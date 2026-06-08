@@ -1,0 +1,187 @@
+version: '3.9'
+
+# ============================================================
+# CuongHoangDev - All-in-One VPS Deployment
+# Stack: Next.js Frontend + Node.js Backend + PostgreSQL + Redis + Nginx
+# ============================================================
+
+services:
+  # ─── PostgreSQL Database ─────────────────────────────────
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: cuonghoangdev_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cuonghoangdev_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456}
+      POSTGRES_INITDB_ARGS: "-c shared_preload_libraries=pgvector"
+    volumes:
+      # Persistent data on host SSD
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cuonghoangdev_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Redis Cache ────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: cuonghoangdev_redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes
+    volumes:
+      # Persistent Redis data
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # ─── Node.js Backend API ────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: cuonghoangdev_backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD:-123456}@postgres:5432/cuonghoangdev_db?schema=public"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:-CuongHoangDevV2SecretKeyNangCao2026NheMaNayCanItNhat256BitNhe}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
+      FRONTEND_URL: ${FRONTEND_URL:-https://cuonghoangdev.com}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://cuonghoangdev.com}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-cuonghoang1103@gmail.com}
+      UPLOAD_DIR: /app/uploads
+      MAX_FILE_SIZE_IMAGES: 10485760
+      MAX_FILE_SIZE_AUDIO: 104857600
+      MAX_FILE_SIZE_VIDEO: 524288000
+      MAX_FILE_SIZE_DOCUMENT: 52428800
+      SMTP_HOST: ${SMTP_HOST:-smtp.gmail.com}
+      SMTP_PORT: 587
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-noreply@cuonghoangdev.com}
+    volumes:
+      # CRITICAL: Map uploads to host SSD — files survive container rebuild
+      - uploads_data:/app/uploads
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # ─── Next.js Frontend ───────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cuonghoangdev_frontend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuonghoangdev.com}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-https://cuonghoangdev.com}
+      AUTH_SECRET: ${AUTH_SECRET:-change-this-to-a-random-secret}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-cuonghoang1103@gmail.com}
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+  # ─── Nginx Reverse Proxy + Static File Server ───────────
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: cuonghoangdev_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - uploads_data:/var/www/cuonghoangdev/uploads:ro
+      # Let's Encrypt certificates
+      - /opt/certbot/conf:/etc/letsencrypt:ro
+      - /opt/certbot/www:/var/www/certbot:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+# ─── Persistent Volumes (SSD-mounted on host) ───────────────────────────
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DATA_DIR:-/opt/cuonghoangdev}/postgres
+
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DATA_DIR:-/opt/cuonghoangdev}/redis
+
+  # CRITICAL: Uploads directory mounted to host SSD
+  # Maps to /app/uploads inside backend container AND /var/www/cuonghoangdev/uploads inside nginx
+  # File path: /opt/cuonghoangdev/uploads/
+  uploads_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DATA_DIR:-/opt/cuonghoangdev}/uploads
+
+networks:
+  backend:
+    driver: bridge
+    name: cuonghoangdev_network

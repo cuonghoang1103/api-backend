@@ -1,0 +1,923 @@
+// ============================================================
+// CuongHoangDev API - Prisma Schema
+// Migrated from Spring Boot JPA/Hibernate
+// Database: PostgreSQL with pgvector extension
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// 1. USERS & AUTHENTICATION
+// ============================================================
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String @unique(map: "roles_name_key") @db.VarChar(50)
+
+  users UserRole[]
+
+  @@map("roles")
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  username  String  @unique(map: "uk_user_username") @db.VarChar(50)
+  password  String? @db.VarChar(255)
+  email     String  @unique(map: "uk_user_email") @db.VarChar(100)
+  fullName  String? @map("full_name") @db.VarChar(100)
+  bio       String? @db.Text
+  avatarUrl String? @map("avatar_url") @db.VarChar(500)
+
+  enabled               Boolean @default(true)
+  accountNonExpired     Boolean @default(true) @map("account_non_expired")
+  accountNonLocked      Boolean @default(true) @map("account_non_locked")
+  credentialsNonExpired Boolean @default(true) @map("credentials_non_expired")
+
+  provider   String? @db.VarChar(50)
+  providerId String? @map("provider_id") @db.VarChar(255)
+
+  roleVersion BigInt @default(0) @map("role_version")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  roles                 UserRole[]
+  posts                 Post[]                 @relation("PostAuthor")
+  courses               Course[]               @relation("CourseInstructor")
+  enrollments           Enrollment[]
+  certificates          Certificate[]
+  musicPlaylists        MusicPlaylist[]
+  fileAttachments       FileAttachment[]
+  passwordResetTokens   PasswordResetToken[]
+  blogComments          Comment[]
+  devPostComments       PostComment[]
+  courseReviews         CourseReview[]
+  shopOrders            ShopOrder[]
+  chatSessions          ChatSession[]
+  chatFeedback          ChatFeedback[]
+  assignmentSubmissions AssignmentSubmission[]
+  aiConfigUpdates       AiConfig[]             @relation("AiConfigUpdater")
+
+  @@index([email], name: "idx_users_email")
+  @@map("users")
+}
+
+model UserRole {
+  userId Int
+  roleId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId], map: "pk_user_roles")
+  @@map("user_roles")
+}
+
+// ============================================================
+// 2. PASSWORD RESET
+// ============================================================
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  token     String   @unique(map: "uk_password_reset_token") @db.VarChar(255)
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token], name: "idx_password_reset_tokens_token")
+  @@index([userId], name: "idx_password_reset_tokens_user_id")
+  @@map("password_reset_tokens")
+}
+
+// ============================================================
+// 3. FILE ATTACHMENTS
+// ============================================================
+
+model FileAttachment {
+  id           Int      @id @default(autoincrement())
+  originalName String   @map("original_name") @db.VarChar(255)
+  storedName   String   @map("stored_name") @db.VarChar(255)
+  filePath     String   @map("file_path") @db.VarChar(500)
+  contentType  String   @map("content_type") @db.VarChar(100)
+  fileSize     BigInt   @map("file_size")
+  uploadedBy   Int?     @map("uploaded_by")
+  uploadedAt   DateTime @default(now()) @map("uploaded_at")
+  fileCategory String?  @map("file_category") @db.VarChar(50)
+
+  uploader User? @relation(fields: [uploadedBy], references: [id], onDelete: SetNull)
+
+  @@index([uploadedBy], name: "idx_file_attachments_uploaded_by")
+  @@index([fileCategory], name: "idx_file_attachments_file_category")
+  @@index([storedName], name: "idx_file_attachments_stored_name")
+  @@map("file_attachments")
+}
+
+// ============================================================
+// 4. BLOG MODULE
+// ============================================================
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique(map: "uk_category_name") @db.VarChar(100)
+  slug        String   @unique(map: "uk_category_slug") @db.VarChar(100)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  posts Post[]
+
+  @@map("categories")
+}
+
+model Post {
+  id            Int       @id @default(autoincrement())
+  title         String    @db.VarChar(255)
+  slug          String    @unique(map: "uk_post_slug") @db.VarChar(255)
+  excerpt       String?   @db.Text
+  content       String    @db.Text
+  thumbnailUrl  String?   @map("thumbnail_url") @db.VarChar(500)
+  status        String    @default("DRAFT") @db.VarChar(20)
+  categoryId    Int?      @map("category_id")
+  authorId      Int?      @map("author_id")
+  viewCount     Int       @default(0) @map("view_count")
+  isFeatured    Boolean   @default(false) @map("is_featured")
+  publishedAt   DateTime? @map("published_at")
+  sourceUrl     String?   @map("source_url") @db.VarChar(555)
+  downloadCount Int       @default(0) @map("download_count")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  author   User?     @relation("PostAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  tags     PostTag[]
+  comments Comment[]
+
+  @@index([categoryId], name: "idx_posts_category_id")
+  @@index([authorId], name: "idx_posts_author_id")
+  @@index([status], name: "idx_posts_status")
+  @@index([publishedAt(sort: Desc)], name: "idx_posts_published_at")
+  @@index([isFeatured], name: "idx_posts_is_featured")
+  @@map("posts")
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique(map: "uk_tag_name") @db.VarChar(50)
+  slug      String   @unique(map: "uk_tag_slug") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  posts PostTag[]
+
+  @@index([slug], name: "idx_tags_slug")
+  @@map("tags")
+}
+
+model PostTag {
+  postId Int
+  tagId  Int
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId], map: "pk_post_tags")
+  @@map("post_tags")
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  postId      Int?     @map("post_id")
+  userId      Int?     @map("user_id")
+  userName    String   @map("user_name") @db.VarChar(100)
+  userAvatar  String?  @map("user_avatar") @db.VarChar(255)
+  commentText String   @map("comment_text") @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([postId], name: "idx_comments_post_id")
+  @@map("comments")
+}
+
+// ============================================================
+// 5. SKILLS & PROJECTS
+// ============================================================
+
+model Skill {
+  id              Int      @id @default(autoincrement())
+  name            String   @db.VarChar(100)
+  slug            String   @unique(map: "uk_skill_slug") @db.VarChar(100)
+  category        String?  @db.VarChar(50)
+  proficiency     Int      @default(3)
+  description     String?  @db.Text
+  yearsExperience Int      @default(0) @map("years_experience")
+  isFeatured      Boolean  @default(false) @map("is_featured")
+  displayOrder    Int      @default(0) @map("display_order")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  projects ProjectSkill[]
+
+  @@index([category], name: "idx_skills_category")
+  @@index([isFeatured], name: "idx_skills_is_featured")
+  @@index([displayOrder], name: "idx_skills_display_order")
+  @@map("skills")
+}
+
+model Project {
+  id           Int       @id @default(autoincrement())
+  title        String    @db.VarChar(255)
+  slug         String    @unique(map: "uk_project_slug") @db.VarChar(255)
+  description  String?   @db.Text
+  content      String?   @db.Text
+  thumbnailUrl String?   @map("thumbnail_url") @db.VarChar(500)
+  images       String?   @db.Text
+  projectUrl   String?   @map("project_url") @db.VarChar(500)
+  videoUrl     String?   @map("video_url") @db.VarChar(500)
+  githubUrl    String?   @map("github_url") @db.VarChar(500)
+  techStack    String?   @map("tech_stack") @db.Text
+  role         String?   @db.VarChar(100)
+  duration     String?   @db.VarChar(100)
+  status       String    @default("COMPLETED") @db.VarChar(20)
+  isFeatured   Boolean   @default(false) @map("is_featured")
+  startDate    DateTime? @map("start_date") @db.Date
+  endDate      DateTime? @map("end_date") @db.Date
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  skills ProjectSkill[]
+
+  @@index([status], name: "idx_projects_status")
+  @@index([isFeatured], name: "idx_projects_is_featured")
+  @@map("projects")
+}
+
+model ProjectSkill {
+  projectId Int
+  skillId   Int
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  skill   Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, skillId], map: "pk_project_skills")
+  @@map("project_skills")
+}
+
+// ============================================================
+// 6. COURSE MODULE (Education / LMS)
+// ============================================================
+
+model CourseCategory {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  slug        String   @unique(map: "uk_course_category_slug") @db.VarChar(100)
+  description String?  @db.Text
+  icon        String?  @db.VarChar(50)
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  courses Course[]
+
+  @@map("course_categories")
+}
+
+model Semester {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  code        String   @unique(map: "uk_semester_code") @db.VarChar(20)
+  ordinal     Int      @unique(map: "uk_semester_ordinal")
+  description String?  @db.Text
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  courses Course[]
+
+  @@map("semesters")
+}
+
+model Course {
+  id                   Int       @id @default(autoincrement())
+  categoryId           Int?      @map("category_id")
+  instructorId         Int?      @map("instructor_id")
+  semesterId           Int?      @map("semester_id")
+  courseCode           String?   @map("course_code") @db.VarChar(50)
+  academyType          String    @default("GENERAL") @map("academy_type") @db.VarChar(30)
+  title                String    @db.VarChar(255)
+  slug                 String    @unique(map: "uk_course_slug") @db.VarChar(255)
+  shortDescription     String?   @map("short_description") @db.VarChar(500)
+  description          String?   @db.Text
+  thumbnailUrl         String?   @map("thumbnail_url") @db.VarChar(500)
+  previewVideoUrl      String?   @map("preview_video_url") @db.VarChar(500)
+  price                Decimal   @default(0) @db.Decimal(10, 2)
+  discountPrice        Decimal?  @map("discount_price") @db.Decimal(10, 2)
+  discountExpiresAt    DateTime? @map("discount_expires_at")
+  level                String    @default("BEGINNER") @db.VarChar(20)
+  language             String    @default("Vietnamese") @db.VarChar(20)
+  isFree               Boolean   @default(false) @map("is_free")
+  isFeatured           Boolean   @default(false) @map("is_featured")
+  isPublished          Boolean   @default(false) @map("is_published")
+  publishedAt          DateTime? @map("published_at")
+  totalDurationSeconds Int       @default(0) @map("total_duration_seconds")
+  totalLessons         Int       @default(0) @map("total_lessons")
+  totalStudents        Int       @default(0) @map("total_students")
+  totalReviews         Int       @default(0) @map("total_reviews")
+  avgRating            Decimal   @default(0) @db.Decimal(3, 2)
+  requirements         String?   @db.Text
+  whatYouLearn         String?   @map("what_you_learn") @db.Text
+  status               String    @default("DRAFT") @db.VarChar(20)
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+
+  category     CourseCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  instructor   User?           @relation("CourseInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
+  semester     Semester?       @relation(fields: [semesterId], references: [id], onDelete: SetNull)
+  sections     CourseSection[]
+  enrollments  Enrollment[]
+  certificates Certificate[]
+  reviews      CourseReview[]
+  tags         CourseTag[]
+
+  @@index([categoryId], name: "idx_courses_category")
+  @@index([instructorId], name: "idx_courses_instructor")
+  @@index([semesterId], name: "idx_courses_semester")
+  @@index([status], name: "idx_courses_status")
+  @@index([isFeatured], name: "idx_courses_featured")
+  @@index([isPublished], name: "idx_courses_published")
+  @@index([courseCode], name: "idx_courses_code")
+  @@index([academyType], name: "idx_courses_academy_type")
+  @@map("courses")
+}
+
+model CourseSection {
+  id          Int      @id @default(autoincrement())
+  courseId    Int      @map("course_id")
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  sortOrder   Int      @default(0) @map("sort_order")
+  isLocked    Boolean  @default(false) @map("is_locked")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons Lesson[]
+
+  @@index([courseId], name: "idx_sections_course")
+  @@map("course_sections")
+}
+
+model Lesson {
+  id                   Int      @id @default(autoincrement())
+  sectionId            Int      @map("section_id")
+  title                String   @db.VarChar(255)
+  slug                 String?  @db.VarChar(255)
+  description          String?  @db.Text
+  content              String?  @db.Text
+  lessonType           String   @default("VIDEO") @map("lesson_type") @db.VarChar(20)
+  videoUrl             String?  @map("video_url") @db.VarChar(500)
+  videoDurationSeconds Int      @default(0) @map("video_duration_seconds")
+  thumbnailUrl         String?  @map("thumbnail_url") @db.VarChar(500)
+  isFreePreview        Boolean  @default(false) @map("is_free_preview")
+  isPublished          Boolean  @default(false) @map("is_published")
+  sortOrder            Int      @default(0) @map("sort_order")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  section        CourseSection    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  details        LessonDetail?
+  documents      CourseDocument[]
+  assignments    Assignment[]
+  lessonProgress LessonProgress[]
+
+  @@index([sectionId], name: "idx_lessons_section")
+  @@index([isPublished], name: "idx_lessons_published")
+  @@map("lessons")
+}
+
+model LessonDetail {
+  id            Int      @id @default(autoincrement())
+  lessonId      Int      @unique(map: "uk_lesson_detail_lesson") @map("lesson_id")
+  videoPlatform String   @default("EMBED") @map("video_platform") @db.VarChar(30)
+  videoUrl      String?  @map("video_url") @db.VarChar(500)
+  sourceCodeUrl String?  @map("source_code_url") @db.VarChar(500)
+  teachingNotes String?  @map("teaching_notes") @db.Text
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@map("lesson_details")
+}
+
+model CourseDocument {
+  id            Int      @id @default(autoincrement())
+  lessonId      Int      @map("lesson_id")
+  title         String   @db.VarChar(255)
+  fileUrl       String   @map("file_url") @db.VarChar(500)
+  fileSizeBytes BigInt   @default(0) @map("file_size_bytes")
+  fileType      String?  @map("file_type") @db.VarChar(50)
+  downloadCount Int      @default(0) @map("download_count")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId], name: "idx_documents_lesson")
+  @@map("course_documents")
+}
+
+model Enrollment {
+  id              Int       @id @default(autoincrement())
+  userId          Int       @map("user_id")
+  courseId        Int       @map("course_id")
+  enrolledAt      DateTime  @default(now()) @map("enrolled_at")
+  expiresAt       DateTime? @map("expires_at")
+  status          String    @default("ACTIVE") @db.VarChar(20)
+  progressPercent Decimal   @default(0) @map("progress_percent") @db.Decimal(5, 2)
+  lastLessonId    Int?      @map("last_lesson_id")
+  lastAccessedAt  DateTime? @map("last_accessed_at")
+
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course         Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  certificate    Certificate?
+  lessonProgress LessonProgress[]
+
+  @@unique([userId, courseId], map: "uk_enrollment_user_course")
+  @@index([userId], name: "idx_enrollments_user")
+  @@index([courseId], name: "idx_enrollments_course")
+  @@index([status], name: "idx_enrollments_status")
+  @@map("enrollments")
+}
+
+model LessonProgress {
+  id                  Int       @id @default(autoincrement())
+  enrollmentId        Int       @map("enrollment_id")
+  lessonId            Int       @map("lesson_id")
+  isCompleted         Boolean   @default(false) @map("is_completed")
+  completedAt         DateTime? @map("completed_at")
+  watchTimeSeconds    Int       @default(0) @map("watch_time_seconds")
+  lastPositionSeconds Int       @default(0) @map("last_position_seconds")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  lesson     Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, lessonId], map: "uk_progress_enrollment_lesson")
+  @@index([enrollmentId], name: "idx_progress_enrollment")
+  @@index([lessonId], name: "idx_progress_lesson")
+  @@map("lesson_progress")
+}
+
+model Assignment {
+  id           Int       @id @default(autoincrement())
+  lessonId     Int       @map("lesson_id")
+  title        String    @db.VarChar(255)
+  instructions String?   @db.Text
+  deadline     DateTime? @db.Timestamp(6)
+  sortOrder    Int       @default(0) @map("sort_order")
+  isPublished  Boolean   @default(true) @map("is_published")
+  maxScore     Float     @default(10.0) @map("max_score")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  lesson      Lesson                 @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  submissions AssignmentSubmission[]
+
+  @@index([lessonId], name: "idx_assignments_lesson")
+  @@map("assignments")
+}
+
+model AssignmentSubmission {
+  id            Int      @id @default(autoincrement())
+  assignmentId  Int      @map("assignment_id")
+  userId        Int      @map("user_id")
+  submissionUrl String   @map("submission_url") @db.VarChar(500)
+  notes         String?  @db.Text
+  status        String   @default("SUBMITTED") @db.VarChar(30)
+  grade         Float?   @db.DoublePrecision
+  feedback      String?  @db.Text
+  submittedAt   DateTime @default(now()) @map("submitted_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([assignmentId, userId], map: "uk_submission_assignment_user")
+  @@index([assignmentId], name: "idx_assignment_submissions_assignment")
+  @@index([userId], name: "idx_assignment_submissions_user")
+  @@map("assignment_submissions")
+}
+
+model Certificate {
+  id                Int       @id @default(autoincrement())
+  certificateNumber String    @unique(map: "uk_certificate_number") @db.VarChar(64)
+  userId            Int       @map("user_id")
+  courseId          Int       @map("course_id")
+  enrollmentId      Int?      @unique @map("enrollment_id")
+  issuedAt          DateTime? @map("issued_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course     Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrollment Enrollment? @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId], map: "uk_certificate_user_course")
+  @@map("certificates")
+}
+
+model CourseReview {
+  id         Int      @id @default(autoincrement())
+  courseId   Int      @map("course_id")
+  userId     Int      @map("user_id")
+  rating     Int
+  title      String?  @db.VarChar(255)
+  content    String?  @db.Text
+  isApproved Boolean  @default(false) @map("is_approved")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, userId], map: "uk_review_course_user")
+  @@index([courseId], name: "idx_reviews_course")
+  @@index([userId], name: "idx_reviews_user")
+  @@map("course_reviews")
+}
+
+model CourseTag {
+  id        Int      @id @default(autoincrement())
+  courseId  Int      @map("course_id")
+  tag       String   @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId], name: "idx_course_tags_course")
+  @@map("course_tags")
+}
+
+// ============================================================
+// 7. SHOP MODULE (E-Commerce)
+// ============================================================
+
+model ProductCategory {
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(100)
+  slug        String? @db.VarChar(100)
+  description String? @db.Text
+  sortOrder   Int     @default(0) @map("sort_order")
+
+  products Product[]
+
+  @@map("product_categories")
+}
+
+model Product {
+  id               Int      @id @default(autoincrement())
+  name             String   @unique @db.VarChar(255)
+  slug             String   @unique(map: "uk_product_slug") @db.VarChar(255)
+  description      String?  @db.Text
+  shortDescription String?  @map("short_description") @db.VarChar(500)
+  thumbnailUrl     String?  @map("thumbnail_url") @db.VarChar(500)
+  images           String?  @db.Text
+  price            Decimal  @db.Decimal(10, 2)
+  originalPrice    Decimal? @map("original_price") @db.Decimal(10, 2)
+  stockQuantity    Int      @default(0) @map("stock_quantity")
+  soldCount        Int      @default(0) @map("sold_count")
+  featured         Boolean  @default(false)
+  isHot            Boolean  @default(false) @map("is_hot")
+  isNew            Boolean  @default(false) @map("is_new")
+  active           Boolean  @default(true)
+  categoryId       Int?     @map("category_id")
+  type             String   @default("DIGITAL") @db.VarChar(20)
+  fileUrl          String?  @map("file_url") @db.VarChar(500)
+  specs            Json     @default("{}") @db.JsonB
+  guidance         String?  @db.Text
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  category   ProductCategory? @relation(fields: [categoryId], references: [id])
+  orderItems ShopOrderItem[]
+
+  @@index([categoryId], name: "idx_products_category")
+  @@index([active], map: "idx_products_active")
+  @@index([featured], map: "idx_products_featured")
+  @@index([createdAt(sort: Desc)], name: "idx_products_created")
+  @@map("products")
+}
+
+model ShopOrder {
+  id             Int       @id @default(autoincrement())
+  orderCode      String    @unique(map: "uk_order_code") @db.VarChar(50)
+  userId         Int?      @map("user_id")
+  buyerName      String    @map("buyer_name") @db.VarChar(255)
+  buyerEmail     String    @map("buyer_email") @db.VarChar(255)
+  buyerPhone     String?   @map("buyer_phone") @db.VarChar(50)
+  buyerAddress   String?   @map("buyer_address") @db.Text
+  subtotal       Decimal   @db.Decimal(10, 2)
+  discountAmount Decimal   @default(0) @map("discount_amount")
+  discountCode   String?   @map("discount_code") @db.VarChar(50)
+  total          Decimal   @db.Decimal(10, 2)
+  status         String    @db.VarChar(20)
+  paymentMethod  String    @default("SIMULATED") @map("payment_method") @db.VarChar(50)
+  paymentStatus  String    @default("PENDING") @map("payment_status") @db.VarChar(20)
+  paymentId      String?   @map("payment_id") @db.VarChar(100)
+  paidAt         DateTime? @map("paid_at")
+  notes          String?   @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  user  User?           @relation(fields: [userId], references: [id])
+  items ShopOrderItem[]
+
+  @@index([userId], name: "idx_orders_user")
+  @@index([status], name: "idx_orders_status")
+  @@index([createdAt(sort: Desc)], name: "idx_orders_created")
+  @@map("shop_orders")
+}
+
+model ShopOrderItem {
+  id           Int     @id @default(autoincrement())
+  orderId      Int     @map("order_id")
+  productName  String  @map("product_name") @db.VarChar(255)
+  productSlug  String? @map("product_slug") @db.VarChar(255)
+  productImage String? @map("product_image") @db.VarChar(500)
+  price        Decimal @db.Decimal(10, 2)
+  quantity     Int     @default(1)
+  total        Decimal @db.Decimal(10, 2)
+  fileUrl      String? @map("file_url") @db.VarChar(500)
+  credentials  String? @db.Text
+
+  order   ShopOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product?  @relation(fields: [productName], references: [name])
+
+  @@index([orderId], name: "idx_order_items_order")
+  @@map("shop_order_items")
+}
+
+model DiscountCode {
+  id                Int       @id @default(autoincrement())
+  code              String    @unique(map: "uk_discount_code") @db.VarChar(50)
+  discountType      String    @default("PERCENT") @map("discount_type") @db.VarChar(20)
+  discountValue     Decimal   @db.Decimal(10, 2)
+  minOrderAmount    Decimal   @default(0) @map("min_order_amount") @db.Decimal(10, 2)
+  maxDiscountAmount Decimal?  @map("max_discount_amount") @db.Decimal(10, 2)
+  maxUses           Int?      @map("max_uses")
+  usedCount         Int       @default(0) @map("used_count")
+  startsAt          DateTime? @map("starts_at")
+  expiresAt         DateTime? @map("expires_at")
+  active            Boolean   @default(true)
+  description       String?   @db.VarChar(255)
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  @@index([code], name: "idx_discount_code")
+  @@map("discount_codes")
+}
+
+// ============================================================
+// 8. MUSIC MODULE (Spotify Clone)
+// ============================================================
+
+model MusicTrack {
+  id              Int       @id @default(autoincrement())
+  title           String    @db.VarChar(255)
+  artist          String    @db.VarChar(255)
+  audioUrl        String?   @map("audio_url") @db.VarChar(700)
+  coverImage      String?   @map("cover_image") @db.VarChar(700)
+  durationSeconds Int?      @map("duration_seconds")
+  fileSize        BigInt?   @map("file_size")
+  publicId        String?   @map("public_id") @db.VarChar(500)
+  cloudinaryUrl   String?   @map("cloudinary_url") @db.VarChar(700)
+  supabasePath    String?   @map("supabase_path") @db.VarChar(500)
+  localPath       String?   @map("local_path") @db.VarChar(500)
+  active          Boolean   @default(true)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at")
+
+  playlists MusicPlaylistTrack[]
+
+  @@map("music_tracks")
+}
+
+model MusicPlaylist {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  coverUrl    String?  @map("cover_url") @db.VarChar(700)
+  userId      Int?     @map("user_id")
+  isPublic    Boolean  @default(true) @map("is_public")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user   User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tracks MusicPlaylistTrack[]
+
+  @@index([userId], name: "idx_playlists_user")
+  @@map("music_playlists")
+}
+
+model MusicPlaylistTrack {
+  id         Int      @id @default(autoincrement())
+  playlistId Int      @map("playlist_id")
+  trackId    Int      @map("track_id")
+  position   Int      @default(0)
+  addedAt    DateTime @default(now()) @map("added_at")
+
+  playlist MusicPlaylist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  track    MusicTrack    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([playlistId, trackId], map: "uk_playlist_track")
+  @@index([playlistId], name: "idx_playlist_tracks_playlist")
+  @@index([trackId], name: "idx_playlist_tracks_track")
+  @@map("music_playlist_tracks")
+}
+
+// ============================================================
+// 9. DEV POSTS (Source Code Hub / Social Sharing)
+// ============================================================
+
+model DevPost {
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(255)
+  description   String?  @db.Text
+  content       String?  @db.Text
+  sourceUrl     String?  @map("source_url") @db.VarChar(555)
+  downloadCount Int      @default(0) @map("download_count")
+  category      String   @default("General") @db.VarChar(100)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  comments PostComment[]
+
+  @@index([category], name: "idx_dev_posts_category")
+  @@index([downloadCount(sort: Desc)], name: "idx_dev_posts_download_count")
+  @@map("dev_posts")
+}
+
+model PostComment {
+  id          Int      @id @default(autoincrement())
+  postId      Int?     @map("post_id")
+  userId      Int?     @map("user_id")
+  userName    String   @map("user_name") @db.VarChar(100)
+  userAvatar  String?  @map("user_avatar") @db.VarChar(255)
+  commentText String   @map("comment_text") @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  post DevPost? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([postId], name: "idx_post_comments_post_id")
+  @@index([userId], name: "idx_post_comments_user_id")
+  @@map("post_comments")
+}
+
+// ============================================================
+// 10. AI CHATBOT (RAG + Gemini)
+// ============================================================
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  userId    Int?     @map("user_id")
+  title     String?  @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+  analytics ChatAnalytics[]
+
+  @@index([userId], name: "idx_chat_sessions_user")
+  @@index([createdAt(sort: Desc)], name: "idx_chat_sessions_created_at")
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id         Int      @id @default(autoincrement())
+  sessionId  String   @map("session_id") @db.VarChar(100)
+  role       String   @db.VarChar(20)
+  content    String   @db.Text
+  tokenCount Int?     @map("token_count")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  session  ChatSession   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  feedback ChatFeedback?
+
+  @@index([sessionId], name: "idx_chat_messages_session")
+  @@map("chat_messages")
+}
+
+model ChatFeedback {
+  id           Int      @id @default(autoincrement())
+  messageId    Int      @unique @map("message_id")
+  userId       Int?     @map("user_id")
+  rating       Int
+  feedbackType String   @map("feedback_type") @db.VarChar(20)
+  comment      String?  @db.Text
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  message ChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId], name: "idx_feedback_user_id")
+  @@index([rating], name: "idx_feedback_rating")
+  @@map("chat_feedback")
+}
+
+model ChatAnalytics {
+  id                Int       @id @default(autoincrement())
+  sessionId         String    @map("session_id") @db.VarChar(100)
+  date              DateTime @map("date") @db.Date
+  messageCount      Int      @default(0) @map("message_count")
+  avgResponseTimeMs Int      @default(0) @map("avg_response_time_ms")
+  tokensUsed        Int      @default(0) @map("tokens_used")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, date], map: "uk_chat_analytics_session_date")
+  @@index([date], name: "idx_chat_analytics_date")
+  @@map("chat_analytics")
+}
+
+// ============================================================
+// 11. AI CONFIG & PROMPTS
+// ============================================================
+
+model AiConfig {
+  id          Int      @id @default(autoincrement())
+  configKey   String   @unique(map: "uk_ai_config_key") @db.VarChar(100)
+  configValue String?  @map("config_value") @db.Text
+  description String?  @db.VarChar(500)
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  updatedBy   Int?     @map("updated_by")
+
+  updater User? @relation("AiConfigUpdater", fields: [updatedBy], references: [id])
+
+  @@index([configKey], name: "idx_ai_config_key")
+  @@map("ai_config")
+}
+
+model AiPrompt {
+  id             Int      @id @default(autoincrement())
+  promptKey      String   @unique(map: "uk_ai_prompt_key") @db.VarChar(100)
+  promptTemplate String   @map("prompt_template") @db.Text
+  description    String?  @db.VarChar(500)
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([promptKey], name: "idx_ai_prompts_key")
+  @@map("ai_prompts")
+}
+
+// ============================================================
+// 12. DOCUMENT CHUNKS (RAG Vector Store)
+// ============================================================
+
+model DocumentChunk {
+  id           Int                         @id @default(autoincrement())
+  content      String                      @db.Text
+  metadata     Json?                       @default("{}") @db.JsonB
+  embedding    Unsupported("vector(768)")?
+  chunkIndex   Int                         @map("chunk_index")
+  documentId   String                      @map("document_id") @db.VarChar(100)
+  documentType String                      @map("document_type") @db.VarChar(50)
+  createdAt    DateTime                    @default(now()) @map("created_at")
+
+  @@index([documentType], name: "idx_document_chunks_type")
+  @@index([documentId], name: "idx_document_chunks_doc_id")
+  @@map("document_chunks")
+}
+
+// ============================================================
+// 13. CONTACT FORM
+// ============================================================
+
+model ContactSubmission {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  email     String   @db.VarChar(255)
+  subject   String?  @db.VarChar(500)
+  message   String   @db.Text
+  ipAddress String?  @map("ip_address") @db.VarChar(45)
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("contact_submissions")
+}

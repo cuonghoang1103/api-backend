@@ -1,0 +1,203 @@
+# ============================================================
+# Production Docker Compose — CuongHoangDev API Stack
+#
+# Gồm 3 container trên mạng nội bộ `vps-network`:
+#   1. postgres-db   — ankane/pgvector:v0.5.1  (Database + Vector DB)
+#   2. redis-cache  — redis:7-alpine           (Cache layer)
+#   3. api-backend   — Dockerfile (Node.js 22)
+#
+# Usage:
+#   docker-compose -f docker-compose.prod.yml up --build -d
+#   docker-compose -f docker-compose.prod.yml down
+#   docker-compose -f docker-compose.prod.yml logs -f api-backend
+# ============================================================
+
+services:
+
+  # ─── 1. PostgreSQL + pgvector ─────────────────────────────────
+  # Database chính hỗ trợ AI Chatbot với vector similarity search
+  postgres-db:
+    image: ankane/pgvector:v0.5.1
+    container_name: cuonghoangdev_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: cuonghoangdev_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required in .env}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      # ── Named volume: ánh xạ dữ liệu ra ổ đĩa VPS 60GB
+      #    Data tồn tại độc lập với container lifecycle
+      vps_postgres_data:/var/lib/postgresql/data
+    networks:
+      - vps-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cuonghoangdev_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    # Cấu hình tài nguyên
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+    # Khuyến nghị: enable SSL ở production
+    # command: ["postgres", "-c", "ssl=on", "-c", "ssl_cert_file=/var/lib/postgresql/data/server.crt", "-c", "ssl_key_file=/var/lib/postgresql/data/server.key"]
+
+
+  # ─── 2. Redis Cache ──────────────────────────────────────────
+  # Bộ nhớ đệm cho:
+  #   - Stream nhạc: chunk caching
+  #   - Chat sessions: session data
+  #   - Rate limiting: request counters
+  redis-cache:
+    image: redis:7-alpine
+    container_name: cuonghoangdev_redis
+    restart: always
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      # ── Named volume: persistence cho Redis AOF data
+      vps_redis_data:/data
+    networks:
+      - vps-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+
+
+  # ─── 3. API Backend (Node.js 22) ──────────────────────────────
+  # Express server xử lý tất cả business logic
+  api-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Cache hiệu quả: rebuild chỉ khi source thay đổi
+      cache_from:
+        - cuonghoangdev_api:latest
+    container_name: cuonghoangdev_api
+    restart: always
+    environment:
+      # ── Node environment
+      NODE_ENV: production
+      PORT: 3001
+
+      # ── Database (dùng tên service trong Docker network)
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres-db:5432/cuonghoangdev_db?schema=public&sslmode=prefer
+
+      # ── Redis (dùng tên service trong Docker network)
+      REDIS_URL: redis://redis-cache:6379
+
+      # ── JWT secrets
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?JWT_REFRESH_SECRET is required}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-30d}
+
+      # ── CORS origins (Vercel frontend)
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://cuonghoangdev.com}
+
+      # ── Cookie secret
+      COOKIE_SECRET: ${COOKIE_SECRET:?COOKIE_SECRET is required}
+
+      # ── Upload directory
+      UPLOAD_DIR: /app/uploads
+
+      # ── Gemini AI
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+
+      # ── AI Config
+      AI_CHAT_MODEL: ${AI_CHAT_MODEL:-gemini-2.0-flash-lite}
+      AI_EMBEDDING_MODEL: ${AI_EMBEDDING_MODEL:-gemini-embedding-002}
+      AI_MAX_TOKENS: ${AI_MAX_TOKENS:-2048}
+      AI_TEMPERATURE: ${AI_TEMPERATURE:-0.7}
+      AI_CHUNK_SIZE: ${AI_CHUNK_SIZE:-1000}
+      AI_CHUNK_OVERLAP: ${AI_CHUNK_OVERLAP:-200}
+      AI_SIMILARITY_THRESHOLD: ${AI_SIMILARITY_THRESHOLD:-0.7}
+
+      # ── Rate limiting
+      RATE_LIMIT_WINDOW_MS: ${RATE_LIMIT_WINDOW_MS:-900000}
+      RATE_LIMIT_MAX_REQUESTS: ${RATE_LIMIT_MAX_REQUESTS:-100}
+
+      # ── Frontend URL (cho redirects, emails)
+      FRONTEND_URL: ${FRONTEND_URL:-https://cuonghoangdev.com}
+    volumes:
+      # Mount thư mục uploads từ host vào container
+      # Đảm bảo file upload tồn tại trên host, không bị container xóa
+      vps_uploads:/app/uploads
+    networks:
+      - vps-network
+    ports:
+      # Map port 3001 ra host (Nginx sẽ proxy vào đây)
+      - "3001:3001"
+    depends_on:
+      # Đợi postgres-db và redis-cache khởi động xong trước
+      postgres-db:
+        condition: service_healthy
+      redis-cache:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health/live"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    # Logging: JSON format cho ELK/Graylog
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+
+# ─── Networks ────────────────────────────────────────────────
+# Bridge network nội bộ: các container giao tiếp qua tên service
+# Container bên ngoài (Nginx) truy cập qua exposed port 3001
+networks:
+  vps-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+
+# ─── Volumes ──────────────────────────────────────────────────
+# Named volumes: Docker quản lý vòng đời, data tồn tại độc lập
+# Dùng `docker volume inspect` để xem mount point trên host
+volumes:
+  vps_postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      # Mount trực tiếp vào thư mục trên host (VPS)
+      # Thay đổi đường dẫn này nếu muốn lưu ở vị trí khác
+      device: /mnt/data/postgres
+  vps_redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/data/redis
+  vps_uploads:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/data/uploads

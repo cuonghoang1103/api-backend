@@ -1,7 +1,4 @@
 FROM node:20-alpine AS base
-FROM node:20-alpine AS deps
-FROM node:20-alpine AS builder
-FROM node:20-alpine AS runner
 
 # ============================================================
 # Stage 1: Dependencies
@@ -11,7 +8,7 @@ WORKDIR /app
 
 # Install all dependencies
 COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 # ============================================================
 # Stage 2: Builder
@@ -42,7 +39,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup -g 1001 -S nextjs && adduser -S nextjs -u 1001
 
 # Create necessary directories
-RUN mkdir .next/cache && chown -R nextjs:nextjs /app
+RUN mkdir -p .next/cache && chown -R nextjs:nextjs /app
 
 # Copy built artifacts
 COPY --from=builder --chown=nextjs:nextjs /app/public ./public

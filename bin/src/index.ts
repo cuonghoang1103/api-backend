@@ -19,6 +19,10 @@ import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// __dirname equivalent in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 import express, {
   type Express,
   type Request,
@@ -31,31 +35,25 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 
-import { config } from './config/env.js';
-import { prisma, connectDatabase } from './config/database.js';
-import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+// Dynamic imports với absolute path
+const { config } = await import(path.join(__dirname, 'config', 'env.js'));
+const { prisma, connectDatabase } = await import(path.join(__dirname, 'config', 'database.js'));
+const { errorHandler, notFoundHandler } = await import(path.join(__dirname, 'middleware', 'errorHandler.js'));
 
 // ─── Routes ────────────────────────────────────────────────
-import authRoutes from './routes/auth.routes.js';
-import profileRoutes from './routes/profile.routes.js';
-import blogRoutes from './routes/blog.routes.js';
-import courseRoutes from './routes/course.routes.js';
-import shopRoutes from './routes/shop.routes.js';
-import musicRoutes from './routes/music.routes.js';
-import aiRoutes from './routes/ai.routes.js';
-import adminRoutes from './routes/admin.routes.js';
-import skillRoutes from './routes/skill.routes.js';
-import contactRoutes from './routes/contact.routes.js';
-import uploadRoutes from './routes/upload.routes.js';
-import devPostRoutes from './routes/devPost.routes.js';
-import systemRoutes from './routes/system.routes.js';
-
-// ─── __dirname polyfill ──────────────────────────────
-// @ts-ignore ESM import.meta polyfill
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-// @ts-ignore suppress unused __dirname warning
-void __dirname;
+const authRoutes = await import(path.join(__dirname, 'routes', 'auth.routes.js'));
+const profileRoutes = await import(path.join(__dirname, 'routes', 'profile.routes.js'));
+const blogRoutes = await import(path.join(__dirname, 'routes', 'blog.routes.js'));
+const courseRoutes = await import(path.join(__dirname, 'routes', 'course.routes.js'));
+const shopRoutes = await import(path.join(__dirname, 'routes', 'shop.routes.js'));
+const musicRoutes = await import(path.join(__dirname, 'routes', 'music.routes.js'));
+const aiRoutes = await import(path.join(__dirname, 'routes', 'ai.routes.js'));
+const adminRoutes = await import(path.join(__dirname, 'routes', 'admin.routes.js'));
+const skillRoutes = await import(path.join(__dirname, 'routes', 'skill.routes.js'));
+const contactRoutes = await import(path.join(__dirname, 'routes', 'contact.routes.js'));
+const uploadRoutes = await import(path.join(__dirname, 'routes', 'upload.routes.js'));
+const devPostRoutes = await import(path.join(__dirname, 'routes', 'devPost.routes.js'));
+const systemRoutes = await import(path.join(__dirname, 'routes', 'system.routes.js'));
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();

@@ -1,6 +1,7 @@
 {
   "name": "cuonghoangdev-api",
   "version": "2.0.0",
+  "type": "module",
   "description": "Node.js/TypeScript/Express Backend for CuongHoangDev Portfolio",
   "main": "dist/index.js",
   "scripts": {

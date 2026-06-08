@@ -67,5 +67,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:3001/health || exit 1
 
 # Start command — Prisma migrate deploy (chạy 1 lần), rồi start server
-# Entry point: dist/src/index.js (khớp tsconfig rootDir: "./src")
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/index.js"]
+# Entry point: dist/index.js (TypeScript strip src/ prefix because rootDir: "./src")
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]

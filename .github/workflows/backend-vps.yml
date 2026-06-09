@@ -31,18 +31,15 @@ jobs:
 
       - name: Sync project to VPS
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
-            # Stop containers first so bind mounts release the dirs
-            docker compose -f /opt/cuonghoangdev/docker-compose.yml down 2>/dev/null || true
-            # Delete data dirs owned by root (docker creates them)
-            rm -rf /opt/cuonghoangdev/{postgres,redis,uploads}
-          '
           rsync -az --delete \
             --exclude '.git' \
             --exclude 'node_modules' \
             --exclude 'frontend/node_modules' \
             --exclude 'frontend/.next' \
             --exclude 'bin' \
+            --exclude 'postgres' \
+            --exclude 'redis' \
+            --exclude 'uploads' \
             --exclude '*.log' \
             ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
@@ -52,8 +49,11 @@ jobs:
             set -e
             cd /opt/cuonghoangdev
 
-            # Create data dirs BEFORE docker compose up (bind mounts must exist)
-            mkdir -p /opt/cuonghoangdev/{postgres,redis,uploads}
+            # Stop containers
+            docker compose -f docker-compose.yml down 2>/dev/null || true
+
+            # Clean subdirs inside data dirs (preserving parent dir ownership)
+            rm -rf /opt/cuonghoangdev/redis/* /opt/cuonghoangdev/uploads/* /opt/cuonghoangdev/postgres/* 2>/dev/null || true
 
             # Build and start all services
             docker compose -f docker-compose.yml up -d --build

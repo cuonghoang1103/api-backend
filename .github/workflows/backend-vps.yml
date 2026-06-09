@@ -43,12 +43,6 @@ jobs:
             --exclude '*.log' \
             ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
-      - name: Setup data directories on VPS
-        run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
-            mkdir -p /opt/cuonghoangdev/{postgres,redis,uploads}
-          '
-
       - name: Deploy on VPS
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '

@@ -315,6 +315,8 @@ router.put('/posts/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, r
           content: String(content),
           excerpt: excerpt?.trim() || null,
           thumbnailUrl: thumbnailUrl?.trim() || null,
+          sourceUrl: sourceUrl?.trim() || null,
+          isFeatured: Boolean(isFeatured),
           status: normalizedStatus,
           categoryId,
           publishedAt: normalizedPublishedAt,
@@ -362,6 +364,8 @@ router.get('/stats/overview', authenticate, requireAdmin('ROLE_ADMIN'), async (_
       totalSkills,
       totalMessages,
       totalSessions,
+      totalViews,
+      recentActiveUsers,
     ] = await Promise.all([
       prisma.user.count(),
       prisma.post.count(),

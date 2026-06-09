@@ -31,11 +31,15 @@ jobs:
 
       - name: Sync project to VPS
         run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            rm -rf /opt/cuonghoangdev/bin
+          '
           rsync -az --delete \
             --exclude '.git' \
             --exclude 'node_modules' \
             --exclude 'frontend/node_modules' \
             --exclude 'frontend/.next' \
+            --exclude 'bin' \
             --exclude '*.log' \
             ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 

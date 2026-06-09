@@ -1,7 +1,7 @@
 import { Router, type Response } from 'express';
 import { nanoid } from 'nanoid';
 import { prisma } from '../config/database.js';
-import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
+import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -134,7 +134,7 @@ function serializeProduct(product: {
 }
 
 // ─── GET /api/v1/shop/categories ─────────────────────
-router.get('/categories', async (req, res: Response<ApiResponse>, next) => {
+router.get('/categories', async (_req, res: Response<ApiResponse>, next) => {
   try {
     const categories = await prisma.productCategory.findMany({
       orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
@@ -392,7 +392,7 @@ router.put('/admin/orders/:id/status', authenticate, requireAdmin('ROLE_ADMIN'),
 });
 
 // ─── GET /api/v1/shop/admin/discounts ────────────────
-router.get('/admin/discounts', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+router.get('/admin/discounts', authenticate, requireAdmin('ROLE_ADMIN'), async (_req, res: Response<ApiResponse>, next) => {
   try {
     const discounts = await prisma.discountCode.findMany({ orderBy: { createdAt: 'desc' } });
     res.json({ success: true, data: discounts });

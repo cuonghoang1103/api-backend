@@ -15,7 +15,7 @@ services:
       POSTGRES_DB: cuonghoangdev_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456}
-      POSTGRES_INITDB_ARGS: "-c shared_preload_libraries=pgvector"
+      POSTGRES_INITDB_ARGS: ""
     volumes:
       # Persistent data on host SSD
       - postgres_data:/var/lib/postgresql/data

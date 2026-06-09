@@ -13,6 +13,8 @@ on:
       - 'frontend/**'
       - 'nginx/**'
       - '.github/workflows/backend-vps.yml'
+      - '.dockerignore'
+  workflow_dispatch:
 
 jobs:
   deploy-backend:

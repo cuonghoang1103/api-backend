@@ -32,7 +32,10 @@ jobs:
       - name: Sync project to VPS
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
-            docker compose -f /opt/cuonghoangdev/docker-compose.yml down -v 2>/dev/null || true
+            # Stop containers first so bind mounts release the dirs
+            docker compose -f /opt/cuonghoangdev/docker-compose.yml down 2>/dev/null || true
+            # Delete data dirs owned by root (docker creates them)
+            rm -rf /opt/cuonghoangdev/{postgres,redis,uploads}
           '
           rsync -az --delete \
             --exclude '.git' \
@@ -51,6 +54,9 @@ jobs:
 
             # Build and start all services
             docker compose -f docker-compose.yml up -d --build
+
+            # Ensure data dirs exist (docker recreates bind mounts)
+            mkdir -p /opt/cuonghoangdev/{postgres,redis,uploads}
 
             # Wait for services to be healthy
             sleep 15

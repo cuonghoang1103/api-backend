@@ -51,8 +51,9 @@ jobs:
             set -e
             cd /opt/cuonghoangdev
 
-            # Stop containers
-            docker compose -f docker-compose.yml down 2>/dev/null || true
+            # Stop containers and remove old ones
+            docker compose -f docker-compose.yml down --remove-orphans 2>/dev/null || true
+            docker rm -f cuonghoangdev_postgres cuonghoangdev_redis cuonghoangdev_backend cuonghoangdev_frontend cuonghoangdev_nginx 2>/dev/null || true
 
             # Clean subdirs inside data dirs (preserving parent dir ownership)
             rm -rf /opt/cuonghoangdev/redis/* /opt/cuonghoangdev/uploads/* /opt/cuonghoangdev/postgres/* 2>/dev/null || true

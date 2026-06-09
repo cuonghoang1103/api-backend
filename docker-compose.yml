@@ -63,8 +63,10 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-CuongHoangDevV2SecretKeyNangCao2026NheMaNayCanItNhat256BitNhe}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
-      FRONTEND_URL: ${FRONTEND_URL:-https://cuonghoangdev.com}
-      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://cuonghoangdev.com}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-CuongHoangDevRefreshSecret2026NheMaNayCanItNhat256BitNhe}
+      COOKIE_SECRET: ${COOKIE_SECRET:-CuongHoangDevCookieSecret2026Nhe}
+      FRONTEND_URL: ${FRONTEND_URL:-https://cuongthai.com}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://cuongthai.com}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
@@ -80,7 +82,7 @@ services:
       SMTP_PORT: 587
       SMTP_USER: ${SMTP_USER:-}
       SMTP_PASS: ${SMTP_PASS:-}
-      SMTP_FROM: ${SMTP_FROM:-noreply@cuonghoangdev.com}
+      SMTP_FROM: ${SMTP_FROM:-noreply@cuongthai.com}
     volumes:
       # CRITICAL: Map uploads to host SSD — files survive container rebuild
       - uploads_data:/app/uploads
@@ -109,8 +111,8 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_API_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuonghoangdev.com}
-      NEXTAUTH_URL: ${NEXTAUTH_URL:-https://cuonghoangdev.com}
+      NEXT_PUBLIC_API_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-https://cuongthai.com}
       AUTH_SECRET: ${AUTH_SECRET:-change-this-to-a-random-secret}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}

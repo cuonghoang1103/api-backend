@@ -136,6 +136,7 @@ services:
     image: nginx:1.27-alpine
     container_name: cuonghoangdev_nginx
     restart: unless-stopped
+    stop_grace_period: 30s
     ports:
       - "80:80"
       - "443:443"
@@ -147,15 +148,18 @@ services:
       - /opt/certbot/conf:/etc/letsencrypt:ro
       - /opt/certbot/www:/var/www/certbot:ro
     depends_on:
-      - frontend
-      - backend
+      frontend:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
     networks:
       - backend
     healthcheck:
-      test: ["CMD", "nginx", "-t"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost/ || wget -qO- http://localhost:80/ || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
+      start_period: 10s
 
 # ─── Persistent Volumes (SSD-mounted on host) ───────────────────────────
 volumes:

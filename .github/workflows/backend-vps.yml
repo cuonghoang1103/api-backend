@@ -42,30 +42,151 @@ jobs:
             --exclude 'postgres' \
             --exclude 'redis' \
             --exclude 'uploads' \
+            --exclude 'backups' \
             --exclude '*.log' \
             ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
-      - name: Deploy on VPS
+      - name: Deploy on VPS — zero-downtime rolling update
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -e
             cd /opt/cuonghoangdev
 
-            # Stop containers and remove old ones
-            docker compose -f docker-compose.yml down --remove-orphans 2>/dev/null || true
-            docker rm -f cuonghoangdev_postgres cuonghoangdev_redis cuonghoangdev_backend cuonghoangdev_frontend cuonghoangdev_nginx 2>/dev/null || true
+            # ── 0. Create all required directories (safety net) ──────────
+            echo "[0/6] Creating required directories..."
+            mkdir -p /opt/cuonghoangdev/nginx/ssl
+            mkdir -p /opt/certbot/conf/live/cuongthai.com
+            mkdir -p /opt/certbot/www
+            mkdir -p /opt/cuonghoangdev/postgres
+            mkdir -p /opt/cuonghoangdev/redis
+            mkdir -p /opt/cuonghoangdev/uploads
+            mkdir -p /opt/cuonghoangdev/backups
+            echo "[0/6] Directories ready"
 
-            # Clean subdirs inside data dirs (preserving parent dir ownership)
-            rm -rf /opt/cuonghoangdev/redis/* /opt/cuonghoangdev/uploads/* /opt/cuonghoangdev/postgres/* 2>/dev/null || true
+            # Copy .env.example → .env if .env does not exist
+            if [ ! -f /opt/cuonghoangdev/.env ]; then
+              echo "[0/6] .env not found — creating from .env.example"
+              if [ -f /opt/cuonghoangdev/.env.example ]; then
+                cp /opt/cuonghoangdev/.env.example /opt/cuonghoangdev/.env
+                echo "[0/6] WARNING: .env was created from .env.example"
+                echo "[0/6] WARNING: Please set secrets on VPS: /opt/cuonghoangdev/.env"
+              fi
+            fi
 
-            # Build and start all services
+            # ── 1. Setup SSL certificates (Let's Encrypt) ───────────────────
+            echo "[1/6] Checking SSL certificates..."
+            CERT_DIR="/opt/certbot/conf/live/cuongthai.com"
+            if [ ! -f "${CERT_DIR}/fullchain.pem" ] || [ ! -f "${CERT_DIR}/privkey.pem" ]; then
+              echo "[1/6] SSL certificates not found — using HTTP-only config first..."
+              mkdir -p /opt/certbot/www /opt/certbot/conf/live/cuongthai.com
+              # Copy HTTP-only fallback config
+              if [ -f /opt/cuonghoangdev/nginx/nginx.http.conf ]; then
+                cp /opt/cuonghoangdev/nginx/nginx.http.conf /opt/cuonghoangdev/nginx/nginx.conf
+              fi
+              echo "[1/6] Using HTTP-only nginx config (SSL certs will be provisioned later)"
+            else
+              echo "[1/6] SSL certificates found at ${CERT_DIR}"
+            fi
+
+            # ── 2. Backup database ──────────────────────────────────────
+            if docker exec cuonghoangdev_postgres psql -U postgres -lqt 2>/dev/null | cut -d "|" -f1 | grep -qw cuonghoangdev_db; then
+              echo "[2/6] Backing up database..."
+              mkdir -p /opt/cuonghoangdev/backups
+              DATE=$(date +%Y%m%d_%H%M%S)
+              docker exec cuonghoangdev_postgres pg_dump -U postgres cuonghoangdev_db | gzip > /opt/cuonghoangdev/backups/${DATE}_backup.sql.gz
+              echo "[2/6] Backup saved: ${DATE}_backup.sql.gz"
+            else
+              echo "[2/6] No existing database to backup, skipping"
+            fi
+
+            # ── 3. Pull latest base images ───────────────────────────────
+            echo "[3/6] Pulling latest images..."
+            docker compose -f docker-compose.yml pull 2>/dev/null || true
+
+            # ── 4. Stop ONLY non-essential containers (preserve data!) ───
+            echo "[4/6] Stopping non-essential containers (postgres/redis preserved)..."
+            docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
+            docker rm   cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
+
+            # ── 5. Start all services ────────────────────────────────────
+            echo "[5/6] Starting all containers..."
             docker compose -f docker-compose.yml up -d --build
 
-            # Wait for services to be healthy
-            sleep 15
+            # ── 6. Wait for services to be healthy ──────────────────────
+            echo "[6/6] Waiting for services to be healthy..."
+            MAX_WAIT=180
+            WAIT_INTERVAL=5
+            elapsed=0
 
-            # Show status
+            wait_for_service() {
+              local name=$1
+              local url=$2
+              echo "  Waiting for $name..."
+              while [ $elapsed -lt $MAX_WAIT ]; do
+                if docker exec "$name" wget -q -O- "$url" 2>/dev/null | grep -q "ok"; then
+                  echo "  ✓ $name is healthy"
+                  return 0
+                fi
+                sleep $WAIT_INTERVAL
+                elapsed=$((elapsed + WAIT_INTERVAL))
+                echo "  waiting... ${elapsed}s"
+              done
+              echo "  WARNING: $name not healthy after ${MAX_WAIT}s"
+              return 1
+            }
+
+            # backend must be up before frontend
+            wait_for_service cuonghoangdev_backend  http://localhost:3001/health
+            wait_for_service cuonghoangdev_frontend http://localhost:3000
+
+            # nginx health check
+            for i in $(seq 1 12); do
+              if docker exec cuonghoangdev_nginx wget -q -O- http://localhost/ >/dev/null 2>&1; then
+                echo "  ✓ cuonghoangdev_nginx is healthy"
+                break
+              fi
+              sleep 5
+            done
+
+            echo "[6/6] Deployment complete"
             docker compose -f docker-compose.yml ps
-            docker compose -f docker-compose.yml logs --tail=50 backend
-            docker compose -f docker-compose.yml logs --tail=20 frontend
+            docker compose -f docker-compose.yml logs --tail=20 backend
+          '
+
+      - name: Create admin user on VPS
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            set -e
+            cd /opt/cuonghoangdev
+
+            for i in $(seq 1 30); do
+              if docker exec cuonghoangdev_backend wget -q -O- http://localhost:3001/health 2>/dev/null | grep -q "ok"; then
+                echo "Backend is ready"
+                break
+              fi
+              echo "Waiting for backend... ($i)"
+              sleep 2
+            done
+
+            if [ -f /opt/cuonghoangdev/scripts/seed-admin.js ]; then
+              docker cp /opt/cuonghoangdev/scripts/seed-admin.js cuonghoangdev_backend:/app/seed-admin.js
+              docker exec cuonghoangdev_backend node seed-admin.js
+              echo "Admin user setup done"
+            else
+              echo "Warning: seed-admin.js not found, skipping admin creation"
+            fi
+          '
+
+      - name: Setup backup cron on VPS
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            set -e
+            mkdir -p /opt/cuonghoangdev/backups
+
+            if [ -f /opt/cuonghoangdev/scripts/backup-cron.sh ]; then
+              chmod +x /opt/cuonghoangdev/scripts/backup-cron.sh
+              chmod +x /opt/cuonghoangdev/scripts/restore-db.sh
+            fi
+
+            (crontab -l 2>/dev/null | grep -v backup-cron; echo "0 2 * * * /opt/cuonghoangdev/scripts/backup-cron.sh >> /var/log/backup-cron.log 2>&1") | crontab -
           '

@@ -56,6 +56,7 @@ jobs:
             mkdir -p /opt/cuonghoangdev/{postgres,redis,uploads}
 
             # Build and start all services
+            docker compose -f docker-compose.yml up -d --build
 
             # Wait for services to be healthy
             sleep 15

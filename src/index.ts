@@ -41,19 +41,22 @@ const { prisma, connectDatabase } = await import(path.join(__dirname, 'config', 
 const { errorHandler, notFoundHandler } = await import(path.join(__dirname, 'middleware', 'errorHandler.js'));
 
 // ─── Routes ────────────────────────────────────────────────
-const authRoutes = await import(path.join(__dirname, 'routes', 'auth.routes.js'));
-const profileRoutes = await import(path.join(__dirname, 'routes', 'profile.routes.js'));
-const blogRoutes = await import(path.join(__dirname, 'routes', 'blog.routes.js'));
-const courseRoutes = await import(path.join(__dirname, 'routes', 'course.routes.js'));
-const shopRoutes = await import(path.join(__dirname, 'routes', 'shop.routes.js'));
-const musicRoutes = await import(path.join(__dirname, 'routes', 'music.routes.js'));
-const aiRoutes = await import(path.join(__dirname, 'routes', 'ai.routes.js'));
-const adminRoutes = await import(path.join(__dirname, 'routes', 'admin.routes.js'));
-const skillRoutes = await import(path.join(__dirname, 'routes', 'skill.routes.js'));
-const contactRoutes = await import(path.join(__dirname, 'routes', 'contact.routes.js'));
-const uploadRoutes = await import(path.join(__dirname, 'routes', 'upload.routes.js'));
-const devPostRoutes = await import(path.join(__dirname, 'routes', 'devPost.routes.js'));
-const systemRoutes = await import(path.join(__dirname, 'routes', 'system.routes.js'));
+const authRoutes = (await import(path.join(__dirname, 'routes', 'auth.routes.js'))).default;
+const profileRoutes = (await import(path.join(__dirname, 'routes', 'profile.routes.js'))).default;
+const blogRoutes = (await import(path.join(__dirname, 'routes', 'blog.routes.js'))).default;
+const courseRoutes = (await import(path.join(__dirname, 'routes', 'course.routes.js'))).default;
+const academyRoutes = (await import(path.join(__dirname, 'routes', 'academy.routes.js'))).default;
+const shopRoutes = (await import(path.join(__dirname, 'routes', 'shop.routes.js'))).default;
+const musicRoutes = (await import(path.join(__dirname, 'routes', 'music.routes.js'))).default;
+const aiRoutes = (await import(path.join(__dirname, 'routes', 'ai.routes.js'))).default;
+const adminRoutes = (await import(path.join(__dirname, 'routes', 'admin.routes.js'))).default;
+const skillRoutes = (await import(path.join(__dirname, 'routes', 'skill.routes.js'))).default;
+const projectRoutes = (await import(path.join(__dirname, 'routes', 'project.routes.js'))).default;
+const certificateRoutes = (await import(path.join(__dirname, 'routes', 'certificate.routes.js'))).default;
+const contactRoutes = (await import(path.join(__dirname, 'routes', 'contact.routes.js'))).default;
+const uploadRoutes = (await import(path.join(__dirname, 'routes', 'upload.routes.js'))).default;
+const devPostRoutes = (await import(path.join(__dirname, 'routes', 'devPost.routes.js'))).default;
+const systemRoutes = (await import(path.join(__dirname, 'routes', 'system.routes.js'))).default;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -182,13 +185,32 @@ const generalLimiter = rateLimit({
 
 // Giới hạn riêng cho auth endpoints (ngăn brute force)
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 phút
-  max: 10, // 10 attempts
+  windowMs: config.nodeEnv === 'production' ? 15 * 60 * 1000 : 60 * 1000,
+  max: (req: Request) => {
+    const host = req.headers.host || '';
+    const forwardedFor = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || '';
+    const ip = req.ip || '';
+    const isLocalDebug = host.includes('localhost')
+      || host.includes('127.0.0.1')
+      || forwardedFor === '127.0.0.1'
+      || forwardedFor === '::1'
+      || ip === '127.0.0.1'
+      || ip === '::1'
+      || ip.endsWith('127.0.0.1');
+
+    if (isLocalDebug) {
+      return 100;
+    }
+
+    return config.nodeEnv === 'production' ? 10 : 100;
+  },
   standardHeaders: true,
   legacyHeaders: false,
   message: {
     success: false,
-    message: 'Too many authentication attempts. Please try again in 15 minutes.',
+    message: config.nodeEnv === 'production'
+      ? 'Too many authentication attempts. Please try again in 15 minutes.'
+      : 'Too many authentication attempts. Please wait a minute and try again.',
     code: 'AUTH_RATE_LIMITED',
   },
   keyGenerator: (req: Request): string => {
@@ -218,11 +240,14 @@ app.use('/api/v1/auth', authLimiter, authRoutes);
 app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/blog', blogRoutes);
 app.use('/api/v1/courses', courseRoutes);
+app.use('/api/v1/academy', academyRoutes);
 app.use('/api/v1/shop', shopRoutes);
 app.use('/api/v1/music', musicRoutes);
 app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/skills', skillRoutes);
+app.use('/api/v1/projects', projectRoutes);
+app.use('/api/v1/certificates', certificateRoutes);
 app.use('/api/v1/contact', contactRoutes);
 app.use('/api/v1/files', uploadLimiter, uploadRoutes);
 app.use('/api/v1/dev-posts', devPostRoutes);

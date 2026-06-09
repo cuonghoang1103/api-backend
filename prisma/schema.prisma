@@ -1,6 +1,6 @@
 // ============================================================
 // CuongHoangDev API - Prisma Schema
-// Migrated from Spring Boot JPA/Hibernate
+// Source of truth for the Node.js backend runtime.
 // Database: PostgreSQL with pgvector extension
 // ============================================================
 

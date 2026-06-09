@@ -1,0 +1,409 @@
+'use client';
+
+import { useState, useEffect, use } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import {
+  ChevronLeft, ChevronRight, CheckCircle, Circle, Lock, Menu, X,
+  Download, BookOpen, Loader2, Play, ChevronDown, ChevronUp, ArrowLeft
+} from 'lucide-react';
+import { coursesApi } from '@/lib/api';
+import { useAuthStore } from '@/store/authStore';
+import { useSession } from 'next-auth/react';
+import { toast } from 'sonner';
+import { sanitizeHtml } from '@/lib/utils';
+import type { Course, LessonDto, LessonProgress } from '@/types';
+
+function formatDuration(seconds: number): string {
+  if (!seconds) return '0:00';
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+interface FlatLesson {
+  sectionId: number;
+  sectionTitle: string;
+  sectionLocked: boolean;
+  lesson: LessonDto;
+}
+
+export default function LearnPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = use(params);
+  const router = useRouter();
+  const slug = resolvedParams.slug;
+  const { isAuthenticated: isBackendAuth, isLoading: isBackendLoading } = useAuthStore();
+  const { status } = useSession();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isLoading = isBackendLoading || status === 'loading';
+  const isAuthenticated = mounted && (isBackendAuth || status === 'authenticated');
+
+  const [course, setCourse] = useState<Course | null>(null);
+  const [currentLesson, setCurrentLesson] = useState<LessonDto | null>(null);
+  const [progress, setProgress] = useState<LessonProgress[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [savingProgress, setSavingProgress] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
+  const [videoKey, setVideoKey] = useState(0);
+  const [videoCompleted, setVideoCompleted] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+    loadCourse();
+  }, [slug, isAuthenticated]);
+
+  const loadCourse = async () => {
+    setLoading(true);
+    try {
+      const res = await coursesApi.getBySlug(slug);
+      const data = res.data.data as Course;
+      if (!data.isEnrolled) {
+        toast.error('You are not enrolled in this course');
+        router.push(`/courses/${slug}`);
+        return;
+      }
+      setCourse(data);
+
+      // Expand all sections by default
+      const sectionIds = new Set(data.sections?.map(s => s.id) || []);
+      setExpandedSections(sectionIds);
+
+      // Load progress
+      const progRes = await coursesApi.getProgress(data.id);
+      setProgress(progRes.data.data || []);
+
+      // Pick first lesson or last accessed
+      if (data.sections && data.sections.length > 0) {
+        const firstLesson = data.sections[0].lessons?.[0];
+        if (firstLesson) selectLesson(firstLesson);
+      }
+      } catch {
+        toast.error('Unable to load course');
+      } finally {
+      setLoading(false);
+    }
+  };
+
+  const selectLesson = async (lesson: LessonDto) => {
+    if (!course) return;
+    setCurrentLesson(lesson);
+    setVideoKey(k => k + 1);
+    setVideoCompleted(false);
+    try {
+      const res = await coursesApi.getLesson(course.id, lesson.id);
+      setCurrentLesson(res.data.data);
+    } catch {
+      // lesson already set from course data
+    }
+  };
+
+  const isCompleted = (lessonId: number) =>
+    progress.find(p => p.lessonId === lessonId)?.isCompleted || false;
+
+  const markComplete = async () => {
+    if (!course || !currentLesson || savingProgress) return;
+    setSavingProgress(true);
+    try {
+      await coursesApi.updateProgress(course.id, {
+        lessonId: currentLesson.id,
+        isCompleted: true,
+        watchTimeSeconds: currentLesson.videoDurationSeconds,
+        lastPositionSeconds: 0,
+      });
+      setProgress(prev => [...prev.filter(p => p.lessonId !== currentLesson.id), {
+        lessonId: currentLesson.id,
+        isCompleted: true,
+        watchTimeSeconds: currentLesson.videoDurationSeconds || 0,
+        lastPositionSeconds: 0,
+      }]);
+      setVideoCompleted(true);
+      toast.success('Lesson completed!');
+    } catch {
+      toast.error('Unable to save progress');
+    } finally {
+      setSavingProgress(false);
+    }
+  };
+
+  const getFlatLessons = (): FlatLesson[] => {
+    if (!course?.sections) return [];
+    return course.sections.flatMap(section =>
+      (section.lessons || []).map(lesson => ({
+        sectionId: section.id,
+        sectionTitle: section.title,
+        sectionLocked: section.isLocked || false,
+        lesson,
+      }))
+    );
+  };
+
+  const flatLessons = getFlatLessons();
+  const currentIndex = currentLesson ? flatLessons.findIndex(f => f.lesson.id === currentLesson.id) : -1;
+  const prevLesson = currentIndex > 0 ? flatLessons[currentIndex - 1]?.lesson : null;
+  const nextLesson = currentIndex < flatLessons.length - 1 ? flatLessons[currentIndex + 1]?.lesson : null;
+
+  const toggleSection = (id: number) => {
+    setExpandedSections(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-darkbg flex items-center justify-center">
+        <Loader2 className="w-10 h-10 animate-spin text-neon-violet" />
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="min-h-screen bg-darkbg flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-text-primary mb-4">Course not found</h2>
+          <Link href="/courses" className="text-neon-violet hover:text-neon-indigo">Back to Courses</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const overallProgress = course.totalLessons > 0
+    ? Math.round((progress.filter(p => p.isCompleted).length / course.totalLessons) * 100)
+    : 0;
+
+  return (
+    <div className="min-h-screen bg-darkbg flex flex-col">
+      {/* Top bar */}
+      <header className="h-14 bg-darkcard border-b border-darkborder/50 flex items-center justify-between px-4 shrink-0 z-20">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 hover:bg-darkbg rounded-lg transition-colors text-text-muted hover:text-text-primary"
+          >
+            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+          <Link href={`/courses/${slug}`} className="text-text-muted hover:text-text-primary transition-colors">
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+          <div>
+            <h1 className="text-sm font-semibold text-text-primary line-clamp-1">{course.title}</h1>
+            <div className="flex items-center gap-2 mt-0.5">
+              <div className="w-24 h-1.5 bg-darkbg rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-neon-indigo to-neon-violet transition-all" style={{ width: `${overallProgress}%` }} />
+              </div>
+              <span className="text-xs text-text-muted">{overallProgress}% completed</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link href="/my-courses" className="text-sm text-neon-violet hover:text-neon-indigo transition-colors">
+            My Courses
+          </Link>
+        </div>
+      </header>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <aside className={`${sidebarOpen ? 'w-80' : 'w-0'} bg-darkcard border-r border-darkborder/50 overflow-y-auto transition-all shrink-0 flex-shrink-0`}>
+          <div className="p-4">
+            <h2 className="font-semibold text-text-primary text-sm mb-4">Course Content</h2>
+            <div className="space-y-1">
+              {course.sections?.map(section => (
+                <div key={section.id} className="border border-darkborder/20 rounded-xl overflow-hidden">
+                  <button
+                    onClick={() => toggleSection(section.id)}
+                    className="w-full flex items-center justify-between p-3 bg-darkbg/50 hover:bg-darkbg transition-colors text-left"
+                  >
+                    <div className="flex-1 min-w-0 pr-2">
+                      <p className="text-sm font-medium text-text-primary line-clamp-2">{section.title}</p>
+                      <p className="text-xs text-text-muted mt-0.5">
+                        {section.lessonCount} lessons • {section.lessons?.filter(l => isCompleted(l.id)).length || 0}/{section.lessonCount} completed
+                      </p>
+                    </div>
+                    {expandedSections.has(section.id)
+                      ? <ChevronUp className="w-4 h-4 text-text-muted shrink-0" />
+                      : <ChevronDown className="w-4 h-4 text-text-muted shrink-0" />
+                    }
+                  </button>
+                  {expandedSections.has(section.id) && (
+                    <div className="divide-y divide-darkborder/10">
+                      {section.lessons?.map(lesson => (
+                        <button
+                          key={lesson.id}
+                          onClick={() => selectLesson(lesson)}
+                          className={`w-full flex items-start gap-2.5 p-3 pl-4 text-left transition-colors ${
+                            currentLesson?.id === lesson.id
+                              ? 'bg-neon-violet/10 border-l-2 border-neon-violet'
+                              : 'hover:bg-darkbg/50'
+                          }`}
+                        >
+                          <span className={`mt-0.5 shrink-0 ${
+                            isCompleted(lesson.id) ? 'text-green-400' :
+                            currentLesson?.id === lesson.id ? 'text-neon-violet' : 'text-text-muted'
+                          }`}>
+                            {isCompleted(lesson.id)
+                              ? <CheckCircle className="w-4 h-4" />
+                              : <Circle className="w-4 h-4" />
+                            }
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-xs font-medium line-clamp-2 ${
+                              currentLesson?.id === lesson.id ? 'text-neon-violet' : 'text-text-secondary'
+                            }`}>
+                              {lesson.title}
+                            </p>
+                            <div className="flex items-center gap-2 mt-1">
+                              {lesson.isFreePreview && (
+                                <span className="text-xs text-green-400 font-medium">Preview</span>
+                              )}
+                              <span className="text-xs text-text-muted">
+                                {formatDuration(lesson.videoDurationSeconds)}
+                              </span>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        {/* Main content */}
+        <main className="flex-1 overflow-y-auto">
+          {currentLesson ? (
+            <div className="max-w-4xl mx-auto px-4 py-8">
+              {/* Video */}
+              {currentLesson.videoUrl && (
+                <div className="aspect-video bg-black rounded-2xl overflow-hidden mb-6">
+                  <video
+                    key={videoKey}
+                    src={currentLesson.videoUrl}
+                    controls
+                    autoPlay
+                    className="w-full h-full"
+                    onEnded={() => {
+                      if (!isCompleted(currentLesson.id)) markComplete();
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Lesson info */}
+              <div className="flex items-start justify-between gap-4 mb-8">
+                <div>
+                  <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">
+                    {currentLesson.title}
+                  </h2>
+                  {currentLesson.description && (
+                    <p className="text-text-secondary leading-relaxed">{currentLesson.description}</p>
+                  )}
+                </div>
+                <button
+                  onClick={markComplete}
+                  disabled={savingProgress || isCompleted(currentLesson.id)}
+                  className={`shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${
+                    isCompleted(currentLesson.id)
+                      ? 'bg-green-500/10 text-green-400 cursor-default'
+                      : 'bg-neon-indigo/10 text-neon-indigo hover:bg-neon-indigo/20'
+                  }`}
+                >
+                  {savingProgress ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : isCompleted(currentLesson.id) ? (
+                    <CheckCircle className="w-4 h-4" />
+                  ) : (
+                    <Circle className="w-4 h-4" />
+                  )}
+                  {isCompleted(currentLesson.id) ? 'Completed' : 'Mark as Complete'}
+                </button>
+              </div>
+
+              {/* Text content */}
+              {currentLesson.content && (
+                <div className="bg-darkcard border border-darkborder/50 rounded-2xl p-6 mb-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <BookOpen className="w-5 h-5 text-neon-violet" />
+                    <h3 className="font-semibold text-text-primary">Lesson Content</h3>
+                  </div>
+                  <div className="text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentLesson.content) }} />
+                </div>
+              )}
+
+              {/* Documents */}
+              {currentLesson.documents && currentLesson.documents.length > 0 && (
+                <div className="bg-darkcard border border-darkborder/50 rounded-2xl p-6 mb-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Download className="w-5 h-5 text-neon-violet" />
+                    <h3 className="font-semibold text-text-primary">Downloadable Materials</h3>
+                  </div>
+                  <div className="space-y-2">
+                    {currentLesson.documents.map(doc => (
+                      <a
+                        key={doc.id}
+                        href={doc.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 p-3 bg-darkbg rounded-xl hover:bg-darkbg/80 transition-colors group"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-neon-indigo/10 flex items-center justify-center shrink-0">
+                          <Download className="w-5 h-5 text-neon-indigo" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors truncate">
+                            {doc.title}
+                          </p>
+                          <p className="text-xs text-text-muted">
+                            {doc.fileType?.toUpperCase()} • {doc.downloadCount} downloads
+                          </p>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation */}
+              <div className="flex items-center justify-between pt-6 border-t border-darkborder/30">
+                {prevLesson ? (
+                  <button
+                    onClick={() => selectLesson(prevLesson)}
+                    className="flex items-center gap-2 px-4 py-2.5 bg-darkcard border border-darkborder/50 rounded-xl text-text-primary hover:border-neon-violet/30 transition-colors text-sm"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous Lesson
+                  </button>
+                ) : <div />}
+                {nextLesson && (
+                  <button
+                    onClick={() => selectLesson(nextLesson)}
+                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium rounded-xl hover:opacity-90 transition-opacity text-sm"
+                  >
+                    Next Lesson
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <Play className="w-12 h-12 text-text-muted mx-auto mb-4" />
+                <p className="text-text-muted">Select a lesson to get started</p>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+}

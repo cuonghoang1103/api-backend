@@ -1,59 +1,47 @@
-FROM node:20-alpine AS base
+# ─────────────────────────────────────────────
+# Build stage
+# ─────────────────────────────────────────────
+FROM node:22-alpine AS builder
 
-# ============================================================
-# Stage 1: Dependencies
-# ============================================================
-FROM base AS deps
 WORKDIR /app
 
-# Install all dependencies
+# Ensure public dir exists (needed by Next.js standalone output)
+RUN mkdir -p /app/public
+
+# Copy package files for dependency caching
 COPY package*.json ./
-RUN npm install && npm cache clean --force
-
-# ============================================================
-# Stage 2: Builder
-# ============================================================
-FROM base AS builder
-WORKDIR /app
-
-# Copy dependencies
-COPY --from=deps /app/node_modules ./node_modules
+RUN npm ci
 
 # Copy source
 COPY . .
 
-# Build Next.js
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
-# ============================================================
-# Stage 3: Runner (Production)
-# ============================================================
-FROM base AS runner
+# ─────────────────────────────────────────────
+# Runtime stage
+# ─────────────────────────────────────────────
+FROM node:22-alpine AS runner
+
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Create user
-RUN addgroup -g 1001 -S nextjs && adduser -S nextjs -u 1001
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
-# Create necessary directories
-RUN mkdir -p .next/cache && chown -R nextjs:nextjs /app
+# Copy built assets
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy built artifacts
-COPY --from=builder --chown=nextjs:nextjs /app/public ./public
-COPY --from=builder --chown=nextjs:nextjs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nextjs /app/.next/static ./.next/static
+USER nextjs
 
-# Expose port
 EXPOSE 3000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost:3000 || exit 1
-
-# Run as non-root
-USER nextjs
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]

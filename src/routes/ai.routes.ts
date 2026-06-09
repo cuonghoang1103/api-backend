@@ -20,6 +20,7 @@
 
 import { Router, type Response } from 'express';
 
+import { prisma } from '../config/database.js';
 import { aiService } from '../services/ai.service.js';
 import { optionalAuth, authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
@@ -327,9 +328,34 @@ router.get('/feedback/stats', authenticate, async (_req: any, res: Response<ApiR
 // ════════════════════════════════════════════════════════════════
 router.get('/analytics/overview', authenticate, async (_req: any, res: Response<ApiResponse>, next) => {
   try {
+    const [sessionCount, messageCount, recentSessions] = await Promise.all([
+      prisma.chatSession.count(),
+      prisma.chatMessage.count(),
+      prisma.chatSession.findMany({
+        select: { createdAt: true },
+        orderBy: { createdAt: 'desc' },
+        take: 100,
+      }),
+    ]);
+
+    let avgResponseTime = 0;
+    if (recentSessions.length > 1) {
+      const diffs = recentSessions
+        .slice(1)
+        .map((s, i) => s.createdAt.getTime() - recentSessions[i].createdAt.getTime())
+        .filter(d => d > 0 && d < 300000);
+      avgResponseTime = diffs.length > 0
+        ? Math.round(diffs.reduce((a, b) => a + b, 0) / diffs.length)
+        : 0;
+    }
+
     res.json({
       success: true,
-      data: { totalSessions: 0, totalMessages: 0, avgResponseTime: 0 },
+      data: {
+        totalSessions: sessionCount,
+        totalMessages: messageCount,
+        avgResponseTime,
+      },
     });
   } catch (error) {
     next(error);

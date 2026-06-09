@@ -39,3 +39,14 @@ nginx/ssl/
 # Docker
 .dockerignore
 !frontend/.dockerignore
+
+# Legacy Java (Spring Boot - archived)
+# src/main/java/
+# src/main/resources/db/migration/
+# pom.xml
+
+# Build artifacts
+bin/
+target/
+*.class
+*.jar

@@ -120,6 +120,34 @@ router.get(
 );
 
 // ════════════════════════════════════════════════════════════════
+// GET /api/v1/music/admin/tracks
+// ════════════════════════════════════════════════════════════════
+router.get(
+  '/admin/tracks',
+  authenticate,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const result = await musicService.getAdminTracks({
+        page: req.query.page ? parseInt(req.query.page as string, 10) : undefined,
+        size: req.query.size ? parseInt(req.query.size as string, 10) : undefined,
+        keyword: req.query.keyword as string | undefined,
+        sortBy: req.query.sortBy as string | undefined,
+        sortDir: req.query.sortDir as string | undefined,
+        includeInactive: req.query.includeInactive === 'true',
+      });
+
+      res.json({
+        success: true,
+        data: result.data,
+        pagination: result.pagination,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
 // GET /api/v1/music/stream/:id
 // CORE: HTTP 206 Partial Content — Spotify-style streaming
 // ════════════════════════════════════════════════════════════════

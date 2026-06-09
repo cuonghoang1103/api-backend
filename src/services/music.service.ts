@@ -368,6 +368,65 @@ export class MusicService {
     };
   }
 
+  // ─── GET /admin/tracks ─────────────────────────────────────
+  async getAdminTracks(params: {
+    page?: number;
+    size?: number;
+    keyword?: string;
+    sortBy?: string;
+    sortDir?: string;
+    includeInactive?: boolean;
+  }): Promise<PaginatedResult<unknown>> {
+    const page = Math.max(1, params.page ?? 1);
+    const size = Math.min(100, Math.max(1, params.size ?? 20));
+    const skip = (page - 1) * size;
+
+    const where = {
+      ...(params.includeInactive ? {} : { active: true }),
+      ...(params.keyword && {
+        OR: [
+          { title: { contains: params.keyword, mode: 'insensitive' as const } },
+          { artist: { contains: params.keyword, mode: 'insensitive' as const } },
+        ],
+      }),
+    };
+
+    const [tracks, total] = await Promise.all([
+      prisma.musicTrack.findMany({
+        where,
+        skip,
+        take: size,
+        orderBy: {
+          [params.sortBy ?? 'createdAt']:
+            params.sortDir === 'asc' ? 'asc' : 'desc',
+        },
+        select: {
+          id: true,
+          title: true,
+          artist: true,
+          coverImage: true,
+          durationSeconds: true,
+          audioUrl: true,
+          localPath: true,
+          fileSize: true,
+          active: true,
+          createdAt: true,
+        },
+      }),
+      prisma.musicTrack.count({ where }),
+    ]);
+
+    return {
+      data: tracks,
+      pagination: {
+        page,
+        limit: size,
+        total,
+        totalPages: Math.ceil(total / size),
+      },
+    };
+  }
+
   // ─── GET /tracks/:id ─────────────────────────────────────
   async getTrackById(id: number): Promise<unknown> {
     const track = await prisma.musicTrack.findUnique({

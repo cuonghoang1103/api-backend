@@ -32,7 +32,7 @@ jobs:
       - name: Sync project to VPS
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
-            rm -rf /opt/cuonghoangdev/bin
+            rm -rf /opt/cuonghoangdev/bin /opt/cuonghoangdev/node_modules /opt/cuonghoangdev/.git /opt/cuonghoangdev/frontend/node_modules
           '
           rsync -az --delete \
             --exclude '.git' \
@@ -43,17 +43,21 @@ jobs:
             --exclude '*.log' \
             ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
+      - name: Setup data directories on VPS
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            mkdir -p /opt/cuonghoangdev/{postgres,redis,uploads}
+            chmod 777 /opt/cuonghoangdev/{postgres,redis,uploads}
+          '
+
       - name: Deploy on VPS
         run: |
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -e
             cd /opt/cuonghoangdev
 
-            # Stop existing containers
-            docker compose -f docker-compose.yml down || true
-
-            # Run database migrations (Prisma)
-            docker compose -f docker-compose.yml run --rm backend npx prisma migrate deploy || true
+            # Clean up old volumes and containers
+            docker compose -f docker-compose.yml down -v 2>/dev/null || true
 
             # Build and start all services
             docker compose -f docker-compose.yml up -d --build

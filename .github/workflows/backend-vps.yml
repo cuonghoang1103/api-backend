@@ -62,7 +62,12 @@ jobs:
           USER="$VPS_USER"
           KEY_FILE=~/.ssh/deploy_key
 
-          ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$USER@$HOST" bash << 'ENDSSH'
+          # Get POSTGRES_PASSWORD from docker-compose.yml on LOCAL machine
+          # (This ensures Docker DNS name + correct port are set in .env)
+          DB_PASS=$(grep 'POSTGRES_PASSWORD' docker-compose.yml | sed "s/.*POSTGRES_PASSWORD:-\([^}]*\)}.*/\1/")
+          DB_PASS="${DB_PASS:-123456}"
+
+          ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$USER@$HOST" bash << ENDSSH
             set -e
             cd /opt/cuonghoangdev
 
@@ -73,14 +78,18 @@ jobs:
               ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
             fi
 
-            # ALWAYS regenerate .env from .env.example to prevent stale env vars.
+            # Regenerate .env from .env.example
             if [ -f .env.example ]; then
               cp .env.example .env
             fi
 
-            # Fix DATABASE_URL to use Docker DNS name + correct port.
-            # .env.example has localhost:5433 for local dev, but Docker uses postgres:5432.
+            # Fix DATABASE_URL: localhost:5433 -> postgres:5432 (Docker DNS)
             sed -i 's|localhost:5433|postgres:5432|g' .env
+
+            # Remove old DATABASE_URL and write resolved password directly (no \${VAR} expansion in .env)
+            sed -i '/^DATABASE_URL=/d' .env
+            echo "DATABASE_URL=postgresql://postgres:${DB_PASS}@postgres:5432/cuonghoangdev_db?schema=public" >> .env
+            echo "[DEBUG] DB_PASS=\${DB_PASS}"
 
             docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
             docker rm -f cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
@@ -90,21 +99,21 @@ jobs:
             docker compose -f docker-compose.yml up -d 2>&1
             echo "Containers started"
 
-            for i in $(seq 1 36); do
+            for i in \$(seq 1 36); do
               if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null | grep -q "ok"; then
                 echo "[OK] backend"
                 break
               fi
-              echo "Waiting for backend... ($i/36)"
+              echo "Waiting for backend... (\$i/36)"
               sleep 5
             done
 
-            for i in $(seq 1 24); do
+            for i in \$(seq 1 24); do
               if docker exec cuonghoangdev_nginx wget -qO- http://localhost/ >/dev/null 2>&1; then
                 echo "[OK] nginx"
                 break
               fi
-              echo "Waiting for nginx... ($i/24)"
+              echo "Waiting for nginx... (\$i/24)"
               sleep 5
             done
 

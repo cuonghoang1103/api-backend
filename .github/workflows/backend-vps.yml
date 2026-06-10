@@ -26,17 +26,18 @@ jobs:
 
       - name: Setup SSH key
         env:
-          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${VPS_SSH_PRIVATE_KEY}" > ~/.ssh/deploy_key
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "echo SSH_CONNECTION_OK"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "echo SSH_CONNECTION_OK"
 
       - name: Sync project to VPS
         run: |
-          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
           rsync -az --delete \
             --exclude '.git' \
             --exclude 'node_modules' \
@@ -83,7 +84,6 @@ jobs:
             if [ ! -f "${CERT_DIR}/fullchain.pem" ] || [ ! -f "${CERT_DIR}/privkey.pem" ]; then
               echo "[1/6] SSL certificates not found — using HTTP-only config first..."
               mkdir -p /opt/certbot/www /opt/certbot/conf/live/cuongthai.com
-              # Copy HTTP-only fallback config
               if [ -f /opt/cuonghoangdev/nginx/nginx.http.conf ]; then
                 cp /opt/cuonghoangdev/nginx/nginx.http.conf /opt/cuonghoangdev/nginx/nginx.conf
               fi
@@ -139,11 +139,9 @@ jobs:
               return 1
             }
 
-            # backend must be up before frontend
             wait_for_service cuonghoangdev_backend  http://localhost:3001/health
             wait_for_service cuonghoangdev_frontend http://localhost:3000
 
-            # nginx health check
             for i in $(seq 1 12); do
               if docker exec cuonghoangdev_nginx wget -q -O- http://localhost/ >/dev/null 2>&1; then
                 echo "  ✓ cuonghoangdev_nginx is healthy"

@@ -88,10 +88,27 @@ router.get(
         sortDir: req.query.sortDir as string | undefined,
       });
 
+      const serializedData = result.data.map((track: any) => {
+        const t = { ...track };
+        if (t.id !== undefined) t.id = Number(t.id);
+        if (t.fileSize !== undefined) t.fileSize = Number(t.fileSize);
+        if (t.durationSeconds !== undefined) t.durationSeconds = Number(t.durationSeconds);
+        if (t.playCount !== undefined) t.playCount = Number(t.playCount);
+        return t;
+      });
+
+      const pag: any = result.pagination;
+      const serializedPagination = {
+        page: Number(pag.page),
+        limit: Number(pag.limit ?? pag.size),
+        total: Number(pag.total),
+        totalPages: Number(pag.totalPages),
+      };
+
       res.json({
         success: true,
-        data: result.data,
-        pagination: result.pagination,
+        data: serializedData,
+        pagination: serializedPagination,
       });
     } catch (error) {
       next(error);
@@ -112,9 +129,19 @@ router.get(
         throw new AppError('Invalid track ID', 400, 'INVALID_ID');
       }
 
-      const track = await musicService.getTrackById(id);
+      const track: any = await musicService.getTrackById(id);
+      if (track.fileSize !== undefined) {
+        track.fileSize = Number(track.fileSize);
+      }
+      // Serialize BigInt fields
+      const serializedTrack = { ...track };
+      if (serializedTrack.fileSize !== undefined) serializedTrack.fileSize = Number(serializedTrack.fileSize);
+      if (serializedTrack.playCount !== undefined) serializedTrack.playCount = Number(serializedTrack.playCount);
+      if (serializedTrack.id !== undefined) serializedTrack.id = Number(serializedTrack.id);
+      if (serializedTrack.uploadedBy !== undefined) serializedTrack.uploadedBy = Number(serializedTrack.uploadedBy);
+      if (serializedTrack.durationSeconds !== undefined) serializedTrack.durationSeconds = Number(serializedTrack.durationSeconds);
 
-      res.json({ success: true, data: track });
+      res.json({ success: true, data: serializedTrack });
     } catch (error) {
       next(error);
     }
@@ -138,10 +165,30 @@ router.get(
         includeInactive: req.query.includeInactive === 'true',
       });
 
+      // Serialize BigInt fields in data array
+      const serializedData = result.data.map((track: any) => {
+        const t = { ...track };
+        if (t.id !== undefined) t.id = Number(t.id);
+        if (t.fileSize !== undefined) t.fileSize = Number(t.fileSize);
+        if (t.durationSeconds !== undefined) t.durationSeconds = Number(t.durationSeconds);
+        if (t.playCount !== undefined) t.playCount = Number(t.playCount);
+        if (t.uploadedBy !== undefined) t.uploadedBy = Number(t.uploadedBy);
+        return t;
+      });
+
+      // Serialize BigInt in pagination
+      const pag: any = result.pagination;
+      const serializedPagination = {
+        page: Number(pag.page),
+        limit: Number(pag.limit ?? pag.size),
+        total: Number(pag.total),
+        totalPages: Number(pag.totalPages),
+      };
+
       res.json({
         success: true,
-        data: result.data,
-        pagination: result.pagination,
+        data: serializedData,
+        pagination: serializedPagination,
       });
     } catch (error) {
       next(error);
@@ -414,7 +461,14 @@ router.get(
   async (req: any, res: Response<ApiResponse>, next) => {
     try {
       const playlists = await musicService.getPlaylists(req.userId);
-      res.json({ success: true, data: playlists });
+      const serialized = playlists.map((p: any) => {
+        const r = { ...p };
+        if (r.id !== undefined) r.id = Number(r.id);
+        if (r.trackCount !== undefined) r.trackCount = Number(r.trackCount);
+        if (r.ownerId !== undefined) r.ownerId = Number(r.ownerId);
+        return r;
+      });
+      res.json({ success: true, data: serialized });
     } catch (error) {
       next(error);
     }
@@ -439,7 +493,13 @@ router.get(
         throw new AppError('Playlist not found', 404, 'PLAYLIST_NOT_FOUND');
       }
 
-      res.json({ success: true, data: playlist });
+      // Serialize BigInt fields
+      const serialized: any = { ...playlist };
+      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
+      if (serialized.trackCount !== undefined) serialized.trackCount = Number(serialized.trackCount);
+      if (serialized.ownerId !== undefined) serialized.ownerId = Number(serialized.ownerId);
+
+      res.json({ success: true, data: serialized });
     } catch (error) {
       next(error);
     }
@@ -460,7 +520,7 @@ router.post(
         throw new AppError('Playlist name is required', 400, 'MISSING_NAME');
       }
 
-      const playlist = await musicService.createPlaylist({
+      const playlist: any = await musicService.createPlaylist({
         name: name.trim(),
         description,
         coverUrl,
@@ -468,9 +528,15 @@ router.post(
         isPublic: isPublic ?? true,
       });
 
+      // Serialize BigInt fields
+      const serialized: any = { ...playlist };
+      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
+      if (serialized.trackCount !== undefined) serialized.trackCount = Number(serialized.trackCount);
+      if (serialized.ownerId !== undefined) serialized.ownerId = Number(serialized.ownerId);
+
       res.status(201).json({
         success: true,
-        data: playlist,
+        data: serialized,
         message: 'Playlist created',
       });
     } catch (error) {
@@ -494,14 +560,20 @@ router.put(
 
       const { name, description, coverUrl, isPublic } = req.body;
 
-      const playlist = await musicService.updatePlaylist(id, {
+      const playlist: any = await musicService.updatePlaylist(id, {
         ...(name !== undefined && { name }),
         ...(description !== undefined && { description }),
         ...(coverUrl !== undefined && { coverUrl }),
         ...(isPublic !== undefined && { isPublic }),
       });
 
-      res.json({ success: true, data: playlist, message: 'Playlist updated' });
+      // Serialize BigInt fields
+      const serialized: any = { ...playlist };
+      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
+      if (serialized.trackCount !== undefined) serialized.trackCount = Number(serialized.trackCount);
+      if (serialized.ownerId !== undefined) serialized.ownerId = Number(serialized.ownerId);
+
+      res.json({ success: true, data: serialized, message: 'Playlist updated' });
     } catch (error) {
       next(error);
     }
@@ -549,14 +621,20 @@ router.post(
         throw new AppError('Valid trackId is required', 400, 'INVALID_TRACK_ID');
       }
 
-      const item = await musicService.addTrackToPlaylist(
+      const item: any = await musicService.addTrackToPlaylist(
         playlistId,
         parseInt(trackId as string, 10),
       );
 
+      // Serialize BigInt fields
+      const serialized = { ...item };
+      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
+      if (serialized.playlistId !== undefined) serialized.playlistId = Number(serialized.playlistId);
+      if (serialized.trackId !== undefined) serialized.trackId = Number(serialized.trackId);
+
       res.status(201).json({
         success: true,
-        data: item,
+        data: serialized,
         message: 'Track added to playlist',
       });
     } catch (error) {

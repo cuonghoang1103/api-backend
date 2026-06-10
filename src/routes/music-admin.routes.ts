@@ -86,9 +86,11 @@ router.post(
 
       // Serialize BigInt fields for JSON response
       const serialized = track as Record<string, unknown>;
-      if (serialized.fileSize !== undefined) {
-        serialized.fileSize = Number(serialized.fileSize);
-      }
+      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
+      if (serialized.fileSize !== undefined) serialized.fileSize = Number(serialized.fileSize);
+      if (serialized.durationSeconds !== undefined) serialized.durationSeconds = Number(serialized.durationSeconds);
+      if (serialized.playCount !== undefined) serialized.playCount = Number(serialized.playCount);
+      if (serialized.uploadedBy !== undefined) serialized.uploadedBy = Number(serialized.uploadedBy);
 
       res.status(201).json({
         success: true,

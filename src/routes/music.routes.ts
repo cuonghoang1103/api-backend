@@ -273,6 +273,7 @@ router.post(
   ]),
   async (req: any, res: Response<ApiResponse>, next) => {
     try {
+      console.log(`[DEBUG][POST /tracks] ENTERED - req.files keys:`, req.files ? Object.keys(req.files) : 'undefined', 'req.body:', req.body);
       const { title, artist, durationSeconds } = req.body;
 
       // ─── Validate required fields ────────────────────────
@@ -287,13 +288,16 @@ router.post(
       let localPath: string | undefined;
       let audioFileSize: number | undefined;
 
+      console.log(`[DEBUG][POST /tracks] req.files audio part:`, req.files?.audio, 'mimetype:', req.files?.audio?.[0]?.mimetype, 'size:', req.files?.audio?.[0]?.size);
       const audioFile = req.files?.audio?.[0] as Express.Multer.File | undefined;
       if (audioFile) {
+        console.log(`[DEBUG][POST /tracks] audioFile mimetype:`, audioFile.mimetype, 'size:', audioFile.size, 'originalname:', audioFile.originalname);
         const uploadResult = await uploadService.uploadFile(
           audioFile,
           'audio',
           req.userId,
         );
+        console.log(`[DEBUG][POST /tracks] uploadResult:`, uploadResult);
         localPath = uploadResult.filePath;
         audioFileSize = Number(uploadResult.fileSize);
       }
@@ -302,6 +306,7 @@ router.post(
       let coverUrl: string | undefined;
       const coverFile = req.files?.cover?.[0] as Express.Multer.File | undefined;
       if (coverFile) {
+        console.log(`[DEBUG][POST /tracks] coverFile mimetype:`, coverFile.mimetype);
         const uploadResult = await uploadService.uploadFile(
           coverFile,
           'images',

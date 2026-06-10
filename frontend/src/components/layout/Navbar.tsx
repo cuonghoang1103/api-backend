@@ -190,6 +190,7 @@ export default function Navbar() {
     { href: '/projects', label: t('projects'), icon: FolderOpen },
     { href: '/games', label: t('games'), icon: Gamepad2, iconNode: <img src="/games-icon.png" alt="Games" className="w-4 h-4 object-contain" /> },
     { href: '/music', label: t('music'), icon: Music },
+    { href: '/social', label: 'Feed', icon: Globe },
     { href: '/chat', label: t('aiChat'), icon: MessageCircle },
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   ];

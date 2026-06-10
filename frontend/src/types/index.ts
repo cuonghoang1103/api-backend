@@ -626,3 +626,6 @@ export interface Playlist {
   totalDuration: string;
   tracks: Track[];
 }
+
+// === SOCIAL TYPES ===
+export * from './social';

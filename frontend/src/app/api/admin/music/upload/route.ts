@@ -252,6 +252,10 @@ export async function POST(request: NextRequest) {
 
     console.log('[admin/music/upload] FWD audio:', audioMime, 'len:', audioPart.data.length, 'hex:', audioPart.data.slice(0, 8).toString('hex'));
 
+    // Debug: verify Blob type
+    const audioBlob2 = new Blob([audioPart.data], { type: audioMime });
+    console.log('[admin/music/upload] audioBlob2.type:', audioBlob2.type, 'size:', audioBlob2.size);
+
     // ── Forward to backend ────────────────────────────────────────────────────
     const backendRes = await fetch(`${BACKEND_URL}/api/v1/music/tracks`, {
       method: "POST",

@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import { v4 as uuidv4 } from 'uuid';
+import crypto from 'crypto';
 import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import type { FileCategory } from '../types/index.js';
@@ -18,6 +19,69 @@ const ALLOWED_DOCUMENT_TYPES = [
   'application/zip',
   'application/x-zip-compressed',
 ];
+
+// ─── Signed URL ─────────────────────────────────────────────────
+const SIGNED_URL_SECRET = process.env.SIGNED_URL_SECRET || 'default-signed-url-secret-change-me';
+const SIGNED_URL_EXPIRY_MS = 30 * 60 * 1000; // 30 minutes
+
+export interface SignedUploadPayload {
+  filename: string;
+  contentType: string;
+  folder: string;
+  userId?: number;
+  exp: number;
+}
+
+export function generateSignedUploadUrl(
+  filename: string,
+  contentType: string,
+  folder: string,
+  userId?: number,
+): { uploadUrl: string; fileId: string } {
+  const exp = Date.now() + SIGNED_URL_EXPIRY_MS;
+  const payload: SignedUploadPayload = { filename, contentType, folder, userId, exp };
+  const payloadBase64 = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const signature = crypto
+    .createHmac('sha256', SIGNED_URL_SECRET)
+    .update(payloadBase64)
+    .digest('base64url');
+
+  const token = `${payloadBase64}.${signature}`;
+  const fileId = uuidv4();
+  // Encode token so it doesn't contain / characters that break Express route params
+  const encodedToken = Buffer.from(token).toString('base64url');
+  const uploadUrl = `/api/v1/files/upload/signed/${encodedToken}`;
+
+  return { uploadUrl, fileId };
+}
+
+export function verifySignedUploadToken(token: string): SignedUploadPayload | null {
+  // Token is base64url-encoded to avoid / characters in Express route params
+  const decodedToken = Buffer.from(token, 'base64url').toString('utf-8');
+  try {
+    const lastDot = decodedToken.lastIndexOf('.');
+    if (lastDot === -1) return null;
+    const payloadBase64 = decodedToken.slice(0, lastDot);
+    const signature = decodedToken.slice(lastDot + 1);
+
+    const expectedSig = crypto
+      .createHmac('sha256', SIGNED_URL_SECRET)
+      .update(payloadBase64)
+      .digest('base64url');
+
+    if (signature !== expectedSig) return null;
+
+    const payload = JSON.parse(
+      Buffer.from(payloadBase64, 'base64url').toString('utf-8')
+    );
+
+    if (Date.now() > payload.exp) return null;
+
+    return payload;
+  } catch {
+    return null;
+  }
+}
 
 function slugify(text: string): string {
   return text
@@ -73,9 +137,11 @@ export class UploadService {
     category: FileCategory,
     uploadedBy?: number,
   ): Promise<UploadResult> {
+    console.log(`[DEBUG][UploadService] uploadFile called with mimetype:`, file.mimetype, 'size:', file.size, 'category:', category, 'originalname:', file.originalname);
     const detectedCategory = getFileCategory(file.mimetype);
     const finalCategory = category || detectedCategory;
     const allowedTypes = getAllowedTypes(finalCategory);
+    console.log(`[DEBUG][UploadService] detectedCategory:`, detectedCategory, 'finalCategory:', finalCategory, 'allowedTypes:', allowedTypes);
 
     if (!allowedTypes.includes(file.mimetype)) {
       throw new Error(`File type ${file.mimetype} is not allowed for category ${finalCategory}`);

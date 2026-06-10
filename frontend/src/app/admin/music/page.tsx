@@ -14,6 +14,27 @@ function debug(...args: unknown[]) {
   console.log('[AdminMusic]', ...args);
 }
 
+// Magic bytes for audio formats (in hex)
+const AUDIO_MAGIC: { sig: number[]; mime: string }[] = [
+  { sig: [0xFF, 0xFB], mime: 'audio/mpeg' },          // MP3 frame header
+  { sig: [0xFF, 0xFA], mime: 'audio/mpeg' },          // MP3 frame header
+  { sig: [0xFF, 0xF3], mime: 'audio/mpeg' },          // MP3 frame header
+  { sig: [0xFF, 0xF2], mime: 'audio/mpeg' },          // MP3 frame header
+  { sig: [0x49, 0x44, 0x33], mime: 'audio/mpeg' },   // ID3 / MP3
+  { sig: [0x4F, 0x67, 0x67, 0x53], mime: 'audio/ogg' }, // OGG
+  { sig: [0x52, 0x49, 0x46, 0x46], mime: 'audio/wav' }, // WAV (RIFF)
+  { sig: [0x66, 0x4C, 0x61, 0x43], mime: 'audio/flac' }, // FLAC
+  { sig: [0x4D, 0x54, 0x72, 0x61], mime: 'audio/mp4' }, // M4A/AAC
+];
+
+function detectAudioMimeType(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer.slice(0, 16));
+  for (const { sig, mime } of AUDIO_MAGIC) {
+    if (sig.every((b, i) => bytes[i] === b)) return mime;
+  }
+  return 'audio/mpeg'; // fallback
+}
+
 interface Track {
   id: number;
   title: string;
@@ -185,7 +206,7 @@ export default function AdminMusicPage() {
     setShowForm(true);
   };
 
-  const handleAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAudioChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     debug('handleAudioChange', {
       fileCount: e.target.files?.length ?? 0,
@@ -194,7 +215,15 @@ export default function AdminMusicPage() {
       fileSize: file?.size,
     });
     if (!file) return;
-    setAudioFile(file);
+
+    // Detect real MIME type via magic bytes
+    const buffer = await file.slice(0, 16).arrayBuffer();
+    const realMime = detectAudioMimeType(buffer);
+    debug('Magic bytes detection:', { reported: file.type, detected: realMime });
+
+    // Force correct MIME type so multipart content-type is accurate
+    const correctedFile = new File([file], file.name, { type: realMime });
+    setAudioFile(correctedFile);
     if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
     const blobUrl = URL.createObjectURL(file);
     setAudioPreviewUrl(blobUrl);

@@ -59,6 +59,7 @@ const contactRoutes = (await import(path.join(__dirname, 'routes', 'contact.rout
 const uploadRoutes = (await import(path.join(__dirname, 'routes', 'upload.routes.js'))).default;
 const devPostRoutes = (await import(path.join(__dirname, 'routes', 'devPost.routes.js'))).default;
 const systemRoutes = (await import(path.join(__dirname, 'routes', 'system.routes.js'))).default;
+const socialRoutes = (await import(path.join(__dirname, 'routes', 'social.routes.js'))).default;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -256,6 +257,7 @@ app.use('/api/v1/contact', contactRoutes);
 app.use('/api/v1/files', uploadLimiter, uploadRoutes);
 app.use('/api/v1/dev-posts', devPostRoutes);
 app.use('/api/v1/system', systemRoutes);
+app.use('/api/v1/social', socialRoutes);
 
 // ─── 10. Health Check ───────────────────────────────────────
 // Render.com và Docker healthcheck gọi endpoint này

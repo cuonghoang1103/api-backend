@@ -65,6 +65,12 @@ model User {
   assignmentSubmissions AssignmentSubmission[]
   aiConfigUpdates       AiConfig[]             @relation("AiConfigUpdater")
   musicHistories       MusicHistory[]
+  socialPosts          SocialPost[]
+  socialLikes         SocialLike[]
+  socialComments      SocialComment[]
+  socialCommentLikes  SocialCommentLike[]
+  socialSaves         SocialSave[]
+  socialShares        SocialShare[]
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -923,6 +929,144 @@ model DocumentChunk {
   @@index([documentType], name: "idx_document_chunks_type")
   @@index([documentId], name: "idx_document_chunks_doc_id")
   @@map("document_chunks")
+}
+
+// ============================================================
+// 14. SOCIAL FEED MODULE (Personal Social Network)
+// ============================================================
+
+model SocialPost {
+  id          Int       @id @default(autoincrement())
+  authorId    Int       @map("author_id")
+  content      String    @db.Text
+  visibility   String    @default("PUBLIC") @map("visibility") @db.VarChar(20)
+  status       String    @default("PUBLISHED") @db.VarChar(20)
+  latitude     Float?    @db.DoublePrecision
+  longitude    Float?    @db.DoublePrecision
+  locationName String?   @map("location_name") @db.VarChar(255)
+  viewCount    Int       @default(0) @map("view_count")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  author   User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  media    SocialMedia[]
+  likes    SocialLike[]
+  comments SocialComment[]
+  saves    SocialSave[]
+  shares   SocialShare[]
+
+  @@index([authorId], name: "idx_social_posts_author")
+  @@index([createdAt(sort: Desc)], name: "idx_social_posts_created")
+  @@index([visibility], name: "idx_social_posts_visibility")
+  @@map("social_posts")
+}
+
+model SocialMedia {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  type      String   @db.VarChar(20) // IMAGE, VIDEO, CODE_FILE
+  url       String   @db.VarChar(700)
+  thumbnail String?  @db.VarChar(700)
+  width     Int?     @db.Integer
+  height    Int?     @db.Integer
+  duration  Int?     @map("duration_seconds")
+  fileSize  BigInt?  @map("file_size")
+  mimeType  String?  @map("mime_type") @db.VarChar(100)
+  alt       String?  @db.VarChar(255)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId], name: "idx_social_media_post")
+  @@map("social_media")
+}
+
+model SocialLike {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId], name: "uk_social_like_post_user")
+  @@index([postId], name: "idx_social_likes_post")
+  @@index([userId], name: "idx_social_likes_user")
+  @@map("social_likes")
+}
+
+model SocialComment {
+  id           Int       @id @default(autoincrement())
+  postId       Int       @map("post_id")
+  userId       Int       @map("user_id")
+  parentId     Int?      @map("parent_id")
+  content      String    @db.Text
+  likesCount   Int       @default(0) @map("likes_count")
+  repliesCount Int       @default(0) @map("replies_count")
+  isEdited     Boolean   @default(false) @map("is_edited")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  post    SocialPost      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent  SocialComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies SocialComment[] @relation("CommentReplies")
+  likes   SocialCommentLike[]
+
+  @@index([postId], name: "idx_social_comments_post")
+  @@index([userId], name: "idx_social_comments_user")
+  @@index([parentId], name: "idx_social_comments_parent")
+  @@index([createdAt(sort: Desc)], name: "idx_social_comments_created")
+  @@map("social_comments")
+}
+
+model SocialCommentLike {
+  id         Int      @id @default(autoincrement())
+  commentId  Int      @map("comment_id")
+  userId     Int      @map("user_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  comment SocialComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId], name: "uk_social_comment_like")
+  @@index([commentId], name: "idx_social_comment_likes_comment")
+  @@index([userId], name: "idx_social_comment_likes_user")
+  @@map("social_comment_likes")
+}
+
+model SocialSave {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  folder    String?  @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId], name: "uk_social_save_post_user")
+  @@index([userId], name: "idx_social_saves_user")
+  @@index([folder], name: "idx_social_saves_folder")
+  @@map("social_saves")
+}
+
+model SocialShare {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  platform  String?  @db.VarChar(30)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([postId], name: "idx_social_shares_post")
+  @@index([userId], name: "idx_social_shares_user")
+  @@index([createdAt(sort: Desc)], name: "idx_social_shares_created")
+  @@map("social_shares")
 }
 
 // ============================================================

@@ -614,3 +614,84 @@ export const certificatesApi = {
 };
 
 export default api;
+
+// ─── Social Feed API ──────────────────────────────────────────────────────────
+
+export const socialApi = {
+  // Feed
+  getFeed: (params?: {
+    cursor?: number;
+    limit?: number;
+    authorId?: number;
+    visibility?: string;
+  }) => api.get('/social/posts', { params }),
+
+  getPost: (id: number) => api.get(`/social/posts/${id}`),
+  createPost: (data: {
+    content: string;
+    visibility?: string;
+    latitude?: number;
+    longitude?: number;
+    locationName?: string;
+    media?: Array<{
+      type: string;
+      url: string;
+      thumbnail?: string;
+      width?: number;
+      height?: number;
+      duration?: number;
+      fileSize?: number;
+      mimeType?: string;
+      alt?: string;
+      sortOrder?: number;
+    }>;
+  }) => api.post('/social/posts', data),
+
+  updatePost: (id: number, data: { content?: string; visibility?: string }) =>
+    api.patch(`/social/posts/${id}`, data),
+
+  deletePost: (id: number) => api.delete(`/social/posts/${id}`),
+
+  // Like
+  likePost: (id: number) => api.post(`/social/posts/${id}/like`),
+  unlikePost: (id: number) => api.delete(`/social/posts/${id}/like`),
+
+  // Comments
+  getComments: (postId: number, params?: { cursor?: number; limit?: number }) =>
+    api.get(`/social/posts/${postId}/comments`, { params }),
+
+  createComment: (data: {
+    postId: number;
+    parentId?: number;
+    content: string;
+  }) => api.post('/social/comments', data),
+
+  updateComment: (id: number, content: string) =>
+    api.patch(`/social/comments/${id}`, { content }),
+
+  deleteComment: (id: number) => api.delete(`/social/comments/${id}`),
+  likeComment: (id: number) => api.post(`/social/comments/${id}/like`),
+
+  // Save
+  savePost: (id: number, folder?: string) =>
+    api.post(`/social/posts/${id}/save`, { folder }),
+  unsavePost: (id: number) => api.delete(`/social/posts/${id}/save`),
+  getSaved: (params?: { cursor?: number; limit?: number; folder?: string }) =>
+    api.get('/social/saves', { params }),
+  getSaveFolders: () => api.get('/social/saves/folders'),
+
+  // Share
+  sharePost: (id: number, platform?: string) =>
+    api.post(`/social/posts/${id}/share`, { platform }),
+
+  // Media upload via signed URL
+  // Note: Uses /files/upload endpoint directly since Nginx routes /api/v1 to backend
+  getSignedUploadUrl: (filename: string, type: 'IMAGE' | 'VIDEO' | 'CODE_FILE') => {
+    const folder = type === 'VIDEO' ? 'social/videos' : type === 'CODE_FILE' ? 'social/files' : 'social/images';
+    const mimeType = type === 'VIDEO' ? 'video/mp4' : type === 'CODE_FILE' ? 'application/zip' : 'image/jpeg';
+    return api.get('/files/upload/signed-url', {
+      params: { filename, folder, contentType: mimeType },
+    });
+  },
+};
+

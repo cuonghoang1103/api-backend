@@ -11,6 +11,7 @@ RUN mkdir -p /app/public
 # Build args for environment variables
 ARG NEXT_PUBLIC_YOUTUBE_API_KEY
 ARG NEXT_PUBLIC_API_URL
+ARG BUILD_NUMBER=$GITHUB_RUN_NUMBER
 
 # Copy package files for dependency caching
 COPY package*.json ./

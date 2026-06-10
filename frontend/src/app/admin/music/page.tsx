@@ -310,7 +310,7 @@ export default function AdminMusicPage() {
           usesProxyAuth: true,
           contentTypeManuallySet: false,
         });
-        const proxyRes = await fetch('/api/v1/music/admin/upload', {
+        const proxyRes = await fetch('/api/music/upload', {
           method: 'POST',
           credentials: 'include',
           body: formData,

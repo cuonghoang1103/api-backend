@@ -499,7 +499,7 @@ export class MusicService {
     audioUrl?: string;
     coverImage?: string;
     durationSeconds?: number;
-    fileSize?: bigint;
+    fileSize?: number;
   }): Promise<unknown> {
     // Validate file exists if localPath provided
     if (data.localPath) {
@@ -706,7 +706,7 @@ export class MusicService {
       audioUrl?: string;
       coverImage?: string;
       durationSeconds?: number;
-      fileSize?: bigint;
+      fileSize?: number;
     }>,
   ): Promise<unknown> {
     return prisma.$transaction(

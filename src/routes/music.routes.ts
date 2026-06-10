@@ -285,7 +285,7 @@ router.post(
 
       // ─── Handle audio file upload ───────────────────────
       let localPath: string | undefined;
-      let audioFileSize: bigint | undefined;
+      let audioFileSize: number | undefined;
 
       const audioFile = req.files?.audio?.[0] as Express.Multer.File | undefined;
       if (audioFile) {
@@ -295,7 +295,7 @@ router.post(
           req.userId,
         );
         localPath = uploadResult.filePath;
-        audioFileSize = BigInt(uploadResult.fileSize);
+        audioFileSize = Number(uploadResult.fileSize);
       }
 
       // ─── Handle cover image upload ────────────────────
@@ -322,9 +322,15 @@ router.post(
         fileSize: audioFileSize,
       });
 
+      // Serialize BigInt fields for JSON response
+      const serialized = track as Record<string, unknown>;
+      if (serialized.fileSize !== undefined) {
+        serialized.fileSize = Number(serialized.fileSize);
+      }
+
       res.status(201).json({
         success: true,
-        data: track,
+        data: serialized,
         message: 'Track created successfully',
       });
     } catch (error) {

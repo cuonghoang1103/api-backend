@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-
-// Node.js runtime to handle larger file uploads through the proxy.
-// The file travels: browser → proxy → backend server → VPS /uploads storage.
+// This route is intentionally OUTSIDE /api/v1/ to bypass Nginx proxy.
+// Nginx proxies /api/v1/* → backend container, so a frontend route at /api/v1/* would
+// never be reached. Instead, this route uses Docker internal networking to reach
+// the backend directly at http://backend:3001.
 export const runtime = 'nodejs';
 export const dynamic = "force-dynamic";
 
@@ -23,21 +23,18 @@ export async function POST(request: NextRequest) {
     const MAX_SIZE = 100 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
       return NextResponse.json(
-        { success: false, message: `File too large. Max 100MB. Your file is ${(file.size / 1024 / 1024).toFixed(1)}MB.` },
+        { success: false, message: `File too large. Max 100MB.` },
         { status: 413 }
       );
     }
 
+    // Read auth token from httpOnly backend_token cookie
     let token = request.cookies.get("backend_token")?.value;
-    const authHeader = request.headers.get("Authorization");
-    if (!token && authHeader?.startsWith("Bearer ")) {
-      token = authHeader.slice(7);
-    }
-
     if (!token) {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
+    // Reconstruct FormData for the backend
     const backendFormData = new FormData();
     backendFormData.append("audio", file);
     backendFormData.append("title", title);
@@ -47,7 +44,8 @@ export async function POST(request: NextRequest) {
       backendFormData.append("cover", coverFile);
     }
 
-    const res = await fetch(`${BACKEND_URL}/api/v1/music/tracks`, {
+    // Use Docker internal DNS to reach the backend container
+    const res = await fetch("http://backend:3001/api/v1/music/tracks", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -66,7 +64,7 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (err) {
-    console.error("[music/upload] Error:", err);
+    console.error("[/api/music/upload] Error:", err);
     return NextResponse.json({ success: false, message: "Upload failed" }, { status: 500 });
   }
 }

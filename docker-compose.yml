@@ -167,7 +167,7 @@ volumes:
       device: ${DATA_DIR:-/opt/cuonghoangdev}/redis
 
   # CRITICAL: Uploads directory mounted to host SSD
-  # Maps to /app/uploads inside backend container AND /var/www/cuonghoangdev/uploads inside nginx
+  # Maps to /app/uploads inside backend container AND /var/www/cuongthai.com/uploads inside nginx
   # File path: /opt/cuonghoangdev/uploads/
   uploads_data:
     driver: local

@@ -164,3 +164,113 @@
 .glow-cyan {
   filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.5));
 }
+
+/* ============================================================
+   CYBER-ANIME TERMINAL EFFECTS
+   ============================================================ */
+
+/* Scanlines overlay — adds CRT monitor lines across the page */
+.scanlines {
+  position: relative;
+}
+
+.scanlines::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+}
+
+/* Glitch text animation */
+@keyframes glitch-clip-1 {
+  0%, 85%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+  86% { clip-path: inset(30% 0 50% 0); transform: translate(-4px, 0); }
+  88% { clip-path: inset(60% 0 20% 0); transform: translate(4px, 0); }
+  90% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 0); }
+  92% { clip-path: inset(80% 0 5% 0); transform: translate(3px, 0); }
+  94% { clip-path: inset(50% 0 30% 0); transform: translate(-4px, 0); }
+  96% { clip-path: inset(20% 0 60% 0); transform: translate(2px, 0); }
+}
+
+@keyframes glitch-clip-2 {
+  0%, 85%, 100% { clip-path: inset(100% 0 0 0); transform: translate(0); }
+  87% { clip-path: inset(50% 0 30% 0); transform: translate(4px, 0); }
+  89% { clip-path: inset(20% 0 60% 0); transform: translate(-4px, 0); }
+  91% { clip-path: inset(70% 0 10% 0); transform: translate(3px, 0); }
+  93% { clip-path: inset(40% 0 40% 0); transform: translate(-2px, 0); }
+  95% { clip-path: inset(10% 0 80% 0); transform: translate(4px, 0); }
+  97% { clip-path: inset(60% 0 25% 0); transform: translate(-3px, 0); }
+}
+
+.glitch-text {
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Default: gentle hover animation */
+.glitch-text:hover::before {
+  opacity: 0.8;
+  color: #06b6d4;
+  animation: glitch-clip-2 0.4s steps(1) forwards;
+}
+
+.glitch-text:hover::after {
+  opacity: 0.8;
+  color: #ec4899;
+  animation: glitch-clip-1 0.4s steps(1) forwards;
+}
+
+/* Triggered state (via JS interval): strong glitch burst */
+.glitch-text.glitch-active::before {
+  opacity: 1;
+  color: #06b6d4;
+  animation: glitch-clip-2 0.4s steps(1) forwards;
+}
+
+.glitch-text.glitch-active::after {
+  opacity: 1;
+  color: #ec4899;
+  animation: glitch-clip-1 0.4s steps(1) forwards;
+}
+
+/* Neon glow pulse */
+@keyframes neon-pulse {
+  0%, 100% { text-shadow: 0 0 10px rgba(139, 92, 246, 0.6), 0 0 20px rgba(139, 92, 246, 0.4); }
+  50% { text-shadow: 0 0 20px rgba(139, 92, 246, 0.9), 0 0 40px rgba(139, 92, 246, 0.6), 0 0 60px rgba(139, 92, 246, 0.3); }
+}
+
+.neon-glow {
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+/* Cyber border flash */
+@keyframes cyber-border-flash {
+  0%, 100% { border-color: rgba(139, 92, 246, 0.3); box-shadow: 0 0 10px rgba(139, 92, 246, 0.1); }
+  50% { border-color: rgba(139, 92, 246, 0.7); box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+}
+
+.cyber-border-flash {
+  animation: cyber-border-flash 3s ease-in-out infinite;
+}
+
+/* Hide default cursor globally when custom CyberCursor is active */
+.cyber-cursor-active * {
+  cursor: none !important;
+}
+

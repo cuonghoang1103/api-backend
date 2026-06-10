@@ -282,8 +282,8 @@ export default function GlobalMusicPlayer() {
     return () => { clearAllTimers(); };
   }, [expanded, currentTrack, tracks.length, hidden, scheduleCollapse, clearAllTimers]);
 
+  // Always show player on any page when there's a current track
   if (!currentTrack || tracks.length === 0) return null;
-  if (!pathname || pathname === '/music') return null;
   if (hidden) return null;
 
   return (

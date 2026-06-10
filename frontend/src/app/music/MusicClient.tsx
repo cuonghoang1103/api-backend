@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Headphones, RefreshCw, Maximize2 } from 'lucide-react';
 import Link from 'next/link';
@@ -8,80 +8,18 @@ import ClientOnly from '@/components/providers/ClientOnly';
 import CyberBackground from '@/components/music/CyberBackground';
 import CyberPlayer from '@/components/music/CyberPlayer';
 import CyberPlaylist from '@/components/music/CyberPlaylist';
+import CyberSearch from '@/components/music/CyberSearch';
 import { useMusicStore } from '@/store/musicStore';
-import type { Track } from '@/types';
-
-function formatSeconds(seconds?: number): string {
-  if (!seconds || !Number.isFinite(seconds)) return '0:00';
-  return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
-}
-
-function buildTrackPlaybackUrl(rawTrack: unknown): string {
-  const t = rawTrack as Record<string, unknown> | undefined;
-  if (!t) return '';
-  if (typeof t.audioUrl === 'string' && t.audioUrl.trim()) {
-    return t.audioUrl;
-  }
-  if (typeof t.localPath === 'string' && t.localPath.trim()) {
-    const normalized = t.localPath.replace(/^\/+/, '');
-    return `/uploads/${normalized}`;
-  }
-  if (typeof t.id === 'number' || typeof t.id === 'string') {
-    return `/api/v1/music/stream/${t.id}`;
-  }
-  return '';
-}
-
-async function fetchBackendTracks(signal?: AbortSignal): Promise<Track[]> {
-  try {
-    const res = await fetch('/api/v1/music/tracks', {
-      credentials: 'include',
-      signal,
-    });
-    if (!res.ok) {
-      console.warn('[MusicPage] fetchBackendTracks HTTP error:', res.status);
-      return [];
-    }
-    const data = await res.json();
-    const raw = Array.isArray(data.data) ? data.data : [];
-    return raw
-      .filter((t: unknown) => Boolean((t as Record<string, unknown>)?.id))
-      .map((t: unknown) => {
-        const r = t as Record<string, unknown>;
-        return {
-          id: String(r.id ?? ''),
-          title: String(r.title ?? 'Unknown'),
-          artist: String(r.artist ?? 'Unknown'),
-          duration: formatSeconds(typeof r.durationSeconds === 'number' ? r.durationSeconds : undefined),
-          durationSeconds: typeof r.durationSeconds === 'number' ? r.durationSeconds : undefined,
-          audioUrl: buildTrackPlaybackUrl(t),
-          coverImage: typeof r.coverImage === 'string' ? r.coverImage : '',
-          localPath: typeof r.localPath === 'string' ? r.localPath : undefined,
-          fileSize: typeof r.fileSize === 'number' ? r.fileSize : undefined,
-          active: typeof r.active === 'boolean' ? r.active : undefined,
-          createdAt: typeof r.createdAt === 'string' ? r.createdAt : undefined,
-        } satisfies Track;
-      });
-  } catch (err) {
-    if (signal?.aborted) return [];
-    console.error('[MusicPage] fetchBackendTracks error:', err);
-    console.error('[MusicPage] Error stack:', (err as Error)?.stack);
-    console.error('[MusicPage] Error name:', (err as Error)?.name);
-    return [];
-  }
-}
+import { useTracks } from '@/hooks/useMusicQueries';
 
 const C = {
   primary: '#8B5CF6',
   secondary: '#06b6d4',
   accent: '#ec4899',
-  glow: 'rgba(139,92,246,0.15)',
-  glassBg: 'rgba(15,23,42,0.75)',
-  border: 'rgba(139,92,246,0.15)',
   text: '#f8fafc',
   textMuted: '#94a3b8',
   dark: '#0f172a',
-} as const;
+};
 
 function CyberShell() {
   return (
@@ -108,7 +46,7 @@ function CyberShell() {
             Initializing audio matrix...
           </span>
           <div className="flex gap-1">
-            {[0,1,2,3].map(i => (
+            {[0, 1, 2, 3].map((i) => (
               <motion.div
                 key={i}
                 className="w-1 rounded-full"
@@ -125,68 +63,34 @@ function CyberShell() {
 }
 
 export default function CyberMusicPage() {
-  // Stable ref to store setTracks so the effect doesn't re-run on every render
   const setTracks = useMusicStore((s) => s.setTracks);
   const storeTracks = useMusicStore((s) => s.tracks);
   const recentlyPlayed = useMusicStore((s) => s.recentlyPlayed);
 
   const [isMounted, setIsMounted] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [loadFailed, setLoadFailed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Use store's tracks as source of truth (never local state)
-  const tracks = storeTracks;
+  // TanStack Query — replaces manual fetch with caching
+  const { data, isLoading, isError, refetch, dataUpdatedAt } = useTracks({ size: 100 });
 
-  // Ref to avoid stale closure in AbortController
-  const abortRef = useRef<AbortController | null>(null);
-
-  const loadTracks = useCallback(async (isRefresh = false) => {
+  // Sync TanStack Query results → Zustand store (only on real data changes)
+  useEffect(() => {
     if (!isMounted) return;
-    if (abortRef.current) abortRef.current.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
+    if (!data?.data) return;
+    setTracks(data.data);
+  }, [data, isMounted, setTracks]);
 
-    if (!isRefresh) setIsLoading(true);
-    setLoadFailed(false);
-
-    try {
-      const result = await fetchBackendTracks(controller.signal);
-      if (controller.signal.aborted) return;
-
-      console.log('[MusicPage] loadTracks result count:', result.length, 'first:', result[0]?.title);
-      // Always call store.setTracks with the fresh result
-      setTracks(result);
-    } catch (err) {
-      if (!controller.signal.aborted) {
-        console.error('[MusicPage] loadTracks catch error:', err);
-        setLoadFailed(true);
-      }
-    } finally {
-      if (!controller.signal.aborted) {
-        setIsLoading(false);
-        setRefreshing(false);
-      }
-    }
-  }, [isMounted, setTracks]);
+  useEffect(() => { setIsMounted(true); }, []);
 
   const refresh = useCallback(async () => {
     setRefreshing(true);
-    await loadTracks(true);
-  }, [loadTracks]);
-
-  // Load on mount; don't put loadTracks in deps — it's stable via ref
-  useEffect(() => {
-    setIsMounted(true);
-    loadTracks();
-    return () => {
-      if (abortRef.current) abortRef.current.abort();
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    await refetch();
+    setRefreshing(false);
+  }, [refetch]);
 
   if (!isMounted) return <CyberShell />;
 
-  const showEmpty = !isLoading && !loadFailed && tracks.length === 0;
+  const showEmpty = !isLoading && !isError && storeTracks.length === 0;
 
   return (
     <div
@@ -196,7 +100,7 @@ export default function CyberMusicPage() {
         cursor: 'crosshair',
       }}
     >
-      {/* Scanlines overlay */}
+      {/* Scanlines */}
       <div
         className="pointer-events-none fixed inset-0 z-50"
         style={{
@@ -226,7 +130,7 @@ export default function CyberMusicPage() {
               background: 'rgba(15,23,42,0.8)',
               backdropFilter: 'blur(20px)',
               WebkitBackdropFilter: 'blur(20px)',
-              borderBottom: `1px solid ${C.border}`,
+              borderBottom: '1px solid rgba(139,92,246,0.15)',
             }}
           >
             <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -267,15 +171,18 @@ export default function CyberMusicPage() {
                 </div>
               </div>
 
-              {/* Stats bar */}
-              <div className="hidden md:flex items-center gap-4 text-xs font-mono" style={{ color: C.textMuted }}>
-                <span>
-                  <span style={{ color: C.primary }}>{tracks.length}</span> tracks
-                </span>
+              {/* Unified Search */}
+              <div className="flex-1 max-w-md hidden md:block">
+                <CyberSearch localTracks={storeTracks} />
+              </div>
+
+              {/* Stats */}
+              <div className="hidden lg:flex items-center gap-4 text-xs font-mono" style={{ color: C.textMuted }}>
+                <span style={{ color: C.primary }}>{storeTracks.length}</span>
+                <span> tracks</span>
                 <span style={{ opacity: 0.3 }}>|</span>
-                <span>
-                  <span style={{ color: C.secondary }}>{recentlyPlayed.length}</span> played
-                </span>
+                <span style={{ color: C.secondary }}>{recentlyPlayed.length}</span>
+                <span> played</span>
                 <span style={{ opacity: 0.3 }}>|</span>
                 <span className="flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" />
@@ -285,6 +192,23 @@ export default function CyberMusicPage() {
 
               {/* Actions */}
               <div className="flex items-center gap-2">
+                {/* Mobile search toggle */}
+                <Link href="/music/now-playing">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono transition-all md:hidden"
+                    style={{
+                      background: `${C.secondary}15`,
+                      border: `1px solid rgba(6,182,212,0.2)`,
+                      color: C.secondary,
+                    }}
+                    title="Full-screen now playing"
+                  >
+                    <Maximize2 className="w-3.5 h-3.5" />
+                  </motion.button>
+                </Link>
+
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -293,7 +217,7 @@ export default function CyberMusicPage() {
                   className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono transition-all disabled:opacity-40"
                   style={{
                     background: `${C.primary}15`,
-                    border: `1px solid ${C.border}`,
+                    border: `1px solid rgba(139,92,246,0.15)`,
                     color: C.primary,
                   }}
                   title="Refresh tracks"
@@ -306,7 +230,7 @@ export default function CyberMusicPage() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono transition-all"
+                    className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono transition-all"
                     style={{
                       background: `${C.secondary}15`,
                       border: `1px solid rgba(6,182,212,0.2)`,
@@ -329,7 +253,7 @@ export default function CyberMusicPage() {
           {isLoading && (
             <div className="flex items-center justify-center h-64 gap-4">
               <div className="flex gap-1">
-                {[0,1,2,3,4].map(i => (
+                {[0, 1, 2, 3, 4].map((i) => (
                   <motion.div
                     key={i}
                     className="w-1.5 rounded-full"
@@ -346,7 +270,7 @@ export default function CyberMusicPage() {
           )}
 
           {/* Network error */}
-          {!isLoading && loadFailed && (
+          {!isLoading && isError && (
             <div className="flex flex-col items-center justify-center h-64 gap-4">
               <div className="text-4xl" style={{ filter: 'hue-rotate(270deg)' }}>⚠</div>
               <p className="text-sm font-mono" style={{ color: C.textMuted }}>
@@ -365,7 +289,7 @@ export default function CyberMusicPage() {
           )}
 
           {/* Content: loaded or empty */}
-          {!isLoading && !loadFailed && (
+          {!isLoading && !isError && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

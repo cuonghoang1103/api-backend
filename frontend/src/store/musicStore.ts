@@ -274,9 +274,17 @@ export const useMusicStore = create<MusicState>()((set, get) => {
       const p = loadPersisted();
 
       if (isShuffled) {
-        const next = get().smartShuffleNext();
+        let next = get().smartShuffleNext();
+
+        // Refill pool if exhausted (smart shuffle loops infinitely).
+        if (!next) {
+          const shuffled = shuffleArray(tracks);
+          set({ smartShufflePool: shuffled.map((t) => t.id) });
+          next = get().smartShuffleNext();
+        }
+
         if (!next) { set({ isPlaying: false }); return; }
-        const idx = tracks.findIndex((t) => t.id === next.id);
+        const idx = tracks.findIndex((t) => t.id === next!.id);
         get().addToHistory(next);
         set({ currentTrack: next, currentIndex: idx, isPlaying: true, currentTime: 0 });
         savePersisted({ ...p, currentTrackId: next.id });

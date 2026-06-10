@@ -34,6 +34,7 @@ import multer from 'multer';
 
 import { musicService } from '../services/music.service.js';
 import { uploadService } from '../services/upload.service.js';
+import { normalizeAudio, isFFmpegAvailable } from '../services/ffmpeg.service.js';
 import { optionalAuth, authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
@@ -312,6 +313,7 @@ router.get('/stream/:id', optionalAuth, async (req: any, res: Response, next) =>
 // ════════════════════════════════════════════════════════════════
 // POST /api/v1/music/tracks
 // Upload track (audio + cover image) + create DB record
+// Auto-normalizes audio using FFmpeg loudnorm after upload
 // ════════════════════════════════════════════════════════════════
 router.post(
   '/tracks',
@@ -345,7 +347,33 @@ router.post(
         );
         console.log(`[DEBUG][POST /tracks] uploadResult:`, uploadResult);
         localPath = uploadResult.filePath;
-        audioFileSize = Number(uploadResult.fileSize);
+
+        // ─── FFmpeg loudnorm normalization ──────────────
+        // Only normalize if FFmpeg is available and file is large enough
+        // (tiny files under 100KB are usually notifications/system sounds)
+        const ffmpegAvailable = await isFFmpegAvailable();
+        if (ffmpegAvailable && audioFile.size > 100 * 1024) {
+          const fs = await import('fs/promises');
+          const pathMod = await import('path');
+          const srcAbs = pathMod.resolve(config.uploadDir, localPath);
+          const tmpNormalized = pathMod.resolve(config.uploadDir, `temp-normalized-${Date.now()}.mp3`);
+          try {
+            const normResult = await normalizeAudio(srcAbs, tmpNormalized);
+            // Replace original with normalized version
+            const { rename } = await import('fs/promises');
+            await rename(tmpNormalized, srcAbs);
+            // Update file size to the normalized version
+            const stats = await fs.stat(srcAbs);
+            audioFileSize = stats.size;
+            console.log(`[FFmpeg] Normalized ${localPath}:`, normResult.measurement.outputI ? `output I=${normResult.measurement.outputI} LUFS` : 'fallback re-encode');
+          } catch (normErr) {
+            // Non-fatal: log and continue with original file
+            console.warn('[FFmpeg] Normalization failed, using original:', normErr);
+            audioFileSize = Number(uploadResult.fileSize);
+          }
+        } else {
+          audioFileSize = Number(uploadResult.fileSize);
+        }
       }
 
       // ─── Handle cover image upload ────────────────────

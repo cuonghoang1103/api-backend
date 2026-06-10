@@ -5,7 +5,10 @@ import Navbar from '@/components/layout/Navbar'
 import CartDrawer from '@/components/shop/CartDrawer'
 import AuthProvider from '@/components/providers/AuthProvider'
 import ToasterProvider from '@/components/providers/ToasterProvider'
+import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider'
 import MusicAudioController from '@/components/music/MusicAudioController'
+import MusicHistoryRecorder from '@/components/music/MusicHistoryRecorder'
+import CyberCursor from '@/components/ui/CyberCursor'
 import LocaleWrapper from '@/components/providers/LocaleWrapper'
 import ClientOnly from '@/components/providers/ClientOnly'
 
@@ -39,8 +42,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning className="bg-darkbg text-text-primary antialiased">
-        <AuthProvider>
-          <ToasterProvider />
+      <AuthProvider>
+        <ToasterProvider />
+        <TanStackQueryProvider>
           <LocaleWrapper>
             {/*
               Navbar reads authStore + cartStore (persisted Zustand stores).
@@ -50,15 +54,18 @@ export default function RootLayout({
             <ClientOnly>
               <Navbar />
               <CartDrawer />
+              <CyberCursor />
             </ClientOnly>
             {children}
             <ClientOnly>
               <MusicAudioController />
+              <MusicHistoryRecorder />
               <GlobalMusicPlayer />
               <FloatingAIAssistant />
             </ClientOnly>
           </LocaleWrapper>
-        </AuthProvider>
+        </TanStackQueryProvider>
+      </AuthProvider>
       </body>
     </html>
   )

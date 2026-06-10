@@ -75,12 +75,20 @@ export async function POST(request: NextRequest) {
   const contentType = request.headers.get("content-type");
   const body = await request.arrayBuffer();
 
+  // Only pass Content-Type for non-FormData requests.
+  // For FormData (multipart), browser sets the boundary automatically.
+  // Overriding it causes Express/multer to fail parsing the body.
+  const isFormData = contentType?.includes("multipart/form-data");
+  const headers: Record<string, string> = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+  if (!isFormData && contentType) {
+    headers["Content-Type"] = contentType;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/v1${path}${search}`, {
     method: "POST",
-    headers: {
-      ...(contentType ? { "Content-Type": contentType } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
+    headers,
     credentials: "include",
     body,
   });
@@ -96,12 +104,17 @@ export async function PUT(request: NextRequest) {
   const contentType = request.headers.get("content-type");
   const body = await request.arrayBuffer();
 
+  const isFormData = contentType?.includes("multipart/form-data");
+  const headers: Record<string, string> = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+  if (!isFormData && contentType) {
+    headers["Content-Type"] = contentType;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/v1${path}${search}`, {
     method: "PUT",
-    headers: {
-      ...(contentType ? { "Content-Type": contentType } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
+    headers,
     credentials: "include",
     body,
   });
@@ -117,12 +130,17 @@ export async function PATCH(request: NextRequest) {
   const contentType = request.headers.get("content-type");
   const body = await request.arrayBuffer();
 
+  const isFormData = contentType?.includes("multipart/form-data");
+  const headers: Record<string, string> = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+  if (!isFormData && contentType) {
+    headers["Content-Type"] = contentType;
+  }
+
   const response = await fetch(`${BACKEND_URL}/api/v1${path}${search}`, {
     method: "PATCH",
-    headers: {
-      ...(contentType ? { "Content-Type": contentType } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
+    headers,
     credentials: "include",
     body,
   });

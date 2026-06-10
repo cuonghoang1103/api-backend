@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { useMusicStore } from '@/store/musicStore';
+import { setAudioAnalyser } from '@/hooks/useAudioAnalyser';
 
 /**
  * MusicAudioController — the single audio engine for the entire app.
@@ -10,12 +11,14 @@ import { useMusicStore } from '@/store/musicStore';
  * Keeps ONE <audio> element alive for the full lifetime of the app.
  * This is what makes playback survive across page navigations.
  *
- * Strict URL validation: only loads audio when the URL is a confirmed
- * audio file path (ends with known extension) or a valid http/https URL.
- * Never sets audio.src to empty string or base page URL.
+ * Also creates an AudioContext + AnalyserNode and shares it globally
+ * so CyberAudioVisualizer can read real-time frequency data for reactive bars.
  */
 export default function MusicAudioController() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const mediaSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
 
   const {
     currentTrack,
@@ -26,10 +29,11 @@ export default function MusicAudioController() {
     repeatMode,
     setCurrentTime,
     setDuration,
+    setAudioElement,
+    setIsPlaying,
     next,
   } = useMusicStore();
 
-  // Track previous currentTrack id to detect track changes
   const prevTrackIdRef = useRef<string | null>(null);
 
   function isValidAudioUrl(url: unknown): url is string {
@@ -41,6 +45,28 @@ export default function MusicAudioController() {
     if (url.startsWith('/uploads/')) return true;
     return url.startsWith('http');
   }
+
+  // Lazily creates AudioContext + AnalyserNode once audio starts playing.
+  // Must be called from both the audio-setup effect and the track-loading effect
+  // because the track-loading effect is what handles play() calls.
+  const ensureAnalyser = useCallback(() => {
+    if (audioContextRef.current || !audioRef.current) return;
+    try {
+      const ctx = new AudioContext();
+      audioContextRef.current = ctx;
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 256;
+      analyser.smoothingTimeConstant = 0.8;
+      analyserRef.current = analyser;
+      const source = ctx.createMediaElementSource(audioRef.current);
+      mediaSourceRef.current = source;
+      source.connect(analyser);
+      analyser.connect(ctx.destination);
+      setAudioAnalyser(analyser);
+    } catch {
+      // Silently skip if AudioContext creation fails (e.g. restricted environments).
+    }
+  }, []);
 
   // Create audio element exactly once — SSR-safe
   useEffect(() => {
@@ -55,7 +81,6 @@ export default function MusicAudioController() {
     const handleLoadedMetadata = () => setDuration(audio.duration);
     const handleEnded = () => next();
     const handleError = () => {
-      // Log only — never let error crash the app
       console.warn('[MusicAudioController] Audio error:', audio.src, audio.error?.message);
     };
 
@@ -66,6 +91,15 @@ export default function MusicAudioController() {
 
     audioRef.current = audio;
 
+    // Autoplay policy: resume AudioContext on first user interaction.
+    const handleInteraction = () => {
+      if (audioContextRef.current?.state === 'suspended') {
+        audioContextRef.current.resume();
+      }
+    };
+    document.addEventListener('click', handleInteraction, { once: true });
+    document.addEventListener('keydown', handleInteraction, { once: true });
+
     return () => {
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
@@ -74,10 +108,15 @@ export default function MusicAudioController() {
       audio.pause();
       audio.src = '';
       audioRef.current = null;
+      setAudioElement(null);
+      setIsPlaying(false);
+      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('keydown', handleInteraction);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [setCurrentTime, setDuration, setAudioElement, setIsPlaying, next]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Load new track — strict URL validation prevents base-URL resolution
+  // Load new track — strict URL validation prevents base-URL resolution.
+  // Also calls ensureAnalyser before every play() to wire up the Web Audio graph.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -85,21 +124,19 @@ export default function MusicAudioController() {
     const rawUrl = currentTrack?.audioUrl;
     const trackId = currentTrack?.id ?? null;
 
-    // Only proceed with a confirmed valid audio URL
     if (!isValidAudioUrl(rawUrl)) {
       audio.pause();
       return;
     }
 
-    // Detect track change
     const trackChanged = prevTrackIdRef.current !== trackId;
     if (trackChanged) {
       prevTrackIdRef.current = trackId;
     }
 
-    // Skip if already loaded and not a track change
     if (audio.src === rawUrl && !trackChanged) {
       if (isPlaying) {
+        ensureAnalyser();
         audio.play().catch(() => {});
       } else {
         audio.pause();
@@ -111,11 +148,12 @@ export default function MusicAudioController() {
     audio.load();
 
     if (isPlaying) {
+      ensureAnalyser();
       audio.play().catch(() => {});
     } else {
       audio.pause();
     }
-  }, [currentTrack?.id, currentTrack?.audioUrl, isPlaying]);
+  }, [currentTrack?.id, currentTrack?.audioUrl, isPlaying, ensureAnalyser]);
 
   // Progress-based auto-next fallback: polls every 500ms and advances when audio ends.
   // This catches cases where the browser 'ended' event doesn't fire reliably
@@ -157,7 +195,6 @@ export default function MusicAudioController() {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !currentTrack) return;
-    // This fires when store's currentTime is set to 0 (from next() in repeat-one mode)
     if (currentTime === 0 && isPlaying && isValidAudioUrl(currentTrack.audioUrl)) {
       if (audio.paused && audio.src && audio.src === currentTrack.audioUrl) {
         console.log('[MusicAudioController] repeat-one: restarting audio at 0:00');

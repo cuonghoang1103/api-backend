@@ -48,6 +48,15 @@ done
 
 # DEBUG: Check actual DATABASE_URL inside container
 docker exec cuonghoangdev_backend sh -c 'echo "Container DATABASE_URL: ${DATABASE_URL}"' || true
+docker exec cuonghoangdev_backend sh -c 'git -C /app rev-parse HEAD 2>/dev/null || echo "No git"' || true
+docker exec cuonghoangdev_backend sh -c 'cat /app/package.json | grep version' || true
+
+# Test database directly from backend container using psql
+docker exec cuonghoangdev_backend node -e "
+const { PrismaClient } = require('@prisma/client');
+const p = new PrismaClient({ datasources: { db: { url: process.env.DATABASE_URL } } });
+p.\$connect().then(() => { console.log('Direct Prisma connect: OK'); p.\$disconnect(); }).catch(e => console.error('Direct Prisma connect: FAIL', e.message));
+" || true
 
 # Wait for nginx
 for i in $(seq 1 24); do

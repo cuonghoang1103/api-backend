@@ -33,8 +33,6 @@ jobs:
           echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "echo SSH_CONNECTION_OK"
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "echo SSH_CONNECTION_OK"
 
       - name: Sync project to VPS
         run: |
@@ -51,144 +49,14 @@ jobs:
             --exclude '*.log' \
             ./ -e "ssh -i ~/.ssh/deploy_key" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
-      - name: Deploy on VPS — zero-downtime rolling update
+      - name: Deploy on VPS
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
-            set -e
-            cd /opt/cuonghoangdev
-
-            # ── 0. Create all required directories (safety net) ──────────
-            echo "[0/6] Creating required directories..."
-            mkdir -p /opt/cuonghoangdev/nginx/ssl
-            mkdir -p /opt/certbot/conf/live/cuongthai.com
-            mkdir -p /opt/certbot/www
-            mkdir -p /opt/cuonghoangdev/postgres
-            mkdir -p /opt/cuonghoangdev/redis
-            mkdir -p /opt/cuonghoangdev/uploads
-            mkdir -p /opt/cuonghoangdev/backups
-            echo "[0/6] Directories ready"
-
-            # Copy .env.example → .env if .env does not exist
-            if [ ! -f /opt/cuonghoangdev/.env ]; then
-              echo "[0/6] .env not found — creating from .env.example"
-              if [ -f /opt/cuonghoangdev/.env.example ]; then
-                cp /opt/cuonghoangdev/.env.example /opt/cuonghoangdev/.env
-                echo "[0/6] WARNING: .env was created from .env.example"
-                echo "[0/6] WARNING: Please set secrets on VPS: /opt/cuonghoangdev/.env"
-              fi
-            fi
-
-            # ── 1. Setup SSL certificates (Let's Encrypt) ───────────────────
-            echo "[1/6] Checking SSL certificates..."
-            CERT_DIR="/opt/certbot/conf/live/cuongthai.com"
-            if [ ! -f "${CERT_DIR}/fullchain.pem" ] || [ ! -f "${CERT_DIR}/privkey.pem" ]; then
-              echo "[1/6] SSL certificates not found — using HTTP-only config first..."
-              mkdir -p /opt/certbot/www /opt/certbot/conf/live/cuongthai.com
-              if [ -f /opt/cuonghoangdev/nginx/nginx.http.conf ]; then
-                cp /opt/cuonghoangdev/nginx/nginx.http.conf /opt/cuonghoangdev/nginx/nginx.conf
-              fi
-              echo "[1/6] Using HTTP-only nginx config (SSL certs will be provisioned later)"
-            else
-              echo "[1/6] SSL certificates found at ${CERT_DIR}"
-            fi
-
-            # ── 2. Backup database ──────────────────────────────────────
-            if docker exec cuonghoangdev_postgres psql -U postgres -lqt 2>/dev/null | cut -d "|" -f1 | grep -qw cuonghoangdev_db; then
-              echo "[2/6] Backing up database..."
-              mkdir -p /opt/cuonghoangdev/backups
-              DATE=$(date +%Y%m%d_%H%M%S)
-              docker exec cuonghoangdev_postgres pg_dump -U postgres cuonghoangdev_db | gzip > /opt/cuonghoangdev/backups/${DATE}_backup.sql.gz
-              echo "[2/6] Backup saved: ${DATE}_backup.sql.gz"
-            else
-              echo "[2/6] No existing database to backup, skipping"
-            fi
-
-            # ── 3. Pull latest base images ───────────────────────────────
-            echo "[3/6] Pulling latest images..."
-            docker compose -f docker-compose.yml pull 2>/dev/null || true
-
-            # ── 4. Stop ONLY non-essential containers (preserve data!) ───
-            echo "[4/6] Stopping non-essential containers (postgres/redis preserved)..."
-            docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
-            docker rm   cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
-
-            # ── 5. Start all services ────────────────────────────────────
-            echo "[5/6] Starting all containers..."
-            docker compose -f docker-compose.yml up -d --build
-
-            # ── 6. Wait for services to be healthy ──────────────────────
-            echo "[6/6] Waiting for services to be healthy..."
-            MAX_WAIT=180
-            WAIT_INTERVAL=5
-            elapsed=0
-
-            wait_for_service() {
-              local name=$1
-              local url=$2
-              echo "  Waiting for $name..."
-              while [ $elapsed -lt $MAX_WAIT ]; do
-                if docker exec "$name" wget -q -O- "$url" 2>/dev/null | grep -q "ok"; then
-                  echo "  ✓ $name is healthy"
-                  return 0
-                fi
-                sleep $WAIT_INTERVAL
-                elapsed=$((elapsed + WAIT_INTERVAL))
-                echo "  waiting... ${elapsed}s"
-              done
-              echo "  WARNING: $name not healthy after ${MAX_WAIT}s"
-              return 1
-            }
-
-            wait_for_service cuonghoangdev_backend  http://localhost:3001/health
-            wait_for_service cuonghoangdev_frontend http://localhost:3000
-
-            for i in $(seq 1 12); do
-              if docker exec cuonghoangdev_nginx wget -q -O- http://localhost/ >/dev/null 2>&1; then
-                echo "  ✓ cuonghoangdev_nginx is healthy"
-                break
-              fi
-              sleep 5
-            done
-
-            echo "[6/6] Deployment complete"
-            docker compose -f docker-compose.yml ps
-            docker compose -f docker-compose.yml logs --tail=20 backend
-          '
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" 'set -e; cd /opt/cuonghoangdev; mkdir -p nginx/ssl certbot/conf/live/cuongthai.com certbot/www postgres redis uploads backups; echo "Dirs created"; if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi; echo "Env checked"; docker compose -f docker-compose.yml pull 2>/dev/null || true; docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true; docker rm cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true; docker compose -f docker-compose.yml up -d --build; echo "Containers started"; for i in $(seq 1 36); do if docker exec cuonghoangdev_backend wget -q -O- http://localhost:3001/health 2>/dev/null | grep -q "ok"; then echo "[OK] backend"; break; fi; sleep 5; done; for i in $(seq 1 36); do if docker exec cuonghoangdev_frontend wget -q -O- http://localhost:3000 2>/dev/null | grep -q ""; then echo "[OK] frontend"; break; fi; sleep 5; done; for i in $(seq 1 12); do if docker exec cuonghoangdev_nginx wget -q -O- http://localhost/ >/dev/null 2>&1; then echo "[OK] nginx"; break; fi; sleep 5; done; docker compose -f docker-compose.yml ps; docker compose -f docker-compose.yml logs --tail=20 backend'
 
       - name: Create admin user on VPS
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
-            set -e
-            cd /opt/cuonghoangdev
-
-            for i in $(seq 1 30); do
-              if docker exec cuonghoangdev_backend wget -q -O- http://localhost:3001/health 2>/dev/null | grep -q "ok"; then
-                echo "Backend is ready"
-                break
-              fi
-              echo "Waiting for backend... ($i)"
-              sleep 2
-            done
-
-            if [ -f /opt/cuonghoangdev/scripts/seed-admin.js ]; then
-              docker cp /opt/cuonghoangdev/scripts/seed-admin.js cuonghoangdev_backend:/app/seed-admin.js
-              docker exec cuonghoangdev_backend node seed-admin.js
-              echo "Admin user setup done"
-            else
-              echo "Warning: seed-admin.js not found, skipping admin creation"
-            fi
-          '
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" 'set -e; cd /opt/cuonghoangdev; for i in $(seq 1 30); do if docker exec cuonghoangdev_backend wget -q -O- http://localhost:3001/health 2>/dev/null | grep -q "ok"; then echo "Backend ready"; break; fi; sleep 2; done; if [ -f scripts/seed-admin.js ]; then docker cp scripts/seed-admin.js cuonghoangdev_backend:/app/; docker exec cuonghoangdev_backend node seed-admin.js; echo "Admin setup done"; fi'
 
       - name: Setup backup cron on VPS
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
-            set -e
-            mkdir -p /opt/cuonghoangdev/backups
-
-            if [ -f /opt/cuonghoangdev/scripts/backup-cron.sh ]; then
-              chmod +x /opt/cuonghoangdev/scripts/backup-cron.sh
-              chmod +x /opt/cuonghoangdev/scripts/restore-db.sh
-            fi
-
-            (crontab -l 2>/dev/null | grep -v backup-cron; echo "0 2 * * * /opt/cuonghoangdev/scripts/backup-cron.sh >> /var/log/backup-cron.log 2>&1") | crontab -
-          '
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" 'set -e; mkdir -p /opt/cuonghoangdev/backups; if [ -f /opt/cuonghoangdev/scripts/backup-cron.sh ]; then chmod +x /opt/cuonghoangdev/scripts/backup-cron.sh; chmod +x /opt/cuonghoangdev/scripts/restore-db.sh; fi; (crontab -l 2>/dev/null | grep -v backup-cron; echo "0 2 * * * /opt/cuonghoangdev/scripts/backup-cron.sh >> /var/log/backup-cron.log 2>&1") | crontab -'

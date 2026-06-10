@@ -85,6 +85,7 @@ jobs:
             # Clean postgres data dir so it re-initializes with the new password
             # (Old data dir was created with a different POSTGRES_PASSWORD)
             rm -rf /opt/cuonghoangdev/postgres
+            mkdir -p /opt/cuonghoangdev/postgres
 
             # Regenerate .env from .env.example
             rm -f .env

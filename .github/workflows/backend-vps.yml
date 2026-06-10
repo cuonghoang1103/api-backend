@@ -13,6 +13,7 @@ on:
       - 'frontend/**'
       - 'nginx/**'
       - '.github/workflows/backend-vps.yml'
+      - 'scripts/**'
       - '.dockerignore'
   workflow_dispatch:
 
@@ -58,91 +59,24 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          KEY_FILE=~/.ssh/deploy_key
-          HOST="$VPS_HOST"
-          USER="$VPS_USER"
-
-          # Get DB password locally (from docker-compose.yml on this machine)
-          # Use line 1 only — grep may match multiple lines (including comments)
-          DB_PASS=$(grep 'POSTGRES_PASSWORD' docker-compose.yml | grep -v '^#' | head -1 | sed "s/.*POSTGRES_PASSWORD:-\([^}]*\)}.*/\1/")
+          # Get DB password locally (from docker-compose.yml)
+          DB_PASS=$(grep 'POSTGRES_PASSWORD' docker-compose.yml | grep -v '^#' | head -1 | sed 's/.*POSTGRES_PASSWORD:-\([^}]*\)}.*/\1/')
           DB_PASS="${DB_PASS:-123456}"
+          echo "Using DB_PASS: ${DB_PASS}"
 
-          # Run deploy script on VPS via SSH
-          ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$USER@$HOST" "
-            set -e
-            cd /opt/cuonghoangdev
+          # Upload deploy script
+          chmod +x scripts/deploy-vps.sh
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no scripts/deploy-vps.sh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/scripts/deploy-vps.sh"
 
-            mkdir -p nginx/ssl certbot/conf/live/cuongthai.com certbot/www postgres redis uploads backups scripts
-
-            # SSL symlinks
-            [ -f certbot/conf/archive/cuongthai.com/fullchain2.pem ] && { ln -sf fullchain2.pem certbot/conf/archive/cuongthai.com/fullchain.pem 2>/dev/null || true; }
-            [ -f certbot/conf/archive/cuongthai.com/privkey2.pem ] && { ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true; }
-
-            # Stop all containers
-            docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend cuonghoangdev_postgres cuonghoangdev_redis 2>/dev/null || true
-            docker rm -f cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend cuonghoangdev_postgres cuonghoangdev_redis 2>/dev/null || true
-
-            # Clean postgres data dir so it re-initializes with the new password
-            # (Old data dir was created with a different POSTGRES_PASSWORD)
-            rm -rf /opt/cuonghoangdev/postgres
-            mkdir -p /opt/cuonghoangdev/postgres
-
-            # Regenerate .env from .env.example
-            rm -f .env
-            cp .env.example .env 2>/dev/null || true
-
-            # Fix DATABASE_URL: localhost:5433 -> postgres:5432 (Docker DNS)
-            sed -i 's|localhost:5433|postgres:5432|g' .env
-            sed -i '/^DATABASE_URL=/d' .env
-            printf 'DATABASE_URL=postgresql://postgres:%s@postgres:5432/cuonghoangdev_db?schema=public\n' "$DB_PASS" >> .env
-            echo 'DB_PASS='"$DB_PASS"
-
-            # Run docker compose
-            export POSTGRES_PASSWORD='$DB_PASS'
-            docker compose -f docker-compose.yml build --pull --no-cache
-            docker compose -f docker-compose.yml up -d
-
-            # Wait for backend
-            for i in \$(seq 1 36); do
-              if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null | grep -q 'ok'; then
-                echo '[OK] backend'
-                break
-              fi
-              echo 'Waiting for backend... ('\$i'/36)'
-              sleep 5
-            done
-
-            # DEBUG: Check actual DATABASE_URL inside container
-            docker exec cuonghoangdev_backend sh -c 'echo "Container DATABASE_URL: \$DATABASE_URL"' || true
-            docker exec cuonghoangdev_backend sh -c 'grep DATABASE_URL /app/.env 2>/dev/null || echo "No .env in /app/"' || true
-
-            # DEBUG: Test Prisma connection directly from container
-            docker exec cuonghoangdev_backend node -e "process.env.DATABASE_URL && console.log('URL OK:', process.env.DATABASE_URL.replace(/:[^:@]+@/, ':***@'))" || true
-
-            # DEBUG: Test postgres connection with psql (no password needed if trusting)
-            docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev_db -c "SELECT current_user, current_database()" 2>&1 || true
-            docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev_db -c "\\du" 2>&1 | head -5 || true
-
-            # Wait for nginx
-            for i in \$(seq 1 24); do
-              if docker exec cuonghoangdev_nginx wget -qO- http://localhost/ >/dev/null 2>&1; then
-                echo '[OK] nginx'
-                break
-              fi
-              echo 'Waiting for nginx... ('\$i'/24)'
-              sleep 5
-            done
-
-            docker compose -f docker-compose.yml ps
-            docker compose -f docker-compose.yml logs --tail=20 backend
-          "
+          # Run deploy script on VPS
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "bash /opt/cuonghoangdev/scripts/deploy-vps.sh '${DB_PASS}'"
 
       - name: Create admin user on VPS
         env:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$VPS_USER@$VPS_HOST" "
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "
             set -e
             cd /opt/cuonghoangdev
             for i in \$(seq 1 30); do
@@ -164,7 +98,7 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$VPS_USER@$VPS_HOST" "
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "
             mkdir -p /opt/cuonghoangdev/backups /opt/cuonghoangdev/scripts
             [ -f /opt/cuonghoangdev/scripts/backup-cron.sh ] && chmod +x /opt/cuonghoangdev/scripts/backup-cron.sh
             [ -f /opt/cuonghoangdev/scripts/restore-db.sh ] && chmod +x /opt/cuonghoangdev/scripts/restore-db.sh

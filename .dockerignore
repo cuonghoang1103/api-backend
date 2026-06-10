@@ -4,6 +4,7 @@ frontend/.next
 bin
 .git
 *.log
+.env
 postgres
 redis
 uploads

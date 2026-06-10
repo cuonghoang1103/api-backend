@@ -62,8 +62,7 @@ jobs:
           USER="$VPS_USER"
           KEY_FILE=~/.ssh/deploy_key
 
-            # Get POSTGRES_PASSWORD default from docker-compose.yml (or fallback to 123456)
-            # docker-compose.yml has: ${POSTGRES_PASSWORD:-123456} — extract the default "123456"
+            # Get POSTGRES_PASSWORD from docker-compose.yml (or fallback to 123456)
             DB_PASS=$(grep 'POSTGRES_PASSWORD' docker-compose.yml | grep -oP '(?<=-)[^}]*' | head -1)
             DB_PASS="${DB_PASS:-123456}"
 
@@ -77,6 +76,11 @@ jobs:
                 ln -sf fullchain2.pem certbot/conf/archive/cuongthai.com/fullchain.pem 2>/dev/null || true
                 ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
               fi
+
+              # Stop all containers first
+              docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend cuonghoangdev_postgres cuonghoangdev_redis 2>/dev/null || true
+              docker rm -f cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend cuonghoangdev_postgres cuonghoangdev_redis 2>/dev/null || true
+              docker ps -a --format '{{.Names}}' | grep -E '^cuonghoangdev_' | xargs -r docker rm -f 2>/dev/null || true
 
               # Remove corrupted .env and regenerate from .env.example
               rm -f .env
@@ -92,35 +96,34 @@ jobs:
               printf 'DATABASE_URL=postgresql://postgres:%s@postgres:5432/cuonghoangdev_db?schema=public\n' "$DB_PASS" >> .env
               echo "[DEBUG] DB_PASS=$DB_PASS"
 
-            docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
-            docker rm -f cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
-            docker ps -a --format '{{.Names}}' | grep -E '^cuonghoangdev_' | xargs -r docker rm -f 2>/dev/null || true
+              # Set POSTGRES_PASSWORD env var so postgres container uses the correct password
+              export POSTGRES_PASSWORD="$DB_PASS"
 
-            docker compose -f docker-compose.yml build --pull --no-cache 2>&1
-            docker compose -f docker-compose.yml up -d 2>&1
-            echo "Containers started"
+              docker compose -f docker-compose.yml build --pull --no-cache 2>&1
+              docker compose -f docker-compose.yml up -d 2>&1
+              echo "Containers started"
 
-            for i in \$(seq 1 36); do
-              if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null | grep -q "ok"; then
-                echo "[OK] backend"
-                break
-              fi
-              echo "Waiting for backend... (\$i/36)"
-              sleep 5
-            done
+              for i in \$(seq 1 36); do
+                if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null | grep -q "ok"; then
+                  echo "[OK] backend"
+                  break
+                fi
+                echo "Waiting for backend... (\$i/36)"
+                sleep 5
+              done
 
-            for i in \$(seq 1 24); do
-              if docker exec cuonghoangdev_nginx wget -qO- http://localhost/ >/dev/null 2>&1; then
-                echo "[OK] nginx"
-                break
-              fi
-              echo "Waiting for nginx... (\$i/24)"
-              sleep 5
-            done
+              for i in \$(seq 1 24); do
+                if docker exec cuonghoangdev_nginx wget -qO- http://localhost/ >/dev/null 2>&1; then
+                  echo "[OK] nginx"
+                  break
+                fi
+                echo "Waiting for nginx... (\$i/24)"
+                sleep 5
+              done
 
-            docker compose -f docker-compose.yml ps
-            docker compose -f docker-compose.yml logs --tail=20 backend
-          ENDSSH
+              docker compose -f docker-compose.yml ps
+              docker compose -f docker-compose.yml logs --tail=20 backend
+            ENDSSH
 
       - name: Create admin user on VPS
         env:

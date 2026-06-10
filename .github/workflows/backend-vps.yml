@@ -62,34 +62,35 @@ jobs:
           USER="$VPS_USER"
           KEY_FILE=~/.ssh/deploy_key
 
-          # Get POSTGRES_PASSWORD from docker-compose.yml on LOCAL machine
-          # (This ensures Docker DNS name + correct port are set in .env)
-          DB_PASS=$(grep 'POSTGRES_PASSWORD' docker-compose.yml | sed "s/.*POSTGRES_PASSWORD:-\([^}]*\)}.*/\1/")
-          DB_PASS="${DB_PASS:-123456}"
+            # Get POSTGRES_PASSWORD default from docker-compose.yml (or fallback to 123456)
+            # docker-compose.yml has: ${POSTGRES_PASSWORD:-123456} — extract the default "123456"
+            DB_PASS=$(grep 'POSTGRES_PASSWORD' docker-compose.yml | grep -oP '(?<=-)[^}]*' | head -1)
+            DB_PASS="${DB_PASS:-123456}"
 
-          ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$USER@$HOST" bash << ENDSSH
-            set -e
-            cd /opt/cuonghoangdev
+            ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$USER@$HOST" bash << ENDSSH
+              set -e
+              cd /opt/cuonghoangdev
 
-            mkdir -p nginx/ssl certbot/conf/live/cuongthai.com certbot/www postgres redis uploads backups scripts
+              mkdir -p nginx/ssl certbot/conf/live/cuongthai.com certbot/www postgres redis uploads backups scripts
 
-            if [ -f certbot/conf/archive/cuongthai.com/fullchain2.pem ]; then
-              ln -sf fullchain2.pem certbot/conf/archive/cuongthai.com/fullchain.pem 2>/dev/null || true
-              ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
-            fi
+              if [ -f certbot/conf/archive/cuongthai.com/fullchain2.pem ]; then
+                ln -sf fullchain2.pem certbot/conf/archive/cuongthai.com/fullchain.pem 2>/dev/null || true
+                ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
+              fi
 
-            # Regenerate .env from .env.example
-            if [ -f .env.example ]; then
-              cp .env.example .env
-            fi
+              # Remove corrupted .env and regenerate from .env.example
+              rm -f .env
+              if [ -f .env.example ]; then
+                cp .env.example .env
+              fi
 
-            # Fix DATABASE_URL: localhost:5433 -> postgres:5432 (Docker DNS)
-            sed -i 's|localhost:5433|postgres:5432|g' .env
+              # Fix DATABASE_URL: localhost:5433 -> postgres:5432 (Docker DNS)
+              sed -i 's|localhost:5433|postgres:5432|g' .env
 
-            # Remove old DATABASE_URL and write resolved password directly (no \${VAR} expansion in .env)
-            sed -i '/^DATABASE_URL=/d' .env
-            echo "DATABASE_URL=postgresql://postgres:${DB_PASS}@postgres:5432/cuonghoangdev_db?schema=public" >> .env
-            echo "[DEBUG] DB_PASS=\${DB_PASS}"
+              # Remove old DATABASE_URL and write correct one with resolved password
+              sed -i '/^DATABASE_URL=/d' .env
+              printf 'DATABASE_URL=postgresql://postgres:%s@postgres:5432/cuonghoangdev_db?schema=public\n' "$DB_PASS" >> .env
+              echo "[DEBUG] DB_PASS=$DB_PASS"
 
             docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
             docker rm -f cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true

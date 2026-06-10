@@ -411,7 +411,6 @@ export class MusicService {
           fileSize: true,
           active: true,
           createdAt: true,
-          uploadedBy: true,
         },
       }),
       prisma.musicTrack.count({ where }),

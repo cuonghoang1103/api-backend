@@ -173,7 +173,6 @@ router.get(
         if (t.fileSize !== undefined) t.fileSize = Number(t.fileSize);
         if (t.durationSeconds !== undefined) t.durationSeconds = Number(t.durationSeconds);
         if (t.playCount !== undefined) t.playCount = Number(t.playCount);
-        if (t.uploadedBy !== undefined) t.uploadedBy = Number(t.uploadedBy);
         return t;
       });
 

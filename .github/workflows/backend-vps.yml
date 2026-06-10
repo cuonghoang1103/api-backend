@@ -25,14 +25,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          ssh-strict: false
 
       - name: Sync project to VPS
         run: |
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
           rsync -az --delete \
             --exclude '.git' \
             --exclude 'node_modules' \
@@ -44,11 +44,11 @@ jobs:
             --exclude 'uploads' \
             --exclude 'backups' \
             --exclude '*.log' \
-            ./ -e "ssh -i ~/.ssh/deploy_key" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
+            ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
       - name: Deploy on VPS — zero-downtime rolling update
         run: |
-          ssh -i ~/.ssh/deploy_key "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -e
             cd /opt/cuonghoangdev
 
@@ -155,7 +155,7 @@ jobs:
 
       - name: Create admin user on VPS
         run: |
-          ssh -i ~/.ssh/deploy_key "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -e
             cd /opt/cuonghoangdev
 
@@ -179,7 +179,7 @@ jobs:
 
       - name: Setup backup cron on VPS
         run: |
-          ssh -i ~/.ssh/deploy_key "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -e
             mkdir -p /opt/cuonghoangdev/backups
 

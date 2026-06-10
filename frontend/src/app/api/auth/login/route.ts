@@ -9,6 +9,7 @@ const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://backend:3001";
  * Backend sets backend_token as httpOnly cookie, then we also
  * set admin_role cookie for middleware/Edge access.
  */
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {

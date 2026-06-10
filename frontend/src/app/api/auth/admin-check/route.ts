@@ -15,6 +15,8 @@ const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://backend:3001";
  *
  * Returns profile data if authenticated as admin, 401 otherwise.
  */
+export const runtime = "nodejs";
+
 export async function GET(request: NextRequest) {
   const token = request.cookies.get("backend_token")?.value;
 

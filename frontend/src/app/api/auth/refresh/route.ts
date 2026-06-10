@@ -10,6 +10,7 @@ const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://backend:3001";
  * Sets the new token as an httpOnly cookie.
  * For OAuth users, NextAuth handles its own token refresh via its built-in mechanism.
  */
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {

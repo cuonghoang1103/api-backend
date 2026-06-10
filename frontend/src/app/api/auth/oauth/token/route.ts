@@ -12,6 +12,7 @@ const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://backend:3001";
  *
  * Called by the /oauth-callback page after NextAuth session is established.
  */
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {

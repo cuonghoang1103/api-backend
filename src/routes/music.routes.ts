@@ -40,50 +40,34 @@ import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
 
-// Multer: lưu audio vào memory trước khi chuyển qua upload service
-const audioUpload = multer({
+// Multer: single middleware that handles both audio and cover fields
+// fileFilter checks fieldname to decide which MIME types are allowed
+const uploadMiddleware = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 200 * 1024 * 1024, // 200MB max
+    fileSize: 200 * 1024 * 1024, // 200MB max for audio
   },
   fileFilter: (_req, file: Express.Multer.File, cb) => {
-    const allowedMimes = [
-      'audio/mpeg',
-      'audio/mp3',
-      'audio/wav',
-      'audio/ogg',
-      'audio/flac',
-      'audio/aac',
-      'audio/mp4',
-      'audio/x-m4a',
-      'audio/opus',
-      'video/mp4',
-    ];
-    if (allowedMimes.includes(file.mimetype)) {
-      cb(null, true);
+    if (file.fieldname === 'audio') {
+      const allowed = [
+        'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg',
+        'audio/flac', 'audio/aac', 'audio/mp4', 'audio/x-m4a',
+        'audio/opus', 'video/mp4',
+      ];
+      if (allowed.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new Error(`Unsupported audio format: ${file.mimetype}`));
+      }
+    } else if (file.fieldname === 'cover') {
+      const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (allowed.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new Error(`Unsupported image format: ${file.mimetype}`));
+      }
     } else {
-      cb(new Error(`Unsupported audio format: ${file.mimetype}`));
-    }
-  },
-});
-
-// Multer cho cover image
-const coverUpload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB max
-  },
-  fileFilter: (_req, file: Express.Multer.File, cb) => {
-    const allowedMimes = [
-      'image/jpeg',
-      'image/png',
-      'image/gif',
-      'image/webp',
-    ];
-    if (allowedMimes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error(`Unsupported image format: ${file.mimetype}`));
+      cb(new Error(`Unexpected field: ${file.fieldname}`));
     }
   },
 });
@@ -285,8 +269,10 @@ router.get('/stream/:id', optionalAuth, async (req: any, res: Response, next) =>
 router.post(
   '/tracks',
   authenticate,
-  audioUpload.fields([{ name: 'audio', maxCount: 1 }]),
-  coverUpload.fields([{ name: 'cover', maxCount: 1 }]),
+  uploadMiddleware.fields([
+    { name: 'audio', maxCount: 1 },
+    { name: 'cover', maxCount: 1 },
+  ]),
   async (req: any, res: Response<ApiResponse>, next) => {
     try {
       const { title, artist, durationSeconds } = req.body;

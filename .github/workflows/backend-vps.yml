@@ -73,7 +73,9 @@ jobs:
               ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
             fi
 
-            if [ ! -f .env ] && [ -f .env.example ]; then
+            # ALWAYS regenerate .env from .env.example to prevent stale env vars.
+            # This ensures the DATABASE_URL uses the correct POSTGRES_PASSWORD from Docker.
+            if [ -f .env.example ]; then
               cp .env.example .env
             fi
 

@@ -27,15 +27,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
-    // Use arrayBuffer() to bypass Nginx stripping Content-Type header.
-    // Nginx may not forward multipart/form-data Content-Type for large proxied requests.
-    // We read raw bytes and parse multipart manually, then rebuild FormData.
+    // ── Read raw body and parse multipart ─────────────────────────────────────
+    // Nginx may not forward multipart/form-data Content-Type, so we use
+    // arrayBuffer() and parse the multipart body manually.
     const buffer = await request.arrayBuffer();
     const contentType = request.headers.get("content-type") || "";
     const boundary = getMultipartBoundary(contentType);
 
     if (!boundary) {
-      console.error("[admin/music/upload] No boundary found:", contentType);
       return NextResponse.json({ success: false, message: "Invalid content type" }, { status: 400 });
     }
 
@@ -48,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     const audioPart = fields["audio"];
     if (!audioPart || !audioPart.data || audioPart.data.length === 0) {
-      console.error("[admin/music/upload] Missing or empty audio. Fields:", Object.keys(fields));
+      console.error("[admin/music/upload] Missing audio. Fields found:", Object.keys(fields));
       return NextResponse.json({ success: false, message: "No audio file provided" }, { status: 400 });
     }
 
@@ -66,7 +65,7 @@ export async function POST(request: NextRequest) {
     );
     backendFormData.append("title", title || "Untitled");
     backendFormData.append("artist", artist || "Unknown Artist");
-    backendFormData.append("durationSeconds", String(durationSeconds || 0));
+    backendFormData.append("durationSeconds", String(durationSeconds));
 
     const coverPart = fields["cover"];
     if (coverPart?.data && coverPart.data.length > 0) {
@@ -101,6 +100,8 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// ── Types ────────────────────────────────────────────────────────────────────
+
 interface MultipartPart {
   name: string;
   filename?: string;
@@ -108,72 +109,82 @@ interface MultipartPart {
   data: Buffer;
 }
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
 function getMultipartBoundary(contentType: string): string | null {
   const match = contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/);
   return match ? (match[1] || match[2]) : null;
 }
 
+/**
+ * Parse a multipart/form-data body into parts.
+ *
+ * Key fix: collect ALL boundary positions first (indexOf with +1 search),
+ * then iterate pairs [boundary_i, boundary_i+1] to extract each part.
+ * The old approach (pos = nextB + boundaryLen) skipped boundaries whose
+ * "--boundary\r\n" was absorbed into the previous slice's offset range.
+ */
 function parseMultipartParts(buffer: Buffer, boundary: string): MultipartPart[] {
   const parts: MultipartPart[] = [];
-  const boundaryStart = Buffer.from("--" + boundary);
-  const boundaryEnd = Buffer.from("--" + boundary + "--");
+  const boundaryBytes = Buffer.from("--" + boundary);
 
-  let pos = 0;
-  while (pos < buffer.length) {
-    const bIdx = buffer.indexOf(boundaryStart, pos);
-    if (bIdx === -1) break;
+  // Collect all boundary positions — O(n) single pass
+  const boundaryPositions: number[] = [];
+  let searchFrom = 0;
+  while (searchFrom < buffer.length) {
+    const idx = buffer.indexOf(boundaryBytes, searchFrom);
+    if (idx === -1) break;
+    boundaryPositions.push(idx);
+    searchFrom = idx + 1;
+  }
 
-    let p = bIdx + boundaryStart.length;
-    if (buffer[p] === 0x0d && buffer[p + 1] === 0x0a) p += 2;
+  // Iterate over consecutive boundary pairs
+  for (let i = 0; i < boundaryPositions.length - 1; i++) {
+    const bIdx = boundaryPositions[i];
+    const nextB = boundaryPositions[i + 1];
 
-    let nextB = buffer.indexOf(boundaryStart, p);
-    const endB = buffer.indexOf(boundaryEnd, p);
-    if (endB !== -1 && (nextB === -1 || endB < nextB)) nextB = endB;
-    if (nextB === -1) nextB = buffer.length;
+    // Content starts after "--boundary\r\n"
+    let p = bIdx + boundaryBytes.length + 2;
+    if (p >= buffer.length) continue;
 
+    // Raw content ends before the next "--boundary\r\n"
     let rawPart = buffer.slice(p, nextB);
-    // Only strip trailing CRLF if it's a delimiter BEFORE the next boundary, not binary content.
-    // Binary files may legitimately contain 0x0D 0x0A bytes.
-    // Look for the last CRLF before the next boundary marker.
-    if (rawPart.length >= 2) {
-      const possibleBoundaryStart = nextB - 4; // 4 = len("--" + "\r\n")
-      if (bIdx < possibleBoundaryStart && rawPart[rawPart.length - 2] === 0x0d && rawPart[rawPart.length - 1] === 0x0a) {
-        rawPart = rawPart.slice(0, -2);
-      }
+
+    // Strip trailing "\r\n" that precedes the next boundary delimiter
+    if (rawPart.length >= 2 && rawPart[rawPart.length - 2] === 0x0d && rawPart[rawPart.length - 1] === 0x0a) {
+      rawPart = rawPart.slice(0, -2);
     }
 
-    const headerEnd = rawPart.indexOf(Buffer.from("\r\n\r\n"));
+    // Header block ends at first CRLFCRLF
+    const headerEndIdx = rawPart.indexOf(Buffer.from("\r\n\r\n"));
     let headerBlock = "";
     let bodyData: Buffer = Buffer.alloc(0);
 
-    if (headerEnd !== -1) {
-      headerBlock = rawPart.slice(0, headerEnd).toString("utf8");
-      bodyData = rawPart.slice(headerEnd + 4);
+    if (headerEndIdx !== -1) {
+      headerBlock = rawPart.slice(0, headerEndIdx).toString("utf8");
+      bodyData = rawPart.slice(headerEndIdx + 4);
     } else {
-      const crlf = rawPart.indexOf(Buffer.from("\r\n"));
-      if (crlf !== -1) {
-        headerBlock = rawPart.slice(0, crlf).toString("utf8");
-        bodyData = rawPart.slice(crlf + 2);
+      const crlfIdx = rawPart.indexOf(Buffer.from("\r\n"));
+      if (crlfIdx !== -1) {
+        headerBlock = rawPart.slice(0, crlfIdx).toString("utf8");
+        bodyData = rawPart.slice(crlfIdx + 2);
       } else {
         headerBlock = rawPart.toString("utf8");
-        bodyData = Buffer.alloc(0);
       }
     }
 
     const nameMatch = headerBlock.match(/name="([^"]+)"/);
+    if (!nameMatch) continue;
+
     const filenameMatch = headerBlock.match(/filename="([^"]+)"/);
     const ctMatch = headerBlock.match(/Content-Type:\s*([^\r\n]+)/i);
 
-    if (nameMatch) {
-      parts.push({
-        name: nameMatch[1],
-        filename: filenameMatch?.[1],
-        contentType: ctMatch ? ctMatch[1].trim() : undefined,
-        data: bodyData,
-      });
-    }
-
-    pos = nextB + boundaryStart.length;
+    parts.push({
+      name: nameMatch[1],
+      filename: filenameMatch?.[1],
+      contentType: ctMatch ? ctMatch[1].trim() : undefined,
+      data: bodyData,
+    });
   }
 
   return parts;

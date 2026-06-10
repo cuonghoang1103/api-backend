@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Headphones, RefreshCw, Maximize2, History, Sliders, Info } from 'lucide-react';
+import { Headphones, RefreshCw, Maximize2 } from 'lucide-react';
 import Link from 'next/link';
 import ClientOnly from '@/components/providers/ClientOnly';
 import CyberBackground from '@/components/music/CyberBackground';
@@ -16,16 +16,18 @@ function formatSeconds(seconds?: number): string {
   return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
 }
 
-function buildTrackPlaybackUrl(rawTrack: any): string {
-  if (typeof rawTrack?.audioUrl === 'string' && rawTrack.audioUrl.trim()) {
-    return rawTrack.audioUrl;
+function buildTrackPlaybackUrl(rawTrack: unknown): string {
+  const t = rawTrack as Record<string, unknown> | undefined;
+  if (!t) return '';
+  if (typeof t.audioUrl === 'string' && t.audioUrl.trim()) {
+    return t.audioUrl;
   }
-  if (typeof rawTrack?.localPath === 'string' && rawTrack.localPath.trim()) {
-    const normalized = rawTrack.localPath.replace(/^\/+/, '');
+  if (typeof t.localPath === 'string' && t.localPath.trim()) {
+    const normalized = t.localPath.replace(/^\/+/, '');
     return `/uploads/${normalized}`;
   }
-  if (rawTrack?.id) {
-    return `/api/v1/music/stream/${rawTrack.id}`;
+  if (typeof t.id === 'number' || typeof t.id === 'string') {
+    return `/api/v1/music/stream/${t.id}`;
   }
   return '';
 }
@@ -36,25 +38,32 @@ async function fetchBackendTracks(): Promise<Track[]> {
       credentials: 'include',
       signal: AbortSignal.timeout(8000),
     });
-    if (!res.ok) return [];
+    if (!res.ok) {
+      console.warn('[MusicPage] fetchBackendTracks HTTP error:', res.status);
+      return [];
+    }
     const data = await res.json();
     const raw = Array.isArray(data.data) ? data.data : [];
     return raw
-      .filter((t: any) => Boolean(t?.id))
-      .map((t: any) => ({
-        id: String(t.id ?? ''),
-        title: String(t.title ?? 'Unknown'),
-        artist: String(t.artist ?? 'Unknown'),
-        duration: formatSeconds(typeof t.durationSeconds === 'number' ? t.durationSeconds : undefined),
-        durationSeconds: typeof t.durationSeconds === 'number' ? t.durationSeconds : undefined,
-        audioUrl: buildTrackPlaybackUrl(t),
-        coverImage: typeof t.coverImage === 'string' ? t.coverImage : '',
-        localPath: typeof t.localPath === 'string' ? t.localPath : undefined,
-        fileSize: typeof t.fileSize === 'number' ? t.fileSize : undefined,
-        active: typeof t.active === 'boolean' ? t.active : undefined,
-        createdAt: typeof t.createdAt === 'string' ? t.createdAt : undefined,
-      }));
-  } catch {
+      .filter((t: unknown) => Boolean((t as Record<string, unknown>)?.id))
+      .map((t: unknown) => {
+        const r = t as Record<string, unknown>;
+        return {
+          id: String(r.id ?? ''),
+          title: String(r.title ?? 'Unknown'),
+          artist: String(r.artist ?? 'Unknown'),
+          duration: formatSeconds(typeof r.durationSeconds === 'number' ? r.durationSeconds : undefined),
+          durationSeconds: typeof r.durationSeconds === 'number' ? r.durationSeconds : undefined,
+          audioUrl: buildTrackPlaybackUrl(t),
+          coverImage: typeof r.coverImage === 'string' ? r.coverImage : '',
+          localPath: typeof r.localPath === 'string' ? r.localPath : undefined,
+          fileSize: typeof r.fileSize === 'number' ? r.fileSize : undefined,
+          active: typeof r.active === 'boolean' ? r.active : undefined,
+          createdAt: typeof r.createdAt === 'string' ? r.createdAt : undefined,
+        } satisfies Track;
+      });
+  } catch (err) {
+    console.error('[MusicPage] fetchBackendTracks error:', err);
     return [];
   }
 }
@@ -113,39 +122,66 @@ function CyberShell() {
 }
 
 export default function CyberMusicPage() {
+  // Stable ref to store setTracks so the effect doesn't re-run on every render
+  const setTracks = useMusicStore((s) => s.setTracks);
+  const storeTracks = useMusicStore((s) => s.tracks);
+  const recentlyPlayed = useMusicStore((s) => s.recentlyPlayed);
+
   const [isMounted, setIsMounted] = useState(false);
-  const [isReady, setIsReady] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const storeSetTracks = useMusicStore((s) => s.setTracks);
-  const { tracks, recentlyPlayed } = useMusicStore();
 
-  useEffect(() => { setIsMounted(true); }, []);
+  // Use store's tracks as source of truth (never local state)
+  const tracks = storeTracks;
 
-  const loadTracks = useCallback(async () => {
+  // Ref to avoid stale closure in AbortController
+  const abortRef = useRef<AbortController | null>(null);
+
+  const loadTracks = useCallback(async (isRefresh = false) => {
     if (!isMounted) return;
-    setIsReady(false);
-    setHasError(false);
+    if (abortRef.current) abortRef.current.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    if (!isRefresh) setIsLoading(true);
+    setLoadFailed(false);
+
     try {
       const result = await fetchBackendTracks();
+      if (controller.signal.aborted) return;
+
+      // Always call store.setTracks with the fresh result
       setTracks(result);
-      storeSetTracks(result);
     } catch {
-      setHasError(true);
+      if (!controller.signal.aborted) {
+        setLoadFailed(true);
+      }
     } finally {
-      setIsReady(true);
+      if (!controller.signal.aborted) {
+        setIsLoading(false);
+        setRefreshing(false);
+      }
     }
-  }, [isMounted, storeSetTracks]);
+  }, [isMounted, setTracks]);
 
   const refresh = useCallback(async () => {
     setRefreshing(true);
-    await loadTracks();
-    setRefreshing(false);
+    await loadTracks(true);
   }, [loadTracks]);
 
-  useEffect(() => { loadTracks(); }, [loadTracks]);
+  // Load on mount; don't put loadTracks in deps — it's stable via ref
+  useEffect(() => {
+    setIsMounted(true);
+    loadTracks();
+    return () => {
+      if (abortRef.current) abortRef.current.abort();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!isMounted) return <CyberShell />;
+
+  const showEmpty = !isLoading && !loadFailed && tracks.length === 0;
 
   return (
     <div
@@ -155,23 +191,24 @@ export default function CyberMusicPage() {
         cursor: 'crosshair',
       }}
     >
-      {/* ── Scanlines overlay ── */}
+      {/* Scanlines overlay */}
       <div
         className="pointer-events-none fixed inset-0 z-50"
         style={{
-          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)',
+          backgroundImage:
+            'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)',
           backgroundSize: '100% 4px',
         }}
       />
 
-      {/* ── Animated background ── */}
+      {/* Animated background */}
       <ClientOnly>
         <CyberBackground />
       </ClientOnly>
 
-      {/* ── Main content ── */}
+      {/* Main content */}
       <div className="relative z-10 flex flex-col min-h-screen">
-        {/* ── Header ── */}
+        {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -247,7 +284,8 @@ export default function CyberMusicPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={refresh}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono transition-all"
+                  disabled={refreshing || isLoading}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono transition-all disabled:opacity-40"
                   style={{
                     background: `${C.primary}15`,
                     border: `1px solid ${C.border}`,
@@ -280,10 +318,10 @@ export default function CyberMusicPage() {
           </div>
         </motion.header>
 
-        {/* ── Main content ── */}
+        {/* Main content */}
         <main className="flex-1 px-4 sm:px-6 py-6 pb-28">
-          {/* Loading */}
-          {!isReady && (
+          {/* Loading skeleton */}
+          {isLoading && (
             <div className="flex items-center justify-center h-64 gap-4">
               <div className="flex gap-1">
                 {[0,1,2,3,4].map(i => (
@@ -302,8 +340,8 @@ export default function CyberMusicPage() {
             </div>
           )}
 
-          {/* Error */}
-          {isReady && hasError && (
+          {/* Network error */}
+          {!isLoading && loadFailed && (
             <div className="flex flex-col items-center justify-center h-64 gap-4">
               <div className="text-4xl" style={{ filter: 'hue-rotate(270deg)' }}>⚠</div>
               <p className="text-sm font-mono" style={{ color: C.textMuted }}>
@@ -321,8 +359,8 @@ export default function CyberMusicPage() {
             </div>
           )}
 
-          {/* Content */}
-          {isReady && !hasError && (
+          {/* Content: loaded or empty */}
+          {!isLoading && !loadFailed && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -356,7 +394,7 @@ export default function CyberMusicPage() {
               </div>
 
               {/* Empty state */}
-              {tracks.length === 0 && (
+              {showEmpty && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -366,7 +404,11 @@ export default function CyberMusicPage() {
                     No tracks detected in the matrix.
                   </p>
                   <p className="text-xs font-mono" style={{ color: C.textMuted, opacity: 0.5 }}>
-                    Upload audio files via admin/music to populate the system.
+                    Upload audio files via{' '}
+                    <a href="/admin/music" style={{ color: C.primary }} className="underline">
+                      admin/music
+                    </a>{' '}
+                    to populate the system.
                   </p>
                 </motion.div>
               )}

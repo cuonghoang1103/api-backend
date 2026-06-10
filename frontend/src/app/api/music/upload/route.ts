@@ -2,10 +2,10 @@
  * POST /api/music/upload
  *
  * Bypasses Nginx /api/v1/ proxy by living at /api/music/upload.
- * Manually iterates form fields to preserve exact field names and types —
- * no reliance on request.formData() which can silently drop or swap fields.
+ * Uses raw Buffer parsing of multipart body to preserve exact field names —
+ * avoids request.formData() which can silently drop fields when forwarding.
  *
- * Flow: browser → this route → backend container (http://backend:3001)
+ * Flow: browser → this route (Docker internal) → backend:3001
  */
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,72 +20,88 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
-    // ── Read raw body as buffer and manually parse multipart ──────────────────
+    // ── Read raw body and parse multipart ─────────────────────────────────────
     const buffer = await request.arrayBuffer();
-    const boundary = getBoundary(request.headers.get("content-type") || "");
+    const contentType = request.headers.get("content-type") || "";
+    const boundary = getBoundary(contentType);
 
     if (!boundary) {
+      console.error("[/api/music/upload] No boundary found in content-type:", contentType);
       return NextResponse.json({ success: false, message: "Invalid content type" }, { status: 400 });
     }
 
     const parts = parseMultipart(Buffer.from(buffer), boundary);
 
+    // Debug log all parsed parts
+    console.log("[/api/music/upload] Parsed parts:", parts.map((p) => ({
+      name: p.name,
+      hasFilename: !!p.filename,
+      filename: p.filename,
+      contentType: p.contentType,
+      valueLength: p.value?.length,
+      dataLength: p.data?.length,
+    })));
+
     // Extract named fields
-    const fields: Record<string, { value: string } | { value: Buffer; filename: string; contentType: string }> = {};
+    const fields: Record<string, MultipartPart> = {};
     for (const part of parts) {
       fields[part.name] = part;
     }
 
     // Validate required audio field
     const audioPart = fields["audio"];
-    if (!audioPart || !("filename" in audioPart) || !audioPart.filename) {
+    if (!audioPart || !audioPart.filename || !audioPart.data) {
+      console.error("[/api/music/upload] Missing audio part. Fields found:", Object.keys(fields));
       return NextResponse.json({ success: false, message: "No audio file provided" }, { status: 400 });
     }
 
-    const title = String((fields["title"] as any)?.value || "");
-    const artist = String((fields["artist"] as any)?.value || "");
-    const durationSeconds = parseInt(String((fields["durationSeconds"] as any)?.value || "0"), 10);
+    const title = String((fields["title"]?.value || "").trim());
+    const artist = String((fields["artist"]?.value || "").trim());
+    const durationSeconds = parseInt(String(fields["durationSeconds"]?.value || "0"), 10);
 
     // ── Reconstruct FormData for the backend ─────────────────────────────────
     const backendFormData = new FormData();
 
-    // Audio file — use the raw Buffer to avoid any type mangling
-    const audioBlob = new Blob([audioPart.value], { type: audioPart.contentType || "audio/mpeg" });
-    backendFormData.append("audio", audioBlob, audioPart.filename);
+    const audioBlob = new Blob([audioPart.data], {
+      type: audioPart.contentType || "audio/mpeg",
+    });
+    backendFormData.append("audio", audioBlob, audioPart.filename!);
 
-    backendFormData.append("title", title);
-    backendFormData.append("artist", artist);
+    backendFormData.append("title", title || "Untitled");
+    backendFormData.append("artist", artist || "Unknown Artist");
     backendFormData.append("durationSeconds", String(durationSeconds || 0));
 
-    // Cover file — if present, forward it
+    // Cover file — if present
     const coverPart = fields["cover"];
-    if (coverPart && "filename" in coverPart && coverPart.filename) {
-      const coverBlob = new Blob([coverPart.value], { type: coverPart.contentType || "image/jpeg" });
+    if (coverPart && coverPart.filename && coverPart.data) {
+      const coverBlob = new Blob([coverPart.data], {
+        type: coverPart.contentType || "image/jpeg",
+      });
       backendFormData.append("cover", coverBlob, coverPart.filename);
     }
 
     // ── Forward to backend container via Docker internal DNS ─────────────────
-    const res = await fetch("http://backend:3001/api/v1/music/tracks", {
+    const backendRes = await fetch("http://backend:3001/api/v1/music/tracks", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        // NOTE: Do NOT set Content-Type — fetch sets it with boundary automatically
       },
       body: backendFormData,
     });
 
-    const rawText = await res.text();
+    const rawText = await backendRes.text();
+    let responseData: Record<string, unknown>;
     try {
-      const data = JSON.parse(rawText);
-      return NextResponse.json(data, { status: res.status });
+      responseData = JSON.parse(rawText);
     } catch {
-      return NextResponse.json(
-        { success: false, message: rawText.slice(0, 300) || "Invalid backend response" },
-        { status: res.status || 502 }
-      );
+      responseData = { message: rawText.slice(0, 300) };
     }
+
+    console.log("[/api/music/upload] Backend response:", backendRes.status, responseData);
+
+    return NextResponse.json(responseData, { status: backendRes.status });
   } catch (err) {
-    console.error("[/api/music/upload] Error:", err);
+    console.error("[/api/music/upload] Unhandled error:", err);
     return NextResponse.json({ success: false, message: "Upload failed" }, { status: 500 });
   }
 }
@@ -113,54 +129,62 @@ function parseMultipart(buffer: Buffer, boundary: string): MultipartPart[] {
   let start = 0;
 
   while (start < buffer.length) {
-    // Find next boundary
-    let boundaryIdx = buffer.indexOf(boundaryBuffer, start);
+    const boundaryIdx = buffer.indexOf(boundaryBuffer, start);
     if (boundaryIdx === -1) break;
 
-    boundaryIdx += boundaryBuffer.length;
-    // Skip \r\n after boundary
-    if (buffer[boundaryIdx] === 0x0D && buffer[boundaryIdx + 1] === 0x0A) boundaryIdx += 2;
+    let pos = boundaryIdx + boundaryBuffer.length;
+    if (buffer[pos] === 0x0D && buffer[pos + 1] === 0x0A) pos += 2;
 
-    // Find next boundary (or end)
-    let nextBoundaryIdx = buffer.indexOf(boundaryBuffer, boundaryIdx);
-    let endBoundaryIdx = buffer.indexOf(endBoundary, boundaryIdx);
+    let nextBoundary = buffer.indexOf(boundaryBuffer, pos);
+    let endIdx = buffer.indexOf(endBoundary, pos);
+    if (endIdx !== -1 && (nextBoundary === -1 || endIdx < nextBoundary)) {
+      nextBoundary = endIdx;
+    }
+    if (nextBoundary === -1) nextBoundary = buffer.length;
 
-    if (endBoundaryIdx !== -1 && (nextBoundaryIdx === -1 || endBoundaryIdx < nextBoundaryIdx)) {
-      nextBoundaryIdx = endBoundaryIdx;
+    // Slice part content (between boundary markers)
+    const partRaw = buffer.slice(pos, nextBoundary);
+    // Strip trailing CRLF
+    const trimmed = partRaw[partRaw.length - 1] === 0x0A ? partRaw.slice(0, -1) : partRaw;
+    const partData = trimmed[trimmed.length - 1] === 0x0D ? trimmed.slice(0, -1) : trimmed;
+
+    // Header block ends at first CRLF
+    const headerEndIdx = partData.indexOf(Buffer.from("\r\n\r\n"));
+    let headerBlock = "";
+    let bodyData: Buffer = Buffer.alloc(0);
+
+    if (headerEndIdx !== -1) {
+      headerBlock = partData.slice(0, headerEndIdx).toString("utf8");
+      bodyData = partData.slice(headerEndIdx + 4);
+    } else {
+      const singleCRLF = partData.indexOf(Buffer.from("\r\n"));
+      if (singleCRLF !== -1) {
+        headerBlock = partData.slice(0, singleCRLF).toString("utf8");
+        bodyData = partData.slice(singleCRLF + 2);
+      } else {
+        headerBlock = partData.toString("utf8");
+        bodyData = Buffer.alloc(0);
+      }
     }
 
-    if (nextBoundaryIdx === -1) nextBoundaryIdx = buffer.length;
-
-    const partData = buffer.slice(boundaryIdx, nextBoundaryIdx);
-    // Trim trailing \r\n
-    const trimmed = partData[partData.length - 1] === 0x0A ? partData.slice(0, -1) : partData;
-    const finalData = trimmed[trimmed.length - 1] === 0x0D ? trimmed.slice(0, -1) : trimmed;
-
-    // Parse Content-Disposition header
-    const headerEnd = finalData.indexOf(0x0D, 0x0A);
-    const headerBlock = headerEnd !== -1 ? finalData.slice(0, headerEnd).toString("utf8") : "";
-    const bodyStart = headerEnd !== -1 ? headerEnd + 2 : 0;
-    const bodyData = finalData.slice(bodyStart);
-
-    // Extract name and filename from Content-Disposition
     const nameMatch = headerBlock.match(/name="([^"]+)"/);
     const filenameMatch = headerBlock.match(/filename="([^"]+)"/);
-    const contentTypeMatch = headerBlock.match(/Content-Type:\s*([^\r\n]+)/i);
+    const ctMatch = headerBlock.match(/Content-Type:\s*([^\r\n]+)/i);
 
-    if (!nameMatch) { start = nextBoundaryIdx + boundaryBuffer.length; continue; }
+    if (!nameMatch) { start = nextBoundary + boundaryBuffer.length; continue; }
 
     const part: MultipartPart = { name: nameMatch[1] };
 
     if (filenameMatch) {
       part.filename = filenameMatch[1];
-      part.contentType = contentTypeMatch ? contentTypeMatch[1].trim() : "application/octet-stream";
+      part.contentType = ctMatch ? ctMatch[1].trim() : "application/octet-stream";
       part.data = bodyData;
     } else {
       part.value = bodyData.toString("utf8");
     }
 
     parts.push(part);
-    start = nextBoundaryIdx + boundaryBuffer.length;
+    start = nextBoundary + boundaryBuffer.length;
   }
 
   return parts;

@@ -82,6 +82,10 @@ jobs:
             docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend cuonghoangdev_postgres cuonghoangdev_redis 2>/dev/null || true
             docker rm -f cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend cuonghoangdev_postgres cuonghoangdev_redis 2>/dev/null || true
 
+            # Clean postgres data dir so it re-initializes with the new password
+            # (Old data dir was created with a different POSTGRES_PASSWORD)
+            rm -rf /opt/cuonghoangdev/postgres
+
             # Regenerate .env from .env.example
             rm -f .env
             cp .env.example .env 2>/dev/null || true

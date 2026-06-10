@@ -17,10 +17,6 @@ mkdir -p nginx/ssl certbot/conf/live/cuongthai.com certbot/www postgres redis up
 docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend cuonghoangdev_postgres cuonghoangdev_redis 2>/dev/null || true
 docker rm -f cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend cuonghoangdev_postgres cuonghoangdev_redis 2>/dev/null || true
 
-# Clean postgres data dir so it re-initializes with the correct password
-rm -rf /opt/cuonghoangdev/postgres
-mkdir -p /opt/cuonghoangdev/postgres
-
 # Regenerate .env from .env.example
 rm -f .env
 cp .env.example .env 2>/dev/null || true
@@ -31,10 +27,13 @@ sed -i '/^DATABASE_URL=/d' .env
 printf 'DATABASE_URL=postgresql://postgres:%s@postgres:5432/cuonghoangdev_db?schema=public\n' "$DB_PASS" >> .env
 echo "DB_PASS=${DB_PASS}"
 
-# Run docker compose
+# Run docker compose — stop old backend, force recreate with new image
+# Keep postgres/redis/frontend/nginx running (don't restart them unnecessarily)
 export POSTGRES_PASSWORD="$DB_PASS"
-docker compose -f docker-compose.yml build --pull --no-cache
-docker compose -f docker-compose.yml up -d
+docker compose -f docker-compose.yml build --pull --no-cache backend
+docker compose -f docker-compose.yml stop backend
+docker compose -f docker-compose.yml rm -f backend
+docker compose -f docker-compose.yml up -d backend
 
 # Wait for backend
 for i in $(seq 1 36); do

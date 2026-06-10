@@ -8,6 +8,10 @@ WORKDIR /app
 # Ensure public dir exists (needed by Next.js standalone output)
 RUN mkdir -p /app/public
 
+# Build args for environment variables
+ARG NEXT_PUBLIC_YOUTUBE_API_KEY
+ARG NEXT_PUBLIC_API_URL
+
 # Copy package files for dependency caching
 COPY package*.json ./
 RUN npm ci
@@ -16,6 +20,8 @@ RUN npm ci
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_YOUTUBE_API_KEY=$NEXT_PUBLIC_YOUTUBE_API_KEY
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN npm run build
 
 # ─────────────────────────────────────────────

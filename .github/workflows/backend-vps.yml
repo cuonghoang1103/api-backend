@@ -54,102 +54,96 @@ jobs:
             ./ -e "ssh -i ~/.ssh/deploy_key" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
       - name: Deploy on VPS
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" << 'ENDSSH'
-set -e
-cd /opt/cuonghoangdev
+          HOST="$VPS_HOST"
+          USER="$VPS_USER"
+          KEY_FILE=~/.ssh/deploy_key
 
-# Create required directories
-mkdir -p nginx/ssl certbot/conf/live/cuongthai.com certbot/www postgres redis uploads backups scripts
+          ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$USER@$HOST" bash << 'ENDSSH'
+            set -e
+            cd /opt/cuonghoangdev
 
-# Check/fix SSL cert symlinks for Docker nginx mount
-if [ -f certbot/conf/archive/cuongthai.com/fullchain2.pem ]; then
-  ln -sf fullchain2.pem certbot/conf/archive/cuongthai.com/fullchain.pem 2>/dev/null || true
-  ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
-fi
+            mkdir -p nginx/ssl certbot/conf/live/cuongthai.com certbot/www postgres redis uploads backups scripts
 
-# Create .env from example if missing
-if [ ! -f .env ] && [ -f .env.example ]; then
-  cp .env.example .env
-fi
+            if [ -f certbot/conf/archive/cuongthai.com/fullchain2.pem ]; then
+              ln -sf fullchain2.pem certbot/conf/archive/cuongthai.com/fullchain.pem 2>/dev/null || true
+              ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
+            fi
 
-# Stop containers gracefully
-docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
-docker rm -f cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
+            if [ ! -f .env ] && [ -f .env.example ]; then
+              cp .env.example .env
+            fi
 
-# Remove old conflicting containers if any
-docker ps -a --format '{{.Names}}' | grep -E '^cuonghoangdev_' | xargs -r docker rm -f 2>/dev/null || true
+            docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
+            docker rm -f cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
+            docker ps -a --format '{{.Names}}' | grep -E '^cuonghoangdev_' | xargs -r docker rm -f 2>/dev/null || true
 
-# Start everything
-docker compose -f docker-compose.yml up -d 2>&1
-echo "Containers started"
+            docker compose -f docker-compose.yml up -d 2>&1
+            echo "Containers started"
 
-# Wait for backend health (using curl - backend has curl)
-for i in $(seq 1 36); do
-  if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null | grep -q "ok"; then
-    echo "[OK] backend"
-    break
-  fi
-  echo "Waiting for backend... ($i/36)"
-  sleep 5
-done
+            for i in $(seq 1 36); do
+              if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null | grep -q "ok"; then
+                echo "[OK] backend"
+                break
+              fi
+              echo "Waiting for backend... ($i/36)"
+              sleep 5
+            done
 
-# Wait for nginx
-for i in $(seq 1 24); do
-  if docker exec cuonghoangdev_nginx wget -qO- http://localhost/ >/dev/null 2>&1; then
-    echo "[OK] nginx"
-    break
-  fi
-  echo "Waiting for nginx... ($i/24)"
-  sleep 5
-done
+            for i in $(seq 1 24); do
+              if docker exec cuonghoangdev_nginx wget -qO- http://localhost/ >/dev/null 2>&1; then
+                echo "[OK] nginx"
+                break
+              fi
+              echo "Waiting for nginx... ($i/24)"
+              sleep 5
+            done
 
-# Show status
-docker compose -f docker-compose.yml ps
-docker compose -f docker-compose.yml logs --tail=20 backend
-ENDSSH
+            docker compose -f docker-compose.yml ps
+            docker compose -f docker-compose.yml logs --tail=20 backend
+          ENDSSH
 
       - name: Create admin user on VPS
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" << 'ENDSSH'
-set -e
-cd /opt/cuonghoangdev
-# Wait for backend to be ready
-for i in $(seq 1 30); do
-  if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null | grep -q "ok"; then
-    echo "Backend ready"
-    break
-  fi
-  sleep 2
-done
-# Run seed script if exists
-if [ -f scripts/seed-admin.cjs ]; then
-  docker cp scripts/seed-admin.cjs cuonghoangdev_backend:/app/seed-admin.cjs
-  docker exec cuonghoangdev_backend node seed-admin.cjs
-  echo "Admin setup done"
-fi
-ENDSSH
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$VPS_USER@$VPS_HOST" bash << 'ENDSSH'
+            set -e
+            cd /opt/cuonghoangdev
+            for i in $(seq 1 30); do
+              if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null | grep -q "ok"; then
+                echo "Backend ready"
+                break
+              fi
+              sleep 2
+            done
+            if [ -f scripts/seed-admin.cjs ]; then
+              docker cp scripts/seed-admin.cjs cuonghoangdev_backend:/app/seed-admin.cjs
+              docker exec cuonghoangdev_backend node seed-admin.cjs
+              echo "Admin setup done"
+            fi
+          ENDSSH
 
       - name: Setup cron jobs on VPS
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" << 'ENDSSH'
-set -e
-mkdir -p /opt/cuonghoangdev/backups /opt/cuonghoangdev/scripts
-
-# Ensure scripts are executable
-if [ -f /opt/cuonghoangdev/scripts/backup-cron.sh ]; then
-  chmod +x /opt/cuonghoangdev/scripts/backup-cron.sh
-fi
-if [ -f /opt/cuonghoangdev/scripts/restore-db.sh ]; then
-  chmod +x /opt/cuonghoangdev/scripts/restore-db.sh
-fi
-
-# Setup backup cron (2 AM daily)
-(crontab -l 2>/dev/null | grep -v backup-cron; echo "0 2 * * * /opt/cuonghoangdev/scripts/backup-cron.sh >> /var/log/backup-cron.log 2>&1") | crontab -
-
-# Setup monitoring cron (every 5 min)
-(crontab -l 2>/dev/null | grep -v monitor.sh; echo "*/5 * * * * /opt/cuonghoangdev/scripts/monitor.sh >> /var/log/cuonghoangdev-monitor.log 2>&1") | crontab -
-
-echo "Cron jobs set up:"
-crontab -l
-ENDSSH
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$VPS_USER@$VPS_HOST" bash << 'ENDSSH'
+            set -e
+            mkdir -p /opt/cuonghoangdev/backups /opt/cuonghoangdev/scripts
+            if [ -f /opt/cuonghoangdev/scripts/backup-cron.sh ]; then
+              chmod +x /opt/cuonghoangdev/scripts/backup-cron.sh
+            fi
+            if [ -f /opt/cuonghoangdev/scripts/restore-db.sh ]; then
+              chmod +x /opt/cuonghoangdev/scripts/restore-db.sh
+            fi
+            (crontab -l 2>/dev/null | grep -v backup-cron; echo "0 2 * * * /opt/cuonghoangdev/scripts/backup-cron.sh >> /var/log/backup-cron.log 2>&1") | crontab -
+            (crontab -l 2>/dev/null | grep -v monitor.sh; echo "*/5 * * * * /opt/cuonghoangdev/scripts/monitor.sh >> /var/log/cuonghoangdev-monitor.log 2>&1") | crontab -
+            echo "Cron jobs set up:"
+            crontab -l
+          ENDSSH

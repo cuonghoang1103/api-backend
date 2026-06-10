@@ -196,6 +196,10 @@ export async function POST(request: NextRequest) {
 
     const { body: forwardedBody, boundary: forwardedBoundary } = buildMultipartBody(forwardedFields);
 
+    // DEBUG: print first 200 bytes of forwarded body to verify Content-Type header
+    console.log("[admin/music/upload] FWD boundary:", forwardedBoundary);
+    console.log("[admin/music/upload] FWD body[:200]:", forwardedBody.slice(0, 200).toString("utf8", 0, 200));
+
     // ── Forward to backend ────────────────────────────────────────────────────
     const backendRes = await fetch("http://backend:3001/api/v1/music/tracks", {
       method: "POST",

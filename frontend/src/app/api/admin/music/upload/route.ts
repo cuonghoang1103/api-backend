@@ -61,23 +61,27 @@ export async function POST(request: NextRequest) {
     const durationSeconds = parseInt(durationStr, 10) || 0;
 
     // ── Reconstruct FormData for the backend ─────────────────────────────────
-    const backendFormData = new FormData();
-    backendFormData.append(
-      "audio",
-      new Blob([audioPart.data], { type: audioPart.contentType || "audio/mpeg" }),
-      audioPart.filename || "track.mp3"
+    // Use File() (not Blob) so Node.js fetch preserves the Content-Type header.
+    const audioFile = new File(
+      [audioPart.data],
+      audioPart.filename || "track.mp3",
+      { type: audioPart.contentType || "audio/mpeg" }
     );
+
+    const backendFormData = new FormData();
+    backendFormData.append("audio", audioFile);
     backendFormData.append("title", title || "Untitled");
     backendFormData.append("artist", artist || "Unknown Artist");
     backendFormData.append("durationSeconds", String(durationSeconds));
 
     const coverPart = fields["cover"];
     if (coverPart?.data && coverPart.data.length > 0) {
-      backendFormData.append(
-        "cover",
-        new Blob([coverPart.data], { type: coverPart.contentType || "image/jpeg" }),
-        coverPart.filename
+      const coverFile = new File(
+        [coverPart.data],
+        coverPart.filename || "cover.jpg",
+        { type: coverPart.contentType || "image/jpeg" }
       );
+      backendFormData.append("cover", coverFile);
     }
 
     // ── Forward to backend container via Docker internal DNS ─────────────────

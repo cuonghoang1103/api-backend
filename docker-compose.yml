@@ -117,9 +117,6 @@ services:
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
       ADMIN_EMAILS: ${ADMIN_EMAILS:-cuonghoang1103@gmail.com}
-    depends_on:
-      backend:
-        condition: service_healthy
     networks:
       - backend
     healthcheck:
@@ -144,9 +141,6 @@ services:
       # Let's Encrypt certificates - use archive dir to avoid symlink issues
       - /opt/certbot/conf/archive/cuongthai.com:/etc/letsencrypt/archive:ro
       - /opt/certbot/www:/var/www/certbot:ro
-    depends_on:
-      backend:
-        condition: service_healthy
     networks:
       - backend
     healthcheck:

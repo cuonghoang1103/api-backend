@@ -265,7 +265,8 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
 
     const [courses, total] = await Promise.all([
       prisma.course.findMany({
-        where, skip, take: Number(size),
+        where, skip,
+        take: Number(size),
         orderBy: { createdAt: 'desc' },
         select: { id: true },
       }),

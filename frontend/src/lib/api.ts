@@ -366,7 +366,7 @@ export const academyApi = {
   gradeSubmission: (data: { submissionId: number; grade?: number; feedback?: string; status?: string }) =>
     api.post('/academy/assignments/grade', data),
   getCourseWithSections: (courseId: number) =>
-    api.get(`/academy/courses/${courseId}`),
+    api.get(`/courses/admin/${courseId}`),
 };
 
 // Course Categories API
@@ -582,6 +582,7 @@ export const adminCoursesApi = {
     deadline?: string;
     sortOrder?: number;
     isPublished?: boolean;
+    maxScore?: number;
   }) => api.post('/courses/assignments', data),
 
   updateAssignment: (id: number, data: Partial<{

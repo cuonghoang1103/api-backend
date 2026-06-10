@@ -45,6 +45,14 @@ export async function POST(request: NextRequest) {
       fields[part.name] = part;
     }
 
+    // DEBUG: log all parsed parts
+    console.log("[admin/music/upload] Parsed parts:", parts.map((p) => ({
+      name: p.name,
+      filename: p.filename,
+      contentType: p.contentType,
+      dataLen: p.data.length,
+    })));
+
     const audioPart = fields["audio"];
     if (!audioPart || !audioPart.data || audioPart.data.length === 0) {
       console.error("[admin/music/upload] Missing audio. Fields found:", Object.keys(fields));

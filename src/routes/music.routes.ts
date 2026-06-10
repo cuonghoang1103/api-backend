@@ -47,6 +47,7 @@ const audioUpload = multer({
     fileSize: 200 * 1024 * 1024, // 200MB max
   },
   fileFilter: (_req, file: Express.Multer.File, cb) => {
+    console.log(`[DEBUG][fileFilter] fieldname: ${file.fieldname}, mimetype: ${file.mimetype}, size: ${file.size}, originalname: ${file.originalname}`);
     const allowedMimes = [
       'audio/mpeg',
       'audio/mp3',
@@ -59,6 +60,7 @@ const audioUpload = multer({
       'audio/opus',
       'video/mp4',
     ];
+    console.log(`[DEBUG][fileFilter] allowedMimes:`, allowedMimes, 'includes?', allowedMimes.includes(file.mimetype));
     if (allowedMimes.includes(file.mimetype)) {
       cb(null, true);
     } else {

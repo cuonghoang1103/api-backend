@@ -18,6 +18,7 @@ const audioUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 200 * 1024 * 1024 },
   fileFilter: (_req, file: Express.Multer.File, cb) => {
+    console.log(`[DEBUG][music-admin fileFilter] fieldname: ${file.fieldname}, mimetype: ${file.mimetype}, size: ${file.size}`);
     const allowed = ['audio/mpeg','audio/mp3','audio/wav','audio/ogg','audio/flac','audio/aac','audio/mp4','audio/x-m4a','audio/opus','video/mp4'];
     if (allowed.includes(file.mimetype)) {
       cb(null, true);

@@ -125,7 +125,6 @@ function CyberShell() {
 }
 
 export default function CyberMusicPage() {
-  console.log('[MusicPage] CyberMusicPage mounted, storeTracks:', storeTracks.length);
   // Stable ref to store setTracks so the effect doesn't re-run on every render
   const setTracks = useMusicStore((s) => s.setTracks);
   const storeTracks = useMusicStore((s) => s.tracks);
@@ -135,9 +134,6 @@ export default function CyberMusicPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [loadFailed, setLoadFailed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
-  // Debug: track mount/loading state
-  console.log('[MusicPage] render: isMounted=', isMounted, 'isLoading=', isLoading, 'loadFailed=', loadFailed, 'storeTracks=', storeTracks.length);
 
   // Use store's tracks as source of truth (never local state)
   const tracks = storeTracks;

@@ -44,7 +44,7 @@ jobs:
             --exclude 'uploads' \
             --exclude 'backups' \
             --exclude '*.log' \
-            ./ -e ~/.ssh/deploy_key "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
+            ./ -e "ssh -i ~/.ssh/deploy_key" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
       - name: Deploy on VPS — zero-downtime rolling update
         run: |

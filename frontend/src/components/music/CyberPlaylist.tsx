@@ -57,6 +57,8 @@ export default function CyberPlaylist() {
     track.artist.toLowerCase().includes(search.toLowerCase())
   );
 
+  console.log('[CyberPlaylist] tracks.length:', tracks.length, 'allTracks.length:', allTracks.length, 'savedAllTracks.length:', savedAllTracks.length);
+
   const totalDuration = tracks.reduce((acc, t) => acc + parseDuration(t.duration), 0);
 
   const handlePlayTrack = (track: Track) => {

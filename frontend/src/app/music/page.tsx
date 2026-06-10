@@ -152,6 +152,7 @@ export default function CyberMusicPage() {
       const result = await fetchBackendTracks(controller.signal);
       if (controller.signal.aborted) return;
 
+      console.log('[MusicPage] loadTracks result count:', result.length, 'first:', result[0]?.title);
       // Always call store.setTracks with the fresh result
       setTracks(result);
     } catch {

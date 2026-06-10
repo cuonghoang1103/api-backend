@@ -37,7 +37,8 @@ jobs:
 
       - name: Verify SSH connection
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "echo SSH_OK"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "echo SSH_OK"
 
       - name: Sync project to VPS
         run: |
@@ -52,58 +53,39 @@ jobs:
             --exclude 'uploads' \
             --exclude 'backups' \
             --exclude '*.log' \
-            ./ -e "ssh -i ~/.ssh/deploy_key" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
+            ./ -e "ssh -i ~/.ssh/deploy_key" \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
-      - name: Deploy on VPS
-        env:
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
+      - name: Upload deploy script
         run: |
-          # Get DB password locally (from docker-compose.yml)
-          DB_PASS=$(grep 'POSTGRES_PASSWORD' docker-compose.yml | grep -v '^#' | head -1 | sed 's/.*POSTGRES_PASSWORD:-\([^}]*\)}.*/\1/')
-          DB_PASS="${DB_PASS:-123456}"
-          echo "Using DB_PASS: ${DB_PASS}"
-
-          # Upload deploy script
           chmod +x scripts/deploy-vps.sh
-          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no scripts/deploy-vps.sh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/scripts/deploy-vps.sh"
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            scripts/deploy-vps.sh \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/scripts/deploy-vps.sh"
 
-          # Run deploy script on VPS
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "bash /opt/cuonghoangdev/scripts/deploy-vps.sh '${DB_PASS}'"
-
-      - name: Create admin user on VPS
+      - name: Run deploy script on VPS
         env:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "
-            set -e
-            cd /opt/cuonghoangdev
-            for i in \$(seq 1 30); do
-              if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null | grep -q 'ok'; then
-                echo 'Backend ready'
-                break
-              fi
-              sleep 2
-            done
-            if [ -f scripts/seed-admin.cjs ]; then
-              docker cp scripts/seed-admin.cjs cuonghoangdev_backend:/app/seed-admin.cjs
-              docker exec cuonghoangdev_backend node seed-admin.cjs
-              echo 'Admin setup done'
-            fi
-          "
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "$VPS_USER@$VPS_HOST" \
+            "bash /opt/cuonghoangdev/scripts/deploy-vps.sh"
 
       - name: Setup cron jobs on VPS
         env:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "$VPS_USER@$VPS_HOST" "
             mkdir -p /opt/cuonghoangdev/backups /opt/cuonghoangdev/scripts
-            [ -f /opt/cuonghoangdev/scripts/backup-cron.sh ] && chmod +x /opt/cuonghoangdev/scripts/backup-cron.sh
-            [ -f /opt/cuonghoangdev/scripts/restore-db.sh ] && chmod +x /opt/cuonghoangdev/scripts/restore-db.sh
-            (crontab -l 2>/dev/null | grep -v backup-cron; echo '0 2 * * * /opt/cuonghoangdev/scripts/backup-cron.sh >> /var/log/backup-cron.log 2>&1') | crontab -
-            (crontab -l 2>/dev/null | grep -v monitor.sh; echo '*/5 * * * * /opt/cuonghoangdev/scripts/monitor.sh >> /var/log/cuonghoangdev-monitor.log 2>&1') | crontab -
-            echo 'Cron jobs set up:'
+            chmod +x /opt/cuonghoangdev/scripts/backup-cron.sh 2>/dev/null || true
+            chmod +x /opt/cuonghoangdev/scripts/restore-db.sh 2>/dev/null || true
+            (crontab -l 2>/dev/null | grep -v backup-cron; \
+              echo '0 2 * * * /opt/cuonghoangdev/scripts/backup-cron.sh >> /var/log/backup-cron.log 2>&1') | crontab -
+            (crontab -l 2>/dev/null | grep -v monitor.sh; \
+              echo '*/5 * * * * /opt/cuonghoangdev/scripts/monitor.sh >> /var/log/cuonghoangdev-monitor.log 2>&1') | crontab -
+            echo 'Cron jobs:'
             crontab -l
           "

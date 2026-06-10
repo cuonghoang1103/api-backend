@@ -2,7 +2,7 @@
  * ============================================================
  * Prisma Database Configuration
  *
- * - Singleton pattern: ngăn tạo nhiều PrismaClient instances
+ * - Mỗi startup tạo PrismaClient mới — tránh cache từ container cũ
  * - Connection pool: tối ưu cho VPS với giới hạn kết nối
  * - Logging: query timing trong dev, error-only trong prod
  * - Shutdown: clean disconnect khi process exit
@@ -11,16 +11,10 @@
 
 import { PrismaClient, Prisma } from '@prisma/client';
 
-// ─── Global singleton (ngăn hot reload tạo nhiều instances) ────
-declare global {
-  // eslint-disable-next-line no-var
-  var __prisma: PrismaClient | undefined;
-}
-
 // ─── PrismaClient instance ─────────────────────────────────────
-// Mỗi Node.js process chỉ nên có 1 PrismaClient duy nhất
-// Prisma quản lý connection pool internally
-const prismaClient = global.__prisma ?? new PrismaClient({
+// Tạo mới mỗi lần process start — KHÔNG dùng singleton global
+// Vì production không cần hot-reload, singleton gây bug khi env vars thay đổi
+const prismaClient = new PrismaClient({
   // ─── Connection Pool Configuration ───────────────────────────
   datasources: {
     db: {
@@ -28,19 +22,9 @@ const prismaClient = global.__prisma ?? new PrismaClient({
     },
   },
 
-  // ─── Log levels ────────────────────────────────────────────
-  // development: log tất cả queries + warnings + errors
-  // production:  log chỉ errors
+  // ─── Log levels ───────────────────────────────────────────
   log: buildLogLevels(process.env.NODE_ENV),
-
-  // ─── Prisma Client Runtime ────────────────────────────────
-  // Dùng 'node' runtime thay vì 'edge' (edge chỉ cho serverless)
 });
-
-// ─── Attach to global trong non-production ───────────────────
-if (process.env.NODE_ENV !== 'production') {
-  global.__prisma = prismaClient;
-}
 
 // ─── Helper: Build log levels từ NODE_ENV ───────────────────
 function buildLogLevels(
@@ -68,7 +52,7 @@ function buildLogLevels(
   }
 }
 
-// ─── Connect ────────────────────────────────────────────────
+// ─── Connect ───────────────────────────────────────────────
 export async function connectDatabase(): Promise<void> {
   try {
     // $connect() mở connection pool
@@ -97,8 +81,7 @@ export async function disconnectDatabase(): Promise<void> {
   }
 }
 
-// ─── Query timeout wrapper ──────────────────────────────────
-// Dùng cho các query nặng (migrate, seed, bulk operations)
+// ─── Query timeout wrapper ─────────────────────────────────
 export async function withTimeout<T>(
   promise: Promise<T>,
   timeoutMs: number = 30_000,
@@ -113,16 +96,13 @@ export async function withTimeout<T>(
 }
 
 // ─── Transaction helper ─────────────────────────────────────
-// Dùng cho các operation cần atomicity
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function withTransaction<T>(
-  fn: (tx: any) => Promise<T>,
+  fn: (tx: unknown) => Promise<T>,
 ): Promise<T> {
   return prismaClient.$transaction(fn);
 }
 
 // ─── Raw query shorthand ───────────────────────────────────
-// Tiện cho các query phức tạp không fit vào Prisma API
 export async function rawQuery<T>(
   query: TemplateStringsArray,
   ...values: unknown[]

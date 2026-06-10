@@ -49,6 +49,7 @@ const academyRoutes = (await import(path.join(__dirname, 'routes', 'academy.rout
 const shopRoutes = (await import(path.join(__dirname, 'routes', 'shop.routes.js'))).default;
 const musicRoutes = (await import(path.join(__dirname, 'routes', 'music.routes.js'))).default;
 const musicAdminRoutes = (await import(path.join(__dirname, 'routes', 'music-admin.routes.js'))).default;
+const musicHistoryRoutes = (await import(path.join(__dirname, 'routes', 'music-history.routes.js'))).default;
 const aiRoutes = (await import(path.join(__dirname, 'routes', 'ai.routes.js'))).default;
 const adminRoutes = (await import(path.join(__dirname, 'routes', 'admin.routes.js'))).default;
 const skillRoutes = (await import(path.join(__dirname, 'routes', 'skill.routes.js'))).default;
@@ -245,6 +246,7 @@ app.use('/api/v1/academy', academyRoutes);
 app.use('/api/v1/shop', shopRoutes);
 app.use('/api/v1/music', musicRoutes);
 app.use('/api/v1/music/admin', musicAdminRoutes);
+app.use('/api/v1/music/history', musicHistoryRoutes);
 app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/skills', skillRoutes);

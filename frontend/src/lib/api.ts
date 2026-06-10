@@ -138,6 +138,18 @@ export const fileApi = {
   delete: (id: number) => api.delete(`/files/${id}`),
 };
 
+// Music API
+export const musicApi = {
+  getTracks: (params?: { page?: number; size?: number; keyword?: string }) =>
+    api.get('/music/tracks', { params }),
+  getTrack: (id: number) => api.get(`/music/tracks/${id}`),
+  getStreamUrl: (id: number) => `/api/v1/music/stream/${id}`,
+  getHistory: () => api.get('/music/history'),
+  recordPlay: (trackId: number) =>
+    api.post('/music/history', { trackId }),
+  clearHistory: () => api.delete('/music/history'),
+};
+
 // User API
 export const userApi = {
   getAll: (params?: {

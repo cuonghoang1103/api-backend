@@ -64,6 +64,7 @@ model User {
   chatFeedback          ChatFeedback[]
   assignmentSubmissions AssignmentSubmission[]
   aiConfigUpdates       AiConfig[]             @relation("AiConfigUpdater")
+  musicHistories       MusicHistory[]
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -710,6 +711,7 @@ model MusicTrack {
   updatedAt       DateTime? @updatedAt @map("updated_at")
 
   playlists MusicPlaylistTrack[]
+  histories MusicHistory[]
 
   @@map("music_tracks")
 }
@@ -745,6 +747,24 @@ model MusicPlaylistTrack {
   @@index([playlistId], name: "idx_playlist_tracks_playlist")
   @@index([trackId], name: "idx_playlist_tracks_track")
   @@map("music_playlist_tracks")
+}
+
+// ============================================================
+// 8b. MUSIC LISTENING HISTORY
+// ============================================================
+model MusicHistory {
+  id        Int      @id @default(autoincrement())
+  userId   Int      @map("user_id")
+  trackId   Int      @map("track_id")
+  playedAt  DateTime @default(now()) @map("played_at")
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track MusicTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trackId], name: "music_history_user_track_unique")
+  @@index([userId, playedAt(sort: Desc)], name: "idx_history_user_time")
+  @@index([userId], name: "idx_history_user")
+  @@map("music_history")
 }
 
 // ============================================================

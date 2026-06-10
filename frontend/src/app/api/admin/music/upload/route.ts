@@ -8,6 +8,8 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 
+const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://backend:3001";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -65,17 +67,12 @@ interface MultipartPart {
   data: Buffer;
 }
 
-/**
- * Robust multipart parser that handles WebKit-style boundaries (no CRLF before first boundary).
- * Extracts each part's headers and body data correctly.
- */
 function parseMultipartParts(buffer: Buffer, boundary: string): MultipartPart[] {
   const parts: MultipartPart[] = [];
   const boundaryDashed = "--" + boundary;
   const boundaryBytes = Buffer.from(boundaryDashed);
   const CRLF = Buffer.from("\r\n");
 
-  // Find all boundary positions
   const positions: number[] = [];
 
   // Check start of buffer
@@ -108,14 +105,11 @@ function parseMultipartParts(buffer: Buffer, boundary: string): MultipartPart[] 
     const start = positions[i];
     const nextStart = positions[i + 1];
 
-    // Skip past the "--boundary" line to the CRLF after it
     let offset = start + boundaryBytes.length;
-    // Skip optional "--" for closing boundary (but only if followed by CRLF or end)
     if (offset + 2 <= buffer.length &&
         buffer[offset] === 0x2d && buffer[offset + 1] === 0x2d) {
       offset += 2;
     }
-    // Skip CRLF after boundary line
     if (offset + 2 <= buffer.length &&
         buffer[offset] === 0x0d && buffer[offset + 1] === 0x0a) {
       offset += 2;
@@ -123,33 +117,27 @@ function parseMultipartParts(buffer: Buffer, boundary: string): MultipartPart[] 
 
     if (offset >= nextStart) continue;
 
-    // rawPart = everything between end of boundary CRLF and start of next boundary
-    const rawPart = buffer.slice(offset, nextStart);
-
-    // Strip trailing CRLF
-    let partData = rawPart;
-    if (partData.length >= 2 &&
-        partData[partData.length - 2] === 0x0d &&
-        partData[partData.length - 1] === 0x0a) {
-      partData = partData.slice(0, -2);
+    let rawPart = buffer.slice(offset, nextStart);
+    if (rawPart.length >= 2 &&
+        rawPart[rawPart.length - 2] === 0x0d &&
+        rawPart[rawPart.length - 1] === 0x0a) {
+      rawPart = rawPart.slice(0, -2);
     }
 
-    // Split headers from body at \r\n\r\n
-    const headerEnd = partData.indexOf(Buffer.from("\r\n\r\n"));
+    const headerEnd = rawPart.indexOf(Buffer.from("\r\n\r\n"));
     let headerBlock = "";
     let body: Buffer = Buffer.alloc(0);
 
     if (headerEnd !== -1) {
-      headerBlock = partData.slice(0, headerEnd).toString("utf8");
-      body = partData.slice(headerEnd + 4);
+      headerBlock = rawPart.slice(0, headerEnd).toString("utf8");
+      body = rawPart.slice(headerEnd + 4);
     } else {
-      // Fallback: split at first CRLF
-      const firstCRLF = partData.indexOf(CRLF);
+      const firstCRLF = rawPart.indexOf(CRLF);
       if (firstCRLF !== -1) {
-        headerBlock = partData.slice(0, firstCRLF).toString("utf8");
-        body = partData.slice(firstCRLF + 2);
+        headerBlock = rawPart.slice(0, firstCRLF).toString("utf8");
+        body = rawPart.slice(firstCRLF + 2);
       } else {
-        headerBlock = partData.toString("utf8");
+        headerBlock = rawPart.toString("utf8");
       }
     }
 
@@ -168,40 +156,6 @@ function parseMultipartParts(buffer: Buffer, boundary: string): MultipartPart[] 
   }
 
   return parts;
-}
-
-function buildMultipartBody(fields: {
-  name: string;
-  filename?: string;
-  contentType?: string;
-  data: Buffer;
-}[]): { body: Buffer; boundary: string } {
-  const boundary = "----UploadBoundary" + Math.random().toString(36).slice(2, 10);
-  const CRLF = Buffer.from("\r\n");
-  const chunks: Buffer[] = [];
-
-  for (const field of fields) {
-    chunks.push(Buffer.from("--" + boundary));
-    chunks.push(CRLF);
-
-    const headerParts: string[] = [
-      `Content-Disposition: form-data; name="${field.name}"${
-        field.filename ? `; filename="${field.filename}"` : ""
-      }`,
-    ];
-    if (field.filename && field.contentType) {
-      headerParts.push(`Content-Type: ${field.contentType}`);
-    }
-
-    chunks.push(Buffer.from(headerParts.join("\r\n") + "\r\n\r\n"));
-    chunks.push(field.data);
-    chunks.push(CRLF);
-  }
-
-  chunks.push(Buffer.from("--" + boundary + "--"));
-  chunks.push(CRLF);
-
-  return { body: Buffer.concat(chunks), boundary };
 }
 
 // ── Route handler ───────────────────────────────────────────────────────────────
@@ -245,15 +199,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: "No audio file provided" }, { status: 400 });
     }
 
-    // Use magic bytes to detect actual audio type (ignore browser-reported MIME)
+    // Use magic bytes to detect actual audio type
     const detectedMime = detectMagicBytes(audioPart.data);
     const audioFilename = audioPart.filename || "track.mp3";
-    const audioExt = audioFilename.split('.').pop()?.toLowerCase() || 'mp3';
     const audioMime = detectedMime || getMimeFromFilename(audioFilename);
 
-    console.log('[admin/music/upload] Audio detected mime:', detectedMime, 'from browser:', audioPart.contentType, 'file:', audioFilename);
+    console.log('[admin/music/upload] Audio detected:', detectedMime, 'browser:', audioPart.contentType, 'file:', audioFilename);
 
-    // Validate audio magic bytes
     const validAudioMimes = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg', 'audio/flac', 'audio/aac', 'audio/mp4', 'audio/x-m4a', 'audio/opus'];
     if (!validAudioMimes.includes(audioMime)) {
       return NextResponse.json({
@@ -278,52 +230,35 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // ── Build forwarded multipart body ─────────────────────────────────────────
-    const forwardedFields: { name: string; filename?: string; contentType?: string; data: Buffer }[] = [
-      {
-        name: "audio",
-        filename: audioFilename,
-        contentType: audioMime,
-        data: audioPart.data,
-      },
-      {
-        name: "title",
-        data: Buffer.from((fields["title"]?.data?.toString("utf8").trim() || "Untitled"), "utf8"),
-      },
-      {
-        name: "artist",
-        data: Buffer.from((fields["artist"]?.data?.toString("utf8").trim() || "Unknown Artist"), "utf8"),
-      },
-      {
-        name: "durationSeconds",
-        data: Buffer.from(
-          String(parseInt(fields["durationSeconds"]?.data?.toString("utf8").trim() || "0", 10) || 0),
-          "utf8"
-        ),
-      },
-    ];
+    // ── Build FormData for backend (uses native fetch — no Buffer body issue) ──
+    const formData = new FormData();
 
+    // Append audio as a Blob with correct MIME type
+    const audioBlob = new Blob([audioPart.data], { type: audioMime });
+    formData.append("audio", audioBlob, audioFilename);
+
+    // Append text fields
+    formData.append("title", (fields["title"]?.data?.toString("utf8").trim() || "Untitled"));
+    formData.append("artist", (fields["artist"]?.data?.toString("utf8").trim() || "Unknown Artist"));
+    formData.append("durationSeconds", String(
+      parseInt(fields["durationSeconds"]?.data?.toString("utf8").trim() || "0", 10) || 0
+    ));
+
+    // Append cover if provided
     if (coverPart?.data && coverPart.data.length > 0) {
-      forwardedFields.push({
-        name: "cover",
-        filename: coverPart.filename || "cover.jpg",
-        contentType: coverMime || "image/jpeg",
-        data: coverPart.data,
-      });
+      const coverBlob = new Blob([coverPart.data], { type: coverMime || "image/jpeg" });
+      formData.append("cover", coverBlob, coverPart.filename || "cover.jpg");
     }
-
-    const { body: forwardedBody, boundary: forwardedBoundary } = buildMultipartBody(forwardedFields);
 
     console.log('[admin/music/upload] FWD audio:', audioMime, 'len:', audioPart.data.length, 'hex:', audioPart.data.slice(0, 8).toString('hex'));
 
     // ── Forward to backend ────────────────────────────────────────────────────
-    const backendRes = await fetch("http://backend:3001/api/v1/music/tracks", {
+    const backendRes = await fetch(`${BACKEND_URL}/api/v1/music/tracks`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": `multipart/form-data; boundary=${forwardedBoundary}`,
       },
-      body: forwardedBody,
+      body: formData,
     });
 
     const rawText = await backendRes.text();

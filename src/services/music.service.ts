@@ -421,8 +421,8 @@ export class MusicService {
       pagination: {
         page,
         limit: size,
-        total,
-        totalPages: Math.ceil(total / size),
+        total: Number(total),
+        totalPages: Math.ceil(Number(total) / size),
       },
     };
   }

@@ -112,6 +112,10 @@ jobs:
               sleep 5
             done
 
+            # DEBUG: Check actual DATABASE_URL inside container
+            docker exec cuonghoangdev_backend sh -c 'echo "Container DATABASE_URL: \$DATABASE_URL"' || true
+            docker exec cuonghoangdev_backend sh -c 'grep DATABASE_URL /app/.env 2>/dev/null || echo "No .env in /app/"' || true
+
             # Wait for nginx
             for i in \$(seq 1 24); do
               if docker exec cuonghoangdev_nginx wget -qO- http://localhost/ >/dev/null 2>&1; then

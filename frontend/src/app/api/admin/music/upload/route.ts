@@ -34,11 +34,18 @@ export async function POST(request: NextRequest) {
     const contentType = request.headers.get("content-type") || "";
     const boundary = getMultipartBoundary(contentType);
 
-    if (!boundary) {
-      return NextResponse.json({ success: false, message: "Invalid content type" }, { status: 400 });
-    }
+    // DEBUG: log raw incoming data
+    console.log("[admin/music/upload] content-type:", contentType);
+    console.log("[admin/music/upload] buffer byteLength:", buffer.byteLength);
+    console.log("[admin/music/upload] boundary:", boundary);
 
-    const parts = parseMultipartParts(Buffer.from(buffer), boundary);
+    // Verify raw bytes around first boundary
+    const buf = Buffer.from(buffer);
+    const bStart = buf.indexOf(Buffer.from("--" + (boundary || "")));
+    console.log("[admin/music/upload] first boundary at offset:", bStart);
+    if (bStart >= 0) {
+      console.log("[admin/music/upload] bytes at boundary:", buf.slice(bStart, bStart + 80).toString("utf8", 0, 80));
+    }
 
     const fields: Record<string, MultipartPart> = {};
     for (const part of parts) {
@@ -46,12 +53,7 @@ export async function POST(request: NextRequest) {
     }
 
     // DEBUG: log all parsed parts
-    console.log("[admin/music/upload] Parsed parts:", parts.map((p) => ({
-      name: p.name,
-      filename: p.filename,
-      contentType: p.contentType,
-      dataLen: p.data.length,
-    })));
+    console.log("[admin/music/upload] Fields after parsing:", Object.keys(fields));
 
     const audioPart = fields["audio"];
     if (!audioPart || !audioPart.data || audioPart.data.length === 0) {
@@ -85,6 +87,8 @@ export async function POST(request: NextRequest) {
     }
 
     // ── Forward to backend container via Docker internal DNS ─────────────────
+    console.log("[admin/music/upload] → backend: audioContentType:", audioPart.contentType, "size:", audioPart.data.length, "audioFilename:", audioPart.filename);
+    console.log("[admin/music/upload] → backend: cover:", coverPart?.filename, coverPart?.contentType);
     const backendRes = await fetch("http://backend:3001/api/v1/music/tracks", {
       method: "POST",
       headers: {

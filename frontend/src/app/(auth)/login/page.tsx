@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
-import { signIn, signOut } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
@@ -20,10 +20,17 @@ const loginSchema = z.object({
 
 type LoginForm = z.infer<typeof loginSchema>;
 
+function isAdminRole(roles: string[]): boolean {
+  if (!roles || roles.length === 0) return false;
+  return roles.some((r) => {
+    const normalized = (r || '').replace(/^ROLE_/i, '').toUpperCase();
+    return normalized === 'ADMIN';
+  });
+}
+
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [backendError, setBackendError] = useState('');
@@ -34,91 +41,88 @@ function LoginForm() {
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      username: '',
-      password: '',
-    },
+    defaultValues: { username: '', password: '' },
   });
 
   const redirect = searchParams.get('redirect');
 
   const onSubmit = async (data: LoginForm) => {
-    // #region agent log
-    fetch('http://127.0.0.1:7305/ingest/6d5fb7f6-cb51-4802-937b-44b6d8aa05b5',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'b41c56'},body:JSON.stringify({sessionId:'b41c56',runId:'pre-fix',hypothesisId:'H1,H4',location:'frontend/src/app/(auth)/login/page.tsx:45',message:'login submit started',data:{username:data.username,passwordLength:data.password?.length ?? 0,hasRedirect:!!searchParams.get('redirect')},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     setIsLoading(true);
     setBackendError('');
+
     try {
+      // Sign out any existing NextAuth session
       try {
         await signOut({ redirect: false });
       } catch {}
 
-      const response = await fetch('/api/auth/login', {
+      // ─── Step 1: Login via backend API ───────────────────────────
+      const loginRes = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ username: data.username, password: data.password }),
       });
 
-      const result = await response.json();
-      // #region agent log
-      fetch('http://127.0.0.1:7305/ingest/6d5fb7f6-cb51-4802-937b-44b6d8aa05b5',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'b41c56'},body:JSON.stringify({sessionId:'b41c56',runId:'pre-fix',hypothesisId:'H1,H3,H4',location:'frontend/src/app/(auth)/login/page.tsx:60',message:'login response received',data:{status:response.status,ok:response.ok,success:!!result?.success,message:result?.message ?? null,hasToken:!!result?.data?.token,role:result?.data?.role ?? null},timestamp:Date.now()})}).catch(()=>{});
-      // #endregion
+      const loginData = await loginRes.json();
 
-      if (!response.ok || !result.success) {
-        const errorMsg = result.message || (response.status === 429
-          ? 'Too many login attempts. Please wait a moment and try again.'
-          : 'Incorrect username or password. Please try again.');
-        // #region agent log
-        fetch('http://127.0.0.1:7305/ingest/6d5fb7f6-cb51-4802-937b-44b6d8aa05b5',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'b41c56'},body:JSON.stringify({sessionId:'b41c56',runId:'post-fix',hypothesisId:'H1,H3,H4',location:'frontend/src/app/(auth)/login/page.tsx:62',message:'login rejected in ui',data:{status:response.status,message:errorMsg,success:!!result?.success},timestamp:Date.now()})}).catch(()=>{});
-        // #endregion
+      if (!loginRes.ok || !loginData.success) {
+        const errorMsg = loginData.message || (
+          loginRes.status === 429
+            ? 'Too many login attempts. Please wait a moment and try again.'
+            : 'Incorrect username or password.'
+        );
         setBackendError(errorMsg);
         toast.error(errorMsg);
         return;
       }
 
-      const token = (result.data?.token as string | undefined) ?? '';
-      const loginRole = (result.data?.role as string | undefined) ?? 'USER';
-      const loginUserId = result.data?.userId as number | undefined;
-      const loginEmail = result.data?.email as string | undefined;
+      // ─── Step 2: Extract auth data from login response ──────────
+      const token: string = loginData.data?.token ?? '';
+      const loginRole: string = loginData.data?.role ?? 'ROLE_USER';
+      const loginRoles: string[] = loginData.data?.roles ?? [loginRole];
+      const loginUserId: number = loginData.data?.userId ?? 0;
+      const loginEmail: string = loginData.data?.email ?? '';
 
-      let profileData: any = null;
+      // ─── Step 3: Fetch profile to confirm roles ──────────────────
+      let profileRoles: string[] = loginRoles;
+      let profileUserId = loginUserId;
+      let profileEmail = loginEmail;
 
-      // Fetch full profile to get accurate roles
       if (token) {
         try {
           const profileRes = await fetch('/api/v1/profile', {
             headers: { Authorization: `Bearer ${token}` },
             credentials: 'include',
           });
+
           if (profileRes.ok) {
-            profileData = await profileRes.json();
+            const profileData = await profileRes.json();
+            if (profileData?.data) {
+              profileRoles = profileData.data.roles ?? loginRoles;
+              profileUserId = profileData.data.id ?? loginUserId;
+              profileEmail = profileData.data.email ?? loginEmail;
+            }
           }
         } catch (e) {
-          console.warn('[login] Profile fetch failed:', e);
+          console.warn('[login] Profile fetch failed, using login response roles:', e);
         }
       }
 
-      // Build AuthResponse-compatible object
+      // ─── Step 4: Build auth state and update store ──────────────
       const authData: AuthResponse = {
         token,
-        userId: profileData?.data?.id ?? loginUserId ?? 0,
-        username: profileData?.data?.username ?? data.username,
-        email: profileData?.data?.email ?? loginEmail ?? '',
-        role: loginRole,
-        roles: profileData?.data?.roles ?? [loginRole],
+        userId: profileUserId,
+        username: data.username,
+        email: profileEmail,
+        role: profileRoles[0] ?? 'ROLE_USER',
+        roles: profileRoles,
       };
 
-      // CRITICAL: call setAuth directly so Zustand state + localStorage are in sync
-      // The auth-changed event will propagate to all open tabs/components
       useAuthStore.getState().setAuth(authData);
 
-      // Determine redirect
-      const roles: string[] = profileData?.data?.roles ?? [loginRole];
-      const isAdmin = roles.some(
-        (r: string) => (r || '').replace('ROLE_', '').toUpperCase() === 'ADMIN'
-      );
-
+      // ─── Step 5: Redirect based on role ─────────────────────────
+      const isAdmin = isAdminRole(profileRoles);
       let dest = '/';
       if (isAdmin) {
         dest = '/admin';
@@ -126,9 +130,9 @@ function LoginForm() {
         dest = redirect;
       }
 
-      toast.success(`Welcome back, ${data.username}!`);
+      toast.success(`Welcome, ${data.username}!`);
 
-      // Hard navigation: replace current history entry so back-button doesn't return to login page
+      // Hard navigation - replaces login page in history so back button doesn't return here
       window.location.replace(dest);
     } catch (err: unknown) {
       const error = err as Error;
@@ -272,6 +276,7 @@ function LoginForm() {
 
           <div className="grid grid-cols-2 gap-3">
             <button
+              type="button"
               onClick={() => signIn('google', { callbackUrl: '/oauth-callback' })}
               className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-darkborder bg-darkbg hover:bg-white/5 text-text-secondary hover:text-text-primary transition-all text-sm font-medium"
             >
@@ -284,6 +289,7 @@ function LoginForm() {
               Google
             </button>
             <button
+              type="button"
               onClick={() => signIn('github', { callbackUrl: '/oauth-callback' })}
               className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-darkborder bg-darkbg hover:bg-white/5 text-text-secondary hover:text-text-primary transition-all text-sm font-medium"
             >
@@ -307,7 +313,7 @@ function LoginForm() {
 
         <p className="text-center text-text-muted text-sm mt-6">
           <Link href="/" className="hover:text-text-primary transition-colors">
-            ← Back to Home
+            Back to Home
           </Link>
         </p>
       </motion.div>

@@ -15,7 +15,7 @@ ARG BUILD_NUMBER=$GITHUB_RUN_NUMBER
 
 # Copy package files for dependency caching
 COPY package*.json ./
-RUN npm ci
+RUN npm install --prefer-offline
 
 # Copy source
 COPY . .

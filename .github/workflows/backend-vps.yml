@@ -74,10 +74,13 @@ jobs:
             fi
 
             # ALWAYS regenerate .env from .env.example to prevent stale env vars.
-            # This ensures the DATABASE_URL uses the correct POSTGRES_PASSWORD from Docker.
             if [ -f .env.example ]; then
               cp .env.example .env
             fi
+
+            # Fix DATABASE_URL to use Docker DNS name + correct port.
+            # .env.example has localhost:5433 for local dev, but Docker uses postgres:5432.
+            sed -i 's|localhost:5433|postgres:5432|g' .env
 
             docker stop cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true
             docker rm -f cuonghoangdev_nginx cuonghoangdev_frontend cuonghoangdev_backend 2>/dev/null || true

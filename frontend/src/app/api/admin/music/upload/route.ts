@@ -34,18 +34,12 @@ export async function POST(request: NextRequest) {
     const contentType = request.headers.get("content-type") || "";
     const boundary = getMultipartBoundary(contentType);
 
-    // DEBUG: log raw incoming data
-    console.log("[admin/music/upload] content-type:", contentType);
-    console.log("[admin/music/upload] buffer byteLength:", buffer.byteLength);
-    console.log("[admin/music/upload] boundary:", boundary);
-
-    // Verify raw bytes around first boundary
-    const buf = Buffer.from(buffer);
-    const bStart = buf.indexOf(Buffer.from("--" + (boundary || "")));
-    console.log("[admin/music/upload] first boundary at offset:", bStart);
-    if (bStart >= 0) {
-      console.log("[admin/music/upload] bytes at boundary:", buf.slice(bStart, bStart + 80).toString("utf8", 0, 80));
+    if (!boundary) {
+      return NextResponse.json({ success: false, message: "Invalid content type" }, { status: 400 });
     }
+
+    // DEBUG: log raw incoming data
+    const parts = parseMultipartParts(Buffer.from(buffer), boundary);
 
     const fields: Record<string, MultipartPart> = {};
     for (const part of parts) {

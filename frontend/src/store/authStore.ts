@@ -85,6 +85,7 @@ export const useAuthStore = create<AuthState>()(
         // Clear the httpOnly cookie — backend_token is the primary auth token
         document.cookie = '__auth__=; path=/; max-age=0';
         document.cookie = 'backend_token=; path=/; max-age=0';
+        document.cookie = 'admin_role=; path=/; max-age=0';
 
         window.dispatchEvent(new CustomEvent('auth-changed', { detail: { action: 'logout' } }));
 

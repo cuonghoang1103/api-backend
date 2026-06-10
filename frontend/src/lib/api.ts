@@ -81,14 +81,9 @@ api.interceptors.response.use(
     error.userFriendlyMessage = friendlyMsg;
 
     if (error.response?.status === 401) {
-      const isLoginRequest = error.config?.url?.includes('/auth/login');
-      if (!isLoginRequest && typeof window !== 'undefined') {
-        // Redirect to login preserving current URL so user can return after login
-        const currentPath = window.location.pathname;
-        window.location.href = currentPath !== '/login'
-          ? `/login?redirect=${encodeURIComponent(currentPath)}`
-          : '/login';
-      }
+      // Auth errors are handled by Next.js middleware on the server side.
+      // Client-side redirect here causes a race condition with admin layout checks.
+      // We only clear the toast/error state, not navigate.
     }
     return Promise.reject(error);
   }

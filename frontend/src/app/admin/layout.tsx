@@ -35,25 +35,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
 
-  // Server-side admin verification on every navigation
-  // backend_token và admin_role là httpOnly → JS không đọc được
-  // Chỉ gọi /api/auth/admin-check để verify với backend
+  // Server-side admin verification using admin-check endpoint
+  // This validates the backend_token cookie against the backend.
+  // It returns user data (fullName, email) on success, redirects on failure.
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const res = await fetch('/api/auth/admin-check', {
           credentials: 'include',
         });
+
         if (res.ok) {
           const data = await res.json();
           const user = data.data;
-          setCurrentUser({ name: user?.fullName || user?.username || 'Admin', email: user?.email || '' });
+          setCurrentUser({
+            name: user?.fullName || user?.username || 'Admin',
+            email: user?.email || '',
+          });
           setAuthChecked(true);
           return;
         }
       } catch {}
 
-      router.push('/login?redirect=' + pathname);
+      // Not admin or not logged in → redirect to login
+      router.push('/login?redirect=' + encodeURIComponent(pathname));
     };
 
     checkAuth();

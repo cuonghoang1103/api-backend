@@ -65,6 +65,8 @@ async function fetchBackendTracks(signal?: AbortSignal): Promise<Track[]> {
   } catch (err) {
     if (signal?.aborted) return [];
     console.error('[MusicPage] fetchBackendTracks error:', err);
+    console.error('[MusicPage] Error stack:', (err as Error)?.stack);
+    console.error('[MusicPage] Error name:', (err as Error)?.name);
     return [];
   }
 }
@@ -155,8 +157,9 @@ export default function CyberMusicPage() {
       console.log('[MusicPage] loadTracks result count:', result.length, 'first:', result[0]?.title);
       // Always call store.setTracks with the fresh result
       setTracks(result);
-    } catch {
+    } catch (err) {
       if (!controller.signal.aborted) {
+        console.error('[MusicPage] loadTracks catch error:', err);
         setLoadFailed(true);
       }
     } finally {

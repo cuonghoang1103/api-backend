@@ -34,8 +34,6 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
           ssh-add ~/.ssh/deploy_key || true
-          # Verify key was added
-          ssh-add -l || true
 
       - name: Sync project to VPS
         run: |
@@ -51,11 +49,12 @@ jobs:
             --exclude 'uploads' \
             --exclude 'backups' \
             --exclude '*.log' \
-            ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
+            ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/" \
+              -e "ssh -o HostKeyAlgorithms=rsa-sha2-256,rsa-sha2-512 -o PubkeyAcceptedAlgorithms=rsa-sha2-256,rsa-sha2-512"
 
       - name: Deploy on VPS — zero-downtime rolling update
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o HostKeyAlgorithms=rsa-sha2-256,rsa-sha2-512 -o PubkeyAcceptedAlgorithms=rsa-sha2-256,rsa-sha2-512 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -e
             cd /opt/cuonghoangdev
 
@@ -162,7 +161,7 @@ jobs:
 
       - name: Create admin user on VPS
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o HostKeyAlgorithms=rsa-sha2-256,rsa-sha2-512 -o PubkeyAcceptedAlgorithms=rsa-sha2-256,rsa-sha2-512 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -e
             cd /opt/cuonghoangdev
 
@@ -186,7 +185,7 @@ jobs:
 
       - name: Setup backup cron on VPS
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o HostKeyAlgorithms=rsa-sha2-256,rsa-sha2-512 -o PubkeyAcceptedAlgorithms=rsa-sha2-256,rsa-sha2-512 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -e
             mkdir -p /opt/cuonghoangdev/backups
 

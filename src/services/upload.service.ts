@@ -137,11 +137,9 @@ export class UploadService {
     category: FileCategory,
     uploadedBy?: number,
   ): Promise<UploadResult> {
-    console.log(`[DEBUG][UploadService] uploadFile called with mimetype:`, file.mimetype, 'size:', file.size, 'category:', category, 'originalname:', file.originalname);
     const detectedCategory = getFileCategory(file.mimetype);
     const finalCategory = category || detectedCategory;
     const allowedTypes = getAllowedTypes(finalCategory);
-    console.log(`[DEBUG][UploadService] detectedCategory:`, detectedCategory, 'finalCategory:', finalCategory, 'allowedTypes:', allowedTypes);
 
     if (!allowedTypes.includes(file.mimetype)) {
       throw new Error(`File type ${file.mimetype} is not allowed for category ${finalCategory}`);

@@ -18,7 +18,6 @@ const audioUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 200 * 1024 * 1024 },
   fileFilter: (_req, file: Express.Multer.File, cb) => {
-    console.log(`[DEBUG][music-admin fileFilter] fieldname: ${file.fieldname}, mimetype: ${file.mimetype}, size: ${file.size}`);
     const allowed = ['audio/mpeg','audio/mp3','audio/wav','audio/ogg','audio/flac','audio/aac','audio/mp4','audio/x-m4a','audio/opus','video/mp4'];
     if (allowed.includes(file.mimetype)) {
       cb(null, true);
@@ -28,13 +27,24 @@ const audioUpload = multer({
   },
 });
 
+const coverUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (_req, file: Express.Multer.File, cb) => {
+    const allowed = ['image/jpeg','image/png','image/gif','image/webp'];
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`Unsupported image format: ${file.mimetype}`));
+    }
+  },
+});
+
 router.post(
   '/',
   authenticate,
-  audioUpload.fields([
-    { name: 'audio', maxCount: 1 },
-    { name: 'cover', maxCount: 1 },
-  ]),
+  audioUpload.fields([{ name: 'audio', maxCount: 1 }]),
+  coverUpload.fields([{ name: 'cover', maxCount: 1 }]),
   async (req: any, res: Response<ApiResponse>, next) => {
     try {
       const { title, artist, durationSeconds } = req.body;

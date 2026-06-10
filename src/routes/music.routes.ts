@@ -47,7 +47,6 @@ const audioUpload = multer({
     fileSize: 200 * 1024 * 1024, // 200MB max
   },
   fileFilter: (_req, file: Express.Multer.File, cb) => {
-    console.log(`[DEBUG][fileFilter] fieldname: ${file.fieldname}, mimetype: ${file.mimetype}, size: ${file.size}, originalname: ${file.originalname}`);
     const allowedMimes = [
       'audio/mpeg',
       'audio/mp3',
@@ -60,7 +59,6 @@ const audioUpload = multer({
       'audio/opus',
       'video/mp4',
     ];
-    console.log(`[DEBUG][fileFilter] allowedMimes:`, allowedMimes, 'includes?', allowedMimes.includes(file.mimetype));
     if (allowedMimes.includes(file.mimetype)) {
       cb(null, true);
     } else {
@@ -69,8 +67,26 @@ const audioUpload = multer({
   },
 });
 
-// Multer cho cover image (reserved for future use)
-void 0;
+// Multer cho cover image
+const coverUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB max
+  },
+  fileFilter: (_req, file: Express.Multer.File, cb) => {
+    const allowedMimes = [
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+    ];
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`Unsupported image format: ${file.mimetype}`));
+    }
+  },
+});
 
 // ════════════════════════════════════════════════════════════════
 // GET /api/v1/music/tracks
@@ -269,13 +285,10 @@ router.get('/stream/:id', optionalAuth, async (req: any, res: Response, next) =>
 router.post(
   '/tracks',
   authenticate,
-  audioUpload.fields([
-    { name: 'audio', maxCount: 1 },
-    { name: 'cover', maxCount: 1 },
-  ]),
+  audioUpload.fields([{ name: 'audio', maxCount: 1 }]),
+  coverUpload.fields([{ name: 'cover', maxCount: 1 }]),
   async (req: any, res: Response<ApiResponse>, next) => {
     try {
-      console.log(`[DEBUG][POST /tracks] ENTERED - req.files keys:`, req.files ? Object.keys(req.files) : 'undefined', 'req.body:', req.body);
       const { title, artist, durationSeconds } = req.body;
 
       // ─── Validate required fields ────────────────────────
@@ -290,10 +303,8 @@ router.post(
       let localPath: string | undefined;
       let audioFileSize: number | undefined;
 
-      console.log(`[DEBUG][POST /tracks] req.files audio part:`, req.files?.audio, 'mimetype:', req.files?.audio?.[0]?.mimetype, 'size:', req.files?.audio?.[0]?.size);
       const audioFile = req.files?.audio?.[0] as Express.Multer.File | undefined;
       if (audioFile) {
-        console.log(`[DEBUG][POST /tracks] audioFile mimetype:`, audioFile.mimetype, 'size:', audioFile.size, 'originalname:', audioFile.originalname);
         const uploadResult = await uploadService.uploadFile(
           audioFile,
           'audio',
@@ -308,7 +319,6 @@ router.post(
       let coverUrl: string | undefined;
       const coverFile = req.files?.cover?.[0] as Express.Multer.File | undefined;
       if (coverFile) {
-        console.log(`[DEBUG][POST /tracks] coverFile mimetype:`, coverFile.mimetype);
         const uploadResult = await uploadService.uploadFile(
           coverFile,
           'images',

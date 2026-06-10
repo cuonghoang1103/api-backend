@@ -63,7 +63,8 @@ jobs:
           USER="$VPS_USER"
 
           # Get DB password locally (from docker-compose.yml on this machine)
-          DB_PASS=$(grep 'POSTGRES_PASSWORD' docker-compose.yml | sed "s/.*POSTGRES_PASSWORD:-\([^}]*\)}.*/\1/")
+          # Use line 1 only — grep may match multiple lines (including comments)
+          DB_PASS=$(grep 'POSTGRES_PASSWORD' docker-compose.yml | grep -v '^#' | head -1 | sed "s/.*POSTGRES_PASSWORD:-\([^}]*\)}.*/\1/")
           DB_PASS="${DB_PASS:-123456}"
 
           # Run deploy script on VPS via SSH

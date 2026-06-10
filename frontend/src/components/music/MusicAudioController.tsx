@@ -120,26 +120,21 @@ export default function MusicAudioController() {
   // Progress-based auto-next fallback: polls every 500ms and advances when audio ends.
   // This catches cases where the browser 'ended' event doesn't fire reliably
   // (e.g. certain streamed audio responses).
+  // CRITICAL: this effect has ZERO dependencies to ensure only ONE interval ever runs.
+  // Using useMusicStore.getState() inside the interval prevents stale closure issues.
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
     const intervalId = setInterval(() => {
-      const { duration, currentTime: storeTime } = audio;
+      const { duration, currentTime, repeatMode } = useMusicStore.getState();
       if (!duration || !Number.isFinite(duration) || duration === 0) return;
-      // Advance to next if within 300ms of end and audio appears stalled
-      if (storeTime > 0 && duration > 0 && storeTime >= duration - 0.3) {
-        const store = useMusicStore.getState();
-        // Only auto-next if not repeat-one (repeat-one resets currentTime via store)
-        if (store.repeatMode !== 'one') {
-          console.log('[MusicAudioController] Progress fallback: triggering next()');
-          store.next();
+      if (currentTime > 0 && duration > 0 && currentTime >= duration - 0.3) {
+        if (repeatMode !== 'one') {
+          useMusicStore.getState().next();
         }
       }
     }, 500);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, []); // <-- ZERO deps: single interval for entire app lifetime
 
   // Sync volume
   useEffect(() => {

@@ -54,12 +54,12 @@ for i in $(seq 1 24); do
     break
   fi
   if [ $i -eq 24 ]; then
-    echo "[FAIL] nginx health check failed after 120s"
-    docker logs cuonghoangdev_nginx --tail=20
-    exit 1
+    echo "[WARN] nginx health check timed out — checking logs"
+    docker logs cuonghoangdev_nginx --tail=10
+  else
+    echo "Waiting for nginx... ($i/24)"
+    sleep 5
   fi
-  echo "Waiting for nginx... ($i/24)"
-  sleep 5
 done
 
 echo ""

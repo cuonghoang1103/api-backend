@@ -147,8 +147,6 @@ services:
     depends_on:
       backend:
         condition: service_healthy
-      frontend:
-        condition: service_healthy
     networks:
       - backend
     healthcheck:

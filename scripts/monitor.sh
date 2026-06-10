@@ -1,7 +1,7 @@
 #!/bin/bash
 # ============================================================
 # CuongHoangDev - Health Monitoring Script
-# Cron: */5 * * * * /opt/cuonghoangdev/monitor.sh
+# Cron: */5 * * * * /opt/cuonghoangdev/scripts/monitor.sh
 # ============================================================
 
 set -e

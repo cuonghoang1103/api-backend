@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://backend:3001";
 
 // Node.js runtime to handle larger file uploads through the proxy.
 // The file travels: browser → proxy → backend server → VPS /uploads storage.

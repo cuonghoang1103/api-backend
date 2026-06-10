@@ -109,6 +109,7 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
+      INTERNAL_BACKEND_URL: http://backend:3001
       NEXT_PUBLIC_API_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
       NEXT_PUBLIC_YOUTUBE_API_KEY: ${NEXT_PUBLIC_YOUTUBE_API_KEY:-}
       NEXTAUTH_URL: ${NEXTAUTH_URL:-https://cuongthai.com}

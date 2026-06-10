@@ -32,11 +32,11 @@ function buildTrackPlaybackUrl(rawTrack: unknown): string {
   return '';
 }
 
-async function fetchBackendTracks(): Promise<Track[]> {
+async function fetchBackendTracks(signal?: AbortSignal): Promise<Track[]> {
   try {
     const res = await fetch('/api/v1/music/tracks', {
       credentials: 'include',
-      signal: AbortSignal.timeout(8000),
+      signal,
     });
     if (!res.ok) {
       console.warn('[MusicPage] fetchBackendTracks HTTP error:', res.status);
@@ -63,6 +63,7 @@ async function fetchBackendTracks(): Promise<Track[]> {
         } satisfies Track;
       });
   } catch (err) {
+    if (signal?.aborted) return [];
     console.error('[MusicPage] fetchBackendTracks error:', err);
     return [];
   }
@@ -148,7 +149,7 @@ export default function CyberMusicPage() {
     setLoadFailed(false);
 
     try {
-      const result = await fetchBackendTracks();
+      const result = await fetchBackendTracks(controller.signal);
       if (controller.signal.aborted) return;
 
       // Always call store.setTracks with the fresh result

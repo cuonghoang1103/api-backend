@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+// Use Docker internal DNS for frontend→backend communication within the container.
+// This bypasses Nginx and avoids circular routing (frontend → Nginx → backend).
+// process.env.INTERNAL_BACKEND_URL is set in the frontend Dockerfile/container env.
+const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://backend:3001";
 
 async function parseBackendResponse(response: Response) {
   const rawText = await response.text();

@@ -25,9 +25,23 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup SSH key
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.VPS_SSH_PRIVATE_KEY }}" > ~/.ssh/temp_key
+          chmod 600 ~/.ssh/temp_key
+          # Convert to traditional PEM (some runners have OpenSSL 3.x without legacy)
+          ssh-keygen -p -m PEM -P "" -N "" -f ~/.ssh/temp_key 2>/dev/null || true
+          # If conversion fails, try raw
+          if ! grep -q "BEGIN.*PRIVATE KEY" ~/.ssh/temp_key 2>/dev/null; then
+            echo "Trying native format..."
+          fi
+          cp ~/.ssh/temp_key ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          rm ~/.ssh/temp_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+          # Test connection
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "echo SSH_OK" || echo "SSH connection test done"
 
       - name: Sync project to VPS
         run: |

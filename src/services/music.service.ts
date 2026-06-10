@@ -411,6 +411,7 @@ export class MusicService {
           fileSize: true,
           active: true,
           createdAt: true,
+          uploadedBy: true,
         },
       }),
       prisma.musicTrack.count({ where }),
@@ -428,7 +429,7 @@ export class MusicService {
   }
 
   // ─── GET /tracks/:id ─────────────────────────────────────
-  async getTrackById(id: number): Promise<unknown> {
+  async getTrackById(id: number, allowInactive = false): Promise<unknown> {
     const track = await prisma.musicTrack.findUnique({
       where: { id },
       include: {
@@ -442,7 +443,7 @@ export class MusicService {
       throw new AppError('Track not found', 404, 'TRACK_NOT_FOUND');
     }
 
-    if (!track.active) {
+    if (!allowInactive && !track.active) {
       throw new AppError('Track has been removed', 404, 'TRACK_NOT_FOUND');
     }
 
@@ -540,8 +541,8 @@ export class MusicService {
       active?: boolean;
     },
   ): Promise<unknown> {
-    // Verify track exists
-    await this.getTrackById(id);
+    // Allow updating inactive tracks (admin restore)
+    await this.getTrackById(id, true);
 
     return prisma.musicTrack.update({
       where: { id },
@@ -551,7 +552,9 @@ export class MusicService {
 
   // ─── DELETE /tracks/:id ──────────────────────────────────
   async deleteTrack(id: number): Promise<void> {
-    // Soft delete: set active = false
+    // Allow deleting inactive tracks (idempotent)
+    await this.getTrackById(id, true);
+
     await prisma.musicTrack.update({
       where: { id },
       data: { active: false },

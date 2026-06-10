@@ -70,4 +70,7 @@ export const config = {
 
   // Contact
   contactAdminEmail: process.env.CONTACT_ADMIN_EMAIL || '',
+
+  // YouTube
+  youtubeApiKey: process.env.YOUTUBE_API_KEY || '',
 } as const;

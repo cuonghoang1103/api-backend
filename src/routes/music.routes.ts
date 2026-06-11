@@ -438,7 +438,7 @@ router.put(
         active,
       } = req.body;
 
-      const track = await musicService.updateTrack(id, {
+      const track: any = await musicService.updateTrack(id, {
         ...(title !== undefined && { title }),
         ...(artist !== undefined && { artist }),
         ...(coverImage !== undefined && { coverImage }),
@@ -446,7 +446,13 @@ router.put(
         ...(active !== undefined && { active }),
       });
 
-      res.json({ success: true, data: track, message: 'Track updated' });
+      const serialized: any = { ...track };
+      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
+      if (serialized.fileSize !== undefined) serialized.fileSize = Number(serialized.fileSize);
+      if (serialized.durationSeconds !== undefined) serialized.durationSeconds = Number(serialized.durationSeconds);
+      if (serialized.playCount !== undefined) serialized.playCount = Number(serialized.playCount);
+
+      res.json({ success: true, data: serialized, message: 'Track updated' });
     } catch (error) {
       next(error);
     }

@@ -162,7 +162,7 @@ export default function Navbar() {
               </span>
             </Link>
 
-            {/* Center: 5 core nav links */}
+            {/* Center: 5 core nav links — iOS Cyber Dock style */}
             <div className="hidden sm:flex items-center gap-0.5">
               {TOP_NAV_LINKS.map((link) => {
                 const isActive = pathname === link.href;
@@ -170,20 +170,26 @@ export default function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[13px] font-medium transition-all duration-200 ${
+                    className={`relative flex items-center gap-1.5 px-4 py-2 rounded-2xl text-[13px] font-bold transition-all duration-200 group ${
                       isActive
-                        ? 'text-neon-violet bg-neon-violet/10'
+                        ? 'text-[#0ea5e9]'
                         : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04]'
                     }`}
                   >
-                    <link.icon className="w-3.5 h-3.5 shrink-0" />
+                    <link.icon className={`w-3.5 h-3.5 shrink-0 transition-all ${
+                      isActive ? 'drop-shadow-[0_0_8px_#0ea5e9]' : ''
+                    }`} />
                     <span>{link.label}</span>
                     {isActive && (
                       <motion.div
                         layoutId="top-nav-indicator"
-                        className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full"
-                        style={{ background: 'linear-gradient(90deg, #6366f1, #8B5CF6, #d946ef)' }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                        className="absolute bottom-0.5 left-1/2 -translate-x-1/2 h-0.5 rounded-full"
+                        style={{
+                          background: '#0ea5e9',
+                          boxShadow: '0 0 12px #0ea5e9, 0 0 24px #0ea5e9, 0 0 36px rgba(14,165,233,0.5)',
+                          width: '60%',
+                        }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                       />
                     )}
                   </Link>

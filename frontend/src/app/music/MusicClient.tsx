@@ -120,20 +120,23 @@ export default function CyberMusicPage() {
         <CyberBackground />
       </ClientOnly>
 
-      {/* Main content */}
-      <div className="relative z-10 flex flex-col min-h-screen">
-        {/* Header */}
+      {/* Main content — padded to clear floating dock */}
+      <div className="relative z-10 flex flex-col min-h-screen pt-[6.5rem]">
+        {/* iOS Cyber Dock — floating glass header */}
         <motion.header
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="sticky top-0 z-30"
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-30 w-[calc(100%-2rem)] max-w-3xl"
         >
           <div
-            className="px-4 sm:px-6 py-3"
+            className="rounded-[28px] px-5 py-3"
             style={{
-              background: 'rgba(15,23,42,0.92)',
-              borderBottom: '1px solid rgba(139,92,246,0.15)',
+              background: 'rgba(10,15,13,0.72)',
+              border: '1px solid rgba(14,165,233,0.35)',
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(14,165,233,0.08), inset 0 1px 0 rgba(255,255,255,0.06)',
             }}
           >
             <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -150,37 +153,38 @@ export default function CyberMusicPage() {
                 </div>
                 <div>
                   <h1
-                    className="text-lg font-bold leading-none font-mono"
+                    className="text-base font-black leading-none font-mono tracking-wide"
                     style={{
-                      background: `linear-gradient(90deg, ${C.primary}, ${C.secondary}, ${C.accent})`,
+                      background: `linear-gradient(90deg, #0ea5e9, #a855f7)`,
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
+                      textShadow: '0 0 24px rgba(14,165,233,0.4)',
                     }}
                   >
                     CYBER_MUSIC
                   </h1>
-                  <p className="text-[9px] font-mono tracking-widest uppercase" style={{ color: C.textMuted }}>
+                  <p className="text-[9px] font-mono tracking-[0.2em] uppercase" style={{ color: C.textMuted }}>
                     Neural Audio Matrix v2.0
                   </p>
                 </div>
               </div>
 
               {/* Unified Search */}
-              <div className="flex-1 max-w-md hidden md:block">
+              <div className="flex-1 max-w-xs hidden md:block">
                 <CyberSearch localTracks={storeTracks} />
               </div>
 
               {/* Stats */}
-              <div className="hidden lg:flex items-center gap-4 text-xs font-mono" style={{ color: C.textMuted }}>
+              <div className="hidden lg:flex items-center gap-3 text-[11px] font-mono" style={{ color: C.textMuted }}>
                 <span style={{ color: C.primary }}>{storeTracks.length}</span>
-                <span> tracks</span>
-                <span style={{ opacity: 0.3 }}>|</span>
+                <span>tracks</span>
+                <span style={{ opacity: 0.2 }}>|</span>
                 <span style={{ color: C.secondary }}>{recentlyPlayed.length}</span>
-                <span> played</span>
-                <span style={{ opacity: 0.3 }}>|</span>
-                <span className="flex items-center gap-1">
+                <span>played</span>
+                <span style={{ opacity: 0.2 }}>|</span>
+                <span className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" />
-                  <span style={{ color: '#4ade80' }}>ONLINE</span>
+                  <span style={{ color: '#4ade80', letterSpacing: '0.1em' }}>ONLINE</span>
                 </span>
               </div>
 
@@ -242,7 +246,7 @@ export default function CyberMusicPage() {
         </motion.header>
 
         {/* Main content */}
-        <main className="flex-1 px-4 sm:px-6 py-6 pb-28">
+        <main className="flex-1 px-4 sm:px-6 pb-28">
           {/* Loading skeleton */}
           {isLoading && (
             <div className="flex items-center justify-center h-64 gap-4">

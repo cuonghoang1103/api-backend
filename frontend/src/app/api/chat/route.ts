@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       systemInstruction: SYSTEM_INSTRUCTION,
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
     });
 
     const contents: ChatMessage[] = [

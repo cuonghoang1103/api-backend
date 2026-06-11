@@ -100,7 +100,7 @@ echo "=== [6/10] Code already synced via rsync ==="
 echo "=== [7/10] Building containers (zero-downtime) ==="
 # Prune all builder cache to ensure fresh build with latest code
 docker builder prune -af
-docker compose up -d --build --remove-orphans --force-recreate backend frontend
+docker compose --env-file /opt/cuonghoangdev/.env up -d --build --remove-orphans --force-recreate backend frontend
 
 echo "=== [8/10] Database schema setup (after backend is up) ==="
 for i in $(seq 1 18); do

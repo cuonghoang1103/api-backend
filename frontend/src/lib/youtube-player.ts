@@ -7,7 +7,7 @@ function onYouTubeIframeAPIReady() {
   ytApiCallbacks = [];
 }
 
-function loadYouTubeAPI(): Promise<void> {
+export function loadYouTubeAPI(): Promise<void> {
   if (ytApiReady) return Promise.resolve();
   if (window.YT?.Player) return Promise.resolve();
 
@@ -23,7 +23,7 @@ function loadYouTubeAPI(): Promise<void> {
   });
 }
 
-function isYouTubeUrl(url: string | undefined): { isYT: boolean; videoId: string } {
+export function isYouTubeUrl(url: string | undefined): { isYT: boolean; videoId: string } {
   if (!url) return { isYT: false, videoId: '' };
   const match = url.match(
     /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,

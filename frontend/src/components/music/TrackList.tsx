@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, Trash2, AlertTriangle, X } from 'lucide-react';
+import { Play, Pause, Trash2, AlertTriangle } from 'lucide-react';
 import { useMusicStore } from '@/store/musicStore';
 import { useAuthStore } from '@/store/authStore';
 import type { Track } from '@/types';
@@ -45,10 +45,9 @@ function TrackItem({
 
   return (
     <motion.div
-      layout
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 10, height: 'auto' }}
+      exit={{ opacity: 0, x: 10 }}
       transition={{ duration: 0.2 }}
       className="group"
     >
@@ -68,21 +67,10 @@ function TrackItem({
         <div className="w-7 flex items-center justify-center shrink-0">
           {isActive && isPlaying && !isBroken ? (
             <div className="flex items-end gap-0.5 h-4">
-              <motion.div
-                animate={{ height: [4, 16, 4] }}
-                transition={{ duration: 0.6, repeat: Infinity, ease: 'easeInOut' }}
-                className="w-1 bg-neon-violet rounded-full"
-              />
-              <motion.div
-                animate={{ height: [8, 4, 12] }}
-                transition={{ duration: 0.6, repeat: Infinity, ease: 'easeInOut', delay: 0.15 }}
-                className="w-1 bg-neon-violet rounded-full"
-              />
-              <motion.div
-                animate={{ height: [12, 4, 8] }}
-                transition={{ duration: 0.6, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-                className="w-1 bg-neon-violet rounded-full"
-              />
+              {/* CSS keyframes — GPU-only, no JS animation overhead */}
+              <div className="w-1 rounded-full track-bar-1" />
+              <div className="w-1 rounded-full track-bar-2" />
+              <div className="w-1 rounded-full track-bar-3" />
             </div>
           ) : (
             <span className={`text-xs font-medium ${isActive ? 'text-neon-violet' : 'text-text-muted/60'}`}>
@@ -235,6 +223,20 @@ export default function TrackList({ onUploadClick }: TrackListProps) {
   // Get tracks directly from the global store
   const tracks = useMusicStore((s) => s.tracks);
 
+  const totalSeconds = useMemo(() => tracks.reduce((acc, t) => {
+    const parts = t.duration.split(':').map(Number);
+    return acc + (parts[0] * 60 + (parts[1] || 0));
+  }, 0), [tracks]);
+
+  const formatTotal = (s: number) => {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    if (h > 0) return `${h}h ${m}m`;
+    return `${m}m`;
+  };
+
+  const brokenCount = useMemo(() => tracks.filter((t) => !t.audioUrl).length, [tracks]);
+
   const handlePlayAll = () => {
     const firstPlayable = tracks.find((t) => t.audioUrl);
     if (firstPlayable) playTrackAtIndex(tracks.indexOf(firstPlayable));
@@ -249,20 +251,6 @@ export default function TrackList({ onUploadClick }: TrackListProps) {
       setDeleteTarget(null);
     }
   };
-
-  const totalSeconds = tracks.reduce((acc, t) => {
-    const parts = t.duration.split(':').map(Number);
-    return acc + (parts[0] * 60 + (parts[1] || 0));
-  }, 0);
-
-  const formatTotal = (s: number) => {
-    const h = Math.floor(s / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    if (h > 0) return `${h}h ${m}m`;
-    return `${m}m`;
-  };
-
-  const brokenCount = tracks.filter((t) => !t.audioUrl).length;
 
   return (
     <>
@@ -328,7 +316,7 @@ export default function TrackList({ onUploadClick }: TrackListProps) {
         )}
 
         {/* Track list */}
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           <div className="space-y-0.5">
             {tracks.map((track, i) => (
               <TrackItem

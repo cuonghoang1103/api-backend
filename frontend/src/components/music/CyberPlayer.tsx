@@ -117,12 +117,12 @@ function VinylDisc({
   const SIZE = 160;
 
   return (
-    <motion.div
+    <div
       className="relative shrink-0"
-      animate={{ rotate: isPlaying ? 360 : 0 }}
-      transition={{ duration: isPlaying ? 8 : 0, repeat: Infinity, ease: 'linear' }}
       style={{ width: SIZE, height: SIZE }}
     >
+      {/* Glow pulse — separate static wrapper so it doesn't recalculate
+          blur vectors on every frame of rotation */}
       {isPlaying && (
         <motion.div
           className="absolute inset-0 rounded-full"
@@ -132,78 +132,86 @@ function VinylDisc({
         />
       )}
 
-      {/* Vinyl base */}
-      <div
-        className="absolute inset-0 rounded-full overflow-hidden"
-        style={{
-          background: 'radial-gradient(circle at 30% 30%, #1a1a2e 0%, #0d0d15 60%, #080810 100%)',
-          boxShadow: `0 0 40px ${C.glow}, 0 0 80px rgba(139,92,246,0.15), inset 0 0 20px rgba(0,0,0,0.5)`,
-        }}
+      {/* Vinyl — only this element rotates; glow is in a separate layer above */}
+      <motion.div
+        className="vinyl-disc-container"
+        animate={{ rotate: isPlaying ? 360 : 0 }}
+        transition={{ duration: isPlaying ? 8 : 0, repeat: Infinity, ease: 'linear' }}
+        style={{ width: SIZE, height: SIZE }}
       >
-        {[...Array(8)].map((_, i) => (
+        {/* Vinyl base */}
+        <div
+          className="absolute inset-0 rounded-full overflow-hidden"
+          style={{
+            background: 'radial-gradient(circle at 30% 30%, #1a1a2e 0%, #0d0d15 60%, #080810 100%)',
+            boxShadow: `0 0 40px ${C.glow}, 0 0 80px rgba(139,92,246,0.15), inset 0 0 20px rgba(0,0,0,0.5)`,
+          }}
+        >
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full"
+              style={{ inset: `${8 + i * 12}px`, border: '1px solid rgba(255,255,255,0.03)' }}
+            />
+          ))}
           <div
-            key={i}
             className="absolute rounded-full"
-            style={{ inset: `${8 + i * 12}px`, border: '1px solid rgba(255,255,255,0.03)' }}
+            style={{
+              top: '5%', left: '10%', width: '35%', height: '20%',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 100%)',
+            }}
           />
-        ))}
+        </div>
+
+        {/* Cover art center */}
+        <div
+          className="absolute rounded-full overflow-hidden"
+          style={{
+            top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+            width: `${SIZE * 0.42}px`, height: `${SIZE * 0.42}px`,
+            boxShadow: `0 0 20px ${C.glow}, 0 2px 8px rgba(0,0,0,0.8)`,
+          }}
+        >
+          {isSafeUrl(coverImage) ? (
+            <Image
+              src={coverImage} alt={title} fill className="object-cover"
+              unoptimized width={SIZE * 0.42} height={SIZE * 0.42}
+            />
+          ) : (
+            <div
+              className="w-full h-full flex items-center justify-center"
+              style={{ background: `linear-gradient(135deg, ${C.primary}, ${C.accent})` }}
+            >
+              <span className="text-white/50 font-bold text-3xl">{title.charAt(0)}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Spindle */}
         <div
           className="absolute rounded-full"
           style={{
-            top: '5%', left: '10%', width: '35%', height: '20%',
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 100%)',
+            top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+            width: '10px', height: '10px',
+            background: 'radial-gradient(circle, #2a2a3a 0%, #111118 100%)',
+            boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), 0 1px 2px rgba(0,0,0,0.8)',
           }}
         />
-      </div>
 
-      {/* Cover art center */}
-      <div
-        className="absolute rounded-full overflow-hidden"
-        style={{
-          top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
-          width: `${SIZE * 0.42}px`, height: `${SIZE * 0.42}px`,
-          boxShadow: `0 0 20px ${C.glow}, 0 2px 8px rgba(0,0,0,0.8)`,
-        }}
-      >
-        {isSafeUrl(coverImage) ? (
-          <Image
-            src={coverImage} alt={title} fill className="object-cover"
-            unoptimized width={SIZE * 0.42} height={SIZE * 0.42}
-          />
-        ) : (
+        {/* Tonearm hint */}
+        {isPlaying && (
           <div
-            className="w-full h-full flex items-center justify-center"
-            style={{ background: `linear-gradient(135deg, ${C.primary}, ${C.accent})` }}
-          >
-            <span className="text-white/50 font-bold text-3xl">{title.charAt(0)}</span>
-          </div>
+            className="absolute"
+            style={{
+              top: '50%', right: '-4px', transform: 'translateY(-50%)',
+              width: '32px', height: '3px', borderRadius: '2px',
+              background: `linear-gradient(to left, ${C.primary}, transparent)`,
+              opacity: 0.6,
+            }}
+          />
         )}
-      </div>
-
-      {/* Spindle */}
-      <div
-        className="absolute rounded-full"
-        style={{
-          top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
-          width: '10px', height: '10px',
-          background: 'radial-gradient(circle, #2a2a3a 0%, #111118 100%)',
-          boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), 0 1px 2px rgba(0,0,0,0.8)',
-        }}
-      />
-
-      {/* Tonearm hint */}
-      {isPlaying && (
-        <div
-          className="absolute"
-          style={{
-            top: '50%', right: '-4px', transform: 'translateY(-50%)',
-            width: '32px', height: '3px', borderRadius: '2px',
-            background: `linear-gradient(to left, ${C.primary}, transparent)`,
-            opacity: 0.6,
-          }}
-        />
-      )}
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 

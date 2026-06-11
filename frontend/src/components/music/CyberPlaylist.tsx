@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { useMusicStore } from '@/store/musicStore';
 import { usePlaylistStore } from '@/store/playlistStore';
@@ -47,37 +46,67 @@ function formatTotal(s: number): string {
 
 export default function CyberPlaylist() {
   const {
-    tracks, currentTrack, isPlaying, playTrackAtIndex, currentIndex,
-    allTracks, savedAllTracks, restoreAllTracks, recentlyPlayed, history,
+    tracks, currentTrack, isPlaying, playTrackAtIndex,
+    allTracks, savedAllTracks, restoreAllTracks, recentlyPlayed,
   } = useMusicStore();
   const { openDrawer, setPendingTrack } = usePlaylistStore();
 
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState<'tracks' | 'history' | 'info'>('tracks');
 
-  const filteredTracks = tracks.filter((track) =>
-    !search ||
-    track.title.toLowerCase().includes(search.toLowerCase()) ||
-    track.artist.toLowerCase().includes(search.toLowerCase())
+  // ── Debounced search ──────────────────────────────────────────────
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setDebouncedSearch(value);
+    }, 300);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
+
+  // ── Memoized derived values ────────────────────────────────────────
+  const filteredTracks = useMemo(() => {
+    if (!debouncedSearch) return tracks;
+    const q = debouncedSearch.toLowerCase();
+    return tracks.filter(
+      (track) =>
+        track.title.toLowerCase().includes(q) ||
+        track.artist.toLowerCase().includes(q),
+    );
+  }, [tracks, debouncedSearch]);
+
+  const totalDuration = useMemo(
+    () => tracks.reduce((acc, t) => acc + parseDuration(t.duration), 0),
+    [tracks],
   );
 
-  console.log('[CyberPlaylist] tracks.length:', tracks.length, 'allTracks.length:', allTracks.length, 'savedAllTracks.length:', savedAllTracks.length);
+  const handlePlayTrack = useCallback(
+    (track: Track) => {
+      const idx = tracks.indexOf(track);
+      if (idx === useMusicStore.getState().currentIndex && currentTrack?.id === track.id) {
+        useMusicStore.getState().togglePlay();
+      } else {
+        playTrackAtIndex(idx);
+      }
+    },
+    [tracks, currentTrack, playTrackAtIndex],
+  );
 
-  const totalDuration = tracks.reduce((acc, t) => acc + parseDuration(t.duration), 0);
-
-  const handlePlayTrack = (track: Track) => {
-    const idx = tracks.indexOf(track);
-    if (idx === currentIndex && currentTrack?.id === track.id) {
-      useMusicStore.getState().togglePlay();
-    } else {
-      playTrackAtIndex(idx);
-    }
-  };
-
-  const handleAddToPlaylist = (track: Track) => {
-    setPendingTrack(track);
-    openDrawer();
-  };
+  const handleAddToPlaylist = useCallback(
+    (track: Track) => {
+      setPendingTrack(track);
+      openDrawer();
+    },
+    [setPendingTrack, openDrawer],
+  );
 
   return (
     <div
@@ -177,7 +206,7 @@ export default function CyberPlaylist() {
               type="text"
               placeholder="Search matrix..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-mono outline-none transition-all"
               style={{
                 background: 'rgba(255,255,255,0.04)',
@@ -240,20 +269,18 @@ export default function CyberPlaylist() {
             </div>
           ) : (
             <div className="space-y-0.5">
-              <AnimatePresence mode="popLayout">
-                {filteredTracks.map((track, idx) => (
-                  <CyberTrackItem
-                    key={track.id}
-                    track={track}
-                    index={idx}
-                    isActive={currentTrack?.id === track.id}
-                    isPlaying={currentTrack?.id === track.id && isPlaying}
-                    onPlay={() => handlePlayTrack(track)}
-                    onAddToPlaylist={() => handleAddToPlaylist(track)}
-                    colors={C}
-                  />
-                ))}
-              </AnimatePresence>
+              {filteredTracks.map((track, idx) => (
+                <CyberTrackItem
+                  key={track.id}
+                  track={track}
+                  index={idx}
+                  isActive={currentTrack?.id === track.id}
+                  isPlaying={currentTrack?.id === track.id && isPlaying}
+                  onPlay={() => handlePlayTrack(track)}
+                  onAddToPlaylist={() => handleAddToPlaylist(track)}
+                  colors={C}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -290,7 +317,7 @@ export default function CyberPlaylist() {
                     isActive={false}
                     isPlaying={false}
                     onPlay={() => {
-                      const globalIdx = tracks.findIndex(t => t.id === track.id);
+                      const globalIdx = tracks.findIndex((t) => t.id === track.id);
                       if (globalIdx >= 0) playTrackAtIndex(globalIdx);
                     }}
                     onAddToPlaylist={() => handleAddToPlaylist(track)}
@@ -327,7 +354,8 @@ export default function CyberPlaylist() {
   );
 }
 
-function CyberTrackItem({
+// ── CyberTrackItem ──────────────────────────────────────────────────────────────────────
+const CyberTrackItem = motion(function CyberTrackItem({
   track, index, isActive, isPlaying, onPlay, onAddToPlaylist, colors, dimmed = false,
 }: {
   track: Track;
@@ -343,13 +371,12 @@ function CyberTrackItem({
 
   return (
     <motion.div
-      layout
-      whileHover={{ scale: 1.01, x: 3 }}
+      whileHover={{ x: 3 }}
       whileTap={{ scale: 0.99 }}
       onClick={onPlay}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="flex items-center gap-3 p-3 rounded-xl cursor-pointer group transition-all duration-200"
+      className="flex items-center gap-3 p-3 rounded-xl cursor-pointer group"
       style={{
         background: isActive ? colors.activeBg : hovered ? colors.cardBgHover : 'transparent',
         border: `1px solid ${isActive ? 'rgba(139,92,246,0.3)' : 'transparent'}`,
@@ -360,15 +387,9 @@ function CyberTrackItem({
       <div className="w-7 flex items-center justify-center shrink-0">
         {isPlaying ? (
           <div className="flex items-end gap-0.5 h-5">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                className="w-1 rounded-full"
-                style={{ background: colors.primary }}
-                animate={{ height: [4, 16 + i * 2, 4] }}
-                transition={{ duration: 0.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.12 }}
-              />
-            ))}
+            <div className="w-1 rounded-full cyber-bar-1" style={{ background: colors.primary, height: 4 }} />
+            <div className="w-1 rounded-full cyber-bar-2" style={{ background: colors.primary, height: 4 }} />
+            <div className="w-1 rounded-full cyber-bar-3" style={{ background: colors.primary, height: 4 }} />
           </div>
         ) : (
           <span className="text-[11px] font-mono tabular-nums" style={{ color: isActive ? colors.primary : colors.textMuted }}>
@@ -428,14 +449,12 @@ function CyberTrackItem({
 
       {/* Track info */}
       <div className="flex-1 min-w-0">
-        <div className="relative overflow-hidden">
-          <MarqueeTitle
-            text={track.title}
-            active={hovered}
-            className="text-sm font-semibold font-mono"
-            style={{ color: isActive ? colors.primary : colors.text }}
-          />
-        </div>
+        <p
+          className="text-sm font-semibold font-mono truncate"
+          style={{ color: isActive ? colors.primary : colors.text }}
+        >
+          {track.title}
+        </p>
         <p className="text-[11px] font-mono truncate" style={{ color: colors.textMuted }}>
           {track.artist}
         </p>
@@ -459,71 +478,4 @@ function CyberTrackItem({
       </span>
     </motion.div>
   );
-}
-
-function MarqueeTitle({
-  text, active, className, style,
-}: {
-  text: string;
-  active: boolean;
-  className?: string;
-  style?: React.CSSProperties;
-}) {
-  const containerRef = useRef<HTMLSpanElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-
-  // Check overflow when text or active state changes
-  useEffect(() => {
-    const check = () => {
-      const textEl = textRef.current;
-      const containerEl = containerRef.current;
-      if (textEl && containerEl) {
-        const textWidth = textEl.scrollWidth;
-        const containerWidth = containerEl.clientWidth;
-        setIsOverflowing(textWidth > containerWidth);
-      }
-    };
-    check();
-    const ro = new ResizeObserver(check);
-    if (containerRef.current) ro.observe(containerRef.current);
-    return () => ro.disconnect();
-  }, [text]);
-
-  return (
-    <span
-      ref={containerRef}
-      style={{ position: 'relative', display: 'block', overflow: 'hidden', ...style }}
-    >
-      <span
-        ref={textRef}
-        className={className}
-        style={{
-          ...style,
-          display: 'inline-block',
-          whiteSpace: 'nowrap',
-          paddingRight: '16px',
-        }}
-      >
-        {isOverflowing && active ? (
-          <>
-            <span style={{ ...style, display: 'inline-block', whiteSpace: 'nowrap', paddingRight: '16px' }}>
-              {text} &nbsp;&nbsp;&nbsp;
-            </span>
-            {text}
-          </>
-        ) : (
-          text
-        )}
-      </span>
-      {isOverflowing && (
-        <style>{`
-          @keyframes marquee-${text.replace(/[^a-zA-Z0-9]/g, '')} {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-        `}</style>
-      )}
-    </span>
-  );
-}
+});

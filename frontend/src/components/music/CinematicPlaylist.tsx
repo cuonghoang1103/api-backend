@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, Search, ChevronRight, Music, Loader2 } from 'lucide-react';
@@ -30,24 +30,49 @@ interface NeonColors {
 }
 
 export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistProps) {
-  const { tracks, currentTrack, isPlaying, playTrack, playTrackAtIndex, currentIndex } = useMusicStore();
+  const { tracks, currentTrack, isPlaying, playTrackAtIndex, currentIndex } = useMusicStore();
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const filteredTracks = tracks.filter((track) =>
-    !search ||
-    track.title.toLowerCase().includes(search.toLowerCase()) ||
-    track.artist.toLowerCase().includes(search.toLowerCase())
-  );
+  // ── Debounced search ─────────────────────────────────────────────
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
 
-  const handlePlayTrack = (track: Track, index: number) => {
-    const actualIndex = tracks.indexOf(track);
-    if (actualIndex === currentIndex && currentTrack?.id === track.id) {
-      useMusicStore.getState().togglePlay();
-    } else {
-      playTrackAtIndex(actualIndex);
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => setDebouncedSearch(value), 300);
+  }, []);
+
+  useEffect(() => {
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, []);
+
+  // ── Memoized derived values ─────────────────────────────────────
+  const filteredTracks = useMemo(() => {
+    if (!debouncedSearch) return tracks;
+    const q = debouncedSearch.toLowerCase();
+    return tracks.filter(
+      (track) =>
+        track.title.toLowerCase().includes(q) ||
+        track.artist.toLowerCase().includes(q),
+    );
+  }, [tracks, debouncedSearch]);
+
+  const totalDuration = useMemo(() => {
+    let acc = 0;
+    for (const t of tracks) {
+      const d = t.duration;
+      if (!d && d !== 0) continue;
+      if (typeof d === 'number') { acc += d; continue; }
+      if (typeof d === 'string' && d.includes(':')) {
+        const parts = d.split(':').map(Number);
+        if (parts.length === 3) { acc += parts[0] * 3600 + parts[1] * 60 + (parts[2] || 0); }
+        else if (parts.length === 2) { acc += parts[0] * 60 + (parts[1] || 0); }
+      }
     }
-  };
+    return acc;
+  }, [tracks]);
 
   const neonColors: NeonColors = {
     primary: isNight ? '#8b5cf6' : '#6366f1',
@@ -61,18 +86,6 @@ export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistP
     border: isNight ? 'rgba(39,39,42,0.6)' : 'rgba(226,232,240,0.6)',
     borderActive: isNight ? 'rgba(139,92,246,0.5)' : 'rgba(99,102,241,0.5)',
   };
-
-  const parseDuration = (d: string | number | undefined): number => {
-    if (!d && d !== 0) return 0;
-    if (typeof d === 'number') return d;
-    if (typeof d === 'string' && d.includes(':')) {
-      const parts = d.split(':').map(Number);
-      return parts[0] * 60 + (parts[1] || 0);
-    }
-    return Number(d) || 0;
-  };
-
-  const totalDuration = tracks.reduce((acc, t) => acc + parseDuration(t.duration), 0);
 
   const formatTotalDuration = (seconds: number) => {
     const h = Math.floor(seconds / 3600);
@@ -157,7 +170,7 @@ export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistP
             type="text"
             placeholder="Search tracks..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all"
             style={{
               background: isNight ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
@@ -194,21 +207,27 @@ export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistP
               {filteredTracks.map((track, idx) => {
                 const isActive = currentTrack?.id === track.id;
                 const isCurrentlyPlaying = isActive && isPlaying;
-
                 return (
                   <motion.div
                     key={track.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -10 }}
-                    transition={{ delay: idx * 0.02 }}
+                    transition={{ duration: 0.15 }}
                   >
                     <TrackItem
                       track={track}
                       index={idx}
                       isActive={isActive}
                       isPlaying={isCurrentlyPlaying}
-                      onPlay={() => handlePlayTrack(track, idx)}
+                      onPlay={() => {
+                        const actualIndex = tracks.indexOf(track);
+                        if (actualIndex === currentIndex && currentTrack?.id === track.id) {
+                          useMusicStore.getState().togglePlay();
+                        } else {
+                          playTrackAtIndex(actualIndex);
+                        }
+                      }}
                       colors={neonColors}
                     />
                   </motion.div>
@@ -225,10 +244,13 @@ export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistP
           className="p-3 flex items-center gap-3"
           style={{ borderTop: `1px solid ${neonColors.border}` }}
         >
-          <motion.div
-            className="w-8 h-8 rounded-lg overflow-hidden shrink-0"
-            animate={{ boxShadow: isPlaying ? [neonColors.glow, `0 0 20px ${neonColors.primary}`, neonColors.glow] : neonColors.glow }}
-            transition={{ duration: isPlaying ? 2 : 0, repeat: isPlaying ? Infinity : 0 }}
+          <div
+            className={`w-8 h-8 rounded-lg overflow-hidden shrink-0 ${isPlaying ? 'cinematic-glow-pulse' : ''}`}
+            style={{
+              boxShadow: neonColors.glow,
+              '--cinematic-glow': neonColors.glow,
+              '--cinematic-primary': neonColors.primary,
+            } as React.CSSProperties}
           >
             {isSafeCoverUrl(currentTrack.coverImage) ? (
               <Image
@@ -248,14 +270,12 @@ export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistP
                 <Music className="w-4 h-4 text-white/70" />
               </div>
             )}
-          </motion.div>
+          </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <motion.span
-                className="w-2 h-2 rounded-full"
+              <div
+                className={`w-2 h-2 rounded-full ${isPlaying ? 'cinematic-dot-pulse' : ''}`}
                 style={{ background: neonColors.primary }}
-                animate={isPlaying ? { scale: [1, 1.3, 1], opacity: [1, 0.7, 1] } : {}}
-                transition={{ duration: 1, repeat: isPlaying ? Infinity : 0 }}
               />
               <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: neonColors.primary }}>
                 Now Playing
@@ -303,20 +323,9 @@ function TrackItem({
       <div className="w-6 flex items-center justify-center shrink-0">
         {isPlaying ? (
           <div className="flex items-end gap-0.5 h-4">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                className="w-1 rounded-full"
-                style={{ background: colors.primary }}
-                animate={{ height: [4, 14 + i * 2, 4] }}
-                transition={{
-                  duration: 0.6,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: i * 0.15,
-                }}
-              />
-            ))}
+            <div className="w-1 rounded-full cin-bar-1" style={{ background: colors.primary }} />
+            <div className="w-1 rounded-full cin-bar-2" style={{ background: colors.primary }} />
+            <div className="w-1 rounded-full cin-bar-3" style={{ background: colors.primary }} />
           </div>
         ) : (
           <span

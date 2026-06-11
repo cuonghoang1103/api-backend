@@ -169,6 +169,80 @@
    CYBER-ANIME TERMINAL EFFECTS
    ============================================================ */
 
+/* ── Cyber track item animated bars ─────────────────────────────── */
+/* Replaces JS-driven repeat:Infinity motion.div bars with GPU-accelerated
+   CSS keyframes. Transform-only animation — zero layout thrash. */
+@keyframes cyber-bar-1 {
+  0%, 100% { transform: scaleY(0.25); }
+  50%       { transform: scaleY(1); }
+}
+@keyframes cyber-bar-2 {
+  0%, 100% { transform: scaleY(0.5); }
+  50%       { transform: scaleY(0.25); }
+}
+@keyframes cyber-bar-3 {
+  0%, 100% { transform: scaleY(1); }
+  50%       { transform: scaleY(0.5); }
+}
+
+.cyber-bar-1 { animation: cyber-bar-1 0.5s ease-in-out infinite; }
+.cyber-bar-2 { animation: cyber-bar-2 0.5s ease-in-out infinite 0.12s; }
+.cyber-bar-3 { animation: cyber-bar-3 0.5s ease-in-out infinite 0.24s; }
+
+/* Track list bar variants */
+@keyframes track-bar-1 {
+  0%, 100% { transform: scaleY(0.25); }
+  50%       { transform: scaleY(1); }
+}
+@keyframes track-bar-2 {
+  0%, 100% { transform: scaleY(0.5); }
+  50%       { transform: scaleY(0.25); }
+}
+@keyframes track-bar-3 {
+  0%, 100% { transform: scaleY(1); }
+  50%       { transform: scaleY(0.5); }
+}
+
+.track-bar-1 { animation: track-bar-1 0.6s ease-in-out infinite; background: theme('colors.neon.violet'); }
+.track-bar-2 { animation: track-bar-2 0.6s ease-in-out infinite 0.15s; background: theme('colors.neon.violet'); }
+.track-bar-3 { animation: track-bar-3 0.6s ease-in-out infinite 0.3s; background: theme('colors.neon.violet'); }
+
+/* Premium playlist bar variants */
+.prem-bar-1 { animation: track-bar-1 0.5s ease-in-out infinite; }
+.prem-bar-2 { animation: track-bar-2 0.5s ease-in-out infinite 0.12s; }
+.prem-bar-3 { animation: track-bar-3 0.5s ease-in-out infinite 0.24s; }
+
+/* Cinematic playlist bar variants */
+.cin-bar-1 { animation: track-bar-1 0.6s ease-in-out infinite; }
+.cin-bar-2 { animation: track-bar-2 0.6s ease-in-out infinite 0.15s; }
+.cin-bar-3 { animation: track-bar-3 0.6s ease-in-out infinite 0.3s; }
+
+/* Cinematic now-playing glow pulse — CSS keyframes instead of JS-driven box-shadow animation */
+@keyframes cinematic-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0px var(--cinematic-glow, rgba(139,92,246,0.2)); }
+  50%       { box-shadow: 0 0 16px var(--cinematic-primary, #8b5cf6); }
+}
+.cinematic-glow-pulse { animation: cinematic-glow-pulse 2s ease-in-out infinite; }
+
+/* Cinematic playing dot pulse */
+@keyframes cinematic-dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.3); opacity: 0.7; }
+}
+.cinematic-dot-pulse { animation: cinematic-dot-pulse 1s ease-in-out infinite; }
+
+/* ── Vinyl disc GPU acceleration ─────────────────────────────── */
+.vinyl-disc-container {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.vinyl-disc-glow {
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
 /* Scanlines overlay — adds CRT monitor lines across the page */
 .scanlines {
   position: relative;

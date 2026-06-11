@@ -57,12 +57,22 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [ytQuery, setYtQuery] = useState('');
 
   const { playTrack, setTracks, tracks } = useMusicStore();
-  const { data: ytResults, isLoading: ytLoading } = useYouTubeSearch(query, open && query.trim().length >= 2);
+  const { data: ytResults, isLoading: ytLoading } = useYouTubeSearch(ytQuery, open && ytQuery.trim().length >= 2);
 
-  // Build combined results: local first, then YouTube
-  const results: SearchResult[] = [
+  // ── Debounce query for YouTube API calls ────────────────────────────
+  const handleQueryChange = useCallback((value: string) => {
+    setQuery(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setYtQuery(value);
+    }, 300);
+  }, []);
+
+  // ── Memoized combined results ───────────────────────────────────────
+  const results = useMemo((): SearchResult[] => [
     ...localTracks
       .filter(
         (t) =>
@@ -90,11 +100,11 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
       audioUrl: `https://www.youtube.com/watch?v=${r.videoId}`,
       videoId: r.videoId,
     })),
-  ];
+  ], [localTracks, query, ytResults]);
 
   const totalResults = results.length;
 
-  // Keyboard navigation
+  // ── Stable keyboard handler ───────────────────────────────────────
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (!open) return;
@@ -104,9 +114,12 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         setFocusedIdx((i) => Math.max(i - 1, 0));
-      } else if (e.key === 'Enter' && focusedIdx >= 0) {
-        e.preventDefault();
-        handleSelect(results[focusedIdx]);
+      } else if (e.key === 'Enter') {
+        const idx = focusedIdx >= 0 ? focusedIdx : 0;
+        if (results[idx]) {
+          e.preventDefault();
+          handleSelect(results[idx]);
+        }
       } else if (e.key === 'Escape') {
         setOpen(false);
         setFocusedIdx(-1);
@@ -185,7 +198,7 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
           type="text"
           value={query}
           onChange={(e) => {
-            setQuery(e.target.value);
+            handleQueryChange(e.target.value);
             setOpen(true);
             setFocusedIdx(-1);
           }}

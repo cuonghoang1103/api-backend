@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, Search, Music, Loader2, ListMusic, Plus, ImagePlus, Upload } from 'lucide-react';
+import { Play, Pause, Search, Music, Loader2, ListMusic, Plus, ImagePlus } from 'lucide-react';
 import { useMusicStore } from '@/store/musicStore';
 import { usePlaylistStore } from '@/store/playlistStore';
 import type { Track } from '@/types';
@@ -18,34 +18,60 @@ interface PremiumPlaylistProps {
 }
 
 export default function PremiumPlaylist({ isNight = true }: PremiumPlaylistProps) {
-  const { tracks, currentTrack, isPlaying, playTrackAtIndex, currentIndex, allTracks, savedAllTracks, setAllTracks, restoreAllTracks } = useMusicStore();
+  const { tracks, currentTrack, isPlaying, playTrackAtIndex, allTracks, savedAllTracks, restoreAllTracks } = useMusicStore();
   const [search, setSearch] = useState('');
   const [isLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'tracks' | 'playlists'>('tracks');
-  // Track if we're currently showing a playlist's track list
   const [showingPlaylistId, setShowingPlaylistId] = useState<string | null>(null);
 
-  // Playlist state
   const { playlists, fetchPlaylists, createPlaylist, playPlaylist } = usePlaylistStore();
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [creating, setCreating] = useState(false);
   const coverInputRef = useRef<HTMLInputElement>(null);
-  const [pendingCover, setPendingCover] = useState<string | null>(null); // base64 preview
+  const [pendingCover, setPendingCover] = useState<string | null>(null);
   const [pendingCoverFile, setPendingCoverFile] = useState<File | null>(null);
 
-  const filteredTracks = tracks.filter((track) =>
-    !search ||
-    track.title.toLowerCase().includes(search.toLowerCase()) ||
-    track.artist.toLowerCase().includes(search.toLowerCase())
-  );
+  // ── Debounced search ─────────────────────────────────────────────
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
 
-  const handlePlayTrack = (track: Track) => {
-    const actualIndex = tracks.indexOf(track);
-    if (actualIndex === currentIndex && currentTrack?.id === track.id) {
-      useMusicStore.getState().togglePlay();
-    } else {
-      playTrackAtIndex(actualIndex);
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => setDebouncedSearch(value), 300);
+  }, []);
+
+  useEffect(() => {
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, []);
+
+  // ── Memoized derived values ─────────────────────────────────────
+  const filteredTracks = useMemo(() => {
+    if (!debouncedSearch) return tracks;
+    const q = debouncedSearch.toLowerCase();
+    return tracks.filter(
+      (track) =>
+        track.title.toLowerCase().includes(q) ||
+        track.artist.toLowerCase().includes(q),
+    );
+  }, [tracks, debouncedSearch]);
+
+  const totalDuration = useMemo(() => tracks.reduce((acc, t) => {
+    const d = t.duration;
+    if (!d && d !== 0) return acc;
+    if (typeof d === 'number') return acc + d;
+    if (typeof d === 'string' && d.includes(':')) {
+      const parts = d.split(':').map(Number);
+      return acc + parts[0] * 60 + (parts[1] || 0);
     }
+    return acc + (Number(d) || 0);
+  }, 0), [tracks]);
+
+  const formatTotal = (s: number) => {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    if (h > 0) return `${h}h ${m}m`;
+    return `${m} min`;
   };
 
   const c = {
@@ -62,25 +88,6 @@ export default function PremiumPlaylist({ isNight = true }: PremiumPlaylistProps
     borderLight: 'rgba(168,85,247,0.08)',
     cardBgHover: 'rgba(168,85,247,0.08)',
     activeBg: 'rgba(168,85,247,0.12)',
-  };
-
-  const parseDuration = (d: string | number | undefined): number => {
-    if (!d && d !== 0) return 0;
-    if (typeof d === 'number') return d;
-    if (typeof d === 'string' && d.includes(':')) {
-      const parts = d.split(':').map(Number);
-      return parts[0] * 60 + (parts[1] || 0);
-    }
-    return Number(d) || 0;
-  };
-
-  const totalDuration = tracks.reduce((acc, t) => acc + parseDuration(t.duration), 0);
-
-  const formatTotal = (s: number) => {
-    const h = Math.floor(s / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    if (h > 0) return `${h}h ${m}m`;
-    return `${m} min`;
   };
 
   const handleCoverSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -271,7 +278,7 @@ export default function PremiumPlaylist({ isNight = true }: PremiumPlaylistProps
               type="text"
               placeholder="Search tracks..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all"
               style={{
                 background: 'rgba(255,255,255,0.04)',
@@ -368,7 +375,7 @@ export default function PremiumPlaylist({ isNight = true }: PremiumPlaylistProps
             </div>
           ) : (
             <div className="space-y-0.5">
-              <AnimatePresence mode="popLayout">
+              <AnimatePresence>
                 {filteredTracks.map((track, idx) => {
                   const isActive = currentTrack?.id === track.id;
                   const isCurrentlyPlaying = isActive && isPlaying;
@@ -378,15 +385,21 @@ export default function PremiumPlaylist({ isNight = true }: PremiumPlaylistProps
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      transition={{ delay: idx * 0.015 }}
-                      layout
+                      transition={{ duration: 0.15 }}
                     >
                       <PremiumTrackItem
                         track={track}
                         index={idx}
                         isActive={isActive}
                         isPlaying={isCurrentlyPlaying}
-                        onPlay={() => handlePlayTrack(track)}
+                        onPlay={() => {
+                          const actualIndex = tracks.indexOf(track);
+                          if (actualIndex === useMusicStore.getState().currentIndex && currentTrack?.id === track.id) {
+                            useMusicStore.getState().togglePlay();
+                          } else {
+                            playTrackAtIndex(actualIndex);
+                          }
+                        }}
                         onAddToPlaylist={() => {
                           usePlaylistStore.getState().setPendingTrack(track);
                           usePlaylistStore.getState().openDrawer();
@@ -511,20 +524,9 @@ function PremiumTrackItem({
       <div className="w-7 flex items-center justify-center shrink-0">
         {isPlaying ? (
           <div className="flex items-end gap-0.5 h-5">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                className="w-1 rounded-full"
-                style={{ background: colors.primary }}
-                animate={{ height: [4, 16 + i * 2, 4] }}
-                transition={{
-                  duration: 0.5,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: i * 0.12,
-                }}
-              />
-            ))}
+            <div className="w-1 rounded-full prem-bar-1" style={{ background: colors.primary }} />
+            <div className="w-1 rounded-full prem-bar-2" style={{ background: colors.primary }} />
+            <div className="w-1 rounded-full prem-bar-3" style={{ background: colors.primary }} />
           </div>
         ) : (
           <span

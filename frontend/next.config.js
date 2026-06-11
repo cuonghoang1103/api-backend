@@ -4,6 +4,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  env: {
+    // Bump this on every deploy to bust Next.js server action cache
+    NEXT_PUBLIC_BUILD_ID: Date.now().toString(36),
+  },
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -19,6 +23,13 @@ const nextConfig = {
         source: '/music',
         headers: [
           { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+        ],
+      },
+      {
+        // No-cache for Next.js static JS chunks to avoid stale server action errors
+        source: '/_next/static/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
         ],
       },
     ];

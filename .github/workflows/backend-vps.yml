@@ -60,22 +60,34 @@ jobs:
             ./ -e "ssh -F $HOME/.ssh/config" \
             "vps:/opt/cuonghoangdev/"
 
+      - name: Create .env on VPS if missing
+        run: |
+          # Only create .env if it doesn't exist (don't overwrite existing!)
+          ssh vps "if [ ! -f /opt/cuonghoangdev/.env ]; then \
+              cp /opt/cuonghoangdev/vps-deploy/.env.example /opt/cuonghoangdev/.env; \
+              echo '[CREATED] .env from .env.example (no existing .env found)'; \
+            else \
+              echo '[SKIP] .env already exists, preserving it'; \
+            fi"
+
       - name: Update .env on VPS with secrets
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
-          # Create .env from .env.example if it doesn't exist
-          ssh vps "if [ ! -f /opt/cuonghoangdev/.env ]; then \
-              cp /opt/cuonghoangdev/vps-deploy/.env.example /opt/cuonghoangdev/.env; \
-            fi"
           # Update YOUTUBE_API_KEY
           ssh vps \
             "sed -i 's|YOUTUBE_API_KEY=.*|YOUTUBE_API_KEY=${YOUTUBE_API_KEY}|' /opt/cuonghoangdev/.env"
           # Update GEMINI_API_KEY
           ssh vps \
             "sed -i 's|GEMINI_API_KEY=.*|GEMINI_API_KEY=${GEMINI_API_KEY}|' /opt/cuonghoangdev/.env"
-          ssh vps "grep -E 'GEMINI_API_KEY|YOUTUBE_API_KEY' /opt/cuonghoangdev/.env"
+          # Update POSTGRES_PASSWORD if secret exists
+          if [ -n "$POSTGRES_PASSWORD" ]; then
+            ssh vps \
+              "sed -i 's|POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=${POSTGRES_PASSWORD}|' /opt/cuonghoangdev/.env"
+          fi
+          ssh vps "grep -E 'GEMINI_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
 
       - name: Upload and run swap setup script
         run: |

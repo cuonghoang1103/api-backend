@@ -222,60 +222,53 @@ export default function MusicAudioController() {
         return;
       }
 
-      const isNewVideo = !ytPlayerInstance || true; // always recreate to load new video
-
-      if (isNewVideo) {
-        if (ytPlayerInstance) {
-          try { ytPlayerInstance.destroy(); } catch { /* ignore */ }
-          ytPlayerInstance = null;
-        }
-
-        stopYouTubePolling();
-
-        const yt = createYouTubePlayer(
-          videoId,
-          0,
-          () => {
-            // onReady
-            if (ytMuted) {
-              ytPlayerInstance?.mute();
-            } else {
-              ytPlayerInstance?.setVolume(ytVolume);
-            }
-            if (shouldPlay) {
-              ytPlayerInstance?.playVideo();
-            }
-            const d = ytPlayerInstance?.getDuration?.() ?? 0;
-            if (d > 0) setDuration(d);
-            startYouTubePolling(ytPlayerInstance!);
-          },
-          (state) => {
-            // onStateChange
-            const { PLAYING, PAUSED, ENDED } = window.YT?.PlayerState ?? {};
-            if (state === ENDED) {
-              stopYouTubePolling();
-              if (repeatMode !== 'one') next();
-            }
-          },
-          () => {
-            // onEnded
-            stopYouTubePolling();
-            next();
-          },
-          (err) => {
-            // onError
-            console.warn('[YouTube] Player error:', err);
-          },
-        );
-        ytPlayerInstance = yt;
-      } else if (ytPlayerInstance) {
-        if (shouldPlay) {
-          ytPlayerInstance.playVideo();
-        } else {
-          ytPlayerInstance.pauseVideo();
-        }
+      // Always recreate to load the new video
+      if (ytPlayerInstance) {
+        try { ytPlayerInstance.destroy(); } catch { /* ignore */ }
+        ytPlayerInstance = null;
       }
+
+      stopYouTubePolling();
+
+      const yt = createYouTubePlayer(
+        videoId,
+        0,
+        () => {
+          // onReady
+          if (ytMuted) {
+            ytPlayerInstance?.mute();
+          } else {
+            ytPlayerInstance?.setVolume(ytVolume);
+          }
+          if (shouldPlay) {
+            ytPlayerInstance?.playVideo();
+          }
+          const d = ytPlayerInstance?.getDuration?.() ?? 0;
+          if (d > 0) setDuration(d);
+          startYouTubePolling(ytPlayerInstance!);
+        },
+        (state) => {
+          // onStateChange
+          const { PLAYING, PAUSED, ENDED } = window.YT?.PlayerState ?? {};
+          if (state === ENDED) {
+            stopYouTubePolling();
+            if (repeatMode !== 'one') next();
+          }
+        },
+        () => {
+          // onEnded
+          stopYouTubePolling();
+          next();
+        },
+        (err) => {
+          // onError
+          console.warn('[YouTube] Player error:', err);
+        },
+      );
+      ytPlayerInstance = yt;
     },
+    // NOTE: setCurrentTime intentionally excluded to prevent effect re-running
+    // during playback. The YouTube polling effect syncs currentTime separately.
     [next, repeatMode, setDuration, startYouTubePolling, stopYouTubePolling],
   );
 
@@ -357,7 +350,15 @@ export default function MusicAudioController() {
     };
   }, [setCurrentTime, setDuration, next]);
 
-  // Load new track
+  // ── Local audio volume sync — separate effect so volume changes don't
+  //    trigger track reloads ─────────────────────────────────────────────
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = isMuted ? 0 : Math.max(0, Math.min(1, volume));
+  }, [volume, isMuted]);
+
+  // ── Load new track ───────────────────────────────────────────────
   useEffect(() => {
     const audio = audioRef.current;
     const rawUrl = currentTrack?.audioUrl;
@@ -367,11 +368,12 @@ export default function MusicAudioController() {
     if (!rawUrl) return;
 
     if (isYT) {
-      // YouTube track: stop local audio, load YouTube
       if (audio) {
         audio.pause();
         audio.src = '';
       }
+      // Use handleYouTubeTrack directly — it doesn't need to be in deps
+      // since we always want to run when track changes
       handleYouTubeTrack(videoId, isPlaying);
       return;
     }
@@ -382,9 +384,6 @@ export default function MusicAudioController() {
     }
 
     if (!audio) return;
-
-    // Volume sync
-    audio.volume = isMuted ? 0 : Math.max(0, Math.min(1, volume));
 
     const trackChanged = prevTrackIdRef.current !== trackId;
     if (trackChanged) prevTrackIdRef.current = trackId;
@@ -408,7 +407,19 @@ export default function MusicAudioController() {
     } else {
       audio.pause();
     }
-  }, [currentTrack?.id, currentTrack?.audioUrl, isPlaying, volume, isMuted, ensureAnalyser, handleYouTubeTrack]);
+  }, [
+    currentTrack?.id,
+    currentTrack?.audioUrl,
+    isPlaying,
+    // NOTE: volume, isMuted intentionally excluded — volume is handled by the
+    // dedicated effect above so volume changes don't restart playback.
+    // handleYouTubeTrack intentionally excluded — YouTube player is created via
+    // createYouTubePlayer inside handleYouTubeTrack which always runs on track change.
+    // handleYouTubeTrack is stable (no setState in deps) so this is safe.
+    // ensureAnalyser is in deps for first-play setup.
+    ensureAnalyser,
+    handleYouTubeTrack,
+  ]);
 
   // Progress-based auto-next for local audio
   useEffect(() => {

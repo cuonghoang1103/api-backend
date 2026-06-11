@@ -91,6 +91,8 @@ services:
       SMTP_FROM: ${SMTP_FROM:-noreply@cuongthai.com}
       YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
       PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-https://api.cuongthai.com}
+    env_file:
+      - /opt/cuonghoangdev/.env
     volumes:
       # CRITICAL: Map uploads to host SSD — files survive container rebuild
       - uploads_data:/app/uploads

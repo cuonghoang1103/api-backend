@@ -6,49 +6,6 @@ import { NextRequest, NextResponse } from "next/server";
 const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://backend:3001";
 
 /**
- * Converts a backend fetch Response to a NextResponse.
- * Handles both JSON and binary (audio) responses.
- */
-async function toNextResponse(response: Response): Promise<NextResponse> {
-  const contentType = response.headers.get("content-type") || "";
-
-  // For JSON responses: parse and return as NextResponse.json
-  if (contentType.includes("application/json")) {
-    const text = await response.text();
-    if (!text.trim()) return new NextResponse(null, { status: response.status });
-    try {
-      const data = JSON.parse(text);
-      return NextResponse.json(data, { status: response.status });
-    } catch {
-      return NextResponse.json({ success: false, message: text }, { status: response.status });
-    }
-  }
-
-  // For binary responses (audio, images): stream the ArrayBuffer directly
-  const arrayBuffer = await response.arrayBuffer();
-  if (arrayBuffer.byteLength === 0) {
-    return new NextResponse(null, { status: response.status });
-  }
-
-  const headers: Record<string, string> = {
-    "Content-Type": contentType || "application/octet-stream",
-    "Content-Length": String(arrayBuffer.byteLength),
-  };
-
-  // Forward streaming headers for audio/Range support
-  const forwarding = [
-    "accept-ranges", "content-range", "cache-control",
-    "x-accel-buffering", "access-control-expose-headers",
-  ];
-  for (const h of forwarding) {
-    const v = response.headers.get(h);
-    if (v) headers[h] = v;
-  }
-
-  return new NextResponse(arrayBuffer, { status: response.status, headers });
-}
-
-/**
  * Sends a request to the backend, forwarding all necessary headers and body.
  *
  * For multipart/form-data: we must NOT read the body as text (which would corrupt
@@ -90,6 +47,73 @@ async function proxyRequest(
     credentials: "include",
     body: body.byteLength > 0 ? body : undefined,
   });
+}
+
+/**
+ * Converts a backend fetch Response to a NextResponse.
+ * Handles SSE/text-streaming by piping directly — no buffering.
+ */
+async function toNextResponse(response: Response): Promise<NextResponse> {
+  const contentType = response.headers.get("content-type") || "";
+
+  // SSE or text streaming: pipe directly (no buffering)
+  if (
+    contentType.includes("text/event-stream") ||
+    contentType.includes("text/stream") ||
+    contentType.includes("application/stream"))
+  {
+    const streamingHeaders: Record<string, string> = {
+      "Content-Type": contentType,
+      "Cache-Control": "no-cache, no-transform",
+      "Connection": "keep-alive",
+      "X-Accel-Buffering": "no",
+    };
+    const forwarding = ["transfer-encoding", "content-encoding"];
+    for (const h of forwarding) {
+      const v = response.headers.get(h);
+      if (v) streamingHeaders[h] = v;
+    }
+    // Stream the ReadableStream directly
+    return new NextResponse(response.body, {
+      status: response.status,
+      headers: streamingHeaders,
+    });
+  }
+
+  // For JSON responses: parse and return as NextResponse.json
+  if (contentType.includes("application/json")) {
+    const text = await response.text();
+    if (!text.trim()) return new NextResponse(null, { status: response.status });
+    try {
+      const data = JSON.parse(text);
+      return NextResponse.json(data, { status: response.status });
+    } catch {
+      return NextResponse.json({ success: false, message: text }, { status: response.status });
+    }
+  }
+
+  // For binary responses (audio, images): stream the ArrayBuffer directly
+  const arrayBuffer = await response.arrayBuffer();
+  if (arrayBuffer.byteLength === 0) {
+    return new NextResponse(null, { status: response.status });
+  }
+
+  const headers: Record<string, string> = {
+    "Content-Type": contentType || "application/octet-stream",
+    "Content-Length": String(arrayBuffer.byteLength),
+  };
+
+  // Forward streaming headers for audio/Range support
+  const forwarding = [
+    "accept-ranges", "content-range", "cache-control",
+    "x-accel-buffering", "access-control-expose-headers",
+  ];
+  for (const h of forwarding) {
+    const v = response.headers.get(h);
+    if (v) headers[h] = v;
+  }
+
+  return new NextResponse(arrayBuffer, { status: response.status, headers });
 }
 
 // ─── GET ────────────────────────────────────────────────────────────────────

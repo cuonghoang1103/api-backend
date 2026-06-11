@@ -54,6 +54,12 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
     # Reset the bind-mounted postgres data directory (corrupt or incompatible)
     rm -rf /opt/cuonghoangdev/postgres
     mkdir -p /opt/cuonghoangdev/postgres
+    echo "[DEBUG] postgres data dir reset, container logs:"
+    docker compose logs --tail=20 postgres 2>&1 || true
+    echo "[DEBUG] container inspect:"
+    docker inspect cuonghoangdev_postgres --format 'restart={{.RestartCount}} state={{.State.Status}}' 2>&1 || true
+    echo "[DEBUG] memory usage:"
+    free -h 2>&1 || true
     docker compose up -d postgres
     for i in $(seq 1 18); do
       if docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
@@ -62,6 +68,8 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
         break
       fi
       echo "Waiting for fresh postgres... ($i/18)"
+      echo "[DEBUG] container state: $(docker inspect cuonghoangdev_postgres --format '{{.State.Status}} ({{.RestartCount}} restarts)' 2>&1 || echo 'not found')"
+      docker compose logs --tail=3 postgres 2>&1 || true
       sleep 5
     done
   fi

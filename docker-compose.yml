@@ -24,7 +24,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 768M
+          memory: 256M
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d cuonghoangdev_db"]
       interval: 10s
@@ -47,7 +47,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 64M
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -106,7 +106,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 768M
+          memory: 384M
     healthcheck:
       test: ["CMD-SHELL", "curl -sf http://localhost:3001/health || exit 1"]
       interval: 15s
@@ -141,7 +141,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2.5G
+          memory: 1.5G
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:3000/ || exit 1"]
       interval: 30s

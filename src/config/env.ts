@@ -52,7 +52,7 @@ export const config = {
 
   // AI
   geminiApiKey: process.env.GEMINI_API_KEY || '',
-  aiChatModel: process.env.AI_CHAT_MODEL || 'gemini-2.5-flash',
+  aiChatModel: process.env.AI_CHAT_MODEL || 'gemini-2.5-flash-lite',
   aiEmbeddingModel: process.env.AI_EMBEDDING_MODEL || 'gemini-embedding-002',
   aiEmbeddingDimensions: parseInt(process.env.AI_EMBEDDING_DIMENSIONS || '768', 10),
   aiMaxTokens: parseInt(process.env.AI_MAX_TOKENS || '2048', 10),

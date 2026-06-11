@@ -46,7 +46,13 @@ import { AppError } from '../middleware/errorHandler.js';
 
 // ─── Lazy-initialized Gemini client ───────────────────────────
 let _genAI: GoogleGenerativeAI | null = null;
-let _chatModel: GenerativeModel | null = null;
+
+// ─── Model fallback list ────────────────────────────────────────
+const MODELS = [
+  'gemini-2.5-flash-lite',
+  'gemini-2.5-flash',
+  'gemini-3-flash',
+];
 
 function getGenAI(): GoogleGenerativeAI {
   if (!_genAI) {
@@ -62,17 +68,14 @@ function getGenAI(): GoogleGenerativeAI {
   return _genAI;
 }
 
-function getModel(): GenerativeModel {
-  if (!_chatModel) {
-    _chatModel = getGenAI().getGenerativeModel({
-      model: config.aiChatModel,
-      generationConfig: {
-        maxOutputTokens: config.aiMaxTokens,
-        temperature: config.aiTemperature,
-      },
-    });
-  }
-  return _chatModel;
+function createModel(modelName: string): GenerativeModel {
+  return getGenAI().getGenerativeModel({
+    model: modelName,
+    generationConfig: {
+      maxOutputTokens: config.aiMaxTokens,
+      temperature: config.aiTemperature,
+    },
+  });
 }
 
 // ─── Session ID generator ────────────────────────────────────
@@ -209,7 +212,6 @@ export class AIService {
    * Dùng cho: fallback, serverless functions, batch processing.
    */
   async sendChat(context: ChatContext) {
-    const model = getModel();
     const { sessionId, message, documentType, topK } = context;
 
     // Build RAG context
@@ -224,46 +226,50 @@ export class AIService {
       await this.saveUserMessage(sessionId, message, context.userId);
     }
 
-    // Create chat session
-    const chat = model.startChat({
-      history: [
-        { role: 'user', parts: [{ text: systemPrompt }] },
-        {
-          role: 'model',
-          parts: [{ text: 'Tôi đã hiểu. Tôi sẽ trả lời dựa trên ngữ cảnh được cung cấp.' }],
-        },
-      ],
-    });
+    let lastError: unknown;
+    for (const modelName of MODELS) {
+      const model = createModel(modelName);
 
-    // Send message
-    const result: GenerateContentResult = await chat.sendMessage(message);
-    const text = result.response.text();
+      const chat = model.startChat({
+        history: [
+          { role: 'user', parts: [{ text: systemPrompt }] },
+          {
+            role: 'model',
+            parts: [{ text: 'Tôi đã hiểu. Tôi sẽ trả lời dựa trên ngữ cảnh được cung cấp.' }],
+          },
+        ],
+      });
 
-    // Save assistant message
-    if (sessionId && text) {
-      await this.saveAssistantMessage(sessionId, text);
+      try {
+        const result: GenerateContentResult = await chat.sendMessage(message);
+        const text = result.response.text();
+
+        if (sessionId && text) {
+          await this.saveAssistantMessage(sessionId, text);
+        }
+        return { text, sessionId };
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        if (errMsg.includes('503')) {
+          lastError = err;
+          continue;
+        }
+        throw err;
+      }
     }
 
-    return { text, sessionId };
+    throw lastError;
   }
 
   // ─── Streaming chat (AsyncGenerator) ─────────────────────
   /**
    * Stream chat response token-by-token.
-   *
-   * Đây là AsyncGenerator — cho phép consumer lặp qua từng token:
-   *
-   *   for await (const token of aiService.streamChat(ctx)) {
-   *     res.write(`data: ${JSON.stringify({ text: token })}\n\n`);
-   *   }
-   *
-   * Gemini SDK gọi API một lần, nhưng trả về stream.
-   * Mỗi lần `for await...of` sẽ yield một chunk text mới.
+   * Auto-retries with fallback models (2.5-flash-lite → 2.5-flash → 3-flash)
+   * on 503 Service Unavailable errors.
    */
   async *streamChat(
     context: ChatContext,
   ): AsyncGenerator<string, void, unknown> {
-    const model = getModel();
     const { sessionId, message, documentType, topK } = context;
 
     // Build RAG context
@@ -278,37 +284,49 @@ export class AIService {
       await this.saveUserMessage(sessionId, message, context.userId);
     }
 
-    // Create chat with system prompt
-    const chat: ChatSession = model.startChat({
-      history: [
-        { role: 'user', parts: [{ text: systemPrompt }] },
-        {
-          role: 'model',
-          parts: [{ text: 'Tôi đã hiểu. Tôi sẽ trả lời dựa trên ngữ cảnh được cung cấp.' }],
-        },
-      ],
-    });
+    // Try each model in order
+    let lastError: unknown;
+    for (const modelName of MODELS) {
+      const model = createModel(modelName);
 
-    // Start streaming
-    const streamResult = await chat.sendMessageStream(message);
+      const chat: ChatSession = model.startChat({
+        history: [
+          { role: 'user', parts: [{ text: systemPrompt }] },
+          {
+            role: 'model',
+            parts: [{ text: 'Tôi đã hiểu. Tôi sẽ trả lời dựa trên ngữ cảnh được cung cấp.' }],
+          },
+        ],
+      });
 
-    // Accumulate full response for saving
-    let fullResponse = '';
+      try {
+        const streamResult = await chat.sendMessageStream(message);
+        let fullResponse = '';
 
-    // Iterate through stream chunks (each chunk = a few tokens)
-    for await (const chunk of streamResult.stream) {
-      const chunkText = chunk.text();
-      fullResponse += chunkText;
+        for await (const chunk of streamResult.stream) {
+          const chunkText = chunk.text();
+          fullResponse += chunkText;
+          yield chunkText;
+        }
 
-      // Yield each chunk to consumer
-      // Consumer will write each chunk to SSE response
-      yield chunkText;
+        if (sessionId && fullResponse) {
+          await this.saveAssistantMessage(sessionId, fullResponse);
+        }
+        return; // success, exit
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        if (errMsg.includes('503')) {
+          console.warn(`[AI] 503 on ${modelName}, trying next model...`);
+          lastError = err;
+          continue; // try next model
+        }
+        // Non-503 error — propagate immediately
+        throw err;
+      }
     }
 
-    // Save full response to database after stream completes
-    if (sessionId && fullResponse) {
-      await this.saveAssistantMessage(sessionId, fullResponse);
-    }
+    // All models failed
+    throw lastError;
   }
 
   // ─── Get full stream result (for advanced use) ────────────
@@ -508,13 +526,13 @@ export class AIService {
     });
   }
 
-  // ─── Reset Gemini model instance ───────────────────────────
+  // ─── Reset Gemini client cache ──────────────────────────────
   /**
-   * Reset model cache. Dùng khi thay đổi model config.
+   * Reset client cache. Dùng khi thay đổi model config.
    */
-  resetModel(): void {
-    _chatModel = null;
-    console.log('[AIService] Model cache reset');
+  resetGenAI(): void {
+    _genAI = null;
+    console.log('[AIService] Gemini client cache reset');
   }
 }
 

@@ -21,6 +21,40 @@ interface ChatMessage {
   parts: { text: string }[];
 }
 
+const MODELS = [
+  'gemini-2.5-flash-lite',
+  'gemini-2.5-flash',
+  'gemini-3-flash',
+];
+
+async function generateWithRetry(
+  genAI: GoogleGenerativeAI,
+  modelName: string,
+  contents: ChatMessage[],
+  generationConfig: { maxOutputTokens: number; temperature: number; topP: number },
+  attempt = 0,
+): Promise<string> {
+  const model = genAI.getGenerativeModel({
+    model: modelName,
+    generationConfig,
+  });
+
+  try {
+    const result = await model.generateContent({ contents });
+    return result.response.text();
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+
+    // 503 = model overloaded — try next model
+    if (errorMessage.includes('503') && attempt < MODELS.length - 1) {
+      console.warn(`[Gemini] 503 on ${modelName}, retrying with ${MODELS[attempt + 1]}...`);
+      return generateWithRetry(genAI, MODELS[attempt + 1], contents, generationConfig, attempt + 1);
+    }
+
+    throw err;
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
@@ -36,27 +70,19 @@ export async function POST(req: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      systemInstruction: SYSTEM_INSTRUCTION,
-      model: 'gemini-2.5-flash',
-    });
 
     const contents: ChatMessage[] = [
       ...history,
       { role: 'user', parts: [{ text: message }] },
     ];
 
-    const result = await model.generateContent({
-      contents,
-      generationConfig: {
-        maxOutputTokens: 2048,
-        temperature: 0.85,
-        topP: 0.95,
-      },
-    });
+    const generationConfig = {
+      maxOutputTokens: 2048,
+      temperature: 0.85,
+      topP: 0.95,
+    };
 
-    const response = result.response;
-    const text = response.text();
+    const text = await generateWithRetry(genAI, MODELS[0], contents, generationConfig);
 
     return NextResponse.json({ text });
   } catch (err: unknown) {

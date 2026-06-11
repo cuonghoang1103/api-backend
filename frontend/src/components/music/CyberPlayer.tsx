@@ -7,7 +7,8 @@ import { useMusicStore } from '@/store/musicStore';
 import CyberAudioVisualizer from './CyberAudioVisualizer';
 
 function isSafeUrl(url: unknown): url is string {
-  return typeof url === 'string' && url.trim().length > 0 && url.startsWith('http');
+  if (typeof url !== 'string' || !url.trim()) return false;
+  return url.startsWith('http') || url.startsWith('/uploads/');
 }
 
 const C = {

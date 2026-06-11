@@ -7,7 +7,8 @@ import { useMusicStore } from '@/store/musicStore';
 import type { Track } from '@/types';
 
 function isSafeUrl(url: unknown): url is string {
-  return typeof url === 'string' && url.trim().length > 0 && url.startsWith('http');
+  if (typeof url !== 'string' || !url.trim()) return false;
+  return url.startsWith('http') || url.startsWith('/uploads/');
 }
 
 const C = {
@@ -99,12 +100,12 @@ export default function CyberPlaylist() {
             whileHover={{ scale: 1.05, rotate: 2 }}
           >
             {isSafeUrl(tracks[0]?.coverImage) ? (
-              <Image
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
                 src={tracks[0].coverImage}
                 alt="Playlist"
-                width={56}
-                height={56}
                 className="object-cover w-full h-full"
+                style={{ width: 56, height: 56 }}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
@@ -372,11 +373,11 @@ function CyberTrackItem({
         style={{ opacity: dimmed ? 0.7 : 1 }}
       >
         {isSafeUrl(track.coverImage) ? (
-          <Image
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             src={track.coverImage}
             alt={track.title}
-            width={44}
-            height={44}
+            style={{ width: 44, height: 44 }}
             className="object-cover w-full h-full"
           />
         ) : (

@@ -14,7 +14,8 @@ import { usePathname } from 'next/navigation';
 const AUTO_HIDE_DELAY = 5000; // 5 seconds
 
 function isSafeCoverUrl(url: unknown): url is string {
-  return typeof url === 'string' && url.trim().length > 0 && url.startsWith('http');
+  if (typeof url !== 'string' || !url.trim()) return false;
+  return url.startsWith('http') || url.startsWith('/uploads/');
 }
 
 // ============================================================

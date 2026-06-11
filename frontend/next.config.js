@@ -23,6 +23,16 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      // Proxy uploaded files to the backend which has the uploads volume mounted
+      // This is needed because Next.js standalone mode doesn't serve files outside public/
+      {
+        source: '/uploads/:path*',
+        destination: 'http://backend:3001/uploads/:path*',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

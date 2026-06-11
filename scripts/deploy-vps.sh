@@ -59,11 +59,11 @@ for i in $(seq 1 18); do
   sleep 5
 done
 
-# Restart nginx (to pick up latest config)
+# Restart nginx (force-recreate to apply new volume mounts)
 echo "Restarting nginx..."
 docker compose stop nginx 2>/dev/null || true
 sleep 2
-docker compose up -d nginx
+docker compose up -d --force-recreate nginx
 
 # Wait for nginx (best-effort)
 for i in $(seq 1 12); do

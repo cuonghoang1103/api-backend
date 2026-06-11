@@ -148,6 +148,13 @@ export default function AdminMusicPage() {
   const [youTubeSearching, setYouTubeSearching] = useState(false);
   const [youTubeError, setYouTubeError] = useState('');
 
+  // YouTube URL import state
+  const [showYouTubeUrlImport, setShowYouTubeUrlImport] = useState(false);
+  const [youTubeUrl, setYouTubeUrl] = useState('');
+  const [youTubeImporting, setYouTubeImporting] = useState(false);
+  const [youTubeImportError, setYouTubeImportError] = useState('');
+  const [youTubeImportSuccess, setYouTubeImportSuccess] = useState('');
+
   // Form state
   const [title, setTitle] = useState('');
   const [artist, setArtist] = useState('');
@@ -305,6 +312,38 @@ export default function AdminMusicPage() {
     });
   };
 
+  // YouTube URL import handler
+  const handleYouTubeUrlImport = async () => {
+    if (!youTubeUrl.trim()) {
+      setYouTubeImportError('Vui long nhap link YouTube');
+      return;
+    }
+    setYouTubeImporting(true);
+    setYouTubeImportError('');
+    setYouTubeImportSuccess('');
+    try {
+      const res = await apiFetch('/admin/youtube-import', {
+        method: 'POST',
+        body: JSON.stringify({ url: youTubeUrl.trim() }),
+      });
+      if (res.success) {
+        setYouTubeImportSuccess(`Da them "${res.data?.title}" thanh cong!`);
+        setYouTubeUrl('');
+        fetchTracks();
+        setTimeout(() => {
+          setShowYouTubeUrlImport(false);
+          setYouTubeImportSuccess('');
+        }, 2000);
+      } else {
+        setYouTubeImportError(res.message || 'Loi them tu YouTube');
+      }
+    } catch (err: any) {
+      setYouTubeImportError(err?.message || 'Loi them tu YouTube');
+    } finally {
+      setYouTubeImporting(false);
+    }
+  };
+
   // Save handler — handles both create and edit
   const handleSave = async () => {
     if (!title.trim() || !artist.trim()) {
@@ -437,6 +476,16 @@ export default function AdminMusicPage() {
             Tim YouTube
           </button>
           <button
+            onClick={() => {
+              setShowYouTubeUrlImport(!showYouTubeUrlImport);
+              setShowForm(false);
+            }}
+            className="flex items-center gap-2 px-4 py-2.5 border border-red-500/30 text-red-400 font-medium rounded-xl hover:bg-red-500/10 transition-colors"
+          >
+            <Youtube className="w-4 h-4" />
+            Tai YouTube URL
+          </button>
+          <button
             onClick={() => openCreate()}
             className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
           >
@@ -499,6 +548,47 @@ export default function AdminMusicPage() {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* YouTube URL Import Panel */}
+      {showYouTubeUrlImport && (
+        <div className="mb-6 bg-darkcard border border-red-500/20 rounded-2xl p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Youtube className="w-5 h-5 text-red-400" />
+            <h3 className="font-semibold text-text-primary">Tai tu YouTube URL</h3>
+          </div>
+          <div className="flex gap-3">
+            <input
+              type="text"
+              value={youTubeUrl}
+              onChange={(e) => {
+                setYouTubeUrl(e.target.value);
+                setYouTubeImportError('');
+                setYouTubeImportSuccess('');
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && void handleYouTubeUrlImport()}
+              placeholder="Dán link YouTube: https://www.youtube.com/watch?v=..."
+              className="flex-1 px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-red-500/50"
+            />
+            <button
+              onClick={() => void handleYouTubeUrlImport()}
+              disabled={youTubeImporting || !youTubeUrl.trim()}
+              className="px-5 py-2.5 bg-red-500 text-white font-medium rounded-xl hover:bg-red-600 transition-colors disabled:opacity-50 flex items-center gap-2"
+            >
+              {youTubeImporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Youtube className="w-4 h-4" />}
+              Tai vao he thong
+            </button>
+          </div>
+          {youTubeImportError && (
+            <p className="mt-2 text-sm text-red-400">{youTubeImportError}</p>
+          )}
+          {youTubeImportSuccess && (
+            <p className="mt-2 text-sm text-green-400">{youTubeImportSuccess}</p>
+          )}
+          <p className="mt-2 text-xs text-text-muted">
+            Dán link video YouTube (VD: youtube.com/watch?v=abc123) de tai truc tiep vao he thong. Anh bia se duoc lay tu YouTube.
+          </p>
         </div>
       )}
 

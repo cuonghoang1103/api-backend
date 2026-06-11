@@ -11,7 +11,8 @@ import {
 import { useMusicStore } from '@/store/musicStore';
 
 function isSafeCoverUrl(url: unknown): url is string {
-  return typeof url === 'string' && url.trim().length > 0 && url.startsWith('http');
+  if (typeof url !== 'string' || !url.trim()) return false;
+  return url.startsWith('http') || url.startsWith('/uploads/');
 }
 
 interface PremiumNowPlayingProps {

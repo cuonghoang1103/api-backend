@@ -11,7 +11,8 @@ import { useMusicStore } from '@/store/musicStore';
 import type { Track } from '@/types';
 
 function isSafeCoverUrl(url: unknown): url is string {
-  return typeof url === 'string' && url.trim().length > 0 && url.startsWith('http');
+  if (typeof url !== 'string' || !url.trim()) return false;
+  return url.startsWith('http') || url.startsWith('/uploads/');
 }
 
 function formatDuration(secs: number): string {

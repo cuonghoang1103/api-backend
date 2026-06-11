@@ -733,6 +733,128 @@ router.put(
 );
 
 // ════════════════════════════════════════════════════════════════
+// POST /api/v1/music/admin/youtube-import
+// Import a track from YouTube URL (video URL + thumbnail)
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/admin/youtube-import',
+  authenticate,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const { url, title, artist } = req.body as {
+        url?: string;
+        title?: string;
+        artist?: string;
+      };
+
+      if (!url?.trim()) {
+        throw new AppError('YouTube URL is required', 400, 'MISSING_URL');
+      }
+
+      const apiKey = config.youtubeApiKey;
+      if (!apiKey) {
+        throw new AppError(
+          'YouTube API key is not configured. Set YOUTUBE_API_KEY in environment.',
+          503,
+          'YOUTUBE_NOT_CONFIGURED',
+        );
+      }
+
+      // Parse video ID from various YouTube URL formats
+      const videoIdMatch = url.match(
+        /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+      );
+      if (!videoIdMatch) {
+        throw new AppError('Invalid YouTube URL', 400, 'INVALID_YOUTUBE_URL');
+      }
+      const videoId = videoIdMatch[1];
+
+      // Fetch video details from YouTube Data API
+      const detailsUrl = new URL('https://www.googleapis.com/youtube/v3/videos');
+      detailsUrl.searchParams.set('part', 'snippet,contentDetails');
+      detailsUrl.searchParams.set('id', videoId);
+      detailsUrl.searchParams.set('key', apiKey);
+
+      const detailsRes = await fetch(detailsUrl.toString());
+      if (!detailsRes.ok) {
+        const errText = await detailsRes.text();
+        console.error('[YouTube Import] API error:', errText);
+        throw new AppError('Failed to fetch YouTube video details', 502, 'YOUTUBE_ERROR');
+      }
+      const detailsData = await detailsRes.json() as {
+        items?: Array<{
+          snippet: {
+            title: string;
+            channelTitle: string;
+            thumbnails: { maxres?: { url?: string }; high?: { url?: string }; medium?: { url?: string } };
+          };
+          contentDetails: { duration?: string };
+        }>;
+        error?: { message?: string };
+      };
+
+      if (detailsData.error?.message) {
+        throw new AppError(`YouTube API error: ${detailsData.error.message}`, 502, 'YOUTUBE_ERROR');
+      }
+
+      const item = detailsData.items?.[0];
+      if (!item) {
+        throw new AppError('YouTube video not found', 404, 'VIDEO_NOT_FOUND');
+      }
+
+      const snippet = item.snippet;
+      const rawDuration = item.contentDetails?.duration || '';
+
+      // Parse ISO 8601 duration to seconds
+      function parseDuration(iso: string): number {
+        if (!iso) return 0;
+        const match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+        if (!match) return 0;
+        return (
+          parseInt(match[1] || '0', 10) * 3600
+          + parseInt(match[2] || '0', 10) * 60
+          + parseInt(match[3] || '0', 10)
+        );
+      }
+
+      const trackTitle = (title?.trim() || snippet.title || 'Unknown').replace(/["\n\r]/g, ' ').trim();
+      const trackArtist = (artist?.trim() || snippet.channelTitle || 'Unknown Artist').replace(/["\n\r]/g, ' ').trim();
+      const thumbnail =
+        snippet.thumbnails?.maxres?.url
+        || snippet.thumbnails?.high?.url
+        || snippet.thumbnails?.medium?.url
+        || '';
+      const durationSeconds = parseDuration(rawDuration);
+
+      // Build the embed/audio URL (uses YouTube nocookie embed — no ads)
+      const audioUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+      // Create track in database
+      const track = await musicService.createTrack({
+        title: trackTitle,
+        artist: trackArtist,
+        audioUrl,
+        coverImage: thumbnail || undefined,
+        durationSeconds: durationSeconds || undefined,
+      });
+
+      const serialized = track as Record<string, unknown>;
+      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
+      if (serialized.fileSize !== undefined) serialized.fileSize = Number(serialized.fileSize);
+      if (serialized.durationSeconds !== undefined) serialized.durationSeconds = Number(serialized.durationSeconds);
+
+      res.status(201).json({
+        success: true,
+        data: serialized,
+        message: 'Track imported from YouTube successfully',
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
 // GET /api/v1/music/admin/youtube-search
 // Search YouTube for music videos
 // ════════════════════════════════════════════════════════════════

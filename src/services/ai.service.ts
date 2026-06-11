@@ -165,9 +165,10 @@ export class AIService {
       data: { sessionId, role: 'user', content },
     });
 
-    await prisma.chatSession.update({
+    await prisma.chatSession.upsert({
       where: { id: sessionId },
-      data: { updatedAt: new Date() },
+      create: { id: sessionId, title: `Chat ${new Date().toLocaleString('vi-VN')}` },
+      update: { updatedAt: new Date() },
     });
   }
 

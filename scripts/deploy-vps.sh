@@ -46,19 +46,22 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
     fi
     sleep 5
   done
-  # If still not ready, force-remove and recreate container
+  # If still not ready, force-remove and recreate container + reset corrupt data
   if [ "$PG_READY" = "0" ]; then
-    echo "[CRITICAL] Postgres stuck in restart loop, forcing container recreation..."
+    echo "[CRITICAL] Postgres stuck in restart loop, resetting data directory..."
     docker compose rm -sf postgres 2>/dev/null || true
-    sleep 5
+    sleep 3
+    # Reset the bind-mounted postgres data directory (corrupt or incompatible)
+    rm -rf /opt/cuonghoangdev/postgres
+    mkdir -p /opt/cuonghoangdev/postgres
     docker compose up -d postgres
     for i in $(seq 1 18); do
       if docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
-        echo "Postgres recreated and up"
+        echo "Postgres recreated and up with fresh data"
         PG_READY=1
         break
       fi
-      echo "Waiting for recreated postgres... ($i/18)"
+      echo "Waiting for fresh postgres... ($i/18)"
       sleep 5
     done
   fi

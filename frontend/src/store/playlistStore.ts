@@ -120,9 +120,11 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
 
   addTrackToPlaylist: async (playlistId: number, track: Track) => {
     try {
-      const res = await fetch(`/api/v1/music/playlists/${playlistId}/tracks/${track.id}`, {
+      const res = await fetch(`/api/v1/music/playlists/${playlistId}/tracks`, {
         method: 'POST',
         credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trackId: track.id }),
       });
       const data = await res.json();
       if (data.success) {
@@ -130,6 +132,8 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
         set((s) => ({
           playlists: s.playlists.map((p) => (p.id === playlistId ? updated : p)),
         }));
+      } else {
+        console.error('[PlaylistStore] addTrack failed:', data.message);
       }
     } catch (err) {
       console.error('[PlaylistStore] addTrack error:', err);

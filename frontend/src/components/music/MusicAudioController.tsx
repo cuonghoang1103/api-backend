@@ -48,7 +48,7 @@ function mountYouTubeContainer() {
   if (!document.getElementById('youtube-player-container')) {
     const container = document.createElement('div');
     container.id = 'youtube-player-container';
-    container.style.cssText = 'position:fixed;width:1px;height:1px;top:-9999px;left:-9999px;pointer-events:none;opacity:0;';
+    container.style.cssText = 'position:fixed;width:1px;height:1px;bottom:0;left:0;pointer-events:none;opacity:0.01;z-index:-1;';
     container.innerHTML = '<div id="youtube-player"></div>';
     document.body.appendChild(container);
   }
@@ -91,6 +91,7 @@ function createYouTubePlayer(
       iv_load_policy: 3,
       modestbranding: 1,
       origin: window.location.origin,
+      playsinline: 1,
     },
     events: {
       onReady: (e: unknown) => {

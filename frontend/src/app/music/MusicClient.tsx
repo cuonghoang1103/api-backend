@@ -120,26 +120,25 @@ export default function CyberMusicPage() {
         <CyberBackground />
       </ClientOnly>
 
-      {/* Main content — padded to clear floating dock */}
-      <div className="relative z-10 flex flex-col min-h-screen pt-[6.5rem]">
-        {/* iOS Cyber Dock — floating glass header */}
-        <motion.header
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-30 w-[calc(100%-2rem)] max-w-3xl"
-        >
+      {/* Main content — padded to clear Navbar only */}
+      <div className="relative z-10 flex flex-col min-h-screen pt-16">
+      {/* iOS Cyber Dock — sticky glass header BELOW Navbar */}
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="sticky top-[4.5rem] z-20 w-full"
+      >
           <div
-            className="rounded-[28px] px-5 py-3"
+            className="px-4 sm:px-6 py-3 mx-0 sm:mx-0"
             style={{
               background: 'rgba(10,15,13,0.72)',
-              border: '1px solid rgba(14,165,233,0.35)',
+              borderBottom: '1px solid rgba(14,165,233,0.35)',
               backdropFilter: 'blur(24px)',
               WebkitBackdropFilter: 'blur(24px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(14,165,233,0.08), inset 0 1px 0 rgba(255,255,255,0.06)',
             }}
           >
-            <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 w-full">
               {/* Brand */}
               <div className="flex items-center gap-3">
                 <div
@@ -170,12 +169,12 @@ export default function CyberMusicPage() {
               </div>
 
               {/* Unified Search */}
-              <div className="flex-1 max-w-xs hidden md:block">
+              <div className="flex-1 max-w-xs w-full md:w-auto order-last md:order-none mt-2 md:mt-0">
                 <CyberSearch localTracks={storeTracks} />
               </div>
 
               {/* Stats */}
-              <div className="hidden lg:flex items-center gap-3 text-[11px] font-mono" style={{ color: C.textMuted }}>
+              <div className="hidden lg:flex items-center gap-3 text-[11px] font-mono shrink-0" style={{ color: C.textMuted }}>
                 <span style={{ color: C.primary }}>{storeTracks.length}</span>
                 <span>tracks</span>
                 <span style={{ opacity: 0.2 }}>|</span>
@@ -189,7 +188,7 @@ export default function CyberMusicPage() {
               </div>
 
               {/* Actions */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 {/* Mobile search toggle */}
                 <Link href="/music/now-playing">
                   <motion.button

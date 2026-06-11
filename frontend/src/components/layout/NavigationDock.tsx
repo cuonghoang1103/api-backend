@@ -66,7 +66,7 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
       {/* ── Toggle button ─────────────────────────────────── */}
       <motion.button
         onClick={onToggle}
-        className="fixed top-4 left-4 z-[60] flex items-center justify-center w-10 h-10 rounded-2xl
+        className="fixed top-16 left-4 z-[60] flex items-center justify-center w-10 h-10 rounded-2xl
           bg-[#0d1117]/90 backdrop-blur-xl border border-white/10
           shadow-[0_8px_32px_rgba(0,0,0,0.5),0_0_0_1px_rgba(139,92,246,0.15)]
           hover:border-neon-violet/40 hover:shadow-[0_8px_32px_rgba(0,0,0,0.5),0_0_20px_rgba(139,92,246,0.2)]
@@ -124,7 +124,7 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -DOCK_WIDTH - 20, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 25, mass: 0.8 }}
-            className="fixed top-0 left-0 bottom-0 z-[56] flex flex-col"
+            className="fixed top-16 left-0 bottom-0 z-[38] flex flex-col"
             style={{ width: DOCK_WIDTH }}
           >
             <div

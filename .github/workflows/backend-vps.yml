@@ -88,8 +88,16 @@ jobs:
             ssh vps \
               "sed -i 's|POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=${POSTGRES_PASSWORD}|' /opt/cuonghoangdev/.env"
           else
-            ssh vps "echo '[SKIP] POSTGRES_PASSWORD secret empty, preserving existing value'"
+            # Use docker exec to reset postgres password to '123456' (default)
+            ssh vps "docker compose -f /opt/cuonghoangdev/docker-compose.yml exec -T postgres \
+              psql -U postgres -c \"ALTER USER postgres PASSWORD '123456';\" 2>/dev/null || \
+              docker compose -f /opt/cuonghoangdev/docker-compose.yml exec -T postgres \
+              psql -p 5432 -U postgres -d postgres -c \"ALTER USER postgres PASSWORD '123456';\" 2>/dev/null || \
+              echo '[WARN] Could not reset postgres password - please set manually'"
+            # Update .env with default password
+            ssh vps "sed -i 's|POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=123456|' /opt/cuonghoangdev/.env"
           fi
+          ssh vps "grep -E 'GEMINI_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
           ssh vps "grep -E 'GEMINI_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
 
       - name: Upload and run swap setup script

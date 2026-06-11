@@ -73,4 +73,7 @@ export const config = {
 
   // YouTube
   youtubeApiKey: process.env.YOUTUBE_API_KEY || '',
+
+  // Public base URL (for absolute upload URLs)
+  publicBaseUrl: process.env.PUBLIC_BASE_URL || 'https://api.cuongthai.com',
 } as const;

@@ -169,8 +169,10 @@ export class UploadService {
     // Move file to storage
     await fs.writeFile(fullPath, file.buffer);
 
-    // Determine public URL
-    const url = `/uploads/${relativePath.replace(/\\/g, '/')}`;
+    // Determine public URL — use absolute URL so browser can fetch via nginx
+    const baseUrl = config.publicBaseUrl;
+    const relative = relativePath.replace(/\\/g, '/');
+    const url = `${baseUrl}/uploads/${relative}`;
 
     // Save to database
     const attachment = await prisma.fileAttachment.create({

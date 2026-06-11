@@ -98,13 +98,13 @@ jobs:
             ssh vps "sed -i 's|POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=123456|' /opt/cuonghoangdev/.env"
           fi
           ssh vps "grep -E 'GEMINI_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
-          ssh vps "grep -E 'GEMINI_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
 
       - name: Upload and run swap setup script
+        continue-on-error: true
         run: |
           chmod +x setup-swap.sh
-          scp -F ~/.ssh/config setup-swap.sh "vps:/tmp/setup-swap.sh"
-          ssh vps "sudo bash /tmp/setup-swap.sh && rm -f /tmp/setup-swap.sh"
+          scp -F ~/.ssh/config setup-swap.sh "vps:/tmp/setup-swap.sh" || true
+          ssh vps "sudo bash /tmp/setup-swap.sh 2>/dev/null; rm -f /tmp/setup-swap.sh" || true
 
       - name: Upload deploy script
         run: |

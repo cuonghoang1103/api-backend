@@ -48,7 +48,9 @@ function mountYouTubeContainer() {
   if (!document.getElementById('youtube-player-container')) {
     const container = document.createElement('div');
     container.id = 'youtube-player-container';
-    container.style.cssText = 'position:fixed;width:1px;height:1px;bottom:0;left:0;pointer-events:none;opacity:0.01;z-index:-1;';
+    // Use 1x1 but visible (not z-index:-1 / opacity:0.01) so mobile browsers
+    // allow audio playback. Hidden via absolute positioning off-screen.
+    container.style.cssText = 'position:fixed;width:1px;height:1px;bottom:0;left:-9999px;pointer-events:none;overflow:hidden;z-index:1;';
     container.innerHTML = '<div id="youtube-player"></div>';
     document.body.appendChild(container);
   }
@@ -92,6 +94,8 @@ function createYouTubePlayer(
       modestbranding: 1,
       origin: window.location.origin,
       playsinline: 1,
+      rel: 0,
+      cc_load_policy: 0,
     },
     events: {
       onReady: (e: unknown) => {

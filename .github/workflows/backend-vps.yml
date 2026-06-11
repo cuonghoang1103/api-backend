@@ -53,6 +53,7 @@ jobs:
             --exclude 'uploads' \
             --exclude 'backups' \
             --exclude '*.log' \
+            --exclude 'setup-swap.sh' \
             ./ -e "ssh -i ~/.ssh/deploy_key" \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
@@ -67,6 +68,19 @@ jobs:
             "grep -q 'YOUTUBE_API_KEY' /opt/cuonghoangdev/.env && \
               sed -i 's/YOUTUBE_API_KEY=.*/YOUTUBE_API_KEY=${YOUTUBE_API_KEY}/' /opt/cuonghoangdev/.env || \
               echo 'YOUTUBE_API_KEY=${YOUTUBE_API_KEY}' >> /opt/cuonghoangdev/.env"
+
+      - name: Upload and run swap setup script
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          chmod +x setup-swap.sh
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            setup-swap.sh \
+            "$VPS_USER@$VPS_HOST:/tmp/setup-swap.sh"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "$VPS_USER@$VPS_HOST" \
+            "sudo bash /tmp/setup-swap.sh && rm -f /tmp/setup-swap.sh"
 
       - name: Upload deploy script
         run: |

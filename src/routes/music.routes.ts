@@ -118,6 +118,48 @@ router.get(
   },
 );
 
+// ─── Helper: serialize a playlist object for API responses ────────────────────
+function serializePlaylist(raw: any): any {
+  const out: any = { ...raw };
+
+  // Numeric fields
+  if (out.id !== undefined) out.id = Number(out.id);
+  if (out.userId !== undefined) out.userId = Number(out.userId);
+  if (out.trackCount !== undefined) out.trackCount = Number(out.trackCount);
+  if (out.totalDurationSeconds !== undefined) out.totalDurationSeconds = Number(out.totalDurationSeconds);
+  if (out.ownerId !== undefined) out.ownerId = Number(out.ownerId);
+
+  // user.username → createdByName for frontend convenience
+  if (raw.user?.username) out.createdByName = raw.user.username;
+
+  // Prisma _count.tracks → trackCount
+  if (raw._count?.tracks !== undefined && out.trackCount === undefined) {
+    out.trackCount = raw._count.tracks;
+  }
+
+  // Prisma junction tracks: [{ track: {...} }] → [track] (flatten for frontend)
+  if (Array.isArray(raw.tracks)) {
+    out.tracks = raw.tracks.map((pt: any) => {
+      if (pt.track) {
+        const t: any = { ...pt.track };
+        if (t.id !== undefined) t.id = Number(t.id);
+        if (t.durationSeconds !== undefined) t.durationSeconds = Number(t.durationSeconds);
+        if (t.fileSize !== undefined) t.fileSize = Number(t.fileSize);
+        if (t.playCount !== undefined) t.playCount = Number(t.playCount);
+        return t;
+      }
+      return pt;
+    });
+  }
+
+  return out;
+}
+
+// ─── Helper: serialize multiple playlists ──────────────────────────────────────
+function serializePlaylists(items: any[]): any[] {
+  return items.map(serializePlaylist);
+}
+
 // ════════════════════════════════════════════════════════════════
 // GET /api/v1/music/tracks/:id
 // ════════════════════════════════════════════════════════════════
@@ -494,13 +536,7 @@ router.get(
   async (req: any, res: Response<ApiResponse>, next) => {
     try {
       const playlists = await musicService.getPlaylists(req.userId);
-      const serialized = playlists.map((p: any) => {
-        const r = { ...p };
-        if (r.id !== undefined) r.id = Number(r.id);
-        if (r.trackCount !== undefined) r.trackCount = Number(r.trackCount);
-        if (r.ownerId !== undefined) r.ownerId = Number(r.ownerId);
-        return r;
-      });
+      const serialized = serializePlaylists(playlists);
       res.json({ success: true, data: serialized });
     } catch (error) {
       next(error);
@@ -526,12 +562,7 @@ router.get(
         throw new AppError('Playlist not found', 404, 'PLAYLIST_NOT_FOUND');
       }
 
-      // Serialize BigInt fields
-      const serialized: any = { ...playlist };
-      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
-      if (serialized.trackCount !== undefined) serialized.trackCount = Number(serialized.trackCount);
-      if (serialized.ownerId !== undefined) serialized.ownerId = Number(serialized.ownerId);
-
+      const serialized = serializePlaylist(playlist);
       res.json({ success: true, data: serialized });
     } catch (error) {
       next(error);
@@ -561,11 +592,7 @@ router.post(
         isPublic: isPublic ?? true,
       });
 
-      // Serialize BigInt fields
-      const serialized: any = { ...playlist };
-      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
-      if (serialized.trackCount !== undefined) serialized.trackCount = Number(serialized.trackCount);
-      if (serialized.ownerId !== undefined) serialized.ownerId = Number(serialized.ownerId);
+      const serialized = serializePlaylist(playlist);
 
       res.status(201).json({
         success: true,
@@ -600,11 +627,7 @@ router.put(
         ...(isPublic !== undefined && { isPublic }),
       });
 
-      // Serialize BigInt fields
-      const serialized: any = { ...playlist };
-      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
-      if (serialized.trackCount !== undefined) serialized.trackCount = Number(serialized.trackCount);
-      if (serialized.ownerId !== undefined) serialized.ownerId = Number(serialized.ownerId);
+      const serialized = serializePlaylist(playlist);
 
       res.json({ success: true, data: serialized, message: 'Playlist updated' });
     } catch (error) {
@@ -654,16 +677,14 @@ router.post(
         throw new AppError('Valid trackId is required', 400, 'INVALID_TRACK_ID');
       }
 
-      const item: any = await musicService.addTrackToPlaylist(
+      await musicService.addTrackToPlaylist(
         playlistId,
         parseInt(trackId as string, 10),
       );
 
-      // Serialize BigInt fields
-      const serialized = { ...item };
-      if (serialized.id !== undefined) serialized.id = Number(serialized.id);
-      if (serialized.playlistId !== undefined) serialized.playlistId = Number(serialized.playlistId);
-      if (serialized.trackId !== undefined) serialized.trackId = Number(serialized.trackId);
+      // Return the full updated playlist so frontend can update its store
+      const updatedPlaylist: any = await musicService.getPlaylistById(playlistId);
+      const serialized = serializePlaylist(updatedPlaylist);
 
       res.status(201).json({
         success: true,
@@ -694,8 +715,13 @@ router.delete(
 
       await musicService.removeTrackFromPlaylist(playlistId, trackId);
 
+      // Return full updated playlist so frontend can update its store
+      const updatedPlaylist: any = await musicService.getPlaylistById(playlistId);
+      const serialized = serializePlaylist(updatedPlaylist);
+
       res.json({
         success: true,
+        data: serialized,
         message: 'Track removed from playlist',
       });
     } catch (error) {

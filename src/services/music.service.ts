@@ -620,6 +620,14 @@ export class MusicService {
         userId: data.userId,
         isPublic: data.isPublic ?? true,
       },
+      include: {
+        user: {
+          select: { id: true, username: true, avatarUrl: true },
+        },
+        _count: {
+          select: { tracks: true },
+        },
+      },
     });
   }
 
@@ -636,6 +644,10 @@ export class MusicService {
     return prisma.musicPlaylist.update({
       where: { id },
       data,
+      include: {
+        user: { select: { id: true, username: true, avatarUrl: true } },
+        _count: { select: { tracks: true } },
+      },
     });
   }
 

@@ -58,7 +58,7 @@ function parsePlaylist(raw: any): PlaylistItem {
     description: raw.description,
     coverUrl: raw.coverUrl,
     userId: raw.userId,
-    createdByName: raw.createdByName,
+    createdByName: raw.createdByName ?? raw.user?.username,
     isPublic: raw.isPublic ?? true,
     trackCount: raw.trackCount ?? 0,
     totalDurationSeconds: raw.totalDurationSeconds ?? 0,

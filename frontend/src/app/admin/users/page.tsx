@@ -49,12 +49,28 @@ interface PageData<T> {
   last: boolean;
 }
 
-/** Provider display config */
-const PROVIDER_CONFIG: Record<string, { label: string; color: string; icon: string }> = {
-  google:     { label: 'Google',  color: 'bg-red-500/15 text-red-400',    icon: '🔴' },
-  github:     { label: 'GitHub',  color: 'bg-gray-500/15 text-gray-300',  icon: '🐙' },
-  facebook:   { label: 'Facebook',color: 'bg-blue-500/15 text-blue-400',  icon: '📘' },
-  credentials:{ label: 'Thường',  color: 'bg-neon-indigo/15 text-neon-indigo', icon: '🔑' },
+/** Provider display config — cyberpunk neon style */
+const PROVIDER_CONFIG: Record<string, { label: string; style: string; icon: string }> = {
+  google: {
+    label: 'Google',
+    style: 'bg-red-500/10 text-red-400 border border-red-500/20 shadow-[0_0_8px_rgba(248,113,113,0.15)]',
+    icon: 'G',
+  },
+  github: {
+    label: 'GitHub',
+    style: 'bg-white/[0.06] text-gray-200 border border-white/[0.12] shadow-[0_0_8px_rgba(255,255,255,0.05)]',
+    icon: 'gh',
+  },
+  facebook: {
+    label: 'Facebook',
+    style: 'bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_8px_rgba(59,130,246,0.15)]',
+    icon: 'f',
+  },
+  credentials: {
+    label: 'Credentials',
+    style: 'bg-violet-500/10 text-violet-400 border border-violet-500/20 shadow-[0_0_8px_rgba(139,92,246,0.15)]',
+    icon: '🔑',
+  },
 };
 
 type FilterMode = 'all' | 'credentials' | 'google' | 'github' | 'facebook';
@@ -156,7 +172,9 @@ export default function AdminUsersPage() {
     const currentUser = currentAuthUser;
     const isSAdmin =
       currentUser?.username === 'cuong03dx' ||
+      currentUser?.username === 'Cuong123' ||
       backendUser?.username === 'cuong03dx' ||
+      backendUser?.username === 'Cuong123' ||
       (currentUser?.email || '').toLowerCase() === 'cuong03dx@gmail.com' ||
       (backendUser?.email || '').toLowerCase() === 'cuong03dx@gmail.com';
     setIsSuperAdmin(isSAdmin);
@@ -232,8 +250,22 @@ export default function AdminUsersPage() {
   };
 
   const saveRoles = async (userId: number) => {
-    void userId;
-    toast.info('Cập nhật vai trò chưa được backend hiện tại hỗ trợ.');
+    setActionLoading(userId);
+    try {
+      await api.patch(`/admin/users/${userId}/roles`, { roles: editRoles });
+      toast.success('Đã cập nhật vai trò thành công!');
+      setEditingId(null);
+      setEditRoles([]);
+      fetchUsers();
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.code ||
+        'Cập nhật thất bại';
+      toast.error(msg);
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   const toggleRole = (role: string) => {
@@ -443,7 +475,7 @@ export default function AdminUsersPage() {
                   const isEditing = editingId === user.id;
                   const isActing = actionLoading === user.id;
                   const pcfg = user.provider
-                    ? (PROVIDER_CONFIG[user.provider] || { label: user.provider, color: 'bg-gray-500/15 text-gray-300', icon: '?' })
+                    ? (PROVIDER_CONFIG[user.provider] || { label: user.provider, style: 'bg-gray-500/10 text-gray-300 border border-gray-500/20 shadow-[0_0_8px_rgba(156,163,175,0.1)]', icon: '?' })
                     : PROVIDER_CONFIG['credentials'];
 
                   return (
@@ -471,7 +503,7 @@ export default function AdminUsersPage() {
 
                       {/* Provider badge */}
                       <td className="px-5 py-4 hidden md:table-cell">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${pcfg.color}`}>
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide ${pcfg.style}`}>
                           {pcfg.icon} {pcfg.label}
                         </span>
                       </td>
@@ -505,19 +537,22 @@ export default function AdminUsersPage() {
 
                       {/* Status */}
                       <td className="px-5 py-4 hidden lg:table-cell">
-                        <div className="flex flex-col gap-1">
+                        <div className="flex flex-col gap-1.5">
                           {user.enabled ? (
-                            <span className="inline-flex items-center gap-1 text-xs text-emerald-400">
-                              <CheckCircle className="w-3.5 h-3.5" /> Active
+                            <span className="inline-flex items-center gap-2 text-xs font-medium text-emerald-400">
+                              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
+                              Active
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-xs text-red-400">
-                              <XCircle className="w-3.5 h-3.5" /> Disabled
+                            <span className="inline-flex items-center gap-2 text-xs font-medium text-red-400">
+                              <span className="w-2 h-2 rounded-full bg-red-400 shadow-[0_0_6px_rgba(248,113,113,0.6)]" />
+                              Disabled
                             </span>
                           )}
-                          {user.accountNonLocked === false && (
-                            <span className="inline-flex items-center gap-1 text-xs text-orange-400">
-                              <Lock className="w-3.5 h-3.5" /> Locked
+                          {!user.accountNonLocked && (
+                            <span className="inline-flex items-center gap-2 text-xs font-medium text-orange-400">
+                              <span className="w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_6px_rgba(251,146,60,0.8)]" />
+                              Locked
                             </span>
                           )}
                         </div>
@@ -525,12 +560,14 @@ export default function AdminUsersPage() {
 
                       {/* Created at */}
                       <td className="px-5 py-4 hidden xl:table-cell">
-                        <span className="text-sm text-text-muted">
+                        <span className="text-xs font-mono text-text-muted">
                           {(() => {
                             try {
-                              return new Date(user.createdAt).toLocaleDateString('vi-VN', {
-                                day: '2-digit', month: '2-digit', year: 'numeric',
-                              });
+                              const d = new Date(user.createdAt);
+                              const day = String(d.getDate()).padStart(2, '0');
+                              const month = String(d.getMonth() + 1).padStart(2, '0');
+                              const year = d.getFullYear();
+                              return `${day}/${month}/${year}`;
                             } catch { return '—'; }
                           })()}
                         </span>

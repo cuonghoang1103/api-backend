@@ -428,13 +428,102 @@ router.post('/users', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res:
   } catch (error) { next(error); }
 });
 
-// ─── PUT /api/v1/admin/users/:id ─────────────────────
-router.put('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+// ─── SUPER ADMIN GUARD ──────────────────────────────────────────────
+const SUPER_ADMINS = ['cuong03dx', 'cuong123'];
+
+function isSuperAdmin(username: string): boolean {
+  return SUPER_ADMINS.includes(username.toLowerCase());
+}
+
+// ─── PATCH /api/v1/admin/users/:id/roles ─────────────────────────
+// Super-admin-only: change roles (promote/demote to Admin)
+// Rejects with 403 if current user is not Cuong03dx or Cuong123
+router.patch('/users/:id/roles', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const { roles } = req.body as { roles: string[] };
+
+    if (!Array.isArray(roles)) {
+      throw new AppError('roles must be an array', 400, 'INVALID_ROLES');
+    }
+
+    // ── Super Admin Identity Guard ─────────────────────────────────
+    const currentUsername = req.user?.username || '';
+    if (!isSuperAdmin(currentUsername)) {
+      res.status(403).json({
+        success: false,
+        message: 'Forbidden: Only cuong03dx or cuong123 can modify user roles.',
+        code: 'SUPER_ADMIN_REQUIRED',
+      });
+      return;
+    }
+
+    const normalizedRoles = roles.map((r: string) => {
+      const upper = r.replace('ROLE_', '').toUpperCase();
+      return upper.startsWith('ROLE_') ? upper : `ROLE_${upper}`;
+    });
+
+    const validRoles = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_EDITOR'];
+    if (!normalizedRoles.every((r: string) => validRoles.includes(r))) {
+      throw new AppError('Invalid role value', 400, 'INVALID_ROLE');
+    }
+
+    const target = await prisma.user.findUnique({ where: { id }, select: { id: true } });
+    if (!target) throw new AppError('User not found', 404, 'USER_NOT_FOUND');
+
+    const rolesToSet = await prisma.role.findMany({
+      where: { name: { in: normalizedRoles } },
+      select: { id: true },
+    });
+    if (rolesToSet.length !== normalizedRoles.length) {
+      throw new AppError('One or more roles do not exist', 400, 'ROLE_NOT_FOUND');
+    }
+
+    await prisma.$transaction([
+      prisma.userRole.deleteMany({ where: { userId: id } }),
+      ...rolesToSet.map((role) =>
+        prisma.userRole.create({ data: { userId: id, roleId: role.id } })
+      ),
+    ]);
+
+    // Increment roleVersion to invalidate cached sessions
+    await prisma.user.update({ where: { id }, data: { roleVersion: { increment: 1 } } });
+
+    const updated = await prisma.user.findUnique({
+      where: { id },
+      include: { roles: { include: { role: true } } },
+    });
+
+    res.json({
+      success: true,
+      message: 'User roles updated successfully',
+      data: updated,
+    });
+  } catch (error) { next(error); }
+});
+
+// ─── PUT /api/v1/admin/users/:id ──────────────────────────────────
+// Requires super admin identity (Cuong03dx or Cuong123)
+router.put('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     const { username, email, fullName, enabled, accountNonLocked } = req.body;
 
-    const user = await prisma.user.update({
+    // ── Super Admin Identity Guard ─────────────────────────────────
+    const currentUsername = req.user?.username || '';
+    if (!isSuperAdmin(currentUsername)) {
+      res.status(403).json({
+        success: false,
+        message: 'Forbidden: Only cuong03dx or cuong123 can edit user accounts.',
+        code: 'SUPER_ADMIN_REQUIRED',
+      });
+      return;
+    }
+
+    const existing = await prisma.user.findUnique({ where: { id }, select: { id: true } });
+    if (!existing) throw new AppError('User not found', 404, 'USER_NOT_FOUND');
+
+    const updated = await prisma.user.update({
       where: { id },
       data: {
         ...(username && { username }),
@@ -444,15 +533,45 @@ router.put('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, r
         ...(accountNonLocked !== undefined && { accountNonLocked }),
       },
     });
-    res.json({ success: true, data: user });
+    res.json({ success: true, data: updated });
   } catch (error) { next(error); }
 });
 
-// ─── DELETE /api/v1/admin/users/:id ───────────────────
-router.delete('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+// ─── DELETE /api/v1/admin/users/:id ──────────────────────────────
+// Hard delete with ORDER GUARD: aborts if user has any shop orders
+// Requires super admin identity (Cuong03dx or Cuong123)
+router.delete('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
   try {
-    await prisma.user.delete({ where: { id: parseInt(req.params.id) } });
-    res.json({ success: true, message: 'User deleted' });
+    const id = parseInt(req.params.id, 10);
+
+    // ── Super Admin Identity Guard ─────────────────────────────────
+    const currentUsername = req.user?.username || '';
+    if (!isSuperAdmin(currentUsername)) {
+      res.status(403).json({
+        success: false,
+        message: 'Forbidden: Only cuong03dx or cuong123 can delete users.',
+        code: 'SUPER_ADMIN_REQUIRED',
+      });
+      return;
+    }
+
+    const existing = await prisma.user.findUnique({ where: { id }, select: { id: true, username: true } });
+    if (!existing) throw new AppError('User not found', 404, 'USER_NOT_FOUND');
+
+    // ── Order Guard: check ShopOrder table ────────────────────────
+    const orderCount = await prisma.shopOrder.count({ where: { userId: id } });
+    if (orderCount > 0) {
+      res.status(409).json({
+        success: false,
+        message: `Cannot delete user: Active/Historical orders detected on this account. (${orderCount} order(s) found)`,
+        code: 'ORDER_GUARD_BLOCKED',
+      });
+      return;
+    }
+
+    // Cascade deletes via Prisma relations (UserRole, ChatSession, MusicHistory, etc.)
+    await prisma.user.delete({ where: { id } });
+    res.json({ success: true, message: 'User deleted permanently' });
   } catch (error) { next(error); }
 });
 

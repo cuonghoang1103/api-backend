@@ -461,7 +461,7 @@ export default function ChatPage() {
   }, [setCurrentSessionId, setSuggestedPrompts]);
 
   return (
-    <div className="flex h-screen pt-16 overflow-hidden cyber-grid-bg">
+    <div className="flex h-[calc(100vh-6rem)] pt-24 overflow-hidden cyber-grid-bg">
       {/* Matrix rain background */}
       <MatrixRain />
 

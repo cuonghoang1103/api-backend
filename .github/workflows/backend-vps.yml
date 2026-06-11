@@ -34,11 +34,21 @@ jobs:
           echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          # Keep SSH sessions alive during long builds
+          cat >> ~/.ssh/config <<'EOF'
+Host vps
+    HostName ${{ secrets.VPS_HOST }}
+    User ${{ secrets.VPS_USER }}
+    IdentityFile ~/.ssh/deploy_key
+    StrictHostKeyChecking no
+    ServerAliveInterval 60
+    ServerAliveCountMax 10
+    ConnectTimeout 30
+EOF
 
       - name: Verify SSH connection
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 \
-            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "echo SSH_OK"
+          ssh vps "echo SSH_OK"
 
       - name: Sync project to VPS
         run: |
@@ -54,57 +64,36 @@ jobs:
             --exclude 'backups' \
             --exclude '*.log' \
             --exclude 'setup-swap.sh' \
-            ./ -e "ssh -i ~/.ssh/deploy_key" \
-            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
+            ./ -e "ssh -F ~/.ssh/config" \
+            "vps:/opt/cuonghoangdev/"
 
       - name: Update .env on VPS with secrets
         env:
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            "$VPS_USER@$VPS_HOST" \
+          ssh vps \
             "grep -q 'YOUTUBE_API_KEY' /opt/cuonghoangdev/.env && \
               sed -i 's/YOUTUBE_API_KEY=.*/YOUTUBE_API_KEY=${YOUTUBE_API_KEY}/' /opt/cuonghoangdev/.env || \
               echo 'YOUTUBE_API_KEY=${YOUTUBE_API_KEY}' >> /opt/cuonghoangdev/.env"
 
       - name: Upload and run swap setup script
-        env:
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           chmod +x setup-swap.sh
-          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            setup-swap.sh \
-            "$VPS_USER@$VPS_HOST:/tmp/setup-swap.sh"
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            "$VPS_USER@$VPS_HOST" \
-            "sudo bash /tmp/setup-swap.sh && rm -f /tmp/setup-swap.sh"
+          scp -F ~/.ssh/config setup-swap.sh "vps:/tmp/setup-swap.sh"
+          ssh vps "sudo bash /tmp/setup-swap.sh && rm -f /tmp/setup-swap.sh"
 
       - name: Upload deploy script
         run: |
           chmod +x scripts/deploy-vps.sh
-          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            scripts/deploy-vps.sh \
-            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/scripts/deploy-vps.sh"
+          scp -F ~/.ssh/config scripts/deploy-vps.sh "vps:/opt/cuonghoangdev/scripts/deploy-vps.sh"
 
       - name: Run deploy script on VPS
-        env:
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            "$VPS_USER@$VPS_HOST" \
-            "bash /opt/cuonghoangdev/scripts/deploy-vps.sh"
+          ssh vps "bash /opt/cuonghoangdev/scripts/deploy-vps.sh"
 
       - name: Setup cron jobs on VPS
-        env:
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            "$VPS_USER@$VPS_HOST" "
+          ssh vps "
             mkdir -p /opt/cuonghoangdev/backups /opt/cuonghoangdev/scripts
             chmod +x /opt/cuonghoangdev/scripts/backup-cron.sh 2>/dev/null || true
             chmod +x /opt/cuonghoangdev/scripts/restore-db.sh 2>/dev/null || true

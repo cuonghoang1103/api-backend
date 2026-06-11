@@ -1,0 +1,273 @@
+/* ============================================================
+   Cyber OS Theme — Global CSS
+   ============================================================ */
+
+/* ── CSS Variables ────────────────────────────────────────────── */
+:root {
+  --cyber-bg: #0a0f0d;
+  --cyber-surface: #0f1a14;
+  --neon-green: #00ff66;
+  --neon-cyan: #00f0ff;
+  --neon-amber: #ffb300;
+  --neon-red: #ff3366;
+  --text-primary: rgba(255, 255, 255, 0.87);
+  --text-secondary: rgba(255, 255, 255, 0.50);
+  --text-muted: rgba(255, 255, 255, 0.25);
+  --border-subtle: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Base ─────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--cyber-bg);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Utility Classes ──────────────────────────────────────────── */
+.bg-cyber-bg {
+  background-color: var(--cyber-bg);
+}
+
+.text-neon-green {
+  color: var(--neon-green);
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+}
+
+.text-neon-cyan {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+}
+
+.text-neon-amber {
+  color: var(--neon-amber);
+  text-shadow: 0 0 8px rgba(255, 179, 0, 0.6);
+}
+
+.border-neon-green {
+  border-color: var(--neon-green);
+}
+
+.border-neon-cyan {
+  border-color: var(--neon-cyan);
+}
+
+.border-neon-amber {
+  border-color: var(--neon-amber);
+}
+
+.bg-neon-green {
+  background-color: var(--neon-green);
+}
+
+.bg-neon-cyan {
+  background-color: var(--neon-cyan);
+}
+
+.bg-neon-amber {
+  background-color: var(--neon-amber);
+}
+
+/* ── CRT Scanlines ───────────────────────────────────────────── */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  animation: crt-flicker 0.15s infinite;
+}
+
+@keyframes crt-flicker {
+  0% { opacity: 0.97; }
+  50% { opacity: 1; }
+  100% { opacity: 0.98; }
+}
+
+/* ── Background Grid ──────────────────────────────────────────── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(0, 255, 102, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 102, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Neon Glow Text ───────────────────────────────────────────── */
+.neon-text-green {
+  color: var(--neon-green);
+  text-shadow:
+    0 0 5px var(--neon-green),
+    0 0 10px var(--neon-green),
+    0 0 20px rgba(0, 255, 102, 0.4);
+}
+
+.neon-text-cyan {
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 5px var(--neon-cyan),
+    0 0 10px var(--neon-cyan),
+    0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+/* ── Neon Border Glow ────────────────────────────────────────── */
+.neon-border-green {
+  border: 1px solid rgba(0, 255, 102, 0.3);
+  box-shadow:
+    0 0 5px rgba(0, 255, 102, 0.1),
+    inset 0 0 5px rgba(0, 255, 102, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.neon-border-green:hover {
+  border-color: rgba(0, 255, 102, 0.6);
+  box-shadow:
+    0 0 15px rgba(0, 255, 102, 0.2),
+    inset 0 0 10px rgba(0, 255, 102, 0.1);
+}
+
+/* ── Glassmorphic Panel ───────────────────────────────────────── */
+.glass-panel {
+  background: rgba(10, 15, 13, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 255, 102, 0.15);
+}
+
+/* ── Animations ───────────────────────────────────────────────── */
+
+/* Laser completion sweep */
+@keyframes laser-complete {
+  0% {
+    background-color: rgba(0, 255, 102, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    background-color: rgba(0, 255, 102, 0.5);
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
+
+.animate-laser-complete {
+  animation: laser-complete 0.6s ease-out;
+}
+
+/* Level-up flash */
+@keyframes levelup-flash {
+  0%, 100% { opacity: 0; }
+  10%, 30%, 50% { opacity: 1; }
+  20%, 40% { opacity: 0; }
+}
+
+.animate-levelup {
+  animation: levelup-flash 0.5s ease-in-out 3;
+}
+
+.animate-levelup-overlay {
+  animation: levelup-overlay 0.4s ease-out;
+}
+
+@keyframes levelup-overlay {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Glitch text effect */
+@keyframes glitch-text {
+  0% {
+    clip-path: inset(40% 0 61% 0);
+    transform: translate(-2px, 2px);
+    color: var(--neon-red);
+  }
+  20% {
+    clip-path: inset(92% 0 1% 0);
+    transform: translate(2px, -2px);
+    color: var(--neon-cyan);
+  }
+  40% {
+    clip-path: inset(43% 0 1% 0);
+    transform: translate(-1px, 1px);
+    color: var(--neon-green);
+  }
+  60% {
+    clip-path: inset(25% 0 58% 0);
+    transform: translate(1px, -1px);
+    color: var(--neon-amber);
+  }
+  80% {
+    clip-path: inset(54% 0 7% 0);
+    transform: translate(-2px, 2px);
+    color: var(--neon-red);
+  }
+  100% {
+    clip-path: inset(58% 0 43% 0);
+    transform: translate(0);
+    color: inherit;
+  }
+}
+
+/* Pulse glow */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(0, 255, 102, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(0, 255, 102, 0.6), 0 0 40px rgba(0, 255, 102, 0.2); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Typing cursor blink */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink::after {
+  content: '_';
+  animation: cursor-blink 1s step-end infinite;
+  color: var(--neon-green);
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 102, 0.2);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 102, 0.4);
+}
+
+/* ── Selection ───────────────────────────────────────────────── */
+::selection {
+  background: rgba(0, 255, 102, 0.3);
+  color: var(--neon-green);
+}

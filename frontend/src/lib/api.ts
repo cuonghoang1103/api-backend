@@ -695,3 +695,107 @@ export const socialApi = {
   },
 };
 
+// ─── Cyber Gamification API ─────────────────────────────────────────────────────
+
+export type CyberTaskType = 'TASK' | 'STUDY' | 'ROUTINE';
+
+export interface CyberTask {
+  id: number;
+  userId: number;
+  title: string;
+  description: string | null;
+  type: CyberTaskType;
+  startTime: string;
+  endTime: string;
+  isCompleted: boolean;
+  expReward: number;
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CyberProfile {
+  id: number;
+  userId: number;
+  level: number;
+  currentExp: number;
+  totalPoints: number;
+  requiredExp: number;
+  updatedAt: string;
+  createdAt: string;
+}
+
+export interface CyberInventory {
+  id: number;
+  userId: number;
+  pointBalance: number;
+  updatedAt: string;
+  createdAt: string;
+  coupons: DiscountCode[];
+}
+
+export interface DiscountCode {
+  id: number;
+  code: string;
+  discountType: string;
+  discountValue: number;
+  maxUses: number | null;
+  usedCount: number;
+  expiresAt: string | null;
+  active: boolean;
+  description: string | null;
+  createdAt: string;
+}
+
+export interface CyberAnalytics {
+  labels: string[];
+  cpuLoad: number[];
+  ramUsage: number[];
+  netLoad: number[];
+  totalTasks: number;
+  completedTasks: number;
+  totalExpEarned: number;
+  level: number;
+  currentExp: number;
+}
+
+export interface ToggleResult {
+  task: CyberTask;
+  profile: CyberProfile;
+  leveledUp: boolean;
+  expGranted: number;
+  dailyCapHit: boolean;
+}
+
+export const cyberApi = {
+  getTasks: (date: string) =>
+    api.get<ApiResponse<CyberTask[]>>(`/cyber/tasks?date=${date}`),
+
+  createTask: (data: {
+    title: string;
+    description?: string;
+    type: CyberTaskType;
+    startTime: string;
+    endTime: string;
+    expReward: number;
+    date: string;
+  }) => api.post<ApiResponse<CyberTask>>('/cyber/tasks', data),
+
+  toggleTask: (id: number) =>
+    api.patch<ApiResponse<ToggleResult>>(`/cyber/tasks/${id}/toggle`),
+
+  deleteTask: (id: number) =>
+    api.delete<ApiResponse<{ success: boolean }>>(`/cyber/tasks/${id}`),
+
+  getProfile: () =>
+    api.get<ApiResponse<CyberProfile>>('/cyber/profile'),
+
+  getInventory: () =>
+    api.get<ApiResponse<CyberInventory>>('/cyber/inventory'),
+
+  mintCoupon: (discountAmount: number) =>
+    api.post<ApiResponse<DiscountCode>>('/cyber/inventory/mint-coupon', { discountAmount }),
+
+  getAnalytics: (period: 'day' | 'month' | 'year') =>
+    api.get<ApiResponse<CyberAnalytics>>(`/cyber/analytics?period=${period}`),
+};

@@ -66,30 +66,45 @@ export const useAuthStore = create<AuthState>()(
         }),
 
       /**
-       * Logout — synchronous, no redirects.
-       * 1. Clear ALL auth keys from storage
-       * 2. Dispatch auth-changed event so ALL components/tabs reset
-       * 3. Reset Zustand state immediately
-       * Callers should handle navigation AFTER this returns.
+       * Logout — full security wipe per spec.
+       * 1. Call backend to destroy server session cookie
+       * 2. Clear ALL auth cookies
+       * 3. Wipe Zustand store state
+       * 4. Clear React Query / TanStack Query cache
+       * 5. Clear localStorage / sessionStorage
+       * 6. Hard redirect to /login
        */
-      logout: () => {
+      logout: async () => {
         if (typeof window === 'undefined') {
           set({ user: null, token: null, isAuthenticated: false, isLoading: false, isHydrated: true });
           return;
         }
 
-        localStorage.removeItem('token');
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('userId');
-        // Clear the httpOnly cookie — backend_token is the primary auth token
-        document.cookie = '__auth__=; path=/; max-age=0';
-        document.cookie = 'backend_token=; path=/; max-age=0';
-        document.cookie = 'admin_role=; path=/; max-age=0';
+        // 1. Hit backend logout endpoint to clear server-side session
+        try {
+          await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+        } catch {
+          // ignore
+        }
 
+        // 2. Clear all auth cookies
+        const cookies = ['token', 'auth_token', 'userId', '__auth__', 'backend_token', 'admin_role'];
+        cookies.forEach((name) => {
+          document.cookie = `${name}=; path=/; max-age=0; SameSite=Strict`;
+        });
+
+        // 3. Dispatch auth-changed event
         window.dispatchEvent(new CustomEvent('auth-changed', { detail: { action: 'logout' } }));
 
+        // 4. Clear Zustand state
         set({ user: null, token: null, isAuthenticated: false, isLoading: false, isHydrated: true });
+
+        // 5. Clear localStorage / sessionStorage
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // 6. Hard redirect — purges all client-side state buffers
+        window.location.href = '/login';
       },
 
       setLoading: (loading) => set({ isLoading: loading }),

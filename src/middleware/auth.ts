@@ -187,3 +187,30 @@ function extractToken(req: Request): string | undefined {
 
   return undefined;
 }
+
+export function requireCyberProfile() {
+  return async (
+    req: Request,
+    _res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      if (!req.user) {
+        throw new UnauthorizedError('Authentication required');
+      }
+      await prisma.cyberProfile.upsert({
+        where: { userId: req.user.userId },
+        update: {},
+        create: { userId: req.user.userId, level: 1, currentExp: 0, totalPoints: 0 },
+      });
+      await prisma.cyberInventory.upsert({
+        where: { userId: req.user.userId },
+        update: {},
+        create: { userId: req.user.userId, pointBalance: 0 },
+      });
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+}

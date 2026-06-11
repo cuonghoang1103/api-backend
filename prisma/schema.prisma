@@ -72,6 +72,11 @@ model User {
   socialSaves         SocialSave[]
   socialShares        SocialShare[]
 
+  cyberProfile CyberProfile?
+  cyberTasks   CyberTask[]
+  cyberInventory CyberInventory?
+  discountCodes DiscountCode[]
+
   @@index([email], name: "idx_users_email")
   @@map("users")
 }
@@ -104,6 +109,60 @@ model PasswordResetToken {
   @@index([token], name: "idx_password_reset_tokens_token")
   @@index([userId], name: "idx_password_reset_tokens_user_id")
   @@map("password_reset_tokens")
+}
+
+// ============================================================
+// 2b. CYBER GAMIFICATION
+// ============================================================
+
+enum CyberTaskType {
+  TASK
+  STUDY
+  ROUTINE
+}
+
+model CyberProfile {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @unique @map("user_id")
+  level       Int      @default(1)
+  currentExp  Int      @default(0) @map("current_exp")
+  totalPoints Int      @default(0) @map("total_points")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("cyber_profiles")
+}
+
+model CyberTask {
+  id          Int          @id @default(autoincrement())
+  userId      Int          @map("user_id")
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String       @db.VarChar(255)
+  description String?      @db.Text
+  type        CyberTaskType @default(TASK)
+  startTime   String       @map("start_time") @db.VarChar(5)
+  endTime     String       @map("end_time") @db.VarChar(5)
+  isCompleted Boolean      @default(false) @map("is_completed")
+  expReward   Int          @default(10) @map("exp_reward")
+  date        DateTime     @db.Date
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@index([userId, date], name: "idx_cyber_tasks_user_date")
+  @@map("cyber_tasks")
+}
+
+model CyberInventory {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique @map("user_id")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pointBalance Int      @default(0) @map("point_balance")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("cyber_inventories")
 }
 
 // ============================================================
@@ -679,6 +738,7 @@ model ShopOrderItem {
 model DiscountCode {
   id                Int       @id @default(autoincrement())
   code              String    @unique(map: "uk_discount_code") @db.VarChar(50)
+  userId            Int?      @map("user_id")
   discountType      String    @default("PERCENT") @map("discount_type") @db.VarChar(20)
   discountValue     Decimal   @db.Decimal(10, 2)
   minOrderAmount    Decimal   @default(0) @map("min_order_amount") @db.Decimal(10, 2)
@@ -692,7 +752,10 @@ model DiscountCode {
   createdAt         DateTime  @default(now()) @map("created_at")
   updatedAt         DateTime  @updatedAt @map("updated_at")
 
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([code], name: "idx_discount_code")
+  @@index([userId], name: "idx_discount_code_user_id")
   @@map("discount_codes")
 }
 

@@ -77,16 +77,25 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
-          # Update YOUTUBE_API_KEY
-          ssh vps \
-            "sed -i 's|YOUTUBE_API_KEY=.*|YOUTUBE_API_KEY=${YOUTUBE_API_KEY}|' /opt/cuonghoangdev/.env"
-          # Update GEMINI_API_KEY
-          ssh vps \
-            "sed -i 's|GEMINI_API_KEY=.*|GEMINI_API_KEY=${GEMINI_API_KEY}|' /opt/cuonghoangdev/.env"
+          # Update YOUTUBE_API_KEY (create line if missing)
+          if grep -q "^YOUTUBE_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
+            ssh vps "sed -i 's|^YOUTUBE_API_KEY=.*|YOUTUBE_API_KEY=${YOUTUBE_API_KEY}|' /opt/cuonghoangdev/.env"
+          else
+            ssh vps "echo 'YOUTUBE_API_KEY=${YOUTUBE_API_KEY}' >> /opt/cuonghoangdev/.env"
+          fi
+          # Update GEMINI_API_KEY (create line if missing)
+          if grep -q "^GEMINI_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
+            ssh vps "sed -i 's|^GEMINI_API_KEY=.*|GEMINI_API_KEY=${GEMINI_API_KEY}|' /opt/cuonghoangdev/.env"
+          else
+            ssh vps "echo 'GEMINI_API_KEY=${GEMINI_API_KEY}' >> /opt/cuonghoangdev/.env"
+          fi
           # Update POSTGRES_PASSWORD only if secret is non-empty
           if [ -n "$POSTGRES_PASSWORD" ]; then
-            ssh vps \
-              "sed -i 's|POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=${POSTGRES_PASSWORD}|' /opt/cuonghoangdev/.env"
+            if grep -q "^POSTGRES_PASSWORD=" /opt/cuonghoangdev/.env 2>/dev/null; then
+              ssh vps "sed -i 's|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=${POSTGRES_PASSWORD}|' /opt/cuonghoangdev/.env"
+            else
+              ssh vps "echo 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}' >> /opt/cuonghoangdev/.env"
+            fi
           else
             # Use docker exec to reset postgres password to '123456' (default)
             ssh vps "docker compose -f /opt/cuonghoangdev/docker-compose.yml exec -T postgres \
@@ -95,7 +104,11 @@ jobs:
               psql -p 5432 -U postgres -d postgres -c \"ALTER USER postgres PASSWORD '123456';\" 2>/dev/null || \
               echo '[WARN] Could not reset postgres password - please set manually'"
             # Update .env with default password
-            ssh vps "sed -i 's|POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=123456|' /opt/cuonghoangdev/.env"
+            if grep -q "^POSTGRES_PASSWORD=" /opt/cuonghoangdev/.env 2>/dev/null; then
+              ssh vps "sed -i 's|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=123456|' /opt/cuonghoangdev/.env"
+            else
+              ssh vps "echo 'POSTGRES_PASSWORD=123456' >> /opt/cuonghoangdev/.env"
+            fi
           fi
           ssh vps "grep -E 'GEMINI_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
 

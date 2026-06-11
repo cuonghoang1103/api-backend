@@ -132,33 +132,22 @@ export default function CyberMusicPage() {
           <div
             className="px-4 sm:px-6 py-3"
             style={{
-              background: 'rgba(15,23,42,0.8)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
+              background: 'rgba(15,23,42,0.92)',
               borderBottom: '1px solid rgba(139,92,246,0.15)',
             }}
           >
             <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
               {/* Brand */}
               <div className="flex items-center gap-3">
-                <motion.div
+                <div
                   className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
                   style={{
                     background: `linear-gradient(135deg, ${C.primary}, ${C.secondary})`,
                     boxShadow: `0 0 20px rgba(139,92,246,0.3)`,
                   }}
-                  animate={{
-                    boxShadow: [
-                      '0 0 20px rgba(139,92,246,0.3)',
-                      '0 0 40px rgba(6,182,212,0.4)',
-                      '0 0 20px rgba(236,72,153,0.3)',
-                      '0 0 20px rgba(139,92,246,0.3)',
-                    ],
-                  }}
-                  transition={{ duration: 4, repeat: Infinity }}
                 >
                   <Headphones className="w-4 h-4 text-white" />
-                </motion.div>
+                </div>
                 <div>
                   <h1
                     className="text-lg font-bold leading-none font-mono"

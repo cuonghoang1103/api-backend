@@ -51,9 +51,6 @@ export default function CyberAudioVisualizer({ isPlaying }: CyberAudioVisualizer
 
       const y = (height - barH) / 2;
 
-      ctx.shadowColor = PRIMARY;
-      ctx.shadowBlur = isPlaying ? 14 : 0;
-
       const grad = ctx.createLinearGradient(x, y, x, y + barH);
       grad.addColorStop(0, PRIMARY);
       grad.addColorStop(0.4, SECONDARY);
@@ -65,15 +62,13 @@ export default function CyberAudioVisualizer({ isPlaying }: CyberAudioVisualizer
       ctx.roundRect(x, y, BAR_W, barH, 2);
       ctx.fill();
 
-      // Reflection under each bar
+      // Reflection under each bar — only when playing
       if (isPlaying) {
         ctx.fillStyle = 'rgba(139,92,246,0.07)';
         ctx.beginPath();
         ctx.roundRect(x, height - y + 2, BAR_W, barH * 0.25, 2);
         ctx.fill();
       }
-
-      ctx.shadowBlur = 0;
     }
 
     if (isPlaying) {

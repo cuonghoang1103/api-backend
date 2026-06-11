@@ -26,13 +26,11 @@ const C = {
 };
 
 function MarqueeTitle({
-  text, active, className, gradientFrom, gradientTo,
+  text, active, className,
 }: {
   text: string;
   active: boolean;
   className?: string;
-  gradientFrom?: string;
-  gradientTo?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
@@ -53,58 +51,34 @@ function MarqueeTitle({
   }, [text]);
 
   return (
-    <div ref={containerRef} className="mb-1" style={{ overflow: 'hidden', position: 'relative' }}>
-      <div
+    <div ref={containerRef} className="mb-1 overflow-hidden relative">
+      <span
+        ref={textRef}
         className={className}
-        style={{
-          background: gradientFrom || gradientTo
-            ? `linear-gradient(135deg, ${gradientFrom || '#f8fafc'}, ${gradientTo || '#8B5CF6'})`
-            : undefined,
-          WebkitBackgroundClip: (gradientFrom || gradientTo) ? 'text' : undefined,
-          WebkitTextFillColor: (gradientFrom || gradientTo) ? 'transparent' : undefined,
-          whiteSpace: 'nowrap',
-          display: 'inline-block',
-          width: '100%',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          animation: isOverflowing && active ? 'marquee-player 6s linear infinite' : undefined,
-        }}
+        style={{ display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
       >
-        {isOverflowing && active ? (
-          <span>
-            {text}&nbsp;&nbsp;&nbsp;
-          </span>
-        ) : (
-          text
-        )}
-      </div>
+        {text}
+      </span>
       {isOverflowing && active && (
-        <span
-          className={className}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            background: gradientFrom || gradientTo
-              ? `linear-gradient(135deg, ${gradientFrom || '#f8fafc'}, ${gradientTo || '#8B5CF6'})`
-              : undefined,
-            WebkitBackgroundClip: (gradientFrom || gradientTo) ? 'text' : undefined,
-            WebkitTextFillColor: (gradientFrom || gradientTo) ? 'transparent' : undefined,
-            whiteSpace: 'nowrap',
-            display: 'inline-block',
-            animation: 'marquee-player 6s linear infinite',
-            animationDelay: '3s',
-          }}
-        >
-          {text}&nbsp;&nbsp;&nbsp;
-        </span>
+        <div className="absolute inset-0 flex items-center pointer-events-none overflow-hidden">
+          <style>{`
+            @keyframes marquee-player {
+              0% { transform: translateX(100%); }
+              100% { transform: translateX(-100%); }
+            }
+          `}</style>
+          <div
+            className={className}
+            style={{
+              whiteSpace: 'nowrap',
+              animation: 'marquee-player 6s linear infinite',
+              marginLeft: containerRef.current?.clientWidth,
+            }}
+          >
+            {text}&nbsp;&nbsp;&nbsp;
+          </div>
+        </div>
       )}
-      <style>{`
-        @keyframes marquee-player {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-100%); }
-        }
-      `}</style>
     </div>
   );
 }
@@ -273,8 +247,7 @@ export default function CyberPlayer() {
       <div
         className="rounded-3xl overflow-hidden"
         style={{
-          background: C.glassBg,
-          backdropFilter: 'blur(32px)',
+          background: 'rgba(15,23,42,0.95)',
           border: `1px solid ${C.border}`,
         }}
       >
@@ -309,15 +282,13 @@ export default function CyberPlayer() {
 
   return (
     <motion.div
-      layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
       className="rounded-3xl overflow-hidden"
       style={{
-        background: C.glassBg,
-        backdropFilter: 'blur(32px)',
+        background: 'rgba(15,23,42,0.95)',
         border: `1px solid ${C.border}`,
         boxShadow: `0 0 80px ${C.glow}, 0 25px 50px rgba(0,0,0,0.4)`,
       }}
@@ -354,9 +325,7 @@ export default function CyberPlayer() {
             <MarqueeTitle
               text={currentTrack.title}
               active={hoveredTitle}
-              className="text-lg md:text-xl font-bold font-mono"
-              gradientFrom={C.text}
-              gradientTo={C.primary}
+              className="text-lg md:text-xl font-bold font-mono text-text-primary"
             />
             <p className="text-sm font-mono truncate" style={{ color: C.textSecondary }}>
               {currentTrack.artist}

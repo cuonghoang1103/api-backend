@@ -55,7 +55,7 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 20, opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="fixed bottom-0 left-0 right-0 z-[60] bg-darkbg/95 backdrop-blur-xl border-t border-darkborder shadow-2xl"
+      className="fixed bottom-0 left-0 right-0 z-[60] bg-darkbg/95 border-t border-darkborder shadow-2xl"
     >
       {/* Invisible activity tracker */}
       <div onClick={onActivity} onMouseDown={onActivity} onTouchStart={onActivity} className="absolute inset-0 cursor-default" />
@@ -181,7 +181,7 @@ function MiniBar({ onExpand, onClose }: { onExpand: () => void; onClose: () => v
       initial={{ y: 80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 80, opacity: 0 }}
-      className="fixed bottom-0 left-0 right-0 z-[60] bg-darkbg/95 backdrop-blur-xl border-t border-darkborder/50"
+      className="fixed bottom-0 left-0 right-0 z-[60] bg-darkbg/95 border-t border-darkborder/50"
     >
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center gap-3 py-2.5">

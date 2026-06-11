@@ -34,17 +34,10 @@ jobs:
           echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
-          # Keep SSH sessions alive during long builds
-          cat >> ~/.ssh/config <<'EOF'
-Host vps
-    HostName ${{ secrets.VPS_HOST }}
-    User ${{ secrets.VPS_USER }}
-    IdentityFile ~/.ssh/deploy_key
-    StrictHostKeyChecking no
-    ServerAliveInterval 60
-    ServerAliveCountMax 10
-    ConnectTimeout 30
-EOF
+          # Keep SSH sessions alive during long builds (write without heredoc to avoid YAML indent issues)
+          mkdir -p ~/.ssh
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ServerAliveInterval 60\n    ServerAliveCountMax 10\n    ConnectTimeout 30\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
 
       - name: Verify SSH connection
         run: |

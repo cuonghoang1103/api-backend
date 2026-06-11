@@ -21,6 +21,10 @@ services:
       - "5432:5432"
     networks:
       - backend
+    deploy:
+      resources:
+        limits:
+          memory: 1G
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d cuonghoangdev_db"]
       interval: 10s
@@ -40,6 +44,10 @@ services:
       - "6379:6379"
     networks:
       - backend
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -81,6 +89,7 @@ services:
       SMTP_USER: ${SMTP_USER:-}
       SMTP_PASS: ${SMTP_PASS:-}
       SMTP_FROM: ${SMTP_FROM:-noreply@cuongthai.com}
+      YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
     volumes:
       # CRITICAL: Map uploads to host SSD — files survive container rebuild
       - uploads_data:/app/uploads
@@ -93,6 +102,10 @@ services:
         condition: service_healthy
     networks:
       - backend
+    deploy:
+      resources:
+        limits:
+          memory: 1G
     healthcheck:
       test: ["CMD-SHELL", "curl -sf http://localhost:3001/health || exit 1"]
       interval: 15s
@@ -105,6 +118,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
+        NEXT_PUBLIC_YOUTUBE_API_KEY: ${NEXT_PUBLIC_YOUTUBE_API_KEY:-}
     container_name: cuonghoangdev_frontend
     restart: unless-stopped
     environment:
@@ -121,8 +137,12 @@ services:
       ADMIN_EMAILS: ${ADMIN_EMAILS:-cuonghoang1103@gmail.com}
     networks:
       - backend
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost/ || wget -qO- http://localhost:80/ || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/ || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -145,8 +165,12 @@ services:
       - /opt/certbot/www:/var/www/certbot:ro
     networks:
       - backend
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost/ || wget -qO- http://localhost:80/ || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost/ || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { toast } from 'sonner';
 import type { Track } from '@/types';
 
 interface PlaylistItem {
@@ -30,8 +31,8 @@ interface PlaylistState {
   // CRUD operations
   createPlaylist: (name: string, coverUrl?: string) => Promise<PlaylistItem | null>;
   deletePlaylist: (id: number) => Promise<void>;
-  addTrackToPlaylist: (playlistId: number, track: Track) => Promise<void>;
-  removeTrackFromPlaylist: (playlistId: number, trackId: string) => Promise<void>;
+  addTrackToPlaylist: (playlistId: number, track: Track) => Promise<{ success: boolean; needsAuth?: boolean }>;
+  removeTrackFromPlaylist: (playlistId: number, trackId: number) => Promise<void>;
   fetchPlaylists: () => Promise<void>;
   playPlaylist: (playlist: PlaylistItem) => void;
 }
@@ -89,16 +90,25 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
         credentials: 'include',
         body: JSON.stringify({ name, coverUrl }),
       });
+
+      if (res.status === 401) {
+        toast.error('Vui lòng đăng nhập để tạo playlist');
+        return null;
+      }
+
       const data = await res.json();
       if (data.success) {
         const created = parsePlaylist(data.data);
         set((s) => ({ playlists: [created, ...s.playlists] }));
+        set({ isOpen: false, pendingTrack: null });
+        toast.success(`Đã tạo playlist "${created.name}"`);
         return created;
       }
-      console.error('[PlaylistStore] create failed:', data.message);
+      toast.error(data.message || 'Tạo playlist thất bại');
       return null;
     } catch (err) {
       console.error('[PlaylistStore] create error:', err);
+      toast.error('Tạo playlist thất bại');
       return null;
     }
   },
@@ -112,9 +122,11 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
       const data = await res.json();
       if (data.success) {
         set((s) => ({ playlists: s.playlists.filter((p) => p.id !== id) }));
+        toast.success('Đã xóa playlist');
       }
     } catch (err) {
       console.error('[PlaylistStore] delete error:', err);
+      toast.error('Xóa playlist thất bại');
     }
   },
 
@@ -124,23 +136,33 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ trackId: track.id }),
+        body: JSON.stringify({ trackId: parseInt(track.id, 10) }),
       });
+
+      if (res.status === 401) {
+        toast.error('Vui lòng đăng nhập để thêm bài hát');
+        return { success: false, needsAuth: true };
+      }
+
       const data = await res.json();
       if (data.success) {
         const updated = parsePlaylist(data.data);
         set((s) => ({
           playlists: s.playlists.map((p) => (p.id === playlistId ? updated : p)),
         }));
-      } else {
-        console.error('[PlaylistStore] addTrack failed:', data.message);
+        toast.success(`Đã thêm "${track.title}" vào playlist`);
+        return { success: true };
       }
+      toast.error(data.message || 'Thêm bài hát thất bại');
+      return { success: false };
     } catch (err) {
       console.error('[PlaylistStore] addTrack error:', err);
+      toast.error('Thêm bài hát thất bại');
+      return { success: false };
     }
   },
 
-  removeTrackFromPlaylist: async (playlistId: number, trackId: string) => {
+  removeTrackFromPlaylist: async (playlistId: number, trackId: number) => {
     try {
       const res = await fetch(`/api/v1/music/playlists/${playlistId}/tracks/${trackId}`, {
         method: 'DELETE',
@@ -175,11 +197,8 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
     const tracks = playlist.tracks ?? [];
     if (tracks.length === 0) return;
     const store = useMusicStore.getState();
-    // Capture the current full track list (50 tracks) BEFORE switching
     const currentAllTracks = store.tracks;
-    // Switch to playlist tracks (4) — savedAllTracks stays intact
     store.setTracks(tracks);
-    // Now save the captured 50 tracks as the "saved" snapshot
     store.setAllTracks(currentAllTracks);
     store.playTrackAtIndex(0);
     set({ isOpen: false });

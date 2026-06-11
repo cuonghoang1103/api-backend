@@ -81,13 +81,16 @@ export default function PlaylistDrawer() {
   const handleAddToPlaylist = async (playlistId: number) => {
     if (!pendingTrack) return;
     setAddingTo(playlistId);
-    await addTrackToPlaylist(playlistId, pendingTrack);
+    const result = await addTrackToPlaylist(playlistId, pendingTrack);
     setAddingTo(null);
-    setPendingTrack(null);
+    if (result.success) {
+      setPendingTrack(null);
+      set({ isOpen: false });
+    }
   };
 
   const handleRemoveTrack = async (playlistId: number, trackId: string) => {
-    await removeTrackFromPlaylist(playlistId, trackId);
+    await removeTrackFromPlaylist(playlistId, parseInt(trackId, 10));
   };
 
   const handlePlayPlaylist = (playlist: typeof playlists[0]) => {

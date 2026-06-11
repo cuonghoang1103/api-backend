@@ -72,6 +72,19 @@ jobs:
             "$VPS_USER@$VPS_HOST" \
             "bash /opt/cuonghoangdev/scripts/deploy-vps.sh"
 
+      - name: Seed Cuong03dx admin account on VPS
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          chmod +x scripts/seed-cuong03dx.cjs
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            scripts/seed-cuong03dx.cjs \
+            "$VPS_USER@$VPS_HOST:/opt/cuonghoangdev/scripts/seed-cuong03dx.cjs"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "$VPS_USER@$VPS_HOST" \
+            "docker compose exec -T backend node /app/scripts/seed-cuong03dx.cjs"
+
       - name: Setup cron jobs on VPS
         env:
           VPS_USER: ${{ secrets.VPS_USER }}

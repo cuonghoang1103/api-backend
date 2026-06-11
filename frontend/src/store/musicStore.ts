@@ -346,16 +346,9 @@ export const useMusicStore = create<MusicState>()((set, get) => {
 
     setDuration: (duration) => set({ duration }),
     setVolume: (volume) => {
-      const p = loadPersisted();
-      set({ volume, isMuted: false });
-      savePersisted({ ...p, volume, isMuted: false });
+      set({ volume });
     },
-    toggleMute: () => {
-      const p = loadPersisted();
-      const { isMuted } = get();
-      set({ isMuted: !isMuted });
-      savePersisted({ ...p, isMuted: !isMuted });
-    },
+    toggleMute: () => set((s) => ({ isMuted: !s.isMuted })),
 
     toggleShuffle: () =>
       set((s) => {

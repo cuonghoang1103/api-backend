@@ -25,22 +25,87 @@ const C = {
   progressBg: 'rgba(255,255,255,0.06)',
 };
 
-function GlitchText({ children, active }: { children: string; active: boolean }) {
+function MarqueeTitle({
+  text, active, className, gradientFrom, gradientTo,
+}: {
+  text: string;
+  active: boolean;
+  className?: string;
+  gradientFrom?: string;
+  gradientTo?: string;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      const t = textRef.current;
+      const c = containerRef.current;
+      if (t && c) {
+        setIsOverflowing(t.scrollWidth > c.clientWidth);
+      }
+    };
+    check();
+    const ro = new ResizeObserver(check);
+    if (containerRef.current) ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, [text]);
+
   return (
-    <motion.span
-      className="relative inline-block"
-      animate={active ? {
-        x: [0, -2, 3, -1, 0],
-        textShadow: [
-          '2px 0 #06b6d4, -2px 0 #ec4899',
-          '-2px 0 #06b6d4, 2px 0 #ec4899',
-          '0 0 transparent',
-        ],
-      } : { x: 0, textShadow: '0 0 transparent' }}
-      transition={{ duration: 0.2 }}
-    >
-      {children}
-    </motion.span>
+    <div ref={containerRef} className="mb-1" style={{ overflow: 'hidden', position: 'relative' }}>
+      <div
+        className={className}
+        style={{
+          background: gradientFrom || gradientTo
+            ? `linear-gradient(135deg, ${gradientFrom || '#f8fafc'}, ${gradientTo || '#8B5CF6'})`
+            : undefined,
+          WebkitBackgroundClip: (gradientFrom || gradientTo) ? 'text' : undefined,
+          WebkitTextFillColor: (gradientFrom || gradientTo) ? 'transparent' : undefined,
+          whiteSpace: 'nowrap',
+          display: 'inline-block',
+          width: '100%',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          animation: isOverflowing && active ? 'marquee-player 6s linear infinite' : undefined,
+        }}
+      >
+        {isOverflowing && active ? (
+          <span>
+            {text}&nbsp;&nbsp;&nbsp;
+          </span>
+        ) : (
+          text
+        )}
+      </div>
+      {isOverflowing && active && (
+        <span
+          className={className}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            background: gradientFrom || gradientTo
+              ? `linear-gradient(135deg, ${gradientFrom || '#f8fafc'}, ${gradientTo || '#8B5CF6'})`
+              : undefined,
+            WebkitBackgroundClip: (gradientFrom || gradientTo) ? 'text' : undefined,
+            WebkitTextFillColor: (gradientFrom || gradientTo) ? 'transparent' : undefined,
+            whiteSpace: 'nowrap',
+            display: 'inline-block',
+            animation: 'marquee-player 6s linear infinite',
+            animationDelay: '3s',
+          }}
+        >
+          {text}&nbsp;&nbsp;&nbsp;
+        </span>
+      )}
+      <style>{`
+        @keyframes marquee-player {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-100%); }
+        }
+      `}</style>
+    </div>
   );
 }
 
@@ -278,21 +343,13 @@ export default function CyberPlayer() {
           <VinylDisc coverImage={currentTrack.coverImage} title={currentTrack.title} isPlaying={isPlaying} />
 
           <div className="flex-1 min-w-0">
-            <motion.h2
-              key={currentTrack.title}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-lg md:text-xl font-bold font-mono truncate mb-1"
-              style={{
-                background: `linear-gradient(135deg, ${C.text}, ${C.primary})`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-              onMouseEnter={() => setHoveredTitle(true)}
-              onMouseLeave={() => setHoveredTitle(false)}
-            >
-              <GlitchText active={hoveredTitle}>{currentTrack.title}</GlitchText>
-            </motion.h2>
+            <MarqueeTitle
+              text={currentTrack.title}
+              active={hoveredTitle}
+              className="text-lg md:text-xl font-bold font-mono"
+              gradientFrom={C.text}
+              gradientTo={C.primary}
+            />
             <p className="text-sm font-mono truncate" style={{ color: C.textSecondary }}>
               {currentTrack.artist}
             </p>

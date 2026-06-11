@@ -11,6 +11,7 @@ import CyberPlaylist from '@/components/music/CyberPlaylist';
 import CyberSearch from '@/components/music/CyberSearch';
 import PlaylistSection from '@/components/music/PlaylistSection';
 import PlaylistView from '@/components/music/PlaylistView';
+import PlaylistDrawer from '@/components/music/PlaylistDrawer';
 import { useMusicStore } from '@/store/musicStore';
 import { useTracks } from '@/hooks/useMusicQueries';
 import type { PlaylistSummary } from '@/types';
@@ -367,6 +368,11 @@ export default function CyberMusicPage() {
           )}
         </main>
       </div>
+
+      {/* Playlist drawer */}
+      <ClientOnly>
+        <PlaylistDrawer />
+      </ClientOnly>
     </div>
   );
 }

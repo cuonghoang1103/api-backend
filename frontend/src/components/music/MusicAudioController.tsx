@@ -82,7 +82,7 @@ function createYouTubePlayer(
     width: '1',
     videoId,
     playerVars: {
-      autoplay: 1,
+      autoplay: 0,
       start: startSeconds,
       controls: 0,
       disablekb: 1,

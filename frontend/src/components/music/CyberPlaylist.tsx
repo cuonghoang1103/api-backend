@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Plus } from 'lucide-react';
 import { useMusicStore } from '@/store/musicStore';
+import { usePlaylistStore } from '@/store/playlistStore';
 import type { Track } from '@/types';
 
 function isSafeUrl(url: unknown): url is string {
@@ -48,6 +50,7 @@ export default function CyberPlaylist() {
     tracks, currentTrack, isPlaying, playTrackAtIndex, currentIndex,
     allTracks, savedAllTracks, restoreAllTracks, recentlyPlayed, history,
   } = useMusicStore();
+  const { openDrawer, setPendingTrack } = usePlaylistStore();
 
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState<'tracks' | 'history' | 'info'>('tracks');
@@ -69,6 +72,11 @@ export default function CyberPlaylist() {
     } else {
       playTrackAtIndex(idx);
     }
+  };
+
+  const handleAddToPlaylist = (track: Track) => {
+    setPendingTrack(track);
+    openDrawer();
   };
 
   return (
@@ -241,6 +249,7 @@ export default function CyberPlaylist() {
                     isActive={currentTrack?.id === track.id}
                     isPlaying={currentTrack?.id === track.id && isPlaying}
                     onPlay={() => handlePlayTrack(track)}
+                    onAddToPlaylist={() => handleAddToPlaylist(track)}
                     colors={C}
                   />
                 ))}
@@ -284,6 +293,7 @@ export default function CyberPlaylist() {
                       const globalIdx = tracks.findIndex(t => t.id === track.id);
                       if (globalIdx >= 0) playTrackAtIndex(globalIdx);
                     }}
+                    onAddToPlaylist={() => handleAddToPlaylist(track)}
                     colors={C}
                     dimmed
                   />
@@ -318,13 +328,14 @@ export default function CyberPlaylist() {
 }
 
 function CyberTrackItem({
-  track, index, isActive, isPlaying, onPlay, colors, dimmed = false,
+  track, index, isActive, isPlaying, onPlay, onAddToPlaylist, colors, dimmed = false,
 }: {
   track: Track;
   index: number;
   isActive: boolean;
   isPlaying: boolean;
   onPlay: () => void;
+  onAddToPlaylist: () => void;
   colors: typeof C;
   dimmed?: boolean;
 }) {
@@ -417,16 +428,30 @@ function CyberTrackItem({
 
       {/* Track info */}
       <div className="flex-1 min-w-0">
-        <GlitchSpan
-          text={track.title}
-          active={hovered && !isPlaying}
-          className="text-sm font-semibold font-mono truncate"
-          style={{ color: isActive ? colors.primary : colors.text }}
-        />
+        <div className="relative overflow-hidden">
+          <MarqueeTitle
+            text={track.title}
+            active={hovered}
+            className="text-sm font-semibold font-mono"
+            style={{ color: isActive ? colors.primary : colors.text }}
+          />
+        </div>
         <p className="text-[11px] font-mono truncate" style={{ color: colors.textMuted }}>
           {track.artist}
         </p>
       </div>
+
+      {/* Add to playlist */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={(e) => { e.stopPropagation(); onAddToPlaylist(); }}
+        className="w-7 h-7 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+        style={{ background: `${colors.primary}15`, color: colors.primary }}
+        title="Add to playlist"
+      >
+        <Plus className="w-3.5 h-3.5" />
+      </motion.button>
 
       {/* Duration */}
       <span className="text-[11px] tabular-nums font-mono shrink-0" style={{ color: colors.textMuted }}>
@@ -436,7 +461,7 @@ function CyberTrackItem({
   );
 }
 
-function GlitchSpan({
+function MarqueeTitle({
   text, active, className, style,
 }: {
   text: string;
@@ -444,21 +469,61 @@ function GlitchSpan({
   className?: string;
   style?: React.CSSProperties;
 }) {
+  const containerRef = useRef<HTMLSpanElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  // Check overflow when text or active state changes
+  useEffect(() => {
+    const check = () => {
+      const textEl = textRef.current;
+      const containerEl = containerRef.current;
+      if (textEl && containerEl) {
+        const textWidth = textEl.scrollWidth;
+        const containerWidth = containerEl.clientWidth;
+        setIsOverflowing(textWidth > containerWidth);
+      }
+    };
+    check();
+    const ro = new ResizeObserver(check);
+    if (containerRef.current) ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, [text]);
+
   return (
-    <motion.span
-      className={className}
-      style={style}
-      animate={active ? {
-        x: [0, -3, 2, -1, 0],
-        textShadow: [
-          '3px 0 #06b6d4, -3px 0 #ec4899',
-          '-2px 0 #06b6d4, 2px 0 #ec4899',
-          '0 0 transparent',
-        ],
-      } : { x: 0, textShadow: '0 0 transparent' }}
-      transition={{ duration: 0.25 }}
+    <span
+      ref={containerRef}
+      style={{ position: 'relative', display: 'block', overflow: 'hidden', ...style }}
     >
-      {text}
-    </motion.span>
+      <span
+        ref={textRef}
+        className={className}
+        style={{
+          ...style,
+          display: 'inline-block',
+          whiteSpace: 'nowrap',
+          paddingRight: '16px',
+        }}
+      >
+        {isOverflowing && active ? (
+          <>
+            <span style={{ ...style, display: 'inline-block', whiteSpace: 'nowrap', paddingRight: '16px' }}>
+              {text} &nbsp;&nbsp;&nbsp;
+            </span>
+            {text}
+          </>
+        ) : (
+          text
+        )}
+      </span>
+      {isOverflowing && (
+        <style>{`
+          @keyframes marquee-${text.replace(/[^a-zA-Z0-9]/g, '')} {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}</style>
+      )}
+    </span>
   );
 }

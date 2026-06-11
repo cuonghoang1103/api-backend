@@ -31,13 +31,8 @@ git -C /opt/cuonghoangdev pull origin main --ff-only
 
 echo "=== [5/7] Building and swapping containers (zero-downtime) ==="
 # up --force-recreate = stop old, remove, start new atomically
-# Much faster than stop + rm + up, avoids race condition
-docker compose up -d --build --remove-orphans --force-recreate backend
-
-# Restart frontend if needed (no-recreate unless image changed)
-if ! docker ps --format '{{.Names}}' | grep -q '^cuonghoangdev_frontend$'; then
-  docker compose up -d frontend
-fi
+# Rebuild both backend AND frontend since frontend code changed
+docker compose up -d --build --remove-orphans --force-recreate backend frontend
 
 echo "=== [6/7] Database schema setup (after backend is up) ==="
 for i in $(seq 1 18); do
@@ -45,9 +40,10 @@ for i in $(seq 1 18); do
     echo "Backend is healthy, running prisma db push..."
     docker compose exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" \
       > /tmp/prisma_push.log 2>&1
+    PRISMA_EXIT=$?
     if grep -q "already in sync\|The database is already in sync" /tmp/prisma_push.log 2>/dev/null; then
       echo "Database schema already in sync"
-    elif [ $? -eq 0 ]; then
+    elif [ $PRISMA_EXIT -eq 0 ]; then
       echo "Database schema pushed successfully"
     else
       echo "[WARN] Prisma push output:"

@@ -80,39 +80,19 @@ app.use(
 
 // ─── 3. CORS — cho phép Next.js frontend gọi API ──────────
 // Development: http://localhost:3000
-// Production: https://cuonghoangdev.com hoặc custom domain
+// Production: https://cuongthai.com
 const corsOptions: cors.CorsOptions = {
-  origin: (origin, callback) => {
-    // Cho phép:
-    // - Same-origin requests (no Origin header, e.g. SSR)
-    // - Requests from configured ALLOWED_ORIGINS
-    // - Requests from localhost (development)
-    if (!origin) {
-      callback(null, true);
-      return;
-    }
-    const allowedOrigins = config.corsOrigins;
-    if (allowedOrigins.includes(origin) || origin.includes('localhost')) {
-      callback(null, true);
-      return;
-    }
-    // In dev mode, allow all origins
-    if (config.nodeEnv === 'development') {
-      callback(null, true);
-      return;
-    }
-    callback(new Error(`CORS: Origin ${origin} not allowed`));
-  },
+  origin: [
+    'https://cuongthai.com',
+    'http://localhost:3000',
+  ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: [
     'Content-Type',
     'Authorization',
     'X-Requested-With',
-    'X-Request-ID',
     'Accept',
-    'Origin',
-    'Cache-Control',
   ],
   exposedHeaders: [
     'X-Request-ID',

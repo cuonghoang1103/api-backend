@@ -292,6 +292,7 @@ export function useCreatePlaylist() {
     mutationFn: (data: { name: string; description?: string; coverUrl?: string }) =>
       fetchJson<{ success: boolean; data: Playlist }>('/api/v1/music/playlists', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       }),

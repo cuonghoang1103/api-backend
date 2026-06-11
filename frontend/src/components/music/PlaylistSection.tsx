@@ -61,13 +61,16 @@ export default function PlaylistSection({ onPlaylistClick }: PlaylistSectionProp
         const formData = new FormData();
         formData.append('file', coverFile);
         formData.append('category', 'playlist-covers');
-        const res = await fetch('/api/v1/uploads', {
+        const res = await fetch('/api/v1/files/upload', {
           method: 'POST',
+          credentials: 'include',
           body: formData,
         });
         const json = await res.json() as { success: boolean; data?: { url?: string }; message?: string };
         if (json.success && json.data?.url) {
           coverUrl = json.data.url;
+        } else {
+          throw new Error(json.message || 'Upload failed');
         }
       }
       const result = await createPlaylist.mutateAsync({

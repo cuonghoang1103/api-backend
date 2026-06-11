@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Track } from '@/types';
+import type { Track, Playlist, PlaylistSummary } from '@/types';
 
 // ─── API fetch helpers ────────────────────────────────────────────────────────
 
@@ -61,7 +61,7 @@ function buildPlaybackUrl(raw: RawTrack): string {
   return `/api/v1/music/stream/${raw.id}`;
 }
 
-function formatDuration(seconds: number): string {
+export function formatDuration(seconds: number): string {
   if (!seconds || !Number.isFinite(seconds)) return '0:00';
   return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
 }
@@ -247,4 +247,134 @@ export function useInvalidateTracks() {
     qc.invalidateQueries({ queryKey: musicKeys.tracks() });
     qc.invalidateQueries({ queryKey: musicKeys.adminTracks() });
   };
+}
+
+// ─── Playlist hooks ──────────────────────────────────────────────────────────
+
+function playlistKeys() {
+  return [...musicKeys.all, 'playlists'] as const;
+}
+
+function playlistDetailKey(id: number) {
+  return [...playlistKeys(), 'detail', id] as const;
+}
+
+/**
+ * Fetch all playlists (public + user-owned).
+ */
+export function usePlaylists() {
+  return useQuery({
+    queryKey: playlistKeys(),
+    queryFn: () =>
+      fetchJson<{ success: boolean; data: PlaylistSummary[] }>('/api/v1/music/playlists'),
+  });
+}
+
+/**
+ * Fetch a single playlist with full track list.
+ */
+export function usePlaylistDetail(id: number | null) {
+  return useQuery({
+    queryKey: playlistDetailKey(id ?? -1),
+    queryFn: () =>
+      fetchJson<{ success: boolean; data: Playlist }>(`/api/v1/music/playlists/${id}`),
+    enabled: id != null && id > 0,
+    staleTime: 30_000,
+  });
+}
+
+/**
+ * Create a new playlist.
+ */
+export function useCreatePlaylist() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { name: string; description?: string; coverUrl?: string }) =>
+      fetchJson<{ success: boolean; data: Playlist }>('/api/v1/music/playlists', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: playlistKeys() });
+    },
+  });
+}
+
+/**
+ * Update a playlist.
+ */
+export function useUpdatePlaylist() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: number;
+      data: { name?: string; description?: string; coverUrl?: string; isPublic?: boolean };
+    }) =>
+      fetchJson<{ success: boolean; data: Playlist }>(`/api/v1/music/playlists/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }),
+    onSuccess: (_d, vars) => {
+      qc.invalidateQueries({ queryKey: playlistKeys() });
+      qc.invalidateQueries({ queryKey: playlistDetailKey(vars.id) });
+    },
+  });
+}
+
+/**
+ * Delete a playlist.
+ */
+export function useDeletePlaylist() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) =>
+      fetchJson<{ success: boolean }>(`/api/v1/music/playlists/${id}`, {
+        method: 'DELETE',
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: playlistKeys() });
+    },
+  });
+}
+
+/**
+ * Add a track to a playlist.
+ */
+export function useAddTrackToPlaylist() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ playlistId, trackId }: { playlistId: number; trackId: number }) =>
+      fetchJson<{ success: boolean }>(`/api/v1/music/playlists/${playlistId}/tracks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trackId }),
+      }),
+    onSuccess: (_d, vars) => {
+      qc.invalidateQueries({ queryKey: playlistDetailKey(vars.playlistId) });
+      qc.invalidateQueries({ queryKey: playlistKeys() });
+    },
+  });
+}
+
+/**
+ * Remove a track from a playlist.
+ */
+export function useRemoveTrackFromPlaylist() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ playlistId, trackId }: { playlistId: number; trackId: number }) =>
+      fetchJson<{ success: boolean }>(
+        `/api/v1/music/playlists/${playlistId}/tracks/${trackId}`,
+        { method: 'DELETE' },
+      ),
+    onSuccess: (_d, vars) => {
+      qc.invalidateQueries({ queryKey: playlistDetailKey(vars.playlistId) });
+      qc.invalidateQueries({ queryKey: playlistKeys() });
+    },
+  });
 }

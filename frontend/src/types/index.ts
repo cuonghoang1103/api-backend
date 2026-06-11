@@ -618,13 +618,44 @@ export interface Track {
 }
 
 export interface Playlist {
-  id: string;
+  id: number;
   name: string;
-  description: string;
-  coverUrl: string;
+  description?: string;
+  coverUrl?: string;
+  userId?: number;
+  isPublic: boolean;
+  user?: {
+    id: number;
+    username: string;
+    avatarUrl?: string;
+  };
   trackCount: number;
-  totalDuration: string;
-  tracks: Track[];
+  tracks?: Array<{
+    position: number;
+    addedAt: string;
+    track: Track;
+  }>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PlaylistSummary {
+  id: number;
+  name: string;
+  description?: string;
+  coverUrl?: string;
+  userId?: number;
+  isPublic: boolean;
+  user?: {
+    id: number;
+    username: string;
+    avatarUrl?: string;
+  };
+  trackCount: number;
+  tracks?: Array<{
+    track: Pick<Track, 'id' | 'title' | 'artist' | 'coverImage' | 'duration'>;
+  }>;
+  createdAt: string;
 }
 
 // === SOCIAL TYPES ===

@@ -9,8 +9,11 @@ import CyberBackground from '@/components/music/CyberBackground';
 import CyberPlayer from '@/components/music/CyberPlayer';
 import CyberPlaylist from '@/components/music/CyberPlaylist';
 import CyberSearch from '@/components/music/CyberSearch';
+import PlaylistSection from '@/components/music/PlaylistSection';
+import PlaylistView from '@/components/music/PlaylistView';
 import { useMusicStore } from '@/store/musicStore';
 import { useTracks } from '@/hooks/useMusicQueries';
+import type { PlaylistSummary } from '@/types';
 
 const C = {
   primary: '#8B5CF6',
@@ -69,6 +72,7 @@ export default function CyberMusicPage() {
 
   const [isMounted, setIsMounted] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [activePlaylistId, setActivePlaylistId] = useState<number | null>(null);
 
   // TanStack Query — replaces manual fetch with caching
   const { data, isLoading, isError, refetch, dataUpdatedAt } = useTracks({ size: 100 });
@@ -296,34 +300,52 @@ export default function CyberMusicPage() {
               transition={{ duration: 0.4 }}
               className="max-w-7xl mx-auto"
             >
-              <div className="flex flex-col xl:flex-row gap-6 items-start">
-                {/* Left: Playlist */}
-                <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  className="w-full xl:w-[38%] xl:shrink-0"
-                >
-                  <ClientOnly>
-                    <CyberPlaylist />
-                  </ClientOnly>
-                </motion.div>
+              {activePlaylistId !== null ? (
+                /* Playlist detail view */
+                <PlaylistView
+                  playlistId={activePlaylistId}
+                  onBack={() => setActivePlaylistId(null)}
+                />
+              ) : (
+                <>
+                  {/* Playlist section */}
+                  <div className="mb-8">
+                    <PlaylistSection
+                      onPlaylistClick={(pl) => setActivePlaylistId(pl.id)}
+                    />
+                  </div>
 
-                {/* Right: Player */}
-                <motion.div
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="flex-1 w-full"
-                >
-                  <ClientOnly>
-                    <CyberPlayer />
-                  </ClientOnly>
-                </motion.div>
-              </div>
+                  {/* Track list + Player */}
+                  <div className="flex flex-col xl:flex-row gap-6 items-start">
+                    {/* Left: Playlist */}
+                    <motion.div
+                      initial={{ opacity: 0, x: -30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 0.1 }}
+                      className="w-full xl:w-[38%] xl:shrink-0"
+                    >
+                      <ClientOnly>
+                        <CyberPlaylist />
+                      </ClientOnly>
+                    </motion.div>
+
+                    {/* Right: Player */}
+                    <motion.div
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                      className="flex-1 w-full"
+                    >
+                      <ClientOnly>
+                        <CyberPlayer />
+                      </ClientOnly>
+                    </motion.div>
+                  </div>
+                </>
+              )}
 
               {/* Empty state */}
-              {showEmpty && (
+              {showEmpty && activePlaylistId === null && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}

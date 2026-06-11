@@ -152,7 +152,11 @@ export default function ChatPage() {
   useEffect(() => {
     const checkBackend = async () => {
       try {
-        await fetch(`/api/v1/system/health`, { signal: AbortSignal.timeout(3000) });
+        await fetch(`/api/v1/system/health`, {
+          signal: typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal
+            ? AbortSignal.timeout(3000)
+            : new AbortController().signal
+        });
         setBackendConnected(true);
       } catch {
         setBackendConnected(false);
@@ -443,6 +447,7 @@ export default function ChatPage() {
     isStreaming, currentSessionId, addMessage, setStreaming, setRobotEmotion,
     currentMessages, setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
     updateLastAssistantMessage, removePendingMessage, limitedMode, setLimitedMode,
+    getToken,
   ]);
 
   const handlePromptSelect = useCallback((prompt: string, forceStatic?: boolean) => {

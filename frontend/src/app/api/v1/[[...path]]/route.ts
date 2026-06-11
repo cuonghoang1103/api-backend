@@ -5,164 +5,124 @@ import { NextRequest, NextResponse } from "next/server";
 // process.env.INTERNAL_BACKEND_URL is set in the frontend Dockerfile/container env.
 const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://backend:3001";
 
-async function parseBackendResponse(response: Response) {
-  const rawText = await response.text();
+/**
+ * Converts a backend fetch Response to a NextResponse.
+ * Handles both JSON and binary (audio) responses.
+ */
+async function toNextResponse(response: Response): Promise<NextResponse> {
   const contentType = response.headers.get("content-type") || "";
 
-  if (!rawText.trim()) {
-    return null;
-  }
-
+  // For JSON responses: parse and return as NextResponse.json
   if (contentType.includes("application/json")) {
+    const text = await response.text();
+    if (!text.trim()) return new NextResponse(null, { status: response.status });
     try {
-      return JSON.parse(rawText);
+      const data = JSON.parse(text);
+      return NextResponse.json(data, { status: response.status });
     } catch {
-      return {
-        success: false,
-        message: rawText,
-      };
+      return NextResponse.json({ success: false, message: text }, { status: response.status });
     }
   }
 
-  return {
-    success: response.ok,
-    message: rawText,
-  };
-}
-
-function toNextResponse(response: Response, data: unknown) {
-  if (data === null) {
+  // For binary responses (audio, images): stream the ArrayBuffer directly
+  const arrayBuffer = await response.arrayBuffer();
+  if (arrayBuffer.byteLength === 0) {
     return new NextResponse(null, { status: response.status });
   }
 
-  if (typeof data === "string") {
-    return new NextResponse(data, {
-      status: response.status,
-      headers: { "Content-Type": response.headers.get("content-type") || "text/plain; charset=utf-8" },
-    });
+  const headers: Record<string, string> = {
+    "Content-Type": contentType || "application/octet-stream",
+    "Content-Length": String(arrayBuffer.byteLength),
+  };
+
+  // Forward streaming headers for audio/Range support
+  const forwarding = [
+    "accept-ranges", "content-range", "cache-control",
+    "x-accel-buffering", "access-control-expose-headers",
+  ];
+  for (const h of forwarding) {
+    const v = response.headers.get(h);
+    if (v) headers[h] = v;
   }
 
-  return NextResponse.json(data, { status: response.status });
+  return new NextResponse(arrayBuffer, { status: response.status, headers });
 }
 
 /**
- * ALL backend API calls go through this proxy route: /api/v1/*
- * The browser attaches the backend_token from the httpOnly cookie automatically.
- * We additionally pass it as Authorization: Bearer header to satisfy JwtAuthenticationFilter.
+ * Sends a request to the backend, forwarding all necessary headers and body.
+ *
+ * For multipart/form-data: we must NOT read the body as text (which would corrupt
+ * binary audio data). Instead we read it as an ArrayBuffer and send it as-is.
+ * This preserves the multipart boundary bytes exactly.
  */
+async function proxyRequest(
+  method: string,
+  backendPath: string,
+  request: NextRequest,
+): Promise<Response> {
+  const token = request.cookies.get("backend_token")?.value;
+  const search = request.nextUrl.search;
+  const contentType = request.headers.get("content-type") || "";
+
+  // Build headers to forward
+  const headers: Record<string, string> = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+
+  // ALWAYS forward Content-Type — including for multipart/form-data.
+  // When request.body is consumed as ArrayBuffer, the browser-set Content-Type
+  // header can be dropped by Next.js. Explicitly forwarding it fixes the issue.
+  if (contentType) {
+    headers["Content-Type"] = contentType;
+  }
+
+  // Forward Range header for audio streaming
+  const range = request.headers.get("range");
+  if (range) headers["Range"] = range;
+
+  // Read body as ArrayBuffer to avoid any text encoding corruption.
+  // This is safe for all content types including multipart/form-data.
+  const body = await request.arrayBuffer();
+
+  return fetch(`${BACKEND_URL}${backendPath}${search}`, {
+    method,
+    headers,
+    credentials: "include",
+    body: body.byteLength > 0 ? body : undefined,
+  });
+}
+
+// ─── GET ────────────────────────────────────────────────────────────────────
 export async function GET(request: NextRequest) {
-  const token = request.cookies.get("backend_token")?.value;
   const path = request.nextUrl.pathname.replace("/api/v1", "");
-  const search = request.nextUrl.search;
-
-  const response = await fetch(`${BACKEND_URL}/api/v1${path}${search}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    credentials: "include",
-  });
-
-  const data = await parseBackendResponse(response);
-  return toNextResponse(response, data);
+  const response = await proxyRequest("GET", `/api/v1${path}`, request);
+  return toNextResponse(response);
 }
 
+// ─── POST ───────────────────────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
-  const token = request.cookies.get("backend_token")?.value;
   const path = request.nextUrl.pathname.replace("/api/v1", "");
-  const search = request.nextUrl.search;
-  const contentType = request.headers.get("content-type");
-  const body = await request.arrayBuffer();
-
-  // Only pass Content-Type for non-FormData requests.
-  // For FormData (multipart), browser sets the boundary automatically.
-  // Overriding it causes Express/multer to fail parsing the body.
-  const isFormData = contentType?.includes("multipart/form-data");
-  const headers: Record<string, string> = {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-  if (!isFormData && contentType) {
-    headers["Content-Type"] = contentType;
-  }
-
-  const response = await fetch(`${BACKEND_URL}/api/v1${path}${search}`, {
-    method: "POST",
-    headers,
-    credentials: "include",
-    body,
-  });
-
-  const data = await parseBackendResponse(response);
-  return toNextResponse(response, data);
+  const response = await proxyRequest("POST", `/api/v1${path}`, request);
+  return toNextResponse(response);
 }
 
+// ─── PUT ────────────────────────────────────────────────────────────────────
 export async function PUT(request: NextRequest) {
-  const token = request.cookies.get("backend_token")?.value;
   const path = request.nextUrl.pathname.replace("/api/v1", "");
-  const search = request.nextUrl.search;
-  const contentType = request.headers.get("content-type");
-  const body = await request.arrayBuffer();
-
-  const isFormData = contentType?.includes("multipart/form-data");
-  const headers: Record<string, string> = {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-  if (!isFormData && contentType) {
-    headers["Content-Type"] = contentType;
-  }
-
-  const response = await fetch(`${BACKEND_URL}/api/v1${path}${search}`, {
-    method: "PUT",
-    headers,
-    credentials: "include",
-    body,
-  });
-
-  const data = await parseBackendResponse(response);
-  return toNextResponse(response, data);
+  const response = await proxyRequest("PUT", `/api/v1${path}`, request);
+  return toNextResponse(response);
 }
 
+// ─── PATCH ─────────────────────────────────────────────────────────────────
 export async function PATCH(request: NextRequest) {
-  const token = request.cookies.get("backend_token")?.value;
   const path = request.nextUrl.pathname.replace("/api/v1", "");
-  const search = request.nextUrl.search;
-  const contentType = request.headers.get("content-type");
-  const body = await request.arrayBuffer();
-
-  const isFormData = contentType?.includes("multipart/form-data");
-  const headers: Record<string, string> = {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-  if (!isFormData && contentType) {
-    headers["Content-Type"] = contentType;
-  }
-
-  const response = await fetch(`${BACKEND_URL}/api/v1${path}${search}`, {
-    method: "PATCH",
-    headers,
-    credentials: "include",
-    body,
-  });
-
-  const data = await parseBackendResponse(response);
-  return toNextResponse(response, data);
+  const response = await proxyRequest("PATCH", `/api/v1${path}`, request);
+  return toNextResponse(response);
 }
 
+// ─── DELETE ─────────────────────────────────────────────────────────────────
 export async function DELETE(request: NextRequest) {
-  const token = request.cookies.get("backend_token")?.value;
   const path = request.nextUrl.pathname.replace("/api/v1", "");
-  const search = request.nextUrl.search;
-
-  const response = await fetch(`${BACKEND_URL}/api/v1${path}${search}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    credentials: "include",
-  });
-
-  const data = await parseBackendResponse(response);
-  return toNextResponse(response, data);
+  const response = await proxyRequest("DELETE", `/api/v1${path}`, request);
+  return toNextResponse(response);
 }

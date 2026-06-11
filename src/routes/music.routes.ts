@@ -345,8 +345,7 @@ router.post(
           'audio',
           req.userId,
         );
-        console.log(`[DEBUG][POST /tracks] uploadResult:`, uploadResult);
-        localPath = uploadResult.filePath;
+          localPath = uploadResult.filePath;
 
         // ─── FFmpeg loudnorm normalization ──────────────
         // Only normalize if FFmpeg is available and file is large enough

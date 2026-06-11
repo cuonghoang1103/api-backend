@@ -228,7 +228,9 @@ export default function AdminMusicPage() {
     setIsActive(track.active !== false);
     setAudioFile(null);
     setCoverFile(null);
-    setAudioPreviewUrl('');
+    // Show audio preview for existing tracks (even without new file)
+    const audioSrc = track.audioUrl || (track.localPath ? '/uploads/' + track.localPath.replace(/^\/+/, '') : '');
+    setAudioPreviewUrl(audioSrc);
     if (audioInputRef.current) audioInputRef.current.value = '';
     if (coverInputRef.current) coverInputRef.current.value = '';
     setEditingId(track.id);
@@ -404,7 +406,7 @@ export default function AdminMusicPage() {
   const handleDelete = async (id: number) => {
     if (!confirm('Ban co chac muon xoa track nay?')) return;
     try {
-      await apiFetch(`/tracks/${id}`, { method: 'DELETE' });
+      await apiFetch('/tracks/' + id, { method: 'DELETE' });
       toast.success('Xoa thanh cong');
       fetchTracks();
     } catch (err: any) {

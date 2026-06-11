@@ -74,6 +74,7 @@ sleep 2
 docker compose up -d --force-recreate nginx
 
 echo "=== [8/8] Wait for nginx (best-effort) ==="
+for i in $(seq 1 12); do
   if docker exec cuonghoangdev_nginx wget -qO- http://localhost/ >/dev/null 2>&1; then
     echo "[OK] nginx"
     break

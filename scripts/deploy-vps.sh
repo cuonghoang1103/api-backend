@@ -22,22 +22,9 @@ echo "=== [2/7] SSL symlinks ==="
   ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
 
 echo "=== [3/7] Pull latest Git changes ==="
-git pull origin main --ff-only
+git -C /opt/cuonghoangdev pull origin main --ff-only
 
-echo "=== [4/7] Database setup (pgvector + schema) ==="
-# Create pgvector extension if missing
-set +e
-docker compose exec -T postgres psql -U postgres -d cuonghoangdev_db \
-  -c "CREATE EXTENSION IF NOT EXISTS vector;" > /tmp/pgvector.log 2>&1
-PGVECTOR_EXIT=$?
-set -e
-if [ $PGVECTOR_EXIT -eq 0 ]; then
-  echo "pgvector extension: OK"
-else
-  echo "pgvector output:"
-  cat /tmp/pgvector.log
-fi
-
+echo "=== [4/7] Database schema setup ==="
 # Run prisma db push (non-fatal)
 docker compose exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" \
   > /tmp/prisma_push.log 2>&1

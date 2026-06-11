@@ -136,6 +136,7 @@ services:
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
       ADMIN_EMAILS: ${ADMIN_EMAILS:-cuonghoang1103@gmail.com}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     networks:
       - backend
     deploy:

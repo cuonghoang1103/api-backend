@@ -57,7 +57,7 @@ jobs:
             --exclude 'backups' \
             --exclude '*.log' \
             --exclude 'setup-swap.sh' \
-            ./ -e "ssh -F ~/.ssh/config" \
+            ./ -e "ssh -F $HOME/.ssh/config" \
             "vps:/opt/cuonghoangdev/"
 
       - name: Update .env on VPS with secrets

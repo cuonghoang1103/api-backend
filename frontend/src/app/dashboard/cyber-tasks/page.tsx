@@ -19,6 +19,7 @@ import { InventoryWindow } from '@/components/cyber/InventoryWindow';
 import { CommandPalette } from '@/components/cyber/CommandPalette';
 import { LaserStrike } from '@/components/cyber/LaserStrike';
 import { CyberAnalyticsChart } from '@/components/cyber/AnalyticsChart';
+import CyberTerminal from '@/components/cyber/CyberTerminal';
 import '@/styles/cyber.css';
 
 function formatDate(date: Date): string {
@@ -398,6 +399,9 @@ export default function CyberTasksPage() {
         onClose={() => setCliOpen(false)}
         onCommand={processCommand}
       />
+
+      {/* CuongMini AI Terminal */}
+      <CyberTerminal />
     </div>
   );
 }

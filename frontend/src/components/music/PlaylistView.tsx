@@ -129,7 +129,14 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
     ...item,
     track: normalizeTrack(item.track as unknown as Parameters<typeof normalizeTrack>[0]),
   }));
-  const totalSec = tracks.reduce((acc, t) => acc + (t.track.durationSeconds ?? 0), 0);
+  const parseDur = (d?: string) => {
+    if (!d) return 0;
+    const parts = d.split(':').map(Number);
+    if (parts.length === 2) return parts[0] * 60 + parts[1];
+    if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+    return 0;
+  };
+  const totalSec = tracks.reduce((acc, t) => acc + parseDur(t.track.duration), 0);
 
   const handlePlayAll = useCallback(() => {
     if (tracks.length === 0) return;

@@ -19,10 +19,14 @@ function PlaylistCard({ playlist, onClick }: PlaylistCardProps) {
 
   const coverSrc = !imgError && playlist.coverUrl ? playlist.coverUrl : DEFAULT_COVER;
   const previewTracks = playlist.tracks?.slice(0, 4) ?? [];
-  const totalSec = previewTracks.reduce(
-    (acc, t) => acc + (t.track.durationSeconds ?? 0),
-    0,
-  );
+  const totalSec = previewTracks.reduce((acc, t) => {
+    const d = t.track.duration;
+    if (!d) return acc;
+    const parts = d.split(':');
+    if (parts.length === 2) return acc + (parseInt(parts[0]) * 60 + parseInt(parts[1]));
+    if (parts.length === 3) return acc + (parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]));
+    return acc;
+  }, 0);
 
   return (
     <motion.div

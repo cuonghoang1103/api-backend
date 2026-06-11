@@ -12,16 +12,31 @@
 # ============================================================
 cd /opt/cuonghoangdev
 
-echo "=== [1/7] Ensuring directories ==="
+echo "=== [1/10] Check and free disk space ==="
+df -h /opt / /
+echo "--- Pruning docker (images, build cache, stopped containers) ---"
+docker builder prune -af 2>/dev/null || true
+docker image prune -af 2>/dev/null || true
+docker container prune -f 2>/dev/null || true
+docker volume prune -f 2>/dev/null || true
+echo "--- Removing old node_modules copies ---"
+find /opt/cuonghoangdev -name "node_modules" -type d -prune -exec rm -rf {} + 2>/dev/null || true
+echo "--- Removing build artifacts ---"
+find /opt/cuonghoangdev -name ".next" -type d -prune -exec rm -rf {} + 2>/dev/null || true
+find /opt/cuonghoangdev -name "dist" -type d -prune -exec rm -rf {} + 2>/dev/null || true
+echo "--- Disk usage after cleanup ---"
+df -h /opt / /var/lib/docker 2>/dev/null || df -h /opt /
+
+echo "=== [2/10] Ensuring directories ==="
 mkdir -p nginx/ssl certbot/conf/live/cuongthai.com certbot/www postgres redis uploads backups scripts
 
-echo "=== [2/7] SSL symlinks ==="
+echo "=== [3/10] SSL symlinks ==="
 [ -f certbot/conf/archive/cuongthai.com/fullchain2.pem ] && \
   ln -sf fullchain2.pem certbot/conf/archive/cuongthai.com/fullchain.pem 2>/dev/null || true
 [ -f certbot/conf/archive/cuongthai.com/privkey2.pem ] && \
   ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
 
-echo "=== [3/7] Ensure database is healthy ==="
+echo "=== [4/10] Ensure database is healthy ==="
 # Force-restart postgres if it's not accepting connections
 # If restart loop persists, check disk space and prune docker
 PG_READY=0
@@ -75,17 +90,17 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
   fi
 fi
 
-echo "=== [4/7] Ensure database exists ==="
+echo "=== [5/10] Ensure database exists ==="
 docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'cuonghoangdev_db'" | grep -q 1 || \
   docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE cuonghoangdev_db" 2>/dev/null
 echo "Database ready"
 
-echo "=== [5/7] Code already synced via rsync — skipping git pull ==="
+echo "=== [6/10] Code already synced via rsync ==="
 
-echo "=== [6/7] Building and swapping containers (zero-downtime) ==="
+echo "=== [7/10] Building containers (zero-downtime) ==="
 docker compose up -d --build --remove-orphans --force-recreate backend frontend
 
-echo "=== [7/7] Database schema setup (after backend is up) ==="
+echo "=== [8/10] Database schema setup (after backend is up) ==="
 for i in $(seq 1 18); do
   if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health >/dev/null 2>&1; then
     echo "Backend is healthy, running prisma db push..."
@@ -111,7 +126,7 @@ docker compose stop nginx 2>/dev/null || true
 sleep 2
 docker compose up -d --force-recreate nginx
 
-echo "=== [8/8] Wait for nginx (best-effort) ==="
+echo "=== [9/10] Wait for nginx (best-effort) ==="
 for i in $(seq 1 12); do
   if docker exec cuonghoangdev_nginx wget -qO- http://localhost/ >/dev/null 2>&1; then
     echo "[OK] nginx"
@@ -139,7 +154,7 @@ echo ""
 echo "=== Backend Logs (last 10) ==="
 docker compose logs --tail=10 backend
 
-echo "=== [10/10] Docker cache cleanup ==="
+echo "=== [10/10] Docker cleanup (free SSD space) ==="
 docker builder prune -f 2>/dev/null || echo "[WARN] builder prune failed"
 docker image prune -f 2>/dev/null || echo "[WARN] image prune failed"
 DOCKER_USAGE=$(docker system df --format '{{.Type}}: {{.Size}}' 2>/dev/null | head -5)

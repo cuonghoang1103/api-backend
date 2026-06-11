@@ -56,6 +56,18 @@ jobs:
             ./ -e "ssh -i ~/.ssh/deploy_key" \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/cuonghoangdev/"
 
+      - name: Update .env on VPS with secrets
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "$VPS_USER@$VPS_HOST" \
+            "grep -q 'YOUTUBE_API_KEY' /opt/cuonghoangdev/.env && \
+              sed -i 's/YOUTUBE_API_KEY=.*/YOUTUBE_API_KEY=${YOUTUBE_API_KEY}/' /opt/cuonghoangdev/.env || \
+              echo 'YOUTUBE_API_KEY=${YOUTUBE_API_KEY}' >> /opt/cuonghoangdev/.env"
+
       - name: Upload deploy script
         run: |
           chmod +x scripts/deploy-vps.sh

@@ -1,0 +1,55 @@
+# CÁC QUY TẮC CỐ ĐỊNH CHO DỰ ÁN
+
+## SSR & Hydration Safety
+
+- Luôn ưu tiên SSR-friendly code.
+- Mọi component sử dụng state của trình duyệt (localStorage, window, audio context) **BẮT BUỘC** phải bọc trong `useEffect` và có kiểm tra `typeof window !== 'undefined'`.
+- Không bao giờ để `localStorage` trực tiếp trong body của component hoặc state khởi tạo.
+- Khi sửa code, luôn kiểm tra xem có gây ra Hydration Mismatch không.
+- Mọi component dùng hooks (useState, useEffect, useRef, useCallback, useMemo) phải có `import { ... } from 'react'`.
+- Mọi file dùng `motion.*`, `AnimatePresence`, `useMotionValue`, `useTransform`, `useSpring` từ framer-motion **phải** có `import { motion, ... } from 'framer-motion'` ở đầu file.
+- Mọi file dùng icon Lucide (`<Home>`, `<Music>`, v.v.) phải có `import { ... } from 'lucide-react'`.
+
+## Error Handling
+
+- Luôn ưu tiên dùng `error.tsx` cho các route để chặn lỗi văng trang.
+- Nếu xảy ra lỗi 500 hoặc CORS, luôn kiểm tra middleware/Nginx config trước khi sửa logic frontend.
+- Cấu trúc Zustand store: Luôn dùng `persist` với một `storage` tùy chỉnh an toàn cho SSR.
+
+## Quy Trình Fix Lỗi
+
+### Lỗi Application Error / Hydration Mismatch
+
+Khi thấy lỗi "Application error: a client-side exception has occurred" hoặc Hydration Mismatch trong console:
+
+1. Tìm file bị lỗi từ stack trace trong console.
+2. Kiểm tra component nào đang truy cập `window` hoặc `localStorage` trước khi mount.
+3. Sửa bằng cách:
+   - Bọc nội dung trong `if (!mounted) return null`.
+   - Dùng `useEffect` để khởi tạo state thay vì inline trong body component.
+   - Đảm bảo đã có `const [mounted, setMounted] = useState(false);` + `useEffect(() => setMounted(true), []);`.
+4. **Hỏi user**: "Bạn đang gặp lỗi ở trang nào? Cho tôi xem console.error."
+
+### Lỗi 500 / CORS
+
+Khi API trả về 500 hoặc bị CORS block:
+
+1. Kiểm tra middleware xử lý multipart/form-data.
+2. Đảm bảo header `Access-Control-Allow-Origin` cho phép `https://cuongthai.com`.
+3. Kiểm tra kỹ logic multer xem có lỗi đường dẫn file không.
+4. **Chỉ sửa file backend liên quan**, không sửa frontend trừ khi cần thiết.
+
+## Nguyên Tắc Sửa Code
+
+- **Chỉ sửa file được chỉ định.** Không được sửa các file khác trừ khi thật sự cần thiết.
+- Tập trung fix lỗi cụ thể dựa trên `console.error` mà user cung cấp.
+- **Sau khi sửa xong bất kỳ file nào**: luôn chạy `npm run build` để xác nhận không có lỗi TypeScript/compile trước khi commit.
+- **Sau khi push**: đợi CI/CD deploy xong, verify bằng `curl -sI https://cuongthai.com` trước khi báo done.
+
+## Pre-Commit Checklist
+
+Trước mỗi commit, tự động chạy:
+
+1. `grep -E "motion\.|AnimatePresence|useState|useEffect|useRef|useCallback" [file vừa sửa]` — xác nhận mọi usage đều có import tương ứng.
+2. `npm run build` — phải pass hoàn toàn, exit code 0.
+3. Nếu build fail: **fix ngay trước khi commit**, không push code lỗi.

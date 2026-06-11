@@ -12,10 +12,10 @@ interface ChatInputProps {
 
 export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputProps) {
   const [value, setValue] = useState('');
+  const [focused, setFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const isDisabled = disabled || isStreaming;
 
-  // Auto-resize textarea
   useEffect(() => {
     const ta = textareaRef.current;
     if (!ta) return;
@@ -23,7 +23,6 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
     ta.style.height = `${Math.min(ta.scrollHeight, 160)}px`;
   }, [value]);
 
-  // Focus on mount
   useEffect(() => {
     textareaRef.current?.focus();
   }, []);
@@ -33,7 +32,6 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
     if (!text || isDisabled) return;
     onSend(text);
     setValue('');
-    // Reset height
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
     }
@@ -50,34 +48,58 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-4 border-t border-darkborder bg-darkbg/80 backdrop-blur-sm"
+      className="px-4 py-3 border-t border-[#22d3ee]/10 bg-[#0d1117]/80 backdrop-blur-xl flex-shrink-0 z-10"
     >
       <div className="max-w-4xl mx-auto">
-        <div className="relative bg-darkcard border border-darkborder rounded-2xl focus-within:border-neon-violet/50 transition-colors shadow-lg shadow-black/20">
+        {/* Terminal input box */}
+        <div
+          className={`
+            relative bg-[#0a0a0f] border rounded-xl
+            transition-all duration-300
+            ${focused
+              ? 'border-[#22d3ee]/50 input-circuit-focus data-card-glow-cyan'
+              : 'border-[#22d3ee]/15'
+            }
+          `}
+        >
+          {/* Terminal prompt prefix */}
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none select-none">
+            <span className="text-[#22d3ee] font-mono text-sm font-bold">&gt;</span>
+            <span className="text-[#64748b] font-mono text-xs">root@cuongmini-os</span>
+            <span className="text-[#64748b] font-mono text-xs">:</span>
+            <span className="text-[#22d3ee]/60 font-mono text-xs">~</span>
+            <span className="text-[#64748b] font-mono text-xs">$</span>
+          </div>
+
           <textarea
             ref={textareaRef}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask me anything about CuongHoang's portfolio, skills, projects..."
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            placeholder="enter command..."
             disabled={isDisabled}
             rows={1}
-            className="w-full px-4 py-3 pr-14 bg-transparent text-text-primary placeholder:text-text-muted focus:outline-none resize-none transition-all disabled:opacity-50"
+            className="w-full pl-[170px] pr-14 py-3 bg-transparent text-[#f8fafc] placeholder:text-[#64748b]/40 font-mono text-sm focus:outline-none resize-none transition-all disabled:opacity-50"
             style={{ minHeight: '48px', maxHeight: '160px' }}
           />
 
-          {/* Send button */}
+          {/* Execute button */}
           <div className="absolute right-2 bottom-2">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.08, y: -2 }}
+              whileTap={{ scale: 0.92 }}
               onClick={handleSubmit}
               disabled={!value.trim() || isDisabled}
-              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-lg ${
-                value.trim() && !isDisabled
-                  ? 'bg-gradient-to-r from-neon-indigo to-neon-violet text-white shadow-neon-indigo/30'
-                  : 'bg-white/5 text-text-muted cursor-not-allowed'
-              }`}
+              className={`
+                relative w-10 h-10 rounded-xl flex items-center justify-center
+                transition-all shadow-lg overflow-hidden exec-btn-glitch
+                ${value.trim() && !isDisabled
+                  ? 'bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6] text-white shadow-[0_0_16px_rgba(34,211,238,0.3)]'
+                  : 'bg-[#1a1a24] text-[#64748b] cursor-not-allowed'
+                }
+              `}
             >
               {isStreaming ? (
                 <motion.div
@@ -93,8 +115,8 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
           </div>
         </div>
 
-        <p className="text-xs text-text-muted text-center mt-2">
-          AI may be incorrect. Verify important information.
+        <p className="text-[11px] text-[#64748b]/50 text-center mt-1.5 font-mono">
+          <span className="text-[#22d3ee]/40">//</span> Press Enter to execute &bull; Shift+Enter for new line &bull; AI responses may be incorrect
         </p>
       </div>
     </motion.div>

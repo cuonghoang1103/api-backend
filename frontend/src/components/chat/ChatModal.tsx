@@ -308,12 +308,15 @@ export default function ChatModal({ onClose }: ChatModalProps) {
           try {
             const data = JSON.parse(raw);
 
-            if (data.sessionId && !resolvedSessionId) {
-              resolvedSessionId = data.sessionId;
-              setCurrentSessionId(resolvedSessionId);
+            // Backend sends: {"type":"connected",...} | {"type":"chunk","text":"..."} | {"type":"done",...} | {"type":"error",...}
+            if (data.type === 'connected') {
+              if (data.sessionId && !resolvedSessionId) {
+                resolvedSessionId = data.sessionId;
+                setCurrentSessionId(resolvedSessionId);
+              }
               continue;
             }
-            if (data.done) {
+            if (data.type === 'done') {
               if (resolvedSessionId && !currentSessionId) {
                 const newSession: ChatSession = {
                   id: Date.now(),
@@ -325,12 +328,14 @@ export default function ChatModal({ onClose }: ChatModalProps) {
               }
               continue;
             }
-            if (data.error) {
-              toast.error(data.error);
+            if (data.type === 'error') {
+              toast.error(data.error || 'Stream error');
               continue;
             }
-            if (data.text) {
-              assistantContent += data.text;
+            // chunk or raw text
+            const text = data.text || data.content || '';
+            if (text) {
+              assistantContent += text;
               updateLastAssistantMessage(sessionId, assistantContent);
             }
           } catch {

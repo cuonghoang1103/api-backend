@@ -337,36 +337,36 @@ export default function ChatPage() {
           try {
             const data = JSON.parse(raw);
 
-            if (data.sessionId && !resolvedSessionId) {
-              resolvedSessionId = data.sessionId;
+            // Backend sends: {"type":"connected","sessionId":"..."} | {"type":"chunk","text":"..."} | {"type":"done",...} | {"type":"error",...}
+            if (data.type === 'connected') {
+              if (data.sessionId && !resolvedSessionId) resolvedSessionId = data.sessionId;
               continue;
             }
-            if (data.done) continue;
-            if (data.error) {
-              errorMsg += data.error;
+            if (data.type === 'done') continue;
+            if (data.type === 'error') {
+              errorMsg += data.error || '';
               continue;
             }
-            if (data.text) {
-              const lowerContent = data.text.toLowerCase();
+            // chunk or raw text
+            const text = data.text || data.content || '';
+            if (text) {
+              const lowerContent = text.toLowerCase();
               if (lowerContent.includes('429') || lowerContent.includes('quota') ||
                   lowerContent.includes('exceeded') || lowerContent.includes('too many requests') ||
                   lowerContent.includes('resource_exhausted') || lowerContent.includes('error')) {
                 hasError = true;
-                errorMsg += data.text;
+                errorMsg += text;
               } else {
-                assistantContent += data.text;
+                assistantContent += text;
                 updateLastAssistantMessage(sessionId, assistantContent);
               }
             }
           } catch {
-            const lowerRaw = raw.toLowerCase();
-            if (lowerRaw.includes('429') || lowerRaw.includes('quota') ||
-                lowerRaw.includes('error') || lowerRaw.includes('da xay ra loi')) {
-              hasError = true;
-              errorMsg += raw;
-            } else if (raw) {
+            // Raw content fallback
+            if (raw) {
               assistantContent += raw;
               updateLastAssistantMessage(sessionId, assistantContent);
+            }
             }
           }
         }
@@ -456,7 +456,7 @@ export default function ChatPage() {
   }, [setCurrentSessionId, setSuggestedPrompts]);
 
   return (
-    <div className="flex h-screen overflow-hidden cyber-grid-bg">
+    <div className="flex h-screen pt-16 overflow-hidden cyber-grid-bg">
       {/* Matrix rain background */}
       <MatrixRain />
 

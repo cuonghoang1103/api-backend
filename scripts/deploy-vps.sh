@@ -22,18 +22,46 @@ echo "=== [2/7] SSL symlinks ==="
   ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
 
 echo "=== [3/7] Ensure database is healthy ==="
-# Force-restart postgres if it's not accepting connections (handles crash recovery)
-if ! docker compose exec -T postgres pg_isready -U postgres -d cuonghoangdev_db >/dev/null 2>&1; then
-  echo "[WARN] Postgres not ready, restarting container..."
+# Force-restart postgres if it's not accepting connections
+# If restart loop persists, check disk space and prune docker
+PG_READY=0
+if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
+  echo "[WARN] Postgres not ready, attempting restart..."
   docker compose restart postgres
   for i in $(seq 1 12); do
     if docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
       echo "Postgres is back up after restart"
+      PG_READY=1
       break
     fi
-    echo "Waiting for postgres to restart... ($i/12)"
+    # Check if container is stuck in restart loop
+    RESTART_COUNT=$(docker inspect cuonghoangdev_postgres --format '{{.RestartCount}}' 2>/dev/null)
+    echo "Waiting for postgres... ($i/12) restart_count=$RESTART_COUNT"
+    if [ "$i" -eq 6 ]; then
+      echo "[WARN] Postgres still down after 30s, checking disk space..."
+      df -h /opt/cuonghoangdev/postgres
+      echo "Pruning docker to free space..."
+      docker builder prune -f 2>/dev/null
+      docker image prune -f 2>/dev/null
+    fi
     sleep 5
   done
+  # If still not ready, force-remove and recreate container
+  if [ "$PG_READY" = "0" ]; then
+    echo "[CRITICAL] Postgres stuck in restart loop, forcing container recreation..."
+    docker compose rm -sf postgres 2>/dev/null || true
+    sleep 5
+    docker compose up -d postgres
+    for i in $(seq 1 18); do
+      if docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
+        echo "Postgres recreated and up"
+        PG_READY=1
+        break
+      fi
+      echo "Waiting for recreated postgres... ($i/18)"
+      sleep 5
+    done
+  fi
 fi
 
 echo "=== [4/7] Ensure database exists ==="
@@ -41,8 +69,7 @@ docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database 
   docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE cuonghoangdev_db" 2>/dev/null
 echo "Database ready"
 
-echo "=== [5/7] Pull latest Git changes ==="
-git -C /opt/cuonghoangdev pull origin main --ff-only
+echo "=== [5/7] Code already synced via rsync — skipping git pull ==="
 
 echo "=== [6/7] Building and swapping containers (zero-downtime) ==="
 docker compose up -d --build --remove-orphans --force-recreate backend frontend

@@ -177,18 +177,15 @@ export default function Navbar() {
                     }`}
                   >
                     <link.icon className={`w-3.5 h-3.5 shrink-0 transition-all ${
-                      isActive ? 'drop-shadow-[0_0_8px_#0ea5e9]' : ''
+                      isActive ? 'drop-shadow-[0_0_6px_#0ea5e9]' : ''
                     }`} />
                     <span>{link.label}</span>
+                    {/* Subtle dot indicator — no heavy glow underline */}
                     {isActive && (
                       <motion.div
                         layoutId="top-nav-indicator"
-                        className="absolute bottom-0.5 left-1/2 -translate-x-1/2 h-0.5 rounded-full"
-                        style={{
-                          background: '#0ea5e9',
-                          boxShadow: '0 0 12px #0ea5e9, 0 0 24px #0ea5e9, 0 0 36px rgba(14,165,233,0.5)',
-                          width: '60%',
-                        }}
+                        className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                        style={{ background: '#0ea5e9', opacity: 0.7 }}
                         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                       />
                     )}

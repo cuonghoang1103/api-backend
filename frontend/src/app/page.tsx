@@ -658,11 +658,11 @@ export default function HomePage() {
                       <div className="absolute top-3 right-3 flex items-center gap-1.5">
                         <span className="px-2 py-1 rounded-md bg-black/60 backdrop-blur-sm border border-white/[0.08] text-[11px] font-mono text-white/70 flex items-center gap-1">
                           <span className="text-yellow-400">★</span>
-                          <span className="text-white/90">{Math.floor(Math.random() * 200 + 50)}</span>
+                          <span className="text-white/90">{50 + (index * 37 % 200)}</span>
                         </span>
                         <span className="px-2 py-1 rounded-md bg-black/60 backdrop-blur-sm border border-white/[0.08] text-[11px] font-mono text-white/70 flex items-center gap-1">
                           <span className="text-emerald-400">⊙</span>
-                          <span className="text-white/90">{Math.floor(Math.random() * 5)}</span>
+                          <span className="text-white/90">{index % 5}</span>
                         </span>
                       </div>
 

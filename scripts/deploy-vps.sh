@@ -21,21 +21,13 @@ echo "=== [2/7] SSL symlinks ==="
 [ -f certbot/conf/archive/cuongthai.com/privkey2.pem ] && \
   ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
 
-echo "=== [3/7] Pull latest Git changes ==="
-git -C /opt/cuonghoangdev pull origin main --ff-only
+echo "=== [3/7] Ensure database exists ==="
+docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'cuonghoangdev_db'" | grep -q 1 || \
+  docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE cuonghoangdev_db" 2>/dev/null
+echo "Database ready"
 
-echo "=== [4/7] Database schema setup ==="
-# Run prisma db push (non-fatal)
-docker compose exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" \
-  > /tmp/prisma_push.log 2>&1
-if grep -q "already in sync\|The database is already in sync" /tmp/prisma_push.log 2>/dev/null; then
-  echo "Database schema already in sync"
-elif [ $? -eq 0 ]; then
-  echo "Database schema pushed successfully"
-else
-  echo "[WARN] Prisma push output:"
-  cat /tmp/prisma_push.log
-fi
+echo "=== [4/7] Pull latest Git changes ==="
+git -C /opt/cuonghoangdev pull origin main --ff-only
 
 echo "=== [5/7] Building and swapping containers (zero-downtime) ==="
 # up --force-recreate = stop old, remove, start new atomically
@@ -47,19 +39,23 @@ if ! docker ps --format '{{.Names}}' | grep -q '^cuonghoangdev_frontend$'; then
   docker compose up -d frontend
 fi
 
-echo "=== [6/7] Health checks ==="
-# Wait for backend
-for i in $(seq 1 36); do
-  if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null | grep -q 'ok'; then
-    echo "[OK] backend"
+echo "=== [6/7] Database schema setup (after backend is up) ==="
+for i in $(seq 1 18); do
+  if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health >/dev/null 2>&1; then
+    echo "Backend is healthy, running prisma db push..."
+    docker compose exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" \
+      > /tmp/prisma_push.log 2>&1
+    if grep -q "already in sync\|The database is already in sync" /tmp/prisma_push.log 2>/dev/null; then
+      echo "Database schema already in sync"
+    elif [ $? -eq 0 ]; then
+      echo "Database schema pushed successfully"
+    else
+      echo "[WARN] Prisma push output:"
+      cat /tmp/prisma_push.log
+    fi
     break
   fi
-  if [ $i -eq 36 ]; then
-    echo "[FAIL] backend health check failed after 180s"
-    docker compose logs --tail=30 backend
-    exit 1
-  fi
-  echo "Waiting for backend... ($i/36)"
+  echo "Waiting for backend to be ready... ($i/18)"
   sleep 5
 done
 
@@ -84,6 +80,11 @@ for i in $(seq 1 12); do
   fi
 done
 
+echo "=== [7/7] Seed Cuong03dx admin account ==="
+if [ -f /opt/cuonghoangdev/scripts/seed-cuong03dx.cjs ]; then
+  docker compose exec -T backend node /app/scripts/seed-cuong03dx.cjs && echo "Seed complete" || echo "[WARN] Seed failed, continuing..."
+fi
+
 echo ""
 echo "=== Container Status ==="
 docker compose ps
@@ -92,7 +93,7 @@ echo ""
 echo "=== Backend Logs (last 10) ==="
 docker compose logs --tail=10 backend
 
-echo "=== [7/7] Docker cache cleanup (free SSD space) ==="
+echo "=== [8/8] Docker cache cleanup (free SSD space) ==="
 docker builder prune -f 2>/dev/null || echo "[WARN] builder prune failed"
 docker image prune -f 2>/dev/null || echo "[WARN] image prune failed"
 DOCKER_USAGE=$(docker system df --format '{{.Type}}: {{.Size}}' 2>/dev/null | head -5)

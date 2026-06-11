@@ -98,7 +98,7 @@ echo "Database ready"
 echo "=== [6/10] Code already synced via rsync ==="
 
 echo "=== [7/10] Building containers (zero-downtime) ==="
-docker compose up -d --build --remove-orphans --force-recreate backend frontend
+docker compose up -d --build --no-cache --remove-orphans --force-recreate backend frontend
 
 echo "=== [8/10] Database schema setup (after backend is up) ==="
 for i in $(seq 1 18); do

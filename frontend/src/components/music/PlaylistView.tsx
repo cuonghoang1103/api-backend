@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Play, Pause, ArrowLeft, ListMusic, Trash2, Clock, Plus, X, Loader2 } from 'lucide-react';
+import { Play, Pause, ArrowLeft, ListMusic, Trash2, Clock, Loader2 } from 'lucide-react';
 import { usePlaylistDetail, useRemoveTrackFromPlaylist, useDeletePlaylist } from '@/hooks/useMusicQueries';
 import type { Playlist, Track } from '@/types';
 import { formatDuration } from '@/hooks/useMusicQueries';
@@ -15,60 +14,48 @@ interface PlaylistViewProps {
   onBack: () => void;
 }
 
-function normalizeTrack(raw: {
-  id: number;
-  title: string;
-  artist: string;
-  audioUrl?: string | null;
-  coverImage?: string | null;
-  durationSeconds?: number | null;
-  fileSize?: BigInt | null;
-  localPath?: string | null;
-  active?: boolean | null;
-  createdAt?: string | Date | null;
-}): Track {
-  const audioUrl = raw.audioUrl?.trim()
-    || (raw.localPath?.trim() ? `/uploads/${raw.localPath.replace(/^\/+/, '')}` : '')
-    || `/api/v1/music/stream/${raw.id}`;
+function buildAudioUrl(raw: { audioUrl?: string | null; localPath?: string | null; id: number }): string {
+  if (raw.audioUrl?.trim()) return raw.audioUrl;
+  if (raw.localPath?.trim()) return `/uploads/${raw.localPath.replace(/^\/+/, '')}`;
+  return `/api/v1/music/stream/${raw.id}`;
+}
+
+function toTrack(raw: Playlist['tracks'] extends Array<infer T> ? T : never): Track {
   return {
     id: String(raw.id),
     title: raw.title ?? 'Unknown',
     artist: raw.artist ?? 'Unknown Artist',
     duration: raw.durationSeconds ? formatDuration(raw.durationSeconds) : '0:00',
-    durationSeconds: Number(raw.durationSeconds ?? 0) || undefined,
-    audioUrl,
+    durationSeconds: raw.durationSeconds ?? undefined,
+    audioUrl: buildAudioUrl(raw as Parameters<typeof buildAudioUrl>[0]),
     coverImage: raw.coverImage ?? '',
     localPath: raw.localPath ?? undefined,
-    fileSize: raw.fileSize != null ? Number(raw.fileSize) : undefined,
-    active: raw.active ?? undefined,
-    createdAt: raw.createdAt ? String(raw.createdAt) : undefined,
+    createdAt: raw.createdAt ?? undefined,
   };
 }
 
 function PlaylistTrackRow({
-  item,
+  track,
   index,
   onRemove,
   onPlay,
   isPlaying,
   currentTrackId,
 }: {
-  item: { position: number; addedAt: string; track: ReturnType<typeof normalizeTrack> };
+  track: Track;
   index: number;
   onRemove: () => void;
   onPlay: () => void;
   isPlaying: boolean;
   currentTrackId?: string;
 }) {
-  const t = item.track;
-  const isActive = currentTrackId === t.id;
+  const isActive = currentTrackId === track.id;
 
   return (
     <div
       className={`flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 rounded-xl group transition-colors cursor-pointer ${isActive ? 'bg-white/5' : ''}`}
       onClick={onPlay}
     >
-      {/* Number / Play */}
       <div className="w-8 flex items-center justify-center shrink-0">
         {isActive && isPlaying ? (
           <Pause className="w-4 h-4 text-neon-violet" />
@@ -80,32 +67,28 @@ function PlaylistTrackRow({
         )}
       </div>
 
-      {/* Cover */}
       <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0">
-        {t.coverImage ? (
+        {track.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={t.coverImage} alt={t.title} className="w-full h-full object-cover" />
+          <img src={track.coverImage} alt={track.title} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center">
-            <span className="text-white/50 text-xs font-bold">{t.title.charAt(0)}</span>
+            <span className="text-white/50 text-xs font-bold">{track.title.charAt(0)}</span>
           </div>
         )}
       </div>
 
-      {/* Info */}
       <div className="flex-1 min-w-0">
         <p className={`text-sm font-medium truncate ${isActive ? 'text-neon-violet' : 'text-white'}`}>
-          {t.title}
+          {track.title}
         </p>
-        <p className="text-xs text-gray-500 truncate">{t.artist}</p>
+        <p className="text-xs text-gray-500 truncate">{track.artist}</p>
       </div>
 
-      {/* Duration */}
       <div className="text-xs text-gray-500 tabular-nums w-10 text-right shrink-0">
-        {t.duration}
+        {track.duration}
       </div>
 
-      {/* Remove */}
       <button
         onClick={(e) => { e.stopPropagation(); onRemove(); }}
         className="p-1.5 text-gray-600 opacity-0 group-hover:opacity-100 hover:text-red-400 transition-all rounded-lg hover:bg-red-500/10 shrink-0"
@@ -125,32 +108,22 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const playlist: Playlist | undefined = data?.data;
-  const tracks = (playlist?.tracks ?? []).map((item) => ({
-    ...item,
-    track: normalizeTrack(item.track as unknown as Parameters<typeof normalizeTrack>[0]),
-  }));
-  const parseDur = (d?: string) => {
-    if (!d) return 0;
-    const parts = d.split(':').map(Number);
-    if (parts.length === 2) return parts[0] * 60 + parts[1];
-    if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
-    return 0;
-  };
-  const totalSec = tracks.reduce((acc, t) => acc + parseDur(t.track.duration), 0);
+  // Backend returns flat tracks — no wrapper needed
+  const rawTracks = playlist?.tracks ?? [];
+  const tracks: Track[] = rawTracks.map((r) => toTrack(r));
+
+  const totalSec = tracks.reduce((acc, t) => acc + (t.durationSeconds ?? 0), 0);
 
   const handlePlayAll = useCallback(() => {
     if (tracks.length === 0) return;
-    // Set all tracks in store and play first
     const { useMusicStore } = require('@/store/musicStore');
-    const allTracks = tracks.map((t: { track: Track }) => t.track);
-    useMusicStore.getState().setTracks(allTracks);
+    useMusicStore.getState().setTracks(tracks);
     useMusicStore.getState().playTrackAtIndex(0);
   }, [tracks]);
 
   const handlePlayTrack = useCallback((index: number) => {
     const { useMusicStore } = require('@/store/musicStore');
-    const allTracks = tracks.map((t: { track: Track }) => t.track);
-    useMusicStore.getState().setTracks(allTracks);
+    useMusicStore.getState().setTracks(tracks);
     useMusicStore.getState().playTrackAtIndex(index);
   }, [tracks]);
 
@@ -191,7 +164,6 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
 
   return (
     <div>
-      {/* Back button */}
       <button
         onClick={onBack}
         className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors mb-4"
@@ -200,9 +172,7 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
         Tat ca bai hat
       </button>
 
-      {/* Playlist header */}
       <div className="flex items-end gap-6 mb-8">
-        {/* Cover */}
         <div className="relative w-44 h-44 rounded-2xl overflow-hidden shadow-2xl shadow-neon-violet/20 shrink-0">
           {playlist.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -214,7 +184,7 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
           ) : tracks.length > 0 ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={tracks[0].track.coverImage || DEFAULT_COVER}
+              src={tracks[0].coverImage || DEFAULT_COVER}
               alt=""
               className="w-full h-full object-cover"
             />
@@ -225,7 +195,6 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
           )}
         </div>
 
-        {/* Info */}
         <div className="flex-1 min-w-0">
           <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Playlist</p>
           <h1 className="text-3xl font-bold text-white mb-1 truncate">{playlist.name}</h1>
@@ -236,7 +205,7 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
             {playlist.user && (
               <span>Tao boi <span className="text-gray-300">{playlist.user.username}</span></span>
             )}
-            <span>{tracks.length} {tracks.length === 1 ? 'bai hat' : 'bai hat'}</span>
+            <span>{tracks.length} bai hat</span>
             {totalSec > 0 && (
               <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
@@ -247,7 +216,6 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
         </div>
       </div>
 
-      {/* Actions */}
       <div className="flex items-center gap-3 mb-6">
         <button
           onClick={handlePlayAll}
@@ -266,7 +234,6 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
         </button>
       </div>
 
-      {/* Track list */}
       {tracks.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
           <p className="text-sm">Playlist trong</p>
@@ -274,12 +241,12 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
         </div>
       ) : (
         <div className="space-y-0.5">
-          {tracks.map((item: { position: number; track: Track }, idx: number) => (
+          {tracks.map((track, idx) => (
             <PlaylistTrackRow
-              key={item.track.id}
-              item={item}
+              key={track.id}
+              track={track}
               index={idx}
-              onRemove={() => handleRemove(Number(item.track.id))}
+              onRemove={() => handleRemove(Number(track.id))}
               onPlay={() => handlePlayTrack(idx)}
               isPlaying={isPlaying}
               currentTrackId={currentTrack?.id}
@@ -288,7 +255,6 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
         </div>
       )}
 
-      {/* Delete confirmation */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)' }}>
           <div className="bg-darkcard border border-darkborder rounded-2xl p-6 max-w-sm w-full shadow-2xl">

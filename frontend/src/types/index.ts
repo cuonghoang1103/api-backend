@@ -631,9 +631,14 @@ export interface Playlist {
   };
   trackCount: number;
   tracks?: Array<{
-    position: number;
-    addedAt: string;
-    track: Track;
+    id: number;
+    title: string;
+    artist: string;
+    audioUrl?: string | null;
+    coverImage?: string | null;
+    durationSeconds?: number | null;
+    localPath?: string | null;
+    createdAt?: string;
   }>;
   createdAt: string;
   updatedAt: string;
@@ -653,7 +658,11 @@ export interface PlaylistSummary {
   };
   trackCount: number;
   tracks?: Array<{
-    track: Pick<Track, 'id' | 'title' | 'artist' | 'coverImage' | 'duration'>;
+    id: number;
+    title: string;
+    artist: string;
+    coverImage?: string | null;
+    durationSeconds?: number | null;
   }>;
   createdAt: string;
 }

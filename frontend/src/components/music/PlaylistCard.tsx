@@ -19,14 +19,8 @@ function PlaylistCard({ playlist, onClick }: PlaylistCardProps) {
 
   const coverSrc = !imgError && playlist.coverUrl ? playlist.coverUrl : DEFAULT_COVER;
   const previewTracks = playlist.tracks?.slice(0, 4) ?? [];
-  const totalSec = previewTracks.reduce((acc, t) => {
-    const d = t.track.duration;
-    if (!d) return acc;
-    const parts = d.split(':');
-    if (parts.length === 2) return acc + (parseInt(parts[0]) * 60 + parseInt(parts[1]));
-    if (parts.length === 3) return acc + (parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]));
-    return acc;
-  }, 0);
+  const parseDurSec = (s?: number | null) => (typeof s === 'number' ? s : 0);
+  const totalSec = previewTracks.reduce((acc, t) => acc + parseDurSec(t.durationSeconds), 0);
 
   return (
     <motion.div
@@ -47,10 +41,10 @@ function PlaylistCard({ playlist, onClick }: PlaylistCardProps) {
         ) : previewTracks.length >= 4 ? (
           <div className="grid grid-cols-2 grid-rows-2 w-full h-full">
             {previewTracks.map((t) => (
-              <div key={t.track.id} className="overflow-hidden">
+              <div key={t.id} className="overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={t.track.coverImage || DEFAULT_COVER}
+                  src={t.coverImage || DEFAULT_COVER}
                   alt=""
                   className="w-full h-full object-cover"
                 />
@@ -60,7 +54,7 @@ function PlaylistCard({ playlist, onClick }: PlaylistCardProps) {
         ) : previewTracks.length > 0 ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={previewTracks[0].track.coverImage || DEFAULT_COVER}
+            src={previewTracks[0].coverImage || DEFAULT_COVER}
             alt=""
             className="w-full h-full object-cover"
           />

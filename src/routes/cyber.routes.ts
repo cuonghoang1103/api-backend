@@ -28,7 +28,7 @@ router.get(
   async (req: any, res: any, next: any) => {
     try {
       const date = (req.query.date as string) || new Date().toISOString().split('T')[0];
-      const tasks = await cyberService.getTasks(req.user.id, date);
+      const tasks = await cyberService.getTasks(req.user.userId, date);
       res.json({ success: true, data: tasks });
     } catch (err) {
       next(err);
@@ -58,7 +58,7 @@ router.post(
   validate,
   async (req: any, res: any, next: any) => {
     try {
-      const task = await cyberService.createTask(req.user.id, req.body);
+      const task = await cyberService.createTask(req.user.userId, req.body);
       res.status(201).json({ success: true, data: task });
     } catch (err) {
       next(err);
@@ -74,7 +74,7 @@ router.patch(
   validate,
   async (req: any, res: any, next: any) => {
     try {
-      const result = await cyberService.toggleTask(req.user.id, Number(req.params.id));
+      const result = await cyberService.toggleTask(req.user.userId, Number(req.params.id));
       res.json({ success: true, data: result });
     } catch (err) {
       next(err);
@@ -90,7 +90,7 @@ router.delete(
   validate,
   async (req: any, res: any, next: any) => {
     try {
-      const result = await cyberService.deleteTask(req.user.id, Number(req.params.id));
+      const result = await cyberService.deleteTask(req.user.userId, Number(req.params.id));
       res.json({ success: true, data: result });
     } catch (err) {
       next(err);
@@ -101,7 +101,7 @@ router.delete(
 // ─── GET /api/v1/cyber/profile ─────────────────────────────────────────────
 router.get('/profile', authenticate, async (req: any, res: any, next: any) => {
   try {
-    const profile = await cyberService.getProfile(req.user.id);
+    const profile = await cyberService.getProfile(req.user.userId);
     res.json({ success: true, data: profile });
   } catch (err) {
     next(err);
@@ -111,7 +111,7 @@ router.get('/profile', authenticate, async (req: any, res: any, next: any) => {
 // ─── GET /api/v1/cyber/inventory ───────────────────────────────────────────
 router.get('/inventory', authenticate, async (req: any, res: any, next: any) => {
   try {
-    const inventory = await cyberService.getInventory(req.user.id);
+    const inventory = await cyberService.getInventory(req.user.userId);
     res.json({ success: true, data: inventory });
   } catch (err) {
     next(err);
@@ -130,7 +130,7 @@ router.post(
   validate,
   async (req: any, res: any, next: any) => {
     try {
-      const coupon = await cyberService.mintCoupon(req.user.id, Number(req.body.discountAmount));
+      const coupon = await cyberService.mintCoupon(req.user.userId, Number(req.body.discountAmount));
       res.status(201).json({ success: true, data: coupon });
     } catch (err) {
       next(err);
@@ -151,7 +151,7 @@ router.get(
   validate,
   async (req: any, res: any, next: any) => {
     try {
-      const analytics = await cyberService.getAnalytics(req.user.id, (req.query.period as any) || 'month');
+      const analytics = await cyberService.getAnalytics(req.user.userId, (req.query.period as any) || 'month');
       res.json({ success: true, data: analytics });
     } catch (err) {
       next(err);

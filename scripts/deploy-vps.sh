@@ -18,6 +18,26 @@ set -e  # Stop on error
 
 cd /opt/cuonghoangdev
 
+# ─── Prevent concurrent deploys (lock file) ────────────────────────────────────
+DEPLOY_LOCK="/tmp/deploy-vps.lock"
+DEPLOY_PID="$$"
+if [ -f "$DEPLOY_LOCK" ]; then
+  LOCK_PID=$(cat "$DEPLOY_LOCK" 2>/dev/null)
+  if [ "$LOCK_PID" != "$DEPLOY_PID" ] && kill -0 "$LOCK_PID" 2>/dev/null; then
+    echo "[WARN] Another deploy is running (PID $LOCK_PID). Waiting..."
+    for i in $(seq 1 60); do
+      sleep 5
+      if ! kill -0 "$LOCK_PID" 2>/dev/null; then
+        echo "[OK] Previous deploy finished. Proceeding."
+        break
+      fi
+      echo "Waiting... ($i/60)"
+    done
+  fi
+fi
+echo "$DEPLOY_PID" > "$DEPLOY_LOCK"
+trap "rm -f $DEPLOY_LOCK" EXIT
+
 # ─── BuildKit: Enable inline cache + parallel build ───────────────────────────
 # BuildKit acceleration:
 #   - parallel: build layers simultaneously (30-50% faster)
@@ -86,9 +106,10 @@ echo "Database ready"
 
 echo "=== [6/7] Build and deploy containers ==="
 # ─── Remove old containers (force) ──────────────────────────────────────────────
-# CRITICAL: must remove old containers before building new ones
+# CRITICAL: must stop AND remove old containers before building new ones
 # Otherwise Docker refuses to start containers with same name
 echo "--- Removing old containers ---"
+docker stop cuonghoangdev_backend cuonghoangdev_frontend 2>/dev/null || true
 docker rm -f cuonghoangdev_backend cuonghoangdev_frontend 2>/dev/null || true
 sleep 3
 

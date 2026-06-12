@@ -98,9 +98,12 @@ echo "Database ready"
 echo "=== [6/10] Code already synced via rsync ==="
 
 echo "=== [7/10] Building containers (zero-downtime) ==="
-# Prune all builder cache to ensure fresh build with latest code
+# Prune ALL Docker build cache to ensure fresh build with latest code
 docker builder prune -af
-docker compose --env-file /opt/cuonghoangdev/.env up -d --build --remove-orphans --force-recreate backend frontend
+docker system prune -af --volumes 2>/dev/null || true
+# Force no-cache build for backend to pick up code changes
+docker build --no-cache -t cuonghoangdev_backend:latest -f /opt/cuonghoangdev/Dockerfile.backend /opt/cuonghoangdev/
+docker compose --env-file /opt/cuonghoangdev/.env up -d --force-recreate backend frontend
 
 echo "=== [8/10] Database schema setup (after backend is up) ==="
 for i in $(seq 1 18); do

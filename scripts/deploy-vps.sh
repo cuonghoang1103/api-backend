@@ -110,10 +110,13 @@ fi
 #   - Layer "npm run build" → REBUILD vì source thay đổi (nhưng rất nhanh)
 echo "--- Building backend (BuildKit + inline cache) ---"
 docker build \
+  --no-cache \
   --build-arg BUILDKIT_INLINE_CACHE=1 \
   -t cuonghoangdev_backend:latest \
   -f /opt/cuonghoangdev/Dockerfile.backend \
-  /opt/cuonghoangdev/ 2>&1 | tail -5
+  /opt/cuonghoangdev/ 2>&1 | tee /tmp/backend_build.log | tail -10
+echo "--- Backend build log (last 5 lines): ---"
+tail -5 /tmp/backend_build.log
 BACKEND_EXIT=$?
 if [ $BACKEND_EXIT -ne 0 ]; then
   echo "[CRITICAL] Backend build FAILED with exit code $BACKEND_EXIT"

@@ -89,6 +89,9 @@ echo "=== [7/10] Building backend container ==="
 OLD_CONTAINER_ID=$(docker inspect cuonghoangdev_backend --format '{{.Id}}' 2>/dev/null || echo "")
 echo "Old container ID: ${OLD_CONTAINER_ID:-none}"
 
+# Stop and remove old container
+docker compose --env-file /opt/cuonghoangdev/.env rm -sf backend 2>/dev/null || true
+
 # Remove old image to force full rebuild
 docker rmi cuonghoangdev_backend:latest 2>/dev/null || true
 

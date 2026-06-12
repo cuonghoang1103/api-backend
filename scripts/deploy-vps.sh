@@ -85,9 +85,22 @@ docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database 
 echo "Database ready"
 
 echo "=== [6/7] Build and deploy containers ==="
-# ─── Stop old containers (but keep images for cache) ──────────────────────────
-echo "--- Stopping old containers ---"
-docker compose stop backend frontend 2>/dev/null || true
+# ─── Remove old containers (force) ──────────────────────────────────────────────
+# CRITICAL: must remove old containers before building new ones
+# Otherwise Docker refuses to start containers with same name
+echo "--- Removing old containers ---"
+docker compose rm -sf backend frontend 2>/dev/null || true
+sleep 2
+
+# Verify old containers are gone
+if docker ps -a --format '{{.Names}}' | grep -q 'cuonghoangdev_backend'; then
+  echo "[WARN] Old backend container still exists, force removing..."
+  docker rm -f cuonghoangdev_backend 2>/dev/null || true
+fi
+if docker ps -a --format '{{.Names}}' | grep -q 'cuonghoangdev_frontend'; then
+  echo "[WARN] Old frontend container still exists, force removing..."
+  docker rm -f cuonghoangdev_frontend 2>/dev/null || true
+fi
 
 # ─── Build backend with BuildKit + inline cache ───────────────────────────────
 # Key optimization: NO --no-cache flag!

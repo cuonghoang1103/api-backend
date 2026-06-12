@@ -576,8 +576,8 @@ export default function ChatPage() {
         </motion.header>
 
         {/* Messages or Welcome */}
-        {/* overflow-hidden = prevent child content from breaking flex column boundary */}
-        <div className="flex-1 overflow-hidden relative chat-scanlines">
+        {/* overflow-clip = clip MatrixRain but NOT the messages scrollbar */}
+        <div className="flex-1 overflow-clip relative chat-scanlines">
           {!mounted ? (
             <div className="flex items-center justify-center h-full">
               <div className="animate-pulse text-[#64748b] font-mono">[ loading systems... ]</div>

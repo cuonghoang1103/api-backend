@@ -89,8 +89,8 @@ echo "=== [6/7] Build and deploy containers ==="
 # CRITICAL: must remove old containers before building new ones
 # Otherwise Docker refuses to start containers with same name
 echo "--- Removing old containers ---"
-docker compose rm -sf backend frontend 2>/dev/null || true
-sleep 2
+docker rm -f cuonghoangdev_backend cuonghoangdev_frontend 2>/dev/null || true
+sleep 3
 
 # Verify old containers are gone
 if docker ps -a --format '{{.Names}}' | grep -q 'cuonghoangdev_backend'; then

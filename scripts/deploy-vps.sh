@@ -72,7 +72,7 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
       fi
       echo "Waiting for fresh postgres... ($i/18)"
       echo "[DEBUG] container state: $(docker inspect cuonghoangdev_postgres --format '{{.State.Status}} ({{.RestartCount}} restarts)' 2>&1 || echo 'not found')"
-      docker compose logs --tail-3 postgres 2>&1 || true
+      docker compose logs --tail 3 postgres 2>&1 || true
       sleep 5
     done
   fi
@@ -125,33 +125,15 @@ docker tag cuonghoangdev_backend:latest cuonghoangdev_backend:$(date +%s) 2>/dev
 
 # Stop and remove OLD container FIRST (before creating new one)
 echo "=== Stopping old container ==="
-docker stop cuonghoangdev_backend 2>/dev/null || true
-docker rm cuonghoangdev_backend 2>/dev/null || true
+docker compose --env-file /opt/cuonghoangdev/.env rm -sf backend 2>/dev/null || true
 echo "Old container removed"
 
 # Wait a moment for Docker to release resources
 sleep 3
 
-# Verify the OLD container is gone by checking it returns non-zero
-CONTAINER_CHECK=$(docker inspect cuonghoangdev_backend --format '{{.Id}}' 2>/dev/null || echo "GONE")
-if [ "$CONTAINER_CHECK" != "GONE" ]; then
-  echo "[WARN] Old container still exists: $CONTAINER_CHECK"
-  echo "Attempting forceful removal..."
-  docker rm -f cuonghoangdev_backend 2>/dev/null || true
-  sleep 3
-  CONTAINER_CHECK=$(docker inspect cuonghoangdev_backend --format '{{.Id}}' 2>/dev/null || echo "GONE")
-fi
-
-if [ "$CONTAINER_CHECK" != "GONE" ]; then
-  echo "[ERROR] Could not remove old container ($CONTAINER_CHECK). Skipping deploy."
-  docker compose ps
-  exit 1
-fi
-echo "Confirmed: old container fully removed"
-
-# Record the new image ID AFTER removal but BEFORE starting new container
-NEW_IMAGE_ID_BEFORE=$(docker images -q cuonghoangdev_backend:latest 2>/dev/null || echo "")
-echo "New image ID (before start): ${NEW_IMAGE_ID_BEFORE:-none}"
+# Verify the container is gone
+CONTAINER_CHECK=$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo "GONE")
+echo "Container status after removal: $CONTAINER_CHECK"
 
 # Start new container using docker compose
 echo "=== Starting new container ==="

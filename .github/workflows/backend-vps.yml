@@ -57,18 +57,9 @@ jobs:
           NEXT_PUBLIC_BUILD_ID=$(date +%s) npm run build
           # Verify .next/ was built
           echo "--- Built .next/ contents ---"
-          ls -la .next/static/css/ 2>/dev/null | head -5
-          echo "--- CSS hash ---"
           ls .next/static/css/*.css 2>/dev/null | head -3
           echo "--- Scrollbar fix present? ---"
           grep -l "chat-messages-scroll" .next/static/css/*.css 2>/dev/null || echo "NOT FOUND"
-
-      - name: Upload frontend build
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-next-build
-          path: frontend/.next/
-          retention-days: 1
 
       - name: Sync project to VPS
         run: |
@@ -88,23 +79,19 @@ jobs:
             ./ -e "ssh -F $HOME/.ssh/config" \
             "vps:/opt/cuonghoangdev/"
 
-      - name: Download frontend build to VPS
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-next-build
-          path: /tmp/frontend-next/
-        env:
-          ACTIONS_RUNTIME_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ACTIONS_RUNTIME_URL: ${{ env.ACTIONS_RUNTIME_URL }}
-
-      - name: Copy frontend build to VPS
+      - name: Deploy .next/ to VPS
         run: |
-          # Copy the downloaded .next/ to VPS
-          rsync -az \
-            /tmp/frontend-next/ \
-            -e "ssh -F $HOME/.ssh/config" \
-            "vps:/opt/cuonghoangdev/frontend/"
-          echo "--- .next/ deployed to VPS via artifacts ---"
+          # Stream .next/ from runner to VPS via SSH pipe (no artifact needed)
+          # This bypasses .gitignore entirely since it's a pipe, not a file transfer
+          cd frontend
+          tar -czf - .next/ 2>/dev/null | \
+            ssh -F $HOME/.ssh/config "vps:/bin/bash -c 'rm -rf /opt/cuonghoangdev/frontend/.next && mkdir -p /opt/cuonghoangdev/frontend && tar -xzf - -C /opt/cuonghoangdev/frontend/'" || \
+          ssh -F $HOME/.ssh/config "vps" "rm -rf /opt/cuonghoangdev/frontend/.next && mkdir -p /opt/cuonghoangdev/frontend"
+          cd ..
+          # Use cat over SSH to transfer the tarball
+          (cd frontend && tar -czf - .next/) | \
+            ssh -F $HOME/.ssh/config "vps" "cd /opt/cuonghoangdev/frontend && tar -xzf -"
+          echo "--- .next/ streamed to VPS ---"
 
       - name: Create .env on VPS if missing
         run: |

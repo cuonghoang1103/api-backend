@@ -89,11 +89,12 @@ jobs:
           ssh -F $HOME/.ssh/config vps "rm -rf /opt/cuonghoangdev/frontend/.next && mkdir -p /opt/cuonghoangdev/frontend" || true
           # Transfer .next/ (fresh build artifacts)
           (cd frontend && tar -czf - .next/) | ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev/frontend && tar -xzf -" || true
-          # Transfer package files (needed by Docker deps stage)
-          tar -czf - package.json package-lock.json | ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev/frontend && tar -xzf -" || true
+          # Transfer package files from frontend/ directory (needed by Docker deps stage)
+          (cd frontend && tar -czf - package.json package-lock.json) | ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev/frontend && tar -xzf -" || true
           echo "--- Build artifacts deployed ---"
           # Verify
           ssh -F $HOME/.ssh/config vps "ls /opt/cuonghoangdev/frontend/.next/static/css/ 2>/dev/null | head -3" || echo "Verification: file listing skipped"
+          ssh -F $HOME/.ssh/config vps "wc -l /opt/cuonghoangdev/frontend/package.json 2>/dev/null || echo 'package.json empty or missing'" || echo "Verification skipped"
 
       - name: Create .env on VPS if missing
         run: |

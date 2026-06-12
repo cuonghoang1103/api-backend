@@ -93,7 +93,7 @@ echo "Old container ID: ${OLD_CONTAINER_ID:-none}"
 # Prune ALL docker cache on the VPS host
 docker builder prune -af 2>/dev/null || true
 
-# Build with BOTH --no-cache and explicit --build-arg to invalidate all layers
+# Build backend with BOTH --no-cache and explicit --build-arg to invalidate all layers
 # Also use --progress=plain to see all build steps in output
 BUILD_OUTPUT=$(docker build \
   --no-cache \
@@ -104,16 +104,32 @@ BUILD_OUTPUT=$(docker build \
 BUILD_EXIT=$?
 
 # Print last lines of build output (shows what was actually built)
-echo "--- Build output (last 10 lines) ---"
-echo "$BUILD_OUTPUT" | tail -10
+echo "--- Backend build output (last 5 lines) ---"
+echo "$BUILD_OUTPUT" | grep -E "Step #[0-9]+/[0-9]+:|COPY|cmd|npm|tsc|error" | tail -5
 
 if [ $BUILD_EXIT -ne 0 ]; then
   echo "[CRITICAL] Backend build FAILED with exit code $BUILD_EXIT"
-  echo "Full build output:"
+  echo "Last 30 build lines:"
   echo "$BUILD_OUTPUT" | tail -30
   echo "NOT proceeding with deploy to avoid using stale code."
-  echo "=== Container Status (stale, still running) ==="
-  docker compose ps
+  exit 1
+fi
+
+echo "=== Building frontend container ==="
+# Prune ALL docker cache for frontend build too
+docker builder prune -af 2>/dev/null || true
+FRONTEND_BUILD=$(docker build \
+  --no-cache \
+  --progress=plain \
+  -t cuonghoangdev_frontend:latest \
+  -f /opt/cuonghoangdev/frontend/Dockerfile \
+  /opt/cuonghoangdev/frontend/ 2>&1)
+FRONTEND_EXIT=$?
+echo "--- Frontend build output (last 5 lines) ---"
+echo "$FRONTEND_BUILD" | grep -E "Step #[0-9]+/[0-9]+:|COPY|npm|error" | tail -5
+if [ $FRONTEND_EXIT -ne 0 ]; then
+  echo "[CRITICAL] Frontend build FAILED with exit code $FRONTEND_EXIT"
+  echo "$FRONTEND_BUILD" | tail -20
   exit 1
 fi
 
@@ -123,40 +139,46 @@ echo "New backend image ID: ${NEW_IMAGE_ID:-none}"
 # Tag with timestamp for debugging
 docker tag cuonghoangdev_backend:latest cuonghoangdev_backend:$(date +%s) 2>/dev/null || true
 
-# Stop and remove OLD container FIRST (before creating new one)
-echo "=== Stopping old container ==="
-docker compose --env-file /opt/cuonghoangdev/.env rm -sf backend 2>/dev/null || true
-echo "Old container removed"
+# Stop and remove OLD containers FIRST
+echo "=== Stopping and removing old containers ==="
+docker compose --env-file /opt/cuonghoangdev/.env rm -sf backend frontend 2>/dev/null || true
+echo "Old containers removed"
 
 # Wait a moment for Docker to release resources
 sleep 3
 
-# Verify the container is gone
-CONTAINER_CHECK=$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo "GONE")
-echo "Container status after removal: $CONTAINER_CHECK"
+# Verify containers are gone
+BACKEND_CHECK=$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo "GONE")
+FRONTEND_CHECK=$(docker inspect cuonghoangdev_frontend --format '{{.State.Status}}' 2>/dev/null || echo "GONE")
+echo "Backend container status: $BACKEND_CHECK"
+echo "Frontend container status: $FRONTEND_CHECK"
 
-# Start new container using docker compose
-echo "=== Starting new container ==="
-docker compose --env-file /opt/cuonghoangdev/.env up -d backend
+# Tag images with timestamp for debugging
+docker tag cuonghoangdev_backend:latest cuonghoangdev_backend:$(date +%s) 2>/dev/null || true
+docker tag cuonghoangdev_frontend:latest cuonghoangdev_frontend:$(date +%s) 2>/dev/null || true
 
-# Wait for new container to be healthy
-echo "=== Verifying new container ==="
+# Start new containers
+echo "=== Starting new containers ==="
+docker compose --env-file /opt/cuonghoangdev/.env up -d backend frontend
+
+# Wait for new containers to be healthy
+echo "=== Verifying new containers ==="
 for i in $(seq 1 30); do
-  CONTAINER_STATUS=$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo "NOT_FOUND")
-  echo "Container check ($i/30): status=$CONTAINER_STATUS"
-  if [ "$CONTAINER_STATUS" = "running" ]; then
-    # Also verify the health endpoint
+  BACKEND_STATUS=$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo "NOT_FOUND")
+  FRONTEND_STATUS=$(docker inspect cuonghoangdev_frontend --format '{{.State.Status}}' 2>/dev/null || echo "NOT_FOUND")
+  echo "Check ($i/30): backend=$BACKEND_STATUS frontend=$FRONTEND_STATUS"
+  if [ "$BACKEND_STATUS" = "running" ] && [ "$FRONTEND_STATUS" = "running" ]; then
     if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health >/dev/null 2>&1; then
-      echo "[OK] New container is healthy!"
+      echo "[OK] Both containers are healthy!"
       break
     fi
   fi
   if [ "$i" -eq 30 ]; then
-    echo "[CRITICAL] New container failed health check after 150s!"
-    echo "Container logs:"
-    docker logs cuonghoangdev_backend --tail=30
-    echo "Container inspect:"
-    docker inspect cuonghoangdev_backend
+    echo "[CRITICAL] Containers failed health check after 150s!"
+    echo "Backend logs:"
+    docker logs cuonghoangdev_backend --tail=20
+    echo "Frontend logs:"
+    docker logs cuonghoangdev_frontend --tail=20
     exit 1
   fi
   sleep 5

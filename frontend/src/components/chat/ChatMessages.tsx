@@ -8,6 +8,37 @@ import { User, Copy, CheckCheck } from 'lucide-react';
 import { format } from 'date-fns';
 import type { ChatMessage } from '@/types';
 
+// ── Inject cyberpunk scrollbar styles directly (bypasses Tailwind build pipeline) ──
+function ChatScrollStyles() {
+  useEffect(() => {
+    // Only inject once
+    if (document.getElementById('chat-messages-scroll-style')) return;
+    const style = document.createElement('style');
+    style.id = 'chat-messages-scroll-style';
+    style.textContent = `
+      .chat-messages-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(34, 211, 238, 0.3) transparent;
+      }
+      .chat-messages-scroll::-webkit-scrollbar { width: 4px; }
+      .chat-messages-scroll::-webkit-scrollbar-track { background: transparent; }
+      .chat-messages-scroll::-webkit-scrollbar-thumb {
+        background: rgba(34, 211, 238, 0.3);
+        border-radius: 2px;
+      }
+      .chat-messages-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(34, 211, 238, 0.55);
+      }
+      .chat-messages-scroll::-webkit-scrollbar-thumb:active {
+        background: rgba(34, 211, 238, 0.8);
+      }
+    `;
+    document.head.appendChild(style);
+    return () => { /* keep styles on mount — re-injecting on unmount is harmless */ };
+  }, []);
+  return null;
+}
+
 // ── Mech Thinking Indicator ────────────────────────────────────────
 function MechThinkingIndicator() {
   return (
@@ -257,11 +288,13 @@ export default function ChatMessages({ messages, isStreaming }: {
   const lastAssistantId = lastAssistantIndex >= 0 ? messages[messages.length - 1 - lastAssistantIndex]?.id : null;
 
   return (
-    /* flex-1 = fill remaining vertical space inside the flex column (header + messages + input) */
-    /* min-w-0  = allow flex child to shrink below its content size (fixes flex overflow bug) */
-    /* overflow-y-auto = only THIS container scrolls when content exceeds its height */
-    /* Custom cyber scrollbar via class + CSS below */
-    <div className="flex-1 min-w-0 overflow-y-auto chat-messages-scroll px-4 sm:px-6 py-6 space-y-6">
+    <>
+      <ChatScrollStyles />
+      {/* flex-1 = fill remaining vertical space inside the flex column (header + messages + input) */}
+      {/* min-w-0  = allow flex child to shrink below its content size (fixes flex overflow bug) */}
+      {/* overflow-y-auto = only THIS container scrolls when content exceeds its height */}
+      {/* Custom cyber scrollbar via ChatScrollStyles (injected <style> tag) */}
+      <div className="flex-1 min-w-0 overflow-y-auto chat-messages-scroll px-4 sm:px-6 py-6 space-y-6">
       <AnimatePresence mode="popLayout">
         {messages.map((msg) => (
           <MessageBubble
@@ -281,5 +314,6 @@ export default function ChatMessages({ messages, isStreaming }: {
       {/* Invisible anchor — scrollIntoView target sits after last message */}
       <div ref={endRef} aria-hidden="true" />
     </div>
+    </>
   );
 }

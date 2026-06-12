@@ -49,7 +49,6 @@ jobs:
             --exclude '.git' \
             --exclude 'node_modules' \
             --exclude 'frontend/node_modules' \
-            --exclude 'frontend/.next' \
             --exclude 'bin' \
             --exclude 'postgres' \
             --exclude 'redis' \

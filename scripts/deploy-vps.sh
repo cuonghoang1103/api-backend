@@ -116,11 +116,11 @@ fi
 echo "=== Building frontend container ==="
 # Frontend is pre-built in GitHub Actions (fresh .next/ via rsync).
 # Docker only packages the pre-built artifacts — no compilation needed.
+# DOCKER_BUILDKIT=0 disables BuildKit to prevent cache state issues
 echo "--- Packaging pre-built frontend (no compilation) ---"
-FRONTEND_BUILD=$(docker build \
+FRONTEND_BUILD=$(DOCKER_BUILDKIT=0 docker build \
   --no-cache \
   --progress=plain \
-  --build-arg BUILDKIT_INLINE_CACHE=0 \
   -t cuonghoangdev_frontend:latest \
   -f /opt/cuonghoangdev/frontend/Dockerfile \
   /opt/cuonghoangdev/frontend/ 2>&1)

@@ -169,8 +169,16 @@ if [ $FRONTEND_EXIT -ne 0 ]; then
 fi
 
 # ─── Start containers ────────────────────────────────────────────────────────
-echo "--- Starting containers ---"
-docker compose up -d backend frontend
+# IMPORTANT: use --force-recreate to ensure new image is used after rebuild
+echo "--- Starting containers with --force-recreate ---"
+docker compose up -d --force-recreate backend frontend
+
+# ─── Verify new image is being used ─────────────────────────────────────────
+sleep 5
+BACKEND_IMG=$(docker inspect cuonghoangdev_backend --format '{{.Config.Image}}' 2>/dev/null)
+BACKEND_ID=$(docker inspect cuonghoangdev_backend --format '{{.Id}}' 2>/dev/null)
+echo "[DEBUG] Backend container image: $BACKEND_IMG"
+echo "[DEBUG] Backend container ID: $BACKEND_ID"
 
 # ─── Health check ────────────────────────────────────────────────────────────
 echo "--- Verifying containers ---"

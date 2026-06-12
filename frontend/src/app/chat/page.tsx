@@ -338,6 +338,9 @@ export default function ChatPage() {
           const raw = line.slice(6).trim();
           if (!raw || raw === '[DONE]') continue;
 
+          // DEBUG: log every raw SSE frame so we can see what's arriving
+          console.log('[Chat] SSE Raw Frame:', raw);
+
           try {
             const data = JSON.parse(raw);
 
@@ -347,23 +350,18 @@ export default function ChatPage() {
               continue;
             }
             if (data.type === 'done') continue;
+
+            // Only treat explicit error frames as errors — not chunks containing the word "error"
             if (data.type === 'error') {
               errorMsg += data.error || '';
               continue;
             }
-            // chunk or raw text
-            const text = data.text || data.content || '';
+
+            // chunk: extract text from the correct key
+            const text = data.text ?? data.content ?? '';
             if (text) {
-              const lowerContent = text.toLowerCase();
-              if (lowerContent.includes('429') || lowerContent.includes('quota') ||
-                  lowerContent.includes('exceeded') || lowerContent.includes('too many requests') ||
-                  lowerContent.includes('resource_exhausted') || lowerContent.includes('error')) {
-                hasError = true;
-                errorMsg += text;
-              } else {
-                assistantContent += text;
-                updateLastAssistantMessage(sessionId, assistantContent);
-              }
+              assistantContent += text;
+              updateLastAssistantMessage(sessionId, assistantContent);
             }
           } catch {
             // Raw content fallback
@@ -372,6 +370,13 @@ export default function ChatPage() {
               updateLastAssistantMessage(sessionId, assistantContent);
             }
           }
+        }
+
+        // Guard: if we accumulated nothing but there was no error, show a fallback so bubble is never empty
+        if (!assistantContent && !hasError && !errorMsg) {
+          console.warn('[Chat] No content received, using fallback');
+          assistantContent = 'Xin lỗi, mình chưa nhận được phản hồi từ AI. Bạn thử hỏi lại nhé!';
+          updateLastAssistantMessage(sessionId, assistantContent);
         }
       }
 

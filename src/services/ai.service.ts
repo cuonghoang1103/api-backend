@@ -49,7 +49,7 @@ let _genAI: GoogleGenerativeAI | null = null;
 
 // ─── Model fallback list ────────────────────────────────────────
 const MODELS = [
-  'gemini-1.5-flash',
+  'gemini-2.5-flash-lite',
 ];
 
 function getGenAI(): GoogleGenerativeAI {

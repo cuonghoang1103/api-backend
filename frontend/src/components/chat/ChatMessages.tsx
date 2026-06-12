@@ -119,76 +119,85 @@ function MessageBubble({ msg, isStreaming, isLastAssistant }: {
         >
           {!isUser ? (
             <div className="markdown-content">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  code({ className, children, ...props }) {
-                    const isInline = !className;
-                    if (isInline) {
-                      return (
-                        <code
-                          className="px-1.5 py-0.5 bg-[#22d3ee]/10 rounded text-[#22d3ee] font-mono text-xs border border-[#22d3ee]/20"
-                          {...props}
-                        >
-                          {children}
-                        </code>
-                      );
-                    }
-                    return (
-                      <pre className="bg-[#0a0a0f] rounded-xl p-3 overflow-x-auto mt-2 mb-2 border border-[#22d3ee]/15">
-                        <code className="text-xs text-[#22d3ee] font-mono" {...props}>
-                          {children}
-                        </code>
-                      </pre>
-                    );
-                  },
-                  a({ href, children }) {
-                    return (
-                      <a
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#22d3ee] underline underline-offset-2 hover:text-[#8b5cf6] transition-colors"
-                      >
-                        {children}
-                      </a>
-                    );
-                  },
-                  p({ children }) {
-                    return <p className="mb-2 last:mb-0">{children}</p>;
-                  },
-                  ul({ children }) {
-                    return <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>;
-                  },
-                  ol({ children }) {
-                    return <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>;
-                  },
-                  li({ children }) {
-                    return <li className="text-[#e2e8f0]/90">{children}</li>;
-                  },
-                  h1({ children }) {
-                    return <h1 className="text-lg font-bold text-[#f8fafc] mb-2 mt-3 font-mono">{children}</h1>;
-                  },
-                  h2({ children }) {
-                    return <h2 className="text-base font-bold text-[#f8fafc] mb-2 mt-3 font-mono">{children}</h2>;
-                  },
-                  h3({ children }) {
-                    return <h3 className="text-sm font-semibold text-[#f8fafc] mb-1 mt-2 font-mono">{children}</h3>;
-                  },
-                  strong({ children }) {
-                    return <strong className="font-semibold text-white">{children}</strong>;
-                  },
-                  blockquote({ children }) {
-                    return (
-                      <blockquote className="border-l-2 border-[#22d3ee] pl-3 italic text-[#94a3b8] my-2 font-mono">
-                        {children}
-                      </blockquote>
-                    );
-                  },
-                }}
-              >
-                {msg.content}
-              </ReactMarkdown>
+              {/* Guard: ensure msg.content is never undefined/null, else show placeholder */}
+              {(() => {
+                const raw = msg.content ?? '';
+                if (!raw.trim()) {
+                  return <span className="text-[#64748b] italic">[AI đang xử lý...]</span>;
+                }
+                return (
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      code({ className, children, ...props }) {
+                        const isInline = !className;
+                        if (isInline) {
+                          return (
+                            <code
+                              className="px-1.5 py-0.5 bg-[#22d3ee]/10 rounded text-[#22d3ee] font-mono text-xs border border-[#22d3ee]/20"
+                              {...props}
+                            >
+                              {children}
+                            </code>
+                          );
+                        }
+                        return (
+                          <pre className="bg-[#0a0a0f] rounded-xl p-3 overflow-x-auto mt-2 mb-2 border border-[#22d3ee]/15">
+                            <code className="text-xs text-[#22d3ee] font-mono" {...props}>
+                              {children}
+                            </code>
+                          </pre>
+                        );
+                      },
+                      a({ href, children }) {
+                        return (
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[#22d3ee] underline underline-offset-2 hover:text-[#8b5cf6] transition-colors"
+                          >
+                            {children}
+                          </a>
+                        );
+                      },
+                      p({ children }) {
+                        return <p className="mb-2 last:mb-0">{children}</p>;
+                      },
+                      ul({ children }) {
+                        return <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>;
+                      },
+                      ol({ children }) {
+                        return <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>;
+                      },
+                      li({ children }) {
+                        return <li className="text-[#e2e8f0]/90">{children}</li>;
+                      },
+                      h1({ children }) {
+                        return <h1 className="text-lg font-bold text-[#f8fafc] mb-2 mt-3 font-mono">{children}</h1>;
+                      },
+                      h2({ children }) {
+                        return <h2 className="text-base font-bold text-[#f8fafc] mb-2 mt-3 font-mono">{children}</h2>;
+                      },
+                      h3({ children }) {
+                        return <h3 className="text-sm font-semibold text-[#f8fafc] mb-1 mt-2 font-mono">{children}</h3>;
+                      },
+                      strong({ children }) {
+                        return <strong className="font-semibold text-white">{children}</strong>;
+                      },
+                      blockquote({ children }) {
+                        return (
+                          <blockquote className="border-l-2 border-[#22d3ee] pl-3 italic text-[#94a3b8] my-2 font-mono">
+                            {children}
+                          </blockquote>
+                        );
+                      },
+                    }}
+                  >
+                    {raw}
+                  </ReactMarkdown>
+                );
+              })()}
             </div>
           ) : (
             <span className="whitespace-pre-wrap">{msg.content}</span>

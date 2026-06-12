@@ -2,28 +2,60 @@ name: VPS Debug Commands
 
 on:
   workflow_dispatch:
-    inputs:
-      command:
-        description: 'Command to run on VPS'
-        required: true
-        default: 'docker ps -a'
 
 jobs:
   debug:
     runs-on: ubuntu-24.04
+
     steps:
-      - name: Run debug command
+      - name: Setup SSH key
         env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          DEBUG_CMD: ${{ github.event.inputs.command }}
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${VPS_SSH_KEY}" | base64 -d > ~/.ssh/deploy_key
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "${VPS_HOST}" >> ~/.ssh/known_hosts 2>/dev/null || true
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 \
-            "${VPS_USER}@${VPS_HOST}" \
-            "${DEBUG_CMD}"
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Check VPS disk space
+        run: |
+          echo "=== Disk Space ==="
+          ssh vps "df -h / /opt /var/lib/docker 2>/dev/null || df -h"
+
+      - name: Check Docker status
+        run: |
+          echo "=== Docker Info ==="
+          ssh vps "docker info 2>&1 | head -20"
+          echo "=== Docker Version ==="
+          ssh vps "docker version 2>&1"
+          echo "=== Docker Compose Version ==="
+          ssh vps "docker compose version 2>&1"
+
+      - name: Check Docker disk usage
+        run: |
+          echo "=== Docker System DF ==="
+          ssh vps "docker system df -v 2>&1 | head -30"
+          echo "=== Docker Images ==="
+          ssh vps "docker images 2>&1"
+          echo "=== Docker Containers ==="
+          ssh vps "docker ps -a 2>&1"
+
+      - name: Check .env on VPS
+        run: |
+          echo "=== .env secrets ==="
+          ssh vps "grep -E 'OPENROUTER|YOUTUBE|POSTGRES' /opt/cuonghoangdev/.env 2>&1"
+
+      - name: Try Docker build test
+        run: |
+          echo "=== Test Docker Build ==="
+          ssh vps "cd /opt/cuonghoangdev && docker build --no-cache -t test-build:latest -f Dockerfile.backend . 2>&1 | tail -50"
+
+      - name: Check backend container logs
+        run: |
+          echo "=== Backend Container Status ==="
+          ssh vps "docker ps -a | grep backend"
+          echo "=== Backend Logs ==="
+          ssh vps "docker logs cuonghoangdev_backend --tail 30 2>&1 || echo 'Container not found'"

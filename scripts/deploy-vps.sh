@@ -138,6 +138,15 @@ docker build \
   /opt/cuonghoangdev/ 2>&1 | tee /tmp/backend_build.log | tail -10
 echo "--- Backend build log (last 5 lines): ---"
 tail -5 /tmp/backend_build.log
+# Verify: check compiled code contains OpenRouter URL (not HuggingFace)
+if docker run --rm cuonghoangdev_backend:latest sh -c "grep -q 'openrouter.ai' /app/dist/services/ai.service.js"; then
+  echo "[OK] Backend compiled with OpenRouter URL"
+else
+  echo "[WARN] Backend compiled code does not contain 'openrouter.ai' - checking for HuggingFace..."
+  if docker run --rm cuonghoangdev_backend:latest sh -c "grep -q 'api-inference.huggingface' /app/dist/services/ai.service.js"; then
+    echo "[CRITICAL] Backend STILL has HuggingFace URL! The --no-cache flag may not have worked."
+  fi
+fi
 BACKEND_EXIT=$?
 if [ $BACKEND_EXIT -ne 0 ]; then
   echo "[CRITICAL] Backend build FAILED with exit code $BACKEND_EXIT"

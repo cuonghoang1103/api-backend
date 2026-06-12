@@ -8,17 +8,12 @@ cd /opt/cuonghoangdev
 
 echo "=== [1/10] Check and free disk space ==="
 df -h /opt / /
-echo "--- Pruning docker (images, build cache, stopped containers) ---"
-docker builder prune -af 2>/dev/null || true
-docker image prune -af 2>/dev/null || true
-docker container prune -f 2>/dev/null || true
-docker volume prune -f 2>/dev/null || true
 echo "--- Removing old node_modules copies ---"
 find /opt/cuonghoangdev -name "node_modules" -type d -prune -exec rm -rf {} + 2>/dev/null || true
 echo "--- Removing build artifacts (dist from backend builds) ---"
 find /opt/cuonghoangdev -name "dist" -type d -prune -exec rm -rf {} + 2>/dev/null || true
 echo "--- Disk usage after cleanup ---"
-df -h /opt / /var/lib/docker 2>/dev/null || df -h /opt /
+df -h /opt /
 
 echo "=== [2/10] Ensuring directories ==="
 mkdir -p nginx/ssl certbot/conf/live/cuongthai.com certbot/www postgres redis uploads backups scripts
@@ -233,21 +228,6 @@ echo "=== [9/9] Seed Cuong03dx admin account ==="
 if [ -f /opt/cuonghoangdev/scripts/seed-cuong03dx.cjs ]; then
   docker compose exec -T backend node /app/scripts/seed-cuong03dx.cjs && echo "Seed complete" || echo "[WARN] Seed failed, continuing..."
 fi
-
-echo ""
-echo "=== Container Status ==="
-docker compose ps
-
-echo ""
-echo "=== Backend Logs (last 10) ==="
-docker compose logs --tail=10 backend
-
-echo "=== [10/10] Docker cleanup (free SSD space) ==="
-docker builder prune -f 2>/dev/null || echo "[WARN] builder prune failed"
-docker image prune -f 2>/dev/null || echo "[WARN] image prune failed"
-DOCKER_USAGE=$(docker system df --format '{{.Type}}: {{.Size}}' 2>/dev/null | head -5)
-echo "Docker disk usage after cleanup:"
-echo "   $DOCKER_USAGE"
 
 echo ""
 echo "=== Deploy complete ==="

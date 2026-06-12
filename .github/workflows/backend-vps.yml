@@ -59,9 +59,11 @@ jobs:
           NEXT_PUBLIC_BUILD_ID=$(date +%s) npm run build
           cd ..
           # Rsync ALL source files AND the fresh .next/ build to VPS.
-          # --no-ignore bypasses .gitignore so .next/ (which is gitignored) is synced.
+          # Use --include to force-include .next/ (overrides any exclude patterns).
           # (no longer exclude frontend/.next — we need it!)
-          rsync -az --delete --no-ignore \
+          rsync -az --delete \
+            --include='.next/' \
+            --include='.next/**' \
             --exclude '.git' \
             --exclude 'node_modules' \
             --exclude 'frontend/node_modules' \

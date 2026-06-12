@@ -129,16 +129,31 @@ docker stop cuonghoangdev_backend 2>/dev/null || true
 docker rm cuonghoangdev_backend 2>/dev/null || true
 echo "Old container removed"
 
-# Verify old container is gone
-NEW_CONTAINER_ID=$(docker inspect cuonghoangdev_backend --format '{{.Id}}' 2>/dev/null || echo "")
-if [ -n "$NEW_CONTAINER_ID" ]; then
-  echo "[ERROR] Old container still exists after removal! Skipping deploy."
+# Wait a moment for Docker to release resources
+sleep 3
+
+# Verify the OLD container is gone by checking it returns non-zero
+CONTAINER_CHECK=$(docker inspect cuonghoangdev_backend --format '{{.Id}}' 2>/dev/null || echo "GONE")
+if [ "$CONTAINER_CHECK" != "GONE" ]; then
+  echo "[WARN] Old container still exists: $CONTAINER_CHECK"
+  echo "Attempting forceful removal..."
+  docker rm -f cuonghoangdev_backend 2>/dev/null || true
+  sleep 3
+  CONTAINER_CHECK=$(docker inspect cuonghoangdev_backend --format '{{.Id}}' 2>/dev/null || echo "GONE")
+fi
+
+if [ "$CONTAINER_CHECK" != "GONE" ]; then
+  echo "[ERROR] Could not remove old container ($CONTAINER_CHECK). Skipping deploy."
   docker compose ps
   exit 1
 fi
-echo "Confirmed: no old container running"
+echo "Confirmed: old container fully removed"
 
-# Start new container using docker compose (uses the new image automatically)
+# Record the new image ID AFTER removal but BEFORE starting new container
+NEW_IMAGE_ID_BEFORE=$(docker images -q cuonghoangdev_backend:latest 2>/dev/null || echo "")
+echo "New image ID (before start): ${NEW_IMAGE_ID_BEFORE:-none}"
+
+# Start new container using docker compose
 echo "=== Starting new container ==="
 docker compose --env-file /opt/cuonghoangdev/.env up -d backend
 

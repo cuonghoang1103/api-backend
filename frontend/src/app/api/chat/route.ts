@@ -22,9 +22,7 @@ interface ChatMessage {
 }
 
 const MODELS = [
-  'gemini-2.5-flash-lite',
-  'gemini-2.5-flash',
-  'gemini-3-flash',
+  'gemini-1.5-flash',
 ];
 
 async function generateWithRetry(

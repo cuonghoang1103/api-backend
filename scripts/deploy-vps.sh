@@ -120,7 +120,6 @@ echo "=== Building frontend container ==="
 echo "--- Packaging pre-built frontend (no compilation) ---"
 FRONTEND_BUILD=$(DOCKER_BUILDKIT=0 docker build \
   --no-cache \
-  --progress=plain \
   -t cuonghoangdev_frontend:latest \
   -f /opt/cuonghoangdev/frontend/Dockerfile \
   /opt/cuonghoangdev/frontend/ 2>&1)

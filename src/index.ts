@@ -346,6 +346,8 @@ async function startServer(): Promise<void> {
     // ─── Auto-sync Prisma schema ─────────────────────────────────
     // This ensures new tables (e.g. document_chunks) are created on startup
     // without requiring manual prisma db push after each deployment.
+    // Note: the `vector(768)` column requires the pgvector extension.
+    // We create the table without the embedding column; pgvector can be added later.
     try {
       await prisma.$executeRawUnsafe(`
         DO $$
@@ -358,7 +360,6 @@ async function startServer(): Promise<void> {
               id SERIAL PRIMARY KEY,
               content TEXT NOT NULL,
               metadata JSONB DEFAULT '{}',
-              embedding vector(768),
               chunk_index INTEGER NOT NULL,
               document_id VARCHAR(100) NOT NULL,
               document_type VARCHAR(50) NOT NULL,
@@ -374,9 +375,9 @@ async function startServer(): Promise<void> {
       `);
       console.log('✅ document_chunks table: OK (auto-synced)');
     } catch (syncErr) {
-      // If the raw SQL fails (e.g. pgvector extension not installed yet),
-      // fall back silently — the try-catch guards in AIService already handle missing tables.
-      console.warn('[Startup] Schema auto-sync skipped (pgvector may not be installed):', syncErr instanceof Error ? syncErr.message : syncErr);
+      // If raw SQL fails (e.g. pgvector extension not installed yet),
+      // fall back silently — the try-catch guards in AIService handle missing tables.
+      console.warn('[Startup] Schema auto-sync skipped:', syncErr instanceof Error ? syncErr.message : syncErr);
     }
 
     // Setup graceful shutdown handlers

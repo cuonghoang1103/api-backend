@@ -2,13 +2,7 @@
 # ============================================================
 # CuongHoangDev - VPS Deployment Script (run via GitHub Actions)
 #
-# Why "up -d --build --remove-orphans" instead of "down && up"?
-#   - "down" TERMINATES containers first, then starts new ones → DOWNTIME window
-#   - "up -d --build --remove-orphans" builds the new image, then atomically
-#     swaps old containers for new ones → ZERO DOWNTIME (blue-green style)
-#   - "--remove-orphans" cleans up containers for services that no longer exist
-#
-# After containers are up, Docker build cache is pruned to free SSD space.
+# Builds and deploys the Docker stack with zero-downtime.
 # ============================================================
 cd /opt/cuonghoangdev
 
@@ -37,8 +31,6 @@ echo "=== [3/10] SSL symlinks ==="
   ln -sf privkey2.pem certbot/conf/archive/cuongthai.com/privkey.pem 2>/dev/null || true
 
 echo "=== [4/10] Ensure database is healthy ==="
-# Force-restart postgres if it's not accepting connections
-# If restart loop persists, check disk space and prune docker
 PG_READY=0
 if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
   echo "[WARN] Postgres not ready, attempting restart..."
@@ -49,7 +41,6 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
       PG_READY=1
       break
     fi
-    # Check if container is stuck in restart loop
     RESTART_COUNT=$(docker inspect cuonghoangdev_postgres --format '{{.RestartCount}}' 2>/dev/null)
     echo "Waiting for postgres... ($i/12) restart_count=$RESTART_COUNT"
     if [ "$i" -eq 6 ]; then
@@ -61,18 +52,15 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
     fi
     sleep 5
   done
-  # If still not ready, force-remove and recreate container + reset corrupt data
   if [ "$PG_READY" = "0" ]; then
     echo "[CRITICAL] Postgres stuck in restart loop, resetting data directory..."
     docker compose rm -sf postgres 2>/dev/null || true
     sleep 3
-    # Reset the bind-mounted postgres data directory (corrupt or incompatible)
     rm -rf /opt/cuonghoangdev/postgres
     mkdir -p /opt/cuonghoangdev/postgres
     echo "[DEBUG] postgres data dir reset, container logs:"
     docker compose logs --tail=20 postgres 2>&1 || true
-    echo "[DEBUG] container inspect:"
-    docker inspect cuonghoangdev_postgres --format 'restart={{.RestartCount}} state={{.State.Status}}' 2>&1 || true
+    echo "[DEBUG] container state: $(docker inspect cuonghoangdev_postgres --format '{{.State.Status}} ({{.RestartCount}} restarts)' 2>&1 || echo 'not found')"
     echo "[DEBUG] memory usage:"
     free -h 2>&1 || true
     docker compose up -d postgres
@@ -97,13 +85,54 @@ echo "Database ready"
 
 echo "=== [6/10] Code already synced via rsync ==="
 
-echo "=== [7/10] Building containers (zero-downtime) ==="
-# Prune ALL Docker build cache to ensure fresh build with latest code
-docker builder prune -af
-docker system prune -af --volumes 2>/dev/null || true
-# Force no-cache build for backend to pick up code changes
-docker build --no-cache -t cuonghoangdev_backend:latest -f /opt/cuonghoangdev/Dockerfile.backend /opt/cuonghoangdev/
-docker compose --env-file /opt/cuonghoangdev/.env up -d --force-recreate backend frontend
+echo "=== [7/10] Building backend container ==="
+# Capture old image ID to detect if build actually changed something
+OLD_IMAGE_ID=$(docker images -q cuonghoangdev_backend:latest 2>/dev/null || echo "")
+echo "Old backend image: ${OLD_IMAGE_ID:-none}"
+
+# Prune builder cache
+docker builder prune -af 2>/dev/null || true
+
+# Build backend with explicit no-cache
+BUILD_OUTPUT=$(docker build --no-cache \
+  -t cuonghoangdev_backend:latest \
+  -f /opt/cuonghoangdev/Dockerfile.backend \
+  /opt/cuonghoangdev/ 2>&1)
+BUILD_EXIT=$?
+
+# Always print build output (even on failure)
+echo "$BUILD_OUTPUT" | tail -20
+
+if [ $BUILD_EXIT -ne 0 ]; then
+  echo "[CRITICAL] Backend build FAILED with exit code $BUILD_EXIT"
+  echo "New image was NOT built. NOT proceeding with deploy to avoid using stale code."
+  echo "=== Container Status (stale) ==="
+  docker compose ps
+  exit 1
+fi
+
+NEW_IMAGE_ID=$(docker images -q cuonghoangdev_backend:latest 2>/dev/null || echo "")
+echo "New backend image: ${NEW_IMAGE_ID:-none}"
+
+if [ "$OLD_IMAGE_ID" = "$NEW_IMAGE_ID" ] && [ -n "$OLD_IMAGE_ID" ]; then
+  echo "[WARN] Image ID unchanged — Docker may have used cached layers despite --no-cache"
+else
+  echo "[OK] Backend image rebuilt successfully"
+fi
+
+# Recreate and start backend container
+echo "=== [7b/10] Starting backend container ==="
+docker compose --env-file /opt/cuonghoangdev/.env up -d --force-recreate backend
+
+# Verify container is running
+BACKEND_STATUS=$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo "NOT_FOUND")
+echo "Backend container status: $BACKEND_STATUS"
+
+if [ "$BACKEND_STATUS" != "running" ]; then
+  echo "[CRITICAL] Backend container failed to start!"
+  docker logs cuonghoangdev_backend --tail=30
+  exit 1
+fi
 
 echo "=== [8/10] Database schema setup (after backend is up) ==="
 for i in $(seq 1 18); do
@@ -121,11 +150,15 @@ for i in $(seq 1 18); do
       cat /tmp/prisma_push.log
     fi
 
-    # Seed CuongMini-OS knowledge base
-    echo "Seeding CuongMini-OS knowledge base v2.0..."
-    docker compose exec -T backend sh -c "npx tsx data/seed-knowledge.ts" \
-      > /tmp/seed_knowledge.log 2>&1 || echo "[WARN] Knowledge seed failed, check /tmp/seed_knowledge.log"
-    cat /tmp/seed_knowledge.log
+    # Seed knowledge base (best-effort, doesn't block deploy)
+    echo "Seeding CuongMini-OS knowledge base (best-effort)..."
+    SEED_OUTPUT=$(docker compose exec -T backend sh -c "npx tsx data/seed-knowledge.ts" 2>&1 || true)
+    if echo "$SEED_OUTPUT" | grep -qi "error\|failed\|cannot"; then
+      echo "[WARN] Knowledge seed issues:"
+      echo "$SEED_OUTPUT" | tail -5
+    else
+      echo "[OK] Knowledge base seeded"
+    fi
     break
   fi
   echo "Waiting for backend to be ready... ($i/18)"

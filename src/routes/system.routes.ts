@@ -1,5 +1,4 @@
 import { Router, type Response } from 'express';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { config } from '../config/env.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -11,21 +10,26 @@ router.get('/health', async (_req, res: Response<ApiResponse>) => {
 });
 
 // ─── GET /api/v1/system/gemini-models ─────────────────
-// Debug endpoint: lists all models accessible by the configured API key
+// Debug endpoint: tests which model names are valid on the v1beta endpoint
 router.get('/gemini-models', async (_req, res: Response<ApiResponse>) => {
-  if (!config.geminiApiKey) {
-    res.status(503).json({ success: false, message: 'GEMINI_API_KEY not configured' });
-    return;
+  const testModels = ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-3-flash', 'gemini-3.5-flash'];
+  const results: Record<string, string> = {};
+  for (const model of testModels) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=FAKE_KEY`;
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: 'test' }] }] })
+      });
+      const data = await resp.json();
+      const msg: string = data?.error?.message || '';
+      results[model] = msg.includes('not found') ? 'NOT_FOUND' : 'EXISTS';
+    } catch {
+      results[model] = 'NETWORK_ERROR';
+    }
   }
-  try {
-    const genAI = new GoogleGenerativeAI(config.geminiApiKey);
-    const modelList = await genAI.listModels();
-    const names = modelList.map((m: any) => m.name?.replace('models/', '') ?? 'unknown');
-    res.json({ success: true, data: { models: names } });
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    res.status(500).json({ success: false, message: msg });
-  }
+  res.json({ success: true, data: { models: results } });
 });
 
 export default router;

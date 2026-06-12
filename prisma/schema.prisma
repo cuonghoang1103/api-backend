@@ -983,7 +983,6 @@ model DocumentChunk {
   id           Int                         @id @default(autoincrement())
   content      String                      @db.Text
   metadata     Json?                       @default("{}") @db.JsonB
-  embedding    Unsupported("vector(768)")?
   chunkIndex   Int                         @map("chunk_index")
   documentId   String                      @map("document_id") @db.VarChar(100)
   documentType String                      @map("document_type") @db.VarChar(50)

@@ -99,7 +99,7 @@ docker rmi cuonghoangdev_backend:latest 2>/dev/null || true
 docker builder prune -af 2>/dev/null || true
 
 # Build backend with explicit no-cache
-BUILD_OUTPUT=$(docker build \
+BUILD_OUTPUT=$(DOCKER_BUILDKIT=0 docker build \
   --no-cache \
   --progress=plain \
   -t cuonghoangdev_backend:latest \

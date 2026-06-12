@@ -95,9 +95,6 @@ docker compose --env-file /opt/cuonghoangdev/.env rm -sf backend 2>/dev/null || 
 # Remove old image to force full rebuild
 docker rmi cuonghoangdev_backend:latest 2>/dev/null || true
 
-# Prune docker builder cache on VPS host
-docker builder prune -af 2>/dev/null || true
-
 # Build backend with explicit no-cache
 BUILD_OUTPUT=$(DOCKER_BUILDKIT=0 docker build \
   --no-cache \

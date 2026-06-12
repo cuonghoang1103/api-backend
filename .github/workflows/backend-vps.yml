@@ -80,10 +80,15 @@ jobs:
             "vps:/opt/cuonghoangdev/"
           # Now rsync .next/ from the runner's local filesystem (bypasses .gitignore)
           # This is the FRESH build we just compiled above
-          rsync -az --delete \
+          echo "--- Syncing .next/ to VPS ---"
+          if ! rsync -azv --delete \
             frontend/.next/ \
             -e "ssh -F $HOME/.ssh/config" \
-            "vps:/opt/cuonghoangdev/frontend/.next/"
+            "vps:/opt/cuonghoangdev/frontend/.next/"; then
+            echo "[CRITICAL] rsync .next/ FAILED"
+            exit 1
+          fi
+          echo "--- .next/ synced successfully ---"
 
       - name: Create .env on VPS if missing
         run: |

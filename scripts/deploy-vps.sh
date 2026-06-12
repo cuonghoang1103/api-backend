@@ -117,6 +117,12 @@ for i in $(seq 1 18); do
       echo "[WARN] Prisma push output:"
       cat /tmp/prisma_push.log
     fi
+
+    # Seed CuongMini-OS knowledge base
+    echo "Seeding CuongMini-OS knowledge base v2.0..."
+    docker compose exec -T backend sh -c "npx tsx data/seed-knowledge.ts" \
+      > /tmp/seed_knowledge.log 2>&1 || echo "[WARN] Knowledge seed failed, check /tmp/seed_knowledge.log"
+    cat /tmp/seed_knowledge.log
     break
   fi
   echo "Waiting for backend to be ready... ($i/18)"

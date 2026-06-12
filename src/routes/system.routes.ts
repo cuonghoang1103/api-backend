@@ -1,5 +1,4 @@
 import { Router, type Response } from 'express';
-import { config } from '../config/env.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -22,7 +21,7 @@ router.get('/gemini-models', async (_req, res: Response<ApiResponse>) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: 'test' }] }] })
       });
-      const data = await resp.json();
+      const data = await resp.json() as { error?: { message?: string } };
       const msg: string = data?.error?.message || '';
       results[model] = msg.includes('not found') ? 'NOT_FOUND' : 'EXISTS';
     } catch {

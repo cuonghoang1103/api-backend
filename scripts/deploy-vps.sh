@@ -120,6 +120,7 @@ echo "--- Packaging pre-built frontend (no compilation) ---"
 FRONTEND_BUILD=$(docker build \
   --no-cache \
   --progress=plain \
+  --build-arg BUILDKIT_INLINE_CACHE=0 \
   -t cuonghoangdev_frontend:latest \
   -f /opt/cuonghoangdev/frontend/Dockerfile \
   /opt/cuonghoangdev/frontend/ 2>&1)

@@ -6,15 +6,15 @@
 # This Dockerfile only packages the pre-built .next/ + production deps.
 # ============================================================
 
-# ─── Stage 1: Deps (production node_modules only) ──────────────
+# ─── Stage 1: Deps (all dependencies for standalone server) ───────
 FROM node:22-alpine AS deps
 
 WORKDIR /app
 
 COPY package*.json ./
 
-# Install ONLY production deps (needed by standalone server.js at runtime)
-RUN npm install --omit=dev --prefer-offline
+# Install all deps (including dev) — some are needed at runtime for standalone server
+RUN npm install
 
 # ─── Stage 2: Runner (production container) ───────────────────
 FROM node:22-alpine AS runner

@@ -50,20 +50,21 @@ jobs:
         run: |
           ssh vps "echo SSH_OK"
 
-      - name: Sync project to VPS
+      - name: Build Next.js frontend
         run: |
-          # Build Next.js ON the GitHub Actions runner (not inside Docker on VPS)
-          # This ensures fresh .next/ is always compiled and available for rsync
           cd frontend
           npm ci
           NEXT_PUBLIC_BUILD_ID=$(date +%s) npm run build
-          cd ..
-          # Rsync ALL source files AND the fresh .next/ build to VPS.
-          # Use --include to force-include .next/ (overrides any exclude patterns).
-          # (no longer exclude frontend/.next — we need it!)
+          # Verify .next/ was built
+          echo "--- Built .next/ contents ---"
+          ls -la .next/static/css/ 2>/dev/null | head -5
+          echo "--- CSS hash ---"
+          ls .next/static/css/*.css 2>/dev/null | head -3
+
+      - name: Sync project to VPS
+        run: |
+          # Rsync all source files to VPS (rsync respects .gitignore so .next/ is skipped here)
           rsync -az --delete \
-            --include='.next/' \
-            --include='.next/**' \
             --exclude '.git' \
             --exclude 'node_modules' \
             --exclude 'frontend/node_modules' \
@@ -77,6 +78,12 @@ jobs:
             --exclude '.env' \
             ./ -e "ssh -F $HOME/.ssh/config" \
             "vps:/opt/cuonghoangdev/"
+          # Now rsync .next/ from the runner's local filesystem (bypasses .gitignore)
+          # This is the FRESH build we just compiled above
+          rsync -az --delete \
+            frontend/.next/ \
+            -e "ssh -F $HOME/.ssh/config" \
+            "vps:/opt/cuonghoangdev/frontend/.next/"
 
       - name: Create .env on VPS if missing
         run: |

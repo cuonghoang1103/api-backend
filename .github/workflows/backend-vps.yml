@@ -108,7 +108,7 @@ jobs:
       - name: Update .env on VPS with secrets
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           # Update YOUTUBE_API_KEY (create line if missing)
@@ -117,11 +117,11 @@ jobs:
           else
             ssh vps "echo 'YOUTUBE_API_KEY=${YOUTUBE_API_KEY}' >> /opt/cuonghoangdev/.env"
           fi
-          # Update GEMINI_API_KEY (create line if missing)
-          if grep -q "^GEMINI_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
-            ssh vps "sed -i 's|^GEMINI_API_KEY=.*|GEMINI_API_KEY=${GEMINI_API_KEY}|' /opt/cuonghoangdev/.env"
+          # Update OPENROUTER_API_KEY (create line if missing)
+          if grep -q "^OPENROUTER_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
+            ssh vps "sed -i 's|^OPENROUTER_API_KEY=.*|OPENROUTER_API_KEY=${OPENROUTER_API_KEY}|' /opt/cuonghoangdev/.env"
           else
-            ssh vps "echo 'GEMINI_API_KEY=${GEMINI_API_KEY}' >> /opt/cuonghoangdev/.env"
+            ssh vps "echo 'OPENROUTER_API_KEY=${OPENROUTER_API_KEY}' >> /opt/cuonghoangdev/.env"
           fi
           # Update POSTGRES_PASSWORD only if secret is non-empty
           if [ -n "$POSTGRES_PASSWORD" ]; then
@@ -144,7 +144,7 @@ jobs:
               ssh vps "echo 'POSTGRES_PASSWORD=123456' >> /opt/cuonghoangdev/.env"
             fi
           fi
-          ssh vps "grep -E 'GEMINI_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
+          ssh vps "grep -E 'OPENROUTER_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
 
       - name: Upload and run swap setup script
         continue-on-error: true

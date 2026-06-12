@@ -246,15 +246,22 @@ export default function ChatMessages({ messages, isStreaming }: {
 }) {
   const endRef = useRef<HTMLDivElement>(null);
 
+  // Auto-scroll to bottom whenever messages change (new message added/updated)
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (endRef.current) {
+      endRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
   }, [messages, isStreaming]);
 
   const lastAssistantIndex = [...messages].reverse().findIndex((m) => m.role === 'assistant');
   const lastAssistantId = lastAssistantIndex >= 0 ? messages[messages.length - 1 - lastAssistantIndex]?.id : null;
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 space-y-6">
+    /* flex-1 = fill remaining vertical space inside the flex column (header + messages + input) */
+    /* min-w-0  = allow flex child to shrink below its content size (fixes flex overflow bug) */
+    /* overflow-y-auto = only THIS container scrolls when content exceeds its height */
+    /* Custom cyber scrollbar via class + CSS below */
+    <div className="flex-1 min-w-0 overflow-y-auto chat-messages-scroll px-4 sm:px-6 py-6 space-y-6">
       <AnimatePresence mode="popLayout">
         {messages.map((msg) => (
           <MessageBubble
@@ -271,7 +278,8 @@ export default function ChatMessages({ messages, isStreaming }: {
         <MechThinkingIndicator />
       )}
 
-      <div ref={endRef} />
+      {/* Invisible anchor — scrollIntoView target sits after last message */}
+      <div ref={endRef} aria-hidden="true" />
     </div>
   );
 }

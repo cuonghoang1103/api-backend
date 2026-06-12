@@ -576,6 +576,7 @@ export default function ChatPage() {
         </motion.header>
 
         {/* Messages or Welcome */}
+        {/* overflow-hidden = prevent child content from breaking flex column boundary */}
         <div className="flex-1 overflow-hidden relative chat-scanlines">
           {!mounted ? (
             <div className="flex items-center justify-center h-full">

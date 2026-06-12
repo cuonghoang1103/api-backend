@@ -633,9 +633,10 @@
 }
 
 /* ── Scanline overlay ────────────────────────────────────────── */
+/* position:absolute so it clips inside its container instead of the viewport */
 .chat-scanlines::after {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 1;
@@ -646,6 +647,29 @@
     rgba(0, 0, 0, 0.02) 2px,
     rgba(0, 0, 0, 0.02) 4px
   );
+}
+
+/* ── Chat messages scroll container ─────────────────────────── */
+/* Thin cyberpunk scrollbar — only affects the chat history zone */
+.chat-messages-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.3) transparent;
+}
+.chat-messages-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.chat-messages-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chat-messages-scroll::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.3);
+  border-radius: 2px;
+}
+.chat-messages-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 238, 0.55);
+}
+.chat-messages-scroll::-webkit-scrollbar-thumb:active {
+  background: rgba(34, 211, 238, 0.8);
 }
 
 /* ── Neon shimmer on prompt cards ───────────────────────────── */

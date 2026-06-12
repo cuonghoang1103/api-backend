@@ -17,17 +17,19 @@ COPY package*.json ./
 RUN npm install --prefer-offline
 
 # ─── Stage 2: Builder (compile code) ─────────────────────────
+# ARG CACHE_BUST changes every build → Docker must re-execute COPY + build layers
 FROM node:22-alpine AS builder
+ARG CACHE_BUST=0
 
 WORKDIR /app
 
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Copy cached node_modules from deps stage
+# Copy cached node_modules from deps stage (no cache bust needed — this is intentional)
 COPY --from=deps /app/node_modules ./node_modules
 
-# Copy rest of source
+# Copy rest of source — CACHE_BUST forces Docker to re-execute this layer every build
 COPY . .
 
 # Build args for environment variables

@@ -17,9 +17,6 @@ echo "--- Removing old node_modules copies ---"
 find /opt/cuonghoangdev -name "node_modules" -type d -prune -exec rm -rf {} + 2>/dev/null || true
 echo "--- Removing build artifacts (dist from backend builds) ---"
 find /opt/cuonghoangdev -name "dist" -type d -prune -exec rm -rf {} + 2>/dev/null || true
-# NOTE: do NOT delete frontend/.next here — rsync brings a fresh .next/ from the
-# GitHub Actions runner (which built it fresh). Deleting .next before rsync would
-# cause rsync to delete the fresh .next/ from the runner too.
 echo "--- Disk usage after cleanup ---"
 df -h /opt / /var/lib/docker 2>/dev/null || df -h /opt /
 
@@ -117,27 +114,13 @@ if [ $BUILD_EXIT -ne 0 ]; then
 fi
 
 echo "=== Building frontend container ==="
-# Build Next.js OUTSIDE Docker directly on the VPS host.
-# This ensures the fresh .next/ is always compiled fresh (not subject to Docker layer cache).
-# The frontend Dockerfile is only used to package the already-built .next/ output.
-echo "--- Installing frontend dependencies on VPS ---"
-cd /opt/cuonghoangdev/frontend
-npm install 2>&1 | tail -5
-echo "--- Building Next.js on VPS (fresh compilation) ---"
-NEXT_OUTPUT=$(NEXT_TELEMETRY_DISABLED=1 npm run build 2>&1)
-NEXT_EXIT=$?
-echo "$NEXT_OUTPUT" | tail -5
-if [ $NEXT_EXIT -ne 0 ]; then
-  echo "[CRITICAL] Next.js build FAILED on VPS: exit $NEXT_EXIT"
-  exit 1
-fi
-
-# Now package the fresh .next/ into a Docker image
-# Prune docker builder cache for fresh build
-docker builder prune -af 2>/dev/null || true
+# Use ARG CACHE_BUST on every build so the builder stage always recompiles fresh.
+# Without this, Docker reuses the cached builder stage from previous builds.
+echo "--- Frontend build (cache-busting ARG forces fresh Next.js compilation) ---"
 FRONTEND_BUILD=$(docker build \
   --no-cache \
   --progress=plain \
+  --build-arg CACHE_BUST=$(date +%s) \
   -t cuonghoangdev_frontend:latest \
   -f /opt/cuonghoangdev/frontend/Dockerfile \
   /opt/cuonghoangdev/frontend/ 2>&1)

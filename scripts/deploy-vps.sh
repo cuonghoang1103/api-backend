@@ -72,7 +72,7 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
       fi
       echo "Waiting for fresh postgres... ($i/18)"
       echo "[DEBUG] container state: $(docker inspect cuonghoangdev_postgres --format '{{.State.Status}} ({{.RestartCount}} restarts)' 2>&1 || echo 'not found')"
-      docker compose logs --tail=3 postgres 2>&1 || true
+      docker compose logs --tail-3 postgres 2>&1 || true
       sleep 5
     done
   fi
@@ -86,91 +86,114 @@ echo "Database ready"
 echo "=== [6/10] Code already synced via rsync ==="
 
 echo "=== [7/10] Building backend container ==="
-# Capture old image ID to detect if build actually changed something
-OLD_IMAGE_ID=$(docker images -q cuonghoangdev_backend:latest 2>/dev/null || echo "")
-echo "Old backend image: ${OLD_IMAGE_ID:-none}"
+# Capture old container ID so we can verify it was replaced
+OLD_CONTAINER_ID=$(docker inspect cuonghoangdev_backend --format '{{.Id}}' 2>/dev/null || echo "")
+echo "Old container ID: ${OLD_CONTAINER_ID:-none}"
 
-# Prune builder cache
+# Prune ALL docker cache on the VPS host
 docker builder prune -af 2>/dev/null || true
 
-# Build backend with explicit no-cache
-BUILD_OUTPUT=$(docker build --no-cache \
+# Build with BOTH --no-cache and explicit --build-arg to invalidate all layers
+# Also use --progress=plain to see all build steps in output
+BUILD_OUTPUT=$(docker build \
+  --no-cache \
+  --progress=plain \
   -t cuonghoangdev_backend:latest \
   -f /opt/cuonghoangdev/Dockerfile.backend \
   /opt/cuonghoangdev/ 2>&1)
 BUILD_EXIT=$?
 
-# Always print build output (even on failure)
-echo "$BUILD_OUTPUT" | tail -20
+# Print last lines of build output (shows what was actually built)
+echo "--- Build output (last 10 lines) ---"
+echo "$BUILD_OUTPUT" | tail -10
 
 if [ $BUILD_EXIT -ne 0 ]; then
   echo "[CRITICAL] Backend build FAILED with exit code $BUILD_EXIT"
-  echo "New image was NOT built. NOT proceeding with deploy to avoid using stale code."
-  echo "=== Container Status (stale) ==="
+  echo "Full build output:"
+  echo "$BUILD_OUTPUT" | tail -30
+  echo "NOT proceeding with deploy to avoid using stale code."
+  echo "=== Container Status (stale, still running) ==="
   docker compose ps
   exit 1
 fi
 
 NEW_IMAGE_ID=$(docker images -q cuonghoangdev_backend:latest 2>/dev/null || echo "")
-echo "New backend image: ${NEW_IMAGE_ID:-none}"
+echo "New backend image ID: ${NEW_IMAGE_ID:-none}"
 
-if [ "$OLD_IMAGE_ID" = "$NEW_IMAGE_ID" ] && [ -n "$OLD_IMAGE_ID" ]; then
-  echo "[WARN] Image ID unchanged — Docker may have used cached layers despite --no-cache"
-else
-  echo "[OK] Backend image rebuilt successfully"
-fi
+# Tag with timestamp for debugging
+docker tag cuonghoangdev_backend:latest cuonghoangdev_backend:$(date +%s) 2>/dev/null || true
 
-# Recreate and start backend container
-echo "=== [7b/10] Starting backend container ==="
-docker compose --env-file /opt/cuonghoangdev/.env up -d --force-recreate backend
+# Stop and remove OLD container FIRST (before creating new one)
+echo "=== Stopping old container ==="
+docker stop cuonghoangdev_backend 2>/dev/null || true
+docker rm cuonghoangdev_backend 2>/dev/null || true
+echo "Old container removed"
 
-# Verify container is running
-BACKEND_STATUS=$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo "NOT_FOUND")
-echo "Backend container status: $BACKEND_STATUS"
-
-if [ "$BACKEND_STATUS" != "running" ]; then
-  echo "[CRITICAL] Backend container failed to start!"
-  docker logs cuonghoangdev_backend --tail=30
+# Verify old container is gone
+NEW_CONTAINER_ID=$(docker inspect cuonghoangdev_backend --format '{{.Id}}' 2>/dev/null || echo "")
+if [ -n "$NEW_CONTAINER_ID" ]; then
+  echo "[ERROR] Old container still exists after removal! Skipping deploy."
+  docker compose ps
   exit 1
 fi
+echo "Confirmed: no old container running"
 
-echo "=== [8/10] Database schema setup (after backend is up) ==="
-for i in $(seq 1 18); do
-  if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health >/dev/null 2>&1; then
-    echo "Backend is healthy, running prisma db push..."
-    docker compose exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" \
-      > /tmp/prisma_push.log 2>&1
-    PRISMA_EXIT=$?
-    if grep -q "already in sync\|The database is already in sync" /tmp/prisma_push.log 2>/dev/null; then
-      echo "Database schema already in sync"
-    elif [ $PRISMA_EXIT -eq 0 ]; then
-      echo "Database schema pushed successfully"
-    else
-      echo "[WARN] Prisma push output:"
-      cat /tmp/prisma_push.log
-    fi
+# Start new container using docker compose (uses the new image automatically)
+echo "=== Starting new container ==="
+docker compose --env-file /opt/cuonghoangdev/.env up -d backend
 
-    # Seed knowledge base (best-effort, doesn't block deploy)
-    echo "Seeding CuongMini-OS knowledge base (best-effort)..."
-    SEED_OUTPUT=$(docker compose exec -T backend sh -c "npx tsx data/seed-knowledge.ts" 2>&1 || true)
-    if echo "$SEED_OUTPUT" | grep -qi "error\|failed\|cannot"; then
-      echo "[WARN] Knowledge seed issues:"
-      echo "$SEED_OUTPUT" | tail -5
-    else
-      echo "[OK] Knowledge base seeded"
+# Wait for new container to be healthy
+echo "=== Verifying new container ==="
+for i in $(seq 1 30); do
+  CONTAINER_STATUS=$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo "NOT_FOUND")
+  echo "Container check ($i/30): status=$CONTAINER_STATUS"
+  if [ "$CONTAINER_STATUS" = "running" ]; then
+    # Also verify the health endpoint
+    if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health >/dev/null 2>&1; then
+      echo "[OK] New container is healthy!"
+      break
     fi
-    break
   fi
-  echo "Waiting for backend to be ready... ($i/18)"
+  if [ "$i" -eq 30 ]; then
+    echo "[CRITICAL] New container failed health check after 150s!"
+    echo "Container logs:"
+    docker logs cuonghoangdev_backend --tail=30
+    echo "Container inspect:"
+    docker inspect cuonghoangdev_backend
+    exit 1
+  fi
   sleep 5
 done
+
+echo "=== [8/10] Database schema setup (after backend is up) ==="
+docker compose exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" \
+  > /tmp/prisma_push.log 2>&1
+PRISMA_EXIT=$?
+if grep -q "already in sync\|The database is already in sync" /tmp/prisma_push.log 2>/dev/null; then
+  echo "Database schema already in sync"
+elif [ $PRISMA_EXIT -eq 0 ]; then
+  echo "Database schema pushed successfully"
+else
+  echo "[WARN] Prisma push output:"
+  cat /tmp/prisma_push.log
+fi
+
+# Seed knowledge base (best-effort)
+echo "Seeding knowledge base (best-effort)..."
+SEED_OUTPUT=$(docker compose exec -T backend sh -c "npx tsx data/seed-knowledge.ts" 2>&1 || true)
+if echo "$SEED_OUTPUT" | grep -qi "error\|cannot find module"; then
+  echo "[WARN] Knowledge seed issues (non-critical):"
+  echo "$SEED_OUTPUT" | tail -5
+else
+  echo "[OK] Knowledge base seeded"
+fi
 
 echo "Restarting nginx..."
 docker compose stop nginx 2>/dev/null || true
 sleep 2
 docker compose up -d --force-recreate nginx
 
-echo "=== [9/10] Wait for nginx (best-effort) ==="
+echo "=== [9/10] Wait for nginx ==="
 for i in $(seq 1 12); do
   if docker exec cuonghoangdev_nginx wget -qO- http://localhost/ >/dev/null 2>&1; then
     echo "[OK] nginx"

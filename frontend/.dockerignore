@@ -1,14 +1,9 @@
+# Frontend Docker build context
+node_modules
+.next
 npm-debug.log*
 yarn-error.log*
 .env.local
 .env.development
 .env.production.local
 .vercel
-
-.next/cache
-.next/server
-.next/BUILD_ID
-.next/turbopack
-.nextTrace-*
-.next/future/
-.next/image/

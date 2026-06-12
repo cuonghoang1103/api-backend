@@ -100,31 +100,26 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
 fi
 
 echo "=== [5/7] Ensure database exists ==="
-# Verify postgres password is correct by testing connection
-PG_PASSWORD="${POSTGRES_PASSWORD:-123456}"
-PG_AUTH_TEST=$(docker compose exec -T postgres psql -U postgres -d cuonghoangdev_db -c "SELECT 1" 2>&1 || true)
-if echo "$PG_AUTH_TEST" | grep -qi "authentication failed\|FATAL\|password authentication failed"; then
-  echo "[WARN] Postgres auth failed - likely stale password from previous container. Recreating postgres..."
-  docker stop cuonghoangdev_postgres 2>/dev/null || true
-  docker rm cuonghoangdev_postgres 2>/dev/null || true
-  sleep 2
-  docker compose up -d postgres
-  for i in $(seq 1 12); do
-    if docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
-      echo "Postgres recreated and up"
-      break
-    fi
-    echo "Waiting for postgres to start... ($i/12)"
-    sleep 5
-  done
-  docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'cuonghoangdev_db'" | grep -q 1 || \
-    docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE cuonghoangdev_db" 2>/dev/null
-  echo "[OK] Postgres recreated with correct password from .env"
-else
-  docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'cuonghoangdev_db'" | grep -q 1 || \
-    docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE cuonghoangdev_db" 2>/dev/null
-  echo "[OK] Postgres authentication verified"
-fi
+# CRITICAL: export vars from .env so docker compose reads the correct password
+set -a && . /opt/cuonghoangdev/.env && set +a
+
+# Always recreate postgres to ensure it uses the current .env password
+# This is safe because data is on a persistent named volume (postgres_data)
+echo "[DEBUG] Recreating postgres to sync password from .env..."
+docker stop cuonghoangdev_postgres 2>/dev/null || true
+docker rm cuonghoangdev_postgres 2>/dev/null || true
+sleep 2
+docker compose up -d postgres
+for i in $(seq 1 12); do
+  if docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
+    echo "Postgres up with current .env password"
+    break
+  fi
+  echo "Waiting for postgres... ($i/12)"
+  sleep 5
+done
+docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'cuonghoangdev_db'" | grep -q 1 || \
+  docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE cuonghoangdev_db" 2>/dev/null
 echo "Database ready"
 
 echo "=== [6/7] Build and deploy containers ==="

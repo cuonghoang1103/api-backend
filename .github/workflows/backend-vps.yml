@@ -81,20 +81,19 @@ jobs:
             ./ -e "ssh -F $HOME/.ssh/config" \
             "vps:/opt/cuonghoangdev/" || echo "Rsync completed with warnings (exit $?)"
 
-      - name: Deploy .next/ and package files to VPS
+      - name: Deploy .next/, node_modules, and package files to VPS
         run: |
-          # Stream .next/ AND package.json files from runner to VPS via SSH pipe.
+          # Stream .next/, node_modules, and package files from runner to VPS.
           # tar pipe bypasses .gitignore entirely (no file on disk to ignore).
-          echo "--- Streaming .next/ and package files to VPS ---"
-          ssh -F $HOME/.ssh/config vps "rm -rf /opt/cuonghoangdev/frontend/.next && mkdir -p /opt/cuonghoangdev/frontend" || true
-          # Transfer .next/ (fresh build artifacts)
-          (cd frontend && tar -czf - .next/) | ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev/frontend && tar -xzf -" || true
-          # Transfer package files from frontend/ directory (needed by Docker deps stage)
-          (cd frontend && tar -czf - package.json package-lock.json) | ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev/frontend && tar -xzf -" || true
+          echo "--- Streaming build artifacts to VPS ---"
+          ssh -F $HOME/.ssh/config vps "rm -rf /opt/cuonghoangdev/frontend/.next /opt/cuonghoangdev/frontend/node_modules && mkdir -p /opt/cuonghoangdev/frontend" || true
+          # Transfer .next/, node_modules, and package files from frontend/ directory
+          (cd frontend && tar -czf - .next/ node_modules/ package.json package-lock.json) | \
+            ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev/frontend && tar -xzf -" || true
           echo "--- Build artifacts deployed ---"
           # Verify
           ssh -F $HOME/.ssh/config vps "ls /opt/cuonghoangdev/frontend/.next/static/css/ 2>/dev/null | head -3" || echo "Verification: file listing skipped"
-          ssh -F $HOME/.ssh/config vps "wc -l /opt/cuonghoangdev/frontend/package.json 2>/dev/null || echo 'package.json empty or missing'" || echo "Verification skipped"
+          ssh -F $HOME/.ssh/config vps "ls /opt/cuonghoangdev/frontend/node_modules/next/package.json 2>/dev/null && echo 'node_modules: OK' || echo 'node_modules: MISSING'" || echo "Verification skipped"
 
       - name: Create .env on VPS if missing
         run: |

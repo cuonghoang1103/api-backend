@@ -60,6 +60,15 @@ jobs:
           ls -la .next/static/css/ 2>/dev/null | head -5
           echo "--- CSS hash ---"
           ls .next/static/css/*.css 2>/dev/null | head -3
+          echo "--- Scrollbar fix present? ---"
+          grep -l "chat-messages-scroll" .next/static/css/*.css 2>/dev/null || echo "NOT FOUND"
+
+      - name: Upload frontend build
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-next-build
+          path: frontend/.next/
+          retention-days: 1
 
       - name: Sync project to VPS
         run: |
@@ -78,17 +87,24 @@ jobs:
             --exclude '.env' \
             ./ -e "ssh -F $HOME/.ssh/config" \
             "vps:/opt/cuonghoangdev/"
-          # Now rsync .next/ from the runner's local filesystem (bypasses .gitignore)
-          # This is the FRESH build we just compiled above
-          echo "--- Syncing .next/ to VPS ---"
-          if ! rsync -azv --delete \
-            frontend/.next/ \
+
+      - name: Download frontend build to VPS
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-next-build
+          path: /tmp/frontend-next/
+        env:
+          ACTIONS_RUNTIME_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTIONS_RUNTIME_URL: ${{ env.ACTIONS_RUNTIME_URL }}
+
+      - name: Copy frontend build to VPS
+        run: |
+          # Copy the downloaded .next/ to VPS
+          rsync -az \
+            /tmp/frontend-next/ \
             -e "ssh -F $HOME/.ssh/config" \
-            "vps:/opt/cuonghoangdev/frontend/.next/"; then
-            echo "[CRITICAL] rsync .next/ FAILED"
-            exit 1
-          fi
-          echo "--- .next/ synced successfully ---"
+            "vps:/opt/cuonghoangdev/frontend/"
+          echo "--- .next/ deployed to VPS via artifacts ---"
 
       - name: Create .env on VPS if missing
         run: |

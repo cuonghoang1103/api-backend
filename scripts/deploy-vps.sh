@@ -114,13 +114,12 @@ if [ $BUILD_EXIT -ne 0 ]; then
 fi
 
 echo "=== Building frontend container ==="
-# Use ARG CACHE_BUST on every build so the builder stage always recompiles fresh.
-# Without this, Docker reuses the cached builder stage from previous builds.
-echo "--- Frontend build (cache-busting ARG forces fresh Next.js compilation) ---"
+# Frontend is pre-built in GitHub Actions (fresh .next/ via rsync).
+# Docker only packages the pre-built artifacts — no compilation needed.
+echo "--- Packaging pre-built frontend (no compilation) ---"
 FRONTEND_BUILD=$(docker build \
   --no-cache \
   --progress=plain \
-  --build-arg CACHE_BUST=$(date +%s) \
   -t cuonghoangdev_frontend:latest \
   -f /opt/cuonghoangdev/frontend/Dockerfile \
   /opt/cuonghoangdev/frontend/ 2>&1)

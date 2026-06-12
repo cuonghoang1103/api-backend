@@ -16,34 +16,9 @@ COPY package*.json ./
 # Install ALL dependencies (including dev for build)
 RUN npm install --prefer-offline
 
-# ─── Stage 2: Builder (compile code) ─────────────────────────
-# ARG CACHE_BUST changes every build → Docker must re-execute COPY + build layers
-FROM node:22-alpine AS builder
-ARG CACHE_BUST=0
-
-WORKDIR /app
-
-ENV NODE_OPTIONS="--max-old-space-size=2048"
-ENV NEXT_TELEMETRY_DISABLED=1
-
-# Copy cached node_modules from deps stage (no cache bust needed — this is intentional)
-COPY --from=deps /app/node_modules ./node_modules
-
-# Copy rest of source — CACHE_BUST forces Docker to re-execute this layer every build
-COPY . .
-
-# Build args for environment variables
-ARG NEXT_PUBLIC_API_URL
-ARG NEXT_PUBLIC_YOUTUBE_API_KEY
-ARG BUILD_NUMBER=local
-
-ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-ENV NEXT_PUBLIC_YOUTUBE_API_KEY=$NEXT_PUBLIC_YOUTUBE_API_KEY
-
-# Build Next.js (standalone output)
-RUN npm run build
-
 # ─── Stage 3: Runner (production container) ───────────────────
+# NOTE: .next/ is pre-built in GitHub Actions and rsynced to VPS.
+# This stage ONLY copies the pre-built artifacts — no compilation needed.
 FROM node:22-alpine AS runner
 
 WORKDIR /app
@@ -60,13 +35,13 @@ RUN apk add --no-cache wget
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Copy only what standalone needs:
-#   1. standalone server directory (contains compiled server.js)
+# Copy pre-built artifacts (built in GitHub Actions, rsynced to VPS):
+#   1. standalone server directory (compiled server.js)
 #   2. .next/static (static assets: JS/CSS/images)
 #   3. public/ (static public assets)
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY public ./public
+COPY .next/standalone ./
+COPY .next/static ./.next/static
 
 USER nextjs
 

@@ -163,13 +163,13 @@ for i in $(seq 1 30); do
 done
 
 echo "=== [7/7] Database schema + seeds ==="
-docker compose exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" \
-  > /tmp/prisma_push.log 2>&1
-if grep -q "already in sync\|The database is already in sync" /tmp/prisma_push.log 2>/dev/null; then
+PRISMA_OUTPUT=$(docker compose exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" 2>&1) || true
+echo "$PRISMA_OUTPUT" | tail -3
+if echo "$PRISMA_OUTPUT" | grep -qi "already in sync\|The database is already in sync"; then
   echo "Database schema already in sync"
-elif grep -q "error\|Error" /tmp/prisma_push.log 2>/dev/null; then
-  echo "[WARN] Prisma push issues:"
-  cat /tmp/prisma_push.log | tail -5
+elif echo "$PRISMA_OUTPUT" | grep -qi "error\|Error"; then
+  echo "[WARN] Prisma push issues (non-critical):"
+  echo "$PRISMA_OUTPUT" | grep -i "error" | head -3
 else
   echo "Database schema pushed successfully"
 fi

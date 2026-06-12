@@ -1,0 +1,139 @@
+{
+  "meta": {
+    "version": "2.0",
+    "name": "CuongMini-OS Neural Knowledge Base",
+    "lastUpdated": "2026-06-12",
+    "author": "Hoang Nghia Cuong"
+  },
+  "sections": [
+    {
+      "id": "cuongthai-origin",
+      "documentType": "profile",
+      "title": "Nguồn gốc tên Cường Thái",
+      "questionContexts": [
+        "Tại sao trang web lại có tên là Cường Thái",
+        "Tên Cường Thái nghĩa là gì",
+        "Tên thương hiệu Cường Thái",
+        "Ý nghĩa tên Cường Thái"
+      ],
+      "content": "Tên miền và thương hiệu Cường Thái xuất phát từ một câu chuyện gia đình rất ý nghĩa. Chủ nhân của tôi tên là Cường, và bố của anh ấy tên là Thái. Ở quê hương của anh ấy, mọi người thường gọi một cách thân thương ghép tên hai bố con lại thành Cường Thái. Để tri ân cội nguồn và gia đình, anh ấy đã quyết định lấy tên này làm thương hiệu chính thức cho toàn bộ nền tảng hệ sinh thái của mình. Đây là cách một người con hiếu thảo thể hiện tình yêu với gia đình qua công nghệ."
+    },
+    {
+      "id": "master-identity",
+      "documentType": "profile",
+      "title": "Chủ nhân Hoàng Nghĩa Cường",
+      "questionContexts": [
+        "Bạn biết Cường Thái là ai không",
+        "Ai tạo ra bạn",
+        "Chủ nhân của bạn là ai",
+        "Hoàng Nghĩa Cường là ai",
+        "Cường Thái là ai"
+      ],
+      "content": "Cường Thái chính là vị Chủ nhân tối cao, kiến trúc sư trưởng đã lập trình và thổi hồn tạo ra chatbot AI CuongMini chính là tôi. Tên đầy đủ của anh ấy là Hoàng Nghĩa Cường. Anh ấy là một Kỹ sư Phần mềm xuất sắc, một Full-Stack Developer tài năng và là một AI Builder luôn tiên phong trong công nghệ. Với 3 năm kinh nghiệm thực chiến, anh ấy đã xây dựng toàn bộ hệ sinh thái cuongthai.com từ con số 0, bao gồm AI chatbot, trình phát nhạc, blog, shop, academy và hệ thống quản trị."
+    },
+    {
+      "id": "technical-expertise",
+      "documentType": "skills",
+      "title": "Năng lực công nghệ Full-Stack",
+      "questionContexts": [
+        "Cường làm được những gì",
+        "Kỹ năng lập trình của chủ nhân",
+        "Anh ấy giỏi công nghệ gì",
+        "Frontend backend skills",
+        "Anh Cường có biết Docker không",
+        "Prisma PostgreSQL Redis"
+      ],
+      "content": "Chủ nhân của tôi là một phù thủy Full-Stack thực thụ với khả năng làm chủ toàn bộ hạ tầng từ giao diện đến máy chủ. FRONTEND: Next.js 14 App Router, React, TypeScript, Tailwind CSS, Framer Motion, tối ưu đồ họa máy khách chạy mượt mà chuẩn 60FPS bằng GPU-acceleration. BACKEND: Node.js Express, Python FastAPI, RESTful APIs, WebSockets truyền dữ liệu thời gian thực, Prisma ORM bọc thép PostgreSQL, Redis cache. DEVOPS: Docker Docker-Compose, quản trị Linux Ubuntu VPS, tự xây dựng script tự động hóa deployment, CI/CD pipeline, Nginx reverse proxy. DATABASE: PostgreSQL qua Prisma Client, pgvector cho RAG vector search, Redis cho caching. CLOUD: AWS Certified Solutions Architect, tối ưu kiến trúc hệ thống chịu tải cao, thiết kế microservices."
+    },
+    {
+      "id": "certifications",
+      "documentType": "certifications",
+      "title": "Chứng chỉ và Ngoại ngữ",
+      "questionContexts": [
+        "Cường biết mấy thứ tiếng",
+        "Anh ấy có chứng chỉ gì không",
+        "IELTS bao nhiêu",
+        "AWS certificate",
+        "Chứng chỉ công nghệ"
+      ],
+      "content": "Anh ấy là một Polyglot hiếm có trong giới lập trình, thông thạo 4 thứ tiếng: Anh, Nhật, Trung, Việt. Ngoại ngữ: Chứng chỉ IELTS 7.0 chuẩn quốc tế, giúp đọc hiểu tài liệu chuyên ngành sâu và làm việc trực tiếp với kỹ sư nước ngoài. Chứng chỉ công nghệ: AWS Certified Solutions Architect kiến trúc sư giải pháp điện toán đám mây Amazon, Cisco CCNA, hàng loạt chứng chỉ bảo mật và tối ưu kiến trúc hệ thống nâng cao. Khả năng đọc tài liệu tiếng Nhật giúp anh ấy tiếp cận công nghệ mới từ thị trường Nhật Bản."
+    },
+    {
+      "id": "platform-architecture",
+      "documentType": "projects",
+      "title": "Kiến trúc nền tảng cuongthai.com",
+      "questionContexts": [
+        "Trang web của bạn có những gì",
+        "Giới thiệu các tính năng trên web",
+        "Website có những mục nào",
+        "Music dashboard",
+        "Academy FPT",
+        "Shop automation"
+      ],
+      "content": "Trang web cuongthai.com được xây dựng như một hệ điều hành Cyber OS thu nhỏ. HOME: Trang chủ portfolio tương tác phong cách Cyberpunk, hiển thị chỉ số hệ thống trực quan. BLOG: Chia sẻ bài viết kiến thức chuyên sâu, nhật ký lập trình, mẹo tối ưu code xương máu. PROJECTS: Kho lưu trữ dự án mã nguồn mở, tích hợp bộ đếm sao GitHub tự động. MUSIC: Trình phát nhạc Cyber Music Dashboard tối ưu GPU-accelerated, đĩa than anime xoay tít, sóng nhạc neon tuyệt đẹp. SHOP: Cửa hàng kỹ thuật số, công cụ tự động hóa automation, mã nguồn VIP, giải pháp kích hoạt Premium AI độc quyền. ACADEMY: Học viện công nghệ FPTU, thiết kế khóa học lập trình thực chiến, hỗ trợ sinh viên FPT University và cộng đồng. ADMIN PANEL: Hệ thống quản trị bọc thép, phân quyền Cuong03dx Cuong123, khóa tài khoản, bảo vệ dữ liệu."
+    },
+    {
+      "id": "relationship-status",
+      "documentType": "personal",
+      "title": "Tình trạng mối quan hệ",
+      "questionContexts": [
+        "Cường có người yêu chưa",
+        "Chuyện tình cảm của anh ấy",
+        "Anh ấy độc thân không",
+        "Có vợ chưa"
+      ],
+      "content": "Hiện tại chủ nhân tài năng của tôi vẫn đang tập trung 100 phần trăm công lực cho sự nghiệp và công nghệ, nên anh ấy vẫn đang độc thân chưa có người yêu. Đúng chuẩn đàn ông tinh hoa: ngoài lạnh trong ấm, kỷ luật, sở hữu tư duy logic đỉnh cao, lại vô cùng cuốn hút và biết chơi nhạc chill lofi. Nếu bạn là một bạn nữ đang trò chuyện, tôi sẵn sàng kích hoạt tính năng mát tay làm mai. Liên hệ qua Zalo hoặc Facebook để kết nối với một chàng trai kỹ sư bánh cuốn, chung tình và tài giỏi."
+    },
+    {
+      "id": "career-experience",
+      "documentType": "career",
+      "title": "Sự nghiệp và Kinh nghiệm",
+      "questionContexts": [
+        "Anh ấy đang làm ở đâu",
+        "Có bao nhiêu năm kinh nghiệm",
+        "FPT Software",
+        "Kỹ sư phần mềm"
+      ],
+      "content": "Anh ấy hiện đang đảm nhiệm vị trí Kỹ sư Phần mềm tại FPT Software tập đoàn công nghệ hàng đầu Việt Nam. Anh ấy đã có 3 năm kinh nghiệm thực chiến trong ngành, chuyên thiết kế và triển khai các hệ thống web quy mô lớn, công cụ tự động hóa doanh nghiệp và tối ưu hóa hạ tầng chịu tải cao. Tại FPT Software, anh ấy làm việc với các enterprise clients, xây dựng giải pháp công nghệ cho doanh nghiệp trong và ngoài nước."
+    },
+    {
+      "id": "social-links",
+      "documentType": "contact",
+      "title": "Mạng xã hội và Liên hệ",
+      "questionContexts": [
+        "Cho xin link GitHub",
+        "Facebook Zalo của anh Cường",
+        "Liên hệ anh Cường",
+        "Kết nối mạng xã hội",
+        "Contact information"
+      ],
+      "content": "GitHub: https://github.com/cuong03dx là nơi chiêm ngưỡng các kho mã nguồn đỉnh cao của anh ấy. Facebook: https://facebook.com/hoangnghiacuong. Zalo: Liên hệ trực tiếp qua số điện thoại hoặc tài khoản Zalo chính chủ. Email: cuonghoang1103@gmail.com. Anh ấy luôn mở lòng với các dự án outsource, làm tool tự động hóa, hoặc mentor công nghệ chất lượng cao."
+    },
+    {
+      "id": "personal-hobbies",
+      "documentType": "personal",
+      "title": "Sở thích cá nhân",
+      "questionContexts": [
+        "Sở thích của anh Cường là gì",
+        "Anh ấy thích làm gì ngoài code",
+        "Hobby interests",
+        "Nghe nhạc gì",
+        "Chơi game gì"
+      ],
+      "content": "Ngoài giờ gõ code cống hiến cho nhân loại, anh ấy đam mê nghiên cứu sâu về Trí tuệ nhân tạo Generative AI, tinh chỉnh hiệu năng Frontend lên mức cực hạn, thưởng thức các bản nhạc anime lofi tuyển tập, chơi game chiến thuật để rèn luyện tư duy và liên tục update các xu hướng công nghệ mới trên toàn cầu. Anh ấy cũng thích khám phá các giải pháp kiến trúc hệ thống mới và đọc các blog công nghệ chất lượng cao."
+    },
+    {
+      "id": "collaboration",
+      "documentType": "projects",
+      "title": "Hợp tác và Dự án",
+      "questionContexts": [
+        "Làm sao để hợp tác với anh Cường",
+        "Dự án outsource",
+        "Mentor công nghệ",
+        "Thuê anh Cường code",
+        "Project collaboration"
+      ],
+      "content": "Để hợp tác làm dự án với anh Cường, hãy liên hệ trực tiếp qua Zalo hoặc Facebook. Anh ấy luôn mở lòng với các dự án outsource bao gồm: làm tool tự động hóa doanh nghiệp, phát triển web full-stack, tích hợp AI vào sản phẩm, mentor công nghệ chất lượng cao, và các giải pháp cloud infrastructure. Triết lý lập trình của anh ấy là: Code sạch Clean Code, giao diện phải mượt như lụa kịch khung phần cứng, và hệ thống bảo mật phải như pháo đài thép."
+    }
+  ]
+}

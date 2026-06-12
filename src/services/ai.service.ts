@@ -184,21 +184,45 @@ export class AIService {
 
   // ─── Fetch RAG context from pgvector ─────────────────────
   /**
-   * Lấy các document chunks liên quan dựa trên documentType.
-   * Trong production, đây sẽ dùng vector similarity search với pgvector.
-   * Hiện tại dùng basic filtering — nâng cấp lên cosine similarity sau.
+   * Lấy các document chunks liên quan dựa trên user message.
+   * Khi documentType được chỉ định → lọc theo type.
+   * Khi không có → dùng text search keyword matching trên toàn bộ chunks.
+   * Vector embedding (pgvector) sẽ được bật sau khi setup embedding model.
    */
-  private async getRAGContext(
+  async getRAGContext(
     documentType: string | undefined,
     topK: number,
+    userMessage?: string,
   ): Promise<string> {
-    if (!documentType) return '';
+    let chunks;
 
-    const chunks = await prisma.documentChunk.findMany({
-      where: { documentType },
-      take: topK,
-      orderBy: { createdAt: 'desc' },
-    });
+    if (documentType) {
+      chunks = await prisma.documentChunk.findMany({
+        where: { documentType },
+        take: topK,
+        orderBy: { createdAt: 'desc' },
+      });
+    } else {
+      // No type specified — fetch all recent chunks then keyword-rank them
+      const all = await prisma.documentChunk.findMany({
+        orderBy: { createdAt: 'desc' },
+        take: topK * 4,
+      });
+
+      if (!userMessage) {
+        chunks = all.slice(0, topK);
+      } else {
+        // Simple keyword scoring: count matching words
+        const words = userMessage.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+        const scored = all.map((c) => {
+          const lower = c.content.toLowerCase();
+          const score = words.reduce((acc, w) => acc + (lower.includes(w) ? 1 : 0), 0);
+          return { chunk: c, score };
+        });
+        scored.sort((a, b) => b.score - a.score);
+        chunks = scored.filter((s) => s.score > 0).slice(0, topK).map((s) => s.chunk);
+      }
+    }
 
     if (chunks.length === 0) return '';
 
@@ -219,6 +243,7 @@ export class AIService {
     const ragContext = await this.getRAGContext(
       documentType,
       topK ?? 5,
+      message,
     );
     const systemPrompt = buildSystemPrompt(ragContext);
 
@@ -277,6 +302,7 @@ export class AIService {
     const ragContext = await this.getRAGContext(
       documentType,
       topK ?? 5,
+      message,
     );
     const systemPrompt = buildSystemPrompt(ragContext);
 

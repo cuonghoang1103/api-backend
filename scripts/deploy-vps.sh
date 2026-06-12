@@ -118,6 +118,8 @@ for i in $(seq 1 12); do
   echo "Waiting for postgres... ($i/12)"
   sleep 5
 done
+
+# Create database if not exists
 docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'cuonghoangdev_db'" | grep -q 1 || \
   docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE cuonghoangdev_db" 2>/dev/null
 echo "Database ready"

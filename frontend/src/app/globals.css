@@ -121,6 +121,53 @@
   .animate-delay-300 { animation-delay: 300ms; }
   .animate-delay-400 { animation-delay: 400ms; }
   .animate-delay-500 { animation-delay: 500ms; }
+
+  /* ── Apple-style easing (global platform standard) ───── */
+  /* Usage: transition-timing-function: var(--ease-apple); */
+  /* Duration:   var(--duration-apple) = 0.3s             */
+  --ease-apple: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-apple-out: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --ease-apple-in: cubic-bezier(0.4, 0.0, 1, 1);
+  --duration-apple: 0.3s;
+
+  /* ── High-performance scale utilities (GPU-accelerated) ── */
+  /* Only animate transform + opacity — NEVER animate width/height/margin */
+  .hover-scale {
+    transition: transform var(--duration-apple) var(--ease-apple),
+                opacity var(--duration-apple) var(--ease-apple);
+  }
+  .hover-scale:hover {
+    transform: scale(1.03);
+  }
+  .hover-scale:active {
+    transform: scale(0.97);
+  }
+
+  /* Nav item press (pillow effect) */
+  .nav-press {
+    transition: transform 0.18s var(--ease-apple),
+                background-color 0.18s var(--ease-apple);
+    will-change: transform;
+  }
+  .nav-press:hover {
+    transform: scale(0.97);
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+  .nav-press:active {
+    transform: scale(0.94);
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  /* Card hover (lift effect — only transform, no layout change) */
+  .card-lift {
+    transition: transform var(--duration-apple) var(--ease-apple),
+                box-shadow var(--duration-apple) var(--ease-apple),
+                border-color var(--duration-apple) var(--ease-apple);
+    will-change: transform;
+  }
+  .card-lift:hover {
+    transform: translateY(-4px);
+  }
 }
 
 /* Custom Scrollbar */

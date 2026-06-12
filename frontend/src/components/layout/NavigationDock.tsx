@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   Home, BookOpen, FolderOpen, Music, MessageCircle,
   LayoutDashboard, Shield, BookMarked, Receipt,
@@ -42,7 +42,70 @@ const SECTIONS = {
 } as const;
 
 const DOCK_WIDTH = 220;
-const DOCK_COLLAPSED_WIDTH = 0;
+
+// ── Apple-style easing ──────────────────────────────────────────────
+const APPLE_EASE: [number, number, number, number] = [0.23, 1, 0.32, 1];
+const APPLE_DURATION = 0.3;
+
+// ── Sliding dock panel: slide in from left on open ──────────────────
+const dockVariants: Variants = {
+  hidden: { x: -DOCK_WIDTH - 20, opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: { type: 'spring', stiffness: 200, damping: 25, mass: 0.8 },
+  },
+  exit: {
+    x: -DOCK_WIDTH - 20,
+    opacity: 0,
+    transition: { type: 'spring', stiffness: 280, damping: 28 },
+  },
+};
+
+// ── Staggered nav section: each section fades/slides in sequentially ─
+const sectionVariants: Variants = {
+  hidden: { opacity: 0, x: -12 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: i * 0.07,
+      duration: APPLE_DURATION,
+      ease: APPLE_EASE,
+    },
+  }),
+};
+
+// ── Individual nav item: pillow press via framer-motion ──────────────
+// Uses whileHover / whileTap — pure transform, zero layout reflow
+const itemVariants: Variants = {
+  default: {
+    backgroundColor: 'rgba(0,0,0,0)',
+    scale: 1,
+  },
+  hover: {
+    scale: 0.97,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    transition: { duration: 0.18, ease: APPLE_EASE },
+  },
+  tap: {
+    scale: 0.94,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    transition: { duration: 0.1, ease: APPLE_EASE },
+  },
+  active: {
+    scale: 1,
+    backgroundColor: 'rgba(139,92,246,0.12)',
+    transition: { duration: 0.2, ease: APPLE_EASE },
+  },
+};
+
+// ── Icon glow transition ─────────────────────────────────────────────
+const iconVariants: Variants = {
+  default: { color: '#94a3b8' },
+  hover: { color: '#a78bfa' },
+  active: { color: '#8B5CF6' },
+};
 
 interface NavigationDockProps {
   isOpen: boolean;
@@ -55,23 +118,23 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
 
   useEffect(() => { setMounted(true); }, []);
 
-  const sections = (['main', 'user', 'admin'] as const).map((key) => ({
+  const sections = (['main', 'user', 'admin'] as const).map((key, i) => ({
     key,
+    index: i,
     ...SECTIONS[key],
-    items: DOCK_ITEMS.filter((i) => i.section === key),
+    items: DOCK_ITEMS.filter((item) => item.section === key),
   }));
 
   return (
     <>
-      {/* ── Toggle button ─────────────────────────────────── */}
+      {/* ── Toggle button ───────────────────────────────────── */}
       <motion.button
         onClick={onToggle}
         className="fixed top-16 left-4 z-[60] flex items-center justify-center w-10 h-10 rounded-2xl
           bg-[#0d1117]/90 backdrop-blur-xl border border-white/10
           shadow-[0_8px_32px_rgba(0,0,0,0.5),0_0_0_1px_rgba(139,92,246,0.15)]
-          hover:border-neon-violet/40 hover:shadow-[0_8px_32px_rgba(0,0,0,0.5),0_0_20px_rgba(139,92,246,0.2)]
           transition-all duration-200 cursor-pointer"
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: 1.05, borderColor: 'rgba(139,92,246,0.4)' }}
         whileTap={{ scale: 0.95 }}
         aria-label={isOpen ? 'Close navigation dock' : 'Open navigation dock'}
       >
@@ -100,7 +163,7 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
         </AnimatePresence>
       </motion.button>
 
-      {/* ── Backdrop ─────────────────────────────────────── */}
+      {/* ── Mobile backdrop ──────────────────────────────────── */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -115,15 +178,15 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
         )}
       </AnimatePresence>
 
-      {/* ── Dock panel ────────────────────────────────────── */}
+      {/* ── Dock panel with staggered entry ───────────────────── */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.nav
             key="dock"
-            initial={{ x: -DOCK_WIDTH - 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -DOCK_WIDTH - 20, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 25, mass: 0.8 }}
+            variants={dockVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
             className="fixed top-16 left-0 bottom-0 z-[38] flex flex-col"
             style={{ width: DOCK_WIDTH }}
           >
@@ -143,10 +206,16 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
                 </div>
               </div>
 
-              {/* Sections */}
+              {/* Sections with staggered fade-in */}
               <div className="flex-1 overflow-y-auto px-2 pb-4 space-y-4 scrollbar-thin scrollbar-thumb-white/5 scrollbar-track-transparent">
-                {sections.map(({ key, label, icon: SectionIcon, items }) => (
-                  <div key={key}>
+                {sections.map(({ key, label, icon: SectionIcon, items, index }) => (
+                  <motion.div
+                    key={key}
+                    custom={index}
+                    variants={sectionVariants}
+                    initial="hidden"
+                    animate="visible"
+                  >
                     {/* Section header */}
                     <div className="flex items-center gap-2 px-3 mb-1.5">
                       <SectionIcon className="w-3 h-3 text-text-muted/40" />
@@ -164,56 +233,91 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
                         const Icon = item.icon;
 
                         return (
-                          <Link
+                          <motion.div
                             key={item.href}
-                            href={item.href}
-                            className="group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150"
-                            style={{
-                              background: isActive
-                                ? 'rgba(139,92,246,0.12)'
-                                : 'transparent',
-                              border: isActive
-                                ? '1px solid rgba(139,92,246,0.25)'
-                                : '1px solid transparent',
-                            }}
+                            variants={isActive ? { ...itemVariants, active: itemVariants.active } : itemVariants}
+                            initial="default"
+                            animate={isActive ? 'active' : 'default'}
+                            whileHover={isActive ? undefined : 'hover'}
+                            whileTap={isActive ? undefined : 'tap'}
+                            custom={isActive}
                           >
-                            {/* Icon */}
-                            <div
-                              className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0 transition-all duration-150"
-                              style={{
-                                background: isActive
-                                  ? 'rgba(139,92,246,0.15)'
-                                  : 'rgba(255,255,255,0.04)',
-                                boxShadow: isActive
-                                  ? '0 0 12px rgba(139,92,246,0.25)'
-                                  : 'none',
-                              }}
+                            <Link
+                              href={item.href}
+                              className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl overflow-hidden"
+                              style={{ display: 'flex' }}
                             >
-                              <Icon
-                                className="w-4 h-4 shrink-0 transition-colors duration-150"
-                                style={{
-                                  color: isActive ? '#8B5CF6' : '#94a3b8',
+                              {/* ── Sliding active indicator (GPU-accelerated) ── */}
+                              {isActive && (
+                                <motion.div
+                                  layoutId="activeIndicator"
+                                  className="absolute inset-y-0 left-0 w-[3px] rounded-full"
+                                  style={{
+                                    background: 'linear-gradient(180deg, #22d3ee, #8b5cf6)',
+                                    boxShadow: '0 0 10px rgba(34,211,238,0.6), 0 0 20px rgba(139,92,246,0.3)',
+                                  }}
+                                  transition={{
+                                    type: 'spring',
+                                    stiffness: 350,
+                                    damping: 30,
+                                    mass: 0.5,
+                                  }}
+                                />
+                              )}
+
+                              {/* Icon with color animation */}
+                              <motion.div
+                                className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
+                                animate={{
+                                  backgroundColor: isActive
+                                    ? 'rgba(139,92,246,0.15)'
+                                    : 'rgba(255,255,255,0.04)',
+                                  boxShadow: isActive
+                                    ? '0 0 12px rgba(139,92,246,0.25)'
+                                    : 'none',
                                 }}
-                              />
-                            </div>
+                                transition={{ duration: 0.2, ease: APPLE_EASE }}
+                              >
+                                <motion.span
+                                  variants={iconVariants}
+                                  animate={isActive ? 'active' : 'default'}
+                                  whileHover={isActive ? undefined : 'hover'}
+                                  style={{ display: 'flex' }}
+                                >
+                                  <Icon className="w-4 h-4 shrink-0" />
+                                </motion.span>
+                              </motion.div>
 
-                            {/* Label */}
-                            <span
-                              className="text-[13px] font-medium truncate transition-colors duration-150"
-                              style={{ color: isActive ? '#c4b5fd' : '#94a3b8' }}
-                            >
-                              {item.label}
-                            </span>
+                              {/* Label */}
+                              <span
+                                className="text-[13px] font-medium truncate"
+                                style={{
+                                  color: isActive ? '#c4b5fd' : '#94a3b8',
+                                  transition: `color ${APPLE_DURATION}s cubic-bezier(0.23,1,0.32,1)`,
+                                }}
+                              >
+                                {item.label}
+                              </span>
 
-                            {/* Active glow dot */}
-                            {isActive && (
-                              <div className="ml-auto w-1.5 h-1.5 rounded-full bg-neon-violet shadow-[0_0_6px_rgba(139,92,246,0.9)] shrink-0" />
-                            )}
-                          </Link>
+                              {/* Active glow dot */}
+                              <AnimatePresence>
+                                {isActive && (
+                                  <motion.div
+                                    initial={{ scale: 0, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={{ scale: 0, opacity: 0 }}
+                                    transition={{ duration: 0.2, ease: APPLE_EASE }}
+                                    className="ml-auto w-1.5 h-1.5 rounded-full bg-neon-violet shrink-0"
+                                    style={{ boxShadow: '0 0 6px rgba(139,92,246,0.9)' }}
+                                  />
+                                )}
+                              </AnimatePresence>
+                            </Link>
+                          </motion.div>
                         );
                       })}
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 

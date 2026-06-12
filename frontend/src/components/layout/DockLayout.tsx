@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import NavigationDock from './NavigationDock';
 
 const DOCK_WIDTH = 220;
+const DOCK_TOGGLE_OFFSET = 52; // toggle button width + gap
 
 export default function DockLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -12,7 +13,6 @@ export default function DockLayout({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     setMounted(true);
-    // Persist dock open state in sessionStorage so refreshing keeps it open
     const saved = sessionStorage.getItem('dock-open');
     if (saved === 'true') setIsSidebarOpen(true);
   }, []);
@@ -25,16 +25,16 @@ export default function DockLayout({ children }: { children: React.ReactNode }) 
     });
   };
 
+  // Use transform: translateX() instead of paddingLeft to avoid layout reflow.
+  // transform is GPU-accelerated and does NOT cause style recalculation.
   return (
     <>
       <NavigationDock isOpen={isSidebarOpen} onToggle={toggleDock} />
 
-      {/* Main content — smoothly shifts when dock opens/closes */}
       <motion.div
         className="relative"
         animate={{
-          paddingLeft: isSidebarOpen ? DOCK_WIDTH + 52 : 0,
-          // paddingRight stays 0 — dock is on the LEFT
+          x: isSidebarOpen ? DOCK_WIDTH + DOCK_TOGGLE_OFFSET : 0,
         }}
         transition={{ type: 'spring', stiffness: 200, damping: 25 }}
       >

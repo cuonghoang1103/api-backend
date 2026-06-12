@@ -38,7 +38,7 @@ import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
 
-// ─── Hugging Face OpenAI-compatible client ──────────────────────
+// ─── OpenRouter OpenAI-compatible client ──────────────────────
 let _openai: OpenAI | null = null;
 
 function getOpenAI(): OpenAI {
@@ -52,7 +52,7 @@ function getOpenAI(): OpenAI {
       );
     }
     _openai = new OpenAI({
-      baseURL: 'https://api-inference.huggingface.co/v1/',
+      baseURL: 'https://openrouter.ai/api/v1/',
       apiKey,
     });
   }
@@ -60,8 +60,8 @@ function getOpenAI(): OpenAI {
 }
 
 // ─── Model identifier ──────────────────────────────────────────
-// DeepSeek R1 Distill Qwen 32B - optimized model on Hugging Face
-const DEFAULT_MODEL = 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B';
+// DeepSeek R1 Distill Qwen 32B via OpenRouter (VPS-friendly)
+const DEFAULT_MODEL = 'deepseek-ai/deepseek-r1-distill-qwen-32b';
 
 // ─── Session ID generator ────────────────────────────────────
 function generateSessionId(): string {

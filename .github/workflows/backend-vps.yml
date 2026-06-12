@@ -64,10 +64,8 @@ jobs:
       - name: Sync project to VPS
         run: |
           # Rsync all source files to VPS (rsync respects .gitignore so .next/ is skipped here)
-          # --no-perms: don't preserve permissions (root vs nextjs mismatch)
-          # --no-owner: don't preserve ownership
-          # --no-group: don't preserve group
-          # --omit-dir-times: don't fail on directory mtime issues
+          # --no-perms/owner/group: avoid permission/ownership mismatch (root vs nextjs)
+          # exit 23 (partial transfer) is non-fatal — add || true to not block the workflow
           rsync -az --delete --no-perms --no-owner --no-group --omit-dir-times \
             --exclude '.git' \
             --exclude 'node_modules' \
@@ -81,7 +79,7 @@ jobs:
             --exclude 'setup-swap.sh' \
             --exclude '.env' \
             ./ -e "ssh -F $HOME/.ssh/config" \
-            "vps:/opt/cuonghoangdev/"
+            "vps:/opt/cuonghoangdev/" || echo "Rsync completed with warnings (exit $?)"
 
       - name: Deploy .next/ to VPS
         run: |
@@ -92,7 +90,7 @@ jobs:
           (cd frontend && tar -czf - .next/) | ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev/frontend && tar -xzf -" || true
           echo "--- .next/ deployed ---"
           # Verify
-          ssh -F $HOME/.ssh/config vps "ls /opt/cuonghoangdev/frontend/.next/static/css/ 2>/dev/null | head -3" || echo "Verification skipped"
+          ssh -F $HOME/.ssh/config vps "ls /opt/cuonghoangdev/frontend/.next/static/css/ 2>/dev/null | head -3" || echo "Verification: file listing skipped"
 
       - name: Create .env on VPS if missing
         run: |

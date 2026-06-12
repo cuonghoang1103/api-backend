@@ -1,24 +1,22 @@
 # ============================================================
 # CuongHoangDev - Next.js Frontend Dockerfile
-# 3-Stage Build: deps → builder → runner
-# Final image target: < 200MB
+# Architecture: deps stage (node_modules) → runner stage (pre-built .next/)
+#
+# .next/ is pre-built in GitHub Actions and rsynced to VPS.
+# This Dockerfile only packages the pre-built .next/ + production deps.
 # ============================================================
 
-# ─── Stage 1: Deps (cache-friendly layer for node_modules) ───
+# ─── Stage 1: Deps (production node_modules only) ──────────────
 FROM node:22-alpine AS deps
 
 WORKDIR /app
 
-# Copy only package files first — maximizes Docker layer cache.
-# Any source code change won't trigger re-download of packages.
 COPY package*.json ./
 
-# Install ALL dependencies (including dev for build)
-RUN npm install --prefer-offline
+# Install ONLY production deps (needed by standalone server.js at runtime)
+RUN npm install --omit=dev --prefer-offline
 
-# ─── Stage 3: Runner (production container) ───────────────────
-# NOTE: .next/ is pre-built in GitHub Actions and rsynced to VPS.
-# This stage ONLY copies the pre-built artifacts — no compilation needed.
+# ─── Stage 2: Runner (production container) ───────────────────
 FROM node:22-alpine AS runner
 
 WORKDIR /app
@@ -34,6 +32,9 @@ RUN apk add --no-cache wget
 # Create non-root user (security best practice)
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
+
+# Copy production node_modules (required by standalone server.js at runtime)
+COPY --from=deps /app/node_modules ./node_modules
 
 # Copy pre-built artifacts (built in GitHub Actions, rsynced to VPS):
 #   1. standalone server directory (compiled server.js)

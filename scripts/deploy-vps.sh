@@ -86,24 +86,16 @@ docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database 
 echo "Database ready"
 
 echo "=== [6/10] Code already synced via rsync ==="
-# AFTER rsync synced fresh code from GitHub Actions runner:
-# Delete .next/ so the Next.js build happens inside Docker (fresh compilation),
-# instead of Docker just copying the .next/ that rsync synced from the runner.
-# Without this, Docker copies .next/ as-is and skips the Next.js build.
-echo "--- Clearing .next/ so Next.js rebuilds fresh inside Docker ---"
-rm -rf /opt/cuonghoangdev/frontend/.next 2>/dev/null || true
-echo "--- .next/ cleared on VPS ---"
 
 echo "=== [7/10] Building backend container ==="
 # Capture old container ID so we can verify it was replaced
 OLD_CONTAINER_ID=$(docker inspect cuonghoangdev_backend --format '{{.Id}}' 2>/dev/null || echo "")
 echo "Old container ID: ${OLD_CONTAINER_ID:-none}"
 
-# Prune ALL docker cache on the VPS host
+# Prune docker builder cache on VPS host
 docker builder prune -af 2>/dev/null || true
 
-# Build backend with BOTH --no-cache and explicit --build-arg to invalidate all layers
-# Also use --progress=plain to see all build steps in output
+# Build backend with explicit no-cache
 BUILD_OUTPUT=$(docker build \
   --no-cache \
   --progress=plain \
@@ -125,7 +117,23 @@ if [ $BUILD_EXIT -ne 0 ]; then
 fi
 
 echo "=== Building frontend container ==="
-# Prune ALL docker cache for frontend build too
+# Build Next.js OUTSIDE Docker directly on the VPS host.
+# This ensures the fresh .next/ is always compiled fresh (not subject to Docker layer cache).
+# The frontend Dockerfile is only used to package the already-built .next/ output.
+echo "--- Installing frontend dependencies on VPS ---"
+cd /opt/cuonghoangdev/frontend
+npm install 2>&1 | tail -5
+echo "--- Building Next.js on VPS (fresh compilation) ---"
+NEXT_OUTPUT=$(NEXT_TELEMETRY_DISABLED=1 npm run build 2>&1)
+NEXT_EXIT=$?
+echo "$NEXT_OUTPUT" | tail -5
+if [ $NEXT_EXIT -ne 0 ]; then
+  echo "[CRITICAL] Next.js build FAILED on VPS: exit $NEXT_EXIT"
+  exit 1
+fi
+
+# Now package the fresh .next/ into a Docker image
+# Prune docker builder cache for fresh build
 docker builder prune -af 2>/dev/null || true
 FRONTEND_BUILD=$(docker build \
   --no-cache \

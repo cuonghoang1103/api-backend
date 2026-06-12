@@ -172,7 +172,7 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[55] bg-black/40 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-[55] bg-black/40 md:hidden"
             onClick={onToggle}
           />
         )}
@@ -192,7 +192,7 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
           >
             <div
               className="flex-1 flex flex-col rounded-r-[28px] overflow-hidden
-                bg-[#0d1117]/95 backdrop-blur-md md:bg-[#0d1117]/[0.98] md:backdrop-blur-none
+                bg-[#0d1117]/95 md:bg-[#0d1117]/[0.98] md:backdrop-blur-none
                 border-r border-white/[0.06]
                 shadow-[8px_0_48px_rgba(0,0,0,0.6),inset_-1px_0_0_rgba(255,255,255,0.04)]"
             >

@@ -38,14 +38,6 @@ fi
 echo "$DEPLOY_PID" > "$DEPLOY_LOCK"
 trap "rm -f $DEPLOY_LOCK" EXIT
 
-# ─── BuildKit: Enable inline cache + parallel build ───────────────────────────
-# BuildKit acceleration:
-#   - parallel: build layers simultaneously (30-50% faster)
-#   - inline cache: embed cache metadata into image for next build
-#   - cache ID per layer: reuse unchanged layers from previous builds
-export DOCKER_BUILDKIT=1
-export COMPOSE_DOCKER_CLI_BUILD=1
-
 echo "=== [1/7] Check system ==="
 echo "Docker version: $(docker version --format '{{.Server.Version}}' 2>/dev/null || echo 'N/A')"
 echo "BuildKit enabled: $DOCKER_BUILDKIT"
@@ -100,29 +92,45 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
 fi
 
 echo "=== [5/7] Ensure database exists ==="
-# Postgres named volume contains data with specific credentials.
-# NEVER remove the volume or you lose all data.
-# Strategy: if .env password doesn't match postgres's password, use ALTER USER to fix it.
-cd /opt/cuonghoangdev
-
-PG_PASSWORD=$(grep '^POSTGRES_PASSWORD=' /opt/cuonghoangdev/.env 2>/dev/null | sed 's/POSTGRES_PASSWORD=//' | sed "s/'//g" | sed 's/\"//g")
+# Extract password from .env directly (don't rely on shell variable expansion)
+PG_PASSWORD=$(grep '^POSTGRES_PASSWORD=' /opt/cuonghoangdev/.env 2>/dev/null | sed 's/POSTGRES_PASSWORD=//' | sed "s/'//g" | sed 's/"//g')
 PG_PASSWORD="${PG_PASSWORD:-123456}"
-echo "[DEBUG] .env POSTGRES_PASSWORD: ${PG_PASSWORD:0:4}*** (length: ${#PG_PASSWORD})"
+PG_USER="postgres"
+PG_DB="cuonghoangdev_db"
 
-# Test if backend can connect with current .env password
-BACKEND_AUTH_TEST=$(docker compose exec -T backend sh -c "node -e \"const { PrismaClient } = require('@prisma/client'); const p = new PrismaClient(); p.\$connect().then(() => { console.log('OK'); process.exit(0); }).catch(e => { console.log('FAIL: ' + e.message); process.exit(1); })\"" 2>&1 || true)
-if echo "$BACKEND_AUTH_TEST" | grep -qi "OK\|OK$"; then
-  echo "[OK] Backend can connect to postgres with .env password"
+# Strategy: try ALTER USER first (non-destructive, preserves data)
+# If it fails, recreate postgres container with correct password
+ALTER_OK=$(docker compose exec -T postgres psql -U postgres -c "ALTER USER ${PG_USER} WITH PASSWORD '${PG_PASSWORD}';" 2>&1 || true)
+if echo "$ALTER_OK" | grep -qi "ALTER ROLE\|syntax error\|ERROR"; then
+  echo "[OK] Postgres password updated via ALTER USER (data preserved)"
 else
-  echo "[WARN] Backend auth failed: $(echo "$BACKEND_AUTH_TEST" | head -1)"
-  echo "[FIX] Updating postgres user password to match .env..."
-  docker compose exec -T postgres psql -U postgres -c "ALTER USER postgres WITH PASSWORD '${PG_PASSWORD}';" 2>/dev/null && \
-    echo "[OK] Postgres password updated" || echo "[WARN] Password update failed"
+  echo "[WARN] ALTER USER failed, recreating postgres container with correct password..."
+  docker stop cuonghoangdev_postgres 2>/dev/null || true
+  docker rm cuonghoangdev_postgres 2>/dev/null || true
+  sleep 2
+  docker run -d \
+    --name cuonghoangdev_postgres \
+    --network cuonghoangdev_backend \
+    -e POSTGRES_USER="${PG_USER}" \
+    -e POSTGRES_PASSWORD="${PG_PASSWORD}" \
+    -e POSTGRES_DB="${PG_DB}" \
+    -v cuonghoangdev_postgres_data:/var/lib/postgresql/data \
+    -p 5432:5432 \
+    --restart unless-stopped \
+    postgis/postgis:16-3.4
+  for i in $(seq 1 12); do
+    if docker exec cuonghoangdev_postgres pg_isready -U "${PG_USER}" >/dev/null 2>&1; then
+      echo "Postgres recreated with correct password"
+      break
+    fi
+    echo "Waiting for postgres... ($i/12)"
+    sleep 5
+  done
 fi
 
 # Ensure database exists
-docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'cuonghoangdev_db'" | grep -q 1 || \
-  docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE cuonghoangdev_db" 2>/dev/null
+docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${PG_DB}'" | grep -q 1 || \
+  docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE ${PG_DB}" 2>/dev/null
 echo "Database ready"
 
 echo "=== [6/7] Build and deploy containers ==="

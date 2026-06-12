@@ -386,7 +386,7 @@ router.put('/admin/config/:key', authenticate, async (req: any, res: Response<Ap
 
     // Reset model if chat_model changed
     if (key === 'chat_model') {
-      aiService.resetGenAI();
+      aiService.resetOpenAI();
     }
 
     res.json({ success: true, data: result });

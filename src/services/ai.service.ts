@@ -1,16 +1,16 @@
 /**
  * ============================================================
- * AI Service — Gemini Streaming + RAG Knowledge Base
+ * AI Service — Hugging Face DeepSeek R1 + RAG Knowledge Base
  *
  * Cung cấp các hàm nghiệp vụ cho AI chatbot:
- * - Non-blocking Gemini API calls
+ * - Non-blocking Hugging Face API calls (OpenAI-compatible)
  * - Streaming response (Server-Sent Events)
  * - RAG: Retrieval Augmented Generation với pgvector
  * - Document chunking & indexing
  * - Chat session management
  * - Feedback tracking
  *
- * Gemini SDK Streaming Architecture:
+ * Hugging Face DeepSeek R1 Streaming Architecture:
  *
  *   Browser ──▶ POST /api/v1/ai/chat
  *                │
@@ -19,7 +19,7 @@
  *                ├── 2. Build system prompt + RAG context
  *                │     └── Query document_chunks (pgvector similarity)
  *                │
- *                └── 3. model.startChat() + sendMessageStream()
+ *                └── 3. OpenAI client.chat.completions.create() + stream: true
  *                      │
  *                      ├── Token 1 → yield "Xin" ──▶ res.write()
  *                      ├── Token 2 → yield " chào" ──▶ res.write()
@@ -28,57 +28,40 @@
  *                      └── Final   → yield "" (done) ──▶ res.write() + res.end()
  *                              └── 4. Save full response → chat_messages table
  *
- * Note: Gemini SDK streaming uses WebSocket under the hood.
- * The Node.js process stays non-blocking throughout.
+ * Note: Using OpenAI SDK v4 with Hugging Face Inference API base URL.
  * ============================================================
  */
 
-import {
-  GoogleGenerativeAI,
-  type GenerativeModel,
-  type ChatSession,
-  type GenerateContentResult,
-} from '@google/generative-ai';
+import OpenAI from 'openai';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
 
-// ─── Lazy-initialized Gemini client ───────────────────────────
-let _genAI: GoogleGenerativeAI | null = null;
+// ─── Hugging Face OpenAI-compatible client ──────────────────────
+let _openai: OpenAI | null = null;
 
-// ─── Model fallback list ────────────────────────────────────────
-// gemini-2.0-flash: the recommended stable model for free tier
-// Fallbacks for 429/503 errors from the API
-const MODELS = [
-  'gemini-2.0-flash',
-  'gemini-2.5-flash',
-  'gemini-3-flash',
-];
-
-function getGenAI(): GoogleGenerativeAI {
-  if (!_genAI) {
-    if (!config.geminiApiKey) {
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    const apiKey = process.env.OPENROUTER_API_KEY || config.openRouterApiKey;
+    if (!apiKey) {
       throw new AppError(
-        'GEMINI_API_KEY is not configured. Please set GEMINI_API_KEY in .env',
+        'OPENROUTER_API_KEY is not configured. Please set OPENROUTER_API_KEY in .env',
         503,
         'AI_NOT_CONFIGURED',
       );
     }
-    _genAI = new GoogleGenerativeAI(config.geminiApiKey);
+    _openai = new OpenAI({
+      baseURL: 'https://api-inference.huggingface.co/v1/',
+      apiKey,
+    });
   }
-  return _genAI;
+  return _openai;
 }
 
-function createModel(modelName: string): GenerativeModel {
-  return getGenAI().getGenerativeModel({
-    model: modelName,
-    generationConfig: {
-      maxOutputTokens: config.aiMaxTokens,
-      temperature: config.aiTemperature,
-    },
-  });
-}
+// ─── Model identifier ──────────────────────────────────────────
+// DeepSeek R1 Distill Qwen 32B - optimized model on Hugging Face
+const DEFAULT_MODEL = 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B';
 
 // ─── Session ID generator ────────────────────────────────────
 function generateSessionId(): string {
@@ -247,7 +230,7 @@ export class AIService {
 
   // ─── Non-streaming chat ─────────────────────────────────
   /**
-   * Gửi message đến Gemini, nhận response đầy đủ (không streaming).
+   * Gửi message đến Hugging Face DeepSeek, nhận response đầy đủ (không streaming).
    * Dùng cho: fallback, serverless functions, batch processing.
    */
   async sendChat(context: ChatContext) {
@@ -266,46 +249,37 @@ export class AIService {
       await this.saveUserMessage(sessionId, message, context.userId);
     }
 
-    let lastError: unknown;
-    for (const modelName of MODELS) {
-      const model = createModel(modelName);
+    try {
+      const openai = getOpenAI();
 
-      const chat = model.startChat({
-        history: [
-          { role: 'user', parts: [{ text: systemPrompt }] },
-          {
-            role: 'model',
-            parts: [{ text: 'Tôi đã hiểu. Tôi sẽ trả lời dựa trên ngữ cảnh được cung cấp.' }],
-          },
+      const response = await openai.chat.completions.create({
+        model: DEFAULT_MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: message },
         ],
+        max_tokens: config.aiMaxTokens,
+        temperature: config.aiTemperature,
+        stream: false,
       });
 
-      try {
-        const result: GenerateContentResult = await chat.sendMessage(message);
-        const text = result.response.text();
+      const text = response.choices[0]?.message?.content || '';
 
-        if (sessionId && text) {
-          await this.saveAssistantMessage(sessionId, text);
-        }
-        return { text, sessionId };
-      } catch (err: unknown) {
-        const errMsg = err instanceof Error ? err.message : String(err);
-        if (errMsg.includes('503')) {
-          lastError = err;
-          continue;
-        }
-        throw err;
+      if (sessionId && text) {
+        await this.saveAssistantMessage(sessionId, text);
       }
+      return { text, sessionId };
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      console.error('[AIService] HuggingFace API error:', errMsg);
+      throw err;
     }
-
-    throw lastError;
   }
 
   // ─── Streaming chat (AsyncGenerator) ─────────────────────
   /**
-   * Stream chat response token-by-token.
-   * Auto-retries with fallback models (2.5-flash-lite → 2.5-flash → 3-flash)
-   * on 503 Service Unavailable errors.
+   * Stream chat response token-by-token from Hugging Face DeepSeek.
+   * Uses OpenAI SDK with stream: true for server-sent events.
    */
   async *streamChat(
     context: ChatContext,
@@ -325,55 +299,44 @@ export class AIService {
       await this.saveUserMessage(sessionId, message, context.userId);
     }
 
-    // Try each model in order
-    let lastError: unknown;
-    for (const modelName of MODELS) {
-      const model = createModel(modelName);
+    try {
+      const openai = getOpenAI();
 
-      const chat: ChatSession = model.startChat({
-        history: [
-          { role: 'user', parts: [{ text: systemPrompt }] },
-          {
-            role: 'model',
-            parts: [{ text: 'Tôi đã hiểu. Tôi sẽ trả lời dựa trên ngữ cảnh được cung cấp.' }],
-          },
+      const stream = await openai.chat.completions.create({
+        model: DEFAULT_MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: message },
         ],
+        max_tokens: config.aiMaxTokens,
+        temperature: config.aiTemperature,
+        stream: true,
       });
 
-      try {
-        const streamResult = await chat.sendMessageStream(message);
-        let fullResponse = '';
+      let fullResponse = '';
 
-        for await (const chunk of streamResult.stream) {
-          const chunkText = chunk.text();
+      for await (const chunk of stream) {
+        const chunkText = chunk.choices[0]?.delta?.content || '';
+        if (chunkText) {
           fullResponse += chunkText;
           yield chunkText;
         }
-
-        if (sessionId && fullResponse) {
-          await this.saveAssistantMessage(sessionId, fullResponse);
-        }
-        return; // success, exit
-      } catch (err: unknown) {
-        const errMsg = err instanceof Error ? err.message : String(err);
-        if (errMsg.includes('503')) {
-          console.warn(`[AI] 503 on ${modelName}, trying next model...`);
-          lastError = err;
-          continue; // try next model
-        }
-        // Non-503 error — propagate immediately
-        throw err;
       }
-    }
 
-    // All models failed
-    throw lastError;
+      if (sessionId && fullResponse) {
+        await this.saveAssistantMessage(sessionId, fullResponse);
+      }
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      console.error('[AIService] HuggingFace streaming error:', errMsg);
+      throw err;
+    }
   }
 
   // ─── Get full stream result (for advanced use) ────────────
   /**
-   * Lấy toàn bộ stream result từ Gemini.
-   * Dùng khi cần access thêm metadata (usage, safety ratings).
+   * Lấy toàn bộ stream result từ Hugging Face.
+   * Dùng khi cần access thêm metadata (usage, model info).
    */
   async getStreamResult(context: ChatContext): Promise<{
     stream: AsyncGenerator<string, void, unknown>;
@@ -593,13 +556,13 @@ export class AIService {
     });
   }
 
-  // ─── Reset Gemini client cache ──────────────────────────────
+  // ─── Reset OpenAI client cache ──────────────────────────────
   /**
    * Reset client cache. Dùng khi thay đổi model config.
    */
-  resetGenAI(): void {
-    _genAI = null;
-    console.log('[AIService] Gemini client cache reset');
+  resetOpenAI(): void {
+    _openai = null;
+    console.log('[AIService] HuggingFace OpenAI client cache reset');
   }
 }
 

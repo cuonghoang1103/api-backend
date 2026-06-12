@@ -50,9 +50,9 @@ export const config = {
   // Cookie
   cookieSecret: process.env.COOKIE_SECRET || 'default-cookie-secret',
 
-  // AI
-  geminiApiKey: process.env.GEMINI_API_KEY || '',
-  aiChatModel: process.env.AI_CHAT_MODEL || 'gemini-2.5-flash-lite',
+  // AI (Hugging Face DeepSeek R1)
+  openRouterApiKey: process.env.OPENROUTER_API_KEY || '',
+  aiChatModel: process.env.AI_CHAT_MODEL || 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B',
   aiEmbeddingModel: process.env.AI_EMBEDDING_MODEL || 'gemini-embedding-002',
   aiEmbeddingDimensions: parseInt(process.env.AI_EMBEDDING_DIMENSIONS || '768', 10),
   aiMaxTokens: parseInt(process.env.AI_MAX_TOKENS || '2048', 10),

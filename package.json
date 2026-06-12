@@ -30,8 +30,8 @@
   "author": "CuongHoangDev",
   "license": "MIT",
   "dependencies": {
-    "@google/generative-ai": "^0.24.0",
     "@prisma/client": "^5.22.0",
+    "openai": "^4.77.0",
     "@types/fluent-ffmpeg": "^2.1.28",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",

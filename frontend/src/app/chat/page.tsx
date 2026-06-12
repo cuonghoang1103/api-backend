@@ -19,7 +19,7 @@ import { findStaticResponse, getDefaultGreeting, getFallbackResponse } from '@/l
 
 // ── Robot avatar with LED eyes ────────────────────────────────────
 function RobotAvatar({ isStreaming }: { isStreaming: boolean }) {
-  const [data, setData] = useState<object | null>(null);
+  const [robotData, setRobotData] = useState<object | null>(null);
 
   useEffect(() => {
     fetch('/animations/robot.json')
@@ -30,8 +30,8 @@ function RobotAvatar({ isStreaming }: { isStreaming: boolean }) {
 
   return (
     <div className="relative w-11 h-11 rounded-2xl overflow-hidden flex items-center justify-center bg-[#0d1117] border border-[#22d3ee]/20 shadow-[0_0_16px_rgba(34,211,238,0.15)]">
-      {data ? (
-        <Lottie animationData={data} loop autoplay style={{ width: '100%', height: '100%' }} />
+      {robotData ? (
+        <Lottie animationData={robotData} loop autoplay style={{ width: '100%', height: '100%' }} />
       ) : (
         <div className="w-full h-full flex flex-col items-center justify-center gap-0.5">
           {/* LED Eyes */}
@@ -370,7 +370,6 @@ export default function ChatPage() {
             if (raw) {
               assistantContent += raw;
               updateLastAssistantMessage(sessionId, assistantContent);
-            }
             }
           }
         }

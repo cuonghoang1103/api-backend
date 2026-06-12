@@ -15,9 +15,11 @@ docker container prune -f 2>/dev/null || true
 docker volume prune -f 2>/dev/null || true
 echo "--- Removing old node_modules copies ---"
 find /opt/cuonghoangdev -name "node_modules" -type d -prune -exec rm -rf {} + 2>/dev/null || true
-echo "--- Removing build artifacts ---"
-find /opt/cuonghoangdev -name ".next" -type d -prune -exec rm -rf {} + 2>/dev/null || true
+echo "--- Removing build artifacts (dist from backend builds) ---"
 find /opt/cuonghoangdev -name "dist" -type d -prune -exec rm -rf {} + 2>/dev/null || true
+# NOTE: do NOT delete frontend/.next here — rsync brings a fresh .next/ from the
+# GitHub Actions runner (which built it fresh). Deleting .next before rsync would
+# cause rsync to delete the fresh .next/ from the runner too.
 echo "--- Disk usage after cleanup ---"
 df -h /opt / /var/lib/docker 2>/dev/null || df -h /opt /
 
@@ -84,6 +86,13 @@ docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database 
 echo "Database ready"
 
 echo "=== [6/10] Code already synced via rsync ==="
+# AFTER rsync synced fresh code from GitHub Actions runner:
+# Delete .next/ so the Next.js build happens inside Docker (fresh compilation),
+# instead of Docker just copying the .next/ that rsync synced from the runner.
+# Without this, Docker copies .next/ as-is and skips the Next.js build.
+echo "--- Clearing .next/ so Next.js rebuilds fresh inside Docker ---"
+rm -rf /opt/cuonghoangdev/frontend/.next 2>/dev/null || true
+echo "--- .next/ cleared on VPS ---"
 
 echo "=== [7/10] Building backend container ==="
 # Capture old container ID so we can verify it was replaced

@@ -162,6 +162,10 @@ jobs:
         run: |
           ssh vps "bash /opt/cuonghoangdev/scripts/deploy-vps.sh"
 
+      - name: Sync .next/ into frontend container (fixes out-of-sync container filesystem)
+        run: |
+          ssh vps "docker exec -u root cuonghoangdev_frontend sh -c 'rm -rf /app/.next/* && mkdir -p /app/.next' && docker cp /opt/cuonghoangdev/frontend/.next/. cuonghoangdev_frontend:/app/.next/ && docker restart cuonghoangdev_frontend"
+
       - name: Setup cron jobs on VPS
         run: |
           ssh vps "

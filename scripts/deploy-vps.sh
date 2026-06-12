@@ -100,26 +100,27 @@ if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; the
 fi
 
 echo "=== [5/7] Ensure database exists ==="
-# CRITICAL: export vars from .env so docker compose reads the correct password
-set -a && . /opt/cuonghoangdev/.env && set +a
+# Postgres named volume contains data with specific credentials.
+# NEVER remove the volume or you lose all data.
+# Strategy: if .env password doesn't match postgres's password, use ALTER USER to fix it.
+cd /opt/cuonghoangdev
 
-# Always recreate postgres to ensure it uses the current .env password
-# This is safe because data is on a persistent named volume (postgres_data)
-echo "[DEBUG] Recreating postgres to sync password from .env..."
-docker stop cuonghoangdev_postgres 2>/dev/null || true
-docker rm cuonghoangdev_postgres 2>/dev/null || true
-sleep 2
-docker compose up -d postgres
-for i in $(seq 1 12); do
-  if docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
-    echo "Postgres up with current .env password"
-    break
-  fi
-  echo "Waiting for postgres... ($i/12)"
-  sleep 5
-done
+PG_PASSWORD=$(grep '^POSTGRES_PASSWORD=' /opt/cuonghoangdev/.env 2>/dev/null | sed 's/POSTGRES_PASSWORD=//' | sed "s/'//g" | sed 's/\"//g")
+PG_PASSWORD="${PG_PASSWORD:-123456}"
+echo "[DEBUG] .env POSTGRES_PASSWORD: ${PG_PASSWORD:0:4}*** (length: ${#PG_PASSWORD})"
 
-# Create database if not exists
+# Test if backend can connect with current .env password
+BACKEND_AUTH_TEST=$(docker compose exec -T backend sh -c "node -e \"const { PrismaClient } = require('@prisma/client'); const p = new PrismaClient(); p.\$connect().then(() => { console.log('OK'); process.exit(0); }).catch(e => { console.log('FAIL: ' + e.message); process.exit(1); })\"" 2>&1 || true)
+if echo "$BACKEND_AUTH_TEST" | grep -qi "OK\|OK$"; then
+  echo "[OK] Backend can connect to postgres with .env password"
+else
+  echo "[WARN] Backend auth failed: $(echo "$BACKEND_AUTH_TEST" | head -1)"
+  echo "[FIX] Updating postgres user password to match .env..."
+  docker compose exec -T postgres psql -U postgres -c "ALTER USER postgres WITH PASSWORD '${PG_PASSWORD}';" 2>/dev/null && \
+    echo "[OK] Postgres password updated" || echo "[WARN] Password update failed"
+fi
+
+# Ensure database exists
 docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'cuonghoangdev_db'" | grep -q 1 || \
   docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE cuonghoangdev_db" 2>/dev/null
 echo "Database ready"

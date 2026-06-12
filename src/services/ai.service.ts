@@ -186,6 +186,8 @@ export class AIService {
    * Khi documentType được chỉ định → lọc theo type.
    * Khi không có → dùng text search keyword matching trên toàn bộ chunks.
    * Vector embedding (pgvector) sẽ được bật sau khi setup embedding model.
+   *
+   * Gracefully returns empty string if table does not exist yet (first run).
    */
   async getRAGContext(
     documentType: string | undefined,
@@ -194,39 +196,49 @@ export class AIService {
   ): Promise<string> {
     let chunks;
 
-    if (documentType) {
-      chunks = await prisma.documentChunk.findMany({
-        where: { documentType },
-        take: topK,
-        orderBy: { createdAt: 'desc' },
-      });
-    } else {
-      // No type specified — fetch all recent chunks then keyword-rank them
-      const all = await prisma.documentChunk.findMany({
-        orderBy: { createdAt: 'desc' },
-        take: topK * 4,
-      });
-
-      if (!userMessage) {
-        chunks = all.slice(0, topK);
-      } else {
-        // Simple keyword scoring: count matching words
-        const words = userMessage.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
-        const scored = all.map((c) => {
-          const lower = c.content.toLowerCase();
-          const score = words.reduce((acc, w) => acc + (lower.includes(w) ? 1 : 0), 0);
-          return { chunk: c, score };
+    try {
+      if (documentType) {
+        chunks = await prisma.documentChunk.findMany({
+          where: { documentType },
+          take: topK,
+          orderBy: { createdAt: 'desc' },
         });
-        scored.sort((a, b) => b.score - a.score);
-        chunks = scored.filter((s) => s.score > 0).slice(0, topK).map((s) => s.chunk);
+      } else {
+        // No type specified — fetch all recent chunks then keyword-rank them
+        const all = await prisma.documentChunk.findMany({
+          orderBy: { createdAt: 'desc' },
+          take: topK * 4,
+        });
+
+        if (!userMessage) {
+          chunks = all.slice(0, topK);
+        } else {
+          // Simple keyword scoring: count matching words
+          const words = userMessage.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+          const scored = all.map((c) => {
+            const lower = c.content.toLowerCase();
+            const score = words.reduce((acc, w) => acc + (lower.includes(w) ? 1 : 0), 0);
+            return { chunk: c, score };
+          });
+          scored.sort((a, b) => b.score - a.score);
+          chunks = scored.filter((s) => s.score > 0).slice(0, topK).map((s) => s.chunk);
+        }
       }
+
+      if (chunks.length === 0) return '';
+
+      return chunks
+        .map((c) => `[${c.documentType}:${c.documentId}]\n${c.content}`)
+        .join('\n\n');
+    } catch (err) {
+      // Table may not exist yet (first run before prisma db push completes)
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('does not exist') || msg.includes('relation') && msg.includes('does not exist')) {
+        console.warn('[AIService] document_chunks table not found, skipping RAG context');
+        return '';
+      }
+      throw err;
     }
-
-    if (chunks.length === 0) return '';
-
-    return chunks
-      .map((c) => `[${c.documentType}:${c.documentId}]\n${c.content}`)
-      .join('\n\n');
   }
 
   // ─── Non-streaming chat ─────────────────────────────────
@@ -372,6 +384,7 @@ export class AIService {
   /**
    * Chunk a document and store in document_chunks table.
    * Sử dụng khi admin upload tài liệu để chatbot có ngữ cảnh.
+   * Gracefully handles missing table (no-op if table doesn't exist yet).
    */
   async indexDocument(data: {
     documentId: string;
@@ -382,9 +395,16 @@ export class AIService {
     const { documentId, documentType, content, metadata } = data;
 
     // Delete existing chunks for this document
-    await prisma.documentChunk.deleteMany({
-      where: { documentId, documentType },
-    });
+    try {
+      await prisma.documentChunk.deleteMany({
+        where: { documentId, documentType },
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (!msg.includes('does not exist') && !(msg.includes('relation') && msg.includes('does not exist'))) {
+        throw err;
+      }
+    }
 
     // Chunk text
     const chunks = this.chunkText(
@@ -461,18 +481,36 @@ export class AIService {
 
   // ─── Clear all chunks ────────────────────────────────────
   async clearAllChunks(): Promise<{ deleted: number }> {
-    const count = await prisma.documentChunk.count();
-    await prisma.documentChunk.deleteMany();
-    return { deleted: count };
+    try {
+      const count = await prisma.documentChunk.count();
+      await prisma.documentChunk.deleteMany();
+      return { deleted: count };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('does not exist') || (msg.includes('relation') && msg.includes('does not exist'))) {
+        console.warn('[AIService] document_chunks table not found, nothing to clear');
+        return { deleted: 0 };
+      }
+      throw err;
+    }
   }
 
   // ─── Get all chunks ──────────────────────────────────────
   async getAllChunks(documentType?: string) {
-    return prisma.documentChunk.findMany({
-      where: documentType ? { documentType } : undefined,
-      orderBy: [{ documentType: 'asc' }, { chunkIndex: 'asc' }],
-      take: 1000,
-    });
+    try {
+      return prisma.documentChunk.findMany({
+        where: documentType ? { documentType } : undefined,
+        orderBy: [{ documentType: 'asc' }, { chunkIndex: 'asc' }],
+        take: 1000,
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('does not exist') || (msg.includes('relation') && msg.includes('does not exist'))) {
+        console.warn('[AIService] document_chunks table not found, returning empty');
+        return [];
+      }
+      throw err;
+    }
   }
 
   // ─── Submit feedback ─────────────────────────────────────

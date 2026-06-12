@@ -48,8 +48,12 @@ import { AppError } from '../middleware/errorHandler.js';
 let _genAI: GoogleGenerativeAI | null = null;
 
 // ─── Model fallback list ────────────────────────────────────────
+// gemini-2.0-flash: the recommended stable model for free tier
+// Fallbacks for 429/503 errors from the API
 const MODELS = [
-  'gemini-1.5-flash',
+  'gemini-2.0-flash',
+  'gemini-2.5-flash',
+  'gemini-3-flash',
 ];
 
 function getGenAI(): GoogleGenerativeAI {

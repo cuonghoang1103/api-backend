@@ -24,7 +24,7 @@ function RobotAvatar({ isStreaming }: { isStreaming: boolean }) {
   useEffect(() => {
     fetch('/animations/robot.json')
       .then((r) => r.json())
-      .then(setData)
+      .then(setRobotData)
       .catch(() => {});
   }, []);
 
@@ -58,7 +58,7 @@ function ChatWelcome({ prompts, onSelect, isLoading }: {
   useEffect(() => {
     fetch('/animations/robot.json')
       .then((r) => r.json())
-      .then(setData)
+      .then(setRobotData)
       .catch(() => {});
   }, []);
 

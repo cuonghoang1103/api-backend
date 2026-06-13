@@ -51,12 +51,24 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
   // version-agnostic fix.
   const router = useRouter();
   const slug = params.slug;
-  const { isAuthenticated: isBackendAuth, isLoading: isBackendLoading } = useAuthStore();
-  const { status } = useSession();
+  // isHydrated becomes true once Zustand has rehydrated from
+  // localStorage — that is the only reliable "auth state is ready"
+  // signal we have. The previous code used `isBackendLoading` (the
+  // store's loading flag) which is NEVER set false on plain
+  // mount, only on login/register/logout — so on a hard refresh
+  // of /courses/:slug/learn the effect sat in the loading branch
+  // forever and never called loadCourse, hence the empty console
+  // + permanent spinner.
+  const { isAuthenticated: isBackendAuth, isHydrated } = useAuthStore();
+  const { status, data: session } = useSession();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const isLoading = isBackendLoading || status === 'loading';
-  const isAuthenticated = mounted && (isBackendAuth || status === 'authenticated');
+  // Auth is "ready" when: (a) the component has mounted client-
+  // side, (b) Zustand has rehydrated, and (c) NextAuth has settled
+  // into authenticated/unauthenticated (not 'loading').
+  const isSessionReady = status !== 'loading';
+  const isAuthReady = mounted && isHydrated && isSessionReady;
+  const isAuthenticated = isAuthReady && (isBackendAuth || status === 'authenticated');
 
   const [course, setCourse] = useState<Course | null>(null);
   const [currentLesson, setCurrentLesson] = useState<LessonDto | null>(null);
@@ -70,12 +82,9 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
 
   // Live effect: once we know the auth state, kick the user to
   // /login (with a callback so they bounce back to this exact page
-  // after authenticating) or load the course. We use a state token
-  // instead of `isAuthenticated` directly in the dependency array
-  // to avoid re-running the effect on unrelated re-renders.
+  // after authenticating) or load the course.
   useEffect(() => {
-    if (!mounted) return;
-    if (isLoading) return;
+    if (!isAuthReady) return;
     if (!isAuthenticated) {
       const callback = encodeURIComponent(`/courses/${slug}/learn`);
       router.push(`/login?callbackUrl=${callback}`);
@@ -83,11 +92,13 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
     }
     loadCourse();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mounted, isLoading, isAuthenticated, slug]);
+  }, [isAuthReady, isAuthenticated, slug]);
 
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const loadCourse = useCallback(async () => {
+    // eslint-disable-next-line no-console
+    console.log('[learn] loadCourse start', { slug, isAuthReady, isAuthenticated });
     setLoading(true);
     setLoadError(null);
     try {

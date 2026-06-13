@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LottieClient from '@/components/ui/LottieClient';
+import type { LottieRefCurrentProps } from 'lottie-react';
 import { useChatStore } from '@/store/chatStore';
 import ChatModal from './ChatModal';
 

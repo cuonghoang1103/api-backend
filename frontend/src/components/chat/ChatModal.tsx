@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { X, Loader2, Copy, CheckCheck, User } from 'lucide-react';
+import { X, Loader2, Copy, CheckCheck, User, Send } from 'lucide-react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
@@ -373,7 +373,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
       setStreaming(false);
     }
   }, [isStreaming, currentSessionId, addMessage, setStreaming, setRobotEmotion,
-      currentMessages, setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
+      setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
       updateLastAssistantMessage, messages]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

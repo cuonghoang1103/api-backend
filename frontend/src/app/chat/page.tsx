@@ -3,13 +3,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Menu, ChevronRight, Wifi, WifiOff, AlertCircle, RefreshCw } from 'lucide-react';
+import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
-import ChatSidebar from '@/components/chat/ChatSidebar';
 import ChatMessages from '@/components/chat/ChatMessages';
 import ChatInput from '@/components/chat/ChatInput';
 import SuggestedPrompts from '@/components/chat/SuggestedPrompts';
@@ -17,6 +16,8 @@ import MatrixRain from '@/components/chat/MatrixRain';
 import LottieClient from '@/components/ui/LottieClient';
 import type { ChatMessage, ChatSession } from '@/types';
 import { findStaticResponse, getDefaultGreeting, getFallbackResponse } from '@/lib/ai-static-responses';
+import { format } from 'date-fns';
+import { vi } from 'date-fns/locale';
 
 // ── Robot avatar with LED eyes ────────────────────────────────────
 function RobotAvatar({ isStreaming, robotData }: { isStreaming: boolean; robotData?: object }) {
@@ -99,7 +100,6 @@ export default function ChatPage() {
     setStreaming,
     setRobotEmotion,
     setSuggestedPrompts,
-    setSidebarOpen,
     setLimitedMode,
   } = useChatStore();
 
@@ -421,127 +421,176 @@ export default function ChatPage() {
   }, [setCurrentSessionId, setSuggestedPrompts]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden cyber-grid-bg">
+    <div className="relative min-h-screen w-full overflow-hidden cyber-grid-bg pt-16">
       {/* Matrix rain background */}
       <MatrixRain />
 
-      {/* Chat sidebar: fixed overlay, z-[51] above navbar (z-40) */}
-      <ChatSidebar
-        onDeleteSession={handleDeleteSession}
-        onSelectSession={handleSelectSession}
-      />
+      {/* ── Persistent left sidebar: chat sessions ───────────────────── */}
+      <aside className="fixed top-16 left-0 bottom-0 w-72 z-20 flex flex-col
+        bg-[#0d1117]/95 backdrop-blur-xl
+        border-r border-[#22d3ee]/10
+        shadow-[4px_0_32px_rgba(0,0,0,0.4)]">
 
-      {/* Main chat area: full viewport minus navbar + mobile nav */}
-      <main className="relative flex flex-col min-h-screen pt-16 pb-16 sm:pb-0">
+        {/* Sidebar header */}
+        <div className="px-4 py-4 border-b border-[#22d3ee]/10 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-[#22d3ee] led-eye" />
+            <span className="font-mono text-sm font-semibold text-[#f8fafc]">
+              <span className="text-[#64748b]">~/</span>
+              <span className="text-[#22d3ee]">sessions</span>
+            </span>
+          </div>
+        </div>
+
+        {/* New session button */}
+        <div className="p-3 shrink-0">
+          <button
+            onClick={() => { setCurrentSessionId(null); setSuggestedPrompts(getContextualPrompts('')); }}
+            className="w-full flex items-center gap-2 px-4 py-2.5
+              bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6]
+              text-white text-sm font-mono font-semibold rounded-xl
+              hover:opacity-90 transition-opacity
+              shadow-[0_0_16px_rgba(34,211,238,0.2)]"
+          >
+            <Plus className="w-4 h-4" />
+            <span>&gt; new_session()</span>
+          </button>
+        </div>
+
+        {/* Session list */}
+        <div className="flex-1 overflow-y-auto px-2 pb-4 space-y-0.5">
+          {sessions.length === 0 && (
+            <p className="text-[#64748b] text-xs text-center py-8 px-2 font-mono">
+              <span className="text-[#22d3ee]">//</span> no sessions found
+            </p>
+          )}
+          {sessions.map((session) => (
+            <button
+              key={session.sessionId}
+              onClick={() => handleSelectSession(session.sessionId)}
+              className={`w-full text-left px-3 py-3 rounded-xl transition-all relative group
+                ${currentSessionId === session.sessionId
+                  ? 'bg-[#22d3ee]/10 text-[#f8fafc] border border-[#22d3ee]/20'
+                  : 'hover:bg-[#22d3ee]/5 text-[#94a3b8] hover:text-[#f8fafc]'
+                }`}
+            >
+              <div className="flex items-start gap-2 pr-8">
+                <MessageSquare className={`w-4 h-4 mt-0.5 flex-shrink-0 ${currentSessionId === session.sessionId ? 'text-[#22d3ee]' : 'text-[#64748b]'}`} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-mono truncate">
+                    <span className="text-[#64748b]">$ </span>
+                    <span className={currentSessionId === session.sessionId ? 'text-[#22d3ee]' : 'text-[#94a3b8]'}>
+                      {session.title || 'New chat'}
+                    </span>
+                  </p>
+                  <p className="text-[10px] font-mono text-[#64748b] mt-0.5">
+                    {format(new Date(session.createdAt), 'dd/MM/yy HH:mm', { locale: vi })}
+                  </p>
+                </div>
+              </div>
+              {currentSessionId === session.sessionId && (
+                <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#22d3ee] led-eye" />
+                </div>
+              )}
+              <button
+                onClick={(e) => { e.stopPropagation(); handleDeleteSession(session.sessionId); }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg
+                  text-[#64748b] hover:text-red-400 hover:bg-red-500/10
+                  opacity-0 group-hover:opacity-100 transition-all"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </button>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div className="px-4 py-3 border-t border-[#22d3ee]/10 shrink-0">
+          <p className="text-[10px] font-mono text-[#64748b]/50 text-center">
+            <span className="text-[#22d3ee]/40">/* </span>CuongMini-OS v1.0<span className="text-[#22d3ee]/40"> */</span>
+          </p>
+        </div>
+      </aside>
+
+      {/* ── Main chat: centered content area ────────────────────────── */}
+      <main className="pl-72 flex flex-col min-h-[calc(100vh-4rem)]">
         {/* Cyber Terminal Header */}
         <motion.header
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative z-[10] px-4 sm:px-6 py-3 border-b border-[#22d3ee]/10 flex items-center gap-3 flex-shrink-0 bg-[#0d1117]/80 backdrop-blur-xl"
+          className="px-6 py-3 border-b border-[#22d3ee]/10 flex items-center gap-4 flex-shrink-0
+            bg-[#0d1117]/60 backdrop-blur-md"
         >
-          {/* Chat history toggle — opens ChatSidebar */}
-          <button
-            onClick={() => setSidebarOpen(!isSidebarOpen)}
-            className="flex items-center justify-center w-8 h-8 rounded-xl hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors"
-            title="Chat history"
+          {/* Robot avatar */}
+          <motion.div
+            animate={{ rotate: isStreaming ? 360 : 0 }}
+            transition={{ duration: isStreaming ? 2 : 0, repeat: isStreaming ? Infinity : 0, ease: 'linear' }}
           >
-            <Menu className="w-4 h-4" />
-          </button>
+            <RobotAvatar isStreaming={isStreaming} robotData={robotData ?? undefined} />
+          </motion.div>
 
-          {/* Home navigation */}
+          {/* Title */}
+          <div className="flex-1">
+            <h1 className="font-mono font-bold text-[#f8fafc] flex items-center gap-2 text-sm">
+              <span className="text-[#22d3ee]">root</span>
+              <span className="text-[#64748b]">@</span>
+              <span className={`text-[#22d3ee] ${glitchTrigger ? 'glitch-burst' : ''}`} data-text="CuongMini-OS">
+                CuongMini-OS
+              </span>
+              <span className="text-[#64748b]">:~#</span>
+              <span className={`text-xs px-1.5 py-0.5 rounded font-sans ${
+                isStreaming ? 'bg-[#22d3ee]/15 text-[#22d3ee] border border-[#22d3ee]/30' : 'bg-[#22d3ee]/8 text-[#64748b] border border-[#22d3ee]/15'
+              }`}>
+                {isStreaming ? '[Active]' : '[Ready]'}
+              </span>
+              {limitedMode && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium bg-amber-500/15 text-amber-400 border border-amber-500/25 rounded-full">
+                  <AlertCircle className="w-3 h-3" />
+                  Limited
+                </span>
+              )}
+            </h1>
+            <div className="flex items-center gap-3 mt-0.5">
+              <p className="text-xs text-[#64748b] font-mono">
+                {limitedMode ? (
+                  <><span className="text-amber-400/80">CACHED</span> • {isAuthenticated ? 'AUTH' : 'GUEST'}</>
+                ) : (
+                  <>RAG-powered • {isAuthenticated ? 'AUTH' : 'GUEST'}</>
+                )}
+              </p>
+              {backendConnected !== null && !limitedMode && (
+                <div className={`flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full font-mono ${
+                  backendConnected ? 'bg-[#22d3ee]/10 text-[#22d3ee]' : 'bg-red-500/10 text-red-400'
+                }`}>
+                  {backendConnected ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
+                  <span className="hidden sm:inline">{backendConnected ? 'Online' : 'Offline'}</span>
+                </div>
+              )}
+              {limitedMode && (
+                <button
+                  onClick={() => setLimitedMode(false, '')}
+                  className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#22d3ee]/10 text-[#22d3ee] hover:bg-[#22d3ee]/20 transition-colors font-mono"
+                >
+                  <RefreshCw className="w-3 h-3" />
+                  <span>Try AI</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Back to home */}
           <Link
             href="/"
-            className="flex items-center justify-center w-8 h-8 rounded-xl hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors"
+            className="flex items-center justify-center w-9 h-9 rounded-xl hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors"
             title="Back to home"
           >
             <Home className="w-4 h-4" />
           </Link>
-
-          <div className="flex items-center gap-3">
-            {/* Robot avatar with LED eyes */}
-            <motion.div
-              animate={{ rotate: isStreaming ? 360 : 0 }}
-              transition={{ duration: isStreaming ? 2 : 0, repeat: isStreaming ? Infinity : 0, ease: 'linear' }}
-            >
-              <RobotAvatar isStreaming={isStreaming} robotData={robotData ?? undefined} />
-            </motion.div>
-
-            <div>
-              {/* Terminal prompt title */}
-              <h1 className="font-heading font-bold text-[#f8fafc] flex items-center gap-2 font-mono text-sm">
-                <span className="text-[#22d3ee]">root</span>
-                <span className="text-[#64748b]">@</span>
-                <span
-                  className={`text-[#22d3ee] ${glitchTrigger ? 'glitch-burst' : ''}`}
-                  data-text="CuongMini-OS"
-                >
-                  CuongMini-OS
-                </span>
-                <span className="text-[#64748b]">:~#</span>
-                <span className="text-[#22d3ee]/40">Chat Session</span>
-                <span className={`text-xs px-1.5 py-0.5 rounded font-sans ${
-                  isStreaming ? 'bg-[#22d3ee]/15 text-[#22d3ee] border border-[#22d3ee]/30' : 'bg-[#22d3ee]/8 text-[#64748b] border border-[#22d3ee]/15'
-                }`}>
-                  {isStreaming ? '[Active]' : '[Ready]'}
-                </span>
-
-                {/* Limited Mode Badge */}
-                <AnimatePresence>
-                  {limitedMode && (
-                    <motion.span
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium bg-amber-500/15 text-amber-400 border border-amber-500/25 rounded-full"
-                    >
-                      <AlertCircle className="w-3 h-3" />
-                      Limited
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </h1>
-
-              <div className="flex items-center gap-2 mt-0.5">
-                <p className="text-xs text-[#64748b] font-mono">
-                  {limitedMode ? (
-                    <><span className="text-amber-400/80">CACHED</span> • {isAuthenticated ? 'AUTH' : 'GUEST'}</>
-                  ) : (
-                    <>RAG-powered • {isAuthenticated ? 'AUTH' : 'GUEST'}</>
-                  )}
-                </p>
-                {backendConnected !== null && !limitedMode && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    title={backendConnected ? 'Backend connected' : 'Backend offline'}
-                    className={`flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full font-mono ${
-                      backendConnected ? 'bg-[#22d3ee]/10 text-[#22d3ee]' : 'bg-red-500/10 text-red-400'
-                    }`}
-                  >
-                    {backendConnected ? (
-                      <Wifi className="w-3 h-3" />
-                    ) : (
-                      <WifiOff className="w-3 h-3" />
-                    )}
-                    <span className="hidden sm:inline">{backendConnected ? 'Online' : 'Offline'}</span>
-                  </motion.div>
-                )}
-                {limitedMode && (
-                  <button
-                    onClick={() => setLimitedMode(false, '')}
-                    className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#22d3ee]/10 text-[#22d3ee] hover:bg-[#22d3ee]/20 transition-colors font-mono"
-                  >
-                    <RefreshCw className="w-3 h-3" />
-                    <span>Try AI</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
         </motion.header>
 
-        {/* Messages area — scrolls independently, scrollbar always visible */}
-        <div className="flex-1 min-w-0 overflow-y-auto chat-scanlines chat-messages-scroll">
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto chat-scanlines chat-messages-scroll">
           {!mounted ? (
             <div className="flex items-center justify-center h-full">
               <div className="animate-pulse text-[#64748b] font-mono">[ loading systems... ]</div>
@@ -567,7 +616,7 @@ export default function ChatPage() {
           )}
         </div>
 
-        {/* Input — always at bottom, never scrolls away */}
+        {/* Input — always at bottom */}
         <ChatInput onSend={sendMessage} isStreaming={isStreaming} />
       </main>
     </div>

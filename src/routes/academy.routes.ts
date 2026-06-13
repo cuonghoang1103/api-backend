@@ -25,6 +25,14 @@ router.post('/semesters', authenticate, requireAdmin('ROLE_ADMIN'), async (req, 
     const ordinal = Number(req.body.ordinal ?? 0);
     if (!name || !code) throw new AppError('name and code are required', 400);
 
+    // Reject early with a friendly 409 instead of a Prisma P2002
+    // stack trace, so the admin can fix the form (or pick a different
+    // code) without having to dig into the server log.
+    const duplicate = await prisma.semester.findFirst({ where: { code } });
+    if (duplicate) {
+      throw new AppError(`Mã kỳ học "${code}" đã tồn tại (đang dùng cho "${duplicate.name}"). Vui lòng chọn mã khác.`, 409);
+    }
+
     const created = await prisma.semester.create({
       data: {
         name,
@@ -43,6 +51,28 @@ router.post('/semesters', authenticate, requireAdmin('ROLE_ADMIN'), async (req, 
 router.put('/semesters/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
   try {
     const id = parseInt(req.params.id, 10);
+
+    // If the admin is changing the code, make sure it doesn't collide
+    // with another semester. The Prisma `@@unique` constraint on
+    // `code` would otherwise throw P2002 ("Unique constraint failed")
+    // and the user would see a raw 500 in the toast. Translating it
+    // to a 409 with a Vietnamese message here turns a confusing
+    // stack trace into actionable feedback.
+    if (req.body.code !== undefined) {
+      const nextCode = String(req.body.code).trim();
+      if (nextCode) {
+        const duplicate = await prisma.semester.findFirst({
+          where: { code: nextCode, NOT: { id } },
+        });
+        if (duplicate) {
+          throw new AppError(
+            `Mã kỳ học "${nextCode}" đã tồn tại (đang dùng cho "${duplicate.name}"). Vui lòng chọn mã khác.`,
+            409
+          );
+        }
+      }
+    }
+
     const updated = await prisma.semester.update({
       where: { id },
       data: {
@@ -55,6 +85,13 @@ router.put('/semesters/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (re
     });
     res.json({ success: true, data: updated });
   } catch (error) {
+    // Last-resort translation: Prisma P2002 → friendly 409 in case a
+    // race condition slips through (two admins editing at the same
+    // time, etc.).
+    if (error && typeof error === 'object' && 'code' in error && (error as { code?: string }).code === 'P2002') {
+      next(new AppError('Mã kỳ học đã tồn tại. Vui lòng chọn mã khác.', 409));
+      return;
+    }
     next(error);
   }
 });

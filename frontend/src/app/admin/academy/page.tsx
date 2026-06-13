@@ -26,10 +26,12 @@ const emptySemesterForm: SemesterFormState = {
 
 function SemesterModal({
   semester,
+  existingSemesters,
   onClose,
   onSaved,
 }: {
   semester?: Semester;
+  existingSemesters: Semester[];
   onClose: () => void;
   onSaved: (saved: Semester) => void;
 }) {
@@ -40,9 +42,24 @@ function SemesterModal({
   );
   const [saving, setSaving] = useState(false);
 
+  // Live duplicate check: warn the admin the moment they type a code
+  // that already exists on another semester. Without this they'd
+  // only learn about the collision after the server 409s.
+  const codeConflict = (() => {
+    const c = form.code.trim();
+    if (!c) return null;
+    return existingSemesters.find(
+      (s) => s.code.toLowerCase() === c.toLowerCase() && s.id !== semester?.id
+    ) || null;
+  })();
+
   const handleSave = async () => {
-    if (!form.name.trim() || !form.code.trim() || form.ordinal <= 0) {
-      toast.error('Vui lòng nhập đầy đủ tên, mã và thứ tự học kỳ');
+    if (!form.name.trim() || !form.code.trim()) {
+      toast.error('Vui lòng nhập đầy đủ tên và mã học kỳ');
+      return;
+    }
+    if (codeConflict) {
+      toast.error(`Mã "${form.code}" đang được dùng cho kỳ "${codeConflict.name}". Vui lòng chọn mã khác.`);
       return;
     }
     setSaving(true);
@@ -95,8 +112,15 @@ function SemesterModal({
                 value={form.code}
                 onChange={(e) => setForm((p) => ({ ...p, code: e.target.value }))}
                 placeholder="S1"
-                className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
+                className={`w-full px-4 py-3 rounded-xl bg-darkbg border text-text-primary ${
+                  codeConflict ? 'border-red-500' : 'border-darkborder'
+                }`}
               />
+              {codeConflict && (
+                <p className="text-xs text-red-400 mt-1.5">
+                  Mã "{form.code}" đang dùng cho kỳ "{codeConflict.name}". Vui lòng chọn mã khác.
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1.5">Thứ tự</label>
@@ -135,7 +159,12 @@ function SemesterModal({
           <button onClick={onClose} className="flex-1 px-4 py-3 rounded-xl border border-darkborder text-text-secondary hover:bg-white/5">
             Huỷ
           </button>
-          <button onClick={handleSave} disabled={saving} className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white disabled:opacity-60">
+          <button
+            onClick={handleSave}
+            disabled={saving || !!codeConflict}
+            title={codeConflict ? 'Vui lòng chọn mã học kỳ khác' : undefined}
+            className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white disabled:opacity-60 disabled:cursor-not-allowed"
+          >
             {saving ? 'Đang lưu...' : 'Lưu'}
           </button>
         </div>
@@ -1256,6 +1285,7 @@ export default function AdminAcademyPage() {
       {semesterModalOpen && (
         <SemesterModal
           semester={semesterModalData}
+          existingSemesters={semesters}
           onClose={() => setSemesterModalOpen(false)}
           onSaved={handleSemesterSaved}
         />

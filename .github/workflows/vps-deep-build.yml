@@ -1,0 +1,61 @@
+name: VPS Deep Build Debug
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deep-build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Stop backend container
+        run: |
+          echo "=== Stop backend ==="
+          ssh vps "docker stop cuonghoangdev_backend 2>/dev/null || true"
+          ssh vps "docker rm -f cuonghoangdev_backend 2>/dev/null || true"
+          ssh vps "docker rmi cuonghoangdev_backend:latest 2>/dev/null || true"
+
+      - name: Clear all Docker cache
+        run: |
+          echo "=== Clear ALL Docker cache ==="
+          ssh vps "docker builder prune -af 2>/dev/null || true"
+          ssh vps "docker system prune -af 2>/dev/null || true"
+
+      - name: Build backend from scratch
+        run: |
+          echo "=== Build backend ==="
+          ssh vps "cd /opt/cuonghoangdev && docker build -t cuonghoangdev_backend:latest -f Dockerfile.backend . 2>&1 | tail -5"
+
+      - name: Verify compiled code
+        run: |
+          echo "=== Check compiled code ==="
+          ssh vps "docker run --rm cuonghoangdev_backend:latest sh -c 'grep -c projects /app/dist/routes/admin.routes.js 2>&1 || echo NOT FOUND'"
+          ssh vps "docker run --rm cuonghoangdev_backend:latest sh -c 'grep \"router.get.*projects\" /app/dist/routes/admin.routes.js 2>&1 || echo NOT FOUND'"
+
+      - name: Start and test
+        run: |
+          echo "=== Start backend ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose up -d backend 2>&1"
+          echo "=== Waiting for health ==="
+          ssh vps "for i in \$(seq 1 30); do
+            if docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/health >/dev/null 2>&1'; then
+              echo '[OK] Backend healthy!'
+              break
+            fi
+            echo \"Wait \$i/30\"
+            sleep 5
+          done"
+          echo "=== Test route ==="
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -s http://localhost:3001/api/v1/admin/projects 2>&1'"

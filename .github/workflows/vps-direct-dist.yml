@@ -1,0 +1,64 @@
+name: VPS Direct Dist Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  direct-deploy:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ServerAliveInterval 60\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Build TypeScript locally
+        run: |
+          echo "=== Build TypeScript locally ==="
+          npm ci --include=dev 2>&1 | tail -3
+          npx prisma generate 2>&1 | tail -3
+          npx tsc 2>&1
+          echo "Exit: $?"
+          echo "=== Verify compiled code ==="
+          grep -c "router.get.*/projects" dist/routes/admin.routes.js
+
+      - name: Deploy compiled dist to VPS and restart
+        run: |
+          echo "=== Upload compiled dist to VPS ==="
+          ssh vps "mkdir -p /opt/cuonghoangdev/dist_backup && cp /opt/cuonghoangdev/backend/dist/routes/admin.routes.js /opt/cuonghoangdev/dist_backup/ 2>/dev/null || true"
+          ssh vps "docker cp cuonghoangdev_backend:/app/dist /tmp/dist_inside"
+          scp -r -F ~/.ssh/config dist/* vps:/tmp/dist_upload/
+          ssh vps "docker cp /tmp/dist_upload/. cuonghoangdev_backend:/app/dist/"
+          echo "=== Restart backend ==="
+          ssh vps "docker restart cuonghoangdev_backend 2>&1"
+          echo "=== Waiting for health ==="
+          ssh vps "for i in \$(seq 1 30); do
+            if docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/health >/dev/null 2>&1'; then
+              echo '[OK] Backend healthy!'
+              break
+            fi
+            echo \"Wait \$i/30\"
+            sleep 5
+          done"
+
+      - name: Verify route
+        run: |
+          echo "=== Verify /api/v1/admin/projects ==="
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -s http://localhost:3001/api/v1/admin/projects 2>&1 || echo FAILED'"
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'grep -c projects /app/dist/routes/admin.routes.js 2>&1'"

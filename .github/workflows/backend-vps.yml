@@ -140,7 +140,7 @@ jobs:
           chmod +x scripts/deploy-vps.sh
           scp -F ~/.ssh/config scripts/deploy-vps.sh "vps:/opt/cuonghoangdev/scripts/deploy-vps.sh"
 
-      - name: Deploy backend: inject fresh dist into container
+      - name: Deploy backend (inject fresh dist into container)
         run: |
           echo "--- Copying compiled dist to VPS ---"
           ssh vps "mkdir -p /opt/cuonghoangdev/dist_fresh"

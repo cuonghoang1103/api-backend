@@ -128,6 +128,13 @@ fi
 echo "--- Removing old backend image to force clean build ---"
 docker rmi cuonghoangdev_backend:latest 2>/dev/null || true
 
+# ─── Clear Docker build cache ─────────────────────────────────────────────
+# CRITICAL: Even deleting the image isn't enough — Docker builder cache
+# can reuse cached builder stage layers (COPY --from=builder ./dist).
+# Must prune builder cache to force fresh compilation.
+echo "--- Clearing Docker build cache ---"
+docker builder prune -af 2>/dev/null || true
+
 # ─── Build backend with BuildKit ─────────────────────────────────────────────
 echo "--- Building backend ---"
 export DOCKER_BUILDKIT=1
@@ -158,6 +165,10 @@ fi
 # ─── Remove old frontend image to force clean rebuild ─────────────────────────
 echo "--- Removing old frontend image to force clean build ---"
 docker rmi cuonghoangdev_frontend:latest 2>/dev/null || true
+
+# ─── Clear Docker build cache for frontend ──────────────────────────────────
+echo "--- Clearing Docker build cache for frontend ---"
+docker builder prune -f 2>/dev/null || true
 
 # ─── Build frontend ──────────────────────────────────────────────────────────
 echo "--- Building frontend ---"

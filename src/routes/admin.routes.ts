@@ -609,4 +609,153 @@ router.get('/check', authenticate, async (req, res: Response<ApiResponse>, next)
   } catch (error) { next(error); }
 });
 
+// ─── GET /api/v1/admin/projects ──────────────────────────
+router.get('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { page = 1, size = 20, keyword } = req.query;
+    const pageNum = Math.max(1, parseInt(String(page), 10));
+    const sizeNum = Math.min(100, Math.max(1, parseInt(String(size), 10)));
+    const skip = (pageNum - 1) * sizeNum;
+    const where: Record<string, unknown> = {};
+    if (keyword) {
+      where.OR = [
+        { title: { contains: String(keyword), mode: 'insensitive' } },
+        { description: { contains: String(keyword), mode: 'insensitive' } },
+      ];
+    }
+    const [projects, total] = await Promise.all([
+      prisma.project.findMany({
+        where,
+        skip,
+        take: sizeNum,
+        orderBy: { createdAt: 'desc' },
+        include: { skills: { include: { skill: true } } },
+      }),
+      prisma.project.count({ where }),
+    ]);
+    res.json({
+      success: true,
+      data: projects,
+      pagination: { page: pageNum, limit: sizeNum, total, totalPages: Math.ceil(total / sizeNum) },
+    });
+  } catch (error) { next(error); }
+});
+
+// ─── POST /api/v1/admin/projects ─────────────────────────
+router.post('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { title, description, content, thumbnailUrl, images, projectUrl, videoUrl, githubUrl, techStack, status, featured, startDate, endDate, role, duration } = req.body;
+    if (!title?.trim()) throw new AppError('Title is required', 400);
+
+    const baseSlug = slugify(title) || `project-${Date.now()}`;
+    let slug = baseSlug;
+    let suffix = 1;
+    while (await prisma.project.findUnique({ where: { slug } })) {
+      slug = `${baseSlug}-${suffix++}`;
+    }
+
+    const imagesJson = Array.isArray(images) ? JSON.stringify(images) : images || null;
+    const techStackStr = Array.isArray(techStack) ? techStack.join(', ') : (techStack || null);
+
+    const project = await prisma.project.create({
+      data: {
+        title: title.trim(),
+        slug,
+        description: description || null,
+        content: content || null,
+        thumbnailUrl: thumbnailUrl || null,
+        images: imagesJson,
+        projectUrl: projectUrl || null,
+        videoUrl: videoUrl || null,
+        githubUrl: githubUrl || null,
+        techStack: techStackStr,
+        status: status || 'COMPLETED',
+        isFeatured: Boolean(featured),
+        startDate: startDate ? new Date(startDate) : null,
+        endDate: endDate ? new Date(endDate) : null,
+        role: role || null,
+        duration: duration || null,
+      },
+      include: { skills: { include: { skill: true } } },
+    });
+    res.status(201).json({ success: true, data: project });
+  } catch (error) { next(error); }
+});
+
+// ─── PUT /api/v1/admin/projects/:id ──────────────────────
+router.put('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const existing = await prisma.project.findUnique({ where: { id } });
+    if (!existing) throw new AppError('Project not found', 404);
+
+    const { title, description, content, thumbnailUrl, images, projectUrl, videoUrl, githubUrl, techStack, status, featured, startDate, endDate, role, duration } = req.body;
+
+    let slug = existing.slug;
+    if (title && title.trim() !== existing.title) {
+      const baseSlug = slugify(title) || `project-${Date.now()}`;
+      let candidate = baseSlug;
+      let suffix = 1;
+      while (true) {
+        const conflict = await prisma.project.findFirst({ where: { slug: candidate, NOT: { id } } });
+        if (!conflict) break;
+        candidate = `${baseSlug}-${suffix++}`;
+      }
+      slug = candidate;
+    }
+
+    const imagesJson = Array.isArray(images) ? JSON.stringify(images) : (images !== undefined ? images : existing.images);
+    const techStackStr = Array.isArray(techStack) ? techStack.join(', ') : (techStack !== undefined ? techStack : existing.techStack);
+
+    const project = await prisma.project.update({
+      where: { id },
+      data: {
+        title: title?.trim() || existing.title,
+        slug,
+        description: description !== undefined ? description : existing.description,
+        content: content !== undefined ? content : existing.content,
+        thumbnailUrl: thumbnailUrl !== undefined ? thumbnailUrl : existing.thumbnailUrl,
+        images: imagesJson,
+        projectUrl: projectUrl !== undefined ? projectUrl : existing.projectUrl,
+        videoUrl: videoUrl !== undefined ? videoUrl : existing.videoUrl,
+        githubUrl: githubUrl !== undefined ? githubUrl : existing.githubUrl,
+        techStack: techStackStr,
+        status: status || existing.status,
+        isFeatured: featured !== undefined ? Boolean(featured) : existing.isFeatured,
+        startDate: startDate !== undefined ? (startDate ? new Date(startDate) : null) : existing.startDate,
+        endDate: endDate !== undefined ? (endDate ? new Date(endDate) : null) : existing.endDate,
+        role: role !== undefined ? role : existing.role,
+        duration: duration !== undefined ? duration : existing.duration,
+      },
+      include: { skills: { include: { skill: true } } },
+    });
+    res.json({ success: true, data: project });
+  } catch (error) { next(error); }
+});
+
+// ─── DELETE /api/v1/admin/projects/:id ─────────────────
+router.delete('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const existing = await prisma.project.findUnique({ where: { id } });
+    if (!existing) throw new AppError('Project not found', 404);
+    await prisma.project.delete({ where: { id } });
+    res.json({ success: true, message: 'Project deleted' });
+  } catch (error) { next(error); }
+});
+
+// ─── PATCH /api/v1/admin/projects/:id/toggle-featured ───
+router.patch('/projects/:id/toggle-featured', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const existing = await prisma.project.findUnique({ where: { id } });
+    if (!existing) throw new AppError('Project not found', 404);
+    const project = await prisma.project.update({
+      where: { id },
+      data: { isFeatured: !existing.isFeatured },
+    });
+    res.json({ success: true, data: project });
+  } catch (error) { next(error); }
+});
+
 export default router;

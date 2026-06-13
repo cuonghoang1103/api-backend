@@ -1,15 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
 import {
   X, ExternalLink, Github, Calendar, Code2, Eye, Star, GitFork,
-  Clock, ChevronRight, BookOpen, Layers, Play,
+  Clock, ChevronRight, BookOpen, Layers, Play, Copy, Check,
 } from 'lucide-react';
-import ImageCarousel from './ImageCarousel';
-import { sanitizeHtml } from '@/lib/utils';
+import ReactMarkdown from 'react-markdown';
+import rehypeHighlight from 'rehype-highlight';
+import type { Components } from 'react-markdown';
 import type { Project } from '@/types';
 
 function extractYouTubeId(url: string): string | null {
@@ -39,10 +38,6 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   ON_HOLD: { bg: 'bg-gray-500/15', text: 'text-gray-400' },
 };
 
-function isSafeUrl(url: unknown): url is string {
-  return typeof url === 'string' && url.trim().length > 0 && url.startsWith('http');
-}
-
 function formatDate(dateStr?: string) {
   if (!dateStr) return null;
   try {
@@ -52,58 +47,69 @@ function formatDate(dateStr?: string) {
   }
 }
 
-function parseMarkdown(content: string): string {
-  if (!content) return '';
-  return content
-    .replace(/^## (.+)$/gm, '<h3 class="text-lg font-bold text-text-primary mt-6 mb-3 flex items-center gap-2"><span class="w-1 h-5 rounded-full bg-gradient-to-b from-neon-violet to-neon-indigo shrink-0"></span>$1</h3>')
-    .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-neon-violet/50 pl-4 py-2 my-3 rounded-r-lg bg-neon-violet/5 text-text-secondary italic">$1</blockquote>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-neon-violet font-semibold">$1</strong>')
-    .replace(/_(.+?)_/g, '<em class="text-neon-indigo">$1</em>')
-    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:underline">$1</a>')
-    .replace(/^- (.+)$/gm, '<li class="flex items-start gap-2 text-text-secondary my-1.5"><span class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style="background:linear-gradient(135deg,#a855f7,#ec4899)"></span>$1</li>')
-    .replace(/^(\d+)\. (.+)$/gm, '<li class="flex items-start gap-2 text-text-secondary my-1.5"><span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-neon-indigo/15 text-neon-indigo mt-0.5">$1</span>$2</li>')
-    .replace(/^---$/gm, '<hr class="my-5 border-darkborder" />')
-    .replace(/\n\n/g, '</p><p class="text-text-secondary leading-relaxed mt-3">')
-    .replace(/^(?!<[hlpb])(.+)$/gm, '$1');
+function CopyButton({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = useCallback(async () => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, [code]);
+
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); handleCopy(); }}
+      className="flex items-center gap-1 px-2 py-1 rounded text-[10px] font-mono text-[#64748b] hover:text-[#94a3b8] transition-colors"
+      title="Copy code"
+    >
+      {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+      {copied ? 'Copied!' : 'Copy'}
+    </button>
+  );
 }
 
-function renderContent(content: string): string {
-  if (!content) return '';
-  const paragraphs = content.split(/\n\n+/);
-  return paragraphs
-    .map((p) => {
-      const trimmed = p.trim();
-      if (!trimmed) return '';
-      if (trimmed.startsWith('<h') || trimmed.startsWith('<blockquote') || trimmed.startsWith('<li') || trimmed.startsWith('<hr')) {
-        return trimmed;
-      }
-      return `<p class="text-text-secondary leading-relaxed mt-3">${parseMarkdown(trimmed)}</p>`;
-    })
-    .join('\n');
-}
+const markdownComponents: Components = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  code({ node: _node, className, children, ...props }: any) {
+    const match = /language-(\w+)/.exec(className || '');
+    const isInline = !match;
+    const code = String(children).replace(/\n$/, '');
+
+    if (isInline) {
+      return (
+        <code
+          className="px-1.5 py-0.5 rounded-md text-[#a855f7] bg-neon-violet/10 font-mono text-xs"
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    }
+
+    return (
+      <div className="relative group my-4 rounded-xl overflow-hidden border border-[#22d3ee]/15">
+        {/* Header bar */}
+        <div className="flex items-center justify-between px-4 py-2 bg-[#1e2530] border-b border-[#2d3748]">
+          <span className="text-[10px] font-mono font-bold text-[#64748b] uppercase tracking-widest">
+            {match[1]}
+          </span>
+          <CopyButton code={code} />
+        </div>
+        {/* Code */}
+        <pre className="!m-0 !rounded-none !border-0 overflow-x-auto">
+          <code className={`${match[1]} hljs !font-mono !text-[13px] !leading-relaxed !bg-transparent`} {...props}>
+            {children}
+          </code>
+        </pre>
+      </div>
+    );
+  },
+};
 
 interface ProjectDetailDrawerProps {
   project: Project | null;
   onClose: () => void;
   starred?: boolean;
   onToggleStar?: () => void;
-}
-
-const MOCK_STATS: Record<number, { views: number; stars: number; forks: number }> = {
-  1: { views: 1420, stars: 89, forks: 24 },
-  2: { views: 890, stars: 45, forks: 12 },
-  3: { views: 670, stars: 38, forks: 9 },
-  4: { views: 450, stars: 22, forks: 6 },
-  5: { views: 320, stars: 15, forks: 4 },
-  6: { views: 280, stars: 18, forks: 3 },
-  7: { views: 150, stars: 8, forks: 2 },
-  8: { views: 520, stars: 31, forks: 7 },
-  9: { views: 390, stars: 19, forks: 5 },
-};
-
-function formatCount(n: number) {
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
-  return String(n);
 }
 
 export default function ProjectDetailDrawer({
@@ -117,20 +123,9 @@ export default function ProjectDetailDrawer({
 
   useEffect(() => { setIsMounted(true); }, []);
 
-  const c = {
-    primary: '#a855f7',
-    secondary: '#ec4899',
-    text: '#f8fafc',
-    textSecondary: '#94a3b8',
-    textMuted: '#64748b',
-    glassBg: 'rgba(10,6,25,0.92)',
-    glassBgLight: 'rgba(20,15,40,0.7)',
-    border: 'rgba(168,85,247,0.18)',
-  };
-
-  const stats = project ? (MOCK_STATS[project.id] ?? { views: 0, stars: 0, forks: 0 }) : null;
   const statusStyle = project ? STATUS_COLORS[project.status] : null;
   const techs = Array.isArray(project?.technologies) ? project.technologies : [];
+  const videoId = project?.videoUrl ? extractYouTubeId(project.videoUrl) : null;
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -146,7 +141,6 @@ export default function ProjectDetailDrawer({
         <>
           {/* Backdrop */}
           <motion.div
-            key="backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -155,33 +149,37 @@ export default function ProjectDetailDrawer({
             onClick={onClose}
           />
 
-          {/* Panel */}
+          {/* iOS Sheet Panel */}
           <motion.div
-            key="panel"
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-2xl flex flex-col"
-            style={{ background: c.glassBg }}
+            className="fixed inset-x-0 bottom-0 z-50 w-full max-w-3xl mx-auto rounded-t-3xl flex flex-col max-h-[92vh]"
+            style={{ background: '#0d1117' }}
           >
+            {/* Handle bar */}
+            <div className="flex justify-center pt-3 pb-1 shrink-0">
+              <div className="w-10 h-1 rounded-full bg-white/20" />
+            </div>
+
             {/* Header */}
             <div
               className="flex items-center justify-between px-6 py-4 shrink-0 border-b"
-              style={{ borderColor: c.border }}
+              style={{ borderColor: 'rgba(168,85,247,0.18)' }}
             >
               <div className="flex items-center gap-3">
                 <div
                   className="w-8 h-8 rounded-lg flex items-center justify-center"
-                  style={{ background: `linear-gradient(135deg, ${c.primary}, ${c.secondary})` }}
+                  style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7)' }}
                 >
                   <Layers className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: c.primary }}>
+                  <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#a855f7' }}>
                     Chi tiết dự án
                   </p>
-                  <h2 className="text-base font-heading font-bold" style={{ color: c.text }}>
+                  <h2 className="text-base font-heading font-bold text-white truncate max-w-[200px] sm:max-w-[300px]">
                     {project.title}
                   </h2>
                 </div>
@@ -189,7 +187,7 @@ export default function ProjectDetailDrawer({
               <button
                 onClick={onClose}
                 className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors hover:bg-white/5"
-                style={{ color: c.textMuted }}
+                style={{ color: '#64748b' }}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -198,12 +196,17 @@ export default function ProjectDetailDrawer({
             {/* Body — scrollable */}
             <div className="flex-1 overflow-y-auto">
               <div className="px-6 py-5 space-y-5">
-                {/* Image Carousel */}
-                <ImageCarousel
-                  images={project.images ?? []}
-                  thumbnailUrl={project.thumbnailUrl}
-                  title={project.title}
-                />
+                {/* Cover Image */}
+                {project.thumbnailUrl && (
+                  <div className="relative rounded-2xl overflow-hidden h-48 sm:h-56">
+                    <img
+                      src={project.thumbnailUrl}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  </div>
+                )}
 
                 {/* Status + Featured badges */}
                 <div className="flex items-center gap-2 flex-wrap">
@@ -212,65 +215,42 @@ export default function ProjectDetailDrawer({
                       {STATUS_LABELS[project.status] ?? project.status}
                     </span>
                   )}
-                  {project.featured && (
+                  {project.isFeatured && (
                     <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-400/15 text-yellow-300">
-                      Nổi bật
+                      Noi Bat
                     </span>
-                  )}
-                  {stats && (
-                    <div className="ml-auto flex items-center gap-3">
-                      <span className="flex items-center gap-1 text-xs" style={{ color: c.textMuted }}>
-                        <Eye className="w-3.5 h-3.5" />
-                        {formatCount(stats.views)}
-                      </span>
-                      {onToggleStar && (
-                        <button
-                          onClick={onToggleStar}
-                          className={`flex items-center gap-1 text-xs transition-all hover:scale-110 ${starred ? 'text-yellow-400' : 'text-text-muted hover:text-yellow-400'}`}
-                        >
-                          <Star className="w-3.5 h-3.5" fill={starred ? 'currentColor' : 'none'} />
-                          {formatCount(stats.stars + (starred ? 1 : 0))}
-                        </button>
-                      )}
-                      <span className="flex items-center gap-1 text-xs" style={{ color: c.textMuted }}>
-                        <GitFork className="w-3.5 h-3.5" />
-                        {formatCount(stats.forks)}
-                      </span>
-                    </div>
                   )}
                 </div>
 
                 {/* Description */}
-                <p className="text-sm leading-relaxed" style={{ color: c.textSecondary }}>
-                  {project.description}
-                </p>
+                {project.description && (
+                  <p className="text-sm leading-relaxed" style={{ color: '#94a3b8' }}>
+                    {project.description}
+                  </p>
+                )}
 
                 {/* Meta info */}
                 <div className="flex flex-wrap gap-4">
                   {project.role && (
-                    <div className="flex items-center gap-1.5 text-xs" style={{ color: c.textSecondary }}>
-                      <Code2 className="w-3.5 h-3.5" style={{ color: c.primary }} />
+                    <div className="flex items-center gap-1.5 text-xs" style={{ color: '#94a3b8' }}>
+                      <Code2 className="w-3.5 h-3.5" style={{ color: '#a855f7' }} />
                       {project.role}
                     </div>
                   )}
                   {project.duration && (
-                    <div className="flex items-center gap-1.5 text-xs" style={{ color: c.textSecondary }}>
-                      <Clock className="w-3.5 h-3.5" style={{ color: c.primary }} />
+                    <div className="flex items-center gap-1.5 text-xs" style={{ color: '#94a3b8' }}>
+                      <Clock className="w-3.5 h-3.5" style={{ color: '#a855f7' }} />
                       {project.duration}
                     </div>
                   )}
                   {(project.startDate || project.endDate) && (
-                    <div className="flex items-center gap-1.5 text-xs" style={{ color: c.textSecondary }}>
-                      <Calendar className="w-3.5 h-3.5" style={{ color: c.primary }} />
+                    <div className="flex items-center gap-1.5 text-xs" style={{ color: '#94a3b8' }}>
+                      <Calendar className="w-3.5 h-3.5" style={{ color: '#a855f7' }} />
                       {formatDate(project.startDate)}
-                      {project.startDate && project.endDate && (
-                        <ChevronRight className="w-3 h-3" />
-                      )}
-                      {formatDate(project.endDate) && project.endDate !== project.startDate
-                        ? formatDate(project.endDate)
-                        : project.startDate && !project.endDate
-                        ? <span className="text-neon-violet">— Hiện tại</span>
-                        : null}
+                      {project.startDate && project.endDate && <ChevronRight className="w-3 h-3" />}
+                      {project.startDate && !project.endDate
+                        ? <span className="text-neon-violet">— Hien tai</span>
+                        : formatDate(project.endDate)}
                     </div>
                   )}
                 </div>
@@ -278,8 +258,8 @@ export default function ProjectDetailDrawer({
                 {/* Tech Stack */}
                 {techs.length > 0 && (
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: c.primary }}>
-                      Công nghệ sử dụng
+                    <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#a855f7' }}>
+                      Cong nghe su dung
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {techs.map((tech) => (
@@ -287,9 +267,9 @@ export default function ProjectDetailDrawer({
                           key={tech}
                           className="px-3 py-1 rounded-lg text-xs font-medium border"
                           style={{
-                            background: `${c.primary}10`,
-                            borderColor: `${c.primary}30`,
-                            color: c.primary,
+                            background: 'rgba(168,85,247,0.08)',
+                            borderColor: 'rgba(168,85,247,0.25)',
+                            color: '#c084fc',
                           }}
                         >
                           {tech}
@@ -299,31 +279,71 @@ export default function ProjectDetailDrawer({
                   </div>
                 )}
 
-                {/* Case Study Content */}
+                {/* Content Markdown with syntax highlighting */}
                 {project.content && (
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: c.primary }}>
+                    <p className="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: '#a855f7' }}>
                       <BookOpen className="w-3.5 h-3.5" />
-                      Hành trình phát triển
+                      Hanh trinh phat trien
                     </p>
                     <div
-                      className="rounded-xl p-5 border"
+                      className="rounded-xl p-5 border overflow-hidden"
                       style={{
                         background: 'rgba(255,255,255,0.02)',
-                        borderColor: `${c.primary}20`,
+                        borderColor: 'rgba(168,85,247,0.15)',
                       }}
                     >
-                      <div
-                        className="text-sm"
-                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(renderContent(project.content)) }}
-                      />
+                      <div className="prose-invert max-w-none">
+                        <style>{`
+                          .prose-invert { color: #94a3b8; font-size: 14px; line-height: 1.8; }
+                          .prose-invert h1, .prose-invert h2, .prose-invert h3 { color: #f8fafc; font-weight: 700; margin-top: 1.5em; margin-bottom: 0.5em; }
+                          .prose-invert h1 { font-size: 1.25rem; }
+                          .prose-invert h2 { font-size: 1.1rem; }
+                          .prose-invert h3 { font-size: 1rem; }
+                          .prose-invert p { margin-bottom: 0.75em; }
+                          .prose-invert a { color: #a855f7; text-decoration: underline; }
+                          .prose-invert strong { color: #f8fafc; }
+                          .prose-invert em { color: #818cf8; }
+                          .prose-invert ul { list-style: none; padding-left: 0; }
+                          .prose-invert ul li { padding-left: 1.2em; position: relative; margin-bottom: 0.3em; }
+                          .prose-invert ul li::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg, #a855f7, #ec4899); }
+                          .prose-invert ol { padding-left: 1.5em; }
+                          .prose-invert ol li { margin-bottom: 0.3em; }
+                          .prose-invert blockquote { border-left: 3px solid #a855f7; padding-left: 1em; margin: 1em 0; font-style: italic; color: #64748b; }
+                          .prose-invert hr { border-color: rgba(168,85,247,0.2); margin: 1.5em 0; }
+                          .prose-invert table { width: 100%; border-collapse: collapse; font-size: 13px; }
+                          .prose-invert th { background: rgba(168,85,247,0.1); padding: 8px; text-align: left; }
+                          .prose-invert td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+                          .prose-invert pre { margin: 0; }
+                          /* highlight.js theme — VS Code Dark Plus inspired */
+                          .hljs { background: #1e2530; color: #d4d4d4; }
+                          .hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-name, .hljs-tag { color: #569cd6; }
+                          .hljs-string, .hljs-title, .hljs-section, .hljs-attribute, .hljs-literal, .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-addition { color: #ce9178; }
+                          .hljs-deletion, .hljs-selector-id, .hljs-selector-class, .hljs-selector-attr, .hljs-selector-pseudo { color: #ce9178; }
+                          .hljs-number { color: #b5cea8; }
+                          .hljs-comment, .hljs-quote { color: #6a9955; font-style: italic; }
+                          .hljs-variable, .hljs-params { color: #9cdcfe; }
+                          .hljs-meta { color: #dcdcaa; }
+                          .hljs-function, .hljs-title.function_ { color: #dcdcaa; }
+                          .hljs-property { color: #9cdcfe; }
+                          .hljs-operator, .hljs-punctuation { color: #d4d4d4; }
+                          .hljs-class .hljs-title, .hljs-title.class_ { color: #4ec9b0; }
+                          .hljs-attr, .hljs-attribute { color: #9cdcfe; }
+                        `}</style>
+                        <ReactMarkdown
+                          rehypePlugins={[rehypeHighlight]}
+                          components={markdownComponents}
+                        >
+                          {project.content}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   </div>
                 )}
 
                 {/* CTA Buttons */}
-                <div className="flex gap-3 pt-2">
-                  {(project as any).videoUrl && (
+                <div className="flex gap-3 pt-2 flex-wrap">
+                  {videoId && (
                     <button
                       onClick={() => setShowVideo(true)}
                       className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-90"
@@ -333,7 +353,7 @@ export default function ProjectDetailDrawer({
                       }}
                     >
                       <Play className="w-4 h-4 fill-current" />
-                      Xem Video Demo
+                      Xem Demo
                     </button>
                   )}
                   {project.projectUrl && (
@@ -341,12 +361,12 @@ export default function ProjectDetailDrawer({
                       href={project.projectUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 py-2.5 text-center text-sm font-medium rounded-xl text-white transition-opacity hover:opacity-90"
-                      style={{ background: `linear-gradient(135deg, ${c.primary}, ${c.secondary})` }}
+                      className="flex-1 py-2.5 text-center text-sm font-medium rounded-xl text-white transition-opacity hover:opacity-90 text-center"
+                      style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7)' }}
                     >
                       <span className="flex items-center justify-center gap-2">
                         <ExternalLink className="w-4 h-4" />
-                        Xem trực tuyến
+                        Xem truc tuyen
                       </span>
                     </a>
                   )}
@@ -356,64 +376,45 @@ export default function ProjectDetailDrawer({
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors"
-                      style={{ borderColor: c.border, color: c.textSecondary }}
-                      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = c.primary; (e.currentTarget as HTMLElement).style.color = c.text; }}
-                      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = c.border; (e.currentTarget as HTMLElement).style.color = c.textSecondary; }}
+                      style={{ borderColor: 'rgba(168,85,247,0.25)', color: '#94a3b8' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = '#a855f7';
+                        e.currentTarget.style.color = '#f8fafc';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = 'rgba(168,85,247,0.25)';
+                        e.currentTarget.style.color = '#94a3b8';
+                      }}
                     >
                       <Github className="w-4 h-4" />
                       GitHub
                     </a>
                   )}
-                  <Link
-                    href={`/projects/${project.slug}`}
-                    onClick={onClose}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors"
-                    style={{ borderColor: c.border, color: c.textSecondary }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = c.primary; (e.currentTarget as HTMLElement).style.color = c.text; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = c.border; (e.currentTarget as HTMLElement).style.color = c.textSecondary; }}
-                  >
-                    Trang chi tiết →
-                  </Link>
                 </div>
 
-                {/* ── YouTube Modal ── */}
-                {isMounted && showVideo && (project as any).videoUrl && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="fixed inset-0 z-[60] flex items-center justify-center p-4"
-                    style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)' }}
-                    onClick={() => setShowVideo(false)}
-                  >
+                {/* YouTube Embed */}
+                <AnimatePresence>
+                  {showVideo && videoId && (
                     <motion.div
-                      initial={{ scale: 0.9, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0.9, opacity: 0 }}
-                      transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                      className="relative w-full max-w-4xl"
-                      onClick={(e) => e.stopPropagation()}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      className="rounded-2xl overflow-hidden border"
+                      style={{ borderColor: 'rgba(168,85,247,0.25)' }}
                     >
-                      <button
-                        onClick={() => setShowVideo(false)}
-                        className="absolute -top-10 right-0 text-white/70 hover:text-white text-sm font-medium transition-colors"
-                      >
-                        Đóng
-                      </button>
                       <div style={{ aspectRatio: '16/9' }}>
                         <iframe
-                          src={`https://www.youtube.com/embed/${extractYouTubeId((project as any).videoUrl!)}?autoplay=1`}
+                          src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
                           title="Project Demo Video"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
-                          className="w-full h-full rounded-2xl border"
-                          style={{ borderColor: c.border }}
+                          className="w-full h-full"
                         />
                       </div>
                     </motion.div>
-                  </motion.div>
-                )}
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </motion.div>

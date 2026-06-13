@@ -2,7 +2,7 @@
 
 import { useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Bold, Italic, Link2, List, ListOrdered, Heading2, Quote, Minus, Loader2 } from 'lucide-react';
+import { Bold, Italic, Link2, List, ListOrdered, Heading2, Quote, Minus, Code, Loader2 } from 'lucide-react';
 
 interface RichTextEditorProps {
   value: string;
@@ -132,6 +132,30 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
       icon: <Minus className="w-4 h-4" />,
       action: () => insertAtCursor('\n---\n', ''),
       title: 'Divider',
+    },
+    {
+      icon: <Code className="w-4 h-4" />,
+      action: () => {
+        const ta = textareaRef.current;
+        if (!ta) return;
+        const start = ta.selectionStart;
+        const end = ta.selectionEnd;
+        const selected = value.substring(start, end);
+        const newValue =
+          value.substring(0, start) +
+          '```javascript\n' + selected +
+          '\n```' +
+          value.substring(end);
+        onChange(newValue);
+        setTimeout(() => {
+          ta.focus();
+          ta.setSelectionRange(
+            start + 14 + selected.length + 4,
+            start + 14 + selected.length + 4
+          );
+        }, 0);
+      },
+      title: 'Code Block',
     },
   ];
 

@@ -1,23 +1,21 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import {
   Plus,
   Pencil,
   Trash2,
   Search,
-  ChevronLeft,
-  ChevronRight,
   X,
   ExternalLink,
   GitBranch,
   XCircle,
   Images,
   BookOpen,
+  Star,
 } from 'lucide-react';
-import { useProjectStore } from '@/store/projectStore';
-import { projectsApi } from '@/lib/api';
+import { api } from '@/lib/api';
 import type { Project } from '@/types';
 import MultiImageUploader from '@/components/admin/MultiImageUploader';
 import RichTextEditor from '@/components/admin/RichTextEditor';
@@ -400,25 +398,39 @@ function slugify(text: string) {
 
 // ─── Admin Page ────────────────────────────────────────────────────────────────
 export default function AdminProjectsPage() {
-  const { projects, addProject, updateProject, deleteProject } = useProjectStore();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
-  const [page, setPage] = useState(0);
-  const [pageSize] = useState(8);
   const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  const filtered = projects.filter((p) => {
-    if (!search) return true;
+  const filtered = useMemo(() => {
+    if (!search) return projects;
     const q = search.toLowerCase();
-    return (
-      p.title.toLowerCase().includes(q) ||
-      (p.description || '').toLowerCase().includes(q) ||
-      (p.technologies ?? []).some((t) => t.toLowerCase().includes(q))
+    return projects.filter(
+      (p) =>
+        p.title.toLowerCase().includes(q) ||
+        (p.description || '').toLowerCase().includes(q) ||
+        (p.technologies ?? []).some((t) => t.toLowerCase().includes(q))
     );
-  });
+  }, [projects, search]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
-  const paginated = filtered.slice(page * pageSize, (page + 1) * pageSize);
+  const fetchProjects = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({ size: '100' });
+      if (search) params.set('keyword', search);
+      const res = await api.get(`/admin/projects?${params}`);
+      setProjects(Array.isArray(res.data?.data) ? res.data.data : []);
+    } catch {
+      toast.error('Lỗi tải danh sách dự án');
+    } finally {
+      setLoading(false);
+    }
+  }, [search]);
+
+  useEffect(() => { fetchProjects(); }, [fetchProjects]);
 
   const openCreate = () => {
     setEditingProject(null);
@@ -435,29 +447,41 @@ export default function AdminProjectsPage() {
     setEditingProject(null);
   };
 
-  const handleSave = async (payload: Parameters<typeof projectsApi.create>[0]) => {
+  const handleSave = async (payload: Record<string, unknown>) => {
     if (editingProject) {
-      const res = await projectsApi.update(editingProject.id, payload);
-      const saved = res.data?.data as Project | undefined;
-      if (saved) updateProject(editingProject.id, saved);
+      await api.put(`/admin/projects/${editingProject.id}`, payload);
       toast.success('Cập nhật dự án thành công!');
     } else {
-      const res = await projectsApi.create(payload);
-      const saved = res.data?.data as Project | undefined;
-      if (saved) addProject(saved);
+      await api.post('/admin/projects', payload);
       toast.success('Tạo dự án thành công!');
     }
+    closeForm();
+    fetchProjects();
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Xóa dự án này?')) return;
+    setDeletingId(id);
     try {
-      await projectsApi.delete(id);
-      deleteProject(id);
+      await api.delete(`/admin/projects/${id}`);
       toast.success('Đã xóa dự án');
+      setProjects((prev) => prev.filter((p) => p.id !== id));
     } catch (err: unknown) {
       const msg = (err as any)?.response?.data?.message ?? 'Xóa thất bại';
       toast.error(msg);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const handleToggleFeatured = async (project: Project) => {
+    try {
+      const res = await api.patch(`/admin/projects/${project.id}/toggle-featured`);
+      setProjects((prev) =>
+        prev.map((p) => (p.id === project.id ? res.data.data : p))
+      );
+      toast.success(res.data.data?.isFeatured ? 'Đã đánh dấu nổi bật' : 'Đã bỏ nổi bật');
+    } catch {
+      toast.error('Thao tác thất bại');
     }
   };
 
@@ -485,23 +509,34 @@ export default function AdminProjectsPage() {
           type="text"
           placeholder="Tìm kiếm dự án..."
           value={search}
-          onChange={(e) => { setSearch(e.target.value); setPage(0); }}
+          onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-10 pr-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
         />
       </div>
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {paginated.length === 0 ? (
+        {loading ? (
+          [...Array(8)].map((_, i) => (
+            <div key={i} className="bg-darkcard rounded-2xl overflow-hidden border border-darkborder animate-pulse">
+              <div className="h-32 bg-darkbg" />
+              <div className="p-4 space-y-2">
+                <div className="h-4 bg-darkbg rounded w-3/4" />
+                <div className="h-3 bg-darkbg rounded w-full" />
+                <div className="h-3 bg-darkbg rounded w-1/2" />
+              </div>
+            </div>
+          ))
+        ) : filtered.length === 0 ? (
           <div className="col-span-full text-center py-16 text-text-muted">
             <GitBranch className="w-12 h-12 mx-auto mb-3 opacity-30" />
             <p>Chưa có dự án nào</p>
           </div>
         ) : (
-          paginated.map((project) => (
+          filtered.map((project) => (
             <div
               key={project.id}
-              className="bg-darkcard border border-darkborder rounded-2xl overflow-hidden hover:border-neon-violet/20 transition-colors group"
+              className="bg-darkcard border border-darkborder rounded-2xl overflow-hidden hover:border-neon-violet/30 transition-all group"
             >
               {/* Thumbnail */}
               <div className="h-32 bg-gradient-to-br from-neon-indigo/10 via-neon-violet/10 to-neon-fuchsia/10 flex items-center justify-center relative overflow-hidden">
@@ -510,37 +545,33 @@ export default function AdminProjectsPage() {
                 ) : (
                   <GitBranch className="w-12 h-12 text-neon-violet/30" />
                 )}
-                {/* Gallery indicator */}
                 {Array.isArray(project.images) && project.images.length > 0 && (
                   <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full bg-black/60 text-white text-[10px] font-medium flex items-center gap-1">
                     <Images className="w-3 h-3" />
                     {project.images.length + 1}
                   </div>
                 )}
-                {project.featured && (
+                {project.isFeatured && (
                   <span className="absolute top-2 right-2 px-2 py-0.5 bg-yellow-400/20 text-yellow-300 text-xs rounded-full font-medium">
-                    Nổi bật
+                    NOI BAT
                   </span>
                 )}
+                <span className={`absolute top-2 left-2 px-2 py-0.5 rounded-full text-xs font-medium ${
+                  statusConfig[project.status] || 'bg-gray-500/10 text-gray-400'
+                }`}>
+                  {statusLabels[project.status] ?? project.status}
+                </span>
               </div>
 
               <div className="p-4">
-                <div className="flex items-start justify-between mb-2 gap-2">
-                  <h3 className="text-sm font-medium text-text-primary truncate flex-1">{project.title}</h3>
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${statusConfig[project.status] || 'bg-gray-500/10 text-gray-400'}`}>
-                    {statusLabels[project.status] ?? project.status}
-                  </span>
-                </div>
+                <h3 className="text-sm font-medium text-text-primary truncate mb-1">{project.title}</h3>
                 <p className="text-xs text-text-muted line-clamp-2 mb-3">{project.description}</p>
 
-                {/* Content badge */}
                 {project.content && project.content.length > 0 && (
                   <div className="flex items-center gap-1 mb-3">
                     <BookOpen className="w-3 h-3 text-neon-violet/60" />
                     <span className="text-[10px] text-neon-violet/60">
-                      {project.content.length > 100
-                        ? `${Math.round(project.content.length / 100) * 100}+ ký tự`
-                        : `${project.content.length} ký tự`}
+                      {project.content.length > 500 ? `${Math.round(project.content.length / 100) * 100}+ ký tự` : `${project.content.length} ký tự`}
                     </span>
                   </div>
                 )}
@@ -558,6 +589,13 @@ export default function AdminProjectsPage() {
                   )}
                 </div>
                 <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => handleToggleFeatured(project)}
+                    className={`p-1.5 rounded-lg transition-colors ${project.isFeatured ? 'text-yellow-400 hover:bg-yellow-400/10' : 'text-text-muted hover:bg-yellow-400/10 hover:text-yellow-400'}`}
+                    title={project.isFeatured ? 'Bỏ nổi bật' : 'Đánh dấu nổi bật'}
+                  >
+                    <Star className={`w-3.5 h-3.5 ${project.isFeatured ? 'fill-current' : ''}`} />
+                  </button>
                   {project.projectUrl && (
                     <a href={project.projectUrl} target="_blank" rel="noopener noreferrer"
                       className="p-1.5 rounded-lg hover:bg-white/5 text-text-muted hover:text-neon-emerald transition-colors">
@@ -572,7 +610,8 @@ export default function AdminProjectsPage() {
                   </button>
                   <button
                     onClick={() => handleDelete(project.id)}
-                    className="p-1.5 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-colors"
+                    disabled={deletingId === project.id}
+                    className="p-1.5 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-colors disabled:opacity-50"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -582,29 +621,6 @@ export default function AdminProjectsPage() {
           ))
         )}
       </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
-          <button
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-            disabled={page === 0}
-            className="p-2 rounded-lg hover:bg-white/5 text-text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <span className="text-sm text-text-secondary px-3">
-            Trang {page + 1} / {totalPages}
-          </span>
-          <button
-            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-            disabled={page >= totalPages - 1}
-            className="p-2 rounded-lg hover:bg-white/5 text-text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-      )}
 
       {/* Modal */}
       {showForm && (

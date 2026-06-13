@@ -130,6 +130,15 @@ jobs:
             else
               ssh vps "echo 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}' >> /opt/cuonghoangdev/.env"
             fi
+            # Also update DATABASE_URL with URL-encoded password (password may contain /, +, = chars)
+            # URL-encode the password: / → %2F, + → %2B, = stays as =
+            ENCODED_PASSWORD=$(python3 -c "import urllib.parse; print(urllib.parse.quote_plus('${POSTGRES_PASSWORD}')" 2>/dev/null || node -e "console.log(encodeURIComponent('${POSTGRES_PASSWORD}'));")
+            ENCODED_PASSWORD=${ENCODED_PASSWORD//%2B/+}
+            if grep -q "^DATABASE_URL=" /opt/cuonghoangdev/.env 2>/dev/null; then
+              ssh vps "sed -i 's|^DATABASE_URL=.*|DATABASE_URL=postgresql://postgres:${ENCODED_PASSWORD}@postgres:5432/cuonghoangdev_db?schema=public|' /opt/cuonghoangdev/.env"
+            else
+              ssh vps "echo 'DATABASE_URL=postgresql://postgres:${ENCODED_PASSWORD}@postgres:5432/cuonghoangdev_db?schema=public' >> /opt/cuonghoangdev/.env"
+            fi
           else
             # Use docker exec to reset postgres password to '123456' (default)
             ssh vps "docker compose -f /opt/cuonghoangdev/docker-compose.yml exec -T postgres \
@@ -144,7 +153,7 @@ jobs:
               ssh vps "echo 'POSTGRES_PASSWORD=123456' >> /opt/cuonghoangdev/.env"
             fi
           fi
-          ssh vps "grep -E 'OPENROUTER_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
+          ssh vps "grep -E 'OPENROUTER_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD|DATABASE_URL' /opt/cuonghoangdev/.env"
 
       - name: Upload and run swap setup script
         continue-on-error: true

@@ -15,6 +15,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
 
       - name: Setup SSH key
         env:
@@ -32,7 +33,18 @@ jobs:
         run: |
           ssh vps "echo SSH_OK"
 
-      - name: Sync project to VPS (backend only)
+      - name: Build backend TypeScript on CI (no Docker cache issues)
+        run: |
+          echo "--- Installing backend deps ---"
+          npm ci --include=dev 2>&1 | tail -3
+          echo "--- Generating Prisma client ---"
+          npx prisma generate 2>&1 | tail -3
+          echo "--- Compiling TypeScript ---"
+          npx tsc 2>&1
+          echo "--- Verify compiled code ---"
+          grep -c "router.get.*/projects" dist/routes/admin.routes.js && echo "[OK] admin/projects route compiled!"
+
+      - name: Sync project to VPS
         run: |
           rsync -az --delete --no-perms --no-owner --no-group --omit-dir-times \
             --exclude '.git' \
@@ -49,17 +61,26 @@ jobs:
             ./ -e "ssh -F $HOME/.ssh/config" \
             "vps:/opt/cuonghoangdev/"
 
-      - name: Upload and run deploy script
+      - name: Deploy backend: inject fresh dist into container
         run: |
-          chmod +x scripts/deploy-vps.sh
-          scp -F ~/.ssh/config scripts/deploy-vps.sh "vps:/opt/cuonghoangdev/scripts/deploy-vps.sh"
-          ssh vps "bash /opt/cuonghoangdev/scripts/deploy-vps.sh"
-
-      - name: Verify admin/projects route works
-        run: |
-          echo "=== Verify /api/v1/admin/projects ==="
-          ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/api/v1/admin/projects 2>&1 || echo FAILED'"
-          ssh vps "docker exec cuonghoangdev_backend sh -c 'grep -c projects /app/dist/routes/admin.routes.js 2>&1 || echo NOT FOUND'"
+          echo "--- Copying compiled dist to VPS ---"
+          ssh vps "mkdir -p /opt/cuonghoangdev/dist_fresh"
+          (tar -czf - dist/) | ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev && tar -xzf -"
+          echo "--- Injecting dist into running backend container ---"
+          ssh vps "docker cp /opt/cuonghoangdev/dist/. cuonghoangdev_backend:/app/dist/"
+          echo "--- Restarting backend to load new code ---"
+          ssh vps "docker restart cuonghoangdev_backend"
+          echo "--- Waiting for reload ---"
+          ssh vps "for i in \$(seq 1 12); do
+            if docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/health >/dev/null 2>&1'; then
+              echo '[OK] Backend reloaded!'
+              break
+            fi
+            echo \"Reload... (\$i/12)\"
+            sleep 5
+          done"
+          echo "--- Verify admin/projects route ---"
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -s http://localhost:3001/api/v1/admin/projects 2>&1'"
 
       - name: Restart nginx
         run: |

@@ -109,9 +109,6 @@ export default function ChatPage() {
   const [sessionCount, setSessionCount] = useState(0);
   const [robotData, setRobotData] = useState<object | null>(null);
 
-  // Use a ref to track first-load merge so we don't re-merge on every mount
-  const hasMergedSessions = useRef(false);
-
   // Fetch robot animation data once
   useEffect(() => {
     fetch('/animations/robot.json')
@@ -142,31 +139,32 @@ export default function ChatPage() {
   // Fetch sessions from API and merge with persisted state
   useEffect(() => {
     if (!mounted) return;
-    const fetchSessions = async () => {
-      try {
-        const res = await api.get('/ai/chat/sessions');
+
+    const doMerge = () => {
+      // Secondary guard: if sessions already populated (non-empty), skip merge
+      const currentSessions = useChatStore.getState().sessions;
+      if (currentSessions.length > 0) {
+        return;
+      }
+
+      api.get('/ai/chat/sessions').then((res) => {
         const apiSessions: ChatSession[] = res.data?.data || [];
+        const persisted = useChatStore.getState().sessions;
+        const persistedIds = new Set(persisted.map(s => s.sessionId));
 
-        if (!hasMergedSessions.current) {
-          // First load: merge API sessions with persisted sessions
-          hasMergedSessions.current = true;
-          const persisted = useChatStore.getState().sessions;
-          const persistedIds = new Set(persisted.map(s => s.sessionId));
+        // Keep persisted sessions that aren't in API response (local-only sessions)
+        const localOnly = persisted.filter(s => !apiSessions.find(a => a.sessionId === s.sessionId));
+        // Prefer API data for sessions that exist in both
+        const merged = [...localOnly, ...apiSessions];
 
-          // Keep persisted sessions that aren't in API response (local-only sessions)
-          const localOnly = persisted.filter(s => !apiSessions.find(a => a.sessionId === s.sessionId));
-          // Prefer API data for sessions that exist in both
-          const merged = [...localOnly, ...apiSessions];
-
-          setSessions(merged);
-          // Keep persisted currentSessionId (don't overwrite)
-        } else {
-          // Subsequent loads: update from API
-          setSessions(apiSessions);
-        }
-      } catch { /* silently ignore */ }
+        setSessions(merged);
+        // Keep persisted currentSessionId (don't overwrite)
+      }).catch(() => {});
     };
-    fetchSessions();
+
+    // Use setTimeout to defer past the initial hydration burst
+    const timer = setTimeout(doMerge, 100);
+    return () => clearTimeout(timer);
   }, [mounted, setSessions]);
 
   // Update contextual prompts

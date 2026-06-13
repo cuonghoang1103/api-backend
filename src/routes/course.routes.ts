@@ -186,6 +186,8 @@ async function serializeCourse(
     avgRating: Number(course.avgRating),
     requirements: course.requirements,
     whatYouLearn: course.whatYouLearn,
+    startDate: course.startDate,
+    endDate: course.endDate,
     status: course.status,
     createdAt: course.createdAt,
     updatedAt: course.updatedAt,
@@ -396,13 +398,18 @@ router.get('/admin/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, r
   } catch (error) { next(error); }
 });
 
-router.get('/semester/:semesterId', async (req, res: Response<ApiResponse>, next) => {
+router.get('/semester/:semesterId', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
   try {
     const semesterId = parseInt(req.params.semesterId, 10);
+    // Admins can opt-in to see DRAFT courses (e.g. while editing in
+    // /admin/academy) by passing ?includeDraft=true. The public
+    // /academy page never sets this, so it still only ever sees
+    // PUBLISHED courses.
+    const includeDraft = String(req.query.includeDraft || '').toLowerCase() === 'true';
     const courses = await prisma.course.findMany({
       where: {
         semesterId,
-        status: 'PUBLISHED',
+        ...(includeDraft ? {} : { status: 'PUBLISHED' }),
       },
       orderBy: [
         { courseCode: 'asc' },
@@ -448,6 +455,8 @@ router.post('/', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Resp
         isPublished: status === 'PUBLISHED',
         requirements: toNullableString(req.body.requirements),
         whatYouLearn: toNullableString(req.body.whatYouLearn),
+        startDate: toOptionalDate(req.body.startDate) ?? null,
+        endDate: toOptionalDate(req.body.endDate) ?? null,
         status,
         publishedAt,
       },
@@ -494,6 +503,8 @@ router.put('/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Re
         ...(req.body.isFeatured !== undefined ? { isFeatured: Boolean(req.body.isFeatured) } : {}),
         ...(req.body.requirements !== undefined ? { requirements: toNullableString(req.body.requirements) } : {}),
         ...(req.body.whatYouLearn !== undefined ? { whatYouLearn: toNullableString(req.body.whatYouLearn) } : {}),
+        ...(req.body.startDate !== undefined ? { startDate: toOptionalDate(req.body.startDate) ?? null } : {}),
+        ...(req.body.endDate !== undefined ? { endDate: toOptionalDate(req.body.endDate) ?? null } : {}),
         ...(req.body.status !== undefined ? { status, isPublished: status === 'PUBLISHED', publishedAt } : {}),
       },
     });

@@ -342,7 +342,11 @@ export const contactApi = {
 // Course Categories API
 export const academyApi = {
   getSemesters: () => api.get('/academy/semesters'),
-  getCoursesBySemester: (semesterId: number) => api.get(`/courses/semester/${semesterId}`),
+  // When called from the admin panel we want to see DRAFT courses too
+  // (the user is editing). The public /academy page never sets this
+  // flag, so it still only ever sees PUBLISHED courses.
+  getCoursesBySemester: (semesterId: number, opts?: { includeDraft?: boolean }) =>
+    api.get(`/courses/semester/${semesterId}`, { params: opts?.includeDraft ? { includeDraft: 'true' } : {} }),
   getLessonAssignments: (lessonId: number) => api.get(`/courses/lessons/${lessonId}/assignments`),
   submitAssignment: (data: { assignmentId: number; submissionUrl: string; notes?: string }) =>
     api.post('/courses/assignments/submit', data),

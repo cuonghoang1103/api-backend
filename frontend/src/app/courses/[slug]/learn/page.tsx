@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ChevronLeft, ChevronRight, CheckCircle, Circle, Lock, Menu, X,
-  Download, BookOpen, Loader2, Play, ChevronDown, ChevronUp, ArrowLeft
+  Download, BookOpen, Loader2, Play, ChevronDown, ChevronUp, ArrowLeft,
+  Code2, ExternalLink, FileText, Github
 } from 'lucide-react';
 import { coursesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -19,6 +20,19 @@ function formatDuration(seconds: number): string {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+// Normalize a YouTube watch / share / short URL into the canonical
+// embed form so we can play it inside an <iframe> on the learn page.
+function toEmbedUrl(raw?: string): string {
+  if (!raw) return '';
+  if (raw.includes('youtube.com/embed/') || raw.includes('youtube-nocookie.com/embed/')) return raw;
+  const watchMatch = raw.match(/[?&]v=([^&]+)/);
+  if (watchMatch?.[1]) return `https://www.youtube.com/embed/${watchMatch[1]}`;
+  const shortMatch = raw.match(/youtu\.be\/([^?&]+)/);
+  if (shortMatch?.[1]) return `https://www.youtube.com/embed/${shortMatch[1]}`;
+  if (/^[a-zA-Z0-9_-]{6,}$/.test(raw)) return `https://www.youtube.com/embed/${raw}`;
+  return raw;
 }
 
 interface FlatLesson {
@@ -77,10 +91,15 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
       const progRes = await coursesApi.getProgress(data.id);
       setProgress(progRes.data.data || []);
 
-      // Pick first lesson or last accessed
+      // Pick first lesson or last accessed, honouring ?lessonId= in URL
       if (data.sections && data.sections.length > 0) {
-        const firstLesson = data.sections[0].lessons?.[0];
-        if (firstLesson) selectLesson(firstLesson);
+        const requestedLessonId = typeof window !== 'undefined'
+          ? Number(new URLSearchParams(window.location.search).get('lessonId')) || null
+          : null;
+        const allLessons = data.sections.flatMap(s => s.lessons || []);
+        const target = (requestedLessonId && allLessons.find(l => l.id === requestedLessonId))
+          || allLessons[0];
+        if (target) selectLesson(target);
       }
       } catch {
         toast.error('Unable to load course');
@@ -282,19 +301,51 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
         <main className="flex-1 overflow-y-auto">
           {currentLesson ? (
             <div className="max-w-4xl mx-auto px-4 py-8">
-              {/* Video */}
-              {currentLesson.videoUrl && (
+              {/* Video — supports YouTube embed + direct file (mp4/webm)
+                  based on videoPlatform. Falls back to a clickable
+                  thumbnail if we don't have a playble URL at all. */}
+              {(currentLesson.detail?.videoUrl || currentLesson.videoUrl) && (
                 <div className="aspect-video bg-black rounded-2xl overflow-hidden mb-6">
-                  <video
-                    key={videoKey}
-                    src={currentLesson.videoUrl}
-                    controls
-                    autoPlay
-                    className="w-full h-full"
-                    onEnded={() => {
-                      if (!isCompleted(currentLesson.id)) markComplete();
-                    }}
-                  />
+                  {(() => {
+                    const platform = currentLesson.detail?.videoPlatform || currentLesson.videoPlatform || 'EMBED';
+                    const url = currentLesson.detail?.videoUrl || currentLesson.videoUrl || '';
+                    if (platform === 'DIRECT' || /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url) || url.startsWith('blob:')) {
+                      return (
+                        <video
+                          key={videoKey}
+                          src={url}
+                          controls
+                          autoPlay
+                          className="w-full h-full"
+                          onEnded={() => {
+                            if (!isCompleted(currentLesson.id)) markComplete();
+                          }}
+                        />
+                      );
+                    }
+                    // YouTube / embed (default) — use embed URL so the
+                    // student can watch inside the web app, not be sent
+                    // off to youtube.com.
+                    const embedUrl = toEmbedUrl(url);
+                    return (
+                      <iframe
+                        key={videoKey}
+                        src={embedUrl}
+                        title={currentLesson.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        className="w-full h-full"
+                        onLoad={() => {
+                          // YouTube iframes don't fire 'ended', so we
+                          // mark complete optimistically after a small
+                          // delay; the user can always toggle manually.
+                          if (!isCompleted(currentLesson.id)) {
+                            window.setTimeout(() => markComplete(), 1500);
+                          }
+                        }}
+                      />
+                    );
+                  })()}
                 </div>
               )}
 
@@ -336,6 +387,47 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                     <h3 className="font-semibold text-text-primary">Lesson Content</h3>
                   </div>
                   <div className="text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentLesson.content) }} />
+                </div>
+              )}
+
+              {/* Teaching notes — instructor's markdown notes attached
+                  to the lesson (LessonDetail.teachingNotes). Renders as
+                  sanitized HTML. */}
+              {currentLesson.detail?.teachingNotes && (
+                <div className="bg-darkcard border border-darkborder/50 rounded-2xl p-6 mb-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <FileText className="w-5 h-5 text-neon-violet" />
+                    <h3 className="font-semibold text-text-primary">Ghi chú giảng dạy</h3>
+                  </div>
+                  <div
+                    className="text-text-secondary leading-relaxed prose prose-invert max-w-none"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentLesson.detail.teachingNotes) }}
+                  />
+                </div>
+              )}
+
+              {/* GitHub source code link — single button, large and
+                  obvious. New tab so we don't kick the student out of
+                  the player. */}
+              {currentLesson.detail?.sourceCodeUrl && (
+                <div className="bg-darkcard border border-darkborder/50 rounded-2xl p-6 mb-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Code2 className="w-5 h-5 text-neon-violet" />
+                    <h3 className="font-semibold text-text-primary">Source code</h3>
+                  </div>
+                  <a
+                    href={currentLesson.detail.sourceCodeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neon-indigo/10 text-neon-indigo border border-neon-indigo/30 hover:bg-neon-indigo/20 transition-colors text-sm font-medium"
+                  >
+                    <Github className="w-4 h-4" />
+                    Xem source trên GitHub
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                  <p className="text-xs text-text-muted mt-2 break-all">
+                    {currentLesson.detail.sourceCodeUrl}
+                  </p>
                 </div>
               )}
 

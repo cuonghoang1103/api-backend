@@ -98,6 +98,22 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
             <p className="text-xs text-text-muted line-clamp-2 mb-4 flex-1">{course.shortDescription}</p>
           )}
 
+          {/* Schedule — show start/end dates for FPT academy courses
+              (and any other course that has them set). Helps students
+              know when the cohort opens/closes. */}
+          {(course.startDate || course.endDate) && (
+            <div className="text-xs text-text-muted mb-3 px-3 py-2 rounded-lg bg-darkbg border border-darkborder/40">
+              <span className="text-neon-violet font-medium">Khai giảng: </span>
+              {course.startDate
+                ? new Date(course.startDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                : '—'}
+              <span className="mx-2 text-text-muted/50">→</span>
+              {course.endDate
+                ? new Date(course.endDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                : '—'}
+            </div>
+          )}
+
           {/* Meta row */}
           <div className="flex items-center gap-3 text-xs text-text-muted mb-4">
             <div className="flex items-center gap-1">

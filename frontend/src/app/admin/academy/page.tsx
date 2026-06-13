@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { BookOpen, ChevronDown, ChevronRight, ClipboardList, Code2, ExternalLink, FileText, FolderTree, GraduationCap, Star, Image as ImageIcon, Link2, Pencil, Plus, Save, Settings, Trash2, Video, X } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronRight, ClipboardList, Code2, ExternalLink, FileText, FolderTree, GraduationCap, Star, Image as ImageIcon, Link2, Pencil, Plus, Save, Send, Settings, Trash2, Video, X } from 'lucide-react';
 import { academyApi, adminCoursesApi } from '@/lib/api';
 import type { Assignment, Course, LessonDto, Semester, SubmissionWithUser } from '@/types';
 import ImageUpload from '@/components/admin/ImageUpload';
@@ -161,6 +161,8 @@ interface CourseFormState {
   status: string;
   requirements: string;
   whatYouLearn: string;
+  startDate: string;
+  endDate: string;
 }
 
 interface SectionFormState {
@@ -216,6 +218,8 @@ const emptyCourse: CourseFormState = {
   status: 'DRAFT',
   requirements: '',
   whatYouLearn: '',
+  startDate: '',
+  endDate: '',
 };
 
 function buildEmptyLesson(sortOrder: number): LessonFormState {
@@ -273,7 +277,7 @@ export default function AdminAcademyPage() {
   useEffect(() => {
     if (!selectedSemesterId) return;
     setLoadingCourses(true);
-    academyApi.getCoursesBySemester(selectedSemesterId)
+    academyApi.getCoursesBySemester(selectedSemesterId, { includeDraft: true })
       .then((res) => setCourses(res.data.data || []))
       .catch(() => toast.error('Không tải được môn học theo kỳ'))
       .finally(() => setLoadingCourses(false));
@@ -313,6 +317,8 @@ export default function AdminAcademyPage() {
           status: course.status || 'DRAFT',
           requirements: course.requirements || '',
           whatYouLearn: course.whatYouLearn || '',
+          startDate: course.startDate ? course.startDate.slice(0, 10) : '',
+          endDate: course.endDate ? course.endDate.slice(0, 10) : '',
         });
 
         const mappedSections = (course.sections || []).map((section, sectionIndex) => ({
@@ -456,6 +462,8 @@ export default function AdminAcademyPage() {
         status: courseForm.status,
         requirements: courseForm.requirements,
         whatYouLearn: courseForm.whatYouLearn,
+        startDate: courseForm.startDate || null,
+        endDate: courseForm.endDate || null,
       };
 
       if (courseId) {
@@ -756,6 +764,30 @@ export default function AdminAcademyPage() {
     }
   };
 
+  // Flip a DRAFT course to PUBLISHED (and re-fetch the sidebar so the
+  // new status shows up). This is a thin wrapper around saveCourse +
+  // a status update, so we don't have to teach the user a separate
+  // "publish" button in two places.
+  const publishCourse = async () => {
+    if (!courseForm.id) {
+      toast.error('Hãy lưu môn học trước khi xuất bản');
+      return;
+    }
+    try {
+      setSavingCourse(true);
+      await adminCoursesApi.update(courseForm.id, { status: 'PUBLISHED' });
+      setCourseForm((prev) => ({ ...prev, status: 'PUBLISHED' }));
+      setCourses((prev) =>
+        prev.map((c) => (c.id === courseForm.id ? { ...c, status: 'PUBLISHED', isPublished: true } : c))
+      );
+      toast.success('Đã xuất bản môn học — sinh viên có thể truy cập ngay');
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Xuất bản thất bại');
+    } finally {
+      setSavingCourse(false);
+    }
+  };
+
   const removeCourse = async () => {
     if (!courseForm.id) return;
     try {
@@ -948,6 +980,11 @@ export default function AdminAcademyPage() {
                   <Trash2 className="w-4 h-4" /> Xóa
                 </button>
               )}
+              {courseForm.id && courseForm.status !== 'PUBLISHED' && (
+                <button onClick={publishCourse} disabled={savingCourse} className="px-4 py-2 rounded-xl border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 flex items-center gap-2 disabled:opacity-60">
+                  <Send className="w-4 h-4" /> Xuất bản
+                </button>
+              )}
               <button onClick={saveCourse} disabled={savingCourse} className="px-4 py-2 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white flex items-center gap-2 disabled:opacity-60">
                 <Save className="w-4 h-4" /> {savingCourse ? 'Đang lưu...' : 'Lưu'}
               </button>
@@ -965,6 +1002,56 @@ export default function AdminAcademyPage() {
               <option value="DRAFT">Draft</option>
               <option value="PUBLISHED">Published</option>
             </select>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div>
+              <label className="block text-xs text-text-muted mb-1.5">Ngày bắt đầu</label>
+              <input
+                type="date"
+                value={courseForm.startDate}
+                onChange={(e) => setCourseForm((prev) => ({ ...prev, startDate: e.target.value }))}
+                className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-text-muted mb-1.5">Ngày kết thúc</label>
+              <input
+                type="date"
+                value={courseForm.endDate}
+                onChange={(e) => setCourseForm((prev) => ({ ...prev, endDate: e.target.value }))}
+                className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-text-muted mb-1.5">Trình độ</label>
+              <select value={courseForm.level} onChange={(e) => setCourseForm((prev) => ({ ...prev, level: e.target.value }))} className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary">
+                <option value="BEGINNER">Cơ bản</option>
+                <option value="INTERMEDIATE">Trung cấp</option>
+                <option value="ADVANCED">Nâng cao</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs text-text-muted mb-1.5">Ngôn ngữ</label>
+              <select value={courseForm.language} onChange={(e) => setCourseForm((prev) => ({ ...prev, language: e.target.value }))} className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary">
+                <option value="Vietnamese">Tiếng Việt</option>
+                <option value="English">English</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <label className="flex items-center gap-2 px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary cursor-pointer">
+              <input type="checkbox" checked={courseForm.isFree} onChange={(e) => setCourseForm((prev) => ({ ...prev, isFree: e.target.checked }))} className="w-4 h-4 rounded border-darkborder bg-darkbg" />
+              <span className="text-sm">Miễn phí</span>
+            </label>
+            <label className="flex items-center gap-2 px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary cursor-pointer">
+              <input type="checkbox" checked={courseForm.isFeatured} onChange={(e) => setCourseForm((prev) => ({ ...prev, isFeatured: e.target.checked }))} className="w-4 h-4 rounded border-darkborder bg-darkbg" />
+              <span className="text-sm">Nổi bật</span>
+            </label>
+            <div className="md:col-span-2 flex items-center px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-muted text-sm">
+              <span>{courseForm.startDate || 'Chưa có ngày bắt đầu'} → {courseForm.endDate || 'Chưa có ngày kết thúc'}</span>
+            </div>
           </div>
 
           <textarea value={courseForm.shortDescription} onChange={(e) => setCourseForm((prev) => ({ ...prev, shortDescription: e.target.value }))} rows={3} placeholder="Mô tả ngắn" className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Play, CheckCircle, Lock, FileText, Clock } from 'lucide-react';
+import Link from 'next/link';
 import type { CourseSection } from '@/types';
 import { useState } from 'react';
 
@@ -26,6 +27,12 @@ interface CurriculumProps {
   sections: CourseSection[];
   enrolled?: boolean;
   completedLessonIds?: number[];
+  /**
+   * Course slug — used to build the link to the lesson player.
+   * If omitted, lesson items are still rendered (locked state is
+   * honoured) but won't be clickable.
+   */
+  courseSlug?: string;
 }
 
 function formatLessonDuration(seconds: number) {
@@ -35,14 +42,22 @@ function formatLessonDuration(seconds: number) {
   return `0:${secs}`;
 }
 
-function LessonItem({ lesson, enrolled, index }: { lesson: LessonItemData; enrolled?: boolean; index: number }) {
+function LessonItem({
+  lesson,
+  enrolled,
+  index,
+  href,
+}: {
+  lesson: LessonItemData;
+  enrolled?: boolean;
+  index: number;
+  href?: string;
+}) {
   const isFreePreview = lesson.isFreePreview;
   const isLocked = !enrolled && !isFreePreview;
 
-  return (
-    <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-      isLocked ? 'opacity-60' : 'hover:bg-white/5 cursor-pointer'
-    }`}>
+  const inner = (
+    <>
       <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
         lesson.isCompleted
           ? 'bg-green-500/20 text-green-400'
@@ -77,11 +92,32 @@ function LessonItem({ lesson, enrolled, index }: { lesson: LessonItemData; enrol
           {formatLessonDuration(lesson.videoDurationSeconds || 0)}
         </span>
       </div>
+    </>
+  );
+
+  // Render as a real link when we have a course slug and the lesson is
+  // accessible. Otherwise fall back to the static (non-clickable) row
+  // so the layout stays consistent.
+  if (href && !isLocked) {
+    return (
+      <Link
+        href={href}
+        className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 cursor-pointer transition-colors"
+      >
+        {inner}
+      </Link>
+    );
+  }
+  return (
+    <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+      isLocked ? 'opacity-60' : 'hover:bg-white/5 cursor-pointer'
+    }`}>
+      {inner}
     </div>
   );
 }
 
-export default function Curriculum({ sections, enrolled, completedLessonIds }: CurriculumProps) {
+export default function Curriculum({ sections, enrolled, completedLessonIds, courseSlug }: CurriculumProps) {
   const [openSections, setOpenSections] = useState<Set<number>>(new Set(sections.map(s => s.id)));
 
   const toggleSection = (id: number) => {
@@ -134,6 +170,7 @@ export default function Curriculum({ sections, enrolled, completedLessonIds }: C
                       lesson={{ ...lesson, isCompleted: completedLessonIds?.includes(lesson.id) }}
                       enrolled={enrolled}
                       index={li}
+                      href={courseSlug ? `/courses/${courseSlug}/learn?lessonId=${lesson.id}` : undefined}
                     />
                   ))}
                 </div>

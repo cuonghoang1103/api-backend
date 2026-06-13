@@ -416,6 +416,8 @@ export interface Course {
   avgRating: number;
   requirements?: string;
   whatYouLearn?: string;
+  startDate?: string;
+  endDate?: string;
   status: 'DRAFT' | 'PUBLISHED' | string;
   createdAt: string;
   categoryId?: number;

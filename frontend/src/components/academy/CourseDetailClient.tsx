@@ -330,7 +330,11 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
             {activeTab === 'curriculum' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 {course.sections && course.sections.length > 0 ? (
-                  <Curriculum sections={course.sections} enrolled={course.isEnrolled} />
+                  <Curriculum
+                    sections={course.sections}
+                    enrolled={course.isEnrolled}
+                    courseSlug={course.slug}
+                  />
                 ) : (
                   <div className="bg-darkcard border border-darkborder rounded-2xl p-12 text-center">
                     <BookOpen className="w-12 h-12 text-text-muted/30 mx-auto mb-3" />

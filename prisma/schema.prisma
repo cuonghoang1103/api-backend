@@ -404,6 +404,8 @@ model Course {
   avgRating            Decimal   @default(0) @db.Decimal(3, 2)
   requirements         String?   @db.Text
   whatYouLearn         String?   @map("what_you_learn") @db.Text
+  startDate            DateTime? @map("start_date")
+  endDate              DateTime? @map("end_date")
   status               String    @default("DRAFT") @db.VarChar(20)
   createdAt            DateTime  @default(now()) @map("created_at")
   updatedAt            DateTime  @updatedAt @map("updated_at")

@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { BookOpen, Code2, FileText, Loader2, PlayCircle, Save, Search, Video } from 'lucide-react';
+import { BookOpen, Code2, ExternalLink, FileText, Loader2, PlayCircle, Save, Search, Video } from 'lucide-react';
+import Link from 'next/link';
 import { academyApi, adminCoursesApi } from '@/lib/api';
 import type { Semester, Course } from '@/types';
 import RichTextEditor from '@/components/admin/RichTextEditor';
@@ -68,7 +69,7 @@ export default function AdminLessonsPage() {
     setSelectedCourseId(undefined);
     setLessons([]);
     setForm(emptyLesson);
-    academyApi.getCoursesBySemester(selectedSemesterId)
+    academyApi.getCoursesBySemester(selectedSemesterId, { includeDraft: true })
       .then((res) => setCourses(res.data.data || []))
       .catch(() => toast.error('Không tải được môn học'))
       .finally(() => setLoadingCourses(false));
@@ -234,13 +235,23 @@ export default function AdminLessonsPage() {
                   <h1 className="text-xl font-heading font-bold text-text-primary mt-1">{form.title}</h1>
                   <p className="text-sm text-text-muted mt-1">{form.courseTitle} — {form.courseCode}</p>
                 </div>
-                <button
-                  onClick={saveLesson}
-                  disabled={saving}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white flex items-center gap-2 disabled:opacity-60"
-                >
-                  <Save className="w-4 h-4" /> {saving ? 'Đang lưu...' : 'Lưu'}
-                </button>
+                <div className="flex items-center gap-2">
+                  {selectedCourseId && (
+                    <Link
+                      href="/admin/academy"
+                      className="px-4 py-2.5 rounded-xl border border-darkborder text-text-secondary hover:border-neon-violet hover:text-neon-violet flex items-center gap-2 text-sm"
+                    >
+                      <ExternalLink className="w-4 h-4" /> Mở course builder
+                    </Link>
+                  )}
+                  <button
+                    onClick={saveLesson}
+                    disabled={saving}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white flex items-center gap-2 disabled:opacity-60"
+                  >
+                    <Save className="w-4 h-4" /> {saving ? 'Đang lưu...' : 'Lưu'}
+                  </button>
+                </div>
               </div>
 
               <div className="grid gap-4 lg:grid-cols-2">

@@ -18,19 +18,27 @@ function ChatScrollStyles() {
     style.textContent = `
       .chat-messages-scroll {
         scrollbar-width: thin;
-        scrollbar-color: rgba(34, 211, 238, 0.3) transparent;
+        scrollbar-color: rgba(34, 211, 238, 0.6) rgba(13, 17, 23, 0.8);
       }
-      .chat-messages-scroll::-webkit-scrollbar { width: 4px; }
-      .chat-messages-scroll::-webkit-scrollbar-track { background: transparent; }
+      .chat-messages-scroll::-webkit-scrollbar { width: 8px; }
+      .chat-messages-scroll::-webkit-scrollbar-track {
+        background: rgba(13, 17, 23, 0.8);
+        border-radius: 4px;
+        margin: 4px 0;
+      }
       .chat-messages-scroll::-webkit-scrollbar-thumb {
-        background: rgba(34, 211, 238, 0.3);
-        border-radius: 2px;
+        background: rgba(34, 211, 238, 0.5);
+        border-radius: 4px;
+        border: 2px solid rgba(13, 17, 23, 0.8);
       }
       .chat-messages-scroll::-webkit-scrollbar-thumb:hover {
-        background: rgba(34, 211, 238, 0.55);
+        background: rgba(34, 211, 238, 0.75);
       }
       .chat-messages-scroll::-webkit-scrollbar-thumb:active {
-        background: rgba(34, 211, 238, 0.8);
+        background: rgba(34, 211, 238, 1);
+      }
+      .chat-messages-scroll::-webkit-scrollbar-corner {
+        background: transparent;
       }
     `;
     document.head.appendChild(style);
@@ -59,7 +67,7 @@ function MechThinkingIndicator() {
         </div>
       </div>
       <div className="inline-flex items-center gap-2 px-4 py-3 rounded-xl rounded-tl-sm bg-[#0d1117]/80 border border-[#22d3ee]/15 data-card-glow-cyan">
-        <span className="text-xs text-[#22d3ee] font-mono">[SYS] Processing...</span>
+        <span className="text-xs text-[#22d3ee] font-mono">[CuongMini] Processing...</span>
         <div className="flex gap-1">
           {[0, 1, 2].map((i) => (
             <motion.div
@@ -154,7 +162,7 @@ function MessageBubble({ msg, isStreaming, isLastAssistant }: {
               {(() => {
                 const raw = msg.content ?? '';
                 if (!raw.trim()) {
-                  return <span className="text-[#64748b] italic">[AI đang xử lý...]</span>;
+                  return <span className="text-[#64748b] italic">[CuongMini đang xử lý...]</span>;
                 }
                 return (
                   <ReactMarkdown

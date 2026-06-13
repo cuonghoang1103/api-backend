@@ -1,11 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import NavigationDock from './NavigationDock';
-
-const DOCK_WIDTH = 220;
-const DOCK_TOGGLE_OFFSET = 52; // toggle button width + gap
 
 export default function DockLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -25,21 +21,15 @@ export default function DockLayout({ children }: { children: React.ReactNode }) 
     });
   };
 
-  // Use transform: translateX() instead of paddingLeft to avoid layout reflow.
-  // transform is GPU-accelerated and does NOT cause style recalculation.
   return (
-    <>
+    <div className="flex min-h-screen w-full overflow-x-hidden">
+      {/* Dock + toggle button — both rendered by NavigationDock */}
       <NavigationDock isOpen={isSidebarOpen} onToggle={toggleDock} />
 
-      <motion.div
-        className="relative"
-        animate={{
-          x: isSidebarOpen ? DOCK_WIDTH + DOCK_TOGGLE_OFFSET : 0,
-        }}
-        transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-      >
+      {/* Main content: takes remaining width */}
+      <main className="flex-1 min-w-0">
         {children}
-      </motion.div>
-    </>
+      </main>
+    </div>
   );
 }

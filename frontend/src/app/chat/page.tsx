@@ -92,11 +92,11 @@ function ChatWelcome({ prompts, onSelect, isLoading }: {
       </motion.div>
 
       <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[#f8fafc] mb-3 font-mono tracking-tight">
-        &gt; <span className="text-[#22d3ee]">Ai_CuongMini</span>
+        &gt; <span className="text-[#22d3ee]">CuongMini</span>
         <span className="text-[#64748b]">.ready()</span>
       </h2>
       <p className="text-[#94a3b8] mb-8 max-w-lg font-mono text-sm">
-        <span className="text-[#22d3ee]">//</span> RAG-powered AI assistant — queries CuongHoang's portfolio, skills, projects &amp; blog.
+        <span className="text-[#22d3ee]">//</span> CuongMini — RAG-powered AI assistant by CuongHoangDev.
       </p>
 
       <SuggestedPrompts prompts={prompts} onSelect={onSelect} isLoading={isLoading} />
@@ -322,7 +322,6 @@ export default function ChatPage() {
 
       const decoder = new TextDecoder();
       let buffer = '';
-      let hasError = false;
       let errorMsg = '';
 
       while (true) {
@@ -338,49 +337,35 @@ export default function ChatPage() {
           const raw = line.slice(6).trim();
           if (!raw || raw === '[DONE]') continue;
 
-          // DEBUG: log every raw SSE frame so we can see what's arriving
-          console.log('[Chat] SSE Raw Frame:', raw);
-
           try {
             const data = JSON.parse(raw);
 
-            // Backend sends: {"type":"connected","sessionId":"..."} | {"type":"chunk","text":"..."} | {"type":"done",...} | {"type":"error",...}
             if (data.type === 'connected') {
               if (data.sessionId && !resolvedSessionId) resolvedSessionId = data.sessionId;
               continue;
             }
             if (data.type === 'done') continue;
 
-            // Only treat explicit error frames as errors — not chunks containing the word "error"
             if (data.type === 'error') {
               errorMsg += data.error || '';
               continue;
             }
 
-            // chunk: extract text from the correct key
             const text = data.text ?? data.content ?? '';
             if (text) {
               assistantContent += text;
               updateLastAssistantMessage(sessionId, assistantContent);
             }
           } catch {
-            // Raw content fallback
             if (raw) {
               assistantContent += raw;
               updateLastAssistantMessage(sessionId, assistantContent);
             }
           }
         }
-
-        // Guard: if we accumulated nothing but there was no error, show a fallback so bubble is never empty
-        if (!assistantContent && !hasError && !errorMsg) {
-          console.warn('[Chat] No content received, using fallback');
-          assistantContent = 'Xin lỗi, mình chưa nhận được phản hồi từ AI. Bạn thử hỏi lại nhé!';
-          updateLastAssistantMessage(sessionId, assistantContent);
-        }
       }
 
-      if (hasError || errorMsg) {
+      if (errorMsg) {
         const staticResp = findStaticResponse(text);
         const responseContent = staticResp?.response || getDefaultGreeting();
         updateLastAssistantMessage(sessionId, responseContent);

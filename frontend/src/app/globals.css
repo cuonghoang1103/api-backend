@@ -672,6 +672,26 @@
   background: rgba(34, 211, 238, 0.8);
 }
 
+/* Thin cyberpunk scrollbar — sidebar session list */
+aside > div:last-of-type,
+aside [class*="session"] {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.3) transparent;
+}
+aside ::-webkit-scrollbar {
+  width: 4px;
+}
+aside ::-webkit-scrollbar-track {
+  background: transparent;
+}
+aside ::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.3);
+  border-radius: 2px;
+}
+aside ::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 238, 0.55);
+}
+
 /* ── Neon shimmer on prompt cards ───────────────────────────── */
 @keyframes neon-shimmer {
   0%   { background-position: -200% center; }

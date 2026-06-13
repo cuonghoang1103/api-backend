@@ -116,7 +116,7 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
         </div>
 
         <p className="text-[11px] text-[#64748b]/50 text-center mt-1.5 font-mono">
-          <span className="text-[#22d3ee]/40">//</span> Press Enter to execute &bull; Shift+Enter for new line &bull; AI responses may be incorrect
+          <span className="text-[#22d3ee]/40">//</span> Press Enter to execute &bull; Shift+Enter for new line &bull; CuongMini responses may be incorrect
         </p>
       </div>
     </motion.div>

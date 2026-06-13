@@ -36,6 +36,11 @@ nginx/ssl/
 # Backups
 /opt/cuonghoangdev/backups/
 
+# Sensitive backup files (credentials, secrets)
+BACKUP*.txt
+*CREDENTIALS*.txt
+*BACKUP*.txt
+
 # Docker
 .dockerignore
 !frontend/.dockerignore

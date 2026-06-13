@@ -100,7 +100,7 @@ function ChatBubble({ msg, isLastAssistant, isStreaming }: {
         {/* Terminal path */}
         {!isUser && (
           <div className="flex items-center gap-1 mb-0.5 px-1">
-            <span className="text-[9px] font-mono text-[#22d3ee]/50">ai@cuongmini-os:~/inference$</span>
+            <span className="text-[9px] font-mono text-[#22d3ee]/50">cuongmini@cuongmini-os:~/inference$</span>
           </div>
         )}
 

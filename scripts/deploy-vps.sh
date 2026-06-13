@@ -21,12 +21,47 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HEALTH_URL="http://localhost:3001/health"
 MAX_RETRIES=18
 RETRIES_INTERVAL=10
+COMPOSE_PROJECT="repo"
+# Use -p flag to force the compose project name. The containers and
+# volumes on this VPS were originally created by a `docker compose up`
+# invocation that defaulted to project name = directory name (`repo`),
+# not `cuonghoangdev`. Using `-p repo` keeps us consistent with those
+# existing labels and the `cuonghoangdev_*` container_name / volume_name
+# values defined in docker-compose.yml.
+DC="docker compose -p ${COMPOSE_PROJECT}"
 
-# ─── Helpers ────────────────────────────────────────────────
+# ─── Helpers (must be defined before first use) ────────────
 info()  { echo "[$(date '+%H:%M:%S')] [INFO]  $1"; }
 ok()    { echo "[$(date '+%H:%M:%S')] [✅ OK]  $1"; }
 warn()  { echo "[$(date '+%H:%M:%S')] [WARN]  $1"; }
 fail()  { echo "[$(date '+%H:%M:%S')] [❌ FAIL] $1"; }
+
+# ─── Source production env ─────────────────────────────────
+# The compose file references ${DATABASE_URL}, ${JWT_SECRET}, etc. via
+# `environment:` blocks, which take precedence over `env_file:` entries
+# when the host shell variable is empty. Source the production env file
+# so those variables are populated for this deploy.
+if [ -f /opt/cuonghoangdev/.env ]; then
+    # Some lines in /opt/cuonghoangdev/.env are malformed (e.g. a bare
+    # API key with no `=` prefix). `source` aborts on those, so we wrap
+    # it in a subshell that ignores non-zero exit codes and only exports
+    # the variables that are well-formed `KEY=VALUE` pairs.
+    set +e
+    while IFS='=' read -r key value; do
+        # Skip blanks, comments, and lines without `=`
+        [ -z "$key" ] && continue
+        case "$key" in '#'*) continue ;; esac
+        # Only export well-formed names (letters/digits/underscore)
+        if [[ "$key" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]]; then
+            # Strip optional surrounding quotes from value
+            eval "export ${key}=${value}"
+        fi
+    done < /opt/cuonghoangdev/.env
+    set -e
+    info "Loaded env from /opt/cuonghoangdev/.env"
+else
+    warn "Production env file /opt/cuonghoangdev/.env not found!"
+fi
 
 # ─── Pre-flight ───────────────────────────────────────────
 cd "$REPO_DIR"
@@ -43,28 +78,34 @@ info "BuildKit: enabled (parallel builds + layer cache)"
 
 # ─── Step 1: Database health check ─────────────────────────
 info "Ensuring database is healthy..."
-if ! docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
-    warn "Postgres not ready, restarting..."
-    docker compose restart postgres
-    for i in $(seq 1 12); do
-        if docker compose exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
-            ok "Postgres is back up"
-            break
-        fi
-        echo "    Waiting for postgres... ($i/12)"
-        sleep 5
-    done
-fi
+# Only check if a running postgres container exists from a prior deploy.
+# On a fresh host (or after `down`), we'll let `up` start it.
+if docker ps --format '{{.Names}}' | grep -q '^cuonghoangdev_postgres$'; then
+    if ! $DC exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
+        warn "Postgres not ready, restarting..."
+        $DC restart postgres
+        for i in $(seq 1 12); do
+            if $DC exec -T postgres pg_isready -U postgres >/dev/null 2>&1; then
+                ok "Postgres is back up"
+                break
+            fi
+            echo "    Waiting for postgres... ($i/12)"
+            sleep 5
+        done
+    fi
 
-# Ensure database exists
-PG_DB="cuonghoangdev_db"
-docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${PG_DB}'" | grep -q 1 || \
-    docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE ${PG_DB}" 2>/dev/null || true
-ok "Database ready"
+    # Ensure database exists
+    PG_DB="cuonghoangdev_db"
+    $DC exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${PG_DB}'" | grep -q 1 || \
+        $DC exec -T postgres psql -U postgres -c "CREATE DATABASE ${PG_DB}" 2>/dev/null || true
+    ok "Database ready"
+else
+    info "No running postgres container yet; will be started by \`up\`"
+fi
 
 # ─── Step 2: Atomic build & restart (zero-downtime) ───────
 info "Building and deploying containers (zero-downtime)..."
-docker compose up -d --build --remove-orphans
+$DC up -d --build --remove-orphans
 ok "Containers built and started"
 
 # ─── Step 3: Health checks ─────────────────────────────────
@@ -83,7 +124,7 @@ echo ""
 
 if [ "$backend_ok" = false ]; then
     fail "Backend failed to become healthy within $((MAX_RETRIES * RETRIES_INTERVAL))s"
-    docker compose logs --tail=20 backend
+    $DC logs --tail=20 backend
     exit 1
 fi
 
@@ -100,12 +141,12 @@ done
 
 # Restart nginx to ensure it picks up new containers
 info "Restarting nginx..."
-docker compose restart nginx
+$DC restart nginx
 sleep 5
 
 # ─── Step 4: Database schema sync ─────────────────────────
 info "Syncing database schema..."
-PRISMA_OUTPUT=$(docker compose exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" 2>&1) || true
+PRISMA_OUTPUT=$($DC exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" 2>&1) || true
 if echo "$PRISMA_OUTPUT" | grep -qi "already in sync\|The database is already in sync"; then
     ok "Database schema in sync"
 elif echo "$PRISMA_OUTPUT" | grep -qi "error"; then
@@ -117,7 +158,7 @@ fi
 # ─── Step 5: Seed admin account (best-effort) ──────────────
 if [ -f scripts/seed-cuong03dx.cjs ]; then
     info "Seeding admin account..."
-    SEED_OUT=$(docker compose exec -T backend node /app/scripts/seed-cuong03dx.cjs 2>&1) || true
+    SEED_OUT=$($DC exec -T backend node /app/scripts/seed-cuong03dx.cjs 2>&1) || true
     if echo "$SEED_OUT" | grep -qi "error"; then
         warn "Seed issue (non-critical): $(echo "$SEED_OUT" | tail -1)"
     else
@@ -130,7 +171,7 @@ echo ""
 echo "========================================="
 echo "  Deployment Summary"
 echo "========================================="
-docker compose ps --format "table {{.Name}}\t{{.Status}}"
+$DC ps --format "table {{.Name}}\t{{.Status}}"
 echo ""
 ok "Deploy complete!"
 info "Frontend: https://cuongthai.com"

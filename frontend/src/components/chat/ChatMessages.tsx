@@ -298,11 +298,8 @@ export default function ChatMessages({ messages, isStreaming }: {
   return (
     <>
       <ChatScrollStyles />
-      {/* flex-1 = fill remaining vertical space inside the flex column (header + messages + input) */}
-      {/* min-w-0  = allow flex child to shrink below its content size (fixes flex overflow bug) */}
-      {/* overflow-y-auto = only THIS container scrolls when content exceeds its height */}
-      {/* Custom cyber scrollbar via ChatScrollStyles (injected <style> tag) */}
-      <div className="flex-1 min-w-0 overflow-y-auto chat-messages-scroll px-4 sm:px-6 py-6 space-y-6">
+      {/* Use outer scroll: flex-col with end anchor. Padding via px/py here. */}
+      <div className="flex-1 min-w-0 flex flex-col chat-messages-scroll px-4 sm:px-6 py-6 space-y-6">
       <AnimatePresence mode="popLayout">
         {messages.map((msg) => (
           <MessageBubble

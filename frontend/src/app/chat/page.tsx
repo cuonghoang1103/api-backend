@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Home } from 'lucide-react';
 import Lottie from 'lottie-react';
 import { ChevronRight, Wifi, WifiOff, AlertCircle, RefreshCw } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
@@ -450,7 +452,7 @@ export default function ChatPage() {
   }, [setCurrentSessionId, setSuggestedPrompts]);
 
   return (
-    <div className="flex h-[calc(100vh-6rem)] pt-24 overflow-hidden cyber-grid-bg">
+    <div className="flex h-screen overflow-hidden cyber-grid-bg pt-16 pb-16 sm:pb-0">
       {/* Matrix rain background */}
       <MatrixRain />
 
@@ -468,13 +470,22 @@ export default function ChatPage() {
         <motion.header
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="px-6 py-4 border-b border-[#22d3ee]/10 flex items-center gap-4 flex-shrink-0 bg-[#0d1117]/80 backdrop-blur-xl"
+          className="px-4 sm:px-6 py-3 sm:py-4 border-b border-[#22d3ee]/10 flex items-center gap-3 flex-shrink-0 bg-[#0d1117]/80 backdrop-blur-xl"
         >
+          {/* Home navigation */}
+          <Link
+            href="/"
+            className="flex items-center justify-center w-8 h-8 rounded-xl hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors shrink-0"
+            title="Back to home"
+          >
+            <Home className="w-4 h-4" />
+          </Link>
+
           <button
             onClick={() => setSidebarOpen(!isSidebarOpen)}
             className="p-2 rounded-lg hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors md:hidden"
           >
-            <ChevronRight className={`w-5 h-5 transition-transform ${isSidebarOpen ? 'rotate-180' : ''}`} />
+            <ChevronRight className={`w-4 h-4 transition-transform ${isSidebarOpen ? 'rotate-180' : ''}`} />
           </button>
 
           <div className="flex items-center gap-3">
@@ -560,9 +571,8 @@ export default function ChatPage() {
           </div>
         </motion.header>
 
-        {/* Messages or Welcome */}
-        {/* overflow-clip = clip MatrixRain but NOT the messages scrollbar */}
-        <div className="flex-1 overflow-clip relative chat-scanlines">
+        {/* Messages area — scrolls independently, scrollbar always visible */}
+        <div className="flex-1 min-w-0 overflow-y-auto chat-scanlines chat-messages-scroll">
           {!mounted ? (
             <div className="flex items-center justify-center h-full">
               <div className="animate-pulse text-[#64748b] font-mono">[ loading systems... ]</div>
@@ -587,7 +597,7 @@ export default function ChatPage() {
           )}
         </div>
 
-        {/* Input */}
+        {/* Input — always at bottom, never scrolls away */}
         <ChatInput onSend={sendMessage} isStreaming={isStreaming} />
       </main>
     </div>

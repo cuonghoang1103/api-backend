@@ -19,6 +19,16 @@ function slugify(value: string): string {
 
 // ─── Public Blog Routes ─────────────────────────────────────────────────────────
 
+function normalizePost(post: Record<string, unknown>) {
+  const tags = post.tags as Array<{ tag: { name: string } }> | undefined;
+  const _count = post._count as Record<string, unknown> | undefined;
+  return {
+    ...post,
+    tagNames: tags ? tags.map((pt) => pt.tag.name) : [],
+    commentCount: _count ? (_count.comments as number) ?? 0 : 0,
+  };
+}
+
 // GET /api/v1/blog/categories
 router.get('/categories', async (_req, res: Response<ApiResponse>, next) => {
   try {
@@ -55,9 +65,11 @@ router.get('/posts', async (req, res: Response<ApiResponse>, next) => {
       prisma.post.count({ where }),
     ]);
 
+    const normalizedPosts = posts.map((post) => normalizePost(post as unknown as Record<string, unknown>));
+
     res.json({
       success: true,
-      data: posts,
+      data: normalizedPosts,
       pagination: { page, limit: size, total, totalPages: Math.ceil(total / size) },
     });
   } catch (error) { next(error); }
@@ -70,9 +82,10 @@ router.get('/posts/featured', async (_req, res: Response<ApiResponse>, next) => 
       where: { status: 'PUBLISHED', isFeatured: true },
       take: 5,
       orderBy: { publishedAt: 'desc' },
-      include: { author: { select: { id: true, username: true, avatarUrl: true } }, category: true },
+      include: { author: { select: { id: true, username: true, avatarUrl: true } }, category: true, tags: { include: { tag: true } } },
     });
-    res.json({ success: true, data: posts });
+    const normalized = posts.map((p) => normalizePost(p as unknown as Record<string, unknown>));
+    res.json({ success: true, data: normalized });
   } catch (error) { next(error); }
 });
 
@@ -84,9 +97,10 @@ router.get('/posts/popular', async (req, res: Response<ApiResponse>, next) => {
       where: { status: 'PUBLISHED' },
       take: limit,
       orderBy: { viewCount: 'desc' },
-      include: { author: { select: { id: true, username: true, avatarUrl: true } }, category: true },
+      include: { author: { select: { id: true, username: true, avatarUrl: true } }, category: true, tags: { include: { tag: true } }, _count: { select: { comments: true } } },
     });
-    res.json({ success: true, data: posts });
+    const normalized = posts.map((p) => normalizePost(p as unknown as Record<string, unknown>));
+    res.json({ success: true, data: normalized });
   } catch (error) { next(error); }
 });
 
@@ -108,7 +122,9 @@ router.get('/posts/by-slug/:slug', async (req, res: Response<ApiResponse>, next)
 
     await prisma.post.update({ where: { id: post.id }, data: { viewCount: { increment: 1 } } });
 
-    res.json({ success: true, data: post });
+    const normalized = normalizePost(post as unknown as Record<string, unknown>);
+
+    res.json({ success: true, data: normalized });
   } catch (error) { next(error); }
 });
 
@@ -135,14 +151,16 @@ router.get('/posts/search', async (req, res: Response<ApiResponse>, next) => {
         skip,
         take: Number(size),
         orderBy: { publishedAt: 'desc' },
-        include: { category: true, tags: { include: { tag: true } } },
+        include: { category: true, tags: { include: { tag: true } }, _count: { select: { comments: true } } },
       }),
       prisma.post.count({ where }),
     ]);
 
+    const normalized = posts.map((p) => normalizePost(p as unknown as Record<string, unknown>));
+
     res.json({
       success: true,
-      data: posts,
+      data: normalized,
       pagination: { page: Number(page), limit: Number(size), total, totalPages: Math.ceil(total / Number(size)) },
     });
   } catch (error) { next(error); }

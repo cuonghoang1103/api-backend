@@ -633,13 +633,48 @@ router.get('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req, re
       }),
       prisma.project.count({ where }),
     ]);
+
+    const normalizedProjects = projects.map((p) => normalizeProject(p as unknown as Record<string, unknown>));
+
     res.json({
       success: true,
-      data: projects,
+      data: normalizedProjects,
       pagination: { page: pageNum, limit: sizeNum, total, totalPages: Math.ceil(total / sizeNum) },
     });
   } catch (error) { next(error); }
 });
+
+function normalizeProject(project: Record<string, unknown>) {
+  const rawImages = project.images;
+  let images: string[] = [];
+  if (typeof rawImages === 'string' && rawImages.trim()) {
+    try {
+      images = JSON.parse(rawImages);
+      if (!Array.isArray(images)) images = [];
+    } catch { images = []; }
+  } else if (Array.isArray(rawImages)) {
+    images = rawImages;
+  }
+
+  const rawTechStack = project.techStack;
+  let technologies: string[] = [];
+  if (typeof rawTechStack === 'string' && rawTechStack.trim()) {
+    technologies = rawTechStack.split(',').map((t: string) => t.trim()).filter(Boolean);
+  } else if (Array.isArray(rawTechStack)) {
+    technologies = rawTechStack;
+  }
+
+  const rawFeatured = (project as Record<string, unknown>).isFeatured;
+  const isFeatured = typeof rawFeatured === 'boolean' ? rawFeatured : false;
+
+  return {
+    ...project,
+    isFeatured,
+    featured: isFeatured,
+    technologies,
+    images,
+  };
+}
 
 // ─── POST /api/v1/admin/projects ─────────────────────────
 router.post('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
@@ -678,7 +713,8 @@ router.post('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req: a
       },
       include: { skills: { include: { skill: true } } },
     });
-    res.status(201).json({ success: true, data: project });
+    const normalized = normalizeProject(project as unknown as Record<string, unknown>);
+    res.status(201).json({ success: true, data: normalized });
   } catch (error) { next(error); }
 });
 
@@ -729,7 +765,8 @@ router.put('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
       },
       include: { skills: { include: { skill: true } } },
     });
-    res.json({ success: true, data: project });
+    const normalized = normalizeProject(project as unknown as Record<string, unknown>);
+    res.json({ success: true, data: normalized });
   } catch (error) { next(error); }
 });
 
@@ -754,7 +791,8 @@ router.patch('/projects/:id/toggle-featured', authenticate, requireAdmin('ROLE_A
       where: { id },
       data: { isFeatured: !existing.isFeatured },
     });
-    res.json({ success: true, data: project });
+    const normalized = normalizeProject(project as unknown as Record<string, unknown>);
+    res.json({ success: true, data: normalized });
   } catch (error) { next(error); }
 });
 

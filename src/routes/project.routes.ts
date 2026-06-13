@@ -5,6 +5,38 @@ import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
 
+function normalizeProject(project: Record<string, unknown>) {
+  const rawImages = project.images;
+  let images: string[] = [];
+  if (typeof rawImages === 'string' && rawImages.trim()) {
+    try {
+      images = JSON.parse(rawImages);
+      if (!Array.isArray(images)) images = [];
+    } catch { images = []; }
+  } else if (Array.isArray(rawImages)) {
+    images = rawImages;
+  }
+
+  const rawTechStack = project.techStack;
+  let technologies: string[] = [];
+  if (typeof rawTechStack === 'string' && rawTechStack.trim()) {
+    technologies = rawTechStack.split(',').map((t: string) => t.trim()).filter(Boolean);
+  } else if (Array.isArray(rawTechStack)) {
+    technologies = rawTechStack;
+  }
+
+  const rawFeatured = (project as Record<string, unknown>).isFeatured;
+  const isFeatured = typeof rawFeatured === 'boolean' ? rawFeatured : false;
+
+  return {
+    ...project,
+    isFeatured,
+    featured: isFeatured,
+    technologies,
+    images,
+  };
+}
+
 // ─── GET /api/v1/projects ─────────────────────────────
 router.get('/', async (req, res: Response<ApiResponse>, next) => {
   try {
@@ -32,9 +64,14 @@ router.get('/', async (req, res: Response<ApiResponse>, next) => {
       prisma.project.count({ where }),
     ]);
 
+    const normalizedProjects = projects.map((p) => {
+      const plain = p as unknown as Record<string, unknown>;
+      return normalizeProject(plain);
+    });
+
     res.json({
       success: true,
-      data: projects,
+      data: normalizedProjects,
       pagination: {
         page: pageNum,
         limit: sizeNum,
@@ -55,7 +92,8 @@ router.get('/featured', async (req, res: Response<ApiResponse>, next) => {
       orderBy: { createdAt: 'desc' },
       include: { skills: { include: { skill: true } } },
     });
-    res.json({ success: true, data: projects });
+    const normalized = projects.map((p) => normalizeProject(p as unknown as Record<string, unknown>));
+    res.json({ success: true, data: normalized });
   } catch (error) { next(error); }
 });
 
@@ -67,7 +105,8 @@ router.get('/:slug', async (req, res: Response<ApiResponse>, next) => {
       include: { skills: { include: { skill: true } } },
     });
     if (!project) throw new AppError('Project not found', 404);
-    res.json({ success: true, data: project });
+    const normalized = normalizeProject(project as unknown as Record<string, unknown>);
+    res.json({ success: true, data: normalized });
   } catch (error) { next(error); }
 });
 

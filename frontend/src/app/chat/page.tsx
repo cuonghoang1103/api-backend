@@ -221,7 +221,6 @@ export default function ChatPage() {
     let isNewLocalSession = false;
 
     if (!sessionId) {
-      // Create a new local session right away
       sessionId = `local_${Date.now()}`;
       const newSession: ChatSession = {
         id: Date.now(),
@@ -279,7 +278,6 @@ export default function ChatPage() {
           toast.info('Limited Mode: AI quota exceeded, using cached answers');
         }
 
-        // Update session title if this was a new local session
         if (isNewLocalSession) {
           const state = useChatStore.getState();
           const existing = state.sessions.find(s => s.sessionId === sessionId);
@@ -294,7 +292,6 @@ export default function ChatPage() {
         return;
       }
 
-      // Send to backend with sessionId (backend will create session if none exists)
       const res = await fetch(`/api/v1/ai/chat`, {
         method: 'POST',
         headers: {
@@ -342,14 +339,10 @@ export default function ChatPage() {
             const data = JSON.parse(raw);
 
             if (data.type === 'connected') {
-              if (data.sessionId && !resolvedSessionId) resolvedSessionId = data.sessionId;
+              if (data.sessionId) resolvedSessionId = data.sessionId;
               continue;
             }
-            if (data.type === 'done') continue;
-
-            if (data.type === 'error') {
-              continue;
-            }
+            if (data.type === 'done' || data.type === 'error') continue;
 
             const text = data.text ?? data.content ?? '';
             if (text) {
@@ -365,17 +358,17 @@ export default function ChatPage() {
         }
       }
 
-      // If backend returned a real sessionId, migrate local session to it
+      // Migrate to backend session if resolved
       if (resolvedSessionId) {
-        const sessionMsgs = useChatStore.getState().messages[sessionId] || [];
-        const migrated = sessionMsgs.map((m) => ({ ...m, sessionId: resolvedSessionId }));
-        setMessages(resolvedSessionId, migrated);
+        const localMessages = useChatStore.getState().messages[sessionId] || [];
 
-        // Replace local session with backend session
         if (isNewLocalSession || sessionId.startsWith('local_')) {
           removeSession(sessionId);
         }
-        setCurrentSessionId(resolvedSessionId);
+
+        // Merge messages into backend session (don't overwrite existing)
+        const existingBackendMessages = useChatStore.getState().messages[resolvedSessionId] || [];
+        const mergedMessages = [...existingBackendMessages, ...localMessages];
 
         const newSession: ChatSession = {
           id: Date.now(),
@@ -384,8 +377,19 @@ export default function ChatPage() {
           createdAt: new Date().toISOString(),
         };
         addSession(newSession);
+        setCurrentSessionId(resolvedSessionId);
+
+        // Store merged messages under resolvedSessionId
+        setMessages(resolvedSessionId, mergedMessages);
+        // Clear the old local session messages (already migrated)
+        if (sessionId !== resolvedSessionId) {
+          useChatStore.setState((state) => {
+            const { [sessionId]: _, ...rest } = state.messages;
+            return { messages: rest };
+          });
+        }
       } else {
-        // No backend sessionId: keep as local, update title
+        // No backend session: keep local, update title
         const state = useChatStore.getState();
         const existing = state.sessions.find(s => s.sessionId === sessionId);
         if (existing) {

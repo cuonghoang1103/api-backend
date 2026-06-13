@@ -10,7 +10,7 @@ const LS_KEY = 'cuong-music-v2';
 const HISTORY_KEY = 'cuong-music-history-v1';
 
 const MAX_HISTORY = 50;
-const SAVE_DEBOUNCE_MS = 5000;
+const SAVE_DEBOUNCE_MS = 1000;
 
 // ── Persisted state ────────────────────────────────────────────────────────────
 interface PersistedState {
@@ -23,15 +23,23 @@ interface PersistedState {
   lastPlaylistId: string | null;
 }
 
+function defaultPersisted(): PersistedState {
+  return { currentTrackId: null, currentTime: 0, volume: 0.7, isMuted: false, isShuffled: false, repeatMode: 'none', lastPlaylistId: null };
+}
+
 function loadPersisted(): PersistedState {
-  if (typeof window === 'undefined') {
-    return { currentTrackId: null, currentTime: 0, volume: 0.7, isMuted: false, isShuffled: false, repeatMode: 'none', lastPlaylistId: null };
-  }
+  if (typeof window === 'undefined') return defaultPersisted();
   try {
     const raw = localStorage.getItem(LS_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const safeTime = typeof parsed.currentTime === 'number' && Number.isFinite(parsed.currentTime) && parsed.currentTime > 0
+        ? parsed.currentTime
+        : 0;
+      return { ...defaultPersisted(), ...parsed, currentTime: safeTime };
+    }
   } catch { /* ignore */ }
-  return { currentTrackId: null, currentTime: 0, volume: 0.7, isMuted: false, isShuffled: false, repeatMode: 'none', lastPlaylistId: null };
+  return defaultPersisted();
 }
 
 // ── Recently played history ─────────────────────────────────────────────────────
@@ -83,6 +91,15 @@ function scheduleSave(getter: () => PersistedState) {
 function savePersisted(p: PersistedState) {
   if (typeof window === 'undefined') return;
   try { localStorage.setItem(LS_KEY, JSON.stringify(p)); } catch { /* ignore */ }
+}
+
+/** Immediately flush any pending debounced save (used on pause/unmount). */
+function flushSave(getter: () => PersistedState) {
+  if (saveTimer) {
+    clearTimeout(saveTimer);
+    saveTimer = null;
+  }
+  savePersisted(getter());
 }
 
 // ── helpers ────────────────────────────────────────────────────────────────────
@@ -178,7 +195,7 @@ export const useMusicStore = create<MusicState>()((set, get) => {
 
     setTracks: (tracks) => {
       const p = loadPersisted();
-      const { savedAllTracks } = get();
+      const { savedAllTracks, currentTrack } = get();
       const first = tracks[0] || null;
       let restored: Track | null = null;
       let restoredIdx = -1;
@@ -187,6 +204,9 @@ export const useMusicStore = create<MusicState>()((set, get) => {
         if (idx >= 0) { restored = tracks[idx]; restoredIdx = idx; }
       }
       const newSaved = savedAllTracks.length === 0 ? tracks : savedAllTracks;
+      // Preserve currentTime so reload restores the listening position
+      const isSameTrack = restored && currentTrack?.id === restored.id;
+      const restoredTime = isSameTrack ? get().currentTime : p.currentTime;
       set({
         tracks,
         allTracks: tracks,
@@ -194,10 +214,11 @@ export const useMusicStore = create<MusicState>()((set, get) => {
         queue: tracks,
         currentTrack: restored ?? first,
         currentIndex: restoredIdx >= 0 ? restoredIdx : (first ? 0 : -1),
+        currentTime: restoredTime,
         lastPlaylistId: null,
         smartShufflePool: [],
       });
-      savePersisted({ ...p, lastPlaylistId: null });
+      savePersisted({ ...p, lastPlaylistId: null, currentTime: restoredTime });
     },
 
     setAllTracks: (tracks) => {
@@ -266,7 +287,22 @@ export const useMusicStore = create<MusicState>()((set, get) => {
 
     togglePlay: () => set((s) => ({ isPlaying: !s.isPlaying })),
     play: () => set({ isPlaying: true }),
-    pause: () => set({ isPlaying: false }),
+    pause: () => {
+      set({ isPlaying: false });
+      // Persist position immediately so a reload/close captures the pause point
+      flushSave(() => {
+        const s = get();
+        return {
+          currentTrackId: s.currentTrack?.id ?? null,
+          currentTime: s.currentTime,
+          volume: s.volume,
+          isMuted: s.isMuted,
+          isShuffled: s.isShuffled,
+          repeatMode: s.repeatMode,
+          lastPlaylistId: s.lastPlaylistId,
+        };
+      });
+    },
 
     next: () => {
       const { tracks, currentIndex, repeatMode, isShuffled } = get();
@@ -398,7 +434,21 @@ export const useMusicStore = create<MusicState>()((set, get) => {
       set((s) => ({ tracks: s.tracks.map((t) => (t.id === id ? { ...t, audioUrl: '' } : t)) }));
     },
 
-    stop: () => set({ isPlaying: false, currentTime: 0 }),
+    stop: () => {
+      set({ isPlaying: false, currentTime: 0 });
+      flushSave(() => {
+        const s = get();
+        return {
+          currentTrackId: s.currentTrack?.id ?? null,
+          currentTime: 0,
+          volume: s.volume,
+          isMuted: s.isMuted,
+          isShuffled: s.isShuffled,
+          repeatMode: s.repeatMode,
+          lastPlaylistId: s.lastPlaylistId,
+        };
+      });
+    },
 
     restoreAllTracks: () => {
       const { savedAllTracks, currentTrack } = get();
@@ -456,3 +506,28 @@ export const useMusicStore = create<MusicState>()((set, get) => {
     },
   };
 });
+
+// ── Flush pending save on page unload ──────────────────────────────────────────
+if (typeof window !== 'undefined') {
+  // Avoid registering the listener multiple times in dev (HMR)
+  const w = window as Window & { __musicUnloadBound?: boolean };
+  if (!w.__musicUnloadBound) {
+    w.__musicUnloadBound = true;
+    const flushOnUnload = () => {
+      flushSave(() => {
+        const s = useMusicStore.getState();
+        return {
+          currentTrackId: s.currentTrack?.id ?? null,
+          currentTime: s.currentTime,
+          volume: s.volume,
+          isMuted: s.isMuted,
+          isShuffled: s.isShuffled,
+          repeatMode: s.repeatMode,
+          lastPlaylistId: s.lastPlaylistId,
+        };
+      });
+    };
+    window.addEventListener('beforeunload', flushOnUnload);
+    window.addEventListener('pagehide', flushOnUnload);
+  }
+}

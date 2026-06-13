@@ -38,30 +38,26 @@ import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
 
-// ─── OpenRouter OpenAI-compatible client ──────────────────────
-let _openai: OpenAI | null = null;
+// ─── Groq (OpenAI-compatible) client ─────────────────────────────
+let _groq: OpenAI | null = null;
 
-function getOpenAI(): OpenAI {
-  if (!_openai) {
-    const apiKey = process.env.OPENROUTER_API_KEY || config.openRouterApiKey;
+function getGroq(): OpenAI {
+  if (!_groq) {
+    const apiKey = process.env.GROQ_API_KEY || config.groqApiKey;
     if (!apiKey) {
       throw new AppError(
-        'OPENROUTER_API_KEY is not configured. Please set OPENROUTER_API_KEY in .env',
+        'GROQ_API_KEY is not configured. Please set GROQ_API_KEY in .env',
         503,
         'AI_NOT_CONFIGURED',
       );
     }
-    _openai = new OpenAI({
-      baseURL: 'https://openrouter.ai/api/v1/',
+    _groq = new OpenAI({
+      baseURL: 'https://api.groq.com/openai/v1',
       apiKey,
     });
   }
-  return _openai;
+  return _groq;
 }
-
-// ─── Model identifier ──────────────────────────────────────────
-// DeepSeek R1 Distill Qwen 32B via OpenRouter (VPS-friendly)
-const DEFAULT_MODEL = 'deepseek-ai/deepseek-r1-distill-qwen-32b';
 
 // ─── Session ID generator ────────────────────────────────────
 function generateSessionId(): string {
@@ -231,7 +227,7 @@ export class AIService {
 
   // ─── Non-streaming chat ─────────────────────────────────
   /**
-   * Gửi message đến Hugging Face DeepSeek, nhận response đầy đủ (không streaming).
+   * Gửi message đến Groq (OpenAI-compatible), nhận response đầy đủ (không streaming).
    * Dùng cho: fallback, serverless functions, batch processing.
    */
   async sendChat(context: ChatContext) {
@@ -251,10 +247,10 @@ export class AIService {
     }
 
     try {
-      const openai = getOpenAI();
+      const groq = getGroq();
 
-      const response = await openai.chat.completions.create({
-        model: DEFAULT_MODEL,
+      const response = await groq.chat.completions.create({
+        model: config.groqChatModel,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message },
@@ -272,15 +268,15 @@ export class AIService {
       return { text, sessionId };
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
-      console.error('[AIService] HuggingFace API error:', errMsg);
+      console.error('[AIService] Groq API error:', errMsg);
       throw err;
     }
   }
 
   // ─── Streaming chat (AsyncGenerator) ─────────────────────
   /**
-   * Stream chat response token-by-token from Hugging Face DeepSeek.
-   * Uses OpenAI SDK with stream: true for server-sent events.
+   * Stream chat response token-by-token from Groq.
+   * Uses OpenAI SDK with stream: true for real SSE streaming.
    */
   async *streamChat(
     context: ChatContext,
@@ -301,10 +297,10 @@ export class AIService {
     }
 
     try {
-      const openai = getOpenAI();
+      const groq = getGroq();
 
-      const stream = await openai.chat.completions.create({
-        model: DEFAULT_MODEL,
+      const stream = await groq.chat.completions.create({
+        model: config.groqChatModel,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message },
@@ -329,7 +325,7 @@ export class AIService {
       }
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
-      console.error('[AIService] HuggingFace streaming error:', errMsg);
+      console.error('[AIService] Groq streaming error:', errMsg);
       throw err;
     }
   }
@@ -557,13 +553,13 @@ export class AIService {
     });
   }
 
-  // ─── Reset OpenAI client cache ──────────────────────────────
+  // ─── Reset Groq client cache ──────────────────────────────
   /**
-   * Reset client cache. Dùng khi thay đổi model config.
+   * Reset Groq client cache. Dùng khi thay đổi API key hoặc model.
    */
   resetOpenAI(): void {
-    _openai = null;
-    console.log('[AIService] HuggingFace OpenAI client cache reset');
+    _groq = null;
+    console.log('[AIService] Groq client cache reset');
   }
 }
 

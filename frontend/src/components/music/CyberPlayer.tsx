@@ -229,11 +229,32 @@ export default function CyberPlayer() {
     : () => null;
 
   const handleProgressClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!progressRef.current) return;
+    if (!progressRef.current || !duration) return;
     const rect = progressRef.current.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     setCurrentTime(pct * duration);
   }, [duration, setCurrentTime]);
+
+  const handleProgressPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!progressRef.current || !duration) return;
+    e.preventDefault();
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    const rect = progressRef.current.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    setCurrentTime(pct * duration);
+  }, [duration, setCurrentTime]);
+
+  const handleProgressPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.buttons !== 1) return;
+    if (!progressRef.current || !duration) return;
+    const rect = progressRef.current.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    setCurrentTime(pct * duration);
+  }, [duration, setCurrentTime]);
+
+  const handleProgressPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+  }, []);
 
   const handleVolumeClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!volumeRef.current) return;
@@ -241,6 +262,27 @@ export default function CyberPlayer() {
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     setVolume(pct);
   }, [setVolume]);
+
+  const handleVolumePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!volumeRef.current) return;
+    e.preventDefault();
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    const rect = volumeRef.current.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    setVolume(pct);
+  }, [setVolume]);
+
+  const handleVolumePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.buttons !== 1) return;
+    if (!volumeRef.current) return;
+    const rect = volumeRef.current.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    setVolume(pct);
+  }, [setVolume]);
+
+  const handleVolumePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+  }, []);
 
   if (!currentTrack) {
     return (
@@ -357,7 +399,11 @@ export default function CyberPlayer() {
           <div
             ref={progressRef}
             onClick={handleProgressClick}
-            className="relative h-1.5 rounded-full cursor-crosshair group"
+            onPointerDown={handleProgressPointerDown}
+            onPointerMove={handleProgressPointerMove}
+            onPointerUp={handleProgressPointerUp}
+            onPointerCancel={handleProgressPointerUp}
+            className="relative h-1.5 rounded-full cursor-crosshair group touch-none select-none"
             style={{ background: C.progressBg }}
           >
             {/* Glow under progress */}
@@ -380,7 +426,7 @@ export default function CyberPlayer() {
             <motion.div
               className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
               style={{
-                left: `${progress}%`,
+                left: `calc(${progress}% - 6px)`,
                 background: C.text,
                 boxShadow: `0 0 10px ${C.primary}`,
               }}
@@ -546,7 +592,11 @@ export default function CyberPlayer() {
                     <div
                       ref={volumeRef}
                       onClick={handleVolumeClick}
-                      className="relative h-1.5 rounded-full cursor-crosshair"
+                      onPointerDown={handleVolumePointerDown}
+                      onPointerMove={handleVolumePointerMove}
+                      onPointerUp={handleVolumePointerUp}
+                      onPointerCancel={handleVolumePointerUp}
+                      className="relative h-1.5 rounded-full cursor-crosshair touch-none select-none"
                       style={{ background: C.progressBg }}
                     >
                       <div

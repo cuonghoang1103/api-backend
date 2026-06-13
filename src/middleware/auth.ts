@@ -94,8 +94,8 @@ export function requireRole(...roles: string[]) {
         throw new ForbiddenError('Account is locked');
       }
 
-      const userRoles = user.roles.map((ur) => ur.role.name);
-      const hasRole = roles.some((role) => userRoles.includes(role));
+      const userRoles = user.roles.map((ur) => ur.role.name.toUpperCase().replace('ROLE_', ''));
+      const hasRole = roles.some((r) => userRoles.includes(r.toUpperCase().replace('ROLE_', '')));
 
       if (!hasRole) {
         throw new ForbiddenError('Insufficient permissions');
@@ -145,8 +145,8 @@ export function requireAdmin(role: string = 'ROLE_ADMIN') {
         throw new ForbiddenError('Account is locked');
       }
 
-      const userRoles = user.roles.map((ur) => ur.role.name);
-      const hasRole = userRoles.includes(role) || userRoles.includes('ADMIN');
+      const userRoles = user.roles.map((ur) => ur.role.name.toUpperCase().replace('ROLE_', ''));
+      const hasRole = userRoles.includes(role.toUpperCase().replace('ROLE_', ''));
 
       if (!hasRole) {
         throw new ForbiddenError('Admin access required');

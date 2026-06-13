@@ -19,6 +19,93 @@ function isSafeCoverUrl(url: unknown): url is string {
 }
 
 // ============================================================
+// SeekBar — click + drag to seek. While dragging, the store
+// is updated locally so the visual thumb follows the pointer,
+// and the audio element is seeked once on release.
+// ============================================================
+function SeekBar({
+  currentTime, duration, onSeek, onActivity,
+}: {
+  currentTime: number;
+  duration: number;
+  onSeek: (time: number) => void;
+  onActivity: () => void;
+}) {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const [dragValue, setDragValue] = useState<number | null>(null);
+
+  const valueFromPointer = useCallback((clientX: number): number => {
+    const el = trackRef.current;
+    if (!el) return 0;
+    const rect = el.getBoundingClientRect();
+    if (rect.width <= 0) return 0;
+    const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    return pct * (duration || 0);
+  }, [duration]);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!duration || duration <= 0) return;
+    e.preventDefault();
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    const v = valueFromPointer(e.clientX);
+    setDragging(true);
+    setDragValue(v);
+    onSeek(v);
+    onActivity();
+  }, [duration, valueFromPointer, onSeek, onActivity]);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragging) return;
+    const v = valueFromPointer(e.clientX);
+    setDragValue(v);
+    onSeek(v);
+  }, [dragging, valueFromPointer, onSeek]);
+
+  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragging) return;
+    (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+    setDragging(false);
+    setDragValue(null);
+    onActivity();
+  }, [dragging, onActivity]);
+
+  const displayValue = dragging && dragValue !== null ? dragValue : currentTime;
+  const progress = duration > 0 ? Math.max(0, Math.min(100, (displayValue / duration) * 100)) : 0;
+  const thumbVisible = dragging || progress > 0;
+
+  return (
+    <div
+      ref={trackRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      className="relative h-2 flex-1 bg-darkborder rounded-full cursor-pointer group/seek select-none touch-none"
+      role="slider"
+      aria-valuemin={0}
+      aria-valuemax={Math.max(duration, 0)}
+      aria-valuenow={Math.floor(displayValue)}
+    >
+      <div
+        className="absolute top-0 left-0 h-full bg-gradient-to-r from-neon-indigo to-neon-violet rounded-full"
+        style={{ width: `${progress}%` }}
+      />
+      {thumbVisible && (
+        <div
+          className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-md pointer-events-none transition-opacity"
+          style={{
+            left: `calc(${progress}% - 6px)`,
+            opacity: dragging ? 1 : 0,
+            boxShadow: '0 0 10px rgba(139,92,246,0.6)',
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+// ============================================================
 // ExpandedPlayer — full-width player view
 // ============================================================
 function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
@@ -33,10 +120,6 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
     toggleShuffle, cycleRepeat,
   } = useMusicStore();
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentTime(parseFloat(e.target.value));
-  };
-
   const formatTime = (t: number) => {
     if (!t || isNaN(t)) return '0:00';
     const m = Math.floor(t / 60);
@@ -44,7 +127,6 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
   const RepeatIcon = repeatMode === 'one' ? Repeat1 : Repeat;
   const storeState = useMusicStore.getState();
   const currentIndex = storeState.currentIndex;
@@ -117,18 +199,12 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
             {/* Progress */}
             <div className="w-full max-w-md flex items-center gap-2">
               <span className="text-xs text-text-muted w-10 text-right tabular-nums">{formatTime(currentTime)}</span>
-              <div className="relative h-1 flex-1 bg-darkborder rounded-full overflow-hidden cursor-pointer">
-                <div
-                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-neon-indigo to-neon-violet rounded-full transition-all"
-                  style={{ width: `${progress}%` }}
-                />
-                <input
-                  type="range" min={0} max={duration || 100}
-                  value={currentTime}
-                  onChange={(e) => { handleSeek(e); onActivity(); }}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                />
-              </div>
+              <SeekBar
+                currentTime={currentTime}
+                duration={duration}
+                onSeek={setCurrentTime}
+                onActivity={onActivity}
+              />
               <span className="text-xs text-text-muted w-10 tabular-nums">{formatTime(duration)}</span>
             </div>
           </div>
@@ -139,10 +215,17 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
               <button onClick={toggleMute} className="text-text-muted hover:text-text-primary transition-colors shrink-0">
                 {isMuted || volume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
               </button>
-              <div className="relative h-1 flex-1 bg-darkborder rounded-full overflow-hidden cursor-pointer">
+              <div className="relative h-2 flex-1 bg-darkborder rounded-full cursor-pointer group/vol">
                 <div
                   className="absolute top-0 left-0 h-full bg-neon-violet/70 rounded-full"
                   style={{ width: `${isMuted ? 0 : volume * 100}%` }}
+                />
+                <div
+                  className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white shadow-md pointer-events-none opacity-0 group-hover/vol:opacity-100"
+                  style={{
+                    left: `calc(${isMuted ? 0 : volume * 100}% - 5px)`,
+                    boxShadow: '0 0 6px rgba(139,92,246,0.6)',
+                  }}
                 />
                 <input
                   type="range" min={0} max={1} step={0.01}

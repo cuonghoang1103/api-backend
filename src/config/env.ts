@@ -50,9 +50,13 @@ export const config = {
   // Cookie
   cookieSecret: process.env.COOKIE_SECRET || 'default-cookie-secret',
 
-  // AI (Hugging Face DeepSeek R1)
+  // AI (Groq - OpenAI-compatible)
+  groqApiKey: process.env.GROQ_API_KEY || '',
+  groqChatModel: process.env.GROQ_CHAT_MODEL || 'llama-3.1-8b-instant',
+  // Legacy Gemini
+  geminiApiKey: process.env.GEMINI_API_KEY || '',
   openRouterApiKey: process.env.OPENROUTER_API_KEY || '',
-  aiChatModel: process.env.AI_CHAT_MODEL || 'deepseek-ai/DeepSeek-R1-Distill-Qwen-32B',
+  aiChatModel: process.env.AI_CHAT_MODEL || 'llama-3.1-8b-instant',
   aiEmbeddingModel: process.env.AI_EMBEDDING_MODEL || 'gemini-embedding-002',
   aiEmbeddingDimensions: parseInt(process.env.AI_EMBEDDING_DIMENSIONS || '768', 10),
   aiMaxTokens: parseInt(process.env.AI_MAX_TOKENS || '2048', 10),

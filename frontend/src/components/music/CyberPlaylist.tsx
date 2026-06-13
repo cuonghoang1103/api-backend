@@ -90,14 +90,17 @@ export default function CyberPlaylist() {
 
   const handlePlayTrack = useCallback(
     (track: Track) => {
-      const idx = tracks.indexOf(track);
-      if (idx === useMusicStore.getState().currentIndex && currentTrack?.id === track.id) {
-        useMusicStore.getState().togglePlay();
-      } else {
-        playTrackAtIndex(idx);
+      const state = useMusicStore.getState();
+      // Clicking the currently playing track toggles play/pause — no restart.
+      if (state.currentTrack?.id === track.id) {
+        state.togglePlay();
+        return;
       }
+      const idx = tracks.indexOf(track);
+      if (idx < 0) return;
+      playTrackAtIndex(idx);
     },
-    [tracks, currentTrack, playTrackAtIndex],
+    [tracks, playTrackAtIndex],
   );
 
   const handleAddToPlaylist = useCallback(
@@ -316,10 +319,7 @@ export default function CyberPlaylist() {
                     index={-1}
                     isActive={false}
                     isPlaying={false}
-                    onPlay={() => {
-                      const globalIdx = tracks.findIndex((t) => t.id === track.id);
-                      if (globalIdx >= 0) playTrackAtIndex(globalIdx);
-                    }}
+                    onPlay={() => handlePlayTrack(track)}
                     onAddToPlaylist={() => handleAddToPlaylist(track)}
                     colors={C}
                     dimmed

@@ -214,10 +214,10 @@ export default function MusicAudioController() {
 
   // ── YouTube playback handler ──────────────────────────────────────
   const handleYouTubeTrack = useCallback(
-    (videoId: string, shouldPlay: boolean) => {
+    (videoId: string, shouldPlay: boolean, startSeconds = 0) => {
       if (!window.YT?.Player) {
         loadYouTubeAPI().then(() => {
-          setTimeout(() => handleYouTubeTrack(videoId, shouldPlay), 500);
+          setTimeout(() => handleYouTubeTrack(videoId, shouldPlay, startSeconds), 500);
         });
         return;
       }
@@ -232,7 +232,7 @@ export default function MusicAudioController() {
 
       const yt = createYouTubePlayer(
         videoId,
-        0,
+        startSeconds,
         () => {
           // onReady
           if (ytMuted) {
@@ -306,6 +306,23 @@ export default function MusicAudioController() {
     }
   }, [currentTime, currentTrack]);
 
+  // Seek local audio (when user drags seek bar or restoring position)
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !currentTrack) return;
+    const { isYT } = isYouTubeUrl(currentTrack.audioUrl);
+    if (isYT) return;
+    // Wait until metadata is loaded so we can seek reliably
+    if (!audio.duration || !Number.isFinite(audio.duration)) return;
+    if (Math.abs(audio.currentTime - currentTime) > 0.5) {
+      try {
+        audio.currentTime = currentTime;
+      } catch {
+        // ignore seek errors (e.g. audio not yet ready)
+      }
+    }
+  }, [currentTime, currentTrack]);
+
   // Create audio element once — SSR-safe
   useEffect(() => {
     if (audioRef.current) return;
@@ -373,8 +390,9 @@ export default function MusicAudioController() {
         audio.src = '';
       }
       // Use handleYouTubeTrack directly — it doesn't need to be in deps
-      // since we always want to run when track changes
-      handleYouTubeTrack(videoId, isPlaying);
+      // since we always want to run when track changes.
+      // Pass currentTime as start position so reloads resume the song.
+      handleYouTubeTrack(videoId, isPlaying, currentTime);
       return;
     }
 
@@ -400,6 +418,25 @@ export default function MusicAudioController() {
 
     audio.src = rawUrl;
     audio.load();
+
+    // After metadata loads, restore the persisted playback position for
+    // freshly-loaded tracks (e.g. after a page reload). Only seek if the
+    // stored currentTime is a meaningful value > 0 to avoid clobbering
+    // intentional "play from start" requests (currentTime: 0).
+    const restoreToTime = currentTime;
+    if (restoreToTime > 0) {
+      const onMetaForRestore = () => {
+        try {
+          if (Math.abs(audio.currentTime - restoreToTime) > 0.5) {
+            audio.currentTime = restoreToTime;
+          }
+        } catch {
+          // ignore
+        }
+        audio.removeEventListener('loadedmetadata', onMetaForRestore);
+      };
+      audio.addEventListener('loadedmetadata', onMetaForRestore);
+    }
 
     if (isPlaying) {
       ensureAnalyser();

@@ -131,6 +131,10 @@ export default function MusicAudioController() {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const mediaSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
 
+  // Mirror of `isPlaying` so the canplay retry handler can read the
+  // latest value without re-running the load-track effect.
+  const isPlayingRef = useRef<boolean>(false);
+
   const {
     currentTrack,
     isPlaying,
@@ -382,6 +386,13 @@ export default function MusicAudioController() {
     audio.volume = isMuted ? 0 : Math.max(0, Math.min(1, volume));
   }, [volume, isMuted]);
 
+  // Keep the isPlayingRef in sync so callbacks attached inside the
+  // load-track effect (e.g. the canplay retry handler) can read the
+  // current value without re-running the effect.
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+
   // ── Load new track ───────────────────────────────────────────────
   useEffect(() => {
     const audio = audioRef.current;
@@ -416,7 +427,9 @@ export default function MusicAudioController() {
     if (audio.src === rawUrl && !trackChanged) {
       if (isPlaying) {
         ensureAnalyser();
-        audio.play().catch(() => {});
+        audio.play().catch((err) => {
+          console.warn('[MusicAudioController] play() rejected (same src):', err?.message);
+        });
       } else {
         audio.pause();
       }
@@ -431,25 +444,64 @@ export default function MusicAudioController() {
     // stored currentTime is a meaningful value > 0 to avoid clobbering
     // intentional "play from start" requests (currentTime: 0).
     const restoreToTime = currentTime;
-    if (restoreToTime > 0) {
-      const onMetaForRestore = () => {
-        try {
-          if (Math.abs(audio.currentTime - restoreToTime) > 0.5) {
-            audio.currentTime = restoreToTime;
-          }
-        } catch {
-          // ignore
-        }
-        audio.removeEventListener('loadedmetadata', onMetaForRestore);
-      };
-      audio.addEventListener('loadedmetadata', onMetaForRestore);
-    }
 
-    if (isPlaying) {
+    // Wait until the new audio is actually playable before calling
+    // play(). Calling play() on a freshly-loaded <audio> that hasn't
+    // reached readyState >= 2 (HAVE_CURRENT_DATA) is a race that the
+    // spec allows to reject with NotSupportedError; in some browsers
+    // the rejection is silent and the track "looks" stuck (isPlaying
+    // true in store, UI spinning, but nothing audible). This is the
+    // exact symptom of the repeat-all loop on the last track.
+    const tryPlay = () => {
+      if (!isPlayingRef.current) return;
       ensureAnalyser();
-      audio.play().catch(() => {});
+      audio
+        .play()
+        .then(() => {
+          // No-op on success
+        })
+        .catch((err) => {
+          console.warn(
+            '[MusicAudioController] play() rejected, retrying on canplay:',
+            err?.message,
+          );
+          // Retry once on canplay in case the first attempt was too
+          // early (e.g. autoplay policy, network blip).
+          audio.addEventListener(
+            'canplay',
+            () => {
+              audio.play().catch((e2) => {
+                console.error('[MusicAudioController] play() failed twice:', e2?.message);
+              });
+            },
+            { once: true },
+          );
+        });
+    };
+
+    const onLoadedMetadataForRestore = () => {
+      try {
+        if (restoreToTime > 0 && Math.abs(audio.currentTime - restoreToTime) > 0.5) {
+          audio.currentTime = restoreToTime;
+        }
+      } catch {
+        // ignore
+      }
+      // Only fire play() after metadata is available so the element
+      // is in a state where playback is actually possible.
+      tryPlay();
+      audio.removeEventListener('loadedmetadata', onLoadedMetadataForRestore);
+    };
+
+    if (restoreToTime > 0) {
+      // Need to seek before we know the element can play at that offset.
+      // Attach the same restore+play handler to loadedmetadata.
+      audio.addEventListener('loadedmetadata', onLoadedMetadataForRestore);
+    } else if (audio.readyState >= 2) {
+      // HAVE_CURRENT_DATA — we can play immediately.
+      tryPlay();
     } else {
-      audio.pause();
+      audio.addEventListener('loadedmetadata', onLoadedMetadataForRestore, { once: true });
     }
   }, [
     currentTrack?.id,
@@ -458,7 +510,7 @@ export default function MusicAudioController() {
     // NOTE: volume, isMuted intentionally excluded — volume is handled by the
     // dedicated effect above so volume changes don't restart playback.
     // handleYouTubeTrack intentionally excluded — YouTube player is created via
-    // createYouTubePlayer inside handleYouTubeTrack which always runs on track change.
+    // handleYouTubeTrack which always runs on track change.
     // handleYouTubeTrack is stable (no setState in deps) so this is safe.
     // ensureAnalyser is in deps for first-play setup.
     ensureAnalyser,

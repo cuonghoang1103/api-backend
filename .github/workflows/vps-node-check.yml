@@ -1,0 +1,29 @@
+name: VPS Node.js Check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check-node:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Check VPS Node.js
+        run: |
+          echo "=== VPS Node version ==="
+          ssh vps "node --version 2>&1"
+          ssh vps "npm --version 2>&1"
+          ssh vps "which node npm 2>&1"
+          ssh vps "ls /usr/local/bin/node /usr/bin/node 2>&1 || echo 'No node found in /usr/local/bin or /usr/bin'"

@@ -122,56 +122,34 @@ if docker ps -a --format '{{.Names}}' | grep -q 'cuonghoangdev_frontend'; then
   docker rm -f cuonghoangdev_frontend 2>/dev/null || true
 fi
 
-# ─── Remove old image to force clean rebuild ───────────────────────────────
-# CRITICAL: Docker layer cache can reuse stale compiled output even with --no-cache.
-# Must delete the old image so TypeScript is forced to recompile from source.
-echo "--- Removing old backend image to force clean build ---"
-docker rmi cuonghoangdev_backend:latest 2>/dev/null || true
-
-# ─── Clear Docker build cache ─────────────────────────────────────────────
-# CRITICAL: Even deleting the image isn't enough — Docker builder cache
-# can reuse cached builder stage layers (COPY --from=builder ./dist).
-# Must prune builder cache to force fresh compilation.
-echo "--- Clearing Docker build cache ---"
-docker builder prune -af 2>/dev/null || true
-
-# ─── Build backend with BuildKit ─────────────────────────────────────────────
-echo "--- Building backend ---"
+# ─── Build backend Docker image (without dist/, then inject fresh dist) ──────────────────────
+# Build from source, but since dist/ is freshly compiled on VPS, we copy the
+# compiled dist AFTER the image is built to ensure latest code is always used.
+echo "--- Building backend Docker image ---"
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 docker build \
   -t cuonghoangdev_backend:latest \
   -f /opt/cuonghoangdev/Dockerfile.backend \
-  /opt/cuonghoangdev/ 2>&1 | tee /tmp/backend_build.log | tail -10
-echo "--- Backend build log (last 5 lines): ---"
-tail -5 /tmp/backend_build.log
-# Verify: check compiled code contains OpenRouter URL (not HuggingFace)
-if docker run --rm cuonghoangdev_backend:latest sh -c "grep -q 'openrouter.ai' /app/dist/services/ai.service.js"; then
-  echo "[OK] Backend compiled with OpenRouter URL"
-else
-  echo "[WARN] Backend compiled code does not contain 'openrouter.ai' - checking for HuggingFace..."
-  if docker run --rm cuonghoangdev_backend:latest sh -c "grep -q 'api-inference.huggingface' /app/dist/services/ai.service.js"; then
-    echo "[CRITICAL] Backend STILL has HuggingFace URL! The --no-cache flag may not have worked."
-  fi
-fi
-BACKEND_EXIT=$?
-if [ $BACKEND_EXIT -ne 0 ]; then
-  echo "[CRITICAL] Backend build FAILED with exit code $BACKEND_EXIT"
-  echo "Backend logs:"
-  docker compose logs --tail=20 backend
-  exit 1
-fi
+  /opt/cuonghoangdev/ 2>&1 | tail -3
+echo "--- Verify compiled code inside image ---"
+docker run --rm cuonghoangdev_backend:latest sh -c "grep -c 'router.get.*/projects' /app/dist/routes/admin.routes.js 2>&1 || echo 'dist not found or route missing'"
 
-# ─── Remove old frontend image to force clean rebuild ─────────────────────────
-echo "--- Removing old frontend image to force clean build ---"
-docker rmi cuonghoangdev_frontend:latest 2>/dev/null || true
+# ─── Build backend: compile TypeScript on VPS, copy dist into running container ─────────
+# Approach: Stop old container, compile TypeScript on VPS, copy dist directly into
+# a fresh container WITHOUT rebuilding the Docker image (avoids Docker build cache issues).
+# This ensures the container always has the LATEST compiled code.
+echo "--- Stopping backend container ---"
+docker stop cuonghoangdev_backend 2>/dev/null || true
+docker rm -f cuonghoangdev_backend 2>/dev/null || true
 
-# ─── Clear Docker build cache for frontend ──────────────────────────────────
-echo "--- Clearing Docker build cache for frontend ---"
-docker builder prune -f 2>/dev/null || true
+echo "--- Compiling TypeScript on VPS ---"
+ssh vps "cd /opt/cuonghoangdev && npx tsc 2>&1 || npm run build 2>&1"
+echo "--- Verify compiled code ---"
+ssh vps "grep -c 'router.get.*/projects' /opt/cuonghoangdev/dist/routes/admin.routes.js 2>&1 && echo '[OK] admin/projects route compiled!' || echo '[ERROR] Route not compiled!'"
 
-# ─── Build frontend ──────────────────────────────────────────────────────────
-echo "--- Building frontend ---"
+# ─── Build frontend Docker image (frontend is built on GitHub Actions, but we need the image) ─
+echo "--- Building frontend Docker image ---"
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 docker build \
@@ -218,6 +196,24 @@ for i in $(seq 1 30); do
   fi
   sleep 5
 done
+
+# ─── Copy latest compiled dist into running backend container ───────────────────────────
+# The container was started from an old Docker image. We need to inject the
+# freshly-compiled dist/ from /opt/cuonghoangdev/dist into the running container.
+echo "--- Injecting latest compiled dist into backend container ---"
+ssh vps "docker cp /opt/cuonghoangdev/dist/. cuonghoangdev_backend:/app/dist/"
+ssh vps "docker restart cuonghoangdev_backend"
+echo "--- Waiting for backend to reload ---"
+for i in $(seq 1 12); do
+  if ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/health >/dev/null 2>&1'"; then
+    echo "[OK] Backend reloaded with new code!"
+    break
+  fi
+  echo "Reloading... ($i/12)"
+  sleep 5
+done
+echo "--- Verify admin/projects route ---"
+ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -s http://localhost:3001/api/v1/admin/projects 2>&1'"
 
 echo "=== [7/7] Database schema + seeds ==="
 PRISMA_OUTPUT=$(docker compose exec -T backend sh -c "npx prisma db push --accept-data-loss --skip-generate" 2>&1) || true

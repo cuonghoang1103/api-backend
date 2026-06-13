@@ -98,36 +98,6 @@ PG_PASSWORD="${PG_PASSWORD:-123456}"
 PG_USER="postgres"
 PG_DB="cuonghoangdev_db"
 
-# Strategy: try ALTER USER first (non-destructive, preserves data)
-# If it fails, recreate postgres container with correct password
-ALTER_OK=$(docker compose exec -T postgres psql -U postgres -c "ALTER USER ${PG_USER} WITH PASSWORD '${PG_PASSWORD}';" 2>&1 || true)
-if echo "$ALTER_OK" | grep -qi "ALTER ROLE\|syntax error\|ERROR"; then
-  echo "[OK] Postgres password updated via ALTER USER (data preserved)"
-else
-  echo "[WARN] ALTER USER failed, recreating postgres container with correct password..."
-  docker stop cuonghoangdev_postgres 2>/dev/null || true
-  docker rm cuonghoangdev_postgres 2>/dev/null || true
-  sleep 2
-  docker run -d \
-    --name cuonghoangdev_postgres \
-    --network cuonghoangdev_backend \
-    -e POSTGRES_USER="${PG_USER}" \
-    -e POSTGRES_PASSWORD="${PG_PASSWORD}" \
-    -e POSTGRES_DB="${PG_DB}" \
-    -v cuonghoangdev_postgres_data:/var/lib/postgresql/data \
-    -p 5432:5432 \
-    --restart unless-stopped \
-    postgis/postgis:16-3.4
-  for i in $(seq 1 12); do
-    if docker exec cuonghoangdev_postgres pg_isready -U "${PG_USER}" >/dev/null 2>&1; then
-      echo "Postgres recreated with correct password"
-      break
-    fi
-    echo "Waiting for postgres... ($i/12)"
-    sleep 5
-  done
-fi
-
 # Ensure database exists
 docker compose exec -T postgres psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${PG_DB}'" | grep -q 1 || \
   docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE ${PG_DB}" 2>/dev/null

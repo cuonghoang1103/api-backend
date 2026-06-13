@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -42,10 +42,15 @@ interface FlatLesson {
   lesson: LessonDto;
 }
 
-export default function LearnPage({ params }: { params: Promise<{ slug: string }> }) {
-  const resolvedParams = use(params);
+export default function LearnPage({ params }: { params: { slug: string } }) {
+  // Next 14: params is a plain object, not a Promise (Next 15+ made it
+  // async). The previous code used React.use(params) which throws at
+  // runtime under Next 14 — this caused the "Application error: a
+  // client-side exception has occurred" the moment the user opened
+  // /courses/:slug/learn. Reading .slug off the prop directly is the
+  // version-agnostic fix.
   const router = useRouter();
-  const slug = resolvedParams.slug;
+  const slug = params.slug;
   const { isAuthenticated: isBackendAuth, isLoading: isBackendLoading } = useAuthStore();
   const { status } = useSession();
   const [mounted, setMounted] = useState(false);
@@ -339,7 +344,10 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                           // YouTube iframes don't fire 'ended', so we
                           // mark complete optimistically after a small
                           // delay; the user can always toggle manually.
-                          if (!isCompleted(currentLesson.id)) {
+                          // Guarded so a slow network reload doesn't
+                          // re-fire the auto-mark and double-count.
+                          if (!isCompleted(currentLesson.id) && !videoCompleted) {
+                            setVideoCompleted(true);
                             window.setTimeout(() => markComplete(), 1500);
                           }
                         }}

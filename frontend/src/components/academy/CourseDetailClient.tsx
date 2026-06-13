@@ -101,7 +101,13 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
         try {
           const revRes = await coursesApi.getReviews(fetchedCourse.id);
           if (!cancelled) setReviews(revRes.data?.data || []);
-        } catch {
+        } catch (revErr: any) {
+          // Backend does not expose GET /api/v1/courses/:id/reviews
+          // (returns 404). That's non-critical — render the page
+          // with an empty reviews list rather than bubble the
+          // error and re-run the slug effect.
+          // eslint-disable-next-line no-console
+          console.warn('[CourseDetail] getReviews skipped', revErr?.response?.status);
           if (!cancelled) setReviews([]);
         }
       } catch (err) {

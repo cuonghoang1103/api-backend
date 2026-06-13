@@ -49,17 +49,33 @@ export default function CourseDetailPage() {
       setLoading(true);
       try {
         const res = await coursesApi.getBySlug(slug);
+        // eslint-disable-next-line no-console
+        console.log('[course-detail] getBySlug OK', { hasData: !!res?.data?.data, slug });
         setCourse(res.data.data);
         if (res.data.data?.id) {
-          const revRes = await coursesApi.getReviews(res.data.data.id);
-          setReviews(revRes.data.data || []);
+          // Wrap the optional reviews call in its own try/catch
+          // — the backend does not expose GET /api/v1/courses/:id/reviews
+          // (returns 404), but that must NOT bubble up and re-run
+          // the main effect via the slug dependency, which is
+          // exactly what the original code did and the user saw
+          // the page spin forever as a result.
+          try {
+            const revRes = await coursesApi.getReviews(res.data.data.id);
+            setReviews(revRes.data.data || []);
+          } catch (revErr: any) {
+            // eslint-disable-next-line no-console
+            console.warn('[course-detail] getReviews skipped', revErr?.response?.status);
+            setReviews([]);
+          }
         }
         // Auto-expand first section
         const data = res.data.data;
         if (data?.sections?.[0]?.id) {
           setExpandedSections(new Set([data.sections[0].id]));
         }
-      } catch {
+      } catch (err: any) {
+        // eslint-disable-next-line no-console
+        console.error('[course-detail] Fetch error', err?.response?.status, err?.message);
         toast.error('Course not found');
       } finally {
         setLoading(false);

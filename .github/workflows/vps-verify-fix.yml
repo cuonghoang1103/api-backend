@@ -1,0 +1,43 @@
+name: VPS Verify Routes Fix
+
+on:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Check source files on VPS
+        run: |
+          echo "=== Check VPS source admin.routes.ts ==="
+          ssh vps "grep -c 'router.get.*/projects' /opt/cuonghoangdev/src/routes/admin.routes.ts 2>&1"
+          ssh vps "grep 'router.get.*/projects' /opt/cuonghoangdev/src/routes/admin.routes.ts 2>&1"
+
+      - name: Check compiled admin.routes.js
+        run: |
+          echo "=== Check compiled admin.routes.js ==="
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'grep -c \"/projects\" /app/dist/routes/admin.routes.js 2>&1 || echo NOT FOUND'"
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'grep \"router.get.*projects\" /app/dist/routes/admin.routes.js 2>&1 || echo NOT FOUND'"
+
+      - name: Check build logs from current container
+        run: |
+          echo "=== Check backend startup logs ==="
+          ssh vps "docker logs cuonghoangdev_backend --tail 50 2>&1 | head -30"
+
+      - name: Test route directly
+        run: |
+          echo "=== Test route inside container ==="
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -s http://localhost:3001/api/v1/admin/projects 2>&1 || echo FAILED'"

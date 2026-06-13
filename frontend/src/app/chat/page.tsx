@@ -87,7 +87,6 @@ export default function ChatPage() {
     messages,
     isStreaming,
     suggestedPrompts,
-    isSidebarOpen,
     limitedMode,
     setSessions,
     addSession,
@@ -101,6 +100,7 @@ export default function ChatPage() {
     setRobotEmotion,
     setSuggestedPrompts,
     setLimitedMode,
+    clearMessages,
   } = useChatStore();
 
   const [backendConnected, setBackendConnected] = useState<boolean | null>(null);
@@ -108,6 +108,9 @@ export default function ChatPage() {
   const [glitchTrigger, setGlitchTrigger] = useState(false);
   const [sessionCount, setSessionCount] = useState(0);
   const [robotData, setRobotData] = useState<object | null>(null);
+
+  // Use a ref to track first-load merge so we don't re-merge on every mount
+  const hasMergedSessions = useRef(false);
 
   // Fetch robot animation data once
   useEffect(() => {
@@ -136,13 +139,31 @@ export default function ChatPage() {
     checkBackend();
   }, []);
 
-  // Fetch sessions
+  // Fetch sessions from API and merge with persisted state
   useEffect(() => {
     if (!mounted) return;
     const fetchSessions = async () => {
       try {
         const res = await api.get('/ai/chat/sessions');
-        setSessions(res.data?.data || []);
+        const apiSessions: ChatSession[] = res.data?.data || [];
+
+        if (!hasMergedSessions.current) {
+          // First load: merge API sessions with persisted sessions
+          hasMergedSessions.current = true;
+          const persisted = useChatStore.getState().sessions;
+          const persistedIds = new Set(persisted.map(s => s.sessionId));
+
+          // Keep persisted sessions that aren't in API response (local-only sessions)
+          const localOnly = persisted.filter(s => !apiSessions.find(a => a.sessionId === s.sessionId));
+          // Prefer API data for sessions that exist in both
+          const merged = [...localOnly, ...apiSessions];
+
+          setSessions(merged);
+          // Keep persisted currentSessionId (don't overwrite)
+        } else {
+          // Subsequent loads: update from API
+          setSessions(apiSessions);
+        }
       } catch { /* silently ignore */ }
     };
     fetchSessions();
@@ -150,14 +171,15 @@ export default function ChatPage() {
 
   // Update contextual prompts
   useEffect(() => {
-    if (currentMessages.length > 0) {
-      const last = currentMessages[currentMessages.length - 1];
+    const msgs = currentSessionId ? (messages[currentSessionId] || []) : [];
+    if (msgs.length > 0) {
+      const last = msgs[msgs.length - 1];
       if (last.role === 'assistant' && last.content.length > 50) {
         const ctx = getContextualPrompts(last.content);
         if (ctx.length > 0) setSuggestedPrompts(ctx);
       }
     }
-  }, [currentMessages.length, currentMessages, setSuggestedPrompts]);
+  }, [currentSessionId, messages, setSuggestedPrompts]);
 
   // Trigger glitch when streaming ends
   useEffect(() => {
@@ -182,7 +204,10 @@ export default function ChatPage() {
 
   const handleDeleteSession = useCallback(async (sessionId: string) => {
     try {
-      await api.delete(`/ai/chat/sessions/${sessionId}`);
+      // Only delete from backend if it's not a local temp session
+      if (!sessionId.startsWith('local_')) {
+        await api.delete(`/ai/chat/sessions/${sessionId}`);
+      }
       removeSession(sessionId);
       toast.success('Conversation deleted');
     } catch {
@@ -193,13 +218,26 @@ export default function ChatPage() {
   const sendMessage = useCallback(async (text: string, forceStatic: boolean = false) => {
     if (!text.trim() || isStreaming) return;
 
-    const sessionId = currentSessionId || '__new__';
+    // Determine sessionId: use current, or create a new local one
+    let sessionId = currentSessionId;
+    let isNewLocalSession = false;
+
+    if (!sessionId) {
+      // Create a new local session right away
+      sessionId = `local_${Date.now()}`;
+      const newSession: ChatSession = {
+        id: Date.now(),
+        sessionId,
+        title: text.trim().slice(0, 50),
+        createdAt: new Date().toISOString(),
+      };
+      addSession(newSession);
+      setCurrentSessionId(sessionId);
+      isNewLocalSession = true;
+    }
+
     const tempId = Date.now();
     setSessionCount((c) => c + 1);
-
-    if (!currentSessionId) {
-      setCurrentSessionId('__new__');
-    }
 
     const userMsg: ChatMessage = {
       id: tempId,
@@ -212,10 +250,7 @@ export default function ChatPage() {
     addMessage(sessionId, userMsg);
     setRobotEmotion('typing');
     setStreaming(true);
-
-    if (currentMessages.length === 0) {
-      setSuggestedPrompts([]);
-    }
+    setSuggestedPrompts([]);
 
     try {
       const shouldUseStatic = forceStatic || limitedMode;
@@ -246,16 +281,13 @@ export default function ChatPage() {
           toast.info('Limited Mode: AI quota exceeded, using cached answers');
         }
 
-        if (!currentSessionId || currentSessionId === '__new__') {
-          const newSession: ChatSession = {
-            id: Date.now(),
-            sessionId: sessionId,
-            title: text.trim().slice(0, 50),
-            createdAt: new Date().toISOString(),
-          };
-          addSession(newSession);
-          if (sessionId === '__new__') {
-            setCurrentSessionId('__new__');
+        // Update session title if this was a new local session
+        if (isNewLocalSession) {
+          const state = useChatStore.getState();
+          const existing = state.sessions.find(s => s.sessionId === sessionId);
+          if (existing) {
+            removeSession(sessionId);
+            addSession({ ...existing, title: text.trim().slice(0, 50) });
           }
         }
 
@@ -264,13 +296,14 @@ export default function ChatPage() {
         return;
       }
 
+      // Send to backend with sessionId (backend will create session if none exists)
       const res = await fetch(`/api/v1/ai/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
         },
-        body: JSON.stringify({ message: text.trim(), sessionId: currentSessionId || undefined, topK: 5 }),
+        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5 }),
       });
 
       if (!res.ok) throw new Error('Stream failed');
@@ -279,7 +312,7 @@ export default function ChatPage() {
       if (!reader) throw new Error('No reader');
 
       let assistantContent = '';
-      let resolvedSessionId = currentSessionId || '';
+      let resolvedSessionId = '';
       const assistantTempId = tempId + 1;
 
       const assistantMsg: ChatMessage = {
@@ -293,7 +326,6 @@ export default function ChatPage() {
 
       const decoder = new TextDecoder();
       let buffer = '';
-      let errorMsg = '';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -318,7 +350,6 @@ export default function ChatPage() {
             if (data.type === 'done') continue;
 
             if (data.type === 'error') {
-              errorMsg += data.error || '';
               continue;
             }
 
@@ -336,36 +367,32 @@ export default function ChatPage() {
         }
       }
 
-      if (errorMsg) {
-        const staticResp = findStaticResponse(text);
-        const responseContent = staticResp?.response || getDefaultGreeting();
-        updateLastAssistantMessage(sessionId, responseContent);
-        assistantContent = responseContent;
-        setLimitedMode(true, 'AI quota exceeded');
-        toast.info('AI quota exceeded. Using cached answers.');
-      }
+      // If backend returned a real sessionId, migrate local session to it
+      if (resolvedSessionId) {
+        const sessionMsgs = useChatStore.getState().messages[sessionId] || [];
+        const migrated = sessionMsgs.map((m) => ({ ...m, sessionId: resolvedSessionId }));
+        setMessages(resolvedSessionId, migrated);
 
-      if (!currentSessionId || currentSessionId === '__new__') {
-        if (resolvedSessionId) {
-          const msgs = useChatStore.getState().messages['__new__'] || [];
-          const migrated = msgs.map((m) => ({ ...m, sessionId: resolvedSessionId }));
-          setMessages(resolvedSessionId, migrated);
-          setCurrentSessionId(resolvedSessionId);
-          const newSession: ChatSession = {
-            id: Date.now(),
-            sessionId: resolvedSessionId,
-            title: text.trim().slice(0, 50),
-            createdAt: new Date().toISOString(),
-          };
-          addSession(newSession);
-        } else {
-          const newSession: ChatSession = {
-            id: Date.now(),
-            sessionId: '__new__',
-            title: text.trim().slice(0, 50),
-            createdAt: new Date().toISOString(),
-          };
-          addSession(newSession);
+        // Replace local session with backend session
+        if (isNewLocalSession || sessionId.startsWith('local_')) {
+          removeSession(sessionId);
+        }
+        setCurrentSessionId(resolvedSessionId);
+
+        const newSession: ChatSession = {
+          id: Date.now(),
+          sessionId: resolvedSessionId,
+          title: text.trim().slice(0, 50),
+          createdAt: new Date().toISOString(),
+        };
+        addSession(newSession);
+      } else {
+        // No backend sessionId: keep as local, update title
+        const state = useChatStore.getState();
+        const existing = state.sessions.find(s => s.sessionId === sessionId);
+        if (existing) {
+          removeSession(sessionId);
+          addSession({ ...existing, title: text.trim().slice(0, 50) });
         }
       }
 
@@ -405,8 +432,8 @@ export default function ChatPage() {
     }
   }, [
     isStreaming, currentSessionId, addMessage, setStreaming, setRobotEmotion,
-    currentMessages, setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
-    updateLastAssistantMessage, removePendingMessage, limitedMode, setLimitedMode,
+    setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
+    updateLastAssistantMessage, removePendingMessage, removeSession, limitedMode, setLimitedMode,
     getToken,
   ]);
 
@@ -416,9 +443,21 @@ export default function ChatPage() {
   }, [sendMessage]);
 
   const handleNewSession = useCallback(() => {
-    setCurrentSessionId(null);
+    // Create a new local session with a unique temp ID
+    const tempId = `local_${Date.now()}`;
+    const newSession: ChatSession = {
+      id: Date.now(),
+      sessionId: tempId,
+      title: 'New chat',
+      createdAt: new Date().toISOString(),
+    };
+    addSession(newSession);
+    setCurrentSessionId(tempId);
+    clearMessages(tempId);
     setSuggestedPrompts(getContextualPrompts(''));
-  }, [setCurrentSessionId, setSuggestedPrompts]);
+    setRobotEmotion('idle');
+    setLimitedMode(false, '');
+  }, [addSession, setCurrentSessionId, clearMessages, setSuggestedPrompts, setRobotEmotion, setLimitedMode]);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden cyber-grid-bg pt-16">

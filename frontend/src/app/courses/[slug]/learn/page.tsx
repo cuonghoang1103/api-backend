@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -68,21 +68,39 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
   const [videoKey, setVideoKey] = useState(0);
   const [videoCompleted, setVideoCompleted] = useState(false);
 
+  // Live effect: once we know the auth state, kick the user to
+  // /login (with a callback so they bounce back to this exact page
+  // after authenticating) or load the course. We use a state token
+  // instead of `isAuthenticated` directly in the dependency array
+  // to avoid re-running the effect on unrelated re-renders.
   useEffect(() => {
+    if (!mounted) return;
+    if (isLoading) return;
     if (!isAuthenticated) {
-      router.push('/login');
+      const callback = encodeURIComponent(`/courses/${slug}/learn`);
+      router.push(`/login?callbackUrl=${callback}`);
       return;
     }
     loadCourse();
-  }, [slug, isAuthenticated]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, isLoading, isAuthenticated, slug]);
 
-  const loadCourse = async () => {
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const loadCourse = useCallback(async () => {
     setLoading(true);
+    setLoadError(null);
     try {
       const res = await coursesApi.getBySlug(slug);
       const data = res.data.data as Course;
+      if (!data) {
+        setLoadError('NOT_FOUND');
+        return;
+      }
       if (!data.isEnrolled) {
-        toast.error('You are not enrolled in this course');
+        // Authenticated but not enrolled — bounce back to the
+        // public course detail page so they can hit Enroll.
+        toast.error('Bạn chưa đăng ký khóa học này');
         router.push(`/courses/${slug}`);
         return;
       }
@@ -93,8 +111,14 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
       setExpandedSections(sectionIds);
 
       // Load progress
-      const progRes = await coursesApi.getProgress(data.id);
-      setProgress(progRes.data.data || []);
+      try {
+        const progRes = await coursesApi.getProgress(data.id);
+        setProgress(progRes.data.data || []);
+      } catch {
+        // Progress is non-critical — keep going with an empty list
+        // so the user can still watch the lesson.
+        setProgress([]);
+      }
 
       // Pick first lesson or last accessed, honouring ?lessonId= in URL
       if (data.sections && data.sections.length > 0) {
@@ -106,12 +130,26 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
           || allLessons[0];
         if (target) selectLesson(target);
       }
-      } catch {
-        toast.error('Unable to load course');
-      } finally {
+    } catch (err: any) {
+      // Distinguish 404 from 401/network so the error UI is
+      // actionable instead of the catch-all "Course not found".
+      const status = err?.response?.status;
+      if (status === 404) {
+        setLoadError('NOT_FOUND');
+      } else if (status === 401) {
+        // Token expired mid-session — push them back to login,
+        // this time the auth flow will pick up the fresh cookie.
+        const callback = encodeURIComponent(`/courses/${slug}/learn`);
+        router.push(`/login?callbackUrl=${callback}`);
+        return;
+      } else {
+        setLoadError('NETWORK');
+        toast.error('Không tải được khóa học. Vui lòng thử lại.');
+      }
+    } finally {
       setLoading(false);
     }
-  };
+  }, [router, slug]);
 
   const selectLesson = async (lesson: LessonDto) => {
     if (!course) return;
@@ -187,15 +225,61 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
     );
   }
 
-  if (!course) {
+  if (loadError === 'NOT_FOUND' || (!course && loadError)) {
     return (
-      <div className="min-h-screen bg-darkbg flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-text-primary mb-4">Course not found</h2>
-          <Link href="/courses" className="text-neon-violet hover:text-neon-indigo">Back to Courses</Link>
+      <div className="min-h-screen bg-darkbg flex items-center justify-center px-4">
+        <div className="text-center max-w-md">
+          <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center">
+            <BookOpen className="w-8 h-8" />
+          </div>
+          <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">
+            Không tìm thấy khóa học
+          </h2>
+          <p className="text-text-secondary text-sm mb-6">
+            Khóa học <span className="font-mono text-text-primary">{slug}</span> không tồn tại hoặc đã bị xoá.
+          </p>
+          <div className="flex gap-3 justify-center">
+            <Link
+              href="/courses"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium text-sm hover:opacity-90 transition-opacity"
+            >
+              Về danh sách khóa học
+            </Link>
+            <Link
+              href="/academy"
+              className="px-5 py-2.5 rounded-xl border border-darkborder text-text-secondary hover:bg-white/5 text-sm"
+            >
+              Về Academy
+            </Link>
+          </div>
         </div>
       </div>
     );
+  }
+
+  if (loadError === 'NETWORK') {
+    return (
+      <div className="min-h-screen bg-darkbg flex items-center justify-center px-4">
+        <div className="text-center max-w-md">
+          <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">
+            Mất kết nối
+          </h2>
+          <p className="text-text-secondary text-sm mb-6">
+            Không tải được khóa học. Vui lòng kiểm tra mạng và thử lại.
+          </p>
+          <button
+            onClick={loadCourse}
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium text-sm"
+          >
+            Thử lại
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return null;
   }
 
   const overallProgress = course.totalLessons > 0

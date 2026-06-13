@@ -1,12 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { useSession } from 'next-auth/react';
 import {
   Clock, Users, BookOpen, Star, Play, Shield, Award,
   ArrowLeft, CheckCircle, ShoppingCart, PlayCircle, Loader2,
 } from 'lucide-react';
 import { coursesApi } from '@/lib/api';
+import { useAuthStore } from '@/store/authStore';
 import type { Course, CourseReview } from '@/types';
 import { toast } from 'sonner';
 import Link from 'next/link';
@@ -381,13 +384,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                   </div>
 
                   {course.isEnrolled ? (
-                    <Link
-                      href={`/courses/${course.slug}/learn`}
-                      className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
-                    >
-                      <PlayCircle className="w-5 h-5" />
-                      Tiếp tục học
-                    </Link>
+                    <ContinueLearningButton slug={course.slug} />
                   ) : isFreeCourse ? (
                     <FreeEnrollButton course={course} onEnrolled={() => setCourse(prev => prev ? { ...prev, isEnrolled: true } : prev)} />
                   ) : (
@@ -434,8 +431,23 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
 function FreeEnrollButton({ course, onEnrolled }: { course: Course; onEnrolled: () => void }) {
   const [enrolling, setEnrolling] = useState(false);
   const [enrolled, setEnrolled] = useState(false);
+  // Pull the auth state from Zustand + NextAuth so we can bounce
+  // unauthenticated users to /login?callbackUrl=… instead of letting
+  // the enroll request 401 with a cryptic "Đăng ký thất bại" toast.
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuthStore();
+  const { status: sessionStatus } = useSession();
+  const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isAuthed = mounted && (isAuthenticated || sessionStatus === 'authenticated');
 
   const handleEnroll = async () => {
+    if (!mounted || isAuthLoading) return;
+    if (!isAuthed) {
+      const callback = encodeURIComponent(`/academy/courses/${course.slug}/learn`);
+      router.push(`/login?callbackUrl=${callback}`);
+      return;
+    }
     setEnrolling(true);
     try {
       await coursesApi.enroll(course.id);
@@ -515,5 +527,46 @@ function AddToCartButton({ course }: { course: Course }) {
         </>
       )}
     </button>
+  );
+}
+
+// ── Continue Learning Button ─────────────────────────────────────────────────
+// `isEnrolled` can be true on the server response even if the user
+// is browsing as a guest (the flag is just "this user object is
+// enrolled in this course" — and at the public course page we
+// haven't asked the user to identify themselves yet). To avoid
+// clicking the green button and landing on a 401 inside /learn,
+// we re-check the auth state in the client and bounce the user to
+// /login?callbackUrl=… if they aren't signed in.
+function ContinueLearningButton({ slug }: { slug: string }) {
+  const { isAuthenticated, isLoading } = useAuthStore();
+  const { status: sessionStatus } = useSession();
+  const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const authKnown = mounted && !isLoading && sessionStatus !== 'loading';
+  const isAuthed = authKnown && (isAuthenticated || sessionStatus === 'authenticated');
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (!authKnown) {
+      e.preventDefault();
+      return;
+    }
+    if (!isAuthed) {
+      e.preventDefault();
+      const callback = encodeURIComponent(`/courses/${slug}/learn`);
+      router.push(`/login?callbackUrl=${callback}`);
+    }
+  };
+
+  return (
+    <Link
+      href={`/courses/${slug}/learn`}
+      onClick={handleClick}
+      className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
+    >
+      <PlayCircle className="w-5 h-5" />
+      Tiếp tục học
+    </Link>
   );
 }

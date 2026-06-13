@@ -44,7 +44,7 @@ function LoginForm() {
     defaultValues: { username: '', password: '' },
   });
 
-  const redirect = searchParams.get('redirect');
+  const redirect = searchParams.get('callbackUrl') || searchParams.get('redirect');
 
   const onSubmit = async (data: LoginForm) => {
     setIsLoading(true);
@@ -126,7 +126,11 @@ function LoginForm() {
       let dest = '/';
       if (isAdmin) {
         dest = '/admin';
-      } else if (redirect && redirect !== '/') {
+      } else if (redirect && /^\/(?!\/)/.test(redirect)) {
+        // Only honour the callback if it's a relative internal path,
+        // not a full URL (open-redirect protection: something
+        // like //evil.com would otherwise bounce the user off-site
+        // after they sign in).
         dest = redirect;
       }
 

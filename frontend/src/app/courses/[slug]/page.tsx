@@ -243,6 +243,12 @@ export default function CourseDetailPage() {
                   {course.isEnrolled ? (
                     <Link
                       href={`/courses/${slug}/learn`}
+                      onClick={(e) => {
+                        if (!isAuthenticated) {
+                          e.preventDefault();
+                          router.push(`/login?callbackUrl=${encodeURIComponent(`/courses/${slug}/learn`)}`);
+                        }
+                      }}
                       className="block w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl text-center hover:opacity-90 transition-opacity"
                     >
                       Continue Learning

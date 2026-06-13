@@ -64,7 +64,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3001
-      DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD:-123456}@postgres:5432/cuonghoangdev_db?schema=public"
+      DATABASE_URL: "${DATABASE_URL}"
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-CuongHoangDevV2SecretKeyNangCao2026NheMaNayCanItNhat256BitNhe}

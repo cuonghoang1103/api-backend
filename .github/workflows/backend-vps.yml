@@ -41,7 +41,6 @@ jobs:
           echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
-          # Keep SSH sessions alive during long builds (write without heredoc to avoid YAML indent issues)
           mkdir -p ~/.ssh
           printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ServerAliveInterval 60\n    ServerAliveCountMax 10\n    ConnectTimeout 30\n' \
             "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
@@ -55,7 +54,6 @@ jobs:
           cd frontend
           npm ci
           NEXT_PUBLIC_BUILD_ID=$(date +%s) npm run build
-          # Verify .next/ was built
           echo "--- Built .next/ contents ---"
           ls .next/static/css/*.css 2>/dev/null | head -3
           echo "--- Scrollbar fix present? ---"
@@ -63,9 +61,6 @@ jobs:
 
       - name: Sync project to VPS
         run: |
-          # Rsync all source files to VPS (rsync respects .gitignore so .next/ is skipped here)
-          # --no-perms/owner/group: avoid permission/ownership mismatch (root vs nextjs)
-          # exit 23 (partial transfer) is non-fatal — add || true to not block the workflow
           rsync -az --delete --no-perms --no-owner --no-group --omit-dir-times \
             --exclude '.git' \
             --exclude 'node_modules' \
@@ -83,21 +78,16 @@ jobs:
 
       - name: Deploy .next/, node_modules, and package files to VPS
         run: |
-          # Stream .next/, node_modules, and package files from runner to VPS.
-          # tar pipe bypasses .gitignore entirely (no file on disk to ignore).
           echo "--- Streaming build artifacts to VPS ---"
           ssh -F $HOME/.ssh/config vps "rm -rf /opt/cuonghoangdev/frontend/.next /opt/cuonghoangdev/frontend/node_modules && mkdir -p /opt/cuonghoangdev/frontend" || true
-          # Transfer .next/, node_modules, and package files from frontend/ directory
           (cd frontend && tar -czf - .next/ node_modules/ package.json package-lock.json) | \
             ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev/frontend && tar -xzf -" || true
           echo "--- Build artifacts deployed ---"
-          # Verify
-          ssh -F $HOME/.ssh/config vps "ls /opt/cuonghoangdev/frontend/.next/static/css/ 2>/dev/null | head -3" || echo "Verification: file listing skipped"
+          ssh -F $HOME/.ssh/config vps "ls /opt/cuonghoangdev/frontend/.next/static/css/ 2>/dev/null | head-3" || echo "Verification: file listing skipped"
           ssh -F $HOME/.ssh/config vps "ls /opt/cuonghoangdev/frontend/node_modules/next/package.json 2>/dev/null && echo 'node_modules: OK' || echo 'node_modules: MISSING'" || echo "Verification skipped"
 
       - name: Create .env on VPS if missing
         run: |
-          # Only create .env if it doesn't exist (don't overwrite existing!)
           ssh vps "if [ ! -f /opt/cuonghoangdev/.env ]; then \
               cp /opt/cuonghoangdev/vps-deploy/.env.example /opt/cuonghoangdev/.env; \
               echo '[CREATED] .env from .env.example (no existing .env found)'; \
@@ -111,49 +101,37 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
-          # Update YOUTUBE_API_KEY (create line if missing)
           if grep -q "^YOUTUBE_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
             ssh vps "sed -i 's|^YOUTUBE_API_KEY=.*|YOUTUBE_API_KEY=${YOUTUBE_API_KEY}|' /opt/cuonghoangdev/.env"
           else
             ssh vps "echo 'YOUTUBE_API_KEY=${YOUTUBE_API_KEY}' >> /opt/cuonghoangdev/.env"
           fi
-          # Update OPENROUTER_API_KEY (create line if missing)
           if grep -q "^OPENROUTER_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
             ssh vps "sed -i 's|^OPENROUTER_API_KEY=.*|OPENROUTER_API_KEY=${OPENROUTER_API_KEY}|' /opt/cuonghoangdev/.env"
           else
             ssh vps "echo 'OPENROUTER_API_KEY=${OPENROUTER_API_KEY}' >> /opt/cuonghoangdev/.env"
           fi
-          # Update POSTGRES_PASSWORD only if secret is non-empty
           if [ -n "$POSTGRES_PASSWORD" ]; then
             if grep -q "^POSTGRES_PASSWORD=" /opt/cuonghoangdev/.env 2>/dev/null; then
               ssh vps "sed -i 's|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=${POSTGRES_PASSWORD}|' /opt/cuonghoangdev/.env"
             else
               ssh vps "echo 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}' >> /opt/cuonghoangdev/.env"
             fi
-            # Also update DATABASE_URL with URL-encoded password (password may contain /, +, = chars)
-            # URL-encode the password: / → %2F, + → %2B, = stays as =
-            ENCODED_PASSWORD=$(python3 -c "import urllib.parse; print(urllib.parse.quote_plus('${POSTGRES_PASSWORD}')" 2>/dev/null || node -e "console.log(encodeURIComponent('${POSTGRES_PASSWORD}'));")
-            ENCODED_PASSWORD=${ENCODED_PASSWORD//%2B/+}
-            if grep -q "^DATABASE_URL=" /opt/cuonghoangdev/.env 2>/dev/null; then
-              ssh vps "sed -i 's|^DATABASE_URL=.*|DATABASE_URL=postgresql://postgres:${ENCODED_PASSWORD}@postgres:5432/cuonghoangdev_db?schema=public|' /opt/cuonghoangdev/.env"
-            else
-              ssh vps "echo 'DATABASE_URL=postgresql://postgres:${ENCODED_PASSWORD}@postgres:5432/cuonghoangdev_db?schema=public' >> /opt/cuonghoangdev/.env"
-            fi
+            ssh vps "python3 -c \"import urllib.parse; import re; pw = '''${POSTGRES_PASSWORD}'''; encoded = urllib.parse.quote(pw, safe=''); lines = open('/opt/cuonghoangdev/.env').readlines(); out = []; found = False; [out.append(re.sub(r'^DATABASE_URL=.*', 'DATABASE_URL=postgresql://postgres:' + encoded + '@postgres:5432/cuonghoangdev_db?schema=public', l)) if l.startswith('DATABASE_URL=') else out.append(l) for l in lines]; open('/opt/cuonghoangdev/.env','w').writelines(out); print('DATABASE_URL updated')\""
           else
-            # Use docker exec to reset postgres password to '123456' (default)
-            ssh vps "docker compose -f /opt/cuonghoangdev/docker-compose.yml exec -T postgres \
-              psql -U postgres -c \"ALTER USER postgres PASSWORD '123456';\" 2>/dev/null || \
-              docker compose -f /opt/cuonghoangdev/docker-compose.yml exec -T postgres \
-              psql -p 5432 -U postgres -d postgres -c \"ALTER USER postgres PASSWORD '123456';\" 2>/dev/null || \
-              echo '[WARN] Could not reset postgres password - please set manually'"
-            # Update .env with default password
+            ssh vps "docker compose -f /opt/cuonghoangdev/docker-compose.yml exec -T postgres psql -U postgres -c \\\"ALTER USER postgres PASSWORD '123456';\\\" 2>/dev/null || echo '[WARN] Could not reset postgres password'"
             if grep -q "^POSTGRES_PASSWORD=" /opt/cuonghoangdev/.env 2>/dev/null; then
               ssh vps "sed -i 's|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=123456|' /opt/cuonghoangdev/.env"
             else
               ssh vps "echo 'POSTGRES_PASSWORD=123456' >> /opt/cuonghoangdev/.env"
             fi
+            if grep -q "^DATABASE_URL=" /opt/cuonghoangdev/.env 2>/dev/null; then
+              ssh vps "sed -i 's|^DATABASE_URL=.*|DATABASE_URL=postgresql://postgres:123456@postgres:5432/cuonghoangdev_db?schema=public|' /opt/cuonghoangdev/.env"
+            else
+              ssh vps "echo 'DATABASE_URL=postgresql://postgres:123456@postgres:5432/cuonghoangdev_db?schema=public' >> /opt/cuonghoangdev/.env"
+            fi
           fi
-          ssh vps "grep -E 'OPENROUTER_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD|DATABASE_URL' /opt/cuonghoangdev/.env"
+          ssh vps "grep -E 'OPENROUTER_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
 
       - name: Upload and run swap setup script
         continue-on-error: true

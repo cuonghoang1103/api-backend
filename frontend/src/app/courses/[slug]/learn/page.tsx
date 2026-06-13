@@ -120,7 +120,15 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
         setProgress([]);
       }
 
-      // Pick first lesson or last accessed, honouring ?lessonId= in URL
+      // Pick first lesson or last accessed, honouring ?lessonId= in URL.
+      //
+      // IMPORTANT: do this synchronously from the data we just
+      // received. We can't call the `selectLesson` function from
+      // here because the `course` state captured in its closure is
+      // still null (React batches setCourse) — the early `if
+      // (!course) return` would silently drop the auto-select and
+      // the page would sit there with the spinner forever showing
+      // an empty main column.
       if (data.sections && data.sections.length > 0) {
         const requestedLessonId = typeof window !== 'undefined'
           ? Number(new URLSearchParams(window.location.search).get('lessonId')) || null
@@ -128,7 +136,24 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
         const allLessons = data.sections.flatMap(s => s.lessons || []);
         const target = (requestedLessonId && allLessons.find(l => l.id === requestedLessonId))
           || allLessons[0];
-        if (target) selectLesson(target);
+        if (target) {
+          setCurrentLesson(target);
+          setVideoKey(k => k + 1);
+          setVideoCompleted(false);
+          // Fire-and-forget the detail fetch — we already have
+          // enough to render the video; details enrich it later.
+          coursesApi.getLesson(data.id, target.id)
+            .then((lessonRes) => {
+              const detail = lessonRes?.data?.data;
+              if (detail) {
+                setCurrentLesson((prev) => (prev?.id === target.id ? detail : prev));
+              }
+            })
+            .catch(() => {
+              // Detail enrichment is best-effort; keep the
+              // minimal lesson from the course payload.
+            });
+        }
       }
     } catch (err: any) {
       // Distinguish 404 from 401/network so the error UI is
@@ -151,18 +176,19 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
     }
   }, [router, slug]);
 
-  const selectLesson = async (lesson: LessonDto) => {
+  const selectLesson = useCallback(async (lesson: LessonDto) => {
     if (!course) return;
     setCurrentLesson(lesson);
     setVideoKey(k => k + 1);
     setVideoCompleted(false);
     try {
       const res = await coursesApi.getLesson(course.id, lesson.id);
-      setCurrentLesson(res.data.data);
+      const detail = res?.data?.data;
+      if (detail) setCurrentLesson(detail);
     } catch {
       // lesson already set from course data
     }
-  };
+  }, [course]);
 
   const isCompleted = (lessonId: number) =>
     progress.find(p => p.lessonId === lessonId)?.isCompleted || false;

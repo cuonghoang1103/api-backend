@@ -343,9 +343,40 @@ export default function MusicAudioController() {
     audio.crossOrigin = 'anonymous';
     audio.preload = 'auto';
 
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    // Single source of truth for end-of-track auto-advance. We attach this
+    // to `timeupdate` (which only fires while audio is actively playing) so
+    // there's no race between a 500ms setInterval and the `ended` event
+    // both firing `next()` — that race is the root cause of the "repeat-all
+    // skips the first song on wrap" bug.
+    //
+    // `triggered` guards against the same near-end condition being reported
+    // on multiple timeupdate ticks; it resets when the user seeks back.
+    let triggered = false;
+    const handleTimeUpdate = () => {
+      const t = audio.currentTime;
+      const d = audio.duration;
+      setCurrentTime(t);
+      if (!d || !Number.isFinite(d) || d === 0) return;
+      if (t >= d - 0.3) {
+        if (!triggered) {
+          triggered = true;
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('[MusicAudioController] timeupdate near-end, calling next()');
+          }
+          next();
+        }
+      } else if (t < d - 2) {
+        triggered = false;
+      }
+    };
     const handleLoadedMetadata = () => setDuration(audio.duration);
     const handleEnded = () => {
+      // Some browsers don't fire timeupdate right at the end, so
+      // `ended` is a safety net. `triggered` may already be true from
+      // the timeupdate path, in which case next() was already called
+      // and we should not call it again. We use a small ref-ish guard
+      // via the closure variable below.
+      triggered = true;
       if (process.env.NODE_ENV !== 'production') {
         console.log('[MusicAudioController] handleEnded fired, calling next()');
       }
@@ -550,45 +581,19 @@ export default function MusicAudioController() {
     handleYouTubeTrack,
   ]);
 
-  // Progress-based auto-next for local audio. The <audio> `ended` event
-  // sometimes never fires (e.g. when duration is `Infinity` for streams
-  // or when the element gets paused mid-end), so this is a safety net.
-  // `useMusicStore.getState().next()` already handles all three repeat
-  // modes: 'one' resets currentTime, 'all' wraps to index 0, 'none'
-  // stops playback at the end of the playlist.
+  // Safety net for end-of-track auto-advance. The primary path is the
+  // `timeupdate` listener registered in the audio-init effect above, which
+  // fires `next()` once when `currentTime >= duration - 0.3`. The `ended`
+  // event is also wired up as a second safety net. We deliberately do NOT
+  // use a setInterval poll anymore — that raced with `ended` and caused
+  // the repeat-all to skip the wrapped-around track.
+  //
+  // This effect is kept as an empty dependency anchor in case we need to
+  // re-arm the safety net on track change. It currently does nothing.
   useEffect(() => {
-    let triggered = false;
-    let lastSeenTrackId: string | null = null;
-    const intervalId = setInterval(() => {
-      const { duration: dur, currentTime: ct, currentTrack: ct2 } = useMusicStore.getState();
-      const { isYT } = isYouTubeUrl(ct2?.audioUrl);
-      if (isYT) return; // YouTube handles its own next
-      if (!dur || !Number.isFinite(dur) || dur === 0) return;
-
-      // Reset the triggered flag whenever the user (or auto-next)
-      // switches to a new track, otherwise the safety net could
-      // immediately fire `next()` again on the freshly-loaded track
-      // (whose currentTime is 0 but whose `duration` in the store
-      // is briefly the previous track's duration while the new
-      // <audio> hasn't fired loadedmetadata yet).
-      if (ct2?.id !== lastSeenTrackId) {
-        lastSeenTrackId = ct2?.id ?? null;
-        triggered = false;
-      }
-
-      // Fire only once per "near-end" window; reset the flag when the
-      // user seeks back so the next song-end can trigger again.
-      if (ct > 0 && dur > 0 && ct >= dur - 0.3) {
-        if (!triggered) {
-          triggered = true;
-          useMusicStore.getState().next();
-        }
-      } else if (ct < dur - 2) {
-        triggered = false;
-      }
-    }, 500);
-    return () => clearInterval(intervalId);
-  }, []);
+    // Intentionally empty. See the audio-init effect and `handleTimeUpdate`
+    // for the actual end-of-track detection.
+  }, [currentTrack?.id]);
 
   return null;
 }

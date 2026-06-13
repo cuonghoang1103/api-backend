@@ -90,7 +90,8 @@ export default function AdminPostsPage() {
       const params = new URLSearchParams({
         page: String(page),
         size: String(pageSize),
-        sort: 'createdAt,desc',
+        sortBy: 'createdAt',
+        sortDir: 'desc',
         ...(search && { keyword: search }),
         ...(statusFilter && { status: statusFilter }),
       });

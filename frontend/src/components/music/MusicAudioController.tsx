@@ -360,9 +360,6 @@ export default function MusicAudioController() {
       if (t >= d - 0.3) {
         if (!triggered) {
           triggered = true;
-          if (process.env.NODE_ENV !== 'production') {
-            console.log('[MusicAudioController] timeupdate near-end, calling next()');
-          }
           next();
         }
       } else if (t < d - 2) {
@@ -374,12 +371,8 @@ export default function MusicAudioController() {
       // Some browsers don't fire timeupdate right at the end, so
       // `ended` is a safety net. `triggered` may already be true from
       // the timeupdate path, in which case next() was already called
-      // and we should not call it again. We use a small ref-ish guard
-      // via the closure variable below.
+      // and we should not call it again.
       triggered = true;
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('[MusicAudioController] handleEnded fired, calling next()');
-      }
       next();
     };
     const handleError = () => {
@@ -435,17 +428,6 @@ export default function MusicAudioController() {
     const rawUrl = currentTrack?.audioUrl;
     const trackId = currentTrack?.id ?? null;
     const { isYT, videoId } = isYouTubeUrl(rawUrl);
-
-    if (process.env.NODE_ENV !== 'production') {
-      console.log(
-        '[MusicAudioController] load-track effect:',
-        'trackId=', trackId,
-        'isPlaying=', isPlaying,
-        'audioSrc=', audio?.src?.slice(0, 80),
-        'readyState=', audio?.readyState,
-        'paused=', audio?.paused,
-      );
-    }
 
     if (!rawUrl) return;
 
@@ -581,18 +563,16 @@ export default function MusicAudioController() {
     handleYouTubeTrack,
   ]);
 
-  // Safety net for end-of-track auto-advance. The primary path is the
-  // `timeupdate` listener registered in the audio-init effect above, which
-  // fires `next()` once when `currentTime >= duration - 0.3`. The `ended`
-  // event is also wired up as a second safety net. We deliberately do NOT
-  // use a setInterval poll anymore — that raced with `ended` and caused
-  // the repeat-all to skip the wrapped-around track.
-  //
-  // This effect is kept as an empty dependency anchor in case we need to
-  // re-arm the safety net on track change. It currently does nothing.
+  // End-of-track auto-advance is handled in the audio-init effect above:
+  //   - `timeupdate` fires `next()` once when currentTime >= duration - 0.3
+  //   - `ended` is a safety net for browsers that don't fire timeupdate at
+  //     the very end
+  // We deliberately don't use a setInterval poll here — that raced with
+  // the `ended` event and caused the repeat-all to skip the wrapped-around
+  // track.
   useEffect(() => {
-    // Intentionally empty. See the audio-init effect and `handleTimeUpdate`
-    // for the actual end-of-track detection.
+    // Intentionally empty. End-of-track detection lives in the
+    // timeupdate/ended listeners attached in the audio-init effect.
   }, [currentTrack?.id]);
 
   return null;

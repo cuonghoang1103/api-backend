@@ -1,4 +1,5 @@
 import GamesClient from './GamesClient';
+import GamesBackground from '@/components/games/GamesBackground';
 import { GAMES_DATA } from '@/types/games';
 
 export const metadata = {
@@ -10,26 +11,11 @@ export default async function GamesPage() {
   const games = GAMES_DATA;
 
   return (
-    <div className="min-h-screen bg-darkbg pt-20 pb-20">
+    <div className="min-h-screen pt-20 pb-20" style={{ background: '#020110' }}>
+      <GamesBackground />
+
       {/* Hero */}
       <section className="relative py-20 overflow-hidden">
-        {/* Background glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-neon-violet/10 rounded-full blur-[128px]" />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-neon-indigo/10 rounded-full blur-[128px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-neon-fuchsia/5 rounded-full blur-[128px]" />
-        </div>
-
-        {/* Grid overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(139,92,246,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.5) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
-        />
-
         <div className="relative max-w-7xl mx-auto px-4">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-violet/10 border border-neon-violet/20 mb-6">
@@ -51,7 +37,7 @@ export default async function GamesPage() {
           </p>
           <p className="text-base text-text-secondary max-w-xl">
             Mini games built with HTML5 Canvas, React & TypeScript. Play for fun,
-            challenge yourself, or just take a break.
+            challenge yourself, or just feed a break.
           </p>
 
           {/* Stats */}

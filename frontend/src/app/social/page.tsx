@@ -5,6 +5,7 @@ import { useSocialStore } from '@/store/socialStore';
 import { PostComposer } from '@/components/social/PostComposer';
 import { PostCard } from '@/components/social/PostCard';
 import { motion, AnimatePresence } from 'framer-motion';
+import SocialBackground from '@/components/social/SocialBackground';
 
 export default function SocialPage() {
   const { posts, loadFeed, loadMore, isLoadingFeed, isLoadingMore, hasNextPage, error } =
@@ -44,13 +45,14 @@ export default function SocialPage() {
   }, [posts, isLoadingMore]);
 
   return (
-    <main className="min-h-screen" style={{ background: 'linear-gradient(135deg, #050505 0%, #0f0a1e 50%, #050505 100%)' }}>
+    <main className="min-h-screen" style={{ background: '#03020c' }}>
+      <SocialBackground />
       {/* Ambient glow */}
       <div
-        className="pointer-events-none fixed inset-0 z-0"
+        className="pointer-events-none fixed inset-0 z-[1]"
         style={{
           background:
-            'radial-gradient(ellipse 800px 600px at 50% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 70%), radial-gradient(ellipse 600px 400px at 80% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 60%)',
+            'radial-gradient(ellipse 800px 600px at 50% 0%, rgba(139, 92, 246, 0.06) 0%, transparent 70%), radial-gradient(ellipse 600px 400px at 80% 50%, rgba(6, 182, 212, 0.04) 0%, transparent 60%)',
         }}
       />
 

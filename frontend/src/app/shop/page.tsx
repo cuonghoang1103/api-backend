@@ -6,6 +6,7 @@ import { Zap, Shield, Clock, Star, ShoppingBag, Loader2 } from 'lucide-react';
 import ProductCard from '@/components/shop/ProductCard';
 import ProductFilter from '@/components/shop/ProductFilter';
 import CartDrawer from '@/components/shop/CartDrawer';
+import ShopBackground from '@/components/shop/ShopBackground';
 import { useProductStore } from '@/store/productStore';
 import { PRICE_RANGES, SORT_OPTIONS } from '@/data/products';
 import type { ProductCategory, PriceRange, SortOption } from '@/types';
@@ -84,7 +85,8 @@ export default function ShopPage() {
   }
 
   return (
-    <div className="min-h-screen bg-darkbg pt-20">
+    <div className="min-h-screen pt-20" style={{ background: '#050310' }}>
+      <ShopBackground />
       {/* Hero */}
       <section className="relative py-12 overflow-hidden">
         <div className="absolute inset-0">

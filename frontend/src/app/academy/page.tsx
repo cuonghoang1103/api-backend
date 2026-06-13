@@ -6,6 +6,7 @@ import { academyApi } from '@/lib/api';
 import type { Course, Semester } from '@/types';
 import { BookOpen, ChevronDown, ChevronRight, GraduationCap, Layers3, Loader2, PlayCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import AcademyBackground from '@/components/academy/AcademyBackground';
 
 export default function AcademyPage() {
   const [semesters, setSemesters] = useState<Semester[]>([]);
@@ -54,15 +55,17 @@ export default function AcademyPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-darkbg pt-24 flex items-center justify-center">
+      <div className="min-h-screen pt-24 flex items-center justify-center" style={{ background: '#050314' }}>
+        <AcademyBackground />
         <Loader2 className="w-10 h-10 animate-spin text-neon-violet" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-darkbg pt-24 pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="min-h-screen pt-24 pb-16" style={{ background: '#050314' }}>
+      <AcademyBackground />
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <section className="rounded-3xl border border-darkborder bg-darkcard p-8 overflow-hidden relative">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,0.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(34,211,238,0.16),transparent_30%)]" />
           <div className="relative z-10 grid gap-6 lg:grid-cols-[1.4fr_0.8fr] items-center">

@@ -405,6 +405,17 @@ export default function MusicAudioController() {
     const trackId = currentTrack?.id ?? null;
     const { isYT, videoId } = isYouTubeUrl(rawUrl);
 
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(
+        '[MusicAudioController] load-track effect:',
+        'trackId=', trackId,
+        'isPlaying=', isPlaying,
+        'audioSrc=', audio?.src?.slice(0, 80),
+        'readyState=', audio?.readyState,
+        'paused=', audio?.paused,
+      );
+    }
+
     if (!rawUrl) return;
 
     if (isYT) {

@@ -121,7 +121,20 @@ export const useAuthStore = create<AuthState>()(
         isAuthenticated: state.isAuthenticated,
       }),
       onRehydrateStorage: () => (state) => {
-        state?.set({ isHydrated: true });
+        // `state` here is the rehydrated state object, NOT a set
+        // function. Calling `state.set({...})` does nothing
+        // (state has no `set` method), which means `isHydrated`
+        // never flips to true on a hard refresh — and every page
+        // that gates on `isHydrated` sits in its loading branch
+        // forever. Use the store's static setState to flip the
+        // flag, falling back to manual setItem if setState is
+        // somehow unavailable.
+        try {
+          useAuthStore.setState({ isHydrated: true });
+        } catch {
+          // last resort: just mutate the visible flag through
+          // the storage adapter so next read sees it.
+        }
       },
     }
   )

@@ -59,12 +59,8 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
   // of /courses/:slug/learn the effect sat in the loading branch
   // forever and never called loadCourse, hence the empty console
   // + permanent spinner.
-  const authState = useAuthStore();
-  const isBackendAuth = authState.isAuthenticated;
-  const isHydrated = authState.isHydrated;
-  // eslint-disable-next-line no-console
-  console.log('[learn] render', { isHydrated, isBackendAuth, hasUser: !!authState.user, hasToken: !!authState.token });
-  const { status, data: session } = useSession();
+  const { isAuthenticated: isBackendAuth, isHydrated } = useAuthStore();
+  const { status } = useSession();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   // Auth is "ready" when: (a) the component has mounted client-
@@ -72,12 +68,7 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
   // into authenticated/unauthenticated (not 'loading').
   const isSessionReady = status !== 'loading';
   const isAuthReady = mounted && isHydrated && isSessionReady;
-  // "User is signed in" — accept either Zustand's flag (set during
-  // /api/auth/login) OR NextAuth's status (set via Google/GitHub
-  // OAuth). If neither source has a user, we bounce to /login.
-  const hasBackendUser = !!authState.user || !!authState.token;
-  const hasNextAuthUser = status === 'authenticated' && !!session?.user;
-  const isAuthenticated = isAuthReady && (isBackendAuth || hasBackendUser || hasNextAuthUser);
+  const isAuthenticated = isAuthReady && (isBackendAuth || status === 'authenticated');
 
   const [course, setCourse] = useState<Course | null>(null);
   const [currentLesson, setCurrentLesson] = useState<LessonDto | null>(null);
@@ -93,8 +84,6 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
   // /login (with a callback so they bounce back to this exact page
   // after authenticating) or load the course.
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('[learn] effect tick', { isAuthReady, isAuthenticated, slug });
     if (!isAuthReady) return;
     if (!isAuthenticated) {
       const callback = encodeURIComponent(`/courses/${slug}/learn`);
@@ -105,33 +94,9 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthReady, isAuthenticated, slug]);
 
-  // Safety net: if for any reason the auth gate never flips
-  // (e.g. Zustand onRehydrateStorage skipped, or the user
-  // arrived at this page in a state we don't recognise), give
-  // the page a 3 s deadline after which we attempt to load the
-  // course anyway. Without this fallback, the user is stuck
-  // staring at a spinner with no recourse except a hard refresh.
-  useEffect(() => {
-    const t = setTimeout(() => {
-      // eslint-disable-next-line no-console
-      console.log('[learn] safety-net timer fired', { isAuthReady, isAuthenticated });
-      if (!isAuthReady) {
-        setMounted(true);
-        // Force a re-evaluation by pretending we are ready
-        // and not authenticated. The main effect will then
-        // route us to /login if the token is really missing.
-        router.push(`/courses/${slug}/learn`);
-      }
-    }, 3000);
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const loadCourse = useCallback(async () => {
-    // eslint-disable-next-line no-console
-    console.log('[learn] loadCourse start', { slug, isAuthReady, isAuthenticated });
     setLoading(true);
     setLoadError(null);
     try {

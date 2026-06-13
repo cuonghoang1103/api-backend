@@ -49,6 +49,19 @@ jobs:
         run: |
           ssh vps "echo SSH_OK"
 
+      - name: Build backend TypeScript (compiled on CI, no Docker cache issues)
+        run: |
+          echo "--- Installing backend deps ---"
+          npm ci --include=dev 2>&1 | tail -3
+          echo "--- Generating Prisma client ---"
+          npx prisma generate 2>&1 | tail -3
+          echo "--- Compiling TypeScript ---"
+          npx tsc 2>&1
+          echo "--- Verify compiled code ---"
+          grep -c "router.get.*/projects" dist/routes/admin.routes.js && echo "[OK] admin/projects route compiled!"
+          echo "--- Verify OpenRouter URL ---"
+          grep -q "openrouter.ai" dist/services/ai.service.js && echo "[OK] OpenRouter URL in AI service!"
+
       - name: Build Next.js frontend
         run: |
           cd frontend
@@ -56,8 +69,6 @@ jobs:
           NEXT_PUBLIC_BUILD_ID=$(date +%s) npm run build
           echo "--- Built .next/ contents ---"
           ls .next/static/css/*.css 2>/dev/null | head -3
-          echo "--- Scrollbar fix present? ---"
-          grep -l "chat-messages-scroll" .next/static/css/*.css 2>/dev/null || echo "NOT FOUND"
 
       - name: Sync project to VPS
         run: |
@@ -76,15 +87,13 @@ jobs:
             ./ -e "ssh -F $HOME/.ssh/config" \
             "vps:/opt/cuonghoangdev/" || echo "Rsync completed with warnings (exit $?)"
 
-      - name: Deploy .next/, node_modules, and package files to VPS
+      - name: Deploy frontend artifacts to VPS
         run: |
-          echo "--- Streaming build artifacts to VPS ---"
+          echo "--- Streaming frontend build artifacts to VPS ---"
           ssh -F $HOME/.ssh/config vps "rm -rf /opt/cuonghoangdev/frontend/.next /opt/cuonghoangdev/frontend/node_modules && mkdir -p /opt/cuonghoangdev/frontend" || true
           (cd frontend && tar -czf - .next/ node_modules/ package.json package-lock.json) | \
-            ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev/frontend && tar -xzf -" || true
-          echo "--- Build artifacts deployed ---"
-          ssh -F $HOME/.ssh/config vps "ls /opt/cuonghoangdev/frontend/.next/static/css/ 2>/dev/null | head-3" || echo "Verification: file listing skipped"
-          ssh -F $HOME/.ssh/config vps "ls /opt/cuonghoangdev/frontend/node_modules/next/package.json 2>/dev/null && echo 'node_modules: OK' || echo 'node_modules: MISSING'" || echo "Verification skipped"
+            ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev/frontend && tar -xzf -"
+          echo "--- Frontend artifacts deployed ---"
 
       - name: Create .env on VPS if missing
         run: |
@@ -117,7 +126,6 @@ jobs:
             else
               ssh vps "echo 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}' >> /opt/cuonghoangdev/.env"
             fi
-            # Upload and run the pg password update script
             scp -F ~/.ssh/config scripts/update-pg-password.py "vps:/tmp/update_pg.py"
             PG_PW='${POSTGRES_PASSWORD}' ssh vps "PG_PW='${POSTGRES_PASSWORD}' python3 /tmp/update_pg.py && rm /tmp/update_pg.py"
           else
@@ -147,11 +155,53 @@ jobs:
           chmod +x scripts/deploy-vps.sh
           scp -F ~/.ssh/config scripts/deploy-vps.sh "vps:/opt/cuonghoangdev/scripts/deploy-vps.sh"
 
-      - name: Run deploy script on VPS
+      - name: Deploy backend: stop old container, inject fresh dist, restart
         run: |
-          ssh vps "bash /opt/cuonghoangdev/scripts/deploy-vps.sh"
+          echo "--- Stopping backend container ---"
+          ssh vps "docker stop cuonghoangdev_backend 2>/dev/null || true"
+          ssh vps "docker rm -f cuonghoangdev_backend 2>/dev/null || true"
+          echo "--- Copying compiled dist to VPS ---"
+          ssh vps "mkdir -p /opt/cuonghoangdev/dist_fresh"
+          (tar -czf - dist/) | ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev && tar -xzf -"
+          echo "--- Starting backend container ---"
+          ssh vps "cd /opt/cuonghoangdev && docker compose up -d backend 2>&1"
+          echo "--- Waiting for backend to be healthy ---"
+          ssh vps "for i in \$(seq 1 30); do
+            STATUS=\$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo 'NOT_FOUND')
+            echo \"Check (\$i/30): backend=\$STATUS\"
+            if [ \"\$STATUS\" = 'running' ]; then
+              if docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/health >/dev/null 2>&1'; then
+                echo '[OK] Backend is healthy!'
+                break
+              fi
+            fi
+            if [ \$i -eq 30 ]; then
+              echo '[CRITICAL] Backend not healthy after 150s!'
+              docker logs cuonghoangdev_backend --tail 30
+              exit 1
+            fi
+            sleep 5
+          done"
 
-      - name: Sync .next/ into frontend container (fixes out-of-sync container filesystem)
+      - name: Inject fresh backend dist into running container
+        run: |
+          echo "--- Injecting freshly compiled dist into backend container ---"
+          ssh vps "docker cp /opt/cuonghoangdev/dist/. cuonghoangdev_backend:/app/dist/"
+          echo "--- Restarting backend to load new code ---"
+          ssh vps "docker restart cuonghoangdev_backend"
+          echo "--- Waiting for reload ---"
+          ssh vps "for i in \$(seq 1 12); do
+            if docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/health >/dev/null 2>&1'; then
+              echo '[OK] Backend reloaded with new code!'
+              break
+            fi
+            echo \"Reload... (\$i/12)\"
+            sleep 5
+          done"
+          echo "--- Verify admin/projects route ---"
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -s http://localhost:3001/api/v1/admin/projects 2>&1'"
+
+      - name: Sync .next/ into frontend container
         run: |
           ssh vps "docker exec -u root cuonghoangdev_frontend sh -c 'rm -rf /app/.next/* && mkdir -p /app/.next' && docker cp /opt/cuonghoangdev/frontend/.next/. cuonghoangdev_frontend:/app/.next/ && docker restart cuonghoangdev_frontend"
 

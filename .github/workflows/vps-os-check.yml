@@ -1,0 +1,30 @@
+name: VPS OS & Tool Check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check-os:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Check VPS OS and package manager
+        run: |
+          echo "=== VPS OS ==="
+          ssh vps "cat /etc/os-release 2>&1 | head -5"
+          echo "=== Package manager ==="
+          ssh vps "which apt apt-get yum dnf 2>&1"
+          echo "=== Try installing Node.js ==="
+          ssh vps "curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - 2>&1 | tail -5 && sudo apt-get install -y nodejs 2>&1 | tail -5 && node --version"

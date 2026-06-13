@@ -41,7 +41,6 @@ jobs:
           echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
-          mkdir -p ~/.ssh
           printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ServerAliveInterval 60\n    ServerAliveCountMax 10\n    ConnectTimeout 30\n' \
             "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
 
@@ -59,7 +58,6 @@ jobs:
           npx tsc 2>&1
           echo "--- Verify compiled code ---"
           grep -c "router.get.*/projects" dist/routes/admin.routes.js && echo "[OK] admin/projects route compiled!"
-          echo "--- Verify OpenRouter URL ---"
           grep -q "openrouter.ai" dist/services/ai.service.js && echo "[OK] OpenRouter URL in AI service!"
 
       - name: Build Next.js frontend
@@ -85,7 +83,7 @@ jobs:
             --exclude 'setup-swap.sh' \
             --exclude '.env' \
             ./ -e "ssh -F $HOME/.ssh/config" \
-            "vps:/opt/cuonghoangdev/" || echo "Rsync completed with warnings (exit $?)"
+            "vps:/opt/cuonghoangdev/" || echo "Rsync completed with warnings"
 
       - name: Deploy frontend artifacts to VPS
         run: |
@@ -99,9 +97,9 @@ jobs:
         run: |
           ssh vps "if [ ! -f /opt/cuonghoangdev/.env ]; then \
               cp /opt/cuonghoangdev/vps-deploy/.env.example /opt/cuonghoangdev/.env; \
-              echo '[CREATED] .env from .env.example (no existing .env found)'; \
+              echo '[CREATED] .env from .env.example'; \
             else \
-              echo '[SKIP] .env already exists, preserving it'; \
+              echo '[SKIP] .env already exists'; \
             fi"
 
       - name: Update .env on VPS with secrets
@@ -128,20 +126,7 @@ jobs:
             fi
             scp -F ~/.ssh/config scripts/update-pg-password.py "vps:/tmp/update_pg.py"
             PG_PW='${POSTGRES_PASSWORD}' ssh vps "PG_PW='${POSTGRES_PASSWORD}' python3 /tmp/update_pg.py && rm /tmp/update_pg.py"
-          else
-            ssh vps "docker compose -f /opt/cuonghoangdev/docker-compose.yml exec -T postgres psql -U postgres -c \\\"ALTER USER postgres PASSWORD '123456';\\\" 2>/dev/null || echo '[WARN] Could not reset postgres password'"
-            if grep -q "^POSTGRES_PASSWORD=" /opt/cuonghoangdev/.env 2>/dev/null; then
-              ssh vps "sed -i 's|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=123456|' /opt/cuonghoangdev/.env"
-            else
-              ssh vps "echo 'POSTGRES_PASSWORD=123456' >> /opt/cuonghoangdev/.env"
-            fi
-            if grep -q "^DATABASE_URL=" /opt/cuonghoangdev/.env 2>/dev/null; then
-              ssh vps "sed -i 's|^DATABASE_URL=.*|DATABASE_URL=postgresql://postgres:123456@postgres:5432/cuonghoangdev_db?schema=public|' /opt/cuonghoangdev/.env"
-            else
-              ssh vps "echo 'DATABASE_URL=postgresql://postgres:123456@postgres:5432/cuonghoangdev_db?schema=public' >> /opt/cuonghoangdev/.env"
-            fi
           fi
-          ssh vps "grep -E 'OPENROUTER_API_KEY|YOUTUBE_API_KEY|POSTGRES_PASSWORD' /opt/cuonghoangdev/.env"
 
       - name: Upload and run swap setup script
         continue-on-error: true
@@ -155,44 +140,19 @@ jobs:
           chmod +x scripts/deploy-vps.sh
           scp -F ~/.ssh/config scripts/deploy-vps.sh "vps:/opt/cuonghoangdev/scripts/deploy-vps.sh"
 
-      - name: Deploy backend: stop old container, inject fresh dist, restart
+      - name: Deploy backend: inject fresh dist into container
         run: |
-          echo "--- Stopping backend container ---"
-          ssh vps "docker stop cuonghoangdev_backend 2>/dev/null || true"
-          ssh vps "docker rm -f cuonghoangdev_backend 2>/dev/null || true"
           echo "--- Copying compiled dist to VPS ---"
           ssh vps "mkdir -p /opt/cuonghoangdev/dist_fresh"
           (tar -czf - dist/) | ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev && tar -xzf -"
-          echo "--- Starting backend container ---"
-          ssh vps "cd /opt/cuonghoangdev && docker compose up -d backend 2>&1"
-          echo "--- Waiting for backend to be healthy ---"
-          ssh vps "for i in \$(seq 1 30); do
-            STATUS=\$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo 'NOT_FOUND')
-            echo \"Check (\$i/30): backend=\$STATUS\"
-            if [ \"\$STATUS\" = 'running' ]; then
-              if docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/health >/dev/null 2>&1'; then
-                echo '[OK] Backend is healthy!'
-                break
-              fi
-            fi
-            if [ \$i -eq 30 ]; then
-              echo '[CRITICAL] Backend not healthy after 150s!'
-              docker logs cuonghoangdev_backend --tail 30
-              exit 1
-            fi
-            sleep 5
-          done"
-
-      - name: Inject fresh backend dist into running container
-        run: |
-          echo "--- Injecting freshly compiled dist into backend container ---"
+          echo "--- Injecting dist into running backend container ---"
           ssh vps "docker cp /opt/cuonghoangdev/dist/. cuonghoangdev_backend:/app/dist/"
           echo "--- Restarting backend to load new code ---"
           ssh vps "docker restart cuonghoangdev_backend"
           echo "--- Waiting for reload ---"
           ssh vps "for i in \$(seq 1 12); do
             if docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/health >/dev/null 2>&1'; then
-              echo '[OK] Backend reloaded with new code!'
+              echo '[OK] Backend reloaded!'
               break
             fi
             echo \"Reload... (\$i/12)\"

@@ -3,15 +3,140 @@
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Search, X, FileText } from 'lucide-react';
+import { Search, X, FileText, Cpu, Zap, Layers, ArrowRight } from 'lucide-react';
 import { blogApi } from '@/lib/api';
-import type { Post, PostCard, Category, PageResponse } from '@/types';
+import type { Post, PostCard, Category } from '@/types';
 import BlogCard from '@/components/blog/BlogCard';
-import CategorySidebar from '@/components/blog/CategorySidebar';
 import BlogPostDetailModal from '@/components/blog/BlogPostDetailModal';
 import ClientOnly from '@/components/providers/ClientOnly';
+import ParticleGridBackground from '@/components/blog/ParticleGridBackground';
 
 const ALL_TAGS = ['JavaScript', 'React', 'TypeScript', 'Next.js', 'Spring Boot', 'AI', 'Node.js', 'Python', 'CSS', 'Docker', 'PostgreSQL', 'DevOps'];
+
+function HeroSection() {
+  return (
+    <section className="relative py-16 overflow-hidden">
+      {/* Glowing accent orbs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px]"
+          style={{
+            background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)',
+            transform: 'translate(-50%, -50%)',
+            filter: 'blur(60px)',
+            animation: 'float1 8s ease-in-out infinite',
+          }}
+        />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px]"
+          style={{
+            background: 'radial-gradient(circle, rgba(236,72,153,0.1) 0%, transparent 70%)',
+            transform: 'translate(50%, 50%)',
+            filter: 'blur(60px)',
+            animation: 'float2 10s ease-in-out infinite',
+          }}
+        />
+        <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px]"
+          style={{
+            background: 'radial-gradient(circle, rgba(6,182,212,0.06) 0%, transparent 70%)',
+            transform: 'translate(-50%, -50%)',
+            filter: 'blur(80px)',
+            animation: 'float3 12s ease-in-out infinite',
+          }}
+        />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-6"
+        >
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
+            style={{
+              background: 'rgba(139,92,246,0.1)',
+              border: '1px solid rgba(139,92,246,0.25)',
+              boxShadow: '0 0 30px rgba(139,92,246,0.1)',
+            }}
+          >
+            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#8b5cf6', boxShadow: '0 0 8px #8b5cf6' }} />
+            <span className="text-xs font-mono font-bold uppercase tracking-widest" style={{ color: '#8b5cf6' }}>
+              Engineering Knowledge Base
+            </span>
+          </motion.div>
+
+          {/* Title */}
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-heading font-bold leading-tight">
+            <span style={{ color: '#f8fafc' }}>Experience </span>
+            <span
+              className="relative"
+              style={{
+                background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #06b6d4 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              Log
+              <motion.span
+                className="absolute -bottom-1 left-0 right-0 h-[2px]"
+                style={{ background: 'linear-gradient(90deg, transparent, #8b5cf6, #ec4899, transparent)' }}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 1, delay: 0.8 }}
+              />
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-base md:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#94a3b8' }}>
+            Production patterns, open-source implementations, and technical deep-dives from the engineering trenches.
+          </p>
+
+          {/* Tech stack pills */}
+          <div className="flex flex-wrap justify-center gap-2 pt-2">
+            {['Next.js', 'TypeScript', 'PostgreSQL', 'Docker', 'AI'].map((tech) => (
+              <motion.div
+                key={tech}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + Math.random() * 0.3 }}
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono"
+                style={{
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  color: '#64748b',
+                }}
+              >
+                <Cpu className="w-3 h-3" style={{ color: '#8b5cf6' }} />
+                {tech}
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      <style jsx>{`
+        @keyframes float1 {
+          0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
+          50% { transform: translate(-50%, -50%) translateY(-40px); }
+        }
+        @keyframes float2 {
+          0%, 100% { transform: translate(50%, 50%) translateY(0px); }
+          50% { transform: translate(50%, 50%) translateY(30px); }
+        }
+        @keyframes float3 {
+          0%, 100% { transform: translate(-50%, -50%) scale(1); }
+          50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+      `}</style>
+    </section>
+  );
+}
 
 function BlogContent() {
   const searchParams = useSearchParams();
@@ -42,7 +167,7 @@ function BlogContent() {
     setLoading(true);
     setError(null);
     try {
-      const params: Record<string, unknown> = { page: currentPage - 1, size: pageSize };
+      const params: Record<string, unknown> = { page: currentPage, size: pageSize };
       if (categorySlug) params.category = categorySlug;
       if (searchKeyword) params.keyword = searchKeyword;
 
@@ -53,9 +178,9 @@ function BlogContent() {
 
       if (selectedTags.length > 0) {
         filteredPosts = filteredPosts.filter((post: PostCard) => {
-          const postTags = post.tagNames || [];
+          const postTags = (post as any).tagNames || [];
           return selectedTags.some(tag =>
-            postTags.some(pt => pt.toLowerCase() === tag.toLowerCase())
+            postTags.some((pt: string) => pt.toLowerCase() === tag.toLowerCase())
           );
         });
       }
@@ -96,66 +221,93 @@ function BlogContent() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative py-16 overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-neon-indigo/15 rounded-full blur-[150px]" />
-          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-neon-violet/15 rounded-full blur-[150px]" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="inline-block px-4 py-1.5 bg-neon-indigo/10 border border-neon-indigo/20 rounded-full text-sm text-neon-indigo font-medium mb-4">
-              Dev Sharing &amp; Source Code Hub
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary mb-4">
-              Engineering{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-indigo via-neon-violet to-neon-fuchsia">
-                Experience Log
-              </span>
-            </h1>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              Production patterns, open-source implementations, and technical deep-dives from the engineering trenches.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Search & Filters */}
-      <section className="sticky top-16 z-40 bg-darkbg/90 backdrop-blur-md border-b border-darkborder py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        className="sticky top-16 z-30 border-b"
+        style={{
+          background: 'rgba(10,10,15,0.85)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderColor: 'rgba(139,92,246,0.1)',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <form onSubmit={handleSearch} className="flex gap-3 mb-4">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-              <input type="text" placeholder="Search articles..." value={searchKeyword}
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#64748b' }} />
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-darkcard border border-darkborder rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors" />
+                className="w-full pl-12 pr-4 py-3 rounded-xl text-sm"
+                style={{
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(139,92,246,0.15)',
+                  color: '#f8fafc',
+                  outline: 'none',
+                }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(139,92,246,0.4)'; e.currentTarget.style.boxShadow = '0 0 20px rgba(139,92,246,0.1)'; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(139,92,246,0.15)'; e.currentTarget.style.boxShadow = 'none'; }}
+              />
               {searchKeyword && (
                 <button type="button" onClick={() => { setSearchKeyword(''); fetchPosts(); }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary">
+                  className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
+                  style={{ color: '#64748b' }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#f8fafc'; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#64748b'; }}>
                   <X className="w-4 h-4" />
                 </button>
               )}
             </div>
-            <button type="submit"
-              className="px-6 py-3 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium rounded-xl hover:opacity-90 transition-opacity">
+            <motion.button
+              type="submit"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-6 py-3 rounded-xl text-sm font-medium text-white transition-opacity"
+              style={{
+                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                boxShadow: '0 0 20px rgba(139,92,246,0.3)',
+              }}
+            >
               Search
-            </button>
+            </motion.button>
           </form>
 
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            <span className="text-xs text-text-muted shrink-0">Tags:</span>
+          <div className="flex items-center gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+            <span className="text-xs shrink-0 font-mono" style={{ color: '#64748b' }}>
+              <Zap className="w-3 h-3 inline mr-1" style={{ color: '#ec4899' }} />
+              Tags:
+            </span>
             {ALL_TAGS.map(tag => (
-              <button key={tag} onClick={() => handleTagToggle(tag)}
-                className={`shrink-0 px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${selectedTags.includes(tag)
-                  ? 'bg-neon-fuchsia text-white' : 'bg-darkcard text-text-muted hover:text-text-primary border border-darkborder hover:border-neon-fuchsia/30'}`}>
+              <motion.button
+                key={tag}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleTagToggle(tag)}
+                className="shrink-0 px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200"
+                style={{
+                  background: selectedTags.includes(tag)
+                    ? 'linear-gradient(135deg, #8b5cf6, #ec4899)'
+                    : 'rgba(255,255,255,0.03)',
+                  border: `1px solid ${selectedTags.includes(tag) ? 'transparent' : 'rgba(139,92,246,0.15)'}`,
+                  color: selectedTags.includes(tag) ? '#fff' : '#64748b',
+                  boxShadow: selectedTags.includes(tag) ? '0 0 16px rgba(139,92,246,0.35)' : 'none',
+                }}
+              >
                 #{tag}
-              </button>
+              </motion.button>
             ))}
             {hasActiveFilters && (
-              <button onClick={clearFilters}
-                className="shrink-0 px-3 py-1 text-xs text-red-400 hover:text-red-300 transition-colors">
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                onClick={clearFilters}
+                className="shrink-0 px-3 py-1 text-xs transition-colors"
+                style={{ color: '#f87171' }}
+              >
                 Clear all
-              </button>
+              </motion.button>
             )}
           </div>
         </div>
@@ -165,29 +317,54 @@ function BlogContent() {
       {activeCategory && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-text-muted text-sm">Browsing:</span>
-            <span className="px-3 py-1 bg-neon-violet/20 text-neon-violet text-sm font-medium rounded-lg border border-neon-violet/20">{activeCategory.name}</span>
-            <a href="/blog" className="text-xs text-text-muted hover:text-neon-violet transition-colors">Clear</a>
+            <span className="text-sm font-mono" style={{ color: '#64748b' }}>Browsing:</span>
+            <span
+              className="px-3 py-1 text-sm font-medium rounded-lg"
+              style={{ background: 'rgba(139,92,246,0.15)', color: '#8b5cf6', border: '1px solid rgba(139,92,246,0.25)' }}
+            >
+              {activeCategory.name}
+            </span>
+            <a href="/blog" className="text-xs transition-colors" style={{ color: '#64748b' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#8b5cf6'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#64748b'; }}>
+              Clear
+            </a>
           </div>
-          {activeCategory.description && <p className="text-text-muted text-sm mb-6">{activeCategory.description}</p>}
+          {activeCategory.description && <p className="text-sm mb-6" style={{ color: '#64748b' }}>{activeCategory.description}</p>}
         </div>
       )}
 
       {/* Results count */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
-        <p className="text-text-muted text-sm">
-          {totalElements > 0 ? `${totalElements} article${totalElements > 1 ? 's' : ''} found` : 'No posts found'}
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-mono" style={{ color: '#64748b' }}>
+            {totalElements > 0 ? `${totalElements} article${totalElements > 1 ? 's' : ''} found` : 'No posts found'}
+          </p>
+          <div className="flex items-center gap-2 text-xs font-mono" style={{ color: '#64748b' }}>
+            <Layers className="w-3.5 h-3.5" />
+            Page {currentPage} of {totalPages}
+          </div>
+        </div>
       </div>
 
-      {/* Loading */}
+      {/* Loading skeleton */}
       {loading && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(9)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-darkcard rounded-2xl overflow-hidden border border-darkborder/50 h-[320px]" />
-              </div>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+                className="rounded-2xl overflow-hidden border"
+                style={{
+                  background: 'rgba(15,15,20,0.7)',
+                  borderColor: 'rgba(139,92,246,0.1)',
+                  height: '340px',
+                  animation: 'pulse 1.5s ease-in-out infinite',
+                }}
+              />
             ))}
           </div>
         </div>
@@ -196,32 +373,65 @@ function BlogContent() {
       {/* Error */}
       {error && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 text-center py-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-red-500/10 rounded-full mb-4">
-            <FileText className="w-8 h-8 text-red-400" />
+          <div
+            className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
+            style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}
+          >
+            <FileText className="w-8 h-8" style={{ color: '#f87171' }} />
           </div>
-          <p className="text-text-secondary mb-4">{error}</p>
-          <button onClick={fetchPosts} className="px-6 py-2.5 bg-neon-violet/20 text-neon-violet rounded-xl hover:bg-neon-violet/30 transition-colors">Try Again</button>
+          <p className="mb-4" style={{ color: '#94a3b8' }}>{error}</p>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={fetchPosts}
+            className="px-6 py-2.5 rounded-xl transition-colors"
+            style={{ background: 'rgba(139,92,246,0.15)', color: '#8b5cf6', border: '1px solid rgba(139,92,246,0.25)' }}
+          >
+            Try Again
+          </motion.button>
         </div>
       )}
 
       {/* Empty */}
       {!loading && !error && posts.length === 0 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-          <div className="text-center py-16">
-            <FileText className="w-16 h-16 mx-auto text-text-muted mb-4" />
-            <h3 className="text-xl font-semibold text-text-primary mb-2">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-20 rounded-2xl border"
+            style={{
+              background: 'rgba(15,15,20,0.5)',
+              borderColor: 'rgba(139,92,246,0.1)',
+            }}
+          >
+            <div
+              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
+              style={{ background: 'rgba(139,92,246,0.1)' }}
+            >
+              <FileText className="w-8 h-8" style={{ color: '#64748b' }} />
+            </div>
+            <h3 className="text-xl font-heading font-semibold mb-2" style={{ color: '#f8fafc' }}>
               {hasActiveFilters ? 'No posts match your filters' : 'No blog posts yet'}
             </h3>
-            <p className="text-text-muted mb-6">
+            <p className="mb-6" style={{ color: '#64748b' }}>
               {hasActiveFilters ? 'Try adjusting your search or category filters.' : 'Check back soon for new articles and tutorials.'}
             </p>
             {hasActiveFilters && (
-              <button onClick={clearFilters}
-                className="px-6 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium rounded-xl hover:opacity-90 transition-opacity">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={clearFilters}
+                className="px-6 py-2.5 rounded-xl font-medium transition-opacity"
+                style={{
+                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                  color: '#fff',
+                  boxShadow: '0 0 20px rgba(139,92,246,0.3)',
+                }}
+              >
                 Clear Filters
-              </button>
+              </motion.button>
             )}
-          </div>
+          </motion.div>
         </div>
       )}
 
@@ -241,30 +451,68 @@ function BlogContent() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-10">
-              <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            <div className="flex justify-center items-center gap-2 mt-12">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 bg-darkcard border border-darkborder rounded-xl text-sm text-text-secondary hover:text-text-primary hover:border-neon-violet/30 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                style={{
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(139,92,246,0.15)',
+                  color: '#94a3b8',
+                }}
+              >
                 Previous
-              </button>
+              </motion.button>
+
               <div className="flex items-center gap-1">
                 {[...Array(Math.min(totalPages, 7))].map((_, i) => {
                   const page = i + 1;
+                  const isActive = currentPage === page;
                   return (
-                    <button key={page} onClick={() => setCurrentPage(page)}
-                      className={`w-10 h-10 rounded-xl text-sm font-medium transition-colors ${currentPage === page
-                        ? 'bg-gradient-to-r from-neon-indigo to-neon-violet text-white'
-                        : 'bg-darkcard border border-darkborder text-text-secondary hover:text-text-primary'}`}>
+                    <motion.button
+                      key={page}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setCurrentPage(page)}
+                      className="w-10 h-10 rounded-xl text-sm font-medium transition-all"
+                      style={
+                        isActive
+                          ? {
+                              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                              color: '#fff',
+                              boxShadow: '0 0 20px rgba(139,92,246,0.35)',
+                            }
+                          : {
+                              background: 'rgba(255,255,255,0.04)',
+                              border: '1px solid rgba(139,92,246,0.15)',
+                              color: '#94a3b8',
+                            }
+                      }
+                    >
                       {page}
-                    </button>
+                    </motion.button>
                   );
                 })}
               </div>
-              <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-darkcard border border-darkborder rounded-xl text-sm text-text-secondary hover:text-text-primary hover:border-neon-violet/30 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                style={{
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(139,92,246,0.15)',
+                  color: '#94a3b8',
+                }}
+              >
                 Next
-              </button>
+                <ArrowRight className="w-4 h-4" />
+              </motion.button>
             </div>
           )}
         </div>
@@ -280,46 +528,34 @@ function BlogContent() {
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-darkbg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="flex-1 min-w-0">
-            <Suspense fallback={
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(9)].map((_, i) => (
-                  <div key={i} className="animate-pulse">
-                    <div className="bg-darkcard rounded-2xl overflow-hidden border border-darkborder/50 h-[320px]" />
-                  </div>
-                ))}
-              </div>
-            }>
-              <BlogContent />
-            </Suspense>
-          </div>
+    <div className="min-h-screen" style={{ background: '#0a0a0f' }}>
+      {/* Particle Grid Background */}
+      <ParticleGridBackground />
 
-          <div className="lg:w-80 shrink-0">
-            <Suspense fallback={null}>
-              <BlogSidebarWrapper />
-            </Suspense>
+      {/* Content layer */}
+      <div className="relative z-10">
+        <HeroSection />
+        <Suspense fallback={
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(9)].map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="bg-darkcard rounded-2xl overflow-hidden border border-darkborder/50 h-[320px]" />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        }>
+          <BlogContent />
+        </Suspense>
       </div>
-    </div>
-  );
-}
 
-function BlogSidebarWrapper() {
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    blogApi.getCategories().then(res => {
-      setCategories(res.data?.data || []);
-    }).catch(() => {});
-  }, []);
-
-  return (
-    <div className="sticky top-36">
-      <CategorySidebar categories={categories} />
+      <style jsx global>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+      `}</style>
     </div>
   );
 }

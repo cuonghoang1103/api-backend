@@ -51,12 +51,11 @@ Mỗi lần push code:
 ### Kết quả mong đợi
 
 ```
-Lần deploy đầu tiên (cold build):  ~25-30 phút (bình thường)
-Lần deploy thứ 2+ (code changes):  ~2-5 phút (cache hit!)
-  - npm ci:           ~2-5 giây    (cache HIT)
-  - tsc:              ~10-30 giây  (chỉ biên dịch file đổi)
-  - prisma generate:  ~3-5 giây    (cache HIT)
-  - Container start:  ~5-10 giây   (zero-downtime)
+Lần deploy đầu tiên (cold build):  ~3-5 phút (bình thường)
+Lần deploy thứ 2+ (code changes): ~30-60 giây (cache hit!)
+  - Docker build (incremental):  ~25-40 giây  (BuildKit cache)
+  - Container start:              ~5-10 giây   (zero-downtime)
+  - Total deploy time:            ~40-60 giây
 ```
 
 ---
@@ -100,13 +99,13 @@ docker build --build-arg BUILDKIT_INLINE_CACHE=1 ...
 
 ## Checklist triển khai
 
-- [ ] Viết lại `Dockerfile.backend` theo multi-stage build
-- [ ] Viết lại `scripts/deploy-vps.sh` enable BuildKit + cache flags
-- [ ] Test build lần 1 (cold build)
-- [ ] Test build lần 2 (code change only) → phải nhanh hơn 10x
-- [ ] Verify container chạy đúng sau deploy
-- [ ] Xóa toàn bộ `docker builder prune` / `docker image prune` / `docker container prune`
-- [ ] Thêm healthcheck cho backend container
+- [x] Viết lại `Dockerfile.backend` theo multi-stage build
+- [x] Viết lại `scripts/deploy-vps.sh` enable BuildKit + cache flags
+- [x] Test build lần 1 (cold build)
+- [x] Test build lần 2 (code change only) → nhanh hơn 10x
+- [x] Verify container chạy đúng sau deploy
+- [x] Xóa toàn bộ `docker builder prune` / `docker image prune` / `docker container prune`
+- [x] Thêm healthcheck cho backend container
 
 ---
 

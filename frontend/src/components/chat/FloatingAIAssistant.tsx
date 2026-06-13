@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Lottie, { LottieRefCurrentProps } from 'lottie-react';
+import LottieClient from '@/components/ui/LottieClient';
 import { useChatStore } from '@/store/chatStore';
 import ChatModal from './ChatModal';
 
@@ -184,18 +184,13 @@ export default function FloatingAIAssistant() {
 
             {/* Lottie Animation */}
             <div className="relative w-full h-full rounded-3xl overflow-hidden">
-              {robotData ? (
-                <Lottie
-                  lottieRef={lottieRef}
-                  animationData={robotData}
-                  loop
-                  autoplay
-                  style={{ width: '100%', height: '100%' }}
-                />
-              ) : (
-                /* Fallback placeholder while loading */
-                <div className="w-full h-full bg-gradient-to-br from-neon-indigo/20 to-neon-violet/20 rounded-3xl flex items-center justify-center" />
-              )}
+              <LottieClient
+                lottieRef={lottieRef}
+                animationData={robotData ?? undefined}
+                loop
+                autoplay
+                style={{ width: '100%', height: '100%' }}
+              />
             </div>
           </motion.button>
 

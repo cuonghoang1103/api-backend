@@ -14,54 +14,26 @@ import ChatMessages from '@/components/chat/ChatMessages';
 import ChatInput from '@/components/chat/ChatInput';
 import SuggestedPrompts from '@/components/chat/SuggestedPrompts';
 import MatrixRain from '@/components/chat/MatrixRain';
+import LottieClient from '@/components/ui/LottieClient';
 import type { ChatMessage, ChatSession } from '@/types';
 import { findStaticResponse, getDefaultGreeting, getFallbackResponse } from '@/lib/ai-static-responses';
 
 // ── Robot avatar with LED eyes ────────────────────────────────────
-function RobotAvatar({ isStreaming }: { isStreaming: boolean }) {
-  const [robotData, setRobotData] = useState<object | null>(null);
-
-  useEffect(() => {
-    fetch('/animations/robot.json')
-      .then((r) => r.json())
-      .then(setRobotData)
-      .catch(() => {});
-  }, []);
-
+function RobotAvatar({ isStreaming, robotData }: { isStreaming: boolean; robotData?: object }) {
   return (
     <div className="relative w-11 h-11 rounded-2xl overflow-hidden flex items-center justify-center bg-[#0d1117] border border-[#22d3ee]/20 shadow-[0_0_16px_rgba(34,211,238,0.15)]">
-      {robotData ? (
-        <Lottie animationData={robotData} loop autoplay style={{ width: '100%', height: '100%' }} />
-      ) : (
-        <div className="w-full h-full flex flex-col items-center justify-center gap-0.5">
-          {/* LED Eyes */}
-          <div className="flex gap-2">
-            <div className={`w-2 h-2 rounded-full bg-[#22d3ee] ${isStreaming ? 'animate-pulse' : 'led-eye'}`} />
-            <div className={`w-2 h-2 rounded-full bg-[#22d3ee] ${isStreaming ? 'animate-pulse' : 'led-eye'}`} style={{ animationDelay: '0.5s' }} />
-          </div>
-          {/* Robot mouth */}
-          <div className="w-3 h-0.5 bg-[#22d3ee]/40 rounded-full" />
-        </div>
-      )}
+      <LottieClient animationData={robotData} loop autoplay style={{ width: '100%', height: '100%' }} />
     </div>
   );
 }
 
 // ── Cyber Terminal Welcome ──────────────────────────────────────────
-function ChatWelcome({ prompts, onSelect, isLoading }: {
+function ChatWelcome({ prompts, onSelect, isLoading, robotData }: {
   prompts: { id: string; label: string; icon: string; prompt: string }[];
   onSelect: (p: string) => void;
   isLoading: boolean;
+  robotData?: object;
 }) {
-  const [robotData, setRobotData] = useState<object | null>(null);
-
-  useEffect(() => {
-    fetch('/animations/robot.json')
-      .then((r) => r.json())
-      .then(setRobotData)
-      .catch(() => {});
-  }, []);
-
   return (
     <motion.div
       key="welcome"
@@ -78,17 +50,7 @@ function ChatWelcome({ prompts, onSelect, isLoading }: {
         className="w-24 h-24 rounded-3xl overflow-hidden flex items-center justify-center mb-6 border border-[#22d3ee]/20 shadow-[0_0_30px_rgba(34,211,238,0.2)]"
         style={{ background: '#0d1117' }}
       >
-        {robotData ? (
-          <Lottie animationData={robotData} loop autoplay style={{ width: '100%', height: '100%' }} />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-1">
-            <div className="flex gap-3">
-              <div className="w-3 h-3 rounded-full bg-[#22d3ee] led-eye" />
-              <div className="w-3 h-3 rounded-full bg-[#22d3ee] led-eye" style={{ animationDelay: '0.5s' }} />
-            </div>
-            <div className="w-5 h-0.5 bg-[#22d3ee]/40 rounded-full mt-1" />
-          </div>
-        )}
+        <LottieClient animationData={robotData} loop autoplay style={{ width: '100%', height: '100%' }} />
       </motion.div>
 
       <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[#f8fafc] mb-3 font-mono tracking-tight">
@@ -145,6 +107,15 @@ export default function ChatPage() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [glitchTrigger, setGlitchTrigger] = useState(false);
   const [sessionCount, setSessionCount] = useState(0);
+  const [robotData, setRobotData] = useState<object | null>(null);
+
+  // Fetch robot animation data once
+  useEffect(() => {
+    fetch('/animations/robot.json')
+      .then((r) => r.json())
+      .then(setRobotData)
+      .catch(() => {});
+  }, []);
 
   const currentMessages = currentSessionId ? (messages[currentSessionId] || []) : [];
 
@@ -492,7 +463,7 @@ export default function ChatPage() {
               animate={{ rotate: isStreaming ? 360 : 0 }}
               transition={{ duration: isStreaming ? 2 : 0, repeat: isStreaming ? Infinity : 0, ease: 'linear' }}
             >
-              <RobotAvatar isStreaming={isStreaming} />
+              <RobotAvatar isStreaming={isStreaming} robotData={robotData ?? undefined} />
             </motion.div>
 
             <div>
@@ -583,6 +554,7 @@ export default function ChatPage() {
                   prompts={suggestedPrompts}
                   onSelect={handlePromptSelect}
                   isLoading={isStreaming}
+                  robotData={robotData ?? undefined}
                 />
               ) : (
                 <ChatMessages

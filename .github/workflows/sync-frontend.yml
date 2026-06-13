@@ -1,10 +1,10 @@
-name: Sync Frontend to VPS (Quick)
+name: Rebuild & Restart Frontend
 
 on:
   workflow_dispatch:
 
 jobs:
-  sync-frontend:
+  rebuild-frontend:
     runs-on: ubuntu-24.04
 
     steps:
@@ -20,15 +20,23 @@ jobs:
           printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
             "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
 
-      - name: Restart frontend container (use built-in .next)
+      - name: Rebuild and restart frontend container
         run: |
-          ssh vps "docker restart cuonghoangdev_frontend"
-          sleep 5
-          echo "--- Frontend container status ---"
-          ssh vps "docker inspect cuonghoangdev_frontend --format 'Status: {{.State.Status}} | Image: {{.Config.Image}}'"
+          echo "--- Stopping old container ---"
+          ssh vps "docker stop cuonghoangdev_frontend 2>/dev/null || true"
+          ssh vps "docker rm -f cuonghoangdev_frontend 2>/dev/null || true"
+          echo "--- Rebuilding frontend image ---"
+          ssh vps "docker build --no-cache -t cuonghoangdev-frontend:latest -f /opt/cuonghoangdev/frontend/Dockerfile /opt/cuonghoangdev/frontend/ 2>&1 | tail -10"
+          echo "--- Starting container ---"
+          ssh vps "docker run -d --name cuonghoangdev_frontend -p 3000:3000 --restart unless-stopped -w /app cuonghoangdev-frontend:latest 2>&1"
+          sleep 10
+          echo "--- Container status ---"
+          ssh vps "docker ps --filter name=cuonghoangdev_frontend --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"
+          echo "--- Container logs ---"
+          ssh vps "docker logs cuonghoangdev_frontend --tail 20 2>&1"
 
       - name: Verify site is up
         run: |
           sleep 5
-          ssh vps "curl -sf http://frontend:3000/ >/dev/null && echo 'Frontend is UP on internal port' || echo 'Frontend check failed on internal port'"
+          ssh vps "curl -sf http://localhost:3000/ >/dev/null && echo 'Frontend is UP on port 3000' || echo 'Frontend check failed on port 3000'"
           ssh vps "curl -sf https://cuongthai.com/ >/dev/null && echo 'Site is UP' || echo 'Site check failed'"

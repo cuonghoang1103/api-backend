@@ -252,7 +252,14 @@ export default function MusicAudioController() {
           const { PLAYING, PAUSED, ENDED } = window.YT?.PlayerState ?? {};
           if (state === ENDED) {
             stopYouTubePolling();
-            if (repeatMode !== 'one') next();
+            // Defer one tick so we don't fire `next` from inside the
+            // YouTube IFrame callback (it can cause the new track to
+            // race the player teardown). The store's `next()` already
+            // handles all three repeat modes:
+            //   - 'one' → reset currentTime to 0 (replay)
+            //   - 'all' → wrap to index 0
+            //   - 'none' → stop at end of playlist
+            setTimeout(() => next(), 0);
           }
         },
         () => {
@@ -458,17 +465,28 @@ export default function MusicAudioController() {
     handleYouTubeTrack,
   ]);
 
-  // Progress-based auto-next for local audio
+  // Progress-based auto-next for local audio. The <audio> `ended` event
+  // sometimes never fires (e.g. when duration is `Infinity` for streams
+  // or when the element gets paused mid-end), so this is a safety net.
+  // `useMusicStore.getState().next()` already handles all three repeat
+  // modes: 'one' resets currentTime, 'all' wraps to index 0, 'none'
+  // stops playback at the end of the playlist.
   useEffect(() => {
+    let triggered = false;
     const intervalId = setInterval(() => {
-      const { duration: dur, currentTime: ct, repeatMode: rm, currentTrack: ct2 } = useMusicStore.getState();
+      const { duration: dur, currentTime: ct, currentTrack: ct2 } = useMusicStore.getState();
       const { isYT } = isYouTubeUrl(ct2?.audioUrl);
       if (isYT) return; // YouTube handles its own next
       if (!dur || !Number.isFinite(dur) || dur === 0) return;
+      // Fire only once per "near-end" window; reset the flag when the
+      // user seeks back so the next song-end can trigger again.
       if (ct > 0 && dur > 0 && ct >= dur - 0.3) {
-        if (rm !== 'one') {
+        if (!triggered) {
+          triggered = true;
           useMusicStore.getState().next();
         }
+      } else if (ct < dur - 2) {
+        triggered = false;
       }
     }, 500);
     return () => clearInterval(intervalId);

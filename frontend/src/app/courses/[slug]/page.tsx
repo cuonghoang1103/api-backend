@@ -47,7 +47,10 @@ export default function CourseDetailPage() {
   // ── DEBUG: render counter — lets us prove from the browser
   // console whether the component is re-mounting in a loop.
   // We use useRef (not state) so the counter update itself
-  // doesn't trigger a re-render.
+  // doesn't trigger a re-render. Kept in place as a
+  // tripwire for the next regression — the same pattern
+  // (z-index / session re-render storm) is likely to bite
+  // again. Safe to remove once everything is stable.
   const renderCountRef = useRef(0);
   renderCountRef.current += 1;
   useEffect(() => {

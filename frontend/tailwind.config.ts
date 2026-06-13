@@ -39,9 +39,9 @@ const config: Config = {
         "neon-gradient-hover": "linear-gradient(135deg, #8b5cf6, #a855f7, #ec4899)",
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        heading: ["Poppins", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "monospace"],
+        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
+        heading: ["var(--font-poppins)", "Poppins", "system-ui", "sans-serif"],
+        mono: ["var(--font-jetbrains-mono)", "JetBrains Mono", "monospace"],
       },
       animation: {
         "fade-in": "fadeIn 0.3s ease-out",

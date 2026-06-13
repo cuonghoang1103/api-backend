@@ -20,15 +20,15 @@ jobs:
           printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
             "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
 
-      - name: Sync .next into frontend container
+      - name: Restart frontend container (use built-in .next)
         run: |
-          ssh vps "docker exec -u root cuonghoangdev_frontend sh -c 'rm -rf /app/.next/* && mkdir -p /app/.next'"
-          ssh vps "docker cp /opt/cuonghoangdev/frontend/.next/. cuonghoangdev_frontend:/app/.next/"
           ssh vps "docker restart cuonghoangdev_frontend"
-          sleep 3
+          sleep 5
           echo "--- Frontend container status ---"
           ssh vps "docker inspect cuonghoangdev_frontend --format 'Status: {{.State.Status}} | Image: {{.Config.Image}}'"
 
       - name: Verify site is up
         run: |
+          sleep 5
+          ssh vps "curl -sf http://frontend:3000/ >/dev/null && echo 'Frontend is UP on internal port' || echo 'Frontend check failed on internal port'"
           ssh vps "curl -sf https://cuongthai.com/ >/dev/null && echo 'Site is UP' || echo 'Site check failed'"

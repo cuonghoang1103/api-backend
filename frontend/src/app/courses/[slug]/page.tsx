@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -44,8 +44,21 @@ export default function CourseDetailPage() {
   const [enrolling, setEnrolling] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
 
+  // ── DEBUG: render counter — lets us prove from the browser
+  // console whether the component is re-mounting in a loop.
+  // We use useRef (not state) so the counter update itself
+  // doesn't trigger a re-render.
+  const renderCountRef = useRef(0);
+  renderCountRef.current += 1;
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('[course-detail] RENDER', { n: renderCountRef.current, slug, courseId: course?.id, loading });
+  });
+
   useEffect(() => {
     const fetch = async () => {
+      // eslint-disable-next-line no-console
+      console.log('[course-detail] effect FIRED', { slug });
       setLoading(true);
       try {
         const res = await coursesApi.getBySlug(slug);

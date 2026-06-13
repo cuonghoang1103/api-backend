@@ -122,16 +122,17 @@ if docker ps -a --format '{{.Names}}' | grep -q 'cuonghoangdev_frontend'; then
   docker rm -f cuonghoangdev_frontend 2>/dev/null || true
 fi
 
-# ─── Build backend with BuildKit + inline cache ───────────────────────────────
-# Key optimization: NO --no-cache! BuildKit reuse layer không thay đổi:
-#   - Layer "COPY package*.json + npm ci" → REUSED nếu package.json không đổi
-#   - Layer "COPY . ." → REBUILD vì code đổi
-#   - Layer "npm run build" → REBUILD vì source đổi (nhưng rất nhanh)
-echo "--- Building backend (BuildKit + inline cache) ---"
+# ─── Remove old image to force clean rebuild ───────────────────────────────
+# CRITICAL: Docker layer cache can reuse stale compiled output even with --no-cache.
+# Must delete the old image so TypeScript is forced to recompile from source.
+echo "--- Removing old backend image to force clean build ---"
+docker rmi cuonghoangdev_backend:latest 2>/dev/null || true
+
+# ─── Build backend with BuildKit ─────────────────────────────────────────────
+echo "--- Building backend ---"
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 docker build \
-  --build-arg BUILDKIT_INLINE_CACHE=1 \
   -t cuonghoangdev_backend:latest \
   -f /opt/cuonghoangdev/Dockerfile.backend \
   /opt/cuonghoangdev/ 2>&1 | tee /tmp/backend_build.log | tail -10
@@ -154,12 +155,15 @@ if [ $BACKEND_EXIT -ne 0 ]; then
   exit 1
 fi
 
-# ─── Build frontend with BuildKit + inline cache ──────────────────────────────
-echo "--- Building frontend (BuildKit + inline cache) ---"
+# ─── Remove old frontend image to force clean rebuild ─────────────────────────
+echo "--- Removing old frontend image to force clean build ---"
+docker rmi cuonghoangdev_frontend:latest 2>/dev/null || true
+
+# ─── Build frontend ──────────────────────────────────────────────────────────
+echo "--- Building frontend ---"
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 docker build \
-  --build-arg BUILDKIT_INLINE_CACHE=1 \
   -t cuonghoangdev_frontend:latest \
   -f /opt/cuonghoangdev/frontend/Dockerfile \
   /opt/cuonghoangdev/frontend/ 2>&1 | tail -5

@@ -128,6 +128,8 @@ export default function CourseDetailPage() {
   };
 
   if (loading) {
+    // eslint-disable-next-line no-console
+    console.log('[course-detail] RENDER → loading branch');
     return (
       <div className="min-h-screen bg-darkbg flex items-center justify-center">
         <Loader2 className="w-10 h-10 animate-spin text-neon-violet" />
@@ -136,6 +138,8 @@ export default function CourseDetailPage() {
   }
 
   if (!course) {
+    // eslint-disable-next-line no-console
+    console.log('[course-detail] RENDER → !course branch');
     return (
       <div className="min-h-screen bg-darkbg flex items-center justify-center">
         <div className="text-center">
@@ -145,6 +149,9 @@ export default function CourseDetailPage() {
       </div>
     );
   }
+
+  // eslint-disable-next-line no-console
+  console.log('[course-detail] RENDER → content branch', { courseId: course.id, sections: course.sections?.length });
 
   const hasDiscount = course.discountPrice && course.discountPrice > 0;
   const canWatch = course.isEnrolled || course.isFree;

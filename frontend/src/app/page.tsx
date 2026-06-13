@@ -12,6 +12,7 @@ import ServicesSection from '@/components/home/ServicesSection';
 import ContactSection from '@/components/home/ContactSection';
 import Footer from '@/components/home/Footer';
 import StatsSection from '@/components/home/StatsSection';
+import HomeBackground from '@/components/home/HomeBackground';
 import { formatNumber } from '@/lib/utils';
 import { ArrowRight, Sparkles, Code2, Terminal, Zap, Brain, Gem, Search, ChevronRight } from 'lucide-react';
 
@@ -138,7 +139,10 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-darkbg">
+    <div className="min-h-screen" style={{ background: '#0a0a0f' }}>
+      {/* ── Multi-Layer Canvas Background ── */}
+      <HomeBackground />
+
       {/* Hero Section */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden pt-16 pb-8">
         {/* Layered background glows */}

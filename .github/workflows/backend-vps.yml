@@ -117,28 +117,9 @@ jobs:
             else
               ssh vps "echo 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}' >> /opt/cuonghoangdev/.env"
             fi
-            # Update password IN the PostgreSQL server (not just .env)
-            # Write a Python script to VPS to avoid shell escaping issues
-            ssh vps "cat > /tmp/update_pg.py << PYEOF
-import subprocess, urllib.parse, re
-pw = '''${POSTGRES_PASSWORD}'''
-result = subprocess.run(
-    ['docker', 'compose', '-f', '/opt/cuonghoangdev/docker-compose.yml', 'exec', '-T', 'postgres',
-     'psql', '-U', 'postgres', '-d', 'postgres', '-c', f\"ALTER USER postgres PASSWORD '{pw}';\"],
-    capture_output=True, text=True
-)
-print('PostgreSQL password updated' if result.returncode == 0 else f'PG error: {result.stderr}')
-encoded = urllib.parse.quote(pw, safe='')
-with open('/opt/cuonghoangdev/.env', 'r') as f:
-    content = f.read()
-content = re.sub(r'^DATABASE_URL=.*',
-    f'DATABASE_URL=postgresql://postgres:{encoded}@postgres:5432/cuonghoangdev_db?schema=public',
-    content, flags=re.MULTILINE)
-with open('/opt/cuonghoangdev/.env', 'w') as f:
-    f.write(content)
-print('DATABASE_URL updated')
-PYEOF
-python3 /tmp/update_pg.py && rm /tmp/update_pg.py"
+            # Upload and run the pg password update script
+            scp -F ~/.ssh/config scripts/update-pg-password.py "vps:/tmp/update_pg.py"
+            PG_PW='${POSTGRES_PASSWORD}' ssh vps "PG_PW='${POSTGRES_PASSWORD}' python3 /tmp/update_pg.py && rm /tmp/update_pg.py"
           else
             ssh vps "docker compose -f /opt/cuonghoangdev/docker-compose.yml exec -T postgres psql -U postgres -c \\\"ALTER USER postgres PASSWORD '123456';\\\" 2>/dev/null || echo '[WARN] Could not reset postgres password'"
             if grep -q "^POSTGRES_PASSWORD=" /opt/cuonghoangdev/.env 2>/dev/null; then

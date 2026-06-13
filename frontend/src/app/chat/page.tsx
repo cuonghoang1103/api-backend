@@ -3,9 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home } from 'lucide-react';
-import Lottie from 'lottie-react';
-import { ChevronRight, Wifi, WifiOff, AlertCircle, RefreshCw } from 'lucide-react';
+import { Home, Menu, ChevronRight, Wifi, WifiOff, AlertCircle, RefreshCw } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
@@ -452,41 +450,41 @@ export default function ChatPage() {
   }, [setCurrentSessionId, setSuggestedPrompts]);
 
   return (
-    <div className="flex h-screen overflow-hidden cyber-grid-bg pt-16 pb-16 sm:pb-0">
+    <div className="relative min-h-screen w-full overflow-hidden cyber-grid-bg">
       {/* Matrix rain background */}
       <MatrixRain />
 
-      {/* Sidebar */}
-      <div className="relative z-10">
-        <ChatSidebar
-          onDeleteSession={handleDeleteSession}
-          onSelectSession={handleSelectSession}
-        />
-      </div>
+      {/* Chat sidebar: fixed overlay, z-[51] above navbar (z-40) */}
+      <ChatSidebar
+        onDeleteSession={handleDeleteSession}
+        onSelectSession={handleSelectSession}
+      />
 
-      {/* Main chat area */}
-      <main className="flex-1 flex flex-col min-w-0 relative z-10">
+      {/* Main chat area: full viewport minus navbar + mobile nav */}
+      <main className="relative flex flex-col min-h-screen pt-16 pb-16 sm:pb-0">
         {/* Cyber Terminal Header */}
         <motion.header
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="px-4 sm:px-6 py-3 sm:py-4 border-b border-[#22d3ee]/10 flex items-center gap-3 flex-shrink-0 bg-[#0d1117]/80 backdrop-blur-xl"
+          className="relative z-[10] px-4 sm:px-6 py-3 border-b border-[#22d3ee]/10 flex items-center gap-3 flex-shrink-0 bg-[#0d1117]/80 backdrop-blur-xl"
         >
+          {/* Chat history toggle — opens ChatSidebar */}
+          <button
+            onClick={() => setSidebarOpen(!isSidebarOpen)}
+            className="flex items-center justify-center w-8 h-8 rounded-xl hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors"
+            title="Chat history"
+          >
+            <Menu className="w-4 h-4" />
+          </button>
+
           {/* Home navigation */}
           <Link
             href="/"
-            className="flex items-center justify-center w-8 h-8 rounded-xl hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors shrink-0"
+            className="flex items-center justify-center w-8 h-8 rounded-xl hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors"
             title="Back to home"
           >
             <Home className="w-4 h-4" />
           </Link>
-
-          <button
-            onClick={() => setSidebarOpen(!isSidebarOpen)}
-            className="p-2 rounded-lg hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors md:hidden"
-          >
-            <ChevronRight className={`w-4 h-4 transition-transform ${isSidebarOpen ? 'rotate-180' : ''}`} />
-          </button>
 
           <div className="flex items-center gap-3">
             {/* Robot avatar with LED eyes */}

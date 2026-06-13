@@ -1,22 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import NavigationDock from './NavigationDock';
 
 export default function DockLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const pathname = usePathname();
 
   useEffect(() => {
-    setMounted(true);
     const saved = sessionStorage.getItem('dock-open');
     if (saved === 'true') setIsSidebarOpen(true);
   }, []);
-
-  // Chat page has its own navigation — hide the global NavigationDock
-  const isChatPage = pathname === '/chat';
 
   const toggleDock = () => {
     setIsSidebarOpen((prev) => {
@@ -27,14 +20,14 @@ export default function DockLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <div className="flex min-h-screen w-full overflow-x-hidden">
-      {/* Dock — only on non-chat pages */}
-      {!isChatPage && <NavigationDock isOpen={isSidebarOpen} onToggle={toggleDock} />}
+    <>
+      {/* Navigation dock: fixed overlay — does NOT affect page layout */}
+      <NavigationDock isOpen={isSidebarOpen} onToggle={toggleDock} />
 
-      {/* Main content: takes remaining width */}
-      <main className={`flex-1 min-w-0 ${isChatPage ? '' : ''}`}>
+      {/* Main content: always full width, never shifts */}
+      <main className="min-h-screen w-full">
         {children}
       </main>
-    </div>
+    </>
   );
 }

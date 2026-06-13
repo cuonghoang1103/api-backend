@@ -17,26 +17,6 @@ interface ChatSidebarProps {
 }
 
 // ── iOS-style cinematic easing: snappy yet organic ─────────────────────
-const backdropVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-  exit: { opacity: 0 },
-};
-
-const drawerVariants = {
-  hidden: { x: -SIDEBAR_WIDTH - 24, opacity: 0 },
-  visible: {
-    x: 0,
-    opacity: 1,
-    transition: { type: 'spring' as const, stiffness: 180, damping: 22, mass: 0.8 },
-  },
-  exit: {
-    x: -SIDEBAR_WIDTH - 24,
-    opacity: 0,
-    transition: { type: 'spring' as const, stiffness: 280, damping: 28 },
-  },
-};
-
 const sessionItemVariants = {
   hidden: { opacity: 0, x: -20 },
   visible: (i: number) => ({
@@ -82,33 +62,33 @@ export default function ChatSidebar({ onDeleteSession, onSelectSession }: ChatSi
 
   return (
     <>
-      {/* ── Glassmorphism backdrop overlay: click to dismiss ─────── */}
+      {/* ── Full-screen backdrop: dims entire page, click to dismiss ─────── */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
-            key="backdrop"
-            variants={backdropVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            transition={{ duration: 0.35, ease: APPLE_EASE }}
+            key="chat-sidebar-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: APPLE_EASE }}
             onClick={() => setSidebarOpen(false)}
-            className="fixed inset-y-0 left-0 w-[288px] z-[19] bg-black/30 backdrop-blur-md"
-            style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
+            className="fixed inset-0 z-[50] bg-black/40 backdrop-blur-md"
+            style={{ backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
+            aria-hidden="true"
           />
         )}
       </AnimatePresence>
 
-      {/* ── Sidebar: fixed overlay drawer that slides in from left ── */}
+      {/* ── Chat sidebar: fixed overlay drawer ── */}
       <AnimatePresence initial={false}>
         {isSidebarOpen && (
           <motion.aside
-            key="sidebar"
-            variants={drawerVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="fixed top-0 left-0 h-full z-20 flex flex-col"
+            key="chat-sidebar-panel"
+            initial={{ x: -SIDEBAR_WIDTH - 24, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -SIDEBAR_WIDTH - 24, opacity: 0 }}
+            transition={{ type: 'spring' as const, stiffness: 220, damping: 24, mass: 0.85 }}
+            className="fixed top-0 left-0 h-full z-[51] flex flex-col"
             style={{ width: SIDEBAR_WIDTH }}
           >
             <div

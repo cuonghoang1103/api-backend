@@ -114,12 +114,23 @@ export default function AdminLessonsPage() {
     if (!selectedLessonId) return;
     setSaving(true);
     try {
-      await adminCoursesApi.updateLessonDetail(selectedLessonId, {
-        videoPlatform: form.videoPlatform,
-        videoUrl: form.videoUrl,
-        sourceCodeUrl: form.sourceCodeUrl,
-        teachingNotes: form.teachingNotes,
-      });
+      // Lesson-detail (video-related fields) and the lesson row itself
+      // (slug, duration) live in two different tables, so they have to
+      // be persisted via two separate endpoints. Previously the second
+      // call was missing, so any user edit to slug / duration was
+      // silently dropped on save.
+      await Promise.all([
+        adminCoursesApi.updateLessonDetail(selectedLessonId, {
+          videoPlatform: form.videoPlatform,
+          videoUrl: form.videoUrl,
+          sourceCodeUrl: form.sourceCodeUrl,
+          teachingNotes: form.teachingNotes,
+        }),
+        adminCoursesApi.updateLesson(selectedLessonId, {
+          slug: form.slug,
+          videoDurationSeconds: form.videoDurationSeconds,
+        }),
+      ]);
       toast.success('Lưu chi tiết bài giảng thành công');
       setLessons((prev) => prev.map((l) => l.id === selectedLessonId ? { ...form } : l));
     } catch (err: any) {

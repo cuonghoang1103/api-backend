@@ -9,8 +9,6 @@ import {
   TrendingUp,
   Eye,
   Clock,
-  Sparkles,
-  Code2,
   ArrowUpRight,
   ArrowDownRight,
   Activity,
@@ -24,6 +22,7 @@ interface StatCard {
   positive?: boolean;
   icon: React.ElementType;
   color: string;
+  source?: 'api' | 'placeholder';
 }
 
 interface RecentPost {
@@ -34,8 +33,18 @@ interface RecentPost {
   createdAt: string;
 }
 
+// Initial placeholder stats. They get replaced with real values after
+// the API call resolves; if an endpoint doesn't return a total, we keep
+// the "—" placeholder rather than fabricate a number.
+const PLACEHOLDER_STATS: StatCard[] = [
+  { label: 'Tổng bài viết', value: '—', icon: FileText, color: 'from-neon-indigo to-neon-violet', source: 'placeholder' },
+  { label: 'Tổng người dùng', value: '—', icon: Users, color: 'from-neon-fuchsia to-neon-pink', source: 'placeholder' },
+  { label: 'Cuộc trò chuyện AI', value: 0, icon: MessageSquare, color: 'from-neon-cyan to-neon-blue', source: 'api' },
+  { label: 'Tin nhắn AI', value: 0, icon: Activity, color: 'from-neon-emerald to-neon-green', source: 'api' },
+];
+
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<StatCard[]>([]);
+  const [stats, setStats] = useState<StatCard[]>(PLACEHOLDER_STATS);
   const [recentPosts, setRecentPosts] = useState<RecentPost[]>([]);
   const [chatStats, setChatStats] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
@@ -43,60 +52,68 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [postsRes, chatRes] = await Promise.allSettled([
+        // Fetch lightweight per-resource endpoints in parallel so the
+        // dashboard never blocks on a slow query, and never has to lie
+        // about totals by computing them from a paginated subset.
+        const [postsPage, chat, usersPage] = await Promise.allSettled([
           api.get('/admin/posts?page=0&size=5'),
           api.get('/ai/analytics/overview').catch(() => ({ data: { data: {} } })),
+          api.get('/admin/users?page=0&size=1').catch(() => ({ data: { data: [], pagination: { total: null } } })),
         ]);
 
-        const posts = postsRes.status === 'fulfilled' && Array.isArray(postsRes.value.data?.data)
-          ? postsRes.value.data.data
+        const postsRows = postsPage.status === 'fulfilled' && Array.isArray(postsPage.value.data?.data)
+          ? postsPage.value.data.data
           : [];
-        setRecentPosts(posts.map((p: any) => ({
-          id: p.id,
-          title: p.title,
-          status: p.status,
-          viewCount: p.viewCount || 0,
-          createdAt: p.createdAt,
-        })));
+        const postsPagination = postsPage.status === 'fulfilled' ? postsPage.value.data?.pagination : null;
+        setRecentPosts(
+          postsRows.map((p: any) => ({
+            id: p.id,
+            title: p.title,
+            status: p.status,
+            viewCount: p.viewCount || 0,
+            createdAt: p.createdAt,
+          }))
+        );
 
-        const chat = chatRes.status === 'fulfilled' ? chatRes.value.data?.data || {} : {};
-        setChatStats(chat);
+        const chatData = chat.status === 'fulfilled' ? chat.value.data?.data || {} : {};
+        setChatStats(chatData);
 
-        const totalViews = posts.reduce((acc: number, p: any) => acc + (p.viewCount || 0), 0);
-        const totalPostCount = postsRes.status === 'fulfilled'
-          ? postsRes.value.data?.pagination?.total || posts.length
-          : posts.length;
+        // Prefer backend-reported totals. If the endpoint doesn't return
+        // pagination.total, fall back to "—" so we never show a partial
+        // count as if it were a true total.
+        const totalPosts = postsPagination?.total;
+        const totalUsers = usersPage.status === 'fulfilled'
+          ? usersPage.value.data?.pagination?.total
+          : null;
 
         setStats([
           {
             label: 'Tổng bài viết',
-            value: totalPostCount,
-            change: '+12%',
-            positive: true,
+            value: typeof totalPosts === 'number' ? totalPosts : '—',
             icon: FileText,
             color: 'from-neon-indigo to-neon-violet',
+            source: 'api',
           },
           {
-            label: 'Tổng views',
-            value: totalViews.toLocaleString('vi-VN'),
-            change: '+8%',
-            positive: true,
-            icon: Eye,
+            label: 'Tổng người dùng',
+            value: typeof totalUsers === 'number' ? totalUsers : '—',
+            icon: Users,
             color: 'from-neon-fuchsia to-neon-pink',
+            source: 'api',
           },
           {
             label: 'Cuộc trò chuyện AI',
-            value: chat.totalSessions || 0,
+            value: chatData.totalSessions || 0,
             icon: MessageSquare,
             color: 'from-neon-cyan to-neon-blue',
+            source: 'api',
           },
           {
-            label: 'Phản hồi tích cực',
-            value: chat.positiveFeedbackPercent
-              ? `${chat.positiveFeedbackPercent}%`
-              : 'N/A',
-            icon: TrendingUp,
+            label: 'Tin nhắn AI',
+            value: chatData.totalMessages || 0,
+            icon: Activity,
             color: 'from-neon-emerald to-neon-green',
+            source: 'api',
           },
         ]);
       } catch {

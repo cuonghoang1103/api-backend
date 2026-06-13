@@ -80,22 +80,13 @@ export default function AdminCoursesPage() {
   const [loadingSections, setLoadingSections] = useState(false);
 
   // ── Auto-sync status ↔ isPublished ──────────────────────────────────────
-  // Single source of truth: `status` drives visibility.
-  // isPublished is kept for backward compatibility but mirrors `status`.
-  useEffect(() => {
-    setCourseForm(prev => ({
-      ...prev,
-      isPublished: prev.status === 'PUBLISHED',
-    }));
-  }, [courseForm.status]);
-
-  // ── Auto-sync isPublished → status (handles checkbox click from old data) ─
-  useEffect(() => {
-    setCourseForm(prev => ({
-      ...prev,
-      status: prev.isPublished ? 'PUBLISHED' : 'DRAFT',
-    }));
-  }, [courseForm.isPublished]);
+  // Single source of truth: `status` drives visibility on the Academy page.
+  // isPublished is kept for backward compatibility but is now auto-synced
+  // with status on every render via a derived value below — we never store
+  // both independently, which previously caused an infinite render loop
+  // (each useEffect's setState triggered the other one).
+  const statusDerived = courseForm.status === 'PUBLISHED';
+  const isPublishedDerived = courseForm.isPublished;
 
   // Section/lesson expanded state
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
@@ -286,7 +277,7 @@ export default function AdminCoursesPage() {
         language: courseForm.language,
         isFree: courseForm.isFree,
         isFeatured: courseForm.isFeatured,
-        isPublished: courseForm.isPublished,
+        isPublished: statusDerived,
         requirements: courseForm.requirements,
         whatYouLearn: courseForm.whatYouLearn,
         status: courseForm.status,
@@ -667,8 +658,10 @@ export default function AdminCoursesPage() {
                     Nổi bật
                   </label>
                   <label className="flex items-center gap-2 text-sm text-text-primary">
-                    <input type="checkbox" checked={courseForm.isPublished}
-                      onChange={e => setCourseForm(p => ({ ...p, isPublished: e.target.checked }))}
+                    <input
+                      type="checkbox"
+                      checked={statusDerived}
+                      onChange={e => setCourseForm(p => ({ ...p, status: e.target.checked ? 'PUBLISHED' : 'DRAFT' }))}
                       className="w-4 h-4 rounded accent-neon-violet"
                     />
                     Đã xuất bản

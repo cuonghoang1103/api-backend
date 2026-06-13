@@ -1,0 +1,43 @@
+name: VPS Deep Debug Routes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deep-debug:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Check compiled admin.routes.js for admin/projects
+        run: |
+          echo "=== grep admin/projects in admin.routes.js ==="
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'grep -c \"admin/projects\" /app/dist/routes/admin.routes.js 2>&1 || echo NOT FOUND'"
+
+      - name: Test inside container directly
+        run: |
+          echo "=== Test /api/v1/admin/projects from inside container ==="
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -sv http://localhost:3001/api/v1/admin/projects 2>&1 | tail -10'"
+
+      - name: Check all routes registered
+        run: |
+          echo "=== grep all GET routes in admin.routes.js ==="
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'grep -o \"router\\.get.*\" /app/dist/routes/admin.routes.js | head -20'"
+
+      - name: Check build timestamp of compiled files
+        run: |
+          echo "=== Build timestamps ==="
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'stat /app/dist/routes/admin.routes.js 2>&1 | grep Modify'"
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'stat /app/dist/routes/blog.routes.js 2>&1 | grep Modify'"
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'stat /app/dist/routes/project.routes.js 2>&1 | grep Modify'"

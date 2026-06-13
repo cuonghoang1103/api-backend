@@ -123,14 +123,14 @@ if docker ps -a --format '{{.Names}}' | grep -q 'cuonghoangdev_frontend'; then
 fi
 
 # ─── Build backend with BuildKit + inline cache ───────────────────────────────
-# Key optimization: NO --no-cache flag!
-# BuildKit sẽ tự động reuse các layer không thay đổi:
+# Key optimization: NO --no-cache! BuildKit reuse layer không thay đổi:
 #   - Layer "COPY package*.json + npm ci" → REUSED nếu package.json không đổi
-#   - Layer "COPY . ." → REBUILD vì code thay đổi
-#   - Layer "npm run build" → REBUILD vì source thay đổi (nhưng rất nhanh)
+#   - Layer "COPY . ." → REBUILD vì code đổi
+#   - Layer "npm run build" → REBUILD vì source đổi (nhưng rất nhanh)
 echo "--- Building backend (BuildKit + inline cache) ---"
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
 docker build \
-  --no-cache \
   --build-arg BUILDKIT_INLINE_CACHE=1 \
   -t cuonghoangdev_backend:latest \
   -f /opt/cuonghoangdev/Dockerfile.backend \
@@ -156,6 +156,8 @@ fi
 
 # ─── Build frontend with BuildKit + inline cache ──────────────────────────────
 echo "--- Building frontend (BuildKit + inline cache) ---"
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
 docker build \
   --build-arg BUILDKIT_INLINE_CACHE=1 \
   -t cuonghoangdev_frontend:latest \

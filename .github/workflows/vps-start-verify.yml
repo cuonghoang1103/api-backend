@@ -1,0 +1,54 @@
+name: VPS Start & Verify
+
+on:
+  workflow_dispatch:
+
+jobs:
+  start-verify:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ServerAliveInterval 60\n    ServerAliveCountMax 10\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Start backend container
+        run: |
+          echo "=== Starting backend container ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose up -d backend 2>&1"
+          echo "=== Waiting for backend to be healthy ==="
+          ssh vps "for i in \$(seq 1 30); do
+            STATUS=\$(docker inspect cuonghoangdev_backend --format '{{.State.Status}}' 2>/dev/null || echo 'NOT_FOUND')
+            echo \"Check (\$i/30): backend=\$STATUS\"
+            if [ \"\$STATUS\" = 'running' ]; then
+              if docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/health >/dev/null 2>&1'; then
+                echo '[OK] Backend is healthy!'
+                break
+              fi
+            fi
+            if [ \$i -eq 30 ]; then
+              echo '[CRITICAL] Backend not healthy after 150s!'
+              docker logs cuonghoangdev_backend --tail 30
+              exit 1
+            fi
+            sleep 5
+          done"
+
+      - name: Verify admin/projects route
+        run: |
+          echo "=== Verify admin/projects route ==="
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/api/v1/admin/projects 2>&1 | head -20 || echo FAILED'"
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'grep -o \"admin/projects\" /app/dist/routes/admin.routes.js 2>&1 | head -5 || echo NOT IN COMPILED CODE'"
+
+      - name: Restart nginx
+        run: |
+          echo "=== Restart nginx ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose restart nginx 2>&1"

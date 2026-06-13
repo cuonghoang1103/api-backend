@@ -97,10 +97,14 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const loadCourse = useCallback(async () => {
+    // eslint-disable-next-line no-console
+    console.log('[learn] loadCourse START', { slug });
     setLoading(true);
     setLoadError(null);
     try {
       const res = await coursesApi.getBySlug(slug);
+      // eslint-disable-next-line no-console
+      console.log('[learn] loadCourse OK', { status: res?.status, hasData: !!res?.data?.data });
       const data = res.data.data as Course;
       if (!data) {
         setLoadError('NOT_FOUND');
@@ -165,6 +169,8 @@ export default function LearnPage({ params }: { params: { slug: string } }) {
         }
       }
     } catch (err: any) {
+      // eslint-disable-next-line no-console
+      console.error('[learn] loadCourse ERROR', err?.response?.status, err?.message);
       // Distinguish 404 from 401/network so the error UI is
       // actionable instead of the catch-all "Course not found".
       const status = err?.response?.status;

@@ -345,7 +345,12 @@ export default function MusicAudioController() {
 
     const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
     const handleLoadedMetadata = () => setDuration(audio.duration);
-    const handleEnded = () => next();
+    const handleEnded = () => {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('[MusicAudioController] handleEnded fired, calling next()');
+      }
+      next();
+    };
     const handleError = () => {
       console.warn('[MusicAudioController] Audio error:', audio.src, audio.error?.message);
     };
@@ -454,16 +459,28 @@ export default function MusicAudioController() {
     // exact symptom of the repeat-all loop on the last track.
     const tryPlay = () => {
       if (!isPlayingRef.current) return;
+      // AudioContext can be suspended after a long-paused tab or right
+      // after a track swap; resume it before play() or the browser
+      // silently swallows the request.
+      if (audioContextRef.current?.state === 'suspended') {
+        audioContextRef.current.resume().catch(() => {});
+      }
       ensureAnalyser();
       audio
         .play()
         .then(() => {
-          // No-op on success
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('[MusicAudioController] play() ok for', trackId);
+          }
         })
         .catch((err) => {
           console.warn(
             '[MusicAudioController] play() rejected, retrying on canplay:',
             err?.message,
+            'trackId=',
+            trackId,
+            'readyState=',
+            audio.readyState,
           );
           // Retry once on canplay in case the first attempt was too
           // early (e.g. autoplay policy, network blip).
@@ -471,7 +488,12 @@ export default function MusicAudioController() {
             'canplay',
             () => {
               audio.play().catch((e2) => {
-                console.error('[MusicAudioController] play() failed twice:', e2?.message);
+                console.error(
+                  '[MusicAudioController] play() failed twice:',
+                  e2?.message,
+                  'trackId=',
+                  trackId,
+                );
               });
             },
             { once: true },
@@ -525,11 +547,24 @@ export default function MusicAudioController() {
   // stops playback at the end of the playlist.
   useEffect(() => {
     let triggered = false;
+    let lastSeenTrackId: string | null = null;
     const intervalId = setInterval(() => {
       const { duration: dur, currentTime: ct, currentTrack: ct2 } = useMusicStore.getState();
       const { isYT } = isYouTubeUrl(ct2?.audioUrl);
       if (isYT) return; // YouTube handles its own next
       if (!dur || !Number.isFinite(dur) || dur === 0) return;
+
+      // Reset the triggered flag whenever the user (or auto-next)
+      // switches to a new track, otherwise the safety net could
+      // immediately fire `next()` again on the freshly-loaded track
+      // (whose currentTime is 0 but whose `duration` in the store
+      // is briefly the previous track's duration while the new
+      // <audio> hasn't fired loadedmetadata yet).
+      if (ct2?.id !== lastSeenTrackId) {
+        lastSeenTrackId = ct2?.id ?? null;
+        triggered = false;
+      }
+
       // Fire only once per "near-end" window; reset the flag when the
       // user seeks back so the next song-end can trigger again.
       if (ct > 0 && dur > 0 && ct >= dur - 0.3) {

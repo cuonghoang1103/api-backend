@@ -19,6 +19,7 @@
  */
 
 import { Router, type Response } from 'express';
+import multer from 'multer';
 
 import { prisma } from '../config/database.js';
 import { aiService } from '../services/ai.service.js';
@@ -28,6 +29,20 @@ import type { ApiResponse } from '../types/index.js';
 import type { ChatMessageDto } from '../types/index.js';
 
 const router = Router();
+
+// Multer config for bulk file upload (.md / .txt)
+const textUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB per file is plenty for knowledge docs
+  fileFilter: (_req, file, cb) => {
+    const allowed = ['.md', '.txt', '.markdown', '.text', ''];
+    const ext = file.originalname.toLowerCase().match(/\.[^.]+$/)?.[0] || '';
+    const okExt = allowed.includes(ext);
+    const okMime = ['text/plain', 'text/markdown', 'text/x-markdown', 'application/octet-stream'].includes(file.mimetype);
+    if (okExt || okMime) cb(null, true);
+    else cb(new AppError(`File type ${ext || file.mimetype} not allowed. Use .md or .txt`, 400, 'INVALID_FILE_TYPE'));
+  },
+});
 
 // ─── SSE Constants ────────────────────────────────────────
 const SSE_KEEPALIVE_INTERVAL_MS = 25_000; // 25s — keep connection alive through Nginx
@@ -418,6 +433,100 @@ router.get('/admin/stats', authenticate, async (_req: any, res: Response<ApiResp
     next(error);
   }
 });
+
+// ════════════════════════════════════════════════════════════════
+// ADMIN: POST /api/v1/ai/admin/documents/upload-files
+// Bulk upload .md / .txt files → index into RAG store
+// Multipart fields: files (1..N), documentType (optional, defaults to 'custom'),
+//                   documentIdPrefix (optional, defaults to file basename)
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/admin/documents/upload-files',
+  authenticate,
+  textUpload.array('files', 20),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const files = req.files as Express.Multer.File[] | undefined;
+      if (!files || files.length === 0) {
+        throw new AppError('No files uploaded (field "files")', 400, 'NO_FILES');
+      }
+      const documentType = (req.body.documentType as string) || 'custom';
+      const documentIdPrefix = (req.body.documentIdPrefix as string) || '';
+
+      const results: Array<{
+        fileName: string;
+        documentId: string;
+        documentType: string;
+        chunksCreated: number;
+        bytes: number;
+      }> = [];
+
+      const errors: Array<{ fileName: string; error: string }> = [];
+
+      for (const file of files) {
+        try {
+          // Derive documentId from filename (strip extension, kebab-case it)
+          const baseName = file.originalname.replace(/\.[^.]+$/, '').trim();
+          const safeName = baseName
+            .toLowerCase()
+            .replace(/[^a-z0-9-]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 60) || 'unnamed';
+          const documentId = documentIdPrefix
+            ? `${documentIdPrefix}-${safeName}`
+            : safeName;
+
+          const content = file.buffer.toString('utf-8').trim();
+          if (!content) {
+            errors.push({ fileName: file.originalname, error: 'Empty file' });
+            continue;
+          }
+
+          const result = await aiService.indexDocument({
+            documentId,
+            documentType,
+            content,
+            metadata: {
+              source: 'bulk_upload',
+              fileName: file.originalname,
+              fileSizeBytes: file.size,
+              uploadedAt: new Date().toISOString(),
+            },
+          });
+
+          results.push({
+            fileName: file.originalname,
+            documentId,
+            documentType,
+            chunksCreated: result.chunksCreated,
+            bytes: file.size,
+          });
+        } catch (err) {
+          errors.push({
+            fileName: file.originalname,
+            error: err instanceof Error ? err.message : String(err),
+          });
+        }
+      }
+
+      const totalChunks = results.reduce((s, r) => s + r.chunksCreated, 0);
+
+      res.status(201).json({
+        success: true,
+        data: {
+          uploaded: results.length,
+          failed: errors.length,
+          totalChunks,
+          results,
+          errors,
+        },
+        message: `Uploaded ${results.length}/${files.length} files, indexed ${totalChunks} chunks`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 // ════════════════════════════════════════════════════════════════
 // ADMIN: POST /api/v1/ai/admin/documents

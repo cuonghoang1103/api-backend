@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   Database, Upload, Trash2, RefreshCw, Search, AlertCircle,
   CheckCircle2, FileText, Tag, X, ChevronLeft, ChevronRight,
+  FileUp, ClipboardPaste,
 } from 'lucide-react';
 
 const API = '/api/v1';
@@ -51,10 +52,15 @@ export default function AIKnowledgePage() {
 
   // Form state
   const [showUpload, setShowUpload] = useState(false);
+  const [uploadTab, setUploadTab] = useState<'paste' | 'file'>('paste');
   const [documentId, setDocumentId] = useState('');
   const [documentType, setDocumentType] = useState('personal_bio');
   const [content, setContent] = useState('');
   const [uploading, setUploading] = useState(false);
+  // File upload state
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [fileDocType, setFileDocType] = useState('blog');
+  const [fileIdPrefix, setFileIdPrefix] = useState('');
 
   const loadChunks = useCallback(async () => {
     setLoading(true);
@@ -130,6 +136,47 @@ export default function AIKnowledgePage() {
       await loadChunks();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleFileUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedFiles.length === 0) {
+      setError('Chọn ít nhất 1 file .md hoặc .txt');
+      return;
+    }
+    setUploading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const formData = new FormData();
+      selectedFiles.forEach((f) => formData.append('files', f));
+      formData.append('documentType', fileDocType.trim() || 'custom');
+      if (fileIdPrefix.trim()) formData.append('documentIdPrefix', fileIdPrefix.trim());
+
+      const res = await fetch(`${API}/ai/admin/documents/upload-files`, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+      });
+      if (!res.ok) {
+        const errBody = await res.text();
+        throw new Error(`HTTP ${res.status}: ${errBody}`);
+      }
+      const data = await res.json();
+      const payload = data.data;
+      setSuccess(
+        `✓ Đã upload ${payload.uploaded}/${payload.uploaded + payload.failed} files → ${payload.totalChunks} chunks` +
+        (payload.failed > 0 ? ` (${payload.failed} lỗi)` : ''),
+      );
+      setSelectedFiles([]);
+      setFileIdPrefix('');
+      setShowUpload(false);
+      await loadChunks();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'File upload failed');
     } finally {
       setUploading(false);
     }
@@ -224,12 +271,46 @@ export default function AIKnowledgePage() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-heading font-bold text-text-primary">Upload Knowledge Document</h3>
               <button
-                onClick={() => setShowUpload(false)}
+                onClick={() => {
+                  setShowUpload(false);
+                  setSelectedFiles([]);
+                  setUploadTab('paste');
+                }}
                 className="p-1 hover:bg-white/5 rounded-lg"
               >
                 <X className="w-5 h-5 text-text-muted" />
               </button>
             </div>
+
+            {/* Tabs */}
+            <div className="flex border-b border-darkborder mb-4">
+              <button
+                type="button"
+                onClick={() => setUploadTab('paste')}
+                className={`px-4 py-2 text-sm font-medium flex items-center gap-2 border-b-2 transition-colors ${
+                  uploadTab === 'paste'
+                    ? 'border-neon-violet text-text-primary'
+                    : 'border-transparent text-text-muted hover:text-text-primary'
+                }`}
+              >
+                <ClipboardPaste className="w-4 h-4" />
+                Paste Content
+              </button>
+              <button
+                type="button"
+                onClick={() => setUploadTab('file')}
+                className={`px-4 py-2 text-sm font-medium flex items-center gap-2 border-b-2 transition-colors ${
+                  uploadTab === 'file'
+                    ? 'border-neon-violet text-text-primary'
+                    : 'border-transparent text-text-muted hover:text-text-primary'
+                }`}
+              >
+                <FileUp className="w-4 h-4" />
+                Upload Files (.md / .txt)
+              </button>
+            </div>
+
+            {uploadTab === 'paste' ? (
             <form onSubmit={handleUpload} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-text-secondary mb-1.5">
@@ -302,6 +383,84 @@ export default function AIKnowledgePage() {
                 </button>
               </div>
             </form>
+            ) : (
+            <form onSubmit={handleFileUpload} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">
+                  Chọn files <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="file"
+                  accept=".md,.txt,.markdown,.text,text/markdown,text/plain"
+                  multiple
+                  onChange={(e) => setSelectedFiles(Array.from(e.target.files || []))}
+                  className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-text-primary text-sm file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-neon-violet/20 file:text-neon-violet file:text-sm file:font-medium hover:file:bg-neon-violet/30"
+                />
+                <p className="text-xs text-text-muted mt-1">
+                  Hỗ trợ .md, .markdown, .txt. Tối đa 20 files, 5MB mỗi file.
+                </p>
+                {selectedFiles.length > 0 && (
+                  <div className="mt-2 p-2 bg-darkbg/50 border border-darkborder/50 rounded-lg">
+                    <p className="text-xs text-text-muted mb-1">Đã chọn ({selectedFiles.length}):</p>
+                    <ul className="space-y-1">
+                      {selectedFiles.map((f, i) => (
+                        <li key={i} className="text-xs text-text-secondary flex items-center gap-2">
+                          <FileText className="w-3 h-3 text-text-muted" />
+                          <span className="truncate flex-1">{f.name}</span>
+                          <span className="text-text-muted">{(f.size / 1024).toFixed(1)}KB</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">
+                  Loại tài liệu (áp dụng cho tất cả files)
+                </label>
+                <select
+                  value={fileDocType}
+                  onChange={(e) => setFileDocType(e.target.value)}
+                  className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-text-primary focus:outline-none focus:border-neon-violet text-sm"
+                >
+                  {DOCUMENT_TYPE_PRESETS.map((p) => (
+                    <option key={p.value} value={p.value}>{p.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">
+                  Document ID Prefix (tuỳ chọn)
+                </label>
+                <input
+                  type="text"
+                  value={fileIdPrefix}
+                  onChange={(e) => setFileIdPrefix(e.target.value)}
+                  placeholder="vd: blog-2026 (sẽ tạo ID: blog-2026-tên-file)"
+                  className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-text-primary placeholder-text-muted/50 focus:outline-none focus:border-neon-violet text-sm"
+                />
+                <p className="text-xs text-text-muted mt-1">
+                  Nếu để trống, ID sẽ lấy từ tên file (vd: <code>bài-viết-1.md</code> → <code>bai-viet-1</code>).
+                </p>
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowUpload(false)}
+                  className="px-4 py-2 bg-white/5 hover:bg-white/10 text-text-primary rounded-xl text-sm"
+                >
+                  Huỷ
+                </button>
+                <button
+                  type="submit"
+                  disabled={uploading || selectedFiles.length === 0}
+                  className="px-4 py-2 bg-gradient-to-r from-neon-indigo to-neon-violet text-white rounded-xl text-sm font-medium disabled:opacity-50"
+                >
+                  {uploading ? `Đang upload ${selectedFiles.length} files...` : `Upload ${selectedFiles.length} file(s)`}
+                </button>
+              </div>
+            </form>
+            )}
           </div>
         </div>
       )}

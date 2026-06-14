@@ -273,7 +273,13 @@ router.post('/admin/posts', authenticate, requireAdmin('ROLE_ADMIN'), async (req
         status: status || 'DRAFT',
         isFeatured: Boolean(isFeatured),
         categoryId,
-        publishedAt: status === 'PUBLISHED' ? (publishedAt ? new Date(publishedAt) : new Date()) : null,
+        // Set publishedAt for both PUBLISHED and SCHEDULED so the
+        // public blog list can order by publish time. DRAFT leaves
+        // it null so a draft never appears live.
+        publishedAt:
+          status === 'PUBLISHED' ? (publishedAt ? new Date(publishedAt) : new Date())
+          : status === 'SCHEDULED' ? (publishedAt ? new Date(publishedAt) : null)
+          : null,
         tags: { create: tagRecords.map((t) => ({ tagId: t.id })) },
       },
       include: { category: true, tags: { include: { tag: true } } },

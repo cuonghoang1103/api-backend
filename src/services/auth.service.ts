@@ -171,6 +171,12 @@ export class AuthService {
         'Email chưa được xác thực. Vui lòng kiểm tra hộp thư và click link xác thực.',
         403,
         'EMAIL_NOT_VERIFIED',
+        // Forward the user's email so the frontend can redirect to
+        // /verify-otp?email=... with a valid value. Without this the
+        // client would have to use the login form's `username` field,
+        // which is the username (not the email) and breaks the OTP
+        // lookup.
+        { email: user.email },
       );
     }
 

@@ -8,7 +8,7 @@ export function notFoundHandler(req: Request, res: Response): void {
 }
 
 export function errorHandler(
-  err: Error & { statusCode?: number; code?: string; name?: string },
+  err: Error & { statusCode?: number; code?: string; name?: string; data?: Record<string, unknown> },
   _req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,9 +22,15 @@ export function errorHandler(
   res.status(statusCode).json({
     success: false,
     message,
+    // Always include `code` so the frontend can branch on well-known
+    // application errors (e.g. EMAIL_NOT_VERIFIED → redirect to
+    // /verify-otp). In dev we also surface the stack for debugging.
+    code: err.code,
+    // Optional structured payload (e.g. { email } for unverified
+    // users so the client can prefill the OTP page).
+    ...(err.data ? { data: err.data } : {}),
     ...(process.env.NODE_ENV === 'development' && {
       stack: err.stack,
-      code: err.code,
     }),
   });
 }
@@ -34,6 +40,7 @@ export class AppError extends Error {
     public message: string,
     public statusCode: number = 500,
     public code?: string,
+    public data?: Record<string, unknown>,
   ) {
     super(message);
     this.name = 'AppError';

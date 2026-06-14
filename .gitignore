@@ -55,3 +55,4 @@ bin/
 target/
 *.class
 *.jar
+frontend/tsconfig.tsbuildinfo

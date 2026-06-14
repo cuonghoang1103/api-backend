@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect, type ChangeEvent, type KeyboardEvent, type ClipboardEvent } from 'react';
-import { motion } from 'framer-motion';
 
 interface OtpInputProps {
   length?: number;
@@ -27,13 +26,19 @@ export function OtpInput({
   error,
 }: OtpInputProps) {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
-  const [digits, setDigits] = useState<string[]>(() =>
-    value.padEnd(length, '').split('').slice(0, length),
-  );
+  const [digits, setDigits] = useState<string[]>(() => {
+    const arr = new Array(length).fill('');
+    for (let i = 0; i < value.length && i < length; i++) {
+      arr[i] = value[i] ?? '';
+    }
+    return arr;
+  });
 
   useEffect(() => {
-    // Keep digits in sync with external value changes (e.g. reset)
-    const arr = value.padEnd(length, '').split('').slice(0, length);
+    const arr = new Array(length).fill('');
+    for (let i = 0; i < value.length && i < length; i++) {
+      arr[i] = value[i] ?? '';
+    }
     setDigits(arr);
   }, [value, length]);
 
@@ -110,7 +115,7 @@ export function OtpInput({
     <div className="w-full">
       <div className="flex items-center justify-center gap-2 sm:gap-3">
         {digits.map((digit, idx) => (
-          <motion.input
+          <input
             key={idx}
             ref={(el) => { inputRefs.current[idx] = el; }}
             type="text"
@@ -122,9 +127,7 @@ export function OtpInput({
             onChange={(e) => handleChange(idx, e)}
             onKeyDown={(e) => handleKeyDown(idx, e)}
             onPaste={handlePaste}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2, delay: idx * 0.04 }}
+            aria-label={`Digit ${idx + 1} of ${length}`}
             className={`
               w-11 h-14 sm:w-12 sm:h-16 text-center text-2xl font-bold
               rounded-xl border-2 transition-all
@@ -137,7 +140,6 @@ export function OtpInput({
               focus:outline-none focus:ring-2 focus:ring-neon-violet/30
               caret-neon-violet
             `}
-            aria-label={`Digit ${idx + 1} of ${length}`}
           />
         ))}
       </div>

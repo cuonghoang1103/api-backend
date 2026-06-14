@@ -32,11 +32,26 @@ export async function POST(request: NextRequest) {
 
     if (!res.ok) {
       let message = "Incorrect username or password";
+      let code: string | undefined;
+      let email: string | undefined;
       try {
         const err = await res.json();
         message = err.message ?? message;
+        // Forward error code so the client can branch (e.g. redirect
+        // unverified users to /verify-otp instead of leaving them
+        // stranded on a "please check your inbox" toast with no
+        // obvious next step).
+        code = err.code;
+        // Backend may include the email in `data` so we can prefill
+        // the OTP page.
+        if (err.data && typeof err.data === 'object') {
+          email = (err.data as { email?: string }).email;
+        }
       } catch {}
-      return NextResponse.json({ success: false, message }, { status: res.status });
+      return NextResponse.json(
+        { success: false, message, code, data: email ? { email } : undefined },
+        { status: res.status },
+      );
     }
 
     const data = await res.json();

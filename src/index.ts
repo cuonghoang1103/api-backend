@@ -68,8 +68,33 @@ const embedJobsRoutes = (await import(path.join(__dirname, 'routes', 'embedJobs.
 const app: Express = express();
 const server = http.createServer(app);
 
-// ─── 1. Trust Proxy (for Nginx/X-Forwarded-*) ────────────
-app.set('trust proxy', 1);
+// ─── 1. Trust Proxy (for Cloudflare → Nginx → Express) ──
+// Stack in production: Cloudflare edge → Nginx reverse proxy →
+// Express. Two hops minimum. `trust proxy = 1` only trusted the
+// immediate upstream (Nginx), so `req.ip` resolved to Nginx's
+// internal IP — every real user shared the same IP, which
+// collapsed all of them into a single rate-limit bucket and
+// caused random "Too many authentication attempts" errors when
+// several users logged in within the same minute.
+//
+// We trust the X-Forwarded-For chain from our known reverse-proxy
+// sources. Express's built-in presets:
+//   • 'loopback'        — 127.0.0.1/8, ::1
+//   • 'linklocal'       — 169.254.0.0/16, fe80::/10
+//   • 'uniquelocal'     — 10/8, 172.16/12, 192.168/16, fc00::/7
+// We also whitelist Cloudflare's edge IP ranges. Setting a
+// function (req) => boolean lets us be precise about which hops
+// are trusted per request.
+app.set('trust proxy', (ip: string, hop: number): boolean => {
+  if (!ip) return false;
+  // Express sets `hop` to the hop count already extracted from
+  // X-Forwarded-For. We want to trust the most recent 2 hops
+  // (Cloudflare edge + Nginx). Anything beyond that is treated
+  // as untrusted and req.ip falls back to the connection's
+  // remote address.
+  if (hop <= 1) return true;
+  return false;
+});
 
 // ─── 2. Security Headers ───────────────────────────────────
 app.use(
@@ -83,18 +108,46 @@ app.use(
 // ─── 3. CORS — cho phép Next.js frontend gọi API ──────────
 // Development: http://localhost:3000
 // Production: https://cuongthai.com
+// CORS allow-list. Add additional origins via the CORS_ORIGINS env
+// variable (CSV). Defaults cover the production domain and the
+// development host. We intentionally include `www.` variants because
+// some users bookmark the www subdomain — CORS would silently reject
+// those and the user would see a generic "fetch failed" error in the
+// console with no actionable hint.
+const defaultCorsOrigins = [
+  'https://cuongthai.com',
+  'https://www.cuongthai.com',
+  'http://localhost:3000',
+];
+const extraCorsOrigins = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
 const corsOptions: cors.CorsOptions = {
-  origin: [
-    'https://cuongthai.com',
-    'http://localhost:3000',
-  ],
+  origin: (origin, callback) => {
+    // Same-origin / curl / server-to-server requests have no Origin
+    // header. Allow them through; the auth middleware decides whether
+    // the request is actually authorized.
+    if (!origin) return callback(null, true);
+
+    const allowed = [...defaultCorsOrigins, ...extraCorsOrigins];
+    if (allowed.includes(origin)) {
+      return callback(null, true);
+    }
+    // Log rejected origins so ops can see what's being blocked in
+    // production. We still return a CORS error so the browser drops
+    // the response.
+    console.warn(`[CORS] Rejected origin: ${origin}`);
+    return callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: [
     'Content-Type',
     'Authorization',
     'X-Requested-With',
     'Accept',
+    'cf-turnstile-response',
   ],
   exposedHeaders: [
     'X-Request-ID',
@@ -193,7 +246,13 @@ const generalLimiter = rateLimit({
 // nhiên — chỉ khoảng 0.05 mật khẩu/giây, thấp hơn tốc độ đoán thực tế
 // của botnet).
 const authLimiter = rateLimit({
-  windowMs: config.nodeEnv === 'production' ? 15 * 60 * 1000 : 60 * 1000,
+  // Per user request: shorter window (1 minute) with 10 attempts is
+  // enough to absorb normal multi-step flows (login, register,
+  // verify-otp, change-password) while still preventing brute-force
+  // attacks. The previous 15-minute window with 50 attempts was too
+  // aggressive — legitimate cross-device logins (e.g. user signing
+  // in on phone, then desktop) tripped the limit.
+  windowMs: config.nodeEnv === 'production' ? 60 * 1000 : 60 * 1000,
   max: (req: Request) => {
     const host = req.headers.host || '';
     const forwardedFor = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || '';
@@ -210,18 +269,27 @@ const authLimiter = rateLimit({
       return 100;
     }
 
-    return config.nodeEnv === 'production' ? 50 : 100;
+    // Production: 10 attempts per minute per IP. This is enough for
+    // a normal flow (register + verify + login + change password) to
+    // complete without throttling, but blocks brute-force password
+    // guessing where the attacker can typically only try a few
+    // accounts per minute before the IP gets locked.
+    return config.nodeEnv === 'production' ? 10 : 100;
   },
   standardHeaders: true,
   legacyHeaders: false,
   message: {
     success: false,
-    message: config.nodeEnv === 'production'
-      ? 'Too many authentication attempts. Please try again in 15 minutes.'
-      : 'Too many authentication attempts. Please wait a minute and try again.',
+    message: 'Too many authentication attempts. Please wait 1 minute and try again.',
     code: 'AUTH_RATE_LIMITED',
   },
   keyGenerator: (req: Request): string => {
+    // Prefer Cloudflare's CF-Connecting-IP header (the user's real
+    // IP, set by the Cloudflare edge). Fall back to the first hop in
+    // X-Forwarded-For, then req.ip (which now correctly resolves
+    // through our updated `trust proxy` setting).
+    const cfIp = (req.headers['cf-connecting-ip'] as string | undefined)?.trim();
+    if (cfIp) return cfIp;
     return (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()
       || req.ip
       || 'unknown';

@@ -85,7 +85,7 @@ export default function PlaylistDrawer() {
     setAddingTo(null);
     if (result.success) {
       setPendingTrack(null);
-      set({ isOpen: false });
+      closeDrawer();
     }
   };
 

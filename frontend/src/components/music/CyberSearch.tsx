@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useYouTubeSearch } from '@/hooks/useMusicQueries';
+import { useQueryClient } from '@tanstack/react-query';
+import { useYouTubeSearch, musicKeys } from '@/hooks/useMusicQueries';
 import { useMusicStore } from '@/store/musicStore';
 import type { Track } from '@/types';
 import type { YouTubeSearchResult } from '@/hooks/useMusicQueries';
@@ -58,8 +59,9 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [ytQuery, setYtQuery] = useState('');
+  const queryClient = useQueryClient();
 
-  const { playTrack, setTracks, tracks } = useMusicStore();
+  const { playTrack, tracks } = useMusicStore();
   const { data: ytResults, isLoading: ytLoading } = useYouTubeSearch(ytQuery, open && ytQuery.trim().length >= 2);
 
   // ── Debounce query for YouTube API calls ────────────────────────────
@@ -128,15 +130,21 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
     [open, focusedIdx, totalResults, results],
   );
 
-  const handleSelect = (result: SearchResult) => {
+  const handleSelect = async (result: SearchResult) => {
     if (result.type === 'local') {
       // Play from existing local tracks
       const track = localTracks.find((t) => String(t.id) === result.id.replace('local-', ''));
       if (track) playTrack(track);
     } else {
-      // YouTube: add to queue and play
+      // YouTube: register the track in backend DB FIRST so it survives
+      // page reloads and shows up in the regular `useTracks` list
+      // (otherwise navigating to /music → back to /music/now-playing
+      // would clobber the YT track from the store and auto-play the
+      // first library track from the beginning). See
+      // backend/src/routes/music.routes.ts `/tracks/remote`.
+      const ytId = `yt-${result.videoId}`;
       const trackData: Track = {
-        id: `yt-${result.videoId}`,
+        id: ytId,
         title: result.title,
         artist: result.artist,
         coverImage: result.thumbnail,
@@ -144,13 +152,51 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
         duration: result.duration || '0:00',
         durationSeconds: normalizeDuration(result.duration),
       };
-      // Add to store tracks if not already there
-      if (!tracks.find((t) => t.id === trackData.id)) {
-        setTracks([...tracks, trackData]);
+
+      // Try to persist as a real DB row so the track is in the regular
+      // track list. If the user isn't logged in (e.g. JWT expired) the
+      // request will 401 — we fall back to the local-store-only flow so
+      // listening still works.
+      try {
+        const res = await fetch('/api/v1/music/tracks/remote', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: trackData.title,
+            artist: trackData.artist,
+            audioUrl: trackData.audioUrl,
+            coverImage: trackData.coverImage,
+            durationSeconds: trackData.durationSeconds,
+            source: 'youtube',
+            videoId: result.videoId,
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const numericId = data?.data?.id;
+          if (numericId) {
+            // Use the DB-assigned numeric id so this track matches what
+            // /api/v1/music/tracks will return on the next page load.
+            trackData.id = String(numericId);
+          }
+          // Invalidate the tracks query so MusicClient picks up the
+          // newly registered YouTube track on its next useEffect tick
+          // (and the next page navigation already has it in the list).
+          queryClient.invalidateQueries({ queryKey: musicKeys.tracks() });
+        }
+      } catch {
+        // Network/backend down — keep the yt-* id and continue
       }
-      const newTracks = tracks.find((t) => t.id === trackData.id) ? tracks : [...tracks, trackData];
-      const idx = newTracks.findIndex((t) => t.id === trackData.id);
-      useMusicStore.getState().playTrackAtIndex(idx >= 0 ? idx : newTracks.length - 1);
+
+      // Add to store tracks if not already there (with the updated id)
+      const currentTracks = useMusicStore.getState().tracks;
+      if (!currentTracks.find((t) => t.id === trackData.id)) {
+        useMusicStore.setState({ tracks: [...currentTracks, trackData] });
+      }
+      const fresh = useMusicStore.getState().tracks;
+      const idx = fresh.findIndex((t) => t.id === trackData.id);
+      useMusicStore.getState().playTrackAtIndex(idx >= 0 ? idx : fresh.length - 1);
     }
     setOpen(false);
     setQuery('');

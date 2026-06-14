@@ -195,7 +195,7 @@ export const useMusicStore = create<MusicState>()((set, get) => {
 
     setTracks: (tracks) => {
       const p = loadPersisted();
-      const { savedAllTracks, currentTrack, tracks: existingTracks } = get();
+      const { savedAllTracks, currentTrack, tracks: existingTracks, isPlaying } = get();
 
       // ── No-op guard ───────────────────────────────────────────────
       // If the new tracks list is identical to what the store already
@@ -213,22 +213,40 @@ export const useMusicStore = create<MusicState>()((set, get) => {
         if (same) return;
       }
 
-      const first = tracks[0] || null;
+      // ── SAFETY NET for in-progress YouTube playback ─────────────
+      // If the user is currently listening to a track and the new
+      // list from the server doesn't contain it (e.g. they searched
+      // a YouTube track that hadn't been registered to the DB yet),
+      // APPEND the current track to the incoming list so it isn't
+      // lost. This is the last line of defense — the primary fix
+      // is in CyberSearch.handleSelect which calls
+      // /api/v1/music/tracks/remote BEFORE adding to the store.
+      let workingTracks = tracks;
+      if (
+        currentTrack &&
+        isPlaying &&
+        !tracks.some((t) => t.id === currentTrack.id)
+      ) {
+        // Preserve playback across the page navigation
+        workingTracks = [...tracks, currentTrack];
+      }
+
+      const first = workingTracks[0] || null;
       let restored: Track | null = null;
       let restoredIdx = -1;
-      if (p.currentTrackId && tracks.length > 0) {
-        const idx = tracks.findIndex((t) => t.id === p.currentTrackId);
-        if (idx >= 0) { restored = tracks[idx]; restoredIdx = idx; }
+      if (p.currentTrackId && workingTracks.length > 0) {
+        const idx = workingTracks.findIndex((t) => t.id === p.currentTrackId);
+        if (idx >= 0) { restored = workingTracks[idx]; restoredIdx = idx; }
       }
-      const newSaved = savedAllTracks.length === 0 ? tracks : savedAllTracks;
+      const newSaved = savedAllTracks.length === 0 ? workingTracks : savedAllTracks;
       // Preserve currentTime so reload restores the listening position
       const isSameTrack = restored && currentTrack?.id === restored.id;
       const restoredTime = isSameTrack ? get().currentTime : p.currentTime;
       set({
-        tracks,
-        allTracks: tracks,
+        tracks: workingTracks,
+        allTracks: workingTracks,
         savedAllTracks: newSaved,
-        queue: tracks,
+        queue: workingTracks,
         currentTrack: restored ?? first,
         currentIndex: restoredIdx >= 0 ? restoredIdx : (first ? 0 : -1),
         currentTime: restoredTime,

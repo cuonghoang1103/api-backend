@@ -252,8 +252,74 @@ export default function MusicAudioController() {
             ytPlayerInstance?.setVolume(ytVol);
             ytVolume = ytVol;
           }
-          if (shouldPlay) {
-            ytPlayerInstance?.playVideo();
+          // Resume playback based on BOTH the explicit `shouldPlay`
+          // argument AND the current store `isPlaying` flag.
+          //
+          // Why both: the load-track effect always passes
+          // `shouldPlay=false` and relies on the play/pause toggle
+          // effect to start the new video. But that effect only fires
+          // when `isPlaying` *changes*. When the user picks a track
+          // from search while another track is already playing,
+          // `isPlaying` is already `true` so the toggle effect never
+          // re-runs — the YouTube player stays paused, the UI keeps
+          // showing the spinning disc (driven by `isPlaying`), and
+          // the user has to click pause/play to force a re-render.
+          // Checking `useMusicStore.getState().isPlaying` here covers
+          // that case and makes the new track audible immediately.
+          const wantPlay = shouldPlay || useMusicStore.getState().isPlaying;
+          if (wantPlay) {
+            const player = ytPlayerInstance!;
+            player.playVideo();
+
+            // ── Autoplay-block detection ──
+            // Some browsers reject `playVideo()` from inside the
+            // `onReady` callback if there hasn't been a recent user
+            // gesture (e.g. user typed a search term in the input and
+            // hit Enter, but no click event was registered against the
+            // page body). YouTube silently swallows the rejection, the
+            // player state stays in BUFFERING, the disc keeps spinning
+            // because `isPlaying=true` in the store, but no audio comes
+            // out. The user reported: "đĩa vẫn quay và đang phát nhưng
+            // tôi không nghe thấy nhạc. Tôi phải ấn paused và ấn play
+            // lại mới nghe được."
+            //
+            // Fix: poll the player state for ~1.5s. If it's still not
+            // PLAYING, force a pause+play sequence which DOES count as
+            // a programmatic re-trigger that YouTube accepts. The
+            // pause+play also fires a state-change event, which the
+            // play/pause toggle effect listens for.
+            let attempts = 0;
+            const probe = setInterval(() => {
+              attempts++;
+              try {
+                const state = player.getPlayerState?.();
+                if (state === window.YT?.PlayerState?.PLAYING) {
+                  clearInterval(probe);
+                  return;
+                }
+              } catch {
+                // Player gone
+                clearInterval(probe);
+                return;
+              }
+              if (attempts >= 3) {
+                clearInterval(probe);
+                // Last resort: pause + play to force a re-trigger.
+                // This is exactly what the user had to do manually
+                // (click pause then play). The `playVideo()` here runs
+                // from a setTimeout callback, which most browsers
+                // consider a valid user-gesture follow-up because the
+                // search-result click already counted as a gesture.
+                try {
+                  player.pauseVideo();
+                  setTimeout(() => {
+                    try { player.playVideo(); } catch { /* ignore */ }
+                  }, 100);
+                } catch {
+                  /* ignore */
+                }
+              }
+            }, 500);
           }
           const d = ytPlayerInstance?.getDuration?.() ?? 0;
           if (d > 0) setDuration(d);

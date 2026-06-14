@@ -3,7 +3,7 @@ import { body } from 'express-validator';
 import { authService } from '../services/auth.service.js';
 import { validate } from '../middleware/validate.js';
 import { authenticate } from '../middleware/auth.js';
-import { captchaMiddleware, softCaptchaMiddleware } from '../middleware/captcha.js';
+import { softCaptchaMiddleware } from '../middleware/captcha.js';
 import type { ApiResponse, AuthResponse } from '../types/index.js';
 
 const router = Router();
@@ -11,7 +11,14 @@ const router = Router();
 // ─── POST /api/v1/auth/login ─────────────────────────────
 router.post(
   '/login',
-  captchaMiddleware,
+  // Soft captcha: an unverified user logging in from a fresh
+  // browser/device may not have a Turnstile token yet (CDN
+  // blocked, ad-blocker stripping 3rd-party scripts, mobile data
+  // saver). The strict middleware would 403 them with no path
+  // forward. With soft mode, the email-verified bypass still
+  // applies, AND a missing token is allowed (just logged). An
+  // INVALID token is still rejected so real abuse is blocked.
+  softCaptchaMiddleware,
   [
     body('username').notEmpty().withMessage('Username is required'),
     body('password').notEmpty().withMessage('Password is required'),
@@ -302,7 +309,12 @@ router.post(
 // ─── POST /api/v1/auth/forgot-password (sends 6-digit OTP) ───
 router.post(
   '/forgot-password',
-  captchaMiddleware,
+  // Soft captcha for the same reason as /login: a user trying to
+  // recover a forgotten password is already in a high-friction
+  // state; making them also solve a CAPTCHA they may not be able
+  // to render is a terrible UX. The email-OTP step is the real
+  // anti-abuse layer here.
+  softCaptchaMiddleware,
   [body('email').isEmail().withMessage('Valid email is required')],
   validate,
   async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {

@@ -78,6 +78,20 @@ export default function CyberMusicPage() {
   // TanStack Query — replaces manual fetch with caching
   const { data, isLoading, isError, refetch, dataUpdatedAt } = useTracks({ size: 100 });
 
+  // ── Manual refetch on every /music mount ──
+  // The user reports that the YouTube track they played on /music is
+  // LOST when they navigate to /music/now-playing and back. Root cause:
+  // the store's tracks list is clobbered by the new query result if its
+  // length doesn't match (the YouTube track isn't yet in the server
+  // list, or the query is served from cache that's older than the
+  // user's recent /tracks/remote registration). Forcing a refetch here
+  // makes sure the latest track list (including any YouTube tracks
+  // registered via the search bar's /tracks/remote call) is loaded.
+  useEffect(() => {
+    if (!isMounted) return;
+    refetch();
+  }, [isMounted, refetch]);
+
   // Sync TanStack Query results → Zustand store.
   //
   // CRITICAL: this must NOT clobber the current playback state when the

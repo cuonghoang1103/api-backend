@@ -685,6 +685,83 @@ router.delete(
 );
 
 // ════════════════════════════════════════════════════════════════
+// POST /api/v1/music/tracks/remote
+// Create a "remote" track record (e.g. YouTube) without uploading a file.
+// The frontend uses this when a user picks a YouTube result from the
+// search bar and wants to save it into a playlist — the existing
+// /playlists/:id/tracks endpoint requires a numeric trackId from the
+// music_tracks table, so we need a real DB row first.
+//
+// Returns the newly-created track in the same shape as the upload
+// endpoint, so the frontend can replace the yt- placeholder id with
+// the real numeric id.
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/tracks/remote',
+  authenticate,
+  async (req: any, res: Response<ApiResponse>, next): Promise<Response<ApiResponse> | void> => {
+    try {
+      // `source` is accepted from the client (e.g. "youtube") for
+      // future analytics / filtering. We currently don't persist it
+      // anywhere, hence the void cast below.
+      const { title, artist, audioUrl, coverImage, durationSeconds } = req.body;
+      void req.body.source;
+
+      if (!title?.trim()) {
+        throw new AppError('Track title is required', 400, 'MISSING_TITLE');
+      }
+      if (!artist?.trim()) {
+        throw new AppError('Artist name is required', 400, 'MISSING_ARTIST');
+      }
+      if (!audioUrl?.trim()) {
+        throw new AppError('audioUrl is required for remote tracks', 400, 'MISSING_AUDIO_URL');
+      }
+
+      // De-dupe by audioUrl: if a track with the same audioUrl already
+      // exists (e.g. user re-searches the same song), reuse it instead
+      // of creating a duplicate row. This also keeps playlists stable —
+      // the same YouTube video always maps to the same numeric trackId.
+      const existing: any = await musicService.getTrackByAudioUrl(audioUrl);
+      if (existing) {
+        return res.status(200).json({
+          success: true,
+          data: {
+            ...existing,
+            id: Number(existing.id),
+            durationSeconds: existing.durationSeconds != null ? Number(existing.durationSeconds) : null,
+            fileSize: existing.fileSize != null ? Number(existing.fileSize) : null,
+          },
+          message: 'Track already exists',
+        });
+      }
+
+      const created: any = await musicService.createTrack({
+        title: String(title).trim().slice(0, 255),
+        artist: String(artist).trim().slice(0, 255),
+        audioUrl: String(audioUrl).trim().slice(0, 700),
+        coverImage: coverImage ? String(coverImage).trim().slice(0, 700) : undefined,
+        durationSeconds: typeof durationSeconds === 'number' && Number.isFinite(durationSeconds) && durationSeconds > 0
+          ? Math.floor(durationSeconds)
+          : undefined,
+      });
+
+      return res.status(201).json({
+        success: true,
+        data: {
+          ...created,
+          id: Number(created.id),
+          durationSeconds: created.durationSeconds != null ? Number(created.durationSeconds) : null,
+          fileSize: created.fileSize != null ? Number(created.fileSize) : null,
+        },
+        message: 'Remote track created',
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
 // POST /api/v1/music/playlists/:id/tracks
 // Add track to playlist
 // ════════════════════════════════════════════════════════════════

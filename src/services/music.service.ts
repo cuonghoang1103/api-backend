@@ -491,6 +491,18 @@ export class MusicService {
     return { track, streamResult };
   }
 
+  // ─── Find track by audioUrl (for de-duplication of remote tracks) ───
+  // Used by the /tracks/remote endpoint to avoid creating a new row
+  // every time the user picks the same YouTube song. We scope to
+  // active tracks so deleted/soft-deleted entries don't shadow new
+  // creates.
+  async getTrackByAudioUrl(audioUrl: string): Promise<unknown> {
+    if (!audioUrl) return null;
+    return prisma.musicTrack.findFirst({
+      where: { audioUrl, active: true },
+    });
+  }
+
   // ─── POST /tracks ─────────────────────────────────────────
   async createTrack(data: {
     title: string;

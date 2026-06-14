@@ -132,11 +132,55 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
 
   addTrackToPlaylist: async (playlistId: number, track: Track) => {
     try {
+      // ── YouTube tracks have placeholder ids like "yt-{videoId}".
+      //    The backend's /playlists/:id/tracks endpoint requires a
+      //    numeric trackId from the music_tracks table, so we first
+      //    create a real "remote" track row via /tracks/remote, then
+      //    add that numeric id to the playlist. The /tracks/remote
+      //    endpoint de-dupes by audioUrl, so re-adding the same song
+      //    is cheap and idempotent. ────────────────────────────────
+      let numericTrackId: number;
+      if (track.id.startsWith('yt-')) {
+        const ytVideoId = track.id.slice(3);
+        const remoteRes = await fetch('/api/v1/music/tracks/remote', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: track.title,
+            artist: track.artist,
+            audioUrl: `https://www.youtube.com/watch?v=${ytVideoId}`,
+            coverImage: track.coverImage,
+            durationSeconds: track.durationSeconds,
+            source: 'youtube',
+          }),
+        });
+
+        if (remoteRes.status === 401) {
+          toast.error('Vui lòng đăng nhập để thêm bài hát');
+          return { success: false, needsAuth: true };
+        }
+
+        const remoteData = await remoteRes.json();
+        if (!remoteData.success) {
+          toast.error(remoteData.message || 'Không thể lưu bài hát từ YouTube');
+          return { success: false };
+        }
+        numericTrackId = Number(remoteData.data.id);
+      } else {
+        const parsed = parseInt(track.id, 10);
+        if (isNaN(parsed)) {
+          toast.error('ID bài hát không hợp lệ');
+          return { success: false };
+        }
+        numericTrackId = parsed;
+      }
+
       const res = await fetch(`/api/v1/music/playlists/${playlistId}/tracks`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ trackId: parseInt(track.id, 10) }),
+        body: JSON.stringify({ trackId: numericTrackId }),
       });
 
       if (res.status === 401) {

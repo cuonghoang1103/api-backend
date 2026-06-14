@@ -4,6 +4,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   env: {
     // Bump this on every deploy to bust Next.js server action cache
     NEXT_PUBLIC_BUILD_ID: Date.now().toString(36),

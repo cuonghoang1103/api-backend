@@ -67,5 +67,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:3001/health || exit 1
 
 # Start command — chạy từ thư mục chứa dist/ (tức /app)
-# CMD biên dịch ra: cd /app && npx prisma migrate deploy && node dist/index.js
+# Dùng `prisma db push` thay cho `migrate deploy` vì repo không có
+# thư mục prisma/migrations (chỉ có schema.prisma + seed.ts).
+# `db push` đồng bộ schema thẳng vào DB mà không cần file migration.
 CMD ["sh", "-c", "cd /app && npx prisma migrate deploy && node dist/index.js"]

@@ -132,10 +132,48 @@ export class AIService {
   }
 
   // ─── Delete session ─────────────────────────────────────
-  async deleteSession(sessionId: string): Promise<void> {
-    await prisma.chatSession.delete({
-      where: { id: sessionId },
+  // The schema declares `onDelete: Cascade` on
+  //   ChatMessage.sessionId
+  //   ChatAnalytics.sessionId
+  // so PostgreSQL removes the dependent rows automatically when
+  // the parent session is dropped. We only need to:
+  //   1. delete feedback rows whose message would otherwise be
+  //      orphaned (FK to ChatMessage, not the session directly)
+  //   2. delete the session itself
+  //
+  // Using `deleteMany` for the final step (rather than `delete`)
+  // makes the call idempotent — re-deleting a missing session
+  // returns 0 instead of throwing P2025, so a stale UI / second
+  // tab can't crash the user with a 500.
+  async deleteSession(sessionId: string): Promise<{ deleted: boolean }> {
+    const result = await prisma.$transaction(async (tx) => {
+      // Best-effort feedback cleanup. `messageId` is a FK to
+      // ChatMessage (not the session), so we have to walk
+      // through the message IDs first to find which feedback
+      // rows point at this session's messages.
+      const messageIds = await tx.chatMessage.findMany({
+        where: { sessionId },
+        select: { id: true },
+      });
+      const ids = messageIds.map((m) => m.id);
+      if (ids.length > 0) {
+        try {
+          await tx.chatFeedback.deleteMany({
+            where: { messageId: { in: ids } },
+          });
+        } catch {
+          // chat_feedback may not be a model on this schema
+          // revision — best-effort, ignore.
+        }
+      }
+      // Final step: drop the session. The DB cascades messages
+      // and analytics rows automatically.
+      const { count } = await tx.chatSession.deleteMany({
+        where: { id: sessionId },
+      });
+      return { deleted: count > 0 };
     });
+    return result;
   }
 
   // ─── Get chat history ───────────────────────────────────

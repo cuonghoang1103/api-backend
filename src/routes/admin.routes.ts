@@ -426,23 +426,54 @@ router.post('/users', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res:
     const bcrypt = await import('bcryptjs');
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    // The DB stores role names in lowercase (`user`, `admin`).
+    // Accept either spelling from the caller.
+    const normalizedRoleName = (roleName || 'user')
+      .toString()
+      .replace(/^ROLE_/i, '')
+      .trim()
+      .toLowerCase();
+
     const user = await prisma.user.create({
       data: {
         username, email, fullName,
         password: hashedPassword,
-        roles: { create: { role: { connect: { name: roleName || 'ROLE_USER' } } } },
+        roles: { create: { role: { connect: { name: normalizedRoleName } } } },
       },
-      include: { roles: { include: { role: true } } },
+      select: {
+        id: true, username: true, email: true, fullName: true,
+        enabled: true, accountNonLocked: true, provider: true, createdAt: true,
+        roles: { select: { role: { select: { id: true, name: true } } } },
+      },
     });
-    res.status(201).json({ success: true, data: user });
+    res.status(201).json({
+      success: true,
+      // Flatten roles to string[] for the client.
+      data: { ...user, roles: (user.roles ?? []).map((ur) => ur.role.name) },
+    });
   } catch (error) { next(error); }
 });
 
 // ─── SUPER ADMIN GUARD ──────────────────────────────────────────────
-const SUPER_ADMINS = ['cuong03dx', 'cuong123'];
+// Only these accounts can mutate other users' roles / lock state
+// of super-admins. The username is matched case-insensitively;
+// the email match is also case-insensitive (some users registered
+// with mixed-case Gmail addresses).
+const SUPER_ADMIN_USERNAMES = ['cuong03dx', 'cuong123'];
+const SUPER_ADMIN_EMAILS = ['cuong03dx@gmail.com'];
 
-function isSuperAdmin(username: string): boolean {
-  return SUPER_ADMINS.includes(username.toLowerCase());
+function isSuperAdminByUsername(username?: string | null): boolean {
+  if (!username) return false;
+  return SUPER_ADMIN_USERNAMES.includes(username.toLowerCase());
+}
+
+function isSuperAdminByEmail(email?: string | null): boolean {
+  if (!email) return false;
+  return SUPER_ADMIN_EMAILS.includes(email.toLowerCase());
+}
+
+function isProtectedAccount(user: { username?: string | null; email?: string | null }): boolean {
+  return isSuperAdminByUsername(user.username) || isSuperAdminByEmail(user.email);
 }
 
 // ─── PATCH /api/v1/admin/users/:id/roles ─────────────────────────
@@ -459,7 +490,7 @@ router.patch('/users/:id/roles', authenticate, requireAdmin('ROLE_ADMIN'), async
 
     // ── Super Admin Identity Guard ─────────────────────────────────
     const currentUsername = req.user?.username || '';
-    if (!isSuperAdmin(currentUsername)) {
+    if (!isSuperAdminByUsername(currentUsername)) {
       res.status(403).json({
         success: false,
         message: 'Forbidden: Only cuong03dx or cuong123 can modify user roles.',
@@ -468,25 +499,36 @@ router.patch('/users/:id/roles', authenticate, requireAdmin('ROLE_ADMIN'), async
       return;
     }
 
-    const normalizedRoles = roles.map((r: string) => {
-      const upper = r.replace('ROLE_', '').toUpperCase();
-      return upper.startsWith('ROLE_') ? upper : `ROLE_${upper}`;
-    });
+    // The DB `roles` table stores names in lowercase
+    // (`user`, `admin`, `moderator`, `editor`). Some legacy
+    // clients send `ROLE_USER` / `ROLE_ADMIN`; the rest of the
+    // code base normalizes both ways via `.replace('ROLE_', '')`
+    // so we accept either spelling here.
+    const normalizedRoles = roles
+      .filter((r): r is string => typeof r === 'string')
+      .map((r) => r.replace(/^ROLE_/i, '').trim().toLowerCase())
+      .filter((r) => r.length > 0);
 
-    const validRoles = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_EDITOR'];
-    if (!normalizedRoles.every((r: string) => validRoles.includes(r))) {
-      throw new AppError('Invalid role value', 400, 'INVALID_ROLE');
+    if (normalizedRoles.length === 0) {
+      throw new AppError('roles must contain at least one role name', 400, 'EMPTY_ROLES');
     }
 
     const target = await prisma.user.findUnique({ where: { id }, select: { id: true } });
     if (!target) throw new AppError('User not found', 404, 'USER_NOT_FOUND');
 
+    // Look up roles by their lowercased name in the DB.
     const rolesToSet = await prisma.role.findMany({
       where: { name: { in: normalizedRoles } },
-      select: { id: true },
+      select: { id: true, name: true },
     });
     if (rolesToSet.length !== normalizedRoles.length) {
-      throw new AppError('One or more roles do not exist', 400, 'ROLE_NOT_FOUND');
+      const found = new Set(rolesToSet.map((r) => r.name));
+      const missing = normalizedRoles.filter((r) => !found.has(r));
+      throw new AppError(
+        `These roles do not exist in the database: ${missing.join(', ')}`,
+        400,
+        'ROLE_NOT_FOUND'
+      );
     }
 
     await prisma.$transaction([
@@ -501,13 +543,20 @@ router.patch('/users/:id/roles', authenticate, requireAdmin('ROLE_ADMIN'), async
 
     const updated = await prisma.user.findUnique({
       where: { id },
-      include: { roles: { include: { role: true } } },
+      select: {
+        id: true, username: true, email: true, fullName: true,
+        enabled: true, accountNonLocked: true, provider: true, createdAt: true,
+        roles: { select: { role: { select: { id: true, name: true } } } },
+      },
     });
 
+    // Flatten roles to string[] for the client (same shape as
+    // GET /admin/users, so the UI doesn't need a special case).
+    const flatRoles = (updated?.roles ?? []).map((ur) => ur.role.name);
     res.json({
       success: true,
       message: 'User roles updated successfully',
-      data: updated,
+      data: { ...updated, roles: flatRoles },
     });
   } catch (error) { next(error); }
 });
@@ -521,7 +570,7 @@ router.put('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: a
 
     // ── Super Admin Identity Guard ─────────────────────────────────
     const currentUsername = req.user?.username || '';
-    if (!isSuperAdmin(currentUsername)) {
+    if (!isSuperAdminByUsername(currentUsername)) {
       res.status(403).json({
         success: false,
         message: 'Forbidden: Only cuong03dx or cuong123 can edit user accounts.',
@@ -542,6 +591,9 @@ router.put('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: a
         ...(enabled !== undefined && { enabled }),
         ...(accountNonLocked !== undefined && { accountNonLocked }),
       },
+      // Explicit field list so the response never contains a
+      // BigInt column (e.g. `roleVersion`).
+      select: { id: true, username: true, email: true, fullName: true, enabled: true, accountNonLocked: true, provider: true, createdAt: true },
     });
     res.json({ success: true, data: updated });
   } catch (error) { next(error); }
@@ -553,10 +605,16 @@ router.put('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: a
 router.delete('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid user id', 400, 'INVALID_ID');
+
+    // ── Self-delete guard ─────────────────────────────────
+    if (id === req.userId) {
+      throw new AppError('Bạn không thể xóa chính mình', 400, 'SELF_DELETE_FORBIDDEN');
+    }
 
     // ── Super Admin Identity Guard ─────────────────────────────────
     const currentUsername = req.user?.username || '';
-    if (!isSuperAdmin(currentUsername)) {
+    if (!isSuperAdminByUsername(currentUsername)) {
       res.status(403).json({
         success: false,
         message: 'Forbidden: Only cuong03dx or cuong123 can delete users.',
@@ -565,8 +623,16 @@ router.delete('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
       return;
     }
 
-    const existing = await prisma.user.findUnique({ where: { id }, select: { id: true, username: true } });
+    const existing = await prisma.user.findUnique({
+      where: { id },
+      select: { id: true, username: true, email: true },
+    });
     if (!existing) throw new AppError('User not found', 404, 'USER_NOT_FOUND');
+
+    // Block deletion of the other super-admin account.
+    if (isProtectedAccount(existing)) {
+      throw new AppError('Không thể xóa tài khoản super admin', 400, 'SUPER_ADMIN_PROTECTED');
+    }
 
     // ── Order Guard: check ShopOrder table ────────────────────────
     const orderCount = await prisma.shopOrder.count({ where: { userId: id } });
@@ -588,9 +654,37 @@ router.delete('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
 // ─── PATCH /api/v1/admin/users/:id/toggle-enabled ────
 router.patch('/users/:id/toggle-enabled', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: parseInt(req.params.id) } });
-    if (!user) throw new AppError('User not found', 404);
-    const updated = await prisma.user.update({ where: { id: user.id }, data: { enabled: !user.enabled } });
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid user id', 400, 'INVALID_ID');
+
+    // ── Super Admin Identity Guard ─────────────────────────────────
+    // The two super-admin accounts (cuong03dx and Cuong123, plus
+    // the cuong03dx@gmail.com email) must always stay enabled.
+    // Disabling them would lock the operator out of the panel.
+    if (id === req.userId) {
+      throw new AppError('Bạn không thể vô hiệu hóa chính mình', 400, 'SELF_MODIFY_FORBIDDEN');
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: { id: true, enabled: true, username: true, email: true },
+    });
+    if (!user) throw new AppError('User not found', 404, 'USER_NOT_FOUND');
+
+    // Don't allow disabling the other super-admin.
+    if (isProtectedAccount(user) && user.enabled) {
+      throw new AppError('Không thể vô hiệu hóa tài khoản super admin', 400, 'SUPER_ADMIN_PROTECTED');
+    }
+
+    const updated = await prisma.user.update({
+      where: { id: user.id },
+      // Explicit field list so the response never contains a
+      // BigInt column (e.g. `roleVersion` was BigInt in some
+      // Prisma revisions, which made JSON.stringify throw
+      // "Do not know how to serialize a BigInt").
+      data: { enabled: !user.enabled },
+      select: { id: true, username: true, email: true, enabled: true, accountNonLocked: true, provider: true, createdAt: true },
+    });
     res.json({ success: true, data: updated });
   } catch (error) { next(error); }
 });
@@ -598,9 +692,28 @@ router.patch('/users/:id/toggle-enabled', authenticate, requireAdmin('ROLE_ADMIN
 // ─── PATCH /api/v1/admin/users/:id/toggle-locked ──────
 router.patch('/users/:id/toggle-locked', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: parseInt(req.params.id) } });
-    if (!user) throw new AppError('User not found', 404);
-    const updated = await prisma.user.update({ where: { id: user.id }, data: { accountNonLocked: !user.accountNonLocked } });
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid user id', 400, 'INVALID_ID');
+
+    if (id === req.userId) {
+      throw new AppError('Bạn không thể tự khóa tài khoản của mình', 400, 'SELF_MODIFY_FORBIDDEN');
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: { id: true, accountNonLocked: true, username: true, email: true },
+    });
+    if (!user) throw new AppError('User not found', 404, 'USER_NOT_FOUND');
+
+    if (isProtectedAccount(user) && user.accountNonLocked) {
+      throw new AppError('Không thể khóa tài khoản super admin', 400, 'SUPER_ADMIN_PROTECTED');
+    }
+
+    const updated = await prisma.user.update({
+      where: { id: user.id },
+      data: { accountNonLocked: !user.accountNonLocked },
+      select: { id: true, username: true, email: true, enabled: true, accountNonLocked: true, provider: true, createdAt: true },
+    });
     res.json({ success: true, data: updated });
   } catch (error) { next(error); }
 });

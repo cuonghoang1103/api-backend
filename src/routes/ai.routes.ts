@@ -291,7 +291,30 @@ router.get('/chat/history/:sessionId', optionalAuth, async (req: any, res: Respo
 router.delete('/chat/sessions/:sessionId', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const { sessionId } = req.params;
-    if (!sessionId) throw new AppError('Session ID required', 400);
+    if (!sessionId) throw new AppError('Session ID required', 400, 'MISSING_SESSION_ID');
+
+    // Frontend-only stub IDs (created before the user is
+    // authenticated, or after a failed send) never reach the
+    // server. Short-circuit them so the route stays idempotent.
+    if (sessionId.startsWith('local_')) {
+      res.json({ success: true, message: 'Local session removed' });
+      return;
+    }
+
+    // Verify ownership: a user can only delete their own session.
+    const session = await prisma.chatSession.findUnique({
+      where: { id: sessionId },
+      select: { id: true, userId: true },
+    });
+    if (!session) {
+      // Idempotent: pretend we deleted it. A second tab racing
+      // with this one shouldn't surface as a 500 to the user.
+      res.json({ success: true, message: 'Session already removed' });
+      return;
+    }
+    if (session.userId && session.userId !== req.user?.userId) {
+      throw new AppError('You are not allowed to delete this session', 403, 'FORBIDDEN');
+    }
 
     await aiService.deleteSession(sessionId);
     res.json({ success: true, message: 'Session deleted' });

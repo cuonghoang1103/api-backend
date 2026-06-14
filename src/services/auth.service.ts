@@ -399,6 +399,10 @@ export class AuthService {
       });
     } else {
       // Create new OAuth user (auto-verified)
+      // NOTE: roles table stores names as lowercase ('user', 'admin') —
+      // using 'ROLE_USER' (the historical Spring Security convention)
+      // would fail with "Role not found" on this DB. Connect by id 2
+      // (the seeded USER role) to be safe across renames.
       user = await prisma.user.create({
         data: {
           username: data.email.split('@')[0] + '_' + Date.now().toString(36),
@@ -409,7 +413,7 @@ export class AuthService {
           emailVerified: true, // OAuth provider đã verify email
           emailVerifiedAt: new Date(),
           roles: {
-            create: { role: { connect: { name: 'ROLE_USER' } } },
+            create: { role: { connect: { name: 'user' } } },
           },
         },
         include: { roles: { include: { role: true } } },

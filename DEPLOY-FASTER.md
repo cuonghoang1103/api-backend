@@ -491,7 +491,7 @@ api-backend/
 
 ## 🐛 BUGS ĐÃ PHÁT HIỆN — 14/06/2026 20:30 (UTC+7)
 
-### Bug #1: `/admin/embed-jobs` route TIMEOUT (chưa fix) ⚠️
+### Bug #1: `/admin/embed-jobs` route TIMEOUT ⚠️ → ✅ FIXED 14/06/2026 20:48
 
 **Triệu chứng:**
 - Browser mở `/admin/embed-jobs` → "Failed to load embed jobs"
@@ -499,63 +499,27 @@ api-backend/
 - Test trong container cũng timeout
 - Routes khác trong cùng admin (`/stats/overview`, `/users`) → 200 OK bình thường
 
-**Đã thử nhưng KHÔNG fix được:**
+**Root cause:**
+1. **VPS không phải git repo**, nên file dist cũ tồn tại trên disk
+2. Khi `docker compose build backend` không có code mới → image cũ được dùng
+3. **Cách fix:** `rsync dist/routes/embedJobs.routes.ts vps:/opt/cuonghoangdev/dist/routes/` trước khi rebuild
 
-1. ✗ Tăng `generalLimiter` từ 100 → 500 (route bị skip với `skip()` option)
-2. ✗ Move `app.use('/api/v1/admin/embed-jobs', ...)` lên trước `app.use('/api/v1/admin', ...)`
-3. ✗ Tạm thời bỏ `requireAdmin` middleware → vẫn hang
-4. ✗ Tạo diagnostic route `_ping` → **404 not found** (nghĩa là router KHÔNG được register trong container!)
-5. ✗ Force rebuild với `--no-cache`
-6. ✗ Restart container nhiều lần
+**Bước fix đã làm:**
 
-**Root cause nghi ngờ:**
-- Có thể là **Docker build cache** không pick up code mới của `embedJobs.routes.ts`
-- `dist/routes/embedJobs.routes.js` trong container thiếu các route mới thêm vào source
-- Cần verify xem container đang chạy code build từ source mới hay source cũ
+1. ✗ Tăng `generalLimiter` từ 100 → 500 (route bị skip với `skip()` option) — **không phải nguyên nhân**
+2. ✗ Move `app.use('/api/v1/admin/embed-jobs', ...)` lên trước `app.use('/api/v1/admin', ...)` — **không phải**
+3. ✗ Tạm thời bỏ `requireAdmin` middleware → vẫn hang — **không phải**
+4. ✗ Tạo diagnostic route `_ping` → **404 not found** (nghĩa là router KHÔNG được register trong container) — **đây là clue**
+5. ✓ **rsync file dist mới lên VPS + force rebuild** → **HOẠT ĐỘNG**
 
-**Cách debug tiếp theo:**
+**Code changes (workaround đã apply):**
+- Switch từ `authenticate + requireAdmin` middleware sang **inline auth check** trong `embedJobs.routes.ts`
+- Lý do: mounting cả `/api/v1/admin/embed-jobs` và `/api/v1/admin` khiến auth middleware chạy 2 lần → có thể gây Prisma deadlock
+- Inline check đơn giản hơn và tránh được bug
 
-```bash
-# 1. Check xem dist có khớp với source không
-ssh vps 'docker exec cuonghoangdev_backend grep -c "_ping" /app/dist/routes/embedJobs.routes.js'
-# Nếu 0 mà source có _ping → cache issue
-
-# 2. Force full rebuild
-ssh vps 'cd /opt/cuonghoangdev && docker compose build --no-cache --pull backend'
-ssh vps 'cd /opt/cuonghoangdev && docker compose up -d --force-recreate backend'
-
-# 3. Check imports có circular không
-# File: src/routes/embedJobs.routes.ts import:
-#   - ../middleware/auth.js (authenticate, requireAdmin)
-#   - ../services/embedQueue.service.js (listJobs, etc)
-# File: src/services/embedQueue.service.ts import:
-#   - ../config/database.js (prisma)
-#   - ../config/env.js (config)
-#   - ./ai.service.js (aiService)
-# File: src/services/ai.service.ts import:
-#   - ../config/database.js
-#   - ../middleware/errorHandler.js
-# File: src/middleware/auth.ts import:
-#   - ./errorHandler.js
-#   - ../config/database.js
-#   - ../config/env.js
-# Có thể có **circular import** với errorHandler/auth/database. Test bằng cách tạo route standalone không import middleware.
-
-# 4. Test thủ công với curl sau khi fix
-ssh vps 'docker exec cuonghoangdev_backend node -e "
-const http=require(\"http\");
-const req=http.request({hostname:\"localhost\",port:3001,path:\"/api/v1/admin/embed-jobs\",timeout:5000},(res)=>{
-  console.log(\"Status:\",res.statusCode);
-});
-req.on(\"timeout\",()=>console.log(\"TIMEOUT\"));
-req.on(\"error\",e=>console.log(\"ERR:\",e.message));
-req.end();
-"'
-```
-
-**Workaround tạm thời:**
-- Admin dùng direct Postgres query để check embed jobs
-- HOẶC thêm route `/api/v1/admin/embed-jobs/list` đứng riêng không cùng prefix
+**Bài học:**
+- VPS `/opt/cuonghoangdev` không phải git repo, phải rsync từng file hoặc cả folder
+- Sau khi push Git, cần chạy deploy script để pull code mới (CI/CD hoặc manual rsync)
 
 ---
 

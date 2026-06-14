@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
-import { signIn } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
@@ -77,11 +77,11 @@ function LoginForm() {
         setBackendError(errorMsg);
         toast.error(errorMsg);
 
-        // Nếu email chưa xác thực → chuyển sang trang gửi lại verification
+        // Nếu email chưa xác thực → chuyển sang trang resend verification
         if (errorCode === 'EMAIL_NOT_VERIFIED') {
           const email = loginData.data?.email || data.username;
           setTimeout(() => {
-            router.push(`/verify-email-prompt?email=${encodeURIComponent(email)}`);
+            router.push(`/verify-email?email=${encodeURIComponent(email)}&resend=1`);
           }, 1500);
         }
         return;

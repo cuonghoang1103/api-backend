@@ -8,8 +8,10 @@ import type { NextAuthConfig } from "next-auth";
  * env, URL OAuth vẫn build được nhưng thiếu `client_id` → Google trả 400,
  * GitHub trả 404, user thấy lỗi "invalid_request" không rõ nguyên nhân.
  *
- * Bây giờ: provider CHỈ được khởi tạo nếu env tồn tại. Nếu thiếu, callback
- * `signIn` sẽ từ chối và trả lỗi rõ ràng cho user. Log cảnh báo ở startup.
+ * Bây giờ: warn ở startup nếu env rỗng (giúp dev phát hiện sớm qua Vercel
+ * / Docker logs), và callback `signIn` từ chối ngay khi user click provider
+ * nếu env chưa set, trả error thân thiện thay vì redirect ra Google rồi mới
+ * lỗi 400.
  */
 function warnMissingEnv(name: string): void {
   if (!process.env[name] || process.env[name]!.trim() === '') {

@@ -48,8 +48,16 @@ router.post(
       .matches(/^[a-zA-Z0-9_]+$/)
       .withMessage('Username can only contain letters, numbers, and underscores'),
     body('password')
-      .isLength({ min: 6 })
-      .withMessage('Password must be at least 6 characters'),
+      .isLength({ min: 12, max: 100 })
+      .withMessage('Password must be at least 12 characters')
+      .matches(/[A-Z]/)
+      .withMessage('Password must contain at least 1 uppercase letter')
+      .matches(/[a-z]/)
+      .withMessage('Password must contain at least 1 lowercase letter')
+      .matches(/[0-9]/)
+      .withMessage('Password must contain at least 1 number')
+      .matches(/[^A-Za-z0-9]/)
+      .withMessage('Password must contain at least 1 special character'),
     body('email').isEmail().withMessage('Valid email is required'),
   ],
   validate,

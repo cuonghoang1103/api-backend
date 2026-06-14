@@ -400,7 +400,7 @@ router.put('/admin/config/:key', authenticate, async (req: any, res: Response<Ap
 // ════════════════════════════════════════════════════════════════
 router.get('/admin/stats', authenticate, async (_req: any, res: Response<ApiResponse>, next) => {
   try {
-    const [feedbackStats, config, chunks] = await Promise.all([
+    const [feedbackStats, config, chunksPage] = await Promise.all([
       aiService.getFeedbackStats(),
       aiService.getConfig(),
       aiService.getAllChunks(),
@@ -411,7 +411,7 @@ router.get('/admin/stats', authenticate, async (_req: any, res: Response<ApiResp
       data: {
         feedback: feedbackStats,
         config,
-        totalChunks: chunks.length,
+        totalChunks: chunksPage.total,
       },
     });
   } catch (error) {

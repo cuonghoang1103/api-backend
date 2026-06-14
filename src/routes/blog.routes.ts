@@ -128,6 +128,35 @@ router.get('/posts/by-slug/:slug', async (req, res: Response<ApiResponse>, next)
   } catch (error) { next(error); }
 });
 
+// GET /api/v1/blog/posts/:id
+// Used by the BlogPostDetailModal (which navigates by post id, not
+// by slug). The `:id` route is declared after the more specific
+// `/by-slug/:slug` so that "by-slug" never gets treated as an id.
+router.get('/posts/:id', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) {
+      throw new AppError('Invalid post id', 400, 'INVALID_ID');
+    }
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: {
+        author: { select: { id: true, username: true, avatarUrl: true, bio: true } },
+        category: true,
+        tags: { include: { tag: true } },
+        comments: { orderBy: { createdAt: 'desc' }, take: 50 },
+        _count: { select: { comments: true } },
+      },
+    });
+    if (!post) throw new AppError('Post not found', 404, 'POST_NOT_FOUND');
+
+    await prisma.post.update({ where: { id: post.id }, data: { viewCount: { increment: 1 } } });
+
+    const normalized = normalizePost(post as unknown as Record<string, unknown>);
+    res.json({ success: true, data: normalized });
+  } catch (error) { next(error); }
+});
+
 // GET /api/v1/blog/posts/search
 router.get('/posts/search', async (req, res: Response<ApiResponse>, next) => {
   try {

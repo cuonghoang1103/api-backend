@@ -14,6 +14,7 @@ import {
   Images,
   BookOpen,
   Star,
+  ChevronRight,
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import type { Project } from '@/types';
@@ -334,7 +335,7 @@ function ProjectFormModal({
                   Gallery + Case Study
                 </span>
               </span>
-              <span className={`transform transition-transform ${showAdvanced ? 'rotate-180' : ''}`}>
+              <span className={`transform transition-transform ${showAdvanced ? 'rotate-90' : ''}`}>
                 <ChevronRight className="w-4 h-4 text-text-muted" />
               </span>
             </button>

@@ -1,6 +1,6 @@
 # 📋 TIẾN ĐỘ DỰ ÁN — CuongHoangDev (api-backend)
 
-> **Cập nhật:** 14/06/2026 19:08 (UTC+7) — Phiên làm việc: Circuit Breaker ✅, Mục #1 (function calling) pending
+> **Cập nhật:** 14/06/2026 19:35 (UTC+7) — Phiên làm việc: Mục #4 + #6 DONE
 > **Repo:** `/Users/admin/Downloads/api-backend`
 > **Production:** https://cuongthai.com
 
@@ -560,13 +560,14 @@ update file này để có timeline chính xác cho dự án.*
 **Tóm tắt tiến độ tổng thể:**
 - ✅ Phase 1 (Mục #3, #7, #8, #9): 100% done
 - ✅ Phase 2 (Mục #2): semantic search DONE
+- ✅ **Mục #4 — Rate-limit UI**: Redis counter + frontend QuotaIndicator LIVE
+- ✅ **Mục #6 — Auto-train cron**: node-cron + embed queue + admin UI LIVE
 - ✅ **Mục #5 — 3-tier provider fallback LIVE**:
   - Groq (primary) + OpenRouter (fallback) + OpenAI (commented, chờ nạp quota)
   - **Circuit Breaker** (Option C): tự skip provider fail, auto-recover
-- ⏳ Mục #1 (function calling), #4 (rate-limit UI), #6 (auto-train cron): pending
-  - **Mục #1**: đã có roadmap chi tiết trong file này (xem section "MỤC #1 — FUNCTION CALLING")
-- 📊 6 mục đã deploy lên production
-- ⏱️ Tổng thời gian đã làm trong phiên này: ~5 giờ
+- ⏳ Mục #1 (function calling): pending (đã có roadmap chi tiết)
+- 📊 **8 mục đã deploy lên production**
+- ⏱️ Tổng thời gian đã làm trong phiên này: ~6 giờ
 
 ### 🎉 Mục #5.5 — Circuit Breaker (Option C) — 14/06/2026 18:58 UTC+7 ✅
 
@@ -677,6 +678,103 @@ Test 5: Real chat với RAG
 **Còn lại cần làm để hoàn thiện Mục #5:**
 - Bạn nạp $5 vào OpenAI billing (https://platform.openai.com/account/billing) → uncomment 2 dòng → restart
 - Hoặc dùng Together AI / Cohere (free tier) làm lớp 3 thay thế
+
+---
+
+## ✅ CÁC MỤC ĐÃ HOÀN THÀNH (tiếp tục cập nhật)
+
+### 🎉 Mục #4 — Rate-limit UI (Per-user Quota) — 14/06/2026 19:35 UTC+7 ✅
+
+**Mục đích:** User thấy được quota còn lại (câu/ngày), hiểu tại sao bị chặn
+khi vượt giới hạn (fair use).
+
+**Thay đổi production:**
+
+- **`src/services/quota.service.ts`** (mới): Redis-backed counter, 3 windows:
+  - Per-minute: 30 requests (chống spam)
+  - Per-day: 500 requests (cap free tier)
+  - Per-month: 10,000 requests (long-term cap)
+  - Tự fail-open nếu Redis down + Postgres fallback (count chat_messages)
+  - Atomic `pipe.exec()` để tránh race condition
+- **`src/routes/quota.routes.ts`** (mới):
+  - `GET /api/v1/quota/me` — quota hiện tại của user
+  - `POST /api/v1/quota/track` — client gọi khi stream complete (delay-increment)
+  - `GET /api/v1/quota/aggregate` — admin: tổng hợp toàn hệ thống
+  - `POST /api/v1/quota/reset/:userId` — admin: reset user (support case)
+- **`frontend/src/components/chat/QuotaIndicator.tsx`** (mới):
+  - Compact mode: hiển thị ở header chat
+  - Detail popover: 3 progress bars (minute/day/month) + reset countdown
+  - Auto-refresh mỗi 30s
+  - Color gradient: cyan → yellow → red khi gần hết
+- **`frontend/src/app/chat/page.tsx`** (modified):
+  - Mount QuotaIndicator compact ở header
+  - Gọi `/quota/track` sau khi stream complete (chỉ khi có content)
+- **`src/index.ts`** (modified): Mount `/api/v1/quota` route
+- **Deps mới:** `redis@^4.7.1`
+
+**API Response example:**
+```json
+{
+  "success": true,
+  "data": {
+    "used": { "minute": 5, "day": 47, "month": 312 },
+    "limit": { "minute": 30, "day": 500, "month": 10000 },
+    "remaining": { "minute": 25, "day": 453, "month": 9688 },
+    "resetAt": { "minute": "...", "day": "...", "month": "..." },
+    "resetIn": { "minute": 42, "day": 7200, "month": 2592000 },
+    "source": "redis"
+  }
+}
+```
+
+---
+
+### 🎉 Mục #6 — Auto-train Cron (Embed Queue) — 14/06/2026 19:35 UTC+7 ✅
+
+**Mục đích:** Hệ thống tự động maintain RAG knowledge base, không cần admin
+bấm "Train" thủ công.
+
+**Thay đổi production:**
+
+- **`src/services/embedQueue.service.ts`** (mới): In-process FIFO queue
+  - 3 job types: `embed_document`, `reembed_all`, `cleanup_garbage`
+  - Auto-retry 3 lần nếu fail
+  - Trade-off: không dùng BullMQ (đơn giản hơn, đủ cho single-process)
+- **`src/services/cron.service.ts`** (mới): node-cron schedule
+  - **03:00 Vietnam hàng ngày:** Cleanup soft-deleted chunks >90 ngày
+  - **02:00 Vietnam Chủ nhật:** Re-embed tất cả chunks (sau model change)
+  - **Mỗi giờ:** Health check Redis + Postgres
+  - **Startup:** Recovery scan (placeholder cho tương lai)
+- **`src/routes/embedJobs.routes.ts`** (mới): Admin endpoints
+  - `GET /api/v1/admin/embed-jobs` — list jobs (filter by status/type)
+  - `GET /api/v1/admin/embed-jobs/stats` — aggregate stats
+  - `POST /api/v1/admin/embed-jobs/{flush,reembed,cleanup}` — manual trigger
+- **`frontend/src/app/admin/embed-jobs/page.tsx`** (mới):
+  - Stats grid (8 cards: total, pending, processing, completed, failed, by type)
+  - Filter tabs (all, pending, processing, completed, failed)
+  - Table với job ID, type, status badge, attempts, duration, error
+  - 3 action buttons: Trigger Re-embed, Cleanup, Flush
+  - Auto-refresh mỗi 10s
+  - Recent errors section (nếu có)
+- **`src/index.ts`** (modified):
+  - Mount `/api/v1/admin/embed-jobs` route
+  - `startCronJobs()` ở server startup
+- **Deps mới:** `node-cron@^3.0.3`, `@types/node-cron@^3.0.11`
+
+**Cách dùng trong code (cho future upload hook):**
+```typescript
+import { enqueueDocumentEmbed } from '../services/embedQueue.service.js';
+
+// Trong upload route, thay vì await aiService.indexDocument(...)
+const job = enqueueDocumentEmbed(documentId, documentType, content, metadata);
+// → response ngay, embed chạy background
+```
+
+**Trade-offs documented:**
+- In-process queue: mất job nếu process crash giữa chừng
+  → Mitigation: idempotent re-run + status column (TODO: migrate schema)
+- Single-process only: không scale horizontal
+  → Acceptable hiện tại vì traffic thấp, nếu cần scale thì migrate sang BullMQ
 
 ---
 

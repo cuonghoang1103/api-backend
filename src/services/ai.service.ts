@@ -143,14 +143,16 @@ export class AIService {
     content: string,
     _userId?: number,
   ): Promise<void> {
-    await prisma.chatMessage.create({
-      data: { sessionId, role: 'user', content },
-    });
-
+    // Ensure session exists BEFORE creating messages that reference it
+    // (foreign key chat_messages_session_id_fkey would otherwise fail).
     await prisma.chatSession.upsert({
       where: { id: sessionId },
       create: { id: sessionId, title: `Chat ${new Date().toLocaleString('vi-VN')}` },
       update: { updatedAt: new Date() },
+    });
+
+    await prisma.chatMessage.create({
+      data: { sessionId, role: 'user', content },
     });
   }
 

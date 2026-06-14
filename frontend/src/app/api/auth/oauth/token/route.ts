@@ -3,8 +3,8 @@ import { auth } from "@/lib/auth";
 
 /**
  * Backend URL — ưu tiên BACKEND_URL (server-only), fallback NEXT_PUBLIC_API_URL,
- * cuối cùng là Docker service name. Trên Vercel, set BACKEND_URL trong env vars
- * (Settings → Environment Variables) trỏ tới https://api.cuongthai.com.
+ * cuối cùng là Docker service name. Trên VPS production, set BACKEND_URL
+ * trong /opt/cuonghoangdev/.env trỏ tới https://api.cuongthai.com.
  */
 const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://backend:3001";
 

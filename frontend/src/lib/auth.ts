@@ -17,7 +17,7 @@ function warnMissingEnv(name: string): void {
     console.error(
       `[nextauth] Missing required env var: ${name}. ` +
       `OAuth provider sẽ fail khi user click sign-in. ` +
-      `Set trong Vercel dashboard (Settings → Environment Variables) hoặc .env.local.`
+      `Set trong /opt/cuonghoangdev/.env (VPS) hoặc .env.local (local dev).`
     );
   }
 }

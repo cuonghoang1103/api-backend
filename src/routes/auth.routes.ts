@@ -104,6 +104,7 @@ router.post(
     }
   },
 );
+
 // ─── POST /api/v1/auth/oauth/register ───────────────────
 router.post(
   '/oauth/register',

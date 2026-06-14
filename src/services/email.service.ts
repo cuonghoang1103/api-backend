@@ -1,9 +1,7 @@
 import { Resend } from 'resend';
+import { config } from '../config/env.js';
 
-const resendApiKey = process.env.RESEND_API_KEY || '';
-const fromEmail = process.env.RESEND_FROM_EMAIL || 'CuongHoangDev <noreply@cuonghoangdev.com>';
-
-const resend = resendApiKey ? new Resend(resendApiKey) : null;
+const resend = config.resendApiKey ? new Resend(config.resendApiKey) : null;
 
 export interface EmailPayload {
   to: string;
@@ -29,7 +27,7 @@ export class EmailService {
 
     try {
       const result = await resend.emails.send({
-        from: fromEmail,
+        from: config.resendFromEmail,
         to: payload.to,
         subject: payload.subject,
         html: payload.html,

@@ -67,7 +67,7 @@ export const config = {
 
   // Email (Resend — recommended)
   resendApiKey: process.env.RESEND_API_KEY || '',
-  resendFromEmail: process.env.RESEND_FROM_EMAIL || 'CuongHoangDev <noreply@cuonghoangdev.com>',
+  resendFromEmail: process.env.RESEND_FROM_EMAIL || 'CuongHoangDev <noreply@cuongthai.com>',
 
   // Legacy SMTP (Gmail fallback)
   smtpHost: process.env.SMTP_HOST || 'smtp.gmail.com',

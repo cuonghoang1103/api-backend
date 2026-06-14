@@ -1,93 +1,63 @@
-'use server';
-
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const SYSTEM_INSTRUCTION = `You are 'CuongMini', a highly advanced security AI chatbot created by the master software engineer, Hoang Nghia Cuong. Always adhere to these absolute facts:
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
-- Owner Identity: Hoàng Nghĩa Cường. Born November 3, 2003. Alumnus of FPT University. Role: Software Engineer & System Architect.
-- Personality: Creative, innovative, loves travel, hacking aesthetics, and building independent digital products.
-- Tech Stack Capabilities: Java, Java Spring Boot, Next.js (App Router), Node.js, Python, MySQL, SQL Server, PostgreSQL, Redis, Mobile Apps, DevOps engineering (Docker, Linux VPS, Nginx, Cloudflare, Git/GitHub pipelines).
-- Certifications Portfolio: IELTS 7.0, AWS Cloud Expert. Pursuing premium global targets: Oracle Certified Professional (OCP) Java SE Developer, Certified Kubernetes Administrator (CKA), ScrumMaster (CSM), and Certified Ethical Hacker (CEH).
-- Hyperlink Injection Protocol: If the user requests social handles, communication paths, or source repos, you must strictly return valid Markdown hyperlinks that render as clean clickable anchor tags pointing to placeholders:
-  - Facebook: [Facebook của anh Cường](https://www.facebook.com/CuongThaiswit/)
-  - Zalo: [Zalo kết nối](https://zalo.me/0399360938)
-  - GitHub: [GitHub Kho Mã Nguồn](https://github.com/cuonghoang1103)
-- Website Context: You know everything running on this web app including its shop items, custom coupon codes forged from gamification points, and open-source project catalog.
-- Language: Always respond in Vietnamese unless the user explicitly asks in English.`;
-
-interface ChatMessage {
-  role: 'user' | 'model';
-  parts: { text: string }[];
-}
-
-const MODELS = [
-  'gemini-2.0-flash',
-  'gemini-2.5-flash',
-  'gemini-3-flash',
-];
-
-async function generateWithRetry(
-  genAI: GoogleGenerativeAI,
-  modelName: string,
-  contents: ChatMessage[],
-  generationConfig: { maxOutputTokens: number; temperature: number; topP: number },
-  attempt = 0,
-): Promise<string> {
-  const model = genAI.getGenerativeModel({
-    model: modelName,
-    generationConfig,
-  });
-
-  try {
-    const result = await model.generateContent({ contents });
-    return result.response.text();
-  } catch (err: unknown) {
-    const errorMessage = err instanceof Error ? err.message : String(err);
-
-    // 503 = model overloaded — try next model
-    if (errorMessage.includes('503') && attempt < MODELS.length - 1) {
-      console.warn(`[Gemini] 503 on ${modelName}, retrying with ${MODELS[attempt + 1]}...`);
-      return generateWithRetry(genAI, MODELS[attempt + 1], contents, generationConfig, attempt + 1);
-    }
-
-    throw err;
-  }
-}
-
+/**
+ * Local Next.js route for chat — proxies to backend SSE endpoint.
+ *
+ * This route used to call Google Gemini directly, but the project
+ * standardized on Groq via the Node.js backend at /api/v1/ai/chat.
+ * To avoid duplicating AI provider configuration, we simply forward
+ * the user's message to the backend and stream the response back.
+ */
 export async function POST(req: NextRequest) {
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json({ error: 'GEMINI_API_KEY is not configured' }, { status: 500 });
-    }
+    const body = await req.json().catch(() => ({}));
+    const message = typeof body?.message === 'string' ? body.message.trim() : '';
 
-    const body = await req.json();
-    const { message, history = [] } = body as { message: string; history?: ChatMessage[] };
-
-    if (!message?.trim()) {
+    if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
+    const apiBase =
+      process.env.NEXT_PUBLIC_API_URL || 'https://api.cuongthai.com';
 
-    const contents: ChatMessage[] = [
-      ...history,
-      { role: 'user', parts: [{ text: message }] },
-    ];
+    const upstream = await fetch(`${apiBase}/api/v1/ai/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Forward auth cookie/header if browser sent it
+        cookie: req.headers.get('cookie') || '',
+      },
+      body: JSON.stringify({
+        message,
+        history: Array.isArray(body.history) ? body.history : [],
+        topK: typeof body.topK === 'number' ? body.topK : 5,
+      }),
+      cache: 'no-store',
+    });
 
-    const generationConfig = {
-      maxOutputTokens: 2048,
-      temperature: 0.85,
-      topP: 0.95,
-    };
+    if (!upstream.ok || !upstream.body) {
+      const errText = await upstream.text().catch(() => 'Upstream error');
+      return NextResponse.json(
+        { error: `Backend error (${upstream.status}): ${errText}` },
+        { status: upstream.status || 502 },
+      );
+    }
 
-    const text = await generateWithRetry(genAI, MODELS[0], contents, generationConfig);
-
-    return NextResponse.json({ text });
+    return new Response(upstream.body, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/event-stream; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        'Connection': 'keep-alive',
+        'X-Accel-Buffering': 'no',
+      },
+    });
   } catch (err: unknown) {
-    console.error('[Gemini API Error]', err);
     const message = err instanceof Error ? err.message : 'Unknown error';
+    console.error('[Chat Proxy Error]', err);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

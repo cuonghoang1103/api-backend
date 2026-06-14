@@ -514,11 +514,27 @@ export function resetCircuitManually(name: string): void {
 // We update the storage type from `vector(768)` to `vector(384)` in
 // the column comment; the JSONB column itself is dimension-agnostic.
 
-import { pipeline, env } from '@xenova/transformers';
+// IMPORTANT: `@xenova/transformers` brings in `onnxruntime-node`, a native
+// binding that requires glibc. Alpine containers in production (and many
+// minimal Docker base images) use musl — loading the module crashes the
+// whole process with `ERR_DLOPEN_FAILED` because it can't find
+// `ld-linux-x86-64.so.2`. To keep the AI / embeddings service usable on
+// Alpine WITHOUT crashing the entire server, we lazy-load transformers
+// inside `getEmbedder()`. The top-level import has been removed; nothing
+// references these symbols before they're actually needed.
+let _pipeline: typeof import('@xenova/transformers').pipeline | null = null;
+let _env: typeof import('@xenova/transformers').env | null = null;
 
-// Allow model download to be cached in /app (in container)
-// Default cache is in node_modules — works in dev, persists in /app in prod
-env.cacheDir = process.env.TRANSFORMERS_CACHE || '/app/.cache/transformers';
+async function loadTransformers() {
+  if (!_pipeline || !_env) {
+    const mod = await import('@xenova/transformers');
+    _pipeline = mod.pipeline;
+    _env = mod.env;
+    // Allow model download to be cached in /app (in container)
+    _env.cacheDir = process.env.TRANSFORMERS_CACHE || '/app/.cache/transformers';
+  }
+  return { pipeline: _pipeline!, env: _env! };
+}
 
 let _embedder: any = null;
 let _initPromise: Promise<any> | null = null;
@@ -529,6 +545,7 @@ async function getEmbedder() {
   if (_embedder) return _embedder;
   if (_initPromise) return _initPromise;
   _initPromise = (async () => {
+    const { pipeline } = await loadTransformers();
     console.log(`[Embeddings] Loading local model ${EMBEDDING_MODEL}...`);
     const start = Date.now();
     _embedder = await pipeline('feature-extraction', EMBEDDING_MODEL);

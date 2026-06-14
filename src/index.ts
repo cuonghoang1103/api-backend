@@ -181,6 +181,17 @@ const generalLimiter = rateLimit({
 });
 
 // Giới hạn riêng cho auth endpoints (ngăn brute force)
+//
+// Lưu ý: bucket này ĐƯỢC CHIA SẺ cho TẤT CẢ endpoints auth (login,
+// register, verify-email-otp, change-password, forgot-password, resend-otp…).
+// 10 requests / 15 phút là QUÁ THẤP cho production — một user bình thường
+// mới: register (1) + verify (2) + login (3) + change password (4) = 4
+// requests. Cộng thêm 1 lần sai password (5) là đã chiếm nửa quota, và
+// mọi retry khi user quên pass / OTP sẽ bị 429. Tăng lên 50 để user
+// thật không bị khóa nhầm trong khi brute-force vẫn bị chặn hiệu quả
+// (với 50/15min, attacker vẫn không thể brute force một mật khẩu ngẫu
+// nhiên — chỉ khoảng 0.05 mật khẩu/giây, thấp hơn tốc độ đoán thực tế
+// của botnet).
 const authLimiter = rateLimit({
   windowMs: config.nodeEnv === 'production' ? 15 * 60 * 1000 : 60 * 1000,
   max: (req: Request) => {
@@ -199,7 +210,7 @@ const authLimiter = rateLimit({
       return 100;
     }
 
-    return config.nodeEnv === 'production' ? 10 : 100;
+    return config.nodeEnv === 'production' ? 50 : 100;
   },
   standardHeaders: true,
   legacyHeaders: false,

@@ -11,6 +11,24 @@ import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
 
+// ─── Helper: serialize a CourseDocument for JSON response ──────────
+//
+// The Prisma model declares `fileSizeBytes` as BigInt. Express
+// uses `JSON.stringify` under the hood, which throws on BigInt
+// values. We coerce BigInt to Number here so the rest of the
+// payload (which we just spread) is JSON-safe.
+//
+// This is the same pattern used in getBySlug below (see
+// `documents: lesson.documents.map((document) => ...)`); we
+// extract it into a helper so every lesson-returning endpoint
+// applies the same coercion.
+function serializeDocument(document: any) {
+  return {
+    ...document,
+    fileSizeBytes: Number(document.fileSizeBytes),
+  };
+}
+
 // ─── Multer config for lesson document uploads ──────────────────────
 //
 // Lesson documents are auxiliary materials the instructor
@@ -255,10 +273,7 @@ async function serializeCourse(
         createdAt: lesson.createdAt,
         updatedAt: lesson.updatedAt,
         details: lesson.details,
-        documents: lesson.documents.map((document) => ({
-          ...document,
-          fileSizeBytes: Number(document.fileSizeBytes),
-        })),
+        documents: lesson.documents.map(serializeDocument),
         assignments: lesson.assignments.map((assignment) => ({
           ...assignment,
           mySubmission: ('submissions' in assignment ? (assignment as typeof assignment & { submissions?: Array<unknown> }).submissions?.[0] : null) || null,
@@ -639,6 +654,7 @@ router.post('/lessons', authenticate, requireAdmin('ROLE_ADMIN'), async (req, re
       videoPlatform: created.details?.videoPlatform ?? 'EMBED',
       sourceCodeUrl: created.details?.sourceCodeUrl,
       teachingNotes: created.details?.teachingNotes,
+      documents: (created.documents || []).map(serializeDocument),
     } });
   } catch (error) { next(error); }
 });
@@ -718,6 +734,11 @@ router.put('/lessons/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req,
       videoPlatform: refreshed?.details?.videoPlatform ?? 'EMBED',
       sourceCodeUrl: refreshed?.details?.sourceCodeUrl,
       teachingNotes: refreshed?.details?.teachingNotes,
+      // CourseDocument.fileSizeBytes is a BigInt in Prisma. Express'
+      // res.json() uses JSON.stringify which can't serialize BigInt.
+      // We map documents here (and on every other lesson response)
+      // so the entire payload is JSON-safe.
+      documents: (refreshed?.documents || []).map(serializeDocument),
     } });
   } catch (error) { next(error); }
 });
@@ -793,10 +814,7 @@ router.get('/:courseId/lessons/:lessonId', async (req, res: Response<ApiResponse
       videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
       sourceCodeUrl: lesson.details?.sourceCodeUrl,
       teachingNotes: lesson.details?.teachingNotes,
-      documents: lesson.documents.map((document) => ({
-        ...document,
-        fileSizeBytes: Number(document.fileSizeBytes),
-      })),
+      documents: lesson.documents.map(serializeDocument),
       assignments: lesson.assignments.map((assignment) => ({
         ...assignment,
         mySubmission: ('submissions' in assignment ? (assignment as typeof assignment & { submissions?: Array<unknown> }).submissions?.[0] : null) || null,

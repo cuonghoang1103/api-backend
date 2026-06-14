@@ -217,8 +217,13 @@ export class AuthService {
         fullName: data.fullName,
         emailVerified: false, // Bắt buộc xác thực
         roles: {
+          // DB seed tạo role name = 'user' / 'admin' (lowercase, không
+          // có tiền tố ROLE_). Cũ — trước đây ghi 'ROLE_USER' — không
+          // match với row nào trong bảng roles → prisma.user.create()
+          // fail với "No 'Role' record(s) found for nested connect".
+          // Hardcode 'user' (không 'ROLE_USER') để khớp với seed.
           create: {
-            role: { connect: { name: 'ROLE_USER' } },
+            role: { connect: { name: 'user' } },
           },
         },
       },

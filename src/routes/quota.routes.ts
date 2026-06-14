@@ -16,7 +16,6 @@ import {
   getQuotaStatus,
   resetUserQuota,
   getAggregateQuota,
-  incrementQuota,
 } from '../services/quota.service.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -27,22 +26,6 @@ router.get('/me', authenticate, async (req: Request, res: Response, next: NextFu
   try {
     const userId = (req as any).user.id;
     const status = await getQuotaStatus(userId);
-    const response: ApiResponse = {
-      success: true,
-      data: status,
-    };
-    res.json(response);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// ─── POST /track — record a usage event (called by client when streaming ends) ────
-// Allows frontend to delay-increment (so aborted requests don't count)
-router.post('/track', authenticate, async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const userId = (req as any).user.id;
-    const status = await incrementQuota(userId);
     const response: ApiResponse = {
       success: true,
       data: status,

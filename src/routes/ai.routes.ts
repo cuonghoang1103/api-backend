@@ -24,6 +24,7 @@ import multer from 'multer';
 import { prisma } from '../config/database.js';
 import { aiService } from '../services/ai.service.js';
 import { optionalAuth, authenticate } from '../middleware/auth.js';
+import { quotaMiddleware } from '../services/quota.service.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import type { ChatMessageDto } from '../types/index.js';
@@ -52,7 +53,7 @@ const SSE_TIMEOUT_MS = 180_000;           // 3 phút max response time
 // POST /api/v1/ai/chat
 // SSE streaming — real-time token-by-token Gemini response
 // ════════════════════════════════════════════════════════════════
-router.post('/chat', optionalAuth, async (req: any, res: Response) => {
+router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Response) => {
   // ─── 1. Validate input FIRST ──────────────────────────────
   // Validation MUST happen before flushHeaders() to avoid double-response
   const { message, sessionId, documentType, topK } = req.body as ChatMessageDto;

@@ -402,10 +402,8 @@ export default function ChatPage() {
       const ctx = getContextualPrompts(assistantContent);
       if (ctx.length > 0) setSuggestedPrompts(ctx);
 
-      // Track quota usage (only after successful AI response)
-      if (assistantContent && getToken()) {
-        api.post('/quota/track').catch(() => {});
-      }
+      // Quota counter is auto-incremented by backend middleware (quotaMiddleware on /ai/chat).
+      // No need to call /quota/track from frontend — QuotaIndicator auto-refreshes every 30s.
 
       const lower = assistantContent.toLowerCase();
       if (lower.includes('!') || lower.includes('great') || lower.includes('awesome')) {

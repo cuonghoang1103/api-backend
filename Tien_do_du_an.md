@@ -1,6 +1,6 @@
 # 📋 TIẾN ĐỘ DỰ ÁN — CuongHoangDev (api-backend)
 
-> **Cập nhật:** 14/06/2026 15:19 (UTC+7) — Phiên làm việc: sửa lỗi → RAG admin → semantic search
+> **Cập nhật:** 14/06/2026 19:08 (UTC+7) — Phiên làm việc: Circuit Breaker ✅, Mục #1 (function calling) pending
 > **Repo:** `/Users/admin/Downloads/api-backend`
 > **Production:** https://cuongthai.com
 
@@ -564,8 +564,9 @@ update file này để có timeline chính xác cho dự án.*
   - Groq (primary) + OpenRouter (fallback) + OpenAI (commented, chờ nạp quota)
   - **Circuit Breaker** (Option C): tự skip provider fail, auto-recover
 - ⏳ Mục #1 (function calling), #4 (rate-limit UI), #6 (auto-train cron): pending
+  - **Mục #1**: đã có roadmap chi tiết trong file này (xem section "MỤC #1 — FUNCTION CALLING")
 - 📊 6 mục đã deploy lên production
-- ⏱️ Tổng thời gian đã làm trong phiên này: ~4.5 giờ
+- ⏱️ Tổng thời gian đã làm trong phiên này: ~5 giờ
 
 ### 🎉 Mục #5.5 — Circuit Breaker (Option C) — 14/06/2026 18:58 UTC+7 ✅
 
@@ -676,3 +677,114 @@ Test 5: Real chat với RAG
 **Còn lại cần làm để hoàn thiện Mục #5:**
 - Bạn nạp $5 vào OpenAI billing (https://platform.openai.com/account/billing) → uncomment 2 dòng → restart
 - Hoặc dùng Together AI / Cohere (free tier) làm lớp 3 thay thế
+
+---
+
+## 📌 MỤC #1 — FUNCTION CALLING (PENDING — 14/06/2026)
+
+**Trạng thái:** Đã tạm hoãn theo yêu cầu user. Dưới đây là roadmap + checklist
+để làm sau (khi user yêu cầu "làm Mục #1" thì quay lại file này).
+
+### 🎯 Mục tiêu
+
+Cho phép AI tự gọi tool/function khi cần (VD: tìm trong RAG, query DB, gọi API
+ngoài) thay vì chỉ trả lời dựa trên prompt + context.
+
+**Lợi ích:**
+- AI trả lời chính xác hơn (query real-time data)
+- Giảm hallucination (data từ tool, không phải tưởng tượng)
+- Linh hoạt hơn (gọi được nhiều tool khác nhau)
+
+### 📊 Phân tích quota (đã làm 14/06)
+
+- **Groq free tier:** 30 RPM, 14,400 RPD, 500K TPD, 18K TPM
+- **OpenRouter free:** ~50 RPD free models, reset theo giờ/ngày
+- **Function calling KHÔNG tốn quota thêm** nếu tool không được gọi (cùng endpoint
+  chat completions, chỉ thêm 100-300 tokens system prompt mô tả tools).
+- **NẾU tool được gọi nhiều:** tốn 2-3x tokens (tool result + context).
+- **Cần cache kết quả tool** để tránh spam query.
+- **Cần throttling ở frontend** (chặn user spam function calls).
+- **Circuit Breaker hiện tại** đã tự fallback Groq → OpenRouter khi Groq 429.
+
+### 🛠️ Cần implement
+
+#### Backend (`src/services/aiProviders.ts` + `src/services/ai.service.ts`)
+
+1. **Định nghĩa tool schemas** (OpenAI function calling format):
+   - `search_knowledge_base(query, topK)` — tìm trong RAG (đã có `getRAGContext()`,
+     chỉ cần expose thành tool)
+   - `get_user_stats(userId)` — số câu hỏi đã hỏi, số lượt còn
+   - `get_weather(city)` — OpenWeatherMap API (free tier 1K calls/ngày)
+   - `search_youtube(query, maxResults)` — YouTube Data API (đã có `YOUTUBE_API_KEY`)
+2. **Pass `tools` param** vào `chat.completions.create({...})` của OpenAI client
+3. **Handle `finish_reason === 'tool_calls'`** — gọi function thật → trả kết quả
+   vào `messages` → gọi lại AI lần 2 để AI viết câu trả lời final
+4. **Max iterations guard** — tránh AI gọi tool vô hạn (cap 3-5 lần)
+5. **Token tracking** — log prompt + completion tokens mỗi call, gửi về frontend
+6. **Cache layer** — Redis cache kết quả tool 5-15 phút (chống spam)
+7. **Timeout per tool** — nếu tool chậm >10s → cancel + trả fallback
+
+#### Frontend (`frontend/src/app/chat/...`)
+
+1. **Hiển thị tool calls** — UI nhỏ bên dưới message: "🔍 Đang tìm trong RAG..."
+2. **Token counter** — góc phải chat, hiển thị tokens đã dùng/giới hạn
+3. **Nút "xem chi tiết"** — show prompt gốc + tool calls + response
+4. **Rate limit indicator** — disable nút gửi khi quota sắp hết (Mục #4)
+
+#### Admin (`src/routes/admin.routes.ts` + `frontend/src/app/admin/...`)
+
+1. **Dashboard quota** — biểu đồ Groq/OpenRouter usage theo ngày
+2. **Tool call log** — table lịch sử: user, tool, latency, status
+3. **Cache inspector** — xem Redis cache, manual clear
+4. **Manual quota adjust** — bump quota user VIP (nếu làm paywall)
+
+### 📁 Files cần tạo/sửa (khi làm Mục #1)
+
+```
+src/services/aiProviders.ts        # Thêm tools param + tool execution loop
+src/services/ai.service.ts         # Wrap chatWithFallback, handle tool_calls
+src/services/tools/                # 🆕 Folder mới
+  ├── searchRag.ts                 # tool: search_knowledge_base
+  ├── getUserStats.ts              # tool: get_user_stats
+  ├── getWeather.ts                # tool: get_weather
+  ├── searchYoutube.ts             # tool: search_youtube
+  └── toolRegistry.ts              # 🆕 Central registry: name → fn + schema
+src/services/toolCache.ts          # 🆕 Redis cache cho tool results
+src/routes/ai.routes.ts            # Pass tools vào request
+frontend/src/app/chat/[sessionId]/page.tsx  # UI: tool call indicator
+frontend/src/app/admin/tools/      # 🆕 Admin dashboard cho tool usage
+.env.example                       # Document new env vars (OPENWEATHER_API_KEY)
+```
+
+### 🧪 Test cases (khi làm Mục #1)
+
+- [ ] Test 1: Hỏi câu KHÔNG cần tool → AI trả lời thẳng, không gọi tool
+- [ ] Test 2: Hỏi "Bạn biết gì về Cường?" → AI gọi `search_knowledge_base` → trả lời
+- [ ] Test 3: Hỏi "Thời tiết HN hôm nay?" → AI gọi `get_weather("Hanoi")` → trả lời
+- [ ] Test 4: Hỏi câu cần 2 tools → AI gọi tuần tự 2 tools → tổng hợp
+- [ ] Test 5: Tool timeout → AI vẫn trả lời được (với data cũ hoặc fallback)
+- [ ] Test 6: Tool fail → AI apologize, không crash
+- [ ] Test 7: Cache hit → response nhanh hơn 5x
+- [ ] Test 8: Token usage log đúng với OpenAI dashboard
+
+### ⏱️ Estimate thời gian
+
+- Backend core: ~1.5h (tools param + execution loop + 4 tools)
+- Cache + error handling: ~0.5h
+- Frontend UI: ~0.5h
+- Admin dashboard: ~0.5h (optional)
+- Testing + docs: ~0.5h
+- **Tổng: ~3-3.5h**
+
+### 📝 Note cho lần làm tiếp theo
+
+Khi user nói "làm Mục #1", bắt đầu bằng:
+1. Đọc lại file này
+2. Check `src/services/ai.service.ts` để hiểu cấu trúc hiện tại
+3. Tạo `src/services/tools/toolRegistry.ts` trước (single source of truth)
+4. Implement `searchRag` đầu tiên (đã có sẵn `getRAGContext()`)
+5. Wire vào `chatWithFallback` với `tools: [...]` param
+6. Test cẩn thận với từng tool
+
+**⚠️ Lưu ý:** Cần thêm env var `OPENWEATHER_API_KEY` (free tier 1K calls/day)
+cho tool `get_weather`. Các tool khác đã có key sẵn (YOUTUBE, GROQ, OPENROUTER).

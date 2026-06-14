@@ -193,6 +193,13 @@ export const authApi = {
 
   resendVerification: (email: string) =>
     api.post('/auth/resend-verification', { email }),
+
+  // Change password (logged-in users only — backend requires backend_token)
+  changePassword: (data: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }) => api.post('/auth/change-password', data),
 };
 
 // File Upload API

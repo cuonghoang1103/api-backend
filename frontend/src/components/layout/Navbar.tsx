@@ -9,11 +9,12 @@ import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import {
   Home, BookOpen, FolderOpen, Music, MessageCircle,
-  User, LogOut, Settings, ChevronDown,
+  User, LogOut, Settings, ChevronDown, KeyRound,
   Globe, ShoppingBag,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { ChangePasswordModal } from '@/components/auth/ChangePasswordModal';
 
 const TOP_NAV_LINKS = [
   { href: '/', label: 'Home', icon: Home },
@@ -30,6 +31,7 @@ export default function Navbar() {
   const { getTotalItems, openDrawer } = useCartStore();
   const [isScrolled, setIsScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [locale, setLocale] = useState('en');
 
   const [mounted, setMounted] = useState(false);
@@ -279,6 +281,16 @@ export default function Navbar() {
                           className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
                           <Globe className="w-4 h-4" />Dashboard
                         </Link>
+                        <button
+                          onClick={() => {
+                            setUserMenuOpen(false);
+                            setChangePasswordOpen(true);
+                          }}
+                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors"
+                        >
+                          <KeyRound className="w-4 h-4" />
+                          Change password
+                        </button>
                         <button onClick={handleLogout}
                           className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors">
                           <LogOut className="w-4 h-4" />Logout
@@ -322,6 +334,12 @@ export default function Navbar() {
           })}
         </div>
       </div>
+
+      {/* Change password modal — opened from user menu */}
+      <ChangePasswordModal
+        open={changePasswordOpen}
+        onClose={() => setChangePasswordOpen(false)}
+      />
     </div>
   );
 }

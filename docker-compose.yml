@@ -89,6 +89,9 @@ services:
       SMTP_USER: ${SMTP_USER:-}
       SMTP_PASS: ${SMTP_PASS:-}
       SMTP_FROM: ${SMTP_FROM:-noreply@cuongthai.com}
+      # Resend (transactional email for verification + password reset)
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-CuongHoangDev <noreply@cuongthai.com>}
       YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
       PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-https://api.cuongthai.com}
     env_file:
@@ -130,6 +133,7 @@ services:
     environment:
       NODE_ENV: production
       INTERNAL_BACKEND_URL: http://backend:3001
+      BACKEND_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
       NEXT_PUBLIC_API_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
       NEXT_PUBLIC_YOUTUBE_API_KEY: ${NEXT_PUBLIC_YOUTUBE_API_KEY:-}
       NEXTAUTH_URL: ${NEXTAUTH_URL:-https://cuongthai.com}

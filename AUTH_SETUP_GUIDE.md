@@ -2,6 +2,7 @@
 
 > **Cập nhật**: 2026-06-14
 > **Phạm vi**: Bảo mật tài khoản (email verify, password mạnh, lockout) + sửa lỗi OAuth Google/GitHub
+> **Môi trường**: **VPS riêng** (160.187.1.208) chạy Docker — domain chính là `cuongthai.com`
 > **Triển khai**: Giai đoạn 1 đã xong. Giai đoạn 2 (2FA, refresh token rotation) sẽ làm sau.
 
 ---
@@ -13,8 +14,8 @@
 3. [Setup Google OAuth credentials](#3-setup-google-oauth-credentials)
 4. [Setup GitHub OAuth credentials](#4-setup-github-oauth-credentials)
 5. [Setup Resend (email)](#5-setup-resend-email)
-6. [Cấu hình env trên Vercel](#6-cấu-hình-env-trên-vercel)
-7. [Cấu hình env trên Render (backend)](#7-cấu-hình-env-trên-render-backend)
+6. [Cập nhật env trên VPS](#6-cập-nhật-env-trên-vps)
+7. [Deploy](#7-deploy)
 8. [Test toàn bộ flow](#8-test-toàn-bộ-flow)
 9. [Troubleshooting](#9-troubleshooting)
 
@@ -23,12 +24,12 @@
 ## 1. Lỗi OAuth hiện tại
 
 ### Lỗi 1: Google trả `400 invalid_request: Missing required parameter: client_id`
-- **Nguyên nhân**: `GOOGLE_CLIENT_ID` rỗng trên Vercel → NextAuth build URL thiếu param
-- **Fix**: Thêm env `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` trên Vercel (xem mục 6)
+- **Nguyên nhân**: `GOOGLE_CLIENT_ID` rỗng trong file `/opt/cuonghoangdev/.env` → NextAuth build URL thiếu param
+- **Fix**: Thêm `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` vào env file (xem mục 6)
 
 ### Lỗi 2: GitHub trả `404 Not Found`
 - **Nguyên nhân**: Tương tự — `GITHUB_CLIENT_ID` rỗng → GitHub không nhận diện được app
-- **Fix**: Thêm env `GITHUB_CLIENT_ID` + `GITHUB_CLIENT_SECRET` trên Vercel
+- **Fix**: Thêm `GITHUB_CLIENT_ID` + `GITHUB_CLIENT_SECRET` vào env file
 
 ### Bảo mật bổ sung (Giai đoạn 1)
 - ✅ Email verification bắt buộc trước khi login (OAuth tự động verify vì provider đã xác thực)
@@ -58,7 +59,7 @@
 | `src/app/(auth)/login/page.tsx` | Handle `EMAIL_NOT_VERIFIED` → chuyển sang prompt resend |
 | `src/app/(auth)/register/page.tsx` | Password policy mạnh (5 checks), màn hình "check your email" sau khi đăng ký, button gửi lại |
 | `src/app/verify-email/page.tsx` | **Mới** — trang xác thực email từ link trong email |
-| `src/app/api/auth/oauth/token/route.ts` | Fix `BACKEND_URL` đọc từ env (Vercel sẽ dùng `BACKEND_URL` hoặc `NEXT_PUBLIC_API_URL` thay vì hardcode Docker) |
+| `src/app/api/auth/oauth/token/route.ts` | Fix `BACKEND_URL` đọc từ env (VPS cũng dùng được) |
 
 ### Config
 | File | Thay đổi |
@@ -66,6 +67,9 @@
 | `package.json` | Thêm dependency `resend` |
 | `.env.example` (backend) | Thêm section Resend |
 | `frontend/.env.example` | Hướng dẫn chi tiết setup Google + GitHub OAuth |
+| `docker-compose.yml` | **CẦN CẬP NHẬT** — thêm env Resend + `RESEND_API_KEY` (xem mục 6) |
+
+> ⚠️ **Quan trọng**: Tôi CHƯA update `docker-compose.yml` vì cần bạn xác nhận trước — xem mục 6 bước 6.3.
 
 ---
 
@@ -93,14 +97,14 @@
 5. **Authorized JavaScript origins**:
    ```
    http://localhost:3000
-   https://cuonghoangdev.com
-   https://www.cuonghoangdev.com
+   https://cuongthai.com
+   https://www.cuongthai.com
    ```
 6. **Authorized redirect URIs**:
    ```
    http://localhost:3000/api/auth/callback/google
-   https://cuonghoangdev.com/api/auth/callback/google
-   https://www.cuonghoangdev.com/api/auth/callback/google
+   https://cuongthai.com/api/auth/callback/google
+   https://www.cuongthai.com/api/auth/callback/google
    ```
 7. Click **Create**
 8. Copy **Client ID** và **Client Secret**
@@ -122,11 +126,11 @@ Nếu muốn user khác (không phải test user) cũng login được:
 2. **New OAuth App**
 3. Điền:
    - Application name: `CuongHoangDev`
-   - Homepage URL: `https://cuonghoangdev.com`
+   - Homepage URL: `https://cuongthai.com`
    - Application description: `Portfolio & Learning Platform`
    - Authorization callback URL:
      ```
-     https://cuonghoangdev.com/api/auth/callback/github
+     https://cuongthai.com/api/auth/callback/github
      ```
 4. Click **Register application**
 5. Copy **Client ID**
@@ -154,7 +158,7 @@ Nếu bạn dev local và muốn test GitHub OAuth:
 ### Bước 5.2: Verify domain (cho production)
 
 1. Vào https://resend.com/domains → **Add Domain**
-2. Nhập domain: `cuonghoangdev.com`
+2. Nhập domain: `cuongthai.com`
 3. Resend sẽ cung cấp DNS records cần thêm:
    - **SPF**: TXT record
    - **DKIM**: TXT record
@@ -183,40 +187,56 @@ Nếu muốn test nhanh không cần verify domain:
 
 ---
 
-## 6. Cấu hình env trên Vercel
+## 6. Cập nhật env trên VPS
 
-Vào https://vercel.com/dashboard → chọn project → **Settings** → **Environment Variables**
+> **Mọi biến môi trường production nằm trong `/opt/cuonghoangdev/.env`** — đây là file duy nhất, được load bởi `docker-compose.yml` (line 95: `env_file:`) và bởi `scripts/deploy-vps.sh`.
 
-Thêm các biến sau (áp dụng cho **Production**, **Preview**, và **Development**):
+### Bước 6.1: SSH vào VPS
 
 ```bash
-# NextAuth (bắt buộc)
-NEXTAUTH_URL=https://cuonghoangdev.com
-AUTH_SECRET=<openssl rand -base64 32>   # Generate key mới
+ssh -i ~/.ssh/id_rsa root@160.187.1.208
+```
 
-# Google OAuth
+### Bước 6.2: Backup file env hiện tại
+
+```bash
+cp /opt/cuonghoangdev/.env /opt/cuonghoangdev/.env.bak.$(date +%Y%m%d-%H%M%S)
+```
+
+### Bước 6.3: Edit env file
+
+```bash
+nano /opt/cuonghoangdev/.env
+```
+
+Thêm/cập nhật các dòng sau:
+
+```bash
+# ─── NextAuth (bắt buộc) ──────────────────────────────
+NEXTAUTH_URL=https://cuongthai.com
+AUTH_SECRET=<openssl rand -base64 32>
+
+# ─── OAuth Google ──────────────────────────────────────
 GOOGLE_CLIENT_ID=<client-id-từ-bước-3.2>
 GOOGLE_CLIENT_SECRET=<client-secret-từ-bước-3.2>
 
-# GitHub OAuth
+# ─── OAuth GitHub ──────────────────────────────────────
 GITHUB_CLIENT_ID=<client-id-từ-bước-4.1>
 GITHUB_CLIENT_SECRET=<client-secret-từ-bước-4.1>
 
-# Backend URL (cho /api/auth/oauth/token proxy)
-BACKEND_URL=https://api.cuongthai.com
-# HOẶC dùng NEXT_PUBLIC_API_URL
-# NEXT_PUBLIC_API_URL=https://api.cuongthai.com
+# ─── Resend (email) ────────────────────────────────────
+RESEND_API_KEY=<api-key-từ-bước-5.3>
+RESEND_FROM_EMAIL=CuongHoangDev <noreply@cuongthai.com>
 
-# Admin emails (CSV)
+# ─── Admin (đã có sẵn) ─────────────────────────────────
 ADMIN_EMAILS=cuongthaihnhe176322@gmail.com
-
-# Database (cho NextAuth session nếu dùng DB strategy — hiện đang JWT nên không cần)
-# DATABASE_URL=<neondb-url>
 ```
 
-**Sau khi thêm xong**, click **Redeploy** để áp dụng.
+Save: `Ctrl+O` → `Enter` → `Ctrl+X`.
 
-### Cách generate `AUTH_SECRET`
+### Bước 6.4: Generate `AUTH_SECRET`
+
+Trên VPS (hoặc local rồi paste):
 
 ```bash
 openssl rand -base64 32
@@ -225,43 +245,109 @@ openssl rand -base64 32
 
 Dùng giá trị output làm `AUTH_SECRET`.
 
----
+### Bước 6.5: Cập nhật docker-compose.yml
 
-## 7. Cấu hình env trên Render (backend)
-
-Vào https://dashboard.render.com → chọn backend service → **Environment**
-
-Thêm:
+Vẫn ở trên VPS:
 
 ```bash
-# Database (NeonDB PostgreSQL)
-DATABASE_URL=<neon-connection-string>
-
-# JWT
-JWT_SECRET=<openssl rand -base64 64>
-JWT_REFRESH_SECRET=<openssl rand -base64 64>
-
-# Resend
-RESEND_API_KEY=<api-key-từ-bước-5.3>
-RESEND_FROM_EMAIL=CuongHoangDev <noreply@cuonghoangdev.com>
-
-# CORS — QUAN TRỌNG: thêm domain Vercel
-ALLOWED_ORIGINS=https://cuonghoangdev.com,https://www.cuonghoangdev.com,https://cuongthai.com,https://api.cuongthai.com
-
-FRONTEND_URL=https://cuonghoangdev.com
-
-# Email admin (cho contact form)
-CONTACT_ADMIN_EMAIL=cuongthaihnhe176322@gmail.com
+cd /home/deployer/repo
+nano docker-compose.yml
 ```
 
-Click **Save Changes** → Render tự redeploy.
+Thêm/cập nhật 2 dòng sau vào service `backend`:
+
+```yaml
+  backend:
+    environment:
+      # ... các env hiện có ...
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-noreply@cuongthai.com}
+```
+
+Và 1 dòng vào service `frontend`:
+
+```yaml
+  frontend:
+    environment:
+      # ... các env hiện có ...
+      BACKEND_URL: ${NEXT_PUBLIC_API_URL:-https://api.cuongthai.com}
+```
+
+Save: `Ctrl+O` → `Enter` → `Ctrl+X`.
+
+> 💡 **Tại sao cần `BACKEND_URL` cho frontend?** Route `/api/auth/oauth/token` trong frontend Next.js cần gọi sang backend Node.js để lấy JWT mới (cookie `backend_token`). Trong Docker thì gọi qua tên service `http://backend:3001` (đã có sẵn ở `INTERNAL_BACKEND_URL`). Nhưng fix gần đây đã ưu tiên `BACKEND_URL` env để linh hoạt hơn.
+
+### Bước 6.6: Verify lại bằng cách check container env
+
+Sau khi deploy (bước 7), verify env đã load:
+
+```bash
+ssh -i ~/.ssh/id_rsa root@160.187.1.208 \
+  "cd /home/deployer/repo && docker compose -p repo exec backend printenv | grep -E 'GOOGLE|GITHUB|RESEND|AUTH_SECRET'"
+```
+
+Phải thấy các biến có giá trị, không phải rỗng.
+
+---
+
+## 7. Deploy
+
+Sau khi commit code mới (đã làm xong), chạy lệnh deploy như bình thường (xem `DEPLOY-FASTER.md`):
+
+```bash
+git push origin main && \
+rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+  --exclude "node_modules" --exclude ".git" --exclude ".next" \
+  --exclude "dist" --exclude "*.log" \
+  --exclude ".env" --exclude ".env.local" --exclude ".env.production" \
+  --exclude "coverage" \
+  ./ root@160.187.1.208:/home/deployer/repo/ && \
+ssh -i ~/.ssh/id_rsa -o BatchMode=yes root@160.187.1.208 \
+  "cd /home/deployer/repo && bash scripts/deploy-vps.sh"
+```
+
+**Lưu ý**:
+- Lần đầu build sẽ chậm hơn (~3-5 phút) vì đổi `package.json` (thêm `resend`).
+- Schema mới (User + EmailVerificationToken) sẽ tự apply bởi `prisma db push` trong script.
+- Health check tự động verify backend sẵn sàng.
+
+### ⚠️ QUAN TRỌNG: User cũ sẽ bị block login
+
+Sau khi `prisma db push`, tất cả user hiện tại sẽ có `email_verified = false` → không login được. Có 2 cách xử lý:
+
+**Cách 1** (khuyến nghị): Tự động verify user OAuth và admin ngay sau migrate.
+
+SSH vào VPS:
+```bash
+ssh -i ~/.ssh/id_rsa root@160.187.1.208
+cd /home/deployer/repo
+docker compose -p repo exec postgres psql -U postgres -d cuonghoangdev_db
+```
+
+Rồi chạy:
+```sql
+-- Auto-verify user đã từng login bằng OAuth
+UPDATE users SET email_verified = true, email_verified_at = NOW()
+WHERE provider IS NOT NULL AND provider != '';
+
+-- Auto-verify user là admin (theo ADMIN_EMAILS trong env)
+UPDATE users SET email_verified = true, email_verified_at = NOW()
+WHERE email = 'cuongthaihnhe176322@gmail.com';
+
+-- (Tuỳ chọn) Auto-verify TẤT CẢ user cũ — rủi ro thấp nếu đây là portfolio cá nhân
+-- UPDATE users SET email_verified = true, email_verified_at = NOW();
+
+\q
+```
+
+**Cách 2** (an toàn nhất): Giữ `email_verified = false`, mỗi user phải click link verify trong email lần đầu login. Nhưng cần SMTP hoạt động trước — Resend phải có API key đúng.
 
 ---
 
 ## 8. Test toàn bộ flow
 
 ### Test 1: Đăng ký tài khoản credentials
-1. Vào https://cuonghoangdev.com/register
+1. Vào https://cuongthai.com/register
 2. Điền form với password mạnh (vd: `MyP@ssw0rd2026!`)
 3. Submit → màn hình "Check your email"
 4. Mở email → click link xác thực
@@ -269,7 +355,7 @@ Click **Save Changes** → Render tự redeploy.
 6. Đăng nhập → vào trang chủ
 
 ### Test 2: Đăng nhập Google
-1. Vào https://cuonghoangdev.com/login
+1. Vào https://cuongthai.com/login
 2. Click nút **Google**
 3. Redirect sang Google → chọn tài khoản
 4. Redirect về `/oauth-callback`
@@ -297,84 +383,119 @@ Click **Save Changes** → Render tự redeploy.
 
 ### Google vẫn lỗi `400 invalid_request: client_id`
 
-1. **Kiểm tra env trên Vercel**:
-   - Vào Vercel Dashboard → Settings → Environment Variables
-   - Verify `GOOGLE_CLIENT_ID` đã được set cho **Production**
-   - Sau khi thêm, phải **Redeploy**
+1. **Kiểm tra env trong container**:
+   ```bash
+   ssh root@160.187.1.208 "cd /home/deployer/repo && \
+     docker compose -p repo exec frontend printenv | grep GOOGLE"
+   ```
+   Nếu rỗng → check `/opt/cuonghoangdev/.env` có dòng `GOOGLE_CLIENT_ID=...` chưa.
 
 2. **Kiểm tra redirect URI**:
    - Vào Google Cloud Console → Credentials → OAuth Client
    - Authorized redirect URIs phải CHÍNH XÁC là:
      ```
-     https://cuonghoangdev.com/api/auth/callback/google
+     https://cuongthai.com/api/auth/callback/google
      ```
-   - Lưu ý: `cuonghoangdev.com` ≠ `www.cuonghoangdev.com` ≠ `cuongthai.com`
+   - Lưu ý: `cuongthai.com` ≠ `www.cuongthai.com` (phải add cả 2)
 
-3. **Clear cache trình duyệt**:
+3. **Check log frontend**:
+   ```bash
+   ssh root@160.187.1.208 "cd /home/deployer/repo && \
+     docker compose -p repo logs --tail=200 frontend | grep -E 'nextauth|oauth'"
+   ```
+   Sẽ thấy warning nếu env rỗng.
+
+4. **Clear cache trình duyệt**:
    - Cmd+Shift+Delete → clear cookies + cache
    - Hoặc test trong Incognito
 
 ### GitHub trả `404 Not Found`
 
-1. Verify `GITHUB_CLIENT_ID` đã set trên Vercel
+1. Verify `GITHUB_CLIENT_ID` đã có trong container:
+   ```bash
+   ssh root@160.187.1.208 "cd /home/deployer/repo && \
+     docker compose -p repo exec frontend printenv | grep GITHUB"
+   ```
 2. Verify callback URL trên GitHub OAuth App:
    ```
-   https://cuonghoangdev.com/api/auth/callback/github
+   https://cuongthai.com/api/auth/callback/github
    ```
 3. Verify app chưa bị suspend (GitHub suspend nếu lâu không dùng)
 
 ### Email verification không gửi
 
-1. **Kiểm tra logs Render**:
-   - Vào Render dashboard → Logs
-   - Tìm `[email] Resend error: ...` hoặc `[email] Failed to send: ...`
+1. **Kiểm tra logs backend**:
+   ```bash
+   ssh root@160.187.1.208 "cd /home/deployer/repo && \
+     docker compose -p repo logs --tail=200 backend | grep -E 'email|Resend'"
+   ```
 2. **Verify `RESEND_API_KEY` đúng**:
-   - Bắt đầu bằng `re_`
-   - Không có khoảng trắng thừa
+   ```bash
+   ssh root@160.187.1.208 "cd /home/deployer/repo && \
+     docker compose -p repo exec backend printenv RESEND_API_KEY"
+   ```
+   Phải bắt đầu bằng `re_`, không có khoảng trắng.
 3. **Verify domain** (nếu dùng domain tùy chỉnh):
    - Vào Resend dashboard → Domains → check status = "Verified"
 4. **Test với sandbox sender**:
-   ```
-   RESEND_FROM_EMAIL=onboarding@resend.dev
+   ```bash
+   # Trên VPS
+   nano /opt/cuonghoangdev/.env
+   # Sửa: RESEND_FROM_EMAIL=onboarding@resend.dev
+   # Rồi restart:
+   cd /home/deployer/repo && docker compose -p repo restart frontend backend
    ```
    Nhưng chỉ gửi được tới email đã đăng ký tài khoản Resend.
 
 ### Login fail với "Email chưa xác thực" mà đã verify rồi
 
-1. Kiểm tra database:
-   ```sql
-   SELECT id, email, email_verified, email_verified_at FROM users WHERE email = '...';
+1. Check database:
+   ```bash
+   ssh root@160.187.1.208 "cd /home/deployer/repo && \
+     docker compose -p repo exec postgres psql -U postgres -d cuonghoangdev_db \
+     -c \"SELECT id, email, email_verified, email_verified_at FROM users WHERE email = '...'\""
    ```
 2. Nếu `email_verified = false` dù đã click link:
    - Có thể token đã expire (24h)
    - Click "Gửi lại email xác thực" trong trang login
 
-### Build fail sau khi update schema
-
-```bash
-cd /Users/admin/Downloads/api-backend
-npx prisma generate
-npx prisma db push   # Cho dev (HOẶC migrate cho prod)
-npm run build
-```
-
 ### Account bị khoá nhưng không phải do nhập sai
 
-Check field `lockoutUntil` trong DB. Nếu > now(): thực sự bị khoá, đợi đến khi hết hạn hoặc manually reset:
+Check field `lockoutUntil` trong DB:
+```bash
+ssh root@160.187.1.208 "cd /home/deployer/repo && \
+  docker compose -p repo exec postgres psql -U postgres -d cuonghoangdev_db \
+  -c \"SELECT email, failed_login_count, lockout_until FROM users WHERE email = '...'\""
+```
+
+Nếu `lockout_until > now()`: thực sự bị khoá, đợi hết hạn hoặc manually reset:
 ```sql
 UPDATE users SET failed_login_count = 0, lockout_until = NULL WHERE email = '...';
+```
+
+### Frontend vẫn gọi `http://backend:3001` (lỗi khi dev local ngoài Docker)
+
+Đó là **bình thường** khi chạy dev ngoài Docker. Trong Docker thì `backend` là tên service nội bộ. Nếu muốn dev local mà vẫn gọi đúng:
+
+Tạo `frontend/.env.local`:
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:3001
+INTERNAL_BACKEND_URL=http://localhost:3001
 ```
 
 ---
 
 ## Tóm tắt các bước cần làm NGAY
 
-1. ✅ Lấy Google Client ID + Secret (mục 3)
-2. ✅ Lấy GitHub Client ID + Secret (mục 4)
-3. ✅ Đăng ký Resend + lấy API key (mục 5)
-4. ✅ Set env trên Vercel (mục 6)
-5. ✅ Set env trên Render (mục 7)
-6. ✅ Redeploy cả 2
-7. ✅ Test toàn bộ flow (mục 8)
+| # | Bước | Mất thời gian |
+|---|---|---|
+| 1 | Lấy Google Client ID + Secret (mục 3) | ~5 phút |
+| 2 | Lấy GitHub Client ID + Secret (mục 4) | ~3 phút |
+| 3 | Đăng ký Resend + lấy API key (mục 5) | ~10 phút (verify DNS có thể chậm hơn) |
+| 4 | Update `/opt/cuonghoangdev/.env` trên VPS (mục 6.3) | ~2 phút |
+| 5 | Update `docker-compose.yml` trên VPS (mục 6.5) | ~2 phút |
+| 6 | Auto-verify user cũ trong DB (mục 7) | ~1 phút |
+| 7 | Deploy như bình thường (mục 7) | ~3-5 phút (cold build vì đổi package.json) |
+| 8 | Test toàn bộ flow (mục 8) | ~5 phút |
 
 Nếu gặp lỗi gì, check mục 9 trước khi báo lại.

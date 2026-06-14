@@ -61,6 +61,8 @@ const devPostRoutes = (await import(path.join(__dirname, 'routes', 'devPost.rout
 const systemRoutes = (await import(path.join(__dirname, 'routes', 'system.routes.js'))).default;
 const socialRoutes = (await import(path.join(__dirname, 'routes', 'social.routes.js'))).default;
 const cyberRoutes = (await import(path.join(__dirname, 'routes', 'cyber.routes.js'))).default;
+const quotaRoutes = (await import(path.join(__dirname, 'routes', 'quota.routes.js'))).default;
+const embedJobsRoutes = (await import(path.join(__dirname, 'routes', 'embedJobs.routes.js'))).default;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -240,6 +242,8 @@ app.use('/api/v1/dev-posts', devPostRoutes);
 app.use('/api/v1/system', systemRoutes);
 app.use('/api/v1/social', socialRoutes);
 app.use('/api/v1/cyber', cyberRoutes);
+app.use('/api/v1/quota', quotaRoutes);
+app.use('/api/v1/admin/embed-jobs', embedJobsRoutes);
 
 // ─── 10. Health Check ───────────────────────────────────────
 // Render.com và Docker healthcheck gọi endpoint này
@@ -397,6 +401,14 @@ async function startServer(): Promise<void> {
 
     // Setup graceful shutdown handlers
     setupGracefulShutdown();
+
+    // Start cron jobs (Mục #6: auto-train + cleanup)
+    try {
+      const { startCronJobs } = await import(path.join(__dirname, 'services', 'cron.service.js'));
+      startCronJobs();
+    } catch (cronErr) {
+      console.warn('[Startup] Cron jobs failed to start:', cronErr instanceof Error ? cronErr.message : cronErr);
+    }
 
     // Start HTTP server
     server.listen(config.port, () => {

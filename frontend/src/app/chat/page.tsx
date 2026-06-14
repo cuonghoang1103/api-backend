@@ -13,6 +13,7 @@ import ChatMessages from '@/components/chat/ChatMessages';
 import ChatInput from '@/components/chat/ChatInput';
 import SuggestedPrompts from '@/components/chat/SuggestedPrompts';
 import MatrixRain from '@/components/chat/MatrixRain';
+import QuotaIndicator from '@/components/chat/QuotaIndicator';
 import LottieClient from '@/components/ui/LottieClient';
 import type { ChatMessage, ChatSession } from '@/types';
 import { findStaticResponse, getDefaultGreeting, getFallbackResponse } from '@/lib/ai-static-responses';
@@ -401,6 +402,11 @@ export default function ChatPage() {
       const ctx = getContextualPrompts(assistantContent);
       if (ctx.length > 0) setSuggestedPrompts(ctx);
 
+      // Track quota usage (only after successful AI response)
+      if (assistantContent && getToken()) {
+        api.post('/quota/track').catch(() => {});
+      }
+
       const lower = assistantContent.toLowerCase();
       if (lower.includes('!') || lower.includes('great') || lower.includes('awesome')) {
         setRobotEmotion('excited');
@@ -628,6 +634,9 @@ export default function ChatPage() {
           >
             <Home className="w-4 h-4" />
           </Link>
+
+          {/* Quota indicator (Mục #4) */}
+          <QuotaIndicator compact />
         </motion.header>
 
         {/* Messages */}

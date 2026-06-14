@@ -249,6 +249,62 @@ curl -X POST https://cuongthai.com/api/v1/ai/admin/documents \
 
 ---
 
+## 🚀 PHASE 1 — Mở rộng tính năng AI/RAG (4 mục đã làm)
+
+> **Cập nhật:** 14/06/2026 14:05 (UTC+7) — Phase 1 hoàn thành trong cùng phiên
+> **Commits mới:** `c236694`, `99e807f`, `025b348`, `9c2306c`, `b444eb8`
+
+### Mục #3 — Multi-provider fallback (commit `b444eb8`) ✅
+- **Files mới:** `src/services/aiProviders.ts` (provider factory + retry logic)
+- **Files sửa:** `src/services/ai.service.ts`, `src/routes/system.routes.ts`, `src/config/env.ts`
+- **Tính năng:**
+  - Thử theo thứ tự: Groq → OpenRouter → OpenAI
+  - Mỗi provider retry 3 lần với exponential backoff (1s, 2s, 4s)
+  - Lỗi 4xx (401, 404) → skip retry, fail fast
+  - Lỗi 5xx, 429, timeout → retry
+  - Debug endpoint: `GET /api/v1/system/ai-providers`
+- **Test:**
+  - Groq thật: trả lời "1+1=2" trong 479ms ✓
+  - Groq fake key → OpenRouter → OpenAI tự động ✓
+- **Lợi ích:** Production-safe, không bị 500 khi Groq rate-limit. **Cấu trúc provider-agnostic** — đổi sang bất kỳ provider nào chỉ cần thêm entry vào `PROVIDERS[]`.
+
+### Mục #7 — Pagination cho admin page (commits `025b348`, `9c2306c`) ✅
+- **Backend:** `aiService.getAllChunks()` trả `{ chunks, total, page, pageSize, totalPages }`
+- **Frontend:** Trang admin có Prev/Next, "Trang X/Y" indicator, filter reset về page 1
+- **Test:** 21 chunks → 5 pages, pageSize 5 → đúng
+- **Lợi ích:** Scale được với 1000+ chunks, payload nhỏ mỗi request
+
+### Mục #8 — Bulk upload .md/.txt (commit `99e807f`) ✅
+- **Backend:** `POST /api/v1/ai/admin/documents/upload-files` (multipart, max 20 files, 5MB/file)
+- **Frontend:** Tab mới "Upload Files" trong upload modal
+- **Test:** Upload 2 files → 2 chunks, cleanup về 21
+- **Lợi ích:** Tác giả dùng editor bình thường, version control, batch upload
+
+### Mục #9 — RAG evaluation script (commit `c236694`) ✅
+- **File mới:** `scripts/test-rag.sh`
+- **Tính năng:**
+  - 12 câu hỏi test, expected keywords
+  - Chấm điểm: % keywords matched
+  - Accuracy trung bình, exit code dựa trên threshold
+- **Kết quả đầu tiên:** **91% accuracy** (11/12 pass)
+- **Câu fail duy nhất:** "Cường có làm education content không?" — AI trả lời trung thực
+  là "hiện chưa có" thay vì đoán từ FPT student role. Đây là câu hỏi test mơ hồ.
+
+### 🎯 Provider-agnostic — Trả lời câu hỏi của bạn
+
+| Trường hợp | Cần làm | Thời gian |
+|---|---|---|
+| Đổi Groq key (rotate) | Sửa `.env`, restart | 30s |
+| Đổi Groq model | Sửa `GROQ_CHAT_MODEL=.env`, restart | 30s |
+| Đổi sang OpenAI thật | Thêm `OPENAI_API_KEY`, restart | 5 phút |
+| Đổi sang Claude | Thêm 1 entry trong `PROVIDERS[]` (Anthropic SDK khác OpenAI, ~15 phút) | 15 phút |
+| Dùng OpenRouter (200+ models) | Đổi `baseURL: 'https://openrouter.ai/api/v1'`, set `OPENROUTER_API_KEY` | 2 phút |
+| Self-host llama.cpp | Đổi `baseURL: 'http://localhost:8080'`, bỏ apiKey | 1 phút |
+
+**Kết luận:** Code đã được thiết kế tốt. Provider factory trong `aiProviders.ts` chuẩn hoá thành 1 pattern, sau này đổi provider như đổi config.
+
+---
+
 ## 📞 LIÊN HỆ KHI CẦN HỖ TRỢ
 
 - **GitHub:** https://github.com/cuonghoang1103/api-backend

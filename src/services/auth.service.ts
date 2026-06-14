@@ -237,16 +237,36 @@ export class AuthService {
       // eslint-disable-next-line no-console
       console.log(`[register] DEV OTP for ${user.email}: ${otpResult.devCode}`);
     }
+    // Always log OTP at INFO level (server console) for any new
+    // account — this is the operational fallback when the email
+    // provider (Resend) bounces the message because the sending
+    // domain isn't verified yet. Without it, a user who registered
+    // successfully has no way to verify their email and is stuck.
+    // We don't expose the OTP in the HTTP response — it's only in
+    // server logs (and in dev mode, also in the local console).
     if (otpToSend) {
-      await emailService.sendOtpEmail({
+      console.log(
+        `[register] OTP for ${user.email} (verify): ${otpToSend} ` +
+        `(email service status: see [email] log line above)`,
+      );
+      const sendResult = await emailService.sendOtpEmail({
         to: user.email,
         fullName: user.fullName ?? undefined,
         otp: otpToSend,
         type: 'verify',
       });
+      if (!sendResult.success) {
+        console.warn(
+          `[register] Failed to deliver OTP email to ${user.email}: ` +
+          `${sendResult.error}. The OTP is still in the server log above ` +
+          `and valid for 5 min — share it manually with the user to let ` +
+          `them verify.`,
+        );
+      }
     }
 
-    return this.buildAuthResponse(user);
+    const authResponse = this.buildAuthResponse(user);
+    return authResponse;
   }
 
   // ─── Verify Email via 6-digit OTP ──────────────────

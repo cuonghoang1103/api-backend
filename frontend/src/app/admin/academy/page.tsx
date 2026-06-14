@@ -6,6 +6,7 @@ import { academyApi, adminCoursesApi } from '@/lib/api';
 import type { Assignment, Course, LessonDto, Semester, SubmissionWithUser } from '@/types';
 import ImageUpload from '@/components/admin/ImageUpload';
 import RichTextEditor from '@/components/admin/RichTextEditor';
+import LessonDocumentsManager from '@/components/admin/LessonDocumentsManager';
 import { toast } from 'sonner';
 
 interface SemesterFormState {
@@ -220,6 +221,15 @@ interface LessonFormState {
   isPublished: boolean;
   sortOrder: number;
   assignments: Assignment[];
+  documents?: Array<{
+    id: number;
+    title: string;
+    fileUrl: string;
+    fileSizeBytes: number;
+    fileType?: string | null;
+    downloadCount: number;
+    createdAt: string;
+  }>;
 }
 
 function normalizeSubmission(submission: any): SubmissionWithUser {
@@ -268,6 +278,7 @@ function buildEmptyLesson(sortOrder: number): LessonFormState {
     isPublished: true,
     sortOrder,
     assignments: [],
+    documents: [],
   };
 }
 
@@ -373,6 +384,7 @@ export default function AdminAcademyPage() {
             isPublished: lesson.isPublished,
             sortOrder: lesson.sortOrder ?? lessonIndex,
             assignments: lesson.assignments || [],
+            documents: lesson.documents || [],
           })),
         }));
 
@@ -1219,6 +1231,20 @@ export default function AdminAcademyPage() {
                               <p className="mb-2 flex items-center gap-2 text-sm font-medium text-text-primary"><FileText className="w-4 h-4 text-neon-violet" /> Ghi chú giảng dạy</p>
                               <RichTextEditor value={lesson.teachingNotes} onChange={(value) => updateLesson(sectionIndex, lessonIndex, { teachingNotes: value, content: value })} placeholder="Nội dung note giảng dạy, markdown được hỗ trợ..." />
                             </div>
+
+                            {/* Tài liệu đính kèm — admin upload file (zip,
+                                doc, pdf, ...), student download trên
+                                /learn. Chỉ render khi lesson đã được
+                                lưu (có id) — upload cần id để gắn file
+                                vào đúng bài học. */}
+                            {lesson.id && (
+                              <div className="mt-2">
+                                <LessonDocumentsManager
+                                  lessonId={lesson.id}
+                                  initialDocuments={lesson.documents || []}
+                                />
+                              </div>
+                            )}
 
                             <div className="space-y-3">
                               {lesson.assignments.map((assignment, assignmentIndex) => (

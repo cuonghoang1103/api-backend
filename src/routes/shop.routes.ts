@@ -160,9 +160,15 @@ router.get('/products/featured', async (req, res: Response<ApiResponse>, next) =
 // ─── GET /api/v1/shop/products ───────────────────────
 router.get('/products', async (req, res: Response<ApiResponse>, next) => {
   try {
-    const { page = 1, size = 12, keyword, search, category, featured } = req.query;
-    const pageNumber = Math.max(0, Number(page));
-    const pageSize = Math.max(1, Number(size));
+    // Page is 0-indexed (offset = page * size). Previously the default
+    // was `1`, which combined with the unsigned `pageNumber * pageSize`
+    // skip offset silently jumped past every product whenever a caller
+    // omitted the page query (e.g. the admin reload fetcher
+    // `getProducts({ size: 100 })`). Public `/shop` would show 0
+    // products even though the total count was correct.
+    const { page = 0, size = 12, keyword, search, category, featured } = req.query;
+    const pageNumber = Math.max(0, Number(page) || 0);
+    const pageSize = Math.max(1, Number(size) || 12);
     const skip = pageNumber * pageSize;
     const searchKeyword = keyword || search;
     const where: Record<string, unknown> = { active: true };

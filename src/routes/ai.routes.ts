@@ -529,6 +529,25 @@ router.post(
 );
 
 // ════════════════════════════════════════════════════════════════
+// ADMIN: POST /api/v1/ai/admin/documents/backfill-embeddings
+// Re-compute embeddings for chunks that don't have one yet.
+// Run once after deploying the embedding feature to populate the
+// 17 chunks that were indexed before embeddings existed.
+// ════════════════════════════════════════════════════════════════
+router.post('/admin/documents/backfill-embeddings', authenticate, async (_req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await aiService.backfillMissingEmbeddings();
+    res.json({
+      success: true,
+      data: result,
+      message: `Scanned ${result.scanned} chunks: ${result.embedded} embedded, ${result.failed} failed`,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ════════════════════════════════════════════════════════════════
 // ADMIN: POST /api/v1/ai/admin/documents
 // Index document into RAG store
 // ════════════════════════════════════════════════════════════════

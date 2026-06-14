@@ -37,7 +37,11 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
-import { chatWithFallback } from './aiProviders.js';
+import {
+  chatWithFallback,
+  computeEmbeddings,
+  cosineSimilarity,
+} from './aiProviders.js';
 
 // ─── Groq (OpenAI-compatible) client ─────────────────────────────
 // Re-export getGroq() for backward compatibility with other code paths
@@ -171,12 +175,17 @@ export class AIService {
     });
   }
 
-  // ─── Fetch RAG context from pgvector ─────────────────────
+  // ─── Fetch RAG context (semantic search with keyword fallback) ──────
   /**
    * Lấy các document chunks liên quan dựa trên user message.
-   * Khi documentType được chỉ định → lọc theo type.
-   * Khi không có → dùng text search keyword matching trên toàn bộ chunks.
-   * Vector embedding (pgvector) sẽ được bật sau khi setup embedding model.
+   *
+   * Strategy:
+   * 1. Nếu documentType được chỉ định → filter theo type, score theo semantic/keyword
+   * 2. Nếu không có type → tìm trên toàn bộ chunks bằng semantic search
+   *
+   * Embedding strategy:
+   * - If ANY chunks in the candidate set have embeddings → use cosine similarity
+   * - Otherwise → fall back to keyword scoring
    *
    * Gracefully returns empty string if table does not exist yet (first run).
    */
@@ -185,41 +194,96 @@ export class AIService {
     topK: number,
     userMessage?: string,
   ): Promise<string> {
-    let chunks;
+    let chunks: Array<{
+      id: number;
+      content: string;
+      documentId: string;
+      documentType: string;
+      embedding: Prisma.JsonValue | null;
+    }>;
 
     try {
+      // Step 1: fetch candidate set
       if (documentType) {
         chunks = await prisma.documentChunk.findMany({
           where: { documentType },
-          take: topK,
+          take: Math.max(topK * 4, 20),
           orderBy: { createdAt: 'desc' },
+          select: { id: true, content: true, documentId: true, documentType: true, embedding: true },
         });
       } else {
-        // No type specified — fetch all recent chunks then keyword-rank them
-        const all = await prisma.documentChunk.findMany({
+        chunks = await prisma.documentChunk.findMany({
           orderBy: { createdAt: 'desc' },
-          take: topK * 4,
+          take: Math.max(topK * 4, 20),
+          select: { id: true, content: true, documentId: true, documentType: true, embedding: true },
         });
-
-        if (!userMessage) {
-          chunks = all.slice(0, topK);
-        } else {
-          // Simple keyword scoring: count matching words
-          const words = userMessage.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
-          const scored = all.map((c) => {
-            const lower = c.content.toLowerCase();
-            const score = words.reduce((acc, w) => acc + (lower.includes(w) ? 1 : 0), 0);
-            return { chunk: c, score };
-          });
-          scored.sort((a, b) => b.score - a.score);
-          chunks = scored.filter((s) => s.score > 0).slice(0, topK).map((s) => s.chunk);
-        }
       }
 
       if (chunks.length === 0) return '';
+      if (!userMessage) {
+        return chunks
+          .slice(0, topK)
+          .map((c) => `[${c.documentType}:${c.documentId}]\n${c.content}`)
+          .join('\n\n');
+      }
 
-      return chunks
-        .map((c) => `[${c.documentType}:${c.documentId}]\n${c.content}`)
+      // Step 2: detect if any candidate has an embedding
+      const hasAnyEmbedding = chunks.some((c) => c.embedding != null);
+
+      if (hasAnyEmbedding) {
+        // Semantic search path
+        try {
+          const queryEmbedding = await computeEmbeddings([userMessage]);
+          if (queryEmbedding.length > 0) {
+            const q = queryEmbedding[0];
+            const scored = chunks.map((c) => {
+              const emb = c.embedding as number[] | null;
+              if (!emb || !Array.isArray(emb) || emb.length === 0) {
+                // Chunk missing embedding: give it a 0 score for now
+                return { chunk: c, score: 0 };
+              }
+              return { chunk: c, score: cosineSimilarity(q, emb) };
+            });
+            scored.sort((a, b) => b.score - a.score);
+
+            // Filter out zero-similarity chunks (likely irrelevant) unless we have < topK
+            let topChunks = scored.filter((s) => s.score > 0.1).slice(0, topK);
+            if (topChunks.length < topK) {
+              // Backfill with highest-scored remaining
+              const backfill = scored
+                .filter((s) => !topChunks.find((t) => t.chunk.id === s.chunk.id))
+                .slice(0, topK - topChunks.length);
+              topChunks = [...topChunks, ...backfill];
+            }
+
+            return topChunks
+              .map((s) => `[${s.chunk.documentType}:${s.chunk.documentId}]\n${s.chunk.content}`)
+              .join('\n\n');
+          }
+        } catch (embErr) {
+          console.warn('[AIService] Embedding query failed, falling back to keyword:', embErr);
+          // fall through to keyword
+        }
+      }
+
+      // Step 3: keyword fallback
+      const words = userMessage.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+      if (words.length === 0) {
+        return chunks.slice(0, topK)
+          .map((c) => `[${c.documentType}:${c.documentId}]\n${c.content}`)
+          .join('\n\n');
+      }
+      const scored = chunks.map((c) => {
+        const lower = c.content.toLowerCase();
+        const score = words.reduce((acc, w) => acc + (lower.includes(w) ? 1 : 0), 0);
+        return { chunk: c, score };
+      });
+      scored.sort((a, b) => b.score - a.score);
+      const topChunks = scored.filter((s) => s.score > 0).slice(0, topK);
+      const final = topChunks.length > 0 ? topChunks : scored.slice(0, topK);
+
+      return final
+        .map((s) => `[${s.chunk.documentType}:${s.chunk.documentId}]\n${s.chunk.content}`)
         .join('\n\n');
     } catch (err) {
       // Table may not exist yet (first run before prisma db push completes)
@@ -391,7 +455,7 @@ export class AIService {
     documentType: string;
     content: string;
     metadata?: Record<string, unknown>;
-  }): Promise<{ chunksCreated: number }> {
+  }): Promise<{ chunksCreated: number; embeddedChunks: number }> {
     const { documentId, documentType, content, metadata } = data;
 
     // Delete existing chunks for this document
@@ -413,7 +477,20 @@ export class AIService {
       config.aiChunkOverlap,
     );
 
-    // Insert new chunks
+    // Compute embeddings for all chunks in one batched call.
+    // If this fails (e.g. no API key), we still index the text — keyword
+    // fallback in getRAGContext() will keep working.
+    let embeddings: number[][] = [];
+    try {
+      embeddings = await computeEmbeddings(chunks);
+    } catch (embErr) {
+      console.warn(
+        `[AIService] Failed to compute embeddings for "${documentId}":`,
+        embErr instanceof Error ? embErr.message : embErr,
+      );
+    }
+
+    // Insert new chunks (with embeddings if we got them)
     await Promise.all(
       chunks.map((chunkContent, index) =>
         prisma.documentChunk.create({
@@ -423,12 +500,75 @@ export class AIService {
             documentType,
             chunkIndex: index,
             metadata: (metadata ?? undefined) as Prisma.InputJsonValue,
+            // Prisma's Json type accepts number[] directly via JSONB
+            embedding: embeddings[index]
+              ? (embeddings[index] as unknown as Prisma.InputJsonValue)
+              : Prisma.DbNull,
           },
         }),
       ),
     );
 
-    return { chunksCreated: chunks.length };
+    return {
+      chunksCreated: chunks.length,
+      embeddedChunks: embeddings.length,
+    };
+  }
+
+  /**
+   * Re-compute embeddings for all existing chunks that don't have one yet.
+   * Run this once after deploying the embedding feature to backfill the
+   * 17 documents uploaded before this feature existed.
+   */
+  async backfillMissingEmbeddings(): Promise<{
+    scanned: number;
+    embedded: number;
+    failed: number;
+  }> {
+    try {
+      const chunks = await prisma.documentChunk.findMany({
+        where: { embedding: { equals: Prisma.DbNull } },
+        select: { id: true, content: true },
+      });
+
+      if (chunks.length === 0) {
+        return { scanned: 0, embedded: 0, failed: 0 };
+      }
+
+      console.log(`[AIService] Backfilling ${chunks.length} chunks with embeddings...`);
+      let embedded = 0;
+      let failed = 0;
+
+      // Process in batches of 20 to avoid hitting rate limits
+      const BATCH = 20;
+      for (let i = 0; i < chunks.length; i += BATCH) {
+        const batch = chunks.slice(i, i + BATCH);
+        try {
+          const embs = await computeEmbeddings(batch.map((c) => c.content));
+          await Promise.all(
+            batch.map((c, idx) =>
+              prisma.documentChunk.update({
+                where: { id: c.id },
+                data: { embedding: embs[idx] as unknown as Prisma.InputJsonValue },
+              }),
+            ),
+          );
+          embedded += batch.length;
+        } catch (batchErr) {
+          console.warn(`[AIService] Batch ${i}-${i + BATCH} failed:`, batchErr);
+          failed += batch.length;
+        }
+      }
+
+      console.log(`[AIService] Backfill done: ${embedded} embedded, ${failed} failed`);
+      return { scanned: chunks.length, embedded, failed };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('does not exist')) {
+        return { scanned: 0, embedded: 0, failed: 0 };
+      }
+      throw err;
+    }
   }
 
   // ─── Chunk text for RAG ─────────────────────────────────

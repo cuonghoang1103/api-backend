@@ -297,3 +297,91 @@ export function listActiveProviders(): Array<{
     priority: p.priority,
   }));
 }
+
+// ============================================================
+// EMBEDDINGS
+// ============================================================
+//
+// 768-dim embeddings via OpenAI-compatible /v1/embeddings endpoint.
+// Default model: `nomic-embed-text-v1.5` on Groq (free, 768 dims).
+//
+// Why not pgvector: current Postgres image doesn't bundle the extension.
+// We store embeddings as JSONB arrays and compute cosine similarity in
+// the app layer. Fine for corpora < 10K chunks.
+
+/**
+ * Compute embedding vector for a single text via Groq /v1/embeddings.
+ * Returns a 768-dim float array.
+ */
+export async function computeEmbedding(text: string): Promise<number[]> {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    throw new AppError('GROQ_API_KEY is not configured (needed for embeddings)', 503, 'AI_NOT_CONFIGURED');
+  }
+
+  // Lazy client for embeddings (separate from chat clients)
+  const client = new OpenAI({
+    baseURL: 'https://api.groq.com/openai/v1',
+    apiKey,
+  });
+
+  const model = process.env.GROQ_EMBEDDING_MODEL || 'nomic-embed-text-v1.5';
+
+  const response = await client.embeddings.create({
+    model,
+    input: text.slice(0, 8000), // truncate to fit model context
+    encoding_format: 'float',
+  });
+
+  return response.data[0].embedding;
+}
+
+/**
+ * Compute embeddings for multiple texts in parallel (batched).
+ * Groq allows batch input → 1 API call returns N arrays.
+ */
+export async function computeEmbeddings(texts: string[]): Promise<number[][]> {
+  if (texts.length === 0) return [];
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    throw new AppError('GROQ_API_KEY is not configured (needed for embeddings)', 503, 'AI_NOT_CONFIGURED');
+  }
+
+  const client = new OpenAI({
+    baseURL: 'https://api.groq.com/openai/v1',
+    apiKey,
+  });
+
+  const model = process.env.GROQ_EMBEDDING_MODEL || 'nomic-embed-text-v1.5';
+
+  // Truncate each text to fit context
+  const truncated = texts.map((t) => t.slice(0, 8000));
+
+  const response = await client.embeddings.create({
+    model,
+    input: truncated,
+    encoding_format: 'float',
+  });
+
+  return response.data.map((d) => d.embedding);
+}
+
+/**
+ * Cosine similarity between two vectors. Returns value in [-1, 1].
+ * For normalized embeddings (which OpenAI/Groq returns) it's in [0, 1].
+ *
+ * O(N) where N is the embedding dimension (768 for nomic-embed-text-v1.5).
+ */
+export function cosineSimilarity(a: number[], b: number[]): number {
+  if (a.length !== b.length) return 0;
+  let dot = 0;
+  let normA = 0;
+  let normB = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    normA += a[i] * a[i];
+    normB += b[i] * b[i];
+  }
+  const denom = Math.sqrt(normA) * Math.sqrt(normB);
+  return denom === 0 ? 0 : dot / denom;
+}

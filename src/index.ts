@@ -343,11 +343,12 @@ async function startServer(): Promise<void> {
     await prisma.$queryRaw`SELECT 1`;
     console.log(`✅ Database pool: OK (${config.nodeEnv})`);
 
-    // ─── Auto-sync Prisma schema ─────────────────────────────────
+    // ─── Auto-sync Prisma schema + add embedding column ────────
     // This ensures new tables (e.g. document_chunks) are created on startup
     // without requiring manual prisma db push after each deployment.
-    // Note: the `vector(768)` column requires the pgvector extension.
-    // We create the table without the embedding column; pgvector can be added later.
+    // Also adds the `embedding JSONB` column for semantic search storage.
+    // (We use JSONB instead of pgvector's vector type because the
+    // current Postgres image doesn't bundle pgvector — see schema comment.)
     try {
       await prisma.$executeRawUnsafe(`
         DO $$
@@ -373,10 +374,24 @@ async function startServer(): Promise<void> {
         END
         $$;
       `);
-      console.log('✅ document_chunks table: OK (auto-synced)');
+
+      // Add embedding column (JSONB array of 768 numbers) for semantic search.
+      // Idempotent: ADD COLUMN IF NOT EXISTS skips on re-run.
+      await prisma.$executeRawUnsafe(`
+        ALTER TABLE document_chunks
+          ADD COLUMN IF NOT EXISTS embedding JSONB;
+      `);
+
+      // GIN index helps when we filter "WHERE embedding IS NOT NULL".
+      await prisma.$executeRawUnsafe(`
+        CREATE INDEX IF NOT EXISTS idx_document_chunks_embedding_present
+          ON document_chunks ((embedding IS NOT NULL))
+          WHERE embedding IS NOT NULL;
+      `);
+
+      console.log('✅ document_chunks table + embedding column: OK (auto-synced)');
     } catch (syncErr) {
-      // If raw SQL fails (e.g. pgvector extension not installed yet),
-      // fall back silently — the try-catch guards in AIService handle missing tables.
+      // If raw SQL fails, the try-catch guards in AIService handle missing tables.
       console.warn('[Startup] Schema auto-sync skipped:', syncErr instanceof Error ? syncErr.message : syncErr);
     }
 

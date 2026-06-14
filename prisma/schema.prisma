@@ -1021,6 +1021,10 @@ model DocumentChunk {
   documentId   String                      @map("document_id") @db.VarChar(100)
   documentType String                      @map("document_type") @db.VarChar(50)
   createdAt    DateTime                    @default(now()) @map("created_at")
+  /// 768-dim vector embedding (Groq `nomic-embed-text-v1.5` compatible).
+  /// Added via raw SQL migration in scripts/enable-pgvector.sql because
+  /// Prisma doesn't natively support pgvector's `vector(N)` type.
+  embedding    Json?
 
   @@index([documentType], name: "idx_document_chunks_type")
   @@index([documentId], name: "idx_document_chunks_doc_id")

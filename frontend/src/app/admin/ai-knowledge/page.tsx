@@ -6,7 +6,7 @@ import {
   CheckCircle2, FileText, Tag, X,
 } from 'lucide-react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://api.cuongthai.com';
+const API = '/api/v1';
 
 interface Chunk {
   id: number;
@@ -51,8 +51,8 @@ export default function AIKnowledgePage() {
     setError(null);
     try {
       const url = filterType
-        ? `${API}/api/v1/ai/admin/documents?documentType=${encodeURIComponent(filterType)}`
-        : `${API}/api/v1/ai/admin/documents`;
+        ? `${API}/ai/admin/documents?documentType=${encodeURIComponent(filterType)}`
+        : `${API}/ai/admin/documents`;
       const res = await fetch(url, { credentials: 'include' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
@@ -78,7 +78,7 @@ export default function AIKnowledgePage() {
     setError(null);
     setSuccess(null);
     try {
-      const res = await fetch(`${API}/api/v1/ai/admin/documents`, {
+      const res = await fetch(`${API}/ai/admin/documents`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -112,7 +112,7 @@ export default function AIKnowledgePage() {
     setSuccess(null);
     try {
       const res = await fetch(
-        `${API}/api/v1/ai/admin/documents/${encodeURIComponent(docId)}?documentType=${encodeURIComponent(docType)}`,
+        `${API}/ai/admin/documents/${encodeURIComponent(docId)}?documentType=${encodeURIComponent(docType)}`,
         { method: 'DELETE', credentials: 'include' },
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

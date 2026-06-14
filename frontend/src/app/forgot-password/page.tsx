@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { Mail, ArrowLeft, Loader2, Clock, Send, KeyRound } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { authApi } from '@/lib/api';
+import { TurnstileWidget } from '@/components/TurnstileWidget';
 import { toast } from 'sonner';
 import { OtpInput } from '@/components/OtpInput';
 
@@ -32,6 +33,12 @@ export default function ForgotPasswordPage() {
   const [resendCount, setResendCount] = useState(0);
   const [error, setError] = useState('');
 
+  // ─── CAPTCHA state ────────────────────────────────────────
+  const [captchaSiteKey, setCaptchaSiteKey] = useState<string | null>(null);
+  const [captchaEnabled, setCaptchaEnabled] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string>('');
+  const [captchaError, setCaptchaError] = useState(false);
+
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
@@ -42,12 +49,35 @@ export default function ForgotPasswordPage() {
     return () => clearTimeout(timer);
   }, [countdown]);
 
+  // Fetch CAPTCHA config (best-effort).
+  useEffect(() => {
+    let cancelled = false;
+    authApi
+      .getCaptchaConfig()
+      .then((cfg) => {
+        if (cancelled) return;
+        setCaptchaEnabled(!!cfg?.enabled);
+        setCaptchaSiteKey(cfg?.siteKey ?? null);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setCaptchaEnabled(false);
+          setCaptchaSiteKey(null);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const captchaReady = !captchaEnabled || captchaToken.length > 0;
+
   // ─── Stage 1: Submit email → backend sends OTP ───
   const onSubmitEmail = async (data: FormData) => {
     setIsLoading(true);
     setError('');
     try {
-      const res = await authApi.forgotPassword(data.email);
+      const res = await authApi.forgotPassword(data.email, captchaEnabled ? captchaToken : undefined);
       setEmail(data.email);
       const ttl = (res.data as { ttl?: number })?.ttl ?? 600;
       setCountdown(ttl);
@@ -68,7 +98,7 @@ export default function ForgotPasswordPage() {
     if (countdown > 0 || resendCount >= 3 || !email) return;
     setIsLoading(true);
     try {
-      const res = await authApi.forgotPassword(email);
+      const res = await authApi.forgotPassword(email, captchaEnabled ? captchaToken : undefined);
       const ttl = (res.data as { ttl?: number })?.ttl ?? 600;
       setCountdown(ttl);
       setResendCount((c) => c + 1);
@@ -187,9 +217,27 @@ export default function ForgotPasswordPage() {
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
               </div>
               {error && <p className="text-red-500 text-sm">{error}</p>}
+
+              {captchaEnabled && captchaSiteKey && (
+                <div className="flex justify-center">
+                  <TurnstileWidget
+                    siteKey={captchaSiteKey}
+                    theme="dark"
+                    onVerify={(token) => { setCaptchaToken(token); setCaptchaError(false); }}
+                    onError={() => { setCaptchaToken(''); setCaptchaError(true); }}
+                    onExpire={() => { setCaptchaToken(''); }}
+                  />
+                </div>
+              )}
+              {captchaError && (
+                <p className="text-red-400 text-sm text-center">
+                  CAPTCHA verification failed. Please try again.
+                </p>
+              )}
+
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || !captchaReady}
                 className="w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}

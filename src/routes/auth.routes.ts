@@ -180,6 +180,28 @@ router.post(
   },
 );
 
+// ─── GET /api/v1/auth/captcha-config ─────────────────────
+// Returns the public Turnstile site key + whether CAPTCHA is enabled.
+// Frontend uses this to decide whether to render the widget and what key
+// to pass it. The secret key NEVER leaves the backend.
+router.get(
+  '/captcha-config',
+  (_req: Request, res: Response<ApiResponse>, next: NextFunction) => {
+    try {
+      res.json({
+        success: true,
+        data: {
+          enabled: !!process.env.TURNSTILE_SECRET_KEY,
+          siteKey: process.env.TURNSTILE_SITE_KEY ?? null,
+          provider: 'cloudflare-turnstile',
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 // ─── GET /api/v1/auth/role ──────────────────────────────
 router.get(
   '/role',

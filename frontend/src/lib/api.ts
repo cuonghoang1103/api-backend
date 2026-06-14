@@ -107,16 +107,49 @@ export { api };
 
 // Auth API
 export const authApi = {
-  login: (data: { username: string; password: string; captchaToken?: string }) =>
-    api.post<ApiResponse<AuthResponse>>('/auth/login', data),
+  /**
+   * Fetch the public CAPTCHA configuration. Returns:
+   *   { enabled: boolean, siteKey: string | null, provider: string }
+   *
+   * Frontend uses this to decide whether to render the Turnstile widget
+   * and which site key to pass it. The secret key never leaves the
+   * backend. The endpoint is cheap and cached by the client.
+   */
+  getCaptchaConfig: () =>
+    api
+      .get<ApiResponse<{ enabled: boolean; siteKey: string | null; provider: string }>>(
+        '/auth/captcha-config',
+      )
+      .then((res) => res.data.data),
 
+  /**
+   * Login. Sends the Turnstile token in the body as `cf-turnstile-response`,
+   * which is the convention the backend's captchaMiddleware reads.
+   */
+  login: (data: { username: string; password: string; captchaToken?: string }) =>
+    api.post<ApiResponse<AuthResponse>>('/auth/login', {
+      username: data.username,
+      password: data.password,
+      'cf-turnstile-response': data.captchaToken,
+    }),
+
+  /**
+   * Register a new user. Sends the Turnstile token alongside credentials.
+   */
   register: (data: {
     username: string;
     password: string;
     email: string;
     fullName?: string;
     captchaToken?: string;
-  }) => api.post('/auth/register', data),
+  }) =>
+    api.post('/auth/register', {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+      fullName: data.fullName,
+      'cf-turnstile-response': data.captchaToken,
+    }),
 
   getProfile: () => api.get('/profile'),
 

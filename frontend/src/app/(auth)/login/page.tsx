@@ -11,6 +11,8 @@ import { signIn, signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
+import { authApi } from '@/lib/api';
+import { TurnstileWidget } from '@/components/TurnstileWidget';
 import type { AuthResponse } from '@/types';
 
 const loginSchema = z.object({
@@ -35,6 +37,12 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [backendError, setBackendError] = useState('');
 
+  // ─── CAPTCHA state ────────────────────────────────────────
+  const [captchaSiteKey, setCaptchaSiteKey] = useState<string | null>(null);
+  const [captchaEnabled, setCaptchaEnabled] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string>('');
+  const [captchaError, setCaptchaError] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -55,6 +63,29 @@ function LoginForm() {
     }
   }, [loginError]);
 
+  // Fetch CAPTCHA config (best-effort). If disabled, just skip widget.
+  useEffect(() => {
+    let cancelled = false;
+    authApi
+      .getCaptchaConfig()
+      .then((cfg) => {
+        if (cancelled) return;
+        setCaptchaEnabled(!!cfg?.enabled);
+        setCaptchaSiteKey(cfg?.siteKey ?? null);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setCaptchaEnabled(false);
+          setCaptchaSiteKey(null);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const captchaReady = !captchaEnabled || captchaToken.length > 0;
+
   const onSubmit = async (data: LoginForm) => {
     setIsLoading(true);
     setBackendError('');
@@ -70,7 +101,11 @@ function LoginForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ username: data.username, password: data.password }),
+        body: JSON.stringify({
+          username: data.username,
+          password: data.password,
+          'cf-turnstile-response': captchaEnabled ? captchaToken : undefined,
+        }),
       });
 
       const loginData = await loginRes.json();
@@ -271,9 +306,26 @@ function LoginForm() {
               </Link>
             </div>
 
+            {captchaEnabled && captchaSiteKey && (
+              <div className="flex justify-center">
+                <TurnstileWidget
+                  siteKey={captchaSiteKey}
+                  theme="dark"
+                  onVerify={(token) => { setCaptchaToken(token); setCaptchaError(false); }}
+                  onError={() => { setCaptchaToken(''); setCaptchaError(true); }}
+                  onExpire={() => { setCaptchaToken(''); }}
+                />
+              </div>
+            )}
+            {captchaError && (
+              <p className="text-red-400 text-sm text-center">
+                CAPTCHA verification failed. Please try again.
+              </p>
+            )}
+
             <motion.button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !captchaReady}
               whileTap={{ scale: isLoading ? 1 : 0.98 }}
               className="w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
             >

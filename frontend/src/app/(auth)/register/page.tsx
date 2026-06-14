@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 
 import { authApi } from '@/lib/api';
 import type { ApiError } from '@/lib/api';
+import { TurnstileWidget } from '@/components/TurnstileWidget';
 
 const registerSchema = z
   .object({
@@ -47,6 +48,12 @@ export default function RegisterPage() {
   const [backendError, setBackendError] = useState('');
   const [registeredEmail, setRegisteredEmail] = useState('');
 
+  // ─── CAPTCHA state ────────────────────────────────────────
+  const [captchaSiteKey, setCaptchaSiteKey] = useState<string | null>(null);
+  const [captchaEnabled, setCaptchaEnabled] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string>('');
+  const [captchaError, setCaptchaError] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -68,6 +75,29 @@ export default function RegisterPage() {
   ];
 
   const allChecksPassed = passwordChecks.every((c) => c.ok);
+  const captchaReady = !captchaEnabled || captchaToken.length > 0;
+
+  // Fetch CAPTCHA config once on mount. If disabled on backend, we just
+  // skip the widget entirely so the form still works in dev / local.
+  useEffect(() => {
+    let cancelled = false;
+    authApi
+      .getCaptchaConfig()
+      .then((cfg) => {
+        if (cancelled) return;
+        setCaptchaEnabled(!!cfg?.enabled);
+        setCaptchaSiteKey(cfg?.siteKey ?? null);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setCaptchaEnabled(false);
+          setCaptchaSiteKey(null);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const onSubmit = async (data: RegisterForm) => {
     setIsLoading(true);
@@ -78,6 +108,7 @@ export default function RegisterPage() {
         email: data.email,
         password: data.password,
         fullName: data.fullName || undefined,
+        captchaToken: captchaEnabled ? captchaToken : undefined,
       });
       setRegisteredEmail(data.email);
       toast.success('Account created! Check your email to verify.');
@@ -286,10 +317,28 @@ export default function RegisterPage() {
               )}
             </div>
 
+            {/* CAPTCHA — Cloudflare Turnstile (only rendered if backend has it enabled) */}
+            {captchaEnabled && captchaSiteKey && (
+              <div className="flex justify-center">
+                <TurnstileWidget
+                  siteKey={captchaSiteKey}
+                  theme="dark"
+                  onVerify={(token) => { setCaptchaToken(token); setCaptchaError(false); }}
+                  onError={() => { setCaptchaToken(''); setCaptchaError(true); }}
+                  onExpire={() => { setCaptchaToken(''); }}
+                />
+              </div>
+            )}
+            {captchaError && (
+              <p className="text-red-400 text-sm text-center">
+                CAPTCHA verification failed. Please try again.
+              </p>
+            )}
+
             {/* Submit */}
             <motion.button
               type="submit"
-              disabled={isLoading || !allChecksPassed}
+              disabled={isLoading || !allChecksPassed || !captchaReady}
               whileTap={{ scale: isLoading ? 1 : 0.98 }}
               className="w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >

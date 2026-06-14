@@ -103,26 +103,74 @@ export default function CyberTerminal() {
     setIsLoading(true);
 
     try {
-      const res = await fetch('/api/chat', {
+      // Get auth token from localStorage if available (optional auth)
+      const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
+
+      const res = await fetch('/api/v1/ai/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text.trim() }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ message: text.trim(), topK: 5 }),
       });
 
-      if (!res.ok) throw new Error('API error');
+      if (!res.ok || !res.body) throw new Error('API error');
 
-      const data = await res.json() as { text?: string; error?: string };
-      const reply = data.text || data.error || 'Xin lỗi, tôi không thể trả lời lúc này.';
+      // Read SSE stream: backend emits "data: {...}\n\n" chunks
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let accumulated = '';
 
+      // Pre-create assistant message so typewriter can fill it
       const aiMsg: Message = { id: Date.now() + 1, role: 'assistant', content: '', timestamp: new Date() };
       setMessages((prev) => [...prev, aiMsg]);
-      await typewriter(reply, (ch) => {
+
+      const updateLast = (chunk: string) => {
+        accumulated += chunk;
         setMessages((prev) => {
           const updated = [...prev];
-          if (updated[updated.length - 1]) updated[updated.length - 1].content += ch;
+          if (updated[updated.length - 1]) {
+            updated[updated.length - 1] = { ...updated[updated.length - 1], content: accumulated };
+          }
           return updated;
         });
-      });
+      };
+
+      // Process the stream in background
+      (async () => {
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() ?? '';
+            for (const line of lines) {
+              if (!line.startsWith('data: ')) continue;
+              const dataStr = line.slice(6);
+              if (!dataStr) continue;
+              try {
+                const data = JSON.parse(dataStr);
+                if (data.type === 'chunk' && data.text) {
+                  updateLast(data.text);
+                } else if (data.type === 'error') {
+                  throw new Error(data.error || 'Stream error');
+                }
+              } catch (parseErr) {
+                if (parseErr instanceof Error && parseErr.message !== 'Stream error') {
+                  // ignore partial JSON
+                } else {
+                  throw parseErr;
+                }
+              }
+            }
+          }
+        } catch {
+          // Stream interrupted — keep what we got
+        }
+      })();
     } catch {
       const errMsg: Message = { id: Date.now() + 1, role: 'assistant', content: '[ERROR] Kết nối AI thất bại. Vui lòng thử lại.', timestamp: new Date() };
       setMessages((prev) => [...prev, errMsg]);

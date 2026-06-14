@@ -9,7 +9,7 @@
  *   1. Initial load (metadata):
  *      GET /api/v1/music/stream/123
  *      Range: bytes=0-1
- *      → Server: HTTP 416 + Content-Range: bytes */{totalSize}
+ *      → Server: HTTP 416 + Content-Range: bytes * / {totalSize}
  *      → Browser biết total file size
  *
  *   2. Buffer first chunk:

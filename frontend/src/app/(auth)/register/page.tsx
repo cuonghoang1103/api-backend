@@ -103,13 +103,30 @@ export default function RegisterPage() {
     setIsLoading(true);
     setBackendError('');
     try {
-      await authApi.register({
-        username: data.username,
-        email: data.email,
-        password: data.password,
-        fullName: data.fullName || undefined,
-        captchaToken: captchaEnabled ? captchaToken : undefined,
+      // Go through /api/auth/register (Next.js route handler) so the
+      // backend_token httpOnly cookie is set. Going through
+      // authApi.register() directly would succeed at the API level
+      // but leave the cookie empty, breaking every subsequent
+      // authenticated call (e.g. enrolling in a free course).
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          fullName: data.fullName || undefined,
+          captchaToken: captchaEnabled ? captchaToken : undefined,
+        }),
       });
+      const json = await res.json().catch(() => null);
+      if (!res.ok || !json?.success) {
+        const msg = json?.message || 'Something went wrong. Please try again.';
+        setBackendError(msg);
+        toast.error(msg);
+        return;
+      }
       setRegisteredEmail(data.email);
       toast.success('Account created! Check your email to verify.');
     } catch (err: unknown) {

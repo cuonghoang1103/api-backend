@@ -457,6 +457,42 @@ router.get('/admin/documents', authenticate, async (req: any, res: Response<ApiR
   }
 });
 
+// ADMIN: DELETE /api/v1/ai/admin/documents/:documentId
+// Delete all chunks belonging to a single document (by documentId + documentType)
+// ════════════════════════════════════════════════════════════════
+router.delete('/admin/documents/:documentId', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { documentId } = req.params;
+    const { documentType } = req.query;
+
+    if (!documentId) throw new AppError('documentId is required', 400);
+    if (!documentType || typeof documentType !== 'string') {
+      throw new AppError('documentType query param is required', 400);
+    }
+
+    const deleted = await prisma.documentChunk.deleteMany({
+      where: {
+        documentId,
+        documentType,
+      },
+    }).catch((err: unknown) => {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('does not exist') || (msg.includes('relation') && msg.includes('does not exist'))) {
+        return { count: 0 };
+      }
+      throw err;
+    });
+
+    res.json({
+      success: true,
+      data: { deleted: deleted.count },
+      message: `Deleted ${deleted.count} chunks for ${documentId}`,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // ════════════════════════════════════════════════════════════════
 // ADMIN: DELETE /api/v1/ai/admin/knowledge/clear-all
 // Clear all RAG chunks

@@ -107,7 +107,7 @@ export { api };
 
 // Auth API
 export const authApi = {
-  login: (data: { username: string; password: string }) =>
+  login: (data: { username: string; password: string; captchaToken?: string }) =>
     api.post<ApiResponse<AuthResponse>>('/auth/login', data),
 
   register: (data: {
@@ -115,6 +115,7 @@ export const authApi = {
     password: string;
     email: string;
     fullName?: string;
+    captchaToken?: string;
   }) => api.post('/auth/register', data),
 
   getProfile: () => api.get('/profile'),
@@ -132,12 +133,28 @@ export const authApi = {
     confirmPassword: string;
   }) => api.post('/auth/change-password', data),
 
-  forgotPassword: (email: string) =>
-    api.post('/auth/forgot-password', { email }),
+  // ─── Forgot password — OTP flow ───
+  forgotPassword: (email: string, captchaToken?: string) =>
+    api.post('/auth/forgot-password', { email, 'cf-turnstile-response': captchaToken }),
 
+  resetPasswordOtp: (data: {
+    email: string;
+    code: string;
+    newPassword: string;
+  }) => api.post('/auth/reset-password-otp', data),
+
+  // Legacy token-link (kept for backward compat)
   resetPassword: (token: string, newPassword: string) =>
     api.post('/auth/reset-password', { token, newPassword }),
 
+  // ─── Verify email — OTP flow (preferred) ───
+  verifyEmailOtp: (email: string, code: string) =>
+    api.post('/auth/verify-email-otp', { email, code }),
+
+  resendOtp: (email: string) =>
+    api.post('/auth/resend-otp', { email }),
+
+  // Legacy token-link
   verifyEmail: (token: string) =>
     api.post('/auth/verify-email', { token }),
 

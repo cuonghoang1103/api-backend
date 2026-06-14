@@ -1,11 +1,12 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
 import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { AuthResponse, JwtPayload } from '../types/index.js';
-import { v4 as uuidv4 } from 'uuid';
 import { emailService } from './email.service.js';
+import { generateOtp, verifyOtp, getOtpTtl, type OtpType } from './otp.service.js';
 
 const SALT_ROUNDS = 12;
 
@@ -224,23 +225,85 @@ export class AuthService {
       include: { roles: { include: { role: true } } },
     });
 
-    // ─── Send verification email (best-effort) ───────────
-    const token = uuidv4();
-    await prisma.emailVerificationToken.create({
-      data: {
-        userId: user.id,
-        email: user.email,
-        token,
-        expiresAt: new Date(Date.now() + EMAIL_VERIFICATION_TTL_MS),
-      },
-    });
-    await emailService.sendVerificationEmail({
-      to: user.email,
-      fullName: user.fullName ?? undefined,
-      token,
-    });
+    // ─── Send 6-digit OTP via email (best-effort) ──────
+    const otpResult = await generateOtp(user.email, 'verify');
+    const otpToSend = otpResult.devCode ?? (await getLatestOtpForLog(user.email, 'verify'));
+    if (process.env.NODE_ENV === 'development' && otpResult.devCode) {
+      // eslint-disable-next-line no-console
+      console.log(`[register] DEV OTP for ${user.email}: ${otpResult.devCode}`);
+    }
+    if (otpToSend) {
+      await emailService.sendOtpEmail({
+        to: user.email,
+        fullName: user.fullName ?? undefined,
+        otp: otpToSend,
+        type: 'verify',
+      });
+    }
 
     return this.buildAuthResponse(user);
+  }
+
+  // ─── Verify Email via 6-digit OTP ──────────────────
+  async verifyEmailOtp(email: string, code: string): Promise<void> {
+    const user = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() } });
+    if (!user) {
+      throw new AppError('Invalid verification code', 400, 'INVALID_OTP');
+    }
+    if (user.emailVerified) {
+      throw new AppError('Email đã được xác thực trước đó', 400, 'ALREADY_VERIFIED');
+    }
+
+    const result = await verifyOtp(email, code, 'verify');
+    if (!result.valid) {
+      const msg =
+        result.reason === 'TOO_MANY_ATTEMPTS'
+          ? 'Bạn đã nhập sai quá nhiều lần. Vui lòng yêu cầu mã mới.'
+          : result.reason === 'NOT_FOUND'
+          ? 'Mã xác thực không tồn tại hoặc đã hết hạn. Vui lòng yêu cầu mã mới.'
+          : 'Mã xác thực không chính xác.';
+      throw new AppError(msg, 400, 'INVALID_OTP');
+    }
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { emailVerified: true, emailVerifiedAt: new Date() },
+    });
+  }
+
+  // ─── Resend Verification OTP ──────────────────────────
+  async resendVerificationOtp(email: string): Promise<{ sent: boolean; ttl: number }> {
+    const user = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() } });
+    if (!user) {
+      // Don't reveal if email exists
+      return { sent: false, ttl: 0 };
+    }
+    if (user.emailVerified) {
+      return { sent: false, ttl: 0 };
+    }
+
+    const result = await generateOtp(email, 'verify');
+    if (result.sent && result.devCode) {
+      await emailService.sendOtpEmail({
+        to: user.email,
+        fullName: user.fullName ?? undefined,
+        otp: result.devCode,
+        type: 'verify',
+      });
+    } else if (result.sent) {
+      // Production: devCode not in result, fetch latest OTP for email
+      const otp = await getLatestOtpForLog(email, 'verify');
+      if (otp) {
+        await emailService.sendOtpEmail({
+          to: user.email,
+          fullName: user.fullName ?? undefined,
+          otp,
+          type: 'verify',
+        });
+      }
+    }
+    const ttl = await getOtpTtl(email, 'verify');
+    return { sent: result.sent, ttl };
   }
 
   // ─── Verify Email ──────────────────────────────────────
@@ -456,26 +519,72 @@ export class AuthService {
     });
   }
 
-  // ─── Forgot Password ────────────────────────────────────
-  async forgotPassword(email: string): Promise<string | null> {
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return null; // Don't reveal if user exists
+  // ─── Forgot Password (sends 6-digit OTP) ─────────────
+  async forgotPassword(email: string): Promise<{ sent: boolean; ttl: number }> {
+    const user = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() } });
+    if (!user) return { sent: false, ttl: 0 }; // Don't reveal if user exists
 
-    const token = uuidv4();
-    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+    const result = await generateOtp(email, 'reset');
+    if (result.sent && result.devCode) {
+      await emailService.sendOtpEmail({
+        to: user.email,
+        fullName: user.fullName ?? undefined,
+        otp: result.devCode,
+        type: 'reset',
+      });
+    } else if (result.sent) {
+      const otp = await getLatestOtpForLog(email, 'reset');
+      if (otp) {
+        await emailService.sendOtpEmail({
+          to: user.email,
+          fullName: user.fullName ?? undefined,
+          otp,
+          type: 'reset',
+        });
+      }
+    }
+    const ttl = await getOtpTtl(email, 'reset');
+    return { sent: result.sent, ttl };
+  }
 
-    await prisma.passwordResetToken.create({
-      data: { userId: user.id, token, expiresAt },
+  // ─── Reset Password via OTP ─────────────────────
+  async resetPasswordWithOtp(
+    email: string,
+    code: string,
+    newPassword: string,
+  ): Promise<void> {
+    const user = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() } });
+    if (!user) {
+      throw new AppError('Invalid reset code', 400, 'INVALID_OTP');
+    }
+
+    const result = await verifyOtp(email, code, 'reset');
+    if (!result.valid) {
+      const msg =
+        result.reason === 'TOO_MANY_ATTEMPTS'
+          ? 'Bạn đã nhập sai quá nhiều lần. Vui lòng yêu cầu mã mới.'
+          : result.reason === 'NOT_FOUND'
+          ? 'Mã đặt lại không tồn tại hoặc đã hết hạn.'
+          : 'Mã đặt lại không chính xác.';
+      throw new AppError(msg, 400, 'INVALID_OTP');
+    }
+
+    // Re-validate new password strength
+    const passwordCheck = validatePasswordStrength(newPassword, user.username, user.email);
+    if (!passwordCheck.valid) {
+      throw new AppError(passwordCheck.errors[0]!, 400, 'WEAK_PASSWORD');
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        roleVersion: { increment: 1 },
+        failedLoginCount: 0,
+        lockoutUntil: null,
+      },
     });
-
-    // Send via Resend
-    await emailService.sendPasswordResetEmail({
-      to: user.email,
-      fullName: user.fullName ?? undefined,
-      token,
-    });
-
-    return token;
   }
 
   // ─── Reset Password ─────────────────────────────────────
@@ -586,6 +695,23 @@ export class AuthService {
       refreshToken,
     };
   }
+}
+
+// ─── Internal helpers (module-level) ──────────────────
+
+/**
+ * Read the latest OTP from Redis. Used in production where the
+ * OTP service's generateOtp() doesn't return the code (it goes
+ * directly to the email). Only call AFTER generateOtp().
+ *
+ * Returns the code or null if not found.
+ */
+async function getLatestOtpForLog(email: string, type: OtpType): Promise<string | null> {
+  const { getRedis } = await import('../config/redis.js');
+  const redis = await getRedis();
+  const normalized = email.toLowerCase().trim();
+  const key = `otp:${type}:${normalized}`;
+  return redis.get(key);
 }
 
 export const authService = new AuthService();

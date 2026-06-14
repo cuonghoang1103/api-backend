@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -45,6 +45,15 @@ function LoginForm() {
   });
 
   const redirect = searchParams.get('callbackUrl') || searchParams.get('redirect');
+  const loginError = searchParams.get('error');
+
+  useEffect(() => {
+    if (loginError === 'login_required') {
+      toast.error('Vui lòng đăng nhập để vào khoá học');
+    } else if (loginError === 'not_admin') {
+      toast.error('Bạn không có quyền truy cập trang quản trị');
+    }
+  }, [loginError]);
 
   const onSubmit = async (data: LoginForm) => {
     setIsLoading(true);
@@ -77,11 +86,11 @@ function LoginForm() {
         setBackendError(errorMsg);
         toast.error(errorMsg);
 
-        // Nếu email chưa xác thực → chuyển sang trang resend verification
+        // Nếu email chưa xác thực → chuyển sang trang OTP verification
         if (errorCode === 'EMAIL_NOT_VERIFIED') {
           const email = loginData.data?.email || data.username;
           setTimeout(() => {
-            router.push(`/verify-email?email=${encodeURIComponent(email)}&resend=1`);
+            router.push(`/verify-otp?email=${encodeURIComponent(email)}&resend=1`);
           }, 1500);
         }
         return;

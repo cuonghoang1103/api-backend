@@ -102,7 +102,74 @@ export class EmailService {
   }
 
   /**
-   * Password reset email.
+   * Email verification — 6-digit OTP code (sent right after registration).
+   * User enters the code in the verification form, no link to click.
+   */
+  async sendOtpEmail(opts: {
+    to: string;
+    fullName?: string;
+    otp: string;
+    type: 'verify' | 'reset';
+    ttlMinutes?: number;
+  }): Promise<{ success: boolean; error?: string }> {
+    const greeting = opts.fullName ? `Xin chào ${opts.fullName},` : 'Xin chào,';
+    const isVerify = opts.type === 'verify';
+    const ttl = opts.ttlMinutes ?? (isVerify ? 5 : 10);
+    const heading = isVerify ? 'Xác thực email của bạn' : 'Đặt lại mật khẩu';
+    const intro = isVerify
+      ? 'Cảm ơn bạn đã đăng ký tài khoản tại CuongHoangDev. Sử dụng mã bên dưới để xác thực email:'
+      : 'Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Sử dụng mã bên dưới để tiếp tục:';
+    const footer = isVerify
+      ? 'Nếu bạn không đăng ký tài khoản này, vui lòng bỏ qua email này.'
+      : 'Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này. Tài khoản của bạn vẫn an toàn.';
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 40px 0; }
+    .container { max-width: 560px; margin: 0 auto; background: #1a1b2e; border-radius: 16px; padding: 40px; }
+    h1 { color: ${isVerify ? '#a78bfa' : '#f59e0b'}; font-size: 24px; margin: 0 0 16px; }
+    p { color: #cbd5e1; line-height: 1.6; margin: 0 0 16px; }
+    .otp-box { background: linear-gradient(135deg, #1e1b4b, #312e81); border: 1px solid #4338ca; border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0; }
+    .otp-code { font-size: 40px; font-weight: 800; letter-spacing: 12px; color: #c4b5fd; font-family: 'SF Mono', Monaco, Consolas, monospace; }
+    .otp-ttl { color: #94a3b8; font-size: 13px; margin-top: 12px; }
+    .footer { color: #64748b; font-size: 12px; margin-top: 32px; }
+    .warning { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 12px; color: #fca5a5; font-size: 14px; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>${heading}</h1>
+    <p>${greeting}</p>
+    <p>${intro}</p>
+    <div class="otp-box">
+      <div class="otp-code">${opts.otp}</div>
+      <div class="otp-ttl">Mã có hiệu lực trong ${ttl} phút</div>
+    </div>
+    ${!isVerify ? `
+    <div class="warning">
+      <strong>Cảnh báo bảo mật:</strong> Không chia sẻ mã này cho bất kỳ ai. Nhân viên CuongHoangDev sẽ không bao giờ yêu cầu mã này.
+    </div>` : ''}
+    <p>${footer}</p>
+    <div class="footer">© ${new Date().getFullYear()} CuongHoangDev. All rights reserved.</div>
+  </div>
+</body>
+</html>`.trim();
+
+    return this.send({
+      to: opts.to,
+      subject: `${heading} — Mã xác thực ${opts.otp}`,
+      html,
+      text: `${greeting}\n\n${isVerify ? 'Mã xác thực email' : 'Mã đặt lại mật khẩu'} của bạn: ${opts.otp}\n\nMã có hiệu lực trong ${ttl} phút.\n\n${footer}`,
+    });
+  }
+
+  /**
+   * Password reset email (link-based, kept for backward compat).
+   * New users should use OTP via sendOtpEmail with type='reset'.
    */
   async sendPasswordResetEmail(opts: {
     to: string;

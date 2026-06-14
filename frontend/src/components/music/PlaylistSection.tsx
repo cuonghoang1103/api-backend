@@ -3,8 +3,12 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ListMusic, Plus, X, Upload, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { usePlaylists, useCreatePlaylist, usePlaylistDetail } from '@/hooks/useMusicQueries';
 import type { PlaylistSummary } from '@/types';
+import { useAuthStore } from '@/store/authStore';
+import { LoginRequired } from '@/components/LoginRequired';
+import { toast } from 'sonner';
 import PlaylistCard from './PlaylistCard';
 
 const C = {
@@ -19,10 +23,13 @@ interface PlaylistSectionProps {
 }
 
 export default function PlaylistSection({ onPlaylistClick }: PlaylistSectionProps) {
+  const router = useRouter();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuthStore();
   const { data, isLoading } = usePlaylists();
   const createPlaylist = useCreatePlaylist();
 
   const [showForm, setShowForm] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [coverFile, setCoverFile] = useState<File | null>(null);
@@ -31,6 +38,20 @@ export default function PlaylistSection({ onPlaylistClick }: PlaylistSectionProp
   const [error, setError] = useState('');
 
   const playlists: PlaylistSummary[] = data?.data ?? [];
+
+  const handleCreateClick = () => {
+    if (isAuthLoading) return;
+    if (!isAuthenticated) {
+      setShowLoginPrompt(true);
+      return;
+    }
+    setShowForm(true);
+  };
+
+  const handleLoginClick = () => {
+    setShowLoginPrompt(false);
+    router.push(`/login?callbackUrl=${encodeURIComponent('/music')}`);
+  };
 
   const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -84,9 +105,16 @@ export default function PlaylistSection({ onPlaylistClick }: PlaylistSectionProp
         setDescription('');
         setCoverFile(null);
         setCoverPreview('');
+        toast.success('Đã tạo playlist!');
       }
     } catch (err: unknown) {
-      setError((err as Error)?.message || 'Loi tao playlist');
+      const e = err as { response?: { data?: { message?: string } } };
+      setError(e?.response?.data?.message || 'Loi tao playlist');
+      // If 401 → re-prompt login
+      if ((err as { response?: { status?: number } })?.response?.status === 401) {
+        setShowForm(false);
+        setShowLoginPrompt(true);
+      }
     } finally {
       setCreating(false);
     }
@@ -106,7 +134,7 @@ export default function PlaylistSection({ onPlaylistClick }: PlaylistSectionProp
           )}
         </div>
         <button
-          onClick={() => setShowForm(true)}
+          onClick={handleCreateClick}
           className="flex items-center gap-1.5 px-3 py-1.5 bg-neon-violet/20 border border-neon-violet/30 text-neon-violet text-xs font-medium rounded-lg hover:bg-neon-violet/30 transition-colors"
         >
           <Plus className="w-3.5 h-3.5" />
@@ -132,6 +160,17 @@ export default function PlaylistSection({ onPlaylistClick }: PlaylistSectionProp
           ))}
         </div>
       )}
+
+      {/* Login required modal */}
+      <AnimatePresence>
+        {showLoginPrompt && (
+          <LoginRequired
+            variant="modal"
+            message="Vui lòng đăng nhập để tạo playlist. Playlist sẽ được gắn với tài khoản của bạn."
+            onClose={() => setShowLoginPrompt(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Create modal */}
       <AnimatePresence>

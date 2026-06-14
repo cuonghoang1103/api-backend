@@ -618,6 +618,19 @@ router.put(
         throw new AppError('Invalid playlist ID', 400, 'INVALID_ID');
       }
 
+      // ─── Ownership check: only the creator or an admin can edit ───
+      const existing = await musicService.getPlaylistById(id);
+      if (!existing) {
+        throw new AppError('Playlist not found', 404, 'PLAYLIST_NOT_FOUND');
+      }
+      const isOwner = (existing as any).userId === req.userId;
+      const isAdmin = req.user?.roles?.some(
+        (r: string) => r.toUpperCase().replace('ROLE_', '') === 'ADMIN',
+      );
+      if (!isOwner && !isAdmin) {
+        throw new AppError('You do not have permission to edit this playlist', 403, 'FORBIDDEN');
+      }
+
       const { name, description, coverUrl, isPublic } = req.body;
 
       const playlist: any = await musicService.updatePlaylist(id, {
@@ -647,6 +660,19 @@ router.delete(
       const id = parseInt(req.params.id, 10);
       if (isNaN(id) || id <= 0) {
         throw new AppError('Invalid playlist ID', 400, 'INVALID_ID');
+      }
+
+      // ─── Ownership check: only the creator or an admin can delete ───
+      const existing = await musicService.getPlaylistById(id);
+      if (!existing) {
+        throw new AppError('Playlist not found', 404, 'PLAYLIST_NOT_FOUND');
+      }
+      const isOwner = (existing as any).userId === req.userId;
+      const isAdmin = req.user?.roles?.some(
+        (r: string) => r.toUpperCase().replace('ROLE_', '') === 'ADMIN',
+      );
+      if (!isOwner && !isAdmin) {
+        throw new AppError('You do not have permission to delete this playlist', 403, 'FORBIDDEN');
       }
 
       await musicService.deletePlaylist(id);

@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 import { authService } from '../services/auth.service.js';
 import { validate } from '../middleware/validate.js';
 import { authenticate } from '../middleware/auth.js';
+import { captchaMiddleware } from '../middleware/captcha.js';
 import type { ApiResponse, AuthResponse } from '../types/index.js';
 
 const router = Router();
@@ -10,6 +11,7 @@ const router = Router();
 // ─── POST /api/v1/auth/login ─────────────────────────────
 router.post(
   '/login',
+  captchaMiddleware,
   [
     body('username').notEmpty().withMessage('Username is required'),
     body('password').notEmpty().withMessage('Password is required'),
@@ -41,6 +43,7 @@ router.post(
 // ─── POST /api/v1/auth/register ──────────────────────────
 router.post(
   '/register',
+  captchaMiddleware,
   [
     body('username')
       .isLength({ min: 3, max: 50 })
@@ -78,7 +81,46 @@ router.post(
   },
 );
 
-// ─── POST /api/v1/auth/verify-email ─────────────────────
+// ─── POST /api/v1/auth/verify-email-otp ──────────────────
+// 6-digit OTP verification (replaces the long token-link flow)
+router.post(
+  '/verify-email-otp',
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('code').matches(/^\d{6}$/).withMessage('Code must be 6 digits'),
+  ],
+  validate,
+  async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
+    try {
+      await authService.verifyEmailOtp(req.body.email, req.body.code);
+      res.json({ success: true, message: 'Email đã được xác thực. Bạn có thể đăng nhập ngay.' });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ─── POST /api/v1/auth/resend-otp ────────────────────────
+router.post(
+  '/resend-otp',
+  [body('email').isEmail().withMessage('Valid email is required')],
+  validate,
+  async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
+    try {
+      const result = await authService.resendVerificationOtp(req.body.email);
+      // Always return the same response to prevent email enumeration
+      res.json({
+        success: true,
+        message: 'Nếu email tồn tại và chưa được xác thực, chúng tôi đã gửi mã OTP mới.',
+        data: { sent: result.sent, ttl: result.ttl },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ─── POST /api/v1/auth/verify-email (token link — backward compat) ───
 router.post(
   '/verify-email',
   [body('token').notEmpty().withMessage('Token is required')],
@@ -93,7 +135,7 @@ router.post(
   },
 );
 
-// ─── POST /api/v1/auth/resend-verification ──────────────
+// ─── POST /api/v1/auth/resend-verification (token link — backward compat) ───
 router.post(
   '/resend-verification',
   [body('email').isEmail().withMessage('Valid email is required')],
@@ -101,7 +143,6 @@ router.post(
   async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
     try {
       const result = await authService.resendVerificationEmail(req.body.email);
-      // Always return the same response to prevent email enumeration
       res.json({
         success: true,
         message: 'Nếu email tồn tại và chưa được xác thực, chúng tôi đã gửi link xác thực mới.',
@@ -183,18 +224,24 @@ router.post(
   },
 );
 
-// ─── POST /api/v1/auth/forgot-password ──────────────────
+// ─── POST /api/v1/auth/forgot-password (sends 6-digit OTP) ───
 router.post(
   '/forgot-password',
+  captchaMiddleware,
   [body('email').isEmail().withMessage('Valid email is required')],
   validate,
   async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
     try {
-      const token = await authService.forgotPassword(req.body.email);
+      const result = await authService.forgotPassword(req.body.email);
+      // Always return the same response to prevent email enumeration
       res.json({
         success: true,
-        message: 'If an account with that email exists, a reset link has been sent.',
-        ...(process.env.NODE_ENV === 'development' && token ? { data: { token } } : {}),
+        message: 'Nếu email tồn tại, chúng tôi đã gửi mã OTP đặt lại mật khẩu.',
+        data: { sent: result.sent, ttl: result.ttl },
+        // Dev only: include the OTP in dev mode for easy testing
+        ...(process.env.NODE_ENV === 'development' && result.ttl > 0
+          ? { devHint: 'OTP was sent. Check email or backend logs.' }
+          : {}),
       });
     } catch (error) {
       next(error);
@@ -202,7 +249,26 @@ router.post(
   },
 );
 
-// ─── POST /api/v1/auth/reset-password ───────────────────
+// ─── POST /api/v1/auth/reset-password-otp (verify OTP + new password) ───
+router.post(
+  '/reset-password-otp',
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('code').matches(/^\d{6}$/).withMessage('Code must be 6 digits'),
+    body('newPassword').isLength({ min: 12, max: 100 }).withMessage('Password must be at least 12 characters'),
+  ],
+  validate,
+  async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
+    try {
+      await authService.resetPasswordWithOtp(req.body.email, req.body.code, req.body.newPassword);
+      res.json({ success: true, message: 'Mật khẩu đã được đặt lại thành công.' });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ─── POST /api/v1/auth/reset-password (token link — backward compat) ───
 router.post(
   '/reset-password',
   [

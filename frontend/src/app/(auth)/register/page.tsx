@@ -91,58 +91,15 @@ export default function RegisterPage() {
     }
   };
 
-  // ─── After successful registration: show email-verification prompt ───
+  // ─── After successful registration: redirect to OTP verification ───
   if (registeredEmail) {
+    // Use replace to allow back-button to skip this state
+    if (typeof window !== 'undefined') {
+      router.replace(`/verify-otp?email=${encodeURIComponent(registeredEmail)}&resend=1`);
+    }
     return (
-      <div className="min-h-screen bg-darkbg flex items-center justify-center px-4 py-12">
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-[150px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-violet/10 rounded-full blur-[150px]" />
-        </div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative w-full max-w-md bg-darkcard border border-darkborder rounded-2xl p-8 text-center"
-        >
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/10 flex items-center justify-center">
-            <CheckCircle2 className="w-8 h-8 text-green-500" />
-          </div>
-          <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">
-            Kiểm tra email của bạn
-          </h2>
-          <p className="text-text-secondary mb-4">
-            Chúng tôi đã gửi link xác thực đến:
-            <br />
-            <strong className="text-text-primary">{registeredEmail}</strong>
-          </p>
-          <p className="text-text-muted text-sm mb-6">
-            Click link trong email để kích hoạt tài khoản. Link có hiệu lực trong <strong>24 giờ</strong>.
-            <br />
-            (Nếu không thấy, hãy kiểm tra thư mục spam.)
-          </p>
-          <div className="space-y-3">
-            <button
-              type="button"
-              onClick={async () => {
-                try {
-                  await authApi.resendVerification(registeredEmail);
-                  toast.success('Đã gửi lại email xác thực');
-                } catch {
-                  toast.error('Không thể gửi lại. Vui lòng thử sau.');
-                }
-              }}
-              className="w-full py-2.5 rounded-xl border border-darkborder text-text-secondary hover:bg-white/5 text-sm transition-colors"
-            >
-              Gửi lại email xác thực
-            </button>
-            <Link
-              href="/login"
-              className="block w-full py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold text-sm"
-            >
-              Quay lại trang đăng nhập
-            </Link>
-          </div>
-        </motion.div>
+      <div className="min-h-screen bg-darkbg flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-neon-violet animate-spin" />
       </div>
     );
   }

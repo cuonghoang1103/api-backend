@@ -299,71 +299,72 @@ export function listActiveProviders(): Array<{
 }
 
 // ============================================================
-// EMBEDDINGS
+// EMBEDDINGS (local, no external API)
 // ============================================================
 //
-// 768-dim embeddings via OpenAI-compatible /v1/embeddings endpoint.
-// Default model: `nomic-embed-text-v1.5` on Groq (free, 768 dims).
+// Uses @xenova/transformers (Transformers.js) running an ONNX model
+// locally — no API key, no network, no cost.
 //
-// Why not pgvector: current Postgres image doesn't bundle the extension.
-// We store embeddings as JSONB arrays and compute cosine similarity in
-// the app layer. Fine for corpora < 10K chunks.
+// Model: Xenova/all-MiniLM-L6-v2
+//   - 384-dim embeddings
+//   - ~22MB ONNX model (downloaded once on first use, then cached)
+//   - Trained on 1B+ sentence pairs (great general-purpose quality)
+//   - ~50-200ms per embedding on CPU
+//
+// For corpora < 10K chunks this is plenty fast. If we ever need
+// better quality we can swap to Xenova/bge-small-en-v1.5 (384-dim,
+// higher quality) or Xenova/bge-large-en-v1.5 (1024-dim, best).
+//
+// We update the storage type from `vector(768)` to `vector(384)` in
+// the column comment; the JSONB column itself is dimension-agnostic.
 
-/**
- * Compute embedding vector for a single text via Groq /v1/embeddings.
- * Returns a 768-dim float array.
- */
-export async function computeEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    throw new AppError('GROQ_API_KEY is not configured (needed for embeddings)', 503, 'AI_NOT_CONFIGURED');
-  }
+import { pipeline, env } from '@xenova/transformers';
 
-  // Lazy client for embeddings (separate from chat clients)
-  const client = new OpenAI({
-    baseURL: 'https://api.groq.com/openai/v1',
-    apiKey,
-  });
+// Allow model download to be cached in /app (in container)
+// Default cache is in node_modules — works in dev, persists in /app in prod
+env.cacheDir = process.env.TRANSFORMERS_CACHE || '/app/.cache/transformers';
 
-  const model = process.env.GROQ_EMBEDDING_MODEL || 'nomic-embed-text-v1.5';
+let _embedder: any = null;
+let _initPromise: Promise<any> | null = null;
+const EMBEDDING_MODEL = 'Xenova/all-MiniLM-L6-v2';
+export const EMBEDDING_DIM = 384;
 
-  const response = await client.embeddings.create({
-    model,
-    input: text.slice(0, 8000), // truncate to fit model context
-    encoding_format: 'float',
-  });
-
-  return response.data[0].embedding;
+async function getEmbedder() {
+  if (_embedder) return _embedder;
+  if (_initPromise) return _initPromise;
+  _initPromise = (async () => {
+    console.log(`[Embeddings] Loading local model ${EMBEDDING_MODEL}...`);
+    const start = Date.now();
+    _embedder = await pipeline('feature-extraction', EMBEDDING_MODEL);
+    console.log(`[Embeddings] Model loaded in ${Date.now() - start}ms`);
+    return _embedder;
+  })();
+  return _initPromise;
 }
 
 /**
- * Compute embeddings for multiple texts in parallel (batched).
- * Groq allows batch input → 1 API call returns N arrays.
+ * Compute embedding vector for a single text using local model.
+ * Returns a 384-dim float array (L2-normalized).
+ */
+export async function computeEmbedding(text: string): Promise<number[]> {
+  const embedder = await getEmbedder();
+  const result = await embedder(text.slice(0, 512), { pooling: 'mean', normalize: true });
+  return Array.from(result.data as Float32Array);
+}
+
+/**
+ * Compute embeddings for multiple texts sequentially.
+ * (Local model is single-threaded, parallel calls would not help.)
  */
 export async function computeEmbeddings(texts: string[]): Promise<number[][]> {
   if (texts.length === 0) return [];
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    throw new AppError('GROQ_API_KEY is not configured (needed for embeddings)', 503, 'AI_NOT_CONFIGURED');
+  const embedder = await getEmbedder();
+  const out: number[][] = [];
+  for (const text of texts) {
+    const result = await embedder(text.slice(0, 512), { pooling: 'mean', normalize: true });
+    out.push(Array.from(result.data as Float32Array));
   }
-
-  const client = new OpenAI({
-    baseURL: 'https://api.groq.com/openai/v1',
-    apiKey,
-  });
-
-  const model = process.env.GROQ_EMBEDDING_MODEL || 'nomic-embed-text-v1.5';
-
-  // Truncate each text to fit context
-  const truncated = texts.map((t) => t.slice(0, 8000));
-
-  const response = await client.embeddings.create({
-    model,
-    input: truncated,
-    encoding_format: 'float',
-  });
-
-  return response.data.map((d) => d.embedding);
+  return out;
 }
 
 /**

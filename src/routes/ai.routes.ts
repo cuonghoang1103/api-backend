@@ -449,9 +449,13 @@ router.post('/admin/documents', authenticate, async (req: any, res: Response<Api
 // ════════════════════════════════════════════════════════════════
 router.get('/admin/documents', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
   try {
-    const { documentType } = req.query;
-    const chunks = await aiService.getAllChunks(documentType as string | undefined);
-    res.json({ success: true, data: chunks });
+    const { documentType, page, pageSize } = req.query;
+    const result = await aiService.getAllChunks(
+      documentType as string | undefined,
+      page ? parseInt(page as string, 10) : 1,
+      pageSize ? parseInt(pageSize as string, 10) : 50,
+    );
+    res.json({ success: true, data: result });
   } catch (error) {
     next(error);
   }

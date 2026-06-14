@@ -520,19 +520,60 @@ export class AIService {
     }
   }
 
-  // ─── Get all chunks ──────────────────────────────────────
-  async getAllChunks(documentType?: string) {
+  // ─── Get all chunks (paginated) ─────────────────────
+  /**
+   * Returns chunks with pagination metadata.
+   * @param documentType filter by type (optional)
+   * @param page 1-indexed page number (default 1)
+   * @param pageSize chunks per page (default 50, max 500)
+   */
+  async getAllChunks(
+    documentType?: string,
+    page: number = 1,
+    pageSize: number = 50,
+  ): Promise<{
+    chunks: Array<{
+      id: number;
+      documentId: string;
+      documentType: string;
+      chunkIndex: number;
+      content: string;
+      createdAt: Date;
+    }>;
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  }> {
+    const safePage = Math.max(1, Math.floor(page));
+    const safePageSize = Math.min(500, Math.max(1, Math.floor(pageSize)));
+    const skip = (safePage - 1) * safePageSize;
+
     try {
-      return prisma.documentChunk.findMany({
-        where: documentType ? { documentType } : undefined,
-        orderBy: [{ documentType: 'asc' }, { chunkIndex: 'asc' }],
-        take: 1000,
-      });
+      const where = documentType ? { documentType } : undefined;
+
+      const [chunks, total] = await Promise.all([
+        prisma.documentChunk.findMany({
+          where,
+          orderBy: [{ documentType: 'asc' }, { chunkIndex: 'asc' }],
+          skip,
+          take: safePageSize,
+        }),
+        prisma.documentChunk.count({ where }),
+      ]);
+
+      return {
+        chunks,
+        total,
+        page: safePage,
+        pageSize: safePageSize,
+        totalPages: Math.ceil(total / safePageSize),
+      };
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (msg.includes('does not exist') || (msg.includes('relation') && msg.includes('does not exist'))) {
         console.warn('[AIService] document_chunks table not found, returning empty');
-        return [];
+        return { chunks: [], total: 0, page: 1, pageSize: safePageSize, totalPages: 0 };
       }
       throw err;
     }

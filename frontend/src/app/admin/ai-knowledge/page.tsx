@@ -3,10 +3,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   Database, Upload, Trash2, RefreshCw, Search, AlertCircle,
-  CheckCircle2, FileText, Tag, X,
+  CheckCircle2, FileText, Tag, X, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 
 const API = '/api/v1';
+const PAGE_SIZE = 50;
 
 interface Chunk {
   id: number;
@@ -15,6 +16,13 @@ interface Chunk {
   chunkIndex: number;
   content: string;
   createdAt: string;
+}
+
+interface PageMeta {
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
 }
 
 const DOCUMENT_TYPE_PRESETS = [
@@ -33,11 +41,13 @@ const DOCUMENT_TYPE_PRESETS = [
 
 export default function AIKnowledgePage() {
   const [chunks, setChunks] = useState<Chunk[]>([]);
+  const [meta, setMeta] = useState<PageMeta>({ total: 0, page: 1, pageSize: PAGE_SIZE, totalPages: 0 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('');
+  const [page, setPage] = useState(1);
 
   // Form state
   const [showUpload, setShowUpload] = useState(false);
@@ -50,18 +60,37 @@ export default function AIKnowledgePage() {
     setLoading(true);
     setError(null);
     try {
-      const url = filterType
-        ? `${API}/ai/admin/documents?documentType=${encodeURIComponent(filterType)}`
-        : `${API}/ai/admin/documents`;
+      const params = new URLSearchParams();
+      if (filterType) params.set('documentType', filterType);
+      params.set('page', String(page));
+      params.set('pageSize', String(PAGE_SIZE));
+      const url = `${API}/ai/admin/documents?${params.toString()}`;
       const res = await fetch(url, { credentials: 'include' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      setChunks(data.data || []);
+      const payload = data.data || { chunks: [], total: 0, page: 1, pageSize: PAGE_SIZE, totalPages: 0 };
+      // Backend returns { chunks, total, page, pageSize, totalPages } OR legacy array
+      if (Array.isArray(payload)) {
+        setChunks(payload);
+        setMeta({ total: payload.length, page: 1, pageSize: PAGE_SIZE, totalPages: 1 });
+      } else {
+        setChunks(payload.chunks || []);
+        setMeta({
+          total: payload.total ?? 0,
+          page: payload.page ?? 1,
+          pageSize: payload.pageSize ?? PAGE_SIZE,
+          totalPages: payload.totalPages ?? 1,
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load chunks');
     } finally {
       setLoading(false);
     }
+  }, [filterType, page]);
+
+  useEffect(() => {
+    setPage(1); // reset to page 1 when filter changes
   }, [filterType]);
 
   useEffect(() => {
@@ -305,10 +334,17 @@ export default function AIKnowledgePage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="p-4 bg-darkcard border border-darkborder rounded-xl">
           <p className="text-xs text-text-muted">Tổng chunks</p>
-          <p className="text-2xl font-heading font-bold text-text-primary">{chunks.length}</p>
+          <p className="text-2xl font-heading font-bold text-text-primary">
+            {meta.total}
+            {meta.total > chunks.length && (
+              <span className="text-xs text-text-muted font-normal ml-1">
+                (trang {meta.page}/{meta.totalPages})
+              </span>
+            )}
+          </p>
         </div>
         <div className="p-4 bg-darkcard border border-darkborder rounded-xl">
-          <p className="text-xs text-text-muted">Số documents</p>
+          <p className="text-xs text-text-muted">Số documents (trang này)</p>
           <p className="text-2xl font-heading font-bold text-text-primary">{Object.keys(grouped).length}</p>
         </div>
         <div className="p-4 bg-darkcard border border-darkborder rounded-xl">
@@ -318,7 +354,7 @@ export default function AIKnowledgePage() {
           </p>
         </div>
         <div className="p-4 bg-darkcard border border-darkborder rounded-xl">
-          <p className="text-xs text-text-muted">Tổng ký tự</p>
+          <p className="text-xs text-text-muted">Ký tự (trang này)</p>
           <p className="text-2xl font-heading font-bold text-text-primary">
             {chunks.reduce((s, c) => s + c.content.length, 0).toLocaleString()}
           </p>
@@ -381,6 +417,37 @@ export default function AIKnowledgePage() {
               </div>
             );
           })}
+
+          {/* Pagination controls */}
+          {meta.totalPages > 1 && (
+            <div className="flex items-center justify-between pt-4 border-t border-darkborder">
+              <p className="text-sm text-text-muted">
+                Trang {meta.page}/{meta.totalPages} • {meta.total} chunks tổng
+                ({meta.pageSize}/trang)
+              </p>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page <= 1 || loading}
+                  className="px-3 py-1.5 bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-text-primary rounded-lg text-sm flex items-center gap-1 transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Trước
+                </button>
+                <span className="text-sm text-text-secondary px-2">
+                  {page} / {meta.totalPages}
+                </span>
+                <button
+                  onClick={() => setPage((p) => Math.min(meta.totalPages, p + 1))}
+                  disabled={page >= meta.totalPages || loading}
+                  className="px-3 py-1.5 bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed text-text-primary rounded-lg text-sm flex items-center gap-1 transition-colors"
+                >
+                  Sau
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

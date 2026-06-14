@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 
-const BACKEND_URL = "http://backend:3001";
+/**
+ * Backend URL — ưu tiên BACKEND_URL (server-only), fallback NEXT_PUBLIC_API_URL,
+ * cuối cùng là Docker service name. Trên Vercel, set BACKEND_URL trong env vars
+ * (Settings → Environment Variables) trỏ tới https://api.cuongthai.com.
+ */
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://backend:3001";
 
 /**
  * POST /api/auth/oauth/token

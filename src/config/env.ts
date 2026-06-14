@@ -65,7 +65,11 @@ export const config = {
   aiChunkOverlap: parseInt(process.env.AI_CHUNK_OVERLAP || '200', 10),
   aiSimilarityThreshold: parseFloat(process.env.AI_SIMILARITY_THRESHOLD || '0.7'),
 
-  // Email
+  // Email (Resend — recommended)
+  resendApiKey: process.env.RESEND_API_KEY || '',
+  resendFromEmail: process.env.RESEND_FROM_EMAIL || 'CuongHoangDev <noreply@cuonghoangdev.com>',
+
+  // Legacy SMTP (Gmail fallback)
   smtpHost: process.env.SMTP_HOST || 'smtp.gmail.com',
   smtpPort: parseInt(process.env.SMTP_PORT || '587', 10),
   smtpUser: process.env.SMTP_USER || '',

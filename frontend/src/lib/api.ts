@@ -51,6 +51,20 @@ export function getFriendlyErrorMessage(error: ApiError): string {
     if (status === 429) return 'Too many requests. Please wait a moment.';
     if (status >= 500) return 'Server error. Please try again later.';
   }
+
+  // Backend-specific error codes
+  if (error.response?.data?.code) {
+    const code = error.response.data.code;
+    if (code === 'ACCOUNT_LOCKED') {
+      return 'Tài khoản bị tạm khoá do nhập sai mật khẩu nhiều lần. Vui lòng đợi 15 phút hoặc đặt lại mật khẩu.';
+    }
+    if (code === 'EMAIL_NOT_VERIFIED') {
+      return 'Email chưa được xác thực. Vui lòng kiểm tra hộp thư và click link xác thực.';
+    }
+    if (code === 'WEAK_PASSWORD') {
+      return 'Mật khẩu chưa đủ mạnh. Yêu cầu: tối thiểu 12 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt.';
+    }
+  }
   if (error.code === 'ECONNABORTED') {
     return 'Request timed out. Please check your connection.';
   }
@@ -123,6 +137,12 @@ export const authApi = {
 
   resetPassword: (token: string, newPassword: string) =>
     api.post('/auth/reset-password', { token, newPassword }),
+
+  verifyEmail: (token: string) =>
+    api.post('/auth/verify-email', { token }),
+
+  resendVerification: (email: string) =>
+    api.post('/auth/resend-verification', { email }),
 };
 
 // File Upload API

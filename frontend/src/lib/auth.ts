@@ -3,6 +3,31 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import type { NextAuthConfig } from "next-auth";
 
+/* ─── OAuth env validation (fail-fast khi user click sign-in) ──────────
+ * Trước đây: `clientId: process.env.GOOGLE_CLIENT_ID ?? ""` — khi deploy thiếu
+ * env, URL OAuth vẫn build được nhưng thiếu `client_id` → Google trả 400,
+ * GitHub trả 404, user thấy lỗi "invalid_request" không rõ nguyên nhân.
+ *
+ * Bây giờ: provider CHỈ được khởi tạo nếu env tồn tại. Nếu thiếu, callback
+ * `signIn` sẽ từ chối và trả lỗi rõ ràng cho user. Log cảnh báo ở startup.
+ */
+function warnMissingEnv(name: string): void {
+  if (!process.env[name] || process.env[name]!.trim() === '') {
+    // eslint-disable-next-line no-console
+    console.error(
+      `[nextauth] Missing required env var: ${name}. ` +
+      `OAuth provider sẽ fail khi user click sign-in. ` +
+      `Set trong Vercel dashboard (Settings → Environment Variables) hoặc .env.local.`
+    );
+  }
+}
+
+warnMissingEnv('GOOGLE_CLIENT_ID');
+warnMissingEnv('GOOGLE_CLIENT_SECRET');
+warnMissingEnv('GITHUB_CLIENT_ID');
+warnMissingEnv('GITHUB_CLIENT_SECRET');
+warnMissingEnv('AUTH_SECRET');
+
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 /**
@@ -29,13 +54,57 @@ export const authConfig: NextAuthConfig = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      authorization: {
+        params: {
+          prompt: "select_account",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID ?? "",
       clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
+      authorization: {
+        params: { scope: "read:user user:email" },
+      },
     }),
   ],
   callbacks: {
+    /**
+     * signIn() chạy TRƯỚC khi NextAuth tạo session — dùng để chặn OAuth khi env
+     * chưa được cấu hình đúng. Trước đây thiếu check này, user click Google →
+     * redirect sang Google → Google trả 400 vì client_id rỗng.
+     */
+    async signIn({ account, profile }) {
+      if (!account || account.provider === "credentials") return true;
+
+      // Block ngay nếu OAuth secret chưa set
+      if (account.provider === "google") {
+        if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+          throw new Error(
+            "Google OAuth chưa được cấu hình. Vui lòng liên hệ admin."
+          );
+        }
+      }
+      if (account.provider === "github") {
+        if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+          throw new Error(
+            "GitHub OAuth chưa được cấu hình. Vui lòng liên hệ admin."
+          );
+        }
+      }
+
+      // Sanity check: email phải có
+      if (!profile?.email) {
+        throw new Error(
+          `Cannot sign in with ${account.provider}: no email returned. ` +
+          `Make sure ${account.provider} account has a verified email.`
+        );
+      }
+
+      return true;
+    },
     /**
      * jwt() is called on EVERY sign-in AND on every token refresh.
      * We ALWAYS fetch the role from the backend DB — never trust the cached token role.

@@ -40,6 +40,21 @@ model User {
   accountNonLocked      Boolean @default(true) @map("account_non_locked")
   credentialsNonExpired Boolean @default(true) @map("credentials_non_expired")
 
+  // ─── Account security (Giai đoạn 1 — bảo mật cao) ────────────────────
+  // Email verification
+  emailVerified           Boolean   @default(false) @map("email_verified")
+  emailVerifiedAt         DateTime? @map("email_verified_at")
+
+  // Account lockout (sau 5 lần nhập sai → khoá 15 phút)
+  failedLoginCount        Int       @default(0) @map("failed_login_count")
+  lockoutUntil            DateTime? @map("lockout_until")
+  lastFailedLoginAt       DateTime? @map("last_failed_login_at")
+
+  // Login tracking (phát hiện thiết bị lạ)
+  lastLoginAt             DateTime? @map("last_login_at")
+  lastLoginIp             String?   @map("last_login_ip") @db.VarChar(64)
+  lastLoginUserAgent      String?   @map("last_login_user_agent") @db.VarChar(500)
+
   provider   String? @db.VarChar(50)
   providerId String? @map("provider_id") @db.VarChar(255)
 
@@ -56,6 +71,7 @@ model User {
   musicPlaylists        MusicPlaylist[]
   fileAttachments       FileAttachment[]
   passwordResetTokens   PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
   blogComments          Comment[]
   devPostComments       PostComment[]
   courseReviews         CourseReview[]
@@ -109,6 +125,22 @@ model PasswordResetToken {
   @@index([token], name: "idx_password_reset_tokens_token")
   @@index([userId], name: "idx_password_reset_tokens_user_id")
   @@map("password_reset_tokens")
+}
+
+model EmailVerificationToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  email     String   @db.VarChar(100)
+  token     String   @unique(map: "uk_email_verification_token") @db.VarChar(255)
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token], name: "idx_email_verification_tokens_token")
+  @@index([userId], name: "idx_email_verification_tokens_user_id")
+  @@map("email_verification_tokens")
 }
 
 // ============================================================

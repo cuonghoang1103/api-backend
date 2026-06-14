@@ -67,13 +67,23 @@ function LoginForm() {
       const loginData = await loginRes.json();
 
       if (!loginRes.ok || !loginData.success) {
-        const errorMsg = loginData.message || (
-          loginRes.status === 429
+        const errorCode = loginData.code;
+        const errorMsg =
+          loginData.message ||
+          (loginRes.status === 429
             ? 'Too many login attempts. Please wait a moment and try again.'
-            : 'Incorrect username or password.'
-        );
+            : 'Incorrect username or password.');
+
         setBackendError(errorMsg);
         toast.error(errorMsg);
+
+        // Nếu email chưa xác thực → chuyển sang trang gửi lại verification
+        if (errorCode === 'EMAIL_NOT_VERIFIED') {
+          const email = loginData.data?.email || data.username;
+          setTimeout(() => {
+            router.push(`/verify-email-prompt?email=${encodeURIComponent(email)}`);
+          }, 1500);
+        }
         return;
       }
 

@@ -24,8 +24,12 @@ const registerSchema = z
     fullName: z.string().optional(),
     password: z
       .string()
-      .min(6, 'Password must be at least 6 characters')
-      .max(100, 'Password max 100 characters'),
+      .min(12, 'Password must be at least 12 characters')
+      .max(100, 'Password max 100 characters')
+      .regex(/[A-Z]/, 'Password must contain at least 1 uppercase letter')
+      .regex(/[a-z]/, 'Password must contain at least 1 lowercase letter')
+      .regex(/[0-9]/, 'Password must contain at least 1 number')
+      .regex(/[^A-Za-z0-9]/, 'Password must contain at least 1 special character'),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -41,6 +45,7 @@ export default function RegisterPage() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [backendError, setBackendError] = useState('');
+  const [registeredEmail, setRegisteredEmail] = useState('');
 
   const {
     register,
@@ -55,10 +60,14 @@ export default function RegisterPage() {
   const password = watch('password');
 
   const passwordChecks = [
-    { label: 'At least 6 characters', ok: !!(password && password.length >= 6) },
-    { label: 'Contains uppercase letter', ok: !!(password && /[A-Z]/.test(password)) },
-    { label: 'Contains a number', ok: !!(password && /[0-9]/.test(password)) },
+    { label: 'At least 12 characters', ok: !!(password && password.length >= 12) },
+    { label: 'Contains uppercase letter (A-Z)', ok: !!(password && /[A-Z]/.test(password)) },
+    { label: 'Contains lowercase letter (a-z)', ok: !!(password && /[a-z]/.test(password)) },
+    { label: 'Contains a number (0-9)', ok: !!(password && /[0-9]/.test(password)) },
+    { label: 'Contains a special character (!@#$...)', ok: !!(password && /[^A-Za-z0-9]/.test(password)) },
   ];
+
+  const allChecksPassed = passwordChecks.every((c) => c.ok);
 
   const onSubmit = async (data: RegisterForm) => {
     setIsLoading(true);
@@ -70,8 +79,8 @@ export default function RegisterPage() {
         password: data.password,
         fullName: data.fullName || undefined,
       });
-      toast.success('Account created! Please sign in.');
-      router.push('/login');
+      setRegisteredEmail(data.email);
+      toast.success('Account created! Check your email to verify.');
     } catch (err: unknown) {
       const error = err as ApiError;
       const msg = error.userFriendlyMessage || 'Something went wrong. Please try again.';
@@ -81,6 +90,62 @@ export default function RegisterPage() {
       setIsLoading(false);
     }
   };
+
+  // ─── After successful registration: show email-verification prompt ───
+  if (registeredEmail) {
+    return (
+      <div className="min-h-screen bg-darkbg flex items-center justify-center px-4 py-12">
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-violet/10 rounded-full blur-[150px]" />
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative w-full max-w-md bg-darkcard border border-darkborder rounded-2xl p-8 text-center"
+        >
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/10 flex items-center justify-center">
+            <CheckCircle2 className="w-8 h-8 text-green-500" />
+          </div>
+          <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">
+            Kiểm tra email của bạn
+          </h2>
+          <p className="text-text-secondary mb-4">
+            Chúng tôi đã gửi link xác thực đến:
+            <br />
+            <strong className="text-text-primary">{registeredEmail}</strong>
+          </p>
+          <p className="text-text-muted text-sm mb-6">
+            Click link trong email để kích hoạt tài khoản. Link có hiệu lực trong <strong>24 giờ</strong>.
+            <br />
+            (Nếu không thấy, hãy kiểm tra thư mục spam.)
+          </p>
+          <div className="space-y-3">
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  await authApi.resendVerification(registeredEmail);
+                  toast.success('Đã gửi lại email xác thực');
+                } catch {
+                  toast.error('Không thể gửi lại. Vui lòng thử sau.');
+                }
+              }}
+              className="w-full py-2.5 rounded-xl border border-darkborder text-text-secondary hover:bg-white/5 text-sm transition-colors"
+            >
+              Gửi lại email xác thực
+            </button>
+            <Link
+              href="/login"
+              className="block w-full py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold text-sm"
+            >
+              Quay lại trang đăng nhập
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-darkbg flex items-center justify-center px-4 py-12">
@@ -267,9 +332,9 @@ export default function RegisterPage() {
             {/* Submit */}
             <motion.button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !allChecksPassed}
               whileTap={{ scale: isLoading ? 1 : 0.98 }}
-              className="w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>

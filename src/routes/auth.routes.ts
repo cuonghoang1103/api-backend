@@ -18,7 +18,10 @@ router.post(
   async (req: Request, res: Response<ApiResponse<AuthResponse>>, next: NextFunction) => {
     try {
       const { username, password } = req.body;
-      const result = await authService.login(username, password);
+      const result = await authService.login(username, password, {
+        ip: req.ip,
+        userAgent: req.headers['user-agent'],
+      });
 
       res.cookie('backend_token', result.token, {
         httpOnly: true,
@@ -67,6 +70,40 @@ router.post(
   },
 );
 
+// ─── POST /api/v1/auth/verify-email ─────────────────────
+router.post(
+  '/verify-email',
+  [body('token').notEmpty().withMessage('Token is required')],
+  validate,
+  async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
+    try {
+      await authService.verifyEmail(req.body.token);
+      res.json({ success: true, message: 'Email đã được xác thực. Bạn có thể đăng nhập ngay.' });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ─── POST /api/v1/auth/resend-verification ──────────────
+router.post(
+  '/resend-verification',
+  [body('email').isEmail().withMessage('Valid email is required')],
+  validate,
+  async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
+    try {
+      const result = await authService.resendVerificationEmail(req.body.email);
+      // Always return the same response to prevent email enumeration
+      res.json({
+        success: true,
+        message: 'Nếu email tồn tại và chưa được xác thực, chúng tôi đã gửi link xác thực mới.',
+        data: { sent: result.sent },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 // ─── POST /api/v1/auth/oauth/register ───────────────────
 router.post(
   '/oauth/register',

@@ -139,7 +139,7 @@ export default function NowPlayingPage() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col min-h-screen">
+      <div className="relative z-10 flex flex-col min-h-screen pt-16">
         {/* Header */}
         <div
           className="px-6 py-4"

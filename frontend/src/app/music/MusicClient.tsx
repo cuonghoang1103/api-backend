@@ -78,11 +78,32 @@ export default function CyberMusicPage() {
   // TanStack Query — replaces manual fetch with caching
   const { data, isLoading, isError, refetch, dataUpdatedAt } = useTracks({ size: 100 });
 
-  // Sync TanStack Query results → Zustand store (only on real data changes)
+  // Sync TanStack Query results → Zustand store.
+  //
+  // CRITICAL: this must NOT clobber the current playback state when the
+  // user navigates back to /music. The TanStack Query cache is reused
+  // across mounts, so `data` is a NEW object reference on every render
+  // (because of `dataUpdatedAt`). Without a guard, `setTracks` would
+  // fire on every page revisit, producing a fresh `currentTrack` object
+  // that breaks the `===` reference check inside MusicAudioController
+  // and forces the audio element to re-load from time 0.
+  //
+  // We only call `setTracks` when the underlying track list is actually
+  // different from what the store already has (compared by id + length).
   useEffect(() => {
     if (!isMounted) return;
-    if (!data?.data) return;
-    setTracks(data.data);
+    const newTracks = data?.data;
+    if (!newTracks) return;
+
+    const currentTracks = useMusicStore.getState().tracks;
+    if (currentTracks.length === newTracks.length) {
+      let same = true;
+      for (let i = 0; i < newTracks.length; i++) {
+        if (currentTracks[i]?.id !== newTracks[i]?.id) { same = false; break; }
+      }
+      if (same) return; // Skip — no real change, keep current playback state
+    }
+    setTracks(newTracks);
   }, [data, isMounted, setTracks]);
 
   useEffect(() => { setIsMounted(true); }, []);

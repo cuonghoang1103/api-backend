@@ -29,7 +29,7 @@
  * ============================================================
  */
 
-import { Router, type Response } from 'express';
+import { Router, type Response, type NextFunction } from 'express';
 import multer from 'multer';
 
 import { musicService } from '../services/music.service.js';
@@ -913,149 +913,170 @@ router.post(
 );
 
 // ════════════════════════════════════════════════════════════════
-// GET /api/v1/music/admin/youtube-search
-// Search YouTube for music videos
+// GET /api/v1/music/youtube-search (PUBLIC — anyone can search)
+// Used by the in-app search bar so guests and regular users get the
+// same experience as admins. Result is metadata only — playback for
+// YouTube tracks still happens client-side (no DB row created).
+// ════════════════════════════════════════════════════════════════
+router.get(
+  '/youtube-search',
+  optionalAuth,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    return handleYouTubeSearch(req, res, next);
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/music/admin/youtube-search (ADMIN — kept for back-compat)
+// Functionally identical to the public route, but reserved as a
+// separate path so we can enrich admin-only fields later (e.g.
+// private tracks, import-into-library action).
 // ════════════════════════════════════════════════════════════════
 router.get(
   '/admin/youtube-search',
   authenticate,
   async (req: any, res: Response<ApiResponse>, next) => {
-    try {
-      const { q } = req.query as { q?: string };
-
-      if (!q?.trim()) {
-        throw new AppError('Search query is required', 400, 'MISSING_QUERY');
-      }
-
-      const apiKey = config.youtubeApiKey;
-      if (!apiKey) {
-        throw new AppError(
-          'YouTube API key is not configured. Set YOUTUBE_API_KEY in environment.',
-          503,
-          'YOUTUBE_NOT_CONFIGURED',
-        );
-      }
-
-      const query = q.trim();
-
-      // Step 1: Search YouTube for the music video
-      const searchUrl = new URL('https://www.googleapis.com/youtube/v3/search');
-      searchUrl.searchParams.set('part', 'snippet');
-      searchUrl.searchParams.set('q', query);
-      searchUrl.searchParams.set('type', 'video');
-      searchUrl.searchParams.set('videoCategoryId', '10'); // Music category
-      searchUrl.searchParams.set('maxResults', '20');
-      searchUrl.searchParams.set('key', apiKey);
-
-      const searchRes = await fetch(searchUrl.toString());
-      if (!searchRes.ok) {
-        const errText = await searchRes.text();
-        console.error('[YouTube Search] Search API error:', errText);
-        throw new AppError('YouTube search failed', 502, 'YOUTUBE_ERROR');
-      }
-      const searchData = await searchRes.json() as {
-        items?: Array<{ id: { videoId: string }; snippet: { title: string; channelTitle: string; thumbnails: { medium?: { url?: string }; high?: { url?: string } } } }>;
-        error?: { message?: string };
-      };
-
-      if (searchData.error?.message) {
-        throw new AppError(`YouTube API error: ${searchData.error.message}`, 502, 'YOUTUBE_ERROR');
-      }
-
-      const items = searchData.items || [];
-      if (items.length === 0) {
-        res.json({ success: true, data: [] });
-        return;
-      }
-
-      // Step 2: Get video durations
-      const videoIds = items.map((item) => item.id.videoId).filter(Boolean);
-      const videoDetailsUrl = new URL('https://www.googleapis.com/youtube/v3/videos');
-      videoDetailsUrl.searchParams.set('part', 'contentDetails');
-      videoDetailsUrl.searchParams.set('id', videoIds.join(','));
-      videoDetailsUrl.searchParams.set('key', apiKey);
-
-      const detailsRes = await fetch(videoDetailsUrl.toString());
-      let durationMap: Record<string, string> = {};
-      if (detailsRes.ok) {
-        const detailsData = await detailsRes.json() as {
-          items?: Array<{ id: string; contentDetails: { duration?: string } }>;
-        };
-        if (detailsData.items) {
-          for (const item of detailsData.items) {
-            if (item.contentDetails?.duration) {
-              durationMap[item.id] = item.contentDetails.duration;
-            }
-          }
-        }
-      }
-
-      // Step 3: Build result array
-      const results = items.map((item) => {
-        const snippet = item.snippet;
-        const videoId = item.id.videoId;
-        const rawTitle = snippet.title || '';
-
-        // Try to extract artist - title pattern
-        let artistName = snippet.channelTitle || 'Unknown Artist';
-        let trackTitle = rawTitle;
-
-        // Common separators: " - ", " — ", " | "
-        const separators = [' - ', ' — ', ' | ', ' – ', ' // '];
-        for (const sep of separators) {
-          if (rawTitle.includes(sep)) {
-            const parts = rawTitle.split(sep);
-            // Usually artist comes first, title comes second
-            artistName = parts[0].trim();
-            trackTitle = parts.slice(1).join(sep).trim();
-            break;
-          }
-        }
-
-        // Clean up "Official Video", "Audio", "Lyric Video" etc.
-        const junkPatterns = [
-          /\(Official (?:Music )?Video\)/i,
-          /\(Official (?:Music )?Audio\)/i,
-          /\(Lyric (?:Video|Audio)\)/i,
-          /\[Official (?:Music )?Video\]/i,
-          /\[Official (?:Music )?Audio\]/i,
-          /\[Lyric (?:Video|Audio)\]/i,
-          /\[Official\]/i,
-          /\[Audio\]/i,
-          /\[Video\]/i,
-          /\(HD\)/i,
-          /\(HQ\)/i,
-          /\[HD\]/i,
-          /\[HQ\]/i,
-        ];
-        for (const pat of junkPatterns) {
-          trackTitle = trackTitle.replace(pat, '').trim();
-        }
-
-        const thumbnail = snippet.thumbnails?.medium?.url
-          || snippet.thumbnails?.high?.url
-          || '';
-
-        const rawDuration = durationMap[videoId] || '';
-        const duration = parseYouTubeDuration(rawDuration);
-
-        return {
-          id: videoId,
-          title: trackTitle,
-          artist: artistName,
-          thumbnail,
-          videoId,
-          durationSeconds: duration,
-          duration: formatDuration(duration),
-        };
-      });
-
-      res.json({ success: true, data: results });
-    } catch (error) {
-      next(error);
-    }
+    return handleYouTubeSearch(req, res, next);
   },
 );
+
+// ─── Shared YouTube search handler ────────────────────────────
+async function handleYouTubeSearch(
+  req: any,
+  res: Response<ApiResponse>,
+  next: NextFunction,
+): Promise<void> {
+  try {
+    const { q } = req.query as { q?: string };
+
+    if (!q?.trim()) {
+      throw new AppError('Search query is required', 400, 'MISSING_QUERY');
+    }
+
+    const apiKey = config.youtubeApiKey;
+    if (!apiKey) {
+      throw new AppError(
+        'YouTube API key is not configured. Set YOUTUBE_API_KEY in environment.',
+        503,
+        'YOUTUBE_NOT_CONFIGURED',
+      );
+    }
+
+    const query = q.trim();
+
+    // Step 1: Search YouTube for the music video
+    const searchUrl = new URL('https://www.googleapis.com/youtube/v3/search');
+    searchUrl.searchParams.set('part', 'snippet');
+    searchUrl.searchParams.set('q', query);
+    searchUrl.searchParams.set('type', 'video');
+    searchUrl.searchParams.set('videoCategoryId', '10'); // Music category
+    searchUrl.searchParams.set('maxResults', '20');
+    searchUrl.searchParams.set('key', apiKey);
+
+    const searchRes = await fetch(searchUrl.toString());
+    if (!searchRes.ok) {
+      const errText = await searchRes.text();
+      console.error('[YouTube Search] Search API error:', errText);
+      throw new AppError('YouTube search failed', 502, 'YOUTUBE_ERROR');
+    }
+    const searchData = (await searchRes.json()) as {
+      items?: Array<{ id: { videoId: string }; snippet: { title: string; channelTitle: string; thumbnails: { medium?: { url?: string }; high?: { url?: string } } } }>;
+      error?: { message?: string };
+    };
+
+    if (searchData.error?.message) {
+      throw new AppError(`YouTube API error: ${searchData.error.message}`, 502, 'YOUTUBE_ERROR');
+    }
+
+    const items = searchData.items || [];
+    if (items.length === 0) {
+      res.json({ success: true, data: [] });
+      return;
+    }
+
+    // Step 2: Get video durations
+    const videoIds = items.map((item) => item.id.videoId).filter(Boolean);
+    const videoDetailsUrl = new URL('https://www.googleapis.com/youtube/v3/videos');
+    videoDetailsUrl.searchParams.set('part', 'contentDetails');
+    videoDetailsUrl.searchParams.set('id', videoIds.join(','));
+    videoDetailsUrl.searchParams.set('key', apiKey);
+
+    const detailsRes = await fetch(videoDetailsUrl.toString());
+    const durationMap: Record<string, string> = {};
+    if (detailsRes.ok) {
+      const detailsData = (await detailsRes.json()) as {
+        items?: Array<{ id: string; contentDetails: { duration?: string } }>;
+      };
+      if (detailsData.items) {
+        for (const item of detailsData.items) {
+          if (item.contentDetails?.duration) {
+            durationMap[item.id] = item.contentDetails.duration;
+          }
+        }
+      }
+    }
+
+    // Step 3: Build result array
+    const results = items.map((item) => {
+      const snippet = item.snippet;
+      const videoId = item.id.videoId;
+      const rawTitle = snippet.title || '';
+
+      // Try to extract artist - title pattern
+      let artistName = snippet.channelTitle || 'Unknown Artist';
+      let trackTitle = rawTitle;
+
+      // Common separators: " - ", " — ", " | "
+      const separators = [' - ', ' — ', ' | ', ' – ', ' // '];
+      for (const sep of separators) {
+        if (rawTitle.includes(sep)) {
+          const parts = rawTitle.split(sep);
+          // Usually artist comes first, title comes second
+          artistName = parts[0].trim();
+          trackTitle = parts.slice(1).join(sep).trim();
+          break;
+        }
+      }
+
+      // Clean up "Official Video", "Audio", "Lyric Video" etc.
+      const junkPatterns = [
+        /\(Official (?:Music )?Video\)/i,
+        /\(Official (?:Music )?Audio\)/i,
+        /\(Lyric (?:Video|Audio)\)/i,
+        /\[Official (?:Music )?Video\]/i,
+        /\[Official (?:Music )?Audio\]/i,
+        /\[Lyric (?:Video|Audio)\]/i,
+        /\(Audio\)/i,
+        /\[Audio\]/i,
+      ];
+      for (const pat of junkPatterns) {
+        trackTitle = trackTitle.replace(pat, '').trim();
+      }
+
+      const thumbnail =
+        snippet.thumbnails?.medium?.url || snippet.thumbnails?.high?.url || '';
+
+      const rawDuration = durationMap[videoId] || '';
+      const duration = parseYouTubeDuration(rawDuration);
+
+      return {
+        id: videoId,
+        title: trackTitle,
+        artist: artistName,
+        thumbnail,
+        videoId,
+        durationSeconds: duration,
+        duration: formatDuration(duration),
+      };
+    });
+
+    res.json({ success: true, data: results });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 
 function parseYouTubeDuration(iso: string): number {
   if (!iso) return 0;

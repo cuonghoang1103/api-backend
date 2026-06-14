@@ -182,8 +182,14 @@ export function useMusicHistory() {
 }
 
 /**
- * Search YouTube for music videos (authenticated).
+ * Search YouTube for music videos (public — works for guests, users, and admins).
  * Returns parsed results with artist/title extraction and durations.
+ *
+ * Backend route:
+ *   GET /api/v1/music/youtube-search?q=...   (public, optionalAuth)
+ *
+ * The /admin/youtube-search variant still exists for back-compat but is no
+ * longer called by the frontend.
  */
 export function useYouTubeSearch(query: string, enabled = true) {
   return useQuery({
@@ -191,7 +197,7 @@ export function useYouTubeSearch(query: string, enabled = true) {
     queryFn: () => {
       if (!query.trim()) return Promise.resolve({ success: true, data: [] } as YouTubeSearchResponse);
       return fetchJson<YouTubeSearchResponse>(
-        `/api/v1/music/admin/youtube-search?q=${encodeURIComponent(query.trim())}`,
+        `/api/v1/music/youtube-search?q=${encodeURIComponent(query.trim())}`,
       );
     },
     enabled: enabled && query.trim().length >= 2,

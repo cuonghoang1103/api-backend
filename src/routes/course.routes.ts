@@ -435,13 +435,14 @@ router.get('/admin/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, r
   } catch (error) { next(error); }
 });
 
-router.get('/semester/:semesterId', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+router.get('/semester/:semesterId', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
     const semesterId = parseInt(req.params.semesterId, 10);
-    // Admins can opt-in to see DRAFT courses (e.g. while editing in
-    // /admin/academy) by passing ?includeDraft=true. The public
-    // /academy page never sets this, so it still only ever sees
-    // PUBLISHED courses.
+    // Public access: any user (including guests) can see PUBLISHED courses.
+    // Admins / course owners can opt-in to see DRAFT courses (e.g. while
+    // editing in /admin/academy) by passing ?includeDraft=true. The public
+    // /academy page never sets this, so it still only ever sees PUBLISHED
+    // courses.
     const includeDraft = String(req.query.includeDraft || '').toLowerCase() === 'true';
     const courses = await prisma.course.findMany({
       where: {

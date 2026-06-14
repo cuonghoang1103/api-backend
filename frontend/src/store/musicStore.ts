@@ -195,7 +195,24 @@ export const useMusicStore = create<MusicState>()((set, get) => {
 
     setTracks: (tracks) => {
       const p = loadPersisted();
-      const { savedAllTracks, currentTrack } = get();
+      const { savedAllTracks, currentTrack, tracks: existingTracks } = get();
+
+      // ── No-op guard ───────────────────────────────────────────────
+      // If the new tracks list is identical to what the store already
+      // has (by id + length), skip the entire update. This prevents
+      // re-creating `currentTrack` / `queue` / etc. on every page
+      // navigation, which would break `===` reference checks inside
+      // MusicAudioController and force a reload of the audio element
+      // (the user reported: "từ trang khác ấn về lại trang nhạc thì
+      // nhạc nó phát lại từ đầu").
+      if (existingTracks.length === tracks.length) {
+        let same = true;
+        for (let i = 0; i < tracks.length; i++) {
+          if (existingTracks[i]?.id !== tracks[i]?.id) { same = false; break; }
+        }
+        if (same) return;
+      }
+
       const first = tracks[0] || null;
       let restored: Track | null = null;
       let restoredIdx = -1;

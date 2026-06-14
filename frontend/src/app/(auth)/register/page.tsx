@@ -75,7 +75,11 @@ export default function RegisterPage() {
   ];
 
   const allChecksPassed = passwordChecks.every((c) => c.ok);
-  const captchaReady = !captchaEnabled || captchaToken.length > 0;
+  // CAPTCHA is soft on this route — backend accepts a missing token
+  // and relies on the email-OTP step for the real anti-abuse check.
+  // Don't gate the submit button on the widget (which may never load
+  // on networks blocking challenges.cloudflare.com).
+  const captchaReady = true;
 
   // Fetch CAPTCHA config once on mount. If disabled on backend, we just
   // skip the widget entirely so the form still works in dev / local.

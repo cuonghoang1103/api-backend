@@ -1,5 +1,25 @@
 /**
- * CAPTCHA verification middleware.
+ * Soft captcha middleware for routes where a Turnstile token is OPTIONAL.
+ *
+ * Why soft mode?
+ *   The user-flow for /register /forgot-password is: user has no
+ *   account yet → can't be matched against the DB → captchaMiddleware
+ *   would always 403 "CAPTCHA verification required" on a brand new
+ *   identity. That's especially painful when the Turnstile widget
+ *   itself fails to render (CDN blocked, browser extension stripping
+ *   3rd-party scripts, mobile data saver) — the user sees a 403 with
+ *   no widget to click and no way to recover.
+ *
+ *   For these routes the email-OTP step is the real security gate.
+ *   This middleware:
+ *     • If a `cf-turnstile-response` token is present → verify it
+ *       (normal strict check). Invalid token → 403.
+ *     • If no token → accept the request. We log it so abuse is
+ *       still visible to ops.
+ *
+ * `required` mode (the original captchaMiddleware) stays available for
+ * flows that genuinely need a challenge on every request (e.g. a
+ * public unauthenticated form with no other anti-abuse layer).
  *
  * Reads the Turnstile token from `cf-turnstile-response` header or
  * `cf-turnstile-response` body field, verifies it via Cloudflare, and
@@ -127,6 +147,57 @@ export async function captchaMiddleware(
   const result = await verifyTurnstileToken(token, req.ip);
 
   if (!result.success) {
+    next(new AppError('CAPTCHA verification failed', 403, 'CAPTCHA_INVALID'));
+    return;
+  }
+
+  next();
+}
+
+/**
+ * Soft variant — see file header. Used on /register and
+ * /forgot-password where email-OTP is the actual security gate.
+ */
+export async function softCaptchaMiddleware(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+): Promise<void> {
+  if (!process.env.TURNSTILE_SECRET_KEY) {
+    return next();
+  }
+  if (!captchaRequired()) {
+    return next();
+  }
+
+  // Bypass for admin/verified-user logins (login flow only — register
+  // has no account yet, so this lookup will normally return 'require').
+  if ((await shouldBypassCaptcha(req)) === 'bypass') {
+    return next();
+  }
+
+  const token =
+    (req.headers['cf-turnstile-response'] as string | undefined) ??
+    (typeof req.body === 'object' && req.body !== null
+      ? (req.body as Record<string, unknown>)['cf-turnstile-response']
+      : undefined);
+
+  if (!token || typeof token !== 'string' || token.length === 0) {
+    // Soft mode: missing token is OK — email-OTP is the real gate.
+    // Still log a warning so ops can see when many requests are
+    // skipping the challenge (could indicate bot pressure).
+    if (process.env.NODE_ENV !== 'test') {
+      // eslint-disable-next-line no-console
+      console.warn('[captcha] soft-mode: no Turnstile token on', req.path);
+    }
+    return next();
+  }
+
+  const result = await verifyTurnstileToken(token, req.ip);
+
+  if (!result.success) {
+    // A token WAS supplied but it's invalid — that's a real abuse
+    // signal, reject it.
     next(new AppError('CAPTCHA verification failed', 403, 'CAPTCHA_INVALID'));
     return;
   }

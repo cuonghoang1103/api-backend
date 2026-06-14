@@ -3,7 +3,7 @@ import { body } from 'express-validator';
 import { authService } from '../services/auth.service.js';
 import { validate } from '../middleware/validate.js';
 import { authenticate } from '../middleware/auth.js';
-import { captchaMiddleware } from '../middleware/captcha.js';
+import { captchaMiddleware, softCaptchaMiddleware } from '../middleware/captcha.js';
 import type { ApiResponse, AuthResponse } from '../types/index.js';
 
 const router = Router();
@@ -43,7 +43,10 @@ router.post(
 // ─── POST /api/v1/auth/register ──────────────────────────
 router.post(
   '/register',
-  captchaMiddleware,
+  // Soft captcha — email-OTP is the real security gate for new
+  // accounts. Hard captcha would block users whose Turnstile widget
+  // can't load (CDN blocked, browser extension, mobile data saver).
+  softCaptchaMiddleware,
   [
     body('username')
       .isLength({ min: 3, max: 50 })

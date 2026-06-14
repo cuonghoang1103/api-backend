@@ -94,7 +94,11 @@ export default function CourseDetailPage() {
         console.error('[course-detail] Fetch error', err?.response?.status, err?.message);
         toast.error('Course not found');
       } finally {
+        // eslint-disable-next-line no-console
+        console.log('[course-detail] finally: setLoading(false)');
         setLoading(false);
+        // eslint-disable-next-line no-console
+        console.log('[course-detail] finally: setLoading(false) DONE');
       }
     };
     fetch();
@@ -151,12 +155,16 @@ export default function CourseDetailPage() {
   }
 
   // eslint-disable-next-line no-console
-  console.log('[course-detail] RENDER → content branch', { courseId: course.id, sections: course.sections?.length });
+  console.log('[course-detail] RENDER → content branch', { courseId: course.id, sections: course.sections?.length, whatYouLearnType: typeof course.whatYouLearn, requirementsType: typeof course.requirements });
 
   const hasDiscount = course.discountPrice && course.discountPrice > 0;
   const canWatch = course.isEnrolled || course.isFree;
+  // eslint-disable-next-line no-console
+  console.log('[course-detail] before split', { hasDiscount, canWatch, hasWhat: !!course.whatYouLearn, hasReq: !!course.requirements });
   const whatYouLearnList = course.whatYouLearn ? course.whatYouLearn.split('\n').filter(Boolean) : [];
   const requirementsList = course.requirements ? course.requirements.split('\n').filter(Boolean) : [];
+  // eslint-disable-next-line no-console
+  console.log('[course-detail] after split', { whatCount: whatYouLearnList.length, reqCount: requirementsList.length });
 
   return (
     <div className="min-h-screen bg-darkbg">

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { academyApi, adminCoursesApi } from '@/lib/api';
 import type { Semester, Course } from '@/types';
 import RichTextEditor from '@/components/admin/RichTextEditor';
+import LessonDocumentsManager from '@/components/admin/LessonDocumentsManager';
 import { toast } from 'sonner';
 
 interface LessonInfo {
@@ -22,6 +23,15 @@ interface LessonInfo {
   courseTitle: string;
   semesterName: string;
   courseCode: string;
+  documents: Array<{
+    id: number;
+    title: string;
+    fileUrl: string;
+    fileSizeBytes: number;
+    fileType?: string | null;
+    downloadCount: number;
+    createdAt: string;
+  }>;
 }
 
 const emptyLesson: LessonInfo = {
@@ -38,6 +48,7 @@ const emptyLesson: LessonInfo = {
   courseTitle: '',
   semesterName: '',
   courseCode: '',
+  documents: [],
 };
 
 export default function AdminLessonsPage() {
@@ -100,6 +111,7 @@ export default function AdminLessonsPage() {
           courseTitle: course.title,
           semesterName: course.semesterName || '',
           courseCode: course.courseCode || '',
+          documents: lesson.documents || [],
         });
       });
     });
@@ -304,9 +316,18 @@ export default function AdminLessonsPage() {
               <RichTextEditor
                 value={form.teachingNotes}
                 onChange={(value) => setForm((p) => ({ ...p, teachingNotes: value }))}
-                placeholder="Nội dung bài giảng, markdown được hỗ trợ..."
+                placeholder="Nội dung bài giảng. Có thể paste từ VSCode/Word/Google Docs — định dạng được giữ nguyên..."
               />
             </div>
+
+            {/* Documents — admin uploads materials (zip, doc, pdf…)
+                that students download from the /learn page. */}
+            {form.id > 0 && (
+              <LessonDocumentsManager
+                lessonId={form.id}
+                initialDocuments={form.documents}
+              />
+            )}
 
             {/* Slug & meta */}
             <div className="bg-darkcard border border-darkborder rounded-2xl p-6">

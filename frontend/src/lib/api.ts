@@ -434,6 +434,20 @@ export const coursesApi = {
     lastPositionSeconds?: number;
   }) => api.post(`/courses/${courseId}/progress`, data),
 
+  // Lesson documents — admin uploads, students download
+  uploadDocument: (lessonId: number, file: File, title?: string) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    if (title) fd.append('title', title);
+    return api.post(`/courses/lessons/${lessonId}/documents`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  deleteDocument: (documentId: number) =>
+    api.delete(`/courses/documents/${documentId}`),
+  downloadDocumentUrl: (documentId: number) =>
+    `/api/v1/courses/documents/${documentId}/download`,
+
   getMyCourses: (params?: {
     page?: number;
     size?: number;

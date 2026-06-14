@@ -1,10 +1,32 @@
 import { Router, Response } from 'express';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs/promises';
+import { v4 as uuidv4 } from 'uuid';
 import { prisma } from '../config/database.js';
 import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { config } from '../config/env.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
+
+// ─── Multer config for lesson document uploads ──────────────────────
+//
+// Lesson documents are auxiliary materials the instructor
+// attaches to a lesson (zip, doc, pdf, ...). Capped at 20 MB
+// per file as requested — anything larger belongs on a CDN
+// or a dedicated file service. We store on local disk under
+// `uploads/lesson-documents/<lessonId>/` and serve via
+// Nginx's existing /uploads/ proxy. The DB only holds the
+// metadata + URL.
+const documentUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 20 * 1024 * 1024, // 20 MB hard cap
+    files: 1,
+  },
+});
 
 function slugify(value: string): string {
   return value
@@ -1004,5 +1026,197 @@ router.post('/:id/progress', authenticate, async (req, res: Response<ApiResponse
     res.json({ success: true, data: progress });
   } catch (error) { next(error); }
 });
+
+// ════════════════════════════════════════════════════════════════
+// LESSON DOCUMENTS — admin uploads, students download
+// ════════════════════════════════════════════════════════════════
+//
+// Files the instructor attaches to a lesson: zip, doc, pdf, etc.
+// Capped at 20 MB per file. We don't stream-chunk — local disk
+// write is fast enough at this size and we want the upload to
+// commit atomically (the file is visible to students only
+// after the DB row is created, so a partial write leaves no
+// dangling rows).
+//
+// Storage layout:
+//   uploads/lesson-documents/<lessonId>/<timestamp>-<random>.<ext>
+// Served by the existing Nginx /uploads/ proxy.
+//
+// Why a separate table (CourseDocument) instead of reusing
+// the generic FileAttachment? Because:
+//   1. Each document tracks its own downloadCount per lesson
+//   2. Cascade-delete with the lesson (already in the schema)
+//   3. Students query documents via the lesson payload — no
+//      join through a generic file table needed
+// ────────────────────────────────────────────────────────────────
+
+/**
+ * POST /api/v1/courses/lessons/:lessonId/documents
+ *
+ * Admin-only. Multipart form-data with a single `file` field and
+ * a `title` field (used as the display name in the download list).
+ * Returns the persisted CourseDocument.
+ */
+router.post(
+  '/lessons/:lessonId/documents',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  documentUpload.single('file'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const lessonId = parseInt(req.params.lessonId, 10);
+      if (isNaN(lessonId)) {
+        throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
+      }
+      if (!req.file) {
+        throw new AppError('No file provided', 400, 'NO_FILE');
+      }
+      // The title field is optional — fall back to the
+      // original filename so the download list still reads
+      // sensibly when the admin uploads in bulk.
+      const title = (req.body?.title || req.file.originalname || '').toString().trim().slice(0, 255) || 'Document';
+
+      const lesson = await prisma.lesson.findUnique({
+        where: { id: lessonId },
+        select: { id: true },
+      });
+      if (!lesson) {
+        throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
+      }
+
+      const ext = path.extname(req.file.originalname || '').toLowerCase().slice(0, 16) || '';
+      const baseName = path
+        .basename(req.file.originalname || 'document', ext)
+        .replace(/[^a-z0-9-_]/gi, '-')
+        .toLowerCase()
+        .slice(0, 40) || 'document';
+      const timestamp = Date.now();
+      const random = uuidv4().split('-')[0];
+      const storedName = `${baseName}-${timestamp}-${random}${ext}`;
+
+      const relativeDir = `lesson-documents/${lessonId}`;
+      const relativePath = `${relativeDir}/${storedName}`;
+      const fullDir = path.join(config.uploadDir, relativeDir);
+      const fullPath = path.join(fullDir, storedName);
+
+      await fs.mkdir(fullDir, { recursive: true });
+      await fs.writeFile(fullPath, req.file.buffer);
+
+      // Public URL is served by the existing /uploads/ proxy
+      // (Nginx passes those straight to the backend).
+      const publicUrl = `/uploads/${relativePath.replace(/\\/g, '/')}`;
+
+      // Best-effort type detection from the extension when
+      // multer can't determine a content-type (it sometimes
+      // returns application/octet-stream for .docx etc.).
+      const fileType = req.file.mimetype && req.file.mimetype !== 'application/octet-stream'
+        ? req.file.mimetype
+        : ext.replace('.', '').toLowerCase() || null;
+
+      const document = await prisma.courseDocument.create({
+        data: {
+          lessonId,
+          title,
+          fileUrl: publicUrl,
+          fileSizeBytes: BigInt(req.file.size),
+          fileType,
+        },
+      });
+
+      res.status(201).json({
+        success: true,
+        data: {
+          id: document.id,
+          lessonId: document.lessonId,
+          title: document.title,
+          fileUrl: document.fileUrl,
+          fileSizeBytes: Number(document.fileSizeBytes),
+          fileType: document.fileType,
+          downloadCount: document.downloadCount,
+          createdAt: document.createdAt,
+        },
+        message: 'Document uploaded successfully',
+      });
+    } catch (error) { next(error); }
+  }
+);
+
+/**
+ * DELETE /api/v1/courses/documents/:id
+ *
+ * Admin-only. Soft-delete (isActive=false) keeps the row for
+ * audit but hides it from the lesson payload. Hard-removes the
+ * file from disk in the background; we don't block the response
+ * on fs.rm.
+ */
+router.delete(
+  '/documents/:id',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        throw new AppError('Invalid document ID', 400, 'INVALID_ID');
+      }
+      const document = await prisma.courseDocument.findUnique({ where: { id } });
+      if (!document) {
+        throw new AppError('Document not found', 404, 'NOT_FOUND');
+      }
+
+      await prisma.courseDocument.update({
+        where: { id },
+        data: { isActive: false },
+      });
+
+      // Best-effort disk cleanup. We don't await so the API
+      // responds fast and a slow disk never blocks the UI.
+      // Errors here are logged but not surfaced to the client.
+      if (document.fileUrl.startsWith('/uploads/')) {
+        const relativePath = document.fileUrl.replace(/^\/uploads\//, '');
+        const fullPath = path.join(config.uploadDir, relativePath);
+        fs.unlink(fullPath).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(`[lesson-documents] failed to remove file ${fullPath}:`, err.message);
+        });
+      }
+
+      res.json({ success: true, message: 'Document removed' });
+    } catch (error) { next(error); }
+  }
+);
+
+/**
+ * GET /api/v1/courses/documents/:id/download
+ *
+ * Authenticated students only (we have to gate this so a
+ * stranger can't scrape materials). Increments downloadCount
+ * and 302-redirects to the actual file URL. Sending a
+ * Content-Disposition: attachment header is left to Nginx
+ * (see nginx config for /uploads/).
+ */
+router.get(
+  '/documents/:id/download',
+  authenticate,
+  async (req, res: Response, next) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        throw new AppError('Invalid document ID', 400, 'INVALID_ID');
+      }
+      const document = await prisma.courseDocument.findUnique({ where: { id } });
+      if (!document || !document.isActive) {
+        throw new AppError('Document not found', 404, 'NOT_FOUND');
+      }
+      // Atomic increment so two students clicking at the
+      // same time don't both see the same count.
+      await prisma.courseDocument.update({
+        where: { id },
+        data: { downloadCount: { increment: 1 } },
+      });
+      res.redirect(302, document.fileUrl);
+    } catch (error) { next(error); }
+  }
+);
 
 export default router;

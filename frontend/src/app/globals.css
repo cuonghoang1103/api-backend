@@ -725,3 +725,172 @@ aside ::-webkit-scrollbar-thumb:hover {
   cursor: none !important;
 }
 
+/* ─── Rich content (Lesson Content / Teaching Notes) ─────────────────────────
+ * Used on the /learn page. Renders sanitized HTML produced by
+ * the TipTap editor in the admin. The blocks below preserve
+ * the editor's font sizes (h1–h4), inline color spans, and
+ * the VSCode-style code blocks. We do NOT depend on
+ * @tailwindcss/typography because that would force
+ * `.prose` colors we don't want in our dark theme.
+ * --------------------------------------------------------------------------- */
+.rich-content {
+  line-height: 1.7;
+}
+
+.rich-content > * + * {
+  margin-top: 0.9em;
+}
+
+.rich-content h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-top: 1.4em;
+  color: var(--text-primary);
+}
+
+.rich-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 1.3em;
+  color: var(--text-primary);
+}
+
+.rich-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-top: 1.2em;
+  color: var(--text-primary);
+}
+
+.rich-content h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 1.1em;
+  color: var(--text-primary);
+}
+
+.rich-content p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.rich-content a {
+  color: var(--neon-indigo);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  word-break: break-word;
+}
+
+.rich-content a:hover {
+  color: var(--neon-violet);
+}
+
+/* Code blocks — VSCode-ish dark background + monospace.
+ * Also covers `inline` `<code>` inside paragraphs. */
+.rich-content code {
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  font-size: 0.9em;
+  border-radius: 4px;
+  background: rgba(99, 102, 241, 0.12);
+  color: #e0e7ff;
+  padding: 1px 6px;
+}
+
+.rich-content pre {
+  background: #0d1117; /* VSCode dark+ */
+  color: #c9d1d9;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.rich-content pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+  border-radius: 0;
+}
+
+/* Highlight a few token-ish colors that we may get from
+ * pasted HTML or future server-side syntax highlighting. */
+.rich-content pre .tok-keyword,
+.rich-content pre .hljs-keyword { color: #ff7b72; }
+.rich-content pre .tok-string,
+.rich-content pre .hljs-string { color: #a5d6ff; }
+.rich-content pre .tok-number,
+.rich-content pre .hljs-number { color: #79c0ff; }
+.rich-content pre .tok-comment,
+.rich-content pre .hljs-comment { color: #8b949e; font-style: italic; }
+.rich-content pre .tok-function,
+.rich-content pre .hljs-function { color: #d2a8ff; }
+.rich-content pre .tok-type,
+.rich-content pre .hljs-type { color: #ffa657; }
+
+.rich-content ul,
+.rich-content ol {
+  padding-left: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.rich-content ul { list-style: disc; }
+.rich-content ol { list-style: decimal; }
+
+.rich-content li + li { margin-top: 0.35em; }
+
+.rich-content blockquote {
+  border-left: 3px solid var(--neon-violet);
+  padding: 0.4em 1em;
+  color: var(--text-secondary);
+  font-style: italic;
+  background: rgba(139, 92, 246, 0.06);
+  border-radius: 0 8px 8px 0;
+}
+
+.rich-content hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-color), transparent);
+  margin: 1.5em 0;
+}
+
+.rich-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.rich-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.rich-content th,
+.rich-content td {
+  border: 1px solid var(--border-color);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.rich-content th {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Inline color spans the editor emits (e.g. <span style="color:#...">).
+ * Nothing extra needed — `style="color:..."` is preserved by
+ * DOMPurify and inherited by the browser. We just make sure
+ * no parent rule wins specificity. */
+.rich-content span[style*="color"] {
+  /* keep the inline color, no override */
+}
+

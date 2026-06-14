@@ -22,6 +22,15 @@ function formatDuration(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
+function formatBytes(bytes: number): string {
+  if (!bytes) return '0 B';
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let v = bytes;
+  let i = 0;
+  while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
+  return `${v.toFixed(v >= 10 ? 0 : 1)} ${units[i]}`;
+}
+
 // Normalize a YouTube watch / share / short URL into the canonical
 // embed form so we can play it inside an <iframe> on the learn page.
 function toEmbedUrl(raw?: string): string {
@@ -40,6 +49,16 @@ interface FlatLesson {
   sectionTitle: string;
   sectionLocked: boolean;
   lesson: LessonDto;
+}
+
+// Backend (NestJS + Prisma) returns the nested detail object under
+// the key `details` (plural — matches the Prisma relation name).
+// Older API responses used `detail` (singular). To stay
+// forward-compatible with both shapes we read whichever is
+// present and treat them as the same object.
+function getLessonDetail(lesson: LessonDto): LessonDetail | undefined {
+  const anyLesson = lesson as any;
+  return anyLesson.details || lesson.detail;
 }
 
 interface LearnPageClientProps {
@@ -298,6 +317,13 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     return null;
   }
 
+  // Derive the nested detail object once. The backend returns it
+  // under either `details` (current Prisma relation name) or
+  // `detail` (legacy alias) — read whichever is present so the
+  // Source code / Teaching notes / Video sections all populate
+  // even when the API shape flips between deploys.
+  const lessonDetail = currentLesson ? getLessonDetail(currentLesson) : undefined;
+
   const overallProgress = course.totalLessons > 0
     ? Math.round((progress.filter(p => p.isCompleted).length / course.totalLessons) * 100)
     : 0;
@@ -409,11 +435,11 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
               {/* Video — supports YouTube embed + direct file (mp4/webm)
                   based on videoPlatform. Falls back to a clickable
                   thumbnail if we don't have a playble URL at all. */}
-              {(currentLesson.detail?.videoUrl || currentLesson.videoUrl) && (
+              {(lessonDetail?.videoUrl || currentLesson.videoUrl) && (
                 <div className="aspect-video bg-black rounded-2xl overflow-hidden mb-6">
                   {(() => {
-                    const platform = currentLesson.detail?.videoPlatform || currentLesson.videoPlatform || 'EMBED';
-                    const url = currentLesson.detail?.videoUrl || currentLesson.videoUrl || '';
+                    const platform = lessonDetail?.videoPlatform || currentLesson.videoPlatform || 'EMBED';
+                    const url = lessonDetail?.videoUrl || currentLesson.videoUrl || '';
                     if (platform === 'DIRECT' || /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url) || url.startsWith('blob:')) {
                       return (
                         <video
@@ -494,22 +520,22 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     <BookOpen className="w-5 h-5 text-neon-violet" />
                     <h3 className="font-semibold text-text-primary">Lesson Content</h3>
                   </div>
-                  <div className="text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentLesson.content) }} />
+                  <div className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentLesson.content) }} />
                 </div>
               )}
 
-              {/* Teaching notes — instructor's markdown notes attached
+              {/* Teaching notes — instructor's notes attached
                   to the lesson (LessonDetail.teachingNotes). Renders as
                   sanitized HTML. */}
-              {currentLesson.detail?.teachingNotes && (
+              {lessonDetail?.teachingNotes && (
                 <div className="bg-darkcard border border-darkborder/50 rounded-2xl p-6 mb-8">
                   <div className="flex items-center gap-2 mb-4">
                     <FileText className="w-5 h-5 text-neon-violet" />
                     <h3 className="font-semibold text-text-primary">Ghi chú giảng dạy</h3>
                   </div>
                   <div
-                    className="text-text-secondary leading-relaxed prose prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentLesson.detail.teachingNotes) }}
+                    className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(lessonDetail.teachingNotes) }}
                   />
                 </div>
               )}
@@ -517,14 +543,14 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
               {/* GitHub source code link — single button, large and
                   obvious. New tab so we don't kick the student out of
                   the player. */}
-              {currentLesson.detail?.sourceCodeUrl && (
+              {lessonDetail?.sourceCodeUrl && (
                 <div className="bg-darkcard border border-darkborder/50 rounded-2xl p-6 mb-8">
                   <div className="flex items-center gap-2 mb-4">
                     <Code2 className="w-5 h-5 text-neon-violet" />
                     <h3 className="font-semibold text-text-primary">Source code</h3>
                   </div>
                   <a
-                    href={currentLesson.detail.sourceCodeUrl}
+                    href={lessonDetail.sourceCodeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neon-indigo/10 text-neon-indigo border border-neon-indigo/30 hover:bg-neon-indigo/20 transition-colors text-sm font-medium"
@@ -534,40 +560,61 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                   <p className="text-xs text-text-muted mt-2 break-all">
-                    {currentLesson.detail.sourceCodeUrl}
+                    {lessonDetail.sourceCodeUrl}
                   </p>
                 </div>
               )}
 
-              {/* Documents */}
+              {/* Documents — tài liệu đính kèm do admin upload.
+                  Liên kết đi qua endpoint download của backend
+                  (/api/v1/courses/documents/:id/download) để
+                  tăng downloadCount và bảo vệ URL thật của file. */}
               {currentLesson.documents && currentLesson.documents.length > 0 && (
                 <div className="bg-darkcard border border-darkborder/50 rounded-2xl p-6 mb-8">
                   <div className="flex items-center gap-2 mb-4">
                     <Download className="w-5 h-5 text-neon-violet" />
-                    <h3 className="font-semibold text-text-primary">Downloadable Materials</h3>
+                    <h3 className="font-semibold text-text-primary">Tài liệu đính kèm</h3>
                   </div>
                   <div className="space-y-2">
-                    {currentLesson.documents.map(doc => (
-                      <a
-                        key={doc.id}
-                        href={doc.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-3 p-3 bg-darkbg rounded-xl hover:bg-darkbg/80 transition-colors group"
-                      >
-                        <div className="w-10 h-10 rounded-lg bg-neon-indigo/10 flex items-center justify-center shrink-0">
-                          <Download className="w-5 h-5 text-neon-indigo" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors truncate">
-                            {doc.title}
-                          </p>
-                          <p className="text-xs text-text-muted">
-                            {doc.fileType?.toUpperCase()} • {doc.downloadCount} downloads
-                          </p>
-                        </div>
-                      </a>
-                    ))}
+                    {currentLesson.documents.map(doc => {
+                      // Use the proxied download URL so we get
+                      // downloadCount tracking + auth. The
+                      // backend will 302-redirect to the real
+                      // file path under /uploads/.
+                      const downloadHref = coursesApi.downloadDocumentUrl(doc.id);
+                      const ext = (doc.fileType || doc.title.split('.').pop() || '').toLowerCase();
+                      const emoji =
+                        ['zip', 'rar', '7z', 'tar', 'gz'].includes(ext) ? '📦' :
+                        ['pdf'].includes(ext) ? '📕' :
+                        ['doc', 'docx'].includes(ext) ? '📘' :
+                        ['xls', 'xlsx', 'csv'].includes(ext) ? '📗' :
+                        ['ppt', 'pptx'].includes(ext) ? '📙' :
+                        ['txt', 'md'].includes(ext) ? '📄' :
+                        ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext) ? '🖼️' :
+                        '📄';
+                      return (
+                        <a
+                          key={doc.id}
+                          href={downloadHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-3 p-3 bg-darkbg rounded-xl hover:bg-darkbg/80 transition-colors group"
+                        >
+                          <div className="w-10 h-10 rounded-lg bg-neon-indigo/10 flex items-center justify-center shrink-0 text-lg">
+                            {emoji}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors truncate">
+                              {doc.title}
+                            </p>
+                            <p className="text-xs text-text-muted">
+                              {formatBytes(doc.fileSizeBytes)} • {doc.downloadCount} lượt tải
+                            </p>
+                          </div>
+                          <Download className="w-4 h-4 text-text-muted group-hover:text-neon-indigo transition-colors shrink-0" />
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
               )}

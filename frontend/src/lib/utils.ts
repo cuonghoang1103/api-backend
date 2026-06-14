@@ -25,10 +25,20 @@ export function sanitizeHtml(dirty: string): string {
       'table', 'thead', 'tbody', 'tr', 'th', 'td',
       'span', 'div', 'hr',
     ],
-    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel', 'style'],
+    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel', 'style', 'data-language', 'language'],
     ALLOW_DATA_ATTR: false,
     ADD_ATTR: ['target'],
   });
+}
+
+/**
+ * Sanitize HTML for rich content coming from the TipTap editor
+ * (Lesson Content / Teaching Notes). Same allowlist as
+ * sanitizeHtml but with `data-language` exposed so future
+ * server-side syntax highlight tokens survive the trip.
+ */
+export function sanitizeRichHtml(dirty: string): string {
+  return sanitizeHtml(dirty);
 }
 
 export const formatDateShort = (dateString: string): string => {

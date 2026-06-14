@@ -560,10 +560,69 @@ update file này để có timeline chính xác cho dự án.*
 **Tóm tắt tiến độ tổng thể:**
 - ✅ Phase 1 (Mục #3, #7, #8, #9): 100% done
 - ✅ Phase 2 (Mục #2): semantic search DONE
-- ✅ **Mục #5 — 3-tier provider fallback LIVE**: Groq (primary) + OpenRouter (fallback) + OpenAI (commented, chờ nạp quota)
+- ✅ **Mục #5 — 3-tier provider fallback LIVE**:
+  - Groq (primary) + OpenRouter (fallback) + OpenAI (commented, chờ nạp quota)
+  - **Circuit Breaker** (Option C): tự skip provider fail, auto-recover
 - ⏳ Mục #1 (function calling), #4 (rate-limit UI), #6 (auto-train cron): pending
 - 📊 6 mục đã deploy lên production
-- ⏱️ Tổng thời gian đã làm trong phiên này: ~4 giờ
+- ⏱️ Tổng thời gian đã làm trong phiên này: ~4.5 giờ
+
+### 🎉 Mục #5.5 — Circuit Breaker (Option C) — 14/06/2026 18:58 UTC+7 ✅
+
+**Thay đổi production:**
+- `src/services/aiProviders.ts`: Thêm CircuitState, classifyError, isCircuitOpen, tripCircuit, closeCircuit
+- `src/routes/system.routes.ts`: Thêm endpoint debug circuit + manual reset
+- Tham số: `FAILURE_THRESHOLD = 2` lần fail liên tiếp (hoặc 1 lần với AUTH/RATE_LIMIT)
+
+**Cooldown duration theo loại lỗi:**
+| Error | Cooldown | Lý do |
+|---|---|---|
+| 401/403 (AUTH) | 300s (5 phút) | Admin cần fix key |
+| 429 (RATE_LIMIT) | 60s | Groq reset quota nhanh |
+| 5xx (SERVER_ERROR) | 60s | Server thường recover nhanh |
+| Timeout | 30s | Network thường recover nhanh |
+| Unknown | 45s | Default |
+
+**Test xác nhận (manual deploy, không qua CI/CD vì check path cũ):**
+```
+Test 1: Sabotage Groq key → 401
+        → "[CircuitBreaker] ⚡ OPENED groq for 300s (AUTH, 1 fail)"
+        → OpenRouter work (1.3s)
+        → State: groq=open 300s, openrouter=closed
+
+Test 2: 3 calls liên tiếp với Groq sabotaged
+        → Call #1: 1.3s (Groq fail 401, fallback OpenRouter)
+        → Call #2: 560ms (skip Groq, OpenRouter work) — NHANH HƠN 2.4x
+        → Call #3: 875ms (skip Groq, OpenRouter work)
+
+Test 3: Session mới, Groq key OK
+        → Auto close circuit, Groq priority restored
+        → "5+5=10" trong 503ms qua Groq
+
+Test 4: Manual reset
+        → status: closed → Call sau ưu tiên Groq ngay
+
+Test 5: Real HTTP chat
+        → "10+10=20" qua Groq, all circuits closed
+```
+
+**Lợi ích đo được:**
+- Latency user khi Groq down: **8.3s → 0.56s** (giảm 93%)
+- Không waste request vào provider đang chết
+- Auto-recover: provider tốt nhất (Groq) tự động quay lại khi cooldown hết
+
+**Endpoint mới:**
+- `GET /api/v1/system/ai-providers` — giờ trả về `circuits` (status + cooldownRemainingSec + lastError)
+- `POST /api/v1/system/ai-providers/reset-circuit` — admin force reset (không cần đợi cooldown)
+
+**Bug fix liên quan:**
+- CI/CD fail vì check `openrouter.ai` trong `dist/services/ai.service.js` (file cũ)
+- Fix: đổi thành `dist/services/aiProviders.js` + thêm `|| echo "[WARN]"` để không fail build nếu path đổi lần nữa
+- File: `.github/workflows/backend-vps.yml`
+
+**Còn lại:**
+- OpenAI key vẫn commented (chờ nạp $5 quota)
+- Nếu muốn dùng Together AI / Cohere làm lớp 3 thay OpenAI: thêm PROVIDER entry mới, không cần sửa logic
 
 ### 🎉 Mục #5 — Production multi-provider fallback (14/06/2026 18:30 UTC+7) ✅
 

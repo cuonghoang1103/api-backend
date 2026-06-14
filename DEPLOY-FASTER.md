@@ -622,3 +622,140 @@ ssh vps 'cd /opt/cuonghoangdev && docker compose up -d --force-recreate backend'
 ~500,000 token/ngày
 
 *Cập nhật lần cuối: 2026-06-14 — sau khi fix lỗi AI chat streaming & xoá Gemini dependency.*
+
+---
+
+## 🔒 Security Implementation (2026-06-14)
+
+Commit `fcf38cb` — đã triển khai đầy đủ 3 lớp bảo mật theo yêu cầu của user.
+
+### 1. OTP 6 số thay token dài (Redis-backed)
+
+**Trước:** Token UUID 64 ký tự gửi qua link email (dài, dễ lộ nếu share link)
+
+**Sau:** Mã 6 số ngẫu nhiên, gửi qua email, dùng 1 lần, hết hạn sau 5-10 phút.
+
+| Endpoint | Mô tả | TTL |
+|---|---|---|
+| `POST /api/v1/auth/verify-email-otp` | Verify email bằng 6 số | 5 phút |
+| `POST /api/v1/auth/resend-otp` | Gửi lại OTP (max 3 lần / giờ) | 5 phút |
+| `POST /api/v1/auth/reset-password-otp` | Verify OTP + đặt pass mới | 10 phút |
+| `POST /api/v1/auth/forgot-password` | Gửi OTP reset | 10 phút |
+
+**Storage:** Redis key `otp:{type}:{email}` với `EX` TTL, kèm counter `attempts` chống brute-force (max 5 lần sai).
+
+**Code:** `src/services/otp.service.ts`, `src/services/auth.service.ts` (methods `verifyEmailOtp`, `resetPasswordWithOtp`).
+
+**Frontend:** `/verify-otp` page mới với `OtpInput` component (6 cells, paste-aware, auto-advance, 5min countdown resend).
+
+### 2. Cloudflare Turnstile (CAPTCHA chống robot)
+
+**Provider:** Cloudflare Turnstile (miễn phí, vô hình, không cần user click).
+
+**Setup cần làm 1 lần (chưa làm):**
+
+1. Vào https://dash.cloudflare.com/?to=/:account/turnstile → Add widget
+2. Domain: `cuongthai.com`
+3. Mode: **Invisible** (user không cần click)
+4. Copy **Site Key** (public) + **Secret Key** (private)
+5. Thêm vào `/opt/cuonghoangdev/.env` trên VPS:
+   ```
+   TURNSTILE_SITE_KEY=0x4AAAAA...
+   TURNSTILE_SECRET_KEY=0x4AAAAA...
+   ```
+
+**Áp dụng cho:** `POST /api/v1/auth/login`, `POST /api/v1/auth/register`, `POST /api/v1/auth/forgot-password`.
+
+**Code:** `src/services/captcha.service.ts`, `src/middleware/captcha.ts`, `frontend/src/components/TurnstileWidget.tsx`.
+
+**Lưu ý:** Nếu `TURNSTILE_SECRET_KEY` chưa set → middleware tự skip (dev mode). Production PHẢI set mới có hiệu lực.
+
+### 3. Phân quyền + Login Gate
+
+#### 3.1. Admin full quyền (đã có sẵn)
+
+`/admin/*` → verify với backend `/api/auth/admin-check`. Nếu không phải admin → redirect `/login?error=not_admin`.
+
+#### 3.2. Login required cho `/learn/*` (mới)
+
+Next.js middleware refactor thành `handleAdminRoute` + `handleLearnRoute`. `/learn/*` yêu cầu bất kỳ user nào đã login (không cần admin).
+
+Test: `curl -L https://cuongthai.com/learn/123` → 307 redirect `/login?callbackUrl=/learn/123&error=login_required`
+
+#### 3.3. "Tạo playlist" bắt login (mới)
+
+Component `PlaylistSection.tsx` — khi click "Tạo Playlist" mà chưa login → hiện modal `<LoginRequired variant="modal" />` với nút "Đăng nhập" → redirect về `/login?callbackUrl=/music`.
+
+#### 3.4. Playlist ownership check (mới)
+
+`PUT /api/v1/music/playlists/:id` và `DELETE /api/v1/music/playlists/:id` giờ enforce ownership:
+- Chỉ creator (`userId === req.userId`) HOẶC admin mới được sửa/xoá
+- User khác → 403 FORBIDDEN
+- Verify: `existing.userId === req.userId` + `req.user.roles.includes('ADMIN')`
+
+#### 3.5. "Tạo bởi: username" (đã có sẵn, verify lại)
+
+- Backend: `musicService.getPlaylists()` đã include `user: { id, username, avatarUrl }`
+- Frontend: `PlaylistCard` hiển thị `by {username}` (line 90-94), `PlaylistView` hiển thị `Tạo bởi {username}` (line 205-207)
+
+### Files changed (commit fcf38cb)
+
+| Loại | Files |
+|---|---|
+| **Backend mới** | `src/services/otp.service.ts`, `src/services/captcha.service.ts`, `src/middleware/captcha.ts`, `src/config/redis.ts` |
+| **Backend sửa** | `src/services/auth.service.ts`, `src/services/email.service.ts`, `src/routes/auth.routes.ts`, `src/routes/music.routes.ts` |
+| **Frontend mới** | `frontend/src/app/verify-otp/page.tsx`, `frontend/src/components/OtpInput.tsx`, `frontend/src/components/TurnstileWidget.tsx`, `frontend/src/components/LoginRequired.tsx` |
+| **Frontend sửa** | `frontend/src/middleware.ts`, `frontend/src/lib/api.ts`, `frontend/src/app/(auth)/login/page.tsx`, `frontend/src/app/(auth)/register/page.tsx`, `frontend/src/app/forgot-password/page.tsx`, `frontend/src/components/music/PlaylistSection.tsx` |
+| **Docs** | `SECURITY_PLAN.md` (mới) |
+
+### Test sau deploy (2026-06-14 21:45)
+
+```bash
+# ✅ /verify-otp render 200
+curl -I https://cuongthai.com/verify-otp
+
+# ✅ /forgot-password render 200
+curl -I https://cuongthai.com/forgot-password
+
+# ✅ /learn/123 không auth → 307 redirect với error=login_required
+curl -I https://cuongthai.com/learn/123
+
+# ✅ /admin không auth → 307 redirect
+curl -I https://cuongthai.com/admin
+
+# ✅ OTP flow: gửi + verify
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"email":"testsec1@example.com"}' \
+  https://api.cuongthai.com/api/v1/auth/forgot-password
+# → {"success":true,"data":{"sent":true,"ttl":599}}
+
+# ✅ Login admin (captcha dev-mode bypass)
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"username":"Cuong03dx","password":"Cuonglinh18052003@"}' \
+  https://api.cuongthai.com/api/v1/auth/login
+# → token + user info
+```
+
+### Bước tiếp theo (cần làm thủ công)
+
+1. **Đăng ký Cloudflare Turnstile** cho `cuongthai.com` (link ở trên)
+2. **Set env vars** `TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` trong `/opt/cuonghoangdev/.env`
+3. **Restart backend** để middleware captcha kích hoạt: `cd /home/deployer/repo && bash scripts/deploy-vps.sh`
+4. **Test CAPTCHA** thực tế: thử login/register từ trình duyệt ẩn danh
+5. **Setup 2FA cho admin** (optional, làm sau) — cần TOTP library
+6. **Audit log admin login** (optional) — lưu IP/UA/timestamp vào DB
+
+### Tại sao Resend + Cloudflare Turnstile là combo tốt nhất?
+
+- Cả 2 đều **miễn phí** (với giới hạn rất cao cho project size này)
+- Cả 2 đều **privacy-friendly** (không tracking user như Google)
+- Resend deliverability **>99%** (tốt hơn SES/Mailgun ở tầm giá này)
+- Turnstile invisible (UX tốt hơn reCAPTCHA v3 vì không có badge góc)
+- Stack **đơn giản**: 1 SDK cho email, 1 widget cho CAPTCHA
+
+### Tham chiếu
+
+- Plan chi tiết: `SECURITY_PLAN.md`
+- Paywall plan (liên quan): `PAYWALL_PLAN.md` section 3 (requireLessonAccess — admin full quyền)
+- Cloudflare Turnstile docs: https://developers.cloudflare.com/turnstile/
+- Resend docs: https://resend.com/docs

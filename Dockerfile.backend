@@ -47,6 +47,12 @@ COPY --from=builder --chown=1001:0 /app/scripts ./scripts
 # Set environment
 ENV NODE_ENV=production
 ENV PORT=3001
+# Allow Node.js to use up to 1.5 GB of RAM. The default 512 MB cap caused
+# OOM crashes when a single large RAG document was indexed (infinite
+# chunking loop multiplied by parallel Prisma writes). 1.5 GB is a
+# comfortable headroom on the 2 GB VPS while still leaving room for
+# Postgres / Nginx / Frontend in the same container group.
+ENV NODE_OPTIONS=--max-old-space-size=1536
 
 # Expose port
 EXPOSE 3001

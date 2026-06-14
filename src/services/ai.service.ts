@@ -401,12 +401,29 @@ export class AIService {
   /**
    * Chia văn bản thành các chunks nhỏ để lưu vào vector DB.
    * Cắt tại ranh giới câu/đoạn để giữ ngữ cảnh.
+   *
+   * Safety: overlap MUST be < chunkSize, otherwise start never advances
+   * and we loop forever, which crashed the process with OOM (see
+   * `aiChunkSize=1000`, `aiChunkOverlap=200` defaults working fine, but
+   * caller must never pass `overlap >= chunkSize`).
    */
   private chunkText(
     text: string,
     chunkSize: number,
     overlap: number,
   ): string[] {
+    if (chunkSize <= 0) {
+      throw new AppError('chunkSize must be > 0', 500, 'INVALID_CHUNK_SIZE');
+    }
+    if (overlap < 0 || overlap >= chunkSize) {
+      throw new AppError(
+        `chunkOverlap (${overlap}) must be in [0, chunkSize) (chunkSize=${chunkSize})`,
+        500,
+        'INVALID_CHUNK_OVERLAP',
+      );
+    }
+    if (text.length === 0) return [];
+
     const chunks: string[] = [];
     let start = 0;
 
@@ -416,7 +433,9 @@ export class AIService {
       if (end >= text.length) {
         end = text.length;
       } else {
-        // Tìm điểm cắt tốt nhất (end of sentence/paragraph)
+        // Tìm điểm cắt tốt nhất (end of sentence/paragraph) trong khoảng
+        // [start + chunkSize/2, start + chunkSize] để tránh chunk quá nhỏ.
+        const minCut = start + Math.floor(chunkSize / 2);
         const candidates = [
           text.lastIndexOf('\n\n', end),
           text.lastIndexOf('\n', end),
@@ -425,7 +444,7 @@ export class AIService {
           text.lastIndexOf('? ', end),
           text.lastIndexOf('; ', end),
           text.lastIndexOf(', ', end),
-        ].filter((pos) => pos > start + chunkSize / 2);
+        ].filter((pos) => pos > minCut);
 
         if (candidates.length > 0) {
           end = candidates[0] + 1; // Include the separator
@@ -438,8 +457,14 @@ export class AIService {
       }
 
       // Slide forward with overlap
-      start = end - overlap;
-      if (start <= 0 || start >= text.length) break;
+      const nextStart = end - overlap;
+      if (nextStart <= start) {
+        // Safety: if the window doesn't move forward (e.g. chunk smaller
+        // than overlap), force a forward step to guarantee termination.
+        start = end;
+      } else {
+        start = nextStart;
+      }
     }
 
     return chunks;

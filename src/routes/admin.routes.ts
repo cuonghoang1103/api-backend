@@ -189,7 +189,17 @@ router.get('/users', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: 
       prisma.user.count({ where }),
     ]);
 
-    res.json({ success: true, data: users, pagination: { page: pageNumber, limit: pageSize, total, totalPages: Math.ceil(total / pageSize) } });
+    // Flatten Prisma's nested `roles: [{ userId, roleId, role: { name } }]`
+    // shape into a simple `roles: string[]` for the client. The admin
+    // frontend (RoleBadge, getRoles, etc.) calls `.replace()` on each
+    // role — that only works on strings, not on the nested object the
+    // Prisma `include` returns.
+    const normalizedUsers = users.map((u) => ({
+      ...u,
+      roles: u.roles.map((ur) => ur.role.name),
+    }));
+
+    res.json({ success: true, data: normalizedUsers, pagination: { page: pageNumber, limit: pageSize, total, totalPages: Math.ceil(total / pageSize) } });
   } catch (error) { next(error); }
 });
 

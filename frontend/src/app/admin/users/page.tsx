@@ -31,7 +31,10 @@ interface BackendUser {
   avatarUrl?: string;
   /** "google" | "github" | "facebook" | null (null = credentials/thường) */
   provider?: string;
-  roles: string[];
+  // Backend may return either a flat string[] (e.g. ['user','admin'])
+  // OR the raw Prisma include shape `[{ userId, roleId, role: { name } }]`.
+  // The page-side helper `getRoles` normalizes both.
+  roles: string[] | { role: { name: string } }[];
   primaryRole?: string;
   enabled: boolean;
   accountNonLocked: boolean;
@@ -84,7 +87,13 @@ const FILTER_OPTIONS: { value: FilterMode; label: string }[] = [
 ];
 
 function RoleBadge({ role }: { role: string }) {
-  const normalized = role.replace('ROLE_', '').toUpperCase();
+  // Defensive: `role` is typed as string but a regression in
+  // /admin/users once returned `roles: [{ role: { name } }]`
+  // (Prisma `include` shape) and crashed the page with
+  // "TypeError: e.replace is not a function". Coerce to string
+  // and bail out on non-strings.
+  const safe = typeof role === 'string' ? role : '';
+  const normalized = safe.replace('ROLE_', '').toUpperCase();
   return (
     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
       normalized === 'ADMIN'     ? 'bg-yellow-500/15 text-yellow-400' :
@@ -191,7 +200,9 @@ export default function AdminUsersPage() {
     }
     const currentVersion = currentUser.roleVersion ?? 0;
     if (initialRoleVersion.current > 0 && currentVersion > initialRoleVersion.current) {
-      const role = (currentUser.role as string || '').replace('ROLE_', '').toUpperCase();
+      const rawRole = currentUser.role;
+      const roleStr = typeof rawRole === 'string' ? rawRole : '';
+      const role = roleStr.replace('ROLE_', '').toUpperCase();
       if (role !== 'ADMIN') {
         setSelfRoleChanged(true);
       }
@@ -229,10 +240,24 @@ export default function AdminUsersPage() {
   }, [fetchUsers]);
 
   // ── Role helpers ─────────────────────────────────────────────────────────
+  // Backend may return either shape depending on endpoint/version:
+  //   1. `roles: string[]`               (e.g. 'user', 'admin', 'ROLE_ADMIN')
+  //   2. `roles: [{ role: { name } }]`   (raw Prisma `include` shape)
+  // Normalize both to a `string[]` of uppercased role names.
   const getRoles = (user: BackendUser): string[] => {
     if (!user.roles) return [];
-    if (Array.isArray(user.roles)) return user.roles.map((r: string) => r.replace('ROLE_', ''));
-    return [];
+    if (!Array.isArray(user.roles)) return [];
+    return user.roles
+      .map((r: unknown): string => {
+        if (typeof r === 'string') return r;
+        if (r && typeof r === 'object' && 'role' in r) {
+          const inner = (r as { role?: { name?: unknown } }).role;
+          if (inner && typeof inner.name === 'string') return inner.name;
+        }
+        return '';
+      })
+      .filter((name) => name.length > 0)
+      .map((name) => name.replace('ROLE_', ''));
   };
 
   const isAdmin = (user: BackendUser) =>

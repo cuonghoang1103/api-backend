@@ -489,4 +489,172 @@ api-backend/
 
 ---
 
+## 🐛 BUGS ĐÃ PHÁT HIỆN — 14/06/2026 20:30 (UTC+7)
+
+### Bug #1: `/admin/embed-jobs` route TIMEOUT (chưa fix) ⚠️
+
+**Triệu chứng:**
+- Browser mở `/admin/embed-jobs` → "Failed to load embed jobs"
+- `curl https://api.cuongthai.com/api/v1/admin/embed-jobs` → HTTP 000 timeout
+- Test trong container cũng timeout
+- Routes khác trong cùng admin (`/stats/overview`, `/users`) → 200 OK bình thường
+
+**Đã thử nhưng KHÔNG fix được:**
+
+1. ✗ Tăng `generalLimiter` từ 100 → 500 (route bị skip với `skip()` option)
+2. ✗ Move `app.use('/api/v1/admin/embed-jobs', ...)` lên trước `app.use('/api/v1/admin', ...)`
+3. ✗ Tạm thời bỏ `requireAdmin` middleware → vẫn hang
+4. ✗ Tạo diagnostic route `_ping` → **404 not found** (nghĩa là router KHÔNG được register trong container!)
+5. ✗ Force rebuild với `--no-cache`
+6. ✗ Restart container nhiều lần
+
+**Root cause nghi ngờ:**
+- Có thể là **Docker build cache** không pick up code mới của `embedJobs.routes.ts`
+- `dist/routes/embedJobs.routes.js` trong container thiếu các route mới thêm vào source
+- Cần verify xem container đang chạy code build từ source mới hay source cũ
+
+**Cách debug tiếp theo:**
+
+```bash
+# 1. Check xem dist có khớp với source không
+ssh vps 'docker exec cuonghoangdev_backend grep -c "_ping" /app/dist/routes/embedJobs.routes.js'
+# Nếu 0 mà source có _ping → cache issue
+
+# 2. Force full rebuild
+ssh vps 'cd /opt/cuonghoangdev && docker compose build --no-cache --pull backend'
+ssh vps 'cd /opt/cuonghoangdev && docker compose up -d --force-recreate backend'
+
+# 3. Check imports có circular không
+# File: src/routes/embedJobs.routes.ts import:
+#   - ../middleware/auth.js (authenticate, requireAdmin)
+#   - ../services/embedQueue.service.js (listJobs, etc)
+# File: src/services/embedQueue.service.ts import:
+#   - ../config/database.js (prisma)
+#   - ../config/env.js (config)
+#   - ./ai.service.js (aiService)
+# File: src/services/ai.service.ts import:
+#   - ../config/database.js
+#   - ../middleware/errorHandler.js
+# File: src/middleware/auth.ts import:
+#   - ./errorHandler.js
+#   - ../config/database.js
+#   - ../config/env.js
+# Có thể có **circular import** với errorHandler/auth/database. Test bằng cách tạo route standalone không import middleware.
+
+# 4. Test thủ công với curl sau khi fix
+ssh vps 'docker exec cuonghoangdev_backend node -e "
+const http=require(\"http\");
+const req=http.request({hostname:\"localhost\",port:3001,path:\"/api/v1/admin/embed-jobs\",timeout:5000},(res)=>{
+  console.log(\"Status:\",res.statusCode);
+});
+req.on(\"timeout\",()=>console.log(\"TIMEOUT\"));
+req.on(\"error\",e=>console.log(\"ERR:\",e.message));
+req.end();
+"'
+```
+
+**Workaround tạm thời:**
+- Admin dùng direct Postgres query để check embed jobs
+- HOẶC thêm route `/api/v1/admin/embed-jobs/list` đứng riêng không cùng prefix
+
+---
+
+### Bug #2: Quota indicator hiển thị `500/500` không giảm (đã fix 1 phần)
+
+**Triệu chứng:**
+- Indicator ở chat header luôn hiển thị 500/500
+- Nhưng Redis có key `quota:1:day:2026-06-14` với value > 0
+- Có nghĩa counter CÓ tăng, nhưng frontend không đọc được
+
+**Đã fix:**
+- ✓ Di chuyển increment từ frontend `/quota/track` (silent fail do auth) → backend `quotaMiddleware()` trên `/ai/chat`
+- ✓ Backend tự tăng counter khi user gửi message
+- ✓ Verify Redis có data thật (`quota:1:day:2026-06-14 = 2`)
+
+**Còn issue nhỏ:**
+- Sau khi restart backend, key Redis vẫn còn → indicator sẽ hiển thị đúng từ data cũ
+- Nhưng lần đầu deploy, response `/quota/me` ban đầu trả `used.day = 0` (vì Redis TTL chưa expire)
+- User phải chat 1 lần để thấy số giảm
+
+---
+
+### Bug #3: General rate limit chặn admin routes (đã fix)
+
+**Triệu chứng:**
+- Frontend `/admin/embed-jobs` và `/quota/me` liên tục bị 429
+- Vì `generalLimiter` (100 req / 15 min) không đủ cho:
+  - QuotaIndicator auto-refresh mỗi 30s
+  - Embed jobs page auto-refresh mỗi 10s
+  - Multiple browser tabs
+
+**Đã fix:**
+- Tăng `generalLimiter` từ 100 → 500 req / 15 min
+- Thêm `skip()` option cho `/v1/quota`, `/v1/admin/embed-jobs`, `/auth/admin-check`
+
+```ts
+// src/index.ts
+const generalLimiter = rateLimit({
+  windowMs: config.rateLimitWindowMs,
+  max: parseInt(process.env.RATE_LIMIT_MAX || '500', 10),
+  skip: (req: Request): boolean => {
+    const path = req.path;
+    return path.startsWith('/v1/quota')
+      || path.startsWith('/v1/admin/embed-jobs')
+      || path.startsWith('/auth/admin-check');
+  },
+  // ...
+});
+```
+
+---
+
+### Bug #4: Login fail do password hash bị escape (đã fix)
+
+**Triệu chứng:**
+- Login với password đúng → "Sai mật khẩu"
+- Bcrypt hash bị bash expansion (`$2a$` → `a0bash$`)
+
+**Đã fix:**
+- Dùng heredoc thay vì inline string:
+```bash
+ssh vps "docker exec -i cuonghoangdev_postgres psql -U postgres -d cuonghoangdev_db" <<EOF
+UPDATE users SET password = '$HASH' WHERE id = 1;
+EOF
+```
+
+---
+
+## 🛠️ Quick diagnosis commands
+
+```bash
+# Health check
+curl -s https://api.cuongthai.com/api/v1/system/health
+
+# Test quota endpoint (no auth → 401)
+curl -sI https://api.cuongthai.com/api/v1/quota/me
+
+# Test admin embed-jobs (should work after fix)
+curl -sI https://api.cuongthai.com/api/v1/admin/embed-jobs
+
+# Check Redis quota keys
+ssh vps 'docker exec cuonghoangdev_redis redis-cli KEYS "quota:*"'
+
+# Check backend logs
+ssh vps 'docker logs cuonghoangdev_backend --tail 30'
+
+# Check container status
+ssh vps 'docker ps --format "table {{.Names}}\t{{.Status}}"'
+
+# Force rebuild
+ssh vps 'cd /opt/cuonghoangdev && docker compose build --no-cache backend'
+ssh vps 'cd /opt/cuonghoangdev && docker compose up -d --force-recreate backend'
+```
+
+---
+Đơn giản hoá cho model bạn đang dùng (llama-3.1-8b-instant):
+
+~30 request/phút
+~14,400 request/ngày
+~500,000 token/ngày
+
 *Cập nhật lần cuối: 2026-06-14 — sau khi fix lỗi AI chat streaming & xoá Gemini dependency.*

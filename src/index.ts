@@ -151,15 +151,26 @@ if (config.nodeEnv === 'development' || config.nodeEnv === 'test') {
 
 // ─── 8. Rate Limiting ───────────────────────────────────────
 // Giới hạn chung cho tất cả /api/* endpoints
+// Raised from 100 → 500 per 15min to accommodate:
+//   - QuotaIndicator polling every 30s
+//   - Embed jobs auto-refresh every 10s
+//   - Multiple browser tabs
 const generalLimiter = rateLimit({
   windowMs: config.rateLimitWindowMs, // 15 phút
-  max: config.rateLimitMaxRequests,    // 100 requests
+  max: parseInt(process.env.RATE_LIMIT_MAX || '500', 10),
   standardHeaders: true,
   legacyHeaders: false,
   message: {
     success: false,
     message: 'Too many requests. Please try again later.',
     code: 'RATE_LIMIT_EXCEEDED',
+  },
+  // Skip rate limit for admin/quota/embed-jobs routes (they have own auth)
+  skip: (req: Request): boolean => {
+    const path = req.path;
+    return path.startsWith('/v1/quota')
+      || path.startsWith('/v1/admin/embed-jobs')
+      || path.startsWith('/auth/admin-check');
   },
   keyGenerator: (req: Request): string => {
     // Dùng X-Forwarded-For nếu có proxy
@@ -232,6 +243,7 @@ app.use('/api/v1/music', musicRoutes);
 app.use('/api/v1/music/admin', musicAdminRoutes);
 app.use('/api/v1/music/history', musicHistoryRoutes);
 app.use('/api/v1/ai', aiRoutes);
+app.use('/api/v1/admin/embed-jobs', embedJobsRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/skills', skillRoutes);
 app.use('/api/v1/projects', projectRoutes);
@@ -243,7 +255,6 @@ app.use('/api/v1/system', systemRoutes);
 app.use('/api/v1/social', socialRoutes);
 app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
-app.use('/api/v1/admin/embed-jobs', embedJobsRoutes);
 
 // ─── 10. Health Check ───────────────────────────────────────
 // Render.com và Docker healthcheck gọi endpoint này

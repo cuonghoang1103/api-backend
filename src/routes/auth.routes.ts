@@ -223,16 +223,27 @@ router.post(
 // Returns the public Turnstile site key + whether CAPTCHA is enabled.
 // Frontend uses this to decide whether to render the widget and what key
 // to pass it. The secret key NEVER leaves the backend.
+//
+// `required` is the *effective* flag — false if the master kill-switch
+// (CAPTCHA_REQUIRED=false) is set OR if the secret isn't configured.
+// `enabled` (kept for back-compat) just reflects whether the secret
+// exists; the widget still needs to render in that case unless
+// `required` is false.
 router.get(
   '/captcha-config',
   (_req: Request, res: Response<ApiResponse>, next: NextFunction) => {
     try {
+      const hasSecret = !!process.env.TURNSTILE_SECRET_KEY;
+      const killSwitch =
+        process.env.CAPTCHA_REQUIRED === 'false' ||
+        process.env.CAPTCHA_REQUIRED === '0';
       res.json({
         success: true,
         data: {
-          enabled: !!process.env.TURNSTILE_SECRET_KEY,
+          enabled: hasSecret && !killSwitch,
           siteKey: process.env.TURNSTILE_SITE_KEY ?? null,
           provider: 'cloudflare-turnstile',
+          required: hasSecret && !killSwitch,
         },
       });
     } catch (error) {

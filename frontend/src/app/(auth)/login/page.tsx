@@ -84,7 +84,13 @@ function LoginForm() {
     };
   }, []);
 
-  const captchaReady = !captchaEnabled || captchaToken.length > 0;
+  // Allow user to submit even if the Turnstile widget failed to render
+  // (CDN blocked, etc.) — we send an empty token and rely on the
+  // backend's CAPTCHA_REQUIRED=false bypass for verified users. The
+  // backend rejects with CAPTCHA_REQUIRED only if the user is unknown
+  // / unverified, in which case the form-level error message we
+  // already show is enough — no need to lock the submit button forever.
+  const captchaReady = true;
 
   const onSubmit = async (data: LoginForm) => {
     setIsLoading(true);

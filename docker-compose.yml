@@ -80,6 +80,15 @@ services:
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
       ADMIN_EMAILS: ${ADMIN_EMAILS:-cuonghoang1103@gmail.com}
       UPLOAD_DIR: /app/uploads
+      # Master switch for the Turnstile CAPTCHA challenge on /login and
+      # /register. Defaults to true when TURNSTILE_SECRET_KEY is set, but
+      # Turnstile's challenges.cloudflare.com CDN is blocked on some
+      # networks (corporate firewalls, regions, browser extensions) and
+      # users see a confusing "CAPTCHA verification required" 403 with
+      # no widget to click. Set CAPTCHA_REQUIRED=false in env to
+      # disable the challenge globally; the email-OTP and per-account
+      # role-based bypass in src/middleware/captcha.ts still apply.
+      CAPTCHA_REQUIRED: ${CAPTCHA_REQUIRED:-true}
       MAX_FILE_SIZE_IMAGES: 10485760
       MAX_FILE_SIZE_AUDIO: 104857600
       MAX_FILE_SIZE_VIDEO: 524288000

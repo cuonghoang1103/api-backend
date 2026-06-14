@@ -138,6 +138,138 @@ function getAvailableProviders(): AIProviderConfig[] {
 const MAX_RETRIES_PER_PROVIDER = 3;
 const RETRY_BASE_DELAY_MS = 1000;
 
+// ============================================================
+// CIRCUIT BREAKER (skip providers đang lỗi tạm thời)
+// ============================================================
+//
+// Khi 1 provider fail nhiều lần (429, 5xx, timeout), ta "mở cầu dao"
+// → skip nó trong 1 khoảng thời gian → không waste request.
+// Sau khi hết cooldown, tự động thử lại (half-open).
+// Nếu thành công → đóng cầu dao, ưu tiên lại provider đó.
+//
+// Lợi ích:
+// - Latency thấp hơn khi 1 provider down (không phải đợi retry 7s)
+// - Tự động "quay lại" provider yêu thích (Groq) khi nó recover
+// - Admin không cần manually disable provider
+//
+// Cooldown duration phụ thuộc vào loại lỗi:
+// - 401/403 (auth fail): 5 phút (admin cần fix key)
+// - 429 (rate limit): 60s (Groq reset quota nhanh)
+// - 5xx/timeout: 60s (server thường recover trong vài chục giây)
+// ============================================================
+
+interface CircuitState {
+  consecutiveFailures: number;
+  cooldownUntil: number | null;
+  lastError: string | null;
+  lastErrorCode: 'AUTH' | 'RATE_LIMIT' | 'SERVER_ERROR' | 'TIMEOUT' | 'UNKNOWN' | null;
+  openedAt: number | null;
+}
+
+const COOLDOWN_MS = {
+  AUTH: 5 * 60 * 1000,        // 5 phút cho 401/403
+  RATE_LIMIT: 60 * 1000,      // 60s cho 429
+  SERVER_ERROR: 60 * 1000,    // 60s cho 5xx
+  TIMEOUT: 30 * 1000,         // 30s cho timeout
+  UNKNOWN: 45 * 1000,         // 45s mặc định
+};
+
+const FAILURE_THRESHOLD = 2;  // Số lần fail liên tiếp trước khi mở cầu dao
+
+const _circuitState: Record<string, CircuitState> = {};
+
+/**
+ * Lấy trạng thái circuit của 1 provider (auto init).
+ */
+function getCircuit(name: string): CircuitState {
+  if (!_circuitState[name]) {
+    _circuitState[name] = {
+      consecutiveFailures: 0,
+      cooldownUntil: null,
+      lastError: null,
+      lastErrorCode: null,
+      openedAt: null,
+    };
+  }
+  return _circuitState[name];
+}
+
+/**
+ * Phân loại lỗi để quyết định cooldown duration.
+ */
+function classifyError(errMsg: string): 'AUTH' | 'RATE_LIMIT' | 'SERVER_ERROR' | 'TIMEOUT' | 'UNKNOWN' {
+  const m = errMsg.toLowerCase();
+  if (m.includes('401') || m.includes('403') || m.includes('unauthorized') || m.includes('forbidden')) return 'AUTH';
+  if (m.includes('429') || m.includes('rate limit') || m.includes('quota')) return 'RATE_LIMIT';
+  if (m.includes('timeout') || m.includes('econnreset') || m.includes('etimedout')) return 'TIMEOUT';
+  if (m.includes('500') || m.includes('502') || m.includes('503') || m.includes('504')) return 'SERVER_ERROR';
+  return 'UNKNOWN';
+}
+
+/**
+ * Kiểm tra provider có đang trong cooldown không.
+ * Tự động "half-open" (cho phép thử lại 1 lần) nếu đã hết cooldown.
+ */
+function isCircuitOpen(name: string): { open: boolean; reason?: string; retryIn?: number } {
+  const c = getCircuit(name);
+  if (!c.cooldownUntil) return { open: false };
+
+  const now = Date.now();
+  if (now >= c.cooldownUntil) {
+    console.log(`[CircuitBreaker] ${name} cooldown expired, half-open (try 1 request)`);
+    return { open: false };
+  }
+
+  const retryIn = Math.ceil((c.cooldownUntil - now) / 1000);
+  return { open: true, reason: c.lastError || 'unknown', retryIn };
+}
+
+/**
+ * Mở cầu dao (skip provider trong X giây).
+ */
+function tripCircuit(name: string, errMsg: string): void {
+  const c = getCircuit(name);
+  c.consecutiveFailures += 1;
+  c.lastError = errMsg;
+  c.lastErrorCode = classifyError(errMsg);
+
+  // Sau N lần fail liên tiếp (hoặc 1 lần với 429/401) → mở cầu dao
+  const shouldTrip = c.consecutiveFailures >= FAILURE_THRESHOLD;
+  const isCriticalError = c.lastErrorCode === 'AUTH' || c.lastErrorCode === 'RATE_LIMIT';
+
+  if (shouldTrip || isCriticalError) {
+    const errorCode = c.lastErrorCode ?? 'UNKNOWN';
+    const cooldown = COOLDOWN_MS[errorCode];
+    c.cooldownUntil = Date.now() + cooldown;
+    c.openedAt = Date.now();
+    console.warn(
+      `[CircuitBreaker] ⚡ OPENED ${name} for ${cooldown / 1000}s ` +
+      `(${c.lastErrorCode}, ${c.consecutiveFailures} consecutive fails): ${errMsg.slice(0, 100)}`,
+    );
+  } else {
+    console.warn(
+      `[CircuitBreaker] ${name} failure ${c.consecutiveFailures}/${FAILURE_THRESHOLD}: ${errMsg.slice(0, 100)}`,
+    );
+  }
+}
+
+/**
+ * Đóng cầu dao (reset counter khi provider work).
+ */
+function closeCircuit(name: string): void {
+  const c = getCircuit(name);
+  if (c.consecutiveFailures > 0 || c.cooldownUntil) {
+    console.log(
+      `[CircuitBreaker] ✓ CLOSED ${name} (recovered after ${c.consecutiveFailures} fails)`,
+    );
+  }
+  c.consecutiveFailures = 0;
+  c.cooldownUntil = null;
+  c.lastError = null;
+  c.lastErrorCode = null;
+  c.openedAt = null;
+}
+
 /**
  * Sleep helper.
  */
@@ -213,13 +345,16 @@ async function callProvider(
 }
 
 /**
- * Gọi AI với auto-fallback qua nhiều providers.
+ * Gọi AI với auto-fallback qua nhiều providers, có circuit breaker.
  *
  * Flow:
  * 1. Lấy danh sách providers có apiKey (theo priority)
- * 2. Thử từng provider cho đến khi thành công
- * 3. Mỗi provider retry 3 lần với exponential backoff
- * 4. Nếu TẤT CẢ providers fail → throw lỗi cuối cùng
+ * 2. Với mỗi provider:
+ *    a. Check circuit breaker → nếu open → skip ngay
+ *    b. Nếu closed/half-open → thử gọi
+ *    c. Thành công → close circuit, ưu tiên lại provider
+ *    d. Fail → trip circuit, chuyển provider tiếp theo
+ * 3. Nếu TẤT CẢ providers fail → throw lỗi cuối cùng
  *
  * @returns ChatResponse kèm metadata: provider nào đã trả lời, số attempts, thời gian
  */
@@ -236,13 +371,26 @@ export async function chatWithFallback(
   }
 
   const attemptLog: string[] = [];
+  const skippedLog: string[] = [];
   const totalStart = Date.now();
   let lastErr: unknown;
 
   for (const provider of available) {
+    // Check circuit breaker TRƯỚC khi gọi
+    const circuit = isCircuitOpen(provider.name);
+    if (circuit.open) {
+      skippedLog.push(`${provider.name}⏸️ (circuit open, retry in ${circuit.retryIn}s)`);
+      console.warn(
+        `[AIProviders] ⏸️ Skipping ${provider.name} (circuit open, retry in ${circuit.retryIn}s): ${circuit.reason}`,
+      );
+      continue;
+    }
+
     try {
       const result = await callProvider(provider, request, attemptLog);
       const totalDuration = Date.now() - totalStart;
+      // Đóng circuit khi provider work
+      closeCircuit(provider.name);
       console.log(
         `[AIProviders] ✓ Answered by ${provider.name} (${result.durationMs}ms, ${result.attempts} attempt, total ${totalDuration}ms): ${attemptLog.join(' → ')}`,
       );
@@ -255,19 +403,21 @@ export async function chatWithFallback(
       };
     } catch (err) {
       lastErr = err;
+      // Mở circuit khi provider fail
+      const errMsg = err instanceof Error ? err.message : String(err);
+      tripCircuit(provider.name, errMsg);
       // Log chi tiết, rồi tiếp tục thử provider tiếp theo
       console.warn(
-        `[AIProviders] Provider ${provider.name} failed after retries, trying next: ${
-          err instanceof Error ? err.message : String(err)
-        }`,
+        `[AIProviders] Provider ${provider.name} failed after retries, trying next: ${errMsg}`,
       );
     }
   }
 
-  // Tất cả providers đều fail
-  const errMsg = lastErr instanceof Error ? lastErr.message : String(lastErr);
+  // Tất cả providers đều fail (hoặc bị circuit-open)
+  const errMsg = lastErr instanceof Error ? lastErr.message : 'All providers circuit-open or failed';
+  const skipped = skippedLog.length > 0 ? ` Skipped: ${skippedLog.join(', ')}.` : '';
   throw new AppError(
-    `All AI providers failed: ${errMsg}. Attempted: ${attemptLog.join(' → ')}`,
+    `All AI providers failed: ${errMsg}. Attempted: ${attemptLog.join(' → ')}.${skipped}`,
     503,
     'AI_ALL_PROVIDERS_FAILED',
   );
@@ -296,6 +446,52 @@ export function listActiveProviders(): Array<{
     baseURL: p.baseURL,
     priority: p.priority,
   }));
+}
+
+/**
+ * Lấy trạng thái circuit breaker của tất cả providers (cho admin debug).
+ */
+export function getAllCircuitStates(): Record<string, {
+  consecutiveFailures: number;
+  cooldownUntil: string | null;
+  cooldownRemainingSec: number | null;
+  lastError: string | null;
+  lastErrorCode: string | null;
+  status: 'closed' | 'open' | 'half-open';
+}> {
+  const out: Record<string, ReturnType<typeof getAllCircuitStates>[string]> = {};
+  const providers = ['groq', 'openrouter', 'openai'];
+  for (const name of providers) {
+    const c = getCircuit(name);
+    const now = Date.now();
+    let status: 'closed' | 'open' | 'half-open' = 'closed';
+    let remaining: number | null = null;
+    if (c.cooldownUntil) {
+      if (now >= c.cooldownUntil) {
+        status = 'half-open';
+      } else {
+        status = 'open';
+        remaining = Math.ceil((c.cooldownUntil - now) / 1000);
+      }
+    }
+    out[name] = {
+      consecutiveFailures: c.consecutiveFailures,
+      cooldownUntil: c.cooldownUntil ? new Date(c.cooldownUntil).toISOString() : null,
+      cooldownRemainingSec: remaining,
+      lastError: c.lastError,
+      lastErrorCode: c.lastErrorCode,
+      status,
+    };
+  }
+  return out;
+}
+
+/**
+ * Reset thủ công circuit breaker cho 1 provider (admin tool).
+ */
+export function resetCircuitManually(name: string): void {
+  closeCircuit(name);
+  console.log(`[CircuitBreaker] Manual reset for ${name}`);
 }
 
 // ============================================================

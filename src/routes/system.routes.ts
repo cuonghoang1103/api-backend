@@ -1,6 +1,6 @@
 import { Router, type Response } from 'express';
 import type { ApiResponse } from '../types/index.js';
-import { listActiveProviders } from '../services/aiProviders.js';
+import { listActiveProviders, getAllCircuitStates, resetCircuitManually } from '../services/aiProviders.js';
 
 const router = Router();
 
@@ -13,13 +13,29 @@ router.get('/health', async (_req, res: Response<ApiResponse>) => {
 // Lists active AI providers (those with API keys set) for admin debug.
 router.get('/ai-providers', async (_req, res: Response<ApiResponse>) => {
   const providers = listActiveProviders();
+  const circuits = getAllCircuitStates();
   res.json({
     success: true,
     data: {
       count: providers.length,
       providers,
+      circuits, // Circuit breaker state cho từng provider
     },
   });
+});
+
+// ─── POST /api/v1/system/ai-providers/reset-circuit ────
+// Manually reset circuit breaker (admin tool, dùng khi cần recover nhanh)
+router.post('/ai-providers/reset-circuit', async (req, res: Response<ApiResponse>) => {
+  const { provider } = req.body as { provider?: string };
+  if (provider) {
+    resetCircuitManually(provider);
+    res.json({ success: true, data: { message: `Circuit reset for ${provider}` } });
+  } else {
+    // Reset tất cả
+    ['groq', 'openrouter', 'openai'].forEach(resetCircuitManually);
+    res.json({ success: true, data: { message: 'All circuits reset' } });
+  }
 });
 
 // ─── GET /api/v1/system/gemini-models ─────────────────

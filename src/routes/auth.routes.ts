@@ -180,6 +180,45 @@ router.post(
   },
 );
 
+// ─── POST /api/v1/auth/oauth/token ────────────────────────
+// Issued by the Next.js OAuth callback page (/api/auth/oauth/token) AFTER
+// NextAuth has confirmed a Google/GitHub sign-in. This endpoint runs the
+// same oauthRegister flow as above (auto-creates the user on first login,
+// links the OAuth provider on subsequent logins) and sets the httpOnly
+// `backend_token` cookie. Without this cookie the OAuth user would be
+// authenticated in the client store but every server-side auth check
+// (course enrollment, music history, etc.) would 401 with
+// "No authentication token provided".
+//
+// NOTE: this route is intentionally NOT protected by captchaMiddleware
+// (it's a programmatic server-to-server call from our own /oauth-callback
+// page, not a user-facing form), and it does NOT require authenticate
+// (we just want to issue a fresh JWT for the OAuth user).
+router.post(
+  '/oauth/token',
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('provider').notEmpty().withMessage('Provider is required'),
+    body('providerId').notEmpty().withMessage('Provider ID is required'),
+  ],
+  validate,
+  async (req: Request, res: Response<ApiResponse<AuthResponse>>, next: NextFunction) => {
+    try {
+      const result = await authService.oauthRegister(req.body);
+      res.cookie('backend_token', result.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: '/',
+      });
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 // ─── GET /api/v1/auth/captcha-config ─────────────────────
 // Returns the public Turnstile site key + whether CAPTCHA is enabled.
 // Frontend uses this to decide whether to render the widget and what key

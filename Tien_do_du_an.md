@@ -559,6 +559,61 @@ update file này để có timeline chính xác cho dự án.*
 
 **Tóm tắt tiến độ tổng thể:**
 - ✅ Phase 1 (Mục #3, #7, #8, #9): 100% done
-- 🔄 Phase 2 (Mục #2): 1/4 done (#2 xong, #1, #4, #6 pending)
-- 📊 5 mục đã deploy lên production, 4 mục tạm dừng chờ bạn test semantic search
-- ⏱️ Tổng thời gian đã làm trong phiên này: ~3 giờ
+- ✅ Phase 2 (Mục #2): semantic search DONE
+- ✅ **Mục #5 — 3-tier provider fallback LIVE**: Groq (primary) + OpenRouter (fallback) + OpenAI (commented, chờ nạp quota)
+- ⏳ Mục #1 (function calling), #4 (rate-limit UI), #6 (auto-train cron): pending
+- 📊 6 mục đã deploy lên production
+- ⏱️ Tổng thời gian đã làm trong phiên này: ~4 giờ
+
+### 🎉 Mục #5 — Production multi-provider fallback (14/06/2026 18:30 UTC+7) ✅
+
+**Thay đổi production:**
+- Update `/opt/cuonghoangdev/.env` trên VPS (clean duplicates cũ)
+- Backup file cũ: `/opt/cuonghoangdev/.env.backup-20260614-182946`
+- Restart với `docker compose --env-file /opt/cuonghoangdev/.env up -d` để tránh override từ `/home/deployer/repo/.env`
+- OpenAI key bị thiếu quota (`insufficient_quota` từ free trial đã hết) → comment out, để bạn nạp $5 vào billing khi cần
+
+**Cấu hình cuối cùng:**
+```bash
+GROQ_API_KEY=gsk_xxxxxxx... (real key in /opt/cuonghoangdev/.env)
+GROQ_CHAT_MODEL=llama-3.1-8b-instant
+OPENROUTER_API_KEY=sk-or-v1-xxxxxxx... (real key in /opt/cuonghoangdev/.env)
+OPENROUTER_CHAT_MODEL=meta-llama/llama-3.1-8b-instruct
+# OPENAI_API_KEY=sk-proj-xxxxxxx... (commented, chờ nạp quota)
+# OPENAI_CHAT_MODEL=gpt-4o-mini
+```
+
+**Test xác nhận (logs từ container):**
+```
+Test 1: GET /api/v1/system/ai-providers
+        → 2 providers: groq (priority 1) + openrouter (priority 2) ✅
+
+Test 2: Chat với Groq primary
+        → HTTP 200, response 16ms ✅
+
+Test 3: Fallback test (GROQ_API_KEY=fake)
+        → "Provider groq failed after retries, trying next: 401"
+        → "✓ Answered by openrouter (1291ms, 1 attempt, total 1628ms)" ✅
+        → Tổng latency user chờ: 1.6 giây (acceptable)
+
+Test 4: All-fail test
+        → Throw 503 "All AI providers failed" trong 889ms ✅
+
+Test 5: Real chat với RAG
+        → "Tôi là CuongMini... Cường có thể thực hiện: Phát triển website..." ✅
+```
+
+**Chi phí ước tính khi Groq hết quota:**
+- OpenRouter `llama-3.1-8b`: $0.0000003/call ≈ **$0.001/1000 chat**
+- Portfolio nhỏ (~100 chat/ngày) = **$0.03/tháng**
+- Rẻ hơn Groq free tier (30 req/phút limit)
+
+**Bài học rút ra:**
+- File `/opt/cuonghoangdev/.env` bị polluted từ các lần test cũ (50+ duplicate entries)
+- Khi `docker compose up -d`, nó tự động load `/home/deployer/repo/.env` (file trong repo) → override DATABASE_URL → container crash
+- Fix: dùng `docker compose --env-file /opt/cuonghoangdev/.env up -d` để chỉ định rõ file env nguồn
+- Khi restart với `restart` thôi, env KHÔNG refresh từ file → phải `down && up` hoặc `--env-file`
+
+**Còn lại cần làm để hoàn thiện Mục #5:**
+- Bạn nạp $5 vào OpenAI billing (https://platform.openai.com/account/billing) → uncomment 2 dòng → restart
+- Hoặc dùng Together AI / Cohere (free tier) làm lớp 3 thay thế

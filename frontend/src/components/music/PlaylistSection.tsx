@@ -135,10 +135,10 @@ export default function PlaylistSection({ onPlaylistClick }: PlaylistSectionProp
         </div>
         <button
           onClick={handleCreateClick}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-neon-violet/20 border border-neon-violet/30 text-neon-violet text-xs font-medium rounded-lg hover:bg-neon-violet/30 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-neon-violet/20 border border-neon-violet/30 text-neon-violet text-xs font-medium rounded-lg hover:bg-neon-violet/30 transition-colors whitespace-nowrap shrink-0"
         >
-          <Plus className="w-3.5 h-3.5" />
-          Tao Playlist
+          <Plus className="w-3.5 h-3.5 shrink-0" />
+          <span className="whitespace-nowrap">Tao Playlist</span>
         </button>
       </div>
 

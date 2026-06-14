@@ -178,7 +178,7 @@ export default function NowPlayingPage() {
         </div>
 
         {/* Main content */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 gap-8">
+        <div className="flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-28 gap-8">
           {currentTrack ? (
             <>
               {/* Album art — large */}

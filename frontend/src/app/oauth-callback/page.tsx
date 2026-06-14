@@ -33,6 +33,14 @@ function OAuthCallbackContent() {
       // The backend reads the user's CURRENT role from the DB.
       let backendToken = '';
       let tokenPayload: { data?: { userId?: number; roles?: string[]; role?: string } } = {};
+      // CRITICAL: declare freshRoles / freshRole BEFORE the step-1 fetch
+      // uses them at line `freshRoles = data.data.roles` (hoisting rule
+      // for `let` is "TDZ until declaration" — assigning to an undeclared
+      // `let` throws ReferenceError, which is caught silently by the
+      // try/catch and breaks the whole OAuth flow). Same issue would
+      // affect `freshRole` if we ever set it before declaring.
+      let freshRole = 'USER';
+      let freshRoles: string[] = [];
       try {
         const res = await fetch('/api/auth/oauth/token', { method: 'POST' });
         if (res.ok) {
@@ -51,9 +59,7 @@ function OAuthCallbackContent() {
 
       // Step 2: Fetch the FRESH profile from the backend to get the CURRENT role.
       // This reflects any role changes made by the admin (cuong03dx) immediately.
-      let freshRole = 'USER';
-      let freshRoles: string[] = [];
-      let freshEmail = session.user.email;
+      const freshEmail = session.user.email;
       if (backendToken) {
         try {
           const profileRes = await fetch('/api/v1/profile', {

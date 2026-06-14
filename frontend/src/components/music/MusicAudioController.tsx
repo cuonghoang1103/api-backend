@@ -242,7 +242,15 @@ export default function MusicAudioController() {
           if (ytMuted) {
             ytPlayerInstance?.mute();
           } else {
-            ytPlayerInstance?.setVolume(ytVolume);
+            // ytVolume is tracked on the 0-100 scale (matching YouTube
+            // IFrame API). The store `volume` is 0-1, so convert before
+            // calling setVolume. Without this, onReady always set
+            // volume to whatever the last `volume` store value was,
+            // which was the raw 0-1 number — YouTube then saw e.g. 0.7
+            // and treated it as 0.7%.
+            const ytVol = Math.round(Math.max(0, Math.min(1, useMusicStore.getState().volume)) * 100);
+            ytPlayerInstance?.setVolume(ytVol);
+            ytVolume = ytVol;
           }
           if (shouldPlay) {
             ytPlayerInstance?.playVideo();
@@ -300,8 +308,15 @@ export default function MusicAudioController() {
       ytMuted = true;
     } else {
       ytPlayerInstance.unMute();
-      ytPlayerInstance.setVolume(volume);
-      ytVolume = volume;
+      // YouTube IFrame API expects volume on a 0-100 integer scale.
+      // Store `volume` is on 0-1 (matches the local <audio> element
+      // volume property). Multiplying by 100 fixes the bug where
+      // dragging the slider to ~0.2 made the YouTube player silent
+      // (it was interpreting 0.2 as "0.2 out of 100" = effectively
+      // muted) — see line 415 for the equivalent local-audio mapping.
+      const ytVol = Math.round(Math.max(0, Math.min(1, volume)) * 100);
+      ytPlayerInstance.setVolume(ytVol);
+      ytVolume = ytVol;
       ytMuted = false;
     }
   }, [volume, isMuted]);
@@ -423,6 +438,20 @@ export default function MusicAudioController() {
   }, [isPlaying]);
 
   // ── Load new track ───────────────────────────────────────────────
+  // CRITICAL: this effect must NOT depend on `isPlaying` — that was
+  // the root cause of "pause then play rewinds to 0". Previously, a
+  // togglePlay() would flip isPlaying → effect re-ran → for YouTube
+  // tracks it destroyed the player and recreated it from `currentTime`,
+  // racing with the polling updater (which writes to currentTime every
+  // 250ms). The recreated player sometimes started from 0 because the
+  // startSeconds captured at the moment the effect ran was stale (the
+  // store was updated just before the effect captured the new closure
+  // but the polling callback also wrote to it).
+  //
+  // The fix: this effect only runs when the trackId or audioUrl
+  // changes. Play/pause is handled by a SEPARATE effect below that
+  // calls playVideo()/pauseVideo() on the existing player without
+  // recreating it.
   useEffect(() => {
     const audio = audioRef.current;
     const rawUrl = currentTrack?.audioUrl;
@@ -436,14 +465,15 @@ export default function MusicAudioController() {
         audio.pause();
         audio.src = '';
       }
-      // Use handleYouTubeTrack directly — it doesn't need to be in deps
-      // since we always want to run when track changes.
-      // Pass currentTime as start position so reloads resume the song.
-      handleYouTubeTrack(videoId, isPlaying, currentTime);
+      // Always pass shouldPlay=false at load time. The play/pause
+      // effect below will start playback once the player is ready.
+      // The store's currentTime at this point is whatever was last
+      // persisted — that's the resume position.
+      handleYouTubeTrack(videoId, false, currentTime);
       return;
     }
 
-    // Local track: stop YouTube
+    // Local track: stop YouTube (don't destroy — we may come back)
     if (ytPlayerInstance) {
       try { ytPlayerInstance.pauseVideo(); } catch { /* ignore */ }
     }
@@ -454,14 +484,8 @@ export default function MusicAudioController() {
     if (trackChanged) prevTrackIdRef.current = trackId;
 
     if (audio.src === rawUrl && !trackChanged) {
-      if (isPlaying) {
-        ensureAnalyser();
-        audio.play().catch((err) => {
-          console.warn('[MusicAudioController] play() rejected (same src):', err?.message);
-        });
-      } else {
-        audio.pause();
-      }
+      // Same track already loaded — no reload needed. The play/pause
+      // effect below will start/stop playback as needed.
       return;
     }
 
@@ -541,27 +565,78 @@ export default function MusicAudioController() {
 
     if (restoreToTime > 0) {
       // Need to seek before we know the element can play at that offset.
-      // Attach the same restore+play handler to loadedmetadata.
+      // Attach the same restore handler to loadedmetadata (no auto-play;
+      // the play/pause effect will fire after this).
       audio.addEventListener('loadedmetadata', onLoadedMetadataForRestore);
-    } else if (audio.readyState >= 2) {
-      // HAVE_CURRENT_DATA — we can play immediately.
-      tryPlay();
     } else {
       audio.addEventListener('loadedmetadata', onLoadedMetadataForRestore, { once: true });
     }
   }, [
     currentTrack?.id,
     currentTrack?.audioUrl,
-    isPlaying,
-    // NOTE: volume, isMuted intentionally excluded — volume is handled by the
-    // dedicated effect above so volume changes don't restart playback.
-    // handleYouTubeTrack intentionally excluded — YouTube player is created via
-    // handleYouTubeTrack which always runs on track change.
+    // NOTE: isPlaying intentionally excluded — toggling play/pause must
+    // NOT reload the track. See the new `play-pause toggle` effect below.
+    // handleYouTubeTrack intentionally excluded — YouTube player is created
+    // via handleYouTubeTrack which always runs on track change.
     // handleYouTubeTrack is stable (no setState in deps) so this is safe.
     // ensureAnalyser is in deps for first-play setup.
     ensureAnalyser,
     handleYouTubeTrack,
   ]);
+
+  // ── Play / pause toggle effect ────────────────────────────────────
+  // Runs whenever `isPlaying` flips. Does NOT reload the audio source
+  // or recreate the YouTube player — it just calls play() / pause() on
+  // the existing element / player. This is the fix for the bug where
+  // pause-then-play rewound YouTube tracks to 0 (the previous code
+  // destroyed and recreated the player on every isPlaying change,
+  // racing the polling updater and sometimes restarting from 0).
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!currentTrack) return;
+    const { isYT } = isYouTubeUrl(currentTrack.audioUrl);
+
+    if (isYT) {
+      const player = ytPlayerInstance;
+      if (!player) return;
+      try {
+        if (isPlaying) {
+          player.playVideo();
+        } else {
+          player.pauseVideo();
+        }
+      } catch {
+        // Player may not be fully ready yet — that's fine, the
+        // initial-load path will pick up the correct state via
+        // its own play/pause decision.
+      }
+      return;
+    }
+
+    if (!audio) return;
+    if (isPlaying) {
+      ensureAnalyser();
+      if (audioContextRef.current?.state === 'suspended') {
+        audioContextRef.current.resume().catch(() => {});
+      }
+      audio.play().catch((err) => {
+        console.warn('[MusicAudioController] play() rejected (toggle):', err?.message);
+        // Retry on canplay in case the audio isn't ready yet
+        // (e.g. user toggled play extremely fast after a track change).
+        audio.addEventListener(
+          'canplay',
+          () => {
+            audio.play().catch((e2) => {
+              console.error('[MusicAudioController] play() failed twice (toggle):', e2?.message);
+            });
+          },
+          { once: true },
+        );
+      });
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying, currentTrack?.id, currentTrack?.audioUrl, ensureAnalyser]);
 
   // End-of-track auto-advance is handled in the audio-init effect above:
   //   - `timeupdate` fires `next()` once when currentTime >= duration - 0.3

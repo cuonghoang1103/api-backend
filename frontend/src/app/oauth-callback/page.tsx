@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
+import { useAuthStore } from '@/store/authStore';
 
 /**
  * OAuth callback page — NextAuth redirects here after OAuth sign-in.
@@ -31,11 +32,18 @@ function OAuthCallbackContent() {
       // Step 1: Set the backend_token cookie with a FRESH JWT from the backend.
       // The backend reads the user's CURRENT role from the DB.
       let backendToken = '';
+      let tokenPayload: { data?: { userId?: number; roles?: string[]; role?: string } } = {};
       try {
         const res = await fetch('/api/auth/oauth/token', { method: 'POST' });
         if (res.ok) {
           const data = await res.json();
           backendToken = data?.token ?? '';
+          tokenPayload = data;
+          // Capture fresh roles from token endpoint response as a fallback
+          // if the profile fetch below fails.
+          if (data?.data?.roles?.length) {
+            freshRoles = data.data.roles;
+          }
         }
       } catch (err) {
         console.error('[oauth-callback] Failed to set backend_token:', err);
@@ -77,6 +85,29 @@ function OAuthCallbackContent() {
             roles: freshRoles,
           }));
         } catch {}
+
+        // CRITICAL: also call setAuth on the Zustand store so OAuth users
+        // are treated as authenticated throughout the app. Without this,
+        // gates like `if (!isAuthenticated) showLoginPrompt()` (Playlist,
+        // Upload, etc.) fire for OAuth users even though the backend
+        // backend_token cookie is set and NextAuth session is valid.
+        try {
+          const userId = tokenPayload?.data?.userId
+            || parseInt(String((session.user as { id?: string })?.id ?? '0'), 10)
+            || 0;
+          useAuthStore.getState().setAuth({
+            success: true,
+            message: 'OAuth login',
+            userId,
+            username: session.user.name ?? freshEmail.split('@')[0],
+            email: freshEmail,
+            fullName: session.user.name ?? freshEmail.split('@')[0],
+            roles: freshRoles.length > 0 ? freshRoles : ['user'],
+            role: freshRoles[0] ?? 'user',
+          });
+        } catch (e) {
+          console.warn('[oauth-callback] setAuth failed:', e);
+        }
 
         window.dispatchEvent(new CustomEvent('auth-updated', {
           detail: {

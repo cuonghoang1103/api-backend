@@ -1,11 +1,25 @@
 import { Router, type Response } from 'express';
 import type { ApiResponse } from '../types/index.js';
+import { listActiveProviders } from '../services/aiProviders.js';
 
 const router = Router();
 
 // ─── GET /api/v1/system/health ────────────────────────
 router.get('/health', async (_req, res: Response<ApiResponse>) => {
   res.json({ success: true, data: { status: 'ok', timestamp: new Date().toISOString() } });
+});
+
+// ─── GET /api/v1/system/ai-providers ─────────────────
+// Lists active AI providers (those with API keys set) for admin debug.
+router.get('/ai-providers', async (_req, res: Response<ApiResponse>) => {
+  const providers = listActiveProviders();
+  res.json({
+    success: true,
+    data: {
+      count: providers.length,
+      providers,
+    },
+  });
 });
 
 // ─── GET /api/v1/system/gemini-models ─────────────────

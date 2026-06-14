@@ -37,8 +37,13 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { chatWithFallback } from './aiProviders.js';
 
 // ─── Groq (OpenAI-compatible) client ─────────────────────────────
+// Re-export getGroq() for backward compatibility with other code paths
+// (system.routes.ts uses it to list available models). The actual chat
+// logic uses the provider factory in aiProviders.ts which supports
+// auto-fallback Groq → OpenRouter → OpenAI.
 let _groq: OpenAI | null = null;
 
 function getGroq(): OpenAI {
@@ -249,28 +254,21 @@ export class AIService {
     }
 
     try {
-      const groq = getGroq();
-
-      const response = await groq.chat.completions.create({
-        model: config.groqChatModel,
+      // Use provider factory with auto-fallback (Groq → OpenRouter → OpenAI)
+      const result = await chatWithFallback({
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message },
         ],
-        max_tokens: config.aiMaxTokens,
-        temperature: config.aiTemperature,
-        stream: false,
       });
 
-      const text = response.choices[0]?.message?.content || '';
-
-      if (sessionId && text) {
-        await this.saveAssistantMessage(sessionId, text);
+      if (sessionId && result.text) {
+        await this.saveAssistantMessage(sessionId, result.text);
       }
-      return { text, sessionId };
+      return { text: result.text, sessionId };
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
-      console.error('[AIService] Groq API error:', errMsg);
+      console.error('[AIService] Chat error:', errMsg);
       throw err;
     }
   }
@@ -298,36 +296,72 @@ export class AIService {
       await this.saveUserMessage(sessionId, message, context.userId);
     }
 
+    // Try streaming with Groq first (fast, real-time SSE).
+    // If Groq fails, fallback to non-streaming chatWithFallback() and yield
+    // the entire response in one chunk.
+    let groq: OpenAI | null = null;
+    let groqAvailable = false;
     try {
-      const groq = getGroq();
+      groq = getGroq();
+      groqAvailable = true;
+    } catch {
+      groqAvailable = false;
+    }
 
-      const stream = await groq.chat.completions.create({
-        model: config.groqChatModel,
+    if (groqAvailable && groq) {
+      try {
+        const stream = await groq.chat.completions.create({
+          model: config.groqChatModel,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: message },
+          ],
+          max_tokens: config.aiMaxTokens,
+          temperature: config.aiTemperature,
+          stream: true,
+        });
+
+        let fullResponse = '';
+
+        for await (const chunk of stream) {
+          const chunkText = chunk.choices[0]?.delta?.content || '';
+          if (chunkText) {
+            fullResponse += chunkText;
+            yield chunkText;
+          }
+        }
+
+        if (sessionId && fullResponse) {
+          await this.saveAssistantMessage(sessionId, fullResponse);
+        }
+        return;
+      } catch (err) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        console.warn(
+          `[AIService] Groq streaming failed, falling back to non-stream: ${errMsg}`,
+        );
+        // Fall through to non-stream fallback
+      }
+    }
+
+    // Fallback: use provider factory (Groq non-stream → OpenRouter → OpenAI)
+    try {
+      const result = await chatWithFallback({
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message },
         ],
-        max_tokens: config.aiMaxTokens,
-        temperature: config.aiTemperature,
-        stream: true,
       });
 
-      let fullResponse = '';
+      // Yield entire text in one chunk (no real streaming, but at least it works)
+      if (result.text) yield result.text;
 
-      for await (const chunk of stream) {
-        const chunkText = chunk.choices[0]?.delta?.content || '';
-        if (chunkText) {
-          fullResponse += chunkText;
-          yield chunkText;
-        }
-      }
-
-      if (sessionId && fullResponse) {
-        await this.saveAssistantMessage(sessionId, fullResponse);
+      if (sessionId && result.text) {
+        await this.saveAssistantMessage(sessionId, result.text);
       }
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
-      console.error('[AIService] Groq streaming error:', errMsg);
+      console.error('[AIService] All providers failed:', errMsg);
       throw err;
     }
   }

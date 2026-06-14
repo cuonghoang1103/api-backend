@@ -50,12 +50,15 @@ export const config = {
   // Cookie
   cookieSecret: process.env.COOKIE_SECRET || 'default-cookie-secret',
 
-  // AI (Groq - OpenAI-compatible)
+  // AI (Multi-provider with auto-fallback)
   groqApiKey: process.env.GROQ_API_KEY || '',
   groqChatModel: process.env.GROQ_CHAT_MODEL || 'llama-3.1-8b-instant',
-  // Legacy Gemini
+  openrouterApiKey: process.env.OPENROUTER_API_KEY || '',
+  openrouterChatModel: process.env.OPENROUTER_CHAT_MODEL || 'meta-llama/llama-3.1-8b-instruct:free',
+  openaiApiKey: process.env.OPENAI_API_KEY || '',
+  openaiChatModel: process.env.OPENAI_CHAT_MODEL || 'gpt-4o-mini',
+  // Legacy
   geminiApiKey: process.env.GEMINI_API_KEY || '',
-  openRouterApiKey: process.env.OPENROUTER_API_KEY || '',
   aiChatModel: process.env.AI_CHAT_MODEL || 'llama-3.1-8b-instant',
   aiEmbeddingModel: process.env.AI_EMBEDDING_MODEL || 'gemini-embedding-002',
   aiEmbeddingDimensions: parseInt(process.env.AI_EMBEDDING_DIMENSIONS || '768', 10),

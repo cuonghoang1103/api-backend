@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
-  Home, BookOpen, FolderOpen, Music, MessageCircle,
+  Home, BookOpen, FolderOpen, Music, MessageCircle, MessagesSquare,
   LayoutDashboard, Shield, BookMarked, Receipt,
   Settings, ChevronLeft, Sparkles, UserCircle,
   GraduationCap, ShoppingBag, Gamepad2, Globe,
@@ -26,8 +26,8 @@ const DOCK_ITEMS: DockItem[] = [
   { href: '/blog', label: 'Blog', icon: BookOpen, section: 'main' },
   { href: '/projects', label: 'Projects', icon: FolderOpen, section: 'main' },
   { href: '/music', label: 'Music', icon: Music, section: 'main' },
-  { href: '/messages', label: 'Messages', icon: MessageCircle, section: 'main', showUnread: true },
-  { href: '/chat', label: 'AI Chat', icon: MessageCircle, section: 'main' },
+  { href: '/messages', label: 'Messages', icon: MessagesSquare, section: 'main', showUnread: true },
+  { href: '/chat', label: 'AI Chat', icon: Sparkles, section: 'main' },
   { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'user' },
   { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'user' },
   { href: '/games', label: 'Games', icon: Gamepad2, section: 'user' },

@@ -9,7 +9,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { useMessagingStore } from '@/store/messagingStore';
 import {
-  Home, BookOpen, FolderOpen, Music, MessageCircle,
+  Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles,
   User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
   Globe, ShoppingBag, GraduationCap, Users,
 } from 'lucide-react';
@@ -25,7 +25,7 @@ const TOP_NAV_LINKS = [
   { href: '/projects', label: 'Projects', icon: FolderOpen },
   { href: '/music', label: 'Music', icon: Music },
   { href: '/messages', label: 'Messages', icon: MessageCircle, authOnly: true },
-  { href: '/chat', label: 'AI Chat', icon: MessageCircle },
+  { href: '/chat', label: 'AI Chat', icon: Sparkles },
 ];
 
 // Facebook Messenger bubble — official-style lightning chat icon.

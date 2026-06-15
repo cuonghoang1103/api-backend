@@ -347,11 +347,15 @@ function MessageButton({ profileId, disabled }: { profileId: number; disabled: b
     }
     setBusy(true);
     try {
+      // Pre-create (or fetch) the thread on the backend so the
+      // /messages page can open it instantly when the page mounts.
+      // The /messages page subscribes to ?peer=<id> and runs the
+      // same startUserThread() on mount, so this call is just a
+      // warm-up — the UI lives on /messages, not in a floating
+      // widget (we don't ship one).
       const { useMessagingStore } = await import('@/store/messagingStore');
-      const store = useMessagingStore.getState();
-      const id = await store.startUserThread(profileId);
-      store.setWidgetOpen(true);
-      await store.openThread(id);
+      await useMessagingStore.getState().startUserThread(profileId);
+      router.push(`/messages?peer=${profileId}`);
     } catch (e: any) {
       const { default: toast } = await import('react-hot-toast');
       const msg = e?.response?.data?.code === 'MESSAGES_DISABLED'

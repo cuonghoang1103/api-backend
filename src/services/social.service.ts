@@ -143,6 +143,7 @@ export async function createPost(input: CreatePostInput) {
             duration: m.duration,
             fileSize: m.fileSize ? BigInt(m.fileSize) : undefined,
             mimeType: m.mimeType,
+            fileName: m.fileName,
             alt: m.alt,
             sortOrder: m.sortOrder ?? idx,
           })),

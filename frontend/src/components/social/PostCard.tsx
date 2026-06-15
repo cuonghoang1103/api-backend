@@ -8,6 +8,7 @@ import {
   Heart, MessageCircle, Bookmark, Share2, MoreHorizontal, Send,
   Repeat2, Trash2, Copy, Flag, Eye, Globe, Users, Lock,
   Smile, ThumbsUp, Frown, Laugh, Angry, Hand, X, Youtube,
+  Download, FileText, FileCode, FileArchive, FileSpreadsheet,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
 import { socialApi } from '@/lib/api';
@@ -15,8 +16,7 @@ import { RenderContentWithCode } from '@/components/social/CodeBlock';
 import PostPoll from '@/components/social/PostPoll';
 import { useAuthStore } from '@/store/authStore';
 import type { SocialPost, SocialComment, SocialMedia } from '@/types/social';
-import { formatDistanceToNow } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { formatRelative } from '@/lib/formatDate';
 import { toast } from 'sonner';
 
 interface PostCardProps {
@@ -298,7 +298,7 @@ export function PostCard({ post }: PostCardProps) {
               <div className="flex items-center gap-1.5 mt-0.5 text-xs flex-wrap" style={{ color: '#64748b' }}>
                 <span>@{authorObj?.username ?? 'user'}</span>
                 <span style={{ color: '#334155' }}>·</span>
-                <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true, locale: vi })}</span>
+                <span>{formatRelative(post.createdAt)}</span>
                 <span style={{ color: '#334155' }}>·</span>
                 <span className="inline-flex items-center gap-0.5" style={{ color: visMeta.color }} title={visMeta.label}>
                   <VisIcon className="h-3 w-3" />
@@ -622,15 +622,32 @@ export function PostCard({ post }: PostCardProps) {
 
 function MediaGrid({ media }: { media: SocialMedia[] }) {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const visual = media.filter((m) => m.type !== 'FILE');
+  const files = media.filter((m) => m.type === 'FILE');
 
-  if (media.length === 1) {
+  if (visual.length === 0) {
+    // Pure file post (no image / video). Hand off to the file list
+    // renderer below so we don't end up rendering an empty grid.
+    return (
+      <>
+        <FileAttachmentList media={files} />
+      </>
+    );
+  }
+
+  if (visual.length === 1) {
     return (
       <div className="mt-3">
         <MediaItem
-          item={media[0]}
-          onClick={() => setLightboxSrc(media[0].url)}
-          autoPlayEnabled={media[0].type === 'VIDEO'}
+          item={visual[0]}
+          onClick={() => setLightboxSrc(visual[0].url)}
+          autoPlayEnabled={visual[0].type === 'VIDEO'}
         />
+        {files.length > 0 && (
+          <div className="mt-2">
+            <FileAttachmentList media={files} />
+          </div>
+        )}
         {lightboxSrc && (
           <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
         )}
@@ -639,38 +656,135 @@ function MediaGrid({ media }: { media: SocialMedia[] }) {
   }
 
   const gridClass =
-    media.length === 2
+    visual.length === 2
       ? 'grid-cols-2'
-      : media.length === 3
+      : visual.length === 3
       ? 'grid-cols-2'
       : 'grid-cols-2';
 
   return (
-    <div className={`mt-3 grid ${gridClass} gap-1.5 rounded-2xl overflow-hidden`}>
-      {media.slice(0, 4).map((item, i) => (
-        <div
-          key={item.id}
-          className="relative overflow-hidden rounded-xl"
-          style={{
-            aspectRatio: '1',
-            gridColumn: i === 0 && media.length === 3 ? 'span 2' : 'span 1',
-          }}
-        >
-          <MediaItem item={item} onClick={() => setLightboxSrc(item.url)} />
-          {i === 3 && media.length > 4 && (
-            <div
-              className="absolute inset-0 flex items-center justify-center text-2xl font-bold"
-              style={{ background: 'rgba(0,0,0,0.6)', color: 'white' }}
-            >
-              +{media.length - 4}
-            </div>
-          )}
+    <div className="mt-3">
+      <div className={`grid ${gridClass} gap-1.5 rounded-2xl overflow-hidden`}>
+        {visual.slice(0, 4).map((item, i) => (
+          <div
+            key={item.id}
+            className="relative overflow-hidden rounded-xl"
+            style={{
+              aspectRatio: '1',
+              gridColumn: i === 0 && visual.length === 3 ? 'span 2' : 'span 1',
+            }}
+          >
+            <MediaItem item={item} onClick={() => setLightboxSrc(item.url)} />
+            {i === 3 && visual.length > 4 && (
+              <div
+                className="absolute inset-0 flex items-center justify-center text-2xl font-bold"
+                style={{ background: 'rgba(0,0,0,0.6)', color: 'white' }}
+              >
+                +{visual.length - 4}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      {files.length > 0 && (
+        <div className="mt-2">
+          <FileAttachmentList media={files} />
         </div>
-      ))}
+      )}
       {lightboxSrc && (
         <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
       )}
     </div>
+  );
+}
+
+// ─── File Attachment List ─────────────────────────────────────────────
+// Renders one row per FILE attachment with a download button. The
+// icon + colour are picked from the file extension so a glance is
+// enough to tell archives from source files from docs.
+
+function fileIconForPostCard(name: string): { Icon: any; color: string } {
+  const ext = (name.split('.').pop() || '').toLowerCase();
+  if (['zip', 'rar', '7z', 'tar', 'gz', 'tgz'].includes(ext)) {
+    return { Icon: FileArchive, color: '#f59e0b' };
+  }
+  if (['md', 'txt', 'log'].includes(ext)) {
+    return { Icon: FileText, color: '#94a3b8' };
+  }
+  if (['pdf'].includes(ext)) {
+    return { Icon: FileText, color: '#ef4444' };
+  }
+  if (['doc', 'docx', 'odt'].includes(ext)) {
+    return { Icon: FileText, color: '#3b82f6' };
+  }
+  if (['xls', 'xlsx', 'csv'].includes(ext)) {
+    return { Icon: FileSpreadsheet, color: '#22c55e' };
+  }
+  if (['js', 'jsx', 'ts', 'tsx', 'json', 'py', 'go', 'rs', 'java', 'rb', 'php', 'css', 'html', 'yml', 'yaml'].includes(ext)) {
+    return { Icon: FileCode, color: '#a78bfa' };
+  }
+  return { Icon: FileText, color: '#64748b' };
+}
+
+function humanFileSizePostCard(bytes?: number | string | bigint | null): string {
+  if (bytes == null) return '';
+  const n = typeof bytes === 'string' ? Number(bytes) : typeof bytes === 'bigint' ? Number(bytes) : bytes;
+  if (!Number.isFinite(n) || n < 0) return '';
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  if (n < 1024 * 1024 * 1024) return `${(n / 1024 / 1024).toFixed(1)} MB`;
+  return `${(n / 1024 / 1024 / 1024).toFixed(2)} GB`;
+}
+
+function FileAttachmentList({ media }: { media: SocialMedia[] }) {
+  return (
+    <ul
+      className="overflow-hidden rounded-2xl"
+      style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}
+    >
+      {media.map((m) => {
+        const name = m.fileName || m.alt || 'Tệp đính kèm';
+        const { Icon, color } = fileIconForPostCard(name);
+        return (
+          <li
+            key={m.id}
+            className="flex items-center gap-3 border-b border-white/[0.04] px-3 py-2.5 last:border-b-0"
+          >
+            <div
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+              style={{ background: `${color}20`, color }}
+            >
+              <Icon size={18} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium text-text-primary" title={name}>
+                {name}
+              </p>
+              <p className="text-[10px]" style={{ color: '#64748b' }}>
+                {humanFileSizePostCard(m.fileSize)}
+                {m.mimeType ? ` · ${m.mimeType}` : ''}
+              </p>
+            </div>
+            <a
+              href={m.url}
+              download={name}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-9 items-center gap-1.5 rounded-lg px-3 text-xs font-medium transition-colors"
+              style={{
+                background: 'rgba(139,92,246,0.12)',
+                color: '#a78bfa',
+                border: '1px solid rgba(139,92,246,0.3)',
+              }}
+              title="Tải xuống"
+            >
+              <Download size={14} />
+              Tải
+            </a>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
@@ -892,7 +1006,7 @@ function CommentItem({
             {comment.likesCount > 0 && comment.likesCount}
           </button>
           <span className="text-xs" style={{ color: '#334155' }}>
-            {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true, locale: vi })}
+            {formatRelative(comment.createdAt)}
           </span>
           {comment.isEdited && (
             <span className="text-xs" style={{ color: '#334155' }}>

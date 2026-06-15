@@ -23,6 +23,12 @@ import {
   ListChecks,
   Youtube,
   Link as LinkIcon,
+  FileText,
+  FileCode,
+  FileArchive,
+  FileSpreadsheet,
+  Paperclip,
+  Code,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
 import { socialApi, fileApi } from '@/lib/api';
@@ -82,6 +88,10 @@ export function PostComposer() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  // Generic file attachments (zip, md, pdf, source files, …) capped
+  // at 10MB per file. The same handleFiles pipeline uploads them;
+  // the post card just renders a download row.
+  const attachInputRef = useRef<HTMLInputElement>(null);
 
   const currentVisibility = VISIBILITY_OPTIONS.find((v) => v.value === composerVisibility) || VISIBILITY_OPTIONS[0];
 
@@ -113,6 +123,37 @@ export function PostComposer() {
         const cursorStart = start + prefix.length;
         const cursorEnd = cursorStart + selected.length;
         ta.setSelectionRange(cursorStart, cursorEnd);
+        adjustTextareaHeight();
+      });
+    },
+    [composerContent, setComposerContent]
+  );
+
+  // Inserts a fenced code block at the caret. The block uses the
+  // triple-backtick markdown syntax that the renderer already
+  // understands (see CodeBlock.tsx) and sets the language to
+  // `tsx` by default since that's what most people paste. The
+  // user can change the language tag after the block is
+  // inserted.
+  const insertCodeBlock = useCallback(
+    (lang: string = 'tsx') => {
+      const ta = textareaRef.current;
+      const start = ta?.selectionStart ?? composerContent.length;
+      const end = ta?.selectionEnd ?? composerContent.length;
+      // Add blank lines around the block so the surrounding text
+      // doesn't get concatenated onto the fence markers.
+      const prefix = composerContent.length > 0 && !composerContent.endsWith('\n\n') ? '\n\n' : '';
+      const block = `${prefix}\`\`\`${lang}\n\n\`\`\`\n`;
+      const next = composerContent.slice(0, start) + block + composerContent.slice(end);
+      setComposerContent(next);
+      requestAnimationFrame(() => {
+        if (!ta) return;
+        ta.focus();
+        // Place the caret between the opening fence and closing
+        // fence so the user can start typing/pasting code
+        // immediately.
+        const cursor = start + prefix.length + 4 + lang.length + 1;
+        ta.setSelectionRange(cursor, cursor);
         adjustTextareaHeight();
       });
     },
@@ -202,21 +243,37 @@ export function PostComposer() {
         }
 
         const isVideo = file.type.startsWith('video/');
+        const isImage = file.type.startsWith('image/');
+        // Anything that's not a recognised image / video goes
+        // through the FILE pipeline so the post card can render a
+        // download link instead of a media tile. 10MB cap to keep
+        // a single post from holding 50MB of binaries.
+        const isFile = !isImage && !isVideo;
+        const FILE_MAX = 10 * 1024 * 1024;
+        if (isFile && file.size > FILE_MAX) {
+          setPostError(`Tệp "${file.name}" vượt quá 10MB`);
+          continue;
+        }
         const id = `upload-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-        const preview = URL.createObjectURL(file);
+        // For files we don't need an object URL preview — the chip
+        // shows the icon + filename + size. For images / videos we
+        // keep the local blob URL so the preview renders before
+        // the upload completes.
+        const preview = isFile ? '' : URL.createObjectURL(file);
         const item: MediaUploadItem = {
           id,
           file,
           preview,
-          type: isVideo ? 'VIDEO' : 'IMAGE',
+          type: isVideo ? 'VIDEO' : isFile ? 'FILE' : 'IMAGE',
           progress: 0,
+          fileName: file.name,
         };
         addComposerMedia([item]);
 
         // Get dimensions for images so the renderer can lay out
         // the grid correctly.
-        if (!isVideo) {
+        if (isImage) {
           const img = document.createElement('img');
           img.onload = () => {
             useSocialStore.setState((s) => ({
@@ -236,7 +293,12 @@ export function PostComposer() {
           composerMedia: s.composerMedia.map((m) => (m.id === id ? { ...m, progress: 25 } : m)),
         }));
         try {
-          const res = await fileApi.upload(file, isVideo ? 'video' : 'images');
+          // Files use category='documents' (the only existing
+          // bucket that accepts everything). Images and videos
+          // keep their tight allow-lists so the backend still
+          // rejects arbitrary blobs being smuggled in.
+          const category = isFile ? 'documents' : isVideo ? 'video' : 'images';
+          const res = await fileApi.upload(file, category);
           const url = res.data?.data?.url;
           if (!url) {
             throw new Error('Upload response missing url');
@@ -255,7 +317,7 @@ export function PostComposer() {
             composerMedia: s.composerMedia.filter((m) => m.id !== id),
           }));
           try {
-            URL.revokeObjectURL(preview);
+            if (preview) URL.revokeObjectURL(preview);
           } catch {}
           const msg = err?.userFriendlyMessage || err?.message || 'Upload failed';
           toast.error(`Không thể tải lên ${file.name}: ${msg}`);
@@ -455,6 +517,24 @@ export function PostComposer() {
                       active={!!composerYouTubeUrl}
                     />
 
+                    {/* Generic file attachment (zip, md, pdf, source files,
+                        …). The 10MB cap is enforced inside handleFiles. */}
+                    <ToolbarButton
+                      icon={<Paperclip size={18} />}
+                      label="Tệp đính kèm"
+                      onClick={() => attachInputRef.current?.click()}
+                    />
+
+                    {/* Code block — inserts a fenced ``` block at the
+                        caret. Useful when pasting code from VSCode
+                        alongside text — the renderer preserves monospace
+                        + applies syntax highlighting. */}
+                    <ToolbarButton
+                      icon={<Code size={18} />}
+                      label="Chèn khối code"
+                      onClick={() => insertCodeBlock()}
+                    />
+
                     {/* Inline formatting */}
                     <ToolbarButton
                       icon={<Bold size={18} />}
@@ -635,6 +715,16 @@ export function PostComposer() {
           ref={videoInputRef}
           type="file"
           accept="video/*,video/mp4,video/webm,video/quicktime"
+          className="hidden"
+          onChange={handleFileChange}
+        />
+        {/* Generic file attachment input. No `accept` restriction
+            so the user can pick zip, md, pdf, source files, etc.
+            The 10MB cap is enforced inside handleFiles. */}
+        <input
+          ref={attachInputRef}
+          type="file"
+          multiple
           className="hidden"
           onChange={handleFileChange}
         />
@@ -890,6 +980,95 @@ function PollEditor({ poll, onChange, onClose }: PollEditorProps) {
 
 // ─── Media Preview ───────────────────────────────────────────────────────────
 
+// Compact icon based on the file extension. We only need a few
+// buckets — the renderer is small and we just want a colour cue
+// so users can spot PDFs vs source files vs archives at a glance.
+function fileIconFor(name: string): { Icon: any; color: string } {
+  const ext = (name.split('.').pop() || '').toLowerCase();
+  if (['zip', 'rar', '7z', 'tar', 'gz', 'tgz'].includes(ext)) {
+    return { Icon: FileArchive, color: '#f59e0b' };
+  }
+  if (['md', 'txt', 'log'].includes(ext)) {
+    return { Icon: FileText, color: '#94a3b8' };
+  }
+  if (['pdf'].includes(ext)) {
+    return { Icon: FileText, color: '#ef4444' };
+  }
+  if (['doc', 'docx', 'odt'].includes(ext)) {
+    return { Icon: FileText, color: '#3b82f6' };
+  }
+  if (['xls', 'xlsx', 'csv'].includes(ext)) {
+    return { Icon: FileSpreadsheet, color: '#22c55e' };
+  }
+  if (['js', 'jsx', 'ts', 'tsx', 'json', 'py', 'go', 'rs', 'java', 'rb', 'php', 'css', 'html', 'yml', 'yaml'].includes(ext)) {
+    return { Icon: FileCode, color: '#a78bfa' };
+  }
+  return { Icon: FileText, color: '#64748b' };
+}
+
+function humanFileSize(bytes?: number): string {
+  if (!bytes || bytes < 0) return '';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+  return `${(bytes / 1024 / 1024 / 1024).toFixed(2)} GB`;
+}
+
+function FileChip({
+  item,
+  onRemove,
+  size = 'md',
+}: {
+  item: MediaUploadItem;
+  onRemove: () => void;
+  size?: 'sm' | 'md';
+}) {
+  const { Icon, color } = fileIconFor(item.file?.name || '');
+  const isSm = size === 'sm';
+  return (
+    <div
+      className="relative flex items-center gap-2 rounded-xl p-2 pr-7"
+      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+    >
+      <div
+        className="flex shrink-0 items-center justify-center rounded-lg"
+        style={{
+          background: `${color}20`,
+          color,
+          width: isSm ? 28 : 32,
+          height: isSm ? 28 : 32,
+        }}
+      >
+        <Icon size={isSm ? 14 : 16} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-xs font-medium text-text-primary" title={item.file?.name}>
+          {item.file?.name || 'Tệp đính kèm'}
+        </p>
+        <p className="text-[10px]" style={{ color: '#64748b' }}>
+          {humanFileSize(item.file?.size)}
+          {item.progress < 100 ? ` · ${item.progress}%` : ''}
+        </p>
+      </div>
+      <button
+        onClick={onRemove}
+        className="absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full text-text-muted hover:bg-white/[0.06] hover:text-red-400"
+        title="Bỏ tệp"
+      >
+        <X size={11} />
+      </button>
+      {item.progress < 100 && (
+        <div
+          className="absolute inset-x-0 bottom-0 h-0.5 overflow-hidden rounded-b-xl"
+          style={{ background: 'rgba(255,255,255,0.06)' }}
+        >
+          <div className="h-full transition-all" style={{ width: `${item.progress}%`, background: color }} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MediaPreview({
   media,
   onRemove,
@@ -897,79 +1076,91 @@ function MediaPreview({
   media: MediaUploadItem[];
   onRemove: (id: string) => void;
 }) {
-  if (media.length === 1) {
-    const item = media[0];
-    return (
-      <div className="relative inline-block w-full overflow-hidden rounded-2xl" style={{ maxHeight: '300px' }}>
-        {item.type === 'VIDEO' ? (
-          <video src={item.preview} className="w-full object-cover" style={{ maxHeight: '300px' }} />
-        ) : (
-          <img
-            src={item.preview}
-            alt="Upload preview"
-            className="w-full object-cover"
-            style={{ maxHeight: '300px' }}
-          />
-        )}
-        {item.progress < 100 && (
-          <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ background: 'rgba(0,0,0,0.5)' }}
-          >
-            <div className="text-center">
-              <Loader2 size={24} className="mx-auto animate-spin text-white" />
-              <p className="mt-1 text-xs text-white">{item.progress}%</p>
-            </div>
-          </div>
-        )}
-        <button
-          onClick={() => onRemove(item.id)}
-          className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full"
-          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)' }}
-        >
-          <X size={14} className="text-white" />
-        </button>
-      </div>
-    );
-  }
+  const imageVideo = media.filter((m) => m.type !== 'FILE');
+  const files = media.filter((m) => m.type === 'FILE');
 
   return (
-    <div className="grid grid-cols-3 gap-1.5">
-      {media.slice(0, 6).map((item, i) => (
-        <div key={item.id} className="relative overflow-hidden rounded-xl" style={{ aspectRatio: '1' }}>
-          {item.type === 'VIDEO' ? (
-            <video src={item.preview} className="h-full w-full object-cover" />
-          ) : (
-            <img src={item.preview} alt="Upload" className="h-full w-full object-cover" />
-          )}
-          {i === 5 && media.length > 6 && (
-            <div
-              className="absolute inset-0 flex items-center justify-center text-xl font-bold text-white"
-              style={{ background: 'rgba(0,0,0,0.6)' }}
-            >
-              +{media.length - 5}
-            </div>
-          )}
-          <button
-            onClick={() => onRemove(item.id)}
-            className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full"
-            style={{ background: 'rgba(0,0,0,0.7)' }}
-          >
-            <X size={10} className="text-white" />
-          </button>
-          {item.progress < 100 && (
-            <div
-              className="absolute inset-x-0 bottom-0 h-1"
-              style={{ background: 'rgba(255,255,255,0.2)' }}
-            >
-              <div
-                className="h-full transition-all"
-                style={{ width: `${item.progress}%`, background: '#8B5CF6' }}
+    <div className="mt-3 space-y-2">
+      {imageVideo.length > 0 && (
+        imageVideo.length === 1 ? (
+          <div className="relative inline-block w-full overflow-hidden rounded-2xl" style={{ maxHeight: '300px' }}>
+            {imageVideo[0].type === 'VIDEO' ? (
+              <video src={imageVideo[0].preview} className="w-full object-cover" style={{ maxHeight: '300px' }} />
+            ) : (
+              <img
+                src={imageVideo[0].preview}
+                alt="Upload preview"
+                className="w-full object-cover"
+                style={{ maxHeight: '300px' }}
               />
-            </div>
-          )}
+            )}
+            {imageVideo[0].progress < 100 && (
+              <div
+                className="absolute inset-0 flex items-center justify-center"
+                style={{ background: 'rgba(0,0,0,0.5)' }}
+              >
+                <div className="text-center">
+                  <Loader2 size={24} className="mx-auto animate-spin text-white" />
+                  <p className="mt-1 text-xs text-white">{imageVideo[0].progress}%</p>
+                </div>
+              </div>
+            )}
+            <button
+              onClick={() => onRemove(imageVideo[0].id)}
+              className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full"
+              style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)' }}
+            >
+              <X size={14} className="text-white" />
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-1.5">
+            {imageVideo.slice(0, 6).map((item, i) => (
+              <div key={item.id} className="relative overflow-hidden rounded-xl" style={{ aspectRatio: '1' }}>
+                {item.type === 'VIDEO' ? (
+                  <video src={item.preview} className="h-full w-full object-cover" />
+                ) : (
+                  <img src={item.preview} alt="Upload" className="h-full w-full object-cover" />
+                )}
+                {i === 5 && imageVideo.length > 6 && (
+                  <div
+                    className="absolute inset-0 flex items-center justify-center text-sm font-semibold text-white"
+                    style={{ background: 'rgba(0,0,0,0.6)' }}
+                  >
+                    +{imageVideo.length - 5}
+                  </div>
+                )}
+                <button
+                  onClick={() => onRemove(item.id)}
+                  className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full"
+                  style={{ background: 'rgba(0,0,0,0.7)' }}
+                >
+                  <X size={10} className="text-white" />
+                </button>
+                {item.progress < 100 && (
+                  <div
+                    className="absolute inset-x-0 bottom-0 h-1"
+                    style={{ background: 'rgba(255,255,255,0.2)' }}
+                  >
+                    <div
+                      className="h-full transition-all"
+                      style={{ width: `${item.progress}%`, background: '#8B5CF6' }}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )
+      )}
+
+      {files.length > 0 && (
+        <div className={files.length === 1 ? '' : 'grid grid-cols-1 gap-1.5 sm:grid-cols-2'}>
+          {files.map((item) => (
+            <FileChip key={item.id} item={item} onRemove={() => onRemove(item.id)} size={files.length > 2 ? 'sm' : 'md'} />
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 }

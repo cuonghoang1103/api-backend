@@ -16,8 +16,7 @@ import { api } from '@/lib/api';
 import SocialBackground from '@/components/social/SocialBackground';
 import SocialSidebar from '@/components/social/SocialSidebar';
 import SocialRightWidget from '@/components/social/SocialRightWidget';
-import { formatDistanceToNow } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { formatRelative } from '@/lib/formatDate';
 
 type NotificationType = 'LIKE' | 'COMMENT' | 'FOLLOW' | 'MENTION' | 'REPOST';
 
@@ -218,10 +217,7 @@ function NotificationRow({ item }: { item: NotificationItem }) {
             {item.message}
           </p>
           <p className="mt-0.5 text-[11px]" style={{ color: '#64748b' }}>
-            {formatDistanceToNow(new Date(item.createdAt), {
-              addSuffix: true,
-              locale: vi,
-            })}
+            {formatRelative(item.createdAt)}
           </p>
         </div>
         {!item.isRead && (

@@ -1087,7 +1087,7 @@ model SocialPost {
 model SocialMedia {
   id        Int      @id @default(autoincrement())
   postId    Int      @map("post_id")
-  type      String   @db.VarChar(20) // IMAGE, VIDEO, CODE_FILE
+  type      String   @db.VarChar(20) // IMAGE, VIDEO, CODE_FILE, FILE
   url       String   @db.VarChar(700)
   thumbnail String?  @db.VarChar(700)
   width     Int?     @db.Integer
@@ -1095,6 +1095,10 @@ model SocialMedia {
   duration  Int?     @map("duration_seconds")
   fileSize  BigInt?  @map("file_size")
   mimeType  String?  @map("mime_type") @db.VarChar(100)
+  // Original file name (used for downloads to set the right
+  // Content-Disposition filename). Different from `alt` which is
+  // the human-readable caption.
+  fileName  String?  @map("file_name") @db.VarChar(255)
   alt       String?  @db.VarChar(255)
   sortOrder Int      @default(0) @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at")

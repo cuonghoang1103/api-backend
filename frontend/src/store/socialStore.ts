@@ -295,6 +295,11 @@ export const useSocialStore = create<SocialState>((set, get) => ({
           width: m.width,
           height: m.height,
           duration: m.duration,
+          // BigInt can't cross JSON, so we ship size as a number
+          // (or string for files > Number.MAX_SAFE_INTEGER) and
+          // the service converts back to BigInt on insert.
+          fileSize: m.file?.size,
+          fileName: m.file?.name,
           sortOrder: i,
           mimeType: m.file.type,
           alt: m.file.name,
@@ -322,7 +327,14 @@ export const useSocialStore = create<SocialState>((set, get) => ({
         youtubeUrl: (composerYouTubeUrl || '').trim() || undefined,
       });
 
-      const newPost = res.data as unknown as SocialPost;
+      // The backend returns an envelope { success, data, ... }.
+      // `res.data` is that envelope, the actual post lives at
+      // `res.data.data`. Reading the wrong level would push a
+      // post-looking object with `id`/`createdAt` undefined
+      // into the feed and crash every PostCard that tries to
+      // render it. We defend against both shapes just in case.
+      const envelope: any = res.data;
+      const newPost: SocialPost = (envelope && envelope.data) ? envelope.data : envelope;
       set((s) => ({
         posts: [newPost, ...s.posts],
         isPosting: false,

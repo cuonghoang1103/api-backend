@@ -750,6 +750,9 @@ export const socialApi = {
       duration?: number;
       fileSize?: number;
       mimeType?: string;
+      // For FILE attachments (zip, md, …) the original file
+      // name. Drives the suggested filename on download.
+      fileName?: string;
       alt?: string;
       sortOrder?: number;
     }>;

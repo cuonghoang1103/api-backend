@@ -145,9 +145,13 @@ export default function PostPoll({ postId, poll }: PostPollProps) {
       <p className="mt-2 text-[10px] text-text-muted">
         {total} {total === 1 ? 'lượt bình chọn' : 'lượt bình chọn'}
         {poll.multiChoice && ' · Có thể chọn nhiều'}
-        {poll.closesAt && new Date(poll.closesAt) > new Date() && (
-          <> · Đóng lúc {new Date(poll.closesAt).toLocaleDateString('vi-VN')}</>
-        )}
+        {(() => {
+          if (!poll.closesAt) return null;
+          const close = new Date(poll.closesAt);
+          if (Number.isNaN(close.getTime())) return null;
+          if (close <= new Date()) return null;
+          return <> · Đóng lúc {close.toLocaleDateString('vi-VN')}</>;
+        })()}
       </p>
     </div>
   );

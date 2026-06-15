@@ -10,13 +10,19 @@ export interface SocialAuthor {
 
 export interface SocialMedia {
   id: number;
-  type: 'IMAGE' | 'VIDEO' | 'CODE_FILE';
+  type: 'IMAGE' | 'VIDEO' | 'CODE_FILE' | 'FILE';
   url: string;
   thumbnail?: string | null;
   width?: number | null;
   height?: number | null;
   duration?: number | null;
   mimeType?: string | null;
+  // Original file name. For FILE attachments (zip, md, …) this
+  // is shown next to the download button and used as the
+  // suggested filename when downloading. For media it's the
+  // same value as `alt`.
+  fileName?: string | null;
+  fileSize?: number | string | null;
   alt?: string | null;
   sortOrder: number;
 }
@@ -126,12 +132,16 @@ export interface MediaUploadItem {
   id: string;
   file: File;
   preview: string;
-  type: 'IMAGE' | 'VIDEO' | 'CODE_FILE';
+  type: 'IMAGE' | 'VIDEO' | 'CODE_FILE' | 'FILE';
   progress: number;
   url?: string;
   thumbnail?: string;
   width?: number;
   height?: number;
   duration?: number;
+  // Human-readable original file name (e.g. "report.pdf").
+  // Displayed in the upload chip and used to drive the
+  // download filename on the post card.
+  fileName?: string;
   error?: string;
 }

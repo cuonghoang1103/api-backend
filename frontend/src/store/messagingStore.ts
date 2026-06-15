@@ -156,6 +156,14 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
           });
           socket.on('connect', () => get().onConnectionChange(true));
           socket.on('disconnect', () => get().onConnectionChange(false));
+          // CRITICAL: by the time we get here, the socket has ALREADY
+          // connected (connectSocket awaited on the 'connect' event).
+          // The listeners above will only fire on the NEXT (re)connect.
+          // We must mirror the live state into the store right now,
+          // otherwise the UI stays stuck on "Ngoại tuyến" forever.
+          if (socket.connected) {
+            get().onConnectionChange(true);
+          }
         }
       }
       // Initial data load

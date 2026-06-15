@@ -175,7 +175,7 @@ export function extractToken(req: Request): string | undefined {
     return authHeader.slice(7);
   }
 
-  // 2. Cookie
+  // 2. Cookie (parsed by cookie-parser middleware in Express)
   if (req.cookies?.backend_token) {
     return req.cookies.backend_token;
   }
@@ -185,7 +185,36 @@ export function extractToken(req: Request): string | undefined {
     return req.query.token;
   }
 
+  // 4. Raw Cookie header — fallback for Socket.IO handshake where
+  //    cookie-parser middleware hasn't run. Manually parse
+  //    `Cookie: backend_token=...; ...` so the realtime channel can
+  //    still authenticate the user.
+  if (req.headers?.cookie) {
+    const cookies = parseCookieHeader(req.headers.cookie);
+    if (cookies.backend_token) {
+      return cookies.backend_token;
+    }
+  }
+
   return undefined;
+}
+
+function parseCookieHeader(header: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  if (!header) return out;
+  for (const part of header.split(';')) {
+    const eq = part.indexOf('=');
+    if (eq < 0) continue;
+    const name = part.slice(0, eq).trim();
+    const raw = part.slice(eq + 1).trim();
+    if (!name) continue;
+    try {
+      out[name] = decodeURIComponent(raw);
+    } catch {
+      out[name] = raw;
+    }
+  }
+  return out;
 }
 
 export function requireCyberProfile() {

@@ -19,6 +19,18 @@ import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// Prisma returns BigInt for fields declared with `BigInt` in the
+// schema (e.g. social_media.file_size, user.role_version, …).
+// JSON.stringify doesn't know how to serialise those and would
+// throw "Do not know how to serialize a BigInt" the moment we try
+// to ship them through res.json(). Wire up a default toJSON that
+// converts to a regular number so we never crash on the way out.
+// Number(BigInt) is safe up to 2^53-1 which is well above any
+// file size we accept (500MB video cap).
+(BigInt.prototype as any).toJSON = function () {
+  return Number(this);
+};
+
 // __dirname equivalent in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

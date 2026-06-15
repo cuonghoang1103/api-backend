@@ -431,7 +431,17 @@ function serializePost(
     createdAt: post.createdAt,
     updatedAt: post.updatedAt,
     author: post.author,
-    media: post.media ?? [],
+    // `fileSize` on SocialMedia is a Prisma BigInt; JSON.stringify
+    // throws "Do not know how to serialize a BigInt" when we try
+    // to ship it across the wire. Convert to a regular number
+    // (the cap is 500MB for video which fits safely in a JS
+    // double). `fileName` is included so the post card can show
+    // the original filename on the download row.
+    media: (post.media ?? []).map((m: any) => ({
+      ...m,
+      fileSize:
+        typeof m.fileSize === 'bigint' ? Number(m.fileSize) : m.fileSize ?? null,
+    })),
     poll: post.poll
       ? {
           ...post.poll,

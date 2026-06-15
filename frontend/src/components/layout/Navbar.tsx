@@ -241,13 +241,8 @@ export default function Navbar() {
                       }`} />
                     )}
                     <span>{link.label}</span>
-                    {isMessages && isAuthenticated && mounted && unreadMessages > 0 && (
-                      <span
-                        className="absolute -top-0.5 right-1.5 min-w-[16px] h-[16px] px-1 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center shadow-lg shadow-red-500/40 ring-2 ring-[#0d0f18]"
-                        title={`${unreadMessages} unread messages`}
-                      >
-                        {unreadMessages > 99 ? '99+' : unreadMessages}
-                      </span>
+                    {isMessages && isAuthenticated && mounted && (
+                      <MessengerUnreadBadge count={unreadMessages} />
                     )}
                     {/* Subtle dot indicator — no heavy glow underline */}
                     {isActive && (
@@ -428,5 +423,40 @@ export default function Navbar() {
         onClose={() => setChangePasswordOpen(false)}
       />
     </div>
+  );
+}
+
+// ── Messenger-style unread badge (top navbar) ─────────────────────
+// Numeric count is hidden when zero (no badge shown). A bounce
+// animation runs every time the displayed text changes, so the
+// badge "pops" when a new message arrives — same feel as the
+// iOS / Facebook Messenger app icon. The key prop on the inner
+// motion.span is what triggers the spring re-mount.
+function MessengerUnreadBadge({ count }: { count: number }) {
+  if (count <= 0) return null;
+  const text = count > 99 ? '99+' : String(count);
+  return (
+    <motion.span
+      key={text}
+      initial={{ scale: 0.4, opacity: 0 }}
+      animate={{ scale: [0.4, 1.25, 1], opacity: 1 }}
+      transition={{
+        duration: 0.45,
+        times: [0, 0.55, 1],
+        ease: [0.32, 0.94, 0.6, 1],
+      }}
+      className="absolute -top-1 -right-1.5 inline-flex items-center justify-center
+        min-w-[18px] h-[18px] px-1.5 rounded-full
+        text-white text-[10px] font-bold
+        bg-[#ef4444]
+        ring-2 ring-[#0d0f18]
+        shadow-[0_0_10px_rgba(239,68,68,0.55),0_2px_4px_rgba(0,0,0,0.4)]
+        tabular-nums"
+      style={{ fontVariantNumeric: 'tabular-nums' }}
+      title={`${count} unread messages`}
+      aria-label={`${count} unread messages`}
+    >
+      {text}
+    </motion.span>
   );
 }

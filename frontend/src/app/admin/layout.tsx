@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard, FileText, Users, Code2, Sparkles,
   LogOut, Menu, X, ChevronRight, Shield,
-  MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
+  MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap, Inbox,
 } from 'lucide-react';
 
 const adminNav = [
@@ -25,6 +25,7 @@ const adminNav = [
   { label: 'Quản lý Projects', href: '/admin/projects', icon: Sparkles },
   { label: 'AI Knowledge Base', href: '/admin/ai-knowledge', icon: Database },
   { label: 'AI Chat Analytics', href: '/admin/ai-analytics', icon: MessageSquare },
+  { label: 'Tin nhắn hỗ trợ', href: '/admin/messages', icon: Inbox },
   { label: 'Embed Queue', href: '/admin/embed-jobs', icon: Zap },
   { label: 'System Stats', href: '/admin/stats', icon: BarChart3 },
 ];

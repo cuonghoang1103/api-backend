@@ -53,6 +53,11 @@ const FloatingAIAssistant = dynamic(
   { ssr: false }
 )
 
+const MessagingWidget = dynamic(
+  () => import('@/components/messaging/MessagingWidget'),
+  { ssr: false }
+)
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://cuonghoang.xyz'),
   title: 'CuongThai',
@@ -95,6 +100,7 @@ export default function RootLayout({
               <MusicHistoryRecorder />
               <GlobalMusicPlayer />
               <FloatingAIAssistant />
+              <MessagingWidget />
             </ClientOnly>
           </LocaleWrapper>
         </TanStackQueryProvider>

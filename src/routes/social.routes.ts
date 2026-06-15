@@ -570,6 +570,10 @@ router.get(
           gender: user.gender,
           birthYear: user.birthYear,
           socialLinks: user.socialLinks,
+          // Whether strangers can DM this user. The /profile/[id]
+          // page reads this to disable the "Nhắn tin" button when
+          // the peer has opted out.
+          allowMessagesFromStrangers: user.allowMessagesFromStrangers,
           roles: user.roles.map((ur: any) => ur.role.name),
           createdAt: user.createdAt,
         },

@@ -38,6 +38,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "sharp": "^0.34.3",
+    "socket.io-client": "^4.8.3",
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.4",
     "zod": "^3.23.8",

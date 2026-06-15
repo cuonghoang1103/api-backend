@@ -51,6 +51,7 @@ interface ProfileData {
   birthYear?: number | null;
   phone?: string | null;
   socialLinks?: Record<string, string> | null;
+  allowMessagesFromStrangers?: boolean;
   roles: string[];
   createdAt: string;
 }
@@ -70,7 +71,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'activity' | 'courses'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'activity' | 'courses' | 'settings'>('profile');
   const [editing, setEditing] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
@@ -116,6 +117,9 @@ export default function ProfilePage() {
   const [myCourses, setMyCourses] = useState<any[]>([]);
   const [courseLoading, setCourseLoading] = useState(false);
 
+  const [allowMessagesFromStrangers, setAllowMessagesFromStrangers] = useState(true);
+  const [savingPrivacy, setSavingPrivacy] = useState(false);
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -142,6 +146,7 @@ export default function ProfilePage() {
             facebook: data?.socialLinks?.facebook || '',
           },
         });
+        setAllowMessagesFromStrangers(data?.allowMessagesFromStrangers ?? true);
       } catch {
         if (user) {
           setForm({
@@ -247,6 +252,20 @@ export default function ProfilePage() {
       toast.error(err?.response?.data?.message || 'Error saving profile');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSavePrivacy = async () => {
+    setSavingPrivacy(true);
+    try {
+      const res = await api.put('/profile', { allowMessagesFromStrangers });
+      const updated = res.data?.data;
+      setProfile((prev) => prev ? { ...prev, ...updated, allowMessagesFromStrangers } : prev);
+      toast.success(allowMessagesFromStrangers ? 'Đã bật nhận tin nhắn từ người lạ' : 'Đã tắt nhận tin nhắn từ người lạ');
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Lỗi khi cập nhật');
+    } finally {
+      setSavingPrivacy(false);
     }
   };
 
@@ -720,6 +739,7 @@ export default function ProfilePage() {
                 { id: 'profile', label: 'Profile', icon: User },
                 { id: 'courses', label: 'My Courses', icon: BookOpen },
                 ...(canEdit ? [{ id: 'password', label: 'Password', icon: KeyRound }] : []),
+                { id: 'settings', label: 'Settings', icon: MessageSquare },
                 { id: 'activity', label: 'Activity', icon: Shield },
               ].map((tab) => (
                 <button
@@ -962,6 +982,53 @@ export default function ProfilePage() {
                           </span>
                         );
                       })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'settings' && (
+                <div className="space-y-4">
+                  <div
+                    className="rounded-2xl p-6"
+                    style={{
+                      background: 'rgba(255,255,255,0.02)',
+                      border: '1px solid rgba(255,255,255,0.06)',
+                    }}
+                  >
+                    <h3 className="mb-1 text-sm font-semibold text-text-primary">Quyền riêng tư tin nhắn</h3>
+                    <p className="mb-4 text-xs text-text-muted">
+                      Khi bật, người lạ có thể bắt đầu cuộc trò chuyện mới với bạn. Khi tắt, chỉ những người đã từng nhắn tin với bạn
+                      mới có thể tiếp tục gửi tin nhắn.
+                    </p>
+                    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 transition-colors hover:border-cyan-500/30">
+                      <input
+                        type="checkbox"
+                        checked={allowMessagesFromStrangers}
+                        onChange={(e) => setAllowMessagesFromStrangers(e.target.checked)}
+                        className="mt-0.5 h-4 w-4 rounded border-white/20 bg-white/5 text-cyan-500 focus:ring-cyan-500/40"
+                      />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-text-primary">
+                          Cho phép người lạ nhắn tin cho tôi
+                        </p>
+                        <p className="mt-0.5 text-[11px] text-text-muted">
+                          {allowMessagesFromStrangers
+                            ? 'Bất kỳ ai cũng có thể bắt đầu cuộc trò chuyện mới với bạn.'
+                            : 'Người lạ sẽ thấy nút Nhắn tin bị vô hiệu hoá trên hồ sơ của bạn.'}
+                        </p>
+                      </div>
+                    </label>
+                    <div className="mt-4 flex justify-end">
+                      <button
+                        onClick={handleSavePrivacy}
+                        disabled={savingPrivacy || (allowMessagesFromStrangers === (profile?.allowMessagesFromStrangers ?? true))}
+                        className="flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                        style={{ background: 'linear-gradient(90deg, #06B6D4, #6366F1)' }}
+                      >
+                        <Save className="h-3.5 w-3.5" />
+                        {savingPrivacy ? 'Đang lưu...' : 'Lưu cài đặt'}
+                      </button>
                     </div>
                   </div>
                 </div>

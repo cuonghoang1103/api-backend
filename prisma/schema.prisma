@@ -111,6 +111,21 @@ model User {
   cyberInventory CyberInventory?
   discountCodes DiscountCode[]
 
+  // ─── Direct messaging (Phase 6) ─────────────────────────
+  // Per-user flag controlling whether strangers (users with no
+  // prior interaction) can start a new conversation. Default on;
+  // users can flip it off in /profile settings. Admins and users
+  // the viewer has already exchanged messages with bypass this
+  // check — the flag only gates the very first contact.
+  allowMessagesFromStrangers Boolean @default(true) @map("allow_messages_from_strangers")
+
+  messageThreadsAsUser  MessageThread[]   @relation("ThreadAsUser")
+  messageThreadsAsAdmin MessageThread[]   @relation("ThreadAsAdmin")
+  messageThreadsAsUserA MessageThread[]   @relation("ThreadUserA")
+  messageThreadsAsUserB MessageThread[]   @relation("ThreadUserB")
+  messagesSent          Message[]         @relation("MessageSender")
+  messageReads          MessageRead[]     @relation("MessageReadUser")
+
   @@index([email], name: "idx_users_email")
   @@map("users")
 }
@@ -231,6 +246,7 @@ model FileAttachment {
   fileCategory String?  @map("file_category") @db.VarChar(50)
 
   uploader User? @relation(fields: [uploadedBy], references: [id], onDelete: SetNull)
+  messageAttachments MessageAttachment[]
 
   @@index([uploadedBy], name: "idx_file_attachments_uploaded_by")
   @@index([fileCategory], name: "idx_file_attachments_file_category")
@@ -1261,4 +1277,101 @@ model ContactSubmission {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("contact_submissions")
+}
+
+// ============================================================
+// 17. DIRECT MESSAGING
+// ============================================================
+// User ↔ admin support chat, plus user ↔ user private chat.
+// One MessageThread per pair (canonical sort for user↔user to
+// avoid duplicates). Messages are soft-deletable (deletedAt) so
+// admins can moderate without losing audit trail.
+//
+// Realtime fan-out is done via Socket.IO in src/socket/messaging.socket.ts;
+// this schema only stores the durable record. Read receipts are
+// tracked per (thread, user) so the inbox can show unread badges.
+// ============================================================
+
+model MessageThread {
+  id            Int       @id @default(autoincrement())
+  // 'ADMIN' = user↔admin support, 'USER' = user↔user DM.
+  type          String    @db.VarChar(20)
+  // ADMIN-thread participants
+  userId        Int?      @map("user_id")
+  adminUserId   Int?      @map("admin_user_id")
+  // USER-thread participants (canonical: userAId < userBId)
+  userAId       Int?      @map("user_a_id")
+  userBId       Int?      @map("user_b_id")
+  // Last activity timestamp — used to sort the inbox
+  // (most-recent first) without joining messages.
+  lastMessageAt DateTime? @map("last_message_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  user      User?  @relation("ThreadAsUser", fields: [userId], references: [id], onDelete: Cascade)
+  adminUser User?  @relation("ThreadAsAdmin", fields: [adminUserId], references: [id], onDelete: Cascade)
+  userA     User?  @relation("ThreadUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB     User?  @relation("ThreadUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  readStates MessageRead[]
+
+  @@unique([userId, adminUserId, type], name: "uk_thread_admin_pair")
+  @@unique([userAId, userBId, type], name: "uk_thread_user_pair")
+  @@index([userId, type], name: "idx_thread_user_type")
+  @@index([adminUserId, type], name: "idx_thread_admin_type")
+  @@index([lastMessageAt(sort: Desc)], name: "idx_thread_last_msg")
+  @@map("message_threads")
+}
+
+model Message {
+  id        Int       @id @default(autoincrement())
+  threadId  Int       @map("thread_id")
+  senderId  Int       @map("sender_id")
+  content   String    @db.Text
+  // Soft delete: message hidden from UI but kept for audit.
+  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  thread      MessageThread       @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  sender      User                @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  attachments MessageAttachment[]
+
+  @@index([threadId, createdAt], name: "idx_msg_thread_time")
+  @@index([senderId], name: "idx_msg_sender")
+  @@map("messages")
+}
+
+model MessageAttachment {
+  id           Int      @id @default(autoincrement())
+  messageId    Int      @map("message_id")
+  fileId       Int      @map("file_id")
+  mimeType     String   @map("mime_type") @db.VarChar(100)
+  fileName     String   @map("file_name") @db.VarChar(255)
+  fileSize     BigInt   @map("file_size")
+  // Optional thumbnail URL for image previews. Generated
+  // client-side via <img> on the same URL; backend doesn't
+  // pre-render thumbnails for chat attachments.
+  thumbnailUrl String?  @map("thumbnail_url") @db.VarChar(500)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  message Message        @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  file    FileAttachment @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([messageId], name: "idx_msg_attach_msg")
+  @@map("message_attachments")
+}
+
+model MessageRead {
+  id         Int      @id @default(autoincrement())
+  threadId   Int      @map("thread_id")
+  userId     Int      @map("user_id")
+  lastReadAt DateTime @map("last_read_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  thread MessageThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user   User          @relation("MessageReadUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([threadId, userId], name: "uk_read_thread_user")
+  @@map("message_reads")
 }

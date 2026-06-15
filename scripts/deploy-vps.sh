@@ -104,6 +104,12 @@ else
 fi
 
 # ─── Step 2: Atomic build & restart (zero-downtime) ───────
+# Generate Prisma client first so the TypeScript compile inside
+# the Docker builder stage sees the latest schema (added tables
+# like message_threads, messages, etc. — see prisma/schema.prisma).
+info "Regenerating Prisma client..."
+$DC run --rm backend sh -c "npx prisma generate" 2>&1 | tail -3 || warn "prisma generate failed (continuing — build may still succeed if types were already generated)"
+
 info "Building and deploying containers (zero-downtime)..."
 $DC up -d --build --remove-orphans
 ok "Containers built and started"

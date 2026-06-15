@@ -75,6 +75,8 @@ const socialRoutes = (await import(path.join(__dirname, 'routes', 'social.routes
 const cyberRoutes = (await import(path.join(__dirname, 'routes', 'cyber.routes.js'))).default;
 const quotaRoutes = (await import(path.join(__dirname, 'routes', 'quota.routes.js'))).default;
 const embedJobsRoutes = (await import(path.join(__dirname, 'routes', 'embedJobs.routes.js'))).default;
+const { router: messagesRoutes, adminRouter: adminMessagesRoutes } = (await import(path.join(__dirname, 'routes', 'messages.routes.js')));
+const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -346,6 +348,15 @@ app.use('/api/v1/system', systemRoutes);
 app.use('/api/v1/social', socialRoutes);
 app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
+app.use('/api/v1/messages', messagesRoutes);
+app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/admin', adminMessagesRoutes);
+
+// ─── 9b. Socket.IO (Direct Messaging) ─────────────────
+// Mount on the shared HTTP server so the existing trust-proxy /
+// cookie / CORS configuration applies. Idempotent — safe to call
+// from a hot-reload wrapper.
+initSocketServer(server);
 
 // ─── 10. Health Check ───────────────────────────────────────
 // Render.com và Docker healthcheck gọi endpoint này

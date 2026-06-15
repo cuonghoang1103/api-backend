@@ -47,6 +47,10 @@ interface PublicProfile {
   birthYear?: number | null;
   phone?: string | null;
   socialLinks?: Record<string, string> | null;
+  // When false, the user has opted out of receiving messages from
+  // users they don't already have a thread with. Mirrors the
+  // User.allowMessagesFromStrangers column.
+  allowMessagesFromStrangers?: boolean;
   roles: string[];
   createdAt: string;
 }
@@ -325,17 +329,54 @@ function ProfileCard({ profile }: { profile: PublicProfile }) {
       </div>
 
       {/* Action row */}
-      <div className="flex gap-2 border-t border-white/[0.04] p-4 sm:p-6">
-        <Link
-          href={`/chat?to=${profile.id}`}
-          className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
-          style={{ background: 'linear-gradient(90deg, #8B5CF6, #6366F1)' }}
-        >
-          <MessageSquare className="h-4 w-4" />
-          Nhắn tin
-        </Link>
-      </div>
+      <MessageButton profileId={profile.id} disabled={profile.allowMessagesFromStrangers === false} />
     </motion.div>
+  );
+}
+
+function MessageButton({ profileId, disabled }: { profileId: number; disabled: boolean }) {
+  const router = useRouter();
+  const auth = useAuthStore();
+  const [busy, setBusy] = useState(false);
+
+  const handleClick = async () => {
+    if (disabled || busy) return;
+    if (!auth.isAuthenticated) {
+      router.push(`/login?next=/messages?peer=${profileId}`);
+      return;
+    }
+    setBusy(true);
+    try {
+      const { useMessagingStore } = await import('@/store/messagingStore');
+      const store = useMessagingStore.getState();
+      const id = await store.startUserThread(profileId);
+      store.setWidgetOpen(true);
+      await store.openThread(id);
+    } catch (e: any) {
+      const { default: toast } = await import('react-hot-toast');
+      const msg = e?.response?.data?.code === 'MESSAGES_DISABLED'
+        ? 'Người dùng này không nhận tin nhắn từ người lạ'
+        : e?.userFriendlyMessage ?? e?.message ?? 'Không thể mở cuộc trò chuyện';
+      toast.error(msg);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="flex gap-2 border-t border-white/[0.04] p-4 sm:p-6">
+      <button
+        type="button"
+        onClick={handleClick}
+        disabled={disabled || busy}
+        title={disabled ? 'Người dùng này không nhận tin nhắn từ người lạ' : undefined}
+        className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+        style={{ background: 'linear-gradient(90deg, #8B5CF6, #6366F1)' }}
+      >
+        <MessageSquare className="h-4 w-4" />
+        {disabled ? 'Không nhận tin nhắn' : 'Nhắn tin'}
+      </button>
+    </div>
   );
 }
 

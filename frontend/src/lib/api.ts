@@ -923,3 +923,100 @@ export const cyberApi = {
   getAnalytics: (period: 'day' | 'month' | 'year') =>
     api.get<ApiResponse<CyberAnalytics>>(`/cyber/analytics?period=${period}`),
 };
+
+// ─── Direct Messaging API ─────────────────────────────
+// Wraps the messaging REST endpoints behind a single object
+// so the messaging store and components can talk to the
+// backend without sprinkling `api.get('/messages/...')` calls
+// throughout the UI code.
+export const messagingApi = {
+  // Threads
+  getOrCreateAdminThread: () =>
+    api.post<ApiResponse<MessagingThread>>('/messages/threads/admin'),
+  getOrCreateUserThread: (peerId: number) =>
+    api.post<ApiResponse<MessagingThread>>(`/messages/threads/user/${peerId}`),
+  listThreads: () =>
+    api.get<ApiResponse<MessagingThread[]>>('/messages/threads'),
+  getThread: (threadId: number) =>
+    api.get<ApiResponse<MessagingThread>>(`/messages/threads/${threadId}`),
+
+  // Messages
+  listMessages: (threadId: number, params?: { cursor?: number; limit?: number }) =>
+    api.get<ApiResponse<MessagingMessage[]>>(`/messages/threads/${threadId}/messages`, { params }),
+  sendMessage: (threadId: number, data: { content?: string; fileIds?: number[] }) =>
+    api.post<ApiResponse<MessagingMessage>>(`/messages/threads/${threadId}/messages`, data),
+  markRead: (threadId: number) =>
+    api.patch<ApiResponse<{ success: boolean }>>(`/messages/threads/${threadId}/read`),
+  deleteMessage: (messageId: number) =>
+    api.delete<ApiResponse<{ success: boolean }>>(`/messages/messages/${messageId}`),
+
+  // Unread badge
+  getUnreadCount: () =>
+    api.get<ApiResponse<{ count: number }>>('/messages/unread-count'),
+
+  // File upload (multipart)
+  uploadAttachment: (file: File) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return api.post<ApiResponse<MessagingUploadedFile>>('/messages/upload', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+};
+
+// ─── Messaging types (mirror the backend serialiser) ────
+export interface MessagingPeer {
+  id: number;
+  username: string;
+  displayName: string;
+  avatarUrl: string | null;
+}
+
+export interface MessagingThread {
+  id: number;
+  type: 'ADMIN' | 'USER';
+  lastMessageAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  peer: MessagingPeer | null;
+  lastMessage?: {
+    id: number;
+    content: string;
+    senderId: number;
+    createdAt: string;
+    hasAttachment: boolean;
+    attachmentMime?: string | null;
+    attachmentName?: string | null;
+  } | null;
+  unreadCount?: number;
+}
+
+export interface MessagingAttachment {
+  id: number;
+  fileId: number;
+  mimeType: string;
+  fileName: string;
+  fileSize: number;
+  url: string;
+  thumbnailUrl?: string | null;
+}
+
+export interface MessagingMessage {
+  id: number;
+  threadId: number;
+  senderId: number;
+  content: string;
+  deleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  sender: MessagingPeer;
+  attachments: MessagingAttachment[];
+}
+
+export interface MessagingUploadedFile {
+  fileId: number;
+  url: string;
+  fileName: string;
+  fileSize: number;
+  mimeType: string;
+}

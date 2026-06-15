@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
-import { api, coursesApi } from '@/lib/api';
+import { api, coursesApi, fileApi } from '@/lib/api';
 import { toast } from 'sonner';
 import {
   User,
@@ -312,10 +312,19 @@ export default function ProfilePage() {
                   {form.username?.charAt(0).toUpperCase()}
                 </div>
               )}
-              {editing && (
+              {uploadingAvatar && (
+                <div className="absolute inset-0 rounded-2xl bg-black/70 flex items-center justify-center z-10">
+                  <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                </div>
+              )}
+              {/* Always allow avatar upload on hover — no need to enter
+                  edit mode for the picture. Saves to server immediately. */}
+              {!uploadingAvatar && canEdit && (
                 <button
+                  type="button"
                   onClick={() => avatarInputRef.current?.click()}
                   className="absolute inset-0 rounded-2xl bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  title="Đổi ảnh đại diện"
                 >
                   <Camera className="w-8 h-8 text-white" />
                 </button>
@@ -328,20 +337,41 @@ export default function ProfilePage() {
                 onChange={async (e) => {
                   const file = e.target.files?.[0];
                   if (!file) return;
+                  if (file.size > 5 * 1024 * 1024) {
+                    toast.error('Ảnh đại diện phải nhỏ hơn 5MB');
+                    e.target.value = '';
+                    return;
+                  }
                   setUploadingAvatar(true);
                   try {
-                    const formData = new FormData();
-                    formData.append('file', file);
-                    const res = await api.post('/files/upload', formData, {
-                      headers: { 'Content-Type': 'multipart/form-data' },
-                    });
-                    const url = res.data?.data?.url || res.data?.data;
+                    // fileApi.upload sends the right multipart headers AND
+                    // the correct `category=images` so the backend accepts
+                    // image/* mime types. Calling /files/upload directly
+                    // without a category would default to "documents" and
+                    // reject image uploads.
+                    const res = await fileApi.upload(file, 'images');
+                    const url = res.data?.data?.url;
+                    if (!url) {
+                      throw new Error('Upload response missing url');
+                    }
                     setForm(prev => ({ ...prev, avatarUrl: url }));
+                    // Persist the avatar URL immediately so the user sees
+                    // the new picture even if they cancel the edit.
+                    try {
+                      await api.put('/profile', { avatarUrl: url });
+                    } catch (persistErr) {
+                      console.warn('Avatar uploaded but profile not saved yet', persistErr);
+                    }
                     toast.success('Image uploaded successfully!');
-                  } catch {
-                    toast.error('Image upload failed');
+                  } catch (err: any) {
+                    const msg =
+                      err?.response?.data?.message ||
+                      err?.message ||
+                      'Image upload failed';
+                    toast.error(msg);
                   } finally {
                     setUploadingAvatar(false);
+                    e.target.value = '';
                   }
                 }}
               />
@@ -353,13 +383,22 @@ export default function ProfilePage() {
                 <h1 className="text-2xl sm:text-3xl font-heading font-bold text-text-primary">
                   {form.displayName || form.fullName || form.username}
                 </h1>
-                {profile?.roles?.map((role) => (
-                  <span key={role} className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                    role === 'ADMIN' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 'bg-neon-indigo/20 text-neon-indigo border border-neon-indigo/30'
-                  }`}>
-                    {role === 'ADMIN' ? 'Administrator' : 'User'}
-                  </span>
-                ))}
+                {profile?.roles?.map((role) => {
+                  // Backend returns role names with a ROLE_ prefix
+                  // (e.g. "ROLE_ADMIN"). Normalise so the badge matches
+                  // admins without forcing the UI to know the prefix.
+                  const normalized = (role || '').replace('ROLE_', '').toUpperCase();
+                  const isAdmin = normalized === 'ADMIN';
+                  return (
+                    <span key={role} className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                      isAdmin
+                        ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                        : 'bg-neon-indigo/20 text-neon-indigo border border-neon-indigo/30'
+                    }`}>
+                      {isAdmin ? 'Administrator' : 'User'}
+                    </span>
+                  );
+                })}
               </div>
               <p className="text-text-secondary text-sm mt-1">@{form.username}</p>
             </div>
@@ -905,13 +944,19 @@ export default function ProfilePage() {
                   <div>
                     <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-3">Roles</h3>
                     <div className="flex flex-wrap gap-2">
-                      {profile?.roles?.map((role) => (
-                        <span key={role} className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
-                          role === 'ADMIN' ? 'bg-yellow-500/15 text-yellow-400 border border-yellow-500/30' : 'bg-neon-indigo/15 text-neon-indigo border border-neon-indigo/30'
-                        }`}>
-                          {role === 'ADMIN' ? 'Administrator' : 'User'}
-                        </span>
-                      ))}
+                      {profile?.roles?.map((role) => {
+                        const normalized = (role || '').replace('ROLE_', '').toUpperCase();
+                        const isAdmin = normalized === 'ADMIN';
+                        return (
+                          <span key={role} className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
+                            isAdmin
+                              ? 'bg-yellow-500/15 text-yellow-400 border border-yellow-500/30'
+                              : 'bg-neon-indigo/15 text-neon-indigo border border-neon-indigo/30'
+                          }`}>
+                            {isAdmin ? 'Administrator' : 'User'}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

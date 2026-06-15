@@ -65,8 +65,16 @@ export function registerSocketEmitter(): MessagingEmitter | null {
   if (!emitter && io) {
     emitter = {
       emit(event: string, payload: unknown) {
-        io?.to(buildThreadRoom(payload)) /* no-op, just to keep tree-shake honest */;
-        // Re-emit to per-user rooms so each participant's sidebar updates
+        // Broadcast the event into the per-thread room so anyone
+        // who has joined the conversation (both the sender's
+        // other devices and the recipient) sees the new
+        // message in real time. Previously this line was a
+        // no-op (`.to(room)` returns a BroadcastOperator but
+        // never emitted), which is why new messages only
+        // showed up after a manual refresh.
+        io?.to(buildThreadRoom(payload)).emit(event, payload);
+        // Re-emit to per-user rooms so each participant's sidebar
+        // unread badge + last-message preview updates.
         if (event === 'thread:new-message') {
           const p = payload as MessageEventPayload;
           for (const uid of p.participantIds) io?.to(`user:${uid}`).emit('thread:updated', p);

@@ -98,7 +98,15 @@ router.get('/threads/:id', async (req: Request, res: Response, next: NextFunctio
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
     const thread = await messagesService.getThread(id, req.userId!);
-    res.json({ success: true, data: thread });
+    // Normalise to the same shape the list endpoints return (with
+    // a `peer` object the frontend expects). The raw Prisma row
+    // exposes user/adminUser/userA/userB, but the UI only knows
+    // about `peer` — without this the chat header falls back to
+    // "Cuộc trò chuyện".
+    res.json({
+      success: true,
+      data: messagesService.serializeThread(thread as any, req.userId!),
+    });
   } catch (error) {
     next(error);
   }

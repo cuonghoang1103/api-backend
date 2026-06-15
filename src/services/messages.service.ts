@@ -461,7 +461,14 @@ export class MessagesService {
     }
   }
 
-  private serializeThread(
+  /**
+   * Format a thread row for the API. Exposes the "other" participant
+   * as `peer` so the frontend can render the sidebar / chat header
+   * without knowing about the underlying userId/userAId/userBId
+   * columns. Public so route handlers (e.g. GET /threads/:id) can
+   * reuse the same serialisation that the list endpoints use.
+   */
+  public serializeThread(
     t: {
       id: number;
       type: string;
@@ -481,8 +488,7 @@ export class MessagesService {
   ) {
     // For the sidebar, expose the "other" participant as `peer`
     const peer = t.type === 'ADMIN'
-      ? (t.userId === viewerId ? t.adminUser : t.user)
-      : (t.userAId === viewerId ? t.userB : t.userA);
+      ? (t.userId === viewerId ? t.adminUser : t.user)      : (t.userAId === viewerId ? t.userB : t.userA);
 
     return {
       id: t.id,

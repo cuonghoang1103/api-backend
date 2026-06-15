@@ -74,6 +74,50 @@ export default function ChatPage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
+  // Build version marker. This is a fixed ribbon that
+  // shows the current commit hash + build time. It is
+  // ALWAYS visible on /chat, no matter what, so that the
+  // user can confirm at a glance whether the browser is
+  // running the new bundle or a cached old one. The text
+  // is intentionally small and tucked into a corner so it
+  // doesn't interfere with the chat UI.
+  //
+  // Bump the BUILD_TAG every time you deploy a chat-side
+  // change. If the user reports "no change" again, they
+  // can read this ribbon and instantly know whether the
+  // browser is on the new build.
+  const BUILD_TAG = 'chat-v3-ios-dock-2026-06-16T02:55Z-f968f68';
+  const [showBuildTag, setShowBuildTag] = useState(false);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    // Only show the ribbon when ?build=1 is in the URL,
+    // so the ribbon doesn't show in normal use. Press 'B'
+    // to toggle it.
+    const check = () => {
+      const url = new URL(window.location.href);
+      setShowBuildTag(url.searchParams.get('build') === '1');
+    };
+    check();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'b' || e.key === 'B') {
+        if (e.target instanceof HTMLElement) {
+          const tag = e.target.tagName;
+          if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        }
+        const url = new URL(window.location.href);
+        if (url.searchParams.get('build') === '1') {
+          url.searchParams.delete('build');
+        } else {
+          url.searchParams.set('build', '1');
+        }
+        window.history.replaceState({}, '', url.toString());
+        check();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   const getToken = () => {
     if (typeof document === 'undefined') return '';
     const match = document.cookie.match(/(?:^|;)\s*backend_token=([^;]*)/);
@@ -693,6 +737,23 @@ export default function ChatPage() {
         {/* Input — always at bottom */}
         <ChatInput onSend={sendMessage} isStreaming={isStreaming} />
       </main>
+
+      {/* Build tag ribbon. Hidden by default, visible when
+          the URL has ?build=1. Press 'B' anywhere on the
+          page to toggle. This is a visual marker so the
+          user can confirm at a glance whether the browser
+          is running the latest bundle. */}
+      {showBuildTag && (
+        <div
+          className="fixed bottom-3 right-3 z-[9999] px-3 py-1.5
+            bg-black/80 text-white text-[10px] font-mono
+            border border-white/20 rounded-md shadow-lg
+            backdrop-blur-md pointer-events-none"
+          aria-hidden
+        >
+          {BUILD_TAG}
+        </div>
+      )}
     </div>
   );
 }

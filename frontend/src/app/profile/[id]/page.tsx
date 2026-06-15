@@ -79,24 +79,41 @@ export default function PublicProfilePage() {
     const load = async () => {
       try {
         setLoading(true);
-        const res = await api.get(`/social/users/${id}/profile`);
-        if (!cancelled) setProfile((res.data?.data as PublicProfile) ?? null);
-      } catch (err: any) {
-        if (!cancelled) {
-          // Fall back to a generic profile so the page still renders
-          // useful info if the dedicated public endpoint isn't wired up.
+        // Public profile endpoint. The path is `/social/users/:id`
+        // — no trailing `/profile`. We try this first, and fall
+        // back to a couple of legacy paths in case the backend
+        // version is older than the frontend.
+        const candidates = [
+          `/social/users/${id}`,
+          `/social/users/${id}/profile`,
+          `/users/${id}/public`,
+        ];
+        let resolved: PublicProfile | null = null;
+        for (const path of candidates) {
           try {
-            const r2 = await api.get(`/users/${id}/public`);
-            if (!cancelled) setProfile((r2.data?.data as PublicProfile) ?? null);
-          } catch {
-            if (!cancelled) {
-              setError(
-                err?.response?.status === 404
-                  ? 'Người dùng không tồn tại'
-                  : 'Không thể tải hồ sơ. Vui lòng thử lại.'
-              );
+            const res = await api.get(path);
+            const body = res.data?.data ?? null;
+            if (body && (body.id || body.username)) {
+              resolved = body as PublicProfile;
+              break;
+            }
+          } catch (e: any) {
+            // 404 / 401 → try next candidate. Anything else (5xx,
+            // network) bubbles up so the outer catch can show the
+            // generic error.
+            if (e?.response?.status && ![404, 401].includes(e.response.status)) {
+              throw e;
             }
           }
+        }
+        if (resolved) {
+          if (!cancelled) setProfile(resolved);
+        } else {
+          if (!cancelled) setError('Người dùng không tồn tại');
+        }
+      } catch (err: any) {
+        if (!cancelled) {
+          setError('Không thể tải hồ sơ. Vui lòng thử lại.');
         }
       } finally {
         if (!cancelled) setLoading(false);

@@ -25,6 +25,8 @@
  *   GET    /api/v1/social/saves/folders   — List save folders
  *
  *   POST   /api/v1/social/posts/:id/share — Share post
+ *
+ *   GET    /api/v1/social/users/:id       — Public profile (sanitised)
  * ============================================================
  */
 
@@ -517,6 +519,61 @@ router.get(
         }));
 
       res.json({ success: true, data: top });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/social/users/:id — Public profile by user ID
+// ════════════════════════════════════════════════════════════════
+// Returns a sanitized public view of a user (no email, no phone,
+// no security fields) so the /profile/[id] page can render any
+// user's card without requiring them to log in. The endpoint is
+// intentionally NOT under /api/v1/users — that namespace belongs
+// to admin-only user management routes which require ROLE_ADMIN.
+//
+// Used by the "Gợi ý kết nối" panel in the right rail of the
+// social feed: clicking a suggestion navigates to /profile/[id]
+// and the page calls this endpoint to populate the card.
+router.get(
+  '/users/:id',
+  optionalAuth,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        throw new AppError('Invalid user ID', 400, 'INVALID_ID');
+      }
+      const user = await prisma.user.findUnique({
+        where: { id },
+        include: { roles: { include: { role: true } } },
+      });
+      if (!user) {
+        throw new AppError('Người dùng không tồn tại', 404, 'USER_NOT_FOUND');
+      }
+      // Public projection: strip PII (email, phone) and account
+      // security fields (lastLoginIp, failedLoginCount, etc.).
+      // The frontend already calls /api/v1/profile for the
+      // signed-in user's full record, so this view is just what
+      // other people should be able to see.
+      res.json({
+        success: true,
+        data: {
+          id: user.id,
+          username: user.username,
+          fullName: user.fullName,
+          displayName: user.displayName ?? user.fullName ?? user.username,
+          avatarUrl: user.avatarUrl,
+          bio: user.bio,
+          gender: user.gender,
+          birthYear: user.birthYear,
+          socialLinks: user.socialLinks,
+          roles: user.roles.map((ur: any) => ur.role.name),
+          createdAt: user.createdAt,
+        },
+      });
     } catch (error) {
       next(error);
     }

@@ -5,14 +5,26 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
-  Home, BookOpen, FolderOpen, Music, MessageCircle, MessagesSquare,
+  Home, BookOpen, FolderOpen, Music, MessagesSquare,
   LayoutDashboard, Shield, BookMarked, Receipt,
-  Settings, ChevronLeft, Sparkles, UserCircle,
+  Settings, Sparkles, UserCircle,
   GraduationCap, ShoppingBag, Gamepad2, Globe,
   PanelLeft, PanelLeftClose,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
+import { cn } from '@/lib/utils';
+import ChatSessionsDrawer from './ChatSessionsDrawer';
+
+// ── Width constants ──────────────────────────────────────────────
+// The rail is intentionally slim (52px) so it stays out of the
+// way on every page. The expanded hover state (220px) is just
+// wide enough to show short labels next to the icons; the
+// sessions drawer is a separate floating panel that lives next
+// to the rail.
+export const DOCK_WIDTH_COLLAPSED = 52;
+export const DOCK_WIDTH_EXPANDED = 220;
+export const DOCK_DRAWER_WIDTH = 280;
 
 interface DockItem {
   href: string;
@@ -45,25 +57,20 @@ const SECTIONS = {
   admin: { label: 'System', icon: Settings },
 } as const;
 
-const DOCK_WIDTH_COLLAPSED = 60;
-const DOCK_WIDTH_EXPANDED = 280;
 const APPLE_EASE: [number, number, number, number] = [0.32, 0.94, 0.6, 1];
 
-// iOS cinematic spring for the dock panel itself.
-const panelSpring = { type: 'spring' as const, stiffness: 320, damping: 32, mass: 0.9 };
-
-// iOS dock magnification: scale curve is a smooth parabola peaking at the
-// hovered item. Index 0 = the hovered item, neighbours get a smaller
-// boost, items further away stay at 1.
+// iOS dock magnification — gentle bump, not a leap. 1.10 on the
+// hovered row, falling off to 1.0 over 2 rows. Kept small because
+// the rail is narrow and we don't want to push siblings.
 function magnifyScale(distance: number): number {
-  if (distance === 0) return 1.22;
-  if (distance === 1) return 1.12;
-  if (distance === 2) return 1.05;
+  if (distance === 0) return 1.10;
+  if (distance === 1) return 1.05;
+  if (distance === 2) return 1.02;
   return 1.0;
 }
 
 const sectionVariants: Variants = {
-  hidden: { opacity: 0, x: -8 },
+  hidden: { opacity: 0, x: -6 },
   visible: (i: number) => ({
     opacity: 1,
     x: 0,
@@ -72,28 +79,29 @@ const sectionVariants: Variants = {
 };
 
 interface NavigationDockProps {
-  /** Whether the dock is open as a full overlay (mobile-style drawer) */
-  isOpen: boolean;
-  onToggle: () => void;
+  /** True when the dock drawer is pinned (auto-hover is ignored). */
+  isPinned: boolean;
+  onPinChange: (pinned: boolean) => void;
+  /** Backwards-compat alias for mobile (drawer mode). */
+  isOpen?: boolean;
+  onToggle?: () => void;
 }
 
-export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps) {
+export default function NavigationDock({
+  isPinned,
+  onPinChange,
+}: NavigationDockProps) {
   const pathname = usePathname();
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  // `isHovered` is the dock panel-level hover (drives the
-  // collapsed → expanded width animation). When the panel is hovered
-  // (or has a pinned-open item via touch / focus) the labels fade in.
   const [isPanelHovered, setIsPanelHovered] = useState(false);
+  const [isDrawerHovered, setIsDrawerHovered] = useState(false);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoCloseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Track whether the viewport is wide enough for the always-visible
-  // rail. Below md the dock is a hidden overlay drawer that the
-  // user opens via a toggle button; on md+ the dock is permanently
-  // mounted and the toggle is removed (hover does the job).
   const [isWideViewport, setIsWideViewport] = useState(false);
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -103,243 +111,259 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
     mq.addEventListener('change', update);
     return () => mq.removeEventListener('change', update);
   }, []);
-  const showToggle = !isWideViewport;
 
-  // Build a flat list of items with stable indices so the magnify
-  // wave can look up "the item 2 positions below me" across section
-  // boundaries. We only care about distance *within* the rendered
-  // sequence, so each rendered dock item gets an index.
   const sections = (['main', 'user', 'admin'] as const).map((key, i) => ({
     key,
     index: i,
     ...SECTIONS[key],
     items: DOCK_ITEMS.filter((item) => item.section === key),
   }));
-
-  // Flat list for magnification distance calc.
   const flatItems = sections.flatMap((s) => s.items);
 
-  // Clear any pending hide-timeout when the panel is (re-)entered.
+  const clearAutoClose = () => {
+    if (autoCloseTimeoutRef.current) {
+      clearTimeout(autoCloseTimeoutRef.current);
+      autoCloseTimeoutRef.current = null;
+    }
+  };
+
   const handlePanelEnter = useCallback(() => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
     }
     setIsPanelHovered(true);
-  }, []);
+    // Auto-open the sessions drawer on hover. Pinned mode
+    // ignores this; pin keeps the drawer visible regardless.
+    if (!isPinned) {
+      clearAutoClose();
+    }
+  }, [isPinned]);
 
-  // Small grace period so the dock doesn't collapse mid-move between
-  // two items (the cursor briefly leaves the panel when crossing the
-  // 1px gap between buttons).
+  // Leaving the rail schedules a 180ms close. If the cursor
+  // reaches the floating drawer in time, the close cancels.
   const handlePanelLeave = useCallback(() => {
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
     hoverTimeoutRef.current = setTimeout(() => {
       setIsPanelHovered(false);
       setHoveredIdx(null);
     }, 120);
+    if (!isPinned) {
+      clearAutoClose();
+      autoCloseTimeoutRef.current = setTimeout(() => {
+        // Only auto-close if the cursor is not on the drawer.
+        // isDrawerHovered state is set inside the drawer.
+      }, 180);
+    }
+  }, [isPinned]);
+
+  const handleDrawerEnter = useCallback(() => {
+    setIsDrawerHovered(true);
+    clearAutoClose();
   }, []);
+
+  const handleDrawerLeave = useCallback(() => {
+    setIsDrawerHovered(false);
+    if (isPinned) return;
+    clearAutoClose();
+    autoCloseTimeoutRef.current = setTimeout(() => {
+      // No-op — visibility is computed from hover state
+    }, 180);
+  }, [isPinned]);
+
+  // Sessions drawer visibility:
+  //   pinned (toggle pressed)            -> always visible
+  //   hovered rail / hovered drawer      -> visible (auto)
+  //   otherwise                          -> hidden
+  // Mobile gets the same behaviour, but the rail itself fills
+  // the viewport because the layout script reserves zero
+  // horizontal space below md.
+  const drawerVisible = isPinned || isPanelHovered || isDrawerHovered;
+
+  const togglePin = useCallback(() => {
+    onPinChange(!isPinned);
+  }, [isPinned, onPinChange]);
 
   useEffect(() => {
     return () => {
       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      if (autoCloseTimeoutRef.current) clearTimeout(autoCloseTimeoutRef.current);
     };
   }, []);
 
-  // Expanded = hovered OR overlay-open (mobile-style drawer mode).
-  const isExpanded = isPanelHovered || isOpen;
+  // Rail is expanded when hovered OR when the sessions drawer
+  // is visible (so the toggle button and icon labels stay
+  // legible when the drawer is up).
+  const isExpanded = isPanelHovered || drawerVisible;
 
   return (
     <>
-      {/* ── Backdrop only for the full overlay (drawer) mode ── */}
+      {/* ── Sessions drawer (floating, glass) ─────────────────────
+          Lives to the right of the rail. In hover mode (auto)
+          the drawer sits over the page content — no layout
+          shift. In pin mode the same drawer is used; layout
+          shift is owned by DockLayout. */}
       <AnimatePresence>
-        {isOpen && (
+        {drawerVisible && isWideViewport && (
           <motion.div
-            key="dock-backdrop"
+            key="dock-drawer"
+            initial={{ opacity: 0, x: -12, scale: 0.98 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -12, scale: 0.98 }}
+            transition={{ type: 'spring', stiffness: 360, damping: 30, mass: 0.7 }}
+            onMouseEnter={handleDrawerEnter}
+            onMouseLeave={handleDrawerLeave}
+            className={cn(
+              'fixed z-[58] rounded-2xl overflow-hidden',
+              isPinned ? 'top-16 bottom-4' : 'top-16 bottom-4',
+            )}
+            style={{
+              // Sit just to the right of the (expanded) rail; in
+              // hover mode this overlaps the page, in pin mode
+              // DockLayout has already reserved the slot.
+              left: DOCK_WIDTH_COLLAPSED + 8,
+              width: DOCK_DRAWER_WIDTH,
+              background: 'rgba(10, 10, 15, 0.50)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.06)',
+              boxShadow: '0 24px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04)',
+            }}
+          >
+            <ChatSessionsDrawer
+              variant={isPinned ? 'pinned' : 'overlay'}
+              onNavigateAway={() => {
+                // After picking a session, close auto-hover but
+                // keep the pin if the user has pinned the
+                // drawer.
+                if (!isPinned) {
+                  setIsPanelHovered(false);
+                  setIsDrawerHovered(false);
+                }
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Backdrop: only when the drawer is pinned. In auto
+           hover mode the drawer just slides in/out and the
+           user keeps free mouse access to the page. ── */}
+      <AnimatePresence>
+        {isPinned && isWideViewport && (
+          <motion.div
+            key="dock-pinned-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: APPLE_EASE }}
-            onClick={onToggle}
-            className="fixed inset-0 z-[58] bg-black/40 backdrop-blur-md"
-            style={{ backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
+            transition={{ duration: 0.2, ease: APPLE_EASE }}
+            onClick={togglePin}
+            className="fixed inset-0 z-[57] bg-black/30"
             aria-hidden="true"
           />
         )}
       </AnimatePresence>
 
-      {/* ── Sidebar panel ──
-          Width is driven by isExpanded. The panel is always mounted
-          (we don't gate the children behind AnimatePresence) so the
-          magnification wave is smooth when the user moves between
-          items. The drawer "enter from the left" entrance is only
-          used the first time it opens via the toggle button. */}
+      {/* ── Sidebar panel (the rail) ────────────────────────────── */}
       <motion.nav
         key="dock-panel"
         initial={false}
         animate={{ width: isExpanded ? DOCK_WIDTH_EXPANDED : DOCK_WIDTH_COLLAPSED }}
-        transition={panelSpring}
+        transition={{ type: 'spring', stiffness: 360, damping: 32, mass: 0.85 }}
         onMouseEnter={handlePanelEnter}
         onMouseLeave={handlePanelLeave}
-        className={`fixed top-0 left-0 h-full z-[59] flex flex-col ${
-          isOpen ? '' : 'pt-16'
-        }`}
+        className="fixed top-0 left-0 h-full z-[59] flex flex-col pt-16"
         style={{ overflow: 'visible' }}
         aria-label="Primary navigation"
       >
         <div
           className="h-full flex flex-col overflow-hidden
-            bg-[#0d1117]/97 backdrop-blur-xl
-            border-r border-white/[0.06]
-            shadow-[8px_0_48px_rgba(0,0,0,0.6),inset_-1px_0_0_rgba(255,255,255,0.04)]"
+            bg-[#0d1117]/95 backdrop-blur-xl
+            border-r border-white/[0.05]
+            shadow-[6px_0_32px_rgba(0,0,0,0.45)]"
         >
-          {/* Header — only when expanded */}
-          <AnimatePresence initial={false}>
-            {isExpanded && (
-              <motion.div
-                key="dock-header"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2, ease: APPLE_EASE }}
-                className="px-4 pt-5 pb-3 flex items-center justify-between shrink-0 border-b border-white/[0.05] overflow-hidden"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-neon-violet shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted/60 whitespace-nowrap">
-                    Navigation
-                  </span>
-                </div>
-                <motion.button
-                  onClick={onToggle}
-                  className="flex items-center justify-center w-7 h-7 rounded-xl
-                    bg-white/[0.05] hover:bg-white/[0.1]
-                    border border-white/[0.06] hover:border-white/[0.12]
-                    text-text-muted hover:text-text-primary
-                    transition-all duration-200"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  aria-label="Close navigation"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </motion.button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Sections — always rendered, but the labels + section
-              headers are width-clipped when collapsed. We use a
-              horizontal padding transition so the icon stays
-              centered when the panel is narrow. */}
-          <div className="flex-1 overflow-y-auto overflow-x-visible py-3 space-y-4">
-            {sections.map(({ key, label, icon: SectionIcon, items, index }) => (
+          {/* Sections — no header, no footer, no section labels.
+              The expanded 220px width is just enough to fit
+              short labels next to the icons. */}
+          <div className="flex-1 overflow-y-auto overflow-x-visible py-3">
+            {sections.map(({ key, items, index }) => (
               <motion.div
                 key={key}
                 custom={index}
                 variants={sectionVariants}
                 initial="hidden"
                 animate="visible"
+                className="space-y-0.5"
               >
-                {/* Section header — only when expanded */}
-                <AnimatePresence initial={false}>
-                  {isExpanded && (
-                    <motion.div
-                      key={`${key}-header`}
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.18, ease: APPLE_EASE }}
-                      className="flex items-center gap-2 px-3 mb-1.5 overflow-hidden"
-                    >
-                      <SectionIcon className="w-3 h-3 text-text-muted/40 shrink-0" />
-                      <span className="text-[9px] font-mono font-semibold uppercase tracking-widest text-text-muted/40 whitespace-nowrap">
-                        {label}
-                      </span>
-                      <div className="flex-1 h-px bg-white/[0.04]" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {items.map((item) => {
+                  const flatIdx = flatItems.indexOf(item);
+                  const distance = hoveredIdx === null ? 99 : Math.abs(flatIdx - hoveredIdx);
+                  const isActive = pathname === item.href ||
+                    (item.href !== '/' && pathname.startsWith(item.href));
+                  const Icon = item.icon;
+                  const showUnread = !!item.showUnread && mounted && isAuthenticated && unreadMessages > 0;
 
-                <div className="space-y-0.5">
-                  {items.map((item) => {
-                    const flatIdx = flatItems.indexOf(item);
-                    const distance = hoveredIdx === null ? 99 : Math.abs(flatIdx - hoveredIdx);
-                    const isActive = pathname === item.href ||
-                      (item.href !== '/' && pathname.startsWith(item.href));
-                    const Icon = item.icon;
-                    const showUnread = !!item.showUnread && mounted && isAuthenticated && unreadMessages > 0;
-
-                    return (
-                      <DockRow
-                        key={item.href}
-                        item={item}
-                        Icon={Icon}
-                        isActive={isActive}
-                        isExpanded={isExpanded}
-                        isDrawerOpen={isOpen}
-                        scale={magnifyScale(distance)}
-                        isHovered={hoveredIdx === flatIdx}
-                        showUnread={showUnread}
-                        unreadCount={unreadMessages}
-                        onHover={() => setHoveredIdx(flatIdx)}
-                        onLeave={() => {
-                          if (hoveredIdx === flatIdx) setHoveredIdx(null);
-                        }}
-                        onNavigate={onToggle}
-                      />
-                    );
-                  })}
-                </div>
-
-                {/* Drawer-pin toggle — sits between the main and
-                    user/admin sections so it reads as a separator.
-                    Always visible (no glow / no neon): a single
-                    small icon that flips when the drawer is pinned.
-                    Click opens the drawer; click again closes it
-                    (toggle). Clicking the backdrop while the
-                    drawer is open also closes it — same as the
-                    mobile toggle button below. */}
-                {key === 'main' && isWideViewport && (
-                  <div className="mt-2 space-y-0.5">
-                    {/* Hairline divider — only when expanded so the
-                        rail stays visually clean in its collapsed
-                        form. */}
-                    <div
-                      className={cn(
-                        'mx-3 my-1 h-px bg-white/[0.05] transition-opacity duration-200',
-                        isExpanded ? 'opacity-100' : 'opacity-0',
-                      )}
-                      aria-hidden
+                  return (
+                    <DockRow
+                      key={item.href}
+                      item={item}
+                      Icon={Icon}
+                      isActive={isActive}
+                      isExpanded={isExpanded}
+                      scale={magnifyScale(distance)}
+                      isHovered={hoveredIdx === flatIdx}
+                      showUnread={showUnread}
+                      unreadCount={unreadMessages}
+                      onHover={() => setHoveredIdx(flatIdx)}
+                      onLeave={() => {
+                        if (hoveredIdx === flatIdx) setHoveredIdx(null);
+                      }}
                     />
+                  );
+                })}
+
+                {/* Pin / unpin toggle — only in the main section,
+                    only on desktop. Sits as a separator so the
+                    user sees it after the navigation group. */}
+                {key === 'main' && isWideViewport && (
+                  <div className="mt-2 mx-1">
                     <motion.button
                       type="button"
-                      onClick={onToggle}
+                      onClick={togglePin}
                       className={cn(
                         'group relative flex w-full items-center rounded-xl select-none',
                         !isExpanded
-                          ? 'justify-center px-1.5 py-1.5 mx-1.5'
-                          : 'gap-3 px-3 py-2 mx-1',
+                          ? 'justify-center px-1.5 py-1.5 mx-0.5'
+                          : 'gap-2.5 px-3 py-2',
                       )}
                       whileHover={{ scale: 1.04 }}
                       whileTap={{ scale: 0.96 }}
                       transition={{ type: 'spring', stiffness: 420, damping: 28 }}
-                      aria-label={isOpen ? 'Collapse drawer' : 'Pin drawer open'}
-                      aria-pressed={isOpen}
+                      aria-label={isPinned ? 'Bỏ ghim sidebar' : 'Ghim sidebar'}
+                      aria-pressed={isPinned}
                     >
-                      <div className="flex w-9 h-9 shrink-0 items-center justify-center rounded-lg">
-                        {isOpen ? (
+                      <div
+                        className={cn(
+                          'flex shrink-0 items-center justify-center rounded-lg',
+                          'transition-colors duration-150',
+                          isPinned
+                            ? 'bg-white/[0.08] text-text-primary'
+                            : 'text-text-secondary group-hover:text-text-primary',
+                          !isExpanded ? 'w-8 h-8' : 'w-8 h-8',
+                        )}
+                      >
+                        {isPinned ? (
                           <PanelLeftClose
                             className={cn(
-                              'shrink-0 transition-colors duration-150',
-                              !isExpanded ? 'w-[16px] h-[16px]' : 'w-4 h-4',
-                              'text-text-secondary group-hover:text-text-primary',
+                              'shrink-0',
+                              !isExpanded ? 'w-[15px] h-[15px]' : 'w-4 h-4',
                             )}
                           />
                         ) : (
                           <PanelLeft
                             className={cn(
-                              'shrink-0 transition-colors duration-150',
-                              !isExpanded ? 'w-[16px] h-[16px]' : 'w-4 h-4',
-                              'text-text-secondary group-hover:text-text-primary',
+                              'shrink-0',
+                              !isExpanded ? 'w-[15px] h-[15px]' : 'w-4 h-4',
                             )}
                           />
                         )}
@@ -348,13 +372,13 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
                         {isExpanded && (
                           <motion.span
                             key="dock-toggle-label"
-                            initial={{ opacity: 0, x: -6 }}
+                            initial={{ opacity: 0, x: -4 }}
                             animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -6 }}
+                            exit={{ opacity: 0, x: -4 }}
                             transition={{ duration: 0.16, ease: APPLE_EASE }}
-                            className="text-[13px] font-medium text-text-secondary group-hover:text-text-primary whitespace-nowrap"
+                            className="text-[12px] font-medium text-text-secondary group-hover:text-text-primary whitespace-nowrap"
                           >
-                            {isOpen ? 'Collapse sidebar' : 'Pin sidebar'}
+                            {isPinned ? 'Bỏ ghim' : 'Ghim sidebar'}
                           </motion.span>
                         )}
                       </AnimatePresence>
@@ -364,96 +388,40 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
               </motion.div>
             ))}
           </div>
-
-          {/* Footer — only when expanded */}
-          <AnimatePresence initial={false}>
-            {isExpanded && (
-              <motion.div
-                key="dock-footer"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2, ease: APPLE_EASE }}
-                className="px-4 pb-5 border-t border-white/[0.04] pt-3 shrink-0 overflow-hidden"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full overflow-hidden ring-1 ring-white/10 shrink-0">
-                    <img src="/images/avatar.png" alt="Avatar" className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[11px] font-semibold text-text-primary truncate">CuongHoang</p>
-                    <p className="text-[9px] text-text-muted/60 font-mono">v2.0.0</p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </motion.nav>
-
-      {/* ── Toggle button — ONLY on mobile (<md) where the dock is
-           a hidden overlay drawer. On desktop the dock is always
-           visible and the user opens it by hovering, so the toggle
-           is redundant. */}
-      {showToggle && (
-        <motion.button
-          onClick={onToggle}
-          className="fixed top-[70px] left-3 z-[60] flex items-center justify-center w-9 h-9 rounded-xl
-            bg-[#0d1117]/90 backdrop-blur-xl border border-white/10
-            shadow-[0_4px_16px_rgba(0,0,0,0.4),0_0_0_1px_rgba(139,92,246,0.15)]
-            transition-all duration-200 cursor-pointer"
-          animate={{
-            opacity: !isExpanded ? 1 : 0,
-            scale: !isExpanded ? 1 : 0.7,
-            pointerEvents: !isExpanded ? 'auto' : 'none',
-          }}
-          transition={{ duration: 0.2 }}
-          whileHover={{ scale: !isExpanded ? 1.08 : 0.7, borderColor: 'rgba(139,92,246,0.4)' }}
-          whileTap={{ scale: 0.92 }}
-          aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
-        >
-          <motion.div animate={{ rotate: isOpen ? -90 : 0 }} transition={{ duration: 0.25, ease: APPLE_EASE }}>
-            <ChevronLeft className="w-4 h-4" style={{ color: '#94a3b8' }} />
-          </motion.div>
-        </motion.button>
-      )}
     </>
   );
 }
 
 // ── Single dock row ───────────────────────────────────────────────
-// Extracted so the magnification / hover / active logic stays in one
-// place and the parent stays readable.
+// Compact row, no glow: a soft white-tinted background for the
+// hovered / active state and a flat gradient bar on the inside
+// edge when the row is the active one. The bar is no-shadow so
+// the rail stays clean.
 function DockRow({
   item,
   Icon,
   isActive,
   isExpanded,
-  isDrawerOpen,
   scale,
   isHovered,
   showUnread,
   unreadCount,
   onHover,
   onLeave,
-  onNavigate,
 }: {
   item: DockItem;
   Icon: React.ElementType;
   isActive: boolean;
   isExpanded: boolean;
-  isDrawerOpen: boolean;
   scale: number;
   isHovered: boolean;
   showUnread: boolean;
   unreadCount: number;
   onHover: () => void;
   onLeave: () => void;
-  onNavigate: () => void;
 }) {
-  // Padding shifts from wide (px-3 py-2.5, gap-3) when expanded to
-  // tight centered (px-2 py-2, gap-0) when collapsed. The icon
-  // stays visually centered via flex justify-center.
   const collapsed = !isExpanded;
 
   return (
@@ -466,166 +434,126 @@ function DockRow({
     >
       <Link
         href={item.href}
-        onClick={onNavigate}
         className={cn(
           'relative flex items-center rounded-xl overflow-hidden select-none',
-          collapsed ? 'justify-center px-1.5 py-1.5 mx-1.5' : 'gap-3 px-3 py-2.5 mx-1',
+          collapsed
+            ? 'justify-center px-1.5 py-1.5 mx-1.5'
+            : 'gap-2.5 px-3 py-2.5 mx-1',
         )}
         style={{ display: 'flex' }}
       >
-        {/* Active indicator bar — only when expanded, otherwise we
-            use a subtle ring on the icon to save space. */}
+        {/* Active indicator bar — flat gradient, no halo. The
+            gradient is the brand cyan→violet we already use
+            elsewhere; without the box-shadow it reads as a
+            printed line, not as light. */}
         {!collapsed && isActive && (
           <motion.div
             layoutId="navActiveIndicator"
-            className="absolute inset-y-0 left-0 w-[3px] rounded-full"
+            className="absolute inset-y-1 left-0 w-[2px] rounded-full"
             style={{
               background: 'linear-gradient(180deg, #22d3ee, #8b5cf6)',
             }}
-            transition={{ type: 'spring', stiffness: 350, damping: 30, mass: 0.5 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 30, mass: 0.5 }}
           />
         )}
 
-        {/* Icon — single source of truth for the magnifying scale.
-            The wrapper's `animate={ scale }` already grows the entire
-            row, but we ALSO animate the inner icon's `backgroundColor`
-            so the magnify wave is visually obvious (small icons
-            stay "icon-sized" while the row scales). */}
+        {/* Icon wrapper — a single soft background tint. No
+            box-shadow glow. The pill background opacity is
+            intentionally low (0.06-0.08) so the rail stays
+            quiet and the cursor's location is the only thing
+            that gets emphasis. */}
         <motion.div
           className={cn(
             'flex items-center justify-center rounded-lg shrink-0',
-            collapsed ? 'w-9 h-9' : 'w-9 h-9',
+            collapsed ? 'w-8 h-8' : 'w-8 h-8',
           )}
           animate={{
             backgroundColor: isActive
-              ? 'rgba(139,92,246,0.10)'
+              ? 'rgba(255,255,255,0.08)'
               : isHovered
                 ? 'rgba(255,255,255,0.06)'
-                : 'rgba(255,255,255,0.04)',
+                : 'rgba(255,255,255,0.0)',
           }}
           transition={{ duration: 0.18, ease: APPLE_EASE }}
         >
           <Icon
             className={cn(
               'shrink-0 transition-colors duration-150',
-              collapsed ? 'w-[16px] h-[16px]' : 'w-4 h-4',
-              isActive ? 'text-neon-violet' : isHovered ? 'text-text-primary' : 'text-text-muted',
+              collapsed ? 'w-[15px] h-[15px]' : 'w-3.5 h-3.5',
+              isActive
+                ? 'text-text-primary'
+                : isHovered
+                  ? 'text-text-primary'
+                  : 'text-text-muted',
             )}
           />
         </motion.div>
 
-        {/* Unread badge — Messenger-style red bubble */}
-        {showUnread && (
-          <UnreadBadge
-            count={unreadCount}
-            collapsed={collapsed}
-            isActive={isActive}
-            isHovered={isHovered}
-          />
-        )}
-
-        {/* Label — slides in from the left, only when expanded */}
         <AnimatePresence initial={false}>
           {!collapsed && (
             <motion.span
-              key="label"
-              initial={{ opacity: 0, x: -6 }}
+              key="dock-row-label"
+              initial={{ opacity: 0, x: -4 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -6 }}
-              transition={{ duration: 0.18, ease: APPLE_EASE }}
-              className="text-[13px] font-medium truncate whitespace-nowrap"
-              style={{ color: isActive ? '#c4b5fd' : isHovered ? '#e5e7eb' : '#94a3b8' }}
+              exit={{ opacity: 0, x: -4 }}
+              transition={{ duration: 0.16, ease: APPLE_EASE }}
+              className={cn(
+                'whitespace-nowrap text-[12px] font-medium',
+                isActive
+                  ? 'text-text-primary'
+                  : isHovered
+                    ? 'text-text-primary'
+                    : 'text-text-secondary',
+              )}
             >
               {item.label}
             </motion.span>
           )}
         </AnimatePresence>
 
-        {/* Active dot (right side) — only when expanded */}
-        {!collapsed && (
-          <AnimatePresence>
-            {isActive && (
-              <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0, opacity: 0 }}
-                transition={{ duration: 0.18, ease: APPLE_EASE }}
-                className="ml-auto w-1.5 h-1.5 rounded-full bg-neon-violet shrink-0"
-                style={{ boxShadow: '0 0 6px rgba(139,92,246,0.9)' }}
-              />
-            )}
-          </AnimatePresence>
+        {/* Unread badge — Messenger-style pill or dot. */}
+        {showUnread && (
+          <UnreadBadge
+            count={unreadCount}
+            collapsed={collapsed}
+            isActive={isActive}
+          />
         )}
       </Link>
     </motion.div>
   );
 }
 
-// ── Messenger-style unread badge ─────────────────────────────────
-// Pill (when count > 9), circle (when count ≤ 9). Always shows the
-// numeric count when expanded; shows a small dot when collapsed so
-// the icon row stays clean.
+// ── Unread badge ──────────────────────────────────────────────────
 function UnreadBadge({
   count,
   collapsed,
   isActive,
-  isHovered,
 }: {
   count: number;
   collapsed: boolean;
   isActive: boolean;
-  isHovered: boolean;
 }) {
-  // Show numeric count whenever there's room. When the dock is
-  // collapsed, we switch to a small dot so the icon row stays tidy
-  // (the badge is only meaningful as a count when the label is
-  // visible).
-  const text = count > 99 ? '99+' : String(count);
-  const showNumber = !collapsed;
-
+  if (collapsed) {
+    return (
+      <span
+        className="absolute top-0.5 right-0.5 min-w-[14px] h-[14px] px-1
+          bg-red-500 text-white text-[9px] font-bold rounded-full
+          flex items-center justify-center
+          shadow-[0_0_0_2px_rgba(13,17,23,0.95)]"
+      >
+        {count > 9 ? '9+' : count}
+      </span>
+    );
+  }
   return (
-    <motion.span
-      key={`badge-${text}`}
-      initial={{ scale: 0.4, opacity: 0 }}
-      animate={{
-        scale: 1,
-        opacity: 1,
-        // Pop on count change (bounce) — scale peaks slightly above
-        // 1 then settles. Triggers on `text` change via the key prop.
-      }}
-      transition={{
-        type: 'spring',
-        stiffness: 600,
-        damping: 18,
-        mass: 0.5,
-      }}
+    <span
       className={cn(
-        'absolute inline-flex items-center justify-center font-bold text-white pointer-events-none',
-        // Position: top-right of the icon when collapsed; sits in
-        // the row (right after the icon) when expanded.
-        collapsed
-          ? 'top-1 right-1 min-w-[14px] h-[14px] px-1 rounded-full'
-          : 'left-[34px] top-1 min-w-[18px] h-[18px] px-1.5 rounded-full',
-        'text-[10px]',
-        // Messenger red with glow
-        'bg-[#ef4444] ring-2 ring-[#0d1117]',
-        'shadow-[0_0_10px_rgba(239,68,68,0.55),0_2px_4px_rgba(0,0,0,0.4)]',
+        'ml-auto text-[10px] font-mono font-semibold',
+        isActive ? 'text-text-primary' : 'text-text-muted',
       )}
-      style={{
-        // Hide number in dot mode but keep the dot, so collapsed
-        // users still see a glanceable indicator.
-        fontVariantNumeric: 'tabular-nums',
-      }}
-      aria-label={`${count} unread messages`}
-      title={`${count} unread messages`}
     >
-      {showNumber ? text : null}
-    </motion.span>
+      {count > 99 ? '99+' : count}
+    </span>
   );
-}
-
-// Tiny utility — duplicated from lib/utils to avoid an extra import
-// (the dock file already imports plenty; we keep this self-contained).
-function cn(...classes: Array<string | false | null | undefined>): string {
-  return classes.filter(Boolean).join(' ');
 }

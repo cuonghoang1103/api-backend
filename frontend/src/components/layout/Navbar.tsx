@@ -7,6 +7,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
+import { useMessagingStore } from '@/store/messagingStore';
 import {
   Home, BookOpen, FolderOpen, Music, MessageCircle,
   User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
@@ -23,14 +24,32 @@ const TOP_NAV_LINKS = [
   { href: '/blog', label: 'Blog', icon: BookOpen },
   { href: '/projects', label: 'Projects', icon: FolderOpen },
   { href: '/music', label: 'Music', icon: Music },
+  { href: '/messages', label: 'Messages', icon: MessageCircle, authOnly: true },
   { href: '/chat', label: 'AI Chat', icon: MessageCircle },
 ];
+
+// Facebook Messenger bubble — official-style lightning chat icon.
+function MessengerIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 36 36"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M18 2C9.4 2 2.5 8.6 2.5 16.7c0 4.7 2.3 8.9 5.9 11.7.2.2.4.4.4.7v3.5c0 .4.4.7.8.5l3.9-2.2c.2-.1.4-.1.6-.1 1.3.4 2.6.6 4 .6 8.6 0 15.5-6.6 15.5-14.7S26.6 2 18 2zm1.2 19.1l-4.1-4.4-7.4 4.4 8.1-8.6 4.2 4.4 7.3-4.4-8.1 8.6z" />
+    </svg>
+  );
+}
 
 export default function Navbar() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const { user: backendUser, isAuthenticated: isBackendAuth } = useAuthStore();
   const { getTotalItems, openDrawer } = useCartStore();
+  const unreadMessages = useMessagingStore((s) => s.unreadTotal);
+  const initMessaging = useMessagingStore((s) => s.init);
+  const disconnectMessaging = useMessagingStore((s) => s.disconnect);
   const [isScrolled, setIsScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
@@ -116,6 +135,31 @@ export default function Navbar() {
     : null;
   const isAdmin = mounted && verifiedAdmin;
 
+  // Connect messaging socket as soon as the user is authenticated so
+  // the unread badge updates in real time and works on every page.
+  useEffect(() => {
+    if (!mounted) return;
+    if (isAuthenticated) {
+      initMessaging();
+    } else {
+      disconnectMessaging();
+    }
+  }, [mounted, isAuthenticated, initMessaging, disconnectMessaging]);
+
+  // Periodically refresh the unread count in case socket events miss.
+  useEffect(() => {
+    if (!mounted || !isAuthenticated) return;
+    let cancelled = false;
+    const tick = async () => {
+      try {
+        await useMessagingStore.getState().refreshUnread();
+      } catch {}
+    };
+    tick();
+    const id = window.setInterval(() => { if (!cancelled) tick(); }, 30000);
+    return () => { cancelled = true; window.clearInterval(id); };
+  }, [mounted, isAuthenticated]);
+
   const switchLocale = (newLocale: string) => {
     document.cookie = `locale=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
     setLocale(newLocale);
@@ -166,10 +210,12 @@ export default function Navbar() {
               </span>
             </Link>
 
-            {/* Center: 5 core nav links — iOS Cyber Dock style */}
+            {/* Center: nav links — iOS Cyber Dock style */}
             <div className="hidden sm:flex items-center gap-0.5">
-              {TOP_NAV_LINKS.map((link) => {
-                const isActive = pathname === link.href;
+              {TOP_NAV_LINKS.filter((l) => !l.authOnly || isAuthenticated).map((link) => {
+                const isActive = pathname === link.href ||
+                  (link.href === '/messages' && pathname?.startsWith('/messages'));
+                const isMessages = link.href === '/messages';
                 return (
                   <Link
                     key={link.href}
@@ -180,10 +226,28 @@ export default function Navbar() {
                         : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04]'
                     }`}
                   >
-                    <link.icon className={`w-3.5 h-3.5 shrink-0 transition-all ${
-                      isActive ? 'drop-shadow-[0_0_6px_#0ea5e9]' : ''
-                    }`} />
+                    {isMessages ? (
+                      <MessengerIcon
+                        className={`w-3.5 h-3.5 shrink-0 transition-all ${
+                          isActive
+                            ? 'drop-shadow-[0_0_6px_#0ea5e9]'
+                            : 'group-hover:scale-110 group-hover:text-neon-cyan'
+                        }`}
+                      />
+                    ) : (
+                      <link.icon className={`w-3.5 h-3.5 shrink-0 transition-all ${
+                        isActive ? 'drop-shadow-[0_0_6px_#0ea5e9]' : ''
+                      }`} />
+                    )}
                     <span>{link.label}</span>
+                    {isMessages && isAuthenticated && mounted && unreadMessages > 0 && (
+                      <span
+                        className="absolute -top-0.5 right-1.5 min-w-[16px] h-[16px] px-1 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center shadow-lg shadow-red-500/40 ring-2 ring-[#0d0f18]"
+                        title={`${unreadMessages} unread messages`}
+                      >
+                        {unreadMessages > 99 ? '99+' : unreadMessages}
+                      </span>
+                    )}
                     {/* Subtle dot indicator — no heavy glow underline */}
                     {isActive && (
                       <motion.div
@@ -328,15 +392,26 @@ export default function Navbar() {
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40
         bg-[#0d0f18]/90 backdrop-blur-xl border-t border-white/[0.06]">
         <div className="flex items-center justify-around px-2 py-2">
-          {TOP_NAV_LINKS.map((link) => {
-            const isActive = pathname === link.href;
+          {TOP_NAV_LINKS.filter((l) => !l.authOnly || isAuthenticated).map((link) => {
+            const isActive = pathname === link.href ||
+              (link.href === '/messages' && pathname?.startsWith('/messages'));
+            const isMessages = link.href === '/messages';
             return (
               <Link key={link.href} href={link.href}
-                className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${
+                className={`relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${
                   isActive ? 'text-neon-violet' : 'text-text-muted'
                 }`}>
-                <link.icon className="w-4 h-4" />
+                {isMessages ? (
+                  <MessengerIcon className="w-4 h-4" />
+                ) : (
+                  <link.icon className="w-4 h-4" />
+                )}
                 <span className="text-[9px] font-medium">{link.label}</span>
+                {isMessages && isAuthenticated && mounted && unreadMessages > 0 && (
+                  <span className="absolute top-0 right-1 min-w-[14px] h-[14px] px-1 rounded-full bg-red-500 text-white text-[8px] font-bold flex items-center justify-center">
+                    {unreadMessages > 99 ? '99+' : unreadMessages}
+                  </span>
+                )}
               </Link>
             );
           })}

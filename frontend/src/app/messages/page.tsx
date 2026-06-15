@@ -2,20 +2,12 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
 import ThreadList from '@/components/messaging/ThreadList';
 import MessageList from '@/components/messaging/MessageList';
 import MessageInput from '@/components/messaging/MessageInput';
-
-// Hide the floating widget on the dedicated /messages page so it
-// doesn't double-render alongside the full-page UI.
-const MessagingWidget = dynamic(
-  () => import('@/components/messaging/MessagingWidget'),
-  { ssr: false }
-);
 
 export default function MessagesPage() {
   return (
@@ -81,13 +73,6 @@ function MessagesPageInner() {
 
   return (
     <div className="min-h-screen" style={{ background: '#03020c' }}>
-      {/* Hidden launcher so the floating widget is mounted for socket
-          init, but we render null visually because we're already on
-          the full page. */}
-      <div className="hidden">
-        <MessagingWidget />
-      </div>
-
       <div className="mx-auto flex h-screen max-w-6xl flex-col px-4 py-6">
         <header className="mb-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-text-primary">Tin nhắn</h1>

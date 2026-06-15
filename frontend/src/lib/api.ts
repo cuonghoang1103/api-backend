@@ -737,6 +737,10 @@ export const socialApi = {
     latitude?: number;
     longitude?: number;
     locationName?: string;
+    // Optional YouTube URL attached to the post (rendered as embed
+    // on the post card). When provided, the user can paste a link
+    // instead of uploading a video file.
+    youtubeUrl?: string;
     media?: Array<{
       type: string;
       url: string;

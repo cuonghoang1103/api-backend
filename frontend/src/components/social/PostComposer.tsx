@@ -4,6 +4,7 @@ import { useRef, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Image as ImageIcon,
+  Video,
   Code2,
   Globe,
   Lock,
@@ -20,6 +21,8 @@ import {
   Plus,
   Trash2,
   ListChecks,
+  Youtube,
+  Link as LinkIcon,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
 import { socialApi } from '@/lib/api';
@@ -53,9 +56,16 @@ const VISIBILITY_OPTIONS = [
 export function PostComposer() {
   const {
     composerContent, composerVisibility, composerMedia, composerPoll, isPosting,
-    setComposerContent, setComposerVisibility, setComposerPoll,
+    composerYouTubeUrl,
+    setComposerContent, setComposerVisibility, setComposerPoll, setComposerYouTubeUrl,
     addComposerMedia, removeComposerMedia, submitPost, clearComposer,
   } = useSocialStore();
+
+  // Keep the local draft in sync with the store (e.g. after a
+  // successful post, clearComposer resets the store to '').
+  useEffect(() => {
+    setYoutubeDraft(composerYouTubeUrl);
+  }, [composerYouTubeUrl]);
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [showVisibilityMenu, setShowVisibilityMenu] = useState(false);
@@ -63,8 +73,15 @@ export function PostComposer() {
   const [postError, setPostError] = useState<string | null>(null);
   const [showPollEditor, setShowPollEditor] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  // Phase 3 — YouTube URL. We keep this in component state (not
+  // the store) because it's tiny and only relevant while the
+  // composer is mounted. The actual store value (which is sent
+  // with the post) is mirrored via setComposerYouTubeUrl.
+  const [youtubeDraft, setYoutubeDraft] = useState('');
+  const [showYouTubeModal, setShowYouTubeModal] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   const currentVisibility = VISIBILITY_OPTIONS.find((v) => v.value === composerVisibility) || VISIBILITY_OPTIONS[0];
 
@@ -138,6 +155,15 @@ export function PostComposer() {
 
   const handleImageUpload = useCallback(() => {
     fileInputRef.current?.click();
+  }, []);
+
+  // Separate button for short vertical videos. We use a dedicated
+  // <input type="file" accept="video/*"> so the user can be
+  // intentional about it (file pickers hide non-matching types
+  // on mobile). The upload pipeline is shared with images via
+  // handleFiles — it just looks at the file's MIME type.
+  const handleVideoUpload = useCallback(() => {
+    videoInputRef.current?.click();
   }, []);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -292,6 +318,35 @@ export function PostComposer() {
                 )}
               </AnimatePresence>
 
+              {/* YouTube URL preview chip — shows the user that a
+                  YouTube embed is queued. Clicking the X clears it. */}
+              <AnimatePresence>
+                {composerYouTubeUrl && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    className="mt-2 flex items-center gap-2 rounded-xl px-3 py-2"
+                    style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}
+                  >
+                    <Youtube className="h-4 w-4 text-red-400 shrink-0" />
+                    <span className="flex-1 min-w-0 truncate text-xs text-text-secondary">
+                      {composerYouTubeUrl}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setComposerYouTubeUrl('');
+                        setYoutubeDraft('');
+                      }}
+                      className="rounded-lg p-1 text-text-muted transition-colors hover:bg-white/[0.05] hover:text-red-400"
+                      title="Bỏ đính kèm"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               {/* Drag overlay */}
               <AnimatePresence>
                 {isDragging && (
@@ -343,8 +398,26 @@ export function PostComposer() {
                     {/* Image upload (also accepts drag-and-drop on the textarea) */}
                     <ToolbarButton
                       icon={<ImageIcon size={18} />}
-                      label="Ảnh/Video"
+                      label="Ảnh"
                       onClick={handleImageUpload}
+                    />
+
+                    {/* Short video upload (TikTok-style vertical clips).
+                        Reuses the same upload pipeline as images — the
+                        type is auto-detected from the file's MIME type. */}
+                    <ToolbarButton
+                      icon={<Video size={18} />}
+                      label="Video ngắn"
+                      onClick={handleVideoUpload}
+                    />
+
+                    {/* YouTube link — opens a tiny modal where the user
+                        pastes a URL. The renderer embeds it inline. */}
+                    <ToolbarButton
+                      icon={<Youtube size={18} />}
+                      label="YouTube"
+                      onClick={() => setShowYouTubeModal(true)}
+                      active={!!composerYouTubeUrl}
                     />
 
                     {/* Inline formatting */}
@@ -512,17 +585,162 @@ export function PostComposer() {
           </AnimatePresence>
         </div>
 
-        {/* Hidden inputs */}
+        {/* Hidden inputs — image picker and dedicated video picker.
+            Both feed the same handleFiles pipeline which auto-detects
+            the type from the file's MIME type. */}
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*,video/*"
+          accept="image/*"
           multiple
           className="hidden"
           onChange={handleFileChange}
         />
+        <input
+          ref={videoInputRef}
+          type="file"
+          accept="video/*,video/mp4,video/webm,video/quicktime"
+          className="hidden"
+          onChange={handleFileChange}
+        />
       </motion.div>
+
+      {/* YouTube URL modal — small popover that asks the user to
+          paste a link. We accept any URL the YouTube IFrame API can
+          play. The post card renderer extracts the video id and
+          embeds it inline. */}
+      <AnimatePresence>
+        {showYouTubeModal && (
+          <YouTubeModal
+            initial={youtubeDraft}
+            onClose={() => setShowYouTubeModal(false)}
+            onSave={(url) => {
+              setComposerYouTubeUrl(url);
+              setYoutubeDraft(url);
+              setShowYouTubeModal(false);
+              if (url) {
+                toast.success('Đã đính kèm video YouTube vào bài viết');
+              } else {
+                toast.success('Đã bỏ đính kèm video YouTube');
+              }
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+// ─── YouTube Modal ───────────────────────────────────────────────────────────
+
+function YouTubeModal({
+  initial,
+  onClose,
+  onSave,
+}: {
+  initial: string;
+  onClose: () => void;
+  onSave: (url: string) => void;
+}) {
+  const [value, setValue] = useState(initial);
+
+  // Quick URL normaliser. Accepts:
+  // - https://www.youtube.com/watch?v=ID
+  // - https://youtu.be/ID
+  // - https://www.youtube.com/shorts/ID
+  // - raw ID (11 chars)
+  const extractVideoId = (input: string): string | null => {
+    const trimmed = input.trim();
+    if (!trimmed) return null;
+    // Already a bare ID (11 alphanumeric chars, dash or underscore)
+    if (/^[A-Za-z0-9_-]{11}$/.test(trimmed)) return trimmed;
+    let m = trimmed.match(/youtube\.com\/watch\?(?:.*&)?v=([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    m = trimmed.match(/youtu\.be\/([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    m = trimmed.match(/youtube\.com\/(?:shorts|embed)\/([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    return null;
+  };
+
+  const valid = value.trim() === '' || extractVideoId(value) !== null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-md overflow-hidden rounded-2xl"
+        style={{
+          background: 'rgba(15,15,25,0.98)',
+          border: '1px solid rgba(255,255,255,0.1)',
+        }}
+      >
+        <div className="flex items-center justify-between p-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="flex items-center gap-2">
+            <Youtube className="h-5 w-5 text-red-500" />
+            <h3 className="text-sm font-semibold text-text-primary">Đính kèm video YouTube</h3>
+          </div>
+          <button onClick={onClose} className="rounded-lg p-1.5 text-text-muted hover:bg-white/[0.05] hover:text-text-primary">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="p-4 space-y-3">
+          <p className="text-xs text-text-muted">
+            Dán liên kết YouTube (youtube.com/watch, youtu.be, hoặc /shorts). Video sẽ hiển thị inline trong bài viết.
+          </p>
+          <div className="flex items-center gap-2 rounded-xl px-3 py-2.5" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <LinkIcon className="h-4 w-4 text-text-muted shrink-0" />
+            <input
+              autoFocus
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="https://www.youtube.com/watch?v=..."
+              className="flex-1 min-w-0 bg-transparent text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
+            />
+          </div>
+          {!valid && (
+            <p className="text-xs text-red-400">Liên kết YouTube không hợp lệ.</p>
+          )}
+          <div className="flex items-center justify-end gap-2 pt-1">
+            {value && (
+              <button
+                onClick={() => {
+                  setValue('');
+                  onSave('');
+                }}
+                className="rounded-xl px-3 py-1.5 text-xs font-medium text-text-muted transition-colors hover:text-red-400"
+              >
+                Bỏ đính kèm
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="rounded-xl px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-white/[0.05]"
+            >
+              Huỷ
+            </button>
+            <button
+              onClick={() => onSave(value.trim())}
+              disabled={!valid}
+              className="rounded-xl px-3 py-1.5 text-xs font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+              style={{ background: 'linear-gradient(90deg, #ef4444, #f97316)' }}
+            >
+              Lưu
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

@@ -174,6 +174,9 @@ export default function ProfilePage() {
   }, [profile?.createdAt]);
 
   useEffect(() => {
+    // Only fetch course stats for backend-authenticated users. Social
+    // login users have no backend_token cookie so the proxy would
+    // 401 and spam the console.
     if (!hasBackendAuth) return;
     const fetchCourseStats = async () => {
       try {
@@ -190,13 +193,15 @@ export default function ProfilePage() {
           hoursLearned: Math.round(enrollments.length * 4.5),
         });
       } catch (err) {
+        // Silently log; the UI gracefully shows 0 stats when the
+        // request fails.
         console.error('Failed to fetch course stats:', err);
       } finally {
         setCourseLoading(false);
       }
     };
     fetchCourseStats();
-  }, [isAuthenticated]);
+  }, [hasBackendAuth]);
 
   const handleSaveProfile = async () => {
     setSaving(true);

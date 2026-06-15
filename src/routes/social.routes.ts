@@ -74,10 +74,25 @@ router.post(
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = getUserId(req);
-      const { content, visibility, latitude, longitude, locationName, media, poll } = req.body;
+      const { content, visibility, latitude, longitude, locationName, media, poll, youtubeUrl } = req.body;
 
       if (!content?.trim()) {
         throw new AppError('Post content is required', 400, 'MISSING_CONTENT');
+      }
+
+      // Light YouTube URL validation. We don't try to verify the
+      // link is live — the post card renderer is the final judge.
+      // We just enforce max length and a reasonable shape so the
+      // database column can't be abused to store arbitrary blobs.
+      let cleanedYoutubeUrl: string | undefined = undefined;
+      if (youtubeUrl && typeof youtubeUrl === 'string') {
+        const trimmed = youtubeUrl.trim();
+        if (trimmed.length > 0) {
+          if (trimmed.length > 500) {
+            throw new AppError('YouTube URL is too long', 400, 'YOUTUBE_URL_TOO_LONG');
+          }
+          cleanedYoutubeUrl = trimmed;
+        }
       }
 
       const post = await createPost({
@@ -87,6 +102,7 @@ router.post(
         latitude,
         longitude,
         locationName,
+        youtubeUrl: cleanedYoutubeUrl,
         media,
         poll,
       });

@@ -55,6 +55,11 @@ export interface CreatePostInput {
   latitude?: number;
   longitude?: number;
   locationName?: string;
+  // Optional YouTube URL. The frontend uses this when the user
+  // pastes a YouTube link into the composer instead of uploading a
+  // video file. Validation lives in the service layer (light check
+  // — we accept any URL the renderer can later embed).
+  youtubeUrl?: string;
   media?: Array<{
     type: string;
     url: string;

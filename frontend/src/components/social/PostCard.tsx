@@ -2,11 +2,12 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Heart, MessageCircle, Bookmark, Share2, MoreHorizontal, Send,
   Repeat2, Trash2, Copy, Flag, Eye, Globe, Users, Lock,
-  Smile, ThumbsUp, Frown, Laugh, Angry, Hand, X,
+  Smile, ThumbsUp, Frown, Laugh, Angry, Hand, X, Youtube,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
 import { socialApi } from '@/lib/api';
@@ -55,8 +56,13 @@ export function PostCard({ post }: PostCardProps) {
   const hasMoreComments = commentsHasMoreByPost[post.id] ?? false;
   const loadingComments = isLoadingComments[post.id] ?? false;
 
-  // Permission flags
-  const isAuthor = (currentUser as any)?.id === post.author.id;
+  // Permission flags. We defend against missing `post.author` so a
+  // malformed post object doesn't crash the whole card (this was
+  // a real crash — "Cannot read properties of undefined (reading
+  // 'id')" — visible in production console). All comparisons
+  // short-circuit when the author or current user is missing.
+  const authorId = (post as any)?.author?.id;
+  const isAuthor = authorId != null && (currentUser as any)?.id === authorId;
   const userRoles = (currentUser as any)?.roles || [];
   const isAdmin = userRoles.some((r: string) =>
     ['admin', 'ADMIN', 'ROLE_ADMIN', 'SUPER_ADMIN'].includes(r)
@@ -133,7 +139,7 @@ export function PostCard({ post }: PostCardProps) {
       // prefixed by "🔁 Repost from @author". We keep the link back
       // to the original so credit is preserved.
       const link = `${window.location.origin}/social/post/${post.id}`;
-      const text = `🔁 Repost từ @${post.author.username}\n\n${post.content.slice(0, 280)}`;
+      const text = `🔁 Repost từ @${authorObj?.username ?? 'user'}\n\n${post.content.slice(0, 280)}`;
       const composer = document.querySelector<HTMLTextAreaElement>('textarea[placeholder*="nghĩ"]');
       if (composer) {
         composer.value = text;
@@ -206,10 +212,18 @@ export function PostCard({ post }: PostCardProps) {
     }
   };
 
-  const authorAvatar = post.author.avatarUrl
-    ? post.author.avatarUrl
-    : `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.author.username}`;
-  const authorDisplay = post.author.displayName || post.author.fullName || post.author.username;
+  // Author info can be missing on a malformed post (e.g. an
+  // optimistic update that hasn't received the server echo yet).
+  // We always render *something* safe so the rest of the card
+  // doesn't crash. The previous code assumed `post.author` was
+  // present, which produced the "Cannot read properties of
+  // undefined (reading 'id')" runtime error.
+  const authorObj = (post as any)?.author ?? null;
+  const authorAvatar = authorObj?.avatarUrl
+    ? authorObj.avatarUrl
+    : `https://api.dicebear.com/7.x/avataaars/svg?seed=${authorObj?.username ?? 'user'}`;
+  const authorDisplay =
+    authorObj?.displayName || authorObj?.fullName || authorObj?.username || 'Người dùng';
 
   return (
     <article
@@ -233,22 +247,33 @@ export function PostCard({ post }: PostCardProps) {
         {/* Author row */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            {/* Avatar */}
-            <div className="relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-full ring-2 ring-violet-500/20">
+            {/* Avatar — clicking goes to the public profile. Wrapped
+                in a Link so the entire avatar+name cluster is one
+                affordance; we add a `stopPropagation` so the card
+                body itself doesn't get a click-through. */}
+            <Link
+              href={isAuthor ? '/profile' : `/profile/${authorId ?? ''}`}
+              className="relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-full ring-2 ring-violet-500/20 transition-transform hover:scale-105"
+              aria-label={`Xem trang cá nhân của ${authorDisplay}`}
+            >
               <Image
                 src={authorAvatar}
                 alt={authorDisplay}
                 fill
                 className="object-cover"
               />
-            </div>
+            </Link>
 
             {/* Name + time + visibility */}
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 flex-wrap">
-                <p className="font-semibold text-white truncate" title={authorDisplay}>
+                <Link
+                  href={isAuthor ? '/profile' : `/profile/${authorId ?? ''}`}
+                  className="font-semibold text-white truncate hover:underline"
+                  title={authorDisplay}
+                >
                   {authorDisplay}
-                </p>
+                </Link>
                 {isAdmin && !isAuthor && (
                   <span
                     className="text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md"
@@ -259,7 +284,7 @@ export function PostCard({ post }: PostCardProps) {
                 )}
               </div>
               <div className="flex items-center gap-1.5 mt-0.5 text-xs flex-wrap" style={{ color: '#64748b' }}>
-                <span>@{post.author.username}</span>
+                <span>@{authorObj?.username ?? 'user'}</span>
                 <span style={{ color: '#334155' }}>·</span>
                 <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true, locale: vi })}</span>
                 <span style={{ color: '#334155' }}>·</span>
@@ -350,6 +375,13 @@ export function PostCard({ post }: PostCardProps) {
         {/* Media */}
         {post.media && post.media.length > 0 && (
           <MediaGrid media={post.media} />
+        )}
+
+        {/* YouTube embed — shown after media if a URL is attached.
+            Renders the official youtube-nocookie iframe so the post
+            works with strict privacy settings. */}
+        {post.youtubeUrl && (
+          <YouTubeEmbed url={post.youtubeUrl} />
         )}
 
         {/* Action bar */}
@@ -514,7 +546,7 @@ export function PostCard({ post }: PostCardProps) {
                 ) : (
                   <>
                     {comments.map((comment) => {
-                      const isCommentAuthor = (currentUser as any)?.id === comment.user.id;
+                      const isCommentAuthor = (currentUser as any)?.id === comment.user?.id;
                       const canDeleteComment = isCommentAuthor || isAdmin;
                       return (
                         <CommentItem
@@ -804,22 +836,36 @@ function CommentItem({
   onDelete?: () => void;
   canDelete?: boolean;
 }) {
-  const avatar = comment.user.avatarUrl
-    ? comment.user.avatarUrl
-    : `https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.user.username}`;
-  const display = comment.user.displayName || comment.user.fullName || comment.user.username;
+  // Defensive defaults — a comment without a user object (e.g.
+  // one that's been partially deleted on the server) should still
+  // render without crashing the whole card.
+  const commentUser = (comment as any)?.user ?? {};
+  const commentUserId = commentUser?.id;
+  const commentUsername = commentUser?.username ?? 'user';
+  const avatar = commentUser.avatarUrl
+    ? commentUser.avatarUrl
+    : `https://api.dicebear.com/7.x/avataaars/svg?seed=${commentUsername}`;
+  const display = commentUser.displayName || commentUser.fullName || commentUser.username || 'Người dùng';
 
   return (
     <div className="flex gap-2.5 group">
-      <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full">
+      <Link
+        href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
+        className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full transition-transform hover:scale-110"
+      >
         <Image src={avatar} alt={display} width={32} height={32} className="object-cover" />
-      </div>
+      </Link>
       <div className="flex-1 min-w-0">
         <div
           className="inline-block max-w-full rounded-2xl px-3 py-2"
           style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
         >
-          <p className="text-xs font-semibold text-white">{display}</p>
+          <Link
+            href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
+            className="text-xs font-semibold text-white hover:underline"
+          >
+            {display}
+          </Link>
           <p className="mt-0.5 text-sm break-words" style={{ color: '#cbd5e1' }}>
             {comment.content}
           </p>
@@ -922,4 +968,58 @@ function formatDuration(seconds: number): string {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+// ─── YouTube Embed ──────────────────────────────────────────────────────
+
+function YouTubeEmbed({ url }: { url: string }) {
+  // Same regex the composer uses to extract the video id from any
+  // of the common YouTube URL shapes (watch, youtu.be, /shorts,
+  // /embed, or a bare 11-char id).
+  const id = (() => {
+    if (!url) return null;
+    if (/^[A-Za-z0-9_-]{11}$/.test(url)) return url;
+    let m = url.match(/youtube\.com\/watch\?(?:.*&)?v=([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    m = url.match(/youtu\.be\/([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    m = url.match(/youtube\.com\/(?:shorts|embed)\/([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    return null;
+  })();
+
+  if (!id) {
+    // Fallback: render a clickable link card when we can't make
+    // sense of the URL.
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-3 flex items-center gap-3 rounded-2xl p-3 transition-colors"
+        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+      >
+        <Youtube className="h-6 w-6 text-red-500 shrink-0" />
+        <span className="truncate text-sm" style={{ color: '#cbd5e1' }}>{url}</span>
+      </a>
+    );
+  }
+
+  return (
+    <div
+      className="mt-3 overflow-hidden rounded-2xl"
+      style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.08)' }}
+    >
+      <div className="relative aspect-video">
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${id}`}
+          title="YouTube video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          className="absolute inset-0 h-full w-full"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  );
 }

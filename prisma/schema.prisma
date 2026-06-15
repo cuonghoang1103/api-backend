@@ -1063,6 +1063,10 @@ model SocialPost {
   longitude    Float?    @db.DoublePrecision
   locationName String?   @map("location_name") @db.VarChar(255)
   viewCount    Int       @default(0) @map("view_count")
+  // Optional YouTube link attached to the post. Used by the feed
+  // composer ("Paste YouTube URL") and rendered as an embedded
+  // player on the post card when present.
+  youtubeUrl   String?   @map("youtube_url") @db.VarChar(500)
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
 

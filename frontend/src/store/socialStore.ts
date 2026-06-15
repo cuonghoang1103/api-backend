@@ -26,6 +26,10 @@ interface SocialState {
   // Phase 2 — poll draft. Null = no poll. The post will be sent with
   // the poll if it's non-null and has at least 2 non-empty options.
   composerPoll: { question: string; options: string[]; multiChoice: boolean } | null;
+  // Phase 3 — optional YouTube URL the user pasted in the composer.
+  // When set, the backend stores it on the post and the renderer
+  // embeds an inline player. Empty string means "no embed".
+  composerYouTubeUrl: string;
   isPosting: boolean;
 
   // Saved posts
@@ -42,6 +46,7 @@ interface SocialState {
 
   // Save/unsave
   toggleSave: (postId: number, folder?: string) => Promise<void>;
+  unsavePost: (postId: number) => Promise<void>;
 
   // Post management
   deletePost: (postId: number) => Promise<void>;
@@ -54,6 +59,8 @@ interface SocialState {
   removeComposerMedia: (id: string) => void;
   // Phase 2 — poll attached to the next post
   setComposerPoll: (poll: { question: string; options: string[]; multiChoice: boolean } | null) => void;
+  // Phase 3 — YouTube URL the composer is tracking
+  setComposerYouTubeUrl: (url: string) => void;
   clearComposer: () => void;
   submitPost: () => Promise<SocialPost | null>;
 
@@ -85,6 +92,7 @@ export const useSocialStore = create<SocialState>((set, get) => ({
   composerMedia: [],
   composerVisibility: 'PUBLIC',
   composerPoll: null,
+  composerYouTubeUrl: '',
   isPosting: false,
 
   savedPosts: [],
@@ -193,6 +201,35 @@ export const useSocialStore = create<SocialState>((set, get) => ({
   },
 
   /**
+   * Bookmark page helper. Removes a saved post from both the local
+   * `savedPosts` list and the main feed. Always optimistically
+   * updates the UI; the network call is best-effort.
+   */
+  unsavePost: async (postId) => {
+    const wasSaved = true;
+    set((s) => ({
+      savedPosts: s.savedPosts.filter((p) => p.id !== postId),
+      posts: s.posts.map((p) =>
+        p.id === postId
+          ? { ...p, isSaved: false, savesCount: Math.max(0, p.savesCount - 1) }
+          : p
+      ),
+    }));
+    try {
+      await socialApi.unsavePost(postId);
+    } catch {
+      // Roll back the optimistic removal
+      set((s) => ({
+        posts: s.posts.map((p) =>
+          p.id === postId
+            ? { ...p, isSaved: wasSaved, savesCount: p.savesCount + 1 }
+            : p
+        ),
+      }));
+    }
+  },
+
+  /**
    * Remove a post from the feed. Used by the post card "Delete"
    * action which is visible to the author OR any admin (the
    * backend enforces the same rule). The removal is optimistic
@@ -232,12 +269,19 @@ export const useSocialStore = create<SocialState>((set, get) => ({
     set((s) => ({ composerMedia: s.composerMedia.filter((m) => m.id !== id) })),
 
   clearComposer: () =>
-    set({ composerContent: '', composerMedia: [], composerVisibility: 'PUBLIC', composerPoll: null }),
+    set({
+      composerContent: '',
+      composerMedia: [],
+      composerVisibility: 'PUBLIC',
+      composerPoll: null,
+      composerYouTubeUrl: '',
+    }),
 
   setComposerPoll: (poll) => set({ composerPoll: poll }),
+  setComposerYouTubeUrl: (url) => set({ composerYouTubeUrl: url }),
 
   submitPost: async () => {
-    const { composerContent, composerMedia, composerVisibility, composerPoll } = get();
+    const { composerContent, composerMedia, composerVisibility, composerPoll, composerYouTubeUrl } = get();
     if (!composerContent.trim() && composerMedia.length === 0 && !composerPoll) return null;
 
     set({ isPosting: true });
@@ -275,6 +319,7 @@ export const useSocialStore = create<SocialState>((set, get) => ({
         visibility: composerVisibility,
         media: mediaPayload.length > 0 ? mediaPayload : undefined,
         poll: pollPayload || undefined,
+        youtubeUrl: (composerYouTubeUrl || '').trim() || undefined,
       });
 
       const newPost = res.data as unknown as SocialPost;

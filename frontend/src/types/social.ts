@@ -51,6 +51,9 @@ export interface SocialPost {
   latitude?: number | null;
   longitude?: number | null;
   locationName?: string | null;
+  // Optional YouTube URL the user pasted into the composer. The
+  // post card renders this as an inline embed when present.
+  youtubeUrl?: string | null;
   viewCount: number;
   createdAt: string;
   updatedAt: string;

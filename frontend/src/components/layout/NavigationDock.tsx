@@ -89,6 +89,21 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  // Track whether the viewport is wide enough for the always-visible
+  // rail. Below md the dock is a hidden overlay drawer that the
+  // user opens via a toggle button; on md+ the dock is permanently
+  // mounted and the toggle is removed (hover does the job).
+  const [isWideViewport, setIsWideViewport] = useState(false);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(min-width: 768px)');
+    const update = () => setIsWideViewport(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  const showToggle = !isWideViewport;
+
   // Build a flat list of items with stable indices so the magnify
   // wave can look up "the item 2 positions below me" across section
   // boundaries. We only care about distance *within* the rendered
@@ -303,29 +318,32 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
         </div>
       </motion.nav>
 
-      {/* ── Toggle button — only when the dock is fully collapsed
-           AND no item is hovered (otherwise it would overlap the
-           top icon). Hidden in the drawer (overlay) mode as well. */}
-      <motion.button
-        onClick={onToggle}
-        className="fixed top-[70px] left-3 z-[60] flex items-center justify-center w-9 h-9 rounded-xl
-          bg-[#0d1117]/90 backdrop-blur-xl border border-white/10
-          shadow-[0_4px_16px_rgba(0,0,0,0.4),0_0_0_1px_rgba(139,92,246,0.15)]
-          transition-all duration-200 cursor-pointer"
-        animate={{
-          opacity: !isExpanded ? 1 : 0,
-          scale: !isExpanded ? 1 : 0.7,
-          pointerEvents: !isExpanded ? 'auto' : 'none',
-        }}
-        transition={{ duration: 0.2 }}
-        whileHover={{ scale: !isExpanded ? 1.08 : 0.7, borderColor: 'rgba(139,92,246,0.4)' }}
-        whileTap={{ scale: 0.92 }}
-        aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
-      >
-        <motion.div animate={{ rotate: isOpen ? -90 : 0 }} transition={{ duration: 0.25, ease: APPLE_EASE }}>
-          <ChevronLeft className="w-4 h-4" style={{ color: '#94a3b8' }} />
-        </motion.div>
-      </motion.button>
+      {/* ── Toggle button — ONLY on mobile (<md) where the dock is
+           a hidden overlay drawer. On desktop the dock is always
+           visible and the user opens it by hovering, so the toggle
+           is redundant. */}
+      {showToggle && (
+        <motion.button
+          onClick={onToggle}
+          className="fixed top-[70px] left-3 z-[60] flex items-center justify-center w-9 h-9 rounded-xl
+            bg-[#0d1117]/90 backdrop-blur-xl border border-white/10
+            shadow-[0_4px_16px_rgba(0,0,0,0.4),0_0_0_1px_rgba(139,92,246,0.15)]
+            transition-all duration-200 cursor-pointer"
+          animate={{
+            opacity: !isExpanded ? 1 : 0,
+            scale: !isExpanded ? 1 : 0.7,
+            pointerEvents: !isExpanded ? 'auto' : 'none',
+          }}
+          transition={{ duration: 0.2 }}
+          whileHover={{ scale: !isExpanded ? 1.08 : 0.7, borderColor: 'rgba(139,92,246,0.4)' }}
+          whileTap={{ scale: 0.92 }}
+          aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
+        >
+          <motion.div animate={{ rotate: isOpen ? -90 : 0 }} transition={{ duration: 0.25, ease: APPLE_EASE }}>
+            <ChevronLeft className="w-4 h-4" style={{ color: '#94a3b8' }} />
+          </motion.div>
+        </motion.button>
+      )}
     </>
   );
 }

@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { useMessagingStore } from '@/store/messagingStore';
@@ -54,6 +54,16 @@ export default function Navbar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [locale, setLocale] = useState('en');
+
+  // iOS-dock state for the top nav links. When the cursor is over
+  // the nav row we expand the labels and run a magnify wave across
+  // the icons — same paradigm as the left sidebar.
+  const [topNavHovered, setTopNavHovered] = useState(false);
+  const [topNavHoveredIdx, setTopNavHoveredIdx] = useState<number | null>(null);
+  const topNavLeaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (topNavLeaveTimer.current) clearTimeout(topNavLeaveTimer.current);
+  }, []);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -211,49 +221,55 @@ export default function Navbar() {
               </span>
             </Link>
 
-            {/* Center: nav links — iOS Cyber Dock style */}
-            <div className="hidden sm:flex items-center gap-0.5">
-              {TOP_NAV_LINKS.filter((l) => !l.authOnly || isAuthenticated).map((link) => {
+            {/* Center: nav links — iOS Cyber Dock style.
+                Collapses to icons-only by default; expanding label
+                + magnify wave triggers on hover, mirroring the
+                left sidebar so both rails behave the same. */}
+            <div
+              className="hidden sm:flex items-center"
+              onMouseEnter={() => {
+                if (topNavLeaveTimer.current) {
+                  clearTimeout(topNavLeaveTimer.current);
+                  topNavLeaveTimer.current = null;
+                }
+                setTopNavHovered(true);
+              }}
+              onMouseLeave={() => {
+                if (topNavLeaveTimer.current) clearTimeout(topNavLeaveTimer.current);
+                topNavLeaveTimer.current = setTimeout(() => {
+                  setTopNavHovered(false);
+                  setTopNavHoveredIdx(null);
+                }, 120);
+              }}
+            >
+              {TOP_NAV_LINKS.filter((l) => !l.authOnly || isAuthenticated).map((link, idx) => {
                 const isActive = pathname === link.href ||
                   (link.href === '/messages' && pathname?.startsWith('/messages'));
                 const isMessages = link.href === '/messages';
+                const distance = topNavHoveredIdx === null ? 99 : Math.abs(idx - topNavHoveredIdx);
+                const scale =
+                  distance === 0 ? 1.22 :
+                  distance === 1 ? 1.12 :
+                  distance === 2 ? 1.05 :
+                  1.0;
                 return (
-                  <Link
+                  <TopNavLink
                     key={link.href}
                     href={link.href}
-                    className={`relative flex items-center gap-1.5 px-4 py-2 rounded-2xl text-[13px] font-bold transition-all duration-200 group ${
-                      isActive
-                        ? 'text-[#0ea5e9]'
-                        : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04]'
-                    }`}
-                  >
-                    {isMessages ? (
-                      <MessengerIcon
-                        className={`w-3.5 h-3.5 shrink-0 transition-all ${
-                          isActive
-                            ? 'drop-shadow-[0_0_6px_#0ea5e9]'
-                            : 'group-hover:scale-110 group-hover:text-neon-cyan'
-                        }`}
-                      />
-                    ) : (
-                      <link.icon className={`w-3.5 h-3.5 shrink-0 transition-all ${
-                        isActive ? 'drop-shadow-[0_0_6px_#0ea5e9]' : ''
-                      }`} />
-                    )}
-                    <span>{link.label}</span>
-                    {isMessages && isAuthenticated && mounted && (
-                      <MessengerUnreadBadge count={unreadMessages} />
-                    )}
-                    {/* Subtle dot indicator — no heavy glow underline */}
-                    {isActive && (
-                      <motion.div
-                        layoutId="top-nav-indicator"
-                        className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
-                        style={{ background: '#0ea5e9', opacity: 0.7 }}
-                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                      />
-                    )}
-                  </Link>
+                    label={link.label}
+                    icon={link.icon}
+                    isActive={isActive}
+                    isMessages={isMessages}
+                    isExpanded={topNavHovered}
+                    scale={scale}
+                    isHovered={topNavHoveredIdx === idx}
+                    onHover={() => setTopNavHoveredIdx(idx)}
+                    onLeave={() => {
+                      if (topNavHoveredIdx === idx) setTopNavHoveredIdx(null);
+                    }}
+                    unreadCount={unreadMessages}
+                    showUnread={isMessages && isAuthenticated && mounted}
+                  />
                 );
               })}
             </div>
@@ -424,6 +440,135 @@ export default function Navbar() {
       />
     </div>
   );
+}
+
+// ── Single top-nav link (iOS dock-style) ──────────────────────────
+// Behaves like DockRow: collapsed by default (icon-only, centered),
+// expands label on parent hover, runs a magnify scale based on
+// distance from the hovered neighbour.
+function TopNavLink({
+  href,
+  label,
+  icon: Icon,
+  isActive,
+  isMessages,
+  isExpanded,
+  scale,
+  isHovered,
+  onHover,
+  onLeave,
+  unreadCount,
+  showUnread,
+}: {
+  href: string;
+  label: string;
+  icon: React.ElementType;
+  isActive: boolean;
+  isMessages: boolean;
+  isExpanded: boolean;
+  scale: number;
+  isHovered: boolean;
+  onHover: () => void;
+  onLeave: () => void;
+  unreadCount: number;
+  showUnread: boolean;
+}) {
+  const collapsed = !isExpanded;
+  return (
+    <motion.div
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      animate={{ scale }}
+      transition={{ type: 'spring', stiffness: 380, damping: 26, mass: 0.55 }}
+      style={{ transformOrigin: 'center center' }}
+    >
+      <Link
+        href={href}
+        className={cn(
+          'relative flex items-center rounded-2xl select-none',
+          collapsed ? 'justify-center w-9 h-9 mx-0.5' : 'gap-1.5 px-4 py-2 mx-0.5',
+        )}
+        style={{ display: 'flex' }}
+      >
+        {/* Icon pill — single source of truth for the magnify wave */}
+        <motion.div
+          className={cn(
+            'flex items-center justify-center rounded-xl shrink-0',
+            collapsed ? 'w-9 h-9' : 'w-8 h-8',
+          )}
+          animate={{
+            backgroundColor: isActive
+              ? 'rgba(14,165,233,0.15)'
+              : isHovered
+                ? 'rgba(139,92,246,0.10)'
+                : 'rgba(255,255,255,0.04)',
+            boxShadow: isActive
+              ? '0 0 12px rgba(14,165,233,0.30)'
+              : isHovered
+                ? '0 0 8px rgba(139,92,246,0.18)'
+                : 'none',
+          }}
+          transition={{ duration: 0.18, ease: [0.32, 0.94, 0.6, 1] }}
+        >
+          {isMessages ? (
+            <MessengerIcon
+              className={cn(
+                'shrink-0 transition-colors duration-150',
+                collapsed ? 'w-[16px] h-[16px]' : 'w-3.5 h-3.5',
+                isActive ? 'text-[#0ea5e9]' : isHovered ? 'text-text-primary' : 'text-text-muted',
+              )}
+            />
+          ) : (
+            <Icon
+              className={cn(
+                'shrink-0 transition-colors duration-150',
+                collapsed ? 'w-[16px] h-[16px]' : 'w-3.5 h-3.5',
+                isActive ? 'text-[#0ea5e9]' : isHovered ? 'text-text-primary' : 'text-text-muted',
+              )}
+            />
+          )}
+        </motion.div>
+
+        {/* Unread badge */}
+        {showUnread && (
+          <MessengerUnreadBadge count={unreadCount} />
+        )}
+
+        {/* Label — fades in when expanded */}
+        <AnimatePresence initial={false}>
+          {!collapsed && (
+            <motion.span
+              key="label"
+              initial={{ opacity: 0, x: -4 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -4 }}
+              transition={{ duration: 0.18, ease: [0.32, 0.94, 0.6, 1] }}
+              className="text-[13px] font-bold whitespace-nowrap"
+              style={{ color: isActive ? '#0ea5e9' : isHovered ? '#e5e7eb' : '#94a3b8' }}
+            >
+              {label}
+            </motion.span>
+          )}
+        </AnimatePresence>
+
+        {/* Active dot */}
+        {!collapsed && isActive && (
+          <motion.div
+            layoutId="top-nav-indicator"
+            className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+            style={{ background: '#0ea5e9', opacity: 0.7 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+          />
+        )}
+      </Link>
+    </motion.div>
+  );
+}
+
+// Tiny utility — duplicated from lib/utils to avoid an extra import
+// (the dock file already imports plenty; we keep this self-contained).
+function cn(...classes: Array<string | false | null | undefined>): string {
+  return classes.filter(Boolean).join(' ');
 }
 
 // ── Messenger-style unread badge (top navbar) ─────────────────────

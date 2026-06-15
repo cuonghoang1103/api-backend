@@ -471,26 +471,32 @@ export default function ChatPage() {
       <MatrixRain />
 
       {/* ── Persistent left sidebar: chat sessions ─────────────
-          This is the AI Chat page's own sidebar — it lives
-          here, on /chat, and ONLY here. The global navigation
-          dock does not show chat history. The aside is
-          positioned below the navbar (top-16) and pinned to
-          the left edge. Because the dock (NavigationDock) is
-          also fixed at left-0 with width 52 (collapsed) /
-          220 (expanded) and is rendered at z-59, we offset
-          the aside by the rail's expanded width and let it
-          sit underneath the rail (the dock visually covers
-          the leftmost pixels while collapsed). When the user
-          expands the dock by hovering, the rail still covers
-          the aside, which is fine — the aside is for the chat
-          page, not for general navigation. */}
-      <aside className="fixed top-16 left-[52px] bottom-0 w-72 z-20 flex flex-col
+          Full-height aside. It starts at top-0 and runs to the
+          bottom, hugging the rail's right edge (left-[52px]).
+          The top 64px of the aside is reserved for the global
+          Navbar (which lives at the top of the viewport on the
+          right side at z-40). The aside header gets a pt-16
+          inset so the '~/sessions' text starts cleanly below
+          the navbar line and isn't covered by it. The dark
+          surface of the aside IS visible behind the navbar on
+          the left strip, which is intentional — it makes the
+          aside feel like a continuous rail rather than a
+          floating panel with a white gap above it. The dock
+          rail (z-59, fixed top-0) sits in front of the aside
+          on the leftmost 52px, so the aside's leftmost strip
+          is covered by the rail. Net visual: a clean full-
+          height dark column to the right of the rail. */}
+      <aside className="fixed top-0 left-[52px] bottom-0 w-72 z-20 flex flex-col
         bg-[#0d1117]/95 backdrop-blur-xl
         border-r border-[#22d3ee]/10
-        shadow-[4px_0_32px_rgba(0,0,0,0.4)]">
+        shadow-[4px_0_32px_rgba(0,0,0,0.4)]"
+        data-build-tag="chat-aside-v2-fullheight">
 
-        {/* Sidebar header */}
-        <div className="px-4 py-4 border-b border-[#22d3ee]/10 flex items-center justify-between shrink-0">
+        {/* Sidebar header — pt-16 leaves room for the global
+            Navbar (h-16) so '~/sessions' isn't tucked under
+            the navbar. The aside's dark surface shows through
+            above the header, matching the rail. */}
+        <div className="px-4 pt-20 pb-4 border-b border-[#22d3ee]/10 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-[#22d3ee] led-eye" />
             <span className="font-mono text-sm font-semibold text-[#f8fafc]">
@@ -572,8 +578,14 @@ export default function ChatPage() {
         </div>
       </aside>
 
-      {/* ── Main chat: centered content area ────────────────────────── */}
-      <main className="pl-[340px] flex flex-col min-h-[calc(100vh-4rem)]">
+      {/* ── Main chat: centered content area ──────────────────────────
+          Aside is now full-height (top-0) so the dark column runs
+          edge-to-edge from the top of the viewport to the bottom.
+          Main content still has pl-[340px] to clear the rail + aside,
+          and pt-16 to clear the global Navbar. The aside's own header
+          reserves pt-20 inside the dark column so its label sits
+          below the Navbar line, but the column itself is unbroken. */}
+      <main className="pl-[340px] pt-16 flex flex-col min-h-screen">
         {/* Cyber Terminal Header */}
         <motion.header
           initial={{ opacity: 0, y: -10 }}

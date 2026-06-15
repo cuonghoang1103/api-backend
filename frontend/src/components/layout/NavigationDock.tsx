@@ -7,20 +7,35 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   Home, BookOpen, FolderOpen, Music, MessagesSquare,
   LayoutDashboard, Shield, BookMarked, Receipt,
-  Settings, Sparkles, UserCircle,
+  Sparkles,
   GraduationCap, ShoppingBag, Gamepad2, Globe,
+  Menu, X, ChevronRight,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 
-// Two fixed rail widths. The dock sits at COLLAPSED_W when at
-// rest and springs to EXPANDED_W when the user clicks the rail
-// (iOS Control Center / iPadOS app-switcher feel). Labels are
-// only visible while expanded; while collapsed, the rail is a
-// pure 52px column with no labels.
-export const DOCK_WIDTH_COLLAPSED = 52;
-export const DOCK_WIDTH_EXPANDED = 220;
+// ── iOS-style floating sidebar ────────────────────────────────
+//
+// The sidebar is a floating panel. It is HIDDEN by default
+// and only appears when the user clicks the menu button in
+// the top-left of the viewport. It does NOT shift the page
+// content — instead a dim + blur backdrop covers the rest of
+// the screen while the panel is open, exactly like the iOS
+// Control Center / app-switcher behaviour.
+//
+// When the panel is open, hovering an icon triggers the iOS
+// dock magnify wave: the hovered icon scales up, the two
+// neighbours scale up less, the two second-neighbours scale
+// even less, and anything farther stays at 1.0.
+//
+// The panel slides in from the left, scales up slightly,
+// and fades its content in, with the easing curve
+// (0.32, 0.94, 0.6, 1) which is close to Apple's standard
+// control-presentation curve.
+
+const DOCK_WIDTH_OPEN = 288; // 18rem — wide enough for icon + label
+const TOGGLE_BUTTON_SIZE = 44; // touch target ~Apple HIG
 
 interface DockItem {
   href: string;
@@ -53,31 +68,50 @@ const SECTIONS = {
   admin: { label: 'System' },
 } as const;
 
-const APPLE_EASE: [number, number, number, number] = [0.32, 0.94, 0.6, 1];
+// Magnify weights — iOS dock feel: hovered icon is the
+// biggest, the two immediate neighbours are noticeably
+// bigger, and the two second neighbours are slightly
+// bigger. Anything farther is at 1.0.
+const MAGNIFY = {
+  hovered: 1.55,
+  neighbor: 1.30,
+  farNeighbor: 1.15,
+} as const;
 
+// Spring used for the panel slide-in / scale. This is the
+// default framer "gentle" spring with the Apple-ish ease
+// baked in via a custom stiffness/damping/mass combo.
+const PANEL_SPRING = { type: 'spring' as const, stiffness: 380, damping: 36, mass: 0.95 };
+const ICON_SPRING = { type: 'spring' as const, stiffness: 320, damping: 22, mass: 0.55 };
+
+// Section reveal variants — used to stagger the fade-in
+// of each section's contents after the panel itself is
+// already in place.
 const sectionVariants: Variants = {
-  hidden: { opacity: 0, x: -6 },
+  hidden: { opacity: 0, y: 4 },
   visible: (i: number) => ({
     opacity: 1,
-    x: 0,
-    transition: { delay: i * 0.05, duration: 0.22, ease: APPLE_EASE },
+    y: 0,
+    transition: { delay: 0.18 + i * 0.04, duration: 0.22, ease: [0.32, 0.94, 0.6, 1] },
   }),
 };
 
-// Magnify weights — the hovered icon is biggest, the two
-// neighbors are next, and the two second-neighbors are
-// smaller. Identical to the iOS dock.
-const MAGNIFY = {
-  hovered: 1.22,
-  neighbor: 1.10,
-  farNeighbor: 1.04,
-} as const;
+// Row variants — the rows themselves fade in slightly
+// after their parent section.
+const rowVariants: Variants = {
+  hidden: { opacity: 0, x: -8 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { delay: 0.22 + i * 0.018, duration: 0.22, ease: [0.32, 0.94, 0.6, 1] },
+  }),
+};
 
 export default function NavigationDock() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
-  const navRef = useRef<HTMLElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -95,63 +129,39 @@ export default function NavigationDock() {
     [],
   );
 
-  // Open the dock on click of the rail. We treat the whole
-  // collapsed rail as a click target — clicking anywhere on
-  // the 52px strip opens the panel. Once open, only clicks
-  // on actual <Link>s navigate; clicks on the rail chrome
-  // (the strip itself, padding, header) keep it open.
-  const handleRailClick = useCallback(() => {
-    if (!isOpen) setIsOpen(true);
-  }, [isOpen]);
-
-  // Close when the cursor leaves the expanded panel.
-  // We use a small grace period (140ms) so the cursor can
-  // travel between the rail and the panel surface without
-  // the panel snapping shut.
-  const handlePanelLeave = useCallback(() => {
-    if (!isOpen) return;
-    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
-    closeTimeoutRef.current = setTimeout(() => {
-      setIsOpen(false);
-      setHoveredHref(null);
-    }, 140);
-  }, [isOpen]);
-
-  const handlePanelEnter = useCallback(() => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
+  const open = useCallback(() => setIsOpen(true), []);
+  const close = useCallback(() => {
+    setIsOpen(false);
+    setHoveredHref(null);
   }, []);
+  const toggle = useCallback(() => setIsOpen((v) => !v), []);
 
   // Close on Esc.
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
+      if (e.key === 'Escape') close();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [isOpen]);
+  }, [isOpen, close]);
 
   // Close on route change.
   useEffect(() => {
-    setIsOpen(false);
-    setHoveredHref(null);
-  }, [pathname]);
+    close();
+  }, [pathname, close]);
 
-  // Click outside the dock to close.
+  // Click outside the panel to close.
   useEffect(() => {
     if (!isOpen) return;
     const onDown = (e: MouseEvent) => {
       const t = e.target as Node | null;
       if (!t) return;
-      if (navRef.current && !navRef.current.contains(t)) {
-        setIsOpen(false);
-        setHoveredHref(null);
+      if (panelRef.current && !panelRef.current.contains(t)) {
+        close();
       }
     };
-    // Defer one frame so the click that opened the dock
+    // Defer one frame so the click that opened the panel
     // does not immediately re-fire a close.
     const id = window.setTimeout(() => {
       document.addEventListener('mousedown', onDown);
@@ -160,6 +170,18 @@ export default function NavigationDock() {
       window.clearTimeout(id);
       document.removeEventListener('mousedown', onDown);
     };
+  }, [isOpen, close]);
+
+  // Lock body scroll while open.
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
   }, [isOpen]);
 
   useEffect(() => {
@@ -171,165 +193,244 @@ export default function NavigationDock() {
   // Flatten items so the magnify pass can compute distance
   // from the hovered item across section boundaries.
   const flatItems = useMemo(() => sections.flatMap((s) => s.items), [sections]);
-
   const hoveredIdx = hoveredHref
     ? flatItems.findIndex((i) => i.href === hoveredHref)
     : -1;
 
   return (
     <>
-      {/* ── Backdrop dim + blur (only when dock is open) ──
-          A full-screen transparent layer that darkens and
-          blurs whatever is behind the dock. Click anywhere
-          on it to close. It animates in/out with the dock
-          using the same spring so the dim appears to come
-          FROM the rail, not pop in independently. */}
+      {/* ── Toggle button (always visible) ────────────────
+          A small floating button in the top-left of the
+          viewport. Tapping it opens the sidebar panel.
+          The button stays put while the panel animates in
+          / out — it does NOT slide away, and the icon
+          crossfades from Menu to X via AnimatePresence. */}
+      <motion.button
+        type="button"
+        aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
+        aria-expanded={isOpen}
+        aria-controls="floating-nav-panel"
+        onClick={toggle}
+        whileHover={{ scale: 1.06 }}
+        whileTap={{ scale: 0.94 }}
+        transition={ICON_SPRING}
+        className={cn(
+          'fixed top-4 left-4 z-[70]',
+          'w-11 h-11 rounded-2xl',
+          'flex items-center justify-center',
+          'bg-[#0d1117]/85 backdrop-blur-2xl',
+          'border border-white/10',
+          'shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)]',
+          'text-text-primary',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22d3ee]/40',
+        )}
+      >
+        <AnimatePresence mode="wait" initial={false}>
+          {isOpen ? (
+            <motion.span
+              key="x-icon"
+              initial={{ opacity: 0, rotate: -45, scale: 0.6 }}
+              animate={{ opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ opacity: 0, rotate: 45, scale: 0.6 }}
+              transition={{ duration: 0.18, ease: [0.32, 0.94, 0.6, 1] }}
+              className="flex items-center justify-center"
+            >
+              <X className="w-5 h-5" />
+            </motion.span>
+          ) : (
+            <motion.span
+              key="menu-icon"
+              initial={{ opacity: 0, rotate: 45, scale: 0.6 }}
+              animate={{ opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ opacity: 0, rotate: -45, scale: 0.6 }}
+              transition={{ duration: 0.18, ease: [0.32, 0.94, 0.6, 1] }}
+              className="flex items-center justify-center"
+            >
+              <Menu className="w-5 h-5" />
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.button>
+
+      {/* ── Backdrop dim + blur (only when panel is open) ──
+          Full-screen transparent layer that darkens and
+          blurs whatever is behind the panel. Clicking
+          anywhere on it closes the panel. It animates in
+          together with the panel so the dim appears to
+          come FROM the menu button, not pop in. */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             key="dock-backdrop"
             initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-            animate={{ opacity: 1, backdropFilter: 'blur(6px)' }}
+            animate={{ opacity: 1, backdropFilter: 'blur(14px)' }}
             exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-            transition={{ duration: 0.28, ease: APPLE_EASE }}
-            className="fixed inset-0 z-[58] bg-black/35"
-            onMouseDown={() => {
-              setIsOpen(false);
-              setHoveredHref(null);
-            }}
+            transition={{ duration: 0.32, ease: [0.32, 0.94, 0.6, 1] }}
+            className="fixed inset-0 z-[65] bg-black/55"
+            onMouseDown={close}
             aria-hidden
           />
         )}
       </AnimatePresence>
 
-      {/* ── Sidebar panel (the rail) ──────────────────────── */}
-      <motion.nav
-        ref={navRef}
-        key="dock-panel"
-        initial={false}
-        animate={{
-          width: isOpen ? DOCK_WIDTH_EXPANDED : DOCK_WIDTH_COLLAPSED,
-        }}
-        transition={{ type: 'spring', stiffness: 340, damping: 32, mass: 0.9 }}
-        onMouseEnter={handlePanelEnter}
-        onMouseLeave={handlePanelLeave}
-        className="fixed top-0 left-0 h-full z-[60] flex flex-col"
-        style={{ overflow: 'visible' }}
-        aria-label="Primary navigation"
-      >
-        <div
-          className="h-full flex flex-col overflow-hidden
-            bg-[#0d1117]/95 backdrop-blur-2xl
-            border-r border-white/[0.06]
-            shadow-[6px_0_32px_rgba(0,0,0,0.55)]"
-        >
-          {/* Click target — the 52px-wide rail when collapsed.
-              When the rail is collapsed, every click on this
-              strip (the open button at the top + the empty
-              body) opens the panel. When the panel is open,
-              this strip is the rail's body and we don't want
-              empty clicks to do anything. */}
-          <button
-            type="button"
-            aria-label={isOpen ? 'Navigation open' : 'Open navigation'}
-            aria-expanded={isOpen}
-            onClick={handleRailClick}
-            className={cn(
-              'flex flex-col items-stretch w-full text-left shrink-0',
-              'focus:outline-none focus-visible:ring-1 focus-visible:ring-white/20',
-              // While collapsed, the button stretches to the
-              // full height and acts as the open trigger. The
-              // real navigation sits ON TOP of it (z-index)
-              // so individual icon clicks still navigate.
-              isOpen ? 'h-0 overflow-hidden' : 'h-full',
-            )}
-            tabIndex={isOpen ? -1 : 0}
-          />
+      {/* ── Floating panel ─────────────────────────────────
+          The sidebar itself. It slides in from the left
+          edge of the viewport with a slight scale-up,
+          which is the iOS sheet-presentation feel. The
+          panel is positioned absolutely at top-0 left-0,
+          with a small inset from the screen edges so it
+          doesn't touch the rounded corners of an iPhone
+          screen, and a generous border-radius so it
+          looks like a glass sheet, not a strip.
 
-          {/* Sections (rendered only when the panel is open).
-              We keep them always-mounted so the magnify
-              animation has somewhere to grow, but we hide
-              the chrome (header labels, scrollbar) while
-              collapsed. */}
-          <div
+          Width is animated by framer-motion (no fixed
+          width, so we can also animate scale in tandem
+          without layout thrash). We start at scale 0.92
+          + x:-32 to get the slide-in, then spring to 1.0
+          / 0. */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.aside
+            key="dock-panel"
+            id="floating-nav-panel"
+            ref={panelRef as React.RefObject<HTMLElement>}
+            role="dialog"
+            aria-label="Primary navigation"
+            initial={{ opacity: 0, x: -40, scale: 0.92 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -32, scale: 0.96 }}
+            transition={PANEL_SPRING}
+            onMouseLeave={() => setHoveredHref(null)}
             className={cn(
-              'flex-1 overflow-y-auto overflow-x-visible py-3',
-              isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
-              'transition-opacity duration-150',
+              'fixed z-[68]',
+              // Position: top-3 / bottom-3 / left-3 gives the
+              // panel a small margin from the screen edges,
+              // matching the iOS Control Center look.
+              'top-3 bottom-3 left-3',
+              'w-[288px]',
+              'flex flex-col',
+              // The glass surface — strong blur, low-opacity
+              // dark background, and a subtle inner stroke
+              // so the panel reads as a real sheet rather
+              // than a flat rectangle.
+              'bg-[#0d1117]/85 backdrop-blur-2xl',
+              'border border-white/[0.08]',
+              'rounded-3xl',
+              'shadow-[0_24px_80px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.04),inset_0_1px_0_rgba(255,255,255,0.06)]',
+              'overflow-hidden',
             )}
           >
-            {sections.map(({ key, items, index }) => (
-              <motion.div
-                key={key}
-                custom={index}
-                variants={sectionVariants}
-                initial="hidden"
-                animate="visible"
-                className="space-y-0.5"
-              >
-                {items.map((item) => {
-                  const flatIdx = flatItems.findIndex((i) => i.href === item.href);
-                  const isActive =
-                    pathname === item.href ||
-                    (item.href !== '/' && pathname.startsWith(item.href));
-                  const isHovered = hoveredHref === item.href;
-                  // Distance-based magnify: only apply while
-                  // open. The hovered icon scales to 1.22,
-                  // immediate neighbors to 1.10, second
-                  // neighbors to 1.04. Anything farther
-                  // stays at 1.0.
-                  let scale = 1;
-                  if (isOpen && hoveredIdx >= 0) {
-                    const d = Math.abs(flatIdx - hoveredIdx);
-                    if (d === 0) scale = MAGNIFY.hovered;
-                    else if (d === 1) scale = MAGNIFY.neighbor;
-                    else if (d === 2) scale = MAGNIFY.farNeighbor;
-                  }
-                  const showUnread =
-                    !!item.showUnread && mounted && isAuthenticated && unreadMessages > 0;
-                  const Icon = item.icon;
+            {/* Panel header — leaves room for the toggle
+                button at the top so they don't overlap. */}
+            <div className="shrink-0 px-5 pt-16 pb-3">
+              <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-text-muted">
+                navigation
+              </p>
+              <p className="text-lg font-semibold text-text-primary mt-1">
+                Where to next?
+              </p>
+            </div>
 
-                  return (
-                    <DockRow
-                      key={item.href}
-                      item={item}
-                      Icon={Icon}
-                      isActive={isActive}
-                      isHovered={isHovered}
-                      isOpen={isOpen}
-                      scale={scale}
-                      showUnread={showUnread}
-                      unreadCount={unreadMessages}
-                      onHover={() => setHoveredHref(item.href)}
-                      onLeave={() => {
-                        // Only clear if this row was the
-                        // hovered one. This avoids a race
-                        // when the cursor moves between
-                        // rows quickly.
-                        setHoveredHref((prev) => (prev === item.href ? null : prev));
-                      }}
-                    />
-                  );
-                })}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.nav>
+            {/* Section list — the magnify magic happens
+                here. We render every section, and inside
+                each section we render the rows. The rows
+                read `hoveredHref` from the parent state
+                to compute their own magnify scale based
+                on distance from the hovered item. */}
+            <div className="flex-1 overflow-y-auto overflow-x-visible px-3 pb-3">
+              {sections.map(({ key, items, index }) => (
+                <motion.div
+                  key={key}
+                  custom={index}
+                  variants={sectionVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="space-y-0.5 mb-3"
+                >
+                  <p className="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-[0.16em] text-text-muted/70">
+                    {SECTIONS[key].label}
+                  </p>
+                  {items.map((item, rowIndex) => {
+                    const flatIdx = flatItems.findIndex((i) => i.href === item.href);
+                    const isActive =
+                      pathname === item.href ||
+                      (item.href !== '/' && pathname.startsWith(item.href));
+                    const isHovered = hoveredHref === item.href;
+                    let scale = 1;
+                    if (hoveredIdx >= 0) {
+                      const d = Math.abs(flatIdx - hoveredIdx);
+                      if (d === 0) scale = MAGNIFY.hovered;
+                      else if (d === 1) scale = MAGNIFY.neighbor;
+                      else if (d === 2) scale = MAGNIFY.farNeighbor;
+                    }
+                    const showUnread =
+                      !!item.showUnread && mounted && isAuthenticated && unreadMessages > 0;
+                    const Icon = item.icon;
+
+                    return (
+                      <motion.div
+                        key={item.href}
+                        custom={rowIndex}
+                        variants={rowVariants}
+                        initial="hidden"
+                        animate="visible"
+                      >
+                        <DockRow
+                          item={item}
+                          Icon={Icon}
+                          isActive={isActive}
+                          isHovered={isHovered}
+                          scale={scale}
+                          showUnread={showUnread}
+                          unreadCount={unreadMessages}
+                          onHover={() => setHoveredHref(item.href)}
+                          onLeave={() => {
+                            setHoveredHref((prev) => (prev === item.href ? null : prev));
+                          }}
+                        />
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Panel footer — a small "Esc to close" hint. */}
+            <div className="shrink-0 px-5 py-3 border-t border-white/[0.06] flex items-center justify-between">
+              <p className="text-[10px] font-mono text-text-muted">
+                Press <kbd className="px-1 py-0.5 mx-0.5 rounded bg-white/5 border border-white/10">Esc</kbd> to close
+              </p>
+              <p className="text-[10px] font-mono text-text-muted/60">
+                ⌘B
+              </p>
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
     </>
   );
 }
 
 // ── Single dock row ─────────────────────────────────────────────
-// A 36px square icon, with magnify scale applied via
-// framer-motion (only while the panel is open and the row
-// is within distance of the hovered row).
+//
+// A row is the clickable nav target. It contains:
+//   - the active indicator bar (cyan→violet gradient) on the
+//     left edge, with framer-motion's layoutId so it glides
+//     between rows when the active route changes
+//   - the icon (in a 40×40 hit area)
+//   - the label (to the right of the icon)
+//   - the chevron (right side, only on hover)
+//   - the unread badge (top right of the row, or inside the
+//     icon at smaller sizes)
+//
+// The icon's scale is animated by framer-motion. While the
+// panel is open, the hovered row's icon scales up to ~1.55,
+// neighbours scale up less, and so on — the iOS dock wave.
 function DockRow({
   item,
   Icon,
   isActive,
   isHovered,
-  isOpen,
   scale,
   showUnread,
   unreadCount,
@@ -340,7 +441,6 @@ function DockRow({
   Icon: React.ElementType;
   isActive: boolean;
   isHovered: boolean;
-  isOpen: boolean;
   scale: number;
   showUnread: boolean;
   unreadCount: number;
@@ -351,126 +451,91 @@ function DockRow({
     <div
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
-      className="relative px-2 py-1.5"
+      className="relative"
     >
       <Link
         href={item.href}
         className={cn(
-          'relative flex items-center w-8 h-8 mx-auto rounded-lg select-none',
-          isOpen ? 'justify-start' : 'justify-center',
+          'relative flex items-center w-full pl-3 pr-3 h-12 rounded-2xl',
           'transition-colors duration-150',
+          isActive
+            ? 'bg-gradient-to-r from-[#22d3ee]/15 to-[#8b5cf6]/10 text-text-primary'
+            : isHovered
+              ? 'bg-white/[0.06] text-text-primary'
+              : 'text-text-muted hover:text-text-primary',
         )}
       >
-        {/* Active indicator bar — flat gradient, no halo. */}
+        {/* Active bar — flat gradient on the left edge. */}
         {isActive && (
           <motion.div
             layoutId="navActiveIndicator"
-            className="absolute -left-2 top-1.5 bottom-1.5 w-[2px] rounded-full"
+            className="absolute -left-1 top-2 bottom-2 w-[3px] rounded-full"
             style={{
               background: 'linear-gradient(180deg, #22d3ee, #8b5cf6)',
+              boxShadow: '0 0 12px rgba(34, 211, 238, 0.4)',
             }}
             transition={{ type: 'spring', stiffness: 380, damping: 30, mass: 0.5 }}
           />
         )}
 
-        {/* Icon wrapper — magnify scale is applied here.
-            The scale motion is spring-based so the
-            magnification is smooth when the cursor
-            travels between rows. We cap the scale
-            animation to the open state so the collapsed
-            rail stays perfectly still. */}
+        {/* Icon wrapper — magnify scale is applied here. */}
         <motion.div
-          className={cn(
-            'flex items-center justify-center rounded-lg w-8 h-8 origin-center',
-          )}
-          animate={{
-            scale: isOpen ? scale : 1,
-            backgroundColor: isActive
-              ? 'rgba(255,255,255,0.08)'
-              : isHovered && isOpen
-                ? 'rgba(255,255,255,0.06)'
-                : 'rgba(255,255,255,0.0)',
-          }}
-          transition={{ type: 'spring', stiffness: 320, damping: 22, mass: 0.55 }}
+          className="flex items-center justify-center w-7 h-7 origin-center"
+          animate={{ scale }}
+          transition={ICON_SPRING}
         >
           <Icon
             className={cn(
-              'shrink-0 w-[15px] h-[15px] transition-colors duration-150',
-              isActive || isHovered
-                ? 'text-text-primary'
-                : 'text-text-muted',
+              'w-[18px] h-[18px] transition-colors duration-150',
+              isActive || isHovered ? 'text-text-primary' : 'text-text-muted',
             )}
           />
         </motion.div>
 
-        {/* Label — only visible when the panel is open.
-            It uses AnimatePresence so the labels fade in
-            slightly after the width animation has begun,
-            matching the iOS panel reveal timing. */}
+        {/* Label */}
+        <span
+          className={cn(
+            'ml-3 flex-1 whitespace-nowrap text-[14px] font-medium select-none transition-colors duration-150',
+            isActive || isHovered ? 'text-text-primary' : 'text-text-muted',
+          )}
+        >
+          {item.label}
+        </span>
+
+        {/* Right-side adornments — chevron on hover, badge
+            when there are unread messages. */}
         <AnimatePresence>
-          {isOpen && (
+          {isHovered && !showUnread && (
             <motion.span
-              key="row-label"
+              key="chevron"
               initial={{ opacity: 0, x: -4 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -4 }}
-              transition={{ duration: 0.16, ease: APPLE_EASE, delay: 0.04 }}
-              className={cn(
-                'ml-3 whitespace-nowrap text-[13px] font-medium select-none',
-                isActive || isHovered
-                  ? 'text-text-primary'
-                  : 'text-text-muted',
-              )}
+              transition={{ duration: 0.14, ease: [0.32, 0.94, 0.6, 1] }}
+              className="text-text-muted"
             >
-              {item.label}
+              <ChevronRight className="w-4 h-4" />
             </motion.span>
           )}
         </AnimatePresence>
 
-        {/* Unread badge — Messenger-style dot. */}
         {showUnread && (
-          <UnreadBadge
-            count={unreadMessages}
-            isActive={isActive}
-            isOpen={isOpen}
-          />
+          <UnreadBadge count={unreadCount} />
         )}
       </Link>
     </div>
   );
 }
 
-// ── Unread badge ───────────────────────────────────────────────
-function UnreadBadge({
-  count,
-  isActive,
-  isOpen,
-}: {
-  count: number;
-  isActive: boolean;
-  isOpen: boolean;
-}) {
-  // While collapsed, the badge is the small dot in the top
-  // right of the icon. When the panel is open, the badge
-  // becomes a small pill on the right side of the row, so
-  // the count is readable instead of a 1-px smudge.
-  if (!isOpen) {
-    return (
-      <span
-        className="absolute top-0.5 right-0.5 min-w-[14px] h-[14px] px-1
-          bg-red-500 text-white text-[9px] font-bold rounded-full
-          flex items-center justify-center
-          shadow-[0_0_0_2px_rgba(13,17,23,0.95)]"
-      >
-        {count > 9 ? '9+' : count}
-      </span>
-    );
-  }
+// ── Unread badge ──────────────────────────────────────────────
+function UnreadBadge({ count }: { count: number }) {
   return (
     <span
-      className="ml-auto min-w-[18px] h-[18px] px-1.5
-        bg-red-500 text-white text-[10px] font-bold rounded-full
-        flex items-center justify-center"
+      className="min-w-[20px] h-[20px] px-1.5
+        bg-gradient-to-br from-[#ef4444] to-[#dc2626]
+        text-white text-[10px] font-bold rounded-full
+        flex items-center justify-center
+        shadow-[0_0_12px_rgba(239,68,68,0.4)]"
     >
       {count > 99 ? '99+' : count}
     </span>

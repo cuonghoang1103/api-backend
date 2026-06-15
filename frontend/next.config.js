@@ -17,6 +17,13 @@ const nextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'http', hostname: 'localhost' },
       { protocol: 'https', hostname: '**.amazonaws.com' },
+      // Uploaded media (social posts, courses, etc.) lives on the
+      // backend's uploads directory served at api.cuongthai.com.
+      // Without these patterns next/image refuses to load them with
+      // "Failed to load resource: net::ERR_ABORTED 403" or blank.
+      { protocol: 'https', hostname: 'api.cuongthai.com' },
+      { protocol: 'https', hostname: 'cuongthai.com' },
+      { protocol: 'https', hostname: 'www.cuongthai.com' },
     ],
   },
   async headers() {

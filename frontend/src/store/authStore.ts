@@ -11,7 +11,18 @@ interface AuthState {
   isHydrated: boolean;
   setAuth: (auth: AuthResponse) => void;
   updateUser: (user: User) => void;
-  updateProfile: (data: { username?: string; email?: string; avatarUrl?: string; bio?: string; fullName?: string }) => void;
+  updateProfile: (data: {
+    username?: string;
+    email?: string;
+    avatarUrl?: string;
+    bio?: string;
+    fullName?: string;
+    displayName?: string;
+    gender?: 'MALE' | 'FEMALE' | 'OTHER' | null;
+    birthYear?: number | null;
+    phone?: string | null;
+    socialLinks?: Record<string, string> | null;
+  }) => void;
   logout: () => void;
   setLoading: (loading: boolean) => void;
 }
@@ -30,6 +41,7 @@ export const useAuthStore = create<AuthState>()(
           id: auth.userId,
           username: auth.username,
           email: auth.email,
+          displayName: auth.username,
           roles: auth.roles || [auth.role],
           enabled: true,
           accountNonLocked: true,

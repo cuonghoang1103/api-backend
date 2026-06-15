@@ -35,6 +35,23 @@ model User {
   bio       String? @db.Text
   avatarUrl String? @map("avatar_url") @db.VarChar(500)
 
+  // ─── Extended profile (Phase 1) ─────────────────────────
+  // displayName: tên hiển thị (có thể khác username, dùng cho UI
+  // trên header feed). Null → fallback về fullName → username.
+  displayName String? @map("display_name") @db.VarChar(100)
+  // gender: 'MALE' | 'FEMALE' | 'OTHER' | null (tuỳ chọn).
+  gender      String? @db.VarChar(20)
+  // birthYear: năm sinh 4 chữ số (1900..currentYear). Null nếu user
+  // không muốn tiết lộ. Lưu riêng năm (không phải full DOB) để
+  // giảm thiểu PII và dễ tính tuổi trên feed.
+  birthYear   Int?    @map("birth_year")
+  // phone: optional, không bắt buộc (giữ nguyên pattern 10-15 số
+  // quốc tế). Không dùng cho 2FA trong phase này.
+  phone       String? @db.VarChar(20)
+  // socialLinks: JSON map { github?, twitter?, linkedin?, website?, youtube?, facebook? }
+  // — schema-free, mỗi frontend tự định nghĩa key khi đọc.
+  socialLinks Json?   @map("social_links")
+
   enabled               Boolean @default(true)
   accountNonExpired     Boolean @default(true) @map("account_non_expired")
   accountNonLocked      Boolean @default(true) @map("account_non_locked")

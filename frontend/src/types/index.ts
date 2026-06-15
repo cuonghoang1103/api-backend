@@ -22,8 +22,19 @@ export interface User {
   username: string;
   email: string;
   fullName?: string;
+  /**
+   * User-facing display name shown in the UI (header, dropdown, post
+   * card, etc). Backend falls back to fullName → username when not set,
+   * so this is always a non-empty string once the profile is loaded.
+   */
+  displayName?: string;
   avatarUrl?: string;
   bio?: string;
+  // Extended profile fields (Phase 1)
+  gender?: 'MALE' | 'FEMALE' | 'OTHER' | null;
+  birthYear?: number | null;
+  phone?: string | null;
+  socialLinks?: Record<string, string> | null;
   roles: string[];
   enabled: boolean;
   accountNonLocked: boolean;

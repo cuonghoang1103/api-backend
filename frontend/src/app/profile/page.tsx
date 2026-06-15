@@ -30,6 +30,13 @@ import {
   PlayCircle,
   CheckCircle,
   Clock,
+  Phone,
+  Cake,
+  Link2,
+  Twitter,
+  Linkedin,
+  Youtube,
+  Facebook,
 } from 'lucide-react';
 
 interface ProfileData {
@@ -37,8 +44,13 @@ interface ProfileData {
   username: string;
   email: string;
   fullName?: string;
+  displayName?: string;
   avatarUrl?: string;
   bio?: string;
+  gender?: 'MALE' | 'FEMALE' | 'OTHER' | null;
+  birthYear?: number | null;
+  phone?: string | null;
+  socialLinks?: Record<string, string> | null;
   roles: string[];
   createdAt: string;
 }
@@ -65,10 +77,22 @@ export default function ProfilePage() {
 
   const [form, setForm] = useState({
     fullName: '',
+    displayName: '',
     email: '',
     username: '',
     avatarUrl: '',
     bio: '',
+    gender: '' as '' | 'MALE' | 'FEMALE' | 'OTHER',
+    birthYear: '' as number | '',
+    phone: '',
+    socialLinks: {
+      github: '',
+      twitter: '',
+      linkedin: '',
+      website: '',
+      youtube: '',
+      facebook: '',
+    } as Record<string, string>,
   });
 
   const [passwordForm, setPasswordForm] = useState({
@@ -101,19 +125,36 @@ export default function ProfilePage() {
         setProfile(data);
         setForm({
           fullName: data?.fullName || '',
+          displayName: data?.displayName || '',
           email: data?.email || '',
           username: data?.username || '',
           avatarUrl: data?.avatarUrl || '',
           bio: data?.bio || '',
+          gender: (data?.gender as any) || '',
+          birthYear: data?.birthYear || '',
+          phone: data?.phone || '',
+          socialLinks: {
+            github: data?.socialLinks?.github || '',
+            twitter: data?.socialLinks?.twitter || '',
+            linkedin: data?.socialLinks?.linkedin || '',
+            website: data?.socialLinks?.website || '',
+            youtube: data?.socialLinks?.youtube || '',
+            facebook: data?.socialLinks?.facebook || '',
+          },
         });
       } catch {
         if (user) {
           setForm({
             fullName: (user as any).fullName || '',
+            displayName: (user as any).displayName || user.username || '',
             email: user.email || '',
             username: user.username || '',
             avatarUrl: '',
             bio: '',
+            gender: '',
+            birthYear: '',
+            phone: '',
+            socialLinks: { github: '', twitter: '', linkedin: '', website: '', youtube: '', facebook: '' },
           });
         }
       } finally {
@@ -160,15 +201,41 @@ export default function ProfilePage() {
   const handleSaveProfile = async () => {
     setSaving(true);
     try {
-      const res = await api.put('/profile', {
+      // Build payload — convert blank strings to null so the backend
+      // can clear optional fields. socialLinks is sent as a partial
+      // object (whitelisted by the backend) so blank fields are
+      // pruned instead of overwriting saved values with empty.
+      const socialLinksPayload: Record<string, string> = {};
+      for (const [k, v] of Object.entries(form.socialLinks)) {
+        if (v && v.trim()) socialLinksPayload[k] = v.trim();
+      }
+
+      const payload: any = {
+        fullName: form.fullName.trim() || null,
+        displayName: form.displayName.trim() || null,
+        email: form.email.trim(),
+        bio: form.bio,
+        avatarUrl: form.avatarUrl.trim() || null,
+        gender: form.gender || null,
+        birthYear: form.birthYear === '' ? null : Number(form.birthYear),
+        phone: form.phone.trim() || null,
+        socialLinks: Object.keys(socialLinksPayload).length > 0 ? socialLinksPayload : null,
+      };
+
+      const res = await api.put('/profile', payload);
+      const updated = res.data?.data;
+      setProfile((prev) => prev ? { ...prev, ...updated } : prev);
+      updateProfile({
         fullName: form.fullName,
+        displayName: form.displayName || form.username,
         email: form.email,
         bio: form.bio,
         avatarUrl: form.avatarUrl,
+        gender: form.gender || null,
+        birthYear: form.birthYear === '' ? null : Number(form.birthYear),
+        phone: form.phone || null,
+        socialLinks: socialLinksPayload,
       });
-      const updated = res.data?.data;
-      setProfile((prev) => prev ? { ...prev, ...updated } : prev);
-      updateProfile({ ...form });
       setEditing(false);
       toast.success('Profile updated successfully!');
     } catch (err: any) {
@@ -284,7 +351,7 @@ export default function ProfilePage() {
             <div className="pb-3 flex-1 min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-2xl sm:text-3xl font-heading font-bold text-text-primary">
-                  {form.fullName || form.username}
+                  {form.displayName || form.fullName || form.username}
                 </h1>
                 {profile?.roles?.map((role) => (
                   <span key={role} className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
@@ -302,7 +369,28 @@ export default function ProfilePage() {
               {editing ? (
                 <div className="flex gap-2">
                   <button
-                    onClick={() => { setEditing(false); setForm({ fullName: profile?.fullName || '', email: profile?.email || '', username: profile?.username || '', avatarUrl: profile?.avatarUrl || '', bio: profile?.bio || '' }); }}
+                    onClick={() => {
+                      setEditing(false);
+                      setForm({
+                        fullName: profile?.fullName || '',
+                        displayName: profile?.displayName || profile?.username || '',
+                        email: profile?.email || '',
+                        username: profile?.username || '',
+                        avatarUrl: profile?.avatarUrl || '',
+                        bio: profile?.bio || '',
+                        gender: (profile?.gender as any) || '',
+                        birthYear: profile?.birthYear || '',
+                        phone: profile?.phone || '',
+                        socialLinks: {
+                          github: profile?.socialLinks?.github || '',
+                          twitter: profile?.socialLinks?.twitter || '',
+                          linkedin: profile?.socialLinks?.linkedin || '',
+                          website: profile?.socialLinks?.website || '',
+                          youtube: profile?.socialLinks?.youtube || '',
+                          facebook: profile?.socialLinks?.facebook || '',
+                        },
+                      });
+                    }}
                     className="p-2.5 bg-darkcard border border-darkborder rounded-xl text-text-muted hover:text-red-400 hover:border-red-400/50 transition-colors"
                   >
                     <X className="w-5 h-5" />
@@ -360,6 +448,26 @@ export default function ProfilePage() {
             <div className="bg-darkcard border border-darkborder rounded-2xl p-5">
               <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-3">Contact</h3>
               <div className="space-y-3">
+                {/* Display name (editable; also shown on user dropdown) */}
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-neon-indigo/10 flex items-center justify-center shrink-0">
+                    <User className="w-4 h-4 text-neon-indigo" />
+                  </div>
+                  {editing ? (
+                    <input
+                      type="text"
+                      value={form.displayName}
+                      onChange={(e) => setForm({ ...form, displayName: e.target.value })}
+                      placeholder="Tên hiển thị (vd: Cuong Hoang)"
+                      maxLength={100}
+                      className="flex-1 min-w-0 px-2.5 py-1.5 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
+                    />
+                  ) : (
+                    <span className="text-sm text-text-secondary truncate">{form.displayName || form.username}</span>
+                  )}
+                </div>
+
+                {/* Email */}
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-neon-indigo/10 flex items-center justify-center shrink-0">
                     <Mail className="w-4 h-4 text-neon-indigo" />
@@ -375,6 +483,8 @@ export default function ProfilePage() {
                     <span className="text-sm text-text-secondary truncate">{form.email}</span>
                   )}
                 </div>
+
+                {/* Full name (legal name — separate from displayName) */}
                 {editing && (
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-neon-violet/10 flex items-center justify-center shrink-0">
@@ -384,11 +494,83 @@ export default function ProfilePage() {
                       type="text"
                       value={form.fullName}
                       onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-                      placeholder="Full Name"
+                      placeholder="Họ tên thật"
+                      maxLength={100}
                       className="flex-1 min-w-0 px-2.5 py-1.5 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
                     />
                   </div>
                 )}
+
+                {/* Phone */}
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-neon-emerald/10 flex items-center justify-center shrink-0">
+                    <Phone className="w-4 h-4 text-neon-emerald" />
+                  </div>
+                  {editing ? (
+                    <input
+                      type="tel"
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      placeholder="Số điện thoại"
+                      maxLength={20}
+                      className="flex-1 min-w-0 px-2.5 py-1.5 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
+                    />
+                  ) : (
+                    <span className="text-sm text-text-secondary truncate">{form.phone || 'Chưa cập nhật'}</span>
+                  )}
+                </div>
+
+                {/* Gender + birth year side by side when editing, single line when viewing */}
+                {editing ? (
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-neon-cyan/10 flex items-center justify-center shrink-0">
+                        <User className="w-4 h-4 text-neon-cyan" />
+                      </div>
+                      <select
+                        value={form.gender}
+                        onChange={(e) => setForm({ ...form, gender: e.target.value as any })}
+                        className="flex-1 min-w-0 px-2.5 py-1.5 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary focus:outline-none focus:border-neon-violet/50 transition-colors cursor-pointer"
+                      >
+                        <option value="">Giới tính</option>
+                        <option value="MALE">Nam</option>
+                        <option value="FEMALE">Nữ</option>
+                        <option value="OTHER">Khác</option>
+                      </select>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-neon-fuchsia/10 flex items-center justify-center shrink-0">
+                        <Cake className="w-4 h-4 text-neon-fuchsia" />
+                      </div>
+                      <input
+                        type="number"
+                        value={form.birthYear}
+                        onChange={(e) => setForm({ ...form, birthYear: e.target.value ? Number(e.target.value) : '' })}
+                        placeholder="Năm sinh"
+                        min={1900}
+                        max={new Date().getFullYear()}
+                        className="flex-1 min-w-0 px-2.5 py-1.5 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="flex items-center gap-2">
+                      <User className="w-3.5 h-3.5 text-text-muted" />
+                      <span className="text-text-secondary">
+                        {form.gender === 'MALE' ? 'Nam' : form.gender === 'FEMALE' ? 'Nữ' : form.gender === 'OTHER' ? 'Khác' : '—'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Cake className="w-3.5 h-3.5 text-text-muted" />
+                      <span className="text-text-secondary">
+                        {form.birthYear ? `${form.birthYear} (${new Date().getFullYear() - Number(form.birthYear)} tuổi)` : '—'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Avatar URL (only when editing) */}
                 {editing && (
                   <div className="space-y-1.5">
                     <div className="flex items-center gap-3">
@@ -406,6 +588,53 @@ export default function ProfilePage() {
                     </div>
                     <p className="text-xs text-text-muted pl-11">Paste image link or upload image at avatar</p>
                   </div>
+                )}
+              </div>
+            </div>
+
+            {/* Social Links */}
+            <div className="bg-darkcard border border-darkborder rounded-2xl p-5">
+              <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-3">Liên kết</h3>
+              <div className="space-y-2.5">
+                {[
+                  { key: 'github', label: 'GitHub', icon: Github, placeholder: 'https://github.com/...' },
+                  { key: 'twitter', label: 'Twitter / X', icon: Twitter, placeholder: 'https://twitter.com/...' },
+                  { key: 'linkedin', label: 'LinkedIn', icon: Linkedin, placeholder: 'https://linkedin.com/in/...' },
+                  { key: 'website', label: 'Website', icon: Globe, placeholder: 'https://...' },
+                  { key: 'youtube', label: 'YouTube', icon: Youtube, placeholder: 'https://youtube.com/...' },
+                  { key: 'facebook', label: 'Facebook', icon: Facebook, placeholder: 'https://facebook.com/...' },
+                ].map(({ key, label, icon: Icon, placeholder }) => {
+                  const value = form.socialLinks[key] || '';
+                  if (!editing && !value) return null;
+                  return (
+                    <div key={key} className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-white/[0.04] flex items-center justify-center shrink-0">
+                        <Icon className="w-3.5 h-3.5 text-text-muted" />
+                      </div>
+                      {editing ? (
+                        <input
+                          type="url"
+                          value={value}
+                          onChange={(e) => setForm({ ...form, socialLinks: { ...form.socialLinks, [key]: e.target.value } })}
+                          placeholder={placeholder}
+                          className="flex-1 min-w-0 px-2.5 py-1.5 bg-darkbg border border-darkborder rounded-lg text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
+                        />
+                      ) : (
+                        <a
+                          href={value}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 min-w-0 text-xs text-text-secondary hover:text-neon-violet transition-colors truncate flex items-center gap-1.5"
+                        >
+                          <span>{label}</span>
+                          <ExternalLink className="w-3 h-3 shrink-0" />
+                        </a>
+                      )}
+                    </div>
+                  );
+                })}
+                {!editing && Object.values(form.socialLinks).every((v) => !v) && (
+                  <p className="text-xs text-text-muted">Chưa có liên kết nào</p>
                 )}
               </div>
             </div>
@@ -518,7 +747,28 @@ export default function ProfilePage() {
                   {editing && (
                     <div className="flex justify-end gap-3 pt-2">
                       <button
-                        onClick={() => { setEditing(false); setForm({ fullName: profile?.fullName || '', email: profile?.email || '', username: profile?.username || '', avatarUrl: profile?.avatarUrl || '', bio: profile?.bio || '' }); }}
+                        onClick={() => {
+                          setEditing(false);
+                          setForm({
+                            fullName: profile?.fullName || '',
+                            displayName: profile?.displayName || profile?.username || '',
+                            email: profile?.email || '',
+                            username: profile?.username || '',
+                            avatarUrl: profile?.avatarUrl || '',
+                            bio: profile?.bio || '',
+                            gender: (profile?.gender as any) || '',
+                            birthYear: profile?.birthYear || '',
+                            phone: profile?.phone || '',
+                            socialLinks: {
+                              github: profile?.socialLinks?.github || '',
+                              twitter: profile?.socialLinks?.twitter || '',
+                              linkedin: profile?.socialLinks?.linkedin || '',
+                              website: profile?.socialLinks?.website || '',
+                              youtube: profile?.socialLinks?.youtube || '',
+                              facebook: profile?.socialLinks?.facebook || '',
+                            },
+                          });
+                        }}
                         className="px-5 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-secondary hover:text-text-primary transition-colors"
                       >
                         Cancel

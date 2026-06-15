@@ -153,11 +153,20 @@ export const authApi = {
 
   getProfile: () => api.get('/profile'),
 
+  // Extended profile update — accepts all Phase 1 fields. The
+  // backend's authService.updateProfile validates each field and
+  // throws AppError(400) with a code (e.g. INVALID_GENDER) so the
+  // frontend can render a field-level error.
   updateProfile: (data: {
     fullName?: string;
     email?: string;
     bio?: string;
     avatarUrl?: string;
+    displayName?: string;
+    gender?: 'MALE' | 'FEMALE' | 'OTHER' | null;
+    birthYear?: number | null;
+    phone?: string | null;
+    socialLinks?: Record<string, string> | null;
   }) => api.put('/profile', data),
 
   changePassword: (data: {

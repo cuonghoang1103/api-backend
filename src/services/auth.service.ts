@@ -498,8 +498,16 @@ export class AuthService {
       username: user.username,
       email: user.email,
       fullName: user.fullName,
+      // displayName is the user-facing "Tên" shown in the UI.
+      // Falls back to fullName then username when not set so
+      // callers always have a non-empty value.
+      displayName: user.displayName ?? user.fullName ?? user.username,
       bio: user.bio,
       avatarUrl: user.avatarUrl,
+      gender: user.gender,
+      birthYear: user.birthYear,
+      phone: user.phone,
+      socialLinks: user.socialLinks,
       provider: user.provider,
       emailVerified: user.emailVerified,
       roles: user.roles.map((ur) => ur.role.name),
@@ -511,20 +519,121 @@ export class AuthService {
   }
 
   // ─── Update Profile ─────────────────────────────────────
+  // Validates and normalises the extended profile fields.
+  // - displayName: trimmed, max 100 chars.
+  // - gender: must be one of MALE/FEMALE/OTHER or null to clear.
+  // - birthYear: 1900..currentYear, or null to clear.
+  // - phone: 10-20 chars (digits, spaces, +, - allowed), or null.
+  // - socialLinks: object with at most the whitelisted keys; each
+  //   value must be a string URL (validated with new URL()).
+  // Throws AppError 400 with a specific message on validation
+  // failure so the frontend can render the field-level error.
   async updateProfile(userId: number, data: {
-    fullName?: string;
+    fullName?: string | null;
     email?: string;
-    bio?: string;
-    avatarUrl?: string;
+    bio?: string | null;
+    avatarUrl?: string | null;
+    displayName?: string | null;
+    gender?: string | null;
+    birthYear?: number | null;
+    phone?: string | null;
+    socialLinks?: Record<string, string> | null;
   }) {
+    const updates: Record<string, unknown> = {};
+
+    if (data.fullName !== undefined) {
+      const trimmed = data.fullName?.trim() || null;
+      if (trimmed && trimmed.length > 100) {
+        throw new AppError('Full name must be 100 characters or less', 400, 'INVALID_FULLNAME');
+      }
+      updates.fullName = trimmed;
+    }
+
+    if (data.email !== undefined) {
+      const email = data.email?.trim().toLowerCase();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        throw new AppError('Invalid email', 400, 'INVALID_EMAIL');
+      }
+      // Ensure unique
+      const existing = await prisma.user.findFirst({ where: { email, NOT: { id: userId } } });
+      if (existing) {
+        throw new AppError('Email already in use', 409, 'EMAIL_TAKEN');
+      }
+      updates.email = email;
+    }
+
+    if (data.bio !== undefined) {
+      updates.bio = data.bio?.trim() || null;
+    }
+
+    if (data.avatarUrl !== undefined) {
+      updates.avatarUrl = data.avatarUrl?.trim() || null;
+    }
+
+    if (data.displayName !== undefined) {
+      const trimmed = data.displayName?.trim() || null;
+      if (trimmed && trimmed.length > 100) {
+        throw new AppError('Display name must be 100 characters or less', 400, 'INVALID_DISPLAYNAME');
+      }
+      updates.displayName = trimmed;
+    }
+
+    if (data.gender !== undefined) {
+      const allowed = ['MALE', 'FEMALE', 'OTHER', null];
+      if (!allowed.includes(data.gender ?? null)) {
+        throw new AppError("Gender must be MALE, FEMALE, OTHER or null", 400, 'INVALID_GENDER');
+      }
+      updates.gender = data.gender ?? null;
+    }
+
+    if (data.birthYear !== undefined) {
+      if (data.birthYear === null) {
+        updates.birthYear = null;
+      } else {
+        const year = Number(data.birthYear);
+        const currentYear = new Date().getFullYear();
+        if (!Number.isInteger(year) || year < 1900 || year > currentYear) {
+          throw new AppError(`Birth year must be between 1900 and ${currentYear}`, 400, 'INVALID_BIRTH_YEAR');
+        }
+        updates.birthYear = year;
+      }
+    }
+
+    if (data.phone !== undefined) {
+      const trimmed = data.phone?.trim() || null;
+      if (trimmed && !/^[\d+\-\s()]{10,20}$/.test(trimmed)) {
+        throw new AppError('Phone must be 10-20 characters (digits, +, -, spaces)', 400, 'INVALID_PHONE');
+      }
+      updates.phone = trimmed;
+    }
+
+    if (data.socialLinks !== undefined) {
+      if (data.socialLinks === null) {
+        updates.socialLinks = null;
+      } else {
+        // Whitelist the supported keys so a malicious payload can't
+        // dump arbitrary data into the JSONB column.
+        const whitelist = ['github', 'twitter', 'linkedin', 'website', 'youtube', 'facebook'];
+        const cleaned: Record<string, string> = {};
+        for (const key of whitelist) {
+          const v = data.socialLinks[key];
+          if (v && typeof v === 'string' && v.trim()) {
+            const trimmed = v.trim();
+            try {
+              new URL(trimmed);
+              cleaned[key] = trimmed;
+            } catch {
+              throw new AppError(`Invalid URL for social link "${key}"`, 400, 'INVALID_SOCIAL_URL');
+            }
+          }
+        }
+        updates.socialLinks = Object.keys(cleaned).length > 0 ? cleaned : null;
+      }
+    }
+
     return prisma.user.update({
       where: { id: userId },
-      data: {
-        ...(data.fullName !== undefined && { fullName: data.fullName }),
-        ...(data.email !== undefined && { email: data.email }),
-        ...(data.bio !== undefined && { bio: data.bio }),
-        ...(data.avatarUrl !== undefined && { avatarUrl: data.avatarUrl }),
-      },
+      data: updates,
       include: { roles: { include: { role: true } } },
     });
   }

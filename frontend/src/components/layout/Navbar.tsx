@@ -9,7 +9,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import {
   Home, BookOpen, FolderOpen, Music, MessageCircle,
-  User, LogOut, Settings, ChevronDown, KeyRound,
+  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
   Globe, ShoppingBag,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -250,8 +250,8 @@ export default function Navbar() {
                       bg-white/[0.04] border border-white/[0.06]
                       hover:border-neon-violet/30 transition-all"
                   >
-                    {displayUser?.image ? (
-                      <img src={displayUser.image} alt={displayUser.name || 'User'} className="w-6 h-6 rounded-lg object-cover" />
+                    {displayUser?.avatarUrl ? (
+                      <img src={displayUser.avatarUrl} alt={displayUser.displayName || displayUser.username || 'User'} className="w-6 h-6 rounded-lg object-cover" />
                     ) : (
                       <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center">
                         <User className="w-3 h-3 text-white" />
@@ -268,7 +268,9 @@ export default function Navbar() {
                         shadow-[0_8px_32px_rgba(0,0,0,0.5)]
                         z-50 overflow-hidden">
                         <div className="px-4 py-3 border-b border-white/[0.06]">
-                          <p className="text-sm font-medium text-text-primary">{displayUser?.name || displayUser?.username}</p>
+                          <p className="text-sm font-medium text-text-primary">
+                            {displayUser?.displayName || displayUser?.name || displayUser?.username}
+                          </p>
                           <p className="text-xs text-text-muted truncate">{displayUser?.email}</p>
                         </div>
                         {isAdmin && (
@@ -280,6 +282,10 @@ export default function Navbar() {
                         <Link href="/dashboard" onClick={() => setUserMenuOpen(false)}
                           className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
                           <Globe className="w-4 h-4" />Dashboard
+                        </Link>
+                        <Link href="/profile" onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
+                          <UserCircle className="w-4 h-4" />Profile
                         </Link>
                         <button
                           onClick={() => {

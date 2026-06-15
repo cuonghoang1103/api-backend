@@ -16,11 +16,29 @@ router.get('/', authenticate, async (req, res: Response<ApiResponse>, next) => {
 });
 
 // ─── PUT /api/v1/profile ───────────────────────────────
+// Accepts both legacy fields (fullName, email, bio, avatarUrl) and
+// the extended fields (displayName, gender, birthYear, phone, socialLinks).
+// Validation is delegated to authService.updateProfile so the same
+// rules apply to admin-driven updates (if we add them later) and to
+// the self-edit path used by the /profile page.
 router.put('/', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
-    const { fullName, email, bio, avatarUrl } = req.body;
-    const user = await authService.updateProfile(req.userId!, { fullName, email, bio, avatarUrl });
-    res.json({ success: true, data: user });
+    const { fullName, email, bio, avatarUrl, displayName, gender, birthYear, phone, socialLinks } = req.body;
+    await authService.updateProfile(req.userId!, {
+      fullName,
+      email,
+      bio,
+      avatarUrl,
+      displayName,
+      gender,
+      birthYear,
+      phone,
+      socialLinks,
+    });
+    // Re-fetch through getProfile so the response shape matches
+    // GET /api/v1/profile (displayName fallback, sanitised values).
+    const profile = await authService.getProfile(req.userId!);
+    res.json({ success: true, data: profile });
   } catch (error) {
     next(error);
   }

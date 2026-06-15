@@ -26,10 +26,19 @@ interface PostPollProps {
 export default function PostPoll({ postId, poll }: PostPollProps) {
   const updatePostPoll = useSocialStore((s) => (s as any).updatePostPoll);
   const [submitting, setSubmitting] = useState(false);
-  const [pending, setPending] = useState<number[]>(poll.userVotes);
+  // Defensive defaults — the backend should always send `userVotes`
+  // (see serializePost in social.service.ts) but a stale client
+  // bundle or a malformed post can still produce undefined here.
+  // Crashing on "reading 'length' of undefined" was a real
+  // production bug; we short-circuit to a sane default so the
+  // surrounding card still renders.
+  const safeUserVotes = Array.isArray(poll?.userVotes) ? poll!.userVotes : [];
+  const safeOptions = Array.isArray(poll?.options) ? poll!.options : [];
+  const safeTotalVotes = typeof poll?.totalVotes === 'number' ? poll!.totalVotes : 0;
+  const [pending, setPending] = useState<number[]>(safeUserVotes);
 
-  const total = Math.max(poll.totalVotes, 0);
-  const hasVoted = poll.userVotes.length > 0;
+  const total = Math.max(safeTotalVotes, 0);
+  const hasVoted = safeUserVotes.length > 0;
   const showResults = hasVoted;
 
   const handleVote = async (optionId: number) => {
@@ -78,9 +87,9 @@ export default function PostPoll({ postId, poll }: PostPollProps) {
       </div>
 
       <div className="space-y-1.5">
-        {poll.options.map((opt) => {
+        {safeOptions.map((opt) => {
           const pct = total > 0 ? Math.round((opt.votesCount / total) * 100) : 0;
-          const isVoted = poll.userVotes.includes(opt.id);
+          const isVoted = safeUserVotes.includes(opt.id);
           const isPending = pending.includes(opt.id);
           return (
             <button

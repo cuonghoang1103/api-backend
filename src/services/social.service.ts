@@ -176,7 +176,21 @@ export async function createPost(input: CreatePostInput) {
     },
   });
 
-  return post;
+  // Run the same shape the feed uses so the freshly created post
+  // matches what PostCard / PostPoll expect. Without this the card
+  // crashes because `isLiked` / `poll.userVotes` / `likesCount` are
+  // missing on the response — only the feed enriches them.
+  const freshUserVotes = post.poll
+    ? (await prisma.socialPollVote.findMany({
+        where: { pollId: post.poll.id, userId: input.authorId },
+        select: { optionId: true },
+      })).map((v) => v.optionId)
+    : [];
+
+  return serializePost(post, {
+    currentUserId: input.authorId,
+    pollUserVotes: freshUserVotes,
+  });
 }
 
 export async function getPostById(postId: number, currentUserId?: number) {
@@ -220,31 +234,17 @@ export async function getPostById(postId: number, currentUserId?: number) {
 
   // Augment poll with the viewer's vote(s) so the UI can show the
   // selected state immediately. Skip for anonymous viewers.
-  let pollAugmented: any = post.poll;
-  if (pollAugmented && currentUserId) {
-    const userVotes = await prisma.socialPollVote.findMany({
-      where: { pollId: pollAugmented.id, userId: currentUserId },
-      select: { optionId: true },
-    });
-    pollAugmented = { ...pollAugmented, userVotes: userVotes.map((v: any) => v.optionId) };
-  } else if (pollAugmented) {
-    pollAugmented = { ...pollAugmented, userVotes: [] };
-  }
+  const pollUserVotes = post.poll && currentUserId
+    ? (await prisma.socialPollVote.findMany({
+        where: { pollId: post.poll.id, userId: currentUserId },
+        select: { optionId: true },
+      })).map((v) => v.optionId)
+    : [];
 
-  return {
-    ...post,
-    poll: pollAugmented,
-    likesCount: post._count.likes,
-    commentsCount: post._count.comments,
-    savesCount: post._count.saves,
-    isLiked: currentUserId ? (post.likes as unknown[]).length > 0 : false,
-    isSaved: currentUserId ? (post.saves as unknown[]).length > 0 : false,
-    savedFolder: currentUserId && Array.isArray(post.saves) && post.saves.length > 0
-      ? (post.saves[0] as { folder?: string }).folder : null,
-    likes: undefined,
-    saves: undefined,
-    _count: undefined,
-  };
+  return serializePost(post, {
+    currentUserId,
+    pollUserVotes,
+  });
 }
 
 export async function deletePost(postId: number, userId: number) {
@@ -365,49 +365,89 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
   // an N+1 query. The PostCard needs userVotes to highlight the
   // selected state in the bars.
   const pollIds = items.map((p: any) => p.poll?.id).filter((x: any) => Boolean(x));
-  let pollVotesByPollId: Record<number, number[]> = {};
-  if (currentUserId && pollIds.length > 0) {
-    const userVotes = await prisma.socialPollVote.findMany({
-      where: { pollId: { in: pollIds }, userId: currentUserId },
-      select: { pollId: true, optionId: true },
-    });
-    pollVotesByPollId = userVotes.reduce((acc: any, v: any) => {
-      (acc[v.pollId] ||= []).push(v.optionId);
-      return acc;
-    }, {} as Record<number, number[]>);
-  }
-
-  const enriched = items.map((post: any) => ({
-    id: post.id,
-    content: post.content,
-    visibility: post.visibility,
-    latitude: post.latitude,
-    longitude: post.longitude,
-    locationName: post.locationName,
-    viewCount: post.viewCount,
-    createdAt: post.createdAt,
-    updatedAt: post.updatedAt,
-    author: post.author,
-    media: post.media,
-    poll: post.poll
-      ? { ...post.poll, userVotes: pollVotesByPollId[post.poll.id] || [] }
-      : null,
-    likesCount: post._count?.likes ?? 0,
-    commentsCount: post._count?.comments ?? 0,
-    savesCount: post._count?.saves ?? 0,
-    isLiked: currentUserId ? (post.likes as unknown[]).length > 0 : false,
-    isSaved: currentUserId ? (post.saves as unknown[]).length > 0 : false,
-    savedFolder: currentUserId && Array.isArray(post.saves) && post.saves.length > 0
-      ? (post.saves[0] as { folder?: string }).folder : null,
-  }));
+  const pollVotesByPollId = currentUserId
+    ? await loadPollVotes(pollIds, currentUserId)
+    : {};
 
   return {
-    data: enriched,
+    data: items.map((post: any) => serializePost(post, { currentUserId, pollUserVotes: pollVotesByPollId[post.poll?.id] || [] })),
     pagination: {
       nextCursor,
       hasNextPage,
       limit,
     },
+  };
+}
+
+/**
+ * Bulk-loads the viewer's poll votes for a list of poll ids. Used by
+ * both the feed and the single-post page so the renderer can highlight
+ * the options the viewer voted for.
+ */
+async function loadPollVotes(
+  pollIds: (number | undefined | null)[],
+  currentUserId: number,
+): Promise<Record<number, number[]>> {
+  const filtered = pollIds.filter((x): x is number => typeof x === 'number' && !Number.isNaN(x));
+  if (filtered.length === 0) return {};
+  const userVotes = await prisma.socialPollVote.findMany({
+    where: { pollId: { in: filtered }, userId: currentUserId },
+    select: { pollId: true, optionId: true },
+  });
+  return userVotes.reduce((acc, v) => {
+    (acc[v.pollId] ||= []).push(v.optionId);
+    return acc;
+  }, {} as Record<number, number[]>);
+}
+
+/**
+ * Shape a Prisma post + viewer-scoped data into the wire format the
+ * frontend expects. Centralised so createPost, getFeed, getPostById
+ * and any other reader all return the same shape — otherwise a
+ * freshly-created post (with no likes/saves yet) would crash the
+ * PostCard because `likesCount` / `isLiked` / `poll.userVotes` are
+ * missing.
+ */
+function serializePost(
+  post: any,
+  opts: {
+    currentUserId?: number;
+    pollUserVotes?: number[];
+  } = {},
+) {
+  const { currentUserId, pollUserVotes } = opts;
+  return {
+    id: post.id,
+    content: post.content,
+    visibility: post.visibility,
+    latitude: post.latitude ?? null,
+    longitude: post.longitude ?? null,
+    locationName: post.locationName ?? null,
+    // `youtubeUrl` may not be selected by every query — fall back to
+    // null so the renderer can defensively check.
+    youtubeUrl: post.youtubeUrl ?? null,
+    viewCount: post.viewCount ?? 0,
+    createdAt: post.createdAt,
+    updatedAt: post.updatedAt,
+    author: post.author,
+    media: post.media ?? [],
+    poll: post.poll
+      ? {
+          ...post.poll,
+          userVotes:
+            pollUserVotes ??
+            (currentUserId ? [] : []),
+        }
+      : null,
+    likesCount: post._count?.likes ?? 0,
+    commentsCount: post._count?.comments ?? 0,
+    savesCount: post._count?.saves ?? 0,
+    isLiked: currentUserId ? (post.likes as unknown[] | undefined)?.length ?? 0 > 0 : false,
+    isSaved: currentUserId ? (post.saves as unknown[] | undefined)?.length ?? 0 > 0 : false,
+    savedFolder:
+      currentUserId && Array.isArray(post.saves) && (post.saves as unknown[]).length > 0
+        ? (post.saves[0] as { folder?: string }).folder ?? null
+        : null,
   };
 }
 

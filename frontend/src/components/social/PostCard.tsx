@@ -70,10 +70,22 @@ export function PostCard({ post }: PostCardProps) {
   const canDelete = isAuthor || isAdmin;
   const visMeta = VISIBILITY_META[post.visibility] || VISIBILITY_META.PUBLIC;
   const VisIcon = visMeta.icon;
-  const contentLong = post.content.length > MAX_PREVIEW_LENGTH;
+  // Defensive defaults. A backend response that lacks `content`
+  // (e.g. a stale cached payload) would otherwise crash on
+  // `.length`. We coerce to '' so the rest of the card keeps
+  // working — the user just sees an empty post body.
+  const safeContent = typeof post.content === 'string' ? post.content : '';
+  const safeMedia = Array.isArray(post.media) ? post.media : [];
+  const safePoll = post.poll ?? null;
+  const safeLikesCount = typeof post.likesCount === 'number' ? post.likesCount : 0;
+  const safeCommentsCount = typeof post.commentsCount === 'number' ? post.commentsCount : 0;
+  const safeSavesCount = typeof post.savesCount === 'number' ? post.savesCount : 0;
+  const safeIsLiked = !!post.isLiked;
+  const safeIsSaved = !!post.isSaved;
+  const contentLong = safeContent.length > MAX_PREVIEW_LENGTH;
   const visibleContent = expanded || !contentLong
-    ? post.content
-    : post.content.slice(0, MAX_PREVIEW_LENGTH).trimEnd() + '…';
+    ? safeContent
+    : safeContent.slice(0, MAX_PREVIEW_LENGTH).trimEnd() + '…';
 
   // Cleanup the long-press timer on unmount so we don't leak
   useEffect(() => {
@@ -139,7 +151,7 @@ export function PostCard({ post }: PostCardProps) {
       // prefixed by "🔁 Repost from @author". We keep the link back
       // to the original so credit is preserved.
       const link = `${window.location.origin}/social/post/${post.id}`;
-      const text = `🔁 Repost từ @${authorObj?.username ?? 'user'}\n\n${post.content.slice(0, 280)}`;
+      const text = `🔁 Repost từ @${authorObj?.username ?? 'user'}\n\n${safeContent.slice(0, 280)}`;
       const composer = document.querySelector<HTMLTextAreaElement>('textarea[placeholder*="nghĩ"]');
       if (composer) {
         composer.value = text;
@@ -155,7 +167,7 @@ export function PostCard({ post }: PostCardProps) {
     }
     socialApi.sharePost(post.id, platform).catch(() => {});
     const urls: Record<string, string> = {
-      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.content.slice(0, 100))}&url=${encodeURIComponent(window.location.origin + '/social/post/' + post.id)}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(safeContent.slice(0, 100))}&url=${encodeURIComponent(window.location.origin + '/social/post/' + post.id)}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/social/post/' + post.id)}`,
     };
     if (urls[platform]) {
@@ -370,11 +382,11 @@ export function PostCard({ post }: PostCardProps) {
         </div>
 
         {/* Poll */}
-        {post.poll && <PostPoll postId={post.id} poll={post.poll} />}
+        {safePoll && <PostPoll postId={post.id} poll={safePoll} />}
 
         {/* Media */}
-        {post.media && post.media.length > 0 && (
-          <MediaGrid media={post.media} />
+        {safeMedia.length > 0 && (
+          <MediaGrid media={safeMedia} />
         )}
 
         {/* YouTube embed — shown after media if a URL is attached.
@@ -405,15 +417,15 @@ export function PostCard({ post }: PostCardProps) {
               onTouchStart={startLongPress}
               onTouchEnd={cancelLongPress}
               className="group inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-colors"
-              style={{ color: post.isLiked ? '#ec4899' : '#94a3b8' }}
-              onMouseEnter={(e) => { if (!post.isLiked) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
+              style={{ color: safeIsLiked ? '#ec4899' : '#94a3b8' }}
+              onMouseEnter={(e) => { if (!safeIsLiked) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
             >
               <Heart
                 size={16}
-                fill={post.isLiked ? '#ec4899' : 'none'}
+                fill={safeIsLiked ? '#ec4899' : 'none'}
                 className="transition-transform group-active:scale-125"
               />
-              <span className="tabular-nums">{post.likesCount}</span>
+              <span className="tabular-nums">{safeLikesCount}</span>
             </button>
             <AnimatePresence>
               {showReactions && (
@@ -445,7 +457,7 @@ export function PostCard({ post }: PostCardProps) {
             active={showComments}
             activeColor="#8B5CF6"
             icon={<MessageCircle size={16} fill={showComments ? '#8B5CF6' : 'none'} />}
-            count={post.commentsCount}
+            count={safeCommentsCount}
             label="Bình luận"
             onClick={handleToggleComments}
           />
@@ -462,10 +474,10 @@ export function PostCard({ post }: PostCardProps) {
 
           {/* Save */}
           <ActionButton
-            active={post.isSaved}
+            active={safeIsSaved}
             activeColor="#f59e0b"
-            icon={<Bookmark size={16} fill={post.isSaved ? '#f59e0b' : 'none'} />}
-            count={post.savesCount}
+            icon={<Bookmark size={16} fill={safeIsSaved ? '#f59e0b' : 'none'} />}
+            count={safeSavesCount}
             label="Lưu"
             onClick={() => toggleSave(post.id)}
           />

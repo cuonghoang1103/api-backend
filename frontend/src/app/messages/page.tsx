@@ -72,8 +72,8 @@ function MessagesPageInner() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#03020c' }}>
-      <div className="mx-auto flex h-screen max-w-6xl flex-col px-4 py-6">
+    <div className="min-h-screen pt-16" style={{ background: '#03020c' }}>
+      <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-6xl flex-col px-4 py-6">
         <header className="mb-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-text-primary">Tin nhắn</h1>
           <p className="text-xs text-text-muted">

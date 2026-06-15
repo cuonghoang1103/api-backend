@@ -248,9 +248,9 @@ export default function Navbar() {
                 const isMessages = link.href === '/messages';
                 const distance = topNavHoveredIdx === null ? 99 : Math.abs(idx - topNavHoveredIdx);
                 const scale =
-                  distance === 0 ? 1.22 :
-                  distance === 1 ? 1.12 :
-                  distance === 2 ? 1.05 :
+                  distance === 0 ? 1.08 :
+                  distance === 1 ? 1.04 :
+                  distance === 2 ? 1.02 :
                   1.0;
                 return (
                   <TopNavLink

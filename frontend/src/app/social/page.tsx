@@ -64,7 +64,7 @@ export default function SocialPage() {
   }, [posts, isLoadingMore]);
 
   return (
-    <main className="min-h-screen" style={{ background: '#03020c' }}>
+    <main className="min-h-screen pt-16" style={{ background: '#03020c' }}>
       <SocialBackground />
       {/* Ambient glow */}
       <div

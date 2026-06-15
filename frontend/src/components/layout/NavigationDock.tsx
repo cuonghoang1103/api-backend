@@ -28,7 +28,7 @@ const DOCK_ITEMS: DockItem[] = [
   { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'user' },
   { href: '/games', label: 'Games', icon: Gamepad2, section: 'user' },
   { href: '/social', label: 'Feed', icon: Globe, section: 'user' },
-  { href: '/my-courses', label: 'My Courses', icon: BookMarked, section: 'user' },
+  { href: '/courses', label: 'Courses', icon: BookMarked, section: 'user' },
   { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'user' },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'admin' },
   { href: '/admin', label: 'Admin', icon: Shield, section: 'admin' },

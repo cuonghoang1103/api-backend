@@ -484,7 +484,7 @@ export default function ChatPage() {
           expands the dock by hovering, the rail still covers
           the aside, which is fine — the aside is for the chat
           page, not for general navigation. */}
-      <aside className="fixed top-16 left-0 bottom-0 w-72 z-20 flex flex-col
+      <aside className="fixed top-16 left-[52px] bottom-0 w-72 z-20 flex flex-col
         bg-[#0d1117]/95 backdrop-blur-xl
         border-r border-[#22d3ee]/10
         shadow-[4px_0_32px_rgba(0,0,0,0.4)]">
@@ -573,7 +573,7 @@ export default function ChatPage() {
       </aside>
 
       {/* ── Main chat: centered content area ────────────────────────── */}
-      <main className="pl-72 flex flex-col min-h-[calc(100vh-4rem)]">
+      <main className="pl-[340px] flex flex-col min-h-[calc(100vh-4rem)]">
         {/* Cyber Terminal Header */}
         <motion.header
           initial={{ opacity: 0, y: -10 }}

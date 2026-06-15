@@ -40,7 +40,7 @@ export default function MessagingWidget() {
   return (
     <>
       {/* Floating launcher */}
-      <div className="fixed bottom-6 right-24 z-[100] flex flex-col items-end gap-3 print:hidden">
+      <div className="fixed bottom-24 right-6 z-[100] flex flex-col items-end gap-3 print:hidden">
         <AnimatePresence>
           {!store.isWidgetOpen && (
             <motion.button

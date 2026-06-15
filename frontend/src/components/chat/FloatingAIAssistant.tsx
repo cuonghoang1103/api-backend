@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import LottieClient from '@/components/ui/LottieClient';
 import type { LottieRefCurrentProps } from 'lottie-react';
 import { useChatStore } from '@/store/chatStore';
+import { useMessagingStore } from '@/store/messagingStore';
 import ChatModal from './ChatModal';
 
 type RobotState = 'idle' | 'thinking' | 'typing';
@@ -101,6 +102,22 @@ export default function FloatingAIAssistant() {
     setShowTooltip(false);
   };
 
+  // When the messaging widget is open, the AI launcher overlaps
+  // the panel. Hide it (and the tooltip) so the user only sees
+  // the active panel. We re-show the tooltip when the messaging
+  // widget closes again.
+  const messagingOpen = useMessagingStore((s) => s.isWidgetOpen);
+  useEffect(() => {
+    if (messagingOpen) {
+      setShowTooltip(false);
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
+    } else {
+      scheduleTooltip();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messagingOpen]);
+
   const handleClose = () => {
     setIsOpen(false);
     scheduleTooltip();
@@ -110,10 +127,18 @@ export default function FloatingAIAssistant() {
     <>
       {/* Floating Robot */}
       <motion.div
-        className="fixed bottom-6 right-6 z-[100]"
+        className="fixed right-6 z-[100]"
+        style={{ bottom: 24 }}
+        // When the messaging widget is open, drop the AI launcher
+        // down so it sits below the messaging panel/launcher and
+        // doesn't overlap. Re-animate up when the messaging widget
+        // closes again. We keep it on-screen (just translated) so
+        // the user can still see & click it.
+        animate={{
+          bottom: messagingOpen ? 88 : 24,
+        }}
+        transition={{ type: 'spring', stiffness: 260, damping: 24 }}
         initial={{ scale: 0, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, type: 'spring', stiffness: 300, damping: 20 }}
       >
         {/* Tooltip bubble */}
         <AnimatePresence>

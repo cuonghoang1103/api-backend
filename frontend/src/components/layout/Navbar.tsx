@@ -189,11 +189,12 @@ export default function Navbar() {
     <div suppressHydrationWarning>
       {/* ── Top Navbar ───────────────────────────────────────── */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
             ? 'h-16 bg-[#0d0f18]/85 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.4)]'
             : 'h-16 bg-transparent'
         }`}
+        style={{ left: 'var(--dock-shift, 0px)' }}
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
@@ -389,8 +390,11 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile nav */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40
-        bg-[#0d0f18]/90 backdrop-blur-xl border-t border-white/[0.06]">
+      <div
+        className="sm:hidden fixed bottom-0 right-0 z-40
+        bg-[#0d0f18]/90 backdrop-blur-xl border-t border-white/[0.06] transition-[left] duration-300"
+        style={{ left: 'var(--dock-shift, 0px)' }}
+      >
         <div className="flex items-center justify-around px-2 py-2">
           {TOP_NAV_LINKS.filter((l) => !l.authOnly || isAuthenticated).map((link) => {
             const isActive = pathname === link.href ||

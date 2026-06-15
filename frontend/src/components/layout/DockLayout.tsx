@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useLayoutEffect, useState } from 'react';
-import NavigationDock, { DOCK_WIDTH } from './NavigationDock';
+import NavigationDock, { DOCK_WIDTH_COLLAPSED } from './NavigationDock';
 
 const MQ_MD = '(min-width: 768px)';
 
@@ -14,7 +14,7 @@ export default function DockLayout({ children }: { children: React.ReactNode }) 
     setIsWide(wide);
     document.documentElement.style.setProperty(
       '--dock-shift',
-      wide ? `${DOCK_WIDTH}px` : '0px',
+      wide ? `${DOCK_WIDTH_COLLAPSED}px` : '0px',
     );
   }, []);
 
@@ -26,14 +26,14 @@ export default function DockLayout({ children }: { children: React.ReactNode }) 
       setIsWide(wide);
       document.documentElement.style.setProperty(
         '--dock-shift',
-        wide ? `${DOCK_WIDTH}px` : '0px',
+        wide ? `${DOCK_WIDTH_COLLAPSED}px` : '0px',
       );
     };
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
-  const shift = isWide === true ? DOCK_WIDTH : 0;
+  const shift = isWide === true ? DOCK_WIDTH_COLLAPSED : 0;
 
   return (
     <>

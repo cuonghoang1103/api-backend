@@ -91,7 +91,7 @@ export default function MessagingWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.96 }}
             transition={{ type: 'spring', damping: 22, stiffness: 260 }}
-            className="fixed bottom-24 right-6 z-[120] flex h-[600px] w-[400px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl shadow-2xl print:hidden"
+            className="fixed bottom-24 right-24 z-[120] flex h-[600px] w-[400px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl shadow-2xl print:hidden"
             style={{
               background: 'rgba(15, 15, 25, 0.92)',
               border: '1px solid rgba(6, 182, 212, 0.3)',

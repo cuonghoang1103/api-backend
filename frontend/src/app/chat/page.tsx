@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2, X } from 'lucide-react';
+import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
@@ -89,7 +89,7 @@ export default function ChatPage() {
   // change. If the user reports "no change" again, they
   // can read this ribbon and instantly know whether the
   // browser is on the new build.
-  const BUILD_TAG = 'chat-v4-floating-dock-2026-06-16T03:10Z-pending';
+  const BUILD_TAG = 'chat-v5-no-magnify-tooltip-2026-06-16T03:20Z-pending';
   const [showBuildTag, setShowBuildTag] = useState(false);
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -130,19 +130,19 @@ export default function ChatPage() {
   // of the global toggle when both are visible. When the
   // global dock is closed, the chat-aside toggle still
   // works on its own.
-  const [chatAsideOpen, setChatAsideOpen] = useState(false);
+  const [chatAsidePinned, setChatAsidePinned] = useState(false);
   const [chatAsideHovered, setChatAsideHovered] = useState<string | null>(null);
   useEffect(() => {
-    if (!chatAsideOpen) return;
+    if (!chatAsidePinned) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setChatAsideOpen(false);
+      if (e.key === 'Escape') setChatAsidePinned(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [chatAsideOpen]);
+  }, [chatAsidePinned]);
   // Close on route change.
   useEffect(() => {
-    setChatAsideOpen(false);
+    setChatAsidePinned(false);
     setChatAsideHovered(null);
   }, [pathname]);
 
@@ -542,228 +542,34 @@ export default function ChatPage() {
       {/* Matrix rain background */}
       <MatrixRain />
 
-      {/* ── Chat sessions aside (floating panel) ──────────
-          Hidden by default. Slides in from the left when
-          the user taps the toggle button at top-left
-          (positioned next to the global dock toggle). The
-          panel uses the same iOS sheet-presentation
-          pattern as the global dock: dim+blur backdrop,
-          spring slide-in with a slight scale-up, rounded
-          glass surface, hover magnify on the session
-          rows. */}
-      <AnimatePresence>
-        {chatAsideOpen && (
-          <motion.div
-            key="chat-aside-backdrop"
-            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-            animate={{ opacity: 1, backdropFilter: 'blur(14px)' }}
-            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-            transition={{ duration: 0.32, ease: [0.32, 0.94, 0.6, 1] }}
-            className="fixed inset-0 z-[55] bg-black/55"
-            onClick={() => { setChatAsideOpen(false); setChatAsideHovered(null); }}
-            aria-hidden
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {chatAsideOpen && (
-          <motion.aside
-            key="chat-aside-panel"
-            id="chat-sessions-panel"
-            role="dialog"
-            aria-label="Chat sessions"
-            initial={{ opacity: 0, x: -40, scale: 0.92 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -32, scale: 0.96 }}
-            transition={{ type: 'spring', stiffness: 380, damping: 36, mass: 0.95 }}
-            onMouseLeave={() => setChatAsideHovered(null)}
-            className="fixed z-[58] top-3 bottom-3 left-3 w-[288px] flex flex-col
-              bg-[#0d1117]/85 backdrop-blur-2xl
-              border border-white/[0.08]
-              rounded-3xl
-              shadow-[0_24px_80px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.04),inset_0_1px_0_rgba(255,255,255,0.06)]
-              overflow-hidden"
-            data-build-tag="chat-aside-v3-floating"
-          >
-            {/* Aside header — pt-20 leaves room for the
-                chat-aside toggle button at top-4 in the
-                same corner. */}
-            <div className="shrink-0 px-5 pt-20 pb-3">
-              <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-text-muted">
-                chat
-              </p>
-              <p className="text-lg font-semibold text-text-primary mt-1">
-                Sessions
-              </p>
-            </div>
-
-            {/* New session button */}
-            <div className="px-4 pb-3 shrink-0">
-              <button
-                onClick={() => {
-                  setCurrentSessionId(null);
-                  setSuggestedPrompts(getContextualPrompts(''));
-                  setChatAsideOpen(false);
-                }}
-                className="w-full flex items-center gap-2 px-4 py-2.5
-                  bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6]
-                  text-white text-sm font-mono font-semibold rounded-xl
-                  hover:opacity-90 transition-opacity
-                  shadow-[0_0_16px_rgba(34,211,238,0.2)]"
-              >
-                <Plus className="w-4 h-4" />
-                <span>&gt; new_session()</span>
-              </button>
-            </div>
-
-            {/* Session list — magnify on hover. */}
-            <div className="flex-1 overflow-y-auto px-3 pb-3">
-              {sessions.length === 0 && (
-                <p className="text-[#64748b] text-xs text-center py-8 px-2 font-mono">
-                  <span className="text-[#22d3ee]">//</span> no sessions found
-                </p>
-              )}
-              {sessions.map((session, idx) => {
-                const isCurrent = currentSessionId === session.sessionId;
-                const isHovered = chatAsideHovered === session.sessionId;
-                let scale = 1;
-                if (chatAsideHovered) {
-                  const hovIdx = sessions.findIndex((s) => s.sessionId === chatAsideHovered);
-                  if (hovIdx >= 0) {
-                    const d = Math.abs(idx - hovIdx);
-                    if (d === 0) scale = 1.55;
-                    else if (d === 1) scale = 1.30;
-                    else if (d === 2) scale = 1.15;
-                  }
-                }
-                return (
-                  <motion.div
-                    key={session.sessionId}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.22 + idx * 0.02, duration: 0.22, ease: [0.32, 0.94, 0.6, 1] }}
-                    onMouseEnter={() => setChatAsideHovered(session.sessionId)}
-                    onMouseLeave={() => {
-                      setChatAsideHovered((prev) => (prev === session.sessionId ? null : prev));
-                    }}
-                    className="relative"
-                  >
-                    <button
-                      onClick={() => {
-                        handleSelectSession(session.sessionId);
-                        setChatAsideOpen(false);
-                      }}
-                      className={cn(
-                        'w-full text-left pl-3 pr-3 h-12 rounded-2xl',
-                        'flex items-center transition-colors duration-150',
-                        isCurrent
-                          ? 'bg-gradient-to-r from-[#22d3ee]/15 to-[#8b5cf6]/10 text-text-primary'
-                          : isHovered
-                            ? 'bg-white/[0.06] text-text-primary'
-                            : 'text-text-muted hover:text-text-primary',
-                      )}
-                    >
-                      {isCurrent && (
-                        <motion.div
-                          layoutId="chat-aside-active"
-                          className="absolute -left-1 top-2 bottom-2 w-[3px] rounded-full"
-                          style={{
-                            background: 'linear-gradient(180deg, #22d3ee, #8b5cf6)',
-                            boxShadow: '0 0 12px rgba(34, 211, 238, 0.4)',
-                          }}
-                          transition={{ type: 'spring', stiffness: 380, damping: 30, mass: 0.5 }}
-                        />
-                      )}
-                      <motion.div
-                        className="flex items-center justify-center w-7 h-7 origin-center"
-                        animate={{ scale }}
-                        transition={{ type: 'spring', stiffness: 320, damping: 22, mass: 0.55 }}
-                      >
-                        <MessageSquare
-                          className={cn(
-                            'w-[18px] h-[18px] transition-colors duration-150',
-                            isCurrent || isHovered ? 'text-text-primary' : 'text-text-muted',
-                          )}
-                        />
-                      </motion.div>
-                      <div className="ml-3 flex-1 min-w-0">
-                        <p className="text-[14px] font-medium truncate">
-                          {session.title || 'New chat'}
-                        </p>
-                        <p className="text-[10px] font-mono text-text-muted/70 mt-0.5">
-                          {format(new Date(session.createdAt), 'dd/MM/yy HH:mm', { locale: vi })}
-                        </p>
-                      </div>
-                      {isCurrent && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#22d3ee] led-eye shrink-0" />
-                      )}
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleDeleteSession(session.sessionId); }}
-                        className="ml-1 p-1.5 rounded-lg text-text-muted hover:text-red-400 hover:bg-white/[0.04] transition-colors shrink-0"
-                        aria-label="Delete session"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </button>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {/* Aside footer — Esc hint. */}
-            <div className="shrink-0 px-5 py-3 border-t border-white/[0.06]">
-              <p className="text-[10px] font-mono text-text-muted">
-                Press <kbd className="px-1 py-0.5 mx-0.5 rounded bg-white/5 border border-white/10">Esc</kbd> to close
-              </p>
-            </div>
-          </motion.aside>
-        )}
-      </AnimatePresence>
-
-      {/* Chat-aside toggle button — to the RIGHT of the
-          global dock toggle (which is at top-4 left-4).
-          Only relevant on /chat. Sits at top-4 left-16. */}
-      <motion.button
-        type="button"
-        aria-label={chatAsideOpen ? 'Close chat sessions' : 'Open chat sessions'}
-        aria-expanded={chatAsideOpen}
-        onClick={() => setChatAsideOpen((v) => !v)}
-        whileHover={{ scale: 1.06 }}
-        whileTap={{ scale: 0.94 }}
-        transition={{ type: 'spring', stiffness: 320, damping: 22, mass: 0.55 }}
-        className="fixed top-4 left-16 z-[70] w-11 h-11 rounded-2xl
-          flex items-center justify-center
-          bg-[#0d1117]/85 backdrop-blur-2xl
-          border border-white/10
-          shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)]
-          text-text-primary
-          focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22d3ee]/40"
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          {chatAsideOpen ? (
-            <motion.span
-              key="x-icon"
-              initial={{ opacity: 0, rotate: -45, scale: 0.6 }}
-              animate={{ opacity: 1, rotate: 0, scale: 1 }}
-              exit={{ opacity: 0, rotate: 45, scale: 0.6 }}
-              transition={{ duration: 0.18, ease: [0.32, 0.94, 0.6, 1] }}
-            >
-              <X className="w-5 h-5" />
-            </motion.span>
-          ) : (
-            <motion.span
-              key="menu-icon"
-              initial={{ opacity: 0, rotate: 45, scale: 0.6 }}
-              animate={{ opacity: 1, rotate: 0, scale: 1 }}
-              exit={{ opacity: 0, rotate: -45, scale: 0.6 }}
-              transition={{ duration: 0.18, ease: [0.32, 0.94, 0.6, 1] }}
-            >
-              <MessageSquare className="w-5 h-5" />
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </motion.button>
+      {/* ── Chat sessions aside (52px rail with tooltip) ──
+          Same pattern as the global NavigationDock:
+          - 52px-wide rail, sessions rendered as fixed-size
+            icons (no magnify, no scale on hover)
+          - hover on an icon -> Facebook-style floating
+            tooltip with the session title
+          - the chat-aside toggle (top-3 left-12) pins the
+            rail to 280px and shows session title + date
+            next to each row
+          - click outside / Esc / route change -> unpin */}
+      <ChatAsideRail
+        pinned={chatAsidePinned}
+        hoveredSessionId={chatAsideHovered}
+        onHoverSession={setChatAsideHovered}
+        onClearHover={() => setChatAsideHovered(null)}
+        onTogglePin={() => setChatAsidePinned((v) => !v)}
+        onClose={() => setChatAsidePinned(false)}
+        sessions={sessions}
+        currentSessionId={currentSessionId}
+        onSelectSession={(id) => { handleSelectSession(id); setChatAsidePinned(false); }}
+        onNewSession={() => {
+          setCurrentSessionId(null);
+          setSuggestedPrompts(getContextualPrompts(''));
+          setChatAsidePinned(false);
+        }}
+        onDeleteSession={handleDeleteSession}
+        data-build-tag="chat-aside-v4-rail"
+      />
 
       {/* ── Main chat: centered content area ──────────────────────
           The aside is now a floating panel that only appears
@@ -899,5 +705,301 @@ export default function ChatPage() {
         </div>
       )}
     </div>
+  );
+}
+
+// ── ChatAsideRail ───────────────────────────────────────────────
+//
+// A 52px-wide rail at the left of the screen, but positioned
+// 12px to the RIGHT of the global NavigationDock (52px wide),
+// so it sits at left-64 in the layout. The rail shows chat
+// sessions as 28x28 fixed-size icons. Hovering an icon pops
+// a Facebook-style floating tooltip to the right.
+//
+// The user can click the pin button at top-3 to expand the
+// rail to 280px and see the session title + date next to
+// each icon. While pinned, hovering a row does NOT magnify
+// the icon — it only changes the row background color,
+// exactly like the global dock.
+function ChatAsideRail({
+  pinned,
+  hoveredSessionId,
+  onHoverSession,
+  onClearHover,
+  onTogglePin,
+  onClose,
+  sessions,
+  currentSessionId,
+  onSelectSession,
+  onNewSession,
+  onDeleteSession,
+}: {
+  pinned: boolean;
+  hoveredSessionId: string | null;
+  onHoverSession: (id: string) => void;
+  onClearHover: () => void;
+  onTogglePin: () => void;
+  onClose: () => void;
+  sessions: Array<{ sessionId: string; title?: string; createdAt: string | number | Date }>;
+  currentSessionId: string | null;
+  onSelectSession: (id: string) => void;
+  onNewSession: () => void;
+  onDeleteSession: (id: string) => void;
+}) {
+  const asideRef = useRef<HTMLElement | null>(null);
+
+  // Click outside (while pinned) to close.
+  useEffect(() => {
+    if (!pinned) return;
+    const onDown = (e: MouseEvent) => {
+      const t = e.target as Node | null;
+      if (!t) return;
+      if (asideRef.current && !asideRef.current.contains(t)) {
+        onClose();
+      }
+    };
+    const id = window.setTimeout(() => {
+      document.addEventListener('mousedown', onDown);
+    }, 0);
+    return () => {
+      window.clearTimeout(id);
+      document.removeEventListener('mousedown', onDown);
+    };
+  }, [pinned, onClose]);
+
+  // The tooltip content — first hovered session's title,
+  // or null. Only shown while the rail is collapsed.
+  const tooltipSession = useMemo(() => {
+    if (!hoveredSessionId || pinned) return null;
+    return sessions.find((s) => s.sessionId === hoveredSessionId) ?? null;
+  }, [hoveredSessionId, pinned, sessions]);
+
+  return (
+    <>
+      <motion.aside
+        ref={asideRef}
+        initial={false}
+        animate={{ width: pinned ? 280 : 52 }}
+        transition={{ type: 'spring', stiffness: 340, damping: 32, mass: 0.9 }}
+        onMouseLeave={onClearHover}
+        className="fixed top-0 z-[55] h-full flex flex-col"
+        style={{ left: 64 }}
+        aria-label="Chat sessions"
+        data-build-tag="chat-aside-v4-rail"
+      >
+        <div
+          className="h-full flex flex-col overflow-hidden
+            bg-[#0d1117]/95 backdrop-blur-2xl
+            border-r border-white/[0.06]
+            shadow-[6px_0_32px_rgba(0,0,0,0.55)]"
+        >
+          {/* Top spacer for the pin button at top-3. */}
+          <div className="shrink-0 h-14" />
+
+          {/* New-session row — always visible, top of list. */}
+          <div className="px-1.5 py-1">
+            <button
+              onClick={onNewSession}
+              className={cn(
+                'relative flex items-center w-full h-9 rounded-xl select-none',
+                pinned ? 'justify-start pl-2.5 pr-3' : 'justify-center',
+                'text-text-muted hover:text-text-primary bg-white/[0.02] hover:bg-white/[0.05]',
+                'transition-colors duration-150',
+              )}
+              aria-label="New chat session"
+            >
+              <div className="flex items-center justify-center w-7 h-7 shrink-0">
+                <Plus className="w-[18px] h-[18px]" />
+              </div>
+              <AnimatePresence>
+                {pinned && (
+                  <motion.span
+                    key="new-session-label"
+                    initial={{ opacity: 0, x: -4 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -4 }}
+                    transition={{ duration: 0.16, ease: [0.32, 0.94, 0.6, 1], delay: 0.04 }}
+                    className="ml-2.5 whitespace-nowrap text-[12px] font-mono"
+                  >
+                    &gt; new_session()
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
+
+          {/* Session list */}
+          <div className="flex-1 overflow-y-auto overflow-x-visible py-1">
+            {sessions.length === 0 && (
+              <p className="text-text-muted/60 text-[10px] text-center py-4 px-2 font-mono">
+                <span className="text-[#22d3ee]">//</span> empty
+              </p>
+            )}
+            {sessions.map((session) => {
+              const isCurrent = currentSessionId === session.sessionId;
+              const isHovered = hoveredSessionId === session.sessionId;
+              return (
+                <div
+                  key={session.sessionId}
+                  onMouseEnter={() => onHoverSession(session.sessionId)}
+                  onMouseLeave={() => {
+                    if (hoveredSessionId === session.sessionId) onClearHover();
+                  }}
+                  className="relative px-1.5 py-1"
+                >
+                  <button
+                    onClick={() => onSelectSession(session.sessionId)}
+                    className={cn(
+                      'relative flex items-center w-full h-9 rounded-xl select-none',
+                      pinned ? 'justify-start pl-2.5 pr-3' : 'justify-center',
+                      'transition-colors duration-150',
+                      isCurrent
+                        ? 'bg-gradient-to-r from-[#22d3ee]/15 to-[#8b5cf6]/10 text-text-primary'
+                        : isHovered
+                          ? 'bg-white/[0.05] text-text-primary'
+                          : 'text-text-muted hover:text-text-primary',
+                    )}
+                  >
+                    {isCurrent && (
+                      <div
+                        className="absolute -left-1 top-1.5 bottom-1.5 w-[2px] rounded-full"
+                        style={{
+                          background: 'linear-gradient(180deg, #22d3ee, #8b5cf6)',
+                          boxShadow: '0 0 8px rgba(34, 211, 238, 0.3)',
+                        }}
+                      />
+                    )}
+                    <div className="flex items-center justify-center w-7 h-7 shrink-0">
+                      <MessageSquare
+                        className={cn(
+                          'w-[18px] h-[18px] transition-colors duration-150',
+                          isCurrent || isHovered ? 'text-text-primary' : 'text-text-muted',
+                        )}
+                      />
+                    </div>
+                    <AnimatePresence>
+                      {pinned && (
+                        <motion.div
+                          key="row-label"
+                          initial={{ opacity: 0, x: -4 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -4 }}
+                          transition={{ duration: 0.16, ease: [0.32, 0.94, 0.6, 1], delay: 0.04 }}
+                          className="ml-2.5 flex-1 min-w-0 text-left"
+                        >
+                          <p className={cn(
+                            'whitespace-nowrap text-[13px] font-medium truncate transition-colors duration-150',
+                            isCurrent || isHovered ? 'text-text-primary' : 'text-text-muted',
+                          )}>
+                            {session.title || 'New chat'}
+                          </p>
+                          <p className="text-[10px] font-mono text-text-muted/70 mt-0.5">
+                            {format(new Date(session.createdAt), 'dd/MM/yy HH:mm', { locale: vi })}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    {pinned && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); onDeleteSession(session.sessionId); }}
+                        className="ml-1 p-1 rounded-lg text-text-muted hover:text-red-400 hover:bg-white/[0.04] transition-colors shrink-0"
+                        aria-label="Delete session"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </motion.aside>
+
+      {/* Floating tooltip for the chat-aside rail. Same
+          Facebook-style design as the global dock tooltip. */}
+      <AnimatePresence>
+        {tooltipSession && (
+          <motion.div
+            key={`chat-tooltip-${tooltipSession.sessionId}`}
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -6 }}
+            transition={{ duration: 0.14, ease: [0.32, 0.94, 0.6, 1] }}
+            className="fixed z-[62] pointer-events-none"
+            style={{ left: 124, top: 4 }}
+          >
+            <div className="relative">
+              <div
+                className="px-3 py-1.5 rounded-lg
+                  bg-[#1a1f2e]/95 backdrop-blur-xl
+                  border border-white/10
+                  shadow-[0_4px_16px_rgba(0,0,0,0.5)]
+                  text-[12px] font-medium text-text-primary whitespace-nowrap"
+              >
+                {tooltipSession.title || 'New chat'}
+              </div>
+              <div
+                className="absolute top-1/2 -translate-y-1/2 -left-1
+                  w-2 h-2 rotate-45
+                  bg-[#1a1f2e]/95
+                  border-l border-b border-white/10"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Chat-aside pin/unpin toggle — at top-3, sits to
+          the RIGHT of the global dock toggle (top-3 left-3).
+          The global dock toggle is 40px wide, so its right
+          edge is at left-13. The chat-aside rail starts at
+          left-64, so this button needs to sit somewhere
+          that doesn't overlap either. We put it at left-14
+          (just to the right of the global dock toggle) and
+          it's visually associated with the global toggle
+          group. */}
+      <motion.button
+        type="button"
+        aria-label={pinned ? 'Unpin chat sessions' : 'Pin chat sessions open'}
+        aria-expanded={pinned}
+        onClick={onTogglePin}
+        whileHover={{ scale: 1.06 }}
+        whileTap={{ scale: 0.94 }}
+        transition={{ type: 'spring', stiffness: 320, damping: 22, mass: 0.55 }}
+        className="fixed top-3 z-[70] w-10 h-10 rounded-xl
+          flex items-center justify-center
+          bg-[#0d1117]/85 backdrop-blur-2xl
+          border border-white/10
+          shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)]
+          text-text-primary
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22d3ee]/40"
+        style={{ left: 58 }}
+      >
+        <AnimatePresence mode="wait" initial={false}>
+          {pinned ? (
+            <motion.span
+              key="chat-panel-close"
+              initial={{ opacity: 0, rotate: -45, scale: 0.6 }}
+              animate={{ opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ opacity: 0, rotate: 45, scale: 0.6 }}
+              transition={{ duration: 0.18, ease: [0.32, 0.94, 0.6, 1] }}
+            >
+              <PanelLeftClose className="w-[18px] h-[18px]" />
+            </motion.span>
+          ) : (
+            <motion.span
+              key="chat-panel-open"
+              initial={{ opacity: 0, rotate: 45, scale: 0.6 }}
+              animate={{ opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ opacity: 0, rotate: -45, scale: 0.6 }}
+              transition={{ duration: 0.18, ease: [0.32, 0.94, 0.6, 1] }}
+            >
+              <PanelLeftOpen className="w-[18px] h-[18px]" />
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.button>
+    </>
   );
 }

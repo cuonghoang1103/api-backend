@@ -76,8 +76,19 @@ router.post(
       const userId = getUserId(req);
       const { content, visibility, latitude, longitude, locationName, media, poll, youtubeUrl } = req.body;
 
-      if (!content?.trim()) {
-        throw new AppError('Post content is required', 400, 'MISSING_CONTENT');
+      // A post is valid as long as *something* goes on the
+      // timeline: text, at least one media row, a YouTube link,
+      // or a poll. Photos-only or video-only posts (no caption)
+      // were rejected with 400 "Post content is required" which
+      // was the source of the "upload image/video thất bại"
+      // complaint — the upload itself worked, the post create
+      // immediately after didn't.
+      const hasText = typeof content === 'string' && content.trim().length > 0;
+      const hasMedia = Array.isArray(media) && media.length > 0;
+      const hasYouTube = typeof youtubeUrl === 'string' && youtubeUrl.trim().length > 0;
+      const hasPoll = !!(poll && poll.question && Array.isArray(poll.options) && poll.options.length >= 2);
+      if (!hasText && !hasMedia && !hasYouTube && !hasPoll) {
+        throw new AppError('Post must include text, media, a YouTube link, or a poll', 400, 'MISSING_CONTENT');
       }
 
       // Light YouTube URL validation. We don't try to verify the

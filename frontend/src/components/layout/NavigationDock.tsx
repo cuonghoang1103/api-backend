@@ -14,12 +14,9 @@ import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 
-// Slim rail width. The 52px column keeps the dock out of the
-// way on every page; on hover it expands to 220px to show the
-// item labels. No sessions drawer lives here — chat history is
-// owned by the /chat page, not by the global navigation.
-export const DOCK_WIDTH_COLLAPSED = 52;
-export const DOCK_WIDTH_EXPANDED = 220;
+// Fixed rail width. The dock never expands; labels are shown as
+// a floating tooltip next to the hovered icon (Facebook style).
+export const DOCK_WIDTH = 52;
 
 interface DockItem {
   href: string;
@@ -54,16 +51,6 @@ const SECTIONS = {
 
 const APPLE_EASE: [number, number, number, number] = [0.32, 0.94, 0.6, 1];
 
-// iOS dock magnification — gentle bump, not a leap. 1.10 on the
-// hovered row, falling off to 1.0 over 2 rows. Kept small because
-// the rail is narrow and we don't want to push siblings.
-function magnifyScale(distance: number): number {
-  if (distance === 0) return 1.10;
-  if (distance === 1) return 1.05;
-  if (distance === 2) return 1.02;
-  return 1.0;
-}
-
 const sectionVariants: Variants = {
   hidden: { opacity: 0, x: -6 },
   visible: (i: number) => ({
@@ -75,8 +62,7 @@ const sectionVariants: Variants = {
 
 export default function NavigationDock() {
   const pathname = usePathname();
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  const [isPanelHovered, setIsPanelHovered] = useState(false);
+  const [hoveredHref, setHoveredHref] = useState<string | null>(null);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -89,22 +75,20 @@ export default function NavigationDock() {
     ...SECTIONS[key],
     items: DOCK_ITEMS.filter((item) => item.section === key),
   }));
-  const flatItems = sections.flatMap((s) => s.items);
 
-  const handlePanelEnter = useCallback(() => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
-    setIsPanelHovered(true);
-  }, []);
-
-  const handlePanelLeave = useCallback(() => {
+  // Show tooltip after ~200ms hover to avoid flicker when the
+  // user is just gliding the cursor over the rail.
+  const handleRowEnter = useCallback((href: string) => {
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
     hoverTimeoutRef.current = setTimeout(() => {
-      setIsPanelHovered(false);
-      setHoveredIdx(null);
-    }, 120);
+      setHoveredHref(href);
+    }, 180);
+  }, []);
+
+  const handleRowLeave = useCallback(() => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    hoverTimeoutRef.current = null;
+    setHoveredHref(null);
   }, []);
 
   useEffect(() => {
@@ -113,87 +97,68 @@ export default function NavigationDock() {
     };
   }, []);
 
-  const isExpanded = isPanelHovered;
-
   return (
-    <>
-      {/* ── Sidebar panel (the rail) ────────────────────────────── */}
-      <motion.nav
-        key="dock-panel"
-        initial={false}
-        animate={{ width: isExpanded ? DOCK_WIDTH_EXPANDED : DOCK_WIDTH_COLLAPSED }}
-        transition={{ type: 'spring', stiffness: 360, damping: 32, mass: 0.85 }}
-        onMouseEnter={handlePanelEnter}
-        onMouseLeave={handlePanelLeave}
-        className="fixed top-0 left-0 h-full z-[59] flex flex-col pt-16"
-        style={{ overflow: 'visible' }}
-        aria-label="Primary navigation"
+    <motion.nav
+      initial={false}
+      animate={{ width: DOCK_WIDTH }}
+      transition={{ type: 'spring', stiffness: 360, damping: 32, mass: 0.85 }}
+      className="fixed top-0 left-0 h-full z-[59] flex flex-col pt-16"
+      style={{ overflow: 'visible' }}
+      aria-label="Primary navigation"
+    >
+      <div
+        className="h-full flex flex-col overflow-hidden
+          bg-[#0d1117]/95 backdrop-blur-xl
+          border-r border-white/[0.05]
+          shadow-[6px_0_32px_rgba(0,0,0,0.45)]"
       >
-        <div
-          className="h-full flex flex-col overflow-hidden
-            bg-[#0d1117]/95 backdrop-blur-xl
-            border-r border-white/[0.05]
-            shadow-[6px_0_32px_rgba(0,0,0,0.45)]"
-        >
-          {/* Sections — no header, no footer, no section labels.
-              The expanded 220px width is just enough to fit
-              short labels next to the icons. */}
-          <div className="flex-1 overflow-y-auto overflow-x-visible py-3">
-            {sections.map(({ key, items, index }) => (
-              <motion.div
-                key={key}
-                custom={index}
-                variants={sectionVariants}
-                initial="hidden"
-                animate="visible"
-                className="space-y-0.5"
-              >
-                {items.map((item) => {
-                  const flatIdx = flatItems.indexOf(item);
-                  const distance = hoveredIdx === null ? 99 : Math.abs(flatIdx - hoveredIdx);
-                  const isActive = pathname === item.href ||
-                    (item.href !== '/' && pathname.startsWith(item.href));
-                  const Icon = item.icon;
-                  const showUnread = !!item.showUnread && mounted && isAuthenticated && unreadMessages > 0;
+        <div className="flex-1 overflow-y-auto overflow-x-visible py-3">
+          {sections.map(({ key, items, index }) => (
+            <motion.div
+              key={key}
+              custom={index}
+              variants={sectionVariants}
+              initial="hidden"
+              animate="visible"
+              className="space-y-0.5"
+            >
+              {items.map((item) => {
+                const isActive = pathname === item.href ||
+                  (item.href !== '/' && pathname.startsWith(item.href));
+                const Icon = item.icon;
+                const showUnread = !!item.showUnread && mounted && isAuthenticated && unreadMessages > 0;
+                const isHovered = hoveredHref === item.href;
 
-                  return (
-                    <DockRow
-                      key={item.href}
-                      item={item}
-                      Icon={Icon}
-                      isActive={isActive}
-                      isExpanded={isExpanded}
-                      scale={magnifyScale(distance)}
-                      isHovered={hoveredIdx === flatIdx}
-                      showUnread={showUnread}
-                      unreadCount={unreadMessages}
-                      onHover={() => setHoveredIdx(flatIdx)}
-                      onLeave={() => {
-                        if (hoveredIdx === flatIdx) setHoveredIdx(null);
-                      }}
-                    />
-                  );
-                })}
-              </motion.div>
-            ))}
-          </div>
+                return (
+                  <DockRow
+                    key={item.href}
+                    item={item}
+                    Icon={Icon}
+                    isActive={isActive}
+                    isHovered={isHovered}
+                    showUnread={showUnread}
+                    unreadCount={unreadMessages}
+                    onHover={() => handleRowEnter(item.href)}
+                    onLeave={handleRowLeave}
+                  />
+                );
+              })}
+            </motion.div>
+          ))}
         </div>
-      </motion.nav>
-    </>
+      </div>
+    </motion.nav>
   );
 }
 
 // ── Single dock row ───────────────────────────────────────────────
-// Compact row, no glow: a soft white-tinted background for the
-// hovered / active state and a flat gradient bar on the inside
-// edge when the row is the active one. The bar is no-shadow so
-// the rail stays clean.
+// A 36px square icon, centered in the 52px column. No scale, no
+// magnify. The label is a small floating tooltip that pops to
+// the right of the icon (Facebook-style) on hover.
 function DockRow({
   item,
   Icon,
   isActive,
-  isExpanded,
-  scale,
   isHovered,
   showUnread,
   unreadCount,
@@ -203,42 +168,33 @@ function DockRow({
   item: DockItem;
   Icon: React.ElementType;
   isActive: boolean;
-  isExpanded: boolean;
-  scale: number;
   isHovered: boolean;
   showUnread: boolean;
   unreadCount: number;
   onHover: () => void;
   onLeave: () => void;
 }) {
-  const collapsed = !isExpanded;
-
   return (
-    <motion.div
+    <div
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
-      animate={{ scale }}
-      transition={{ type: 'spring', stiffness: 380, damping: 26, mass: 0.55 }}
-      style={{ transformOrigin: 'center center' }}
+      className="relative px-2 py-1.5"
     >
       <Link
         href={item.href}
         className={cn(
-          'relative flex items-center rounded-xl overflow-hidden select-none',
-          collapsed
-            ? 'justify-center px-1.5 py-1.5 mx-1.5'
-            : 'gap-2.5 px-3 py-2.5 mx-1',
+          'relative flex items-center justify-center w-8 h-8 mx-auto rounded-lg select-none',
+          'transition-colors duration-150',
         )}
-        style={{ display: 'flex' }}
       >
         {/* Active indicator bar — flat gradient, no halo. The
-            gradient is the brand cyan→violet we already use
-            elsewhere; without the box-shadow it reads as a
-            printed line, not as light. */}
-        {!collapsed && isActive && (
+            bar sits on the left edge of the row, not the
+            icon, so it reads as a printed marker for the
+            whole row. */}
+        {isActive && (
           <motion.div
             layoutId="navActiveIndicator"
-            className="absolute inset-y-1 left-0 w-[2px] rounded-full"
+            className="absolute -left-2 top-1.5 bottom-1.5 w-[2px] rounded-full"
             style={{
               background: 'linear-gradient(180deg, #22d3ee, #8b5cf6)',
             }}
@@ -252,10 +208,7 @@ function DockRow({
             quiet and the cursor's location is the only thing
             that gets emphasis. */}
         <motion.div
-          className={cn(
-            'flex items-center justify-center rounded-lg shrink-0',
-            collapsed ? 'w-8 h-8' : 'w-8 h-8',
-          )}
+          className="flex items-center justify-center rounded-lg w-8 h-8"
           animate={{
             backgroundColor: isActive
               ? 'rgba(255,255,255,0.08)'
@@ -267,8 +220,7 @@ function DockRow({
         >
           <Icon
             className={cn(
-              'shrink-0 transition-colors duration-150',
-              collapsed ? 'w-[15px] h-[15px]' : 'w-3.5 h-3.5',
+              'shrink-0 w-[15px] h-[15px] transition-colors duration-150',
               isActive
                 ? 'text-text-primary'
                 : isHovered
@@ -278,71 +230,67 @@ function DockRow({
           />
         </motion.div>
 
-        <AnimatePresence initial={false}>
-          {!collapsed && (
-            <motion.span
-              key="dock-row-label"
-              initial={{ opacity: 0, x: -4 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -4 }}
-              transition={{ duration: 0.16, ease: APPLE_EASE }}
-              className={cn(
-                'whitespace-nowrap text-[12px] font-medium',
-                isActive
-                  ? 'text-text-primary'
-                  : isHovered
-                    ? 'text-text-primary'
-                    : 'text-text-secondary',
-              )}
-            >
-              {item.label}
-            </motion.span>
-          )}
-        </AnimatePresence>
-
-        {/* Unread badge — Messenger-style pill or dot. */}
+        {/* Unread badge — Messenger-style dot. */}
         {showUnread && (
           <UnreadBadge
             count={unreadCount}
-            collapsed={collapsed}
             isActive={isActive}
           />
         )}
       </Link>
-    </motion.div>
+
+      {/* Tooltip — Facebook-style label that pops out to the
+          right of the icon. Anchored left-12 (so its arrow /
+          left edge sits 4px right of the rail), vertically
+          centered on the row. The label is a small dark pill
+          with a slight backdrop blur so it stays readable
+          over both light and dark page backgrounds. */}
+      <AnimatePresence>
+        {isHovered && (
+          <motion.div
+            key={`tooltip-${item.href}`}
+            initial={{ opacity: 0, x: -4 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -4 }}
+            transition={{ duration: 0.14, ease: APPLE_EASE }}
+            className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3 z-[60]"
+          >
+            <div
+              className="whitespace-nowrap rounded-lg px-2.5 py-1.5
+                text-[12px] font-medium text-white
+                shadow-[0_6px_18px_rgba(0,0,0,0.4)]"
+              style={{
+                background: 'rgba(13, 17, 23, 0.92)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+            >
+              {item.label}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
 // ── Unread badge ──────────────────────────────────────────────────
 function UnreadBadge({
   count,
-  collapsed,
   isActive,
 }: {
   count: number;
-  collapsed: boolean;
   isActive: boolean;
 }) {
-  if (collapsed) {
-    return (
-      <span
-        className="absolute top-0.5 right-0.5 min-w-[14px] h-[14px] px-1
-          bg-red-500 text-white text-[9px] font-bold rounded-full
-          flex items-center justify-center
-          shadow-[0_0_0_2px_rgba(13,17,23,0.95)]"
-      >
-        {count > 9 ? '9+' : count}
-      </span>
-    );
-  }
   return (
     <span
-      className={cn(
-        'ml-auto text-[10px] font-mono font-semibold',
-        isActive ? 'text-text-primary' : 'text-text-muted',
-      )}
+      className="absolute top-0.5 right-0.5 min-w-[14px] h-[14px] px-1
+        bg-red-500 text-white text-[9px] font-bold rounded-full
+        flex items-center justify-center
+        shadow-[0_0_0_2px_rgba(13,17,23,0.95)]"
     >
-      {count > 99 ? '99+' : count}
+      {count > 9 ? '9+' : count}
     </span>
   );
 }

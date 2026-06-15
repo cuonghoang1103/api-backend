@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -268,11 +267,12 @@ export function PostCard({ post }: PostCardProps) {
               className="relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-full ring-2 ring-violet-500/20 transition-transform hover:scale-105"
               aria-label={`Xem trang cá nhân của ${authorDisplay}`}
             >
-              <Image
+              <img
                 src={authorAvatar}
                 alt={authorDisplay}
-                fill
-                className="object-cover"
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
               />
             </Link>
 
@@ -851,12 +851,12 @@ function MediaItem({
             onClick={(e) => e.stopPropagation()}
           />
         ) : (
-          <Image
+          <img
             src={item.thumbnail || item.url}
             alt={item.alt || ''}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 600px"
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover"
           />
         )}
 
@@ -900,14 +900,19 @@ function MediaItem({
     );
   }
 
+  const imgUrl =
+    typeof item.url === 'string' && item.url.startsWith('/')
+      ? `https://api.cuongthai.com${item.url}`
+      : (item.url ?? '');
+
   return (
-    <button onClick={onClick} className="relative h-full w-full">
-      <Image
-        src={item.url}
+    <button onClick={onClick} className="relative h-full w-full overflow-hidden">
+      <img
+        src={imgUrl}
         alt={item.alt || ''}
-        fill
-        className="object-cover transition-transform hover:scale-105"
-        sizes="(max-width: 768px) 100vw, 600px"
+        loading="lazy"
+        decoding="async"
+        className="h-full w-full object-cover transition-transform hover:scale-105"
       />
     </button>
   );
@@ -929,13 +934,11 @@ function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
         className="relative max-h-full max-w-3xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <Image
+        <img
           src={src}
           alt="Full size"
-          width={1200}
-          height={800}
           className="rounded-2xl"
-          style={{ maxHeight: '80vh', objectFit: 'contain' }}
+          style={{ maxHeight: '80vh', objectFit: 'contain', width: 'auto', height: 'auto' }}
         />
         <button
           onClick={onClose}
@@ -979,7 +982,7 @@ function CommentItem({
         href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
         className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full transition-transform hover:scale-110"
       >
-        <Image src={avatar} alt={display} width={32} height={32} className="object-cover" />
+        <img src={avatar} alt={display} loading="lazy" decoding="async" className="h-8 w-8 flex-shrink-0 rounded-full object-cover" />
       </Link>
       <div className="flex-1 min-w-0">
         <div

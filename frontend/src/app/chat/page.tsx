@@ -89,7 +89,7 @@ export default function ChatPage() {
   // change. If the user reports "no change" again, they
   // can read this ribbon and instantly know whether the
   // browser is on the new build.
-  const BUILD_TAG = 'chat-v5-no-magnify-tooltip-2026-06-16T03:20Z-pending';
+  const BUILD_TAG = 'chat-v6-navbar-no-magnify-2026-06-16T03:35Z-pending';
   const [showBuildTag, setShowBuildTag] = useState(false);
   useEffect(() => {
     if (typeof window === 'undefined') return;

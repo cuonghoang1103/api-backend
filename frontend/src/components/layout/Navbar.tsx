@@ -200,26 +200,19 @@ export default function Navbar() {
         }`}
         style={{ left: 'var(--dock-shift, 0px)' }}
       >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-14">
+        <div className="h-full pl-2 pr-2 flex items-center justify-between gap-1.5">
 
-            {/* Left: Logo */}
-            <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+            {/* Left: Logo (icon only) */}
+            <Link href="/" className="flex items-center shrink-0 group">
               <img
                 src="/images/avatar.png"
                 alt="CuongHoang"
                 className="w-8 h-8 rounded-xl object-cover ring-1 ring-neon-violet/30 group-hover:ring-neon-violet/60 transition-all"
               />
-              <span className="font-heading font-bold text-sm text-text-primary hidden sm:block group-hover:text-neon-violet transition-colors">
-                CuongHoang
-              </span>
             </Link>
 
-            {/* Center: nav links — iOS Cyber Dock style.
-                Collapses to icons-only by default; expanding label
-                + magnify wave triggers on hover, mirroring the
-                left sidebar so both rails behave the same. */}
-            <div className="hidden sm:flex items-center">
+            {/* Center: nav links — icons only, no labels. */}
+            <div className="hidden sm:flex items-center ml-1">
               {TOP_NAV_LINKS.filter((l) => !l.authOnly || isAuthenticated).map((link, idx) => {
                 const isActive = pathname === link.href ||
                   (link.href === '/messages' && pathname?.startsWith('/messages'));
@@ -366,7 +359,6 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-          </div>
         </div>
       </nav>
 
@@ -412,12 +404,13 @@ export default function Navbar() {
   );
 }
 
-// ── Single top-nav link ───────────────────────────────────────────
+// ── Single top-nav link (icon-only) ──────────────────────────────
 //
-// Simple icon + label row. No magnify wave. No collapse-expand.
-// The icon and label are always shown side by side. Hovering
-// the row only changes the icon pill's background color and
-// the label's text color, both via a fast color tween.
+// Just an icon pill. No label, no magnify. The row is a
+// 36x36 fixed-size square; the icon inside it is fixed-size
+// 16x16. Hovering the row only changes the icon pill's
+// background color and the icon's text color. The icon
+// NEVER scales or moves.
 function TopNavLink({
   href,
   label,
@@ -448,14 +441,15 @@ function TopNavLink({
     >
       <Link
         href={href}
+        title={label}
+        aria-label={label}
         className={cn(
-          'relative flex items-center gap-1.5 px-3 py-2 mx-0.5 rounded-2xl select-none',
+          'relative flex items-center justify-center w-9 h-9 mx-0.5 rounded-xl select-none',
           'transition-colors duration-150',
         )}
       >
-        {/* Icon pill — background color tweens on hover. */}
         <div
-          className="flex items-center justify-center w-8 h-8 rounded-xl shrink-0
+          className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0
             transition-all duration-150"
           style={{
             backgroundColor: isActive
@@ -486,14 +480,6 @@ function TopNavLink({
             />
           )}
         </div>
-
-        {/* Label — always visible. Color tweens on hover. */}
-        <span
-          className="text-[13px] font-bold whitespace-nowrap transition-colors duration-150"
-          style={{ color: isActive ? '#0ea5e9' : isHovered ? '#e5e7eb' : '#94a3b8' }}
-        >
-          {label}
-        </span>
 
         {/* Unread badge — Messenger-style. */}
         {showUnread && (

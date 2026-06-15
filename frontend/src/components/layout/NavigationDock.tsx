@@ -9,22 +9,17 @@ import {
   LayoutDashboard, Shield, BookMarked, Receipt,
   Settings, Sparkles, UserCircle,
   GraduationCap, ShoppingBag, Gamepad2, Globe,
-  PanelLeft, PanelLeftClose,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
-import ChatSessionsDrawer from './ChatSessionsDrawer';
 
-// ── Width constants ──────────────────────────────────────────────
-// The rail is intentionally slim (52px) so it stays out of the
-// way on every page. The expanded hover state (220px) is just
-// wide enough to show short labels next to the icons; the
-// sessions drawer is a separate floating panel that lives next
-// to the rail.
+// Slim rail width. The 52px column keeps the dock out of the
+// way on every page; on hover it expands to 220px to show the
+// item labels. No sessions drawer lives here — chat history is
+// owned by the /chat page, not by the global navigation.
 export const DOCK_WIDTH_COLLAPSED = 52;
 export const DOCK_WIDTH_EXPANDED = 220;
-export const DOCK_DRAWER_WIDTH = 280;
 
 interface DockItem {
   href: string;
@@ -78,39 +73,15 @@ const sectionVariants: Variants = {
   }),
 };
 
-interface NavigationDockProps {
-  /** True when the dock drawer is pinned (auto-hover is ignored). */
-  isPinned: boolean;
-  onPinChange: (pinned: boolean) => void;
-  /** Backwards-compat alias for mobile (drawer mode). */
-  isOpen?: boolean;
-  onToggle?: () => void;
-}
-
-export default function NavigationDock({
-  isPinned,
-  onPinChange,
-}: NavigationDockProps) {
+export default function NavigationDock() {
   const pathname = usePathname();
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [isPanelHovered, setIsPanelHovered] = useState(false);
-  const [isDrawerHovered, setIsDrawerHovered] = useState(false);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const autoCloseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-
-  const [isWideViewport, setIsWideViewport] = useState(false);
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mq = window.matchMedia('(min-width: 768px)');
-    const update = () => setIsWideViewport(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
 
   const sections = (['main', 'user', 'admin'] as const).map((key, i) => ({
     key,
@@ -120,150 +91,32 @@ export default function NavigationDock({
   }));
   const flatItems = sections.flatMap((s) => s.items);
 
-  const clearAutoClose = () => {
-    if (autoCloseTimeoutRef.current) {
-      clearTimeout(autoCloseTimeoutRef.current);
-      autoCloseTimeoutRef.current = null;
-    }
-  };
-
   const handlePanelEnter = useCallback(() => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
     }
     setIsPanelHovered(true);
-    // Auto-open the sessions drawer on hover. Pinned mode
-    // ignores this; pin keeps the drawer visible regardless.
-    if (!isPinned) {
-      clearAutoClose();
-    }
-  }, [isPinned]);
+  }, []);
 
-  // Leaving the rail schedules a 180ms close. If the cursor
-  // reaches the floating drawer in time, the close cancels.
   const handlePanelLeave = useCallback(() => {
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
     hoverTimeoutRef.current = setTimeout(() => {
       setIsPanelHovered(false);
       setHoveredIdx(null);
     }, 120);
-    if (!isPinned) {
-      clearAutoClose();
-      autoCloseTimeoutRef.current = setTimeout(() => {
-        // Only auto-close if the cursor is not on the drawer.
-        // isDrawerHovered state is set inside the drawer.
-      }, 180);
-    }
-  }, [isPinned]);
-
-  const handleDrawerEnter = useCallback(() => {
-    setIsDrawerHovered(true);
-    clearAutoClose();
   }, []);
-
-  const handleDrawerLeave = useCallback(() => {
-    setIsDrawerHovered(false);
-    if (isPinned) return;
-    clearAutoClose();
-    autoCloseTimeoutRef.current = setTimeout(() => {
-      // No-op — visibility is computed from hover state
-    }, 180);
-  }, [isPinned]);
-
-  // Sessions drawer visibility:
-  //   pinned (toggle pressed)            -> always visible
-  //   hovered rail / hovered drawer      -> visible (auto)
-  //   otherwise                          -> hidden
-  // Mobile gets the same behaviour, but the rail itself fills
-  // the viewport because the layout script reserves zero
-  // horizontal space below md.
-  const drawerVisible = isPinned || isPanelHovered || isDrawerHovered;
-
-  const togglePin = useCallback(() => {
-    onPinChange(!isPinned);
-  }, [isPinned, onPinChange]);
 
   useEffect(() => {
     return () => {
       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-      if (autoCloseTimeoutRef.current) clearTimeout(autoCloseTimeoutRef.current);
     };
   }, []);
 
-  // Rail is expanded when hovered OR when the sessions drawer
-  // is visible (so the toggle button and icon labels stay
-  // legible when the drawer is up).
-  const isExpanded = isPanelHovered || drawerVisible;
+  const isExpanded = isPanelHovered;
 
   return (
     <>
-      {/* ── Sessions drawer (floating, glass) ─────────────────────
-          Lives to the right of the rail. In hover mode (auto)
-          the drawer sits over the page content — no layout
-          shift. In pin mode the same drawer is used; layout
-          shift is owned by DockLayout. */}
-      <AnimatePresence>
-        {drawerVisible && isWideViewport && (
-          <motion.div
-            key="dock-drawer"
-            initial={{ opacity: 0, x: -12, scale: 0.98 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -12, scale: 0.98 }}
-            transition={{ type: 'spring', stiffness: 360, damping: 30, mass: 0.7 }}
-            onMouseEnter={handleDrawerEnter}
-            onMouseLeave={handleDrawerLeave}
-            className={cn(
-              'fixed z-[58] rounded-2xl overflow-hidden',
-              isPinned ? 'top-16 bottom-4' : 'top-16 bottom-4',
-            )}
-            style={{
-              // Sit just to the right of the (expanded) rail; in
-              // hover mode this overlaps the page, in pin mode
-              // DockLayout has already reserved the slot.
-              left: DOCK_WIDTH_COLLAPSED + 8,
-              width: DOCK_DRAWER_WIDTH,
-              background: 'rgba(10, 10, 15, 0.50)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.06)',
-              boxShadow: '0 24px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04)',
-            }}
-          >
-            <ChatSessionsDrawer
-              variant={isPinned ? 'pinned' : 'overlay'}
-              onNavigateAway={() => {
-                // After picking a session, close auto-hover but
-                // keep the pin if the user has pinned the
-                // drawer.
-                if (!isPinned) {
-                  setIsPanelHovered(false);
-                  setIsDrawerHovered(false);
-                }
-              }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ── Backdrop: only when the drawer is pinned. In auto
-           hover mode the drawer just slides in/out and the
-           user keeps free mouse access to the page. ── */}
-      <AnimatePresence>
-        {isPinned && isWideViewport && (
-          <motion.div
-            key="dock-pinned-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: APPLE_EASE }}
-            onClick={togglePin}
-            className="fixed inset-0 z-[57] bg-black/30"
-            aria-hidden="true"
-          />
-        )}
-      </AnimatePresence>
-
       {/* ── Sidebar panel (the rail) ────────────────────────────── */}
       <motion.nav
         key="dock-panel"
@@ -321,70 +174,6 @@ export default function NavigationDock({
                     />
                   );
                 })}
-
-                {/* Pin / unpin toggle — only in the main section,
-                    only on desktop. Sits as a separator so the
-                    user sees it after the navigation group. */}
-                {key === 'main' && isWideViewport && (
-                  <div className="mt-2 mx-1">
-                    <motion.button
-                      type="button"
-                      onClick={togglePin}
-                      className={cn(
-                        'group relative flex w-full items-center rounded-xl select-none',
-                        !isExpanded
-                          ? 'justify-center px-1.5 py-1.5 mx-0.5'
-                          : 'gap-2.5 px-3 py-2',
-                      )}
-                      whileHover={{ scale: 1.04 }}
-                      whileTap={{ scale: 0.96 }}
-                      transition={{ type: 'spring', stiffness: 420, damping: 28 }}
-                      aria-label={isPinned ? 'Bỏ ghim sidebar' : 'Ghim sidebar'}
-                      aria-pressed={isPinned}
-                    >
-                      <div
-                        className={cn(
-                          'flex shrink-0 items-center justify-center rounded-lg',
-                          'transition-colors duration-150',
-                          isPinned
-                            ? 'bg-white/[0.08] text-text-primary'
-                            : 'text-text-secondary group-hover:text-text-primary',
-                          !isExpanded ? 'w-8 h-8' : 'w-8 h-8',
-                        )}
-                      >
-                        {isPinned ? (
-                          <PanelLeftClose
-                            className={cn(
-                              'shrink-0',
-                              !isExpanded ? 'w-[15px] h-[15px]' : 'w-4 h-4',
-                            )}
-                          />
-                        ) : (
-                          <PanelLeft
-                            className={cn(
-                              'shrink-0',
-                              !isExpanded ? 'w-[15px] h-[15px]' : 'w-4 h-4',
-                            )}
-                          />
-                        )}
-                      </div>
-                      <AnimatePresence initial={false}>
-                        {isExpanded && (
-                          <motion.span
-                            key="dock-toggle-label"
-                            initial={{ opacity: 0, x: -4 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -4 }}
-                            transition={{ duration: 0.16, ease: APPLE_EASE }}
-                            className="text-[12px] font-medium text-text-secondary group-hover:text-text-primary whitespace-nowrap"
-                          >
-                            {isPinned ? 'Bỏ ghim' : 'Ghim sidebar'}
-                          </motion.span>
-                        )}
-                      </AnimatePresence>
-                    </motion.button>
-                  </div>
-                )}
               </motion.div>
             ))}
           </div>

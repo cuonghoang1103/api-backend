@@ -10,7 +10,7 @@ import { useCartStore } from '@/store/cartStore';
 import {
   Home, BookOpen, FolderOpen, Music, MessageCircle,
   User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
-  Globe, ShoppingBag,
+  Globe, ShoppingBag, GraduationCap, Users,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -18,6 +18,8 @@ import { ChangePasswordModal } from '@/components/auth/ChangePasswordModal';
 
 const TOP_NAV_LINKS = [
   { href: '/', label: 'Home', icon: Home },
+  { href: '/academy', label: 'Academy', icon: GraduationCap },
+  { href: '/social', label: 'Feed', icon: Users },
   { href: '/blog', label: 'Blog', icon: BookOpen },
   { href: '/projects', label: 'Projects', icon: FolderOpen },
   { href: '/music', label: 'Music', icon: Music },

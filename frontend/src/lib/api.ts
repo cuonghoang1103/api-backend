@@ -749,6 +749,13 @@ export const socialApi = {
       alt?: string;
       sortOrder?: number;
     }>;
+    // Phase 2 — optional poll attached to the post.
+    poll?: {
+      question: string;
+      options: string[];
+      multiChoice?: boolean;
+      closesAt?: string;
+    };
   }) => api.post('/social/posts', data),
 
   updatePost: (id: number, data: { content?: string; visibility?: string }) =>
@@ -787,6 +794,12 @@ export const socialApi = {
   // Share
   sharePost: (id: number, platform?: string) =>
     api.post(`/social/posts/${id}/share`, { platform }),
+
+  // Polls
+  votePoll: (pollId: number, optionIds: number[]) =>
+    api.post(`/social/polls/${pollId}/vote`, { optionIds }),
+
+  getPoll: (pollId: number) => api.get(`/social/polls/${pollId}`),
 
   // Media upload via signed URL
   // Note: Uses /files/upload endpoint directly since Nginx routes /api/v1 to backend

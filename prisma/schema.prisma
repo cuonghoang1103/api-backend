@@ -104,6 +104,7 @@ model User {
   socialCommentLikes  SocialCommentLike[]
   socialSaves         SocialSave[]
   socialShares        SocialShare[]
+  socialPollVotes     SocialPollVote[]
 
   cyberProfile CyberProfile?
   cyberTasks   CyberTask[]
@@ -1071,6 +1072,7 @@ model SocialPost {
   comments SocialComment[]
   saves    SocialSave[]
   shares   SocialShare[]
+  poll     SocialPoll?
 
   @@index([authorId], name: "idx_social_posts_author")
   @@index([createdAt(sort: Desc)], name: "idx_social_posts_created")
@@ -1184,6 +1186,56 @@ model SocialShare {
   @@index([userId], name: "idx_social_shares_user")
   @@index([createdAt(sort: Desc)], name: "idx_social_shares_created")
   @@map("social_shares")
+}
+
+// ─── Poll (Phase 2 — admin-style quick vote on a post) ────────────
+// Each post can carry 0..1 poll. The options live in their own table
+// so we can count votes efficiently and reorder them on the client.
+model SocialPoll {
+  id           Int      @id @default(autoincrement())
+  postId       Int      @unique @map("post_id")
+  question     String   @db.VarChar(500)
+  multiChoice  Boolean  @default(false) @map("multi_choice")
+  closesAt     DateTime? @map("closes_at")
+  totalVotes   Int      @default(0) @map("total_votes")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  post    SocialPost        @relation(fields: [postId], references: [id], onDelete: Cascade)
+  options SocialPollOption[]
+  votes   SocialPollVote[]
+
+  @@map("social_polls")
+}
+
+model SocialPollOption {
+  id        Int      @id @default(autoincrement())
+  pollId    Int      @map("poll_id")
+  text      String   @db.VarChar(255)
+  votesCount Int     @default(0) @map("votes_count")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  poll  SocialPoll      @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  votes SocialPollVote[]
+
+  @@index([pollId], name: "idx_social_poll_options_poll")
+  @@map("social_poll_options")
+}
+
+model SocialPollVote {
+  id        Int      @id @default(autoincrement())
+  pollId    Int      @map("poll_id")
+  optionId  Int      @map("option_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  poll   SocialPoll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  option SocialPollOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  user   User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([pollId, userId], name: "uk_social_poll_vote_user")
+  @@index([optionId], name: "idx_social_poll_votes_option")
+  @@map("social_poll_votes")
 }
 
 // ============================================================

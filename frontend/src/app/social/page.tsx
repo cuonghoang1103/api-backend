@@ -4,6 +4,8 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useSocialStore } from '@/store/socialStore';
 import { PostComposer } from '@/components/social/PostComposer';
 import { PostCard } from '@/components/social/PostCard';
+import SocialSidebar from '@/components/social/SocialSidebar';
+import SocialRightWidget from '@/components/social/SocialRightWidget';
 import { motion, AnimatePresence } from 'framer-motion';
 import SocialBackground from '@/components/social/SocialBackground';
 
@@ -56,86 +58,107 @@ export default function SocialPage() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-2xl px-4 py-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
-        >
-          <h1
-            className="bg-gradient-to-r from-violet-400 via-purple-400 to-cyan-400 bg-clip-text text-4xl font-black tracking-tight text-transparent"
-            style={{ fontSize: '2.5rem' }}
-          >
-            Feed
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: '#64748b' }}>
-            Your personal space
-          </p>
-        </motion.div>
+      {/* 3-column layout:
+          - Left rail: navigation icons (hidden on small screens)
+          - Centre: feed (600-700px max-width for comfortable reading)
+          - Right: trending/AI widget (hidden on small screens)
+          - On <lg: single-column centred feed
+       */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-6">
+        <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)_300px]">
+          {/* Left sidebar (icons) */}
+          <div className="hidden lg:block">
+            <SocialSidebar />
+          </div>
 
-        {/* Composer */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <PostComposer />
-        </motion.div>
-
-        {/* Feed */}
-        <div className="mt-6 space-y-4">
-          <AnimatePresence mode="popLayout">
-            {isLoadingFeed && posts.length === 0 ? (
-              <FeedSkeleton key="skeleton" />
-            ) : error ? (
-              <div
-                className="rounded-2xl p-6 text-center"
-                style={{
-                  background: 'rgba(139, 92, 246, 0.05)',
-                  border: '1px solid rgba(139, 92, 246, 0.15)',
-                }}
+          {/* Center feed — bounded width so reading is comfortable */}
+          <div className="mx-auto w-full max-w-[680px] min-w-0">
+            {/* Header */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6"
+            >
+              <h1
+                className="bg-gradient-to-r from-violet-400 via-purple-400 to-cyan-400 bg-clip-text text-4xl font-black tracking-tight text-transparent"
+                style={{ fontSize: '2.5rem' }}
               >
-                <p style={{ color: '#f87171' }}>{error}</p>
-                <button
-                  onClick={() => loadFeed(true)}
-                  className="mt-3 rounded-xl px-4 py-2 text-sm font-medium transition-all"
-                  style={{
-                    background: 'rgba(139, 92, 246, 0.2)',
-                    color: '#a78bfa',
-                    border: '1px solid rgba(139, 92, 246, 0.3)',
-                  }}
-                >
-                  Try again
-                </button>
-              </div>
-            ) : posts.length === 0 ? (
-              <EmptyFeed />
-            ) : (
-              posts.map((post, index) => (
-                <motion.div
-                  key={post.id}
-                  layout
-                  initial={{ opacity: 0, y: 20, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3, delay: index < 5 ? index * 0.05 : 0 }}
-                >
-                  <PostCard post={post} />
-                </motion.div>
-              ))
-            )}
-          </AnimatePresence>
+                Feed
+              </h1>
+              <p className="mt-1 text-sm" style={{ color: '#64748b' }}>
+                Your personal space
+              </p>
+            </motion.div>
 
-          {/* Load more trigger */}
-          <div ref={loadMoreRef} className="flex justify-center py-4">
-            {isLoadingMore && (
-              <div className="flex items-center gap-3">
-                <div className="h-2 w-2 animate-pulse rounded-full" style={{ background: '#8B5CF6' }} />
-                <div className="h-2 w-2 animate-pulse rounded-full" style={{ background: '#8B5CF6', animationDelay: '150ms' }} />
-                <div className="h-2 w-2 animate-pulse rounded-full" style={{ background: '#8B5CF6', animationDelay: '300ms' }} />
+            {/* Composer */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <PostComposer />
+            </motion.div>
+
+            {/* Feed */}
+            <div className="mt-6 space-y-4">
+              <AnimatePresence mode="popLayout">
+                {isLoadingFeed && posts.length === 0 ? (
+                  <FeedSkeleton key="skeleton" />
+                ) : error ? (
+                  <div
+                    className="rounded-2xl p-6 text-center"
+                    style={{
+                      background: 'rgba(139, 92, 246, 0.05)',
+                      border: '1px solid rgba(139, 92, 246, 0.15)',
+                    }}
+                  >
+                    <p style={{ color: '#f87171' }}>{error}</p>
+                    <button
+                      onClick={() => loadFeed(true)}
+                      className="mt-3 rounded-xl px-4 py-2 text-sm font-medium transition-all"
+                      style={{
+                        background: 'rgba(139, 92, 246, 0.2)',
+                        color: '#a78bfa',
+                        border: '1px solid rgba(139, 92, 246, 0.3)',
+                      }}
+                    >
+                      Try again
+                    </button>
+                  </div>
+                ) : posts.length === 0 ? (
+                  <EmptyFeed />
+                ) : (
+                  posts.map((post, index) => (
+                    <motion.div
+                      key={post.id}
+                      layout
+                      initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.3, delay: index < 5 ? index * 0.05 : 0 }}
+                    >
+                      <PostCard post={post} />
+                    </motion.div>
+                  ))
+                )}
+              </AnimatePresence>
+
+              {/* Load more trigger */}
+              <div ref={loadMoreRef} className="flex justify-center py-4">
+                {isLoadingMore && (
+                  <div className="flex items-center gap-3">
+                    <div className="h-2 w-2 animate-pulse rounded-full" style={{ background: '#8B5CF6' }} />
+                    <div className="h-2 w-2 animate-pulse rounded-full" style={{ background: '#8B5CF6', animationDelay: '150ms' }} />
+                    <div className="h-2 w-2 animate-pulse rounded-full" style={{ background: '#8B5CF6', animationDelay: '300ms' }} />
+                  </div>
+                )}
               </div>
-            )}
+            </div>
+          </div>
+
+          {/* Right widget — trending + AI shortcut + suggestions */}
+          <div className="hidden lg:block">
+            <SocialRightWidget />
           </div>
         </div>
       </div>

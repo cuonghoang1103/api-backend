@@ -23,6 +23,9 @@ interface SocialState {
   composerContent: string;
   composerMedia: MediaUploadItem[];
   composerVisibility: 'PUBLIC' | 'FRIENDS' | 'PRIVATE';
+  // Phase 2 — poll draft. Null = no poll. The post will be sent with
+  // the poll if it's non-null and has at least 2 non-empty options.
+  composerPoll: { question: string; options: string[]; multiChoice: boolean } | null;
   isPosting: boolean;
 
   // Saved posts
@@ -40,11 +43,17 @@ interface SocialState {
   // Save/unsave
   toggleSave: (postId: number, folder?: string) => Promise<void>;
 
+  // Post management
+  deletePost: (postId: number) => Promise<void>;
+  updatePostPoll: (postId: number, poll: any) => void;
+
   // Composer
   setComposerContent: (content: string) => void;
   setComposerVisibility: (v: 'PUBLIC' | 'FRIENDS' | 'PRIVATE') => void;
   addComposerMedia: (items: MediaUploadItem[]) => void;
   removeComposerMedia: (id: string) => void;
+  // Phase 2 — poll attached to the next post
+  setComposerPoll: (poll: { question: string; options: string[]; multiChoice: boolean } | null) => void;
   clearComposer: () => void;
   submitPost: () => Promise<SocialPost | null>;
 
@@ -75,6 +84,7 @@ export const useSocialStore = create<SocialState>((set, get) => ({
   composerContent: '',
   composerMedia: [],
   composerVisibility: 'PUBLIC',
+  composerPoll: null,
   isPosting: false,
 
   savedPosts: [],
@@ -182,6 +192,36 @@ export const useSocialStore = create<SocialState>((set, get) => ({
     }
   },
 
+  /**
+   * Remove a post from the feed. Used by the post card "Delete"
+   * action which is visible to the author OR any admin (the
+   * backend enforces the same rule). The removal is optimistic
+   * and we don't roll it back on failure because the user just
+   * saw the row disappear — surfacing a 500 here would be more
+   * confusing than a single missing card.
+   */
+  deletePost: async (postId) => {
+    const before = get().posts;
+    set({ posts: before.filter((p) => p.id !== postId) });
+    try {
+      await socialApi.deletePost(postId);
+    } catch (err) {
+      // Restore on error so the feed doesn't lie.
+      set({ posts: before });
+      throw err;
+    }
+  },
+
+  /**
+   * In-place patch of a post's poll. We don't refetch the whole
+   * feed because the rest of the row is unchanged; the user just
+   * toggled their vote.
+   */
+  updatePostPoll: (postId, poll) =>
+    set((s) => ({
+      posts: s.posts.map((p) => (p.id === postId ? { ...p, poll } : p)),
+    })),
+
   setComposerContent: (content) => set({ composerContent: content }),
   setComposerVisibility: (v) => set({ composerVisibility: v }),
 
@@ -192,11 +232,13 @@ export const useSocialStore = create<SocialState>((set, get) => ({
     set((s) => ({ composerMedia: s.composerMedia.filter((m) => m.id !== id) })),
 
   clearComposer: () =>
-    set({ composerContent: '', composerMedia: [], composerVisibility: 'PUBLIC' }),
+    set({ composerContent: '', composerMedia: [], composerVisibility: 'PUBLIC', composerPoll: null }),
+
+  setComposerPoll: (poll) => set({ composerPoll: poll }),
 
   submitPost: async () => {
-    const { composerContent, composerMedia, composerVisibility } = get();
-    if (!composerContent.trim() && composerMedia.length === 0) return null;
+    const { composerContent, composerMedia, composerVisibility, composerPoll } = get();
+    if (!composerContent.trim() && composerMedia.length === 0 && !composerPoll) return null;
 
     set({ isPosting: true });
     try {
@@ -214,10 +256,25 @@ export const useSocialStore = create<SocialState>((set, get) => ({
           alt: m.file.name,
         }));
 
+      // Only send the poll if the user actually filled in the question
+      // and at least 2 options. Otherwise the draft was abandoned and
+      // we silently drop it.
+      const pollPayload = composerPoll
+        ? (() => {
+            const q = composerPoll.question.trim();
+            const opts = composerPoll.options.map((o) => o.trim()).filter(Boolean);
+            if (q && opts.length >= 2) {
+              return { question: q, options: opts, multiChoice: composerPoll.multiChoice };
+            }
+            return null;
+          })()
+        : null;
+
       const res = await socialApi.createPost({
         content: composerContent,
         visibility: composerVisibility,
         media: mediaPayload.length > 0 ? mediaPayload : undefined,
+        poll: pollPayload || undefined,
       });
 
       const newPost = res.data as unknown as SocialPost;
@@ -293,7 +350,7 @@ export const useSocialStore = create<SocialState>((set, get) => ({
     set({ isLoadingSaves: true });
     try {
       const res = await socialApi.getSaved({ limit: 20 });
-      set({ savedPosts: res.data.data.map((s) => s.post), isLoadingSaves: false });
+      set({ savedPosts: (res.data.data as any).map((s: any) => s.post), isLoadingSaves: false });
     } catch {
       set({ isLoadingSaves: false });
     }

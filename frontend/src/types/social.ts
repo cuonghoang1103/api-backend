@@ -4,6 +4,7 @@ export interface SocialAuthor {
   id: number;
   username: string;
   fullName: string | null;
+  displayName?: string | null;
   avatarUrl: string | null;
 }
 
@@ -20,6 +21,29 @@ export interface SocialMedia {
   sortOrder: number;
 }
 
+export interface SocialPollOption {
+  id: number;
+  pollId: number;
+  text: string;
+  votesCount: number;
+  sortOrder: number;
+  createdAt: string;
+}
+
+export interface SocialPoll {
+  id: number;
+  postId: number;
+  question: string;
+  multiChoice: boolean;
+  closesAt: string | null;
+  totalVotes: number;
+  createdAt: string;
+  options: SocialPollOption[];
+  // Per-viewer array of option ids the current user has voted for.
+  // Empty array if the viewer hasn't voted or is anonymous.
+  userVotes: number[];
+}
+
 export interface SocialPost {
   id: number;
   content: string;
@@ -32,6 +56,8 @@ export interface SocialPost {
   updatedAt: string;
   author: SocialAuthor;
   media: SocialMedia[];
+  // Optional poll attached to the post (Phase 2).
+  poll: SocialPoll | null;
   likesCount: number;
   commentsCount: number;
   savesCount: number;

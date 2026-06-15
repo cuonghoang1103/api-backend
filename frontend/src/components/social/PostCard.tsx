@@ -1,30 +1,80 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, MessageCircle, Bookmark, Share2, MoreHorizontal, Send } from 'lucide-react';
+import {
+  Heart, MessageCircle, Bookmark, Share2, MoreHorizontal, Send,
+  Repeat2, Trash2, Copy, Flag, Eye, Globe, Users, Lock,
+  Smile, ThumbsUp, Frown, Laugh, Angry, Hand, X,
+} from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
 import { socialApi } from '@/lib/api';
 import { RenderContentWithCode } from '@/components/social/CodeBlock';
+import PostPoll from '@/components/social/PostPoll';
+import { useAuthStore } from '@/store/authStore';
 import type { SocialPost, SocialComment, SocialMedia } from '@/types/social';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
+import { toast } from 'sonner';
 
 interface PostCardProps {
   post: SocialPost;
 }
+
+const VISIBILITY_META: Record<string, { icon: any; label: string; color: string }> = {
+  PUBLIC: { icon: Globe, label: 'Công khai', color: '#94a3b8' },
+  FRIENDS: { icon: Users, label: 'Bạn bè', color: '#22c55e' },
+  PRIVATE: { icon: Lock, label: 'Chỉ mình tôi', color: '#f59e0b' },
+};
+
+const REACTIONS = [
+  { key: 'like', emoji: '👍', label: 'Thích', icon: ThumbsUp, color: '#3b82f6' },
+  { key: 'love', emoji: '❤️', label: 'Yêu thích', icon: Heart, color: '#ec4899' },
+  { key: 'laugh', emoji: '😆', label: 'Haha', icon: Laugh, color: '#eab308' },
+  { key: 'wow', emoji: '😮', label: 'Wow', icon: Smile, color: '#f59e0b' },
+  { key: 'sad', emoji: '😢', label: 'Buồn', icon: Frown, color: '#06b6d4' },
+  { key: 'angry', emoji: '😡', label: 'Phẫn nộ', icon: Angry, color: '#ef4444' },
+];
+
+const MAX_PREVIEW_LENGTH = 600;
 
 export function PostCard({ post }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
-  const { toggleLike, toggleSave, loadComments, commentsByPost, loadMoreComments, commentsHasMoreByPost, isLoadingComments, addOptimisticComment } = useSocialStore();
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [showReactions, setShowReactions] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const longPressTimer = useRef<any>(null);
+  const { toggleLike, toggleSave, loadComments, commentsByPost, loadMoreComments, commentsHasMoreByPost, isLoadingComments, addOptimisticComment, deletePost } = useSocialStore();
+  const { user: currentUser } = useAuthStore();
 
   const comments = commentsByPost[post.id] || [];
   const hasMoreComments = commentsHasMoreByPost[post.id] ?? false;
   const loadingComments = isLoadingComments[post.id] ?? false;
+
+  // Permission flags
+  const isAuthor = (currentUser as any)?.id === post.author.id;
+  const userRoles = (currentUser as any)?.roles || [];
+  const isAdmin = userRoles.some((r: string) =>
+    ['admin', 'ADMIN', 'ROLE_ADMIN', 'SUPER_ADMIN'].includes(r)
+  );
+  const canDelete = isAuthor || isAdmin;
+  const visMeta = VISIBILITY_META[post.visibility] || VISIBILITY_META.PUBLIC;
+  const VisIcon = visMeta.icon;
+  const contentLong = post.content.length > MAX_PREVIEW_LENGTH;
+  const visibleContent = expanded || !contentLong
+    ? post.content
+    : post.content.slice(0, MAX_PREVIEW_LENGTH).trimEnd() + '…';
+
+  // Cleanup the long-press timer on unmount so we don't leak
+  useEffect(() => {
+    return () => {
+      if (longPressTimer.current) clearTimeout(longPressTimer.current);
+    };
+  }, []);
 
   const handleToggleComments = () => {
     if (!showComments) {
@@ -75,6 +125,26 @@ export function PostCard({ post }: PostCardProps) {
     setShowShareMenu(false);
     if (platform === 'copy') {
       navigator.clipboard.writeText(`${window.location.origin}/social/post/${post.id}`);
+      toast.success('Đã sao chép liên kết');
+      return;
+    }
+    if (platform === 'repost') {
+      // Retweet-style share: create a new post with the same content
+      // prefixed by "🔁 Repost from @author". We keep the link back
+      // to the original so credit is preserved.
+      const link = `${window.location.origin}/social/post/${post.id}`;
+      const text = `🔁 Repost từ @${post.author.username}\n\n${post.content.slice(0, 280)}`;
+      const composer = document.querySelector<HTMLTextAreaElement>('textarea[placeholder*="nghĩ"]');
+      if (composer) {
+        composer.value = text;
+        composer.dispatchEvent(new Event('input', { bubbles: true }));
+        composer.focus();
+        composer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        toast.success('Đã điền vào khung soạn — bấm "Đăng" để repost');
+      } else {
+        navigator.clipboard.writeText(`${text}\n\n${link}`);
+        toast.success('Đã sao chép nội dung repost');
+      }
       return;
     }
     socialApi.sharePost(post.id, platform).catch(() => {});
@@ -87,6 +157,17 @@ export function PostCard({ post }: PostCardProps) {
     }
   };
 
+  const handleDelete = async () => {
+    if (!confirm('Bạn có chắc muốn xoá bài viết này?')) return;
+    try {
+      await deletePost(post.id);
+      toast.success('Đã xoá bài viết');
+      setShowMoreMenu(false);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Xoá thất bại');
+    }
+  };
+
   const handleLikeComment = async (commentId: number) => {
     try {
       await socialApi.likeComment(commentId);
@@ -95,9 +176,40 @@ export function PostCard({ post }: PostCardProps) {
     }
   };
 
+  /**
+   * Delete a comment. We hit the backend directly here (not through
+   * the store) because the optimistic list update is bound to the
+   * specific PostCard instance — refetching the whole comment list
+   * on every delete would re-trigger the cursor pagination.
+   */
+  const handleDeleteComment = async (commentId: number) => {
+    if (!confirm('Xoá bình luận này?')) return;
+    try {
+      await socialApi.deleteComment(commentId);
+      setShowComments(false);
+      // Refresh feed to update comment count
+      loadComments(post.id, true);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Xoá bình luận thất bại');
+    }
+  };
+
+  // Long-press to show reactions panel
+  const startLongPress = () => {
+    if (longPressTimer.current) clearTimeout(longPressTimer.current);
+    longPressTimer.current = setTimeout(() => setShowReactions(true), 450);
+  };
+  const cancelLongPress = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
   const authorAvatar = post.author.avatarUrl
     ? post.author.avatarUrl
     : `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.author.username}`;
+  const authorDisplay = post.author.displayName || post.author.fullName || post.author.username;
 
   return (
     <article
@@ -120,60 +232,120 @@ export function PostCard({ post }: PostCardProps) {
       <div className="p-5">
         {/* Author row */}
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             {/* Avatar */}
             <div className="relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-full ring-2 ring-violet-500/20">
               <Image
                 src={authorAvatar}
-                alt={post.author.fullName || post.author.username}
+                alt={authorDisplay}
                 fill
                 className="object-cover"
               />
             </div>
 
-            {/* Name + time */}
-            <div>
-              <p className="font-semibold text-white">
-                {post.author.fullName || post.author.username}
-              </p>
-              <div className="flex items-center gap-2">
-                <p className="text-xs" style={{ color: '#64748b' }}>
-                  @{post.author.username}
+            {/* Name + time + visibility */}
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <p className="font-semibold text-white truncate" title={authorDisplay}>
+                  {authorDisplay}
                 </p>
+                {isAdmin && !isAuthor && (
+                  <span
+                    className="text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md"
+                    style={{ background: 'rgba(234,179,8,0.15)', color: '#facc15', border: '1px solid rgba(234,179,8,0.3)' }}
+                  >
+                    Admin
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-1.5 mt-0.5 text-xs flex-wrap" style={{ color: '#64748b' }}>
+                <span>@{post.author.username}</span>
                 <span style={{ color: '#334155' }}>·</span>
-                <p className="text-xs" style={{ color: '#64748b' }}>
-                  {formatDistanceToNow(new Date(post.createdAt), {
-                    addSuffix: true,
-                    locale: vi,
-                  })}
-                </p>
+                <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true, locale: vi })}</span>
+                <span style={{ color: '#334155' }}>·</span>
+                <span className="inline-flex items-center gap-0.5" style={{ color: visMeta.color }} title={visMeta.label}>
+                  <VisIcon className="h-3 w-3" />
+                </span>
                 {post.locationName && (
                   <>
                     <span style={{ color: '#334155' }}>·</span>
-                    <p className="text-xs" style={{ color: '#64748b' }}>
-                      📍 {post.locationName}
-                    </p>
+                    <span>📍 {post.locationName}</span>
                   </>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Menu */}
-          <button
-            className="rounded-xl p-2 transition-colors"
-            style={{ color: '#64748b' }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-          >
-            <MoreHorizontal size={18} />
-          </button>
+          {/* More menu */}
+          <div className="relative flex-shrink-0">
+            <button
+              className="rounded-xl p-2 transition-colors"
+              style={{ color: '#64748b' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMoreMenu(!showMoreMenu);
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+            >
+              <MoreHorizontal size={18} />
+            </button>
+            <AnimatePresence>
+              {showMoreMenu && (
+                <>
+                  <div className="fixed inset-0 z-30" onClick={() => setShowMoreMenu(false)} />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                    className="absolute right-0 top-full z-40 mt-1 w-44 overflow-hidden rounded-2xl py-1"
+                    style={{ background: 'rgba(15,15,25,0.95)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}
+                  >
+                    <button
+                      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] hover:text-text-primary transition-colors"
+                      onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/social/post/${post.id}`); setShowMoreMenu(false); toast.success('Đã sao chép liên kết'); }}
+                    >
+                      <Copy className="h-3.5 w-3.5" /> Sao chép liên kết
+                    </button>
+                    {canDelete && (
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+                        onClick={handleDelete}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        {isAuthor ? 'Xoá bài viết' : 'Xoá (quyền admin)'}
+                      </button>
+                    )}
+                    {!isAuthor && (
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        onClick={() => { toast.info('Đã gửi báo cáo'); setShowMoreMenu(false); }}
+                      >
+                        <Flag className="h-3.5 w-3.5" /> Báo cáo
+                      </button>
+                    )}
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
-        {/* Content */}
+        {/* Content with "See more" */}
         <div className="mt-3">
-          <RenderContentWithCode content={post.content} />
+          <RenderContentWithCode content={visibleContent} />
+          {contentLong && (
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="mt-1 text-xs font-medium text-neon-violet hover:text-neon-indigo transition-colors"
+            >
+              {expanded ? 'Thu gọn' : 'Xem thêm'}
+            </button>
+          )}
         </div>
+
+        {/* Poll */}
+        {post.poll && <PostPoll postId={post.id} poll={post.poll} />}
 
         {/* Media */}
         {post.media && post.media.length > 0 && (
@@ -185,81 +357,136 @@ export function PostCard({ post }: PostCardProps) {
           className="mt-4 flex items-center gap-1"
           style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}
         >
-          {/* Like */}
-          <ActionButton
-            active={post.isLiked}
-            activeColor="#ec4899"
-            icon={<Heart size={17} fill={post.isLiked ? '#ec4899' : 'none'} />}
-            count={post.likesCount}
-            label="Like"
-            onClick={() => toggleLike(post.id)}
-          />
+          {/* Like (with long-press to choose reaction) */}
+          <div
+            className="relative"
+            onMouseEnter={() => setShowReactions(false)}
+          >
+            <button
+              onClick={() => toggleLike(post.id)}
+              onMouseDown={startLongPress}
+              onMouseUp={cancelLongPress}
+              onMouseLeave={(e) => {
+                cancelLongPress();
+                e.currentTarget.style.background = 'transparent';
+              }}
+              onTouchStart={startLongPress}
+              onTouchEnd={cancelLongPress}
+              className="group inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-colors"
+              style={{ color: post.isLiked ? '#ec4899' : '#94a3b8' }}
+              onMouseEnter={(e) => { if (!post.isLiked) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
+            >
+              <Heart
+                size={16}
+                fill={post.isLiked ? '#ec4899' : 'none'}
+                className="transition-transform group-active:scale-125"
+              />
+              <span className="tabular-nums">{post.likesCount}</span>
+            </button>
+            <AnimatePresence>
+              {showReactions && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 6, scale: 0.9 }}
+                  className="absolute bottom-full left-0 mb-2 flex gap-1 rounded-2xl p-1.5 z-30"
+                  style={{ background: 'rgba(15,15,25,0.95)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}
+                  onMouseLeave={() => setShowReactions(false)}
+                >
+                  {REACTIONS.map((r) => (
+                    <button
+                      key={r.key}
+                      onClick={() => { setShowReactions(false); toggleLike(post.id); }}
+                      className="text-xl hover:scale-125 transition-transform px-1.5"
+                      title={r.label}
+                    >
+                      {r.emoji}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
           {/* Comment */}
           <ActionButton
             active={showComments}
             activeColor="#8B5CF6"
-            icon={<MessageCircle size={17} fill={showComments ? '#8B5CF6' : 'none'} />}
+            icon={<MessageCircle size={16} fill={showComments ? '#8B5CF6' : 'none'} />}
             count={post.commentsCount}
-            label="Comment"
+            label="Bình luận"
             onClick={handleToggleComments}
+          />
+
+          {/* Repost */}
+          <ActionButton
+            active={false}
+            activeColor="#22c55e"
+            icon={<Repeat2 size={16} />}
+            count={0}
+            label="Repost"
+            onClick={() => handleShare('repost')}
           />
 
           {/* Save */}
           <ActionButton
             active={post.isSaved}
             activeColor="#f59e0b"
-            icon={<Bookmark size={17} fill={post.isSaved ? '#f59e0b' : 'none'} />}
+            icon={<Bookmark size={16} fill={post.isSaved ? '#f59e0b' : 'none'} />}
             count={post.savesCount}
-            label="Save"
+            label="Lưu"
             onClick={() => toggleSave(post.id)}
           />
 
-          {/* Share */}
+          {/* Share menu */}
           <div className="relative ml-auto">
             <ActionButton
               active={showShareMenu}
               activeColor="#06b6d4"
-              icon={<Share2 size={17} />}
-              label="Share"
+              icon={<Share2 size={16} />}
+              label="Chia sẻ"
               onClick={() => setShowShareMenu(!showShareMenu)}
             />
             <AnimatePresence>
               {showShareMenu && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 5 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: 5 }}
-                  className="absolute right-0 top-full z-20 mt-1 w-40 overflow-hidden rounded-2xl py-1"
-                  style={{
-                    background: 'rgba(15,15,25,0.95)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    backdropFilter: 'blur(20px)',
-                  }}
-                >
-                  {[
-                    { key: 'copy', label: 'Copy link' },
-                    { key: 'twitter', label: 'Share to X' },
-                    { key: 'facebook', label: 'Share to Facebook' },
-                  ].map((item) => (
-                    <button
-                      key={item.key}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
-                      style={{ color: '#94a3b8' }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                        e.currentTarget.style.color = '#e2e8f0';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'transparent';
-                        e.currentTarget.style.color = '#94a3b8';
-                      }}
-                      onClick={() => handleShare(item.key)}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </motion.div>
+                <>
+                  <div className="fixed inset-0 z-20" onClick={() => setShowShareMenu(false)} />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: 5 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: 5 }}
+                    className="absolute right-0 top-full z-30 mt-1 w-44 overflow-hidden rounded-2xl py-1"
+                    style={{
+                      background: 'rgba(15,15,25,0.95)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      backdropFilter: 'blur(20px)',
+                    }}
+                  >
+                    {[
+                      { key: 'copy', label: 'Sao chép liên kết' },
+                      { key: 'twitter', label: 'Chia sẻ lên X' },
+                      { key: 'facebook', label: 'Chia sẻ lên Facebook' },
+                      { key: 'repost', label: 'Repost về trang cá nhân' },
+                    ].map((item) => (
+                      <button
+                        key={item.key}
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        style={{ color: '#94a3b8' }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                          e.currentTarget.style.color = '#e2e8f0';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'transparent';
+                          e.currentTarget.style.color = '#94a3b8';
+                        }}
+                        onClick={() => handleShare(item.key)}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </motion.div>
+                </>
               )}
             </AnimatePresence>
           </div>
@@ -282,24 +509,30 @@ export function PostCard({ post }: PostCardProps) {
                   <CommentSkeleton />
                 ) : comments.length === 0 ? (
                   <p className="py-2 text-center text-xs" style={{ color: '#475569' }}>
-                    No comments yet. Be the first!
+                    Chưa có bình luận nào. Hãy là người đầu tiên!
                   </p>
                 ) : (
                   <>
-                    {comments.map((comment) => (
-                      <CommentItem
-                        key={comment.id}
-                        comment={comment}
-                        onLike={() => handleLikeComment(comment.id)}
-                      />
-                    ))}
+                    {comments.map((comment) => {
+                      const isCommentAuthor = (currentUser as any)?.id === comment.user.id;
+                      const canDeleteComment = isCommentAuthor || isAdmin;
+                      return (
+                        <CommentItem
+                          key={comment.id}
+                          comment={comment}
+                          onLike={() => handleLikeComment(comment.id)}
+                          canDelete={canDeleteComment}
+                          onDelete={canDeleteComment ? () => handleDeleteComment(comment.id) : undefined}
+                        />
+                      );
+                    })}
                     {hasMoreComments && (
                       <button
                         className="w-full rounded-xl py-2 text-xs font-medium transition-colors"
                         style={{ color: '#8B5CF6' }}
                         onClick={() => loadMoreComments(post.id)}
                       >
-                        Load more comments
+                        Xem thêm bình luận
                       </button>
                     )}
                   </>
@@ -349,7 +582,11 @@ function MediaGrid({ media }: { media: SocialMedia[] }) {
   if (media.length === 1) {
     return (
       <div className="mt-3">
-        <MediaItem item={media[0]} onClick={() => setLightboxSrc(media[0].url)} />
+        <MediaItem
+          item={media[0]}
+          onClick={() => setLightboxSrc(media[0].url)}
+          autoPlayEnabled={media[0].type === 'VIDEO'}
+        />
         {lightboxSrc && (
           <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
         )}
@@ -396,33 +633,108 @@ function MediaGrid({ media }: { media: SocialMedia[] }) {
 function MediaItem({
   item,
   onClick,
+  autoPlayEnabled = false,
 }: {
   item: SocialMedia;
   onClick: () => void;
+  autoPlayEnabled?: boolean;
 }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const containerRef = useRef<HTMLButtonElement | null>(null);
+  const [isInView, setIsInView] = useState(false);
+  const [muted, setMuted] = useState(true);
+
+  // ─── Auto-play on scroll: only when the video cell is at least
+  // 60% visible AND the user hasn't scrolled it out. We use an
+  // IntersectionObserver to avoid expensive scroll-listener math.
+  useEffect(() => {
+    if (!autoPlayEnabled || item.type !== 'VIDEO') return;
+    const el = containerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          setIsInView(e.isIntersecting && e.intersectionRatio >= 0.6);
+        }
+      },
+      { threshold: [0, 0.3, 0.6, 0.9] }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [autoPlayEnabled, item.type]);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (isInView) {
+      // Autoplay may fail (browser policy) but we swallow the error.
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  }, [isInView]);
+
   if (item.type === 'VIDEO') {
     return (
-      <button onClick={onClick} className="relative h-full w-full">
-        <Image
-          src={item.thumbnail || item.url}
-          alt={item.alt || ''}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 600px"
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="flex h-12 w-12 items-center justify-center rounded-full"
-            style={{ background: 'rgba(0,0,0,0.6)' }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-              <path d="M8 5v14l11-7z" />
-            </svg>
+      <button
+        ref={containerRef}
+        onClick={onClick}
+        className="relative h-full w-full overflow-hidden bg-black"
+      >
+        {autoPlayEnabled ? (
+          <video
+            ref={videoRef}
+            src={item.url}
+            poster={item.thumbnail ?? undefined}
+            muted={muted}
+            loop
+            playsInline
+            className="h-full w-full object-cover"
+            onClick={(e) => e.stopPropagation()}
+          />
+        ) : (
+          <Image
+            src={item.thumbnail || item.url}
+            alt={item.alt || ''}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 600px"
+          />
+        )}
+
+        {!autoPlayEnabled && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div
+              className="flex h-12 w-12 items-center justify-center rounded-full"
+              style={{ background: 'rgba(0,0,0,0.6)' }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Mute toggle (only when autoplaying) */}
+        {autoPlayEnabled && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setMuted((m) => !m);
+            }}
+            className="absolute bottom-2 left-2 rounded-md px-1.5 py-0.5 text-[10px] font-medium text-white"
+            style={{ background: 'rgba(0,0,0,0.6)' }}
+            title={muted ? 'Bật tiếng' : 'Tắt tiếng'}
+          >
+            {muted ? '🔇' : '🔊'}
+          </button>
+        )}
+
         {item.duration && (
-          <div className="absolute bottom-2 right-2 rounded-md px-1.5 py-0.5 text-xs font-medium text-white"
-            style={{ background: 'rgba(0,0,0,0.7)' }}>
+          <div
+            className="absolute bottom-2 right-2 rounded-md px-1.5 py-0.5 text-xs font-medium text-white"
+            style={{ background: 'rgba(0,0,0,0.7)' }}
+          >
             {formatDuration(item.duration)}
           </div>
         )}
@@ -484,28 +796,31 @@ function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
 function CommentItem({
   comment,
   onLike,
+  onDelete,
+  canDelete,
 }: {
   comment: SocialComment;
   onLike: () => void;
+  onDelete?: () => void;
+  canDelete?: boolean;
 }) {
   const avatar = comment.user.avatarUrl
     ? comment.user.avatarUrl
     : `https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.user.username}`;
+  const display = comment.user.displayName || comment.user.fullName || comment.user.username;
 
   return (
-    <div className="flex gap-2.5">
+    <div className="flex gap-2.5 group">
       <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full">
-        <Image src={avatar} alt={comment.user.username} width={32} height={32} className="object-cover" />
+        <Image src={avatar} alt={display} width={32} height={32} className="object-cover" />
       </div>
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <div
-          className="inline-block rounded-2xl px-3 py-2"
+          className="inline-block max-w-full rounded-2xl px-3 py-2"
           style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
         >
-          <p className="text-xs font-semibold text-white">
-            {comment.user.fullName || comment.user.username}
-          </p>
-          <p className="mt-0.5 text-sm" style={{ color: '#cbd5e1' }}>
+          <p className="text-xs font-semibold text-white">{display}</p>
+          <p className="mt-0.5 text-sm break-words" style={{ color: '#cbd5e1' }}>
             {comment.content}
           </p>
         </div>
@@ -523,8 +838,17 @@ function CommentItem({
           </span>
           {comment.isEdited && (
             <span className="text-xs" style={{ color: '#334155' }}>
-              (edited)
+              (đã sửa)
             </span>
+          )}
+          {canDelete && onDelete && (
+            <button
+              onClick={onDelete}
+              className="flex items-center gap-1 text-xs transition-colors text-text-muted hover:text-red-400 opacity-0 group-hover:opacity-100"
+              title="Xoá bình luận"
+            >
+              <Trash2 size={11} />
+            </button>
           )}
         </div>
       </div>
@@ -545,7 +869,7 @@ function ActionButton({
   active: boolean;
   activeColor: string;
   icon: React.ReactNode;
-  count: number;
+  count?: number;
   label: string;
   onClick: () => void;
 }) {
@@ -573,7 +897,7 @@ function ActionButton({
       title={label}
     >
       {icon}
-      {count > 0 && <span>{count}</span>}
+      {count != null && count > 0 && <span>{count}</span>}
     </motion.button>
   );
 }

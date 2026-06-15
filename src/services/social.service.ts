@@ -16,6 +16,36 @@
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 
+/**
+ * Returns true if the user has the ADMIN role. Used by delete
+ * endpoints so admins can remove any post/comment on the feed.
+ * We cache the check per-request via a Map because the same
+ * userId can call multiple admin-gated deletes in one request.
+ */
+const adminCheckCache = new Map<number, boolean>();
+async function isUserAdmin(userId: number): Promise<boolean> {
+  if (adminCheckCache.has(userId)) return adminCheckCache.get(userId)!;
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { roles: { include: { role: true } } },
+  });
+  if (!user) {
+    adminCheckCache.set(userId, false);
+    return false;
+  }
+  const isAdmin = user.roles.some((ur) => {
+    const name = ur.role.name.toUpperCase();
+    return name === 'ADMIN' || name === 'ROLE_ADMIN' || name === 'SUPER_ADMIN' || name === 'ROLE_SUPER_ADMIN';
+  });
+  adminCheckCache.set(userId, isAdmin);
+  return isAdmin;
+}
+
+/** Reset the per-request admin cache. Call this from tests. */
+export function _clearAdminCache() {
+  adminCheckCache.clear();
+}
+
 // ─── Types ─────────────────────────────────────────────────────────
 
 export interface CreatePostInput {
@@ -37,6 +67,13 @@ export interface CreatePostInput {
     alt?: string;
     sortOrder?: number;
   }>;
+  // Phase 2 — optional poll attached to the post.
+  poll?: {
+    question: string;
+    options: string[];
+    multiChoice?: boolean;
+    closesAt?: Date;
+  };
 }
 
 export interface FeedOptions {
@@ -56,7 +93,36 @@ export interface CommentInput {
 // ─── Post CRUD ────────────────────────────────────────────────────
 
 export async function createPost(input: CreatePostInput) {
-  const { media, ...postData } = input;
+  const { media, poll, ...postData } = input;
+
+  // Validate poll first so we don't half-create a post with
+  // an invalid poll attached.
+  let pollCreateData: any = undefined;
+  if (poll) {
+    const q = poll.question?.trim();
+    if (!q) throw new AppError('Poll question is required', 400, 'POLL_QUESTION_REQUIRED');
+    if (q.length > 500) throw new AppError('Poll question is too long', 400, 'POLL_QUESTION_TOO_LONG');
+    if (!Array.isArray(poll.options) || poll.options.length < 2 || poll.options.length > 10) {
+      throw new AppError('A poll must have between 2 and 10 options', 400, 'POLL_OPTIONS_RANGE');
+    }
+    const cleaned = poll.options.map((o) => (o ?? '').toString().trim()).filter(Boolean);
+    if (cleaned.length !== poll.options.length) {
+      throw new AppError('Poll options cannot be blank', 400, 'POLL_OPTIONS_BLANK');
+    }
+    if (cleaned.some((o) => o.length > 255)) {
+      throw new AppError('Each poll option must be 255 characters or less', 400, 'POLL_OPTION_TOO_LONG');
+    }
+    pollCreateData = {
+      create: {
+        question: q,
+        multiChoice: !!poll.multiChoice,
+        closesAt: poll.closesAt || undefined,
+        options: {
+          create: cleaned.map((text, sortOrder) => ({ text, sortOrder })),
+        },
+      },
+    };
+  }
 
   const post = await prisma.socialPost.create({
     data: {
@@ -77,6 +143,7 @@ export async function createPost(input: CreatePostInput) {
           })),
         },
       } : undefined,
+      poll: pollCreateData,
     },
     include: {
       author: {
@@ -84,11 +151,15 @@ export async function createPost(input: CreatePostInput) {
           id: true,
           username: true,
           fullName: true,
+          displayName: true,
           avatarUrl: true,
         },
       },
       media: {
         orderBy: { sortOrder: 'asc' as const },
+      },
+      poll: {
+        include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
       _count: {
         select: {
@@ -112,11 +183,15 @@ export async function getPostById(postId: number, currentUserId?: number) {
           id: true,
           username: true,
           fullName: true,
+          displayName: true,
           avatarUrl: true,
         },
       },
       media: {
         orderBy: { sortOrder: 'asc' as const },
+      },
+      poll: {
+        include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
       _count: {
         select: {
@@ -138,8 +213,22 @@ export async function getPostById(postId: number, currentUserId?: number) {
 
   if (!post) throw new AppError('Post not found', 404, 'POST_NOT_FOUND');
 
+  // Augment poll with the viewer's vote(s) so the UI can show the
+  // selected state immediately. Skip for anonymous viewers.
+  let pollAugmented: any = post.poll;
+  if (pollAugmented && currentUserId) {
+    const userVotes = await prisma.socialPollVote.findMany({
+      where: { pollId: pollAugmented.id, userId: currentUserId },
+      select: { optionId: true },
+    });
+    pollAugmented = { ...pollAugmented, userVotes: userVotes.map((v: any) => v.optionId) };
+  } else if (pollAugmented) {
+    pollAugmented = { ...pollAugmented, userVotes: [] };
+  }
+
   return {
     ...post,
+    poll: pollAugmented,
     likesCount: post._count.likes,
     commentsCount: post._count.comments,
     savesCount: post._count.saves,
@@ -160,7 +249,13 @@ export async function deletePost(postId: number, userId: number) {
   });
 
   if (!post) throw new AppError('Post not found', 404, 'POST_NOT_FOUND');
-  if (post.authorId !== userId) throw new AppError('Unauthorized', 403, 'FORBIDDEN');
+
+  // Allow post author OR any user with the ADMIN role to delete.
+  // This implements the requirement "admin có quyền cao nhất trong n,
+  // có thể xoá bài viết của bất kì user hay tài khoản nào".
+  if (post.authorId !== userId && !(await isUserAdmin(userId))) {
+    throw new AppError('Unauthorized', 403, 'FORBIDDEN');
+  }
 
   await prisma.socialPost.delete({ where: { id: postId } });
   return { message: 'Post deleted' };
@@ -217,6 +312,7 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
           id: true,
           username: true,
           fullName: true,
+          displayName: true,
           avatarUrl: true,
         },
       },
@@ -234,6 +330,9 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
           alt: true,
           sortOrder: true,
         },
+      },
+      poll: {
+        include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
       _count: {
         select: {
@@ -257,6 +356,22 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
   const items = hasNextPage ? posts.slice(0, limit) : posts;
   const nextCursor = hasNextPage ? items[items.length - 1]?.id : null;
 
+  // Bulk-load the viewer's poll votes for the visible polls to avoid
+  // an N+1 query. The PostCard needs userVotes to highlight the
+  // selected state in the bars.
+  const pollIds = items.map((p: any) => p.poll?.id).filter((x: any) => Boolean(x));
+  let pollVotesByPollId: Record<number, number[]> = {};
+  if (currentUserId && pollIds.length > 0) {
+    const userVotes = await prisma.socialPollVote.findMany({
+      where: { pollId: { in: pollIds }, userId: currentUserId },
+      select: { pollId: true, optionId: true },
+    });
+    pollVotesByPollId = userVotes.reduce((acc: any, v: any) => {
+      (acc[v.pollId] ||= []).push(v.optionId);
+      return acc;
+    }, {} as Record<number, number[]>);
+  }
+
   const enriched = items.map((post: any) => ({
     id: post.id,
     content: post.content,
@@ -269,6 +384,9 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
     updatedAt: post.updatedAt,
     author: post.author,
     media: post.media,
+    poll: post.poll
+      ? { ...post.poll, userVotes: pollVotesByPollId[post.poll.id] || [] }
+      : null,
     likesCount: post._count?.likes ?? 0,
     commentsCount: post._count?.comments ?? 0,
     savesCount: post._count?.saves ?? 0,
@@ -458,7 +576,11 @@ export async function deleteComment(commentId: number, userId: number) {
   });
 
   if (!comment) throw new AppError('Comment not found', 404, 'COMMENT_NOT_FOUND');
-  if (comment.userId !== userId) throw new AppError('Unauthorized', 403, 'FORBIDDEN');
+
+  // Allow comment author OR any admin to delete.
+  if (comment.userId !== userId && !(await isUserAdmin(userId))) {
+    throw new AppError('Unauthorized', 403, 'FORBIDDEN');
+  }
 
   await prisma.socialComment.delete({ where: { id: commentId } });
 
@@ -622,4 +744,109 @@ export async function sharePost(postId: number, userId: number, platform?: strin
   });
 
   return { shared: true };
+}
+
+// ════════════════════════════════════════════════════════════════
+// Polls (Phase 2)
+// ════════════════════════════════════════════════════════════════
+
+/**
+ * Cast a vote on a poll. Replaces any previous vote if not
+ * multi-choice. Increments total_votes on the poll and votes_count
+ * on the option. The transaction prevents partial writes if the
+ * user double-submits (unique constraint blocks duplicates).
+ */
+export async function votePoll(pollId: number, userId: number, optionIds: number[]) {
+  if (!Array.isArray(optionIds) || optionIds.length === 0) {
+    throw new AppError('At least one option id is required', 400, 'MISSING_OPTIONS');
+  }
+
+  return prisma.$transaction(async (tx) => {
+    const poll = await tx.socialPoll.findUnique({
+      where: { id: pollId },
+      include: { options: true },
+    });
+    if (!poll) throw new AppError('Poll not found', 404, 'POLL_NOT_FOUND');
+
+    if (poll.closesAt && poll.closesAt.getTime() < Date.now()) {
+      throw new AppError('Poll has closed', 400, 'POLL_CLOSED');
+    }
+
+    if (!poll.multiChoice && optionIds.length > 1) {
+      throw new AppError('This poll only allows a single choice', 400, 'POLL_SINGLE_CHOICE');
+    }
+
+    const validIds = new Set(poll.options.map((o: any) => o.id));
+    for (const id of optionIds) {
+      if (!validIds.has(id)) {
+        throw new AppError(`Option ${id} is not part of this poll`, 400, 'INVALID_OPTION');
+      }
+    }
+
+    // Remove previous vote(s) for this user on this poll (re-vote)
+    const previous = await tx.socialPollVote.findMany({
+      where: { pollId, userId },
+    });
+    if (previous.length > 0) {
+      const prevOptionIds = previous.map((v: any) => v.optionId);
+      await tx.socialPollVote.deleteMany({ where: { pollId, userId } });
+      // Decrement counts
+      for (const prevOptId of prevOptionIds) {
+        await tx.socialPollOption.update({
+          where: { id: prevOptId },
+          data: { votesCount: { decrement: 1 } },
+        });
+      }
+      await tx.socialPoll.update({
+        where: { id: pollId },
+        data: { totalVotes: { decrement: previous.length } },
+      });
+    }
+
+    // Apply new votes
+    for (const optionId of optionIds) {
+      await tx.socialPollVote.create({
+        data: { pollId, optionId, userId },
+      });
+      await tx.socialPollOption.update({
+        where: { id: optionId },
+        data: { votesCount: { increment: 1 } },
+      });
+    }
+
+    await tx.socialPoll.update({
+      where: { id: pollId },
+      data: { totalVotes: { increment: optionIds.length } },
+    });
+
+    const fresh = await tx.socialPoll.findUnique({
+      where: { id: pollId },
+      include: {
+        options: { orderBy: { sortOrder: 'asc' } },
+      },
+    });
+    return fresh;
+  });
+}
+
+/**
+ * Returns the poll with the viewer's selection(s) flagged.
+ * Used by the post-card to render the bars + selected state.
+ */
+export async function getPollForViewer(pollId: number, userId?: number) {
+  const poll = await prisma.socialPoll.findUnique({
+    where: { id: pollId },
+    include: { options: { orderBy: { sortOrder: 'asc' } } },
+  });
+  if (!poll) throw new AppError('Poll not found', 404, 'POLL_NOT_FOUND');
+
+  const userVotes = userId
+    ? await prisma.socialPollVote.findMany({ where: { pollId, userId } })
+    : [];
+  const userOptionIds = new Set(userVotes.map((v: any) => v.optionId));
+
+  return {
+    ...poll,
+    userVotes: Array.from(userOptionIds),
+  };
 }

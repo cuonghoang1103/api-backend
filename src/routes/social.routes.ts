@@ -31,6 +31,7 @@
 import { Router, type Response } from 'express';
 import { authenticate, optionalAuth } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { prisma } from '../config/database.js';
 import {
   createPost,
   getPostById,
@@ -49,6 +50,8 @@ import {
   getSavedPosts,
   getSaveFolders,
   sharePost,
+  votePoll,
+  getPollForViewer,
 } from '../services/social.service.js';
 
 const router = Router();
@@ -71,7 +74,7 @@ router.post(
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = getUserId(req);
-      const { content, visibility, latitude, longitude, locationName, media } = req.body;
+      const { content, visibility, latitude, longitude, locationName, media, poll } = req.body;
 
       if (!content?.trim()) {
         throw new AppError('Post content is required', 400, 'MISSING_CONTENT');
@@ -85,6 +88,7 @@ router.post(
         longitude,
         locationName,
         media,
+        poll,
       });
 
       res.status(201).json({ success: true, data: post });
@@ -437,6 +441,142 @@ router.post(
 
       const { platform } = req.body;
       const result = await sharePost(postId, userId, platform);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/social/trending — Top hashtags (last 7 days)
+// ════════════════════════════════════════════════════════════════
+// Lightweight endpoint that scans recent post content for #hashtag
+// mentions. We don't persist hashtags as a separate table yet
+// (the schema isn't in place), so the extraction happens on the
+// fly via a regex. The query is bounded by `since` (default 7d)
+// and the in-memory post cap so the endpoint stays cheap.
+router.get(
+  '/trending',
+  optionalAuth,
+  async (_req: any, res: Response<any>, next) => {
+    try {
+      const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      const posts = await prisma.socialPost.findMany({
+        where: { createdAt: { gte: since }, visibility: 'PUBLIC' },
+        select: { content: true, createdAt: true },
+        orderBy: { createdAt: 'desc' },
+        take: 500,
+      });
+
+      // Count #tag occurrences (case-insensitive, alphanum+underscore+vn)
+      const tagCounts = new Map<string, number>();
+      const tagRegex = /#([\p{L}\p{N}_]{2,50})/gu;
+      for (const p of posts) {
+        const matches = p.content.matchAll(tagRegex);
+        for (const m of matches) {
+          const tag = m[1].toLowerCase();
+          tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+        }
+      }
+
+      const top = Array.from(tagCounts.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([tag, count], idx) => ({
+          id: idx + 1,
+          tag,
+          postsCount: count,
+        }));
+
+      res.json({ success: true, data: top });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/social/suggestions — People to follow
+// ════════════════════════════════════════════════════════════════
+// Returns up to N recently-active users the viewer doesn't follow
+// yet. We don't have a "follow" relationship in the schema, so
+// the suggestion just picks users that have posted recently
+// (excluding the viewer themselves). When we add a follow
+// relation this endpoint can be tightened.
+router.get(
+  '/suggestions',
+  optionalAuth,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string, 10) || 3, 10);
+      const excludeId = req.user?.userId;
+      const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+      // Aggregate posters in the last 30 days, ordered by post count.
+      const grouped = await prisma.socialPost.groupBy({
+        by: ['authorId'],
+        where: {
+          createdAt: { gte: since },
+          visibility: 'PUBLIC',
+          ...(excludeId ? { NOT: { authorId: excludeId } } : {}),
+        },
+        _count: { authorId: true },
+        orderBy: { _count: { authorId: 'desc' } },
+        take: limit,
+      });
+
+      if (grouped.length === 0) {
+        res.json({ success: true, data: [] });
+        return;
+      }
+
+      const users = await prisma.user.findMany({
+        where: { id: { in: grouped.map((g: any) => g.authorId) } },
+        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, bio: true },
+      });
+
+      const data = grouped.map((g: any) => users.find((u: any) => u.id === g.authorId)).filter(Boolean);
+
+      res.json({ success: true, data });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/social/polls/:id/vote — Cast a vote on a poll
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/polls/:id/vote',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      const pollId = parseInt(req.params.id, 10);
+      if (isNaN(pollId)) throw new AppError('Invalid poll ID', 400, 'INVALID_ID');
+
+      const { optionIds } = req.body;
+      const result = await votePoll(pollId, userId, optionIds);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/social/polls/:id — Get poll with viewer state
+// ════════════════════════════════════════════════════════════════
+router.get(
+  '/polls/:id',
+  optionalAuth,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const pollId = parseInt(req.params.id, 10);
+      if (isNaN(pollId)) throw new AppError('Invalid poll ID', 400, 'INVALID_ID');
+      const result = await getPollForViewer(pollId, req.user?.userId);
       res.json({ success: true, data: result });
     } catch (error) {
       next(error);

@@ -3,7 +3,7 @@
 import { useState, useEffect, useLayoutEffect } from 'react';
 import NavigationDock from './NavigationDock';
 
-const DOCK_WIDTH_COLLAPSED = 72;
+const DOCK_WIDTH_COLLAPSED = 60;
 const DOCK_WIDTH_EXPANDED = 280;
 const MQ_MD = '(min-width: 768px)';
 

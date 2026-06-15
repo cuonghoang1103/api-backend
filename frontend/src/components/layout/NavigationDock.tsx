@@ -44,7 +44,7 @@ const SECTIONS = {
   admin: { label: 'System', icon: Settings },
 } as const;
 
-const DOCK_WIDTH_COLLAPSED = 72;
+const DOCK_WIDTH_COLLAPSED = 60;
 const DOCK_WIDTH_EXPANDED = 280;
 const APPLE_EASE: [number, number, number, number] = [0.32, 0.94, 0.6, 1];
 
@@ -396,7 +396,7 @@ function DockRow({
         onClick={onNavigate}
         className={cn(
           'relative flex items-center rounded-xl overflow-hidden select-none',
-          collapsed ? 'justify-center px-2 py-2 mx-2' : 'gap-3 px-3 py-2.5 mx-1',
+          collapsed ? 'justify-center px-1.5 py-1.5 mx-1.5' : 'gap-3 px-3 py-2.5 mx-1',
         )}
         style={{ display: 'flex' }}
       >
@@ -422,7 +422,7 @@ function DockRow({
         <motion.div
           className={cn(
             'flex items-center justify-center rounded-lg shrink-0',
-            collapsed ? 'w-10 h-10' : 'w-9 h-9',
+            collapsed ? 'w-9 h-9' : 'w-9 h-9',
           )}
           animate={{
             backgroundColor: isActive
@@ -441,7 +441,7 @@ function DockRow({
           <Icon
             className={cn(
               'shrink-0 transition-colors duration-150',
-              collapsed ? 'w-[18px] h-[18px]' : 'w-4 h-4',
+              collapsed ? 'w-[16px] h-[16px]' : 'w-4 h-4',
               isActive ? 'text-neon-violet' : isHovered ? 'text-text-primary' : 'text-text-muted',
             )}
           />

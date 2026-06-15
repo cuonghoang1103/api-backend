@@ -9,6 +9,7 @@ import {
   LayoutDashboard, Shield, BookMarked, Receipt,
   Settings, ChevronLeft, Sparkles, UserCircle,
   GraduationCap, ShoppingBag, Gamepad2, Globe,
+  PanelLeft, PanelLeftClose,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -288,6 +289,78 @@ export default function NavigationDock({ isOpen, onToggle }: NavigationDockProps
                     );
                   })}
                 </div>
+
+                {/* Drawer-pin toggle — sits between the main and
+                    user/admin sections so it reads as a separator.
+                    Always visible (no glow / no neon): a single
+                    small icon that flips when the drawer is pinned.
+                    Click opens the drawer; click again closes it
+                    (toggle). Clicking the backdrop while the
+                    drawer is open also closes it — same as the
+                    mobile toggle button below. */}
+                {key === 'main' && isWideViewport && (
+                  <div className="mt-2 space-y-0.5">
+                    {/* Hairline divider — only when expanded so the
+                        rail stays visually clean in its collapsed
+                        form. */}
+                    <div
+                      className={cn(
+                        'mx-3 my-1 h-px bg-white/[0.05] transition-opacity duration-200',
+                        isExpanded ? 'opacity-100' : 'opacity-0',
+                      )}
+                      aria-hidden
+                    />
+                    <motion.button
+                      type="button"
+                      onClick={onToggle}
+                      className={cn(
+                        'group relative flex w-full items-center rounded-xl select-none',
+                        !isExpanded
+                          ? 'justify-center px-1.5 py-1.5 mx-1.5'
+                          : 'gap-3 px-3 py-2 mx-1',
+                      )}
+                      whileHover={{ scale: 1.04 }}
+                      whileTap={{ scale: 0.96 }}
+                      transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+                      aria-label={isOpen ? 'Collapse drawer' : 'Pin drawer open'}
+                      aria-pressed={isOpen}
+                    >
+                      <div className="flex w-9 h-9 shrink-0 items-center justify-center rounded-lg">
+                        {isOpen ? (
+                          <PanelLeftClose
+                            className={cn(
+                              'shrink-0 transition-colors duration-150',
+                              !isExpanded ? 'w-[16px] h-[16px]' : 'w-4 h-4',
+                              'text-text-secondary group-hover:text-text-primary',
+                            )}
+                          />
+                        ) : (
+                          <PanelLeft
+                            className={cn(
+                              'shrink-0 transition-colors duration-150',
+                              !isExpanded ? 'w-[16px] h-[16px]' : 'w-4 h-4',
+                              'text-text-secondary group-hover:text-text-primary',
+                            )}
+                          />
+                        )}
+                      </div>
+                      <AnimatePresence initial={false}>
+                        {isExpanded && (
+                          <motion.span
+                            key="dock-toggle-label"
+                            initial={{ opacity: 0, x: -6 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -6 }}
+                            transition={{ duration: 0.16, ease: APPLE_EASE }}
+                            className="text-[13px] font-medium text-text-secondary group-hover:text-text-primary whitespace-nowrap"
+                          >
+                            {isOpen ? 'Collapse sidebar' : 'Pin sidebar'}
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+                    </motion.button>
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
@@ -408,7 +481,6 @@ function DockRow({
             className="absolute inset-y-0 left-0 w-[3px] rounded-full"
             style={{
               background: 'linear-gradient(180deg, #22d3ee, #8b5cf6)',
-              boxShadow: '0 0 10px rgba(34,211,238,0.6), 0 0 20px rgba(139,92,246,0.3)',
             }}
             transition={{ type: 'spring', stiffness: 350, damping: 30, mass: 0.5 }}
           />
@@ -426,15 +498,10 @@ function DockRow({
           )}
           animate={{
             backgroundColor: isActive
-              ? 'rgba(139,92,246,0.18)'
+              ? 'rgba(139,92,246,0.10)'
               : isHovered
-                ? 'rgba(139,92,246,0.10)'
+                ? 'rgba(255,255,255,0.06)'
                 : 'rgba(255,255,255,0.04)',
-            boxShadow: isActive
-              ? '0 0 14px rgba(139,92,246,0.30)'
-              : isHovered
-                ? '0 0 8px rgba(139,92,246,0.18)'
-                : 'none',
           }}
           transition={{ duration: 0.18, ease: APPLE_EASE }}
         >

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2 } from 'lucide-react';
+import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
@@ -11,14 +11,13 @@ import { api } from '@/lib/api';
 import { toast } from 'sonner';
 import ChatMessages from '@/components/chat/ChatMessages';
 import ChatInput from '@/components/chat/ChatInput';
+import ChatSidebar from '@/components/chat/ChatSidebar';
 import SuggestedPrompts from '@/components/chat/SuggestedPrompts';
 import MatrixRain from '@/components/chat/MatrixRain';
 import QuotaIndicator from '@/components/chat/QuotaIndicator';
 import LottieClient from '@/components/ui/LottieClient';
 import type { ChatMessage, ChatSession } from '@/types';
 import { findStaticResponse, getDefaultGreeting, getFallbackResponse } from '@/lib/ai-static-responses';
-import { format } from 'date-fns';
-import { vi } from 'date-fns/locale';
 
 // ── Robot avatar with LED eyes ────────────────────────────────────
 function RobotAvatar({ isStreaming, robotData }: { isStreaming: boolean; robotData?: object }) {
@@ -470,96 +469,20 @@ export default function ChatPage() {
       {/* Matrix rain background */}
       <MatrixRain />
 
-      {/* ── Persistent left sidebar: chat sessions ───────────────────── */}
-      <aside className="fixed top-16 left-0 bottom-0 w-72 z-20 flex flex-col
-        bg-[#0d1117]/95 backdrop-blur-xl
-        border-r border-[#22d3ee]/10
-        shadow-[4px_0_32px_rgba(0,0,0,0.4)]">
+      {/* ── Persistent left sidebar: chat sessions (dock-style) ──
+          The sidebar is a sibling overlay. It defaults to a 40px
+          vertical rail (icon only) and expands to 288px on click.
+          The main <main> below is padded by the rail's collapsed
+          width — the expanded drawer overlays content rather than
+          reflowing it, so the chat area never gets jankily shoved
+          around when the user opens / collapses the session list. */}
+      <ChatSidebar
+        onDeleteSession={handleDeleteSession}
+        onSelectSession={handleSelectSession}
+      />
 
-        {/* Sidebar header */}
-        <div className="px-4 py-4 border-b border-[#22d3ee]/10 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-[#22d3ee] led-eye" />
-            <span className="font-mono text-sm font-semibold text-[#f8fafc]">
-              <span className="text-[#64748b]">~/</span>
-              <span className="text-[#22d3ee]">sessions</span>
-            </span>
-          </div>
-        </div>
-
-        {/* New session button */}
-        <div className="p-3 shrink-0">
-          <button
-            onClick={() => { setCurrentSessionId(null); setSuggestedPrompts(getContextualPrompts('')); }}
-            className="w-full flex items-center gap-2 px-4 py-2.5
-              bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6]
-              text-white text-sm font-mono font-semibold rounded-xl
-              hover:opacity-90 transition-opacity
-              shadow-[0_0_16px_rgba(34,211,238,0.2)]"
-          >
-            <Plus className="w-4 h-4" />
-            <span>&gt; new_session()</span>
-          </button>
-        </div>
-
-        {/* Session list */}
-        <div className="flex-1 overflow-y-auto px-2 pb-4 space-y-0.5">
-          {sessions.length === 0 && (
-            <p className="text-[#64748b] text-xs text-center py-8 px-2 font-mono">
-              <span className="text-[#22d3ee]">//</span> no sessions found
-            </p>
-          )}
-          {sessions.map((session) => (
-            <button
-              key={session.sessionId}
-              onClick={() => handleSelectSession(session.sessionId)}
-              className={`w-full text-left px-3 py-3 rounded-xl transition-all relative group
-                ${currentSessionId === session.sessionId
-                  ? 'bg-[#22d3ee]/10 text-[#f8fafc] border border-[#22d3ee]/20'
-                  : 'hover:bg-[#22d3ee]/5 text-[#94a3b8] hover:text-[#f8fafc]'
-                }`}
-            >
-              <div className="flex items-start gap-2 pr-8">
-                <MessageSquare className={`w-4 h-4 mt-0.5 flex-shrink-0 ${currentSessionId === session.sessionId ? 'text-[#22d3ee]' : 'text-[#64748b]'}`} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-mono truncate">
-                    <span className="text-[#64748b]">$ </span>
-                    <span className={currentSessionId === session.sessionId ? 'text-[#22d3ee]' : 'text-[#94a3b8]'}>
-                      {session.title || 'New chat'}
-                    </span>
-                  </p>
-                  <p className="text-[10px] font-mono text-[#64748b] mt-0.5">
-                    {format(new Date(session.createdAt), 'dd/MM/yy HH:mm', { locale: vi })}
-                  </p>
-                </div>
-              </div>
-              {currentSessionId === session.sessionId && (
-                <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#22d3ee] led-eye" />
-                </div>
-              )}
-              <button
-                onClick={(e) => { e.stopPropagation(); handleDeleteSession(session.sessionId); }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg
-                  text-[#64748b] hover:text-red-400 hover:bg-red-500/10
-                  opacity-0 group-hover:opacity-100 transition-all"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </button>
-          ))}
-        </div>
-
-        {/* Footer */}
-        <div className="px-4 py-3 border-t border-[#22d3ee]/10 shrink-0">
-          <p className="text-[10px] font-mono text-[#64748b]/50 text-center">
-            <span className="text-[#22d3ee]/40">/* </span>CuongMini-OS v1.0<span className="text-[#22d3ee]/40"> */</span>
-          </p>
-        </div>
-      </aside>
-
-      {/* ── Main chat: centered content area ────────────────────────── */}
-      <main className="pl-72 flex flex-col min-h-[calc(100vh-4rem)]">
+      {/* ── Main chat: padded to clear the 40px collapsed rail ── */}
+      <main className="pl-[40px] flex flex-col min-h-[calc(100vh-4rem)]">
         {/* Cyber Terminal Header */}
         <motion.header
           initial={{ opacity: 0, y: -10 }}

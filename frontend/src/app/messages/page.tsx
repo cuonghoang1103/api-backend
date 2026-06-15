@@ -2,12 +2,15 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+import { Loader2, RefreshCcw, Wifi, WifiOff, AlertCircle, Check, CheckCheck } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
 import ThreadList from '@/components/messaging/ThreadList';
 import MessageList from '@/components/messaging/MessageList';
 import MessageInput from '@/components/messaging/MessageInput';
+import { cn } from '@/lib/utils';
+import { formatDistanceToNow } from 'date-fns';
+import { vi } from 'date-fns/locale';
 
 export default function MessagesPage() {
   return (
@@ -25,7 +28,14 @@ function MessagesPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const auth = useAuthStore();
-  const store = useMessagingStore();
+  const isConnected = useMessagingStore((s) => s.isConnected);
+  const isConnecting = useMessagingStore((s) => s.isConnecting);
+  const initError = useMessagingStore((s) => s.initError);
+  const init = useMessagingStore((s) => s.init);
+  const retry = useMessagingStore((s) => s.retryConnection);
+  const currentThreadId = useMessagingStore((s) => s.currentThreadId);
+  const currentThread = useMessagingStore((s) => s.currentThread);
+  const getPresence = useMessagingStore((s) => s.getPresence);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -40,11 +50,25 @@ function MessagesPageInner() {
     }
   }, [mounted, auth.isAuthenticated, router]);
 
-  // Boot the socket + load threads
+  // Boot the socket + load threads.
+  // Only run once on first authenticated mount. Reconnect is handled
+  // by the socket itself; manual retry uses the retry button.
   useEffect(() => {
     if (!mounted || !auth.isAuthenticated) return;
-    store.init();
-  }, [mounted, auth.isAuthenticated, store]);
+    let cancelled = false;
+    (async () => {
+      await init();
+      // If still not connected after the first attempt, start a
+      // single gentle background retry so the "Đang kết nối" state
+      // does not sit there forever (e.g. cookie race after login).
+      if (cancelled) return;
+      if (!useMessagingStore.getState().isConnected && !useMessagingStore.getState().isConnecting) {
+        setTimeout(() => { if (!cancelled) retry(); }, 2500);
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, auth.isAuthenticated]);
 
   // Optional: auto-open a thread if ?peer=<id> is set
   useEffect(() => {
@@ -52,6 +76,7 @@ function MessagesPageInner() {
     if (!peerId || !auth.isAuthenticated) return;
     const pid = parseInt(peerId, 10);
     if (isNaN(pid)) return;
+    const store = useMessagingStore.getState();
     (async () => {
       try {
         const id = await store.startUserThread(pid);
@@ -76,9 +101,12 @@ function MessagesPageInner() {
       <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-6xl flex-col px-4 py-6">
         <header className="mb-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-text-primary">Tin nhắn</h1>
-          <p className="text-xs text-text-muted">
-            {store.isConnected ? 'Đã kết nối' : 'Đang kết nối...'}
-          </p>
+          <ConnectionPill
+            isConnected={isConnected}
+            isConnecting={isConnecting}
+            initError={initError}
+            onRetry={retry}
+          />
         </header>
 
         <div
@@ -104,12 +132,16 @@ function MessagesPageInner() {
 
           {/* Main chat area */}
           <div className="flex min-w-0 flex-1 flex-col">
-            {store.currentThreadId ? (
+            {currentThreadId ? (
               <>
+                <ThreadHeader
+                  thread={currentThread}
+                  getPresence={getPresence}
+                />
                 <div className="min-h-0 flex-1">
                   <MessageList />
                 </div>
-                <MessageInput />
+                <MessageInput disabled={!isConnected} />
               </>
             ) : (
               <div className="flex h-full flex-col items-center justify-center gap-2 p-8 text-center text-text-muted">
@@ -119,6 +151,116 @@ function MessagesPageInner() {
             )}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Connection status pill (header right) ───────────────────
+function ConnectionPill({
+  isConnected,
+  isConnecting,
+  initError,
+  onRetry,
+}: {
+  isConnected: boolean;
+  isConnecting: boolean;
+  initError: string | null;
+  onRetry: () => void;
+}) {
+  if (isConnected) {
+    return (
+      <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] text-emerald-400">
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+        </span>
+        <span>Đang hoạt động</span>
+      </div>
+    );
+  }
+  if (isConnecting) {
+    return (
+      <div className="flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-1 text-[11px] text-amber-400">
+        <Loader2 className="h-3 w-3 animate-spin" />
+        <span>Đang kết nối...</span>
+      </div>
+    );
+  }
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 rounded-full border border-red-500/20 bg-red-500/10 px-2.5 py-1 text-[11px] text-red-400">
+        <WifiOff className="h-3 w-3" />
+        <span>{initError ? 'Mất kết nối' : 'Ngoại tuyến'}</span>
+      </div>
+      <button
+        onClick={onRetry}
+        className="flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-[11px] text-text-secondary transition-colors hover:bg-white/[0.08] hover:text-text-primary"
+        title="Thử kết nối lại"
+      >
+        <RefreshCcw className="h-3 w-3" />
+        <span>Thử lại</span>
+      </button>
+    </div>
+  );
+}
+
+// ── Thread header (chat top) ───────────────────────────────
+function ThreadHeader({
+  thread,
+  getPresence,
+}: {
+  thread: ReturnType<typeof useMessagingStore.getState>['currentThread'];
+  getPresence: (uid: number) => { online: boolean; lastSeen: number };
+}) {
+  const peer = thread?.peer;
+  const presence = peer ? getPresence(peer.id) : null;
+
+  const statusText = presence?.online
+    ? 'Đang hoạt động'
+    : presence && presence.lastSeen > 0
+      ? `Hoạt động ${formatDistanceToNow(new Date(presence.lastSeen), { addSuffix: false, locale: vi })} trước`
+      : 'Ngoại tuyến';
+
+  return (
+    <div
+      className="flex shrink-0 items-center gap-3 border-b border-white/[0.06] px-4 py-3"
+      style={{ background: 'rgba(0,0,0,0.15)' }}
+    >
+      <div className="relative shrink-0">
+        {peer?.avatarUrl ? (
+          <img src={peer.avatarUrl} alt={peer.displayName} className="h-9 w-9 rounded-full object-cover" />
+        ) : (
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
+            style={{ background: 'linear-gradient(135deg, #06B6D4, #6366F1)' }}
+          >
+            {(peer?.displayName ?? peer?.username ?? '?').charAt(0).toUpperCase()}
+          </div>
+        )}
+        {presence && (
+          <span
+            className={cn(
+              'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full ring-2 ring-[#0a0a14]',
+              presence.online ? 'bg-emerald-400' : 'bg-zinc-500',
+            )}
+            title={statusText}
+          />
+        )}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-semibold text-text-primary">
+          {peer?.displayName ?? peer?.username ?? 'Cuộc trò chuyện'}
+          {thread?.type === 'ADMIN' && (
+            <span className="ml-2 inline-flex items-center rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[9px] font-bold text-amber-400">ADMIN</span>
+          )}
+        </p>
+        <p className={cn(
+          'truncate text-[11px]',
+          presence?.online ? 'text-emerald-400' : 'text-text-muted',
+        )}>
+          {statusText}
+        </p>
       </div>
     </div>
   );

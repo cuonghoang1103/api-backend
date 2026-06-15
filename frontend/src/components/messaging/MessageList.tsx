@@ -88,15 +88,26 @@ export default function MessageList() {
               {format(new Date(g.day), 'dd MMMM yyyy')}
             </span>
           </div>
-          {g.items.map((m) => (
-            <MessageBubble
-              key={m.id}
-              message={m}
-              isOwn={m.senderId === auth.user?.id}
-              canDelete={m.senderId === auth.user?.id}
-              onDelete={() => store.deleteMessage(threadId, m.id)}
-            />
-          ))}
+          {g.items.map((m, idx) => {
+            // Show sender name only for the first message in a run
+            // from the same sender (i.e. when previous message is
+            // from a different sender). For own messages, never
+            // show sender name.
+            const prev = idx > 0 ? g.items[idx - 1] : null;
+            const showSender =
+              m.senderId !== auth.user?.id &&
+              (!prev || prev.senderId !== m.senderId);
+            return (
+              <MessageBubble
+                key={m.id}
+                message={m}
+                isOwn={m.senderId === auth.user?.id}
+                canDelete={m.senderId === auth.user?.id}
+                onDelete={() => store.deleteMessage(threadId, m.id)}
+                showSender={showSender}
+              />
+            );
+          })}
         </div>
       ))}
 

@@ -954,6 +954,10 @@ export const messagingApi = {
   getUnreadCount: () =>
     api.get<ApiResponse<{ count: number }>>('/messages/unread-count'),
 
+  // Online presence (one-shot list of currently-connected user IDs)
+  getOnlineUsers: () =>
+    api.get<ApiResponse<{ userIds: number[] }>>('/messages/online'),
+
   // File upload (multipart)
   uploadAttachment: (file: File) => {
     const fd = new FormData();
@@ -1001,6 +1005,11 @@ export interface MessagingAttachment {
   thumbnailUrl?: string | null;
 }
 
+export interface MessagingReadReceipt {
+  userId: number;
+  readAt: string;
+}
+
 export interface MessagingMessage {
   id: number;
   threadId: number;
@@ -1011,6 +1020,7 @@ export interface MessagingMessage {
   updatedAt: string;
   sender: MessagingPeer;
   attachments: MessagingAttachment[];
+  readBy?: MessagingReadReceipt[];
 }
 
 export interface MessagingUploadedFile {

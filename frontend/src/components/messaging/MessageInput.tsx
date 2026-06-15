@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { Send, Paperclip, X, Loader2, FileText } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { Send, Paperclip, X, Loader2, FileText, Image as ImageIcon, Smile } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { messagingApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 
 interface PendingAttachment {
+  id: string;
   file: File;
+  previewUrl?: string;
   fileId?: number;
   url?: string;
   uploading: boolean;
@@ -16,6 +18,7 @@ interface PendingAttachment {
 }
 
 const MAX_SIZE = 10 * 1024 * 1024;
+const MAX_FILES = 5;
 const ALLOWED_PREFIXES = ['image/', 'application/pdf', 'text/', 'application/zip', 'application/x-zip-compressed'];
 const ALLOWED_EXACT = new Set([
   'application/msword',
@@ -24,12 +27,13 @@ const ALLOWED_EXACT = new Set([
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 ]);
 
-export default function MessageInput() {
+export default function MessageInput({ disabled = false }: { disabled?: boolean }) {
   const store = useMessagingStore();
   const threadId = store.currentThreadId!;
   const [text, setText] = useState('');
   const [pending, setPending] = useState<PendingAttachment[]>([]);
   const [sending, setSending] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -37,7 +41,9 @@ export default function MessageInput() {
   useEffect(() => {
     return () => {
       if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
+      pending.forEach((p) => p.previewUrl && URL.revokeObjectURL(p.previewUrl));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Auto-resize textarea
@@ -50,9 +56,13 @@ export default function MessageInput() {
 
   const handlePickFiles = () => fileInputRef.current?.click();
 
-  const handleFiles = async (files: FileList | null) => {
-    if (!files) return;
-    for (const file of Array.from(files)) {
+  const ingestFiles = useCallback(async (files: FileList | File[]) => {
+    const list = Array.from(files);
+    for (const file of list) {
+      if (pending.length >= MAX_FILES) {
+        toast.error(`Tối đa ${MAX_FILES} file mỗi tin nhắn`);
+        break;
+      }
       if (file.size > MAX_SIZE) {
         toast.error(`${file.name}: vượt quá 10MB`);
         continue;
@@ -61,30 +71,78 @@ export default function MessageInput() {
         toast.error(`${file.name}: định dạng không được hỗ trợ`);
         continue;
       }
-      const entry: PendingAttachment = { file, uploading: true };
+      const id = `${file.name}-${file.size}-${Date.now()}-${Math.random()}`;
+      const previewUrl = file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined;
+      const entry: PendingAttachment = { id, file, previewUrl, uploading: true };
       setPending((p) => [...p, entry]);
       try {
         const res = await messagingApi.uploadAttachment(file);
         const data = res.data.data;
         setPending((p) =>
-          p.map((x) => (x.file === file ? { ...x, fileId: data.fileId, url: data.url, uploading: false } : x)),
+          p.map((x) => (x.id === id ? { ...x, fileId: data.fileId, url: data.url, uploading: false } : x)),
         );
       } catch (e: any) {
         setPending((p) =>
-          p.map((x) => (x.file === file ? { ...x, uploading: false, error: 'Upload thất bại' } : x)),
+          p.map((x) => (x.id === id ? { ...x, uploading: false, error: 'Upload thất bại' } : x)),
         );
+        toast.error(`${file.name}: upload thất bại`);
       }
+    }
+  }, [pending.length]);
+
+  const handleFiles = async (files: FileList | null) => {
+    if (!files) return;
+    await ingestFiles(files);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleRemove = (id: string) => {
+    setPending((p) => {
+      const target = p.find((x) => x.id === id);
+      if (target?.previewUrl) URL.revokeObjectURL(target.previewUrl);
+      return p.filter((x) => x.id !== id);
+    });
+  };
+
+  // ── Drag & drop ─────────────────────────────────────────
+  const handleDragOver = (e: React.DragEvent) => {
+    if (disabled) return;
+    if (e.dataTransfer.types.includes('Files')) {
+      e.preventDefault();
+      setDragOver(true);
+    }
+  };
+  const handleDragLeave = (e: React.DragEvent) => {
+    if (e.currentTarget === e.target) setDragOver(false);
+  };
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    if (disabled) return;
+    if (e.dataTransfer.files?.length) {
+      await ingestFiles(e.dataTransfer.files);
     }
   };
 
-  const handleRemove = (file: File) => {
-    setPending((p) => p.filter((x) => x.file !== file));
+  // ── Paste images from clipboard ───────────────────────
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    if (disabled) return;
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    const files: File[] = [];
+    for (const it of Array.from(items)) {
+      if (it.kind === 'file') {
+        const f = it.getAsFile();
+        if (f) files.push(f);
+      }
+    }
+    if (files.length === 0) return;
+    e.preventDefault();
+    await ingestFiles(files);
   };
 
   const handleTextChange = (v: string) => {
     setText(v);
-    // Emit typing event (debounced — set true on first keystroke,
-    // set false after 3s of no input)
     if (v.length > 0) {
       store.setTyping(threadId, true);
       if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
@@ -96,7 +154,7 @@ export default function MessageInput() {
 
   const handleSend = async () => {
     const trimmed = text.trim();
-    const fileIds = pending.filter((p) => p.fileId).map((p) => p.fileId!) ;
+    const fileIds = pending.filter((p) => p.fileId).map((p) => p.fileId!);
     if (!trimmed && fileIds.length === 0) return;
     if (sending) return;
 
@@ -104,6 +162,8 @@ export default function MessageInput() {
     try {
       await store.sendMessage(threadId, trimmed, fileIds.length ? fileIds : undefined);
       setText('');
+      // Revoke any previews still around
+      pending.forEach((p) => p.previewUrl && URL.revokeObjectURL(p.previewUrl));
       setPending([]);
       if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
       store.setTyping(threadId, false);
@@ -128,7 +188,25 @@ export default function MessageInput() {
     <div
       className="shrink-0 border-t border-white/[0.06] p-2"
       style={{ background: 'rgba(0,0,0,0.2)' }}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
+      {/* Drag overlay */}
+      <AnimatePresence>
+        {dragOver && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-2xl border-2 border-dashed border-cyan-500/60 bg-cyan-500/10 backdrop-blur-sm"
+            style={{ position: 'absolute', inset: '0.5rem' }}
+          >
+            <p className="text-sm font-medium text-cyan-300">Thả file để đính kèm</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Pending attachments strip */}
       <AnimatePresence>
         {pending.length > 0 && (
@@ -140,25 +218,37 @@ export default function MessageInput() {
           >
             {pending.map((p) => (
               <div
-                key={p.file.name + p.file.size}
-                className="flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1 text-[11px]"
+                key={p.id}
+                className="group relative flex items-center gap-1.5 overflow-hidden rounded-lg border border-white/[0.08] bg-white/[0.04] p-1.5 text-[11px]"
               >
                 {p.uploading ? (
-                  <Loader2 className="h-3 w-3 animate-spin text-cyan-400" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded bg-white/[0.04]">
+                    <Loader2 className="h-4 w-4 animate-spin text-cyan-400" />
+                  </div>
                 ) : p.error ? (
-                  <X className="h-3 w-3 text-red-400" />
-                ) : p.file.type.startsWith('image/') && p.url ? (
-                  <img src={p.url} alt="" className="h-5 w-5 rounded object-cover" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded bg-red-500/10">
+                    <X className="h-4 w-4 text-red-400" />
+                  </div>
+                ) : p.previewUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.previewUrl} alt="" className="h-12 w-12 rounded object-cover" />
                 ) : (
-                  <FileText className="h-3 w-3 text-text-muted" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded bg-white/[0.04]">
+                    <FileText className="h-5 w-5 text-text-muted" />
+                  </div>
                 )}
-                <span className="max-w-[120px] truncate">{p.file.name}</span>
+                <div className="min-w-0 max-w-[140px] pr-4">
+                  <p className="truncate text-text-primary">{p.file.name}</p>
+                  <p className="text-[10px] text-text-muted">
+                    {p.error ? <span className="text-red-400">{p.error}</span> : formatBytes(p.file.size)}
+                  </p>
+                </div>
                 <button
-                  onClick={() => handleRemove(p.file)}
-                  className="rounded p-0.5 text-text-muted transition-colors hover:bg-white/[0.06] hover:text-red-400"
+                  onClick={() => handleRemove(p.id)}
+                  className="absolute right-1 top-1 rounded p-0.5 text-text-muted transition-colors hover:bg-white/[0.08] hover:text-red-400"
                   aria-label="Bỏ file"
                 >
-                  <X className="h-2.5 w-2.5" />
+                  <X className="h-3 w-3" />
                 </button>
               </div>
             ))}
@@ -169,8 +259,10 @@ export default function MessageInput() {
       <div className="flex items-end gap-1.5">
         <button
           onClick={handlePickFiles}
-          className="shrink-0 rounded-xl p-2 text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary"
+          disabled={disabled}
+          className="shrink-0 rounded-xl p-2 text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
           aria-label="Đính kèm file"
+          title="Đính kèm file (kéo-thả hoặc dán ảnh)"
         >
           <Paperclip className="h-4 w-4" />
         </button>
@@ -188,13 +280,15 @@ export default function MessageInput() {
           value={text}
           onChange={(e) => handleTextChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Nhập tin nhắn..."
-          className="chat-messages-scroll min-h-[36px] max-h-[120px] flex-1 resize-none rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-cyan-500/40 focus:outline-none"
+          onPaste={handlePaste}
+          disabled={disabled}
+          placeholder={disabled ? 'Đang kết nối...' : 'Nhập tin nhắn...'}
+          className="min-h-[36px] max-h-[120px] flex-1 resize-none rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-cyan-500/40 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           style={{ scrollbarWidth: 'thin' }}
         />
         <button
           onClick={handleSend}
-          disabled={!hasContent || sending}
+          disabled={!hasContent || sending || disabled}
           className="shrink-0 rounded-xl p-2 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
           style={{ background: 'linear-gradient(135deg, #06B6D4, #6366F1)' }}
           aria-label="Gửi"
@@ -207,6 +301,13 @@ export default function MessageInput() {
 }
 
 function isAllowed(mime: string): boolean {
+  if (!mime) return false;
   if (ALLOWED_EXACT.has(mime)) return true;
   return ALLOWED_PREFIXES.some((p) => mime.startsWith(p));
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }

@@ -209,4 +209,14 @@ adminRouter.get('/messages/threads', async (req: Request, res: Response, next: N
   }
 });
 
+// GET /api/v1/messages/online — currently-connected user IDs
+router.get('/online', async (_req: Request, res: Response<ApiResponse<{ userIds: number[] }>>, next: NextFunction) => {
+  try {
+    const { getOnlineUserIds } = await import('../socket/messaging.socket.js');
+    res.json({ success: true, data: { userIds: getOnlineUserIds() } });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export { router, adminRouter };

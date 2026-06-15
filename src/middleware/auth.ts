@@ -168,7 +168,7 @@ export function requireAdmin(role: string = 'ROLE_ADMIN') {
   };
 }
 
-function extractToken(req: Request): string | undefined {
+export function extractToken(req: Request): string | undefined {
   // 1. Authorization header
   const authHeader = req.headers.authorization;
   if (authHeader?.startsWith('Bearer ')) {

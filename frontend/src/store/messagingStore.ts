@@ -37,28 +37,41 @@ interface TypingState {
   byThread: Record<number, Record<number, number>>;
 }
 
+interface PresenceState {
+  // userId -> { online: boolean; lastSeen: number (epoch ms) }
+  // Populated by the local socket's connect/disconnect events for
+  // the current user, plus heartbeat broadcasts for other users.
+  byUserId: Record<number, { online: boolean; lastSeen: number }>;
+}
+
 interface MessagingState {
   threads: MessagingThread[];
   threadsLoaded: boolean;
   threadsLoading: boolean;
   currentThreadId: number | null;
+  currentThread: MessagingThread | null;
   messagesByThread: Record<number, MessagingMessage[]>;
   messagesLoading: boolean;
   hasMoreByThread: Record<number, boolean>;
   unreadTotal: number;
   isWidgetOpen: boolean;
   isConnected: boolean;
-  typing: TypingState;
+  isConnecting: boolean;
+  lastConnectAttempt: number;
   initError: string | null;
+  typing: TypingState;
+  presence: PresenceState;
 
   // Lifecycle
   init: () => Promise<void>;
   shutdown: () => void;
+  retryConnection: () => Promise<void>;
   setWidgetOpen: (open: boolean) => void;
 
   // Threads
   loadThreads: () => Promise<void>;
   refreshThreadSummary: (threadId: number) => Promise<void>;
+  loadOnlineUsers: () => Promise<void>;
 
   // Open / switch thread
   openThread: (threadId: number) => Promise<void>;
@@ -73,10 +86,14 @@ interface MessagingState {
   markRead: (threadId: number) => Promise<void>;
   setTyping: (threadId: number, isTyping: boolean) => void;
 
+  // Presence
+  getPresence: (userId: number) => { online: boolean; lastSeen: number };
+
   // Internal socket handlers (called from socket lib)
   applyIncomingMessage: (threadId: number, message: MessagingMessage) => void;
-  applyReadReceipt: (threadId: number, readerId: number) => void;
+  applyReadReceipt: (threadId: number, readerId: number, readAt?: string) => void;
   applyThreadUpdated: (threadId: number) => void;
+  applyPeerPresence: (userId: number, online: boolean, lastSeen: number) => void;
   onConnectionChange: (connected: boolean) => void;
 }
 
@@ -87,53 +104,78 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   threadsLoaded: false,
   threadsLoading: false,
   currentThreadId: null,
+  currentThread: null,
   messagesByThread: {},
   messagesLoading: false,
   hasMoreByThread: {},
   unreadTotal: 0,
   isWidgetOpen: false,
   isConnected: false,
-  typing: { byThread: {} },
+  isConnecting: false,
+  lastConnectAttempt: 0,
   initError: null,
+  typing: { byThread: {} },
+  presence: { byUserId: {} },
 
   async init() {
     const auth = useAuthStore.getState();
     if (!auth.isAuthenticated) return;
-    if (getSocket()) return; // already connected
+    if (getSocket()?.connected) return; // already connected
+    // De-dupe in-flight init calls
+    if (get().isConnecting) return;
 
-    set({ initError: null });
+    set({ isConnecting: true, initError: null, lastConnectAttempt: Date.now() });
     try {
       await connectSocket();
-      // Wire socket events into the store once
       const socket = getSocket();
       if (socket) {
-        socket.on('thread:new-message', (payload: { threadId: number; message: MessagingMessage }) => {
-          get().applyIncomingMessage(payload.threadId, payload.message);
-        });
-        socket.on('thread:read', (payload: { threadId: number; readerId: number }) => {
-          get().applyReadReceipt(payload.threadId, payload.readerId);
-        });
-        socket.on('thread:updated', (payload: { threadId: number }) => {
-          get().applyThreadUpdated(payload.threadId);
-        });
-        socket.on('thread:typing', (payload: { threadId: number; userId: number; isTyping: boolean }) => {
-          const cur = get().typing.byThread[payload.threadId] ?? {};
-          const next = { ...cur };
-          if (payload.isTyping) {
-            next[payload.userId] = Date.now() + TYPING_TIMEOUT_MS;
-          } else {
-            delete next[payload.userId];
-          }
-          set((s) => ({ typing: { byThread: { ...s.typing.byThread, [payload.threadId]: next } } }));
-        });
-        socket.on('connect', () => get().onConnectionChange(true));
-        socket.on('disconnect', () => get().onConnectionChange(false));
+        // Wire socket events into the store once
+        if (!(socket as any)._messagingWired) {
+          (socket as any)._messagingWired = true;
+          socket.on('thread:new-message', (payload: { threadId: number; message: MessagingMessage }) => {
+            get().applyIncomingMessage(payload.threadId, payload.message);
+          });
+          socket.on('thread:read', (payload: { threadId: number; readerId: number; readAt?: string | Date }) => {
+            get().applyReadReceipt(payload.threadId, payload.readerId, payload.readAt as any);
+          });
+          socket.on('thread:updated', (payload: { threadId: number }) => {
+            get().applyThreadUpdated(payload.threadId);
+          });
+          socket.on('thread:typing', (payload: { threadId: number; userId: number; isTyping: boolean }) => {
+            const cur = get().typing.byThread[payload.threadId] ?? {};
+            const next = { ...cur };
+            if (payload.isTyping) {
+              next[payload.userId] = Date.now() + TYPING_TIMEOUT_MS;
+            } else {
+              delete next[payload.userId];
+            }
+            set((s) => ({ typing: { byThread: { ...s.typing.byThread, [payload.threadId]: next } } }));
+          });
+          socket.on('presence:update', (payload: { userId: number; online: boolean; lastSeen: number }) => {
+            get().applyPeerPresence(payload.userId, payload.online, payload.lastSeen);
+          });
+          socket.on('connect', () => get().onConnectionChange(true));
+          socket.on('disconnect', () => get().onConnectionChange(false));
+        }
       }
       // Initial data load
-      await Promise.all([get().loadThreads(), get().refreshUnread()]);
+      await Promise.all([get().loadThreads(), get().refreshUnread(), get().loadOnlineUsers()]);
+      set({ isConnecting: false, initError: null });
     } catch (e: any) {
-      set({ initError: e?.message ?? 'Failed to connect to chat server' });
+      set({
+        isConnecting: false,
+        isConnected: false,
+        initError: e?.message ?? 'Failed to connect to chat server',
+      });
     }
+  },
+
+  async retryConnection() {
+    // Force a fresh connection: tear down the current socket, then init.
+    if (get().isConnecting) return;
+    try { disconnectSocket(); } catch {}
+    set({ isConnected: false, initError: null });
+    await get().init();
   },
 
   shutdown() {
@@ -142,11 +184,16 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       threads: [],
       threadsLoaded: false,
       currentThreadId: null,
+      currentThread: null,
       messagesByThread: {},
       hasMoreByThread: {},
       unreadTotal: 0,
       isWidgetOpen: false,
       isConnected: false,
+      isConnecting: false,
+      initError: null,
+      typing: { byThread: {} },
+      presence: { byUserId: {} },
     });
   },
 
@@ -186,9 +233,38 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     }
   },
 
+  async loadOnlineUsers() {
+    try {
+      const res = await messagingApi.getOnlineUsers();
+      const ids = res.data.data?.userIds ?? [];
+      const now = Date.now();
+      set((s) => {
+        const next = { ...s.presence.byUserId };
+        // Mark everyone from the snapshot as online
+        for (const id of ids) next[id] = { online: true, lastSeen: now };
+        // Anyone NOT in the snapshot who we previously thought was
+        // online becomes offline with the time of this snapshot
+        for (const idStr of Object.keys(next)) {
+          const id = Number(idStr);
+          if (!ids.includes(id) && next[id]?.online) {
+            next[id] = { online: false, lastSeen: now };
+          }
+        }
+        return { presence: { byUserId: next } };
+      });
+    } catch {
+      // ignore
+    }
+  },
+
   async openThread(threadId) {
     set({ currentThreadId: threadId, isWidgetOpen: true });
     joinThread(threadId);
+
+    // Try to surface the thread detail immediately if we have it
+    // in the sidebar cache — otherwise fetch in the background.
+    const cached = get().threads.find((t) => t.id === threadId) ?? null;
+    if (cached) set({ currentThread: cached });
 
     // Lazy-load the thread detail if we don't have messages yet
     if (!get().messagesByThread[threadId]) {
@@ -208,6 +284,14 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       }
     } else {
       get().markRead(threadId);
+    }
+
+    // Refresh the thread header info (last message preview, peer)
+    try {
+      const res = await messagingApi.getThread(threadId);
+      set({ currentThread: res.data.data as MessagingThread });
+    } catch {
+      // Best effort
     }
   },
 
@@ -271,6 +355,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
         avatarUrl: auth.user?.avatarUrl ?? null,
       },
       attachments: [], // Real attachments are added after the server roundtrip
+      readBy: [],
     };
     set((s) => ({
       messagesByThread: {
@@ -342,6 +427,15 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     emitTyping(threadId, isTyping);
   },
 
+  getPresence(userId) {
+    const auth = useAuthStore.getState();
+    if (auth.user?.id === userId) {
+      // Self: presence is always online (we are running this code).
+      return { online: true, lastSeen: Date.now() };
+    }
+    return get().presence.byUserId[userId] ?? { online: false, lastSeen: 0 };
+  },
+
   applyIncomingMessage(threadId, message) {
     const auth = useAuthStore.getState();
     const isOwn = message.senderId === auth.user?.id;
@@ -395,14 +489,30 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     }
   },
 
-  applyReadReceipt(threadId, readerId) {
+  applyReadReceipt(threadId, readerId, readAt) {
     const auth = useAuthStore.getState();
     if (readerId === auth.user?.id) return;
-    set((s) => ({
-      threads: s.threads.map((t) =>
+    const ts = readAt ? new Date(readAt).getTime() : Date.now();
+    set((s) => {
+      // Update thread unread in sidebar
+      const newThreads = s.threads.map((t) =>
         t.id === threadId ? { ...t, unreadCount: 0 } : t,
-      ),
-    }));
+      );
+      // Stamp every own message in this thread as "read by readerId"
+      // (track the latest read timestamp; we only need to know the
+      // last time it was read to render single/double-tick)
+      const newMessages = { ...s.messagesByThread };
+      const cur = newMessages[threadId];
+      if (cur) {
+        newMessages[threadId] = cur.map((m) => {
+          if (m.senderId !== auth.user?.id) return m;
+          const existing = m.readBy ?? [];
+          if (existing.some((r) => r.userId === readerId)) return m;
+          return { ...m, readBy: [...existing, { userId: readerId, readAt: new Date(ts).toISOString() }] };
+        });
+      }
+      return { threads: newThreads, messagesByThread: newMessages };
+    });
   },
 
   applyThreadUpdated(threadId) {
@@ -411,12 +521,36 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     get().refreshUnread();
   },
 
+  applyPeerPresence(userId, online, lastSeen) {
+    set((s) => ({
+      presence: {
+        byUserId: { ...s.presence.byUserId, [userId]: { online, lastSeen } },
+      },
+    }));
+  },
+
   onConnectionChange(connected) {
-    set({ isConnected: connected });
+    set({ isConnected: connected, isConnecting: false });
     if (connected) {
       // Re-join active thread room after reconnect
       const t = get().currentThreadId;
       if (t) joinThread(t);
+      // Refresh the online-user list — peers may have come/gone
+      // while we were disconnected.
+      get().loadOnlineUsers();
+    } else {
+      // Stamp own last-seen so the peer UI knows we just went offline
+      const auth = useAuthStore.getState();
+      if (auth.user?.id) {
+        set((s) => ({
+          presence: {
+            byUserId: {
+              ...s.presence.byUserId,
+              [auth.user!.id]: { online: false, lastSeen: Date.now() },
+            },
+          },
+        }));
+      }
     }
   },
 }));

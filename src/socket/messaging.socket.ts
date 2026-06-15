@@ -23,12 +23,13 @@
  */
 
 import type { Server as HttpServer } from 'http';
+import type { Request } from 'express';
 import { Server as IOServer, type Socket } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/env.js';
 import { prisma } from '../config/database.js';
 import { UnauthorizedError } from '../middleware/errorHandler.js';
-import type { JwtPayload } from '../middleware/auth.js';
+import { extractToken, type JwtPayload } from '../middleware/auth.js';
 
 export interface MessageEventPayload {
   threadId: number;
@@ -85,6 +86,17 @@ function buildThreadRoom(payload: unknown): string {
 }
 
 /**
+ * Track the set of user IDs currently connected. Used so we can
+ * tell a freshly-connected client "user X is online" and tell
+ * peers when a user goes offline.
+ */
+const onlineUserIds = new Set<number>();
+
+export function getOnlineUserIds(): number[] {
+  return Array.from(onlineUserIds);
+}
+
+/**
  * Attach a Socket.IO server to the existing HTTP server. Idempotent
  * — calling twice is a no-op so hot reload doesn't double-bind.
  */
@@ -106,12 +118,14 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     pingTimeout: 60000,
   });
 
-  // Auth middleware: read JWT from `socket.handshake.auth.token`,
-  // verify roleVersion against the DB, and reject mismatches.
+  // Auth middleware: read JWT from the same places the Express
+  // middleware does (auth.token, Authorization header, or the
+  // httpOnly `backend_token` cookie via `extractToken`). The
+  // cookie path is the production case — the JWT lives in an
+  // httpOnly cookie and is never exposed to JS.
   io.use(async (socket, next) => {
     try {
-      const token = (socket.handshake.auth?.token as string | undefined) ??
-        (socket.handshake.headers['authorization'] as string | undefined)?.replace(/^Bearer\s+/i, '');
+      const token = extractToken(socket.request as unknown as Request);
       if (!token) {
         return next(new UnauthorizedError('No authentication token provided'));
       }
@@ -147,6 +161,23 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
       socket.join(`admin:${user.id}`);
     }
 
+    // Track this connection. A user can be connected from multiple
+    // tabs/devices — only mark them offline once every connection
+    // for that user has closed.
+    const wasOffline = !onlineUserIds.has(user.id);
+    onlineUserIds.add(user.id);
+    socket.data.isLastSocket = false;
+
+    if (wasOffline) {
+      // Broadcast "came online" to everyone (cheap — one event per
+      // status change, not per socket).
+      socket.broadcast.emit('presence:update', {
+        userId: user.id,
+        online: true,
+        lastSeen: Date.now(),
+      });
+    }
+
     // Client can opt-in to a thread room explicitly (e.g. when the
     // user opens the panel for that thread). Idempotent.
     socket.on('thread:join', (threadId: number) => {
@@ -165,6 +196,22 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
         userId: user.id,
         isTyping: !!payload.isTyping,
       });
+    });
+
+    socket.on('disconnect', () => {
+      // Only mark offline if this was the last open socket for the
+      // user (multi-tab case).
+      const socketsForUser = Array.from(io?.sockets.sockets.values() ?? [])
+        .filter((s) => (s.data.user as { id: number } | undefined)?.id === user.id);
+      if (socketsForUser.length === 0) {
+        onlineUserIds.delete(user.id);
+        // Broadcast "went offline" to everyone
+        io?.emit('presence:update', {
+          userId: user.id,
+          online: false,
+          lastSeen: Date.now(),
+        });
+      }
     });
   });
 

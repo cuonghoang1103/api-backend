@@ -25,7 +25,7 @@ import {
   Link as LinkIcon,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
-import { socialApi } from '@/lib/api';
+import { socialApi, fileApi } from '@/lib/api';
 import type { MediaUploadItem } from '@/types/social';
 import { toast } from 'sonner';
 
@@ -178,57 +178,92 @@ export function PostComposer() {
   // drag-and-drop overlay. We bound concurrent uploads to 6 to
   // keep the grid preview manageable; if the user drops more we
   // queue the rest and start them as the earlier ones finish.
+  //
+  // Real upload flow:
+  //   1. POST /api/v1/files/upload with the File and `category`
+  //      (videos use category='videos' so the backend applies the
+  //      video size/format allow-list).
+  //   2. Backend returns { url, ... } pointing to the stored file.
+  //   3. We replace the local `preview` blob URL with the real
+  //      `url` and emit progress 100.
+  //
+  // The earlier implementation assigned `url = preview` (a blob
+  // URL) which is only valid in the user's own browser — other
+  // viewers saw broken images and the renderer crashed on
+  // "reading 'length' of undefined" once it tried to render
+  // the post.
   const handleFiles = useCallback(
     async (files: File[]) => {
       const limited = files.slice(0, 6);
       for (const file of limited) {
-      if (file.size > 50 * 1024 * 1024) {
-        setPostError('File too large (max 50MB)');
-        continue;
-      }
+        if (file.size > 50 * 1024 * 1024) {
+          setPostError('File too large (max 50MB)');
+          continue;
+        }
 
-      const isVideo = file.type.startsWith('video/');
-      const id = `upload-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        const isVideo = file.type.startsWith('video/');
+        const id = `upload-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-      const preview = URL.createObjectURL(file);
-      const item: MediaUploadItem = {
-        id,
-        file,
-        preview,
-        type: isVideo ? 'VIDEO' : 'IMAGE',
-        progress: 0,
-      };
-      addComposerMedia([item]);
+        const preview = URL.createObjectURL(file);
+        const item: MediaUploadItem = {
+          id,
+          file,
+          preview,
+          type: isVideo ? 'VIDEO' : 'IMAGE',
+          progress: 0,
+        };
+        addComposerMedia([item]);
 
-      // Get dimensions for images
-      if (!isVideo) {
-        const img = document.createElement('img');
-        img.onload = () => {
+        // Get dimensions for images so the renderer can lay out
+        // the grid correctly.
+        if (!isVideo) {
+          const img = document.createElement('img');
+          img.onload = () => {
+            useSocialStore.setState((s) => ({
+              composerMedia: s.composerMedia.map((m) =>
+                m.id === id ? { ...m, width: img.naturalWidth, height: img.naturalHeight } : m
+              ),
+            }));
+          };
+          img.src = preview;
+        }
+
+        // Real upload. We report a coarse progress while the
+        // request is in flight — browser-side XHR progress would
+        // be more accurate but axios progress events require
+        // additional wiring we don't need for a 50MB cap.
+        useSocialStore.setState((s) => ({
+          composerMedia: s.composerMedia.map((m) => (m.id === id ? { ...m, progress: 25 } : m)),
+        }));
+        try {
+          const res = await fileApi.upload(file, isVideo ? 'video' : 'images');
+          const url = res.data?.data?.url;
+          if (!url) {
+            throw new Error('Upload response missing url');
+          }
           useSocialStore.setState((s) => ({
             composerMedia: s.composerMedia.map((m) =>
-              m.id === id ? { ...m, width: img.naturalWidth, height: img.naturalHeight } : m
+              m.id === id
+                ? { ...m, progress: 100, url, thumbnail: isVideo ? preview : url }
+                : m
             ),
           }));
-        };
-        img.src = preview;
+        } catch (err: any) {
+          // Roll back: drop the failed item so it never ships
+          // with the post and surface a toast.
+          useSocialStore.setState((s) => ({
+            composerMedia: s.composerMedia.filter((m) => m.id !== id),
+          }));
+          try {
+            URL.revokeObjectURL(preview);
+          } catch {}
+          const msg = err?.userFriendlyMessage || err?.message || 'Upload failed';
+          toast.error(`Không thể tải lên ${file.name}: ${msg}`);
+        }
       }
-
-      // Simulate upload progress (real upload goes through signed URL)
-      for (let p = 0; p <= 100; p += 20) {
-        await new Promise((r) => setTimeout(r, 100));
-        useSocialStore.setState((s) => ({
-          composerMedia: s.composerMedia.map((m) => (m.id === id ? { ...m, progress: p } : m)),
-        }));
-      }
-
-      // Mark as done (in real implementation, upload to signed URL here)
-      useSocialStore.setState((s) => ({
-        composerMedia: s.composerMedia.map((m) =>
-          m.id === id ? { ...m, progress: 100, url: preview } : m
-        ),
-      }));
-    }
-  }, [addComposerMedia]);
+    },
+    [addComposerMedia],
+  );
 
   // ─── Hashtag / mention helpers ───────────────────────────────────
   // When the user types @ or # we surface a tiny helper note so

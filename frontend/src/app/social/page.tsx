@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { useSocialStore } from '@/store/socialStore';
 import { PostComposer } from '@/components/social/PostComposer';
 import { PostCard } from '@/components/social/PostCard';
@@ -12,6 +12,23 @@ import SocialBackground from '@/components/social/SocialBackground';
 export default function SocialPage() {
   const { posts, loadFeed, loadMore, isLoadingFeed, isLoadingMore, hasNextPage, error } =
     useSocialStore();
+
+  // Track whether the NavigationDock is open so we can push the page
+  // content left and avoid the panel covering the header / composer.
+  const [dockOpen, setDockOpen] = useState(false);
+  useEffect(() => {
+    const saved = sessionStorage.getItem('dock-open');
+    if (saved === 'true') setDockOpen(true);
+    const handler = () => {
+      setDockOpen(sessionStorage.getItem('dock-open') === 'true');
+    };
+    window.addEventListener('storage', handler);
+    window.addEventListener('focus', handler);
+    return () => {
+      window.removeEventListener('storage', handler);
+      window.removeEventListener('focus', handler);
+    };
+  }, []);
 
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -63,8 +80,16 @@ export default function SocialPage() {
           - Centre: feed (600-700px max-width for comfortable reading)
           - Right: trending/AI widget (hidden on small screens)
           - On <lg: single-column centred feed
+
+          When the NavigationDock is open (280px wide), the left edge
+          of the feed gets covered. We push the grid to the right so
+          the Feed header + composer are never hidden.
        */}
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-6">
+      <div
+        className={`relative z-10 mx-auto max-w-7xl px-4 py-6 transition-[padding-left] duration-300 ${
+          dockOpen ? 'lg:pl-[calc(280px+1.5rem)]' : ''
+        }`}
+      >
         <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)_300px]">
           {/* Left sidebar (icons) */}
           <div className="hidden lg:block">

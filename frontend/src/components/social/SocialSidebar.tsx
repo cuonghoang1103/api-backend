@@ -14,6 +14,7 @@ import {
   Users,
   Music,
   Code2,
+  GraduationCap,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useEffect, useState } from 'react';
@@ -60,6 +61,7 @@ export default function SocialSidebar({
     { href: '/blog', label: 'Blog', icon: Sparkles },
     { href: '/projects', label: 'Projects', icon: Code2 },
     { href: '/music', label: 'Music', icon: Music },
+    { href: '/courses', label: 'Courses', icon: GraduationCap },
   ];
 
   return (

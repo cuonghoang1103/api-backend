@@ -49,7 +49,7 @@ export default function Navbar() {
   const { getTotalItems, openDrawer } = useCartStore();
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
   const initMessaging = useMessagingStore((s) => s.init);
-  const disconnectMessaging = useMessagingStore((s) => s.disconnect);
+  const disconnectMessaging = useMessagingStore((s) => s.shutdown);
   const [isScrolled, setIsScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);

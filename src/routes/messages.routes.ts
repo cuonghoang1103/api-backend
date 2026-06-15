@@ -173,11 +173,11 @@ router.post(
       if (req.file.size > 10 * 1024 * 1024) {
         throw new AppError('File exceeds 10MB limit', 413, 'FILE_TOO_LARGE');
       }
-      // Re-use the existing service. `category='documents'` is
-      // a conservative default; the service auto-detects the
-      // actual mime category and validates against the right
-      // allowlist.
-      const result = await uploadService.uploadFile(req.file, 'documents', req.userId);
+      // Re-use the existing service. Pass an empty category so the
+      // service auto-detects the right allowlist (images, audio,
+      // video, or documents) from the file's mime type. Hard-coding
+      // 'documents' here would reject any image/* upload.
+      const result = await uploadService.uploadFile(req.file, '' as any, req.userId);
       res.status(201).json({
         success: true,
         data: {

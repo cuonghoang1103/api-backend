@@ -89,7 +89,7 @@ export default function ChatPage() {
   // change. If the user reports "no change" again, they
   // can read this ribbon and instantly know whether the
   // browser is on the new build.
-  const BUILD_TAG = 'chat-v7-icons-only-navbar-2026-06-16T03:50Z-pending';
+  const BUILD_TAG = 'chat-v8-navbar-fb-tooltip-2026-06-16T04:05Z-pending';
   const [showBuildTag, setShowBuildTag] = useState(false);
   useEffect(() => {
     if (typeof window === 'undefined') return;

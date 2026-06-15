@@ -200,15 +200,18 @@ export default function Navbar() {
         }`}
         style={{ left: 'var(--dock-shift, 0px)' }}
       >
-        <div className="h-full pl-2 pr-2 flex items-center justify-between gap-1.5">
+        <div className="h-full pl-4 pr-4 flex items-center justify-between gap-1.5">
 
-            {/* Left: Logo (icon only) */}
-            <Link href="/" className="flex items-center shrink-0 group">
+            {/* Left: Logo (avatar + wordmark) */}
+            <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
               <img
                 src="/images/avatar.png"
                 alt="CuongHoang"
                 className="w-8 h-8 rounded-xl object-cover ring-1 ring-neon-violet/30 group-hover:ring-neon-violet/60 transition-all"
               />
+              <span className="font-heading font-bold text-sm text-text-primary hidden sm:block group-hover:text-neon-violet transition-colors">
+                CuongHoang
+              </span>
             </Link>
 
             {/* Center: nav links — icons only, no labels. */}
@@ -436,6 +439,7 @@ function TopNavLink({
 }) {
   return (
     <div
+      className="relative"
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >
@@ -494,6 +498,46 @@ function TopNavLink({
           />
         )}
       </Link>
+
+      {/* Facebook-style floating tooltip — appears below the icon
+          on hover, with a small arrow (▼) pointing up at the icon.
+          Same paradigm as the Facebook chat list (image 2 from
+          the user). Tooltip is wrapped in AnimatePresence so it
+          fades in / out with a tiny translate. */}
+      <AnimatePresence>
+        {isHovered && (
+          <motion.div
+            key="topnav-tip"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.15, ease: [0.32, 0.94, 0.6, 1] }}
+            className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50"
+          >
+            <div className="relative">
+              {/* Tooltip body — Facebook chat-list style. */}
+              <div
+                className="px-2.5 py-1 rounded-md
+                  bg-black/90 text-white text-[12px] font-semibold
+                  whitespace-nowrap shadow-[0_4px_12px_rgba(0,0,0,0.4)]
+                  border border-white/10"
+              >
+                {label}
+              </div>
+              {/* Upward arrow — a small rotated square that
+                  points at the icon. The 2px shift keeps the
+                  tip glued to the tooltip body so the rotation
+                  doesn't leave a hairline gap. */}
+              <div
+                className="absolute -top-1 left-1/2 -translate-x-1/2
+                  w-2 h-2 rotate-45
+                  bg-black/90 border-l border-t border-white/10"
+                style={{ marginTop: '1px' }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -49,6 +49,7 @@ export interface ReadEventPayload {
 export interface MessagingEmitter {
   emit(event: 'thread:new-message', payload: MessageEventPayload): void;
   emit(event: 'thread:read', payload: ReadEventPayload): void;
+  emit(event: 'message:updated' | 'thread:updated', payload: unknown): void;
   emit(event: string, payload: unknown): void;
 }
 
@@ -65,32 +66,34 @@ export function registerSocketEmitter(): MessagingEmitter | null {
   if (!emitter && io) {
     emitter = {
       emit(event: string, payload: unknown) {
+        const p = payload as {
+          threadId?: number;
+          threadType?: string;
+          participantIds?: number[];
+        };
+        if (!p || !p.threadId) return;
+
         // Broadcast the event into the per-thread room so anyone
         // who has joined the conversation (both the sender's
         // other devices and the recipient) sees the new
-        // message in real time. Previously this line was a
-        // no-op (`.to(room)` returns a BroadcastOperator but
-        // never emitted), which is why new messages only
-        // showed up after a manual refresh.
-        io?.to(buildThreadRoom(payload)).emit(event, payload);
-        // Re-emit to per-user rooms so each participant's sidebar
-        // unread badge + last-message preview updates.
-        if (event === 'thread:new-message') {
-          const p = payload as MessageEventPayload;
-          for (const uid of p.participantIds) io?.to(`user:${uid}`).emit('thread:updated', p);
-        } else if (event === 'thread:read') {
-          const p = payload as ReadEventPayload;
-          for (const uid of p.participantIds) io?.to(`user:${uid}`).emit('thread:updated', p);
+        // message in real time.
+        io?.to(`thread:${p.threadId}`).emit(event, payload);
+
+        // ALSO broadcast to each participant's personal user room.
+        // This is the bugfix for "user side không nhận được tin
+        // nhắn": previously we only emitted to the thread room,
+        // so a user who had the thread listed in the sidebar
+        // but hadn't clicked into it yet (and therefore hadn't
+        // joined the thread room) never got the update.
+        if (Array.isArray(p.participantIds)) {
+          for (const uid of p.participantIds) {
+            io?.to(`user:${uid}`).emit(event, payload);
+          }
         }
       },
     };
   }
   return emitter;
-}
-
-function buildThreadRoom(payload: unknown): string {
-  const p = payload as { threadId?: number };
-  return p.threadId ? `thread:${p.threadId}` : '';
 }
 
 /**
@@ -169,6 +172,43 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
       socket.join(`admin:${user.id}`);
     }
 
+    // AUTO-JOIN all thread rooms this user is a participant in.
+    // This is the critical bugfix: previously a connected user
+    // only received realtime events for threads they had
+    // explicitly joined via `thread:join`. As a result, a user
+    // who was on /messages (sidebar visible) but had not yet
+    // clicked into a specific thread did NOT receive the
+    // "new message" event when the other side sent something.
+    // The sidebar's "đang hoạt động" indicator would freeze and
+    // the unread badge would not update until they refreshed.
+    //
+    // We now eagerly join every thread this user is a
+    // participant in. The set is small (one per conversation),
+    // and the rooms are pre-keyed so the cost is just a few
+    // hash lookups per connection. Reconnect logic is also
+    // covered — the rooms are re-established on every
+    // `connect` event.
+    void (async () => {
+      try {
+        const threads = await prisma.messageThread.findMany({
+          where: {
+            OR: [
+              { type: 'ADMIN', OR: [{ userId: user.id }, { adminUserId: user.id }] },
+              { type: 'USER', OR: [{ userAId: user.id }, { userBId: user.id }] },
+            ],
+          },
+          select: { id: true },
+        });
+        for (const t of threads) {
+          socket.join(`thread:${t.id}`);
+        }
+      } catch (err) {
+        // Non-fatal: realtime still works for explicit joins
+        // and the user:* room below.
+        console.error('[messaging.socket] auto-join threads failed', err);
+      }
+    })();
+
     // Track this connection. A user can be connected from multiple
     // tabs/devices — only mark them offline once every connection
     // for that user has closed.
@@ -187,7 +227,9 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     }
 
     // Client can opt-in to a thread room explicitly (e.g. when the
-    // user opens the panel for that thread). Idempotent.
+    // user opens the panel for that thread). Idempotent — already
+    // auto-joined, but this lets the client ensure join happens
+    // even for threads created AFTER connect.
     socket.on('thread:join', (threadId: number) => {
       if (typeof threadId === 'number') socket.join(`thread:${threadId}`);
     });

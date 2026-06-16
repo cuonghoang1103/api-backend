@@ -2,12 +2,13 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Loader2, RefreshCcw, Wifi, WifiOff, AlertCircle, Check, CheckCheck } from 'lucide-react';
+import { Loader2, RefreshCcw, Wifi, WifiOff, AlertCircle, Check, CheckCheck, LogIn } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
 import ThreadList from '@/components/messaging/ThreadList';
 import MessageList from '@/components/messaging/MessageList';
 import MessageInput from '@/components/messaging/MessageInput';
+import NicknamePopover from '@/components/messaging/NicknamePopover';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -58,10 +59,39 @@ function MessagesPageInner() {
     let cancelled = false;
     (async () => {
       await init();
+      if (cancelled) return;
+
+      // CRITICAL: if the auth cookie is stale (e.g. the JWT was
+      // invalidated by a password change or `roleVersion` bump),
+      // `init()` will succeed in opening the socket — the socket
+      // doesn't know about roleVersion — but the very first REST
+      // call (loadThreads) will return 401. The store's loader
+      // silently swallows that error, leaving the user staring
+      // at an empty inbox with a green "Đang hoạt động" pill.
+      // We need to actively probe /profile (which goes through
+      // the same auth middleware) and, if it 401s, force a
+      // logout so the user can re-authenticate.
+      try {
+        const probe = await fetch('/api/v1/auth/profile', { credentials: 'include' });
+        if (probe.status === 401 || probe.status === 403) {
+          // Cookie is bad — log out and bounce to /login.
+          await useAuthStore.getState().logout();
+          return;
+        }
+      } catch {
+        // Network error — let the socket reconnect logic handle it.
+      }
+
+      // Mirror any per-thread nicknames the user has set so the
+      // sidebar shows the alias instead of the real username.
+      try {
+        await useMessagingStore.getState().loadNicknames();
+      } catch {
+        // ignore
+      }
       // If still not connected after the first attempt, start a
       // single gentle background retry so the "Đang kết nối" state
       // does not sit there forever (e.g. cookie race after login).
-      if (cancelled) return;
       if (!useMessagingStore.getState().isConnected && !useMessagingStore.getState().isConnecting) {
         setTimeout(() => { if (!cancelled) retry(); }, 2500);
       }
@@ -187,20 +217,37 @@ function ConnectionPill({
       </div>
     );
   }
+  // 401-style errors get a "log in again" button so the user can
+  // recover without having to clear cookies manually.
+  const needsRelogin = initError && /hết hạn|invalid|unauthor/i.test(initError);
   return (
     <div className="flex items-center gap-2">
-      <div className="flex items-center gap-1.5 rounded-full border border-red-500/20 bg-red-500/10 px-2.5 py-1 text-[11px] text-red-400">
-        <WifiOff className="h-3 w-3" />
-        <span>{initError ? 'Mất kết nối' : 'Ngoại tuyến'}</span>
-      </div>
-      <button
-        onClick={onRetry}
-        className="flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-[11px] text-text-secondary transition-colors hover:bg-white/[0.08] hover:text-text-primary"
-        title="Thử kết nối lại"
+      <div
+        className="flex max-w-[260px] items-center gap-1.5 rounded-full border border-red-500/20 bg-red-500/10 px-2.5 py-1 text-[11px] text-red-400"
+        title={initError ?? ''}
       >
-        <RefreshCcw className="h-3 w-3" />
-        <span>Thử lại</span>
-      </button>
+        <WifiOff className="h-3 w-3 shrink-0" />
+        <span className="truncate">{initError || 'Ngoại tuyến'}</span>
+      </div>
+      {needsRelogin ? (
+        <button
+          onClick={() => useAuthStore.getState().logout()}
+          className="flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-1 text-[11px] font-medium text-amber-300 transition-colors hover:bg-amber-500/20"
+          title="Đăng nhập lại"
+        >
+          <LogIn className="h-3 w-3" />
+          <span>Đăng nhập lại</span>
+        </button>
+      ) : (
+        <button
+          onClick={onRetry}
+          className="flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-[11px] text-text-secondary transition-colors hover:bg-white/[0.08] hover:text-text-primary"
+          title="Thử kết nối lại"
+        >
+          <RefreshCcw className="h-3 w-3" />
+          <span>Thử lại</span>
+        </button>
+      )}
     </div>
   );
 }
@@ -249,12 +296,15 @@ function ThreadHeader({
         )}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold text-text-primary">
-          {peer?.displayName ?? peer?.username ?? 'Cuộc trò chuyện'}
-          {thread?.type === 'ADMIN' && (
-            <span className="ml-2 inline-flex items-center rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[9px] font-bold text-amber-400">ADMIN</span>
-          )}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="truncate text-sm font-semibold text-text-primary">
+            {peer?.displayName ?? peer?.username ?? 'Cuộc trò chuyện'}
+            {thread?.type === 'ADMIN' && (
+              <span className="ml-2 inline-flex items-center rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[9px] font-bold text-amber-400">ADMIN</span>
+            )}
+          </p>
+          <NicknamePopover thread={thread!} />
+        </div>
         <p className={cn(
           'truncate text-[11px]',
           presence?.online ? 'text-emerald-400' : 'text-text-muted',

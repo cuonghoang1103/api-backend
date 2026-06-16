@@ -1,28 +1,44 @@
 'use client';
 
 import { useState } from 'react';
-import { Trash2, FileText, Download, X, Check, CheckCheck } from 'lucide-react';
+import { Trash2, FileText, Download, X, Check, CheckCheck, Undo2 } from 'lucide-react';
 import type { MessagingMessage } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
-import { format } from 'date-fns';
+import { useMessagingStore } from '@/store/messagingStore';
+import { format, formatDistanceToNow } from 'date-fns';
+import { vi } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import ReactionBar from './ReactionBar';
+import toast from 'react-hot-toast';
+
+const RECALL_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
 
 export default function MessageBubble({
   message,
   isOwn,
-  canDelete,
-  onDelete,
   showSender = false,
 }: {
   message: MessagingMessage;
   isOwn: boolean;
-  canDelete: boolean;
-  onDelete: () => void;
-  /** Show sender name + avatar for peer messages (grouped look). */
   showSender?: boolean;
+  /** Backwards-compat: kept so we can change canDelete → isOwn without touching callers. */
+  canDelete?: boolean;
+  onDelete?: () => void;
 }) {
   const [showMenu, setShowMenu] = useState(false);
   const auth = useAuthStore();
+  const store = useMessagingStore();
+
+  // Recalled: show stub, hide menu/reactions/recall option
+  if (message.recalled) {
+    return (
+      <div className="my-1 flex justify-center">
+        <span className="rounded-full bg-white/[0.04] px-2.5 py-0.5 text-[10px] italic text-text-muted">
+          Tin nhắn đã thu hồi
+        </span>
+      </div>
+    );
+  }
 
   if (message.deleted) {
     return (
@@ -40,6 +56,35 @@ export default function MessageBubble({
   // "delivered/read" (2 ticks, cyan) if at least one peer has read.
   const isRead = isOwn && Array.isArray(message.readBy) && message.readBy.length > 0;
   const isOptimistic = message.id < 0;
+
+  // Recall is only allowed for the sender, only on real (not
+  // optimistic) messages, and only within the 5-minute window.
+  const ageMs = Date.now() - new Date(message.createdAt).getTime();
+  const canRecall =
+    isOwn && !isOptimistic && !message.recalled && ageMs < RECALL_WINDOW_MS;
+
+  const handleRecall = async () => {
+    setShowMenu(false);
+    try {
+      await store.recallMessage(message.threadId, message.id);
+    } catch (e: any) {
+      toast.error(e?.userFriendlyMessage ?? e?.message ?? 'Không thể thu hồi tin nhắn');
+    }
+  };
+
+  const handleDelete = async () => {
+    setShowMenu(false);
+    try {
+      await store.deleteMessage(message.threadId, message.id);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleToggleReaction = (emoji: string) => {
+    if (isOptimistic) return;
+    void store.toggleReaction(message.threadId, message.id, emoji);
+  };
 
   return (
     <div className={cn('my-1 flex gap-2', isOwn ? 'justify-end' : 'justify-start')}>
@@ -126,7 +171,14 @@ export default function MessageBubble({
             'text-text-muted': !isOwn,
           })}
         >
-          <span>{format(new Date(message.createdAt), 'HH:mm')}</span>
+          <span title={format(new Date(message.createdAt), 'PPpp')}>
+            {format(new Date(message.createdAt), 'HH:mm')}
+          </span>
+          {isOwn && canRecall && (
+            <span className="opacity-60" title={`Có thể thu hồi trong ${formatDistanceToNow(new Date(Date.now() + (RECALL_WINDOW_MS - ageMs)), { locale: vi })}`}>
+              ·
+            </span>
+          )}
           {/* Read receipts for own messages */}
           {isOwn && !isOptimistic && (
             isRead ? (
@@ -138,7 +190,7 @@ export default function MessageBubble({
           {isOwn && isOptimistic && (
             <span className="opacity-70" title="Đang gửi...">·</span>
           )}
-          {canDelete && (
+          {(isOwn || true) && (
             <div className="relative ml-1">
               <button
                 onClick={() => setShowMenu((s) => !s)}
@@ -148,20 +200,46 @@ export default function MessageBubble({
                 <X className="h-3 w-3" />
               </button>
               {showMenu && (
-                <button
-                  onClick={() => {
-                    setShowMenu(false);
-                    onDelete();
-                  }}
-                  className="absolute right-0 top-4 z-10 flex items-center gap-1 rounded-lg border border-white/10 bg-red-500/90 px-2 py-1 text-[10px] font-medium text-white shadow-lg hover:bg-red-500"
+                <div
+                  className={cn(
+                    'absolute top-4 z-10 flex flex-col gap-0.5 rounded-lg border border-white/10 bg-[#0a0a14]/95 p-1 shadow-lg backdrop-blur',
+                    isOwn ? 'right-0' : 'left-0',
+                  )}
                 >
-                  <Trash2 className="h-3 w-3" />
-                  Xoá
-                </button>
+                  {isOwn && canRecall && (
+                    <button
+                      onClick={handleRecall}
+                      className="flex items-center gap-1.5 rounded px-2 py-1 text-[11px] font-medium text-amber-300 hover:bg-amber-500/15"
+                    >
+                      <Undo2 className="h-3 w-3" />
+                      Thu hồi
+                    </button>
+                  )}
+                  {isOwn && (
+                    <button
+                      onClick={handleDelete}
+                      className="flex items-center gap-1.5 rounded px-2 py-1 text-[11px] font-medium text-red-300 hover:bg-red-500/15"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                      Xoá
+                    </button>
+                  )}
+                </div>
               )}
             </div>
           )}
         </div>
+      </div>
+
+      {/* Reactions row + picker — outside the bubble so the
+          pill border doesn't get clipped by rounded corners */}
+      <div className={cn('flex max-w-[80%] flex-col', isOwn ? 'items-end' : 'items-start')}>
+        <ReactionBar
+          reactions={message.reactions ?? []}
+          myUserId={auth.user?.id}
+          onToggle={handleToggleReaction}
+          isOwn={isOwn}
+        />
       </div>
     </div>
   );

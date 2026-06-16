@@ -83,8 +83,14 @@ interface MessagingState {
   loadMoreMessages: (threadId: number) => Promise<void>;
   sendMessage: (threadId: number, content: string, fileIds?: number[]) => Promise<void>;
   deleteMessage: (threadId: number, messageId: number) => Promise<void>;
+  recallMessage: (threadId: number, messageId: number) => Promise<void>;
+  toggleReaction: (threadId: number, messageId: number, emoji: string) => Promise<void>;
   markRead: (threadId: number) => Promise<void>;
   setTyping: (threadId: number, isTyping: boolean) => void;
+
+  // Nicknames
+  setNickname: (threadId: number, targetId: number, alias: string) => Promise<void>;
+  loadNicknames: () => Promise<void>;
 
   // Presence
   getPresence: (userId: number) => { online: boolean; lastSeen: number };
@@ -93,6 +99,11 @@ interface MessagingState {
   applyIncomingMessage: (threadId: number, message: MessagingMessage) => void;
   applyReadReceipt: (threadId: number, readerId: number, readAt?: string) => void;
   applyThreadUpdated: (threadId: number) => void;
+  applyMessageUpdated: (
+    threadId: number,
+    messageId: number,
+    changes: { deleted?: boolean; recalled?: boolean; recalledAt?: string; reactions?: unknown },
+  ) => void;
   applyPeerPresence: (userId: number, online: boolean, lastSeen: number) => void;
   onConnectionChange: (connected: boolean) => void;
 }
@@ -156,6 +167,18 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
           });
           socket.on('connect', () => get().onConnectionChange(true));
           socket.on('disconnect', () => get().onConnectionChange(false));
+          // Listen for in-place message updates (recall, delete,
+          // reactions) and per-thread metadata changes.
+          socket.on(
+            'message:updated',
+            (payload: {
+              threadId: number;
+              messageId: number;
+              changes: { deleted?: boolean; recalled?: boolean; recalledAt?: string; reactions?: unknown };
+            }) => {
+              get().applyMessageUpdated(payload.threadId, payload.messageId, payload.changes);
+            },
+          );
           // CRITICAL: by the time we get here, the socket has ALREADY
           // connected (connectSocket awaited on the 'connect' event).
           // The listeners above will only fire on the NEXT (re)connect.
@@ -214,8 +237,16 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     try {
       const res = await messagingApi.listThreads();
       set({ threads: res.data.data ?? [], threadsLoaded: true, threadsLoading: false });
-    } catch {
+    } catch (e: any) {
+      // A 401 here means the JWT in the httpOnly cookie is stale
+      // (e.g. roleVersion bump from a password change). Surface
+      // a clear error so the UI can prompt the user to re-login
+      // instead of silently showing an empty inbox.
+      const status = e?.response?.status;
       set({ threadsLoading: false });
+      if (status === 401 || status === 403) {
+        set({ initError: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.' });
+      }
     }
   },
 
@@ -414,6 +445,104 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     }
   },
 
+  async recallMessage(threadId, messageId) {
+    try {
+      await messagingApi.recallMessage(messageId);
+      // Optimistic local update — the server will broadcast
+      // the canonical update via 'message:updated' which will
+      // overwrite this if the timestamps differ.
+      set((s) => ({
+        messagesByThread: {
+          ...s.messagesByThread,
+          [threadId]: (s.messagesByThread[threadId] ?? []).map((m) =>
+            m.id === messageId
+              ? { ...m, recalled: true, recalledAt: new Date().toISOString(), content: '' }
+              : m,
+          ),
+        },
+      }));
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async toggleReaction(threadId, messageId, emoji) {
+    try {
+      const res = await messagingApi.toggleReaction(messageId, emoji);
+      set((s) => ({
+        messagesByThread: {
+          ...s.messagesByThread,
+          [threadId]: (s.messagesByThread[threadId] ?? []).map((m) =>
+            m.id === messageId ? { ...m, reactions: res.data.data.summary } : m,
+          ),
+        },
+      }));
+    } catch {
+      // ignore
+    }
+  },
+
+  async setNickname(threadId, targetId, alias) {
+    try {
+      await messagingApi.setNickname(threadId, targetId, alias);
+      // Update the local peer display name to reflect the alias
+      // immediately. The thread list and header both read from
+      // `peer.displayName`, so swapping it here gives instant UI
+      // feedback even before the next refetch.
+      set((s) => {
+        const updatePeer = (t: any) => {
+          if (t.id !== threadId || !t.peer || t.peer.id !== targetId) return t;
+          return {
+            ...t,
+            peer: {
+              ...t.peer,
+              alias: alias || null,
+              displayName: alias || t.peer.displayName,
+            },
+          };
+        };
+        return {
+          threads: s.threads.map(updatePeer),
+          currentThread: s.currentThread && s.currentThread.id === threadId
+            ? updatePeer(s.currentThread) as any
+            : s.currentThread,
+        };
+      });
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async loadNicknames() {
+    try {
+      const res = await messagingApi.listNicknames();
+      const rows = res.data.data ?? [];
+      // Build a quick lookup so we can apply the alias to any
+      // matching thread/peer in the cache.
+      set((s) => {
+        const apply = (t: any) => {
+          if (!t.peer) return t;
+          const nick = rows.find((r) => r.threadId === t.id && r.targetId === t.peer.id);
+          if (!nick) return t;
+          return {
+            ...t,
+            peer: {
+              ...t.peer,
+              alias: nick.alias,
+              displayName: nick.alias || t.peer.displayName,
+            },
+          };
+        };
+        return {
+          threads: s.threads.map(apply),
+          currentThread: s.currentThread ? apply(s.currentThread) as any : s.currentThread,
+        };
+      });
+    } catch {
+      // ignore
+    }
+  },
+
   async markRead(threadId) {
     const auth = useAuthStore.getState();
     if (!auth.user) return;
@@ -529,6 +658,30 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     get().refreshUnread();
   },
 
+  applyMessageUpdated(
+    threadId,
+    messageId,
+    changes,
+  ) {
+    set((s) => {
+      const cur = s.messagesByThread[threadId];
+      if (!cur) return s;
+      const next = cur.map((m) => {
+        if (m.id !== messageId) return m;
+        const merged: MessagingMessage = { ...m, ...changes } as MessagingMessage;
+        // Recall: also wipe the content.
+        if (changes.recalled) {
+          merged.content = '';
+        }
+        if (changes.deleted) {
+          merged.content = '';
+        }
+        return merged;
+      });
+      return { messagesByThread: { ...s.messagesByThread, [threadId]: next } };
+    });
+  },
+
   applyPeerPresence(userId, online, lastSeen) {
     set((s) => ({
       presence: {
@@ -540,7 +693,10 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   onConnectionChange(connected) {
     set({ isConnected: connected, isConnecting: false });
     if (connected) {
-      // Re-join active thread room after reconnect
+      // Re-join active thread room after reconnect. The server
+      // now auto-joins every thread on connect, but we also
+      // re-join explicitly here in case the active thread was
+      // created AFTER the initial socket connect.
       const t = get().currentThreadId;
       if (t) joinThread(t);
       // Refresh the online-user list — peers may have come/gone

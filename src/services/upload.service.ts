@@ -21,7 +21,10 @@ const ALLOWED_DOCUMENT_TYPES = [
 ];
 
 // ─── Signed URL ─────────────────────────────────────────────────
-const SIGNED_URL_SECRET = process.env.SIGNED_URL_SECRET || 'default-signed-url-secret-change-me';
+// Secret comes from env (validated at startup — no placeholder
+// default allowed in production). If it's missing or weak, the
+// server fails to start instead of silently using a forgeable value.
+const SIGNED_URL_SECRET = config.signedUrlSecret;
 const SIGNED_URL_EXPIRY_MS = 30 * 60 * 1000; // 30 minutes
 
 export interface SignedUploadPayload {

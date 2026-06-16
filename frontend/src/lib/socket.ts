@@ -102,7 +102,18 @@ export function getSocket(): Socket | null {
 }
 
 export function joinThread(threadId: number) {
-  socket?.emit('thread:join', threadId);
+  // Socket may not be connected yet (e.g. on a fresh page load
+  // the store calls openThread before the 'connect' event
+  // resolves). Queue the join: store the room and re-emit on
+  // next 'connect' so the request never gets lost.
+  if (!socket) return;
+  if (socket.connected) {
+    socket.emit('thread:join', threadId);
+    return;
+  }
+  // Listen for the next connect and re-emit
+  const s = socket as Socket;
+  s.once('connect', () => s.emit('thread:join', threadId));
 }
 
 export function leaveThread(threadId: number) {
@@ -110,5 +121,6 @@ export function leaveThread(threadId: number) {
 }
 
 export function emitTyping(threadId: number, isTyping: boolean) {
-  socket?.emit('thread:typing', { threadId, isTyping });
+  if (!socket?.connected) return;
+  socket.emit('thread:typing', { threadId, isTyping });
 }

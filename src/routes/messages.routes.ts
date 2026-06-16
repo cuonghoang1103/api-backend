@@ -103,10 +103,8 @@ router.get('/threads/:id', async (req: Request, res: Response, next: NextFunctio
     // exposes user/adminUser/userA/userB, but the UI only knows
     // about `peer` — without this the chat header falls back to
     // "Cuộc trò chuyện".
-    res.json({
-      success: true,
-      data: messagesService.serializeThread(thread as any, req.userId!),
-    });
+    const serialized = await messagesService.serializeThreadAsync(thread as any, req.userId!);
+    res.json({ success: true, data: serialized });
   } catch (error) {
     next(error);
   }
@@ -160,6 +158,62 @@ router.delete('/messages/:id', async (req: Request, res: Response, next: NextFun
     if (isNaN(id)) throw new AppError('Invalid message ID', 400, 'INVALID_ID');
     await messagesService.softDeleteMessage(id, req.userId!);
     res.json({ success: true });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── POST /api/v1/messages/messages/:id/recall ─────────
+// Sender-only, 5-min window. Wipes the message content and
+// marks it as recalled (UI shows a stub).
+router.post('/messages/:id/recall', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid message ID', 400, 'INVALID_ID');
+    await messagesService.recallMessage(id, req.userId!);
+    res.json({ success: true });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── POST /api/v1/messages/messages/:id/reactions ─────
+// Toggle a reaction. Body: { emoji: "👍" }
+router.post('/messages/:id/reactions', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid message ID', 400, 'INVALID_ID');
+    const emoji = String(req.body?.emoji ?? '');
+    const result = await messagesService.toggleReaction(id, req.userId!, emoji);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── PUT /api/v1/messages/threads/:id/nickname ────────
+// Set/clear the nickname THIS user has assigned to the
+// OTHER participant in the thread. Body: { targetId, alias }
+router.put('/threads/:id/nickname', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const targetId = parseInt(String(req.body?.targetId ?? ''), 10);
+    if (isNaN(targetId)) throw new AppError('targetId is required', 400, 'INVALID_TARGET');
+    const alias = String(req.body?.alias ?? '');
+    const result = await messagesService.setNickname(id, req.userId!, targetId, alias);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── GET /api/v1/messages/nicknames ───────────────────
+// All nicknames the current user has set across their threads.
+router.get('/nicknames', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const rows = await messagesService.listNicknamesForUser(req.userId!);
+    res.json({ success: true, data: rows });
   } catch (error) {
     next(error);
   }

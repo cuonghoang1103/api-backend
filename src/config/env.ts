@@ -1,95 +1,257 @@
 import dotenv from 'dotenv';
+import { z } from 'zod';
 
 dotenv.config();
 
-export const config = {
+/**
+ * Environment variable validation.
+ *
+ * Why we do this:
+ * - Production secrets MUST be set. If we fall back to empty strings or
+ *   hardcoded defaults, the app silently misbehaves (auth breaks, cookies
+ *   become forgeable, payments get rejected).
+ * - The Zod schema below enforces this at startup, so we fail fast with
+ *   a clear error message instead of debugging weird 500s at 3am.
+ *
+ * Behavior:
+ * - In production (NODE_ENV=production): throws on any missing/invalid
+ *   required variable. App refuses to start.
+ * - In development: logs a warning and continues, so contributors can
+ *   iterate without setting up every integration.
+ */
+const envSchema = z.object({
   // Server
-  port: parseInt(process.env.PORT || '3001', 10),
-  nodeEnv: process.env.NODE_ENV || 'development',
+  PORT: z.string().regex(/^\d+$/).default('3001'),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
   // Database
-  databaseUrl: process.env.DATABASE_URL || '',
+  DATABASE_URL: z
+    .string()
+    .min(1, 'DATABASE_URL is required')
+    .refine(
+      (val) => val.startsWith('postgresql://') || val.startsWith('postgres://'),
+      'DATABASE_URL must be a PostgreSQL connection string',
+    ),
 
-  // JWT
-  jwtSecret: process.env.JWT_SECRET || '',
-  jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',
-  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || '',
-  jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+  // JWT — required in production
+  JWT_SECRET: z
+    .string()
+    .min(32, 'JWT_SECRET must be at least 32 characters')
+    .refine(
+      (val) => val !== 'default-cookie-secret' && val !== 'change-me',
+      'JWT_SECRET cannot be a placeholder value',
+    ),
+  JWT_EXPIRES_IN: z.string().default('24h'),
+  JWT_REFRESH_SECRET: z
+    .string()
+    .min(32, 'JWT_REFRESH_SECRET must be at least 32 characters')
+    .refine(
+      (val) => val !== 'default-cookie-secret' && val !== 'change-me',
+      'JWT_REFRESH_SECRET cannot be a placeholder value',
+    ),
+  JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
 
   // Redis
-  redisHost: process.env.REDIS_HOST || 'localhost',
-  redisPort: parseInt(process.env.REDIS_PORT || '6379', 10),
-  redisPassword: process.env.REDIS_PASSWORD || '',
-  redisDb: parseInt(process.env.REDIS_DB || '0', 10),
+  REDIS_HOST: z.string().default('localhost'),
+  REDIS_PORT: z.string().regex(/^\d+$/).default('6379'),
+  REDIS_PASSWORD: z.string().optional().default(''),
+  REDIS_DB: z.string().regex(/^\d+$/).default('0'),
 
   // CORS
-  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
-  corsOrigins: (process.env.ALLOWED_ORIGINS || 'http://localhost:3000').split(','),
+  FRONTEND_URL: z.string().url().default('http://localhost:3000'),
+  ALLOWED_ORIGINS: z.string().default('http://localhost:3000'),
 
-  // OAuth
-  googleClientId: process.env.GOOGLE_CLIENT_ID || '',
-  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-  githubClientId: process.env.GITHUB_CLIENT_ID || '',
-  githubClientSecret: process.env.GITHUB_CLIENT_SECRET || '',
-  // Personal access token for the GitHub REST API. Optional —
-  // when set, requests to api.github.com are authenticated and
-  // the rate limit is 5000/hr instead of 60/hr. Used by the
-  // repo-hub service to fetch metadata + starred repos.
-  githubApiToken: process.env.GITHUB_API_TOKEN || '',
+  // OAuth — optional but validated when present
+  GOOGLE_CLIENT_ID: z.string().optional().default(''),
+  GOOGLE_CLIENT_SECRET: z.string().optional().default(''),
+  GITHUB_CLIENT_ID: z.string().optional().default(''),
+  GITHUB_CLIENT_SECRET: z.string().optional().default(''),
+  GITHUB_API_TOKEN: z.string().optional().default(''),
 
   // Admin
-  adminEmails: (process.env.ADMIN_EMAILS || '').split(',').filter(Boolean),
-  adminUsername: process.env.ADMIN_USERNAME || 'admin',
+  ADMIN_EMAILS: z.string().default(''),
+  ADMIN_USERNAME: z.string().default('admin'),
 
   // File Upload
-  uploadDir: process.env.UPLOAD_DIR || './uploads',
-  maxFileSizeImages: parseInt(process.env.MAX_FILE_SIZE_IMAGES || '10485760', 10),
-  maxFileSizeAudio: parseInt(process.env.MAX_FILE_SIZE_AUDIO || '104857600', 10),
-  maxFileSizeVideo: parseInt(process.env.MAX_FILE_SIZE_VIDEO || '524288000', 10),
-  maxFileSizeDocument: parseInt(process.env.MAX_FILE_SIZE_DOCUMENT || '52428800', 10),
+  UPLOAD_DIR: z.string().default('./uploads'),
+  MAX_FILE_SIZE_IMAGES: z.string().regex(/^\d+$/).default('10485760'),
+  MAX_FILE_SIZE_AUDIO: z.string().regex(/^\d+$/).default('104857600'),
+  MAX_FILE_SIZE_VIDEO: z.string().regex(/^\d+$/).default('524288000'),
+  MAX_FILE_SIZE_DOCUMENT: z.string().regex(/^\d+$/).default('52428800'),
 
   // Rate Limiting
-  rateLimitWindowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10),
-  rateLimitMaxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100', 10),
+  RATE_LIMIT_WINDOW_MS: z.string().regex(/^\d+$/).default('900000'),
+  RATE_LIMIT_MAX_REQUESTS: z.string().regex(/^\d+$/).default('100'),
 
-  // Cookie
-  cookieSecret: process.env.COOKIE_SECRET || 'default-cookie-secret',
+  // Signed URL secret — required in production, no placeholder default
+  SIGNED_URL_SECRET: z
+    .string()
+    .min(32, 'SIGNED_URL_SECRET must be at least 32 characters')
+    .refine(
+      (val) => val !== 'default-signed-url-secret-change-me' && val !== 'change-me',
+      'SIGNED_URL_SECRET cannot be a placeholder value',
+    ),
 
-  // AI (Multi-provider with auto-fallback)
-  groqApiKey: process.env.GROQ_API_KEY || '',
-  groqChatModel: process.env.GROQ_CHAT_MODEL || 'llama-3.1-8b-instant',
-  openrouterApiKey: process.env.OPENROUTER_API_KEY || '',
-  openrouterChatModel: process.env.OPENROUTER_CHAT_MODEL || 'meta-llama/llama-3.1-8b-instruct:free',
-  openaiApiKey: process.env.OPENAI_API_KEY || '',
-  openaiChatModel: process.env.OPENAI_CHAT_MODEL || 'gpt-4o-mini',
-  // Legacy
-  geminiApiKey: process.env.GEMINI_API_KEY || '',
-  aiChatModel: process.env.AI_CHAT_MODEL || 'llama-3.1-8b-instant',
-  aiEmbeddingModel: process.env.AI_EMBEDDING_MODEL || 'gemini-embedding-002',
-  aiEmbeddingDimensions: parseInt(process.env.AI_EMBEDDING_DIMENSIONS || '768', 10),
-  aiMaxTokens: parseInt(process.env.AI_MAX_TOKENS || '2048', 10),
-  aiTemperature: parseFloat(process.env.AI_TEMPERATURE || '0.7'),
-  aiChunkSize: parseInt(process.env.AI_CHUNK_SIZE || '1000', 10),
-  aiChunkOverlap: parseInt(process.env.AI_CHUNK_OVERLAP || '200', 10),
-  aiSimilarityThreshold: parseFloat(process.env.AI_SIMILARITY_THRESHOLD || '0.7'),
+  // Cookie secret — required in production, no placeholder default
+  COOKIE_SECRET: z
+    .string()
+    .min(32, 'COOKIE_SECRET must be at least 32 characters')
+    .refine(
+      (val) => val !== 'default-cookie-secret' && val !== 'change-me',
+      'COOKIE_SECRET cannot be a placeholder value',
+    ),
 
-  // Email (Resend — recommended)
-  resendApiKey: process.env.RESEND_API_KEY || '',
-  resendFromEmail: process.env.RESEND_FROM_EMAIL || 'CuongHoangDev <noreply@cuongthai.com>',
+  // AI providers — at least one is required for chat to work
+  GROQ_API_KEY: z.string().optional().default(''),
+  GROQ_CHAT_MODEL: z.string().default('llama-3.1-8b-instant'),
+  OPENROUTER_API_KEY: z.string().optional().default(''),
+  OPENROUTER_CHAT_MODEL: z.string().default('meta-llama/llama-3.1-8b-instruct:free'),
+  OPENAI_API_KEY: z.string().optional().default(''),
+  OPENAI_CHAT_MODEL: z.string().default('gpt-4o-mini'),
+  GEMINI_API_KEY: z.string().optional().default(''),
+  AI_CHAT_MODEL: z.string().default('llama-3.1-8b-instant'),
+  AI_EMBEDDING_MODEL: z.string().default('gemini-embedding-002'),
+  AI_EMBEDDING_DIMENSIONS: z.string().regex(/^\d+$/).default('768'),
+  AI_MAX_TOKENS: z.string().regex(/^\d+$/).default('2048'),
+  AI_TEMPERATURE: z.string().default('0.7'),
+  AI_CHUNK_SIZE: z.string().regex(/^\d+$/).default('1000'),
+  AI_CHUNK_OVERLAP: z.string().regex(/^\d+$/).default('200'),
+  AI_SIMILARITY_THRESHOLD: z.string().default('0.7'),
 
-  // Legacy SMTP (Gmail fallback)
-  smtpHost: process.env.SMTP_HOST || 'smtp.gmail.com',
-  smtpPort: parseInt(process.env.SMTP_PORT || '587', 10),
-  smtpUser: process.env.SMTP_USER || '',
-  smtpPass: process.env.SMTP_PASS || '',
-  smtpFrom: process.env.SMTP_FROM || 'noreply@cuonghoangdev.com',
+  // Email
+  RESEND_API_KEY: z.string().optional().default(''),
+  RESEND_FROM_EMAIL: z.string().default('CuongHoangDev <noreply@cuongthai.com>'),
+  SMTP_HOST: z.string().default('smtp.gmail.com'),
+  SMTP_PORT: z.string().regex(/^\d+$/).default('587'),
+  SMTP_USER: z.string().optional().default(''),
+  SMTP_PASS: z.string().optional().default(''),
+  SMTP_FROM: z.string().default('noreply@cuonghoangdev.com'),
 
   // Contact
-  contactAdminEmail: process.env.CONTACT_ADMIN_EMAIL || '',
+  CONTACT_ADMIN_EMAIL: z.string().default(''),
 
   // YouTube
-  youtubeApiKey: process.env.YOUTUBE_API_KEY || '',
+  YOUTUBE_API_KEY: z.string().optional().default(''),
 
-  // Public base URL (for absolute upload URLs)
-  publicBaseUrl: process.env.PUBLIC_BASE_URL || 'https://api.cuongthai.com',
+  // Public base URL
+  PUBLIC_BASE_URL: z.string().url().default('https://api.cuongthai.com'),
+});
+
+type EnvSchema = z.infer<typeof envSchema>;
+
+function parseEnv(): EnvSchema {
+  const parsed = envSchema.safeParse(process.env);
+
+  if (!parsed.success) {
+    const errors = parsed.error.errors
+      .map((e) => `  - ${e.path.join('.')}: ${e.message}`)
+      .join('\n');
+
+    if (process.env.NODE_ENV === 'production') {
+      // Fail fast in production — silent fallback to empty/default
+      // secrets is exactly what we want to prevent.
+      throw new Error(
+        `\n❌ Invalid environment configuration:\n${errors}\n\n` +
+          `Set the required variables in /opt/cuonghoangdev/.env and restart.\n`,
+      );
+    } else {
+      // In dev/test, log a warning and continue. The app may not
+      // work for every feature, but contributors can still iterate.
+      console.warn(
+        `\n⚠️  Environment validation warnings:\n${errors}\n` +
+          `(Ignoring in ${process.env.NODE_ENV || 'development'} mode — these would be fatal in production.)\n`,
+      );
+      return process.env as unknown as EnvSchema;
+    }
+  }
+
+  return parsed.data;
+}
+
+const env = parseEnv();
+
+export const config = {
+  // Server
+  port: parseInt(env.PORT, 10),
+  nodeEnv: env.NODE_ENV,
+
+  // Database
+  databaseUrl: env.DATABASE_URL,
+
+  // JWT
+  jwtSecret: env.JWT_SECRET,
+  jwtExpiresIn: env.JWT_EXPIRES_IN,
+  jwtRefreshSecret: env.JWT_REFRESH_SECRET,
+  jwtRefreshExpiresIn: env.JWT_REFRESH_EXPIRES_IN,
+
+  // Redis
+  redisHost: env.REDIS_HOST,
+  redisPort: parseInt(env.REDIS_PORT, 10),
+  redisPassword: env.REDIS_PASSWORD,
+  redisDb: parseInt(env.REDIS_DB, 10),
+
+  // CORS
+  frontendUrl: env.FRONTEND_URL,
+  corsOrigins: env.ALLOWED_ORIGINS.split(','),
+
+  // OAuth
+  googleClientId: env.GOOGLE_CLIENT_ID,
+  googleClientSecret: env.GOOGLE_CLIENT_SECRET,
+  githubClientId: env.GITHUB_CLIENT_ID,
+  githubClientSecret: env.GITHUB_CLIENT_SECRET,
+  githubApiToken: env.GITHUB_API_TOKEN,
+
+  // Admin
+  adminEmails: env.ADMIN_EMAILS.split(',').filter(Boolean),
+  adminUsername: env.ADMIN_USERNAME,
+
+  // File Upload
+  uploadDir: env.UPLOAD_DIR,
+  maxFileSizeImages: parseInt(env.MAX_FILE_SIZE_IMAGES, 10),
+  maxFileSizeAudio: parseInt(env.MAX_FILE_SIZE_AUDIO, 10),
+  maxFileSizeVideo: parseInt(env.MAX_FILE_SIZE_VIDEO, 10),
+  maxFileSizeDocument: parseInt(env.MAX_FILE_SIZE_DOCUMENT, 10),
+
+  // Rate Limiting
+  rateLimitWindowMs: parseInt(env.RATE_LIMIT_WINDOW_MS, 10),
+  rateLimitMaxRequests: parseInt(env.RATE_LIMIT_MAX_REQUESTS, 10),
+
+  // Cookie
+  cookieSecret: env.COOKIE_SECRET,
+  signedUrlSecret: env.SIGNED_URL_SECRET,
+
+  // AI
+  groqApiKey: env.GROQ_API_KEY,
+  groqChatModel: env.GROQ_CHAT_MODEL,
+  openrouterApiKey: env.OPENROUTER_API_KEY,
+  openrouterChatModel: env.OPENROUTER_CHAT_MODEL,
+  openaiApiKey: env.OPENAI_API_KEY,
+  openaiChatModel: env.OPENAI_CHAT_MODEL,
+  geminiApiKey: env.GEMINI_API_KEY,
+  aiChatModel: env.AI_CHAT_MODEL,
+  aiEmbeddingModel: env.AI_EMBEDDING_MODEL,
+  aiEmbeddingDimensions: parseInt(env.AI_EMBEDDING_DIMENSIONS, 10),
+  aiMaxTokens: parseInt(env.AI_MAX_TOKENS, 10),
+  aiTemperature: parseFloat(env.AI_TEMPERATURE),
+  aiChunkSize: parseInt(env.AI_CHUNK_SIZE, 10),
+  aiChunkOverlap: parseInt(env.AI_CHUNK_OVERLAP, 10),
+  aiSimilarityThreshold: parseFloat(env.AI_SIMILARITY_THRESHOLD),
+
+  // Email
+  resendApiKey: env.RESEND_API_KEY,
+  resendFromEmail: env.RESEND_FROM_EMAIL,
+  smtpHost: env.SMTP_HOST,
+  smtpPort: parseInt(env.SMTP_PORT, 10),
+  smtpUser: env.SMTP_USER,
+  smtpPass: env.SMTP_PASS,
+  smtpFrom: env.SMTP_FROM,
+
+  // Contact
+  contactAdminEmail: env.CONTACT_ADMIN_EMAIL,
+
+  // YouTube
+  youtubeApiKey: env.YOUTUBE_API_KEY,
+
+  // Public base URL
+  publicBaseUrl: env.PUBLIC_BASE_URL,
 } as const;

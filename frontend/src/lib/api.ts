@@ -949,16 +949,21 @@ export const messagingApi = {
     api.patch<ApiResponse<{ success: boolean }>>(`/messages/threads/${threadId}/read`),
   deleteMessage: (messageId: number) =>
     api.delete<ApiResponse<{ success: boolean }>>(`/messages/messages/${messageId}`),
-
-  // Unread badge
-  getUnreadCount: () =>
-    api.get<ApiResponse<{ count: number }>>('/messages/unread-count'),
-
-  // Online presence (one-shot list of currently-connected user IDs)
+  recallMessage: (messageId: number) =>
+    api.post<ApiResponse<{ success: boolean }>>(`/messages/messages/${messageId}/recall`),
+  toggleReaction: (messageId: number, emoji: string) =>
+    api.post<ApiResponse<{ action: 'added' | 'removed'; summary: MessagingReaction[] }>>(
+      `/messages/messages/${messageId}/reactions`,
+      { emoji },
+    ),
+  setNickname: (threadId: number, targetId: number, alias: string) =>
+    api.put<ApiResponse<unknown>>(`/messages/threads/${threadId}/nickname`, { targetId, alias }),
+  listNicknames: () =>
+    api.get<ApiResponse<Array<{ threadId: number; targetId: number; alias: string }>>>(
+      '/messages/nicknames',
+    ),
   getOnlineUsers: () =>
     api.get<ApiResponse<{ userIds: number[] }>>('/messages/online'),
-
-  // File upload (multipart)
   uploadAttachment: (file: File) => {
     const fd = new FormData();
     fd.append('file', file);
@@ -966,6 +971,10 @@ export const messagingApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
+
+  // Unread badge
+  getUnreadCount: () =>
+    api.get<ApiResponse<{ count: number }>>('/messages/unread-count'),
 };
 
 // ─── Messaging types (mirror the backend serialiser) ────
@@ -982,7 +991,7 @@ export interface MessagingThread {
   lastMessageAt: string | null;
   createdAt: string;
   updatedAt: string;
-  peer: MessagingPeer | null;
+  peer: (MessagingPeer & { alias?: string | null }) | null;
   lastMessage?: {
     id: number;
     content: string;
@@ -1010,17 +1019,26 @@ export interface MessagingReadReceipt {
   readAt: string;
 }
 
+export interface MessagingReaction {
+  emoji: string;
+  count: number;
+  userIds: number[];
+}
+
 export interface MessagingMessage {
   id: number;
   threadId: number;
   senderId: number;
   content: string;
   deleted: boolean;
+  recalled?: boolean;
+  recalledAt?: string | null;
   createdAt: string;
   updatedAt: string;
   sender: MessagingPeer;
   attachments: MessagingAttachment[];
   readBy?: MessagingReadReceipt[];
+  reactions?: MessagingReaction[];
 }
 
 export interface MessagingUploadedFile {

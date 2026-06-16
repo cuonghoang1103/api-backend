@@ -1,0 +1,65 @@
+{
+  "name": "CuongThai - Portfolio & Academy",
+  "short_name": "CuongThai",
+  "description": "Portfolio, E-commerce, AI chat, courses, music & direct messaging",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#03020c",
+  "theme_color": "#0a0a14",
+  "lang": "vi",
+  "dir": "ltr",
+  "categories": ["productivity", "education", "lifestyle", "social"],
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tin nhắn",
+      "short_name": "Messages",
+      "description": "Mở hộp thư tin nhắn",
+      "url": "/messages",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "AI Chat",
+      "short_name": "AI",
+      "description": "Trò chuyện với AI Assistant",
+      "url": "/chat",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Academy",
+      "short_name": "Học tập",
+      "description": "Khóa học & bài học",
+      "url": "/academy",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Shop",
+      "short_name": "Shop",
+      "description": "Cửa hàng sản phẩm",
+      "url": "/shop",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Music",
+      "short_name": "Nhạc",
+      "description": "Nghe nhạc & playlist",
+      "url": "/music",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+    }
+  ]
+}

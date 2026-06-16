@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { api, coursesApi, fileApi } from '@/lib/api';
 import { toast } from 'sonner';
+import SafeAvatar from '@/components/ui/SafeAvatar';
 import {
   User,
   Mail,
@@ -322,20 +323,17 @@ export default function ProfilePage() {
         </div>
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="relative -mt-16 sm:-mt-20 flex items-end gap-4 sm:gap-6">
-            {/* Avatar */}
-            <div className="relative group shrink-0">
-              {form.avatarUrl ? (
-                <img
-                  src={form.avatarUrl}
-                  alt={form.username}
-                  className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl object-cover border-4 border-darkbg shadow-2xl"
-                />
-              ) : (
-                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-white text-4xl sm:text-5xl font-bold border-4 border-darkbg shadow-2xl">
-                  {form.username?.charAt(0).toUpperCase()}
-                </div>
-              )}
+        <div className="relative -mt-16 sm:-mt-20 flex items-end gap-4 sm:gap-6">
+          {/* Avatar */}
+          <div className="relative group shrink-0">
+            <SafeAvatar
+              src={form.avatarUrl}
+              alt={form.username || 'avatar'}
+              seed={form.username}
+              size={144}
+              rounded="2xl"
+              className="border-4 border-darkbg shadow-2xl"
+            />
               {uploadingAvatar && (
                 <div className="absolute inset-0 rounded-2xl bg-black/70 flex items-center justify-center z-10">
                   <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />

@@ -102,8 +102,6 @@ export default function MessageList() {
                 key={m.id}
                 message={m}
                 isOwn={m.senderId === auth.user?.id}
-                canDelete={m.senderId === auth.user?.id}
-                onDelete={() => store.deleteMessage(threadId, m.id)}
                 showSender={showSender}
               />
             );

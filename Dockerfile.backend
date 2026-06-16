@@ -30,12 +30,21 @@ FROM node:22-slim AS runner
 WORKDIR /app
 
 # Security: run as non-root user, install curl for healthcheck
-RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/* && \
+RUN apt-get update && apt-get install -y --no-install-recommends curl tini && rm -rf /var/lib/apt/lists/* && \
     useradd --uid 1001 --gid 0 --shell /bin/bash --create-home nodejs
 
 # Create uploads directory
 RUN mkdir -p /app/uploads/images /app/uploads/audio /app/uploads/video /app/uploads/documents && \
-    chown -R 1001:0 /app
+    chown -R 1001:0 /app && \
+    chmod -R g+rwX /app
+
+# Copy the fix-perms entrypoint. This runs as root (the only time
+# we drop the non-root USER) so it can chown a host-mounted volume
+# that was created on macOS with a different uid (501:staff).
+# Without this, `nodejs` (uid 1001) gets EACCES when the volume
+# is mounted because the volume's permissions belong to 501:staff.
+COPY --chown=0:0 scripts/fix-uploads-perms.sh /usr/local/bin/fix-uploads-perms.sh
+RUN chmod +x /usr/local/bin/fix-uploads-perms.sh
 
 # Copy built artifacts (only production deps)
 COPY --from=builder --chown=1001:0 /app/node_modules ./node_modules
@@ -61,6 +70,11 @@ EXPOSE 3001
 HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:3001/health || exit 1
 
+# Fix host-mounted upload directory ownership BEFORE we drop to the
+# non-root nodejs user. tini is a tiny init that forwards signals
+# and reaps zombies; using it as PID 1 means Ctrl-C in dev still
+# cleanly stops the Node process.
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/fix-uploads-perms.sh"]
 # Run as non-root
 USER nodejs
 

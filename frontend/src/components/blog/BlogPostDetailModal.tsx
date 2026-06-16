@@ -8,6 +8,7 @@ import { X, Download, MessageSquare, Send, Tag, Calendar, Eye, Loader2, Clock } 
 import Image from 'next/image';
 import { blogApi } from '@/lib/api';
 import type { Post, BlogComment } from '@/types';
+import SafeAvatar from '@/components/ui/SafeAvatar';
 
 const C = {
   primary: '#a855f7',
@@ -289,14 +290,13 @@ function CommentItem({ comment }: { comment: BlogComment }) {
   return (
     <div className="rounded-xl p-3" style={{ background: 'rgba(15,10,30,0.6)', border: `1px solid ${C.border}` }}>
       <div className="flex items-start gap-2.5">
-        <div className="w-7 h-7 rounded-full overflow-hidden shrink-0 mt-0.5">
-          <Image
-            src={comment.userAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(comment.userName)}`}
-            alt={comment.userName}
-            width={28} height={28}
-            className="object-cover w-full h-full"
-          />
-        </div>
+        <SafeAvatar
+          src={comment.userAvatar}
+          alt={comment.userName}
+          seed={comment.userName}
+          size={28}
+          rounded="full"
+        />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-bold" style={{ color: C.text }}>{comment.userName}</span>

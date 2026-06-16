@@ -9,6 +9,17 @@ dist/
 .env.local
 .env.*.local
 
+# Local-only seed scripts (with hardcoded credentials)
+# Real seed logic is in scripts/seed-admin.cjs (CLI-driven)
+scripts/seed-*user.cjs
+scripts/seed-*.local.*
+
+# Local test/scratch files (not for production)
+test_socket.cjs
+test_socket.js
+*.local.cjs
+*.local.js
+
 # Prisma
 prisma/migrations/
 
@@ -56,3 +67,8 @@ target/
 *.class
 *.jar
 frontend/tsconfig.tsbuildinfo
+
+# Local backups
+.env.bak-pre-rotation
+*.env.bak
+*.env.tmp

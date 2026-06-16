@@ -121,12 +121,15 @@ model User {
   // check — the flag only gates the very first contact.
   allowMessagesFromStrangers Boolean @default(true) @map("allow_messages_from_strangers")
 
-  messageThreadsAsUser  MessageThread[] @relation("ThreadAsUser")
-  messageThreadsAsAdmin MessageThread[] @relation("ThreadAsAdmin")
-  messageThreadsAsUserA MessageThread[] @relation("ThreadUserA")
-  messageThreadsAsUserB MessageThread[] @relation("ThreadUserB")
-  messagesSent          Message[]       @relation("MessageSender")
-  messageReads          MessageRead[]   @relation("MessageReadUser")
+  messageThreadsAsUser  MessageThread[]   @relation("ThreadAsUser")
+  messageThreadsAsAdmin MessageThread[]   @relation("ThreadAsAdmin")
+  messageThreadsAsUserA MessageThread[]   @relation("ThreadUserA")
+  messageThreadsAsUserB MessageThread[]   @relation("ThreadUserB")
+  messagesSent          Message[]         @relation("MessageSender")
+  messageReads          MessageRead[]     @relation("MessageReadUser")
+  nicknamesOwned        ThreadNickname[]  @relation("NicknameOwner")
+  nicknamesTargeted     ThreadNickname[]  @relation("NicknameTarget")
+  reactions             MessageReaction[] @relation("ReactionUser")
 
   // ─── Personal dashboard (per-user, never deleted) ────────
   // Each user owns exactly one DashboardState row. The 1:N
@@ -1337,6 +1340,7 @@ model MessageThread {
   userB      User?         @relation("ThreadUserB", fields: [userBId], references: [id], onDelete: Cascade)
   messages   Message[]
   readStates MessageRead[]
+  nicknames  ThreadNickname[]
 
   @@unique([userId, adminUserId, type], name: "uk_thread_admin_pair")
   @@unique([userAId, userBId, type], name: "uk_thread_user_pair")
@@ -1352,17 +1356,70 @@ model Message {
   senderId  Int       @map("sender_id")
   content   String    @db.Text
   // Soft delete: message hidden from UI but kept for audit.
+  // Note: `deletedAt` means "Xoá" (delete for me / unsend).
+  // `recalledAt` means "Thu hoi" (withdraw, also hides content).
   deletedAt DateTime? @map("deleted_at")
+  // Recall: sender retracted the message. After this timestamp
+  // the message is treated as "Tin nhắn đã thu hồi" everywhere.
+  // We keep the row for audit but the content is wiped.
+  recalledAt DateTime? @map("recalled_at")
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 
   thread      MessageThread       @relation(fields: [threadId], references: [id], onDelete: Cascade)
   sender      User                @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
   attachments MessageAttachment[]
+  reactions   MessageReaction[]
 
   @@index([threadId, createdAt], name: "idx_msg_thread_time")
   @@index([senderId], name: "idx_msg_sender")
   @@map("messages")
+}
+
+/// Per-user, per-thread nickname. Lets a user rename the other
+/// participant in their own sidebar / chat header without
+/// affecting the peer's view. Maps userId -> (threadId -> alias).
+model ThreadNickname {
+  id        Int      @id @default(autoincrement())
+  threadId  Int      @map("thread_id")
+  // The user who SET the nickname (not the user being renamed).
+  ownerId   Int      @map("owner_id")
+  // The user being renamed (the "other" participant in the
+  // owner's view of this thread).
+  targetId  Int      @map("target_id")
+  // The alias. Empty string means "no alias" / cleared.
+  alias     String   @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  thread MessageThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  owner  User          @relation("NicknameOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  target User          @relation("NicknameTarget", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@unique([threadId, ownerId, targetId], name: "uk_nickname_per_user")
+  @@index([ownerId], name: "idx_nickname_owner")
+  @@map("thread_nicknames")
+}
+
+/// One row per (user, message, emoji). Multiple users can react
+/// with the same emoji, but the same user can only have one
+/// reaction of a given emoji per message (re-react is a no-op).
+model MessageReaction {
+  id        Int      @id @default(autoincrement())
+  messageId Int      @map("message_id")
+  userId    Int      @map("user_id")
+  // The reaction emoji — we use a short string code (e.g. "👍")
+  // to keep things simple. We don't need a separate ReactionType
+  // table for v1; new emojis are added by just sending them.
+  emoji     String   @db.VarChar(16)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation("ReactionUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId, emoji], name: "uk_reaction_user_emoji")
+  @@index([messageId], name: "idx_reaction_message")
+  @@map("message_reactions")
 }
 
 model MessageAttachment {

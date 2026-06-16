@@ -187,12 +187,16 @@ export class MessagesService {
     });
     const readMap = new Map(reads.map((r) => [r.threadId, r.lastReadAt]));
 
-    return threads.map((t) => {
+    const serialized = await Promise.all(
+      threads.map((t) => this.serializeThreadAsync(t, userId)),
+    );
+
+    return threads.map((t, idx) => {
       const lastMsg = t.messages[0] ?? null;
       const lastRead = readMap.get(t.id) ?? new Date(0);
       const unread = lastMsg && lastMsg.senderId !== userId && lastMsg.createdAt > lastRead ? 1 : 0;
       return {
-        ...this.serializeThread(t, userId),
+        ...serialized[idx],
         lastMessage: lastMsg ? this.serializeMessagePreview(lastMsg) : null,
         unreadCount: unread,
       };
@@ -227,14 +231,18 @@ export class MessagesService {
     });
     const readMap = new Map(reads.map((r) => [r.threadId, r.lastReadAt]));
 
-    return threads.map((t) => {
+    const serialized = await Promise.all(
+      threads.map((t) => this.serializeThreadAsync(t, adminId)),
+    );
+
+    return threads.map((t, idx) => {
       const lastMsg = t.messages[0] ?? null;
       const lastRead = readMap.get(t.id) ?? new Date(0);
       // For admin, unread means the user sent something the admin hasn't read
       const unread =
         lastMsg && lastMsg.senderId !== adminId && lastMsg.createdAt > lastRead ? 1 : 0;
       return {
-        ...this.serializeThread(t, adminId),
+        ...serialized[idx],
         lastMessage: lastMsg ? this.serializeMessagePreview(lastMsg) : null,
         unreadCount: unread,
       };
@@ -267,10 +275,37 @@ export class MessagesService {
         attachments: {
           include: { file: { select: { id: true, filePath: true } } },
         },
+        reactions: {
+          select: { emoji: true, userId: true },
+        },
       },
     });
 
-    return messages.reverse().map((m) => this.serializeMessage(m));
+    const ids = messages.map((m) => m.id);
+    const reactionsByMsg = new Map<number, Array<{ emoji: string; count: number; userIds: number[] }>>();
+    for (const m of messages) {
+      if (m.reactions.length === 0) continue;
+      const byEmoji = new Map<string, number[]>();
+      for (const r of m.reactions) {
+        const arr = byEmoji.get(r.emoji) ?? [];
+        arr.push(r.userId);
+        byEmoji.set(r.emoji, arr);
+      }
+      reactionsByMsg.set(
+        m.id,
+        Array.from(byEmoji.entries()).map(([emoji, userIds]) => ({
+          emoji,
+          count: userIds.length,
+          userIds,
+        })),
+      );
+    }
+    void ids;
+
+    return messages.reverse().map((m) => ({
+      ...this.serializeMessage(m),
+      reactions: reactionsByMsg.get(m.id) ?? [],
+    }));
   }
 
   async sendMessage(
@@ -405,10 +440,155 @@ export class MessagesService {
     if (msg.senderId !== requesterId && !isRequesterAdmin) {
       throw new AppError('You can only delete your own messages', 403, 'NOT_MESSAGE_OWNER');
     }
+    if (msg.recalledAt) {
+      // Already recalled — the "delete" semantics are essentially
+      // the same as recall from the UI's perspective.
+      return;
+    }
     await prisma.message.update({
       where: { id: messageId },
       data: { deletedAt: new Date() },
     });
+    this.emitMessageUpdated(msg.thread, messageId, { deleted: true });
+  }
+
+  /**
+   * Recall (withdraw) a message. Only the sender may recall, and
+   * only within a short window (default 5 min) — past that, the
+   * recipient has already seen it and we shouldn't allow silent
+   * un-sending. The message row stays for audit; `recalledAt` is
+   * set and the content is wiped. The UI shows "Tin nhắn đã thu hồi".
+   */
+  async recallMessage(messageId: number, requesterId: number) {
+    const RECALL_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
+    const msg = await prisma.message.findUnique({
+      where: { id: messageId },
+      include: { thread: true },
+    });
+    if (!msg) throw new AppError('Message not found', 404, 'MESSAGE_NOT_FOUND');
+    if (msg.senderId !== requesterId) {
+      throw new AppError('Bạn chỉ có thể thu hồi tin nhắn của mình', 403, 'NOT_MESSAGE_OWNER');
+    }
+    if (msg.recalledAt) return; // idempotent
+    if (msg.deletedAt) {
+      // Already deleted; recall would be meaningless.
+      return;
+    }
+    const age = Date.now() - new Date(msg.createdAt).getTime();
+    if (age > RECALL_WINDOW_MS) {
+      throw new AppError(
+        'Chỉ có thể thu hồi tin nhắn trong vòng 5 phút sau khi gửi',
+        400,
+        'RECALL_WINDOW_EXPIRED',
+      );
+    }
+    const now = new Date();
+    await prisma.message.update({
+      where: { id: messageId },
+      data: { recalledAt: now, content: '' },
+    });
+    this.emitMessageUpdated(msg.thread, messageId, { recalled: true, recalledAt: now });
+  }
+
+  // ─── Reactions ─────────────────────────────────────────
+
+  /**
+   * Toggle a reaction (e.g. "👍") on a message by the current
+   * user. If the user has already reacted with this emoji, the
+   * reaction is removed (un-react). Otherwise it's added. This
+   * is the same UX model Slack/iMessage use.
+   */
+  async toggleReaction(messageId: number, userId: number, emoji: string) {
+    if (!emoji || emoji.length > 16) {
+      throw new AppError('Emoji không hợp lệ', 400, 'INVALID_EMOJI');
+    }
+    const msg = await prisma.message.findUnique({
+      where: { id: messageId },
+      include: { thread: true },
+    });
+    if (!msg) throw new AppError('Message not found', 404, 'MESSAGE_NOT_FOUND');
+    this.assertParticipant(msg.thread, userId);
+
+    const existing = await prisma.messageReaction.findUnique({
+      where: {
+        uk_reaction_user_emoji: { messageId, userId, emoji },
+      },
+    });
+
+    let action: 'added' | 'removed';
+    if (existing) {
+      await prisma.messageReaction.delete({ where: { id: existing.id } });
+      action = 'removed';
+    } else {
+      await prisma.messageReaction.create({
+        data: { messageId, userId, emoji },
+      });
+      action = 'added';
+    }
+
+    // Return the up-to-date reaction summary so the client can
+    // update without a separate fetch.
+    const summary = await this.getReactionSummary(messageId);
+    this.emitMessageUpdated(msg.thread, messageId, { reactions: summary });
+    return { action, summary };
+  }
+
+  private async getReactionSummary(messageId: number): Promise<Array<{ emoji: string; count: number; userIds: number[] }>> {
+    const rows = await prisma.messageReaction.findMany({
+      where: { messageId },
+      orderBy: { createdAt: 'asc' },
+    });
+    const byEmoji = new Map<string, number[]>();
+    for (const r of rows) {
+      const arr = byEmoji.get(r.emoji) ?? [];
+      arr.push(r.userId);
+      byEmoji.set(r.emoji, arr);
+    }
+    return Array.from(byEmoji.entries()).map(([emoji, userIds]) => ({
+      emoji,
+      count: userIds.length,
+      userIds,
+    }));
+  }
+
+  // ─── Nicknames ─────────────────────────────────────────
+
+  /**
+   * Set a per-thread nickname for the "other" participant.
+   * The nickname is local to `ownerId` — it does not affect how
+   * `targetId` sees the thread. Empty string clears the alias.
+   */
+  async setNickname(threadId: number, ownerId: number, targetId: number, alias: string) {
+    const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
+    if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');
+    this.assertParticipant(thread, ownerId);
+    if (ownerId === targetId) {
+      throw new AppError('Không thể đặt biệt danh cho chính mình', 400, 'SELF_NICKNAME');
+    }
+    const trimmed = (alias ?? '').trim().slice(0, 100);
+    const updated = await prisma.threadNickname.upsert({
+      where: {
+        uk_nickname_per_user: { threadId, ownerId, targetId },
+      },
+      create: { threadId, ownerId, targetId, alias: trimmed },
+      update: { alias: trimmed },
+    });
+    this.emitThreadUpdated(thread, { nicknameChanged: true, ownerId, targetId, alias: trimmed });
+    return updated;
+  }
+
+  /**
+   * Get the nicknames the current user has set in any of their
+   * threads. Returns a map keyed by `${threadId}:${targetId}` so
+   * the frontend can look up the alias per (thread, peer) pair
+   * without N+1 queries.
+   */
+  async listNicknamesForUser(userId: number): Promise<Array<{ threadId: number; targetId: number; alias: string }>> {
+    const rows = await prisma.threadNickname.findMany({
+      where: { ownerId: userId },
+      select: { threadId: true, targetId: true, alias: true },
+    });
+    return rows.filter((r) => r.alias.length > 0);
   }
 
   // ─── Helpers ───────────────────────────────────────────
@@ -468,6 +648,55 @@ export class MessagesService {
    * columns. Public so route handlers (e.g. GET /threads/:id) can
    * reuse the same serialisation that the list endpoints use.
    */
+  public async serializeThreadAsync(
+    t: {
+      id: number;
+      type: string;
+      userId: number | null;
+      adminUserId: number | null;
+      userAId: number | null;
+      userBId: number | null;
+      lastMessageAt: Date | null;
+      createdAt: Date;
+      updatedAt: Date;
+      user?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+      adminUser?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+      userA?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+      userB?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+    },
+    viewerId: number,
+  ) {
+    const peer = t.type === 'ADMIN'
+      ? (t.userId === viewerId ? t.adminUser : t.user)
+      : (t.userAId === viewerId ? t.userB : t.userA);
+
+    let alias: string | null = null;
+    if (peer) {
+      const nick = await prisma.threadNickname.findUnique({
+        where: { uk_nickname_per_user: { threadId: t.id, ownerId: viewerId, targetId: peer.id } },
+        select: { alias: true },
+      });
+      if (nick && nick.alias.length > 0) alias = nick.alias;
+    }
+
+    return {
+      id: t.id,
+      type: t.type,
+      lastMessageAt: t.lastMessageAt,
+      createdAt: t.createdAt,
+      updatedAt: t.updatedAt,
+      peer: peer
+        ? {
+            id: peer.id,
+            username: peer.username,
+            displayName: alias ?? peer.displayName ?? peer.fullName ?? peer.username,
+            avatarUrl: peer.avatarUrl,
+            alias,
+          }
+        : null,
+    };
+  }
+
   public serializeThread(
     t: {
       id: number;
@@ -502,6 +731,7 @@ export class MessagesService {
             username: peer.username,
             displayName: peer.displayName ?? peer.fullName ?? peer.username,
             avatarUrl: peer.avatarUrl,
+            alias: null as string | null,
           }
         : null,
     };
@@ -533,6 +763,7 @@ export class MessagesService {
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date | null;
+    recalledAt: Date | null;
     sender: { id: number; username: string; fullName: string | null; displayName: string | null; avatarUrl: string | null };
     attachments: {
       id: number;
@@ -548,8 +779,12 @@ export class MessagesService {
       id: m.id,
       threadId: m.threadId,
       senderId: m.senderId,
-      content: m.deletedAt ? '' : m.content,
+      // Recalled: content wiped, show empty (UI shows a stub).
+      // Deleted: same — UI shows the "đã xoá" stub.
+      content: m.deletedAt || m.recalledAt ? '' : m.content,
       deleted: m.deletedAt !== null,
+      recalled: m.recalledAt !== null,
+      recalledAt: m.recalledAt,
       createdAt: m.createdAt,
       updatedAt: m.updatedAt,
       sender: {
@@ -588,6 +823,45 @@ export class MessagesService {
       message,
     };
     emitter.emit('thread:new-message', payload);
+  }
+
+  /**
+   * Emit a targeted "message updated" event for in-place state
+   * changes (recall, delete, reactions). Recipients are the
+   * thread's participants — we use both the thread room AND
+   * each participant's user room so users see the update
+   * regardless of whether they have the thread open.
+   */
+  private emitMessageUpdated(
+    thread: { id: number; type: string; userId: number | null; adminUserId: number | null; userAId: number | null; userBId: number | null },
+    messageId: number,
+    changes: { deleted?: boolean; recalled?: boolean; recalledAt?: Date; reactions?: unknown },
+  ) {
+    const emitter = this.getEmitter();
+    if (!emitter) return;
+    const payload = {
+      threadId: thread.id,
+      threadType: thread.type,
+      participantIds: this.collectParticipantIds(thread),
+      messageId,
+      changes,
+    };
+    emitter.emit('message:updated', payload);
+  }
+
+  private emitThreadUpdated(
+    thread: { id: number; type: string; userId: number | null; adminUserId: number | null; userAId: number | null; userBId: number | null },
+    changes: Record<string, unknown>,
+  ) {
+    const emitter = this.getEmitter();
+    if (!emitter) return;
+    const payload = {
+      threadId: thread.id,
+      threadType: thread.type,
+      participantIds: this.collectParticipantIds(thread),
+      changes,
+    };
+    emitter.emit('thread:updated', payload);
   }
 
   private emitRead(

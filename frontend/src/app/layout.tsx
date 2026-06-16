@@ -1,5 +1,5 @@
 import '@/app/globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter, Poppins, JetBrains_Mono } from 'next/font/google'
 import dynamic from 'next/dynamic'
 import Navbar from '@/components/layout/Navbar'
@@ -8,6 +8,7 @@ import CartDrawer from '@/components/shop/CartDrawer'
 import AuthProvider from '@/components/providers/AuthProvider'
 import ToasterProvider from '@/components/providers/ToasterProvider'
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider'
+import ServiceWorkerRegister from '@/components/providers/ServiceWorkerRegister'
 import MusicAudioController from '@/components/music/MusicAudioController'
 import MusicHistoryRecorder from '@/components/music/MusicHistoryRecorder'
 import CyberCursor from '@/components/ui/CyberCursor'
@@ -57,10 +58,26 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://cuonghoang.xyz'),
   title: 'CuongThai',
   description: 'Portfolio & E-commerce Platform with AI Integration',
+  applicationName: 'CuongThai',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'CuongThai',
+  },
   icons: {
     icon: '/favicon.png',
     apple: '/favicon.png',
   },
+}
+
+// Separate `viewport` export (Next.js 14 way — keeps it
+// from clashing with the static `metadata` object above).
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#0a0a14',
 }
 
 export default function RootLayout({
@@ -79,6 +96,7 @@ export default function RootLayout({
         <ToasterProvider />
         <TanStackQueryProvider>
           <LocaleWrapper>
+            <ServiceWorkerRegister />
             <ClientOnly>
               <Navbar />
               <CartDrawer />

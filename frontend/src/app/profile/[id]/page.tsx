@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import SafeAvatar from '@/components/ui/SafeAvatar';
 import {
   ArrowLeft,
   User,
@@ -216,21 +217,14 @@ function ProfileCard({ profile }: { profile: PublicProfile }) {
       <div className="relative px-4 pb-4 sm:px-6">
         <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:gap-5">
           <div className="-mt-14 sm:-mt-16">
-            {profile.avatarUrl ? (
-              <img
-                src={profile.avatarUrl}
-                alt={profile.username}
-                className="h-28 w-28 rounded-2xl object-cover border-4 shadow-2xl"
-                style={{ borderColor: '#03020c' }}
-              />
-            ) : (
-              <div
-                className="flex h-28 w-28 items-center justify-center rounded-2xl bg-gradient-to-br from-neon-indigo to-neon-violet text-5xl font-bold text-white border-4 shadow-2xl"
-                style={{ borderColor: '#03020c' }}
-              >
-                {(displayName || '?').charAt(0).toUpperCase()}
-              </div>
-            )}
+            <SafeAvatar
+              src={profile.avatarUrl}
+              alt={displayName || profile.username}
+              seed={profile.username}
+              size={112}
+              rounded="2xl"
+              className="border-4 shadow-2xl"
+            />
           </div>
           <div className="flex-1 min-w-0 pb-1">
             <div className="flex flex-wrap items-center gap-2">

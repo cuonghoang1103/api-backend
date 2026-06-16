@@ -13,8 +13,19 @@ WORKDIR /app
 # Any source code change won't trigger re-download of packages.
 COPY package*.json ./
 
-# Install ALL dependencies (including dev for build)
-RUN npm install --prefer-offline
+# Install dependencies. Offline fallback uses /app-host-cache/
+# that the deploy script pre-warms (see scripts/pre-warm-node-modules.sh).
+COPY --chown=root:root host-cache /app-host-cache
+RUN npm install --prefer-offline --no-audit --fetch-timeout=60000 || \
+    (echo "⚠ npm install failed (offline?). Restoring from host cache..." && \
+     if [ -d /app-host-cache/frontend-node_modules/sharp ] && [ -d /app-host-cache/frontend-node_modules/.bin/next ]; then \
+       rm -rf node_modules && \
+       cp -r /app-host-cache/frontend-node_modules ./node_modules && \
+       echo "✅ Restored from host cache" && \
+       npm rebuild --no-audit || true; \
+     else \
+       echo "❌ No host fallback. Re-run scripts/pre-warm-node-modules.sh" && exit 1; \
+     fi)
 
 # ─── Stage 2: Builder (compile code) ─────────────────────────
 FROM node:22-alpine AS builder
@@ -39,6 +50,13 @@ ARG GOOGLE_CLIENT_ID
 ARG GOOGLE_CLIENT_SECRET
 ARG GITHUB_CLIENT_ID
 ARG GITHUB_CLIENT_SECRET
+# Sentry (browser error tracking). NEXT_PUBLIC_* vars are inlined
+# at build time by Next.js's webpack plugin, so they MUST be passed
+# as build args — runtime env vars won't reach the browser bundle.
+ARG NEXT_PUBLIC_SENTRY_DSN
+ARG NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE
+ARG NEXT_PUBLIC_SENTRY_ENVIRONMENT
+ARG NEXT_PUBLIC_SENTRY_RELEASE
 ARG BUILD_NUMBER=local
 
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
@@ -49,6 +67,10 @@ ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
 ENV GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
 ENV GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID
 ENV GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET
+ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
+ENV NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE=$NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE
+ENV NEXT_PUBLIC_SENTRY_ENVIRONMENT=$NEXT_PUBLIC_SENTRY_ENVIRONMENT
+ENV NEXT_PUBLIC_SENTRY_RELEASE=$NEXT_PUBLIC_SENTRY_RELEASE
 
 # Build Next.js (standalone output)
 RUN npm run build

@@ -78,7 +78,7 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
-      ADMIN_EMAILS: ${ADMIN_EMAILS:-cuonghoang1103@gmail.com}
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-cuongthaihnhe176322@gmail.com}
       UPLOAD_DIR: /app/uploads
       # Master switch for the Turnstile CAPTCHA challenge on /login and
       # /register. Defaults to true when TURNSTILE_SECRET_KEY is set, but
@@ -103,6 +103,11 @@ services:
       RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-CuongHoangDev <noreply@cuongthai.com>}
       YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
       PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-https://api.cuongthai.com}
+      # Sentry (error tracking). Leave empty to disable.
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      SENTRY_TRACES_SAMPLE_RATE: ${SENTRY_TRACES_SAMPLE_RATE:-0.1}
+      SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT:-production}
+      SENTRY_RELEASE: ${SENTRY_RELEASE:-}
     env_file:
       - /opt/cuonghoangdev/.env
     volumes:
@@ -144,6 +149,13 @@ services:
         GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
         GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
         GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+        # Sentry (browser-side error capture). Injected at build time
+        # because NEXT_PUBLIC_* vars are inlined by Next.js during
+        # webpack compilation. Leave empty to disable.
+        NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+        NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE: ${NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE:-0.1}
+        NEXT_PUBLIC_SENTRY_ENVIRONMENT: ${NEXT_PUBLIC_SENTRY_ENVIRONMENT:-production}
+        NEXT_PUBLIC_SENTRY_RELEASE: ${NEXT_PUBLIC_SENTRY_RELEASE:-}
     container_name: cuonghoangdev_frontend
     restart: unless-stopped
     environment:
@@ -158,8 +170,11 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
-      ADMIN_EMAILS: ${ADMIN_EMAILS:-cuonghoang1103@gmail.com}
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-cuongthaihnhe176322@gmail.com}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+      NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE: ${NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE:-0.1}
+      NEXT_PUBLIC_SENTRY_ENVIRONMENT: ${NEXT_PUBLIC_SENTRY_ENVIRONMENT:-production}
     networks:
       - backend
     deploy:
@@ -195,7 +210,17 @@ services:
         limits:
           memory: 256M
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost/ || exit 1"]
+      # Use HTTPS with --no-check-certificate because:
+      # - port 80 only serves the ACME challenge and 301-redirects everything
+      #   else, which wget (without -L) doesn't follow, so the healthcheck
+      #   would never return 200 from the body.
+      # - the cert mounted here is the real Let's Encrypt cert, but
+      #   wget inside alpine doesn't ship the ISRG root by default and
+      #   the SAN doesn't include "localhost", so cert verification fails.
+      # The healthcheck only proves that nginx accepted the TLS handshake
+      # and started serving — i.e. nginx is up. The Sentry-backed monitor.sh
+      # does the real end-to-end check every 5 min against the public URL.
+      test: ["CMD-SHELL", "wget --no-check-certificate -qO- https://localhost/ >/dev/null 2>&1 || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3

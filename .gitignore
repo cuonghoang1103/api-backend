@@ -18,6 +18,8 @@ scripts/seed-*.local.*
 test_socket.cjs
 test_socket.js
 *.local.cjs
+# VPS info / credentials notes — contain plaintext root password
+hoangappvps.txt
 *.local.js
 
 # Prisma

@@ -13,14 +13,44 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3 make g+
 # Copy package files
 COPY package*.json ./
 
-# Install ALL dependencies (including devDependencies for TypeScript)
-RUN npm ci --include=dev
+# Install ALL dependencies (including devDependencies for TypeScript).
+# Offline fallback: if npm ci fails (VPS firewall blocks registry),
+# restore from /app-host-cache/ that was copied via pre-warm script
+# (see scripts/pre-warm-node-modules.sh). The COPY above requires
+# host-cache/ to exist in the build context; the deploy script
+# always creates it before `docker compose up --build`.
+COPY --chown=root:root host-cache /app-host-cache
+RUN npm ci --include=dev --prefer-offline --no-audit --fetch-timeout=60000 || \
+    (echo "⚠ npm ci failed (offline?). Restoring from host cache..." && \
+     if [ -d /app-host-cache/node_modules/sharp ] && [ -d /app-host-cache/node_modules/@prisma ]; then \
+       rm -rf node_modules && \
+       cp -r /app-host-cache/node_modules ./node_modules && \
+       echo "✅ Restored from host cache" && \
+       npm rebuild --no-audit || true; \
+     else \
+       echo "❌ No host fallback. Re-run scripts/pre-warm-node-modules.sh" && exit 1; \
+     fi)
 
 # Copy source code
 COPY . .
 
-# Generate Prisma Client
-RUN npx prisma generate
+# Generate Prisma Client from the fresh schema in COPY . . above.
+# Use prisma generate with --no-engine to skip downloading engine
+# binaries when possible (offline VPS). The engines themselves
+# were already pre-warmed by scripts/pre-warm-node-modules.sh
+# into /app-host-cache/node_modules/.prisma/, which we copy
+# into the final image as well.
+RUN npx prisma generate 2>&1 | tail -5 || \
+    (echo "⚠ prisma generate failed (offline?). Using host .prisma cache..." && \
+     if [ -d /app-host-cache/node_modules/.prisma/client/schema.prisma ]; then \
+       rm -rf ./node_modules/.prisma && \
+       cp -r /app-host-cache/node_modules/.prisma ./node_modules/.prisma && \
+       cp -r /app-host-cache/node_modules/@prisma ./node_modules/@prisma.tmp && \
+       rm -rf ./node_modules/@prisma && mv ./node_modules/@prisma.tmp ./node_modules/@prisma && \
+       echo "✅ Restored .prisma + @prisma from host cache"; \
+     else \
+       echo "❌ No prisma cache. Re-run pre-warm-node-modules.sh" && exit 1; \
+     fi)
 
 # TypeScript compilation
 RUN npm run build

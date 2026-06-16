@@ -8,3 +8,7 @@ bin
 postgres
 redis
 uploads
+# host-cache is pre-warmed by deploy-vps.sh and used as
+# offline fallback when npm registry / GitHub are blocked.
+# MUST be included in build context.
+# !host-cache

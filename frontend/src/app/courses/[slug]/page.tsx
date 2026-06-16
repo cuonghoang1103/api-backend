@@ -5,9 +5,9 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Star, Users, Clock, BookOpen, Play, Lock, CheckCircle,
-  ChevronDown, ChevronUp, Loader2, Award, Globe, Calendar, Download, ArrowLeft
+  ChevronDown, ChevronUp, Loader2, Award, Globe, Calendar, Download, ArrowLeft, CreditCard
 } from 'lucide-react';
-import { coursesApi } from '@/lib/api';
+import { coursesApi, paymentApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -42,6 +42,7 @@ export default function CourseDetailPage() {
   const [reviews, setReviews] = useState<CourseReview[]>([]);
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
+  const [buying, setBuying] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
 
   // ── DEBUG: render counter — lets us prove from the browser
@@ -123,6 +124,29 @@ export default function CourseDetailPage() {
     }
   };
 
+  // Paid-course flow: call backend to create a CourseOrder, get the
+  // VNPay paymentUrl, then redirect. Backend will process the IPN
+  // callback to enroll the user.
+  const handleBuyCourse = async () => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+    if (!course) return;
+    setBuying(true);
+    try {
+      const res = await paymentApi.createCourseOrder(course.id);
+      const { paymentUrl } = res.data.data;
+      // Redirect to VNPay gateway. The user pays (QR/ATM/Visa) and
+      // lands back on /payment/return which polls for status.
+      window.location.href = paymentUrl;
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { message?: string } } };
+      toast.error(e?.response?.data?.message || 'Khong the tao don thanh toan');
+      setBuying(false);
+    }
+  };
+
   const toggleSection = (id: number) => {
     setExpandedSections(prev => {
       const next = new Set(prev);
@@ -159,6 +183,10 @@ export default function CourseDetailPage() {
 
   const hasDiscount = course.discountPrice && course.discountPrice > 0;
   const canWatch = course.isEnrolled || course.isFree;
+  // Paid course = explicitly not free AND has a price > 0.
+  // Backend has the same check, but duplicating here means we render
+  // the right button without a server round-trip.
+  const isPaidCourse = !course.isFree && Number(course.price) > 0;
   // eslint-disable-next-line no-console
   console.log('[course-detail] before split', { hasDiscount, canWatch, hasWhat: !!course.whatYouLearn, hasReq: !!course.requirements });
   const whatYouLearnList = course.whatYouLearn ? course.whatYouLearn.split('\n').filter(Boolean) : [];
@@ -300,6 +328,24 @@ export default function CourseDetailPage() {
                     >
                       Continue Learning
                     </Link>
+                  ) : isPaidCourse ? (
+                    <button
+                      onClick={handleBuyCourse}
+                      disabled={buying}
+                      className="w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+                    >
+                      {buying ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <CreditCard className="w-5 h-5" />
+                      )}
+                      {buying
+                        ? 'Dang tao don thanh toan...'
+                        : `Mua khoa hoc - ${formatPrice(
+                            Number(course.discountPrice && hasDiscount ? course.discountPrice : course.price),
+                            false,
+                          )}`}
+                    </button>
                   ) : (
                     <button
                       onClick={handleEnroll}
@@ -307,12 +353,16 @@ export default function CourseDetailPage() {
                       className="w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {enrolling && <Loader2 className="w-5 h-5 animate-spin" />}
-                      {enrolling ? 'Registering...' : course.isFree ? 'Enroll for Free' : 'Enroll Now'}
+                      {enrolling ? 'Dang dang ky...' : 'Dang ky mien phi'}
                     </button>
                   )}
 
                   <p className="text-center text-text-muted text-xs mt-3">
-                    {course.isEnrolled ? 'You are enrolled in this course' : 'Lifetime access • Free updates'}
+                    {course.isEnrolled
+                      ? 'You are enrolled in this course'
+                      : isPaidCourse
+                        ? 'Thanh toan an toan qua VNPay (QR / ATM / Visa)'
+                        : 'Lifetime access - Free updates'}
                   </p>
                 </div>
               </div>

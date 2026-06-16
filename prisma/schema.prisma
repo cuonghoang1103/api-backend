@@ -59,18 +59,18 @@ model User {
 
   // ─── Account security (Giai đoạn 1 — bảo mật cao) ────────────────────
   // Email verification
-  emailVerified           Boolean   @default(false) @map("email_verified")
-  emailVerifiedAt         DateTime? @map("email_verified_at")
+  emailVerified   Boolean   @default(false) @map("email_verified")
+  emailVerifiedAt DateTime? @map("email_verified_at")
 
   // Account lockout (sau 5 lần nhập sai → khoá 15 phút)
-  failedLoginCount        Int       @default(0) @map("failed_login_count")
-  lockoutUntil            DateTime? @map("lockout_until")
-  lastFailedLoginAt       DateTime? @map("last_failed_login_at")
+  failedLoginCount  Int       @default(0) @map("failed_login_count")
+  lockoutUntil      DateTime? @map("lockout_until")
+  lastFailedLoginAt DateTime? @map("last_failed_login_at")
 
   // Login tracking (phát hiện thiết bị lạ)
-  lastLoginAt             DateTime? @map("last_login_at")
-  lastLoginIp             String?   @map("last_login_ip") @db.VarChar(64)
-  lastLoginUserAgent      String?   @map("last_login_user_agent") @db.VarChar(500)
+  lastLoginAt        DateTime? @map("last_login_at")
+  lastLoginIp        String?   @map("last_login_ip") @db.VarChar(64)
+  lastLoginUserAgent String?   @map("last_login_user_agent") @db.VarChar(500)
 
   provider   String? @db.VarChar(50)
   providerId String? @map("provider_id") @db.VarChar(255)
@@ -80,36 +80,37 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  roles                 UserRole[]
-  posts                 Post[]                 @relation("PostAuthor")
-  courses               Course[]               @relation("CourseInstructor")
-  enrollments           Enrollment[]
-  certificates          Certificate[]
-  musicPlaylists        MusicPlaylist[]
-  fileAttachments       FileAttachment[]
-  passwordResetTokens   PasswordResetToken[]
+  roles                   UserRole[]
+  posts                   Post[]                   @relation("PostAuthor")
+  courses                 Course[]                 @relation("CourseInstructor")
+  enrollments             Enrollment[]
+  certificates            Certificate[]
+  musicPlaylists          MusicPlaylist[]
+  fileAttachments         FileAttachment[]
+  passwordResetTokens     PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
-  blogComments          Comment[]
-  devPostComments       PostComment[]
-  courseReviews         CourseReview[]
-  shopOrders            ShopOrder[]
-  chatSessions          ChatSession[]
-  chatFeedback          ChatFeedback[]
-  assignmentSubmissions AssignmentSubmission[]
-  aiConfigUpdates       AiConfig[]             @relation("AiConfigUpdater")
-  musicHistories       MusicHistory[]
-  socialPosts          SocialPost[]
-  socialLikes         SocialLike[]
-  socialComments      SocialComment[]
-  socialCommentLikes  SocialCommentLike[]
-  socialSaves         SocialSave[]
-  socialShares        SocialShare[]
-  socialPollVotes     SocialPollVote[]
+  blogComments            Comment[]
+  devPostComments         PostComment[]
+  courseReviews           CourseReview[]
+  shopOrders              ShopOrder[]
+  courseOrders            CourseOrder[]
+  chatSessions            ChatSession[]
+  chatFeedback            ChatFeedback[]
+  assignmentSubmissions   AssignmentSubmission[]
+  aiConfigUpdates         AiConfig[]               @relation("AiConfigUpdater")
+  musicHistories          MusicHistory[]
+  socialPosts             SocialPost[]
+  socialLikes             SocialLike[]
+  socialComments          SocialComment[]
+  socialCommentLikes      SocialCommentLike[]
+  socialSaves             SocialSave[]
+  socialShares            SocialShare[]
+  socialPollVotes         SocialPollVote[]
 
-  cyberProfile CyberProfile?
-  cyberTasks   CyberTask[]
+  cyberProfile   CyberProfile?
+  cyberTasks     CyberTask[]
   cyberInventory CyberInventory?
-  discountCodes DiscountCode[]
+  discountCodes  DiscountCode[]
 
   // ─── Direct messaging (Phase 6) ─────────────────────────
   // Per-user flag controlling whether strangers (users with no
@@ -119,12 +120,12 @@ model User {
   // check — the flag only gates the very first contact.
   allowMessagesFromStrangers Boolean @default(true) @map("allow_messages_from_strangers")
 
-  messageThreadsAsUser  MessageThread[]   @relation("ThreadAsUser")
-  messageThreadsAsAdmin MessageThread[]   @relation("ThreadAsAdmin")
-  messageThreadsAsUserA MessageThread[]   @relation("ThreadUserA")
-  messageThreadsAsUserB MessageThread[]   @relation("ThreadUserB")
-  messagesSent          Message[]         @relation("MessageSender")
-  messageReads          MessageRead[]     @relation("MessageReadUser")
+  messageThreadsAsUser  MessageThread[] @relation("ThreadAsUser")
+  messageThreadsAsAdmin MessageThread[] @relation("ThreadAsAdmin")
+  messageThreadsAsUserA MessageThread[] @relation("ThreadUserA")
+  messageThreadsAsUserB MessageThread[] @relation("ThreadUserB")
+  messagesSent          Message[]       @relation("MessageSender")
+  messageReads          MessageRead[]   @relation("MessageReadUser")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -201,19 +202,19 @@ model CyberProfile {
 }
 
 model CyberTask {
-  id          Int          @id @default(autoincrement())
-  userId      Int          @map("user_id")
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title       String       @db.VarChar(255)
-  description String?      @db.Text
+  id          Int           @id @default(autoincrement())
+  userId      Int           @map("user_id")
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String        @db.VarChar(255)
+  description String?       @db.Text
   type        CyberTaskType @default(TASK)
-  startTime   String       @map("start_time") @db.VarChar(5)
-  endTime     String       @map("end_time") @db.VarChar(5)
-  isCompleted Boolean      @default(false) @map("is_completed")
-  expReward   Int          @default(10) @map("exp_reward")
-  date        DateTime     @db.Date
-  createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime     @updatedAt @map("updated_at")
+  startTime   String        @map("start_time") @db.VarChar(5)
+  endTime     String        @map("end_time") @db.VarChar(5)
+  isCompleted Boolean       @default(false) @map("is_completed")
+  expReward   Int           @default(10) @map("exp_reward")
+  date        DateTime      @db.Date
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
 
   @@index([userId, date], name: "idx_cyber_tasks_user_date")
   @@map("cyber_tasks")
@@ -245,7 +246,7 @@ model FileAttachment {
   uploadedAt   DateTime @default(now()) @map("uploaded_at")
   fileCategory String?  @map("file_category") @db.VarChar(50)
 
-  uploader User? @relation(fields: [uploadedBy], references: [id], onDelete: SetNull)
+  uploader           User?               @relation(fields: [uploadedBy], references: [id], onDelete: SetNull)
   messageAttachments MessageAttachment[]
 
   @@index([uploadedBy], name: "idx_file_attachments_uploaded_by")
@@ -484,6 +485,7 @@ model Course {
   certificates Certificate[]
   reviews      CourseReview[]
   tags         CourseTag[]
+  orders       CourseOrder[]
 
   @@index([categoryId], name: "idx_courses_category")
   @@index([instructorId], name: "idx_courses_instructor")
@@ -890,10 +892,10 @@ model MusicPlaylistTrack {
 // 8b. MUSIC LISTENING HISTORY
 // ============================================================
 model MusicHistory {
-  id        Int      @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   userId   Int      @map("user_id")
-  trackId   Int      @map("track_id")
-  playedAt  DateTime @default(now()) @map("played_at")
+  trackId  Int      @map("track_id")
+  playedAt DateTime @default(now()) @map("played_at")
 
   user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   track MusicTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
@@ -996,8 +998,8 @@ model ChatFeedback {
 }
 
 model ChatAnalytics {
-  id                Int       @id @default(autoincrement())
-  sessionId         String    @map("session_id") @db.VarChar(100)
+  id                Int      @id @default(autoincrement())
+  sessionId         String   @map("session_id") @db.VarChar(100)
   date              DateTime @map("date") @db.Date
   messageCount      Int      @default(0) @map("message_count")
   avgResponseTimeMs Int      @default(0) @map("avg_response_time_ms")
@@ -1048,13 +1050,13 @@ model AiPrompt {
 // ============================================================
 
 model DocumentChunk {
-  id           Int                         @id @default(autoincrement())
-  content      String                      @db.Text
-  metadata     Json?                       @default("{}") @db.JsonB
-  chunkIndex   Int                         @map("chunk_index")
-  documentId   String                      @map("document_id") @db.VarChar(100)
-  documentType String                      @map("document_type") @db.VarChar(50)
-  createdAt    DateTime                    @default(now()) @map("created_at")
+  id           Int      @id @default(autoincrement())
+  content      String   @db.Text
+  metadata     Json?    @default("{}") @db.JsonB
+  chunkIndex   Int      @map("chunk_index")
+  documentId   String   @map("document_id") @db.VarChar(100)
+  documentType String   @map("document_type") @db.VarChar(50)
+  createdAt    DateTime @default(now()) @map("created_at")
   /// 768-dim vector embedding (Groq `nomic-embed-text-v1.5` compatible).
   /// Added via raw SQL migration in scripts/enable-pgvector.sql because
   /// Prisma doesn't natively support pgvector's `vector(N)` type.
@@ -1070,21 +1072,21 @@ model DocumentChunk {
 // ============================================================
 
 model SocialPost {
-  id          Int       @id @default(autoincrement())
-  authorId    Int       @map("author_id")
-  content      String    @db.Text
-  visibility   String    @default("PUBLIC") @map("visibility") @db.VarChar(20)
-  status       String    @default("PUBLISHED") @db.VarChar(20)
-  latitude     Float?    @db.DoublePrecision
-  longitude    Float?    @db.DoublePrecision
-  locationName String?   @map("location_name") @db.VarChar(255)
-  viewCount    Int       @default(0) @map("view_count")
+  id           Int      @id @default(autoincrement())
+  authorId     Int      @map("author_id")
+  content      String   @db.Text
+  visibility   String   @default("PUBLIC") @map("visibility") @db.VarChar(20)
+  status       String   @default("PUBLISHED") @db.VarChar(20)
+  latitude     Float?   @db.DoublePrecision
+  longitude    Float?   @db.DoublePrecision
+  locationName String?  @map("location_name") @db.VarChar(255)
+  viewCount    Int      @default(0) @map("view_count")
   // Optional YouTube link attached to the post. Used by the feed
   // composer ("Paste YouTube URL") and rendered as an embedded
   // player on the post card when present.
-  youtubeUrl   String?   @map("youtube_url") @db.VarChar(500)
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  youtubeUrl   String?  @map("youtube_url") @db.VarChar(500)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   author   User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
   media    SocialMedia[]
@@ -1141,21 +1143,21 @@ model SocialLike {
 }
 
 model SocialComment {
-  id           Int       @id @default(autoincrement())
-  postId       Int       @map("post_id")
-  userId       Int       @map("user_id")
-  parentId     Int?      @map("parent_id")
-  content      String    @db.Text
-  likesCount   Int       @default(0) @map("likes_count")
-  repliesCount Int       @default(0) @map("replies_count")
-  isEdited     Boolean   @default(false) @map("is_edited")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  id           Int      @id @default(autoincrement())
+  postId       Int      @map("post_id")
+  userId       Int      @map("user_id")
+  parentId     Int?     @map("parent_id")
+  content      String   @db.Text
+  likesCount   Int      @default(0) @map("likes_count")
+  repliesCount Int      @default(0) @map("replies_count")
+  isEdited     Boolean  @default(false) @map("is_edited")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  post    SocialPost      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parent  SocialComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies SocialComment[] @relation("CommentReplies")
+  post    SocialPost          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user    User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent  SocialComment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies SocialComment[]     @relation("CommentReplies")
   likes   SocialCommentLike[]
 
   @@index([postId], name: "idx_social_comments_post")
@@ -1166,13 +1168,13 @@ model SocialComment {
 }
 
 model SocialCommentLike {
-  id         Int      @id @default(autoincrement())
-  commentId  Int      @map("comment_id")
-  userId     Int      @map("user_id")
-  createdAt  DateTime @default(now()) @map("created_at")
+  id        Int      @id @default(autoincrement())
+  commentId Int      @map("comment_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
 
   comment SocialComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([commentId, userId], name: "uk_social_comment_like")
   @@index([commentId], name: "idx_social_comment_likes_comment")
@@ -1216,15 +1218,15 @@ model SocialShare {
 // Each post can carry 0..1 poll. The options live in their own table
 // so we can count votes efficiently and reorder them on the client.
 model SocialPoll {
-  id           Int      @id @default(autoincrement())
-  postId       Int      @unique @map("post_id")
-  question     String   @db.VarChar(500)
-  multiChoice  Boolean  @default(false) @map("multi_choice")
-  closesAt     DateTime? @map("closes_at")
-  totalVotes   Int      @default(0) @map("total_votes")
-  createdAt    DateTime @default(now()) @map("created_at")
+  id          Int       @id @default(autoincrement())
+  postId      Int       @unique @map("post_id")
+  question    String    @db.VarChar(500)
+  multiChoice Boolean   @default(false) @map("multi_choice")
+  closesAt    DateTime? @map("closes_at")
+  totalVotes  Int       @default(0) @map("total_votes")
+  createdAt   DateTime  @default(now()) @map("created_at")
 
-  post    SocialPost        @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post    SocialPost         @relation(fields: [postId], references: [id], onDelete: Cascade)
   options SocialPollOption[]
   votes   SocialPollVote[]
 
@@ -1232,14 +1234,14 @@ model SocialPoll {
 }
 
 model SocialPollOption {
-  id        Int      @id @default(autoincrement())
-  pollId    Int      @map("poll_id")
-  text      String   @db.VarChar(255)
-  votesCount Int     @default(0) @map("votes_count")
-  sortOrder Int      @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at")
+  id         Int      @id @default(autoincrement())
+  pollId     Int      @map("poll_id")
+  text       String   @db.VarChar(255)
+  votesCount Int      @default(0) @map("votes_count")
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
 
-  poll  SocialPoll      @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  poll  SocialPoll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
   votes SocialPollVote[]
 
   @@index([pollId], name: "idx_social_poll_options_poll")
@@ -1308,11 +1310,11 @@ model MessageThread {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  user      User?  @relation("ThreadAsUser", fields: [userId], references: [id], onDelete: Cascade)
-  adminUser User?  @relation("ThreadAsAdmin", fields: [adminUserId], references: [id], onDelete: Cascade)
-  userA     User?  @relation("ThreadUserA", fields: [userAId], references: [id], onDelete: Cascade)
-  userB     User?  @relation("ThreadUserB", fields: [userBId], references: [id], onDelete: Cascade)
-  messages  Message[]
+  user       User?         @relation("ThreadAsUser", fields: [userId], references: [id], onDelete: Cascade)
+  adminUser  User?         @relation("ThreadAsAdmin", fields: [adminUserId], references: [id], onDelete: Cascade)
+  userA      User?         @relation("ThreadUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB      User?         @relation("ThreadUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  messages   Message[]
   readStates MessageRead[]
 
   @@unique([userId, adminUserId, type], name: "uk_thread_admin_pair")
@@ -1374,4 +1376,59 @@ model MessageRead {
 
   @@unique([threadId, userId], name: "uk_read_thread_user")
   @@map("message_reads")
+}
+
+// ============================================================
+// 19. COURSE PAYMENT (VNPay)
+// ============================================================
+// Luu moi order mua course qua VNPay. Khi IPN xac nhan thanh
+// toan thanh cong, backend tu dong tao Enrollment cho user.
+//
+// orderCode = vnp_TxnRef (VNPay), unique, format: COURSE_{courseId}_{userId}_{ts}
+model CourseOrder {
+  id              Int       @id @default(autoincrement())
+  orderCode       String    @unique(map: "uk_course_order_code") @db.VarChar(80)
+  userId          Int       @map("user_id")
+  courseId        Int       @map("course_id")
+  // So tien user phai tra (VND), da tru discount. Luu Decimal
+  // de tranh floating point rounding error.
+  amount          Decimal   @db.Decimal(10, 2)
+  // Trang thai: PENDING | PAID | FAILED | REFUNDED
+  status          String    @default("PENDING") @db.VarChar(20)
+  paymentMethod   String    @default("VNPAY") @map("payment_method") @db.VarChar(30)
+  // VNPay tra ve sau khi thanh toan thanh cong
+  paymentTxnNo    String?   @map("payment_txn_no") @db.VarChar(50)
+  paymentBankCode String?   @map("payment_bank_code") @db.VarChar(30)
+  paymentPayDate  DateTime? @map("payment_pay_date")
+  // Idempotent guard: true sau khi da tao Enrollment tu IPN.
+  // Tranh increment totalStudents 2 lan khi VNPay retry IPN.
+  enrolled        Boolean   @default(false)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status], name: "idx_course_orders_user_status")
+  @@index([courseId], name: "idx_course_orders_course")
+  @@map("course_orders")
+}
+
+// Log moi IPN callback tu VNPay de audit/debug.
+// KHONG dung de quyet dinh trang thai don hang (xem CourseOrder).
+// Mot don hang co the co nhieu log (VNPay retry).
+model PaymentTransaction {
+  id           Int       @id @default(autoincrement())
+  orderCode    String    @map("order_code") @db.VarChar(80)
+  gatewayTxnNo String?   @map("gateway_txn_no") @db.VarChar(50)
+  bankCode     String?   @map("bank_code") @db.VarChar(30)
+  payDate      DateTime? @map("pay_date")
+  responseCode String?   @map("response_code") @db.VarChar(10)
+  amount       Decimal   @db.Decimal(10, 2)
+  // Raw payload tu VNPay (de debug/audit)
+  rawPayload   Json      @map("raw_payload")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  @@index([orderCode], name: "idx_payment_tx_order")
+  @@map("payment_transactions")
 }

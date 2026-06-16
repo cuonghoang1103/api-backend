@@ -6,9 +6,9 @@ import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import {
   Clock, Users, BookOpen, Star, Play, Shield, Award,
-  ArrowLeft, CheckCircle, ShoppingCart, PlayCircle, Loader2,
+  ArrowLeft, CheckCircle, PlayCircle, Loader2, CreditCard,
 } from 'lucide-react';
-import { coursesApi } from '@/lib/api';
+import { coursesApi, paymentApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import type { Course, CourseReview } from '@/types';
 import { toast } from 'sonner';
@@ -394,7 +394,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                   ) : isFreeCourse ? (
                     <FreeEnrollButton course={course} onEnrolled={() => setCourse(prev => prev ? { ...prev, isEnrolled: true } : prev)} />
                   ) : (
-                    <AddToCartButton course={course} />
+                    <BuyNowButton course={course} />
                   )}
                 </div>
 
@@ -498,38 +498,58 @@ function FreeEnrollButton({ course, onEnrolled }: { course: Course; onEnrolled: 
 }
 
 // ── Add to Cart Button ─────────────────────────────────────────────────────────
-function AddToCartButton({ course }: { course: Course }) {
-  const [added, setAdded] = useState(false);
+// Buy-now button for paid courses. Calls backend to create a
+// CourseOrder + VNPay paymentUrl, then redirects the user to the
+// gateway. Backend's IPN callback handles actual enrollment on
+// payment success. User comes back to /payment/return for UI.
+function BuyNowButton({ course }: { course: Course }) {
+  const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
+  const { status: sessionStatus } = useSession();
+  const [buying, setBuying] = useState(false);
 
-  const handleAddToCart = () => {
-    import('@/store/cartStore').then(({ useCartStore }) => {
-      const store = useCartStore.getState();
-      const alreadyInCart = store.isInCart('academy', undefined, course.id);
-      if (alreadyInCart) {
-        store.openDrawer();
-        return;
-      }
-      store.addAcademyItem(course);
-      setAdded(true);
-      toast.success('Đã thêm khóa học vào giỏ hàng!');
-      store.openDrawer();
-    });
+  const handleBuy = async () => {
+    const isAuth = isAuthenticated || sessionStatus === 'authenticated';
+    if (!isAuth) {
+      router.push(`/login?callbackUrl=${encodeURIComponent(`/academy/courses/${course.slug}`)}`);
+      return;
+    }
+    setBuying(true);
+    try {
+      const res = await paymentApi.createCourseOrder(course.id);
+      const { paymentUrl } = res.data.data;
+      window.location.href = paymentUrl;
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { message?: string } } };
+      toast.error(e?.response?.data?.message || 'Khong the tao don thanh toan');
+      setBuying(false);
+    }
   };
+
+  // Pick the right price label (discount or original)
+  const finalPrice = course.discountPrice && Number(course.discountPrice) > 0
+    ? Number(course.discountPrice)
+    : Number(course.price);
+  const priceLabel = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(finalPrice);
 
   return (
     <button
-      onClick={handleAddToCart}
-      className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
+      onClick={handleBuy}
+      disabled={buying}
+      className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
     >
-      {added ? (
+      {buying ? (
         <>
-          <CheckCircle className="w-5 h-5" />
-          Đã có trong giỏ hàng
+          <Loader2 className="w-5 h-5 animate-spin" />
+          Dang tao don thanh toan...
         </>
       ) : (
         <>
-          <ShoppingCart className="w-5 h-5" />
-          Thêm vào giỏ hàng
+          <CreditCard className="w-5 h-5" />
+          Mua ngay - {priceLabel}
         </>
       )}
     </button>

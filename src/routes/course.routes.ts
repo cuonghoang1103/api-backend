@@ -977,6 +977,15 @@ router.post('/:id/enroll', authenticate, async (req, res: Response<ApiResponse>,
     const course = await prisma.course.findUnique({ where: { id: courseId } });
     if (!course) throw new AppError('Course not found', 404);
 
+    // Paid courses must go through the payment flow. Frontend should
+    // call POST /api/v1/payments/course to get a VNPay URL instead.
+    if (!course.isFree && Number(course.price) > 0) {
+      throw new AppError(
+        'Khoa hoc nay can thanh toan. Vui long mua de co the hoc.',
+        402,
+      );
+    }
+
     const existing = await prisma.enrollment.findUnique({
       where: { userId_courseId: { userId: req.userId!, courseId } },
     });

@@ -1030,3 +1030,15 @@ export interface MessagingUploadedFile {
   fileSize: number;
   mimeType: string;
 }
+
+// ─── Payment API (VNPay) ───────────────────────────────────
+export const paymentApi = {
+  // Create a course order, return VNPay paymentUrl to redirect to
+  createCourseOrder(courseId: number) {
+    return api.post('/api/v1/payments/course', { courseId });
+  },
+  // Poll order status after redirect from VNPay
+  getOrderStatus(orderCode: string) {
+    return api.get(`/api/v1/payments/order/${encodeURIComponent(orderCode)}`);
+  },
+};

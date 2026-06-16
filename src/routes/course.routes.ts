@@ -70,14 +70,13 @@ async function assertCanAccessCourseContent(
   if (isFree && mode !== 'admin-or-enrolled') {
     return { isAdmin: false, isEnrolled: true, isFree: true };
   }
-  // Admin bypass — but only for mode='admin-or-enrolled'. We
-  // don't want a normal admin to accidentally see paid content
-  // through the wrong endpoint. The /admin/* routes already
-  // have their own access control.
-  if (mode === 'admin-or-enrolled' && userId) {
-    // The user has many roles (UserRole join table). Check any
-    // role's slug/named in the admin set. The convention in
-    // this codebase is role.name = 'ROLE_ADMIN' or 'ROLE_SUPERADMIN'.
+  // Admin / instructor bypass — applies to every mode because
+  // we never want a course's own instructor or a privileged
+  // admin to be locked out of paid content. The /admin/* routes
+  // have their own access control, but public endpoints (e.g. the
+  // marketing /:slug page rendered for an admin user) should
+  // also show full content.
+  if (userId) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {

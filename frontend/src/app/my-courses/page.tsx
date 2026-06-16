@@ -22,7 +22,34 @@ export default function MyCoursesPage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const isLoading = isBackendLoading || status === 'loading';
+  // Safety timer: if the auth store never reports isHydrated
+  // (e.g. Zustand persist fails to load from storage on a
+  // browser with localStorage disabled), don't let the page
+  // sit at the spinner forever. After 1.5s we force unblock
+  // the load so the user at least sees the empty state or
+  // gets bounced to /login.
+  const [hydrationTimeout, setHydrationTimeout] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setHydrationTimeout(true), 1500);
+    return () => clearTimeout(t);
+  }, []);
+
+  const isHydrating = isBackendLoading || status === 'loading';
+  // Wait for the auth store to rehydrate before deciding the
+  // user state. isHydrated is flipped to true inside
+  // authStore.onRehydrateStorage once the persisted state has
+  // been read from localStorage. isLoading is a separate
+  // transient flag that only flips false on setAuth / logout
+  // / setLoading(false) — on a hard refresh the store starts
+  // at isLoading=true and the rehydrate hook does NOT clear
+  // it, so gating on isLoading would spin forever for any
+  // user who already has a persisted auth-storage entry.
+  // isHydrated is the correct signal. hydrationTimeout is a
+  // defensive backstop so the page unblocks even if the
+  // rehydrate hook itself fails to fire (e.g. localStorage
+  // unavailable in the browser).
+  const isStoreHydrated = useAuthStore((s) => s.isHydrated);
+  const isLoading = isHydrating && !isStoreHydrated && !hydrationTimeout;
   // Authenticated if either backend auth OR social login session exists
   const isAuthenticated = mounted && (isBackendAuth || status === 'authenticated');
 

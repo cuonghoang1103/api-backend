@@ -142,7 +142,13 @@ export const useAuthStore = create<AuthState>()(
         // flag, falling back to manual setItem if setState is
         // somehow unavailable.
         try {
-          useAuthStore.setState({ isHydrated: true });
+          // Also flip isLoading to false: rehydration means the
+          // auth state has been restored from storage, so the
+          // initial "is the user logged in?" check is done.
+          // Pages that gate on `isLoading` (e.g. /my-courses)
+          // would otherwise sit at the spinner forever even
+          // when the user is already authenticated.
+          useAuthStore.setState({ isHydrated: true, isLoading: false });
         } catch {
           // last resort: just mutate the visible flag through
           // the storage adapter so next read sees it.

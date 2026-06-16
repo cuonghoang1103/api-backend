@@ -321,7 +321,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
                 const newSession: ChatSession = {
                   id: Date.now(),
                   sessionId: resolvedSessionId,
-                  title: text.trim().slice(0, 50),
+                  title: assistantContent.trim().slice(0, 50),
                   createdAt: new Date().toISOString(),
                 };
                 addSession(newSession);

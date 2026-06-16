@@ -96,7 +96,7 @@ export default function AdminOrdersPage() {
     setLoading(true);
     try {
       const res = await adminGetOrders({ size: 100 });
-      setOrders((res.data || []).map(mapOrderFromBackend));
+      setOrders((res.content || []).map(mapOrderFromBackend));
       } catch {
       toast.error(t('admin.orders.loadError'));
     } finally {

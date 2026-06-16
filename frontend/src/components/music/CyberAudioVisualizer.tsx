@@ -103,7 +103,7 @@ export default function CyberAudioVisualizer({ isPlaying }: CyberAudioVisualizer
         if (!freqData || freqData.length !== analyser.frequencyBinCount) {
           freqData = new Uint8Array(analyser.frequencyBinCount);
         }
-        analyser.getByteFrequencyData(freqData);
+        analyser.getByteFrequencyData(freqData as Uint8Array<ArrayBuffer>);
       } else {
         freqData = null;
       }

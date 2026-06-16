@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Calendar, Cpu, Terminal, Package, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
+import { Calendar, Cpu, Terminal, Package, ChevronLeft, ChevronRight, RefreshCw, BarChart3 } from 'lucide-react';
 import {
   cyberApi as api,
   type CyberTask,

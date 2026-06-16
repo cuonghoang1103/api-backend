@@ -215,7 +215,7 @@ export default function ProjectDetailDrawer({
                       {STATUS_LABELS[project.status] ?? project.status}
                     </span>
                   )}
-                  {project.isFeatured && (
+                  {project.featured && (
                     <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-400/15 text-yellow-300">
                       Noi Bat
                     </span>

@@ -75,7 +75,7 @@ export default function AdminStatsPage() {
     { label: 'Memory Usage', value: `${stats?.memoryUsedMB || 0}MB / ${stats?.memoryTotalMB || 0}MB`, icon: Cpu, percent: stats?.memoryPercent || 0 },
     { label: 'Disk Usage', value: 'N/A', icon: HardDrive, percent: 0 },
     { label: 'Uptime', value: stats?.uptimeFormatted || 'N/A', icon: Clock, percent: 0 },
-    { label: 'Tổng cuộc trò chuyện', value: stats?.totalSessions || 0, icon: Activity, percent: 0 },
+    { label: 'Tổng cuộc trò chuyện', value: stats?.activeSessions || 0, icon: Activity, percent: 0 },
   ];
 
   if (loading) {

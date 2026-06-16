@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     // ── Reconstruct FormData for the backend ─────────────────────────────────
     const backendFormData = new FormData();
 
-    const audioBlob = new Blob([audioPart.data], {
+    const audioBlob = new Blob([audioPart.data as BlobPart], {
       type: audioPart.contentType || "audio/mpeg",
     });
     backendFormData.append("audio", audioBlob, audioPart.filename!);
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     // Cover file — if present
     const coverPart = fields["cover"];
     if (coverPart && coverPart.filename && coverPart.data) {
-      const coverBlob = new Blob([coverPart.data], {
+      const coverBlob = new Blob([coverPart.data as BlobPart], {
         type: coverPart.contentType || "image/jpeg",
       });
       backendFormData.append("cover", coverBlob, coverPart.filename);

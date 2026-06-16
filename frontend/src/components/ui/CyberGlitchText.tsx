@@ -2,9 +2,11 @@
 
 import { useEffect, useRef } from 'react';
 
+type GlitchTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'p' | 'div' | 'a';
+
 interface CyberGlitchTextProps {
   children: React.ReactNode;
-  as?: keyof JSX.IntrinsicElements;
+  as?: GlitchTag;
   className?: string;
   enabled?: boolean;
   interval?: number;
@@ -49,9 +51,14 @@ export default function CyberGlitchText({
   const text = typeof children === 'string' ? children : '';
 
   return (
-    // @ts-expect-error - dynamic tag with ref
+    // Tag is a dynamic HTML element (h1/h2/span/...). The union of all
+    // possible ref types blows up TypeScript's "too complex" heuristic
+    // (TS2590). We suppress the per-element check and use `unknown`
+    // because the ref is forwarded by the caller, who knows which
+    // element type they expect.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     <Tag
-      ref={ref}
+      ref={ref as any}
       className={`glitch-text ${className}`}
       data-text={text}
     >

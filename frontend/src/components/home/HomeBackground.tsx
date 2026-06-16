@@ -46,9 +46,9 @@ export default function HomeBackground() {
   const timeRef = useRef(0);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas = canvasRef.current!;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
     if (!ctx) return;
 
     const COLORS = ['#8b5cf6', '#06b6d4', '#ec4899', '#a855f7', '#22d3ee', '#6366f1'];

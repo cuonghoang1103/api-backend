@@ -234,7 +234,7 @@ export async function POST(request: NextRequest) {
     const formData = new FormData();
 
     // Append audio as a Blob with correct MIME type
-    const audioBlob = new Blob([audioPart.data], { type: audioMime });
+    const audioBlob = new Blob([audioPart.data as BlobPart], { type: audioMime });
     formData.append("audio", audioBlob, audioFilename);
 
     // Append text fields
@@ -246,7 +246,7 @@ export async function POST(request: NextRequest) {
 
     // Append cover if provided
     if (coverPart?.data && coverPart.data.length > 0) {
-      const coverBlob = new Blob([coverPart.data], { type: coverMime || "image/jpeg" });
+      const coverBlob = new Blob([coverPart.data as BlobPart], { type: coverMime || "image/jpeg" });
       formData.append("cover", coverBlob, coverPart.filename || "cover.jpg");
     }
 

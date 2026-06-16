@@ -135,7 +135,7 @@ export default function ChatSidebar({ onDeleteSession, onSelectSession }: ChatSi
         >
           {/* Toggle pill — MessageSquare icon, glows when expanded
               is wanted. The whole 40px rail is the click target. */}
-          <button
+          <motion.button
             onClick={toggle}
             className="group relative w-9 h-9 rounded-xl flex items-center justify-center
               bg-white/[0.04] hover:bg-[#22d3ee]/15
@@ -170,7 +170,7 @@ export default function ChatSidebar({ onDeleteSession, onSelectSession }: ChatSi
                 transition={{ type: 'spring', stiffness: 380, damping: 30 }}
               />
             )}
-          </button>
+          </motion.button>
 
           {/* Tiny magnify hint on hover */}
           <span className="[writing-mode:vertical-rl] rotate-180 text-[9px] font-mono uppercase tracking-widest text-[#64748b]/40 group-hover:text-[#64748b]/80 transition-colors">

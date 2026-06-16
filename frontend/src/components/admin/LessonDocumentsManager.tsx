@@ -12,7 +12,7 @@ interface DocumentItem {
   fileSizeBytes: number;
   fileType?: string | null;
   downloadCount: number;
-  createdAt: string;
+  createdAt?: string;
 }
 
 interface LessonDocumentsManagerProps {

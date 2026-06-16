@@ -5,6 +5,7 @@ export interface ApiResponse<T> {
   message: string;
   data: T;
   timestamp: string;
+  code?: string;
 }
 
 export interface PageResponse<T> {
@@ -43,12 +44,15 @@ export interface User {
 }
 
 export interface AuthResponse {
-  token: string;
+  token?: string;
   userId: number;
   username: string;
   email: string;
   role: string;
   roles: string[];
+  success?: boolean;
+  message?: string;
+  fullName?: string;
 }
 
 export interface LoginRequest {
@@ -388,6 +392,7 @@ export interface CourseDocument {
   fileSizeBytes: number;
   fileType?: string;
   downloadCount: number;
+  createdAt?: string;
 }
 
 export interface CourseSection {

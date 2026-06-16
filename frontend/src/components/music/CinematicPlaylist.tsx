@@ -63,9 +63,8 @@ export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistP
     let acc = 0;
     for (const t of tracks) {
       const d = t.duration;
-      if (!d && d !== 0) continue;
-      if (typeof d === 'number') { acc += d; continue; }
-      if (typeof d === 'string' && d.includes(':')) {
+      if (!d) continue;
+      if (d.includes(':')) {
         const parts = d.split(':').map(Number);
         if (parts.length === 3) { acc += parts[0] * 3600 + parts[1] * 60 + (parts[2] || 0); }
         else if (parts.length === 2) { acc += parts[0] * 60 + (parts[1] || 0); }

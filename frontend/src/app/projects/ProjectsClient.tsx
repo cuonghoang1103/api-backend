@@ -114,13 +114,13 @@ function CardCarousel({
             </button>
           )}
 
-          {project.isFeatured && (
+          {project.featured && (
             <div className="absolute top-3 left-3 px-2.5 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold rounded-lg shadow-lg z-20">
               NOI BAT
             </div>
           )}
 
-          {project.status && !project.isFeatured && (
+          {project.status && !project.featured && (
             <div className={`absolute top-3 right-3 px-2.5 py-1 text-xs font-medium rounded-lg border z-20 ${STATUS_COLORS[project.status] || ''}`}>
               {STATUS_LABELS[project.status] || project.status}
             </div>

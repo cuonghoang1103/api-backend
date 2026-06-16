@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
   const user = session.user;
   const role = (user.role as string) || "USER";
-  const username = (user.username as string) || user.email.split("@")[0];
+  const username = (user.username as string) || (user.email?.split("@")[0] ?? "user");
   const name = user.name || username;
 
   return NextResponse.json({

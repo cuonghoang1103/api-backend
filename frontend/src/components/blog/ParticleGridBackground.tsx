@@ -30,11 +30,11 @@ export default function ParticleGridBackground() {
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const gridCanvas = gridRef.current;
+    const canvas = canvasRef.current!;
+    const gridCanvas = gridRef.current!;
     if (!canvas || !gridCanvas) return;
-    const ctx = canvas.getContext('2d');
-    const gridCtx = gridCanvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
+    const gridCtx = gridCanvas.getContext('2d')!;
     if (!ctx || !gridCtx) return;
 
     const COLORS = ['#8b5cf6', '#06b6d4', '#ec4899', '#a855f7', '#22d3ee'];

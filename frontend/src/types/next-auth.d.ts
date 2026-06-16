@@ -4,6 +4,7 @@ import type { JWT } from "@auth/core/jwt";
 // ─── NextAuth v5 type extensions ───────────────────────────────────────────────
 
 type UserRole = "USER" | "ADMIN" | "MODERATOR" | "EDITOR";
+export type { UserRole };
 
 // Extend the next-auth Session type
 declare module "next-auth" {

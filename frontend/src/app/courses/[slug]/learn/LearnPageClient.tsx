@@ -13,7 +13,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import { sanitizeHtml } from '@/lib/utils';
-import type { Course, LessonDto, LessonProgress } from '@/types';
+import type { Course, LessonDto, LessonProgress, LessonDetail } from '@/types';
 
 function formatDuration(seconds: number): string {
   if (!seconds) return '0:00';

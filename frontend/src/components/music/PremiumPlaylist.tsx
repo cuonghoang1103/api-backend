@@ -58,9 +58,8 @@ export default function PremiumPlaylist({ isNight = true }: PremiumPlaylistProps
 
   const totalDuration = useMemo(() => tracks.reduce((acc, t) => {
     const d = t.duration;
-    if (!d && d !== 0) return acc;
-    if (typeof d === 'number') return acc + d;
-    if (typeof d === 'string' && d.includes(':')) {
+    if (!d) return acc;
+    if (d.includes(':')) {
       const parts = d.split(':').map(Number);
       return acc + parts[0] * 60 + (parts[1] || 0);
     }

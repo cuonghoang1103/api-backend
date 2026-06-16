@@ -72,6 +72,7 @@ interface MessagingState {
   loadThreads: () => Promise<void>;
   refreshThreadSummary: (threadId: number) => Promise<void>;
   loadOnlineUsers: () => Promise<void>;
+  refreshUnread: () => Promise<void>;
 
   // Open / switch thread
   openThread: (threadId: number) => Promise<void>;

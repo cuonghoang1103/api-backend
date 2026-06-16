@@ -20,14 +20,25 @@ function buildAudioUrl(raw: { audioUrl?: string | null; localPath?: string | nul
   return `/api/v1/music/stream/${raw.id}`;
 }
 
-function toTrack(raw: Playlist['tracks'] extends Array<infer T> ? T : never): Track {
+interface PlaylistTrack {
+  id: number;
+  title: string;
+  artist: string;
+  audioUrl?: string | null;
+  coverImage?: string | null;
+  durationSeconds?: number | null;
+  localPath?: string | null;
+  createdAt?: string;
+}
+
+function toTrack(raw: PlaylistTrack): Track {
   return {
     id: String(raw.id),
     title: raw.title ?? 'Unknown',
     artist: raw.artist ?? 'Unknown Artist',
     duration: raw.durationSeconds ? formatDuration(raw.durationSeconds) : '0:00',
     durationSeconds: raw.durationSeconds ?? undefined,
-    audioUrl: buildAudioUrl(raw as Parameters<typeof buildAudioUrl>[0]),
+    audioUrl: buildAudioUrl(raw),
     coverImage: raw.coverImage ?? '',
     localPath: raw.localPath ?? undefined,
     createdAt: raw.createdAt ?? undefined,

@@ -113,7 +113,22 @@ function ProjectFormModal({
 }: {
   project?: Project | null;
   onClose: () => void;
-  onSave: (payload: ReturnType<typeof buildPayload>) => Promise<void>;
+  onSave: (payload: {
+    title: string;
+    slug: string;
+    description: string;
+    techStack: string;
+    status: string;
+    featured: boolean;
+    projectUrl?: string;
+    githubUrl?: string;
+    videoUrl?: string;
+    role?: string;
+    duration?: string;
+    thumbnailUrl?: string;
+    images?: string[];
+    content?: string;
+  }) => Promise<void>;
 }) {
   const isEditing = Boolean(project);
 
@@ -157,13 +172,13 @@ function ProjectFormModal({
     description: form.description,
     techStack: form.technologies.join(', '),
     status: form.status,
-    projectUrl: form.projectUrl || null,
-    githubUrl: form.githubUrl || null,
-    thumbnailUrl: form.thumbnailUrl || null,
-    videoUrl: form.videoUrl || null,
+    projectUrl: form.projectUrl || undefined,
+    githubUrl: form.githubUrl || undefined,
+    thumbnailUrl: form.thumbnailUrl || undefined,
+    videoUrl: form.videoUrl || undefined,
     featured: form.featured,
     images: form.images,
-    content: form.content || null,
+    content: form.content || undefined,
   });
 
   const handleSave = async () => {
@@ -480,7 +495,7 @@ export default function AdminProjectsPage() {
       setProjects((prev) =>
         prev.map((p) => (p.id === project.id ? res.data.data : p))
       );
-      toast.success(res.data.data?.isFeatured ? 'Đã đánh dấu nổi bật' : 'Đã bỏ nổi bật');
+      toast.success(res.data.data?.featured ? 'Đã đánh dấu nổi bật' : 'Đã bỏ nổi bật');
     } catch {
       toast.error('Thao tác thất bại');
     }
@@ -552,7 +567,7 @@ export default function AdminProjectsPage() {
                     {project.images.length + 1}
                   </div>
                 )}
-                {project.isFeatured && (
+                {project.featured && (
                   <span className="absolute top-2 right-2 px-2 py-0.5 bg-yellow-400/20 text-yellow-300 text-xs rounded-full font-medium">
                     NOI BAT
                   </span>
@@ -592,10 +607,10 @@ export default function AdminProjectsPage() {
                 <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => handleToggleFeatured(project)}
-                    className={`p-1.5 rounded-lg transition-colors ${project.isFeatured ? 'text-yellow-400 hover:bg-yellow-400/10' : 'text-text-muted hover:bg-yellow-400/10 hover:text-yellow-400'}`}
-                    title={project.isFeatured ? 'Bỏ nổi bật' : 'Đánh dấu nổi bật'}
+                    className={`p-1.5 rounded-lg transition-colors ${project.featured ? 'text-yellow-400 hover:bg-yellow-400/10' : 'text-text-muted hover:bg-yellow-400/10 hover:text-yellow-400'}`}
+                    title={project.featured ? 'Bỏ nổi bật' : 'Đánh dấu nổi bật'}
                   >
-                    <Star className={`w-3.5 h-3.5 ${project.isFeatured ? 'fill-current' : ''}`} />
+                    <Star className={`w-3.5 h-3.5 ${project.featured ? 'fill-current' : ''}`} />
                   </button>
                   {project.projectUrl && (
                     <a href={project.projectUrl} target="_blank" rel="noopener noreferrer"

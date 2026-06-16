@@ -245,7 +245,7 @@ export interface BlogCardProps {
 export default function BlogCard({ post, index = 0, variant = 'default', onCardClick }: BlogCardProps) {
   const isFeatured = variant === 'featured';
   const isCompact = variant === 'compact';
-  const readingTime = estimateReadingTime(post.content || post.excerpt);
+  const readingTime = estimateReadingTime((post as Post).content || post.excerpt || '');
   const snippet = getCodeSnippet(post.id, post.title);
   const dlCount = post.downloadCount ?? 0;
   const cmCount = post.commentCount ?? 0;

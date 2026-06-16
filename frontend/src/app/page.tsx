@@ -482,8 +482,8 @@ export default function HomePage() {
                       <motion.div
                         key={tag.label}
                         initial={{ opacity: 0, scale: 0.7 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 1.1 + i * 0.15 }}
+                        animate={{ opacity: 1, scale: 1, y: [0, parseInt(tag.float), 0] }}
+                        transition={{ duration: 3 + i * 0.7, repeat: Infinity, ease: 'easeInOut', delay: 1.1 + i * 0.15 }}
                         className="absolute px-2.5 py-1 rounded-lg border text-[11px] font-mono font-medium backdrop-blur-md"
                         style={{
                           left: tag.x,
@@ -492,8 +492,6 @@ export default function HomePage() {
                           backdropFilter: 'blur(12px)',
                         }}
                         custom={tag.float}
-                        animate={{ y: [0, parseInt(tag.float), 0] }}
-                        transition={{ duration: 3 + i * 0.7, repeat: Infinity, ease: 'easeInOut', delay: tag.delay }}
                       >
                         <div className={`absolute inset-0 rounded-lg ${tag.color} opacity-90`} />
                         <span className="relative">{tag.label}</span>
@@ -817,9 +815,9 @@ export default function HomePage() {
                     >
                       {/* Cover image */}
                       <div className="aspect-[16/9] relative overflow-hidden bg-darkbg">
-                        {post.coverImage || post.thumbnailUrl ? (
+                        {post.thumbnailUrl ? (
                           <img
-                            src={post.coverImage || post.thumbnailUrl}
+                            src={post.thumbnailUrl}
                             alt={post.title}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                           />

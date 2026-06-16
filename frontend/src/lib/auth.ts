@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import type { NextAuthConfig } from "next-auth";
+import type { UserRole } from "@/types/next-auth";
 
 /* ─── OAuth env validation (fail-fast khi user click sign-in) ──────────
  * Trước đây: `clientId: process.env.GOOGLE_CLIENT_ID ?? ""` — khi deploy thiếu
@@ -185,7 +186,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
 
 /* ─── Helpers ──────────────────────────────────────────────────────────────── */
 
-function normalizeRole(role: string | null | undefined): string {
+function normalizeRole(role: string | null | undefined): UserRole {
   if (!role) return "USER";
   const r = role.toUpperCase();
   if (r === "ADMIN" || r === "ROLE_ADMIN") return "ADMIN";

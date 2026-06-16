@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
+import Link from 'next/link';
 import {
   Search, Star, ExternalLink, Github, Filter, X, Sparkles,
   Tag as TagIcon, Code2, ChevronLeft, ChevronRight, RefreshCw,
@@ -451,27 +452,25 @@ interface RepoCardProps {
 
 function RepoCard({ repo }: RepoCardProps) {
   return (
-    <article className="group relative h-full overflow-hidden rounded-2xl border border-darkborder/50 bg-darkcard/60 p-5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-neon-violet/40 hover:shadow-[0_8px_40px_-12px_rgba(167,139,250,0.4)]">
-      {/* Top row: stars + language */}
-      <div className="mb-3 flex items-start justify-between gap-3">
-        <a
-          href={repo.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group/link flex min-w-0 flex-1 items-center gap-2"
-        >
-          <Github className="h-5 w-5 shrink-0 text-text-secondary group-hover/link:text-text-primary" />
-          <h3 className="truncate font-heading text-base font-bold text-text-primary group-hover/link:text-neon-violet">
-            {repo.repoName}
-          </h3>
-          <ExternalLink className="h-3.5 w-3.5 shrink-0 text-text-muted opacity-0 transition-opacity group-hover/link:opacity-100" />
-        </a>
-        <span
-          className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium ${languageBadge(repo.language)}`}
-        >
-          {repo.language || 'N/A'}
-        </span>
-      </div>
+    <Link
+      href={`/repos/${repo.id}`}
+      className="group block h-full"
+    >
+      <article className="relative h-full overflow-hidden rounded-2xl border border-darkborder/50 bg-darkcard/60 p-5 backdrop-blur-xl transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-neon-violet/40 group-hover:shadow-[0_8px_40px_-12px_rgba(167,139,250,0.4)]">
+        {/* Top row: stars + language */}
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div className="group/link flex min-w-0 flex-1 items-center gap-2">
+            <Github className="h-5 w-5 shrink-0 text-text-secondary group-hover:text-text-primary" />
+            <h3 className="truncate font-heading text-base font-bold text-text-primary group-hover:text-neon-violet">
+              {repo.repoName}
+            </h3>
+          </div>
+          <span
+            className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium ${languageBadge(repo.language)}`}
+          >
+            {repo.language || 'N/A'}
+          </span>
+        </div>
 
       {/* Owner + stars */}
       <div className="mb-3 flex items-center gap-3 text-xs text-text-muted">
@@ -518,8 +517,31 @@ function RepoCard({ repo }: RepoCardProps) {
         </div>
       )}
 
+      {/* Footer: "Xem chi tiet" hint + external link */}
+      <div className="mt-4 flex items-center justify-between border-t border-white/[0.04] pt-3 text-xs">
+        <span className="inline-flex items-center gap-1 text-text-muted transition-colors group-hover:text-neon-violet">
+          Xem chi tiet
+          <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+        </span>
+        <span
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.open(repo.url, '_blank', 'noopener,noreferrer');
+          }}
+          role="button"
+          tabIndex={-1}
+          className="inline-flex items-center gap-1 text-text-muted transition-colors hover:text-text-primary"
+          title="Mo tren GitHub"
+        >
+          <ExternalLink className="h-3 w-3" />
+          GitHub
+        </span>
+      </div>
+
       {/* Hover ring */}
       <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-neon-violet/0 transition-all duration-300 group-hover:ring-neon-violet/30" />
-    </article>
+      </article>
+    </Link>
   );
 }

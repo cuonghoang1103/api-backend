@@ -26,7 +26,7 @@ import { paymentApi } from '@/lib/api';
  * between payment and IPN, or the IPN might lag the redirect.
  */
 
-type PollState = 'polling' | 'success' | 'failed' | 'timeout';
+type PollState = 'polling' | 'success' | 'failed' | 'timeout' | 'auth';
 
 function PaymentReturnContent() {
   const params = useSearchParams();
@@ -80,7 +80,15 @@ function PaymentReturnContent() {
         }
         setPollCount(c => c + 1);
         setTimeout(poll, pollIntervalMs);
-      } catch {
+      } catch (err: unknown) {
+        // 401: user is not logged in (session expired or different
+        // device). Tell them to log in to see their order.
+        const e = err as { response?: { status?: number } };
+        if (e?.response?.status === 401) {
+          setState('auth');
+          return;
+        }
+        // Network/5xx: keep polling until we run out
         if (pollCount + 1 >= maxPolls) {
           setState('timeout');
           return;
@@ -182,6 +190,28 @@ function PaymentReturnContent() {
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
             >
               Ve trang chu
+            </Link>
+          </>
+        )}
+
+        {state === 'auth' && (
+          <>
+            <div className="w-16 h-16 mx-auto rounded-full bg-neon-indigo/20 flex items-center justify-center mb-4">
+              <AlertTriangle className="w-10 h-10 text-neon-indigo" />
+            </div>
+            <h1 className="text-2xl font-heading font-bold text-text-primary mb-2">
+              Vui long dang nhap
+            </h1>
+            <p className="text-text-muted text-sm mb-6">
+              Phien dang nhap da het han. Vui long dang nhap lai de xem
+              trang thai don hang. Neu ban da thanh toan thanh cong, khoa
+              hoc se tu dong duoc mo khoa trong tai khoan.
+            </p>
+            <Link
+              href={`/login?callbackUrl=${encodeURIComponent(`/payment/return?orderCode=${orderCode}`)}`}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
+            >
+              Dang nhap
             </Link>
           </>
         )}

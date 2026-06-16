@@ -30,8 +30,10 @@
 import { Router, Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
-import { authenticate } from '../middleware/auth.js';
+import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { vnpayIpnGuard } from '../middleware/vnpayIpnGuard.js';
+import { emailService } from '../services/email.service.js';
 import {
   buildCoursePaymentUrl,
   getClientIp,
@@ -42,6 +44,25 @@ import type { ApiResponse } from '../types/index.js';
 import type { VnpIpnParsed } from './payment.types.js';
 
 const router = Router();
+
+// How long an unpaid order stays valid for. After this, the IPN will
+// still be accepted if VNPay eventually calls (payment may have been
+// delayed), but frontend will stop polling and user can re-attempt.
+// Set in minutes; default 15.
+const ORDER_TTL_MINUTES = parseInt(
+  process.env.VNPAY_ORDER_TTL_MINUTES || '15',
+  10,
+);
+
+// Shape of the data we need to send a course receipt email. We
+// extract this from inside the transaction callback and use it
+// after commit to send the email.
+type ReceiptContext = {
+  to: string;
+  fullName: string | null;
+  courseTitle: string;
+  courseSlug: string;
+};
 
 // ─── Helpers ────────────────────────────────────────────────
 
@@ -74,6 +95,16 @@ function generateOrderCode(courseId: number, userId: number): string {
     .toString(36)
     .padStart(3, '0');
   return `COURSE_${courseId}_${userId}_${ts}_${rand}`;
+}
+
+/**
+ * Returns true if the PENDING order has passed its TTL window.
+ * We keep the row around for audit, but we won't reuse it for a
+ * new paymentUrl — user must create a fresh order.
+ */
+function isOrderExpired(order: { createdAt: Date }, ttlMinutes: number): boolean {
+  const ageMs = Date.now() - new Date(order.createdAt).getTime();
+  return ageMs > ttlMinutes * 60 * 1000;
 }
 
 /**
@@ -116,11 +147,13 @@ router.post('/course', authenticate, async (req: Request, res: Response<ApiRespo
       throw new AppError('Ban da dang ky khoa hoc nay roi', 409);
     }
 
-    // Block if there's already a PENDING order (avoid creating multiple)
+    // Block if there's already a PENDING order. We re-use it ONLY if
+    // it hasn't expired (within ORDER_TTL_MINUTES). Otherwise we mark
+    // it FAILED and create a fresh one.
     const existingPending = await prisma.courseOrder.findFirst({
       where: { userId: req.userId!, courseId, status: 'PENDING' },
     });
-    if (existingPending) {
+    if (existingPending && !isOrderExpired(existingPending, ORDER_TTL_MINUTES)) {
       // Reuse the existing order — rebuild payment URL
       const paymentUrl = buildCoursePaymentUrl(
         existingPending.orderCode,
@@ -137,6 +170,13 @@ router.post('/course', authenticate, async (req: Request, res: Response<ApiRespo
         },
       });
       return;
+    }
+    if (existingPending) {
+      // Expired stale order — mark failed so a fresh one can be created
+      await prisma.courseOrder.update({
+        where: { id: existingPending.id },
+        data: { status: 'FAILED' },
+      });
     }
 
     const finalAmount = computeFinalPrice(
@@ -217,7 +257,7 @@ router.get('/vnpay/return', async (req: Request, res, next) => {
 // We always return 200 because we never want VNPay to retry our handler
 // (the order is already terminal in our DB). The RspCode in the body
 // is informational.
-router.post('/vnpay/ipn', async (req: Request, res: Response, next) => {
+router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, next) => {
   try {
     const query = req.query as Record<string, unknown>;
     const verify = verifyIpnCall(query);
@@ -302,6 +342,8 @@ router.post('/vnpay/ipn', async (req: Request, res: Response, next) => {
 
     // ── SUCCESS PATH ──
     // Wrap in transaction so partial failure can't leave inconsistent state.
+    const receiptContextRef: { current: ReceiptContext | null } = { current: null };
+
     await prisma.$transaction(async (tx) => {
       // 1) mark order PAID
       await tx.courseOrder.update({
@@ -335,6 +377,58 @@ router.post('/vnpay/ipn', async (req: Request, res: Response, next) => {
           data: { totalStudents: { increment: 1 } },
         });
       }
+
+      // 4) Pull user + course info to send receipt AFTER the
+      //    transaction commits. Done here (read-only) so we don't
+      //    need a separate query.
+      const user = await tx.user.findUnique({
+        where: { id: order.userId },
+        select: { email: true, fullName: true },
+      });
+      const course = await tx.course.findUnique({
+        where: { id: order.courseId },
+        select: { title: true, slug: true },
+      });
+      if (user && course) {
+        receiptContextRef.current = {
+          to: user.email,
+          fullName: user.fullName,
+          courseTitle: course.title,
+          courseSlug: course.slug,
+        };
+      }
+    });
+
+    const ctx = receiptContextRef.current;
+
+    // Send the receipt AFTER commit. Failures here don't roll back
+    // the enrollment — we never want a Resend outage to refund the
+    // user, and the user can re-fetch the receipt from /my-courses
+    // anyway. Logged for visibility.
+    if (ctx) {
+      try {
+        await emailService.sendCourseReceiptEmail({
+          to: ctx.to,
+          fullName: ctx.fullName ?? undefined,
+          orderCode: order.orderCode,
+          courseTitle: ctx.courseTitle,
+          courseSlug: ctx.courseSlug,
+          amount: Number(order.amount),
+          paidAt: vnpPayDate || new Date(),
+        });
+      } catch (err) {
+        // EmailService already swallows + logs; we catch defensively
+        // so the IPN still returns 200 to VNPay.
+        console.error('[payment-ipn] receipt email failed', err);
+      }
+    }
+
+    console.log('[payment-ipn] PAID', {
+      orderCode: order.orderCode,
+      userId: order.userId,
+      courseId: order.courseId,
+      amountVnd: ipnParsed.amountVnd,
+      txnNo: vnpTransactionNo,
     });
 
     res.status(200).json({ RspCode: '00', Message: 'OK' });
@@ -380,5 +474,118 @@ router.get('/order/:orderCode', authenticate, async (req: Request, res: Response
     next(error);
   }
 });
+
+// ─── 5. GET /api/v1/payments/admin/orders (admin) ────────────
+// Lists course orders with filters for the admin dashboard.
+// Query params:
+//   status    = PENDING|PAID|FAILED|REFUNDED (optional)
+//   courseId  = filter by course (optional)
+//   page      = 1-based, default 1
+//   pageSize  = default 20, max 100
+router.get(
+  '/admin/orders',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: Request, res: Response<ApiResponse>, next) => {
+    try {
+      const status = (req.query.status as string) || undefined;
+      const courseIdStr = req.query.courseId as string | undefined;
+      const courseId = courseIdStr ? parseInt(courseIdStr, 10) : undefined;
+      const page = Math.max(1, parseInt((req.query.page as string) || '1', 10));
+      const pageSize = Math.min(
+        100,
+        Math.max(1, parseInt((req.query.pageSize as string) || '20', 10)),
+      );
+
+      const where: Prisma.CourseOrderWhereInput = {};
+      if (
+        status &&
+        ['PENDING', 'PAID', 'FAILED', 'REFUNDED'].includes(status)
+      ) {
+        where.status = status;
+      }
+      if (courseId && !isNaN(courseId)) {
+        where.courseId = courseId;
+      }
+
+      const [total, items] = await Promise.all([
+        prisma.courseOrder.count({ where }),
+        prisma.courseOrder.findMany({
+          where,
+          orderBy: { createdAt: 'desc' },
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          include: {
+            user: { select: { id: true, username: true, email: true, fullName: true } },
+            course: { select: { id: true, slug: true, title: true } },
+          },
+        }),
+      ]);
+
+      res.json({
+        success: true,
+        data: {
+          total,
+          page,
+          pageSize,
+          items: items.map(o => ({
+            id: o.id,
+            orderCode: o.orderCode,
+            status: o.status,
+            amount: Number(o.amount),
+            paymentMethod: o.paymentMethod,
+            paymentTxnNo: o.paymentTxnNo,
+            paymentBankCode: o.paymentBankCode,
+            paymentPayDate: o.paymentPayDate,
+            enrolled: o.enrolled,
+            user: o.user,
+            course: o.course,
+            createdAt: o.createdAt,
+            updatedAt: o.updatedAt,
+          })),
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ─── 6. GET /api/v1/payments/admin/transactions/:orderCode ───
+// Audit trail of every IPN callback VNPay sent for an order.
+// Useful when investigating "why did the order fail" — the responseCode
+// and rawPayload tell you exactly what VNPay sent.
+router.get(
+  '/admin/transactions/:orderCode',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: Request, res: Response<ApiResponse>, next) => {
+    try {
+      const { orderCode } = req.params;
+      const txs = await prisma.paymentTransaction.findMany({
+        where: { orderCode },
+        orderBy: { createdAt: 'desc' },
+      });
+      res.json({
+        success: true,
+        data: {
+          orderCode,
+          transactions: txs.map(t => ({
+            id: t.id,
+            gatewayTxnNo: t.gatewayTxnNo,
+            bankCode: t.bankCode,
+            payDate: t.payDate,
+            responseCode: t.responseCode,
+            amount: Number(t.amount),
+            rawPayload: t.rawPayload,
+            createdAt: t.createdAt,
+          })),
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 export default router;

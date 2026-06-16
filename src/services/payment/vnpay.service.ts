@@ -128,9 +128,14 @@ function sanitizeOrderInfo(input: string): string {
 /**
  * Verify a return URL (user-facing) query payload.
  * Returns { isVerified, isSuccess, message }.
+ *
+ * Cast to `unknown` first then to the SDK's expected shape because the
+ * SDK types are tighter than Express's `req.query` (which is
+ * `ParsedQs`). The verify functions iterate over the keys and pull
+ * vnp_* fields, so any object with vnp_ keys is fine.
  */
 export function verifyReturnUrl(query: Record<string, unknown>) {
-  return getClient().verifyReturnUrl(query as never);
+  return getClient().verifyReturnUrl(query as unknown as never);
 }
 
 /**
@@ -141,7 +146,7 @@ export function verifyReturnUrl(query: Record<string, unknown>) {
  * and create Enrollment. Return URL is NOT trusted (user can manipulate).
  */
 export function verifyIpnCall(query: Record<string, unknown>) {
-  return getClient().verifyIpnCall(query as never);
+  return getClient().verifyIpnCall(query as unknown as never);
 }
 
 /**

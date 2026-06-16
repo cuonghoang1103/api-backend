@@ -221,6 +221,91 @@ export class EmailService {
       text: `${greeting}\n\nTruy cập link sau để đặt lại mật khẩu (có hiệu lực 1h):\n${resetUrl}\n\nNếu bạn không yêu cầu, vui lòng bỏ qua email này.`,
     });
   }
+
+  /**
+   * Course purchase receipt — sent after VNPay IPN marks an order PAID.
+   * Includes order code, amount, and a deep link to the learn page so
+   * the user can start watching the course right away.
+   */
+  async sendCourseReceiptEmail(opts: {
+    to: string;
+    fullName?: string;
+    orderCode: string;
+    courseTitle: string;
+    courseSlug: string;
+    amount: number;
+    paidAt: Date;
+  }): Promise<{ success: boolean; error?: string }> {
+    const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, '');
+    const learnUrl = `${frontendUrl}/courses/${opts.courseSlug}/learn`;
+    const greeting = opts.fullName ? `Xin chào ${opts.fullName},` : 'Xin chào,';
+    const formattedAmount = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(opts.amount);
+    const paidAtStr = new Intl.DateTimeFormat('vi-VN', {
+      dateStyle: 'long',
+      timeStyle: 'short',
+    }).format(opts.paidAt);
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 40px 0; }
+    .container { max-width: 560px; margin: 0 auto; background: #1a1b2e; border-radius: 16px; padding: 40px; }
+    h1 { color: #34d399; font-size: 24px; margin: 0 0 16px; }
+    p { color: #cbd5e1; line-height: 1.6; margin: 0 0 16px; }
+    .button { display: inline-block; padding: 14px 32px; background: linear-gradient(90deg, #10b981, #34d399); color: #fff !important; text-decoration: none; border-radius: 12px; font-weight: 600; margin: 16px 0; }
+    .receipt { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 20px; margin: 24px 0; }
+    .receipt-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .receipt-row:last-child { border-bottom: none; }
+    .receipt-label { color: #94a3b8; font-size: 14px; }
+    .receipt-value { color: #e2e8f0; font-weight: 600; font-size: 14px; }
+    .footer { color: #64748b; font-size: 12px; margin-top: 32px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Thanh toán thành công!</h1>
+    <p>${greeting}</p>
+    <p>Cảm ơn bạn đã đăng ký khóa học tại <strong>CuongHoangDev</strong>. Đơn hàng của bạn đã được xác nhận và khóa học đã được mở khóa trong tài khoản.</p>
+    <div class="receipt">
+      <div class="receipt-row">
+        <span class="receipt-label">Khóa học</span>
+        <span class="receipt-value">${opts.courseTitle}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Mã đơn hàng</span>
+        <span class="receipt-value">${opts.orderCode}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Số tiền</span>
+        <span class="receipt-value">${formattedAmount}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Thời gian</span>
+        <span class="receipt-value">${paidAtStr}</span>
+      </div>
+    </div>
+    <p style="text-align: center; margin: 32px 0;">
+      <a href="${learnUrl}" class="button">Vào học ngay</a>
+    </p>
+    <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng phản hồi email này.</p>
+    <div class="footer">© ${new Date().getFullYear()} CuongHoangDev. All rights reserved.</div>
+  </div>
+</body>
+</html>`.trim();
+
+    return this.send({
+      to: opts.to,
+      subject: `Xác nhận thanh toán — ${opts.courseTitle}`,
+      html,
+      text: `${greeting}\n\nCảm ơn bạn đã mua khóa học "${opts.courseTitle}".\n\nMã đơn: ${opts.orderCode}\nSố tiền: ${formattedAmount}\nThời gian: ${paidAtStr}\n\nVào học ngay: ${learnUrl}`,
+    });
+  }
 }
 
 export const emailService = new EmailService();

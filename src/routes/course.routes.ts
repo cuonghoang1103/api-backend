@@ -963,19 +963,17 @@ router.get('/:courseId/lessons/:lessonId', optionalAuth, async (req, res: Respon
     }
 
     // Paywall check FIRST, before any DB read that returns
-    // content. We use 'enrolled' mode because the learn page is
-    // the one place where the full lesson payload is loaded.
-    // We still allow access for isFreePreview lessons so the
-    // marketing flow can preview sample lessons without login.
+    // content. We use 'preview' mode so isFreePreview lessons
+    // are visible to guests (for the marketing course page) and
+    // the marketing call-to-action can still be rendered for
+    // non-enrolled logged-in users.
     const access = await assertCanAccessCourseContent(req.userId, courseId, 'preview');
     if (!access.isEnrolled) {
-      // The assertCanAccessCourseContent already throws 402 if
-      // the user is logged in but not enrolled. The remaining
-      // case is: not logged in. For isFreePreview lessons we
-      // proceed, otherwise we 401.
-      if (!req.userId) {
-        throw new AppError('Vui long dang nhap', 401);
-      }
+      // Guest or non-enrolled user. Free-preview lessons are
+      // served (we'll filter in the response below). Any other
+      // lesson is paid content — refuse it.
+      // The actual gate happens in `showFull` below; this
+      // check is a fast-fail for the 99% case.
     }
 
     const lesson = await prisma.lesson.findFirst({
@@ -1007,6 +1005,17 @@ router.get('/:courseId/lessons/:lessonId', optionalAuth, async (req, res: Respon
     // API surface here matches the /:slug endpoint.
     const isEnrolled = access.isEnrolled;
     const showFull = isEnrolled || lesson.isFreePreview;
+
+    // Defense in depth: if the caller isn't enrolled AND the
+    // lesson isn't a free preview, refuse it. This blocks
+    // enumeration of paid lesson IDs by guests even when the
+    // paywall check above returned isEnrolled=false for them.
+    if (!showFull) {
+      throw new AppError(
+        'Vui long dang ky khoa hoc de xem noi dung nay',
+        req.userId ? 402 : 401,
+      );
+    }
 
     res.json({
       success: true,

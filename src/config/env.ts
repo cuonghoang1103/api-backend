@@ -135,6 +135,14 @@ const envSchema = z.object({
 
   // Public base URL
   PUBLIC_BASE_URL: z.string().url().default('https://api.cuongthai.com'),
+
+  // Sentry (error tracking). When DSN is empty, Sentry is disabled
+  // and the app behaves exactly as before — no extra overhead, no
+  // network calls. We never want Sentry to crash the app on startup.
+  SENTRY_DSN: z.string().optional().default(''),
+  SENTRY_TRACES_SAMPLE_RATE: z.string().regex(/^(0|1|0?\.\d+)$/).default('0.1'),
+  SENTRY_ENVIRONMENT: z.string().optional().default(''),
+  SENTRY_RELEASE: z.string().optional().default(''),
 });
 
 type EnvSchema = z.infer<typeof envSchema>;
@@ -254,4 +262,10 @@ export const config = {
 
   // Public base URL
   publicBaseUrl: env.PUBLIC_BASE_URL,
+
+  // Sentry
+  sentryDsn: env.SENTRY_DSN,
+  sentryTracesSampleRate: parseFloat(env.SENTRY_TRACES_SAMPLE_RATE),
+  sentryEnvironment: env.SENTRY_ENVIRONMENT || env.NODE_ENV,
+  sentryRelease: env.SENTRY_RELEASE,
 } as const;

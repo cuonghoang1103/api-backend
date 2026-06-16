@@ -19,6 +19,12 @@ import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// Sentry must be initialised BEFORE any other module imports that
+// could throw. We do it here (the very first thing) so a Prisma
+// connection error during startup is also captured.
+import { initSentry, captureException, flushSentry, setupSentryErrorHandler, sentryRequestMiddleware } from './services/sentry.service.js';
+initSentry();
+
 // Prisma returns BigInt for fields declared with `BigInt` in the
 // schema (e.g. social_media.file_size, user.role_version, …).
 // JSON.stringify doesn't know how to serialise those and would
@@ -328,6 +334,10 @@ const uploadLimiter = rateLimit({
 
 app.use('/api/', generalLimiter);
 
+// Tag incoming API requests with the route template so Sentry
+// transactions don't explode into one entry per dynamic id.
+app.use('/api/', sentryRequestMiddleware);
+
 // ─── 9. API Routes ─────────────────────────────────────────
 app.use('/api/v1/auth', authLimiter, authRoutes);
 app.use('/api/v1/profile', profileRoutes);
@@ -405,6 +415,11 @@ app.get('/health/ready', async (_req: Request, res: Response) => {
 // ─── 11. 404 Handler ───────────────────────────────────────
 app.use(notFoundHandler);
 
+// ─── 11b. Sentry Express Error Handler ─────────────────────
+// Auto-captures thrown errors with the full request context.
+// Must come AFTER all routes + 404, BEFORE the global error handler.
+setupSentryErrorHandler(app);
+
 // ─── 12. Global Error Handler ───────────────────────────────
 app.use(errorHandler);
 
@@ -426,6 +441,11 @@ function setupGracefulShutdown(): void {
         console.error('Error during shutdown:', err);
       }
 
+      // Flush pending Sentry events before exit. We give it 2s
+      // which is enough for in-flight events to ship without
+      // delaying shutdown noticeably.
+      await flushSentry(2000);
+
       console.log('Graceful shutdown complete');
       process.exit(0);
     });
@@ -444,6 +464,7 @@ function setupGracefulShutdown(): void {
   process.on('uncaughtException', (err: Error) => {
     console.error('UNCAUGHT EXCEPTION! Shutting down...');
     console.error(err);
+    captureException(err, { type: 'uncaughtException' });
     shutdown('UNCAUGHT_EXCEPTION');
   });
 
@@ -451,6 +472,15 @@ function setupGracefulShutdown(): void {
   process.on('unhandledRejection', (reason: unknown) => {
     console.error('UNHANDLED REJECTION! Shutting down...');
     console.error(reason);
+    // Sentry expects an Error. Wrap non-Error values so the stack
+    // trace is captured.
+    const err =
+      reason instanceof Error
+        ? reason
+        : new Error(
+            typeof reason === 'string' ? reason : 'Unhandled rejection',
+          );
+    captureException(err, { type: 'unhandledRejection' });
     shutdown('UNHANDLED_REJECTION');
   });
 }
@@ -539,6 +569,7 @@ async function startServer(): Promise<void> {
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
+    captureException(error, { type: 'startup' });
     process.exit(1);
   }
 }

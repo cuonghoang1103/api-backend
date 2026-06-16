@@ -41,7 +41,8 @@ const router = Router();
  * GET /api/v1/repos
  *
  * Public feed of PUBLISHED repos. Supports:
- *   - `page` (default 1), `pageSize` (default 12, max 50)
+ *   - `page` (default 1), `pageSize` (default 12, max 50 for
+ *     public, max 200 for admins via the same endpoint)
  *   - `tagId`    — filter by tag ID
  *   - `tagSlug`  — filter by tag slug
  *   - `language` — filter by primary language (case-insensitive)
@@ -58,8 +59,27 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
     const includeDrafts = String(req.query.includeDrafts || '').toLowerCase() === 'true';
 
     // Admins can pass ?includeDrafts=true to peek at DRAFT entries.
-    // The default for everyone else is PUBLISHED-only.
-    const status: GithubRepoStatus = includeDrafts && req.userId ? 'DRAFT' : 'PUBLISHED';
+    // The default for everyone else is PUBLISHED-only. We also
+    // let the admin flip ?includeDrafts to fetch BOTH statuses
+    // by setting status to undefined — useful for the "ALL" tab
+    // in the admin dashboard.
+    let status: GithubRepoStatus | undefined;
+    if (includeDrafts && req.userId) {
+      // `undefined` here means "no status filter", so the admin
+      // ALL tab sees both DRAFT and PUBLISHED rows. Without an
+      // authenticated user we still default to PUBLISHED-only.
+      status = undefined;
+    } else {
+      status = 'PUBLISHED';
+    }
+
+    // Whitelist the sort key so a malicious client can't pass
+    // arbitrary Prisma orderBy values.
+    const allowedSorts = ['newest', 'oldest', 'most-stars', 'least-stars', 'name-asc', 'name-desc'] as const;
+    const sortParam = String(req.query.sort || 'newest');
+    const sort = (allowedSorts as readonly string[]).includes(sortParam)
+      ? (sortParam as 'newest' | 'oldest' | 'most-stars' | 'least-stars' | 'name-asc' | 'name-desc')
+      : 'newest';
 
     const result = await listRepos({
       status,
@@ -69,6 +89,8 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
       keyword,
       page,
       pageSize,
+      sort,
+      isAdmin: !!req.userId,
     });
     res.json({ success: true, ...result });
   } catch (error) { next(error); }

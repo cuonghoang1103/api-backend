@@ -1124,6 +1124,7 @@ export interface GithubRepoListResponse {
   page: number;
   pageSize: number;
   totalPages: number;
+  sort?: string;
 }
 
 export const githubApi = {
@@ -1136,6 +1137,7 @@ export const githubApi = {
     language?: string;
     keyword?: string;
     includeDrafts?: boolean;
+    sort?: 'newest' | 'oldest' | 'most-stars' | 'least-stars' | 'name-asc' | 'name-desc';
   }) {
     return api.get<GithubRepoListResponse>('/repos', { params });
   },

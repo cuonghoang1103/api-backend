@@ -63,8 +63,10 @@ export default function AdminReposPage() {
       // The /repos endpoint defaults to PUBLISHED. We need to
       // ask for DRAFTs explicitly when on the DRAFT tab, and
       // for the ALL view we just fetch all (admin sees both).
+      // `status: undefined` (with includeDrafts) makes the
+      // backend return BOTH statuses — useful for the ALL tab.
       const includeDrafts = activeTab !== 'PUBLISHED';
-      const res = await githubApi.list({ pageSize: 50, includeDrafts });
+      const res = await githubApi.list({ pageSize: 200, includeDrafts, sort: 'newest' });
       // Client-side filter: when the tab is DRAFT, drop the
       // PUBLISHED rows the backend returned (it returns both
       // when includeDrafts=true, per the route impl). When
@@ -206,11 +208,16 @@ export default function AdminReposPage() {
 
   const toggleStatus = async (repo: GithubRepo) => {
     const next: 'DRAFT' | 'PUBLISHED' = repo.status === 'DRAFT' ? 'PUBLISHED' : 'DRAFT';
+    // Optimistic update — flip the row locally first so the
+    // user sees instant feedback. We revert on error.
+    const previous = repos;
+    setRepos((curr) => curr.map((r) => (r.id === repo.id ? { ...r, status: next } : r)));
     try {
       await githubApi.setStatus(repo.id, next);
       toast.success(next === 'PUBLISHED' ? 'Da dang len feed' : 'Da chuyen ve draft');
-      await loadRepos(tab);
     } catch (err: unknown) {
+      // Revert on failure.
+      setRepos(previous);
       const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
         || (err as Error).message;
       toast.error(message || 'Loi khi doi trang thai');
@@ -608,6 +615,11 @@ function FormModal(props: FormModalProps) {
             </div>
             <p className="mt-1 text-[11px] text-text-muted">
               Backend se tu dong goi GitHub API de lay stars, language, description.
+              {isEdit && (
+                <span className="ml-1 text-amber-400/80">
+                  URL khong the thay doi sau khi tao.
+                </span>
+              )}
             </p>
           </div>
 

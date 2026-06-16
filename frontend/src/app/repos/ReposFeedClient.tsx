@@ -1,122 +1,35 @@
 'use client';
 
-import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Search, Star, ExternalLink, Github, Filter, X, Sparkles,
   Tag as TagIcon, Code2, ChevronLeft, ChevronRight, RefreshCw,
+  ArrowDownAZ, Calendar, Flame,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { githubApi, GithubRepo, GithubRepoTag, GithubRepoListResponse } from '@/lib/api';
+import { languageBadgeClasses, formatStars } from '@/lib/repos';
+import { renderReview } from '@/lib/markdown';
 import ParticleBackground from '@/components/repos/ParticleBackground';
-
-// Tiny inline markdown renderer. We support the subset the
-// admin review is likely to use: bold, italic, inline code,
-// links, line breaks, and bulleted lists. We deliberately
-// don't pull in a full markdown lib to keep the bundle small.
-function renderInlineMarkdown(input: string): string {
-  return input
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 rounded bg-darkbg/70 text-neon-violet text-[0.85em]">$1</code>')
-    .replace(/\*\*([^*]+)\*\*/g, '<strong class="text-text-primary">$1</strong>')
-    .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
-    .replace(
-      /\[([^\]]+)\]\((https?:[^)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-neon-indigo hover:text-neon-violet underline underline-offset-2">$1</a>',
-    );
-}
-
-function renderReview(review: string): string {
-  if (!review) return '';
-  const lines = review.split('\n');
-  const out: string[] = [];
-  let inList = false;
-  for (const raw of lines) {
-    const line = raw.trim();
-    if (line.startsWith('- ')) {
-      if (!inList) {
-        out.push('<ul class="list-disc list-inside space-y-1.5 my-3">');
-        inList = true;
-      }
-      out.push(`<li>${renderInlineMarkdown(line.slice(2))}</li>`);
-    } else {
-      if (inList) {
-        out.push('</ul>');
-        inList = false;
-      }
-      if (line === '') {
-        out.push('<br/>');
-      } else {
-        out.push(`<p class="my-2 leading-relaxed">${renderInlineMarkdown(line)}</p>`);
-      }
-    }
-  }
-  if (inList) out.push('</ul>');
-  return out.join('');
-}
-
-// ─── Language → color map ─────────────────────────────────────────
-//
-// GitHub-style language colors for the language badge. We only
-// hardcode the common ones; anything else falls back to violet.
-// Keeping this in one place makes the badge easy to tweak
-// without hunting through the card.
-const LANGUAGE_COLORS: Record<string, string> = {
-  TypeScript: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  JavaScript: 'bg-yellow-500/20 text-yellow-200 border-yellow-500/30',
-  Python: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-  Go: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-  Rust: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
-  Java: 'bg-red-500/20 text-red-300 border-red-500/30',
-  Kotlin: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-  Swift: 'bg-pink-500/20 text-pink-300 border-pink-500/30',
-  'C++': 'bg-pink-500/20 text-pink-300 border-pink-500/30',
-  C: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
-  'C#': 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
-  PHP: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
-  Ruby: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
-  Shell: 'bg-lime-500/20 text-lime-300 border-lime-500/30',
-  HTML: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
-  CSS: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
-  Dart: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-  Vue: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-};
-
-function languageBadge(lang: string | null): string {
-  if (!lang) return 'bg-darkcard text-text-muted border-darkborder';
-  return (
-    LANGUAGE_COLORS[lang] ||
-    'bg-neon-violet/15 text-neon-violet border-neon-violet/30'
-  );
-}
-
-// Format star counts. 1234 → "1.2k", 1500000 → "1.5M".
-function formatStars(n: number): string {
-  if (n < 1000) return n.toString();
-  if (n < 1_000_000) return `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k`;
-  return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
-}
-
-// ─── Filter state ─────────────────────────────────────────────────
-//
-// All filter state is held in a single object. URL state would
-// be nicer for shareable links, but for v1 we keep it in-memory
-// to avoid hydration mismatch on the SSR-rendered initial page.
-interface Filters {
-  keyword: string;
-  tagId: number | null;
-  language: string | null;
-  page: number;
-}
 
 interface ReposFeedClientProps {
   initialData: GithubRepoListResponse | null;
   initialTags: GithubRepoTag[];
   initialLanguages: { name: string; count: number }[];
 }
+
+type SortKey = 'newest' | 'oldest' | 'most-stars' | 'least-stars' | 'name-asc' | 'name-desc';
+
+const SORT_OPTIONS: { value: SortKey; label: string; icon: React.ReactNode }[] = [
+  { value: 'newest', label: 'Moi nhat', icon: <Calendar className="h-3.5 w-3.5" /> },
+  { value: 'oldest', label: 'Cu nhat', icon: <Calendar className="h-3.5 w-3.5 opacity-60" /> },
+  { value: 'most-stars', label: 'Nhieu sao', icon: <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" /> },
+  { value: 'least-stars', label: 'It sao', icon: <Star className="h-3.5 w-3.5" /> },
+  { value: 'name-asc', label: 'Ten A-Z', icon: <ArrowDownAZ className="h-3.5 w-3.5" /> },
+  { value: 'name-desc', label: 'Ten Z-A', icon: <ArrowDownAZ className="h-3.5 w-3.5 rotate-180" /> },
+];
 
 export default function ReposFeedClient({
   initialData,
@@ -126,21 +39,21 @@ export default function ReposFeedClient({
   const [repos, setRepos] = useState<GithubRepo[]>(initialData?.items ?? []);
   const [tags, setTags] = useState<GithubRepoTag[]>(initialTags);
   const [languages, setLanguages] = useState<{ name: string; count: number }[]>(initialLanguages);
-  const [filters, setFilters] = useState<Filters>({
+  const [filters, setFilters] = useState({
     keyword: '',
-    tagId: null,
-    language: null,
+    tagId: null as number | null,
+    language: null as string | null,
     page: 1,
   });
+  const [sort, setSort] = useState<SortKey>('newest');
   const [total, setTotal] = useState(initialData?.total ?? 0);
   const [totalPages, setTotalPages] = useState(initialData?.totalPages ?? 0);
   const [loading, setLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
-  // AbortController to cancel stale fetches when filters change.
   const fetchAbortRef = useRef<AbortController | null>(null);
 
-  const fetchRepos = useCallback(async (current: Filters) => {
+  const fetchRepos = useCallback(async (current: typeof filters) => {
     fetchAbortRef.current?.abort();
     const controller = new AbortController();
     fetchAbortRef.current = controller;
@@ -153,6 +66,7 @@ export default function ReposFeedClient({
         language: current.language || undefined,
         keyword: current.keyword || undefined,
       });
+      if (controller.signal.aborted) return;
       const data = res.data;
       setRepos(data.items);
       setTotal(data.total);
@@ -163,12 +77,10 @@ export default function ReposFeedClient({
       console.error('[repos] fetch error', err);
       toast.error('Khong tai duoc danh sach repo');
     } finally {
-      setLoading(false);
+      if (!controller.signal.aborted) setLoading(false);
     }
   }, []);
 
-  // Refetch on filter change (except `searchInput` which is
-  // debounced separately below).
   useEffect(() => {
     fetchRepos(filters);
   }, [filters, fetchRepos]);
@@ -180,6 +92,30 @@ export default function ReposFeedClient({
     }, 350);
     return () => clearTimeout(id);
   }, [searchInput]);
+
+  // Client-side sort. The backend doesn't expose a sort param
+  // today (filters via SQL already), so we sort the result set
+  // in the browser. This is fine because pageSize is capped at
+  // 12 — the work is trivial.
+  const sortedRepos = useMemo(() => {
+    const list = [...repos];
+    switch (sort) {
+      case 'newest':
+        return list.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
+      case 'oldest':
+        return list.sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt));
+      case 'most-stars':
+        return list.sort((a, b) => b.stars - a.stars);
+      case 'least-stars':
+        return list.sort((a, b) => a.stars - b.stars);
+      case 'name-asc':
+        return list.sort((a, b) => a.repoName.localeCompare(b.repoName));
+      case 'name-desc':
+        return list.sort((a, b) => b.repoName.localeCompare(a.repoName));
+      default:
+        return list;
+    }
+  }, [repos, sort]);
 
   const activeFilterCount = (filters.tagId ? 1 : 0) + (filters.language ? 1 : 0) + (filters.keyword ? 1 : 0);
 
@@ -221,6 +157,27 @@ export default function ReposFeedClient({
             Tong hop nhung repo GitHub toi yeu thich, kem bai hoc va nhan xet cua ban than
             de giup ban quyet dinh co nen hoc theo repo do hay khong.
           </motion.p>
+
+          {/* Quick stats row */}
+          <motion.div
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-6 flex flex-wrap items-center justify-center gap-3 text-xs text-text-muted"
+          >
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-darkborder bg-darkcard/40 px-3 py-1">
+              <Github className="h-3 w-3" />
+              <span className="font-mono font-semibold text-text-primary">{total}</span> repo
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-darkborder bg-darkcard/40 px-3 py-1">
+              <TagIcon className="h-3 w-3" />
+              <span className="font-mono font-semibold text-text-primary">{tags.length}</span> tag
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-darkborder bg-darkcard/40 px-3 py-1">
+              <Code2 className="h-3 w-3" />
+              <span className="font-mono font-semibold text-text-primary">{languages.length}</span> ngon ngu
+            </span>
+          </motion.div>
         </header>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
@@ -250,6 +207,15 @@ export default function ReposFeedClient({
                   placeholder="Tim theo ten hoac mo ta..."
                   className="w-full rounded-xl border border-darkborder bg-darkbg/60 py-2.5 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none focus:ring-1 focus:ring-neon-violet/30"
                 />
+                {searchInput && (
+                  <button
+                    onClick={() => setSearchInput('')}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-text-muted hover:text-text-primary"
+                    aria-label="Xoa tim kiem"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -266,13 +232,16 @@ export default function ReposFeedClient({
                     <button
                       key={t.id}
                       onClick={() => setFilters((p) => ({ ...p, tagId: active ? null : t.id, page: 1 }))}
-                      className={`rounded-full border px-3 py-1 text-xs transition-all ${
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs transition-all ${
                         active
                           ? 'border-neon-violet bg-neon-violet/20 text-text-primary shadow-[0_0_12px_rgba(167,139,250,0.25)]'
                           : 'border-darkborder bg-darkbg/40 text-text-secondary hover:border-neon-violet/40 hover:text-text-primary'
                       }`}
                     >
                       {t.name}
+                      <span className={`text-[10px] ${active ? 'text-text-primary/70' : 'text-text-muted'}`}>
+                        {t.count}
+                      </span>
                     </button>
                   );
                 })}
@@ -298,6 +267,11 @@ export default function ReposFeedClient({
                           : 'border-darkborder bg-darkbg/40 text-text-secondary hover:border-neon-indigo/40 hover:text-text-primary'
                       }`}
                     >
+                      <span
+                        className={`inline-block h-1.5 w-1.5 rounded-full ${
+                          active ? 'bg-neon-indigo' : 'bg-text-muted'
+                        }`}
+                      />
                       {l.name}
                       <span className="text-text-muted">{l.count}</span>
                     </button>
@@ -309,7 +283,7 @@ export default function ReposFeedClient({
 
           {/* ─── Repo grid ──────────────────────────────────── */}
           <section>
-            <div className="mb-4 flex items-center justify-between text-sm text-text-muted">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 text-sm text-text-muted">
               <span>
                 {loading
                   ? 'Dang tai...'
@@ -317,14 +291,33 @@ export default function ReposFeedClient({
                   ? 'Chua co repo nao'
                   : `Hien thi ${repos.length} / ${total} repo`}
               </span>
-              <button
-                onClick={() => fetchRepos(filters)}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-darkborder bg-darkcard/60 px-3 py-1.5 text-text-secondary transition-colors hover:border-neon-violet/40 hover:text-text-primary"
-                title="Tai lai"
-              >
-                <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
-                Tai lai
-              </button>
+
+              <div className="flex items-center gap-2">
+                {/* Sort */}
+                <div className="relative">
+                  <select
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value as SortKey)}
+                    className="appearance-none rounded-lg border border-darkborder bg-darkcard/60 py-1.5 pl-3 pr-8 text-xs text-text-secondary transition-colors hover:border-neon-violet/40 hover:text-text-primary focus:border-neon-violet/50 focus:outline-none"
+                  >
+                    {SORT_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ArrowDownAZ className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-text-muted" />
+                </div>
+
+                <button
+                  onClick={() => fetchRepos(filters)}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-darkborder bg-darkcard/60 px-3 py-1.5 text-text-secondary transition-colors hover:border-neon-violet/40 hover:text-text-primary"
+                  title="Tai lai"
+                >
+                  <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
+                  Tai lai
+                </button>
+              </div>
             </div>
 
             {repos.length === 0 && !loading ? (
@@ -335,7 +328,7 @@ export default function ReposFeedClient({
                 className="grid grid-cols-1 gap-5 md:grid-cols-2"
               >
                 <AnimatePresence mode="popLayout">
-                  {repos.map((repo) => (
+                  {sortedRepos.map((repo) => (
                     <motion.li
                       key={repo.id}
                       layout
@@ -426,14 +419,18 @@ function PageButton({ disabled, onClick, children }: PageButtonProps) {
 function EmptyState({ onClear, hasFilters }: { onClear: () => void; hasFilters: boolean }) {
   return (
     <div className="rounded-2xl border border-darkborder/50 bg-darkcard/40 p-10 text-center backdrop-blur-xl">
-      <Github className="mx-auto mb-4 h-12 w-12 text-text-muted" />
-      <h3 className="mb-2 text-lg font-semibold text-text-primary">Chua co repo phu hop</h3>
+      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-darkborder bg-darkcard/60">
+        {hasFilters ? <Filter className="h-8 w-8 text-text-muted" /> : <Github className="h-8 w-8 text-text-muted" />}
+      </div>
+      <h3 className="mb-2 text-lg font-semibold text-text-primary">
+        {hasFilters ? 'Khong co repo phu hop voi bo loc' : 'Kho repo dang duoc cap nhat'}
+      </h3>
       <p className="mx-auto max-w-md text-sm text-text-secondary">
         {hasFilters
           ? 'Thu xoa bo loc hoac tu khoa khac de xem them repo.'
           : 'Hay quay lai sau, kho repo dang duoc cap nhat.'}
       </p>
-      {hasFilters && (
+      {hasFilters ? (
         <button
           onClick={onClear}
           className="mt-5 inline-flex items-center gap-2 rounded-xl border border-neon-violet/40 bg-neon-violet/10 px-4 py-2 text-sm font-medium text-neon-violet transition-colors hover:bg-neon-violet/20"
@@ -441,6 +438,16 @@ function EmptyState({ onClear, hasFilters }: { onClear: () => void; hasFilters: 
           <X className="h-4 w-4" />
           Xoa bo loc
         </button>
+      ) : (
+        <a
+          href="https://github.com/cuonghoang1103?tab=repositories"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 inline-flex items-center gap-2 rounded-xl border border-neon-violet/40 bg-neon-violet/10 px-4 py-2 text-sm font-medium text-neon-violet transition-colors hover:bg-neon-violet/20"
+        >
+          <Flame className="h-4 w-4" />
+          Xem GitHub cua toi
+        </a>
       )}
     </div>
   );
@@ -456,7 +463,7 @@ function RepoCard({ repo }: RepoCardProps) {
       href={`/repos/${repo.id}`}
       className="group block h-full"
     >
-      <article className="relative h-full overflow-hidden rounded-2xl border border-darkborder/50 bg-darkcard/60 p-5 backdrop-blur-xl transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-neon-violet/40 group-hover:shadow-[0_8px_40px_-12px_rgba(167,139,250,0.4)]">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-darkborder/50 bg-darkcard/60 p-5 backdrop-blur-xl transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-neon-violet/40 group-hover:shadow-[0_8px_40px_-12px_rgba(167,139,250,0.4)]">
         {/* Top row: stars + language */}
         <div className="mb-3 flex items-start justify-between gap-3">
           <div className="group/link flex min-w-0 flex-1 items-center gap-2">
@@ -466,81 +473,95 @@ function RepoCard({ repo }: RepoCardProps) {
             </h3>
           </div>
           <span
-            className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium ${languageBadge(repo.language)}`}
+            className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium ${languageBadgeClasses(repo.language)}`}
           >
             {repo.language || 'N/A'}
           </span>
         </div>
 
-      {/* Owner + stars */}
-      <div className="mb-3 flex items-center gap-3 text-xs text-text-muted">
-        <span className="truncate">@{repo.owner}</span>
-        <span aria-hidden>·</span>
-        <span className="inline-flex items-center gap-1 text-yellow-400">
-          <Star className="h-3.5 w-3.5 fill-yellow-400" />
-          <span className="font-mono font-semibold">{formatStars(repo.stars)}</span>
-        </span>
-      </div>
+        {/* Owner + stars + date */}
+        <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-text-muted">
+          <span className="truncate">@{repo.owner}</span>
+          <span aria-hidden>·</span>
+          <span className="inline-flex items-center gap-1 text-yellow-400">
+            <Star className="h-3.5 w-3.5 fill-yellow-400" />
+            <span className="font-mono font-semibold">{formatStars(repo.stars)}</span>
+          </span>
+          {repo.createdAt && (
+            <>
+              <span aria-hidden>·</span>
+              <span className="inline-flex items-center gap-1">
+                <Calendar className="h-3 w-3" />
+                {new Date(repo.createdAt).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+              </span>
+            </>
+          )}
+        </div>
 
-      {/* Description (GitHub's own) */}
-      {repo.description && (
-        <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-text-secondary">
-          {repo.description}
-        </p>
-      )}
+        {/* Description (GitHub's own) */}
+        {repo.description && (
+          <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-text-secondary">
+            {repo.description}
+          </p>
+        )}
 
-      {/* myReview panel */}
-      {repo.myReview && (
-        <div className="relative mb-4 overflow-hidden rounded-xl border border-neon-violet/20 bg-gradient-to-br from-neon-violet/[0.04] to-neon-indigo/[0.04] p-4">
-          <div className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-neon-violet">
-            <Sparkles className="h-3 w-3" />
-            Bai hoc &amp; danh gia
+        {/* myReview panel — flex-grow so the footer sticks to the bottom of the card */}
+        {repo.myReview && (
+          <div className="relative mb-4 flex-grow overflow-hidden rounded-xl border border-neon-violet/20 bg-gradient-to-br from-neon-violet/[0.04] to-neon-indigo/[0.04] p-4">
+            <div className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-neon-violet">
+              <Sparkles className="h-3 w-3" />
+              Bai hoc &amp; danh gia
+            </div>
+            <div
+              className="rich-content line-clamp-3 text-sm leading-relaxed text-text-secondary"
+              dangerouslySetInnerHTML={{ __html: renderReview(repo.myReview) }}
+            />
           </div>
-          <div
-            className="rich-content text-sm leading-relaxed text-text-secondary"
-            dangerouslySetInnerHTML={{ __html: renderReview(repo.myReview) }}
-          />
+        )}
+
+        {/* Tags */}
+        {repo.tags && repo.tags.length > 0 && (
+          <div className="mb-3 flex flex-wrap gap-1.5">
+            {repo.tags.slice(0, 4).map((t) => (
+              <span
+                key={t.id}
+                className="rounded-full border border-darkborder bg-darkbg/60 px-2 py-0.5 text-[10px] uppercase tracking-wider text-text-muted"
+              >
+                #{t.name}
+              </span>
+            ))}
+            {repo.tags.length > 4 && (
+              <span className="rounded-full border border-darkborder bg-darkbg/60 px-2 py-0.5 text-[10px] text-text-muted">
+                +{repo.tags.length - 4}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Footer: "Xem chi tiet" hint + external link */}
+        <div className="mt-auto flex items-center justify-between border-t border-white/[0.04] pt-3 text-xs">
+          <span className="inline-flex items-center gap-1 text-text-muted transition-colors group-hover:text-neon-violet">
+            Xem chi tiet
+            <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+          </span>
+          <span
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              window.open(repo.url, '_blank', 'noopener,noreferrer');
+            }}
+            role="button"
+            tabIndex={-1}
+            className="inline-flex items-center gap-1 text-text-muted transition-colors hover:text-text-primary"
+            title="Mo tren GitHub"
+          >
+            <ExternalLink className="h-3 w-3" />
+            GitHub
+          </span>
         </div>
-      )}
 
-      {/* Tags */}
-      {repo.tags && repo.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {repo.tags.map((t) => (
-            <span
-              key={t.id}
-              className="rounded-full border border-darkborder bg-darkbg/60 px-2 py-0.5 text-[10px] uppercase tracking-wider text-text-muted"
-            >
-              #{t.name}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Footer: "Xem chi tiet" hint + external link */}
-      <div className="mt-4 flex items-center justify-between border-t border-white/[0.04] pt-3 text-xs">
-        <span className="inline-flex items-center gap-1 text-text-muted transition-colors group-hover:text-neon-violet">
-          Xem chi tiet
-          <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-        </span>
-        <span
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            window.open(repo.url, '_blank', 'noopener,noreferrer');
-          }}
-          role="button"
-          tabIndex={-1}
-          className="inline-flex items-center gap-1 text-text-muted transition-colors hover:text-text-primary"
-          title="Mo tren GitHub"
-        >
-          <ExternalLink className="h-3 w-3" />
-          GitHub
-        </span>
-      </div>
-
-      {/* Hover ring */}
-      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-neon-violet/0 transition-all duration-300 group-hover:ring-neon-violet/30" />
+        {/* Hover ring */}
+        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-neon-violet/0 transition-all duration-300 group-hover:ring-neon-violet/30" />
       </article>
     </Link>
   );

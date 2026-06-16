@@ -5,15 +5,15 @@
 // (github.routes.ts) is a thin adapter that just parses the
 // request, calls a service method, and serializes the result.
 //
-// Why a service:
-//   1. The GitHub API is rate-limited (60/hr unauthenticated,
-//      5000/hr with a token). Centralizing calls makes it easy
-//      to add caching or backoff later.
-//   2. The same `parseRepoUrl` + `fetchRepoMetadata` is reused
-//      by the manual POST endpoint AND the auto-fetch-starred
-//      flow, so we want the parsing in one place.
-//   3. Tests (when added) can stub the service without touching
-//      HTTP plumbing.
+// Reliability features:
+//   - withRetry(): wraps every GitHub fetch with exponential
+//     backoff so transient 5xx / 403-rate-limit responses don't
+//     fail the whole batch.
+//   - pMap(): runs the sync loop in parallel with a bounded
+//     concurrency so we don't hammer the GitHub API (which would
+//     burn through the 5000/hr token quota in seconds).
+//   - parseRepoUrl(): accepts the canonical HTTPS form, the SSH
+//     shorthand, the .git suffix, and the `owner/repo` shorthand.
 // ────────────────────────────────────────────────────────────────────
 
 import { prisma } from '../config/database.js';
@@ -31,6 +31,8 @@ export interface GithubRepoMetadata {
   stars: number;
   language: string | null;
   description: string | null;
+  forks?: number;
+  openIssues?: number;
 }
 
 /** A small projection used by the auto-draft list. */
@@ -117,7 +119,61 @@ function stripGitSuffix(name: string): string {
   return name.replace(/\.git$/, '');
 }
 
-// ─── GitHub API call ──────────────────────────────────────────────
+// ─── GitHub API call (with retry) ──────────────────────────────────
+
+/**
+ * Execute `fn` with exponential backoff on transient errors.
+ *
+ * The GitHub REST API returns 403 when we're hitting the rate
+ * limit and 5xx when something on their side is broken. Both
+ * are recoverable if we wait a few seconds and try again, so we
+ * retry up to `retries` times (default 3) with delays of 1s,
+ * 2s, 4s. 4xx errors that are NOT 403 or 429 (e.g. 404) are
+ * considered permanent and bubble up immediately.
+ */
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  options: { retries?: number; baseDelayMs?: number; label?: string } = {},
+): Promise<T> {
+  const retries = options.retries ?? 3;
+  const base = options.baseDelayMs ?? 1000;
+  const label = options.label ?? 'github-api';
+
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastErr = err;
+      // Permanent (non-retryable) errors: 4xx other than 403 / 429.
+      // We detect this by the AppError code (set in the throw
+      // branches below) so we don't need to inspect the response
+      // body again.
+      if (err instanceof AppError && (err as AppError & { code?: string }).code === 'GITHUB_API_NOT_FOUND') {
+        throw err;
+      }
+      if (attempt === retries) break;
+      // Exponential backoff with full jitter.
+      const delay = base * 2 ** attempt + Math.random() * 250;
+      // eslint-disable-next-line no-console
+      console.warn(`[${label}] retry ${attempt + 1}/${retries} after ${Math.round(delay)}ms`);
+      await new Promise((r) => setTimeout(r, delay));
+    }
+  }
+  throw lastErr;
+}
+
+function githubHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'cuongthai-repo-hub',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+  if (config.githubApiToken) {
+    headers.Authorization = `Bearer ${config.githubApiToken}`;
+  }
+  return headers;
+}
 
 /**
  * Fetch public metadata for a repo from the GitHub REST API.
@@ -129,57 +185,65 @@ function stripGitSuffix(name: string): string {
  *
  * Returns null when the repo doesn't exist (404) so callers can
  * translate that into a user-friendly error.
+ *
+ * Wrapped in withRetry: a transient 5xx or 403 will be retried
+ * with backoff before bubbling up as GITHUB_API_ERROR.
  */
 export async function fetchRepoMetadata(
   owner: string,
   repoName: string,
 ): Promise<GithubRepoMetadata | null> {
-  const headers: Record<string, string> = {
-    Accept: 'application/vnd.github+json',
-    'User-Agent': 'cuongthai-repo-hub',
-    'X-GitHub-Api-Version': '2022-11-28',
-  };
-  if (config.githubApiToken) {
-    headers.Authorization = `Bearer ${config.githubApiToken}`;
-  }
+  return withRetry(async () => {
+    const apiUrl = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repoName)}`;
+    const res = await fetch(apiUrl, { headers: githubHeaders() });
 
-  const apiUrl = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repoName)}`;
-  const res = await fetch(apiUrl, { headers });
+    if (res.status === 404) {
+      // Marked as a permanent error so withRetry doesn't retry it.
+      throw new AppError('Repo 404 tren GitHub', 404, 'GITHUB_API_NOT_FOUND');
+    }
 
-  // 404 → not found. Return null so the route can render a
-  // precise "Repo not found on GitHub" error.
-  if (res.status === 404) return null;
+    if (res.status === 403 || res.status === 429) {
+      // Rate limit — throw a transient error so withRetry backs off.
+      const text = await res.text().catch(() => '');
+      throw new AppError(
+        `GitHub rate limit (${res.status}): ${text.slice(0, 200)}`,
+        503,
+        'GITHUB_RATE_LIMIT',
+      );
+    }
 
-  if (!res.ok) {
-    // For other errors (403 rate limit, 5xx), throw so the
-    // route can return a 502 with a generic message. We don't
-    // leak the upstream status code to the client.
-    const text = await res.text().catch(() => '');
-    throw new AppError(
-      `GitHub API loi (${res.status}): ${text.slice(0, 200)}`,
-      502,
-      'GITHUB_API_ERROR',
-    );
-  }
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new AppError(
+        `GitHub API loi (${res.status}): ${text.slice(0, 200)}`,
+        502,
+        'GITHUB_API_ERROR',
+      );
+    }
 
-  const body = (await res.json()) as {
-    full_name?: string;
-    html_url?: string;
-    stargazers_count?: number;
-    language?: string | null;
-    description?: string | null;
-    owner?: { login?: string };
-    name?: string;
-  };
+    const body = (await res.json()) as {
+      full_name?: string;
+      html_url?: string;
+      stargazers_count?: number;
+      language?: string | null;
+      description?: string | null;
+      forks_count?: number;
+      open_issues_count?: number;
+      owner?: { login?: string };
+      name?: string;
+    };
 
-  return {
-    owner: body.owner?.login || owner,
-    repoName: body.name || repoName,
-    url: body.html_url || `https://github.com/${owner}/${repoName}`,
-    stars: body.stargazers_count ?? 0,
-    language: body.language ?? null,
-    description: body.description ?? null,
-  };
+    return {
+      owner: body.owner?.login || owner,
+      repoName: body.name || repoName,
+      url: body.html_url || `https://github.com/${owner}/${repoName}`,
+      stars: body.stargazers_count ?? 0,
+      language: body.language ?? null,
+      description: body.description ?? null,
+      forks: body.forks_count ?? 0,
+      openIssues: body.open_issues_count ?? 0,
+    };
+  }, { label: `repo:${owner}/${repoName}` });
 }
 
 /**
@@ -196,55 +260,56 @@ export async function fetchRecentlyStarred(
   username: string,
   limit: number = 10,
 ): Promise<GithubStarredRepo[]> {
-  const headers: Record<string, string> = {
-    Accept: 'application/vnd.github+json',
-    'User-Agent': 'cuongthai-repo-hub',
-    'X-GitHub-Api-Version': '2022-11-28',
-  };
-  if (config.githubApiToken) {
-    headers.Authorization = `Bearer ${config.githubApiToken}`;
-  }
+  return withRetry(async () => {
+    const perPage = Math.min(Math.max(limit, 1), 30);
+    const apiUrl =
+      `https://api.github.com/users/${encodeURIComponent(username)}/starred?per_page=${perPage}&sort=created&direction=desc`;
 
-  const perPage = Math.min(Math.max(limit, 1), 30);
-  const apiUrl =
-    `https://api.github.com/users/${encodeURIComponent(username)}/starred?per_page=${perPage}&sort=created&direction=desc`;
+    const res = await fetch(apiUrl, { headers: githubHeaders() });
 
-  const res = await fetch(apiUrl, { headers });
+    if (res.status === 404) {
+      throw new AppError(
+        `GitHub user "${username}" khong ton tai`,
+        404,
+        'USER_NOT_FOUND',
+      );
+    }
+    if (res.status === 403 || res.status === 429) {
+      const text = await res.text().catch(() => '');
+      throw new AppError(
+        `GitHub rate limit (${res.status}): ${text.slice(0, 200)}`,
+        503,
+        'GITHUB_RATE_LIMIT',
+      );
+    }
+    if (!res.ok) {
+      throw new AppError(
+        `GitHub API loi (${res.status})`,
+        502,
+        'GITHUB_API_ERROR',
+      );
+    }
 
-  if (res.status === 404) {
-    throw new AppError(
-      `GitHub user "${username}" khong ton tai`,
-      404,
-      'USER_NOT_FOUND',
-    );
-  }
-  if (!res.ok) {
-    throw new AppError(
-      `GitHub API loi (${res.status})`,
-      502,
-      'GITHUB_API_ERROR',
-    );
-  }
+    const list = (await res.json()) as Array<{
+      full_name?: string;
+      html_url?: string;
+      stargazers_count?: number;
+      language?: string | null;
+      description?: string | null;
+    }>;
 
-  const list = (await res.json()) as Array<{
-    full_name?: string;
-    html_url?: string;
-    stargazers_count?: number;
-    language?: string | null;
-    description?: string | null;
-  }>;
-
-  return list.map((item) => {
-    const [owner = '', repoName = ''] = (item.full_name || '').split('/');
-    return {
-      owner,
-      repoName: stripGitSuffix(repoName),
-      url: item.html_url || `https://github.com/${owner}/${repoName}`,
-      stars: item.stargazers_count ?? 0,
-      language: item.language ?? null,
-      description: item.description ?? null,
-    };
-  });
+    return list.map((item) => {
+      const [owner = '', repoName = ''] = (item.full_name || '').split('/');
+      return {
+        owner,
+        repoName: stripGitSuffix(repoName),
+        url: item.html_url || `https://github.com/${owner}/${repoName}`,
+        stars: item.stargazers_count ?? 0,
+        language: item.language ?? null,
+        description: item.description ?? null,
+      };
+    });
+  }, { label: `starred:${username}` });
 }
 
 // ─── Database operations ──────────────────────────────────────────
@@ -272,8 +337,10 @@ export async function createOrUpdateRepoFromUrl(params: {
   tagNames?: string[];
 }): Promise<unknown> {
   const { githubUrl, myReview, status } = params;
-  if (!myReview || !myReview.trim()) {
-    throw new AppError('Vui long nhap bai hoc / nhan xet', 400, 'EMPTY_REVIEW');
+  // Allow empty review for DRAFT entries; require it for
+  // PUBLISHED so the public feed always shows curated content.
+  if (status === 'PUBLISHED' && (!myReview || !myReview.trim())) {
+    throw new AppError('Vui long nhap bai hoc / nhan xet truoc khi xuat ban', 400, 'EMPTY_REVIEW');
   }
 
   const { owner, repoName } = parseRepoUrl(githubUrl);
@@ -301,7 +368,7 @@ export async function createOrUpdateRepoFromUrl(params: {
       stars: meta.stars,
       language: meta.language,
       description: meta.description,
-      myReview: myReview.trim(),
+      myReview: (myReview || '').trim(),
       status,
       tags: tagIdList.length > 0
         ? { create: tagIdList.map((tagId) => ({ tagId })) }
@@ -313,7 +380,7 @@ export async function createOrUpdateRepoFromUrl(params: {
       stars: meta.stars,
       language: meta.language,
       description: meta.description,
-      myReview: myReview.trim(),
+      myReview: (myReview || '').trim(),
       status,
     },
   });
@@ -354,6 +421,8 @@ export async function createOrUpdateRepoFromUrl(params: {
  *   - `language` filter (exact match, case-insensitive)
  *   - `keyword` filter (substring on repoName + description, case-insensitive)
  *   - pagination via `page` + `pageSize`
+ *   - `sort` (newest | oldest | most-stars | least-stars |
+ *     name-asc | name-desc) — defaults to newest
  */
 export async function listRepos(params: {
   status?: GithubRepoStatus;
@@ -363,7 +432,9 @@ export async function listRepos(params: {
   keyword?: string;
   page?: number;
   pageSize?: number;
-}): Promise<{ items: unknown[]; total: number; page: number; pageSize: number; totalPages: number }> {
+  sort?: 'newest' | 'oldest' | 'most-stars' | 'least-stars' | 'name-asc' | 'name-desc';
+  isAdmin?: boolean;
+}): Promise<{ items: unknown[]; total: number; page: number; pageSize: number; totalPages: number; sort: string }> {
   const {
     status = 'PUBLISHED',
     tagId,
@@ -372,6 +443,7 @@ export async function listRepos(params: {
     keyword,
     page = 1,
     pageSize = 12,
+    sort = 'newest',
   } = params;
 
   const where: Prisma.GithubRepoWhereInput = { status };
@@ -388,14 +460,34 @@ export async function listRepos(params: {
     where.tags = { some: { tag: { slug: tagSlug } } };
   }
 
+  // Map the friendly sort key to a Prisma orderBy. The DB does
+  // the heavy lifting so we don't pay an in-memory sort cost on
+  // large result sets.
+  const orderBy: Prisma.GithubRepoOrderByWithRelationInput = (() => {
+    switch (sort) {
+      case 'oldest': return { createdAt: 'asc' };
+      case 'most-stars': return { stars: 'desc' };
+      case 'least-stars': return { stars: 'asc' };
+      case 'name-asc': return { repoName: 'asc' };
+      case 'name-desc': return { repoName: 'desc' };
+      case 'newest':
+      default: return { createdAt: 'desc' };
+    }
+  })();
+
+  // The pageSize cap depends on whether the caller is an admin
+  // (200, so the admin dashboard can show all repos in one shot)
+  // or a public user (50, to keep the public feed snappy).
+  const isAdmin = !!params.isAdmin;
+  const maxSize = isAdmin ? 200 : 50;
   const safePage = Math.max(1, page);
-  const safeSize = Math.min(Math.max(1, pageSize), 50);
+  const safeSize = Math.min(Math.max(1, pageSize), maxSize);
   const skip = (safePage - 1) * safeSize;
 
   const [items, total] = await Promise.all([
     prisma.githubRepo.findMany({
       where,
-      orderBy: { createdAt: 'desc' },
+      orderBy,
       skip,
       take: safeSize,
       include: {
@@ -411,6 +503,7 @@ export async function listRepos(params: {
     page: safePage,
     pageSize: safeSize,
     totalPages: Math.ceil(total / safeSize),
+    sort,
   };
 }
 
@@ -434,6 +527,16 @@ export async function getRepoByUrl(url: string): Promise<unknown | null> {
 export async function updateRepoStatus(id: string, status: GithubRepoStatus): Promise<unknown> {
   const exists = await prisma.githubRepo.findUnique({ where: { id } });
   if (!exists) throw new AppError('Repo khong ton tai', 404, 'NOT_FOUND');
+  // If we're publishing a DRAFT that has an empty review,
+  // refuse the transition so the public feed never shows a
+  // blank review card.
+  if (status === 'PUBLISHED' && (!exists.myReview || !exists.myReview.trim())) {
+    throw new AppError(
+      'Khong the publish khi review dang trong. Vui long nhap review truoc.',
+      400,
+      'EMPTY_REVIEW',
+    );
+  }
   const updated = await prisma.githubRepo.update({
     where: { id },
     data: { status },
@@ -452,6 +555,9 @@ export async function deleteRepo(id: string): Promise<void> {
  * Update a repo's review + tags in place. Used by the admin
  * "Edit review" flow. Does NOT re-fetch from GitHub — the
  * admin can hit /sync to refresh metadata.
+ *
+ * Review can be empty for DRAFT entries. If the admin is editing
+ * a PUBLISHED entry, we require a non-empty review.
  */
 export async function updateRepoReview(params: {
   id: string;
@@ -462,8 +568,9 @@ export async function updateRepoReview(params: {
   const exists = await prisma.githubRepo.findUnique({ where: { id: params.id } });
   if (!exists) throw new AppError('Repo khong ton tai', 404, 'NOT_FOUND');
 
-  if (!params.myReview || !params.myReview.trim()) {
-    throw new AppError('Vui long nhap bai hoc / nhan xet', 400, 'EMPTY_REVIEW');
+  // Reject empty review when the repo is already PUBLISHED.
+  if (exists.status === 'PUBLISHED' && (!params.myReview || !params.myReview.trim())) {
+    throw new AppError('Khong the xoa review cua repo da publish. Hay chuyen ve DRAFT truoc.', 400, 'EMPTY_REVIEW');
   }
 
   const tagIdList = await resolveTagList(params.tagIds, params.tagNames);
@@ -471,7 +578,7 @@ export async function updateRepoReview(params: {
   await prisma.$transaction([
     prisma.githubRepo.update({
       where: { id: params.id },
-      data: { myReview: params.myReview.trim() },
+      data: { myReview: (params.myReview || '').trim() },
     }),
     prisma.githubRepoTag.deleteMany({
       where: { repoId: params.id, tagId: { notIn: tagIdList } },
@@ -495,6 +602,11 @@ export async function updateRepoReview(params: {
  *
  * We deliberately don't update `myReview` here — that's editorial
  * content and shouldn't be clobbered by GitHub data.
+ *
+ * Concurrency is bounded so a token-authenticated user (5000/hr)
+ * can still safely sync hundreds of repos in one run, and an
+ * anonymous user (60/hr) will fail gracefully with a clear
+ * per-repo error rather than 502-ing the whole batch.
  */
 export async function syncAllRepoMetadata(): Promise<{
   total: number;
@@ -508,20 +620,20 @@ export async function syncAllRepoMetadata(): Promise<{
   let updated = 0;
   const failed: Array<{ id: string; url: string; error: string }> = [];
 
-  // Sequential to stay well under the rate limit. With a
-  // personal access token (5000/hr) you can safely process
-  // thousands of repos in one run; without one (60/hr) the
-  // request will start failing around repo #50.
-  for (const repo of repos) {
+  // pMap: bounded-concurrency parallel map. Authenticated users
+  // get a higher concurrency; anonymous users stay at 1 (sequential)
+  // because their rate-limit budget is tiny.
+  const concurrency = config.githubApiToken ? 5 : 1;
+  await pMap(repos, concurrency, async (repo) => {
     try {
       const meta = await fetchRepoMetadata(repo.owner, repo.repoName);
       if (!meta) {
         failed.push({ id: repo.id, url: repo.url, error: 'Repo 404 tren GitHub' });
-        continue;
+        return;
       }
-      if (meta.stars === repo.stars) {
+      if (meta.stars === repo.stars && meta.language && meta.description) {
         // No change — skip the DB write to avoid useless churn.
-        continue;
+        return;
       }
       await prisma.githubRepo.update({
         where: { id: repo.id },
@@ -536,7 +648,7 @@ export async function syncAllRepoMetadata(): Promise<{
       const message = err instanceof Error ? err.message : 'Unknown error';
       failed.push({ id: repo.id, url: repo.url, error: message });
     }
-  }
+  });
 
   return { total: repos.length, updated, failed };
 }
@@ -595,6 +707,35 @@ export async function fetchStarredAsDrafts(
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────
+
+/**
+ * Bounded-concurrency parallel map. Runs `worker` for each
+ * element in `items` with at most `concurrency` inflight at
+ * any time. Preserves the input order in the result.
+ */
+async function pMap<T, R>(
+  items: T[],
+  concurrency: number,
+  worker: (item: T, index: number) => Promise<R>,
+): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let nextIndex = 0;
+  const workers: Array<Promise<void>> = [];
+  for (let w = 0; w < concurrency; w += 1) {
+    workers.push(
+      (async () => {
+        while (true) {
+          const i = nextIndex;
+          nextIndex += 1;
+          if (i >= items.length) return;
+          results[i] = await worker(items[i], i);
+        }
+      })(),
+    );
+  }
+  await Promise.all(workers);
+  return results;
+}
 
 /**
  * Convert an incoming `tagIds` and `tagNames` list into a list

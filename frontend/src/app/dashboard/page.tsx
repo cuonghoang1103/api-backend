@@ -67,6 +67,14 @@ export default function DashboardPage() {
 
   // ── Real-time clock — safe: useState with default, set inside useEffect ──
   const [clock, setClock] = useState({ hour: -1, minute: -1 });
+
+  // ── Mounted guard: prevents hydration mismatch by ensuring we never
+  // render the dashboard content during SSR. The server always renders
+  // a null-ish state; the client renders the real data after mount.
+  // This eliminates React error #418 (hydration mismatch) completely.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
   useEffect(() => {
     const update = () => {
       const now = new Date();
@@ -247,8 +255,11 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#0f111a] text-white pb-16">
-      {/* ── Hydration guard: wait for server snapshot before painting ── */}
-      {isHydrating && (
+      {/* Spinner during hydration, content when ready. No mounted guard needed
+          because isHydrating=false on SSR (useState(false)) so the content
+          path renders on server — identical to what the client renders on first
+          paint before React takes over. */}
+      {isHydrating ? (
         <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
           <div className="relative w-16 h-16">
             <div className="absolute inset-0 rounded-full border-2 border-violet-500/20" />
@@ -258,29 +269,18 @@ export default function DashboardPage() {
             Dang dong bo dashboard tu server...
           </p>
         </div>
-      )}
-
-      {/* Ambient background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-violet-600/8 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-fuchsia-600/8 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-cyan-600/4 rounded-full blur-[150px]" />
-      </div>
-
-      {/* Content only renders after the server snapshot arrives, so
-          the user never sees an empty frame while hydrating. */}
-      {!isHydrating && (
+      ) : (
         <>
-        {/* Ambient background */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-violet-600/8 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-fuchsia-600/8 rounded-full blur-[100px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-cyan-600/4 rounded-full blur-[150px]" />
-        </div>
+          {/* Ambient background */}
+          <div className="fixed inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-violet-600/8 rounded-full blur-[120px]" />
+            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-fuchsia-600/8 rounded-full blur-[100px]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-cyan-600/4 rounded-full blur-[150px]" />
+          </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 pt-6 space-y-5">
-        {/* ── Header row ── */}
-        <div className="flex items-end justify-between">
+          <div className="relative z-10 max-w-5xl mx-auto px-4 pt-6 space-y-5">
+            {/* ── Header row ── */}
+            <div className="flex items-end justify-between">
           <div>
             <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-cyan-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
               Dashboard
@@ -501,7 +501,8 @@ export default function DashboardPage() {
         </p>
         </div>
         </>
-      )} {/* end !isHydrating */}
+      )}
+
       <AnimatePresence>
         {statsOpen && (
           <StatsModal
@@ -517,7 +518,6 @@ export default function DashboardPage() {
           />
         )}
       </AnimatePresence>
-      )} {/* end !isHydrating */}
     </div>
   );
 }

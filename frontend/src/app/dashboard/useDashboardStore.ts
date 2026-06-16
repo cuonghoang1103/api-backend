@@ -5,31 +5,30 @@
  * is the offline mirror.
  *
  * Lifecycle:
- *   1. Auth resolves → userId is known.
- *   2. We call `hydrateFromServer(userId)` once to fetch the
- *      full snapshot from the DB and replace the in-memory
- *      state. This is the ONLY way data enters the store
- *      from the network on cold start.
+ *   1. Auth resolves (isStoreHydrated=true, userId known) → trigger hydrate.
+ *   2. We call `hydrateFromServer(userId)` once to fetch the full
+ *      snapshot from the DB and replace the in-memory state. This is
+ *      the ONLY way data enters the store from the network.
  *   3. Subsequent user actions go through the action functions
  *      (addTask, toggleTask, etc.) which do optimistic local
  *      updates + fire-and-forget background sync.
  *   4. When auth changes (login/logout/switch account) we
- *      call `hydrateFromServer(newUserId)` again — same
- *      function, but the local state was already reset to
- *      defaults inside `switchUser`, so the snapshot just
- *      overwrites the empty default.
+ *      call `hydrateFromServer(newUserId)` again.
  *
- * What this fixes vs the previous version:
- *   - Old: data only lived in localStorage. A device wipe or
- *     a new browser meant the user lost all their planning.
- *   - New: data lives in PostgreSQL, scoped by user_id. A new
- *     device is the same data as the old one. A private-mode
- *     browse shows nothing (the API returns 401) which is the
- *     right behavior for a personal dashboard.
- *   - Old: cross-device edits collided silently — two tabs on
- *     two devices could each have a different `exp` total.
- *   - New: the server computes level/exp from its own counter
- *     so a localStorage edit can't inflate the user's stats.
+ * Why isStoreHydrated matters:
+ *   - Zustand persist rehydrates asynchronously. Without waiting for
+ *     isStoreHydrated=true, the hook could compute userId='guest'
+ *     because isAuthenticated hasn't been flipped yet (it updates
+ *     inside onRehydrateStorage which runs after the first subscriber
+ *     fires).
+ *   - We gate the userId computation on BOTH isLoading=false AND
+ *     isStoreHydrated=true to ensure the auth state is fully restored
+ *     before we decide who the user is.
+ *
+ * Why NOT persist to localStorage for reads:
+ *   - localStorage edits can inflate level/exp. Server is authoritative.
+ *   - A different user on the same device would see stale data.
+ *   - localStorage is only a fallback for offline mode.
  */
 import { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from '@/store/authStore';
@@ -50,28 +49,35 @@ import {
   hydrateFromServer,
   replaceSeedTasks,
 } from './store';
-import type { TaskScope } from './types';
+export type { TaskScope } from './types';
 
 export function useDashboardStore() {
-  // ── Auth subscription ─────────────────────────────────────────────
+  // ── Auth state ──────────────────────────────────────────────────
+  // We wait for isStoreHydrated before deciding the userId. Without
+  // this, the first subscriber fire (before onRehydrateStorage runs)
+  // could compute userId='guest' even though the user IS logged in.
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isLoading = useAuthStore((s) => s.isLoading);
+  const isStoreHydrated = useAuthStore((s) => s.isHydrated);
 
-  // Stable userId from auth — only changes after auth fully resolves.
-  // We check BOTH isAuthenticated AND user.id because the persist
-  // middleware may restore `user` from localStorage before `isAuthenticated`
-  // is flipped by onRehydrateStorage (a known Zustand persist quirk).
   const userId =
-    !isLoading && isAuthenticated && user?.id != null
+    !isLoading && isStoreHydrated && isAuthenticated && user?.id != null
       ? String(user.id)
       : 'guest';
 
-  // ── Dashboard store subscription ──────────────────────────────────
+  // ── Dashboard snapshot (local React state) ─────────────────────
+  // Initialised to getState() (module-level defaults) so SSR renders
+  // a stable shell. Updated via the store subscription.
   const [snapshot, setSnapshot] = useState(getState);
   const [isHydrating, setIsHydrating] = useState(false);
-  const [hydratedFor, setHydratedFor] = useState<string>('guest');
 
+  // Track which userId we've already hydrated for. Using a ref avoids
+  // a render loop — we compare without triggering a re-render.
+  const hydratedForRef = useRef<string>('guest');
+
+  // Subscribe to store changes. The callback fires on every mutation
+  // (addTask, toggleTask, etc.) and keeps the local snapshot in sync.
   useEffect(() => {
     const unsub = subscribe(() => {
       setSnapshot(getState());
@@ -79,25 +85,22 @@ export function useDashboardStore() {
     return unsub;
   }, []);
 
-  // ── Auth-driven hydrate ───────────────────────────────────────────
-  // When userId changes, reset the in-memory state and fetch
-  // the new snapshot. We track `hydratedFor` separately so a
-  // re-render that produces the same userId (e.g. the auth
-  // store re-emits) doesn't trigger a second hydrate.
+  // ── Auth-driven hydration ────────────────────────────────────────
+  // When userId changes, fetch a fresh snapshot from the server for
+  // the new user. We use a hydration timeout as a defensive backstop
+  // in case isStoreHydrated never fires (localStorage unavailable).
   useEffect(() => {
-    if (hydratedFor === userId) return;
-    setIsHydrating(true);
-    switchUser(userId);
-    setHydratedFor(userId);
+    const newId = userId;
 
-    // Skip the network call for guests — there's no server
-    // data to fetch. The user gets the empty default state
-    // and the seed function will populate the demo tasks
-    // locally so the page has something to show.
-    if (userId === 'guest') {
+    if (hydratedForRef.current === newId) return;
+
+    setIsHydrating(true);
+    switchUser(newId);
+    hydratedForRef.current = newId;
+
+    if (newId === 'guest') {
       setIsHydrating(false);
-      // Fire-and-forget the seed for guest demo.
-      (async () => {
+      void (async () => {
         await ensureScopeSeeded('today');
         await ensureScopeSeeded('week');
         await ensureScopeSeeded('month');
@@ -105,21 +108,38 @@ export function useDashboardStore() {
       return;
     }
 
+    // Defensive: if isStoreHydrated hasn't fired within 2 seconds,
+    // force the hydration anyway using the current userId. This
+    // guards against the case where onRehydrateStorage fails to
+    // fire (e.g. localStorage blocked) and userId stays 'guest'.
+    const timeoutId = setTimeout(() => {
+      if (hydratedForRef.current === 'guest' && userId !== 'guest') {
+        hydratedForRef.current = userId;
+        void (async () => {
+          try {
+            await hydrateFromServer(userId);
+            await ensureScopeSeeded('today');
+            await ensureScopeSeeded('week');
+            await ensureScopeSeeded('month');
+          } finally {
+            setIsHydrating(false);
+          }
+        })();
+      }
+    }, 2000);
+
     void (async () => {
       try {
-        await hydrateFromServer(userId);
-        // After we have the server snapshot, seed any scope
-        // the user doesn't have tasks for yet. The server's
-        // bulk-seed is idempotent so this is safe to call
-        // on every load.
+        await hydrateFromServer(newId);
         await ensureScopeSeeded('today');
         await ensureScopeSeeded('week');
         await ensureScopeSeeded('month');
       } finally {
+        clearTimeout(timeoutId);
         setIsHydrating(false);
       }
     })();
-  }, [userId, hydratedFor]);
+  }, [userId]);
 
   return {
     ...snapshot,

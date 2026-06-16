@@ -31,7 +31,7 @@ Xây dựng những sản phẩm chất lượng, giúp doanh nghiệp số hóa
 ## 📍 Thông tin liên hệ
 - 🌐 Website: [cuonghoang.dev](https://cuonghoang.dev)
 - 💻 GitHub: [github.com/cuonghoangdev](https://github.com/cuonghoangdev)
-- 📧 Email: cuonghoang1103@gmail.com
+- 📧 Email: cuongthaihnhe176322@gmail.com
 - 📱 Phone: +84 399 360 938
 
 ---
@@ -197,7 +197,7 @@ Website: **/blog** - Xem tất cả bài viết
 
 | Kênh | Thông tin |
 |------|-----------|
-| 📧 **Email** | cuonghoang1103@gmail.com |
+| 📧 **Email** | cuongthaihnhe176322@gmail.com |
 | 📱 **Phone** | +84 399 360 938 |
 | 💬 **Zalo** | 0399360938 |
 | 🌐 **Website** | cuonghoang.dev |
@@ -267,7 +267,7 @@ Website: **/blog** - Xem tất cả bài viết
 
 ## 📞 Liên hệ ngay
 
-- 📧 Email: cuonghoang1103@gmail.com
+- 📧 Email: cuongthaihnhe176322@gmail.com
 - 📱 Phone: +84 399 360 938
 - 💬 Zalo: 0399360938
 
@@ -401,7 +401,7 @@ Hiện tại mình đang ở **Limited Mode** (API quota đã hết) nên có th
 ### Bạn có thể:
 1. **Thử hỏi lại sau** - Khi API được reset
 2. **Hỏi về chủ đề có sẵn** - Xem các gợi ý bên dưới
-3. **Liên hệ trực tiếp** - cuonghoang1103@gmail.com
+3. **Liên hệ trực tiếp** - cuongthaihnhe176322@gmail.com
 
 ### 📚 Các chủ đề có sẵn:
 - Giới thiệu CuongHoangDev

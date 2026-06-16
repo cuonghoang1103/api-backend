@@ -96,7 +96,7 @@ npm run db:seed
 ```
 ✅ Database connected
 ✅ Roles created
-✅ Admin user created: cuonghoang1103@gmail.com
+✅ Admin user created: cuongthaihnhe176322@gmail.com
 ✅ AI configs seeded
 ✅ AI prompts seeded
 ✅ Discount codes seeded

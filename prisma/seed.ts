@@ -29,7 +29,7 @@ async function main() {
     update: {},
     create: {
       username: 'admin',
-      email: 'cuonghoang1103@gmail.com',
+      email: 'cuongthaihnhe176322@gmail.com',
       fullName: 'Cuong Hoang Dev',
       password: adminPassword,
       roles: {

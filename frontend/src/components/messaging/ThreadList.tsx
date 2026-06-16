@@ -90,13 +90,17 @@ export default function ThreadList() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
                         <p className="truncate text-sm font-medium text-text-primary">
-                          {t.peer?.alias ? (
-                            <>
-                              <span className="text-amber-300">{t.peer.alias}</span>
-                              <span className="ml-1 text-[10px] font-normal text-text-muted">(@{t.peer.username})</span>
-                            </>
+                          {t.peer ? (
+                            t.peer.alias ? (
+                              <>
+                                <span className="text-amber-300">{t.peer.alias}</span>
+                                <span className="ml-1 text-[10px] font-normal text-text-muted">(@{t.peer.username ?? 'unknown'})</span>
+                              </>
+                            ) : (
+                              t.peer.displayName ?? t.peer.username ?? 'Cuộc trò chuyện'
+                            )
                           ) : (
-                            t.peer?.displayName ?? t.peer?.username ?? 'Cuộc trò chuyện'
+                            'Cuộc trò chuyện'
                           )}
                         </p>
                         {t.lastMessageAt && (

@@ -303,7 +303,9 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
 
     // Try to surface the thread detail immediately if we have it
     // in the sidebar cache — otherwise fetch in the background.
-    const cached = get().threads.find((t) => t.id === threadId) ?? null;
+    // Only use the cache when it has a peer so the header doesn't
+    // render a blank avatar while the API call is in flight.
+    const cached = get().threads.find((t) => t.id === threadId && !!t.peer) ?? null;
     if (cached) set({ currentThread: cached });
 
     // Lazy-load the thread detail if we don't have messages yet

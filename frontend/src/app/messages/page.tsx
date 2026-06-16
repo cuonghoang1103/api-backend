@@ -155,19 +155,19 @@ function MessagesPageInner() {
             <div className="border-b border-white/[0.06] px-4 py-3">
               <h2 className="text-sm font-semibold text-text-primary">Hộp thư</h2>
             </div>
-            <div className="min-h-0 flex-1">
-              <ThreadList />
-            </div>
-          </div>
+                    <div className="min-h-0 flex-1">
+                      <ThreadList />
+                    </div>
+                  </div>
 
-          {/* Main chat area */}
-          <div className="flex min-w-0 flex-1 flex-col">
-            {currentThreadId ? (
-              <>
-                <ThreadHeader
-                  thread={currentThread}
-                  getPresence={getPresence}
-                />
+                  {/* Main chat area */}
+                  <div className="flex min-w-0 flex-1 flex-col">
+                    {currentThreadId && currentThread ? (
+                      <>
+                        <ThreadHeader
+                          thread={currentThread}
+                          getPresence={getPresence}
+                        />
                 <div className="min-h-0 flex-1">
                   <MessageList />
                 </div>

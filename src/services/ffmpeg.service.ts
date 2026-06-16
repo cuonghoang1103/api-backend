@@ -176,7 +176,7 @@ export async function normalizeAudio(
       if (outputThreshMatch) measurement.outputThresh = outputThreshMatch[1];
     }
 
-    console.log('[FFmpeg] Pass 1 measurement:', measurement);
+    // (debug log removed 2026-06-17)
   } catch (err) {
     console.warn('[FFmpeg] Pass 1 measurement failed (non-fatal):', err);
     // Continue with default target values
@@ -205,7 +205,7 @@ export async function normalizeAudio(
 
   try {
     await execAsync(normalizeCmd, { timeout: 300000 });
-    console.log(`[FFmpeg] Normalized: ${absInput} → ${absOutput}`);
+    // (debug log removed 2026-06-17)
   } catch (err) {
     // If FFmpeg fails, try a simpler approach — just re-encode without loudnorm
     console.warn('[FFmpeg] Loudnorm normalization failed, falling back to re-encode:', err);
@@ -217,7 +217,7 @@ export async function normalizeAudio(
     ].join(' ');
     try {
       await execAsync(fallbackCmd, { timeout: 300000 });
-      console.log(`[FFmpeg] Fallback re-encode: ${absInput} → ${absOutput}`);
+      // (debug log removed 2026-06-17)
     } catch (fallbackErr) {
       throw new AppError(
         `Audio processing failed: ${(fallbackErr as Error).message}`,

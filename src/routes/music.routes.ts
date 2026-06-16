@@ -334,7 +334,7 @@ router.get('/stream/:id', optionalAuth, async (req: any, res: Response, next) =>
     // ─── Step 7: Stream completion ────────────────────────
     // Log khi streaming hoàn thành (để monitor)
     streamResult.stream.on('end', () => {
-      console.log(`[MusicStream] Track ${trackId} streamed successfully`);
+      // (debug log removed 2026-06-17 — too noisy, fires on every track play)
     });
 
     // ─── Step 8: Handle client disconnect ─────────────────
@@ -399,14 +399,14 @@ router.post(
           const srcAbs = pathMod.resolve(config.uploadDir, localPath);
           const tmpNormalized = pathMod.resolve(config.uploadDir, `temp-normalized-${Date.now()}.mp3`);
           try {
-            const normResult = await normalizeAudio(srcAbs, tmpNormalized);
+            await normalizeAudio(srcAbs, tmpNormalized);
             // Replace original with normalized version
             const { rename } = await import('fs/promises');
             await rename(tmpNormalized, srcAbs);
             // Update file size to the normalized version
             const stats = await fs.stat(srcAbs);
             audioFileSize = stats.size;
-            console.log(`[FFmpeg] Normalized ${localPath}:`, normResult.measurement.outputI ? `output I=${normResult.measurement.outputI} LUFS` : 'fallback re-encode');
+            // (debug log removed 2026-06-17)
           } catch (normErr) {
             // Non-fatal: log and continue with original file
             console.warn('[FFmpeg] Normalization failed, using original:', normErr);

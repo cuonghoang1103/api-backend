@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { captureException } from '../services/sentry.service.js';
 
 export function notFoundHandler(req: Request, res: Response): void {
   res.status(404).json({
@@ -9,7 +10,7 @@ export function notFoundHandler(req: Request, res: Response): void {
 
 export function errorHandler(
   err: Error & { statusCode?: number; code?: string; name?: string; data?: Record<string, unknown> },
-  _req: Request,
+  req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction,
@@ -18,6 +19,17 @@ export function errorHandler(
 
   const statusCode = err.statusCode || 500;
   const message = err.message || 'Internal Server Error';
+
+  // Report to Sentry — but only for 5xx errors. Client errors (4xx)
+  // are not bugs and would just spam the dashboard.
+  if (statusCode >= 500) {
+    captureException(err, {
+      url: req.originalUrl,
+      method: req.method,
+      statusCode,
+      code: err.code,
+    });
+  }
 
   res.status(statusCode).json({
     success: false,

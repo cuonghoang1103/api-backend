@@ -250,11 +250,14 @@ export class AuthService {
     // successfully has no way to verify their email and is stuck.
     // We don't expose the OTP in the HTTP response — it's only in
     // server logs (and in dev mode, also in the local console).
+    //
+    // SECURITY NOTE (2026-06-17): The OTP used to be logged UNCONDITIONALLY
+    // (success or failure of email send), which leaks the OTP to any
+    // stdout / log aggregator / Sentry capture. We now only log it when
+    // the email send FAILED — i.e. when ops actually needs it as a
+    // fallback. When email sends succeed, the user gets the OTP via
+    // the normal channel and we don't need a server-side copy.
     if (otpToSend) {
-      console.log(
-        `[register] OTP for ${user.email} (verify): ${otpToSend} ` +
-        `(email service status: see [email] log line above)`,
-      );
       const sendResult = await emailService.sendOtpEmail({
         to: user.email,
         fullName: user.fullName ?? undefined,
@@ -262,6 +265,14 @@ export class AuthService {
         type: 'verify',
       });
       if (!sendResult.success) {
+        // Email send failed — print the OTP as the operational fallback
+        // so the user (or an admin reading the log) can complete
+        // verification manually. This is the only path that still
+        // surfaces the OTP; on success we intentionally stay silent.
+        console.log(
+          `[register] OTP for ${user.email} (verify): ${otpToSend} ` +
+          `(email service status: see [email] log line above)`,
+        );
         console.warn(
           `[register] Failed to deliver OTP email to ${user.email}: ` +
           `${sendResult.error}. The OTP is still in the server log above ` +

@@ -39,7 +39,7 @@ export class EmailService {
         return { success: false, error: result.error.message };
       }
 
-      console.log(`[email] Sent "${payload.subject}" to ${payload.to} (id: ${result.data?.id})`);
+      // (debug log removed 2026-06-17 — was logging recipient email)
       return { success: true, id: result.data?.id };
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error';

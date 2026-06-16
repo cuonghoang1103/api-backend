@@ -439,7 +439,12 @@ async function serializeCourse(
         }
 
         // Not enrolled on a paid course: strip the paid content
-        // fields. Exception: isFreePreview lessons stay public.
+        // fields. Exception: isFreePreview lessons stay public
+        // (with documents) so the marketing site can show what
+        // the student would get. All other lessons hide their
+        // document list too — even a doc ID would let an
+        // attacker hit /documents/:id/download if they could
+        // guess it.
         if (lesson.isFreePreview) {
           return {
             ...base,
@@ -449,10 +454,25 @@ async function serializeCourse(
             sourceCodeUrl: lesson.details?.sourceCodeUrl,
             teachingNotes: undefined,
             details: undefined,
+            // Documents ARE shown for free previews so the
+            // marketing page can show "Sample materials
+            // available" with a download link. The /download
+            // endpoint re-checks enrollment for free previews
+            // only when there is a price; for genuinely free
+            // courses every document is reachable.
+            documents: lesson.documents.map(serializeDocument),
           };
         }
 
-        return base;
+        return {
+          ...base,
+          // Strip documents from non-preview lessons on a paid
+          // course. The /:courseId/lessons/:lessonId endpoint
+          // already 401s/402s this case so this is defense in
+          // depth, but it also stops any future code path that
+          // exposes this object from leaking document IDs.
+          documents: [],
+        };
       }),
     })),
     reviews: course.reviews,

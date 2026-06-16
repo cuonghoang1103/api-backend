@@ -70,7 +70,6 @@ async function assertCanAccessCourseContent(
   if (isFree && mode !== 'admin-or-enrolled') {
     return { isAdmin: false, isEnrolled: true, isFree: true };
   }
-
   // Admin bypass — but only for mode='admin-or-enrolled'. We
   // don't want a normal admin to accidentally see paid content
   // through the wrong endpoint. The /admin/* routes already
@@ -128,6 +127,31 @@ async function assertCanAccessCourseContent(
   }
   if (enrollment.expiresAt && enrollment.expiresAt.getTime() < Date.now()) {
     throw new AppError('Enrollment da het han', 403);
+  }
+
+  // CRITICAL: a course that is now paid (price > 0 and isFree=false)
+  // requires a corresponding PAID CourseOrder for this enrollment to
+  // count. Without this check, students who enrolled when the course
+  // was free keep full access even after the admin flips on a price —
+  // a real revenue leak we shipped and only noticed because a user
+  // tested it. We also accept COMPLETED status so the student can
+  // review past material, and REFUNDED is treated as a "no".
+  //
+  // The check is on PAID-or-COMPLETED orders only — a PENDING/FAILED
+  // order from an abandoned checkout must NOT unlock content.
+  const paidOrder = await prisma.courseOrder.findFirst({
+    where: {
+      userId,
+      courseId,
+      status: { in: ['PAID', 'COMPLETED'] },
+    },
+    select: { id: true, status: true },
+  });
+  if (!paidOrder) {
+    throw new AppError(
+      'Khoa hoc nay da chuyen sang tra phi. Vui long mua de tiep tuc hoc',
+      402,
+    );
   }
 
   return { isAdmin: false, isEnrolled: true, isFree: false };
@@ -330,11 +354,31 @@ async function serializeCourse(
   // treat that as a paid course with free preview lessons —
   // `isFree=true` then acts only as the global "previewable"
   // signal, not a bypass.
+  //
+  // CRITICAL: we also check for a PAID/COMPLETED CourseOrder.
+  // An enrollment row alone is not enough — students who
+  // enrolled when the course was free keep their enrollment
+  // row after the admin flips on a price, and without this
+  // second check they would retain full access for free. This
+  // is the bug we just fixed (see also assertCanAccessCourseContent
+  // for the same pattern in the gating helper).
   const isFree = course.isFree && Number(course.price) <= 0;
   const isOwner = options?.userId !== undefined && course.instructorId === options.userId;
+  let hasPaidOrder = false;
+  if (options?.userId && !isFree && !isOwner) {
+    const order = await prisma.courseOrder.findFirst({
+      where: {
+        userId: options.userId,
+        courseId,
+        status: { in: ['PAID', 'COMPLETED'] },
+      },
+      select: { id: true },
+    });
+    hasPaidOrder = Boolean(order);
+  }
   const hasPaidAccess = options?.includeDraftLessons
     || isFree
-    || Boolean(enrollment)
+    || (Boolean(enrollment) && (isFree || hasPaidOrder))
     || isOwner;
 
   const totalPublishedLessons = course.sections.reduce(

@@ -94,6 +94,7 @@ model User {
   courseReviews           CourseReview[]
   shopOrders              ShopOrder[]
   courseOrders            CourseOrder[]
+  refundedCourseOrders    CourseOrder[]             @relation("CourseOrderRefunder")
   chatSessions            ChatSession[]
   chatFeedback            ChatFeedback[]
   assignmentSubmissions   AssignmentSubmission[]
@@ -824,6 +825,8 @@ model DiscountCode {
 
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  courseOrders CourseOrder[]
+
   @@index([code], name: "idx_discount_code")
   @@index([userId], name: "idx_discount_code_user_id")
   @@map("discount_codes")
@@ -1403,14 +1406,40 @@ model CourseOrder {
   // Idempotent guard: true sau khi da tao Enrollment tu IPN.
   // Tranh increment totalStudents 2 lan khi VNPay retry IPN.
   enrolled        Boolean   @default(false)
+  // Frontend-sent idempotency key. Prevents the same client from
+  // creating two orders by double-clicking "Mua" before the first
+  // redirect takes effect. Unique per user (a different user can
+  // safely re-use the same UUID).
+  idempotencyKey  String?   @map("idempotency_key") @db.VarChar(64)
+  // Optional discount code applied to this order. We keep both the
+  // code (string) and the FK so the snapshot survives coupon deletion
+  // or value change.
+  discountCode    String?   @map("discount_code") @db.VarChar(50)
+  discountCodeId  Int?      @map("discount_code_id")
+  // The amount BEFORE applying the discount code, for audit.
+  originalAmount  Decimal?  @map("original_amount") @db.Decimal(10, 2)
+  // ─── Refund tracking (set by admin) ──
+  // refundAmount: how much was actually returned to the user.
+  // Can be less than `amount` for partial refunds. Null = not refunded.
+  refundAmount    Decimal?  @map("refund_amount") @db.Decimal(10, 2)
+  refundReason    String?   @map("refund_reason") @db.VarChar(500)
+  refundedAt      DateTime? @map("refunded_at")
+  refundedBy      Int?      @map("refunded_by")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course        Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  // set null on delete so the order stays visible even after the
+  // coupon is removed by an admin.
+  coupon        DiscountCode? @relation(fields: [discountCodeId], references: [id], onDelete: SetNull)
+  refundedByUser User?        @relation("CourseOrderRefunder", fields: [refundedBy], references: [id], onDelete: SetNull)
 
+  @@unique([userId, idempotencyKey], name: "uk_course_order_idempotency")
   @@index([userId, status], name: "idx_course_orders_user_status")
   @@index([courseId], name: "idx_course_orders_course")
+  @@index([discountCodeId], name: "idx_course_orders_coupon")
+  @@index([refundedBy], name: "idx_course_orders_refunder")
   @@map("course_orders")
 }
 

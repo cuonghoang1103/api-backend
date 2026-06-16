@@ -306,6 +306,101 @@ export class EmailService {
       text: `${greeting}\n\nCảm ơn bạn đã mua khóa học "${opts.courseTitle}".\n\nMã đơn: ${opts.orderCode}\nSố tiền: ${formattedAmount}\nThời gian: ${paidAtStr}\n\nVào học ngay: ${learnUrl}`,
     });
   }
+
+  /**
+   * Course refund confirmation — sent when an admin issues a refund.
+   * Includes the amount returned, the original order code, and the
+   * admin's reason. We DO NOT promise a refund timeline here because
+   * the actual bank transfer happens via VNPay's settlement, not from
+   * our system.
+   */
+  async sendCourseRefundEmail(opts: {
+    to: string;
+    fullName?: string;
+    orderCode: string;
+    courseTitle: string;
+    refundAmount: number;
+    originalAmount: number;
+    reason: string;
+    refundedAt: Date;
+  }): Promise<{ success: boolean; error?: string }> {
+    const greeting = opts.fullName ? `Xin chào ${opts.fullName},` : 'Xin chào,';
+    const formattedRefund = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(opts.refundAmount);
+    const formattedOriginal = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(opts.originalAmount);
+    const isPartial = opts.refundAmount < opts.originalAmount;
+    const refundedAtStr = new Intl.DateTimeFormat('vi-VN', {
+      dateStyle: 'long',
+      timeStyle: 'short',
+    }).format(opts.refundedAt);
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 40px 0; }
+    .container { max-width: 560px; margin: 0 auto; background: #1a1b2e; border-radius: 16px; padding: 40px; }
+    h1 { color: #f59e0b; font-size: 24px; margin: 0 0 16px; }
+    p { color: #cbd5e1; line-height: 1.6; margin: 0 0 16px; }
+    .receipt { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 12px; padding: 20px; margin: 24px 0; }
+    .receipt-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .receipt-row:last-child { border-bottom: none; }
+    .receipt-label { color: #94a3b8; font-size: 14px; }
+    .receipt-value { color: #e2e8f0; font-weight: 600; font-size: 14px; }
+    .reason-box { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; font-size: 14px; color: #e2e8f0; margin: 12px 0; }
+    .footer { color: #64748b; font-size: 12px; margin-top: 32px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>${isPartial ? 'Hoàn tiền một phần' : 'Hoàn tiền thành công'}</h1>
+    <p>${greeting}</p>
+    <p>Đơn hàng của bạn đã được admin xử lý hoàn tiền. Vui lòng kiểm tra thông tin bên dưới:</p>
+    <div class="receipt">
+      <div class="receipt-row">
+        <span class="receipt-label">Khóa học</span>
+        <span class="receipt-value">${opts.courseTitle}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Mã đơn hàng</span>
+        <span class="receipt-value">${opts.orderCode}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Số tiền gốc</span>
+        <span class="receipt-value">${formattedOriginal}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Số tiền hoàn</span>
+        <span class="receipt-value">${formattedRefund}</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Thời gian</span>
+        <span class="receipt-value">${refundedAtStr}</span>
+      </div>
+    </div>
+    <p><strong>Lý do hoàn tiền:</strong></p>
+    <div class="reason-box">${opts.reason}</div>
+    <p>Tiền sẽ được chuyển về phương thức thanh toán ban đầu trong vòng 3-7 ngày làm việc (tuỳ ngân hàng).</p>
+    <p>Nếu bạn có thắc mắc, vui lòng phản hồi email này.</p>
+    <div class="footer">© ${new Date().getFullYear()} CuongHoangDev. All rights reserved.</div>
+  </div>
+</body>
+</html>`.trim();
+
+    return this.send({
+      to: opts.to,
+      subject: `Hoàn tiền khoá học — ${opts.courseTitle}`,
+      html,
+      text: `${greeting}\n\nĐơn hàng "${opts.courseTitle}" đã được hoàn tiền.\n\nMã đơn: ${opts.orderCode}\nSố tiền gốc: ${formattedOriginal}\nSố tiền hoàn: ${formattedRefund}\nLý do: ${opts.reason}\nThời gian: ${refundedAtStr}\n\nTiền sẽ được chuyển về phương thức ban đầu trong 3-7 ngày làm việc.`,
+    });
+  }
 }
 
 export const emailService = new EmailService();

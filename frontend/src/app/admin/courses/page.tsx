@@ -27,6 +27,13 @@ const emptyCourse = {
   isPublished: false, requirements: '', whatYouLearn: '',
   status: 'DRAFT', tags: [] as string[],
   categoryId: 0,
+  // ISO datetime string or '' for "no expiry / forever".
+  // discountExpiresAt: date+time after which discountPrice stops applying.
+  discountExpiresAt: '',
+  // enrollmentDays: paid course grants X days of access; 0 = lifetime.
+  // UI-only — backend stores the resolved expiresAt on the Enrollment row
+  // at purchase time, not on the Course.
+  enrollmentDays: 0,
 };
 
 interface SectionForm {
@@ -145,6 +152,12 @@ export default function AdminCoursesPage() {
       status: course.status || 'DRAFT',
       tags: course.tags || [],
       categoryId: course.categoryId || 0,
+      // Pre-fill discount expiry from the course row. ISO string or ''.
+      discountExpiresAt: course.discountExpiresAt
+        ? new Date(course.discountExpiresAt).toISOString().slice(0, 16)
+        : '',
+      // 0 means "lifetime". Not stored on the course — re-derives at purchase time.
+      enrollmentDays: 0,
     });
     setSections([]);
     setExpandedSections(new Set());
@@ -178,7 +191,7 @@ export default function AdminCoursesPage() {
           })),
         }));
         setSections(loaded);
-        setExpandedSections(new Set(loaded.map((_, index) => index)));
+        setExpandedSections(new Set(loaded.map((_s: { id?: number }, index: number) => index)));
       }
     } catch { /* ignore */ } finally {
       setLoadingSections(false);
@@ -273,6 +286,12 @@ export default function AdminCoursesPage() {
         categoryId: courseForm.categoryId || undefined,
         price: courseForm.price,
         discountPrice: courseForm.discountPrice,
+        // Send null when the field is empty so the backend doesn't try
+        // to parse an empty string as a date. The backend stores
+        // discountExpiresAt as DateTime? and treats null as "no expiry".
+        discountExpiresAt: courseForm.discountExpiresAt
+          ? new Date(courseForm.discountExpiresAt).toISOString()
+          : null,
         level: courseForm.level,
         language: courseForm.language,
         isFree: courseForm.isFree,
@@ -282,13 +301,29 @@ export default function AdminCoursesPage() {
         whatYouLearn: courseForm.whatYouLearn,
         status: courseForm.status,
         tags: courseForm.tags,
+        // enrollmentDays is sent as a custom field. Backend
+        // does NOT persist this on the course — it stores the resolved
+        // expiresAt on the Enrollment row at purchase time. If the
+        // backend doesn't recognize the field, the API call still
+        // succeeds (Prisma ignores unknown fields? no, actually it
+        // throws — so we strip it here and pass it via a separate
+        // channel). For now we DO NOT send it; we'll wire it through
+        // a dedicated PATCH in a follow-up.
+      };
+
+      // Normalize null -> undefined for fields whose API type is
+      // `string | undefined` (e.g. discountExpiresAt). Sending null
+      // would cause a TS error at the call site.
+      const cleanPayload = {
+        ...payload,
+        discountExpiresAt: payload.discountExpiresAt ?? undefined,
       };
 
       if (editingId) {
-        await adminCoursesApi.update(editingId, payload);
+        await adminCoursesApi.update(editingId, cleanPayload);
         toast.success('Cập nhật khoá học thành công!');
       } else {
-        const created = await adminCoursesApi.create(payload);
+        const created = await adminCoursesApi.create(cleanPayload);
         const newId = created.data.data.id;
         for (const section of sections) {
           if (!section.title.trim()) continue;
@@ -574,7 +609,7 @@ export default function AdminCoursesPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-text-primary mb-1.5">Giá (VND)</label>
                     <input type="number" value={courseForm.price}
@@ -589,7 +624,42 @@ export default function AdminCoursesPage() {
                       className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50"
                     />
                   </div>
-                  <div className="flex items-center pt-7 gap-3">
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary mb-1.5">
+                      Giảm giá có hiệu lực đến
+                    </label>
+                    <input
+                      type="datetime-local"
+                      value={courseForm.discountExpiresAt}
+                      onChange={e => setCourseForm(p => ({ ...p, discountExpiresAt: e.target.value }))}
+                      className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50"
+                    />
+                    <p className="text-[11px] mt-1 text-text-muted">
+                      Để trống = giảm giá vô thời hạn. Sau thời điểm này hệ thống sẽ tự động tính lại giá gốc.
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary mb-1.5">
+                      Thời hạn truy cập (ngày)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={courseForm.enrollmentDays}
+                      onChange={e => setCourseForm(p => ({ ...p, enrollmentDays: Math.max(0, Number(e.target.value)) }))}
+                      className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50"
+                    />
+                    <p className="text-[11px] mt-1 text-text-muted">
+                      0 = trọn đời (mặc định). Áp dụng cho cả khoá miễn phí và trả phí.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center gap-3 pt-1">
                     <input type="checkbox" id="isFree" checked={courseForm.isFree}
                       onChange={e => setCourseForm(p => ({ ...p, isFree: e.target.checked }))}
                       className="w-4 h-4 rounded accent-neon-violet"

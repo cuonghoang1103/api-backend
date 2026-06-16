@@ -7,6 +7,7 @@ import {
   LayoutDashboard, FileText, Users, Code2, Sparkles,
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap, Inbox,
+  CreditCard,
 } from 'lucide-react';
 
 const adminNav = [
@@ -19,6 +20,7 @@ const adminNav = [
   { label: 'Quản lý Shop', href: '/admin/shop', icon: ShoppingBag },
   { label: 'Quản lý Mã giảm giá', href: '/admin/discounts', icon: Tag },
   { label: 'Quản lý Đơn hàng', href: '/admin/orders', icon: Receipt },
+  { label: 'Đơn hàng khoá học (VNPay)', href: '/admin/course-orders', icon: CreditCard },
   { label: 'Quản lý Posts', href: '/admin/posts', icon: FileText },
   { label: 'Quản lý Users', href: '/admin/users', icon: Users },
   { label: 'Quản lý Skills', href: '/admin/skills', icon: Code2 },

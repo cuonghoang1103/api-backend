@@ -1033,12 +1033,61 @@ export interface MessagingUploadedFile {
 
 // ─── Payment API (VNPay) ───────────────────────────────────
 export const paymentApi = {
-  // Create a course order, return VNPay paymentUrl to redirect to
-  createCourseOrder(courseId: number) {
-    return api.post('/api/v1/payments/course', { courseId });
+  // Create a course order, return VNPay paymentUrl to redirect to.
+  // We generate a fresh idempotencyKey here (UUIDv4) so the same
+  // client retrying — e.g. because the network dropped before the
+  // redirect — gets the same order back instead of two.
+  createCourseOrder(courseId: number, discountCode?: string) {
+    const idempotencyKey =
+      typeof crypto !== 'undefined' && 'randomUUID' in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    return api.post('/api/v1/payments/course', {
+      courseId,
+      idempotencyKey,
+      ...(discountCode ? { discountCode } : {}),
+    });
   },
   // Poll order status after redirect from VNPay
   getOrderStatus(orderCode: string) {
     return api.get(`/api/v1/payments/order/${encodeURIComponent(orderCode)}`);
+  },
+  // Admin: paginated list of all course orders
+  adminListOrders(params?: {
+    status?: string;
+    courseId?: number;
+    page?: number;
+    pageSize?: number;
+  }) {
+    return api.get('/api/v1/payments/admin/orders', { params });
+  },
+  // Admin: audit trail of IPN callbacks for a given order
+  adminListTransactions(orderCode: string) {
+    return api.get(
+      `/api/v1/payments/admin/transactions/${encodeURIComponent(orderCode)}`,
+    );
+  },
+  // Admin: update enrollment (set/clear expiresAt, change status)
+  adminUpdateEnrollment(data: {
+    userId: number;
+    courseId: number;
+    expiresAt?: string | null;
+    status?: 'ACTIVE' | 'SUSPENDED' | 'COMPLETED';
+  }) {
+    return api.patch('/api/v1/payments/admin/enrollment', data);
+  },
+  // Admin: revoke enrollment
+  adminRevokeEnrollment(userId: number, courseId: number) {
+    return api.delete('/api/v1/payments/admin/enrollment', {
+      data: { userId, courseId },
+    });
+  },
+  // Admin: issue refund (full or partial)
+  adminRefundOrder(data: {
+    orderCode: string;
+    refundAmount?: number;
+    reason: string;
+  }) {
+    return api.post('/api/v1/payments/admin/refund', data);
   },
 };

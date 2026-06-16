@@ -68,6 +68,28 @@ export function startCronJobs(): void {
     }
   }, { timezone: 'UTC' });
 
+  // ─── Payment order cleanup (every 15 min) ───
+  // Mark CourseOrder rows that have been PENDING for more than the
+  // configured TTL (default 15 min) as FAILED. The IPN handler will
+  // still accept a late callback from VNPay — it only marks PAID, so
+  // a FAILED → PAID transition is fine. This stops the UI from
+  // showing a "stuck" PENDING order indefinitely.
+  const ttlMinutes = parseInt(process.env.VNPAY_ORDER_TTL_MINUTES || '15', 10);
+  cron.schedule('*/15 * * * *', async () => {
+    try {
+      const cutoff = new Date(Date.now() - ttlMinutes * 60 * 1000);
+      const { count } = await prisma.courseOrder.updateMany({
+        where: { status: 'PENDING', createdAt: { lt: cutoff } },
+        data: { status: 'FAILED' },
+      });
+      if (count > 0) {
+        console.log(`[cron] Expired ${count} stale PENDING orders (older than ${ttlMinutes} min)`);
+      }
+    } catch (err) {
+      console.error('[cron] Order cleanup failed:', (err as Error).message);
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Startup recovery ───
   void recoverPendingJobs();
 
@@ -75,6 +97,7 @@ export function startCronJobs(): void {
   console.log('       - Nightly cleanup @ 03:00 Vietnam');
   console.log('       - Weekly re-embed @ Sun 02:00 Vietnam');
   console.log('       - Hourly health check');
+  console.log(`       - Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`);
 }
 
 /**

@@ -583,9 +583,7 @@ export default function MusicAudioController() {
       audio
         .play()
         .then(() => {
-          if (process.env.NODE_ENV !== 'production') {
-            console.log('[MusicAudioController] play() ok for', trackId);
-          }
+          // (debug log removed 2026-06-17)
         })
         .catch((err) => {
           console.warn(

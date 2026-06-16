@@ -73,7 +73,7 @@ function OAuthCallbackContent() {
               (r: string) => (r || '').replace('ROLE_', '').toUpperCase() === 'ADMIN'
             );
             freshRole = isAdmin ? 'ADMIN' : 'USER';
-            console.log('[oauth-callback] Fresh role from backend:', freshRole, 'roles:', freshRoles);
+            // (debug log removed 2026-06-17)
           }
         } catch (err) {
           console.error('[oauth-callback] Failed to fetch profile:', err);

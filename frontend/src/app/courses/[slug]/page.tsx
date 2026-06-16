@@ -45,29 +45,33 @@ export default function CourseDetailPage() {
   const [buying, setBuying] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
 
-  // ── DEBUG: render counter — lets us prove from the browser
-  // console whether the component is re-mounting in a loop.
-  // We use useRef (not state) so the counter update itself
-  // doesn't trigger a re-render. Kept in place as a
-  // tripwire for the next regression — the same pattern
-  // (z-index / session re-render storm) is likely to bite
-  // again. Safe to remove once everything is stable.
+  // ── Render-storm tripwire. Counter updates on every render (via ref
+  // so it doesn't itself trigger a re-render). If we ever exceed 50
+  // renders in 3 seconds the page is almost certainly stuck in a
+  // re-render loop — the original symptom that motivated this code.
+  // Before 2026-06-17 this also printed every render; that turned
+  // out to be too noisy for normal debugging so the log is now
+  // silenced unless the threshold is crossed. Keep the counter.
   const renderCountRef = useRef(0);
+  const renderWindowStartRef = useRef(Date.now());
   renderCountRef.current += 1;
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('[course-detail] RENDER', { n: renderCountRef.current, slug, courseId: course?.id, loading });
-  });
+  if (process.env.NODE_ENV !== 'production') {
+    if (renderCountRef.current === 1 || Date.now() - renderWindowStartRef.current > 3000) {
+      renderWindowStartRef.current = Date.now();
+      renderCountRef.current = 1;
+    } else if (renderCountRef.current > 50) {
+      // eslint-disable-next-line no-console
+      console.warn('[course-detail] possible render storm — 50+ renders in 3s. last slug=', slug);
+      renderCountRef.current = 0;
+      renderWindowStartRef.current = Date.now();
+    }
+  }
 
   useEffect(() => {
     const fetch = async () => {
-      // eslint-disable-next-line no-console
-      console.log('[course-detail] effect FIRED', { slug });
       setLoading(true);
       try {
         const res = await coursesApi.getBySlug(slug);
-        // eslint-disable-next-line no-console
-        console.log('[course-detail] getBySlug OK', { hasData: !!res?.data?.data, slug });
         setCourse(res.data.data);
         if (res.data.data?.id) {
           // Wrap the optional reviews call in its own try/catch
@@ -95,11 +99,7 @@ export default function CourseDetailPage() {
         console.error('[course-detail] Fetch error', err?.response?.status, err?.message);
         toast.error('Course not found');
       } finally {
-        // eslint-disable-next-line no-console
-        console.log('[course-detail] finally: setLoading(false)');
         setLoading(false);
-        // eslint-disable-next-line no-console
-        console.log('[course-detail] finally: setLoading(false) DONE');
       }
     };
     fetch();
@@ -156,8 +156,6 @@ export default function CourseDetailPage() {
   };
 
   if (loading) {
-    // eslint-disable-next-line no-console
-    console.log('[course-detail] RENDER → loading branch');
     return (
       <div className="min-h-screen bg-darkbg flex items-center justify-center">
         <Loader2 className="w-10 h-10 animate-spin text-neon-violet" />
@@ -166,8 +164,6 @@ export default function CourseDetailPage() {
   }
 
   if (!course) {
-    // eslint-disable-next-line no-console
-    console.log('[course-detail] RENDER → !course branch');
     return (
       <div className="min-h-screen bg-darkbg flex items-center justify-center">
         <div className="text-center">
@@ -178,21 +174,14 @@ export default function CourseDetailPage() {
     );
   }
 
-  // eslint-disable-next-line no-console
-  console.log('[course-detail] RENDER → content branch', { courseId: course.id, sections: course.sections?.length, whatYouLearnType: typeof course.whatYouLearn, requirementsType: typeof course.requirements });
-
   const hasDiscount = course.discountPrice && course.discountPrice > 0;
   const canWatch = course.isEnrolled || course.isFree;
   // Paid course = explicitly not free AND has a price > 0.
   // Backend has the same check, but duplicating here means we render
   // the right button without a server round-trip.
   const isPaidCourse = !course.isFree && Number(course.price) > 0;
-  // eslint-disable-next-line no-console
-  console.log('[course-detail] before split', { hasDiscount, canWatch, hasWhat: !!course.whatYouLearn, hasReq: !!course.requirements });
   const whatYouLearnList = course.whatYouLearn ? course.whatYouLearn.split('\n').filter(Boolean) : [];
   const requirementsList = course.requirements ? course.requirements.split('\n').filter(Boolean) : [];
-  // eslint-disable-next-line no-console
-  console.log('[course-detail] after split', { whatCount: whatYouLearnList.length, reqCount: requirementsList.length });
 
   return (
     <div className="min-h-screen bg-darkbg">

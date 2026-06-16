@@ -32,15 +32,7 @@ export async function POST(request: NextRequest) {
 
     const parts = parseMultipart(Buffer.from(buffer), boundary);
 
-    // Debug log all parsed parts
-    console.log("[/api/music/upload] Parsed parts:", parts.map((p) => ({
-      name: p.name,
-      hasFilename: !!p.filename,
-      filename: p.filename,
-      contentType: p.contentType,
-      valueLength: p.value?.length,
-      dataLength: p.data?.length,
-    })));
+    // (debug log removed 2026-06-17)
 
     // Extract named fields
     const fields: Record<string, MultipartPart> = {};
@@ -97,8 +89,7 @@ export async function POST(request: NextRequest) {
       responseData = { message: rawText.slice(0, 300) };
     }
 
-    console.log("[/api/music/upload] Backend response:", backendRes.status, responseData);
-
+    // (debug log removed 2026-06-17)
     return NextResponse.json(responseData, { status: backendRes.status });
   } catch (err) {
     console.error("[/api/music/upload] Unhandled error:", err);

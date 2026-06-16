@@ -149,7 +149,7 @@ export const authConfig: NextAuthConfig = {
         const freshRole = normalizeRole(data.data?.primaryRole ?? data.data?.role ?? "USER");
         const freshVersion: number = data.data?.roleVersion ?? 0;
 
-        console.log(`[nextauth] ${account ? "signIn" : "refresh"} → role=${freshRole}, version=${freshVersion}`);
+        // (debug log removed 2026-06-17 — role/ver visible to every browser)
 
         token.id = String(data.data?.id ?? token.id ?? token.sub ?? "");
         token.role = freshRole;

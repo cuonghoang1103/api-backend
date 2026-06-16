@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import * as Sentry from '@sentry/nextjs';
 import { AlertTriangle, RotateCw } from 'lucide-react';
 
 /**
@@ -24,6 +25,15 @@ export default function GlobalError({
     // even though we're rendering a friendly fallback.
     // eslint-disable-next-line no-console
     console.error('[AppErrorBoundary]', error);
+
+    // Report to Sentry. We tag with the error boundary so we can
+    // tell client-render failures apart from API/server errors in
+    // the dashboard. The `digest` is Next.js's stable error id
+    // useful for cross-referencing server logs.
+    Sentry.captureException(error, {
+      tags: { source: 'error-boundary' },
+      extra: { digest: error.digest },
+    });
   }, [error]);
 
   const message = (() => {

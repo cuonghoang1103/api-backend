@@ -24,7 +24,9 @@ export async function POST(request: NextRequest) {
   let session;
   try {
     session = await auth();
-    console.log("[oauth/token] Session:", JSON.stringify(session?.user));
+    // SECURITY (2026-06-17): don't log full session.user to stdout
+    // — it contains the OAuth access token, email, avatar URL and
+    // every role/permission. Anyone with browser DevTools can see it.
   } catch (err) {
     console.error("[oauth/token] auth() failed:", err);
     return NextResponse.json({ success: false, message: "Auth session error" }, { status: 500 });

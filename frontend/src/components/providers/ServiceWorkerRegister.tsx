@@ -18,7 +18,7 @@ export default function ServiceWorkerRegister() {
             w.addEventListener('statechange', () => {
               if (w.state === 'installed' && navigator.serviceWorker.controller) {
                 // New SW available — could show a toast
-                console.log('[PWA] New service worker available');
+                // (debug log removed 2026-06-17)
               }
             });
           });

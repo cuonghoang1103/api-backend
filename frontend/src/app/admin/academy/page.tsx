@@ -515,7 +515,7 @@ export default function AdminAcademyPage() {
       }
 
       if (!courseId) throw new Error('Course save failed');
-      console.log('[saveCourse] Course saved, id=', courseId);
+      // (debug log removed 2026-06-17)
 
       // Delete removed sections/lessons/assignments from DB first.
       // Without this, old records stay in DB and reappear after reload.
@@ -527,7 +527,7 @@ export default function AdminAcademyPage() {
         if (!currentSectionIds.has(prevSectionId)) {
           try {
             await adminCoursesApi.deleteSection(prevSectionId);
-            console.log('[saveCourse] Deleted removed section id=', prevSectionId);
+            // (debug log removed 2026-06-17)
           } catch (err: any) {
             errors.push(`Không xoá được chương cũ ${prevSection.title}: ${err?.response?.data?.message || err.message}`);
           }
@@ -545,7 +545,7 @@ export default function AdminAcademyPage() {
           if (!currentLessonIds.has(prevLessonId)) {
             try {
               await adminCoursesApi.deleteLesson(prevLessonId);
-              console.log('[saveCourse] Deleted removed lesson id=', prevLessonId);
+              // (debug log removed 2026-06-17)
             } catch (err: any) {
               errors.push(`Không xoá được bài cũ ${prevLesson.title}: ${err?.response?.data?.message || err.message}`);
             }
@@ -559,13 +559,13 @@ export default function AdminAcademyPage() {
           for (const prevAssignment of prevLesson.assignments) {
             const prevAssignmentId = prevAssignment.id;
             if (!prevAssignmentId) continue;
-            if (!currentAssignmentIds.has(prevAssignmentId)) {
-              try {
-                await adminCoursesApi.deleteAssignment(prevAssignmentId);
-                console.log('[saveCourse] Deleted removed assignment id=', prevAssignmentId);
-              } catch (err: any) {
-                errors.push(`Không xoá được bài tập cũ ${prevAssignment.title}: ${err?.response?.data?.message || err.message}`);
-              }
+              if (!currentAssignmentIds.has(prevAssignmentId)) {
+                try {
+                  await adminCoursesApi.deleteAssignment(prevAssignmentId);
+                  // (debug log removed 2026-06-17)
+                } catch (err: any) {
+                  errors.push(`Không xoá được bài tập cũ ${prevAssignment.title}: ${err?.response?.data?.message || err.message}`);
+                }
             }
           }
         }
@@ -582,12 +582,12 @@ export default function AdminAcademyPage() {
 
         // Skip if already processed by id (backend duplicates)
         if (section.id != null && processedSectionIds.has(section.id)) {
-          console.log('[saveCourse] Skipping duplicate section id=', section.id, 'title=', section.title);
+          // (debug log removed 2026-06-17)
           continue;
         }
         // Skip if same title already seen in this run (user added duplicate section)
         if (titleKey && seenSectionTitles.has(titleKey)) {
-          console.log('[saveCourse] Skipping duplicate section title=', section.title);
+          // (debug log removed 2026-06-17)
           continue;
         }
         if (section.id != null) processedSectionIds.add(section.id);
@@ -619,7 +619,7 @@ export default function AdminAcademyPage() {
             errors.push(`Chương ${sectionIndex + 1}: không tạo được ID`);
             continue;
           }
-          console.log(`[saveCourse] Section ${sectionIndex} saved, id=`, savedSectionId);
+          // (debug log removed 2026-06-17)
         } catch (err: any) {
           console.error(`[saveCourse] Section ${sectionIndex} failed:`, err?.response?.data);
           errors.push(`Chương ${sectionIndex + 1}: ${err?.response?.data?.message || err.message}`);
@@ -635,7 +635,7 @@ export default function AdminAcademyPage() {
           const titleKey = (lesson.title || '').trim().toLowerCase();
 
           if (titleKey && seenLessonTitles.has(titleKey)) {
-            console.log('[saveCourse] Skipping duplicate lesson title=', lesson.title, 'in section', savedSectionId);
+            // (debug log removed 2026-06-17)
             continue;
           }
           seenLessonTitles.add(titleKey);
@@ -686,7 +686,7 @@ export default function AdminAcademyPage() {
               errors.push(`Bài ${lessonIndex + 1} (${lesson.title || 'không tên'}): không tạo được ID`);
               continue;
             }
-            console.log(`[saveCourse] Lesson ${lessonIndex} saved, id=`, lessonId);
+            // (debug log removed 2026-06-17)
 
             const newAssignments: Assignment[] = [];
             for (let assignmentIndex = 0; assignmentIndex < lesson.assignments.length; assignmentIndex++) {

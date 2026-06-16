@@ -183,10 +183,7 @@ export async function POST(request: NextRequest) {
     }
 
     const parts = parseMultipartParts(Buffer.from(buffer), boundary);
-    console.log('[admin/music/upload] Parsed parts:', parts.map(p => ({
-      name: p.name, filename: p.filename, ct: p.contentType,
-      len: p.data.length, hex: p.data.slice(0, 8).toString('hex'),
-    })));
+    // (debug log removed 2026-06-17)
 
     const fields: Record<string, MultipartPart> = {};
     for (const part of parts) {
@@ -204,7 +201,7 @@ export async function POST(request: NextRequest) {
     const audioFilename = audioPart.filename || "track.mp3";
     const audioMime = detectedMime || getMimeFromFilename(audioFilename);
 
-    console.log('[admin/music/upload] Audio detected:', detectedMime, 'browser:', audioPart.contentType, 'file:', audioFilename);
+    // (debug log removed 2026-06-17)
 
     const validAudioMimes = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg', 'audio/flac', 'audio/aac', 'audio/mp4', 'audio/x-m4a', 'audio/opus'];
     if (!validAudioMimes.includes(audioMime)) {
@@ -250,7 +247,7 @@ export async function POST(request: NextRequest) {
       formData.append("cover", coverBlob, coverPart.filename || "cover.jpg");
     }
 
-    console.log('[admin/music/upload] FWD audio:', audioMime, 'len:', audioPart.data.length, 'hex:', audioPart.data.slice(0, 8).toString('hex'));
+    // (debug log removed 2026-06-17)
 
     // ── Forward to backend ────────────────────────────────────────────────────
     const backendRes = await fetch(`${BACKEND_URL}/api/v1/music/tracks`, {

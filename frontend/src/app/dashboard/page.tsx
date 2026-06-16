@@ -58,9 +58,18 @@ export default function DashboardPage() {
   const todayPct = totalToday ? Math.round((doneToday / totalToday) * 100) : 0;
   const todayExpGained = doneToday * 25;
 
-  const todayIso = new Date().toISOString().slice(0, 10);
-  const alreadyCelebrated = lastCelebrationDate === todayIso;
-  const alreadyPlanned = tomorrowPlanLockedDate === todayIso;
+  // Compute todayIso ONLY on the client to avoid hydration mismatch.
+  // Server's UTC date and client's local date can differ at midnight.
+  // Start with an empty string (matches server) and fill in on mount.
+  const [todayIso, setTodayIso] = useState<string>('');
+  const [alreadyCelebrated, setAlreadyCelebrated] = useState(false);
+  const [alreadyPlanned, setAlreadyPlanned] = useState(false);
+  useEffect(() => {
+    const iso = new Date().toISOString().slice(0, 10);
+    setTodayIso(iso);
+    setAlreadyCelebrated(lastCelebrationDate === iso);
+    setAlreadyPlanned(tomorrowPlanLockedDate === iso);
+  }, [lastCelebrationDate, tomorrowPlanLockedDate]);
   const isAllDone = totalToday > 0 && todayTasks.every((t) => t.done);
 
   const [statsOpen, setStatsOpen] = useState(false);
@@ -151,7 +160,7 @@ export default function DashboardPage() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      const date = new Date().toISOString().slice(0, 10);
+      const date = mounted ? new Date().toISOString().slice(0, 10) : 'date';
       a.download = `dashboard-backup-${date}.json`;
       document.body.appendChild(a);
       a.click();
@@ -255,11 +264,21 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#0f111a] text-white pb-16">
-      {/* Spinner during hydration, content when ready. No mounted guard needed
-          because isHydrating=false on SSR (useState(false)) so the content
-          path renders on server — identical to what the client renders on first
-          paint before React takes over. */}
-      {isHydrating ? (
+      {/* SSR guard: render a stable shell on the server, real content
+          only after mount. This eliminates ALL hydration mismatches
+          caused by Date(), motion initial states, or auth state
+          differences between server and client. */}
+      {!mounted ? (
+        <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
+          <div className="relative w-16 h-16">
+            <div className="absolute inset-0 rounded-full border-2 border-violet-500/20" />
+            <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-violet-500 animate-spin" style={{ animationDuration: '0.8s' }} />
+          </div>
+          <p className="text-sm text-slate-400 font-medium animate-pulse">
+            Dang tai dashboard...
+          </p>
+        </div>
+      ) : isHydrating ? (
         <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
           <div className="relative w-16 h-16">
             <div className="absolute inset-0 rounded-full border-2 border-violet-500/20" />

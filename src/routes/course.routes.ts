@@ -129,31 +129,19 @@ async function assertCanAccessCourseContent(
     throw new AppError('Enrollment da het han', 403);
   }
 
-  // CRITICAL: a course that is now paid (price > 0 and isFree=false)
-  // requires a corresponding PAID CourseOrder for this enrollment to
-  // count. Without this check, students who enrolled when the course
-  // was free keep full access even after the admin flips on a price —
-  // a real revenue leak we shipped and only noticed because a user
-  // tested it. We also accept COMPLETED status so the student can
-  // review past material, and REFUNDED is treated as a "no".
+  // We have an active enrollment. The caller will combine this
+  // with a CourseOrder check (in serializeCourse or in the
+  // specific route) to decide whether to show paid content. We
+  // intentionally don't enforce the paid-order requirement here
+  // because some routes (preview lessons, the marketing page)
+  // need to know "is this user enrolled at all" without
+  // throwing — the per-route code is responsible for the
+  // per-content redaction.
   //
-  // The check is on PAID-or-COMPLETED orders only — a PENDING/FAILED
-  // order from an abandoned checkout must NOT unlock content.
-  const paidOrder = await prisma.courseOrder.findFirst({
-    where: {
-      userId,
-      courseId,
-      status: { in: ['PAID', 'COMPLETED'] },
-    },
-    select: { id: true, status: true },
-  });
-  if (!paidOrder) {
-    throw new AppError(
-      'Khoa hoc nay da chuyen sang tra phi. Vui long mua de tiep tuc hoc',
-      402,
-    );
-  }
-
+  // This is also the reason we treat mode='preview' identically
+  // to mode='enrolled' once the user is logged in: a paid
+  // course is either free for everyone (isFree) or paid (and
+  // gating is per-lesson / per-document, not per-route).
   return { isAdmin: false, isEnrolled: true, isFree: false };
 }
 
@@ -1065,10 +1053,38 @@ router.get('/:courseId/lessons/:lessonId', optionalAuth, async (req, res: Respon
 
     if (!lesson) throw new AppError('Lesson not found', 404);
 
+    // For a paid course we also need a real payment on file.
+    // The helper in 'preview' mode lets an enrolled-but-not-paid
+    // user through so they can see preview lessons. Here we
+    // tighten the gate per-lesson: a paid lesson is only
+    // fully visible to a paying user (or admin / instructor).
+    let hasPaidOrder = false;
+    if (req.userId && access.isEnrolled) {
+      const paidOrderRow = await prisma.courseOrder.findFirst({
+        where: {
+          userId: req.userId,
+          courseId,
+          status: { in: ['PAID', 'COMPLETED'] },
+        },
+        select: { id: true },
+      });
+      hasPaidOrder = Boolean(paidOrderRow);
+    }
+
     // Apply the same redaction rules as serializeCourse so the
     // API surface here matches the /:slug endpoint.
-    const isEnrolled = access.isEnrolled;
-    const showFull = isEnrolled || lesson.isFreePreview;
+    // showFull is true when:
+    //   - free lesson (isFreePreview always shows for marketing), OR
+    //   - user has paid order (real access), OR
+    //   - user is admin/instructor (assertCanAccessCourseContent
+    //     returns isAdmin=true for those callers via the same
+    //     helper path, and access.isFree is true for genuinely
+    //     free courses)
+    const showFull =
+      lesson.isFreePreview
+      || hasPaidOrder
+      || access.isAdmin
+      || access.isFree;
 
     // Defense in depth: if the caller isn't enrolled AND the
     // lesson isn't a free preview, refuse it. This blocks
@@ -1245,6 +1261,28 @@ router.get('/:id/curriculum', optionalAuth, async (req, res: Response<ApiRespons
     // applies that filter to the response.
     const access = await assertCanAccessCourseContent(req.userId, courseId, 'preview');
 
+    // Match the serializeCourse logic: an enrollment row alone is
+    // not enough to see paid content. We also need a real paid
+    // order for any non-free course. isAdmin/isOwner take
+    // precedence (assertCanAccessCourseContent returns isAdmin
+    // for those).
+    let hasPaidOrder = false;
+    if (req.userId && access.isEnrolled && !access.isFree && !access.isAdmin) {
+      const order = await prisma.courseOrder.findFirst({
+        where: {
+          userId: req.userId,
+          courseId,
+          status: { in: ['PAID', 'COMPLETED'] },
+        },
+        select: { id: true },
+      });
+      hasPaidOrder = Boolean(order);
+    }
+    // "real" enrollment = paid access (not just an old free row)
+    const hasFullAccess = access.isFree
+      || access.isAdmin
+      || (access.isEnrolled && hasPaidOrder);
+
     const course = await prisma.course.findUnique({
       where: { id: courseId },
       include: {
@@ -1275,9 +1313,11 @@ router.get('/:id/curriculum', optionalAuth, async (req, res: Response<ApiRespons
       sortOrder: section.sortOrder,
       isLocked: section.isLocked,
       lessons: section.lessons
-        .filter(lesson => access.isEnrolled || lesson.isFreePreview || !lesson.isPublished)
+        // Only show lessons if: paid user has access, OR it's a
+        // free preview, OR (admin/instructor viewing draft).
+        .filter(lesson => hasFullAccess || lesson.isFreePreview || access.isAdmin)
         .map(lesson => {
-          if (access.isEnrolled) {
+          if (hasFullAccess) {
             return {
               id: lesson.id,
               title: lesson.title,
@@ -1294,7 +1334,7 @@ router.get('/:id/curriculum', optionalAuth, async (req, res: Response<ApiRespons
               teachingNotes: lesson.details?.teachingNotes,
             };
           }
-          // Not enrolled but the lesson is a free preview
+          // Not fully paid but the lesson is a free preview
           return {
             id: lesson.id,
             title: lesson.title,

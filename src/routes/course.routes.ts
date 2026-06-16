@@ -94,6 +94,15 @@ async function assertCanAccessCourseContent(
     }
   }
 
+  // 'preview' mode lets guests see isFreePreview lessons without
+  // an account. We treat the caller as a "non-enrolled preview
+  // viewer" so the caller can return only the preview lessons
+  // instead of the full curriculum. The actual filtering happens
+  // in the route, not here.
+  if (mode === 'preview' && !userId) {
+    return { isAdmin: false, isEnrolled: false, isFree: false };
+  }
+
   if (!userId) {
     throw new AppError(
       'Vui long dang nhap va dang ky khoa hoc de xem noi dung',

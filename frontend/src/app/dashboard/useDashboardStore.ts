@@ -55,11 +55,17 @@ import type { TaskScope } from './types';
 export function useDashboardStore() {
   // ── Auth subscription ─────────────────────────────────────────────
   const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isLoading = useAuthStore((s) => s.isLoading);
 
   // Stable userId from auth — only changes after auth fully resolves.
-  // 'guest' for the unauthenticated state — actions become local-only.
-  const userId = !isLoading && user?.id != null ? String(user.id) : 'guest';
+  // We check BOTH isAuthenticated AND user.id because the persist
+  // middleware may restore `user` from localStorage before `isAuthenticated`
+  // is flipped by onRehydrateStorage (a known Zustand persist quirk).
+  const userId =
+    !isLoading && isAuthenticated && user?.id != null
+      ? String(user.id)
+      : 'guest';
 
   // ── Dashboard store subscription ──────────────────────────────────
   const [snapshot, setSnapshot] = useState(getState);

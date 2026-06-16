@@ -133,25 +133,25 @@ export const useAuthStore = create<AuthState>()(
         isAuthenticated: state.isAuthenticated,
       }),
       onRehydrateStorage: () => (state) => {
-        // `state` here is the rehydrated state object, NOT a set
-        // function. Calling `state.set({...})` does nothing
-        // (state has no `set` method), which means `isHydrated`
-        // never flips to true on a hard refresh — and every page
-        // that gates on `isHydrated` sits in its loading branch
-        // forever. Use the store's static setState to flip the
-        // flag, falling back to manual setItem if setState is
-        // somehow unavailable.
+        // Zustand persist has already restored `user` and `isAuthenticated`
+        // from localStorage into the store by the time this callback fires.
+        // All we need to do is flip the two flags that the initial
+        // `useState` defaults set to `false`/`true` (which is wrong for
+        // the rehydration path — on SSR/hydration the user is already
+        // known from the cookie, so `isLoading: false` is correct too).
         try {
-          // Also flip isLoading to false: rehydration means the
-          // auth state has been restored from storage, so the
-          // initial "is the user logged in?" check is done.
-          // Pages that gate on `isLoading` (e.g. /my-courses)
-          // would otherwise sit at the spinner forever even
-          // when the user is already authenticated.
-          useAuthStore.setState({ isHydrated: true, isLoading: false });
+          const hasUser = Boolean(state && (state as any).user != null);
+          useAuthStore.setState({
+            isHydrated: true,
+            isLoading: false,
+            // Force `isAuthenticated` from the persisted state so the
+            // dashboard hook sees the real userId immediately after
+            // rehydration (not the `'guest'` fallback that fires when
+            // `isAuthenticated` is still `false` on first render).
+            isAuthenticated: hasUser,
+          });
         } catch {
-          // last resort: just mutate the visible flag through
-          // the storage adapter so next read sees it.
+          useAuthStore.setState({ isHydrated: true, isLoading: false });
         }
       },
     }

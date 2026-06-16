@@ -215,7 +215,7 @@ export default function NavigationDock() {
         whileTap={{ scale: 0.94 }}
         transition={ICON_SPRING}
         className={cn(
-          'fixed top-4 left-4 z-[70]',
+          'fixed top-4 left-6 z-[70]',
           'w-11 h-11 rounded-2xl',
           'flex items-center justify-center',
           'bg-[#0d1117]/85 backdrop-blur-2xl',

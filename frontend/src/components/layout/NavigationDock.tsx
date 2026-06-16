@@ -10,6 +10,7 @@ import {
   Sparkles,
   GraduationCap, ShoppingBag, Gamepad2, Globe,
   Menu, X, ChevronRight,
+  Github,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -58,6 +59,7 @@ const DOCK_ITEMS: DockItem[] = [
   { href: '/social', label: 'Feed', icon: Globe, section: 'user' },
   { href: '/courses', label: 'Courses', icon: BookMarked, section: 'user' },
   { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'user' },
+  { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'user' },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'admin' },
   { href: '/admin', label: 'Admin', icon: Shield, section: 'admin' },
 ];

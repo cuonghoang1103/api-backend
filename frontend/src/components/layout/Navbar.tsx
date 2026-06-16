@@ -200,13 +200,12 @@ export default function Navbar() {
         }`}
         style={{ left: 'var(--dock-shift, 0px)' }}
       >
-        <div className="h-full pl-10 pr-10 flex items-center justify-between gap-2">
+        <div className="h-full pl-14 pr-14 flex items-center justify-between gap-2">
 
-            {/* Left: Logo (avatar + wordmark) — pulled in much
-                further from the screen edge so the row never
-                overlaps the floating iOS dock toggle on the
-                left, even on the narrowest desktop layout. */}
-            <Link href="/" className="flex items-center gap-2.5 ml-3 shrink-0 group">
+            {/* Left: Logo (avatar + wordmark) — pulled in well
+                past the screen edge so the row never overlaps
+                the floating iOS dock toggle on the left. */}
+            <Link href="/" className="flex items-center gap-2.5 ml-5 shrink-0 group">
               <img
                 src="/images/avatar.png"
                 alt="CuongHoang"

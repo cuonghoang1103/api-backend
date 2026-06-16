@@ -89,7 +89,7 @@ export default function ChatPage() {
   // change. If the user reports "no change" again, they
   // can read this ribbon and instantly know whether the
   // browser is on the new build.
-  const BUILD_TAG = 'chat-v10-navbar-pull-more-2026-06-16T06:30Z-pending';
+  const BUILD_TAG = 'chat-v11-navbar-pull-far-2026-06-16T07:10Z-pending';
   const [showBuildTag, setShowBuildTag] = useState(false);
   useEffect(() => {
     if (typeof window === 'undefined') return;

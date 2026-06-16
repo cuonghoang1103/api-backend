@@ -6,7 +6,7 @@
 
 set -e
 
-ALERT_EMAIL="${ALERT_EMAIL:-cuonghoang1103@gmail.com}"
+ALERT_EMAIL="${ALERT_EMAIL:-cuongthaihnhe176322@gmail.com}"
 FRONTEND_URL="https://cuongthai.com"
 BACKEND_URL="https://api.cuongthai.com/health"
 LOG_FILE="/var/log/cuonghoangdev-monitor.log"

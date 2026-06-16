@@ -1091,3 +1091,112 @@ export const paymentApi = {
     return api.post('/api/v1/payments/admin/refund', data);
   },
 };
+
+// ─── GitHub Repo Hub API ─────────────────────────────────────────────────────
+// Public + admin endpoints for the curated GitHub repo feed.
+// Public methods hit /api/v1/repos/* and work without a session;
+// admin methods require ROLE_ADMIN (the backend enforces this).
+
+export interface GithubRepoTag {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+export interface GithubRepo {
+  id: string;
+  repoName: string;
+  owner: string;
+  url: string;
+  stars: number;
+  language: string | null;
+  description: string | null;
+  myReview: string;
+  status: 'DRAFT' | 'PUBLISHED';
+  createdAt: string;
+  updatedAt: string;
+  tags: GithubRepoTag[];
+}
+
+export interface GithubRepoListResponse {
+  items: GithubRepo[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export const githubApi = {
+  // ─── Public feed ─────────────────────────────────────────────────────
+  list(params?: {
+    page?: number;
+    pageSize?: number;
+    tagId?: number;
+    tagSlug?: string;
+    language?: string;
+    keyword?: string;
+    includeDrafts?: boolean;
+  }) {
+    return api.get<GithubRepoListResponse>('/repos', { params });
+  },
+
+  detail(id: string) {
+    return api.get<{ data: GithubRepo }>(`/repos/${id}`);
+  },
+
+  // Aggregations for the sidebar filter chips.
+  tags() {
+    return api.get<{ data: GithubRepoTag[] }>('/repos/tags');
+  },
+
+  languages() {
+    return api.get<{ data: { name: string; count: number }[] }>('/repos/languages');
+  },
+
+  // ─── Admin ───────────────────────────────────────────────────────────
+  create(data: {
+    githubUrl: string;
+    myReview: string;
+    status?: 'DRAFT' | 'PUBLISHED';
+    tagIds?: number[];
+    tagNames?: string[];
+  }) {
+    return api.post<{ data: GithubRepo }>('/repos', data);
+  },
+
+  update(id: string, data: {
+    myReview: string;
+    tagIds?: number[];
+    tagNames?: string[];
+  }) {
+    return api.put<{ data: GithubRepo }>(`/repos/${id}`, data);
+  },
+
+  setStatus(id: string, status: 'DRAFT' | 'PUBLISHED') {
+    return api.patch<{ data: GithubRepo }>(`/repos/${id}/status`, { status });
+  },
+
+  remove(id: string) {
+    return api.delete<{ success: boolean; message: string }>(`/repos/${id}`);
+  },
+
+  syncAll() {
+    return api.post<{
+      data: {
+        total: number;
+        updated: number;
+        failed: Array<{ id: string; url: string; error: string }>;
+      };
+    }>('/repos/sync');
+  },
+
+  fetchStarred(username: string, limit?: number) {
+    return api.post<{
+      data: {
+        inserted: number;
+        skipped: number;
+        items: GithubRepo[];
+      };
+    }>('/repos/fetch-starred', { username, limit });
+  },
+};

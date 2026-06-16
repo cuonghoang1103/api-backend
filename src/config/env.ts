@@ -31,6 +31,11 @@ export const config = {
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
   githubClientId: process.env.GITHUB_CLIENT_ID || '',
   githubClientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+  // Personal access token for the GitHub REST API. Optional —
+  // when set, requests to api.github.com are authenticated and
+  // the rate limit is 5000/hr instead of 60/hr. Used by the
+  // repo-hub service to fetch metadata + starred repos.
+  githubApiToken: process.env.GITHUB_API_TOKEN || '',
 
   // Admin
   adminEmails: (process.env.ADMIN_EMAILS || '').split(',').filter(Boolean),

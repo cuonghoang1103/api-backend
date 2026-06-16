@@ -94,7 +94,7 @@ model User {
   courseReviews           CourseReview[]
   shopOrders              ShopOrder[]
   courseOrders            CourseOrder[]
-  refundedCourseOrders    CourseOrder[]             @relation("CourseOrderRefunder")
+  refundedCourseOrders    CourseOrder[]            @relation("CourseOrderRefunder")
   chatSessions            ChatSession[]
   chatFeedback            ChatFeedback[]
   assignmentSubmissions   AssignmentSubmission[]
@@ -312,6 +312,11 @@ model Tag {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   posts PostTag[]
+  // Many-to-many back-relation to GithubRepo through GithubRepoTag.
+  // Same tag taxonomy as blog posts so users can navigate by
+  // topic (Backend, Frontend, Clean Architecture, Payment, etc.)
+  // across both surfaces without re-tagging.
+  repos GithubRepoTag[]
 
   @@index([slug], name: "idx_tags_slug")
   @@map("tags")
@@ -1428,12 +1433,12 @@ model CourseOrder {
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
-  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course        Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course         Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
   // set null on delete so the order stays visible even after the
   // coupon is removed by an admin.
-  coupon        DiscountCode? @relation(fields: [discountCodeId], references: [id], onDelete: SetNull)
-  refundedByUser User?        @relation("CourseOrderRefunder", fields: [refundedBy], references: [id], onDelete: SetNull)
+  coupon         DiscountCode? @relation(fields: [discountCodeId], references: [id], onDelete: SetNull)
+  refundedByUser User?         @relation("CourseOrderRefunder", fields: [refundedBy], references: [id], onDelete: SetNull)
 
   @@unique([userId, idempotencyKey], name: "uk_course_order_idempotency")
   @@index([userId, status], name: "idx_course_orders_user_status")
@@ -1460,4 +1465,82 @@ model PaymentTransaction {
 
   @@index([orderCode], name: "idx_payment_tx_order")
   @@map("payment_transactions")
+}
+
+// ============================================================
+// 20. GITHUB REPO HUB & FEED
+// ============================================================
+//
+// Curated, opinionated feed of GitHub repositories the site
+// owner has starred or hand-picked. Each entry has the admin's
+// own `myReview` (markdown) attached — this is the editorial
+// layer, not just an aggregation of GitHub stars. Status
+// (DRAFT/PUBLISHED) lets the admin stage entries before going
+// live.
+//
+// `url` is the canonical repo URL on github.com and is unique
+// to prevent duplicate rows when the same repo is added twice
+// from different code paths (manual form, fetch-starred, sync).
+// ────────────────────────────────────────────────────────────────
+
+enum GithubRepoStatus {
+  DRAFT
+  PUBLISHED
+
+  @@map("github_repo_status")
+}
+
+model GithubRepo {
+  // UUID is friendlier for public-facing API responses than a
+  // sequential int. We expose this in card URLs.
+  id          String           @id @default(uuid()) @db.Uuid
+  repoName    String           @map("repo_name") @db.VarChar(200)
+  owner       String           @db.VarChar(100)
+  // Canonical https://github.com/{owner}/{repo} URL. Unique so
+  // a second POST with the same URL is rejected at the DB level.
+  url         String           @unique(map: "uk_github_repos_url") @db.VarChar(500)
+  // Most recent stargazers_count pulled from the GitHub API.
+  // Cached so the feed can render without re-hitting GitHub
+  // on every request.
+  stars       Int              @default(0)
+  // Primary language from GitHub. Nullable because some
+  // repos (e.g. all-docs) report null.
+  language    String?          @db.VarChar(50)
+  // Original description from GitHub. Optional in case the
+  // admin wants to clear it before publishing.
+  description String?          @db.Text
+  // The admin's own editorial review / lessons learned. This
+  // is the centerpiece of the feature — the reason to list a
+  // repo at all. Supports markdown rendered client-side.
+  myReview    String           @db.Text
+  status      GithubRepoStatus @default(DRAFT)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Many-to-many join to Tag for multi-axis classification.
+  tags GithubRepoTag[]
+
+  @@index([status], name: "idx_github_repos_status")
+  // Composite index to support the common public-feed query
+  // (status=PUBLISHED ORDER BY createdAt DESC).
+  @@index([status, createdAt(sort: Desc)], name: "idx_github_repos_status_created")
+  @@index([language], name: "idx_github_repos_language")
+  @@index([owner, repoName], name: "idx_github_repos_owner_name")
+  @@map("github_repos")
+}
+
+model GithubRepoTag {
+  repoId String @map("repo_id") @db.Uuid
+  tagId  Int    @map("tag_id")
+
+  repo GithubRepo @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  tag  Tag        @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([repoId, tagId], map: "pk_github_repo_tags")
+  // Lookup tags for a repo (used when serializing for the feed).
+  @@index([repoId], name: "idx_github_repo_tags_repo")
+  // Lookup repos for a tag (used when filtering the feed by tag).
+  @@index([tagId], name: "idx_github_repo_tags_tag")
+  @@map("github_repo_tags")
 }

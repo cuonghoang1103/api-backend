@@ -263,11 +263,14 @@ export default function DashboardPage() {
   }, [isAuthenticated, currentUserId, replaceSeedTasks]);
 
   return (
-    <div className="min-h-screen bg-[#0f111a] text-white pb-16">
+    <div className="min-h-screen bg-[#0f111a] text-white pb-16" key={mounted ? 'live' : 'ssr'}>
       {/* SSR guard: render a stable shell on the server, real content
           only after mount. This eliminates ALL hydration mismatches
           caused by Date(), motion initial states, or auth state
-          differences between server and client. */}
+          differences between server and client. The `key` prop above
+          forces React to fully unmount and remount the entire page
+          tree when mounted flips, which is a belt-and-braces
+          safeguard against any subtle DOM-level mismatch. */}
       {!mounted ? (
         <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
           <div className="relative w-16 h-16">

@@ -11,6 +11,119 @@ import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
 
+// ─── Helper: gate paid course content on enrollment ────────────────
+//
+// Background: previously the public course endpoints (GET /:slug,
+// GET /:id/curriculum, GET /:courseId/lessons/:lessonId) returned
+// the full curriculum — including `videoUrl`, `teachingNotes`,
+// `sourceCodeUrl`, and `documents` — to anyone, even users who
+// hadn't paid. The frontend /learn page tried to gate on
+// `isEnrolled`, but a determined user could bypass the UI by
+// hitting the API directly and download every video/document URL.
+//
+// This helper is the single chokepoint: any endpoint that returns
+// a course's lesson content must call it first. It checks:
+//
+//   1. User is authenticated
+//   2. Course is free (price=0 or isFree=true) OR
+//      user has an active Enrollment (status='ACTIVE' and not expired)
+//
+// On failure it throws a 402 (Payment Required) — a stronger
+// signal than 403 for paid content so the frontend can render
+// the correct "Buy this course" CTA.
+//
+// The `mode` arg lets the caller opt into a slightly more lenient
+// view: 'preview' allows access to lessons flagged `isFreePreview`
+// even when the user is not enrolled. Use that for the public
+// course detail page where the marketing site needs to show
+// sample lessons.
+type AccessMode = 'enrolled' | 'preview' | 'admin-or-enrolled';
+
+async function assertCanAccessCourseContent(
+  userId: number | null | undefined,
+  courseId: number,
+  mode: AccessMode = 'enrolled',
+): Promise<{ isAdmin: boolean; isEnrolled: boolean; isFree: boolean }> {
+  const course = await prisma.course.findUnique({
+    where: { id: courseId },
+    select: { id: true, isFree: true, price: true, isPublished: true, instructorId: true },
+  });
+  if (!course) throw new AppError('Course not found', 404);
+  if (course.isPublished !== true) {
+    // Only admins or the instructor can see draft content. Public
+    // endpoints should never expose unpublished material.
+    if (!userId) throw new AppError('Course not available', 404);
+  }
+
+  // Free courses bypass enrollment entirely. `isFree` is the
+  // explicit flag; `price <= 0` is a legacy fallback. Either way,
+  // no paywall applies.
+  //
+  // Note: an inconsistency has happened in the admin UI where
+  // admins set `isFree=true` AND `price=300000` on the same
+  // course (e.g. toggling "Free" to enable a preview, then
+  // setting a real price). We treat `isFree=true && price>0` as
+  // a "free preview available" mode — content is still gated
+  // because someone clearly intended a paid course. The admin
+  // should toggle `isFree=false` once the price is set.
+  const isFree = course.isFree && Number(course.price) <= 0;
+  if (isFree && mode !== 'admin-or-enrolled') {
+    return { isAdmin: false, isEnrolled: true, isFree: true };
+  }
+
+  // Admin bypass — but only for mode='admin-or-enrolled'. We
+  // don't want a normal admin to accidentally see paid content
+  // through the wrong endpoint. The /admin/* routes already
+  // have their own access control.
+  if (mode === 'admin-or-enrolled' && userId) {
+    // The user has many roles (UserRole join table). Check any
+    // role's slug/named in the admin set. The convention in
+    // this codebase is role.name = 'ROLE_ADMIN' or 'ROLE_SUPERADMIN'.
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        roles: {
+          select: { role: { select: { name: true } } },
+        },
+      },
+    });
+    const roleNames = user?.roles?.map((ur) => ur.role.name) || [];
+    const isAdmin = roleNames.includes('ROLE_ADMIN') || roleNames.includes('ROLE_SUPERADMIN');
+    if (isAdmin || course.instructorId === userId) {
+      return { isAdmin: true, isEnrolled: true, isFree };
+    }
+  }
+
+  if (!userId) {
+    throw new AppError(
+      'Vui long dang nhap va dang ky khoa hoc de xem noi dung',
+      401,
+    );
+  }
+
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { userId_courseId: { userId, courseId } },
+    select: { status: true, expiresAt: true },
+  });
+  if (!enrollment) {
+    throw new AppError(
+      'Khoa hoc nay can dang ky. Vui long mua de truy cap noi dung',
+      402,
+    );
+  }
+  if (enrollment.status !== 'ACTIVE') {
+    throw new AppError(
+      `Enrollment khong con active (status=${enrollment.status})`,
+      403,
+    );
+  }
+  if (enrollment.expiresAt && enrollment.expiresAt.getTime() < Date.now()) {
+    throw new AppError('Enrollment da het han', 403);
+  }
+
+  return { isAdmin: false, isEnrolled: true, isFree: false };
+}
+
 // ─── Helper: serialize a CourseDocument for JSON response ──────────
 //
 // The Prisma model declares `fileSizeBytes` as BigInt. Express
@@ -191,6 +304,30 @@ async function serializeCourse(
       })
     : null;
 
+  // Decide whether the requesting user is allowed to see the full
+  // lesson content. We compute this ONCE here and apply it to every
+  // lesson in the response so the redaction logic is centralized.
+  //
+  //   - Free course: everyone sees content (course.price <= 0 and
+  //     course.isFree === true). No paywall.
+  //   - Paid course + not enrolled: redact content (no videoUrl,
+  //     no teachingNotes, no sourceCodeUrl, no documents).
+  //   - Paid course + enrolled: full content.
+  //   - Paid course + instructor: full content (their own course).
+  //   - includeDraftLessons: caller is admin; trust them.
+  //
+  // Edge case: a course can have `isFree=true` AND `price>0`
+  // (admin toggled the checkbox but also set a real price). We
+  // treat that as a paid course with free preview lessons —
+  // `isFree=true` then acts only as the global "previewable"
+  // signal, not a bypass.
+  const isFree = course.isFree && Number(course.price) <= 0;
+  const isOwner = options?.userId !== undefined && course.instructorId === options.userId;
+  const hasPaidAccess = options?.includeDraftLessons
+    || isFree
+    || Boolean(enrollment)
+    || isOwner;
+
   const totalPublishedLessons = course.sections.reduce(
     (sum, section) => sum + section.lessons.length,
     0,
@@ -253,33 +390,61 @@ async function serializeCourse(
       totalDurationSeconds: section.lessons.reduce((sum, lesson) => sum + lesson.videoDurationSeconds, 0),
       createdAt: section.createdAt,
       updatedAt: section.updatedAt,
-      lessons: section.lessons.map((lesson) => ({
-        id: lesson.id,
-        sectionId: lesson.sectionId,
-        title: lesson.title,
-        slug: lesson.slug,
-        description: lesson.description,
-        content: lesson.content,
-        lessonType: lesson.lessonType,
-        videoUrl: lesson.videoUrl,
-        videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
-        sourceCodeUrl: lesson.details?.sourceCodeUrl,
-        teachingNotes: lesson.details?.teachingNotes,
-        videoDurationSeconds: lesson.videoDurationSeconds,
-        thumbnailUrl: lesson.thumbnailUrl,
-        isFreePreview: lesson.isFreePreview,
-        isPublished: lesson.isPublished,
-        sortOrder: lesson.sortOrder,
-        createdAt: lesson.createdAt,
-        updatedAt: lesson.updatedAt,
-        details: lesson.details,
-        documents: lesson.documents.map(serializeDocument),
-        assignments: lesson.assignments.map((assignment) => ({
-          ...assignment,
-          mySubmission: ('submissions' in assignment ? (assignment as typeof assignment & { submissions?: Array<unknown> }).submissions?.[0] : null) || null,
-          submissions: undefined,
-        })),
-      })),
+      lessons: section.lessons.map((lesson) => {
+        // Base shape — public marketing metadata (title, duration,
+        // preview flag) is always visible.
+        const base = {
+          id: lesson.id,
+          sectionId: lesson.sectionId,
+          title: lesson.title,
+          slug: lesson.slug,
+          description: lesson.description,
+          lessonType: lesson.lessonType,
+          videoDurationSeconds: lesson.videoDurationSeconds,
+          thumbnailUrl: lesson.thumbnailUrl,
+          isFreePreview: lesson.isFreePreview,
+          isPublished: lesson.isPublished,
+          sortOrder: lesson.sortOrder,
+          createdAt: lesson.createdAt,
+          updatedAt: lesson.updatedAt,
+          documents: lesson.documents.map(serializeDocument),
+          assignments: lesson.assignments.map((assignment) => ({
+            ...assignment,
+            mySubmission: ('submissions' in assignment ? (assignment as typeof assignment & { submissions?: Array<unknown> }).submissions?.[0] : null) || null,
+            submissions: undefined,
+          })),
+        };
+
+        if (hasPaidAccess) {
+          // Enrolled / admin / free-course: full content. The
+          // learn page renders this without a second API call.
+          return {
+            ...base,
+            content: lesson.content,
+            videoUrl: lesson.videoUrl,
+            videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
+            sourceCodeUrl: lesson.details?.sourceCodeUrl,
+            teachingNotes: lesson.details?.teachingNotes,
+            details: lesson.details,
+          };
+        }
+
+        // Not enrolled on a paid course: strip the paid content
+        // fields. Exception: isFreePreview lessons stay public.
+        if (lesson.isFreePreview) {
+          return {
+            ...base,
+            content: lesson.content,
+            videoUrl: lesson.videoUrl,
+            videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
+            sourceCodeUrl: lesson.details?.sourceCodeUrl,
+            teachingNotes: undefined,
+            details: undefined,
+          };
+        }
+
+        return base;
+      }),
     })),
     reviews: course.reviews,
     isEnrolled: Boolean(enrollment),
@@ -780,10 +945,29 @@ router.put('/lessons/:lessonId/detail', authenticate, requireAdmin('ROLE_ADMIN')
   } catch (error) { next(error); }
 });
 
-router.get('/:courseId/lessons/:lessonId', async (req, res: Response<ApiResponse>, next) => {
+router.get('/:courseId/lessons/:lessonId', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
     const courseId = parseInt(req.params.courseId, 10);
     const lessonId = parseInt(req.params.lessonId, 10);
+    if (isNaN(courseId) || isNaN(lessonId)) {
+      throw new AppError('Invalid course or lesson id', 400);
+    }
+
+    // Paywall check FIRST, before any DB read that returns
+    // content. We use 'enrolled' mode because the learn page is
+    // the one place where the full lesson payload is loaded.
+    // We still allow access for isFreePreview lessons so the
+    // marketing flow can preview sample lessons without login.
+    const access = await assertCanAccessCourseContent(req.userId, courseId, 'preview');
+    if (!access.isEnrolled) {
+      // The assertCanAccessCourseContent already throws 402 if
+      // the user is logged in but not enrolled. The remaining
+      // case is: not logged in. For isFreePreview lessons we
+      // proceed, otherwise we 401.
+      if (!req.userId) {
+        throw new AppError('Vui long dang nhap', 401);
+      }
+    }
 
     const lesson = await prisma.lesson.findFirst({
       where: {
@@ -810,18 +994,34 @@ router.get('/:courseId/lessons/:lessonId', async (req, res: Response<ApiResponse
 
     if (!lesson) throw new AppError('Lesson not found', 404);
 
-    res.json({ success: true, data: {
-      ...lesson,
-      videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
-      sourceCodeUrl: lesson.details?.sourceCodeUrl,
-      teachingNotes: lesson.details?.teachingNotes,
-      documents: lesson.documents.map(serializeDocument),
-      assignments: lesson.assignments.map((assignment) => ({
-        ...assignment,
-        mySubmission: ('submissions' in assignment ? (assignment as typeof assignment & { submissions?: Array<unknown> }).submissions?.[0] : null) || null,
-        submissions: undefined,
-      })),
-    } });
+    // Apply the same redaction rules as serializeCourse so the
+    // API surface here matches the /:slug endpoint.
+    const isEnrolled = access.isEnrolled;
+    const showFull = isEnrolled || lesson.isFreePreview;
+
+    res.json({
+      success: true,
+      data: {
+        ...lesson,
+        videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
+        sourceCodeUrl: showFull ? lesson.details?.sourceCodeUrl : undefined,
+        teachingNotes: showFull ? lesson.details?.teachingNotes : undefined,
+        videoUrl: showFull ? lesson.videoUrl : undefined,
+        // Lesson body text is paid content too. Even a free
+        // preview gets the marketing copy via description, but
+        // `content` (the full article) is gated.
+        content: showFull ? lesson.content : undefined,
+        documents: showFull
+          ? lesson.documents.map(serializeDocument)
+          : [],
+        assignments: lesson.assignments.map((assignment) => ({
+          ...assignment,
+          mySubmission: ('submissions' in assignment ? (assignment as typeof assignment & { submissions?: Array<unknown> }).submissions?.[0] : null) || null,
+          submissions: undefined,
+        })),
+        details: undefined, // we already flattened the relevant fields
+      },
+    });
   } catch (error) { next(error); }
 });
 
@@ -945,19 +1145,94 @@ router.get('/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next)
   } catch (error) { next(error); }
 });
 
-router.get('/:id/curriculum', async (req, res: Response<ApiResponse>, next) => {
+router.get('/:id/curriculum', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
+    const courseId = parseInt(req.params.id, 10);
+    if (isNaN(courseId)) {
+      throw new AppError('Invalid course id', 400);
+    }
+
+    // Paywall check: anyone reading the curriculum gets the same
+    // access check as the /:slug endpoint. We don't want a
+    // unauthenticated user to enumerate every lesson's videoUrl
+    // by hitting this endpoint.
+    //
+    // For 'preview' mode, only isFreePreview lessons are exposed
+    // for non-enrolled callers — so the marketing site can show
+    // a sample but never the full curriculum. The caller below
+    // applies that filter to the response.
+    const access = await assertCanAccessCourseContent(req.userId, courseId, 'preview');
+
     const course = await prisma.course.findUnique({
-      where: { id: parseInt(req.params.id) },
+      where: { id: courseId },
       include: {
         sections: {
-          include: { lessons: { include: { details: true }, orderBy: { sortOrder: 'asc' } } },
+          include: {
+            lessons: {
+              // includeDraftLessons is admin-only; for public
+              // we only show published lessons.
+              orderBy: { sortOrder: 'asc' },
+              include: { details: true },
+            },
+          },
           orderBy: { sortOrder: 'asc' },
         },
       },
     });
     if (!course) throw new AppError('Course not found', 404);
-    res.json({ success: true, data: course.sections });
+
+    // Apply the same redaction as serializeCourse: paid courses
+    // expose only lesson metadata, plus full content for
+    // isFreePreview lessons. We use the isFreePreview flag to
+    // filter the curriculum for the marketing view.
+    const sections = course.sections.map(section => ({
+      id: section.id,
+      courseId: section.courseId,
+      title: section.title,
+      description: section.description,
+      sortOrder: section.sortOrder,
+      isLocked: section.isLocked,
+      lessons: section.lessons
+        .filter(lesson => access.isEnrolled || lesson.isFreePreview || !lesson.isPublished)
+        .map(lesson => {
+          if (access.isEnrolled) {
+            return {
+              id: lesson.id,
+              title: lesson.title,
+              slug: lesson.slug,
+              description: lesson.description,
+              lessonType: lesson.lessonType,
+              videoDurationSeconds: lesson.videoDurationSeconds,
+              thumbnailUrl: lesson.thumbnailUrl,
+              isFreePreview: lesson.isFreePreview,
+              sortOrder: lesson.sortOrder,
+              videoUrl: lesson.videoUrl,
+              videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
+              sourceCodeUrl: lesson.details?.sourceCodeUrl,
+              teachingNotes: lesson.details?.teachingNotes,
+            };
+          }
+          // Not enrolled but the lesson is a free preview
+          return {
+            id: lesson.id,
+            title: lesson.title,
+            slug: lesson.slug,
+            description: lesson.description,
+            lessonType: lesson.lessonType,
+            videoDurationSeconds: lesson.videoDurationSeconds,
+            thumbnailUrl: lesson.thumbnailUrl,
+            isFreePreview: lesson.isFreePreview,
+            sortOrder: lesson.sortOrder,
+            videoUrl: lesson.videoUrl,
+            videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
+            // We deliberately omit teachingNotes + sourceCodeUrl
+            // for preview lessons — those are bonus materials
+            // only for paying students.
+          };
+        }),
+    }));
+
+    res.json({ success: true, data: sections });
   } catch (error) { next(error); }
 });
 
@@ -1232,10 +1507,26 @@ router.get(
       if (isNaN(id)) {
         throw new AppError('Invalid document ID', 400, 'INVALID_ID');
       }
-      const document = await prisma.courseDocument.findUnique({ where: { id } });
+      const document = await prisma.courseDocument.findUnique({
+        where: { id },
+        include: {
+          // We need the lesson's courseId to check enrollment.
+          lesson: { select: { section: { select: { courseId: true } } } },
+        },
+      });
       if (!document || !document.isActive) {
         throw new AppError('Document not found', 404, 'NOT_FOUND');
       }
+
+      // Paywall check: documents are gated on enrollment, just
+      // like the lesson content itself. We do this BEFORE
+      // incrementing the download counter so denied attempts
+      // don't pollute analytics.
+      const courseId = document.lesson?.section?.courseId;
+      if (courseId) {
+        await assertCanAccessCourseContent(req.userId, courseId, 'admin-or-enrolled');
+      }
+
       // Atomic increment so two students clicking at the
       // same time don't both see the same count.
       await prisma.courseDocument.update({

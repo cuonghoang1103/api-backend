@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, ChevronRight, Zap, Clock, Bot } from 'lucide-react';
+import { Sparkles, ChevronRight, Zap, Clock, Bot, Download, Upload, RefreshCw, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import AvatarCard from './AvatarCard';
@@ -11,6 +11,8 @@ import TaskList from './TaskList';
 import StatsModal from './StatsModal';
 import { useDashboardStore } from './useDashboardStore';
 import { useAuthStore } from '@/store/authStore';
+import { dashboardApi } from '@/lib/api';
+import { hydrateFromServer } from './store';
 import type { TaskScope, ActivityType } from './types';
 import { ACTIVITY_META } from './Timeline';
 
@@ -29,22 +31,24 @@ const ACT_LABELS: Record<ActivityType, string> = {
 export default function DashboardPage() {
   const { user, isAuthenticated } = useAuthStore();
 
-  // Destructuring from the Zustand hook — subscribes to ALL state changes
+  // Destructuring from the dashboard hook. `isHydrating` lets
+  // us show a small loading badge on first paint so the user
+  // doesn't see "0 tasks" flash for a frame before the
+  // server snapshot arrives.
   const {
     level, exp, timeline, activityFilter, userId: currentUserId,
     tasks, lastCelebrationDate, tomorrowPlanLockedDate,
+    isHydrating,
     setActivity, setActivityFilter,
     addTask, toggleTask, removeTask, awardExp,
-    markCelebrated, planTomorrow, ensureScopeSeeded,
+    markCelebrated, planTomorrow, ensureScopeSeeded, celebrate,
+    replaceSeedTasks,
   } = useDashboardStore();
 
-  // Track the current userId — seed defaults when userId changes
-  const prevUserIdRef = useRef<string>(currentUserId);
+  // Re-seed for guests / new users after hydrate. The hook
+  // already does this for logged-in users via the auth-resolve
+  // effect; this is a no-op fast-path for guests.
   useEffect(() => {
-    if (currentUserId !== prevUserIdRef.current) {
-      prevUserIdRef.current = currentUserId;
-    }
-    // Seed default tasks after mount or user switch
     (['today', 'week', 'month'] as TaskScope[]).forEach((s) => ensureScopeSeeded(s));
   }, [currentUserId]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -88,19 +92,158 @@ export default function DashboardPage() {
     ? todayTasks.filter((t) => t.activityType === activityFilter)
     : [];
 
-  const handleEndOfDay = () => {
-    awardExp(todayExpGained);
+  const handleEndOfDay = async () => {
+    // Server-side celebration. We delegate the EXP math to
+    // /api/v1/dashboard/celebrate so the user can't inflate
+    // their own level by clicking twice or editing the
+    // localStorage mirror. The server's unique index on
+    // (user_id, celebrated_date) makes this idempotent.
     setStatsOpen(true);
+    const result = await celebrate();
+    if (result.alreadyCelebrated) {
+      toast.info('Hom nay ban da tong ket roi — EXP da duoc ghi nhan');
+    } else if (!result.ok) {
+      toast.error('Khong the tong ket — vui long thu lai');
+    }
   };
 
   const handleCelebrate = () => markCelebrated();
 
-  const handlePlanTomorrow = (titles: string[]) => {
-    planTomorrow(titles);
-    toast.success('Đã lưu kế hoạch cho ngày mai!');
+  const handlePlanTomorrow = async (titles: string[]) => {
+    try {
+      await planTomorrow(titles);
+      toast.success('Da luu ke hoach cho ngay mai!');
+    } catch {
+      toast.error('Khong the luu ke hoach — vui long thu lai');
+    }
   };
 
   const handleClearFilter = () => setActivityFilter(null);
+
+  // ── Backup / Restore ────────────────────────────────────────
+  // We use a hidden file input for the import flow so we don't
+  // have to deal with drag-and-drop. The export is a plain
+  // JSON download — readable in any text editor, restorable
+  // from the same UI or via a script.
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [backupBusy, setBackupBusy] = useState(false);
+
+  const handleExport = useCallback(async () => {
+    if (!isAuthenticated) {
+      toast.error('Vui long dang nhap de su dung backup');
+      return;
+    }
+    setBackupBusy(true);
+    try {
+      const res = await dashboardApi.export();
+      const data = res.data?.data;
+      if (!data) throw new Error('Empty export');
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const date = new Date().toISOString().slice(0, 10);
+      a.download = `dashboard-backup-${date}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success('Da tai xuong file backup');
+    } catch (err) {
+      console.error(err);
+      toast.error('Khong the export — vui long thu lai');
+    } finally {
+      setBackupBusy(false);
+    }
+  }, [isAuthenticated]);
+
+  const handleImport = useCallback(async (file: File) => {
+    if (!isAuthenticated) {
+      toast.error('Vui long dang nhap de su dung backup');
+      return;
+    }
+    if (!confirm('Import se thay the toan bo task hien tai (luu tru task cu vao archive). Tiep tuc?')) {
+      return;
+    }
+    setBackupBusy(true);
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      await dashboardApi.import(data);
+      await hydrateFromServer(currentUserId);
+      toast.success('Da import thanh cong');
+    } catch (err) {
+      console.error(err);
+      toast.error('File khong hop le — vui long kiem tra lai');
+    } finally {
+      setBackupBusy(false);
+    }
+  }, [isAuthenticated, currentUserId]);
+
+  const handleReset = useCallback(async () => {
+    if (!isAuthenticated) {
+      toast.error('Vui long dang nhap');
+      return;
+    }
+    if (!confirm('Reset se xoa TAT CA task hien tai va dua dashboard ve mac dinh. Tiep tuc?')) {
+      return;
+    }
+    if (!confirm('That su muon reset? Hanh dong nay khong the hoan tac (ban nen Export truoc).')) {
+      return;
+    }
+    setBackupBusy(true);
+    try {
+      await dashboardApi.reset();
+      await hydrateFromServer(currentUserId);
+      // Re-seed the default tasks so the user has something
+      // to look at after the reset.
+      await ensureScopeSeeded('today');
+      await ensureScopeSeeded('week');
+      await ensureScopeSeeded('month');
+      toast.success('Da reset dashboard ve mac dinh');
+    } catch (err) {
+      console.error(err);
+      toast.error('Khong the reset');
+    } finally {
+      setBackupBusy(false);
+    }
+  }, [isAuthenticated, currentUserId, ensureScopeSeeded]);
+
+  const handleReseedDefaults = useCallback(async () => {
+    if (!isAuthenticated) {
+      toast.error('Vui long dang nhap');
+      return;
+    }
+    if (!confirm('Se thay the task hien tai bang mac dinh. Tiep tuc?')) {
+      return;
+    }
+    setBackupBusy(true);
+    try {
+      await replaceSeedTasks('today', [
+        'Hoc 1 chuong sach / khoa hoc',
+        'Hoan thanh 1 task cong viec',
+        'Tap the duc 30 phut',
+      ]);
+      await replaceSeedTasks('week', [
+        'Doc xong 2 chuong sach',
+        'Hoan thanh project ca nhan',
+        'Don dep phong / khong gian lam viec',
+      ]);
+      await replaceSeedTasks('month', [
+        'Hoan thanh muc tieu lon thang nay',
+        'Tiet kiem du ngan sach',
+        'Hoc duoc ky nang moi',
+      ]);
+      await hydrateFromServer(currentUserId);
+      toast.success('Da khoi phuc task mac dinh');
+    } catch (err) {
+      console.error(err);
+      toast.error('Khong the khoi phuc');
+    } finally {
+      setBackupBusy(false);
+    }
+  }, [isAuthenticated, currentUserId, replaceSeedTasks]);
 
   return (
     <div className="min-h-screen bg-[#0f111a] text-white pb-16">
@@ -119,27 +262,96 @@ export default function DashboardPage() {
               Dashboard
             </h1>
             <p className="text-sm text-slate-500 mt-1">Theo dõi ngày làm việc của bạn</p>
+            {isAuthenticated && (
+              <div className="mt-2 flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-emerald-400/70">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                {isHydrating ? 'Dang dong bo tu server...' : 'Da dong bo voi server'}
+              </div>
+            )}
           </div>
 
-          {/* Clock widget */}
-          <div className="hidden sm:flex flex-col items-end gap-1">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/[0.04] border border-white/[0.06]">
-              <Clock className="w-4 h-4 text-cyan-400" />
-              <span className="font-mono font-black text-white text-base">{timeStr}</span>
-            </div>
-            {currentActivityMeta ? (
-              <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ background: currentActivityMeta.glowColor, boxShadow: `0 0 6px ${currentActivityMeta.glowColor}` }}
+          <div className="flex items-center gap-2">
+            {/* Backup/restore cluster — only for logged-in users */}
+            {isAuthenticated && (
+              <div className="flex items-center gap-1.5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-1">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="application/json,.json"
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) void handleImport(f);
+                    e.target.value = ''; // allow re-selecting the same file
+                  }}
                 />
-                <span>
-                  Đang: <span style={{ color: currentActivityMeta.glowColor }} className="font-bold">{currentActivityMeta.label}</span>
-                </span>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleExport}
+                  disabled={backupBusy}
+                  title="Tai xuong file JSON backup"
+                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-50"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  Export
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={backupBusy}
+                  title="Khoi phuc tu file JSON"
+                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-50"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  Import
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleReseedDefaults}
+                  disabled={backupBusy}
+                  title="Khoi phuc task mac dinh"
+                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-50"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  Mac dinh
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleReset}
+                  disabled={backupBusy}
+                  title="Xoa het task va dua ve mac dinh"
+                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-medium text-red-300 hover:text-red-200 hover:bg-red-500/10 transition-colors disabled:opacity-50"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Reset
+                </motion.button>
               </div>
-            ) : (
-              <span className="text-[11px] text-slate-600">Chưa gán hoạt động</span>
             )}
+
+            {/* Clock widget */}
+            <div className="hidden sm:flex flex-col items-end gap-1">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/[0.04] border border-white/[0.06]">
+                <Clock className="w-4 h-4 text-cyan-400" />
+                <span className="font-mono font-black text-white text-base">{timeStr}</span>
+              </div>
+              {currentActivityMeta ? (
+                <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                  <div
+                    className="w-2 h-2 rounded-full"
+                    style={{ background: currentActivityMeta.glowColor, boxShadow: `0 0 6px ${currentActivityMeta.glowColor}` }}
+                  />
+                  <span>
+                    Đang: <span style={{ color: currentActivityMeta.glowColor }} className="font-bold">{currentActivityMeta.label}</span>
+                  </span>
+                </div>
+              ) : (
+                <span className="text-[11px] text-slate-600">Chưa gán hoạt động</span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -259,7 +471,9 @@ export default function DashboardPage() {
         </div>
 
         <p className="text-center text-[11px] text-slate-700 pb-4">
-          Dữ liệu được lưu cục bộ trên thiết bị này
+          {isAuthenticated
+            ? 'Du lieu duoc dong bo len server — theo ban tren moi thiet bi'
+            : 'Dang nhap de dong bo dashboard len server va su dung nhieu thiet bi'}
         </p>
       </div>
 

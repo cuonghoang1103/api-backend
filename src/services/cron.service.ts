@@ -90,6 +90,55 @@ export function startCronJobs(): void {
     }
   }, { timezone: 'UTC' });
 
+  // ─── Dashboard archive (daily @ 04:00 Vietnam / 21:00 UTC) ───
+  // Two-phase retention to keep user data "forever" without
+  // bloating the DB:
+  //   1. Hard-archive any active tasks whose date is more than
+  //      DASHBOARD_ARCHIVE_DAYS ago (default 30). The user can
+  //      still see them in /export for another 6 months.
+  //   2. Hard-delete any archived tasks more than
+  //      DASHBOARD_PURGE_DAYS ago (default 180) to bound the
+  //      table size. Celebrations follow the same retention.
+  // Both are silent no-ops when the table is empty.
+  const archiveDays = parseInt(process.env.DASHBOARD_ARCHIVE_DAYS || '30', 10);
+  const purgeDays = parseInt(process.env.DASHBOARD_PURGE_DAYS || '180', 10);
+  cron.schedule('0 21 * * *', async () => {
+    try {
+      const archiveCutoff = new Date(Date.now() - archiveDays * 24 * 60 * 60 * 1000);
+      const archiveDate = archiveCutoff.toISOString().slice(0, 10);
+
+      const archived = await prisma.dashboardTask.updateMany({
+        where: { archivedAt: null, date: { lt: archiveDate } },
+        data: { archivedAt: new Date() },
+      });
+      if (archived.count > 0) {
+        console.log(`[cron] Archived ${archived.count} dashboard tasks older than ${archiveDays} days`);
+      }
+
+      const purgeCutoff = new Date(Date.now() - purgeDays * 24 * 60 * 60 * 1000);
+      const purged = await prisma.dashboardTask.deleteMany({
+        where: { archivedAt: { lt: purgeCutoff } },
+      });
+      if (purged.count > 0) {
+        console.log(`[cron] Purged ${purged.count} archived dashboard tasks older than ${purgeDays} days`);
+      }
+
+      // Celebration history is cheap to keep — capped at ~3 years
+      // for the same reason. After 3 years, the user's streak
+      // graph is still readable from the level/exp fields in
+      // dashboard_state, which never expire.
+      const celebrationPurgeCutoff = new Date(Date.now() - 3 * 365 * 24 * 60 * 60 * 1000);
+      const purgedCeleb = await prisma.dashboardCelebration.deleteMany({
+        where: { createdAt: { lt: celebrationPurgeCutoff } },
+      });
+      if (purgedCeleb.count > 0) {
+        console.log(`[cron] Purged ${purgedCeleb.count} old celebration records`);
+      }
+    } catch (err) {
+      console.error('[cron] Dashboard archive failed:', (err as Error).message);
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Startup recovery ───
   void recoverPendingJobs();
 
@@ -98,6 +147,7 @@ export function startCronJobs(): void {
   console.log('       - Weekly re-embed @ Sun 02:00 Vietnam');
   console.log('       - Hourly health check');
   console.log(`       - Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`);
+  console.log(`       - Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d)`);
 }
 
 /**

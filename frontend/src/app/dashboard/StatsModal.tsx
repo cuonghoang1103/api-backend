@@ -106,7 +106,13 @@ export default function StatsModal({
       confettiIntervalRef.current = null;
     }
     if (hasPlan) {
+      // onPlanTomorrow hits the server (/api/v1/dashboard/plan-tomorrow)
+      // and only commits if the user typed at least one title.
       onPlanTomorrow(plans);
+      // onCelebrate is now a no-op for logged-in users (the
+      // server already locked today's celebration when the
+      // modal was opened). We still call it so guests see the
+      // local lastCelebratedDate flip — the same UX as before.
       onCelebrate();
       onClose();
     }

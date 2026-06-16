@@ -1200,3 +1200,177 @@ export const githubApi = {
     }>('/repos/fetch-starred', { username, limit });
   },
 };
+
+// ══════════════════════════════════════════════════════════════════
+// Personal Dashboard API
+// ══════════════════════════════════════════════════════════════════
+//
+// All endpoints require auth (the route file mounts an
+// `authenticate` middleware). The dashboard is the user's private
+// data — there's no admin view, no shared view, no public view.
+// Server is the source of truth; the localStorage mirror exists
+// only for offline-first behavior and is rebuilt from the server
+// snapshot on every auth-ready event.
+
+export type DashboardActivityType =
+  | 'study' | 'work' | 'exercise' | 'cook'
+  | 'sleep' | 'rest' | 'leisure' | 'social';
+
+export interface DashboardTask {
+  id: number;
+  scope: 'today' | 'week' | 'month';
+  date: string; // YYYY-MM-DD
+  title: string;
+  done: boolean;
+  exp: number;
+  activityType: DashboardActivityType | null;
+  createdAt: string;
+  completedAt: string | null;
+}
+
+export interface DashboardSnapshot {
+  level: number;
+  exp: number;
+  totalExp: number;
+  timeline: Array<{ hour: number; activity?: { type: DashboardActivityType; label: string } }>;
+  lastCelebratedAt: string | null;
+  tomorrowPlanLockedDate: string | null;
+  celebratedToday: boolean;
+  todayStats: { expAwarded: number; tasksDone: number; tasksTotal: number } | null;
+  tasks: DashboardTask[];
+}
+
+export interface DashboardExport {
+  exportedAt: string;
+  version: 1;
+  state: {
+    level: number;
+    exp: number;
+    totalExp: number;
+    timeline: string; // raw JSON from DB
+  } | null;
+  tasks: Array<DashboardTask & { archivedAt: string | null }>;
+  celebrations: Array<{
+    celebratedDate: string;
+    expAwarded: number;
+    tasksDone: number;
+    tasksTotal: number;
+    createdAt: string;
+  }>;
+}
+
+export const dashboardApi = {
+  // Returns the full snapshot: state + active tasks + today's
+  // celebration marker. Called once on dashboard mount; the
+  // local store patches from this and from there does
+  // optimistic local updates with background sync.
+  get() {
+    return api.get<{ data: DashboardSnapshot }>('/dashboard');
+  },
+
+  // Patch the state row (level, exp, totalExp, timeline, plan lock).
+  // lastCelebratedAt is server-controlled — don't send it here.
+  updateState(data: Partial<{
+    level: number;
+    exp: number;
+    totalExp: number;
+    timeline: DashboardSnapshot['timeline'];
+    tomorrowPlanLockedDate: string | null;
+  }>) {
+    return api.put<{ data: any }>('/dashboard/state', data);
+  },
+
+  // Add a single task. Returns the persisted row (server is the
+  // one who assigned the id).
+  addTask(data: {
+    scope: 'today' | 'week' | 'month';
+    title: string;
+    exp?: number;
+    activityType?: DashboardActivityType | null;
+    date?: string;
+  }) {
+    return api.post<{ data: DashboardTask }>('/dashboard/tasks', data);
+  },
+
+  // Bulk-seed a list of titles for a (scope, date) bucket. The
+  // server is idempotent — a second call for the same bucket
+  // returns `{ skipped: true }` and the existing tasks. Use
+  // `replace: true` to wipe-and-reseed (the manual-reset path).
+  bulkSeedTasks(data: {
+    scope: 'today' | 'week' | 'month';
+    titles: string[];
+    activityType?: DashboardActivityType | null;
+    date?: string;
+    replace?: boolean;
+  }) {
+    return api.post<{
+      data: {
+        skipped: boolean;
+        tasks: DashboardTask[];
+      };
+    }>('/dashboard/tasks/bulk', data);
+  },
+
+  // Toggle done / edit title / change scope / change date. Any
+  // combination of the supported fields works.
+  patchTask(id: number, data: Partial<{
+    title: string;
+    done: boolean;
+    exp: number;
+    activityType: DashboardActivityType | null;
+    scope: 'today' | 'week' | 'month';
+    date: string;
+  }>) {
+    return api.patch<{ data: DashboardTask }>(`/dashboard/tasks/${id}`, data);
+  },
+
+  // Soft-delete: the row stays in the DB (archivedAt set) so
+  // the user can re-import from an export. The cron hard-deletes
+  // after the retention window expires.
+  removeTask(id: number) {
+    return api.delete<{ data: { id: number; archived: true } }>(`/dashboard/tasks/${id}`);
+  },
+
+  // "End of day" celebration. Idempotent: a repeat call returns
+  // 409 ALREADY_CELEBRATED with the original record. The client
+  // should treat 409 as a no-op (re-render the locked state).
+  celebrate() {
+    return api.post<{
+      data: {
+        celebration: { celebratedDate: string; expAwarded: number; tasksDone: number; tasksTotal: number; createdAt: string };
+        state: { level: number; exp: number; totalExp: number; lastCelebratedAt: string | null };
+        todayStats: { expGained: number; done: number; total: number };
+      };
+    }>('/dashboard/celebrate');
+  },
+
+  // Pre-create tomorrow's tasks. The server archives any
+  // existing tomorrow tasks for the same user, so this is a
+  // clean replace — the user's new plan supersedes any
+  // auto-generated defaults from earlier in the day.
+  planTomorrow(data: { titles: string[]; activityType?: DashboardActivityType | null }) {
+    return api.post<{
+      data: { tomorrowDate: string; tasks: DashboardTask[] };
+    }>('/dashboard/plan-tomorrow', data);
+  },
+
+  // Full export — used by the "Export to JSON" backup button.
+  // Includes both active and archived tasks + celebration log
+  // for the most recent N entries (capped server-side).
+  export() {
+    return api.get<{ data: DashboardExport }>('/dashboard/export');
+  },
+
+  // Restore from a previous export. Wipes current active tasks
+  // (archives them, doesn't hard-delete) and replays the
+  // export. Use the DELETE endpoint for a true factory reset.
+  import(data: DashboardExport) {
+    return api.post<{ data: { imported: true } }>('/dashboard/import', data);
+  },
+
+  // "Reset to factory defaults" — requires ?confirm=YES in
+  // the body to protect against accidental clicks.
+  reset() {
+    return api.delete<{ data: { reset: true } }>('/dashboard?confirm=YES');
+  },
+};

@@ -128,6 +128,19 @@ model User {
   messagesSent          Message[]       @relation("MessageSender")
   messageReads          MessageRead[]   @relation("MessageReadUser")
 
+  // ─── Personal dashboard (per-user, never deleted) ────────
+  // Each user owns exactly one DashboardState row. The 1:N
+  // dashboardTasks relation stores both active and archived
+  // (soft-deleted) tasks — see DashboardTask.archivedAt below.
+  // We persist state on the server (instead of just localStorage)
+  // so the dashboard follows the user across devices, survives
+  // cache clears, and is recoverable from the DB if the client
+  // gets wiped. Server is the source of truth; the client still
+  // keeps a localStorage mirror for offline-first behavior.
+  dashboardState        DashboardState?
+  dashboardTasks        DashboardTask[]
+  dashboardCelebrations DashboardCelebration[]
+
   @@index([email], name: "idx_users_email")
   @@map("users")
 }
@@ -1543,4 +1556,113 @@ model GithubRepoTag {
   // Lookup repos for a tag (used when filtering the feed by tag).
   @@index([tagId], name: "idx_github_repo_tags_tag")
   @@map("github_repo_tags")
+}
+
+// ══════════════════════════════════════════════════════════════════
+// Personal Dashboard — private per-user scheduling & task tracking
+// ══════════════════════════════════════════════════════════════════
+//
+// We persist this on the server (not localStorage) so:
+//   - User data survives device wipe / browser change / private mode
+//   - User gets the same dashboard on phone, laptop, tablet
+//   - Backup/restore is just a SQL export — no JS state to chase
+//   - Admins can audit "this user has X tasks pending" without
+//     scraping the client
+//
+// All data is private (always scoped to req.userId). Anonymous
+// visitors get nothing — there's no guest mode at the DB level.
+// The cron job in src/jobs/dashboardArchive.ts soft-archives
+// tasks older than the retention window (default 30 days) and
+// hard-deletes them after 180 days.
+
+model DashboardState {
+  id                     Int       @id @default(autoincrement())
+  userId                 Int       @unique @map("user_id")
+  level                  Int       @default(1)
+  exp                    Int       @default(0)
+  // JSON-encoded TimelineSlot[24]. Stored as text so we can evolve
+  // the shape without migrations; the API layer parses it.
+  timeline               String    @default("[]") @map("timeline") @db.Text
+  // YYYY-MM-DD of the last "end of day" celebration, or null.
+  // We persist this so a user can't double-claim EXP by clicking
+  // the celebration twice (the API checks today == lastCelebratedAt
+  // before awarding).
+  lastCelebratedAt       DateTime? @map("last_celebrated_at")
+  // YYYY-MM-DD of the day the user locked the next-day plan.
+  // Distinct from lastCelebratedAt so we can let the user lock
+  // a plan in the morning without having to celebrate first.
+  tomorrowPlanLockedDate DateTime? @map("tomorrow_plan_locked_date")
+  // Cached total exp earned across the user's lifetime. The
+  // server is the only authority on this — the client's local
+  // EXP can drift and we periodically re-sync from here.
+  totalExp               Int       @default(0) @map("total_exp")
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("dashboard_states")
+}
+
+model DashboardTask {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @map("user_id")
+  // 'today' | 'week' | 'month' — matches the existing TaskScope.
+  // We store it as a string to match the API and avoid enum
+  // churn when we add new scopes (e.g. 'quarter').
+  scope        String    @db.VarChar(16)
+  // YYYY-MM-DD. We always normalize on write so query by date
+  // works as a string compare (date_trunc would be slower on
+  // the volumes we expect).
+  date         String    @db.VarChar(10)
+  title        String    @db.VarChar(500)
+  done         Boolean   @default(false)
+  // EXP awarded when this task is checked off. Defaults to 25
+  // to match the legacy client behavior; admin can tweak per
+  // task in the future.
+  exp          Int       @default(25)
+  // Optional link to the activity this task belongs to
+  // (study/work/exercise/...). Same values as ACTIVITY_META.
+  activityType String?   @map("activity_type") @db.VarChar(32)
+  // When this task was created (UTC).
+  createdAt    DateTime  @default(now()) @map("created_at")
+  // When it was checked off. Used for streak / heatmap reports.
+  completedAt  DateTime? @map("completed_at")
+  // Soft-delete: a non-null value means the task is archived.
+  // Archived tasks are kept for 180 days then hard-deleted by
+  // the archive cron. We never lose user data — even deleted
+  // tasks remain recoverable from a DB backup for years.
+  archivedAt   DateTime? @map("archived_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Active-task index: we read "today's tasks" all the time, so
+  // (userId, archivedAt IS NULL, date) is our hottest access path.
+  // The composite index on (userId, date) covers the timeline view.
+  @@index([userId, archivedAt, date], name: "idx_dashboard_tasks_active")
+  @@index([userId, date], name: "idx_dashboard_tasks_user_date")
+  @@index([userId, completedAt], name: "idx_dashboard_tasks_completed")
+  @@map("dashboard_tasks")
+}
+
+model DashboardCelebration {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @map("user_id")
+  // The calendar day (YYYY-MM-DD) the user celebrated. The
+  // unique constraint guarantees one celebration per day even
+  // if the user spams the button — the API surfaces a 409 and
+  // the client re-renders the locked state.
+  celebratedDate String   @unique @map("celebrated_date") @db.VarChar(10)
+  // EXP awarded for this celebration. We keep the amount so we
+  // can show "you got +150 EXP on 2026-06-15" later if we add
+  // a history view.
+  expAwarded     Int      @default(0) @map("exp_awarded")
+  tasksDone      Int      @default(0) @map("tasks_done")
+  tasksTotal     Int      @default(0) @map("tasks_total")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, celebratedDate], name: "idx_dashboard_celeb_user_date")
+  @@map("dashboard_celebrations")
 }

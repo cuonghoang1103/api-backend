@@ -74,6 +74,7 @@ const devPostRoutes = (await import(path.join(__dirname, 'routes', 'devPost.rout
 const systemRoutes = (await import(path.join(__dirname, 'routes', 'system.routes.js'))).default;
 const socialRoutes = (await import(path.join(__dirname, 'routes', 'social.routes.js'))).default;
 const githubRoutes = (await import(path.join(__dirname, 'routes', 'github.routes.js'))).default;
+const dashboardRoutes = (await import(path.join(__dirname, 'routes', 'dashboard.routes.js'))).default;
 const cyberRoutes = (await import(path.join(__dirname, 'routes', 'cyber.routes.js'))).default;
 const quotaRoutes = (await import(path.join(__dirname, 'routes', 'quota.routes.js'))).default;
 const embedJobsRoutes = (await import(path.join(__dirname, 'routes', 'embedJobs.routes.js'))).default;
@@ -350,6 +351,7 @@ app.use('/api/v1/dev-posts', devPostRoutes);
 app.use('/api/v1/system', systemRoutes);
 app.use('/api/v1/social', socialRoutes);
 app.use('/api/v1/repos', githubRoutes);
+app.use('/api/v1/dashboard', dashboardRoutes);
 app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
 app.use('/api/v1/messages', messagesRoutes);

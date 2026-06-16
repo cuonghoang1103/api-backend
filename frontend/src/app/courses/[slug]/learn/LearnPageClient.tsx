@@ -329,7 +329,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     : 0;
 
   return (
-    <div className="min-h-screen bg-darkbg flex flex-col">
+    <div className="min-h-screen bg-darkbg flex flex-col pt-16">
       {/* Top bar */}
       <header className="h-14 bg-darkcard border-b border-darkborder/50 flex items-center justify-between px-4 shrink-0 z-20">
         <div className="flex items-center gap-3">

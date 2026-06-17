@@ -23,6 +23,8 @@
 set -euo pipefail
 
 SITEMAP_URL="https://cuongthai.com/sitemap.xml"
+INDEXING_ENDPOINT="https://cuongthai.com/api/index-url"
+LAST_INDEXED_FILE="/opt/cuonghoangdev/.last-indexed-urls.txt"
 
 # ─── Google ────────────────────────────────────────────────
 # Google deprecated the &ping= URL in 2023 and now returns 404
@@ -101,4 +103,134 @@ echo "[$(date '+%H:%M:%S')] [INFO]  Pinging search engines for: $SITEMAP_URL"
 google_ping
 bing_ping
 # indexnow_ping   # enable when INDEXNOW_KEY is set up
+
+# ─── Google Indexing API (active push) ─────────────────────
+# Google's old &ping= URL was deprecated in 2023. The active
+# way to tell Google "hey, this URL changed, please crawl it
+# now" is the Indexing API. We call our own /api/index-url
+# route, which uses the service account configured in
+# frontend/src/config/google-key.json to talk to Google.
+#
+# To avoid burning the 200/day quota on every deploy (we deploy
+# multiple times per day, but only a fraction of those deploys
+# add new content), we diff the current sitemap against the
+# last deploy's URL list and only submit URLs that are new.
+#
+# The diff is stored in /opt/cuonghoangdev/.last-indexed-urls.txt
+# so it persists across deploys. If the file is missing (first
+# deploy on a fresh VPS), we submit all sitemap URLs and save
+# the result.
+#
+# This block is best-effort: a failure here MUST NOT fail the
+# deploy. The route itself is rate-limited at 60s/URL, so for
+# 50+ new URLs the loop can take 50+ minutes; we cap with
+# MAX_INDEX_PER_DEPLOY (default 20) and the rest get picked up
+# on the next deploy.
+google_indexing_api_ping() {
+  local max_per_deploy="${MAX_INDEX_PER_DEPLOY:-20}"
+
+  # Bail out if the service-account key isn't on the VPS yet.
+  # deploy-vps.sh warns about this; we just skip silently.
+  if [ ! -f /opt/cuonghoangdev/frontend/src/config/google-key.json ]; then
+    echo "[$(date '+%H:%M:%S')] [SKIP] google-key.json missing on VPS — Indexing API disabled"
+    return 0
+  fi
+
+  # Fetch the current sitemap. Sort + unique so the diff is
+  # stable across deploys (sitemap order can change as routes
+  # are added/removed).
+  local current_urls
+  current_urls=$(curl -sS --max-time 15 "$SITEMAP_URL" \
+    | grep -oE '<loc>[^<]+</loc>' \
+    | sed -E 's#</?loc>##g' \
+    | sort -u) || {
+    echo "[$(date '+%H:%M:%S')] [WARN] Could not fetch sitemap, skipping Indexing API"
+    return 0
+  }
+
+  if [ -z "$current_urls" ]; then
+    echo "[$(date '+%H:%M:%S')] [SKIP] sitemap is empty, nothing to index"
+    return 0
+  fi
+
+  # Diff against the last deploy's list.
+  local new_urls=()
+  if [ -f "$LAST_INDEXED_FILE" ]; then
+    while IFS= read -r url; do
+      [ -z "$url" ] && continue
+      if ! grep -qxF "$url" "$LAST_INDEXED_FILE"; then
+        new_urls+=("$url")
+      fi
+    done <<< "$current_urls"
+  else
+    # First run on a fresh VPS: index everything.
+    while IFS= read -r url; do
+      [ -n "$url" ] && new_urls+=("$url")
+    done <<< "$current_urls"
+  fi
+
+  if [ ${#new_urls[@]} -eq 0 ]; then
+    echo "[$(date '+%H:%M:%S')] [INFO]  No new URLs since last deploy, skipping Indexing API"
+    return 0
+  fi
+
+  # Cap the batch to avoid running forever in CI. The rest
+  # get submitted on the next deploy.
+  if [ ${#new_urls[@]} -gt "$max_per_deploy" ]; then
+    echo "[$(date '+%H:%M:%S')] [INFO]  ${#new_urls[@]} new URLs; capping at $max_per_deploy this run"
+    new_urls=("${new_urls[@]:0:$max_per_deploy}")
+  fi
+
+  echo "[$(date '+%H:%M:%S')] [INFO]  Indexing ${#new_urls[@]} new URLs via Indexing API..."
+
+  local success=0
+  local failed=0
+  local url
+  for url in "${new_urls[@]}"; do
+    local resp
+    resp=$(curl -sS --max-time 30 -w "\n%{http_code}" \
+      -X POST "$INDEXING_ENDPOINT" \
+      -H "Content-Type: application/json" \
+      -d "{\"url\":\"$url\"}" 2>&1) || {
+      echo "[$(date '+%H:%M:%S')] [WARN]  curl failed for $url"
+      failed=$((failed + 1))
+      continue
+    }
+    local code
+    code=$(echo "$resp" | tail -1)
+    local body
+    body=$(echo "$resp" | head -n -1)
+
+    if [ "$code" = "200" ]; then
+      success=$((success + 1))
+      echo "[$(date '+%H:%M:%S')] [✅ OK]  Indexed: $url"
+    elif [ "$code" = "429" ]; then
+      # Already submitted recently. Don't count as failure.
+      echo "[$(date '+%H:%M:%S')] [INFO]  Already indexed recently: $url"
+    else
+      failed=$((failed + 1))
+      echo "[$(date '+%H:%M:%S')] [WARN]  HTTP $code for $url: $body"
+      # On 403 the SA doesn't own the property — stop the
+      # batch so we don't burn quota on a config problem.
+      if [ "$code" = "403" ]; then
+        echo "[$(date '+%H:%M:%S')] [WARN]  Stopping batch: PERMISSION_DENIED. Add SA as Owner in Search Console."
+        break
+      fi
+    fi
+
+    # Throttle: route allows 60s/URL, we wait 65s to be safe.
+    sleep 65
+  done
+
+  # Persist the *current* full URL list (not just what we
+  # successfully submitted) so the diff on the next deploy
+  # is against the current sitemap, not a partial submission.
+  # Use sudo since /opt/cuonghoangdev is root-owned.
+  echo "$current_urls" > "$LAST_INDEXED_FILE.tmp" && \
+    mv "$LAST_INDEXED_FILE.tmp" "$LAST_INDEXED_FILE"
+
+  echo "[$(date '+%H:%M:%S')] [OK]   Indexing API: $success ok, $failed failed, ${#new_urls[@]} attempted"
+}
+
+google_indexing_api_ping
 echo "[$(date '+%H:%M:%S')] [OK]   Done"

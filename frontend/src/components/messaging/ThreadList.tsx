@@ -6,11 +6,8 @@ import {
   MessageCirclePlus,
   Search,
   Pin,
-  PinOff,
   BellOff,
-  Bell,
   Archive,
-  ArchiveRestore,
   CircleDot,
   MoreHorizontal,
   X,
@@ -19,10 +16,11 @@ import {
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
-import toast from 'react-hot-toast';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
+import ThreadRowMenu from './ThreadRowMenu';
 
 // iOS-like spring transition — feels premium and "lightweight"
 const HOVER_SPRING = 'transition-[background-color,transform,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]';
@@ -207,6 +205,15 @@ export default function ThreadList() {
               const mutedUntil = t.preferences?.mutedUntil;
               const isMuted = mutedUntil ? new Date(mutedUntil) > new Date() : false;
               const isArchived = !!t.preferences?.archivedAt;
+              // The row is "unread-looking" if either:
+              //  1. There's a real unread count (new messages since
+              //     the user last read the thread), OR
+              //  2. The user explicitly clicked "Mark as unread" —
+              //     we stamp `markedUnreadAt` and treat the row as
+              //     bold until they re-open the thread (markRead
+              //     clears it implicitly).
+              const isMarkedUnread = !!t.preferences?.markedUnreadAt;
+              const isUnreadLooking = (t.unreadCount && t.unreadCount > 0) || isMarkedUnread;
               return (
                 <li key={t.id} className="relative">
                   <button
@@ -234,8 +241,16 @@ export default function ThreadList() {
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline justify-between gap-2">
-                        {/* Username — primary, full weight, white */}
-                        <p className="flex min-w-0 items-center gap-1 truncate text-sm font-semibold text-text-primary">
+                        {/* Username — primary, full weight, white.
+                            When the row is "unread-looking" (real
+                            unread OR marked unread by user action)
+                            we bump the timestamp to a brighter
+                            cyan to make the row pop. */}
+                        <p
+                          className={cn(
+                            'flex min-w-0 items-center gap-1 truncate text-sm font-semibold text-text-primary',
+                          )}
+                        >
                           <span className="truncate">
                             {t.peer ? (
                               t.peer.alias ? (
@@ -253,19 +268,34 @@ export default function ThreadList() {
                           {isPinned && <Pin className="h-3 w-3 shrink-0 text-amber-400" aria-label="Đã ghim" />}
                           {isMuted && <BellOff className="h-3 w-3 shrink-0 text-text-muted" aria-label="Đã tắt thông báo" />}
                         </p>
-                        {/* Timestamp — moved closer to username, smaller,
-                            muted. `tabular-nums` keeps the digits from
-                            jumping around as minutes tick over. */}
+                        {/* Timestamp — cyan + bold when unread-looking
+                            so the row visually stands out from the
+                            rest of the inbox. `tabular-nums` keeps
+                            the digits from jumping around as minutes
+                            tick over. */}
                         {t.lastMessageAt && (
-                          <span className="shrink-0 text-[10px] font-normal tabular-nums text-text-muted/80">
+                          <span
+                            className={cn(
+                              'shrink-0 text-[10px] tabular-nums',
+                              isUnreadLooking
+                                ? 'font-bold text-cyan-300'
+                                : 'font-normal text-text-muted/80',
+                            )}
+                          >
                             {formatDistanceToNow(new Date(t.lastMessageAt), { addSuffix: false, locale: vi })}
                           </span>
                         )}
                       </div>
                       <div className="mt-0.5 flex items-center gap-1.5">
-                        {/* Preview — clearly lighter than the username
-                            above to establish text hierarchy. */}
-                        <p className="truncate text-[11.5px] font-normal text-text-muted/70">
+                        {/* Preview — bolder + brighter when unread */}
+                        <p
+                          className={cn(
+                            'truncate text-[11.5px]',
+                            isUnreadLooking
+                              ? 'font-semibold text-text-secondary'
+                              : 'font-normal text-text-muted/70',
+                          )}
+                        >
                           {t.lastMessage?.hasAttachment ? (
                             <>
                               <span className="text-cyan-400">📎</span> {t.lastMessage.attachmentName ?? 'Đính kèm'}
@@ -276,9 +306,9 @@ export default function ThreadList() {
                         </p>
                       </div>
                     </div>
-                    {t.unreadCount && t.unreadCount > 0 ? (
+                    {(t.unreadCount && t.unreadCount > 0) || isMarkedUnread ? (
                       <span className="ml-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-cyan-500 px-1.5 text-[10px] font-bold text-white">
-                        {t.unreadCount}
+                        {t.unreadCount && t.unreadCount > 0 ? t.unreadCount : '•'}
                       </span>
                     ) : null}
                   </button>
@@ -287,6 +317,7 @@ export default function ThreadList() {
                       same context menu as right-click. Visible on hover
                       OR when this row's menu is open. */}
                   <button
+                    data-kebab
                     onClick={(e) => {
                       e.stopPropagation();
                       setActiveMenuThreadId((cur) => (cur === t.id ? null : t.id));
@@ -300,45 +331,14 @@ export default function ThreadList() {
                     <MoreHorizontal className="h-3.5 w-3.5" />
                   </button>
 
-                  {/* Row context menu — Messenger-style popup with
-                      Pin / Mute / Mark unread / Archive. Positioned
-                      next to the kebab trigger. */}
+                  {/* Row context menu — full Messenger-style popover
+                      with Pin / Mark unread / Mute (with duration) /
+                      View profile / Block / Archive / Delete / Report.
+                      See ThreadRowMenu.tsx for the full panel layout. */}
                   <AnimatePresence>
                     {activeMenuThreadId === t.id && (
-                      <ThreadContextMenu
-                        isPinned={isPinned}
-                        isMuted={isMuted}
-                        isArchived={isArchived}
-                        onPin={() => {
-                          setActiveMenuThreadId(null);
-                          void store.togglePin(t.id).catch((e) =>
-                            toast.error('Không thể ghim cuộc trò chuyện'),
-                          );
-                        }}
-                        onMute={() => {
-                          setActiveMenuThreadId(null);
-                          void store.toggleMute(t.id).catch((e) =>
-                            toast.error('Không thể tắt thông báo'),
-                          );
-                        }}
-                        onMarkUnread={() => {
-                          setActiveMenuThreadId(null);
-                          void store.markThreadUnread(t.id).catch((e) =>
-                            toast.error('Không thể đánh dấu chưa đọc'),
-                          );
-                        }}
-                        onArchive={() => {
-                          setActiveMenuThreadId(null);
-                          if (isArchived) {
-                            void store.unarchiveThread(t.id).then(() => {
-                              toast.success('Đã bỏ lưu trữ');
-                            }).catch(() => toast.error('Không thể bỏ lưu trữ'));
-                          } else {
-                            void store.archiveThread(t.id).then(() => {
-                              toast.success('Đã lưu trữ cuộc trò chuyện');
-                            }).catch(() => toast.error('Không thể lưu trữ'));
-                          }
-                        }}
+                      <ThreadRowMenu
+                        thread={t}
                         onClose={() => setActiveMenuThreadId(null)}
                       />
                     )}
@@ -447,78 +447,6 @@ function EmptyState({
         </button>
       )}
     </div>
-  );
-}
-
-function ThreadContextMenu({
-  isPinned,
-  isMuted,
-  isArchived,
-  onPin,
-  onMute,
-  onMarkUnread,
-  onArchive,
-  onClose,
-}: {
-  isPinned: boolean;
-  isMuted: boolean;
-  isArchived: boolean;
-  onPin: () => void;
-  onMute: () => void;
-  onMarkUnread: () => void;
-  onArchive: () => void;
-  onClose: () => void;
-}) {
-  // Render the menu as a popover anchored to the row. We position
-  // it absolutely to the row container so it doesn't reflow the
-  // sidebar when opening/closing.
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: -2 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95, y: -2 }}
-      transition={{ duration: 0.12, ease: [0.16, 1, 0.3, 1] }}
-      onMouseLeave={onClose}
-      className="absolute right-2 top-full z-20 mt-1 w-44 overflow-hidden rounded-xl border border-white/10 bg-[#0a0a14]/95 p-1 shadow-2xl backdrop-blur"
-    >
-      <MenuItem icon={isPinned ? PinOff : Pin} label={isPinned ? 'Bỏ ghim' : 'Ghim'} onClick={onPin} />
-      <MenuItem icon={isMuted ? Bell : BellOff} label={isMuted ? 'Bật thông báo' : 'Tắt thông báo (8h)'} onClick={onMute} />
-      <MenuItem icon={CircleDot} label="Đánh dấu chưa đọc" onClick={onMarkUnread} />
-      <div className="my-1 border-t border-white/[0.06]" />
-      <MenuItem
-        icon={isArchived ? ArchiveRestore : Archive}
-        label={isArchived ? 'Bỏ lưu trữ' : 'Lưu trữ'}
-        onClick={onArchive}
-        danger={!isArchived}
-      />
-    </motion.div>
-  );
-}
-
-function MenuItem({
-  icon: Icon,
-  label,
-  onClick,
-  danger,
-}: {
-  icon: typeof Pin;
-  label: string;
-  onClick: () => void;
-  danger?: boolean;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        'flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-[12px] transition-colors',
-        danger
-          ? 'text-amber-300 hover:bg-amber-500/15'
-          : 'text-text-secondary hover:bg-white/[0.06] hover:text-text-primary',
-      )}
-    >
-      <Icon className="h-3.5 w-3.5" />
-      <span>{label}</span>
-    </button>
   );
 }
 

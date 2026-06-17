@@ -993,11 +993,25 @@ export const messagingApi = {
     ),
 
   // Hard-delete the chat from THIS viewer's inbox. Soft delete
-  // server-side (preferences.archivedAt); the other participant
-  // still keeps their copy.
+  // server-side (preferences.archivedAt + deletedAt); the other
+  // participant still keeps their copy. The row is filtered out
+  // of every sidebar tab for the deleter.
   deleteChat: (threadId: number) =>
     api.delete<ApiResponse<{ preferences: MessagingThreadPreference | null; deleted: boolean }>>(
       `/messages/threads/${threadId}/hard`,
+    ),
+
+  // Mute with a duration. Body: { durationMinutes: number | null }
+  //   0      → unmute
+  //   15     → 15 minutes
+  //   60     → 1 hour
+  //   480    → 8 hours
+  //   1440   → 24 hours
+  //   null   → mute until further notice (year 9999 on the server)
+  muteFor: (threadId: number, durationMinutes: number | null) =>
+    api.post<ApiResponse<{ preferences: MessagingThreadPreference | null }>>(
+      `/messages/threads/${threadId}/mute-for`,
+      { durationMinutes },
     ),
 
   // Report a thread to moderators. Body: { reason, category? }.
@@ -1049,7 +1063,79 @@ export interface MessagingThreadPreference {
   mutedUntil?: string;
   archivedAt?: string;
   markedUnreadAt?: string;
+  deletedAt?: string;
 }
+
+// ─── Admin moderation queue (thread reports) ──────────
+// Used by /admin/reports page. The shape mirrors the backend
+// `listReports` response in src/services/messaging-safety.service.ts.
+export interface MessagingThreadReport {
+  id: number;
+  reason: string;
+  category: 'spam' | 'harassment' | 'hate' | 'impersonation' | 'other' | null;
+  createdAt: string;
+  resolvedAt: string | null;
+  resolution: string | null;
+  reporter: {
+    id: number;
+    username: string;
+    displayName: string | null;
+    fullName: string | null;
+    avatarUrl: string | null;
+  } | null;
+  resolver: {
+    id: number;
+    username: string;
+    displayName: string | null;
+  } | null;
+  thread: {
+    id: number;
+    type: 'ADMIN' | 'USER';
+    userA: {
+      id: number;
+      username: string;
+      displayName: string | null;
+      avatarUrl: string | null;
+    } | null;
+    userB: {
+      id: number;
+      username: string;
+      displayName: string | null;
+      avatarUrl: string | null;
+    } | null;
+    lastMessage: {
+      id: number;
+      content: string;
+      senderId: number;
+      createdAt: string;
+    } | null;
+  } | null;
+}
+
+export interface MessagingThreadReportStats {
+  open: number;
+  resolved24h: number;
+  total: number;
+}
+
+export interface MessagingThreadReportList {
+  rows: MessagingThreadReport[];
+  nextCursor: number | null;
+}
+
+// Admin reports API — mounted under /api/v1/admin/reports
+// by src/routes/admin.reports.routes.ts.
+export const adminReportsApi = {
+  list: (params?: { status?: 'open' | 'resolved'; cursor?: number; take?: number }) =>
+    api.get<ApiResponse<MessagingThreadReportList>>('/admin/reports', { params }),
+  stats: () =>
+    api.get<ApiResponse<MessagingThreadReportStats>>('/admin/reports/stats'),
+  resolve: (reportId: number, resolution?: string) =>
+    api.post<ApiResponse<{ id: number; resolvedAt: string }>>(
+      `/admin/reports/${reportId}/resolve`,
+      resolution ? { resolution } : {},
+    ),
+};
 
 export interface MessagingThread {
   id: number;

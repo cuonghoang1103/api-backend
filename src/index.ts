@@ -370,6 +370,9 @@ app.use('/api/v1/quota', quotaRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/admin', adminMessagesRoutes);
+// Admin moderation queue for thread reports (block/report system).
+const { default: adminReportsRoutes } = (await import(path.join(__dirname, 'routes', 'admin.reports.routes.js')));
+app.use('/api/v1/admin/reports', adminReportsRoutes);
 
 // ─── 9b. Socket.IO (Direct Messaging) ─────────────────
 // Mount on the shared HTTP server so the existing trust-proxy /

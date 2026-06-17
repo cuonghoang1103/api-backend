@@ -166,6 +166,98 @@ export class MessagingSafetyService {
     });
     return { id: created.id, createdAt: created.createdAt };
   }
+
+  /**
+   * Admin-only: list thread reports. Pagination via ?cursor=
+   * (id of last seen row) and ?take= (max 50). Default ordering
+   * is unresolved first, then newest. We expose the reporter's
+   * username/avatar so the admin UI can render the "real-time
+   * ticker" view without a separate /users/<id> fetch.
+   */
+  async listReports(opts: { cursor?: number; take?: number; status?: 'open' | 'resolved' } = {}) {
+    const take = Math.min(opts.take ?? 30, 50);
+    const where: any = {};
+    if (opts.status === 'open') where.resolvedAt = null;
+    if (opts.status === 'resolved') where.resolvedAt = { not: null };
+
+    const rows = await prisma.threadReport.findMany({
+      where,
+      orderBy: [{ resolvedAt: 'asc' }, { id: 'desc' }],
+      take: take + 1,
+      ...(opts.cursor ? { cursor: { id: opts.cursor }, skip: 1 } : {}),
+      include: {
+        reporter: { select: { id: true, username: true, displayName: true, fullName: true, avatarUrl: true } },
+        thread: {
+          select: {
+            id: true,
+            type: true,
+            userA: { select: { id: true, username: true, displayName: true, avatarUrl: true } },
+            userB: { select: { id: true, username: true, displayName: true, avatarUrl: true } },
+            messages: {
+              orderBy: { createdAt: 'desc' },
+              take: 1,
+              select: { id: true, content: true, senderId: true, createdAt: true },
+            },
+          },
+        },
+        resolver: { select: { id: true, username: true, displayName: true } },
+      },
+    });
+    const nextCursor = rows.length > take ? rows[take].id : null;
+    const slice = rows.slice(0, take).map((r) => ({
+      id: r.id,
+      reason: r.reason,
+      category: r.category,
+      createdAt: r.createdAt,
+      resolvedAt: r.resolvedAt,
+      resolution: r.resolution,
+      reporter: r.reporter,
+      resolver: r.resolver,
+      thread: r.thread
+        ? {
+            id: r.thread.id,
+            type: r.thread.type,
+            userA: r.thread.userA,
+            userB: r.thread.userB,
+            lastMessage: r.thread.messages[0] ?? null,
+          }
+        : null,
+    }));
+    return { rows: slice, nextCursor };
+  }
+
+  /**
+   * Aggregated stats for the admin dashboard's header cards.
+   * Cheaper than fetching all rows and counting client-side.
+   */
+  async reportStats() {
+    const [open, resolved24h, total] = await Promise.all([
+      prisma.threadReport.count({ where: { resolvedAt: null } }),
+      prisma.threadReport.count({
+        where: {
+          resolvedAt: { gte: new Date(Date.now() - 24 * 60 * 60 * 1000) },
+        },
+      }),
+      prisma.threadReport.count(),
+    ]);
+    return { open, resolved24h, total };
+  }
+
+  /**
+   * Mark a report as resolved. Stores a free-form resolution
+   * note so future moderators can see what was done.
+   */
+  async resolveReport(reportId: number, resolverId: number, resolution?: string) {
+    const updated = await prisma.threadReport.update({
+      where: { id: reportId },
+      data: {
+        resolvedAt: new Date(),
+        resolvedBy: resolverId,
+        resolution: resolution ? String(resolution).slice(0, 500) : null,
+      },
+    });
+    return updated;
+  }
 }
 
 export const messagingSafetyService = new MessagingSafetyService();

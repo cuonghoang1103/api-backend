@@ -340,23 +340,41 @@ router.post('/threads/:id/mark-unread', async (req: Request, res: Response, next
   }
 });
 
+// ─── POST /api/v1/messages/threads/:id/mute-for ─────────
+// Facebook-style mute with a duration. Body: { durationMinutes: number | null }
+// Allowed: 0 (unmute) | 15 | 60 | 480 | 1440 | null (indefinite)
+router.post('/threads/:id/mute-for', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const raw = req.body?.durationMinutes;
+    let duration: number | null;
+    if (raw === null || raw === undefined) {
+      duration = null;
+    } else {
+      const num = Number(raw);
+      const allowed = [0, 15, 60, 480, 1440];
+      if (!allowed.includes(num) && raw !== null) {
+        throw new AppError('Duration không hợp lệ. Chỉ chấp nhận: 0, 15, 60, 480, 1440 hoặc null', 400, 'INVALID_DURATION');
+      }
+      duration = num;
+    }
+    const preferences = await messagesService.muteThreadFor(id, req.userId!, duration);
+    res.json({ success: true, data: { preferences } });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // ─── DELETE /api/v1/messages/threads/:id/hard ───────────
-// "Delete chat" — full delete of the thread for the current
-// user only. We mark all messages in the thread as deleted
-// for this viewer (per-user delete via MessageRead flags is
-// too complex, so we just hide the row from the sidebar by
-// setting preferences.archivedAt to a sentinel "deleted" slot
-// and then archive the thread on the server side too).
-//
-// To keep things simple and reversible, the API just sets
-// preferences.archivedAt; the row stays in the DB so the
-// other participant can still see their copy. The UI hides
-// the row from the inbox once archived.
+// "Delete chat" — per-viewer hard delete. The row stays in the
+// DB so the other participant keeps their copy, but the
+// deleter sees no trace of the thread in any sidebar tab.
 router.delete('/threads/:id/hard', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
-    const preferences = await messagesService.archiveThread(id, req.userId!);
+    const preferences = await messagesService.deleteThreadForViewer(id, req.userId!);
     res.json({ success: true, data: { preferences, deleted: true } });
   } catch (error) {
     next(error);

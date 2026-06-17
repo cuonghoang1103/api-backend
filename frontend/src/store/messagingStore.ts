@@ -107,6 +107,14 @@ interface MessagingState {
   ) => Promise<void>;
   togglePin: (threadId: number) => Promise<void>;
   toggleMute: (threadId: number) => Promise<void>;
+  // Mute with a duration (Facebook-style).
+  //   0     → unmute
+  //   15    → 15 minutes
+  //   60    → 1 hour
+  //   480   → 8 hours
+  //   1440  → 24 hours
+  //   null  → indefinite
+  muteFor: (threadId: number, durationMinutes: number | null) => Promise<void>;
   archiveThread: (threadId: number) => Promise<void>;
   unarchiveThread: (threadId: number) => Promise<void>;
   markThreadUnread: (threadId: number) => Promise<void>;
@@ -916,11 +924,10 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       set((s) => {
         const threads = s.threads.map((t) => {
           if (t.id !== threadId) return t;
-          // Mark as unread bumps the badge even if the user is
-          // not currently looking at the thread. lastReadAt isn't
-          // reset (that's markRead's job) — we just stamp the
-          // preference, and the sidebar's "bold" rendering keys
-          // off it.
+          // Mark as unread: stamp the preference + ensure
+          // unreadCount is at least 1 so the sidebar badge
+          // appears immediately. ThreadList renders the row as
+          // "bold" when `preferences.markedUnreadAt` is set.
           return {
             ...t,
             preferences,
@@ -945,12 +952,18 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     try {
       const res = await messagingApi.deleteChat(threadId);
       const preferences = res.data.data?.preferences ?? null;
+      // Hard-delete: filter the row OUT of the threads list
+      // entirely (the user shouldn't see it in any tab). The
+      // server marks preferences.deletedAt so listThreadsForUser
+      // will also exclude it on the next refresh — we mirror
+      // that here so the UI updates instantly without waiting
+      // for a refetch.
       set((s) => ({
-        threads: s.threads.map((t) => (t.id === threadId ? { ...t, preferences } : t)),
+        threads: s.threads.filter((t) => t.id !== threadId),
         currentThread:
-          s.currentThread && s.currentThread.id === threadId
-            ? { ...s.currentThread, preferences }
-            : s.currentThread,
+          s.currentThread && s.currentThread.id === threadId ? null : s.currentThread,
+        currentThreadId:
+          s.currentThreadId === threadId ? null : s.currentThreadId,
       }));
       // If the deleted thread was the one open in the panel,
       // close it so the user lands back on the empty-state
@@ -958,6 +971,30 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       if (get().currentThreadId === threadId) {
         get().closeThread();
       }
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  // ─── Mute with duration (Facebook-style) ───────────────
+  // Pass `durationMinutes`:
+  //   0    → unmute
+  //   15   → 15 minutes
+  //   60   → 1 hour
+  //   480  → 8 hours
+  //   1440 → 24 hours
+  //   null → indefinite (until manually un-muted)
+  async muteFor(threadId, durationMinutes) {
+    try {
+      const res = await messagingApi.muteFor(threadId, durationMinutes);
+      const preferences = res.data.data?.preferences ?? null;
+      set((s) => ({
+        threads: s.threads.map((t) => (t.id === threadId ? { ...t, preferences } : t)),
+        currentThread:
+          s.currentThread && s.currentThread.id === threadId
+            ? { ...s.currentThread, preferences }
+            : s.currentThread,
+      }));
     } catch (e) {
       throw e;
     }

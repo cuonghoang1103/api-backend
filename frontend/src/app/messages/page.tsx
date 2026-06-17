@@ -14,6 +14,7 @@ import {
   LogIn,
   MessageCircle,
   Headphones,
+  ShieldOff,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
@@ -23,6 +24,7 @@ import MessageList from '@/components/messaging/MessageList';
 import MessageInput from '@/components/messaging/MessageInput';
 import NicknamePopover from '@/components/messaging/NicknamePopover';
 import ThreadHeaderMenu from '@/components/messaging/ThreadHeaderMenu';
+import BlockedUsersModal from '@/components/messaging/BlockedUsersModal';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -57,6 +59,8 @@ function MessagesPageInner() {
   const startAdminThread = useMessagingStore((s) => s.startAdminThread);
   const openThread = useMessagingStore((s) => s.openThread);
   const [mounted, setMounted] = useState(false);
+  const [blockedModalOpen, setBlockedModalOpen] = useState(false);
+  const blockedCount = useMessagingStore((s) => s.blockedUsers.length);
 
   const isAdmin = (auth.user?.roles ?? []).some(
     (r) => r.replace('ROLE_', '').toUpperCase() === 'ADMIN',
@@ -207,9 +211,23 @@ function MessagesPageInner() {
             }}
           >
             <div className="border-b border-white/[0.04] px-4 py-3">
-              <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-text-muted">
-                Hộp thư
-              </h2>
+              <div className="mb-1 flex items-center justify-between">
+                <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-text-muted">
+                  Hộp thư
+                </h2>
+                <button
+                  onClick={() => setBlockedModalOpen(true)}
+                  className="flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-semibold text-text-muted transition-colors hover:bg-white/[0.06] hover:text-text-primary"
+                  title="Xem người dùng đã chặn"
+                >
+                  <ShieldOff className="h-3 w-3" />
+                  {blockedCount > 0 ? (
+                    <span className="tabular-nums">{blockedCount} đã chặn</span>
+                  ) : (
+                    <span>Đã chặn</span>
+                  )}
+                </button>
+              </div>
             </div>
             <div className="min-h-0 flex-1">
               <ThreadList />
@@ -262,6 +280,14 @@ function MessagesPageInner() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Blocklist modal — opens via the shield icon next to the
+          "Hộp thư" header. Lists every user the viewer has blocked
+          and lets them unblock from one place. */}
+      <BlockedUsersModal
+        open={blockedModalOpen}
+        onClose={() => setBlockedModalOpen(false)}
+      />
     </div>
   );
 }

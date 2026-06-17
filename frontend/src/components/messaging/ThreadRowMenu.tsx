@@ -3,52 +3,51 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  MoreHorizontal,
   MailOpen,
   BellOff,
   Bell,
+  Pin,
+  PinOff,
+  Archive,
+  ArchiveRestore,
   User as UserIcon,
   ShieldOff,
-  Archive,
   Trash2,
   Flag,
   Clock,
   ChevronRight,
+  MoreHorizontal,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
+import type { MessagingThread } from '@/lib/api';
 
 type ReportCategory = 'spam' | 'harassment' | 'hate' | 'impersonation' | 'other';
-
 type Panel = 'main' | 'mute' | 'block' | 'delete' | 'report';
 
 /**
- * The 3-dot menu that lives on the thread header (right side
- * of the avatar + name row). It mirrors the Messenger popover:
- *  - Mark as unread
- *  - Mute / Unmute notifications (Facebook-style: 15m / 1h /
- *    8h / 24h / until you turn it back on)
- *  - View profile
- *  - Block
- *  - Archive chat
- *  - ─── separator
- *  - Delete chat
- *  - Report
+ * 3-dot context menu that pops out from the kebab icon on each
+ * thread row in the sidebar. Mirrors the header ThreadHeaderMenu
+ * so users get the same actions whether they're looking at the
+ * list or already inside a thread.
  *
- * We deliberately omit Audio / Video call per project
- * requirements (no WebRTC infra).
+ * Differences from the header menu:
+ *  - Anchored to the row (top-full, right-2) instead of the
+ *    header's right edge
+ *  - Adds Pin / Unpin (which makes more sense at the list level
+ *    than inside an open thread)
+ *  - Has Archive / Unarchive context toggle
  */
-export default function ThreadHeaderMenu({
-  threadId,
-  peerId,
+export default function ThreadRowMenu({
+  thread,
+  onClose,
 }: {
-  threadId: number;
-  peerId: number;
+  thread: MessagingThread;
+  onClose: () => void;
 }) {
-  const [open, setOpen] = useState(false);
   const [panel, setPanel] = useState<Panel>('main');
   const [reportCategory, setReportCategory] = useState<ReportCategory>('spam');
   const [reportReason, setReportReason] = useState('');
@@ -57,41 +56,37 @@ export default function ThreadHeaderMenu({
 
   const auth = useAuthStore();
   const store = useMessagingStore();
-  const thread = store.threads.find((t) => t.id === threadId) ?? store.currentThread;
-  const peer = thread?.peer;
 
-  const mutedUntil = thread?.preferences?.mutedUntil;
+  const isPinned = !!thread.preferences?.pinnedAt;
+  const mutedUntil = thread.preferences?.mutedUntil;
   const isMuted = mutedUntil ? new Date(mutedUntil) > new Date() : false;
-  const isBlocked = store.isBlocked(peerId);
-
-  // Close on outside click
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [open]);
+  const isArchived = !!thread.preferences?.archivedAt;
+  const peerId = thread.peer?.id;
+  const isSelfThread = !!peerId && auth.user?.id === peerId;
 
   // Reset inner-panel state when the menu closes
   useEffect(() => {
-    if (open) return;
     setPanel('main');
     setReportReason('');
     setReportCategory('spam');
-  }, [open]);
+  }, []);
 
-  const requireAuth = () => auth.user?.id === peerId;
+  const closeMenu = () => onClose();
 
-  const closeMenu = () => setOpen(false);
+  const handlePin = async () => {
+    closeMenu();
+    try {
+      await store.togglePin(thread.id);
+      toast.success(isPinned ? 'Đã bỏ ghim' : 'Đã ghim cuộc trò chuyện');
+    } catch (e) {
+      toast.error('Không thể ghim');
+    }
+  };
 
   const handleMarkUnread = async () => {
     closeMenu();
     try {
-      await store.markThreadUnread(threadId);
+      await store.markThreadUnread(thread.id);
       toast.success('Đã đánh dấu chưa đọc');
     } catch (e) {
       toast.error('Không thể đánh dấu chưa đọc');
@@ -100,24 +95,29 @@ export default function ThreadHeaderMenu({
 
   const handleViewProfile = () => {
     closeMenu();
-    if (!peer) return;
-    router.push(`/profile/${peer.id}`);
+    if (!peerId) return;
+    router.push(`/profile/${peerId}`);
   };
 
   const handleArchive = async () => {
     closeMenu();
     try {
-      await store.archiveThread(threadId);
-      toast.success('Đã lưu trữ cuộc trò chuyện');
+      if (isArchived) {
+        await store.unarchiveThread(thread.id);
+        toast.success('Đã bỏ lưu trữ');
+      } else {
+        await store.archiveThread(thread.id);
+        toast.success('Đã lưu trữ cuộc trò chuyện');
+      }
     } catch (e) {
-      toast.error('Không thể lưu trữ');
+      toast.error('Không thể thay đổi trạng thái lưu trữ');
     }
   };
 
   const handleDelete = async () => {
     closeMenu();
     try {
-      await store.deleteChat(threadId);
+      await store.deleteChat(thread.id);
       toast.success('Đã xoá cuộc trò chuyện');
     } catch (e) {
       toast.error('Không thể xoá cuộc trò chuyện');
@@ -126,21 +126,12 @@ export default function ThreadHeaderMenu({
 
   const handleBlock = async () => {
     closeMenu();
+    if (!peerId) return;
     try {
       await store.blockUser(peerId);
       toast.success('Đã chặn người dùng');
     } catch (e: any) {
-      toast.error(e?.userFriendlyMessage ?? 'Không thể chặn người dùng');
-    }
-  };
-
-  const handleUnblock = async () => {
-    closeMenu();
-    try {
-      await store.unblockUser(peerId);
-      toast.success('Đã bỏ chặn người dùng');
-    } catch (e) {
-      toast.error('Không thể bỏ chặn');
+      toast.error(e?.userFriendlyMessage ?? 'Không thể chặn');
     }
   };
 
@@ -151,7 +142,7 @@ export default function ThreadHeaderMenu({
     }
     closeMenu();
     try {
-      await store.reportThread(threadId, {
+      await store.reportThread(thread.id, {
         reason: reportReason,
         category: reportCategory,
       });
@@ -164,7 +155,7 @@ export default function ThreadHeaderMenu({
   const handleMuteFor = async (durationMinutes: number | null) => {
     closeMenu();
     try {
-      await store.muteFor(threadId, durationMinutes);
+      await store.muteFor(thread.id, durationMinutes);
       const label =
         durationMinutes === null
           ? 'Đã tắt thông báo vĩnh viễn'
@@ -172,9 +163,7 @@ export default function ThreadHeaderMenu({
             ? 'Đã bật thông báo'
             : durationMinutes < 60
               ? `Đã tắt thông báo ${durationMinutes} phút`
-              : durationMinutes < 480
-                ? `Đã tắt thông báo ${durationMinutes / 60} giờ`
-                : `Đã tắt thông báo ${durationMinutes / 60} giờ`;
+              : `Đã tắt thông báo ${durationMinutes / 60} giờ`;
       toast.success(label);
     } catch (e) {
       toast.error('Không thể thay đổi cài đặt thông báo');
@@ -182,104 +171,132 @@ export default function ThreadHeaderMenu({
   };
 
   return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen((s) => !s)}
-        className="rounded-lg p-2 text-text-muted transition-colors hover:bg-white/[0.06] hover:text-text-primary"
-        aria-label="Mở tuỳ chọn cuộc trò chuyện"
-        title="Tuỳ chọn"
-      >
-        <MoreHorizontal className="h-5 w-5" />
-      </button>
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, scale: 0.95, y: -2 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: -2 }}
+      transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
+      className="absolute right-2 top-full z-30 mt-1 w-72 overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a14]/98 p-1.5 shadow-2xl backdrop-blur"
+      onMouseLeave={(e) => {
+        // Only close if the user truly leaves the menu area —
+        // `relatedTarget` is the element the cursor is moving
+        // into, so we close only when that's outside both the
+        // menu and the kebab trigger.
+        const next = e.relatedTarget as HTMLElement | null;
+        if (next && (ref.current?.contains(next) || next.closest('[data-kebab]'))) return;
+        closeMenu();
+      }}
+    >
+      {panel === 'main' && (
+        <div className="space-y-0.5">
+          <RowMenuItem
+            icon={isPinned ? PinOff : Pin}
+            label={isPinned ? 'Bỏ ghim' : 'Ghim'}
+            onClick={handlePin}
+          />
+          <RowMenuItem
+            icon={MailOpen}
+            label="Đánh dấu chưa đọc"
+            onClick={handleMarkUnread}
+          />
+          <RowMenuItem
+            icon={isMuted ? Bell : BellOff}
+            label={isMuted ? 'Bật thông báo' : 'Tắt thông báo'}
+            trailing={<ChevronRight className="h-3.5 w-3.5 text-text-muted" />}
+            onClick={() => setPanel('mute')}
+          />
+          {peerId && !isSelfThread && (
+            <RowMenuItem icon={UserIcon} label="Xem trang cá nhân" onClick={handleViewProfile} />
+          )}
+          {peerId && !isSelfThread && (
+            <RowMenuItem
+              icon={ShieldOff}
+              label="Chặn"
+              tone="warning"
+              onClick={() => setPanel('block')}
+            />
+          )}
+          <RowMenuItem
+            icon={isArchived ? ArchiveRestore : Archive}
+            label={isArchived ? 'Bỏ lưu trữ' : 'Lưu trữ'}
+            onClick={handleArchive}
+          />
+          <div className="my-1 border-t border-white/[0.06]" />
+          <RowMenuItem
+            icon={Trash2}
+            label="Xoá cuộc trò chuyện"
+            tone="danger"
+            onClick={() => setPanel('delete')}
+          />
+          {peerId && !isSelfThread && (
+            <RowMenuItem
+              icon={Flag}
+              label="Báo cáo"
+              tone="danger"
+              onClick={() => setPanel('report')}
+            />
+          )}
+        </div>
+      )}
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -4, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -4, scale: 0.97 }}
-            transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute right-0 top-full z-30 mt-1 w-72 overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a14]/98 p-1.5 shadow-2xl backdrop-blur"
-          >
-            {panel === 'main' && (
-              <div className="space-y-0.5">
-                <MenuItem icon={MailOpen} label="Đánh dấu chưa đọc" onClick={handleMarkUnread} />
-                <MenuItem
-                  icon={isMuted ? Bell : BellOff}
-                  label={isMuted ? 'Bật thông báo' : 'Tắt thông báo'}
-                  trailing={<ChevronRight className="h-3.5 w-3.5 text-text-muted" />}
-                  onClick={() => setPanel('mute')}
-                />
-                {peer && !requireAuth() && (
-                  <MenuItem icon={UserIcon} label="Xem trang cá nhân" onClick={handleViewProfile} />
-                )}
-                {peer && !requireAuth() && !isBlocked && (
-                  <MenuItem icon={ShieldOff} label="Chặn" tone="warning" onClick={() => setPanel('block')} />
-                )}
-                {peer && !requireAuth() && isBlocked && (
-                  <MenuItem icon={ShieldOff} label="Bỏ chặn người dùng" onClick={handleUnblock} />
-                )}
-                <MenuItem icon={Archive} label="Lưu trữ" onClick={handleArchive} />
-                <div className="my-1 border-t border-white/[0.06]" />
-                <MenuItem icon={Trash2} label="Xoá cuộc trò chuyện" tone="danger" onClick={() => setPanel('delete')} />
-                {peer && !requireAuth() && (
-                  <MenuItem icon={Flag} label="Báo cáo" tone="danger" onClick={() => setPanel('report')} />
-                )}
-              </div>
-            )}
+      {panel === 'mute' && (
+        <SubPanelHeader
+          title={isMuted ? 'Đang tắt thông báo' : 'Tắt thông báo trong…'}
+          onBack={() => setPanel('main')}
+        >
+          <RowMenuItem icon={Clock} label="15 phút" onClick={() => handleMuteFor(15)} />
+          <RowMenuItem icon={Clock} label="1 giờ" onClick={() => handleMuteFor(60)} />
+          <RowMenuItem icon={Clock} label="8 giờ" onClick={() => handleMuteFor(480)} />
+          <RowMenuItem icon={Clock} label="24 giờ" onClick={() => handleMuteFor(1440)} />
+          <div className="my-1 border-t border-white/[0.06]" />
+          <RowMenuItem
+            icon={BellOff}
+            label="Cho đến khi tôi bật lại"
+            tone="warning"
+            onClick={() => handleMuteFor(null)}
+          />
+          {isMuted && (
+            <>
+              <div className="my-1 border-t border-white/[0.06]" />
+              <RowMenuItem icon={Bell} label="Bật thông báo" onClick={() => handleMuteFor(0)} />
+            </>
+          )}
+        </SubPanelHeader>
+      )}
 
-            {panel === 'mute' && (
-              <SubPanel title={isMuted ? 'Đang tắt thông báo' : 'Tắt thông báo trong…'} onBack={() => setPanel('main')}>
-                <MenuItem icon={Clock} label="15 phút" onClick={() => handleMuteFor(15)} />
-                <MenuItem icon={Clock} label="1 giờ" onClick={() => handleMuteFor(60)} />
-                <MenuItem icon={Clock} label="8 giờ" onClick={() => handleMuteFor(480)} />
-                <MenuItem icon={Clock} label="24 giờ" onClick={() => handleMuteFor(1440)} />
-                <div className="my-1 border-t border-white/[0.06]" />
-                <MenuItem icon={BellOff} label="Cho đến khi tôi bật lại" tone="warning" onClick={() => handleMuteFor(null)} />
-                {isMuted && (
-                  <>
-                    <div className="my-1 border-t border-white/[0.06]" />
-                    <MenuItem icon={Bell} label="Bật thông báo" onClick={() => handleMuteFor(0)} />
-                  </>
-                )}
-              </SubPanel>
-            )}
+      {panel === 'block' && (
+        <ConfirmBlock
+          peerName={thread.peer?.displayName ?? thread.peer?.username ?? 'người dùng này'}
+          onConfirm={handleBlock}
+          onBack={() => setPanel('main')}
+        />
+      )}
 
-            {panel === 'block' && (
-              <ConfirmBlock
-                peerName={peer?.displayName ?? peer?.username ?? 'người dùng này'}
-                onConfirm={handleBlock}
-                onBack={() => setPanel('main')}
-              />
-            )}
+      {panel === 'delete' && (
+        <ConfirmDelete
+          peerName={thread.peer?.displayName ?? thread.peer?.username ?? 'người dùng này'}
+          onConfirm={handleDelete}
+          onBack={() => setPanel('main')}
+        />
+      )}
 
-            {panel === 'delete' && (
-              <ConfirmDelete
-                peerName={peer?.displayName ?? peer?.username ?? 'người dùng này'}
-                onConfirm={handleDelete}
-                onBack={() => setPanel('main')}
-              />
-            )}
-
-            {panel === 'report' && (
-              <ReportForm
-                peerName={peer?.displayName ?? peer?.username ?? 'người dùng này'}
-                category={reportCategory}
-                reason={reportReason}
-                onCategoryChange={setReportCategory}
-                onReasonChange={setReportReason}
-                onConfirm={handleReport}
-                onBack={() => setPanel('main')}
-              />
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+      {panel === 'report' && (
+        <ReportForm
+          peerName={thread.peer?.displayName ?? thread.peer?.username ?? 'người dùng này'}
+          category={reportCategory}
+          reason={reportReason}
+          onCategoryChange={setReportCategory}
+          onReasonChange={setReportReason}
+          onConfirm={handleReport}
+          onBack={() => setPanel('main')}
+        />
+      )}
+    </motion.div>
   );
 }
 
-function MenuItem({
+function RowMenuItem({
   icon: Icon,
   label,
   onClick,
@@ -309,7 +326,7 @@ function MenuItem({
   );
 }
 
-function SubPanel({
+function SubPanelHeader({
   title,
   onBack,
   children,
@@ -345,7 +362,7 @@ function ConfirmBlock({
     <div className="space-y-2 p-2">
       <p className="px-1 text-[13px] font-semibold text-text-primary">Chặn {peerName}?</p>
       <p className="px-1 text-[11.5px] leading-relaxed text-text-muted">
-        Họ sẽ không thể nhắn tin cho bạn hoặc bắt đầu cuộc trò chuyện mới. Bạn có thể bỏ chặn bất cứ lúc nào trong phần Cài đặt chat.
+        Họ sẽ không thể nhắn tin cho bạn hoặc bắt đầu cuộc trò chuyện mới.
       </p>
       <div className="flex gap-2 pt-1">
         <button
@@ -378,7 +395,7 @@ function ConfirmDelete({
     <div className="space-y-2 p-2">
       <p className="px-1 text-[13px] font-semibold text-text-primary">Xoá cuộc trò chuyện với {peerName}?</p>
       <p className="px-1 text-[11.5px] leading-relaxed text-text-muted">
-        Cuộc trò chuyện sẽ bị ẩn khỏi tất cả các tab trong hộp thư của bạn. Người kia vẫn giữ bản sao của họ. Hành động này không thể hoàn tác.
+        Sẽ bị ẩn khỏi tất cả các tab trong hộp thư của bạn. Người kia vẫn giữ bản sao của họ.
       </p>
       <div className="flex gap-2 pt-1">
         <button

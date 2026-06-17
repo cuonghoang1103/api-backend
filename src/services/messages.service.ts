@@ -42,6 +42,7 @@ export interface ThreadPreference {
   mutedUntil?: string;     // ISO timestamp; suppress notifications until then
   archivedAt?: string;     // ISO timestamp; hide from default inbox
   markedUnreadAt?: string; // ISO timestamp; "Mark as unread" badge
+  deletedAt?: string;      // ISO timestamp; hard-delete from viewer's sidebar
 }
 
 type ThreadPreferencesMap = Record<string, ThreadPreference>;
@@ -236,7 +237,13 @@ export class MessagesService {
     const blockedIds = await this.getBlockedIds(userId);
     const filtered = threads.filter((t) => {
       const peers = this.collectThreadPeerIds(t);
-      return !peers.some((pid) => blockedIds.has(pid));
+      if (peers.some((pid) => blockedIds.has(pid))) return false;
+      // Hard-deleted threads leave the sidebar entirely. We keep
+      // the row in the DB so the other participant still has their
+      // copy, but the deleter sees no trace in any tab.
+      const pref = this.getPreferenceForViewer(t.preferences, userId);
+      if (pref?.deletedAt) return false;
+      return true;
     });
 
     const reads = await prisma.messageRead.findMany({
@@ -784,6 +791,36 @@ export class MessagesService {
   }
 
   /**
+   * Hard-delete a thread for the current viewer only. We set a
+   * `deletedAt` slot in preferences (in addition to archivedAt)
+   * so the sidebar can fully exclude the row from every tab.
+   *
+   * The row stays in the DB so the other participant keeps
+   * their copy. This is the "Delete chat" UX in Messenger —
+   * local-only, reversible by un-deleting via a future "Hidden"
+   * tab if needed.
+   */
+  async deleteThreadForViewer(threadId: number, userId: number) {
+    const now = new Date().toISOString();
+    const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
+    if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');
+    this.assertParticipant(thread, userId);
+
+    const current = (thread.preferences ?? {}) as ThreadPreferencesMap;
+    const mine = { ...(current[String(userId)] ?? {}) };
+    mine.archivedAt = now;
+    mine.deletedAt = now;
+    const next: ThreadPreferencesMap = { ...current, [String(userId)]: mine };
+    await prisma.messageThread.update({
+      where: { id: threadId },
+      data: { preferences: next as any },
+    });
+
+    this.emitThreadUpdated(thread, { preferenceChanged: { userId, slot: 'deletedAt', value: now } });
+    return this.getPreferenceForViewer(next, userId);
+  }
+
+  /**
    * "Mark as unread" — sets `markedUnreadAt` to "now" so the
    * sidebar shows a bold dot + the last-message timestamp
    * without bumping the row to the top. (The inbox re-sort
@@ -792,6 +829,30 @@ export class MessagesService {
    */
   async markThreadUnread(threadId: number, userId: number) {
     return this.setThreadPreference(threadId, userId, 'markedUnreadAt', new Date().toISOString());
+  }
+
+  /**
+   * "Mute for X minutes" — Facebook-style. We accept a duration
+   * in minutes and compute `mutedUntil = now + Xm`. Passing 0
+   * clears the mute entirely (same as toggleMute off).
+   *
+   * Allowed durations: 0 / 15 / 60 / 480 (8h) / 1440 (24h) /
+   * null (indefinite). We use the standard "minutes" value
+   * so the client can post `{ durationMinutes: 0 }` for unmute.
+   */
+  async muteThreadFor(threadId: number, userId: number, durationMinutes: number | null) {
+    let value: string | null;
+    if (durationMinutes === null) {
+      // Indefinite: use a far-future date (year 9999). Server
+      // side check just compares to now, so any far-future
+      // string works. We pick a real ISO date for clarity.
+      value = '9999-12-31T23:59:59.999Z';
+    } else if (durationMinutes === 0) {
+      value = null;
+    } else {
+      value = new Date(Date.now() + durationMinutes * 60_000).toISOString();
+    }
+    return this.setThreadPreference(threadId, userId, 'mutedUntil', value);
   }
 
   /**

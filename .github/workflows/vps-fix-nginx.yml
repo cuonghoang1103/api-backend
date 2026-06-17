@@ -22,7 +22,7 @@ jobs:
       - name: Check nginx status
         run: |
           echo "=== nginx container status ==="
-          ssh vps "docker ps -a --filter name=cuonghoangdev_nginx --format 'table {{.Names}}\t{{.Status}}\t{{.ExitCode}}'"
+          ssh vps "docker ps -a --filter name=cuonghoangdev_nginx --format 'table {{.Names}}\t{{.Status}}'"
           echo ""
           echo "=== nginx logs (last 30) ==="
           ssh vps "docker logs cuonghoangdev_nginx --tail 30 2>&1"

@@ -2,9 +2,21 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Loader2, RefreshCcw, Wifi, WifiOff, AlertCircle, Check, CheckCheck, LogIn } from 'lucide-react';
+import {
+  Loader2,
+  RefreshCcw,
+  Wifi,
+  WifiOff,
+  AlertCircle,
+  Check,
+  CheckCheck,
+  LogIn,
+  MessageCircle,
+  Headphones,
+} from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
+import { motion, AnimatePresence } from 'framer-motion';
 import ThreadList from '@/components/messaging/ThreadList';
 import MessageList from '@/components/messaging/MessageList';
 import MessageInput from '@/components/messaging/MessageInput';
@@ -12,6 +24,9 @@ import NicknamePopover from '@/components/messaging/NicknamePopover';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
+
+// iOS-like spring curve — used everywhere for hover/transitions
+const IOS_SPRING = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
 export default function MessagesPage() {
   return (
@@ -37,7 +52,26 @@ function MessagesPageInner() {
   const currentThreadId = useMessagingStore((s) => s.currentThreadId);
   const currentThread = useMessagingStore((s) => s.currentThread);
   const getPresence = useMessagingStore((s) => s.getPresence);
+  const startAdminThread = useMessagingStore((s) => s.startAdminThread);
+  const openThread = useMessagingStore((s) => s.openThread);
   const [mounted, setMounted] = useState(false);
+
+  const isAdmin = (auth.user?.roles ?? []).some(
+    (r) => r.replace('ROLE_', '').toUpperCase() === 'ADMIN',
+  );
+
+  const handleStartAdmin = async () => {
+    try {
+      const id = await startAdminThread();
+      await openThread(id);
+    } catch {
+      // The user is on an empty screen with no toast surface; the
+      // ThreadList already shows this same banner with toasts wired
+      // up. We swallow here so clicking from the empty state still
+      // does the right thing (open the admin thread) without
+      // duplicating the toast path.
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -127,10 +161,26 @@ function MessagesPageInner() {
   }
 
   return (
-    <div className="min-h-screen pt-16" style={{ background: '#03020c' }}>
+    // Page background — deepest of the three layers (Sidebar > List > Content).
+    // We use a near-black blue-tinted shade here, then brighten the inner
+    // panels so the eye is pulled toward the conversation.
+    <div
+      className="min-h-screen pt-16"
+      style={{
+        background:
+          'radial-gradient(ellipse at top, #0a0a18 0%, #03020c 60%, #020108 100%)',
+      }}
+    >
       <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-6xl flex-col px-4 py-6">
         <header className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-text-primary">Tin nhắn</h1>
+          <h1
+            className="text-2xl font-bold tracking-tight text-text-primary"
+            // iOS uses tighter letter-spacing on display text. -0.022em
+            // matches Apple's San Francisco tracking on a 24px headline.
+            style={{ letterSpacing: '-0.022em' }}
+          >
+            Tin nhắn
+          </h1>
           <ConnectionPill
             isConnected={isConnected}
             isConnecting={isConnecting}
@@ -140,46 +190,74 @@ function MessagesPageInner() {
         </header>
 
         <div
-          className="flex min-h-0 flex-1 overflow-hidden rounded-2xl"
-          style={{
-            background: 'rgba(15, 15, 25, 0.6)',
-            border: '1px solid rgba(255,255,255,0.06)',
-            backdropFilter: 'blur(20px)',
-          }}
+          // Outer panel: darkest of the three layers. Holds the whole
+          // messenger surface with a subtle border + backdrop blur.
+          className="flex min-h-0 flex-1 overflow-hidden rounded-2xl border border-white/[0.04] bg-black/30 shadow-2xl backdrop-blur-2xl"
         >
-          {/* Sidebar */}
+          {/* Sidebar: layer 2 — slightly lighter than the page, darker
+              than the chat list. Stays as the "container" for the
+              inbox header + admin support banner. */}
           <div
-            className="hidden w-80 shrink-0 border-r border-white/[0.06] md:flex md:flex-col"
-            style={{ background: 'rgba(0,0,0,0.2)' }}
+            className="hidden w-80 shrink-0 flex-col border-r border-white/[0.04] md:flex"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(15,15,28,0.65) 0%, rgba(8,8,18,0.65) 100%)',
+            }}
           >
-            <div className="border-b border-white/[0.06] px-4 py-3">
-              <h2 className="text-sm font-semibold text-text-primary">Hộp thư</h2>
+            <div className="border-b border-white/[0.04] px-4 py-3">
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-text-muted">
+                Hộp thư
+              </h2>
             </div>
-                    <div className="min-h-0 flex-1">
-                      <ThreadList />
-                    </div>
-                  </div>
+            <div className="min-h-0 flex-1">
+              <ThreadList />
+            </div>
+          </div>
 
-                  {/* Main chat area */}
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    {currentThreadId && currentThread ? (
-                      <>
-                        <ThreadHeader
-                          thread={currentThread}
-                          getPresence={getPresence}
-                        />
+          {/* Main chat area: layer 3 (the brightest of the three). The
+              extra +0.05 brightness on a deep navy tint makes the
+              message list visually pop, mimicking the way iMessage
+              lifts the active conversation off the sidebar. */}
+          <AnimatePresence mode="wait">
+            {currentThreadId && currentThread ? (
+              <motion.div
+                key={`thread-${currentThreadId}`}
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -8 }}
+                transition={{ duration: 0.22, ease: IOS_SPRING as any }}
+                className="flex min-w-0 flex-1 flex-col"
+                style={{
+                  background:
+                    'linear-gradient(180deg, #11121f 0%, #0c0d18 100%)',
+                }}
+              >
+                <ThreadHeader
+                  thread={currentThread}
+                  getPresence={getPresence}
+                />
                 <div className="min-h-0 flex-1">
                   <MessageList />
                 </div>
                 <MessageInput disabled={!isConnected} />
-              </>
+              </motion.div>
             ) : (
-              <div className="flex h-full flex-col items-center justify-center gap-2 p-8 text-center text-text-muted">
-                <p className="text-sm">Chọn một cuộc trò chuyện ở bên trái</p>
-                <p className="text-xs">hoặc bắt đầu thread mới với admin bằng nút phía trên.</p>
-              </div>
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.25, ease: IOS_SPRING as any }}
+                className="flex h-full min-w-0 flex-1 flex-col"
+                style={{
+                  background:
+                    'linear-gradient(180deg, #11121f 0%, #0c0d18 100%)',
+                }}
+              >
+                <EmptyChatState isAdmin={!!isAdmin} onStartAdmin={handleStartAdmin} />
+              </motion.div>
             )}
-          </div>
+          </AnimatePresence>
         </div>
       </div>
     </div>
@@ -200,10 +278,10 @@ function ConnectionPill({
 }) {
   if (isConnected) {
     return (
-      <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] text-emerald-400">
-        <span className="relative flex h-2 w-2">
+      <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-[11px] font-medium text-emerald-300 shadow-[0_0_16px_rgba(16,185,129,0.1)]">
+        <span className="relative flex h-1.5 w-1.5">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
         </span>
         <span>Đang hoạt động</span>
       </div>
@@ -271,15 +349,18 @@ function ThreadHeader({
 
   return (
     <div
-      className="flex shrink-0 items-center gap-3 border-b border-white/[0.06] px-4 py-3"
-      style={{ background: 'rgba(0,0,0,0.15)' }}
+      className="flex shrink-0 items-center gap-3 border-b border-white/[0.04] px-4 py-3.5"
+      style={{
+        background:
+          'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 100%)',
+      }}
     >
       <div className="relative shrink-0">
         {peer?.avatarUrl ? (
-          <img src={peer.avatarUrl} alt={peer.displayName} className="h-9 w-9 rounded-full object-cover" />
+          <img src={peer.avatarUrl} alt={peer.displayName} className="h-10 w-10 rounded-full object-cover" />
         ) : (
           <div
-            className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white"
             style={{ background: 'linear-gradient(135deg, #06B6D4, #6366F1)' }}
           >
             {(peer?.displayName ?? peer?.username ?? '?').charAt(0).toUpperCase()}
@@ -288,8 +369,10 @@ function ThreadHeader({
         {presence && (
           <span
             className={cn(
-              'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full ring-2 ring-[#0a0a14]',
-              presence.online ? 'bg-emerald-400' : 'bg-zinc-500',
+              'absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full ring-2 ring-[#0c0d18]',
+              presence.online
+                ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]'
+                : 'bg-zinc-500',
             )}
             title={statusText}
           />
@@ -297,7 +380,10 @@ function ThreadHeader({
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <p className="truncate text-sm font-semibold text-text-primary">
+          <p
+            className="truncate text-[15px] font-semibold text-text-primary"
+            style={{ letterSpacing: '-0.011em' }}
+          >
             {peer?.displayName ?? peer?.username ?? 'Cuộc trò chuyện'}
             {thread?.type === 'ADMIN' && (
               <span className="ml-2 inline-flex items-center rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[9px] font-bold text-amber-400">ADMIN</span>
@@ -305,13 +391,71 @@ function ThreadHeader({
           </p>
           <NicknamePopover thread={thread!} />
         </div>
-        <p className={cn(
-          'truncate text-[11px]',
-          presence?.online ? 'text-emerald-400' : 'text-text-muted',
-        )}>
+        <p
+          className={cn(
+            'truncate text-[11.5px]',
+            presence?.online ? 'text-emerald-400' : 'text-text-muted/80',
+          )}
+          style={{ letterSpacing: '-0.003em' }}
+        >
           {statusText}
         </p>
       </div>
+    </div>
+  );
+}
+
+// ── Empty chat state (no thread selected) ───────────────────
+// Shown on the right panel when the user hasn't picked a thread yet.
+// The previous version was just two lines of muted text. The new
+// version adds a soft outline icon as a visual anchor and a
+// friendlier "Hỗ trợ từ Admin" call-to-action that doubles as a
+// shortcut (the same button is in the sidebar, but here it's
+// in-context).
+function EmptyChatState({
+  isAdmin,
+  onStartAdmin,
+}: {
+  isAdmin: boolean;
+  onStartAdmin: () => void;
+}) {
+  return (
+    <div className="flex h-full flex-col items-center justify-center px-6 py-10 text-center">
+      <motion.div
+        // Subtle float animation on the icon to draw the eye without
+        // being distracting. iOS uses a similar effect on its empty
+        // mailbox screen.
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: IOS_SPRING as any }}
+        className="mb-6 flex h-24 w-24 items-center justify-center rounded-3xl border border-white/[0.06] bg-gradient-to-br from-white/[0.04] to-white/[0.01] shadow-inner"
+      >
+        <MessageCircle
+          className="h-10 w-10 text-cyan-400/80"
+          strokeWidth={1.5}
+          aria-hidden
+        />
+      </motion.div>
+      <h3
+        className="mb-1.5 text-base font-semibold text-text-primary"
+        style={{ letterSpacing: '-0.011em' }}
+      >
+        Chọn một cuộc trò chuyện
+      </h3>
+      <p
+        className="mb-8 max-w-[280px] text-[13px] leading-relaxed text-text-muted"
+        style={{ letterSpacing: '-0.003em' }}
+      >
+        Chọn một cuộc trò chuyện ở bên trái, hoặc bắt đầu thread mới
+        với admin bằng nút bên dưới.
+      </p>
+      <button
+        onClick={onStartAdmin}
+        className="group flex items-center gap-2.5 rounded-2xl border border-cyan-500/20 bg-cyan-500/[0.08] px-5 py-3 text-sm font-medium text-cyan-200 transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] hover:border-cyan-500/30 hover:bg-cyan-500/[0.12] hover:shadow-[0_8px_24px_rgba(6,182,212,0.2)] active:scale-[0.98]"
+      >
+        <Headphones className="h-4 w-4" strokeWidth={2} />
+        <span>{isAdmin ? 'Mở thread hỗ trợ của bạn' : 'Chat với Admin'}</span>
+      </button>
     </div>
   );
 }

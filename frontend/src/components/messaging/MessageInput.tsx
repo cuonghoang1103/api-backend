@@ -185,9 +185,15 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
   const hasContent = text.trim().length > 0 || hasReadyAttachments;
 
   return (
+    // Slightly elevated bar so it feels like an "input dock" rather
+    // than a divider. The linear-gradient gives a sense of light
+    // coming from the top, matching the ThreadHeader above.
     <div
-      className="shrink-0 border-t border-white/[0.06] p-2"
-      style={{ background: 'rgba(0,0,0,0.2)' }}
+      className="shrink-0 border-t border-white/[0.04] p-3"
+      style={{
+        background:
+          'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.25) 100%)',
+      }}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -256,15 +262,28 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
         )}
       </AnimatePresence>
 
-      <div className="flex items-end gap-1.5">
+      {/* ── Single unified input "pill" ──
+          Paperclip on the left, textarea in the middle, send button
+          embedded on the right edge of the same rounded container.
+          The send button is INSIDE the input shape, not a sibling —
+          this is the iOS Messages pattern: a single shape that
+          contains the field, with a small action area glued to the
+          trailing edge. */}
+      <div
+        className="flex items-end gap-1 rounded-2xl border border-white/[0.06] bg-white/[0.03] pl-1 pr-1 py-1 transition-colors focus-within:border-cyan-500/30 focus-within:bg-white/[0.05]"
+      >
         <button
           onClick={handlePickFiles}
           disabled={disabled}
+          // The paperclip sits inside the input pill, not as a
+          // floating button. Slightly larger + 1.75 stroke gives the
+          // icon more "presence" so it reads as a real affordance
+          // rather than an afterthought.
           className="shrink-0 rounded-xl p-2 text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
           aria-label="Đính kèm file"
           title="Đính kèm file (kéo-thả hoặc dán ảnh)"
         >
-          <Paperclip className="h-4 w-4" />
+          <Paperclip className="h-[18px] w-[18px]" strokeWidth={1.75} />
         </button>
         <input
           ref={fileInputRef}
@@ -283,17 +302,23 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
           onPaste={handlePaste}
           disabled={disabled}
           placeholder={disabled ? 'Đang kết nối...' : 'Nhập tin nhắn...'}
-          className="min-h-[36px] max-h-[120px] flex-1 resize-none rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-cyan-500/40 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-          style={{ scrollbarWidth: 'thin' }}
+          className="min-h-[36px] max-h-[120px] flex-1 resize-none border-0 bg-transparent px-1.5 py-2 text-sm text-text-primary placeholder:text-text-muted/70 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          style={{ letterSpacing: '-0.003em', scrollbarWidth: 'thin' }}
         />
         <button
           onClick={handleSend}
           disabled={!hasContent || sending || disabled}
-          className="shrink-0 rounded-xl p-2 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+          // Send button lives inside the input pill, on the right
+          // edge. The gradient matches the own-message bubble so the
+          // user has a consistent visual: "I write here → the message
+          // looks like this." Disabled state dims to 40% (matches the
+          // previous version) but we add a small scale on press so
+          // it has a tactile feel.
+          className="shrink-0 rounded-xl p-2 text-white transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105 hover:opacity-95 active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100"
           style={{ background: 'linear-gradient(135deg, #06B6D4, #6366F1)' }}
           aria-label="Gửi"
         >
-          {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+          {sending ? <Loader2 className="h-[18px] w-[18px] animate-spin" /> : <Send className="h-[18px] w-[18px]" strokeWidth={2} />}
         </button>
       </div>
     </div>

@@ -1,13 +1,16 @@
 'use client';
 
 import { useEffect } from 'react';
-import { ShieldCheck, MessageCirclePlus } from 'lucide-react';
+import { Headphones, MessageCirclePlus } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
+
+// iOS-like spring transition — feels premium and "lightweight"
+const HOVER_SPRING = 'transition-[background-color,transform,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]';
 
 export default function ThreadList() {
   const store = useMessagingStore();
@@ -37,10 +40,14 @@ export default function ThreadList() {
       <div className="shrink-0 space-y-1.5 border-b border-white/[0.04] p-3">
         <button
           onClick={handleStartAdmin}
-          className="flex w-full items-center gap-3 rounded-xl border border-cyan-500/20 bg-cyan-500/[0.08] px-3 py-2.5 text-left text-sm text-text-primary transition-colors hover:bg-cyan-500/[0.15]"
+          className={cn(
+            'group flex w-full items-center gap-3 rounded-xl border border-cyan-500/20 bg-cyan-500/[0.08] px-3 py-2.5 text-left text-sm text-text-primary',
+            HOVER_SPRING,
+            'hover:scale-[1.01] hover:border-cyan-500/30 hover:bg-cyan-500/[0.12] hover:shadow-[0_4px_20px_rgba(6,182,212,0.15)] active:scale-[0.99]',
+          )}
         >
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl" style={{ background: 'linear-gradient(135deg, #06B6D4, #6366F1)' }}>
-            <ShieldCheck className="h-4 w-4 text-white" />
+            <Headphones className="h-4 w-4 text-white" />
           </div>
           <div className="min-w-0 flex-1">
             <p className="font-medium">Hỗ trợ từ Admin</p>
@@ -68,7 +75,7 @@ export default function ThreadList() {
             <p className="text-xs">Bắt đầu bằng cách chat với admin ở trên.</p>
           </div>
         ) : (
-          <ul className="space-y-1">
+          <ul className="space-y-0.5">
             {store.threads.map((t) => {
               const presence = t.peer ? getPresence(t.peer.id) : null;
               return (
@@ -76,9 +83,14 @@ export default function ThreadList() {
                   <button
                     onClick={() => store.openThread(t.id)}
                     className={cn(
-                      'flex w-full items-center gap-3 rounded-xl p-2.5 text-left transition-colors',
-                      'hover:bg-white/[0.04]',
-                      store.currentThreadId === t.id && 'bg-white/[0.06]',
+                      'flex w-full items-center gap-3 rounded-xl p-2.5 text-left',
+                      HOVER_SPRING,
+                      'hover:scale-[1.005] hover:bg-white/[0.04] active:scale-[0.995]',
+                      store.currentThreadId === t.id &&
+                        // Active state uses a soft cyan tint with a left
+                        // accent bar so the selected row is unmistakable
+                        // without screaming for attention.
+                        'bg-cyan-500/[0.08] shadow-[inset_2px_0_0_0_rgba(6,182,212,0.7)]',
                     )}
                   >
                     <Avatar
@@ -88,8 +100,9 @@ export default function ThreadList() {
                       online={presence?.online ?? false}
                     />
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="truncate text-sm font-medium text-text-primary">
+                      <div className="flex items-baseline justify-between gap-2">
+                        {/* Username — primary, full weight, white */}
+                        <p className="truncate text-sm font-semibold text-text-primary">
                           {t.peer ? (
                             t.peer.alias ? (
                               <>
@@ -103,14 +116,19 @@ export default function ThreadList() {
                             'Cuộc trò chuyện'
                           )}
                         </p>
+                        {/* Timestamp — moved closer to username, smaller,
+                            muted. `tabular-nums` keeps the digits from
+                            jumping around as minutes tick over. */}
                         {t.lastMessageAt && (
-                          <span className="shrink-0 text-[10px] text-text-muted">
+                          <span className="shrink-0 text-[10px] font-normal tabular-nums text-text-muted/80">
                             {formatDistanceToNow(new Date(t.lastMessageAt), { addSuffix: false, locale: vi })}
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <p className="truncate text-[11px] text-text-muted">
+                      <div className="mt-0.5 flex items-center gap-1.5">
+                        {/* Preview — clearly lighter than the username
+                            above to establish text hierarchy. */}
+                        <p className="truncate text-[11.5px] font-normal text-text-muted/70">
                           {t.lastMessage?.hasAttachment ? (
                             <>
                               <span className="text-cyan-400">📎</span> {t.lastMessage.attachmentName ?? 'Đính kèm'}
@@ -152,14 +170,20 @@ function Avatar({ src, name, badge, online }: { src?: string | null; name: strin
         </div>
       )}
       {badge === 'admin' && <AdminBadge />}
-      {/* Online dot — always shown when peer is known. If lastSeen
-          is recent we treat as online; otherwise offline. The
-          presence store updates in real time via socket events. */}
+      {/* Online dot — properly overlapping the avatar's bottom-right
+          corner using a 2px ring that matches the row background. The
+          dot is `h-3 w-3` (slightly larger than the previous 2.5) so
+          the status is actually readable at a glance. */}
       {badge !== 'admin' && (
         <span
           className={cn(
-            'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full ring-2 ring-[#0a0a14]',
-            online ? 'bg-emerald-400' : 'bg-zinc-500',
+            'absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full ring-2',
+            // Slightly larger ring uses a translucent color so the dot
+            // "punches out" of any background the row happens to be on
+            // (hover, active, default).
+            online
+              ? 'bg-emerald-400 ring-[#0a0a14] shadow-[0_0_8px_rgba(16,185,129,0.4)]'
+              : 'bg-zinc-500 ring-[#0a0a14]',
           )}
           title={online ? 'Đang hoạt động' : 'Ngoại tuyến'}
         />
@@ -167,8 +191,10 @@ function Avatar({ src, name, badge, online }: { src?: string | null; name: strin
       {badge === 'admin' && (
         <span
           className={cn(
-            'absolute -bottom-0.5 right-1.5 h-2.5 w-2.5 rounded-full ring-2 ring-[#0a0a14]',
-            online ? 'bg-emerald-400' : 'bg-zinc-500',
+            'absolute -bottom-0.5 right-1.5 h-3 w-3 rounded-full ring-2 ring-[#0a0a14]',
+            online
+              ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]'
+              : 'bg-zinc-500',
           )}
           title={online ? 'Đang hoạt động' : 'Ngoại tuyến'}
         />

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Trash2, FileText, Download, X, Check, CheckCheck, Undo2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import type { MessagingMessage } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
@@ -12,6 +13,15 @@ import ReactionBar from './ReactionBar';
 import toast from 'react-hot-toast';
 
 const RECALL_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
+
+// iOS-style spring for bubble appear animation. The (0.16, 1, 0.3, 1)
+// curve overshoots slightly then settles, matching iMessage's new
+// bubble drop-in.
+const BUBBLE_ENTER = {
+  initial: { opacity: 0, y: 8, scale: 0.92 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+};
 
 export default function MessageBubble({
   message,
@@ -87,7 +97,10 @@ export default function MessageBubble({
   };
 
   return (
-    <div className={cn('my-1 flex gap-2', isOwn ? 'justify-end' : 'justify-start')}>
+    // `items-end` keeps short bubbles anchored to the bottom of the
+    // row, which matters when a long message is followed by a short
+    // one (the timestamp/read-receipts should still align).
+    <div className={cn('my-1 flex items-end gap-2', isOwn ? 'justify-end' : 'justify-start')}>
       {/* Peer avatar (left side) */}
       {!isOwn && (
         <div className="shrink-0 self-end pb-1">
@@ -107,31 +120,51 @@ export default function MessageBubble({
         </div>
       )}
 
-      <div
-        className={cn('group relative max-w-[80%] rounded-2xl px-3 py-2 text-sm', {
-          'rounded-br-sm text-white': isOwn,
-          'rounded-bl-sm text-text-primary': !isOwn,
-        })}
-        style={
-          isOwn
-            ? { background: 'linear-gradient(135deg, #06B6D4, #6366F1)' }
-            : {
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.06)',
-              }
-        }
-      >
+      <div className="flex max-w-[65%] min-w-0 flex-col">
+        <motion.div
+          {...BUBBLE_ENTER}
+          // iOS-style bubble shape:
+          //   - width fits the content (short messages don't stretch
+          //     to the max-width unnecessarily)
+          //   - rounded-2xl (16px) on the outer corners
+          //   - the "tail" corner is the sender side of the LAST
+          //     message in a run; intermediate messages get a fully
+          //     rounded shape on the sender side too so the row of
+          //     bubbles reads as a group
+          // For own messages: tail on bottom-right (sender)
+          // For peer messages: tail on bottom-left (sender)
+          className={cn(
+            'group relative w-fit max-w-full text-sm leading-relaxed',
+            isOwn
+              ? 'ml-auto rounded-2xl rounded-br-md text-white'
+              : 'mr-auto rounded-2xl rounded-bl-md text-text-primary',
+          )}
+          style={
+            isOwn
+              ? {
+                  background:
+                    'linear-gradient(135deg, #06B6D4 0%, #6366F1 100%)',
+                  boxShadow:
+                    '0 1px 0 rgba(255,255,255,0.06) inset, 0 4px 14px rgba(6,182,212,0.18)',
+                }
+              : {
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  boxShadow: '0 1px 0 rgba(255,255,255,0.02) inset',
+                }
+          }
+        >
         {/* Sender name for peer (grouped look) */}
         {!isOwn && showSender && (
-          <p className="mb-0.5 text-[11px] font-semibold text-cyan-400">
+          <p className="mb-0.5 px-3.5 pt-1.5 text-[11px] font-semibold text-cyan-400">
             {senderName}
           </p>
         )}
 
-        {message.content && <p className="whitespace-pre-wrap break-words">{message.content}</p>}
+        {message.content && <p className="whitespace-pre-wrap break-words px-3.5 py-1.5">{message.content}</p>}
 
         {message.attachments.length > 0 && (
-          <div className={cn('mt-1.5 space-y-1.5', message.content ? 'border-t border-white/10 pt-1.5' : '')}>
+          <div className={cn('mt-1 space-y-1.5 px-3.5 pb-1.5', message.content ? 'border-t border-white/10 pt-1.5' : '')}>
             {message.attachments.map((a) =>
               a.mimeType.startsWith('image/') ? (
                 <a key={a.id} href={a.url} target="_blank" rel="noopener noreferrer" className="block">
@@ -166,7 +199,7 @@ export default function MessageBubble({
         )}
 
         <div
-          className={cn('mt-0.5 flex items-center gap-1 text-[10px]', {
+          className={cn('mt-0.5 flex items-center gap-1 px-3.5 pb-1.5 text-[10px]', {
             'text-white/70': isOwn,
             'text-text-muted': !isOwn,
           })}
@@ -229,17 +262,20 @@ export default function MessageBubble({
             </div>
           )}
         </div>
-      </div>
+        </motion.div>
 
       {/* Reactions row + picker — outside the bubble so the
-          pill border doesn't get clipped by rounded corners */}
-      <div className={cn('flex max-w-[80%] flex-col', isOwn ? 'items-end' : 'items-start')}>
+          pill border doesn't get clipped by rounded corners. Sits
+          at the sender's edge so the heart/laugh lines up with the
+          bubble's tail. */}
+      <div className={cn('mt-0.5', isOwn ? 'self-end' : 'self-start')}>
         <ReactionBar
           reactions={message.reactions ?? []}
           myUserId={auth.user?.id}
           onToggle={handleToggleReaction}
           isOwn={isOwn}
         />
+      </div>
       </div>
     </div>
   );

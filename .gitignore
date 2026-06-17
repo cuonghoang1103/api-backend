@@ -74,3 +74,22 @@ frontend/tsconfig.tsbuildinfo
 .env.bak-pre-rotation
 *.env.bak
 *.env.tmp
+
+# ─── Google service-account keys ───────────────────────────
+# These JSON files contain a private key that grants
+# programmatic access to Google APIs as the project's
+# service account. If pushed to a public repo, anyone could
+# impersonate the service account and (in this project's
+# case) hit Google's Indexing API to index whatever URLs
+# they wanted under the cuonghoang0311 quota.
+#
+# We block BOTH the explicit filenames AND the whole
+# google-key pattern (catches google-key.json, google-
+# key.prod.json, google-key.dev.json, etc.).
+#
+# The key file is copied into the production container
+# out-of-band by the deploy script — see scripts/deploy-vps.sh.
+frontend/src/config/google-key.json
+frontend/src/config/google-key.*.json
+**/google-key*.json
+!frontend/src/config/.gitkeep

@@ -109,6 +109,24 @@ fi
 info "Regenerating Prisma client..."
 $DC run --rm backend sh -c "npx prisma generate" 2>&1 | tail -3 || warn "prisma generate failed (continuing — build may still succeed if types were already generated)"
 
+# ─── Copy secrets that are .gitignore'd ────────────────────
+# Files like frontend/src/config/google-key.json are excluded
+# from git (so a public repo can't leak service-account keys)
+# but the running container still needs them. The deploy
+# script runs on the VPS, not on the dev machine, so it
+# can't read the local file directly. We expect the user
+# to have run scripts/copy-secrets.sh before invoking this
+# script; if the file is missing we just warn and let the
+# build continue (the route will 503 until the file lands,
+# but everything else still works).
+if [ -f "$REPO_DIR/frontend/src/config/google-key.json" ]; then
+    info "google-key.json present — Google Indexing API will work"
+else
+    warn "frontend/src/config/google-key.json missing on VPS"
+    warn "  Run \`./scripts/copy-secrets.sh\` from your local machine"
+    warn "  to upload it. /api/index-url will 503 until then."
+fi
+
 info "Building and deploying containers (zero-downtime)..."
 $DC up -d --build --remove-orphans
 ok "Containers built and started"
@@ -120,7 +138,7 @@ for i in $(seq 1 $MAX_RETRIES); do
     if docker exec cuonghoangdev_backend sh -c "curl -sf ${HEALTH_URL} >/dev/null 2>&1"; then
         ok "Backend is healthy (after $((i * RETRIES_INTERVAL))s)"
         backend_ok=true
-        break
+      break
     fi
     echo -ne "\r    Waiting... $((i * RETRIES_INTERVAL))s / $((MAX_RETRIES * RETRIES_INTERVAL))s   "
     sleep $RETRIES_INTERVAL
@@ -140,14 +158,14 @@ for i in $(seq 1 6); do
         ok "Frontend is healthy"
         frontend_ok=true
         break
-    fi
-    sleep 5
+  fi
+  sleep 5
 done
 
 # Restart nginx to ensure it picks up new containers
 info "Restarting nginx..."
 $DC restart nginx
-sleep 5
+  sleep 5
 
 # ─── Step 4: Database schema sync ─────────────────────────
 info "Syncing database schema..."

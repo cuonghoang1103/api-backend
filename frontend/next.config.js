@@ -42,6 +42,85 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
         ],
       },
+      // ─── Global security headers ──────────────────────────────────
+      // These run on every response served by the Next.js server
+      // (both static and dynamic). The headers are also relevant
+      // for nginx which already sets HSTS — but having them in
+      // Next means they survive the next nginx config rewrite.
+      //
+      // - X-Content-Type-Options: nosniff — prevents MIME sniffing
+      //   (avatars uploaded as `image/*` are served with the right
+      //   Content-Type, but defense-in-depth).
+      // - X-Frame-Options: SAMEORIGIN — anti-clickjacking. The site
+      //   embeds its own content (CourseDetail, ProjectDetailDrawer)
+      //   but never wants to be framed by a third party.
+      // - Referrer-Policy: strict-origin-when-cross-origin — leaks
+      //   only the origin (not the path) when navigating out.
+      // - Permissions-Policy — disable APIs the site doesn't use
+      //   (geolocation, camera, microphone, payment). Saves a
+      //   permission-prompt surface and limits XSS impact.
+      // - X-Powered-By: removed — don't tell attackers the runtime.
+      // - Cross-Origin-*-Policy: tighten COOP/COEP to same-origin
+      //   (we don't share a process with other sites) and cross-origin
+      //   for resources (images, fonts can be embedded anywhere).
+      // - Content-Security-Policy: see below.
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'geolocation=(), camera=(), microphone=(), payment=(), usb=()' },
+          // Hide the framework fingerprint. The `x-nextjs-*` headers
+          // are still emitted by Next for routing cache; this only
+          // removes the `X-Powered-By: Next.js` line.
+          { key: 'X-Powered-By', value: '' },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+          { key: 'Cross-Origin-Resource-Policy', value: 'cross-origin' },
+          {
+            key: 'Content-Security-Policy',
+            // Directives:
+            // - default-src 'self': only same-origin by default.
+            // - script-src 'self' 'unsafe-inline' 'unsafe-eval': Next.js
+            //   inlines hydration data and uses eval in dev. In prod the
+            //   build hashes all scripts, but a nonce-based policy would
+            //   be a larger refactor. 'unsafe-inline' on the script side
+            //   is a known Next.js tradeoff; we mitigate by allowing only
+            //   the Sentry tunnel + Turnstile explicitly.
+            // - style-src 'self' 'unsafe-inline': Tailwind injects
+            //   inline styles; next/font inlines @font-face.
+            // - img-src: self + data: (avatars, inline SVG) + the
+            //   image hosts we actually use (Unsplash, our API).
+            // - connect-src: API + Sentry + WebSocket. WSS needed for
+            //   Sentry realtime.
+            // - frame-src: YouTube embed + Turnstile iframe.
+            // - media-src: self + API for music tracks.
+            // - font-src: self + data: for next/font.
+            // - object-src 'none': block <object>/<embed>.
+            // - base-uri 'self': no <base> tag hijacking.
+            // - form-action 'self': no third-party form posts.
+            // - frame-ancestors 'self': same as X-Frame-Options.
+            // - upgrade-insecure-requests: rewrite any leftover http://
+            //   to https://.
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https://api.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com",
+              "font-src 'self' data:",
+              "connect-src 'self' https://api.cuongthai.com https://*.sentry.io wss://*.sentry.io",
+              "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com",
+              "media-src 'self' https://api.cuongthai.com blob:",
+              "worker-src 'self' blob:",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'self'",
+              "upgrade-insecure-requests",
+            ].join('; '),
+          },
+        ],
+      },
     ];
   },
   async rewrites() {

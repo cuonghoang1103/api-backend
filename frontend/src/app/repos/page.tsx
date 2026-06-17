@@ -18,8 +18,20 @@ import { headers } from 'next/headers';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'GitHub Repo Hub | CuongHoangDev',
-  description: 'Kho repo GitHub duoc binh chon, kem nhan xet va bai hoc rut ra cho moi du an.',
+  title: 'GitHub Repo Hub',
+  description:
+    'A curated hub of GitHub repositories with reviews, lessons learned, ' +
+    'and engineering write-ups for every project.',
+  openGraph: {
+    title: 'GitHub Repo Hub | CuongThai',
+    description:
+      'A curated hub of GitHub repositories with reviews and engineering write-ups.',
+    url: 'https://cuongthai.com/repos',
+    type: 'website',
+  },
+  alternates: {
+    canonical: 'https://cuongthai.com/repos',
+  },
 };
 
 // Tell crawlers (and Next.js) this page is user-facing and

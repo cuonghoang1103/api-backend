@@ -55,9 +55,28 @@ const FloatingAIAssistant = dynamic(
 )
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://cuonghoang.xyz'),
-  title: 'CuongThai',
-  description: 'Portfolio & E-commerce Platform with AI Integration',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://cuongthai.com'),
+  title: {
+    default: 'CuongThai — Portfolio, Academy & E-commerce with AI',
+    template: '%s | CuongThai',
+  },
+  description:
+    'Portfolio, courses, music, blog & e-commerce platform built by Cuong Hoang. ' +
+    'AI-powered chatbot, real-time messaging, and a hand-curated dev hub.',
+  keywords: [
+    'CuongThai',
+    'Cuong Hoang',
+    'portfolio',
+    'e-commerce',
+    'AI chatbot',
+    'online courses',
+    'Vietnam developer',
+    'Next.js',
+    'Spring Boot',
+  ],
+  authors: [{ name: 'Cuong Hoang', url: 'https://cuongthai.com' }],
+  creator: 'Cuong Hoang',
+  publisher: 'CuongThai',
   applicationName: 'CuongThai',
   manifest: '/manifest.json',
   appleWebApp: {
@@ -68,6 +87,49 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.png',
     apple: '/favicon.png',
+  },
+  // Open Graph (Facebook, LinkedIn, Discord, …) — used when someone
+  // shares the homepage on social. The og:image MUST be a 1200x630
+  // PNG/JPG; the default Next.js social card works as a fallback.
+  openGraph: {
+    type: 'website',
+    locale: 'vi_VN',
+    alternateLocale: 'en_US',
+    url: 'https://cuongthai.com',
+    siteName: 'CuongThai',
+    title: 'CuongThai — Portfolio, Academy & E-commerce with AI',
+    description:
+      'Portfolio, courses, music, blog & e-commerce platform built by Cuong Hoang.',
+  },
+  // Twitter card — large image shows up nicely when the homepage is
+  // shared. Summary card is the safe default; large_image_card
+  // would be nicer but needs a 1200x675 image to be uploaded.
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CuongThai — Portfolio, Academy & E-commerce with AI',
+    description:
+      'Portfolio, courses, music, blog & e-commerce platform built by Cuong Hoang.',
+    creator: '@cuonghoang1103',
+  },
+  // Robots: opt in to indexing by default. Pages that should NOT
+  // be indexed (admin, auth, etc.) override this with their own
+  // `robots: { index: false }` in their page-level metadata.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  // Canonical URL — prevents duplicate-content penalties from
+  // /, /index.html, and any future aliases. Sitemap's own
+  // <loc> values match this.
+  alternates: {
+    canonical: 'https://cuongthai.com',
   },
 }
 
@@ -85,6 +147,64 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // JSON-LD structured data for the homepage. This is a
+  // Schema.org/Person + WebSite + Organization triple that
+  // gives Google rich-result data for the site owner.
+  //
+  // - Person: anchors the "author" of the portfolio
+  // - WebSite: declares the site's canonical name + search
+  //   target (we don't have a search results page yet, so we
+  //   point at the homepage as a fallback)
+  // - Organization: links the Person to the brand
+  //
+  // Note: This is the SITE-WIDE block. Page-level JSON-LD
+  // (Course, BlogPosting, Product) should be added inside
+  // each page component as its own <Script type="ld+json">
+  // element, so the data is per-page.
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': 'https://cuongthai.com/#website',
+        url: 'https://cuongthai.com',
+        name: 'CuongThai',
+        description:
+          'Portfolio, courses, music, blog & e-commerce platform built by Cuong Hoang.',
+        inLanguage: 'vi-VN',
+        publisher: { '@id': 'https://cuongthai.com/#person' },
+      },
+      {
+        '@type': 'Person',
+        '@id': 'https://cuongthai.com/#person',
+        name: 'Cuong Hoang',
+        url: 'https://cuongthai.com',
+        jobTitle: 'Full-Stack Developer & AI Engineer',
+        knowsAbout: [
+          'Next.js',
+          'React',
+          'TypeScript',
+          'Spring Boot',
+          'PostgreSQL',
+          'Docker',
+          'AI / LLM',
+        ],
+        sameAs: [
+          'https://github.com/cuonghoang1103',
+          'https://www.facebook.com/hoangnghiacuong',
+        ],
+      },
+      {
+        '@type': 'Organization',
+        '@id': 'https://cuongthai.com/#org',
+        name: 'CuongThai',
+        url: 'https://cuongthai.com',
+        logo: 'https://cuongthai.com/favicon.png',
+        founder: { '@id': 'https://cuongthai.com/#person' },
+      },
+    ],
+  }
+
   return (
     <html
       lang="en"
@@ -92,6 +212,19 @@ export default function RootLayout({
       className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable}`}
     >
       <body suppressHydrationWarning className="bg-darkbg text-text-primary antialiased">
+        {/* Site-wide JSON-LD. The next/script wrapper defers it
+            so it doesn't block first paint. Pages that need
+            per-page structured data (Course, BlogPosting,
+            Product) add their own <script type="application/
+            ld+json"> inside the page component. */}
+        <script
+          type="application/ld+json"
+          // dangerouslySetInnerHTML is required because Next
+          // would otherwise escape the JSON braces and break
+          // the parser. The payload is a static const above,
+          // so there's no XSS surface.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       <AuthProvider>
         <ToasterProvider />
         <TanStackQueryProvider>

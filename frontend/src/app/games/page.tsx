@@ -1,10 +1,14 @@
+import type { Metadata } from 'next'
 import GamesClient from './GamesClient';
 import GamesBackground from '@/components/games/GamesBackground';
 import { GAMES_DATA } from '@/types/games';
 
-export const metadata = {
-  title: 'Games — Playground | CuongHoangDev',
+export const metadata: Metadata = {
+  title: 'Games — Playground',
   description: 'Play free games built with HTML5 Canvas, React & TypeScript.',
+  alternates: {
+    canonical: 'https://cuongthai.com/games',
+  },
 };
 
 export default async function GamesPage() {

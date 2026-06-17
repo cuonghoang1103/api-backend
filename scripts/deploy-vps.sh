@@ -18,7 +18,7 @@ set -euo pipefail
 
 # ─── Config ────────────────────────────────────────────────
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HEALTH_URL="http://localhost:3001/health"
+HEALTH_URL="http://localhost:3001/api/v1/system/health"
 MAX_RETRIES=18
 RETRIES_INTERVAL=10
 COMPOSE_PROJECT="repo"

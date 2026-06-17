@@ -27,15 +27,27 @@ jobs:
           echo "=== nginx logs (last 30) ==="
           ssh vps "docker logs cuonghoangdev_nginx --tail 30 2>&1"
 
-      - name: Force recreate nginx
+      - name: Force recreate all in order
         run: |
-          echo "=== Stop & remove nginx ==="
-          ssh vps "docker stop cuonghoangdev_nginx 2>&1 || true"
-          ssh vps "docker rm -f cuonghoangdev_nginx 2>&1 || true"
-          sleep 3
-          echo "=== Recreate nginx via docker compose ==="
-          ssh vps "cd /opt/cuonghoangdev && docker compose -p cuonghoangdev up -d nginx 2>&1"
+          echo "=== Stop everything ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose -p cuonghoangdev stop 2>&1"
+          ssh vps "cd /opt/cuonghoangdev && docker compose -p cuonghoangdev rm -f 2>&1"
+          sleep 5
+          echo "=== Start postgres + redis ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose -p cuonghoangdev up -d postgres redis 2>&1"
+          echo "=== Wait 15s ==="
+          sleep 15
+          echo "=== Start backend ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose -p cuonghoangdev up -d backend 2>&1"
           sleep 10
+          echo "=== Start frontend ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose -p cuonghoangdev up -d frontend 2>&1"
+          sleep 10
+          echo "=== Start nginx LAST ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose -p cuonghoangdev up -d nginx 2>&1"
+          sleep 15
+          echo "=== Status ==="
+          ssh vps "docker ps --filter name=cuonghoangdev --format 'table {{.Names}}\t{{.Status}}'"
 
       - name: Test
         run: |

@@ -181,3 +181,18 @@ echo ""
 ok "Deploy complete!"
 info "Frontend: https://cuongthai.com"
 info "Backend:  https://cuongthai.com/api/v1"
+
+# ─── Ping search engines ──────────────────────────────────
+# After a successful deploy, hint Google/Bing that the sitemap
+# has been refreshed. The script is best-effort — the legacy
+# endpoints are deprecated as of 2024, so it's an INFO line in
+# the deploy log most of the time, but it doesn't hurt to try
+# (and if either engine brings the legacy endpoint back, we
+# pick it up for free).
+if [ -f "$REPO_DIR/scripts/ping-search-engines.sh" ]; then
+    info "Pinging search engines..."
+    "$REPO_DIR/scripts/ping-search-engines.sh" || \
+        warn "Search engine ping failed (non-critical)"
+else
+    info "ping-search-engines.sh not found, skipping"
+fi

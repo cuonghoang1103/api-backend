@@ -68,6 +68,12 @@ type IndexSuccess = {
 type IndexError = {
   success: false
   error: string
+  // Optional debug fields — only set when the request reached
+  // Google and Google returned a structured error. Helpful for
+  // diagnosing ownership/permission issues from the response
+  // body without having to dig into server logs.
+  googleStatus?: number
+  googleCode?: string | null
 }
 
 type IndexResponse = IndexSuccess | IndexError
@@ -241,14 +247,29 @@ export async function POST(req: NextRequest) {
     // service account added to the Search Console owners
     // list; NOT_FOUND means the URL returns 404; QUOTA_
     // EXCEEDED means wait 24h).
+    const googleError = err?.response?.data?.error
     const message =
-      err?.response?.data?.error?.message ??
-      err?.message ??
-      'Google Indexing API request failed'
+      googleError?.message ?? err?.message ?? 'Google Indexing API request failed'
     const status = err?.response?.status ?? 502
-    console.error('[index-url] Google API error', { url, status, message, err })
+    // Include the Google error code in the response so the
+    // caller (and our own debugging) can tell PERMISSION_DENIED
+    // apart from a network failure or a quota error. We log the
+    // full error on the server so we don't leak internal stack
+    // details to clients.
+    console.error('[index-url] Google API error', {
+      url,
+      httpStatus: status,
+      googleCode: googleError?.status,
+      googleMessage: message,
+      errors: googleError?.errors,
+    })
     return NextResponse.json(
-      { success: false, error: message } satisfies IndexResponse,
+      {
+        success: false,
+        error: message,
+        googleStatus: status,
+        googleCode: googleError?.status ?? null,
+      } satisfies IndexResponse,
       { status: status >= 400 && status < 600 ? status : 502 },
     )
   }

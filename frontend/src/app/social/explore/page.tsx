@@ -8,6 +8,7 @@ import { api } from '@/lib/api';
 import SocialBackground from '@/components/social/SocialBackground';
 import SocialSidebar from '@/components/social/SocialSidebar';
 import SocialRightWidget from '@/components/social/SocialRightWidget';
+import { SafeImage } from '@/components/ui/SafeImage';
 
 interface TrendingTopic {
   id: number;
@@ -239,7 +240,12 @@ function PeopleList({ items }: { items: SuggestedUser[] }) {
             className="flex items-center gap-3 border-b border-white/[0.04] px-4 py-3 transition-colors hover:bg-white/[0.04] last:border-0"
           >
             {u.avatarUrl ? (
-              <img src={u.avatarUrl} alt="" className="h-10 w-10 rounded-full object-cover" />
+              <SafeImage
+                src={u.avatarUrl}
+                alt={u.displayName || u.username || 'User'}
+                label={u.displayName || u.username || 'User'}
+                className="h-10 w-10 rounded-full object-cover"
+              />
             ) : (
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet text-sm font-bold text-white">
                 {(u.displayName || u.fullName || u.username).charAt(0).toUpperCase()}

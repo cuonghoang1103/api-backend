@@ -13,6 +13,7 @@ import { useAuthStore } from '@/store/authStore';
 import type { Course, CourseReview } from '@/types';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import { SafeImage } from '@/components/ui/SafeImage';
 import Curriculum from '@/components/academy/Curriculum';
 import Reviews from '@/components/academy/Reviews';
 import CourseCard from '@/components/academy/CourseCard';
@@ -283,7 +284,12 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                     )
                   ) : course.thumbnailUrl ? (
                     <>
-                      <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover" />
+                      <SafeImage
+                        src={course.thumbnailUrl}
+                        alt={course.title}
+                        label={course.title}
+                        className="w-full h-full object-cover"
+                      />
                       <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                           <Play className="w-8 h-8 text-white fill-white" />
@@ -377,7 +383,12 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
               >
                 {course.thumbnailUrl && (
                   <div className="aspect-video relative overflow-hidden">
-                    <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover" />
+                    <SafeImage
+                      src={course.thumbnailUrl}
+                      alt={course.title}
+                      label={course.title}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 )}
 

@@ -6,6 +6,7 @@ import { Search, ExternalLink, Github, Calendar, Users, Code2, Eye, Star, GitFor
 import { projectsApi } from '@/lib/api';
 import type { Project } from '@/types';
 import ProjectDetailDrawer from '@/components/projects/ProjectDetailDrawer';
+import { SafeImage } from '@/components/ui/SafeImage';
 
 const STATUS_LABELS: Record<string, string> = {
   COMPLETED: 'Completed',
@@ -82,15 +83,13 @@ function CardCarousel({
         <>
           <AnimatePresence mode="wait">
             {allImages[current] && (
-              <motion.img
+              <SafeImage
                 key={current}
                 src={allImages[current]}
                 alt={project.title}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                label={project.title}
                 className="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
               />
             )}
           </AnimatePresence>

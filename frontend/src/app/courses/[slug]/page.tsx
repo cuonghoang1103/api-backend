@@ -12,6 +12,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import { sanitizeHtml } from '@/lib/utils';
+import { SafeImage } from '@/components/ui/SafeImage';
 import type { Course, CourseReview } from '@/types';
 
 function formatDuration(seconds: number): string {
@@ -278,7 +279,12 @@ export default function CourseDetailPage() {
               <div className="bg-darkcard border border-darkborder/50 rounded-2xl overflow-hidden sticky top-6">
                 {course.thumbnailUrl && (
                   <div className="aspect-video relative">
-                    <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover" />
+                    <SafeImage
+                      src={course.thumbnailUrl}
+                      alt={course.title}
+                      label={course.title}
+                      className="w-full h-full object-cover"
+                    />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-16 h-16 rounded-full bg-black/60 flex items-center justify-center cursor-pointer hover:bg-black/70 transition-colors">
                         <Play className="w-7 h-7 text-white fill-white ml-1" />

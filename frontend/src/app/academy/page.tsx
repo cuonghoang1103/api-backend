@@ -7,6 +7,7 @@ import type { Course, Semester } from '@/types';
 import { BookOpen, ChevronDown, ChevronRight, GraduationCap, Layers3, Loader2, PlayCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import AcademyBackground from '@/components/academy/AcademyBackground';
+import { SafeImage } from '@/components/ui/SafeImage';
 
 export default function AcademyPage() {
   const [semesters, setSemesters] = useState<Semester[]>([]);
@@ -165,7 +166,12 @@ export default function AcademyPage() {
                         >
                           <div className="aspect-video bg-gradient-to-br from-neon-indigo/20 via-neon-violet/10 to-transparent flex items-center justify-center overflow-hidden relative">
                             {course.thumbnailUrl ? (
-                              <img src={course.thumbnailUrl} alt={course.title} className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" />
+                              <SafeImage
+                                src={course.thumbnailUrl}
+                                alt={course.title}
+                                label={course.title}
+                                className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                              />
                             ) : (
                               <PlayCircle className="w-12 h-12 text-white/80 group-hover:scale-110 transition-transform relative z-10" />
                             )}

@@ -6,6 +6,7 @@ import {
   X, ExternalLink, Github, Calendar, Code2, Eye, Star, GitFork,
   Clock, ChevronRight, BookOpen, Layers, Play, Copy, Check,
 } from 'lucide-react';
+import { SafeImage } from '@/components/ui/SafeImage';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import type { Components } from 'react-markdown';
@@ -199,9 +200,10 @@ export default function ProjectDetailDrawer({
                 {/* Cover Image */}
                 {project.thumbnailUrl && (
                   <div className="relative rounded-2xl overflow-hidden h-48 sm:h-56">
-                    <img
+                    <SafeImage
                       src={project.thumbnailUrl}
                       alt={project.title}
+                      label={project.title}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />

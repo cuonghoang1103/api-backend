@@ -13,6 +13,7 @@ import ContactSection from '@/components/home/ContactSection';
 import Footer from '@/components/home/Footer';
 import StatsSection from '@/components/home/StatsSection';
 import HomeBackground from '@/components/home/HomeBackground';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { formatNumber } from '@/lib/utils';
 import { ArrowRight, Sparkles, Code2, Terminal, Zap, Brain, Gem, Search, ChevronRight } from 'lucide-react';
 
@@ -816,9 +817,10 @@ export default function HomePage() {
                       {/* Cover image */}
                       <div className="aspect-[16/9] relative overflow-hidden bg-darkbg">
                         {post.thumbnailUrl ? (
-                          <img
+                          <SafeImage
                             src={post.thumbnailUrl}
                             alt={post.title}
+                            label={post.title}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                           />
                         ) : (

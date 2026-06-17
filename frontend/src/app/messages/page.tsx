@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { SafeImage } from '@/components/ui/SafeImage';
 import {
   Loader2,
   RefreshCcw,
@@ -357,7 +358,12 @@ function ThreadHeader({
     >
       <div className="relative shrink-0">
         {peer?.avatarUrl ? (
-          <img src={peer.avatarUrl} alt={peer.displayName} className="h-10 w-10 rounded-full object-cover" />
+          <SafeImage
+            src={peer.avatarUrl}
+            alt={peer.displayName}
+            label={peer.displayName || peer.username || 'User'}
+            className="h-10 w-10 rounded-full object-cover"
+          />
         ) : (
           <div
             className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white"

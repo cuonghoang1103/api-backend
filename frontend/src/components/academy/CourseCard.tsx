@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Star, Users, Clock, BookOpen, Play } from 'lucide-react';
 import type { Course } from '@/types';
+import { SafeImage } from '@/components/ui/SafeImage';
 
 interface CourseCardProps {
   course: Course;
@@ -44,9 +45,10 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
         {/* Thumbnail */}
         <Link href={`/academy/courses/${course.slug}`} className="block relative aspect-video overflow-hidden">
           {course.thumbnailUrl ? (
-            <img
+            <SafeImage
               src={course.thumbnailUrl}
               alt={course.title}
+              label={course.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (

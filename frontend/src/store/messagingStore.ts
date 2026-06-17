@@ -48,6 +48,10 @@ interface MessagingState {
   threads: MessagingThread[];
   threadsLoaded: boolean;
   threadsLoading: boolean;
+  /** "Active" = visible in the default inbox. Archived threads are kept
+   *  in this list (so we can show them under the "Archived" tab) but
+   *  excluded from the default render. */
+  showArchived: boolean;
   currentThreadId: number | null;
   currentThread: MessagingThread | null;
   messagesByThread: Record<number, MessagingMessage[]>;
@@ -67,6 +71,7 @@ interface MessagingState {
   shutdown: () => void;
   retryConnection: () => Promise<void>;
   setWidgetOpen: (open: boolean) => void;
+  setShowArchived: (show: boolean) => void;
 
   // Threads
   loadThreads: () => Promise<void>;
@@ -93,13 +98,26 @@ interface MessagingState {
   setNickname: (threadId: number, targetId: number, alias: string) => Promise<void>;
   loadNicknames: () => Promise<void>;
 
+  // Per-user thread preferences (pin / mute / archive / mark-unread)
+  setThreadPreference: (
+    threadId: number,
+    slot: 'pinnedAt' | 'mutedUntil' | 'archivedAt' | 'markedUnreadAt',
+    value: string | null,
+  ) => Promise<void>;
+  togglePin: (threadId: number) => Promise<void>;
+  toggleMute: (threadId: number) => Promise<void>;
+  archiveThread: (threadId: number) => Promise<void>;
+  unarchiveThread: (threadId: number) => Promise<void>;
+  markThreadUnread: (threadId: number) => Promise<void>;
+
   // Presence
   getPresence: (userId: number) => { online: boolean; lastSeen: number };
 
   // Internal socket handlers (called from socket lib)
   applyIncomingMessage: (threadId: number, message: MessagingMessage) => void;
   applyReadReceipt: (threadId: number, readerId: number, readAt?: string) => void;
-  applyThreadUpdated: (threadId: number) => void;
+  applyThreadUpdated: (threadId: number, changes?: { preferenceChanged?: { userId: number; slot: string; value: string | null } }) => void;
+  applyThreadCreated: (thread: MessagingThread) => void;
   applyMessageUpdated: (
     threadId: number,
     messageId: number,
@@ -111,10 +129,29 @@ interface MessagingState {
 
 const TYPING_TIMEOUT_MS = 3500;
 
+/**
+ * Sort threads for the sidebar:
+ *  1. Pinned threads first
+ *  2. Then by lastMessageAt DESC (most recent activity)
+ *  3. Stable on id for equal timestamps
+ */
+function sortThreads(threads: MessagingThread[]): MessagingThread[] {
+  return threads.slice().sort((a, b) => {
+    const ap = a.preferences?.pinnedAt ? 1 : 0;
+    const bp = b.preferences?.pinnedAt ? 1 : 0;
+    if (ap !== bp) return bp - ap;
+    const at = a.lastMessageAt ? new Date(a.lastMessageAt).getTime() : 0;
+    const bt = b.lastMessageAt ? new Date(b.lastMessageAt).getTime() : 0;
+    if (bt !== at) return bt - at;
+    return b.id - a.id;
+  });
+}
+
 export const useMessagingStore = create<MessagingState>((set, get) => ({
   threads: [],
   threadsLoaded: false,
   threadsLoading: false,
+  showArchived: false,
   currentThreadId: null,
   currentThread: null,
   messagesByThread: {},
@@ -150,8 +187,16 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
           socket.on('thread:read', (payload: { threadId: number; readerId: number; readAt?: string | Date }) => {
             get().applyReadReceipt(payload.threadId, payload.readerId, payload.readAt as any);
           });
-          socket.on('thread:updated', (payload: { threadId: number }) => {
-            get().applyThreadUpdated(payload.threadId);
+          socket.on('thread:updated', (payload: { threadId: number; changes?: any }) => {
+            get().applyThreadUpdated(payload.threadId, payload?.changes);
+          });
+          // NEW: peer started a new conversation. Re-emitted to
+          // BOTH participants so the freshly-created thread shows
+          // up in both sidebars without a refresh. We treat the
+          // payload idempotently — if the row already exists we
+          // just refresh its summary.
+          socket.on('thread:created', (payload: { thread: MessagingThread }) => {
+            get().applyThreadCreated(payload.thread);
           });
           socket.on('thread:typing', (payload: { threadId: number; userId: number; isTyping: boolean }) => {
             const cur = get().typing.byThread[payload.threadId] ?? {};
@@ -215,6 +260,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     set({
       threads: [],
       threadsLoaded: false,
+      showArchived: false,
       currentThreadId: null,
       currentThread: null,
       messagesByThread: {},
@@ -233,11 +279,20 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     set({ isWidgetOpen: open });
   },
 
+  setShowArchived(show) {
+    set({ showArchived: show });
+  },
+
   async loadThreads() {
     set({ threadsLoading: true });
     try {
       const res = await messagingApi.listThreads();
-      set({ threads: res.data.data ?? [], threadsLoaded: true, threadsLoading: false });
+      const raw = res.data.data ?? [];
+      set({
+        threads: sortThreads(raw),
+        threadsLoaded: true,
+        threadsLoading: false,
+      });
     } catch (e: any) {
       // A 401 here means the JWT in the httpOnly cookie is stale
       // (e.g. roleVersion bump from a password change). Surface
@@ -595,6 +650,58 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
           return { ...s, messagesByThread: { ...s.messagesByThread, [threadId]: next } };
         }
       }
+      // BUGFIX: if the socket event arrived for a thread that ISN'T
+      // in the sidebar yet (e.g. peer just started a brand new
+      // conversation), fetch the canonical thread row from the
+      // REST API and prepend it. Without this, the sidebar would
+      // silently ignore the event and the user wouldn't see the
+      // new thread until they refreshed the page.
+      const threadExists = s.threads.some((t) => t.id === threadId);
+      if (!threadExists && !isOwn) {
+        // Fire-and-forget the fetch. We don't await — the user
+        // gets an immediate empty thread row in the sidebar (so
+        // the unread badge is visible right away) and the full
+        // row is filled in once the fetch resolves.
+        get().refreshThreadSummary(threadId);
+      }
+      const newThreadPreview = {
+        id: message.id,
+        content: message.content,
+        senderId: message.senderId,
+        createdAt: message.createdAt,
+        hasAttachment: message.attachments.length > 0,
+        attachmentMime: message.attachments[0]?.mimeType,
+        attachmentName: message.attachments[0]?.fileName,
+      };
+      // Bump lastMessage + unreadCount on the matching row.
+      // We re-sort the list because lastMessageAt changes and
+      // pinned rows need to stay at the top.
+      const updatedThreads = s.threads.map((t) => {
+        if (t.id !== threadId) return t;
+        if (isOwn) return t;
+        return {
+          ...t,
+          unreadCount: s.currentThreadId === threadId ? 0 : (t.unreadCount ?? 0) + 1,
+          lastMessage: newThreadPreview,
+          lastMessageAt: message.createdAt,
+        };
+      });
+      // If the thread still isn't in the list, add a stub so the
+      // user can see something is happening. The full peer info
+      // arrives a moment later via refreshThreadSummary.
+      if (!threadExists) {
+        updatedThreads.push({
+          id: threadId,
+          type: 'USER',
+          lastMessageAt: message.createdAt,
+          createdAt: message.createdAt,
+          updatedAt: message.createdAt,
+          peer: null,
+          lastMessage: newThreadPreview,
+          unreadCount: isOwn ? 0 : 1,
+          preferences: null,
+        });
+      }
       return {
         ...s,
         messagesByThread: { ...s.messagesByThread, [threadId]: [...cur, message] },
@@ -603,24 +710,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
           isOwn || s.currentThreadId === threadId
             ? s.unreadTotal
             : s.unreadTotal + 1,
-        threads: s.threads.map((t) => {
-          if (t.id !== threadId) return t;
-          if (isOwn) return t;
-          return {
-            ...t,
-            unreadCount: s.currentThreadId === threadId ? 0 : (t.unreadCount ?? 0) + 1,
-            lastMessage: {
-              id: message.id,
-              content: message.content,
-              senderId: message.senderId,
-              createdAt: message.createdAt,
-              hasAttachment: message.attachments.length > 0,
-              attachmentMime: message.attachments[0]?.mimeType,
-              attachmentName: message.attachments[0]?.fileName,
-            },
-            lastMessageAt: message.createdAt,
-          };
-        }),
+        threads: sortThreads(updatedThreads),
       };
     });
     // If the message came in for the open thread, also mark read
@@ -655,10 +745,171 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     });
   },
 
-  applyThreadUpdated(threadId) {
-    // Light refresh — re-fetch the thread to update lastMessage preview
+  applyThreadCreated(thread) {
+    set((s) => {
+      // Idempotent: if the row is already there (which happens
+      // when the SENDER receives its own broadcast back), just
+      // refresh the peer/preferences fields in case the canonical
+      // version is fresher.
+      const existing = s.threads.find((t) => t.id === thread.id);
+      if (existing) {
+        return {
+          ...s,
+          threads: sortThreads(
+            s.threads.map((t) =>
+              t.id === thread.id
+                ? { ...t, ...thread, preferences: thread.preferences ?? t.preferences }
+                : t,
+            ),
+          ),
+        };
+      }
+      return {
+        ...s,
+        threads: sortThreads([...s.threads, { ...thread, unreadCount: 0 }]),
+      };
+    });
+  },
+
+  applyThreadUpdated(threadId, changes) {
+    // Light refresh — re-fetch the thread to update lastMessage preview.
+    // For preference changes (pin/mute/archive/mark-unread) we update
+    // the local row in-place so the sidebar reflects the change without
+    // a round-trip.
+    const pc = changes?.preferenceChanged;
+    if (pc && typeof pc === 'object' && pc.slot) {
+      set((s) => {
+        const auth = useAuthStore.getState();
+        if (pc.userId !== auth.user?.id) return s; // not for us
+        return {
+          ...s,
+          threads: sortThreads(
+            s.threads.map((t) => {
+              if (t.id !== threadId) return t;
+              const prefs = { ...(t.preferences ?? {}) } as Record<string, any>;
+              if (pc.value === null) delete prefs[pc.slot];
+              else prefs[pc.slot] = pc.value;
+              return { ...t, preferences: prefs };
+            }),
+          ),
+        };
+      });
+      return;
+    }
     get().refreshThreadSummary(threadId);
     get().refreshUnread();
+  },
+
+  // ─── Per-user thread preferences (Pin / Mute / Archive / Mark unread) ───
+  // All four slots go through one helper so the wiring is consistent.
+  async setThreadPreference(threadId, slot, value) {
+    // Optimistic local update so the UI feels instant. If the API
+    // call fails, the server's `thread:updated` event will overwrite
+    // with the actual value when it next propagates.
+    set((s) => ({
+      threads: sortThreads(
+        s.threads.map((t) => {
+          if (t.id !== threadId) return t;
+          const prefs = { ...(t.preferences ?? {}) } as Record<string, any>;
+          if (value === null) delete prefs[slot];
+          else prefs[slot] = value;
+          return { ...t, preferences: prefs };
+        }),
+      ),
+    }));
+    try {
+      const res = await messagingApi.updatePreference(threadId, { slot, value });
+      const preferences = res.data.data?.preferences ?? null;
+      set((s) => ({
+        threads: sortThreads(
+          s.threads.map((t) => (t.id === threadId ? { ...t, preferences } : t)),
+        ),
+        currentThread:
+          s.currentThread && s.currentThread.id === threadId
+            ? { ...s.currentThread, preferences }
+            : s.currentThread,
+      }));
+    } catch (e: any) {
+      // Roll back: re-fetch from server. The simplest rollback is
+      // a list refresh so we sync back to the source of truth.
+      void get().loadThreads();
+      throw e;
+    }
+  },
+
+  async togglePin(threadId) {
+    const cur = get().threads.find((t) => t.id === threadId);
+    const isPinned = !!cur?.preferences?.pinnedAt;
+    await get().setThreadPreference(threadId, 'pinnedAt', isPinned ? null : new Date().toISOString());
+  },
+
+  async toggleMute(threadId) {
+    const cur = get().threads.find((t) => t.id === threadId);
+    const mutedUntil = cur?.preferences?.mutedUntil;
+    const isMuted = mutedUntil ? new Date(mutedUntil) > new Date() : false;
+    // 8h mute window — common chat-app default. Pass `null` to clear.
+    const next: string | null = isMuted
+      ? null
+      : new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString();
+    await get().setThreadPreference(threadId, 'mutedUntil', next);
+  },
+
+  async archiveThread(threadId) {
+    try {
+      const res = await messagingApi.archiveThread(threadId);
+      const preferences = res.data.data?.preferences ?? null;
+      set((s) => ({
+        threads: s.threads.map((t) => (t.id === threadId ? { ...t, preferences } : t)),
+        currentThread:
+          s.currentThread && s.currentThread.id === threadId
+            ? { ...s.currentThread, preferences }
+            : s.currentThread,
+      }));
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async unarchiveThread(threadId) {
+    try {
+      const res = await messagingApi.unarchiveThread(threadId);
+      const preferences = res.data.data?.preferences ?? null;
+      set((s) => ({
+        threads: s.threads.map((t) => (t.id === threadId ? { ...t, preferences } : t)),
+        currentThread:
+          s.currentThread && s.currentThread.id === threadId
+            ? { ...s.currentThread, preferences }
+            : s.currentThread,
+      }));
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async markThreadUnread(threadId) {
+    try {
+      const res = await messagingApi.markThreadUnread(threadId);
+      const preferences = res.data.data?.preferences ?? null;
+      set((s) => {
+        const threads = s.threads.map((t) => {
+          if (t.id !== threadId) return t;
+          // Mark as unread bumps the badge even if the user is
+          // not currently looking at the thread. lastReadAt isn't
+          // reset (that's markRead's job) — we just stamp the
+          // preference, and the sidebar's "bold" rendering keys
+          // off it.
+          return {
+            ...t,
+            preferences,
+            unreadCount: t.unreadCount && t.unreadCount > 0 ? t.unreadCount : 1,
+          };
+        });
+        const unreadTotal = threads.reduce((acc, t) => acc + (t.unreadCount ?? 0), 0);
+        return { threads, unreadTotal };
+      });
+    } catch (e) {
+      throw e;
+    }
   },
 
   applyMessageUpdated(

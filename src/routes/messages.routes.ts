@@ -256,6 +256,89 @@ router.post(
   },
 );
 
+// ─── Per-user thread preferences (Pin / Mute / Archive / Mark unread) ─
+// All four slots live in the same JSONB column on the thread row,
+// keyed by the viewer's userId. Pass `value: null` to clear.
+// Body: { slot: 'pinnedAt' | 'mutedUntil' | 'archivedAt' | 'markedUnreadAt', value: ISOString | null }
+router.patch('/threads/:id/preference', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const allowedSlots = ['pinnedAt', 'mutedUntil', 'archivedAt', 'markedUnreadAt'] as const;
+    type Slot = (typeof allowedSlots)[number];
+    const slot = req.body?.slot as Slot;
+    if (!slot || !allowedSlots.includes(slot)) {
+      throw new AppError('Invalid preference slot', 400, 'INVALID_SLOT');
+    }
+    const rawValue = req.body?.value;
+    // null clears the slot. A ISO string sets it. Anything else errors.
+    const value = rawValue === null || rawValue === undefined
+      ? null
+      : (() => {
+          if (typeof rawValue !== 'string') {
+            throw new AppError('value must be a string or null', 400, 'INVALID_VALUE');
+          }
+          const ts = new Date(rawValue);
+          if (isNaN(ts.getTime())) {
+            throw new AppError('value must be a valid ISO timestamp', 400, 'INVALID_VALUE');
+          }
+          return ts.toISOString();
+        })();
+
+    const updated = await messagesService.updateThreadPreference(id, req.userId!, slot, value);
+    res.json({ success: true, data: { preferences: updated } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── DELETE /api/v1/messages/threads/:id ───────────────
+// "Archive" the thread for the current user. Soft-delete
+// (we keep the messages for the other participant) — sets
+// preferences[viewerId].archivedAt = now and the row stays
+// out of the default inbox until unarchived. Returns the
+// updated preference set so the client can update state
+// without a follow-up fetch.
+router.delete('/threads/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const preferences = await messagesService.archiveThread(id, req.userId!);
+    res.json({ success: true, data: { preferences } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── POST /api/v1/messages/threads/:id/unarchive ───────
+// Undo the archive. Idempotent.
+router.post('/threads/:id/unarchive', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const preferences = await messagesService.unarchiveThread(id, req.userId!);
+    res.json({ success: true, data: { preferences } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── POST /api/v1/messages/threads/:id/mark-unread ──────
+// Sets `markedUnreadAt = now` so the sidebar shows a bold
+// dot until the user clicks into the thread (which calls
+// markRead, which clears it implicitly by advancing
+// lastReadAt past markedUnreadAt).
+router.post('/threads/:id/mark-unread', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const preferences = await messagesService.markThreadUnread(id, req.userId!);
+    res.json({ success: true, data: { preferences } });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // ─── Admin sub-router ──────────────────────────────────
 const adminRouter = Router();
 adminRouter.use(authenticate);

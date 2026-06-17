@@ -1342,6 +1342,12 @@ model MessageThread {
   messages   Message[]
   readStates MessageRead[]
   nicknames  ThreadNickname[]
+  // Per-user thread preferences. JSONB keyed by userId so each
+  // participant can independently pin/mute/archive the thread
+  // without affecting the other side.
+  //
+  // Shape: { [userId]: { pinnedAt?, mutedUntil?, archivedAt?, markedUnreadAt? } }
+  preferences Json     @default("{}") @map("preferences")
 
   @@unique([userId, adminUserId, type], name: "uk_thread_admin_pair")
   @@unique([userAId, userBId, type], name: "uk_thread_user_pair")

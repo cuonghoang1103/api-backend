@@ -1,0 +1,56 @@
+name: VPS Force Restart Backend
+
+on: workflow_dispatch
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Stop backend container
+        run: |
+          echo "=== Stopping backend container ==="
+          ssh vps "docker stop cuonghoangdev_backend 2>&1 || true"
+          sleep 3
+          ssh vps "docker rm -f cuonghoangdev_backend 2>&1 || true"
+
+      - name: Restart via docker compose
+        run: |
+          echo "=== Starting backend via docker compose ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose -p cuonghoangdev up -d backend 2>&1"
+          echo "=== Waiting for container to start ==="
+          sleep 15
+
+      - name: Check backend status
+        run: |
+          echo "=== Container status ==="
+          ssh vps "docker ps --filter name=cuonghoangdev --format 'table {{.Names}}\t{{.Status}}'"
+          echo "=== Backend logs (last 30) ==="
+          ssh vps "docker logs cuonghoangdev_backend --tail 30 2>&1"
+
+      - name: Health check
+        run: |
+          sleep 10
+          echo "=== Health check ==="
+          ssh vps "curl -sf http://localhost:3001/health 2>&1 || echo 'Health failed'"
+          ssh vps "curl -sf http://localhost:3001/api/v1/system/health 2>&1 || echo 'System health failed'"
+
+      - name: Test AI Chat
+        run: |
+          sleep 5
+          echo "=== Test AI Chat ==="
+          curl -s -X POST https://api.cuongthai.com/api/v1/ai/chat \
+            -H "Content-Type: application/json" \
+            -d '{"message": "Xin chao"}' 2>&1 | head -30

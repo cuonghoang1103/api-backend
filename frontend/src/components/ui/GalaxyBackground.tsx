@@ -25,9 +25,24 @@ import { useEffect, useRef } from 'react';
  *  - No deps — pure canvas2d.
  *
  * The component is `pointer-events: none` so it never blocks
- * clicks; the parent page keeps its own interactive layer.
+ * clicks. By default it spans the full viewport (`fixed
+ * inset-0 -z-10`), but you can pass `contained` to make it
+ * sit inside its parent as an `absolute inset-0` layer —
+ * useful when you want the galaxy confined to a single
+ * panel (e.g. the messenger body) rather than the whole
+ * page.
  */
-export default function GalaxyBackground() {
+export default function GalaxyBackground({
+  contained = false,
+}: {
+  /**
+   * When `true`, the wrapper becomes `absolute inset-0` and
+   * sizes itself to its parent (which must be `position:
+   * relative` or similar). When `false` (default) the
+   * wrapper is `fixed inset-0 -z-10` covering the viewport.
+   */
+  contained?: boolean;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -40,9 +55,7 @@ export default function GalaxyBackground() {
     let lastTs = 0;
     let width = 0;
     let height = 0;
-    let dpr = 1;
-
-    // ── Star field ────────────────────────────────────────
+    let dpr = 1;    // ── Star field ────────────────────────────────────────
     // Two layers: a dense near-field of small stars and a
     // sparser far-field of bigger twinkly stars. We sample
     // positions once on resize; the per-frame work is just
@@ -97,23 +110,33 @@ export default function GalaxyBackground() {
     ];
 
     /**
-     * Resize the canvas backing store to match the viewport
-     * (in device pixels) and rebuild the star field. Cheap
-     * because we only sample positions, not allocate per
-     * frame.
+     * Resize the canvas backing store to match the canvas's
+     * actual rendered size (in CSS pixels) and rebuild the
+     * star field. Cheap because we only sample positions, not
+     * allocate per frame.
+     *
+     * We use `clientWidth/clientHeight` (not `window.inner*`)
+     * so the same code works in both `fixed inset-0` (full
+     * viewport) and `absolute inset-0` (clipped to a parent)
+     * modes. In the latter case the parent must be
+     * `position: relative` and have a definite size.
      */
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = window.innerWidth;
-      height = window.innerHeight;
+      // Fall back to 0 if the canvas is hidden — we skip
+      // resampling in that case so we don't divide by 0.
+      const rect = canvas.getBoundingClientRect();
+      width = rect.width || canvas.clientWidth;
+      height = rect.height || canvas.clientHeight;
+      if (width === 0 || height === 0) return;
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // (Re)seed stars proportionally to the viewport area so
-      // density stays roughly constant on big screens.
+      // (Re)seed stars proportionally to the canvas area so
+      // density stays roughly constant on big canvases.
       const area = (width * height) / (1280 * 720);
       const count = Math.floor(STAR_COUNT * Math.max(0.6, Math.min(2, area)));
       stars = new Array(count).fill(0).map(() => ({
@@ -315,10 +338,16 @@ export default function GalaxyBackground() {
 
     resize();
     raf = requestAnimationFrame(draw);
-    window.addEventListener('resize', resize);
+    // ResizeObserver catches both window resizes AND parent
+    // container resizes (e.g. when the messenger panel
+    // changes height because the user opened a thread). It
+    // fires once on observe so we don't need a separate
+    // initial resize call.
+    const ro = new ResizeObserver(() => resize());
+    ro.observe(canvas);
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener('resize', resize);
+      ro.disconnect();
     };
   }, []);
 
@@ -326,9 +355,16 @@ export default function GalaxyBackground() {
     <div
       aria-hidden="true"
       // pointer-events: none so the page stays clickable.
-      // The wrapper is `fixed inset-0 -z-10` so it sits behind
-      // every page element regardless of stacking context.
-      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#02020a]"
+      // The wrapper is `fixed inset-0 -z-10` by default so
+      // it sits behind every page element regardless of
+      // stacking context. When `contained` is set we switch
+      // to `absolute inset-0` and drop the negative z-index
+      // so the parent panel can decide its own stacking.
+      className={
+        contained
+          ? 'pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit] bg-[#02020a]'
+          : 'pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#02020a]'
+      }
     >
       <canvas
         ref={canvasRef}

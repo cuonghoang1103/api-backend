@@ -177,7 +177,6 @@ function MessagesPageInner() {
     // gradient so they read as solid surfaces floating over
     // the space scene.
     <div className="relative min-h-screen pt-16">
-      <GalaxyBackground />
       <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-6xl flex-col px-4 py-6">
         <header className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -200,10 +199,16 @@ function MessagesPageInner() {
         </header>
 
         <div
-          // Outer panel: darkest of the three layers. Holds the whole
-          // messenger surface with a subtle border + backdrop blur.
-          className="flex min-h-0 flex-1 overflow-hidden rounded-2xl border border-white/[0.04] bg-black/30 shadow-2xl backdrop-blur-2xl"
+          // Outer panel: holds the whole messenger surface.
+          // `relative` so the absolutely-positioned galaxy
+          // background clips to this rounded container instead
+          // of escaping into the page. The panel itself is
+          // transparent — the GalaxyBackground component below
+          // is what paints the dark space scene; the inner
+          // sidebar/chat-area gradients sit on top of it.
+          className="relative flex min-h-0 flex-1 overflow-hidden rounded-2xl border border-white/[0.06] shadow-[0_8px_40px_rgba(0,0,0,0.6)]"
         >
+          <GalaxyBackground contained />
           {/* Sidebar: layer 2 — slightly lighter than the page, darker
               than the chat list. Stays as the "container" for the
               inbox header + admin support banner. */}
@@ -211,7 +216,7 @@ function MessagesPageInner() {
             className="hidden w-80 shrink-0 flex-col border-r border-white/[0.04] md:flex"
             style={{
               background:
-                'linear-gradient(180deg, rgba(15,15,28,0.65) 0%, rgba(8,8,18,0.65) 100%)',
+                'linear-gradient(180deg, rgba(15,15,28,0.72) 0%, rgba(8,8,18,0.78) 100%)',
             }}
           >
             <div className="border-b border-white/[0.04] px-4 py-3">
@@ -253,7 +258,7 @@ function MessagesPageInner() {
                 className="flex min-w-0 flex-1 flex-col"
                 style={{
                   background:
-                    'linear-gradient(180deg, #11121f 0%, #0c0d18 100%)',
+                    'linear-gradient(180deg, rgba(17,18,31,0.72) 0%, rgba(12,13,24,0.78) 100%)',
                 }}
               >
                 <ThreadHeader
@@ -275,7 +280,7 @@ function MessagesPageInner() {
                 className="flex h-full min-w-0 flex-1 flex-col"
                 style={{
                   background:
-                    'linear-gradient(180deg, #11121f 0%, #0c0d18 100%)',
+                    'linear-gradient(180deg, rgba(17,18,31,0.72) 0%, rgba(12,13,24,0.78) 100%)',
                 }}
               >
                 <EmptyChatState isAdmin={!!isAdmin} onStartAdmin={handleStartAdmin} />
@@ -581,11 +586,11 @@ function InboxTopMenu({ onOpenBlocked }: { onOpenBlocked: () => void }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.97 }}
             transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute right-0 top-full z-30 mt-1 w-56 overflow-hidden rounded-2xl border border-white/15 bg-[#050510] p-1.5 shadow-2xl [backdrop-filter:none]"
+            className="absolute right-0 top-full z-30 mt-1 w-56 overflow-hidden rounded-2xl border border-black/40 bg-black p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.6),0_0_0_1px_rgba(0,0,0,0.4)]"
           >
             <button
               onClick={handleOpenBlocked}
-              className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px] text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary"
+              className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px] font-medium text-white transition-colors hover:bg-white/[0.08]"
             >
               <ShieldOff className="h-4 w-4 shrink-0" />
               <span className="flex-1">Người dùng đã chặn</span>
@@ -593,7 +598,7 @@ function InboxTopMenu({ onOpenBlocked }: { onOpenBlocked: () => void }) {
             <button
               onClick={handleMarkAllRead}
               disabled={markingAll}
-              className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px] text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary disabled:opacity-50"
+              className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px] font-medium text-white transition-colors hover:bg-white/[0.08] disabled:opacity-50"
             >
               {markingAll ? (
                 <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
@@ -602,10 +607,10 @@ function InboxTopMenu({ onOpenBlocked }: { onOpenBlocked: () => void }) {
               )}
               <span className="flex-1">Đánh dấu tất cả đã đọc</span>
             </button>
-            <div className="my-1 border-t border-white/[0.06]" />
+            <div className="my-1 border-t border-white/[0.08]" />
             <button
               onClick={handleRefresh}
-              className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px] text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary"
+              className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px] font-medium text-white transition-colors hover:bg-white/[0.08]"
             >
               <RefreshCcw className="h-4 w-4 shrink-0" />
               <span className="flex-1">Làm mới hộp thư</span>

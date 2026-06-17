@@ -26,6 +26,7 @@ import MessageInput from '@/components/messaging/MessageInput';
 import NicknamePopover from '@/components/messaging/NicknamePopover';
 import ThreadHeaderMenu from '@/components/messaging/ThreadHeaderMenu';
 import BlockedUsersModal from '@/components/messaging/BlockedUsersModal';
+import GalaxyBackground from '@/components/ui/GalaxyBackground';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -169,16 +170,14 @@ function MessagesPageInner() {
   }
 
   return (
-    // Page background — deepest of the three layers (Sidebar > List > Content).
-    // We use a near-black blue-tinted shade here, then brighten the inner
-    // panels so the eye is pulled toward the conversation.
-    <div
-      className="min-h-screen pt-16"
-      style={{
-        background:
-          'radial-gradient(ellipse at top, #0a0a18 0%, #03020c 60%, #020108 100%)',
-      }}
-    >
+    // Page background is a fixed-positioned animated
+    // galaxy (suns, planets, stars, nebulas). The root
+    // container is transparent so the canvas shows through.
+    // The three messenger panels each carry their own
+    // gradient so they read as solid surfaces floating over
+    // the space scene.
+    <div className="relative min-h-screen pt-16">
+      <GalaxyBackground />
       <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-6xl flex-col px-4 py-6">
         <header className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -582,7 +581,7 @@ function InboxTopMenu({ onOpenBlocked }: { onOpenBlocked: () => void }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.97 }}
             transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute right-0 top-full z-30 mt-1 w-56 overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a14]/98 p-1.5 shadow-2xl backdrop-blur"
+            className="absolute right-0 top-full z-30 mt-1 w-56 overflow-hidden rounded-2xl border border-white/15 bg-[#050510] p-1.5 shadow-2xl [backdrop-filter:none]"
           >
             <button
               onClick={handleOpenBlocked}

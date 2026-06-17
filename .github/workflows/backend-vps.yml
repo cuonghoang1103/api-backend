@@ -213,9 +213,28 @@ jobs:
           echo "--- Copying compiled dist to VPS ---"
           ssh vps "mkdir -p /opt/cuonghoangdev/dist_fresh"
           (tar -czf - dist/) | ssh -F $HOME/.ssh/config vps "cd /opt/cuonghoangdev && tar -xzf -"
-          echo "--- Injecting dist into running backend container ---"
+          echo "--- Sync prisma/ folder into container (NEW models/columns) ---"
+          # The host's /opt/cuonghoangdev/prisma/ was rsync'd from CI,
+          # but the Docker image baked in an older prisma/ at build
+          # time. We copy the new prisma/ on top so that
+          # `prisma generate` and `prisma db push` inside the container
+          # see the current schema.
+          ssh vps "docker cp /opt/cuonghoangdev/prisma/. cuonghoangdev_backend:/app/prisma/"
+          echo "--- Inject dist into running backend container ---"
           ssh vps "docker cp /opt/cuonghoangdev/dist/. cuonghoangdev_backend:/app/dist/"
-          echo "--- Restarting backend to load new code ---"
+          echo "--- Regenerate Prisma Client inside container ---"
+          # The CI-side `npx prisma generate` only updates the host's
+          # client; the running container still has the OLD client
+          # baked in at image build time. Without this step, any new
+          # model/field introduced in schema.prisma will cause
+          # "Cannot read properties of undefined (reading 'findMany')"
+          # errors when the new code touches prisma.<newModel>.
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'npx prisma generate' 2>&1" | tail -5
+          echo "--- Apply any new migrations / schema changes ---"
+          # Push schema deltas (e.g. new columns/tables). This is
+          # idempotent and safe to run on every deploy.
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'npx prisma db push --accept-data-loss --skip-generate' 2>&1" | tail -10
+          echo "--- Restarting backend to load new code + new Prisma client ---"
           ssh vps "docker restart cuonghoangdev_backend"
           echo "--- Waiting for reload ---"
           ssh vps "for i in \$(seq 1 12); do

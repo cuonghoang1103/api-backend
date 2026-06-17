@@ -9,7 +9,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { useMessagingStore } from '@/store/messagingStore';
 import {
-  Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles,
+  Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles, TrendingUp,
   User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
   Globe, ShoppingBag, GraduationCap, Users,
 } from 'lucide-react';
@@ -23,6 +23,7 @@ const TOP_NAV_LINKS = [
   { href: '/social', label: 'Feed', icon: Users },
   { href: '/blog', label: 'Blog', icon: BookOpen },
   { href: '/projects', label: 'Projects', icon: FolderOpen },
+  { href: '/tech-trends', label: 'Tech Trends', icon: TrendingUp },
   { href: '/music', label: 'Music', icon: Music },
   { href: '/messages', label: 'Messages', icon: MessageCircle, authOnly: true },
   { href: '/chat', label: 'AI Chat', icon: Sparkles },

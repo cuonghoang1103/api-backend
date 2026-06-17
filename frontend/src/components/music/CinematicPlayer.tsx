@@ -32,6 +32,7 @@ export default function CinematicPlayer({ isNight = true }: CinematicPlayerProps
 
   const [expanded, setExpanded] = useState(false);
   const progressRef = useRef<HTMLDivElement>(null);
+  const [imgError, setImgError] = useState(false);
 
   if (!currentTrack) return null;
 
@@ -105,12 +106,13 @@ export default function CinematicPlayer({ isNight = true }: CinematicPlayerProps
                     },
                   }}
                 >
-                  {isSafeCoverUrl(currentTrack.coverImage) ? (
+                  {isSafeCoverUrl(currentTrack.coverImage) && !imgError ? (
                     <Image
                       src={currentTrack.coverImage}
                       alt={currentTrack.title}
                       fill
                       className="object-cover"
+                      onError={() => setImgError(true)}
                     />
                   ) : (
                     <div
@@ -297,12 +299,13 @@ export default function CinematicPlayer({ isNight = true }: CinematicPlayerProps
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {isSafeCoverUrl(currentTrack.coverImage) ? (
+                {isSafeCoverUrl(currentTrack.coverImage) && !imgError ? (
                   <Image
                     src={currentTrack.coverImage}
                     alt={currentTrack.title}
                     fill
                     className="object-cover"
+                    onError={() => setImgError(true)}
                   />
                 ) : (
                   <div

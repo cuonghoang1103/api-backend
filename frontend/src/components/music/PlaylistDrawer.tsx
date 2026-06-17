@@ -315,6 +315,8 @@ function PlaylistItem({
   onRemoveTrack: (trackId: string) => void;
   colors: Record<string, string>;
 }) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div
       className="rounded-xl overflow-hidden"
@@ -327,8 +329,8 @@ function PlaylistItem({
           onClick={onPlay}
           className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 shadow-md"
         >
-          {isSafeCoverUrl(playlist.coverUrl) ? (
-            <Image src={playlist.coverUrl!} alt={playlist.name} fill className="object-cover" sizes="48px" />
+          {isSafeCoverUrl(playlist.coverUrl) && !imgError ? (
+            <Image src={playlist.coverUrl!} alt={playlist.name} fill className="object-cover" sizes="48px" onError={() => setImgError(true)} />
           ) : (
             <div
               className="w-full h-full flex items-center justify-center"

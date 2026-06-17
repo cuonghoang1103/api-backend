@@ -33,6 +33,7 @@ function TrackItem({
   );
   const isActive = currentTrack?.id === track.id;
   const isBroken = !track.audioUrl;
+  const [imgError, setImgError] = useState(false);
 
   const handlePlay = () => {
     if (isBroken) return;
@@ -86,8 +87,13 @@ function TrackItem({
             isBroken ? 'cursor-not-allowed' : 'cursor-pointer'
           }`}
         >
-          {track.coverImage ? (
-            <img src={track.coverImage} alt={track.title} className="w-full h-full object-cover" />
+          {track.coverImage && !imgError ? (
+            <img
+              src={track.coverImage}
+              alt={track.title}
+              className="w-full h-full object-cover"
+              onError={() => setImgError(true)}
+            />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center">
               <span className="text-white/50 text-sm font-bold">{track.title.charAt(0)}</span>

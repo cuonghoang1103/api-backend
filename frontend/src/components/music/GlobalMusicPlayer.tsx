@@ -120,6 +120,8 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
     toggleShuffle, cycleRepeat,
   } = useMusicStore();
 
+  const [imgError, setImgError] = useState(false);
+
   const formatTime = (t: number) => {
     if (!t || isNaN(t)) return '0:00';
     const m = Math.floor(t / 60);
@@ -146,13 +148,14 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
           {/* Cover + Info */}
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="relative w-14 h-14 rounded-xl overflow-hidden shadow-lg shrink-0">
-              {isSafeCoverUrl(currentTrack?.coverImage) ? (
+              {isSafeCoverUrl(currentTrack?.coverImage) && !imgError ? (
                 <Image
                   src={currentTrack.coverImage}
                   alt={currentTrack.title}
                   fill
                   className="object-cover"
                   priority
+                  onError={() => setImgError(true)}
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center">
@@ -256,6 +259,7 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
 // ============================================================
 function MiniBar({ onExpand, onClose }: { onExpand: () => void; onClose: () => void }) {
   const { currentTrack, isPlaying, togglePlay } = useMusicStore();
+  const [imgError, setImgError] = useState(false);
 
   if (!currentTrack) return null;
 
@@ -269,8 +273,8 @@ function MiniBar({ onExpand, onClose }: { onExpand: () => void; onClose: () => v
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center gap-3 py-2.5">
           <button onClick={onExpand} className="relative w-9 h-9 rounded-lg overflow-hidden shadow-md shrink-0">
-            {isSafeCoverUrl(currentTrack.coverImage) ? (
-              <Image src={currentTrack.coverImage} alt={currentTrack.title} fill className="object-cover" />
+            {isSafeCoverUrl(currentTrack.coverImage) && !imgError ? (
+              <Image src={currentTrack.coverImage} alt={currentTrack.title} fill className="object-cover" onError={() => setImgError(true)} />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center">
                 <Music className="w-4 h-4 text-white/50" />

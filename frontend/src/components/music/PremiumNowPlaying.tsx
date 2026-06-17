@@ -30,6 +30,7 @@ export default function PremiumNowPlaying({ isNight = true }: PremiumNowPlayingP
   const progressRef = useRef<HTMLDivElement>(null);
   const volumeRef = useRef<HTMLDivElement>(null);
   const [showVolume, setShowVolume] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const formatTime = (t: number) => {
     if (!t || isNaN(t)) return '0:00';
@@ -434,6 +435,7 @@ function VinylDisc({
   glow: string;
 }) {
   const DISC_SIZE = 120; // px
+  const [imgError, setImgError] = useState(false);
 
   return (
     <motion.div
@@ -505,7 +507,7 @@ function VinylDisc({
           boxShadow: `0 0 20px ${glow}, 0 2px 8px rgba(0,0,0,0.8)`,
         }}
       >
-        {isSafeCoverUrl(coverImage) ? (
+        {isSafeCoverUrl(coverImage) && !imgError ? (
           <Image
             src={coverImage}
             alt={title}
@@ -513,6 +515,7 @@ function VinylDisc({
             height={DISC_SIZE * 0.45}
             className="object-cover w-full h-full"
             unoptimized
+            onError={() => setImgError(true)}
           />
         ) : (
           <div

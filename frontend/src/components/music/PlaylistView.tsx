@@ -6,6 +6,7 @@ import { Play, Pause, ArrowLeft, ListMusic, Trash2, Clock, Loader2 } from 'lucid
 import { usePlaylistDetail, useRemoveTrackFromPlaylist, useDeletePlaylist } from '@/hooks/useMusicQueries';
 import type { Playlist, Track } from '@/types';
 import { formatDuration } from '@/hooks/useMusicQueries';
+import { SafeImage } from '@/components/ui/SafeImage';
 
 const DEFAULT_COVER = 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80';
 
@@ -61,6 +62,7 @@ function PlaylistTrackRow({
   currentTrackId?: string;
 }) {
   const isActive = currentTrackId === track.id;
+  const [imgError, setImgError] = useState(false);
 
   return (
     <div
@@ -79,9 +81,13 @@ function PlaylistTrackRow({
       </div>
 
       <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0">
-        {track.coverImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={track.coverImage} alt={track.title} className="w-full h-full object-cover" />
+        {track.coverImage && !imgError ? (
+          <img
+            src={track.coverImage}
+            alt={track.title}
+            className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
+          />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center">
             <span className="text-white/50 text-xs font-bold">{track.title.charAt(0)}</span>
@@ -117,6 +123,7 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
   const deletePlaylist = useDeletePlaylist();
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [coverImgError, setCoverImgError] = useState(false);
 
   const playlist: Playlist | undefined = data?.data;
   // Backend returns flat tracks — no wrapper needed
@@ -185,15 +192,14 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
 
       <div className="flex items-end gap-6 mb-8">
         <div className="relative w-44 h-44 rounded-2xl overflow-hidden shadow-2xl shadow-neon-violet/20 shrink-0">
-          {playlist.coverUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
+          {playlist.coverUrl && !coverImgError ? (
             <img
               src={playlist.coverUrl}
               alt={playlist.name}
               className="w-full h-full object-cover"
+              onError={() => setCoverImgError(true)}
             />
           ) : tracks.length > 0 ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={tracks[0].coverImage || DEFAULT_COVER}
               alt=""

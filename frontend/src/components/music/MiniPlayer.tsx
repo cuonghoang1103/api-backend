@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Play, Pause, SkipForward, SkipBack } from 'lucide-react';
@@ -16,6 +17,7 @@ interface MiniPlayerProps {
 
 export default function MiniPlayer({ isNight = true }: MiniPlayerProps) {
   const { currentTrack, isPlaying, currentTime, duration, next, previous, togglePlay } = useMusicStore();
+  const [imgError, setImgError] = useState(false);
 
   if (!currentTrack) return null;
 
@@ -65,13 +67,14 @@ export default function MiniPlayer({ isNight = true }: MiniPlayerProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {isSafeCoverUrl(currentTrack.coverImage) ? (
+            {isSafeCoverUrl(currentTrack.coverImage) && !imgError ? (
               <Image
                 src={currentTrack.coverImage}
                 alt={currentTrack.title}
                 width={44}
                 height={44}
                 className="object-cover w-full h-full"
+                onError={() => setImgError(true)}
               />
             ) : (
               <div

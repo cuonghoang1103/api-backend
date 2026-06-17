@@ -55,6 +55,7 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [focusedIdx, setFocusedIdx] = useState(-1);
+  const [failedThumbs, setFailedThumbs] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -338,13 +339,20 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
                 >
                   {/* Thumbnail */}
                   <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 shadow-md">
-                    {result.thumbnail ? (
+                    {result.thumbnail && !failedThumbs.has(result.id) ? (
                       <Image
                         src={result.thumbnail}
                         alt={result.title}
                         fill
                         className="object-cover"
                         unoptimized={result.thumbnail.startsWith('http')}
+                        onError={() => {
+                          setFailedThumbs(prev => {
+                            const next = new Set(prev);
+                            next.add(result.id);
+                            return next;
+                          });
+                        }}
                       />
                     ) : (
                       <div

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback, type Dispatch, type SetStateAction } from 'react';
 import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { useMusicStore } from '@/store/musicStore';
@@ -53,6 +53,8 @@ export default function CyberPlaylist() {
 
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState<'tracks' | 'history' | 'info'>('tracks');
+  const [imgError, setImgError] = useState(false);
+  const [failedThumbs, setFailedThumbs] = useState<Set<string>>(new Set());
 
   // ── Debounced search ──────────────────────────────────────────────
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -139,13 +141,14 @@ export default function CyberPlaylist() {
             }}
             whileHover={{ scale: 1.05, rotate: 2 }}
           >
-            {isSafeUrl(tracks[0]?.coverImage) ? (
+            {isSafeUrl(tracks[0]?.coverImage) && !imgError ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={tracks[0].coverImage}
                 alt="Playlist"
                 className="object-cover w-full h-full"
                 style={{ width: 56, height: 56 }}
+                onError={() => setImgError(true)}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
@@ -282,6 +285,8 @@ export default function CyberPlaylist() {
                   onPlay={() => handlePlayTrack(track)}
                   onAddToPlaylist={() => handleAddToPlaylist(track)}
                   colors={C}
+                  failedThumbs={failedThumbs}
+                  setFailedThumbs={setFailedThumbs}
                 />
               ))}
             </div>
@@ -357,6 +362,7 @@ export default function CyberPlaylist() {
 // ── CyberTrackItem ──────────────────────────────────────────────────────────────────────
 const CyberTrackItem = motion(function CyberTrackItem({
   track, index, isActive, isPlaying, onPlay, onAddToPlaylist, colors, dimmed = false,
+  failedThumbs, setFailedThumbs,
 }: {
   track: Track;
   index: number;
@@ -366,6 +372,8 @@ const CyberTrackItem = motion(function CyberTrackItem({
   onAddToPlaylist: () => void;
   colors: typeof C;
   dimmed?: boolean;
+  failedThumbs: Set<string>;
+  setFailedThumbs: Dispatch<SetStateAction<Set<string>>>;
 }) {
   const [hovered, setHovered] = useState(false);
 
@@ -404,13 +412,20 @@ const CyberTrackItem = motion(function CyberTrackItem({
         whileHover={{ scale: 1.08 }}
         style={{ opacity: dimmed ? 0.7 : 1 }}
       >
-        {isSafeUrl(track.coverImage) ? (
+        {isSafeUrl(track.coverImage) && !failedThumbs.has(track.id) ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={track.coverImage}
             alt={track.title}
             style={{ width: 44, height: 44 }}
             className="object-cover w-full h-full"
+            onError={() => {
+              setFailedThumbs(prev => {
+                const next = new Set(prev);
+                next.add(track.id);
+                return next;
+              });
+            }}
           />
         ) : (
           <div

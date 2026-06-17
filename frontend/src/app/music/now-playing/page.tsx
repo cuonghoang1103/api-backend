@@ -38,6 +38,8 @@ export default function NowPlayingPage() {
   const progressRef = useRef<HTMLDivElement>(null);
   const volumeRef = useRef<HTMLDivElement>(null);
   const [crosshair, setCrosshair] = useState({ x: 0, y: 0 });
+  const [bgImgError, setBgImgError] = useState(false);
+  const [vinylImgError, setVinylImgError] = useState(false);
 
   useEffect(() => { setIsMounted(true); }, []);
 
@@ -66,7 +68,8 @@ export default function NowPlayingPage() {
   if (!isMounted) return null;
 
   const bgImage = currentTrack?.coverImage;
-  const isBlurred = isSafeUrl(bgImage);
+  const isBlurred = isSafeUrl(bgImage) && !bgImgError;
+  const hasCover = isSafeUrl(currentTrack?.coverImage) && !vinylImgError;
 
   return (
     <div
@@ -78,6 +81,20 @@ export default function NowPlayingPage() {
         cursor: 'crosshair',
       }}
     >
+      {/* Hidden tracker for background image errors */}
+      <img
+        src={bgImage}
+        alt=""
+        className="hidden"
+        onError={() => setBgImgError(true)}
+      />
+      {/* Hidden tracker for vinyl image errors */}
+      <img
+        src={currentTrack?.coverImage}
+        alt=""
+        className="hidden"
+        onError={() => setVinylImgError(true)}
+      />
       {/* ── Blurred background ── */}
       {isBlurred && (
         <div
@@ -194,7 +211,7 @@ export default function NowPlayingPage() {
                 <motion.div
                   className="absolute inset-0 rounded-3xl"
                   style={{
-                    background: isSafeUrl(currentTrack.coverImage)
+                    background: hasCover
                       ? `url(${currentTrack.coverImage}) center/cover`
                       : `linear-gradient(135deg, ${C.primary}, ${C.secondary})`,
                     boxShadow: `0 0 80px rgba(139,92,246,0.4), 0 0 160px rgba(139,92,246,0.15)`,
@@ -207,7 +224,7 @@ export default function NowPlayingPage() {
                   ]}}
                   transition={{ duration: 5, repeat: Infinity }}
                 />
-                {!isSafeUrl(currentTrack.coverImage) && (
+                {!hasCover && (
                   <div className="absolute inset-0 flex items-center justify-center rounded-3xl">
                     <span className="text-white/40 font-bold text-7xl">
                       {currentTrack.title.charAt(0)}

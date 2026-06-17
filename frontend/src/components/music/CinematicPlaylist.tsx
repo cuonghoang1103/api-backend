@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback, type Dispatch, type SetStateAction } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, Search, ChevronRight, Music, Loader2 } from 'lucide-react';
@@ -10,6 +10,12 @@ import type { Track } from '@/types';
 function isSafeCoverUrl(url: unknown): url is string {
   if (typeof url !== 'string' || !url.trim()) return false;
   return url.startsWith('http') || url.startsWith('/uploads/');
+}
+
+function ImageWithFallback({ src, alt, ...props }: React.ComponentProps<typeof Image>) {
+  const [err, setErr] = useState(false);
+  if (err) return null;
+  return <Image {...props} src={src} alt={alt} onError={() => setErr(true)} />;
 }
 
 interface CinematicPlaylistProps {
@@ -33,6 +39,7 @@ export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistP
   const { tracks, currentTrack, isPlaying, playTrackAtIndex, currentIndex } = useMusicStore();
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [failedThumbs, setFailedThumbs] = useState<Set<string | number>>(new Set<string | number>());
 
   // ── Debounced search ─────────────────────────────────────────────
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -114,13 +121,14 @@ export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistP
             }}
             whileHover={{ scale: 1.05, rotate: 2 }}
           >
-            {isSafeCoverUrl(tracks[0]?.coverImage) ? (
+            {isSafeCoverUrl(tracks[0]?.coverImage) && !failedThumbs.has('header') ? (
               <Image
                 src={tracks[0].coverImage}
                 alt="Playlist Cover"
                 width={64}
                 height={64}
                 className="object-cover w-full h-full"
+                onError={() => setFailedThumbs(prev => { const n = new Set(prev); n.add('header'); return n; })}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
@@ -228,6 +236,8 @@ export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistP
                         }
                       }}
                       colors={neonColors}
+                      failedThumbs={failedThumbs}
+                      setFailedThumbs={setFailedThumbs}
                     />
                   </motion.div>
                 );
@@ -251,13 +261,14 @@ export default function CinematicPlaylist({ isNight = true }: CinematicPlaylistP
               '--cinematic-primary': neonColors.primary,
             } as React.CSSProperties}
           >
-            {isSafeCoverUrl(currentTrack.coverImage) ? (
+            {isSafeCoverUrl(currentTrack.coverImage) && !failedThumbs.has('nowPlaying') ? (
               <Image
                 src={currentTrack.coverImage}
                 alt="Now Playing"
                 width={32}
                 height={32}
                 className="object-cover w-full h-full"
+                onError={() => setFailedThumbs(prev => { const n = new Set(prev); n.add('nowPlaying'); return n; })}
               />
             ) : (
               <div
@@ -299,6 +310,8 @@ function TrackItem({
   isPlaying,
   onPlay,
   colors,
+  failedThumbs,
+  setFailedThumbs,
 }: {
   track: Track;
   index: number;
@@ -306,6 +319,8 @@ function TrackItem({
   isPlaying: boolean;
   onPlay: () => void;
   colors: NeonColors;
+  failedThumbs: Set<string | number>;
+  setFailedThumbs: Dispatch<SetStateAction<Set<string | number>>>;
 }) {
   return (
     <motion.div
@@ -341,13 +356,14 @@ function TrackItem({
         className="relative w-11 h-11 rounded-lg overflow-hidden shrink-0"
         whileHover={{ scale: 1.05 }}
       >
-        {isSafeCoverUrl(track.coverImage) ? (
+        {isSafeCoverUrl(track.coverImage) && !failedThumbs.has(track.id) ? (
           <Image
             src={track.coverImage}
             alt={track.title}
             width={44}
             height={44}
             className="object-cover w-full h-full"
+            onError={() => setFailedThumbs(prev => { const n = new Set(prev); n.add(track.id); return n; })}
           />
         ) : (
           <div

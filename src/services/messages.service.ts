@@ -19,6 +19,8 @@
  *   - getUnreadCount(userId)
  *   - softDeleteMessage(messageId, requesterId)
  *   - attachFilesToMessage(messageId, fileIds)
+ *   - setThreadPreference / clearThreadPreference (pin/mute/archive/markUnread)
+ *   - archiveThread (soft-delete a thread for the current user)
  */
 
 import { prisma } from '../config/database.js';
@@ -27,6 +29,21 @@ import { registerSocketEmitter, type MessageEventPayload } from '../socket/messa
 
 const MAX_CONTENT_LENGTH = 4000;
 const MAX_ATTACHMENTS_PER_MESSAGE = 5;
+
+/**
+ * Per-user thread preferences. Stored in the MessageThread JSONB
+ * `preferences` column keyed by userId so each participant can
+ * independently pin / mute / archive / mark-unread the thread
+ * without affecting the other side's view.
+ */
+export interface ThreadPreference {
+  pinnedAt?: string;       // ISO timestamp; presence = pinned
+  mutedUntil?: string;     // ISO timestamp; suppress notifications until then
+  archivedAt?: string;     // ISO timestamp; hide from default inbox
+  markedUnreadAt?: string; // ISO timestamp; "Mark as unread" badge
+}
+
+type ThreadPreferencesMap = Record<string, ThreadPreference>;
 
 function isAdmin(user: { roles: { role: { name: string } }[] }): boolean {
   return user.roles.some(
@@ -55,10 +72,16 @@ export class MessagesService {
    * same thread. Admin-side threads are 1:1 (one user ↔ one admin),
    * not a group; the current architecture assumes a single admin
    * recipient (or the first admin found) for support routing.
+   *
+   * Emits `thread:created` over socket ONLY when a new thread is
+   * actually created (not on idempotent re-fetch). This is the
+   * bugfix for the sidebar not refreshing when the other side
+   * starts a new conversation.
    */
   async getOrCreateAdminThread(userId: number) {
     const existing = await prisma.messageThread.findFirst({
       where: { type: 'ADMIN', userId, adminUserId: { not: null } },
+      include: this.threadIncludeForViewer(userId),
     });
     if (existing) return existing;
 
@@ -71,9 +94,13 @@ export class MessagesService {
       );
     }
 
-    return prisma.messageThread.create({
+    const created = await prisma.messageThread.create({
       data: { type: 'ADMIN', userId, adminUserId: adminId },
+      include: this.threadIncludeForViewer(userId),
     });
+
+    this.emitThreadCreated(created);
+    return created;
   }
 
   /**
@@ -81,6 +108,9 @@ export class MessagesService {
    * creating one if it doesn't exist. Participants are stored
    * in canonical order (smaller id first) to keep the unique
    * index from creating duplicate threads.
+   *
+   * Emits `thread:created` on socket when a new thread is created
+   * so BOTH participants see it in their sidebar without a refresh.
    */
   async getOrCreateUserThread(userId: number, peerId: number) {
     if (userId === peerId) {
@@ -105,6 +135,7 @@ export class MessagesService {
     const [a, b] = userId < peerId ? [userId, peerId] : [peerId, userId];
     const existing = await prisma.messageThread.findFirst({
       where: { type: 'USER', userAId: a, userBId: b },
+      include: this.threadIncludeForViewer(userId),
     });
     if (existing) return existing;
 
@@ -116,9 +147,13 @@ export class MessagesService {
       );
     }
 
-    return prisma.messageThread.create({
+    const created = await prisma.messageThread.create({
       data: { type: 'USER', userAId: a, userBId: b },
+      include: this.threadIncludeForViewer(userId),
     });
+
+    this.emitThreadCreated(created);
+    return created;
   }
 
   async getThread(threadId: number, viewerId: number) {
@@ -194,11 +229,17 @@ export class MessagesService {
     return threads.map((t, idx) => {
       const lastMsg = t.messages[0] ?? null;
       const lastRead = readMap.get(t.id) ?? new Date(0);
+      // Per-thread unread: count own-recipient messages newer than lastRead.
+      // We don't store this in the row to keep the model simple; the
+      // list endpoint already pays one query for messages, so we
+      // piggyback on it. The store keeps a running count in memory
+      // and refreshes from this endpoint on every load.
       const unread = lastMsg && lastMsg.senderId !== userId && lastMsg.createdAt > lastRead ? 1 : 0;
       return {
         ...serialized[idx],
         lastMessage: lastMsg ? this.serializeMessagePreview(lastMsg) : null,
         unreadCount: unread,
+        preferences: this.getPreferenceForViewer(t.preferences, userId),
       };
     });
   }
@@ -245,6 +286,7 @@ export class MessagesService {
         ...serialized[idx],
         lastMessage: lastMsg ? this.serializeMessagePreview(lastMsg) : null,
         unreadCount: unread,
+        preferences: this.getPreferenceForViewer(t.preferences, adminId),
       };
     });
   }
@@ -591,6 +633,94 @@ export class MessagesService {
     return rows.filter((r) => r.alias.length > 0);
   }
 
+  // ─── Thread preferences (per-user pin/mute/archive/mark-unread) ───
+
+  /**
+   * Per-user preference helper. The DB column is JSONB keyed by
+   * userId, so two participants can pin/mute independently.
+   * Read returns `null` (NOT undefined) when there's no entry so
+   * JSON serialisation round-trips cleanly.
+   */
+  private getPreferenceForViewer(
+    preferences: unknown,
+    viewerId: number,
+  ): ThreadPreference | null {
+    if (!preferences || typeof preferences !== 'object') return null;
+    const map = preferences as ThreadPreferencesMap;
+    return map[String(viewerId)] ?? null;
+  }
+
+  /**
+   * Set or clear a single preference slot for the current viewer
+   * (e.g. `pinnedAt = now` or `mutedUntil = "2026-06-19T00:00:00Z"`).
+   * Pass `null` to clear that slot.
+   *
+   * Emits a `thread:updated` socket event so other devices of the
+   * same user see the change immediately.
+   */
+  async setThreadPreference(
+    threadId: number,
+    userId: number,
+    slot: keyof ThreadPreference,
+    value: string | null,
+  ) {
+    const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
+    if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');
+    this.assertParticipant(thread, userId);
+
+    const current = (thread.preferences ?? {}) as ThreadPreferencesMap;
+    const mine = { ...(current[String(userId)] ?? {}) };
+    if (value === null) delete mine[slot];
+    else mine[slot] = value;
+
+    const next: ThreadPreferencesMap = { ...current, [String(userId)]: mine };
+    await prisma.messageThread.update({
+      where: { id: threadId },
+      data: { preferences: next as any },
+    });
+
+    this.emitThreadUpdated(thread, { preferenceChanged: { userId, slot, value } });
+    return this.getPreferenceForViewer(next, userId);
+  }
+
+  /**
+   * "Archive" a thread for the current user. Sets `archivedAt`
+   * so the sidebar can hide it under a separate "Archived" tab
+   * without removing the messages.
+   */
+  async archiveThread(threadId: number, userId: number) {
+    return this.setThreadPreference(threadId, userId, 'archivedAt', new Date().toISOString());
+  }
+
+  async unarchiveThread(threadId: number, userId: number) {
+    return this.setThreadPreference(threadId, userId, 'archivedAt', null);
+  }
+
+  /**
+   * "Mark as unread" — sets `markedUnreadAt` to "now" so the
+   * sidebar shows a bold dot + the last-message timestamp
+   * without bumping the row to the top. (The inbox re-sort
+   * uses lastMessageAt; this just makes the row visually
+   * appear as unread until the user clicks into it.)
+   */
+  async markThreadUnread(threadId: number, userId: number) {
+    return this.setThreadPreference(threadId, userId, 'markedUnreadAt', new Date().toISOString());
+  }
+
+  /**
+   * Generic "preference update" channel used by the route handler
+   * for arbitrary `{ slot: 'pinnedAt' | 'mutedUntil' | 'archivedAt' | 'markedUnreadAt', value: ISOString | null }`
+   * payloads. Keeps the route surface area small.
+   */
+  async updateThreadPreference(
+    threadId: number,
+    userId: number,
+    slot: keyof ThreadPreference,
+    value: string | null,
+  ) {
+    return this.setThreadPreference(threadId, userId, slot, value);
+  }
+
   // ─── Helpers ───────────────────────────────────────────
 
   private async buildAttachmentCreates(fileIds: number[]) {
@@ -679,6 +809,15 @@ export class MessagesService {
       if (nick && nick.alias.length > 0) alias = nick.alias;
     }
 
+    // Read the per-viewer preference set straight from the row.
+    // The `getThread` route includes `preferences` already; the
+    // `listThreads` route reads it via `select` and passes it
+    // through `getPreferenceForViewer`.
+    const rawPrefs = (t as any).preferences;
+    const preferences = rawPrefs !== undefined
+      ? this.getPreferenceForViewer(rawPrefs, viewerId)
+      : null;
+
     return {
       id: t.id,
       type: t.type,
@@ -694,6 +833,7 @@ export class MessagesService {
             alias,
           }
         : null,
+      preferences,
     };
   }
 
@@ -809,6 +949,67 @@ export class MessagesService {
   }
 
   // ─── Realtime fan-out ──────────────────────────────────
+
+  private emitThreadCreated(thread: {
+    id: number;
+    type: string;
+    userId: number | null;
+    adminUserId: number | null;
+    userAId: number | null;
+    userBId: number | null;
+    lastMessageAt: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
+    user?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+    adminUser?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+    userA?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+    userB?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
+  }) {
+    const emitter = this.getEmitter();
+    if (!emitter) return;
+    const participantIds = this.collectParticipantIds(thread);
+    const payload = {
+      threadId: thread.id,
+      threadType: thread.type,
+      participantIds,
+      thread,
+    };
+    // Fire to BOTH participants so the freshly-created thread shows
+    // up in the sidebar of whoever didn't initiate the create.
+    // Sender will also receive it (so its own UI is consistent),
+    // and the store treats it idempotently.
+    for (const uid of participantIds) {
+      emitter.emit('thread:created', { ...payload, viewerId: uid });
+    }
+  }
+
+  private threadIncludeForViewer(_viewerId: number) {
+    return {
+      user: {
+        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+      },
+      adminUser: {
+        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+      },
+      userA: {
+        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+      },
+      userB: {
+        select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+      },
+      messages: {
+        orderBy: { createdAt: 'desc' },
+        take: 1,
+        select: {
+          id: true,
+          content: true,
+          senderId: true,
+          createdAt: true,
+          attachments: { select: { id: true, mimeType: true, fileName: true } },
+        },
+      },
+    } as const;
+  }
 
   private emitNewMessage(
     thread: { id: number; type: string; userId: number | null; adminUserId: number | null; userAId: number | null; userBId: number | null },

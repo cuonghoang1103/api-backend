@@ -49,7 +49,7 @@ export interface ReadEventPayload {
 export interface MessagingEmitter {
   emit(event: 'thread:new-message', payload: MessageEventPayload): void;
   emit(event: 'thread:read', payload: ReadEventPayload): void;
-  emit(event: 'message:updated' | 'thread:updated', payload: unknown): void;
+  emit(event: 'message:updated' | 'thread:updated' | 'thread:created', payload: unknown): void;
   emit(event: string, payload: unknown): void;
 }
 

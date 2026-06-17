@@ -968,6 +968,29 @@ export const messagingApi = {
   // Unread badge
   getUnreadCount: () =>
     api.get<ApiResponse<{ count: number }>>('/messages/unread-count'),
+
+  // Per-user thread preferences (Pin / Mute / Archive / Mark unread).
+  // Body shape: { slot, value: ISOString | null }
+  updatePreference: (
+    threadId: number,
+    payload: { slot: 'pinnedAt' | 'mutedUntil' | 'archivedAt' | 'markedUnreadAt'; value: string | null },
+  ) =>
+    api.patch<ApiResponse<{ preferences: MessagingThreadPreference | null }>>(
+      `/messages/threads/${threadId}/preference`,
+      payload,
+    ),
+  archiveThread: (threadId: number) =>
+    api.delete<ApiResponse<{ preferences: MessagingThreadPreference | null }>>(
+      `/messages/threads/${threadId}`,
+    ),
+  unarchiveThread: (threadId: number) =>
+    api.post<ApiResponse<{ preferences: MessagingThreadPreference | null }>>(
+      `/messages/threads/${threadId}/unarchive`,
+    ),
+  markThreadUnread: (threadId: number) =>
+    api.post<ApiResponse<{ preferences: MessagingThreadPreference | null }>>(
+      `/messages/threads/${threadId}/mark-unread`,
+    ),
 };
 
 // ─── Messaging types (mirror the backend serialiser) ────
@@ -976,6 +999,19 @@ export interface MessagingPeer {
   username: string;
   displayName: string;
   avatarUrl: string | null;
+}
+
+/**
+ * Per-viewer preference set stored in the MessageThread JSONB
+ * `preferences` column under the viewer's userId. Each slot is
+ * optional — its presence means "yes" (e.g. pinnedAt is set = pinned)
+ * and `null` means "not set".
+ */
+export interface MessagingThreadPreference {
+  pinnedAt?: string;
+  mutedUntil?: string;
+  archivedAt?: string;
+  markedUnreadAt?: string;
 }
 
 export interface MessagingThread {
@@ -995,6 +1031,8 @@ export interface MessagingThread {
     attachmentName?: string | null;
   } | null;
   unreadCount?: number;
+  /** Per-viewer preferences. Backend omits this for non-participants. */
+  preferences?: MessagingThreadPreference | null;
 }
 
 export interface MessagingAttachment {

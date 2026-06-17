@@ -250,7 +250,17 @@ jobs:
 
       - name: Sync .next/ into frontend container
         run: |
-          ssh vps "docker exec -u root cuonghoangdev_frontend sh -c 'rm -rf /app/.next/* && mkdir -p /app/.next' && docker cp /opt/cuonghoangdev/frontend/.next/. cuonghoangdev_frontend:/app/.next/ && docker restart cuonghoangdev_frontend"
+          # IMPORTANT: copy BOTH `static/` (CSS + JS chunks for the
+          # browser) AND the standalone `server/` + `server/app/`
+          # (the server-rendered pages and the manifest). Skipping
+          # static/ would 404 every _next/static/chunks/*.js and
+          # leave the user staring at a black hydration-mismatch
+          # page. We do the static copy FIRST, then the rest, then
+          # restart so the server re-reads the manifest.
+          ssh -F $HOME/.ssh/config vps "docker exec -u root cuonghoangdev_frontend sh -c 'rm -rf /app/.next && mkdir -p /app/.next/static /app/.next/server'"
+          docker cp /opt/cuonghoangdev/frontend/.next/static/. cuonghoangdev_frontend:/app/.next/static/
+          docker cp /opt/cuonghoangdev/frontend/.next/server/. cuonghoangdev_frontend:/app/.next/server/
+          ssh -F $HOME/.ssh/config vps "docker restart cuonghoangdev_frontend"
 
       - name: Setup cron jobs on VPS
         run: |

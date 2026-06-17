@@ -117,7 +117,14 @@ interface MessagingState {
   muteFor: (threadId: number, durationMinutes: number | null) => Promise<void>;
   archiveThread: (threadId: number) => Promise<void>;
   unarchiveThread: (threadId: number) => Promise<void>;
+  // Toggle the archived state. Pass `nextView` if you want the
+  // caller (UI) to be told which tab to switch to when the row
+  // disappears from the current view. This is how the row menu
+  // keeps the user in a sensible place after toggling.
+  toggleArchive: (threadId: number) => Promise<{ wasArchived: boolean; isArchived: boolean }>;
   markThreadUnread: (threadId: number) => Promise<void>;
+  unmarkThreadUnread: (threadId: number) => Promise<void>;
+  toggleMarkUnread: (threadId: number) => Promise<{ wasMarked: boolean; isMarked: boolean }>;
 
   // Messenger-style destructive actions
   deleteChat: (threadId: number) => Promise<void>;
@@ -940,6 +947,65 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     } catch (e) {
       throw e;
     }
+  },
+
+  // Reverse of `markThreadUnread`. Clears the `markedUnreadAt`
+  // preference so the row returns to its normal "read" style
+  // and (importantly) does NOT keep the forced unreadCount bump
+  // from the mark-unread action — the real unreadCount stays as
+  // the server reports it.
+  async unmarkThreadUnread(threadId) {
+    try {
+      // The server endpoint is `messagingApi.updatePreference` —
+      // passing `value: null` clears the slot. We then mirror
+      // the response into local state so the row's "bold" style
+      // goes away immediately.
+      const res = await messagingApi.updatePreference(threadId, {
+        slot: 'markedUnreadAt',
+        value: null,
+      });
+      const preferences = res.data.data?.preferences ?? null;
+      set((s) => ({
+        threads: s.threads.map((t) => {
+          if (t.id !== threadId) return t;
+          return { ...t, preferences };
+        }),
+        currentThread:
+          s.currentThread && s.currentThread.id === threadId
+            ? { ...s.currentThread, preferences }
+            : s.currentThread,
+      }));
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  // Toggle helper for the "Mark unread" item in the row/header
+  // menu. Returns enough info for the caller to update its UI
+  // state (e.g. flip the menu label).
+  async toggleMarkUnread(threadId) {
+    const cur = get().threads.find((t) => t.id === threadId);
+    const wasMarked = !!cur?.preferences?.markedUnreadAt;
+    if (wasMarked) {
+      await get().unmarkThreadUnread(threadId);
+      return { wasMarked, isMarked: false };
+    }
+    await get().markThreadUnread(threadId);
+    return { wasMarked, isMarked: true };
+  },
+
+  // Toggle helper for the "Lưu trữ" / "Bỏ lưu trữ" item. We
+  // reuse the existing archive / unarchive endpoints so the
+  // server stays the single source of truth for preferences.
+  async toggleArchive(threadId) {
+    const cur = get().threads.find((t) => t.id === threadId);
+    const wasArchived = !!cur?.preferences?.archivedAt;
+    if (wasArchived) {
+      await get().unarchiveThread(threadId);
+      return { wasArchived, isArchived: false };
+    }
+    await get().archiveThread(threadId);
+    return { wasArchived, isArchived: true };
   },
 
   // ─── Destructive: delete chat from viewer's inbox ─────

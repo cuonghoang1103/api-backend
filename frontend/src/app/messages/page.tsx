@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useRef, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SafeImage } from '@/components/ui/SafeImage';
 import {
@@ -15,6 +15,7 @@ import {
   MessageCircle,
   Headphones,
   ShieldOff,
+  MoreHorizontal,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
@@ -28,6 +29,7 @@ import BlockedUsersModal from '@/components/messaging/BlockedUsersModal';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
+import toast from 'react-hot-toast';
 
 // iOS-like spring curve — used everywhere for hover/transitions
 const IOS_SPRING = 'cubic-bezier(0.16, 1, 0.3, 1)';
@@ -179,14 +181,17 @@ function MessagesPageInner() {
     >
       <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-6xl flex-col px-4 py-6">
         <header className="mb-4 flex items-center justify-between">
-          <h1
-            className="text-2xl font-bold tracking-tight text-text-primary"
-            // iOS uses tighter letter-spacing on display text. -0.022em
-            // matches Apple's San Francisco tracking on a 24px headline.
-            style={{ letterSpacing: '-0.022em' }}
-          >
-            Tin nhắn
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1
+              className="text-2xl font-bold tracking-tight text-text-primary"
+              // iOS uses tighter letter-spacing on display text. -0.022em
+              // matches Apple's San Francisco tracking on a 24px headline.
+              style={{ letterSpacing: '-0.022em' }}
+            >
+              Tin nhắn
+            </h1>
+            <InboxTopMenu onOpenBlocked={() => setBlockedModalOpen(true)} />
+          </div>
           <ConnectionPill
             isConnected={isConnected}
             isConnecting={isConnecting}
@@ -490,6 +495,125 @@ function EmptyChatState({
         <Headphones className="h-4 w-4" strokeWidth={2} />
         <span>{isAdmin ? 'Mở thread hỗ trợ của bạn' : 'Chat với Admin'}</span>
       </button>
+    </div>
+  );
+}
+
+// ── Top-right "3-dot" menu for the inbox header ─────────────
+// Sits next to the "Tin nhắn" title and exposes the page-level
+// actions that don't belong on a single row: open the blocklist,
+// refresh the inbox, mark everything as read. Lives in this
+// file (instead of its own component) because it's tightly
+// coupled to `MessagesPageInner` state — opening the blocklist
+// modal, etc.
+function InboxTopMenu({ onOpenBlocked }: { onOpenBlocked: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [markingAll, setMarkingAll] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  const handleRefresh = async () => {
+    setOpen(false);
+    try {
+      await useMessagingStore.getState().loadThreads();
+      toast.success('Đã làm mới hộp thư');
+    } catch {
+      toast.error('Không thể làm mới');
+    }
+  };
+
+  const handleMarkAllRead = async () => {
+    setOpen(false);
+    setMarkingAll(true);
+    try {
+      const store = useMessagingStore.getState();
+      // Mark all threads as read on the server. We hit the
+      // per-thread endpoint in parallel for speed. The store
+      // already exposes `markRead` (sets unreadCount → 0 on
+      // the local state) — we just need to ensure each thread
+      // gets hit. We do best-effort: if some fail the rest
+      // still go through.
+      await Promise.allSettled(
+        store.threads
+          .filter((t) => (t.unreadCount ?? 0) > 0)
+          .map((t) => store.markRead(t.id)),
+      );
+      // Always re-fetch from server so the badges are 100% in sync
+      await store.loadThreads();
+      toast.success('Đã đánh dấu tất cả đã đọc');
+    } catch {
+      toast.error('Không thể đánh dấu tất cả đã đọc');
+    } finally {
+      setMarkingAll(false);
+    }
+  };
+
+  const handleOpenBlocked = () => {
+    setOpen(false);
+    onOpenBlocked();
+  };
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((s) => !s)}
+        className="rounded-lg p-2 text-text-muted transition-colors hover:bg-white/[0.06] hover:text-text-primary"
+        aria-label="Tuỳ chọn hộp thư"
+        title="Tuỳ chọn"
+      >
+        <MoreHorizontal className="h-5 w-5" />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -4, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -4, scale: 0.97 }}
+            transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute right-0 top-full z-30 mt-1 w-56 overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a14]/98 p-1.5 shadow-2xl backdrop-blur"
+          >
+            <button
+              onClick={handleOpenBlocked}
+              className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px] text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary"
+            >
+              <ShieldOff className="h-4 w-4 shrink-0" />
+              <span className="flex-1">Người dùng đã chặn</span>
+            </button>
+            <button
+              onClick={handleMarkAllRead}
+              disabled={markingAll}
+              className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px] text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary disabled:opacity-50"
+            >
+              {markingAll ? (
+                <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
+              ) : (
+                <CheckCheck className="h-4 w-4 shrink-0" />
+              )}
+              <span className="flex-1">Đánh dấu tất cả đã đọc</span>
+            </button>
+            <div className="my-1 border-t border-white/[0.06]" />
+            <button
+              onClick={handleRefresh}
+              className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px] text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary"
+            >
+              <RefreshCcw className="h-4 w-4 shrink-0" />
+              <span className="flex-1">Làm mới hộp thư</span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

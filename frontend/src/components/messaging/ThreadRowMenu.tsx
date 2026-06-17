@@ -61,6 +61,7 @@ export default function ThreadRowMenu({
   const mutedUntil = thread.preferences?.mutedUntil;
   const isMuted = mutedUntil ? new Date(mutedUntil) > new Date() : false;
   const isArchived = !!thread.preferences?.archivedAt;
+  const isMarkedUnread = !!thread.preferences?.markedUnreadAt;
   const peerId = thread.peer?.id;
   const isSelfThread = !!peerId && auth.user?.id === peerId;
 
@@ -86,8 +87,8 @@ export default function ThreadRowMenu({
   const handleMarkUnread = async () => {
     closeMenu();
     try {
-      await store.markThreadUnread(thread.id);
-      toast.success('Đã đánh dấu chưa đọc');
+      const { isMarked } = await store.toggleMarkUnread(thread.id);
+      toast.success(isMarked ? 'Đã đánh dấu chưa đọc' : 'Đã bỏ đánh dấu chưa đọc');
     } catch (e) {
       toast.error('Không thể đánh dấu chưa đọc');
     }
@@ -196,8 +197,8 @@ export default function ThreadRowMenu({
             onClick={handlePin}
           />
           <RowMenuItem
-            icon={MailOpen}
-            label="Đánh dấu chưa đọc"
+            icon={isMarkedUnread ? MailOpen : MailOpen}
+            label={isMarkedUnread ? 'Bỏ đánh dấu chưa đọc' : 'Đánh dấu chưa đọc'}
             onClick={handleMarkUnread}
           />
           <RowMenuItem

@@ -101,6 +101,23 @@ export default function ThreadList() {
     return { archived, pinned, unread, all: store.threads.length };
   }, [store.threads]);
 
+  // Auto-bounce the user out of the "Lưu trữ" / "Chưa đọc" /
+  // "Ghim" tab when the current list empties out (e.g. they
+  // just unarchived the last thread via the row menu). Without
+  // this, the user is left staring at an empty list with no
+  // idea why the row they just toggled is gone.
+  useEffect(() => {
+    if (!store.threadsLoaded) return;
+    if (visibleThreads.length > 0) return;
+    if (filter === 'archived' && counts.archived === 0) {
+      setFilter('all');
+    } else if (filter === 'unread' && counts.unread === 0) {
+      setFilter('all');
+    } else if (filter === 'pinned' && counts.pinned === 0) {
+      setFilter('all');
+    }
+  }, [visibleThreads.length, filter, counts.archived, counts.unread, counts.pinned, store.threadsLoaded]);
+
   return (
     <div ref={containerRef} className="flex min-h-0 flex-1 flex-col">
       {/* Quick action — chat with admin (sticky) */}

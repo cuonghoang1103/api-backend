@@ -22,6 +22,7 @@ import ThreadList from '@/components/messaging/ThreadList';
 import MessageList from '@/components/messaging/MessageList';
 import MessageInput from '@/components/messaging/MessageInput';
 import NicknamePopover from '@/components/messaging/NicknamePopover';
+import ThreadHeaderMenu from '@/components/messaging/ThreadHeaderMenu';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -407,6 +408,7 @@ function ThreadHeader({
           {statusText}
         </p>
       </div>
+      {peer && <ThreadHeaderMenu threadId={thread!.id} peerId={peer.id} />}
     </div>
   );
 }

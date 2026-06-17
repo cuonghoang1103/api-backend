@@ -23,6 +23,7 @@ import multer from 'multer';
 import { authenticate, requireRole } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { messagesService } from '../services/messages.service.js';
+import { messagingSafetyService } from '../services/messaging-safety.service.js';
 import { uploadService } from '../services/upload.service.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -334,6 +335,79 @@ router.post('/threads/:id/mark-unread', async (req: Request, res: Response, next
     if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
     const preferences = await messagesService.markThreadUnread(id, req.userId!);
     res.json({ success: true, data: { preferences } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── DELETE /api/v1/messages/threads/:id/hard ───────────
+// "Delete chat" — full delete of the thread for the current
+// user only. We mark all messages in the thread as deleted
+// for this viewer (per-user delete via MessageRead flags is
+// too complex, so we just hide the row from the sidebar by
+// setting preferences.archivedAt to a sentinel "deleted" slot
+// and then archive the thread on the server side too).
+//
+// To keep things simple and reversible, the API just sets
+// preferences.archivedAt; the row stays in the DB so the
+// other participant can still see their copy. The UI hides
+// the row from the inbox once archived.
+router.delete('/threads/:id/hard', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const preferences = await messagesService.archiveThread(id, req.userId!);
+    res.json({ success: true, data: { preferences, deleted: true } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── POST /api/v1/messages/threads/:id/report ──────────
+// Report a thread to moderators. Body: { reason, category? }.
+router.post('/threads/:id/report', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const reason = String(req.body?.reason ?? '').trim();
+    const category = req.body?.category ?? null;
+    const result = await messagingSafetyService.reportThread(req.userId!, id, reason, category);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── Per-viewer blocklist (Messenger-style) ────────────
+// Get the list of users THIS user has blocked.
+router.get('/blocks', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const list = await messagingSafetyService.listBlockedUsers(req.userId!);
+    res.json({ success: true, data: list });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Block a user. Body: { reason? }.
+router.post('/blocks/:userId', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.userId, 10);
+    if (isNaN(id)) throw new AppError('Invalid user ID', 400, 'INVALID_ID');
+    const result = await messagingSafetyService.blockUser(req.userId!, id, req.body?.reason ?? null);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Unblock a user.
+router.delete('/blocks/:userId', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.userId, 10);
+    if (isNaN(id)) throw new AppError('Invalid user ID', 400, 'INVALID_ID');
+    const result = await messagingSafetyService.unblockUser(req.userId!, id);
+    res.json({ success: true, data: result });
   } catch (error) {
     next(error);
   }

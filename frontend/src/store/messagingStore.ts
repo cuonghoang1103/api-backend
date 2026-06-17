@@ -21,6 +21,7 @@ import {
   messagingApi,
   type MessagingMessage,
   type MessagingThread,
+  type MessagingBlockedUser,
 } from '@/lib/api';
 import {
   connectSocket,
@@ -110,6 +111,21 @@ interface MessagingState {
   unarchiveThread: (threadId: number) => Promise<void>;
   markThreadUnread: (threadId: number) => Promise<void>;
 
+  // Messenger-style destructive actions
+  deleteChat: (threadId: number) => Promise<void>;
+  reportThread: (
+    threadId: number,
+    payload: { reason: string; category?: 'spam' | 'harassment' | 'hate' | 'impersonation' | 'other' | null },
+  ) => Promise<{ id: number; createdAt: string }>;
+
+  // Blocklist
+  blockedUsers: MessagingBlockedUser[];
+  blockedLoaded: boolean;
+  loadBlocked: () => Promise<void>;
+  blockUser: (userId: number, reason?: string) => Promise<void>;
+  unblockUser: (userId: number) => Promise<void>;
+  isBlocked: (userId: number) => boolean;
+
   // Presence
   getPresence: (userId: number) => { online: boolean; lastSeen: number };
 
@@ -165,6 +181,8 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   initError: null,
   typing: { byThread: {} },
   presence: { byUserId: {} },
+  blockedUsers: [],
+  blockedLoaded: false,
 
   async init() {
     const auth = useAuthStore.getState();
@@ -236,7 +254,12 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
         }
       }
       // Initial data load
-      await Promise.all([get().loadThreads(), get().refreshUnread(), get().loadOnlineUsers()]);
+      await Promise.all([
+        get().loadThreads(),
+        get().refreshUnread(),
+        get().loadOnlineUsers(),
+        get().loadBlocked(),
+      ]);
       set({ isConnecting: false, initError: null });
     } catch (e: any) {
       set({
@@ -910,6 +933,87 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     } catch (e) {
       throw e;
     }
+  },
+
+  // ─── Destructive: delete chat from viewer's inbox ─────
+  // Per Messenger convention "Delete chat" is local — it
+  // archives the thread (so the row leaves the default inbox)
+  // and clears the chat state. The other participant keeps
+  // their copy. We also close the thread on the client side
+  // so the right-hand panel goes back to the empty state.
+  async deleteChat(threadId) {
+    try {
+      const res = await messagingApi.deleteChat(threadId);
+      const preferences = res.data.data?.preferences ?? null;
+      set((s) => ({
+        threads: s.threads.map((t) => (t.id === threadId ? { ...t, preferences } : t)),
+        currentThread:
+          s.currentThread && s.currentThread.id === threadId
+            ? { ...s.currentThread, preferences }
+            : s.currentThread,
+      }));
+      // If the deleted thread was the one open in the panel,
+      // close it so the user lands back on the empty-state
+      // hint card instead of staring at a "Chat đã xoá" body.
+      if (get().currentThreadId === threadId) {
+        get().closeThread();
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  // ─── Report thread to moderators ──────────────────────
+  async reportThread(threadId, payload) {
+    const res = await messagingApi.reportThread(threadId, payload);
+    return res.data.data;
+  },
+
+  // ─── Blocklist ────────────────────────────────────────
+  async loadBlocked() {
+    try {
+      const res = await messagingApi.listBlocked();
+      set({ blockedUsers: res.data.data ?? [], blockedLoaded: true });
+    } catch {
+      set({ blockedUsers: [], blockedLoaded: true });
+    }
+  },
+
+  async blockUser(userId, reason) {
+    await messagingApi.blockUser(userId, reason);
+    // Optimistically refresh the local list so the next
+    // `isBlocked()` call returns true without a round-trip.
+    set((s) => ({
+      blockedUsers: s.blockedUsers.find((u) => u.id === userId)
+        ? s.blockedUsers
+        : s.blockedUsers,
+      blockedLoaded: true,
+    }));
+    // Pull the canonical list (with the newly-blocked user's
+    // profile info) so the UI can show them in a "Blocked"
+    // sheet if needed.
+    await get().loadBlocked();
+    // Also drop any threads with this peer from the sidebar.
+    set((s) => ({
+      threads: s.threads.filter((t) => {
+        const peerId = t.peer?.id;
+        return peerId !== userId;
+      }),
+    }));
+  },
+
+  async unblockUser(userId) {
+    await messagingApi.unblockUser(userId);
+    set((s) => ({
+      blockedUsers: s.blockedUsers.filter((u) => u.id !== userId),
+    }));
+    // Refresh the inbox so the now-unblocked peer's thread
+    // reappears (if any).
+    await get().loadThreads();
+  },
+
+  isBlocked(userId) {
+    return get().blockedUsers.some((u) => u.id === userId);
   },
 
   applyMessageUpdated(

@@ -26,6 +26,7 @@
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { registerSocketEmitter, type MessageEventPayload } from '../socket/messaging.socket.js';
+import { messagingSafetyService } from './messaging-safety.service.js';
 
 const MAX_CONTENT_LENGTH = 4000;
 const MAX_ATTACHMENTS_PER_MESSAGE = 5;
@@ -147,6 +148,18 @@ export class MessagesService {
       );
     }
 
+    // Block check: if either side has blocked the other, refuse
+    // to start a new thread. Existing threads are unaffected
+    // (the block hides the row, the thread itself is still in
+    // the DB so unblock restores access).
+    if (await messagingSafetyService.isBlockedEitherDirection(userId, peerId)) {
+      throw new AppError(
+        'Bạn không thể bắt đầu cuộc trò chuyện với người dùng này',
+        403,
+        'USER_BLOCKED',
+      );
+    }
+
     const created = await prisma.messageThread.create({
       data: { type: 'USER', userAId: a, userBId: b },
       include: this.threadIncludeForViewer(userId),
@@ -217,16 +230,25 @@ export class MessagesService {
       },
     });
 
+    // Hide threads whose peer is in our blocklist (we blocked them
+    // OR they blocked us). The thread row stays in the DB so
+    // unblocking restores the conversation immediately.
+    const blockedIds = await this.getBlockedIds(userId);
+    const filtered = threads.filter((t) => {
+      const peers = this.collectThreadPeerIds(t);
+      return !peers.some((pid) => blockedIds.has(pid));
+    });
+
     const reads = await prisma.messageRead.findMany({
-      where: { userId, threadId: { in: threads.map((t) => t.id) } },
+      where: { userId, threadId: { in: filtered.map((t) => t.id) } },
     });
     const readMap = new Map(reads.map((r) => [r.threadId, r.lastReadAt]));
 
     const serialized = await Promise.all(
-      threads.map((t) => this.serializeThreadAsync(t, userId)),
+      filtered.map((t) => this.serializeThreadAsync(t, userId)),
     );
 
-    return threads.map((t, idx) => {
+    return filtered.map((t, idx) => {
       const lastMsg = t.messages[0] ?? null;
       const lastRead = readMap.get(t.id) ?? new Date(0);
       // Per-thread unread: count own-recipient messages newer than lastRead.
@@ -358,6 +380,21 @@ export class MessagesService {
     const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
     if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');
     this.assertParticipant(thread, senderId);
+
+    // Block check: enforce bidirectionally. If either side has
+    // blocked the other, refuse to send (the row stays in the
+    // DB for the other side, but we don't accept new writes).
+    const peers = this.collectThreadPeerIds(thread);
+    for (const peerId of peers) {
+      if (peerId === senderId) continue;
+      if (await messagingSafetyService.isBlockedEitherDirection(senderId, peerId)) {
+        throw new AppError(
+          'Không thể gửi tin nhắn: người dùng đã bị chặn',
+          403,
+          'USER_BLOCKED',
+        );
+      }
+    }
 
     const content = (data.content ?? '').trim();
     const fileIds = Array.isArray(data.fileIds) ? data.fileIds.slice(0, MAX_ATTACHMENTS_PER_MESSAGE) : [];
@@ -631,6 +668,56 @@ export class MessagesService {
       select: { threadId: true, targetId: true, alias: true },
     });
     return rows.filter((r) => r.alias.length > 0);
+  }
+
+  // ─── Blocklist helpers (called by the listing code) ───
+
+  /**
+   * Return the set of userIds that the given viewer has blocked
+   * OR has been blocked by. We use both directions so a row
+   * disappears from BOTH sidebars once a block lands.
+   *
+   * Cached on the request via `getBlockedIds` — for now this
+   * runs once per listThreads call which is fine (one query
+   * per page load).
+   */
+  private async getBlockedIds(userId: number): Promise<Set<number>> {
+    const rows = await prisma.userBlock.findMany({
+      where: {
+        OR: [
+          { blockerId: userId },
+          { blockedId: userId },
+        ],
+      },
+      select: { blockerId: true, blockedId: true },
+    });
+    const ids = new Set<number>();
+    for (const r of rows) {
+      // Always add the OTHER side of the relationship (the peer
+      // whose messages we want to hide from this viewer's
+      // sidebar). If we blocked them, hide them; if they
+      // blocked us, hide us from our own view.
+      ids.add(r.blockerId === userId ? r.blockedId : r.blockerId);
+    }
+    return ids;
+  }
+
+  /**
+   * Return the set of peer userIds for a thread, regardless of
+   * thread type. Used to filter against the blocklist in
+   * `listThreadsForUser`.
+   */
+  private collectThreadPeerIds(thread: {
+    type: string;
+    userId: number | null;
+    adminUserId: number | null;
+    userAId: number | null;
+    userBId: number | null;
+  }): number[] {
+    if (thread.type === 'ADMIN') {
+      return [thread.userId, thread.adminUserId].filter((x): x is number => x !== null);
+    }
+    return [thread.userAId, thread.userBId].filter((x): x is number => x !== null);
   }
 
   // ─── Thread preferences (per-user pin/mute/archive/mark-unread) ───

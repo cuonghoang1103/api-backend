@@ -131,6 +131,10 @@ model User {
   nicknamesOwned        ThreadNickname[]  @relation("NicknameOwner")
   nicknamesTargeted     ThreadNickname[]  @relation("NicknameTarget")
   reactions             MessageReaction[] @relation("ReactionUser")
+  blocksCreated         UserBlock[]       @relation("UserBlocksCreated")
+  blocksReceived        UserBlock[]       @relation("UserBlocksReceived")
+  reportsFiled          ThreadReport[]    @relation("ThreadReportsFiled")
+  reportsResolved       ThreadReport[]    @relation("ThreadReportsResolved")
 
   // ─── Personal dashboard (per-user, never deleted) ────────
   // Each user owns exactly one DashboardState row. The 1:N
@@ -1342,6 +1346,7 @@ model MessageThread {
   messages   Message[]
   readStates MessageRead[]
   nicknames  ThreadNickname[]
+  reports    ThreadReport[]   @relation("ThreadReportsTarget")
   // Per-user thread preferences. JSONB keyed by userId so each
   // participant can independently pin/mute/archive the thread
   // without affecting the other side.
@@ -1355,6 +1360,57 @@ model MessageThread {
   @@index([adminUserId, type], name: "idx_thread_admin_type")
   @@index([lastMessageAt(sort: Desc)], name: "idx_thread_last_msg")
   @@map("message_threads")
+}
+
+/// Per-user blocklist for direct messaging. When user A blocks
+/// user B, B can no longer send A new messages, start a new
+/// thread with A, or even see A's existing thread in their
+/// sidebar. We don't delete the thread — A still keeps their
+/// copy and can unblock at any time.
+model UserBlock {
+  id         Int      @id @default(autoincrement())
+  blockerId  Int      @map("blocker_id")
+  blockedId  Int      @map("blocked_id")
+  // Optional reason stored for the blocker's reference. Not
+  // shown to the blocked user.
+  reason     String?  @db.VarChar(200)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  blocker User @relation("UserBlocksCreated", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("UserBlocksReceived", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId], name: "uk_block_pair")
+  @@index([blockerId], name: "idx_block_blocker")
+  @@index([blockedId], name: "idx_block_blocked")
+  @@map("user_blocks")
+}
+
+/// Reports against a chat thread. Each row is a "user X reports
+/// thread Y because ..." entry. Stored for moderator review;
+/// the reporter can withdraw by deleting the row.
+model ThreadReport {
+  id          Int      @id @default(autoincrement())
+  reporterId  Int      @map("reporter_id")
+  threadId    Int      @map("thread_id")
+  // Free-form reason. Kept short (200 chars) so we can render
+  // it directly in the admin inbox without further truncation.
+  reason      String   @db.VarChar(200)
+  // Optional structured category for filtering in admin.
+  // 'SPAM' | 'HARASSMENT' | 'HATE' | 'IMPERSONATION' | 'OTHER' | null
+  category    String?  @db.VarChar(30)
+  createdAt   DateTime @default(now()) @map("created_at")
+  resolvedAt  DateTime? @map("resolved_at")
+  resolvedBy  Int?     @map("resolved_by")
+  resolution  String?  @db.VarChar(500)
+
+  reporter User         @relation("ThreadReportsFiled", fields: [reporterId], references: [id], onDelete: Cascade)
+  thread   MessageThread @relation("ThreadReportsTarget", fields: [threadId], references: [id], onDelete: Cascade)
+  resolver User?        @relation("ThreadReportsResolved", fields: [resolvedBy], references: [id], onDelete: SetNull)
+
+  @@index([reporterId], name: "idx_report_reporter")
+  @@index([threadId], name: "idx_report_thread")
+  @@index([resolvedAt], name: "idx_report_resolved")
+  @@map("thread_reports")
 }
 
 model Message {

@@ -991,7 +991,44 @@ export const messagingApi = {
     api.post<ApiResponse<{ preferences: MessagingThreadPreference | null }>>(
       `/messages/threads/${threadId}/mark-unread`,
     ),
+
+  // Hard-delete the chat from THIS viewer's inbox. Soft delete
+  // server-side (preferences.archivedAt); the other participant
+  // still keeps their copy.
+  deleteChat: (threadId: number) =>
+    api.delete<ApiResponse<{ preferences: MessagingThreadPreference | null; deleted: boolean }>>(
+      `/messages/threads/${threadId}/hard`,
+    ),
+
+  // Report a thread to moderators. Body: { reason, category? }.
+  reportThread: (threadId: number, payload: { reason: string; category?: 'spam' | 'harassment' | 'hate' | 'impersonation' | 'other' | null }) =>
+    api.post<ApiResponse<{ id: number; createdAt: string }>>(
+      `/messages/threads/${threadId}/report`,
+      payload,
+    ),
+
+  // Per-viewer blocklist (Messenger-style "blocked users" sheet).
+  listBlocked: () =>
+    api.get<ApiResponse<Array<MessagingBlockedUser>>>('/messages/blocks'),
+  blockUser: (userId: number, reason?: string) =>
+    api.post<ApiResponse<{ ok: boolean; blockedId: number }>>(
+      `/messages/blocks/${userId}`,
+      reason ? { reason } : {},
+    ),
+  unblockUser: (userId: number) =>
+    api.delete<ApiResponse<{ ok: boolean; blockedId: number }>>(
+      `/messages/blocks/${userId}`,
+    ),
 };
+
+export interface MessagingBlockedUser {
+  id: number;
+  username: string;
+  displayName: string;
+  avatarUrl: string | null;
+  reason: string | null;
+  blockedAt: string;
+}
 
 // ─── Messaging types (mirror the backend serialiser) ────
 export interface MessagingPeer {

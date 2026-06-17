@@ -8,7 +8,7 @@ set -e
 
 ALERT_EMAIL="${ALERT_EMAIL:-cuongthaihnhe176322@gmail.com}"
 FRONTEND_URL="https://cuongthai.com"
-BACKEND_URL="https://api.cuongthai.com/health"
+BACKEND_URL="https://api.cuongthai.com/api/v1/system/health"
 LOG_FILE="/var/log/cuonghoangdev-monitor.log"
 TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN:-}"
 TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID:-}"

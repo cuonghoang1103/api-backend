@@ -1,87 +1,111 @@
 'use client';
 
-import { useState, useMemo, useEffect, type ReactNode } from 'react';
+import { useState, useMemo, useEffect, useCallback, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bookmark, Share2, Clock, TrendingUp, Search, Sparkles, Code2, AlertTriangle, CheckCircle2, X } from 'lucide-react';
+import { Bookmark, Share2, Clock, TrendingUp, Search, Sparkles, Code2, AlertTriangle, CheckCircle2, X, Loader2 } from 'lucide-react';
+import { techTrendsApi } from '@/lib/api';
 import {
-  ARTICLES,
-  AUTHORS,
   CATEGORY_TABS,
   QUICK_TIPS,
-  TRENDING_TAGS,
-  TOP_AUTHORS,
+  CATEGORY_DEFAULT_EMOJI,
   type Article,
   type Category,
+  type TrendingTag,
+  type TopAuthor,
   type CodeBlock,
-} from './data';
+} from './types';
 
 /**
  * Tech Trends & Insights — public page
  *
- * Layout:
- *   [ Header + search + tab bar ]
- *   [ main 70%  |  sidebar 30% (sticky) ]
- *     main:   bento grid of article cards (featured = 2-col, normal = 1-col)
- *     sidebar: Trending Tags / Quick Tips / Top Authors
+ * Data source: `techTrendsApi.list()` (read-only, no auth).
+ * The page hydrates once on mount and does all subsequent
+ * filtering / searching client-side. With the current page
+ * size cap of 100 this is fine; if the dataset ever crosses
+ * ~500 articles we should switch to server-side paging.
  *
- * Animations:
- *   - Cards: fade + slide-up on filter change (Framer Motion + layout)
- *   - Tabs:  active pill slides between positions
- *   - Hover: scale-up + neon glow on each card
+ * Layout: bento grid (main, 70%) + sticky sidebar (30%).
+ * Featured articles span 2 columns; normal articles span 1.
  *
- * State:
- *   - category: 'All' | one of the 4 categories
- *   - query:    search text (matches title + summary + tags)
- *   - bookmarks: Set<articleId> persisted in localStorage (SSR-safe)
- *
- * "use client" is required because we use useState / useEffect and
- * Framer Motion. The page wrapper (page.tsx) is a server component
- * so the page metadata still works for SEO.
+ * SSR safety: bookmark state reads from localStorage only
+ * after useEffect fires, so the server and the first client
+ * render agree (no hydration mismatch).
  */
 export default function TechTrendsClient() {
   const [category, setCategory] = useState<'All' | Category>('All');
   const [query, setQuery] = useState('');
-  const [bookmarks, setBookmarks] = useState<Set<string>>(new Set());
+  const [bookmarks, setBookmarks] = useState<Set<number>>(new Set());
   const [mounted, setMounted] = useState(false);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
 
-  // SSR-safe hydration: only read localStorage after mount. Without
-  // this guard the server renders one thing and the client renders
-  // another, which is a classic hydration mismatch source.
+  // Data: articles from the backend. The hook returns the
+  // raw PublicTechTrendArticle (id is number, not string),
+  // which is what the rest of the page wants.
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  // Hydration guard
   useEffect(() => setMounted(true), []);
 
+  // Initial load + bookmark hydration
   useEffect(() => {
     if (!mounted) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        setLoading(true);
+        const res = await techTrendsApi.list({ size: 100 });
+        if (cancelled) return;
+        // The public serializer is already in the right
+        // shape — we just narrow the type for the rest
+        // of the page.
+        setArticles(res.data.data as unknown as Article[]);
+        setLoadError(null);
+      } catch (err) {
+        if (cancelled) return;
+        const msg = err instanceof Error ? err.message : 'Failed to load articles';
+        setLoadError(msg);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    // Hydrate bookmarks from localStorage
     try {
       const raw = localStorage.getItem('tech-trends:bookmarks');
       if (raw) {
         const arr = JSON.parse(raw);
-        if (Array.isArray(arr)) setBookmarks(new Set(arr));
+        if (Array.isArray(arr)) {
+          setBookmarks(new Set(arr.filter((x) => Number.isFinite(x))));
+        }
       }
     } catch {
-      // localStorage may be unavailable (private mode, sandbox).
-      // Silently fall back to an in-memory set.
+      // localStorage may be unavailable — fall back to
+      // the in-memory Set.
     }
+    return () => { cancelled = true; };
   }, [mounted]);
 
-  const persistBookmarks = (next: Set<string>) => {
-    setBookmarks(next);
-    try {
-      localStorage.setItem('tech-trends:bookmarks', JSON.stringify([...next]));
-    } catch {}
-  };
+  const toggleBookmark = useCallback((id: number) => {
+    setBookmarks((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      try {
+        localStorage.setItem('tech-trends:bookmarks', JSON.stringify([...next]));
+      } catch {
+        // localStorage may be unavailable (private mode /
+        // sandbox) — keep the in-memory Set as the source
+        // of truth for this session.
+      }
+      return next;
+    });
+  }, []);
 
-  const toggleBookmark = (id: string) => {
-    const next = new Set(bookmarks);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
-    persistBookmarks(next);
-  };
-
-  // Filter + search
+  // Filter + search (client-side, against the loaded set)
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return ARTICLES.filter((a) => {
+    return articles.filter((a) => {
       if (category !== 'All' && a.category !== category) return false;
       if (!q) return true;
       return (
@@ -90,16 +114,46 @@ export default function TechTrendsClient() {
         a.tags.some((t) => t.toLowerCase().includes(q))
       );
     });
-  }, [category, query]);
+  }, [articles, category, query]);
 
-  const trendingTags = useMemo(() => TRENDING_TAGS(8), []);
-  const topAuthors = useMemo(() => TOP_AUTHORS(3), []);
+  // Sidebar data — computed from the full article set, not
+  // the filtered slice, so the sidebar stays stable as the
+  // user types in the search box.
+  const trendingTags = useMemo<TrendingTag[]>(() => {
+    const tagScores = new Map<string, number>();
+    for (const a of articles) {
+      for (const t of a.tags) {
+        tagScores.set(t, (tagScores.get(t) ?? 0) + (a.trendingScore || 1));
+      }
+    }
+    return [...tagScores.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([tag, score]) => ({ tag, score }));
+  }, [articles]);
+
+  const topAuthors = useMemo<TopAuthor[]>(() => {
+    const authorScores = new Map<number, number>();
+    for (const a of articles) {
+      if (!a.author) continue;
+      authorScores.set(a.author.id, (authorScores.get(a.author.id) ?? 0) + (a.trendingScore || 1));
+    }
+    return [...authorScores.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([id, score]) => {
+        const author = articles.find((x) => x.author?.id === id)?.author;
+        // author is guaranteed non-null here because we
+        // only built the map from articles with an author.
+        return { author: author as Required<NonNullable<Article['author']>>, score };
+      })
+      .filter((x): x is TopAuthor => Boolean(x.author));
+  }, [articles]);
 
   return (
     <div className="min-h-screen pt-24 pb-20 bg-darkbg" style={{ background: '#0a0a0f' }}>
-      {/* Decorative background — soft glow blobs to add depth without
-          competing with the content. Pointer events off so it never
-          intercepts clicks. */}
+      {/* Decorative background — soft glow blobs to add depth
+          without competing with the content. */}
       <div className="pointer-events-none fixed inset-0 -z-0 overflow-hidden">
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-neon-indigo/10 rounded-full blur-3xl" />
         <div className="absolute top-1/3 -right-32 w-96 h-96 bg-neon-fuchsia/10 rounded-full blur-3xl" />
@@ -107,7 +161,7 @@ export default function TechTrendsClient() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* ── Header ────────────────────────────────────────── */}
+        {/* ── Header ────────────────────────────────────── */}
         <header className="mb-10">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -204,7 +258,7 @@ export default function TechTrendsClient() {
 
             <div className="ml-auto text-xs text-text-muted">
               <span className="text-text-secondary font-medium">{filtered.length}</span>
-              {' '}of {ARTICLES.length} posts
+              {' '}of {articles.length} posts
             </div>
           </motion.div>
         </header>
@@ -213,36 +267,42 @@ export default function TechTrendsClient() {
         <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
           {/* Main column (70% on desktop) */}
           <main className="lg:col-span-7">
-            <AnimatePresence mode="popLayout">
-              {filtered.length === 0 ? (
-                <EmptyState
-                  key="empty"
-                  query={query}
-                  category={category}
-                  onReset={() => { setQuery(''); setCategory('All'); }}
-                />
-              ) : (
-                <motion.div
-                  key="grid"
-                  layout
-                  className="grid grid-cols-1 md:grid-cols-2 gap-5"
-                >
-                  {filtered.map((article, idx) => (
-                    <ArticleCard
-                      key={article.id}
-                      article={article}
-                      index={idx}
-                      bookmarked={mounted && bookmarks.has(article.id)}
-                      onToggleBookmark={() => toggleBookmark(article.id)}
-                      isExpanded={expandedId === article.id}
-                      onToggleExpand={() =>
-                        setExpandedId((cur) => (cur === article.id ? null : article.id))
-                      }
-                    />
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {loading ? (
+              <LoadingState />
+            ) : loadError ? (
+              <ErrorState message={loadError} />
+            ) : (
+              <AnimatePresence mode="popLayout">
+                {filtered.length === 0 ? (
+                  <EmptyState
+                    key="empty"
+                    query={query}
+                    category={category}
+                    onReset={() => { setQuery(''); setCategory('All'); }}
+                  />
+                ) : (
+                  <motion.div
+                    key="grid"
+                    layout
+                    className="grid grid-cols-1 md:grid-cols-2 gap-5"
+                  >
+                    {filtered.map((article, idx) => (
+                      <ArticleCard
+                        key={article.id}
+                        article={article}
+                        index={idx}
+                        bookmarked={mounted && bookmarks.has(article.id)}
+                        onToggleBookmark={() => toggleBookmark(article.id)}
+                        isExpanded={expandedId === article.id}
+                        onToggleExpand={() =>
+                          setExpandedId((cur) => (cur === article.id ? null : article.id))
+                        }
+                      />
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            )}
           </main>
 
           {/* Sidebar (30% on desktop, hidden on mobile/tablet) */}
@@ -268,6 +328,31 @@ const CATEGORY_STYLES: Record<Category, { bg: string; text: string; border: stri
   Interviews: { bg: 'bg-neon-fuchsia/10',   text: 'text-neon-fuchsia',   border: 'border-neon-fuchsia/20',   emoji: '🎯' },
 };
 
+const FALLBACK_GRADIENTS = [
+  'from-neon-indigo to-neon-violet',
+  'from-neon-cyan to-neon-blue',
+  'from-neon-fuchsia to-neon-pink',
+  'from-neon-emerald to-neon-green',
+  'from-neon-orange to-neon-red',
+];
+
+function pickGradient(id: number) {
+  return FALLBACK_GRADIENTS[id % FALLBACK_GRADIENTS.length];
+}
+
+function authorInitials(name: string | null | undefined): string {
+  if (!name) return 'U';
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'U';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function authorDisplayName(author: Article['author']): string {
+  if (!author) return 'Anonymous';
+  return author.displayName || author.fullName || author.username || 'Anonymous';
+}
+
 function ArticleCard({
   article,
   index,
@@ -284,8 +369,8 @@ function ArticleCard({
   onToggleExpand: () => void;
 }) {
   const style = CATEGORY_STYLES[article.category];
-  // Featured = 2 columns on md+, normal = 1 column.
-  const spanClass = article.featured ? 'md:col-span-2' : 'md:col-span-1';
+  const spanClass = article.isFeatured ? 'md:col-span-2' : 'md:col-span-1';
+  const displayCover = article.coverEmoji || CATEGORY_DEFAULT_EMOJI[article.category];
 
   return (
     <motion.article
@@ -307,20 +392,35 @@ function ArticleCard({
           'hover:shadow-[0_8px_32px_-8px_rgba(139,92,246,0.4)]',
         ].join(' ')}
       >
-        {/* Cover — gradient + emoji, no external image dep */}
+        {/* Cover — either a real image (if coverImageUrl
+            is set) or the gradient + emoji fallback. */}
         <div
           className={[
-            'relative w-full overflow-hidden',
-            article.featured ? 'aspect-[2.4/1]' : 'aspect-[2/1]',
+            'relative w-full overflow-hidden bg-darkcard',
+            article.isFeatured ? 'aspect-[2.4/1]' : 'aspect-[2/1]',
           ].join(' ')}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-darksurface via-darkcard to-darksurface" />
-          <div className="absolute inset-0 bg-gradient-to-br from-neon-indigo/10 via-transparent to-neon-fuchsia/10" />
-          <div className="absolute inset-0 flex items-center justify-center text-7xl sm:text-8xl select-none">
-            <span className="transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
-              {article.cover}
-            </span>
-          </div>
+          {article.coverImageUrl ? (
+            <>
+              <img
+                src={article.coverImageUrl}
+                alt={article.title}
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-darkcard via-darkcard/40 to-transparent" />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-br from-darksurface via-darkcard to-darksurface" />
+              <div className="absolute inset-0 bg-gradient-to-br from-neon-indigo/10 via-transparent to-neon-fuchsia/10" />
+              <div className="absolute inset-0 flex items-center justify-center text-7xl sm:text-8xl select-none">
+                <span className="transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+                  {displayCover}
+                </span>
+              </div>
+            </>
+          )}
 
           {/* Category pill on cover */}
           <div className="absolute top-3 left-3 flex items-center gap-1.5">
@@ -342,7 +442,7 @@ function ArticleCard({
             )}
           </div>
 
-          {/* Bookmark button on cover */}
+          {/* Bookmark button */}
           <button
             onClick={(e) => { e.stopPropagation(); onToggleBookmark(); }}
             className={[
@@ -363,7 +463,7 @@ function ArticleCard({
           <h2 className={[
             'font-heading font-semibold text-text-primary tracking-tight',
             'leading-relaxed',
-            article.featured ? 'text-2xl sm:text-3xl' : 'text-lg sm:text-xl',
+            article.isFeatured ? 'text-2xl sm:text-3xl' : 'text-lg sm:text-xl',
           ].join(' ')}>
             {article.title}
           </h2>
@@ -381,9 +481,9 @@ function ArticleCard({
             />
           )}
 
-          {/* Expanded body — shows on demand */}
+          {/* Expanded body */}
           <AnimatePresence>
-            {isExpanded && (
+            {isExpanded && article.body.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
@@ -401,36 +501,48 @@ function ArticleCard({
           </AnimatePresence>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-1.5">
-            {article.tags.map((t) => (
-              <span
-                key={t}
-                className="px-2 py-0.5 rounded-md text-[11px] font-medium
-                  bg-white/[0.04] text-text-muted border border-white/[0.04]
-                  hover:text-text-primary hover:border-neon-violet/30 transition-colors cursor-pointer"
-                onClick={() => { /* future: route to filtered list */ }}
-              >
-                #{t}
-              </span>
-            ))}
-          </div>
+          {article.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {article.tags.map((t) => (
+                <span
+                  key={t}
+                  className="px-2 py-0.5 rounded-md text-[11px] font-medium
+                    bg-white/[0.04] text-text-muted border border-white/[0.04]
+                    hover:text-text-primary hover:border-neon-violet/30 transition-colors cursor-pointer"
+                  onClick={() => { /* future: route to filtered list */ }}
+                >
+                  #{t}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Meta + actions */}
           <div className="flex items-center justify-between pt-3 border-t border-darkborder">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div
-                className={[
-                  'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white',
-                  'bg-gradient-to-br shrink-0',
-                  article.author.gradient,
-                ].join(' ')}
-              >
-                {article.author.initials}
-              </div>
+              {article.author?.avatarUrl ? (
+                <img
+                  src={article.author.avatarUrl}
+                  alt={authorDisplayName(article.author)}
+                  className="w-8 h-8 rounded-full object-cover shrink-0"
+                />
+              ) : (
+                <div
+                  className={[
+                    'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white',
+                    'bg-gradient-to-br shrink-0',
+                    pickGradient(article.author?.id ?? article.id),
+                  ].join(' ')}
+                >
+                  {authorInitials(authorDisplayName(article.author))}
+                </div>
+              )}
               <div className="min-w-0">
-                <p className="text-xs font-medium text-text-primary truncate">{article.author.name}</p>
+                <p className="text-xs font-medium text-text-primary truncate">
+                  {authorDisplayName(article.author)}
+                </p>
                 <div className="flex items-center gap-1.5 text-[11px] text-text-muted">
-                  <span>{formatDate(article.publishedAt)}</span>
+                  <span>{formatDate(article.publishedAt || article.createdAt)}</span>
                   <span>·</span>
                   <Clock className="w-3 h-3" />
                   <span>{article.readTimeMin} min read</span>
@@ -520,7 +632,8 @@ function CodeComparison({ before, after, takeaway }: {
 
 // ── Sidebar widgets ──────────────────────────────────────────────
 
-function TrendingTagsCard({ tags, onSelect }: { tags: { tag: string; score: number }[]; onSelect: (t: string) => void }) {
+function TrendingTagsCard({ tags, onSelect }: { tags: TrendingTag[]; onSelect: (t: string) => void }) {
+  if (tags.length === 0) return null;
   return (
     <Widget title="Trending Tags" icon={<TrendingUp className="w-4 h-4" />}>
       <div className="flex flex-wrap gap-1.5">
@@ -545,7 +658,7 @@ function TrendingTagsCard({ tags, onSelect }: { tags: { tag: string; score: numb
   );
 }
 
-function QuickTipsCard({ tips }: { tips: { title: string; body: string }[] }) {
+function QuickTipsCard({ tips }: { tips: typeof QUICK_TIPS }) {
   return (
     <Widget title="Quick Coding Tips" icon={<Sparkles className="w-4 h-4" />}>
       <ol className="space-y-3">
@@ -565,7 +678,8 @@ function QuickTipsCard({ tips }: { tips: { title: string; body: string }[] }) {
   );
 }
 
-function TopAuthorsCard({ items }: { items: { author: typeof AUTHORS[number]; score: number }[] }) {
+function TopAuthorsCard({ items }: { items: TopAuthor[] }) {
+  if (items.length === 0) return null;
   return (
     <Widget title="Top Authors" icon={<Sparkles className="w-4 h-4" />}>
       <ul className="space-y-3">
@@ -574,21 +688,33 @@ function TopAuthorsCard({ items }: { items: { author: typeof AUTHORS[number]; sc
             <span className="shrink-0 text-[10px] font-bold text-text-muted w-3 mt-2.5 tabular-nums">
               {i + 1}
             </span>
-            <div className={[
-              'w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0',
-              'bg-gradient-to-br', author.gradient,
-            ].join(' ')}>
-              {author.initials}
-            </div>
+            {author.avatarUrl ? (
+              <img
+                src={author.avatarUrl}
+                alt={authorDisplayName(author)}
+                className="w-9 h-9 rounded-full object-cover shrink-0"
+              />
+            ) : (
+              <div className={[
+                'w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0',
+                'bg-gradient-to-br', pickGradient(author.id),
+              ].join(' ')}>
+                {authorInitials(authorDisplayName(author))}
+              </div>
+            )}
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-2">
-                <p className="text-xs font-semibold text-text-primary truncate">{author.name}</p>
+                <p className="text-xs font-semibold text-text-primary truncate">
+                  {authorDisplayName(author)}
+                </p>
                 <span className="text-[9px] text-text-muted tabular-nums shrink-0">{score} pts</span>
               </div>
-              <p className="text-[10px] text-text-muted truncate">{author.handle}</p>
-              <p className="text-[11px] text-text-secondary leading-relaxed mt-1 line-clamp-2">
-                {author.bio}
-              </p>
+              <p className="text-[10px] text-text-muted truncate">@{author.username}</p>
+              {author.bio && (
+                <p className="text-[11px] text-text-secondary leading-relaxed mt-1 line-clamp-2">
+                  {author.bio}
+                </p>
+              )}
             </div>
           </li>
         ))}
@@ -609,7 +735,35 @@ function Widget({ title, icon, children }: { title: string; icon: ReactNode; chi
   );
 }
 
-// ── Empty state ─────────────────────────────────────────────────
+// ── States ─────────────────────────────────────────────────
+
+function LoadingState() {
+  return (
+    <div className="col-span-full flex flex-col items-center justify-center py-20 gap-3">
+      <Loader2 className="w-7 h-7 text-neon-violet animate-spin" />
+      <p className="text-sm text-text-muted">Loading articles…</p>
+    </div>
+  );
+}
+
+function ErrorState({ message }: { message: string }) {
+  return (
+    <div className="col-span-full rounded-2xl bg-darkcard/60 backdrop-blur-sm border border-darkborder p-12 text-center">
+      <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-red-500/10 flex items-center justify-center">
+        <AlertTriangle className="w-7 h-7 text-red-400" />
+      </div>
+      <h3 className="text-xl font-heading font-semibold text-text-primary mb-2">
+        Couldn’t load articles
+      </h3>
+      <p className="text-sm text-text-secondary max-w-md mx-auto leading-relaxed">
+        {message}
+      </p>
+      <p className="text-xs text-text-muted mt-3">
+        Check that the backend is running and the <code className="text-text-secondary">tech_trend_articles</code> table has been migrated.
+      </p>
+    </div>
+  );
+}
 
 function EmptyState({ query, category, onReset }: { query: string; category: string; onReset: () => void }) {
   return (

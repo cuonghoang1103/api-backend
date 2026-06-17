@@ -1388,3 +1388,186 @@ export const dashboardApi = {
     return api.delete<{ data: { reset: true } }>('/dashboard?confirm=YES');
   },
 };
+
+// ───────────────────────────────────────────────────────────────────
+// Tech Trends & Insights API (public + admin)
+//
+// Public endpoints (no auth) read published articles from
+// `/tech-trends/*`. Admin endpoints live under
+// `/admin/tech-trends` and require ROLE_ADMIN — the auth
+// cookie is sent automatically with `withCredentials: true`
+// (which is the default in the shared `api` instance).
+// ───────────────────────────────────────────────────────────────────
+
+// Shape of a single article in the public response. Mirrors
+// the backend `serializeForPublic()` output: body is a
+// `string[]` (paragraphs), codeBlock is a typed object, and
+// `author` is the joined user record (or null).
+export interface PublicTechTrendArticle {
+  id: number;
+  title: string;
+  slug: string;
+  summary: string;
+  body: string[];
+  category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+  coverEmoji: string | null;
+  coverImageUrl: string | null;
+  codeBlock: {
+    before: { lang: string; lines: string[] };
+    after: { lang: string; lines: string[] };
+    takeaway: string;
+  } | null;
+  tags: string[];
+  trendingScore: number;
+  isFeatured: boolean;
+  status: 'DRAFT' | 'PUBLISHED';
+  readTimeMin: number;
+  author: {
+    id: number;
+    username: string;
+    fullName: string | null;
+    displayName: string | null;
+    avatarUrl: string | null;
+    bio: string | null;
+  } | null;
+  viewCount: number;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Admin-side view of an article — same shape as the public
+// one but with the raw DB fields (body is whatever was sent,
+// usually string[]). We keep the type loose on body so the
+// admin form can round-trip the JSONB as-is.
+export interface AdminTechTrendArticle extends Omit<PublicTechTrendArticle, 'body'> {
+  body: string[];
+  // Admin gets access to the raw category/author field that
+  // some server queries emit. We add it as optional so the
+  // type stays compatible with the public response too.
+}
+
+export const techTrendsApi = {
+  // Public: list published articles. Supports filtering
+  // by category, keyword, and the `featured` flag. The
+  // frontend uses a large `size` (default 100) so it can
+  // do its own bento-grid ordering and client-side
+  // search without paging the server.
+  list(params?: {
+    category?: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews' | 'All';
+    q?: string;
+    featured?: boolean;
+    page?: number;
+    size?: number;
+  }) {
+    // The 'All' tab is a client-side filter — the server
+    // doesn't need to know about it. Strip it before
+    // sending.
+    const { category, ...rest } = params ?? {};
+    return api.get<{
+      data: PublicTechTrendArticle[];
+      pagination: { page: number; limit: number; total: number; totalPages: number };
+    }>('/tech-trends/articles', {
+      params: category && category !== 'All' ? { category, ...rest } : rest,
+    });
+  },
+
+  // Public: get a single article. Increments viewCount.
+  getById(id: number) {
+    return api.get<{ data: PublicTechTrendArticle }>(`/tech-trends/articles/${id}`);
+  },
+
+  // Public: get category counts for the tab bar.
+  getCategories() {
+    return api.get<{
+      data: { id: string; label: string; count: number }[];
+    }>('/tech-trends/categories');
+  },
+};
+
+export const adminTechTrendsApi = {
+  // Admin: list ALL articles (including DRAFT). Same shape
+  // as public but no status filter.
+  list(params?: {
+    status?: 'DRAFT' | 'PUBLISHED';
+    category?: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+    q?: string;
+    page?: number;
+    size?: number;
+  }) {
+    return api.get<{
+      data: AdminTechTrendArticle[];
+      pagination: { page: number; limit: number; total: number; totalPages: number };
+    }>('/admin/tech-trends', { params });
+  },
+
+  // Admin: create. The server auto-slugifies the title and
+  // dedupes the slug with a numeric suffix.
+  create(payload: {
+    title: string;
+    summary: string;
+    body: string[];
+    category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+    coverEmoji?: string;
+    coverImageUrl?: string;
+    codeBlock?: AdminTechTrendArticle['codeBlock'];
+    tags: string[];
+    trendingScore?: number;
+    isFeatured?: boolean;
+    status?: 'DRAFT' | 'PUBLISHED';
+    readTimeMin?: number;
+    publishedAt?: string;
+  }) {
+    return api.post<{ data: AdminTechTrendArticle }>('/admin/tech-trends', payload);
+  },
+
+  // Admin: update. The server re-derives the slug only if
+  // the title actually changed, so existing links stay
+  // stable across edits.
+  update(
+    id: number,
+    payload: Partial<{
+      title: string;
+      summary: string;
+      body: string[];
+      category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+      coverEmoji: string;
+      coverImageUrl: string;
+      codeBlock: AdminTechTrendArticle['codeBlock'];
+      tags: string[];
+      trendingScore: number;
+      isFeatured: boolean;
+      status: 'DRAFT' | 'PUBLISHED';
+      readTimeMin: number;
+      publishedAt: string;
+    }>,
+  ) {
+    return api.put<{ data: AdminTechTrendArticle }>(`/admin/tech-trends/${id}`, payload);
+  },
+
+  // Admin: delete.
+  remove(id: number) {
+    return api.delete<{ data: { id: number } }>(`/admin/tech-trends/${id}`);
+  },
+
+  // Admin: one-click publish / unpublish.
+  publish(id: number) {
+    return api.post<{ data: AdminTechTrendArticle }>(`/admin/tech-trends/${id}/publish`);
+  },
+  unpublish(id: number) {
+    return api.post<{ data: AdminTechTrendArticle }>(`/admin/tech-trends/${id}/unpublish`);
+  },
+
+  // Upload a cover image to the existing /files/upload
+  // endpoint and return the URL. We use the public
+  // `fileApi.upload()` under the hood — declared here so
+  // the admin page has a single import surface.
+  uploadCover(file: File) {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('category', 'images');
+    return api.post<{ data: { url: string; id: number } }>('/files/upload', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+};

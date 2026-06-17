@@ -7,7 +7,7 @@ import {
   LayoutDashboard, FileText, Users, Code2, Sparkles,
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap, Inbox,
-  CreditCard, Github, Search,
+  CreditCard, Github, Search, TrendingUp,
 } from 'lucide-react';
 
 const adminNav = [
@@ -31,6 +31,7 @@ const adminNav = [
   { label: 'Tin nhắn hỗ trợ', href: '/admin/messages', icon: Inbox },
   { label: 'Embed Queue', href: '/admin/embed-jobs', icon: Zap },
   { label: 'SEO Tools', href: '/admin/seo', icon: Search },
+  { label: 'Tech Trends', href: '/admin/tech-trends', icon: TrendingUp },
   { label: 'System Stats', href: '/admin/stats', icon: BarChart3 },
 ];
 

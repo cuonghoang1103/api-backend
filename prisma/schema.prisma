@@ -107,6 +107,7 @@ model User {
   socialSaves             SocialSave[]
   socialShares            SocialShare[]
   socialPollVotes         SocialPollVote[]
+  techTrendArticles       TechTrendArticle[]       @relation("TechTrendAuthor")
 
   cyberProfile   CyberProfile?
   cyberTasks     CyberTask[]
@@ -1334,10 +1335,10 @@ model MessageThread {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  user       User?         @relation("ThreadAsUser", fields: [userId], references: [id], onDelete: Cascade)
-  adminUser  User?         @relation("ThreadAsAdmin", fields: [adminUserId], references: [id], onDelete: Cascade)
-  userA      User?         @relation("ThreadUserA", fields: [userAId], references: [id], onDelete: Cascade)
-  userB      User?         @relation("ThreadUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  user       User?            @relation("ThreadAsUser", fields: [userId], references: [id], onDelete: Cascade)
+  adminUser  User?            @relation("ThreadAsAdmin", fields: [adminUserId], references: [id], onDelete: Cascade)
+  userA      User?            @relation("ThreadUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB      User?            @relation("ThreadUserB", fields: [userBId], references: [id], onDelete: Cascade)
   messages   Message[]
   readStates MessageRead[]
   nicknames  ThreadNickname[]
@@ -1351,20 +1352,20 @@ model MessageThread {
 }
 
 model Message {
-  id        Int       @id @default(autoincrement())
-  threadId  Int       @map("thread_id")
-  senderId  Int       @map("sender_id")
-  content   String    @db.Text
+  id         Int       @id @default(autoincrement())
+  threadId   Int       @map("thread_id")
+  senderId   Int       @map("sender_id")
+  content    String    @db.Text
   // Soft delete: message hidden from UI but kept for audit.
   // Note: `deletedAt` means "Xoá" (delete for me / unsend).
   // `recalledAt` means "Thu hoi" (withdraw, also hides content).
-  deletedAt DateTime? @map("deleted_at")
+  deletedAt  DateTime? @map("deleted_at")
   // Recall: sender retracted the message. After this timestamp
   // the message is treated as "Tin nhắn đã thu hồi" everywhere.
   // We keep the row for audit but the content is wiped.
   recalledAt DateTime? @map("recalled_at")
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
 
   thread      MessageThread       @relation(fields: [threadId], references: [id], onDelete: Cascade)
   sender      User                @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
@@ -1722,4 +1723,67 @@ model DashboardCelebration {
 
   @@index([userId, celebratedDate], name: "idx_dashboard_celeb_user_date")
   @@map("dashboard_celebrations")
+}
+
+// ============================================================
+// TECH TRENDS & INSIGHTS (added 2026-06-17)
+// ============================================================
+// Long-form editorial articles for the /tech-trends public page.
+//
+// `category` is a small enum to keep the filter UI fast and the
+// trending aggregation simple — we don't need a full category
+// join table for a 4-bucket set. `tags` is a free-form string
+// array because authors tag organically; for tag-based search
+// the public /posts/search endpoint does a case-insensitive
+// substring match in code, which is fine at the current
+// cardinality (< 1000 articles expected lifetime).
+//
+// `cover_image_url` is nullable so authors can skip a cover and
+// fall back to the emoji we set in `cover_emoji` (or the default
+// per-category icon on the frontend).
+//
+// `code_block` is JSON: { before: {lang, lines:[...]},
+// after: {lang, lines:[...]}, takeaway: string }. Optional — only
+// present on #FixBug posts.
+//
+// `is_featured` flips the bento card to span 2 columns on the
+// public page.
+//
+// `trending_score` is a 0-100 score maintained by the admin UI
+// (the admin sets it manually) and surfaced into the sidebar
+// "Trending Tags" computation. We do not auto-compute it in
+// the backend yet — too small a dataset to justify the SQL.
+//
+// `status` mirrors the Post model (DRAFT | PUBLISHED). Public
+// queries always filter status = 'PUBLISHED' so drafts never
+// leak. Admins see all statuses.
+model TechTrendArticle {
+  id            Int       @id @default(autoincrement())
+  title         String    @db.VarChar(255)
+  slug          String    @unique(map: "uk_tech_trend_slug") @db.VarChar(255)
+  summary       String    @db.Text
+  body          Json      @db.JsonB
+  category      String    @db.VarChar(20)
+  coverEmoji    String?   @map("cover_emoji") @db.VarChar(16)
+  coverImageUrl String?   @map("cover_image_url") @db.VarChar(500)
+  codeBlock     Json?     @map("code_block") @db.JsonB
+  tags          String[]  @default([])
+  trendingScore Int       @default(0) @map("trending_score")
+  isFeatured    Boolean   @default(false) @map("is_featured")
+  status        String    @default("DRAFT") @db.VarChar(20)
+  readTimeMin   Int       @default(5) @map("read_time_min")
+  authorId      Int?      @map("author_id")
+  viewCount     Int       @default(0) @map("view_count")
+  publishedAt   DateTime? @map("published_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  author User? @relation("TechTrendAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([category], name: "idx_tech_trend_category")
+  @@index([status], name: "idx_tech_trend_status")
+  @@index([isFeatured], name: "idx_tech_trend_featured")
+  @@index([publishedAt(sort: Desc)], name: "idx_tech_trend_published_at")
+  @@index([authorId], name: "idx_tech_trend_author_id")
+  @@map("tech_trend_articles")
 }

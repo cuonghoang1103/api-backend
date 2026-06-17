@@ -1057,7 +1057,7 @@ async function handleYouTubeSearch(
       throw new AppError('YouTube search failed', 502, 'YOUTUBE_ERROR');
     }
     const searchData = (await searchRes.json()) as {
-      items?: Array<{ id: { videoId: string }; snippet: { title: string; channelTitle: string; thumbnails: { medium?: { url?: string }; high?: { url?: string } } } }>;
+      items?: Array<{ id: { kind?: string; videoId?: string; channelId?: string }; snippet: { title: string; channelTitle: string; thumbnails: { medium?: { url?: string }; high?: { url?: string } } } }>;
       error?: { message?: string };
     };
 
@@ -1109,10 +1109,12 @@ async function handleYouTubeSearch(
       }
     }
 
-    // Step 3: Build result array
+    // Step 3: Build result array. `videoItems` was filtered to
+    // items with `id.videoId` present, so the non-null assertion
+    // is safe here.
     const results = videoItems.map((item) => {
       const snippet = item.snippet;
-      const videoId = item.id.videoId;
+      const videoId = item.id.videoId!;
       const rawTitle = snippet.title || '';
 
       // Try to extract artist - title pattern

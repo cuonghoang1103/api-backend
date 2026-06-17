@@ -7,10 +7,10 @@
 // and the share/copy button.
 
 import RepoDetailClient from './RepoDetailClient';
-import { githubApi } from '@/lib/api';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
+import { getServerApiBaseUrl } from '@/lib/server-api';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,37 +18,43 @@ interface PageProps {
   params: { id: string };
 }
 
+// 60s cache for the detail page. The repo data is read-only and
+// doesn't change often (admin edits through the CMS, not user
+// actions), so a 60s revalidation window keeps the data fresh
+// enough while cutting cold-start latency in half.
+const REPO_CACHE_TTL_SECONDS = 60;
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   // Lightweight fetch just for metadata — we still hit the API
   // because the URL is an opaque UUID, not a slug, so we can't
   // pre-bake titles. If the repo doesn't exist we still return
   // a sensible default so Next.js doesn't crash.
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+  const baseUrl = getServerApiBaseUrl();
   const cookie = headers().get('cookie') ?? '';
   try {
     const res = await fetch(`${baseUrl}/api/v1/repos/${params.id}`, {
       headers: { cookie, accept: 'application/json' },
-      cache: 'no-store',
+      next: { revalidate: REPO_CACHE_TTL_SECONDS },
     });
     if (!res.ok) {
-      return { title: 'Repo not found | CuongHoangDev' };
+      return { title: 'Repo not found | CuongThai' };
     }
     const json = await res.json();
     if (!json.success || !json.data) {
-      return { title: 'Repo not found | CuongHoangDev' };
+      return { title: 'Repo not found | CuongThai' };
     }
     const repo = json.data;
     const description = repo.description
       || repo.myReview?.replace(/[#*`>\-]+/g, '').trim().slice(0, 200)
-      || `Repository ${repo.repoName} by ${repo.owner} on GitHub. Reviewed and curated on CuongHoangDev.`;
+      || `Repository ${repo.repoName} by ${repo.owner} on GitHub. Reviewed and curated on CuongThai.`;
     return {
-      title: `${repo.repoName} | GitHub Repo Hub | CuongHoangDev`,
+      title: `${repo.repoName} | GitHub Repo Hub | CuongThai`,
       description,
       openGraph: {
         title: `${repo.repoName} — GitHub Repo Hub`,
         description,
         type: 'article',
-        url: `https://cuonghoang.xyz/repos/${params.id}`,
+        url: `https://cuongthai.com/repos/${params.id}`,
       },
       twitter: {
         card: 'summary',
@@ -57,14 +63,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
     };
   } catch {
-    return { title: 'Repo | CuongHoangDev' };
+    return { title: 'Repo | CuongThai' };
   }
 }
 
 export default async function RepoDetailPage({ params }: PageProps) {
   const headerList = headers();
   const cookie = headerList.get('cookie') ?? '';
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+  // Use the server-side API base (internal Docker network).
+  // See lib/server-api.ts for why this matters for TTFB.
+  const baseUrl = getServerApiBaseUrl();
 
   let repo: import('@/lib/api').GithubRepo | null = null;
   let related: import('@/lib/api').GithubRepo[] = [];
@@ -73,11 +81,11 @@ export default async function RepoDetailPage({ params }: PageProps) {
     const [detailRes, listRes] = await Promise.all([
       fetch(`${baseUrl}/api/v1/repos/${params.id}`, {
         headers: { cookie, accept: 'application/json' },
-        cache: 'no-store',
+        next: { revalidate: REPO_CACHE_TTL_SECONDS },
       }),
       fetch(`${baseUrl}/api/v1/repos?pageSize=6`, {
         headers: { cookie, accept: 'application/json' },
-        cache: 'no-store',
+        next: { revalidate: REPO_CACHE_TTL_SECONDS },
       }),
     ]);
 

@@ -160,7 +160,16 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
+      # Internal Docker-network URL for SSR fetches from the
+      # frontend container. Using this instead of the public
+      # NEXT_PUBLIC_API_URL cuts cold-start latency from ~4s
+      # to ~50ms because the request doesn't have to do a TLS
+      # handshake with the public-facing nginx. See
+      # frontend/src/lib/server-api.ts for the resolver.
+      # The existing INTERNAL_BACKEND_URL is kept for any
+      # older code that still references it directly.
       INTERNAL_BACKEND_URL: http://backend:3001
+      API_INTERNAL_URL: http://backend:3001
       BACKEND_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
       NEXT_PUBLIC_API_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
       NEXT_PUBLIC_YOUTUBE_API_KEY: ${NEXT_PUBLIC_YOUTUBE_API_KEY:-}

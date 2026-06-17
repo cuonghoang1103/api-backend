@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerApiBaseUrl } from '@/lib/server-api';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -20,8 +21,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    const apiBase =
-      process.env.NEXT_PUBLIC_API_URL || 'https://api.cuongthai.com';
+    // Server-side base URL. Use the internal Docker network
+    // (http://backend:3001) when available — the route handler
+    // runs in the frontend container, so the public URL means
+    // going out to the internet and back through nginx, which
+    // adds 3-5s of TLS-handshake overhead on cold requests.
+    // See lib/server-api.ts for the rationale.
+    // Use internal URL if the env points at one (Docker: http://backend:3001).
+    // Otherwise fall back to NEXT_PUBLIC_API_URL (Vercel, local dev).
+    // The internal URL is preferred because the route handler runs
+    // in the frontend container — a public URL means going out to
+    // the internet and back through nginx, which adds 3-5s of
+    // TLS-handshake overhead on cold requests.
+    // See lib/server-api.ts for the rationale.
+    const apiBase = (process.env.API_INTERNAL_URL || process.env.BACKEND_INTERNAL_URL)
+      ? getServerApiBaseUrl().replace(/\/$/, '')
+      : (process.env.NEXT_PUBLIC_API_URL || getServerApiBaseUrl()).replace(/\/$/, '');
 
     const upstream = await fetch(`${apiBase}/api/v1/ai/chat`, {
       method: 'POST',

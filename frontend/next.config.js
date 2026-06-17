@@ -104,11 +104,17 @@ const nextConfig = {
             //   to https://.
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
+              // YouTube domains added to script-src (iframe_api), img-src
+              // (video thumbnails, channel avatars), and frame-src (the
+              // player itself). All three are needed for the /music
+              // search → YouTube IFrame Player flow. Without these the
+              // search results show no thumbnails and the player never
+              // loads its API script.
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com",
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: blob: https://api.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com",
+              "img-src 'self' data: blob: https://api.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com",
               "font-src 'self' data:",
-              "connect-src 'self' https://api.cuongthai.com https://*.sentry.io wss://*.sentry.io",
+              "connect-src 'self' https://api.cuongthai.com https://*.sentry.io wss://*.sentry.io https://www.youtube.com",
               "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com",
               "media-src 'self' https://api.cuongthai.com blob:",
               "worker-src 'self' blob:",

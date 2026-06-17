@@ -1071,8 +1071,24 @@ async function handleYouTubeSearch(
       return;
     }
 
+    // Filter out non-video items. We request `type=video` on the
+    // YouTube API but the API still occasionally returns channel
+    // / playlist entries (a known quirk for short Vietnamese
+    // queries — the API seems to think "sơn tùng" matches the
+    // official channel by name, even when we asked for videos).
+    // Without this filter the frontend gets items with no
+    // `videoId`, the play button silently no-ops, and the user
+    // sees a "song" they can't play.
+    const videoItems = items.filter(
+      (item) => item.id?.kind === 'youtube#video' && item.id.videoId,
+    );
+    if (videoItems.length === 0) {
+      res.json({ success: true, data: [] });
+      return;
+    }
+
     // Step 2: Get video durations
-    const videoIds = items.map((item) => item.id.videoId).filter(Boolean);
+    const videoIds = videoItems.map((item) => item.id.videoId).filter(Boolean);
     const videoDetailsUrl = new URL('https://www.googleapis.com/youtube/v3/videos');
     videoDetailsUrl.searchParams.set('part', 'contentDetails');
     videoDetailsUrl.searchParams.set('id', videoIds.join(','));
@@ -1094,7 +1110,7 @@ async function handleYouTubeSearch(
     }
 
     // Step 3: Build result array
-    const results = items.map((item) => {
+    const results = videoItems.map((item) => {
       const snippet = item.snippet;
       const videoId = item.id.videoId;
       const rawTitle = snippet.title || '';

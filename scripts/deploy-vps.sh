@@ -21,13 +21,12 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HEALTH_URL="http://localhost:3001/api/v1/system/health"
 MAX_RETRIES=18
 RETRIES_INTERVAL=10
-COMPOSE_PROJECT="repo"
-# Use -p flag to force the compose project name. The containers and
-# volumes on this VPS were originally created by a `docker compose up`
-# invocation that defaulted to project name = directory name (`repo`),
-# not `cuonghoangdev`. Using `-p repo` keeps us consistent with those
-# existing labels and the `cuonghoangdev_*` container_name / volume_name
-# values defined in docker-compose.yml.
+COMPOSE_PROJECT="cuonghoangdev"
+# Use -p flag to force the compose project name. The containers on
+# this VPS carry the `com.docker.compose.project=cuonghoangdev` label,
+# so we have to pass -p cuonghoangdev to make `docker compose ps`,
+# `exec`, etc. find them. Without this, the script silently treats
+# the cluster as empty and fails to talk to postgres / backend.
 DC="docker compose -p ${COMPOSE_PROJECT}"
 
 # ─── Helpers (must be defined before first use) ────────────

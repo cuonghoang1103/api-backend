@@ -106,6 +106,7 @@ jobs:
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -118,10 +119,24 @@ jobs:
           else
             ssh vps "echo 'YOUTUBE_API_KEY=${YOUTUBE_API_KEY}' >> /opt/cuonghoangdev/.env"
           fi
+          if [ -n "$GROQ_API_KEY" ]; then
+            if grep -q "^GROQ_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
+              ssh vps "sed -i 's|^GROQ_API_KEY=.*|GROQ_API_KEY=${GROQ_API_KEY}|' /opt/cuonghoangdev/.env"
+            else
+              ssh vps "echo 'GROQ_API_KEY=${GROQ_API_KEY}' >> /opt/cuonghoangdev/.env"
+            fi
+          fi
           if grep -q "^OPENROUTER_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
             ssh vps "sed -i 's|^OPENROUTER_API_KEY=.*|OPENROUTER_API_KEY=${OPENROUTER_API_KEY}|' /opt/cuonghoangdev/.env"
           else
             ssh vps "echo 'OPENROUTER_API_KEY=${OPENROUTER_API_KEY}' >> /opt/cuonghoangdev/.env"
+          fi
+          if [ -n "$OPENAI_API_KEY" ]; then
+            if grep -q "^OPENAI_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
+              ssh vps "sed -i 's|^OPENAI_API_KEY=.*|OPENAI_API_KEY=${OPENAI_API_KEY}|' /opt/cuonghoangdev/.env"
+            else
+              ssh vps "echo 'OPENAI_API_KEY=${OPENAI_API_KEY}' >> /opt/cuonghoangdev/.env"
+            fi
           fi
           # Required secrets - use GitHub secret if set, otherwise keep existing value in .env
           # (The .env was originally set up with strong random values that we don't want

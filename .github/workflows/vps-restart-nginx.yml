@@ -1,0 +1,35 @@
+name: VPS Restart Nginx
+
+on: workflow_dispatch
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Restart nginx
+        run: |
+          echo "=== Restarting nginx container ==="
+          ssh vps "docker restart cuonghoangdev_nginx 2>&1"
+          sleep 10
+          ssh vps "docker ps --filter name=cuonghoangdev_nginx --format 'table {{.Names}}\t{{.Status}}'"
+
+      - name: Test AI chat
+        run: |
+          sleep 5
+          echo "=== Test AI Chat ==="
+          curl -s -X POST https://api.cuongthai.com/api/v1/ai/chat \
+            -H "Content-Type: application/json" \
+            -d '{"message": "Xin chao"}' 2>&1 | head -30

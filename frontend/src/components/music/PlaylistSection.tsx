@@ -108,10 +108,11 @@ export default function PlaylistSection({ onPlaylistClick }: PlaylistSectionProp
         toast.success('Đã tạo playlist!');
       }
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e?.response?.data?.message || 'Loi tao playlist');
+      const e = err as { message?: string; status?: number };
+      const msg = e?.message || 'Loi tao playlist';
+      setError(msg);
       // If 401 → re-prompt login
-      if ((err as { response?: { status?: number } })?.response?.status === 401) {
+      if (e?.status === 401) {
         setShowForm(false);
         setShowLoginPrompt(true);
       }

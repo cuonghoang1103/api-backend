@@ -48,13 +48,23 @@ interface HistoryState {
   recentlyPlayed: Track[]; // cached full track objects
 }
 
+function defaultHistory(): HistoryState {
+  return { history: [], recentlyPlayed: [] };
+}
+
 function loadHistory(): HistoryState {
-  if (typeof window === 'undefined') return { history: [], recentlyPlayed: [] };
+  if (typeof window === 'undefined') return defaultHistory();
   try {
     const raw = localStorage.getItem(HISTORY_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return {
+        history: Array.isArray(parsed?.history) ? parsed.history : [],
+        recentlyPlayed: Array.isArray(parsed?.recentlyPlayed) ? parsed.recentlyPlayed : [],
+      };
+    }
   } catch { /* ignore */ }
-  return { history: [], recentlyPlayed: [] };
+  return defaultHistory();
 }
 
 function saveHistory(state: HistoryState) {

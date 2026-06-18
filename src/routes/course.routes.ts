@@ -1523,7 +1523,8 @@ router.post(
       const fullDir = path.join(config.uploadDir, relativeDir);
       const fullPath = path.join(fullDir, storedName);
 
-      await fs.mkdir(fullDir, { recursive: true });
+      await fs.mkdir(fullDir, { recursive: true, mode: 0o777 });
+      await fs.chmod(fullDir, 0o777).catch(() => { /* ignore */ });
       await fs.writeFile(fullPath, req.file.buffer);
 
       // Public URL is served by the existing /uploads/ proxy

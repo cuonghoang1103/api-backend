@@ -201,7 +201,8 @@ router.put(
       const relativePath = `${payload.folder}/${storedName}`;
       const fullPath = path.join(config.uploadDir, relativePath);
 
-      await fs.mkdir(path.dirname(fullPath), { recursive: true });
+      await fs.mkdir(path.dirname(fullPath), { recursive: true, mode: 0o777 });
+      await fs.chmod(path.dirname(fullPath), 0o777).catch(() => { /* ignore */ });
       await fs.writeFile(fullPath, req.file.buffer);
 
       const publicUrl = `/uploads/${relativePath.replace(/\\/g, '/')}`;

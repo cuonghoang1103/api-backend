@@ -166,8 +166,13 @@ export class UploadService {
     const relativePath = path.join(subDir, storedName);
     const fullPath = path.join(config.uploadDir, relativePath);
 
-    // Ensure directory exists
-    await fs.mkdir(path.dirname(fullPath), { recursive: true });
+    // Ensure directory exists — mode 0o777 + chmod after mkdir
+    // works around Docker named volumes from macOS hosts where chown
+    // is blocked by the filesystem (APFS). Group write perms let uid
+    // 1001 (nodejs) write even without owning the directory.
+    const dir = path.dirname(fullPath);
+    await fs.mkdir(dir, { recursive: true, mode: 0o777 });
+    await fs.chmod(dir, 0o777).catch(() => { /* ignore */ });
 
     // Move file to storage
     await fs.writeFile(fullPath, file.buffer);

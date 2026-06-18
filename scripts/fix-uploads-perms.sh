@@ -39,9 +39,12 @@ if [ -d "$UPLOAD_DIR" ]; then
 
   if [ "$NEEDS_FIX" = "1" ]; then
     echo "[fix-uploads-perms] Adjusting $UPLOAD_DIR ownership to $TARGET_UID:0"
-    chown -R "$TARGET_UID:0" "$UPLOAD_DIR" 2>/dev/null || \
-      echo "[fix-uploads-perms] chown failed (read-only mount?)"
-    chmod -R g+rwX "$UPLOAD_DIR" 2>/dev/null || true
+    chown -R "$TARGET_UID:0" "$UPLOAD_DIR" && \
+      chmod -R g+rwX "$UPLOAD_DIR" || {
+        echo "[fix-uploads-perms] chown failed (possible read-only mount or NFS share)"
+        echo "[fix-uploads-perms] Applying chmod -R 777 as fallback..."
+        chmod -R 777 "$UPLOAD_DIR" || true
+      }
   fi
 fi
 

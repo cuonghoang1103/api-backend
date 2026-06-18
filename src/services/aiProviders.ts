@@ -108,7 +108,13 @@ function getClient(provider: AIProviderConfig): OpenAI {
     );
   }
 
-  const clientConfig: ConstructorParameters<typeof OpenAI>[0] = { apiKey };
+  const clientConfig: ConstructorParameters<typeof OpenAI>[0] = {
+    apiKey,
+    // Short HTTP timeout so streaming failures surface quickly instead of
+    // hanging the SSE response for 20+ seconds.
+    timeout: 8_000,
+    maxRetries: 0,
+  };
   if (provider.baseURL) clientConfig.baseURL = provider.baseURL;
 
   _clients[provider.name] = new OpenAI(clientConfig);
@@ -133,10 +139,13 @@ function getAvailableProviders(): AIProviderConfig[] {
 }
 
 /**
- * Retry config: 3 lần với exponential backoff (1s, 2s, 4s).
+ * Retry config: 1 retry with exponential backoff (500ms).
+ * Reduced from 3 retries (1+2+4=7s) to 1 retry (0.5s) so users see
+ * errors within ~1-2s instead of waiting 20+ seconds for all providers
+ * to time out.
  */
-const MAX_RETRIES_PER_PROVIDER = 3;
-const RETRY_BASE_DELAY_MS = 1000;
+const MAX_RETRIES_PER_PROVIDER = 1;
+const RETRY_BASE_DELAY_MS = 500;
 
 // ============================================================
 // CIRCUIT BREAKER (skip providers đang lỗi tạm thời)

@@ -377,9 +377,15 @@ export default function ChatModal({ onClose }: ChatModalProps) {
               continue;
             }
             if (data.type === 'error') {
-              // Remove the empty assistant bubble we added so the user
-              // doesn't see a blank card with no content.
-              removePendingMessage(sessionId, assistantTempId);
+              // If we already streamed some content, keep the partial
+              // answer and append a notice so the user doesn't lose what
+              // they already saw. Otherwise remove the empty bubble.
+              const errorNote = '\n\n_[Đã bị ngắt: ' + (data.error || 'AI service unavailable') + ']_';
+              if (assistantContent.trim()) {
+                updateLastAssistantMessage(sessionId, assistantContent + errorNote);
+              } else {
+                removePendingMessage(sessionId, assistantTempId);
+              }
               toast.error(data.error || 'AI service is temporarily unavailable. Please try again.');
               // CRITICAL: break out of the read loop so the finally block
               // runs and clears the streaming state. Otherwise the spinner

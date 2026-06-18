@@ -73,7 +73,7 @@ jobs:
             dockerfile: Dockerfile.backend.ghcr
             image_name: api-backend-backend
           - target: frontend
-            context: ./frontend
+            context: frontend
             dockerfile: Dockerfile.ghcr
             image_name: api-backend-frontend
     permissions:

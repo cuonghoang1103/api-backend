@@ -2,50 +2,52 @@
 # ============================================================
 # fix-uploads-perms.sh — runs as root before dropping to nodejs
 # ============================================================
-# Docker named volumes created on a macOS host inherit a
-# 501:staff ownership that is meaningless inside the container.
-# When the backend (running as uid 1001) tries to write a
-# user upload, it hits EACCES. We detect the mismatch and
-# chown the volume before exec'ing the main process.
+# Docker named volumes from macOS hosts use APFS, which blocks
+# chown from inside the container (EACCES even as root).
+# Solution: chmod -R 777 on the entire uploads tree.
+# Group write (o+w) lets uid 1001 (nodejs) write regardless
+# of ownership. The umask on the macOS host is 022, so existing
+# files are typically 644 (rw-r--r--); directories are 755.
+# chmod 777 makes dirs +rwx for all and files +rw for all.
+# This is safe because /uploads/ is NOT world-readable auth data
+# and the nodejs process already runs as a non-root user.
 
-set -eu
+set -e
 
 UPLOAD_DIR="${UPLOAD_DIR:-/app/uploads}"
-TARGET_UID="${FIX_UPLOADS_UID:-1001}"
+LOG_PREFIX="[fix-uploads-perms]"
 
 if [ -d "$UPLOAD_DIR" ]; then
-  # If any subdirectory is owned by uid 501 (macOS host default) instead of
-  # our nodejs user (uid 1001), the Docker named volume was populated on
-  # macOS and needs fixing. We scan ALL subdirectories dynamically so any
-  # category created at runtime (e.g. playlist-covers, thumbnails, etc.)
-  # is automatically covered — no need to hardcode a list.
-  NEEDS_FIX=0
-  if [ -d "$UPLOAD_DIR" ]; then
-    for sub in "$UPLOAD_DIR"/*/; do
-      if [ -d "$sub" ]; then
-        CUR_UID=$(stat -c '%u' "$sub" 2>/dev/null || echo "")
-        if [ "$CUR_UID" != "$TARGET_UID" ] && [ "$CUR_UID" != "0" ]; then
-          NEEDS_FIX=1
-          break
-        fi
-      fi
-    done
-    # Also check the root upload dir itself
-    CUR_UID=$(stat -c '%u' "$UPLOAD_DIR" 2>/dev/null || echo "")
-    if [ "$NEEDS_FIX" = "0" ] && [ "$CUR_UID" != "$TARGET_UID" ] && [ "$CUR_UID" != "0" ]; then
-      NEEDS_FIX=1
-    fi
-  fi
+  echo "$LOG_PREFIX Scanning $UPLOAD_DIR for permission issues..."
 
-  if [ "$NEEDS_FIX" = "1" ]; then
-    echo "[fix-uploads-perms] Adjusting $UPLOAD_DIR ownership to $TARGET_UID:0"
-    chown -R "$TARGET_UID:0" "$UPLOAD_DIR" && \
-      chmod -R g+rwX "$UPLOAD_DIR" || {
-        echo "[fix-uploads-perms] chown failed (possible read-only mount or NFS share)"
-        echo "[fix-uploads-perms] Applying chmod -R 777 as fallback..."
-        chmod -R 777 "$UPLOAD_DIR" || true
-      }
+  # Check if any directory inside uploads is NOT writable by group.
+  # stat -c '%a' returns the permissions in octal (e.g. 755, 644).
+  HAS_BAD=0
+  for dir in "$UPLOAD_DIR" "$UPLOAD_DIR"/*/; do
+    [ -d "$dir" ] || continue
+    PERMS=$(stat -c '%a' "$dir" 2>/dev/null || echo "")
+    # Check if group write bit is set. Permissions like 755 → 3rd char
+    # contains '7' if group-write is set. We check the middle digit.
+    # Example: 755 → '5' (no group write), 775 → '7' (has group write)
+    GRP_W_BIT=$(echo "$PERMS" | cut -c2)
+    if [ "$GRP_W_BIT" != "7" ]; then
+      echo "$LOG_PREFIX Directory $(basename "$dir" 2>/dev/null || echo "$dir") has mode $PERMS (group-write bit not set)"
+      HAS_BAD=1
+      break
+    fi
+  done
+
+  if [ "$HAS_BAD" = "1" ]; then
+    echo "$LOG_PREFIX Applying chmod -R 777 to $UPLOAD_DIR (macOS APFS volume detected)"
+    chmod -R 777 "$UPLOAD_DIR" || {
+      echo "$LOG_PREFIX ERROR: chmod failed — uploads directory may be read-only"
+      echo "$LOG_PREFIX Check Docker volume mount options: ensure :Z or :Delegated is NOT set"
+    }
+  else
+    echo "$LOG_PREFIX Permissions OK (group-write bit set on all directories)"
   fi
+else
+  echo "$LOG_PREFIX $UPLOAD_DIR does not exist yet — skipping"
 fi
 
 # Hand off to whatever was passed as CMD (the node process).

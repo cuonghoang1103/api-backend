@@ -328,6 +328,8 @@ export default function CyberPlaylist() {
                     onAddToPlaylist={() => handleAddToPlaylist(track)}
                     colors={C}
                     dimmed
+                    failedThumbs={failedThumbs}
+                    setFailedThumbs={setFailedThumbs}
                   />
                 </motion.div>
               ))}

@@ -14,19 +14,28 @@ UPLOAD_DIR="${UPLOAD_DIR:-/app/uploads}"
 TARGET_UID="${FIX_UPLOADS_UID:-1001}"
 
 if [ -d "$UPLOAD_DIR" ]; then
-  # If a directory is owned by someone other than the target
-  # uid (or by root without a usable group), chown it. We don't
-  # touch files we just created ourselves (owner already correct).
+  # If any subdirectory is owned by uid 501 (macOS host default) instead of
+  # our nodejs user (uid 1001), the Docker named volume was populated on
+  # macOS and needs fixing. We scan ALL subdirectories dynamically so any
+  # category created at runtime (e.g. playlist-covers, thumbnails, etc.)
+  # is automatically covered — no need to hardcode a list.
   NEEDS_FIX=0
-  for sub in images audio video documents; do
-    if [ -d "$UPLOAD_DIR/$sub" ]; then
-      CUR_UID=$(stat -c '%u' "$UPLOAD_DIR/$sub" 2>/dev/null || echo "")
-      if [ "$CUR_UID" != "$TARGET_UID" ] && [ "$CUR_UID" != "0" ]; then
-        NEEDS_FIX=1
-        break
+  if [ -d "$UPLOAD_DIR" ]; then
+    for sub in "$UPLOAD_DIR"/*/; do
+      if [ -d "$sub" ]; then
+        CUR_UID=$(stat -c '%u' "$sub" 2>/dev/null || echo "")
+        if [ "$CUR_UID" != "$TARGET_UID" ] && [ "$CUR_UID" != "0" ]; then
+          NEEDS_FIX=1
+          break
+        fi
       fi
+    done
+    # Also check the root upload dir itself
+    CUR_UID=$(stat -c '%u' "$UPLOAD_DIR" 2>/dev/null || echo "")
+    if [ "$NEEDS_FIX" = "0" ] && [ "$CUR_UID" != "$TARGET_UID" ] && [ "$CUR_UID" != "0" ]; then
+      NEEDS_FIX=1
     fi
-  done
+  fi
 
   if [ "$NEEDS_FIX" = "1" ]; then
     echo "[fix-uploads-perms] Adjusting $UPLOAD_DIR ownership to $TARGET_UID:0"

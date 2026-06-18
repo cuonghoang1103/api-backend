@@ -36,6 +36,7 @@ RUN useradd --uid 1001 --gid 0 --shell /bin/bash --create-home nodejs
 
 # Pre-create uploads dirs (matches Dockerfile.backend layout)
 RUN mkdir -p /app/uploads/images /app/uploads/audio /app/uploads/video /app/uploads/documents \
+            /app/uploads/playlist-covers /app/uploads/thumbnails \
  && chown -R 1001:0 /app && chmod -R g+rwX /app
 
 # Copy the fix-perms entrypoint. Runs as root to chown a host-mounted

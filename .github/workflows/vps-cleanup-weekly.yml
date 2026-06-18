@@ -1,0 +1,79 @@
+name: VPS Auto Cleanup - Prevent Disk Full
+
+on:
+  schedule:
+    # Chạy lúc 3h sáng UTC mỗi Chủ nhật (= 10h sáng VN)
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Check current disk
+        run: |
+          echo "=== Disk before cleanup ==="
+          ssh vps "df -h / 2>&1 | head -3"
+
+      - name: Prune dangling images + builder cache
+        run: |
+          echo "=== Prune dangling images ==="
+          ssh vps "docker image prune -f 2>&1 | tail -3"
+          echo ""
+          echo "=== Prune builder cache older than 7 days ==="
+          ssh vps "docker builder prune -f --filter 'until=168h' 2>&1 | tail -3"
+
+      - name: Truncate container logs > 200MB
+        run: |
+          echo "=== Truncating oversized logs ==="
+          ssh vps "docker ps --format '{{.Names}}' | while read c; do
+            log=\$(docker inspect --format='{{.LogPath}}' \$c 2>/dev/null)
+            if [ -n \"\$log\" ] && [ -f \"\$log\" ]; then
+              size_mb=\$(du -m \"\$log\" 2>/dev/null | cut -f1)
+              if [ \"\$size_mb\" -gt 200 ]; then
+                echo \"Truncating \$c log (\${size_mb}MB)\"
+                sudo truncate -s 0 \"\$log\"
+              fi
+            fi
+          done"
+
+      - name: Clean apt cache + old logs
+        run: |
+          echo "=== Clean apt cache ==="
+          ssh vps "sudo apt-get clean 2>&1 | tail -2"
+          echo ""
+          echo "=== Clean /tmp files older than 7 days ==="
+          ssh vps "sudo find /tmp -type f -atime +7 -delete 2>/dev/null && echo 'Cleaned /tmp' || echo 'No files to clean'"
+          echo ""
+          echo "=== Rotate system logs ==="
+          ssh vps "sudo journalctl --vacuum-time=7d 2>&1 | tail -3"
+
+      - name: Final report
+        run: |
+          echo "=== Disk after cleanup ==="
+          ssh vps "df -h / 2>&1 | head -3"
+          echo ""
+          echo "=== Docker df ==="
+          ssh vps "docker system df"
+          echo ""
+          echo "=== Send alert if disk > 85% ==="
+          USED=$(ssh vps "df / | tail -1 | awk '{print \$5}' | tr -d '%'")
+          if [ "$USED" -gt 85 ]; then
+            echo "::warning::Disk usage at ${USED}% — consider upgrading volume size"
+          else
+            echo "Disk usage at ${USED}% — OK"
+          fi

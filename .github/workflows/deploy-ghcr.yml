@@ -230,17 +230,20 @@ jobs:
 
       - name: Wait for backend healthcheck
         run: |
+          # The new image boots in ~5s but Prisma client initialization
+          # + DB connection can take 10-20s on cold start. Give it 60s.
           ssh vps "
             for i in \$(seq 1 12); do
-              if curl -sf http://localhost:3001/health >/dev/null 2>&1; then
-                echo '[OK] Backend healthy!'
+              if docker inspect --format='{{.State.Health.Status}}' cuonghoangdev_backend 2>/dev/null | grep -q healthy; then
+                echo \"[OK] Backend healthy after \${i} checks\"
                 break
               fi
-              echo \"Reload... (\$i/12)\"
+              echo \"Waiting for backend... (\$i/12)\"
               sleep 5
             done
-            if ! curl -sf http://localhost:3001/health >/dev/null 2>&1; then
-              echo '[FAIL] Backend never came up; rolling back...'
+            if ! docker inspect --format='{{.State.Health.Status}}' cuonghoangdev_backend 2>/dev/null | grep -q healthy; then
+              echo '[FAIL] Backend never became healthy'
+              docker logs cuonghoangdev_backend --tail 30
               exit 1
             fi
           "
@@ -248,16 +251,17 @@ jobs:
       - name: Wait for frontend healthcheck
         run: |
           ssh vps "
-            for i in \$(seq 1 8); do
-              if curl -sf http://localhost:3000/ >/dev/null 2>&1; then
-                echo '[OK] Frontend healthy!'
+            for i in \$(seq 1 12); do
+              if docker inspect --format='{{.State.Health.Status}}' cuonghoangdev_frontend 2>/dev/null | grep -q healthy; then
+                echo \"[OK] Frontend healthy after \${i} checks\"
                 break
               fi
-              echo \"Reload... (\$i/8)\"
+              echo \"Waiting for frontend... (\$i/12)\"
               sleep 5
             done
-            if ! curl -sf http://localhost:3000/ >/dev/null 2>&1; then
-              echo '[FAIL] Frontend never came up'
+            if ! docker inspect --format='{{.State.Health.Status}}' cuonghoangdev_frontend 2>/dev/null | grep -q healthy; then
+              echo '[FAIL] Frontend never became healthy'
+              docker logs cuonghoangdev_frontend --tail 30
               exit 1
             fi
           "

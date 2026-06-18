@@ -1,5 +1,7 @@
 'use client';
 
+// Test commit for GHCR deploy timing - 2026-06-18
+
 import { useState, useRef, useEffect, useMemo, useCallback, type Dispatch, type SetStateAction } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';

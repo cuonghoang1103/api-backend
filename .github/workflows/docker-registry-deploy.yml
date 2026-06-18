@@ -69,12 +69,8 @@ jobs:
       matrix:
         include:
           - target: backend
-            context: ${{ github.workspace }}
-            dockerfile: ${{ github.workspace }}/Dockerfile.backend.ghcr
             image_name: api-backend-backend
           - target: frontend
-            context: ${{ github.workspace }}/frontend
-            dockerfile: ${{ github.workspace }}/frontend/Dockerfile.ghcr
             image_name: api-backend-frontend
     permissions:
       contents: read
@@ -105,8 +101,11 @@ jobs:
       - name: Build & push ${{ matrix.target }}
         uses: docker/build-push-action@v6
         with:
-          context: ${{ matrix.context }}
-          file: ${{ matrix.dockerfile }}
+      - name: Build & push ${{ matrix.target }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.target == 'backend' && 'Dockerfile.backend.ghcr' || 'frontend/Dockerfile.ghcr' }}
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.image_name }}:${{ env.IMAGE_TAG }}
@@ -130,11 +129,6 @@ jobs:
             ${{ matrix.target == 'frontend' && format('NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE={0}', secrets.NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE) || '' }}
             ${{ matrix.target == 'frontend' && format('NEXT_PUBLIC_SENTRY_ENVIRONMENT={0}', secrets.NEXT_PUBLIC_SENTRY_ENVIRONMENT) || '' }}
             ${{ matrix.target == 'frontend' && format('NEXT_PUBLIC_SENTRY_RELEASE={0}', secrets.NEXT_PUBLIC_SENTRY_RELEASE) || '' }}
-          # Use BuildKit's cache backend so layers persist between runs.
-          # cache-from pulls existing image as a cache source (the
-          # pre-built backend/frontend images on GHCR have the
-          # node_modules layer; using them as cache makes
-          # reinstall only rebuild changed layers).
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.image_name }}:latest
           cache-to: type=local,dest=/tmp/.buildx-cache-${{ matrix.target }},mode=max
           provenance: false

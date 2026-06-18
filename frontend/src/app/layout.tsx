@@ -54,6 +54,11 @@ const FloatingAIAssistant = dynamic(
   { ssr: false }
 )
 
+const SoundInitializer = dynamic(
+  () => import('@/components/providers/SoundInitializer'),
+  { ssr: false }
+)
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://cuongthai.com'),
   title: {
@@ -246,6 +251,7 @@ export default function RootLayout({
               <MusicHistoryRecorder />
               <GlobalMusicPlayer />
               <FloatingAIAssistant />
+              <SoundInitializer />
             </ClientOnly>
           </LocaleWrapper>
         </TanStackQueryProvider>

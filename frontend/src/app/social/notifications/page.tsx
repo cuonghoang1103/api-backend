@@ -51,28 +51,67 @@ export default function NotificationsPage() {
 
   useEffect(() => {
     let cancelled = false;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
+    let firstLoad = true;
+
     const load = async () => {
       try {
-        setLoading(true);
         const res = await api.get('/social/notifications', { params: { limit: 50 } });
         if (cancelled) return;
         const data = (res.data?.data ?? []) as NotificationItem[];
+        // Compare with previous unread count to detect new
+        // notifications arriving while the page is open or in
+        // another tab. We only fire the sound on a strict increase
+        // — a fresh mount (firstLoad) shouldn't ding.
+        setUnreadCount((prevUnread) => {
+          const newUnread = data.filter((n) => !n.isRead).length;
+          if (!firstLoad && newUnread > prevUnread) {
+            // Lazy import — same pattern used in the other store
+            // hooks to keep the module-load cost off the
+            // notifications page when the user has never
+            // interacted with it.
+            import('@/lib/sound').then(({ playSound }) => {
+              playSound('notification');
+            }).catch(() => { /* ignore */ });
+          }
+          return newUnread;
+        });
         setItems(data);
-        setUnreadCount(data.filter((n) => !n.isRead).length);
       } catch {
         // Endpoint may not exist yet — show a friendly empty state
         // rather than an error toast so the page never feels broken.
         if (!cancelled) {
           setItems([]);
-          setUnreadCount(0);
+          setUnreadCount((prev) => prev);
         }
       } finally {
         if (!cancelled) setLoading(false);
+        firstLoad = false;
       }
     };
     load();
+
+    // Poll every 60s so a notification arriving while the user is on
+    // another page still produces a sound on their next glance at
+    // the page. The endpoint isn't pushed via socket, so polling is
+    // the only way without a backend change. Page Visibility API
+    // pauses the poll when the tab is hidden to avoid burning API
+    // quota in the background.
+    const start = () => {
+      if (pollTimer) return;
+      pollTimer = setInterval(load, 60_000);
+    };
+    const stop = () => {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    };
+    const onVis = () => { if (document.visibilityState === 'visible') start(); else stop(); };
+    if (document.visibilityState === 'visible') start();
+    document.addEventListener('visibilitychange', onVis);
+
     return () => {
       cancelled = true;
+      stop();
+      document.removeEventListener('visibilitychange', onVis);
     };
   }, []);
 

@@ -52,6 +52,13 @@ export const useAuthStore = create<AuthState>()(
           // Store user in localStorage for client-side auth checks
           localStorage.setItem('user', JSON.stringify(userObj));
           window.dispatchEvent(new CustomEvent('auth-changed', { detail: { action: 'login', user: userObj } }));
+          // Play the "login" sound. Lazy-imported so users who have
+          // never logged in don't pay the Web Audio + IndexedDB
+          // module-load cost. The sound service itself checks the
+          // user's master/sound-kind toggles before actually playing.
+          import('@/lib/sound').then(({ playSound }) => {
+            playSound('login');
+          }).catch(() => { /* ignore */ });
         }
 
         set({ user: userObj, token: null, isAuthenticated: true, isLoading: false });

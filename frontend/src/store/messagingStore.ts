@@ -672,6 +672,19 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   applyIncomingMessage(threadId, message) {
     const auth = useAuthStore.getState();
     const isOwn = message.senderId === auth.user?.id;
+    // Play a "new message" sound when an incoming message arrives
+    // for a thread the user ISN'T currently viewing. If they have
+    // the thread open they're already aware of the message; the
+    // sound would be annoying. This matches the unread-bump rule
+    // (line below: `unreadCount` only increments when
+    // currentThreadId !== threadId).
+    if (!isOwn) {
+      // Lazy-import to avoid loading the sound service when the
+      // user has never received a message in this session.
+      import('@/lib/sound').then(({ playSound }) => {
+        playSound('message');
+      }).catch(() => { /* ignore */ });
+    }
     set((s) => {
       const cur = s.messagesByThread[threadId] ?? [];
       // De-dupe (sender may receive their own message back via socket)

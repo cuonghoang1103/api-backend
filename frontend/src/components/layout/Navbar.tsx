@@ -335,6 +335,10 @@ export default function Navbar() {
                           className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
                           <UserCircle className="w-4 h-4" />Profile
                         </Link>
+                        <Link href="/settings/notifications" onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
+                          <Settings className="w-4 h-4" />Notification sounds
+                        </Link>
                         <button
                           onClick={() => {
                             setUserMenuOpen(false);

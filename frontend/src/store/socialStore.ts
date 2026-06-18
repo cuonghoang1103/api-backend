@@ -340,6 +340,13 @@ export const useSocialStore = create<SocialState>((set, get) => ({
         isPosting: false,
       }));
       get().clearComposer();
+      // Play the "post created" sound. Lazy-imported; the sound
+      // service respects the user's per-kind toggle.
+      if (typeof window !== 'undefined') {
+        import('@/lib/sound').then(({ playSound }) => {
+          playSound('post');
+        }).catch(() => { /* ignore */ });
+      }
       return newPost;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to post';

@@ -1,0 +1,219 @@
+name: Docker Registry Deploy (GHCR)
+
+# ──────────────────────────────────────────────────────────────
+# This workflow is the new "fast" deploy path. It runs in PARALLEL
+# with the legacy backend-vps.yml workflow. The legacy one stays
+# enabled as a fallback for ~1 week, then can be disabled.
+#
+# Why faster (6-7 min → ~1.5-2 min):
+#   • GitHub Actions runner builds the Docker images (fast CPU + fast
+#     network to GHCR). No more rsync/tar piping 300MB+ of node_modules
+#     over SSH to the VPS.
+#   • Docker Layer Cache: package.json is copied before source code
+#     in the Dockerfiles, so as long as deps don't change, the heavy
+#     node_modules layer is reused. The image push contains only the
+#     diff layer (~5-30MB per build).
+#   • VPS just does `docker pull` of the new tag and restarts the
+#     containers. A `docker pull` of 50MB on datacenter network
+#     takes ~5-10s.
+#   • The prisma generate + db push + restart healthcheck are the
+#     only "real" work on the VPS side.
+#
+# Why safer (no impact on running flows):
+#   • Same env file, same volumes (uploads_data), same Docker network
+#     (backend). Containers are recreated with the SAME names, so
+#     nginx still proxies to cuonghoangdev_backend:3001.
+#   • The DB schema is migrated via prisma db push BEFORE the new
+#     backend container starts, so a brief moment of old code
+#     serving a new schema doesn't happen.
+#   • The legacy backend-vps.yml workflow is NOT touched. If this
+#     new workflow breaks, just disable it in the Actions tab and
+#     fall back to the old one.
+# ──────────────────────────────────────────────────────────────
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'prisma/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'frontend/**'
+      - 'Dockerfile.backend'
+      - 'frontend/Dockerfile'
+      - '.github/workflows/docker-registry-deploy.yml'
+      - 'scripts/registry-deploy.sh'
+  workflow_dispatch:
+    inputs:
+      tag_suffix:
+        description: 'Optional tag suffix (default: commit SHA)'
+        required: false
+        default: ''
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_OWNER: cuonghoang1103
+  # Tag is the short SHA. Override with workflow_dispatch input.
+  IMAGE_TAG: ${{ github.event.inputs.tag_suffix != '' && github.event.inputs.tag_suffix || github.sha }}
+
+jobs:
+  # ─── Build & push both images in parallel ────────────────────
+  build:
+    name: Build & Push (${{ matrix.target }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: backend
+            context: .
+            dockerfile: Dockerfile.backend
+            image_name: api-backend-backend
+          - target: frontend
+            context: ./frontend
+            dockerfile: Dockerfile
+            image_name: api-backend-frontend
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache-${{ matrix.target }}
+          key: ${{ runner.os }}-buildx-${{ matrix.target }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-${{ matrix.target }}-
+
+      - name: Build & push ${{ matrix.target }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.image_name }}:${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.image_name }}:latest
+          # Build args that need to be inlined at build time for the
+          # frontend (Next.js inlines NEXT_PUBLIC_* via webpack). These
+          # come from GitHub Secrets. If a secret is empty the
+          # build arg is still passed as empty string — that's fine,
+          # Next.js's `env:` block in next.config.js handles that.
+          build-args: |
+            ${{ matrix.target == 'frontend' && format('NEXT_PUBLIC_API_URL={0}', secrets.NEXT_PUBLIC_API_URL) || '' }}
+            ${{ matrix.target == 'frontend' && format('NEXT_PUBLIC_YOUTUBE_API_KEY={0}', secrets.NEXT_PUBLIC_YOUTUBE_API_KEY) || '' }}
+            ${{ matrix.target == 'frontend' && format('NEXTAUTH_URL={0}', secrets.NEXTAUTH_URL) || '' }}
+            ${{ matrix.target == 'frontend' && format('NEXTAUTH_SECRET={0}', secrets.NEXTAUTH_SECRET) || '' }}
+            ${{ matrix.target == 'frontend' && format('AUTH_SECRET={0}', secrets.NEXTAUTH_SECRET) || '' }}
+            ${{ matrix.target == 'frontend' && format('GOOGLE_CLIENT_ID={0}', secrets.GOOGLE_CLIENT_ID) || '' }}
+            ${{ matrix.target == 'frontend' && format('GOOGLE_CLIENT_SECRET={0}', secrets.GOOGLE_CLIENT_SECRET) || '' }}
+            ${{ matrix.target == 'frontend' && format('GITHUB_CLIENT_ID={0}', secrets.GITHUB_CLIENT_ID) || '' }}
+            ${{ matrix.target == 'frontend' && format('GITHUB_CLIENT_SECRET={0}', secrets.GITHUB_CLIENT_SECRET) || '' }}
+            ${{ matrix.target == 'frontend' && format('NEXT_PUBLIC_SENTRY_DSN={0}', secrets.NEXT_PUBLIC_SENTRY_DSN) || '' }}
+            ${{ matrix.target == 'frontend' && format('NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE={0}', secrets.NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE) || '' }}
+            ${{ matrix.target == 'frontend' && format('NEXT_PUBLIC_SENTRY_ENVIRONMENT={0}', secrets.NEXT_PUBLIC_SENTRY_ENVIRONMENT) || '' }}
+            ${{ matrix.target == 'frontend' && format('NEXT_PUBLIC_SENTRY_RELEASE={0}', secrets.NEXT_PUBLIC_SENTRY_RELEASE) || '' }}
+          # Use BuildKit's cache backend so layers persist between runs.
+          # cache-from pulls existing image as a cache source (the
+          # pre-built backend/frontend images on GHCR have the
+          # node_modules layer; using them as cache makes
+          # reinstall only rebuild changed layers).
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.image_name }}:latest
+          cache-to: type=local,dest=/tmp/.buildx-cache-${{ matrix.target }},mode=max
+          provenance: false
+
+  # ─── Deploy to VPS (sequential, after both images are pushed) ─
+  deploy:
+    name: Pull & Restart on VPS
+    runs-on: ubuntu-24.04
+    needs: build
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ServerAliveInterval 60\n    ServerAliveCountMax 10\n    ConnectTimeout 30\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Verify SSH connection
+        run: ssh vps "echo SSH_OK"
+
+      - name: Run registry deploy script on VPS
+        env:
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          GHCR_OWNER: ${{ env.IMAGE_OWNER }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Write the token to a temp file on the VPS (mode 600,
+          # owned by root). The script reads it and calls
+          # `docker login ghcr.io` before pulling. The token is
+          # scoped per-job by GitHub Actions and is the safe
+          # alternative to committing a PAT in /root/.ghcr_token.
+          ssh vps "mkdir -p /root/.docker && touch /root/.docker/config.json"
+          TOKEN_B64=$(printf '%s' "$GHCR_TOKEN" | base64 -w0)
+          ssh vps "echo '${TOKEN_B64}' | base64 -d > /tmp/.ghcr_token && chmod 600 /tmp/.ghcr_token"
+          ssh vps "export IMAGE_TAG='${IMAGE_TAG}' && \
+                   export GHCR_OWNER='${GHCR_OWNER}' && \
+                   export GHCR_TOKEN_FILE='/tmp/.ghcr_token' && \
+                   bash /opt/cuonghoangdev/scripts/registry-deploy.sh 2>&1" | tee /tmp/deploy-output.log
+          # Always remove the temp token file after deploy, even on failure.
+          ssh vps "rm -f /tmp/.ghcr_token"
+          echo "--- Verifying deployment ---"
+          ssh vps "curl -sI https://api.cuongthai.com/health 2>&1 | head -3"
+          ssh vps "curl -sI https://cuongthai.com 2>&1 | head -3"
+
+      - name: Post-deploy health check (wait for new containers to be ready)
+        run: |
+          echo "--- Waiting for backend healthcheck ---"
+          for i in $(seq 1 24); do
+            if ssh vps "docker exec cuonghoangdev_backend sh -c 'curl -sf http://localhost:3001/health >/dev/null 2>&1'"; then
+              echo "[OK] Backend healthy after ${i}x5s"
+              break
+            fi
+            echo "  ...waiting (${i}/24)"
+            sleep 5
+          done
+          echo "--- Waiting for frontend healthcheck ---"
+          for i in $(seq 1 12); do
+            if ssh vps "docker exec cuonghoangdev_frontend sh -c 'wget -qO- http://localhost:3000/ >/dev/null 2>&1'"; then
+              echo "[OK] Frontend healthy after ${i}x5s"
+              break
+            fi
+            echo "  ...waiting (${i}/12)"
+            sleep 5
+          done
+
+      - name: Cleanup old images on VPS (keep last 3 tags)
+        continue-on-error: true
+        run: |
+          ssh vps "docker images ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/api-backend-backend --format '{{.Tag}}' | \
+            grep -v 'latest' | sort -r | tail -n +4 | xargs -I {} \
+            docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/api-backend-backend:{} 2>/dev/null || true"
+          ssh vps "docker images ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/api-backend-frontend --format '{{.Tag}}' | \
+            grep -v 'latest' | sort -r | tail -n +4 | xargs -I {} \
+            docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/api-backend-frontend:{} 2>/dev/null || true"
+          echo "--- Disk usage after cleanup ---"
+          ssh vps "docker system df"

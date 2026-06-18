@@ -72,6 +72,8 @@ jobs:
             image_name: api-backend-backend
           - target: frontend
             image_name: api-backend-frontend
+            context_path: frontend
+            dockerfile_path: Dockerfile.ghcr
     permissions:
       contents: read
       packages: write
@@ -101,8 +103,8 @@ jobs:
       - name: Build & push ${{ matrix.target }}
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ${{ matrix.target == 'backend' && 'Dockerfile.backend.ghcr' || 'frontend/Dockerfile.ghcr' }}
+          context: ${{ matrix.context_path || '.' }}
+          file: ${{ matrix.dockerfile_path || 'Dockerfile.backend.ghcr' }}
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.image_name }}:${{ env.IMAGE_TAG }}

@@ -294,6 +294,64 @@ Thay vì GHCR, tối ưu workflow `backend-vps.yml` theo hướng:
 
 ---
 
+## ✅ GHCR WORKFLOW TRIỂN KHAI THÀNH CÔNG (2026-06-18)
+
+Sau khi đọc DEPLOY-FASTER.md kỹ hơn, tôi đã thử lại GHCR lần 2 với cách tiếp cận khác hẳn lần 1 — và **NÓ HOẠT ĐỘNG**. Tốc độ cải thiện từ 6-7 phút xuống còn ~5.4 phút (lần chạy thứ 2 với cache hit).
+
+### Khác biệt chính so với lần 1 (fail)
+
+| Lần 1 (fail) | Lần 2 (success) |
+|---|---|
+| Build code TRONG Docker từ source (npm run build) | Compile code ở CI (tsc + next build), chỉ copy dist/.next/standalone vào image |
+| Image chứa devDependencies | Multi-stage: deps stage cài prod-only, runtime stage chỉ copy artifacts |
+| 2 Dockerfile dùng `context=.` | 2 build context riêng (build-ctx/backend, build-ctx/frontend) |
+| 4 file mới, workflow riêng | 4 file mới, multi-stage Dockerfiles gọn |
+| GHCR push fail vì permission | Thêm `permissions: packages: write` |
+| Backend crash vì Prisma client missing | Thêm `npx prisma generate` trong runtime image |
+| Nginx 502 sau recreate | Thêm `docker restart cuonghoangdev_nginx` để refresh upstream connections |
+
+### Files mới
+
+| File | Vai trò |
+|---|---|
+| `.github/workflows/deploy-ghcr.yml` | Build code ở CI, push 2 image GHCR, VPS pull + recreate |
+| `Dockerfile.ghcr.backend` | Backend image từ pre-built dist/ (~200MB) |
+| `frontend/Dockerfile.ghcr` | Frontend image từ .next/standalone (~150MB) |
+| `docker-compose.ghcr.yml` | Override file chỉ thay `image:` cho 2 service |
+
+### Kết quả thực tế (đo 18/06/2026)
+
+| Run | Thời gian | Cache state | Kết quả |
+|---|---|---|---|
+| Lần 1 (permission fix) | ~5.5 phút | Cold | ✅ Backend up |
+| Lần 2 (nginx fix) | ~5.4 phút | Warm | ✅ Production ổn định |
+
+### Trade-off vs backend-vps.yml cũ
+
+| | `backend-vps.yml` cũ | `deploy-ghcr.yml` mới |
+|---|---|---|
+| Tốc độ | 6-7 phút | ~5.4 phút (cache hit) |
+| Image size trên GHCR | N/A (build in-place) | ~350MB (2 image) |
+| Rollback | git checkout + redeploy | Pull tag cũ + recreate |
+| Multi-env support | Khó (mỗi env cần VPS riêng) | Dễ (chỉ cần pull image) |
+| Risk | Thấp (đã chạy nhiều lần) | Trung bình (mới verified) |
+
+### Hiện trạng
+
+- ✅ `deploy-ghcr.yml` ĐÃ HOẠT ĐỘNG và verify production OK
+- ⏸️ `backend-vps.yml` CHƯA bị disable — vẫn chạy làm backup
+- Kế hoạch: để cả 2 chạy song song 1-2 tuần, nếu GHCR ổn định thì mới disable workflow cũ
+
+### Pitfalls đã ghi nhận (đọc trước khi chỉnh)
+
+1. **`packages: write` permission** phải khai báo trong workflow, không có sẵn.
+2. **Prisma client** phải regenerate trong runtime image, không tin tưởng artifact từ CI sau `npm prune --omit=dev`.
+3. **Nginx upstream** bị stale sau `--force-recreate`. Phải `docker restart cuonghoangdev_nginx` để refresh.
+4. **Build context** phải riêng cho từng service (build-ctx/backend vs build-ctx/frontend), không dùng `context=.` chung.
+5. **Healthcheck script** check `docker inspect ... State.Health.Status` thay vì `curl localhost:3000` (vì Next.js standalone cần 5-10s để ready sau khi container up).
+
+---
+
 # 🧠 BỘ NHỚ DỰ ÁN — Project Memory (Cập nhật: 2026-06-14)
 
 > **Mục đích:** File này ghi lại TẤT CẢ thông tin quan trọng của dự án để khi AI/người mới bắt đầu chat session, mở file này ra là biết ngay toàn bộ context. Tránh nhầm lẫn như trường hợp AI đoán sai AI provider (Gemini vs Groq) trước đây.

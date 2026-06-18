@@ -15,16 +15,14 @@
  *     harder
  */
 import path from 'path';
+import { randomBytes } from 'crypto';
 
 const SAFE_RANDOM_BYTES = 6; // 12 hex chars, plenty for collision avoidance
 
 function randomSuffix(): string {
   // 6 bytes = 12 hex chars. crypto.randomBytes is sync-block-cheap
   // and avoids the Math.random predictability footgun.
-  // (Dynamic import keeps ESM-friendly top-level syntax clean.)
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const nodeCrypto = require('crypto') as typeof import('crypto');
-  return nodeCrypto.randomBytes(SAFE_RANDOM_BYTES).toString('hex');
+  return randomBytes(SAFE_RANDOM_BYTES).toString('hex');
 }
 
 /** Always use forward slashes in keys, regardless of host OS. */

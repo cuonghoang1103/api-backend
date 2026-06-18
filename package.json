@@ -19,7 +19,15 @@
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist",
     "migrate:r2": "tsx scripts/migrate-to-r2.ts",
-    "migrate:r2:dry": "tsx scripts/migrate-to-r2.ts --dry-run"
+    "migrate:r2:dry": "tsx scripts/migrate-to-r2.ts --dry-run",
+    "test:smoke": "tsx scripts/test-all.ts",
+    "test:image": "tsx scripts/test-image-optimizer.ts",
+    "test:r2": "tsx scripts/test-r2.ts",
+    "test:pipeline": "tsx scripts/test-pipeline.ts",
+    "test:migration": "tsx scripts/test-migration.ts",
+    "test:music": "tsx scripts/test-music-stream.ts",
+    "test:errors": "tsx scripts/test-errors.ts",
+    "test:cdn": "tsx scripts/test-cdn.ts"
   },
   "keywords": [
     "portfolio",

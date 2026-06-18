@@ -296,16 +296,27 @@ export class MessagesService {
       },
     });
 
+    // Hide threads the admin hard-deleted for themselves.
+    // Mirrors the per-viewer filter in `listThreadsForUser`
+    // (dòng 244) so the inbox doesn't re-populate deleted
+    // chats after an F5 / sign-out / sign-in. The other side
+    // of the conversation still has their own copy in the DB.
+    const filtered = threads.filter((t) => {
+      const pref = this.getPreferenceForViewer(t.preferences, adminId);
+      if (pref?.deletedAt) return false;
+      return true;
+    });
+
     const reads = await prisma.messageRead.findMany({
-      where: { userId: adminId, threadId: { in: threads.map((t) => t.id) } },
+      where: { userId: adminId, threadId: { in: filtered.map((t) => t.id) } },
     });
     const readMap = new Map(reads.map((r) => [r.threadId, r.lastReadAt]));
 
     const serialized = await Promise.all(
-      threads.map((t) => this.serializeThreadAsync(t, adminId)),
+      filtered.map((t) => this.serializeThreadAsync(t, adminId)),
     );
 
-    return threads.map((t, idx) => {
+    return filtered.map((t, idx) => {
       const lastMsg = t.messages[0] ?? null;
       const lastRead = readMap.get(t.id) ?? new Date(0);
       // For admin, unread means the user sent something the admin hasn't read

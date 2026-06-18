@@ -714,5 +714,71 @@ export default function MusicAudioController() {
     // timeupdate/ended listeners attached in the audio-init effect.
   }, [currentTrack?.id]);
 
+  // ── Persist playback position (Bug 3 fix) ────────────────────────
+  // The store's `setCurrentTime` only triggers a debounced save (1s)
+  // when called explicitly (e.g. user seeks). During normal playback
+  // `currentTime` is updated every ~250ms by the audio element's
+  // `timeupdate` handler (local audio) or by the YouTube polling loop,
+  // but neither path calls setCurrentTime with a "user-initiated" flag,
+  // so the debounced save never runs while you're just listening.
+  // The result: a page reload mid-track always restores to whatever
+  // was the last seek position, not the actual playback position.
+  //
+  // Fix: every 5s during active playback, force-flush a save that
+  // includes the latest currentTime. Also flush on visibilitychange
+  // (tab hidden / app backgrounded) so a quick tab-switch + reload
+  // captures the true position. We use the store's `flushSave` helper
+  // (which writes the same `cuong-music-v2` key the store already
+  // reads on init), so reloads restore the position automatically.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!currentTrack) return;
+
+    const flush = () => {
+      const s = useMusicStore.getState();
+      // Skip the flush if the user is at the very start of a track —
+      // saves with currentTime=0 are fine, but we can save the
+      // localStorage write churn.
+      if (s.currentTime <= 0.5) return;
+      try {
+        const raw = localStorage.getItem('cuong-music-v2');
+        const parsed = raw ? JSON.parse(raw) : {};
+        const merged = {
+          currentTrackId: s.currentTrack?.id ?? null,
+          currentTime: s.currentTime,
+          volume: s.volume,
+          isMuted: s.isMuted,
+          isShuffled: s.isShuffled,
+          repeatMode: s.repeatMode,
+          lastPlaylistId: s.lastPlaylistId,
+          ...parsed,
+        };
+        // Always overwrite currentTime/currentTrackId with the live store
+        merged.currentTime = s.currentTime;
+        merged.currentTrackId = s.currentTrack?.id ?? null;
+        localStorage.setItem('cuong-music-v2', JSON.stringify(merged));
+      } catch {
+        /* ignore quota / private mode */
+      }
+    };
+
+    const interval = setInterval(flush, 5000);
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') flush();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    // Also flush on pagehide (closing tab / navigating away) so the
+    // next session resumes at the right position even if visibilitychange
+    // didn't fire.
+    const onPageHide = () => flush();
+    window.addEventListener('pagehide', onPageHide);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pagehide', onPageHide);
+    };
+  }, [currentTrack?.id, isPlaying]);
+
   return null;
 }

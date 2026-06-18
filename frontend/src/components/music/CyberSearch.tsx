@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { useQueryClient } from '@tanstack/react-query';
 import { useYouTubeSearch, musicKeys } from '@/hooks/useMusicQueries';
 import { useMusicStore } from '@/store/musicStore';
@@ -55,7 +54,10 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [focusedIdx, setFocusedIdx] = useState(-1);
+  // Map of result.id → 'tried-default' (after first YouTube thumb failed)
+  // so we can fall back to a lower-quality thumbnail on the same CDN.
   const [failedThumbs, setFailedThumbs] = useState<Set<string>>(new Set());
+  const [retriedThumbs, setRetriedThumbs] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -64,6 +66,19 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
 
   const { playTrack, tracks } = useMusicStore();
   const { data: ytResults, isLoading: ytLoading } = useYouTubeSearch(ytQuery, open && ytQuery.trim().length >= 2);
+
+  // Returns a thumbnail URL with the quality suffix swapped, e.g.
+  //   hqdefault.jpg → mqdefault.jpg
+  // YouTube's CDN serves smaller variants more reliably on production
+  // referrers (large `maxresdefault` requests are sometimes blocked
+  // or redirected by anti-hotlink rules). This is the same fallback
+  // strategy used by the YouTube IFrame API.
+  const downgradeYouTubeThumb = (url: string): string => {
+    return url
+      .replace('/maxresdefault.jpg', '/hqdefault.jpg')
+      .replace('/hqdefault.jpg', '/mqdefault.jpg')
+      .replace('/sddefault.jpg', '/mqdefault.jpg');
+  };
 
   // ── Debounce query for YouTube API calls ────────────────────────────
   const handleQueryChange = useCallback((value: string) => {
@@ -338,20 +353,39 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
                   onMouseEnter={() => setFocusedIdx(idx)}
                 >
                   {/* Thumbnail */}
-                  <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 shadow-md">
+                  <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 shadow-md bg-black/40">
                     {result.thumbnail && !failedThumbs.has(result.id) ? (
-                      <Image
-                        src={result.thumbnail}
+                      // Plain <img> instead of next/image so we can
+                      // attach referrerPolicy="no-referrer" (YouTube
+                      // CDN sometimes blocks hot-linked requests when
+                      // the referer is a production domain) and so
+                      // `onError` fires reliably for external URLs.
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={retriedThumbs.has(result.id) ? downgradeYouTubeThumb(result.thumbnail) : result.thumbnail}
                         alt={result.title}
-                        fill
-                        className="object-cover"
-                        unoptimized={result.thumbnail.startsWith('http')}
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover"
                         onError={() => {
-                          setFailedThumbs(prev => {
-                            const next = new Set(prev);
-                            next.add(result.id);
-                            return next;
-                          });
+                          // YouTube: first failure → swap to a lower
+                          // quality variant. Second failure → show
+                          // gradient placeholder. Local track covers
+                          // go straight to placeholder.
+                          const isYT = result.type === 'youtube';
+                          if (isYT && !retriedThumbs.has(result.id)) {
+                            setRetriedThumbs((prev) => {
+                              const next = new Set(prev);
+                              next.add(result.id);
+                              return next;
+                            });
+                          } else {
+                            setFailedThumbs((prev) => {
+                              const next = new Set(prev);
+                              next.add(result.id);
+                              return next;
+                            });
+                          }
                         }}
                       />
                     ) : (

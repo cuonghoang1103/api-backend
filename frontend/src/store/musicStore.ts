@@ -205,7 +205,7 @@ export const useMusicStore = create<MusicState>()((set, get) => {
 
     setTracks: (tracks) => {
       const p = loadPersisted();
-      const { savedAllTracks, currentTrack, tracks: existingTracks, isPlaying } = get();
+      const { savedAllTracks, currentTrack, tracks: existingTracks, isPlaying, currentTime, isPlaying: isPlayingNow } = get();
 
       // ── No-op guard ───────────────────────────────────────────────
       // If the new tracks list is identical to what the store already
@@ -223,7 +223,50 @@ export const useMusicStore = create<MusicState>()((set, get) => {
         if (same) return;
       }
 
-      // ── SAFETY NET for in-progress YouTube playback ─────────────
+      // ── Bug 4 fix: stronger safety net for in-progress playback ──
+      // If the user is currently playing a track, do NOT reset any of
+      // the playback state (currentTrack / currentIndex / currentTime
+      // / isPlaying) just because the new server-side list differs.
+      //
+      // The previous logic only preserved `currentTrack` by appending
+      // it to `workingTracks`, but it then ran the full "restore from
+      // persisted state" block which could still clobber
+      // `currentTime` to a stale value and re-create the
+      // `currentTrack` reference — which made the audio controller
+      // see a "new track" and reload the audio source.
+      //
+      // Now: if a track is actively playing, we keep the entire
+      // playback state untouched and only refresh the static track
+      // lists (tracks / allTracks / savedAllTracks / queue). The
+      // playing track is already in `existingTracks` (or we append
+      // it), so the next track has somewhere to live.
+      const isActivelyPlaying = currentTrack && isPlayingNow;
+
+      if (isActivelyPlaying && currentTrack) {
+        let workingTracks = tracks;
+        if (!tracks.some((t) => t.id === currentTrack.id)) {
+          // The currently playing track is missing from the new list
+          // (e.g. a YouTube track that hasn't been registered to the
+          // DB yet). Append it so the store's "next track" logic
+          // still has a coherent list to advance through.
+          workingTracks = [...tracks, currentTrack];
+        }
+        const newSaved = savedAllTracks.length === 0 ? workingTracks : savedAllTracks;
+        // DO NOT touch currentTrack / currentIndex / currentTime /
+        // isPlaying / duration — they're owned by the audio
+        // controller. Only refresh the static lists.
+        set({
+          tracks: workingTracks,
+          allTracks: workingTracks,
+          savedAllTracks: newSaved,
+          queue: workingTracks,
+          lastPlaylistId: null,
+          smartShufflePool: [],
+        });
+        return;
+      }
+
+      // ── SAFETY NET for in-progress YouTube playback (legacy) ────
       // If the user is currently listening to a track and the new
       // list from the server doesn't contain it (e.g. they searched
       // a YouTube track that hadn't been registered to the DB yet),
@@ -432,6 +475,10 @@ export const useMusicStore = create<MusicState>()((set, get) => {
     toggleMute: () => set((s) => ({ isMuted: !s.isMuted })),
 
     toggleShuffle: () =>
+      // CRITICAL: same as cycleRepeat — pure UI toggle. Do NOT touch
+      // `currentTrack`, `currentTime`, or `isPlaying`. Touching
+      // `tracks` reference is fine because the audio controller is
+      // not subscribed to that array (it reads `currentTrack` only).
       set((s) => {
         const p = loadPersisted();
         const newShuffle = !s.isShuffled;
@@ -451,6 +498,12 @@ export const useMusicStore = create<MusicState>()((set, get) => {
 
     cycleRepeat: () => {
       const p = loadPersisted();
+      // CRITICAL: this is a pure UI toggle. It MUST NOT modify
+      // `currentTrack`, `currentTime`, `isPlaying`, or anything that
+      // would cause MusicAudioController to reload the audio source
+      // (the controller has effects keyed on `currentTrack?.id` /
+      // `currentTrack?.audioUrl` / `currentTime` that reload the
+      // track). Keep the dep list to just `repeatMode`.
       set((s) => {
         const modes: RepeatMode[] = ['none', 'all', 'one'];
         const idx = modes.indexOf(s.repeatMode);

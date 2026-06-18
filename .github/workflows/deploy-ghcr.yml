@@ -29,6 +29,7 @@ concurrency:
 # for the duration of this workflow.
 permissions:
   contents: read
+  actions: write
   packages: write
 
 env:
@@ -53,6 +54,26 @@ jobs:
           cache-dependency-path: |
             package-lock.json
             frontend/package-lock.json
+
+      - name: Restore Next.js SWC incremental cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            frontend/.next/cache
+            frontend/node_modules/.cache
+          key: nextjs-cache-${{ runner.os }}-frontend-lock-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            nextjs-cache-${{ runner.os }}-frontend-lock-
+            nextjs-cache-${{ runner.os }}-frontend-
+
+      - name: Restore backend build cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules/.cache
+          key: backend-cache-${{ runner.os }}-lock-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            backend-cache-${{ runner.os }}-lock-
 
       # ─── Build backend (TypeScript) in parallel with frontend ───
       - name: Install backend deps

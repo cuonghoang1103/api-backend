@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { X, Loader2, Copy, CheckCheck, User, Send } from 'lucide-react';
+import { X, Loader2, Copy, CheckCheck, User, Send, Search } from 'lucide-react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
@@ -20,7 +20,26 @@ const INITIAL_PROMPTS = [
 ];
 
 // ── Mech typing indicator ─────────────────────────────────────────
+const LOADING_MESSAGES = [
+  'Đang tìm kiếm thông tin...',
+  'Đang phân tích câu hỏi...',
+  'Đang truy xuất tài liệu...',
+  'Đang suy nghĩ...',
+  'Đang chuẩn bị câu trả lời...',
+];
+
 function MechTypingIndicator() {
+  const [msgIdx, setMsgIdx] = useState(0);
+
+  useEffect(() => {
+    // Rotate friendly loading messages every 4s
+    // so user sees context even when AI providers are slow/failing
+    const t = setInterval(() => {
+      setMsgIdx((i) => (i + 1) % LOADING_MESSAGES.length);
+    }, 4000);
+    return () => clearInterval(t);
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -28,7 +47,7 @@ function MechTypingIndicator() {
       exit={{ opacity: 0 }}
       className="flex gap-2"
     >
-      <div className="w-8 h-8 rounded-xl bg-[#0d1117] border border-[#22d3ee]/20 flex items-center justify-center overflow-hidden">
+      <div className="w-8 h-8 rounded-xl bg-[#0d1117] border border-[#22d3ee]/20 flex items-center justify-center overflow-hidden flex-shrink-0">
         <div className="flex flex-col items-center gap-0.5">
           <div className="flex gap-1.5">
             <div className="w-1 h-1 rounded-full bg-[#22d3ee] mech-pulse-dot" />
@@ -37,7 +56,20 @@ function MechTypingIndicator() {
           <div className="w-2 h-px bg-[#22d3ee]/30" />
         </div>
       </div>
-      <div className="px-3 py-2 rounded-xl rounded-tl-sm bg-[#0d1117]/80 border border-[#22d3ee]/15 data-card-glow-cyan">
+      <div className="px-3 py-2 rounded-xl rounded-tl-sm bg-[#0d1117]/80 border border-[#22d3ee]/15 data-card-glow-cyan flex items-center gap-2">
+        <Search className="w-3 h-3 text-[#22d3ee] animate-pulse" />
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={msgIdx}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.25 }}
+            className="text-[11px] text-[#94a3b8] font-mono whitespace-nowrap"
+          >
+            {LOADING_MESSAGES[msgIdx]}
+          </motion.span>
+        </AnimatePresence>
         <div className="flex gap-1">
           {[0, 1, 2].map((i) => (
             <motion.div
@@ -329,7 +361,10 @@ export default function ChatModal({ onClose }: ChatModalProps) {
               continue;
             }
             if (data.type === 'error') {
-              toast.error(data.error || 'Stream error');
+              // Remove the empty assistant bubble we added so the user
+              // doesn't see a blank card with no content.
+              removePendingMessage(sessionId, assistantTempId);
+              toast.error(data.error || 'AI service is temporarily unavailable. Please try again.');
               continue;
             }
             // chunk or raw text
@@ -374,7 +409,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
     }
   }, [isStreaming, currentSessionId, addMessage, setStreaming, setRobotEmotion,
       setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
-      updateLastAssistantMessage, messages]);
+      updateLastAssistantMessage, removePendingMessage, messages]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {

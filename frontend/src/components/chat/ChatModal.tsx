@@ -323,10 +323,26 @@ export default function ChatModal({ onClose }: ChatModalProps) {
 
       const decoder = new TextDecoder();
       let buffer = '';
+      let stallCount = 0; // count of consecutive slow chunks
+      let idleTimer: ReturnType<typeof setTimeout> | null = null;
+
+      const resetIdleTimer = () => {
+        if (idleTimer) clearTimeout(idleTimer);
+        // If no chunk arrives within 20s, abort the stream and let the
+        // finally block clean up. Prevents spinner from spinning forever
+        // if the server hangs after sending a few frames.
+        idleTimer = setTimeout(() => {
+          try {
+            reader.cancel('idle-timeout');
+          } catch {}
+        }, 20_000);
+      };
+      resetIdleTimer();
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
+        resetIdleTimer();
 
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split('\n');
@@ -365,7 +381,10 @@ export default function ChatModal({ onClose }: ChatModalProps) {
               // doesn't see a blank card with no content.
               removePendingMessage(sessionId, assistantTempId);
               toast.error(data.error || 'AI service is temporarily unavailable. Please try again.');
-              continue;
+              // CRITICAL: break out of the read loop so the finally block
+              // runs and clears the streaming state. Otherwise the spinner
+              // spins forever if the server forgets to close the stream.
+              break;
             }
             // chunk or raw text
             const text = data.text || data.content || '';
@@ -381,6 +400,9 @@ export default function ChatModal({ onClose }: ChatModalProps) {
           }
         }
       }
+
+      // Clean up idle timer regardless of how we exited the loop
+      if (idleTimer) clearTimeout(idleTimer);
 
       if (!resolvedSessionId) {
         const finalId = Date.now().toString();

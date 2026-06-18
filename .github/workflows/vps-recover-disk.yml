@@ -1,0 +1,136 @@
+name: VPS Recover - Disk Full / DB Down
+
+on:
+  workflow_dispatch
+
+jobs:
+  recover:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ServerAliveInterval 60\n    ServerAliveCountMax 10\n    ConnectTimeout 30\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Step 1 — Identify big consumers
+        run: |
+          echo "=== Top 20 largest dirs under /opt/cuonghoangdev ==="
+          ssh vps "du -sh /opt/cuonghoangdev/* 2>/dev/null | sort -h | tail -20"
+          echo ""
+          echo "=== Top 10 largest dirs at root ==="
+          ssh vps "sudo du -sh /* 2>/dev/null | sort -h | tail -10"
+          echo ""
+          echo "=== Top 15 largest files (any) ==="
+          ssh vps "sudo find / -type f -size +50M 2>/dev/null -exec du -h {} \; 2>/dev/null | sort -h | tail -15"
+
+      - name: Step 2 — Check docker logs size
+        run: |
+          echo "=== Docker logs size per container ==="
+          ssh vps "ls -lah /var/lib/docker/containers/*/  2>/dev/null | grep -E '\.log$' | head -20"
+          echo ""
+          echo "=== Per-container log size (docker) ==="
+          ssh vps "docker ps --format '{{.Names}}' | while read c; do
+            size=\$(docker inspect --format='{{.LogPath}}' \$c 2>/dev/null | xargs -I {} sudo du -h {} 2>/dev/null | cut -f1)
+            echo \"\$c  \$size\"
+          done"
+
+      - name: Step 3 — Docker system prune (safe — only dangling)
+        run: |
+          echo "=== Before prune ==="
+          ssh vps "docker system df"
+          echo ""
+          echo "=== Prune dangling images + unused build cache ==="
+          ssh vps "docker image prune -f 2>&1 | tail -5"
+          ssh vps "docker builder prune -f --filter 'until=24h' 2>&1 | tail -5"
+          echo ""
+          echo "=== After prune ==="
+          ssh vps "docker system df"
+
+      - name: Step 4 — Truncate oversized container logs
+        run: |
+          echo "=== Truncating logs > 100MB ==="
+          ssh vps "docker ps --format '{{.Names}}' | while read c; do
+            log=\$(docker inspect --format='{{.LogPath}}' \$c 2>/dev/null)
+            if [ -n \"\$log\" ] && [ -f \"\$log\" ]; then
+              size=\$(du -m \"\$log\" 2>/dev/null | cut -f1)
+              if [ \"\$size\" -gt 100 ]; then
+                echo \"Truncating \$c log (\${size}MB): \$log\"
+                sudo truncate -s 0 \"\$log\"
+              fi
+            fi
+          done"
+
+      - name: Step 5 — Disk after cleanup
+        run: |
+          echo "=== Disk after cleanup ==="
+          ssh vps "df -h /opt/cuonghoangdev 2>&1 | head -3"
+
+      - name: Step 6 — Restart Postgres
+        run: |
+          echo "=== Restart Postgres ==="
+          ssh vps "docker restart cuonghoangdev_postgres 2>&1"
+          echo ""
+          echo "=== Wait 15s for recovery ==="
+          sleep 15
+          echo ""
+          echo "=== pg_isready (15 tries, 4s each = 60s) ==="
+          ssh vps "for i in \$(seq 1 15); do
+            if docker exec cuonghoangdev_postgres pg_isready -U postgres 2>/dev/null; then
+              echo \"[OK] Postgres ready after \$i tries\"
+              break
+            fi
+            echo \"Try \$i/15: not ready, sleeping 4s\"
+            sleep 4
+          done"
+
+      - name: Step 7 — Restart Backend (drop stale Prisma connections)
+        run: |
+          echo "=== Restart Backend ==="
+          ssh vps "docker restart cuonghoangdev_backend 2>&1"
+          sleep 10
+          echo ""
+          echo "=== Health from inside container ==="
+          ssh vps "for i in \$(seq 1 12); do
+            if docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>/dev/null; then
+              echo \"[OK] Backend healthy after \$i tries\"
+              break
+            fi
+            echo \"Try \$i/12: not healthy, sleeping 5s\"
+            sleep 5
+          done"
+
+      - name: Step 8 — Verify public endpoints
+        run: |
+          echo "=== Public API smoke ==="
+          sleep 5
+          echo "--- /api/v1/music/tracks?limit=1 ---"
+          curl -s --max-time 10 "https://api.cuongthai.com/api/v1/music/tracks?limit=1" 2>&1 | head -c 400
+          echo ""
+          echo ""
+          echo "--- /api/v1/projects?limit=1 ---"
+          curl -s --max-time 10 "https://api.cuongthai.com/api/v1/projects?limit=1" 2>&1 | head -c 400
+          echo ""
+          echo ""
+          echo "--- /api/v1/posts?limit=1 ---"
+          curl -s --max-time 10 "https://api.cuongthai.com/api/v1/posts?limit=1" 2>&1 | head -c 400
+          echo ""
+          echo ""
+          echo "=== Frontend ==="
+          curl -sI --max-time 10 "https://cuongthai.com/music" 2>&1 | head -2
+
+      - name: Step 9 — Final disk
+        run: |
+          echo "=== Final disk state ==="
+          ssh vps "df -h / 2>&1 | head -3"
+          echo ""
+          echo "=== Container statuses ==="
+          ssh vps "docker ps --format 'table {{.Names}}\t{{.Status}}' | grep -E 'postgres|backend|redis|nginx'"

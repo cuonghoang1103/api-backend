@@ -236,6 +236,64 @@ bash scripts/deploy-vps.sh
 
 ---
 
+## ⚠️ BÀI HỌC: Tại sao KHÔNG chuyển sang GHCR Registry Deploy (2026-06-18)
+
+Đã thử thiết kế workflow mới `docker-registry-deploy.yml` (build image trên CI → push lên `ghcr.io` → VPS pull & restart). Ý tưởng hay nhưng **không phù hợp với project này** vì các lý do sau:
+
+### 1. Project có pre-existing TypeScript errors (~48 lỗi ở admin pages)
+
+Backend có nhiều lỗi TS cũ trong admin pages (theo note "Build error pre-existing" ở cuối file). Workflow cũ `backend-vps.yml` xử lý bằng cách:
+
+- Chạy `npx tsc` ở CI **chỉ để compile `dist/`**
+- Sau đó rsync `dist/` xuống VPS
+- VPS `docker cp` inject `dist/` vào container **đang chạy** (in-place)
+- Không build lại Docker image → không cần `tsc` pass
+
+Workflow GHCR mới thì lại:
+- Build Docker image từ source sạch → `RUN npm run build` chạy `tsc` → **fail** vì pre-existing errors
+- Không có cách bypass vì image phải chứa code compile được
+
+### 2. App structure có code chung cho cả 2 context
+
+Frontend Dockerfile ban đầu dùng `context=.` (repo root) thay vì `context=./frontend` → `COPY . .` copy cả `package.json` của backend → `npm run build` chạy `tsc` (backend) thay vì `next build` (frontend) → fail. Phải dùng 2 context khác nhau (root cho backend, frontend/ cho frontend), đồng nghĩa với 2 Dockerfile riêng — phức tạp hóa setup.
+
+### 3. Workflow cũ đã là "near-optimal" cho single-VPS
+
+DEPLOY-FASTER.md rationale (cuối file) ghi rõ:
+
+> **Tại sao không dùng CI/CD (GitHub Actions)?** Vì repo nhỏ, VPS chỉ có 1, việc thêm CI/CD layer sẽ chậm hơn rsync trực tiếp.
+
+Thực tế deploy cũ ~6-7 phút, trong đó:
+- ~3-4 phút: `npx tsc` compile + `npm run build` Next.js (chạy trên VPS, CPU chậm)
+- ~30-60s: rsync delta
+- ~20-30s: docker restart + healthcheck
+
+Đây là bottleneck thực sự — **không phải image pull qua SSH** (SSH delta 30-60s). Nếu muốn tăng tốc, **build TS ở CI** (CPU mạnh) thay vì build image từ source ở VPS — chính là workflow cũ đang làm rồi.
+
+### 4. Khi nào GHCR mới đáng giá?
+
+Chỉ khi:
+- Backend/frontend **sạch TS errors** (chuyển sang strict mode nghiêm túc)
+- Có nhiều môi trường (staging + prod + multi-region)
+- Cần rollback nhanh bằng cách swap image tag
+
+Trong khi đó, **workflow `backend-vps.yml` hiện tại đã là best fit**:
+- Build code trên CI (CPU mạnh) → tăng tốc compile TS/Next
+- `docker cp` inject in-place → zero downtime thực sự
+- Không cần BuildKit cache ở VPS → tránh phụ thuộc local Docker state
+- File `.env` ở VPS là single source of truth → đơn giản, dễ audit
+
+### 5. Nếu muốn tăng tốc thêm, cải tiến gì?
+
+Thay vì GHCR, tối ưu workflow `backend-vps.yml` theo hướng:
+- **Bỏ qua bước build Next.js ở VPS** (đã làm rồi — CI build + sync .next xuống)
+- **Tăng BuildKit cache hit rate** bằng cách mount cache volume persistent
+- **Tăng parallelism**: chạy build backend và frontend song song ở CI (đã làm)
+
+Đo thời gian: nếu `tsc` ở CI mất < 60s, tổng workflow sẽ là ~3-4 phút (vs GHCR ~2 phút nhưng rủi ro cao hơn nhiều).
+
+---
+
 # 🧠 BỘ NHỚ DỰ ÁN — Project Memory (Cập nhật: 2026-06-14)
 
 > **Mục đích:** File này ghi lại TẤT CẢ thông tin quan trọng của dự án để khi AI/người mới bắt đầu chat session, mở file này ra là biết ngay toàn bộ context. Tránh nhầm lẫn như trường hợp AI đoán sai AI provider (Gemini vs Groq) trước đây.

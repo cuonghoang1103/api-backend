@@ -1,0 +1,76 @@
+# ============================================================
+# Dockerfile.backend.ghcr - CI build variant for GHCR push
+# No host-cache (which was a workaround for offline VPS builds).
+# This file is used by .github/workflows/docker-registry-deploy.yml
+# and is INDEPENDENT of the original Dockerfile.backend used by
+# docker-compose on the VPS.
+# ============================================================
+
+# ─── Stage 1: TypeScript Build ─────────────────────────
+FROM node:22-slim AS builder
+WORKDIR /app
+
+# Build tools for native modules (sharp, bcrypt, prisma engines)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ openssl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy package files FIRST to maximize layer cache.
+# Any source-only change won't re-download packages.
+COPY package*.json ./
+COPY prisma ./prisma/
+
+# Pre-generate Prisma client (engine binaries, schema-derived
+# client). Doing it as a separate layer means the engine
+# download is cached independently of source code changes.
+RUN npx prisma generate 2>&1 | tail -5
+
+# Install all deps (devDependencies needed for tsc).
+RUN npm ci --include=dev --no-audit
+
+# Now copy the rest of the source and compile.
+COPY tsconfig.json ./
+COPY src ./src/
+RUN npm run build
+
+# ─── Stage 2: Production Runtime ─────────────────────────
+FROM node:22-slim AS runner
+WORKDIR /app
+
+# curl for healthcheck, tini for proper signal handling
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl tini ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --uid 1001 --gid 0 --shell /bin/bash --create-home nodejs
+
+# Create uploads directory (host volume overrides this in production)
+RUN mkdir -p /app/uploads/images /app/uploads/audio /app/uploads/video /app/uploads/documents \
+    && chown -R 1001:0 /app && chmod -R g+rwX /app
+
+# Production-only deps: rebuild node_modules without devDependencies.
+# Faster than carrying over builder's full node_modules (~700MB → ~120MB).
+COPY package*.json ./
+RUN npm ci --omit=dev --no-audit
+
+# Copy compiled output + prisma + entrypoint
+COPY --from=builder --chown=1001:0 /app/dist ./dist
+COPY --from=builder --chown=1001:0 /app/prisma ./prisma
+
+# Copy the fix-perms entrypoint (runs as root, then drops to nodejs)
+COPY --chown=0:0 scripts/fix-uploads-perms.sh /usr/local/bin/fix-uploads-perms.sh
+RUN chmod +x /usr/local/bin/fix-uploads-perms.sh
+
+ENV NODE_ENV=production
+ENV PORT=3001
+# Cap at 1.5GB so 2GB VPS doesn't OOM during large RAG indexing.
+ENV NODE_OPTIONS=--max-old-space-size=1536
+
+EXPOSE 3001
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:3001/health || exit 1
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/fix-uploads-perms.sh"]
+USER nodejs
+
+CMD ["node", "dist/index.js"]

@@ -41,7 +41,9 @@ on:
       - 'package-lock.json'
       - 'frontend/**'
       - 'Dockerfile.backend'
+      - 'Dockerfile.backend.ghcr'
       - 'frontend/Dockerfile'
+      - 'frontend/Dockerfile.ghcr'
       - '.github/workflows/docker-registry-deploy.yml'
       - 'scripts/registry-deploy.sh'
   workflow_dispatch:
@@ -68,11 +70,11 @@ jobs:
         include:
           - target: backend
             context: .
-            dockerfile: Dockerfile.backend
+            dockerfile: Dockerfile.backend.ghcr
             image_name: api-backend-backend
           - target: frontend
             context: ./frontend
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.ghcr
             image_name: api-backend-frontend
     permissions:
       contents: read

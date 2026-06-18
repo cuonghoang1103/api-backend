@@ -1,0 +1,86 @@
+name: VPS Fix DB - Diagnose & Recover PostgreSQL
+
+on:
+  workflow_dispatch
+
+jobs:
+  fix-db:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ServerAliveInterval 60\n    ServerAliveCountMax 10\n    ConnectTimeout 30\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Step 1 — Container status
+        run: |
+          echo "=== 1. Container status ==="
+          ssh vps "docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}' | grep -E 'postgres|backend|redis|nginx'"
+
+      - name: Step 2 — Postgres logs
+        run: |
+          echo "=== 2. Postgres logs (last 50) ==="
+          ssh vps "docker logs cuonghoangdev_postgres --tail 50 2>&1"
+
+      - name: Step 3 — Disk & memory
+        run: |
+          echo "=== 3a. Disk usage ==="
+          ssh vps "df -h /opt/cuonghoangdev 2>&1 | head -10"
+          echo ""
+          echo "=== 3b. Docker system df ==="
+          ssh vps "docker system df 2>&1"
+          echo ""
+          echo "=== 3c. Memory ==="
+          ssh vps "free -h 2>&1"
+
+      - name: Step 4 — Postgres data dir
+        run: |
+          echo "=== 4. Postgres data dir ==="
+          ssh vps "ls -la /opt/cuonghoangdev/postgres 2>&1 | head -20"
+          echo ""
+          ssh vps "du -sh /opt/cuonghoangdev/postgres 2>&1"
+
+      - name: Step 5 — pg_isready
+        run: |
+          echo "=== 5. pg_isready (with retries) ==="
+          ssh vps "for i in 1 2 3 4 5 6 7 8 9 10; do
+            if docker exec cuonghoangdev_postgres pg_isready -U postgres 2>/dev/null; then
+              echo \"[OK] Postgres ready after \$i tries\"
+              break
+            fi
+            echo \"Try \$i/10: not ready, sleeping 3s\"
+            sleep 3
+          done"
+
+      - name: Step 6 — Active connections
+        run: |
+          echo "=== 6. Active DB connections ==="
+          ssh vps "docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev_db -c 'SELECT count(*) AS connections, state FROM pg_stat_activity GROUP BY state;' 2>&1 | head -15"
+
+      - name: Step 7 — Backend logs
+        run: |
+          echo "=== 7. Backend logs (last 30) ==="
+          ssh vps "docker logs cuonghoangdev_backend --tail 30 2>&1"
+
+      - name: Step 8 — Backend health from inside container
+        run: |
+          echo "=== 8. Internal backend health (checks DB) ==="
+          ssh vps "docker exec cuonghoangdev_backend curl -sf http://localhost:3001/health 2>&1 || echo 'Health check FAILED'"
+
+      - name: Step 9 — Public API smoke
+        run: |
+          echo "=== 9. Public API smoke tests ==="
+          echo "--- /api/v1/music/tracks?limit=1 ---"
+          curl -s --max-time 10 "https://api.cuongthai.com/api/v1/music/tracks?limit=1" 2>&1 | head -c 300
+          echo ""
+          echo "--- /api/v1/projects?limit=1 ---"
+          curl -s --max-time 10 "https://api.cuongthai.com/api/v1/projects?limit=1" 2>&1 | head -c 300

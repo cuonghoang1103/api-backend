@@ -5,7 +5,7 @@ import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import MessageBubble from './MessageBubble';
 import TypingIndicator from './TypingIndicator';
-import { Loader2 } from 'lucide-react';
+import { AlertCircle, Loader2, RefreshCcw } from 'lucide-react';
 import { format } from 'date-fns';
 
 export default function MessageList() {
@@ -69,7 +69,7 @@ export default function MessageList() {
         </div>
       )}
 
-      {messages.length === 0 && !store.messagesLoading && (
+      {messages.length === 0 && !store.messagesLoading && !store.messageLoadError && (
         <div className="flex h-full items-center justify-center text-center text-xs text-text-muted">
           Chưa có tin nhắn. Hãy gửi lời chào!
         </div>
@@ -78,6 +78,26 @@ export default function MessageList() {
       {store.messagesLoading && messages.length === 0 && (
         <div className="flex h-full items-center justify-center">
           <Loader2 className="h-5 w-5 animate-spin text-cyan-400" />
+        </div>
+      )}
+
+      {store.messageLoadError && !store.messagesLoading && (
+        // Surface a retry-able error when the server fetch failed.
+        // Without this, a transient 401 (cookie race after login)
+        // would silently leave the user staring at "Chưa có tin
+        // tin nhắn" with no indication anything went wrong.
+        <div className="m-3 flex flex-col items-center gap-2 rounded-xl border border-red-500/20 bg-red-500/[0.06] p-4 text-center">
+          <AlertCircle className="h-5 w-5 text-red-400" />
+          <p className="text-[12px] leading-relaxed text-red-300">
+            {store.messageLoadError}
+          </p>
+          <button
+            onClick={() => store.openThread(threadId)}
+            className="mt-1 inline-flex items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-[11px] font-medium text-red-200 transition-colors hover:bg-red-500/20"
+          >
+            <RefreshCcw className="h-3 w-3" />
+            Thử lại
+          </button>
         </div>
       )}
 

@@ -99,6 +99,10 @@ export const useAuthStore = create<AuthState>()(
           return;
         }
 
+        // Capture the active user BEFORE we wipe state so we can
+        // scope the IndexedDB cache clear to just their records.
+        const prevUserId = get().user?.id;
+
         // 1. Hit backend logout endpoint to clear server-side session
         try {
           await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
@@ -121,6 +125,18 @@ export const useAuthStore = create<AuthState>()(
         // 5. Clear localStorage / sessionStorage
         localStorage.clear();
         sessionStorage.clear();
+
+        // 5b. Wipe the per-user message cache so the next user
+        // on a shared device doesn't see the previous user's
+        // chat history appear from IndexedDB on next login.
+        try {
+          if (prevUserId != null) {
+            const { clearForUser } = await import('@/lib/messageCache');
+            await clearForUser(prevUserId);
+          }
+        } catch {
+          // ignore — best effort
+        }
 
         // 6. Hard redirect — purges all client-side state buffers
         window.location.href = '/login';

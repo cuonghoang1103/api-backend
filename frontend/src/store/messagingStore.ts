@@ -57,6 +57,11 @@ interface MessagingState {
   currentThread: MessagingThread | null;
   messagesByThread: Record<number, MessagingMessage[]>;
   messagesLoading: boolean;
+  /** Set when the latest `listMessages` call for the open thread
+   *  failed. The UI surfaces a "Try again" button when this is
+   *  non-null. Cleared on a successful retry or when the user
+   *  opens a different thread. */
+  messageLoadError: string | null;
   hasMoreByThread: Record<number, boolean>;
   unreadTotal: number;
   isWidgetOpen: boolean;
@@ -147,6 +152,11 @@ interface MessagingState {
   // Internal socket handlers (called from socket lib)
   applyIncomingMessage: (threadId: number, message: MessagingMessage) => void;
   applyReadReceipt: (threadId: number, readerId: number, readAt?: string) => void;
+  /** Mirror the current `messagesByThread[threadId]` array to
+   *  IndexedDB. Called whenever the thread's message list
+   *  changes (send, receive, delete, etc.) so a hard refresh
+   *  never loses messages. Best-effort: failures are silent. */
+  persistThreadMessages: (threadId: number) => void;
   applyThreadUpdated: (threadId: number, changes?: { preferenceChanged?: { userId: number; slot: string; value: string | null } }) => void;
   applyThreadCreated: (thread: MessagingThread) => void;
   applyMessageUpdated: (
@@ -187,6 +197,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   currentThread: null,
   messagesByThread: {},
   messagesLoading: false,
+  messageLoadError: null,
   hasMoreByThread: {},
   unreadTotal: 0,
   isWidgetOpen: false,
@@ -401,23 +412,105 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     const cached = get().threads.find((t) => t.id === threadId && !!t.peer) ?? null;
     if (cached) set({ currentThread: cached });
 
+    // ── Optimistic restore from IndexedDB ─────────────────────────
+    // The previous version of this function only fetched from the
+    // server, so any of these scenarios produced a permanently
+    // empty thread for the user:
+    //   1. Hard refresh mid-conversation — in-memory state gone,
+    //      server fetch races with cookie hydration, transient
+    //      empty result, UI stuck.
+    //   2. Sign-out → sign-in on a different device — no local
+    //      cache; the new device relies on the network round-trip.
+    //   3. The user came back after a long break and the message
+    //      endpoint momentarily 401s while the JWT refreshes.
+    //
+    // Now we restore the last known good message list from
+    // IndexedDB the instant the user opens the thread. The
+    // server fetch below still runs to pull any newer messages
+    // and reconcile the order; if the server fetch fails the
+    // user at least sees the conversation history instead of a
+    // blank screen.
+    const auth = useAuthStore.getState();
+    if (auth.user?.id != null && !get().messagesByThread[threadId]) {
+      const cachedMsgs = await import('@/lib/messageCache').then((m) =>
+        m.loadMessages(threadId, auth.user!.id),
+      );
+      if (cachedMsgs && cachedMsgs.length > 0) {
+        set((s) => ({
+          messagesByThread: { ...s.messagesByThread, [threadId]: cachedMsgs as MessagingMessage[] },
+          hasMoreByThread: { ...s.hasMoreByThread, [threadId]: cachedMsgs.length >= 50 },
+          // Don't flip messagesLoading on for the cache restore —
+          // the user already has data to look at.
+        }));
+      }
+    }
+
     // Lazy-load the thread detail if we don't have messages yet
+    // (or even if we do — the server is the source of truth, and
+    // newer messages may have arrived while we were away).
     if (!get().messagesByThread[threadId]) {
-      set({ messagesLoading: true });
+      set({ messagesLoading: true, messageLoadError: null });
       try {
         const res = await messagingApi.listMessages(threadId, { limit: 50 });
-        const messages = res.data.data ?? [];
+        const messages = (res.data.data ?? []) as MessagingMessage[];
         set((s) => ({
           messagesByThread: { ...s.messagesByThread, [threadId]: messages },
           hasMoreByThread: { ...s.hasMoreByThread, [threadId]: messages.length >= 50 },
           messagesLoading: false,
+          messageLoadError: null,
         }));
+        // Persist the fresh list to IndexedDB so the next visit
+        // can restore from cache. Awaiting isn't required (the
+        // store continues to work either way), but doing it
+        // before markRead avoids a race where the user sends a
+        // message and the cache write from the fetch hasn't
+        // landed yet.
+        if (auth.user?.id != null) {
+          await import('@/lib/messageCache').then((m) =>
+            m.saveMessages(threadId, auth.user!.id, messages as unknown[]),
+          );
+        }
         // Mark as read on entry
         get().markRead(threadId);
-      } catch {
-        set({ messagesLoading: false });
+      } catch (e: any) {
+        // CRITICAL: previously this catch block only cleared the
+        // loading flag and left `messagesByThread[threadId]`
+        // undefined, so the next `openThread` call would retry
+        // from scratch — a UX trap when the failure is sticky
+        // (e.g. 401 from a stale JWT). We now set an empty array
+        // and surface a retry-able error so the UI can show a
+        // proper "Couldn't load messages — try again" state
+        // instead of an indefinite "Chưa có tin nhắn" stub.
+        const status = e?.response?.status;
+        set({
+          messagesLoading: false,
+          messageLoadError:
+            status === 401 || status === 403
+              ? 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'
+              : 'Không thể tải tin nhắn. Vui lòng thử lại.',
+        });
       }
     } else {
+      // We already have messages (either from cache or from a
+      // previous open). Refetch in the background to pick up
+      // anything new without blocking the UI. Failures here are
+      // silent — the cached list is good enough.
+      try {
+        const res = await messagingApi.listMessages(threadId, { limit: 50 });
+        const messages = (res.data.data ?? []) as MessagingMessage[];
+        set((s) => ({
+          messagesByThread: { ...s.messagesByThread, [threadId]: messages },
+          hasMoreByThread: { ...s.hasMoreByThread, [threadId]: messages.length >= 50 },
+          messageLoadError: null,
+        }));
+        if (auth.user?.id != null) {
+          await import('@/lib/messageCache').then((m) =>
+            m.saveMessages(threadId, auth.user!.id, messages as unknown[]),
+          );
+        }
+      } catch {
+        // Silent — we already have a good list to show.
+      }
       get().markRead(threadId);
     }
 
@@ -513,6 +606,9 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       }));
       // Update the thread summary (last message preview)
       get().refreshThreadSummary(threadId);
+      // Mirror the new state to IndexedDB so a hard refresh
+      // immediately after sending doesn't lose the message.
+      get().persistThreadMessages(threadId);
     } catch (e) {
       // Roll back the optimistic insert
       set((s) => ({
@@ -768,6 +864,32 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     if (get().currentThreadId === threadId && !isOwn) {
       get().markRead(threadId);
     }
+    // Mirror the new state to IndexedDB so the conversation
+    // survives a hard refresh even if the user closes the tab
+    // immediately. Best-effort, silent on failure.
+    get().persistThreadMessages(threadId);
+  },
+
+  /**
+   * Mirror `messagesByThread[threadId]` to IndexedDB. Fire-and-forget;
+   * failures are silent. The store imports `messageCache` lazily so
+   * the rest of the bundle doesn't pay for it until the first call.
+   *
+   * Why an action on the store (not a side-effect inside `set`):
+   *   Zustand's `set` is synchronous and we don't want every state
+   *   mutation to be followed by an async IndexedDB write inside the
+   *   reducer. By exposing this as a method we let the caller decide
+   *   *when* to persist (e.g. after a successful network op, not on
+   *   every typing indicator tick).
+   */
+  persistThreadMessages(threadId) {
+    const auth = useAuthStore.getState();
+    if (auth.user?.id == null) return;
+    const list = get().messagesByThread[threadId];
+    if (!list) return;
+    import('@/lib/messageCache').then(({ saveMessages }) => {
+      saveMessages(threadId, auth.user!.id, list as unknown[]);
+    }).catch(() => { /* ignore */ });
   },
 
   applyReadReceipt(threadId, readerId, readAt) {

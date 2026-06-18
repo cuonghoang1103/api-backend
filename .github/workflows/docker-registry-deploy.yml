@@ -69,12 +69,12 @@ jobs:
       matrix:
         include:
           - target: backend
-            context: .
-            dockerfile: Dockerfile.backend.ghcr
+            context: ${{ github.workspace }}
+            dockerfile: ${{ github.workspace }}/Dockerfile.backend.ghcr
             image_name: api-backend-backend
           - target: frontend
-            context: frontend
-            dockerfile: Dockerfile.ghcr
+            context: ${{ github.workspace }}/frontend
+            dockerfile: ${{ github.workspace }}/frontend/Dockerfile.ghcr
             image_name: api-backend-frontend
     permissions:
       contents: read

@@ -166,13 +166,41 @@ export class UploadService {
     const relativePath = path.join(subDir, storedName);
     const fullPath = path.join(config.uploadDir, relativePath);
 
-    // Ensure directory exists — mode 0o777 + chmod after mkdir
-    // works around Docker named volumes from macOS hosts where chown
-    // is blocked by the filesystem (APFS). Group write perms let uid
-    // 1001 (nodejs) write even without owning the directory.
+    // Ensure directory exists — try create as 0o777, then chmod
+    // parent directories up the tree until writeFile succeeds.
+    // On bind-mounted Docker volumes, existing dirs may have
+    // restrictive modes (755) and the container process (uid 1001)
+    // may not own them, so chmod can also fail with EACCES.
+    // We try chmod on the leaf dir first, then walk up the tree.
     const dir = path.dirname(fullPath);
     await fs.mkdir(dir, { recursive: true, mode: 0o777 });
-    await fs.chmod(dir, 0o777).catch(() => { /* ignore */ });
+
+    const chmodRecursive = async (targetDir: string): Promise<void> => {
+      // chmod the target
+      await fs.chmod(targetDir, 0o777).catch(() => { /* ignore */ });
+      // chmod all entries inside (best-effort)
+      let entries: string[] = [];
+      try {
+        entries = await fs.readdir(targetDir);
+      } catch {
+        return;
+      }
+      for (const entry of entries) {
+        const entryPath = path.join(targetDir, entry);
+        try {
+          const stat = await fs.stat(entryPath);
+          if (stat.isDirectory()) {
+            await fs.chmod(entryPath, 0o777).catch(() => { /* ignore */ });
+          } else {
+            await fs.chmod(entryPath, 0o666).catch(() => { /* ignore */ });
+          }
+        } catch {
+          /* ignore */
+        }
+      }
+    };
+
+    await chmodRecursive(dir);
 
     // Move file to storage — retry with chmod on EACCES
     // (handles bind-mounted Docker volumes where chmod may not persist)
@@ -180,6 +208,14 @@ export class UploadService {
       await fs.writeFile(fullPath, file.buffer);
     } catch (err: unknown) {
       if ((err as NodeJS.ErrnoException).code === 'EACCES') {
+        // Walk up the directory tree, chmod every parent, then retry.
+        let cur = dir;
+        for (let i = 0; i < 6; i++) {
+          await fs.chmod(cur, 0o777).catch(() => { /* ignore */ });
+          const parent = path.dirname(cur);
+          if (parent === cur) break;
+          cur = parent;
+        }
         await fs.chmod(fullPath, 0o666).catch(() => { /* ignore */ });
         await fs.writeFile(fullPath, file.buffer);
       } else {

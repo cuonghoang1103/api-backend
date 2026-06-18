@@ -26,7 +26,7 @@ import { configureSoundSources, invalidateCustomSoundCache } from '@/lib/sound';
 
 export type { SoundKind };
 
-const ALL_KINDS: SoundKind[] = ['message', 'notification', 'login', 'post'];
+const ALL_KINDS: SoundKind[] = ['message', 'notification', 'login', 'post', 'like', 'admin-notification'];
 
 export interface SoundKindMeta {
   /** human-readable label, used in the settings UI */
@@ -40,14 +40,19 @@ export interface SoundKindMeta {
 
 export const SOUND_KINDS: Record<SoundKind, SoundKindMeta> = {
   message: {
-    label: 'Tin nhắn mới',
+    label: 'Tin nhắn mới chưa đọc',
     description: 'Phát khi có tin nhắn chưa đọc trong chat',
     icon: 'MessageCircle',
   },
   notification: {
-    label: 'Thông báo',
-    description: 'Phát khi có thông báo mới (like, comment, follow…)',
+    label: 'Có thông báo mới (user thường)',
+    description: 'Phát khi có thông báo mới dành cho mọi user',
     icon: 'Bell',
+  },
+  'admin-notification': {
+    label: 'Thông báo từ admin (riêng Cuong03dx)',
+    description: 'Phát khi admin đăng bài post / upload tài liệu / khoá học mới',
+    icon: 'Crown',
   },
   login: {
     label: 'Đăng nhập thành công',
@@ -55,9 +60,14 @@ export const SOUND_KINDS: Record<SoundKind, SoundKindMeta> = {
     icon: 'LogIn',
   },
   post: {
-    label: 'Đăng bài viết mới',
+    label: 'Đăng bài post thành công',
     description: 'Phát sau khi bạn đăng một bài post mới lên feed',
     icon: 'Send',
+  },
+  like: {
+    label: 'Tym bài viết',
+    description: 'Phát khi bạn (hoặc ai đó) tym một bài viết trong feed',
+    icon: 'Heart',
   },
 };
 
@@ -81,15 +91,19 @@ interface PreferencesState {
 const defaultEnabled = (): Record<SoundKind, boolean> => ({
   message: true,
   notification: true,
+  'admin-notification': true,
   login: true,
   post: true,
+  like: true,
 });
 
 const defaultCustomFileName = (): Record<SoundKind, string> => ({
   message: '',
   notification: '',
+  'admin-notification': '',
   login: '',
   post: '',
+  like: '',
 });
 
 export const usePreferencesStore = create<PreferencesState>()(

@@ -16,6 +16,8 @@ import {
   Play,
   Check,
   AlertCircle,
+  Heart,
+  Crown,
 } from 'lucide-react';
 import {
   usePreferencesStore,
@@ -36,6 +38,21 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   MessageCircle,
   LogIn,
   Send,
+  Heart,
+  Crown,
+};
+
+// Display name of the bundled default MP3 for each kind. Shown in
+// the UI as "Đang dùng mặc định: <name>" so the user can see at a
+// glance which file is currently configured before they upload
+// their own.
+const DEFAULT_FILE_NAMES: Record<SoundKind, string> = {
+  message: 'tin_nhan_moi_chua_doc.mp3',
+  notification: 'co_thong_bao_moi.mp3',
+  'admin-notification': 'shikabukiste_yatta.mp3',
+  login: 'co_thong_bao_moi.mp3',
+  post: 'dang_bai_post_thanh_cong.mp3',
+  like: 'moon_drop.mp3',
 };
 
 // Allowed mime types. The extension check below is the real
@@ -254,7 +271,9 @@ function KindRow({ kind }: KindRowProps) {
                 <Check className="w-3 h-3" /> Đang dùng: {customFileName}
               </span>
             ) : (
-              <span className="text-slate-500">Đang dùng âm thanh mặc định (Web Audio)</span>
+              <span className="text-slate-500">
+                Đang dùng mặc định: {DEFAULT_FILE_NAMES[kind]}
+              </span>
             )}
             {savedTick > 0 && !error && (
               <span key={savedTick} className="ml-2 text-violet-400 animate-pulse">

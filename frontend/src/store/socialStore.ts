@@ -151,6 +151,15 @@ export const useSocialStore = create<SocialState>((set, get) => ({
       ),
     }));
 
+    // Play the "like" sound on every state change (both like and
+    // unlike). The user explicitly asked for the chime to play even
+    // when they themselves like their own posts.
+    if (typeof window !== 'undefined') {
+      import('@/lib/sound').then(({ playSound }) => {
+        playSound('like');
+      }).catch(() => { /* ignore */ });
+    }
+
     try {
       if (wasLiked) {
         await socialApi.unlikePost(postId);

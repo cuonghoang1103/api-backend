@@ -66,12 +66,26 @@ export default function NotificationsPage() {
         setUnreadCount((prevUnread) => {
           const newUnread = data.filter((n) => !n.isRead).length;
           if (!firstLoad && newUnread > prevUnread) {
+            // Detect which kind of chime to play:
+            //   - any notification whose actor is the site owner
+            //     (Cuong03dx) plays the special admin chime
+            //   - everything else plays the regular notification
+            //     chime
+            // We look at the most recent unread item first; if
+            // multiple arrived in the same tick, prefer the admin
+            // one (it's the higher-priority event the user wants
+            // to hear distinctly).
+            const ADMIN_USERNAME = 'Cuong03dx';
+            const newestUnread = [...data]
+              .filter((n) => !n.isRead)
+              .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))[0];
+            const fromAdmin = newestUnread?.actor?.username === ADMIN_USERNAME;
             // Lazy import — same pattern used in the other store
             // hooks to keep the module-load cost off the
             // notifications page when the user has never
             // interacted with it.
             import('@/lib/sound').then(({ playSound }) => {
-              playSound('notification');
+              playSound(fromAdmin ? 'admin-notification' : 'notification');
             }).catch(() => { /* ignore */ });
           }
           return newUnread;

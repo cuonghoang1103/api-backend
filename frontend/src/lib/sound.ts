@@ -1,11 +1,12 @@
 /**
  * Notification sound service.
  *
- * Two backends:
- *   1. DEFAULT  — synthesized in-browser via Web Audio API. No
- *                 network fetch, no asset, no permission popup. Each
- *                 SoundKind has a different tone pattern so they're
- *                 easy to tell apart by ear.
+ * Two-tier playback:
+ *   1. DEFAULT  — bundled MP3 file served from /sounds/default-*.mp3
+ *                 (placed in `frontend/public/sounds/`). These were
+ *                 chosen by the site owner; they're cached by the
+ *                 browser after the first visit and play without any
+ *                 localStorage / IndexedDB dependency.
  *   2. CUSTOM   — user-uploaded audio file (mp3/wav/ogg/m4a) loaded
  *                 from IndexedDB. The user picks these in
  *                 /settings/notifications. Falls back to DEFAULT
@@ -29,58 +30,21 @@
 
 import { getSound, type SoundKind } from './soundStorage';
 
-interface ToneSpec {
-  /** oscillator frequency in Hz */
-  freq: number;
-  /** duration in seconds */
-  dur: number;
-  /** delay from previous tone (0 for first) */
-  gap?: number;
-  /** peak gain (0-1) */
-  gain?: number;
-  /** oscillator waveform */
-  wave?: OscillatorType;
-}
-
-interface SoundPreset {
-  /** list of tones, played in order. See ToneSpec. */
-  tones: ToneSpec[];
-}
-
-const PRESETS: Record<SoundKind, SoundPreset> = {
-  // 2-note "ding-dong" — messages
-  message: {
-    tones: [
-      { freq: 880, dur: 0.12, gain: 0.25, wave: 'sine' },
-      { freq: 660, dur: 0.18, gap: 0.04, gain: 0.22, wave: 'sine' },
-    ],
-  },
-  // 3-note rising chime — notifications
-  notification: {
-    tones: [
-      { freq: 660, dur: 0.10, gain: 0.22, wave: 'triangle' },
-      { freq: 880, dur: 0.10, gap: 0.04, gain: 0.22, wave: 'triangle' },
-      { freq: 1320, dur: 0.18, gap: 0.04, gain: 0.24, wave: 'triangle' },
-    ],
-  },
-  // 4-note cheerful arpeggio — login
-  login: {
-    tones: [
-      { freq: 523, dur: 0.10, gain: 0.22, wave: 'sine' }, // C5
-      { freq: 659, dur: 0.10, gap: 0.03, gain: 0.22, wave: 'sine' }, // E5
-      { freq: 784, dur: 0.10, gap: 0.03, gain: 0.22, wave: 'sine' }, // G5
-      { freq: 1046, dur: 0.20, gap: 0.03, gain: 0.24, wave: 'sine' }, // C6
-    ],
-  },
-  // 1-note subtle "pop" — post created
-  post: {
-    tones: [
-      { freq: 1046, dur: 0.10, gain: 0.20, wave: 'sine' },
-    ],
-  },
+// Static URL for each default sound. These live in
+// frontend/public/sounds/ and are served as static assets by Next.js
+// (the `/sounds/...` path maps to `public/sounds/...`). The browser
+// caches the response after the first hit, so subsequent plays are
+// instant.
+const DEFAULT_URLS: Record<SoundKind, string> = {
+  message: '/sounds/default-message.mp3',
+  notification: '/sounds/default-notification.mp3',
+  login: '/sounds/default-notification.mp3', // unused — kept for type completeness
+  post: '/sounds/default-post.mp3',
+  like: '/sounds/default-like.mp3',
+  'admin-notification': '/sounds/default-admin-notification.mp3',
 };
 
-// ── AudioContext singleton ────────────────────────────────────────────────
+// ── AudioContext singleton (used for both default and custom) ────────────
 let ctx: AudioContext | null = null;
 let ctxReady = false;
 
@@ -109,54 +73,43 @@ async function ensureContext(): Promise<AudioContext | null> {
   return c;
 }
 
-// ── Default (synthesized) playback ───────────────────────────────────────
-function playDefault(kind: SoundKind, volume: number): void {
-  const c = getCtx();
-  if (!c) return;
-  const preset = PRESETS[kind];
-  if (!preset) return;
+// ── Audio element cache (per kind) ───────────────────────────────────────
+// We keep one HTMLAudioElement per (kind, source) so the browser can
+// stream-decode once and replay cheaply. Caching per kind means the
+// same kind played in quick succession (e.g. 5 notifications in a
+// row) won't each trigger a fresh network fetch or file decode.
+type Source = 'default' | `custom:${SoundKind}`;
 
-  const master = Math.max(0, Math.min(1, volume));
-  let t = c.currentTime + 0.01;
-  for (const tone of preset.tones) {
-    const osc = c.createOscillator();
-    const gain = c.createGain();
-    osc.type = tone.wave ?? 'sine';
-    osc.frequency.setValueAtTime(tone.freq, t);
-    const peak = (tone.gain ?? 0.2) * master;
-    // Quick attack / exponential release to avoid clicks
-    gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), t + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + tone.dur);
-    osc.connect(gain).connect(c.destination);
-    osc.start(t);
-    osc.stop(t + tone.dur + 0.02);
-    t += tone.dur + (tone.gap ?? 0.05);
+interface CachedAudio {
+  element: HTMLAudioElement;
+  source: Source;
+}
+
+const cache: Partial<Record<SoundKind, CachedAudio>> = {};
+
+function buildAudioElement(src: string): HTMLAudioElement {
+  const audio = new Audio(src);
+  audio.preload = 'auto';
+  return audio;
+}
+
+function getOrBuildAudio(kind: SoundKind, src: string, source: Source): HTMLAudioElement {
+  const cached = cache[kind];
+  if (cached && cached.source === source) return cached.element;
+  if (cached) {
+    try { cached.element.pause(); } catch { /* ignore */ }
   }
+  const el = buildAudioElement(src);
+  cache[kind] = { element: el, source };
+  return el;
 }
 
 // ── Custom (user-uploaded) playback ──────────────────────────────────────
-// We cache HTMLAudioElement per SoundKind so the browser can keep
-// them in memory and start playback without a fresh decode each
-// time. Re-decoding 50KB MP3s on every message would be wasteful.
-const customAudioCache: Partial<Record<SoundKind, HTMLAudioElement>> = {};
-
 async function playCustom(kind: SoundKind, volume: number): Promise<boolean> {
   const rec = await getSound(kind);
   if (!rec) return false;
-
-  let audio = customAudioCache[kind];
-  if (!audio) {
-    try {
-      const url = URL.createObjectURL(rec.blob);
-      audio = new Audio(url);
-      audio.preload = 'auto';
-      customAudioCache[kind] = audio;
-    } catch {
-      return false;
-    }
-  }
-
+  const url = URL.createObjectURL(rec.blob);
+  const audio = getOrBuildAudio(kind, url, `custom:${kind}`);
   audio.volume = Math.max(0, Math.min(1, volume));
   // currentTime=0 so a rapid-fire sequence of the same sound starts
   // from the beginning each time instead of resuming mid-play.
@@ -165,7 +118,24 @@ async function playCustom(kind: SoundKind, volume: number): Promise<boolean> {
     await audio.play();
     return true;
   } catch {
-    // Autoplay blocked or decode error — fall back to default.
+    return false;
+  }
+}
+
+// ── Default (bundled MP3) playback ───────────────────────────────────────
+function playDefault(kind: SoundKind, volume: number): boolean {
+  if (typeof window === 'undefined') return false;
+  const url = DEFAULT_URLS[kind];
+  if (!url) return false;
+  const audio = getOrBuildAudio(kind, url, 'default');
+  audio.volume = Math.max(0, Math.min(1, volume));
+  try { audio.currentTime = 0; } catch { /* ignore */ }
+  try {
+    // play() returns a promise; we don't await it because we want
+    // playSound() to be fire-and-forget from the caller's view.
+    void audio.play();
+    return true;
+  } catch {
     return false;
   }
 }
@@ -205,27 +175,21 @@ export async function playSound(kind: SoundKind, opts: PlayOptions = {}): Promis
   await ensureContext();
   const volume = opts.volume ?? volumeGetter();
 
-  // Try the user's custom file first; fall back to the synthesized
+  // Try the user's custom file first; fall back to the bundled
   // default if anything goes wrong (file deleted, decode error,
   // autoplay blocked on <audio>, etc.).
   const customOk = await playCustom(kind, volume);
   if (customOk) return true;
-
-  try {
-    playDefault(kind, volume);
-    return true;
-  } catch {
-    return false;
-  }
+  return playDefault(kind, volume);
 }
 
 /** Test-play a specific kind, ignoring enabled flags. Used by the
  *  "Test" button in /settings/notifications. */
-export async function testSound(kind: SoundKind, volume = 0.6): Promise<boolean> {
+export async function testSound(kind: SoundKind, volume = 0.7): Promise<boolean> {
   await ensureContext();
   const customOk = await playCustom(kind, volume);
   if (customOk) return true;
-  try { playDefault(kind, volume); return true; } catch { return false; }
+  return playDefault(kind, volume);
 }
 
 /** Wipe cached <audio> elements so the next playSound() re-reads the
@@ -233,21 +197,25 @@ export async function testSound(kind: SoundKind, volume = 0.6): Promise<boolean>
  *  their custom sound. */
 export function invalidateCustomSoundCache(kind?: SoundKind): void {
   if (kind) {
-    const a = customAudioCache[kind];
-    if (a) {
-      try { a.pause(); } catch { /* ignore */ }
-      try { URL.revokeObjectURL(a.src); } catch { /* ignore */ }
-      delete customAudioCache[kind];
+    const c = cache[kind];
+    if (c && c.source === `custom:${kind}`) {
+      try { c.element.pause(); } catch { /* ignore */ }
+      try { URL.revokeObjectURL(c.element.src); } catch { /* ignore */ }
+      delete cache[kind];
     }
   } else {
-    for (const k of Object.keys(customAudioCache) as SoundKind[]) {
-      const a = customAudioCache[k];
-      if (a) {
-        try { a.pause(); } catch { /* ignore */ }
-        try { URL.revokeObjectURL(a.src); } catch { /* ignore */ }
+    for (const k of Object.keys(cache) as SoundKind[]) {
+      const c = cache[k];
+      if (c && c.source.startsWith('custom:')) {
+        try { c.element.pause(); } catch { /* ignore */ }
+        try { URL.revokeObjectURL(c.element.src); } catch { /* ignore */ }
       }
     }
-    for (const k of Object.keys(customAudioCache)) delete customAudioCache[k as SoundKind];
+    for (const k of Object.keys(cache)) {
+      if (cache[k as SoundKind]?.source.startsWith('custom:')) {
+        delete cache[k as SoundKind];
+      }
+    }
   }
 }
 

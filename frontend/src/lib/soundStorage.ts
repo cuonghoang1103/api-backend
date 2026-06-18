@@ -22,7 +22,7 @@ const DB_NAME = 'cuong-sound-prefs';
 const DB_VERSION = 1;
 const STORE = 'sounds';
 
-export type SoundKind = 'message' | 'notification' | 'login' | 'post';
+export type SoundKind = 'message' | 'notification' | 'login' | 'post' | 'like' | 'admin-notification';
 
 export interface SoundRecord {
   id: SoundKind;

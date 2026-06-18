@@ -24,6 +24,13 @@ concurrency:
   group: deploy-ghcr
   cancel-in-progress: true
 
+# GHCR push requires `packages: write`. Default GITHUB_TOKEN has
+# read-only package scope; we explicitly request the higher scope
+# for the duration of this workflow.
+permissions:
+  contents: read
+  packages: write
+
 env:
   REGISTRY: ghcr.io
   IMAGE_OWNER: cuonghoang1103

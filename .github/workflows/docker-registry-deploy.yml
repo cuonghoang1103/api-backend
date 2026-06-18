@@ -101,9 +101,6 @@ jobs:
       - name: Build & push ${{ matrix.target }}
         uses: docker/build-push-action@v6
         with:
-      - name: Build & push ${{ matrix.target }}
-        uses: docker/build-push-action@v6
-        with:
           context: .
           file: ${{ matrix.target == 'backend' && 'Dockerfile.backend.ghcr' || 'frontend/Dockerfile.ghcr' }}
           push: true

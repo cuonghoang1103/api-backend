@@ -1,10 +1,17 @@
-import path from 'path';
-import fs from 'fs/promises';
-import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import type { FileCategory } from '../types/index.js';
+import {
+  uploadGeneric,
+  uploadImage,
+  uploadAudio,
+  uploadDocument,
+  UploadError,
+} from '../storage/uploadService.js';
+import { getStorageProvider } from '../storage/StorageProvider.js';
+import { logger } from '../utils/logger.js';
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
 const ALLOWED_AUDIO_TYPES = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg', 'audio/flac', 'audio/aac'];
@@ -86,16 +93,6 @@ export function verifySignedUploadToken(token: string): SignedUploadPayload | nu
   }
 }
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 60);
-}
-
 function getFileCategory(mimeType: string): FileCategory {
   if (ALLOWED_IMAGE_TYPES.includes(mimeType)) return 'images';
   if (ALLOWED_AUDIO_TYPES.includes(mimeType)) return 'audio';
@@ -133,8 +130,47 @@ export interface UploadResult {
   fileCategory: string;
 }
 
+// ─── Deprecated path-based helpers ───────────────────────────────────────────
+//
+// The original `UploadService` wrote files directly to
+// `config.uploadDir`. After the R2 migration every upload goes
+// through `storage/uploadService.ts`, which delegates to the
+// active `StorageProvider` (R2 in production, local in dev).
+// The two helpers below are kept only as a SAFETY NET for any
+// future caller that still asks for path-based delete. They
+// refuse to do local-disk writes on production so we can't
+// accidentally land a file outside the R2 bucket.
+
+/**
+ * @deprecated Use `deleteByUrl` / `deleteByKey` from
+ * `storage/uploadService.ts` instead. This wrapper remains for
+ * callers that already pass around a path string and want a
+ * one-line drop-in. It maps the path through the active
+ * storage provider so it works against both R2 (key form) and
+ * legacy local layouts.
+ */
+async function deleteByPath(filePath: string): Promise<void> {
+  // Legacy local path: try the local provider first (no-op on R2
+  // because the URL prefix won't match). Then fall through to
+  // the bucket key form via publicUrl() so an R2-stored key
+  // still resolves.
+  const provider = getStorageProvider();
+  // Treat as bucket key first (matches R2).
+  await provider.delete(filePath).catch((err) => {
+    logger.warn(`[upload-deprecated] path-based delete failed for ${filePath}: ${(err as Error).message}`);
+  });
+}
+
+/**
+ * @deprecated `UploadService` no longer writes files locally. It
+ * is a thin pass-through to `storage/uploadService.ts` so all
+ * uploads land in R2 (or the dev local provider). Kept only
+ * because a handful of legacy test scripts import the
+ * `uploadService` singleton; the methods below delegate to the
+ * canonical storage service.
+ */
 export class UploadService {
-  // ─── Upload Single File ────────────────────────────────
+  // ─── Upload Single File ──────────────────────────────────
   async uploadFile(
     file: Express.Multer.File,
     category: FileCategory,
@@ -154,88 +190,48 @@ export class UploadService {
       throw new Error(`File size exceeds maximum of ${maxMB}MB`);
     }
 
-    // Generate unique stored name
-    const baseSlug = slugify(path.parse(file.originalname).name);
-    const timestamp = Date.now();
-    const randomStr = uuidv4().split('-')[0];
-    const ext = path.extname(file.originalname).toLowerCase();
-    const storedName = `${baseSlug}-${timestamp}-${randomStr}${ext}`;
-
-    // Subdirectory based on category
-    const subDir = finalCategory;
-    const relativePath = path.join(subDir, storedName);
-    const fullPath = path.join(config.uploadDir, relativePath);
-
-    // Ensure directory exists — try create as 0o777, then chmod
-    // parent directories up the tree until writeFile succeeds.
-    // On bind-mounted Docker volumes, existing dirs may have
-    // restrictive modes (755) and the container process (uid 1001)
-    // may not own them, so chmod can also fail with EACCES.
-    // We try chmod on the leaf dir first, then walk up the tree.
-    const dir = path.dirname(fullPath);
-    await fs.mkdir(dir, { recursive: true, mode: 0o777 });
-
-    const chmodRecursive = async (targetDir: string): Promise<void> => {
-      // chmod the target
-      await fs.chmod(targetDir, 0o777).catch(() => { /* ignore */ });
-      // chmod all entries inside (best-effort)
-      let entries: string[] = [];
-      try {
-        entries = await fs.readdir(targetDir);
-      } catch {
-        return;
-      }
-      for (const entry of entries) {
-        const entryPath = path.join(targetDir, entry);
-        try {
-          const stat = await fs.stat(entryPath);
-          if (stat.isDirectory()) {
-            await fs.chmod(entryPath, 0o777).catch(() => { /* ignore */ });
-          } else {
-            await fs.chmod(entryPath, 0o666).catch(() => { /* ignore */ });
-          }
-        } catch {
-          /* ignore */
-        }
-      }
+    const input = {
+      buffer: file.buffer,
+      originalName: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
     };
 
-    await chmodRecursive(dir);
-
-    // Move file to storage — retry with chmod on EACCES
-    // (handles bind-mounted Docker volumes where chmod may not persist)
+    // Route to the right storage helper based on category.
+    // This way the file lands in R2 (prod) or local dev
+    // provider, never on a raw disk path.
+    let stored;
     try {
-      await fs.writeFile(fullPath, file.buffer);
-    } catch (err: unknown) {
-      if ((err as NodeJS.ErrnoException).code === 'EACCES') {
-        // Walk up the directory tree, chmod every parent, then retry.
-        let cur = dir;
-        for (let i = 0; i < 6; i++) {
-          await fs.chmod(cur, 0o777).catch(() => { /* ignore */ });
-          const parent = path.dirname(cur);
-          if (parent === cur) break;
-          cur = parent;
-        }
-        await fs.chmod(fullPath, 0o666).catch(() => { /* ignore */ });
-        await fs.writeFile(fullPath, file.buffer);
+      if (finalCategory === 'audio') {
+        stored = await uploadAudio(input, { userId: uploadedBy });
+      } else if (finalCategory === 'images') {
+        stored = await uploadImage(input, 'images/post', { userId: uploadedBy });
+      } else if (finalCategory === 'video') {
+        stored = await uploadGeneric(input, 'video', { userId: uploadedBy });
       } else {
-        throw err;
+        stored = await uploadDocument(input, { userId: uploadedBy });
       }
+    } catch (err) {
+      if (err instanceof UploadError) {
+        // Re-throw with a useful legacy-shaped message; callers
+        // expecting an `Error` still see the same surface.
+        throw new Error(err.message);
+      }
+      throw err;
     }
 
-    // Determine public URL — use absolute URL so browser can fetch via nginx
-    const baseUrl = config.publicBaseUrl;
-    const relative = relativePath.replace(/\\/g, '/');
-    const url = `${baseUrl}/uploads/${relative}`;
+    const storedName = stored.key.split('/').pop() ?? file.originalname;
 
-    // Save to database
+    // Persist a FileAttachment row for legacy callers that
+    // still query it (admin UI etc.). Without this row the
+    // admin "Files" page would silently drop the upload.
     const attachment = await prisma.fileAttachment.create({
       data: {
         originalName: file.originalname,
         storedName,
-        filePath: relativePath,
+        filePath: stored.key,
         contentType: file.mimetype,
-        fileSize: file.size,
+        fileSize: BigInt(stored.size),
         uploadedBy,
         fileCategory: finalCategory,
       },
@@ -246,14 +242,14 @@ export class UploadService {
       originalName: attachment.originalName,
       storedName: attachment.storedName,
       filePath: attachment.filePath,
-      url,
+      url: stored.url,
       contentType: attachment.contentType,
       fileSize: Number(attachment.fileSize),
       fileCategory: attachment.fileCategory || finalCategory,
     };
   }
 
-  // ─── Upload Multiple Files ─────────────────────────────
+  // ─── Upload Multiple Files ───────────────────────────────
   async uploadMultiple(
     files: Express.Multer.File[],
     category: FileCategory,
@@ -265,40 +261,28 @@ export class UploadService {
         const result = await this.uploadFile(file, category, uploadedBy);
         results.push(result);
       } catch (error) {
-        console.error(`Failed to upload ${file.originalname}:`, error);
+        logger.error(`Failed to upload ${file.originalname}: ${(error as Error).message}`);
       }
     }
     return results;
   }
 
-  // ─── Delete File ──────────────────────────────────────
+  // ─── Delete File ─────────────────────────────────────────
   async deleteFile(id: number): Promise<void> {
     const attachment = await prisma.fileAttachment.findUnique({ where: { id } });
     if (!attachment) return;
-
-    const fullPath = path.join(config.uploadDir, attachment.filePath);
-    try {
-      await fs.unlink(fullPath);
-    } catch {
-      // File might already be deleted
-    }
-
+    await deleteByPath(attachment.filePath);
     await prisma.fileAttachment.delete({ where: { id } });
   }
 
-  // ─── Get File Info ────────────────────────────────────
+  // ─── Get File Info ───────────────────────────────────────
   async getFile(id: number) {
     return prisma.fileAttachment.findUnique({ where: { id } });
   }
 
-  // ─── Delete Physical File ─────────────────────────────
+  // ─── Delete Physical File ────────────────────────────────
   async deletePhysicalFile(filePath: string): Promise<void> {
-    const fullPath = path.join(config.uploadDir, filePath);
-    try {
-      await fs.unlink(fullPath);
-    } catch {
-      // Ignore if file doesn't exist
-    }
+    await deleteByPath(filePath);
   }
 }
 

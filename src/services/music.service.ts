@@ -530,15 +530,42 @@ export class MusicService {
     durationSeconds?: number;
     fileSize?: number;
   }): Promise<unknown> {
-    // Validate file exists if localPath provided
+    // Validate the audio reference. Two cases:
+    //   1. R2 bucket key — e.g. "audio/songs/1234-abcd.mp3". No
+    //      leading slash, no "uploads/" prefix. We can't
+    //      existsSync() a remote object, so we just sanity-check
+    //      the key shape. The upload route has already put the
+    //      object successfully, so if we got a key it's live.
+    //   2. Legacy local path — leading slash OR "uploads/"
+    //      prefix. The pre-R2 upload route wrote files under
+    //      `config.uploadDir`; existing rows still point there.
+    //      existsSync() is the right check for those.
+    // Anything else (e.g. a YouTube URL) is also accepted as
+    // long as `audioUrl` is set, since the streaming endpoint
+    // routes YouTube links directly.
     if (data.localPath) {
-      const absolutePath = path.resolve(config.uploadDir, data.localPath);
-      if (!existsSync(absolutePath)) {
-        throw new AppError(
-          `Uploaded file not found: ${data.localPath}`,
-          400,
-          'FILE_NOT_FOUND',
-        );
+      const looksLikeR2Key =
+        !data.localPath.startsWith('/') &&
+        !data.localPath.startsWith('uploads/');
+      if (looksLikeR2Key) {
+        // R2 key — basic shape check; the storage provider has
+        // already verified the object exists on PUT.
+        if (data.localPath.length === 0 || data.localPath.includes('..')) {
+          throw new AppError(
+            `Invalid storage key: ${data.localPath}`,
+            400,
+            'INVALID_STORAGE_KEY',
+          );
+        }
+      } else {
+        const absolutePath = path.resolve(config.uploadDir, data.localPath);
+        if (!existsSync(absolutePath)) {
+          throw new AppError(
+            `Uploaded file not found: ${data.localPath}`,
+            400,
+            'FILE_NOT_FOUND',
+          );
+        }
       }
     }
 

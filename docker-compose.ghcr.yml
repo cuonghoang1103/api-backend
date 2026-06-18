@@ -1,0 +1,22 @@
+# ============================================================
+# docker-compose.ghcr.yml - GHCR image overrides
+# This file is merged on top of docker-compose.yml by Docker
+# Compose. It replaces only the `image:` for the two services
+# we ship from CI; everything else (env_file, volumes, healthcheck,
+# depends_on, networks) is inherited from the base file.
+# ============================================================
+
+services:
+  backend:
+    # Override build directive with pre-built GHCR image.
+    # Tag is passed in by the workflow as CUONG_BACKEND_IMAGE.
+    image: ${CUONG_BACKEND_IMAGE:-ghcr.io/cuonghoang1103/api-backend-backend:main}
+    build: !reset null
+
+  frontend:
+    image: ${CUONG_FRONTEND_IMAGE:-ghcr.io/cuonghoang1103/api-backend-frontend:main}
+    build: !reset null
+
+  # postgres, redis, nginx: keep using docker-compose.yml as-is.
+  # We don't ship these images; the VPS has them cached or pulls
+  # from Docker Hub on first run.

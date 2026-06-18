@@ -1,0 +1,76 @@
+# ============================================================
+# Backend Image - GHCR version
+# Build artifacts are pre-compiled in CI (dist/ + node_modules + prisma).
+# This Dockerfile just packages them into a slim runtime image.
+# Final target: < 200MB
+# ============================================================
+
+# ─── Stage 1: Install production-only deps on the runtime base ───
+FROM node:22-slim AS deps
+WORKDIR /app
+
+# System deps needed at runtime (curl for healthcheck, tini for signal handling)
+RUN apt-get update && apt-get install -y --no-install-recommends curl tini && rm -rf /var/lib/apt/lists/*
+
+# Install ONLY production deps. The CI runner pre-compiles src/ → dist/
+# and runs `npm prune --omit=dev` on a fresh copy of node_modules before
+# shipping. The base node:22-slim uses glibc which matches what the
+# dev environment produced, so any native modules (sharp, prisma engines)
+# work without re-compilation.
+# Build context is ./build-ctx/backend/ (populated by the workflow).
+COPY package*.json ./
+RUN npm ci --omit=dev --prefer-offline --no-audit --fetch-timeout=60000 \
+ && npm cache clean --force
+
+# ─── Stage 2: Runtime Image ─────────────────────────────────────
+FROM node:22-slim AS runtime
+WORKDIR /app
+
+# Re-install runtime system deps (curl, tini). The deps stage is
+# discarded; this keeps the final image lean without inheriting
+# npm cache or build toolchain.
+RUN apt-get update && apt-get install -y --no-install-recommends curl tini && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user for security
+RUN useradd --uid 1001 --gid 0 --shell /bin/bash --create-home nodejs
+
+# Pre-create uploads dirs (matches Dockerfile.backend layout)
+RUN mkdir -p /app/uploads/images /app/uploads/audio /app/uploads/video /app/uploads/documents \
+ && chown -R 1001:0 /app && chmod -R g+rwX /app
+
+# Copy the fix-perms entrypoint. Runs as root to chown a host-mounted
+# volume that was created on macOS (uid 501:staff) — without this the
+# nodejs user (uid 1001) gets EACCES on /app/uploads.
+# The CI workflow stages this file at build-ctx/backend/scripts/.
+COPY scripts/fix-uploads-perms.sh /usr/local/bin/fix-uploads-perms.sh
+RUN chmod +x /usr/local/bin/fix-uploads-perms.sh
+
+# ─── Copy CI-built artifacts ────────────────────────────────
+# Build context: ./build-ctx/backend/ (populated by the workflow).
+# It contains: dist/, prisma/, package.json, scripts/fix-uploads-perms.sh,
+# and a production-only node_modules.
+COPY --from=deps --chown=1001:0 /app/node_modules ./node_modules
+COPY --chown=1001:0 dist ./dist
+COPY --chown=1001:0 prisma ./prisma
+COPY --chown=1001:0 package.json ./package.json
+COPY --chown=1001:0 scripts ./scripts
+
+ENV NODE_ENV=production
+ENV PORT=3001
+# Cap V8 heap at 1.5GB (matches Dockerfile.backend — see that file
+# for the OOM rationale on the 2GB VPS).
+ENV NODE_OPTIONS=--max-old-space-size=1536
+
+EXPOSE 3001
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:3001/health || exit 1
+
+# tini as PID 1 so Ctrl-C in dev cleanly stops Node. The entrypoint
+# script runs as root briefly to chown the uploads volume, then
+# drops to nodejs via the script's own `exec gosu nodejs ...` step.
+# (See scripts/fix-uploads-perms.sh for the full sequence.)
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/fix-uploads-perms.sh"]
+USER nodejs
+
+CMD ["node", "dist/index.js"]

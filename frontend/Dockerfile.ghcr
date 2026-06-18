@@ -1,0 +1,53 @@
+# ============================================================
+# Frontend Image - GHCR version
+# Uses pre-built .next/standalone from CI, so this Dockerfile
+# never runs `next build` (avoids 3-4min build inside Docker).
+# Final target: < 150MB thanks to standalone output.
+# ============================================================
+
+# ─── Stage 1: Deps (install just the standalone server's runtime needs) ───
+FROM node:22-alpine AS deps
+WORKDIR /app
+
+# Standalone output requires only the deps Next.js traces at build
+# time. We install them fresh here (not from CI) so the npm install
+# layer is a separate cache line from the standalone copy.
+# Build context is ./build-ctx/frontend/ (populated by the workflow).
+COPY package*.json ./
+RUN npm ci --omit=dev --prefer-offline --no-audit --fetch-timeout=60000 \
+ && npm cache clean --force
+
+# ─── Stage 2: Runtime Image (Next.js standalone) ──────────────────
+FROM node:22-alpine AS runtime
+WORKDIR /app
+
+# wget for the frontend healthcheck (matches docker-compose.yml)
+RUN apk add --no-cache wget
+
+# Non-root user (security best practice)
+RUN addgroup --system --gid 1001 nodejs \
+ && adduser --system --uid 1001 nextjs
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# ─── Copy CI-built standalone output ─────────────────────────
+# CI runs `npm ci && npm run build` and ships frontend/.next/standalone
+# + frontend/.next/static + frontend/public into build-ctx/frontend/.
+# The standalone/ folder already contains server.js and a pruned
+# node_modules with only the deps Next.js actually traces.
+COPY --from=deps /app/node_modules ./node_modules
+COPY .next/standalone ./
+COPY .next/static ./.next/static
+COPY public ./public
+
+USER nextjs
+
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/ || exit 1
+
+CMD ["node", "server.js"]

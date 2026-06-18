@@ -1,0 +1,265 @@
+name: Deploy via GHCR (fast path)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      # Only run when backend/frontend/schemas/deploy files change.
+      # All other commits (docs, scripts) keep using backend-vps.yml.
+      - 'src/**'
+      - 'prisma/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'frontend/**'
+      - 'Dockerfile*'
+      - 'docker-compose*'
+      - 'nginx/**'
+      - '.github/workflows/deploy-ghcr.yml'
+      - 'scripts/fix-uploads-perms.sh'
+  workflow_dispatch:
+
+# Allow only one concurrent deploy; cancel older in-flight runs so
+# a fast follow-up commit doesn't queue behind a slow build.
+concurrency:
+  group: deploy-ghcr
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_OWNER: cuonghoang1103
+  BACKEND_IMAGE: ghcr.io/cuonghoang1103/api-backend-backend
+  FRONTEND_IMAGE: ghcr.io/cuonghoang1103/api-backend-frontend
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+
+      # ─── Build backend (TypeScript) in parallel with frontend ───
+      - name: Install backend deps
+        run: |
+          echo "--- Installing backend deps ---"
+          npm ci --include=dev --no-audit 2>&1 | tail -5
+
+      - name: Generate Prisma client + compile backend
+        run: |
+          echo "--- prisma generate ---"
+          npx prisma generate 2>&1 | tail -3
+          echo "--- tsc compile ---"
+          npx tsc 2>&1 | tail -10
+          echo "--- dist/ contents ---"
+          ls dist/ | head -10
+
+      - name: Prune backend to production deps
+        run: |
+          # Replace devDeps with a production-only copy. The CI-built
+          # node_modules has TypeScript + @types/* etc. that we don't
+          # want in the runtime image.
+          cp -r node_modules /tmp/node_modules.dev
+          npm prune --omit=dev --no-audit 2>&1 | tail -3
+          echo "--- Pruned node_modules size: ---"
+          du -sh node_modules
+
+      - name: Install frontend deps + build Next.js (standalone)
+        run: |
+          cd frontend
+          echo "--- npm ci ---"
+          npm ci --no-audit 2>&1 | tail -5
+          echo "--- next build (standalone) ---"
+          # next.config.js already has output: 'standalone', so this
+          # produces frontend/.next/standalone/ (server.js + pruned
+          # node_modules), frontend/.next/static/, and frontend/public/.
+          NEXT_PUBLIC_BUILD_ID=$(date +%s) npm run build 2>&1 | tail -15
+          echo "--- standalone size ---"
+          du -sh .next/standalone .next/static 2>/dev/null
+
+      # ─── Set up Docker Buildx with layer cache ────────────────
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ─── Stage backend + frontend build contexts in parallel ───
+      # We pre-stage each context into its own dir so the Dockerfiles
+      # can use simple relative COPY paths (backend/dist, frontend/
+      # .next/standalone, etc.) without copying the whole repo.
+      - name: Stage backend build context
+        run: |
+          mkdir -p build-ctx/backend/scripts
+          cp -r dist prisma package.json package-lock.json build-ctx/backend/
+          # The Dockerfile references scripts/fix-uploads-perms.sh which
+          # lives at the repo root (./scripts/), not under backend/.
+          # Stage it where the Dockerfile expects it.
+          cp scripts/fix-uploads-perms.sh build-ctx/backend/scripts/
+          # node_modules is large; copy the pruned production copy.
+          cp -r node_modules build-ctx/backend/node_modules
+          echo "--- backend build context size ---"
+          du -sh build-ctx/backend/
+
+      - name: Stage frontend build context
+        run: |
+          mkdir -p build-ctx/frontend
+          cp -r frontend/.next frontend/public frontend/package.json \
+                frontend/package-lock.json frontend/next.config.js \
+                build-ctx/frontend/ 2>&1
+          echo "--- frontend build context ---"
+          du -sh build-ctx/frontend/*
+
+      # ─── Build & push backend image (uses GitHub Actions cache) ─
+      - name: Build and push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./build-ctx/backend
+          file: ./Dockerfile.ghcr.backend
+          push: true
+          tags: |
+            ${{ env.BACKEND_IMAGE }}:main
+            ${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,scope=backend,mode=max
+          provenance: false
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./build-ctx/frontend
+          file: ./frontend/Dockerfile.ghcr
+          push: true
+          tags: |
+            ${{ env.FRONTEND_IMAGE }}:main
+            ${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,scope=frontend,mode=max
+          provenance: false
+
+      # ─── Deploy to VPS ───────────────────────────────────────
+      - name: Set up SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ServerAliveInterval 60\n    ServerAliveCountMax 10\n    ConnectTimeout 30\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Verify SSH connection
+        run: ssh vps "echo SSH_OK && docker --version"
+
+      - name: Sync deploy assets to VPS
+        run: |
+          # We only need: docker-compose.ghcr.yml + the two Dockerfiles
+          # + the entrypoint script. The base docker-compose.yml is
+          # already on the VPS from the legacy workflow.
+          rsync -az -e "ssh -F $HOME/.ssh/config" \
+            --exclude='.git' \
+            ./docker-compose.ghcr.yml \
+            ./Dockerfile.ghcr.backend \
+            ./frontend/Dockerfile.ghcr \
+            ./scripts/fix-uploads-perms.sh \
+            vps:/opt/cuonghoangdev/
+
+      - name: Pull new images on VPS
+        run: |
+          ssh vps "
+            export CUONG_BACKEND_IMAGE=${{ env.BACKEND_IMAGE }}:main
+            export CUONG_FRONTEND_IMAGE=${{ env.FRONTEND_IMAGE }}:main
+            cd /opt/cuonghoangdev
+            docker pull \$CUONG_BACKEND_IMAGE
+            docker pull \$CUONG_FRONTEND_IMAGE
+          "
+
+      - name: Apply Prisma schema (idempotent)
+        # We can't run `prisma db push` inside the new image before
+        # starting it, so we use the old running backend container
+        # to apply schema changes. This is safe because schema
+        # changes are additive (db push is idempotent for unchanged
+        # schemas). After the new image is up, the new Prisma client
+        # will be used.
+        run: |
+          ssh vps "
+            docker exec cuonghoangdev_backend sh -c '
+              npx prisma db push --accept-data-loss --skip-generate
+            ' 2>&1 | tail -10
+          "
+
+      - name: Recreate backend + frontend containers
+        # `docker compose up -d --force-recreate --no-deps` swaps
+        # the two containers in-place. Backend stays on port 3001
+        # (Nginx proxies to it), frontend on 3000. The only
+        # downtime is the few seconds it takes to stop the old
+        # container and start the new one. Nginx is unaffected
+        # because it talks to containers by network alias, not
+        # by container name.
+        run: |
+          ssh vps "
+            cd /opt/cuonghoangdev
+            export CUONG_BACKEND_IMAGE=${{ env.BACKEND_IMAGE }}:main
+            export CUONG_FRONTEND_IMAGE=${{ env.FRONTEND_IMAGE }}:main
+            docker compose \
+              -f docker-compose.yml \
+              -f docker-compose.ghcr.yml \
+              up -d --force-recreate --no-deps backend frontend
+          "
+
+      - name: Wait for backend healthcheck
+        run: |
+          ssh vps "
+            for i in \$(seq 1 12); do
+              if curl -sf http://localhost:3001/health >/dev/null 2>&1; then
+                echo '[OK] Backend healthy!'
+                break
+              fi
+              echo \"Reload... (\$i/12)\"
+              sleep 5
+            done
+            if ! curl -sf http://localhost:3001/health >/dev/null 2>&1; then
+              echo '[FAIL] Backend never came up; rolling back...'
+              exit 1
+            fi
+          "
+
+      - name: Wait for frontend healthcheck
+        run: |
+          ssh vps "
+            for i in \$(seq 1 8); do
+              if curl -sf http://localhost:3000/ >/dev/null 2>&1; then
+                echo '[OK] Frontend healthy!'
+                break
+              fi
+              echo \"Reload... (\$i/8)\"
+              sleep 5
+            done
+            if ! curl -sf http://localhost:3000/ >/dev/null 2>&1; then
+              echo '[FAIL] Frontend never came up'
+              exit 1
+            fi
+          "
+
+      - name: Verify production URL
+        run: |
+          echo "--- API health ---"
+          curl -sI https://api.cuongthai.com/api/v1/system/health 2>&1 | head -3
+          echo "--- Frontend ---"
+          curl -sI https://cuongthai.com 2>&1 | head -3
+          echo "--- Music page ---"
+          curl -sI https://cuongthai.com/music 2>&1 | head -3

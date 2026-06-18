@@ -45,8 +45,8 @@ RUN mkdir -p /app/uploads/images /app/uploads/audio /app/uploads/video /app/uplo
 COPY scripts/fix-uploads-perms.sh /usr/local/bin/fix-uploads-perms.sh
 RUN chmod +x /usr/local/bin/fix-uploads-perms.sh
 
-# ─── Copy CI-built artifacts ────────────────────────────────
-# Build context: ./build-ctx/backend/ (populated by the workflow).
+# Copy CI-built artifacts (staged by the workflow at build-ctx/backend/).
+# Build context is ./build-ctx/backend/ (populated by the workflow).
 # It contains: dist/, prisma/, package.json, scripts/fix-uploads-perms.sh,
 # and a production-only node_modules.
 COPY --from=deps --chown=1001:0 /app/node_modules ./node_modules
@@ -54,6 +54,13 @@ COPY --chown=1001:0 dist ./dist
 COPY --chown=1001:0 prisma ./prisma
 COPY --chown=1001:0 package.json ./package.json
 COPY --chown=1001:0 scripts ./scripts
+
+# Re-generate Prisma client at image build time. We copy the schema
+# first so `prisma generate` produces the matching client into
+# ./node_modules/.prisma/client/. This works because we install
+# prisma + @prisma/client as production deps in the deps stage
+# (they're runtime deps, not devDeps).
+RUN npx prisma generate 2>&1 | tail -3
 
 ENV NODE_ENV=production
 ENV PORT=3001

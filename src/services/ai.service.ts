@@ -424,13 +424,38 @@ export class AIService {
         });
 
         let fullResponse = '';
-
-        for await (const chunk of stream) {
-          const chunkText = chunk.choices[0]?.delta?.content || '';
-          if (chunkText) {
-            fullResponse += chunkText;
-            yield chunkText;
+        // Use a real timeout to detect stalls: if no chunk arrives within
+        // 8s, abort the stream and raise an error so the outer SSE
+        // handler can return an error frame quickly. Without this, the
+        // OpenAI SDK can hang on "Premature close" indefinitely and the
+        // user sees the spinner spin for tens of seconds.
+        const STREAM_IDLE_TIMEOUT_MS = 8_000;
+        const withIdleTimeout = async <T>(p: Promise<T>, ms: number): Promise<T> => {
+          let to: ReturnType<typeof setTimeout> | null = null;
+          const timeoutPromise = new Promise<never>((_, reject) => {
+            to = setTimeout(() => reject(new Error('Stream idle timeout')), ms);
+          });
+          try {
+            return await Promise.race([p, timeoutPromise]);
+          } finally {
+            if (to) clearTimeout(to);
           }
+        };
+
+        try {
+          while (true) {
+            const next = withIdleTimeout(stream[Symbol.asyncIterator]().next(), STREAM_IDLE_TIMEOUT_MS);
+            const { value: chunk, done } = await next;
+            if (done) break;
+            const chunkText = chunk?.choices?.[0]?.delta?.content || '';
+            if (chunkText) {
+              fullResponse += chunkText;
+              yield chunkText;
+            }
+          }
+        } finally {
+          // Best-effort cleanup
+          try { await stream.controller?.abort?.(); } catch {}
         }
 
         if (sessionId && fullResponse) {
@@ -440,9 +465,13 @@ export class AIService {
       } catch (err) {
         const errMsg = err instanceof Error ? err.message : String(err);
         console.warn(
-          `[AIService] Groq streaming failed, falling back to non-stream: ${errMsg}`,
+          `[AIService] Groq streaming failed: ${errMsg}`,
         );
-        // Fall through to non-stream fallback
+        // Don't fall back to non-stream providers — that path adds
+        // another 5-10s of latency trying OpenRouter/OpenAI, which the
+        // user sees as a stuck spinner. The circuit breaker already
+        // trips Groq, so subsequent requests skip it automatically.
+        throw err;
       }
     }
 

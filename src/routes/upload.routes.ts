@@ -1,15 +1,33 @@
+/**
+ * File upload routes.
+ *
+ * All routes use multer in memory mode — the file is held in
+ * RAM as a Buffer until the route handler passes it to
+ * `uploadService` (R2 or local), so we never write a temp file
+ * to the VPS disk for a normal upload.
+ *
+ * The signed-URL flow (`/upload/signed-url` + `/upload/signed/:token`)
+ * is preserved for large direct uploads: the client requests a
+ * short-lived token, then `PUT`s the file body directly. We
+ * still receive it as a buffer and run it through the same
+ * upload pipeline, so the optimization/storage rules apply
+ * uniformly.
+ */
 import { Router, type Response } from 'express';
 import multer from 'multer';
-import path from 'path';
-import fs from 'fs/promises';
-import { v4 as uuidv4 } from 'uuid';
-import { prisma } from '../config/database.js';
-import { config } from '../config/env.js';
 import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
-import { uploadService, generateSignedUploadUrl, verifySignedUploadToken } from '../services/upload.service.js';
-import type { ApiResponse, UploadResult } from '../types/index.js';
-import type { FileCategory } from '../types/index.js';
+import { prisma } from '../config/database.js';
+import {
+  uploadGeneric,
+  uploadImage,
+  deleteByKey,
+  UploadError,
+} from '../storage/uploadService.js';
+import { getStorageProvider } from '../storage/StorageProvider.js';
+import { generateSignedUploadUrl, verifySignedUploadToken } from '../services/upload.service.js';
+import { logger } from '../utils/logger.js';
+import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
 const SIGNED_URL_EXPIRY_MS = 30 * 60 * 1000;
@@ -17,31 +35,56 @@ const SIGNED_URL_EXPIRY_MS = 30 * 60 * 1000;
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 100 * 1024 * 1024, // 100MB
-  },
-  fileFilter: (_req, _file, cb) => {
-    // Allow all file types; validation happens in service
-    cb(null, true);
+    fileSize: 100 * 1024 * 1024, // 100MB hard cap; per-category caps live in uploadService
   },
 });
+
+/**
+ * Map a public `category` string (as sent by the client) to a
+ * bucket prefix. We accept the existing client vocabulary
+ * (`images`, `documents`, `audio`, `video`) so nothing on the
+ * frontend has to change.
+ */
+function resolveCategory(raw: string | undefined): {
+  bucket: 'images/avatar' | 'images/post' | 'images/cover' | 'images/chat' | 'images/playlist-covers' | 'images/thumbnails' | 'documents/lesson' | 'documents/chat' | 'audio/songs' | 'audio/notifications' | 'video';
+  optimize: boolean;
+} {
+  const c = (raw || 'documents').toLowerCase();
+  if (c === 'avatar' || c === 'avatars') return { bucket: 'images/avatar', optimize: true };
+  if (c === 'post' || c === 'posts' || c === 'images') return { bucket: 'images/post', optimize: true };
+  if (c === 'cover' || c === 'covers') return { bucket: 'images/cover', optimize: true };
+  if (c === 'chat' || c === 'messages') return { bucket: 'images/chat', optimize: true };
+  if (c === 'playlist' || c === 'playlist-covers') return { bucket: 'images/playlist-covers', optimize: true };
+  if (c === 'thumbnails' || c === 'thumb') return { bucket: 'images/thumbnails', optimize: true };
+  if (c === 'lesson' || c === 'lesson-documents' || c === 'documents') return { bucket: 'documents/lesson', optimize: false };
+  if (c === 'chat-docs' || c === 'chat-attachments') return { bucket: 'documents/chat', optimize: false };
+  if (c === 'audio' || c === 'songs') return { bucket: 'audio/songs', optimize: false };
+  if (c === 'notification-sound' || c === 'notifications') return { bucket: 'audio/notifications', optimize: false };
+  if (c === 'video') return { bucket: 'video', optimize: false };
+  // Unknown — fall back to documents so we never silently drop.
+  return { bucket: 'documents/lesson', optimize: false };
+}
 
 // ─── POST /api/v1/files/upload ─────────────────────────
 router.post(
   '/upload',
   authenticate,
   upload.single('file'),
-  async (
-    req,
-    res: Response<ApiResponse<UploadResult>>,
-    next,
-  ) => {
+  async (req, res: Response<ApiResponse>, next) => {
     try {
       if (!req.file) {
         throw new AppError('No file provided', 400, 'NO_FILE');
       }
-
-      const category = (req.body.category || 'documents') as FileCategory;
-      const result = await uploadService.uploadFile(req.file, category, req.userId);
+      const { bucket, optimize } = resolveCategory(req.body.category);
+      const input = {
+        buffer: req.file.buffer,
+        originalName: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+      };
+      const result = optimize
+        ? await uploadImage(input, bucket, { userId: req.userId })
+        : await uploadGeneric(input, bucket, { userId: req.userId, optimize: false });
 
       res.status(201).json({
         success: true,
@@ -49,6 +92,9 @@ router.post(
         message: 'File uploaded successfully',
       });
     } catch (error) {
+      if (error instanceof UploadError) {
+        return next(new AppError(error.message, error.status, error.code));
+      }
       next(error);
     }
   },
@@ -59,29 +105,34 @@ router.post(
   '/upload/multiple',
   authenticate,
   upload.array('files', 10),
-  async (
-    req,
-    res: Response<ApiResponse<UploadResult[]>>,
-    next,
-  ) => {
+  async (req, res: Response<ApiResponse>, next) => {
     try {
-      if (!req.files || req.files.length === 0) {
+      if (!req.files || (req.files as Express.Multer.File[]).length === 0) {
         throw new AppError('No files provided', 400, 'NO_FILES');
       }
-
-      const category = (req.body.category || 'documents') as FileCategory;
-      const results = await uploadService.uploadMultiple(
-        req.files as Express.Multer.File[],
-        category,
-        req.userId,
-      );
-
+      const { bucket, optimize } = resolveCategory(req.body.category);
+      const results = [];
+      for (const f of req.files as Express.Multer.File[]) {
+        const input = {
+          buffer: f.buffer,
+          originalName: f.originalname,
+          mimetype: f.mimetype,
+          size: f.size,
+        };
+        const out = optimize
+          ? await uploadImage(input, bucket, { userId: req.userId })
+          : await uploadGeneric(input, bucket, { userId: req.userId, optimize: false });
+        results.push(out);
+      }
       res.status(201).json({
         success: true,
         data: results,
         message: `${results.length} files uploaded successfully`,
       });
     } catch (error) {
+      if (error instanceof UploadError) {
+        return next(new AppError(error.message, error.status, error.code));
+      }
       next(error);
     }
   },
@@ -94,19 +145,20 @@ router.delete('/:id', authenticate, async (req, res: Response<ApiResponse>, next
     if (isNaN(id)) {
       throw new AppError('Invalid file ID', 400, 'INVALID_ID');
     }
-
-    const file = await uploadService.getFile(id);
+    const file = await prisma.fileAttachment.findUnique({ where: { id } });
     if (!file) {
       throw new AppError('File not found', 404, 'FILE_NOT_FOUND');
     }
-
-    // Only uploader or admin can delete
-    if (file.uploadedBy !== req.userId && !req.user?.roles.includes('ROLE_ADMIN')) {
+    if (file.uploadedBy !== req.userId && !req.user?.roles?.includes('ROLE_ADMIN')) {
       throw new AppError('Not authorized to delete this file', 403, 'FORBIDDEN');
     }
-
-    await uploadService.deleteFile(id);
-
+    // Best-effort storage delete. We do it BEFORE the DB delete
+    // so a failed DB delete still leaves the file marked for
+    // cleanup. Conversely, if the storage delete throws, we
+    // still proceed — orphaned files are a smaller problem than
+    // orphaned DB rows that point at nothing.
+    await deleteByKey(file.filePath);
+    await prisma.fileAttachment.delete({ where: { id } });
     res.json({ success: true, message: 'File deleted successfully' });
   } catch (error) {
     next(error);
@@ -120,13 +172,22 @@ router.get('/:id', async (req, res: Response<ApiResponse>, next) => {
     if (isNaN(id)) {
       throw new AppError('Invalid file ID', 400, 'INVALID_ID');
     }
-
-    const file = await uploadService.getFile(id);
+    const file = await prisma.fileAttachment.findUnique({ where: { id } });
     if (!file) {
       throw new AppError('File not found', 404, 'FILE_NOT_FOUND');
     }
-
-    res.json({ success: true, data: file });
+    res.json({
+      success: true,
+      data: {
+        id: file.id,
+        originalName: file.originalName,
+        storedName: file.storedName,
+        url: getStorageProvider().publicUrl(file.filePath),
+        contentType: file.contentType,
+        fileSize: Number(file.fileSize),
+        fileCategory: file.fileCategory,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -163,24 +224,19 @@ router.get('/upload/signed-url', authenticate, (req, res: Response<ApiResponse>,
 router.put(
   '/upload/signed/:token',
   multer({ storage: multer.memoryStorage(), limits: { fileSize: 100 * 1024 * 1024 } }).single('file'),
-  async (req, res: Response<ApiResponse<UploadResult>>, next) => {
+  async (req, res: Response<ApiResponse>, next) => {
     try {
       const { token } = req.params;
-
       if (!token) {
         throw new AppError('Token is required', 400, 'MISSING_TOKEN');
       }
-
       const payload = verifySignedUploadToken(token);
       if (!payload) {
         throw new AppError('Invalid or expired upload token', 401, 'INVALID_TOKEN');
       }
-
       if (!req.file) {
         throw new AppError('No file provided', 400, 'NO_FILE');
       }
-
-      // Validate file type against signed payload
       if (req.file.mimetype !== payload.contentType) {
         throw new AppError(
           `File type mismatch. Expected ${payload.contentType}, got ${req.file.mimetype}`,
@@ -189,60 +245,28 @@ router.put(
         );
       }
 
-      // Save file locally
-      const baseSlug = payload.filename
-        ? payload.filename.replace(/\.[^.]+$/, '').replace(/[^a-z0-9]/gi, '-').toLowerCase().slice(0, 50)
-        : 'file';
-      const timestamp = Date.now();
-      const randomStr = uuidv4().split('-')[0];
-      const ext = path.extname(payload.filename || req.file.originalname || 'file').toLowerCase();
-      const storedName = `${baseSlug}-${timestamp}-${randomStr}${ext}`;
+      const { bucket, optimize } = resolveCategory(payload.folder);
+      const input = {
+        buffer: req.file.buffer,
+        originalName: payload.filename || req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+      };
+      const result = optimize
+        ? await uploadImage(input, bucket, { userId: payload.userId ?? undefined })
+        : await uploadGeneric(input, bucket, { userId: payload.userId ?? undefined, optimize: false });
 
-      const relativePath = `${payload.folder}/${storedName}`;
-      const fullPath = path.join(config.uploadDir, relativePath);
-
-      await fs.mkdir(path.dirname(fullPath), { recursive: true, mode: 0o777 });
-      await fs.chmod(path.dirname(fullPath), 0o777).catch(() => { /* ignore */ });
-      try {
-        await fs.writeFile(fullPath, req.file.buffer);
-      } catch (err: unknown) {
-        if ((err as NodeJS.ErrnoException).code === 'EACCES') {
-          await fs.chmod(fullPath, 0o666).catch(() => { /* ignore */ });
-          await fs.writeFile(fullPath, req.file.buffer);
-        } else {
-          throw err;
-        }
-      }
-
-      const publicUrl = `/uploads/${relativePath.replace(/\\/g, '/')}`;
-
-      // Save to database
-      const attachment = await prisma.fileAttachment.create({
-        data: {
-          originalName: payload.filename || req.file.originalname,
-          storedName,
-          filePath: relativePath,
-          contentType: payload.contentType,
-          fileSize: req.file.size,
-          uploadedBy: payload.userId || undefined,
-          fileCategory: payload.folder.split('/')[0] || 'documents',
-        },
-      });
+      logger.info(`[upload] signed PUT ${result.url} (${result.size}B)`);
 
       res.status(201).json({
         success: true,
-        data: {
-          id: attachment.id,
-          originalName: attachment.originalName,
-          storedName: attachment.storedName,
-          filePath: attachment.filePath,
-          url: publicUrl,
-          contentType: attachment.contentType,
-          fileSize: Number(attachment.fileSize),
-          fileCategory: attachment.fileCategory || payload.folder.split('/')[0],
-        },
+        data: result,
+        message: 'File uploaded successfully',
       });
     } catch (error) {
+      if (error instanceof UploadError) {
+        return next(new AppError(error.message, error.status, error.code));
+      }
       next(error);
     }
   },

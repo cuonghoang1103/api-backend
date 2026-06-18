@@ -451,19 +451,26 @@ export class MusicService {
 
   // ─── GET /stream/:id — Stream audio với Range support ───
   /**
-   * Lấy thông tin track + tạo range stream.
-   * Endpoint gọi hàm này sẽ xử lý pipe response.
+   * Build the response the streaming endpoint should hand to the
+   * client. Two branches:
    *
-   * @param id - Track ID từ database
-   * @param range - HTTP Range header từ client
-   * @returns StreamResult chứa ReadableStream và HTTP headers
+   *   - The track is backed by a local file (`localPath`
+   *     references the old `/uploads/...` layout) — return a
+   *     `streamResult` for the route handler to pipe.
+   *   - The track is backed by R2 (the `localPath` is a bucket
+   *     key) — return a `redirect` URL pointing at a short-
+   *     lived signed R2 URL. The browser follows the redirect
+   *     and streams directly from the CDN, which is faster
+   *     (no Node.js in the hot path) and supports HTTP Range
+   *     natively.
    */
   async getStreamOptions(
     id: number,
     range?: string,
   ): Promise<{
     track: Awaited<ReturnType<MusicService['getTrackById']>>;
-    streamResult: StreamResult;
+    streamResult?: StreamResult;
+    redirect?: string;
   }> {
     const track = await this.getTrackById(id);
 
@@ -479,15 +486,25 @@ export class MusicService {
       );
     }
 
-    // Auto-detect MIME type từ extension
-    const mimeType = detectMimeType(filePath);
+    // R2 path: bucket key (e.g. "audio/songs/1234-abcd.mp3").
+    // We don't have a leading slash, so the leading-slash test
+    // discriminates R2 keys from legacy local paths.
+    if (!filePath.startsWith('/') && !filePath.startsWith('uploads/')) {
+      const { getStorageProvider } = await import('../storage/StorageProvider.js');
+      const provider = getStorageProvider();
+      // 10-minute signed URL. Long enough to stream a long
+      // track, short enough that a leaked link is useless.
+      const signed = await provider.signedUrl(filePath, 600);
+      return { track, redirect: signed };
+    }
 
+    // Local path: build the legacy range stream.
+    const mimeType = detectMimeType(filePath);
     const streamResult = createRangeStream({
       range,
       filePath,
       contentType: mimeType,
     });
-
     return { track, streamResult };
   }
 
@@ -574,6 +591,24 @@ export class MusicService {
 
   // ─── Hard delete (admin cleanup) ─────────────────────────
   async hardDeleteTrack(id: number): Promise<void> {
+    // Capture the storage references BEFORE we delete the row
+    // so we know what to remove from R2 afterwards.
+    const track = await prisma.musicTrack.findUnique({ where: { id } });
+    if (track) {
+      const { deleteByUrls } = await import('../storage/uploadService.js');
+      const urls: Array<string | null | undefined> = [track.coverImage];
+      // Only the audio row is deletable on R2 — the localPath
+      // might be a remote (YouTube) URL, in which case
+      // deleteByUrl is a no-op.
+      if (track.localPath && !track.localPath.startsWith('http')) {
+        // The track's localPath stores the bucket key, not a
+        // URL. Build the canonical public URL so deleteByUrls
+        // can extract the key.
+        const { getStorageProvider } = await import('../storage/StorageProvider.js');
+        urls.push(getStorageProvider().publicUrl(track.localPath));
+      }
+      await deleteByUrls(urls);
+    }
     await prisma.musicTrack.delete({ where: { id } });
   }
 

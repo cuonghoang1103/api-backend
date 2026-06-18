@@ -24,7 +24,7 @@ import { authenticate, requireRole } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { messagesService } from '../services/messages.service.js';
 import { messagingSafetyService } from '../services/messaging-safety.service.js';
-import { uploadService } from '../services/upload.service.js';
+import { uploadImage, uploadDocument, UploadError } from '../storage/uploadService.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -236,22 +236,48 @@ router.post(
       if (req.file.size > 10 * 1024 * 1024) {
         throw new AppError('File exceeds 10MB limit', 413, 'FILE_TOO_LARGE');
       }
-      // Re-use the existing service. Pass an empty category so the
-      // service auto-detects the right allowlist (images, audio,
-      // video, or documents) from the file's mime type. Hard-coding
-      // 'documents' here would reject any image/* upload.
-      const result = await uploadService.uploadFile(req.file, '' as any, req.userId);
+      // Auto-detect bucket from mime: image → optimize, else → document.
+      const input = {
+        buffer: req.file.buffer,
+        originalName: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+      };
+      const result = req.file.mimetype.startsWith('image/')
+        ? await uploadImage(input, 'images/chat', { userId: req.userId })
+        : await uploadDocument(input, { userId: req.userId, scope: 'chat' });
+
+      // Persist a FileAttachment row so the message can later
+      // reference the file by numeric id (the messenger stores
+      // `fileIds: number[]` in the message row, not the R2 key).
+      const stored = await import('../config/database.js').then(({ prisma }) =>
+        prisma.fileAttachment.create({
+          data: {
+            originalName: input.originalName,
+            storedName: result.key.split('/').pop() ?? input.originalName,
+            filePath: result.key,
+            contentType: result.contentType,
+            fileSize: BigInt(result.size),
+            uploadedBy: req.userId,
+            fileCategory: input.mimetype.startsWith('image/') ? 'images' : 'documents',
+          },
+        }),
+      );
+
       res.status(201).json({
         success: true,
         data: {
-          fileId: result.id,
+          fileId: stored.id,
           url: result.url,
-          fileName: result.originalName,
-          fileSize: result.fileSize,
+          fileName: input.originalName,
+          fileSize: result.size,
           mimeType: result.contentType,
         },
       });
     } catch (error) {
+      if (error instanceof UploadError) {
+        return next(new AppError(error.message, error.status, error.code));
+      }
       next(error);
     }
   },

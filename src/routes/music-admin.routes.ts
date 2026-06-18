@@ -7,7 +7,7 @@ import { Router, type Response } from 'express';
 import multer from 'multer';
 
 import { musicService } from '../services/music.service.js';
-import { uploadService } from '../services/upload.service.js';
+import { uploadAudio, uploadImage, UploadError } from '../storage/uploadService.js';
 import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
@@ -56,27 +56,44 @@ router.post(
         throw new AppError('Artist name is required', 400, 'MISSING_ARTIST');
       }
 
-      let localPath: string | undefined;
+      let audioKey: string | undefined;
       let audioFileSize: number | undefined;
 
       const audioFile = req.files?.audio?.[0] as Express.Multer.File | undefined;
       if (audioFile) {
-        const uploadResult = await uploadService.uploadFile(audioFile, 'audio', req.userId);
-        localPath = uploadResult.filePath;
-        audioFileSize = Number(uploadResult.fileSize);
+        const res2 = await uploadAudio(
+          {
+            buffer: audioFile.buffer,
+            originalName: audioFile.originalname,
+            mimetype: audioFile.mimetype,
+            size: audioFile.size,
+          },
+          { userId: req.userId, kind: 'songs' },
+        );
+        audioKey = res2.key;
+        audioFileSize = res2.size;
       }
 
       let coverUrl: string | undefined;
       const coverFile = req.files?.cover?.[0] as Express.Multer.File | undefined;
       if (coverFile) {
-        const uploadResult = await uploadService.uploadFile(coverFile, 'images', req.userId);
-        coverUrl = uploadResult.url;
+        const res2 = await uploadImage(
+          {
+            buffer: coverFile.buffer,
+            originalName: coverFile.originalname,
+            mimetype: coverFile.mimetype,
+            size: coverFile.size,
+          },
+          'images/playlist-covers',
+          { userId: req.userId },
+        );
+        coverUrl = res2.url;
       }
 
       const track = await musicService.createTrack({
         title: title.trim(),
         artist: artist.trim(),
-        localPath,
+        localPath: audioKey,
         coverImage: coverUrl,
         durationSeconds: durationSeconds
           ? parseInt(durationSeconds as string, 10)
@@ -98,6 +115,9 @@ router.post(
         message: 'Track created successfully',
       });
     } catch (error) {
+      if (error instanceof UploadError) {
+        return next(new AppError(error.message, error.status, error.code));
+      }
       next(error);
     }
   },

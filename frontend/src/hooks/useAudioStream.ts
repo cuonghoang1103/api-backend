@@ -115,15 +115,53 @@ export function useAudioStream(options: UseAudioStreamOptions = {}) {
   }, []);
 
   // ─── Build stream URL ───────────────────────────────
+  //
+  // Three layouts co-exist in the DB during the migration
+  // window, in order of preference:
+  //
+  //   1. `localPath` is a bucket key (e.g. "audio/songs/...").
+  //      Build the public CDN URL — the browser streams
+  //      directly from Cloudflare, no backend hop, native
+  //      Range support.
+  //   2. `localPath` is a legacy local path (starts with
+  //      "uploads/" or "/"). Hit the backend stream endpoint,
+  //      which still serves the file from local disk for the
+  //      rare pre-migration track.
+  //   3. `localPath` is missing but `audioUrl` is a remote
+  //      (YouTube) URL. Use it directly.
+  //   4. Otherwise fall through to the streaming endpoint so
+  //      the backend can decide what to do (404, signed R2
+  //      redirect, etc.).
   const getStreamUrl = useCallback((track: AudioTrack): string => {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const cdnBase =
+      process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://media.cuongthai.com';
 
-    // Ưu tiên local file path
-    if (track.localPath) {
-      return `${baseUrl}/uploads/${track.localPath}`;
+    // (1) R2 key → CDN URL. Bucket keys never start with "/"
+    // and never start with "uploads/".
+    if (
+      track.localPath &&
+      !track.localPath.startsWith('/') &&
+      !track.localPath.startsWith('uploads/') &&
+      !track.localPath.startsWith('http')
+    ) {
+      return `${cdnBase}/${track.localPath}`;
     }
 
-    // Backend streaming endpoint (hỗ trợ Range request)
+    // (2) Legacy local path.
+    if (track.localPath && track.localPath.startsWith('uploads/')) {
+      return `${baseUrl}/${track.localPath}`;
+    }
+    if (track.localPath && track.localPath.startsWith('/')) {
+      return `${baseUrl}${track.localPath}`;
+    }
+
+    // (3) Remote audio URL.
+    if (track.audioUrl && track.audioUrl.startsWith('http')) {
+      return track.audioUrl;
+    }
+
+    // (4) Fallback — let the backend decide.
     return `${baseUrl}/api/v1/music/stream/${track.id}`;
   }, []);
 

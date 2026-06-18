@@ -33,12 +33,12 @@ import { Router, type Response, type NextFunction } from 'express';
 import multer from 'multer';
 
 import { musicService } from '../services/music.service.js';
-import { uploadService } from '../services/upload.service.js';
 import { normalizeAudio, isFFmpegAvailable } from '../services/ffmpeg.service.js';
 import { optionalAuth, authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
-import type { ApiResponse } from '../types/index.js';
+import { uploadAudio, uploadImage, UploadError } from '../storage/uploadService.js';
 import { config } from '../config/env.js';
+import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
 
@@ -259,10 +259,25 @@ router.get('/stream/:id', optionalAuth, async (req: any, res: Response, next) =>
     const rangeHeader = req.headers.range as string | undefined;
 
     // ─── Step 3: Get stream options từ service ───────────
-    const { streamResult, track } = await musicService.getStreamOptions(
+    const { streamResult, track, redirect } = await musicService.getStreamOptions(
       trackId,
       rangeHeader,
     );
+
+    // R2 path: hand the browser a 302 to a signed R2 URL. The
+    // CDN serves the audio with native Range support, and the
+    // response headers (Content-Type, Accept-Ranges, etc.)
+    // come from R2 — so we don't need to set them here.
+    if (redirect) {
+      return res.redirect(302, redirect);
+    }
+
+    // Local path: keep the legacy pipe-the-stream behaviour.
+    if (!streamResult) {
+      // Should never happen — getStreamOptions throws when
+      // there's no playable file. Defensive 500 just in case.
+      return res.status(500).json({ success: false, message: 'No stream available' });
+    }
 
     // ─── Step 4: Set HTTP headers ─────────────────────────
     // HTTP 206 Partial Content khi có Range header
@@ -277,77 +292,35 @@ router.get('/stream/:id', optionalAuth, async (req: any, res: Response, next) =>
 
     // Thiết lập headers cho streaming response
     res.set({
-      // MIME type: audio/mpeg cho MP3, audio/wav cho WAV, etc.
       'Content-Type': streamResult.contentType,
-
-      // Kích thước chunk trả về (bytes)
-      // Nếu có Range: 102400 bytes
-      // Nếu không Range: toàn bộ file
       'Content-Length': streamResult.contentLength,
-
-      // Header này báo cho browser biết server hỗ trợ range request
       'Accept-Ranges': streamResult.acceptRanges,
-
-      // Chunk này chứa bytes nào trong file
-      // Ví dụ: "bytes 0-102399/5242880" (102400 bytes đầu trong file 5MB)
       'Content-Range': streamResult.contentRange,
-
-      // Cache: cho phép browser cache 1 giờ
-      // Vì file nhạc hiếm khi thay đổi
       'Cache-Control': 'public, max-age=3600',
-
-      // Inline: browser tự động phát, không tải về
       'Content-Disposition': `inline; filename="${encodeURIComponent((track as Record<string, unknown>).title as string ?? 'audio')}.mp3"`,
-
-      // Không buffer bởi Nginx proxy (quantam)
       'X-Accel-Buffering': 'no',
-
-      // CORS headers cho cross-origin requests
       'Access-Control-Expose-Headers': 'Content-Range,Accept-Ranges,Content-Length',
     });
 
     // ─── Step 5: Pipe stream về browser ──────────────────
-    // createReadStream() đọc file theo chunks 64KB
-    // Không load toàn bộ file vào RAM
     streamResult.stream.pipe(res);
 
     // ─── Step 6: Error handling cho stream ────────────────
-    // Xử lý lỗi khi streaming (file deleted, disk error, etc.)
     streamResult.stream.on('error', (err: Error) => {
       console.error(`[MusicStream] Stream error for track ${trackId}:`, err.message);
-
-      // Nếu headers đã được gửi, không thể set status code
-      // Chỉ có thể kết thúc connection
       if (!res.headersSent) {
-        res.status(500).json({
-          success: false,
-          message: 'Audio streaming error',
-        });
+        res.status(500).json({ success: false, message: 'Audio streaming error' });
       }
-
-      // Ensure response is closed
       if (!res.writableEnded) {
         res.end();
       }
     });
 
-    // ─── Step 7: Stream completion ────────────────────────
-    // Log khi streaming hoàn thành (để monitor)
-    streamResult.stream.on('end', () => {
-      // (debug log removed 2026-06-17 — too noisy, fires on every track play)
-    });
-
     // ─── Step 8: Handle client disconnect ─────────────────
-    // Khi user tua nhạc (seek) hoặc tắt nhạc,
-    // browser aborts connection → req closes
     req.on('close', () => {
-      // destroy() ngắt stream ngay lập tức
-      // Giải phóng file descriptor
       streamResult.stream.destroy();
     });
   } catch (error) {
-    // Xử lý các lỗi không phải streaming
-    // (track not found, file not found, etc.)
     next(error);
   }
 });
@@ -377,43 +350,85 @@ router.post(
       }
 
       // ─── Handle audio file upload ───────────────────────
-      let localPath: string | undefined;
+      //
+      // Flow:
+      //   1. Stream the original upload to R2 (no local disk I/O
+      //      for the raw file).
+      //   2. If FFmpeg is available and the file is worth
+      //      normalizing (>100KB), download the just-uploaded
+      //      object to `/tmp`, run loudnorm, re-upload the
+      //      normalized version, and delete the original. The
+      //      final R2 key is what we store in the DB.
+      //   3. On any normalization failure, keep the original
+      //      upload — the track is still playable, just not
+      //      volume-equalized.
+      let audioKey: string | undefined;
       let audioFileSize: number | undefined;
 
       const audioFile = req.files?.audio?.[0] as Express.Multer.File | undefined;
       if (audioFile) {
-        const uploadResult = await uploadService.uploadFile(
-          audioFile,
-          'audio',
-          req.userId,
-        );
-          localPath = uploadResult.filePath;
+        const input = {
+          buffer: audioFile.buffer,
+          originalName: audioFile.originalname,
+          mimetype: audioFile.mimetype,
+          size: audioFile.size,
+        };
+        const initial = await uploadAudio(input, { userId: req.userId, kind: 'songs' });
+        audioKey = initial.key;
+        audioFileSize = initial.size;
 
-        // ─── FFmpeg loudnorm normalization ──────────────
-        // Only normalize if FFmpeg is available and file is large enough
-        // (tiny files under 100KB are usually notifications/system sounds)
         const ffmpegAvailable = await isFFmpegAvailable();
         if (ffmpegAvailable && audioFile.size > 100 * 1024) {
-          const fs = await import('fs/promises');
-          const pathMod = await import('path');
-          const srcAbs = pathMod.resolve(config.uploadDir, localPath);
-          const tmpNormalized = pathMod.resolve(config.uploadDir, `temp-normalized-${Date.now()}.mp3`);
           try {
-            await normalizeAudio(srcAbs, tmpNormalized);
-            // Replace original with normalized version
-            const { rename } = await import('fs/promises');
-            await rename(tmpNormalized, srcAbs);
-            // Update file size to the normalized version
-            const stats = await fs.stat(srcAbs);
-            audioFileSize = stats.size;
-            // (debug log removed 2026-06-17)
+            // Download → normalize → re-upload via a /tmp staging
+            // pair. We use Node's `os.tmpdir()` so the file
+            // lands on the host's actual /tmp, not inside the
+            // container's read-only rootfs.
+            const { tmpdir } = await import('os');
+            const { promises: fsp } = await import('fs');
+            const pathMod = await import('path');
+            const { getStorageProvider } = await import('../storage/StorageProvider.js');
+            const provider = getStorageProvider();
+
+            const tmpIn = pathMod.join(tmpdir(), `norm-in-${Date.now()}.mp3`);
+            const tmpOut = pathMod.join(tmpdir(), `norm-out-${Date.now()}.mp3`);
+
+            // Pull the just-uploaded bytes back. For R2 this is
+            // a network round-trip; for local it's a copy. Both
+            // are tolerable here because the file is already
+            // small (capped at 200MB by multer) and normalization
+            // is the slow path anyway.
+            const dl = await provider.readStream(initial.key);
+            await new Promise<void>((resolve, reject) => {
+              const out = require('fs').createWriteStream(tmpIn);
+              dl.stream.on('error', reject);
+              out.on('error', reject);
+              out.on('finish', () => resolve());
+              dl.stream.pipe(out);
+            });
+
+            await normalizeAudio(tmpIn, tmpOut);
+            const normalized = await fsp.readFile(tmpOut);
+            const normalizedSize = normalized.length;
+            const normalizedKey = initial.key.replace(/\.mp3$/i, '') + '-norm.mp3';
+            await provider.put(normalizedKey, normalized, initial.contentType);
+
+            // Drop the un-normalized original; the normalized
+            // version is what users should hear.
+            await provider.delete(initial.key);
+
+            audioKey = normalizedKey;
+            audioFileSize = normalizedSize;
+
+            // Best-effort cleanup of the staging files. We
+            // never block the response on these.
+            fsp.unlink(tmpIn).catch(() => { /* ignore */ });
+            fsp.unlink(tmpOut).catch(() => { /* ignore */ });
           } catch (normErr) {
-            // Non-fatal: log and continue with original file
             console.warn('[FFmpeg] Normalization failed, using original:', normErr);
-            audioFileSize = Number(uploadResult.fileSize);
+            // Keep the original `audioKey` and `audioFileSize`
+            // we set above.
           }
-        } else {
-          audioFileSize = Number(uploadResult.fileSize);
         }
       }
 
@@ -421,19 +436,28 @@ router.post(
       let coverUrl: string | undefined;
       const coverFile = req.files?.cover?.[0] as Express.Multer.File | undefined;
       if (coverFile) {
-        const uploadResult = await uploadService.uploadFile(
-          coverFile,
-          'images',
-          req.userId,
+        const coverRes = await uploadImage(
+          {
+            buffer: coverFile.buffer,
+            originalName: coverFile.originalname,
+            mimetype: coverFile.mimetype,
+            size: coverFile.size,
+          },
+          'images/playlist-covers',
+          { userId: req.userId },
         );
-        coverUrl = uploadResult.url;
+        coverUrl = coverRes.url;
       }
 
       // ─── Create track record ────────────────────────────
+      // We persist the R2 key in `localPath` (the column name
+      // is a vestige of the pre-R2 design; renaming it would
+      // require a migration). The streaming endpoint knows how
+      // to interpret it as either a local path or an R2 key.
       const track = await musicService.createTrack({
         title: title.trim(),
         artist: artist.trim(),
-        localPath,
+        localPath: audioKey,
         coverImage: coverUrl,
         durationSeconds: durationSeconds
           ? parseInt(durationSeconds as string, 10)
@@ -453,6 +477,9 @@ router.post(
         message: 'Track created successfully',
       });
     } catch (error) {
+      if (error instanceof UploadError) {
+        return next(new AppError(error.message, error.status, error.code));
+      }
       next(error);
     }
   },

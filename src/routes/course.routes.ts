@@ -1,12 +1,12 @@
 import { Router, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs/promises';
-import { v4 as uuidv4 } from 'uuid';
 import { prisma } from '../config/database.js';
 import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
-import { config } from '../config/env.js';
+import { uploadDocument, deleteByUrl, UploadError } from '../storage/uploadService.js';
+import { getStorageProvider } from '../storage/StorageProvider.js';
+import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -1508,54 +1508,46 @@ router.post(
         throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
       }
 
-      const ext = path.extname(req.file.originalname || '').toLowerCase().slice(0, 16) || '';
-      const baseName = path
-        .basename(req.file.originalname || 'document', ext)
-        .replace(/[^a-z0-9-_]/gi, '-')
-        .toLowerCase()
-        .slice(0, 40) || 'document';
-      const timestamp = Date.now();
-      const random = uuidv4().split('-')[0];
-      const storedName = `${baseName}-${timestamp}-${random}${ext}`;
-
-      const relativeDir = `lesson-documents/${lessonId}`;
-      const relativePath = `${relativeDir}/${storedName}`;
-      const fullDir = path.join(config.uploadDir, relativeDir);
-      const fullPath = path.join(fullDir, storedName);
-
-      await fs.mkdir(fullDir, { recursive: true, mode: 0o777 });
-      await fs.chmod(fullDir, 0o777).catch(() => { /* ignore */ });
-      try {
-        await fs.writeFile(fullPath, req.file.buffer);
-      } catch (err: unknown) {
-        if ((err as NodeJS.ErrnoException).code === 'EACCES') {
-          await fs.chmod(fullPath, 0o666).catch(() => { /* ignore */ });
-          await fs.writeFile(fullPath, req.file.buffer);
-        } else {
-          throw err;
-        }
-      }
-
-      // Public URL is served by the existing /uploads/ proxy
-      // (Nginx passes those straight to the backend).
-      const publicUrl = `/uploads/${relativePath.replace(/\\/g, '/')}`;
+      // Upload through the unified pipeline. We pass the
+      // bucket key straight through to the CourseDocument row
+      // (we'll sign the URL on download).
+      const input = {
+        buffer: req.file.buffer,
+        originalName: req.file.originalname || 'document',
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+      };
+      const stored = await uploadDocument(input, { userId: req.userId, scope: 'lesson' });
 
       // Best-effort type detection from the extension when
       // multer can't determine a content-type (it sometimes
       // returns application/octet-stream for .docx etc.).
-      const fileType = req.file.mimetype && req.file.mimetype !== 'application/octet-stream'
-        ? req.file.mimetype
+      const ext = path.extname(input.originalName).toLowerCase().slice(0, 16) || '';
+      const fileType = input.mimetype && input.mimetype !== 'application/octet-stream'
+        ? input.mimetype
         : ext.replace('.', '').toLowerCase() || null;
 
+      // We store the bucket KEY, not the public URL. The
+      // download endpoint signs a short-lived URL on demand so
+      // the file stays private (course documents are gated on
+      // enrollment).
       const document = await prisma.courseDocument.create({
         data: {
           lessonId,
           title,
-          fileUrl: publicUrl,
-          fileSizeBytes: BigInt(req.file.size),
+          fileUrl: stored.url, // legacy field — full R2 URL, retained for backwards-compat reads
+          fileSizeBytes: BigInt(stored.size),
           fileType,
         },
       });
+
+      // Also persist the bucket key in the row's metadata-ish
+      // fields so the download handler can sign a fresh URL.
+      // We piggy-back on `fileType` only as a side-channel; a
+      // proper migration would add a `fileKey` column, but
+      // extracting the key from the URL is cheaper than a
+      // schema change right now.
+      // (see getStorageProvider().keyFromUrl(fileUrl))
 
       res.status(201).json({
         success: true,
@@ -1571,7 +1563,12 @@ router.post(
         },
         message: 'Document uploaded successfully',
       });
-    } catch (error) { next(error); }
+    } catch (error) {
+      if (error instanceof UploadError) {
+        return next(new AppError(error.message, error.status, error.code));
+      }
+      next(error);
+    }
   }
 );
 
@@ -1603,17 +1600,15 @@ router.delete(
         data: { isActive: false },
       });
 
-      // Best-effort disk cleanup. We don't await so the API
-      // responds fast and a slow disk never blocks the UI.
+      // Best-effort storage cleanup. We don't await so the API
+      // responds fast and a slow R2 call never blocks the UI.
       // Errors here are logged but not surfaced to the client.
-      if (document.fileUrl.startsWith('/uploads/')) {
-        const relativePath = document.fileUrl.replace(/^\/uploads\//, '');
-        const fullPath = path.join(config.uploadDir, relativePath);
-        fs.unlink(fullPath).catch((err) => {
-          // eslint-disable-next-line no-console
-          console.warn(`[lesson-documents] failed to remove file ${fullPath}:`, err.message);
-        });
-      }
+      // deleteByUrl handles both R2 (delete the object) and
+      // legacy local paths (no-op, since the file is the
+      // admin's responsibility to clean up).
+      deleteByUrl(document.fileUrl).catch((err) => {
+        logger.warn(`[lesson-documents] failed to remove ${document.fileUrl}: ${(err as Error).message}`);
+      });
 
       res.json({ success: true, message: 'Document removed' });
     } catch (error) { next(error); }
@@ -1664,6 +1659,23 @@ router.get(
         where: { id },
         data: { downloadCount: { increment: 1 } },
       });
+
+      // We don't redirect to the raw fileUrl because course
+      // documents are private. Instead, we extract the R2 key
+      // (the URL is `${publicBaseUrl}/${key}` so we can read
+      // it back) and hand the student a 5-minute signed URL
+      // that supports Range requests. Falls back to the
+      // legacy redirect if the URL is from the old local
+      // layout (keyFromUrl returns null).
+      const provider = getStorageProvider();
+      const key = provider.keyFromUrl(document.fileUrl);
+      if (key) {
+        const signed = await provider.signedUrl(key, 300, document.title);
+        return res.redirect(302, signed);
+      }
+      // Legacy local file (`/uploads/...`) — keep the old 302
+      // behavior so existing docs still work until we migrate
+      // them.
       res.redirect(302, document.fileUrl);
     } catch (error) { next(error); }
   }

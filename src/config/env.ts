@@ -136,6 +136,16 @@ const envSchema = z.object({
   // Public base URL
   PUBLIC_BASE_URL: z.string().url().default('https://api.cuongthai.com'),
 
+  // Cloudflare R2 (S3-compatible object storage)
+  // Required in production; optional in dev so the rest of the app
+  // can still boot if you're iterating on something unrelated.
+  R2_BUCKET_NAME: z.string().optional().default(''),
+  R2_PUBLIC_URL: z.string().optional().default(''),
+  R2_ENDPOINT_URL: z.string().optional().default(''),
+  R2_ACCESS_KEY_ID: z.string().optional().default(''),
+  R2_SECRET_ACCESS_KEY: z.string().optional().default(''),
+  R2_REGION: z.string().optional().default('auto'),
+
   // Sentry (error tracking). When DSN is empty, Sentry is disabled
   // and the app behaves exactly as before — no extra overhead, no
   // network calls. We never want Sentry to crash the app on startup.
@@ -262,6 +272,19 @@ export const config = {
 
   // Public base URL
   publicBaseUrl: env.PUBLIC_BASE_URL,
+
+  // Cloudflare R2
+  r2: {
+    bucketName: env.R2_BUCKET_NAME,
+    publicUrl: env.R2_PUBLIC_URL.replace(/\/$/, ''), // strip trailing slash
+    endpoint: env.R2_ENDPOINT_URL,
+    accessKeyId: env.R2_ACCESS_KEY_ID,
+    secretAccessKey: env.R2_SECRET_ACCESS_KEY,
+    region: env.R2_REGION,
+    enabled: Boolean(
+      env.R2_BUCKET_NAME && env.R2_ENDPOINT_URL && env.R2_ACCESS_KEY_ID && env.R2_SECRET_ACCESS_KEY,
+    ),
+  },
 
   // Sentry
   sentryDsn: env.SENTRY_DSN,

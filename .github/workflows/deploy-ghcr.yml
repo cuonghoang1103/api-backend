@@ -228,6 +228,20 @@ jobs:
               up -d --force-recreate --no-deps backend frontend
           "
 
+      - name: Reload nginx to refresh upstream connections
+        # The nginx container is 15h old and has cached the old
+        # backend/frontend container IPs. After --force-recreate,
+        # the upstream connections go stale, causing 502s. A
+        # `docker restart` is the safest fix (no risk of breaking
+        # an in-flight TLS handshake the way `nginx -s reload`
+        # would, and the restart is sub-second).
+        run: |
+          ssh vps "
+            docker restart cuonghoangdev_nginx
+            sleep 5
+            docker ps --format 'table {{.Names}}\t{{.Status}}' | grep nginx
+          "
+
       - name: Wait for backend healthcheck
         run: |
           # The new image boots in ~5s but Prisma client initialization

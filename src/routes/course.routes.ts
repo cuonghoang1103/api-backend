@@ -1525,7 +1525,16 @@ router.post(
 
       await fs.mkdir(fullDir, { recursive: true, mode: 0o777 });
       await fs.chmod(fullDir, 0o777).catch(() => { /* ignore */ });
-      await fs.writeFile(fullPath, req.file.buffer);
+      try {
+        await fs.writeFile(fullPath, req.file.buffer);
+      } catch (err: unknown) {
+        if ((err as NodeJS.ErrnoException).code === 'EACCES') {
+          await fs.chmod(fullPath, 0o666).catch(() => { /* ignore */ });
+          await fs.writeFile(fullPath, req.file.buffer);
+        } else {
+          throw err;
+        }
+      }
 
       // Public URL is served by the existing /uploads/ proxy
       // (Nginx passes those straight to the backend).

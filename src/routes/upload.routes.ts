@@ -203,7 +203,16 @@ router.put(
 
       await fs.mkdir(path.dirname(fullPath), { recursive: true, mode: 0o777 });
       await fs.chmod(path.dirname(fullPath), 0o777).catch(() => { /* ignore */ });
-      await fs.writeFile(fullPath, req.file.buffer);
+      try {
+        await fs.writeFile(fullPath, req.file.buffer);
+      } catch (err: unknown) {
+        if ((err as NodeJS.ErrnoException).code === 'EACCES') {
+          await fs.chmod(fullPath, 0o666).catch(() => { /* ignore */ });
+          await fs.writeFile(fullPath, req.file.buffer);
+        } else {
+          throw err;
+        }
+      }
 
       const publicUrl = `/uploads/${relativePath.replace(/\\/g, '/')}`;
 

@@ -174,8 +174,18 @@ export class UploadService {
     await fs.mkdir(dir, { recursive: true, mode: 0o777 });
     await fs.chmod(dir, 0o777).catch(() => { /* ignore */ });
 
-    // Move file to storage
-    await fs.writeFile(fullPath, file.buffer);
+    // Move file to storage — retry with chmod on EACCES
+    // (handles bind-mounted Docker volumes where chmod may not persist)
+    try {
+      await fs.writeFile(fullPath, file.buffer);
+    } catch (err: unknown) {
+      if ((err as NodeJS.ErrnoException).code === 'EACCES') {
+        await fs.chmod(fullPath, 0o666).catch(() => { /* ignore */ });
+        await fs.writeFile(fullPath, file.buffer);
+      } else {
+        throw err;
+      }
+    }
 
     // Determine public URL — use absolute URL so browser can fetch via nginx
     const baseUrl = config.publicBaseUrl;

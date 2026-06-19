@@ -4,6 +4,7 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useMusicStore } from '@/store/musicStore';
 import { setAudioAnalyser } from '@/hooks/useAudioAnalyser';
 import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
+import { getMediaUrl } from '@/lib/utils';
 
 // Declare the YouTube IFrame API global
 declare global {
@@ -520,7 +521,14 @@ export default function MusicAudioController() {
   // recreating it.
   useEffect(() => {
     const audio = audioRef.current;
-    const rawUrl = currentTrack?.audioUrl;
+    // Resolve the playable URL. R2 CDN URLs fail CORS when the audio
+    // element is created with `crossOrigin = 'anonymous'` (which we
+    // need for the Web Audio AnalyserNode visualizer), so we route
+    // R2 / uploaded tracks through the backend stream endpoint
+    // which carries CORS headers via the global middleware.
+    const rawUrl = currentTrack
+      ? getMediaUrl(currentTrack.localPath, currentTrack.audioUrl, currentTrack.id)
+      : undefined;
     const trackId = currentTrack?.id ?? null;
     const { isYT, videoId } = isYouTubeUrl(rawUrl);
 

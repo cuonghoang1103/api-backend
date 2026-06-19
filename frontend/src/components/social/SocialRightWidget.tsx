@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
   TrendingUp,
@@ -9,9 +10,13 @@ import {
   Sparkles,
   ExternalLink,
   Flame,
+  MessageSquare,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import { useAuthStore } from '@/store/authStore';
+import { useMessagingStore } from '@/store/messagingStore';
+import toast from 'react-hot-toast';
 
 interface TrendingTopic {
   id: number;
@@ -41,9 +46,53 @@ interface SuggestedUser {
  *    call; on failure we just show a small note.
  */
 export default function SocialRightWidget() {
+  const router = useRouter();
+  const auth = useAuthStore();
   const [trending, setTrending] = useState<TrendingTopic[]>([]);
   const [suggestions, setSuggestions] = useState<SuggestedUser[]>([]);
   const [loaded, setLoaded] = useState(false);
+  // Per-user "starting conversation" state so the button on one
+  // row can show a spinner without freezing the others.
+  const [starting, setStarting] = useState<Record<number, boolean>>({});
+
+  /**
+   * Open a DM thread with a suggested user.
+   *
+   * Flow:
+   *  1. If the viewer is not signed in, bounce to /login with a
+   *     `next` param that takes them straight into /messages
+   *     pre-opened on the right thread.
+   *  2. Otherwise ask the backend to (idempotently) create the
+   *     thread and store the id on the messaging store, then
+   *     navigate to /messages?peer=<id> so the page can
+   *     select it on mount.
+   *
+   * The navigate step runs even if the API call fails — same
+   * pattern as MessageButton on the profile page — so the user
+   * always lands somewhere useful. Errors surface as toasts.
+   */
+  const handleMessage = async (userId: number) => {
+    if (starting[userId]) return;
+    if (!auth.isAuthenticated) {
+      router.push(`/login?next=/messages?peer=${userId}`);
+      return;
+    }
+    setStarting((s) => ({ ...s, [userId]: true }));
+    try {
+      await useMessagingStore.getState().startUserThread(userId);
+    } catch (e: any) {
+      const msg =
+        e?.response?.data?.code === 'MESSAGES_DISABLED'
+          ? 'Người dùng này không nhận tin nhắn từ người lạ'
+          : e?.userFriendlyMessage ?? e?.message ?? 'Không thể mở cuộc trò chuyện';
+      toast.error(msg);
+    } finally {
+      setStarting((s) => ({ ...s, [userId]: false }));
+    }
+    // Always navigate so the user lands in /messages even if the
+    // pre-create failed (the page retries on mount).
+    router.push(`/messages?peer=${userId}`);
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -161,36 +210,50 @@ export default function SocialRightWidget() {
         >
           <h3 className="text-sm font-semibold text-text-primary mb-3">Gợi ý kết nối</h3>
           <ul className="space-y-3">
-            {suggestions.map((u) => (
-              <li key={u.id} className="flex items-center gap-2.5">
-                <Link
-                  href={`/profile/${u.id}`}
-                  className="flex flex-1 items-center gap-2.5 min-w-0 rounded-lg px-1 py-1 -mx-1 hover:bg-white/[0.04] transition-colors"
-                >
-                  {u.avatarUrl ? (
-                    <img src={u.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
-                  ) : (
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-xs font-bold text-white">
-                      {(u.displayName || u.fullName || u.username).charAt(0).toUpperCase()}
+            {suggestions.map((u) => {
+              const isStarting = !!starting[u.id];
+              return (
+                <li key={u.id} className="flex items-center gap-2.5">
+                  <Link
+                    href={`/profile/${u.id}`}
+                    className="flex flex-1 items-center gap-2.5 min-w-0 rounded-lg px-1 py-1 -mx-1 hover:bg-white/[0.04] transition-colors"
+                  >
+                    {u.avatarUrl ? (
+                      <img src={u.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
+                    ) : (
+                      <div className="h-8 w-8 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-xs font-bold text-white">
+                        {(u.displayName || u.fullName || u.username).charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-text-primary truncate">
+                        {u.displayName || u.fullName || u.username}
+                      </p>
+                      <p className="text-[10px] text-text-muted truncate">@{u.username}</p>
                     </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-text-primary truncate">
-                      {u.displayName || u.fullName || u.username}
-                    </p>
-                    <p className="text-[10px] text-text-muted truncate">@{u.username}</p>
-                  </div>
-                </Link>
-                <Link
-                  href={`/profile/${u.id}`}
-                  aria-label={`Xem hồ sơ của ${u.displayName || u.fullName || u.username}`}
-                  className="rounded-lg px-2.5 py-1 text-[10px] font-medium text-text-secondary hover:text-text-primary border border-white/[0.08] hover:border-white/[0.2] transition-colors flex items-center gap-1"
-                >
-                  Xem
-                  <ExternalLink className="h-2.5 w-2.5" />
-                </Link>
-              </li>
-            ))}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => handleMessage(u.id)}
+                    disabled={isStarting}
+                    aria-label={`Nhắn tin với ${u.displayName || u.fullName || u.username}`}
+                    className="rounded-lg px-2.5 py-1 text-[10px] font-medium text-white transition-all hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 flex items-center gap-1"
+                    style={{ background: 'linear-gradient(90deg, #06B6D4, #6366F1)' }}
+                  >
+                    <MessageSquare className="h-2.5 w-2.5" />
+                    {isStarting ? 'Đang mở…' : 'Nhắn tin'}
+                  </button>
+                  <Link
+                    href={`/profile/${u.id}`}
+                    aria-label={`Xem hồ sơ của ${u.displayName || u.fullName || u.username}`}
+                    className="rounded-lg px-2.5 py-1 text-[10px] font-medium text-text-secondary hover:text-text-primary border border-white/[0.08] hover:border-white/[0.2] transition-colors flex items-center gap-1"
+                  >
+                    Xem
+                    <ExternalLink className="h-2.5 w-2.5" />
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

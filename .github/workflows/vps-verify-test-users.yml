@@ -23,8 +23,8 @@ jobs:
       - name: Mark test users email verified
         run: |
           ssh vps "
-            docker exec cuonghoangdev_postgres psql -U cuonghoangdev -d cuonghoangdev -c \
+            docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev_db -c \
               \"UPDATE users SET email_verified = true, is_email_verified = true WHERE username IN ('testmsga_001', 'testmsgb_001', 'testmsg_otp1');\" 2>&1
-            docker exec cuonghoangdev_postgres psql -U cuonghoangdev -d cuonghoangdev -c \
+            docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev_db -c \
               \"SELECT id, username, email_verified, is_email_verified FROM users WHERE username LIKE 'testmsg%';\" 2>&1
           "

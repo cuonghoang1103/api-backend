@@ -1,4 +1,4 @@
-name: VPS - URGENT: Recover frontend container
+name: URGENT Fix Frontend Container
 
 on:
   workflow_dispatch:

@@ -682,6 +682,7 @@ router.get('/semester/:semesterId', optionalAuth, async (req, res: Response<ApiR
     });
 
     const serialized = await Promise.all(courses.map((course) => serializeCourse(course.id, req.userId ? { userId: req.userId } : undefined)));
+    res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=600');
     res.json({ success: true, data: serialized });
   } catch (error) { next(error); }
 });

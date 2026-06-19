@@ -2,46 +2,39 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { academyApi } from '@/lib/api';
 import type { Course, Semester } from '@/types';
-import { BookOpen, ChevronDown, ChevronRight, GraduationCap, Layers3, Loader2, PlayCircle } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronRight, GraduationCap, Layers3, PlayCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import AcademyBackground from '@/components/academy/AcademyBackground';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { useSemesters, useCoursesBySemesters } from '@/hooks/useAcademyQueries';
 
 export default function AcademyPage() {
-  const [semesters, setSemesters] = useState<Semester[]>([]);
-  const [coursesBySemester, setCoursesBySemester] = useState<Record<number, Course[]>>({});
+  const { data: semesters = [], isLoading: loadingSemesters, error: semestersError } = useSemesters();
+  const coursesQueries = useCoursesBySemesters(semesters);
+
+  // Build the courses-by-semester map once all parallel queries finish.
+  const coursesBySemester = useMemo<Record<number, Course[]>>(() => {
+    const map: Record<number, Course[]> = {};
+    semesters.forEach((semester, idx) => {
+      map[semester.id] = coursesQueries[idx]?.data ?? [];
+    });
+    return map;
+  }, [semesters, coursesQueries]);
+
+  const loading = loadingSemesters || coursesQueries.some((q) => q.isLoading && !q.data);
+
   const [expanded, setExpanded] = useState<number[]>([]);
-  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    // Auto-expand the first two semesters once data arrives.
+    if (semesters.length > 0 && expanded.length === 0) {
+      setExpanded(semesters.slice(0, 2).map((s) => s.id));
+    }
+  }, [semesters, expanded.length]);
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        const semesterRes = await academyApi.getSemesters();
-        const semesterRows = semesterRes.data.data || [];
-        setSemesters(semesterRows);
-        setExpanded(semesterRows.slice(0, 2).map((item: Semester) => item.id));
-
-        const entries = await Promise.all(
-          semesterRows.map(async (semester: Semester) => {
-            const courseRes = await academyApi.getCoursesBySemester(semester.id);
-            return [semester.id, courseRes.data.data || []] as const;
-          })
-        );
-
-        setCoursesBySemester(Object.fromEntries(entries));
-      } catch (error) {
-        console.error(error);
-        toast.error('Không tải được Academy FPT');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    load();
-  }, []);
+    if (semestersError) toast.error('Không tải được Academy FPT');
+  }, [semestersError]);
 
   const totalCourses = useMemo(
     () => Object.values(coursesBySemester).reduce((sum, courses) => sum + courses.length, 0),
@@ -53,15 +46,6 @@ export default function AcademyPage() {
       ? prev.filter((item) => item !== semesterId)
       : [...prev, semesterId]);
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen pt-24 flex items-center justify-center" style={{ background: '#050314' }}>
-        <AcademyBackground />
-        <Loader2 className="w-10 h-10 animate-spin text-neon-violet" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen pt-24 pb-16" style={{ background: '#050314' }}>

@@ -12,6 +12,7 @@ router.get('/semesters', async (_req, res: Response<ApiResponse>, next) => {
       where: { isActive: true },
       orderBy: [{ ordinal: 'asc' }, { id: 'asc' }],
     });
+    res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
     res.json({ success: true, data: semesters });
   } catch (error) {
     next(error);

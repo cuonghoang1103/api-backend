@@ -58,8 +58,7 @@ jobs:
       - name: Restart backend to pick up new env
         run: |
           echo "=== Stop and recreate backend so it reads new .env ==="
-          ssh vps "cd /opt/cuonghoangdev && docker compose stop backend 2>&1 || true"
-          ssh vps "cd /opt/cuonghoangdev && docker compose rm -f backend 2>&1 || true"
+          ssh vps "cd /opt/cuonghoangdev && (docker compose stop backend 2>&1 || true) && (docker compose rm -f backend 2>&1 || true) && (docker rm -f cuonghoangdev_backend 2>&1 || true)"
           ssh vps "cd /opt/cuonghoangdev && docker compose up -d --no-deps backend 2>&1"
           sleep 20
           echo "=== Container status ==="

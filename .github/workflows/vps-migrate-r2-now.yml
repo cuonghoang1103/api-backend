@@ -23,8 +23,7 @@ jobs:
       - name: Force-recreate backend so it reads new .env
         run: |
           echo "=== Stopping and removing old backend container ==="
-          ssh vps "cd /opt/cuonghoangdev && docker compose stop backend 2>&1 || true"
-          ssh vps "cd /opt/cuonghoangdev && docker compose rm -f backend 2>&1 || true"
+          ssh vps "cd /opt/cuonghoangdev && (docker compose stop backend 2>&1 || true) && (docker compose rm -f backend 2>&1 || true) && (docker rm -f cuonghoangdev_backend 2>&1 || true)"
           echo "=== Recreating backend container ==="
           ssh vps "cd /opt/cuonghoangdev && docker compose up -d --no-deps backend 2>&1"
           sleep 20

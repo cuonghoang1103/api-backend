@@ -424,43 +424,43 @@ export class AIService {
         });
 
         let fullResponse = '';
-        // Use a real timeout to detect stalls: if no chunk arrives within
-        // 8s, abort the stream and raise an error so the outer SSE
-        // handler can return an error frame quickly. Without this, the
-        // OpenAI SDK can hang on "Premature close" indefinitely and the
-        // user sees the spinner spin for tens of seconds.
+        // Idle-watchdog: if no chunk arrives within 8s, abort the stream
+        // controller and throw so the outer catch returns an error
+        // frame. Without this the OpenAI SDK can stall on
+        // "Premature close" and the user sees the spinner spin for
+        // tens of seconds.
         const STREAM_IDLE_TIMEOUT_MS = 8_000;
-        const iterator = stream[Symbol.asyncIterator]();
-        let timedOut = false;
+        let lastActivity = Date.now();
+        let abortTimer: ReturnType<typeof setTimeout> | null = null;
+
+        const armIdleTimer = () => {
+          if (abortTimer) clearTimeout(abortTimer);
+          abortTimer = setTimeout(() => {
+            try { stream.controller?.abort?.(); } catch {}
+          }, STREAM_IDLE_TIMEOUT_MS);
+        };
+        armIdleTimer();
 
         try {
-          while (true) {
-            const nextP = iterator.next();
-            let to: ReturnType<typeof setTimeout> | null = null;
-            const timeoutPromise = new Promise<never>((_, reject) => {
-              to = setTimeout(() => {
-                timedOut = true;
-                try { stream.controller?.abort?.(); } catch {}
-                reject(new Error('Stream idle timeout'));
-              }, STREAM_IDLE_TIMEOUT_MS);
-            });
-            let value: IteratorResult<unknown>;
-            try {
-              value = await Promise.race([nextP, timeoutPromise]);
-            } finally {
-              if (to) clearTimeout(to);
-            }
-            if (value.done) break;
-            const chunk = value.value as { choices?: Array<{ delta?: { content?: string } }> } | undefined;
-            const chunkText = chunk?.choices?.[0]?.delta?.content || '';
+          for await (const chunk of stream) {
+            const chunkText = chunk.choices?.[0]?.delta?.content || '';
             if (chunkText) {
               fullResponse += chunkText;
               yield chunkText;
             }
+            // Reset the idle timer whenever we get a chunk
+            lastActivity = Date.now();
+            armIdleTimer();
           }
+        } catch (err) {
+          // If we timed out (controller aborted), surface a clean error.
+          if (Date.now() - lastActivity >= STREAM_IDLE_TIMEOUT_MS) {
+            throw new Error('Stream idle timeout');
+          }
+          throw err;
         } finally {
+          if (abortTimer) clearTimeout(abortTimer);
           try { stream.controller?.abort?.(); } catch {}
-          if (timedOut) throw new Error('Stream idle timeout');
         }
 
         if (sessionId && fullResponse) {

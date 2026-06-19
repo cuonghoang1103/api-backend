@@ -16,7 +16,7 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
-    domains: ['images.unsplash.com', 'api.cuongthai.com', 'cuongthai.com', 'www.cuongthai.com'],
+    domains: ['images.unsplash.com', 'api.cuongthai.com', 'cuongthai.com', 'www.cuongthai.com', 'media.cuongthai.com'],
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'http', hostname: 'localhost' },
@@ -24,6 +24,14 @@ const nextConfig = {
       { protocol: 'https', hostname: 'api.cuongthai.com' },
       { protocol: 'https', hostname: 'cuongthai.com' },
       { protocol: 'https', hostname: 'www.cuongthai.com' },
+      // Cloudflare R2 custom domain — added when the project
+      // migrated from local-disk uploads to R2 in mid-2026.
+      // Without these entries, any Next.js `<Image>` (and the
+      // CSP that wraps the same allowlist) refuses to load
+      // post covers, avatars, and playlist thumbnails that
+      // are now served from `media.cuongthai.com`.
+      { protocol: 'https', hostname: 'media.cuongthai.com' },
+      { protocol: 'https', hostname: 'e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com' },
     ],
   },
   async headers() {
@@ -112,11 +120,24 @@ const nextConfig = {
               // loads its API script.
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com",
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: blob: https://api.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com",
+              // `media.cuongthai.com` (the R2 custom domain) was
+              // added when the project migrated to Cloudflare R2 in
+              // mid-2026. All new post images, avatars, playlist
+              // covers, and music artwork come from this host.
+              // Without it, browsers silently refuse to load the
+              // images and the audio element refuses to start
+              // playback, even though the network fetch itself
+              // returns HTTP 200. The R2 S3 endpoint is kept as a
+              // fallback for any leftover direct-to-bucket links.
+              "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com",
               "font-src 'self' data:",
-              "connect-src 'self' https://api.cuongthai.com https://*.sentry.io wss://*.sentry.io https://www.youtube.com",
+              "connect-src 'self' https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.sentry.io wss://*.sentry.io https://www.youtube.com",
               "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com",
-              "media-src 'self' https://api.cuongthai.com blob:",
+              // `media-src` controls <audio>/<video> elements and
+              // the Web Audio API. R2 music tracks are streamed
+              // directly from the CDN (no backend hop), so the
+              // domain must be allowed here.
+              "media-src 'self' https://api.cuongthai.com https://media.cuongthai.com blob:",
               "worker-src 'self' blob:",
               "object-src 'none'",
               "base-uri 'self'",

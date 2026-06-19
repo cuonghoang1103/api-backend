@@ -107,6 +107,7 @@ router.get(
         totalPages: Number(pag.totalPages),
       };
 
+      res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
       res.json({
         success: true,
         data: serializedData,
@@ -564,6 +565,7 @@ router.get(
     try {
       const playlists = await musicService.getPlaylists(req.userId);
       const serialized = serializePlaylists(playlists);
+      res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
       res.json({ success: true, data: serialized });
     } catch (error) {
       next(error);
@@ -590,6 +592,7 @@ router.get(
       }
 
       const serialized = serializePlaylist(playlist);
+      res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
       res.json({ success: true, data: serialized });
     } catch (error) {
       next(error);
@@ -1175,8 +1178,14 @@ async function handleYouTubeSearch(
         trackTitle = trackTitle.replace(pat, '').trim();
       }
 
+      const thumbnails = snippet.thumbnails as Record<string, { url?: string }> | undefined;
       const thumbnail =
-        snippet.thumbnails?.medium?.url || snippet.thumbnails?.high?.url || '';
+        thumbnails?.['maxresdefault']?.url ||
+        thumbnails?.high?.url ||
+        thumbnails?.medium?.url ||
+        thumbnails?.standard?.url ||
+        thumbnails?.default?.url ||
+        '';
 
       const rawDuration = durationMap[videoId] || '';
       const duration = parseYouTubeDuration(rawDuration);

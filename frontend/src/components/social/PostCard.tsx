@@ -14,6 +14,7 @@ import { socialApi } from '@/lib/api';
 import { RenderContentWithCode } from '@/components/social/CodeBlock';
 import PostPoll from '@/components/social/PostPoll';
 import { useAuthStore } from '@/store/authStore';
+import { getMediaUrl } from '@/lib/utils';
 import type { SocialPost, SocialComment, SocialMedia } from '@/types/social';
 import { formatRelative } from '@/lib/formatDate';
 import { toast } from 'sonner';
@@ -39,7 +40,14 @@ const REACTIONS = [
 
 const MAX_PREVIEW_LENGTH = 600;
 
-export function PostCard({ post }: PostCardProps) {
+interface PostCardProps {
+  post: SocialPost;
+  onToggleLike?: (postId: number) => Promise<void>;
+  onToggleSave?: (postId: number) => Promise<void>;
+  onDelete?: (postId: number) => Promise<void>;
+}
+
+export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -177,7 +185,11 @@ export function PostCard({ post }: PostCardProps) {
   const handleDelete = async () => {
     if (!confirm('Bạn có chắc muốn xoá bài viết này?')) return;
     try {
-      await deletePost(post.id);
+      if (onDelete) {
+        await onDelete(post.id);
+      } else {
+        await deletePost(post.id);
+      }
       toast.success('Đã xoá bài viết');
       setShowMoreMenu(false);
     } catch (err: any) {
@@ -407,7 +419,7 @@ export function PostCard({ post }: PostCardProps) {
             onMouseEnter={() => setShowReactions(false)}
           >
             <button
-              onClick={() => toggleLike(post.id)}
+              onClick={() => { if (onToggleLike) { onToggleLike(post.id); } else { toggleLike(post.id); } }}
               onMouseDown={startLongPress}
               onMouseUp={cancelLongPress}
               onMouseLeave={(e) => {
@@ -440,7 +452,7 @@ export function PostCard({ post }: PostCardProps) {
                   {REACTIONS.map((r) => (
                     <button
                       key={r.key}
-                      onClick={() => { setShowReactions(false); toggleLike(post.id); }}
+                      onClick={() => { setShowReactions(false); if (onToggleLike) { onToggleLike(post.id); } else { toggleLike(post.id); } }}
                       className="text-xl hover:scale-125 transition-transform px-1.5"
                       title={r.label}
                     >
@@ -479,7 +491,7 @@ export function PostCard({ post }: PostCardProps) {
             icon={<Bookmark size={16} fill={safeIsSaved ? '#f59e0b' : 'none'} />}
             count={safeSavesCount}
             label="Lưu"
-            onClick={() => toggleSave(post.id)}
+            onClick={() => { if (onToggleSave) { onToggleSave(post.id); } else { toggleSave(post.id); } }}
           />
 
           {/* Share menu */}
@@ -640,7 +652,7 @@ function MediaGrid({ media }: { media: SocialMedia[] }) {
       <div className="mt-3">
         <MediaItem
           item={visual[0]}
-          onClick={() => setLightboxSrc(visual[0].url)}
+          onClick={() => setLightboxSrc(getMediaUrl(visual[0].url, visual[0].url))}
           autoPlayEnabled={visual[0].type === 'VIDEO'}
         />
         {files.length > 0 && (
@@ -674,7 +686,10 @@ function MediaGrid({ media }: { media: SocialMedia[] }) {
               gridColumn: i === 0 && visual.length === 3 ? 'span 2' : 'span 1',
             }}
           >
-            <MediaItem item={item} onClick={() => setLightboxSrc(item.url)} />
+            <MediaItem
+              item={item}
+              onClick={() => setLightboxSrc(getMediaUrl(item.url, item.url))}
+            />
             {i === 3 && visual.length > 4 && (
               <div
                 className="absolute inset-0 flex items-center justify-center text-2xl font-bold"
@@ -842,8 +857,8 @@ function MediaItem({
         {autoPlayEnabled ? (
           <video
             ref={videoRef}
-            src={item.url}
-            poster={item.thumbnail ?? undefined}
+            src={getMediaUrl(item.url, item.url)}
+            poster={item.thumbnail ? getMediaUrl(item.thumbnail, item.thumbnail) : undefined}
             muted={muted}
             loop
             playsInline
@@ -852,7 +867,7 @@ function MediaItem({
           />
         ) : (
           <img
-            src={item.thumbnail || item.url}
+            src={getMediaUrl(item.thumbnail || item.url, item.thumbnail || item.url)}
             alt={item.alt || ''}
             loading="lazy"
             decoding="async"
@@ -900,10 +915,13 @@ function MediaItem({
     );
   }
 
-  const imgUrl =
-    typeof item.url === 'string' && item.url.startsWith('/')
-      ? `https://api.cuongthai.com${item.url}`
-      : (item.url ?? '');
+  // Post media urls can be:
+  //   - a full https URL (R2 public CDN or any other host) → as-is
+  //   - an R2 bucket key (no leading slash, no `uploads/`) → CDN
+  //   - a relative path starting with `/` → backend origin
+  // getMediaUrl() handles all three so legacy local uploads
+  // and new R2 uploads both render.
+  const imgUrl = getMediaUrl(item.url, item.url) || '';
 
   return (
     <button onClick={onClick} className="relative h-full w-full overflow-hidden">
@@ -1148,6 +1166,43 @@ function YouTubeEmbed({ url }: { url: string }) {
           className="absolute inset-0 h-full w-full"
           loading="lazy"
         />
+      </div>
+    </div>
+  );
+}
+
+// ─── Skeleton loader ───────────────────────────────────────────────
+
+export function PostSkeleton() {
+  return (
+    <div
+      className="rounded-2xl p-5"
+      style={{
+        background: 'rgba(255,255,255,0.02)',
+        border: '1px solid rgba(255,255,255,0.06)',
+        backdropFilter: 'blur(20px)',
+      }}
+    >
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-full animate-pulse" style={{ background: 'rgba(255,255,255,0.08)' }} />
+        <div className="flex-1 space-y-2">
+          <div className="h-3 w-24 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.08)' }} />
+          <div className="h-2.5 w-16 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
+        </div>
+        <div className="w-6 h-6 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
+      </div>
+      {/* Content lines */}
+      <div className="space-y-2 mb-4">
+        <div className="h-3 w-full rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.06)' }} />
+        <div className="h-3 w-5/6 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.06)' }} />
+        <div className="h-3 w-4/6 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.06)' }} />
+      </div>
+      {/* Action bar */}
+      <div className="flex items-center gap-6 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div className="h-7 w-16 rounded-lg animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
+        <div className="h-7 w-16 rounded-lg animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
+        <div className="h-7 w-16 rounded-lg animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
       </div>
     </div>
   );

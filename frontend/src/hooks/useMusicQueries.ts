@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Track, Playlist, PlaylistSummary } from '@/types';
+import { getMediaUrl } from '@/lib/utils';
 
 // ─── API fetch helpers ────────────────────────────────────────────────────────
 
@@ -53,12 +54,9 @@ function normalizeTrack(raw: RawTrack): Track {
 }
 
 function buildPlaybackUrl(raw: RawTrack): string {
-  if (raw.audioUrl?.trim()) return raw.audioUrl;
-  if (raw.localPath?.trim()) {
-    const normalized = raw.localPath.replace(/^\/+/, '');
-    return `/uploads/${normalized}`;
-  }
-  return `/api/v1/music/stream/${raw.id}`;
+  // Resolves R2 keys, legacy local paths, and remote audio URLs
+  // through the shared helper. See lib/utils.ts#getMediaUrl.
+  return getMediaUrl(raw.localPath, raw.audioUrl, raw.id);
 }
 
 export function formatDuration(seconds: number): string {
@@ -273,6 +271,8 @@ export function usePlaylists() {
     queryKey: playlistKeys(),
     queryFn: () =>
       fetchJson<{ success: boolean; data: PlaylistSummary[] }>('/api/v1/music/playlists'),
+    staleTime: 60_000,
+    gcTime: 10 * 60_000,
   });
 }
 
@@ -285,7 +285,8 @@ export function usePlaylistDetail(id: number | null) {
     queryFn: () =>
       fetchJson<{ success: boolean; data: Playlist }>(`/api/v1/music/playlists/${id}`),
     enabled: id != null && id > 0,
-    staleTime: 30_000,
+    staleTime: 60_000,    // 1 minute — playlist data rarely changes
+    gcTime: 10 * 60_000, // 10 minutes
   });
 }
 

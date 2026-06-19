@@ -55,6 +55,7 @@ import {
   votePoll,
   getPollForViewer,
 } from '../services/social.service.js';
+import { notifyAdminPost } from '../services/notification.service.js';
 
 const router = Router();
 
@@ -120,6 +121,19 @@ router.post(
         poll,
       });
 
+      // Fan out to all users if the poster is an admin
+      void (async () => {
+        try {
+          const user = await prisma.user.findUnique({
+            where: { id: userId },
+            include: { roles: { include: { role: true } } },
+          });
+          if (user?.roles.some((ur) => ['ROLE_ADMIN', 'ADMIN', 'SUPER_ADMIN'].includes(ur.role.name))) {
+            await notifyAdminPost(userId, post.id, typeof content === 'string' ? content.slice(0, 80) : undefined);
+          }
+        } catch { /* non-fatal */ }
+      })();
+
       res.status(201).json({ success: true, data: post });
     } catch (error) {
       next(error);
@@ -146,6 +160,10 @@ router.post(
         currentUserId,
       });
 
+      // Short-lived cache: social feed changes frequently, so we only cache
+      // for 30s on the client side. stale-while-revalidate gives the CDN
+      // (if any) a window to serve stale while revalidating.
+      res.set('Cache-Control', 'private, max-age=30, stale-while-revalidate=60');
       res.json({ success: true, ...result });
     } catch (error) {
       next(error);

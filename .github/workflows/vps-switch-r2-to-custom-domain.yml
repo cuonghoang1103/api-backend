@@ -85,15 +85,11 @@ jobs:
         run: |
           ssh vps "
             set -e
-            cd /opt/cuonghoangdev
-
-            # Copy the script into the container so we don't need
-            # host bind mounts (the workflow runs docker exec, which
-            # doesn't accept -v here without root). After this the
-            # script is available at /tmp/migrate-r2-urls.ts inside
-            # the container.
+            # Copy into /app/scripts so node resolution finds @prisma/client
+            # in /app/node_modules (when the script is at /tmp/, Node only
+            # searches /tmp/node_modules which doesn't exist).
             docker cp /opt/cuonghoangdev/scripts/migrate-r2-urls.ts \
-              cuonghoangdev_backend:/tmp/migrate-r2-urls.ts
+              cuonghoangdev_backend:/app/scripts/migrate-r2-urls.ts
 
             docker exec \
               -e OLD_HOST='${{ env.OLD_HOST }}' \
@@ -102,13 +98,10 @@ jobs:
               cuonghoangdev_backend sh -c '
                 cd /app
                 if [ ! -f node_modules/.bin/tsx ]; then
-                  echo \"[WARN] tsx not found, installing...\"
                   npm install --no-save tsx 2>&1 | tail -3
                 fi
-                OLD_HOST=\"\$OLD_HOST\" \
-                NEW_HOST=\"\$NEW_HOST\" \
-                DRY_RUN=\"\$DRY_RUN\" \
-                  npx tsx /tmp/migrate-r2-urls.ts
+                OLD_HOST=\"\$OLD_HOST\" NEW_HOST=\"\$NEW_HOST\" DRY_RUN=\"\$DRY_RUN\" \
+                  npx tsx /app/scripts/migrate-r2-urls.ts
               '
           "
 

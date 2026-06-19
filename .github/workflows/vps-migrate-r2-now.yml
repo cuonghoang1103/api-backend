@@ -39,9 +39,11 @@ jobs:
         run: |
           ssh vps "
             set -e
-            cd /opt/cuonghoangdev
+            # Copy into /app/scripts so node resolution finds @prisma/client
+            # in /app/node_modules.
             docker cp /opt/cuonghoangdev/scripts/migrate-r2-urls.ts \
-              cuonghoangdev_backend:/tmp/migrate-r2-urls.ts
+              cuonghoangdev_backend:/app/scripts/migrate-r2-urls.ts
+
             docker exec \
               -e OLD_HOST='${{ env.OLD_HOST }}' \
               -e NEW_HOST='${{ env.NEW_HOST }}' \
@@ -52,7 +54,7 @@ jobs:
                   npm install --no-save tsx 2>&1 | tail -3
                 fi
                 OLD_HOST=\"\$OLD_HOST\" NEW_HOST=\"\$NEW_HOST\" DRY_RUN=\"\$DRY_RUN\" \
-                  npx tsx /tmp/migrate-r2-urls.ts
+                  npx tsx /app/scripts/migrate-r2-urls.ts
               '
           "
 

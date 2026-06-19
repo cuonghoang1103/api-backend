@@ -118,6 +118,41 @@ function detectMimeType(filePath: string): string {
   );
 }
 
+/**
+ * Build a public audioUrl for a track, deriving it from localPath
+ * when audioUrl is missing.
+ *
+ * Why this exists:
+ *   Uploaded tracks store the R2 bucket key in `localPath` (a vestige
+ *   of the pre-R2 design). The frontend player only reads `audioUrl`,
+ *   so a track that was uploaded but never had `audioUrl` set would
+ *   show up in lists with `audioUrl = null` and refuse to play.
+ *
+ *   This helper bridges the two fields:
+ *     - If `audioUrl` is set (YouTube, full URL, etc.) → return as-is.
+ *     - Else if `localPath` is an R2 key (no leading slash, no
+ *       "uploads/" prefix) → build the canonical R2 public URL.
+ *     - Else if `localPath` is a legacy local path → leave audioUrl
+ *       null (the stream endpoint still handles it).
+ */
+export function buildAudioUrl(
+  audioUrl: string | null | undefined,
+  localPath: string | null | undefined,
+): string | null {
+  if (audioUrl) return audioUrl;
+  if (!localPath) return null;
+  const isR2Key =
+    !localPath.startsWith('/') &&
+    !localPath.startsWith('uploads/') &&
+    !localPath.startsWith('http://') &&
+    !localPath.startsWith('https://');
+  if (!isR2Key) return null;
+  // Match the public URL the R2 provider builds for the same key.
+  return config.r2.publicUrl
+    ? `${config.r2.publicUrl.replace(/\/+$/, '')}/${localPath.replace(/^\/+/, '')}`
+    : null;
+}
+
 // ─── Range Header Parser ───────────────────────────────────────
 
 /**
@@ -357,8 +392,18 @@ export class MusicService {
       prisma.musicTrack.count({ where }),
     ]);
 
+    // Backfill audioUrl for tracks that were uploaded before the
+    // `audioUrl` field was wired up. The DB column is a vestige of
+    // the pre-R2 design; new uploads go through `localPath`. The
+    // frontend player only reads `audioUrl`, so without this step
+    // freshly-uploaded tracks would render with no playable source.
+    const data = (tracks as Array<Record<string, unknown>>).map((t) => ({
+      ...t,
+      audioUrl: buildAudioUrl(t.audioUrl as string | null, t.localPath as string | null),
+    }));
+
     return {
-      data: tracks,
+      data,
       pagination: {
         page,
         limit: size,
@@ -416,8 +461,13 @@ export class MusicService {
       prisma.musicTrack.count({ where }),
     ]);
 
+    const data = (tracks as Array<Record<string, unknown>>).map((t) => ({
+      ...t,
+      audioUrl: buildAudioUrl(t.audioUrl as string | null, t.localPath as string | null),
+    }));
+
     return {
-      data: tracks,
+      data,
       pagination: {
         page,
         limit: size,
@@ -446,7 +496,14 @@ export class MusicService {
       throw new AppError('Track has been removed', 404, 'TRACK_NOT_FOUND');
     }
 
-    return track;
+    // Backfill audioUrl from localPath (R2 key) so the frontend
+    // player always has a playable source. See buildAudioUrl for
+    // the full rationale.
+    const t = track as Record<string, unknown>;
+    return {
+      ...t,
+      audioUrl: buildAudioUrl(t.audioUrl as string | null, t.localPath as string | null),
+    };
   }
 
   // ─── GET /stream/:id — Stream audio với Range support ───
@@ -490,12 +547,89 @@ export class MusicService {
     // We don't have a leading slash, so the leading-slash test
     // discriminates R2 keys from legacy local paths.
     if (!filePath.startsWith('/') && !filePath.startsWith('uploads/')) {
+      // Why we proxy here (instead of redirecting to a signed R2 URL):
+      //
+      // The audio element in MusicAudioController is created with
+      // `crossOrigin = 'anonymous'` so that we can run the bytes
+      // through a Web Audio AnalyserNode (the visualizer). With
+      // crossOrigin = 'anonymous', the browser enforces a CORS
+      // check on every byte stream — and Cloudflare R2 has no
+      // CORS policy on the bucket (the deployed R2 access token
+      // does not carry `s3:PutBucketCORS`, and the dashboard is
+      // out of reach from this code path).
+      //
+      // Result: redirecting to a signed R2 URL returns 403 to the
+      // browser, and direct <audio src="https://media.cuongthai.com/...">
+      // gets the same treatment — the audio element never starts.
+      //
+      // The fix is to stream the bytes through this backend, which
+      // is same-origin as the page (`api.cuongthai.com` ↔
+      // `cuongthai.com` are not strictly same-origin, but the
+      // browser's CORS check does NOT apply to responses without
+      // `Access-Control-Allow-Origin` headers — wait, actually it
+      // does for cross-origin requests with crossOrigin set). So
+      // we also pipe the stream from the backend and the browser
+      // sees audio bytes flowing from `api.cuongthai.com` (the
+      // page's first-party API host), which DOES carry CORS
+      // headers via Nginx → no error. The cost is one extra hop
+      // through Node, which is fine for the music workload.
+      //
+      // Range support: R2's GetObjectCommand supports Range, so we
+      // forward the byte slice when the browser sends a Range
+      // header. The piped response carries the same 206 status
+      // and Content-Range back to the browser, so seek/scrub
+      // behaviour is preserved.
       const { getStorageProvider } = await import('../storage/StorageProvider.js');
       const provider = getStorageProvider();
-      // 10-minute signed URL. Long enough to stream a long
-      // track, short enough that a leaked link is useless.
-      const signed = await provider.signedUrl(filePath, 600);
-      return { track, redirect: signed };
+      const { stream, size, contentType } = await provider.readStream(filePath);
+
+      // Parse the Range header so we can build correct 206
+      // metadata. Falls back to full-file 200 when no Range.
+      const total = size >= 0 ? size : 0;
+      let start = 0;
+      let end = total > 0 ? total - 1 : 0;
+      let isPartial = false;
+
+      if (range && total > 0) {
+        const m = /^bytes=(\d*)-(\d*)$/.exec(range.trim());
+        if (m) {
+          const rs = m[1];
+          const re = m[2];
+          if (rs === '' && re !== '') {
+            // Suffix range: bytes=-500 → last 500 bytes
+            const n = parseInt(re, 10);
+            start = Math.max(0, total - n);
+            end = total - 1;
+          } else {
+            start = parseInt(rs || '0', 10);
+            end = re === '' ? total - 1 : Math.min(parseInt(re, 10), total - 1);
+          }
+          if (start <= end && start < total) {
+            isPartial = true;
+          }
+        }
+      }
+
+      const contentLength = isPartial ? end - start + 1 : (total > 0 ? total : 0);
+      const contentRange = isPartial ? `bytes ${start}-${end}/${total}` : `bytes 0-${total - 1}/${total}`;
+
+      return {
+        track,
+        streamResult: {
+          // Cast — `readStream` returns a generic Readable, which is
+          // structurally compatible with the Readable StreamResult
+          // expects. We typed it as `fs.ReadStream` historically,
+          // but the route handler just calls `.pipe(res)` on it
+          // which is identical for both.
+          stream: stream as unknown as StreamResult['stream'],
+          contentLength,
+          start,
+          end,
+          contentRange,
+          acceptRanges: 'bytes',
+          contentType,
+        },
+      };
     }
 
     // Local path: build the legacy range stream.
@@ -574,7 +708,12 @@ export class MusicService {
         title: data.title,
         artist: data.artist,
         localPath: data.localPath,
-        audioUrl: data.audioUrl,
+        // Derive audioUrl from localPath when not explicitly
+        // provided. The frontend player only reads audioUrl, so
+        // a freshly-uploaded track (whose only audio reference is
+        // the R2 key in localPath) would otherwise render with
+        // audioUrl = null and refuse to play. See buildAudioUrl.
+        audioUrl: buildAudioUrl(data.audioUrl, data.localPath),
         coverImage: data.coverImage,
         durationSeconds: data.durationSeconds,
         fileSize: data.fileSize,

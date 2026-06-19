@@ -1,0 +1,36 @@
+name: VPS - Test new chunks directly on frontend container
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Check chunks
+        run: |
+          ssh vps "
+            echo '=== Chunks on disk in container ==='
+            docker exec cuonghoangdev_frontend sh -c 'ls -la .next/static/chunks/ 2>/dev/null' | head -30
+
+            echo ''
+            echo '=== Hit the chunk via container directly (bypass nginx) ==='
+            docker exec cuonghoangdev_frontend sh -c 'wget -qO- http://localhost:3000/_next/static/chunks/3916-4130d0ef5ce2db74.js | head -c 200' 2>&1
+
+            echo ''
+            echo '=== Check nginx config ==='
+            cat /opt/cuonghoangdev/nginx/nginx.conf 2>/dev/null | grep -A5 'next/static' | head -15
+          "

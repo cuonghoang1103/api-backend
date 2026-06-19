@@ -57,9 +57,9 @@ jobs:
 
       - name: Restart backend to pick up new env
         run: |
-          echo "=== Restarting backend ==="
-          ssh vps "docker restart cuonghoangdev_backend 2>&1 || docker compose -p cuonghoangdev restart backend 2>&1"
-          sleep 10
+          echo "=== Force-recreating backend so it reads new .env ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose up -d --force-recreate --no-deps backend 2>&1"
+          sleep 12
           echo "=== Container status ==="
           ssh vps "docker ps --filter name=cuonghoangdev --format 'table {{.Names}}\t{{.Status}}'"
 
@@ -86,21 +86,28 @@ jobs:
             set -e
             cd /opt/cuonghoangdev
 
-            # The script lives on the host (rsync'd by CI). Run it
-            # against the running DB by invoking it inside the backend
-            # container with the host file mounted read-only.
-            docker exec -e OLD_HOST='${{ env.OLD_HOST }}' \
-                          -e NEW_HOST='${{ env.NEW_HOST }}' \
-                          -e DRY_RUN=0 \
-                          -v /opt/cuonghoangdev/scripts:/opt/cuonghoangdev/scripts:ro \
-                          cuonghoangdev_backend sh -c '
+            # Copy the script into the container so we don't need
+            # host bind mounts (the workflow runs docker exec, which
+            # doesn't accept -v here without root). After this the
+            # script is available at /tmp/migrate-r2-urls.ts inside
+            # the container.
+            docker cp /opt/cuonghoangdev/scripts/migrate-r2-urls.ts \
+              cuonghoangdev_backend:/tmp/migrate-r2-urls.ts
+
+            docker exec \
+              -e OLD_HOST='${{ env.OLD_HOST }}' \
+              -e NEW_HOST='${{ env.NEW_HOST }}' \
+              -e DRY_RUN=0 \
+              cuonghoangdev_backend sh -c '
                 cd /app
                 if [ ! -f node_modules/.bin/tsx ]; then
                   echo \"[WARN] tsx not found, installing...\"
                   npm install --no-save tsx 2>&1 | tail -3
                 fi
-                OLD_HOST=\$OLD_HOST NEW_HOST=\$NEW_HOST DRY_RUN=\$DRY_RUN \
-                  npx tsx /opt/cuonghoangdev/scripts/migrate-r2-urls.ts
+                OLD_HOST=\"\$OLD_HOST\" \
+                NEW_HOST=\"\$NEW_HOST\" \
+                DRY_RUN=\"\$DRY_RUN\" \
+                  npx tsx /tmp/migrate-r2-urls.ts
               '
           "
 

@@ -32,6 +32,10 @@ const nextConfig = {
       // are now served from `media.cuongthai.com`.
       { protocol: 'https', hostname: 'media.cuongthai.com' },
       { protocol: 'https', hostname: 'e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com' },
+      // Cloudflare R2 public bucket URLs (e.g. pub-*.r2.dev) — used when
+      // R2_PUBLIC_URL is configured to return the bucket's public URL instead
+      // of the custom domain. CSP must allow these for images to render.
+      { protocol: 'https', hostname: '*.r2.dev' },
     ],
   },
   async headers() {
@@ -129,9 +133,9 @@ const nextConfig = {
               // playback, even though the network fetch itself
               // returns HTTP 200. The R2 S3 endpoint is kept as a
               // fallback for any leftover direct-to-bucket links.
-              "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com",
+              "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com",
               "font-src 'self' data:",
-              "connect-src 'self' https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.sentry.io wss://*.sentry.io https://www.youtube.com",
+              "connect-src 'self' https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://*.sentry.io wss://*.sentry.io https://www.youtube.com",
               "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com",
               // `media-src` controls <audio>/<video> elements and
               // the Web Audio API. R2 music tracks are streamed

@@ -430,23 +430,28 @@ export class AIService {
         // OpenAI SDK can hang on "Premature close" indefinitely and the
         // user sees the spinner spin for tens of seconds.
         const STREAM_IDLE_TIMEOUT_MS = 8_000;
-        const withIdleTimeout = async <T>(p: Promise<T>, ms: number): Promise<T> => {
-          let to: ReturnType<typeof setTimeout> | null = null;
-          const timeoutPromise = new Promise<never>((_, reject) => {
-            to = setTimeout(() => reject(new Error('Stream idle timeout')), ms);
-          });
-          try {
-            return await Promise.race([p, timeoutPromise]);
-          } finally {
-            if (to) clearTimeout(to);
-          }
-        };
+        const iterator = stream[Symbol.asyncIterator]();
+        let timedOut = false;
 
         try {
           while (true) {
-            const next = withIdleTimeout(stream[Symbol.asyncIterator]().next(), STREAM_IDLE_TIMEOUT_MS);
-            const { value: chunk, done } = await next;
-            if (done) break;
+            const nextP = iterator.next();
+            let to: ReturnType<typeof setTimeout> | null = null;
+            const timeoutPromise = new Promise<never>((_, reject) => {
+              to = setTimeout(() => {
+                timedOut = true;
+                try { stream.controller?.abort?.(); } catch {}
+                reject(new Error('Stream idle timeout'));
+              }, STREAM_IDLE_TIMEOUT_MS);
+            });
+            let value: IteratorResult<unknown>;
+            try {
+              value = await Promise.race([nextP, timeoutPromise]);
+            } finally {
+              if (to) clearTimeout(to);
+            }
+            if (value.done) break;
+            const chunk = value.value as { choices?: Array<{ delta?: { content?: string } }> } | undefined;
             const chunkText = chunk?.choices?.[0]?.delta?.content || '';
             if (chunkText) {
               fullResponse += chunkText;
@@ -454,8 +459,8 @@ export class AIService {
             }
           }
         } finally {
-          // Best-effort cleanup
-          try { await stream.controller?.abort?.(); } catch {}
+          try { stream.controller?.abort?.(); } catch {}
+          if (timedOut) throw new Error('Stream idle timeout');
         }
 
         if (sessionId && fullResponse) {

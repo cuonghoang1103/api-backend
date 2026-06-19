@@ -85,11 +85,23 @@ jobs:
           ssh vps "
             set -e
             cd /opt/cuonghoangdev
-            OLD_HOST='${{ env.OLD_HOST }}' \
-            NEW_HOST='${{ env.NEW_HOST }}' \
-            DRY_RUN=0 \
-            docker exec -e OLD_HOST -e NEW_HOST -e DRY_RUN=0 \
-              cuonghoangdev_backend sh -c 'cd /app && npx tsx /opt/cuonghoangdev/scripts/migrate-r2-urls.ts'
+
+            # The script lives on the host (rsync'd by CI). Run it
+            # against the running DB by invoking it inside the backend
+            # container with the host file mounted read-only.
+            docker exec -e OLD_HOST='${{ env.OLD_HOST }}' \
+                          -e NEW_HOST='${{ env.NEW_HOST }}' \
+                          -e DRY_RUN=0 \
+                          -v /opt/cuonghoangdev/scripts:/opt/cuonghoangdev/scripts:ro \
+                          cuonghoangdev_backend sh -c '
+                cd /app
+                if [ ! -f node_modules/.bin/tsx ]; then
+                  echo \"[WARN] tsx not found, installing...\"
+                  npm install --no-save tsx 2>&1 | tail -3
+                fi
+                OLD_HOST=\$OLD_HOST NEW_HOST=\$NEW_HOST DRY_RUN=\$DRY_RUN \
+                  npx tsx /opt/cuonghoangdev/scripts/migrate-r2-urls.ts
+              '
           "
 
       - name: Rebuild frontend with new NEXT_PUBLIC_R2_PUBLIC_URL

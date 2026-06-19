@@ -131,7 +131,7 @@ export default function SocialRightWidget() {
             {trending.map((t, idx) => (
               <li key={t.id}>
                 <Link
-                  href={`/social/search?q=%23${encodeURIComponent(t.tag)}`}
+                  href={`/search?q=%23${encodeURIComponent(t.tag)}`}
                   className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs hover:bg-white/[0.04] transition-colors group"
                 >
                   <span className="text-text-muted font-mono w-5 text-right">{idx + 1}.</span>
@@ -163,21 +163,27 @@ export default function SocialRightWidget() {
           <ul className="space-y-3">
             {suggestions.map((u) => (
               <li key={u.id} className="flex items-center gap-2.5">
-                {u.avatarUrl ? (
-                  <img src={u.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
-                ) : (
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-xs font-bold text-white">
-                    {(u.displayName || u.fullName || u.username).charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-text-primary truncate">
-                    {u.displayName || u.fullName || u.username}
-                  </p>
-                  <p className="text-[10px] text-text-muted truncate">@{u.username}</p>
-                </div>
                 <Link
                   href={`/profile/${u.id}`}
+                  className="flex flex-1 items-center gap-2.5 min-w-0 rounded-lg px-1 py-1 -mx-1 hover:bg-white/[0.04] transition-colors"
+                >
+                  {u.avatarUrl ? (
+                    <img src={u.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-xs font-bold text-white">
+                      {(u.displayName || u.fullName || u.username).charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-text-primary truncate">
+                      {u.displayName || u.fullName || u.username}
+                    </p>
+                    <p className="text-[10px] text-text-muted truncate">@{u.username}</p>
+                  </div>
+                </Link>
+                <Link
+                  href={`/profile/${u.id}`}
+                  aria-label={`Xem hồ sơ của ${u.displayName || u.fullName || u.username}`}
                   className="rounded-lg px-2.5 py-1 text-[10px] font-medium text-text-secondary hover:text-text-primary border border-white/[0.08] hover:border-white/[0.2] transition-colors flex items-center gap-1"
                 >
                   Xem

@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { api, coursesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
+import toast from 'react-hot-toast';
 import SocialBackground from '@/components/social/SocialBackground';
 import SocialSidebar from '@/components/social/SocialSidebar';
 import SocialRightWidget from '@/components/social/SocialRightWidget';
@@ -149,7 +150,7 @@ export default function PublicProfilePage() {
 
           <div className="mx-auto w-full min-w-0">
             <Link
-              href="/social"
+              href="/"
               className="mb-4 inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-sm text-text-secondary transition-colors hover:bg-white/[0.04] hover:text-text-primary"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -334,7 +335,11 @@ function MessageButton({ profileId, disabled }: { profileId: number; disabled: b
   const [busy, setBusy] = useState(false);
 
   const handleClick = async () => {
-    if (disabled || busy) return;
+    console.log('[MessageButton] click', { profileId, disabled, busy, authed: auth.isAuthenticated });
+    if (disabled || busy) {
+      if (disabled) toast.error('Người dùng này không nhận tin nhắn từ người lạ');
+      return;
+    }
     if (!auth.isAuthenticated) {
       router.push(`/login?next=/messages?peer=${profileId}`);
       return;
@@ -343,22 +348,22 @@ function MessageButton({ profileId, disabled }: { profileId: number; disabled: b
     try {
       // Pre-create (or fetch) the thread on the backend so the
       // /messages page can open it instantly when the page mounts.
-      // The /messages page subscribes to ?peer=<id> and runs the
-      // same startUserThread() on mount, so this call is just a
-      // warm-up — the UI lives on /messages, not in a floating
-      // widget (we don't ship one).
       const { useMessagingStore } = await import('@/store/messagingStore');
       await useMessagingStore.getState().startUserThread(profileId);
-      router.push(`/messages?peer=${profileId}`);
     } catch (e: any) {
-      const { default: toast } = await import('react-hot-toast');
-      const msg = e?.response?.data?.code === 'MESSAGES_DISABLED'
-        ? 'Người dùng này không nhận tin nhắn từ người lạ'
-        : e?.userFriendlyMessage ?? e?.message ?? 'Không thể mở cuộc trò chuyện';
+      console.error('[MessageButton] startUserThread failed', e);
+      const msg =
+        e?.response?.data?.code === 'MESSAGES_DISABLED'
+          ? 'Người dùng này không nhận tin nhắn từ người lạ'
+          : e?.userFriendlyMessage ?? e?.message ?? 'Không thể mở cuộc trò chuyện';
       toast.error(msg);
+      // Still navigate — the user may want to see the inbox anyway.
     } finally {
       setBusy(false);
     }
+    // Always navigate. If startUserThread failed, the /messages page
+    // will retry on mount and show its own error if needed.
+    router.push(`/messages?peer=${profileId}`);
   };
 
   return (
@@ -367,12 +372,13 @@ function MessageButton({ profileId, disabled }: { profileId: number; disabled: b
         type="button"
         onClick={handleClick}
         disabled={disabled || busy}
+        aria-label={disabled ? 'Người dùng này không nhận tin nhắn' : 'Bắt đầu nhắn tin'}
         title={disabled ? 'Người dùng này không nhận tin nhắn từ người lạ' : undefined}
         className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         style={{ background: 'linear-gradient(90deg, #8B5CF6, #6366F1)' }}
       >
         <MessageSquare className="h-4 w-4" />
-        {disabled ? 'Không nhận tin nhắn' : 'Nhắn tin'}
+        {busy ? 'Đang mở…' : disabled ? 'Không nhận tin nhắn' : 'Nhắn tin'}
       </button>
     </div>
   );

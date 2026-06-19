@@ -90,13 +90,18 @@ function MessagesPageInner() {
   useEffect(() => {
     if (!mounted) return;
     if (!auth.isAuthenticated) {
-      router.replace(`/login?next=/messages`);
+      // Preserve ?peer=... when bouncing to login so the user lands
+      // back on the same conversation after authenticating.
+      const peer = searchParams.get('peer');
+      const next = peer ? `/messages?peer=${peer}` : '/messages';
+      router.replace(`/login?next=${encodeURIComponent(next)}`);
     }
-  }, [mounted, auth.isAuthenticated, router]);
+  }, [mounted, auth.isAuthenticated, router, searchParams]);
 
   // Boot the socket + load threads.
-  // Only run once on first authenticated mount. Reconnect is handled
-  // by the socket itself; manual retry uses the retry button.
+  // Runs once on first authenticated mount. The socket itself
+  // reconnects on transport failures; manual retry uses the
+  // dedicated retry button.
   useEffect(() => {
     if (!mounted || !auth.isAuthenticated) return;
     let cancelled = false;
@@ -143,23 +148,34 @@ function MessagesPageInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mounted, auth.isAuthenticated]);
 
-  // Optional: auto-open a thread if ?peer=<id> is set
+  // Optional: auto-open a thread if ?peer=<id> is set.
+  // Wait until the socket has finished connecting — startUserThread
+  // does a REST round-trip that's safer to issue once the store has
+  // been initialised (avoids a race where the auto-open runs before
+  // the auth probe above has had a chance to log us out).
   useEffect(() => {
     const peerId = searchParams.get('peer');
     if (!peerId || !auth.isAuthenticated) return;
     const pid = parseInt(peerId, 10);
     if (isNaN(pid)) return;
-    const store = useMessagingStore.getState();
-    (async () => {
+    let cancelled = false;
+    const tryOpen = async () => {
+      if (cancelled) return;
       try {
+        const store = useMessagingStore.getState();
         const id = await store.startUserThread(pid);
+        if (cancelled) return;
         await store.openThread(id);
-      } catch {
-        // ignore — user can pick from the sidebar
+      } catch (e) {
+        console.warn('[messages] auto-open thread failed', e);
       }
-    })();
+    };
+    // Run immediately; startUserThread is idempotent. If the socket
+    // is still booting, the request will queue normally.
+    tryOpen();
+    return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, auth.isAuthenticated]);
+  }, [searchParams, auth.isAuthenticated, isConnected]);
 
   if (!mounted || !auth.isAuthenticated) {
     return (

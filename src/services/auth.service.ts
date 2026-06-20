@@ -523,6 +523,8 @@ export class AuthService {
       emailVerified: user.emailVerified,
       // Whether other users (with no prior thread) can DM this user
       allowMessagesFromStrangers: user.allowMessagesFromStrangers,
+      coverPhotoUrl: user.coverPhotoUrl,
+      lastActiveAt: user.lastActiveAt,
       roles: user.roles.map((ur) => ur.role.name),
       role: user.roles[0]?.role.name || 'ROLE_USER',
       roleVersion: Number(user.roleVersion),
@@ -552,6 +554,7 @@ export class AuthService {
     phone?: string | null;
     socialLinks?: Record<string, string> | null;
     allowMessagesFromStrangers?: boolean;
+    coverPhotoUrl?: string | null;
   }) {
     const updates: Record<string, unknown> = {};
 
@@ -650,6 +653,10 @@ export class AuthService {
       // boolean is treated as "off" so a malicious client can't
       // bypass the privacy flag with a truthy non-bool.
       updates.allowMessagesFromStrangers = !!data.allowMessagesFromStrangers;
+    }
+
+    if (data.coverPhotoUrl !== undefined) {
+      updates.coverPhotoUrl = data.coverPhotoUrl?.trim() || null;
     }
 
     return prisma.user.update({

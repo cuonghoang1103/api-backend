@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -12,8 +12,6 @@ import {
   Phone,
   Cake,
   Calendar,
-  MapPin,
-  Link2,
   Github,
   Twitter,
   Linkedin,
@@ -21,48 +19,46 @@ import {
   Facebook,
   Globe,
   ExternalLink,
-  Shield,
   Users,
-  BookOpen,
-  PlayCircle,
-  CheckCircle,
-  Clock,
-  Award,
   MessageSquare,
+  UserPlus,
+  UserMinus,
+  Wifi,
+  WifiOff,
+  Image,
+  Loader2,
 } from 'lucide-react';
-import { api, coursesApi } from '@/lib/api';
+import { api, socialUserApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
+import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import SocialBackground from '@/components/social/SocialBackground';
 import SocialSidebar from '@/components/social/SocialSidebar';
 import SocialRightWidget from '@/components/social/SocialRightWidget';
+import { cn } from '@/lib/utils';
 
 interface PublicProfile {
   id: number;
   username: string;
-  email?: string;
   fullName?: string;
   displayName?: string;
   avatarUrl?: string;
+  coverPhotoUrl?: string;
   bio?: string;
   gender?: 'MALE' | 'FEMALE' | 'OTHER' | null;
   birthYear?: number | null;
   phone?: string | null;
   socialLinks?: Record<string, string> | null;
-  // When false, the user has opted out of receiving messages from
-  // users they don't already have a thread with. Mirrors the
-  // User.allowMessagesFromStrangers column.
   allowMessagesFromStrangers?: boolean;
   roles: string[];
   createdAt: string;
+  isOnline: boolean;
+  lastActiveAt?: string | null;
+  followerCount: number;
+  followingCount: number;
+  isFollowing: boolean;
 }
 
-/**
- * /profile/[id] — view a public user profile. Mirrors the
- * /profile page (own profile) but the fields are read-only and
- * we surface a different "Follow / Message" CTA. If the id
- * matches the signed-in user, we redirect to /profile.
- */
 export default function PublicProfilePage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -72,11 +68,10 @@ export default function PublicProfilePage() {
   const [profile, setProfile] = useState<PublicProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [followingLoading, setFollowingLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
-    // If you're viewing your own profile, send the user to the
-    // editable /profile page instead so they can use the full editor.
     if (currentUser && String(currentUser.id) === String(id)) {
       router.replace('/profile');
       return;
@@ -85,14 +80,10 @@ export default function PublicProfilePage() {
     const load = async () => {
       try {
         setLoading(true);
-        // Public profile endpoint. The path is `/social/users/:id`
-        // — no trailing `/profile`. We try this first, and fall
-        // back to a couple of legacy paths in case the backend
-        // version is older than the frontend.
+        // Try new enhanced endpoint first, fall back to legacy
         const candidates = [
+          `/users/${id}`,
           `/social/users/${id}`,
-          `/social/users/${id}/profile`,
-          `/users/${id}/public`,
         ];
         let resolved: PublicProfile | null = null;
         for (const path of candidates) {
@@ -104,9 +95,6 @@ export default function PublicProfilePage() {
               break;
             }
           } catch (e: any) {
-            // 404 / 401 → try next candidate. Anything else (5xx,
-            // network) bubbles up so the outer catch can show the
-            // generic error.
             if (e?.response?.status && ![404, 401].includes(e.response.status)) {
               throw e;
             }
@@ -117,19 +105,34 @@ export default function PublicProfilePage() {
         } else {
           if (!cancelled) setError('Người dùng không tồn tại');
         }
-      } catch (err: any) {
-        if (!cancelled) {
-          setError('Không thể tải hồ sơ. Vui lòng thử lại.');
-        }
+      } catch {
+        if (!cancelled) setError('Không thể tải hồ sơ. Vui lòng thử lại.');
       } finally {
         if (!cancelled) setLoading(false);
       }
     };
     load();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [id, currentUser, router]);
+
+  const handleFollowToggle = async () => {
+    if (!profile) return;
+    setFollowingLoading(true);
+    try {
+      const res = await socialUserApi.toggleFollow(profile.id);
+      const data = res.data?.data;
+      setProfile(prev => prev ? {
+        ...prev,
+        isFollowing: data?.isFollowing ?? !prev.isFollowing,
+        followerCount: data?.followerCount ?? prev.followerCount + (data?.isFollowing ? 1 : -1),
+      } : prev);
+      toast.success(data?.isFollowing ? `Đã theo dõi ${profile.displayName || profile.username}` : `Đã bỏ theo dõi ${profile.displayName || profile.username}`);
+    } catch (e: any) {
+      toast.error(e?.response?.data?.message || 'Lỗi khi cập nhật');
+    } finally {
+      setFollowingLoading(false);
+    }
+  };
 
   return (
     <main className="min-h-screen" style={{ background: '#03020c' }}>
@@ -162,7 +165,11 @@ export default function PublicProfilePage() {
             ) : error ? (
               <ErrorState message={error} />
             ) : profile ? (
-              <ProfileCard profile={profile} />
+              <ProfileCard
+                profile={profile}
+                onFollowToggle={handleFollowToggle}
+                followingLoading={followingLoading}
+              />
             ) : (
               <ErrorState message="Không tìm thấy người dùng" />
             )}
@@ -177,12 +184,21 @@ export default function PublicProfilePage() {
   );
 }
 
-function ProfileCard({ profile }: { profile: PublicProfile }) {
+function ProfileCard({
+  profile,
+  onFollowToggle,
+  followingLoading,
+}: {
+  profile: PublicProfile;
+  onFollowToggle: () => void;
+  followingLoading: boolean;
+}) {
   const displayName = profile.displayName || profile.fullName || profile.username;
   const normalizedRoles = (profile.roles || []).map((r) =>
     (r || '').replace('ROLE_', '').toUpperCase()
   );
   const isAdmin = normalizedRoles.includes('ADMIN');
+  const isAuthenticated = typeof window !== 'undefined';
 
   return (
     <motion.div
@@ -195,45 +211,60 @@ function ProfileCard({ profile }: { profile: PublicProfile }) {
         backdropFilter: 'blur(20px)',
       }}
     >
-      {/* Cover */}
-      <div className="relative h-40 sm:h-48">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%)',
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 20% 50%, white 1px, transparent 1px)',
-            backgroundSize: '30px 30px',
-          }}
-        />
+      {/* Cover Photo */}
+      <div className="relative h-48 sm:h-56 overflow-hidden">
+        {profile.coverPhotoUrl ? (
+          <img
+            src={profile.coverPhotoUrl}
+            alt="Cover"
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%)',
+            }}
+          >
+            <div
+              className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px)',
+                backgroundSize: '30px 30px',
+              }}
+            />
+          </div>
+        )}
+        {/* Online indicator */}
+        {profile.isOnline && (
+          <div className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/20 px-2.5 py-1 text-[11px] font-medium text-emerald-300 backdrop-blur-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+            </span>
+            Đang hoạt động
+          </div>
+        )}
       </div>
 
-      {/* Avatar + name */}
+      {/* Avatar + name + stats */}
       <div className="relative px-4 pb-4 sm:px-6">
         <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:gap-5">
-          <div className="-mt-14 sm:-mt-16">
+          <div className="-mt-14 sm:-mt-16 z-10">
             <SafeAvatar
               src={profile.avatarUrl}
               alt={displayName || profile.username}
               seed={profile.username}
               size={112}
               rounded="2xl"
-              className="border-4 shadow-2xl"
+              className="border-4 shadow-2xl border-darkbg"
             />
           </div>
           <div className="flex-1 min-w-0 pb-1">
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-2xl font-bold text-text-primary">{displayName}</h1>
               {isAdmin && (
-                <span
-                  className="rounded-full border border-yellow-500/30 bg-yellow-500/15 px-2.5 py-0.5 text-xs font-semibold text-yellow-400"
-                >
+                <span className="rounded-full border border-yellow-500/30 bg-yellow-500/15 px-2.5 py-0.5 text-xs font-semibold text-yellow-400">
                   Administrator
                 </span>
               )}
@@ -241,6 +272,23 @@ function ProfileCard({ profile }: { profile: PublicProfile }) {
             <p className="text-sm" style={{ color: '#94a3b8' }}>
               @{profile.username}
             </p>
+            {/* Follower / Following stats */}
+            <div className="mt-2 flex items-center gap-4">
+              <Link
+                href={`/profile/${profile.id}/followers`}
+                className="flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors"
+              >
+                <strong className="text-text-primary font-semibold">{profile.followerCount}</strong>
+                <span>followers</span>
+              </Link>
+              <Link
+                href={`/profile/${profile.id}/following`}
+                className="flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors"
+              >
+                <strong className="text-text-primary font-semibold">{profile.followingCount}</strong>
+                <span>following</span>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -250,7 +298,7 @@ function ProfileCard({ profile }: { profile: PublicProfile }) {
           </p>
         )}
 
-        {/* Meta */}
+        {/* Meta row */}
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs" style={{ color: '#94a3b8' }}>
           {profile.createdAt && (
             <span className="inline-flex items-center gap-1.5">
@@ -269,12 +317,6 @@ function ProfileCard({ profile }: { profile: PublicProfile }) {
 
       {/* Detail cards */}
       <div className="grid grid-cols-1 gap-3 border-t border-white/[0.04] p-4 sm:grid-cols-2 sm:p-6">
-        {profile.email && (
-          <MetaRow icon={Mail} label="Email" value={profile.email} />
-        )}
-        {profile.phone && (
-          <MetaRow icon={Phone} label="Điện thoại" value={profile.phone} />
-        )}
         {profile.gender && (
           <MetaRow
             icon={User}
@@ -324,61 +366,74 @@ function ProfileCard({ profile }: { profile: PublicProfile }) {
       </div>
 
       {/* Action row */}
-      <MessageButton profileId={profile.id} disabled={profile.allowMessagesFromStrangers === false} />
+      <ActionRow
+        profile={profile}
+        onFollowToggle={onFollowToggle}
+        followingLoading={followingLoading}
+      />
     </motion.div>
   );
 }
 
-function MessageButton({ profileId, disabled }: { profileId: number; disabled: boolean }) {
+function ActionRow({
+  profile,
+  onFollowToggle,
+  followingLoading,
+}: {
+  profile: PublicProfile;
+  onFollowToggle: () => void;
+  followingLoading: boolean;
+}) {
   const router = useRouter();
   const auth = useAuthStore();
-  const [busy, setBusy] = useState(false);
 
-  const handleClick = async () => {
-    console.log('[MessageButton] click', { profileId, disabled, busy, authed: auth.isAuthenticated });
-    if (disabled || busy) {
-      if (disabled) toast.error('Người dùng này không nhận tin nhắn từ người lạ');
-      return;
-    }
+  const handleMessageClick = () => {
     if (!auth.isAuthenticated) {
-      router.push(`/login?next=/messages?peer=${profileId}`);
+      router.push(`/login?next=/messages?peer=${profile.id}`);
       return;
     }
-    setBusy(true);
-    try {
-      // Pre-create (or fetch) the thread on the backend so the
-      // /messages page can open it instantly when the page mounts.
-      const { useMessagingStore } = await import('@/store/messagingStore');
-      await useMessagingStore.getState().startUserThread(profileId);
-    } catch (e: any) {
-      console.error('[MessageButton] startUserThread failed', e);
-      const msg =
-        e?.response?.data?.code === 'MESSAGES_DISABLED'
-          ? 'Người dùng này không nhận tin nhắn từ người lạ'
-          : e?.userFriendlyMessage ?? e?.message ?? 'Không thể mở cuộc trò chuyện';
-      toast.error(msg);
-      // Still navigate — the user may want to see the inbox anyway.
-    } finally {
-      setBusy(false);
-    }
-    // Always navigate. If startUserThread failed, the /messages page
-    // will retry on mount and show its own error if needed.
-    router.push(`/messages?peer=${profileId}`);
+    router.push(`/messages?peer=${profile.id}`);
   };
 
   return (
     <div className="flex gap-2 border-t border-white/[0.04] p-4 sm:p-6">
+      {/* Follow / Unfollow */}
       <button
         type="button"
-        onClick={handleClick}
-        disabled={disabled || busy}
-        aria-label={disabled ? 'Người dùng này không nhận tin nhắn' : 'Bắt đầu nhắn tin'}
-        title={disabled ? 'Người dùng này không nhận tin nhắn từ người lạ' : undefined}
-        className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-        style={{ background: 'linear-gradient(90deg, #8B5CF6, #6366F1)' }}
+        onClick={onFollowToggle}
+        disabled={followingLoading}
+        className={cn(
+          'flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-medium text-white transition-all hover:opacity-90 disabled:opacity-50',
+          profile.isFollowing
+            ? 'border border-white/10 bg-white/5 hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300'
+            : 'bg-gradient-to-r from-neon-indigo to-neon-violet hover:from-neon-violet hover:to-neon-fuchsia'
+        )}
+      >
+        {followingLoading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : profile.isFollowing ? (
+          <UserMinus className="h-4 w-4" />
+        ) : (
+          <UserPlus className="h-4 w-4" />
+        )}
+        {followingLoading ? 'Đang cập nhật...' : profile.isFollowing ? 'Bỏ theo dõi' : 'Theo dõi'}
+      </button>
+
+      {/* Message */}
+      <button
+        type="button"
+        onClick={handleMessageClick}
+        disabled={profile.allowMessagesFromStrangers === false}
+        className="flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-medium text-white transition-all hover:opacity-90 disabled:opacity-40"
+        style={{
+          background: profile.allowMessagesFromStrangers === false
+            ? 'rgba(255,255,255,0.05)'
+            : 'linear-gradient(90deg, #8B5CF6, #6366F1)',
+        }}
+        title={profile.allowMessagesFromStrangers === false ? 'Người dùng này không nhận tin nhắn từ người lạ' : undefined}
       >
         <MessageSquare className="h-4 w-4" />
-        {busy ? 'Đang mở…' : disabled ? 'Không nhận tin nhắn' : 'Nhắn tin'}
+        {profile.allowMessagesFromStrangers === false ? 'Không nhận tin' : 'Nhắn tin'}
       </button>
     </div>
   );
@@ -428,7 +483,7 @@ function Skeleton() {
       className="overflow-hidden rounded-2xl"
       style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}
     >
-      <div className="h-40 animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
+      <div className="h-48 animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
       <div className="p-6 space-y-3">
         <div className="h-6 w-1/3 animate-pulse rounded" style={{ background: 'rgba(255,255,255,0.05)' }} />
         <div className="h-4 w-1/2 animate-pulse rounded" style={{ background: 'rgba(255,255,255,0.04)' }} />

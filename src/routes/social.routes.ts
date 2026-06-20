@@ -72,6 +72,9 @@ import {
   notifyMention,
 } from '../services/notification.service.js';
 import { notifyAdminPost } from '../services/notification.service.js';
+import {
+  getEnhancedPublicProfile,
+} from '../services/follow.service.js';
 
 const router = Router();
 
@@ -924,58 +927,20 @@ router.get(
 );
 
 // ════════════════════════════════════════════════════════════════
-// GET /api/v1/social/users/:id — Public profile by user ID
-// ════════════════════════════════════════════════════════════════
-// Returns a sanitized public view of a user (no email, no phone,
-// no security fields) so the /profile/[id] page can render any
-// user's card without requiring them to log in. The endpoint is
-// intentionally NOT under /api/v1/users — that namespace belongs
-// to admin-only user management routes which require ROLE_ADMIN.
-//
-// Used by the "Gợi ý kết nối" panel in the right rail of the
-// social feed: clicking a suggestion navigates to /profile/[id]
-// and the page calls this endpoint to populate the card.
+// GET /api/v1/social/users/:id — Enhanced public profile (with follow stats)
+// Redirects to the unified /api/v1/users/:id endpoint for consistency.
+// The /profile/[id] page calls this path (legacy), while new code uses
+// /api/v1/users/:id directly. Keeping both paths for backwards compat.
 router.get(
   '/users/:id',
   optionalAuth,
   async (req: any, res: Response<any>, next) => {
     try {
       const id = parseInt(req.params.id, 10);
-      if (isNaN(id)) {
-        throw new AppError('Invalid user ID', 400, 'INVALID_ID');
-      }
-      const user = await prisma.user.findUnique({
-        where: { id },
-        include: { roles: { include: { role: true } } },
-      });
-      if (!user) {
-        throw new AppError('Người dùng không tồn tại', 404, 'USER_NOT_FOUND');
-      }
-      // Public projection: strip PII (email, phone) and account
-      // security fields (lastLoginIp, failedLoginCount, etc.).
-      // The frontend already calls /api/v1/profile for the
-      // signed-in user's full record, so this view is just what
-      // other people should be able to see.
-      res.json({
-        success: true,
-        data: {
-          id: user.id,
-          username: user.username,
-          fullName: user.fullName,
-          displayName: user.displayName ?? user.fullName ?? user.username,
-          avatarUrl: user.avatarUrl,
-          bio: user.bio,
-          gender: user.gender,
-          birthYear: user.birthYear,
-          socialLinks: user.socialLinks,
-          // Whether strangers can DM this user. The /profile/[id]
-          // page reads this to disable the "Nhắn tin" button when
-          // the peer has opted out.
-          allowMessagesFromStrangers: user.allowMessagesFromStrangers,
-          roles: user.roles.map((ur: any) => ur.role.name),
-          createdAt: user.createdAt,
-        },
-      });
+      if (isNaN(id)) throw new AppError('Invalid user ID', 400, 'INVALID_ID');
+      const profile = await getEnhancedPublicProfile(id, req.user?.userId);
+      if (!profile) throw new AppError('Người dùng không tồn tại', 404, 'USER_NOT_FOUND');
+      res.json({ success: true, data: profile });
     } catch (error) {
       next(error);
     }

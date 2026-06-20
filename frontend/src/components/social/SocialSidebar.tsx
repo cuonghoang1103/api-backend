@@ -15,12 +15,16 @@ import {
   BookmarkCheck,
   Plus,
   Loader2,
+  UserPlus,
+  UserCheck,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { socialApi } from '@/lib/api';
+import { socialUserApi } from '@/lib/api';
 import type { FeedCollection } from '@/types/social';
+import SafeAvatar from '@/components/ui/SafeAvatar';
 
 interface SocialSidebarProps {
   unreadNotifications?: number;
@@ -118,6 +122,9 @@ export default function SocialSidebar({
 
       {/* ── Saved Collections ─────────────────────────────────── */}
       <CollectionsSection />
+
+      {/* ── Online Users / Suggestions ─────────────────────────── */}
+      <FriendsSection />
 
       <div className="mt-6 px-3 text-[10px] font-semibold uppercase tracking-widest text-text-muted">
         Khám phá
@@ -318,5 +325,111 @@ function CollectionsSection() {
         </div>
       </div>
     </>
+  );
+}
+
+// ─── Online Users / Suggestions Section ───────────────────────
+// Shows suggested users with their online status and a quick-follow
+// button. Appears in the left navigation sidebar of the social feed.
+
+interface SuggestedUser {
+  id: number;
+  username: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+  isOnline: boolean;
+  followedAt: Date;
+}
+
+function FriendsSection() {
+  const { user } = useAuthStore();
+  const [suggestedUsers, setSuggestedUsers] = useState<SuggestedUser[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [followingIds, setFollowingIds] = useState<ReadonlySet<number>>(new Set<number>());
+
+  useEffect(() => {
+    if (!user) return;
+    setLoading(true);
+    socialUserApi.getSuggestions(10)
+      .then((r: any) => setSuggestedUsers(r.data?.data ?? []))
+      .catch(() => {/* ignore */})
+      .finally(() => setLoading(false));
+  }, [user]);
+
+  const handleFollow = async (targetId: number) => {
+    try {
+      const res = await socialUserApi.toggleFollow(targetId);
+      const data = res.data?.data;
+      if (data?.isFollowing) {
+        setFollowingIds(prev => new Set([...Array.from(prev), targetId]));
+        setSuggestedUsers(prev => prev.filter(u => u.id !== targetId));
+      }
+    } catch { /* ignore */ }
+  };
+
+  if (!user) return null;
+
+  return (
+    <div className="mt-4">
+      <div className="px-3 text-[10px] font-semibold uppercase tracking-widest text-text-muted">
+        Bạn bè
+      </div>
+      <div className="mt-2 space-y-1 max-h-[260px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+        {loading ? (
+          <div className="px-3 py-3 text-center">
+            <Loader2 size={14} className="animate-spin mx-auto text-text-muted" />
+          </div>
+        ) : suggestedUsers.length === 0 ? null : (
+          suggestedUsers.map(u => {
+            const isFollowing = followingIds.has(u.id);
+            const displayName = u.displayName || u.username;
+            return (
+              <Link
+                key={u.id}
+                href={`/profile/${u.id}`}
+                className="group flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs transition-all hover:bg-white/[0.04]"
+              >
+                <div className="relative shrink-0">
+                  <SafeAvatar
+                    src={u.avatarUrl}
+                    alt={displayName}
+                    seed={u.username}
+                    size={32}
+                    rounded="full"
+                  />
+                  {u.isOnline && (
+                    <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-darkbg bg-emerald-400" />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium text-text-secondary group-hover:text-text-primary transition-colors">
+                    {displayName}
+                  </p>
+                  <p className="truncate text-[10px] text-text-muted">
+                    {u.isOnline ? (
+                      <span className="text-emerald-400">Đang hoạt động</span>
+                    ) : '@' + u.username}
+                  </p>
+                </div>
+                {!isFollowing && (
+                  <button
+                    onClick={(e) => { e.preventDefault(); void handleFollow(u.id); }}
+                    className="shrink-0 rounded-lg p-1 text-text-muted hover:text-neon-violet hover:bg-white/5 transition-all"
+                    title="Theo dõi"
+                  >
+                    <UserPlus size={14} />
+                  </button>
+                )}
+                {isFollowing && (
+                  <span className="shrink-0 text-neon-violet">
+                    <UserCheck size={14} />
+                  </span>
+                )}
+              </Link>
+            );
+          })
+        )}
+      </div>
+    </div>
   );
 }

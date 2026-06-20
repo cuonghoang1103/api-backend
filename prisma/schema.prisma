@@ -34,6 +34,8 @@ model User {
   fullName  String? @map("full_name") @db.VarChar(100)
   bio       String? @db.Text
   avatarUrl String? @map("avatar_url") @db.VarChar(500)
+  coverPhotoUrl String? @map("cover_photo_url") @db.VarChar(500)
+  lastActiveAt DateTime? @map("last_active_at")
 
   // ─── Extended profile (Phase 1) ─────────────────────────
   // displayName: tên hiển thị (có thể khác username, dùng cho UI
@@ -169,6 +171,10 @@ model User {
   // takes their Hub data with it (no orphans).
   hubFolders HubFolder[]
   hubLinks   HubLink[]
+
+  // ─── Social Follow Graph ────────────────────────────────
+  following Follow[] @relation("Following")
+  followers Follow[] @relation("Followers")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -2076,4 +2082,20 @@ model HubLink {
   @@index([userId], name: "idx_hub_links_user")
   @@index([isPublic, createdAt(sort: Desc)], name: "idx_hub_links_public")
   @@map("hub_links")
+}
+
+// ─── Social Follow Graph ──────────────────────────────────
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int      @map("follower_id")
+  followingId Int      @map("following_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  follower  User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId], map: "uk_follow_pair")
+  @@index([followingId], map: "idx_follow_following")
+  @@index([followerId], map: "idx_follow_follower")
+  @@map("follows")
 }

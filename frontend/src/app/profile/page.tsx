@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
-import { api, coursesApi, fileApi } from '@/lib/api';
+import { api, coursesApi, fileApi, socialUserApi } from '@/lib/api';
 import { toast } from 'sonner';
 import SafeAvatar from '@/components/ui/SafeAvatar';
 import {
@@ -38,6 +38,8 @@ import {
   Linkedin,
   Youtube,
   Facebook,
+  Image,
+  Loader2,
 } from 'lucide-react';
 
 interface ProfileData {
@@ -47,12 +49,15 @@ interface ProfileData {
   fullName?: string;
   displayName?: string;
   avatarUrl?: string;
+  coverPhotoUrl?: string;
   bio?: string;
   gender?: 'MALE' | 'FEMALE' | 'OTHER' | null;
   birthYear?: number | null;
   phone?: string | null;
   socialLinks?: Record<string, string> | null;
   allowMessagesFromStrangers?: boolean;
+  followerCount?: number;
+  followingCount?: number;
   roles: string[];
   createdAt: string;
 }
@@ -75,7 +80,9 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'activity' | 'courses' | 'settings'>('profile');
   const [editing, setEditing] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState({
     fullName: '',
@@ -83,6 +90,7 @@ export default function ProfilePage() {
     email: '',
     username: '',
     avatarUrl: '',
+    coverPhotoUrl: '',
     bio: '',
     gender: '' as '' | 'MALE' | 'FEMALE' | 'OTHER',
     birthYear: '' as number | '',
@@ -96,6 +104,8 @@ export default function ProfilePage() {
       facebook: '',
     } as Record<string, string>,
   });
+
+  const [followStats, setFollowStats] = useState({ followers: 0, following: 0 });
 
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
@@ -134,6 +144,7 @@ export default function ProfilePage() {
           email: data?.email || '',
           username: data?.username || '',
           avatarUrl: data?.avatarUrl || '',
+          coverPhotoUrl: data?.coverPhotoUrl || '',
           bio: data?.bio || '',
           gender: (data?.gender as any) || '',
           birthYear: data?.birthYear || '',
@@ -155,7 +166,8 @@ export default function ProfilePage() {
             displayName: (user as any).displayName || user.username || '',
             email: user.email || '',
             username: user.username || '',
-            avatarUrl: '',
+            avatarUrl: (user as any).avatarUrl || '',
+            coverPhotoUrl: (user as any).coverPhotoUrl || '',
             bio: '',
             gender: '',
             birthYear: '',
@@ -169,6 +181,22 @@ export default function ProfilePage() {
     };
     fetchProfile();
   }, [user, hasSocialAuth]);
+
+  // Fetch follow stats for own profile
+  useEffect(() => {
+    if (!profile?.id || !hasBackendAuth) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await socialUserApi.getProfile(profile.id);
+        const data = res.data?.data;
+        if (!cancelled && data) {
+          setFollowStats({ followers: data.followerCount ?? 0, following: data.followingCount ?? 0 });
+        }
+      } catch { /* ignore */ }
+    })();
+    return () => { cancelled = true; };
+  }, [profile?.id, hasBackendAuth]);
 
   useEffect(() => {
     if (profile?.createdAt) {
@@ -227,6 +255,7 @@ export default function ProfilePage() {
         email: form.email.trim(),
         bio: form.bio,
         avatarUrl: form.avatarUrl.trim() || null,
+        coverPhotoUrl: form.coverPhotoUrl.trim() || null,
         gender: form.gender || null,
         birthYear: form.birthYear === '' ? null : Number(form.birthYear),
         phone: form.phone.trim() || null,
@@ -299,6 +328,26 @@ export default function ProfilePage() {
     if (editing) handleSaveProfile();
   };
 
+  const handleCoverPhotoUpload = async (file: File) => {
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('Ảnh bìa phải nhỏ hơn 10MB');
+      return;
+    }
+    setUploadingCover(true);
+    try {
+      const res = await fileApi.upload(file, 'images');
+      const url = res.data?.data?.url;
+      if (!url) throw new Error('Upload response missing url');
+      setForm(prev => ({ ...prev, coverPhotoUrl: url }));
+      await api.put('/profile', { coverPhotoUrl: url });
+      toast.success('Đã cập nhật ảnh bìa!');
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || err?.message || 'Lỗi upload ảnh bìa');
+    } finally {
+      setUploadingCover(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-darkbg flex items-center justify-center">
@@ -309,20 +358,39 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-darkbg">
-      {/* Cover + Avatar */}
-      <div className="relative">
-        <div className="h-48 sm:h-64 bg-gradient-to-r from-neon-indigo via-purple-600 to-neon-violet relative overflow-hidden">
-          <div className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage: `radial-gradient(circle at 20% 50%, white 1px, transparent 1px)`,
-              backgroundSize: '30px 30px'
-            }}
-          />
-          <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2" />
-          <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-neon-fuchsia/20 rounded-full blur-3xl" />
-        </div>
+      {/* Cover Photo */}
+      <div className="relative h-48 sm:h-64 overflow-hidden group">
+        {form.coverPhotoUrl ? (
+          <img src={form.coverPhotoUrl} alt="Cover" className="h-full w-full object-cover" />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-r from-neon-indigo via-purple-600 to-neon-violet">
+            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+          </div>
+        )}
+        {/* Gradient overlay */}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-darkbg/80 to-transparent" />
+        {/* Edit cover button */}
+        {mounted && canEdit && (
+          <label className="absolute bottom-3 right-3 flex cursor-pointer items-center gap-2 rounded-xl border border-white/20 bg-black/40 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm transition-all hover:bg-black/60 hover:border-white/30">
+            {uploadingCover ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Image className="h-3.5 w-3.5" />}
+            <span>{uploadingCover ? 'Đang tải...' : 'Đổi ảnh bìa'}</span>
+            <input
+              ref={coverInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                e.target.value = '';
+                await handleCoverPhotoUpload(file);
+              }}
+            />
+          </label>
+        )}
+      </div>
 
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="relative -mt-16 sm:-mt-20 flex items-end gap-4 sm:gap-6">
           {/* Avatar */}
           <div className="relative group shrink-0">
@@ -334,151 +402,151 @@ export default function ProfilePage() {
               rounded="2xl"
               className="border-4 border-darkbg shadow-2xl"
             />
-              {uploadingAvatar && (
-                <div className="absolute inset-0 rounded-2xl bg-black/70 flex items-center justify-center z-10">
-                  <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                </div>
-              )}
-              {/* Always allow avatar upload on hover — no need to enter
-                  edit mode for the picture. Saves to server immediately. */}
-              {!uploadingAvatar && canEdit && (
-                <button
-                  type="button"
-                  onClick={() => avatarInputRef.current?.click()}
-                  className="absolute inset-0 rounded-2xl bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                  title="Đổi ảnh đại diện"
-                >
-                  <Camera className="w-8 h-8 text-white" />
-                </button>
-              )}
-              <input
-                ref={avatarInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={async (e) => {
-                  const file = e.target.files?.[0];
-                  if (!file) return;
-                  if (file.size > 5 * 1024 * 1024) {
-                    toast.error('Ảnh đại diện phải nhỏ hơn 5MB');
-                    e.target.value = '';
-                    return;
-                  }
-                  setUploadingAvatar(true);
-                  try {
-                    // fileApi.upload sends the right multipart headers AND
-                    // the correct `category=images` so the backend accepts
-                    // image/* mime types. Calling /files/upload directly
-                    // without a category would default to "documents" and
-                    // reject image uploads.
-                    const res = await fileApi.upload(file, 'images');
-                    const url = res.data?.data?.url;
-                    if (!url) {
-                      throw new Error('Upload response missing url');
-                    }
-                    setForm(prev => ({ ...prev, avatarUrl: url }));
-                    // Persist the avatar URL immediately so the user sees
-                    // the new picture even if they cancel the edit.
-                    try {
-                      await api.put('/profile', { avatarUrl: url });
-                    } catch (persistErr) {
-                      console.warn('Avatar uploaded but profile not saved yet', persistErr);
-                    }
-                    toast.success('Image uploaded successfully!');
-                  } catch (err: any) {
-                    const msg =
-                      err?.response?.data?.message ||
-                      err?.message ||
-                      'Image upload failed';
-                    toast.error(msg);
-                  } finally {
-                    setUploadingAvatar(false);
-                    e.target.value = '';
-                  }
-                }}
-              />
-            </div>
-
-            {/* Name + meta */}
-            <div className="pb-3 flex-1 min-w-0">
-              <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="text-2xl sm:text-3xl font-heading font-bold text-text-primary">
-                  {form.displayName || form.fullName || form.username}
-                </h1>
-                {profile?.roles?.map((role) => {
-                  // Backend returns role names with a ROLE_ prefix
-                  // (e.g. "ROLE_ADMIN"). Normalise so the badge matches
-                  // admins without forcing the UI to know the prefix.
-                  const normalized = (role || '').replace('ROLE_', '').toUpperCase();
-                  const isAdmin = normalized === 'ADMIN';
-                  return (
-                    <span key={role} className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                      isAdmin
-                        ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
-                        : 'bg-neon-indigo/20 text-neon-indigo border border-neon-indigo/30'
-                    }`}>
-                      {isAdmin ? 'Administrator' : 'User'}
-                    </span>
-                  );
-                })}
+            {uploadingAvatar && (
+              <div className="absolute inset-0 rounded-2xl bg-black/70 flex items-center justify-center z-10">
+                <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
               </div>
-              <p className="text-text-secondary text-sm mt-1">@{form.username}</p>
-            </div>
+            )}
+            {/* Always allow avatar upload on hover — no need to enter
+                edit mode for the picture. Saves to server immediately. */}
+            {!uploadingAvatar && canEdit && (
+              <button
+                type="button"
+                onClick={() => avatarInputRef.current?.click()}
+                className="absolute inset-0 rounded-2xl bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                title="Đổi ảnh đại diện"
+              >
+                <Camera className="w-8 h-8 text-white" />
+              </button>
+            )}
+            <input
+              ref={avatarInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) {
+                  toast.error('Ảnh đại diện phải nhỏ hơn 5MB');
+                  e.target.value = '';
+                  return;
+                }
+                setUploadingAvatar(true);
+                try {
+                  // fileApi.upload sends the right multipart headers AND
+                  // the correct `category=images` so the backend accepts
+                  // image/* mime types. Calling /files/upload directly
+                  // without a category would default to "documents" and
+                  // reject image uploads.
+                  const res = await fileApi.upload(file, 'images');
+                  const url = res.data?.data?.url;
+                  if (!url) {
+                    throw new Error('Upload response missing url');
+                  }
+                  setForm(prev => ({ ...prev, avatarUrl: url }));
+                  // Persist the avatar URL immediately so the user sees
+                  // the new picture even if they cancel the edit.
+                  try {
+                    await api.put('/profile', { avatarUrl: url });
+                  } catch (persistErr) {
+                    console.warn('Avatar uploaded but profile not saved yet', persistErr);
+                  }
+                  toast.success('Image uploaded successfully!');
+                } catch (err: any) {
+                  const msg =
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    'Image upload failed';
+                  toast.error(msg);
+                } finally {
+                  setUploadingAvatar(false);
+                  e.target.value = '';
+                }
+              }}
+            />
+          </div>
 
-            {/* Edit button */}
-            <div className="pb-3 shrink-0">
-              {editing ? (
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      setEditing(false);
-                      setForm({
-                        fullName: profile?.fullName || '',
-                        displayName: profile?.displayName || profile?.username || '',
-                        email: profile?.email || '',
-                        username: profile?.username || '',
-                        avatarUrl: profile?.avatarUrl || '',
-                        bio: profile?.bio || '',
-                        gender: (profile?.gender as any) || '',
-                        birthYear: profile?.birthYear || '',
-                        phone: profile?.phone || '',
-                        socialLinks: {
-                          github: profile?.socialLinks?.github || '',
-                          twitter: profile?.socialLinks?.twitter || '',
-                          linkedin: profile?.socialLinks?.linkedin || '',
-                          website: profile?.socialLinks?.website || '',
-                          youtube: profile?.socialLinks?.youtube || '',
-                          facebook: profile?.socialLinks?.facebook || '',
-                        },
-                      });
-                    }}
-                    className="p-2.5 bg-darkcard border border-darkborder rounded-xl text-text-muted hover:text-red-400 hover:border-red-400/50 transition-colors"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={handleSaveProfile}
-                    disabled={saving}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
-                  >
-                    {saving ? (
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    ) : (
-                      <Check className="w-4 h-4" />
-                    )}
-                    Save
-                  </button>
-                </div>
-              ) : (
-                  <button
-                    onClick={() => setEditing(true)}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-secondary hover:text-text-primary hover:border-neon-violet/50 transition-colors"
-                  >
-                    <Edit3 className="w-4 h-4" />
-                    {canEdit ? 'Edit' : 'View Profile'}
-                  </button>
-              )}
+          {/* Name + meta */}
+          <div className="pb-3 flex-1 min-w-0">
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-2xl sm:text-3xl font-heading font-bold text-text-primary">
+                {form.displayName || form.fullName || form.username}
+              </h1>
+              {profile?.roles?.map((role) => {
+                // Backend returns role names with a ROLE_ prefix
+                // (e.g. "ROLE_ADMIN"). Normalise so the badge matches
+                // admins without forcing the UI to know the prefix.
+                const normalized = (role || '').replace('ROLE_', '').toUpperCase();
+                const isAdmin = normalized === 'ADMIN';
+                return (
+                  <span key={role} className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                    isAdmin
+                      ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                      : 'bg-neon-indigo/20 text-neon-indigo border border-neon-indigo/30'
+                  }`}>
+                    {isAdmin ? 'Administrator' : 'User'}
+                  </span>
+                );
+              })}
             </div>
+            <p className="text-text-secondary text-sm mt-1">@{form.username}</p>
+          </div>
+
+          {/* Edit button */}
+          <div className="pb-3 shrink-0">
+            {editing ? (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setEditing(false);
+                    setForm({
+                      fullName: profile?.fullName || '',
+                      displayName: profile?.displayName || profile?.username || '',
+                      email: profile?.email || '',
+                      username: profile?.username || '',
+                      avatarUrl: profile?.avatarUrl || '',
+                      coverPhotoUrl: profile?.coverPhotoUrl || '',
+                      bio: profile?.bio || '',
+                      gender: (profile?.gender as any) || '',
+                      birthYear: profile?.birthYear || '',
+                      phone: profile?.phone || '',
+                      socialLinks: {
+                        github: profile?.socialLinks?.github || '',
+                        twitter: profile?.socialLinks?.twitter || '',
+                        linkedin: profile?.socialLinks?.linkedin || '',
+                        website: profile?.socialLinks?.website || '',
+                        youtube: profile?.socialLinks?.youtube || '',
+                        facebook: profile?.socialLinks?.facebook || '',
+                      },
+                    });
+                  }}
+                  className="p-2.5 bg-darkcard border border-darkborder rounded-xl text-text-muted hover:text-red-400 hover:border-red-400/50 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={handleSaveProfile}
+                  disabled={saving}
+                  className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
+                >
+                  {saving ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Check className="w-4 h-4" />
+                  )}
+                  Save
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setEditing(true)}
+                className="flex items-center gap-2 px-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-secondary hover:text-text-primary hover:border-neon-violet/50 transition-colors"
+              >
+                <Edit3 className="w-4 h-4" />
+                {canEdit ? 'Edit' : 'View Profile'}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -703,18 +771,22 @@ export default function ProfilePage() {
             {/* Stats */}
             <div className="bg-darkcard border border-darkborder rounded-2xl p-5">
               <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-3">Statistics</h3>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div className="text-center p-3 bg-darkbg rounded-xl">
                   <p className="text-xl font-bold text-neon-indigo">{stats.joinedDays}</p>
                   <p className="text-xs text-text-muted mt-0.5">Days</p>
                 </div>
                 <div className="text-center p-3 bg-darkbg rounded-xl">
-                  <p className="text-xl font-bold text-neon-violet">{profile?.roles?.length || 1}</p>
-                  <p className="text-xs text-text-muted mt-0.5">Roles</p>
+                  <p className="text-xl font-bold text-neon-violet">{followStats.followers}</p>
+                  <p className="text-xs text-text-muted mt-0.5">Followers</p>
                 </div>
                 <div className="text-center p-3 bg-darkbg rounded-xl">
-                  <p className="text-xl font-bold text-neon-emerald">v1</p>
-                  <p className="text-xs text-text-muted mt-0.5">Version</p>
+                  <p className="text-xl font-bold text-neon-emerald">{followStats.following}</p>
+                  <p className="text-xs text-text-muted mt-0.5">Following</p>
+                </div>
+                <div className="text-center p-3 bg-darkbg rounded-xl">
+                  <p className="text-xl font-bold text-neon-cyan">{profile?.roles?.length || 1}</p>
+                  <p className="text-xs text-text-muted mt-0.5">Roles</p>
                 </div>
               </div>
             </div>
@@ -797,7 +869,7 @@ export default function ProfilePage() {
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
                         className="w-full px-4 py-3 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50 transition-colors"
-                          placeholder="Enter email"
+                        placeholder="Enter email"
                       />
                     ) : (
                       <div className="px-4 py-3 bg-darkbg border border-darkborder rounded-xl text-sm text-text-secondary">
@@ -817,6 +889,7 @@ export default function ProfilePage() {
                             email: profile?.email || '',
                             username: profile?.username || '',
                             avatarUrl: profile?.avatarUrl || '',
+                            coverPhotoUrl: profile?.coverPhotoUrl || '',
                             bio: profile?.bio || '',
                             gender: (profile?.gender as any) || '',
                             birthYear: profile?.birthYear || '',

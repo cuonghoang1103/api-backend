@@ -272,6 +272,19 @@ export const userApi = {
   count: () => api.get('/admin/users/count'),
 };
 
+// Social user API — public profiles, follow, presence
+export const socialUserApi = {
+  getProfile: (id: number) => api.get(`/users/${id}`),
+  toggleFollow: (targetId: number) => api.post('/users/follow', { targetId }),
+  getFollowers: (id: number, cursor?: number, limit = 20) =>
+    api.get(`/users/${id}/followers`, { params: { cursor, limit } }),
+  getFollowing: (id: number, cursor?: number, limit = 20) =>
+    api.get(`/users/${id}/following`, { params: { cursor, limit } }),
+  getSuggestions: (limit = 10) => api.get('/users/suggestions', { params: { limit } }),
+  updateStatus: () => api.post('/users/status'),
+  updateCoverPhoto: (coverPhotoUrl: string) => api.post('/users/cover-photo', { coverPhotoUrl }),
+};
+
 // Blog API
 export const blogApi = {
   getPosts: (params?: {

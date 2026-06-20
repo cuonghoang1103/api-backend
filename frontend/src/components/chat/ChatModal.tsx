@@ -9,6 +9,7 @@ import { useChatStore, getContextualPrompts } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { api } from '@/lib/api';
+import { findStaticResponse } from '@/lib/ai-static-responses';
 import { toast } from 'sonner';
 import type { ChatMessage, ChatSession } from '@/types';
 
@@ -142,7 +143,7 @@ function ChatBubble({ msg, isLastAssistant, isStreaming }: {
             : 'bg-[#0d1117]/80 border border-[#22d3ee]/15 text-[#e2e8f0] rounded-tl-sm data-card-glow-cyan'
         }`}>
           {!isUser ? (
-            <div className="markdown-content text-xs">
+            <div className="markdown-content text-xs overflow-hidden">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
@@ -156,8 +157,8 @@ function ChatBubble({ msg, isLastAssistant, isStreaming }: {
                       );
                     }
                     return (
-                      <pre className="bg-[#0a0a0f] rounded-lg p-2 overflow-x-auto mt-1 mb-1">
-                        <code className="text-[10px] text-[#22d3ee] font-mono" {...props}>{children}</code>
+                      <pre className="bg-[#0a0a0f] rounded-lg p-2 overflow-x-auto max-w-full mt-1 mb-1">
+                        <code className="text-[10px] text-[#22d3ee] font-mono break-all" {...props}>{children}</code>
                       </pre>
                     );
                   },
@@ -241,15 +242,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
 
   const modalMessages = messages['__modal__'] || [];
 
-  // Smart auto-scroll: only scroll when user is within 150px of bottom
-  useEffect(() => {
-    const container = messagesEndRef.current?.parentElement;
-    if (!container) return;
-    const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
-    if (distanceFromBottom < 150) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [modalMessages]);
+  // No auto-scroll — user controls their own scroll position entirely.
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -383,18 +376,15 @@ export default function ChatModal({ onClose }: ChatModalProps) {
               continue;
             }
             if (data.type === 'error') {
-              // Only show the error UI if:
-              // 1. We received NO content at all (completely failed), AND
-              // 2. The error is NOT a mid-stream "Premature close" from Groq
-              //    (Groq sometimes sends "Premature close" right after completing
-              //    the full response — the content is still valid, don't warn)
-              const isPrematureClose = /premature\s*close/i.test(data.error || '');
-              if (!assistantContent.trim() && !isPrematureClose) {
+              // Only surface error if we truly got nothing and it's a real failure.
+              // Provider-level errors (quota, rate-limit) — no toast, silent.
+              // The outer catch block will try static fallback.
+              const isProviderError = /429|rate.limit|quota|404|timeout|connection|refused|unavailable/i.test(data.error || '');
+              const hasContent = assistantContent.trim().length > 0;
+              if (!hasContent && !isProviderError) {
                 removePendingMessage(sessionId, assistantTempId);
-                toast.error(data.error || 'AI service is temporarily unavailable. Please try again.');
+                toast.error(data.error || 'AI service is temporarily unavailable.');
               }
-              // If we got content, the response is still valid — suppress the error.
-              // The "Premature close" suffix from Groq is benign network noise.
               break;
             }
             // chunk or raw text
@@ -434,9 +424,21 @@ export default function ChatModal({ onClose }: ChatModalProps) {
       setShowPrompts(true);
     } catch (err) {
       console.error('Chat error:', err);
-      toast.error('AI connection error. Please check if backend is running.');
+      const staticResp = findStaticResponse(text);
+      if (staticResp) {
+        const fallbackMsg: ChatMessage = {
+          id: tempId + 2,
+          sessionId,
+          role: 'assistant',
+          content: staticResp.response,
+          createdAt: new Date().toISOString(),
+        };
+        addMessage(sessionId, fallbackMsg);
+      } else {
+        toast.error('AI connection error. Please check if backend is running.');
+        setRobotEmotion('sad');
+      }
       setMessages(sessionId, (messages[sessionId] || []).filter(m => m.id !== tempId && m.id !== (tempId + 1)));
-      setRobotEmotion('sad');
     } finally {
       setStreaming(false);
     }

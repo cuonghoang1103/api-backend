@@ -1,0 +1,57 @@
+name: VPS - Kill duplicate repo-frontend-1
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Remove duplicate container
+        run: |
+          ssh vps "
+            echo '=== Find which compose owns repo-frontend-1 ==='
+            # Check what networks and volumes
+            docker inspect repo-frontend-1 --format '{{.Name}} | {{range .Config.Env}}{{println .}}{{end}}' 2>&1 | head -20
+            echo ''
+            echo '=== Check labels ==='
+            docker inspect repo-frontend-1 --format '{{.Config.Labels}}' 2>&1
+            echo ''
+            echo '=== Find what compose created it ==='
+            # Look at /opt for compose files
+            ls /opt 2>&1
+            echo ''
+            # Check repos that might be running
+            for dir in /opt/*/; do
+              if [ -f \"\${dir}docker-compose.yml\" ] || [ -f \"\${dir}docker-compose.yaml\" ]; then
+                echo \"Found compose in: \${dir}\"
+                grep -E 'frontend|3000' \"\${dir}docker-compose.y*ml\" | head -5
+              fi
+            done
+            echo ''
+            echo '=== Just stop and remove the old one to free port 3000 ==='
+            docker stop repo-frontend-1
+            docker rm repo-frontend-1
+            echo ''
+            echo '=== Verify only one frontend on port 3000 ==='
+            docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}' | grep -E '3000|frontend'
+            echo ''
+            echo '=== Test 1090 chunk 10 times ==='
+            for i in 1 2 3 4 5 6 7 8 9 10; do
+              STATUS=\$(curl -sI --max-time 5 'https://cuongthai.com/_next/static/chunks/1090-3bbb31422781b3b6.js' 2>&1 | head -1)
+              echo \"Try \$i: \$STATUS\"
+            done
+          "

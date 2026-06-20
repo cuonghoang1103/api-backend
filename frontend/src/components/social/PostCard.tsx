@@ -110,71 +110,81 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const qc = useQueryClient();
 
   // ─── Query cache helpers (added 2026-06-20) ────────────────────
-  // The /social page renders from the TanStack Query cache
+  // The feed page renders from the TanStack Query cache
   // (`useSocialFeed`), NOT from Zustand. Zustand mutations alone
   // never trigger a re-render of the cached data — we must
   // write to the cache directly too.
   //
-  // TanStack Query v5 API:
-  // - `setQueriesData({ predicate: fn }, updater)` patches all
-  //   cached queries where predicate(query) returns true.
-  // - `getQueriesData({ queryKey, exact })` returns exact-key matches.
-  // - `setQueryData(queryKey, newData)` restores a snapshot.
+  // TanStack Query v5 `setQueriesData({ queryKey: [...] })` uses
+  // `matchQuery` with `exact=true` (default) for key comparison.
+  // `partialMatchKey` checks object-keys but NOT array prefixes.
+  // Result: `setQueriesData({ queryKey: ['social','feed'] })` does
+  // NOT match a cache entry stored under
+  // `['social','feed',{limit:20}]` — causing a silent no-op.
+  //
+  // Fix: use `qc.getQueryCache().findAll({ predicate })` to
+  // iterate all cached queries and manually match on the feed
+  // prefix. We also call `qc.invalidateQueries` afterward so the
+  // next background refetch syncs with the server.
+
+  /** Return all Query objects in the cache whose key starts with
+   *  `['social','feed']`. This is the reliable way to match feed
+   *  pages regardless of their pagination params. */
+  const getFeedQueries = () =>
+    qc.getQueryCache().getAll().filter(
+      (q) => Array.isArray(q.queryKey) &&
+             q.queryKey[0] === 'social' &&
+             q.queryKey[1] === 'feed',
+    );
 
   /** Snapshot the feed cache entries before a mutation. */
   const snapshotFeed = () =>
-    qc.getQueriesData({ queryKey: ['social', 'feed'], exact: true });
+    getFeedQueries().map((q) => [q.queryKey as string[], q.state.data as SocialFeedResponse | undefined]);
 
-  /** Patch a single post in all cached feed queries. */
+  /** Patch a single post in all cached feed queries. Calls
+   *  `invalidateFeed` afterward so the next refetch reconciles. */
   const patchFeed = (postId: number, updater: (p: SocialPost) => SocialPost) => {
-    qc.setQueriesData(
-      {
-        predicate: (q) => {
-          const k = q.queryKey as string[];
-          return Array.isArray(k) && k[0] === 'social' && k[1] === 'feed';
-        },
-      },
-      (old) => {
-        if (!old) return old;
-        const arr = old as unknown as SocialFeedResponse;
-        if (!arr || !Array.isArray(arr.data)) return old;
-        const next = arr.data.map((p) => (p.id === postId ? updater(p) : p));
-        const changed = next.some((p, i) => p !== arr.data[i]);
-        return changed ? { ...arr, data: next } : arr;
-      },
-    );
+    for (const q of getFeedQueries()) {
+      const data = q.state.data as SocialFeedResponse | undefined;
+      if (!data || !Array.isArray(data.data)) continue;
+      const next = data.data.map((p) => (p.id === postId ? updater(p) : p));
+      if (next.some((p, i) => p !== data.data[i])) {
+        q.setState({ data: { ...data, data: next } });
+      }
+    }
+    invalidateFeed();
   };
 
-  /** Restore a previously-saved snapshot after a failed mutation. */
+  /** Restore the snapshot after a failed mutation. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const restoreSnapshot = (snap: any) => {
     if (!snap) return;
     for (const [key, data] of snap) {
-      if (data !== undefined) qc.setQueryData(key as string[], data);
+      const q = qc.getQueryCache().getAll().find(
+        (q) => JSON.stringify(q.queryKey) === JSON.stringify(key),
+      );
+      if (q && data !== undefined) q.setState({ data });
     }
   };
 
   /** Drop a post from all cached feed queries (delete). */
   const removePostFromCache = (postId: number) => {
-    qc.setQueriesData(
-      {
-        predicate: (q) => {
-          const k = q.queryKey as string[];
-          return Array.isArray(k) && k[0] === 'social' && k[1] === 'feed';
-        },
-      },
-      (old) => {
-        if (!old) return old;
-        const arr = old as unknown as SocialFeedResponse;
-        if (!arr || !Array.isArray(arr.data)) return old;
-        return { ...arr, data: arr.data.filter((p) => p.id !== postId) };
-      },
-    );
+    for (const q of getFeedQueries()) {
+      const data = q.state.data as SocialFeedResponse | undefined;
+      if (!data || !Array.isArray(data.data)) continue;
+      const next = data.data.filter((p) => p.id !== postId);
+      if (next.length !== data.data.length) {
+        q.setState({ data: { ...data, data: next } });
+      }
+    }
+    invalidateFeed();
   };
 
-  /** Invalidate all social queries (reconcile with server). */
+  /** Invalidate all social queries so the next background refetch
+   *  picks up authoritative data from the server. */
   const invalidateFeed = () =>
     qc.invalidateQueries({ queryKey: socialKeys.all });
+
 
 
   const comments = commentsByPost[post.id] || [];
@@ -466,15 +476,10 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
       reactionBreakdown: nextBreakdown,
     }));
 
-    // Fire network — both the new store action and the legacy
-    // `onToggleLike` page-level handler. The store does its own
-    // optimistic update; we tolerate one redundant patch.
-    if (onToggleLike) {
-      onToggleLike(post.id).catch(() => {
-        // restore cache on failure
-        restoreSnapshot(snapshot);
-      });
-    }
+    // Call the new emoji-aware API. `toggleReaction` from the store
+    // calls `reactPost` which handles LIKE/LOVE/HAHA/SAD/ANGRY
+    // correctly via SocialLike.type. We skip the legacy `toggleLike`
+    // endpoint entirely (it only supports LIKE, not multi-emoji).
     toggleReaction(post.id, type).catch(() => {
       restoreSnapshot(snapshot);
     });
@@ -880,10 +885,12 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
           style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}
         >
           {/* Like (with long-press to choose reaction) */}
-          <div
-            className="relative"
-            onMouseEnter={() => setShowReactions(false)}
-          >
+          {/* The wrapper div must NOT have onMouseEnter — that was
+              closing the reactions popover when the mouse moved from
+              the button to the popover. The popover now sits directly
+              below the button inside AnimatePresence, with a transparent
+              connector div to prevent any mouse-leave gap. */}
+          <div className="relative">
             <button
               onClick={() => handleReact('LIKE')}
               onMouseDown={startLongPress}
@@ -923,62 +930,75 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
                   initial={{ opacity: 0, y: 6, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.9 }}
-                  className="absolute bottom-full left-0 mb-2 flex gap-1 rounded-2xl p-1.5 z-30"
-                  style={{ background: 'rgba(15,15,25,0.95)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute bottom-full left-0 mb-1 z-50 flex flex-col items-start gap-1"
+                  style={{ pointerEvents: 'auto' }}
                   onMouseLeave={() => setShowReactions(false)}
                 >
-                  {REACTION_KEYS.map((k) => {
-                    const r = REACTION_META[k];
-                    // Highlight the viewer's CURRENT reaction
-                    // (if any) so they can see what's active.
-                    const isMine = myReaction === k;
-                    return (
-                      <button
-                        key={k}
-                        onClick={() => handleReact(k)}
-                        onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.4) translateY(-4px)'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.transform = isMine ? 'scale(1.15)' : 'scale(1)'; }}
-                        className="text-xl transition-transform px-1.5"
-                        title={r.label}
-                        style={{
-                          transform: isMine ? 'scale(1.15)' : 'scale(1)',
-                          filter: isMine ? `drop-shadow(0 0 6px ${r.color})` : undefined,
-                        }}
-                      >
-                        {r.emoji}
-                      </button>
-                    );
-                  })}
+                  {/* Transparent connector: fills the 4px gap between
+                      button and popover so the mouse never leaves the
+                      interactive zone while moving up. */}
+                  <div
+                    className="w-full h-1 cursor-default"
+                    style={{ pointerEvents: 'none' }}
+                  />
+                  {/* Emoji picker row */}
+                  <div
+                    className="flex gap-1 rounded-2xl p-1.5"
+                    style={{
+                      background: 'rgba(15,15,25,0.95)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      backdropFilter: 'blur(20px)',
+                    }}
+                  >
+                    {REACTION_KEYS.map((k) => {
+                      const r = REACTION_META[k];
+                      const isMine = myReaction === k;
+                      return (
+                        <button
+                          key={k}
+                          onClick={() => handleReact(k)}
+                          onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.4) translateY(-4px)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.transform = isMine ? 'scale(1.15)' : 'scale(1)'; }}
+                          className="text-xl transition-transform px-1.5"
+                          title={r.label}
+                          style={{
+                            transform: isMine ? 'scale(1.15)' : 'scale(1)',
+                            filter: isMine ? `drop-shadow(0 0 6px ${r.color})` : undefined,
+                          }}
+                        >
+                          {r.emoji}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {/* Emoji stack — now INSIDE AnimatePresence so no
+                      gap exists between button and popover. */}
+                  {activeReactions.length > 0 && safeLikesCount > 0 && (
+                    <div className="flex items-center gap-1 pl-1.5">
+                      <div className="flex -space-x-1">
+                        {activeReactions.slice(0, 3).map((k) => (
+                          <span
+                            key={k}
+                            className="inline-flex items-center justify-center w-4 h-4 rounded-full text-[10px] leading-none"
+                            style={{
+                              background: 'rgba(15,15,25,0.95)',
+                              border: '1px solid rgba(255,255,255,0.1)',
+                            }}
+                            title={REACTION_META[k].label}
+                          >
+                            {REACTION_META[k].emoji}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="text-[10px] text-slate-500 tabular-nums">
+                        {safeLikesCount}
+                      </span>
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
-
-            {/* Emoji stack under the like button — only when
-                at least one reaction is non-zero AND the post
-                has more than 0 likes. Renders the active types
-                with their count next to it. */}
-            {activeReactions.length > 0 && safeLikesCount > 0 && (
-              <div className="mt-1 flex items-center gap-1 pl-1.5">
-                <div className="flex -space-x-1">
-                  {activeReactions.slice(0, 3).map((k) => (
-                    <span
-                      key={k}
-                      className="inline-flex items-center justify-center w-4 h-4 rounded-full text-[10px] leading-none"
-                      style={{
-                        background: 'rgba(15,15,25,0.95)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                      }}
-                      title={REACTION_META[k].label}
-                    >
-                      {REACTION_META[k].emoji}
-                    </span>
-                  ))}
-                </div>
-                <span className="text-[10px] text-slate-500 tabular-nums">
-                  {safeLikesCount}
-                </span>
-              </div>
-            )}
           </div>
 
           {/* Comment */}

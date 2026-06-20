@@ -112,73 +112,70 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   // ─── Query cache helpers (added 2026-06-20) ────────────────────
   // The /social page renders from the TanStack Query cache
   // (`useSocialFeed`), NOT from Zustand. Zustand mutations alone
-  // never re-render the UI — we must write to the cache too.
+  // never trigger a re-render of the cached data — we must
+  // write to the cache directly too.
   //
-  // TanStack Query v5 uses `QueryCache.getQueries()` internally.
-  // We call it directly instead of the typed helpers to avoid
-  // strict type mismatches between `readonly ["social","feed"]`
-  // and `QueryFilters`. We use a mutable array for the key so
-  // JSON.stringify comparison works reliably.
-  const FEED_KEYS: ['social', 'feed'] = ['social', 'feed'];
+  // TanStack Query v5 API:
+  // - `setQueriesData({ predicate: fn }, updater)` patches all
+  //   cached queries where predicate(query) returns true.
+  // - `getQueriesData({ queryKey, exact })` returns exact-key matches.
+  // - `setQueryData(queryKey, newData)` restores a snapshot.
 
-  /** Snapshot the feed cache entries before a mutation so we can
-   *  roll back if the API call fails. */
-  const snapshotFeed = (): Array<[typeof FEED_KEYS, SocialFeedResponse | undefined]> => {
-    return qc
-      .getQueryCache()
-      .getAll()
-      .filter((q) => {
-        const k = q.queryKey as unknown[];
-        return Array.isArray(k) && k[0] === 'social' && k[1] === 'feed';
-      })
-      .map((q) => [q.queryKey as unknown as typeof FEED_KEYS, q.state.data as SocialFeedResponse | undefined]);
-  };
+  /** Snapshot the feed cache entries before a mutation. */
+  const snapshotFeed = () =>
+    qc.getQueriesData({ queryKey: ['social', 'feed'], exact: true });
 
   /** Patch a single post in all cached feed queries. */
   const patchFeed = (postId: number, updater: (p: SocialPost) => SocialPost) => {
-    qc.getQueryCache().getAll().forEach((q) => {
-      const k = q.queryKey as unknown[];
-      if (!Array.isArray(k) || k[0] !== 'social' || k[1] !== 'feed') return;
-      const data = q.state.data as SocialFeedResponse | undefined;
-      if (!data || !Array.isArray(data.data)) return;
-      const next: SocialFeedResponse = {
-        ...data,
-        data: data.data.map((p) => (p.id === postId ? updater(p) : p)),
-      };
-      q.setState((s) => ({ ...s, data: next }));
-    });
+    qc.setQueriesData(
+      {
+        predicate: (q) => {
+          const k = q.queryKey as string[];
+          return Array.isArray(k) && k[0] === 'social' && k[1] === 'feed';
+        },
+      },
+      (old) => {
+        if (!old) return old;
+        const arr = old as unknown as SocialFeedResponse;
+        if (!arr || !Array.isArray(arr.data)) return old;
+        const next = arr.data.map((p) => (p.id === postId ? updater(p) : p));
+        const changed = next.some((p, i) => p !== arr.data[i]);
+        return changed ? { ...arr, data: next } : arr;
+      },
+    );
   };
 
   /** Restore a previously-saved snapshot after a failed mutation. */
-  const restoreSnapshot = (
-    snap: Array<[typeof FEED_KEYS, SocialFeedResponse | undefined]>,
-  ) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const restoreSnapshot = (snap: any) => {
+    if (!snap) return;
     for (const [key, data] of snap) {
-      const found = qc.getQueryCache().getAll().find(
-        (q) => JSON.stringify(q.queryKey) === JSON.stringify(key),
-      );
-      if (found && data !== undefined) found.setState((s) => ({ ...s, data }));
+      if (data !== undefined) qc.setQueryData(key as string[], data);
     }
   };
 
   /** Drop a post from all cached feed queries (delete). */
   const removePostFromCache = (postId: number) => {
-    qc.getQueryCache().getAll().forEach((q) => {
-      const k = q.queryKey as unknown[];
-      if (!Array.isArray(k) || k[0] !== 'social' || k[1] !== 'feed') return;
-      const data = q.state.data as SocialFeedResponse | undefined;
-      if (!data || !Array.isArray(data.data)) return;
-      const next: SocialFeedResponse = {
-        ...data,
-        data: data.data.filter((p) => p.id !== postId),
-      };
-      q.setState((s) => ({ ...s, data: next }));
-    });
+    qc.setQueriesData(
+      {
+        predicate: (q) => {
+          const k = q.queryKey as string[];
+          return Array.isArray(k) && k[0] === 'social' && k[1] === 'feed';
+        },
+      },
+      (old) => {
+        if (!old) return old;
+        const arr = old as unknown as SocialFeedResponse;
+        if (!arr || !Array.isArray(arr.data)) return old;
+        return { ...arr, data: arr.data.filter((p) => p.id !== postId) };
+      },
+    );
   };
 
   /** Invalidate all social queries (reconcile with server). */
   const invalidateFeed = () =>
     qc.invalidateQueries({ queryKey: socialKeys.all });
+
 
   const comments = commentsByPost[post.id] || [];
   const hasMoreComments = commentsHasMoreByPost[post.id] ?? false;

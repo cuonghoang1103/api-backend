@@ -79,6 +79,7 @@ const uploadRoutes = (await import(path.join(__dirname, 'routes', 'upload.routes
 const devPostRoutes = (await import(path.join(__dirname, 'routes', 'devPost.routes.js'))).default;
 const systemRoutes = (await import(path.join(__dirname, 'routes', 'system.routes.js'))).default;
 const socialRoutes = (await import(path.join(__dirname, 'routes', 'social.routes.js'))).default;
+const notificationRoutes = (await import(path.join(__dirname, 'routes', 'notifications.routes.js'))).default;
 const githubRoutes = (await import(path.join(__dirname, 'routes', 'github.routes.js'))).default;
 const dashboardRoutes = (await import(path.join(__dirname, 'routes', 'dashboard.routes.js'))).default;
 const hubRoutesModule = await import(path.join(__dirname, 'routes', 'hub.routes.js'));
@@ -366,6 +367,7 @@ app.use('/api/v1/tech-trends', techTrendsPublicRoutes);
 app.use('/api/v1/admin/tech-trends', techTrendsAdminRoutes);
 app.use('/api/v1/system', systemRoutes);
 app.use('/api/v1/social', socialRoutes);
+app.use('/api/v1/social/notifications', notificationRoutes);
 // ─── Saved Collections alias (2026-06-20) ─────────────────────────
 // The Saved Collections endpoints are exposed under /api/v1/feed
 // per spec, but live in social.routes.ts (next to the existing

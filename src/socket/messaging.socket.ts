@@ -50,6 +50,13 @@ export interface MessagingEmitter {
   emit(event: 'thread:new-message', payload: MessageEventPayload): void;
   emit(event: 'thread:read', payload: ReadEventPayload): void;
   emit(event: 'message:updated' | 'thread:updated' | 'thread:created', payload: unknown): void;
+  // ─── Social notifications (added 2026-06-20) ────────────────
+  // The notification service emits this event to a single
+  // receiver's `user:{id}` room. The shape is the row from
+  // the SocialNotification table plus the embedded sender
+  // profile (we keep the type loose to avoid a circular
+  // import on the Prisma model).
+  emit(event: 'social:notification', payload: { receiverId: number; [k: string]: unknown }): void;
   emit(event: string, payload: unknown): void;
 }
 
@@ -70,7 +77,21 @@ export function registerSocketEmitter(): MessagingEmitter | null {
           threadId?: number;
           threadType?: string;
           participantIds?: number[];
+          // ─── Social notifications (added 2026-06-20) ──────
+          // The notification service emits events with
+          // `receiverId` (single user) instead of a thread id.
+          // We route them to the receiver's `user:{id}` room.
+          receiverId?: number;
         };
+
+        // Notification path: route to the receiver's personal
+        // room only. We deliberately don't broadcast to a
+        // "global" room because notifications are 1-to-1.
+        if (event === 'social:notification' && p && typeof p.receiverId === 'number') {
+          io?.to(`user:${p.receiverId}`).emit(event, payload);
+          return;
+        }
+
         if (!p || !p.threadId) return;
 
         // Broadcast the event into the per-thread room so anyone

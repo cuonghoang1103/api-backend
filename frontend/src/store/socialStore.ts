@@ -2,7 +2,13 @@
 
 import { create } from 'zustand';
 import { socialApi } from '@/lib/api';
-import type { SocialPost, SocialComment, MediaUploadItem } from '@/types/social';
+import type {
+  SocialPost,
+  SocialComment,
+  MediaUploadItem,
+  ReactionType,
+  ReactionBreakdown,
+} from '@/types/social';
 
 interface SocialState {
   // Feed
@@ -41,8 +47,26 @@ interface SocialState {
   loadFeed: (reset?: boolean) => Promise<void>;
   loadMore: () => Promise<void>;
 
-  // Like/unlike
+  // Like/unlike — legacy entry kept for callers that still use
+  // the old "Like / Unlike" pair of buttons (e.g. profile pages
+  // that link to /social/posts/:id/like). New UI goes through
+  // `toggleReaction` which carries the reaction type.
   toggleLike: (postId: number) => Promise<void>;
+
+  // ─── Multi-emoji reactions (added 2026-06-20) ────────────────
+  // Toggles a specific reaction type on a post. The server tells
+  // us whether the user is now reacted or not, what their current
+  // type is, and the per-type counts — we apply those directly to
+  // the local post row so the emoji stack updates instantly.
+  toggleReaction: (postId: number, type: ReactionType) => Promise<void>;
+
+  // Patch a post's reaction breakdown in-place. Used when the
+  // server pushes an updated breakdown via socket (so we don't
+  // have to refetch the whole feed to render the new count).
+  updatePostReactions: (
+    postId: number,
+    next: { reacted: boolean; myType: ReactionType | null; likesCount: number; breakdown: ReactionBreakdown },
+  ) => void;
 
   // Save/unsave
   toggleSave: (postId: number, folder?: string) => Promise<void>;
@@ -177,6 +201,129 @@ export const useSocialStore = create<SocialState>((set, get) => ({
       }));
     }
   },
+
+  /**
+   * Multi-emoji reaction toggle (added 2026-06-20).
+   *
+   * Optimistic update path:
+   *   1. Snapshot the previous reaction state (wasReacted,
+   *      wasType, prevBreakdown) so we can roll back on failure.
+   *   2. Locally apply the new state: if the user previously
+   *      reacted with the same emoji → remove (un-react);
+   *      otherwise → swap to the new emoji.
+   *   3. Recompute the optimistic breakdown (the +/- 1 per type).
+   *   4. Fire the API call. On success we replace the optimistic
+   *      snapshot with the server's authoritative counts (covers
+   *      edge cases like concurrent reactions from other users).
+   *      On failure we revert.
+   */
+  toggleReaction: async (postId, type) => {
+    const post = get().posts.find((p) => p.id === postId);
+    if (!post) return;
+
+    const prevBreakdown: ReactionBreakdown = {
+      LIKE: post.reactionBreakdown?.LIKE ?? 0,
+      LOVE: post.reactionBreakdown?.LOVE ?? 0,
+      HAHA: post.reactionBreakdown?.HAHA ?? 0,
+      SAD:  post.reactionBreakdown?.SAD ?? 0,
+      ANGRY: post.reactionBreakdown?.ANGRY ?? 0,
+    };
+    const prevMyType = post.myReaction ?? null;
+    const willRemove = prevMyType === type;
+
+    // Build the optimistic next state.
+    const nextBreakdown: ReactionBreakdown = { ...prevBreakdown };
+    if (prevMyType) nextBreakdown[prevMyType] = Math.max(0, nextBreakdown[prevMyType] - 1);
+    if (!willRemove) nextBreakdown[type] = (nextBreakdown[type] ?? 0) + 1;
+
+    const nextLikesCount = Object.values(nextBreakdown).reduce((a, b) => a + b, 0);
+    const nextMyType: ReactionType | null = willRemove ? null : type;
+
+    set((s) => ({
+      posts: s.posts.map((p) =>
+        p.id === postId
+          ? {
+              ...p,
+              myReaction: nextMyType,
+              // `isLiked` mirrors "did this user react at all" so
+              // legacy renderers and the save popover still work.
+              isLiked: !!nextMyType,
+              likesCount: nextLikesCount,
+              reactionBreakdown: nextBreakdown,
+            }
+          : p,
+      ),
+    }));
+
+    // Play the "like" sound on every state change (both like and
+    // unlike). The user explicitly asked for the chime to play even
+    // when they themselves like their own posts.
+    if (typeof window !== 'undefined') {
+      import('@/lib/sound').then(({ playSound }) => {
+        playSound('like');
+      }).catch(() => { /* ignore */ });
+    }
+
+    try {
+      const res = await socialApi.reactPost(postId, type);
+      const data = res.data.data;
+      // Replace the optimistic snapshot with the server's
+      // authoritative numbers.
+      set((s) => ({
+        posts: s.posts.map((p) =>
+          p.id === postId
+            ? {
+                ...p,
+                myReaction: data.myType,
+                isLiked: !!data.myType,
+                likesCount: data.likesCount,
+                reactionBreakdown: data.breakdown,
+              }
+            : p,
+        ),
+      }));
+    } catch {
+      // Revert on error
+      set((s) => ({
+        posts: s.posts.map((p) =>
+          p.id === postId
+            ? {
+                ...p,
+                myReaction: prevMyType,
+                isLiked: !!prevMyType,
+                likesCount: Object.values(prevBreakdown).reduce((a, b) => a + b, 0),
+                reactionBreakdown: prevBreakdown,
+              }
+            : p,
+        ),
+      }));
+    }
+  },
+
+  /**
+   * Replace the reaction block on a post with a fresh snapshot
+   * from the server (typically pushed by a socket event). We
+   * don't touch `myReaction` here — the server doesn't know the
+   * viewer's vote, only the aggregate — so this is for OTHER
+   * users' reactions that just bumped the count.
+   */
+  updatePostReactions: (postId, next) =>
+    set((s) => ({
+      posts: s.posts.map((p) =>
+        p.id === postId
+          ? {
+              ...p,
+              likesCount: next.likesCount,
+              reactionBreakdown: next.breakdown,
+              // We don't blindly overwrite myReaction — only when
+              // the server tells us the viewer is no longer
+              // reacted. (If the viewer's reaction changed on
+              // another tab they need to refresh anyway.)
+              isLiked: next.reacted ? true : p.isLiked,
+            }
+          : p,
+      ),
+    })),
 
   toggleSave: async (postId, folder) => {
     const { posts } = get();

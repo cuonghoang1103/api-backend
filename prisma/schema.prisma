@@ -106,6 +106,11 @@ model User {
   socialCommentLikes      SocialCommentLike[]
   socialSaves             SocialSave[]
   socialShares            SocialShare[]
+  // Notification graph — who is the receiver / sender on social
+  // notifications. The reverse relations are defined on
+  // SocialNotification above.
+  socialNotificationsReceived SocialNotification[] @relation("NotificationsReceived")
+  socialNotificationsSent     SocialNotification[] @relation("NotificationsSent")
   socialPollVotes         SocialPollVote[]
   techTrendArticles       TechTrendArticle[]       @relation("TechTrendAuthor")
 
@@ -1168,14 +1173,26 @@ model SocialLike {
   id        Int      @id @default(autoincrement())
   postId    Int      @map("post_id")
   userId    Int      @map("user_id")
+  // ─── Reaction type (added 2026-06-20) ─────────────────────────
+  // The legacy like was a single (postId, userId) row. We now
+  // support multi-emoji reactions. The type is a small enum stored
+  // as VARCHAR(16) at the DB level so we can add new reactions
+  // without a Prisma migration. Default 'LIKE' keeps every row
+  // created before the upgrade behaving like a regular like.
+  type      String   @default("LIKE") @db.VarChar(16)
   createdAt DateTime @default(now()) @map("created_at")
 
   post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
   user User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([postId, userId], name: "uk_social_like_post_user")
+  // One reaction per (post, user, type) — the user can only have
+  // ONE 'LIKE' on a post, ONE 'LOVE' on the same post, etc. They
+  // can change their reaction by deleting the old one and inserting
+  // a new one (handled in the service).
+  @@unique([postId, userId, type], name: "uk_social_reaction_post_user_type")
   @@index([postId], name: "idx_social_likes_post")
   @@index([userId], name: "idx_social_likes_user")
+  @@index([postId, type], name: "idx_social_likes_post_type")
   @@map("social_likes")
 }
 
@@ -1185,6 +1202,13 @@ model SocialComment {
   userId       Int      @map("user_id")
   parentId     Int?     @map("parent_id")
   content      String   @db.Text
+  // ─── @mentions (added 2026-06-20) ─────────────────────────────
+  // Array of user IDs the commenter tagged with @username. Stored
+  // on the comment so the notification job can fan out a single
+  // "bạn được nhắc tới" alert per tag without re-parsing the
+  // content. The frontend also reads this to render the
+  // `<a href="/profile/123">@name</a>` links inside the comment.
+  mentions     Int[]    @default([]) @map("mentions")
   likesCount   Int      @default(0) @map("likes_count")
   repliesCount Int      @default(0) @map("replies_count")
   isEdited     Boolean  @default(false) @map("is_edited")
@@ -1249,6 +1273,56 @@ model SocialShare {
   @@index([userId], name: "idx_social_shares_user")
   @@index([createdAt(sort: Desc)], name: "idx_social_shares_created")
   @@map("social_shares")
+}
+
+// ════════════════════════════════════════════════════════════════
+// 14b. SOCIAL NOTIFICATIONS (added 2026-06-20)
+// ════════════════════════════════════════════════════════════════
+// In-app notifications for the social feed. Each row is addressed
+// to a single receiver (the user who should see the bell badge)
+// and points at a single "actor" (the user who triggered the
+// event). `entityId` is the polymorphic pointer to whatever the
+// notification is about — post id, comment id, or message id
+// depending on `type`. We don't add FK constraints on `entityId`
+// because the target table varies by type, and the cascade
+// behaviour differs (deleting a post should drop related
+// notifications; deleting a comment should too; deleting a
+// message is a soft-delete so notifications stay).
+//
+// `payload` (JSONB) is a free-form per-type blob (e.g. for
+// reactions: { type: 'LOVE' }; for comments: { commentId, parentId }).
+// The frontend uses it to render the right icon / route the user
+// to the right place when they click the bell item.
+//
+// `isRead` is the source of truth for the unread badge — when the
+// user opens the dropdown we flip this in bulk. There is no
+// per-notification "seen at" timestamp yet.
+
+model SocialNotification {
+  id         Int      @id @default(autoincrement())
+  receiverId Int      @map("receiver_id")
+  senderId   Int      @map("sender_id")
+  // NEW_POST | NEW_REACTION | NEW_COMMENT | NEW_REPLY |
+  // NEW_MENTION | NEW_MESSAGE
+  type       String   @db.VarChar(20)
+  // Polymorphic pointer — meaning depends on `type`. We keep it
+  // as Int (no FK) for forward flexibility.
+  entityId   Int?     @map("entity_id")
+  // Optional second polymorphic pointer (e.g. comment.parentId
+  // for a reply so the bell can deep-link into the right thread).
+  secondaryEntityId Int? @map("secondary_entity_id")
+  payload    Json?    @map("payload") @db.JsonB
+  isRead     Boolean  @default(false) @map("is_read")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  receiver User @relation("NotificationsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender   User @relation("NotificationsSent",     fields: [senderId],   references: [id], onDelete: Cascade)
+
+  // Hot path: "list the latest unread notifications for user X".
+  @@index([receiverId, isRead, createdAt(sort: Desc)], name: "idx_social_notif_receiver_unread")
+  @@index([receiverId, createdAt(sort: Desc)], name: "idx_social_notif_receiver_time")
+  @@index([senderId], name: "idx_social_notif_sender")
+  @@map("social_notifications")
 }
 
 // ─── Poll (Phase 2 — admin-style quick vote on a post) ────────────

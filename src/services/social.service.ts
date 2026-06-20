@@ -93,6 +93,11 @@ export interface CommentInput {
   postId: number;
   parentId?: number;
   content: string;
+  // Optional @mention list. Either Int[] or string[] of numeric
+  // ids; coerced in the service. Stored verbatim on the comment
+  // so the notification job can fan out without re-parsing the
+  // text body.
+  mentions?: Array<number | string>;
 }
 
 // ─── Post CRUD ────────────────────────────────────────────────────
@@ -242,9 +247,31 @@ export async function getPostById(postId: number, currentUserId?: number) {
       })).map((v) => v.optionId)
     : [];
 
+  // ─── Reaction breakdown (added 2026-06-20) ────────────────────
+  // We compute the per-type counts so PostCard can render the
+  // emoji stack without an extra round-trip. Cheap groupBy.
+  const grouped = await prisma.socialLike.groupBy({
+    by: ['type'],
+    where: { postId: post.id },
+    _count: { type: true },
+  });
+  const reactionBreakdown: Record<ReactionType, number> = {
+    LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0,
+  };
+  for (const row of grouped as Array<{ type: string; _count: { type: number } }>) {
+    if (row.type in reactionBreakdown) {
+      reactionBreakdown[row.type as ReactionType] = row._count.type;
+    }
+  }
+  const myReactionType = currentUserId
+    ? (post.likes as Array<{ type: string }> | undefined)?.[0]?.type ?? null
+    : null;
+
   return serializePost(post, {
     currentUserId,
     pollUserVotes,
+    reactionBreakdown,
+    myReactionType,
   });
 }
 
@@ -349,7 +376,7 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       },
       likes: currentUserId ? {
         where: { userId: currentUserId },
-        select: { id: true },
+        select: { id: true, type: true },
       } : false,
       saves: currentUserId ? {
         where: { userId: currentUserId },
@@ -370,8 +397,36 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
     ? await loadPollVotes(pollIds, currentUserId)
     : {};
 
+  // Per-post reaction breakdown + viewer's own reaction type. We
+  // do a single groupBy across the visible post ids so the
+  // PostCard can render the emoji stack without N extra queries.
+  const postIds = items.map((p: any) => p.id);
+  const reactionGrouped = postIds.length > 0
+    ? await prisma.socialLike.groupBy({
+        by: ['postId', 'type'],
+        where: { postId: { in: postIds } },
+        _count: { type: true },
+      })
+    : [];
+  const breakdownByPost = new Map<number, Record<ReactionType, number>>();
+  for (const row of reactionGrouped as Array<{ postId: number; type: string; _count: { type: number } }>) {
+    let cur = breakdownByPost.get(row.postId);
+    if (!cur) {
+      cur = { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 };
+      breakdownByPost.set(row.postId, cur);
+    }
+    if (row.type in cur) {
+      cur[row.type as ReactionType] = row._count.type;
+    }
+  }
+
   return {
-    data: items.map((post: any) => serializePost(post, { currentUserId, pollUserVotes: pollVotesByPollId[post.poll?.id] || [] })),
+    data: items.map((post: any) => serializePost(post, {
+      currentUserId,
+      pollUserVotes: pollVotesByPollId[post.poll?.id] || [],
+      reactionBreakdown: breakdownByPost.get(post.id) ?? { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
+      myReactionType: (post.likes as Array<{ type: string }> | undefined)?.[0]?.type ?? null,
+    })),
     pagination: {
       nextCursor,
       hasNextPage,
@@ -414,9 +469,15 @@ function serializePost(
   opts: {
     currentUserId?: number;
     pollUserVotes?: number[];
+    // Reaction breakdown + viewer's own reaction type (added 2026-06-20).
+    // These are optional so legacy callers (createPost) keep working
+    // — the resulting post just won't carry the new fields. PostCard
+    // falls back to a default when the fields are missing.
+    reactionBreakdown?: Record<ReactionType, number>;
+    myReactionType?: string | null;
   } = {},
 ) {
-  const { currentUserId, pollUserVotes } = opts;
+  const { currentUserId, pollUserVotes, reactionBreakdown, myReactionType } = opts;
   return {
     id: post.id,
     content: post.content,
@@ -455,6 +516,13 @@ function serializePost(
     savesCount: post._count?.saves ?? 0,
     isLiked: currentUserId ? (post.likes as unknown[] | undefined)?.length ?? 0 > 0 : false,
     isSaved: currentUserId ? (post.saves as unknown[] | undefined)?.length ?? 0 > 0 : false,
+    // ─── Reaction fields (added 2026-06-20) ────────────────────
+    // The user's current reaction type (or null if they haven't
+    // reacted). PostCard reads this to highlight the right emoji.
+    myReaction: myReactionType ?? null,
+    // Per-type counts. Empty default so the PostCard can always
+    // call `breakdown.LIKE` without a null check.
+    reactionBreakdown: reactionBreakdown ?? { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
     savedFolder:
       currentUserId && Array.isArray(post.saves) && (post.saves as unknown[]).length > 0
         ? (post.saves[0] as { folder?: string }).folder ?? null
@@ -462,9 +530,67 @@ function serializePost(
   };
 }
 
-// ─── Like / Unlike ────────────────────────────────────────────────
+// ─── Like / Unlike / React ────────────────────────────────────────
+
+// Allow-list of reaction types the API accepts. Anything else is
+// rejected with 400. We keep this as a runtime constant (not a
+// Prisma enum) so we can add new emojis in the future without a
+// schema migration — the column is a plain VARCHAR(16).
+export const REACTION_TYPES = ['LIKE', 'LOVE', 'HAHA', 'SAD', 'ANGRY'] as const;
+export type ReactionType = (typeof REACTION_TYPES)[number];
+
+/** Reject anything that isn't in the allow-list. */
+function normaliseReactionType(raw: unknown): ReactionType {
+  if (typeof raw !== 'string') return 'LIKE';
+  const upper = raw.toUpperCase();
+  return (REACTION_TYPES as readonly string[]).includes(upper)
+    ? (upper as ReactionType)
+    : 'LIKE';
+}
 
 export async function likePost(postId: number, userId: number) {
+  // Legacy endpoint — kept as a thin wrapper around reactPost()
+  // so the original /social/posts/:id/like route continues to
+  // work unchanged. Internally we just write a 'LIKE' reaction.
+  return reactPost(postId, userId, 'LIKE');
+}
+
+export async function unlikePost(postId: number, userId: number) {
+  // Clear ALL reaction types the user has on this post (legacy
+  // behaviour: unlike = remove any reaction). We don't filter by
+  // type so a user who reacted with 'LOVE' and then hits the
+  // legacy unlike endpoint still gets cleared.
+  await prisma.socialLike.deleteMany({
+    where: { postId, userId },
+  });
+
+  const count = await prisma.socialLike.count({ where: { postId } });
+  return { liked: false, likesCount: count };
+}
+
+/**
+ * New multi-emoji reaction endpoint.
+ *
+ * Semantics (spec'd by the user):
+ *   - First time the user reacts with type T on a post: insert a
+ *     row. The post is now "reacted to" with T.
+ *   - The user clicks the SAME emoji again: remove the row (toggle
+ *     off). The post is no longer reacted to with T.
+ *   - The user clicks a DIFFERENT emoji while already having T:
+ *     remove T, insert the new one (swap reaction). The
+ *     @@unique([postId, userId, type]) constraint makes this safe.
+ *
+ * Always returns a small payload that lets the PostCard update
+ * its UI without an extra round-trip:
+ *   { reacted: bool, type, likesCount, myReactions: [{ type, count }] }
+ */
+export async function reactPost(
+  postId: number,
+  userId: number,
+  rawType: unknown,
+) {
+  const type = normaliseReactionType(rawType);
+
   const post = await prisma.socialPost.findUnique({
     where: { id: postId },
     select: { id: true },
@@ -472,28 +598,80 @@ export async function likePost(postId: number, userId: number) {
   if (!post) throw new AppError('Post not found', 404, 'POST_NOT_FOUND');
 
   const existing = await prisma.socialLike.findFirst({
-    where: { postId, userId },
+    where: { postId, userId, type },
+    select: { id: true },
   });
 
   if (existing) {
-    return { liked: true, message: 'Already liked' };
+    // Same type clicked twice → unreact
+    await prisma.socialLike.delete({ where: { id: existing.id } });
+  } else {
+    // If the user has a DIFFERENT reaction on this post, drop it
+    // so the (post, user) pair has at most one reaction row.
+    // This matches Facebook's "swap reaction" UX.
+    await prisma.socialLike.deleteMany({ where: { postId, userId } });
+    await prisma.socialLike.create({
+      data: { postId, userId, type },
+    });
   }
 
-  await prisma.socialLike.create({
-    data: { postId, userId },
+  // Recompute counts. We return a per-type breakdown so the
+  // PostCard can render the emoji stack ("👍 12  ❤️ 3  😆 1").
+  const [total, grouped] = await Promise.all([
+    prisma.socialLike.count({ where: { postId } }),
+    prisma.socialLike.groupBy({
+      by: ['type'],
+      where: { postId },
+      _count: { type: true },
+    }),
+  ]);
+
+  const breakdown: Record<ReactionType, number> = {
+    LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0,
+  };
+  for (const row of grouped as Array<{ type: string; _count: { type: number } }>) {
+    if (row.type in breakdown) {
+      breakdown[row.type as ReactionType] = row._count.type;
+    }
+  }
+
+  // Look up the user's CURRENT reaction (might be null if they
+  // just unreacted). The PostCard reads this to know which emoji
+  // to highlight.
+  const mine = await prisma.socialLike.findFirst({
+    where: { postId, userId },
+    select: { type: true },
   });
 
-  const count = await prisma.socialLike.count({ where: { postId } });
-  return { liked: true, likesCount: count };
+  return {
+    reacted: !!mine,
+    myType: (mine?.type as ReactionType | undefined) ?? null,
+    likesCount: total,
+    breakdown,
+  };
 }
 
-export async function unlikePost(postId: number, userId: number) {
-  await prisma.socialLike.deleteMany({
-    where: { postId, userId },
+/**
+ * Returns the per-type breakdown for a post (used by the feed
+ * service to enrich the wire payload so PostCard can render the
+ * emoji stack without an extra round-trip).
+ */
+export async function getReactionBreakdown(postId: number) {
+  const grouped = await prisma.socialLike.groupBy({
+    by: ['type'],
+    where: { postId },
+    _count: { type: true },
   });
-
-  const count = await prisma.socialLike.count({ where: { postId } });
-  return { liked: false, likesCount: count };
+  const breakdown: Record<ReactionType, number> = {
+    LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0,
+  };
+  for (const row of grouped as Array<{ type: string; _count: { type: number } }>) {
+    if (row.type in breakdown) {
+      breakdown[row.type as ReactionType] = row._count.type;
+    }
+  }
+  const total = Object.values(breakdown).reduce((a, b) => a + b, 0);
+  return { total, breakdown };
 }
 
 export async function likeComment(commentId: number, userId: number) {
@@ -530,16 +708,47 @@ export async function likeComment(commentId: number, userId: number) {
 export async function createComment(input: CommentInput) {
   const post = await prisma.socialPost.findUnique({
     where: { id: input.postId },
-    select: { id: true },
+    select: { id: true, authorId: true },
   });
   if (!post) throw new AppError('Post not found', 404, 'POST_NOT_FOUND');
+
+  // Optional parent comment for replies. We validate it belongs
+  // to the same post so a reply can't be cross-attached.
+  let resolvedParentId: number | null = null;
+  if (input.parentId != null) {
+    const parent = await prisma.socialComment.findUnique({
+      where: { id: input.parentId },
+      select: { id: true, postId: true },
+    });
+    if (!parent) {
+      throw new AppError('Parent comment not found', 404, 'PARENT_COMMENT_NOT_FOUND');
+    }
+    if (parent.postId !== input.postId) {
+      throw new AppError('Parent comment does not belong to this post', 400, 'PARENT_COMMENT_MISMATCH');
+    }
+    resolvedParentId = parent.id;
+  }
+
+  // Optional @mentions. We accept either a number[] (preferred) or
+  // a string[] that we'll attempt to coerce. De-dupe and drop
+  // mentions of the commenter themselves (no point notifying
+  // yourself).
+  const rawMentions = (input as any).mentions;
+  const cleanedMentions: number[] = Array.isArray(rawMentions)
+    ? Array.from(new Set(
+        rawMentions
+          .map((m: unknown) => (typeof m === 'number' ? m : parseInt(String(m), 10)))
+          .filter((n: number) => Number.isFinite(n) && n > 0 && n !== input.userId),
+      ))
+    : [];
 
   const comment = await prisma.socialComment.create({
     data: {
       postId: input.postId,
       userId: input.userId,
-      parentId: input.parentId,
+      parentId: resolvedParentId,
       content: input.content,
+      mentions: cleanedMentions,
     },
     include: {
       user: {
@@ -551,9 +760,13 @@ export async function createComment(input: CommentInput) {
     },
   });
 
-  if (input.parentId) {
+  // Bump the parent's `repliesCount` so the UI can show "View N
+  // replies" without a count query. We only do this for replies
+  // (parentId set); top-level comments don't have a parent to
+  // bump.
+  if (resolvedParentId != null) {
     await prisma.socialComment.update({
-      where: { id: input.parentId },
+      where: { id: resolvedParentId },
       data: { repliesCount: { increment: 1 } },
     });
   }
@@ -563,6 +776,8 @@ export async function createComment(input: CommentInput) {
     likesCount: comment._count.likes,
     isLiked: false,
     repliesCount: comment.repliesCount,
+    parentId: resolvedParentId,
+    mentions: cleanedMentions,
   };
 }
 
@@ -600,6 +815,9 @@ export async function getComments(postId: number, options: { cursor?: number; li
     id: c.id,
     postId: c.postId,
     content: c.content,
+    // @mention ids — the PostCard reads this to render
+    // `<a>@username</a>` inside the comment body.
+    mentions: Array.isArray(c.mentions) ? c.mentions : [],
     likesCount: c._count?.likes ?? 0,
     repliesCount: c.repliesCount,
     isEdited: c.isEdited,
@@ -612,6 +830,7 @@ export async function getComments(postId: number, options: { cursor?: number; li
       postId: r.postId,
       parentId: r.parentId,
       content: r.content,
+      mentions: Array.isArray(r.mentions) ? r.mentions : [],
       likesCount: r._count?.likes ?? 0,
       repliesCount: r.repliesCount,
       isEdited: r.isEdited,

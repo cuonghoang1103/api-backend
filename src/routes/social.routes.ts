@@ -42,6 +42,7 @@ import {
   getFeed,
   likePost,
   unlikePost,
+  reactPost,
   createComment,
   getComments,
   deleteComment,
@@ -55,6 +56,12 @@ import {
   votePoll,
   getPollForViewer,
 } from '../services/social.service.js';
+import {
+  notifyPostReaction,
+  notifyPostComment,
+  notifyCommentReply,
+  notifyMention,
+} from '../services/notification.service.js';
 import { notifyAdminPost } from '../services/notification.service.js';
 
 const router = Router();
@@ -273,6 +280,54 @@ router.delete(
 );
 
 // ════════════════════════════════════════════════════════════════
+// POST /api/v1/social/posts/:id/react — Multi-emoji reaction
+// ════════════════════════════════════════════════════════════════
+//
+// New (2026-06-20) endpoint. Body: { type: 'LIKE' | 'LOVE' |
+// 'HAHA' | 'SAD' | 'ANGRY' }.
+//
+// Toggle semantics:
+//   - First reaction with type T   → insert row
+//   - Click SAME emoji again       → remove (un-react)
+//   - Click a DIFFERENT emoji      → swap (drop old, insert new)
+//
+// The PostCard relies on the per-type breakdown in the response
+// to update the emoji stack without a refetch.
+router.post(
+  '/posts/:id/react',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      const postId = parseInt(req.params.id, 10);
+      if (isNaN(postId)) throw new AppError('Invalid post ID', 400, 'INVALID_ID');
+
+      const { type } = req.body ?? {};
+      const result = await reactPost(postId, userId, type);
+
+      // Fire an in-app notification to the post author. We do
+      // this AFTER the DB write so a failure here doesn't roll
+      // back the reaction. The helper self-filters when
+      // userId === post.authorId (no self-notify).
+      if (result.reacted) {
+        const post = await prisma.socialPost.findUnique({
+          where: { id: postId },
+          select: { authorId: true },
+        });
+        if (post && post.authorId !== userId) {
+          // fire-and-forget — the helper logs its own errors
+          void notifyPostReaction(post.authorId, userId, postId, result.myType ?? 'LIKE');
+        }
+      }
+
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
 // GET /api/v1/social/posts/:id/comments — List comments
 // ════════════════════════════════════════════════════════════════
 router.get(
@@ -305,7 +360,7 @@ router.post(
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = getUserId(req);
-      const { postId, parentId, content } = req.body;
+      const { postId, parentId, content, mentions } = req.body;
 
       if (!postId || isNaN(parseInt(postId, 10))) {
         throw new AppError('Valid postId is required', 400, 'INVALID_POST_ID');
@@ -319,7 +374,59 @@ router.post(
         postId: parseInt(postId, 10),
         parentId: parentId ? parseInt(parentId, 10) : undefined,
         content: content.trim(),
+        mentions: Array.isArray(mentions) ? mentions : undefined,
       });
+
+      // Notification fan-out (fire-and-forget; helpers self-log
+      // any error so a notification glitch never blocks the
+      // create response).
+      try {
+        const post = await prisma.socialPost.findUnique({
+          where: { id: comment.postId },
+          select: { authorId: true },
+        });
+        const parent = comment.parentId
+          ? await prisma.socialComment.findUnique({
+              where: { id: comment.parentId },
+              select: { userId: true },
+            })
+          : null;
+
+        // 1) Reply → notify the parent comment's author
+        if (parent && parent.userId !== userId) {
+          void notifyCommentReply(
+            parent.userId,
+            userId,
+            comment.postId,
+            comment.id,
+            comment.parentId!,
+          );
+        }
+
+        // 2) Top-level comment on someone else's post → notify
+        //    the post author (unless already notified as parent
+        //    comment author).
+        if (
+          post &&
+          post.authorId !== userId &&
+          post.authorId !== parent?.userId
+        ) {
+          void notifyPostComment(post.authorId, userId, comment.postId, comment.id);
+        }
+
+        // 3) @mentions → notify each tagged user (skip self and
+        //    anyone already notified above)
+        if (Array.isArray(comment.mentions)) {
+          for (const mid of comment.mentions) {
+            if (mid === userId) continue;
+            if (mid === post?.authorId && post.authorId !== parent?.userId) continue;
+            if (mid === parent?.userId) continue;
+            void notifyMention(mid, userId, comment.postId, comment.id);
+          }
+        }
+      } catch (notifErr) {
+        console.warn('[social.routes] notification fan-out failed:', (notifErr as Error).message);
+      }
 
       res.status(201).json({ success: true, data: comment });
     } catch (error) {

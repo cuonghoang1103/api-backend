@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import type { ApiResponse, AuthResponse } from '@/types';
+import type { ReactionType, ReactionBreakdown } from '@/types/social';
 
 const DEFAULT_UPLOAD_CATEGORY = 'images';
 
@@ -763,9 +764,28 @@ export const socialApi = {
 
   deletePost: (id: number) => api.delete(`/social/posts/${id}`),
 
-  // Like
+  // Like — legacy endpoints kept for any caller that still uses
+  // them. The new reaction picker UI calls `reactPost` instead.
   likePost: (id: number) => api.post(`/social/posts/${id}/like`),
   unlikePost: (id: number) => api.delete(`/social/posts/${id}/like`),
+
+  // ─── Multi-emoji reactions (added 2026-06-20) ──────────────────
+  // Toggle semantics:
+  //   first click T    → insert T
+  //   click T again    → remove T
+  //   click T' (≠ T)   → swap to T'
+  // Response carries the per-type breakdown so the card can
+  // update the emoji stack without an extra round-trip.
+  reactPost: (id: number, type: ReactionType) =>
+    api.post<{
+      success: true;
+      data: {
+        reacted: boolean;
+        myType: ReactionType | null;
+        likesCount: number;
+        breakdown: ReactionBreakdown;
+      };
+    }>(`/social/posts/${id}/react`, { type }),
 
   // Comments
   getComments: (postId: number, params?: { cursor?: number; limit?: number }) =>
@@ -775,6 +795,11 @@ export const socialApi = {
     postId: number;
     parentId?: number;
     content: string;
+    // @mention ids (added 2026-06-20). The backend de-dupes and
+    // strips self-mentions, so the client can pass anything it
+    // likes. The CommentSection builds this list from the
+    // @-picker UI it owns.
+    mentions?: number[];
   }) => api.post('/social/comments', data),
 
   updateComment: (id: number, content: string) =>
@@ -837,6 +862,33 @@ export const socialApi = {
       params: { filename, folder, contentType: mimeType },
     });
   },
+};
+
+// ─── In-app social notifications (added 2026-06-20) ──────────────────
+// Wraps /social/notifications (cursor-paginated list, PATCH to
+// mark read, GET /unread-count for the bell badge). All three
+// endpoints require an authenticated user.
+export const notificationApi = {
+  list: (params?: { cursor?: number; limit?: number }) =>
+    api.get<{
+      success: true;
+      data: {
+        items: import('@/types/social').SocialNotification[];
+        pagination: { nextCursor: number | null; hasNextPage: boolean; limit: number };
+        unreadCount: number;
+      };
+    }>('/social/notifications', { params }),
+
+  unreadCount: () =>
+    api.get<{ success: true; data: { unreadCount: number } }>(
+      '/social/notifications/unread-count',
+    ),
+
+  markRead: (body: { all?: boolean; ids?: number[] } = { all: true }) =>
+    api.patch<{ success: true; data: { updated: number } }>(
+      '/social/notifications',
+      body,
+    ),
 };
 
 // ─── Cyber Gamification API ─────────────────────────────────────────────────────

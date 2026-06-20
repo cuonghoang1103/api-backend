@@ -6,8 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Heart, MessageCircle, Bookmark, Share2, MoreHorizontal, Send,
   Repeat2, Trash2, Copy, Flag, Eye, Globe, Users, Lock,
-  Smile, ThumbsUp, Frown, Laugh, Angry, Hand, X, Youtube,
+  X, Youtube,
   Download, FileText, FileCode, FileArchive, FileSpreadsheet,
+  CornerDownRight,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
 import { socialApi } from '@/lib/api';
@@ -18,7 +19,8 @@ import SocialSavePopover, {
 } from '@/components/social/SocialSavePopover';
 import { useAuthStore } from '@/store/authStore';
 import { getMediaUrl } from '@/lib/utils';
-import type { SocialPost, SocialComment, SocialMedia } from '@/types/social';
+import type { SocialPost, SocialComment, SocialMedia, ReactionType } from '@/types/social';
+import { REACTION_META } from '@/types/social';
 import { formatRelative } from '@/lib/formatDate';
 import { toast } from 'sonner';
 
@@ -32,14 +34,13 @@ const VISIBILITY_META: Record<string, { icon: any; label: string; color: string 
   PRIVATE: { icon: Lock, label: 'Chỉ mình tôi', color: '#f59e0b' },
 };
 
-const REACTIONS = [
-  { key: 'like', emoji: '👍', label: 'Thích', icon: ThumbsUp, color: '#3b82f6' },
-  { key: 'love', emoji: '❤️', label: 'Yêu thích', icon: Heart, color: '#ec4899' },
-  { key: 'laugh', emoji: '😆', label: 'Haha', icon: Laugh, color: '#eab308' },
-  { key: 'wow', emoji: '😮', label: 'Wow', icon: Smile, color: '#f59e0b' },
-  { key: 'sad', emoji: '😢', label: 'Buồn', icon: Frown, color: '#06b6d4' },
-  { key: 'angry', emoji: '😡', label: 'Phẫn nộ', icon: Angry, color: '#ef4444' },
-];
+// ─── Multi-emoji reactions (added 2026-06-20) ─────────────────────
+// Drives the reaction picker popover. `key` is the ReactionType
+// the server now understands (LIKE / LOVE / HAHA / SAD / ANGRY).
+// `meta` is the visual mapping (emoji + label + colour) sourced
+// from types/social.ts so the new code and any future consumer
+// share one source of truth.
+const REACTION_KEYS: ReactionType[] = ['LIKE', 'LOVE', 'HAHA', 'SAD', 'ANGRY'];
 
 const MAX_PREVIEW_LENGTH = 600;
 
@@ -78,7 +79,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const [collectionsLoaded, setCollectionsLoaded] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const longPressTimer = useRef<any>(null);
-  const { toggleLike, toggleSave, loadComments, commentsByPost, loadMoreComments, commentsHasMoreByPost, isLoadingComments, addOptimisticComment, deletePost } = useSocialStore();
+  const { toggleLike, toggleReaction, toggleSave, loadComments, commentsByPost, loadMoreComments, commentsHasMoreByPost, isLoadingComments, addOptimisticComment, deletePost } = useSocialStore();
   const { user: currentUser } = useAuthStore();
 
   const comments = commentsByPost[post.id] || [];
@@ -245,6 +246,67 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     }
   };
 
+  /**
+   * Post a reply to a top-level comment.
+   *   - parentId: id of the comment being replied to
+   *   - content: the full text (including the leading
+   *     "@display " that CommentItem pre-filled)
+   *
+   * We extract the @mention ids from `content` against the
+   * usernames we know about (currently the only candidates
+   * are the users appearing in the comments of this post).
+   * For v1 we just send an empty mentions array and let the
+   * notification service do best-effort from the @string
+   * itself; the mentions column on the row is opt-in
+   * metadata. A future iteration can resolve names → ids via
+   * a /api/users/search endpoint.
+   */
+  const handleReplyComment = async (parentId: number, content: string) => {
+    // Best-effort: try to find an @username in the content
+    // and resolve it to a user id by scanning the currently
+    // loaded comments. If we can't find it, we send an empty
+    // array — the comment still saves, just without the
+    // mention notification.
+    const match = content.match(/@([\p{L}\p{N}_.]{1,30})/u);
+    let mentionId: number | null = null;
+    if (match) {
+      const target = match[1].toLowerCase();
+      for (const c of comments) {
+        const u = (c as any).user;
+        if (!u) continue;
+        if (u.username?.toLowerCase() === target || u.displayName?.toLowerCase() === target || u.fullName?.toLowerCase() === target) {
+          mentionId = u.id;
+          break;
+        }
+        if (Array.isArray(c.replies)) {
+          for (const r of c.replies) {
+            const ru = (r as any).user;
+            if (ru && (ru.username?.toLowerCase() === target || ru.displayName?.toLowerCase() === target || ru.fullName?.toLowerCase() === target)) {
+              mentionId = ru.id;
+              break;
+            }
+          }
+          if (mentionId) break;
+        }
+      }
+    }
+
+    try {
+      await socialApi.createComment({
+        postId: post.id,
+        parentId,
+        content,
+        mentions: mentionId ? [mentionId] : undefined,
+      });
+      // Refresh the comment list so the new reply shows up
+      // under the parent.
+      loadComments(post.id, true);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Gửi trả lời thất bại');
+      throw err; // let CommentItem re-enable its submit button
+    }
+  };
+
   // Long-press to show reactions panel
   const startLongPress = () => {
     if (longPressTimer.current) clearTimeout(longPressTimer.current);
@@ -256,6 +318,37 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
       longPressTimer.current = null;
     }
   };
+
+  // ─── Multi-emoji reactions (added 2026-06-20) ──────────────────
+  // Click on the picker (long-press or hover) → call
+  // `toggleReaction(type)`. The store handles optimistic update
+  // and the round-trip; this is just a thin proxy.
+  const handleReact = (type: ReactionType) => {
+    setShowReactions(false);
+    if (onToggleLike) {
+      // External handler (e.g. social page level) — we still
+      // honour the legacy `onToggleLike` but ALSO try the new
+      // store call so the new emoji metadata flows. If the
+      // page only wired up onToggleLike, fall through to it.
+      onToggleLike(post.id).catch(() => { /* ignore */ });
+    }
+    toggleReaction(post.id, type);
+  };
+
+  // The viewer's current reaction. Drives the heart icon
+  // colour + the label below the count.
+  const myReaction = (post as any).myReaction as ReactionType | null | undefined;
+  const reactionColor = myReaction ? REACTION_META[myReaction].color : '#94a3b8';
+  const reactionEmoji = myReaction ? REACTION_META[myReaction].emoji : null;
+  const breakdown = (post as any).reactionBreakdown as
+    | Record<ReactionType, number>
+    | undefined;
+  // Count of "non-zero" reaction types so we can show the
+  // emoji stack: a post with only 👍 shows just 👍, but a post
+  // with 👍 + ❤️ shows both.
+  const activeReactions = REACTION_KEYS.filter(
+    (k) => (breakdown?.[k] ?? 0) > 0,
+  );
 
   // ─── Saved Collections: handlers (added 2026-06-20) ────────────
   // When the popover opens for the first time, fetch the user's
@@ -508,7 +601,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
             onMouseEnter={() => setShowReactions(false)}
           >
             <button
-              onClick={() => { if (onToggleLike) { onToggleLike(post.id); } else { toggleLike(post.id); } }}
+              onClick={() => handleReact('LIKE')}
               onMouseDown={startLongPress}
               onMouseUp={cancelLongPress}
               onMouseLeave={(e) => {
@@ -518,14 +611,26 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
               onTouchStart={startLongPress}
               onTouchEnd={cancelLongPress}
               className="group inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-colors"
-              style={{ color: safeIsLiked ? '#ec4899' : '#94a3b8' }}
-              onMouseEnter={(e) => { if (!safeIsLiked) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
+              style={{ color: myReaction ? reactionColor : '#94a3b8' }}
+              onMouseEnter={(e) => { if (!myReaction) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
             >
-              <Heart
-                size={16}
-                fill={safeIsLiked ? '#ec4899' : 'none'}
-                className="transition-transform group-active:scale-125"
-              />
+              {myReaction ? (
+                // Render the viewer's current reaction emoji
+                // (could be any of the 5 types). It scales up
+                // on press just like the old heart.
+                <span
+                  className="text-[15px] leading-none transition-transform group-active:scale-125"
+                  aria-label={REACTION_META[myReaction].label}
+                >
+                  {reactionEmoji}
+                </span>
+              ) : (
+                <Heart
+                  size={16}
+                  fill="none"
+                  className="transition-transform group-active:scale-125"
+                />
+              )}
               <span className="tabular-nums">{safeLikesCount}</span>
             </button>
             <AnimatePresence>
@@ -538,19 +643,58 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
                   style={{ background: 'rgba(15,15,25,0.95)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}
                   onMouseLeave={() => setShowReactions(false)}
                 >
-                  {REACTIONS.map((r) => (
-                    <button
-                      key={r.key}
-                      onClick={() => { setShowReactions(false); if (onToggleLike) { onToggleLike(post.id); } else { toggleLike(post.id); } }}
-                      className="text-xl hover:scale-125 transition-transform px-1.5"
-                      title={r.label}
-                    >
-                      {r.emoji}
-                    </button>
-                  ))}
+                  {REACTION_KEYS.map((k) => {
+                    const r = REACTION_META[k];
+                    // Highlight the viewer's CURRENT reaction
+                    // (if any) so they can see what's active.
+                    const isMine = myReaction === k;
+                    return (
+                      <button
+                        key={k}
+                        onClick={() => handleReact(k)}
+                        onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.4) translateY(-4px)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.transform = isMine ? 'scale(1.15)' : 'scale(1)'; }}
+                        className="text-xl transition-transform px-1.5"
+                        title={r.label}
+                        style={{
+                          transform: isMine ? 'scale(1.15)' : 'scale(1)',
+                          filter: isMine ? `drop-shadow(0 0 6px ${r.color})` : undefined,
+                        }}
+                      >
+                        {r.emoji}
+                      </button>
+                    );
+                  })}
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Emoji stack under the like button — only when
+                at least one reaction is non-zero AND the post
+                has more than 0 likes. Renders the active types
+                with their count next to it. */}
+            {activeReactions.length > 0 && safeLikesCount > 0 && (
+              <div className="mt-1 flex items-center gap-1 pl-1.5">
+                <div className="flex -space-x-1">
+                  {activeReactions.slice(0, 3).map((k) => (
+                    <span
+                      key={k}
+                      className="inline-flex items-center justify-center w-4 h-4 rounded-full text-[10px] leading-none"
+                      style={{
+                        background: 'rgba(15,15,25,0.95)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                      }}
+                      title={REACTION_META[k].label}
+                    >
+                      {REACTION_META[k].emoji}
+                    </span>
+                  ))}
+                </div>
+                <span className="text-[10px] text-slate-500 tabular-nums">
+                  {safeLikesCount}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Comment */}
@@ -703,8 +847,12 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
                           key={comment.id}
                           comment={comment}
                           onLike={() => handleLikeComment(comment.id)}
-                          canDelete={canDeleteComment}
+                          onLikeComment={handleLikeComment}
                           onDelete={canDeleteComment ? () => handleDeleteComment(comment.id) : undefined}
+                          onDeleteComment={handleDeleteComment}
+                          onReply={handleReplyComment}
+                          canDelete={canDeleteComment}
+                          postId={post.id}
                         />
                       );
                     })}
@@ -1101,15 +1249,30 @@ function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
 function CommentItem({
   comment,
   onLike,
+  onLikeComment,
   onDelete,
+  onDeleteComment,
+  onReply,
   canDelete,
+  postId,
+  depth = 0,
 }: {
   comment: SocialComment;
   onLike: () => void;
+  // Like handler that accepts a commentId. We need this for the
+  // nested-replies case because each reply's like lives in
+  // PostCard's closure (it has access to `socialApi` + the
+  // `loadComments` refresh). `onLike` is a no-arg variant
+  // reserved for the top-level "click to like this comment"
+  // path; for replies we always use `onLikeComment(id)`.
+  onLikeComment?: (commentId: number) => void;
   onDelete?: () => void;
+  onDeleteComment?: (commentId: number) => void;
+  onReply?: (parentId: number, content: string) => Promise<void>;
   canDelete?: boolean;
-}) {
-  // Defensive defaults — a comment without a user object (e.g.
+  postId: number;
+  depth?: number;
+}) {  // Defensive defaults — a comment without a user object (e.g.
   // one that's been partially deleted on the server) should still
   // render without crashing the whole card.
   const commentUser = (comment as any)?.user ?? {};
@@ -1119,6 +1282,84 @@ function CommentItem({
     ? commentUser.avatarUrl
     : `https://api.dicebear.com/7.x/avataaars/svg?seed=${commentUsername}`;
   const display = commentUser.displayName || commentUser.fullName || commentUser.username || 'Người dùng';
+
+  // Reply input state. We track per-comment whether the input
+  // is open, what the user has typed, and whether the
+  // submission is in flight. The store doesn't own this state
+  // — it's a pure UI concern of CommentItem.
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [replyText, setReplyText] = useState('');
+  const [replySubmitting, setReplySubmitting] = useState(false);
+
+  // Pre-fill `@display ` when the user clicks the Reply button
+  // for the first time. We use the display name with a trailing
+  // space so the user can immediately start typing their reply.
+  const openReply = () => {
+    setReplyText((cur) => (cur.length === 0 ? `@${display} ` : cur));
+    setReplyOpen(true);
+  };
+
+  const submitReply = async () => {
+    const trimmed = replyText.trim();
+    if (!trimmed || !onReply) return;
+    setReplySubmitting(true);
+    try {
+      await onReply(comment.id, trimmed);
+      setReplyText('');
+      setReplyOpen(false);
+    } catch {
+      /* parent surfaces the error toast */
+    } finally {
+      setReplySubmitting(false);
+    }
+  };
+
+  // Render the comment body with @mention chips. We split on
+  // @username tokens and wrap each one in a clickable link.
+  // The mention user IDs are on `comment.mentions` so we can
+  // pick the right href per token.
+  const mentionIds: number[] = Array.isArray((comment as any).mentions)
+    ? ((comment as any).mentions as number[])
+    : [];
+  const renderContent = () => {
+    const text = comment.content || '';
+    // Match @ followed by non-whitespace characters, max 30
+    // chars (matches the username limit in the registration
+    // form).
+    const re = /@([\p{L}\p{N}_.]{1,30})/gu;
+    const parts: Array<{ type: 'text' | 'mention'; value: string; idx: number }> = [];
+    let last = 0;
+    let i = 0;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(text)) !== null) {
+      if (m.index > last) {
+        parts.push({ type: 'text', value: text.slice(last, m.index), idx: i++ });
+      }
+      // We don't know the userId from the username alone
+      // (the API only stores userId, not name). The link
+      // still works as a visual hint — clicking jumps to
+      // the commenter's own profile (searchable on the
+      // server). In a future iteration the backend can
+      // resolve usernames to ids in the response.
+      parts.push({ type: 'mention', value: m[0], idx: i++ });
+      last = m.index + m[0].length;
+    }
+    if (last < text.length) {
+      parts.push({ type: 'text', value: text.slice(last), idx: i++ });
+    }
+    return parts.map((p) =>
+      p.type === 'mention' ? (
+        <span
+          key={p.idx}
+          className="text-violet-300 font-medium"
+        >
+          {p.value}
+        </span>
+      ) : (
+        <span key={p.idx}>{p.value}</span>
+      ),
+    );
+  };
 
   return (
     <div className="flex gap-2.5 group">
@@ -1140,10 +1381,10 @@ function CommentItem({
             {display}
           </Link>
           <p className="mt-0.5 text-sm break-words" style={{ color: '#cbd5e1' }}>
-            {comment.content}
+            {renderContent()}
           </p>
         </div>
-        <div className="mt-1 flex items-center gap-3 pl-1">
+        <div className="mt-1 flex items-center gap-3 pl-1 flex-wrap">
           <button
             onClick={onLike}
             className="flex items-center gap-1 text-xs transition-colors"
@@ -1160,6 +1401,20 @@ function CommentItem({
               (đã sửa)
             </span>
           )}
+          {/* Reply button — only meaningful for top-level
+              comments. We deliberately don't let users reply
+              to a reply of a reply (1-level deep, matches the
+              backend's 1-level nesting in getComments). */}
+          {onReply && depth === 0 && (
+            <button
+              onClick={openReply}
+              className="flex items-center gap-1 text-xs transition-colors text-text-muted hover:text-violet-300"
+              title="Trả lời bình luận này"
+            >
+              <CornerDownRight size={11} />
+              Trả lời
+            </button>
+          )}
           {canDelete && onDelete && (
             <button
               onClick={onDelete}
@@ -1170,6 +1425,77 @@ function CommentItem({
             </button>
           )}
         </div>
+
+        {/* Reply input — only when replyOpen is true. Indented
+            with a left margin so it visually nests under the
+            comment. The pre-filled `@display ` token makes it
+            obvious to the user who they're replying to. */}
+        {replyOpen && (
+          <div className="mt-2 ml-2 pl-3 border-l border-violet-500/30">
+            <div className="flex items-center gap-2">
+              <input
+                value={replyText}
+                onChange={(e) => setReplyText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    void submitReply();
+                  } else if (e.key === 'Escape') {
+                    setReplyOpen(false);
+                  }
+                }}
+                autoFocus
+                placeholder={`Trả lời ${display}...`}
+                className="flex-1 rounded-xl px-3 py-1.5 text-sm text-white placeholder-slate-500 outline-none"
+                style={{
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(139,92,246,0.3)',
+                }}
+                disabled={replySubmitting}
+              />
+              <button
+                onClick={submitReply}
+                disabled={!replyText.trim() || replySubmitting}
+                className="p-1.5 rounded-lg transition-colors disabled:opacity-50"
+                style={{
+                  background: 'rgba(139,92,246,0.2)',
+                  color: '#c4b5fd',
+                }}
+                title="Gửi (Enter)"
+              >
+                <Send size={12} />
+              </button>
+              <button
+                onClick={() => setReplyOpen(false)}
+                className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300"
+                title="Huỷ (Esc)"
+              >
+                <X size={12} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Replies — nested under the top-level comment. We
+            only render one level deep (depth==0 → renders its
+            .replies[] with depth==1, those don't recurse). */}
+        {depth === 0 && Array.isArray(comment.replies) && comment.replies.length > 0 && (
+          <div className="mt-3 ml-3 pl-3 space-y-2 border-l border-white/[0.06]">
+            {comment.replies.map((reply) => (
+              <CommentItem
+                key={reply.id}
+                comment={reply}
+                onLike={() => onLikeComment ? onLikeComment(reply.id) : undefined}
+                onLikeComment={onLikeComment}
+                onDelete={canDelete ? () => onDeleteComment ? onDeleteComment(reply.id) : undefined : undefined}
+                onReply={onReply}
+                canDelete={canDelete}
+                postId={postId}
+                depth={1}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

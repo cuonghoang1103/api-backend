@@ -1,13 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ExternalLink, MoreVertical, Edit3, Trash2, Globe, Hash, Globe2,
-} from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ExternalLink, MoreVertical, Globe, Hash, Globe2 } from 'lucide-react';
 
 import type { HubLink } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import HubLinkMenu from './HubLinkMenu';
 
 interface HubLinkRowProps {
   link: HubLink;
@@ -30,31 +28,6 @@ function gradientFor(id: number) {
 export default function HubLinkRow({ link, onEdit, onDelete }: HubLinkRowProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(
-    null,
-  );
-
-  // Position the dropdown relative to the viewport so it escapes
-  // any parent overflow/transform that would otherwise clip it.
-  // Recompute on scroll/resize while open.
-  useEffect(() => {
-    if (!menuOpen) return;
-    const compute = () => {
-      const rect = buttonRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      setMenuPos({
-        top: rect.bottom + 4,
-        right: window.innerWidth - rect.right,
-      });
-    };
-    compute();
-    window.addEventListener('scroll', compute, true);
-    window.addEventListener('resize', compute);
-    return () => {
-      window.removeEventListener('scroll', compute, true);
-      window.removeEventListener('resize', compute);
-    };
-  }, [menuOpen]);
 
   const host = (() => {
     try { return new URL(link.url).hostname.replace(/^www\./, ''); }
@@ -147,45 +120,14 @@ export default function HubLinkRow({ link, onEdit, onDelete }: HubLinkRowProps) 
           >
             <MoreVertical className="h-3.5 w-3.5" />
           </button>
-          <AnimatePresence>
-            {menuOpen && menuPos && (
-              <>
-                <div
-                  className="fixed inset-0 z-[9998]"
-                  onClick={() => setMenuOpen(false)}
-                  aria-hidden
-                />
-                <motion.div
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.12 }}
-                  style={{
-                    position: 'fixed',
-                    top: menuPos.top,
-                    right: menuPos.right,
-                  }}
-                  className="z-[9999] w-32 overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/95 shadow-2xl backdrop-blur-xl"
-                >
-                  <button
-                    onClick={() => { setMenuOpen(false); onEdit(link); }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                  >
-                    <Edit3 className="h-3 w-3" /> Sua
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      if (confirm(`Xoa link "${link.title}"?`)) onDelete(link.id);
-                    }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-red-400 transition-colors hover:bg-red-500/10"
-                  >
-                    <Trash2 className="h-3 w-3" /> Xoa
-                  </button>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
+          <HubLinkMenu
+            link={link}
+            open={menuOpen}
+            anchorRef={buttonRef}
+            onClose={() => setMenuOpen(false)}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
         </div>
       </div>
     </div>

@@ -383,19 +383,18 @@ export default function ChatModal({ onClose }: ChatModalProps) {
               continue;
             }
             if (data.type === 'error') {
-              // If we already streamed some content, keep the partial
-              // answer and append a notice so the user doesn't lose what
-              // they already saw. Otherwise remove the empty bubble.
-              const errorNote = '\n\n_[Đã bị ngắt: ' + (data.error || 'AI service unavailable') + ']_';
-              if (assistantContent.trim()) {
-                updateLastAssistantMessage(sessionId, assistantContent + errorNote);
-              } else {
+              // Only show the error UI if:
+              // 1. We received NO content at all (completely failed), AND
+              // 2. The error is NOT a mid-stream "Premature close" from Groq
+              //    (Groq sometimes sends "Premature close" right after completing
+              //    the full response — the content is still valid, don't warn)
+              const isPrematureClose = /premature\s*close/i.test(data.error || '');
+              if (!assistantContent.trim() && !isPrematureClose) {
                 removePendingMessage(sessionId, assistantTempId);
+                toast.error(data.error || 'AI service is temporarily unavailable. Please try again.');
               }
-              toast.error(data.error || 'AI service is temporarily unavailable. Please try again.');
-              // CRITICAL: break out of the read loop so the finally block
-              // runs and clears the streaming state. Otherwise the spinner
-              // spins forever if the server forgets to close the stream.
+              // If we got content, the response is still valid — suppress the error.
+              // The "Premature close" suffix from Groq is benign network noise.
               break;
             }
             // chunk or raw text

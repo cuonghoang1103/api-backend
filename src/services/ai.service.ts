@@ -441,6 +441,7 @@ export class AIService {
         };
         armIdleTimer();
 
+        let completed = false;
         try {
           for await (const chunk of stream) {
             const chunkText = chunk.choices?.[0]?.delta?.content || '';
@@ -448,18 +449,23 @@ export class AIService {
               fullResponse += chunkText;
               yield chunkText;
             }
-            // Reset the idle timer whenever we get a chunk
             lastActivity = Date.now();
             armIdleTimer();
           }
+          completed = true;
         } catch (err) {
-          // If we timed out (controller aborted), surface a clean error.
           if (Date.now() - lastActivity >= STREAM_IDLE_TIMEOUT_MS) {
             throw new Error('Stream idle timeout');
           }
           throw err;
         } finally {
           if (abortTimer) clearTimeout(abortTimer);
+        }
+
+        // Only abort the stream controller if we didn't complete normally.
+        // Calling abort() after a normal stream end causes the OpenAI SDK
+        // to emit "Premature close" — the response was valid, skip abort.
+        if (!completed) {
           try { stream.controller?.abort?.(); } catch {}
         }
 

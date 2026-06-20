@@ -1,0 +1,47 @@
+name: VPS - Sync ALL chunks from host to container
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Compare chunks
+        run: |
+          ssh vps "
+            echo '=== Chunks on host ==='
+            ls /opt/cuonghoangdev/frontend/.next/static/chunks/ | wc -l
+            echo '=== Chunks in container ==='
+            docker exec cuonghoangdev_frontend sh -c 'ls /app/.next/static/chunks/ | wc -l'
+            echo ''
+            echo '=== Host chunks list ==='
+            ls /opt/cuonghoangdev/frontend/.next/static/chunks/ | sort > /tmp/host_chunks.txt
+            echo '=== Container chunks list ==='
+            docker exec cuonghoangdev_frontend sh -c 'ls /app/.next/static/chunks/ | sort' > /tmp/container_chunks.txt
+            echo ''
+            echo '=== Diff: chunks in host but NOT in container ==='
+            comm -23 /tmp/host_chunks.txt /tmp/container_chunks.txt | head -20
+            echo ''
+            echo '=== Diff: chunks in container but NOT in host ==='
+            comm -13 /tmp/host_chunks.txt /tmp/container_chunks.txt | head -20
+            echo ''
+            echo '=== Total diff ==='
+            echo \"Host total: \$(wc -l < /tmp/host_chunks.txt)\"
+            echo \"Container total: \$(wc -l < /tmp/container_chunks.txt)\"
+            echo \"Missing in container: \$(comm -23 /tmp/host_chunks.txt /tmp/container_chunks.txt | wc -l)\"
+            echo \"Extra in container: \$(comm -13 /tmp/host_chunks.txt /tmp/container_chunks.txt | wc -l)\"
+          "

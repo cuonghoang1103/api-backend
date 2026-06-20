@@ -75,7 +75,7 @@ frontend/tsconfig.tsbuildinfo
 *.env.bak
 *.env.tmp
 
-# ─── Google service-account keys ───────────────────────────
+# Google service-account keys
 # These JSON files contain a private key that grants
 # programmatic access to Google APIs as the project's
 # service account. If pushed to a public repo, anyone could
@@ -93,3 +93,7 @@ frontend/src/config/google-key.json
 frontend/src/config/google-key.*.json
 **/google-key*.json
 !frontend/src/config/.gitkeep
+
+# Archived workflows and docs (kept on disk for reference, not in git)
+.github/workflows-archive/
+docs-archive/

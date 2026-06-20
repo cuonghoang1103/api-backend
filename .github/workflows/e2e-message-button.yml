@@ -40,7 +40,7 @@ jobs:
 
           echo ""
           echo "=== 2. Verify email via DB ==="
-          ssh vps "docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev -c \"UPDATE users SET email_verified_at = NOW() WHERE id = $USERID;\"" 2>&1 | tail -3
+          ssh vps "docker exec cuonghoangdev_db_postgres psql -U postgres -d cuonghoangdev_db -c \"UPDATE users SET email_verified_at = NOW() WHERE id = $USERID;\"" 2>&1 | tail -3
 
           echo ""
           echo "=== 3. Login with username ==="
@@ -83,7 +83,7 @@ jobs:
 
           echo ""
           echo "=== 7. Cleanup test user ==="
-          ssh vps "docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev -c \"DELETE FROM users WHERE id = $USERID;\"" 2>&1 | tail -3
+          ssh vps "docker exec cuonghoangdev_db_postgres psql -U postgres -d cuonghoangdev_db -c \"DELETE FROM users WHERE id = $USERID;\"" 2>&1 | tail -3
 
           echo ""
           echo "=== E2E PASSED ==="

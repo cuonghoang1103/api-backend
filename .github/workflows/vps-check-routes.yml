@@ -1,0 +1,44 @@
+name: VPS - Check routes in built app
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Diagnose
+        run: |
+          ssh vps "
+            echo '=== Routes manifest on host ==='
+            cat /opt/cuonghoangdev/frontend/.next/routes-manifest.json 2>/dev/null | head -50
+            echo ''
+            echo '=== Routes manifest in container ==='
+            docker exec cuonghoangdev_frontend sh -c 'cat /app/.next/routes-manifest.json 2>/dev/null' | head -30
+            echo ''
+            echo '=== Build ID match ==='
+            echo 'Host:'
+            cat /opt/cuonghoangdev/frontend/.next/BUILD_ID
+            echo ''
+            echo 'Container:'
+            docker exec cuonghoangdev_frontend sh -c 'cat /app/.next/BUILD_ID 2>/dev/null' || echo 'NO BUILD_ID'
+            echo ''
+            echo '=== Test /social directly on container (bypass nginx) ==='
+            docker exec cuonghoangdev_frontend sh -c 'curl -sI http://localhost:3000/social' 2>&1 | head -5
+            echo ''
+            echo '=== Test on nginx (public) ==='
+            curl -sI --max-time 5 'https://cuongthai.com/social' 2>&1 | head -5
+          "

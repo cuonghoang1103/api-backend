@@ -68,19 +68,49 @@ export default async function HubPage() {
     ),
     fetchWithTimeout<{
       success: boolean;
-      data: unknown[];
-      total: number;
-      page: number;
-      pageSize: number;
-      totalPages: number;
+      data: { items?: unknown[]; total?: number };
+      total?: number;
+      items?: unknown[];
     }>(`${baseUrl}/api/v1/hub/links?pageSize=50&folderId=all`, cookie),
   ]);
 
+  // Backend wraps listLinks payload in `{ success, data: { items, total, ... } }`
+  // (this matches the rest of the API contract — see fix in commit
+  // f65ebb8). We unwrap defensively in case the shape ever drifts.
+  type MaybeWrapped = { items?: unknown[]; total?: number };
+  const extractLinksPayload = (raw: typeof linksRes): {
+    items: unknown[];
+    total: number;
+  } => {
+    if (!raw) return { items: [], total: 0 };
+    // Axios-like wrapping: { data: { items, total } }
+    if (raw.data && typeof raw.data === 'object' && 'items' in raw.data) {
+      const wrapped = raw.data as MaybeWrapped;
+      return { items: wrapped.items ?? [], total: wrapped.total ?? 0 };
+    }
+    // Unwrapped: { items, total } directly on the response
+    if ('items' in raw) {
+      const flat = raw as unknown as MaybeWrapped;
+      return { items: flat.items ?? [], total: flat.total ?? 0 };
+    }
+    return { items: [], total: 0 };
+  };
+
+  const initialLinksPayload = extractLinksPayload(linksRes);
+  const initialFolders = (() => {
+    if (!foldersRes) return [];
+    if (Array.isArray(foldersRes.data)) return foldersRes.data;
+    if (Array.isArray((foldersRes as { data?: unknown }).data)) {
+      return ((foldersRes as { data: unknown[] }).data);
+    }
+    return [];
+  })();
+
   return (
     <HubClient
-      initialFolders={(foldersRes?.data ?? []) as never}
-      initialLinks={(linksRes?.data ?? []) as never}
-      initialTotal={linksRes?.total ?? 0}
+      initialFolders={initialFolders as never}
+      initialLinks={initialLinksPayload.items as never}
+      initialTotal={initialLinksPayload.total}
     />
   );
 }

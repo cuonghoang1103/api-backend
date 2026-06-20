@@ -40,9 +40,18 @@ export default function HubClient({
   useEffect(() => { setMounted(true); }, []);
 
   // ── Data state ─────────────────────────────────────────────
-  const [folders, setFolders] = useState<HubFolder[]>(initialFolders);
-  const [links, setLinks] = useState<HubLink[]>(initialLinks);
-  const [total, setTotal] = useState<number>(initialTotal);
+  // Coerce initial state so we always have an array even if SSR
+  // somehow passes an object (defense in depth — HubLinkGrid calls
+  // links.map() unconditionally and crashes otherwise).
+  const initialLinksArray = Array.isArray(initialLinks) ? initialLinks : [];
+  const initialFoldersArray = Array.isArray(initialFolders) ? initialFolders : [];
+  const [folders, setFolders] = useState<HubFolder[]>(initialFoldersArray);
+  const [links, setLinks] = useState<HubLink[]>(initialLinksArray);
+  const [total, setTotal] = useState<number>(
+    typeof initialTotal === 'number'
+      ? initialTotal
+      : initialLinksArray.length,
+  );
   const [loading, setLoading] = useState(false);
 
   // ── Filter / view state ────────────────────────────────────

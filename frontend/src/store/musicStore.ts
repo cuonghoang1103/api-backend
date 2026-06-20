@@ -393,9 +393,14 @@ export const useMusicStore = create<MusicState>()((set, get) => {
     },
 
     next: () => {
-      const { tracks, currentIndex, repeatMode, isShuffled } = get();
+      const { tracks, currentIndex, currentTrack, repeatMode, isShuffled } = get();
       if (tracks.length === 0) return;
       const p = loadPersisted();
+
+      // Apple Music parity: when repeat-one is on, it takes
+      // precedence over shuffle — the user explicitly asked to loop
+      // the current track, so restart it instead of advancing.
+      if (repeatMode === 'one' && currentTrack) { set({ currentTime: 0 }); return; }
 
       if (isShuffled) {
         let next = get().smartShuffleNext();
@@ -414,8 +419,6 @@ export const useMusicStore = create<MusicState>()((set, get) => {
         savePersisted({ ...p, currentTrackId: next.id });
         return;
       }
-
-      if (repeatMode === 'one') { set({ currentTime: 0 }); return; }
 
       let nextIdx = currentIndex + 1;
       if (nextIdx >= tracks.length) {

@@ -543,6 +543,20 @@ export class MusicService {
       );
     }
 
+    // External (http/https) audio sources — YouTube tracks, remote
+    // URLs registered via /tracks/remote — are NOT streamable through
+    // this backend. The frontend plays them via the YouTube IFrame
+    // Player API, which talks directly to YouTube. Returning 500
+    // ("NoSuchKey") was masking the real cause and broke any tooling
+    // that probed /stream/:id. Reject early with a clear 400.
+    if (/^https?:\/\//i.test(filePath)) {
+      throw new AppError(
+        'External audio is not streamable via this endpoint',
+        400,
+        'EXTERNAL_AUDIO',
+      );
+    }
+
     // R2 path: bucket key (e.g. "audio/songs/1234-abcd.mp3").
     // We don't have a leading slash, so the leading-slash test
     // discriminates R2 keys from legacy local paths.

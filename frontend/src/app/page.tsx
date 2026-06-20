@@ -93,14 +93,23 @@ export default function SocialPage() {
     [feedHasMore, isLoadingMore, loadMore],
   );
 
-  // Use Zustand store for posts state (supports infinite scroll via loadMore).
-  // TanStack Query feeds initial data from cache (instant on revisit).
-  const displayPosts = feedData?.data ?? [];
+  // Zustand posts is the single source of truth for rendering.
+  // TanStack Query is used only for background data fetching
+  // (initial load via the loader, not for display).
+  // Every mutation in PostCard updates Zustand directly, so
+  // this component re-renders immediately when posts change.
+  const displayPosts = posts;
 
+  // Seed Zustand store from TQ data. We use set() to ensure
+  // a re-render — direct assignment (getState().posts = ...) does NOT
+  // trigger Zustand subscriptions.
   useEffect(() => {
     if (feedData?.data && feedData.data.length > 0) {
-      // Seed Zustand store with TanStack Query data so PostCard mutations work.
-      useSocialStore.getState().posts = feedData.data;
+      const storePosts = useSocialStore.getState().posts;
+      // Only update if Zustand is empty (avoids overwriting in-flight changes)
+      if (storePosts.length === 0) {
+        useSocialStore.setState({ posts: feedData.data });
+      }
     }
   }, [feedData]);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ExternalLink, MoreVertical, Edit3, Trash2, Globe, Link2, Hash,
@@ -32,6 +32,31 @@ function gradientFor(id: number) {
 
 export default function HubLinkCard({ link, onEdit, onDelete }: HubLinkCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(
+    null,
+  );
+
+  // Position the dropdown in viewport coords so it escapes any
+  // parent overflow/transform that would otherwise clip it.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const compute = () => {
+      const rect = buttonRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      setMenuPos({
+        top: rect.bottom + 4,
+        right: window.innerWidth - rect.right,
+      });
+    };
+    compute();
+    window.addEventListener('scroll', compute, true);
+    window.addEventListener('resize', compute);
+    return () => {
+      window.removeEventListener('scroll', compute, true);
+      window.removeEventListener('resize', compute);
+    };
+  }, [menuOpen]);
 
   const host = (() => {
     try { return new URL(link.url).hostname.replace(/^www\./, ''); }
@@ -132,6 +157,7 @@ export default function HubLinkCard({ link, onEdit, onDelete }: HubLinkCardProps
           </a>
           <div className="relative">
             <button
+              ref={buttonRef}
               onClick={() => setMenuOpen((v) => !v)}
               className="rounded p-1 text-text-muted transition-colors hover:bg-white/5 hover:text-text-primary"
               title="Them"
@@ -139,15 +165,24 @@ export default function HubLinkCard({ link, onEdit, onDelete }: HubLinkCardProps
               <MoreVertical className="h-3.5 w-3.5" />
             </button>
             <AnimatePresence>
-              {menuOpen && (
+              {menuOpen && menuPos && (
                 <>
-                  <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+                  <div
+                    className="fixed inset-0 z-[9998]"
+                    onClick={() => setMenuOpen(false)}
+                    aria-hidden
+                  />
                   <motion.div
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.12 }}
-                    className="absolute right-0 top-full z-20 mt-1 w-36 overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/95 shadow-2xl backdrop-blur-xl"
+                    style={{
+                      position: 'fixed',
+                      top: menuPos.top,
+                      right: menuPos.right,
+                    }}
+                    className="z-[9999] w-36 overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/95 shadow-2xl backdrop-blur-xl"
                   >
                     <button
                       onClick={() => { setMenuOpen(false); onEdit(link); }}

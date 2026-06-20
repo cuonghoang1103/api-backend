@@ -6,11 +6,13 @@
  * Mounted at /api/v1/users
  *
  * Endpoints:
- *   GET    /api/v1/users/:id           — Enhanced public profile
+ *   GET    /api/v1/users/suggestions   — Suggested users to follow
+ *   GET    /api/v1/users/:id          — Enhanced public profile
  *   GET    /api/v1/users/:id/followers — List followers
  *   GET    /api/v1/users/:id/following — List following
- *   POST   /api/v1/users/follow        — Follow / unfollow (toggle)
- *   POST   /api/v1/users/status        — Update presence (lastActiveAt)
+ *   POST   /api/v1/users/follow       — Follow / unfollow (toggle)
+ *   POST   /api/v1/users/status       — Update presence (lastActiveAt)
+ *   POST   /api/v1/users/cover-photo  — Update cover photo URL
  */
 
 import { Router, type Response } from 'express';
@@ -29,6 +31,24 @@ import {
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
+
+// ─── GET /api/v1/users/suggestions ─────────────────────────
+// Returns users the current user might want to follow
+// NOTE: This route MUST be defined BEFORE /:id otherwise
+// Express matches "suggestions" as a :id parameter.
+router.get(
+  '/suggestions',
+  authenticate,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string, 10) || 10, 20);
+      const users = await getSuggestedUsers(req.user.userId!, limit);
+      res.json({ success: true, data: users });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 // ─── GET /api/v1/users/:id ──────────────────────────────────
 // Enhanced public profile: follows counts, isFollowing, isOnline
@@ -111,22 +131,6 @@ router.get(
 
       const result = await getFollowing(id, cursor, limit);
       res.json({ success: true, data: result });
-    } catch (error) {
-      next(error);
-    }
-  },
-);
-
-// ─── GET /api/v1/users/suggestions ─────────────────────────
-// Returns users the current user might want to follow
-router.get(
-  '/suggestions',
-  authenticate,
-  async (req: any, res: Response<ApiResponse>, next) => {
-    try {
-      const limit = Math.min(parseInt(req.query.limit as string, 10) || 10, 20);
-      const users = await getSuggestedUsers(req.user.userId!, limit);
-      res.json({ success: true, data: users });
     } catch (error) {
       next(error);
     }

@@ -366,6 +366,21 @@ app.use('/api/v1/tech-trends', techTrendsPublicRoutes);
 app.use('/api/v1/admin/tech-trends', techTrendsAdminRoutes);
 app.use('/api/v1/system', systemRoutes);
 app.use('/api/v1/social', socialRoutes);
+// ─── Saved Collections alias (2026-06-20) ─────────────────────────
+// The Saved Collections endpoints are exposed under /api/v1/feed
+// per spec, but live in social.routes.ts (next to the existing
+// /social/saves/* routes that share the same service layer). We
+// mount the same router under a second prefix instead of duplicating
+// the route definitions. Endpoints exposed here:
+//
+//   GET  /api/v1/feed/collections
+//   POST /api/v1/feed/collections
+//   POST /api/v1/feed/save-post
+//
+// The legacy /api/v1/social/posts/:id/save + /api/v1/social/saves/*
+// routes mounted above remain untouched so existing clients keep
+// working.
+app.use('/api/v1/feed', socialRoutes);
 app.use('/api/v1/repos', githubRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
 // Hub — personal bookmark manager. Authenticated router for

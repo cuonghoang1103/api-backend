@@ -78,6 +78,36 @@ jobs:
             echo ''
             echo '=== Final status ==='
             docker ps --format 'table {{.Names}}\t{{.Status}}' | head -10
+
+            echo ''
+            echo '=== Copy fresh .next from host into the running container ==='
+            # The image's baked-in .next is OLD. Replace it with the fresh
+            # build that the backend-vps workflow put on the host filesystem.
+            docker exec -u root cuonghoangdev_frontend sh -c 'rm -rf /app/.next/*'
+            docker cp /opt/cuonghoangdev/frontend/.next/. cuonghoangdev_frontend:/app/.next/
+
+            echo ''
+            echo '=== Restart to pick up new build ==='
+            docker restart cuonghoangdev_frontend
+
+            echo ''
+            echo '=== Wait for healthy after restart ==='
+            for i in \$(seq 1 30); do
+              STATUS=\$(docker inspect --format='{{.State.Health.Status}}' cuonghoangdev_frontend 2>/dev/null || echo 'starting')
+              if [ \"\$STATUS\" = 'healthy' ]; then
+                echo \"Container healthy after \${i} checks\"
+                break
+              fi
+              echo \"Status: \$STATUS (\$i/30)\"
+              sleep 3
+            done
+
+            echo ''
+            echo '=== Compare build IDs ==='
+            echo 'Host:'
+            cat /opt/cuonghoangdev/frontend/.next/BUILD_ID
+            echo 'Container:'
+            docker exec cuonghoangdev_frontend sh -c 'cat /app/.next/BUILD_ID' 2>&1
           "
 
       - name: Verify on production

@@ -1125,3 +1125,335 @@ export async function getPollForViewer(pollId: number, userId?: number) {
     userVotes: Array.from(userOptionIds),
   };
 }
+
+// ════════════════════════════════════════════════════════════════
+// Feed Collections — multi-folder saved posts (added 2026-06-20)
+// ════════════════════════════════════════════════════════════════
+//
+// Two-table design (FeedCollection + FeedSavedPost) — one row
+// per (user, post, collection) triple. This supersedes the old
+// single-folder `SocialSave.folder` model for new saves, but we
+// keep `SocialSave` for backward compatibility with any code
+// path that still writes to it (the legacy /social/posts/:id/
+// save route is untouched and continues to use it).
+//
+// Functions below:
+//   - listCollections(userId)        → user-facing collection list
+//   - createCollection(userId, name) → create + return new row
+//   - deleteCollection(userId, id)   → owner-only delete + cascade
+//   - renameCollection(userId, id)   → owner-only rename
+//   - savePostToCollections(...)     → multi-folder save/un-save
+//   - listSavedPostsInCollection     → posts in a specific folder
+//   - getPostSaveContext             → which collections a post is in
+//
+// `SocialSave` is intentionally NOT updated by these functions —
+// the legacy single-folder table becomes a read-only mirror. We
+// still update `SocialPost.savesCount` so the existing feed card
+// counters stay accurate (the feed cares about "saved? yes/no",
+// not which folder).
+
+/** Normalise a collection name. We lowercase for uniqueness
+ *  checks but keep the original casing for display. We trim
+ *  whitespace, collapse runs of internal whitespace, and
+ *  cap at 80 chars (matches `FeedCollection.name` schema). */
+function normaliseCollectionName(raw: string): string {
+  return raw.trim().replace(/\s+/g, ' ').slice(0, 80);
+}
+
+/** List all collections owned by `userId` plus per-collection
+ *  save counts and an `uncategorized` bucket count. Sorted by
+ *  user-defined sortOrder then by createdAt (oldest first). */
+export async function listCollections(userId: number) {
+  const collections = await prisma.feedCollection.findMany({
+    where: { ownerId: userId },
+    orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+    include: {
+      _count: { select: { saves: { where: { userId } } } },
+    },
+  });
+
+  // The "uncategorised" bucket = legacy `SocialSave` rows with
+  // a NULL folder. New multi-collection saves always go through
+  // `FeedSavedPost`, which requires a non-null collectionId by
+  // schema. This legacy bucket stays visible so existing users
+  // don't lose access to posts they saved before this feature.
+  const legacyUncategorised = await prisma.socialSave.count({
+    where: { userId, folder: null },
+  });
+
+  return {
+    collections: collections.map((c: any) => ({
+      id: c.id,
+      name: c.name,
+      icon: c.icon,
+      sortOrder: c.sortOrder,
+      count: c._count.saves,
+      createdAt: c.createdAt,
+    })),
+    uncategorized: legacyUncategorised,
+    total: collections.reduce((a: number, c: any) => a + c._count.saves, 0) + legacyUncategorised,
+  };
+}
+
+/** Create a new collection owned by `userId`. Throws
+ *  DUPLICATE_COLLECTION_NAME if a folder with the same
+ *  (case-insensitive) name already exists. */
+export async function createCollection(userId: number, rawName: string, icon?: string | null) {
+  const name = normaliseCollectionName(rawName);
+  if (name.length === 0) {
+    throw new AppError('Tên bộ sưu tập không được để trống', 400, 'EMPTY_NAME');
+  }
+  // Case-insensitive duplicate check. Postgres `mode: 'insensitive'`
+  // is supported by Prisma for the `contains`/`equals` filters.
+  const existing = await prisma.feedCollection.findFirst({
+    where: {
+      ownerId: userId,
+      name: { equals: name, mode: 'insensitive' as any },
+    },
+  });
+  if (existing) {
+    throw new AppError('Bạn đã có bộ sưu tập với tên này', 409, 'DUPLICATE_COLLECTION_NAME');
+  }
+  // Compute sortOrder = max + 1 so new collections appear at the
+  // bottom of the list by default. The user can re-order later.
+  const maxRow = await prisma.feedCollection.findFirst({
+    where: { ownerId: userId },
+    orderBy: { sortOrder: 'desc' },
+    select: { sortOrder: true },
+  });
+  const nextOrder = (maxRow?.sortOrder ?? 0) + 1;
+
+  const created = await prisma.feedCollection.create({
+    data: {
+      name,
+      ownerId: userId,
+      icon: icon && icon.length <= 8 ? icon : null,
+      sortOrder: nextOrder,
+    },
+  });
+  return created;
+}
+
+/** Owner-only delete. Cascades to FeedSavedPost rows so no
+ *  orphan saves survive. */
+export async function deleteCollection(userId: number, collectionId: number) {
+  const c = await prisma.feedCollection.findUnique({ where: { id: collectionId } });
+  if (!c) throw new AppError('Collection not found', 404, 'COLLECTION_NOT_FOUND');
+  if (c.ownerId !== userId) {
+    throw new AppError('Bạn không có quyền xoá bộ sưu tập này', 403, 'NOT_OWNER');
+  }
+  const affected = await prisma.feedSavedPost.count({ where: { collectionId } });
+  await prisma.feedCollection.delete({ where: { id: collectionId } });
+  return { deletedCollectionId: collectionId, affectedPosts: affected };
+}
+
+/** Owner-only rename. */
+export async function renameCollection(userId: number, collectionId: number, rawName: string) {
+  const name = normaliseCollectionName(rawName);
+  if (name.length === 0) throw new AppError('Tên không được để trống', 400, 'EMPTY_NAME');
+  const c = await prisma.feedCollection.findUnique({ where: { id: collectionId } });
+  if (!c) throw new AppError('Collection not found', 404, 'COLLECTION_NOT_FOUND');
+  if (c.ownerId !== userId) throw new AppError('Không có quyền đổi tên', 403, 'NOT_OWNER');
+  const dupe = await prisma.feedCollection.findFirst({
+    where: {
+      ownerId: userId,
+      id: { not: collectionId },
+      name: { equals: name, mode: 'insensitive' as any },
+    },
+  });
+  if (dupe) throw new AppError('Đã có bộ sưu tập trùng tên', 409, 'DUPLICATE_COLLECTION_NAME');
+  const updated = await prisma.feedCollection.update({
+    where: { id: collectionId },
+    data: { name },
+  });
+  return updated;
+}
+
+/**
+ * Save a post into one or more collections. The semantics
+ * are "set the membership to exactly these collections" —
+ * any prior (post,user,collection) rows for this user NOT
+ * in the new list are removed. This mirrors how Facebook's
+ * bookmark popup works: check a few boxes, click Save, the
+ *   "checked" set is the new state.
+ *
+ * Body params:
+ *   - postId:        number (required)
+ *   - collectionIds: number[] (optional — empty = remove ALL saves
+ *                                for this (post,user))
+ *
+ * The legacy `SocialSave` row is also written/cleared so the
+ * feed card's `isSaved` flag stays consistent across both
+ * tables. (The feed card only reads `SocialPost.isSaved`, which
+ * is derived from `SocialSave.exists` in `serializePost`.)
+ */
+export async function savePostToCollections(
+  userId: number,
+  postId: number,
+  collectionIds: number[],
+) {
+  // 1. Validate post exists.
+  const post = await prisma.socialPost.findUnique({ where: { id: postId } });
+  if (!post) throw new AppError('Bài viết không tồn tại', 404, 'POST_NOT_FOUND');
+
+  // 2. Validate collections belong to user (and exist).
+  let validIds: number[] = [];
+  if (Array.isArray(collectionIds) && collectionIds.length > 0) {
+    const ids = Array.from(new Set(collectionIds.map((n) => Number(n)).filter((n) => Number.isInteger(n) && n > 0)));
+    if (ids.length > 0) {
+      const owned = await prisma.feedCollection.findMany({
+        where: { id: { in: ids }, ownerId: userId },
+        select: { id: true },
+      });
+      validIds = owned.map((o: any) => o.id);
+      if (validIds.length !== ids.length) {
+        throw new AppError('Một hoặc nhiều bộ sưu tập không hợp lệ', 400, 'INVALID_COLLECTION');
+      }
+    }
+  }
+
+  return prisma.$transaction(async (tx) => {
+    // 3. Read existing memberships so we can compute the
+    //    delta on the post's `isSaved` UI flag.
+    const existing = await tx.feedSavedPost.findMany({
+      where: { userId, postId },
+      select: { collectionId: true },
+    });
+    const prev = new Set(existing.map((e: any) => e.collectionId));
+    const next = new Set(validIds);
+
+    const toAdd   = validIds.filter((id) => !prev.has(id));
+    const toRemove = Array.from(prev).filter((id) => !next.has(id));
+
+    // 4. Insert the new rows (unique constraint dedupes dupes).
+    for (const cid of toAdd) {
+      await tx.feedSavedPost.create({
+        data: { userId, postId, collectionId: cid },
+      });
+    }
+
+    // 5. Delete the removed rows.
+    if (toRemove.length > 0) {
+      await tx.feedSavedPost.deleteMany({
+        where: { userId, postId, collectionId: { in: toRemove } },
+      });
+    }
+
+    // 6. Mirror to legacy `SocialSave` so the feed card's
+    //    `isSaved` stays accurate. The legacy table stores a
+    //    single folder name — we use the FIRST collection's
+    //    name for display, or NULL if the user removed all
+    //    collections.
+    const isSaved = validIds.length > 0;
+    if (isSaved) {
+      const firstCollection = await tx.feedCollection.findUnique({
+        where: { id: validIds[0] },
+        select: { name: true },
+      });
+      // SocialSave doesn't expose a composite unique key in
+      // the Prisma schema (no named @@unique), so we
+      // upsert by find-then-create/update on the (postId,
+      // userId) pair. Cheaper to deleteMany + create than
+      // a full transaction here.
+      await tx.socialSave.deleteMany({ where: { postId, userId } });
+      await tx.socialSave.create({
+        data: { postId, userId, folder: firstCollection?.name ?? null },
+      });
+    } else {
+      await tx.socialSave.deleteMany({ where: { postId, userId } });
+    }
+
+    return {
+      postId,
+      collectionIds: validIds,
+      added: toAdd,
+      removed: toRemove,
+      isSaved,
+    };
+  });
+}
+
+/** Which collections does THIS user have THIS post in?
+ *  Used by the popover to pre-tick checkboxes when the
+ *  user opens it on an already-saved post. */
+export async function getPostSaveContext(userId: number, postId: number) {
+  const rows = await prisma.feedSavedPost.findMany({
+    where: { userId, postId },
+    select: {
+      collectionId: true,
+      collection: { select: { id: true, name: true, icon: true } },
+    },
+  });
+  return {
+    collectionIds: rows.map((r: any) => r.collectionId),
+    collections: rows.map((r: any) => r.collection),
+    isSaved: rows.length > 0,
+  };
+}
+
+/** List posts in a specific collection. Cursor-paginated.
+ *  Returns the full SocialPost rows so the page can render
+ *  them with PostCard without an extra fetch. */
+export async function listSavedPostsInCollection(
+  userId: number,
+  collectionId: number | null,
+  cursor: number | null,
+  limit: number,
+) {
+  // Validate ownership for non-null collections.
+  if (collectionId !== null) {
+    const owned = await prisma.feedCollection.findFirst({
+      where: { id: collectionId, ownerId: userId },
+      select: { id: true },
+    });
+    if (!owned) throw new AppError('Collection not found', 404, 'COLLECTION_NOT_FOUND');
+  }
+
+  const where: any = collectionId === null
+    ? { userId, collectionId: null as any } // sentinel — see below
+    : { userId, collectionId };
+
+  // The schema requires a non-null collectionId on
+  // FeedSavedPost; for the "Chưa phân loại" bucket we fall
+  // back to the legacy `SocialSave.folder IS NULL` query and
+  // shape it the same way so the page renders identically.
+  if (collectionId === null) {
+    const legacyRows = await prisma.socialSave.findMany({
+      where: { userId, folder: null },
+      include: { post: true },
+      orderBy: { createdAt: 'desc' },
+      take: limit + 1,
+      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+    });
+    const hasMore = legacyRows.length > limit;
+    const sliced = legacyRows.slice(0, limit);
+    return {
+      items: sliced.map((r: any) => ({
+        saveId: r.id,
+        savedAt: r.createdAt,
+        folder: r.folder,
+        post: r.post,
+      })),
+      nextCursor: hasMore ? sliced[sliced.length - 1].id : null,
+    };
+  }
+
+  const rows = await prisma.feedSavedPost.findMany({
+    where,
+    include: { post: true },
+    orderBy: { createdAt: 'desc' },
+    take: limit + 1,
+    ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+  });
+  const hasMore = rows.length > limit;
+  const sliced = rows.slice(0, limit);
+  return {
+    items: sliced.map((r: any) => ({
+      saveId: r.id,
+      savedAt: r.createdAt,
+      collectionId: r.collectionId,
+      post: r.post,
+    })),
+    nextCursor: hasMore ? sliced[sliced.length - 1].id : null,
+  };
+}

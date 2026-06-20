@@ -1,111 +1,150 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+/**
+ * /saved — Personal Saved Posts page (v2 — multi-collection).
+ *
+ * Tabbed view of the user's bookmarked posts. Tabs are derived
+ * from the `FeedCollection` table (real multi-folder model).
+ *
+ * Each tab fetches its own page of saved posts from
+ * `/feed/collections/:id/posts`. We re-use `PostCard` so the
+ * action bar / like / comment / share / save flows stay 100%
+ * identical to the feed.
+ *
+ * Why a new component instead of mutating the legacy one: the
+ * legacy page relied on `SocialSave.folder` (single string).
+ * The new contract is id-based so the two flows can't share
+ * one render path. We keep the legacy export on disk in case
+ * external bookmarks still point at the old behaviour — but
+ * we wire `/saved` to the new component via this file.
+ */
+
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bookmark, BookmarkCheck, Folder, Hash, Inbox, Layers,
-  Trash2,
+  Plus, Trash2, Loader2,
 } from 'lucide-react';
-import { useSocialStore } from '@/store/socialStore';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { socialApi } from '@/lib/api';
 import { PostCard, PostSkeleton } from '@/components/social/PostCard';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import type { SocialPost } from '@/types/social';
+import type { FeedCollection, SocialPost } from '@/types/social';
+import { socialKeys } from '@/hooks/useSocialQueries';
 
-/**
- * /saved — Personal Saved Posts page.
- *
- * A tabbed view of the user's bookmarked posts. Tabs are derived
- * from `SocialSave.folder` so any save grouping the user has built
- * up over time appears automatically — no migration needed.
- *
- * Built entirely on top of the existing socialStore + socialApi
- * primitives (loadSaved, loadSaveFolders, toggleSave, unsavePost)
- * so the feed action bar / PostCard continue to work unchanged.
- */
+// ─── Tab keys ─────────────────────────────────────────────────────
+//
+// `null`  → all (the user is just browsing every saved post)
+// `0`     → uncategorized bucket (legacy saves w/o folder)
+// `N>0`   → specific collection id
+
+const ALL_TAB: number | null = null;
+const UNCATEGORISED_TAB = 0 as const;
+
 export default function SavedPostsPage() {
-  const {
-    savedPosts,
-    saveFolders,
-    isLoadingSaves,
-    loadSaved,
-    loadSaveFolders,
-    unsavePost,
-    loadFeed,
-  } = useSocialStore();
+  const qc = useQueryClient();
+  // The currently selected tab id. `null` = All.
+  const [activeTab, setActiveTab] = useState<number | null>(ALL_TAB);
+  // Track which tabs the user has visited so we lazy-load the
+  // active tab's posts the first time it's selected.
+  const [visitedTabs, setVisitedTabs] = useState<Set<number>>(new Set([ALL_TAB as any]));
 
-  // `null` = "Chưa phân loại", string = a named collection,
-  // empty-string = "Tất cả" (all saved posts regardless of folder).
-  const [activeTab, setActiveTab] = useState<string>('');
-
-  // Hydrate on mount. We fetch both endpoints so the tab bar can
-  // show counts and the body has posts to filter.
-  useEffect(() => {
-    void loadSaveFolders();
-    void loadSaved();
-  }, [loadSaveFolders, loadSaved]);
-
-  // The store returns saved posts as flat SocialPost[] (already
-  // unwrapped from { savedId, post }). We group by folder for the
-  // tab counts and to render the active bucket.
-  const grouped = useMemo(() => {
-    const m = new Map<string, SocialPost[]>();
-    m.set('', []); // Tất cả
-    m.set('__uncategorized', []); // Chưa phân loại
-    for (const f of saveFolders) {
-      const key = f.name ?? '__uncategorized';
-      if (!m.has(key)) m.set(key, []);
-    }
-    for (const p of savedPosts) {
-      // The post carries its savedFolder (set by the feed) so we
-      // can group without re-querying.
-      const folder = (p as any)?.savedFolder ?? null;
-      const key = folder ?? '__uncategorized';
-      m.get(key)?.push(p);
-      m.get('')?.push(p);
-    }
-    return m;
-  }, [savedPosts, saveFolders]);
-
-  const visiblePosts = grouped.get(activeTab) ?? [];
-
-  const handleUnsave = async (postId: number): Promise<void> => {
-    try {
-      await unsavePost(postId);
-      toast.success('Đã bỏ lưu');
-    } catch {
-      toast.error('Bỏ lưu thất bại');
-    }
-  };
-
-  // Build the tab list. We always pin "Tất cả" first, then
-  // "Chưa phân loại" if there are any, then named folders in
-  // the order returned by the server (server sorts by count desc).
-  type Tab = { key: string; label: string; count: number; icon: any };
-  const tabs: Tab[] = [];
-  tabs.push({
-    key: '',
-    label: 'Tất cả',
-    count: savedPosts.length,
-    icon: Layers,
+  // ── Collections list (always loaded) ────────────────────────
+  const collectionsQuery = useQuery({
+    queryKey: [...socialKeys.all, 'collections'] as const,
+    queryFn: () => socialApi.listCollectionsV2().then((r: any) => r.data.data as {
+      collections: FeedCollection[];
+      uncategorized: number;
+      total: number;
+    }),
+    staleTime: 30_000,
   });
-  if ((grouped.get('__uncategorized')?.length ?? 0) > 0) {
+  const collections = collectionsQuery.data?.collections ?? [];
+  const uncategorizedCount = collectionsQuery.data?.uncategorized ?? 0;
+  const totalSaved = collectionsQuery.data?.total ?? 0;
+
+  // ── Active tab content ───────────────────────────────────────
+  const activeQuery = useQuery({
+    queryKey: [...socialKeys.all, 'collection-posts', activeTab] as const,
+    queryFn: async () => {
+      const r = await socialApi.listSavedPostsInCollection(
+        activeTab === UNCATEGORISED_TAB ? null : activeTab,
+        { limit: 20 },
+      );
+      return (r as any).data.data as {
+        items: Array<{ saveId: number; savedAt: string; post: SocialPost }>;
+        nextCursor: number | null;
+      };
+    },
+    enabled: activeTab !== null && visitedTabs.has(activeTab as any),
+    staleTime: 30_000,
+  });
+
+  // When the user switches tab, mark it visited so the query
+  // fetches. We mark BEFORE the switch so a click triggers the
+  // fetch immediately.
+  const selectTab = useCallback((id: number | null) => {
+    setVisitedTabs((prev) => {
+      const next = new Set(prev);
+      next.add(id as any);
+      return next;
+    });
+    setActiveTab(id);
+  }, []);
+
+  // ── Delete collection ────────────────────────────────────────
+  const deleteCollection = useMutation({
+    mutationFn: (id: number) => socialApi.deleteCollectionV2(id),
+    onMutate: async (id) => {
+      // Optimistic remove from local list.
+      const prev = collections;
+      qc.setQueryData([...socialKeys.all, 'collections'], (old: any) =>
+        old ? { ...old, collections: old.collections.filter((c: any) => c.id !== id) } : old,
+      );
+      return { prev };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.prev) qc.setQueryData([...socialKeys.all, 'collections'], ctx.prev as any);
+      toast.error('Xoá thất bại');
+    },
+    onSuccess: () => {
+      toast.success('Đã xoá bộ sưu tập');
+      // If we deleted the active tab, jump back to All.
+      if (activeTab !== null && !isNaN(activeTab as any) && activeTab !== UNCATEGORISED_TAB) {
+        setActiveTab(ALL_TAB);
+      }
+      // Refresh the active tab's post list (the deleted posts
+      // may still be in the local cache).
+      qc.invalidateQueries({ queryKey: [...socialKeys.all, 'collection-posts'] });
+    },
+  });
+
+  // Build tab list. We always pin "Tất cả" first, then
+  // "Chưa phân loại" if non-zero, then user collections.
+  type Tab = { key: number | null; label: string; count: number; icon: any };
+  const tabs: Tab[] = [
+    { key: ALL_TAB, label: 'Tất cả', count: totalSaved, icon: Layers },
+  ];
+  if (uncategorizedCount > 0) {
     tabs.push({
-      key: '__uncategorized',
+      key: UNCATEGORISED_TAB,
       label: 'Chưa phân loại',
-      count: grouped.get('__uncategorized')!.length,
+      count: uncategorizedCount,
       icon: Inbox,
     });
   }
-  for (const f of saveFolders) {
-    if (!f.name) continue;
+  for (const c of collections) {
     tabs.push({
-      key: f.name,
-      label: f.name,
-      count: f.count,
-      icon: Folder,
+      key: c.id,
+      label: c.name,
+      count: c.count,
+      icon: c.icon ? (() => <span>{c.icon}</span>) as any : Folder,
     });
   }
+
+  const items = activeQuery.data?.items ?? [];
+  const isLoadingActive = activeQuery.isLoading && activeQuery.isFetching;
 
   return (
     <main
@@ -124,23 +163,30 @@ export default function SavedPostsPage() {
           >
             <Bookmark size={20} style={{ color: '#f59e0b' }} />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h1 className="font-heading text-2xl font-bold text-text-primary">
               Đã lưu
             </h1>
             <p className="text-sm text-text-muted">
-              {savedPosts.length === 0
+              {totalSaved === 0
                 ? 'Bạn chưa lưu bài viết nào.'
-                : `${savedPosts.length} bài viết · ${saveFolders.length} collection`}
+                : `${totalSaved} bài viết · ${collections.length} bộ sưu tập`}
             </p>
           </div>
+          {/* Inline create collection */}
+          <NewCollectionButton onCreated={(c) => {
+            qc.setQueryData([...socialKeys.all, 'collections'], (old: any) =>
+              old ? { ...old, collections: [...old.collections, c] } : old,
+            );
+            selectTab(c.id);
+          }} />
         </div>
       </header>
 
       {/* Tabs */}
       {tabs.length > 1 && (
         <div
-          className="mb-5 flex gap-2 overflow-x-auto rounded-2xl p-1.5"
+          className="mb-5 flex gap-1.5 overflow-x-auto rounded-2xl p-1.5"
           style={{
             background: 'rgba(255,255,255,0.03)',
             border: '1px solid rgba(255,255,255,0.08)',
@@ -152,31 +198,32 @@ export default function SavedPostsPage() {
             const isActive = activeTab === t.key;
             return (
               <button
-                key={t.key}
-                onClick={() => setActiveTab(t.key)}
+                key={String(t.key)}
+                onClick={() => selectTab(t.key)}
                 className={cn(
-                  'flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-all',
+                  'relative flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-all',
                   isActive
-                    ? 'text-white shadow-lg'
-                    : 'text-text-muted hover:bg-white/[0.04] hover:text-text-primary',
+                    ? 'text-text-primary'
+                    : 'text-text-muted hover:bg-white/[0.04] hover:text-text-secondary',
                 )}
                 style={
                   isActive
                     ? {
-                        background: 'linear-gradient(135deg, rgba(245,158,11,0.35), rgba(139,92,246,0.35))',
+                        background: 'rgba(245,158,11,0.15)',
+                        border: '1px solid rgba(245,158,11,0.35)',
+                        boxShadow: '0 0 0 1px rgba(245,158,11,0.2), 0 4px 16px rgba(245,158,11,0.18)',
                       }
-                    : undefined
+                    : { border: '1px solid transparent' }
                 }
               >
-                <Icon size={13} />
-                {t.label}
+                {typeof Icon === 'function' && Icon.length ? <Icon size={14} /> : <Icon size={14} />}
+                <span>{t.label}</span>
                 <span
-                  className={cn(
-                    'rounded-full px-1.5 py-0.5 text-[10px] tabular-nums',
-                    isActive
-                      ? 'bg-white/15 text-white'
-                      : 'bg-white/[0.04] text-text-muted',
-                  )}
+                  className="rounded-full px-1.5 text-[10px] tabular-nums"
+                  style={{
+                    background: isActive ? 'rgba(245,158,11,0.3)' : 'rgba(255,255,255,0.06)',
+                    color: isActive ? '#fcd34d' : '#94a3b8',
+                  }}
                 >
                   {t.count}
                 </span>
@@ -186,46 +233,68 @@ export default function SavedPostsPage() {
         </div>
       )}
 
+      {/* Active collection toolbar (delete) */}
+      {activeTab !== null && activeTab !== UNCATEGORISED_TAB && activeTab !== ALL_TAB && (
+        <div className="mb-4 flex items-center justify-end">
+          <button
+            onClick={() => {
+              const c = collections.find((x) => x.id === activeTab);
+              if (!c) return;
+              if (confirm(`Xoá bộ sưu tập "${c.name}"? Các bài viết lưu trong đó sẽ được giữ nguyên ở tab "Tất cả".`)) {
+                deleteCollection.mutate(c.id);
+              }
+            }}
+            disabled={deleteCollection.isPending}
+            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
+          >
+            <Trash2 size={12} />
+            Xoá bộ sưu tập này
+          </button>
+        </div>
+      )}
+
       {/* Body */}
-      {isLoadingSaves ? (
+      {totalSaved === 0 ? (
+        <EmptyState />
+      ) : isLoadingActive ? (
         <div className="space-y-4">
-          {[1, 2].map((i) => (
+          {[0, 1, 2].map((i) => (
             <PostSkeleton key={i} />
           ))}
         </div>
-      ) : visiblePosts.length === 0 ? (
-        <EmptyState tab={activeTab} onGoToFeed={() => void loadFeed()} />
+      ) : items.length === 0 ? (
+        <EmptyState hint="Chưa có bài viết nào trong bộ sưu tập này." />
       ) : (
         <div className="space-y-4">
           <AnimatePresence mode="popLayout">
-            {visiblePosts.map((post) => (
+            {items.map((it, index) => (
               <motion.div
-                key={post.id}
-                layout
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.2 }}
-                className="relative"
+                key={it.saveId}
+                initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.25, delay: index < 5 ? index * 0.04 : 0 }}
               >
                 <PostCard
-                  post={post}
-                  onToggleSave={() => handleUnsave(post.id)}
+                  post={it.post}
+                  onDelete={async (postId) => {
+                    // The card has its own delete optimistic
+                    // update; we just need to make sure the
+                    // current tab refreshes too.
+                    await socialApi.unsavePost(postId).catch(() => null);
+                    qc.invalidateQueries({ queryKey: [...socialKeys.all, 'collection-posts'] });
+                    qc.invalidateQueries({ queryKey: [...socialKeys.all, 'collections'] });
+                  }}
+                  onToggleSave={async (postId) => {
+                    // The card handles the cache patch. We
+                    // additionally invalidate THIS page's
+                    // collection tab so the saved post
+                    // disappears on refresh.
+                    await socialApi.unsavePost(postId).catch(() => null);
+                    qc.invalidateQueries({ queryKey: [...socialKeys.all, 'collection-posts'] });
+                    qc.invalidateQueries({ queryKey: [...socialKeys.all, 'collections'] });
+                  }}
                 />
-                {/* Folder tag chip */}
-                {(post as any)?.savedFolder ? (
-                  <div
-                    className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
-                    style={{
-                      background: 'rgba(245,158,11,0.15)',
-                      color: '#fbbf24',
-                      border: '1px solid rgba(245,158,11,0.35)',
-                    }}
-                  >
-                    <Hash size={9} />
-                    {(post as any).savedFolder}
-                  </div>
-                ) : null}
               </motion.div>
             ))}
           </AnimatePresence>
@@ -235,53 +304,130 @@ export default function SavedPostsPage() {
   );
 }
 
-/**
- * Empty state — different copy depending on whether the user is
- * in "Tất cả" (no saves at all) vs a specific collection that just
- * happens to be empty.
- */
-function EmptyState({ tab, onGoToFeed }: { tab: string; onGoToFeed: () => void }) {
-  const isAll = tab === '';
+// ─── Sub-components ──────────────────────────────────────────────
+
+function EmptyState({ hint }: { hint?: string }) {
   return (
-    <div
-      className="rounded-3xl px-6 py-16 text-center"
-      style={{
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        backdropFilter: 'blur(20px)',
-      }}
-    >
+    <div className="flex flex-col items-center justify-center rounded-3xl border border-white/[0.06] bg-white/[0.02] px-6 py-16 text-center">
       <div
-        className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
+        className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
         style={{
-          background: 'rgba(245,158,11,0.1)',
-          border: '1px solid rgba(245,158,11,0.25)',
+          background: 'rgba(245,158,11,0.12)',
+          border: '1px solid rgba(245,158,11,0.3)',
         }}
       >
-        <BookmarkCheck size={28} className="text-amber-400" />
+        <BookmarkCheck size={28} style={{ color: '#f59e0b' }} />
       </div>
-      <h2 className="mb-2 font-heading text-lg font-bold text-text-primary">
-        {isAll ? 'Chưa có bài viết đã lưu' : 'Collection trống'}
+      <h2 className="text-base font-semibold text-text-primary">
+        Chưa có gì ở đây
       </h2>
-      <p className="mx-auto mb-5 max-w-sm text-sm text-text-muted">
-        {isAll
-          ? 'Bấm vào biểu tượng Bookmark trên bất kỳ bài viết nào để lưu lại. Bạn có thể chọn collection hoặc tạo mới ngay tại chỗ.'
-          : 'Chưa có bài viết nào trong collection này. Hãy lưu bài viết vào đây từ trang chủ.'}
+      <p className="mt-1 max-w-sm text-sm text-text-muted">
+        {hint ?? 'Lưu bài viết từ trang Feed bằng cách nhấn vào biểu tượng bookmark. Bạn có thể phân loại vào nhiều bộ sưu tập khác nhau.'}
       </p>
-      {isAll && (
-        <button
-          onClick={onGoToFeed}
-          className="inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium transition-colors"
-          style={{
-            background: 'rgba(139,92,246,0.18)',
-            color: '#a78bfa',
-            border: '1px solid rgba(139,92,246,0.35)',
-          }}
-        >
-          <Bookmark size={14} />
-          Khám phá bài viết
-        </button>
-      )}
+    </div>
+  );
+}
+
+function NewCollectionButton({ onCreated }: { onCreated: (c: FeedCollection) => void }) {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  const submit = async () => {
+    const trimmed = name.trim();
+    if (!trimmed || busy) return;
+    setBusy(true);
+    try {
+      const res = await socialApi.createCollectionV2(trimmed);
+      const created = (res as any)?.data?.data as FeedCollection | undefined;
+      if (created) {
+        onCreated(created);
+        setName('');
+        setOpen(false);
+        toast.success(`Đã tạo "${created.name}"`);
+      }
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Tạo thất bại');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium transition-all"
+        style={{
+          background: 'rgba(139,92,246,0.15)',
+          color: '#c4b5fd',
+          border: '1px solid rgba(139,92,246,0.3)',
+        }}
+      >
+        <Plus size={14} />
+        Bộ sưu tập mới
+      </button>
+      <AnimatePresence>
+        {open && (
+          <>
+            <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} aria-hidden />
+            <motion.div
+              initial={{ opacity: 0, y: -6, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -6, scale: 0.96 }}
+              transition={{ duration: 0.15 }}
+              className="absolute right-0 top-full z-40 mt-2 w-72 overflow-hidden rounded-2xl p-3"
+              style={{
+                background: 'rgba(15,15,25,0.96)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                backdropFilter: 'blur(20px)',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-wide text-text-muted">
+                Tên bộ sưu tập
+              </label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    void submit();
+                  } else if (e.key === 'Escape') {
+                    setOpen(false);
+                  }
+                }}
+                autoFocus
+                maxLength={80}
+                placeholder="Gaming, Tài liệu, ..."
+                className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-text-primary outline-none placeholder:text-text-muted/60 transition-colors focus:border-violet-400/50"
+              />
+              <div className="mt-2 flex items-center justify-end gap-2">
+                <button
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-2.5 py-1.5 text-xs text-text-muted hover:bg-white/5 hover:text-text-secondary"
+                >
+                  Huỷ
+                </button>
+                <button
+                  onClick={() => void submit()}
+                  disabled={!name.trim() || busy}
+                  className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all disabled:opacity-40"
+                  style={{
+                    background: 'rgba(139,92,246,0.25)',
+                    color: '#c4b5fd',
+                    border: '1px solid rgba(139,92,246,0.4)',
+                  }}
+                >
+                  {busy ? <Loader2 size={12} className="animate-spin" /> : <Plus size={12} />}
+                  Tạo
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

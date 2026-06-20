@@ -817,12 +817,9 @@ export const socialApi = {
   getSaveFolders: () => api.get('/social/saves/folders'),
 
   // ── Saved Collections (added 2026-06-20) ─────────────────────
-  // New endpoints that mirror the spec'd Feed collections API
-  // (GET /feed/collections, POST /feed/collections,
-  // POST /feed/save-post). The endpoints are aliases for the
-  // underlying SocialSave model — folder is stored on SocialSave.
-  // We do NOT remove the legacy methods above so any external
-  // caller keeps working.
+  // Legacy methods below — kept for callers that still use
+  // the old string-based folder API. The legacy popover in
+  // SocialSavePopover.tsx calls `createCollection`.
   listCollections: () =>
     api.get<{
       success: true;
@@ -841,6 +838,52 @@ export const socialApi = {
     api.post<{ success: true; data: { saved: boolean; folder?: string | null } }>(
       '/feed/save-post',
       { postId, collection, remove },
+    ),
+
+  // ── Saved Collections v2 (2026-06-20) ────────────────────────
+  // Multi-folder bookmark backed by the `FeedCollection` +
+  // `FeedSavedPost` tables. Each post can be saved into
+  // MULTIPLE collections (unlike the legacy single-folder
+  // model). The contract is ID-based, not name-based.
+  listCollectionsV2: () =>
+    api.get<{
+      success: true;
+      data: import('@/types/social').FeedCollectionsResponse;
+    }>('/feed/collections'),
+  createCollectionV2: (name: string, icon?: string) =>
+    api.post<{
+      success: true;
+      data: import('@/types/social').FeedCollectionCreated;
+    }>('/feed/collections', { name, icon }),
+  deleteCollectionV2: (id: number) =>
+    api.delete<{ success: true; data: { deletedCollectionId: number; affectedPosts: number } }>(
+      `/feed/collections/${id}`,
+    ),
+  renameCollectionV2: (id: number, name: string) =>
+    api.patch<{ success: true; data: { id: number; name: string } }>(
+      `/feed/collections/${id}`,
+      { name },
+    ),
+  savePostToCollections: (postId: number, collectionIds: number[]) =>
+    api.post<{
+      success: true;
+      data: import('@/types/social').FeedSaveResult;
+    }>('/feed/save-post-v2', { postId, collectionIds }),
+  getPostSaveContext: (postId: number) =>
+    api.get<{
+      success: true;
+      data: import('@/types/social').FeedPostSaveContext;
+    }>(`/feed/save-context`, { params: { postId } }),
+  listSavedPostsInCollection: (
+    collectionId: number | null,
+    params: { cursor?: number; limit?: number } = {},
+  ) =>
+    api.get<{
+      success: true;
+      data: import('@/types/social').FeedSavedPostsResponse;
+    }>(
+      `/feed/collections/${collectionId === null ? 'uncategorized' : collectionId}/posts`,
+      { params },
     ),
 
   // Share

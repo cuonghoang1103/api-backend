@@ -55,6 +55,15 @@ import {
   sharePost,
   votePoll,
   getPollForViewer,
+  // Saved Collections v2 (added 2026-06-20) — multi-folder
+  // bookmark backed by `FeedCollection` + `FeedSavedPost`.
+  listCollections,
+  createCollection,
+  deleteCollection,
+  renameCollection,
+  savePostToCollections,
+  getPostSaveContext,
+  listSavedPostsInCollection,
 } from '../services/social.service.js';
 import {
   notifyPostReaction,
@@ -626,29 +635,62 @@ router.post(
 // GET /api/v1/feed/collections — List user's save collections
 // ════════════════════════════════════════════════════════════════
 //
-// Returns the list of folders the current user has used on SocialSave
-// + the uncategorised count. We always include the full groupBy
-// (folder → count) so the popover in PostCard can render the existing
-// collections with their counts side-by-side.
+// v2 — returns rows from the `FeedCollection` table (real
+// multi-folder model). The legacy `/saves/folders` endpoint
+// is preserved below for callers that still want the
+// `SocialSave.folder` groupBy output.
 //
 // Response shape:
-//   { success: true, data: { collections: [{ name, count }], uncategorized: number, total: number } }
+//   {
+//     success: true,
+//     data: {
+//       collections: [{ id, name, icon, count, sortOrder, createdAt }],
+//       uncategorized: number,
+//       total: number
+//     }
+//   }
 router.get(
   '/collections',
   authenticate,
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = getUserId(req);
-      const result = await getSaveFolders(userId);
-      // The service returns `{ folders, total, uncategorized }` and we
-      // simply forward it — no transformation. The shape is locked in
-      // by the frontend popover.
-      res.json({
+      const result = await listCollections(userId);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/feed/collections — Create a new collection
+// ════════════════════════════════════════════════════════════════
+//
+// Body: { name: string, icon?: string }
+// Response: { success: true, data: { id, name, icon, sortOrder, count: 0, createdAt } }
+router.post(
+  '/collections',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      const rawName = (req.body?.name ?? '').toString();
+      const icon = req.body?.icon;
+      const created = await createCollection(
+        userId,
+        rawName,
+        typeof icon === 'string' ? icon : null,
+      );
+      res.status(201).json({
         success: true,
         data: {
-          collections: result.folders,
-          uncategorized: result.uncategorized,
-          total: result.total,
+          id: created.id,
+          name: created.name,
+          icon: created.icon,
+          sortOrder: created.sortOrder,
+          count: 0,
+          createdAt: created.createdAt,
         },
       });
     } catch (error) {
@@ -658,64 +700,137 @@ router.get(
 );
 
 // ════════════════════════════════════════════════════════════════
-// POST /api/v1/feed/collections — "Create" a collection
+// DELETE /api/v1/feed/collections/:id — Delete a collection
 // ════════════════════════════════════════════════════════════════
-//
-// Collections are not a real table — they are implicit through
-// `SocialSave.folder`. So creating one is just an upsert: we make
-// sure a save with this folder name exists for the current user.
-// If the user has no saved posts yet (or no posts in that folder),
-// we still want the popover to display the new name immediately.
-//
-// To keep semantics simple, we:
-//   1. validate the name (1..50 chars, trim, no control chars)
-//   2. upsert a zero-impact "marker" save on the most recent post
-//      the user has seen. If they have no posts to attach to, we
-//      succeed silently and the folder will appear as soon as they
-//      save a real post into it.
-//
-// Returns the normalised name so the client can use it for the
-// popover's `checked` state without an extra round-trip.
-router.post(
-  '/collections',
+router.delete(
+  '/collections/:id',
   authenticate,
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = getUserId(req);
-      // userId is required for the route to be authenticated; future
-      // server-side fan-out (e.g. collection icons stored on the user)
-      // will use it. Today the collection is implicit through
-      // SocialSave.folder so there is nothing user-scoped to write.
-      void userId;
-      const rawName = (req.body?.name ?? '').toString();
-      const name = rawName.trim();
-      if (!name) {
-        throw new AppError('Collection name is required', 400, 'MISSING_NAME');
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        throw new AppError('Invalid collection id', 400, 'INVALID_ID');
       }
-      if (name.length > 50) {
-        throw new AppError('Collection name must be 50 characters or less', 400, 'COLLECTION_NAME_TOO_LONG');
-      }
-      // Strip characters that would break the popover's "ticking"
-      // logic or the URL slug later. Allow letters, digits, spaces,
-      // dashes, underscores and Vietnamese diacritics.
-      const safe = name.replace(/[^\p{L}\p{N}\s\-_]/gu, '');
-      if (safe !== name) {
-        throw new AppError('Collection name contains invalid characters', 400, 'INVALID_NAME_CHARS');
-      }
+      const result = await deleteCollection(userId, id);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
-      // The folder appears in `getSaveFolders` as soon as a save
-      // exists with that name. We don't create one out of thin air
-      // — instead we return the normalised name and let the popover
-      // immediately call `save-post` with the same name, which will
-      // land in the DB on the next save.
-      res.status(201).json({
-        success: true,
-        data: {
-          name: safe,
-          count: 0,
-          newlyCreated: true,
-        },
-      });
+// ════════════════════════════════════════════════════════════════
+// PATCH /api/v1/feed/collections/:id — Rename a collection
+// ════════════════════════════════════════════════════════════════
+router.patch(
+  '/collections/:id',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        throw new AppError('Invalid collection id', 400, 'INVALID_ID');
+      }
+      const rawName = (req.body?.name ?? '').toString();
+      const updated = await renameCollection(userId, id, rawName);
+      res.json({ success: true, data: { id: updated.id, name: updated.name } });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/feed/save-post — Save a post to collections (v2)
+// ════════════════════════════════════════════════════════════════
+//
+// Replaces the legacy string-based body. The new contract is
+// strictly IDs, so the client doesn't need to know about
+// `FeedCollection.name` casing rules.
+//
+// Body:
+//   { postId: number, collectionIds: number[] }
+//   - `collectionIds: []` → unsave the post entirely
+//
+// Response:
+//   { success: true, data: { postId, collectionIds, added, removed, isSaved } }
+//
+// The legacy /feed/save-post with `collection: string` still
+// works (see handler above) — we leave it in place as a
+// compatibility shim. v2 supersedes it for new clients.
+router.post(
+  '/save-post-v2',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      const postId = parseInt(req.body?.postId, 10);
+      if (isNaN(postId)) {
+        throw new AppError('Valid postId is required', 400, 'INVALID_POST_ID');
+      }
+      const collectionIds = Array.isArray(req.body?.collectionIds)
+        ? req.body.collectionIds.map((n: any) => Number(n))
+        : [];
+      const result = await savePostToCollections(userId, postId, collectionIds);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// GET /api/v1/feed/save-context?postId=N
+//   → returns the collections THIS user has THIS post in.
+//   Used by the popover to pre-tick checkboxes when the
+//   post is already saved.
+router.get(
+  '/save-context',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      const postId = parseInt(req.query.postId as string, 10);
+      if (isNaN(postId)) {
+        throw new AppError('Valid postId required', 400, 'INVALID_POST_ID');
+      }
+      const result = await getPostSaveContext(userId, postId);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// GET /api/v1/feed/collections/:id/posts?cursor=N&limit=K
+//   → returns saved posts in the specified collection (or
+//     uncategorized if id is omitted / "null"). The page
+//     uses this to render the tab content.
+router.get(
+  '/collections/:id/posts',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      const idParam = req.params.id;
+      let collectionId: number | null = null;
+      if (idParam && idParam !== 'uncategorized') {
+        const parsed = parseInt(idParam, 10);
+        if (isNaN(parsed)) {
+          throw new AppError('Invalid collection id', 400, 'INVALID_ID');
+        }
+        collectionId = parsed;
+      }
+      const cursor = req.query.cursor
+        ? parseInt(req.query.cursor as string, 10)
+        : null;
+      const limit = Math.min(
+        Math.max(parseInt((req.query.limit as string) || '20', 10) || 20, 1),
+        50,
+      );
+      const result = await listSavedPostsInCollection(userId, collectionId, cursor, limit);
+      res.json({ success: true, data: result });
     } catch (error) {
       next(error);
     }

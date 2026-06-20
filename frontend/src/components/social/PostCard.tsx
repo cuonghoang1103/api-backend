@@ -18,9 +18,10 @@ import PostPoll from '@/components/social/PostPoll';
 import SocialSavePopover, {
   type SaveCollection,
 } from '@/components/social/SocialSavePopover';
+import SocialSavePopoverV2 from '@/components/social/SocialSavePopoverV2';
 import { useAuthStore } from '@/store/authStore';
 import { getMediaUrl } from '@/lib/utils';
-import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown } from '@/types/social';
+import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext } from '@/types/social';
 import { REACTION_META, EMPTY_REACTION_BREAKDOWN } from '@/types/social';
 import { socialKeys, type SocialFeedResponse } from '@/hooks/useSocialQueries';
 import { formatRelative } from '@/lib/formatDate';
@@ -65,13 +66,8 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showReactions, setShowReactions] = useState(false);
-  // ─── Saved Collections popover (added 2026-06-20) ───────────────
-  // The popover lets the user pick which collection to save into.
-  // It opens when the bookmark button is clicked, instead of
-  // toggling save directly. A separate set of state tracks the
-  // button's own toggle behaviour so a quick click without a
-  // collection still works (toggle into the default/uncategorised
-  // bucket).
+  // ─── Saved Collections popover (legacy single-folder, kept
+  //      for callers that still wire it up). ───────────────────
   const [showSavePopover, setShowSavePopover] = useState(false);
   const saveButtonRef = useRef<HTMLButtonElement | null>(null);
   // Cache of the user's existing collections. We hydrate this on
@@ -81,6 +77,34 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const [collectionsLoaded, setCollectionsLoaded] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const longPressTimer = useRef<any>(null);
+
+  // ─── Saved Collections V2 popover (added 2026-06-20) ────────
+  // Multi-folder variant powered by FeedCollection +
+  // FeedSavedPost. State is separate from the legacy
+  // single-folder popover above so we can A/B them or roll
+  // back without touching unrelated code. The V2 popover
+  // is the default for new saves; the legacy one stays as
+  // a compatibility fallback for the existing single-folder
+  // route.
+  const [showSavePopoverV2, setShowSavePopoverV2] = useState(false);
+  // Cached FeedCollection rows for the popover. Fetched once
+  // per popover open. The parent (e.g. the /saved page) can
+  // also pre-load this via `initialCollections`.
+  const [collectionsV2, setCollectionsV2] = useState<FeedCollection[]>(
+    () => ((post as any).__initialCollections as FeedCollection[] | undefined) ?? [],
+  );
+  // Pre-tick state: which collections this post is currently
+  // saved into. Cached so reopening the popover is instant.
+  const [saveContext, setSaveContext] = useState<FeedPostSaveContext | null>(
+    () => (post as any).__saveContext as FeedPostSaveContext | null ?? null,
+  );
+  const [collectionsV2Loaded, setCollectionsV2Loaded] = useState(
+    Boolean((post as any).__initialCollections) || Boolean((post as any).__saveContext),
+  );
+  const [collectionsV2Loading, setCollectionsV2Loading] = useState(false);
+  // Whether the next click on the bookmark button should open
+  // the V2 popover. We always open V2 for new code; the legacy
+  // popover is left alone.
   const { toggleLike, toggleReaction, toggleSave, loadComments, commentsByPost, loadMoreComments, commentsHasMoreByPost, isLoadingComments, addOptimisticComment, deletePost } = useSocialStore();
   const { user: currentUser } = useAuthStore();
   const qc = useQueryClient();
@@ -550,6 +574,106 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     }
   };
 
+  // ─── Saved Collections V2 handlers (added 2026-06-20) ────────
+  // Lazy-fetch the user's collections + the post's current
+  // save context. We re-fetch every time the popover opens
+  // so the popover is always fresh (counts, new folders
+  // created in another tab, etc.).
+  const ensureV2Loaded = async () => {
+    setCollectionsV2Loading(true);
+    try {
+      const [listRes, ctxRes] = await Promise.all([
+        socialApi.listCollectionsV2(),
+        socialApi.getPostSaveContext(post.id),
+      ]);
+      const list = (listRes as any)?.data?.data;
+      const ctx = (ctxRes as any)?.data?.data;
+      if (Array.isArray(list?.collections)) {
+        setCollectionsV2(list.collections);
+      }
+      if (ctx) setSaveContext(ctx);
+      setCollectionsV2Loaded(true);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Tải bộ sưu tập thất bại');
+    } finally {
+      setCollectionsV2Loading(false);
+    }
+  };
+
+  /**
+   * Multi-collection commit. The popover tells us the new
+   * set of collection ids the user wants this post in; we
+   * hit `/feed/save-post-v2`, patch the Query cache + the
+   * Zustand `savedPosts` array, and refresh the context.
+   */
+  const handleCommitV2 = async (collectionIds: number[]) => {
+    const snapshot = qc.getQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS });
+    const wasSaved = post.isSaved;
+    const willBeSaved = collectionIds.length > 0;
+    patchPostInCache(post.id, (p) => ({
+      ...p,
+      isSaved: willBeSaved,
+      savesCount: Math.max(0, (p.savesCount ?? 0) + (wasSaved === willBeSaved ? 0 : willBeSaved ? 1 : -1)),
+    }));
+    try {
+      const res = await socialApi.savePostToCollections(post.id, collectionIds);
+      const data = (res as any)?.data?.data as
+        | { collectionIds: number[]; isSaved: boolean }
+        | undefined;
+      // Refresh save context from server to stay in sync.
+      const ctxRes = await socialApi.getPostSaveContext(post.id);
+      const freshCtx = (ctxRes as any)?.data?.data as FeedPostSaveContext | undefined;
+      if (freshCtx) setSaveContext(freshCtx);
+      // Bump collection counts locally for instant feedback.
+      const list = await socialApi.listCollectionsV2();
+      const listData = (list as any)?.data?.data;
+      if (Array.isArray(listData?.collections)) {
+        setCollectionsV2(listData.collections);
+      }
+      // Keep Zustand's `savedPosts` consistent for pages that
+      // read from it. The new save lives at the head.
+      if (data?.isSaved) {
+        useSocialStore.setState((s) => {
+          const without = s.savedPosts.filter((p) => p.id !== post.id);
+          return { savedPosts: [post, ...without] };
+        });
+      } else {
+        useSocialStore.setState((s) => ({
+          savedPosts: s.savedPosts.filter((p) => p.id !== post.id),
+        }));
+      }
+    } catch (err: any) {
+      // Rollback cache.
+      snapshot.forEach(([key, data]) => qc.setQueryData<SocialFeedResponse>(key, data));
+      throw err;
+    }
+  };
+
+  /** Inline-create a collection. The new row is appended to
+   *  the local list so the popover shows it immediately. */
+  const handleCreateV2 = async (name: string): Promise<FeedCollection | null> => {
+    try {
+      const res = await socialApi.createCollectionV2(name);
+      const created = (res as any)?.data?.data as FeedCollection | undefined;
+      if (!created) return null;
+      // Optimistic prepend. Server returns id + sortOrder.
+      setCollectionsV2((prev) => {
+        if (prev.some((c) => c.id === created.id)) return prev;
+        return [...prev, created];
+      });
+      return created;
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Tạo bộ sưu tập thất bại');
+      return null;
+    }
+  };
+
+  /** Open the V2 popover. Refreshes the data each time. */
+  const openSavePopoverV2 = async () => {
+    setShowSavePopoverV2(true);
+    void ensureV2Loaded();
+  };
+
   const handleSaveClick = async () => {
     if (onToggleSave) {
       // External controller wins (e.g. /saved page passes its own
@@ -557,14 +681,17 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
       onToggleSave(post.id);
       return;
     }
-    // First click opens the popover. Subsequent clicks re-toggle
-    // (close the popover). This matches Facebook / TikTok UX.
-    if (showSavePopover) {
-      setShowSavePopover(false);
+    // First click opens the V2 (multi-folder) popover.
+    // Subsequent clicks on the same card while the popover is
+    // open close it. We always open V2 for new code; the
+    // legacy single-folder popover stays as a fallback that
+    // we render only if a parent specifically asked for it
+    // (no parent does today).
+    if (showSavePopoverV2) {
+      setShowSavePopoverV2(false);
       return;
     }
-    setShowSavePopover(true);
-    void ensureCollectionsLoaded();
+    await openSavePopoverV2();
   };
 
   // Author info can be missing on a malformed post (e.g. an
@@ -912,6 +1039,22 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
             anchorRef={saveButtonRef}
             open={showSavePopover}
             onClose={() => setShowSavePopover(false)}
+          />
+          {/* V2 multi-collection popover (added 2026-06-20).
+              Wired alongside the legacy one; the bookmark
+              button now opens this one. The legacy remains
+              for callers that explicitly toggle
+              `showSavePopover` themselves. */}
+          <SocialSavePopoverV2
+            postId={post.id}
+            collections={collectionsV2}
+            context={saveContext}
+            loading={collectionsV2Loading}
+            onCommit={handleCommitV2}
+            onCreateCollection={handleCreateV2}
+            anchorRef={saveButtonRef}
+            open={showSavePopoverV2}
+            onClose={() => setShowSavePopoverV2(false)}
           />
 
           {/* Share menu */}

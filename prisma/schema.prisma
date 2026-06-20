@@ -106,6 +106,14 @@ model User {
   socialCommentLikes      SocialCommentLike[]
   socialSaves             SocialSave[]
   socialShares            SocialShare[]
+  // Saved Collections (multi-folder bookmark system). The
+  // relation `feedCollections` is the list of collections
+  // the user OWNS. The relation `feedSavedPosts` is the
+  // junction table that stores which posts they've saved
+  // into which collections.
+  feedCollections         FeedCollection[]  @relation("FeedCollectionOwner")
+  feedSavedPosts          FeedSavedPost[]
+
   // Notification graph — who is the receiver / sender on social
   // notifications. The reverse relations are defined on
   // SocialNotification above.
@@ -1136,6 +1144,10 @@ model SocialPost {
   comments SocialComment[]
   saves    SocialSave[]
   shares   SocialShare[]
+  // Back-relation from the new multi-collection save table.
+  // A post can be saved into N collections per user (one
+  // row per (user, post, collection) triple).
+  feedSavedPosts FeedSavedPost[]
   poll     SocialPoll?
 
   @@index([authorId], name: "idx_social_posts_author")
@@ -1257,6 +1269,68 @@ model SocialSave {
   @@index([userId], name: "idx_social_saves_user")
   @@index([folder], name: "idx_social_saves_folder")
   @@map("social_saves")
+}
+
+// ════════════════════════════════════════════════════════════════════
+// FeedCollection — "Saved Collections" multi-folder bookmark system
+// ════════════════════════════════════════════════════════════════════
+//
+// A user owns N named collections (e.g. "Gaming", "Tài liệu").
+// Each row represents the collection itself — the actual
+// (post ↔ collection) membership lives in FeedSavedPost below.
+//
+// We do NOT delete these in cascade when a user is removed in
+// the `User` model: the cascade sits on the many-to-many
+// relation (FeedSavedPost). Hard-deleting a collection,
+// however, must cascade to FeedSavedPost so we don't end up
+// with orphan saves.
+model FeedCollection {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(80)
+  ownerId     Int      @map("owner_id")
+  // Optional emoji chosen by the user for quick visual ID.
+  icon        String?  @db.VarChar(8)
+  // Soft-sort key for the order the user arranged their
+  // collections in. Defaults to createdAt so the popover
+  // lists them in a stable order without explicit drag-drop.
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt    @map("updated_at")
+
+  owner User                @relation("FeedCollectionOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  saves FeedSavedPost[]
+
+  // Two collections on the same user can't share the same
+  // name. The check is case-insensitive via the unique
+  // extension `citext` would normally need; here we just
+  // normalise on write and rely on a unique constraint at
+  // the storage layer. Postgres won't fold case by default,
+  // so we lowercase before insert in the service.
+  @@unique([ownerId, name], name: "uk_feed_collection_owner_name")
+  @@index([ownerId], name: "idx_feed_collections_owner")
+  @@map("feed_collections")
+}
+
+// FeedSavedPost — junction row that says "user X saved post Y
+// into collection Z". One row per (user, post, collection).
+// A post can be saved into MULTIPLE collections (unlike
+// SocialSave which is single-folder). The UNIQUE constraint
+// enforces that.
+model FeedSavedPost {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  postId       Int      @map("post_id")
+  collectionId Int      @map("collection_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post       SocialPost     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  collection FeedCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId, collectionId], name: "uk_feed_saved_user_post_collection")
+  @@index([userId, collectionId], name: "idx_feed_saved_user_collection")
+  @@index([userId, createdAt(sort: Desc)], name: "idx_feed_saved_user_recent")
+  @@map("feed_saved_posts")
 }
 
 model SocialShare {

@@ -223,3 +223,70 @@ export interface MediaUploadItem {
   fileName?: string;
   error?: string;
 }
+
+// ════════════════════════════════════════════════════════════════════
+// FeedCollection / FeedSavedPost — Multi-folder bookmark (2026-06-20)
+// ════════════════════════════════════════════════════════════════════
+//
+// A user owns N named collections. A post can be saved into
+// MANY collections per user. The contract mirrors the backend
+// route layer in `src/routes/social.routes.ts`.
+
+/** One row of the `FeedCollection` table. */
+export interface FeedCollection {
+  id: number;
+  name: string;
+  icon: string | null;
+  sortOrder: number;
+  /** Number of posts this user has saved INTO this collection. */
+  count: number;
+  createdAt: string;
+}
+
+/** Result of GET /api/v1/feed/collections */
+export interface FeedCollectionsResponse {
+  collections: FeedCollection[];
+  /** Legacy "Chưa phân loại" bucket = old `SocialSave.folder
+   *  IS NULL` rows. Non-zero only for users who saved posts
+   *  before this feature. */
+  uncategorized: number;
+  total: number;
+}
+
+/** Result of POST /api/v1/feed/collections */
+export interface FeedCollectionCreated {
+  id: number;
+  name: string;
+  icon: string | null;
+  sortOrder: number;
+  count: number;
+  createdAt: string;
+}
+
+/** Result of POST /api/v1/feed/save-post-v2 */
+export interface FeedSaveResult {
+  postId: number;
+  collectionIds: number[];
+  added: number[];
+  removed: number[];
+  isSaved: boolean;
+}
+
+/** Result of GET /api/v1/feed/save-context?postId=… */
+export interface FeedPostSaveContext {
+  collectionIds: number[];
+  collections: Array<Pick<FeedCollection, 'id' | 'name' | 'icon'>>;
+  isSaved: boolean;
+}
+
+/** Result of GET /api/v1/feed/collections/:id/posts */
+export interface FeedSavedPostsResponse {
+  items: Array<{
+    saveId: number;
+    savedAt: string;
+    collectionId?: number;
+    folder?: string | null;
+    post: SocialPost;
+  }>;
+  nextCursor: number | null;
+}

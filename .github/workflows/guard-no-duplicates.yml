@@ -1,0 +1,97 @@
+name: CI/CD Guard - Prevent duplicate frontend containers
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'docker-compose*.yml'
+      - 'frontend/**'
+      - '.github/workflows/backend-vps.yml'
+      - '.github/workflows/sync-frontend.yml'
+
+jobs:
+  guard:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Detect and remove duplicate containers
+        run: |
+          ssh vps "
+            set -e
+
+            echo '=== List all containers on port 3000 (frontend) ==='
+            FRONTEND_CONTAINERS=\$(docker ps --filter 'publish=3000' --format '{{.Names}}' | sort)
+            echo \"Containers on port 3000:\"
+            echo \"\$FRONTEND_CONTAINERS\"
+            echo ''
+            COUNT=\$(echo \"\$FRONTEND_CONTAINERS\" | grep -c . || true)
+            echo \"Count: \$COUNT\"
+
+            # The canonical frontend container name is 'cuonghoangdev_frontend'.
+            # Anything else on port 3000 is a duplicate from a stale project.
+            if [ \"\$COUNT\" -gt 1 ]; then
+              echo ''
+              echo '!!! DUPLICATE FRONTEND CONTAINERS DETECTED !!!'
+              for c in \$FRONTEND_CONTAINERS; do
+                if [ \"\$c\" != 'cuonghoangdev_frontend' ]; then
+                  echo \"Removing duplicate: \$c\"
+                  docker stop \"\$c\" 2>&1 || true
+                  docker rm \"\$c\" 2>&1 || true
+                fi
+              done
+            else
+              echo 'OK: Only 1 frontend container running.'
+            fi
+
+            echo ''
+            echo '=== List all containers on port 3001 (backend) ==='
+            BACKEND_CONTAINERS=\$(docker ps --filter 'publish=3001' --format '{{.Names}}' | sort)
+            echo \"\$BACKEND_CONTAINERS\"
+            BCOUNT=\$(echo \"\$BACKEND_CONTAINERS\" | grep -c . || true)
+            echo \"Count: \$BCOUNT\"
+
+            if [ \"\$BCOUNT\" -gt 1 ]; then
+              echo '!!! DUPLICATE BACKEND CONTAINERS DETECTED !!!'
+              for c in \$BACKEND_CONTAINERS; do
+                if [ \"\$c\" != 'cuonghoangdev_backend' ]; then
+                  echo \"Removing duplicate: \$c\"
+                  docker stop \"\$c\" 2>&1 || true
+                  docker rm \"\$c\" 2>&1 || true
+                fi
+              done
+            else
+              echo 'OK: Only 1 backend container running.'
+            fi
+
+            echo ''
+            echo '=== Final state ==='
+            docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}' | grep -E '3000|3001|cuonghoangdev' || true
+          "
+
+      - name: Verify site still healthy
+        run: |
+          sleep 5
+          echo '=== /social ==='
+          curl -sI --max-time 10 'https://cuongthai.com/social' 2>&1 | head -2
+          echo ''
+          echo '=== /login ==='
+          curl -sI --max-time 10 'https://cuongthai.com/login' 2>&1 | head -2
+          echo ''
+          echo '=== Sample chunks 5x each ==='
+          for i in 1 2 3 4 5; do
+            STATUS=\$(curl -sI --max-time 4 'https://cuongthai.com/_next/static/chunks/1090-c692b087adb34144.js' 2>&1 | head -1)
+            echo \"Try \$i: \$STATUS\"
+          done

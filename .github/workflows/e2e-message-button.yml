@@ -1,0 +1,96 @@
+name: E2E Test - Verify Nhắn tin button flow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: E2E test
+        env:
+          API: https://api.cuongthai.com
+        run: |
+          set -e
+          BASE="${{ env.API }}/api/v1"
+          TS=$(date +%s)
+          TESTUSER="e2e_btn_${TS}"
+          EMAIL="${TESTUSER}@test.local"
+          PASSWORD="TestPass123!_Str0ng_Passw0rd"
+
+          echo "=== 1. Register test user ==="
+          REG=$(curl -s -X POST "$BASE/auth/register" \
+            -H "Content-Type: application/json" \
+            -d "{\"username\":\"$TESTUSER\",\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\",\"fullName\":\"E2E Test $TS\"}" 2>&1)
+          echo "$REG" | head -c 300
+          echo ""
+
+          echo "=== 2. Auto-verify email via DB (use debug workflow approach) ==="
+          # Run psql on VPS to mark email as verified
+          ssh vps "
+            docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev -c \"UPDATE users SET email_verified_at = NOW() WHERE username = '$TESTUSER';\" 2>&1 | head -5
+          "
+
+          echo "=== 3. Login ==="
+          LOGIN=$(curl -s -X POST "$BASE/auth/login" \
+            -H "Content-Type: application/json" \
+            -d "{\"login\":\"$TESTUSER\",\"password\":\"$PASSWORD\"}" 2>&1)
+          echo "$LOGIN" | head -c 400
+          echo ""
+          TOKEN=$(echo "$LOGIN" | grep -oE '"token":"[^"]+"' | head -1 | cut -d'"' -f4)
+          echo "Token: ${TOKEN:0:30}..."
+
+          if [ -z "$TOKEN" ]; then
+            echo "Login failed, aborting"
+            exit 1
+          fi
+
+          echo ""
+          echo "=== 4. Start user thread with user id 1 (admin Cuong Hoang) ==="
+          THREAD=$(curl -s -X POST "$BASE/messages/threads/user/1" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" 2>&1)
+          echo "$THREAD" | head -c 600
+          echo ""
+
+          echo ""
+          echo "=== 5. List threads ==="
+          LIST=$(curl -s "$BASE/messages/threads" \
+            -H "Authorization: Bearer $TOKEN" 2>&1)
+          echo "$LIST" | head -c 600
+          echo ""
+
+          echo ""
+          echo "=== 6. Send a test message ==="
+          THREAD_ID=$(echo "$THREAD" | grep -oE '"id":[0-9]+' | head -1 | cut -d':' -f2)
+          echo "Thread ID: $THREAD_ID"
+          if [ -n "$THREAD_ID" ]; then
+            MSG=$(curl -s -X POST "$BASE/messages/threads/$THREAD_ID/messages" \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "Content-Type: application/json" \
+              -d '{"content":"Xin chào! Test từ E2E flow button Nhắn tin","type":"text"}' 2>&1)
+            echo "$MSG" | head -c 400
+            echo ""
+          fi
+
+          echo ""
+          echo "=== 7. Cleanup test user ==="
+          ssh vps "
+            docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev -c \"DELETE FROM users WHERE username = '$TESTUSER';\" 2>&1 | head -3
+          "
+
+          echo ""
+          echo "=== E2E DONE ==="

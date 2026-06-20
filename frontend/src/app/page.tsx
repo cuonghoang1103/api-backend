@@ -215,23 +215,27 @@ export default function SocialPage() {
                 ) : displayPosts.length === 0 ? (
                   <EmptyFeed />
                 ) : (
-                  displayPosts.map((post, index) => (
-                    <motion.div
-                      key={post.id}
-                      layout
-                      initial={{ opacity: 0, y: 20, scale: 0.97 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.3, delay: index < 5 ? index * 0.05 : 0 }}
-                    >
-                      <PostCard
-                        post={post}
-                        onToggleLike={handleToggleLike}
-                        onToggleSave={handleToggleSave}
-                        onDelete={handleDeletePost}
-                      />
-                    </motion.div>
-                  ))
+                  displayPosts.map((post, index) => {
+                    // Find the latest version of this post from Zustand.
+                    // Zustand is the single source of truth for mutations;
+                    // TQ is used only for initial data hydration and
+                    // background refetch reconciliation.
+                    const latest = posts.find((p) => p.id === post.id) ?? post;
+                    return (
+                      <motion.div
+                        key={post.id}
+                        layout
+                        initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.3, delay: index < 5 ? index * 0.05 : 0 }}
+                      >
+                        <PostCard
+                          post={latest}
+                        />
+                      </motion.div>
+                    );
+                  })
                 )}
               </AnimatePresence>
 

@@ -739,19 +739,11 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     void ensureV2Loaded();
   };
 
+  // Bookmark button click: open the V2 multi-collection popover.
+  // The popover's own toggleCollection → handleCommitV2 path manages
+  // all optimistic UI and API calls. We no longer delegate to
+  // onToggleSave prop here — PostCard owns the entire save UX.
   const handleSaveClick = async () => {
-    if (onToggleSave) {
-      // External controller wins (e.g. /saved page passes its own
-      // toggle handler). Keep behaviour unchanged.
-      onToggleSave(post.id);
-      return;
-    }
-    // First click opens the V2 (multi-folder) popover.
-    // Subsequent clicks on the same card while the popover is
-    // open close it. We always open V2 for new code; the
-    // legacy single-folder popover stays as a fallback that
-    // we render only if a parent specifically asked for it
-    // (no parent does today).
     if (showSavePopoverV2) {
       setShowSavePopoverV2(false);
       return;

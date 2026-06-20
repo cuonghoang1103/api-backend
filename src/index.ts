@@ -81,6 +81,9 @@ const systemRoutes = (await import(path.join(__dirname, 'routes', 'system.routes
 const socialRoutes = (await import(path.join(__dirname, 'routes', 'social.routes.js'))).default;
 const githubRoutes = (await import(path.join(__dirname, 'routes', 'github.routes.js'))).default;
 const dashboardRoutes = (await import(path.join(__dirname, 'routes', 'dashboard.routes.js'))).default;
+const hubRoutesModule = await import(path.join(__dirname, 'routes', 'hub.routes.js'));
+const hubRoutes = hubRoutesModule.default;
+const { hubPublicRouter } = hubRoutesModule;
 const cyberRoutes = (await import(path.join(__dirname, 'routes', 'cyber.routes.js'))).default;
 const quotaRoutes = (await import(path.join(__dirname, 'routes', 'quota.routes.js'))).default;
 const embedJobsRoutes = (await import(path.join(__dirname, 'routes', 'embedJobs.routes.js'))).default;
@@ -365,6 +368,11 @@ app.use('/api/v1/system', systemRoutes);
 app.use('/api/v1/social', socialRoutes);
 app.use('/api/v1/repos', githubRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
+// Hub — personal bookmark manager. Authenticated router for
+// folders/links/scrape; public router for /public/:slug lookups
+// (mounted on the same prefix but with no auth middleware).
+app.use('/api/v1/hub', hubRoutes);
+app.use('/api/v1/hub', hubPublicRouter);
 app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
 app.use('/api/v1/messages', messagesRoutes);

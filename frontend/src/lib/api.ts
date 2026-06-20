@@ -1732,3 +1732,124 @@ export const adminTechTrendsApi = {
     });
   },
 };
+
+// ─── Hub — Personal Bookmark Manager ───────────────────────────────
+//
+// All Hub endpoints are auth-gated. The response shape mirrors
+// what the backend sends from src/services/hub.service.ts.
+
+export interface HubFolder {
+  id: number;
+  name: string;
+  icon: string | null;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+  _count: { links: number };
+}
+
+export interface HubLink {
+  id: number;
+  folderId: number | null;
+  url: string;
+  title: string;
+  description: string | null;
+  thumbnailUrl: string | null;
+  faviconUrl: string | null;
+  notes: string | null;
+  tags: string[];
+  isPublic: boolean;
+  publicSlug: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface HubScrapeResult {
+  url: string;
+  title: string | null;
+  description: string | null;
+  thumbnailUrl: string | null;
+  faviconUrl: string | null;
+  siteName: string | null;
+}
+
+export interface HubLinkListResponse {
+  data: HubLink[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export const hubApi = {
+  // Folders ──────────────────────────────────────────────────────
+  listFolders: () => api.get<{ data: HubFolder[] }>('/hub/folders'),
+
+  createFolder: (data: { name: string; icon?: string | null; sortOrder?: number }) =>
+    api.post<{ data: HubFolder }>('/hub/folders', data),
+
+  updateFolder: (id: number, data: { name?: string; icon?: string | null; sortOrder?: number }) =>
+    api.patch<{ data: HubFolder }>(`/hub/folders/${id}`, data),
+
+  deleteFolder: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/hub/folders/${id}`),
+
+  // Links ────────────────────────────────────────────────────────
+  listLinks: (params?: {
+    folderId?: number | 'null' | 'all';
+    q?: string;
+    page?: number;
+    pageSize?: number;
+  }) => api.get<HubLinkListResponse>('/hub/links', { params }),
+
+  createLink: (data: {
+    folderId?: number | null;
+    url: string;
+    title: string;
+    description?: string | null;
+    thumbnailUrl?: string | null;
+    faviconUrl?: string | null;
+    notes?: string | null;
+    tags?: string[];
+    isPublic?: boolean;
+  }) => api.post<{ data: HubLink }>('/hub/links', data),
+
+  updateLink: (
+    id: number,
+    data: Partial<{
+      folderId: number | null;
+      url: string;
+      title: string;
+      description: string | null;
+      thumbnailUrl: string | null;
+      faviconUrl: string | null;
+      notes: string | null;
+      tags: string[];
+      isPublic: boolean;
+    }>,
+  ) => api.patch<{ data: HubLink }>(`/hub/links/${id}`, data),
+
+  deleteLink: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/hub/links/${id}`),
+
+  // Scrape — auto-fill metadata for a new link. Used by the
+  // AddLinkModal on URL paste.
+  scrape: (url: string) =>
+    api.post<{ data: HubScrapeResult }>('/hub/scrape', { url }),
+
+  // Public lookup — no auth needed.
+  getPublic: (slug: string) =>
+    api.get<{
+      data: {
+        id: number;
+        url: string;
+        title: string;
+        description: string | null;
+        thumbnailUrl: string | null;
+        faviconUrl: string | null;
+        publicSlug: string;
+        createdAt: string;
+      };
+    }>(`/hub/public/${slug}`),
+};
+

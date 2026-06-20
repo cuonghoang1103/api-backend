@@ -149,6 +149,14 @@ model User {
   dashboardTasks        DashboardTask[]
   dashboardCelebrations DashboardCelebration[]
 
+  // ─── Personal Hub — bookmark manager (Phase 7) ─────
+  // User-owned folders + links. Every row is scoped by userId;
+  // all routes put `userId` in their WHERE clause to prevent
+  // cross-tenant reads. Cascade on delete so removing a user
+  // takes their Hub data with it (no orphans).
+  hubFolders HubFolder[]
+  hubLinks   HubLink[]
+
   @@index([email], name: "idx_users_email")
   @@map("users")
 }
@@ -1848,4 +1856,76 @@ model TechTrendArticle {
   @@index([publishedAt(sort: Desc)], name: "idx_tech_trend_published_at")
   @@index([authorId], name: "idx_tech_trend_author_id")
   @@map("tech_trend_articles")
+}
+
+// ============================================================
+// 21. HUB — Personal Bookmark Manager (added 2026-06-20)
+// ============================================================
+// User-owned folders + links. Pure CRUD, no sharing graph yet
+// beyond the per-link `isPublic` flag. Every row is scoped by
+// userId; all routes use `authenticate` middleware and a
+// where: { id, userId } clause to prevent cross-tenant reads.
+//
+// `icon` is intentionally a short string — either a Lucide
+// component name (e.g. "Layers") or a full URL to an uploaded
+// cover image. The frontend decides which to render based on
+// whether the value starts with "/" or "http".
+
+model HubFolder {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  name      String   @db.VarChar(100)
+  // Either a Lucide icon name (frontend resolves to component)
+  // or an absolute URL to an uploaded image on R2.
+  icon      String?  @db.VarChar(500)
+  // Display order within the sidebar. Lower = first. Default 0.
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  links HubLink[]
+
+  @@index([userId, sortOrder], name: "idx_hub_folders_user_sort")
+  @@index([userId, name], name: "idx_hub_folders_user_name")
+  @@map("hub_folders")
+}
+
+model HubLink {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  folderId     Int?     @map("folder_id")
+  url          String   @db.VarChar(2000)
+  title        String   @db.VarChar(500)
+  description  String?  @db.Text
+  thumbnailUrl String?  @map("thumbnail_url") @db.VarChar(2000)
+  faviconUrl   String?  @map("favicon_url") @db.VarChar(500)
+  // Free-form note (markdown/plain). No length cap at the DB
+  // level — the API layer trims to 5000 chars which is plenty
+  // for a personal note while still letting Postgres TEXT be
+  // efficient.
+  notes        String?  @db.Text
+  // String[] tags. Native Postgres array — no join table needed
+  // for a small set (typically < 20 per link). The API normalises
+  // each tag to lowercase + trim before insert.
+  tags         String[] @default([])
+  // When true the link is reachable via /api/v1/hub/public/:slug
+  // without auth. We never expose userId, notes, or personal
+  // tags in the public payload.
+  isPublic     Boolean  @default(false) @map("is_public")
+  // Public slug used by /api/hub/public/:slug. Null until first
+  // share; we generate it server-side with nanoid(10) for
+  // unguessability.
+  publicSlug   String?  @unique @map("public_slug") @db.VarChar(32)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folder HubFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt(sort: Desc)], name: "idx_hub_links_user_recent")
+  @@index([userId, folderId], name: "idx_hub_links_user_folder")
+  @@index([userId], name: "idx_hub_links_user")
+  @@index([isPublic, createdAt(sort: Desc)], name: "idx_hub_links_public")
+  @@map("hub_links")
 }

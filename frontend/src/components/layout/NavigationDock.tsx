@@ -8,7 +8,7 @@ import {
   Home, BookOpen, FolderOpen, Music, MessagesSquare,
   LayoutDashboard, Shield, BookMarked, Receipt,
   Sparkles, User,
-  GraduationCap, ShoppingBag, Gamepad2,
+  GraduationCap, ShoppingBag, Gamepad2, Layers,
   Menu, X, ChevronRight,
   Github,
 } from 'lucide-react';
@@ -56,6 +56,7 @@ const DOCK_ITEMS: DockItem[] = [
   { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'user' },
   { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'user' },
   { href: '/games', label: 'Games', icon: Gamepad2, section: 'user' },
+  { href: '/hub', label: 'Hub', icon: Layers, section: 'user' },
   { href: '/about', label: 'About', icon: User, section: 'user' },
   { href: '/courses', label: 'Courses', icon: BookMarked, section: 'user' },
   { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'user' },

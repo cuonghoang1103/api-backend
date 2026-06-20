@@ -1428,7 +1428,18 @@ export async function listSavedPostsInCollection(
   if (collectionId === null) {
     const legacyRows = await prisma.socialSave.findMany({
       where: { userId, folder: null },
-      include: { post: true },
+      include: {
+        post: {
+          include: {
+            _count: { select: { likes: true, comments: true, saves: true } },
+            author: true,
+            media: true,
+            poll: true,
+            likes: true,
+            saves: true,
+          },
+        },
+      },
       orderBy: { createdAt: 'desc' },
       take: limit + 1,
       ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
@@ -1440,7 +1451,7 @@ export async function listSavedPostsInCollection(
         saveId: r.id,
         savedAt: r.createdAt,
         folder: r.folder,
-        post: r.post,
+        post: serializePost(r.post, { currentUserId: userId }),
       })),
       nextCursor: hasMore ? sliced[sliced.length - 1].id : null,
     };
@@ -1448,7 +1459,19 @@ export async function listSavedPostsInCollection(
 
   const rows = await prisma.feedSavedPost.findMany({
     where,
-    include: { post: true },
+    include: {
+      post: {
+        include: {
+          _count: { select: { likes: true, comments: true, saves: true } },
+          author: true,
+          media: true,
+          poll: true,
+          likes: true,
+          saves: true,
+        },
+      },
+      collection: { select: { id: true, name: true } },
+    },
     orderBy: { createdAt: 'desc' },
     take: limit + 1,
     ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
@@ -1456,12 +1479,17 @@ export async function listSavedPostsInCollection(
   const hasMore = rows.length > limit;
   const sliced = rows.slice(0, limit);
   return {
-    items: sliced.map((r: any) => ({
-      saveId: r.id,
-      savedAt: r.createdAt,
-      collectionId: r.collectionId,
-      post: r.post,
-    })),
+    items: sliced.map((r: any) => {
+      // Pass collection name so savedFolder appears correctly on the card.
+      const serialized = serializePost(r.post, { currentUserId: userId });
+      serialized.savedFolder = r.collection?.name ?? null;
+      return {
+        saveId: r.id,
+        savedAt: r.createdAt,
+        collectionId: r.collectionId,
+        post: serialized,
+      };
+    }),
     nextCursor: hasMore ? sliced[sliced.length - 1].id : null,
   };
 }

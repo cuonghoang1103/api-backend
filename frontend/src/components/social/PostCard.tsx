@@ -977,8 +977,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.9 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute bottom-full left-0 mb-0 z-50 flex flex-col items-start gap-0"
-                  style={{ pointerEvents: 'none' }}>
+                  className="absolute bottom-full left-0 mb-0 z-50 flex flex-col items-start gap-0 pointer-events-auto">
                   {/* Invisible hit-area: a tall transparent div that fills
                       the gap between the button and the emoji row so the
                       cursor can never "fall through" while moving up.

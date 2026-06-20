@@ -929,13 +929,15 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
           className="mt-4 flex items-center gap-1"
           style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}
         >
-          {/* ─── Like button wrapper — onMouseLeave HERE (not on the button)
-              prevents the popover from closing when the mouse travels
-              from the button edge to the popover. The popover closes
-              only when the cursor leaves the entire button+popover
-              zone (the wrapper div). ─── */}
+          {/* ─── Like button wrapper ────────────────────────────────────
+              HOVER: popover opens on mouse enter (no long-press delay).
+              Mouse-leave from the ENTIRE wrapper zone closes it,
+              giving the user a generous 12px invisible bridge so the
+              cursor can safely travel from the button edge to the
+              popover without triggering onMouseLeave. ────────────────── */}
         <div
           className="relative"
+          onMouseEnter={() => setShowReactions(true)}
           onMouseLeave={() => {
             cancelLongPress();
             setShowReactions(false);
@@ -943,18 +945,12 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
         >
           <button
             onClick={() => handleReact('LIKE')}
-            onMouseDown={startLongPress}
-            onMouseUp={cancelLongPress}
-            onTouchStart={startLongPress}
-            onTouchEnd={cancelLongPress}
+            onMouseEnter={(e) => { if (!myReaction) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = ''; }}
             className="group inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-colors"
             style={{ color: myReaction ? reactionColor : '#94a3b8' }}
-            onMouseEnter={(e) => { if (!myReaction) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
           >
               {myReaction ? (
-                // Render the viewer's current reaction emoji
-                // (could be any of the 5 types). It scales up
-                // on press just like the old heart.
                 <span
                   className="text-[15px] leading-none transition-transform group-active:scale-125"
                   aria-label={REACTION_META[myReaction].label}
@@ -977,20 +973,16 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.9 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute bottom-full left-0 mb-0 z-50 flex flex-col items-start gap-0 pointer-events-auto">
-                  {/* Invisible hit-area: a tall transparent div that fills
-                      the gap between the button and the emoji row so the
-                      cursor can never "fall through" while moving up.
-                      pointer-events-none so it never blocks clicks. */}
-                  <div
-                    className="w-full cursor-default"
-                    style={{ height: '12px', pointerEvents: 'none' }}
-                  />
-                  {/* Emoji picker row */}
+                  className="absolute bottom-full left-0 z-50 flex flex-col items-start pointer-events-auto"
+                >
+                  {/* Invisible bridge: fills the gap between the button
+                      and the popover so the cursor never "falls through"
+                      and triggers onMouseLeave on the wrapper. */}
+                  <div className="w-full cursor-default" style={{ height: '12px', pointerEvents: 'none' }} />
+                  {/* Emoji picker */}
                   <div
                     className="relative z-50 flex gap-1 rounded-2xl p-1.5"
                     style={{
-                      pointerEvents: 'auto',
                       background: 'rgba(15,15,25,0.95)',
                       border: '1px solid rgba(255,255,255,0.1)',
                       backdropFilter: 'blur(20px)',

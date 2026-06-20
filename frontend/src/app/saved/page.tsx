@@ -23,7 +23,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bookmark, BookmarkCheck, Folder, Hash, Inbox, Layers,
-  Plus, Trash2, Loader2,
+  Plus, Trash2, Loader2, RefreshCw,
 } from 'lucide-react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { socialApi } from '@/lib/api';
@@ -78,7 +78,9 @@ export default function SavedPostsPage() {
       };
     },
     enabled: activeTab !== null && visitedTabs.has(activeTab as any),
-    staleTime: 30_000,
+    // Always refetch when the user switches tab so they see the latest
+    // posts with full media (the API fix added media serialization).
+    staleTime: 0,
   });
 
   // When the user switches tab, mark it visited so the query
@@ -174,12 +176,30 @@ export default function SavedPostsPage() {
             </p>
           </div>
           {/* Inline create collection */}
-          <NewCollectionButton onCreated={(c) => {
-            qc.setQueryData([...socialKeys.all, 'collections'], (old: any) =>
-              old ? { ...old, collections: [...old.collections, c] } : old,
-            );
-            selectTab(c.id);
-          }} />
+          <div className="flex items-center gap-2">
+            {/* Refresh to bust old TQ cache */}
+            <button
+              onClick={() => {
+                qc.invalidateQueries({ queryKey: [...socialKeys.all, 'collection-posts'] });
+                qc.invalidateQueries({ queryKey: [...socialKeys.all, 'collections'] });
+              }}
+              className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium transition-all"
+              style={{
+                background: 'rgba(255,255,255,0.05)',
+                color: '#94a3b8',
+                border: '1px solid rgba(255,255,255,0.08)',
+              }}
+              title="Làm mới"
+            >
+              <RefreshCw size={14} />
+            </button>
+            <NewCollectionButton onCreated={(c) => {
+              qc.setQueryData([...socialKeys.all, 'collections'], (old: any) =>
+                old ? { ...old, collections: [...old.collections, c] } : old,
+              );
+              selectTab(c.id);
+            }} />
+          </div>
         </div>
       </header>
 

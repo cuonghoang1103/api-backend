@@ -110,66 +110,62 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const qc = useQueryClient();
 
   // ─── Query cache helpers (added 2026-06-20) ────────────────────
-  // The /social page renders `displayPosts` from the TanStack
-  // Query cache (`useSocialFeed`), NOT from the Zustand store.
-  // That means a Zustand mutation alone won't re-render the UI
-  // — we have to patch the cache too. The helpers below write
-  // directly into every cached feed query so the change is
-  // reflected immediately, then invalidate to reconcile with
-  // the server on the next fetch.
+  // The /social page renders from the TanStack Query cache
+  // (`useSocialFeed`), NOT from Zustand. Zustand mutations alone
+  // never re-render the UI — we must write to the cache too.
   //
-  // Both helpers are no-ops if no feed query is in cache
-  // (e.g. /profile page which doesn't use TanStack Query), in
-  // which case the Zustand store + props are the source of
-  // truth.
-  //
-  // IMPORTANT: use ['social', 'feed'] as the key prefix — NOT
-  // socialKeys.feed() — because that key does NOT include the
-  // `{ limit }` param that useSocialFeed({ limit: 20 }) stores
-  // in cache. TanStack Query keys are deeply compared; the
-  // partial-prefix match on ['social','feed'] catches ALL cached
-  // feed pages regardless of pagination state.
-  const FEED_KEYS = { queryKey: ['social', 'feed'] as const };
+  // IMPORTANT: use a plain array `['social', 'feed']` as the key.
+  // TanStack Query v5 `setQueriesData` accepts a `QueryKeyFilter`
+  // function which receives every cached key. Wrapping in
+  // `{ queryKey: [...] }` would make it an object, which
+  // `getQueriesData` does NOT accept as a valid `QueryKey`.
+  const FEED_KEYS = ['social', 'feed'] as const;
 
-  /**
-   * Patch a single post in every cached feed query without
-   * firing a network round-trip. Caller passes a function
-   * that returns the new post row.
-   */
-  const patchPostInCache = (postId: number, updater: (p: SocialPost) => SocialPost) => {
-    qc.setQueriesData<SocialFeedResponse>(FEED_KEYS, (old) => {
-      if (!old || !Array.isArray(old.data)) return old;
-      let touched = false;
-      const next = old.data.map((p) => {
-        if (p.id === postId) {
-          touched = true;
-          return updater(p);
-        }
-        return p;
-      });
-      return touched ? { ...old, data: next } : old;
-    });
+  // Snapshot the feed before mutating so we can roll back on error.
+  const snapshotFeed = () =>
+    qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
+
+  // Patch all feed queries in cache (used for optimistic like/save).
+  const patchFeed = (postId: number, updater: (p: SocialPost) => SocialPost) =>
+    qc.setQueriesData<SocialFeedResponse>(
+      (key): key is typeof FEED_KEYS =>
+        Array.isArray(key) && key[0] === 'social' && key[1] === 'feed',
+      (old) => {
+        if (!old || !Array.isArray(old.data)) return old;
+        let touched = false;
+        return {
+          ...old,
+          data: old.data.map((p) => {
+            if (p.id === postId) { touched = true; return updater(p); }
+            return p;
+          }),
+        };
+      },
+    );
+
+  // Restore a snapshot on failure.
+  const restoreSnapshot = (
+    snap: Array<[typeof FEED_KEYS, SocialFeedResponse | undefined]>,
+  ) => {
+    for (const [key, data] of snap) {
+      if (data !== undefined) qc.setQueryData<SocialFeedResponse>(key, data);
+    }
   };
 
-  /**
-   * Drop a post from every cached feed query (for delete).
-   */
-  const removePostFromCache = (postId: number) => {
-    qc.setQueriesData<SocialFeedResponse>(FEED_KEYS, (old) => {
-      if (!old || !Array.isArray(old.data)) return old;
-      const before = old.data.length;
-      const next = old.data.filter((p) => p.id !== postId);
-      if (next.length === before) return old;
-      return { ...old, data: next };
-    });
-  };
+  /** Drop a post from cache (delete). */
+  const removePostFromCache = (postId: number) =>
+    qc.setQueriesData<SocialFeedResponse>(
+      (key): key is typeof FEED_KEYS =>
+        Array.isArray(key) && key[0] === 'social' && key[1] === 'feed',
+      (old) => {
+        if (!old || !Array.isArray(old.data)) return old;
+        return { ...old, data: old.data.filter((p) => p.id !== postId) };
+      },
+    );
 
-  /** Trigger a background refetch so the cache reconciles
-   *  with the server's authoritative state. Safe to call
-   *  even if the page doesn't use TanStack Query. */
-  const invalidateFeed = () => {
+  /** Trigger a background refetch to reconcile with server. */
+  const invalidateFeed = () =>
     qc.invalidateQueries({ queryKey: socialKeys.all });
-  };
 
   const comments = commentsByPost[post.id] || [];
   const hasMoreComments = commentsHasMoreByPost[post.id] ?? false;
@@ -297,7 +293,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const handleDelete = async () => {
     if (!confirm('Bạn có chắc muốn xoá bài viết này?')) return;
     // Snapshot the row from cache so we can restore on error.
-    const snapshot = qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
+    const snapshot = snapshotFeed();
     // Optimistic — drop the row from the cache immediately so
     // the card disappears without waiting for the network.
     removePostFromCache(post.id);
@@ -316,10 +312,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
       toast.success('Đã xoá bài viết');
       setShowMoreMenu(false);
     } catch (err: any) {
-      // Roll back the optimistic cache patch.
-      snapshot.forEach(([key, data]) => {
-        qc.setQueryData<SocialFeedResponse>(key, data);
-      });
+      restoreSnapshot(snapshot);
       toast.error(err?.response?.data?.message || 'Xoá thất bại');
     }
   };
@@ -436,7 +429,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     setShowReactions(false);
 
     // Snapshot cache for rollback on failure.
-    const snapshot = qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
+    const snapshot = snapshotFeed();
 
     // Optimistic cache patch — compute the next breakdown from
     // the current row, write it back to every cached feed.
@@ -455,7 +448,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     const nextLikesCount = Object.values(nextBreakdown).reduce((a, b) => a + b, 0);
     const nextMyType: ReactionType | null = willRemove ? null : type;
 
-    patchPostInCache(post.id, (p) => ({
+    patchFeed(post.id, (p) => ({
       ...p,
       myReaction: nextMyType,
       isLiked: !!nextMyType,
@@ -469,13 +462,11 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     if (onToggleLike) {
       onToggleLike(post.id).catch(() => {
         // restore cache on failure
-        snapshot.forEach(([key, data]) => qc.setQueryData<SocialFeedResponse>(key, data));
+        restoreSnapshot(snapshot);
       });
     }
     toggleReaction(post.id, type).catch(() => {
-      // store reverts itself; also restore cache in case the
-      // store missed it.
-      snapshot.forEach(([key, data]) => qc.setQueryData<SocialFeedResponse>(key, data));
+      restoreSnapshot(snapshot);
     });
   };
 
@@ -483,9 +474,9 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   // Same problem as like — the page renders from the Query cache,
   // so we patch it in parallel with the Zustand mutation.
   const handleSave = async () => {
-    const snapshot = qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
+    const snapshot = snapshotFeed();
     const wasSaved = post.isSaved;
-    patchPostInCache(post.id, (p) => ({
+    patchFeed(post.id, (p) => ({
       ...p,
       isSaved: !wasSaved,
       savesCount: Math.max(0, (p.savesCount ?? 0) + (wasSaved ? -1 : 1)),
@@ -497,7 +488,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
         await toggleSave(post.id);
       }
     } catch {
-      snapshot.forEach(([key, data]) => qc.setQueryData<SocialFeedResponse>(key, data));
+      restoreSnapshot(snapshot);
     }
   };
 
@@ -561,9 +552,9 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     // Optimistic cache patch — the popover always saves INTO a
     // folder (or removes). We patch `isSaved` + `savesCount` so
     // the bookmark icon reflects the action immediately.
-    const snapshot = qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
+    const snapshot = snapshotFeed();
     const wasSaved = post.isSaved;
-    patchPostInCache(post.id, (p) => ({
+    patchFeed(post.id, (p) => ({
       ...p,
       isSaved: remove ? false : true,
       savedFolder: remove ? null : folder ?? p.savedFolder ?? null,
@@ -576,7 +567,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
         await toggleSave(post.id, folder ?? undefined);
       }
     } catch (err: any) {
-      snapshot.forEach(([key, data]) => qc.setQueryData<SocialFeedResponse>(key, data));
+      restoreSnapshot(snapshot);
       toast.error(err?.response?.data?.message || 'Lưu bài viết thất bại');
     }
   };
@@ -614,10 +605,10 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
    * Zustand `savedPosts` array, and refresh the context.
    */
   const handleCommitV2 = async (collectionIds: number[]) => {
-    const snapshot = qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
+    const snapshot = snapshotFeed();
     const wasSaved = post.isSaved;
     const willBeSaved = collectionIds.length > 0;
-    patchPostInCache(post.id, (p) => ({
+    patchFeed(post.id, (p) => ({
       ...p,
       isSaved: willBeSaved,
       savesCount: Math.max(0, (p.savesCount ?? 0) + (wasSaved === willBeSaved ? 0 : willBeSaved ? 1 : -1)),
@@ -650,8 +641,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
         }));
       }
     } catch (err: any) {
-      // Rollback cache.
-      snapshot.forEach(([key, data]) => qc.setQueryData<SocialFeedResponse>(key, data));
+      restoreSnapshot(snapshot);
       throw err;
     }
   };

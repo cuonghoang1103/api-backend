@@ -172,12 +172,16 @@ function VinylDisc({
             // makes the onError handler fire reliably for external
             // hosts (the next/image error event is swallowed on
             // some builds when the host isn't in remotePatterns).
+            // NOTE: do NOT add `referrerPolicy="no-referrer"` here.
+            // YouTube's i.ytimg.com CDN (which serves thumbnails)
+            // returns a 404 placeholder image when the Referer header
+            // is missing — so stripping the referer actually causes
+            // YouTube thumbnails to disappear instead of load.
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={coverImage}
               alt={title}
               loading="lazy"
-              referrerPolicy="no-referrer"
               className="w-full h-full object-cover"
               onError={() => setImgError(true)}
             />

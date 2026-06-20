@@ -637,7 +637,28 @@ export class MusicService {
       }
 
       const contentLength = isPartial ? end - start + 1 : (total > 0 ? total : 0);
-      const contentRange = isPartial ? `bytes ${start}-${end}/${total}` : `bytes 0-${total - 1}/${total}`;
+
+      // Build the Content-Range header. The total in the header MUST
+      // be the FULL file size — not the partial chunk size. Using the
+      // chunk size here (e.g. `bytes 0-102399/102399` for a 100KB
+      // chunk of a 5MB file) makes the browser think the track is
+      // only 100KB long, so the seek bar maxes out after 100KB and
+      // the disc shows "near end" while only the first chunk plays.
+      let fullFileTotal = total;
+      if (isPartial) {
+        try {
+          const { getStorageProvider } = await import('../storage/StorageProvider.js');
+          const sizeProvider = getStorageProvider();
+          // HEAD-equivalent: readStream without Range returns the full file size.
+          const { size: headSize } = await sizeProvider.readStream(filePath);
+          if (headSize > 0) fullFileTotal = headSize;
+        } catch {
+          // Fall back to the range-based partial total
+        }
+      }
+      const contentRange = isPartial
+        ? `bytes ${start}-${end}/${fullFileTotal}`
+        : `bytes 0-${total > 0 ? total - 1 : 0}/${total}`;
 
       return {
         track,

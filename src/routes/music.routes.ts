@@ -399,13 +399,14 @@ router.post(
             // are tolerable here because the file is already
             // small (capped at 200MB by multer) and normalization
             // is the slow path anyway.
+            const { createWriteStream } = await import('fs');
             const dl = await provider.readStream(initial.key);
+            const writer = createWriteStream(tmpIn);
             await new Promise<void>((resolve, reject) => {
-              const out = require('fs').createWriteStream(tmpIn);
               dl.stream.on('error', reject);
-              out.on('error', reject);
-              out.on('finish', () => resolve());
-              dl.stream.pipe(out);
+              writer.on('error', reject);
+              writer.on('finish', () => resolve());
+              dl.stream.pipe(writer);
             });
 
             await normalizeAudio(tmpIn, tmpOut);

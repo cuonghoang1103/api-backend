@@ -472,15 +472,14 @@ export class AIService {
         console.warn(
           `[AIService] Groq streaming failed: ${errMsg}`,
         );
-        // Don't fall back to non-stream providers — that path adds
-        // another 5-10s of latency trying OpenRouter/OpenAI, which the
-        // user sees as a stuck spinner. The circuit breaker already
-        // trips Groq, so subsequent requests skip it automatically.
-        throw err;
+        // Groq stream failed — fall through to non-stream fallback below.
+        // Do NOT throw; let the chatWithFallback path handle it.
       }
     }
 
-    // Fallback: use provider factory (Groq non-stream → OpenRouter → OpenAI)
+    // ─── Non-stream fallback ─────────────────────────────────
+    // Groq streaming failed or Groq wasn't available.
+    // Use chatWithFallback (Groq non-stream → OpenRouter → OpenAI).
     try {
       const result = await chatWithFallback({
         messages: [
@@ -489,8 +488,13 @@ export class AIService {
         ],
       });
 
-      // Yield entire text in one chunk (no real streaming, but at least it works)
-      if (result.text) yield result.text;
+      // Simulate streaming: yield the text in chunks of ~4 chars
+      // so the UI gets real-time updates instead of a single flash.
+      if (result.text) {
+        for (let i = 0; i < result.text.length; i += 4) {
+          yield result.text.slice(i, i + 4);
+        }
+      }
 
       if (sessionId && result.text) {
         await this.saveAssistantMessage(sessionId, result.text);

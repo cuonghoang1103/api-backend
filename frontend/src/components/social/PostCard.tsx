@@ -122,8 +122,10 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const FEED_KEYS = ['social', 'feed'] as const;
 
   // Snapshot the feed before mutating so we can roll back on error.
-  const snapshotFeed = () =>
-    qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
+  // We cast to `any` because getQueriesData returns QueryKey (unknown[])
+  // as the key type, but we know the keys are exactly ['social','feed'].
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const snapshotFeed = () => qc.getQueriesData<SocialFeedResponse>(FEED_KEYS) as any;
 
   // Patch all feed queries in cache (used for optimistic like/save).
   const patchFeed = (postId: number, updater: (p: SocialPost) => SocialPost) =>
@@ -132,11 +134,10 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
         Array.isArray(key) && key[0] === 'social' && key[1] === 'feed',
       (old) => {
         if (!old || !Array.isArray(old.data)) return old;
-        let touched = false;
         return {
           ...old,
           data: old.data.map((p) => {
-            if (p.id === postId) { touched = true; return updater(p); }
+            if (p.id === postId) return updater(p);
             return p;
           }),
         };
@@ -144,10 +145,10 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     );
 
   // Restore a snapshot on failure.
-  const restoreSnapshot = (
-    snap: Array<[typeof FEED_KEYS, SocialFeedResponse | undefined]>,
-  ) => {
-    for (const [key, data] of snap) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const restoreSnapshot = (snap: any) => {
+    if (!snap) return;
+    for (const [key, data] of snap as Array<[typeof FEED_KEYS, SocialFeedResponse | undefined]>) {
       if (data !== undefined) qc.setQueryData<SocialFeedResponse>(key, data);
     }
   };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -283,28 +283,39 @@ export default function ChatMessages({ messages, isStreaming }: {
   messages: ChatMessage[];
   isStreaming: boolean;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
+  const lastScrollTop = useRef<number>(0);
+  const userScrolledUp = useRef<boolean>(false);
 
-  // Smart auto-scroll: only scroll to bottom if user is near the bottom
-  // (within 150px). If user scrolled up to read, respect their position.
+  // ── Smart auto-scroll ────────────────────────────────────────
+  // Only auto-scroll to bottom when the user is already near bottom.
+  // Once the user scrolls up manually, we stop auto-scrolling until they
+  // scroll back near the bottom. This preserves reading position during
+  // long AI responses without fighting the user's scroll intent.
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
+    endRef.current?.scrollIntoView({ behavior, block: 'end' });
+  }, []);
+
+  // Track scroll position — if user scrolls away from bottom, lock it.
+  const handleScroll = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    // Remember scroll direction
+    lastScrollTop.current = scrollTop;
+    // "Near bottom" = within 150px of the bottom edge
+    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+    userScrolledUp.current = distanceFromBottom > 150;
+  }, []);
+
+  // When streaming: auto-scroll only if user is near bottom.
+  // When streaming ends: never force-scroll (let user read).
   useEffect(() => {
-    const container = endRef.current?.parentElement;
-    if (!container) return;
-
-    if (isStreaming) {
-      // During streaming, check distance from bottom
-      const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
-      if (distanceFromBottom < 150) {
-        endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      }
-    } else if (messages.length > 0) {
-      // After streaming ends, scroll to bottom for new messages
-      const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
-      if (distanceFromBottom < 150) {
-        endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      }
+    if (isStreaming && !userScrolledUp.current) {
+      scrollToBottom('smooth');
     }
-  }, [messages, isStreaming]);
+  }, [isStreaming, scrollToBottom]);
 
   const lastAssistantIndex = [...messages].reverse().findIndex((m) => m.role === 'assistant');
   const lastAssistantId = lastAssistantIndex >= 0 ? messages[messages.length - 1 - lastAssistantIndex]?.id : null;
@@ -312,8 +323,14 @@ export default function ChatMessages({ messages, isStreaming }: {
   return (
     <>
       <ChatScrollStyles />
-      {/* Use outer scroll: flex-col with end anchor. Padding via px/py here. */}
-      <div className="flex-1 min-w-0 flex flex-col chat-messages-scroll px-4 sm:px-6 py-6 space-y-6">
+      {/* Outer scroll container — attach the scroll listener here */}
+      <div
+        ref={containerRef}
+        onScroll={handleScroll}
+        className="flex-1 min-w-0 flex flex-col chat-messages-scroll px-4 sm:px-6 py-6 space-y-6"
+      >
+      {/* popLayout: only animates entering/leaving elements, not existing ones.
+          This prevents every message from re-animating when the array changes. */}
       <AnimatePresence mode="popLayout">
         {messages.map((msg) => (
           <MessageBubble

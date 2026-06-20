@@ -489,9 +489,6 @@ export default function ChatPage() {
       }
     } catch (err) {
       console.error('Chat error:', err);
-      toast.error('AI connection error. Please check if backend is running.');
-      removePendingMessage(sessionId, tempId);
-      setRobotEmotion('sad');
       const staticResp = findStaticResponse(text);
       if (staticResp) {
         const assistantMsg: ChatMessage = {
@@ -503,8 +500,12 @@ export default function ChatPage() {
         };
         addMessage(sessionId, assistantMsg);
         setLimitedMode(true, 'AI unavailable - Using cached answers');
-        toast.info('Using cached answers due to connection error.');
+        toast.info('AI unavailable — using cached answers');
+      } else {
+        toast.error('AI connection error. Please check if backend is running.');
+        setRobotEmotion('sad');
       }
+      removePendingMessage(sessionId, tempId);
     } finally {
       setStreaming(false);
     }
@@ -858,7 +859,7 @@ export default function ChatPage() {
               <div className="animate-pulse text-[#64748b] font-mono">[ loading systems... ]</div>
             </div>
           ) : (
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="popLayout">
               {currentMessages.length === 0 ? (
                 <ChatWelcome
                   key="welcome"

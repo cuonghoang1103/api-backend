@@ -483,6 +483,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
           border border-[#22d3ee]/15
           shadow-[0_0_40px_rgba(34,211,238,0.08),0_8px_32px_rgba(0,0,0,0.8)]
           flex flex-col overflow-hidden"
+          style={{ contain: 'layout style' }}
       >
         {/* Header */}
         <div className="flex items-center gap-3 px-5 py-3.5 border-b border-[#22d3ee]/10 bg-[#0d1117]/60 flex-shrink-0">
@@ -523,7 +524,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-3 space-y-3">
           {/* Welcome */}
           {modalMessages.length === 0 && (
             <motion.div

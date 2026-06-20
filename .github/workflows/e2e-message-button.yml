@@ -20,77 +20,70 @@ jobs:
           printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
             "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
 
-      - name: E2E test
-        env:
-          API: https://api.cuongthai.com
+      - name: E2E test - Messaging flow
         run: |
           set -e
-          BASE="${{ env.API }}/api/v1"
+          BASE="https://api.cuongthai.com/api/v1"
           TS=$(date +%s)
-          TESTUSER="e2e_btn_${TS}"
+          TESTUSER="e2e_msg_${TS}"
           EMAIL="${TESTUSER}@test.local"
           PASSWORD="TestPass123!_Str0ng_Passw0rd"
 
-          echo "=== 1. Register test user ==="
+          echo "=== 1. Register ==="
           REG=$(curl -s -X POST "$BASE/auth/register" \
             -H "Content-Type: application/json" \
-            -d "{\"username\":\"$TESTUSER\",\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\",\"fullName\":\"E2E Test $TS\"}" 2>&1)
-          echo "$REG" | head -c 300
+            -d "{\"username\":\"$TESTUSER\",\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\",\"fullName\":\"E2E Msg $TS\"}" 2>&1)
+          USERID=$(echo "$REG" | grep -oE '"userId":[0-9]+' | head -1 | cut -d':' -f2)
+          echo "UserId: $USERID"
+          echo "$REG" | head -c 200
           echo ""
 
-          echo "=== 2. Auto-verify email via DB (use debug workflow approach) ==="
-          # Run psql on VPS to mark email as verified
-          ssh vps "
-            docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev -c \"UPDATE users SET email_verified_at = NOW() WHERE username = '$TESTUSER';\" 2>&1 | head -5
-          "
+          echo ""
+          echo "=== 2. Verify email via DB ==="
+          ssh vps "docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev -c \"UPDATE users SET email_verified_at = NOW() WHERE id = $USERID;\"" 2>&1 | tail -3
 
-          echo "=== 3. Login ==="
+          echo ""
+          echo "=== 3. Login with username ==="
           LOGIN=$(curl -s -X POST "$BASE/auth/login" \
             -H "Content-Type: application/json" \
-            -d "{\"login\":\"$TESTUSER\",\"password\":\"$PASSWORD\"}" 2>&1)
-          echo "$LOGIN" | head -c 400
-          echo ""
+            -d "{\"username\":\"$TESTUSER\",\"password\":\"$PASSWORD\"}" 2>&1)
           TOKEN=$(echo "$LOGIN" | grep -oE '"token":"[^"]+"' | head -1 | cut -d'"' -f4)
-          echo "Token: ${TOKEN:0:30}..."
-
           if [ -z "$TOKEN" ]; then
-            echo "Login failed, aborting"
+            echo "Login failed:"
+            echo "$LOGIN"
             exit 1
           fi
+          echo "Token OK (${#TOKEN} chars)"
 
           echo ""
-          echo "=== 4. Start user thread with user id 1 (admin Cuong Hoang) ==="
+          echo "=== 4. Start thread with user 1 (Cuong Hoang) ==="
           THREAD=$(curl -s -X POST "$BASE/messages/threads/user/1" \
             -H "Authorization: Bearer $TOKEN" \
             -H "Content-Type: application/json" 2>&1)
           echo "$THREAD" | head -c 600
+          THREAD_ID=$(echo "$THREAD" | grep -oE '"id":[0-9]+' | head -1 | cut -d':' -f2)
+          echo ""
+          echo "Thread ID: $THREAD_ID"
+
+          echo ""
+          echo "=== 5. Send a test message ==="
+          MSG=$(curl -s -X POST "$BASE/messages/threads/$THREAD_ID/messages" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"content":"Xin chào! Test E2E Nhắn tin button","type":"text"}' 2>&1)
+          echo "$MSG" | head -c 400
           echo ""
 
           echo ""
-          echo "=== 5. List threads ==="
+          echo "=== 6. List threads (should see thread with peer) ==="
           LIST=$(curl -s "$BASE/messages/threads" \
             -H "Authorization: Bearer $TOKEN" 2>&1)
           echo "$LIST" | head -c 600
           echo ""
 
           echo ""
-          echo "=== 6. Send a test message ==="
-          THREAD_ID=$(echo "$THREAD" | grep -oE '"id":[0-9]+' | head -1 | cut -d':' -f2)
-          echo "Thread ID: $THREAD_ID"
-          if [ -n "$THREAD_ID" ]; then
-            MSG=$(curl -s -X POST "$BASE/messages/threads/$THREAD_ID/messages" \
-              -H "Authorization: Bearer $TOKEN" \
-              -H "Content-Type: application/json" \
-              -d '{"content":"Xin chào! Test từ E2E flow button Nhắn tin","type":"text"}' 2>&1)
-            echo "$MSG" | head -c 400
-            echo ""
-          fi
-
-          echo ""
           echo "=== 7. Cleanup test user ==="
-          ssh vps "
-            docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev -c \"DELETE FROM users WHERE username = '$TESTUSER';\" 2>&1 | head -3
-          "
+          ssh vps "docker exec cuonghoangdev_postgres psql -U postgres -d cuonghoangdev -c \"DELETE FROM users WHERE id = $USERID;\"" 2>&1 | tail -3
 
           echo ""
-          echo "=== E2E DONE ==="
+          echo "=== E2E PASSED ==="

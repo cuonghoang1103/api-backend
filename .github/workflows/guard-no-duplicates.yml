@@ -92,6 +92,6 @@ jobs:
           echo ''
           echo '=== Sample chunks 5x each ==='
           for i in 1 2 3 4 5; do
-            STATUS=\$(curl -sI --max-time 4 'https://cuongthai.com/_next/static/chunks/1090-c692b087adb34144.js' 2>&1 | head -1)
-            echo \"Try \$i: \$STATUS\"
+            STATUS=$(curl -sI --max-time 4 'https://cuongthai.com/_next/static/chunks/1090-c692b087adb34144.js' 2>&1 | head -1)
+            echo "Try ${i}: ${STATUS}"
           done

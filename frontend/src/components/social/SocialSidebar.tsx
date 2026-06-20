@@ -5,12 +5,9 @@ import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
   Home,
-  Bell,
   MessageCircle,
-  Bookmark,
   User as UserIcon,
   Sparkles,
-  Hash,
   Users,
   Music,
   Code2,
@@ -48,15 +45,12 @@ export default function SocialSidebar({
   );
 
   const items = [
-    { href: '/social', label: 'Home', icon: Home, exact: true },
-    { href: '/social/notifications', label: 'Notifications', icon: Bell, badge: unreadNotifications },
-    { href: '/chat', label: 'Messages', icon: MessageCircle, badge: unreadMessages },
-    { href: '/social/bookmarks', label: 'Bookmarks', icon: Bookmark },
-    { href: '/profile', label: 'Profile', icon: UserIcon },
+    { href: '/', label: 'Home', icon: Home, exact: true },
+    { href: '/messages', label: 'Messages', icon: MessageCircle, badge: unreadMessages },
+    { href: '/about', label: 'About', icon: UserIcon },
   ];
 
   const explore = [
-    { href: '/social/explore', label: 'Explore', icon: Hash },
     { href: '/blog', label: 'Blog', icon: Sparkles },
     { href: '/projects', label: 'Projects', icon: Code2 },
     { href: '/music', label: 'Music', icon: Music },

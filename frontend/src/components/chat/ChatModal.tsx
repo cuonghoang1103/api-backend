@@ -241,8 +241,14 @@ export default function ChatModal({ onClose }: ChatModalProps) {
 
   const modalMessages = messages['__modal__'] || [];
 
+  // Smart auto-scroll: only scroll when user is within 150px of bottom
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const container = messagesEndRef.current?.parentElement;
+    if (!container) return;
+    const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+    if (distanceFromBottom < 150) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [modalMessages]);
 
   useEffect(() => {

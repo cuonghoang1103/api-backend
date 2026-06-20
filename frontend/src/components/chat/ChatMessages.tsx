@@ -285,10 +285,24 @@ export default function ChatMessages({ messages, isStreaming }: {
 }) {
   const endRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom whenever messages change (new message added/updated)
+  // Smart auto-scroll: only scroll to bottom if user is near the bottom
+  // (within 150px). If user scrolled up to read, respect their position.
   useEffect(() => {
-    if (endRef.current) {
-      endRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    const container = endRef.current?.parentElement;
+    if (!container) return;
+
+    if (isStreaming) {
+      // During streaming, check distance from bottom
+      const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+      if (distanceFromBottom < 150) {
+        endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    } else if (messages.length > 0) {
+      // After streaming ends, scroll to bottom for new messages
+      const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+      if (distanceFromBottom < 150) {
+        endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
     }
   }, [messages, isStreaming]);
 

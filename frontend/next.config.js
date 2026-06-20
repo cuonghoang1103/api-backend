@@ -32,11 +32,23 @@ const nextConfig = {
       // are now served from `media.cuongthai.com`.
       { protocol: 'https', hostname: 'media.cuongthai.com' },
       { protocol: 'https', hostname: 'e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com' },
-      // Cloudflare R2 public bucket URLs (e.g. pub-*.r2.dev) — used when
-      // R2_PUBLIC_URL is configured to return the bucket's public URL instead
-      // of the custom domain. CSP must allow these for images to render.
-      { protocol: 'https', hostname: '*.r2.dev' },
-    ],
+    // Cloudflare R2 public bucket URLs (e.g. pub-*.r2.dev) — used when
+    // R2_PUBLIC_URL is configured to return the bucket's public URL instead
+    // of the custom domain. CSP must allow these for images to render.
+    { protocol: 'https', hostname: '*.r2.dev' },
+    // YouTube thumbnail hosts. The /music search bar fetches
+    // video thumbnails from i.ytimg.com / i9.ytimg.com and stores
+    // the URL on the track row so the disc cover renders after
+    // the user picks a song. `unoptimized: true` above already
+    // bypasses the optimizer for <Image>, but a few next/image
+    // builds still log "Invalid src prop … hostname not
+    // configured" warnings against these hosts. Listing them
+    // explicitly makes the image runtime accept the URL
+    // outright with no warning.
+    { protocol: 'https', hostname: 'i.ytimg.com' },
+    { protocol: 'https', hostname: 'i9.ytimg.com' },
+    { protocol: 'https', hostname: 'yt3.ggpht.com' },
+  ],
   },
   async headers() {
     return [

@@ -247,9 +247,10 @@ export async function getPostById(postId: number, currentUserId?: number) {
       })).map((v) => v.optionId)
     : [];
 
-  // ─── Reaction breakdown (added 2026-06-20) ────────────────────
-  // We compute the per-type counts so PostCard can render the
-  // emoji stack without an extra round-trip. Cheap groupBy.
+  // ─── Reaction breakdown (groupBy SocialLike.type) ─────────────
+  // SocialLike.type stores the reaction type (LIKE / LOVE / HAHA /
+  // SAD / ANGRY). The groupBy gives per-type counts so PostCard
+  // can render the emoji stack without an extra round-trip.
   const grouped = await prisma.socialLike.groupBy({
     by: ['type'],
     where: { postId: post.id },
@@ -263,6 +264,9 @@ export async function getPostById(postId: number, currentUserId?: number) {
       reactionBreakdown[row.type as ReactionType] = row._count.type;
     }
   }
+  // myReactionType: read the current user's reaction row from
+  // SocialLike. The LIKE button stores 'LIKE'; the emoji picker
+  // stores LOVE / HAHA / SAD / ANGRY in the same column.
   const myReactionType = currentUserId
     ? (post.likes as Array<{ type: string }> | undefined)?.[0]?.type ?? null
     : null;
@@ -425,7 +429,11 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       currentUserId,
       pollUserVotes: pollVotesByPollId[post.poll?.id] || [],
       reactionBreakdown: breakdownByPost.get(post.id) ?? { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
-      myReactionType: (post.likes as Array<{ type: string }> | undefined)?.[0]?.type ?? null,
+      // SocialLike.type stores the reaction type (LIKE / LOVE / HAHA /
+      // SAD / ANGRY). Both the legacy LIKE button and the new emoji
+      // picker write to this column so this single read covers both.
+      myReactionType:
+        (post.likes as Array<{ type: string }> | undefined)?.[0]?.type ?? null,
     })),
     pagination: {
       nextCursor,

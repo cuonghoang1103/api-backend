@@ -60,6 +60,22 @@ export interface StoredObject {
   etag?: string;
 }
 
+/**
+ * Options for {@link StorageProvider.readStream}.
+ *
+ * `range` follows the HTTP Range header format (`bytes=START-END`).
+ * Both bounds are inclusive. `END` is optional for open-ended
+ * ranges. The provider must return a stream that contains
+ * exactly those bytes (or, for open-ended, from START to EOF) so
+ * that the byte stream the caller pipes to the client lines up
+ * with the `Content-Length` / `Content-Range` headers the music
+ * streaming endpoint already sets.
+ */
+export interface ReadStreamOptions {
+  /** Optional HTTP Range header value, e.g. "bytes=0-102400". */
+  range?: string;
+}
+
 export interface StorageProvider {
   readonly kind: StorageKind;
   /** Upload a buffer to the given key */
@@ -74,8 +90,19 @@ export interface StorageProvider {
   publicUrl(key: string): string;
   /** Reverse-lookup: extract the key from a public URL. */
   keyFromUrl(url: string | null | undefined): string | null;
-  /** Open a readable stream for a key. Used by the music stream endpoint. */
-  readStream(key: string): Promise<{ stream: Readable; size: number; contentType: string }>;
+  /**
+   * Open a readable stream for a key. Used by the music stream endpoint.
+   * The `options.range` parameter is forwarded to the storage backend so
+   * the returned stream contains exactly the requested bytes (or all
+   * bytes from START to EOF for open-ended ranges like "bytes=2000000-").
+   * Without this, R2 always returns the full object and the response
+   * body doesn't match the `Content-Range` header — which makes the
+   * browser play only the first chunk of the file after every seek.
+   */
+  readStream(
+    key: string,
+    options?: ReadStreamOptions,
+  ): Promise<{ stream: Readable; size: number; contentType: string }>;
 }
 
 // ─── Local implementation ──────────────────────────────────
@@ -130,7 +157,10 @@ class LocalStorageProvider implements StorageProvider {
     return url.slice(prefix.length);
   }
 
-  async readStream(key: string): Promise<{ stream: Readable; size: number; contentType: string }> {
+  async readStream(
+    key: string,
+    options?: ReadStreamOptions,
+  ): Promise<{ stream: Readable; size: number; contentType: string }> {
     const fullPath = path.join(config.uploadDir, key);
     if (!existsSync(fullPath)) {
       throw new Error(`Local file not found: ${key}`);
@@ -138,8 +168,58 @@ class LocalStorageProvider implements StorageProvider {
     const size = statSync(fullPath).size;
     const ext = path.extname(key).toLowerCase();
     const mime = MIME_BY_EXT[ext] ?? 'application/octet-stream';
+
+    // If a range is requested, slice the file at the OS level so we
+    // never load the whole track into RAM. Falls back to the full
+    // file when the range is missing or unparseable (the streaming
+    // endpoint will serve it as HTTP 200 with full Content-Length).
+    if (options?.range) {
+      const parsed = parseRangeHeader(options.range, size);
+      if (parsed) {
+        const { start, end } = parsed;
+        return {
+          stream: createReadStream(fullPath, { start, end, autoClose: true }),
+          size,
+          contentType: mime,
+        };
+      }
+    }
     return { stream: createReadStream(fullPath), size, contentType: mime };
   }
+}
+
+// ─── Range header parser (used by the local provider) ─────────────
+// Minimal port of the parser in services/music.service.ts so the
+// storage layer doesn't have to import a service module (and create
+// a cycle). Accepts the standard HTTP Range header format:
+//   bytes=START-END  (both inclusive)
+//   bytes=START-     (from START to EOF)
+//   bytes=-N         (the last N bytes)
+// Returns null when the input is malformed; the caller should then
+// fall back to streaming the whole file.
+function parseRangeHeader(
+  range: string,
+  total: number,
+): { start: number; end: number } | null {
+  const m = /^bytes=(\d*)-(\d*)$/.exec(range.trim());
+  if (!m) return null;
+  const rs = m[1];
+  const re = m[2];
+  let start: number;
+  let end: number;
+  if (rs === '' && re !== '') {
+    const n = parseInt(re, 10);
+    if (!Number.isFinite(n) || n <= 0) return null;
+    start = Math.max(0, total - n);
+    end = total - 1;
+  } else {
+    start = parseInt(rs || '0', 10);
+    end = re === '' ? total - 1 : Math.min(parseInt(re, 10), total - 1);
+  }
+  if (!Number.isFinite(start) || !Number.isFinite(end)) return null;
+  if (start < 0 || end < start) return null;
+  if (start >= total) return null;
+  return { start, end };
 }
 
 // ─── R2 implementation ─────────────────────────────────────
@@ -178,7 +258,10 @@ class R2StorageProvider implements StorageProvider {
     return r2KeyFromUrl(url);
   }
 
-  async readStream(key: string): Promise<{ stream: Readable; size: number; contentType: string }> {
+  async readStream(
+    key: string,
+    options?: ReadStreamOptions,
+  ): Promise<{ stream: Readable; size: number; contentType: string }> {
     // For R2 we don't have a "size" without a HEAD call. The
     // music stream endpoint only uses the stream itself, so we
     // return -1 and let the HTTP layer figure out Content-Length
@@ -194,6 +277,18 @@ class R2StorageProvider implements StorageProvider {
       new GetObjectCommand({
         Bucket: config.r2.bucketName,
         Key: key,
+        // CRITICAL: forward the HTTP Range header to R2. Without
+        // this, the SDK always returns the full object regardless
+        // of the byte slice the browser asked for. The streaming
+        // endpoint then sends a `Content-Range: bytes N-M/TOTAL`
+        // header alongside the full 8MB body, and the browser
+        // only reads up to Content-Length (N-M+1 bytes) — meaning
+        // every seek silently rewinds playback to byte 0, which
+        // is what causes "the disc shows the song near the end
+        // but only the beginning is audible". R2/S3 supports the
+        // same `bytes=START-END` format as HTTP, so we just pass
+        // the value through.
+        ...(options?.range ? { Range: options.range } : {}),
       }),
     );
     if (!res.Body) throw new Error(`R2 object has no body: ${key}`);

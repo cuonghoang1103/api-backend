@@ -593,34 +593,46 @@ export class MusicService {
       // header. The piped response carries the same 206 status
       // and Content-Range back to the browser, so seek/scrub
       // behaviour is preserved.
+      //
+      // We MUST hand the range string to the provider verbatim —
+      // the AWS SDK formats its Range header the same way the
+      // browser does (`bytes=START-END`), so no reformatting is
+      // needed. Forwarding the range is what makes seek/scrub
+      // work: without it the SDK ignores the byte slice and
+      // returns the full object, the response body no longer
+      // matches the `Content-Range` header, and the browser
+      // silently rewinds playback to byte 0 after every seek
+      // ("the disc shows the song near the end but only the
+      // beginning is audible" — see also R2StorageProvider
+      // for the matching read-side comment).
       const { getStorageProvider } = await import('../storage/StorageProvider.js');
       const provider = getStorageProvider();
-      const { stream, size, contentType } = await provider.readStream(filePath);
+      const { stream, size, contentType } = await provider.readStream(
+        filePath,
+        range ? { range } : undefined,
+      );
 
       // Parse the Range header so we can build correct 206
-      // metadata. Falls back to full-file 200 when no Range.
+      // metadata. Falls back to full-file 200 when no Range or
+      // when the header is unparseable (we still stream the
+      // whole file in that case, which is the safe default).
       const total = size >= 0 ? size : 0;
       let start = 0;
       let end = total > 0 ? total - 1 : 0;
       let isPartial = false;
 
       if (range && total > 0) {
-        const m = /^bytes=(\d*)-(\d*)$/.exec(range.trim());
-        if (m) {
-          const rs = m[1];
-          const re = m[2];
-          if (rs === '' && re !== '') {
-            // Suffix range: bytes=-500 → last 500 bytes
-            const n = parseInt(re, 10);
-            start = Math.max(0, total - n);
-            end = total - 1;
-          } else {
-            start = parseInt(rs || '0', 10);
-            end = re === '' ? total - 1 : Math.min(parseInt(re, 10), total - 1);
+        try {
+          const parsed = parseRangeHeader(range, total);
+          start = parsed.start;
+          end = Math.min(parsed.end, total - 1);
+          if (start < total) {
+            isPartial = start !== 0 || end !== total - 1;
           }
-          if (start <= end && start < total) {
-            isPartial = true;
-          }
+        } catch {
+          // Unparseable Range — fall back to streaming the full file
+          // and let the upstream provider's no-range path take over.
+          isPartial = false;
         }
       }
 

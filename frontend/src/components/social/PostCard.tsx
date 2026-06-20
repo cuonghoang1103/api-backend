@@ -21,7 +21,7 @@ import SocialSavePopover, {
 import SocialSavePopoverV2 from '@/components/social/SocialSavePopoverV2';
 import { useAuthStore } from '@/store/authStore';
 import { getMediaUrl } from '@/lib/utils';
-import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext } from '@/types/social';
+import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext, FeedSaveResult } from '@/types/social';
 import { REACTION_META, EMPTY_REACTION_BREAKDOWN } from '@/types/social';
 import { socialKeys, type SocialFeedResponse } from '@/hooks/useSocialQueries';
 import { formatRelative } from '@/lib/formatDate';
@@ -312,27 +312,31 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
 
   const handleDelete = async () => {
     if (!confirm('Bạn có chắc muốn xoá bài viết này?')) return;
-    // Snapshot the row from cache so we can restore on error.
+    // Snapshot both TQ cache and Zustand for rollback on error.
     const snapshot = snapshotFeed();
-    // Optimistic — drop the row from the cache immediately so
-    // the card disappears without waiting for the network.
+    const prevPosts = useSocialStore.getState().posts;
+    const prevSaved = useSocialStore.getState().savedPosts;
+
+    // ─── Optimistic UI — update BOTH stores immediately so the card
+    // disappears INSTANTLY without waiting for the network round-trip.
     removePostFromCache(post.id);
+    useSocialStore.setState((s) => ({
+      posts: s.posts.filter((p) => p.id !== post.id),
+      savedPosts: s.savedPosts.filter((p) => p.id !== post.id),
+    }));
+
     try {
       if (onDelete) {
         await onDelete(post.id);
       } else {
         await deletePost(post.id);
       }
-      // Also patch Zustand so any sibling component reading
-      // from it (e.g. the saved page) stays consistent.
-      useSocialStore.setState((s) => ({
-        posts: s.posts.filter((p) => p.id !== post.id),
-        savedPosts: s.savedPosts.filter((p) => p.id !== post.id),
-      }));
       toast.success('Đã xoá bài viết');
       setShowMoreMenu(false);
     } catch (err: any) {
+      // Restore both TQ cache AND Zustand on failure.
       restoreSnapshot(snapshot);
+      useSocialStore.setState({ posts: prevPosts, savedPosts: prevSaved });
       toast.error(err?.response?.data?.message || 'Xoá thất bại');
     }
   };
@@ -448,11 +452,14 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const handleReact = (type: ReactionType) => {
     setShowReactions(false);
 
-    // Snapshot cache for rollback on failure.
+    // Snapshot for rollback if the API call fails.
     const snapshot = snapshotFeed();
 
-    // Optimistic cache patch — compute the next breakdown from
-    // the current row, write it back to every cached feed.
+    // ─── Optimistic state update ──────────────────────────────────
+    // Compute the next breakdown from the current row, then write
+    // it directly to Zustand AND patch the TanStack Query cache
+    // so both the Zustand-driven render AND any TQ-driven render
+    // stay in sync.
     const prevBreakdown: ReactionBreakdown = {
       LIKE: post.reactionBreakdown?.LIKE ?? 0,
       LOVE: post.reactionBreakdown?.LOVE ?? 0,
@@ -468,6 +475,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     const nextLikesCount = Object.values(nextBreakdown).reduce((a, b) => a + b, 0);
     const nextMyType: ReactionType | null = willRemove ? null : type;
 
+    // 1. Patch TQ cache (covers TQ-driven feed renders)
     patchFeed(post.id, (p) => ({
       ...p,
       myReaction: nextMyType,
@@ -476,26 +484,54 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
       reactionBreakdown: nextBreakdown,
     }));
 
-    // Call the new emoji-aware API. `toggleReaction` from the store
-    // calls `reactPost` which handles LIKE/LOVE/HAHA/SAD/ANGRY
-    // correctly via SocialLike.type. We skip the legacy `toggleLike`
-    // endpoint entirely (it only supports LIKE, not multi-emoji).
+    // 2. Update Zustand directly (covers Zustand-driven renders —
+    //    PostCard reads from the Zustand store, not TQ)
+    useSocialStore.setState((s) => ({
+      posts: s.posts.map((p) =>
+        p.id === post.id
+          ? { ...p, myReaction: nextMyType, isLiked: !!nextMyType, likesCount: nextLikesCount, reactionBreakdown: nextBreakdown }
+          : p
+      ),
+    }));
+
+    // 3. Fire API — on failure revert both TQ cache and Zustand
     toggleReaction(post.id, type).catch(() => {
       restoreSnapshot(snapshot);
+      // Revert Zustand too
+      useSocialStore.setState((s) => ({
+        posts: s.posts.map((p) =>
+          p.id === post.id
+            ? { ...p, myReaction: prevMyType, isLiked: !!prevMyType, likesCount: Object.values(prevBreakdown).reduce((a, b) => a + b, 0), reactionBreakdown: prevBreakdown }
+            : p
+        ),
+      }));
     });
   };
 
   // ─── Save toggle (added 2026-06-20) ────────────────────────────
-  // Same problem as like — the page renders from the Query cache,
-  // so we patch it in parallel with the Zustand mutation.
+  // The page renders from Zustand AND TQ cache. We must update
+  // BOTH so the bookmark icon flips immediately regardless of which
+  // store the current page reads from.
   const handleSave = async () => {
     const snapshot = snapshotFeed();
     const wasSaved = post.isSaved;
+    const willBeSaved = !wasSaved;
+    const nextSavesCount = Math.max(0, (post.savesCount ?? 0) + (wasSaved ? -1 : 1));
+
+    // 1. Patch TQ cache
     patchFeed(post.id, (p) => ({
       ...p,
-      isSaved: !wasSaved,
-      savesCount: Math.max(0, (p.savesCount ?? 0) + (wasSaved ? -1 : 1)),
+      isSaved: willBeSaved,
+      savesCount: nextSavesCount,
     }));
+
+    // 2. Update Zustand directly
+    useSocialStore.setState((s) => ({
+      posts: s.posts.map((p) =>
+        p.id === post.id ? { ...p, isSaved: willBeSaved, savesCount: nextSavesCount } : p
+      ),
+    }));
+
     try {
       if (onToggleSave) {
         await onToggleSave(post.id);
@@ -504,6 +540,12 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
       }
     } catch {
       restoreSnapshot(snapshot);
+      // Revert Zustand
+      useSocialStore.setState((s) => ({
+        posts: s.posts.map((p) =>
+          p.id === post.id ? { ...p, isSaved: wasSaved, savesCount: Math.max(0, nextSavesCount + (wasSaved ? 1 : -1)) } : p
+        ),
+      }));
     }
   };
 
@@ -616,47 +658,58 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   /**
    * Multi-collection commit. The popover tells us the new
    * set of collection ids the user wants this post in; we
-   * hit `/feed/save-post-v2`, patch the Query cache + the
-   * Zustand `savedPosts` array, and refresh the context.
+   * hit `/feed/save-post-v2`, patch the TQ cache + Zustand,
+   * and refresh the context.
    */
   const handleCommitV2 = async (collectionIds: number[]) => {
     const snapshot = snapshotFeed();
+    const prevPosts = useSocialStore.getState().posts;
+    const prevSaved = useSocialStore.getState().savedPosts;
     const wasSaved = post.isSaved;
     const willBeSaved = collectionIds.length > 0;
+    const prevSavesCount = post.savesCount ?? 0;
+    const nextSavesCount = wasSaved === willBeSaved
+      ? prevSavesCount
+      : willBeSaved ? prevSavesCount + 1 : Math.max(0, prevSavesCount - 1);
+
+    // ─── Optimistic UI — update TQ cache AND Zustand immediately
     patchFeed(post.id, (p) => ({
       ...p,
       isSaved: willBeSaved,
-      savesCount: Math.max(0, (p.savesCount ?? 0) + (wasSaved === willBeSaved ? 0 : willBeSaved ? 1 : -1)),
+      savesCount: nextSavesCount,
     }));
+    useSocialStore.setState((s) => ({
+      posts: s.posts.map((p) =>
+        p.id === post.id ? { ...p, isSaved: willBeSaved, savesCount: nextSavesCount } : p
+      ),
+      savedPosts: willBeSaved
+        ? (() => {
+            const without = s.savedPosts.filter((p) => p.id !== post.id);
+            return [post, ...without];
+          })()
+        : s.savedPosts.filter((p) => p.id !== post.id),
+    }));
+
     try {
       const res = await socialApi.savePostToCollections(post.id, collectionIds);
-      const data = (res as any)?.data?.data as
-        | { collectionIds: number[]; isSaved: boolean }
-        | undefined;
-      // Refresh save context from server to stay in sync.
+      const data = (res as any)?.data?.data as FeedSaveResult | undefined;
+
+      // Refresh save context from server.
       const ctxRes = await socialApi.getPostSaveContext(post.id);
       const freshCtx = (ctxRes as any)?.data?.data as FeedPostSaveContext | undefined;
       if (freshCtx) setSaveContext(freshCtx);
-      // Bump collection counts locally for instant feedback.
-      const list = await socialApi.listCollectionsV2();
-      const listData = (list as any)?.data?.data;
+
+      // Refresh collections list with updated counts.
+      const listRes = await socialApi.listCollectionsV2();
+      const listData = (listRes as any)?.data?.data;
       if (Array.isArray(listData?.collections)) {
         setCollectionsV2(listData.collections);
       }
-      // Keep Zustand's `savedPosts` consistent for pages that
-      // read from it. The new save lives at the head.
-      if (data?.isSaved) {
-        useSocialStore.setState((s) => {
-          const without = s.savedPosts.filter((p) => p.id !== post.id);
-          return { savedPosts: [post, ...without] };
-        });
-      } else {
-        useSocialStore.setState((s) => ({
-          savedPosts: s.savedPosts.filter((p) => p.id !== post.id),
-        }));
-      }
     } catch (err: any) {
+      // Revert both TQ cache AND Zustand on failure.
       restoreSnapshot(snapshot);
+      useSocialStore.setState({ posts: prevPosts, savedPosts: prevSaved });
+      toast.error(err?.response?.data?.message || 'Lưu bài viết thất bại');
       throw err;
     }
   };
@@ -884,27 +937,28 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
           className="mt-4 flex items-center gap-1"
           style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}
         >
-          {/* Like (with long-press to choose reaction) */}
-          {/* The wrapper div must NOT have onMouseEnter — that was
-              closing the reactions popover when the mouse moved from
-              the button to the popover. The popover now sits directly
-              below the button inside AnimatePresence, with a transparent
-              connector div to prevent any mouse-leave gap. */}
-          <div className="relative">
-            <button
-              onClick={() => handleReact('LIKE')}
-              onMouseDown={startLongPress}
-              onMouseUp={cancelLongPress}
-              onMouseLeave={(e) => {
-                cancelLongPress();
-                e.currentTarget.style.background = 'transparent';
-              }}
-              onTouchStart={startLongPress}
-              onTouchEnd={cancelLongPress}
-              className="group inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-colors"
-              style={{ color: myReaction ? reactionColor : '#94a3b8' }}
-              onMouseEnter={(e) => { if (!myReaction) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
-            >
+          {/* ─── Like button wrapper — onMouseLeave HERE (not on the button)
+              prevents the popover from closing when the mouse travels
+              from the button edge to the popover. The popover closes
+              only when the cursor leaves the entire button+popover
+              zone (the wrapper div). ─── */}
+        <div
+          className="relative"
+          onMouseLeave={() => {
+            cancelLongPress();
+            setShowReactions(false);
+          }}
+        >
+          <button
+            onClick={() => handleReact('LIKE')}
+            onMouseDown={startLongPress}
+            onMouseUp={cancelLongPress}
+            onTouchStart={startLongPress}
+            onTouchEnd={cancelLongPress}
+            className="group inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-colors"
+            style={{ color: myReaction ? reactionColor : '#94a3b8' }}
+            onMouseEnter={(e) => { if (!myReaction) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
+          >
               {myReaction ? (
                 // Render the viewer's current reaction emoji
                 // (could be any of the 5 types). It scales up
@@ -931,21 +985,21 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.9 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute bottom-full left-0 mb-1 z-50 flex flex-col items-start gap-1"
-                  style={{ pointerEvents: 'auto' }}
-                  onMouseLeave={() => setShowReactions(false)}
-                >
-                  {/* Transparent connector: fills the 4px gap between
-                      button and popover so the mouse never leaves the
-                      interactive zone while moving up. */}
+                  className="absolute bottom-full left-0 mb-0 z-50 flex flex-col items-start gap-0"
+                  style={{ pointerEvents: 'none' }}>
+                  {/* Invisible hit-area: a tall transparent div that fills
+                      the gap between the button and the emoji row so the
+                      cursor can never "fall through" while moving up.
+                      pointer-events-none so it never blocks clicks. */}
                   <div
-                    className="w-full h-1 cursor-default"
-                    style={{ pointerEvents: 'none' }}
+                    className="w-full cursor-default"
+                    style={{ height: '12px', pointerEvents: 'none' }}
                   />
                   {/* Emoji picker row */}
                   <div
-                    className="flex gap-1 rounded-2xl p-1.5"
+                    className="relative z-50 flex gap-1 rounded-2xl p-1.5"
                     style={{
+                      pointerEvents: 'auto',
                       background: 'rgba(15,15,25,0.95)',
                       border: '1px solid rgba(255,255,255,0.1)',
                       backdropFilter: 'blur(20px)',

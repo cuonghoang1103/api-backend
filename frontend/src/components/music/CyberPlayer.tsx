@@ -2,7 +2,6 @@
 
 import { useRef, useEffect, useCallback, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { useMusicStore } from '@/store/musicStore';
 import CyberAudioVisualizer from './CyberAudioVisualizer';
 
@@ -89,6 +88,16 @@ function VinylDisc({
   coverImage: string; title: string; isPlaying: boolean;
 }) {
   const SIZE = 160;
+  // Track image load failures so we can fall back to the
+  // initial-letter placeholder instead of leaving the disc
+  // looking empty. YouTube maxresdefault.jpg returns a 404
+  // placeholder for older videos, R2 covers can 5xx briefly
+  // during deploys, and a CSP/Referer hiccup on the first
+  // request can all blank out the <Image> without ever
+  // surfacing an error to React. With this state we always
+  // render *something* visually meaningful.
+  const [imgError, setImgError] = useState(false);
+  const showFallback = !coverImage || imgError || !isSafeUrl(coverImage);
 
   return (
     <div
@@ -146,18 +155,32 @@ function VinylDisc({
             boxShadow: `0 0 20px ${C.glow}, 0 2px 8px rgba(0,0,0,0.8)`,
           }}
         >
-          {isSafeUrl(coverImage) ? (
-            <Image
-              src={coverImage} alt={title} fill className="object-cover"
-              unoptimized width={SIZE * 0.42} height={SIZE * 0.42}
-            />
-          ) : (
+          {showFallback ? (
+            // Initial-letter fallback. Shown when the cover URL is
+            // missing, unsafe, or the <Image> reported an onError
+            // (e.g. YouTube returned a 404 placeholder, R2 had a
+            // transient 5xx, or the request was blocked by CSP).
             <div
               className="w-full h-full flex items-center justify-center"
               style={{ background: `linear-gradient(135deg, ${C.primary}, ${C.accent})` }}
             >
               <span className="text-white/50 font-bold text-3xl">{title.charAt(0)}</span>
             </div>
+          ) : (
+            // `<img>` instead of next/image: avoids the next/image
+            // `fill` + explicit `width`/`height` conflict, and
+            // makes the onError handler fire reliably for external
+            // hosts (the next/image error event is swallowed on
+            // some builds when the host isn't in remotePatterns).
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={coverImage}
+              alt={title}
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover"
+              onError={() => setImgError(true)}
+            />
           )}
         </div>
 

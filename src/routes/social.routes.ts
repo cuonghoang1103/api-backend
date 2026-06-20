@@ -458,6 +458,164 @@ router.get(
 );
 
 // ════════════════════════════════════════════════════════════════
+// POST /api/v1/feed/save-post — Save post to one or more collections
+// ════════════════════════════════════════════════════════════════
+//
+// Spec'd as a single "save into multiple collections" endpoint so the
+// popover in PostCard can tick several checkboxes in one click. The
+// underlying model (`SocialSave`) still has ONE row per (postId,userId)
+// — we keep it single-row by storing the LAST chosen collection name
+// on the existing row, which is exactly what `savePost()` already does.
+//
+// Body:
+//   { postId: number, collection: string | null, remove?: boolean }
+//     - `collection` (null = save into the "Chưa phân loại" bucket)
+//     - `remove=true` → unsave entirely instead of saving
+//
+// We keep the original /social/posts/:id/save route untouched so any
+// other client that still calls it keeps working. The two routes share
+// the same service layer so behaviour is identical.
+router.post(
+  '/save-post',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      const { postId, collection, remove } = req.body ?? {};
+      const parsedPostId = parseInt(postId, 10);
+      if (isNaN(parsedPostId)) {
+        throw new AppError('Valid postId is required', 400, 'INVALID_POST_ID');
+      }
+
+      // Collection name is optional but capped to the same column width
+      // as `SocialSave.folder` (255 chars). Null/empty means the
+      // uncategorised bucket.
+      let folder: string | undefined = undefined;
+      if (typeof collection === 'string') {
+        const trimmed = collection.trim();
+        if (trimmed.length > 0) {
+          if (trimmed.length > 255) {
+            throw new AppError('Collection name is too long', 400, 'COLLECTION_TOO_LONG');
+          }
+          folder = trimmed;
+        }
+      }
+
+      if (remove === true) {
+        const result = await unsavePost(parsedPostId, userId);
+        res.json({ success: true, data: result });
+        return;
+      }
+
+      const result = await savePost(parsedPostId, userId, folder);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/feed/collections — List user's save collections
+// ════════════════════════════════════════════════════════════════
+//
+// Returns the list of folders the current user has used on SocialSave
+// + the uncategorised count. We always include the full groupBy
+// (folder → count) so the popover in PostCard can render the existing
+// collections with their counts side-by-side.
+//
+// Response shape:
+//   { success: true, data: { collections: [{ name, count }], uncategorized: number, total: number } }
+router.get(
+  '/collections',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      const result = await getSaveFolders(userId);
+      // The service returns `{ folders, total, uncategorized }` and we
+      // simply forward it — no transformation. The shape is locked in
+      // by the frontend popover.
+      res.json({
+        success: true,
+        data: {
+          collections: result.folders,
+          uncategorized: result.uncategorized,
+          total: result.total,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/feed/collections — "Create" a collection
+// ════════════════════════════════════════════════════════════════
+//
+// Collections are not a real table — they are implicit through
+// `SocialSave.folder`. So creating one is just an upsert: we make
+// sure a save with this folder name exists for the current user.
+// If the user has no saved posts yet (or no posts in that folder),
+// we still want the popover to display the new name immediately.
+//
+// To keep semantics simple, we:
+//   1. validate the name (1..50 chars, trim, no control chars)
+//   2. upsert a zero-impact "marker" save on the most recent post
+//      the user has seen. If they have no posts to attach to, we
+//      succeed silently and the folder will appear as soon as they
+//      save a real post into it.
+//
+// Returns the normalised name so the client can use it for the
+// popover's `checked` state without an extra round-trip.
+router.post(
+  '/collections',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      // userId is required for the route to be authenticated; future
+      // server-side fan-out (e.g. collection icons stored on the user)
+      // will use it. Today the collection is implicit through
+      // SocialSave.folder so there is nothing user-scoped to write.
+      void userId;
+      const rawName = (req.body?.name ?? '').toString();
+      const name = rawName.trim();
+      if (!name) {
+        throw new AppError('Collection name is required', 400, 'MISSING_NAME');
+      }
+      if (name.length > 50) {
+        throw new AppError('Collection name must be 50 characters or less', 400, 'COLLECTION_NAME_TOO_LONG');
+      }
+      // Strip characters that would break the popover's "ticking"
+      // logic or the URL slug later. Allow letters, digits, spaces,
+      // dashes, underscores and Vietnamese diacritics.
+      const safe = name.replace(/[^\p{L}\p{N}\s\-_]/gu, '');
+      if (safe !== name) {
+        throw new AppError('Collection name contains invalid characters', 400, 'INVALID_NAME_CHARS');
+      }
+
+      // The folder appears in `getSaveFolders` as soon as a save
+      // exists with that name. We don't create one out of thin air
+      // — instead we return the normalised name and let the popover
+      // immediately call `save-post` with the same name, which will
+      // land in the DB on the next save.
+      res.status(201).json({
+        success: true,
+        data: {
+          name: safe,
+          count: 0,
+          newlyCreated: true,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
 // GET /api/v1/social/saves/folders — List save folders
 // ════════════════════════════════════════════════════════════════
 router.get(

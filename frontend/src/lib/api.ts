@@ -791,6 +791,33 @@ export const socialApi = {
     api.get('/social/saves', { params }),
   getSaveFolders: () => api.get('/social/saves/folders'),
 
+  // ── Saved Collections (added 2026-06-20) ─────────────────────
+  // New endpoints that mirror the spec'd Feed collections API
+  // (GET /feed/collections, POST /feed/collections,
+  // POST /feed/save-post). The endpoints are aliases for the
+  // underlying SocialSave model — folder is stored on SocialSave.
+  // We do NOT remove the legacy methods above so any external
+  // caller keeps working.
+  listCollections: () =>
+    api.get<{
+      success: true;
+      data: {
+        collections: Array<{ name: string | null; count: number }>;
+        uncategorized: number;
+        total: number;
+      };
+    }>('/feed/collections'),
+  createCollection: (name: string) =>
+    api.post<{
+      success: true;
+      data: { name: string; count: number; newlyCreated: boolean };
+    }>('/feed/collections', { name }),
+  savePostToCollection: (postId: number, collection: string | null, remove = false) =>
+    api.post<{ success: true; data: { saved: boolean; folder?: string | null } }>(
+      '/feed/save-post',
+      { postId, collection, remove },
+    ),
+
   // Share
   sharePost: (id: number, platform?: string) =>
     api.post(`/social/posts/${id}/share`, { platform }),

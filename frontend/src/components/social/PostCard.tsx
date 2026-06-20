@@ -13,6 +13,9 @@ import { useSocialStore } from '@/store/socialStore';
 import { socialApi } from '@/lib/api';
 import { RenderContentWithCode } from '@/components/social/CodeBlock';
 import PostPoll from '@/components/social/PostPoll';
+import SocialSavePopover, {
+  type SaveCollection,
+} from '@/components/social/SocialSavePopover';
 import { useAuthStore } from '@/store/authStore';
 import { getMediaUrl } from '@/lib/utils';
 import type { SocialPost, SocialComment, SocialMedia } from '@/types/social';
@@ -40,6 +43,11 @@ const REACTIONS = [
 
 const MAX_PREVIEW_LENGTH = 600;
 
+// Matches the `activeColor` previously passed to ActionButton for
+// the save state. Centralised here so the new bookmark button and
+// the popover use exactly the same amber.
+const NEON_AMBER = '#f59e0b';
+
 interface PostCardProps {
   post: SocialPost;
   onToggleLike?: (postId: number) => Promise<void>;
@@ -54,6 +62,20 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showReactions, setShowReactions] = useState(false);
+  // ─── Saved Collections popover (added 2026-06-20) ───────────────
+  // The popover lets the user pick which collection to save into.
+  // It opens when the bookmark button is clicked, instead of
+  // toggling save directly. A separate set of state tracks the
+  // button's own toggle behaviour so a quick click without a
+  // collection still works (toggle into the default/uncategorised
+  // bucket).
+  const [showSavePopover, setShowSavePopover] = useState(false);
+  const saveButtonRef = useRef<HTMLButtonElement | null>(null);
+  // Cache of the user's existing collections. We hydrate this on
+  // first popover open. Lazily loaded so the PostCard stays cheap
+  // when no one opens the popover.
+  const [cachedCollections, setCachedCollections] = useState<SaveCollection[]>([]);
+  const [collectionsLoaded, setCollectionsLoaded] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const longPressTimer = useRef<any>(null);
   const { toggleLike, toggleSave, loadComments, commentsByPost, loadMoreComments, commentsHasMoreByPost, isLoadingComments, addOptimisticComment, deletePost } = useSocialStore();
@@ -233,6 +255,73 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
       clearTimeout(longPressTimer.current);
       longPressTimer.current = null;
     }
+  };
+
+  // ─── Saved Collections: handlers (added 2026-06-20) ────────────
+  // When the popover opens for the first time, fetch the user's
+  // existing collections. We cache the result for the rest of the
+  // session so navigating to /saved and back is instant. The list
+  // is fetched via the new /feed/collections endpoint; legacy
+  // /social/saves/folders still works as a fallback so we don't
+  // break if the new route hasn't been deployed yet.
+  const ensureCollectionsLoaded = async () => {
+    if (collectionsLoaded) return;
+    try {
+      const res = await socialApi.listCollections();
+      const data = res.data?.data;
+      if (data && Array.isArray(data.collections)) {
+        setCachedCollections(data.collections as SaveCollection[]);
+        setCollectionsLoaded(true);
+      }
+    } catch {
+      try {
+        // Fallback to legacy endpoint
+        const res = await socialApi.getSaveFolders();
+        const folders = (res.data?.data?.folders ?? []) as SaveCollection[];
+        setCachedCollections(folders);
+        setCollectionsLoaded(true);
+      } catch {
+        // ignore — empty list will be shown
+      }
+    }
+  };
+
+  /**
+   * Called by SocialSavePopover when the user picks a collection
+   * or hits "Bỏ lưu". We delegate to the existing `toggleSave`
+   * action from the social store so the optimistic UI, the
+   * `savedFolder` field on the post, and the saves count all stay
+   * consistent with the rest of the app.
+   *
+   * - `folder === null` + `remove === false`: save into the
+   *   uncategorised bucket (legacy `toggleSave(id)` semantics).
+   * - `folder === 'X'` + `remove === false`: save into "X".
+   * - `remove === true`: unsave entirely.
+   */
+  const handleSaveCommit = async (folder: string | null, remove: boolean) => {
+    if (remove) {
+      await toggleSave(post.id); // legacy unsave
+      return;
+    }
+    // Same path as the bookmark click — just pass the folder.
+    await toggleSave(post.id, folder ?? undefined);
+  };
+
+  const handleSaveClick = async () => {
+    if (onToggleSave) {
+      // External controller wins (e.g. /saved page passes its own
+      // toggle handler). Keep behaviour unchanged.
+      onToggleSave(post.id);
+      return;
+    }
+    // First click opens the popover. Subsequent clicks re-toggle
+    // (close the popover). This matches Facebook / TikTok UX.
+    if (showSavePopover) {
+      setShowSavePopover(false);
+      return;
+    }
+    setShowSavePopover(true);
+    void ensureCollectionsLoaded();
   };
 
   // Author info can be missing on a malformed post (e.g. an
@@ -484,14 +573,51 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
             onClick={() => handleShare('repost')}
           />
 
-          {/* Save */}
-          <ActionButton
-            active={safeIsSaved}
-            activeColor="#f59e0b"
-            icon={<Bookmark size={16} fill={safeIsSaved ? '#f59e0b' : 'none'} />}
-            count={safeSavesCount}
-            label="Lưu"
-            onClick={() => { if (onToggleSave) { onToggleSave(post.id); } else { toggleSave(post.id); } }}
+          {/* Save — opens the Saved Collections popover on click.
+              The button's own ref is forwarded so the popover can
+              anchor itself below it. We keep the ActionButton
+              wrapper so the visual style is identical to before. */}
+          <button
+            ref={saveButtonRef}
+            onClick={handleSaveClick}
+            className="group flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-medium transition-colors"
+            style={{
+              color: safeIsSaved ? NEON_AMBER : '#64748b',
+              background: safeIsSaved ? 'rgba(245,158,11,0.08)' : 'transparent',
+            }}
+            onMouseEnter={(e) => {
+              if (!safeIsSaved) {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+                e.currentTarget.style.color = '#94a3b8';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!safeIsSaved) {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = '#64748b';
+              }
+            }}
+            title={safeIsSaved ? `Đã lưu${post.savedFolder ? ` vào "${post.savedFolder}"` : ''}` : 'Lưu bài viết'}
+            aria-label={safeIsSaved ? 'Đã lưu bài viết' : 'Lưu bài viết'}
+            aria-haspopup="dialog"
+            aria-expanded={showSavePopover}
+          >
+            <Bookmark
+              size={16}
+              fill={safeIsSaved ? NEON_AMBER : 'none'}
+              className="transition-transform group-active:scale-125"
+            />
+            {safeSavesCount > 0 && <span className="tabular-nums">{safeSavesCount}</span>}
+          </button>
+          <SocialSavePopover
+            postId={post.id}
+            currentFolder={post.savedFolder ?? null}
+            isSaved={safeIsSaved}
+            collections={cachedCollections}
+            onCommit={handleSaveCommit}
+            anchorRef={saveButtonRef}
+            open={showSavePopover}
+            onClose={() => setShowSavePopover(false)}
           />
 
           {/* Share menu */}

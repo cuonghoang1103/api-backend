@@ -89,8 +89,22 @@ export default function HubClient({
         page: 1,
         pageSize: 50,
       });
-      setLinks(res.data.data);
-      setTotal(res.data.total);
+      // Backend wraps the listLinks result in `{ success, data: { items, total, ... } }`.
+      // Be defensive in case the shape ever drifts back.
+      const payload = res.data.data as
+        | { items?: HubLink[]; total?: number }
+        | HubLink[]
+        | undefined;
+      if (Array.isArray(payload)) {
+        setLinks(payload);
+        setTotal(payload.length);
+      } else if (payload && typeof payload === 'object') {
+        setLinks(payload.items ?? []);
+        setTotal(payload.total ?? 0);
+      } else {
+        setLinks([]);
+        setTotal(0);
+      }
     } catch (err) {
       console.error('[hub] reloadLinks', err);
       toast.error('Khong tai duoc danh sach link');

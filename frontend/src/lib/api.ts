@@ -1774,11 +1774,13 @@ export interface HubScrapeResult {
 }
 
 export interface HubLinkListResponse {
-  data: HubLink[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
+  data: {
+    items: HubLink[];
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  };
 }
 
 export const hubApi = {

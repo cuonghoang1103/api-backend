@@ -100,7 +100,10 @@ router.get('/links', async (req: Request, res: Response<ApiResponse>, next) => {
       page: req.query.page ? Number(req.query.page) : undefined,
       pageSize: req.query.pageSize ? Number(req.query.pageSize) : undefined,
     });
-    res.json({ success: true, ...result });
+    // Wrap in { data } to match the rest of the API contract —
+    // other endpoints all return `{ success, data: <payload> }`,
+    // and the frontend's hubApi.listLinks expects `res.data.data`.
+    res.json({ success: true, data: result });
   } catch (err) { next(err); }
 });
 

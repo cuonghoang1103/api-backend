@@ -122,7 +122,14 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   // (e.g. /profile page which doesn't use TanStack Query), in
   // which case the Zustand store + props are the source of
   // truth.
-  const FEED_KEYS = [socialKeys.feed()] as const;
+  //
+  // IMPORTANT: use ['social', 'feed'] as the key prefix — NOT
+  // socialKeys.feed() — because that key does NOT include the
+  // `{ limit }` param that useSocialFeed({ limit: 20 }) stores
+  // in cache. TanStack Query keys are deeply compared; the
+  // partial-prefix match on ['social','feed'] catches ALL cached
+  // feed pages regardless of pagination state.
+  const FEED_KEYS = { queryKey: ['social', 'feed'] as const };
 
   /**
    * Patch a single post in every cached feed query without
@@ -130,7 +137,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
    * that returns the new post row.
    */
   const patchPostInCache = (postId: number, updater: (p: SocialPost) => SocialPost) => {
-    qc.setQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS }, (old) => {
+    qc.setQueriesData<SocialFeedResponse>(FEED_KEYS, (old) => {
       if (!old || !Array.isArray(old.data)) return old;
       let touched = false;
       const next = old.data.map((p) => {
@@ -148,7 +155,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
    * Drop a post from every cached feed query (for delete).
    */
   const removePostFromCache = (postId: number) => {
-    qc.setQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS }, (old) => {
+    qc.setQueriesData<SocialFeedResponse>(FEED_KEYS, (old) => {
       if (!old || !Array.isArray(old.data)) return old;
       const before = old.data.length;
       const next = old.data.filter((p) => p.id !== postId);
@@ -290,7 +297,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const handleDelete = async () => {
     if (!confirm('Bạn có chắc muốn xoá bài viết này?')) return;
     // Snapshot the row from cache so we can restore on error.
-    const snapshot = qc.getQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS });
+    const snapshot = qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
     // Optimistic — drop the row from the cache immediately so
     // the card disappears without waiting for the network.
     removePostFromCache(post.id);
@@ -429,7 +436,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     setShowReactions(false);
 
     // Snapshot cache for rollback on failure.
-    const snapshot = qc.getQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS });
+    const snapshot = qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
 
     // Optimistic cache patch — compute the next breakdown from
     // the current row, write it back to every cached feed.
@@ -476,7 +483,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   // Same problem as like — the page renders from the Query cache,
   // so we patch it in parallel with the Zustand mutation.
   const handleSave = async () => {
-    const snapshot = qc.getQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS });
+    const snapshot = qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
     const wasSaved = post.isSaved;
     patchPostInCache(post.id, (p) => ({
       ...p,
@@ -554,7 +561,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
     // Optimistic cache patch — the popover always saves INTO a
     // folder (or removes). We patch `isSaved` + `savesCount` so
     // the bookmark icon reflects the action immediately.
-    const snapshot = qc.getQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS });
+    const snapshot = qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
     const wasSaved = post.isSaved;
     patchPostInCache(post.id, (p) => ({
       ...p,
@@ -607,7 +614,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
    * Zustand `savedPosts` array, and refresh the context.
    */
   const handleCommitV2 = async (collectionIds: number[]) => {
-    const snapshot = qc.getQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS });
+    const snapshot = qc.getQueriesData<SocialFeedResponse>(FEED_KEYS);
     const wasSaved = post.isSaved;
     const willBeSaved = collectionIds.length > 0;
     patchPostInCache(post.id, (p) => ({

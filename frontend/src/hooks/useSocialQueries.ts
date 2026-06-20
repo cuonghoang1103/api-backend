@@ -75,10 +75,19 @@ export function useSocialComments(postId: number, params?: { cursor?: number; li
 
 // ─── Mutations ────────────────────────────────────────────────────────────────
 
+/**
+ * Force a background refetch of the feed. We use `refetchType:
+ * 'all'` so even queries that are still within their 30s
+ * staleTime will get re-pulled — the alternative (`'none'`)
+ * leaves stale data on screen until the user navigates.
+ */
 export function useInvalidateFeed() {
   const qc = useQueryClient();
   return () => {
-    qc.invalidateQueries({ queryKey: socialKeys.feed() });
+    qc.invalidateQueries({
+      queryKey: socialKeys.feed(),
+      refetchType: 'all',
+    });
   };
 }
 

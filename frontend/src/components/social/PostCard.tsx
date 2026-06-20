@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Heart, MessageCircle, Bookmark, Share2, MoreHorizontal, Send,
@@ -19,8 +20,9 @@ import SocialSavePopover, {
 } from '@/components/social/SocialSavePopover';
 import { useAuthStore } from '@/store/authStore';
 import { getMediaUrl } from '@/lib/utils';
-import type { SocialPost, SocialComment, SocialMedia, ReactionType } from '@/types/social';
-import { REACTION_META } from '@/types/social';
+import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown } from '@/types/social';
+import { REACTION_META, EMPTY_REACTION_BREAKDOWN } from '@/types/social';
+import { socialKeys, type SocialFeedResponse } from '@/hooks/useSocialQueries';
 import { formatRelative } from '@/lib/formatDate';
 import { toast } from 'sonner';
 
@@ -81,6 +83,62 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   const longPressTimer = useRef<any>(null);
   const { toggleLike, toggleReaction, toggleSave, loadComments, commentsByPost, loadMoreComments, commentsHasMoreByPost, isLoadingComments, addOptimisticComment, deletePost } = useSocialStore();
   const { user: currentUser } = useAuthStore();
+  const qc = useQueryClient();
+
+  // ─── Query cache helpers (added 2026-06-20) ────────────────────
+  // The /social page renders `displayPosts` from the TanStack
+  // Query cache (`useSocialFeed`), NOT from the Zustand store.
+  // That means a Zustand mutation alone won't re-render the UI
+  // — we have to patch the cache too. The helpers below write
+  // directly into every cached feed query so the change is
+  // reflected immediately, then invalidate to reconcile with
+  // the server on the next fetch.
+  //
+  // Both helpers are no-ops if no feed query is in cache
+  // (e.g. /profile page which doesn't use TanStack Query), in
+  // which case the Zustand store + props are the source of
+  // truth.
+  const FEED_KEYS = [socialKeys.feed()] as const;
+
+  /**
+   * Patch a single post in every cached feed query without
+   * firing a network round-trip. Caller passes a function
+   * that returns the new post row.
+   */
+  const patchPostInCache = (postId: number, updater: (p: SocialPost) => SocialPost) => {
+    qc.setQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS }, (old) => {
+      if (!old || !Array.isArray(old.data)) return old;
+      let touched = false;
+      const next = old.data.map((p) => {
+        if (p.id === postId) {
+          touched = true;
+          return updater(p);
+        }
+        return p;
+      });
+      return touched ? { ...old, data: next } : old;
+    });
+  };
+
+  /**
+   * Drop a post from every cached feed query (for delete).
+   */
+  const removePostFromCache = (postId: number) => {
+    qc.setQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS }, (old) => {
+      if (!old || !Array.isArray(old.data)) return old;
+      const before = old.data.length;
+      const next = old.data.filter((p) => p.id !== postId);
+      if (next.length === before) return old;
+      return { ...old, data: next };
+    });
+  };
+
+  /** Trigger a background refetch so the cache reconciles
+   *  with the server's authoritative state. Safe to call
+   *  even if the page doesn't use TanStack Query. */
+  const invalidateFeed = () => {
+    qc.invalidateQueries({ queryKey: socialKeys.all });
+  };
 
   const comments = commentsByPost[post.id] || [];
   const hasMoreComments = commentsHasMoreByPost[post.id] ?? false;
@@ -207,15 +265,30 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
 
   const handleDelete = async () => {
     if (!confirm('Bạn có chắc muốn xoá bài viết này?')) return;
+    // Snapshot the row from cache so we can restore on error.
+    const snapshot = qc.getQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS });
+    // Optimistic — drop the row from the cache immediately so
+    // the card disappears without waiting for the network.
+    removePostFromCache(post.id);
     try {
       if (onDelete) {
         await onDelete(post.id);
       } else {
         await deletePost(post.id);
       }
+      // Also patch Zustand so any sibling component reading
+      // from it (e.g. the saved page) stays consistent.
+      useSocialStore.setState((s) => ({
+        posts: s.posts.filter((p) => p.id !== post.id),
+        savedPosts: s.savedPosts.filter((p) => p.id !== post.id),
+      }));
       toast.success('Đã xoá bài viết');
       setShowMoreMenu(false);
     } catch (err: any) {
+      // Roll back the optimistic cache patch.
+      snapshot.forEach(([key, data]) => {
+        qc.setQueryData<SocialFeedResponse>(key, data);
+      });
       toast.error(err?.response?.data?.message || 'Xoá thất bại');
     }
   };
@@ -323,16 +396,78 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
   // Click on the picker (long-press or hover) → call
   // `toggleReaction(type)`. The store handles optimistic update
   // and the round-trip; this is just a thin proxy.
+  //
+  // We ALSO patch the TanStack Query cache in parallel because
+  // the /social page renders from the cache, not the Zustand
+  // store. Without this the emoji never appears on the card
+  // even though the API call succeeds.
   const handleReact = (type: ReactionType) => {
     setShowReactions(false);
+
+    // Snapshot cache for rollback on failure.
+    const snapshot = qc.getQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS });
+
+    // Optimistic cache patch — compute the next breakdown from
+    // the current row, write it back to every cached feed.
+    const prevBreakdown: ReactionBreakdown = {
+      LIKE: post.reactionBreakdown?.LIKE ?? 0,
+      LOVE: post.reactionBreakdown?.LOVE ?? 0,
+      HAHA: post.reactionBreakdown?.HAHA ?? 0,
+      SAD:  post.reactionBreakdown?.SAD  ?? 0,
+      ANGRY:post.reactionBreakdown?.ANGRY?? 0,
+    };
+    const prevMyType: ReactionType | null = (post as any).myReaction ?? null;
+    const willRemove = prevMyType === type;
+    const nextBreakdown: ReactionBreakdown = { ...prevBreakdown };
+    if (prevMyType) nextBreakdown[prevMyType] = Math.max(0, nextBreakdown[prevMyType] - 1);
+    if (!willRemove) nextBreakdown[type] = (nextBreakdown[type] ?? 0) + 1;
+    const nextLikesCount = Object.values(nextBreakdown).reduce((a, b) => a + b, 0);
+    const nextMyType: ReactionType | null = willRemove ? null : type;
+
+    patchPostInCache(post.id, (p) => ({
+      ...p,
+      myReaction: nextMyType,
+      isLiked: !!nextMyType,
+      likesCount: nextLikesCount,
+      reactionBreakdown: nextBreakdown,
+    }));
+
+    // Fire network — both the new store action and the legacy
+    // `onToggleLike` page-level handler. The store does its own
+    // optimistic update; we tolerate one redundant patch.
     if (onToggleLike) {
-      // External handler (e.g. social page level) — we still
-      // honour the legacy `onToggleLike` but ALSO try the new
-      // store call so the new emoji metadata flows. If the
-      // page only wired up onToggleLike, fall through to it.
-      onToggleLike(post.id).catch(() => { /* ignore */ });
+      onToggleLike(post.id).catch(() => {
+        // restore cache on failure
+        snapshot.forEach(([key, data]) => qc.setQueryData<SocialFeedResponse>(key, data));
+      });
     }
-    toggleReaction(post.id, type);
+    toggleReaction(post.id, type).catch(() => {
+      // store reverts itself; also restore cache in case the
+      // store missed it.
+      snapshot.forEach(([key, data]) => qc.setQueryData<SocialFeedResponse>(key, data));
+    });
+  };
+
+  // ─── Save toggle (added 2026-06-20) ────────────────────────────
+  // Same problem as like — the page renders from the Query cache,
+  // so we patch it in parallel with the Zustand mutation.
+  const handleSave = async () => {
+    const snapshot = qc.getQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS });
+    const wasSaved = post.isSaved;
+    patchPostInCache(post.id, (p) => ({
+      ...p,
+      isSaved: !wasSaved,
+      savesCount: Math.max(0, (p.savesCount ?? 0) + (wasSaved ? -1 : 1)),
+    }));
+    try {
+      if (onToggleSave) {
+        await onToggleSave(post.id);
+      } else {
+        await toggleSave(post.id);
+      }
+    } catch {
+      snapshot.forEach(([key, data]) => qc.setQueryData<SocialFeedResponse>(key, data));
+    }
   };
 
   // The viewer's current reaction. Drives the heart icon
@@ -392,12 +527,27 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
    * - `remove === true`: unsave entirely.
    */
   const handleSaveCommit = async (folder: string | null, remove: boolean) => {
-    if (remove) {
-      await toggleSave(post.id); // legacy unsave
-      return;
+    // Optimistic cache patch — the popover always saves INTO a
+    // folder (or removes). We patch `isSaved` + `savesCount` so
+    // the bookmark icon reflects the action immediately.
+    const snapshot = qc.getQueriesData<SocialFeedResponse>({ queryKey: FEED_KEYS });
+    const wasSaved = post.isSaved;
+    patchPostInCache(post.id, (p) => ({
+      ...p,
+      isSaved: remove ? false : true,
+      savedFolder: remove ? null : folder ?? p.savedFolder ?? null,
+      savesCount: Math.max(0, (p.savesCount ?? 0) + ((remove || wasSaved) ? -1 : 1)),
+    }));
+    try {
+      if (remove) {
+        await (onToggleSave ? onToggleSave(post.id) : toggleSave(post.id));
+      } else {
+        await toggleSave(post.id, folder ?? undefined);
+      }
+    } catch (err: any) {
+      snapshot.forEach(([key, data]) => qc.setQueryData<SocialFeedResponse>(key, data));
+      toast.error(err?.response?.data?.message || 'Lưu bài viết thất bại');
     }
-    // Same path as the bookmark click — just pass the folder.
-    await toggleSave(post.id, folder ?? undefined);
   };
 
   const handleSaveClick = async () => {

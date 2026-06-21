@@ -13,43 +13,45 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3 make g+
 # Copy package files
 COPY package*.json ./
 
+# Copy host-cache from host if it exists (for offline VPS fallback)
+# The deploy script pre-populates this via scripts/pre-warm-node-modules.sh.
+# We use RUN instead of COPY so an empty dir does NOT break the Docker cache key.
+RUN if [ -d "$(pwd)/host-cache" ] && [ "$(ls -A "$(pwd)/host-cache")" != "" ]; then \
+      cp -r host-cache /app-host-cache && echo "host-cache present"; \
+    else \
+      echo "host-cache empty/absent — using online npm"; \
+    fi
+
 # Install ALL dependencies (including devDependencies for TypeScript).
-# Offline fallback: if npm ci fails (VPS firewall blocks registry),
-# restore from /app-host-cache/ that was copied via pre-warm script
-# (see scripts/pre-warm-node-modules.sh). The COPY above requires
-# host-cache/ to exist in the build context; the deploy script
-# always creates it before `docker compose up --build`.
-COPY --chown=root:root host-cache /app-host-cache
-RUN npm ci --include=dev --prefer-offline --no-audit --fetch-timeout=60000 || \
-    (echo "⚠ npm ci failed (offline?). Restoring from host cache..." && \
-     if [ -d /app-host-cache/node_modules/sharp ] && [ -d /app-host-cache/node_modules/@prisma ]; then \
+# Offline fallback: if npm ci fails, restore from /app-host-cache/ if populated.
+RUN npm ci --include=dev --no-audit --fetch-timeout=60000 || \
+    (echo "npm ci failed — checking host cache..." && \
+     if [ -d /app-host-cache/node_modules ] && \
+        [ -d /app-host-cache/node_modules/sharp ] && \
+        [ -d /app-host-cache/node_modules/@prisma ]; then \
        rm -rf node_modules && \
        cp -r /app-host-cache/node_modules ./node_modules && \
-       echo "✅ Restored from host cache" && \
+       echo "Restored from host cache" && \
        npm rebuild --no-audit || true; \
      else \
-       echo "❌ No host fallback. Re-run scripts/pre-warm-node-modules.sh" && exit 1; \
+       echo "No host fallback — npm ci must succeed" && exit 1; \
      fi)
 
 # Copy source code
 COPY . .
 
 # Generate Prisma Client from the fresh schema in COPY . . above.
-# Use prisma generate with --no-engine to skip downloading engine
-# binaries when possible (offline VPS). The engines themselves
-# were already pre-warmed by scripts/pre-warm-node-modules.sh
-# into /app-host-cache/node_modules/.prisma/, which we copy
-# into the final image as well.
+# If it fails (offline), try to restore .prisma cache from host-cache.
 RUN npx prisma generate 2>&1 | tail -5 || \
-    (echo "⚠ prisma generate failed (offline?). Using host .prisma cache..." && \
+    (echo "prisma generate failed — checking host cache..." && \
      if [ -d /app-host-cache/node_modules/.prisma/client/schema.prisma ]; then \
        rm -rf ./node_modules/.prisma && \
        cp -r /app-host-cache/node_modules/.prisma ./node_modules/.prisma && \
        cp -r /app-host-cache/node_modules/@prisma ./node_modules/@prisma.tmp && \
        rm -rf ./node_modules/@prisma && mv ./node_modules/@prisma.tmp ./node_modules/@prisma && \
-       echo "✅ Restored .prisma + @prisma from host cache"; \
+       echo "Restored .prisma + @prisma from host cache"; \
      else \
-       echo "❌ No prisma cache. Re-run pre-warm-node-modules.sh" && exit 1; \
+       echo "No prisma cache — prisma generate must succeed" && exit 1; \
      fi)
 
 # TypeScript compilation

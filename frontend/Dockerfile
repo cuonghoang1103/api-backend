@@ -13,18 +13,25 @@ WORKDIR /app
 # Any source code change won't trigger re-download of packages.
 COPY package*.json ./
 
+# Copy host-cache from host if it exists (for offline VPS fallback)
+RUN if [ -d "$(pwd)/host-cache" ] && [ "$(ls -A "$(pwd)/host-cache")" != "" ]; then \
+      cp -r host-cache /app-host-cache && echo "host-cache present"; \
+    else \
+      echo "host-cache empty/absent — using online npm"; \
+    fi
+
 # Install dependencies. Offline fallback uses /app-host-cache/
 # that the deploy script pre-warms (see scripts/pre-warm-node-modules.sh).
-COPY --chown=root:root host-cache /app-host-cache
-RUN npm install --prefer-offline --no-audit --fetch-timeout=60000 || \
-    (echo "⚠ npm install failed (offline?). Restoring from host cache..." && \
-     if [ -d /app-host-cache/frontend-node_modules/sharp ] && [ -d /app-host-cache/frontend-node_modules/.bin/next ]; then \
+RUN npm install --no-audit --fetch-timeout=60000 || \
+    (echo "npm install failed — checking host cache..." && \
+     if [ -d /app-host-cache/frontend-node_modules/sharp ] && \
+        [ -d /app-host-cache/frontend-node_modules/.bin/next ]; then \
        rm -rf node_modules && \
        cp -r /app-host-cache/frontend-node_modules ./node_modules && \
-       echo "✅ Restored from host cache" && \
+       echo "Restored from host cache" && \
        npm rebuild --no-audit || true; \
      else \
-       echo "❌ No host fallback. Re-run scripts/pre-warm-node-modules.sh" && exit 1; \
+       echo "No host fallback — npm install must succeed" && exit 1; \
      fi)
 
 # ─── Stage 2: Builder (compile code) ─────────────────────────

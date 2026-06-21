@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Plus, Pencil, Trash2, X, Search, Loader2, BookOpen } from 'lucide-react';
 import { toast } from 'sonner';
 import type { CourseCategory } from '@/types';
+import { courseCategoryApi } from '@/lib/api';
 
 interface CategoryForm {
   id?: number;
@@ -16,7 +17,7 @@ interface CategoryForm {
 }
 
 const emptyForm: CategoryForm = {
-  name: '', slug: '', description: '', icon: '', sortOrder: 0, isActive: true,
+  id: undefined, name: '', slug: '', description: '', icon: '', sortOrder: 0, isActive: true,
 };
 
 const ICONS = ['code', 'smartphone', 'brain', 'cloud', 'database', 'terminal', 'globe', 'lock', 'rocket', 'star', 'zap', 'shield'];
@@ -33,11 +34,10 @@ export default function AdminCategoriesPage() {
   const fetchCategories = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/course-categories/admin/all', { credentials: 'include' });
-      const data = await res.json();
-      setCategories(Array.isArray(data?.data) ? data.data : []);
+      const res = await courseCategoryApi.getAdminAll();
+      setCategories(Array.isArray(res.data?.data) ? res.data.data : []);
     } catch {
-      toast.error('Failed to load categories');
+      toast.error('Không thể tải danh mục');
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ export default function AdminCategoriesPage() {
       description: cat.description || '',
       icon: cat.icon || '',
       sortOrder: cat.sortOrder || 0,
-      isActive: true,
+      isActive: cat.isActive ?? true,
     });
     setShowForm(true);
   };
@@ -89,28 +89,17 @@ export default function AdminCategoriesPage() {
         sortOrder: form.sortOrder,
         isActive: form.isActive,
       };
-      let res;
       if (editingId) {
-        res = await fetch(`/course-categories/${editingId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(payload),
-        });
+        await courseCategoryApi.update(editingId, payload);
       } else {
-        res = await fetch('/course-categories', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(payload),
-        });
+        await courseCategoryApi.create(payload);
       }
-      if (!res.ok) throw new Error('Save failed');
       toast.success(editingId ? 'Category updated!' : 'Category created!');
       setShowForm(false);
       fetchCategories();
-    } catch {
-      toast.error('Failed to save category');
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err?.message || 'Failed to save category';
+      toast.error(msg);
     } finally {
       setSaving(false);
     }
@@ -119,15 +108,12 @@ export default function AdminCategoriesPage() {
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this category?')) return;
     try {
-      const res = await fetch(`/course-categories/${id}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      });
-      if (!res.ok) throw new Error();
+      await courseCategoryApi.delete(id);
       toast.success('Deleted!');
       fetchCategories();
-    } catch {
-      toast.error('Delete failed');
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err?.message || 'Delete failed';
+      toast.error(msg);
     }
   };
 

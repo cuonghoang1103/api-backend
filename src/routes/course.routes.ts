@@ -43,7 +43,7 @@ async function assertCanAccessCourseContent(
   userId: number | null | undefined,
   courseId: number,
   mode: AccessMode = 'enrolled',
-): Promise<{ isAdmin: boolean; isEnrolled: boolean; isFree: boolean }> {
+): Promise<{ isAdmin: boolean; isEnrolled: boolean; isFree: boolean; hasCodeEnrollment: boolean }> {
   const course = await prisma.course.findUnique({
     where: { id: courseId },
     select: { id: true, isFree: true, price: true, isPublished: true, instructorId: true, accessType: true },
@@ -70,8 +70,9 @@ async function assertCanAccessCourseContent(
   // compatibility: a course with `accessType='FREE'` OR the legacy
   // `isFree=true && price<=0` bypasses enrollment.
   const isFree = course.accessType === 'FREE' || (course.isFree && Number(course.price) <= 0);
-  if (isFree && mode !== 'admin-or-enrolled') {
-    return { isAdmin: false, isEnrolled: true, isFree: true };
+  const isCodeCourse = course.accessType === 'CODE';
+  if (isFree && !isCodeCourse && mode !== 'admin-or-enrolled') {
+    return { isAdmin: false, isEnrolled: true, isFree: true, hasCodeEnrollment: false };
   }
   // Admin / instructor bypass — applies to every mode because
   // we never want a course's own instructor or a privileged
@@ -91,7 +92,7 @@ async function assertCanAccessCourseContent(
     const roleNames = user?.roles?.map((ur) => ur.role.name) || [];
     const isAdmin = roleNames.includes('ROLE_ADMIN') || roleNames.includes('ROLE_SUPERADMIN');
     if (isAdmin || course.instructorId === userId) {
-      return { isAdmin: true, isEnrolled: true, isFree };
+      return { isAdmin: true, isEnrolled: true, isFree, hasCodeEnrollment: false };
     }
   }
 
@@ -101,7 +102,7 @@ async function assertCanAccessCourseContent(
   // instead of the full curriculum. The actual filtering happens
   // in the route, not here.
   if (mode === 'preview' && !userId) {
-    return { isAdmin: false, isEnrolled: false, isFree: false };
+    return { isAdmin: false, isEnrolled: false, isFree: false, hasCodeEnrollment: false };
   }
 
   if (!userId) {
@@ -113,7 +114,7 @@ async function assertCanAccessCourseContent(
 
   const enrollment = await prisma.enrollment.findUnique({
     where: { userId_courseId: { userId, courseId } },
-    select: { status: true, expiresAt: true },
+    select: { status: true, expiresAt: true, source: true },
   });
   if (!enrollment) {
     throw new AppError(
@@ -131,6 +132,12 @@ async function assertCanAccessCourseContent(
     throw new AppError('Enrollment da het han', 403);
   }
 
+  // CODE enrollment only grants access for CODE courses
+  const hasCodeEnrollment = enrollment.source === 'CODE' && isCodeCourse;
+  if (hasCodeEnrollment) {
+    return { isAdmin: false, isEnrolled: true, isFree: false, hasCodeEnrollment: true };
+  }
+
   // We have an active enrollment. The caller will combine this
   // with a CourseOrder check (in serializeCourse or in the
   // specific route) to decide whether to show paid content. We
@@ -144,7 +151,7 @@ async function assertCanAccessCourseContent(
   // to mode='enrolled' once the user is logged in: a paid
   // course is either free for everyone (isFree) or paid (and
   // gating is per-lesson / per-document, not per-route).
-  return { isAdmin: false, isEnrolled: true, isFree: false };
+  return { isAdmin: false, isEnrolled: true, isFree: false, hasCodeEnrollment: false };
 }
 
 // ─── Helper: serialize a CourseDocument for JSON response ──────────
@@ -356,6 +363,7 @@ async function serializeCourse(
   // compatibility: a course with `accessType='FREE'` OR the legacy
   // `isFree=true && price<=0` bypasses enrollment.
   const isFree = course.accessType === 'FREE' || (course.isFree && Number(course.price) <= 0);
+  const isCodeCourse = course.accessType === 'CODE';
   const isOwner = options?.userId !== undefined && course.instructorId === options.userId;
   let hasPaidOrder = false;
   if (options?.userId && !isFree && !isOwner) {
@@ -369,10 +377,14 @@ async function serializeCourse(
     });
     hasPaidOrder = Boolean(order);
   }
+  // CODE enrollment grants access ONLY when enrollment.source === 'CODE'.
+  // A FREE enrollment does NOT unlock a CODE course.
+  const hasCodeEnrollment = enrollment?.source === 'CODE';
   const hasPaidAccess = options?.includeDraftLessons
-    || isFree
-    || (Boolean(enrollment) && (isFree || hasPaidOrder))
-    || isOwner;
+    || isOwner
+    || (isFree && !isCodeCourse && Boolean(enrollment))
+    || hasPaidOrder
+    || (isCodeCourse && hasCodeEnrollment);
 
   const totalPublishedLessons = course.sections.reduce(
     (sum, section) => sum + section.lessons.length,
@@ -1089,12 +1101,14 @@ router.get('/:courseId/lessons/:lessonId', optionalAuth, async (req, res: Respon
     //   - user is admin/instructor (assertCanAccessCourseContent
     //     returns isAdmin=true for those callers via the same
     //     helper path, and access.isFree is true for genuinely
-    //     free courses)
+    //     free courses), OR
+    //   - user has CODE enrollment
     const showFull =
       lesson.isFreePreview
       || hasPaidOrder
       || access.isAdmin
-      || access.isFree;
+      || access.isFree
+      || access.hasCodeEnrollment;
 
     // Defense in depth: if the caller isn't enrolled AND the
     // lesson isn't a free preview, refuse it. This blocks
@@ -1288,10 +1302,10 @@ router.get('/:id/curriculum', optionalAuth, async (req, res: Response<ApiRespons
       });
       hasPaidOrder = Boolean(order);
     }
-    // "real" enrollment = paid access (not just an old free row)
+    // "real" enrollment = paid access or CODE enrollment (not just an old free row)
     const hasFullAccess = access.isFree
       || access.isAdmin
-      || (access.isEnrolled && hasPaidOrder);
+      || (access.isEnrolled && (hasPaidOrder || access.hasCodeEnrollment));
 
     const course = await prisma.course.findUnique({
       where: { id: courseId },
@@ -1384,11 +1398,13 @@ router.post('/:id/enroll', authenticate, async (req, res: Response<ApiResponse>,
     const course = await prisma.course.findUnique({ where: { id: courseId } });
     if (!course) throw new AppError('Course not found', 404);
 
-    // Paid courses must go through the payment flow. Frontend should
-    // call POST /api/v1/payments/course to get a VNPay URL instead.
-    if (!course.isFree && Number(course.price) > 0) {
+    // Only courses with accessType='FREE' (or legacy isFree=true with price=0)
+    // can be enrolled via this endpoint. Paid/code courses must go through
+    // their respective payment or code-activation flows.
+    const isFreeCourse = course.accessType === 'FREE' || (course.isFree && Number(course.price) <= 0);
+    if (!isFreeCourse) {
       throw new AppError(
-        'Khoa hoc nay can thanh toan. Vui long mua de co the hoc.',
+        'Khoa hoc nay hien tai chua mo miễn phí. Vui long mua hoac nhap ma kich hoat.',
         402,
       );
     }
@@ -1693,21 +1709,19 @@ router.get(
 );
 
 // POST /api/v1/courses/activate-code
-// Nginx proxies /api/v1/* to the backend, but this specific route lives
-// in the frontend (Next.js) because it needs to read the httpOnly
-// backend_token cookie (server-side). We forward the request there.
+// Proxy server-side so the httpOnly backend_token cookie is forwarded to the
+// real activate-code handler in academy.routes.ts without the nginx
+// CORS restriction.
 router.post('/activate-code', async (req: any, res: any, next) => {
   try {
     const { courseId, code } = req.body;
-    const authHeader = req.headers.authorization;
 
     const result = await fetch(
-      `http://cuonghoangdev_frontend:3000/api/v1/courses/activate-code`,
+      `${process.env.INTERNAL_BACKEND_URL || 'http://localhost:3001'}/api/v1/academy/activate-code`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(authHeader ? { Authorization: authHeader } : {}),
           ...(req.headers.cookie ? { Cookie: req.headers.cookie } : {}),
         },
         body: JSON.stringify({ courseId, code }),

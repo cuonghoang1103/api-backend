@@ -240,9 +240,9 @@ router.post('/course', orderCreateLimiter, authenticate, async (req: Request, re
     if (course.isPublished !== true) {
       throw new AppError('Khoa hoc chua duoc xuat ban', 400);
     }
-    const isPaid = !course.isFree && Number(course.price) > 0;
+    const isPaid = course.accessType === 'PAID' || (!course.isFree && Number(course.price) > 0);
     if (!isPaid) {
-      throw new AppError('Khoa hoc nay mien phi, vui long su dung nut enroll', 400);
+      throw new AppError('Khoa hoc nay khong chap nhan thanh toan. Vui long su dung nut mien phi hoac ma kich hoat.', 400);
     }
 
     // Block duplicate purchase

@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import {
   Clock, Users, BookOpen, Star, Play, Shield, Award,
   ArrowLeft, CheckCircle, PlayCircle, Loader2, CreditCard,
-  KeyRound, Lock,
+  KeyRound, Lock, ChevronRight,
 } from 'lucide-react';
 import { coursesApi, paymentApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -59,6 +59,10 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'reviews'>('overview');
+  // Tracks whether the current user has an enrollment row for this course.
+  // We derive it from the API response initially, then keep it in sync
+  // after enroll/activate actions so the CTA re-renders without a page reload.
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -92,6 +96,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
         }
 
         setCourse(fetchedCourse);
+        setIsEnrolled(Boolean(fetchedCourse.isEnrolled));
 
         const allCourses: Course[] = Array.isArray(allRes.data?.data) ? allRes.data.data : [];
         setRelatedCourses(
@@ -150,9 +155,13 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
     );
   }
 
-  const isFreeCourse = course.isFree || course.price === 0;
+  const isFreeCourse = course.accessType === 'FREE' || (course.isFree && Number(course.price) <= 0);
   // accessType is the authoritative field; fall back to legacy isFree logic
   const accessType = (course as any).accessType || (isFreeCourse ? 'FREE' : 'PAID');
+  // Effective CTA: show "Vao hoc" when user has real access.
+  // isEnrolled=true means a CourseEnrollment row exists (backend verified).
+  // For CODE courses, hasPaidAccess=true only when enrollment.source='CODE'.
+  const effectiveHasAccess = course.hasPaidAccess || (accessType === 'FREE' && (course as any).isEnrolled);
 
   const priceInfo = isFreeCourse
     ? { label: 'Miễn phí', display: 'Miễn phí', original: null }
@@ -202,7 +211,9 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <div className="flex flex-wrap gap-2 mb-3">
                 <span className={`px-3 py-1 rounded-lg text-xs font-medium ${levelColor}`}>{levelLabel}</span>
-                {course.isFree && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-green-500/20 text-green-400">Miễn phí</span>}
+                {accessType === 'FREE' && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-green-500/20 text-green-400">Miễn phí</span>}
+                {accessType === 'CODE' && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-violet/20 text-neon-violet">Mã kích hoạt</span>}
+                {accessType === 'PAID' && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-indigo/20 text-neon-indigo">Trả phí</span>}
                 {course.categoryName && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-indigo/20 text-neon-indigo">{course.categoryName}</span>}
               </div>
               <h1 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4">{course.title}</h1>
@@ -396,26 +407,26 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                 )}
 
                 <div className="p-6 border-t border-darkborder">
-                  <div className="flex items-end gap-3 mb-4">
-                    <span className="text-3xl font-heading font-bold text-text-primary">{priceInfo.display}</span>
-                    {priceInfo.original && (
-                      <span className="text-lg text-text-muted line-through">{priceInfo.original}</span>
-                    )}
-                  </div>
-
-                  {course.hasPaidAccess ? (
-                    <ContinueLearningButton slug={course.slug} />
-                  ) : accessType === 'FREE' ? (
-                    <FreeEnrollButton course={course} onEnrolled={() => setCourse(prev => prev ? { ...prev, isEnrolled: true, hasPaidAccess: true } : prev)} />
-                  ) : accessType === 'PAID' ? (
-                    <BuyNowButton course={course} />
-                  ) : (
-                    <CodeActivateBox
-                      slug={course.slug}
-                      courseId={course.id}
-                      onActivated={() => setCourse(prev => prev ? { ...prev, isEnrolled: true, hasPaidAccess: true } : prev)}
-                    />
+                  {/* Price always shown for paid/code courses */}
+                  {!isFreeCourse && (
+                    <div className="flex items-end gap-3 mb-4">
+                      <span className="text-3xl font-heading font-bold text-text-primary">{priceInfo.display}</span>
+                      {priceInfo.original && (
+                        <span className="text-lg text-text-muted line-through">{priceInfo.original}</span>
+                      )}
+                    </div>
                   )}
+
+                  {/* ── Always show 3 access options ──────────────────────────── */}
+                  <CourseAccessOptions
+                    course={course}
+                    isEnrolled={isEnrolled}
+                    hasPaidAccess={!!course.hasPaidAccess}
+                    onEnrolled={() => {
+                      setIsEnrolled(true);
+                      setCourse(prev => prev ? { ...prev, isEnrolled: true, hasPaidAccess: true } : prev);
+                    }}
+                  />
                 </div>
 
                 <div className="p-6 space-y-3 border-t border-darkborder">
@@ -453,270 +464,214 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
   );
 }
 
-// ── Free Enroll Button ─────────────────────────────────────────────────────────
-function FreeEnrollButton({ course, onEnrolled }: { course: Course; onEnrolled: () => void }) {
-  const [enrolling, setEnrolling] = useState(false);
-  const [enrolled, setEnrolled] = useState(false);
-  // Pull the auth state from Zustand + NextAuth so we can bounce
-  // unauthenticated users to /login?callbackUrl=… instead of letting
-  // the enroll request 401 with a cryptic "Đăng ký thất bại" toast.
+// ════════════════════════════════════════════════════════════════════════
+// CourseAccessOptions — 3 access methods: Miễn phí / Mua / Nhập code
+// Always visible. Behaviour per option:
+//   FREE:    Enroll directly if FREE course → go to learn
+//            If not FREE course → error toast
+//   PAID:    Go to payment → success → enroll (no re-pay if already paid)
+//   CODE:    Enter code → activate → go to learn (must re-enter each time)
+// ════════════════════════════════════════════════════════════════════════
+function CourseAccessOptions({
+  course,
+  isEnrolled,
+  hasPaidAccess,
+  onEnrolled,
+}: {
+  course: Course;
+  isEnrolled: boolean;
+  hasPaidAccess: boolean;
+  onEnrolled: () => void;
+}) {
   const { isAuthenticated, isLoading: isAuthLoading } = useAuthStore();
   const { status: sessionStatus } = useSession();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const isAuthed = mounted && (isAuthenticated || sessionStatus === 'authenticated');
+  const isAuthed = mounted && !isAuthLoading && (isAuthenticated || sessionStatus === 'authenticated');
 
-  const handleEnroll = async () => {
-    if (!mounted || isAuthLoading) return;
+  // ── FREE option ───────────────────────────────────────────────────
+  const [freeLoading, setFreeLoading] = useState(false);
+
+  const handleFreeAccess = async () => {
     if (!isAuthed) {
-      const callback = encodeURIComponent(`/academy/courses/${course.slug}/learn`);
-      router.push(`/login?callbackUrl=${callback}`);
-      return;
-    }
-    setEnrolling(true);
-    try {
-      await coursesApi.enroll(course.id);
-      setEnrolled(true);
-      onEnrolled();
-      toast.success('Đăng ký thành công!');
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Đăng ký thất bại');
-    } finally {
-      setEnrolling(false);
-    }
-  };
-
-  if (enrolled) {
-    return (
-      <Link
-        href={`/academy/courses/${course.slug}/learn`}
-        className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
-      >
-        <PlayCircle className="w-5 h-5" />
-        Bắt đầu học
-      </Link>
-    );
-  }
-
-  return (
-    <button
-      onClick={handleEnroll}
-      disabled={enrolling}
-      className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
-    >
-      {enrolling ? (
-        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-      ) : (
-        <>
-          <Award className="w-5 h-5" />
-          Đăng ký miễn phí
-        </>
-      )}
-    </button>
-  );
-}
-
-// ── Add to Cart Button ─────────────────────────────────────────────────────────
-// Buy-now button for paid courses. Calls backend to create a
-// CourseOrder + VNPay paymentUrl, then redirects the user to the
-// gateway. Backend's IPN callback handles actual enrollment on
-// payment success. User comes back to /payment/return for UI.
-function BuyNowButton({ course }: { course: Course }) {
-  const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
-  const { status: sessionStatus } = useSession();
-  const [buying, setBuying] = useState(false);
-
-  const handleBuy = async () => {
-    const isAuth = isAuthenticated || sessionStatus === 'authenticated';
-    if (!isAuth) {
       router.push(`/login?callbackUrl=${encodeURIComponent(`/academy/courses/${course.slug}`)}`);
       return;
     }
-    setBuying(true);
+    setFreeLoading(true);
+    try {
+      await coursesApi.enroll(course.id);
+      onEnrolled();
+      toast.success('Đăng ký miễn phí thành công!');
+      router.push(`/academy/courses/${course.slug}/learn`);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Không thể đăng ký miễn phí');
+    } finally {
+      setFreeLoading(false);
+    }
+  };
+
+  // ── PAID option ───────────────────────────────────────────────────
+  const [paidLoading, setPaidLoading] = useState(false);
+
+  const handlePaidAccess = async () => {
+    if (!isAuthed) {
+      router.push(`/login?callbackUrl=${encodeURIComponent(`/academy/courses/${course.slug}`)}`);
+      return;
+    }
+    // Already paid → go straight to learn
+    if (hasPaidAccess) {
+      router.push(`/academy/courses/${course.slug}/learn`);
+      return;
+    }
+    setPaidLoading(true);
     try {
       const res = await paymentApi.createCourseOrder(course.id);
       const { paymentUrl } = res.data.data;
       window.location.href = paymentUrl;
-    } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      toast.error(e?.response?.data?.message || 'Khong the tao don thanh toan');
-      setBuying(false);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Không thể tạo đơn thanh toán');
+      setPaidLoading(false);
     }
   };
 
-  // Pick the right price label (discount or original)
+  // ── CODE option ───────────────────────────────────────────────────
+  const [code, setCode] = useState('');
+  const [codeLoading, setCodeLoading] = useState(false);
+  const [codeError, setCodeError] = useState('');
+
+  const handleCodeActivate = async () => {
+    const cleanCode = code.trim().toUpperCase();
+    if (!cleanCode || cleanCode.length < 4) {
+      setCodeError('Vui lòng nhập mã (tối thiểu 4 ký tự)');
+      return;
+    }
+    if (!isAuthed) {
+      router.push(`/login?callbackUrl=${encodeURIComponent(`/academy/courses/${course.slug}`)}`);
+      return;
+    }
+    setCodeLoading(true);
+    setCodeError('');
+    try {
+      await coursesApi.activateCode(course.id, cleanCode);
+      onEnrolled();
+      toast.success('Kích hoạt thành công!');
+      router.push(`/academy/courses/${course.slug}/learn`);
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || 'Mã không hợp lệ';
+      setCodeError(msg);
+      toast.error(msg);
+    } finally {
+      setCodeLoading(false);
+    }
+  };
+
   const finalPrice = course.discountPrice && Number(course.discountPrice) > 0
     ? Number(course.discountPrice)
     : Number(course.price);
   const priceLabel = new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
+    style: 'currency', currency: 'VND',
   }).format(finalPrice);
 
-  return (
-    <button
-      onClick={handleBuy}
-      disabled={buying}
-      className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
-    >
-      {buying ? (
-        <>
-          <Loader2 className="w-5 h-5 animate-spin" />
-          Dang tao don thanh toan...
-        </>
-      ) : (
-        <>
-          <CreditCard className="w-5 h-5" />
-          Mua ngay - {priceLabel}
-        </>
-      )}
-    </button>
-  );
-}
-
-// ── Continue Learning Button ─────────────────────────────────────────────────
-// `isEnrolled` can be true on the server response even if the user
-// is browsing as a guest (the flag is just "this user object is
-// enrolled in this course" — and at the public course page we
-// haven't asked the user to identify themselves yet). To avoid
-// clicking the green button and landing on a 401 inside /learn,
-// we re-check the auth state in the client and bounce the user to
-// /login?callbackUrl=… if they aren't signed in.
-function ContinueLearningButton({ slug }: { slug: string }) {
-  const { isAuthenticated, isLoading } = useAuthStore();
-  const { status: sessionStatus } = useSession();
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  const authKnown = mounted && !isLoading && sessionStatus !== 'loading';
-  const isAuthed = authKnown && (isAuthenticated || sessionStatus === 'authenticated');
-
-  const handleClick = (e: React.MouseEvent) => {
-    if (!authKnown) {
-      e.preventDefault();
-      return;
-    }
-    if (!isAuthed) {
-      e.preventDefault();
-      const callback = encodeURIComponent(`/courses/${slug}/learn`);
-      router.push(`/login?callbackUrl=${callback}`);
-    }
-  };
-
-  return (
-    <Link
-      href={`/courses/${slug}/learn`}
-      onClick={handleClick}
-      className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
-    >
-      <PlayCircle className="w-5 h-5" />
-      Tiếp tục học
-    </Link>
-  );
-}
-
-// ── Code Activate Box ──────────────────────────────────────────────────────────
-function CodeActivateBox({ slug, courseId, onActivated }: { slug: string; courseId: number; onActivated: () => void }) {
-  const [code, setCode] = useState('');
-  const [activating, setActivating] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const { isAuthenticated } = useAuthStore();
-  const { status: sessionStatus } = useSession();
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  const isAuthed = mounted && (isAuthenticated || sessionStatus === 'authenticated');
-
-  const handleActivate = async () => {
-    const cleanCode = code.trim().toUpperCase();
-    if (!cleanCode || cleanCode.length < 4) {
-      setError('Vui long nhap ma kich hoat (toi thieu 4 ky tu)');
-      return;
-    }
-    if (!isAuthed) {
-      router.push(`/login?callbackUrl=${encodeURIComponent(`/academy/courses/${slug}`)}`);
-      return;
-    }
-    setActivating(true);
-    setError('');
-    try {
-      await coursesApi.activateCode(courseId, cleanCode);
-      setSuccess(true);
-      onActivated();
-      toast.success('Kich hoat thanh cong! Ban co the bat dau hoc ngay.');
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || 'Ma kich hoat khong hop le';
-      setError(msg);
-      toast.error(msg);
-    } finally {
-      setActivating(false);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleActivate();
-  };
-
-  if (success) {
-    return (
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-sm">
-          <CheckCircle className="w-5 h-5 shrink-0" />
-          Kich hoat thanh cong!
-        </div>
-        <Link
-          href={`/academy/courses/${slug}/learn`}
-          className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
-        >
-          <PlayCircle className="w-5 h-5" />
-          Bat dau hoc ngay
-        </Link>
-      </div>
-    );
-  }
-
+  // ── Render ────────────────────────────────────────────────────────
   return (
     <div className="space-y-3">
-      <div className="flex items-start gap-2 p-3 bg-neon-violet/5 border border-neon-violet/20 rounded-xl">
-        <Lock className="w-4 h-4 text-neon-violet shrink-0 mt-0.5" />
-        <p className="text-xs text-text-secondary leading-relaxed">
-          Khoa hoc nay yeu cau nhap <strong className="text-neon-violet">ma kich hoat</strong> de dang ky.
-        </p>
-      </div>
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={code}
-          onChange={e => {
-            setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10));
-            setError('');
-          }}
-          onKeyDown={handleKeyDown}
-          placeholder="ABC123"
-          maxLength={10}
-          className="flex-1 px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center text-lg"
-        />
-        <button
-          onClick={handleActivate}
-          disabled={activating}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
-        >
-          {activating ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
+      {/* ── Option 1: Miễn phí ─────────────────────────────── */}
+      <button
+        onClick={handleFreeAccess}
+        disabled={freeLoading}
+        className="flex items-center justify-between w-full px-4 py-3 rounded-xl border transition-all disabled:opacity-50
+          bg-gradient-to-r from-green-500/10 to-green-600/10 border-green-500/30
+          hover:from-green-500/20 hover:to-green-600/20 hover:border-green-500/50"
+      >
+        <div className="flex items-center gap-3">
+          {freeLoading ? (
+            <Loader2 className="w-5 h-5 text-green-400 animate-spin" />
           ) : (
-            <>
-              <KeyRound className="w-5 h-5" />
-              Kich hoat
-            </>
+            <Award className="w-5 h-5 text-green-400" />
           )}
+          <div className="text-left">
+            <p className="text-sm font-semibold text-green-400">Miễn phí</p>
+            <p className="text-xs text-green-400/60">Đăng ký & học ngay</p>
+          </div>
+        </div>
+        <ChevronRight className="w-4 h-4 text-green-400/60" />
+      </button>
+
+      {/* ── Option 2: Thanh toán ────────────────────────────── */}
+      {hasPaidAccess ? (
+        <button
+          onClick={handlePaidAccess}
+          className="flex items-center justify-between w-full px-4 py-3 rounded-xl border transition-all
+            bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 border-neon-violet/30
+            hover:from-neon-indigo/20 hover:to-neon-violet/20 hover:border-neon-violet/50"
+        >
+          <div className="flex items-center gap-3">
+            <CheckCircle className="w-5 h-5 text-neon-violet" />
+            <div className="text-left">
+              <p className="text-sm font-semibold text-neon-violet">Đã thanh toán</p>
+              <p className="text-xs text-neon-violet/60">Tiếp tục học</p>
+            </div>
+          </div>
+          <ChevronRight className="w-4 h-4 text-neon-violet/60" />
         </button>
-      </div>
-      {error && (
-        <p className="text-xs text-red-400">{error}</p>
+      ) : (
+        <button
+          onClick={handlePaidAccess}
+          disabled={paidLoading}
+          className="flex items-center justify-between w-full px-4 py-3 rounded-xl border transition-all disabled:opacity-50
+            bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 border-neon-violet/30
+            hover:from-neon-indigo/20 hover:to-neon-violet/20 hover:border-neon-violet/50"
+        >
+          <div className="flex items-center gap-3">
+            {paidLoading ? (
+              <Loader2 className="w-5 h-5 text-neon-violet animate-spin" />
+            ) : (
+              <CreditCard className="w-5 h-5 text-neon-violet" />
+            )}
+            <div className="text-left">
+              <p className="text-sm font-semibold text-neon-violet">Thanh toán</p>
+              <p className="text-xs text-neon-violet/60">Mua ngay – {priceLabel}</p>
+            </div>
+          </div>
+          <ChevronRight className="w-4 h-4 text-neon-violet/60" />
+        </button>
       )}
+
+      {/* ── Option 3: Nhập mã ─────────────────────────────── */}
+      <div className="flex flex-col gap-2 p-3 rounded-xl border border-darkborder bg-darkbg">
+        <div className="flex items-center gap-2">
+          <KeyRound className="w-4 h-4 text-neon-violet shrink-0" />
+          <span className="text-sm font-medium text-text-primary">Nhập mã kích hoạt</span>
+        </div>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={code}
+            onChange={e => {
+              setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10));
+              setCodeError('');
+            }}
+            onKeyDown={e => { if (e.key === 'Enter') handleCodeActivate(); }}
+            placeholder="ABC123"
+            maxLength={10}
+            className="flex-1 px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
+          />
+          <button
+            onClick={handleCodeActivate}
+            disabled={codeLoading}
+            className="flex items-center justify-center gap-1 px-3 py-2 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+          >
+            {codeLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              'Kích hoạt'
+            )}
+          </button>
+        </div>
+        {codeError && <p className="text-xs text-red-400">{codeError}</p>}
+      </div>
     </div>
   );
 }
+

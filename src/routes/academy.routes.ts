@@ -376,6 +376,9 @@ router.post('/activate-code', authenticate, async (req, res: Response<ApiRespons
     });
     if (!course) throw new AppError('Course not found', 404);
     if (!course.isPublished) throw new AppError('Khoa hoc chua duoc xuat ban', 400);
+    if (course.accessType !== 'CODE') {
+      throw new AppError('Khoa hoc nay khong chap nhan ma kich hoat', 400);
+    }
 
     // Find the code
     const courseCode = await prisma.courseCode.findFirst({
@@ -396,7 +399,27 @@ router.post('/activate-code', authenticate, async (req, res: Response<ApiRespons
       where: { userId_courseId: { userId, courseId } },
     });
     if (existingEnrollment) {
-      throw new AppError('Ban da dang ky khoa hoc nay roi', 400);
+      // If upgrading from FREE/PAID enrollment to CODE, update the source
+      if (existingEnrollment.source !== 'CODE') {
+        await prisma.enrollment.update({
+          where: { id: existingEnrollment.id },
+          data: { source: 'CODE', courseCodeId: courseCode.id },
+        });
+        await prisma.courseCode.update({
+          where: { id: courseCode.id },
+          data: { usedCount: { increment: 1 } },
+        });
+        res.json({
+          success: true,
+          data: { message: 'Kich hoat thanh cong! Ban co the bat dau hoc ngay.', courseId },
+        });
+      } else {
+        res.json({
+          success: true,
+          data: { message: 'Khoa hoc da duoc kich hoat roi.', courseId },
+        });
+      }
+      return;
     }
 
     // Create enrollment + increment usedCount in a transaction

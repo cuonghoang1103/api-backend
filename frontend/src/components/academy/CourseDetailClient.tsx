@@ -350,7 +350,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                 {course.sections && course.sections.length > 0 ? (
                   <Curriculum
                     sections={course.sections}
-                    enrolled={course.isEnrolled}
+                    enrolled={!!course.hasPaidAccess}
                     courseSlug={course.slug}
                   />
                 ) : (
@@ -403,17 +403,17 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                     )}
                   </div>
 
-                  {course.isEnrolled ? (
+                  {course.hasPaidAccess ? (
                     <ContinueLearningButton slug={course.slug} />
                   ) : accessType === 'FREE' ? (
-                    <FreeEnrollButton course={course} onEnrolled={() => setCourse(prev => prev ? { ...prev, isEnrolled: true } : prev)} />
+                    <FreeEnrollButton course={course} onEnrolled={() => setCourse(prev => prev ? { ...prev, isEnrolled: true, hasPaidAccess: true } : prev)} />
                   ) : accessType === 'PAID' ? (
                     <BuyNowButton course={course} />
                   ) : (
                     <CodeActivateBox
                       slug={course.slug}
                       courseId={course.id}
-                      onActivated={() => setCourse(prev => prev ? { ...prev, isEnrolled: true } : prev)}
+                      onActivated={() => setCourse(prev => prev ? { ...prev, isEnrolled: true, hasPaidAccess: true } : prev)}
                     />
                   )}
                 </div>

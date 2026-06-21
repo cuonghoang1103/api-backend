@@ -515,6 +515,7 @@ async function serializeCourse(
     })),
     reviews: course.reviews,
     isEnrolled: Boolean(enrollment),
+    hasPaidAccess,
     enrollmentProgress,
     enrollmentCount: course._count.enrollments,
     reviewCount: course._count.reviews,

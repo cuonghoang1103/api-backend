@@ -208,8 +208,10 @@ export default function CourseDetailPage() {
 
   const hasDiscount = course.discountPrice && course.discountPrice > 0;
   const accessType = (course as any).accessType || (course.isFree ? 'FREE' : 'PAID');
-  const canWatch = course.isEnrolled || accessType === 'FREE';
   // accessType is the authoritative field for course access type.
+  // hasPaidAccess: user has valid paid order for PAID courses, or is enrolled on FREE/CODE courses.
+  // NOTE: serializeCourse returns hasPaidAccess = isFree OR (hasPaidOrder) OR isOwner.
+  // For CODE courses, a valid enrollment (created by activate-code API) grants access.
   const isPaidCourse = accessType === 'PAID';
   const isCodeCourse = accessType === 'CODE';
   const whatYouLearnList = course.whatYouLearn ? course.whatYouLearn.split('\n').filter(Boolean) : [];
@@ -341,7 +343,7 @@ export default function CourseDetailPage() {
                     )}
                   </div>
 
-                  {course.isEnrolled ? (
+                  {course.hasPaidAccess ? (
                     <Link
                       href={`/courses/${slug}/learn`}
                       onClick={(e) => {
@@ -420,7 +422,7 @@ export default function CourseDetailPage() {
                   )}
 
                   <p className="text-center text-text-muted text-xs mt-3">
-                    {course.isEnrolled
+                    {course.hasPaidAccess
                       ? 'You are enrolled in this course'
                       : isPaidCourse
                         ? 'Thanh toan an toan qua VNPay (QR / ATM / Visa)'
@@ -493,7 +495,7 @@ export default function CourseDetailPage() {
                     {expandedSections.has(section.id) && (
                       <div className="divide-y divide-darkborder/20">
                         {section.lessons?.map((lesson) => {
-                          const locked = section.isLocked && !course.isEnrolled;
+                          const locked = section.isLocked && !course.hasPaidAccess;
                           const isFree = lesson.isFreePreview;
                           return (
                             <div key={lesson.id} className="flex items-center gap-3 p-3 pl-4">

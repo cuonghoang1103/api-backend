@@ -451,6 +451,7 @@ export interface Course {
   sections?: CourseSection[];
   tags?: string[];
   isEnrolled?: boolean;
+  hasPaidAccess?: boolean;
   enrollmentProgress?: number;
 }
 

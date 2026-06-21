@@ -171,6 +171,7 @@ model User {
   // takes their Hub data with it (no orphans).
   hubFolders HubFolder[]
   hubLinks   HubLink[]
+  hubFiles   HubFile[]
 
   // ─── Social Follow Graph ────────────────────────────────
   following Follow[] @relation("Following")
@@ -2026,19 +2027,23 @@ model TechTrendArticle {
 // whether the value starts with "/" or "http".
 
 model HubFolder {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  name      String   @db.VarChar(100)
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  parentId  Int?      @map("parent_id")
+  name      String    @db.VarChar(100)
   // Either a Lucide icon name (frontend resolves to component)
   // or an absolute URL to an uploaded image on R2.
-  icon      String?  @db.VarChar(500)
+  icon      String?   @db.VarChar(500)
   // Display order within the sidebar. Lower = first. Default 0.
-  sortOrder Int      @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  sortOrder Int       @default(0) @map("sort_order")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
 
-  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  links HubLink[]
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  links    HubLink[]
+  files    HubFile[]
+  parent   HubFolder?   @relation("HubSubFolders", fields: [parentId], references: [id], onDelete: Cascade)
+  children HubFolder[]  @relation("HubSubFolders")
 
   @@index([userId, sortOrder], name: "idx_hub_folders_user_sort")
   @@index([userId, name], name: "idx_hub_folders_user_name")
@@ -2062,7 +2067,9 @@ model HubLink {
   // String[] tags. Native Postgres array — no join table needed
   // for a small set (typically < 20 per link). The API normalises
   // each tag to lowercase + trim before insert.
-  tags         String[] @default([])
+  tags   String[] @default([])
+  // Progress status: "unread" | "learning" | "done"
+  status String   @default("unread") @map("status")
   // When true the link is reachable via /api/v1/hub/public/:slug
   // without auth. We never expose userId, notes, or personal
   // tags in the public payload.
@@ -2082,6 +2089,36 @@ model HubLink {
   @@index([userId], name: "idx_hub_links_user")
   @@index([isPublic, createdAt(sort: Desc)], name: "idx_hub_links_public")
   @@map("hub_links")
+}
+
+// ─── Hub File Storage ─────────────────────────────────────────
+
+model HubFile {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  folderId  Int?      @map("folder_id")
+  // Display name shown in the UI (original filename).
+  name      String    @db.VarChar(255)
+  // R2 object key, e.g. "hub-files/user42/abc123.pdf"
+  key       String    @db.VarChar(500)
+  size      Int                            // bytes
+  mimeType  String    @db.VarChar(100)
+  // Progress status: "unread" | "learning" | "done"
+  status    String    @default("unread")
+  tags      String[]  @default([])
+  notes     String?   @db.Text
+  isPublic  Boolean   @default(false)
+  publicSlug String?  @unique @map("public_slug") @db.VarChar(32)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folder HubFolder?   @relation(fields: [folderId], references: [id], onDelete: SetNull)
+
+  @@index([userId, folderId], name: "idx_hub_files_user_folder")
+  @@index([userId, status], name: "idx_hub_files_user_status")
+  @@index([userId], name: "idx_hub_files_user")
+  @@map("hub_files")
 }
 
 // ─── Social Follow Graph ──────────────────────────────────

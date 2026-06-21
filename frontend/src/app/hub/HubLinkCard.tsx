@@ -13,6 +13,7 @@ interface HubLinkCardProps {
   link: HubLink;
   onEdit: (link: HubLink) => void;
   onDelete: (id: number) => void;
+  onStatusChange?: (id: number, status: string) => void;
 }
 
 // Deterministic gradient per-link (so the same link always gets
@@ -29,7 +30,7 @@ function gradientFor(id: number) {
   return palettes[id % palettes.length];
 }
 
-export default function HubLinkCard({ link, onEdit, onDelete }: HubLinkCardProps) {
+export default function HubLinkCard({ link, onEdit, onDelete, onStatusChange }: HubLinkCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -146,6 +147,7 @@ export default function HubLinkCard({ link, onEdit, onDelete }: HubLinkCardProps
               onClose={() => setMenuOpen(false)}
               onEdit={onEdit}
               onDelete={onDelete}
+              onStatusChange={onStatusChange ?? (() => {})}
             />
           </div>
         </div>

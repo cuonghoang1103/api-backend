@@ -8,9 +8,10 @@ interface HubLinkGridProps {
   links: HubLink[];
   onEdit: (link: HubLink) => void;
   onDelete: (id: number) => void;
+  onStatusChange?: (id: number, status: string) => void;
 }
 
-export default function HubLinkGrid({ links, onEdit, onDelete }: HubLinkGridProps) {
+export default function HubLinkGrid({ links, onEdit, onDelete, onStatusChange }: HubLinkGridProps) {
   return (
     <motion.ul
       layout
@@ -24,7 +25,12 @@ export default function HubLinkGrid({ links, onEdit, onDelete }: HubLinkGridProp
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25, delay: Math.min(i, 8) * 0.02 }}
         >
-          <HubLinkCard link={link} onEdit={onEdit} onDelete={onDelete} />
+          <HubLinkCard
+            link={link}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onStatusChange={onStatusChange}
+          />
         </motion.li>
       ))}
     </motion.ul>

@@ -21,13 +21,13 @@ export async function listFolders(userId: number) {
   return prisma.hubFolder.findMany({
     where: { userId },
     orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
-    include: { _count: { select: { links: true } } },
+    include: { _count: { select: { links: true, files: true } } },
   });
 }
 
 export async function createFolder(
   userId: number,
-  data: { name: string; icon?: string | null; sortOrder?: number },
+  data: { name: string; icon?: string | null; sortOrder?: number; parentId?: number | null },
 ) {
   const name = data.name.trim();
   if (name.length === 0 || name.length > 100) {
@@ -36,21 +36,33 @@ export async function createFolder(
   if (data.icon != null && data.icon.length > 500) {
     throw new AppError('Icon qua dai (max 500 ky tu)', 400, 'INVALID_ICON');
   }
+  if (data.parentId != null) {
+    await assertFolderOwnership(userId, data.parentId);
+    // Enforce max 2-level depth
+    const parent = await prisma.hubFolder.findFirst({
+      where: { id: data.parentId, userId },
+      select: { parentId: true },
+    });
+    if (parent?.parentId != null) {
+      throw new AppError('Chi ho tro toi da 2 cap thu muc', 400, 'FOLDER_DEPTH_EXCEEDED');
+    }
+  }
   return prisma.hubFolder.create({
     data: {
       userId,
       name,
       icon: data.icon ?? null,
       sortOrder: typeof data.sortOrder === 'number' ? Math.floor(data.sortOrder) : 0,
+      parentId: data.parentId ?? null,
     },
-    include: { _count: { select: { links: true } } },
+    include: { _count: { select: { links: true, files: true } } },
   });
 }
 
 export async function updateFolder(
   userId: number,
   id: number,
-  data: { name?: string; icon?: string | null; sortOrder?: number },
+  data: { name?: string; icon?: string | null; sortOrder?: number; parentId?: number | null },
 ) {
   if (!Number.isInteger(id) || id <= 0) {
     throw new AppError('id khong hop le', 400, 'INVALID_ID');
@@ -75,6 +87,28 @@ export async function updateFolder(
     }
     updateData.sortOrder = Math.floor(data.sortOrder);
   }
+  if (data.parentId !== undefined) {
+    if (data.parentId !== null) {
+      await assertFolderOwnership(userId, data.parentId);
+      // Prevent nesting a folder under itself or a descendant
+      if (data.parentId === id) {
+        throw new AppError('Khong the chuyen thu muc vao chinh no', 400, 'INVALID_PARENT');
+      }
+      const descendantIds = await getDescendantFolderIds(id);
+      if (descendantIds.includes(data.parentId)) {
+        throw new AppError('Khong the chuyen thu muc vao thu muc con', 400, 'INVALID_PARENT');
+      }
+      // Enforce max 2-level depth
+      const parent = await prisma.hubFolder.findFirst({
+        where: { id: data.parentId, userId },
+        select: { parentId: true },
+      });
+      if (parent?.parentId != null) {
+        throw new AppError('Chi ho tro toi da 2 cap thu muc', 400, 'FOLDER_DEPTH_EXCEEDED');
+      }
+    }
+    updateData.parentId = data.parentId;
+  }
   if (Object.keys(updateData).length === 0) {
     throw new AppError('Khong co truong hop le de cap nhat', 400, 'EMPTY_UPDATE');
   }
@@ -88,7 +122,7 @@ export async function updateFolder(
   }
   return prisma.hubFolder.findUnique({
     where: { id },
-    include: { _count: { select: { links: true } } },
+    include: { _count: { select: { links: true, files: true } } },
   });
 }
 
@@ -234,6 +268,7 @@ export async function updateLink(
     notes?: string | null;
     tags?: string[];
     isPublic?: boolean;
+    status?: string;
   },
 ) {
   if (!Number.isInteger(id) || id <= 0) {
@@ -301,6 +336,13 @@ export async function updateLink(
       updateData.publicSlug = null;
     }
   }
+  const VALID_STATUSES = ['unread', 'learning', 'done'];
+  if (data.status !== undefined) {
+    if (!VALID_STATUSES.includes(data.status)) {
+      throw new AppError(`Status phai la mot trong: ${VALID_STATUSES.join(', ')}`, 400, 'INVALID_STATUS');
+    }
+    updateData.status = data.status;
+  }
   if (Object.keys(updateData).length === 0) {
     throw new AppError('Khong co truong hop le de cap nhat', 400, 'EMPTY_UPDATE');
   }
@@ -326,6 +368,323 @@ export async function deleteLink(userId: number, id: number) {
     throw new AppError('Link khong ton tai hoac khong thuoc ve ban', 404, 'NOT_FOUND');
   }
   return { id, deleted: true };
+}
+
+// ─── File CRUD ──────────────────────────────────────────────
+
+export type ListFilesOpts = {
+  folderId?: number | null | 'all';
+  status?: string;
+  keyword?: string;
+  page?: number;
+  pageSize?: number;
+};
+
+export async function listFiles(userId: number, opts: ListFilesOpts) {
+  const page = Math.max(1, Math.floor(opts.page ?? 1));
+  const pageSize = Math.min(100, Math.max(1, Math.floor(opts.pageSize ?? 50)));
+
+  const folderFilter = (() => {
+    if (opts.folderId === undefined || opts.folderId === 'all') return {};
+    if (opts.folderId === null) return { folderId: null };
+    return { folderId: opts.folderId };
+  })();
+
+  const statusFilter = opts.status ? { status: opts.status } : {};
+
+  const keyword = opts.keyword?.trim();
+  const keywordFilter = keyword
+    ? {
+        OR: [
+          { name: { contains: keyword, mode: 'insensitive' as const } },
+          { notes: { contains: keyword, mode: 'insensitive' as const } },
+          { tags: { has: keyword } },
+        ],
+      }
+    : {};
+
+  const where = { userId, ...folderFilter, ...statusFilter, ...keywordFilter };
+
+  const [items, total] = await Promise.all([
+    prisma.hubFile.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.hubFile.count({ where }),
+  ]);
+
+  return {
+    items: items.map(serializeFile),
+    total,
+    page,
+    pageSize,
+    totalPages: Math.max(1, Math.ceil(total / pageSize)),
+  };
+}
+
+export async function createFile(
+  userId: number,
+  data: {
+    folderId?: number | null;
+    name: string;
+    key: string;
+    size: number;
+    mimeType: string;
+    tags?: string[];
+    notes?: string | null;
+    isPublic?: boolean;
+  },
+) {
+  const name = String(data.name ?? '').trim();
+  if (!name || name.length > 255) {
+    throw new AppError('Ten file 1-255 ky tu', 400, 'INVALID_NAME');
+  }
+  if (data.folderId != null) {
+    await assertFolderOwnership(userId, data.folderId);
+  }
+
+  const tags = normalizeTags(data.tags);
+  const wantsPublic = data.isPublic === true;
+
+  return prisma.hubFile.create({
+    data: {
+      userId,
+      folderId: data.folderId ?? null,
+      name,
+      key: String(data.key),
+      size: Math.max(0, Math.floor(data.size)),
+      mimeType: String(data.mimeType).slice(0, 100),
+      tags,
+      notes: data.notes?.trim() || null,
+      isPublic: wantsPublic,
+      publicSlug: wantsPublic ? await uniqueFilePublicSlug() : null,
+    },
+  });
+}
+
+export async function updateFile(
+  userId: number,
+  id: number,
+  data: {
+    folderId?: number | null;
+    name?: string;
+    tags?: string[];
+    notes?: string | null;
+    status?: string;
+    isPublic?: boolean;
+  },
+) {
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new AppError('id khong hop le', 400, 'INVALID_ID');
+  }
+  const VALID_STATUSES = ['unread', 'learning', 'done'];
+  const updateData: Record<string, unknown> = {};
+
+  if (data.name !== undefined) {
+    const name = String(data.name).trim();
+    if (!name || name.length > 255) {
+      throw new AppError('Ten file 1-255 ky tu', 400, 'INVALID_NAME');
+    }
+    updateData.name = name;
+  }
+  if (data.folderId !== undefined) {
+    if (data.folderId == null) {
+      updateData.folderId = null;
+    } else {
+      await assertFolderOwnership(userId, data.folderId);
+      updateData.folderId = data.folderId;
+    }
+  }
+  if (data.tags !== undefined) {
+    updateData.tags = normalizeTags(data.tags);
+  }
+  if (data.notes !== undefined) {
+    updateData.notes = data.notes == null ? null : String(data.notes).trim() || null;
+  }
+  if (data.status !== undefined) {
+    if (!VALID_STATUSES.includes(data.status)) {
+      throw new AppError(`Status phai la mot trong: ${VALID_STATUSES.join(', ')}`, 400, 'INVALID_STATUS');
+    }
+    updateData.status = data.status;
+  }
+  if (data.isPublic !== undefined) {
+    const wantsPublic = data.isPublic === true;
+    updateData.isPublic = wantsPublic;
+    if (wantsPublic) {
+      const existing = await prisma.hubFile.findFirst({
+        where: { id, userId },
+        select: { publicSlug: true },
+      });
+      if (!existing) {
+        throw new AppError('File khong ton tai hoac khong thuoc ve ban', 404, 'NOT_FOUND');
+      }
+      updateData.publicSlug = existing.publicSlug ?? (await uniqueFilePublicSlug());
+    } else {
+      updateData.publicSlug = null;
+    }
+  }
+  if (Object.keys(updateData).length === 0) {
+    throw new AppError('Khong co truong hop le de cap nhat', 400, 'EMPTY_UPDATE');
+  }
+
+  const result = await prisma.hubFile.updateMany({
+    where: { id, userId },
+    data: updateData,
+  });
+  if (result.count === 0) {
+    throw new AppError('File khong ton tai hoac khong thuoc ve ban', 404, 'NOT_FOUND');
+  }
+  return prisma.hubFile.findUnique({ where: { id } });
+}
+
+export async function deleteFile(userId: number, id: number) {
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new AppError('id khong hop le', 400, 'INVALID_ID');
+  }
+  const file = await prisma.hubFile.findFirst({
+    where: { id, userId },
+    select: { id: true, key: true },
+  });
+  if (!file) {
+    throw new AppError('File khong ton tai hoac khong thuoc ve ban', 404, 'NOT_FOUND');
+  }
+  // Delete from R2
+  try {
+    const { deleteObject } = await import('../config/r2.js');
+    await deleteObject(file.key);
+  } catch {
+    // Non-fatal: file may already be gone from R2
+  }
+  await prisma.hubFile.deleteMany({ where: { id, userId } });
+  return { id, deleted: true };
+}
+
+export async function getSignedFileUrl(userId: number, id: number) {
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new AppError('id khong hop le', 400, 'INVALID_ID');
+  }
+  const file = await prisma.hubFile.findFirst({
+    where: { id, userId },
+    select: { id: true, key: true, name: true, mimeType: true },
+  });
+  if (!file) {
+    throw new AppError('File khong ton tai hoac khong thuoc ve ban', 404, 'NOT_FOUND');
+  }
+  const { getSignedDownloadUrl } = await import('../config/r2.js');
+  const url = await getSignedDownloadUrl(file.key, 300, file.name);
+  return { url, mimeType: file.mimeType };
+}
+
+// ─── AI Auto-tagging ────────────────────────────────────────
+
+const TAG_PROMPT_SYSTEM = `Ban la mot chuyen gia phan loai tai lieu. Nhan vao ten file (name) va dinh dang (mimeType), tra ve danh sach tag phu hop. Chi tra ve danh sach tag, moi tag la mot chu thuong, khong dau, toi da 10 tag, phan cach nhau bang dau phay. Cac tag can phu hop voi noi dung tai lieu. Vi du: name="postgres_tuning.sql", mimeType="application/sql" => "database, postgresql, sql, performance, backend". Khong giai thich, chi tra ve tags.`;
+
+const TAG_PROMPT_USER = (name: string, mimeType: string) =>
+  `Ten file: ${name}\nDinh dang: ${mimeType}`;
+
+const EXTENSION_TAG_MAP: Record<string, string[]> = {
+  '.pdf': ['document', 'pdf'],
+  '.docx': ['document', 'word'],
+  '.doc': ['document', 'word'],
+  '.txt': ['document', 'text'],
+  '.md': ['markdown', 'documentation'],
+  '.sql': ['database', 'sql'],
+  '.ts': ['typescript', 'frontend'],
+  '.tsx': ['react', 'typescript', 'frontend'],
+  '.js': ['javascript', 'frontend'],
+  '.jsx': ['react', 'javascript', 'frontend'],
+  '.py': ['python', 'backend'],
+  '.java': ['java', 'backend'],
+  '.go': ['golang', 'backend'],
+  '.rs': ['rust', 'backend'],
+  '.cs': ['csharp', 'backend'],
+  '.cpp': ['cpp', 'backend'],
+  '.c': ['c', 'backend'],
+  '.zip': ['archive', 'compressed'],
+  '.tar': ['archive', 'compressed'],
+  '.gz': ['archive', 'compressed'],
+  '.rar': ['archive', 'compressed'],
+  '.json': ['data', 'config'],
+  '.xml': ['data', 'config'],
+  '.yaml': ['devops', 'config'],
+  '.yml': ['devops', 'config'],
+  '.png': ['image', 'image'],
+  '.jpg': ['image', 'image'],
+  '.jpeg': ['image', 'image'],
+  '.gif': ['image', 'image'],
+  '.webp': ['image', 'image'],
+  '.svg': ['image', 'vector'],
+  '.mp4': ['video', 'media'],
+  '.mp3': ['audio', 'media'],
+  '.wav': ['audio', 'media'],
+  '.css': ['css', 'frontend'],
+  '.html': ['html', 'frontend'],
+  '.sh': ['bash', 'devops'],
+  '.ps1': ['powershell', 'devops'],
+};
+
+export async function aiSuggestTags(userId: number, id: number) {
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new AppError('id khong hop le', 400, 'INVALID_ID');
+  }
+  const file = await prisma.hubFile.findFirst({
+    where: { id, userId },
+    select: { id: true, name: true, mimeType: true, tags: true },
+  });
+  if (!file) {
+    throw new AppError('File khong ton tai hoac khong thuoc ve ban', 404, 'NOT_FOUND');
+  }
+
+  const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+  const extTags = EXTENSION_TAG_MAP[ext] ?? [];
+  let suggestedTags = [...new Set(extTags)];
+
+  // Try AI tagging via Groq
+  try {
+    const { chatWithFallback } = await import('../services/aiProviders.js');
+    const result = await chatWithFallback({
+      messages: [
+        { role: 'system', content: TAG_PROMPT_SYSTEM },
+        { role: 'user', content: TAG_PROMPT_USER(file.name, file.mimeType) },
+      ],
+      maxTokens: 100,
+    });
+    const rawContent = result.text ?? '';
+    const aiTags = rawContent
+      .toLowerCase()
+      .replace(/tags?:\s*/gi, '')
+      .split(',')
+      .map((t: string) => t.trim().replace(/^#+/, ''))
+      .filter((t: string) => t.length > 0 && t.length <= 50);
+    if (aiTags.length > 0) {
+      suggestedTags = [...new Set([...suggestedTags, ...aiTags])];
+    }
+  } catch {
+    // AI unavailable — fall back to extension-based tags only
+  }
+
+  const merged = [...new Set([...file.tags, ...suggestedTags])].slice(0, 30);
+  await prisma.hubFile.updateMany({
+    where: { id, userId },
+    data: { tags: merged },
+  });
+  return { tags: merged };
+}
+
+// ─── Public file lookup ──────────────────────────────────────
+
+export async function getPublicFile(slug: string) {
+  const cleanSlug = String(slug ?? '').trim();
+  if (!cleanSlug) return null;
+  return prisma.hubFile.findFirst({
+    where: { publicSlug: cleanSlug, isPublic: true },
+    select: {
+      id: true, name: true, mimeType: true, size: true,
+      publicSlug: true, createdAt: true,
+    },
+  });
 }
 
 // ─── Scrape ─────────────────────────────────────────────────
@@ -430,7 +789,7 @@ function serializeLink(l: {
   id: number; folderId: number | null; url: string; title: string;
   description: string | null; thumbnailUrl: string | null;
   faviconUrl: string | null; notes: string | null; tags: string[];
-  isPublic: boolean; publicSlug: string | null;
+  isPublic: boolean; publicSlug: string | null; status: string;
   createdAt: Date; updatedAt: Date;
 }) {
   return {
@@ -445,6 +804,7 @@ function serializeLink(l: {
     tags: l.tags,
     isPublic: l.isPublic,
     publicSlug: l.publicSlug,
+    status: l.status,
     createdAt: l.createdAt.toISOString(),
     updatedAt: l.updatedAt.toISOString(),
   };
@@ -461,6 +821,55 @@ async function assertFolderOwnership(userId: number, folderId: number) {
   if (!folder) {
     throw new AppError('Folder khong ton tai hoac khong thuoc ve ban', 404, 'FOLDER_NOT_FOUND');
   }
+}
+
+async function getDescendantFolderIds(folderId: number): Promise<number[]> {
+  const children = await prisma.hubFolder.findMany({
+    where: { parentId: folderId },
+    select: { id: true },
+  });
+  const ids: number[] = [];
+  for (const child of children) {
+    ids.push(child.id);
+    const grandChildren = await getDescendantFolderIds(child.id);
+    ids.push(...grandChildren);
+  }
+  return ids;
+}
+
+function serializeFile(f: {
+  id: number; folderId: number | null; name: string; key: string;
+  size: number; mimeType: string; status: string; tags: string[];
+  notes: string | null; isPublic: boolean; publicSlug: string | null;
+  createdAt: Date; updatedAt: Date;
+}) {
+  return {
+    id: f.id,
+    folderId: f.folderId,
+    name: f.name,
+    key: f.key,
+    size: f.size,
+    mimeType: f.mimeType,
+    status: f.status,
+    tags: f.tags,
+    notes: f.notes,
+    isPublic: f.isPublic,
+    publicSlug: f.publicSlug,
+    createdAt: f.createdAt.toISOString(),
+    updatedAt: f.updatedAt.toISOString(),
+  };
+}
+
+async function uniqueFilePublicSlug(): Promise<string> {
+  for (let i = 0; i < 5; i++) {
+    const slug = nanoid(10);
+    const exists = await prisma.hubFile.findFirst({
+      where: { publicSlug: slug },
+      select: { id: true },
+    });
+    if (!exists) return slug;
+  }
+  return `${nanoid(8)}${Date.now().toString(36)}`;
 }
 
 function normalizeTags(raw: unknown): string[] {

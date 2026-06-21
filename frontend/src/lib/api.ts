@@ -1878,9 +1878,10 @@ export interface HubFolder {
   name: string;
   icon: string | null;
   sortOrder: number;
+  parentId: number | null;
   createdAt: string;
   updatedAt: string;
-  _count: { links: number };
+  _count: { links: number; files: number };
 }
 
 export interface HubLink {
@@ -1895,6 +1896,7 @@ export interface HubLink {
   tags: string[];
   isPublic: boolean;
   publicSlug: string | null;
+  status: 'unread' | 'learning' | 'done';
   createdAt: string;
   updatedAt: string;
 }
@@ -1906,6 +1908,22 @@ export interface HubScrapeResult {
   thumbnailUrl: string | null;
   faviconUrl: string | null;
   siteName: string | null;
+}
+
+export interface HubFile {
+  id: number;
+  folderId: number | null;
+  name: string;
+  key: string;
+  size: number;
+  mimeType: string;
+  status: 'unread' | 'learning' | 'done';
+  tags: string[];
+  notes: string | null;
+  isPublic: boolean;
+  publicSlug: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface HubLinkListResponse {
@@ -1922,10 +1940,10 @@ export const hubApi = {
   // Folders ──────────────────────────────────────────────────────
   listFolders: () => api.get<{ data: HubFolder[] }>('/hub/folders'),
 
-  createFolder: (data: { name: string; icon?: string | null; sortOrder?: number }) =>
+  createFolder: (data: { name: string; icon?: string | null; sortOrder?: number; parentId?: number | null }) =>
     api.post<{ data: HubFolder }>('/hub/folders', data),
 
-  updateFolder: (id: number, data: { name?: string; icon?: string | null; sortOrder?: number }) =>
+  updateFolder: (id: number, data: { name?: string; icon?: string | null; sortOrder?: number; parentId?: number | null }) =>
     api.patch<{ data: HubFolder }>(`/hub/folders/${id}`, data),
 
   deleteFolder: (id: number) =>
@@ -1963,6 +1981,7 @@ export const hubApi = {
       notes: string | null;
       tags: string[];
       isPublic: boolean;
+      status: 'unread' | 'learning' | 'done';
     }>,
   ) => api.patch<{ data: HubLink }>(`/hub/links/${id}`, data),
 
@@ -1988,5 +2007,73 @@ export const hubApi = {
         createdAt: string;
       };
     }>(`/hub/public/${slug}`),
+};
+
+export const hubFileApi = {
+  // Get presigned R2 PUT URL for direct upload from browser
+  presign: (data: { name: string; mimeType: string }) =>
+    api.post<{ data: { uploadUrl: string; key: string } }>('/hub/files/presign', data),
+
+  // Register a file after successful upload
+  create: (data: {
+    key: string;
+    name: string;
+    mimeType: string;
+    size: number;
+    folderId?: number | null;
+    tags?: string[];
+    notes?: string | null;
+    isPublic?: boolean;
+  }) => api.post<{ data: HubFile }>('/hub/files', data),
+
+  list: (params?: {
+    folderId?: number | 'null' | 'all';
+    status?: string;
+    q?: string;
+    page?: number;
+    pageSize?: number;
+  }) =>
+    api.get<{
+      data: {
+        items: HubFile[];
+        total: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
+      };
+    }>('/hub/files', { params }),
+
+  getSignedUrl: (id: number) =>
+    api.get<{ data: { url: string; mimeType: string } }>(`/hub/files/${id}/url`),
+
+  update: (
+    id: number,
+    data: Partial<{
+      folderId: number | null;
+      name: string;
+      tags: string[];
+      notes: string | null;
+      status: 'unread' | 'learning' | 'done';
+      isPublic: boolean;
+    }>,
+  ) => api.patch<{ data: HubFile }>(`/hub/files/${id}`, data),
+
+  delete: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/hub/files/${id}`),
+
+  aiSuggestTags: (id: number) =>
+    api.post<{ data: { tags: string[] } }>(`/hub/files/${id}/ai-tags`, {}),
+
+  getPublic: (slug: string) =>
+    api.get<{
+      data: {
+        id: number;
+        name: string;
+        mimeType: string;
+        size: number;
+        publicSlug: string;
+        createdAt: string;
+      };
+    }>(`/hub/files/public/${slug}`),
 };
 

@@ -6,18 +6,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Layers, LogIn } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { hubApi, type HubFolder, type HubLink } from '@/lib/api';
+import { hubApi, hubFileApi, type HubFolder, type HubLink, type HubFile } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 
 import HubFolderSidebar from './HubFolderSidebar';
-import HubToolbar from './HubToolbar';
+import HubToolbar, { type ViewMode, type StatusFilter } from './HubToolbar';
 import HubLinkGrid from './HubLinkGrid';
 import HubLinkList from './HubLinkList';
 import HubAddLinkModal from './HubAddLinkModal';
+import HubFilePreviewModal from '@/components/hub/HubFilePreviewModal';
+import HubUploadModal from '@/components/hub/HubUploadModal';
+import HubKanbanBoard from '@/components/hub/HubKanbanBoard';
+import HubCommandPalette from '@/components/hub/HubCommandPalette';
+import HubBanner from '@/components/hub/HubBanner';
 
 type FolderSelection = number | 'all' | 'null';
-type ViewMode = 'grid' | 'list';
 
 interface HubClientProps {
   initialFolders: HubFolder[];
@@ -32,62 +36,74 @@ export default function HubClient({
 }: HubClientProps) {
   const { isAuthenticated } = useAuthStore();
 
-  // ── Mounted guard — per the workspace's SSR/hydration rule, we
-  // never render content that depends on the client until after
-  // mount. We also use this to gate auth (zustand persists to
-  // localStorage, so it returns null on the first server render).
+  // ── Mounted guard
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
-  // ── Data state ─────────────────────────────────────────────
-  // Coerce initial state so we always have an array even if SSR
-  // somehow passes an object (defense in depth — HubLinkGrid calls
-  // links.map() unconditionally and crashes otherwise).
+  // ── Data state
   const initialLinksArray = Array.isArray(initialLinks) ? initialLinks : [];
   const initialFoldersArray = Array.isArray(initialFolders) ? initialFolders : [];
   const [folders, setFolders] = useState<HubFolder[]>(initialFoldersArray);
   const [links, setLinks] = useState<HubLink[]>(initialLinksArray);
-  const [total, setTotal] = useState<number>(
-    typeof initialTotal === 'number'
-      ? initialTotal
-      : initialLinksArray.length,
+  const [files, setFiles] = useState<HubFile[]>([]);
+  const [totalLinks, setTotalLinks] = useState<number>(
+    typeof initialTotal === 'number' ? initialTotal : initialLinksArray.length,
   );
+  const [totalFiles, setTotalFiles] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  // ── Filter / view state ────────────────────────────────────
+  // ── Filter / view state
   const [selectedFolder, setSelectedFolder] = useState<FolderSelection>('all');
   const [searchInput, setSearchInput] = useState('');
   const [keyword, setKeyword] = useState('');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [bannerUrl, setBannerUrl] = useState<string | null>(null);
 
-  // Persist viewMode in localStorage. Wrapped in mounted guard
-  // so SSR never reads localStorage and trips a hydration warning.
+  // Persist viewMode in localStorage
   useEffect(() => {
     if (!mounted) return;
     const stored = typeof window !== 'undefined' ? window.localStorage.getItem('hub:viewMode') : null;
-    if (stored === 'grid' || stored === 'list') setViewMode(stored);
+    if (stored === 'grid' || stored === 'list' || stored === 'kanban') setViewMode(stored);
+    const storedBanner = localStorage.getItem('hub:bannerUrl');
+    if (storedBanner) setBannerUrl(storedBanner);
   }, [mounted]);
   useEffect(() => {
     if (!mounted) return;
     try { window.localStorage.setItem('hub:viewMode', viewMode); } catch { /* ignore */ }
   }, [viewMode, mounted]);
 
-  // Debounce search input → keyword (300ms).
+  // Debounce search input → keyword (300ms)
   useEffect(() => {
     const id = window.setTimeout(() => setKeyword(searchInput.trim()), 300);
     return () => window.clearTimeout(id);
   }, [searchInput]);
 
-  // ── Modal state ────────────────────────────────────────────
+  // Ctrl+K / Cmd+K shortcut for command palette
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setCommandPaletteOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  // ── Modal state
   const [addFolderOpen, setAddFolderOpen] = useState(false);
   const [addLinkOpen, setAddLinkOpen] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<HubLink | null>(null);
+  const [previewFile, setPreviewFile] = useState<HubFile | null>(null);
 
-  // ── Refs to avoid stale closures in the fetch effect ───────
+  // ── Refs
   const foldersRef = useRef(folders);
   foldersRef.current = folders;
 
-  // ── Fetch links whenever filters change ────────────────────
+  // ── Fetch links whenever filters change
   const reloadLinks = useCallback(async () => {
     if (!mounted || !isAuthenticated) return;
     setLoading(true);
@@ -96,23 +112,21 @@ export default function HubClient({
         folderId: selectedFolder,
         q: keyword || undefined,
         page: 1,
-        pageSize: 50,
+        pageSize: 100,
       });
-      // Backend wraps the listLinks result in `{ success, data: { items, total, ... } }`.
-      // Be defensive in case the shape ever drifts back.
       const payload = res.data.data as
         | { items?: HubLink[]; total?: number }
         | HubLink[]
         | undefined;
       if (Array.isArray(payload)) {
         setLinks(payload);
-        setTotal(payload.length);
+        setTotalLinks(payload.length);
       } else if (payload && typeof payload === 'object') {
         setLinks(payload.items ?? []);
-        setTotal(payload.total ?? 0);
+        setTotalLinks(payload.total ?? 0);
       } else {
         setLinks([]);
-        setTotal(0);
+        setTotalLinks(0);
       }
     } catch (err) {
       console.error('[hub] reloadLinks', err);
@@ -122,11 +136,36 @@ export default function HubClient({
     }
   }, [mounted, isAuthenticated, selectedFolder, keyword]);
 
-  useEffect(() => {
-    reloadLinks();
-  }, [reloadLinks]);
+  // ── Fetch files
+  const reloadFiles = useCallback(async () => {
+    if (!mounted || !isAuthenticated) return;
+    try {
+      const res = await hubFileApi.list({
+        folderId: selectedFolder,
+        q: keyword || undefined,
+        page: 1,
+        pageSize: 100,
+      });
+      const payload = res.data.data as
+        | { items?: HubFile[]; total?: number }
+        | HubFile[]
+        | undefined;
+      if (Array.isArray(payload)) {
+        setFiles(payload);
+        setTotalFiles(payload.length);
+      } else if (payload && typeof payload === 'object') {
+        setFiles(payload.items ?? []);
+        setTotalFiles(payload.total ?? 0);
+      } else {
+        setFiles([]);
+        setTotalFiles(0);
+      }
+    } catch (err) {
+      console.error('[hub] reloadFiles', err);
+    }
+  }, [mounted, isAuthenticated, selectedFolder, keyword]);
 
-  // ── Fetch folders once (after auth) ────────────────────────
+  // ── Fetch folders
   const reloadFolders = useCallback(async () => {
     if (!mounted || !isAuthenticated) return;
     try {
@@ -137,16 +176,30 @@ export default function HubClient({
     }
   }, [mounted, isAuthenticated]);
 
+  // Re-fetch on filter changes
+  useEffect(() => {
+    void reloadLinks();
+    void reloadFiles();
+  }, [reloadLinks, reloadFiles]);
+
   useEffect(() => {
     if (mounted && isAuthenticated && initialFolders.length === 0) {
-      reloadFolders();
+      void reloadFolders();
     }
   }, [mounted, isAuthenticated, initialFolders.length, reloadFolders]);
 
-  // ── Handlers ───────────────────────────────────────────────
-  const handleCreateFolder = useCallback(async (name: string, icon: string | null) => {
+  // ── Handlers
+  const handleCreateFolder = useCallback(async (
+    name: string,
+    icon: string | null,
+    parentId?: number | null,
+  ) => {
     try {
-      const res = await hubApi.createFolder({ name, icon: icon ?? undefined });
+      const res = await hubApi.createFolder({
+        name,
+        icon: icon ?? undefined,
+        parentId: parentId ?? undefined,
+      });
       setFolders((prev) => [...prev, res.data.data]);
       toast.success('Da tao thu muc');
     } catch (err) {
@@ -161,12 +214,13 @@ export default function HubClient({
       setFolders((prev) => prev.filter((f) => f.id !== id));
       if (selectedFolder === id) setSelectedFolder('all');
       toast.success('Da xoa thu muc');
-      reloadLinks();
+      void reloadLinks();
+      void reloadFiles();
     } catch (err) {
       console.error(err);
       toast.error('Khong the xoa thu muc');
     }
-  }, [selectedFolder, reloadLinks]);
+  }, [selectedFolder, reloadLinks, reloadFiles]);
 
   const handleSaveLink = useCallback(async (data: {
     id?: number;
@@ -188,8 +242,8 @@ export default function HubClient({
         await hubApi.createLink(data);
         toast.success('Da luu link');
       }
-      reloadLinks();
-      reloadFolders(); // counts may have changed
+      void reloadLinks();
+      void reloadFolders();
     } catch (err) {
       console.error(err);
       toast.error('Khong the luu link');
@@ -201,7 +255,7 @@ export default function HubClient({
     try {
       await hubApi.deleteLink(id);
       setLinks((prev) => prev.filter((l) => l.id !== id));
-      setTotal((t) => Math.max(0, t - 1));
+      setTotalLinks((t) => Math.max(0, t - 1));
       toast.success('Da xoa link');
     } catch (err) {
       console.error(err);
@@ -209,7 +263,67 @@ export default function HubClient({
     }
   }, []);
 
-  // ── Render ─────────────────────────────────────────────────
+  const handleDeleteFile = useCallback(async (id: number) => {
+    try {
+      await hubFileApi.delete(id);
+      setFiles((prev) => prev.filter((f) => f.id !== id));
+      setTotalFiles((t) => Math.max(0, t - 1));
+      toast.success('Da xoa file');
+    } catch (err) {
+      console.error(err);
+      toast.error('Khong the xoa file');
+    }
+  }, []);
+
+  const handleStatusChange = useCallback(async (type: 'link' | 'file', id: number, status: string) => {
+    try {
+      if (type === 'link') {
+        await hubApi.updateLink(id, { status: status as 'unread' | 'learning' | 'done' });
+        setLinks((prev) => prev.map((l) => l.id === id ? { ...l, status: status as HubLink['status'] } : l));
+      } else {
+        await hubFileApi.update(id, { status: status as 'unread' | 'learning' | 'done' });
+        setFiles((prev) => prev.map((f) => f.id === id ? { ...f, status: status as HubFile['status'] } : f));
+      }
+      toast.success('Da cap nhat trang thai');
+    } catch (err) {
+      console.error(err);
+      toast.error('Khong the cap nhat trang thai');
+    }
+  }, []);
+
+  const handleBannerUpload = useCallback(async (file: File) => {
+    // Upload banner to R2 via presigned URL
+    const presigned = await hubFileApi.presign({
+      name: 'banner.jpg',
+      mimeType: file.type,
+    });
+    await fetch(presigned.data.data.uploadUrl, {
+      method: 'PUT',
+      body: file,
+      headers: { 'Content-Type': file.type },
+    });
+    const bannerKey = presigned.data.data.key;
+    // Build public URL from the key
+    const cdnBase = process.env.NEXT_PUBLIC_CDN_URL ?? '';
+    const url = cdnBase ? `${cdnBase}/${bannerKey}` : bannerKey;
+    setBannerUrl(url);
+    localStorage.setItem('hub:bannerUrl', url);
+  }, []);
+
+  // ── Filtered items based on status
+  const filteredLinks = useMemo(() => {
+    if (statusFilter === 'all') return links;
+    return links.filter((l) => l.status === statusFilter);
+  }, [links, statusFilter]);
+
+  const filteredFiles = useMemo(() => {
+    if (statusFilter === 'all') return files;
+    return files.filter((f) => f.status === statusFilter);
+  }, [files, statusFilter]);
+
+  const total = filteredLinks.length + filteredFiles.length;
+
+  // ── Render
   if (!mounted) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-darkbg pt-24">
@@ -255,7 +369,7 @@ export default function HubClient({
           className="mb-4 inline-flex items-center gap-2 rounded-full border border-neon-violet/30 bg-neon-violet/10 px-4 py-1.5 text-xs uppercase tracking-wider text-neon-violet"
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Personal Bookmark Manager
+          Personal Knowledge Hub
         </motion.div>
         <motion.h1
           initial={{ opacity: 0, y: -8 }}
@@ -274,7 +388,7 @@ export default function HubClient({
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mx-auto max-w-2xl text-text-secondary"
         >
-          Luu link, bai viet, cong cu — tu dong lay metadata chi bang mot lan paste URL.
+          Luu link, file, bai viet — tu dong lay metadata chi bang mot lan paste URL.
         </motion.p>
       </header>
 
@@ -297,38 +411,56 @@ export default function HubClient({
             onSearchInput={setSearchInput}
             viewMode={viewMode}
             onViewModeChange={setViewMode}
+            statusFilter={statusFilter}
+            onStatusFilterChange={setStatusFilter}
             onAddLink={() => { setEditingLink(null); setAddLinkOpen(true); }}
-            total={total}
+            onAddFile={() => setUploadOpen(true)}
+            totalLinks={filteredLinks.length}
+            totalFiles={filteredFiles.length}
             loading={loading}
             folderName={folderNameFor(folders, selectedFolder)}
+            total={total}
           />
 
-          {links.length === 0 && !loading ? (
+          {total === 0 && !loading ? (
             <EmptyState
-              hasFilters={!!keyword || selectedFolder !== 'all'}
-              onClear={() => { setSearchInput(''); setSelectedFolder('all'); }}
+              hasFilters={!!keyword || selectedFolder !== 'all' || statusFilter !== 'all'}
+              onClear={() => { setSearchInput(''); setSelectedFolder('all'); setStatusFilter('all'); }}
               onAddLink={() => { setEditingLink(null); setAddLinkOpen(true); }}
+              onAddFile={() => setUploadOpen(true)}
             />
           ) : (
             <AnimatePresence mode="wait">
               <motion.div
-                key={viewMode}
+                key={`${viewMode}-${statusFilter}`}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.2 }}
               >
-                {viewMode === 'grid' ? (
+                {viewMode === 'kanban' ? (
+                  <HubKanbanBoard
+                    links={filteredLinks}
+                    files={filteredFiles}
+                    onEditLink={(l) => { setEditingLink(l); setAddLinkOpen(true); }}
+                    onDeleteLink={handleDeleteLink}
+                    onDeleteFile={handleDeleteFile}
+                    onPreviewFile={setPreviewFile}
+                    onRefresh={() => { void reloadLinks(); void reloadFiles(); }}
+                  />
+                ) : viewMode === 'grid' ? (
                   <HubLinkGrid
-                    links={links}
+                    links={filteredLinks}
                     onEdit={(l) => { setEditingLink(l); setAddLinkOpen(true); }}
                     onDelete={handleDeleteLink}
+                    onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
                   />
                 ) : (
                   <HubLinkList
-                    links={links}
+                    links={filteredLinks}
                     onEdit={(l) => { setEditingLink(l); setAddLinkOpen(true); }}
                     onDelete={handleDeleteLink}
+                    onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
                   />
                 )}
               </motion.div>
@@ -337,6 +469,7 @@ export default function HubClient({
         </section>
       </div>
 
+      {/* Modals */}
       <HubAddLinkModal
         open={addLinkOpen}
         initial={editingLink}
@@ -344,16 +477,47 @@ export default function HubClient({
         onClose={() => { setAddLinkOpen(false); setEditingLink(null); }}
         onSave={handleSaveLink}
       />
+
+      <HubUploadModal
+        open={uploadOpen}
+        folders={folders}
+        onClose={() => setUploadOpen(false)}
+        onUploaded={() => { void reloadFiles(); void reloadFolders(); }}
+      />
+
+      <HubFilePreviewModal
+        file={previewFile}
+        open={!!previewFile}
+        onClose={() => setPreviewFile(null)}
+        onDelete={handleDeleteFile}
+        onUpdate={(id, data) => {
+          void handleStatusChange('file', id, data.status ?? '');
+          if (data.notes !== undefined) {
+            void hubFileApi.update(id, { notes: data.notes });
+          }
+        }}
+      />
+
+      <AnimatePresence>
+        {commandPaletteOpen && (
+          <HubCommandPalette
+            folders={folders}
+            onSelectFolder={setSelectedFolder}
+            onAddLink={() => { setEditingLink(null); setAddLinkOpen(true); }}
+            onAddFile={() => setUploadOpen(true)}
+            onAddFolder={() => setAddFolderOpen(true)}
+            onSetViewMode={setViewMode}
+            onClose={() => setCommandPaletteOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
 // ─── helpers ──────────────────────────────────────────────────────
 
-function folderNameFor(
-  folders: HubFolder[],
-  selected: FolderSelection,
-): string {
+function folderNameFor(folders: HubFolder[], selected: FolderSelection): string {
   if (selected === 'all') return 'Tat ca';
   if (selected === 'null') return 'Chua phan loai';
   const f = folders.find((x) => x.id === selected);
@@ -365,10 +529,12 @@ function EmptyState({
   hasFilters,
   onClear,
   onAddLink,
+  onAddFile,
 }: {
   hasFilters: boolean;
   onClear: () => void;
   onAddLink: () => void;
+  onAddFile: () => void;
 }) {
   return (
     <div className="rounded-2xl border border-darkborder/50 bg-darkcard/40 p-10 text-center backdrop-blur-xl">
@@ -376,12 +542,12 @@ function EmptyState({
         <Layers className="h-8 w-8 text-text-muted" />
       </div>
       <h3 className="mb-2 text-lg font-semibold text-text-primary">
-        {hasFilters ? 'Khong co link phu hop' : 'Hub cua ban dang trong'}
+        {hasFilters ? 'Khong co ket qua phu hop' : 'Hub cua ban dang trong'}
       </h3>
       <p className="mx-auto mb-5 max-w-md text-sm text-text-secondary">
         {hasFilters
           ? 'Thu xoa bo loc hoac tu khoa khac.'
-          : 'Luu link dau tien de bat dau — chi can paste URL, chung toi se tu dong lay metadata.'}
+          : 'Luu link hoac upload file dau tien de bat dau.'}
       </p>
       {hasFilters ? (
         <button
@@ -391,12 +557,20 @@ function EmptyState({
           Xoa bo loc
         </button>
       ) : (
-        <button
-          onClick={onAddLink}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-neon-violet/30 transition-all hover:opacity-90"
-        >
-          Luu link dau tien
-        </button>
+        <div className="flex items-center justify-center gap-3">
+          <button
+            onClick={onAddLink}
+            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-neon-violet/30 transition-all hover:opacity-90"
+          >
+            Them link
+          </button>
+          <button
+            onClick={onAddFile}
+            className="inline-flex items-center gap-2 rounded-xl border border-neon-emerald/40 bg-neon-emerald/10 px-4 py-2 text-sm font-semibold text-neon-emerald transition-colors hover:bg-neon-emerald/20"
+          >
+            Upload file
+          </button>
+        </div>
       )}
     </div>
   );

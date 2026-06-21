@@ -8,9 +8,10 @@ interface HubLinkListProps {
   links: HubLink[];
   onEdit: (link: HubLink) => void;
   onDelete: (id: number) => void;
+  onStatusChange?: (id: number, status: string) => void;
 }
 
-export default function HubLinkList({ links, onEdit, onDelete }: HubLinkListProps) {
+export default function HubLinkList({ links, onEdit, onDelete, onStatusChange }: HubLinkListProps) {
   return (
     <motion.ul layout className="space-y-2">
       {links.map((link, i) => (

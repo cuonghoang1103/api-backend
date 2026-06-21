@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Layers, Plus, FolderOpen, Inbox, MoreVertical, Trash2, Edit3, X, Check,
+  ChevronRight, FolderPlus,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -16,7 +17,7 @@ interface HubFolderSidebarProps {
   folders: HubFolder[];
   selected: Selection;
   onSelect: (id: Selection) => void;
-  onCreate: (name: string, icon: string | null) => void;
+  onCreate: (name: string, icon: string | null, parentId?: number | null) => void;
   onDelete: (id: number) => void;
   addOpen: boolean;
   setAddOpen: (open: boolean) => void;
@@ -29,6 +30,23 @@ export default function HubFolderSidebar({
   const [menuId, setMenuId] = useState<number | null>(null);
   const [renamingId, setRenamingId] = useState<number | null>(null);
   const [renameValue, setRenameValue] = useState('');
+  const [expandedFolders, setExpandedFolders] = useState<Set<number>>(new Set());
+
+  // Top-level folders = parentId === null
+  const rootFolders = folders.filter((f) => f.parentId == null);
+  const childCount = (parentId: number) =>
+    folders.filter((f) => f.parentId === parentId).length;
+
+  const toggleExpand = (id: number) => {
+    setExpandedFolders((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const totalCount = (f: HubFolder) => f._count.links + f._count.files;
 
   const submit = () => {
     const n = newName.trim();
@@ -38,23 +56,12 @@ export default function HubFolderSidebar({
     setAddOpen(false);
   };
 
-  const startRename = (f: HubFolder) => {
-    setRenamingId(f.id);
-    setRenameValue(f.name);
-    setMenuId(null);
-  };
-
   const submitRename = async () => {
     if (renamingId == null) return;
     const n = renameValue.trim();
     if (!n) { toast.error('Ten khong duoc rong'); return; }
     try {
       await hubApi.updateFolder(renamingId, { name: n });
-      // Tell the parent to reload by simulating a refetch:
-      // we can't pass reloadFolders here without prop drilling, so
-      // we do a local optimistic rename and let the next refetch
-      // reconcile. Simpler: just toast success and the next effect
-      // (selectedFolder change or reload) will pick it up.
       toast.success('Da doi ten thu muc');
     } catch {
       toast.error('Khong the doi ten');
@@ -81,6 +88,7 @@ export default function HubFolderSidebar({
         </div>
 
         <div className="space-y-1">
+          {/* Fixed items */}
           <FolderItem
             active={selected === 'all'}
             icon={<Layers className="h-3.5 w-3.5" />}
@@ -95,78 +103,28 @@ export default function HubFolderSidebar({
             count={undefined}
             onClick={() => onSelect('null')}
           />
-          {folders.map((f) => (
-            <div key={f.id} className="group relative">
-              {renamingId === f.id ? (
-                <div className="flex items-center gap-1 rounded-xl border border-neon-violet/40 bg-darkbg/60 px-2 py-1.5">
-                  <input
-                    autoFocus
-                    value={renameValue}
-                    onChange={(e) => setRenameValue(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') void submitRename();
-                      if (e.key === 'Escape') { setRenamingId(null); setRenameValue(''); }
-                    }}
-                    className="flex-1 bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted"
-                  />
-                  <button
-                    onClick={submitRename}
-                    className="text-emerald-400 hover:text-emerald-300"
-                    title="Luu"
-                  >
-                    <Check className="h-3.5 w-3.5" />
-                  </button>
-                  <button
-                    onClick={() => { setRenamingId(null); setRenameValue(''); }}
-                    className="text-text-muted hover:text-text-primary"
-                    title="Huy"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              ) : (
-                <FolderItem
-                  active={selected === f.id}
-                  icon={<FolderOpen className="h-3.5 w-3.5" />}
-                  label={f.name}
-                  count={f._count.links}
-                  onClick={() => onSelect(f.id)}
-                />
-              )}
-              {renamingId !== f.id && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); setMenuId(menuId === f.id ? null : f.id); }}
-                  className="absolute right-1 top-1/2 -translate-y-1/2 rounded p-1 text-text-muted opacity-0 transition-all hover:bg-white/5 hover:text-text-primary group-hover:opacity-100"
-                  title="Them"
-                >
-                  <MoreVertical className="h-3.5 w-3.5" />
-                </button>
-              )}
-              <AnimatePresence>
-                {menuId === f.id && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.12 }}
-                    className="absolute right-1 top-full z-20 mt-1 w-36 overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/95 shadow-2xl backdrop-blur-xl"
-                  >
-                    <button
-                      onClick={() => startRename(f)}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                    >
-                      <Edit3 className="h-3 w-3" /> Doi ten
-                    </button>
-                    <button
-                      onClick={() => { setMenuId(null); if (confirm(`Xoa thu muc "${f.name}"? Links se giu lai nhung bo folder.`)) onDelete(f.id); }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-red-400 transition-colors hover:bg-red-500/10"
-                    >
-                      <Trash2 className="h-3 w-3" /> Xoa
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+
+          {/* User folders with sub-folder support */}
+          {rootFolders.map((f) => (
+            <FolderTreeItem
+              key={f.id}
+              folder={f}
+              folders={folders}
+              selected={selected}
+              onSelect={onSelect}
+              onToggleExpand={toggleExpand}
+              expandedFolders={expandedFolders}
+              renamingId={renamingId}
+              renameValue={renameValue}
+              setRenamingId={setRenamingId}
+              setRenameValue={setRenameValue}
+              menuId={menuId}
+              setMenuId={setMenuId}
+              onDelete={onDelete}
+              onSubmitRename={submitRename}
+              childCount={childCount}
+              totalCount={totalCount}
+            />
           ))}
         </div>
       </div>
@@ -213,6 +171,197 @@ export default function HubFolderSidebar({
     </div>
   );
 }
+
+// ─── Folder Tree Item ─────────────────────────────────────────
+
+interface FolderTreeItemProps {
+  folder: HubFolder;
+  folders: HubFolder[];
+  selected: Selection;
+  onSelect: (id: Selection) => void;
+  onToggleExpand: (id: number) => void;
+  expandedFolders: Set<number>;
+  renamingId: number | null;
+  renameValue: string;
+  setRenamingId: (id: number | null) => void;
+  setRenameValue: (v: string) => void;
+  menuId: number | null;
+  setMenuId: (id: number | null) => void;
+  onDelete: (id: number) => void;
+  onSubmitRename: () => void;
+  childCount: (id: number) => number;
+  totalCount: (f: HubFolder) => number;
+}
+
+function FolderTreeItem({
+  folder, folders, selected, onSelect, onToggleExpand,
+  expandedFolders, renamingId, renameValue, setRenamingId, setRenameValue,
+  menuId, setMenuId, onDelete, onSubmitRename, childCount, totalCount,
+}: FolderTreeItemProps) {
+  const children = folders.filter((f) => f.parentId === folder.id);
+  const hasChildren = children.length > 0;
+  const isExpanded = expandedFolders.has(folder.id);
+
+  return (
+    <div>
+      {renamingId === folder.id ? (
+        <div className="flex items-center gap-1 rounded-xl border border-neon-violet/40 bg-darkbg/60 px-2 py-1.5">
+          <input
+            autoFocus
+            value={renameValue}
+            onChange={(e) => setRenameValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') void onSubmitRename();
+              if (e.key === 'Escape') { setRenamingId(null); setRenameValue(''); }
+            }}
+            className="flex-1 bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted"
+          />
+          <button
+            onClick={onSubmitRename}
+            className="text-emerald-400 hover:text-emerald-300"
+            title="Luu"
+          >
+            <Check className="h-3.5 w-3.5" />
+          </button>
+          <button
+            onClick={() => { setRenamingId(null); setRenameValue(''); }}
+            className="text-text-muted hover:text-text-primary"
+            title="Huy"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      ) : (
+        <div className="group relative flex items-center">
+          {/* Expand/collapse chevron */}
+          {hasChildren ? (
+            <button
+              onClick={() => onToggleExpand(folder.id)}
+              className="mr-0.5 flex h-5 w-5 items-center justify-center rounded text-text-muted transition-all hover:text-text-primary"
+            >
+              <motion.div
+                animate={{ rotate: isExpanded ? 90 : 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <ChevronRight className="h-3.5 w-3.5" />
+              </motion.div>
+            </button>
+          ) : (
+            <div className="mr-0.5 h-5 w-5" />
+          )}
+
+          <FolderItem
+            active={selected === folder.id}
+            icon={<FolderOpen className="h-3.5 w-3.5" />}
+            label={folder.name}
+            count={totalCount(folder)}
+            onClick={() => onSelect(folder.id)}
+          />
+
+          {/* Menu button */}
+          {renamingId !== folder.id && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setMenuId(menuId === folder.id ? null : folder.id);
+              }}
+              className="absolute right-1 top-1/2 -translate-y-1/2 rounded p-1 text-text-muted opacity-0 transition-all hover:bg-white/5 hover:text-text-primary group-hover:opacity-100"
+              title="Them"
+            >
+              <MoreVertical className="h-3.5 w-3.5" />
+            </button>
+          )}
+
+          {/* Dropdown menu */}
+          <AnimatePresence>
+            {menuId === folder.id && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.12 }}
+                className="absolute right-1 top-full z-20 mt-1 w-36 overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/95 shadow-2xl backdrop-blur-xl"
+              >
+                <button
+                  onClick={() => { setRenamingId(folder.id); setRenameValue(folder.name); setMenuId(null); }}
+                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+                >
+                  <Edit3 className="h-3 w-3" /> Doi ten
+                </button>
+                <button
+                  onClick={() => {
+                    setMenuId(null);
+                    if (confirm(`Tao thu muc con trong "${folder.name}"?`)) {
+                      const name = prompt('Ten thu muc con:');
+                      if (name?.trim()) {
+                        // We can't call onCreate with parentId here easily
+                        // Use API directly
+                        void hubApi.createFolder({ name: name.trim() }).then(() => {
+                          toast.success('Da tao thu muc con');
+                        }).catch(() => toast.error('Khong the tao thu muc'));
+                      }
+                    }
+                  }}
+                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+                >
+                  <FolderPlus className="h-3 w-3" /> Them thu muc con
+                </button>
+                <button
+                  onClick={() => {
+                    setMenuId(null);
+                    if (confirm(`Xoa thu muc "${folder.name}"? Links va files se giu lai.`)) onDelete(folder.id);
+                  }}
+                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-red-400 transition-colors hover:bg-red-500/10"
+                >
+                  <Trash2 className="h-3 w-3" /> Xoa
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
+      {/* Children */}
+      <AnimatePresence>
+        {hasChildren && isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="ml-5 overflow-hidden"
+          >
+            <div className="mt-1 space-y-1 border-l border-darkborder/50 pl-3">
+              {children.map((child) => (
+                <FolderTreeItem
+                  key={child.id}
+                  folder={child}
+                  folders={folders}
+                  selected={selected}
+                  onSelect={onSelect}
+                  onToggleExpand={onToggleExpand}
+                  expandedFolders={expandedFolders}
+                  renamingId={renamingId}
+                  renameValue={renameValue}
+                  setRenamingId={setRenamingId}
+                  setRenameValue={setRenameValue}
+                  menuId={menuId}
+                  setMenuId={setMenuId}
+                  onDelete={onDelete}
+                  onSubmitRename={onSubmitRename}
+                  childCount={childCount}
+                  totalCount={totalCount}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// ─── Folder Item ──────────────────────────────────────────────
 
 function FolderItem({
   active, icon, label, count, onClick,

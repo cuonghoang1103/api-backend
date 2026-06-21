@@ -482,7 +482,14 @@ export default function HubClient({
         open={uploadOpen}
         folders={folders}
         onClose={() => setUploadOpen(false)}
-        onUploaded={() => { void reloadFiles(); void reloadFolders(); }}
+        onUploaded={(file) => {
+          setFiles((prev) => {
+            if (prev.some((f) => f.id === file.id)) return prev;
+            return [file, ...prev];
+          });
+          setTotalFiles((prev) => prev + 1);
+          void reloadFolders();
+        }}
       />
 
       <HubFilePreviewModal

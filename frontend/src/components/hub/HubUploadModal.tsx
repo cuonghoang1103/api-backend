@@ -8,14 +8,14 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { hubFileApi, type HubFolder } from '@/lib/api';
+import { hubFileApi, type HubFile, type HubFolder } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
 interface HubUploadModalProps {
   open: boolean;
   folders: HubFolder[];
   onClose: () => void;
-  onUploaded: () => void;
+  onUploaded: (file: HubFile) => void;
 }
 
 type UploadState = 'idle' | 'uploading' | 'ai-tagging' | 'done' | 'error';
@@ -66,6 +66,8 @@ export default function HubUploadModal({ open, folders, onClose, onUploaded }: H
   const uploadAll = async () => {
     if (files.length === 0) return;
 
+    const uploadedFiles: HubFile[] = [];
+
     for (let i = 0; i < files.length; i++) {
       const entry = files[i];
       if (entry.state !== 'idle') continue;
@@ -97,36 +99,34 @@ export default function HubUploadModal({ open, folders, onClose, onUploaded }: H
           prev.map((f) => (f.id === entry.id ? { ...f, progress: 60 } : f)),
         );
 
-        // Step 3: Register file in DB
-        await hubFileApi.create({
+        // Step 3: Register file in DB (capture response directly)
+        const createRes = await hubFileApi.create({
           key,
           name: entry.file.name,
           mimeType: entry.file.type || 'application/octet-stream',
           size: entry.file.size,
           folderId: folderId === '' ? null : folderId,
         });
+        const createdFile = createRes.data.data;
+        uploadedFiles.push(createdFile);
 
         setFiles((prev) =>
           prev.map((f) => (f.id === entry.id ? { ...f, state: 'ai-tagging' as UploadState, progress: 80 } : f)),
         );
 
-        // Step 4: AI auto-tag (get the file ID from the list call)
+        // Step 4: AI auto-tag using the file we already have
         try {
-          const listRes = await hubFileApi.list({ q: entry.file.name, pageSize: 1 });
-          const createdFile = listRes.data.data.items?.[0];
-          if (createdFile) {
-            const tagRes = await hubFileApi.aiSuggestTags(createdFile.id);
-            setFiles((prev) =>
-              prev.map((f) =>
-                f.id === entry.id
-                  ? { ...f, state: 'done' as UploadState, progress: 100, suggestedTags: tagRes.data.data.tags, selectedTags: tagRes.data.data.tags }
-                  : f,
-              ),
-            );
-          } else {
-            setFiles((prev) =>
-              prev.map((f) => (f.id === entry.id ? { ...f, state: 'done' as UploadState, progress: 100 } : f)),
-            );
+          const tagRes = await hubFileApi.aiSuggestTags(createdFile.id);
+          const tags = tagRes.data.data.tags ?? [];
+          setFiles((prev) =>
+            prev.map((f) =>
+              f.id === entry.id
+                ? { ...f, state: 'done' as UploadState, progress: 100, suggestedTags: tags, selectedTags: tags }
+                : f,
+            ),
+          );
+          if (tags.length > 0) {
+            await hubFileApi.update(createdFile.id, { tags });
           }
         } catch {
           setFiles((prev) =>
@@ -146,9 +146,10 @@ export default function HubUploadModal({ open, folders, onClose, onUploaded }: H
     }
 
     const allDone = files.every((f) => f.state === 'done' || f.state === 'error');
-    if (allDone && files.some((f) => f.state === 'done')) {
-      toast.success(`Da tai len ${files.filter((f) => f.state === 'done').length} file`);
-      onUploaded();
+    const doneCount = files.filter((f) => f.state === 'done').length;
+    if (allDone && doneCount > 0) {
+      toast.success(`Da tai len ${doneCount} file`);
+      uploadedFiles.forEach((f) => onUploaded(f));
     }
   };
 

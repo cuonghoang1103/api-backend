@@ -26,6 +26,15 @@ async function proxyRequest(
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
+  // Forward the httpOnly backend_token cookie as-is so the backend
+  // can read it directly (cookie-parser middleware).  Without this,
+  // POST /api/v1/hub/scrape and POST /api/v1/hub/files/presign return 401
+  // "No authentication token provided" on the api.cuongthai.com domain.
+  const cookieHeader = request.headers.get("cookie");
+  if (cookieHeader) {
+    headers["Cookie"] = cookieHeader;
+  }
+
   // ALWAYS forward Content-Type — including for multipart/form-data.
   // When request.body is consumed as ArrayBuffer, the browser-set Content-Type
   // header can be dropped by Next.js. Explicitly forwarding it fixes the issue.
@@ -80,13 +89,24 @@ async function toNextResponse(response: Response): Promise<NextResponse> {
     });
   }
 
+  // Collect Set-Cookie headers from the backend response.
+  // NextResponse does not support Set-Cookie via its constructor headers
+  // param on all versions, so we handle it via cookies() helper.
+  const setCookieHeaders = response.headers.getSetCookie?.() ?? [];
+
   // For JSON responses: parse and return as NextResponse.json
   if (contentType.includes("application/json")) {
     const text = await response.text();
-    if (!text.trim()) return new NextResponse(null, { status: response.status });
+    if (!text.trim()) {
+      const next = new NextResponse(null, { status: response.status });
+      for (const sc of setCookieHeaders) next.cookies.set(sc as unknown as string, "");
+      return next;
+    }
     try {
       const data = JSON.parse(text);
-      return NextResponse.json(data, { status: response.status });
+      const next = NextResponse.json(data, { status: response.status });
+      for (const sc of setCookieHeaders) next.cookies.set(sc as unknown as string, "");
+      return next;
     } catch {
       return NextResponse.json({ success: false, message: text }, { status: response.status });
     }
@@ -95,7 +115,9 @@ async function toNextResponse(response: Response): Promise<NextResponse> {
   // For binary responses (audio, images): stream the ArrayBuffer directly
   const arrayBuffer = await response.arrayBuffer();
   if (arrayBuffer.byteLength === 0) {
-    return new NextResponse(null, { status: response.status });
+    const next = new NextResponse(null, { status: response.status });
+    for (const sc of setCookieHeaders) next.cookies.set(sc as unknown as string, "");
+    return next;
   }
 
   const headers: Record<string, string> = {

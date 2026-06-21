@@ -145,15 +145,15 @@ const nextConfig = {
               // playback, even though the network fetch itself
               // returns HTTP 200. The R2 S3 endpoint is kept as a
               // fallback for any leftover direct-to-bucket links.
-              "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com",
+              "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com",
               "font-src 'self' data:",
-              "connect-src 'self' https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://*.sentry.io wss://*.sentry.io https://www.youtube.com",
+              "connect-src 'self' https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://*.sentry.io wss://*.sentry.io https://www.youtube.com",
               "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com",
               // `media-src` controls <audio>/<video> elements and
               // the Web Audio API. R2 music tracks are streamed
               // directly from the CDN (no backend hop), so the
               // domain must be allowed here.
-              "media-src 'self' https://api.cuongthai.com https://media.cuongthai.com blob:",
+              "media-src 'self' https://api.cuongthai.com https://media.cuongthai.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com blob:",
               "worker-src 'self' blob:",
               "object-src 'none'",
               "base-uri 'self'",

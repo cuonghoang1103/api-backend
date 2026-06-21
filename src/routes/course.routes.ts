@@ -1692,4 +1692,33 @@ router.get(
   }
 );
 
+// POST /api/v1/courses/activate-code
+// Nginx proxies /api/v1/* to the backend, but this specific route lives
+// in the frontend (Next.js) because it needs to read the httpOnly
+// backend_token cookie (server-side). We forward the request there.
+router.post('/activate-code', async (req: any, res: any, next) => {
+  try {
+    const { courseId, code } = req.body;
+    const authHeader = req.headers.authorization;
+
+    const result = await fetch(
+      `http://cuonghoangdev_frontend:3000/api/v1/courses/activate-code`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(authHeader ? { Authorization: authHeader } : {}),
+          ...(req.headers.cookie ? { Cookie: req.headers.cookie } : {}),
+        },
+        body: JSON.stringify({ courseId, code }),
+      },
+    );
+
+    const data = await result.json();
+    res.status(result.status).json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

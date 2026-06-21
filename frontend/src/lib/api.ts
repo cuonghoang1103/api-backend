@@ -576,7 +576,7 @@ export const coursesApi = {
   }) => api.post('/courses/reviews', data),
 
   activateCode: (courseId: number, code: string) =>
-    api.post('/academy/activate-code', { courseId, code }),
+    api.post('/courses/activate-code', { courseId, code }),
 };
 
 // Admin Courses API

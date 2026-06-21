@@ -37,6 +37,7 @@ import { vnpayIpnGuard } from '../middleware/vnpayIpnGuard.js';
 import { emailService } from '../services/email.service.js';
 import {
   buildCoursePaymentUrl,
+  buildVnpayPaymentUrl,
   getClientIp,
   verifyIpnCall,
   verifyReturnUrl,
@@ -179,6 +180,33 @@ function isOrderExpired(order: { createdAt: Date }, ttlMinutes: number): boolean
 }
 
 /**
+ * Split a vnp_TxnRef back into { orderType, id }.
+ *
+ * We encode the order type as the prefix of vnp_TxnRef so the IPN
+ * handler can branch (course vs product) WITHOUT a speculative DB
+ * lookup against both tables.
+ *
+ *  - PRODUCT orders (created via /create-qr): `PRODUCT_{shopOrderId}_{ts}`
+ *    → { orderType: 'PRODUCT', id: shopOrderId }
+ *  - COURSE orders (legacy /course flow):     `COURSE_{courseId}_{userId}_{ts}_{rand}`
+ *    → { orderType: 'COURSE', id: null } — the course path looks the
+ *      order up by its full orderCode (== vnp_TxnRef), so we don't need
+ *      to extract a numeric id here.
+ *
+ * Returns null orderType for anything we don't recognise.
+ */
+function parseTxnRef(txnRef: string): { orderType: 'COURSE' | 'PRODUCT' | null; id: number | null } {
+  if (txnRef.startsWith('PRODUCT_')) {
+    const m = txnRef.match(/^PRODUCT_(\d+)/);
+    return { orderType: 'PRODUCT', id: m ? Number(m[1]) : null };
+  }
+  if (txnRef.startsWith('COURSE_')) {
+    return { orderType: 'COURSE', id: null };
+  }
+  return { orderType: null, id: null };
+}
+
+/**
  * Parse the vnp_PayDate "yyyyMMddHHmmss" string into a Date.
  * Returns null if the input is malformed.
  */
@@ -188,6 +216,115 @@ function parseVnpayPayDate(raw: unknown): Date | null {
   if (!m) return null;
   const [, y, mo, d, h, mi, s] = m;
   return new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi, +s));
+}
+
+/**
+ * Handle the PRODUCT (Shop) branch of the VNPay IPN.
+ *
+ * The caller (the /vnpay/ipn handler) has already done the GLOBAL part
+ * of the security check: it verified the HMAC-SHA512 checksum and logged
+ * the raw payload to PaymentTransaction. Here we finish the strict
+ * 4-step protocol for the shop order:
+ *
+ *   1. (checksum — already verified by caller)
+ *   2. Order existence        → RspCode 01 if missing
+ *   3. Amount match           → RspCode 04 if mismatched
+ *   4. Status must be PENDING  → RspCode 02 if already finalized
+ *
+ * On vnp_ResponseCode === '00' we mark the order PAID and decrement
+ * stock — all inside a single transaction whose first statement is an
+ * atomic `updateMany WHERE status='PENDING'`. That conditional update is
+ * the idempotency guard: if VNPay retries the IPN, the second call
+ * updates 0 rows and we skip the stock decrement, so inventory is never
+ * double-counted and money is never lost.
+ *
+ * Always responds 200 + { RspCode, Message } (VNPay's required shape) so
+ * VNPay does not retry against an already-terminal order.
+ */
+async function handleProductIpn(
+  shopOrderId: number | null,
+  ipn: VnpIpnParsed,
+  res: Response,
+): Promise<void> {
+  if (shopOrderId === null) {
+    res.status(200).json({ RspCode: '01', Message: 'Malformed product order ref' });
+    return;
+  }
+
+  // Step 2 — order existence
+  const order = await prisma.shopOrder.findUnique({
+    where: { id: shopOrderId },
+    include: { items: true },
+  });
+  if (!order) {
+    res.status(200).json({ RspCode: '01', Message: 'Order not found' });
+    return;
+  }
+
+  // Step 4 (early) — idempotent: already finalized → no-op success
+  if (order.status === 'PAID') {
+    res.status(200).json({ RspCode: '00', Message: 'Already processed' });
+    return;
+  }
+
+  // Step 3 — amount match (order.total is VND; ipn.amountVnd is /100)
+  if (ipn.amountVnd !== Number(order.total)) {
+    res.status(200).json({ RspCode: '04', Message: 'Amount mismatch' });
+    return;
+  }
+
+  // vnp_ResponseCode 00 = success; anything else = failed/cancelled
+  if (ipn.responseCode !== '00') {
+    await prisma.shopOrder.update({
+      where: { id: order.id },
+      data: { status: 'CANCELLED', paymentStatus: 'FAILED' },
+    });
+    res.status(200).json({ RspCode: '00', Message: 'Recorded as failed' });
+    return;
+  }
+
+  // ── SUCCESS PATH ──
+  await prisma.$transaction(async (tx) => {
+    // Atomic PENDING → PAID. updateMany returns the affected count, our
+    // idempotency guard against concurrent / retried IPNs.
+    const flipped = await tx.shopOrder.updateMany({
+      where: { id: order.id, status: 'PENDING' },
+      data: {
+        status: 'PAID',
+        paymentStatus: 'PAID',
+        paymentMethod: 'VNPAY',
+        paymentId: ipn.transactionNo,
+        paidAt: ipn.payDate || new Date(),
+      },
+    });
+
+    // Someone else already transitioned it — skip stock side effects.
+    if (flipped.count !== 1) return;
+
+    // Decrement stock + bump sold count for each line item. Items link
+    // to Product by name (the relation FK). updateMany with a
+    // `stockQuantity >= quantity` guard avoids driving stock negative for
+    // tracked products; soldCount is bumped unconditionally for analytics.
+    for (const item of order.items) {
+      await tx.product.updateMany({
+        where: { name: item.productName, stockQuantity: { gte: item.quantity } },
+        data: { stockQuantity: { decrement: item.quantity } },
+      });
+      await tx.product.updateMany({
+        where: { name: item.productName },
+        data: { soldCount: { increment: item.quantity } },
+      });
+    }
+  });
+
+  console.log('[payment-ipn] PRODUCT PAID', {
+    orderCode: order.orderCode,
+    shopOrderId: order.id,
+    amountVnd: ipn.amountVnd,
+    txnNo: ipn.transactionNo,
+  });
+
+  res.status(200).json({ RspCode: '00', Message: 'Confirm Success' });
 }
 
 // ─── 1. POST /api/v1/payments/course ────────────────────────
@@ -416,6 +553,118 @@ router.post('/course', orderCreateLimiter, authenticate, async (req: Request, re
   }
 });
 
+// ─── 1b. POST /api/v1/payments/create-qr ────────────────────
+// Unified QR-payment entry point for BOTH Academy (course) and Shop
+// (product). The frontend creates the order first (via its own
+// endpoint), then calls this with the resulting order id + type to get
+// a VNPay payment URL. The client library turns that URL into a QR code
+// in a modal for the user to scan (VNPAY-QR).
+//
+// Body: { orderId: number, orderType: 'COURSE' | 'PRODUCT' }
+// Returns: { paymentUrl, txnRef, amount, orderType }
+//
+// vnp_TxnRef is encoded as `{ORDER_TYPE}_{id}_{ts}` so the IPN handler
+// can split the flow. For COURSE we reuse the order's existing
+// `orderCode` (already `COURSE_...`) so the legacy IPN lookup-by-code
+// keeps working unchanged.
+router.post('/create-qr', orderCreateLimiter, authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { orderId, orderType } = req.body as { orderId?: unknown; orderType?: unknown };
+
+    if (typeof orderId !== 'number' || !Number.isInteger(orderId) || orderId <= 0) {
+      throw new AppError('orderId phai la so nguyen duong', 400);
+    }
+    if (orderType !== 'COURSE' && orderType !== 'PRODUCT') {
+      throw new AppError("orderType phai la 'COURSE' hoac 'PRODUCT'", 400);
+    }
+
+    const ipAddr = getClientIp(req);
+    // VNPay requires vnp_TxnRef unique per day. A trailing timestamp lets
+    // the same order be re-attempted (e.g. user closed the QR modal) with
+    // a fresh ref while the regex in parseTxnRef still recovers the id.
+    const ts = Date.now();
+
+    if (orderType === 'COURSE') {
+      const order = await prisma.courseOrder.findUnique({
+        where: { id: orderId },
+        include: { course: { select: { title: true } } },
+      });
+      if (!order) throw new AppError('Don hang khoa hoc khong ton tai', 404);
+      if (order.userId !== req.userId!) {
+        throw new AppError('Ban khong co quyen thanh toan don hang nay', 403);
+      }
+      if (order.status !== 'PENDING') {
+        throw new AppError(`Don hang da o trang thai ${order.status}, khong the tao ma QR`, 409);
+      }
+
+      // Reuse the existing COURSE_-prefixed orderCode as the txnRef so the
+      // unchanged course IPN branch (lookup-by-orderCode) resolves it.
+      const paymentUrl = buildVnpayPaymentUrl(
+        order.orderCode,
+        Number(order.amount),
+        `Thanh toan khoa hoc ${order.course.title}`,
+        ipAddr,
+      );
+
+      res.json({
+        success: true,
+        data: {
+          paymentUrl,
+          txnRef: order.orderCode,
+          amount: Number(order.amount),
+          orderType: 'COURSE',
+        },
+      });
+      return;
+    }
+
+    // orderType === 'PRODUCT'
+    const order = await prisma.shopOrder.findUnique({ where: { id: orderId } });
+    if (!order) throw new AppError('Don hang san pham khong ton tai', 404);
+    // Shop checkout allows guests (userId nullable). If the order has an
+    // owner, enforce it; guest orders are payable by the authenticated
+    // requester who holds the orderCode.
+    if (order.userId !== null && order.userId !== req.userId!) {
+      throw new AppError('Ban khong co quyen thanh toan don hang nay', 403);
+    }
+    if (order.status !== 'PENDING') {
+      throw new AppError(`Don hang da o trang thai ${order.status}, khong the tao ma QR`, 409);
+    }
+
+    const amount = Number(order.total);
+    if (!(amount > 0)) {
+      throw new AppError('Gia tri don hang khong hop le', 400);
+    }
+
+    const txnRef = `PRODUCT_${order.id}_${ts}`;
+    const paymentUrl = buildVnpayPaymentUrl(
+      txnRef,
+      amount,
+      `Thanh toan don hang ${order.orderCode}`,
+      ipAddr,
+    );
+
+    // Mark the chosen payment method so admin/orders shows VNPAY (the
+    // column default stays SIMULATED for the legacy simulated checkout).
+    await prisma.shopOrder.update({
+      where: { id: order.id },
+      data: { paymentMethod: 'VNPAY' },
+    });
+
+    res.json({
+      success: true,
+      data: {
+        paymentUrl,
+        txnRef,
+        amount,
+        orderType: 'PRODUCT',
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // ─── 2. GET /api/v1/payments/vnpay/return ───────────────────
 // VNPay redirects the user's browser here after payment.
 // We don't trust this — just redirect to frontend /payment/return
@@ -505,6 +754,15 @@ router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, nex
 
     if (!vnpOrderCode) {
       res.status(200).json({ RspCode: '01', Message: 'Missing order code' });
+      return;
+    }
+
+    // ── Split the flow by vnp_TxnRef prefix ──
+    // PRODUCT_* → Shop order (handled + returned here).
+    // Anything else (COURSE_*) falls through to the course path below.
+    const { orderType, id: parsedId } = parseTxnRef(vnpOrderCode);
+    if (orderType === 'PRODUCT') {
+      await handleProductIpn(parsedId, ipnParsed, res);
       return;
     }
 

@@ -7,13 +7,14 @@ import { useRouter } from 'next/navigation';
 import {
   ArrowLeft, ShieldCheck, CreditCard, Lock, Tag,
   CheckCircle, XCircle, AlertCircle, Package,
-  BookOpen, Loader2,
+  BookOpen, Loader2, QrCode,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
 import { useOrderStore } from '@/store/orderStore';
-import { createOrder as apiCreateOrder, validateDiscount } from '@/lib/api/shop';
+import { createOrder as apiCreateOrder, validateDiscount, createShopPaymentQr, getOrderByCode } from '@/lib/api/shop';
 import { generateInvoicePDF } from '@/lib/invoice';
+import PaymentQrModal, { type QrPaymentStatus } from '@/components/payment/PaymentQrModal';
 import type { BuyerInfo } from '@/types';
 import { toast } from 'sonner';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -140,64 +141,122 @@ export default function CheckoutPage() {
     }
   };
 
+  // VNPAY-QR modal state. `pendingOrder` holds the locally-built order so
+  // we can finalize the success UI once polling confirms the IPN flipped
+  // the order to PAID.
+  const [qr, setQr] = useState<{ paymentUrl: string; orderCode: string; amount: number } | null>(null);
+  const [pendingOrder, setPendingOrder] = useState<Order | null>(null);
+
+  // Create the backend order from the current cart + buyer info.
+  // Shared by the simulated and VNPAY flows.
+  const createBackendOrder = async () => {
+    const orderItems = shopItems.map((item) => ({
+      productId: parseInt(item.product.id),
+      productName: item.product.name,
+      productSlug: item.product.slug,
+      productImage: item.product.thumbnail,
+      price: item.product.price,
+      quantity: item.quantity,
+    }));
+
+    const res = await apiCreateOrder({
+      buyerName: buyerInfo.fullName,
+      buyerEmail: buyerInfo.email,
+      buyerPhone: buyerInfo.phone || undefined,
+      buyerAddress: buyerInfo.address || undefined,
+      items: orderItems,
+      discountCode: appliedCoupon?.code,
+    });
+    return res.data;
+  };
+
+  // Map a backend order payload to the local Order shape used by the store.
+  const buildLocalOrder = (backendOrder: any): Order => {
+    const backendItems = Array.isArray(backendOrder?.items) ? backendOrder.items : [];
+    return {
+      id: String(backendOrder.id), // numeric ID from backend for status updates
+      orderCode: backendOrder.orderCode, // display code
+      items: backendItems.map((item: any) => ({
+        id: String(item.id),
+        itemType: 'shop' as const,
+        name: item.productName,
+        thumbnail: item.productImage || '/images/products/default.jpg',
+        price: item.price,
+        quantity: item.quantity,
+        category: 'Web Template' as const,
+      })),
+      subtotal: backendOrder.subtotal,
+      discountAmount: backendOrder.discountAmount,
+      discountCode: backendOrder.discountCode,
+      total: backendOrder.total,
+      status: backendOrder.status as Order['status'],
+      buyerInfo,
+      createdAt: backendOrder.createdAt,
+      completedAt: backendOrder.paidAt,
+    };
+  };
+
+  // Finalize the success UI: persist, show success step, clear cart, invoice.
+  const finalizeSuccess = (order: Order) => {
+    saveBackendOrder(order);
+    setSuccessOrderCode(order.orderCode ?? '');
+    setStep('success');
+    clearCart();
+    generateInvoicePDF(order);
+    toast.success(t('checkout.paymentSuccess'));
+  };
+
   const handleFakePayment = async () => {
     setIsProcessing(true);
     try {
-      const orderItems = shopItems.map((item) => ({
-        productId: parseInt(item.product.id),
-        productName: item.product.name,
-        productSlug: item.product.slug,
-        productImage: item.product.thumbnail,
-        price: item.product.price,
-        quantity: item.quantity,
-      }));
-
-      const res = await apiCreateOrder({
-        buyerName: buyerInfo.fullName,
-        buyerEmail: buyerInfo.email,
-        buyerPhone: buyerInfo.phone || undefined,
-        buyerAddress: buyerInfo.address || undefined,
-        items: orderItems,
-        discountCode: appliedCoupon?.code,
-      });
-
-      const backendOrder = res.data;
-      const backendItems = Array.isArray(backendOrder?.items) ? backendOrder.items : [];
-      const order: Order = {
-        id: String(backendOrder.id), // numeric ID from backend for status updates
-        orderCode: backendOrder.orderCode, // display code
-        items: backendItems.map((item: any) => ({
-          id: String(item.id),
-          itemType: 'shop' as const,
-          name: item.productName,
-          thumbnail: item.productImage || '/images/products/default.jpg',
-          price: item.price,
-          quantity: item.quantity,
-          category: 'Web Template' as const,
-        })),
-        subtotal: backendOrder.subtotal,
-        discountAmount: backendOrder.discountAmount,
-        discountCode: backendOrder.discountCode,
-        total: backendOrder.total,
-        status: backendOrder.status as Order['status'],
-        buyerInfo,
-        createdAt: backendOrder.createdAt,
-        completedAt: backendOrder.paidAt,
-      };
-
-      saveBackendOrder(order);
-
-      setSuccessOrderCode(backendOrder.orderCode);
+      const backendOrder = await createBackendOrder();
+      const order = buildLocalOrder(backendOrder);
       setIsProcessing(false);
-      setStep('success');
-      clearCart();
-      generateInvoicePDF(order);
-      toast.success(t('checkout.paymentSuccess'));
+      finalizeSuccess(order);
     } catch (err) {
       const message = err instanceof Error ? err.message : t('checkout.paymentError');
       setIsProcessing(false);
       toast.error(message);
     }
+  };
+
+  // VNPAY-QR flow: create order → get QR payment URL → open modal → poll
+  // until the backend IPN confirms PAID, then finalize.
+  const handleVnpayPayment = async () => {
+    setIsProcessing(true);
+    try {
+      const backendOrder = await createBackendOrder();
+      const qrRes = await createShopPaymentQr(Number(backendOrder.id));
+      const data = (qrRes as any).data;
+      setPendingOrder(buildLocalOrder(backendOrder));
+      setQr({
+        paymentUrl: data.paymentUrl,
+        orderCode: backendOrder.orderCode,
+        amount: Number(data.amount ?? backendOrder.total),
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : t('checkout.paymentError');
+      toast.error(message);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Poll the shop order status for the QR modal.
+  const pollShopStatus = async (): Promise<QrPaymentStatus> => {
+    if (!qr) return 'PENDING';
+    const res = await getOrderByCode(qr.orderCode);
+    const status = (res as any)?.data?.status as string | undefined;
+    if (status === 'PAID') return 'PAID';
+    if (status === 'CANCELLED' || status === 'FAILED') return 'FAILED';
+    return 'PENDING';
+  };
+
+  const handleShopPaid = () => {
+    const order = pendingOrder;
+    setQr(null);
+    setPendingOrder(null);
+    if (order) finalizeSuccess({ ...order, status: 'PAID' as Order['status'] });
   };
 
   if (step === 'success') {
@@ -410,6 +469,24 @@ export default function CheckoutPage() {
                     <span>{t('checkout.demoNote')}</span>
                   </div>
                 </div>
+                {/* Primary: VNPAY-QR (scan to pay) */}
+                <button
+                  onClick={handleVnpayPayment}
+                  disabled={isProcessing}
+                  className="w-full mb-3 py-4 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-60"
+                >
+                  {isProcessing ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      {t('contact.sending')}
+                    </>
+                  ) : (
+                    <>
+                      <QrCode className="w-4 h-4" />
+                      Thanh toán VNPAY-QR — {formatPrice(total)}
+                    </>
+                  )}
+                </button>
                 <div className="flex gap-3">
                   <button
                     onClick={() => setStep('info')}
@@ -420,7 +497,7 @@ export default function CheckoutPage() {
                   <button
                     onClick={handleFakePayment}
                     disabled={isProcessing}
-                    className="flex-[2] py-4 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-60"
+                    className="flex-[2] py-4 bg-darkbg border border-darkborder text-text-primary font-semibold rounded-xl hover:border-neon-violet/30 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
                   >
                     {isProcessing ? (
                       <>
@@ -430,11 +507,24 @@ export default function CheckoutPage() {
                     ) : (
                       <>
                         <Lock className="w-4 h-4" />
-                        {t('checkout.payNow')} — {formatPrice(total)}
+                        {t('checkout.simulatedPayment')}
                       </>
                     )}
                   </button>
                 </div>
+
+                {qr && (
+                  <PaymentQrModal
+                    open={!!qr}
+                    paymentUrl={qr.paymentUrl}
+                    amount={qr.amount}
+                    orderCode={qr.orderCode}
+                    title="Thanh toán đơn hàng"
+                    pollStatus={pollShopStatus}
+                    onPaid={handleShopPaid}
+                    onClose={() => { setQr(null); setPendingOrder(null); }}
+                  />
+                )}
               </motion.div>
             )}
           </div>

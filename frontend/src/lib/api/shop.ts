@@ -258,6 +258,21 @@ export async function getOrderByCode(
   return request(`/shop/orders/${code}`);
 }
 
+/**
+ * Create a VNPAY-QR payment for an existing shop order.
+ * Returns the VNPay gateway `paymentUrl` to render as a QR code.
+ * vnp_TxnRef is `PRODUCT_{orderId}_{ts}` so the backend IPN routes it
+ * to the shop (product) branch.
+ */
+export async function createShopPaymentQr(
+  orderId: number
+): Promise<ApiResponse<{ paymentUrl: string; txnRef: string; amount: number; orderType: 'PRODUCT' }>> {
+  return request('/payments/create-qr', {
+    method: 'POST',
+    body: JSON.stringify({ orderId, orderType: 'PRODUCT' }),
+  });
+}
+
 export async function getMyOrders(): Promise<ApiResponse<OrderResponse[]>> {
   return request('/shop/orders/my');
 }

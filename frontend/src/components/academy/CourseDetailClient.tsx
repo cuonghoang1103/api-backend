@@ -18,6 +18,7 @@ import { SafeImage } from '@/components/ui/SafeImage';
 import Curriculum from '@/components/academy/Curriculum';
 import Reviews from '@/components/academy/Reviews';
 import CourseCard from '@/components/academy/CourseCard';
+import PaymentQrModal, { type QrPaymentStatus } from '@/components/payment/PaymentQrModal';
 
 interface CourseDetailClientProps {
   slug: string;
@@ -513,6 +514,9 @@ function CourseAccessOptions({
 
   // ── PAID option ───────────────────────────────────────────────────
   const [paidLoading, setPaidLoading] = useState(false);
+  // VNPAY-QR modal state. Set when an order is created; the modal renders
+  // the QR and polls until the backend IPN flips the order to PAID.
+  const [qr, setQr] = useState<{ paymentUrl: string; orderCode: string; amount: number } | null>(null);
 
   const handlePaidAccess = async () => {
     if (!isAuthed) {
@@ -527,12 +531,33 @@ function CourseAccessOptions({
     setPaidLoading(true);
     try {
       const res = await paymentApi.createCourseOrder(course.id);
-      const { paymentUrl } = res.data.data;
-      window.location.href = paymentUrl;
+      const { paymentUrl, orderCode, amount } = res.data.data;
+      // Open the QR modal instead of a full-page redirect, so the user
+      // scans + pays without leaving the course page. Polling drives the
+      // post-payment redirect.
+      setQr({ paymentUrl, orderCode, amount });
     } catch (err: any) {
       toast.error(err?.response?.data?.message || 'Không thể tạo đơn thanh toán');
+    } finally {
       setPaidLoading(false);
     }
+  };
+
+  // Poll the course order status for the QR modal.
+  const pollCourseStatus = async (): Promise<QrPaymentStatus> => {
+    if (!qr) return 'PENDING';
+    const res = await paymentApi.getOrderStatus(qr.orderCode);
+    const status = res.data?.data?.status as string | undefined;
+    if (status === 'PAID') return 'PAID';
+    if (status === 'FAILED' || status === 'CANCELLED') return 'FAILED';
+    return 'PENDING';
+  };
+
+  const handleCoursePaid = () => {
+    setQr(null);
+    onEnrolled();
+    toast.success('Thanh toán thành công! Chào mừng bạn đến với khóa học.');
+    router.push(`/academy/courses/${course.slug}/learn`);
   };
 
   // ── CODE option ───────────────────────────────────────────────────
@@ -671,6 +696,20 @@ function CourseAccessOptions({
         </div>
         {codeError && <p className="text-xs text-red-400">{codeError}</p>}
       </div>
+
+      {/* ── VNPAY-QR payment modal ─────────────────────────── */}
+      {qr && (
+        <PaymentQrModal
+          open={!!qr}
+          paymentUrl={qr.paymentUrl}
+          amount={qr.amount}
+          orderCode={qr.orderCode}
+          title={`Thanh toán khóa học`}
+          pollStatus={pollCourseStatus}
+          onPaid={handleCoursePaid}
+          onClose={() => setQr(null)}
+        />
+      )}
     </div>
   );
 }

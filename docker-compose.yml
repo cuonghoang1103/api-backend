@@ -133,7 +133,9 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - backend
+      backend:
+        aliases:
+          - backend
     deploy:
       resources:
         limits:

@@ -1373,15 +1373,23 @@ export const paymentApi = {
       typeof crypto !== 'undefined' && 'randomUUID' in crypto
         ? crypto.randomUUID()
         : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    return api.post('/api/v1/payments/course', {
+    return api.post('/payments/course', {
       courseId,
       idempotencyKey,
       ...(discountCode ? { discountCode } : {}),
     });
   },
+  // Unified VNPAY-QR entry point for an EXISTING order (course or
+  // product). Returns { paymentUrl, txnRef, amount, orderType }. The
+  // caller renders paymentUrl as a QR code. Used by the Shop flow (whose
+  // order-create endpoint doesn't return a paymentUrl) and available to
+  // Academy as well.
+  createPaymentQr(orderId: number, orderType: 'COURSE' | 'PRODUCT') {
+    return api.post('/payments/create-qr', { orderId, orderType });
+  },
   // Poll order status after redirect from VNPay
   getOrderStatus(orderCode: string) {
-    return api.get(`/api/v1/payments/order/${encodeURIComponent(orderCode)}`);
+    return api.get(`/payments/order/${encodeURIComponent(orderCode)}`);
   },
   // Admin: paginated list of all course orders
   adminListOrders(params?: {
@@ -1390,12 +1398,12 @@ export const paymentApi = {
     page?: number;
     pageSize?: number;
   }) {
-    return api.get('/api/v1/payments/admin/orders', { params });
+    return api.get('/payments/admin/orders', { params });
   },
   // Admin: audit trail of IPN callbacks for a given order
   adminListTransactions(orderCode: string) {
     return api.get(
-      `/api/v1/payments/admin/transactions/${encodeURIComponent(orderCode)}`,
+      `/payments/admin/transactions/${encodeURIComponent(orderCode)}`,
     );
   },
   // Admin: update enrollment (set/clear expiresAt, change status)
@@ -1405,11 +1413,11 @@ export const paymentApi = {
     expiresAt?: string | null;
     status?: 'ACTIVE' | 'SUSPENDED' | 'COMPLETED';
   }) {
-    return api.patch('/api/v1/payments/admin/enrollment', data);
+    return api.patch('/payments/admin/enrollment', data);
   },
   // Admin: revoke enrollment
   adminRevokeEnrollment(userId: number, courseId: number) {
-    return api.delete('/api/v1/payments/admin/enrollment', {
+    return api.delete('/payments/admin/enrollment', {
       data: { userId, courseId },
     });
   },
@@ -1419,7 +1427,7 @@ export const paymentApi = {
     refundAmount?: number;
     reason: string;
   }) {
-    return api.post('/api/v1/payments/admin/refund', data);
+    return api.post('/payments/admin/refund', data);
   },
 };
 

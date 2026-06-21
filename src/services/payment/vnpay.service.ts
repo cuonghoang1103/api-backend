@@ -87,7 +87,52 @@ function getClient(): VNPay {
 }
 
 /**
+ * Build a VNPay payment URL for ANY order type (course or product).
+ *
+ * This is the generic, order-type-agnostic builder used by the unified
+ * `POST /create-qr` endpoint. The `txnRef` is whatever string we want
+ * VNPay to echo back in the IPN/return callback — we encode the order
+ * type as its prefix (`COURSE_...` or `PRODUCT_...`) so the IPN handler
+ * can split the flow without an extra DB lookup.
+ *
+ * The `vnpay` SDK does the heavy lifting that VNPay's spec requires:
+ *  - sorts the params alphabetically,
+ *  - builds the query string,
+ *  - signs it with HMAC-SHA512 using the secret hash (vnp_HashSecret),
+ *  - appends vnp_SecureHash.
+ * (Configured in getClient() with HashAlgorithm.SHA512.)
+ *
+ * @param txnRef vnp_TxnRef — must be unique per day. Format:
+ *               `{ORDER_TYPE}_{id}_{ts}` e.g. `PRODUCT_42_1718000000000`.
+ * @param amount VND amount (NOT multiplied by 100 — the SDK does that).
+ * @param orderInfo Description, ASCII only ("Thanh toan ...").
+ * @param ipAddr User's IP from req.
+ * @returns Full VNPay gateway URL with the HMAC-signed query string.
+ */
+export function buildVnpayPaymentUrl(
+  txnRef: string,
+  amount: number,
+  orderInfo: string,
+  ipAddr: string,
+): string {
+  const cfg = loadConfig();
+  const vnpay = getClient();
+  return vnpay.buildPaymentUrl({
+    vnp_Amount: amount,
+    vnp_IpAddr: ipAddr || '127.0.0.1',
+    vnp_ReturnUrl: cfg.returnUrl,
+    vnp_TxnRef: txnRef,
+    vnp_OrderInfo: sanitizeOrderInfo(orderInfo),
+  });
+}
+
+/**
  * Build the VNPay payment URL for a course purchase.
+ *
+ * Thin wrapper around {@link buildVnpayPaymentUrl}, kept for backward
+ * compatibility with the existing `POST /payments/course` flow (whose
+ * orderCode already starts with `COURSE_`).
+ *
  * @param orderCode Unique order code (used as vnp_TxnRef). Format:
  *                  COURSE_{courseId}_{userId}_{ts}
  * @param amount VND amount (NOT multiplied by 100 — vnpay SDK does that)
@@ -101,15 +146,7 @@ export function buildCoursePaymentUrl(
   orderInfo: string,
   ipAddr: string,
 ): string {
-  const cfg = loadConfig();
-  const vnpay = getClient();
-  return vnpay.buildPaymentUrl({
-    vnp_Amount: amount,
-    vnp_IpAddr: ipAddr || '127.0.0.1',
-    vnp_ReturnUrl: cfg.returnUrl,
-    vnp_TxnRef: orderCode,
-    vnp_OrderInfo: sanitizeOrderInfo(orderInfo),
-  });
+  return buildVnpayPaymentUrl(orderCode, amount, orderInfo, ipAddr);
 }
 
 /**

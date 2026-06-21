@@ -513,6 +513,7 @@ model Course {
   price                Decimal   @default(0) @db.Decimal(10, 2)
   discountPrice        Decimal?  @map("discount_price") @db.Decimal(10, 2)
   discountExpiresAt    DateTime? @map("discount_expires_at")
+  accessType        String    @default("FREE") @map("access_type") @db.VarChar(10)
   level                String    @default("BEGINNER") @db.VarChar(20)
   language             String    @default("Vietnamese") @db.VarChar(20)
   isFree               Boolean   @default(false) @map("is_free")
@@ -541,6 +542,7 @@ model Course {
   reviews      CourseReview[]
   tags         CourseTag[]
   orders       CourseOrder[]
+  courseCodes  CourseCode[]
 
   @@index([categoryId], name: "idx_courses_category")
   @@index([instructorId], name: "idx_courses_instructor")
@@ -550,6 +552,7 @@ model Course {
   @@index([isPublished], name: "idx_courses_published")
   @@index([courseCode], name: "idx_courses_code")
   @@index([academyType], name: "idx_courses_academy_type")
+  @@index([accessType], name: "idx_courses_access_type")
   @@map("courses")
 }
 
@@ -640,17 +643,41 @@ model Enrollment {
   progressPercent Decimal   @default(0) @map("progress_percent") @db.Decimal(5, 2)
   lastLessonId    Int?      @map("last_lesson_id")
   lastAccessedAt  DateTime? @map("last_accessed_at")
+  courseCodeId    Int?      @map("course_code_id")
+  // How the user gained access: 'FREE' | 'PAID' | 'CODE' | 'ADMIN' | 'INSTRUCTOR'
+  source          String    @default("FREE") @db.VarChar(20)
 
   user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   course         Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
   certificate    Certificate?
   lessonProgress LessonProgress[]
+  usedCourseCode CourseCode?      @relation(fields: [courseCodeId], references: [id], onDelete: SetNull)
 
   @@unique([userId, courseId], map: "uk_enrollment_user_course")
   @@index([userId], name: "idx_enrollments_user")
   @@index([courseId], name: "idx_enrollments_course")
   @@index([status], name: "idx_enrollments_status")
   @@map("enrollments")
+}
+
+model CourseCode {
+  id        Int       @id @default(autoincrement())
+  code      String    @db.VarChar(10)
+  courseId  Int       @map("course_id")
+  maxUses   Int       @default(1) @map("max_uses")
+  usedCount Int       @default(0) @map("used_count")
+  isActive  Boolean   @default(true) @map("is_active")
+  expiresAt DateTime? @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  course     Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrollments Enrollment[]
+
+  @@unique([courseId, code], map: "uk_course_code_course_code")
+  @@index([code], name: "idx_course_codes_code")
+  @@index([courseId], name: "idx_course_codes_course")
+  @@map("course_codes")
 }
 
 model LessonProgress {

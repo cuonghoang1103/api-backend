@@ -27,6 +27,7 @@ const emptyCourse = {
   isPublished: false, requirements: '', whatYouLearn: '',
   status: 'DRAFT', tags: [] as string[],
   categoryId: 0,
+  accessType: 'FREE',
   // ISO datetime string or '' for "no expiry / forever".
   // discountExpiresAt: date+time after which discountPrice stops applying.
   discountExpiresAt: '',
@@ -147,6 +148,7 @@ export default function AdminCoursesPage() {
       isFree: course.isFree || false,
       isFeatured: course.isFeatured || false,
       isPublished: course.isPublished || false,
+      accessType: (course as any).accessType || 'FREE',
       requirements: course.requirements || '',
       whatYouLearn: course.whatYouLearn || '',
       status: course.status || 'DRAFT',
@@ -296,6 +298,7 @@ export default function AdminCoursesPage() {
         language: courseForm.language,
         isFree: courseForm.isFree,
         isFeatured: courseForm.isFeatured,
+        accessType: courseForm.accessType,
         isPublished: statusDerived,
         requirements: courseForm.requirements,
         whatYouLearn: courseForm.whatYouLearn,
@@ -658,14 +661,57 @@ export default function AdminCoursesPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 pt-1">
-                    <input type="checkbox" id="isFree" checked={courseForm.isFree}
-                      onChange={e => setCourseForm(p => ({ ...p, isFree: e.target.checked }))}
-                      className="w-4 h-4 rounded accent-neon-violet"
-                    />
-                    <label htmlFor="isFree" className="text-sm text-text-primary">Khoá học miễn phí</label>
+                {/* Access Type */}
+                <div>
+                  <label className="block text-sm font-medium text-text-primary mb-2">Hinh thuc truy cap</label>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {[
+                      { value: 'FREE', label: 'Mien phi', desc: 'Hoc vien dang ky tu do', color: 'green' },
+                      { value: 'PAID', label: 'Tra phi', desc: 'Mua qua VNPay', color: 'indigo' },
+                      { value: 'CODE', label: 'Ma kich hoat', desc: 'Nhap ma 6 ky tu', color: 'violet' },
+                    ].map(opt => (
+                      <label
+                        key={opt.value}
+                        className={`flex flex-col gap-1 p-4 rounded-xl border cursor-pointer transition-all ${
+                          courseForm.accessType === opt.value
+                            ? 'border-neon-violet bg-neon-violet/10'
+                            : 'border-darkborder bg-darkbg hover:border-darkborder/80'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                            courseForm.accessType === opt.value ? 'border-neon-violet' : 'border-darkborder'
+                          }`}>
+                            {courseForm.accessType === opt.value && (
+                              <div className="w-2 h-2 rounded-full bg-neon-violet" />
+                            )}
+                          </div>
+                          <span className="text-sm font-semibold text-text-primary">{opt.label}</span>
+                        </div>
+                        <span className="text-[11px] text-text-muted ml-6">{opt.desc}</span>
+                        <input
+                          type="radio"
+                          name="accessType"
+                          value={opt.value}
+                          checked={courseForm.accessType === opt.value}
+                          onChange={e => setCourseForm(p => ({ ...p, accessType: e.target.value }))}
+                          className="sr-only"
+                        />
+                      </label>
+                    ))}
                   </div>
+                  {/* Show price inputs when PAID is selected */}
+                  {courseForm.accessType === 'PAID' && (
+                    <p className="text-[11px] mt-2 text-text-muted">
+                      Khi chon "Tra phi", o nhap gia va gia giam ben duoi se hien thi tren trang chi tiet khoa hoc.
+                    </p>
+                  )}
+                  {/* CODE warning */}
+                  {courseForm.accessType === 'CODE' && (
+                    <p className="text-[11px] mt-2 text-amber-400/80">
+                      Khoa hoc se bi chan. Hoc vien can nhap dung ma code de dang ky.
+                    </p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

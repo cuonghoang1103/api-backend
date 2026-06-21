@@ -46,7 +46,7 @@ async function assertCanAccessCourseContent(
 ): Promise<{ isAdmin: boolean; isEnrolled: boolean; isFree: boolean }> {
   const course = await prisma.course.findUnique({
     where: { id: courseId },
-    select: { id: true, isFree: true, price: true, isPublished: true, instructorId: true },
+    select: { id: true, isFree: true, price: true, isPublished: true, instructorId: true, accessType: true },
   });
   if (!course) throw new AppError('Course not found', 404);
   if (course.isPublished !== true) {
@@ -66,7 +66,10 @@ async function assertCanAccessCourseContent(
   // a "free preview available" mode — content is still gated
   // because someone clearly intended a paid course. The admin
   // should toggle `isFree=false` once the price is set.
-  const isFree = course.isFree && Number(course.price) <= 0;
+  // `accessType` is the authoritative field. `isFree` is kept for backward
+  // compatibility: a course with `accessType='FREE'` OR the legacy
+  // `isFree=true && price<=0` bypasses enrollment.
+  const isFree = course.accessType === 'FREE' || (course.isFree && Number(course.price) <= 0);
   if (isFree && mode !== 'admin-or-enrolled') {
     return { isAdmin: false, isEnrolled: true, isFree: true };
   }
@@ -349,7 +352,10 @@ async function serializeCourse(
   // second check they would retain full access for free. This
   // is the bug we just fixed (see also assertCanAccessCourseContent
   // for the same pattern in the gating helper).
-  const isFree = course.isFree && Number(course.price) <= 0;
+  // `accessType` is the authoritative field. `isFree` is kept for backward
+  // compatibility: a course with `accessType='FREE'` OR the legacy
+  // `isFree=true && price<=0` bypasses enrollment.
+  const isFree = course.accessType === 'FREE' || (course.isFree && Number(course.price) <= 0);
   const isOwner = options?.userId !== undefined && course.instructorId === options.userId;
   let hasPaidOrder = false;
   if (options?.userId && !isFree && !isOwner) {
@@ -392,6 +398,7 @@ async function serializeCourse(
     level: course.level,
     language: course.language,
     academyType: course.academyType,
+    accessType: course.accessType,
     isFree: course.isFree,
     isFeatured: course.isFeatured,
     isPublished: course.isPublished,
@@ -717,6 +724,7 @@ router.post('/', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Resp
         isFree: Boolean(req.body.isFree),
         isFeatured: Boolean(req.body.isFeatured),
         isPublished: status === 'PUBLISHED',
+        accessType: toNullableString(req.body.accessType) ?? 'FREE',
         requirements: toNullableString(req.body.requirements),
         whatYouLearn: toNullableString(req.body.whatYouLearn),
         startDate: toOptionalDate(req.body.startDate) ?? null,
@@ -765,6 +773,7 @@ router.put('/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Re
         ...(req.body.language !== undefined ? { language: toNullableString(req.body.language) ?? 'Vietnamese' } : {}),
         ...(req.body.isFree !== undefined ? { isFree: Boolean(req.body.isFree) } : {}),
         ...(req.body.isFeatured !== undefined ? { isFeatured: Boolean(req.body.isFeatured) } : {}),
+        ...(req.body.accessType !== undefined ? { accessType: toNullableString(req.body.accessType) ?? 'FREE' } : {}),
         ...(req.body.requirements !== undefined ? { requirements: toNullableString(req.body.requirements) } : {}),
         ...(req.body.whatYouLearn !== undefined ? { whatYouLearn: toNullableString(req.body.whatYouLearn) } : {}),
         ...(req.body.startDate !== undefined ? { startDate: toOptionalDate(req.body.startDate) ?? null } : {}),

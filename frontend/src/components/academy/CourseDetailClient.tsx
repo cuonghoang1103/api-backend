@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import {
   Clock, Users, BookOpen, Star, Play, Shield, Award,
   ArrowLeft, CheckCircle, PlayCircle, Loader2, CreditCard,
+  KeyRound, Lock,
 } from 'lucide-react';
 import { coursesApi, paymentApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -150,6 +151,8 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
   }
 
   const isFreeCourse = course.isFree || course.price === 0;
+  // accessType is the authoritative field; fall back to legacy isFree logic
+  const accessType = (course as any).accessType || (isFreeCourse ? 'FREE' : 'PAID');
 
   const priceInfo = isFreeCourse
     ? { label: 'Miễn phí', display: 'Miễn phí', original: null }
@@ -402,10 +405,16 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
 
                   {course.isEnrolled ? (
                     <ContinueLearningButton slug={course.slug} />
-                  ) : isFreeCourse ? (
+                  ) : accessType === 'FREE' ? (
                     <FreeEnrollButton course={course} onEnrolled={() => setCourse(prev => prev ? { ...prev, isEnrolled: true } : prev)} />
-                  ) : (
+                  ) : accessType === 'PAID' ? (
                     <BuyNowButton course={course} />
+                  ) : (
+                    <CodeActivateBox
+                      slug={course.slug}
+                      courseId={course.id}
+                      onActivated={() => setCourse(prev => prev ? { ...prev, isEnrolled: true } : prev)}
+                    />
                   )}
                 </div>
 
@@ -605,5 +614,109 @@ function ContinueLearningButton({ slug }: { slug: string }) {
       <PlayCircle className="w-5 h-5" />
       Tiếp tục học
     </Link>
+  );
+}
+
+// ── Code Activate Box ──────────────────────────────────────────────────────────
+function CodeActivateBox({ slug, courseId, onActivated }: { slug: string; courseId: number; onActivated: () => void }) {
+  const [code, setCode] = useState('');
+  const [activating, setActivating] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const { isAuthenticated } = useAuthStore();
+  const { status: sessionStatus } = useSession();
+  const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isAuthed = mounted && (isAuthenticated || sessionStatus === 'authenticated');
+
+  const handleActivate = async () => {
+    const cleanCode = code.trim().toUpperCase();
+    if (!cleanCode || cleanCode.length < 4) {
+      setError('Vui long nhap ma kich hoat (toi thieu 4 ky tu)');
+      return;
+    }
+    if (!isAuthed) {
+      router.push(`/login?callbackUrl=${encodeURIComponent(`/academy/courses/${slug}`)}`);
+      return;
+    }
+    setActivating(true);
+    setError('');
+    try {
+      await coursesApi.activateCode(courseId, cleanCode);
+      setSuccess(true);
+      onActivated();
+      toast.success('Kich hoat thanh cong! Ban co the bat dau hoc ngay.');
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || 'Ma kich hoat khong hop le';
+      setError(msg);
+      toast.error(msg);
+    } finally {
+      setActivating(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleActivate();
+  };
+
+  if (success) {
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-sm">
+          <CheckCircle className="w-5 h-5 shrink-0" />
+          Kich hoat thanh cong!
+        </div>
+        <Link
+          href={`/academy/courses/${slug}/learn`}
+          className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
+        >
+          <PlayCircle className="w-5 h-5" />
+          Bat dau hoc ngay
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-start gap-2 p-3 bg-neon-violet/5 border border-neon-violet/20 rounded-xl">
+        <Lock className="w-4 h-4 text-neon-violet shrink-0 mt-0.5" />
+        <p className="text-xs text-text-secondary leading-relaxed">
+          Khoa hoc nay yeu cau nhap <strong className="text-neon-violet">ma kich hoat</strong> de dang ky.
+        </p>
+      </div>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={code}
+          onChange={e => {
+            setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10));
+            setError('');
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder="ABC123"
+          maxLength={10}
+          className="flex-1 px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center text-lg"
+        />
+        <button
+          onClick={handleActivate}
+          disabled={activating}
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
+        >
+          {activating ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <>
+              <KeyRound className="w-5 h-5" />
+              Kich hoat
+            </>
+          )}
+        </button>
+      </div>
+      {error && (
+        <p className="text-xs text-red-400">{error}</p>
+      )}
+    </div>
   );
 }

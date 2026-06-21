@@ -224,4 +224,205 @@ router.post('/assignments/grade', authenticate, requireAdmin('ROLE_ADMIN'), asyn
   }
 });
 
+// ─── Code Academy (Course Code Management) ────────────────────────────────────
+
+// GET /api/v1/academy/codes — list all course codes (admin)
+router.get('/codes', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { courseId } = req.query;
+    const where: Record<string, unknown> = {};
+    if (courseId) where.courseId = Number(courseId);
+
+    const codes = await prisma.courseCode.findMany({
+      where,
+      include: {
+        course: { select: { id: true, title: true, slug: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    res.json({ success: true, data: codes });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/academy/codes — create a new course code (admin)
+router.post('/codes', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const courseId = Number(req.body.courseId);
+    if (!courseId || Number.isNaN(courseId)) {
+      throw new AppError('courseId is required', 400);
+    }
+    const code = String(req.body.code || '').trim().toUpperCase();
+    if (!code || code.length < 4 || code.length > 10) {
+      throw new AppError('Code must be 4-10 uppercase characters', 400);
+    }
+    const maxUses = Number(req.body.maxUses ?? 1);
+    if (Number.isNaN(maxUses) || maxUses < 1) {
+      throw new AppError('maxUses must be at least 1', 400);
+    }
+
+    const course = await prisma.course.findUnique({ where: { id: courseId } });
+    if (!course) throw new AppError('Course not found', 404);
+
+    // Check duplicate
+    const existing = await prisma.courseCode.findFirst({
+      where: { courseId, code },
+    });
+    if (existing) {
+      throw new AppError(`Mã "${code}" đã tồn tại cho khóa học này.`, 409);
+    }
+
+    const created = await prisma.courseCode.create({
+      data: {
+        code,
+        courseId,
+        maxUses,
+        isActive: req.body.isActive !== undefined ? Boolean(req.body.isActive) : true,
+        expiresAt: req.body.expiresAt ? new Date(req.body.expiresAt) : null,
+      },
+      include: {
+        course: { select: { id: true, title: true, slug: true } },
+      },
+    });
+
+    res.status(201).json({ success: true, data: created });
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && (error as { code?: string }).code === 'P2002') {
+      next(new AppError('Mã code đã tồn tại. Vui lòng chọn mã khác.', 409));
+      return;
+    }
+    next(error);
+  }
+});
+
+// PUT /api/v1/academy/codes/:id — update a course code (admin)
+router.put('/codes/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid code id', 400);
+
+    const existing = await prisma.courseCode.findUnique({ where: { id } });
+    if (!existing) throw new AppError('Code not found', 404);
+
+    // If changing code, check uniqueness
+    if (req.body.code !== undefined) {
+      const nextCode = String(req.body.code).trim().toUpperCase();
+      if (nextCode && (nextCode.length < 4 || nextCode.length > 10)) {
+        throw new AppError('Code must be 4-10 uppercase characters', 400);
+      }
+      if (nextCode && nextCode !== existing.code) {
+        const dup = await prisma.courseCode.findFirst({
+          where: { courseId: existing.courseId, code: nextCode, NOT: { id } },
+        });
+        if (dup) throw new AppError(`Mã "${nextCode}" đã tồn tại cho khóa học này.`, 409);
+      }
+    }
+
+    const updated = await prisma.courseCode.update({
+      where: { id },
+      data: {
+        ...(req.body.code !== undefined ? { code: String(req.body.code).trim().toUpperCase() } : {}),
+        ...(req.body.maxUses !== undefined ? { maxUses: Number(req.body.maxUses) } : {}),
+        ...(req.body.isActive !== undefined ? { isActive: Boolean(req.body.isActive) } : {}),
+        ...(req.body.expiresAt !== undefined ? { expiresAt: req.body.expiresAt ? new Date(req.body.expiresAt as string) : null } : {}),
+      },
+      include: {
+        course: { select: { id: true, title: true, slug: true } },
+      },
+    });
+
+    res.json({ success: true, data: updated });
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && (error as { code?: string }).code === 'P2002') {
+      next(new AppError('Mã code đã tồn tại. Vui lòng chọn mã khác.', 409));
+      return;
+    }
+    next(error);
+  }
+});
+
+// DELETE /api/v1/academy/codes/:id — delete a course code (admin)
+router.delete('/codes/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid code id', 400);
+    await prisma.courseCode.delete({ where: { id } });
+    res.json({ success: true, data: { id } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/academy/activate-code — activate a course code (user)
+router.post('/activate-code', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId!;
+    const courseId = Number(req.body.courseId);
+    const code = String(req.body.code || '').trim().toUpperCase();
+
+    if (!courseId || Number.isNaN(courseId)) {
+      throw new AppError('courseId is required', 400);
+    }
+    if (!code || code.length < 4 || code.length > 10) {
+      throw new AppError('Mã kích hoạt không hợp lệ', 400);
+    }
+
+    // Check course exists and is CODE type
+    const course = await prisma.course.findUnique({
+      where: { id: courseId },
+      select: { id: true, title: true, accessType: true, isPublished: true },
+    });
+    if (!course) throw new AppError('Course not found', 404);
+    if (!course.isPublished) throw new AppError('Khoa hoc chua duoc xuat ban', 400);
+
+    // Find the code
+    const courseCode = await prisma.courseCode.findFirst({
+      where: { courseId, code },
+      include: { course: { select: { title: true } } },
+    });
+    if (!courseCode) throw new AppError('Ma kich hoat khong ton tai', 404);
+    if (!courseCode.isActive) throw new AppError('Ma kich hoat da bi khoa', 403);
+    if (courseCode.expiresAt && courseCode.expiresAt.getTime() < Date.now()) {
+      throw new AppError('Ma kich hoat da het han', 403);
+    }
+    if (courseCode.usedCount >= courseCode.maxUses) {
+      throw new AppError('Ma kich hoat da het luot su dung', 403);
+    }
+
+    // Check if user already enrolled
+    const existingEnrollment = await prisma.enrollment.findUnique({
+      where: { userId_courseId: { userId, courseId } },
+    });
+    if (existingEnrollment) {
+      throw new AppError('Ban da dang ky khoa hoc nay roi', 400);
+    }
+
+    // Create enrollment + increment usedCount in a transaction
+    await prisma.$transaction([
+      prisma.courseCode.update({
+        where: { id: courseCode.id },
+        data: { usedCount: { increment: 1 } },
+      }),
+      prisma.enrollment.create({
+        data: {
+          userId,
+          courseId,
+          source: 'CODE',
+          courseCodeId: courseCode.id,
+          status: 'ACTIVE',
+        },
+      }),
+    ]);
+
+    res.json({
+      success: true,
+      data: { message: 'Kich hoat thanh cong! Ban co the bat dau hoc ngay.', courseId },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

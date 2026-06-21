@@ -5,7 +5,8 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Star, Users, Clock, BookOpen, Play, Lock, CheckCircle,
-  ChevronDown, ChevronUp, Loader2, Award, Globe, Calendar, Download, ArrowLeft, CreditCard
+  ChevronDown, ChevronUp, Loader2, Award, Globe, Calendar, Download, ArrowLeft, CreditCard,
+  KeyRound,
 } from 'lucide-react';
 import { coursesApi, paymentApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -44,6 +45,9 @@ export default function CourseDetailPage() {
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
   const [buying, setBuying] = useState(false);
+  const [activatingCode, setActivatingCode] = useState(false);
+  const [accessCode, setAccessCode] = useState('');
+  const [codeError, setCodeError] = useState('');
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
 
   // ── Render-storm tripwire. Counter updates on every render (via ref
@@ -148,6 +152,33 @@ export default function CourseDetailPage() {
     }
   };
 
+  const handleActivateCode = async () => {
+    const code = accessCode.trim().toUpperCase();
+    if (!code || code.length < 4) {
+      setCodeError('Vui long nhap ma kich hoat (toi thieu 4 ky tu)');
+      return;
+    }
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+    if (!course) return;
+    setActivatingCode(true);
+    setCodeError('');
+    try {
+      await coursesApi.activateCode(course.id, code);
+      toast.success('Kich hoat thanh cong! Ban co the bat dau hoc ngay.');
+      router.push(`/courses/${slug}/learn`);
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { message?: string } } };
+      const msg = e?.response?.data?.message || 'Ma kich hoat khong hop le';
+      setCodeError(msg);
+      toast.error(msg);
+    } finally {
+      setActivatingCode(false);
+    }
+  };
+
   const toggleSection = (id: number) => {
     setExpandedSections(prev => {
       const next = new Set(prev);
@@ -176,11 +207,11 @@ export default function CourseDetailPage() {
   }
 
   const hasDiscount = course.discountPrice && course.discountPrice > 0;
-  const canWatch = course.isEnrolled || course.isFree;
-  // Paid course = explicitly not free AND has a price > 0.
-  // Backend has the same check, but duplicating here means we render
-  // the right button without a server round-trip.
-  const isPaidCourse = !course.isFree && Number(course.price) > 0;
+  const accessType = (course as any).accessType || (course.isFree ? 'FREE' : 'PAID');
+  const canWatch = course.isEnrolled || accessType === 'FREE';
+  // accessType is the authoritative field for course access type.
+  const isPaidCourse = accessType === 'PAID';
+  const isCodeCourse = accessType === 'CODE';
   const whatYouLearnList = course.whatYouLearn ? course.whatYouLearn.split('\n').filter(Boolean) : [];
   const requirementsList = course.requirements ? course.requirements.split('\n').filter(Boolean) : [];
 
@@ -341,6 +372,42 @@ export default function CourseDetailPage() {
                             false,
                           )}`}
                     </button>
+                  ) : isCodeCourse ? (
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-2 p-3 bg-neon-violet/5 border border-neon-violet/20 rounded-xl">
+                        <Lock className="w-4 h-4 text-neon-violet shrink-0 mt-0.5" />
+                        <p className="text-xs text-text-secondary leading-relaxed">
+                          Khoa hoc nay yeu cau nhap <strong className="text-neon-violet">ma kich hoat</strong> de dang ky.
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={accessCode}
+                          onChange={e => {
+                            setAccessCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10));
+                            setCodeError('');
+                          }}
+                          onKeyDown={e => { if (e.key === 'Enter') handleActivateCode(); }}
+                          placeholder="ABC123"
+                          maxLength={10}
+                          className="flex-1 px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center text-base"
+                        />
+                        <button
+                          onClick={handleActivateCode}
+                          disabled={activatingCode}
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+                        >
+                          {activatingCode ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <KeyRound className="w-4 h-4" />
+                          )}
+                          Kich hoat
+                        </button>
+                      </div>
+                      {codeError && <p className="text-xs text-red-400">{codeError}</p>}
+                    </div>
                   ) : (
                     <button
                       onClick={handleEnroll}
@@ -357,7 +424,9 @@ export default function CourseDetailPage() {
                       ? 'You are enrolled in this course'
                       : isPaidCourse
                         ? 'Thanh toan an toan qua VNPay (QR / ATM / Visa)'
-                        : 'Lifetime access - Free updates'}
+                        : isCodeCourse
+                          ? 'Ma kich hoat: 4-10 ky tu (chu hoa, so)'
+                          : 'Lifetime access - Free updates'}
                   </p>
                 </div>
               </div>

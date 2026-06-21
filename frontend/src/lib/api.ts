@@ -466,6 +466,25 @@ export const academyApi = {
     api.get(`/courses/admin/${courseId}`),
 };
 
+export const academyCodesApi = {
+  getAll: (courseId?: number) =>
+    api.get('/academy/codes', { params: courseId ? { courseId } : {} }),
+  create: (data: {
+    courseId: number;
+    code: string;
+    maxUses?: number;
+    isActive?: boolean;
+    expiresAt?: string;
+  }) => api.post('/academy/codes', data),
+  update: (id: number, data: {
+    code?: string;
+    maxUses?: number;
+    isActive?: boolean;
+    expiresAt?: string;
+  }) => api.put(`/academy/codes/${id}`, data),
+  delete: (id: number) => api.delete(`/academy/codes/${id}`),
+};
+
 // Course Categories API
 export const courseCategoryApi = {
   getAll: () => api.get('/course-categories'),
@@ -555,6 +574,9 @@ export const coursesApi = {
     title?: string;
     content?: string;
   }) => api.post('/courses/reviews', data),
+
+  activateCode: (courseId: number, code: string) =>
+    api.post('/academy/activate-code', { courseId, code }),
 };
 
 // Admin Courses API
@@ -587,6 +609,7 @@ export const adminCoursesApi = {
     language?: string;
     isFree?: boolean;
     isFeatured?: boolean;
+    accessType?: string;
     requirements?: string;
     whatYouLearn?: string;
     status?: string;
@@ -611,6 +634,7 @@ export const adminCoursesApi = {
     language: string;
     isFree: boolean;
     isFeatured: boolean;
+    accessType: string;
     isPublished: boolean;
     requirements: string;
     whatYouLearn: string;

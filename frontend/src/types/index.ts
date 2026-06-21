@@ -421,6 +421,7 @@ export interface Course {
   level: string;
   language: string;
   academyType?: string;
+  accessType?: string;
   isFree: boolean;
   isFeatured: boolean;
   isPublished: boolean;

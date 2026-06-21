@@ -8,11 +8,13 @@ import {
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap, Inbox,
   CreditCard, Github, Search, TrendingUp, AlertTriangle,
+  KeyRound,
 } from 'lucide-react';
 
 const adminNav = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'FPT Academy LMS', href: '/admin/academy', icon: GraduationCap },
+  { label: 'Quản lý Mã Code', href: '/admin/code-academy', icon: KeyRound },
   { label: 'Quan ly Bai Giang', href: '/admin/lessons', icon: BookOpen },
   { label: 'Quan ly Nhac', href: '/admin/music', icon: Music },
   { label: 'Quản lý Khoá học', href: '/admin/courses', icon: BookOpen },

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = "http://backend:3001";
+const BACKEND_URL = "http://cuonghoangdev_backend:3001";
 
 /**
  * POST /api/auth/login

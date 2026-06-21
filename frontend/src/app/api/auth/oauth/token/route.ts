@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth";
  * cuối cùng là Docker service name. Trên VPS production, set BACKEND_URL
  * trong /opt/cuonghoangdev/.env trỏ tới https://api.cuongthai.com.
  */
-const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://backend:3001";
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://cuonghoangdev_backend:3001";
 
 /**
  * POST /api/auth/oauth/token

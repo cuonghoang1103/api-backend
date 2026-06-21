@@ -25,7 +25,7 @@ async function proxyRequest(
   const headers: Record<string, string> = { Authorization: `Bearer ${token}` };
   if (body) headers["Content-Type"] = "application/json";
 
-  const res = await fetch("http://backend:3001/api/v1/music/history", {
+  const res = await fetch("http://cuonghoangdev_backend:3001/api/v1/music/history", {
     method,
     headers,
     ...(body ? { body: JSON.stringify(body) } : {}),

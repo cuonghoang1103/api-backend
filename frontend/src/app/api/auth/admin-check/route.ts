@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 // Use Docker internal DNS for frontend→backend communication within the container.
 // Both containers are on the same Docker bridge network (cuonghoangdev_network).
 // Next.js standalone server runs on port 3000, backend on port 3001.
-const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://backend:3001";
+const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || "http://cuonghoangdev_backend:3001";
 
 /**
  * GET /api/auth/admin-check

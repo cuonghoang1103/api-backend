@@ -40,6 +40,6 @@ export function getServerApiBaseUrl(): string {
   return (
     process.env.API_INTERNAL_URL ||
     process.env.BACKEND_INTERNAL_URL ||
-    'http://backend:3001'
+    'http://cuonghoangdev_backend:3001'
   )
 }

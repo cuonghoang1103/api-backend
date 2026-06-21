@@ -15,7 +15,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFile, stat } from 'fs/promises';
 import path from 'path';
 
-const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || 'http://backend:3001';
+const BACKEND_URL = process.env.INTERNAL_BACKEND_URL || 'http://cuonghoangdev_backend:3001';
 
 // In Next.js standalone Docker builds, assets are copied here
 const LOCAL_UPLOADS_DIR = path.join(process.cwd(), 'standalone', 'uploads');

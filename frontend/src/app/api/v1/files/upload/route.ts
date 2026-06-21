@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Both containers on same Docker bridge network. Backend port 3001.
-const BACKEND_URL = "http://backend:3001";
+const BACKEND_URL = "http://cuonghoangdev_backend:3001";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

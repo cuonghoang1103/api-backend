@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     }
 
     // ── Forward to backend container via Docker internal DNS ─────────────────
-    const backendRes = await fetch("http://backend:3001/api/v1/music/tracks", {
+    const backendRes = await fetch("http://cuonghoangdev_backend:3001/api/v1/music/tracks", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

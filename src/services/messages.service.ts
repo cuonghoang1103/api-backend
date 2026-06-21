@@ -251,8 +251,33 @@ export class MessagesService {
     });
     const readMap = new Map(reads.map((r) => [r.threadId, r.lastReadAt]));
 
+    // Batch-fetch all nicknames for these threads so serializeThreadAsync
+    // doesn't make one DB call per thread (N+1 fix).
+    const peerIds = [...new Set(filtered.map((t) => {
+      const p = t.type === 'ADMIN'
+        ? (t.userId === userId ? t.adminUser?.id : t.user?.id)
+        : (t.userAId === userId ? t.userB?.id : t.userA?.id);
+      return p;
+    }).filter(Boolean))] as number[];
+
+    const nicknameRows = peerIds.length > 0
+      ? await prisma.threadNickname.findMany({
+          where: {
+            ownerId: userId,
+            targetId: { in: peerIds },
+            threadId: { in: filtered.map((t) => t.id) },
+          },
+          select: { threadId: true, targetId: true, alias: true },
+        })
+      : [];
+
+    const nicknameByThreadAndPeer = new Map<string, string | null>();
+    for (const row of nicknameRows) {
+      nicknameByThreadAndPeer.set(`${row.threadId}-${row.targetId}`, row.alias || null);
+    }
+
     const serialized = await Promise.all(
-      filtered.map((t) => this.serializeThreadAsync(t, userId)),
+      filtered.map((t) => this.serializeThreadAsync(t, userId, nicknameByThreadAndPeer)),
     );
 
     return filtered.map((t, idx) => {
@@ -312,8 +337,30 @@ export class MessagesService {
     });
     const readMap = new Map(reads.map((r) => [r.threadId, r.lastReadAt]));
 
+    // Batch-fetch all nicknames for these threads (N+1 fix).
+    const peerIds = [...new Set(filtered.map((t) => {
+      const p = t.userId === adminId ? t.adminUser?.id : t.user?.id;
+      return p;
+    }).filter(Boolean))] as number[];
+
+    const nicknameRows = peerIds.length > 0
+      ? await prisma.threadNickname.findMany({
+          where: {
+            ownerId: adminId,
+            targetId: { in: peerIds },
+            threadId: { in: filtered.map((t) => t.id) },
+          },
+          select: { threadId: true, targetId: true, alias: true },
+        })
+      : [];
+
+    const nicknameByThreadAndPeer = new Map<string, string | null>();
+    for (const row of nicknameRows) {
+      nicknameByThreadAndPeer.set(`${row.threadId}-${row.targetId}`, row.alias || null);
+    }
+
     const serialized = await Promise.all(
-      filtered.map((t) => this.serializeThreadAsync(t, adminId)),
+      filtered.map((t) => this.serializeThreadAsync(t, adminId, nicknameByThreadAndPeer)),
     );
 
     return filtered.map((t, idx) => {
@@ -954,6 +1001,8 @@ export class MessagesService {
       userB?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null } | null;
     },
     viewerId: number,
+    /** Pre-fetched nickname map: key = `${threadId}-${peerId}`, value = alias string */
+    nicknameByThreadAndPeer?: Map<string, string | null>,
   ) {
     const peer = t.type === 'ADMIN'
       ? (t.userId === viewerId ? t.adminUser : t.user)
@@ -961,11 +1010,8 @@ export class MessagesService {
 
     let alias: string | null = null;
     if (peer) {
-      const nick = await prisma.threadNickname.findUnique({
-        where: { uk_nickname_per_user: { threadId: t.id, ownerId: viewerId, targetId: peer.id } },
-        select: { alias: true },
-      });
-      if (nick && nick.alias.length > 0) alias = nick.alias;
+      const key = `${t.id}-${peer.id}`;
+      alias = nicknameByThreadAndPeer?.get(key) ?? null;
     }
 
     // Read the per-viewer preference set straight from the row.

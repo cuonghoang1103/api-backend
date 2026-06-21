@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Maximize2, Minimize2, X, Send, Zap, Terminal, ChevronRight, Loader2 } from 'lucide-react';
+import DOMPurify from 'isomorphic-dompurify';
 
 interface Message {
   id: number;
@@ -32,27 +33,27 @@ const C = {
 };
 
 function parseMarkdown(text: string): string {
-  return text
+  const raw = text
     .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g,
       '<a href="$2" target="_blank" rel="noopener noreferrer" class="cyber-link">$1</a>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
     .replace(/`([^`]+)`/g, '<code class="cyber-code">$1</code>')
     .replace(/\n/g, '<br/>');
+  return DOMPurify.sanitize(raw, {
+    ALLOWED_TAGS: ['a', 'strong', 'em', 'code', 'br'],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'class'],
+  });
 }
 
 export default function CyberTerminal() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isMaximized, setIsMaximized] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [greetingDone, setGreetingDone] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const dragStartRef = useRef({ x: 0, y: 0 });
-  const terminalRef = useRef<HTMLDivElement>(null);
 
   // ── Typewriter effect ─────────────────────────────────────────────────────────
   const typewriter = useCallback((text: string, onChar?: (char: string) => void): Promise<void> => {
@@ -88,16 +89,7 @@ export default function CyberTerminal() {
     greet();
   }, [typewriter]);
 
-  // ── Scroll to bottom ──────────────────────────────────────────────────────────
-  // Smart auto-scroll: only scroll when user is within 150px of bottom
-  useEffect(() => {
-    const container = messagesEndRef.current?.parentElement;
-    if (!container) return;
-    const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
-    if (distanceFromBottom < 150) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
+  // ── No auto-scroll — user controls their own scroll position entirely ──
 
   // ── Send message ───────────────────────────────────────────────────────────────
   const sendMessage = useCallback(async (text: string) => {
@@ -162,10 +154,15 @@ export default function CyberTerminal() {
                 if (data.type === 'chunk' && data.text) {
                   updateLast(data.text);
                 } else if (data.type === 'error') {
-                  throw new Error(data.error || 'Stream error');
+                  // Only error-out if we got zero content.
+                  // "Premature close" or provider errors after valid chunks are benign.
+                  if (!accumulated.trim()) {
+                    throw new Error(data.error || 'Stream error');
+                  }
+                  // Has content — stream was valid, ignore error silently
                 }
               } catch (parseErr) {
-                if (parseErr instanceof Error && parseErr.message !== 'Stream error') {
+                if (parseErr instanceof SyntaxError) {
                   // ignore partial JSON
                 } else {
                   throw parseErr;
@@ -174,7 +171,7 @@ export default function CyberTerminal() {
             }
           }
         } catch {
-          // Stream interrupted — keep what we got
+          // Stream interrupted — keep whatever accumulated
         }
       })();
     } catch {
@@ -192,32 +189,6 @@ export default function CyberTerminal() {
       sendMessage(input);
     }
   };
-
-  // ── Draggable window ──────────────────────────────────────────────────────────
-  const handleDragStart = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('.window-controls') || (e.target as HTMLElement).closest('.terminal-input')) return;
-    setIsDragging(true);
-    dragStartRef.current = { x: e.clientX, y: e.clientY };
-  };
-
-  useEffect(() => {
-    if (!isDragging) return;
-    const onMove = (e: MouseEvent) => {
-      if (!terminalRef.current) return;
-      const dx = e.clientX - dragStartRef.current.x;
-      const dy = e.clientY - dragStartRef.current.y;
-      dragStartRef.current = { x: e.clientX, y: e.clientY };
-      const rect = terminalRef.current.getBoundingClientRect();
-      terminalRef.current.style.left = `${rect.left + dx}px`;
-      terminalRef.current.style.top = `${rect.top + dy}px`;
-      terminalRef.current.style.right = 'auto';
-      terminalRef.current.style.bottom = 'auto';
-    };
-    const onUp = () => setIsDragging(false);
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-    return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
-  }, [isDragging]);
 
   if (isMinimized) return null;
 
@@ -247,8 +218,7 @@ export default function CyberTerminal() {
 
       {/* Terminal Container */}
       <div
-        ref={terminalRef}
-        className="fixed z-[200] w-[95vw] max-w-[720px] rounded-xl overflow-hidden shadow-[0_0_60px_rgba(0,255,102,0.15)] terminal-flicker"
+        className="fixed z-[200] w-[720px] max-w-[95vw] rounded-xl overflow-hidden shadow-[0_0_60px_rgba(0,255,102,0.15)] terminal-flicker"
         style={{
           bottom: '80px',
           right: '24px',
@@ -256,14 +226,12 @@ export default function CyberTerminal() {
           border: `1px solid ${C.border}`,
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
-          resize: 'none',
         }}
       >
         {/* Window Header Bar */}
         <div
-          className="flex items-center justify-between px-4 py-2 cursor-move select-none"
+          className="flex items-center justify-between px-4 py-2 select-none"
           style={{ background: 'rgba(0,15,8,0.95)', borderBottom: `1px solid ${C.border}` }}
-          onMouseDown={handleDragStart}
         >
           {/* Left: traffic lights */}
           <div className="flex items-center gap-2 window-controls">
@@ -271,13 +239,10 @@ export default function CyberTerminal() {
               onClick={() => setIsMinimized(true)}
               className="w-3 h-3 rounded-full bg-red-500/60 hover:bg-red-500 transition-colors"
             />
-            <button
-              onClick={() => setIsMaximized(!isMaximized)}
-              className="w-3 h-3 rounded-full bg-amber-500/60 hover:bg-amber-500 transition-colors"
-            />
+            <div className="w-3 h-3 rounded-full bg-green-500/40" title="AI Online" />
             <button
               onClick={() => setIsMinimized(true)}
-              className="w-3 h-3 rounded-full bg-green-500/60 hover:bg-green-500 transition-colors"
+              className="w-3 h-3 rounded-full bg-yellow-500/60 hover:bg-yellow-500 transition-colors"
             />
           </div>
 
@@ -300,8 +265,8 @@ export default function CyberTerminal() {
         <div
           className="terminal-scroll"
           style={{
-            maxHeight: isMaximized ? '80vh' : '480px',
-            height: isMaximized ? '80vh' : '480px',
+            height: '480px',
+            maxHeight: '480px',
             overflowY: 'auto',
             padding: '12px 16px',
             fontFamily: '"Fira Code", "JetBrains Mono", monospace',

@@ -265,20 +265,29 @@ export class AuthService {
         type: 'verify',
       });
       if (!sendResult.success) {
-        // Email send failed — print the OTP as the operational fallback
-        // so the user (or an admin reading the log) can complete
-        // verification manually. This is the only path that still
-        // surfaces the OTP; on success we intentionally stay silent.
-        console.log(
-          `[register] OTP for ${user.email} (verify): ${otpToSend} ` +
-          `(email service status: see [email] log line above)`,
-        );
-        console.warn(
-          `[register] Failed to deliver OTP email to ${user.email}: ` +
-          `${sendResult.error}. The OTP is still in the server log above ` +
-          `and valid for 5 min — share it manually with the user to let ` +
-          `them verify.`,
-        );
+        // Email send failed — admin needs a way to help the user verify.
+        // Log only a masked version: first+last digit so the user can
+        // confirm which code they're looking at, but the full code is
+        // never written to stdout / log aggregator / Sentry.
+        const masked = otpToSend.length >= 4
+          ? `${otpToSend[0]}***${otpToSend[otpToSend.length - 1]}`
+          : `***`;
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(
+            `[register] Email failed for ${user.email}. ` +
+            `Masked OTP: ${masked} | Full OTP logged only in DEV console. ` +
+            `In production: retrieve from /api/admin/users/{id}/otp or DB. ` +
+            `Error: ${sendResult.error}`,
+          );
+          // eslint-disable-next-line no-console
+          console.log(`[register] FULL OTP for ${user.email}: ${otpToSend}`);
+        } else {
+          console.warn(
+            `[register] Email failed for ${user.email}. ` +
+            `Masked OTP: ${masked} | Full OTP: check /api/admin/users ` +
+            `endpoint or database directly. Error: ${sendResult.error}`,
+          );
+        }
       }
     }
 

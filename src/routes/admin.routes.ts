@@ -180,10 +180,15 @@ router.get('/users', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: 
         : {}),
     };
 
+    const allowedSortColumns = ['createdAt', 'username', 'email', 'fullName'] as const;
+    const safeSortBy = allowedSortColumns.includes(sortBy as typeof allowedSortColumns[number])
+      ? sortBy as string
+      : 'createdAt';
+
     const [users, total] = await Promise.all([
       prisma.user.findMany({
         where, skip, take: pageSize,
-        orderBy: { [sortBy as string]: sortDir === 'asc' ? 'asc' : 'desc' },
+        orderBy: { [safeSortBy]: sortDir === 'asc' ? 'asc' as const : 'desc' as const },
         select: { id: true, username: true, email: true, fullName: true, avatarUrl: true, enabled: true, accountNonLocked: true, provider: true, createdAt: true, roles: { include: { role: true } } },
       }),
       prisma.user.count({ where }),
@@ -241,7 +246,27 @@ router.get('/posts', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: 
       prisma.post.count({ where }),
     ]);
 
-    const normalizedPosts = await Promise.all(posts.map((post) => serializePost(post.id)));
+    const normalizedPosts = posts.map((post) => ({
+      id: post.id,
+      title: post.title,
+      slug: post.slug,
+      content: post.content,
+      excerpt: post.excerpt,
+      thumbnailUrl: post.thumbnailUrl,
+      status: post.status,
+      categoryId: post.categoryId,
+      categoryName: post.category?.name,
+      categorySlug: post.category?.slug,
+      tagNames: post.tags.map((postTag) => postTag.tag.name),
+      viewCount: post.viewCount,
+      isFeatured: post.isFeatured,
+      publishedAt: post.publishedAt,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      sourceUrl: post.sourceUrl,
+      downloadCount: post.downloadCount,
+      commentCount: post._count.comments,
+    }));
 
     res.json({
       success: true,

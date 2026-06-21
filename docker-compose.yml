@@ -152,7 +152,6 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
-        NEXT_PUBLIC_YOUTUBE_API_KEY: ${NEXT_PUBLIC_YOUTUBE_API_KEY:-}
         NEXTAUTH_URL: ${NEXTAUTH_URL:-https://cuongthai.com}
         NEXTAUTH_SECRET: ${AUTH_SECRET:-}
         AUTH_SECRET: ${AUTH_SECRET:-}
@@ -183,7 +182,6 @@ services:
       API_INTERNAL_URL: http://backend:3001
       BACKEND_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
       NEXT_PUBLIC_API_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
-      NEXT_PUBLIC_YOUTUBE_API_KEY: ${NEXT_PUBLIC_YOUTUBE_API_KEY:-}
       NEXTAUTH_URL: ${NEXTAUTH_URL:-https://cuongthai.com}
       AUTH_SECRET: ${AUTH_SECRET:-change-this-to-a-random-secret}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}

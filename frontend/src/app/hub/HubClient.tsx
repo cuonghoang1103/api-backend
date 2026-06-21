@@ -432,7 +432,7 @@ export default function HubClient({
           ) : (
             <AnimatePresence mode="wait">
               <motion.div
-                key={`${viewMode}-${statusFilter}`}
+                key={`${viewMode}-${statusFilter}-${links.length}-${files.length}`}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
@@ -440,6 +440,7 @@ export default function HubClient({
               >
                 {viewMode === 'kanban' ? (
                   <HubKanbanBoard
+                    key={`kanban-${links.length}-${files.length}`}
                     links={filteredLinks}
                     files={filteredFiles}
                     onEditLink={(l) => { setEditingLink(l); setAddLinkOpen(true); }}

@@ -4,10 +4,12 @@ import { useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   MouseSensor,
   TouchSensor,
+  closestCenter,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
@@ -61,6 +63,7 @@ export default function HubKanbanBoard({
   ];
 
   const [activeItem, setActiveItem] = useState<CardItem | null>(null);
+  const [activeColumn, setActiveColumn] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
@@ -72,14 +75,46 @@ export default function HubKanbanBoard({
     if (item) setActiveItem(item);
   };
 
+  const handleDragOver = (event: DragOverEvent) => {
+    const { over } = event;
+    if (!over) { setActiveColumn(null); return; }
+    const overId = String(over.id);
+    // over might be a column droppable or a card
+    if (['unread', 'learning', 'done'].includes(overId)) {
+      setActiveColumn(overId);
+    } else {
+      // over is a card — find its column
+      const col = COLUMNS.find((c) =>
+        getItemsForColumn(allItems, c.id).some(
+          (item) => `${item.type}-${item.type === 'link' ? item.data.id : (item.data as HubFile).id}` === overId,
+        ),
+      );
+      setActiveColumn(col?.id ?? null);
+    }
+  };
+
   const handleDragEnd = async (event: DragEndEvent) => {
-    setActiveItem(null);
     const { active, over } = event;
+    setActiveItem(null);
     if (!over) return;
 
+    let targetStatus: string;
     const overId = String(over.id);
-    const [targetStatus] = overId.split('-');
-    if (!['unread', 'learning', 'done'].includes(targetStatus)) return;
+
+    if (activeColumn && ['unread', 'learning', 'done'].includes(activeColumn)) {
+      targetStatus = activeColumn;
+    } else if (['unread', 'learning', 'done'].includes(overId)) {
+      targetStatus = overId;
+    } else {
+      // over is a card — find its column
+      const col = COLUMNS.find((c) =>
+        getItemsForColumn(allItems, c.id).some(
+          (item) => `${item.type}-${item.type === 'link' ? item.data.id : (item.data as HubFile).id}` === overId,
+        ),
+      );
+      if (!col) return;
+      targetStatus = col.id;
+    }
 
     const itemId = String(active.id);
     const [itemType, itemIdNum] = itemId.split('-');
@@ -101,7 +136,9 @@ export default function HubKanbanBoard({
   return (
     <DndContext
       sensors={sensors}
+      collisionDetection={closestCenter}
       onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
       <div className="flex gap-4 overflow-x-auto pb-4">

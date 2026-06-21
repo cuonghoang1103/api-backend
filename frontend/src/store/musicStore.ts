@@ -7,6 +7,7 @@ const brokenLocalTracks = new Set<string>();
 
 // ── localStorage keys ──────────────────────────────────────────────────────────
 const LS_KEY = 'cuong-music-v2';
+const BLOB_STORAGE_KEY = 'music-audio-blobs-v2';
 const HISTORY_KEY = 'cuong-music-history-v1';
 
 const MAX_HISTORY = 50;
@@ -524,6 +525,29 @@ export const useMusicStore = create<MusicState>()((set, get) => {
         tracks: s.tracks.map((track) => {
           if (!track.id.startsWith('local-')) return track;
           if (brokenLocalTracks.has(track.id)) return track;
+          try {
+            const stored: Record<string, { data: string; type: string }> =
+              JSON.parse(localStorage.getItem(BLOB_STORAGE_KEY) || '{}');
+            const blob = stored[track.id];
+            if (blob?.data && blob.data.startsWith('data:')) {
+              // Reconstruct Blob from the stored data: URL so the track
+              // plays after page reload. We decode base64 synchronously
+              // using a DataView rather than relying on fetch().
+              const base64 = blob.data.split(',')[1];
+              if (base64) {
+                const binary = atob(base64);
+                const bytes = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) {
+                  bytes[i] = binary.charCodeAt(i);
+                }
+                const restoredBlob = new Blob([bytes], { type: blob.type || 'audio/mpeg' });
+                const restoredUrl = URL.createObjectURL(restoredBlob);
+                return { ...track, audioUrl: restoredUrl };
+              }
+            }
+          } catch {
+            /* storage unavailable or quota exceeded */
+          }
           brokenLocalTracks.add(track.id);
           return { ...track, audioUrl: '' };
         }),

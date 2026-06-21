@@ -605,6 +605,28 @@ export class MusicService {
       // ("the disc shows the song near the end but only the
       // beginning is audible" — see also R2StorageProvider
       // for the matching read-side comment).
+      // Validate Range against DB fileSize BEFORE hitting R2.
+      // R2's Content-Length reflects only the bytes returned (not the full
+      // file size), so we must use the DB record which was set at upload time.
+      const dbFileSize = Number((track as Record<string, unknown>).fileSize ?? 0);
+
+      if (range) {
+        // Extract start from Range header without full parsing
+        const eqIdx = range.indexOf('=');
+        const dashIdx = range.indexOf('-', eqIdx + 1);
+        const rangeStart = dashIdx > eqIdx + 1
+          ? parseInt(range.substring(eqIdx + 1, dashIdx), 10)
+          : 0;
+        if (rangeStart >= dbFileSize && dbFileSize > 0) {
+          // 416 Range Not Satisfiable — start byte exceeds file size
+          throw new AppError(
+            `Range start ${rangeStart} >= file size ${dbFileSize}`,
+            416,
+            'RANGE_NOT_SATISFIABLE',
+          );
+        }
+      }
+
       const { getStorageProvider } = await import('../storage/StorageProvider.js');
       const provider = getStorageProvider();
       const { stream, size, contentType } = await provider.readStream(
@@ -612,10 +634,7 @@ export class MusicService {
         range ? { range } : undefined,
       );
 
-      // Parse the Range header so we can build correct 206
-      // metadata. Falls back to full-file 200 when no Range or
-      // when the header is unparseable (we still stream the
-      // whole file in that case, which is the safe default).
+      // total is R2's returned byte count (may be full file or partial chunk)
       const total = size >= 0 ? size : 0;
       let start = 0;
       let end = total > 0 ? total - 1 : 0;
@@ -623,39 +642,23 @@ export class MusicService {
 
       if (range && total > 0) {
         try {
-          const parsed = parseRangeHeader(range, total);
+          // Parse using DB fileSize so parseRangeHeader can validate correctly
+          const parsed = parseRangeHeader(range, dbFileSize);
           start = parsed.start;
-          end = Math.min(parsed.end, total - 1);
-          if (start < total) {
-            isPartial = start !== 0 || end !== total - 1;
-          }
-        } catch {
-          // Unparseable Range — fall back to streaming the full file
-          // and let the upstream provider's no-range path take over.
+          end = Math.min(parsed.end, dbFileSize - 1);
+          isPartial = start !== 0 || end !== dbFileSize - 1;
+        } catch (rangeErr) {
+          // Unparseable Range header → return full file
           isPartial = false;
         }
       }
 
       const contentLength = isPartial ? end - start + 1 : (total > 0 ? total : 0);
-
-      // Build the Content-Range header. The total in the header MUST
-      // be the FULL file size — not the partial chunk size. Using the
-      // chunk size here (e.g. `bytes 0-102399/102399` for a 100KB
-      // chunk of a 5MB file) makes the browser think the track is
-      // only 100KB long, so the seek bar maxes out after 100KB and
-      // the disc shows "near end" while only the first chunk plays.
-      let fullFileTotal = total;
-      if (isPartial) {
-        try {
-          const { getStorageProvider } = await import('../storage/StorageProvider.js');
-          const sizeProvider = getStorageProvider();
-          // HEAD-equivalent: readStream without Range returns the full file size.
-          const { size: headSize } = await sizeProvider.readStream(filePath);
-          if (headSize > 0) fullFileTotal = headSize;
-        } catch {
-          // Fall back to the range-based partial total
-        }
-      }
+      // Content-Range total MUST be the full file size so the browser sets
+      // the seek bar to the correct duration. Using the partial chunk size
+      // (total) breaks the progress bar — it would max out after N bytes
+      // while the disc shows the track near the end.
+      const fullFileTotal = dbFileSize > 0 ? dbFileSize : (total > 0 ? total : 0);
       const contentRange = isPartial
         ? `bytes ${start}-${end}/${fullFileTotal}`
         : `bytes 0-${total > 0 ? total - 1 : 0}/${total}`;

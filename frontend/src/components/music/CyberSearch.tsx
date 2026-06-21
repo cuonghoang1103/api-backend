@@ -365,7 +365,6 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
                         src={retriedThumbs.has(result.id) ? downgradeYouTubeThumb(result.thumbnail) : result.thumbnail}
                         alt={result.title}
                         loading="lazy"
-                        referrerPolicy="no-referrer"
                         className="w-full h-full object-cover"
                         onError={() => {
                           // YouTube: first failure → swap to a lower

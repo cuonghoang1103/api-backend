@@ -8,15 +8,17 @@
  *  - Get client IP (proxy-aware)
  *
  * Docs: https://vnpay.js.org/
- * Sandbox: https://sandbox.vnpayment.vn
  *
- * IMPORTANT — sandbox vs production:
- *  - Sandbox: vnpayHost = "https://sandbox.vnpayment.vn", tmnCode/secureSecret
- *    from https://sandbox.vnpayment.vn/devreg
- *  - Production: vnpayHost = "https://pay.vnpayment.vn", real credentials
- *    from VNPay after contract signing.
+ * Environment switching (VNPAY_SANDBOX env var):
+ *  - VNPAY_SANDBOX=1  → sandbox:    https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+ *  - VNPAY_SANDBOX=0  → production: https://pay.vnpay.vn/vpcpay.html
+ *  - Unset            → follows NODE_ENV ('production' → live, anything else → sandbox)
  *
- * All env vars must be set, otherwise the service throws at boot to
+ * Note: sandbox and production use DIFFERENT gateway hosts AND different
+ * payment endpoint paths. The SDK's testMode=true forces the sandbox host
+ * automatically; for production we supply the live host + the shorter path.
+ *
+ * All env vars (except VNPAY_URL) must be set; service throws at boot to
  * fail fast (better than silent breakage at runtime).
  */
 import { VNPay, HashAlgorithm } from 'vnpay';
@@ -26,8 +28,10 @@ interface VnpayConfig {
   tmnCode: string;
   secureSecret: string;
   vnpayHost: string;
+  paymentEndpoint: string;
   returnUrl: string;
   ipnUrl: string;
+  isSandbox: boolean;
 }
 
 let cachedConfig: VnpayConfig | null = null;
@@ -38,14 +42,12 @@ function loadConfig(): VnpayConfig {
 
   const tmnCode = process.env.VNPAY_TMN_CODE;
   const secureSecret = process.env.VNPAY_HASH_SECRET;
-  const vnpayHost = process.env.VNPAY_URL;
   const returnUrl = process.env.VNPAY_RETURN_URL;
   const ipnUrl = process.env.VNPAY_IPN_URL;
 
   const missing = [
     !tmnCode && 'VNPAY_TMN_CODE',
     !secureSecret && 'VNPAY_HASH_SECRET',
-    !vnpayHost && 'VNPAY_URL',
     !returnUrl && 'VNPAY_RETURN_URL',
     !ipnUrl && 'VNPAY_IPN_URL',
   ].filter(Boolean) as string[];
@@ -57,15 +59,31 @@ function loadConfig(): VnpayConfig {
     );
   }
 
-  // Strip trailing slash from host so URL concatenation is clean.
-  const normalizedHost = vnpayHost!.replace(/\/$/, '');
+  // VNPAY_SANDBOX=1 → always sandbox.
+  // VNPAY_SANDBOX=0 → always production.
+  // Unset → fall back to NODE_ENV ('production' = live, anything else = sandbox).
+  const isSandbox =
+    process.env.VNPAY_SANDBOX === '1' ||
+    (process.env.VNPAY_SANDBOX !== '0' && process.env.NODE_ENV !== 'production');
+
+  // Sandbox and production use different hosts AND different path segments.
+  // The SDK's `testMode: true` overrides vnpayHost to the sandbox host
+  // automatically, but we still set it explicitly for clarity.
+  const vnpayHost = isSandbox
+    ? 'https://sandbox.vnpayment.vn'
+    : 'https://pay.vnpay.vn';
+  const paymentEndpoint = isSandbox
+    ? 'paymentv2/vpcpay.html'  // sandbox:    /paymentv2/vpcpay.html
+    : 'vpcpay.html';           // production: /vpcpay.html  ← different path!
 
   cachedConfig = {
     tmnCode: tmnCode!,
     secureSecret: secureSecret!,
-    vnpayHost: normalizedHost,
+    vnpayHost,
+    paymentEndpoint,
     returnUrl: returnUrl!,
     ipnUrl: ipnUrl!,
+    isSandbox,
   };
   return cachedConfig;
 }
@@ -77,10 +95,12 @@ function getClient(): VNPay {
     tmnCode: cfg.tmnCode,
     secureSecret: cfg.secureSecret,
     vnpayHost: cfg.vnpayHost,
-    testMode: cfg.vnpayHost.includes('sandbox'),
+    // testMode=true forces the SDK to override vnpayHost with the sandbox
+    // gateway regardless of what we pass. testMode=false uses our vnpayHost.
+    testMode: cfg.isSandbox,
     hashAlgorithm: HashAlgorithm.SHA512,
     endpoints: {
-      paymentEndpoint: 'paymentv2/vpcpay.html',
+      paymentEndpoint: cfg.paymentEndpoint,
     },
   });
   return cachedClient;

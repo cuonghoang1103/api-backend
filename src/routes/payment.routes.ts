@@ -27,7 +27,7 @@
  *   - frontend polls up to 6×1.5s
  *   - even if user closes browser, IPN still processes the order
  */
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import rateLimit from 'express-rate-limit';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
@@ -697,23 +697,21 @@ router.get('/vnpay/return', async (req: Request, res, next) => {
   }
 });
 
-// ─── 3. POST /api/v1/payments/vnpay/ipn ─────────────────────
-// Server-to-server callback from VNPay. THIS is where we trust the
-// payment and update the order.
+// ─── 3. IPN handler (GET + POST) /api/v1/payments/vnpay/ipn ────
+// VNPay v2 API sends IPN as GET (params in query string). We also
+// accept POST for backward compatibility with some VNPay configurations.
 //
 // Required response: 200 with JSON body { RspCode, Message }.
-//   RspCode "00" = success → VNPay won't retry
-//   anything else  = failure → VNPay will retry
+//   RspCode "00" = acknowledged → VNPay won't retry
+//   anything else = problem → VNPay will retry until it gets "00"
 //
-// We always return 200 because we never want VNPay to retry our handler
-// (the order is already terminal in our DB). The RspCode in the body
-// is informational.
-router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, next) => {
+// We always return HTTP 200. The RspCode in the body is what VNPay
+// reads to decide whether to retry.
+async function handleVnpayIpn(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const query = req.query as Record<string, unknown>;
     const verify = verifyIpnCall(query);
 
-    // Parse all VNPay fields we care about
     const vnpOrderCode = (query.vnp_TxnRef as string) || '';
     const vnpResponseCode = (query.vnp_ResponseCode as string) || '';
     const vnpTransactionNo = (query.vnp_TransactionNo as string) || null;
@@ -725,13 +723,12 @@ router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, nex
       responseCode: vnpResponseCode,
       transactionNo: vnpTransactionNo,
       bankCode: vnpBankCode,
-      amountVnd: Math.round(vnpAmount / 100), // VNPay ×100, convert back
+      amountVnd: Math.round(vnpAmount / 100), // VNPay sends amount × 100
       payDate: vnpPayDate,
       isVerified: verify.isVerified,
     };
 
-    // Always log the IPN first, even if verification fails.
-    // This is our audit trail.
+    // Audit log — always first, even if verification fails.
     await prisma.paymentTransaction.create({
       data: {
         orderCode: vnpOrderCode || 'UNKNOWN',
@@ -744,10 +741,9 @@ router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, nex
       },
     });
 
+    // RspCode 97 = checksum mismatch. Return 200 so VNPay doesn't
+    // flood us with retries, but the non-00 body signals rejection.
     if (!verify.isVerified) {
-      // Bad checksum — could be tampering or misconfigured secret.
-      // Return 200 + non-00 RspCode to signal "received but rejected",
-      // so VNPay won't retry but we record the attempt.
       res.status(200).json({ RspCode: '97', Message: 'Invalid checksum' });
       return;
     }
@@ -757,15 +753,14 @@ router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, nex
       return;
     }
 
-    // ── Split the flow by vnp_TxnRef prefix ──
-    // PRODUCT_* → Shop order (handled + returned here).
-    // Anything else (COURSE_*) falls through to the course path below.
+    // Route by vnp_TxnRef prefix: PRODUCT_* → shop, anything else → course.
     const { orderType, id: parsedId } = parseTxnRef(vnpOrderCode);
     if (orderType === 'PRODUCT') {
       await handleProductIpn(parsedId, ipnParsed, res);
       return;
     }
 
+    // ── COURSE PATH ──
     const order = await prisma.courseOrder.findUnique({
       where: { orderCode: vnpOrderCode },
     });
@@ -774,13 +769,13 @@ router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, nex
       return;
     }
 
-    // Idempotent guard — if already PAID, no-op. VNPay might retry.
+    // RspCode 00 for already-PAID prevents unnecessary VNPay retries.
     if (order.status === 'PAID') {
       res.status(200).json({ RspCode: '00', Message: 'Already processed' });
       return;
     }
 
-    // Verify amount matches what we expect (in VND, since order.amount is VND)
+    // Amount integrity check (order.amount is VND; ipnParsed.amountVnd is /100 already)
     if (ipnParsed.amountVnd !== Number(order.amount)) {
       await prisma.courseOrder.update({
         where: { id: order.id },
@@ -790,7 +785,6 @@ router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, nex
       return;
     }
 
-    // vnp_ResponseCode 00 = success; anything else = failed
     if (vnpResponseCode !== '00') {
       await prisma.courseOrder.update({
         where: { id: order.id },
@@ -801,54 +795,47 @@ router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, nex
     }
 
     // ── SUCCESS PATH ──
-    // Wrap in transaction so partial failure can't leave inconsistent state.
     const receiptContextRef: { current: ReceiptContext | null } = { current: null };
 
     await prisma.$transaction(async (tx) => {
-      // 1) mark order PAID
-      await tx.courseOrder.update({
-        where: { id: order.id },
+      // Atomic PENDING→PAID. updateMany with a status='PENDING' guard is
+      // the idempotency lock: if two concurrent IPNs arrive simultaneously,
+      // only the first wins (count=1); the second sees count=0 and returns
+      // early, preventing a double totalStudents increment.
+      const flipped = await tx.courseOrder.updateMany({
+        where: { id: order.id, status: 'PENDING' },
         data: {
           status: 'PAID',
           paymentTxnNo: vnpTransactionNo,
           paymentBankCode: vnpBankCode,
           paymentPayDate: vnpPayDate,
+          enrolled: true,
         },
       });
 
-      // 2) create enrollment (idempotent — upsert)
+      if (flipped.count !== 1) return; // concurrent IPN already processed this
+
       await tx.enrollment.upsert({
-        where: {
-          userId_courseId: { userId: order.userId, courseId: order.courseId },
-        },
+        where: { userId_courseId: { userId: order.userId, courseId: order.courseId } },
         create: { userId: order.userId, courseId: order.courseId },
         update: { status: 'ACTIVE' },
       });
 
-      // 3) mark order as enrolled + bump course totalStudents.
-      // Guard with `enrolled` flag so a retried IPN doesn't double-increment.
-      if (!order.enrolled) {
-        await tx.courseOrder.update({
-          where: { id: order.id },
-          data: { enrolled: true },
-        });
-        await tx.course.update({
-          where: { id: order.courseId },
-          data: { totalStudents: { increment: 1 } },
-        });
-      }
-
-      // 4) Pull user + course info to send receipt AFTER the
-      //    transaction commits. Done here (read-only) so we don't
-      //    need a separate query.
-      const user = await tx.user.findUnique({
-        where: { id: order.userId },
-        select: { email: true, fullName: true },
-      });
-      const course = await tx.course.findUnique({
+      await tx.course.update({
         where: { id: order.courseId },
-        select: { title: true, slug: true },
+        data: { totalStudents: { increment: 1 } },
       });
+
+      const [user, course] = await Promise.all([
+        tx.user.findUnique({
+          where: { id: order.userId },
+          select: { email: true, fullName: true },
+        }),
+        tx.course.findUnique({
+          where: { id: order.courseId },
+          select: { title: true, slug: true },
+        }),
+      ]);
       if (user && course) {
         receiptContextRef.current = {
           to: user.email,
@@ -860,11 +847,6 @@ router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, nex
     });
 
     const ctx = receiptContextRef.current;
-
-    // Send the receipt AFTER commit. Failures here don't roll back
-    // the enrollment — we never want a Resend outage to refund the
-    // user, and the user can re-fetch the receipt from /my-courses
-    // anyway. Logged for visibility.
     if (ctx) {
       try {
         await emailService.sendCourseReceiptEmail({
@@ -877,8 +859,6 @@ router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, nex
           paidAt: vnpPayDate || new Date(),
         });
       } catch (err) {
-        // EmailService already swallows + logs; we catch defensively
-        // so the IPN still returns 200 to VNPay.
         console.error('[payment-ipn] receipt email failed', err);
       }
     }
@@ -895,7 +875,11 @@ router.post('/vnpay/ipn', vnpayIpnGuard, async (req: Request, res: Response, nex
   } catch (error) {
     next(error);
   }
-});
+}
+
+// VNPay v2 sends IPN via GET; some configurations use POST. Accept both.
+router.get('/vnpay/ipn', vnpayIpnGuard, handleVnpayIpn);
+router.post('/vnpay/ipn', vnpayIpnGuard, handleVnpayIpn);
 
 // ─── 4. GET /api/v1/payments/order/:orderCode ───────────────
 // Frontend polls this after redirect. We only return info the
@@ -1130,23 +1114,28 @@ router.delete(
         throw new AppError('courseId phai la so nguyen', 400);
       }
 
+      const userId = body.userId as number;
+      const courseId = body.courseId as number;
+
       const existing = await prisma.enrollment.findUnique({
-        where: { userId_courseId: { userId: body.userId, courseId: body.courseId } },
+        where: { userId_courseId: { userId, courseId } },
       });
       if (!existing) {
         throw new AppError('Khong tim thay dang ky', 404);
       }
 
-      // Wrap in a transaction so totalStudents doesn't go negative
-      // if the counter is already at 0.
-      // The non-null assertion is safe because the validation above
-      // narrows body.userId / body.courseId to number; TS just
-      // doesn't carry the narrowing into the transaction closure.
-      const userId = body.userId as number;
-      const courseId = body.courseId as number;
+      // Wrap in a transaction: delete enrollment, cancel related orders,
+      // and decrement totalStudents atomically.
       await prisma.$transaction(async (tx) => {
+        // Delete enrollment
         await tx.enrollment.delete({
           where: { userId_courseId: { userId, courseId } },
+        });
+        // Cancel all related CourseOrders for this user+course (keep audit trail)
+        // Cancel PENDING, PAID, and COMPLETED — all indicate the user had access.
+        await tx.courseOrder.updateMany({
+          where: { userId, courseId, status: { in: ['PENDING', 'PAID', 'COMPLETED'] } },
+          data: { status: 'CANCELLED' },
         });
         // Decrement totalStudents, never below 0
         await tx.$executeRaw`
@@ -1325,3 +1314,120 @@ router.post(
 );
 
 export default router;
+
+// ─── GET /api/v1/payments/admin/enrollments ─────────────────────
+// Admin list of all course enrollments with source/type detection.
+router.get(
+  '/admin/enrollments',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: Request, res: Response<ApiResponse>, next) => {
+    try {
+      const keyword = (req.query.keyword as string) || '';
+      const page = Math.max(1, parseInt((req.query.page as string) || '1', 10));
+      const pageSize = Math.min(100, Math.max(1, parseInt((req.query.pageSize as string) || '20', 10)));
+
+      const where = keyword
+        ? {
+            OR: [
+              { user: { fullName: { contains: keyword, mode: 'insensitive' as const } } },
+              { user: { email: { contains: keyword, mode: 'insensitive' as const } } },
+              { course: { title: { contains: keyword, mode: 'insensitive' as const } } },
+            ],
+          }
+        : {};
+
+      const [total, items] = await Promise.all([
+        prisma.enrollment.count({ where }),
+        prisma.enrollment.findMany({
+          where,
+          orderBy: { enrolledAt: 'desc' },
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          include: {
+            user: { select: { id: true, username: true, email: true, fullName: true } },
+            course: { select: { id: true, slug: true, title: true } },
+            usedCourseCode: { select: { code: true } },
+          },
+        }),
+      ]);
+
+      // Fetch related CourseOrders for each enrollment to detect type.
+      const userIds = [...new Set(items.map(i => i.userId))];
+      const courseIds = [...new Set(items.map(i => i.courseId))];
+      const orders = await prisma.courseOrder.findMany({
+        where: {
+          userId: { in: userIds },
+          courseId: { in: courseIds },
+        },
+        select: {
+          id: true, userId: true, courseId: true, status: true,
+          paymentMethod: true, amount: true, discountCode: true,
+        },
+      });
+      const orderMap = new Map<string, typeof orders[0]>();
+      for (const o of orders) {
+        orderMap.set(`${o.userId}-${o.courseId}`, o);
+      }
+
+      const enrollmentSource = (
+        source: string,
+        order: (typeof orders)[0] | undefined,
+        usedCode: { code: string } | null,
+      ): { label: string; type: string } => {
+        if (source === 'ADMIN') {
+          return { label: 'Mien phi (Admin cap)', type: 'free' };
+        }
+        if (source === 'INSTRUCTOR') {
+          return { label: 'Mien phi (Giang vien)', type: 'free' };
+        }
+        if (source === 'CODE' || (usedCode && !order)) {
+          return { label: 'Nhap Code', type: 'code' };
+        }
+        if (!order) {
+          return { label: 'Mien phi', type: 'free' };
+        }
+        if (order.paymentMethod === 'VNPAY' && order.status === 'PAID') {
+          return { label: 'Mua bang VNPAY-QR', type: 'vnpay' };
+        }
+        if (Number(order.amount) === 0 && order.paymentMethod === 'MANUAL') {
+          return { label: 'Mien phi (Admin cap)', type: 'free' };
+        }
+        if (order.status === 'PAID') {
+          return { label: 'Mua bang VNPAY-QR', type: 'vnpay' };
+        }
+        return { label: source, type: 'free' };
+      };
+
+      res.json({
+        success: true,
+        data: {
+          total,
+          page,
+          pageSize,
+          items: items.map(e => {
+            const order = orderMap.get(`${e.userId}-${e.courseId}`);
+            const sourceInfo = enrollmentSource(e.source, order, e.usedCourseCode);
+            return {
+              id: e.id,
+              userId: e.userId,
+              courseId: e.courseId,
+              enrolledAt: e.enrolledAt,
+              status: e.status,
+              source: e.source,
+              sourceLabel: sourceInfo.label,
+              sourceType: sourceInfo.type,
+              user: e.user,
+              course: e.course,
+              usedCode: e.usedCourseCode?.code || null,
+              orderId: order?.id || null,
+              orderStatus: order?.status || null,
+            };
+          }),
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);

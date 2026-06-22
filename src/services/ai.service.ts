@@ -42,6 +42,7 @@ import {
   computeEmbeddings,
   cosineSimilarity,
 } from './aiProviders.js';
+import { logger } from '../utils/logger.js';
 
 // ─── Groq (OpenAI-compatible) client ─────────────────────────────
 // Re-export getGroq() for backward compatibility with other code paths
@@ -299,7 +300,7 @@ export class AIService {
               .join('\n\n');
           }
         } catch (embErr) {
-          console.warn('[AIService] Embedding query failed, falling back to keyword:', embErr);
+          logger.warn('AIService Embedding query failed, falling back to keyword', { error: embErr instanceof Error ? embErr.message : String(embErr) });
           // fall through to keyword
         }
       }
@@ -327,7 +328,7 @@ export class AIService {
       // Table may not exist yet (first run before prisma db push completes)
       const msg = err instanceof Error ? err.message : String(err);
       if (msg.includes('does not exist') || msg.includes('relation') && msg.includes('does not exist')) {
-        console.warn('[AIService] document_chunks table not found, skipping RAG context');
+        logger.warn('AIService document_chunks table not found, skipping RAG context');
         return '';
       }
       throw err;
@@ -370,7 +371,7 @@ export class AIService {
       return { text: result.text, sessionId };
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
-      console.error('[AIService] Chat error:', errMsg);
+      logger.error('AIService Chat error', { error: errMsg });
       throw err;
     }
   }
@@ -475,9 +476,7 @@ export class AIService {
         return;
       } catch (err) {
         const errMsg = err instanceof Error ? err.message : String(err);
-        console.warn(
-          `[AIService] Groq streaming failed: ${errMsg}`,
-        );
+ logger.warn('AIService Groq streaming failed', { error: errMsg });
         // Groq stream failed — fall through to non-stream fallback below.
         // Do NOT throw; let the chatWithFallback path handle it.
       }
@@ -507,7 +506,7 @@ export class AIService {
       }
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
-      console.error('[AIService] All providers failed:', errMsg);
+      logger.error('AIService All providers failed', { error: errMsg });
       throw err;
     }
   }
@@ -566,10 +565,10 @@ export class AIService {
     try {
       embeddings = await computeEmbeddings(chunks);
     } catch (embErr) {
-      console.warn(
-        `[AIService] Failed to compute embeddings for "${documentId}":`,
-        embErr instanceof Error ? embErr.message : embErr,
-      );
+ logger.warn('AIService failed to compute embeddings', {
+ documentId,
+ error: embErr instanceof Error ? embErr.message : String(embErr),
+ });
     }
 
     // Insert new chunks (with embeddings if we got them)
@@ -617,7 +616,7 @@ export class AIService {
         return { scanned: 0, embedded: 0, failed: 0 };
       }
 
-      console.log(`[AIService] Backfilling ${chunks.length} chunks with embeddings...`);
+      logger.info('AIService backfilling chunks with embeddings', { total: chunks.length });
       let embedded = 0;
       let failed = 0;
 
@@ -637,12 +636,12 @@ export class AIService {
           );
           embedded += batch.length;
         } catch (batchErr) {
-          console.warn(`[AIService] Batch ${i}-${i + BATCH} failed:`, batchErr);
+          logger.warn('AIService batch failed', { start: i, end: i + BATCH, error: batchErr instanceof Error ? batchErr.message : String(batchErr) });
           failed += batch.length;
         }
       }
 
-      console.log(`[AIService] Backfill done: ${embedded} embedded, ${failed} failed`);
+      logger.info('AIService backfill done', { embedded, failed });
       return { scanned: chunks.length, embedded, failed };
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -735,7 +734,7 @@ export class AIService {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (msg.includes('does not exist') || (msg.includes('relation') && msg.includes('does not exist'))) {
-        console.warn('[AIService] document_chunks table not found, nothing to clear');
+        logger.warn('AIService document_chunks table not found, nothing to clear');
         return { deleted: 0 };
       }
       throw err;
@@ -794,7 +793,7 @@ export class AIService {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (msg.includes('does not exist') || (msg.includes('relation') && msg.includes('does not exist'))) {
-        console.warn('[AIService] document_chunks table not found, returning empty');
+        logger.warn('AIService document_chunks table not found, returning empty');
         return { chunks: [], total: 0, page: 1, pageSize: safePageSize, totalPages: 0 };
       }
       throw err;
@@ -883,7 +882,7 @@ export class AIService {
    */
   resetOpenAI(): void {
     _groq = null;
-    console.log('[AIService] Groq client cache reset');
+    logger.info('AIService Groq client cache reset');
   }
 }
 

@@ -35,6 +35,7 @@ import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { vnpayIpnGuard } from '../middleware/vnpayIpnGuard.js';
 import { emailService } from '../services/email.service.js';
+import { logger } from '../utils/logger.js';
 import {
   buildCoursePaymentUrl,
   buildVnpayPaymentUrl,
@@ -317,12 +318,12 @@ async function handleProductIpn(
     }
   });
 
-  console.log('[payment-ipn] PRODUCT PAID', {
-    orderCode: order.orderCode,
-    shopOrderId: order.id,
-    amountVnd: ipn.amountVnd,
-    txnNo: ipn.transactionNo,
-  });
+ logger.info('payment-ipn PRODUCT PAID', {
+ orderCode: order.orderCode,
+ shopOrderId: order.id,
+ amountVnd: ipn.amountVnd,
+ txnNo: ipn.transactionNo,
+ });
 
   res.status(200).json({ RspCode: '00', Message: 'Confirm Success' });
 }
@@ -526,7 +527,7 @@ router.post('/course', orderCreateLimiter, authenticate, async (req: Request, re
         // Log only — don't roll back the order. The coupon might
         // already be at maxUses; in that case the next attempt
         // will fail at the applyDiscountCode check.
-        console.warn('[payment] failed to increment coupon usedCount', err);
+        logger.warn('failed to increment coupon usedCount', { error: err instanceof Error ? err.message : String(err) });
       }
     }
 
@@ -864,17 +865,17 @@ async function handleVnpayIpn(req: Request, res: Response, next: NextFunction): 
           paidAt: vnpPayDate || new Date(),
         });
       } catch (err) {
-        console.error('[payment-ipn] receipt email failed', err);
+        logger.error('receipt email failed', { error: err instanceof Error ? err.message : String(err) });
       }
     }
 
-    console.log('[payment-ipn] PAID', {
-      orderCode: order.orderCode,
-      userId: order.userId,
-      courseId: order.courseId,
-      amountVnd: ipnParsed.amountVnd,
-      txnNo: vnpTransactionNo,
-    });
+ logger.info('payment-ipn PAID', {
+ orderCode: order.orderCode,
+ userId: order.userId,
+ courseId: order.courseId,
+ amountVnd: ipnParsed.amountVnd,
+ txnNo: vnpTransactionNo,
+ });
 
     res.status(200).json({ RspCode: '00', Message: 'OK' });
   } catch (error) {
@@ -1293,15 +1294,15 @@ router.post(
           refundedAt,
         });
       } catch (err) {
-        console.error('[payment-refund] email failed', err);
+        logger.error('refund email failed', { error: err instanceof Error ? err.message : String(err) });
       }
 
-      console.log('[payment-refund] REFUNDED', {
-        orderCode: order.orderCode,
-        amount: refundAmount,
-        isFull: isFullRefund,
-        adminId,
-      });
+ logger.info('payment-refund REFUNDED', {
+ orderCode: order.orderCode,
+ amount: refundAmount,
+ isFull: isFullRefund,
+ adminId,
+ });
 
       res.json({
         success: true,

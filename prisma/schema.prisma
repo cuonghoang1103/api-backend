@@ -1198,6 +1198,12 @@ model SocialPost {
   @@index([status, createdAt(sort: Desc)], name: "idx_social_posts_status_created")
   @@index([authorId, createdAt(sort: Desc)], name: "idx_social_posts_author_created")
   @@index([visibility, status, createdAt(sort: Desc)], name: "idx_social_posts_vis_status_created")
+  // GIN trigram index powering fast ILIKE/substring search on
+  // post content (see social.service.ts). Requires the pg_trgm
+  // extension. `map:` pins the DB index name to match the
+  // migration SQL; `raw("gin_trgm_ops")` selects the trigram
+  // operator class.
+  @@index([content(ops: raw("gin_trgm_ops"))], type: Gin, map: "idx_social_posts_content_trgm")
   @@map("social_posts")
 }
 

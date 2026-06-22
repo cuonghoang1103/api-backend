@@ -351,14 +351,15 @@ export default function AdminUsersPage() {
   // ── Auth detection ───────────────────────────────────────────────────────
   useEffect(() => {
     const currentUser = currentAuthUser;
-    const isSAdmin =
-      currentUser?.username === 'cuong03dx' ||
-      currentUser?.username === 'Cuong123' ||
-      backendUser?.username === 'cuong03dx' ||
-      backendUser?.username === 'Cuong123' ||
-      (currentUser?.email || '').toLowerCase() === 'cuong03dx@gmail.com' ||
-      (backendUser?.email || '').toLowerCase() === 'cuong03dx@gmail.com';
-    setIsSuperAdmin(isSAdmin);
+    // OAuth/session users carry a singular `role` string; credentials users
+    // (backendUser from authStore) carry a `roles` array — check both.
+    const rawRole = (currentUser?.role || '');
+    const roleFromStr = (typeof rawRole === 'string' ? rawRole : '').replace('ROLE_', '').toUpperCase();
+    const rolesArr: unknown[] = Array.isArray(currentUser?.roles) ? currentUser.roles : [];
+    const isAdmin =
+      roleFromStr === 'ADMIN' ||
+      rolesArr.some((r: unknown) => (typeof r === 'string' ? r : '').replace('ROLE_', '').toUpperCase() === 'ADMIN');
+    setIsSuperAdmin(isAdmin);
     setIsOAuthAdmin(!backendUser && !!session?.user);
   }, [currentAuthUser, session, backendUser]);
 

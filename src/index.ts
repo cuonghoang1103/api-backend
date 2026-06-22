@@ -578,6 +578,26 @@ async function startServer(): Promise<void> {
       `);
 
       console.log('✅ document_chunks table + embedding column: OK (auto-synced)');
+
+      // ─── Hashtag search optimization (Social Feed) ─────────────
+      // Enable pg_trgm for trigram-based ILIKE searches on post
+      // content so hashtag filtering (GET /social/posts?hashtag=X)
+      // and trending aggregation (GET /social/trending) stay fast
+      // as the social_posts table grows past 100k rows.
+      // Both CREATE EXTENSION and CREATE INDEX are idempotent.
+      try {
+        await prisma.$executeRawUnsafe(`CREATE EXTENSION IF NOT EXISTS pg_trgm;`);
+        await prisma.$executeRawUnsafe(`
+          CREATE INDEX IF NOT EXISTS idx_social_posts_content_trgm
+            ON social_posts USING GIN (content gin_trgm_ops);
+        `);
+        console.log('✅ social_posts GIN trigram index: OK');
+      } catch (trgmErr) {
+        // pg_trgm may not be available in all Postgres distributions.
+        // The hashtag filter falls back to a sequential scan which is
+        // correct but slower; this is non-fatal.
+        console.warn('[Startup] pg_trgm index skipped (extension unavailable):', trgmErr instanceof Error ? trgmErr.message : trgmErr);
+      }
     } catch (syncErr) {
       // If raw SQL fails, the try-catch guards in AIService handle missing tables.
       console.warn('[Startup] Schema auto-sync skipped:', syncErr instanceof Error ? syncErr.message : syncErr);

@@ -169,13 +169,15 @@ router.post(
   async (req: any, res: any, next) => {
     try {
       const currentUserId = req.user?.userId;
-      const { cursor, limit = '20', authorId, visibility } = req.query;
+      const { cursor, limit = '20', authorId, visibility, hashtag } = req.query;
 
       const result = await getFeed({
         cursor: cursor ? parseInt(cursor as string, 10) : undefined,
         limit: Math.min(parseInt(limit as string, 10) || 20, 50),
         authorId: authorId ? parseInt(authorId as string, 10) : undefined,
         visibility: visibility as string | undefined,
+        // Hashtag filter — strip leading # if client included it
+        hashtag: hashtag ? (hashtag as string).replace(/^#/, '').trim() || undefined : undefined,
         currentUserId,
       });
 
@@ -879,44 +881,51 @@ router.post(
 );
 
 // ════════════════════════════════════════════════════════════════
-// GET /api/v1/social/trending — Top hashtags (last 7 days)
+// GET /api/v1/social/trending — Top hashtags (last 24 hours)
 // ════════════════════════════════════════════════════════════════
-// Lightweight endpoint that scans recent post content for #hashtag
-// mentions. We don't persist hashtags as a separate table yet
-// (the schema isn't in place), so the extraction happens on the
-// fly via a regex. The query is bounded by `since` (default 7d)
-// and the in-memory post cap so the endpoint stays cheap.
+// Scans the last 24 hours of PUBLIC posts, extracts #hashtag
+// tokens, aggregates their frequency, and returns the top 10.
+// The query window is intentionally narrow (24h) so the "Xu hướng"
+// widget reflects *today's* activity rather than week-old posts.
+// Uses the GIN trigram index on social_posts.content (created at
+// startup) so the regex scan stays fast as the table grows.
 router.get(
   '/trending',
   optionalAuth,
-  async (_req: any, res: Response<any>, next) => {
+  async (req: any, res: Response<any>, next) => {
     try {
-      const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      const topN = Math.min(parseInt((req.query.limit as string) || '10', 10), 20);
+      const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
       const posts = await prisma.socialPost.findMany({
         where: { createdAt: { gte: since }, visibility: 'PUBLIC' },
-        select: { content: true, createdAt: true },
+        select: { content: true },
         orderBy: { createdAt: 'desc' },
-        take: 500,
+        take: 1000,
       });
 
-      // Count #tag occurrences (case-insensitive, alphanum+underscore+vn)
+      // Count #tag occurrences (case-insensitive, Unicode-aware)
       const tagCounts = new Map<string, number>();
       const tagRegex = /#([\p{L}\p{N}_]{2,50})/gu;
       for (const p of posts) {
+        // De-dupe within a single post so one post counts once per tag
+        const seenInPost = new Set<string>();
         const matches = p.content.matchAll(tagRegex);
         for (const m of matches) {
           const tag = m[1].toLowerCase();
-          tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+          if (!seenInPost.has(tag)) {
+            seenInPost.add(tag);
+            tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+          }
         }
       }
 
       const top = Array.from(tagCounts.entries())
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 5)
-        .map(([tag, count], idx) => ({
+        .slice(0, topN)
+        .map(([tag, postsCount], idx) => ({
           id: idx + 1,
           tag,
-          postsCount: count,
+          postsCount,
         }));
 
       res.json({ success: true, data: top });

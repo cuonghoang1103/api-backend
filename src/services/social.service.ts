@@ -86,6 +86,8 @@ export interface FeedOptions {
   limit?: number;
   authorId?: number;
   visibility?: string;
+  /** Filter feed to posts whose content contains this hashtag (case-insensitive). */
+  hashtag?: string;
 }
 
 export interface CommentInput {
@@ -333,13 +335,16 @@ export async function updatePost(postId: number, userId: number, data: {
 // ─── Feed ────────────────────────────────────────────────────────
 
 export async function getFeed(options: FeedOptions & { currentUserId?: number }) {
-  const { cursor, limit = 20, authorId, visibility, currentUserId } = options;
+  const { cursor, limit = 20, authorId, visibility, currentUserId, hashtag } = options;
 
   const posts = await prisma.socialPost.findMany({
     where: {
       visibility: visibility as 'PUBLIC' | 'FRIENDS' | 'PRIVATE' | undefined,
       ...(authorId ? { authorId } : {}),
       ...(cursor ? { id: { lt: cursor } } : {}),
+      // Hashtag filter: ILIKE '%#tag%' — uses the GIN trigram index on
+      // social_posts.content (created at startup if pg_trgm is available).
+      ...(hashtag ? { content: { contains: `#${hashtag}`, mode: 'insensitive' as const } } : {}),
     },
     orderBy: { createdAt: 'desc' },
     take: limit + 1,

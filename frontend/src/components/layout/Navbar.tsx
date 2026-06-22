@@ -8,10 +8,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { useMessagingStore } from '@/store/messagingStore';
+import { useNotificationStore } from '@/store/notificationStore';
+import { useNotificationSocket } from '@/hooks/useNotificationSocket';
+import NotificationDropdown from '@/components/social/NotificationDropdown';
 import {
   Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles, TrendingUp,
   User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
-  Globe, ShoppingBag, GraduationCap,
+  Globe, ShoppingBag, GraduationCap, Bell,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -51,8 +54,15 @@ export default function Navbar() {
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
   const initMessaging = useMessagingStore((s) => s.init);
   const disconnectMessaging = useMessagingStore((s) => s.shutdown);
+  const unreadNotifications = useNotificationStore((s) => s.unreadCount);
   const [isScrolled, setIsScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [bellOpen, setBellOpen] = useState(false);
+  const bellRef = useRef<HTMLButtonElement>(null);
+
+  // Start the socket listener for real-time in-app notifications.
+  // This is idempotent — re-renders are no-ops.
+  useNotificationSocket();
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [locale, setLocale] = useState('en');
 
@@ -287,6 +297,33 @@ export default function Navbar() {
                 )}
               </button>
 
+              {/* Notification bell — only for authenticated users */}
+              {isAuthenticated && mounted && (
+                <button
+                  ref={bellRef}
+                  type="button"
+                  onClick={() => {
+                    setBellOpen((o) => !o);
+                    if (!bellOpen) {
+                      // Hydrate the notification list on first open.
+                      useNotificationStore.getState().loadInitial();
+                    }
+                  }}
+                  className="relative flex items-center justify-center w-9 h-9 rounded-xl
+                    bg-white/[0.04] border border-white/[0.06]
+                    hover:border-neon-violet/30 hover:bg-neon-violet/5 transition-all"
+                  title="Thông báo"
+                  aria-label="Notifications"
+                >
+                  <Bell className="w-3.5 h-3.5 text-text-secondary" />
+                  {unreadNotifications > 0 && (
+                    <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 rounded-full bg-neon-fuchsia text-white text-[9px] font-bold flex items-center justify-center shadow-lg shadow-neon-fuchsia/30">
+                      {unreadNotifications > 99 ? '99+' : unreadNotifications}
+                    </span>
+                  )}
+                </button>
+              )}
+
               <LanguageSwitcher />
 
               {/* User */}
@@ -411,6 +448,15 @@ export default function Navbar() {
         open={changePasswordOpen}
         onClose={() => setChangePasswordOpen(false)}
       />
+
+      {/* Notification dropdown — portal so it escapes stacking contexts */}
+      {isAuthenticated && mounted && (
+        <NotificationDropdown
+          anchor={bellRef.current}
+          open={bellOpen}
+          onClose={() => setBellOpen(false)}
+        />
+      )}
     </div>
   );
 }

@@ -350,14 +350,27 @@ router.get(
   optionalAuth,
   async (req: any, res: Response<any>, next) => {
     try {
-      const postId = parseInt(req.params.id, 10);
-      if (isNaN(postId)) throw new AppError('Invalid post ID', 400, 'INVALID_ID');
+    const postId = parseInt(req.params.id, 10);
+    if (isNaN(postId)) throw new AppError('Invalid post ID', 400, 'INVALID_ID');
 
-      const { cursor, limit = '20' } = req.query;
-      const result = await getComments(postId, {
-        cursor: cursor ? parseInt(cursor as string, 10) : undefined,
-        limit: parseInt(limit as string, 10) || 20,
-      });
+    const { cursor, limit = '20' } = req.query;
+    // Validate `cursor` if present: must be a positive integer.
+    // The service layer would otherwise propagate NaN to Prisma,
+    // which surfaces as a 500 'Invalid cursor' error. Catching it
+    // here turns a server fault into a 400 client error and
+    // documents the accepted shape.
+    let cursorId: number | undefined;
+    if (cursor != null && cursor !== '') {
+    const parsed = parseInt(cursor as string, 10);
+    if (!Number.isInteger(parsed) || parsed < 1 || String(parsed) !== String(cursor)) {
+    throw new AppError('Invalid cursor', 400, 'INVALID_CURSOR');
+    }
+    cursorId = parsed;
+    }
+    const result = await getComments(postId, {
+    ...(cursorId != null ? { cursor: cursorId } : {}),
+    limit: parseInt(limit as string, 10) || 20,
+    });
 
       res.json({ success: true, ...result });
     } catch (error) {

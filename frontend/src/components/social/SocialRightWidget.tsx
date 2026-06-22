@@ -13,7 +13,7 @@ import {
   MessageSquare,
   X,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Component, type ReactNode, useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
@@ -34,6 +34,18 @@ interface SuggestedUser {
   bio?: string;
 }
 
+class SocialRightWidgetErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}
+
 /**
  * Right rail of the 3-column social layout. Hosts three widgets:
  * 1. AI Assistant shortcut — mirrors the floating assistant and
@@ -46,7 +58,7 @@ interface SuggestedUser {
  *    panel. The data comes from a lightweight /api/v1/social/suggestions
  *    call; on failure we just show a small note.
  */
-export default function SocialRightWidget() {
+function SocialRightWidgetInner() {
   const router = useRouter();
   const auth = useAuthStore();
   const [trending, setTrending] = useState<TrendingTopic[]>([]);
@@ -257,7 +269,7 @@ export default function SocialRightWidget() {
                       <img src={u.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
                     ) : (
                       <div className="h-8 w-8 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-xs font-bold text-white">
-                        {(u.displayName || u.fullName || u.username).charAt(0).toUpperCase()}
+                        {(u.displayName || u.fullName || u.username || '?').charAt(0).toUpperCase()}
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
@@ -297,5 +309,13 @@ export default function SocialRightWidget() {
         © CuongHoangDev · Social feed
       </p>
     </aside>
+  );
+}
+
+export default function SocialRightWidget() {
+  return (
+    <SocialRightWidgetErrorBoundary>
+      <SocialRightWidgetInner />
+    </SocialRightWidgetErrorBoundary>
   );
 }

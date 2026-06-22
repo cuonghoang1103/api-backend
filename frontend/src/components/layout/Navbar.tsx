@@ -316,9 +316,9 @@ export default function Navbar() {
                   aria-label="Notifications"
                 >
                   <Bell className="w-3.5 h-3.5 text-text-secondary" />
-                  {unreadNotifications > 0 && (
+                  {(unreadNotifications ?? 0) > 0 && (
                     <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 rounded-full bg-neon-fuchsia text-white text-[9px] font-bold flex items-center justify-center shadow-lg shadow-neon-fuchsia/30">
-                      {unreadNotifications > 99 ? '99+' : unreadNotifications}
+                      {(unreadNotifications ?? 0) > 99 ? '99+' : unreadNotifications}
                     </span>
                   )}
                 </button>
@@ -432,9 +432,9 @@ export default function Navbar() {
                   <link.icon className="w-4 h-4" />
                 )}
                 <span className="text-[9px] font-medium">{link.label}</span>
-                {isMessages && isAuthenticated && mounted && unreadMessages > 0 && (
+                {isMessages && isAuthenticated && mounted && (unreadMessages ?? 0) > 0 && (
                   <span className="absolute top-0 right-1 min-w-[14px] h-[14px] px-1 rounded-full bg-red-500 text-white text-[8px] font-bold flex items-center justify-center">
-                    {unreadMessages > 99 ? '99+' : unreadMessages}
+                    {(unreadMessages ?? 0) > 99 ? '99+' : unreadMessages}
                   </span>
                 )}
               </Link>

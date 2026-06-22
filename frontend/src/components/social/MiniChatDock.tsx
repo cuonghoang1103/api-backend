@@ -1,6 +1,8 @@
 'use client';
 
 import {
+  Component,
+  type ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -13,6 +15,18 @@ import SafeAvatar from '@/components/ui/SafeAvatar';
 import { connectSocket, emitTyping, getSocket } from '@/lib/socket';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
+
+class MiniChatDockErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}
 
 /* ────────────────────────────────────────────────────────────────────
  * MiniChatDock — Facebook-style floating chat windows
@@ -65,7 +79,7 @@ const SUGGESTED_REPLIES = [
   'Haha, hay quá!',
 ];
 
-export default function MiniChatDock() {
+function MiniChatDockInner() {
   const [windows, setWindows] = useState<ChatWindowState[]>([]);
   const inputRefs = useRef<Record<number, HTMLInputElement | null>>({});
   // Per-window typing debounce timers.
@@ -270,9 +284,9 @@ export default function MiniChatDock() {
                 >
                   <div className="relative shrink-0">
                     <SafeAvatar
-                      src={w.peer.avatarUrl}
-                      alt={w.peer.displayName}
-                      seed={w.peer.username}
+                      src={w.peer?.avatarUrl}
+                      alt={w.peer?.displayName ?? ''}
+                      seed={w.peer?.username ?? ''}
                       size={28}
                       rounded="full"
                       fallbackType="initials"
@@ -286,7 +300,7 @@ export default function MiniChatDock() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-white">
-                      {w.peer.displayName}
+                      {w.peer?.displayName ?? w.peer?.username ?? ''}
                     </p>
                     <p className="truncate text-[10px] text-white/50">
                       {w.isTyping ? (
@@ -373,7 +387,7 @@ export default function MiniChatDock() {
                         <div className="mt-3 flex items-center gap-2 text-xs text-white/50">
                           <TypingDots />
                           <span className="italic">
-                            {w.peer.displayName} đang nhập…
+                            {w.peer?.displayName ?? w.peer?.username ?? ''} đang nhập…
                           </span>
                         </div>
                       )}
@@ -422,7 +436,7 @@ export default function MiniChatDock() {
                         onChange={(e) =>
                           updateDraft(w.peer.id, e.target.value, w.threadId)
                         }
-                        placeholder={`Nhắn ${w.peer.displayName}…`}
+                        placeholder={`Nhắn ${w.peer?.displayName ?? w.peer?.username ?? ''}…`}
                         className="flex-1 rounded-full bg-white/5 px-3 py-1.5 text-sm text-white placeholder-white/40 outline-none focus:bg-white/10"
                         disabled={!w.threadId}
                       />
@@ -443,6 +457,14 @@ export default function MiniChatDock() {
         </AnimatePresence>
       </div>
     </div>
+  );
+}
+
+export default function MiniChatDock() {
+  return (
+    <MiniChatDockErrorBoundary>
+      <MiniChatDockInner />
+    </MiniChatDockErrorBoundary>
   );
 }
 

@@ -23,6 +23,7 @@
 import * as Sentry from '@sentry/node';
 import type { Express, Request, Response, NextFunction } from 'express';
 import { config } from '../config/env.js';
+import { logger } from '../utils/logger.js';
 
 let initialized = false;
 
@@ -77,12 +78,12 @@ export function initSentry(): void {
         return event;
       },
     });
-    initialized = true;
-    console.log('✅ Sentry initialized');
-  } catch (err) {
-    // Never let Sentry init failure take down the server.
-    console.error('[Sentry] init failed:', err);
-  }
+ initialized = true;
+ logger.info('Sentry initialized', { environment: config.sentryEnvironment, release: config.sentryRelease || undefined });
+ } catch (err) {
+ // Never let Sentry init failure take down the server.
+ logger.error('Sentry init failed', { error: err instanceof Error ? err.message : String(err) });
+ }
 }
 
 /**
@@ -104,19 +105,19 @@ export function initSentry(): void {
 export function setupSentryRequestHandler(app: Express): void {
   if (!initialized) return;
   try {
-    app.use(Sentry.Handlers.requestHandler());
-  } catch (err) {
-    console.error('[Sentry] requestHandler failed:', err);
-  }
+ app.use(Sentry.Handlers.requestHandler());
+ } catch (err) {
+ logger.error('Sentry requestHandler failed', { error: err instanceof Error ? err.message : String(err) });
+ }
 }
 
 export function setupSentryErrorHandler(app: Express): void {
   if (!initialized) return;
   try {
-    app.use(Sentry.Handlers.errorHandler());
-  } catch (err) {
-    console.error('[Sentry] errorHandler failed:', err);
-  }
+ app.use(Sentry.Handlers.errorHandler());
+ } catch (err) {
+ logger.error('Sentry errorHandler failed', { error: err instanceof Error ? err.message : String(err) });
+ }
 }
 
 /**

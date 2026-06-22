@@ -299,7 +299,6 @@ rename an existing one without grepping first).
 - `redis connection ready`
 
 ### Sentry
-- `Sentry initialized` — `{ environment, release }`
 - `Sentry init failed` — `{ error }`
 - `Sentry requestHandler failed` — `{ error }`
 - `Sentry errorHandler failed` — `{ error }`

@@ -522,13 +522,12 @@ function setupGracefulShutdown(): void {
 // ─── 14. Server Startup ─────────────────────────────────────
 async function startServer(): Promise<void> {
   try {
-    // Kết nối database
+    // Kết nối database (logs its own 'Database connected' with elapsedMs)
     await connectDatabase();
- logger.info('Database connected');
 
- // Verify Prisma connection pool
- await prisma.$queryRaw`SELECT 1`;
- logger.info('Database pool OK', { env: config.nodeEnv });
+    // Verify Prisma connection pool with a real round-trip
+    await prisma.$queryRaw`SELECT 1`;
+    logger.info('Database pool OK', { env: config.nodeEnv });
 
     // ─── Auto-sync Prisma schema + add embedding column ────────
     // This ensures new tables (e.g. document_chunks) are created on startup

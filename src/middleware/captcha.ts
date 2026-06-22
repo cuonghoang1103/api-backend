@@ -52,6 +52,7 @@ import { Request, Response, NextFunction } from 'express';
 import { verifyTurnstileToken } from '../services/captcha.service.js';
 import { AppError } from './errorHandler.js';
 import { prisma } from '../config/database.js';
+import { logger } from '../utils/logger.js';
 
 function captchaRequired(): boolean {
   // Default ON when the secret is configured. Opt-out via env.
@@ -107,7 +108,7 @@ async function shouldBypassCaptcha(req: Request): Promise<'bypass' | 'require'> 
     });
     return isAdmin ? 'bypass' : 'require';
   } catch (err) {
-    console.warn('[captcha] Bypass lookup failed, falling back to captcha check:', err);
+    logger.warn('captcha bypass lookup failed, falling back to captcha check', { error: err instanceof Error ? err.message : String(err) });
     return 'require';
   }
 }
@@ -186,10 +187,9 @@ export async function softCaptchaMiddleware(
     // Soft mode: missing token is OK — email-OTP is the real gate.
     // Still log a warning so ops can see when many requests are
     // skipping the challenge (could indicate bot pressure).
-    if (process.env.NODE_ENV !== 'test') {
-      // eslint-disable-next-line no-console
-      console.warn('[captcha] soft-mode: no Turnstile token on', req.path);
-    }
+ if (process.env.NODE_ENV !== 'test') {
+ logger.warn('captcha soft-mode: no Turnstile token', { path: req.path });
+ }
     return next();
   }
 

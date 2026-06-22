@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Paperclip, X, Loader2, FileText, Image as ImageIcon, Smile } from 'lucide-react';
+import { Send, Paperclip, X, Loader2, FileText, Reply } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { messagingApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,6 +30,8 @@ const ALLOWED_EXACT = new Set([
 export default function MessageInput({ disabled = false }: { disabled?: boolean }) {
   const store = useMessagingStore();
   const threadId = store.currentThreadId!;
+  const replyTo = useMessagingStore((s) => s.replyTo);
+  const setReplyTo = useMessagingStore((s) => s.setReplyTo);
   const [text, setText] = useState('');
   const [pending, setPending] = useState<PendingAttachment[]>([]);
   const [sending, setSending] = useState(false);
@@ -158,11 +160,16 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
     if (!trimmed && fileIds.length === 0) return;
     if (sending) return;
 
+    const parentMessageId = replyTo?.id ?? null;
     setSending(true);
     try {
-      await store.sendMessage(threadId, trimmed, fileIds.length ? fileIds : undefined);
+      await store.sendMessage(
+        threadId,
+        trimmed,
+        fileIds.length ? fileIds : undefined,
+        parentMessageId,
+      );
       setText('');
-      // Revoke any previews still around
       pending.forEach((p) => p.previewUrl && URL.revokeObjectURL(p.previewUrl));
       setPending([]);
       if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
@@ -198,6 +205,35 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
+      {/* Reply strip — shown when replying to a message */}
+      <AnimatePresence>
+        {replyTo && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-2 flex items-center gap-2 rounded-xl border border-cyan-500/20 bg-cyan-500/[0.06] px-3 py-2"
+          >
+            <Reply className="h-3.5 w-3.5 shrink-0 text-cyan-400" />
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] font-semibold text-cyan-400">
+                {replyTo.sender.displayName ?? replyTo.sender.username}
+              </p>
+              <p className="truncate text-[11px] text-text-muted">
+                {replyTo.content || '📎 Tệp đính kèm'}
+              </p>
+            </div>
+            <button
+              onClick={() => setReplyTo(null)}
+              className="shrink-0 rounded p-0.5 text-text-muted hover:text-text-primary"
+              aria-label="Huỷ trả lời"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Drag overlay */}
       <AnimatePresence>
         {dragOver && (

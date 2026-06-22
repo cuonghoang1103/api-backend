@@ -23,12 +23,13 @@ router.get('/', authenticate, async (req, res: Response<ApiResponse>, next) => {
 // the self-edit path used by the /profile page.
 router.put('/', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
-    const { fullName, email, bio, avatarUrl, displayName, gender, birthYear, phone, socialLinks, allowMessagesFromStrangers } = req.body;
+    const { fullName, email, bio, avatarUrl, coverPhotoUrl, displayName, gender, birthYear, phone, socialLinks, allowMessagesFromStrangers } = req.body;
     await authService.updateProfile(req.userId!, {
       fullName,
       email,
       bio,
       avatarUrl,
+      coverPhotoUrl,
       displayName,
       gender,
       birthYear,

@@ -82,22 +82,43 @@ function MarqueeTitle({
   );
 }
 
+// For YouTube thumbnails: try successively smaller variants until one loads.
+// maxresdefault (1280px) is often absent for older videos; hqdefault (480px)
+// and mqdefault (320px) are almost always present.
+function downgradeYouTubeThumb(url: string): string | null {
+  if (url.includes('maxresdefault')) return url.replace('maxresdefault', 'hqdefault');
+  if (url.includes('hqdefault')) return url.replace('hqdefault', 'mqdefault');
+  if (url.includes('sddefault')) return url.replace('sddefault', 'mqdefault');
+  return null; // no further downgrade possible
+}
+
 function VinylDisc({
   coverImage, title, isPlaying,
 }: {
   coverImage: string; title: string; isPlaying: boolean;
 }) {
   const SIZE = 160;
-  // Track image load failures so we can fall back to the
-  // initial-letter placeholder instead of leaving the disc
-  // looking empty. YouTube maxresdefault.jpg returns a 404
-  // placeholder for older videos, R2 covers can 5xx briefly
-  // during deploys, and a CSP/Referer hiccup on the first
-  // request can all blank out the <Image> without ever
-  // surfacing an error to React. With this state we always
-  // render *something* visually meaningful.
+  // Progressive fallback for YouTube thumbnails:
+  //   maxresdefault → hqdefault → mqdefault → letter placeholder
+  const [resolvedCover, setResolvedCover] = useState(coverImage);
   const [imgError, setImgError] = useState(false);
-  const showFallback = !coverImage || imgError || !isSafeUrl(coverImage);
+
+  // Reset whenever the track changes
+  useEffect(() => {
+    setResolvedCover(coverImage);
+    setImgError(false);
+  }, [coverImage]);
+
+  const handleImgError = () => {
+    const next = downgradeYouTubeThumb(resolvedCover);
+    if (next && next !== resolvedCover) {
+      setResolvedCover(next);
+    } else {
+      setImgError(true);
+    }
+  };
+
+  const showFallback = !resolvedCover || imgError || !isSafeUrl(resolvedCover);
 
   return (
     <div
@@ -179,11 +200,11 @@ function VinylDisc({
             // YouTube thumbnails to disappear instead of load.
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={coverImage}
+              src={resolvedCover}
               alt={title}
               loading="lazy"
               className="w-full h-full object-cover"
-              onError={() => setImgError(true)}
+              onError={handleImgError}
             />
           )}
         </div>

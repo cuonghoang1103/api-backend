@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Trash2, FileText, Download, X, Check, CheckCheck, Undo2 } from 'lucide-react';
+import { Trash2, FileText, Download, X, Check, CheckCheck, Undo2, Reply } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { MessagingMessage } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -11,6 +11,18 @@ import { vi } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import ReactionBar from './ReactionBar';
 import toast from 'react-hot-toast';
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.cuongthai.com';
+
+// Ensure attachment URLs are absolute. Old serializer produced relative
+// "/uploads/..." paths; new serializer returns full URLs from the storage
+// provider. This guard handles both so cached/old messages still render.
+function resolveUrl(url: string): string {
+  if (!url) return url;
+  if (url.startsWith('http')) return url;
+  if (url.startsWith('/')) return `${API_BASE}${url}`;
+  return `${API_BASE}/${url}`;
+}
 
 const RECALL_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
 
@@ -27,13 +39,14 @@ export default function MessageBubble({
   message,
   isOwn,
   showSender = false,
+  onReply,
 }: {
   message: MessagingMessage;
   isOwn: boolean;
   showSender?: boolean;
-  /** Backwards-compat: kept so we can change canDelete → isOwn without touching callers. */
   canDelete?: boolean;
   onDelete?: () => void;
+  onReply?: (message: MessagingMessage) => void;
 }) {
   const [showMenu, setShowMenu] = useState(false);
   const auth = useAuthStore();
@@ -161,25 +174,48 @@ export default function MessageBubble({
           </p>
         )}
 
+        {/* Quoted / reply snippet */}
+        {message.parentMessage && (
+          <div className={cn(
+            'mx-3 mt-2 mb-1 rounded-lg border-l-2 px-2.5 py-1.5 text-[11px] leading-snug',
+            isOwn
+              ? 'border-white/40 bg-white/10 text-white/70'
+              : 'border-cyan-500/60 bg-white/[0.04] text-text-muted',
+          )}>
+            <span className="font-semibold text-cyan-400">
+              {message.parentMessage.senderName}
+            </span>
+            <p className="mt-0.5 line-clamp-2 break-words opacity-80">
+              {message.parentMessage.content || '📎 Tệp đính kèm'}
+            </p>
+          </div>
+        )}
+
         {message.content && <p className="whitespace-pre-wrap break-words px-3.5 py-1.5">{message.content}</p>}
 
         {message.attachments.length > 0 && (
           <div className={cn('mt-1 space-y-1.5 px-3.5 pb-1.5', message.content ? 'border-t border-white/10 pt-1.5' : '')}>
-            {message.attachments.map((a) =>
-              a.mimeType.startsWith('image/') ? (
-                <a key={a.id} href={a.url} target="_blank" rel="noopener noreferrer" className="block">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={a.url}
-                    alt={a.fileName}
-                    className="max-h-56 max-w-[280px] rounded-lg object-cover"
-                    loading="lazy"
-                  />
-                </a>
-              ) : (
+            {message.attachments.map((a) => {
+              const resolvedUrl = resolveUrl(a.url);
+              if (a.mimeType.startsWith('image/')) {
+                return (
+                  <a key={a.id} href={resolvedUrl} target="_blank" rel="noopener noreferrer" className="block">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={resolvedUrl}
+                      alt={a.fileName}
+                      className="max-h-56 max-w-[280px] rounded-lg object-cover"
+                      loading="lazy"
+                    />
+                  </a>
+                );
+              }
+              // Determine icon by MIME type
+              const ext = a.fileName.split('.').pop()?.toLowerCase() ?? '';
+              return (
                 <a
                   key={a.id}
-                  href={a.url}
+                  href={resolvedUrl}
                   download={a.fileName}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -188,13 +224,14 @@ export default function MessageBubble({
                     'bg-white/[0.04] hover:bg-white/[0.08]': !isOwn,
                   })}
                 >
-                  <FileText className="h-3.5 w-3.5 shrink-0" />
+                  <FileText className="h-3.5 w-3.5 shrink-0 opacity-70" />
                   <span className="min-w-0 flex-1 truncate">{a.fileName}</span>
+                  <span className="text-[10px] opacity-50">{ext.toUpperCase()}</span>
                   <span className="text-[10px] opacity-70">{formatBytes(a.fileSize)}</span>
                   <Download className="h-3 w-3 shrink-0" />
                 </a>
-              ),
-            )}
+              );
+            })}
           </div>
         )}
 
@@ -239,6 +276,15 @@ export default function MessageBubble({
                     isOwn ? 'right-0' : 'left-0',
                   )}
                 >
+                  {onReply && (
+                    <button
+                      onClick={() => { setShowMenu(false); onReply(message); }}
+                      className="flex items-center gap-1.5 rounded px-2 py-1 text-[11px] font-medium text-cyan-300 hover:bg-cyan-500/15"
+                    >
+                      <Reply className="h-3 w-3" />
+                      Trả lời
+                    </button>
+                  )}
                   {isOwn && canRecall && (
                     <button
                       onClick={handleRecall}

@@ -1292,18 +1292,237 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete, onOpenThe
   );
 }
 
+// ─── Fullscreen Video Player ──────────────────────────────────────────────────
+
+function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const progressRef = useRef<HTMLDivElement | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const [muted, setMuted] = useState(false);
+  const [showControls, setShowControls] = useState(true);
+  const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Close on Escape
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  const resetHideTimer = () => {
+    setShowControls(true);
+    if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
+    hideControlsTimer.current = setTimeout(() => setShowControls(false), 3000);
+  };
+
+  const togglePlay = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) { v.play().catch(() => {}); } else { v.pause(); }
+    resetHideTimer();
+  };
+
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = progressRef.current;
+    const v = videoRef.current;
+    if (!el || !v || !duration) return;
+    const rect = el.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    v.currentTime = pct * duration;
+    resetHideTimer();
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Number(e.target.value);
+    setVolume(val);
+    if (videoRef.current) { videoRef.current.volume = val; videoRef.current.muted = val === 0; }
+    setMuted(val === 0);
+  };
+
+  const toggleFullscreen = () => {
+    const el = videoRef.current;
+    if (!el) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    } else {
+      el.requestFullscreen().catch(() => {});
+    }
+  };
+
+  const fmt = (t: number) => {
+    if (!t || isNaN(t)) return '0:00';
+    return `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  };
+
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95"
+      onClick={onClose}
+      onMouseMove={resetHideTimer}
+    >
+      <div
+        className="relative flex h-full w-full max-w-5xl flex-col items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Video */}
+        <video
+          ref={videoRef}
+          src={src}
+          className="max-h-[calc(100vh-80px)] w-full object-contain"
+          autoPlay
+          onClick={togglePlay}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime ?? 0)}
+          onLoadedMetadata={() => setDuration(videoRef.current?.duration ?? 0)}
+          onVolumeChange={() => {
+            const v = videoRef.current;
+            if (!v) return;
+            setVolume(v.muted ? 0 : v.volume);
+            setMuted(v.muted);
+          }}
+        />
+
+        {/* Controls overlay */}
+        <AnimatePresence>
+          {showControls && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.18 }}
+              className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-8"
+              style={{
+                background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)',
+              }}
+            >
+              {/* Progress bar */}
+              <div
+                ref={progressRef}
+                onClick={handleSeek}
+                className="mb-3 h-1 w-full cursor-pointer rounded-full bg-white/20"
+              >
+                <div
+                  className="h-full rounded-full bg-white transition-[width] duration-100"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+
+              {/* Bottom controls row */}
+              <div className="flex items-center gap-3 text-white">
+                {/* Play/Pause */}
+                <button onClick={togglePlay} className="shrink-0 hover:opacity-80">
+                  {playing ? (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                      <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
+                    </svg>
+                  ) : (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
+                  )}
+                </button>
+
+                {/* Time */}
+                <span className="text-[13px] tabular-nums opacity-80">
+                  {fmt(currentTime)} / {fmt(duration)}
+                </span>
+
+                <div className="flex-1" />
+
+                {/* Volume */}
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => {
+                      if (videoRef.current) {
+                        videoRef.current.muted = !videoRef.current.muted;
+                        setMuted(videoRef.current.muted);
+                      }
+                    }}
+                    className="hover:opacity-80"
+                  >
+                    {muted || volume === 0 ? (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                        <line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
+                      </svg>
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                      </svg>
+                    )}
+                  </button>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={muted ? 0 : volume}
+                    onChange={handleVolumeChange}
+                    className="w-20 accent-white"
+                  />
+                </div>
+
+                {/* Fullscreen */}
+                <button onClick={toggleFullscreen} className="ml-1 hover:opacity-80">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3" /><path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                    <path d="M3 16v3a2 2 0 0 0 2 2h3" /><path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                  </svg>
+                </button>
+
+                {/* Close */}
+                <button onClick={onClose} className="ml-1 hover:opacity-80">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Top close button (always visible) */}
+        <button
+          onClick={onClose}
+          className="absolute right-3 top-3 rounded-full bg-black/50 p-1.5 text-white hover:bg-black/80"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
 // ─── Media Grid ───────────────────────────────────────────────────────────────
 
-function MediaGrid({ media, postId, onOpenTheater }: { 
-  media: SocialMedia[]; 
+function MediaGrid({ media, postId, onOpenTheater }: {
+  media: SocialMedia[];
   /** Owning post id — passed down so MediaItem's Theater button
    *  can fire the right callback without re-deriving it. */
   postId?: number;
   onOpenTheater?: (postId: number) => void;
 }) {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const visual = media.filter((m) => m.type !== 'FILE');
   const files = media.filter((m) => m.type === 'FILE');
+
+  const handleMediaClick = (item: SocialMedia) => {
+    const url = getMediaUrl(item.url, item.url);
+    if (item.type === 'VIDEO') {
+      setVideoSrc(url);
+    } else {
+      setLightboxSrc(url);
+    }
+  };
 
   if (visual.length === 0) {
     // Pure file post (no image / video). Hand off to the file list
@@ -1320,7 +1539,7 @@ function MediaGrid({ media, postId, onOpenTheater }: {
       <div className="mt-3">
         <MediaItem
           item={visual[0]}
-          onClick={() => setLightboxSrc(getMediaUrl(visual[0].url, visual[0].url))}
+          onClick={() => handleMediaClick(visual[0])}
           autoPlayEnabled={visual[0].type === 'VIDEO'}
           onOpenTheater={
             onOpenTheater && postId != null
@@ -1336,6 +1555,11 @@ function MediaGrid({ media, postId, onOpenTheater }: {
         {lightboxSrc && (
           <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
         )}
+        <AnimatePresence>
+          {videoSrc && (
+            <VideoPlayerModal src={videoSrc} onClose={() => setVideoSrc(null)} />
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -1361,7 +1585,7 @@ function MediaGrid({ media, postId, onOpenTheater }: {
           >
             <MediaItem
               item={item}
-              onClick={() => setLightboxSrc(getMediaUrl(item.url, item.url))}
+              onClick={() => handleMediaClick(item)}
               onOpenTheater={
                 item.type === 'VIDEO' && onOpenTheater && postId != null
                   ? () => onOpenTheater(postId)
@@ -1387,6 +1611,11 @@ function MediaGrid({ media, postId, onOpenTheater }: {
       {lightboxSrc && (
         <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
       )}
+      <AnimatePresence>
+        {videoSrc && (
+          <VideoPlayerModal src={videoSrc} onClose={() => setVideoSrc(null)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

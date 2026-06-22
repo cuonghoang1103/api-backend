@@ -7,6 +7,7 @@ import MessageBubble from './MessageBubble';
 import TypingIndicator from './TypingIndicator';
 import { AlertCircle, Loader2, RefreshCcw } from 'lucide-react';
 import { format } from 'date-fns';
+import type { MessagingMessage } from '@/lib/api';
 
 export default function MessageList() {
   const store = useMessagingStore();
@@ -14,6 +15,11 @@ export default function MessageList() {
   const threadId = store.currentThreadId!;
   const messages = store.messagesByThread[threadId] ?? [];
   const scrollRef = useRef<HTMLDivElement>(null);
+  const setReplyTo = store.setReplyTo;
+
+  const handleReply = (msg: MessagingMessage) => {
+    setReplyTo(msg);
+  };
 
   // Auto-scroll to the bottom on new messages (only if user is near
   // the bottom; if they've scrolled up to read history, leave them
@@ -123,6 +129,7 @@ export default function MessageList() {
                 message={m}
                 isOwn={m.senderId === auth.user?.id}
                 showSender={showSender}
+                onReply={handleReply}
               />
             );
           })}

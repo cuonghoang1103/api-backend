@@ -27,9 +27,20 @@ import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { registerSocketEmitter, type MessageEventPayload } from '../socket/messaging.socket.js';
 import { messagingSafetyService } from './messaging-safety.service.js';
+import { getStorageProvider } from '../storage/StorageProvider.js';
 
 const MAX_CONTENT_LENGTH = 4000;
 const MAX_ATTACHMENTS_PER_MESSAGE = 5;
+
+// Build a full public URL for a stored file.
+// `filePath` in the DB is either an R2 key ("images/chat/abc.webp")
+// or a legacy local path ("uploads/foo/bar.pdf" / "/uploads/foo/bar.pdf").
+// The storage provider's publicUrl() expects a bare key without the
+// leading "uploads/" prefix, so we strip it before calling.
+function buildAttachmentUrl(filePath: string): string {
+  const key = filePath.replace(/^\/+/, '').replace(/^uploads\//, '');
+  return getStorageProvider().publicUrl(key);
+}
 
 /**
  * Per-user thread preferences. Stored in the MessageThread JSONB
@@ -407,6 +418,16 @@ export class MessagesService {
         reactions: {
           select: { emoji: true, userId: true },
         },
+        parentMessage: {
+          select: {
+            id: true,
+            senderId: true,
+            content: true,
+            deletedAt: true,
+            recalledAt: true,
+            sender: { select: { displayName: true, fullName: true, username: true } },
+          },
+        },
       },
     });
 
@@ -440,7 +461,7 @@ export class MessagesService {
   async sendMessage(
     threadId: number,
     senderId: number,
-    data: { content?: string; fileIds?: number[] },
+    data: { content?: string; fileIds?: number[]; parentMessageId?: number | null },
   ) {
     const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
     if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');
@@ -491,11 +512,23 @@ export class MessagesService {
       }
     }
 
+    // Validate parentMessageId belongs to the same thread
+    if (data.parentMessageId) {
+      const parent = await prisma.message.findFirst({
+        where: { id: data.parentMessageId, threadId },
+        select: { id: true },
+      });
+      if (!parent) {
+        throw new AppError('Parent message not found in this thread', 404, 'PARENT_NOT_FOUND');
+      }
+    }
+
     const message = await prisma.message.create({
       data: {
         threadId,
         senderId,
         content,
+        parentMessageId: data.parentMessageId ?? null,
         attachments: fileIds.length
           ? {
               create: await this.buildAttachmentCreates(fileIds),
@@ -508,6 +541,16 @@ export class MessagesService {
         },
         attachments: {
           include: { file: { select: { id: true, filePath: true } } },
+        },
+        parentMessage: {
+          select: {
+            id: true,
+            senderId: true,
+            content: true,
+            deletedAt: true,
+            recalledAt: true,
+            sender: { select: { displayName: true, fullName: true, username: true } },
+          },
         },
       },
     });
@@ -950,7 +993,9 @@ export class MessagesService {
           mimeType: f.contentType,
           fileName: f.originalName,
           fileSize: f.fileSize,
-          thumbnailUrl: f.filePath,
+          // Only image files use the path as a thumbnail URL;
+          // docs/PDFs/ZIPs have no thumbnail.
+          thumbnailUrl: f.contentType.startsWith('image/') ? f.filePath : null,
         };
       })
       .filter(Boolean) as Array<{
@@ -1119,6 +1164,14 @@ export class MessagesService {
       thumbnailUrl: string | null;
       file: { id: number; filePath: string };
     }[];
+    parentMessage?: {
+      id: number;
+      senderId: number;
+      content: string;
+      deletedAt: Date | null;
+      recalledAt: Date | null;
+      sender: { displayName: string | null; fullName: string | null; username: string };
+    } | null;
   }) {
     return {
       id: m.id,
@@ -1144,12 +1197,24 @@ export class MessagesService {
         mimeType: a.mimeType,
         fileName: a.fileName,
         fileSize: Number(a.fileSize),
-        // Public URL served by Nginx from /uploads/. The DB stores
-        // the relative path; the frontend concatenates with the
-        // API base URL via `lib/api.ts`.
-        url: `/uploads/${a.file.filePath.replace(/^uploads\//, '')}`,
-        thumbnailUrl: a.thumbnailUrl ? `/uploads/${a.thumbnailUrl.replace(/^uploads\//, '')}` : null,
+        url: buildAttachmentUrl(a.file.filePath),
+        thumbnailUrl: a.thumbnailUrl ? buildAttachmentUrl(a.thumbnailUrl) : null,
       })),
+      parentMessageId: (m as any).parentMessageId ?? null,
+      parentMessage: m.parentMessage
+        ? {
+            id: m.parentMessage.id,
+            senderId: m.parentMessage.senderId,
+            senderName:
+              m.parentMessage.sender.displayName ??
+              m.parentMessage.sender.fullName ??
+              m.parentMessage.sender.username,
+            content:
+              m.parentMessage.deletedAt || m.parentMessage.recalledAt
+                ? ''
+                : m.parentMessage.content,
+          }
+        : null,
     };
   }
 

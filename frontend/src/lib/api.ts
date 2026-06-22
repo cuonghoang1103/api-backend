@@ -1097,7 +1097,7 @@ export const messagingApi = {
   // Messages
   listMessages: (threadId: number, params?: { cursor?: number; limit?: number }) =>
     api.get<ApiResponse<MessagingMessage[]>>(`/messages/threads/${threadId}/messages`, { params }),
-  sendMessage: (threadId: number, data: { content?: string; fileIds?: number[] }) =>
+  sendMessage: (threadId: number, data: { content?: string; fileIds?: number[]; parentMessageId?: number | null }) =>
     api.post<ApiResponse<MessagingMessage>>(`/messages/threads/${threadId}/messages`, data),
   markRead: (threadId: number) =>
     api.patch<ApiResponse<{ success: boolean }>>(`/messages/threads/${threadId}/read`),
@@ -1354,6 +1354,13 @@ export interface MessagingMessage {
   attachments: MessagingAttachment[];
   readBy?: MessagingReadReceipt[];
   reactions?: MessagingReaction[];
+  parentMessageId?: number | null;
+  parentMessage?: {
+    id: number;
+    senderId: number;
+    senderName: string;
+    content: string;
+  } | null;
 }
 
 export interface MessagingUploadedFile {

@@ -91,9 +91,13 @@ interface MessagingState {
   startAdminThread: () => Promise<number>;
   startUserThread: (peerId: number) => Promise<number>;
 
+  // Reply state — the message the user is currently replying to
+  replyTo: MessagingMessage | null;
+  setReplyTo: (message: MessagingMessage | null) => void;
+
   // Messages
   loadMoreMessages: (threadId: number) => Promise<void>;
-  sendMessage: (threadId: number, content: string, fileIds?: number[]) => Promise<void>;
+  sendMessage: (threadId: number, content: string, fileIds?: number[], parentMessageId?: number | null) => Promise<void>;
   deleteMessage: (threadId: number, messageId: number) => Promise<void>;
   recallMessage: (threadId: number, messageId: number) => Promise<void>;
   toggleReaction: (threadId: number, messageId: number, emoji: string) => Promise<void>;
@@ -207,8 +211,13 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   initError: null,
   typing: { byThread: {} },
   presence: { byUserId: {} },
+  replyTo: null,
   blockedUsers: [],
   blockedLoaded: false,
+
+  setReplyTo(message) {
+    set({ replyTo: message });
+  },
 
   async init() {
     const auth = useAuthStore.getState();
@@ -560,12 +569,14 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     }
   },
 
-  async sendMessage(threadId, content, fileIds) {
+  async sendMessage(threadId, content, fileIds, parentMessageId) {
     const trimmed = content.trim();
     if (!trimmed && !(fileIds && fileIds.length)) return;
     const auth = useAuthStore.getState();
     const senderId = auth.user?.id;
     if (!senderId) return;
+
+    const replySnap = get().replyTo;
 
     // Optimistic insert
     const optimistic: MessagingMessage = {
@@ -584,8 +595,20 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       },
       attachments: [], // Real attachments are added after the server roundtrip
       readBy: [],
+      parentMessageId: parentMessageId ?? replySnap?.id ?? null,
+      parentMessage: replySnap
+        ? {
+            id: replySnap.id,
+            senderId: replySnap.senderId,
+            senderName: replySnap.sender.displayName ?? replySnap.sender.username,
+            content: replySnap.content,
+          }
+        : null,
     };
+
+    // Clear reply state immediately on send
     set((s) => ({
+      replyTo: null,
       messagesByThread: {
         ...s.messagesByThread,
         [threadId]: [...(s.messagesByThread[threadId] ?? []), optimistic],
@@ -593,7 +616,11 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     }));
 
     try {
-      const res = await messagingApi.sendMessage(threadId, { content: trimmed, fileIds });
+      const res = await messagingApi.sendMessage(threadId, {
+        content: trimmed,
+        fileIds,
+        parentMessageId: parentMessageId ?? replySnap?.id ?? null,
+      });
       const real = res.data.data;
       // Replace optimistic with real
       set((s) => ({

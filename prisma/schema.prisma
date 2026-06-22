@@ -554,6 +554,9 @@ model Course {
   @@index([courseCode], name: "idx_courses_code")
   @@index([academyType], name: "idx_courses_academy_type")
   @@index([accessType], name: "idx_courses_access_type")
+  @@index([isPublished, status, createdAt(sort: Desc)], name: "idx_courses_published_status_created")
+  @@index([isPublished, isFeatured], name: "idx_courses_published_featured")
+  @@index([categoryId, isPublished], name: "idx_courses_category_published")
   @@map("courses")
 }
 
@@ -658,6 +661,9 @@ model Enrollment {
   @@index([userId], name: "idx_enrollments_user")
   @@index([courseId], name: "idx_enrollments_course")
   @@index([status], name: "idx_enrollments_status")
+  @@index([userId, status], name: "idx_enrollments_user_status")
+  @@index([courseId, status], name: "idx_enrollments_course_status")
+  @@index([expiresAt], name: "idx_enrollments_expires_at")
   @@map("enrollments")
 }
 
@@ -1188,6 +1194,9 @@ model SocialPost {
   @@index([authorId], name: "idx_social_posts_author")
   @@index([createdAt(sort: Desc)], name: "idx_social_posts_created")
   @@index([visibility], name: "idx_social_posts_visibility")
+  @@index([status, createdAt(sort: Desc)], name: "idx_social_posts_status_created")
+  @@index([authorId, createdAt(sort: Desc)], name: "idx_social_posts_author_created")
+  @@index([visibility, status, createdAt(sort: Desc)], name: "idx_social_posts_vis_status_created")
   @@map("social_posts")
 }
 
@@ -1272,6 +1281,8 @@ model SocialComment {
   @@index([userId], name: "idx_social_comments_user")
   @@index([parentId], name: "idx_social_comments_parent")
   @@index([createdAt(sort: Desc)], name: "idx_social_comments_created")
+  @@index([postId, parentId, createdAt(sort: Desc)], name: "idx_social_comments_post_parent_created")
+  @@index([parentId, createdAt(sort: Desc)], name: "idx_social_comments_parent_created")
   @@map("social_comments")
 }
 
@@ -1550,6 +1561,8 @@ model MessageThread {
   @@index([userId, type], name: "idx_thread_user_type")
   @@index([adminUserId, type], name: "idx_thread_admin_type")
   @@index([lastMessageAt(sort: Desc)], name: "idx_thread_last_msg")
+  @@index([userAId, lastMessageAt(sort: Desc)], name: "idx_thread_user_a_last_msg")
+  @@index([userBId, lastMessageAt(sort: Desc)], name: "idx_thread_user_b_last_msg")
   @@map("message_threads")
 }
 
@@ -1605,28 +1618,33 @@ model ThreadReport {
 }
 
 model Message {
-  id         Int       @id @default(autoincrement())
-  threadId   Int       @map("thread_id")
-  senderId   Int       @map("sender_id")
-  content    String    @db.Text
+  id              Int       @id @default(autoincrement())
+  threadId        Int       @map("thread_id")
+  senderId        Int       @map("sender_id")
+  content         String    @db.Text
+  // Reply-to: optional reference to the parent message this is replying to.
+  parentMessageId Int?      @map("parent_message_id")
   // Soft delete: message hidden from UI but kept for audit.
   // Note: `deletedAt` means "Xoá" (delete for me / unsend).
   // `recalledAt` means "Thu hoi" (withdraw, also hides content).
-  deletedAt  DateTime? @map("deleted_at")
+  deletedAt       DateTime? @map("deleted_at")
   // Recall: sender retracted the message. After this timestamp
   // the message is treated as "Tin nhắn đã thu hồi" everywhere.
   // We keep the row for audit but the content is wiped.
-  recalledAt DateTime? @map("recalled_at")
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime  @updatedAt @map("updated_at")
+  recalledAt      DateTime? @map("recalled_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
 
-  thread      MessageThread       @relation(fields: [threadId], references: [id], onDelete: Cascade)
-  sender      User                @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
-  attachments MessageAttachment[]
-  reactions   MessageReaction[]
+  thread        MessageThread       @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  sender        User                @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  parentMessage Message?            @relation("MessageReplies", fields: [parentMessageId], references: [id], onDelete: SetNull)
+  replies       Message[]           @relation("MessageReplies")
+  attachments   MessageAttachment[]
+  reactions     MessageReaction[]
 
   @@index([threadId, createdAt], name: "idx_msg_thread_time")
   @@index([senderId], name: "idx_msg_sender")
+  @@index([parentMessageId], name: "idx_msg_parent")
   @@map("messages")
 }
 
@@ -1769,6 +1787,9 @@ model CourseOrder {
   @@index([courseId], name: "idx_course_orders_course")
   @@index([discountCodeId], name: "idx_course_orders_coupon")
   @@index([refundedBy], name: "idx_course_orders_refunder")
+  @@index([status, createdAt(sort: Desc)], name: "idx_course_orders_status_created")
+  @@index([courseId, status], name: "idx_course_orders_course_status")
+  @@index([createdAt(sort: Desc)], name: "idx_course_orders_created")
   @@map("course_orders")
 }
 

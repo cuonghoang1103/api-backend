@@ -133,6 +133,7 @@ router.post('/threads/:id/messages', async (req: Request, res: Response, next: N
     const message = await messagesService.sendMessage(id, req.userId!, {
       content: req.body?.content,
       fileIds: req.body?.fileIds,
+      parentMessageId: req.body?.parentMessageId ?? null,
     });
     res.status(201).json({ success: true, data: message });
   } catch (error) {

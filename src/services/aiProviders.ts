@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import { AppError } from '../middleware/errorHandler.js';
 import { config } from '../config/env.js';
+import { logger } from '../utils/logger.js';
 
 /**
  * AI Provider abstraction.
@@ -117,11 +118,9 @@ function getClient(provider: AIProviderConfig): OpenAI {
   };
   if (provider.baseURL) clientConfig.baseURL = provider.baseURL;
 
-  _clients[provider.name] = new OpenAI(clientConfig);
-  console.log(
-    `[AIProviders] Initialized client: ${provider.name} → ${provider.baseURL ?? 'api.openai.com'}`,
-  );
-  return _clients[provider.name];
+ _clients[provider.name] = new OpenAI(clientConfig);
+ logger.info('AIProviders initialized client', { provider: provider.name, baseURL: provider.baseURL ?? 'api.openai.com' });
+ return _clients[provider.name];
 }
 
 function getModel(provider: AIProviderConfig): string {
@@ -225,7 +224,7 @@ function isCircuitOpen(name: string): { open: boolean; reason?: string; retryIn?
 
   const now = Date.now();
   if (now >= c.cooldownUntil) {
-    console.log(`[CircuitBreaker] ${name} cooldown expired, half-open (try 1 request)`);
+    logger.info('CircuitBreaker cooldown expired, half-open', { name });
     return { open: false };
   }
 
@@ -251,15 +250,21 @@ function tripCircuit(name: string, errMsg: string): void {
     const cooldown = COOLDOWN_MS[errorCode];
     c.cooldownUntil = Date.now() + cooldown;
     c.openedAt = Date.now();
-    console.warn(
-      `[CircuitBreaker] ⚡ OPENED ${name} for ${cooldown / 1000}s ` +
-      `(${c.lastErrorCode}, ${c.consecutiveFailures} consecutive fails): ${errMsg.slice(0, 100)}`,
-    );
-  } else {
-    console.warn(
-      `[CircuitBreaker] ${name} failure ${c.consecutiveFailures}/${FAILURE_THRESHOLD}: ${errMsg.slice(0, 100)}`,
-    );
-  }
+ logger.warn('CircuitBreaker OPENED', {
+ name,
+ cooldownSec: cooldown / 1000,
+ errorCode: c.lastErrorCode,
+ consecutiveFailures: c.consecutiveFailures,
+ error: errMsg.slice(0, 100),
+ });
+ } else {
+ logger.warn('CircuitBreaker failure', {
+ name,
+ failures: c.consecutiveFailures,
+ threshold: FAILURE_THRESHOLD,
+ error: errMsg.slice(0, 100),
+ });
+ }
 }
 
 /**
@@ -268,9 +273,7 @@ function tripCircuit(name: string, errMsg: string): void {
 function closeCircuit(name: string): void {
   const c = getCircuit(name);
   if (c.consecutiveFailures > 0 || c.cooldownUntil) {
-    console.log(
-      `[CircuitBreaker] ✓ CLOSED ${name} (recovered after ${c.consecutiveFailures} fails)`,
-    );
+ logger.info('CircuitBreaker CLOSED (recovered)', { name, recoveredAfterFails: c.consecutiveFailures });
   }
   c.consecutiveFailures = 0;
   c.cooldownUntil = null;
@@ -389,9 +392,11 @@ export async function chatWithFallback(
     const circuit = isCircuitOpen(provider.name);
     if (circuit.open) {
       skippedLog.push(`${provider.name}⏸️ (circuit open, retry in ${circuit.retryIn}s)`);
-      console.warn(
-        `[AIProviders] ⏸️ Skipping ${provider.name} (circuit open, retry in ${circuit.retryIn}s): ${circuit.reason}`,
-      );
+ logger.warn('AIProviders skipping (circuit open)', {
+ provider: provider.name,
+ retryIn: circuit.retryIn,
+ reason: circuit.reason,
+ });
       continue;
     }
 
@@ -400,9 +405,13 @@ export async function chatWithFallback(
       const totalDuration = Date.now() - totalStart;
       // Đóng circuit khi provider work
       closeCircuit(provider.name);
-      console.log(
-        `[AIProviders] ✓ Answered by ${provider.name} (${result.durationMs}ms, ${result.attempts} attempt, total ${totalDuration}ms): ${attemptLog.join(' → ')}`,
-      );
+ logger.info('AIProviders answered', {
+ provider: provider.name,
+ providerDurationMs: result.durationMs,
+ attempts: result.attempts,
+ totalDurationMs: totalDuration,
+ attemptLog: attemptLog.join(' → '),
+ });
       return {
         text: result.text,
         provider: provider.name,
@@ -416,9 +425,10 @@ export async function chatWithFallback(
       const errMsg = err instanceof Error ? err.message : String(err);
       tripCircuit(provider.name, errMsg);
       // Log chi tiết, rồi tiếp tục thử provider tiếp theo
-      console.warn(
-        `[AIProviders] Provider ${provider.name} failed after retries, trying next: ${errMsg}`,
-      );
+ logger.warn('AIProviders provider failed, trying next', {
+ provider: provider.name,
+ error: errMsg,
+ });
     }
   }
 
@@ -437,7 +447,7 @@ export async function chatWithFallback(
  */
 export function resetProviderClients(): void {
   Object.keys(_clients).forEach((k) => delete _clients[k]);
-  console.log('[AIProviders] All client caches reset');
+  logger.info('AIProviders all client caches reset');
 }
 
 /**
@@ -500,7 +510,7 @@ export function getAllCircuitStates(): Record<string, {
  */
 export function resetCircuitManually(name: string): void {
   closeCircuit(name);
-  console.log(`[CircuitBreaker] Manual reset for ${name}`);
+  logger.info('CircuitBreaker manual reset', { name });
 }
 
 // ============================================================
@@ -555,10 +565,10 @@ async function getEmbedder() {
   if (_initPromise) return _initPromise;
   _initPromise = (async () => {
     const { pipeline } = await loadTransformers();
-    console.log(`[Embeddings] Loading local model ${EMBEDDING_MODEL}...`);
-    const start = Date.now();
-    _embedder = await pipeline('feature-extraction', EMBEDDING_MODEL);
-    console.log(`[Embeddings] Model loaded in ${Date.now() - start}ms`);
+ logger.info('Embeddings loading local model', { model: EMBEDDING_MODEL });
+ const start = Date.now();
+ _embedder = await pipeline('feature-extraction', EMBEDDING_MODEL);
+ logger.info('Embeddings model loaded', { durationMs: Date.now() - start });
     return _embedder;
   })();
   return _initPromise;

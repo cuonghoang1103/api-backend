@@ -34,6 +34,7 @@ import { Router, type Response } from 'express';
 import { authenticate, optionalAuth } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { prisma } from '../config/database.js';
+import { logger } from '../utils/logger.js';
 import {
   createPost,
   getPostById,
@@ -439,7 +440,7 @@ router.post(
           }
         }
       } catch (notifErr) {
-        console.warn('[social.routes] notification fan-out failed:', (notifErr as Error).message);
+        logger.warn('notification fan-out failed', { error: (notifErr as Error).message });
       }
 
       res.status(201).json({ success: true, data: comment });

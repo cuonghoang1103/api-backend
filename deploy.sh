@@ -167,6 +167,9 @@ if [ -f "$VPS_ENV_FILE" ]; then
         [ -z "$key" ] && continue
         case "$key" in '#'*) continue ;; esac
         if [[ "$key" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]]; then
+            # Strip surrounding double or single quotes (common in .env files)
+            value="${value%\"}" ; value="${value#\"}"
+            value="${value%\'}" ; value="${value#\'}"
             export "${key}=${value}"
         fi
     done < "$VPS_ENV_FILE"

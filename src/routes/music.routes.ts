@@ -38,6 +38,7 @@ import { optionalAuth, authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { uploadAudio, uploadImage, UploadError } from '../storage/uploadService.js';
 import { config } from '../config/env.js';
+import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -308,7 +309,7 @@ router.get('/stream/:id', optionalAuth, async (req: any, res: Response, next) =>
 
     // ─── Step 6: Error handling cho stream ────────────────
     streamResult.stream.on('error', (err: Error) => {
-      console.error(`[MusicStream] Stream error for track ${trackId}:`, err.message);
+      logger.error('MusicStream stream error', { trackId, error: err.message });
       if (!res.headersSent) {
         res.status(500).json({ success: false, message: 'Audio streaming error' });
       }
@@ -427,7 +428,7 @@ router.post(
             fsp.unlink(tmpIn).catch(() => { /* ignore */ });
             fsp.unlink(tmpOut).catch(() => { /* ignore */ });
           } catch (normErr) {
-            console.warn('[FFmpeg] Normalization failed, using original:', normErr);
+            logger.warn('Normalization failed, using original', { error: normErr instanceof Error ? normErr.message : String(normErr) });
             // Keep the original `audioKey` and `audioFileSize`
             // we set above.
           }
@@ -944,7 +945,7 @@ router.post(
       const detailsRes = await fetch(detailsUrl.toString());
       if (!detailsRes.ok) {
         const errText = await detailsRes.text();
-        console.error('[YouTube Import] API error:', errText);
+        logger.error('YouTube Import API error', { body: errText });
         throw new AppError('Failed to fetch YouTube video details', 502, 'YOUTUBE_ERROR');
       }
       const detailsData = await detailsRes.json() as {
@@ -1084,7 +1085,7 @@ async function handleYouTubeSearch(
     const searchRes = await fetch(searchUrl.toString());
     if (!searchRes.ok) {
       const errText = await searchRes.text();
-      console.error('[YouTube Search] Search API error:', errText);
+      logger.error('YouTube Search API error', { body: errText });
       throw new AppError('YouTube search failed', 502, 'YOUTUBE_ERROR');
     }
     const searchData = (await searchRes.json()) as {

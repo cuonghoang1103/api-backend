@@ -18,7 +18,6 @@ import {
   Send,
   ChevronUp,
   ChevronDown,
-  Maximize2,
 } from 'lucide-react';
 import type { SocialPost, SocialMedia } from '@/types/social';
 import { REACTION_META } from '@/types/social';
@@ -367,28 +366,134 @@ function ReelVideo({
   onToggleMute: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const [showControls, setShowControls] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Autoplay muted when the slide becomes active. Pause (and
-  // reset) when it scrolls out of view — this is the heart of
-  // the muted-autoplay-on-scroll behaviour the spec asked for.
+  // Autoplay muted when the slide becomes active. Pause (and reset)
+  // when it scrolls out of view.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
     if (isActive) {
       v.currentTime = 0;
+      setCurrentTime(0);
+      setShowControls(true);
       const p = v.play();
       if (p && typeof p.then === 'function') p.catch(() => {});
     } else {
       v.pause();
+      if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
     }
   }, [isActive]);
 
-  const handlePlay = () => setIsPlaying(true);
-  const handlePause = () => setIsPlaying(false);
+  // Track browser fullscreen changes
+  useEffect(() => {
+    const handler = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handler);
+    return () => document.removeEventListener('fullscreenchange', handler);
+  }, []);
+
+  // Sync volume to video element when muted prop changes
+  useEffect(() => {
+    const v = videoRef.current;
+    if (v) v.muted = muted;
+  }, [muted]);
+
+  const resetHideTimer = () => {
+    setShowControls(true);
+    if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
+    hideControlsTimer.current = setTimeout(() => {
+      if (videoRef.current && !videoRef.current.paused) {
+        setShowControls(false);
+      }
+    }, 2000);
+  };
+
+  const handlePlay = () => {
+    setIsPlaying(true);
+    resetHideTimer();
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false);
+    setShowControls(true);
+    if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
+  };
+
+  const togglePlay = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) { v.play().catch(() => {}); } else { v.pause(); }
+  };
+
+  const toggleFullscreen = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const el = containerRef.current;
+    if (!el) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    } else {
+      el.requestFullscreen().catch(() => {});
+    }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    const val = Number(e.target.value);
+    setVolume(val);
+    const v = videoRef.current;
+    if (v) v.volume = val;
+    if (val > 0 && muted) onToggleMute();
+    if (val === 0 && !muted) onToggleMute();
+  };
+
+  // Keyboard shortcuts: Space = play/pause, ← / → = seek ±5s
+  // ↑/↓ are intentionally NOT handled here — the parent TheaterMode
+  // owns slide navigation on those keys.
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (e.key === ' ' || e.key === 'k') {
+      e.preventDefault();
+      e.stopPropagation();
+      if (v.paused) { v.play().catch(() => {}); } else { v.pause(); }
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      v.currentTime = Math.max(0, v.currentTime - 5);
+      setCurrentTime(v.currentTime);
+      resetHideTimer();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      v.currentTime = Math.min(duration, v.currentTime + 5);
+      setCurrentTime(v.currentTime);
+      resetHideTimer();
+    }
+  };
+
+  const fmt = (t: number) => {
+    if (!t || isNaN(t)) return '0:00';
+    return `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  };
+
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="relative flex h-full max-h-[90vh] w-auto items-center justify-center">
+    <div
+      ref={containerRef}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      className="relative flex h-full max-h-[90vh] w-auto items-center justify-center outline-none"
+      onMouseMove={resetHideTimer}
+      onMouseEnter={() => setShowControls(true)}
+      onMouseLeave={() => { if (isPlaying) setShowControls(false); }}
+    >
       <video
         ref={videoRef}
         src={getMediaUrl(slide.media.url, slide.media.url)}
@@ -402,35 +507,162 @@ function ReelVideo({
         playsInline
         onPlay={handlePlay}
         onPause={handlePause}
-        className="max-h-full max-w-full rounded-2xl object-contain"
+        onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime ?? 0)}
+        onLoadedMetadata={() => {
+          setDuration(videoRef.current?.duration ?? 0);
+          const v = videoRef.current;
+          if (v) { v.volume = volume; v.muted = muted; }
+        }}
+        onClick={togglePlay}
+        className="max-h-full max-w-full cursor-pointer rounded-2xl object-contain"
       />
 
-      {/* Mute toggle */}
-      <button
-        onClick={onToggleMute}
-        aria-label={muted ? 'Bật tiếng' : 'Tắt tiếng'}
-        className="absolute right-3 bottom-3 flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1.5 text-xs text-white backdrop-blur-md"
-      >
-        {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-        {muted ? 'Muted' : 'On'}
-      </button>
+      {/* Caption overlay (shown when controls are hidden) */}
+      <AnimatePresence>
+        {!showControls && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="pointer-events-none absolute bottom-0 left-0 right-0 p-4 pb-16"
+          >
+            <p className="line-clamp-3 text-sm text-white/90 drop-shadow-md">
+              {slide.post.content}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Caption overlay (TikTok-style at the bottom) */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 p-4">
-        <p className="line-clamp-3 text-sm text-white/90 drop-shadow-md">
-          {slide.post.content}
-        </p>
-      </div>
+      {/* Big play indicator when paused */}
+      <AnimatePresence>
+        {!isPlaying && isActive && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.7 }}
+            transition={{ duration: 0.15 }}
+            className="pointer-events-none absolute inset-0 flex items-center justify-center"
+          >
+            <div className="rounded-full bg-black/40 p-5 backdrop-blur-sm">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* A "playing" indicator that's subtle so users can see
-          what's happening. Hidden if the video is playing. */}
-      {!isPlaying && isActive && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="rounded-full bg-black/40 p-4 backdrop-blur-sm">
-            <Maximize2 size={28} className="text-white" />
-          </div>
-        </div>
-      )}
+      {/* Controls overlay */}
+      <AnimatePresence>
+        {showControls && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="absolute bottom-0 left-0 right-0 rounded-b-2xl px-4 pb-3 pt-10"
+            style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Caption (shown inside controls when bar is visible) */}
+            {slide.post.content && (
+              <p className="mb-2 line-clamp-2 text-xs text-white/80 drop-shadow-md">
+                {slide.post.content}
+              </p>
+            )}
+
+            {/* Scrubber */}
+            <div className="group/rscrub relative mb-2.5 w-full cursor-pointer py-2">
+              <div className="absolute left-0 right-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-white/25">
+                <div
+                  className="absolute inset-y-0 left-0 rounded-full bg-violet-500"
+                  style={{ width: `${progress}%` }}
+                />
+                <div
+                  className="pointer-events-none absolute top-1/2 h-3 w-3 -translate-y-1/2 scale-0 rounded-full bg-white shadow-md transition-transform duration-150 group-hover/rscrub:scale-100"
+                  style={{ left: `calc(${progress}% - 6px)` }}
+                />
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={duration || 100}
+                step={0.1}
+                value={currentTime}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  if (videoRef.current) videoRef.current.currentTime = val;
+                  setCurrentTime(val);
+                  resetHideTimer();
+                }}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                aria-label="Seek"
+              />
+            </div>
+
+            {/* Controls row */}
+            <div className="flex items-center gap-3 text-white">
+              {/* Play/Pause */}
+              <button onClick={togglePlay} className="shrink-0 transition-opacity hover:opacity-75" aria-label={isPlaying ? 'Pause' : 'Play'}>
+                {isPlaying ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                )}
+              </button>
+
+              {/* Time */}
+              <span className="text-xs tabular-nums opacity-80">
+                {fmt(currentTime)} / {fmt(duration)}
+              </span>
+
+              <div className="flex-1" />
+
+              {/* Volume */}
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={(e) => { e.stopPropagation(); onToggleMute(); }}
+                  className="transition-opacity hover:opacity-75"
+                  aria-label={muted ? 'Unmute' : 'Mute'}
+                >
+                  {muted || volume === 0 ? <VolumeX size={16} /> : <Volume2 size={16} />}
+                </button>
+                <input
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  value={muted ? 0 : volume}
+                  onChange={handleVolumeChange}
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-16 cursor-pointer accent-violet-500"
+                  aria-label="Volume"
+                />
+              </div>
+
+              {/* Fullscreen */}
+              <button onClick={toggleFullscreen} className="transition-opacity hover:opacity-75" aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}>
+                {isFullscreen ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M8 3v3a2 2 0 0 1-2 2H3" /><path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+                    <path d="M3 16h3a2 2 0 0 1 2 2v3" /><path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3" /><path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                    <path d="M3 16v3a2 2 0 0 0 2 2h3" /><path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -1296,26 +1296,39 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete, onOpenThe
 
 function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const progressRef = useRef<HTMLDivElement | null>(null);
+  const playerContainerRef = useRef<HTMLDivElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [muted, setMuted] = useState(false);
   const [showControls, setShowControls] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Close on Escape
+  // Close on Escape (global so it fires even without focus)
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
   }, [onClose]);
 
+  // Track browser fullscreen state
+  useEffect(() => {
+    const handler = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handler);
+    return () => document.removeEventListener('fullscreenchange', handler);
+  }, []);
+
+  // Focus player on mount so keyboard shortcuts work immediately
+  useEffect(() => {
+    playerContainerRef.current?.focus();
+  }, []);
+
   const resetHideTimer = () => {
     setShowControls(true);
     if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
-    hideControlsTimer.current = setTimeout(() => setShowControls(false), 3000);
+    hideControlsTimer.current = setTimeout(() => setShowControls(false), 2000);
   };
 
   const togglePlay = () => {
@@ -1325,14 +1338,11 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
     resetHideTimer();
   };
 
-  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = progressRef.current;
-    const v = videoRef.current;
-    if (!el || !v || !duration) return;
-    const rect = el.getBoundingClientRect();
-    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    v.currentTime = pct * duration;
-    resetHideTimer();
+  // Show controls always when paused
+  const handlePause = () => {
+    setPlaying(false);
+    setShowControls(true);
+    if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1343,7 +1353,7 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
   };
 
   const toggleFullscreen = () => {
-    const el = videoRef.current;
+    const el = playerContainerRef.current;
     if (!el) return;
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => {});
@@ -1352,9 +1362,31 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
     }
   };
 
+  // Keyboard shortcuts: Space = play/pause, ←/→ = seek ±5s
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (e.key === ' ' || e.key === 'k') {
+      e.preventDefault();
+      togglePlay();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      v.currentTime = Math.max(0, v.currentTime - 5);
+      setCurrentTime(v.currentTime);
+      resetHideTimer();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      v.currentTime = Math.min(duration, v.currentTime + 5);
+      setCurrentTime(v.currentTime);
+      resetHideTimer();
+    }
+  };
+
   const fmt = (t: number) => {
     if (!t || isNaN(t)) return '0:00';
-    return `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+    const m = Math.floor(t / 60);
+    const s = Math.floor(t % 60);
+    return `${m}:${String(s).padStart(2, '0')}`;
   };
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
@@ -1369,18 +1401,21 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
       onMouseMove={resetHideTimer}
     >
       <div
-        className="relative flex h-full w-full max-w-5xl flex-col items-center justify-center"
+        ref={playerContainerRef}
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        className="relative flex h-full w-full max-w-5xl flex-col items-center justify-center outline-none"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Video */}
         <video
           ref={videoRef}
           src={src}
-          className="max-h-[calc(100vh-80px)] w-full object-contain"
+          className="max-h-[calc(100vh-80px)] w-full object-contain cursor-pointer"
           autoPlay
           onClick={togglePlay}
           onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
+          onPause={handlePause}
           onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime ?? 0)}
           onLoadedMetadata={() => setDuration(videoRef.current?.duration ?? 0)}
           onVolumeChange={() => {
@@ -1395,31 +1430,51 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
         <AnimatePresence>
           {showControls && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.18 }}
-              className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-8"
+              className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-10"
               style={{
-                background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)',
+                background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 60%, transparent 100%)',
               }}
             >
-              {/* Progress bar */}
-              <div
-                ref={progressRef}
-                onClick={handleSeek}
-                className="mb-3 h-1 w-full cursor-pointer rounded-full bg-white/20"
-              >
-                <div
-                  className="h-full rounded-full bg-white transition-[width] duration-100"
-                  style={{ width: `${progress}%` }}
+              {/* Scrubber: invisible input on top of visual track */}
+              <div className="group/scrub relative mb-3 w-full cursor-pointer py-2">
+                {/* Track */}
+                <div className="absolute left-0 right-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-white/25">
+                  {/* Fill */}
+                  <div
+                    className="absolute inset-y-0 left-0 rounded-full bg-violet-500"
+                    style={{ width: `${progress}%` }}
+                  />
+                  {/* Thumb (appears on hover) */}
+                  <div
+                    className="pointer-events-none absolute top-1/2 h-3.5 w-3.5 -translate-y-1/2 scale-0 rounded-full bg-white shadow-md transition-transform duration-150 group-hover/scrub:scale-100"
+                    style={{ left: `calc(${progress}% - 7px)` }}
+                  />
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={duration || 100}
+                  step={0.1}
+                  value={currentTime}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    if (videoRef.current) videoRef.current.currentTime = val;
+                    setCurrentTime(val);
+                    resetHideTimer();
+                  }}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                  aria-label="Seek"
                 />
               </div>
 
               {/* Bottom controls row */}
               <div className="flex items-center gap-3 text-white">
                 {/* Play/Pause */}
-                <button onClick={togglePlay} className="shrink-0 hover:opacity-80">
+                <button onClick={togglePlay} className="shrink-0 transition-opacity hover:opacity-75" aria-label={playing ? 'Pause' : 'Play'}>
                   {playing ? (
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                       <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
@@ -1447,7 +1502,8 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
                         setMuted(videoRef.current.muted);
                       }
                     }}
-                    className="hover:opacity-80"
+                    className="transition-opacity hover:opacity-75"
+                    aria-label={muted || volume === 0 ? 'Unmute' : 'Mute'}
                   >
                     {muted || volume === 0 ? (
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -1468,20 +1524,28 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
                     step={0.05}
                     value={muted ? 0 : volume}
                     onChange={handleVolumeChange}
-                    className="w-20 accent-white"
+                    className="w-20 accent-violet-500 cursor-pointer"
+                    aria-label="Volume"
                   />
                 </div>
 
-                {/* Fullscreen */}
-                <button onClick={toggleFullscreen} className="ml-1 hover:opacity-80">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M8 3H5a2 2 0 0 0-2 2v3" /><path d="M21 8V5a2 2 0 0 0-2-2h-3" />
-                    <path d="M3 16v3a2 2 0 0 0 2 2h3" /><path d="M16 21h3a2 2 0 0 0 2-2v-3" />
-                  </svg>
+                {/* Fullscreen toggle */}
+                <button onClick={toggleFullscreen} className="ml-1 transition-opacity hover:opacity-75" aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}>
+                  {isFullscreen ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M8 3v3a2 2 0 0 1-2 2H3" /><path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+                      <path d="M3 16h3a2 2 0 0 1 2 2v3" /><path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M8 3H5a2 2 0 0 0-2 2v3" /><path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                      <path d="M3 16v3a2 2 0 0 0 2 2h3" /><path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                    </svg>
+                  )}
                 </button>
 
                 {/* Close */}
-                <button onClick={onClose} className="ml-1 hover:opacity-80">
+                <button onClick={onClose} className="ml-1 transition-opacity hover:opacity-75" aria-label="Close">
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -1492,7 +1556,7 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
         {/* Top close button (always visible) */}
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 rounded-full bg-black/50 p-1.5 text-white hover:bg-black/80"
+          className="absolute right-3 top-3 rounded-full bg-black/50 p-1.5 text-white transition-colors hover:bg-black/80"
         >
           <X className="h-5 w-5" />
         </button>
@@ -1725,6 +1789,12 @@ function MediaItem({
   const containerRef = useRef<HTMLButtonElement | null>(null);
   const [isInView, setIsInView] = useState(false);
   const [muted, setMuted] = useState(true);
+  // Inline playback state for the control bar
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [showInlineControls, setShowInlineControls] = useState(false);
+  const inlineHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ─── Auto-play on scroll: only when the video cell is at least
   // 60% visible AND the user hasn't scrolled it out. We use an
@@ -1756,12 +1826,28 @@ function MediaItem({
     }
   }, [isInView]);
 
+  const resetInlineHideTimer = () => {
+    setShowInlineControls(true);
+    if (inlineHideTimer.current) clearTimeout(inlineHideTimer.current);
+    inlineHideTimer.current = setTimeout(() => setShowInlineControls(false), 2000);
+  };
+
+  const fmtInline = (t: number) => {
+    if (!t || isNaN(t)) return '0:00';
+    return `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  };
+
+  const inlineProgress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
   if (item.type === 'VIDEO') {
     return (
       <button
         ref={containerRef}
         onClick={onClick}
-        className="relative h-full w-full overflow-hidden bg-black"
+        className="group/media relative h-full w-full overflow-hidden bg-black"
+        onMouseEnter={resetInlineHideTimer}
+        onMouseMove={resetInlineHideTimer}
+        onMouseLeave={() => { if (isPlaying) setShowInlineControls(false); }}
       >
         {autoPlayEnabled ? (
           <video
@@ -1773,6 +1859,10 @@ function MediaItem({
             playsInline
             className="h-full w-full object-cover"
             onClick={(e) => e.stopPropagation()}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => { setIsPlaying(false); setShowInlineControls(true); }}
+            onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime ?? 0)}
+            onLoadedMetadata={() => setDuration(videoRef.current?.duration ?? 0)}
           />
         ) : (
           <img
@@ -1797,27 +1887,8 @@ function MediaItem({
           </div>
         )}
 
-        {/* Mute toggle (only when autoplaying) */}
-        {autoPlayEnabled && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setMuted((m) => !m);
-            }}
-            className="absolute bottom-2 left-2 rounded-md px-1.5 py-0.5 text-[10px] font-medium text-white"
-            style={{ background: 'rgba(0,0,0,0.6)' }}
-            title={muted ? 'Bật tiếng' : 'Tắt tiếng'}
-          >
-            {muted ? '🔇' : '🔊'}
-          </button>
-        )}
-
-        {/* Theater-mode shortcut (only on videos, only when the
-            page wired onOpenTheater). Clicking opens the
-            fullscreen Reels-style modal. We deliberately sit
-            this button next to the duration badge so the
-            bottom-left of the video remains the play/mute zone. */}
-        {item.type === 'VIDEO' && onOpenTheater && (
+        {/* Theater-mode shortcut */}
+        {onOpenTheater && (
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -1827,17 +1898,7 @@ function MediaItem({
             title="Mở Theater Mode (toàn màn hình)"
             aria-label="Mở Theater Mode"
           >
-            <svg
-              width="11"
-              height="11"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M8 3H5a2 2 0 0 0-2 2v3" />
               <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
               <path d="M3 16v3a2 2 0 0 0 2 2h3" />
@@ -1847,7 +1908,92 @@ function MediaItem({
           </button>
         )}
 
-        {item.duration && (
+        {/* Inline control bar (auto-play mode only) */}
+        {autoPlayEnabled && (
+          <div
+            className={`absolute bottom-0 left-0 right-0 px-2 pb-2 pt-6 transition-opacity duration-200 ${showInlineControls ? 'opacity-100' : 'opacity-0'}`}
+            style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Scrubber */}
+            <div className="group/iscrub relative mb-1.5 w-full cursor-pointer py-1.5">
+              <div className="absolute left-0 right-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-white/25">
+                <div className="absolute inset-y-0 left-0 rounded-full bg-violet-500" style={{ width: `${inlineProgress}%` }} />
+                <div
+                  className="pointer-events-none absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 scale-0 rounded-full bg-white shadow transition-transform duration-150 group-hover/iscrub:scale-100"
+                  style={{ left: `calc(${inlineProgress}% - 5px)` }}
+                />
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={duration || 100}
+                step={0.1}
+                value={currentTime}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  if (videoRef.current) videoRef.current.currentTime = val;
+                  setCurrentTime(val);
+                }}
+                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                aria-label="Seek"
+              />
+            </div>
+            {/* Controls row */}
+            <div className="flex items-center gap-2 text-white">
+              {/* Play/Pause */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const v = videoRef.current;
+                  if (!v) return;
+                  if (v.paused) { v.play().catch(() => {}); } else { v.pause(); }
+                }}
+                className="shrink-0 transition-opacity hover:opacity-75"
+                aria-label={isPlaying ? 'Pause' : 'Play'}
+              >
+                {isPlaying ? (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
+                  </svg>
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                )}
+              </button>
+              {/* Time */}
+              <span className="text-[10px] tabular-nums opacity-80">
+                {fmtInline(currentTime)} / {fmtInline(duration)}
+              </span>
+              <div className="flex-1" />
+              {/* Mute */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setMuted((m) => !m);
+                }}
+                className="transition-opacity hover:opacity-75"
+                aria-label={muted ? 'Unmute' : 'Mute'}
+              >
+                {muted ? (
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                    <line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
+                  </svg>
+                ) : (
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Static duration badge (non-autoplay) */}
+        {!autoPlayEnabled && item.duration && (
           <div
             className="absolute bottom-2 right-2 rounded-md px-1.5 py-0.5 text-xs font-medium text-white"
             style={{ background: 'rgba(0,0,0,0.7)' }}

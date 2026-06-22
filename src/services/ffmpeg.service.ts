@@ -24,6 +24,7 @@ import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs/promises';
 import { AppError } from '../middleware/errorHandler.js';
+import { logger } from '../utils/logger.js';
 
 const execAsync = promisify(exec);
 
@@ -95,7 +96,7 @@ export async function getAudioMetadata(filePath: string): Promise<AudioMetadata>
       format: format?.format_name || undefined,
     };
   } catch (err) {
-    console.warn('[FFmpeg] getAudioMetadata failed:', err);
+    logger.warn('getAudioMetadata failed', { error: err instanceof Error ? err.message : String(err) });
     return {};
   }
 }
@@ -178,7 +179,7 @@ export async function normalizeAudio(
 
     // (debug log removed 2026-06-17)
   } catch (err) {
-    console.warn('[FFmpeg] Pass 1 measurement failed (non-fatal):', err);
+    logger.warn('Pass 1 measurement failed (non-fatal)', { error: err instanceof Error ? err.message : String(err) });
     // Continue with default target values
   }
 
@@ -208,7 +209,7 @@ export async function normalizeAudio(
     // (debug log removed 2026-06-17)
   } catch (err) {
     // If FFmpeg fails, try a simpler approach — just re-encode without loudnorm
-    console.warn('[FFmpeg] Loudnorm normalization failed, falling back to re-encode:', err);
+    logger.warn('Loudnorm normalization failed, falling back to re-encode', { error: err instanceof Error ? err.message : String(err) });
     const fallbackCmd = [
       `${FFMPEG_PATH} -y -i "${absInput}"`,
       '-c:a libmp3lame -b:a 192k',
@@ -233,7 +234,7 @@ export async function normalizeAudio(
     const normalizedStats = await fs.stat(absOutput);
     normalizedSize = normalizedStats.size;
   } catch {
-    console.warn('[FFmpeg] Could not stat normalized file:', absOutput);
+    logger.warn('Could not stat normalized file', { path: absOutput });
   }
 
   return {

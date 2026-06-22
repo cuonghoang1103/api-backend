@@ -1,0 +1,30 @@
+# Thư viện và thư mục build hệ thống
+node_modules/
+.next/
+.nuxt/
+out/
+dist/
+build/
+.cache/
+
+# Cơ sở dữ liệu và Logs
+.prisma/
+prisma/migrations/
+*.log
+*.sqlite
+
+# Tài sản, hình ảnh, video (Cực kỳ nặng token)
+public/assets/
+public/uploads/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.mp4
+*.ico
+
+# File cấu hình môi trường bảo mật
+.env
+.env.*
+.git/

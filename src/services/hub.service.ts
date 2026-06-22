@@ -361,6 +361,14 @@ export async function deleteLink(userId: number, id: number) {
   if (!Number.isInteger(id) || id <= 0) {
     throw new AppError('id khong hop le', 400, 'INVALID_ID');
   }
+  // Clear publicSlug in a separate step before deleting — Prisma's
+  // `delete` bypasses `update` callbacks, so we can't set it to null
+  // as part of the delete. Two queries but the row is gone either way
+  // and the unique index stays clean.
+  await prisma.hubLink.updateMany({
+    where: { id, userId, publicSlug: { not: null } },
+    data: { publicSlug: null },
+  });
   const result = await prisma.hubLink.deleteMany({
     where: { id, userId },
   });
@@ -545,17 +553,26 @@ export async function deleteFile(userId: number, id: number) {
   }
   const file = await prisma.hubFile.findFirst({
     where: { id, userId },
-    select: { id: true, key: true },
+    select: { id: true, key: true, publicSlug: true },
   });
   if (!file) {
     throw new AppError('File khong ton tai hoac khong thuoc ve ban', 404, 'NOT_FOUND');
   }
-  // Delete from R2
+  // Delete from R2 (non-fatal if already gone)
   try {
     const { deleteObject } = await import('../config/r2.js');
     await deleteObject(file.key);
   } catch {
     // Non-fatal: file may already be gone from R2
+  }
+  // Clear publicSlug before delete — Prisma deleteMany bypasses
+  // update callbacks so we need a separate update call to clear
+  // the unique constraint before the row is removed.
+  if (file.publicSlug) {
+    await prisma.hubFile.updateMany({
+      where: { id, userId, publicSlug: file.publicSlug },
+      data: { publicSlug: null },
+    });
   }
   await prisma.hubFile.deleteMany({ where: { id, userId } });
   return { id, deleted: true };

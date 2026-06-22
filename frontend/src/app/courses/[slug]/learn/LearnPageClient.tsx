@@ -111,6 +111,22 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
         router.push(`/courses/${slug}`);
         return;
       }
+
+      // Enrollment expired: hasPaidAccess is false but enrollment row exists.
+      if (data.enrollmentExpiresAt && !data.hasPaidAccess) {
+        toast.error('Quyền truy cập đã hết hạn. Vui lòng gia hạn để tiếp tục học.');
+        router.push(`/courses/${slug}`);
+        return;
+      }
+
+      // CODE enrollment gate: requires re-entry of the activation code each browser
+      // session. PAID enrollments bypass this gate entirely — persistent access.
+      const isPaidEnrollment = data.enrollmentSource === 'PAID';
+      if (!isPaidEnrollment && data.enrollmentSource === 'CODE' && !sessionStorage.getItem(`code_session_${data.id}`)) {
+        toast.info('Vui lòng nhập mã kích hoạt để tiếp tục phiên học');
+        router.push(`/courses/${slug}`);
+        return;
+      }
       setCourse(data);
 
       // Expand all sections by default

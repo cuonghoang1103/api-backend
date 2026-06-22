@@ -815,17 +815,6 @@ async function handleVnpayIpn(req: Request, res: Response, next: NextFunction): 
 
       if (flipped.count !== 1) return; // concurrent IPN already processed this
 
-      await tx.enrollment.upsert({
-        where: { userId_courseId: { userId: order.userId, courseId: order.courseId } },
-        create: { userId: order.userId, courseId: order.courseId },
-        update: { status: 'ACTIVE' },
-      });
-
-      await tx.course.update({
-        where: { id: order.courseId },
-        data: { totalStudents: { increment: 1 } },
-      });
-
       const [user, course] = await Promise.all([
         tx.user.findUnique({
           where: { id: order.userId },
@@ -833,9 +822,25 @@ async function handleVnpayIpn(req: Request, res: Response, next: NextFunction): 
         }),
         tx.course.findUnique({
           where: { id: order.courseId },
-          select: { title: true, slug: true },
+          select: { title: true, slug: true, enrollmentDurationDays: true },
         }),
       ]);
+
+      const durationDays = course?.enrollmentDurationDays ?? 0;
+      const enrollmentExpiresAt = durationDays > 0
+        ? new Date(Date.now() + durationDays * 86_400_000)
+        : null;
+
+      await tx.enrollment.upsert({
+        where: { userId_courseId: { userId: order.userId, courseId: order.courseId } },
+        create: { userId: order.userId, courseId: order.courseId, source: 'PAID', expiresAt: enrollmentExpiresAt },
+        update: { status: 'ACTIVE', source: 'PAID', expiresAt: enrollmentExpiresAt },
+      });
+
+      await tx.course.update({
+        where: { id: order.courseId },
+        data: { totalStudents: { increment: 1 } },
+      });
       if (user && course) {
         receiptContextRef.current = {
           to: user.email,

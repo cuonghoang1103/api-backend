@@ -369,14 +369,15 @@ router.post('/activate-code', authenticate, async (req, res: Response<ApiRespons
       throw new AppError('Mã kích hoạt không hợp lệ', 400);
     }
 
-    // Check course exists and is CODE type
+    // Check course exists and accepts activation codes.
+    // CODE = code-only courses (legacy). PAID = "Trả phí or Mã kích hoạt" (accepts both).
     const course = await prisma.course.findUnique({
       where: { id: courseId },
       select: { id: true, title: true, accessType: true, isPublished: true },
     });
     if (!course) throw new AppError('Course not found', 404);
     if (!course.isPublished) throw new AppError('Khoa hoc chua duoc xuat ban', 400);
-    if (course.accessType !== 'CODE') {
+    if (course.accessType !== 'CODE' && course.accessType !== 'PAID') {
       throw new AppError('Khoa hoc nay khong chap nhan ma kich hoat', 400);
     }
 

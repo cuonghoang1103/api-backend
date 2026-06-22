@@ -132,8 +132,10 @@ async function assertCanAccessCourseContent(
     throw new AppError('Enrollment da het han', 403);
   }
 
-  // CODE enrollment only grants access for CODE courses
-  const hasCodeEnrollment = enrollment.source === 'CODE' && isCodeCourse;
+  // CODE enrollment grants access for CODE courses (legacy) and PAID courses
+  // (admin "Trả phí or Mã kích hoạt" type accepts both payment and activation codes).
+  const isPaidOrCodeCourse = isCodeCourse || course.accessType === 'PAID';
+  const hasCodeEnrollment = enrollment.source === 'CODE' && isPaidOrCodeCourse;
   if (hasCodeEnrollment) {
     return { isAdmin: false, isEnrolled: true, isFree: false, hasCodeEnrollment: true };
   }
@@ -365,6 +367,11 @@ async function serializeCourse(
   const isFree = course.accessType === 'FREE' || (course.isFree && Number(course.price) <= 0);
   const isCodeCourse = course.accessType === 'CODE';
   const isOwner = options?.userId !== undefined && course.instructorId === options.userId;
+  // Expired enrollments do not grant access. Frontend receives enrollmentExpiresAt
+  // to surface the "access expired" message and offer re-purchase.
+  const enrollmentExpired = enrollment?.expiresAt
+    ? enrollment.expiresAt.getTime() < Date.now()
+    : false;
   let hasPaidOrder = false;
   if (options?.userId && !isFree && !isOwner) {
     const order = await prisma.courseOrder.findFirst({
@@ -377,14 +384,15 @@ async function serializeCourse(
     });
     hasPaidOrder = Boolean(order);
   }
-  // CODE enrollment grants access ONLY when enrollment.source === 'CODE'.
-  // A FREE enrollment does NOT unlock a CODE course.
-  const hasCodeEnrollment = enrollment?.source === 'CODE';
+  // CODE enrollment grants access for CODE courses (legacy) and PAID courses
+  // (admin "Trả phí or Mã kích hoạt" type). A FREE enrollment never unlocks a CODE/PAID course.
+  const isPaidOrCodeCourse = isCodeCourse || course.accessType === 'PAID';
+  const hasCodeEnrollment = enrollment?.source === 'CODE' && !enrollmentExpired;
   const hasPaidAccess = options?.includeDraftLessons
     || isOwner
-    || (isFree && !isCodeCourse && Boolean(enrollment))
-    || hasPaidOrder
-    || (isCodeCourse && hasCodeEnrollment);
+    || (isFree && !isCodeCourse && Boolean(enrollment) && !enrollmentExpired)
+    || (hasPaidOrder && !enrollmentExpired)
+    || (isPaidOrCodeCourse && hasCodeEnrollment);
 
   const totalPublishedLessons = course.sections.reduce(
     (sum, section) => sum + section.lessons.length,
@@ -529,6 +537,8 @@ async function serializeCourse(
     isEnrolled: Boolean(enrollment),
     hasPaidAccess,
     enrollmentProgress,
+    enrollmentSource: enrollment?.source,
+    enrollmentExpiresAt: enrollment?.expiresAt?.toISOString(),
     enrollmentCount: course._count.enrollments,
     reviewCount: course._count.reviews,
   };
@@ -738,6 +748,7 @@ router.post('/', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Resp
         isFeatured: Boolean(req.body.isFeatured),
         isPublished: status === 'PUBLISHED',
         accessType: toNullableString(req.body.accessType) ?? 'FREE',
+        enrollmentDurationDays: req.body.enrollmentDurationDays != null ? Number(req.body.enrollmentDurationDays) : 0,
         requirements: toNullableString(req.body.requirements),
         whatYouLearn: toNullableString(req.body.whatYouLearn),
         startDate: toOptionalDate(req.body.startDate) ?? null,
@@ -787,6 +798,7 @@ router.put('/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Re
         ...(req.body.isFree !== undefined ? { isFree: Boolean(req.body.isFree) } : {}),
         ...(req.body.isFeatured !== undefined ? { isFeatured: Boolean(req.body.isFeatured) } : {}),
         ...(req.body.accessType !== undefined ? { accessType: toNullableString(req.body.accessType) ?? 'FREE' } : {}),
+        ...(req.body.enrollmentDurationDays !== undefined ? { enrollmentDurationDays: Number(req.body.enrollmentDurationDays) } : {}),
         ...(req.body.requirements !== undefined ? { requirements: toNullableString(req.body.requirements) } : {}),
         ...(req.body.whatYouLearn !== undefined ? { whatYouLearn: toNullableString(req.body.whatYouLearn) } : {}),
         ...(req.body.startDate !== undefined ? { startDate: toOptionalDate(req.body.startDate) ?? null } : {}),

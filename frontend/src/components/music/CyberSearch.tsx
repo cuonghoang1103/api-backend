@@ -54,10 +54,10 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [focusedIdx, setFocusedIdx] = useState(-1);
-  // Map of result.id → 'tried-default' (after first YouTube thumb failed)
-  // so we can fall back to a lower-quality thumbnail on the same CDN.
-  const [failedThumbs, setFailedThumbs] = useState<Set<string>>(new Set());
+  // Map of result.id → true (first load failed, retrying with lower quality)
   const [retriedThumbs, setRetriedThumbs] = useState<Set<string>>(new Set());
+  // Map of result.id → true (all qualities exhausted, show gradient)
+  const [failedThumbs, setFailedThumbs] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -358,32 +358,22 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
                       // Plain <img> instead of next/image so we can
                       // attach referrerPolicy="no-referrer" (YouTube
                       // CDN sometimes blocks hot-linked requests when
-                      // the referer is a production domain) and so
-                      // `onError` fires reliably for external URLs.
+                      // the referer is a production domain).
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={retriedThumbs.has(result.id) ? downgradeYouTubeThumb(result.thumbnail) : result.thumbnail}
                         alt={result.title}
                         loading="lazy"
                         className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
                         onError={() => {
-                          // YouTube: first failure → swap to a lower
-                          // quality variant. Second failure → show
-                          // gradient placeholder. Local track covers
-                          // go straight to placeholder.
                           const isYT = result.type === 'youtube';
                           if (isYT && !retriedThumbs.has(result.id)) {
-                            setRetriedThumbs((prev) => {
-                              const next = new Set(prev);
-                              next.add(result.id);
-                              return next;
-                            });
+                            // First failure: downgrade to hqdefault
+                            setRetriedThumbs((prev) => new Set(prev).add(result.id));
                           } else {
-                            setFailedThumbs((prev) => {
-                              const next = new Set(prev);
-                              next.add(result.id);
-                              return next;
-                            });
+                            // Second failure or local track: show gradient
+                            setFailedThumbs((prev) => new Set(prev).add(result.id));
                           }
                         }}
                       />

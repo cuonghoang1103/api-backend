@@ -1180,24 +1180,16 @@ async function handleYouTubeSearch(
       }
 
       const thumbnails = snippet.thumbnails as Record<string, { url?: string }> | undefined;
-      // YouTube's API uses the keys `default`, `medium`, `high`,
-      // `standard`, and `maxres` (NOT `maxresdefault` — the full
-      // filename only appears in the URL itself, e.g.
-      // `…/maxresdefault.jpg`). The previous code looked up
-      // `maxresdefault` and never matched, so the response
-      // silently fell back to `high` even for videos that DO
-      // have a maxres thumbnail — making the disc cover look
-      // noticeably softer than it should. We now check both the
-      // API key (`maxres`) and the filename (`maxresdefault`)
-      // so we always pick the largest available variant.
+      // Use i.ytimg.com CDN URLs built directly from videoId.  The API's
+      // `thumbnails.*.url` field sometimes returns a URL that gets blocked
+      // by YouTube's per-video anti-hotlink rules on certain referrers.
+      // Constructing the URL from the CDN hostname guarantees hotlink-
+      // friendly delivery regardless of the video's individual config.
+      // Prefer maxresdefault when the video has it; fall back to hqdefault
+      // which is guaranteed to exist for every YouTube video.
       const thumbnail =
-        thumbnails?.['maxres']?.url ||
-        thumbnails?.['maxresdefault']?.url ||
-        thumbnails?.['standard']?.url ||
-        thumbnails?.['high']?.url ||
-        thumbnails?.['medium']?.url ||
-        thumbnails?.['default']?.url ||
-        '';
+        thumbnails?.['maxresdefault']?.url
+        || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 
       const rawDuration = durationMap[videoId] || '';
       const duration = parseYouTubeDuration(rawDuration);

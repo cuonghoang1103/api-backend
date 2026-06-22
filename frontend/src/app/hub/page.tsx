@@ -29,8 +29,6 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://cuongthai.com/hub' },
 };
 
-const HUB_CACHE_TTL_SECONDS = 30;
-
 async function fetchWithTimeout<T>(
   url: string,
   cookie: string,
@@ -42,7 +40,12 @@ async function fetchWithTimeout<T>(
     const res = await fetch(url, {
       headers: { cookie, accept: 'application/json' },
       signal: controller.signal,
-      next: { revalidate: HUB_CACHE_TTL_SECONDS },
+      // `force-dynamic` page + no-store = always fresh, never cached.
+      // The `revalidate` option was causing stale data to be served
+      // when a different user's session triggered a re-render during
+      // the cache window, because Next.js reused the cached response
+      // for all concurrent requests regardless of the auth cookie.
+      cache: 'no-store',
     });
     if (!res.ok) return null;
     return (await res.json()) as T;

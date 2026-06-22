@@ -31,9 +31,6 @@ const emptyCourse = {
   // ISO datetime string or '' for "no expiry / forever".
   // discountExpiresAt: date+time after which discountPrice stops applying.
   discountExpiresAt: '',
-  // enrollmentDays: paid course grants X days of access; 0 = lifetime.
-  // UI-only — backend stores the resolved expiresAt on the Enrollment row
-  // at purchase time, not on the Course.
   enrollmentDays: 0,
 };
 
@@ -148,7 +145,7 @@ export default function AdminCoursesPage() {
       isFree: course.isFree || false,
       isFeatured: course.isFeatured || false,
       isPublished: course.isPublished || false,
-      accessType: (course as any).accessType || 'FREE',
+      accessType: ((course as any).accessType === 'CODE' ? 'PAID' : (course as any).accessType) || 'FREE',
       requirements: course.requirements || '',
       whatYouLearn: course.whatYouLearn || '',
       status: course.status || 'DRAFT',
@@ -158,8 +155,7 @@ export default function AdminCoursesPage() {
       discountExpiresAt: course.discountExpiresAt
         ? new Date(course.discountExpiresAt).toISOString().slice(0, 16)
         : '',
-      // 0 means "lifetime". Not stored on the course — re-derives at purchase time.
-      enrollmentDays: 0,
+      enrollmentDays: course.enrollmentDurationDays ?? 0,
     });
     setSections([]);
     setExpandedSections(new Set());
@@ -299,19 +295,12 @@ export default function AdminCoursesPage() {
         isFree: courseForm.isFree,
         isFeatured: courseForm.isFeatured,
         accessType: courseForm.accessType,
+        enrollmentDurationDays: courseForm.enrollmentDays,
         isPublished: statusDerived,
         requirements: courseForm.requirements,
         whatYouLearn: courseForm.whatYouLearn,
         status: courseForm.status,
         tags: courseForm.tags,
-        // enrollmentDays is sent as a custom field. Backend
-        // does NOT persist this on the course — it stores the resolved
-        // expiresAt on the Enrollment row at purchase time. If the
-        // backend doesn't recognize the field, the API call still
-        // succeeds (Prisma ignores unknown fields? no, actually it
-        // throws — so we strip it here and pass it via a separate
-        // channel). For now we DO NOT send it; we'll wire it through
-        // a dedicated PATCH in a follow-up.
       };
 
       // Normalize null -> undefined for fields whose API type is
@@ -664,11 +653,10 @@ export default function AdminCoursesPage() {
                 {/* Access Type */}
                 <div>
                   <label className="block text-sm font-medium text-text-primary mb-2">Hinh thuc truy cap</label>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {[
                       { value: 'FREE', label: 'Mien phi', desc: 'Hoc vien dang ky tu do', color: 'green' },
-                      { value: 'PAID', label: 'Tra phi', desc: 'Mua qua VNPay', color: 'indigo' },
-                      { value: 'CODE', label: 'Ma kich hoat', desc: 'Nhap ma 6 ky tu', color: 'violet' },
+                      { value: 'PAID', label: 'Tra phi or Ma kich hoat', desc: 'Mua qua VNPay / Nhap ma 6 ky tu', color: 'indigo' },
                     ].map(opt => (
                       <label
                         key={opt.value}
@@ -703,13 +691,7 @@ export default function AdminCoursesPage() {
                   {/* Show price inputs when PAID is selected */}
                   {courseForm.accessType === 'PAID' && (
                     <p className="text-[11px] mt-2 text-text-muted">
-                      Khi chon "Tra phi", o nhap gia va gia giam ben duoi se hien thi tren trang chi tiet khoa hoc.
-                    </p>
-                  )}
-                  {/* CODE warning */}
-                  {courseForm.accessType === 'CODE' && (
-                    <p className="text-[11px] mt-2 text-amber-400/80">
-                      Khoa hoc se bi chan. Hoc vien can nhap dung ma code de dang ky.
+                      Khi chon "Tra phi or Ma kich hoat", o nhap gia va gia giam ben duoi se hien thi tren trang chi tiet khoa hoc. Hoc vien co the mua qua VNPay hoac nhap ma kich hoat.
                     </p>
                   )}
                 </div>

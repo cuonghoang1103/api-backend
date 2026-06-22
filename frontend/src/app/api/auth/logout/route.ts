@@ -12,7 +12,7 @@ export async function POST() {
   // Xóa backend_token cookie
   response.cookies.set("backend_token", "", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 0,
     path: "/",
@@ -20,7 +20,7 @@ export async function POST() {
   // Xóa admin_role cookie
   response.cookies.set("admin_role", "", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 0,
     path: "/",

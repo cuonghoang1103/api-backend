@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Star, Users, Clock, BookOpen, Play, Lock, CheckCircle,
-  ChevronDown, ChevronUp, Loader2, Award, Globe, Calendar, Download, ArrowLeft, CreditCard,
+  ChevronDown, ChevronUp, ChevronRight, Loader2, Award, Globe, Calendar, Download, ArrowLeft, CreditCard,
   KeyRound,
 } from 'lucide-react';
 import { coursesApi, paymentApi } from '@/lib/api';
@@ -29,31 +29,9 @@ function formatPrice(price: number, isFree: boolean): string {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 }
 
-interface OldCourseAccessOptionsProps {
-  course: Course;
-  isAuthenticated: boolean;
-  isPaidCourse: boolean;
-  isCodeCourse: boolean;
-  accessCode: string;
-  setAccessCode: (v: string) => void;
-  codeError: string;
-  setCodeError: (v: string) => void;
-  enrolling: boolean;
-  setEnrolling: (v: boolean) => void;
-  buying: boolean;
-  setBuying: (v: boolean) => void;
-  activatingCode: boolean;
-  setActivatingCode: (v: boolean) => void;
-  handleEnroll: () => Promise<void>;
-  handleBuyCourse: () => Promise<void>;
-  handleActivateCode: () => Promise<void>;
-}
-
 function OldCourseAccessOptions({
   course,
   isAuthenticated,
-  isPaidCourse,
-  isCodeCourse,
   accessCode,
   setAccessCode,
   codeError,
@@ -67,79 +45,52 @@ function OldCourseAccessOptions({
   handleEnroll,
   handleBuyCourse,
   handleActivateCode,
-}: OldCourseAccessOptionsProps) {
+}: {
+  course: Course;
+  isAuthenticated: boolean;
+  accessCode: string;
+  setAccessCode: (v: string) => void;
+  codeError: string;
+  setCodeError: (v: string) => void;
+  enrolling: boolean;
+  setEnrolling: (v: boolean) => void;
+  buying: boolean;
+  setBuying: (v: boolean) => void;
+  activatingCode: boolean;
+  setActivatingCode: (v: boolean) => void;
+  handleEnroll: () => Promise<void>;
+  handleBuyCourse: () => Promise<void>;
+  handleActivateCode: () => Promise<void>;
+}) {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const codeSessionKey = `code_session_${course.id}`;
+  const hasCodeSession = mounted && !!sessionStorage.getItem(codeSessionKey);
+  const isPaidEnrollment = course.enrollmentSource === 'PAID';
+  const isCodeEnrollment = course.enrollmentSource === 'CODE';
 
   const finalPrice = course.discountPrice && Number(course.discountPrice) > 0
     ? Number(course.discountPrice)
     : Number(course.price);
   const priceLabel = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(finalPrice);
 
-  // FREE button
-  const [freeLoading, setFreeLoading] = useState(false);
-  const handleFreeAccess = async () => {
+  const isPaidType = course.accessType === 'PAID';
+
+  const handleFreeClick = async () => {
     if (!isAuthenticated) {
       router.push(`/login?callbackUrl=${encodeURIComponent(`/courses/${course.slug}`)}`);
       return;
     }
-    setFreeLoading(true);
+    if (course.accessType !== 'FREE') {
+      toast.warning('Khoa hoc nay hien tai chua ap dung hinh thuc mien phi');
+      return;
+    }
     try {
-      await coursesApi.enroll(course.id);
       await handleEnroll();
     } catch (err: any) {
       toast.error(err?.response?.data?.message || 'Khong the dang ky mien phi');
-    } finally {
-      setFreeLoading(false);
-    }
-  };
-
-  // PAID button
-  const [paidLoading, setPaidLoading] = useState(false);
-  const handlePaidAccess = async () => {
-    if (!isAuthenticated) {
-      router.push(`/login?callbackUrl=${encodeURIComponent(`/courses/${course.slug}`)}`);
-      return;
-    }
-    if (course.hasPaidAccess) {
-      router.push(`/courses/${course.slug}/learn`);
-      return;
-    }
-    setPaidLoading(true);
-    try {
-      const res = await paymentApi.createCourseOrder(course.id);
-      const { paymentUrl } = res.data.data;
-      window.location.href = paymentUrl;
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Khong the tao don thanh toan');
-      setPaidLoading(false);
-    }
-  };
-
-  // CODE button
-  const [codeLoading, setCodeLoading] = useState(false);
-  const handleCodeAccess = async () => {
-    const cleanCode = accessCode.trim().toUpperCase();
-    if (!cleanCode || cleanCode.length < 4) {
-      setCodeError('Vui long nhap ma (toi thieu 4 ky tu)');
-      return;
-    }
-    if (!isAuthenticated) {
-      router.push(`/login?callbackUrl=${encodeURIComponent(`/courses/${course.slug}`)}`);
-      return;
-    }
-    setCodeLoading(true);
-    setCodeError('');
-    try {
-      await coursesApi.activateCode(course.id, cleanCode);
-      await handleActivateCode();
-      toast.success('Kich hoat thanh cong!');
-      router.push(`/courses/${course.slug}/learn`);
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || 'Ma khong hop le';
-      setCodeError(msg);
-      toast.error(msg);
-    } finally {
-      setCodeLoading(false);
     }
   };
 
@@ -147,99 +98,163 @@ function OldCourseAccessOptions({
     <div className="space-y-3">
       {/* Miễn phí */}
       <button
-        onClick={handleFreeAccess}
-        disabled={freeLoading}
-        className="flex items-center justify-between w-full px-4 py-3 rounded-xl border transition-all disabled:opacity-50
-          bg-gradient-to-r from-green-500/10 to-green-600/10 border-green-500/30
-          hover:from-green-500/20 hover:to-green-600/20 hover:border-green-500/50"
+        onClick={handleFreeClick}
+        disabled={enrolling || isPaidType}
+        className={`flex items-center justify-between w-full px-4 py-3 rounded-xl border transition-all disabled:opacity-50
+          ${isPaidType
+            ? 'bg-darkbg border-darkborder cursor-not-allowed opacity-40'
+            : 'bg-gradient-to-r from-green-500/10 to-green-600/10 border-green-500/30 hover:from-green-500/20 hover:to-green-600/20 hover:border-green-500/50'
+          }`}
       >
         <div className="flex items-center gap-3">
-          {freeLoading ? (
+          {enrolling ? (
             <Loader2 className="w-5 h-5 text-green-400 animate-spin" />
           ) : (
             <Award className="w-5 h-5 text-green-400" />
           )}
           <div className="text-left">
-            <p className="text-sm font-semibold text-green-400">Mien phi</p>
-            <p className="text-xs text-green-400/60">Dang ky & hoc ngay</p>
+            <p className={`text-sm font-semibold ${isPaidType ? 'text-text-muted' : 'text-green-400'}`}>Miễn phí</p>
+            <p className={`text-xs ${isPaidType ? 'text-text-muted/60' : 'text-green-400/60'}`}>
+              {isPaidType ? 'Không áp dụng' : 'Đăng ký & học ngay'}
+            </p>
           </div>
         </div>
         <ChevronDown className="w-4 h-4 text-green-400/60" />
       </button>
 
-      {/* Thanh toán */}
-      {course.hasPaidAccess ? (
-        <button
-          onClick={handlePaidAccess}
-          className="flex items-center justify-between w-full px-4 py-3 rounded-xl border transition-all
-            bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 border-neon-violet/30
-            hover:from-neon-indigo/20 hover:to-neon-violet/20 hover:border-neon-violet/50"
-        >
-          <div className="flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-neon-violet" />
-            <div className="text-left">
-              <p className="text-sm font-semibold text-neon-violet">Da thanh toan</p>
-              <p className="text-xs text-neon-violet/60">Tiep tuc hoc</p>
-            </div>
-          </div>
-          <ChevronDown className="w-4 h-4 text-neon-violet/60" />
-        </button>
-      ) : (
-        <button
-          onClick={handlePaidAccess}
-          disabled={paidLoading}
-          className="flex items-center justify-between w-full px-4 py-3 rounded-xl border transition-all disabled:opacity-50
-            bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 border-neon-violet/30
-            hover:from-neon-indigo/20 hover:to-neon-violet/20 hover:border-neon-violet/50"
-        >
-          <div className="flex items-center gap-3">
-            {paidLoading ? (
-              <Loader2 className="w-5 h-5 text-neon-violet animate-spin" />
+      {/* Trả phí or Mã kích hoạt — chỉ hiện khi PAID, 2 lựa chọn độc lập */}
+      {isPaidType && (
+        <div className="rounded-xl border border-neon-violet/30 bg-gradient-to-r from-neon-indigo/5 to-neon-violet/5 overflow-hidden">
+          {course.hasPaidAccess ? (
+            // ── User already has access — branch by enrollment source ──
+            isPaidEnrollment ? (
+              // Flow 1: PAID enrollment — direct navigation, no code gate ever
+              <button
+                onClick={() => router.push(`/courses/${course.slug}/learn`)}
+                className="flex items-center justify-between w-full px-4 py-3 transition-all
+                  bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 hover:from-neon-indigo/20 hover:to-neon-violet/20"
+              >
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-neon-violet" />
+                  <div className="text-left">
+                    <p className="text-sm font-semibold text-neon-violet">Vào học ngay</p>
+                    <p className="text-xs text-neon-violet/60">Đã thanh toán thành công</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-neon-violet/60" />
+              </button>
+            ) : isCodeEnrollment && hasCodeSession ? (
+              // Flow 2a: CODE enrollment with valid session — navigate directly
+              <button
+                onClick={() => router.push(`/courses/${course.slug}/learn`)}
+                className="flex items-center justify-between w-full px-4 py-3 transition-all
+                  bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 hover:from-neon-indigo/20 hover:to-neon-violet/20"
+              >
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-neon-violet" />
+                  <div className="text-left">
+                    <p className="text-sm font-semibold text-neon-violet">Tiếp tục học</p>
+                    <p className="text-xs text-neon-violet/60">Mã kích hoạt hợp lệ cho phiên này</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-neon-violet/60" />
+              </button>
             ) : (
-              <CreditCard className="w-5 h-5 text-neon-violet" />
-            )}
-            <div className="text-left">
-              <p className="text-sm font-semibold text-neon-violet">Thanh toan</p>
-              <p className="text-xs text-neon-violet/60">Mua ngay – {priceLabel}</p>
-            </div>
-          </div>
-          <ChevronDown className="w-4 h-4 text-neon-violet/60" />
-        </button>
-      )}
+              // Flow 2b: CODE enrollment but no session — require re-entry of code
+              <div className="px-4 py-4 space-y-3">
+                <div className="flex items-start gap-2 p-3 rounded-lg bg-neon-violet/10 border border-neon-violet/30">
+                  <KeyRound className="w-4 h-4 text-neon-violet mt-0.5 shrink-0" />
+                  <div>
+                    <p className="text-sm font-semibold text-neon-violet">Nhập lại mã để tiếp tục</p>
+                    <p className="text-xs text-neon-violet/60">Mỗi phiên làm việc cần xác nhận mã kích hoạt</p>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={accessCode}
+                    onChange={e => {
+                      setAccessCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10));
+                      setCodeError('');
+                    }}
+                    onKeyDown={e => { if (e.key === 'Enter') handleActivateCode(); }}
+                    placeholder="ABC123"
+                    maxLength={10}
+                    className="flex-1 px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
+                  />
+                  <button
+                    onClick={handleActivateCode}
+                    disabled={activatingCode}
+                    className="flex items-center justify-center gap-1 px-3 py-2 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+                  >
+                    {activatingCode ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Xác nhận'}
+                  </button>
+                </div>
+                {codeError && <p className="text-xs text-red-400">{codeError}</p>}
+              </div>
+            )
+          ) : (
+            // ── No access yet — show purchase form ──
+            <>
+              <div className="px-4 py-3 border-b border-neon-violet/20">
+                <p className="text-sm font-semibold text-neon-violet">Trả phí or Mã kích hoạt</p>
+                <p className="text-xs text-neon-violet/60">Chọn 1 trong 2 cách để truy cập khóa học</p>
+              </div>
 
-      {/* Nhập mã kích hoạt */}
-      <div className="flex flex-col gap-2 p-3 rounded-xl border border-darkborder bg-darkbg">
-        <div className="flex items-center gap-2">
-          <KeyRound className="w-4 h-4 text-neon-violet shrink-0" />
-          <span className="text-sm font-medium text-text-primary">Nhap ma kich hoat</span>
+              <div className="px-4 pb-4 space-y-3 pt-3">
+                {/* VNPay */}
+                <button
+                  onClick={handleBuyCourse}
+                  disabled={buying}
+                  className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg border border-neon-violet/30 bg-darkbg hover:bg-neon-violet/10 transition-all disabled:opacity-50"
+                >
+                  {buying
+                    ? <Loader2 className="w-4 h-4 text-neon-violet animate-spin" />
+                    : <CreditCard className="w-4 h-4 text-neon-violet" />}
+                  <div className="text-left">
+                    <p className="text-sm font-medium text-text-primary">Thanh toán VNPay</p>
+                    <p className="text-xs text-text-muted">Mua ngay – {priceLabel}</p>
+                  </div>
+                </button>
+
+                {/* Mã kích hoạt */}
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <KeyRound className="w-4 h-4 text-neon-violet shrink-0" />
+                    <span className="text-sm font-medium text-text-primary">Mã kích hoạt</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={accessCode}
+                      onChange={e => {
+                        setAccessCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10));
+                        setCodeError('');
+                      }}
+                      onKeyDown={e => { if (e.key === 'Enter') handleActivateCode(); }}
+                      placeholder="ABC123"
+                      maxLength={10}
+                      className="flex-1 px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
+                    />
+                    <button
+                      onClick={handleActivateCode}
+                      disabled={activatingCode}
+                      className="flex items-center justify-center gap-1 px-3 py-2 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+                    >
+                      {activatingCode ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        'Kích hoạt'
+                      )}
+                    </button>
+                  </div>
+                  {codeError && <p className="text-xs text-red-400">{codeError}</p>}
+                </div>
+              </div>
+            </>
+          )}
         </div>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={accessCode}
-            onChange={e => {
-              setAccessCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10));
-              setCodeError('');
-            }}
-            onKeyDown={e => { if (e.key === 'Enter') handleCodeAccess(); }}
-            placeholder="ABC123"
-            maxLength={10}
-            className="flex-1 px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
-          />
-          <button
-            onClick={handleCodeAccess}
-            disabled={codeLoading}
-            className="flex items-center justify-center gap-1 px-3 py-2 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
-          >
-            {codeLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              'Kich hoat'
-            )}
-          </button>
-        </div>
-        {codeError && <p className="text-xs text-red-400">{codeError}</p>}
-      </div>
+      )}
     </div>
   );
 }
@@ -382,6 +397,8 @@ export default function CourseDetailPage() {
     setCodeError('');
     try {
       await coursesApi.activateCode(course.id, code);
+      // Authorize this browser session so the learn page gate passes.
+      sessionStorage.setItem(`code_session_${course.id}`, '1');
       toast.success('Kich hoat thanh cong! Ban co the bat dau hoc ngay.');
       router.push(`/courses/${slug}/learn`);
     } catch (err: unknown) {
@@ -559,8 +576,6 @@ export default function CourseDetailPage() {
                   <OldCourseAccessOptions
                     course={course}
                     isAuthenticated={!!isAuthenticated}
-                    isPaidCourse={isPaidCourse}
-                    isCodeCourse={isCodeCourse}
                     accessCode={accessCode}
                     setAccessCode={setAccessCode}
                     codeError={codeError}

@@ -10,6 +10,7 @@
  */
 
 import { PrismaClient, Prisma } from '@prisma/client';
+import { logger } from '../utils/logger.js';
 
 // ─── PrismaClient instance ─────────────────────────────────────
 // Tạo mới mỗi lần process start — KHÔNG dùng singleton global
@@ -63,22 +64,22 @@ export async function connectDatabase(): Promise<void> {
     await prismaClient.$queryRaw`SELECT 1`;
     const elapsed = Date.now() - start;
 
-    console.log(`✅ Database connected (${elapsed}ms)`);
-  } catch (error) {
-    console.error('❌ Database connection failed:');
-    throw error;
-  }
+ logger.info('Database connected', { elapsedMs: elapsed });
+ } catch (error) {
+ logger.error('Database connection failed', { error: error instanceof Error ? error.message : String(error) });
+ throw error;
+ }
 }
 
 // ─── Disconnect ─────────────────────────────────────────────
 export async function disconnectDatabase(): Promise<void> {
   try {
     await prismaClient.$disconnect();
-    console.log('✅ Database disconnected');
-  } catch (error) {
-    console.error('❌ Database disconnect error:', error);
-    throw error;
-  }
+ logger.info('Database disconnected');
+ } catch (error) {
+ logger.error('Database disconnect error', { error: error instanceof Error ? error.message : String(error) });
+ throw error;
+ }
 }
 
 // ─── Query timeout wrapper ─────────────────────────────────

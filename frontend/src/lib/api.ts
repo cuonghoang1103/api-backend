@@ -1683,11 +1683,11 @@ export const dashboardApi = {
     return api.patch<{ data: DashboardTask }>(`/dashboard/tasks/${id}`, data);
   },
 
-  // Soft-delete: the row stays in the DB (archivedAt set) so
-  // the user can re-import from an export. The cron hard-deletes
-  // after the retention window expires.
+  // Hard-delete: a manual delete removes the task immediately and
+  // permanently (no archive limbo). Auto-expiry of completed tasks
+  // is a separate, server-driven path (see the dashboard cron).
   removeTask(id: number) {
-    return api.delete<{ data: { id: number; archived: true } }>(`/dashboard/tasks/${id}`);
+    return api.delete<{ data: { id: number; deleted: true } }>(`/dashboard/tasks/${id}`);
   },
 
   // "End of day" celebration. Idempotent: a repeat call returns

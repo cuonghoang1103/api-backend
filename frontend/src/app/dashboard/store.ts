@@ -37,6 +37,7 @@
  *     useState pattern (like the old store) keeps the
  *     mutations auditable in one place.
  */
+import { toast } from 'sonner';
 import type { DashboardState, Task, TimelineSlot, TaskScope, ActivityType } from './types';
 import { dashboardApi, type DashboardSnapshot, type DashboardTask as ApiTask, type DashboardActivityType } from '@/lib/api';
 
@@ -331,7 +332,15 @@ export async function addTask(
       return real;
     }
   } catch (err) {
+    // Rollback: drop the optimistic row so the UI doesn't show a
+    // task the server never accepted, and tell the user.
     console.warn('[Dashboard] addTask sync failed', err);
+    currentState = {
+      ...currentState,
+      tasks: currentState.tasks.filter((t) => t.id !== optimistic.id),
+    };
+    notify();
+    toast.error('Khong the luu task — vui long thu lai');
   }
   return optimistic;
 }
@@ -339,7 +348,8 @@ export async function addTask(
 export async function toggleTask(id: string): Promise<void> {
   const before = currentState.tasks.find((t) => t.id === id);
   if (!before) return;
-  const nextDone = !before.done;
+  const prevDone = before.done;
+  const nextDone = !prevDone;
   currentState = {
     ...currentState,
     tasks: currentState.tasks.map((t) => (t.id === id ? { ...t, done: nextDone } : t)),
@@ -349,18 +359,35 @@ export async function toggleTask(id: string): Promise<void> {
   try {
     await dashboardApi.patchTask(Number(id), { done: nextDone });
   } catch (err) {
+    // Rollback to the previous done-state on failure.
     console.warn('[Dashboard] toggleTask sync failed', err);
+    currentState = {
+      ...currentState,
+      tasks: currentState.tasks.map((t) => (t.id === id ? { ...t, done: prevDone } : t)),
+    };
+    notify();
+    toast.error('Khong the cap nhat task — da hoan tac');
   }
 }
 
 export async function removeTask(id: string): Promise<void> {
+  const index = currentState.tasks.findIndex((t) => t.id === id);
+  if (index === -1) return;
+  const removed = currentState.tasks[index];
   currentState = { ...currentState, tasks: currentState.tasks.filter((t) => t.id !== id) };
   notify();
   if (currentState.userId === 'guest' || id.startsWith('optimistic-')) return;
   try {
     await dashboardApi.removeTask(Number(id));
   } catch (err) {
+    // Rollback: re-insert the task at its original position so a
+    // failed delete doesn't make the user's task vanish.
     console.warn('[Dashboard] removeTask sync failed', err);
+    const tasks = [...currentState.tasks];
+    tasks.splice(Math.min(index, tasks.length), 0, removed);
+    currentState = { ...currentState, tasks };
+    notify();
+    toast.error('Khong the xoa task — da khoi phuc');
   }
 }
 

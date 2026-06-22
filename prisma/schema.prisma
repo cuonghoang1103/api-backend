@@ -1982,10 +1982,14 @@ model DashboardCelebration {
   id             Int      @id @default(autoincrement())
   userId         Int      @map("user_id")
   // The calendar day (YYYY-MM-DD) the user celebrated. The
-  // unique constraint guarantees one celebration per day even
-  // if the user spams the button — the API surfaces a 409 and
-  // the client re-renders the locked state.
-  celebratedDate String   @unique @map("celebrated_date") @db.VarChar(10)
+  // uniqueness that guarantees one celebration per day is the
+  // COMPOSITE (user_id, celebrated_date) constraint below — NOT
+  // a global unique on this column. A global unique here was a
+  // multi-user bug: the first user to celebrate on a date would
+  // win the row and every other user's celebrate POST would hit
+  // a unique violation. Each user gets exactly one celebration
+  // per day, independent of everyone else.
+  celebratedDate String   @map("celebrated_date") @db.VarChar(10)
   // EXP awarded for this celebration. We keep the amount so we
   // can show "you got +150 EXP on 2026-06-15" later if we add
   // a history view.
@@ -1996,7 +2000,10 @@ model DashboardCelebration {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId, celebratedDate], name: "idx_dashboard_celeb_user_date")
+  // One celebration per (user, day). Serves as both the
+  // uniqueness guard and the (userId, celebratedDate) lookup
+  // index, so no separate @@index is needed.
+  @@unique([userId, celebratedDate], name: "uniq_dashboard_celeb_user_date")
   @@map("dashboard_celebrations")
 }
 

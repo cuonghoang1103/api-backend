@@ -57,6 +57,32 @@ export function normalizeDate(s: string): string {
   throw new Error(`Khong the parse date: ${s}`);
 }
 
+/**
+ * How long a COMPLETED task stays visible before it auto-expires.
+ * After this many days past `completedAt`, the task is hidden from
+ * the dashboard (query-time filter in GET) and eventually hard-
+ * deleted by the daily cron. This is the single knob to tune the
+ * retention window — change it here and both the read filter and
+ * the cron pick it up. Overridable via DASHBOARD_COMPLETED_RETENTION_DAYS.
+ *
+ * Note: this only applies to *completed* tasks. Active (unfinished)
+ * tasks never auto-expire — the user must finish or delete them.
+ * Manually deleted tasks are removed immediately and permanently.
+ */
+export const COMPLETED_TASK_RETENTION_DAYS = (() => {
+  const raw = parseInt(process.env.DASHBOARD_COMPLETED_RETENTION_DAYS || '', 10);
+  return Number.isFinite(raw) && raw > 0 ? raw : 7;
+})();
+
+/**
+ * The cutoff Date for completed-task expiry: any task with
+ * `done = true` and `completedAt < this` is considered expired
+ * and should no longer be shown to the user.
+ */
+export function completedExpiryCutoff(now: Date = new Date()): Date {
+  return new Date(now.getTime() - COMPLETED_TASK_RETENTION_DAYS * 24 * 60 * 60 * 1000);
+}
+
 export type TaskScope = 'today' | 'week' | 'month';
 
 /**

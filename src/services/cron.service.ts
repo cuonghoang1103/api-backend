@@ -21,6 +21,7 @@ import { enqueueJob, recoverPendingJobs } from './embedQueue.service.js';
 import { pingQuotaRedis } from './quota.service.js';
 import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
+import { completedExpiryCutoff, COMPLETED_TASK_RETENTION_DAYS } from '../utils/dashboard.js';
 
 let _started = false;
 
@@ -116,6 +117,21 @@ export function startCronJobs(): void {
         logger.info('cron archived dashboard tasks', { count: archived.count, archiveDays });
       }
 
+      // Auto-expiry: physically remove COMPLETED tasks whose
+      // completedAt is older than the retention window (default 7d).
+      // The GET endpoint already hides these at read time; this step
+      // keeps the table from growing unbounded with stale done rows.
+      // Active (unfinished) tasks are never touched here.
+      const expiredCompleted = await prisma.dashboardTask.deleteMany({
+        where: { done: true, completedAt: { lt: completedExpiryCutoff() } },
+      });
+      if (expiredCompleted.count > 0) {
+        logger.info('cron purged expired completed dashboard tasks', {
+          count: expiredCompleted.count,
+          retentionDays: COMPLETED_TASK_RETENTION_DAYS,
+        });
+      }
+
       const purgeCutoff = new Date(Date.now() - purgeDays * 24 * 60 * 60 * 1000);
       const purged = await prisma.dashboardTask.deleteMany({
         where: { archivedAt: { lt: purgeCutoff } },
@@ -149,7 +165,7 @@ export function startCronJobs(): void {
  'Weekly re-embed @ Sun 02:00 Vietnam',
  'Hourly health check',
  `Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`,
- `Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d)`,
+ `Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d, completed-expiry ${COMPLETED_TASK_RETENTION_DAYS}d)`,
  ],
  });
 }

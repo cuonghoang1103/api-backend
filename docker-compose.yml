@@ -67,10 +67,18 @@ services:
       DATABASE_URL: "${DATABASE_URL}"
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      JWT_SECRET: ${JWT_SECRET:-CuongHoangDevV2SecretKeyNangCao2026NheMaNayCanItNhat256BitNhe}
+      # Required secrets - fail-fast if missing. Previously these had weak
+      # public default values (CuongHoangDevV2...) that anyone could read
+      # from this repo and forge JWTs/cookies against production. The
+      # compose `:-` fallback has been removed; if any of these are
+      # unset, `docker compose up` aborts with a clear error pointing
+      # to the missing variable name. Set them via the host
+      # /opt/cuonghoangdev/.env (mounted as env_file below) or pass
+      # them inline.
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required - set it in /opt/cuonghoangdev/.env}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
-      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-CuongHoangDevRefreshSecret2026NheMaNayCanItNhat256BitNhe}
-      COOKIE_SECRET: ${COOKIE_SECRET:-CuongHoangDevCookieSecret2026Nhe}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?JWT_REFRESH_SECRET is required - set it in /opt/cuonghoangdev/.env}
+      COOKIE_SECRET: ${COOKIE_SECRET:?COOKIE_SECRET is required - set it in /opt/cuonghoangdev/.env}
       FRONTEND_URL: ${FRONTEND_URL:-https://cuongthai.com}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://cuongthai.com}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}

@@ -58,6 +58,9 @@ export default function CheckoutPage() {
 
   const [errors, setErrors] = useState<Partial<BuyerInfo>>({});
 
+  const [qr, setQr] = useState<{ paymentUrl: string; orderCode: string; amount: number } | null>(null);
+  const [pendingOrder, setPendingOrder] = useState<Order | null>(null);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -140,12 +143,6 @@ export default function CheckoutPage() {
       setStep('payment');
     }
   };
-
-  // VNPAY-QR modal state. `pendingOrder` holds the locally-built order so
-  // we can finalize the success UI once polling confirms the IPN flipped
-  // the order to PAID.
-  const [qr, setQr] = useState<{ paymentUrl: string; orderCode: string; amount: number } | null>(null);
-  const [pendingOrder, setPendingOrder] = useState<Order | null>(null);
 
   // Create the backend order from the current cart + buyer info.
   // Shared by the simulated and VNPAY flows.

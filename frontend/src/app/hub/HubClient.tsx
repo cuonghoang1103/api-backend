@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Layers, LogIn } from 'lucide-react';
+import { Sparkles, Layers, LogIn, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { hubApi, hubFileApi, type HubFolder, type HubLink, type HubFile } from '@/lib/api';
@@ -14,12 +14,14 @@ import HubFolderSidebar from './HubFolderSidebar';
 import HubToolbar, { type ViewMode, type StatusFilter } from './HubToolbar';
 import HubLinkGrid from './HubLinkGrid';
 import HubLinkList from './HubLinkList';
+import HubLinkCard from './HubLinkCard';
 import HubAddLinkModal from './HubAddLinkModal';
 import HubFilePreviewModal from '@/components/hub/HubFilePreviewModal';
 import HubUploadModal from '@/components/hub/HubUploadModal';
 import HubKanbanBoard from '@/components/hub/HubKanbanBoard';
 import HubCommandPalette from '@/components/hub/HubCommandPalette';
 import HubBanner from '@/components/hub/HubBanner';
+import HubFileCard from '@/components/hub/HubFileCard';
 
 type FolderSelection = number | 'all' | 'null';
 
@@ -256,12 +258,13 @@ export default function HubClient({
       await hubApi.deleteLink(id);
       setLinks((prev) => prev.filter((l) => l.id !== id));
       setTotalLinks((t) => Math.max(0, t - 1));
+      void reloadFolders(); // refresh sidebar counts
       toast.success('Da xoa link');
     } catch (err) {
       console.error(err);
       toast.error('Khong the xoa link');
     }
-  }, []);
+  }, [reloadFolders]);
 
   const handleDeleteFile = useCallback(async (id: number) => {
     try {
@@ -450,19 +453,60 @@ export default function HubClient({
                     onRefresh={() => { void reloadLinks(); void reloadFiles(); }}
                   />
                 ) : viewMode === 'grid' ? (
-                  <HubLinkGrid
-                    links={filteredLinks}
-                    onEdit={(l) => { setEditingLink(l); setAddLinkOpen(true); }}
-                    onDelete={handleDeleteLink}
-                    onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
-                  />
+                  <div key={`grid-${links.length}-${files.length}`} className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    {filteredFiles.map((f) => (
+                      <HubFileCard
+                        key={`file-${f.id}`}
+                        file={f}
+                        onClick={setPreviewFile}
+                        onDelete={handleDeleteFile}
+                        onStatusChange={(id, status) => { void handleStatusChange('file', id, status); }}
+                      />
+                    ))}
+                    {filteredLinks.map((l) => (
+                      <HubLinkCard
+                        key={`link-${l.id}`}
+                        link={l}
+                        onEdit={(link) => { setEditingLink(link); setAddLinkOpen(true); }}
+                        onDelete={handleDeleteLink}
+                        onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
+                      />
+                    ))}
+                  </div>
                 ) : (
-                  <HubLinkList
-                    links={filteredLinks}
-                    onEdit={(l) => { setEditingLink(l); setAddLinkOpen(true); }}
-                    onDelete={handleDeleteLink}
-                    onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
-                  />
+                  <div key={`list-${links.length}-${files.length}`} className="space-y-2">
+                    {filteredFiles.map((f) => (
+                      <div
+                        key={`file-${f.id}`}
+                        className="flex items-center gap-3 rounded-xl border border-darkborder/50 bg-darkcard/40 px-3 py-2.5 transition-colors hover:border-neon-violet/40 hover:bg-darkcard/60"
+                      >
+                        <button onClick={() => setPreviewFile(f)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-neon-violet/10 text-neon-violet">
+                            <Layers className="h-4 w-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium text-text-primary">{f.name}</p>
+                            <p className="text-[10px] text-text-muted">
+                              {(f.size / 1024).toFixed(1)} KB · {f.mimeType.split('/')[1]?.toUpperCase() ?? 'FILE'}
+                            </p>
+                          </div>
+                        </button>
+                        <button
+                          onClick={() => { if (confirm(`Xoa file "${f.name}"?`)) void handleDeleteFile(f.id); }}
+                          className="rounded p-1.5 text-text-muted hover:text-red-400"
+                          aria-label="Xoa file"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                    <HubLinkList
+                      links={filteredLinks}
+                      onEdit={(l) => { setEditingLink(l); setAddLinkOpen(true); }}
+                      onDelete={handleDeleteLink}
+                      onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
+                    />
+                  </div>
                 )}
               </motion.div>
             </AnimatePresence>

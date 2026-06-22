@@ -23,6 +23,7 @@ export interface DevPostDetail {
   description: string;
   content: string;
   sourceUrl: string;
+  videoUrl?: string | null;
   downloadCount: number;
   category: string;
   createdAt: string;

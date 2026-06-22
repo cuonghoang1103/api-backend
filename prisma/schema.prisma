@@ -1007,6 +1007,7 @@ model DevPost {
   description   String?  @db.Text
   content       String?  @db.Text
   sourceUrl     String?  @map("source_url") @db.VarChar(555)
+  videoUrl      String?  @map("video_url") @db.VarChar(555)
   downloadCount Int      @default(0) @map("download_count")
   category      String   @default("General") @db.VarChar(100)
   createdAt     DateTime @default(now()) @map("created_at")

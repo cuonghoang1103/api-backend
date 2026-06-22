@@ -26,6 +26,7 @@ import { aiService } from '../services/ai.service.js';
 import { optionalAuth, authenticate } from '../middleware/auth.js';
 import { quotaMiddleware } from '../services/quota.service.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 import type { ChatMessageDto } from '../types/index.js';
 
@@ -204,7 +205,7 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     );
     res.end();
   } catch (streamError) {
-    console.error('[AI-SSE] Stream error:', streamError);
+    logger.error('AI-SSE stream error', { error: streamError instanceof Error ? streamError.message : String(streamError) });
     clearTimers();
 
     // If headers already sent, write error frame

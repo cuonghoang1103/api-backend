@@ -27,6 +27,7 @@
 import { prisma } from '../config/database.js';
 import { emailService } from './email.service.js';
 import { registerSocketEmitter } from '../socket/messaging.socket.js';
+import { logger } from '../utils/logger.js';
 
 /** Allowed notification types — locked at the service layer so a
  *  bad caller can't insert a row with a typo and break the
@@ -103,7 +104,7 @@ async function pushNotification(args: {
   } catch (err) {
     // Never let a notification failure break the user-visible
     // action (like / comment / etc.). Just log and move on.
-    console.warn('[NotificationService] pushNotification failed:', (err as Error).message);
+    logger.warn('pushNotification failed', { error: (err as Error).message });
   }
 }
 
@@ -203,7 +204,7 @@ export async function notifyAdminPost(
       html: `<p>A new post has been submitted and is awaiting review.</p>`,
     });
   } catch (err) {
-    console.warn('[NotificationService] notifyAdminPost failed:', (err as Error).message);
+    logger.warn('notifyAdminPost failed', { error: (err as Error).message });
   }
 }
 
@@ -220,7 +221,7 @@ export async function notifyAdminProject(
       html: `<p>A new project has been submitted and is awaiting review.</p>`,
     });
   } catch (err) {
-    console.warn('[NotificationService] notifyAdminProject failed:', (err as Error).message);
+    logger.warn('notifyAdminProject failed', { error: (err as Error).message });
   }
 }
 
@@ -237,7 +238,7 @@ export async function notifyAdminBlog(
       html: `<p>A new blog post has been submitted and is awaiting review.</p>`,
     });
   } catch (err) {
-    console.warn('[NotificationService] notifyAdminBlog failed:', (err as Error).message);
+    logger.warn('notifyAdminBlog failed', { error: (err as Error).message });
   }
 }
 
@@ -253,7 +254,7 @@ export async function notifyPasswordChanged(
       html: `<p>Your password was recently changed. If this wasn't you, please contact support immediately.</p>`,
     });
   } catch (err) {
-    console.warn('[NotificationService] notifyPasswordChanged failed:', (err as Error).message);
+    logger.warn('notifyPasswordChanged failed', { error: (err as Error).message });
   }
 }
 

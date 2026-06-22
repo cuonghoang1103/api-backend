@@ -20,6 +20,7 @@
 import { prisma } from '../config/database.js';
 import { aiService } from './ai.service.js';
 import { config } from '../config/env.js';
+import { logger } from '../utils/logger.js';
 
 export type JobType = 'embed_document' | 'reembed_all' | 'cleanup_garbage';
 export type JobStatus = 'pending' | 'processing' | 'completed' | 'failed';
@@ -134,17 +135,17 @@ async function processQueue(): Promise<void> {
         next.status = 'completed';
         next.completedAt = new Date();
         next.result = result;
-        console.log(`[embedQueue] ✓ ${next.type} (${next.id}) done in ${Date.now() - next.startedAt.getTime()}ms`);
+        logger.info('embed job done', { jobId: next.id, type: next.type, durationMs: Date.now() - next.startedAt.getTime() });
       } catch (err) {
         next.error = (err as Error).message;
         if (next.attempts >= 3) {
           next.status = 'failed';
           next.completedAt = new Date();
-          console.error(`[embedQueue] ✗ ${next.type} (${next.id}) FAILED after ${next.attempts} attempts:`, next.error);
+          logger.error('embed job failed', { jobId: next.id, type: next.type, attempts: next.attempts, error: next.error });
         } else {
           // Reset to pending for retry
           next.status = 'pending';
-          console.warn(`[embedQueue] ⚠ ${next.type} (${next.id}) attempt ${next.attempts} failed, will retry:`, next.error);
+          logger.warn('embed job attempt failed, will retry', { jobId: next.id, type: next.type, attempts: next.attempts, error: next.error });
         }
       }
     }
@@ -219,7 +220,7 @@ export async function recoverPendingJobs(): Promise<number> {
   // We don't have a status column on documentChunk currently —
   // in a future migration we'd add one. For now this is a no-op
   // placeholder, but the hook is in place.
-  console.log('[embedQueue] Recovery scan: no pending jobs to recover (status column not yet migrated)');
+  logger.info('embed queue recovery scan: no pending jobs (status column not yet migrated)');
   return 0;
 }
 

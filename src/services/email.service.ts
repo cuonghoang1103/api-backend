@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { config } from '../config/env.js';
+import { logger } from '../utils/logger.js';
 
 const resend = config.resendApiKey ? new Resend(config.resendApiKey) : null;
 
@@ -18,10 +19,10 @@ export class EmailService {
    */
   async send(payload: EmailPayload): Promise<{ success: boolean; error?: string; id?: string }> {
     if (!resend) {
-      console.warn('[email] RESEND_API_KEY not set — email not sent. Payload:', {
-        to: payload.to,
-        subject: payload.subject,
-      });
+ logger.warn('RESEND_API_KEY not set — email not sent', {
+ to: payload.to,
+ subject: payload.subject,
+ });
       return { success: false, error: 'Email service not configured' };
     }
 
@@ -35,7 +36,7 @@ export class EmailService {
       });
 
       if (result.error) {
-        console.error('[email] Resend error:', result.error);
+        logger.error('Resend error', { error: result.error.message });
         return { success: false, error: result.error.message };
       }
 
@@ -43,7 +44,7 @@ export class EmailService {
       return { success: true, id: result.data?.id };
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error';
-      console.error('[email] Failed to send:', message);
+      logger.error('Failed to send', { error: message });
       return { success: false, error: message };
     }
   }

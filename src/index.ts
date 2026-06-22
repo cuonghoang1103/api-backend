@@ -18,6 +18,7 @@ import 'dotenv/config';
 import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { logger } from './utils/logger.js';
 
 // Sentry must be initialised BEFORE any other module imports that
 // could throw. We do it here (the very first thing) so a Prisma
@@ -167,7 +168,7 @@ const corsOptions: cors.CorsOptions = {
     // Log rejected origins so ops can see what's being blocked in
     // production. We still return a CORS error so the browser drops
     // the response.
-    console.warn(`[CORS] Rejected origin: ${origin}`);
+    logger.warn('CORS rejected origin', { origin });
     return callback(new Error(`CORS: origin ${origin} not allowed`));
   },
   credentials: true,
@@ -461,52 +462,50 @@ app.use(errorHandler);
 // ─── 13. Graceful Shutdown ─────────────────────────────────
 // Xử lý khi container restart hoặc SIGTERM/SIGINT
 function setupGracefulShutdown(): void {
-  const shutdown = async (signal: string): Promise<void> => {
-    console.log(`\n${signal} received. Starting graceful shutdown...`);
+ const shutdown = async (signal: string): Promise<void> => {
+ logger.info('shutdown signal received', { signal });
 
-    // Ngừng nhận request mới
-    server.close(async () => {
-      console.log('HTTP server closed');
+ // Ngừng nhận request mới
+ server.close(async () => {
+ logger.info('HTTP server closed');
 
-      try {
-        // Đợi request hiện tại hoàn thành (tối đa 10s)
-        await prisma.$disconnect();
-        console.log('Database connections closed');
-      } catch (err) {
-        console.error('Error during shutdown:', err);
-      }
+ try {
+ // Đợi request hiện tại hoàn thành (tối đa 10s)
+ await prisma.$disconnect();
+ logger.info('Database connections closed');
+ } catch (err) {
+ logger.error('Error during shutdown', { error: err instanceof Error ? err.message : String(err) });
+ }
 
-      // Flush pending Sentry events before exit. We give it 2s
-      // which is enough for in-flight events to ship without
-      // delaying shutdown noticeably.
-      await flushSentry(2000);
+ // Flush pending Sentry events before exit. We give it 2s
+ // which is enough for in-flight events to ship without
+ // delaying shutdown noticeably.
+ await flushSentry(2000);
 
-      console.log('Graceful shutdown complete');
-      process.exit(0);
-    });
+ logger.info('Graceful shutdown complete');
+ process.exit(0);
+ });
 
-    // Force close sau 30s
-    setTimeout(() => {
-      console.error('Could not close connections in time, forcefully shutting down');
-      process.exit(1);
-    }, 30_000);
-  };
+ // Force close sau 30s
+ setTimeout(() => {
+ logger.error('Could not close connections in time, forcefully shutting down');
+ process.exit(1);
+ }, 30_000);
+ };
 
   process.on('SIGTERM', () => shutdown('SIGTERM'));
   process.on('SIGINT', () => shutdown('SIGINT'));
 
-  // Xử lý uncaught exception
-  process.on('uncaughtException', (err: Error) => {
-    console.error('UNCAUGHT EXCEPTION! Shutting down...');
-    console.error(err);
-    captureException(err, { type: 'uncaughtException' });
-    shutdown('UNCAUGHT_EXCEPTION');
-  });
+ // Xử lý uncaught exception
+ process.on('uncaughtException', (err: Error) => {
+ logger.error('UNCAUGHT EXCEPTION! Shutting down...', { error: err.message, stack: err.stack });
+ captureException(err, { type: 'uncaughtException' });
+ shutdown('UNCAUGHT_EXCEPTION');
+ });
 
-  // Xử lý unhandled promise rejection
-  process.on('unhandledRejection', (reason: unknown) => {
-    console.error('UNHANDLED REJECTION! Shutting down...');
-    console.error(reason);
+ // Xử lý unhandled promise rejection
+ process.on('unhandledRejection', (reason: unknown) => {
+ logger.error('UNHANDLED REJECTION! Shutting down...', { reason: reason instanceof Error ? reason.message : String(reason) });
     // Sentry expects an Error. Wrap non-Error values so the stack
     // trace is captured.
     const err =
@@ -525,11 +524,11 @@ async function startServer(): Promise<void> {
   try {
     // Kết nối database
     await connectDatabase();
-    console.log('✅ Database connected');
+ logger.info('Database connected');
 
-    // Verify Prisma connection pool
-    await prisma.$queryRaw`SELECT 1`;
-    console.log(`✅ Database pool: OK (${config.nodeEnv})`);
+ // Verify Prisma connection pool
+ await prisma.$queryRaw`SELECT 1`;
+ logger.info('Database pool OK', { env: config.nodeEnv });
 
     // ─── Auto-sync Prisma schema + add embedding column ────────
     // This ensures new tables (e.g. document_chunks) are created on startup
@@ -577,7 +576,7 @@ async function startServer(): Promise<void> {
           WHERE embedding IS NOT NULL;
       `);
 
-      console.log('✅ document_chunks table + embedding column: OK (auto-synced)');
+      logger.info('document_chunks table + embedding column OK (auto-synced)');
 
       // ─── Hashtag search optimization (Social Feed) ─────────────
       // Enable pg_trgm for trigram-based ILIKE searches on post
@@ -591,17 +590,17 @@ async function startServer(): Promise<void> {
           CREATE INDEX IF NOT EXISTS idx_social_posts_content_trgm
             ON social_posts USING GIN (content gin_trgm_ops);
         `);
-        console.log('✅ social_posts GIN trigram index: OK');
-      } catch (trgmErr) {
-        // pg_trgm may not be available in all Postgres distributions.
-        // The hashtag filter falls back to a sequential scan which is
-        // correct but slower; this is non-fatal.
-        console.warn('[Startup] pg_trgm index skipped (extension unavailable):', trgmErr instanceof Error ? trgmErr.message : trgmErr);
-      }
-    } catch (syncErr) {
-      // If raw SQL fails, the try-catch guards in AIService handle missing tables.
-      console.warn('[Startup] Schema auto-sync skipped:', syncErr instanceof Error ? syncErr.message : syncErr);
-    }
+ logger.info('social_posts GIN trigram index OK');
+ } catch (trgmErr) {
+ // pg_trgm may not be available in all Postgres distributions.
+ // The hashtag filter falls back to a sequential scan which is
+ // correct but slower; this is non-fatal.
+ logger.warn('pg_trgm index skipped (extension unavailable)', { error: trgmErr instanceof Error ? trgmErr.message : String(trgmErr) });
+ }
+ } catch (syncErr) {
+ // If raw SQL fails, the try-catch guards in AIService handle missing tables.
+ logger.warn('Schema auto-sync skipped', { error: syncErr instanceof Error ? syncErr.message : String(syncErr) });
+ }
 
     // Setup graceful shutdown handlers
     setupGracefulShutdown();
@@ -611,19 +610,21 @@ async function startServer(): Promise<void> {
       const { startCronJobs } = await import(path.join(__dirname, 'services', 'cron.service.js'));
       startCronJobs();
     } catch (cronErr) {
-      console.warn('[Startup] Cron jobs failed to start:', cronErr instanceof Error ? cronErr.message : cronErr);
-    }
+ logger.warn('Cron jobs failed to start', { error: cronErr instanceof Error ? cronErr.message : String(cronErr) });
+ }
 
-    // Start HTTP server
-    server.listen(config.port, () => {
-      console.log(`🚀 CuongHoangDev API running on port ${config.port}`);
-      console.log(`   Environment: ${config.nodeEnv}`);
-      console.log(`   Frontend URL: ${config.frontendUrl}`);
-      console.log(`   Upload dir: ${config.uploadDir}`);
-      console.log(`   Database: ${process.env.DATABASE_URL?.split('@')[1] || 'not configured'}`);
-    });
-  } catch (error) {
-    console.error('❌ Failed to start server:', error);
+ // Start HTTP server
+ server.listen(config.port, () => {
+ logger.info('CuongHoangDev API running', {
+ port: config.port,
+ env: config.nodeEnv,
+ frontendUrl: config.frontendUrl,
+ uploadDir: config.uploadDir,
+ database: process.env.DATABASE_URL?.split('@')[1] || 'not configured',
+ });
+ });
+ } catch (error) {
+    logger.error('Failed to start server', { error: error instanceof Error ? error.message : String(error) });
     captureException(error, { type: 'startup' });
     process.exit(1);
   }

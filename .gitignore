@@ -23,7 +23,10 @@ hoangappvps.txt
 *.local.js
 
 # Prisma
-prisma/migrations/
+# Note: prisma/migrations/ is intentionally TRACKED. Migrations must be
+# committed so that `prisma migrate deploy` works on fresh DBs and CI.
+# (Previously this was ignored, which silently caused new migrations
+# — e.g. 20260622_add_message_reply_support — to be missing from git.)
 
 # Logs
 *.log

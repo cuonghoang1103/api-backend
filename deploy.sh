@@ -243,9 +243,7 @@ done
 
 # ── Step 5: Reload nginx ───────────────────────────────────────────
 info "Reloading nginx config..."
-$DC exec -T nginx nginx -s reload 2>/dev/null \
-    && ok "Nginx reloaded" \
-    || warn "nginx reload skipped (non-fatal)"
+$DC exec -T nginx nginx -s reload 2>/dev/null && ok "Nginx reloaded" || true
 
 # ── Step 6: Docker build cache cleanup (free SSD space) ───────────
 info "Pruning Docker build cache..."

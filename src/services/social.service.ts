@@ -799,20 +799,20 @@ export async function getComments(postId: number, options: { cursor?: number; li
 
   // Cursor-based pagination. The frontend (`socialStore.ts:514`)
   // uses a "load more" pattern: store `nextCursor` from the response
-  // and pass it back as `?cursor=<id>`. The list is sorted
-  // `createdAt ASC` (oldest first) and the UI renders the same order
-  // top-to-bottom. "Xem thêm bình luận" therefore expects *older*
-  // comments on subsequent pages — that means smaller `createdAt`,
-  // which we reach via `cursor: { id }` + `skip: 1`. We point
-  // `nextCursor` at `items[0].id` (oldest in the returned page)
-  // rather than `items[items.length-1].id` (newest) — using the
-  // newest id with ASC order would re-fetch the same page. Mirror
-  // pattern in `src/routes/notifications.routes.ts:71` which uses
-  // the analogous end-of-page id because that endpoint sorts
-  // `id DESC` (newest first).
+  // and pass it back as `?cursor=<id>`. The list is sorted `id ASC`
+  // (oldest first, since `id` is monotonically increasing with
+  // insertion order) and the UI renders the same order top-to-bottom.
+  // "Xem thêm bình luận" therefore expects *older* comments on
+  // subsequent pages — that means smaller id, which we reach via
+  // at `items[items.length-1].id` (newest in the page) — skip: 1
+  // then ORDER BY id ASC walks forward to the next page. The
+  // previous `items[0]?.id` was wrong: with ASC order it would
+  // re-fetch the same page. Mirror pattern in
+  // `src/routes/notifications.routes.ts:71` which uses the analogous
+  // end-of-page id under DESC order.
   const comments = await prisma.socialComment.findMany({
     where: { postId, parentId: null },
-    orderBy: { createdAt: 'asc' },
+    orderBy: { id: 'asc' },
     take: limit + 1,
   ...(cursor != null ? { cursor: { id: cursor }, skip: 1 } : {}),
     include: {
@@ -836,9 +836,7 @@ export async function getComments(postId: number, options: { cursor?: number; li
 
   const hasNextPage = comments.length > limit;
   const items = hasNextPage ? comments.slice(0, limit) : comments;
-  // Oldest item in the returned page is the natural "load more"
-  // anchor: passing it as the next cursor continues the ASC walk.
-  const nextCursor = hasNextPage ? items[0]?.id : null;
+  const nextCursor = hasNextPage ? items[items.length - 1]?.id : null;
 
   const enriched = items.map((c: any) => ({
     id: c.id,

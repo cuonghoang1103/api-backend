@@ -23,6 +23,7 @@
 import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { logger } from '../utils/logger.js';
 import { createClient } from 'redis';
 
 // ─── Redis client (lazy init) ───────────────────────────
@@ -37,7 +38,7 @@ async function getRedis(): Promise<ReturnType<typeof createClient>> {
       database: config.redisDb,
     });
     _redis.on('error', (err: Error) => {
-      console.error('[quota] Redis error:', err.message);
+      logger.error('Redis error', { error: err.message });
     });
   }
   await _redis.connect();
@@ -146,7 +147,7 @@ export async function getQuotaStatus(userId: string): Promise<QuotaStatus> {
     );
   } catch (err) {
     // Redis down — fall back to Postgres count from chat_messages
-    console.warn('[quota] Redis unavailable, falling back to Postgres:', (err as Error).message);
+    logger.warn('Redis unavailable, falling back to Postgres', { error: (err as Error).message });
     return await getPostgresFallbackQuota(userId, now);
   }
 }
@@ -220,7 +221,7 @@ export function quotaMiddleware() {
       next();
     } catch (err) {
       // If Redis fails, log + let request through (fail-open)
-      console.error('[quota] Middleware error, allowing request:', (err as Error).message);
+      logger.error('Middleware error, allowing request', { error: (err as Error).message });
       next();
     }
   };
@@ -302,7 +303,7 @@ async function getPostgresFallbackQuota(userId: string, _now: Date): Promise<Quo
         },
       });
     } catch (err) {
-      console.error('[quota] Postgres fallback failed:', (err as Error).message);
+      logger.error('Postgres fallback failed', { error: (err as Error).message });
     }
   }
 

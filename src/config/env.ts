@@ -172,15 +172,23 @@ function parseEnv(): EnvSchema {
         `\n❌ Invalid environment configuration:\n${errors}\n\n` +
           `Set the required variables in /opt/cuonghoangdev/.env and restart.\n`,
       );
-    } else {
-      // In dev/test, log a warning and continue. The app may not
-      // work for every feature, but contributors can still iterate.
-      console.warn(
-        `\n⚠️  Environment validation warnings:\n${errors}\n` +
-          `(Ignoring in ${process.env.NODE_ENV || 'development'} mode — these would be fatal in production.)\n`,
-      );
-      return process.env as unknown as EnvSchema;
-    }
+ } else {
+ // In dev/test, log a warning and continue. The app may not
+ // work for every feature, but contributors can still iterate.
+ //
+ // NOTE: We deliberately use `process.stderr.write` here rather than
+ // the shared `logger` from `../utils/logger.ts`. That module imports
+ // `config` from this very file, so a logger call inside the
+ // `parseEnv()` call chain would be a circular import with TDZ
+ // (config is `undefined` while env.ts is mid-load). Using
+ // process.stderr.write keeps the env-validation warning visible
+ // without that risk — and the env loader runs exactly once.
+ process.stderr.write(
+ `\n⚠️ Environment validation warnings:\n${errors}\n` +
+ `(Ignoring in ${process.env.NODE_ENV || 'development'} mode — these would be fatal in production.)\n`,
+ );
+ return process.env as unknown as EnvSchema;
+ }
   }
 
   return parsed.data;

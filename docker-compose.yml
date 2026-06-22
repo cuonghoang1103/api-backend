@@ -152,6 +152,11 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      # host network lets the build container reach Google Fonts / npm
+      # registries — needed because Next.js downloads font files at
+      # compile time (next/font/google) and the default bridge network
+      # has no outbound internet in this VPS configuration.
+      network: host
       args:
         NEXT_PUBLIC_API_URL: ${FRONTEND_PUBLIC_API_URL:-https://api.cuongthai.com}
         NEXTAUTH_URL: ${NEXTAUTH_URL:-https://cuongthai.com}

@@ -122,9 +122,12 @@ if [ "$MODE" = "local" ]; then
     # ── Step 2: SSH into VPS and trigger VPS-mode deploy ───────────
     info "SSHing into VPS to build and restart containers..."
     echo ""
+    # -T: no pseudo-TTY (deploy script is non-interactive; -tt causes
+    # PTY teardown to propagate a spurious exit code 1 even when the
+    # remote command succeeds).
     ssh -i "$VPS_SSH_KEY" \
         -o StrictHostKeyChecking=accept-new \
-        -tt \
+        -T \
         "${VPS_USER}@${VPS_IP}" \
         "cd ${VPS_DEPLOY_DIR} && bash deploy.sh"
 

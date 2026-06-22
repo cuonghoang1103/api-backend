@@ -201,7 +201,7 @@ export async function notifyAdminPost(
     await emailService.send({
       to: 'cuongthaihnhe176322@gmail.com',
       subject: '[CuongThai] New post submitted',
-      html: `<p>A new post has been submitted and is awaiting review.</p>`,
+      html: '<p>A new post has been submitted and is awaiting review.</p>',
     });
   } catch (err) {
     logger.warn('notifyAdminPost failed', { error: (err as Error).message });
@@ -218,7 +218,7 @@ export async function notifyAdminProject(
     await emailService.send({
       to: 'cuongthaihnhe176322@gmail.com',
       subject: '[CuongThai] New project submitted',
-      html: `<p>A new project has been submitted and is awaiting review.</p>`,
+      html: '<p>A new project has been submitted and is awaiting review.</p>',
     });
   } catch (err) {
     logger.warn('notifyAdminProject failed', { error: (err as Error).message });
@@ -235,7 +235,7 @@ export async function notifyAdminBlog(
     await emailService.send({
       to: 'cuongthaihnhe176322@gmail.com',
       subject: '[CuongThai] New blog post submitted',
-      html: `<p>A new blog post has been submitted and is awaiting review.</p>`,
+      html: '<p>A new blog post has been submitted and is awaiting review.</p>',
     });
   } catch (err) {
     logger.warn('notifyAdminBlog failed', { error: (err as Error).message });
@@ -251,7 +251,7 @@ export async function notifyPasswordChanged(
     await emailService.send({
       to: 'cuongthaihnhe176322@gmail.com',
       subject: '[CuongThai] Password changed',
-      html: `<p>Your password was recently changed. If this wasn't you, please contact support immediately.</p>`,
+      html: '<p>Your password was recently changed. If this wasn\'t you, please contact support immediately.</p>',
     });
   } catch (err) {
     logger.warn('notifyPasswordChanged failed', { error: (err as Error).message });

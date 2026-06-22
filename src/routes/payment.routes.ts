@@ -576,7 +576,7 @@ router.post('/create-qr', orderCreateLimiter, authenticate, async (req: Request,
       throw new AppError('orderId phai la so nguyen duong', 400);
     }
     if (orderType !== 'COURSE' && orderType !== 'PRODUCT') {
-      throw new AppError("orderType phai la 'COURSE' hoac 'PRODUCT'", 400);
+      throw new AppError('orderType phai la \'COURSE\' hoac \'PRODUCT\'', 400);
     }
 
     const ipAddr = getClientIp(req);

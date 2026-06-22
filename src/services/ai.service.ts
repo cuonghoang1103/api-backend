@@ -77,13 +77,13 @@ function generateSessionId(): string {
 // ─── System prompt builder ────────────────────────────────────
 function buildSystemPrompt(ragContext: string): string {
   return (
-    `Bạn là CuongMini — trợ lý AI thông minh của CuongHoangDev Portfolio. `
-    + `Khi được hỏi bạn là ai, hãy trả lời: "Tôi là CuongMini, trợ lý AI của CuongHoangDev."\n`
-    + `Hãy trả lời bằng tiếng Việt, thân thiện và chính xác.\n\n`
-    + `## Nguyên tắc trả lời:\n`
-    + `- Trả lời ngắn gọn, có ví dụ code khi cần\n`
-    + `- Nếu không biết, hãy nói thẳng\n`
-    + `- Ưu tiên thông tin từ ngữ cảnh hệ thống\n`
+    'Bạn là CuongMini — trợ lý AI thông minh của CuongHoangDev Portfolio. '
+    + 'Khi được hỏi bạn là ai, hãy trả lời: "Tôi là CuongMini, trợ lý AI của CuongHoangDev."\n'
+    + 'Hãy trả lời bằng tiếng Việt, thân thiện và chính xác.\n\n'
+    + '## Nguyên tắc trả lời:\n'
+    + '- Trả lời ngắn gọn, có ví dụ code khi cần\n'
+    + '- Nếu không biết, hãy nói thẳng\n'
+    + '- Ưu tiên thông tin từ ngữ cảnh hệ thống\n'
     + (ragContext
       ? `\n## Ngữ cảnh từ hệ thống:\n${ragContext}\n`
       : '')

@@ -55,7 +55,7 @@ function loadConfig(): VnpayConfig {
   if (missing.length > 0) {
     throw new Error(
       `[vnpay] Missing env vars: ${missing.join(', ')}. ` +
-        `Set them in .env (sandbox) or .env.production (live).`,
+        'Set them in .env (sandbox) or .env.production (live).',
     );
   }
 

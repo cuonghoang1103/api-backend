@@ -271,7 +271,7 @@ export class AuthService {
         // never written to stdout / log aggregator / Sentry.
         const masked = otpToSend.length >= 4
           ? `${otpToSend[0]}***${otpToSend[otpToSend.length - 1]}`
-          : `***`;
+          : '***';
  if (process.env.NODE_ENV === 'development') {
  logger.warn('register email failed', {
  email: user.email,
@@ -607,7 +607,7 @@ export class AuthService {
     if (data.gender !== undefined) {
       const allowed = ['MALE', 'FEMALE', 'OTHER', null];
       if (!allowed.includes(data.gender ?? null)) {
-        throw new AppError("Gender must be MALE, FEMALE, OTHER or null", 400, 'INVALID_GENDER');
+        throw new AppError('Gender must be MALE, FEMALE, OTHER or null', 400, 'INVALID_GENDER');
       }
       updates.gender = data.gender ?? null;
     }

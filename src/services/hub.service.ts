@@ -596,7 +596,7 @@ export async function getSignedFileUrl(userId: number, id: number) {
 
 // ─── AI Auto-tagging ────────────────────────────────────────
 
-const TAG_PROMPT_SYSTEM = `Ban la mot chuyen gia phan loai tai lieu. Nhan vao ten file (name) va dinh dang (mimeType), tra ve danh sach tag phu hop. Chi tra ve danh sach tag, moi tag la mot chu thuong, khong dau, toi da 10 tag, phan cach nhau bang dau phay. Cac tag can phu hop voi noi dung tai lieu. Vi du: name="postgres_tuning.sql", mimeType="application/sql" => "database, postgresql, sql, performance, backend". Khong giai thich, chi tra ve tags.`;
+const TAG_PROMPT_SYSTEM = 'Ban la mot chuyen gia phan loai tai lieu. Nhan vao ten file (name) va dinh dang (mimeType), tra ve danh sach tag phu hop. Chi tra ve danh sach tag, moi tag la mot chu thuong, khong dau, toi da 10 tag, phan cach nhau bang dau phay. Cac tag can phu hop voi noi dung tai lieu. Vi du: name="postgres_tuning.sql", mimeType="application/sql" => "database, postgresql, sql, performance, backend". Khong giai thich, chi tra ve tags.';
 
 const TAG_PROMPT_USER = (name: string, mimeType: string) =>
   `Ten file: ${name}\nDinh dang: ${mimeType}`;
@@ -979,8 +979,8 @@ function decodeHtmlEntities(s: string): string {
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&apos;/g, "'")
+    .replace(/&#39;/g, '\'')
+    .replace(/&apos;/g, '\'')
     .replace(/&#(\d+);/g, (_m, code) => {
       const n = Number(code);
       return Number.isFinite(n) && n > 0 && n < 0x110000 ? String.fromCodePoint(n) : _m;

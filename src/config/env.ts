@@ -170,7 +170,7 @@ function parseEnv(): EnvSchema {
       // secrets is exactly what we want to prevent.
       throw new Error(
         `\n❌ Invalid environment configuration:\n${errors}\n\n` +
-          `Set the required variables in /opt/cuonghoangdev/.env and restart.\n`,
+          'Set the required variables in /opt/cuonghoangdev/.env and restart.\n',
       );
  } else {
  // In dev/test, log a warning and continue. The app may not

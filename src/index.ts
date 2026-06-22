@@ -584,7 +584,7 @@ async function startServer(): Promise<void> {
       // as the social_posts table grows past 100k rows.
       // Both CREATE EXTENSION and CREATE INDEX are idempotent.
       try {
-        await prisma.$executeRawUnsafe(`CREATE EXTENSION IF NOT EXISTS pg_trgm;`);
+        await prisma.$executeRawUnsafe('CREATE EXTENSION IF NOT EXISTS pg_trgm;');
         await prisma.$executeRawUnsafe(`
           CREATE INDEX IF NOT EXISTS idx_social_posts_content_trgm
             ON social_posts USING GIN (content gin_trgm_ops);

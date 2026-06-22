@@ -795,7 +795,7 @@ export async function createComment(input: CommentInput) {
 }
 
 export async function getComments(postId: number, options: { cursor?: number; limit?: number } = {}) {
-  const { cursor: _c, limit = 20 } = options;
+  const { limit = 20 } = options;
 
   const comments = await prisma.socialComment.findMany({
     where: { postId, parentId: null },

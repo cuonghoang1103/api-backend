@@ -216,20 +216,6 @@ jobs:
             docker pull \$CUONG_FRONTEND_IMAGE
           "
 
-      - name: Apply Prisma schema (idempotent)
-        # We can't run `prisma db push` inside the new image before
-        # starting it, so we use the old running backend container
-        # to apply schema changes. This is safe because schema
-        # changes are additive (db push is idempotent for unchanged
-        # schemas). After the new image is up, the new Prisma client
-        # will be used.
-        run: |
-          ssh vps "
-            docker exec cuonghoangdev_backend sh -c '
-              npx prisma db push --accept-data-loss --skip-generate
-            ' 2>&1 | tail -10
-          "
-
       - name: Recreate backend + frontend containers
         # `docker compose up -d --force-recreate --no-deps` swaps
         # the two containers in-place. Backend stays on port 3001
@@ -248,6 +234,51 @@ jobs:
               -f docker-compose.ghcr.yml \
               up -d --force-recreate --no-deps backend frontend
           "
+
+      - name: Apply Prisma migrations (migrate deploy + baseline guard)
+        # Runs INSIDE the freshly-recreated backend container, which
+        # carries THIS commit's prisma/migrations/ (the old container
+        # did not — that's why this step lives after the recreate and
+        # before the nginx refresh, so the schema is migrated before
+        # traffic is routed to the new backend).
+        #
+        # `migrate deploy` applies pending migrations via the
+        # _prisma_migrations history. Baseline guard: the VPS DB was
+        # historically managed by `prisma db push`, which never writes
+        # migration history, so the first migrate run can fail with
+        # P3005 ("schema is not empty"). When that happens we mark the
+        # existing migrations as already-applied, reconcile any
+        # residual delta with a one-time db push, then re-run deploy.
+        # On an already-baselined DB the guard never triggers.
+        run: |
+          ssh vps 'docker exec -i cuonghoangdev_backend sh -s' <<'REMOTE'
+          set -e
+          cd /app
+          echo "--- prisma migrate deploy ---"
+          set +e
+          OUT=$(npx prisma migrate deploy 2>&1); RC=$?
+          set -e
+          echo "$OUT"
+          if [ "$RC" -ne 0 ]; then
+            if echo "$OUT" | grep -q "P3005"; then
+              echo "--- DB not baselined; marking existing migrations as already-applied ---"
+              for d in prisma/migrations/*/; do
+                [ -f "${d}migration.sql" ] || continue
+                name=$(basename "$d")
+                echo "resolve --applied $name"
+                npx prisma migrate resolve --applied "$name" || true
+              done
+              echo "--- Reconciling residual schema delta (one-time db push) ---"
+              npx prisma db push --accept-data-loss --skip-generate
+              echo "--- Re-running migrate deploy to confirm clean state ---"
+              npx prisma migrate deploy
+            else
+              echo "[FAIL] migrate deploy failed for a non-baseline reason"
+              exit 1
+            fi
+          fi
+          echo "[OK] database schema is up to date"
+          REMOTE
 
       - name: Reload nginx to refresh upstream connections
         # The nginx container is 15h old and has cached the old

@@ -3,7 +3,14 @@ import { prisma } from '../config/database.js';
 import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
-import { isValidIsoDate, normalizeDate, todayIso, scopeDate } from '../utils/dashboard.js';
+import {
+  isValidIsoDate,
+  normalizeDate,
+  todayIso,
+  scopeDate,
+  completedExpiryCutoff,
+  COMPLETED_TASK_RETENTION_DAYS,
+} from '../utils/dashboard.js';
 
 const router = Router();
 
@@ -40,7 +47,18 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
     const [state, tasks, todayCeleb] = await Promise.all([
       prisma.dashboardState.findUnique({ where: { userId } }),
       prisma.dashboardTask.findMany({
-        where: { userId, archivedAt: null },
+        // Auto-expiry: hide completed tasks older than the retention
+        // window even before the nightly cron physically removes them,
+        // so the dashboard reflects the rule the instant it applies.
+        // The NOT clause means: drop rows where (done = true AND
+        // completedAt < cutoff). Active tasks and recently-completed
+        // tasks are always kept. completedExpiryCutoff() reads the
+        // COMPLETED_TASK_RETENTION_DAYS knob (default 7d).
+        where: {
+          userId,
+          archivedAt: null,
+          NOT: { done: true, completedAt: { lt: completedExpiryCutoff() } },
+        },
         orderBy: [{ scope: 'asc' }, { date: 'asc' }, { id: 'asc' }],
       }),
       prisma.dashboardCelebration.findFirst({
@@ -70,6 +88,9 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
         level: state?.level ?? 1,
         exp: state?.exp ?? 0,
         totalExp: state?.totalExp ?? 0,
+        // How long completed tasks live before auto-expiring. Sent
+        // so the UI can show "completed tasks vanish after N days".
+        completedRetentionDays: COMPLETED_TASK_RETENTION_DAYS,
         timeline,
         lastCelebratedAt: state?.lastCelebratedAt ?? null,
         tomorrowPlanLockedDate: state?.tomorrowPlanLockedDate ?? null,
@@ -402,8 +423,15 @@ router.patch('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next
 });
 
 // ─── DELETE /api/v1/dashboard/tasks/:id ──────────────────────────
-// Soft delete: we set archivedAt, the cron hard-deletes later.
-// Hard delete (purge) is a separate admin endpoint.
+// HARD delete: when the user explicitly deletes a task it is
+// removed immediately and permanently — there is no archive
+// limbo for a manual delete. (Auto-expiry of *completed* tasks is
+// the only path that hides tasks without the user asking; that's
+// handled by the GET filter + the nightly cron.)
+//
+// We still scope by userId in the WHERE so a hostile client can't
+// delete another user's task by guessing the id (IDOR guard). The
+// deleteMany return count lets us 404 cleanly when nothing matched.
 router.delete('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const userId = req.userId!;
@@ -411,14 +439,13 @@ router.delete('/tasks/:id', async (req: Request, res: Response<ApiResponse>, nex
     if (!Number.isInteger(taskId) || taskId <= 0) {
       throw new AppError('id khong hop le', 400);
     }
-    const result = await prisma.dashboardTask.updateMany({
-      where: { id: taskId, userId, archivedAt: null },
-      data: { archivedAt: new Date() },
+    const result = await prisma.dashboardTask.deleteMany({
+      where: { id: taskId, userId },
     });
     if (result.count === 0) {
-      throw new AppError('Task khong ton tai hoac da bi xoa', 404);
+      throw new AppError('Task khong ton tai hoac khong thuoc ve ban', 404);
     }
-    res.json({ success: true, data: { id: taskId, archived: true } });
+    res.json({ success: true, data: { id: taskId, deleted: true } });
   } catch (error) { next(error); }
 });
 
@@ -526,7 +553,22 @@ router.post('/celebrate', async (req: Request, res: Response<ApiResponse>, next)
         todayStats: { expGained, done, total },
       },
     });
-  } catch (error) { next(error); }
+  } catch (error) {
+    // Race guard: two near-simultaneous celebrate requests can both
+    // pass the findFirst pre-check and then collide on the
+    // (user_id, celebrated_date) unique index. Prisma surfaces that
+    // as P2002 — treat it as "already celebrated" (409) rather than
+    // leaking a 500.
+    if ((error as { code?: string }).code === 'P2002') {
+      res.status(409).json({
+        success: false,
+        code: 'ALREADY_CELEBRATED',
+        message: 'Ban da tong ket hom nay roi',
+      });
+      return;
+    }
+    next(error);
+  }
 });
 
 // ─── POST /api/v1/dashboard/plan-tomorrow ────────────────────────

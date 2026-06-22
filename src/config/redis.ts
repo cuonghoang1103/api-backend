@@ -8,6 +8,7 @@
  */
 import { createClient, type RedisClientType } from 'redis';
 import { config } from './env.js';
+import { logger } from '../utils/logger.js';
 
 let _redis: RedisClientType | null = null;
 let _connecting: Promise<RedisClientType> | null = null;
@@ -33,15 +34,15 @@ export async function getRedis(): Promise<RedisClientType> {
       database: config.redisDb,
     });
 
-    client.on('error', (err: Error) => {
-      console.error('[redis] Client error:', err.message);
-    });
-    client.on('reconnecting', () => {
-      console.warn('[redis] Reconnecting...');
-    });
-    client.on('ready', () => {
-      console.log('[redis] Connection ready');
-    });
+ client.on('error', (err: Error) => {
+ logger.error('redis client error', { error: err.message });
+ });
+ client.on('reconnecting', () => {
+ logger.warn('redis reconnecting');
+ });
+ client.on('ready', () => {
+ logger.info('redis connection ready');
+ });
 
     await client.connect();
     _redis = client;

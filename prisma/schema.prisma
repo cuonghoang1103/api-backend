@@ -2002,8 +2002,12 @@ model DashboardCelebration {
 
   // One celebration per (user, day). Serves as both the
   // uniqueness guard and the (userId, celebratedDate) lookup
-  // index, so no separate @@index is needed.
-  @@unique([userId, celebratedDate], name: "uniq_dashboard_celeb_user_date")
+  // index, so no separate @@index is needed. `map:` sets the
+  // DATABASE constraint name so it matches the migration SQL
+  // (uniq_dashboard_celeb_user_date) — using `name:` instead
+  // would only rename the Prisma Client field and leave the DB
+  // index on Prisma's default name, causing schema drift.
+  @@unique([userId, celebratedDate], map: "uniq_dashboard_celeb_user_date")
   @@map("dashboard_celebrations")
 }
 

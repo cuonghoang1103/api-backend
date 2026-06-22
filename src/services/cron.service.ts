@@ -20,6 +20,7 @@ import cron from 'node-cron';
 import { enqueueJob, recoverPendingJobs } from './embedQueue.service.js';
 import { pingQuotaRedis } from './quota.service.js';
 import { prisma } from '../config/database.js';
+import { logger } from '../utils/logger.js';
 
 let _started = false;
 
@@ -28,44 +29,44 @@ let _started = false;
  */
 export function startCronJobs(): void {
   if (_started) {
-    console.log('[cron] Already started, skipping');
+    logger.info('cron already started, skipping');
     return;
   }
   _started = true;
 
   // ─── Nightly cleanup @ 03:00 Vietnam (20:00 UTC) ───
   cron.schedule('0 20 * * *', async () => {
-    console.log('[cron] Running nightly cleanup job');
-    try {
-      const job = enqueueJob('cleanup_garbage', {});
-      console.log(`[cron] Cleanup enqueued: ${job.id}`);
-    } catch (err) {
-      console.error('[cron] Cleanup enqueue failed:', (err as Error).message);
-    }
+ logger.info('cron running nightly cleanup job');
+ try {
+ const job = enqueueJob('cleanup_garbage', {});
+ logger.info('cron cleanup enqueued', { jobId: job.id });
+ } catch (err) {
+ logger.error('cron cleanup enqueue failed', { error: (err as Error).message });
+ }
   }, { timezone: 'UTC' });
 
   // ─── Weekly re-embed check @ Sunday 02:00 Vietnam (19:00 UTC Sat) ───
   cron.schedule('0 19 * * 6', async () => {
-    console.log('[cron] Running weekly re-embed check');
-    try {
-      const job = enqueueJob('reembed_all', {});
-      console.log(`[cron] Re-embed enqueued: ${job.id}`);
-    } catch (err) {
-      console.error('[cron] Re-embed enqueue failed:', (err as Error).message);
-    }
+ logger.info('cron running weekly re-embed check');
+ try {
+ const job = enqueueJob('reembed_all', {});
+ logger.info('cron re-embed enqueued', { jobId: job.id });
+ } catch (err) {
+ logger.error('cron re-embed enqueue failed', { error: (err as Error).message });
+ }
   }, { timezone: 'UTC' });
 
   // ─── Hourly health check ───
   cron.schedule('0 * * * *', async () => {
     const redisOk = await pingQuotaRedis();
     if (!redisOk) {
-      console.warn('[cron] ⚠️  Redis unreachable — quota service running in Postgres fallback mode');
-    }
-    try {
-      await prisma.$queryRaw`SELECT 1`;
-    } catch (err) {
-      console.error('[cron] ⚠️  Postgres unreachable:', (err as Error).message);
-    }
+ logger.warn('cron Redis unreachable — quota service running in Postgres fallback mode');
+ }
+ try {
+ await prisma.$queryRaw`SELECT 1`;
+ } catch (err) {
+ logger.error('cron Postgres unreachable', { error: (err as Error).message });
+ }
   }, { timezone: 'UTC' });
 
   // ─── Payment order cleanup (every 15 min) ───
@@ -83,10 +84,10 @@ export function startCronJobs(): void {
         data: { status: 'FAILED' },
       });
       if (count > 0) {
-        console.log(`[cron] Expired ${count} stale PENDING orders (older than ${ttlMinutes} min)`);
+        logger.info('cron expired stale PENDING orders', { count, ttlMinutes });
       }
     } catch (err) {
-      console.error('[cron] Order cleanup failed:', (err as Error).message);
+      logger.error('cron order cleanup failed', { error: (err as Error).message });
     }
   }, { timezone: 'UTC' });
 
@@ -112,7 +113,7 @@ export function startCronJobs(): void {
         data: { archivedAt: new Date() },
       });
       if (archived.count > 0) {
-        console.log(`[cron] Archived ${archived.count} dashboard tasks older than ${archiveDays} days`);
+        logger.info('cron archived dashboard tasks', { count: archived.count, archiveDays });
       }
 
       const purgeCutoff = new Date(Date.now() - purgeDays * 24 * 60 * 60 * 1000);
@@ -120,7 +121,7 @@ export function startCronJobs(): void {
         where: { archivedAt: { lt: purgeCutoff } },
       });
       if (purged.count > 0) {
-        console.log(`[cron] Purged ${purged.count} archived dashboard tasks older than ${purgeDays} days`);
+        logger.info('cron purged archived dashboard tasks', { count: purged.count, purgeDays });
       }
 
       // Celebration history is cheap to keep — capped at ~3 years
@@ -132,22 +133,25 @@ export function startCronJobs(): void {
         where: { createdAt: { lt: celebrationPurgeCutoff } },
       });
       if (purgedCeleb.count > 0) {
-        console.log(`[cron] Purged ${purgedCeleb.count} old celebration records`);
+        logger.info('cron purged old celebration records', { count: purgedCeleb.count });
       }
     } catch (err) {
-      console.error('[cron] Dashboard archive failed:', (err as Error).message);
+      logger.error('cron dashboard archive failed', { error: (err as Error).message });
     }
   }, { timezone: 'UTC' });
 
   // ─── Startup recovery ───
   void recoverPendingJobs();
 
-  console.log('[cron] ✓ All cron jobs registered:');
-  console.log('       - Nightly cleanup @ 03:00 Vietnam');
-  console.log('       - Weekly re-embed @ Sun 02:00 Vietnam');
-  console.log('       - Hourly health check');
-  console.log(`       - Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`);
-  console.log(`       - Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d)`);
+ logger.info('cron all jobs registered', {
+ jobs: [
+ 'Nightly cleanup @ 03:00 Vietnam',
+ 'Weekly re-embed @ Sun 02:00 Vietnam',
+ 'Hourly health check',
+ `Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`,
+ `Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d)`,
+ ],
+ });
 }
 
 /**
@@ -157,5 +161,5 @@ export function stopCronJobs(): void {
   // node-cron doesn't have a built-in stopAll — destroying tasks is verbose.
   // We just flip the flag so future startCronJobs() calls become no-ops.
   _started = false;
-  console.log('[cron] Stopped (flag flipped)');
+  logger.info('cron stopped (flag flipped)');
 }

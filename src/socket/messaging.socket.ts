@@ -30,6 +30,7 @@ import { config } from '../config/env.js';
 import { prisma } from '../config/database.js';
 import { UnauthorizedError } from '../middleware/errorHandler.js';
 import { extractToken, type JwtPayload } from '../middleware/auth.js';
+import { logger } from '../utils/logger.js';
 
 export interface MessageEventPayload {
   threadId: number;
@@ -226,7 +227,7 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
       } catch (err) {
         // Non-fatal: realtime still works for explicit joins
         // and the user:* room below.
-        console.error('[messaging.socket] auto-join threads failed', err);
+        logger.error('auto-join threads failed', { error: err instanceof Error ? err.message : String(err) });
       }
     })();
 

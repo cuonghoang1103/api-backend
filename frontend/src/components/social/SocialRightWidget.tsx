@@ -11,6 +11,7 @@ import {
   ExternalLink,
   Flame,
   MessageSquare,
+  X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
@@ -51,6 +52,18 @@ export default function SocialRightWidget() {
   const [trending, setTrending] = useState<TrendingTopic[]>([]);
   const [suggestions, setSuggestions] = useState<SuggestedUser[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [activeHashtag, setActiveHashtag] = useState<string | null>(null);
+
+  const handleHashtagClick = (tag: string) => {
+    const next = activeHashtag === tag ? null : tag;
+    setActiveHashtag(next);
+    // Notify the feed page to filter by this hashtag.
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('social:filter-hashtag', { detail: { hashtag: next } }),
+      );
+    }
+  };
   // Per-user "starting conversation" state so the button on one
   // row can show a spinner without freezing the others.
   const [starting, setStarting] = useState<Record<number, boolean>>({});
@@ -169,6 +182,20 @@ export default function SocialRightWidget() {
           <Flame className="h-3.5 w-3.5 text-neon-fuchsia" />
         </div>
 
+        {activeHashtag && (
+          <div className="mb-2 flex items-center gap-1.5 rounded-lg px-2 py-1" style={{ background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.25)' }}>
+            <Hash className="h-3 w-3 text-neon-violet shrink-0" />
+            <span className="flex-1 text-xs text-neon-violet font-medium truncate">#{activeHashtag}</span>
+            <button
+              type="button"
+              onClick={() => handleHashtagClick(activeHashtag)}
+              className="text-text-muted hover:text-text-primary transition-colors"
+              title="Xoá bộ lọc"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        )}
         {!loaded ? (
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
@@ -177,19 +204,27 @@ export default function SocialRightWidget() {
           </div>
         ) : trending.length > 0 ? (
           <ul className="space-y-1">
-            {trending.map((t, idx) => (
-              <li key={t.id}>
-                <Link
-                  href={`/search?q=%23${encodeURIComponent(t.tag)}`}
-                  className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs hover:bg-white/[0.04] transition-colors group"
-                >
-                  <span className="text-text-muted font-mono w-5 text-right">{idx + 1}.</span>
-                  <Hash className="h-3 w-3 text-text-muted" />
-                  <span className="text-text-secondary group-hover:text-text-primary truncate">{t.tag}</span>
-                  <span className="ml-auto text-text-muted">{t.postsCount}</span>
-                </Link>
-              </li>
-            ))}
+            {trending.map((t, idx) => {
+              const isActive = activeHashtag === t.tag;
+              return (
+                <li key={t.id}>
+                  <button
+                    type="button"
+                    onClick={() => handleHashtagClick(t.tag)}
+                    className={`w-full flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs transition-colors group text-left ${
+                      isActive
+                        ? 'bg-neon-violet/10 text-neon-violet'
+                        : 'hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    <span className="text-text-muted font-mono w-5 text-right">{idx + 1}.</span>
+                    <Hash className={`h-3 w-3 shrink-0 ${isActive ? 'text-neon-violet' : 'text-text-muted'}`} />
+                    <span className={`truncate ${isActive ? 'text-neon-violet font-medium' : 'text-text-secondary group-hover:text-text-primary'}`}>{t.tag}</span>
+                    <span className="ml-auto text-text-muted">{t.postsCount}</span>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p className="text-xs text-text-muted">

@@ -22,7 +22,7 @@ import SocialSavePopoverV2 from '@/components/social/SocialSavePopoverV2';
 import { useAuthStore } from '@/store/authStore';
 import { getMediaUrl } from '@/lib/utils';
 import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext, FeedSaveResult } from '@/types/social';
-import { REACTION_META, EMPTY_REACTION_BREAKDOWN } from '@/types/social';
+import { REACTION_META, REACTION_PICKER_ORDER, WOW_META, EMPTY_REACTION_BREAKDOWN } from '@/types/social';
 import { socialKeys, type SocialFeedResponse } from '@/hooks/useSocialQueries';
 import { formatRelative } from '@/lib/formatDate';
 import { toast } from 'sonner';
@@ -57,9 +57,16 @@ interface PostCardProps {
   onToggleLike?: (postId: number) => Promise<void>;
   onToggleSave?: (postId: number) => Promise<void>;
   onDelete?: (postId: number) => Promise<void>;
+  /**
+   * Fired when the user clicks the "Theater" button on a video
+   * media item. The page-level wrapper opens the fullscreen
+   * TheaterMode modal. PostCard does not own the modal — it
+   * only emits the intent.
+   */
+  onOpenTheater?: (postId: number) => void;
 }
 
-export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCardProps) {
+export function PostCard({ post, onToggleLike, onToggleSave, onDelete, onOpenTheater }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -914,7 +921,11 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
 
         {/* Media */}
         {safeMedia.length > 0 && (
-          <MediaGrid media={safeMedia} />
+          <MediaGrid
+            media={safeMedia}
+            postId={post.id}
+            onOpenTheater={onOpenTheater}
+          />
         )}
 
         {/* YouTube embed — shown after media if a URL is attached.
@@ -969,48 +980,68 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
             <AnimatePresence>
               {showReactions && (
                 <motion.div
-                  initial={{ opacity: 0, y: 6, scale: 0.9 }}
+                  key="reaction-picker"
+                  initial={{ opacity: 0, y: 8, scale: 0.85 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.9 }}
-                  transition={{ duration: 0.15 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.85 }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 380,
+                    damping: 22,
+                    mass: 0.6,
+                  }}
                   className="absolute bottom-full left-0 z-50 flex flex-col items-start pointer-events-auto"
                 >
                   {/* Invisible bridge: fills the gap between the button
                       and the popover so the cursor never "falls through"
                       and triggers onMouseLeave on the wrapper. */}
                   <div className="w-full cursor-default" style={{ height: '12px', pointerEvents: 'none' }} />
-                  {/* Emoji picker */}
+                  {/* Emoji picker — 6-emoji Facebook-style bar. The popover
+                      enters with a spring (overshoot) so the emojis feel
+                      "popped up". WOW is a visual-only reaction that maps
+                      to a normal LIKE on the wire. */}
                   <div
-                    className="relative z-50 flex gap-1 rounded-2xl p-1.5"
+                    className="relative z-50 flex gap-0.5 rounded-2xl p-1.5 shadow-2xl"
                     style={{
-                      background: 'rgba(15,15,25,0.95)',
+                      background: 'rgba(15,15,25,0.96)',
                       border: '1px solid rgba(255,255,255,0.1)',
                       backdropFilter: 'blur(20px)',
                     }}
                   >
-                    {REACTION_KEYS.map((k) => {
-                      const r = REACTION_META[k];
-                      const isMine = myReaction === k;
+                    {REACTION_PICKER_ORDER.map((k, idx) => {
+                      const isWow = k === 'WOW';
+                      const r = isWow ? WOW_META : REACTION_META[k as ReactionType];
+                      const isMine = !isWow && myReaction === k;
                       return (
-                        <button
+                        <motion.button
                           key={k}
-                          onClick={() => handleReact(k)}
-                          onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.4) translateY(-4px)'; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.transform = isMine ? 'scale(1.15)' : 'scale(1)'; }}
-                          className="text-xl transition-transform px-1.5"
+                          initial={{ opacity: 0, y: 6, scale: 0.6 }}
+                          animate={{
+                            opacity: 1,
+                            y: 0,
+                            scale: 1,
+                            transition: { delay: idx * 0.03, type: 'spring', stiffness: 420, damping: 18 },
+                          }}
+                          exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.1 } }}
+                          whileHover={{ scale: 1.45, y: -6, transition: { duration: 0.15 } }}
+                          whileTap={{ scale: 1.1 }}
+                          onClick={() => {
+                            // WOW is a visual alias for LIKE on the server.
+                            handleReact(isWow ? 'LIKE' : (k as ReactionType));
+                          }}
+                          className="text-2xl px-1.5 py-0.5 cursor-pointer origin-bottom"
                           title={r.label}
                           style={{
-                            transform: isMine ? 'scale(1.15)' : 'scale(1)',
+                            transform: isMine ? 'scale(1.18)' : 'scale(1)',
                             filter: isMine ? `drop-shadow(0 0 6px ${r.color})` : undefined,
                           }}
                         >
                           {r.emoji}
-                        </button>
+                        </motion.button>
                       );
                     })}
                   </div>
-                  {/* Emoji stack — now INSIDE AnimatePresence so no
-                      gap exists between button and popover. */}
+                  {/* Emoji stack */}
                   {activeReactions.length > 0 && safeLikesCount > 0 && (
                     <div className="flex items-center gap-1 pl-1.5">
                       <div className="flex -space-x-1">
@@ -1263,7 +1294,13 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete }: PostCar
 
 // ─── Media Grid ───────────────────────────────────────────────────────────────
 
-function MediaGrid({ media }: { media: SocialMedia[] }) {
+function MediaGrid({ media, postId, onOpenTheater }: { 
+  media: SocialMedia[]; 
+  /** Owning post id — passed down so MediaItem's Theater button
+   *  can fire the right callback without re-deriving it. */
+  postId?: number;
+  onOpenTheater?: (postId: number) => void;
+}) {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const visual = media.filter((m) => m.type !== 'FILE');
   const files = media.filter((m) => m.type === 'FILE');
@@ -1285,6 +1322,11 @@ function MediaGrid({ media }: { media: SocialMedia[] }) {
           item={visual[0]}
           onClick={() => setLightboxSrc(getMediaUrl(visual[0].url, visual[0].url))}
           autoPlayEnabled={visual[0].type === 'VIDEO'}
+          onOpenTheater={
+            onOpenTheater && postId != null
+              ? () => onOpenTheater(postId)
+              : undefined
+          }
         />
         {files.length > 0 && (
           <div className="mt-2">
@@ -1320,6 +1362,11 @@ function MediaGrid({ media }: { media: SocialMedia[] }) {
             <MediaItem
               item={item}
               onClick={() => setLightboxSrc(getMediaUrl(item.url, item.url))}
+              onOpenTheater={
+                item.type === 'VIDEO' && onOpenTheater && postId != null
+                  ? () => onOpenTheater(postId)
+                  : undefined
+              }
             />
             {i === 3 && visual.length > 4 && (
               <div
@@ -1438,10 +1485,12 @@ function MediaItem({
   item,
   onClick,
   autoPlayEnabled = false,
+  onOpenTheater,
 }: {
   item: SocialMedia;
   onClick: () => void;
   autoPlayEnabled?: boolean;
+  onOpenTheater?: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLButtonElement | null>(null);
@@ -1531,6 +1580,41 @@ function MediaItem({
             title={muted ? 'Bật tiếng' : 'Tắt tiếng'}
           >
             {muted ? '🔇' : '🔊'}
+          </button>
+        )}
+
+        {/* Theater-mode shortcut (only on videos, only when the
+            page wired onOpenTheater). Clicking opens the
+            fullscreen Reels-style modal. We deliberately sit
+            this button next to the duration badge so the
+            bottom-left of the video remains the play/mute zone. */}
+        {item.type === 'VIDEO' && onOpenTheater && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenTheater();
+            }}
+            className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-[10px] font-semibold text-white backdrop-blur-md transition-colors hover:bg-neon-violet"
+            title="Mở Theater Mode (toàn màn hình)"
+            aria-label="Mở Theater Mode"
+          >
+            <svg
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+              <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+              <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+              <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+            </svg>
+            Theater
           </button>
         )}
 
@@ -1980,7 +2064,35 @@ function YouTubeEmbed({ url }: { url: string }) {
   );
 }
 
-// ─── Skeleton loader ───────────────────────────────────────────────
+// ─── Shimmering skeleton loader ─────────────────────────────────
+// Replaces the previous flat `animate-pulse` block with a moving
+// gradient that slides from left to right. Two variants share the
+// same shimmer keyframe so the page looks visually consistent while
+// the feed is hydrating.
+
+function ShimmerBlock({
+  className,
+  rounded = 'rounded',
+}: {
+  className: string;
+  rounded?: string;
+}) {
+  return (
+    <div
+      className={`relative overflow-hidden ${rounded} ${className}`}
+      style={{ background: 'rgba(255,255,255,0.04)' }}
+    >
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(90deg, transparent 0%, rgba(139,92,246,0.10) 50%, transparent 100%)',
+          animation: 'social-shimmer 1.6s ease-in-out infinite',
+        }}
+      />
+    </div>
+  );
+}
 
 export function PostSkeleton() {
   return (
@@ -1994,24 +2106,27 @@ export function PostSkeleton() {
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 rounded-full animate-pulse" style={{ background: 'rgba(255,255,255,0.08)' }} />
+        <ShimmerBlock className="w-10 h-10" rounded="rounded-full" />
         <div className="flex-1 space-y-2">
-          <div className="h-3 w-24 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.08)' }} />
-          <div className="h-2.5 w-16 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
+          <ShimmerBlock className="h-3 w-24" />
+          <ShimmerBlock className="h-2.5 w-16" />
         </div>
-        <div className="w-6 h-6 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
+        <ShimmerBlock className="w-6 h-6" rounded="rounded" />
       </div>
       {/* Content lines */}
       <div className="space-y-2 mb-4">
-        <div className="h-3 w-full rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.06)' }} />
-        <div className="h-3 w-5/6 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.06)' }} />
-        <div className="h-3 w-4/6 rounded animate-pulse" style={{ background: 'rgba(255,255,255,0.06)' }} />
+        <ShimmerBlock className="h-3 w-full" />
+        <ShimmerBlock className="h-3 w-5/6" />
+        <ShimmerBlock className="h-3 w-4/6" />
       </div>
       {/* Action bar */}
-      <div className="flex items-center gap-6 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div className="h-7 w-16 rounded-lg animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
-        <div className="h-7 w-16 rounded-lg animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
-        <div className="h-7 w-16 rounded-lg animate-pulse" style={{ background: 'rgba(255,255,255,0.05)' }} />
+      <div
+        className="flex items-center gap-6 pt-3"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+      >
+        <ShimmerBlock className="h-7 w-16" rounded="rounded-lg" />
+        <ShimmerBlock className="h-7 w-16" rounded="rounded-lg" />
+        <ShimmerBlock className="h-7 w-16" rounded="rounded-lg" />
       </div>
     </div>
   );

@@ -759,6 +759,8 @@ export const socialApi = {
     limit?: number;
     authorId?: number;
     visibility?: string;
+    /** Filter to posts containing this hashtag (backend handles # prefix). */
+    hashtag?: string;
   }) => api.get('/social/posts', { params }),
 
   getPost: (id: number) => api.get(`/social/posts/${id}`),
@@ -1420,6 +1422,14 @@ export const paymentApi = {
     return api.delete('/payments/admin/enrollment', {
       data: { userId, courseId },
     });
+  },
+  // Admin: list all enrollments with source detection
+  adminListEnrollments(params?: {
+    keyword?: string;
+    page?: number;
+    pageSize?: number;
+  }) {
+    return api.get('/payments/admin/enrollments', { params });
   },
   // Admin: issue refund (full or partial)
   adminRefundOrder(data: {

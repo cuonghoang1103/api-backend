@@ -52,6 +52,15 @@ export interface SocialPoll {
 
 export type ReactionType = 'LIKE' | 'LOVE' | 'HAHA' | 'SAD' | 'ANGRY';
 
+/**
+ * Visual-only extension of ReactionType. WOW is rendered in the
+ * emoji picker (Facebook-style 6-emoji bar) but is NOT sent to the
+ * server — clicking it just triggers a regular LIKE so the existing
+ * backend contract stays unchanged. Keeping a separate type here
+ * makes the client-only nature obvious to any future reader.
+ */
+export type ExtendedReactionType = ReactionType | 'WOW';
+
 export interface ReactionBreakdown {
   LIKE: number;
   LOVE: number;
@@ -75,6 +84,19 @@ export const REACTION_META: Record<ReactionType, { emoji: string; label: string;
   SAD:  { emoji: '😢', label: 'Buồn', color: '#06b6d4' },
   ANGRY:{ emoji: '😡', label: 'Phẫn nộ', color: '#ef4444' },
 };
+
+// WOW is shown in the picker but maps to a normal LIKE on the wire.
+export const WOW_META = { emoji: '😮', label: 'Wow', color: '#f59e0b' } as const;
+
+/** Order of the 6 emoji buttons in the hover-reaction popover. */
+export const REACTION_PICKER_ORDER: ExtendedReactionType[] = [
+  'LIKE',
+  'LOVE',
+  'HAHA',
+  'WOW',
+  'SAD',
+  'ANGRY',
+];
 
 export interface SocialPost {
   id: number;

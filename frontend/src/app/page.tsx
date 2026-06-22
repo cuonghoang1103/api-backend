@@ -9,6 +9,8 @@ import SocialSidebar from '@/components/social/SocialSidebar';
 import SocialRightWidget from '@/components/social/SocialRightWidget';
 import { motion, AnimatePresence } from 'framer-motion';
 import SocialBackground from '@/components/social/SocialBackground';
+import TheaterMode from '@/components/social/TheaterMode';
+import MiniChatDock from '@/components/social/MiniChatDock';
 
 export default function SocialPage() {
   const { posts, loadMore, isLoadingMore, hasNextPage } = useSocialStore();
@@ -16,9 +18,27 @@ export default function SocialPage() {
   const invalidateFeedRef = useRef(invalidateFeed);
   invalidateFeedRef.current = invalidateFeed;
 
+  // Active hashtag filter set by the right-side trending widget.
+  const [activeHashtag, setActiveHashtag] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { hashtag } = (e as CustomEvent<{ hashtag: string | null }>).detail ?? {};
+      const next = hashtag || null;
+      setActiveHashtag(next);
+      // Reset Zustand store so the filtered feed loads from scratch.
+      useSocialStore.setState({ posts: [], cursor: null, hasNextPage: true });
+    };
+    window.addEventListener('social:filter-hashtag', handler as EventListener);
+    return () => window.removeEventListener('social:filter-hashtag', handler as EventListener);
+  }, []);
+
   // TanStack Query feed — reads from cache if visited within 30s (no refetch),
   // falls back to Zustand store if cache is empty.
-  const { data: feedData, isLoading: isLoadingFeed, error } = useSocialFeed({ limit: 20 });
+  const { data: feedData, isLoading: isLoadingFeed, error } = useSocialFeed({
+    limit: 20,
+    hashtag: activeHashtag ?? undefined,
+  });
 
   // Hydrate Zustand store from TanStack Query cache so PostCard mutations work.
   // Invalidate the query after mutations to trigger a background refetch.
@@ -53,6 +73,23 @@ export default function SocialPage() {
       window.removeEventListener('storage', handler);
       window.removeEventListener('focus', handler);
     };
+  }, []);
+
+  // ─── Theater Mode state (added 2026-06-22) ─────────────────
+  // Page-level state for the fullscreen video modal. PostCard
+  // emits `onOpenTheater(postId)`; we remember which post was
+  // asked for and pass the current feed down to TheaterMode
+  // along with a close handler. Keeping the state at the page
+  // level (instead of inside PostCard) means the modal can be
+  // closed from anywhere — keyboard, click on backdrop, the X
+  // button — without each card needing to know about the
+  // others.
+  const [theaterState, setTheaterState] = useState<{ postId: number } | null>(null);
+  const handleOpenTheater = useCallback((postId: number) => {
+    setTheaterState({ postId });
+  }, []);
+  const handleCloseTheater = useCallback(() => {
+    setTheaterState(null);
   }, []);
 
   // Wrap Zustand mutations so they invalidate the TanStack Query cache.
@@ -189,6 +226,38 @@ export default function SocialPage() {
               <PostComposer />
             </motion.div>
 
+            {/* Active hashtag filter banner */}
+            {activeHashtag && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="mt-4 flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+                style={{
+                  background: 'rgba(139,92,246,0.1)',
+                  border: '1px solid rgba(139,92,246,0.25)',
+                }}
+              >
+                <span style={{ color: '#a78bfa' }}>Đang lọc: <strong>#{activeHashtag}</strong></span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveHashtag(null);
+                    useSocialStore.setState({ posts: [], cursor: null, hasNextPage: true });
+                    if (typeof window !== 'undefined') {
+                      window.dispatchEvent(
+                        new CustomEvent('social:filter-hashtag', { detail: { hashtag: null } }),
+                      );
+                    }
+                  }}
+                  className="ml-auto text-xs transition-colors"
+                  style={{ color: '#7c3aed' }}
+                >
+                  Xoá bộ lọc ×
+                </button>
+              </motion.div>
+            )}
+
             {/* Feed — space-y-6 gives each post more breathing room */}
             <div className="mt-6 space-y-6">
               <AnimatePresence mode="popLayout">
@@ -241,6 +310,7 @@ export default function SocialPage() {
                       >
                         <PostCard
                           post={latest}
+                          onOpenTheater={handleOpenTheater}
                         />
                       </motion.div>
                     );
@@ -267,6 +337,26 @@ export default function SocialPage() {
           </div>
         </div>
       </div>
+
+      {/* ─── Theater Mode overlay (added 2026-06-22) ────────────
+          Sits OUTSIDE the grid so it can cover the entire
+          viewport including the left/right sidebars. State is
+          page-level (see `theaterState` above) so any PostCard
+          can open it. */}
+      <TheaterMode
+        posts={displayPosts}
+        startPostId={theaterState?.postId ?? 0}
+        open={theaterState !== null}
+        onClose={handleCloseTheater}
+        onReact={handleToggleLike}
+      />
+
+      {/* ─── Floating mini-chat dock (added 2026-06-22) ────────
+          Listens for the `social:open-mini-chat` event that
+          SocialSidebar's FriendsSection dispatches when the
+          user clicks a friend row. Mounted at the page level
+          so it survives route changes inside the social app. */}
+      <MiniChatDock />
     </main>
   );
 }

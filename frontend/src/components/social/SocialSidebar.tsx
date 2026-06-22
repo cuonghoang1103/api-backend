@@ -382,50 +382,98 @@ function FriendsSection() {
         ) : suggestedUsers.length === 0 ? null : (
           suggestedUsers.map(u => {
             const isFollowing = followingIds.has(u.id);
-            const displayName = u.displayName || u.username;
+            // Prefer the friendly displayName; fall back to the username.
+            // The grey secondary line is always the raw @username so the
+            // user can still reference the handle when searching for the
+            // account (Facebook-style avatar + name + @handle layout).
+            const friendlyName = u.displayName?.trim() || u.username;
             return (
-              <Link
+              <button
                 key={u.id}
-                href={`/profile/${u.id}`}
-                className="group flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs transition-all hover:bg-white/[0.04]"
+                type="button"
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    window.dispatchEvent(
+                      new CustomEvent('social:open-mini-chat', {
+                        detail: {
+                          id: u.id,
+                          username: u.username,
+                          displayName: friendlyName,
+                          avatarUrl: u.avatarUrl,
+                        },
+                      }),
+                    );
+                  }
+                }}
+                className="group flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-xs transition-all hover:bg-white/[0.04] text-left"
               >
                 <div className="relative shrink-0">
                   <SafeAvatar
                     src={u.avatarUrl}
-                    alt={displayName}
+                    alt={friendlyName}
                     seed={u.username}
                     size={32}
                     rounded="full"
                   />
                   {u.isOnline && (
-                    <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-darkbg bg-emerald-400" />
+                    <span
+                      className="absolute bottom-0 right-0 flex h-3 w-3 items-center justify-center rounded-full border-2 border-[#0a0a0f] bg-neon-emerald"
+                      title="Đang hoạt động"
+                      aria-label="Đang hoạt động"
+                    >
+                      {/* Double-ring pulse: an inner static dot +
+                          an outer animated ping for a clearer
+                          "live" cue without being noisy. */}
+                      <span className="absolute inset-0 animate-ping rounded-full bg-neon-emerald opacity-70" />
+                      <span className="relative h-1.5 w-1.5 rounded-full bg-white" />
+                    </span>
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium text-text-secondary group-hover:text-text-primary transition-colors">
-                    {displayName}
+                    {friendlyName}
                   </p>
-                  <p className="truncate text-[10px] text-text-muted">
-                    {u.isOnline ? (
-                      <span className="text-emerald-400">Đang hoạt động</span>
-                    ) : '@' + u.username}
+                  <p
+                    className={`truncate text-[10px] ${
+                      u.isOnline ? 'text-emerald-400/80' : 'text-text-muted/60'
+                    }`}
+                  >
+                    {/* Always show the grayed @handle so the
+                        row reads as a real identity (not a
+                        test id). When the friend is online we
+                        prefix the handle with a green pulse
+                        marker that mirrors the avatar dot. */}
+                    <span className="text-text-muted/50">@</span>
+                    {u.username}
                   </p>
                 </div>
                 {!isFollowing && (
-                  <button
-                    onClick={(e) => { e.preventDefault(); void handleFollow(u.id); }}
+                  <span
+                    role="button"
+                    tabIndex={-1}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      void handleFollow(u.id);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        void handleFollow(u.id);
+                      }
+                    }}
                     className="shrink-0 rounded-lg p-1 text-text-muted hover:text-neon-violet hover:bg-white/5 transition-all"
                     title="Theo dõi"
                   >
                     <UserPlus size={14} />
-                  </button>
+                  </span>
                 )}
                 {isFollowing && (
                   <span className="shrink-0 text-neon-violet">
                     <UserCheck size={14} />
                   </span>
                 )}
-              </Link>
+              </button>
             );
           })
         )}

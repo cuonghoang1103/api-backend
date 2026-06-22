@@ -701,6 +701,12 @@ aside ::-webkit-scrollbar-thumb:hover {
   animation: neon-shimmer 3s ease-in-out infinite;
 }
 
+/* ── Social Feed skeleton shimmer ───────────────────────────── */
+@keyframes social-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 /* ── Hexagon corner accents ─────────────────────────────────── */
 .hex-accent-tl::before,
 .hex-accent-br::after {

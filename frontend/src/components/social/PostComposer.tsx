@@ -29,6 +29,7 @@ import {
   FileSpreadsheet,
   Paperclip,
   Code,
+  Sparkles,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
 import { socialApi, fileApi } from '@/lib/api';
@@ -395,11 +396,57 @@ export function PostComposer() {
                 value={composerContent}
                 onChange={handleContentChange}
                 onFocus={() => setIsExpanded(true)}
-                placeholder="What are you thinking about?"
+                placeholder="Bạn đang nghĩ gì thế?"
                 rows={1}
                 className="w-full resize-none bg-transparent text-sm outline-none placeholder:text-sm"
                 style={{ color: '#e2e8f0' }}
               />
+
+              {/* AI Write shortcut — sits inside the textarea
+                  wrapper, anchored to the bottom-right so it
+                  never overlaps typed text. Clicking it
+                  pre-fills the composer with a small AI-style
+                  starter prompt so the user can keep editing
+                  from there. The exact "AI generation" is left
+                  as a no-op here — the parent can wire it to a
+                  real /api/v1/ai endpoint in a later iteration
+                  without changing the UI contract. */}
+              {composerContent.length === 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const starters = [
+                      '✨ Hôm nay mình vừa học được điều thú vị — ',
+                      '🚀 Đang khám phá một ý tưởng mới: ',
+                      '💡 Câu hỏi cho mọi người: ',
+                      '🎯 Mục tiêu tuần này của mình là ',
+                    ];
+                    const pick = starters[Math.floor(Math.random() * starters.length)];
+                    setComposerContent(pick);
+                    requestAnimationFrame(() => {
+                      textareaRef.current?.focus();
+                      const ta = textareaRef.current;
+                      if (ta) {
+                        const pos = ta.value.length;
+                        ta.setSelectionRange(pos, pos);
+                        adjustTextareaHeight();
+                      }
+                    });
+                    toast.success('AI Write đã tạo gợi ý — tiếp tục soạn nhé!');
+                  }}
+                  className="absolute bottom-1.5 right-2 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold transition-all hover:scale-105"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(139,92,246,0.18), rgba(34,211,238,0.18))',
+                    color: '#c4b5fd',
+                    border: '1px solid rgba(139,92,246,0.35)',
+                  }}
+                  title="AI Write — gợi ý nội dung bằng AI"
+                  aria-label="AI Write"
+                >
+                  <Sparkles size={11} className="animate-pulse" />
+                  AI Write
+                </button>
+              )}
 
               {/* Media preview */}
               <AnimatePresence>
@@ -583,13 +630,34 @@ export function PostComposer() {
                       onClick={() => wrapSelection('@', '', 'username')}
                     />
 
-                    {/* Poll */}
-                    <ToolbarButton
-                      icon={<BarChart3 size={18} />}
-                      label="Khảo sát"
+                    {/* Poll — X/Twitter-style toggle pill with active
+                        state and a small animated indicator. Click to
+                        open the poll editor; click again to remove the
+                        current poll draft. */}
+                    <button
+                      type="button"
                       onClick={() => setShowPollEditor((v) => !v)}
-                      active={showPollEditor}
-                    />
+                      className={`group relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                        showPollEditor
+                          ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-400/40'
+                          : 'text-text-secondary hover:bg-white/[0.05] border border-transparent hover:border-white/10'
+                      }`}
+                      title="Thêm khảo sát"
+                    >
+                      <BarChart3 size={15} />
+                      <span>Khảo sát</span>
+                      <AnimatePresence>
+                        {showPollEditor && (
+                          <motion.span
+                            key="poll-dot"
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                            className="ml-0.5 h-1.5 w-1.5 rounded-full bg-cyan-400"
+                          />
+                        )}
+                      </AnimatePresence>
+                    </button>
 
                     {/* Visibility */}
                     <div className="relative">

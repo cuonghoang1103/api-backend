@@ -9,6 +9,7 @@ export interface SocialFeedParams {
   limit?: number;
   authorId?: number;
   visibility?: string;
+  hashtag?: string;
 }
 
 export interface SocialFeedResponse {

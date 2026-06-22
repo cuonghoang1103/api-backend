@@ -453,6 +453,9 @@ export interface Course {
   isEnrolled?: boolean;
   hasPaidAccess?: boolean;
   enrollmentProgress?: number;
+  enrollmentSource?: string;
+  enrollmentExpiresAt?: string;
+  enrollmentDurationDays?: number;
 }
 
 export interface Enrollment {

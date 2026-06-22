@@ -21,11 +21,11 @@ declare global {
   }
 }
 
-export function authenticate(
+export async function authenticate(
   req: Request,
   _res: Response,
   next: NextFunction,
-): void {
+): Promise<void> {
   try {
     const token = extractToken(req);
     if (!token) {
@@ -35,6 +35,19 @@ export function authenticate(
     const decoded = jwt.verify(token, config.jwtSecret) as JwtPayload;
     req.user = decoded;
     req.userId = decoded.userId;
+
+    // Re-verify account status from DB on every authenticated request so that
+    // locking or disabling a user takes effect immediately across all devices —
+    // the JWT alone is not enough because it has a long TTL.
+    const dbUser = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      select: { enabled: true, accountNonLocked: true },
+    });
+
+    if (!dbUser) throw new UnauthorizedError('User not found');
+    if (!dbUser.enabled) throw new ForbiddenError('Account is disabled');
+    if (!dbUser.accountNonLocked) throw new ForbiddenError('Account is locked');
+
     next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {

@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Search, X, FileText, Cpu, Zap, Layers, ArrowRight } from 'lucide-react';
-import { blogApi } from '@/lib/api';
-import type { Post, PostCard, Category } from '@/types';
 import BlogCard from '@/components/blog/BlogCard';
 import BlogPostDetailModal from '@/components/blog/BlogPostDetailModal';
-import ClientOnly from '@/components/providers/ClientOnly';
 import ParticleGridBackground from '@/components/blog/ParticleGridBackground';
+import ClientOnly from '@/components/providers/ClientOnly';
+import { blogApi } from '@/lib/api';
+import type { Category, PostCard } from '@/types';
+import { motion } from 'framer-motion';
+import { ArrowRight, Cpu, FileText, Layers, Search, X, Zap } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
 const ALL_TAGS = ['JavaScript', 'React', 'TypeScript', 'Next.js', 'Spring Boot', 'AI', 'Node.js', 'Python', 'CSS', 'Docker', 'PostgreSQL', 'DevOps'];
 
@@ -87,7 +87,7 @@ function HeroSection() {
                 style={{ background: 'linear-gradient(90deg, transparent, #8b5cf6, #ec4899, transparent)' }}
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 1, delay: 0.8 }}
+                transition={{ duration: 1, delay: 0.8 }}              
               />
             </span>
           </h1>

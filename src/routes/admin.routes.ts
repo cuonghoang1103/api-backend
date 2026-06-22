@@ -189,7 +189,7 @@ router.get('/users', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: 
       prisma.user.findMany({
         where, skip, take: pageSize,
         orderBy: { [safeSortBy]: sortDir === 'asc' ? 'asc' as const : 'desc' as const },
-        select: { id: true, username: true, email: true, fullName: true, avatarUrl: true, enabled: true, accountNonLocked: true, provider: true, createdAt: true, roles: { include: { role: true } } },
+        select: { id: true, username: true, email: true, fullName: true, displayName: true, avatarUrl: true, enabled: true, accountNonLocked: true, emailVerified: true, provider: true, createdAt: true, roles: { include: { role: true } } },
       }),
       prisma.user.count({ where }),
     ]);
@@ -591,7 +591,7 @@ router.patch('/users/:id/roles', authenticate, requireAdmin('ROLE_ADMIN'), async
 router.put('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const id = parseInt(req.params.id, 10);
-    const { username, email, fullName, enabled, accountNonLocked } = req.body;
+    const { username, email, fullName, displayName, enabled, accountNonLocked, emailVerified } = req.body;
 
     // ── Super Admin Identity Guard ─────────────────────────────────
     const currentUsername = req.user?.username || '';
@@ -613,12 +613,12 @@ router.put('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: a
         ...(username && { username }),
         ...(email && { email }),
         ...(fullName !== undefined && { fullName }),
+        ...(displayName !== undefined && { displayName }),
         ...(enabled !== undefined && { enabled }),
         ...(accountNonLocked !== undefined && { accountNonLocked }),
+        ...(emailVerified !== undefined && { emailVerified }),
       },
-      // Explicit field list so the response never contains a
-      // BigInt column (e.g. `roleVersion`).
-      select: { id: true, username: true, email: true, fullName: true, enabled: true, accountNonLocked: true, provider: true, createdAt: true },
+      select: { id: true, username: true, email: true, fullName: true, displayName: true, enabled: true, accountNonLocked: true, emailVerified: true, provider: true, createdAt: true },
     });
     res.json({ success: true, data: updated });
   } catch (error) { next(error); }
@@ -650,7 +650,7 @@ router.delete('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
 
     const existing = await prisma.user.findUnique({
       where: { id },
-      select: { id: true, username: true, email: true },
+      select: { id: true, username: true, email: true, emailVerified: true },
     });
     if (!existing) throw new AppError('User not found', 404, 'USER_NOT_FOUND');
 
@@ -659,13 +659,38 @@ router.delete('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
       throw new AppError('Không thể xóa tài khoản super admin', 400, 'SUPER_ADMIN_PROTECTED');
     }
 
-    // ── Order Guard: check ShopOrder table ────────────────────────
-    const orderCount = await prisma.shopOrder.count({ where: { userId: id } });
-    if (orderCount > 0) {
+    // ── Business Rule: only unverified accounts may be deleted ────
+    if (existing.emailVerified) {
       res.status(409).json({
         success: false,
-        message: `Cannot delete user: Active/Historical orders detected on this account. (${orderCount} order(s) found)`,
-        code: 'ORDER_GUARD_BLOCKED',
+        message: 'Không thể xóa tài khoản này: email đã được xác minh. Chỉ tài khoản chưa xác minh email mới được phép xóa.',
+        code: 'EMAIL_VERIFIED_GUARD',
+      });
+      return;
+    }
+
+    // ── Order Guard: block if user has PENDING or PROCESSING orders ─
+    const [pendingShopOrders, pendingCourseOrders] = await Promise.all([
+      prisma.shopOrder.count({
+        where: {
+          userId: id,
+          OR: [
+            { status: { in: ['PENDING', 'PROCESSING'] } },
+            { paymentStatus: { in: ['PENDING', 'PROCESSING'] } },
+          ],
+        },
+      }),
+      prisma.courseOrder.count({
+        where: { userId: id, status: { in: ['PENDING', 'PROCESSING'] } },
+      }),
+    ]);
+
+    const totalPending = pendingShopOrders + pendingCourseOrders;
+    if (totalPending > 0) {
+      res.status(409).json({
+        success: false,
+        message: `Không thể xóa tài khoản: có ${totalPending} đơn hàng đang chờ xử lý (shop: ${pendingShopOrders}, khóa học: ${pendingCourseOrders}). Hãy hoàn tất hoặc hủy tất cả đơn hàng trước.`,
+        code: 'PENDING_ORDERS_GUARD',
       });
       return;
     }

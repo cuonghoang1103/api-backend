@@ -7,6 +7,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import type { AuthResponse, JwtPayload } from '../types/index.js';
 import { emailService } from './email.service.js';
 import { generateOtp, verifyOtp, getOtpTtl, type OtpType } from './otp.service.js';
+import { logger } from '../utils/logger.js';
 
 const SALT_ROUNDS = 12;
 
@@ -239,10 +240,9 @@ export class AuthService {
     // ─── Send 6-digit OTP via email (best-effort) ──────
     const otpResult = await generateOtp(user.email, 'verify');
     const otpToSend = otpResult.devCode ?? (await getLatestOtpForLog(user.email, 'verify'));
-    if (process.env.NODE_ENV === 'development' && otpResult.devCode) {
-      // eslint-disable-next-line no-console
-      console.log(`[register] DEV OTP for ${user.email}: ${otpResult.devCode}`);
-    }
+ if (process.env.NODE_ENV === 'development' && otpResult.devCode) {
+ logger.info('register dev OTP', { email: user.email, otp: otpResult.devCode });
+ }
     // Always log OTP at INFO level (server console) for any new
     // account — this is the operational fallback when the email
     // provider (Resend) bounces the message because the sending
@@ -272,22 +272,22 @@ export class AuthService {
         const masked = otpToSend.length >= 4
           ? `${otpToSend[0]}***${otpToSend[otpToSend.length - 1]}`
           : `***`;
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(
-            `[register] Email failed for ${user.email}. ` +
-            `Masked OTP: ${masked} | Full OTP logged only in DEV console. ` +
-            `In production: retrieve from /api/admin/users/{id}/otp or DB. ` +
-            `Error: ${sendResult.error}`,
-          );
-          // eslint-disable-next-line no-console
-          console.log(`[register] FULL OTP for ${user.email}: ${otpToSend}`);
-        } else {
-          console.warn(
-            `[register] Email failed for ${user.email}. ` +
-            `Masked OTP: ${masked} | Full OTP: check /api/admin/users ` +
-            `endpoint or database directly. Error: ${sendResult.error}`,
-          );
-        }
+ if (process.env.NODE_ENV === 'development') {
+ logger.warn('register email failed', {
+ email: user.email,
+ maskedOtp: masked,
+ hint: 'Full OTP logged only in DEV console. In production: retrieve from /api/admin/users/{id}/otp or DB.',
+ error: sendResult.error,
+ });
+ logger.info('register FULL OTP (dev only)', { email: user.email, otp: otpToSend });
+ } else {
+ logger.warn('register email failed', {
+ email: user.email,
+ maskedOtp: masked,
+ hint: 'Full OTP: check /api/admin/users endpoint or database directly.',
+ error: sendResult.error,
+ });
+ }
       }
     }
 

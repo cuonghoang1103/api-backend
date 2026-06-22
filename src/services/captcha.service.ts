@@ -20,8 +20,10 @@
  * Reference: https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
  */
 
+import { logger } from '../utils/logger.js';
+
 const TURNSTILE_VERIFY_URL =
-  'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+ 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 interface TurnstileVerifyResponse {
   success: boolean;
@@ -45,7 +47,7 @@ export async function verifyTurnstileToken(
   // If not configured, skip verification (development mode)
   if (!secret) {
     if (process.env.NODE_ENV === 'production') {
-      console.error('[captcha] TURNSTILE_SECRET_KEY not set in production!');
+      logger.error('TURNSTILE_SECRET_KEY not set in production!');
       return { success: false, error: 'CAPTCHA not configured' };
     }
     return { success: true };
@@ -68,20 +70,20 @@ export async function verifyTurnstileToken(
     });
 
     if (!res.ok) {
-      console.error('[captcha] Turnstile API error:', res.status);
+      logger.error('Turnstile API error', { status: res.status });
       return { success: false, error: 'CAPTCHA service unavailable' };
     }
 
     const data = (await res.json()) as TurnstileVerifyResponse;
 
     if (!data.success) {
-      console.warn('[captcha] Verification failed:', data['error-codes']);
+      logger.warn('Verification failed', { codes: data['error-codes'] });
       return { success: false, error: data['error-codes']?.join(', ') || 'Verification failed' };
     }
 
     return { success: true };
   } catch (err) {
-    console.error('[captcha] Network error:', err);
+    logger.error('Network error', { error: err instanceof Error ? err.message : String(err) });
     return { success: false, error: 'CAPTCHA service error' };
   }
 }

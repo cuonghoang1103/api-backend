@@ -31,7 +31,12 @@ VPS_USER="root"
 VPS_SSH_KEY="${HOME}/.ssh/id_rsa"
 VPS_DEPLOY_DIR="/home/deployer/repo"
 VPS_ENV_FILE="/opt/cuonghoangdev/.env"
-COMPOSE_PROJECT="cuonghoangdev"
+# Project name must match the label on existing containers.
+# Compose derives this from the working directory when no -p flag is
+# used. Since the code lives at /home/deployer/repo/, the project is
+# "repo" — not "cuonghoangdev". Using a mismatched -p causes Compose
+# to try to create duplicate containers (conflict on container_name).
+COMPOSE_PROJECT="repo"
 HEALTH_URL="http://localhost:3001/api/v1/system/health"
 MAX_HEALTH_RETRIES=18    # 18 × 10s = 3 minutes
 HEALTH_INTERVAL=10

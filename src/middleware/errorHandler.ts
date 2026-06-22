@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { captureException } from '../services/sentry.service.js';
+import { logger } from '../utils/logger.js';
 
 export function notFoundHandler(req: Request, res: Response): void {
   res.status(404).json({
@@ -15,7 +16,14 @@ export function errorHandler(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction,
 ): void {
-  console.error('[Error]', err);
+  logger.error('Express error handler', {
+ error: err.message,
+ stack: err.stack,
+ name: err.name,
+ code: err.code,
+ path: req.path,
+ method: req.method,
+ });
 
   const statusCode = err.statusCode || 500;
   const message = err.message || 'Internal Server Error';

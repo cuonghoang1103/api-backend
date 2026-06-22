@@ -20,6 +20,7 @@ import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { GithubRepoStatus, Prisma } from '@prisma/client';
+import { logger } from '../utils/logger.js';
 
 // ─── Public types ─────────────────────────────────────────────────
 
@@ -154,9 +155,8 @@ async function withRetry<T>(
       }
       if (attempt === retries) break;
       // Exponential backoff with full jitter.
-      const delay = base * 2 ** attempt + Math.random() * 250;
-      // eslint-disable-next-line no-console
-      console.warn(`[${label}] retry ${attempt + 1}/${retries} after ${Math.round(delay)}ms`);
+ const delay = base * 2 ** attempt + Math.random() * 250;
+ logger.warn('github fetch retry', { label, attempt: attempt + 1, retries, delayMs: Math.round(delay) });
       await new Promise((r) => setTimeout(r, delay));
     }
   }

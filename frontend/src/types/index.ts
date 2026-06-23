@@ -903,12 +903,20 @@ export interface ContentPerformance {
  contentProjectId: number;
  /** Free-form per-platform breakdown kept as JsonB on the server. */
  platformMetrics: Record<string, unknown> | null;
+ /** Aggregated totals. Server uses `views/likes/comments/shares`
+ * as flat columns on `content_performance`; we expose them
+ * as `totalViews/totalLikes/...` on the client so the
+ * editor speaks in "total" semantics. */
  totalViews: number;
  totalLikes: number;
  totalComments: number;
  totalShares: number;
- totalRevenue: number;
- notes: string | null;
+ /** Click-through rate as a fraction (0..1) — render as %. */
+ ctr: number | null;
+ /** Average watch time in seconds. */
+ watchTimeSec: number | null;
+ /** Free-form "what worked / what didn't" notes. */
+ lessonsLearned: string | null;
  createdAt: string;
  updatedAt: string;
 }
@@ -919,12 +927,14 @@ export interface ContentReferenceLink {
  url: string;
 }
 
-/** Full project shape returned by GET /admin/content/projects/:id. */
+ /** Full project shape returned by GET /admin/content/projects/:id. */
 export interface ContentProject {
  id: number;
  slug: string;
  title: string;
  concept: string | null;
+ /** Phase 7: long-form script body (markdown-ish). */
+ script: string | null;
  mainHook: string | null;
  thumbnailUrl: string | null;
  type: ContentType;
@@ -974,6 +984,7 @@ export interface ContentProjectCreate {
  type?: ContentType;
  status?: ContentStatus;
  concept?: string | null;
+ script?: string | null;
  mainHook?: string | null;
  thumbnailUrl?: string | null;
  ideaDate?: string | null;
@@ -993,6 +1004,8 @@ export interface ContentProjectUpdate extends Partial<ContentProjectCreate> {
  affiliateProducts?: ContentAffiliateProduct[];
  platformPosts?: ContentPlatformPost[];
  checklistItems?: ContentChecklistItem[];
+ // Phase 7: full performance payload (server upserts).
+ performance?: ContentPerformance | null;
 }
 
 // === IDEA BANK TYPES (Phase 5) ===

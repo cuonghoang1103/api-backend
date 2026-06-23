@@ -2430,6 +2430,11 @@ model ContentProject {
  filmDate DateTime? @map("film_date")
  publishDate DateTime? @map("publish_date")
  concept String? @db.Text
+ // Phase 7: full freeform script body. Markdown-ish,
+ // long-form (treated as @db.Text). Distinct from
+ // `concept` (a 1-2 sentence description). The Script
+ // editor tab owns this field.
+ script String? @db.Text
  // Short opening hook (≤200 chars). Used as a teaser line
  // in Pipeline cards and Calendar popups.
  mainHook String? @map("main_hook") @db.VarChar(280)

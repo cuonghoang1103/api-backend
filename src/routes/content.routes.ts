@@ -44,7 +44,8 @@ import {
  replaceChildren,
  toJsonInput,
  toDateOrNull,
-} from '../services/content.service.js';
+ shapePerformance,
+ } from '../services/content.service.js';
 import {
  createIdea,
  deleteIdea,
@@ -131,6 +132,7 @@ function buildProjectPatch(body: Record<string, unknown>, existing: { title: str
  out.title = t;
  }
  if (body.concept !== undefined) out.concept = body.concept ?? null;
+ if (body.script !== undefined) out.script = body.script ?? null;
  if (body.mainHook !== undefined) out.mainHook = body.mainHook ?? null;
  if (body.thumbnailUrl !== undefined) out.thumbnailUrl = body.thumbnailUrl ?? null;
  if (body.type !== undefined) {
@@ -236,7 +238,7 @@ router.get('/projects', async (req, res: Response<ApiResponse>, next) => {
 // ─── POST /projects ────────────────────────────────────────────────────────
 router.post('/projects', async (req, res: Response<ApiResponse>, next) => {
  try {
- const { title, type, status, concept, mainHook, thumbnailUrl, ideaDate, filmDate, publishDate, tags, referenceLinks } = req.body ?? {};
+ const { title, type, status, concept, script, mainHook, thumbnailUrl, ideaDate, filmDate, publishDate, tags, referenceLinks } = req.body ?? {};
  if (typeof title !== 'string' || !title.trim()) {
  throw new AppError('Title is required', 400, 'TITLE_REQUIRED');
  }
@@ -254,6 +256,7 @@ router.post('/projects', async (req, res: Response<ApiResponse>, next) => {
  title: title.trim(),
  slug,
  concept: concept ?? null,
+ script: script ?? null,
  mainHook: mainHook ?? null,
  thumbnailUrl: thumbnailUrl ?? null,
  type: isValidType(type) ? type : ContentType.OTHER,
@@ -263,10 +266,21 @@ router.post('/projects', async (req, res: Response<ApiResponse>, next) => {
  publishDate: toDateOrNull(publishDate),
  tags: Array.isArray(tags) ? (tags as unknown[]).filter((t): t is string => typeof t === 'string') : [],
  referenceLinks: json === undefined ? Prisma.JsonNull : json,
+ // Phase 7: seed a default empty performance row so the
+ // editor's Performance tab has something to bind to.
+ performance: { create: {} },
  },
  include: FULL_INCLUDE,
  });
- res.status(201).json({ success: true, data: created });
+ res.status(201).json({
+ success: true,
+ data: {
+ ...created,
+ performance: created.performance
+ ? shapePerformance(created.performance)
+ : null,
+ },
+ });
  } catch (error) { next(error); }
 });
 
@@ -279,7 +293,15 @@ router.get('/projects/:id', async (req, res: Response<ApiResponse>, next) => {
  include: FULL_INCLUDE,
  });
  if (!project) throw new AppError('Content project not found', 404, 'CONTENT_NOT_FOUND');
- res.json({ success: true, data: project });
+ // Phase 7: shape ContentPerformance for the editor
+ // (flat → "total" + json normalisation).
+ const data = {
+ ...project,
+ performance: project.performance
+ ? shapePerformance(project.performance)
+ : null,
+ };
+ res.json({ success: true, data });
  } catch (error) { next(error); }
 });
 
@@ -311,6 +333,10 @@ router.put('/projects/:id', async (req, res: Response<ApiResponse>, next) => {
  platformPosts?: Array<Record<string, unknown>>;
  checklistItems?: Array<Record<string, unknown>>;
  };
+ // Phase 7: optional performance payload (post-publish metrics).
+ // Shape: { totalViews, totalLikes, totalComments, totalShares, ctr,
+ // watchTimeSec, lessonsLearned, platformMetrics }. All fields optional.
+ const performancePayload = (body as { performance?: Record<string, unknown> }).performance;
 
  // Pre-validate enum fields so a bad payload throws *before*
  // we open a transaction.
@@ -464,13 +490,79 @@ router.put('/projects/:id', async (req, res: Response<ApiResponse>, next) => {
  }),
  });
  }
- });
 
+ // Phase 7: upsert performance if the client sent it.
+ if (performancePayload && typeof performancePayload === 'object') {
+ const p = performancePayload;
+ const num = (v: unknown) => {
+ if (v == null || v === '') return null;
+ const n = Number(v);
+ return Number.isFinite(n) ? n : null;
+ };
+ const int = (v: unknown) => {
+ const n = num(v);
+ return n == null ? 0 : Math.trunc(n);
+ };
+ // CTR: store as a fraction (0..1). Client may send a
+ // fraction (0.05) or a percent (5) — normalise.
+ const ctrRaw = num(p.ctr);
+ const ctr =
+ ctrRaw == null
+ ? null
+ : ctrRaw > 1
+ ? ctrRaw / 100
+ : ctrRaw;
+ const platformMetrics =
+ p.platformMetrics &&
+ typeof p.platformMetrics === 'object' &&
+ !Array.isArray(p.platformMetrics)
+ ? p.platformMetrics
+ : {};
+ const lessonsLearned =
+ typeof p.lessonsLearned === 'string' &&
+ p.lessonsLearned.trim() !== ''
+ ? p.lessonsLearned
+ : null;
+ await tx.contentPerformance.upsert({
+ where: { contentProjectId: id },
+ create: {
+ contentProjectId: id,
+ views: int(p.totalViews),
+ likes: int(p.totalLikes),
+ comments: int(p.totalComments),
+ shares: int(p.totalShares),
+ ctr,
+ watchTimeSec: int(p.watchTimeSec),
+ platformMetrics,
+ lessonsLearned,
+ },
+ update: {
+ views: int(p.totalViews),
+ likes: int(p.totalLikes),
+ comments: int(p.totalComments),
+ shares: int(p.totalShares),
+ ctr,
+ watchTimeSec: int(p.watchTimeSec),
+ platformMetrics,
+ lessonsLearned,
+ },
+ });
+ }
+ });
  const fresh = await prisma.contentProject.findUnique({
  where: { id },
  include: FULL_INCLUDE,
  });
- res.json({ success: true, data: fresh });
+ if (!fresh) throw new AppError('Content project not found', 404, 'CONTENT_NOT_FOUND');
+ // Phase 7: shape performance for the editor (flat → "total"
+ // + json normalisation).
+ const data = {
+ ...fresh,
+ performance: fresh.performance
+ ? shapePerformance(fresh.performance)
+ : null,
+ };
+ res.json({ success: true, data });
  } catch (error) { next(error); }
 });
 

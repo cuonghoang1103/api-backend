@@ -45,6 +45,11 @@ import { useProjectAutosave } from './useProjectAutosave';
 import OverviewTab from './OverviewTab';
 import StoryboardTab from './StoryboardTab';
 import TeleprompterTab from './TeleprompterTab';
+import ScriptTab from './ScriptTab';
+import ShotlistTab from './ShotlistTab';
+import PlatformsTab from './PlatformsTab';
+import ChecklistTab from './ChecklistTab';
+import PerformanceTab from './PerformanceTab';
 import { CONTENT_STATUS_META } from '@/lib/studio-meta';
 import type {
  ContentAffiliateProduct,
@@ -275,9 +280,50 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  />
  )}
  {activeTab === 'teleprompter' && <TeleprompterTab project={form} />}
+ {activeTab === 'script' && (
+ <ScriptTab
+ script={form.script ?? null}
+ onChange={(script) => setForm((prev) => (prev ? { ...prev, script } : prev))}
+ />
+ )}
+ {activeTab === 'shotlist' && (
+ <ShotlistTab
+ days={form.days}
+ onChange={(days) => setForm((prev) => (prev ? { ...prev, days } : prev))}
+ />
+ )}
+ {activeTab === 'platforms' && (
+ <PlatformsTab
+ platforms={form.platformPosts}
+ onChange={(platformPosts) =>
+ setForm((prev) => (prev ? { ...prev, platformPosts } : prev))
+ }
+ />
+ )}
+ {activeTab === 'checklist' && (
+ <ChecklistTab
+ items={form.checklistItems}
+ onChange={(checklistItems) =>
+ setForm((prev) => (prev ? { ...prev, checklistItems } : prev))
+ }
+ />
+ )}
+ {activeTab === 'performance' && (
+ <PerformanceTab
+ performance={form.performance}
+ onChange={(performance) =>
+ setForm((prev) => (prev ? { ...prev, performance } : prev))
+ }
+ />
+ )}
  {activeTab !== 'overview' &&
  activeTab !== 'storyboard' &&
- activeTab !== 'teleprompter' && (
+ activeTab !== 'teleprompter' &&
+ activeTab !== 'script' &&
+ activeTab !== 'shotlist' &&
+ activeTab !== 'platforms' &&
+ activeTab !== 'checklist' &&
+ activeTab !== 'performance' && (
  <ComingSoonTab
  tabId={activeTab}
  tabLabel={TABS.find((t) => t.id === activeTab)?.label ?? ''}
@@ -305,6 +351,7 @@ function buildPayload(form: ContentProject) {
  type: form.type,
  status: form.status,
  concept: form.concept,
+ script: form.script,
  mainHook: form.mainHook,
  thumbnailUrl: form.thumbnailUrl,
  ideaDate: form.ideaDate,

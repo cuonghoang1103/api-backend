@@ -206,8 +206,47 @@ export function toDateOrNull(value: unknown): Date | null {
  if (value == null || value === '') return null;
  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
  if (typeof value === 'number' || typeof value === 'string') {
-  const d = new Date(value);
+ const d = new Date(value);
  return Number.isNaN(d.getTime()) ? null : d;
  }
  return null;
+}
+
+/**
+ * Phase 7: shape `ContentPerformance` for the editor.
+ *
+ * The Prisma model uses flat `views / likes / comments / shares`
+ * column names (because that's what the DB has stored since
+ * the original schema). The editor speaks in *total* semantics
+ * (`totalViews / totalLikes / ...`) so the UI labels stay
+ * consistent regardless of which project / which page renders
+ * the metrics.
+ *
+ * We also normalise `platformMetrics` from `Json` to a plain
+ * object so the React tree can `.map` over it without worrying
+ * about Prisma's `JsonValue` type union.
+ */
+export function shapePerformance<
+ T extends {
+ views: number;
+ likes: number;
+ comments: number;
+ shares: number;
+ ctr: number | null;
+ watchTimeSec: number | null;
+ platformMetrics: unknown;
+ lessonsLearned: string | null;
+ }
+>(p: T) {
+ return {
+ ...p,
+ totalViews: p.views,
+ totalLikes: p.likes,
+ totalComments: p.comments,
+ totalShares: p.shares,
+ platformMetrics:
+ p.platformMetrics && typeof p.platformMetrics === 'object'
+ ? (p.platformMetrics as Record<string, unknown>)
+ : null,
+ };
 }

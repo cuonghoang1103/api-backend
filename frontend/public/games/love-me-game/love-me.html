@@ -95,12 +95,12 @@
   <p class="submsg" id="submsg"></p>
 
   <div class="bear" id="bear">
-    <img src="bear.gif" alt="cute bear">
+    <img src="bear-main.gif" alt="cute bear">
   </div>
 
-  <div id="celebration" style="display:none;position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:3;text-align:center;pointer-events:none;font-size:clamp(48px,12vw,80px);">
-    <div style="animation:bob 3s ease-in-out infinite">🎉</div>
-    <div style="margin-top:8px;animation:bob 3s ease-in-out 0.5s infinite">💖</div>
+  <div id="celebration" style="display:none;position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:3;text-align:center;pointer-events:none;">
+    <img src="bear-celebrate.gif" style="width:280px;max-width:70vw;display:block;margin:0 auto;" alt="celebrate bear">
+    <img src="bear-celebrate.gif" style="width:280px;max-width:70vw;display:block;margin:8px auto 0;transform:scaleX(-1);" alt="celebrate bear mirror">
   </div>
 
   <button class="no" id="no">No</button>
@@ -191,6 +191,7 @@
     noBtn.style.display='none';
     celebration.style.display='block';
     document.body.style.background='#fce4b6';
+    field.style.background='linear-gradient(180deg,#f5d5a0,#fce4b6)';
     question.textContent='I love you too! 😘';
     submsg.textContent='you just made me so happy ♡';
     submsg.classList.add('show');
@@ -208,6 +209,7 @@
     answered=false; bear.style.display='';
     celebration.style.display='none';
     document.body.style.background='#fff';
+    field.style.background='';
     question.textContent='Do you love me?'; submsg.classList.remove('show'); submsg.textContent='';
     bottom.classList.remove('done'); noBtn.style.display=''; yesBtn.style.transform='scale(1)';
     measure();

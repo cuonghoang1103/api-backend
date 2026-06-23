@@ -2,6 +2,7 @@ import { Router, Response } from 'express';
 import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { renderProjectMarkdown } from '../services/projectMarkdown.service.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -784,37 +785,46 @@ router.get('/check', authenticate, async (req, res: Response<ApiResponse>, next)
 
 // ─── GET /api/v1/admin/projects ──────────────────────────
 router.get('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
-  try {
-    const { page = 1, size = 20, keyword } = req.query;
-    const pageNum = Math.max(1, parseInt(String(page), 10));
-    const sizeNum = Math.min(100, Math.max(1, parseInt(String(size), 10)));
-    const skip = (pageNum - 1) * sizeNum;
-    const where: Record<string, unknown> = {};
-    if (keyword) {
-      where.OR = [
-        { title: { contains: String(keyword), mode: 'insensitive' } },
-        { description: { contains: String(keyword), mode: 'insensitive' } },
-      ];
-    }
-    const [projects, total] = await Promise.all([
-      prisma.project.findMany({
-        where,
-        skip,
-        take: sizeNum,
-        orderBy: { createdAt: 'desc' },
-        include: { skills: { include: { skill: true } } },
-      }),
-      prisma.project.count({ where }),
-    ]);
+ try {
+ const { page = 1, size = 20, keyword, category, difficulty, status } = req.query;
+ const pageNum = Math.max(1, parseInt(String(page), 10));
+ const sizeNum = Math.min(100, Math.max(1, parseInt(String(size), 10)));
+ const skip = (pageNum - 1) * sizeNum;
+ const where: Record<string, unknown> = {};
+ if (keyword) {
+ where.OR = [
+ { title: { contains: String(keyword), mode: 'insensitive' } },
+ { description: { contains: String(keyword), mode: 'insensitive' } },
+ ];
+ }
+ if (category) where.category = String(category);
+ if (difficulty) where.difficulty = String(difficulty);
+ if (status) where.status = String(status);
 
-    const normalizedProjects = projects.map((p) => normalizeProject(p as unknown as Record<string, unknown>));
+ const [projects, total] = await Promise.all([
+ prisma.project.findMany({
+ where,
+ skip,
+ take: sizeNum,
+ orderBy: { createdAt: 'desc' },
+ include: {
+ skills: { include: { skill: true } },
+ milestones: { orderBy: { order: 'asc' } },
+ features: { orderBy: { order: 'asc' } },
+ resources: { orderBy: { order: 'asc' } },
+ },
+ }),
+ prisma.project.count({ where }),
+ ]);
 
-    res.json({
-      success: true,
-      data: normalizedProjects,
-      pagination: { page: pageNum, limit: sizeNum, total, totalPages: Math.ceil(total / sizeNum) },
-    });
-  } catch (error) { next(error); }
+ const normalizedProjects = projects.map((p) => normalizeProject(p as unknown as Record<string, unknown>));
+
+ res.json({
+ success: true,
+ data: normalizedProjects,
+ pagination: { page: pageNum, limit: sizeNum, total, totalPages: Math.ceil(total / sizeNum) },
+ });
+ } catch (error) { next(error); }
 });
 
 function normalizeProject(project: Record<string, unknown>) {
@@ -844,103 +854,172 @@ function normalizeProject(project: Record<string, unknown>) {
     ...project,
     isFeatured,
     featured: isFeatured,
-    technologies,
-    images,
-  };
+technologies,
+ images,
+ };
 }
+
+// ─── GET /api/v1/admin/projects/:id ──────────────────────
+// Admin detail view — returns the full project with all
+// relations so the editor page can hydrate in one round-
+// trip. Unlike the public detail route this also returns
+// drafts (isPublished=false).
+router.get('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseInt(String(req.params.id), 10);
+ if (Number.isNaN(id)) throw new AppError('Invalid id', 400);
+
+ const project = await prisma.project.findUnique({
+ where: { id },
+ include: {
+ skills: { include: { skill: true } },
+ milestones: { orderBy: { order: 'asc' } },
+ features: { orderBy: { order: 'asc' } },
+ resources: { orderBy: { order: 'asc' } },
+ },
+ });
+ if (!project) throw new AppError('Project not found', 404);
+
+ const normalized = normalizeProject(project as unknown as Record<string, unknown>);
+ res.json({ success: true, data: normalized });
+ } catch (error) { next(error); }
+});
 
 // ─── POST /api/v1/admin/projects ─────────────────────────
 router.post('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
-  try {
-    const { title, description, content, thumbnailUrl, images, projectUrl, videoUrl, githubUrl, techStack, status, featured, startDate, endDate, role, duration } = req.body;
-    if (!title?.trim()) throw new AppError('Title is required', 400);
+ try {
+ const {
+ title, description, content, thumbnailUrl, images,
+ projectUrl, videoUrl, githubUrl, techStack, status,
+ featured, startDate, endDate, role, duration,
+ // Phase 2: case study fields
+ category, difficulty, bodyMdx, schemaCode, schemaLang, isPublished,
+ } = req.body;
+ if (!title?.trim()) throw new AppError('Title is required', 400);
 
-    const baseSlug = slugify(title) || `project-${Date.now()}`;
-    let slug = baseSlug;
-    let suffix = 1;
-    while (await prisma.project.findUnique({ where: { slug } })) {
-      slug = `${baseSlug}-${suffix++}`;
-    }
+ const baseSlug = slugify(title) || `project-${Date.now()}`;
+ let slug = baseSlug;
+ let suffix = 1;
+ while (await prisma.project.findUnique({ where: { slug } })) {
+ slug = `${baseSlug}-${suffix++}`;
+ }
 
-    const imagesJson = Array.isArray(images) ? JSON.stringify(images) : images || null;
-    const techStackStr = Array.isArray(techStack) ? techStack.join(', ') : (techStack || null);
+ const imagesJson = Array.isArray(images) ? JSON.stringify(images) : images || null;
+ const techStackStr = Array.isArray(techStack) ? techStack.join(', ') : (techStack || null);
 
-    const project = await prisma.project.create({
-      data: {
-        title: title.trim(),
-        slug,
-        description: description || null,
-        content: content || null,
-        thumbnailUrl: thumbnailUrl || null,
-        images: imagesJson,
-        projectUrl: projectUrl || null,
-        videoUrl: videoUrl || null,
-        githubUrl: githubUrl || null,
-        techStack: techStackStr,
-        status: status || 'COMPLETED',
-        isFeatured: Boolean(featured),
-        startDate: startDate ? new Date(startDate) : null,
-        endDate: endDate ? new Date(endDate) : null,
-        role: role || null,
-        duration: duration || null,
-      },
-      include: { skills: { include: { skill: true } } },
-    });
-    const normalized = normalizeProject(project as unknown as Record<string, unknown>);
-    res.status(201).json({ success: true, data: normalized });
-  } catch (error) { next(error); }
+ // Auto-render bodyHtml from bodyMdx on insert so the
+ // public detail page doesn't pay the cost on first read.
+ const bodyHtml = bodyMdx ? safeRender(bodyMdx) : null;
+
+ const project = await prisma.project.create({
+ data: {
+ title: title.trim(),
+ slug,
+ description: description || null,
+ content: content || null,
+ thumbnailUrl: thumbnailUrl || null,
+ images: imagesJson,
+ projectUrl: projectUrl || null,
+ videoUrl: videoUrl || null,
+ githubUrl: githubUrl || null,
+ techStack: techStackStr,
+ status: status || 'COMPLETED',
+ isFeatured: Boolean(featured),
+ startDate: startDate ? new Date(startDate) : null,
+ endDate: endDate ? new Date(endDate) : null,
+ role: role || null,
+ duration: duration || null,
+ category: category || null,
+ difficulty: difficulty || null,
+ bodyMdx: bodyMdx || null,
+ bodyHtml,
+ schemaCode: schemaCode || null,
+ schemaLang: schemaLang || null,
+ isPublished: isPublished !== undefined ? Boolean(isPublished) : true,
+ },
+ include: { skills: { include: { skill: true } } },
+ });
+ const normalized = normalizeProject(project as unknown as Record<string, unknown>);
+ res.status(201).json({ success: true, data: normalized });
+ } catch (error) { next(error); }
 });
 
 // ─── PUT /api/v1/admin/projects/:id ──────────────────────
 router.put('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
-  try {
-    const id = parseInt(req.params.id);
-    const existing = await prisma.project.findUnique({ where: { id } });
-    if (!existing) throw new AppError('Project not found', 404);
+ try {
+ const id = parseInt(req.params.id);
+ const existing = await prisma.project.findUnique({ where: { id } });
+ if (!existing) throw new AppError('Project not found', 404);
 
-    const { title, description, content, thumbnailUrl, images, projectUrl, videoUrl, githubUrl, techStack, status, featured, startDate, endDate, role, duration } = req.body;
+ const {
+ title, description, content, thumbnailUrl, images,
+ projectUrl, videoUrl, githubUrl, techStack, status,
+ featured, startDate, endDate, role, duration,
+ category, difficulty, bodyMdx, schemaCode, schemaLang, isPublished,
+ } = req.body;
 
-    let slug = existing.slug;
-    if (title && title.trim() !== existing.title) {
-      const baseSlug = slugify(title) || `project-${Date.now()}`;
-      let candidate = baseSlug;
-      let suffix = 1;
-      while (true) {
-        const conflict = await prisma.project.findFirst({ where: { slug: candidate, NOT: { id } } });
-        if (!conflict) break;
-        candidate = `${baseSlug}-${suffix++}`;
-      }
-      slug = candidate;
-    }
+ let slug = existing.slug;
+ if (title && title.trim() !== existing.title) {
+ const baseSlug = slugify(title) || `project-${Date.now()}`;
+ let candidate = baseSlug;
+ let suffix = 1;
+ while (true) {
+ const conflict = await prisma.project.findFirst({ where: { slug: candidate, NOT: { id } } });
+ if (!conflict) break;
+ candidate = `${baseSlug}-${suffix++}`;
+ }
+ slug = candidate;
+ }
 
-    const imagesJson = Array.isArray(images) ? JSON.stringify(images) : (images !== undefined ? images : existing.images);
-    const techStackStr = Array.isArray(techStack) ? techStack.join(', ') : (techStack !== undefined ? techStack : existing.techStack);
+ const imagesJson = Array.isArray(images) ? JSON.stringify(images) : (images !== undefined ? images : existing.images);
+ const techStackStr = Array.isArray(techStack) ? techStack.join(', ') : (techStack !== undefined ? techStack : existing.techStack);
 
-    const project = await prisma.project.update({
-      where: { id },
-      data: {
-        title: title?.trim() || existing.title,
-        slug,
-        description: description !== undefined ? description : existing.description,
-        content: content !== undefined ? content : existing.content,
-        thumbnailUrl: thumbnailUrl !== undefined ? thumbnailUrl : existing.thumbnailUrl,
-        images: imagesJson,
-        projectUrl: projectUrl !== undefined ? projectUrl : existing.projectUrl,
-        videoUrl: videoUrl !== undefined ? videoUrl : existing.videoUrl,
-        githubUrl: githubUrl !== undefined ? githubUrl : existing.githubUrl,
-        techStack: techStackStr,
-        status: status || existing.status,
-        isFeatured: featured !== undefined ? Boolean(featured) : existing.isFeatured,
-        startDate: startDate !== undefined ? (startDate ? new Date(startDate) : null) : existing.startDate,
-        endDate: endDate !== undefined ? (endDate ? new Date(endDate) : null) : existing.endDate,
-        role: role !== undefined ? role : existing.role,
-        duration: duration !== undefined ? duration : existing.duration,
-      },
-      include: { skills: { include: { skill: true } } },
-    });
-    const normalized = normalizeProject(project as unknown as Record<string, unknown>);
-    res.json({ success: true, data: normalized });
-  } catch (error) { next(error); }
+ // Auto re-render bodyHtml whenever bodyMdx changes (or
+ // is provided and the previous bodyHtml was empty). On
+ // a malformed doc we keep the previous cache rather than
+ // clearing it — better to show stale content than nothing.
+ let bodyHtmlUpdate: string | null | undefined = undefined;
+ if (bodyMdx !== undefined) {
+ if (bodyMdx === null || bodyMdx.trim() === '') {
+ bodyHtmlUpdate = null;
+ } else if (bodyMdx !== existing.bodyMdx || !existing.bodyHtml) {
+ bodyHtmlUpdate = safeRender(bodyMdx);
+ if (bodyHtmlUpdate === null) bodyHtmlUpdate = existing.bodyHtml;
+ }
+ }
+
+ const project = await prisma.project.update({
+ where: { id },
+ data: {
+ title: title?.trim() || existing.title,
+ slug,
+ description: description !== undefined ? description : existing.description,
+ content: content !== undefined ? content : existing.content,
+ thumbnailUrl: thumbnailUrl !== undefined ? thumbnailUrl : existing.thumbnailUrl,
+ images: imagesJson,
+ projectUrl: projectUrl !== undefined ? projectUrl : existing.projectUrl,
+ videoUrl: videoUrl !== undefined ? videoUrl : existing.videoUrl,
+ githubUrl: githubUrl !== undefined ? githubUrl : existing.githubUrl,
+ techStack: techStackStr,
+ status: status || existing.status,
+ isFeatured: featured !== undefined ? Boolean(featured) : existing.isFeatured,
+ startDate: startDate !== undefined ? (startDate ? new Date(startDate) : null) : existing.startDate,
+ endDate: endDate !== undefined ? (endDate ? new Date(endDate) : null) : existing.endDate,
+ role: role !== undefined ? role : existing.role,
+ duration: duration !== undefined ? duration : existing.duration,
+ category: category !== undefined ? category : existing.category,
+ difficulty: difficulty !== undefined ? difficulty : existing.difficulty,
+ bodyMdx: bodyMdx !== undefined ? bodyMdx : existing.bodyMdx,
+ ...(bodyHtmlUpdate !== undefined ? { bodyHtml: bodyHtmlUpdate } : {}),
+ schemaCode: schemaCode !== undefined ? schemaCode : existing.schemaCode,
+ schemaLang: schemaLang !== undefined ? schemaLang : existing.schemaLang,
+ isPublished: isPublished !== undefined ? Boolean(isPublished) : existing.isPublished,
+ },
+ include: { skills: { include: { skill: true } } },
+ });
+ const normalized = normalizeProject(project as unknown as Record<string, unknown>);
+ res.json({ success: true, data: normalized });
+ } catch (error) { next(error); }
 });
 
 // ─── DELETE /api/v1/admin/projects/:id ─────────────────
@@ -956,17 +1035,269 @@ router.delete('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (
 
 // ─── PATCH /api/v1/admin/projects/:id/toggle-featured ───
 router.patch('/projects/:id/toggle-featured', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
-  try {
-    const id = parseInt(req.params.id);
-    const existing = await prisma.project.findUnique({ where: { id } });
-    if (!existing) throw new AppError('Project not found', 404);
-    const project = await prisma.project.update({
-      where: { id },
-      data: { isFeatured: !existing.isFeatured },
-    });
-    const normalized = normalizeProject(project as unknown as Record<string, unknown>);
-    res.json({ success: true, data: normalized });
-  } catch (error) { next(error); }
+ try {
+ const id = parseInt(req.params.id);
+ const existing = await prisma.project.findUnique({ where: { id } });
+ if (!existing) throw new AppError('Project not found', 404);
+ const project = await prisma.project.update({
+ where: { id },
+ data: { isFeatured: !existing.isFeatured },
+ });
+ const normalized = normalizeProject(project as unknown as Record<string, unknown>);
+ res.json({ success: true, data: normalized });
+ } catch (error) { next(error); }
+});
+
+// ────────────────────────────────────────────────────────────
+// Phase 2 — Case study child entities
+// ────────────────────────────────────────────────────────────
+// Milestones / Features / Resources each have a full CRUD
+// surface (list, create, update, delete). All routes are
+// admin-only and validate :id is numeric + the parent
+// project exists before touching anything.
+
+// ─── Helper: render-safe wrapper ───────────────────────────
+// Wraps renderProjectMarkdown so a single broken document
+// can't take down the whole write path. Returns null on
+// failure so the caller can decide whether to keep the
+// previous cache or null it out.
+function safeRender(mdx: string): string | null {
+ try {
+ return renderProjectMarkdown(mdx);
+ } catch (err) {
+ console.error('[admin] renderProjectMarkdown failed:', err);
+ return null;
+ }
+}
+
+// ─── Helper: parseInt id with NaN check ────────────────────
+function parseId(raw: string): number {
+ const id = parseInt(raw, 10);
+ if (Number.isNaN(id)) throw new AppError('Invalid id', 400);
+ return id;
+}
+
+// ─── Helper: assert project exists ─────────────────────────
+async function assertProject(id: number): Promise<void> {
+ const exists = await prisma.project.findUnique({ where: { id }, select: { id: true } });
+ if (!exists) throw new AppError('Project not found', 404);
+}
+
+// ─── POST /api/v1/admin/projects/:id/render ───────────────
+// Force a re-render of bodyHtml from bodyMdx. Used after
+// an editor save that bypassed the auto-render path, or to
+// recover from a corrupted cache.
+router.post('/projects/:id/render', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const existing = await prisma.project.findUnique({ where: { id } });
+ if (!existing) throw new AppError('Project not found', 404);
+ if (!existing.bodyMdx) throw new AppError('Project has no bodyMdx to render', 400);
+
+ const html = safeRender(existing.bodyMdx);
+ if (html === null) throw new AppError('Render failed; check bodyMdx', 500);
+ await prisma.project.update({ where: { id }, data: { bodyHtml: html } });
+ res.json({ success: true, data: { bodyHtml: html } });
+ } catch (error) { next(error); }
+});
+
+// ─── MILESTONES CRUD ─────────────────────────────────────
+router.get('/projects/:id/milestones', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ await assertProject(id);
+ const items = await prisma.projectMilestone.findMany({
+ where: { projectId: id },
+ orderBy: { order: 'asc' },
+ });
+ res.json({ success: true, data: items });
+ } catch (error) { next(error); }
+});
+
+router.post('/projects/:id/milestones', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ await assertProject(id);
+ const { phase, title, description, date, imageUrl, order } = req.body;
+ if (!phase?.trim()) throw new AppError('phase is required', 400);
+ if (!title?.trim()) throw new AppError('title is required', 400);
+ const created = await prisma.projectMilestone.create({
+ data: {
+ projectId: id,
+ phase: phase.trim(),
+ title: title.trim(),
+ description: description || null,
+ date: date ? new Date(date) : null,
+ imageUrl: imageUrl || null,
+ order: typeof order === 'number' ? order : 0,
+ },
+ });
+ res.status(201).json({ success: true, data: created });
+ } catch (error) { next(error); }
+});
+
+router.put('/projects/:id/milestones/:mid', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const mid = parseId(req.params.mid);
+ const existing = await prisma.projectMilestone.findUnique({ where: { id: mid } });
+ if (!existing || existing.projectId !== id) throw new AppError('Milestone not found', 404);
+ const { phase, title, description, date, imageUrl, order } = req.body;
+ const updated = await prisma.projectMilestone.update({
+ where: { id: mid },
+ data: {
+ phase: phase ?? existing.phase,
+ title: title ?? existing.title,
+ description: description !== undefined ? description : existing.description,
+ date: date !== undefined ? (date ? new Date(date) : null) : existing.date,
+ imageUrl: imageUrl !== undefined ? imageUrl : existing.imageUrl,
+ order: typeof order === 'number' ? order : existing.order,
+ },
+ });
+ res.json({ success: true, data: updated });
+ } catch (error) { next(error); }
+});
+
+router.delete('/projects/:id/milestones/:mid', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const mid = parseId(req.params.mid);
+ const existing = await prisma.projectMilestone.findUnique({ where: { id: mid } });
+ if (!existing || existing.projectId !== id) throw new AppError('Milestone not found', 404);
+ await prisma.projectMilestone.delete({ where: { id: mid } });
+ res.json({ success: true, message: 'Deleted' });
+ } catch (error) { next(error); }
+});
+
+// ─── FEATURES CRUD ────────────────────────────────────────
+router.get('/projects/:id/features', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ await assertProject(id);
+ const items = await prisma.projectFeature.findMany({
+ where: { projectId: id },
+ orderBy: { order: 'asc' },
+ });
+ res.json({ success: true, data: items });
+ } catch (error) { next(error); }
+});
+
+router.post('/projects/:id/features', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ await assertProject(id);
+ const { title, description, status, order } = req.body;
+ if (!title?.trim()) throw new AppError('title is required', 400);
+ const created = await prisma.projectFeature.create({
+ data: {
+ projectId: id,
+ title: title.trim(),
+ description: description || null,
+ status: status || 'PLANNED',
+ order: typeof order === 'number' ? order : 0,
+ },
+ });
+ res.status(201).json({ success: true, data: created });
+ } catch (error) { next(error); }
+});
+
+router.put('/projects/:id/features/:fid', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const fid = parseId(req.params.fid);
+ const existing = await prisma.projectFeature.findUnique({ where: { id: fid } });
+ if (!existing || existing.projectId !== id) throw new AppError('Feature not found', 404);
+ const { title, description, status, order } = req.body;
+ const updated = await prisma.projectFeature.update({
+ where: { id: fid },
+ data: {
+ title: title ?? existing.title,
+ description: description !== undefined ? description : existing.description,
+ status: status ?? existing.status,
+ order: typeof order === 'number' ? order : existing.order,
+ },
+ });
+ res.json({ success: true, data: updated });
+ } catch (error) { next(error); }
+});
+
+router.delete('/projects/:id/features/:fid', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const fid = parseId(req.params.fid);
+ const existing = await prisma.projectFeature.findUnique({ where: { id: fid } });
+ if (!existing || existing.projectId !== id) throw new AppError('Feature not found', 404);
+ await prisma.projectFeature.delete({ where: { id: fid } });
+ res.json({ success: true, message: 'Deleted' });
+ } catch (error) { next(error); }
+});
+
+// ─── RESOURCES CRUD ───────────────────────────────────────
+router.get('/projects/:id/resources', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ await assertProject(id);
+ const items = await prisma.projectResource.findMany({
+ where: { projectId: id },
+ orderBy: { order: 'asc' },
+ });
+ res.json({ success: true, data: items });
+ } catch (error) { next(error); }
+});
+
+router.post('/projects/:id/resources', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ await assertProject(id);
+ const { title, url, type, fileSize, description, order } = req.body;
+ if (!title?.trim()) throw new AppError('title is required', 400);
+ if (!url?.trim()) throw new AppError('url is required', 400);
+ const created = await prisma.projectResource.create({
+ data: {
+ projectId: id,
+ title: title.trim(),
+ url: url.trim(),
+ type: type || 'LINK',
+ fileSize: typeof fileSize === 'number' ? fileSize : null,
+ description: description || null,
+ order: typeof order === 'number' ? order : 0,
+ },
+ });
+ res.status(201).json({ success: true, data: created });
+ } catch (error) { next(error); }
+});
+
+router.put('/projects/:id/resources/:rid', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const rid = parseId(req.params.rid);
+ const existing = await prisma.projectResource.findUnique({ where: { id: rid } });
+ if (!existing || existing.projectId !== id) throw new AppError('Resource not found', 404);
+ const { title, url, type, fileSize, description, order } = req.body;
+ const updated = await prisma.projectResource.update({
+ where: { id: rid },
+ data: {
+ title: title ?? existing.title,
+ url: url ?? existing.url,
+ type: type ?? existing.type,
+ fileSize: fileSize !== undefined ? (typeof fileSize === 'number' ? fileSize : null) : existing.fileSize,
+ description: description !== undefined ? description : existing.description,
+ order: typeof order === 'number' ? order : existing.order,
+ },
+ });
+ res.json({ success: true, data: updated });
+ } catch (error) { next(error); }
+});
+
+router.delete('/projects/:id/resources/:rid', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const rid = parseId(req.params.rid);
+ const existing = await prisma.projectResource.findUnique({ where: { id: rid } });
+ if (!existing || existing.projectId !== id) throw new AppError('Resource not found', 404);
+ await prisma.projectResource.delete({ where: { id: rid } });
+ res.json({ success: true, message: 'Deleted' });
+ } catch (error) { next(error); }
 });
 
 export default router;

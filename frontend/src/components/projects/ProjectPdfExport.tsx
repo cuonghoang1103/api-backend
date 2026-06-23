@@ -13,6 +13,17 @@
 // avoid blocking the UI: PDF generation runs synchronously
 // inside jspdf, so the button briefly shows a "Đang tạo…"
 // state before the file is downloaded.
+//
+// ─── Font: Vietnamese support ────────────────────────────────
+//
+// jspdf's built-in fonts (Helvetica, Times, Courier) only
+// cover Latin-1, so a case study with diacritics like
+// "Vấn đề" or "Giải pháp" would render as garbage. We
+// embed a subset of Noto Sans (45KB on disk) that covers
+// ASCII + Latin Extended A/B + common currency symbols,
+// which is enough for Vietnamese case studies. The font
+// is registered on first export and cached for subsequent
+// calls in the same session.
 
 'use client';
 
@@ -20,12 +31,38 @@ import { useState } from 'react';
 import jsPDF from 'jspdf';
 import { FileDown, Loader2 } from 'lucide-react';
 import type { Project } from '@/types';
+import { NOTO_SANS_VI_BASE64 } from '@/lib/fonts/notoSansVi';
 
 interface Props {
  project: Project;
 }
 
 const labelStatus = (s: string) => s.charAt(0) + s.slice(1).toLowerCase();
+
+// ─── Font registration cache ─────────────────────────────────
+// jspdf's `addFileToVFS` + `addFont` is somewhat expensive
+// (it decodes the base64 and parses the TTF tables) so we
+// do it once per session and reuse the registered name
+// afterwards. Subsequent exports skip registration entirely.
+let VI_FONT_REGISTERED = false;
+const VI_FONT_NAME = 'NotoSansVI';
+
+function ensureVietnameseFont(doc: jsPDF): string {
+ if (!VI_FONT_REGISTERED) {
+ doc.addFileToVFS(VI_FONT_NAME + '.ttf', NOTO_SANS_VI_BASE64);
+ // Register the same TTF under three style aliases
+ // (normal, bold, italic). jspdf picks the style-specific
+ // font when setFont is called, but since we only ship
+ // Regular weight, all three render identically. The point
+ // is that setFont(VI, 'bold') no longer falls back to
+ // Helvetica, which would corrupt diacritics.
+ doc.addFont(VI_FONT_NAME + '.ttf', VI_FONT_NAME, 'normal');
+ doc.addFont(VI_FONT_NAME + '.ttf', VI_FONT_NAME, 'bold');
+ doc.addFont(VI_FONT_NAME + '.ttf', VI_FONT_NAME, 'italic');
+ VI_FONT_REGISTERED = true;
+ }
+ return VI_FONT_NAME;
+}
 
 /**
  * Convert markdown to a list of printable lines.
@@ -115,6 +152,13 @@ export default function ProjectPdfExport({ project }: Props) {
 
  try {
  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+ // Register the Vietnamese-capable font BEFORE any text
+ // is drawn. The font is reused for the entire document
+ // (title, description, body, footer) so the Vietnamese
+ // diacritics render correctly throughout.
+ const FONT = ensureVietnameseFont(doc);
+ doc.setFont(FONT, 'normal');
+
  const pageWidth = doc.internal.pageSize.getWidth();
  const pageHeight = doc.internal.pageSize.getHeight();
  const margin = 15;
@@ -122,7 +166,7 @@ export default function ProjectPdfExport({ project }: Props) {
  let y = margin;
 
  // ── Title ─────────────────────────────────────────────
- doc.setFont('helvetica', 'bold');
+ doc.setFont(FONT, 'bold');
  doc.setFontSize(20);
  const titleLines = doc.splitTextToSize(project.title, contentWidth);
  doc.text(titleLines, margin, y);
@@ -130,7 +174,7 @@ export default function ProjectPdfExport({ project }: Props) {
 
  // ── Description ───────────────────────────────────────
  if (project.description) {
- doc.setFont('helvetica', 'normal');
+ doc.setFont(FONT, 'normal');
  doc.setFontSize(11);
  doc.setTextColor(80);
  const descLines = doc.splitTextToSize(project.description, contentWidth);
@@ -140,7 +184,7 @@ export default function ProjectPdfExport({ project }: Props) {
  }
 
  // ── Meta line ─────────────────────────────────────────
- doc.setFont('helvetica', 'italic');
+ doc.setFont(FONT, 'italic');
  doc.setFontSize(9);
  doc.setTextColor(120);
  const metaBits: string[] = [];
@@ -159,20 +203,20 @@ export default function ProjectPdfExport({ project }: Props) {
  // ── Milestones ────────────────────────────────────────
  if (project.milestones && project.milestones.length) {
  y += 4;
- doc.setFont('helvetica', 'bold');
+ doc.setFont(FONT, 'bold');
  doc.setFontSize(13);
  doc.text('Milestones', margin, y);
  y += 6;
 
- doc.setFont('helvetica', 'normal');
+ doc.setFont(FONT, 'normal');
  doc.setFontSize(10);
  for (const m of project.milestones) {
  y = checkPage(doc, y, pageHeight, margin);
- doc.setFont('helvetica', 'bold');
+ doc.setFont(FONT, 'bold');
  const head = `${m.title}${m.phase ? ` — ${m.phase}` : ''}${m.date ? ` (${m.date})` : ''}`;
  doc.text(doc.splitTextToSize(head, contentWidth), margin, y);
  y += 5;
- doc.setFont('helvetica', 'normal');
+ doc.setFont(FONT, 'normal');
  if (m.description) {
  const dl = doc.splitTextToSize(m.description, contentWidth - 4);
  doc.text(dl, margin + 4, y);
@@ -186,12 +230,12 @@ export default function ProjectPdfExport({ project }: Props) {
  if (project.features && project.features.length) {
  y += 4;
  y = checkPage(doc, y, pageHeight, margin);
- doc.setFont('helvetica', 'bold');
+ doc.setFont(FONT, 'bold');
  doc.setFontSize(13);
  doc.text('Features', margin, y);
  y += 6;
 
- doc.setFont('helvetica', 'normal');
+ doc.setFont(FONT, 'normal');
  doc.setFontSize(10);
  for (const f of project.features) {
  y = checkPage(doc, y, pageHeight, margin);
@@ -207,12 +251,12 @@ export default function ProjectPdfExport({ project }: Props) {
  if (project.resources && project.resources.length) {
  y += 4;
  y = checkPage(doc, y, pageHeight, margin);
- doc.setFont('helvetica', 'bold');
+ doc.setFont(FONT, 'bold');
  doc.setFontSize(13);
  doc.text('Resources', margin, y);
  y += 6;
 
- doc.setFont('helvetica', 'normal');
+ doc.setFont(FONT, 'normal');
  doc.setFontSize(10);
  for (const r of project.resources) {
  y = checkPage(doc, y, pageHeight, margin);
@@ -228,7 +272,7 @@ export default function ProjectPdfExport({ project }: Props) {
  if (project.bodyMdx && project.bodyMdx.trim()) {
  y += 6;
  y = checkPage(doc, y, pageHeight, margin);
- doc.setFont('helvetica', 'bold');
+ doc.setFont(FONT, 'bold');
  doc.setFontSize(14);
  doc.text('Case study', margin, y);
  y += 7;
@@ -237,13 +281,13 @@ export default function ProjectPdfExport({ project }: Props) {
  doc.setFontSize(10);
  for (const b of blocks) {
  // Style switch
- if (b.style === 'h1') { doc.setFont('helvetica', 'bold'); doc.setFontSize(15); }
- else if (b.style === 'h2') { doc.setFont('helvetica', 'bold'); doc.setFontSize(13); }
- else if (b.style === 'h3') { doc.setFont('helvetica', 'bold'); doc.setFontSize(11); }
- else if (b.style === 'quote') { doc.setFont('helvetica', 'italic'); doc.setTextColor(80); }
- else if (b.style === 'code') { doc.setFont('courier', 'normal'); doc.setFontSize(9); doc.setTextColor(60); }
- else if (b.style === 'li') { doc.setFont('helvetica', 'normal'); doc.setTextColor(0); }
- else { doc.setFont('helvetica', 'normal'); doc.setTextColor(0); }
+ if (b.style === 'h1') { doc.setFont(FONT, 'bold'); doc.setFontSize(15); }
+ else if (b.style === 'h2') { doc.setFont(FONT, 'bold'); doc.setFontSize(13); }
+ else if (b.style === 'h3') { doc.setFont(FONT, 'bold'); doc.setFontSize(11); }
+ else if (b.style === 'quote') { doc.setFont(FONT, 'italic'); doc.setTextColor(80); }
+ else if (b.style === 'code') { doc.setFont(FONT, 'normal'); doc.setFontSize(9); doc.setTextColor(60); }
+ else if (b.style === 'li') { doc.setFont(FONT, 'normal'); doc.setTextColor(0); }
+ else { doc.setFont(FONT, 'normal'); doc.setTextColor(0); }
 
  const tl = doc.splitTextToSize(b.text, contentWidth);
  for (const line of tl) {
@@ -261,7 +305,7 @@ export default function ProjectPdfExport({ project }: Props) {
  const pageCount = doc.getNumberOfPages();
  for (let i = 1; i <= pageCount; i++) {
  doc.setPage(i);
- doc.setFont('helvetica', 'italic');
+ doc.setFont(FONT, 'italic');
  doc.setFontSize(8);
  doc.setTextColor(150);
  doc.text(

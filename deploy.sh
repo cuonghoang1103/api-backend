@@ -201,24 +201,39 @@ done
 # ── Step 2: Atomic build & restart (zero-downtime) ────────────────
 # `up -d --build` builds the new image, then atomically swaps the
 # running container — no downtime window unlike `down && up`.
+# `--force-recreate` ensures containers with the same name but a
+# stale image get torn down before the new one is created
+# (otherwise Compose refuses to bind a duplicate container_name).
 # `--remove-orphans` cleans up containers for removed services.
 info "Building images and restarting containers (zero-downtime)..."
-$DC up -d --build --remove-orphans
+$DC up -d --build --force-recreate --remove-orphans
 ok "Containers built and swapped"
 
-# ── Step 3: Database schema sync ──────────────────────────────────
-info "Waiting 10s for backend to initialise before Prisma push..."
+# ── Step 3: Database schema sync (migration deploy) ──────────────
+# We use `migrate deploy` (not `db push`) so that:
+# 1. Raw SQL in our migration files (e.g. generated tsvector
+# columns, GIN indexes, triggers) is applied — `db push`
+# only knows about schema.prisma and silently skips them.
+# 2. Every applied migration is recorded in
+# `_prisma_migrations`, so subsequent deploys are idempotent
+# and we can audit which DBs are on which version.
+# 3. The `--accept-data-loss` flag from `db push` is gone —
+# we never want to silently drop columns on a live DB.
+info "Waiting 10s for backend to initialise before Prisma migrate..."
 sleep 10
 
 PRISMA_OUT=$($DC exec -T backend sh -c \
-    "npx prisma db push --accept-data-loss --skip-generate" 2>&1) || true
-if echo "$PRISMA_OUT" | grep -qi "already in sync"; then
-    ok "Database schema already in sync"
+ "npx prisma migrate deploy" 2>&1) || true
+if echo "$PRISMA_OUT" | grep -qi "already in sync\|no pending migrations"; then
+ ok "Database schema already in sync"
 elif echo "$PRISMA_OUT" | grep -qi "error"; then
-    warn "Prisma push had errors — see /tmp/prisma.log"
-    echo "$PRISMA_OUT" > /tmp/prisma.log
+ warn "Prisma migrate had errors — see /tmp/prisma.log"
+ echo "$PRISMA_OUT" > /tmp/prisma.log
 else
-    ok "Database schema updated"
+ ok "Database schema migrated"
+ # Print the tail of the migrate output so we can see which
+ # migrations were applied this run.
+ echo "$PRISMA_OUT" | tail -5 | sed 's/^/ /'
 fi
 
 # ── Step 4: Health checks ─────────────────────────────────────────

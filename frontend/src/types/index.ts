@@ -865,7 +865,7 @@ export interface ContentAffiliateProduct {
  order: number;
 }
 
-/** Single scene within a production day. */
+ /** Single scene within a production day. */
 export interface ContentScene {
  id?: number;
  sceneNumber: number;
@@ -875,7 +875,10 @@ export interface ContentScene {
  action: string | null;
  cameraAngle: string | null;
  shotType: ShotType | null;
- props: string[];
+ // Server schema: VarChar(300) — a single string. We
+ // accept either a list (chip-style input) or a string
+ // (free-form text) on the client; the API normalises.
+ props: string | null;
  brollNotes: string | null;
  editingNotes: string | null;
  durationSeconds: number | null;
@@ -932,7 +935,11 @@ export interface ContentProject {
  tags: string[];
  referenceLinks: ContentReferenceLink[] | null;
  days: ContentProductionDay[];
- products: ContentAffiliateProduct[];
+ // Note: the Prisma relation is named `affiliateProducts`
+ // (so the JSON we get from the API uses that key) but
+ // the data model is still "a list of products to plug /
+ // review". We use the same field name on the wire.
+ affiliateProducts: ContentAffiliateProduct[];
  platformPosts: ContentPlatformPost[];
  checklistItems: ContentChecklistItem[];
  performance: ContentPerformance | null;
@@ -955,7 +962,7 @@ export interface ContentProjectSummary {
  updatedAt: string;
  _count?: {
  days: number;
- products: number;
+ affiliateProducts: number;
  platformPosts: number;
  checklistItems: number;
  };
@@ -983,7 +990,7 @@ export interface ContentProjectCreate {
  */
 export interface ContentProjectUpdate extends Partial<ContentProjectCreate> {
  days?: ContentProductionDay[];
- products?: ContentAffiliateProduct[];
+ affiliateProducts?: ContentAffiliateProduct[];
  platformPosts?: ContentPlatformPost[];
  checklistItems?: ContentChecklistItem[];
 }

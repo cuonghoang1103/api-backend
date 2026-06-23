@@ -1,35 +1,63 @@
 'use client';
 
-// /creator/pipeline — Kanban view (Phase 4 will build the
-// real DnD implementation). Phase 3 ships a placeholder
-// so the topbar nav doesn't 404.
+// /creator/pipeline — Kanban board for moving projects
+// across production stages. The DnD logic + status
+// updates live in PipelineBoard so this page stays a
+// thin layout wrapper.
 
-import { motion } from 'framer-motion';
-import { KanbanSquare, Construction } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+import { KanbanSquare } from 'lucide-react';
+import PipelineBoard from '@/components/studio/kanban/PipelineBoard';
 
-export default function PipelinePage() {
+function PipelineContent() {
+ const search = useSearchParams();
+ const focus = search.get('status');
  return (
- <div className="px-4 sm:px-6 lg:px-8 py-12 max-w-4xl mx-auto">
- <motion.div
- initial={{ opacity: 0, y: 12 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ duration: 0.4 }}
- className="text-center"
- >
- <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-studio-500/15 ring-1 ring-studio-500/30 mb-4">
- <KanbanSquare className="w-7 h-7 text-studio-400" />
+ <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-[100rem] mx-auto">
+ {/* Page header — collapses on mobile */}
+ <div className="flex items-center justify-between mb-4">
+ <div className="flex items-center gap-2.5">
+ <div className="w-9 h-9 rounded-xl bg-studio-500/15 ring-1 ring-studio-500/30 flex items-center justify-center">
+ <KanbanSquare className="w-5 h-5 text-studio-400" />
  </div>
- <h1 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary">
+ <div>
+ <h1 className="font-heading text-2xl font-bold text-text-primary">
  Pipeline
  </h1>
- <p className="mt-2 text-text-secondary text-sm">
- Drag cards across the production stages.
+ <p className="text-xs text-text-muted">
+ {focus
+ ? `Focusing on ${focus.toLowerCase()} — drag cards across to update status.`
+ : 'Drag a card across the columns to update its status.'}
  </p>
- <div className="mt-8 inline-flex items-center gap-2 px-3 h-9 rounded-full bg-studio-500/10 text-studio-300 text-xs font-semibold uppercase tracking-wider">
- <Construction className="w-3.5 h-3.5" />
- Arriving in Phase 4
  </div>
- </motion.div>
  </div>
+ </div>
+
+ <PipelineBoard />
+ </div>
+ );
+}
+
+export default function PipelinePage() {
+ // useSearchParams in a client component requires a
+ // Suspense boundary (Next.js 14 requirement for static
+ // rendering). The fallback just shows the same shell.
+ return (
+ <Suspense fallback={
+ <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-[100rem] mx-auto">
+ <div className="flex items-center gap-2.5 mb-4">
+ <div className="w-9 h-9 rounded-xl bg-studio-500/15 ring-1 ring-studio-500/30 flex items-center justify-center">
+ <KanbanSquare className="w-5 h-5 text-studio-400" />
+ </div>
+ <div>
+ <h1 className="font-heading text-2xl font-bold text-text-primary">Pipeline</h1>
+ <p className="text-xs text-text-muted">Loading…</p>
+ </div>
+ </div>
+ </div>
+ }>
+ <PipelineContent />
+ </Suspense>
  );
 }

@@ -200,9 +200,9 @@ export function setActivityFilter(filter: ActivityType | null): void {
  * so the page still renders something usable.
  */
 export async function hydrateFromServer(userId: string): Promise<void> {
-  // Flush the current user's mirror before swapping so the
-  // data we just wrote doesn't get clobbered by a stale read.
-  if (typeof window !== 'undefined' && currentState.userId !== 'guest') {
+ // Flush the current user's mirror before swapping so the
+ // data we just wrote doesn't get clobbered by a stale read.
+ if (typeof window !== 'undefined' && currentState.userId !== 'guest') {
     try {
       localStorage.setItem(mirrorKey(currentState.userId), JSON.stringify({
         level: currentState.level,
@@ -216,14 +216,14 @@ export async function hydrateFromServer(userId: string): Promise<void> {
     } catch { /* ignore */ }
   }
 
-  try {
-    const res = await dashboardApi.get();
-    if (res.data?.data) {
-      currentState = snapshotToState(res.data.data, userId);
-      notify();
-      return;
-    }
-  } catch (err) {
+try {
+ const res = await dashboardApi.get();
+ if (res.data?.data) {
+ currentState = snapshotToState(res.data.data, userId);
+ notify();
+ return;
+ }
+ } catch (err) {
     // Network error / 401 / 5xx — fall through to mirror.
     console.warn('[Dashboard] hydrateFromServer failed, using local mirror', err);
   }

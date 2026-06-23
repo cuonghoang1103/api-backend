@@ -2447,6 +2447,9 @@ model ContentProject {
  platformPosts PlatformPost[]
  checklistItems ChecklistItem[]
  performance ContentPerformance?
+ // Reverse side: ideas that were promoted into this project.
+ // Nullable, indexed so we can list "which ideas became this?".
+ promotedFromIdeas ContentIdea[]
 
  @@index([status, type], map: "idx_content_projects_status_type")
  @@index([filmDate], map: "idx_content_projects_film_date")
@@ -2583,4 +2586,60 @@ model ContentPerformance {
  contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
 
  @@map("content_performance")
+}
+
+// ─── ContentIdea (Idea Bank) ─────────────────────────────────────
+// Lightweight capture model: titles + a one-liner hook + free-form
+// tags. Lives separately from ContentProject so the idea list stays
+// fast (no JOINs) and the /creator/ideas page can show a different
+// shape (card grid, capture-first form). Promoting an idea creates
+// a new ContentProject with title/concept/tags copied over and
+// links back via promotedToProjectId.
+enum IdeaStatus {
+ CAPTURED // just dumped, not yet refined
+ REFINED // fleshed out, ready to commit to a project
+ PROMOTED // turned into a ContentProject
+ ARCHIVED // explicitly killed
+
+ @@map("idea_status")
+}
+
+model ContentIdea {
+ id Int @id @default(autoincrement())
+ // Short title (≤140 chars). The hero field of the card.
+ title String @db.VarChar(140)
+ // Optional one-liner hook (≤280 chars) — teaser for the
+ // eventual video.
+ hook String? @db.VarChar(280)
+ // Free-form notes (any length). Why is this interesting?
+ // What format? Who is the audience? This is the "long text"
+ // of an idea, not a script.
+ notes String? @db.Text
+ // 1-5 personal score. Lets the user rank what to film next.
+ // Optional: lots of users will just dump ideas without a
+ // score, so this stays nullable.
+ score Int? @db.SmallInt
+ // Detected/favourite ContentType — used as a default when
+ // the idea is promoted. Nullable so a raw idea can be just
+ // "a thing I want to make" without committing to a format.
+ suggestedType ContentType? @map("suggested_type")
+ // Lifecycle status. CAPTURED is the default.
+ status IdeaStatus @default(CAPTURED)
+ // When the idea is promoted, points back at the resulting
+ // ContentProject (nullable + onDelete: SetNull so deleting
+ // the project doesn't delete the idea — the user can re-
+ // promote it later).
+ promotedToProjectId Int? @map("promoted_to_project_id")
+ promotedAt DateTime? @map("promoted_at")
+ // Free-form tags (same convention as ContentProject.tags).
+ tags String[] @default([])
+ createdAt DateTime @default(now()) @map("created_at")
+ updatedAt DateTime @updatedAt @map("updated_at")
+
+ promotedToProject ContentProject? @relation(fields: [promotedToProjectId], references: [id], onDelete: SetNull)
+
+ @@index([status], map: "idx_content_ideas_status")
+ @@index([score], map: "idx_content_ideas_score")
+ @@index([createdAt(sort: Desc)], map: "idx_content_ideas_created_at")
+ @@map("content_ideas")
 }

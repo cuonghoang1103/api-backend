@@ -19,11 +19,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { contentApi, type ContentListParams } from '@/lib/api';
 import type {
+ ContentIdea,
+ ContentIdeaCreate,
+ ContentIdeaUpdate,
  ContentProject,
  ContentProjectCreate,
  ContentProjectSummary,
  ContentProjectUpdate,
  ContentStatus,
+ IdeaListParams,
 } from '@/types';
 
 // ─── Query Keys ─────────────────────────────────────────────────────────────
@@ -173,4 +177,106 @@ export function useSetContentDetail() {
  return (id: number, project: ContentProject) => {
  qc.setQueryData(contentKeys.detail(id), project);
  };
+}
+
+// ============================================================
+// Phase 5: Idea Bank hooks
+// ============================================================
+// Each query/mutation mirrors the project hook shape so the
+// `/creator/ideas` page can plug them in directly. We keep
+// a separate `ideaKeys` namespace so invalidations don't
+// accidentally nuke the project list (and vice versa).
+
+export const ideaKeys = {
+ all: ['content-ideas'] as const,
+ list: (params?: IdeaListParams) => [...ideaKeys.all, 'list', params ?? {}] as const,
+ detail: (id: number) => [...ideaKeys.all, 'detail', id] as const,
+};
+
+export function useContentIdeas(params?: IdeaListParams) {
+ return useQuery({
+ queryKey: ideaKeys.list(params),
+ queryFn: () =>
+ contentApi.ideas.list(params).then((r) => r.data.data),
+ staleTime: 5 * 60_000,
+ });
+}
+
+export function useContentIdea(id: number | null) {
+ return useQuery({
+ enabled: id !== null,
+ queryKey: ideaKeys.detail(id ?? -1),
+ queryFn: () =>
+ contentApi.ideas.get(id as number).then((r) => r.data.data),
+ staleTime: 5 * 60_000,
+ });
+}
+
+export function useCreateContentIdea() {
+ const qc = useQueryClient();
+ return useMutation({
+ mutationFn: (payload: ContentIdeaCreate) =>
+ contentApi.ideas.create(payload),
+ onSuccess: () => {
+ qc.invalidateQueries({ queryKey: ideaKeys.all, refetchType: 'all' });
+ },
+ });
+}
+
+export function useUpdateContentIdea() {
+ const qc = useQueryClient();
+ return useMutation({
+ mutationFn: ({ id, payload }: { id: number; payload: ContentIdeaUpdate }) =>
+ contentApi.ideas.update(id, payload),
+ // Optimistic update of the list cache so the UI
+ // reflects the change instantly. On error we roll
+ // back to the previous value.
+ onMutate: async ({ id, payload }) => {
+ await qc.cancelQueries({ queryKey: ideaKeys.all });
+ const prevLists = qc.getQueriesData<{
+ items: ContentIdea[];
+ total: number;
+ }>({ queryKey: ideaKeys.all });
+ prevLists.forEach(([key, snapshot]) => {
+ if (!snapshot?.items) return;
+ qc.setQueryData<{ items: ContentIdea[]; total: number }>(key, {
+ total: snapshot.total,
+ items: snapshot.items.map((i) => (i.id === id ? { ...i, ...payload } : i)),
+ });
+ });
+ return { prevLists };
+ },
+ onError: (_err, _vars, ctx) => {
+ ctx?.prevLists?.forEach(([key, snapshot]) => {
+ qc.setQueryData(key, snapshot);
+ });
+ },
+ onSettled: () => {
+ qc.invalidateQueries({ queryKey: ideaKeys.all, refetchType: 'all' });
+ },
+ });
+}
+
+export function useDeleteContentIdea() {
+ const qc = useQueryClient();
+ return useMutation({
+ mutationFn: (id: number) => contentApi.ideas.remove(id),
+ onSuccess: () => {
+ qc.invalidateQueries({ queryKey: ideaKeys.all, refetchType: 'all' });
+ },
+ });
+}
+
+export function usePromoteContentIdea() {
+ const qc = useQueryClient();
+ return useMutation({
+ mutationFn: (id: number) => contentApi.ideas.promote(id),
+ onSuccess: () => {
+ // The promote call creates a project, so the
+ // project list cache is now stale too. Invalidate
+ // both namespaces.
+ qc.invalidateQueries({ queryKey: ideaKeys.all, refetchType: 'all' });
+ qc.invalidateQueries({ queryKey: contentKeys.all, refetchType: 'all' });
+ },
+ });
 }

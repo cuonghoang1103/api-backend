@@ -15,6 +15,7 @@ import type {
  ShotType,
  ContentPlatform,
  ChecklistPhase,
+ IdeaStatus,
 } from '@/types';
 
 // ─── Status meta ────────────────────────────────────────────────────────────
@@ -143,4 +144,18 @@ export const CHECKLIST_PHASE_META: Record<ChecklistPhase, { label: string; color
  PRODUCTION: { label: 'Production', color: '#f59e0b' },
  POST: { label: 'Post-production', color: '#a855f7' },
  PUBLISH: { label: 'Publish', color: '#10b981' },
+};
+
+// ─── Idea Status meta (Phase 5) ────────────────────────────────────────────
+// The four idea lifecycle stages. Color-coded to feel
+// distinct from project status (slightly lighter
+// palette — ideas are softer than committed projects).
+export const IDEA_STATUS_META: Record<
+ IdeaStatus,
+ { label: string; color: string; tint: string }
+> = {
+ CAPTURED: { label: 'Captured', color: '#fbbf24', tint: 'rgba(251, 191, 36, 0.12)' },
+ REFINED: { label: 'Refined', color: '#60a5fa', tint: 'rgba(96, 165, 250, 0.12)' },
+ PROMOTED: { label: 'Promoted', color: '#10b981', tint: 'rgba(16, 185, 129, 0.12)' },
+ ARCHIVED: { label: 'Archived', color: '#64748b', tint: 'rgba(100, 116, 139, 0.12)' },
 };

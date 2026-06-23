@@ -995,5 +995,61 @@ export interface ContentProjectUpdate extends Partial<ContentProjectCreate> {
  checklistItems?: ContentChecklistItem[];
 }
 
+// === IDEA BANK TYPES (Phase 5) ===
+// Lightweight capture model that lives separately from
+// ContentProject so the /creator/ideas page can stay fast
+// (no JOINs) and show a card-grid UX instead of the
+// editor-shape.
+export type IdeaStatus =
+ | 'CAPTURED'
+ | 'REFINED'
+ | 'PROMOTED'
+ | 'ARCHIVED';
+
+export interface ContentIdea {
+ id: number;
+ title: string;
+ hook: string | null;
+ notes: string | null;
+ /** 1-5 personal score. Null = unrated. */
+ score: number | null;
+ suggestedType: ContentType | null;
+ status: IdeaStatus;
+ /** When the idea was promoted, points back at the
+ * resulting ContentProject (null until then). */
+ promotedToProjectId: number | null;
+ promotedAt: string | null;
+ tags: string[];
+ createdAt: string;
+ updatedAt: string;
+}
+
+/** Query params for GET /admin/content/ideas. */
+export interface IdeaListParams {
+ status?: IdeaStatus;
+ search?: string;
+ tag?: string;
+ take?: number;
+ skip?: number;
+}
+
+/** Payload for POST /admin/content/ideas. */
+export interface ContentIdeaCreate {
+ title: string;
+ hook?: string | null;
+ notes?: string | null;
+ score?: number | null;
+ suggestedType?: ContentType | null;
+ tags?: string[];
+}
+
+/** Payload for PATCH /admin/content/ideas/:id. Every
+ * field optional. status transitions are server-
+ * validated (e.g. you can't PROMOTE via this endpoint,
+ * use POST /ideas/:id/promote). */
+export interface ContentIdeaUpdate extends Partial<ContentIdeaCreate> {
+ status?: IdeaStatus;
+}
+
 // === SOCIAL TYPES ===
 export * from './social';

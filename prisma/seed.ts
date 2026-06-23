@@ -118,6 +118,12 @@ async function main() {
  // Wipes + recreates the demo project so the upcoming
  // editor UI always has a non-trivial dataset.
  await seedContentCreator();
+
+ // ─── Seed Content Idea Bank (Phase 5) ─────────────
+ // Idempotent: re-uses any matching title so re-runs
+ // don't duplicate ideas. Used to populate the
+ // /creator/ideas page on a fresh install.
+ await seedContentIdeas();
 }
 
 async function seedCaseStudyProject() {
@@ -616,6 +622,128 @@ async function seedContentCreator() {
  console.log(
  `✅ Seeded content project "${slug}" with ${dayCount} days, ${sceneCount} scenes, ${productCount} products, ${postCount} posts, ${checklistCount} checklist items, performance=${hasPerformance}`,
  );
+}
+
+// ─── Phase 5: Idea Bank seed ────────────────────────
+// A handful of demo ideas so the /creator/ideas page has
+// something to show on a fresh install. Idempotent via
+// upsert-by-title.
+async function seedContentIdeas() {
+ // Each idea is { title, hook, notes, score, suggestedType, status, tags }.
+ // The first one ("Build a 30-day public journal of building an AI studio")
+ // is the "promoted" example — we point it at the demo ContentProject
+ // we just seeded.
+ const demoProject = await prisma.contentProject.findFirst({
+ where: { slug: 'vlog-hau-truong-ai' },
+ select: { id: true },
+ });
+
+ const ideas: Array<{
+ title: string;
+ hook: string | null;
+ notes: string | null;
+ score: number | null;
+ suggestedType: 'VLOG' | 'AFFILIATE' | 'CODE' | 'REVIEW' | 'IDEA' | 'OTHER' | null;
+ status: 'CAPTURED' | 'REFINED' | 'PROMOTED' | 'ARCHIVED';
+ tags: string[];
+ promotedToProjectId?: number;
+ promotedAt?: Date;
+ }> = [
+ {
+ title: 'Build a 30-day public journal of building an AI studio',
+ hook: 'Một tháng public nhật ký build Content Studio: lý do, quyết định, thất bại.',
+ notes:
+ 'Doc-style. Mỗi ngày một clip ngắn 60-90s. Audience: indie creators. CTA: subscribe để theo dõi 30 ngày.',
+ score: 5,
+ suggestedType: 'VLOG',
+ status: 'PROMOTED',
+ tags: ['series', 'behind-the-scenes', 'ai'],
+ promotedToProjectId: demoProject?.id,
+ promotedAt: new Date(),
+ },
+ {
+  title: 'Top 5 mẫu Cloud Resume gây ấn tượng với HR (2026 edition)',
+ hook: 'Đi qua 5 portfolio thật — chỉ ra điểm khiến HR nhấn "mời phỏng vấn".',
+ notes:
+ 'Affiliate-friendly: có thể chèn link tới template cá nhân. Cần B-roll chụp màn hình, 2-3 case study.',
+ score: 4,
+ suggestedType: 'AFFILIATE',
+ status: 'REFINED',
+ tags: ['portfolio', 'career', 'review'],
+ },
+ {
+ title: 'Code review: 3 open-source "AI wrapper" đáng học nhất tuần này',
+ hook: 'Pick 3 repos trending trên GitHub, đi qua 1 file then chốt mỗi cái.',
+ notes: 'Series idea. Mỗi tập 5-7 phút. Có thể bắt đầu bằng Perplexity-style wrappers.',
+ score: 4,
+ suggestedType: 'CODE',
+ status: 'CAPTURED',
+ tags: ['code-review', 'open-source', 'ai'],
+ },
+ {
+ title: 'Một ngày của mình: 5:00 AM → midnight, 5 quyết định đã đổi cả năm',
+ hook: 'Story-time format, pacing chậm, voiceover + B-roll đời thường.',
+ notes: 'Hook mạnh, ít text. Kết bằng CTA "bạn thì sao?".',
+ score: 3,
+ suggestedType: 'VLOG',
+ status: 'CAPTURED',
+ tags: ['lifestyle', 'story-time'],
+ },
+ {
+ title: 'Review Logitech MX Master 4 sau 6 tháng dùng thật',
+ hook: 'Không phải unbox — đây là sau 6 tháng dùng cho code + design.',
+ notes: 'Pros/cons thật. Affiliate link authorized qua Amazon Associates.',
+ score: 3,
+ suggestedType: 'REVIEW',
+ status: 'CAPTURED',
+ tags: ['gear', 'review', 'long-term'],
+ },
+ {
+ title: '"Tôi đã build một SaaS bằng Cursor mà không code" — honest take',
+ hook: 'Nói thẳng: cái gì hoạt động, cái gì không, cái gì tôi phải code lại.',
+ notes: 'Format: 3 phần (works / does not / lessons). Cần screen record thật.',
+ score: 4,
+ suggestedType: 'IDEA',
+ status: 'CAPTURED',
+ tags: ['cursor', 'saas', 'no-code', 'honest'],
+ },
+ ];
+
+ let created = 0;
+ let reused = 0;
+ for (const idea of ideas) {
+ // Upsert by title. We re-write all fields so the seed
+ // is always self-correcting (e.g. if you change the
+ // suggestedType in the seed file, re-running will
+ // update the DB to match).
+ const existing = await prisma.contentIdea.findFirst({
+ where: { title: idea.title },
+ select: { id: true },
+ });
+ if (existing) {
+ await prisma.contentIdea.update({
+ where: { id: existing.id },
+ data: {
+ hook: idea.hook,
+ notes: idea.notes,
+ score: idea.score,
+ suggestedType: idea.suggestedType,
+ status: idea.status,
+ tags: idea.tags,
+ promotedToProjectId: idea.promotedToProjectId ?? null,
+ promotedAt: idea.promotedAt ?? null,
+ },
+ });
+ reused++;
+ } else {
+ await prisma.contentIdea.create({ data: idea });
+ created++;
+ }
+ }
+
+ console.log(
+ `💡 Seeded content ideas: ${created} created, ${reused} updated (total ${ideas.length})`,
+  );
 }
 
 main()

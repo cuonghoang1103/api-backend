@@ -45,6 +45,14 @@ import {
  toJsonInput,
  toDateOrNull,
 } from '../services/content.service.js';
+import {
+ createIdea,
+ deleteIdea,
+ getIdea,
+ listIdeas,
+ promoteIdea,
+ updateIdea,
+} from '../services/content.idea.service.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -517,13 +525,111 @@ router.patch('/projects/:id/status', async (req, res: Response<ApiResponse>, nex
  } catch (error) { next(error); }
 });
 
-// ─── DELETE /projects/:id ───────────────────────────────────────────────────
+ // ─── DELETE /projects/:id ───────────────────────────────────────────────────
 router.delete('/projects/:id', async (req, res: Response<ApiResponse>, next) => {
  try {
  const id = parseId(req.params.id);
  await assertProject(id);
  await prisma.contentProject.delete({ where: { id } });
  res.json({ success: true, message: 'Content project deleted' });
+ } catch (error) { next(error); }
+});
+
+// ============================================================
+// Phase 5: Idea Bank
+// ------------------------------------------------------------
+// Lightweight CRUD on content_ideas. The page is
+// mostly read-only cards, so we expose a small set
+// of endpoints. Promote is a special path that
+// creates a ContentProject + flips the idea in one
+// transaction.
+//
+// Endpoints
+// ── GET /ideas — list (filter by ?status=&search=&tag=)
+// ── POST /ideas — create
+// ── GET /ideas/:id — single
+// ── PATCH /ideas/:id — update any subset
+// ── DELETE /ideas/:id — remove
+// ── POST /ideas/:id/promote — create project + flip status
+// ============================================================
+
+// ─── GET /ideas ───────────────────────────────────────────────
+router.get('/ideas', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const status = req.query.status as
+ | 'CAPTURED' | 'REFINED' | 'PROMOTED' | 'ARCHIVED' | undefined;
+ const search = req.query.search as string | undefined;
+ const tag = req.query.tag as string | undefined;
+ const take = req.query.take ? Number(req.query.take) : undefined;
+ const skip = req.query.skip ? Number(req.query.skip) : undefined;
+ const result = await listIdeas({ status, search, tag, take, skip });
+ res.json({ success: true, data: result });
+ } catch (error) { next(error); }
+});
+
+// ─── POST /ideas ──────────────────────────────────────────────
+router.post('/ideas', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const { title, hook, notes, score, suggestedType, tags } = req.body ?? {};
+ if (typeof title !== 'string' || title.trim().length === 0) {
+ throw new AppError('title is required', 400, 'BAD_REQUEST');
+ }
+ const idea = await createIdea({
+ title: title.trim(),
+ hook: hook ?? null,
+ notes: notes ?? null,
+ score: typeof score === 'number' ? score : null,
+ suggestedType: suggestedType ?? null,
+ tags: Array.isArray(tags) ? tags : [],
+ });
+ res.json({ success: true, data: idea });
+ } catch (error) { next(error); }
+});
+
+// ─── GET /ideas/:id ───────────────────────────────────────────
+router.get('/ideas/:id', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const idea = await getIdea(id);
+ if (!idea) throw new AppError('Idea not found', 404, 'IDEA_NOT_FOUND');
+ res.json({ success: true, data: idea });
+ } catch (error) { next(error); }
+});
+
+// ─── PATCH /ideas/:id ─────────────────────────────────────────
+router.patch('/ideas/:id', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const idea = await getIdea(id);
+ if (!idea) throw new AppError('Idea not found', 404, 'IDEA_NOT_FOUND');
+ const updated = await updateIdea(id, req.body ?? {});
+ res.json({ success: true, data: updated });
+ } catch (error) { next(error); }
+});
+
+// ─── DELETE /ideas/:id ────────────────────────────────────────
+router.delete('/ideas/:id', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const idea = await getIdea(id);
+ if (!idea) throw new AppError('Idea not found', 404, 'IDEA_NOT_FOUND');
+ await deleteIdea(id);
+ res.json({ success: true, message: 'Idea deleted' });
+ } catch (error) { next(error); }
+});
+
+// ─── POST /ideas/:id/promote ─────────────────────────────────
+router.post('/ideas/:id/promote', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const result = await promoteIdea(id);
+ res.json({
+ success: true,
+ data: result,
+ // A small `redirectTo` hint so the editor can navigate
+ // to the new project without a second roundtrip.
+ message: `redirectTo=/creator/projects/${result.project.id}`,
+ });
  } catch (error) { next(error); }
 });
 

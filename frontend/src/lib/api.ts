@@ -2193,12 +2193,17 @@ export const hubFileApi = {
 // shared admin cookie auth (axios sends `withCredentials`,
 // see the instance config above).
 import type {
+ ContentIdea,
+ ContentIdeaCreate,
+ ContentIdeaUpdate,
  ContentProject,
  ContentProjectCreate,
  ContentProjectSummary,
  ContentProjectUpdate,
  ContentStatus,
  ContentType,
+ IdeaListParams,
+ IdeaStatus,
 } from '@/types';
 
 export interface ContentListParams {
@@ -2236,6 +2241,46 @@ export const contentApi = {
  api.delete<{ success: boolean; message: string }>(
  `/admin/content/projects/${id}`,
  ),
+
+ // ── Phase 5: Idea Bank ─────────────────────────────────
+ ideas: {
+ /** GET /admin/content/ideas — list with filter/search/tag. */
+ list: (params?: IdeaListParams) =>
+ api.get<{
+ data: { items: ContentIdea[]; total: number };
+ }>('/admin/content/ideas', { params }),
+
+ /** GET /admin/content/ideas/:id — single. */
+ get: (id: number) =>
+ api.get<{ data: ContentIdea }>(`/admin/content/ideas/${id}`),
+
+ /** POST /admin/content/ideas — create. */
+ create: (payload: ContentIdeaCreate) =>
+ api.post<{ data: ContentIdea }>('/admin/content/ideas', payload),
+
+ /** PATCH /admin/content/ideas/:id — partial update. */
+ update: (id: number, payload: ContentIdeaUpdate) =>
+ api.patch<{ data: ContentIdea }>(
+ `/admin/content/ideas/${id}`,
+ payload,
+ ),
+
+ /** DELETE /admin/content/ideas/:id. */
+ remove: (id: number) =>
+ api.delete<{ success: boolean; message: string }>(
+ `/admin/content/ideas/${id}`,
+ ),
+
+ /** POST /admin/content/ideas/:id/promote — create a
+ * ContentProject from this idea, flip the idea to
+ * PROMOTED, all in one transaction. The response
+ * `message` field carries `redirectTo=/creator/projects/N`. */
+ promote: (id: number) =>
+ api.post<{
+ data: { idea: ContentIdea; project: ContentProjectSummary };
+ message: string;
+ }>(`/admin/content/ideas/${id}/promote`),
+ },
 };
 
 

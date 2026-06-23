@@ -50,21 +50,21 @@ function normalizeProject(project: Record<string, unknown>) {
 
  // Don't leak admin-only fields to the public. The public
  // routes only ever see published projects, so isPublished
- // is noise — and we never want the raw markdown source
- // (bodyMdx) or the schema code (schemaCode) on the wire
- // to anonymous clients. Admin routes use a different
- // shape (ADMIN_PROJECT_INCLUDE) that includes everything.
+ // is noise. We deliberately keep `bodyMdx` off the wire
+ // (the rendered `bodyHtml` is what visitors see, and the
+ // raw source contains admin-only callout directives).
+ //
+ // schemaCode / schemaLang ARE public: the public detail
+ // page renders a "Database Schema" section using them, so
+ // stripping them here would leave a permanent empty
+ // section on the visitor's screen.
  const {
  isPublished: _omitPublished,
  bodyMdx: _omitBodyMdx,
- schemaCode: _omitSchemaCode,
- schemaLang: _omitSchemaLang,
  ...rest
  } = project as Record<string, unknown> & {
  isPublished?: boolean;
  bodyMdx?: string | null;
- schemaCode?: string | null;
- schemaLang?: string | null;
  };
 
  return {

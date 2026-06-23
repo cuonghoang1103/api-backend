@@ -38,6 +38,7 @@ import type {
 } from '@/types';
 import MarkdownEditor from '@/components/admin/MarkdownEditor';
 import MilestonesEditor from '@/components/admin/MilestonesEditor';
+import CodeBlock from '@/components/projects/CodeBlock';
 import FeaturesEditor from '@/components/admin/FeaturesEditor';
 import ResourcesEditor from '@/components/admin/ResourcesEditor';
 import ListItemEditor from '@/components/admin/ListItemEditor';
@@ -636,6 +637,22 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  </select>
  </Field>
  </div>
+ {/* Live preview: same Shiki-based <CodeBlock /> the
+ public detail page uses, so what the admin sees matches
+ the visitor's view 1:1. Hidden when there's no code
+ yet so the section doesn't take up space. */}
+ {form.schemaCode && form.schemaCode.trim() && (
+ <div className="mt-3">
+ <div className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5">
+ Preview (giống trang public)
+ </div>
+ <CodeBlock
+ code={form.schemaCode}
+ language={form.schemaLang || 'prisma'}
+ fileName="schema"
+ />
+ </div>
+ )}
  </Section>
 
  {/* ─── Section: Milestones ────────────────────────── */}

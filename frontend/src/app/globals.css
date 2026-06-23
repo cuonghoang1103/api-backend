@@ -992,9 +992,16 @@ aside ::-webkit-scrollbar-thumb:hover {
  border-radius: 0.2rem;
 }
 
-/* ── Code block (hljs dark theme) ───────────────────── */
+/* ── Code block (Shiki / rehype-pretty-code output) ─────
+ * Shiki emits inline-styled <span style="color:#xxx">…
+ * </span> for each token, so no per-class rules are needed.
+ * The <pre> still needs a dark background that matches
+ * github-dark and a monospace font. We keep the legacy
+ * hljs-* class rules below for projects whose bodyHtml
+ * was rendered with the old pipeline (they'll be
+ * re-rendered on next save with the new pipeline). */
 .case-study-body pre {
- background: rgb(15, 16, 26);
+ background: #0d1117; /* github-dark base */
  border: 1px solid rgba(255, 255, 255, 0.08);
  border-radius: 0.5rem;
  padding: 1rem 1.25rem;
@@ -1003,6 +1010,9 @@ aside ::-webkit-scrollbar-thumb:hover {
  line-height: 1.6;
  position: relative;
 }
+/* rehype-pretty-code wraps the code in <code data-theme="…"
+ * data-language="…">. Force transparent background so the
+ * Shiki theme controls the look. */
 .case-study-body pre code {
  background: transparent !important;
  border: 0 !important;

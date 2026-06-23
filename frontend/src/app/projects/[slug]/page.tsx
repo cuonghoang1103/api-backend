@@ -415,20 +415,37 @@ export default function ProjectDetailPage() {
  <MilestoneTimeline milestones={project.milestones ?? []} />
  <FeatureChecklist features={project.features ?? []} />
 
- {/* Body: 2-column TOC + content */}
+ {/* Body: 2-column TOC + content
+ ─────────────────────────────────────────────────────────
+ The case study uses a centered, single-column reading
+ layout (`max-w-3xl mx-auto`) so prose never gets squeezed
+ by the sidebar. The TOC sits to the left on `lg+` and
+ stacks above on smaller screens. The reading-width is
+ capped at 48rem (~768px) per typography best-practice;
+ anything wider hurts line-length readability.
+ */}
  {hasBody && (
- <div
+ <section
  id="case-study-content"
- className="grid grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)] gap-8 lg:gap-12 mt-4"
+ className="mt-12 scroll-mt-24"
  >
- <TableOfContents contentSelector=".case-study-body" headingOffset={120} />
- <article className="min-w-0">
  <h2 className="text-lg font-heading font-bold text-text-primary mb-4 flex items-center gap-2">
  <BookOpen className="w-5 h-5" style={{ color: C.primary }} />
  Case Study
  </h2>
  <div
- className="rounded-2xl p-6 sm:p-8 border"
+ className="grid grid-cols-1 lg:grid-cols-[200px_minmax(0,1fr)] gap-8 lg:gap-10"
+ >
+ <aside className="hidden lg:block">
+ <TableOfContents contentSelector=".case-study-body" headingOffset={120} />
+ </aside>
+ {/* Reading column: capped at ~768px (prose max-w-3xl) and
+ centered. The `prose` class from tailwindcss/typography
+ would conflict with our custom .case-study-body styles,
+ so we keep the visual treatment in globals.css and only
+ take the width constraint from utility classes. */}
+ <article
+ className="min-w-0 max-w-3xl mx-auto w-full rounded-2xl p-6 sm:p-8 border"
  style={{ background: C.surface, borderColor: C.border }}
  >
  <MarkdownRenderer
@@ -436,9 +453,15 @@ export default function ProjectDetailPage() {
  mdx={project.bodyMdx || project.content}
  openLinksInNewTab
  />
- </div>
  </article>
  </div>
+ {/* TOC shown above the article on mobile (the aside is
+ hidden in the grid). It picks up the same headings via
+ the .case-study-body selector. */}
+ <div className="lg:hidden mt-6">
+ <TableOfContents contentSelector=".case-study-body" headingOffset={120} />
+ </div>
+ </section>
  )}
 
  {/* Database schema */}

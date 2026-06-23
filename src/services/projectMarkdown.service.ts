@@ -1,6 +1,7 @@
 import { unified, type Processor } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 import remarkRehype from 'remark-rehype';
 import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
@@ -32,6 +33,9 @@ import type { Root as HastRoot, Element as HastElement } from 'hast';
  * ▼
  * remark-parse → mdast
  * remark-gfm → tables, strikethrough, task-lists
+ * remark-breaks → soft line breaks become <br> (matches
+ * │ admin preview behaviour; without this a paragraph
+ * │ pasted with hard wraps renders as a single line)
  * remark-rehype → hast
  * rehype-raw → allow inline HTML (still sanitised next)
  * rehype-highlight → add hljs-* classes to <pre><code>
@@ -126,6 +130,7 @@ function getProcessor(): AnyProcessor {
  cachedProcessor = (unified() as unknown as AnyProcessor)
  .use(remarkParse)
  .use(remarkGfm)
+ .use(remarkBreaks)
  .use(remarkRehype, { allowDangerousHtml: true })
  .use(rehypeRaw)
  .use(rehypeHighlight, { detect: true, ignoreMissing: true })
@@ -272,6 +277,7 @@ export function renderProjectMarkdown(mdx: string): string {
  const proc = (unified() as unknown as AnyProcessor)
  .use(remarkParse)
  .use(remarkGfm)
+ .use(remarkBreaks)
  .use(remarkRehype, { allowDangerousHtml: true })
  .use(rehypeRaw)
  .use(rehypeHighlight, { detect: true, ignoreMissing: true })

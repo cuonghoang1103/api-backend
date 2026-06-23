@@ -21,6 +21,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ProjectMilestone } from '@/types';
+import CodeBlock from '@/components/projects/CodeBlock';
 
 // Same language set used by the case-study "Database Schema"
 // section (ProjectEditor.tsx → SCHEMA_LANGS). Re-declared
@@ -321,6 +322,22 @@ function CodeBlockEditor({
  rows={6}
  className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded text-xs font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:border-neon-violet/50 transition-colors"
  />
+ {/* Live preview — same Shiki-powered <CodeBlock /> the
+ public page uses. Lets the admin see colors + line
+ breaks exactly as the visitor will. */}
+ {localCode.trim() && (
+ <div>
+ <div className="text-[10px] text-text-muted uppercase tracking-wider mb-1.5">
+ Preview (giống trang public)
+ </div>
+ <CodeBlock
+ code={localCode}
+ language={lang}
+ fileName={lang}
+ compact
+ />
+ </div>
+ )}
  </div>
  </motion.div>
  )}

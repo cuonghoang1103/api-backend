@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="color-scheme" content="light">
 <title>Do you love me?</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,10 +21,13 @@
   html,body{height:100%;margin:0}
   body{
     font-family:"Baloo 2",system-ui,-apple-system,sans-serif;
-    background:#fff;
+    background:radial-gradient(ellipse at 50% 40%,#ffd7e6 0%,#fff2f7 55%,#ffe9c9 100%);
     overflow:hidden;color:var(--text);
   }
-  #field{position:fixed;inset:0;overflow:hidden;touch-action:none}
+  #field{
+    position:fixed;inset:0;overflow:hidden;touch-action:none;
+    background:radial-gradient(ellipse at 50% 40%,var(--bg2) 0%,var(--bg1) 55%,var(--bg3) 100%);
+  }
   .float{position:absolute;bottom:-40px;opacity:0;will-change:transform,opacity}
 
   .question{
@@ -98,15 +102,36 @@
   <p class="submsg" id="submsg"></p>
 
   <div class="bear" id="bear">
-    <img src="https://media.tenor.com/HHPMFMlwwMIAAAAC/congratulations-congrats.gif"
-         style="width:100%;height:auto;display:block;" alt="cute character">
+    <svg viewBox="0 0 240 260" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="45" rx="34" ry="32" fill="var(--bear)"/>
+      <ellipse cx="50" cy="45" rx="20" ry="18" fill="var(--bear-d)"/>
+      <ellipse cx="190" cy="45" rx="34" ry="32" fill="var(--bear)"/>
+      <ellipse cx="190" cy="45" rx="20" ry="18" fill="var(--bear-d)"/>
+      <ellipse cx="120" cy="148" rx="108" ry="108" fill="var(--bear)"/>
+      <ellipse cx="120" cy="148" rx="88" ry="88" fill="var(--cream)"/>
+      <ellipse cx="120" cy="175" rx="38" ry="30" fill="var(--bear-d)"/>
+      <ellipse cx="87" cy="100" rx="10" ry="12" fill="var(--feat)"/>
+      <ellipse cx="153" cy="100" rx="10" ry="12" fill="var(--feat)"/>
+      <ellipse cx="90" cy="97" rx="4" ry="4" fill="#fff"/>
+      <ellipse cx="156" cy="97" rx="4" ry="4" fill="#fff"/>
+      <path d="M120 148 Q112 130 120 128 Q128 130 120 148" fill="var(--feat)" class="nose"/>
+      <path d="M120 148 Q112 128 120 126 Q128 128 120 148" fill="var(--feat)"/>
+      <path d="M112 130 Q106 125 110 132 Q113 138 120 128" fill="var(--feat)" stroke="none"/>
+      <path d="M128 130 Q134 125 130 132 Q127 138 120 128" fill="var(--feat)" stroke="none"/>
+      <ellipse cx="75" cy="122" rx="18" ry="12" fill="var(--blush)" opacity="0.55"/>
+      <ellipse cx="165" cy="122" rx="18" ry="12" fill="var(--blush)" opacity="0.55"/>
+      <ellipse cx="55" cy="258" rx="30" ry="20" fill="var(--bear)"/>
+      <ellipse cx="185" cy="258" rx="30" ry="20" fill="var(--bear)"/>
+      <g class="eye-happy">
+        <path d="M82 98 Q87 93 92 98" stroke="var(--feat)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M148 98 Q153 93 158 98" stroke="var(--feat)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      </g>
+    </svg>
   </div>
 
-  <div id="celebration" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;text-align:center;pointer-events:none;">
-    <img src="https://media.tenor.com/1YfOblkZ6pMAAAAC/tonton-tonton-sticker.gif"
-         style="width:280px;max-width:70vw;display:block;margin:0 auto;" alt="cute bear">
-    <img src="https://media.tenor.com/1YfOblkZ6pMAAAAC/tonton-tonton-sticker.gif"
-         style="width:280px;max-width:70vw;display:block;margin:12px auto 0;transform:scaleX(-1);" alt="cute bear mirror">
+  <div id="celebration" style="display:none;position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:3;text-align:center;pointer-events:none;font-size:clamp(48px,12vw,80px);">
+    <div style="animation:bob 3s ease-in-out infinite">🎉</div>
+    <div style="margin-top:8px;animation:bob 3s ease-in-out 0.5s infinite">💖</div>
   </div>
 
   <button class="no" id="no">No</button>

@@ -214,7 +214,7 @@ export default function CreatorListPage() {
  Calendar
  </Link>
  <Link
- href="/creator/projects/new"
+ href="/creator/ideas"
  className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg bg-studio-500 text-bg-base text-xs font-semibold hover:bg-studio-400 transition-colors"
  >
  <Plus className="w-3.5 h-3.5" />

@@ -229,11 +229,29 @@ if echo "$PRISMA_OUT" | grep -qi "already in sync\|no pending migrations"; then
 elif echo "$PRISMA_OUT" | grep -qi "error"; then
  warn "Prisma migrate had errors — see /tmp/prisma.log"
  echo "$PRISMA_OUT" > /tmp/prisma.log
-else
+ else
  ok "Database schema migrated"
  # Print the tail of the migrate output so we can see which
  # migrations were applied this run.
  echo "$PRISMA_OUT" | tail -5 | sed 's/^/ /'
+ fi
+
+# ── Step 3.5: Idempotent seed (Content Creator demo data) ───────
+# `prisma migrate deploy` does NOT auto-run the seed script.
+# We invoke it explicitly here so the /creator/* pages always
+# have demo data to render on a fresh production DB.
+# The seed is fully idempotent (delete-then-recreate for the
+# demo project, upsert-by-title for ideas) so this is safe to
+# re-run on every deploy.
+info "Running idempotent seed (Content Creator demo data)..."
+SEED_OUT=$($DC exec -T backend sh -c \
+ "npx prisma db seed" 2>&1) || true
+if echo "$SEED_OUT" | grep -qi "error"; then
+ warn "Seed reported errors — see /tmp/seed.log"
+ echo "$SEED_OUT" > /tmp/seed.log
+else
+ ok "Seed complete"
+ echo "$SEED_OUT" | tail -5 | sed 's/^/ /'
 fi
 
 # ── Step 4: Health checks ─────────────────────────────────────────

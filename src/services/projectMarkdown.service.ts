@@ -265,8 +265,14 @@ const slugify = slugifyHeading;
  * @throws if the pipeline throws — caller's responsibility to
  * catch (we don't want to crash a write path because of a
  * single malformed doc; route layer logs and falls back).
+ *
+ * Async on purpose: some plugins in the chain (e.g. rehype-raw)
+ * run their transform asynchronously in current versions, so a
+ * synchronous `processSync()` throws
+ * `runSync finished async. Use run instead`. `process()` works
+ * for both sync and async transforms, so we await it.
  */
-export function renderProjectMarkdown(mdx: string): string {
+export async function renderProjectMarkdown(mdx: string): Promise<string> {
  if (!mdx || !mdx.trim()) return '';
  const pre = preprocessCallouts(mdx);
 
@@ -285,7 +291,7 @@ export function renderProjectMarkdown(mdx: string): string {
  .use(rehypeHeadingIds)
  .use(rehypeStringify, { allowDangerousHtml: false });
 
- return String(proc.processSync(pre));
+ return String(await proc.process(pre));
 }
 
 /**

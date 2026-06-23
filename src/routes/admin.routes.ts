@@ -910,7 +910,7 @@ router.post('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req: a
 
  // Auto-render bodyHtml from bodyMdx on insert so the
  // public detail page doesn't pay the cost on first read.
- const bodyHtml = bodyMdx ? safeRender(bodyMdx) : null;
+ const bodyHtml = bodyMdx ? await safeRender(bodyMdx) : null;
 
  const project = await prisma.project.create({
  data: {
@@ -984,7 +984,7 @@ router.put('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
  if (bodyMdx === null || bodyMdx.trim() === '') {
  bodyHtmlUpdate = null;
  } else if (bodyMdx !== existing.bodyMdx || !existing.bodyHtml) {
- bodyHtmlUpdate = safeRender(bodyMdx);
+ bodyHtmlUpdate = await safeRender(bodyMdx);
  if (bodyHtmlUpdate === null) bodyHtmlUpdate = existing.bodyHtml;
  }
  }
@@ -1062,9 +1062,9 @@ router.patch('/projects/:id/toggle-featured', authenticate, requireAdmin('ROLE_A
 // can't take down the whole write path. Returns null on
 // failure so the caller can decide whether to keep the
 // previous cache or null it out.
-function safeRender(mdx: string): string | null {
+async function safeRender(mdx: string): Promise<string | null> {
  try {
- return renderProjectMarkdown(mdx);
+ return await renderProjectMarkdown(mdx);
  } catch (err) {
  console.error('[admin] renderProjectMarkdown failed:', err);
  return null;
@@ -1095,7 +1095,7 @@ router.post('/projects/:id/render', authenticate, requireAdmin('ROLE_ADMIN'), as
  if (!existing) throw new AppError('Project not found', 404);
  if (!existing.bodyMdx) throw new AppError('Project has no bodyMdx to render', 400);
 
- const html = safeRender(existing.bodyMdx);
+ const html = await safeRender(existing.bodyMdx);
  if (html === null) throw new AppError('Render failed; check bodyMdx', 500);
  await prisma.project.update({ where: { id }, data: { bodyHtml: html } });
  res.json({ success: true, data: { bodyHtml: html } });

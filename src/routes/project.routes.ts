@@ -93,7 +93,7 @@ async function ensureBodyHtml(project: {
  if (project.bodyHtml && project.bodyHtml.trim()) return project.bodyHtml;
 
  try {
- const html = renderProjectMarkdown(project.bodyMdx);
+ const html = await renderProjectMarkdown(project.bodyMdx);
  await prisma.project.update({
  where: { id: project.id },
  data: { bodyHtml: html },
@@ -403,7 +403,7 @@ router.post('/:slug/render', authenticate, requireAdmin('ROLE_ADMIN'), async (re
  if (!project) throw new AppError('Project not found', 404);
  if (!project.bodyMdx) throw new AppError('Project has no bodyMdx to render', 400);
 
- const html = renderProjectMarkdown(project.bodyMdx);
+ const html = await renderProjectMarkdown(project.bodyMdx);
  await prisma.project.update({
  where: { id: project.id },
  data: { bodyHtml: html },

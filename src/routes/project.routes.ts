@@ -225,9 +225,16 @@ router.get('/search', async (req, res: Response<ApiResponse>, next): Promise<voi
  ts_rank(p.search_vector, websearch_to_tsquery('simple', $1)) AS rank,
  ts_headline(
  'simple',
- coalesce(p.body_mdx, p.description, ''),
+ -- Concat title + body + description with E'\\n' so ts_headline
+ -- can pick matches from any of the three sources that contribute
+ -- to the search_vector index. We prefer bodyMdx for context
+ -- because it has the most text, but we always include title so
+ -- short queries like "ai" still produce a visible <mark> even
+ -- when bodyMdx is null. MaxFragments=2 lets us see up to two
+ -- separate match windows when the query is multi-word.
+ concat_ws(E'\\n', p.title, coalesce(p.body_mdx, ''), coalesce(p.description, '')),
  websearch_to_tsquery('simple', $1),
- 'StartSel=<mark>, StopSel=</mark>, MaxWords=20, MinWords=10, MaxFragments=1'
+ 'StartSel=<mark>, StopSel=</mark>, MaxWords=25, MinWords=10, MaxFragments=2, ShortWord=2'
  ) AS snippet
  FROM projects p
  WHERE p.is_published = true

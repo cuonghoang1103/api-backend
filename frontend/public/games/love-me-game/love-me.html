@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Do you love me?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Baloo+2:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#fff2f7; --bg2:#ffd7e6; --bg3:#ffe9c9;
+    --bear:#e8a86b; --bear-d:#d68f52; --cream:#fff1da;
+    --feat:#6e4427; --blush:#ff9fb4;
+    --gift:#ff7ea6; --gift-d:#f25e8d; --ribbon:#ffd24d;
+    --yes:#ff5d8a; --yes-d:#ef3f72; --no:#ffffff; --no-line:#ffaecb;
+    --q:#ff4f86; --text:#9a6b7c;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;margin:0}
+  body{
+    font-family:"Baloo 2",system-ui,-apple-system,sans-serif;
+    background:#fff;
+    overflow:hidden;color:var(--text);
+  }
+  #field{position:fixed;inset:0;overflow:hidden;touch-action:none}
+  .float{position:absolute;bottom:-40px;opacity:0;will-change:transform,opacity}
+
+  .question{
+    position:absolute;top:12vh;left:50%;transform:translateX(-50%);
+    width:90%;text-align:center;margin:0;z-index:2;
+    font-family:"Pacifico",cursive;color:var(--q);
+    font-size:clamp(30px,8vw,46px);line-height:1.1;text-shadow:0 2px 0 #ffd6e4;
+  }
+  .submsg{
+    position:absolute;top:calc(12vh + clamp(40px,9vw,58px));left:50%;transform:translateX(-50%);
+    width:90%;text-align:center;z-index:2;margin:0;
+    font-size:16px;font-weight:600;color:#cf6f93;opacity:0;transition:opacity .5s;
+  }
+  .submsg.show{opacity:1}
+
+  /* the character — centered on screen */
+  .bear{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:220px;max-width:60vw;z-index:3}
+  .bear svg{display:block;width:100%;height:auto;overflow:visible}
+  .bob,.foot-l,.foot-r,.ear-l,.ear-r,.gift-wrap{transform-box:fill-box}
+  .bob{transform-origin:50% 95%}
+  .foot-l,.foot-r{transform-origin:50% 50%}
+  .ear-l{transform-origin:92px 54px}.ear-r{transform-origin:168px 54px}
+  .gift-wrap{transform-origin:50% 60%}
+  @media (prefers-reduced-motion:no-preference){
+    .bob{animation:bob 3s ease-in-out infinite}
+    @keyframes bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-7px) rotate(1.5deg)}}
+    .ear-l{animation:earl 3s ease-in-out infinite}.ear-r{animation:earr 3s ease-in-out infinite}
+    @keyframes earl{0%,100%{transform:rotate(0)}50%{transform:rotate(-7deg)}}
+    @keyframes earr{0%,100%{transform:rotate(0)}50%{transform:rotate(7deg)}}
+  }
+  .eye-happy{opacity:0}
+  .blush{transition:opacity .4s,transform .4s}
+
+  .no{
+    position:absolute;z-index:4;
+    font-family:inherit;font-weight:700;font-size:22px;cursor:pointer;border:none;
+    padding:14px 34px;border-radius:999px;background:var(--no);color:var(--yes);
+    box-shadow:inset 0 0 0 2px var(--no-line),0 6px 14px rgba(255,120,160,.25);
+  }
+  .bottom{position:fixed;left:0;right:0;bottom:6vh;display:flex;justify-content:center;align-items:center;z-index:5}
+  .yes{
+    font-family:inherit;font-weight:700;font-size:20px;cursor:pointer;border:none;
+    padding:15px 44px;border-radius:999px;background:linear-gradient(180deg,#ff7aa3,var(--yes));color:#fff;
+    box-shadow:0 8px 0 var(--yes-d),0 12px 18px rgba(239,63,114,.35);transition:transform .15s,filter .2s;will-change:transform;
+  }
+  .yes:hover{filter:brightness(1.05)}
+  .yes:active{transform:translateY(4px) scale(var(--ys,1));box-shadow:0 4px 0 var(--yes-d)}
+  .replay{
+    font-family:inherit;background:#fff;color:#cf6f93;font-size:15px;font-weight:600;
+    padding:12px 22px;border-radius:999px;border:none;cursor:pointer;display:none;box-shadow:0 6px 14px rgba(255,120,160,.25);
+  }
+  .replay:hover{color:var(--yes)}
+  .done .yes,.done .no{display:none}.done .replay{display:inline-block}
+
+  #burst{position:fixed;inset:0;pointer-events:none;overflow:visible;z-index:9}
+  .pt{position:absolute;left:50%;top:46%;will-change:transform,opacity}
+  @keyframes pop{0%{transform:translate(-50%,-50%) scale(.3);opacity:1}
+    100%{transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) scale(var(--s)) rotate(var(--r));opacity:0}}
+
+  #bgm{position:fixed;bottom:12px;right:12px;z-index:20;background:rgba(255,255,255,0.7);border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px;line-height:36px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);transition:opacity .2s}
+  #bgm:hover{opacity:0.8}
+</style>
+</head>
+<body>
+<audio id="bgm-audio" src="nen.mp3" loop preload="auto"></audio>
+<button id="bgm" title="Bật/tắt nhạc nền">♪</button>
+
+<div id="field">
+  <div id="burst"></div>
+
+  <h1 class="question" id="question">Do you love me?</h1>
+  <p class="submsg" id="submsg"></p>
+
+  <div class="bear" id="bear">
+    <img src="https://media.tenor.com/HHPMFMlwwMIAAAAC/congratulations-congrats.gif"
+         style="width:100%;height:auto;display:block;" alt="cute character">
+  </div>
+
+  <div id="celebration" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;text-align:center;pointer-events:none;">
+    <img src="https://media.tenor.com/1YfOblkZ6pMAAAAC/tonton-tonton-sticker.gif"
+         style="width:280px;max-width:70vw;display:block;margin:0 auto;" alt="cute bear">
+    <img src="https://media.tenor.com/1YfOblkZ6pMAAAAC/tonton-tonton-sticker.gif"
+         style="width:280px;max-width:70vw;display:block;margin:12px auto 0;transform:scaleX(-1);" alt="cute bear mirror">
+  </div>
+
+  <button class="no" id="no">No</button>
+
+  <div class="bottom" id="bottom">
+    <button class="yes" id="yes">Yes</button>
+    <button class="replay" id="replay">↺ chơi lại</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const field=document.getElementById('field');
+  const burst=document.getElementById('burst');
+  const bear=document.getElementById('bear');
+  const noBtn=document.getElementById('no');
+  const yesBtn=document.getElementById('yes');
+  const replay=document.getElementById('replay');
+  const question=document.getElementById('question');
+  const submsg=document.getElementById('submsg');
+  const bottom=document.getElementById('bottom');
+  const celebration=document.getElementById('celebration');
+  const bgmAudio=document.getElementById('bgm-audio');
+  const bgmBtn=document.getElementById('bgm');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let fw=0, fh=0, answered=false;
+
+  // background music — auto-play on first interaction
+  let bgmStarted=false;
+  function startBgm(){
+    if(bgmStarted) return; bgmStarted=true;
+    bgmAudio.play().then(()=>{ bgmBtn.textContent='⏸'; }).catch(()=>{});
+  }
+  function toggleBgm(){
+    if(bgmAudio.paused){ bgmAudio.play().then(()=>{ bgmBtn.textContent='⏸'; }).catch(()=>{}); }
+    else { bgmAudio.pause(); bgmBtn.textContent='♪'; }
+  }
+  bgmBtn.addEventListener('click',toggleBgm);
+  document.addEventListener('click',startBgm,{once:true});
+  document.addEventListener('touchstart',startBgm,{once:true});
+  bgmAudio.addEventListener('play',()=>bgmBtn.textContent='⏸');
+  bgmAudio.addEventListener('pause',()=>bgmBtn.textContent='♪');
+
+  function measure(){
+    const r=field.getBoundingClientRect(); fw=r.width; fh=r.height;
+  }
+
+  function spawnBurst(){
+    const items=['💖','💕','💛','✨','🎉','🧸','💗'];
+    for(let i=0;i<32;i++){
+      const p=document.createElement('div'); p.className='pt';
+      p.textContent=items[Math.floor(Math.random()*items.length)];
+      const ang=Math.random()*Math.PI*2, dist=100+Math.random()*180;
+      p.style.setProperty('--tx',Math.cos(ang)*dist+'px');
+      p.style.setProperty('--ty',Math.sin(ang)*dist-40+'px');
+      p.style.setProperty('--r',(Math.random()*360)+'deg');
+      p.style.setProperty('--s',(0.7+Math.random()*0.9).toFixed(2));
+      p.style.fontSize=(16+Math.random()*20)+'px';
+      p.style.animation='pop '+(900+Math.random()*600)+'ms ease-out forwards';
+      burst.appendChild(p); setTimeout(()=>p.remove(),1600);
+    }
+  }
+  function chime(){
+    try{
+      const Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx) return;
+      const ac=new Ctx(); [523.25,659.25,783.99,1046.5].forEach((f,i)=>{
+        const o=ac.createOscillator(), g=ac.createGain(); o.type='triangle'; o.frequency.value=f;
+        const t=ac.currentTime+i*0.12;
+        g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.18,t+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001,t+0.32);
+        o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+0.34);
+      });
+    }catch(_){}
+  }
+
+  function moveNoBtn(){
+    if(answered) return;
+    const nx=Math.random()*(fw-noBtn.offsetWidth-16)+8;
+    const ny=Math.max(200, fh*0.3)+Math.random()*(fh*0.5);
+    noBtn.style.left=nx+'px';
+    noBtn.style.top=Math.min(ny, fh-noBtn.offsetHeight-8)+'px';
+  }
+
+  function sayYes(){
+    if(answered) return; answered=true;
+    bear.style.display='none';
+    noBtn.style.display='none';
+    celebration.style.display='block';
+    document.body.style.background='#fce4b6';
+    question.textContent='I love you too! 😘';
+    submsg.textContent='you just made me so happy ♡';
+    submsg.classList.add('show');
+    bottom.classList.add('done');
+    spawnBurst(); if(!reduce) setTimeout(spawnBurst,350); chime();
+  }
+  yesBtn.addEventListener('click',sayYes);
+
+  noBtn.addEventListener('pointerenter',function(e){ e.preventDefault(); e.stopPropagation(); moveNoBtn(); });
+  noBtn.addEventListener('mousedown',function(e){ e.preventDefault(); e.stopPropagation(); moveNoBtn(); });
+  noBtn.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); moveNoBtn(); });
+  noBtn.addEventListener('touchstart',function(e){ e.preventDefault(); e.stopPropagation(); moveNoBtn(); },{passive:false});
+
+  replay.addEventListener('click',function(){
+    answered=false; bear.style.display='';
+    celebration.style.display='none';
+    document.body.style.background='#fff';
+    question.textContent='Do you love me?'; submsg.classList.remove('show'); submsg.textContent='';
+    bottom.classList.remove('done'); noBtn.style.display=''; yesBtn.style.transform='scale(1)';
+    measure();
+  });
+
+  window.addEventListener('resize',measure);
+  function start(){ measure(); }
+  if(document.readyState==='complete') start(); else window.addEventListener('load',start);
+  setTimeout(start,60);
+})();
+</script>
+</body>
+</html>

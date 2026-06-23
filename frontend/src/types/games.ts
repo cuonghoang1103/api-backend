@@ -46,30 +46,6 @@ export interface Game {
 /** Mock data — replace or extend with API calls later */
 export const GAMES_DATA: Game[] = [
   {
-    id: 'love-me',
-    title: 'Love Me',
-    slug: 'love-me',
-    shortDescription: 'An adorable interactive game — will you say yes?',
-    description:
-      'A cute bear character asks the big question. Tap "Yes" to celebrate, or try to tap "No" — it runs away every time! Perfect for a sweet surprise.',
-    howToPlay:
-      'Click or tap "Yes" to make the bear happy and trigger a confetti celebration. Try clicking "No" and watch it escape!',
-    thumbnail: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&q=80',
-    previewImage: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&q=80',
-    category: 'Casual',
-    tags: ['Cute', 'Interactive'],
-    technologies: ['HTML5', 'CSS3', 'Vanilla JS'],
-    difficulty: 'Easy',
-    playTime: '1-2 min',
-    isPlayable: true,
-    isFeatured: true,
-    isNew: true,
-    releaseDate: '2026-06-23',
-    componentName: '',
-    gameType: 'iframe',
-    iframeSrc: '/games/love-me/love-me.html',
-  },
-  {
     id: 'snake-game',
     title: 'Snake Game',
     slug: 'snake-game',

@@ -25,6 +25,7 @@ import {
  CalendarRange,
  Lightbulb,
  KanbanSquare,
+ ListChecks,
 } from 'lucide-react';
 
 interface CreatorNavItem {
@@ -38,7 +39,8 @@ const CREATOR_NAV: CreatorNavItem[] = [
  { label: 'Idea Bank', href: '/creator/ideas', icon: Lightbulb },
  { label: 'Pipeline', href: '/creator/pipeline', icon: KanbanSquare },
  { label: 'Calendar', href: '/creator/calendar', icon: CalendarRange },
-];
+ { label: 'List', href: '/creator/list', icon: ListChecks },
+ ];
 
 export default function StudioTopbar() {
  const pathname = usePathname();

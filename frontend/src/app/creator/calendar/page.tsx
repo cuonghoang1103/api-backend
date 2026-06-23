@@ -389,6 +389,24 @@ export default function CalendarPage() {
  return { totalFilm, totalPublish, upcoming };
  }, [events]);
 
+ if (projectsQ.isLoading) {
+ return (
+ <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl mx-auto">
+ <h1 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary mb-4">
+ Calendar
+ </h1>
+ <div className="flex items-center justify-center py-16 text-text-muted text-sm">
+ <motion.div
+ animate={{ rotate: 360 }}
+ transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+ className="inline-block w-4 h-4 border-2 border-studio-500 border-t-transparent rounded-full mr-2"
+ />
+ Loading projects…
+ </div>
+ </div>
+ );
+ }
+
  return (
  <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl mx-auto space-y-6">
  {/* Header */}

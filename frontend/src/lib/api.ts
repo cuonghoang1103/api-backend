@@ -401,25 +401,73 @@ export const skillsApi = {
 
 // Projects API
 export const projectsApi = {
-  getAll: (params?: {
-    page?: number;
-    size?: number;
-    keyword?: string;
-    status?: string;
-  }) => api.get('/projects', { params }),
+ getAll: (params?: {
+ page?: number;
+ size?: number;
+ keyword?: string;
+ status?: string;
+ category?: string;
+ difficulty?: string;
+ }) => api.get('/projects', { params }),
 
-  getFeatured: (params?: { page?: number; size?: number }) =>
-    api.get('/projects/featured', { params }),
+ getFeatured: (params?: { page?: number; size?: number }) =>
+ api.get('/projects/featured', { params }),
 
-  getBySlug: (slug: string) => api.get(`/projects/${slug}`),
+ getBySlug: (slug: string) => api.get(`/projects/${slug}`),
 
-  create: (data: Record<string, unknown>) => api.post('/projects', data),
+ create: (data: Record<string, unknown>) => api.post('/projects', data),
 
-  update: (id: number, data: Record<string, unknown>) => api.put(`/projects/${id}`, data),
+ update: (id: number, data: Record<string, unknown>) => api.put(`/projects/${id}`, data),
 
-  delete: (id: number) => api.delete(`/projects/${id}`),
+ delete: (id: number) => api.delete(`/projects/${id}`),
 
-  toggleFeatured: (id: number) => api.patch(`/projects/${id}/toggle-featured`),
+ toggleFeatured: (id: number) => api.patch(`/projects/${id}/toggle-featured`),
+
+ // ─── Case study additions ────────────────────────────────
+ // Anonymous like (idempotent by IP). Server returns the
+ // authoritative count + the project's likeCount field.
+ like: (slug: string) => api.post(`/projects/${slug}/like`),
+
+ // Force a re-render of bodyHtml from bodyMdx (admin).
+ render: (slug: string) => api.post(`/projects/${slug}/render`),
+
+ // Full-text search powered by Postgres tsvector. Returns
+ // ranked results with a highlighted snippet (already
+ // includes <mark> tags around the match). Filters by
+ // category and difficulty; capped at 50 results.
+ search: (params: {
+ q: string;
+ category?: string;
+ difficulty?: string;
+ size?: number;
+ }) => api.get('/projects/search', { params }),
+
+ // Child entities — milestones
+ listMilestones: (projectId: number) => api.get(`/admin/projects/${projectId}/milestones`),
+ createMilestone: (projectId: number, data: Record<string, unknown>) =>
+ api.post(`/admin/projects/${projectId}/milestones`, data),
+ updateMilestone: (projectId: number, id: number, data: Record<string, unknown>) =>
+ api.put(`/admin/projects/${projectId}/milestones/${id}`, data),
+ deleteMilestone: (projectId: number, id: number) =>
+ api.delete(`/admin/projects/${projectId}/milestones/${id}`),
+
+ // Child entities — features
+ listFeatures: (projectId: number) => api.get(`/admin/projects/${projectId}/features`),
+ createFeature: (projectId: number, data: Record<string, unknown>) =>
+ api.post(`/admin/projects/${projectId}/features`, data),
+ updateFeature: (projectId: number, id: number, data: Record<string, unknown>) =>
+ api.put(`/admin/projects/${projectId}/features/${id}`, data),
+ deleteFeature: (projectId: number, id: number) =>
+ api.delete(`/admin/projects/${projectId}/features/${id}`),
+
+ // Child entities — resources
+ listResources: (projectId: number) => api.get(`/admin/projects/${projectId}/resources`),
+ createResource: (projectId: number, data: Record<string, unknown>) =>
+ api.post(`/admin/projects/${projectId}/resources`, data),
+ updateResource: (projectId: number, id: number, data: Record<string, unknown>) =>
+ api.put(`/admin/projects/${projectId}/resources/${id}`, data),
+ deleteResource: (projectId: number, id: number) =>
+ api.delete(`/admin/projects/${projectId}/resources/${id}`),
 };
 
 // Contact API

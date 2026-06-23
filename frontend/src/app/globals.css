@@ -897,6 +897,277 @@ aside ::-webkit-scrollbar-thumb:hover {
  * DOMPurify and inherited by the browser. We just make sure
  * no parent rule wins specificity. */
 .rich-content span[style*="color"] {
-  /* keep the inline color, no override */
+ /* keep the inline color, no override */
 }
+
+/* ══════════════════════════════════════════════════════════
+ * Phase 3: Case Study / Build Log styles
+ * ══════════════════════════════════════════════════════════
+ * Used by MarkdownRenderer for bodyHtml output and by the
+ * detail page sidebar/body wrapper. All rules are scoped
+ * to .case-study-body so they don't leak into blog posts
+ * or other rich content areas. */
+
+/* ── Wrapper & headings ─────────────────────────────── */
+.case-study-body {
+ color: rgb(229, 231, 235);
+ font-size: 1rem;
+ line-height: 1.75;
+ word-break: break-word;
+}
+.case-study-body > * + * {
+ margin-top: 1.25rem;
+}
+.case-study-body h1,
+.case-study-body h2,
+.case-study-body h3,
+.case-study-body h4 {
+ color: #fff;
+ font-weight: 700;
+ line-height: 1.3;
+ scroll-margin-top: 6rem;
+ position: relative;
+}
+.case-study-body h1 {
+ font-size: 1.875rem;
+ margin-top: 2.5rem;
+ padding-bottom: 0.5rem;
+ border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.case-study-body h2 {
+ font-size: 1.5rem;
+ margin-top: 2.25rem;
+ padding-left: 0.875rem;
+ border-left: 3px solid rgb(139, 92, 246);
+}
+.case-study-body h3 {
+ font-size: 1.25rem;
+ margin-top: 1.75rem;
+ color: rgb(196, 181, 253);
+}
+.case-study-body h4 {
+ font-size: 1.125rem;
+ margin-top: 1.5rem;
+ color: rgb(167, 139, 250);
+}
+
+/* ── Paragraphs & inline ────────────────────────────── */
+.case-study-body p {
+ color: rgb(209, 213, 219);
+}
+.case-study-body strong { color: #fff; font-weight: 600; }
+.case-study-body em { color: rgb(196, 181, 253); }
+.case-study-body a {
+ color: rgb(167, 139, 250);
+ text-decoration: underline;
+ text-underline-offset: 3px;
+ transition: color 0.15s;
+}
+.case-study-body a:hover { color: rgb(196, 181, 253); }
+
+/* ── Inline code ────────────────────────────────────── */
+.case-study-body :not(pre) > code {
+ background: rgba(139, 92, 246, 0.15);
+ color: rgb(196, 181, 253);
+ padding: 0.125rem 0.4rem;
+ border-radius: 0.25rem;
+ font-size: 0.875em;
+ font-family: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+ border: 1px solid rgba(139, 92, 246, 0.2);
+}
+.case-study-body kbd {
+ background: rgba(255, 255, 255, 0.08);
+ border: 1px solid rgba(255, 255, 255, 0.15);
+ border-radius: 0.25rem;
+ padding: 0.1rem 0.4rem;
+ font-size: 0.8em;
+ font-family: monospace;
+ color: #fff;
+ box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.case-study-body mark {
+ background: rgba(139, 92, 246, 0.3);
+ color: rgb(237, 233, 254);
+ padding: 0.05rem 0.2rem;
+ border-radius: 0.2rem;
+}
+
+/* ── Code block (hljs dark theme) ───────────────────── */
+.case-study-body pre {
+ background: rgb(15, 16, 26);
+ border: 1px solid rgba(255, 255, 255, 0.08);
+ border-radius: 0.5rem;
+ padding: 1rem 1.25rem;
+ overflow-x: auto;
+ font-size: 0.875rem;
+ line-height: 1.6;
+ position: relative;
+}
+.case-study-body pre code {
+ background: transparent !important;
+ border: 0 !important;
+ padding: 0 !important;
+ color: rgb(229, 231, 235);
+ font-family: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+}
+.case-study-body .hljs-comment,
+.case-study-body .hljs-quote { color: #6b7280; font-style: italic; }
+.case-study-body .hljs-keyword,
+.case-study-body .hljs-selector-tag,
+.case-study-body .hljs-built_in,
+.case-study-body .hljs-meta { color: #c084fc; }
+.case-study-body .hljs-string,
+.case-study-body .hljs-attr,
+.case-study-body .hljs-symbol { color: #86efac; }
+.case-study-body .hljs-number,
+.case-study-body .hljs-literal { color: #fbbf24; }
+.case-study-body .hljs-title,
+.case-study-body .hljs-section,
+.case-study-body .hljs-name { color: #93c5fd; }
+.case-study-body .hljs-type,
+.case-study-body .hljs-class .hljs-title { color: #67e8f9; }
+.case-study-body .hljs-tag,
+.case-study-body .hljs-attribute { color: #f9a8d4; }
+.case-study-body .hljs-variable,
+.case-study-body .hljs-template-variable { color: #fda4af; }
+.case-study-body .hljs-regexp { color: #fde68a; }
+.case-study-body .hljs-deletion { background: rgba(239, 68, 68, 0.2); }
+.case-study-body .hljs-addition { background: rgba(34, 197, 94, 0.2); }
+
+/* ── Lists ──────────────────────────────────────────── */
+.case-study-body ul,
+.case-study-body ol {
+ padding-left: 1.5rem;
+}
+.case-study-body ul { list-style: disc; }
+.case-study-body ol { list-style: decimal; }
+.case-study-body li {
+ margin-top: 0.5rem;
+ color: rgb(209, 213, 219);
+}
+.case-study-body li::marker { color: rgb(139, 92, 246); }
+.case-study-body li > input[type="checkbox"] {
+ margin-right: 0.5rem;
+ accent-color: rgb(139, 92, 246);
+}
+
+/* ── Blockquote (default, not callout) ──────────────── */
+.case-study-body blockquote {
+ border-left: 4px solid rgba(255, 255, 255, 0.15);
+ padding: 0.5rem 0 0.5rem 1rem;
+ color: rgb(156, 163, 175);
+ font-style: italic;
+ background: rgba(255, 255, 255, 0.02);
+ border-radius: 0 0.375rem 0.375rem 0;
+}
+.case-study-body blockquote p { color: inherit; }
+
+/* ── Callouts (4 variants) ──────────────────────────── */
+.case-study-body .callout {
+ display: flex;
+ flex-direction: column;
+ gap: 0.5rem;
+ padding: 1rem 1.25rem;
+ border-radius: 0.5rem;
+ border: 1px solid;
+ margin: 1.5rem 0;
+}
+.case-study-body .callout-title {
+ font-weight: 600;
+ display: flex;
+ align-items: center;
+ gap: 0.5rem;
+}
+.case-study-body .callout-title::before {
+ content: '';
+ display: inline-block;
+ width: 0.5rem;
+ height: 0.5rem;
+ border-radius: 9999px;
+ background: currentColor;
+}
+.case-study-body .callout-body > :first-child { margin-top: 0; }
+.case-study-body .callout-body > :last-child { margin-bottom: 0; }
+
+.case-study-body .callout-tip {
+ background: rgba(59, 130, 246, 0.1);
+ border-color: rgba(59, 130, 246, 0.4);
+ color: rgb(147, 197, 253);
+}
+.case-study-body .callout-tip .callout-title { color: rgb(96, 165, 250); }
+.case-study-body .callout-note {
+ background: rgba(139, 92, 246, 0.1);
+ border-color: rgba(139, 92, 246, 0.4);
+ color: rgb(196, 181, 253);
+}
+.case-study-body .callout-note .callout-title { color: rgb(167, 139, 250); }
+.case-study-body .callout-warning {
+ background: rgba(234, 179, 8, 0.1);
+ border-color: rgba(234, 179, 8, 0.4);
+ color: rgb(253, 224, 71);
+}
+.case-study-body .callout-warning .callout-title { color: rgb(250, 204, 21); }
+.case-study-body .callout-danger {
+ background: rgba(239, 68, 68, 0.1);
+ border-color: rgba(239, 68, 68, 0.4);
+ color: rgb(252, 165, 165);
+}
+.case-study-body .callout-danger .callout-title { color: rgb(248, 113, 113); }
+
+/* ── Tables (GFM) ───────────────────────────────────── */
+.case-study-body table {
+ width: 100%;
+ border-collapse: collapse;
+ font-size: 0.9rem;
+}
+.case-study-body th,
+.case-study-body td {
+ border: 1px solid rgba(255, 255, 255, 0.1);
+ padding: 0.5rem 0.75rem;
+ text-align: left;
+}
+.case-study-body th {
+ background: rgba(255, 255, 255, 0.04);
+ font-weight: 600;
+ color: #fff;
+}
+.case-study-body tbody tr:nth-child(even) {
+ background: rgba(255, 255, 255, 0.02);
+}
+
+/* ── Image & figure ─────────────────────────────────── */
+.case-study-body img {
+ max-width: 100%;
+ height: auto;
+ border-radius: 0.5rem;
+ border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.case-study-body figure {
+ margin: 1.5rem 0;
+}
+.case-study-body figcaption {
+ text-align: center;
+ font-size: 0.875rem;
+ color: rgb(156, 163, 175);
+ margin-top: 0.5rem;
+}
+
+/* ── HR & details/summary ───────────────────────────── */
+.case-study-body hr {
+ border: 0;
+ border-top: 1px solid rgba(255, 255, 255, 0.1);
+ margin: 2rem 0;
+}
+.case-study-body details {
+ background: rgba(255, 255, 255, 0.03);
+ border: 1px solid rgba(255, 255, 255, 0.08);
+ border-radius: 0.5rem;
+ padding: 0.75rem 1rem;
+}
+.case-study-body summary {
+ cursor: pointer;
+ font-weight: 600;
+ color: #fff;
+}
+
 

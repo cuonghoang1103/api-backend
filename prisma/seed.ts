@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { renderProjectMarkdown } from '../src/services/projectMarkdown.service.js';
 
 const prisma = new PrismaClient();
 
@@ -107,6 +108,283 @@ async function main() {
   console.log('✅ Discount codes seeded');
 
   console.log('🌱 Seed complete!');
+
+ // ─── Seed sample case-study project ──────────────────
+ // Idempotent upsert keyed on slug. We re-render bodyHtml
+ // every run so the cache always reflects bodyMdx.
+ await seedCaseStudyProject();
+}
+
+async function seedCaseStudyProject() {
+ const slug = 'cuonghoang-dev-portal';
+
+ const bodyMdx = `# cuonghoang.com — Portfolio + CMS
+
+Trang portfolio cá nhân được tái cấu trúc năm 2026 thành một **build-log đầy đủ**, hỗ trợ viết case study dài hạn với markdown, code highlight, callouts, timeline và tài nguyên đính kèm.
+
+## Vấn đề
+
+Trang portfolio cũ chỉ có **2 trường** \`description\` + \`content\`, render markdown qua regex tự viết. Khi viết case study dài (>5 phút đọc), hệ thống cũ:
+
+- Không có mục lục — độc giả lạc trong bài viết.
+- Không hỗ trợ code block highlight — chỉ escape HTML.
+- Không có callout (tip/warning/danger) — không thể nhấn mạnh điểm quan trọng.
+- Không có timeline / features / resources — mỗi dự án phải viết thủ công bằng emoji.
+
+## Giải pháp
+
+Thiết kế lại schema với 3 model mới:
+
+\`\`\`prisma
+model Project {
+ // ...legacy fields...
+ bodyMdx String? @db.Text
+ bodyHtml String? @db.Text
+ viewCount Int @default(0)
+ likeCount Int @default(0)
+ isPublished Boolean @default(true)
+
+ milestones ProjectMilestone[]
+ features ProjectFeature[]
+ resources ProjectResource[]
+ likes ProjectLike[]
+}
+
+model ProjectMilestone {
+ id Int @id @default(autoincrement())
+ projectId Int
+ phase String
+ title String
+ description String?
+ date DateTime?
+ imageUrl String?
+ order Int @default(0)
+}
+\`\`\`
+
+Render pipeline chạy trên server:
+
+> :::tip[Lý do render server-side]
+> Backend cache \`bodyHtml\` để frontend không phải ship 500KB unified pipeline xuống browser. Lần đầu tiên truy cập, route \`GET /projects/:slug\` lazy-backfill cache nếu rỗng.
+> :::
+
+## Tính năng chính
+
+| Tính năng | Mô tả |
+|-----------|-------|
+| Markdown + directives | Hỗ trợ GFM, code highlight, 4 callout variants |
+| TOC | Tự sinh từ headings, click anchor mượt |
+| Reading progress | Thanh tiến trình trên đầu trang, đo theo content wrapper |
+| Timeline | Milestone với icon theo phase, gradient line |
+| Features checklist | 3 trạng thái: DONE / IN_PROGRESS / PLANNED |
+| Resources | PDF / DOC / REPO / LINK với icon và file size |
+| Like ẩn danh | IP HMAC-SHA256 dedup, idempotent |
+
+## Cảnh báo
+
+:::warning[Thận trọng khi sanitize]
+\`rehype-sanitize\` strip mọi tag nguy hiểm nhưng cũng strip \`id\` trên heading. Phải inject lại id *sau khi* sanitize để TOC có anchor hoạt động.
+:::
+
+:::danger[Không trust client gửi bodyHtml]
+Client **không bao giờ** được phép gửi \`bodyHtml\` lên server. Render chỉ chạy server-side từ \`bodyMdx\`. Nếu nhận bodyHtml từ client thì drop ngay.
+:::
+
+## Đường học
+
+\`\`\`bash
+# Clone
+git clone https://github.com/cuonghoang/cuonghoang-dev-portal
+
+# Setup
+cp .env.example .env
+npm install
+npm run db:migrate
+npm run db:seed
+
+# Run
+npm run dev
+\`\`\`
+
+## Kết quả
+
+- **Build log** đầy đủ cho mỗi dự án lớn.
+- **Tìm kiếm full-text** trên bodyMdx (planned).
+- **PDF export** cho CV-style download (planned).
+`;
+
+ const project = await prisma.project.upsert({
+ where: { slug },
+ update: {
+ bodyMdx,
+ // bodyHtml is re-rendered below
+ },
+ create: {
+ title: 'cuonghoang.com — Portfolio + Build Log',
+ slug,
+ description: 'Trang portfolio cá nhân với hệ thống case study / build log đầy đủ: markdown, TOC, code highlight, callouts, timeline, features, resources.',
+ content: null,
+ thumbnailUrl: null,
+ images: JSON.stringify([]),
+ projectUrl: 'https://cuonghoang.com',
+ videoUrl: null,
+ githubUrl: 'https://github.com/cuonghoang/cuonghoang-dev-portal',
+ techStack: 'Next.js, TypeScript, Express, Prisma, PostgreSQL, Cloudflare R2',
+ role: 'Full-stack Developer',
+ duration: '2 tháng',
+ status: 'IN_PROGRESS',
+ isFeatured: true,
+ startDate: new Date('2026-04-01'),
+ endDate: null,
+ category: 'Web',
+ difficulty: 'ADVANCED',
+ bodyMdx,
+ schemaCode: `model Project {
+ id Int @id @default(autoincrement())
+ title String @db.VarChar(255)
+ slug String @unique @db.VarChar(255)
+ description String? @db.Text
+ content String? @db.Text
+ thumbnailUrl String? @map("thumbnail_url")
+ images String? @db.Text
+ projectUrl String? @map("project_url")
+ videoUrl String? @map("video_url")
+ githubUrl String? @map("github_url")
+ techStack String? @map("tech_stack")
+ role String? @db.VarChar(100)
+ duration String? @db.VarChar(100)
+ status String @default("COMPLETED")
+ isFeatured Boolean @default(false)
+ startDate DateTime?
+ endDate DateTime?
+ category String?
+ difficulty String?
+ bodyMdx String? @map("body_mdx")
+ bodyHtml String? @map("body_html")
+ schemaCode String? @map("schema_code")
+ schemaLang String? @map("schema_lang")
+ viewCount Int @default(0)
+ likeCount Int @default(0)
+ isPublished Boolean @default(true)
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+}`,
+ schemaLang: 'prisma',
+ viewCount: 0,
+ likeCount: 0,
+ isPublished: true,
+ },
+ });
+
+ // Render + persist bodyHtml so the public detail page
+ // doesn't have to lazy-backfill on first read.
+ let bodyHtml: string | null = null;
+ try {
+ bodyHtml = renderProjectMarkdown(bodyMdx);
+ } catch (err) {
+ console.error('[seed] renderProjectMarkdown failed:', err);
+ }
+ if (bodyHtml) {
+ await prisma.project.update({
+ where: { id: project.id },
+ data: { bodyHtml },
+ });
+ }
+
+ // ─── Milestones ────────────────────────────────────
+ await prisma.projectMilestone.deleteMany({ where: { projectId: project.id } });
+ await prisma.projectMilestone.createMany({
+ data: [
+ {
+ projectId: project.id,
+ phase: 'IDEATION',
+ title: 'Phát hiện vấn đề',
+ description: 'Trang portfolio cũ chỉ có 2 trường, không hỗ trợ case study dài. Regex markdown tự viết bắt đầu lộ bug khi nội dung >5 phút đọc.',
+ date: new Date('2026-04-05'),
+ order: 0,
+ },
+ {
+ projectId: project.id,
+ phase: 'DESIGN',
+ title: 'Thiết kế schema Phase 2',
+ description: 'Thêm 9 field mới vào Project (bodyMdx, bodyHtml, schemaCode, schemaLang, viewCount, likeCount, isPublished, category, difficulty) + 3 model con (Milestone, Feature, Resource) + 1 model Like. Migration additive — không DROP column nào.',
+ date: new Date('2026-04-15'),
+ order: 1,
+ },
+ {
+ projectId: project.id,
+ phase: 'BACKEND',
+ title: 'Markdown service + 13 admin routes',
+ description: 'unified pipeline (remark-parse → gfm → rehype-raw → highlight → sanitize → stringify), callout preprocessor cho 4 variant, lazy bodyHtml backfill, IP HMAC-SHA256 cho like, fire-and-forget viewCount++.',
+ date: new Date('2026-05-10'),
+ order: 2,
+ },
+ {
+ projectId: project.id,
+ phase: 'FRONTEND',
+ title: 'Trang /projects/[slug] + 8 components',
+ description: 'MarkdownRenderer, CodeBlock (lazy hljs), TableOfContents (sticky + mobile drawer), ReadingProgressBar (rAF), MilestoneTimeline, FeatureChecklist, ResourcesList, ProjectLikeButton (optimistic).',
+ date: new Date('2026-05-25'),
+ order: 3,
+ },
+ {
+ projectId: project.id,
+ phase: 'POLISH',
+ title: 'Admin editor split-pane + autosave',
+ description: 'MarkdownEditor với toolbar, live preview, R2 image upload, autosave debounce 2s với isPublished=false. Drag-reorder milestones/features/resources bằng @dnd-kit.',
+ date: new Date('2026-06-15'),
+ order: 4,
+ },
+ ],
+ });
+
+ // ─── Features ──────────────────────────────────────
+ await prisma.projectFeature.deleteMany({ where: { projectId: project.id } });
+ await prisma.projectFeature.createMany({
+ data: [
+ { projectId: project.id, title: 'Markdown + GFM', description: 'Tables, strikethrough, task lists, autolinks.', status: 'DONE', order: 0 },
+ { projectId: project.id, title: '4 callout variants', description: 'tip / note / warning / danger với emoji icon.', status: 'DONE', order: 1 },
+ { projectId: project.id, title: 'Code highlight (hljs)', description: 'Lazy-load 16+ ngôn ngữ, fallback plaintext.', status: 'DONE', order: 2 },
+ { projectId: project.id, title: 'TOC với scroll-spy', description: 'IntersectionObserver, Vietnamese slugifier.', status: 'DONE', order: 3 },
+ { projectId: project.id, title: 'Reading progress bar', description: 'rAF-throttled, đo content wrapper.', status: 'DONE', order: 4 },
+ { projectId: project.id, title: 'Like ẩn danh', description: 'IP HMAC-SHA256 dedup, optimistic UI.', status: 'DONE', order: 5 },
+ { projectId: project.id, title: 'Full-text search', description: 'Postgres to_tsvector GIN index trên bodyMdx.', status: 'PLANNED', order: 6 },
+ { projectId: project.id, title: 'PDF export', description: 'jsPDF cho CV-style download.', status: 'PLANNED', order: 7 },
+ ],
+ });
+
+ // ─── Resources ─────────────────────────────────────
+ await prisma.projectResource.deleteMany({ where: { projectId: project.id } });
+ await prisma.projectResource.createMany({
+ data: [
+ {
+ projectId: project.id,
+ title: 'Source code (GitHub)',
+ url: 'https://github.com/cuonghoang/cuonghoang-dev-portal',
+ type: 'REPO',
+ description: 'Full monorepo: Next.js frontend + Express/Prisma backend.',
+ order: 0,
+ },
+ {
+ projectId: project.id,
+ title: 'Database schema docs',
+ url: 'https://cuonghoang.com/admin/projects/1',
+ type: 'LINK',
+ description: 'Xem schema tương tác trong admin panel.',
+ order: 1,
+ },
+ {
+ projectId: project.id,
+ title: 'unified pipeline docs',
+ url: 'https://unifiedjs.com/',
+ type: 'LINK',
+ description: 'Tài liệu tham khảo về unified, remark, rehype.',
+ order: 2,
+ },
+ ],
+ });
+
+ console.log(`✅ Seeded case study project "${slug}" with ${5} milestones, ${8} features, ${3} resources`);
 }
 
 main()

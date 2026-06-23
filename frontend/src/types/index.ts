@@ -94,27 +94,101 @@ export interface Skill {
 }
 
 export interface Project {
-  id: number;
-  title: string;
-  slug: string;
-  description?: string;
-  content?: string;
-  thumbnailUrl?: string;
-  projectUrl?: string;
-  githubUrl?: string;
-  videoUrl?: string;
-  technologies?: string[];
-  images?: string[];
-  role?: string;
-  duration?: string;
-  status: string;
-  featured: boolean;
-  startDate?: string;
-  endDate?: string;
-  skillNames?: string[];
-  viewCount?: number;
-  createdAt: string;
-  updatedAt?: string;
+ id: number;
+ title: string;
+ slug: string;
+ description?: string;
+ content?: string;
+ thumbnailUrl?: string;
+ projectUrl?: string;
+ githubUrl?: string;
+ videoUrl?: string;
+ technologies?: string[];
+ images?: string[];
+ role?: string;
+ duration?: string;
+ status: string;
+ featured: boolean;
+ startDate?: string;
+ endDate?: string;
+ skillNames?: string[];
+ viewCount?: number;
+ createdAt: string;
+ updatedAt?: string;
+ // Case-study fields (Phase 2)
+ category?: string;
+ difficulty?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+ bodyMdx?: string;
+ bodyHtml?: string;
+ schemaCode?: string;
+ schemaLang?: string;
+ likeCount?: number;
+ isPublished?: boolean;
+ // Child relations — populated by the public detail route
+ // when the project is loaded. Components should treat all
+ // of these as optional and gracefully degrade to empty
+ // arrays / fallback rendering.
+ milestones?: ProjectMilestone[];
+ features?: ProjectFeature[];
+ resources?: ProjectResource[];
+}
+
+export interface ProjectMilestone {
+ id: number;
+ projectId?: number;
+ phase: string;
+ title: string;
+ description?: string;
+ date?: string;
+ imageUrl?: string;
+ order?: number;
+ createdAt?: string;
+}
+
+export type ProjectFeatureStatus = 'DONE' | 'IN_PROGRESS' | 'PLANNED';
+
+export interface ProjectFeature {
+ id: number;
+ projectId?: number;
+ title: string;
+ description?: string;
+ status: ProjectFeatureStatus;
+ order?: number;
+ createdAt?: string;
+}
+
+export type ProjectResourceType = 'PDF' | 'DOC' | 'REPO' | 'LINK' | 'OTHER';
+
+export interface ProjectSearchHit {
+ id: number;
+ slug: string;
+ title: string;
+ description: string | null;
+ thumbnailUrl: string | null;
+ category: string | null;
+ difficulty: string | null;
+ viewCount: number;
+ likeCount: number;
+ rank: number;
+ snippet: string | null;
+}
+
+export interface ProjectSearchResponse {
+ results: ProjectSearchHit[];
+ total: number;
+ query: string;
+}
+
+export interface ProjectResource {
+ id: number;
+ projectId?: number;
+ title: string;
+ url: string;
+ type: ProjectResourceType;
+ fileSize?: number;
+ description?: string;
+ order?: number;
+ createdAt?: string;
 }
 
 // Blog types

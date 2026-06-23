@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ExternalLink, Github, Calendar, Users, Code2, Eye, Star, GitFork, SlidersHorizontal, Play, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import { Search, ExternalLink, Github, Calendar, Users, Code2, Eye, Star, GitFork, SlidersHorizontal, Play, ChevronDown, FileSearch, Rss } from 'lucide-react';
 import { projectsApi } from '@/lib/api';
 import type { Project } from '@/types';
-import ProjectDetailDrawer from '@/components/projects/ProjectDetailDrawer';
 import { SafeImage } from '@/components/ui/SafeImage';
 
 const STATUS_LABELS: Record<string, string> = {
@@ -286,14 +287,17 @@ function ProjectCard({
 
 // ─── Main Component ──────────────────────────────────────────────────────────────
 export default function ProjectsClient() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchInput, setSearchInput] = useState('');
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [techFilter, setTechFilter] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+ const router = useRouter();
+ const [projects, setProjects] = useState<Project[]>([]);
+ const [loading, setLoading] = useState(true);
+ const [searchInput, setSearchInput] = useState('');
+ const [searchKeyword, setSearchKeyword] = useState('');
+ const [statusFilter, setStatusFilter] = useState('');
+ const [techFilter, setTechFilter] = useState('');
+ const [currentPage, setCurrentPage] = useState(1);
+  // ── Removed in Phase 5: selectedProject state for the
+ // legacy ProjectDetailDrawer. Card clicks now navigate
+ // to /projects/[slug] instead of opening a modal.
   const [videoModalUrl, setVideoModalUrl] = useState<string | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
@@ -377,40 +381,55 @@ export default function ProjectsClient() {
     });
   };
 
-  const openPanel = (project: Project) => setSelectedProject(project);
-  const closePanel = () => setSelectedProject(null);
+ const openPanel = (project: Project) => {
+ // Phase 5: navigate to the dedicated detail route
+ // instead of opening the legacy modal drawer.
+ router.push(`/projects/${project.slug}`);
+ };
 
-  return (
-    <>
-      <ProjectDetailDrawer
-        project={selectedProject}
-        onClose={closePanel}
-        starred={selectedProject ? starredIds.has(selectedProject.id) : false}
-        onToggleStar={selectedProject ? () => toggleStar(selectedProject.id) : undefined}
-      />
+ return (
+ <>
 
-      {/* Filters */}
+ {/* Filters */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 space-y-3">
         {/* Search + Filter toggle */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <form onSubmit={handleSearch} className="flex-1 flex gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-              <input
-                type="text"
-                placeholder="Tim kiem du an..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-xl bg-darkcard border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-6 py-3 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium rounded-xl hover:opacity-90 transition-opacity whitespace-nowrap"
-            >
-              Tim kiem
-            </button>
-          </form>
+ <div className="flex flex-col sm:flex-row gap-4">
+ <form onSubmit={handleSearch} className="flex-1 flex gap-2">
+ <div className="relative flex-1">
+ <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
+ <input
+ type="text"
+ placeholder="Tim kiem du an..."
+ value={searchInput}
+ onChange={(e) => setSearchInput(e.target.value)}
+ className="w-full pl-12 pr-4 py-3 rounded-xl bg-darkcard border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
+ />
+ </div>
+ <button
+ type="submit"
+ className="px-6 py-3 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium rounded-xl hover:opacity-90 transition-opacity whitespace-nowrap"
+ >
+ Tim kiem
+ </button>
+ <Link
+ href={searchInput.trim() ? `/projects/search?q=${encodeURIComponent(searchInput.trim())}` : '/projects/search'}
+ className="px-4 py-3 rounded-xl border border-darkborder text-text-secondary hover:border-neon-violet/50 hover:text-white transition-colors whitespace-nowrap text-sm inline-flex items-center gap-1.5"
+ title="Tìm kiếm nâng cao trong nội dung case study"
+ >
+ <FileSearch className="w-4 h-4" />
+ Tìm nâng cao
+ </Link>
+ <a
+ href="/api/v1/projects/feed.xml"
+ target="_blank"
+ rel="alternate"
+ className="px-3 py-3 rounded-xl border border-darkborder text-orange-400 hover:border-orange-400/50 transition-colors"
+ title="RSS feed"
+ >
+ <Rss className="w-4 h-4" />
+ </a>
+ </form>
+
 
           {/* Filter toggle button */}
           <button

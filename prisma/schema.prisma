@@ -27,15 +27,15 @@ model Role {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  username  String  @unique(map: "uk_user_username") @db.VarChar(50)
-  password  String? @db.VarChar(255)
-  email     String  @unique(map: "uk_user_email") @db.VarChar(100)
-  fullName  String? @map("full_name") @db.VarChar(100)
-  bio       String? @db.Text
-  avatarUrl String? @map("avatar_url") @db.VarChar(500)
-  coverPhotoUrl String? @map("cover_photo_url") @db.VarChar(500)
-  lastActiveAt DateTime? @map("last_active_at")
+  id            Int       @id @default(autoincrement())
+  username      String    @unique(map: "uk_user_username") @db.VarChar(50)
+  password      String?   @db.VarChar(255)
+  email         String    @unique(map: "uk_user_email") @db.VarChar(100)
+  fullName      String?   @map("full_name") @db.VarChar(100)
+  bio           String?   @db.Text
+  avatarUrl     String?   @map("avatar_url") @db.VarChar(500)
+  coverPhotoUrl String?   @map("cover_photo_url") @db.VarChar(500)
+  lastActiveAt  DateTime? @map("last_active_at")
 
   // ─── Extended profile (Phase 1) ─────────────────────────
   // displayName: tên hiển thị (có thể khác username, dùng cho UI
@@ -113,7 +113,7 @@ model User {
   // the user OWNS. The relation `feedSavedPosts` is the
   // junction table that stores which posts they've saved
   // into which collections.
-  feedCollections         FeedCollection[]  @relation("FeedCollectionOwner")
+  feedCollections         FeedCollection[]         @relation("FeedCollectionOwner")
   feedSavedPosts          FeedSavedPost[]
 
   // Notification graph — who is the receiver / sender on social
@@ -121,8 +121,8 @@ model User {
   // SocialNotification above.
   socialNotificationsReceived SocialNotification[] @relation("NotificationsReceived")
   socialNotificationsSent     SocialNotification[] @relation("NotificationsSent")
-  socialPollVotes         SocialPollVote[]
-  techTrendArticles       TechTrendArticle[]       @relation("TechTrendAuthor")
+  socialPollVotes             SocialPollVote[]
+  techTrendArticles           TechTrendArticle[]   @relation("TechTrendAuthor")
 
   cyberProfile   CyberProfile?
   cyberTasks     CyberTask[]
@@ -441,14 +441,113 @@ model Project {
   isFeatured   Boolean   @default(false) @map("is_featured")
   startDate    DateTime? @map("start_date") @db.Date
   endDate      DateTime? @map("end_date") @db.Date
+  // ─── Case study / build log fields (Phase 2, additive) ───
+  // category — free-form string ("Web", "AI", "DevOps"…).
+  // difficulty — BEGINNER | INTERMEDIATE | ADVANCED.
+  // bodyMdx — Markdown source of truth.
+  // bodyHtml — server-rendered cache of bodyMdx; backfilled
+  // lazily on first public read if empty.
+  // schemaCode / schemaLang — optional code block for the
+  // "Database Schema" section on the case-study page.
+  // viewCount — denormalised counter, fire-and-forget on
+  // public detail reads. Not transactional.
+  // likeCount — denormalised counter for anonymous likes,
+  // kept consistent with project_likes table by routes.
+  // isPublished — admin can flip to false to hide a project
+  // without deleting it; defaults to true so existing
+  // projects stay public.
+  category     String?   @db.VarChar(80)
+  difficulty   String?   @db.VarChar(20)
+  bodyMdx      String?   @map("body_mdx") @db.Text
+  bodyHtml     String?   @map("body_html") @db.Text
+  schemaCode   String?   @map("schema_code") @db.Text
+  schemaLang   String?   @map("schema_lang") @db.VarChar(40)
+  viewCount    Int       @default(0) @map("view_count")
+  likeCount    Int       @default(0) @map("like_count")
+  isPublished  Boolean   @default(true) @map("is_published")
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
 
-  skills ProjectSkill[]
+  skills     ProjectSkill[]
+  milestones ProjectMilestone[]
+  features   ProjectFeature[]
+  resources  ProjectResource[]
+  likes      ProjectLike[]
 
   @@index([status], name: "idx_projects_status")
   @@index([isFeatured], name: "idx_projects_is_featured")
+  @@index([category], name: "idx_projects_category")
+  @@index([difficulty], name: "idx_projects_difficulty")
+  @@index([isPublished], name: "idx_projects_is_published")
   @@map("projects")
+}
+
+model ProjectMilestone {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  phase       String    @db.VarChar(40)
+  title       String    @db.VarChar(255)
+  description String?   @db.Text
+  date        DateTime? @db.Date
+  imageUrl    String?   @map("image_url") @db.VarChar(500)
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, order], name: "idx_project_milestones_project_order")
+  @@map("project_milestones")
+}
+
+model ProjectFeature {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  status      String   @default("PLANNED") @db.VarChar(20)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, order], name: "idx_project_features_project_order")
+  @@index([projectId, status], name: "idx_project_features_project_status")
+  @@map("project_features")
+}
+
+model ProjectResource {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  title       String   @db.VarChar(255)
+  url         String   @db.VarChar(1000)
+  type        String   @default("LINK") @db.VarChar(20)
+  fileSize    Int?     @map("file_size")
+  description String?  @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, order], name: "idx_project_resources_project_order")
+  @@map("project_resources")
+}
+
+model ProjectLike {
+  // Anonymous like record, keyed by IP HMAC-SHA256 hash so
+  // the user can hit "like" repeatedly without inflating
+  // the count. Unique (project_id, ip_hash) enforces
+  // idempotency at the DB level; the API layer also
+  // catches and treats the duplicate as success.
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  ipHash    String   @map("ip_hash") @db.VarChar(128)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, ipHash], name: "uk_project_like_project_ip")
+  @@index([projectId], name: "idx_project_likes_project")
+  @@map("project_likes")
 }
 
 model ProjectSkill {
@@ -498,41 +597,41 @@ model Semester {
 }
 
 model Course {
-  id                   Int       @id @default(autoincrement())
-  categoryId           Int?      @map("category_id")
-  instructorId         Int?      @map("instructor_id")
-  semesterId           Int?      @map("semester_id")
-  courseCode           String?   @map("course_code") @db.VarChar(50)
-  academyType          String    @default("GENERAL") @map("academy_type") @db.VarChar(30)
-  title                String    @db.VarChar(255)
-  slug                 String    @unique(map: "uk_course_slug") @db.VarChar(255)
-  shortDescription     String?   @map("short_description") @db.VarChar(500)
-  description          String?   @db.Text
-  thumbnailUrl         String?   @map("thumbnail_url") @db.VarChar(500)
-  previewVideoUrl      String?   @map("preview_video_url") @db.VarChar(500)
-  price                Decimal   @default(0) @db.Decimal(10, 2)
-  discountPrice        Decimal?  @map("discount_price") @db.Decimal(10, 2)
-  discountExpiresAt    DateTime? @map("discount_expires_at")
+  id                     Int       @id @default(autoincrement())
+  categoryId             Int?      @map("category_id")
+  instructorId           Int?      @map("instructor_id")
+  semesterId             Int?      @map("semester_id")
+  courseCode             String?   @map("course_code") @db.VarChar(50)
+  academyType            String    @default("GENERAL") @map("academy_type") @db.VarChar(30)
+  title                  String    @db.VarChar(255)
+  slug                   String    @unique(map: "uk_course_slug") @db.VarChar(255)
+  shortDescription       String?   @map("short_description") @db.VarChar(500)
+  description            String?   @db.Text
+  thumbnailUrl           String?   @map("thumbnail_url") @db.VarChar(500)
+  previewVideoUrl        String?   @map("preview_video_url") @db.VarChar(500)
+  price                  Decimal   @default(0) @db.Decimal(10, 2)
+  discountPrice          Decimal?  @map("discount_price") @db.Decimal(10, 2)
+  discountExpiresAt      DateTime? @map("discount_expires_at")
   accessType             String    @default("FREE") @map("access_type") @db.VarChar(10)
   enrollmentDurationDays Int       @default(0) @map("enrollment_duration_days")
   level                  String    @default("BEGINNER") @db.VarChar(20)
-  language             String    @default("Vietnamese") @db.VarChar(20)
-  isFree               Boolean   @default(false) @map("is_free")
-  isFeatured           Boolean   @default(false) @map("is_featured")
-  isPublished          Boolean   @default(false) @map("is_published")
-  publishedAt          DateTime? @map("published_at")
-  totalDurationSeconds Int       @default(0) @map("total_duration_seconds")
-  totalLessons         Int       @default(0) @map("total_lessons")
-  totalStudents        Int       @default(0) @map("total_students")
-  totalReviews         Int       @default(0) @map("total_reviews")
-  avgRating            Decimal   @default(0) @db.Decimal(3, 2)
-  requirements         String?   @db.Text
-  whatYouLearn         String?   @map("what_you_learn") @db.Text
-  startDate            DateTime? @map("start_date")
-  endDate              DateTime? @map("end_date")
-  status               String    @default("DRAFT") @db.VarChar(20)
-  createdAt            DateTime  @default(now()) @map("created_at")
-  updatedAt            DateTime  @updatedAt @map("updated_at")
+  language               String    @default("Vietnamese") @db.VarChar(20)
+  isFree                 Boolean   @default(false) @map("is_free")
+  isFeatured             Boolean   @default(false) @map("is_featured")
+  isPublished            Boolean   @default(false) @map("is_published")
+  publishedAt            DateTime? @map("published_at")
+  totalDurationSeconds   Int       @default(0) @map("total_duration_seconds")
+  totalLessons           Int       @default(0) @map("total_lessons")
+  totalStudents          Int       @default(0) @map("total_students")
+  totalReviews           Int       @default(0) @map("total_reviews")
+  avgRating              Decimal   @default(0) @db.Decimal(3, 2)
+  requirements           String?   @db.Text
+  whatYouLearn           String?   @map("what_you_learn") @db.Text
+  startDate              DateTime? @map("start_date")
+  endDate                DateTime? @map("end_date")
+  status                 String    @default("DRAFT") @db.VarChar(20)
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @updatedAt @map("updated_at")
 
   category     CourseCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   instructor   User?           @relation("CourseInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
@@ -678,7 +777,7 @@ model CourseCode {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 
-  course     Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
   enrollments Enrollment[]
 
   @@unique([courseId, code], map: "uk_course_code_course_code")
@@ -1180,17 +1279,17 @@ model SocialPost {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  author   User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  media    SocialMedia[]
-  likes    SocialLike[]
-  comments SocialComment[]
-  saves    SocialSave[]
-  shares   SocialShare[]
+  author         User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  media          SocialMedia[]
+  likes          SocialLike[]
+  comments       SocialComment[]
+  saves          SocialSave[]
+  shares         SocialShare[]
   // Back-relation from the new multi-collection save table.
   // A post can be saved into N collections per user (one
   // row per (user, post, collection) triple).
   feedSavedPosts FeedSavedPost[]
-  poll     SocialPoll?
+  poll           SocialPoll?
 
   @@index([authorId], name: "idx_social_posts_author")
   @@index([createdAt(sort: Desc)], name: "idx_social_posts_created")
@@ -1338,19 +1437,19 @@ model SocialSave {
 // however, must cascade to FeedSavedPost so we don't end up
 // with orphan saves.
 model FeedCollection {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(80)
-  ownerId     Int      @map("owner_id")
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(80)
+  ownerId   Int      @map("owner_id")
   // Optional emoji chosen by the user for quick visual ID.
-  icon        String?  @db.VarChar(8)
+  icon      String?  @db.VarChar(8)
   // Soft-sort key for the order the user arranged their
   // collections in. Defaults to createdAt so the popover
   // lists them in a stable order without explicit drag-drop.
-  sortOrder   Int      @default(0) @map("sort_order")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt    @map("updated_at")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  owner User                @relation("FeedCollectionOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  owner User            @relation("FeedCollectionOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   saves FeedSavedPost[]
 
   // Two collections on the same user can't share the same
@@ -1426,24 +1525,24 @@ model SocialShare {
 // per-notification "seen at" timestamp yet.
 
 model SocialNotification {
-  id         Int      @id @default(autoincrement())
-  receiverId Int      @map("receiver_id")
-  senderId   Int      @map("sender_id")
+  id                Int      @id @default(autoincrement())
+  receiverId        Int      @map("receiver_id")
+  senderId          Int      @map("sender_id")
   // NEW_POST | NEW_REACTION | NEW_COMMENT | NEW_REPLY |
   // NEW_MENTION | NEW_MESSAGE
-  type       String   @db.VarChar(20)
+  type              String   @db.VarChar(20)
   // Polymorphic pointer — meaning depends on `type`. We keep it
   // as Int (no FK) for forward flexibility.
-  entityId   Int?     @map("entity_id")
+  entityId          Int?     @map("entity_id")
   // Optional second polymorphic pointer (e.g. comment.parentId
   // for a reply so the bell can deep-link into the right thread).
-  secondaryEntityId Int? @map("secondary_entity_id")
-  payload    Json?    @map("payload") @db.JsonB
-  isRead     Boolean  @default(false) @map("is_read")
-  createdAt  DateTime @default(now()) @map("created_at")
+  secondaryEntityId Int?     @map("secondary_entity_id")
+  payload           Json?    @map("payload") @db.JsonB
+  isRead            Boolean  @default(false) @map("is_read")
+  createdAt         DateTime @default(now()) @map("created_at")
 
   receiver User @relation("NotificationsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
-  sender   User @relation("NotificationsSent",     fields: [senderId],   references: [id], onDelete: Cascade)
+  sender   User @relation("NotificationsSent", fields: [senderId], references: [id], onDelete: Cascade)
 
   // Hot path: "list the latest unread notifications for user X".
   @@index([receiverId, isRead, createdAt(sort: Desc)], name: "idx_social_notif_receiver_unread")
@@ -1548,20 +1647,20 @@ model MessageThread {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  user       User?            @relation("ThreadAsUser", fields: [userId], references: [id], onDelete: Cascade)
-  adminUser  User?            @relation("ThreadAsAdmin", fields: [adminUserId], references: [id], onDelete: Cascade)
-  userA      User?            @relation("ThreadUserA", fields: [userAId], references: [id], onDelete: Cascade)
-  userB      User?            @relation("ThreadUserB", fields: [userBId], references: [id], onDelete: Cascade)
-  messages   Message[]
-  readStates MessageRead[]
-  nicknames  ThreadNickname[]
-  reports    ThreadReport[]   @relation("ThreadReportsTarget")
+  user        User?            @relation("ThreadAsUser", fields: [userId], references: [id], onDelete: Cascade)
+  adminUser   User?            @relation("ThreadAsAdmin", fields: [adminUserId], references: [id], onDelete: Cascade)
+  userA       User?            @relation("ThreadUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB       User?            @relation("ThreadUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  messages    Message[]
+  readStates  MessageRead[]
+  nicknames   ThreadNickname[]
+  reports     ThreadReport[]   @relation("ThreadReportsTarget")
   // Per-user thread preferences. JSONB keyed by userId so each
   // participant can independently pin/mute/archive the thread
   // without affecting the other side.
   //
   // Shape: { [userId]: { pinnedAt?, mutedUntil?, archivedAt?, markedUnreadAt? } }
-  preferences Json     @default("{}") @map("preferences")
+  preferences Json             @default("{}") @map("preferences")
 
   @@unique([userId, adminUserId, type], name: "uk_thread_admin_pair")
   @@unique([userAId, userBId, type], name: "uk_thread_user_pair")
@@ -1579,13 +1678,13 @@ model MessageThread {
 /// sidebar. We don't delete the thread — A still keeps their
 /// copy and can unblock at any time.
 model UserBlock {
-  id         Int      @id @default(autoincrement())
-  blockerId  Int      @map("blocker_id")
-  blockedId  Int      @map("blocked_id")
+  id        Int      @id @default(autoincrement())
+  blockerId Int      @map("blocker_id")
+  blockedId Int      @map("blocked_id")
   // Optional reason stored for the blocker's reference. Not
   // shown to the blocked user.
-  reason     String?  @db.VarChar(200)
-  createdAt  DateTime @default(now()) @map("created_at")
+  reason    String?  @db.VarChar(200)
+  createdAt DateTime @default(now()) @map("created_at")
 
   blocker User @relation("UserBlocksCreated", fields: [blockerId], references: [id], onDelete: Cascade)
   blocked User @relation("UserBlocksReceived", fields: [blockedId], references: [id], onDelete: Cascade)
@@ -1600,23 +1699,23 @@ model UserBlock {
 /// thread Y because ..." entry. Stored for moderator review;
 /// the reporter can withdraw by deleting the row.
 model ThreadReport {
-  id          Int      @id @default(autoincrement())
-  reporterId  Int      @map("reporter_id")
-  threadId    Int      @map("thread_id")
+  id         Int       @id @default(autoincrement())
+  reporterId Int       @map("reporter_id")
+  threadId   Int       @map("thread_id")
   // Free-form reason. Kept short (200 chars) so we can render
   // it directly in the admin inbox without further truncation.
-  reason      String   @db.VarChar(200)
+  reason     String    @db.VarChar(200)
   // Optional structured category for filtering in admin.
   // 'SPAM' | 'HARASSMENT' | 'HATE' | 'IMPERSONATION' | 'OTHER' | null
-  category    String?  @db.VarChar(30)
-  createdAt   DateTime @default(now()) @map("created_at")
-  resolvedAt  DateTime? @map("resolved_at")
-  resolvedBy  Int?     @map("resolved_by")
-  resolution  String?  @db.VarChar(500)
+  category   String?   @db.VarChar(30)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  resolvedAt DateTime? @map("resolved_at")
+  resolvedBy Int?      @map("resolved_by")
+  resolution String?   @db.VarChar(500)
 
-  reporter User         @relation("ThreadReportsFiled", fields: [reporterId], references: [id], onDelete: Cascade)
+  reporter User          @relation("ThreadReportsFiled", fields: [reporterId], references: [id], onDelete: Cascade)
   thread   MessageThread @relation("ThreadReportsTarget", fields: [threadId], references: [id], onDelete: Cascade)
-  resolver User?        @relation("ThreadReportsResolved", fields: [resolvedBy], references: [id], onDelete: SetNull)
+  resolver User?         @relation("ThreadReportsResolved", fields: [resolvedBy], references: [id], onDelete: SetNull)
 
   @@index([reporterId], name: "idx_report_reporter")
   @@index([threadId], name: "idx_report_thread")
@@ -2094,23 +2193,23 @@ model TechTrendArticle {
 // whether the value starts with "/" or "http".
 
 model HubFolder {
-  id        Int       @id @default(autoincrement())
-  userId    Int       @map("user_id")
-  parentId  Int?      @map("parent_id")
-  name      String    @db.VarChar(100)
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  parentId  Int?     @map("parent_id")
+  name      String   @db.VarChar(100)
   // Either a Lucide icon name (frontend resolves to component)
   // or an absolute URL to an uploaded image on R2.
-  icon      String?   @db.VarChar(500)
+  icon      String?  @db.VarChar(500)
   // Display order within the sidebar. Lower = first. Default 0.
-  sortOrder Int       @default(0) @map("sort_order")
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   links    HubLink[]
   files    HubFile[]
-  parent   HubFolder?   @relation("HubSubFolders", fields: [parentId], references: [id], onDelete: Cascade)
-  children HubFolder[]  @relation("HubSubFolders")
+  parent   HubFolder?  @relation("HubSubFolders", fields: [parentId], references: [id], onDelete: Cascade)
+  children HubFolder[] @relation("HubSubFolders")
 
   @@index([userId, sortOrder], name: "idx_hub_folders_user_sort")
   @@index([userId, name], name: "idx_hub_folders_user_name")
@@ -2134,9 +2233,9 @@ model HubLink {
   // String[] tags. Native Postgres array — no join table needed
   // for a small set (typically < 20 per link). The API normalises
   // each tag to lowercase + trim before insert.
-  tags   String[] @default([])
+  tags         String[] @default([])
   // Progress status: "unread" | "learning" | "done"
-  status String   @default("unread") @map("status")
+  status       String   @default("unread") @map("status")
   // When true the link is reachable via /api/v1/hub/public/:slug
   // without auth. We never expose userId, notes, or personal
   // tags in the public payload.
@@ -2161,26 +2260,26 @@ model HubLink {
 // ─── Hub File Storage ─────────────────────────────────────────
 
 model HubFile {
-  id        Int       @id @default(autoincrement())
-  userId    Int       @map("user_id")
-  folderId  Int?      @map("folder_id")
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  folderId   Int?     @map("folder_id")
   // Display name shown in the UI (original filename).
-  name      String    @db.VarChar(255)
+  name       String   @db.VarChar(255)
   // R2 object key, e.g. "hub-files/user42/abc123.pdf"
-  key       String    @db.VarChar(500)
-  size      Int                            // bytes
-  mimeType  String    @db.VarChar(100)
+  key        String   @db.VarChar(500)
+  size       Int // bytes
+  mimeType   String   @db.VarChar(100)
   // Progress status: "unread" | "learning" | "done"
-  status    String    @default("unread")
-  tags      String[]  @default([])
-  notes     String?   @db.Text
-  isPublic  Boolean   @default(false)
+  status     String   @default("unread")
+  tags       String[] @default([])
+  notes      String?  @db.Text
+  isPublic   Boolean  @default(false)
   publicSlug String?  @unique @map("public_slug") @db.VarChar(32)
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
-  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  folder HubFolder?   @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folder HubFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
 
   @@index([userId, folderId], name: "idx_hub_files_user_folder")
   @@index([userId, status], name: "idx_hub_files_user_status")

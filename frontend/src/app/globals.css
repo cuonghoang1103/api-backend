@@ -1170,4 +1170,285 @@ aside ::-webkit-scrollbar-thumb:hover {
  color: #fff;
 }
 
+/* ============================================================
+ * Premium Projects page — ambient, glass, shimmer utilities
+ * ============================================================
+ * All rules below are scoped to the /projects page and
+ * new components. They do NOT leak into the rest of the
+ * site because the new components opt in by class name.
+ * ------------------------------------------------------------ */
+
+/* ── Glassmorphism — frosted card surface ──────────────── */
+/* Replaces the older `.glass` rule with a tighter,
+ * less heavy variant. Rgba is intentionally low so the
+ * card never reads as a translucent colored box — it's a
+ * subtle frosted layer over the aurora field below. */
+.glass-frost {
+ background: rgba(18, 18, 26, 0.55);
+ backdrop-filter: blur(20px) saturate(140%);
+ -webkit-backdrop-filter: blur(20px) saturate(140%);
+ border: 1px solid rgba(255, 255, 255, 0.06);
+ /* Inner highlight — a thin top-to-bottom white gradient
+ * that fakes a subtle bevel along the top edge. */
+ box-shadow:
+ 0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
+ 0 12px 30px rgba(0, 0, 0, 0.35),
+ 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+/* ── 1px gradient border (violet → indigo) ─────────────── */
+/* The .gradient-border utility in this file is content-box
+ * mask-based; this is a more controlled variant used by
+ * the premium cards. */
+.gradient-border-violet {
+ position: relative;
+ background-clip: padding-box;
+}
+.gradient-border-violet::before {
+ content: '';
+ position: absolute;
+ inset: 0;
+ padding: 1px;
+ border-radius: inherit;
+ background: linear-gradient(
+ 135deg,
+ rgba(139, 92, 246, 0.55),
+ rgba(99, 102, 241, 0.25) 35%,
+ rgba(34, 211, 238, 0.0) 60%,
+ rgba(217, 70, 239, 0.45)
+ );
+ -webkit-mask:
+ linear-gradient(#fff 0 0) content-box,
+ linear-gradient(#fff 0 0);
+ -webkit-mask-composite: xor;
+ mask-composite: exclude;
+ opacity: 0;
+ transition: opacity 0.4s var(--ease-apple, cubic-bezier(0.23, 1, 0.32, 1));
+ pointer-events: none;
+}
+.gradient-border-violet:hover::before,
+.gradient-border-violet.is-active::before {
+ opacity: 1;
+}
+
+/* ── Faint CSS grid (high-end tech texture) ─────────────── */
+.grid-overlay {
+ background-image:
+ linear-gradient(rgba(139, 92, 246, 0.035) 1px, transparent 1px),
+ linear-gradient(90deg, rgba(139, 92, 246, 0.035) 1px, transparent 1px);
+ background-size: 48px 48px;
+ background-position: -1px -1px;
+}
+
+/* ── SVG noise overlay — adds film grain over the canvas ── */
+/* A single low-opacity data-uri SVG, embedded so we don't
+ * ship a separate asset. Pointer-events:none so it never
+ * interferes with the UI. */
+.noise-overlay::after {
+ content: '';
+ position: absolute;
+ inset: 0;
+ pointer-events: none;
+ background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+ opacity: 0.04;
+ mix-blend-mode: overlay;
+}
+
+/* ── Skeleton shimmer — gradient strip sweeping across ──── */
+/* Used by <ProjectsSkeleton>. The wrapper has overflow
+ * hidden, the inner element uses a 200% wide gradient
+ * that translates -100% → 100% on a 1.6s loop. */
+.shimmer-track {
+ position: relative;
+ overflow: hidden;
+ background: rgba(255, 255, 255, 0.025);
+}
+.shimmer-track::after {
+ content: '';
+ position: absolute;
+ inset: 0;
+ background: linear-gradient(
+ 90deg,
+ transparent 0%,
+ rgba(139, 92, 246, 0.06) 45%,
+ rgba(255, 255, 255, 0.05) 50%,
+ rgba(139, 92, 246, 0.06) 55%,
+ transparent 100%
+ );
+ transform: translateX(-100%);
+ animation: shimmerSweep 1.6s linear infinite;
+}
+/* The keyframe is defined in tailwind.config.ts but we
+ * also reference it here as a fallback for cases where
+ * the config isn't picked up (e.g. isolated hot reload). */
+@keyframes shimmerSweep {
+ 0% { transform: translateX(-100%); }
+ 100% { transform: translateX(100%); }
+}
+
+/* ── Premium card tilt wrapper ──────────────────────────── */
+/* The card surface gets perspective + 3d transform-style
+ * so the rotateX/Y from Framer Motion actually creates a
+ * 3D feel rather than a flat skew. */
+.premium-tilt {
+ transform-style: preserve-3d;
+ -webkit-transform-style: preserve-3d;
+ will-change: transform;
+}
+
+/* Children that should "float" forward (image, headline)
+ * when the card tilts. The translateZ is small so the
+ * effect is subtle. */
+.premium-tilt-child {
+ transform: translateZ(20px);
+}
+
+/* ── Magnetic press — button feedback ───────────────────── */
+/* Subtle press feedback for action buttons. Scale on tap
+ * (CSS so it works even before Framer Motion hydrates) +
+ * a tiny glow ring on hover. */
+.magnetic-press {
+ transition:
+ transform 0.22s var(--ease-apple, cubic-bezier(0.23, 1, 0.32, 1)),
+ box-shadow 0.22s var(--ease-apple, cubic-bezier(0.23, 1, 0.32, 1));
+ will-change: transform;
+}
+.magnetic-press:hover {
+ box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35), 0 6px 20px rgba(139, 92, 246, 0.18);
+}
+.magnetic-press:active {
+ transform: scale(0.96);
+}
+
+/* ── Scroll cue (hero bottom) ───────────────────────────── */
+/* A vertical 2px line that gently pulses — points the
+ * user toward the project grid below. */
+.scroll-cue {
+ width: 1px;
+ height: 56px;
+ background: linear-gradient(to bottom, transparent, rgba(139, 92, 246, 0.7), transparent);
+ transform-origin: top;
+ animation: scrollCuePulse 2.4s ease-in-out infinite;
+}
+@keyframes scrollCuePulse {
+ 0%, 100% { opacity: 0.35; transform: scaleY(0.7); }
+ 50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ── Hero rotating tagline caret ─────────────────────────── */
+.hero-caret {
+ display: inline-block;
+ width: 0.5em;
+ height: 1.1em;
+ vertical-align: -0.12em;
+ margin-left: 0.05em;
+ background: #c4b5fd;
+ box-shadow: 0 0 8px rgba(139, 92, 246, 0.7);
+ animation: caretBlink 1.1s steps(2, jump-none) infinite;
+}
+@keyframes caretBlink {
+ 0%, 100% { opacity: 1; }
+ 50% { opacity: 0; }
+}
+
+/* ── Status pill (mono, uppercase, tiny) ─────────────────── */
+.status-pill {
+ display: inline-flex;
+ align-items: center;
+ gap: 0.3rem;
+ padding: 0.2rem 0.55rem;
+ font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+ font-size: 10px;
+ font-weight: 500;
+ letter-spacing: 0.08em;
+ text-transform: uppercase;
+ border-radius: 9999px;
+ border: 1px solid currentColor;
+ background: rgba(0, 0, 0, 0.4);
+ backdrop-filter: blur(8px);
+ -webkit-backdrop-filter: blur(8px);
+}
+
+/* ── Tech chip — small mono pill ────────────────────────── */
+.tech-chip {
+ display: inline-flex;
+ align-items: center;
+ padding: 0.18rem 0.55rem;
+ font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+ font-size: 10px;
+ letter-spacing: 0.03em;
+ color: rgb(196, 181, 253);
+ background: rgba(139, 92, 246, 0.08);
+ border: 1px solid rgba(139, 92, 246, 0.18);
+ border-radius: 4px;
+ transition: all 0.2s var(--ease-apple, cubic-bezier(0.23, 1, 0.32, 1));
+}
+.tech-chip:hover {
+ background: rgba(139, 92, 246, 0.16);
+ border-color: rgba(139, 92, 246, 0.4);
+ color: rgb(221, 214, 254);
+}
+
+/* ── Eyebrow chip above hero (mono, pulsing dot) ────────── */
+.eyebrow-chip {
+ display: inline-flex;
+ align-items: center;
+ gap: 0.5rem;
+ padding: 0.35rem 0.85rem;
+ font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+ font-size: 11px;
+ letter-spacing: 0.12em;
+ text-transform: uppercase;
+ color: rgb(196, 181, 253);
+ background: rgba(139, 92, 246, 0.06);
+ border: 1px solid rgba(139, 92, 246, 0.25);
+ border-radius: 9999px;
+}
+.eyebrow-chip .dot {
+ width: 6px;
+ height: 6px;
+ border-radius: 9999px;
+ background: #4ade80;
+ box-shadow: 0 0 8px #4ade80;
+ animation: led-blink 4s ease-in-out infinite;
+}
+@keyframes led-blink {
+ 0%, 90%, 100% { opacity: 1; }
+ 93% { opacity: 0.3; }
+ 96% { opacity: 1; }
+ 98% { opacity: 0.5; }
+}
+
+/* ── Search field — focus halo ──────────────────────────── */
+.search-field {
+ transition:
+ border-color 0.25s var(--ease-apple, cubic-bezier(0.23, 1, 0.32, 1)),
+ box-shadow 0.25s var(--ease-apple, cubic-bezier(0.23, 1, 0.32, 1));
+}
+.search-field:focus-within {
+ border-color: rgba(139, 92, 246, 0.5);
+ box-shadow:
+ 0 0 0 3px rgba(139, 92, 246, 0.12),
+ 0 0 30px rgba(139, 92, 246, 0.18);
+}
+
+/* ── Reduced-motion fallback ────────────────────────────── */
+/* If the user has prefers-reduced-motion set, kill the
+ * ambient drift + shimmer + caret pulse. The page stays
+ * usable; it just stops moving. */
+@media (prefers-reduced-motion: reduce) {
+ .animate-aurora-drift-slow,
+ .animate-aurora-drift-slower,
+ .shimmer-track::after,
+ .scroll-cue,
+ .hero-caret,
+ .eyebrow-chip .dot,
+ .noise-overlay::after {
+ animation: none !important;
+ }
+ .premium-tilt {
+ transform: none !important;
+ }
+}
+
 

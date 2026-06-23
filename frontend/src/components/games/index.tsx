@@ -21,6 +21,19 @@ interface GameRendererProps {
 }
 
 export default function GameRenderer({ game }: GameRendererProps) {
+  if (game.gameType === 'iframe' && game.iframeSrc) {
+    return (
+      <iframe
+        src={game.iframeSrc}
+        title={game.title}
+        className="w-full h-full rounded-xl"
+        style={{ minHeight: '400px' }}
+        allow="autoplay; fullscreen"
+        sandbox="allow-scripts allow-same-origin allow-forms"
+      />
+    );
+  }
+
   switch (game.componentName) {
     case 'SnakeGame':
       return <SnakeGame />;

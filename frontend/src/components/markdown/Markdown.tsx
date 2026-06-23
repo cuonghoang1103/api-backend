@@ -6,7 +6,6 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
-import rehypePrettyCode, { type Options as PrettyCodeOptions } from 'rehype-pretty-code';
 import CodeBlock from './CodeBlock';
 
 interface MarkdownProps {
@@ -34,8 +33,14 @@ interface MarkdownProps {
  * with manual line breaks collapse to one line)
  * • rehype-raw: allow the callout preprocessor's <aside>
  * blocks to pass through
- * • rehype-pretty-code: VSCode-grade syntax highlighting
- * for fenced code blocks (uses Shiki under the hood)
+ *
+ * Fenced code blocks are NOT highlighted by a rehype plugin.
+ * react-markdown runs its rehype chain via `runSync()`, which
+ * throws "runSync finished async. Use run instead" the moment a
+ * plugin transforms asynchronously — and Shiki (rehype-pretty-code)
+ * is async. So instead we render each ```fence``` through the
+ * <CodeBlock /> component, which performs the Shiki highlight in a
+ * React effect (async-safe) and gives us the exact same theme.
  *
  * Two render paths:
  * 1. If `html` is provided, render directly via
@@ -116,16 +121,6 @@ export default function Markdown({
  remarkPlugins={[remarkGfm, remarkBreaks]}
  rehypePlugins={[
  rehypeRaw,
- // rehype-pretty-code turns ```lang … ``` into
- // <pre><code data-language="…"><span style="color:#xxx">…
- // </span></code></pre> using Shiki (github-dark theme).
- // The default options produce inline-styled spans, so
- // we only need to set the theme — no extra CSS classes.
- [rehypePrettyCode, {
- theme: 'github-dark',
- keepBackground: false,
- defaultLang: 'plaintext',
- } satisfies PrettyCodeOptions],
  rehypeSanitize,
  ]}
  components={{
@@ -139,16 +134,15 @@ export default function Markdown({
  return <a {...props} />;
  },
  // Inline code in our design system — neon-violet pill.
- // Block code (fenced) is handled by rehype-pretty-code
- // and arrives as a fully styled <pre><code>.
+ // Fenced code blocks (className `language-xxx`) are
+ // rendered by <CodeBlock />, which highlights with Shiki
+ // asynchronously inside a React effect — safe under
+ // react-markdown's synchronous rehype runner.
  code: ({ className, children, ...props }) => {
- const isBlock = /language-/.test(className ?? '');
- if (isBlock) {
- return (
- <code className={className} {...props}>
- {children}
- </code>
- );
+ const match = /language-(\w+)/.exec(className ?? '');
+ if (match) {
+ const code = String(children ?? '').replace(/\n$/, '');
+ return <CodeBlock code={code} language={match[1]} />;
  }
  return (
  <code className="px-1.5 py-0.5 rounded text-[0.9em] bg-neon-violet/10 text-neon-violet border border-neon-violet/20 font-mono" {...props}>
@@ -156,15 +150,10 @@ export default function Markdown({
  </code>
  );
  },
- // rehype-pretty-code wraps the rendered code in a <pre>
- // with `data-language` etc. We pass it through unchanged
- // and let the global .case-study-body pre styles handle
- // the chrome.
- pre: ({ children, ...props }) => (
- <pre {...props} className="shiki-pre">
- {children}
- </pre>
- ),
+ // <CodeBlock /> renders its own <pre> chrome, so unwrap
+ // react-markdown's surrounding <pre> to avoid invalid
+ // <pre><div> nesting. Inline code never reaches here.
+ pre: ({ children }) => <>{children}</>,
  h1: ({ id, children, ...props }) => <h1 id={id} {...props}>{children}</h1>,
  h2: ({ id, children, ...props }) => <h2 id={id} {...props}>{children}</h2>,
  h3: ({ id, children, ...props }) => <h3 id={id} {...props}>{children}</h3>,

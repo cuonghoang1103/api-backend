@@ -23,23 +23,33 @@ async function main() {
   console.log('✅ Roles created');
 
   // ─── Create admin user ─────────────────────────────
-  const adminPassword = await bcrypt.hash('admin123', 12);
-
-  const admin = await prisma.user.upsert({
-    where: { username: 'admin' },
-    update: {},
-    create: {
-      username: 'admin',
-      email: 'cuongthaihnhe176322@gmail.com',
-      fullName: 'Cuong Hoang Dev',
-      password: adminPassword,
-      roles: {
-        create: [{ roleId: roleAdmin.id }],
+  // Idempotent + collision-safe. An admin account may already
+  // exist under a *different* username (the real `Cuong03dx`
+  // account is seeded separately by seed-cuong03dx.cjs) but with
+  // this same email. Upserting by `username: 'admin'` would miss
+  // that row, fall through to create, and hit a P2002 unique
+  // violation on `email` — which aborts the whole seed before the
+  // project / content-creator / idea seeds below ever run. So we
+  // look the user up by its unique email first and only create one
+  // when none exists.
+  const adminEmail = 'cuongthaihnhe176322@gmail.com';
+  let admin = await prisma.user.findUnique({ where: { email: adminEmail } });
+  if (!admin) {
+    const adminPassword = await bcrypt.hash('admin123', 12);
+    admin = await prisma.user.create({
+      data: {
+        username: 'admin',
+        email: adminEmail,
+        fullName: 'Cuong Hoang Dev',
+        password: adminPassword,
+        roles: {
+          create: [{ roleId: roleAdmin.id }],
+        },
       },
-    },
-  });
+    });
+  }
 
-  console.log('✅ Admin user created:', admin.email);
+  console.log('✅ Admin user ready:', admin.email);
 
   // ─── Seed AI Config ────────────────────────────────
   const aiConfigs = [
@@ -291,7 +301,7 @@ npm run dev
  // doesn't have to lazy-backfill on first read.
  let bodyHtml: string | null = null;
  try {
- bodyHtml = renderProjectMarkdown(bodyMdx);
+ bodyHtml = await renderProjectMarkdown(bodyMdx);
  } catch (err) {
  console.error('[seed] renderProjectMarkdown failed:', err);
  }

@@ -2209,6 +2209,17 @@ import type {
 export interface ContentListParams {
  status?: ContentStatus;
  type?: ContentType;
+ /** ISO date string (YYYY-MM-DD). Used by the
+ * calendar view to fetch only projects whose
+ * filmDate/publishDate fall in this window. */
+ from?: string;
+ /** ISO date string (YYYY-MM-DD). Inclusive — the
+ * server extends to end-of-day. */
+ to?: string;
+ /** Which date field the range applies to.
+ * `film` (default if not used with `any`) or
+ * `publish` or `any` (OR across both). */
+ field?: 'film' | 'publish' | 'any';
  q?: string;
 }
 

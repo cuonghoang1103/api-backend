@@ -169,7 +169,7 @@ function buildProjectPatch(body: Record<string, unknown>, existing: { title: str
  return out as { title: string } & Record<string, unknown>;
 }
 
-// ─── GET /projects ─────────────────────────────────────────────────────────
+ // ─── GET /projects ─────────────────────────────────────────────────────────
 router.get('/projects', async (req, res: Response<ApiResponse>, next) => {
  try {
  const where: Prisma.ContentProjectWhereInput = {};
@@ -184,6 +184,44 @@ router.get('/projects', async (req, res: Response<ApiResponse>, next) => {
  { title: { contains: req.query.q.trim(), mode: 'insensitive' } },
  { concept: { contains: req.query.q.trim(), mode: 'insensitive' } },
  ];
+ }
+
+ // Phase 6: optional date-range filter used by the
+ // calendar view. Pass `?from=YYYY-MM-DD&to=YYYY-MM-DD`
+ // and we restrict to projects whose `filmDate` OR
+ // `publishDate` falls in that window. The `field` query
+ // narrows it: `?field=film` (default), `?field=publish`,
+ // or `?field=any` (OR, the calendar default).
+ const fromStr = typeof req.query.from === 'string' ? req.query.from : '';
+ const toStr = typeof req.query.to === 'string' ? req.query.to : '';
+ const field = typeof req.query.field === 'string' ? req.query.field : 'any';
+ if (fromStr || toStr) {
+ const from = fromStr ? new Date(fromStr) : null;
+ const to = toStr ? new Date(toStr) : null;
+ if (from && Number.isNaN(from.getTime())) {
+ throw new AppError('Invalid "from" date', 400, 'BAD_REQUEST');
+ }
+ if (to && Number.isNaN(to.getTime())) {
+ throw new AppError('Invalid "to" date', 400, 'BAD_REQUEST');
+ }
+ const range: Prisma.DateTimeFilter = {};
+ if (from) range.gte = from;
+ if (to) range.lte = to;
+ // For "to" we want to include the whole day, so
+ // bump it to the end of day if user only gave a date.
+ if (to && /^\d{4}-\d{2}-\d{2}$/.test(toStr)) {
+ to.setHours(23, 59, 59, 999);
+ }
+ if (field === 'film') where.filmDate = range;
+ else if (field === 'publish') where.publishDate = range;
+ else {
+ // 'any' — match either filmDate or publishDate
+ where.OR = [
+ ...(Array.isArray(where.OR) ? where.OR : []),
+ { filmDate: range },
+ { publishDate: range },
+ ];
+ }
  }
 
  const items = await prisma.contentProject.findMany({

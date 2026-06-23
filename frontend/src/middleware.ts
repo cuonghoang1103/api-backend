@@ -19,18 +19,24 @@ import { NextRequest, NextResponse } from 'next/server';
  *
  * Routes:
  * - /admin/* → admin only (admin_role=1)
+ * - /creator/* → admin only (Content Studio, Phase 3+)
  * - /learn/* → any authenticated user (just needs backend_token)
  */
 export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+ const pathname = request.nextUrl.pathname;
 
-  if (pathname.startsWith('/admin')) {
-    return handleAdminRoute(request, pathname);
-  }
-  if (pathname.startsWith('/learn')) {
-    return handleLearnRoute(request, pathname);
-  }
-  return NextResponse.next();
+ if (pathname.startsWith('/admin')) {
+ return handleAdminRoute(request, pathname);
+ }
+ if (pathname.startsWith('/creator')) {
+ // Content Studio is admin-only. Reuses the exact same
+ // cookie gate as /admin/* — no extra config needed.
+ return handleAdminRoute(request, pathname);
+ }
+ if (pathname.startsWith('/learn')) {
+ return handleLearnRoute(request, pathname);
+ }
+ return NextResponse.next();
 }
 
 function readCookie(request: NextRequest, name: string): string {
@@ -124,5 +130,5 @@ async function handleLearnRoute(
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/admin', '/learn/:path*'],
+ matcher: ['/admin/:path*', '/admin', '/creator/:path*', '/creator', '/learn/:path*'],
 };

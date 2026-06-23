@@ -12,24 +12,28 @@ import { useNotificationStore } from '@/store/notificationStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import NotificationDropdown from '@/components/social/NotificationDropdown';
 import {
-  Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles, TrendingUp,
-  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
-  Globe, ShoppingBag, GraduationCap, Bell,
+ Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles, TrendingUp,
+ User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
+ Globe, ShoppingBag, GraduationCap, Bell, Clapperboard,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { ChangePasswordModal } from '@/components/auth/ChangePasswordModal';
 
 const TOP_NAV_LINKS = [
-  { href: '/', label: 'Home', icon: Home },
-  { href: '/academy', label: 'Academy', icon: GraduationCap },
-  { href: '/about', label: 'About', icon: User },
-  { href: '/blog', label: 'Blog', icon: BookOpen },
-  { href: '/projects', label: 'Projects', icon: FolderOpen },
-  { href: '/tech-trends', label: 'Tech Trends', icon: TrendingUp },
-  { href: '/music', label: 'Music', icon: Music },
-  { href: '/messages', label: 'Messages', icon: MessageCircle, authOnly: true },
-  { href: '/chat', label: 'AI Chat', icon: Sparkles },
+ { href: '/', label: 'Home', icon: Home },
+ { href: '/academy', label: 'Academy', icon: GraduationCap },
+ { href: '/about', label: 'About', icon: User },
+ { href: '/blog', label: 'Blog', icon: BookOpen },
+ { href: '/projects', label: 'Projects', icon: FolderOpen },
+ // Content Studio — admin-only. Filtered out at render
+ // time unless the verified admin check passes. Distinct
+ // amber accent vs the violet used everywhere else.
+ { href: '/creator', label: 'Studio', icon: Clapperboard, adminOnly: true },
+ { href: '/tech-trends', label: 'Tech Trends', icon: TrendingUp },
+ { href: '/music', label: 'Music', icon: Music },
+ { href: '/messages', label: 'Messages', icon: MessageCircle, authOnly: true },
+ { href: '/chat', label: 'AI Chat', icon: Sparkles },
 ];
 
 // Facebook Messenger bubble — official-style lightning chat icon.
@@ -230,7 +234,11 @@ export default function Navbar() {
 
             {/* Center: nav links — icons only, no labels. */}
             <div className="hidden sm:flex items-center ml-1">
-              {TOP_NAV_LINKS.filter((l) => !l.authOnly || isAuthenticated).map((link, idx) => {
+              {TOP_NAV_LINKS.filter((l) => {
+ if (l.adminOnly) return isAdmin;
+ if (l.authOnly) return isAuthenticated;
+ return true;
+ }).map((link, idx) => {
                 const isActive = pathname === link.href ||
                   (link.href === '/messages' && pathname?.startsWith('/messages'));
                 const isMessages = link.href === '/messages';
@@ -417,7 +425,11 @@ export default function Navbar() {
         style={{ left: 'var(--dock-shift, 0px)' }}
       >
         <div className="flex items-center justify-around px-2 py-2">
-          {TOP_NAV_LINKS.filter((l) => !l.authOnly || isAuthenticated).map((link) => {
+          {TOP_NAV_LINKS.filter((l) => {
+ if (l.adminOnly) return isAdmin;
+ if (l.authOnly) return isAuthenticated;
+ return true;
+ }).map((link) => {
             const isActive = pathname === link.href ||
               (link.href === '/messages' && pathname?.startsWith('/messages'));
             const isMessages = link.href === '/messages';

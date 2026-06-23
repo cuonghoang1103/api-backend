@@ -7,36 +7,41 @@ import {
   LayoutDashboard, FileText, Users, Code2, Sparkles,
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap, Inbox,
-  CreditCard, Github, Search, TrendingUp, AlertTriangle,
-  KeyRound, UsersRound,
+ CreditCard, Github, Search, TrendingUp, AlertTriangle,
+ KeyRound, UsersRound, Clapperboard,
 } from 'lucide-react';
 
 const adminNav = [
-  { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { label: 'FPT Academy LMS', href: '/admin/academy', icon: GraduationCap },
-  { label: 'Quản lý Mã Code', href: '/admin/code-academy', icon: KeyRound },
-  { label: 'Quan ly Bai Giang', href: '/admin/lessons', icon: BookOpen },
-  { label: 'Quan ly Nhac', href: '/admin/music', icon: Music },
-  { label: 'Quản lý Khoá học', href: '/admin/courses', icon: BookOpen },
-  { label: 'Danh mục Khoá học', href: '/admin/course-categories', icon: Sparkles },
-  { label: 'Quản lý Shop', href: '/admin/shop', icon: ShoppingBag },
-  { label: 'Quản lý Mã giảm giá', href: '/admin/discounts', icon: Tag },
-  { label: 'Quản lý Đơn hàng', href: '/admin/orders', icon: Receipt },
-  { label: 'Đơn hàng khoá học (VNPay)', href: '/admin/course-orders', icon: CreditCard },
-  { label: 'Hoc vien khoa hoc', href: '/admin/course-enrollments', icon: UsersRound },
-  { label: 'Quản lý Posts', href: '/admin/posts', icon: FileText },
-  { label: 'GitHub Repo Hub', href: '/admin/repos', icon: Github },
-  { label: 'Quản lý Users', href: '/admin/users', icon: Users },
-  { label: 'Quản lý Skills', href: '/admin/skills', icon: Code2 },
-  { label: 'Quản lý Projects', href: '/admin/projects', icon: Sparkles },
-  { label: 'AI Knowledge Base', href: '/admin/ai-knowledge', icon: Database },
-  { label: 'AI Chat Analytics', href: '/admin/ai-analytics', icon: MessageSquare },
-  { label: 'Tin nhắn hỗ trợ', href: '/admin/messages', icon: Inbox },
-  { label: 'Báo cáo vi phạm', href: '/admin/reports', icon: AlertTriangle },
-  { label: 'Embed Queue', href: '/admin/embed-jobs', icon: Zap },
-  { label: 'SEO Tools', href: '/admin/seo', icon: Search },
-  { label: 'Tech Trends', href: '/admin/tech-trends', icon: TrendingUp },
-  { label: 'System Stats', href: '/admin/stats', icon: BarChart3 },
+ { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+ // Content Studio — distinct amber entry in the admin
+ // sidebar. Sits at the top of the nav (right below
+ // Dashboard) so the creator workflow is the first thing
+ // the user sees when they open the admin panel.
+ { label: 'Content Studio', href: '/creator', icon: Clapperboard, accent: 'studio' as const },
+ { label: 'FPT Academy LMS', href: '/admin/academy', icon: GraduationCap },
+ { label: 'Quản lý Mã Code', href: '/admin/code-academy', icon: KeyRound },
+ { label: 'Quan ly Bai Giang', href: '/admin/lessons', icon: BookOpen },
+ { label: 'Quan ly Nhac', href: '/admin/music', icon: Music },
+ { label: 'Quản lý Khoá học', href: '/admin/courses', icon: BookOpen },
+ { label: 'Danh mục Khoá học', href: '/admin/course-categories', icon: Sparkles },
+ { label: 'Quản lý Shop', href: '/admin/shop', icon: ShoppingBag },
+ { label: 'Quản lý Mã giảm giá', href: '/admin/discounts', icon: Tag },
+ { label: 'Quản lý Đơn hàng', href: '/admin/orders', icon: Receipt },
+ { label: 'Đơn hàng khoá học (VNPay)', href: '/admin/course-orders', icon: CreditCard },
+ { label: 'Hoc vien khoa hoc', href: '/admin/course-enrollments', icon: UsersRound },
+ { label: 'Quản lý Posts', href: '/admin/posts', icon: FileText },
+ { label: 'GitHub Repo Hub', href: '/admin/repos', icon: Github },
+ { label: 'Quản lý Users', href: '/admin/users', icon: Users },
+ { label: 'Quản lý Skills', href: '/admin/skills', icon: Code2 },
+ { label: 'Quản lý Projects', href: '/admin/projects', icon: Sparkles },
+ { label: 'AI Knowledge Base', href: '/admin/ai-knowledge', icon: Database },
+ { label: 'AI Chat Analytics', href: '/admin/ai-analytics', icon: MessageSquare },
+ { label: 'Tin nhắn hỗ trợ', href: '/admin/messages', icon: Inbox },
+ { label: 'Báo cáo vi phạm', href: '/admin/reports', icon: AlertTriangle },
+ { label: 'Embed Queue', href: '/admin/embed-jobs', icon: Zap },
+ { label: 'SEO Tools', href: '/admin/seo', icon: Search },
+ { label: 'Tech Trends', href: '/admin/tech-trends', icon: TrendingUp },
+ { label: 'System Stats', href: '/admin/stats', icon: BarChart3 },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -112,29 +117,39 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-          {adminNav.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${
-                  isActive
-                    ? 'bg-neon-violet/15 text-neon-violet'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
-                } ${!sidebarOpen && 'justify-center'}`}
-                title={!sidebarOpen ? item.label : undefined}
-              >
-                <item.icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-neon-violet' : 'text-text-muted group-hover:text-text-secondary'}`} />
-                {sidebarOpen && <span className="truncate">{item.label}</span>}
-                {isActive && sidebarOpen && (
-                  <ChevronRight className="w-4 h-4 ml-auto text-neon-violet/50" />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
+ <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+ {adminNav.map((item) => {
+ // Studio entry uses an amber accent class set; every
+ // other entry uses the default violet. `isActive` is
+ // also broader for studio so visiting /creator/* keeps
+ // the sidebar item highlighted.
+ const isStudio = item.accent === 'studio';
+ const isActive = isStudio
+ ? pathname === item.href || pathname?.startsWith('/creator')
+ : pathname === item.href;
+ const activeBg = isStudio ? 'bg-studio-500/15 text-studio-300' : 'bg-neon-violet/15 text-neon-violet';
+ const activeIcon = isStudio ? 'text-studio-400' : 'text-neon-violet';
+ const activeChevron = isStudio ? 'text-studio-500/50' : 'text-neon-violet/50';
+ return (
+ <Link
+ key={item.href}
+ href={item.href}
+ className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${
+ isActive
+ ? activeBg
+ : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
+ } ${!sidebarOpen && 'justify-center'}`}
+ title={!sidebarOpen ? item.label : undefined}
+ >
+ <item.icon className={`w-5 h-5 flex-shrink-0 ${isActive ? activeIcon : 'text-text-muted group-hover:text-text-secondary'}`} />
+ {sidebarOpen && <span className="truncate">{item.label}</span>}
+ {isActive && sidebarOpen && (
+ <ChevronRight className={`w-4 h-4 ml-auto ${activeChevron}`} />
+ )}
+ </Link>
+ );
+ })}
+ </nav>
 
         <div className="p-3 border-t border-darkborder space-y-1">
           <Link
@@ -173,23 +188,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <X className="w-5 h-5 text-text-muted" />
               </button>
             </div>
-            <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-              {adminNav.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                      isActive
-                        ? 'bg-neon-violet/15 text-neon-violet'
-                        : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
-                    }`}
-                  >
-                    <item.icon className="w-5 h-5" />
-                    <span>{item.label}</span>
-                  </Link>
+ <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+ {adminNav.map((item) => {
+ const isStudio = item.accent === 'studio';
+ const isActive = isStudio
+ ? pathname === item.href || pathname?.startsWith('/creator')
+ : pathname === item.href;
+ const activeBg = isStudio ? 'bg-studio-500/15 text-studio-300' : 'bg-neon-violet/15 text-neon-violet';
+ return (
+ <Link
+ key={item.href}
+ href={item.href}
+ onClick={() => setMobileOpen(false)}
+ className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+ isActive
+ ? activeBg
+ : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
+ }`}
+ >
+ <item.icon className="w-5 h-5" />
+ <span>{item.label}</span>
+ </Link>
                 );
               })}
             </nav>

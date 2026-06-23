@@ -14,30 +14,53 @@ const config: Config = {
         darkcard: "#12121a",
         darksurface: "#1a1a24",
         darkborder: "#27272a",
-        neon: {
-          indigo: "#6366f1",
-          violet: "#8b5cf6",
-          fuchsia: "#d946ef",
-          cyan: "#22d3ee",
-          green: "#4ade80",
-          emerald: "#10b981",
-          blue: "#3b82f6",
-          orange: "#fb923c",
-          red: "#f43f5e",
-          pink: "#ec4899",
-        },
-        text: {
+ neon: {
+ indigo: "#6366f1",
+ violet: "#8b5cf6",
+ fuchsia: "#d946ef",
+ cyan: "#22d3ee",
+ green: "#4ade80",
+ emerald: "#10b981",
+ blue: "#3b82f6",
+ orange: "#fb923c",
+ red: "#f43f5e",
+ pink: "#ec4899",
+ },
+ // Studio palette (Content Creator area) — warm amber
+ // distinct from the violet used by /projects. Each step
+ // mirrors Tailwind's amber scale so `bg-studio-500/30`
+ // etc. Just Work. The 50/950 extremes are slightly
+ // nudged for legibility on a dark surface.
+ studio: {
+ 50: "#fffbeb",
+ 100: "#fef3c7",
+ 200: "#fde68a",
+ 300: "#fcd34d",
+ 400: "#fbbf24",
+ 500: "#f59e0b",
+ 600: "#d97706",
+ 700: "#b45309",
+ 800: "#92400e",
+ 900: "#78350f",
+ 950: "#451a03",
+ },
+ text: {
           primary: "#f8fafc",
           secondary: "#94a3b8",
           muted: "#64748b",
         },
       },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "neon-gradient": "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)",
-        "neon-gradient-hover": "linear-gradient(135deg, #8b5cf6, #a855f7, #ec4899)",
-      },
+ backgroundImage: {
+ "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+ "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+ "neon-gradient": "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)",
+ "neon-gradient-hover": "linear-gradient(135deg, #8b5cf6, #a855f7, #ec4899)",
+ // Studio = warm amber. Used on the studio topbar and
+ // status pills so the editor feels visually distinct
+ // from the violet /projects editor.
+ "studio-gradient": "linear-gradient(135deg, #f59e0b, #fbbf24, #fde68a)",
+ "studio-gradient-soft": "linear-gradient(135deg, rgba(245,158,11,0.85), rgba(251,191,36,0.65))",
+ },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
         heading: ["var(--font-poppins)", "Poppins", "system-ui", "sans-serif"],
@@ -55,6 +78,11 @@ const config: Config = {
  "shimmer-sweep": "shimmerSweep 1.6s linear infinite",
  "caret-blink": "caretBlink 1.1s steps(2, jump-none) infinite",
  "scroll-cue-pulse": "scrollCuePulse 2.4s ease-in-out infinite",
+ // Studio-only motion (Content Creator area). Reel-spin
+ // runs on the loading/empty-state reel icon; projector
+ // fades amber in/out for a slow ambient pulse.
+ "reel-spin": "reelSpin 6s linear infinite",
+ "projector-pulse": "projectorPulse 4s ease-in-out infinite",
  },
  keyframes: {
  fadeIn: {
@@ -108,6 +136,19 @@ const config: Config = {
  "0%, 100%": { opacity: "0.35", transform: "scaleY(0.7)" },
  "50%": { opacity: "1", transform: "scaleY(1)" },
  },
+ // Reel-spin: a 6s linear rotation used for the
+ // loading/empty-state reel-of-film icon on the studio.
+ reelSpin: {
+ "0%": { transform: "rotate(0deg)" },
+ "100%": { transform: "rotate(360deg)" },
+ },
+ // Projector pulse: a slow opacity + scale lift on amber
+ // glow backgrounds. Pairs with the .projector class to
+ // give the page a "lights on in the studio" feel.
+ projectorPulse: {
+ "0%, 100%": { opacity: "0.6", transform: "scale(1)" },
+ "50%": { opacity: "1", transform: "scale(1.04)" },
+ },
  },
  // 3D-tilt card primitives — the card surface gets
  // perspective so the rotateX/Y actually feels like a
@@ -129,6 +170,13 @@ const config: Config = {
  // Premium card — hover. Bigger lift + violet glow ring.
  "premium-card-hover":
  "0 1px 0 0 rgba(255,255,255,0.06) inset, 0 24px 60px rgba(0,0,0,0.55), 0 0 50px rgba(139,92,246,0.18), 0 0 0 1px rgba(139,92,246,0.25)",
+ // Studio card resting state — amber glow instead of
+ // violet. Same shadow shape so cards line up under
+ // both editors.
+ "studio-card":
+ "0 1px 0 0 rgba(255,255,255,0.04) inset, 0 1px 2px rgba(0,0,0,0.4), 0 12px 30px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04)",
+ "studio-card-hover":
+ "0 1px 0 0 rgba(255,255,255,0.06) inset, 0 24px 60px rgba(0,0,0,0.55), 0 0 50px rgba(245,158,11,0.18), 0 0 0 1px rgba(245,158,11,0.28)",
  },
  },
  },

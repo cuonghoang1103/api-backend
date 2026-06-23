@@ -1442,6 +1442,103 @@ aside ::-webkit-scrollbar-thumb:hover {
  0 0 30px rgba(139, 92, 246, 0.18);
 }
 
+/* ─── Studio (Content Creator) ──────────────────────────────
+ * Warm-amber visual language distinct from the violet
+ * /projects editor. The five classes below are the only
+ * dedicated studio CSS — everything else composes
+ * Tailwind tokens (bg-studio-500, etc.) inline.
+ *
+ * If the user has prefers-reduced-motion: reduce the global
+ * media query at the bottom of this file kills the
+ * film-grain + reel-spin + projector-pulse animations.
+ */
+
+/* .studio-glass — frosted panel for cards / sidebars.
+ * Two layers of shadow + a warm amber top-edge glow so
+ * the studio feels like a real film studio bay (lights on
+ * at the top, dark stage below). */
+.studio-glass {
+ background: rgba(18, 18, 26, 0.78);
+ backdrop-filter: blur(16px) saturate(1.4);
+ -webkit-backdrop-filter: blur(16px) saturate(1.4);
+ border: 1px solid rgba(245, 158, 11, 0.16);
+ box-shadow:
+ 0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
+ 0 -1px 0 0 rgba(245, 158, 11, 0.08) inset,
+ 0 18px 40px rgba(0, 0, 0, 0.45),
+ 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+/* .film-grain — animated 1px noise overlay. Cheap to
+ * render (a tiny SVG turbulence tiled at 200x200) but
+ * gives every studio surface a subtle "shooting on
+ * film" texture. Pointer-events:none so it never
+ * intercepts clicks. */
+.film-grain {
+ position: relative;
+}
+.film-grain::after {
+ content: '';
+ position: absolute;
+ inset: 0;
+ pointer-events: none;
+ opacity: 0.06;
+ mix-blend-mode: overlay;
+ background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+ background-size: 200px 200px;
+ animation: filmGrainShift 1.4s steps(6) infinite;
+}
+@keyframes filmGrainShift {
+ 0% { transform: translate(0, 0); }
+ 16% { transform: translate(-3%, 2%); }
+ 33% { transform: translate(2%, -2%); }
+ 50% { transform: translate(-1%, 3%); }
+ 66% { transform: translate(3%, 1%); }
+ 83% { transform: translate(-2%, -1%); }
+ 100% { transform: translate(0, 0); }
+}
+
+/* .reel-spin — wrapper class. The actual rotation comes
+ * from the animate-reel-spin Tailwind animation so it can
+ * be paused globally via the reduced-motion media query. */
+.reel-spin {
+ display: inline-block;
+ will-change: transform;
+}
+
+/* .studio-grid — 32px cyan/amber grid for backgrounds. Uses
+ * two stacked linear-gradients so the amber edge lines only
+ * show every 4th cell (gives a "set floor" look without
+ * being a wall of lines). */
+.studio-grid {
+ background-image:
+ linear-gradient(rgba(245, 158, 11, 0.05) 1px, transparent 1px),
+ linear-gradient(90deg, rgba(245, 158, 11, 0.05) 1px, transparent 1px),
+ linear-gradient(rgba(245, 158, 11, 0.12) 1px, transparent 1px),
+ linear-gradient(90deg, rgba(245, 158, 11, 0.12) 1px, transparent 1px);
+ background-size: 32px 32px, 32px 32px, 128px 128px, 128px 128px;
+ background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+}
+
+/* .vignette — radial darkening at the page edges. Sits
+ * below content (z=0) and above the page background so the
+ * studio feels like a small lit room rather than an
+ * infinite black void. */
+.vignette {
+ position: relative;
+}
+.vignette::before {
+ content: '';
+ position: absolute;
+ inset: 0;
+ pointer-events: none;
+ background: radial-gradient(
+ ellipse at center,
+ transparent 40%,
+ rgba(0, 0, 0, 0.4) 100%
+ );
+}
+
 /* ── Reduced-motion fallback ────────────────────────────── */
 /* If the user has prefers-reduced-motion set, kill the
  * ambient drift + shimmer + caret pulse. The page stays
@@ -1453,11 +1550,17 @@ aside ::-webkit-scrollbar-thumb:hover {
  .scroll-cue,
  .hero-caret,
  .eyebrow-chip .dot,
- .noise-overlay::after {
+ .noise-overlay::after,
+ .film-grain::after,
+ .animate-reel-spin,
+ .animate-projector-pulse {
  animation: none !important;
  }
  .premium-tilt {
  transform: none !important;
+ }
+ .reel-spin {
+ animation: none !important;
  }
 }
 

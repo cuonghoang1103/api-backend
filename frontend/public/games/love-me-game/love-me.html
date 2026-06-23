@@ -21,12 +21,12 @@
   html,body{height:100%;margin:0}
   body{
     font-family:"Baloo 2",system-ui,-apple-system,sans-serif;
-    background:radial-gradient(ellipse at 50% 40%,#ffd7e6 0%,#fff2f7 55%,#ffe9c9 100%);
+    background:#ffffff;
     overflow:hidden;color:var(--text);
   }
   #field{
     position:fixed;inset:0;overflow:hidden;touch-action:none;
-    background:radial-gradient(ellipse at 50% 40%,var(--bg2) 0%,var(--bg1) 55%,var(--bg3) 100%);
+    background:#ffffff;
   }
   .float{position:absolute;bottom:-40px;opacity:0;will-change:transform,opacity}
 
@@ -190,8 +190,8 @@
     bear.style.display='none';
     noBtn.style.display='none';
     celebration.style.display='block';
-    document.body.style.background='#fce4b6';
-    field.style.background='linear-gradient(180deg,#f5d5a0,#fce4b6)';
+    document.body.style.background='#fff5e0';
+    field.style.background='#fff5e0';
     question.textContent='I love you too! 😘';
     submsg.textContent='you just made me so happy ♡';
     submsg.classList.add('show');
@@ -209,7 +209,7 @@
     answered=false; bear.style.display='';
     celebration.style.display='none';
     document.body.style.background='#fff';
-    field.style.background='';
+    field.style.background='#ffffff';
     question.textContent='Do you love me?'; submsg.classList.remove('show'); submsg.textContent='';
     bottom.classList.remove('done'); noBtn.style.display=''; yesBtn.style.transform='scale(1)';
     measure();

@@ -45,14 +45,15 @@ export default function DashboardPage() {
     replaceSeedTasks,
   } = useDashboardStore();
 
-  // Re-seed for guests / new users after hydrate. The hook
-  // already does this for logged-in users via the auth-resolve
-  // effect; this is a no-op fast-path for guests.
-  useEffect(() => {
-    (['today', 'week', 'month'] as TaskScope[]).forEach((s) => ensureScopeSeeded(s));
-  }, [currentUserId]); // eslint-disable-line react-hooks/exhaustive-deps
+ // Note: ensureScopeSeeded is no longer called from here.
+ // The auth-driven effect inside useDashboardStore
+ // (frontend/src/app/dashboard/useDashboardStore.ts:92-142)
+ // already calls it for BOTH the guest path (line 101-108)
+ // and the logged-in path (line 131-141), so an extra
+ // re-seed here only produced duplicate POST /dashboard/
+ // tasks/bulk requests on every page mount.
 
-  const todayTasks = tasks.filter((t) => t.scope === 'today');
+ const todayTasks = tasks.filter((t) => t.scope === 'today');
   const doneToday = todayTasks.filter((t) => t.done).length;
   const totalToday = todayTasks.length;
   const todayPct = totalToday ? Math.round((doneToday / totalToday) * 100) : 0;

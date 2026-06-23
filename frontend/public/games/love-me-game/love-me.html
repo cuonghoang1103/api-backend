@@ -62,12 +62,30 @@
   }
   .bottom{position:fixed;left:0;right:0;bottom:6vh;display:flex;justify-content:center;align-items:center;z-index:5}
   .yes{
+    position:fixed;z-index:4;
     font-family:inherit;font-weight:700;font-size:20px;cursor:pointer;border:none;
     padding:15px 44px;border-radius:999px;background:linear-gradient(180deg,#ff7aa3,var(--yes));color:#fff;
-    box-shadow:0 8px 0 var(--yes-d),0 12px 18px rgba(239,63,114,.35);transition:transform .15s,filter .2s;will-change:transform;
+    box-shadow:0 6px 14px rgba(255,120,160,.25);
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .yes{animation:orbit 25s linear infinite}
+    @keyframes orbit{
+      0%{top:15%;left:50%;transform:translateX(-50%)}
+      12.5%{top:15%;left:80%}
+      25%{top:50%;left:80%;transform:translateY(-50%)}
+      37.5%{top:80%;left:80%;transform:translateY(-50%)}
+      50%{top:80%;left:50%;transform:translateX(-50%)}
+      62.5%{top:80%;left:20%;transform:translateY(-50%)}
+      75%{top:50%;left:20%;transform:translateY(-50%)}
+      87.5%{top:15%;left:20%}
+      100%{top:15%;left:50%;transform:translateX(-50%)}
+    }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .yes{position:absolute;top:80%;left:50%;transform:translateX(-50%)}
   }
   .yes:hover{filter:brightness(1.05)}
-  .yes:active{transform:translateY(4px) scale(var(--ys,1));box-shadow:0 4px 0 var(--yes-d)}
+  .yes:active{transform:translateY(4px)}
   .replay{
     font-family:inherit;background:#fff;color:#cf6f93;font-size:15px;font-weight:600;
     padding:12px 22px;border-radius:999px;border:none;cursor:pointer;display:none;box-shadow:0 6px 14px rgba(255,120,160,.25);
@@ -85,7 +103,7 @@
 </style>
 </head>
 <body>
-<audio id="bgm-audio" src="nen.mp3" loop preload="auto"></audio>
+<audio id="bgm-audio" src="nen.mp3" loop preload="auto" autoplay></audio>
 <button id="bgm" title="Bật/tắt nhạc nền">♪</button>
 
 <div id="field">
@@ -129,21 +147,17 @@
 
   let fw=0, fh=0, answered=false;
 
-  // background music — auto-play on first interaction
-  let bgmStarted=false;
+  // background music — auto-play immediately
   function startBgm(){
-    if(bgmStarted) return; bgmStarted=true;
     bgmAudio.play().then(()=>{ bgmBtn.textContent='⏸'; }).catch(()=>{});
   }
-  function toggleBgm(){
-    if(bgmAudio.paused){ bgmAudio.play().then(()=>{ bgmBtn.textContent='⏸'; }).catch(()=>{}); }
-    else { bgmAudio.pause(); bgmBtn.textContent='♪'; }
-  }
-  bgmBtn.addEventListener('click',toggleBgm);
-  document.addEventListener('click',startBgm,{once:true});
-  document.addEventListener('touchstart',startBgm,{once:true});
   bgmAudio.addEventListener('play',()=>bgmBtn.textContent='⏸');
   bgmAudio.addEventListener('pause',()=>bgmBtn.textContent='♪');
+  bgmBtn.addEventListener('click',function(){
+    if(bgmAudio.paused){ bgmAudio.play().then(()=>{ bgmBtn.textContent='⏸'; }).catch(()=>{}); }
+    else { bgmAudio.pause(); bgmBtn.textContent='♪'; }
+  });
+  startBgm();
 
   function measure(){
     const r=field.getBoundingClientRect(); fw=r.width; fh=r.height;
@@ -208,10 +222,10 @@
   replay.addEventListener('click',function(){
     answered=false; bear.style.display='';
     celebration.style.display='none';
-    document.body.style.background='#fff';
+    document.body.style.background='';
     field.style.background='#ffffff';
     question.textContent='Do you love me?'; submsg.classList.remove('show'); submsg.textContent='';
-    bottom.classList.remove('done'); noBtn.style.display=''; yesBtn.style.transform='scale(1)';
+    bottom.classList.remove('done'); noBtn.style.display='';
     measure();
   });
 

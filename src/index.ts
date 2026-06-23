@@ -93,6 +93,7 @@ const quotaRoutes = (await import(path.join(__dirname, 'routes', 'quota.routes.j
 const embedJobsRoutes = (await import(path.join(__dirname, 'routes', 'embedJobs.routes.js'))).default;
 const { publicRouter: techTrendsPublicRoutes, adminRouter: techTrendsAdminRoutes } = (await import(path.join(__dirname, 'routes', 'techTrends.routes.js')));
 const { router: messagesRoutes, adminRouter: adminMessagesRoutes } = (await import(path.join(__dirname, 'routes', 'messages.routes.js')));
+const contentRoutes = (await import(path.join(__dirname, 'routes', 'content.routes.js'))).default;
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
 
 // ─── Express App ───────────────────────────────────────────
@@ -370,6 +371,7 @@ app.use('/api/v1/files', uploadLimiter, uploadRoutes);
 app.use('/api/v1/dev-posts', devPostRoutes);
 app.use('/api/v1/tech-trends', techTrendsPublicRoutes);
 app.use('/api/v1/admin/tech-trends', techTrendsAdminRoutes);
+app.use('/api/v1/admin/content', contentRoutes);
 app.use('/api/v1/system', systemRoutes);
 app.use('/api/v1/social', socialRoutes);
 app.use('/api/v1/social/notifications', notificationRoutes);

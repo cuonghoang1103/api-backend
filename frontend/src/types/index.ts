@@ -792,5 +792,201 @@ export interface PlaylistSummary {
   createdAt: string;
 }
 
+// === CONTENT CREATOR TYPES ===
+// Phase 2 — content routes mounted at /api/v1/admin/content.
+// These mirror the Prisma enums (see prisma/schema.prisma
+// "Content creator" block) and shape the editor's save
+// payload. Kept inline here rather than split into a
+// separate module because the editor will touch them from
+// many call sites — a one-stop import is easier to keep
+// consistent.
+
+export type ContentType =
+ | 'VLOG'
+ | 'AFFILIATE'
+ | 'CODE_REVIEW'
+ | 'REVIEW'
+ | 'IDEA'
+ | 'OTHER';
+
+export type ContentStatus =
+ | 'IDEA'
+ | 'SCRIPTING'
+ | 'FILMING'
+ | 'EDITING'
+ | 'SCHEDULED'
+ | 'PUBLISHED';
+
+export type SceneType =
+ | 'OPENING'
+ | 'HOOK'
+ | 'INTRO'
+ | 'BODY'
+ | 'BROLL'
+ | 'CTA'
+ | 'OUTRO';
+
+export type ShotType = 'CLOSEUP' | 'MEDIUM' | 'WIDE' | 'POV' | 'OVERHEAD';
+
+export type ContentPlatform = 'TIKTOK' | 'YOUTUBE' | 'FACEBOOK' | 'INSTAGRAM';
+
+export type ChecklistPhase = 'PRE' | 'PRODUCTION' | 'POST' | 'PUBLISH';
+
+/** Single checklist row under a content project. */
+export interface ContentChecklistItem {
+ id?: number;
+ phase: ChecklistPhase;
+ label: string;
+ done: boolean;
+ order: number;
+}
+
+/** Single platform post slot (caption, schedule, URL). */
+export interface ContentPlatformPost {
+ id?: number;
+ platform: ContentPlatform;
+ caption: string | null;
+ hashtags: string[];
+ scheduledTime: string | null;
+ postUrl: string | null;
+ isPublished: boolean;
+ order: number;
+}
+
+/** Single affiliate / product placement row. */
+export interface ContentAffiliateProduct {
+ id?: number;
+ name: string;
+ url: string | null;
+ discountCode: string | null;
+ commissionPercent: number | null;
+ revenue: number | null;
+ notes: string | null;
+ order: number;
+}
+
+/** Single scene within a production day. */
+export interface ContentScene {
+ id?: number;
+ sceneNumber: number;
+ sceneType: SceneType;
+ dialogue: string | null;
+ voiceover: string | null;
+ action: string | null;
+ cameraAngle: string | null;
+ shotType: ShotType | null;
+ props: string[];
+ brollNotes: string | null;
+ editingNotes: string | null;
+ durationSeconds: number | null;
+ storyboardImageUrl: string | null;
+ order: number;
+}
+
+/** A production day = 1 filming session with N scenes. */
+export interface ContentProductionDay {
+ id?: number;
+ dayNumber: number;
+ date: string | null;
+ location: string | null;
+ notes: string | null;
+ order: number;
+ scenes: ContentScene[];
+}
+
+/** Post-publish metrics (1:1 with the project, optional). */
+export interface ContentPerformance {
+ id: number;
+ contentProjectId: number;
+ /** Free-form per-platform breakdown kept as JsonB on the server. */
+ platformMetrics: Record<string, unknown> | null;
+ totalViews: number;
+ totalLikes: number;
+ totalComments: number;
+ totalShares: number;
+ totalRevenue: number;
+ notes: string | null;
+ createdAt: string;
+ updatedAt: string;
+}
+
+/** Reference link attached to a content project (saved as JsonB). */
+export interface ContentReferenceLink {
+ label: string;
+ url: string;
+}
+
+/** Full project shape returned by GET /admin/content/projects/:id. */
+export interface ContentProject {
+ id: number;
+ slug: string;
+ title: string;
+ concept: string | null;
+ mainHook: string | null;
+ thumbnailUrl: string | null;
+ type: ContentType;
+ status: ContentStatus;
+ ideaDate: string | null;
+ filmDate: string | null;
+ publishDate: string | null;
+ tags: string[];
+ referenceLinks: ContentReferenceLink[] | null;
+ days: ContentProductionDay[];
+ products: ContentAffiliateProduct[];
+ platformPosts: ContentPlatformPost[];
+ checklistItems: ContentChecklistItem[];
+ performance: ContentPerformance | null;
+ createdAt: string;
+ updatedAt: string;
+}
+
+/** Light list-row shape returned by GET /admin/content/projects. */
+export interface ContentProjectSummary {
+ id: number;
+ slug: string;
+ title: string;
+ type: ContentType;
+ status: ContentStatus;
+ thumbnailUrl: string | null;
+ ideaDate: string | null;
+ filmDate: string | null;
+ publishDate: string | null;
+ tags: string[];
+ updatedAt: string;
+ _count?: {
+ days: number;
+ products: number;
+ platformPosts: number;
+ checklistItems: number;
+ };
+}
+
+/** Payload shape for POST /admin/content/projects. */
+export interface ContentProjectCreate {
+ title: string;
+ type?: ContentType;
+ status?: ContentStatus;
+ concept?: string | null;
+ mainHook?: string | null;
+ thumbnailUrl?: string | null;
+ ideaDate?: string | null;
+ filmDate?: string | null;
+ publishDate?: string | null;
+ tags?: string[];
+ referenceLinks?: ContentReferenceLink[];
+}
+
+/** Payload shape for PUT /admin/content/projects/:id.
+ * Every child list is the *full desired state* — the server
+ * diffs against the DB and inserts/updates/deletes as
+ * needed. The editor only needs to call this on every save.
+ */
+export interface ContentProjectUpdate extends Partial<ContentProjectCreate> {
+ days?: ContentProductionDay[];
+ products?: ContentAffiliateProduct[];
+ platformPosts?: ContentPlatformPost[];
+ checklistItems?: ContentChecklistItem[];
+}
+
 // === SOCIAL TYPES ===
 export * from './social';

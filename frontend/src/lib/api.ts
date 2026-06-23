@@ -2174,16 +2174,68 @@ export const hubFileApi = {
   aiSuggestTags: (id: number) =>
     api.post<{ data: { tags: string[] } }>(`/hub/files/${id}/ai-tags`, {}),
 
-  getPublic: (slug: string) =>
-    api.get<{
-      data: {
-        id: number;
-        name: string;
-        mimeType: string;
-        size: number;
-        publicSlug: string;
-        createdAt: string;
-      };
-    }>(`/hub/files/public/${slug}`),
+ getPublic: (slug: string) =>
+ api.get<{
+ data: {
+ id: number;
+ name: string;
+ mimeType: string;
+ size: number;
+ publicSlug: string;
+ createdAt: string;
+ };
+  }>(`/hub/files/public/${slug}`),
 };
+
+// === CONTENT CREATOR ===
+// Phase 2 — admin API mounted at /api/v1/admin/content. All
+// routes require ROLE_ADMIN (handled by the server) and the
+// shared admin cookie auth (axios sends `withCredentials`,
+// see the instance config above).
+import type {
+ ContentProject,
+ ContentProjectCreate,
+ ContentProjectSummary,
+ ContentProjectUpdate,
+ ContentStatus,
+ ContentType,
+} from '@/types';
+
+export interface ContentListParams {
+ status?: ContentStatus;
+ type?: ContentType;
+ q?: string;
+}
+
+export const contentApi = {
+ /** GET /admin/content/projects — list (filterable). */
+ list: (params?: ContentListParams) =>
+ api.get<{ data: ContentProjectSummary[] }>('/admin/content/projects', { params }),
+
+ /** GET /admin/content/projects/:id — full nested read. */
+ get: (id: number) =>
+ api.get<{ data: ContentProject }>(`/admin/content/projects/${id}`),
+
+ /** POST /admin/content/projects — create new project. */
+ create: (payload: ContentProjectCreate) =>
+ api.post<{ data: ContentProject }>('/admin/content/projects', payload),
+
+ /** PUT /admin/content/projects/:id — full upsert incl. children. */
+ update: (id: number, payload: ContentProjectUpdate) =>
+ api.put<{ data: ContentProject }>(`/admin/content/projects/${id}`, payload),
+
+ /** PATCH /admin/content/projects/:id/status — kanban drag-drop. */
+ updateStatus: (id: number, status: ContentStatus) =>
+ api.patch<{ data: ContentProjectSummary }>(
+ `/admin/content/projects/${id}/status`,
+ { status },
+ ),
+
+ /** DELETE /admin/content/projects/:id. */
+ remove: (id: number) =>
+ api.delete<{ success: boolean; message: string }>(
+ `/admin/content/projects/${id}`,
+ ),
+};
+
 

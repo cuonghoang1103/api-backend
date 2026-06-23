@@ -43,23 +43,16 @@
   }
   .submsg.show{opacity:1}
 
-  /* the character — centered on screen */
-  .bear{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:220px;max-width:60vw;z-index:3}
-  .bear svg{display:block;width:100%;height:auto;overflow:visible}
-  .bob,.foot-l,.foot-r,.ear-l,.ear-r,.gift-wrap{transform-box:fill-box}
-  .bob{transform-origin:50% 95%}
-  .foot-l,.foot-r{transform-origin:50% 50%}
-  .ear-l{transform-origin:92px 54px}.ear-r{transform-origin:168px 54px}
-  .gift-wrap{transform-origin:50% 60%}
   @media (prefers-reduced-motion:no-preference){
-    .bob{animation:bob 3s ease-in-out infinite}
-    @keyframes bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-7px) rotate(1.5deg)}}
-    .ear-l{animation:earl 3s ease-in-out infinite}.ear-r{animation:earr 3s ease-in-out infinite}
-    @keyframes earl{0%,100%{transform:rotate(0)}50%{transform:rotate(-7deg)}}
-    @keyframes earr{0%,100%{transform:rotate(0)}50%{transform:rotate(7deg)}}
+    .bear img{animation:bob 3s ease-in-out infinite}
+    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
   }
-  .eye-happy{opacity:0}
-  .blush{transition:opacity .4s,transform .4s}
+  @media (prefers-reduced-motion:reduce){
+    .bear img{animation:none}
+  }
+
+  .bear{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:220px;max-width:60vw;z-index:3}
+  .bear img{display:block;width:100%;height:auto;border-radius:16px}
 
   .no{
     position:absolute;z-index:4;
@@ -102,31 +95,7 @@
   <p class="submsg" id="submsg"></p>
 
   <div class="bear" id="bear">
-    <svg viewBox="0 0 240 260" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="45" rx="34" ry="32" fill="var(--bear)"/>
-      <ellipse cx="50" cy="45" rx="20" ry="18" fill="var(--bear-d)"/>
-      <ellipse cx="190" cy="45" rx="34" ry="32" fill="var(--bear)"/>
-      <ellipse cx="190" cy="45" rx="20" ry="18" fill="var(--bear-d)"/>
-      <ellipse cx="120" cy="148" rx="108" ry="108" fill="var(--bear)"/>
-      <ellipse cx="120" cy="148" rx="88" ry="88" fill="var(--cream)"/>
-      <ellipse cx="120" cy="175" rx="38" ry="30" fill="var(--bear-d)"/>
-      <ellipse cx="87" cy="100" rx="10" ry="12" fill="var(--feat)"/>
-      <ellipse cx="153" cy="100" rx="10" ry="12" fill="var(--feat)"/>
-      <ellipse cx="90" cy="97" rx="4" ry="4" fill="#fff"/>
-      <ellipse cx="156" cy="97" rx="4" ry="4" fill="#fff"/>
-      <path d="M120 148 Q112 130 120 128 Q128 130 120 148" fill="var(--feat)" class="nose"/>
-      <path d="M120 148 Q112 128 120 126 Q128 128 120 148" fill="var(--feat)"/>
-      <path d="M112 130 Q106 125 110 132 Q113 138 120 128" fill="var(--feat)" stroke="none"/>
-      <path d="M128 130 Q134 125 130 132 Q127 138 120 128" fill="var(--feat)" stroke="none"/>
-      <ellipse cx="75" cy="122" rx="18" ry="12" fill="var(--blush)" opacity="0.55"/>
-      <ellipse cx="165" cy="122" rx="18" ry="12" fill="var(--blush)" opacity="0.55"/>
-      <ellipse cx="55" cy="258" rx="30" ry="20" fill="var(--bear)"/>
-      <ellipse cx="185" cy="258" rx="30" ry="20" fill="var(--bear)"/>
-      <g class="eye-happy">
-        <path d="M82 98 Q87 93 92 98" stroke="var(--feat)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        <path d="M148 98 Q153 93 158 98" stroke="var(--feat)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      </g>
-    </svg>
+    <img src="bear.gif" alt="cute bear">
   </div>
 
   <div id="celebration" style="display:none;position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:3;text-align:center;pointer-events:none;font-size:clamp(48px,12vw,80px);">

@@ -22,6 +22,7 @@ const PUBLIC_INCLUDE = {
  milestones: { orderBy: { order: 'asc' as const } },
  features: { orderBy: { order: 'asc' as const } },
  resources: { orderBy: { order: 'asc' as const } },
+ listItems: { orderBy: { order: 'asc' as const } },
 };
 
 function normalizeProject(project: Record<string, unknown>) {

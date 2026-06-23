@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
  Lightbulb,
@@ -9,8 +10,10 @@ import {
  Cog,
  Calendar,
  Image as ImageIcon,
+ Code2,
 } from 'lucide-react';
 import type { ProjectMilestone } from '@/types';
+import CodeBlock from './CodeBlock';
 
 interface MilestoneTimelineProps {
  milestones: ProjectMilestone[];
@@ -108,6 +111,26 @@ export default function MilestoneTimeline({ milestones }: MilestoneTimelineProps
  <div className="mt-3 rounded-lg overflow-hidden border border-darkborder">
  {/* eslint-disable-next-line @next/next/no-img-element */}
  <img src={m.imageUrl} alt={m.title} className="w-full h-auto" />
+ </div>
+ )}
+ {/*
+ Optional "Code review" block. Stored verbatim on the
+ milestone row (codeBlock) with a separate language
+ hint (codeLang). Reuses the same CodeBlock component
+ as the case-study "Database Schema" section so the
+ look-and-feel is consistent.
+ */}
+ {m.codeBlock && (
+ <div className="mt-3">
+ <div className="flex items-center gap-1.5 text-[10px] text-text-muted uppercase tracking-wider mb-1.5">
+ <Code2 className="w-3 h-3" />
+ Code review · {m.codeLang ?? 'plaintext'}
+ </div>
+ <CodeBlock
+ code={m.codeBlock}
+ language={m.codeLang ?? 'plaintext'}
+ fileName={m.phase?.toLowerCase().replace(/\s+/g, '-') ?? undefined}
+ />
  </div>
  )}
  </div>

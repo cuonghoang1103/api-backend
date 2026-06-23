@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Trash2, GripVertical, Calendar, ImageIcon } from 'lucide-react';
+import { Plus, Trash2, GripVertical, Calendar, ImageIcon, Code2, ChevronDown, ChevronUp } from 'lucide-react';
 import {
  DndContext,
  closestCenter,
@@ -19,8 +19,23 @@ import {
  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { ProjectMilestone } from '@/types';
+
+// Same language set used by the case-study "Database Schema"
+// section (ProjectEditor.tsx → SCHEMA_LANGS). Re-declared
+// locally to keep this editor self-contained — duplicating
+// the 7-entry list is cheaper than introducing a shared
+// constants file for a single consumer.
+const CODE_LANGS = [
+ 'prisma',
+ 'sql',
+ 'typescript',
+ 'javascript',
+ 'json',
+ 'yaml',
+ 'plaintext',
+];
 
 interface MilestonesEditorProps {
  milestones: ProjectMilestone[];
@@ -186,6 +201,21 @@ function SortableMilestone({
  placeholder="URL ảnh minh hoạ (optional)"
  className="w-full px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-xs"
  />
+ {/*
+ ─── Code review block ───
+ Toggle that opens/closes a code editor for the
+ milestone. The textarea stores the raw code; the
+ select picks the language for syntax highlighting on
+ the public page. Both fields are stored verbatim on
+ the milestone row (codeBlock + codeLang). The
+ collapsed-by-default state keeps the editor compact
+ when the admin doesn't want to add a code review.
+ */}
+ <CodeBlockEditor
+ codeBlock={milestone.codeBlock}
+ codeLang={milestone.codeLang}
+ onUpdate={onUpdate}
+ />
  </div>
  <button
  type="button"
@@ -197,5 +227,104 @@ function SortableMilestone({
  </button>
  </div>
  </motion.li>
+ );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// CodeBlockEditor — collapsible "Code review" sub-section that
+// lives below the milestone description. When the milestone
+// has no `codeBlock` and isn't expanded, the editor only shows
+// a single "+ Code review" toggle. Once expanded, it reveals a
+// language selector + monospace textarea. The textarea uses a
+// local mirror state (same pattern as the ListItemEditor
+// content input) to keep the cursor stable while typing — the
+// parent's onUpdate rewrites the whole milestone object on
+// every keystroke which would otherwise flicker the input.
+// ─────────────────────────────────────────────────────────────────
+function CodeBlockEditor({
+ codeBlock,
+ codeLang,
+ onUpdate,
+}: {
+ codeBlock: string | undefined;
+ codeLang: string | undefined;
+ onUpdate: (patch: Partial<ProjectMilestone>) => void;
+}) {
+ // Auto-expand if the milestone already has code from a
+ // previous save so the admin sees the existing content
+ // without having to click the toggle.
+ const [open, setOpen] = useState<boolean>(Boolean(codeBlock));
+ const [localCode, setLocalCode] = useState(codeBlock ?? '');
+ const [isFocused, setIsFocused] = useState(false);
+
+ if (!isFocused && localCode !== (codeBlock ?? '')) {
+ setLocalCode(codeBlock ?? '');
+ }
+
+ const lang = codeLang ?? 'plaintext';
+
+ return (
+ <div className="rounded-lg border border-darkborder/60 bg-darkcard/40">
+ <button
+ type="button"
+ onClick={() => setOpen((v) => !v)}
+ className="w-full flex items-center justify-between gap-2 px-3 py-2 text-xs text-text-muted hover:text-text-primary transition-colors"
+ >
+ <span className="inline-flex items-center gap-1.5">
+ <Code2 className="w-3.5 h-3.5" />
+ {codeBlock ? 'Code review' : 'Thêm code review'}
+ {codeBlock && (
+ <span className="text-[10px] text-text-muted">
+ · {codeLang ?? 'plaintext'} · {codeBlock.length} chars
+ </span>
+ )}
+ </span>
+ {open ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+ </button>
+ <AnimatePresence initial={false}>
+ {open && (
+ <motion.div
+ initial={{ height: 0, opacity: 0 }}
+ animate={{ height: 'auto', opacity: 1 }}
+ exit={{ height: 0, opacity: 0 }}
+ transition={{ duration: 0.18 }}
+ className="overflow-hidden"
+ >
+ <div className="px-3 pb-3 space-y-2">
+ <div className="flex items-center gap-2">
+ <label className="text-[10px] text-text-muted uppercase">Ngôn ngữ</label>
+ <select
+ value={lang}
+ onChange={(e) => onUpdate({ codeLang: e.target.value })}
+ className="px-2 py-1 bg-darkcard border border-darkborder rounded text-xs"
+ >
+ {CODE_LANGS.map((l) => (
+ <option key={l} value={l}>{l}</option>
+ ))}
+ </select>
+ </div>
+ <textarea
+ value={localCode}
+ onFocus={() => setIsFocused(true)}
+ onBlur={() => {
+ setIsFocused(false);
+ if (localCode !== (codeBlock ?? '')) {
+ onUpdate({ codeBlock: localCode });
+ }
+ }}
+ onChange={(e) => {
+ const v = e.target.value;
+ setLocalCode(v);
+ onUpdate({ codeBlock: v });
+ }}
+ placeholder="Dán code để hiển thị syntax-highlighted trên trang case study..."
+ rows={6}
+ className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded text-xs font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:border-neon-violet/50 transition-colors"
+ />
+ </div>
+ </motion.div>
+ )}
+ </AnimatePresence>
+ </div>
  );
 }

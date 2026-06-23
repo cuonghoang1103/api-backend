@@ -310,6 +310,12 @@ npm run dev
  description: 'Thêm 9 field mới vào Project (bodyMdx, bodyHtml, schemaCode, schemaLang, viewCount, likeCount, isPublished, category, difficulty) + 3 model con (Milestone, Feature, Resource) + 1 model Like. Migration additive — không DROP column nào.',
  date: new Date('2026-04-15'),
  order: 1,
+ // Demo of the new milestone.codeBlock / codeLang fields —
+ // picked SQL because the schema diff above is naturally
+ // SQL-shaped (ALTER TABLE … ADD COLUMN). The public page
+ // renders it with highlight.js via CodeBlock.
+ codeBlock: 'ALTER TABLE "projects" ADD COLUMN "body_mdx" TEXT;\nALTER TABLE "projects" ADD COLUMN "is_published" BOOLEAN NOT NULL DEFAULT true;',
+ codeLang: 'sql',
  },
  {
  projectId: project.id,
@@ -335,6 +341,38 @@ npm run dev
  date: new Date('2026-06-15'),
  order: 4,
  },
+ ],
+ });
+
+ // ─── List items (3 sections share the same table) ──
+ // Re-create the rows from scratch so the seed is
+ // idempotent: deleting by (projectId, kind) clears any
+ // stale rows left over from a previous seed.
+ await prisma.projectListItem.deleteMany({ where: { projectId: project.id } });
+ await prisma.projectListItem.createMany({
+ data: [
+ // Core Knowledge
+ { projectId: project.id, kind: 'CORE_KNOWLEDGE', content: 'React Server Components (RSC) vs Client Components', order: 0 },
+ { projectId: project.id, kind: 'CORE_KNOWLEDGE', content: 'Next.js App Router routing conventions', order: 1 },
+ { projectId: project.id, kind: 'CORE_KNOWLEDGE', content: 'Prisma ORM (migrations, queries, relations)', order: 2 },
+ { projectId: project.id, kind: 'CORE_KNOWLEDGE', content: 'NextAuth.js v5 flow (JWT, sessions)', order: 3 },
+ { projectId: project.id, kind: 'CORE_KNOWLEDGE', content: 'bcrypt password hashing', order: 4 },
+ { projectId: project.id, kind: 'CORE_KNOWLEDGE', content: 'Zod validation', order: 5 },
+ { projectId: project.id, kind: 'CORE_KNOWLEDGE', content: 'TailwindCSS utility classes', order: 6 },
+ { projectId: project.id, kind: 'CORE_KNOWLEDGE', content: 'TypeScript strict mode', order: 7 },
+ // Portfolio Bonus
+ { projectId: project.id, kind: 'PORTFOLIO_BONUS', content: 'Live demo trên Vercel', order: 0 },
+ { projectId: project.id, kind: 'PORTFOLIO_BONUS', content: 'GitHub Actions CI/CD', order: 1 },
+ { projectId: project.id, kind: 'PORTFOLIO_BONUS', content: 'README với screenshots + GIF demo', order: 2 },
+ { projectId: project.id, kind: 'PORTFOLIO_BONUS', content: 'Unit tests với Vitest', order: 3 },
+ { projectId: project.id, kind: 'PORTFOLIO_BONUS', content: 'E2E tests với Playwright', order: 4 },
+ { projectId: project.id, kind: 'PORTFOLIO_BONUS', content: 'Storybook cho components', order: 5 },
+ // Completion Outcomes
+ { projectId: project.id, kind: 'COMPLETION_OUTCOME', content: 'Full CRUD với Next.js', order: 0 },
+ { projectId: project.id, kind: 'COMPLETION_OUTCOME', content: 'Authentication flow', order: 1 },
+ { projectId: project.id, kind: 'COMPLETION_OUTCOME', content: 'Basic database design', order: 2 },
+ { projectId: project.id, kind: 'COMPLETION_OUTCOME', content: 'TypeScript end-to-end', order: 3 },
+ { projectId: project.id, kind: 'COMPLETION_OUTCOME', content: 'Production deployment', order: 4 },
  ],
  });
 
@@ -384,7 +422,7 @@ npm run dev
  ],
  });
 
- console.log(`✅ Seeded case study project "${slug}" with ${5} milestones, ${8} features, ${3} resources`);
+ console.log(`✅ Seeded case study project "${slug}" with ${5} milestones, ${8} features, ${3} resources, ${19} list items`);
 }
 
 main()

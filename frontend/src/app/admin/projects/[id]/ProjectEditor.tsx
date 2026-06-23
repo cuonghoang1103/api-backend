@@ -24,6 +24,9 @@ import {
  Download,
  Tag,
  Layers,
+ GraduationCap,
+ Trophy,
+ Target,
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import type {
@@ -31,11 +34,13 @@ import type {
  ProjectMilestone,
  ProjectFeature,
  ProjectResource,
+ ProjectListItem,
 } from '@/types';
 import MarkdownEditor from '@/components/admin/MarkdownEditor';
 import MilestonesEditor from '@/components/admin/MilestonesEditor';
 import FeaturesEditor from '@/components/admin/FeaturesEditor';
 import ResourcesEditor from '@/components/admin/ResourcesEditor';
+import ListItemEditor from '@/components/admin/ListItemEditor';
 import MultiImageUploader from '@/components/admin/MultiImageUploader';
 import ThumbnailUploader from '@/components/admin/ThumbnailUploader';
 
@@ -86,26 +91,57 @@ const DIFFICULTIES: { value: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'; label: st
 ];
 const SCHEMA_LANGS = ['prisma', 'sql', 'typescript', 'javascript', 'json', 'yaml', 'plaintext'];
 
+// The three list-of-strings sections share a single DB table
+// (project_list_items) but each has its own visual treatment
+// in the editor + the public page. The `sectionKey` flows
+// through SaveableSection to the toast message ("Đã lưu
+// core-knowledge"). The icon drives the section header.
+const LIST_KIND_META: Record<
+ 'CORE_KNOWLEDGE' | 'PORTFOLIO_BONUS' | 'COMPLETION_OUTCOME',
+ { title: string; sectionKey: string; icon: typeof BookOpen }
+> = {
+ CORE_KNOWLEDGE: {
+ title: 'Kiến thức cần học vững (Core Knowledge)',
+ sectionKey: 'core-knowledge',
+ icon: GraduationCap,
+ },
+ PORTFOLIO_BONUS: {
+ title: 'Điểm cộng cho portfolio (Bonus Points)',
+ sectionKey: 'portfolio-bonus',
+ icon: Trophy,
+ },
+ COMPLETION_OUTCOME: {
+ title: 'Đánh giá sau khi hoàn thành (Outcomes)',
+ sectionKey: 'completion-outcome',
+ icon: Target,
+ },
+};
+
 /**
  * ProjectEditor — admin editor page for a single project.
  *
  * Architecture:
  * • One load at mount (GET /admin/projects/:id) hydrates the
- * whole form (basic fields + 3 child lists) in a single
- * round-trip.
+ * whole form (basic fields + 4 child lists: milestones,
+ * features, resources, list items) in a single round-trip.
  * • The "Basic + Case Study" section autosaves 2s after the
- * last edit (debounced) and toggles isPublished:false on
- * every save. This means the public page keeps the previous
- * published version while the admin is editing, and the
- * admin's preview still shows the new content (via
- * /projects/:slug?preview=1 in dev — see PreviewButton).
- * • The "Milestones / Features / Resources" sections each
- * have their own explicit "Lưu danh sách" button because
- * the CRUD per-item is a separate request and we don't
- * want to spam 20+ POSTs on every keystroke.
- * • "Xuất bản" is the only button that flips isPublished
- * back to true. It also re-runs the main save first so the
- * published version reflects any pending edits.
+ * last edit (debounced). Autosave preserves isPublished —
+ * the only place that flips the flag is the explicit
+ * "Đăng" / "Bỏ đăng" toggle or the "Lưu + Xuất bản"
+ * button in the header. This was a bug previously:
+ * autosave used to flip isPublished=false on every save,
+ * which made "Lưu" unusable as a save-only action.
+ * • Child entity sections (milestones/features/resources/
+ * list items) each have their own explicit "Lưu danh sách"
+ * button because per-item CRUD is a separate request and
+ * we don't want to spam POSTs on every keystroke. The save
+ * handler is diff-based and idempotent: POSTs only the new
+ * items (negative placeholder id), PUTs only the edits,
+ * DELETEs only the removals. Saving the same list twice
+ * with no changes is a no-op.
+ * • "Lưu + Xuất bản" runs the main save first (flushing
+ * any pending autosave debounce), then flips isPublished
+ * to true in a second PUT.
  */
 export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  const router = useRouter();
@@ -114,6 +150,12 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  const [milestones, setMilestones] = useState<ProjectMilestone[]>([]);
  const [features, setFeatures] = useState<ProjectFeature[]>([]);
  const [resources, setResources] = useState<ProjectResource[]>([]);
+ // Three list-of-strings sections (Core Knowledge / Portfolio
+ // Bonus / Completion Outcomes). All three live in the same
+ // DB table, partitioned by `kind`. The editor filters the
+ // shared listItems state per kind when passing to each
+ // ListItemEditor instance.
+ const [listItems, setListItems] = useState<ProjectListItem[]>([]);
 
  // Form state — separate from `project` so unsaved edits
  // don't leak back into the underlying record.
@@ -137,6 +179,7 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  setMilestones(p.milestones ?? []);
  setFeatures(p.features ?? []);
  setResources(p.resources ?? []);
+ setListItems(p.listItems ?? []);
  setForm({
  title: p.title ?? '',
  description: p.description ?? '',
@@ -173,6 +216,13 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  // ─── Autosave (basic + case study only) ───────────────
  // We only autosave the "main" fields. Child entities have
  // their own manual save buttons. The debounce is 2s.
+ //
+ // Important: autosave preserves the current isPublished
+ // value. Previously this handler sent isPublished:false on
+ // every save, which made "Lưu" silently un-publish the
+ // project. The publish flow is now driven entirely by
+ // the explicit "Đăng" / "Bỏ đăng" toggle or the
+ // "Lưu + Xuất bản" button — see togglePublish() below.
  const performSave = useCallback(async () => {
  if (!form || !project) return;
  setSaveStatus('saving');
@@ -180,11 +230,12 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  // buildPayload keeps the legacy `content` field in sync
  // (it's still served on /projects list cards and used as
  // the bodyMdx fallback for projects that pre-date the
- // migration).
- const payload = buildPayload(form, project, { setIsPublishedFalse: true });
+ // migration). isPublished is included in the payload
+ // only as a *field pass-through* — we read it from `form`
+ // (the canonical state) rather than flipping it here.
+ const payload = buildPayload(form, project);
  const res = await api.put(`/admin/projects/${projectId}`, payload);
  setProject((prev) => prev ? { ...prev, ...(res.data?.data as Project) } : prev);
- setForm((f) => f ? { ...f, isPublished: false } : f);
  setLastSavedAt(new Date());
  setSaveStatus('saved');
  setTimeout(() => setSaveStatus('idle'), 2200);
@@ -225,13 +276,28 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  }, [performSave]);
 
  // ─── Publish (set isPublished=true) ───────────────────
+ // First flush any pending autosave debounce so the
+ // published version reflects the latest field edits, then
+ // flip isPublished=true in a second PUT. The two-step
+ // pattern (save → publish) avoids races where a pending
+ // autosave PUT could overwrite the publish PUT with the
+ // stale isPublished=false.
  const publish = useCallback(async () => {
  if (!form || !project) return;
+ // Cancel any pending debounce so it doesn't fire a
+ // third PUT after ours.
+ if (debounceRef.current) {
+ clearTimeout(debounceRef.current);
+ debounceRef.current = null;
+ }
  setSaveStatus('saving');
  try {
- const payload = buildPayload(form, project, { setIsPublishedFalse: false });
- payload.isPublished = true;
- const res = await api.put(`/admin/projects/${projectId}`, payload);
+ // 1) Save the latest field state with the current
+ // isPublished (so we don't accidentally un-publish).
+ const basePayload = buildPayload(form, project);
+ await api.put(`/admin/projects/${projectId}`, basePayload);
+ // 2) Now flip isPublished=true in a second PUT.
+ const res = await api.put(`/admin/projects/${projectId}`, { isPublished: true });
  setProject((prev) => prev ? { ...prev, ...(res.data?.data as Project) } : prev);
  setForm((f) => f ? { ...f, isPublished: true } : f);
  setLastSavedAt(new Date());
@@ -240,9 +306,37 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  setTimeout(() => setSaveStatus('idle'), 2200);
  } catch (err: unknown) {
  setSaveStatus('error');
- toast.error('Xuất bản thất bại');
+ const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+ ?? 'Xuất bản thất bại';
+ toast.error(msg);
  }
  }, [form, project, projectId]);
+
+ // ─── Toggle publish (fast switch, no save) ────────────
+ // When the admin just wants to flip visibility without
+ // going through the full save flow, this button sends a
+ // minimal PUT with only isPublished toggled. It does NOT
+ // touch any other field. Useful when the user is mid-edit
+ // and wants to peek at the public page.
+ const togglePublish = useCallback(async () => {
+ if (!project) return;
+ const next = !project.isPublished;
+ setSaveStatus('saving');
+ try {
+ const res = await api.put(`/admin/projects/${projectId}`, { isPublished: next });
+ setProject((prev) => prev ? { ...prev, ...(res.data?.data as Project) } : prev);
+ setForm((f) => f ? { ...f, isPublished: next } : f);
+ setLastSavedAt(new Date());
+ setSaveStatus('saved');
+ toast.success(next ? 'Đã đăng dự án' : 'Đã chuyển về bản nháp');
+ setTimeout(() => setSaveStatus('idle'), 2200);
+ } catch (err: unknown) {
+ setSaveStatus('error');
+ const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+ ?? 'Thao tác thất bại';
+ toast.error(msg);
+ }
+ }, [project, projectId]);
 
  if (loading || !form || !project) {
  return (
@@ -281,6 +375,35 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  </div>
  <div className="flex items-center gap-2 flex-wrap">
  <SaveIndicator status={saveStatus} lastSavedAt={lastSavedAt} />
+ {/*
+ Visibility toggle — single button that flips
+ isPublished without going through the full save flow.
+ Distinct from "Lưu + Xuất bản" (which also flushes
+ pending field edits).
+ */}
+ <button
+ type="button"
+ onClick={() => void togglePublish()}
+ disabled={saveStatus === 'saving'}
+ title={project.isPublished ? 'Chuyển về bản nháp' : 'Đăng dự án lên trang công khai'}
+ className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg border transition-colors disabled:opacity-50 ${
+ project.isPublished
+ ? 'border-yellow-500/40 text-yellow-300 hover:bg-yellow-500/10'
+ : 'border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10'
+ }`}
+ >
+ {project.isPublished ? (
+ <>
+ <StarOff className="w-3.5 h-3.5" />
+ Bản nháp
+ </>
+ ) : (
+ <>
+ <Star className="w-3.5 h-3.5" />
+ Đăng
+ </>
+ )}
+ </button>
  <a
  href={previewHref}
  target="_blank"
@@ -293,7 +416,8 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  <button
  type="button"
  onClick={() => void performSave()}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-darkcard border border-darkborder text-text-secondary hover:text-text-primary hover:border-neon-violet/30 transition-colors"
+ disabled={saveStatus === 'saving'}
+ className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-darkcard border border-darkborder text-text-secondary hover:text-text-primary hover:border-neon-violet/30 transition-colors disabled:opacity-50"
  >
  <Save className="w-3.5 h-3.5" />
  Lưu
@@ -304,7 +428,7 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  disabled={saveStatus === 'saving'}
  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-gradient-to-r from-neon-indigo to-neon-violet text-white hover:opacity-90 transition-opacity disabled:opacity-50"
  >
- Xuất bản
+ {project.isPublished ? 'Lưu + Xuất bản lại' : 'Lưu + Xuất bản'}
  </button>
  </div>
  </div>
@@ -524,7 +648,7 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  setProject((prev) => prev ? { ...prev, milestones: items } : prev);
  }}
  onRevert={() => setMilestones(project.milestones ?? [])}
- saveFn={async (items: ProjectMilestone[]) => saveChildList('milestones', items, project, projectId, (next) => setMilestones(next as ProjectMilestone[])) as Promise<ProjectMilestone[]>}
+ saveFn={async (items: ProjectMilestone[]) => saveChildList('milestones', items, project, projectId, (next) => setMilestones(next as ProjectMilestone[]), 'milestones') as Promise<ProjectMilestone[]>}
  >
  <MilestonesEditor milestones={milestones} onChange={setMilestones} />
  </SaveableSection>
@@ -540,7 +664,7 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  setProject((prev) => prev ? { ...prev, features: items } : prev);
  }}
  onRevert={() => setFeatures(project.features ?? [])}
- saveFn={async (items: ProjectFeature[]) => saveChildList('features', items, project, projectId, (next) => setFeatures(next as ProjectFeature[])) as Promise<ProjectFeature[]>}
+ saveFn={async (items: ProjectFeature[]) => saveChildList('features', items, project, projectId, (next) => setFeatures(next as ProjectFeature[]), 'features') as Promise<ProjectFeature[]>}
  >
  <FeaturesEditor features={features} onChange={setFeatures} />
  </SaveableSection>
@@ -556,22 +680,98 @@ export default function ProjectEditor({ projectId }: ProjectEditorProps) {
  setProject((prev) => prev ? { ...prev, resources: items } : prev);
  }}
  onRevert={() => setResources(project.resources ?? [])}
- saveFn={async (items: ProjectResource[]) => saveChildList('resources', items, project, projectId, (next) => setResources(next as ProjectResource[])) as Promise<ProjectResource[]>}
+ saveFn={async (items: ProjectResource[]) => saveChildList('resources', items, project, projectId, (next) => setResources(next as ProjectResource[]), 'resources') as Promise<ProjectResource[]>}
  >
  <ResourcesEditor resources={resources} onChange={setResources} />
  </SaveableSection>
  </Section>
+
+ {/*
+ ─── 3 list-of-strings sections (Core Knowledge / Portfolio
+ Bonus / Completion Outcomes) ───
+ All three share the same DB table (project_list_items)
+ partitioned by `kind`. We use a local `setListItemsForKind`
+ closure that filters the working list by kind, calls the
+ shared saveChildList helper, then merges the canonical
+ result back into the parent state.
+ */}
+ {(['CORE_KNOWLEDGE', 'PORTFOLIO_BONUS', 'COMPLETION_OUTCOME'] as const).map((kind) => {
+ const cfg = LIST_KIND_META[kind];
+ const itemsForKind = listItems.filter((x) => x.kind === kind);
+ return (
+ <Section key={kind} icon={cfg.icon} title={cfg.title}>
+ <SaveableSection
+ sectionKey={cfg.sectionKey}
+ current={itemsForKind}
+ serverItems={project.listItems?.filter((x) => x.kind === kind) ?? []}
+ onSaved={(saved) => {
+ // Replace just the items of this kind in the parent
+ // listItems state. Items of other kinds are preserved.
+ setListItems((prev) => {
+ const other = prev.filter((x) => x.kind !== kind);
+ return [...other, ...saved];
+ });
+ }}
+ onRevert={() => {
+ // Re-sync items of this kind from the server snapshot.
+ setListItems((prev) => {
+ const other = prev.filter((x) => x.kind !== kind);
+ const server = project.listItems?.filter((x) => x.kind === kind) ?? [];
+ return [...other, ...server];
+ });
+ }}
+ saveFn={async (next) => {
+ // The list-item POST endpoint requires `kind` in the
+ // body. We strip it from the working copy (where it's
+ // redundant — the section already knows its own kind)
+ // and re-inject it via `extraPostFields` so the server
+ // gets the discriminator.
+ const payload = next.map(({ kind: _kind, ...rest }) => rest) as ProjectListItem[];
+ const result = await saveChildList<ProjectListItem>(
+ 'list-items',
+ payload,
+ project,
+ projectId,
+ // setLocal here is a no-op: the canonical list is
+ // returned separately and the parent's onSaved callback
+ // splices it into the full listItems state.
+ () => undefined,
+ 'listItems',
+ // Inject the kind on every POST so the server can
+ // route the row into the right partition.
+ () => ({ kind }),
+ );
+ return result;
+ }}
+ >
+ <ListItemEditor
+ items={itemsForKind}
+ kind={kind}
+ onChange={(next) => {
+ // When the child editor mutates the list, splice the
+ // updated slice back into the parent state.
+ setListItems((prev) => {
+ const other = prev.filter((x) => x.kind !== kind);
+ return [...other, ...next];
+ });
+ }}
+ />
+ </SaveableSection>
+ </Section>
+ );
+ })}
 
  <div className="text-xs text-text-muted text-center">
  ID: {project.id} • Tạo: {new Date(project.createdAt).toLocaleString('vi-VN')}
  </div>
  </div>
  );
-}
 
 // ─────────────────────────────────────────────────────────────────
 // Sub-components
 // ─────────────────────────────────────────────────────────────────
+
+}
 
 function Section({
  icon: Icon,
@@ -750,8 +950,7 @@ function SaveableSection<T extends { id: number }>({
  */
 function buildPayload(
  form: FormState,
- project: Project,
- opts: { setIsPublishedFalse: boolean },
+ _project: Project,
 ): Record<string, unknown> {
  return {
  title: form.title,
@@ -774,7 +973,11 @@ function buildPayload(
  bodyMdx: form.bodyMdx || null,
  schemaCode: form.schemaCode || null,
  schemaLang: form.schemaLang || null,
- isPublished: opts.setIsPublishedFalse ? false : project.isPublished,
+ // isPublished is taken from `form` (the canonical state) so
+ // autosave never silently flips the publish flag. The user
+ // drives the flag explicitly via togglePublish() or
+ // publish().
+ isPublished: form.isPublished,
  };
 }
 
@@ -784,50 +987,133 @@ function buildPayload(
  * removals. Returns the canonical list as the server sees
  * it so the parent state can be updated.
  *
- * The generic `T` is the union of all three child types.
- * We cast at the boundary because TS can't infer `T` from
+ * The generic `T` is the union of all four child types
+ * (milestones, features, resources, list items). We cast
+ * at the boundary because TS can't infer `T` from
  * `project[section]` (which is a property of a union of
  * discriminated values). The runtime shape is identical.
+ *
+ * IDEMPOTENCY: saving the same list twice with no changes
+ * is a no-op. The diff uses stable item ids, so:
+ * • unchanged items → 0 PUT, 0 POST, 0 DELETE
+ * • items present on server but not in working → DELETE
+ * • items in working with id < 0 → POST (strip placeholder)
+ * • items in working with id > 0 and field values changed
+ * from server → PUT
+ * • items in working with id > 0 but field values UNCHANGED
+ * from server → no-op (preserves order/index from `working`)
+ *
+ * This is the fix for the previous bug where the canonical
+ * list returned to the parent only contained POST/PUT
+ * responses, dropping every item the user didn't touch.
+ * After that bug, the parent's `project[section]` only
+ * held the changed items, so the *next* save treated the
+ * missing items as "removes" — and if the user re-added
+ * them, the server ended up with duplicates.
+ *
+ * The fix preserves the working list's order for unchanged
+ * items (since the user might have drag-reordered them) and
+ * splices in the new server response for freshly created
+ * items at the index where the placeholder used to live.
  */
-async function saveChildList(
- section: 'milestones' | 'features' | 'resources',
- working: Array<{ id: number }>,
+async function saveChildList<T extends { id: number }>(
+ // `section` is the API path segment (kebab-case). The
+ // corresponding field on `project` is camelCase (see the
+ // `projectField` parameter below).
+ section: 'milestones' | 'features' | 'resources' | 'list-items',
+ working: T[],
  project: Project,
  projectId: number,
- setLocal: (next: Array<{ id: number }>) => void,
-): Promise<Array<{ id: number }>> {
- const serverList = (project[section] ?? []) as Array<{ id: number }>;
- const serverIds = new Set(serverList.map((x) => x.id));
+ setLocal: (next: T[]) => void,
+ // The matching field name on `project` for this section.
+ // Required because TS doesn't allow indexing by a string
+ // literal union with mixed casing (camelCase keys vs
+ // kebab-case URL segments).
+ projectField: 'milestones' | 'features' | 'resources' | 'listItems',
+ // Optional hook called for every POST payload so the
+ // caller can inject extra fields the server expects but
+ // that don't belong in the working copy. We use it for
+ // list items: the `kind` discriminator isn't in the
+ // editor's working copy because the section already
+ // knows its own kind.
+ extraPostFields?: (item: T) => Record<string, unknown>,
+): Promise<T[]> {
+ const serverList = (project[projectField] ?? []) as unknown as T[];
+ // Build a map by id so we can do a fast lookup of the
+ // server version of each working item. The diff uses the
+ // working list as the source of truth for order and for
+ // field values, then patches in the server response for
+ // freshly POSTed rows (which only differ by the auto-
+ // generated id and createdAt).
+ const serverById = new Map<number, T>();
+ for (const s of serverList) serverById.set(s.id, s);
+
  const workingIds = new Set(working.map((x) => x.id));
+ const serverIds = new Set(serverList.map((x) => x.id));
 
- const adds = working.filter((x) => !serverIds.has(x.id) && x.id < 0);
+ // 1) Removals: server rows that no longer appear in the
+ // working list. Delete in reverse-id order so the UI
+ // doesn't see intermediate "ghost" rows.
  const removes = serverList.filter((x) => !workingIds.has(x.id));
- const edits = working.filter((x) => serverIds.has(x.id) && x.id > 0);
-
- const newItems: Array<{ id: number }> = [];
- for (const it of adds) {
- // strip the negative placeholder id
- const { id: _omit, ...payload } = it;
- const res = await api.post(`/admin/projects/${projectId}/${section}`, payload);
- newItems.push(res.data?.data as { id: number });
- }
- for (const it of edits) {
- const res = await api.put(`/admin/projects/${projectId}/${section}/${it.id}`, it);
- newItems.push(res.data?.data as { id: number });
- }
  for (const it of removes) {
  await api.delete(`/admin/projects/${projectId}/${section}/${it.id}`);
+ serverById.delete(it.id);
  }
 
- // Build the canonical list: keep negatives in place for
- // any adds that failed (UI keeps them in the editor for
- // retry), then the new + edited items.
- const canonical: Array<{ id: number }> = [
- ...working.filter((x) => x.id < 0),
- ...newItems,
- ];
+ // 2) Walk the working list in order, decide per-item:
+ // • negative id → POST then splice in the server response
+ // • positive id present in server → PUT if changed, else keep
+ // • positive id NOT in server → POST (the user re-added an
+ // item the server had already lost — unlikely but
+ // possible if a previous save partially failed).
+ const canonical: T[] = [];
+ for (const it of working) {
+ if (it.id < 0) {
+ const { id: _omit, ...payload } = it as T & { id: number };
+ const extra = extraPostFields ? extraPostFields(it) : {};
+ const res = await api.post(
+ `/admin/projects/${projectId}/${section}`,
+ { ...payload, ...extra } as unknown as Record<string, unknown>,
+ );
+ // The response is the canonical row from the server.
+ // We replace the negative placeholder in the working
+ // list with this server response — same field shape
+ // (TS-wise) and now has a real positive id.
+ const serverItem = (res.data?.data as T) ?? ({ ...(it as T), id: Math.abs(it.id) } as T);
+ canonical.push(serverItem);
+ serverById.set(serverItem.id, serverItem);
+ } else if (serverById.has(it.id)) {
+ // Re-check against the server snapshot. If the user
+ // didn't change anything, skip the PUT entirely so
+ // we don't burn an UPDATE for no reason. Equality is
+ // JSON-based because child items are flat objects.
+ const server = serverById.get(it.id)!;
+ if (JSON.stringify(it) !== JSON.stringify(server)) {
+ const res = await api.put(
+ `/admin/projects/${projectId}/${section}/${it.id}`,
+ it as unknown as Record<string, unknown>,
+ );
+ const serverItem = (res.data?.data as T) ?? it;
+ canonical.push(serverItem);
+ } else {
+ // Unchanged — keep the working copy (it preserves
+ // the user's intended order vs the server's order).
+ canonical.push(it);
+ }
+ } else {
+ // Positive id in working but not on server — POST
+ // (we don't have a way to PUT to a non-existent row).
+ const { id: _omit, ...payload } = it as T & { id: number };
+ const extra = extraPostFields ? extraPostFields(it) : {};
+ const res = await api.post(
+ `/admin/projects/${projectId}/${section}`,
+ { ...payload, ...extra } as unknown as Record<string, unknown>,
+ );
+ const serverItem = (res.data?.data as T) ?? it;
+ canonical.push(serverItem);
+ }
+ }
 
- // Replace local state so the diff-vs-server check resets.
  setLocal(canonical);
  return canonical;
 }

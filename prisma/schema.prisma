@@ -473,6 +473,7 @@ model Project {
   features   ProjectFeature[]
   resources  ProjectResource[]
   likes      ProjectLike[]
+  listItems  ProjectListItem[]
 
   @@index([status], name: "idx_projects_status")
   @@index([isFeatured], name: "idx_projects_is_featured")
@@ -490,6 +491,14 @@ model ProjectMilestone {
   description String?   @db.Text
   date        DateTime? @db.Date
   imageUrl    String?   @map("image_url") @db.VarChar(500)
+  // codeBlock / codeLang — optional VSCode-style code review
+  // snippet shown below the milestone description. The
+  // content is plain text (no syntax tree in DB); highlighting
+  // is rendered client-side via Shiki / highlight.js based on
+  // codeLang. Free-form VARCHAR(40) to keep the same set of
+  // languages as project.schemaLang.
+  codeBlock   String?   @map("code_block") @db.Text
+  codeLang    String?   @map("code_lang") @db.VarChar(40)
   order       Int       @default(0)
   createdAt   DateTime  @default(now()) @map("created_at")
 
@@ -530,6 +539,35 @@ model ProjectResource {
 
   @@index([projectId, order], name: "idx_project_resources_project_order")
   @@map("project_resources")
+}
+
+// ─────────────────────────────────────────────────────────────────
+// ProjectListItem — single table for the three "list of strings"
+// sections (Core Knowledge / Portfolio Bonus / Completion
+// Outcomes). Using a kind enum keeps the schema compact and
+// the API uniform: one CRUD pair handles all three.
+// ─────────────────────────────────────────────────────────────────
+enum ProjectListKind {
+  CORE_KNOWLEDGE
+  PORTFOLIO_BONUS
+  COMPLETION_OUTCOME
+}
+
+model ProjectListItem {
+  id        Int             @id @default(autoincrement())
+  projectId Int             @map("project_id")
+  kind      ProjectListKind
+  // The "content" is the user-facing string the editor stores
+  // and the public page renders. VARCHAR(500) so titles like
+  // "NextAuth.js v5 flow (JWT, sessions)" fit comfortably.
+  content   String          @db.VarChar(500)
+  order     Int             @default(0)
+  createdAt DateTime        @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, kind, order], name: "idx_project_list_items_project_kind_order")
+  @@map("project_list_items")
 }
 
 model ProjectLike {

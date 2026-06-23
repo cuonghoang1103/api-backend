@@ -468,6 +468,19 @@ export const projectsApi = {
  api.put(`/admin/projects/${projectId}/resources/${id}`, data),
  deleteResource: (projectId: number, id: number) =>
  api.delete(`/admin/projects/${projectId}/resources/${id}`),
+
+ // Child entities — list items (Core Knowledge / Portfolio Bonus /
+ // Outcomes). All three kinds share one CRUD pair — `kind` is a
+ // query param for GET and a body field for POST. The editor
+ // always knows which kind it's editing, so the URLs are stable.
+ listListItems: (projectId: number, kind: 'CORE_KNOWLEDGE' | 'PORTFOLIO_BONUS' | 'COMPLETION_OUTCOME') =>
+ api.get(`/admin/projects/${projectId}/list-items`, { params: { kind } }),
+ createListItem: (projectId: number, data: Record<string, unknown>) =>
+ api.post(`/admin/projects/${projectId}/list-items`, data),
+ updateListItem: (projectId: number, id: number, data: Record<string, unknown>) =>
+ api.put(`/admin/projects/${projectId}/list-items/${id}`, data),
+ deleteListItem: (projectId: number, id: number) =>
+ api.delete(`/admin/projects/${projectId}/list-items/${id}`),
 };
 
 // Contact API

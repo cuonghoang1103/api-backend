@@ -131,6 +131,7 @@ export interface Project {
  milestones?: ProjectMilestone[];
  features?: ProjectFeature[];
  resources?: ProjectResource[];
+ listItems?: ProjectListItem[];
 }
 
 export interface ProjectMilestone {
@@ -141,6 +142,13 @@ export interface ProjectMilestone {
  description?: string;
  date?: string;
  imageUrl?: string;
+ // Optional code-review snippet stored verbatim (plain text);
+ // the public page renders it with syntax highlighting based
+ // on codeLang. Free-form string for codeLang mirrors the
+ // backend's schemaLang VARCHAR(40) so the editor dropdown can
+ // reuse the same set of supported languages.
+ codeBlock?: string;
+ codeLang?: string;
  order?: number;
  createdAt?: string;
 }
@@ -187,6 +195,26 @@ export interface ProjectResource {
  type: ProjectResourceType;
  fileSize?: number;
  description?: string;
+ order?: number;
+ createdAt?: string;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// ProjectListItem — single shape for the three "list of strings"
+// sections (Core Knowledge / Portfolio Bonus / Completion
+// Outcomes). The server stores all three in the same table
+// (project_list_items) with a `kind` discriminator. The editor
+// renders one section per kind, the public page renders three
+// sections filtering by kind client-side. One interface, one
+// API method set, three UI surfaces.
+// ─────────────────────────────────────────────────────────────────
+export type ProjectListKind = 'CORE_KNOWLEDGE' | 'PORTFOLIO_BONUS' | 'COMPLETION_OUTCOME';
+
+export interface ProjectListItem {
+ id: number;
+ projectId?: number;
+ kind: ProjectListKind;
+ content: string;
  order?: number;
  createdAt?: string;
 }

@@ -876,6 +876,7 @@ router.get('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
  milestones: { orderBy: { order: 'asc' } },
  features: { orderBy: { order: 'asc' } },
  resources: { orderBy: { order: 'asc' } },
+ listItems: { orderBy: { order: 'asc' } },
  },
  });
  if (!project) throw new AppError('Project not found', 404);
@@ -1118,7 +1119,7 @@ router.post('/projects/:id/milestones', authenticate, requireAdmin('ROLE_ADMIN')
  try {
  const id = parseId(req.params.id);
  await assertProject(id);
- const { phase, title, description, date, imageUrl, order } = req.body;
+ const { phase, title, description, date, imageUrl, order, codeBlock, codeLang } = req.body;
  if (!phase?.trim()) throw new AppError('phase is required', 400);
  if (!title?.trim()) throw new AppError('title is required', 400);
  const created = await prisma.projectMilestone.create({
@@ -1129,6 +1130,8 @@ router.post('/projects/:id/milestones', authenticate, requireAdmin('ROLE_ADMIN')
  description: description || null,
  date: date ? new Date(date) : null,
  imageUrl: imageUrl || null,
+ codeBlock: codeBlock ?? null,
+ codeLang: codeLang ?? null,
  order: typeof order === 'number' ? order : 0,
  },
  });
@@ -1142,7 +1145,7 @@ router.put('/projects/:id/milestones/:mid', authenticate, requireAdmin('ROLE_ADM
  const mid = parseId(req.params.mid);
  const existing = await prisma.projectMilestone.findUnique({ where: { id: mid } });
  if (!existing || existing.projectId !== id) throw new AppError('Milestone not found', 404);
- const { phase, title, description, date, imageUrl, order } = req.body;
+ const { phase, title, description, date, imageUrl, order, codeBlock, codeLang } = req.body;
  const updated = await prisma.projectMilestone.update({
  where: { id: mid },
  data: {
@@ -1151,6 +1154,11 @@ router.put('/projects/:id/milestones/:mid', authenticate, requireAdmin('ROLE_ADM
  description: description !== undefined ? description : existing.description,
  date: date !== undefined ? (date ? new Date(date) : null) : existing.date,
  imageUrl: imageUrl !== undefined ? imageUrl : existing.imageUrl,
+ // codeBlock / codeLang: only overwrite when the client
+ // actually sent the field. Sending `null` clears it,
+ // `undefined` (missing key) leaves the previous value.
+ codeBlock: codeBlock !== undefined ? codeBlock : existing.codeBlock,
+ codeLang: codeLang !== undefined ? codeLang : existing.codeLang,
  order: typeof order === 'number' ? order : existing.order,
  },
  });
@@ -1296,6 +1304,90 @@ router.delete('/projects/:id/resources/:rid', authenticate, requireAdmin('ROLE_A
  const existing = await prisma.projectResource.findUnique({ where: { id: rid } });
  if (!existing || existing.projectId !== id) throw new AppError('Resource not found', 404);
  await prisma.projectResource.delete({ where: { id: rid } });
+ res.json({ success: true, message: 'Deleted' });
+ } catch (error) { next(error); }
+});
+
+// ─── LIST ITEMS CRUD (Core Knowledge / Portfolio Bonus / Outcomes) ──
+// All three new list sections share a single table (project_list_items)
+// differentiated by the `kind` enum. One CRUD pair covers all three
+// because the model is identical — only the kind varies.
+//
+// `kind` is part of the URL so the editor doesn't have to remember
+// which kind it's saving (it always knows from the section it's in).
+// Pass `kind` as a query param for the list endpoint; pass it in the
+// body for create; pass it in the URL for single-item routes so a
+// single GET / POST / PUT / DELETE per kind would be cleaner — we
+// accept `kind` in the body for create/put to keep the URL stable.
+
+const LIST_KINDS = new Set<ListKind>(['CORE_KNOWLEDGE', 'PORTFOLIO_BONUS', 'COMPLETION_OUTCOME']);
+type ListKind = 'CORE_KNOWLEDGE' | 'PORTFOLIO_BONUS' | 'COMPLETION_OUTCOME';
+function assertListKind(k: unknown): asserts k is ListKind {
+ if (typeof k !== 'string' || !LIST_KINDS.has(k as ListKind)) {
+ throw new AppError('Invalid list kind. Must be one of: CORE_KNOWLEDGE, PORTFOLIO_BONUS, COMPLETION_OUTCOME', 400);
+ }
+}
+
+router.get('/projects/:id/list-items', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ await assertProject(id);
+ const kind = String(req.query.kind ?? '');
+ assertListKind(kind);
+ const items = await prisma.projectListItem.findMany({
+ where: { projectId: id, kind },
+ orderBy: { order: 'asc' },
+ });
+ res.json({ success: true, data: items });
+ } catch (error) { next(error); }
+});
+
+router.post('/projects/:id/list-items', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ await assertProject(id);
+ const { kind, content, order } = req.body;
+ assertListKind(kind);
+ if (!content?.trim()) throw new AppError('content is required', 400);
+ if (content.length > 500) throw new AppError('content exceeds 500 characters', 400);
+ const created = await prisma.projectListItem.create({
+ data: {
+ projectId: id,
+ kind,
+ content: content.trim(),
+ order: typeof order === 'number' ? order : 0,
+ },
+ });
+ res.status(201).json({ success: true, data: created });
+ } catch (error) { next(error); }
+});
+
+router.put('/projects/:id/list-items/:lid', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const lid = parseId(req.params.lid);
+ const existing = await prisma.projectListItem.findUnique({ where: { id: lid } });
+ if (!existing || existing.projectId !== id) throw new AppError('List item not found', 404);
+ const { content, order } = req.body;
+ if (content !== undefined && content.length > 500) throw new AppError('content exceeds 500 characters', 400);
+ const updated = await prisma.projectListItem.update({
+ where: { id: lid },
+ data: {
+ content: content !== undefined ? content.trim() : existing.content,
+ order: typeof order === 'number' ? order : existing.order,
+ },
+ });
+ res.json({ success: true, data: updated });
+ } catch (error) { next(error); }
+});
+
+router.delete('/projects/:id/list-items/:lid', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const lid = parseId(req.params.lid);
+ const existing = await prisma.projectListItem.findUnique({ where: { id: lid } });
+ if (!existing || existing.projectId !== id) throw new AppError('List item not found', 404);
+ await prisma.projectListItem.delete({ where: { id: lid } });
  res.json({ success: true, message: 'Deleted' });
  } catch (error) { next(error); }
 });

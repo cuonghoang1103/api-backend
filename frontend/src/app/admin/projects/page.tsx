@@ -55,6 +55,7 @@ export default function AdminProjectsPage() {
  const [search, setSearch] = useState('');
  const [deletingId, setDeletingId] = useState<number | null>(null);
  const [togglingId, setTogglingId] = useState<number | null>(null);
+ const [publishingId, setPublishingId] = useState<number | null>(null);
  const [creating, setCreating] = useState(false);
 
  const filtered = useMemo(() => {
@@ -137,6 +138,29 @@ export default function AdminProjectsPage() {
  toast.error('Thao tác thất bại');
  } finally {
  setTogglingId(null);
+ }
+ };
+
+ // Fast publish toggle for the admin list — single PUT
+ // with just the boolean, no other field touched. Used
+ // by the green/red icon button on each card so the admin
+ // can flip a project's visibility without opening the
+ // editor.
+ const handleTogglePublish = async (project: Project) => {
+ setPublishingId(project.id);
+ const next = !project.isPublished;
+ try {
+ const res = await api.put(`/admin/projects/${project.id}`, { isPublished: next });
+ setProjects((prev) =>
+ prev.map((p) => (p.id === project.id ? { ...p, ...(res.data?.data as Project) } : p)),
+ );
+ toast.success(next ? 'Đã đăng dự án' : 'Đã chuyển về bản nháp');
+ } catch (err: unknown) {
+ const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+ ?? 'Thao tác thất bại';
+ toast.error(msg);
+ } finally {
+ setPublishingId(null);
  }
  };
 
@@ -289,6 +313,23 @@ export default function AdminProjectsPage() {
 
  {/* Actions */}
  <div className="flex items-center justify-end gap-1">
+ {/*
+ Publish toggle on each card. Distinct from the editor
+ header toggle — this one doesn't require opening the
+ project, useful when scanning the list.
+ */}
+ <button
+ onClick={() => handleTogglePublish(project)}
+ disabled={publishingId === project.id}
+ className={`p-1.5 rounded-lg transition-colors disabled:opacity-50 ${
+ project.isPublished !== false
+ ? 'text-emerald-400 hover:bg-emerald-500/10'
+ : 'text-text-muted hover:bg-emerald-500/10 hover:text-emerald-400'
+ }`}
+ title={project.isPublished !== false ? 'Chuyển về bản nháp' : 'Đăng dự án'}
+ >
+ {project.isPublished !== false ? <CheckCircle2 className="w-3.5 h-3.5" /> : <CircleDashed className="w-3.5 h-3.5" />}
+ </button>
  <button
  onClick={() => handleToggleFeatured(project)}
  disabled={togglingId === project.id}

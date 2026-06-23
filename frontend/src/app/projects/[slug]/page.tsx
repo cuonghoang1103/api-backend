@@ -14,9 +14,13 @@ import {
  BookOpen,
  ChevronRight,
  ArrowRight,
+ GraduationCap,
+ Trophy,
+ Target,
+ CheckCircle2,
 } from 'lucide-react';
 import { projectsApi } from '@/lib/api';
-import type { Project } from '@/types';
+import type { Project, ProjectListItem, ProjectListKind } from '@/types';
 import { useProjectStore } from '@/store/projectStore';
 import ImageCarousel from '@/components/projects/ImageCarousel';
 import MarkdownRenderer from '@/components/projects/MarkdownRenderer';
@@ -185,6 +189,23 @@ export default function ProjectDetailPage() {
  const src = project.bodyMdx || project.content || '';
  return computeReadingTime(src);
  }, [project]);
+
+ // Filter list-of-strings items by kind. We keep them as
+ // three separate lists (memoized) so each public section
+ // is rendered with its own header + icon, matching the
+ // editor's per-section treatment.
+ const coreKnowledge = useMemo(
+ () => (project?.listItems ?? []).filter((x) => x.kind === 'CORE_KNOWLEDGE'),
+ [project],
+ );
+ const portfolioBonus = useMemo(
+ () => (project?.listItems ?? []).filter((x) => x.kind === 'PORTFOLIO_BONUS'),
+ [project],
+ );
+ const completionOutcome = useMemo(
+ () => (project?.listItems ?? []).filter((x) => x.kind === 'COMPLETION_OUTCOME'),
+ [project],
+ );
 
  if (loading) {
  return (
@@ -443,6 +464,33 @@ export default function ProjectDetailPage() {
 
  <ResourcesList resources={project.resources ?? []} />
 
+ {/* 3 list-of-strings sections — all share the same
+ component shape but each gets its own header + icon to
+ match the editor's per-section treatment. The component
+ is rendered with framer-motion stagger for a polished
+ reveal as the user scrolls past the timeline. */}
+ <ListItemsSection
+ title="Kiến thức cần học vững"
+ subtitle="Những kiến thức nền tảng cần nắm vững khi bắt tay vào dự án"
+ icon={GraduationCap}
+ accent="text-cyan-400"
+ items={coreKnowledge}
+ />
+ <ListItemsSection
+ title="Điểm cộng cho portfolio"
+ subtitle="Những thứ khiến dự án nổi bật hơn khi ứng tuyển hoặc chia sẻ"
+ icon={Trophy}
+ accent="text-yellow-400"
+ items={portfolioBonus}
+ />
+ <ListItemsSection
+ title="Đánh giá sau khi hoàn thành"
+ subtitle="Những gì bạn sẽ 'biết cách làm' sau khi đưa dự án lên production"
+ icon={Target}
+ accent="text-emerald-400"
+ items={completionOutcome}
+ />
+
  {/* Related projects */}
  {relatedProjects.length > 0 && (
  <motion.section
@@ -573,5 +621,60 @@ function PlayIcon() {
  <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8z" />
  <path d="M9.75 15.5V8.5l6.5 3.5-6.5 3.5z" fill="#FF0000" />
  </svg>
+ );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// ListItemsSection — renders one of the three "list of
+// strings" sections (Core Knowledge / Portfolio Bonus /
+// Completion Outcomes). Visually consistent with the rest of
+// the case study page (rounded dark card, neon icon, staggered
+// reveal). Returns null when the list is empty so the public
+// page only shows sections that have content.
+// ─────────────────────────────────────────────────────────────────
+function ListItemsSection({
+ title,
+ subtitle,
+ icon: Icon,
+ accent,
+ items,
+}: {
+ title: string;
+ subtitle: string;
+ icon: typeof CheckCircle2;
+ accent: string;
+ items: ProjectListItem[];
+}) {
+ if (!items || items.length === 0) return null;
+ return (
+ <motion.section
+ initial={{ opacity: 0, y: 16 }}
+ whileInView={{ opacity: 1, y: 0 }}
+ viewport={{ once: true, margin: '-50px' }}
+ transition={{ duration: 0.4 }}
+ className="mt-10"
+ >
+ <div className="flex items-center gap-2 mb-1">
+ <Icon className={`w-5 h-5 ${accent}`} />
+ <h2 className="text-lg font-heading font-bold text-text-primary">{title}</h2>
+ <span className="ml-auto text-xs text-text-muted">{items.length} mục</span>
+ </div>
+ <p className="text-sm text-text-muted mb-4">{subtitle}</p>
+ <ul className="space-y-2">
+ {items.map((it, i) => (
+ <motion.li
+ key={it.id ?? i}
+ initial={{ opacity: 0, x: -6 }}
+ whileInView={{ opacity: 1, x: 0 }}
+ viewport={{ once: true, margin: '-30px' }}
+ transition={{ duration: 0.25, delay: i * 0.03 }}
+ className="flex items-start gap-2 bg-darkcard border border-darkborder rounded-xl px-4 py-3"
+ >
+ <CheckCircle2 className={`w-4 h-4 mt-0.5 flex-shrink-0 ${accent}`} />
+ <span className="text-sm text-text-primary leading-relaxed">{it.content}</span>
+ </motion.li>
+ ))}
+ </ul>
+ </motion.section>
  );
 }

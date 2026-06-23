@@ -80,11 +80,18 @@ COPY --chown=0:0 scripts/fix-uploads-perms.sh /usr/local/bin/fix-uploads-perms.s
 RUN chmod +x /usr/local/bin/fix-uploads-perms.sh
 
 # Copy built artifacts (only production deps)
-COPY --from=builder --chown=1001:0 /app/node_modules ./node_modules
-COPY --from=builder --chown=1001:0 /app/dist ./dist
-COPY --from=builder --chown=1001:0 /app/prisma ./prisma
-COPY --from=builder --chown=1001:0 /app/package.json ./package.json
-COPY --from=builder --chown=1001:0 /app/scripts ./scripts
+ COPY --from=builder --chown=1001:0 /app/node_modules ./node_modules
+ COPY --from=builder --chown=1001:0 /app/dist ./dist
+ # Copy the source tree so `npx prisma db seed` (which uses tsx to
+ # run prisma/seed.ts) can resolve `../src/services/...` imports.
+ # Without this, seed fails with ERR_MODULE_NOT_FOUND on a fresh
+ # production container. Source is not used by the running Node
+ # process (which only loads from dist/); it is only here for the
+ # seed script.
+ COPY --from=builder --chown=1001:0 /app/src ./src
+ COPY --from=builder --chown=1001:0 /app/prisma ./prisma
+ COPY --from=builder --chown=1001:0 /app/package.json ./package.json
+ COPY --from=builder --chown=1001:0 /app/scripts ./scripts
 
 # Set environment
 ENV NODE_ENV=production

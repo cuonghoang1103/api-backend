@@ -113,6 +113,11 @@ async function main() {
  // Idempotent upsert keyed on slug. We re-render bodyHtml
  // every run so the cache always reflects bodyMdx.
  await seedCaseStudyProject();
+
+ // ─── Seed Content Creator demo project (Phase 1) ────
+ // Wipes + recreates the demo project so the upcoming
+ // editor UI always has a non-trivial dataset.
+ await seedContentCreator();
 }
 
 async function seedCaseStudyProject() {
@@ -423,6 +428,194 @@ npm run dev
  });
 
  console.log(`✅ Seeded case study project "${slug}" with ${5} milestones, ${8} features, ${3} resources, ${19} list items`);
+}
+
+// ============================================================
+// Phase 1: Content Creator seed
+// ------------------------------------------------------------
+// Idempotent upsert keyed on `slug`. Deletes-then-recreates
+// child lists (days, scenes, products, posts, checklist) so
+// any drift between code and DB self-heals on re-run.
+//
+// The demo project covers every Status enum and every Scene
+// Type at least once, so the editor UI has a non-trivial
+// dataset to render in the upcoming Phase 4 view.
+// ============================================================
+async function seedContentCreator() {
+ const slug = 'vlog-hau-truong-ai';
+
+ // If a previous seed ran with a different shape, wipe the
+ // project and recreate from scratch. Safe because this seed
+ // only ever owns a single demo project.
+ const existing = await prisma.contentProject.findUnique({ where: { slug } });
+ if (existing) {
+ await prisma.contentProject.delete({ where: { id: existing.id } });
+ }
+
+ const project = await prisma.contentProject.create({
+ data: {
+ slug,
+ title: 'Vlog hậu trường AI: tôi build production tool 30 ngày',
+ type: 'VLOG',
+ status: 'SCRIPTING',
+ ideaDate: new Date('2026-06-20'),
+ filmDate: new Date('2026-07-05'),
+ publishDate: new Date('2026-07-12'),
+ concept:
+ '30 ngày, 1 production tool, 0 framework AI hype. Tôi sẽ ghi lại từng commit, từng bug, từng decision trong quá trình build Content Creator cho portfolio của mình.',
+ mainHook:
+ 'Tôi đã build production tool trong 30 ngày — đây là 5 bài học đắt giá nhất',
+ tags: ['vlog', 'ai', 'build-in-public', 'productivity'],
+ referenceLinks: [
+ { label: 'Building in Public — Marc Lou', url: 'https://marclou.com' },
+ { label: 'Notion Calendar', url: 'https://notion.so/calendar' },
+ ],
+ days: {
+ create: [
+ {
+ dayNumber: 1,
+ date: new Date('2026-07-05'),
+ location: 'Home studio',
+ notes: 'Day 1: Intro + kể chuyện + show dashboard trước/sau',
+ order: 0,
+ scenes: {
+ create: [
+ {
+ sceneNumber: 1,
+ sceneType: 'HOOK',
+ shotType: 'CLOSEUP',
+ voiceover:
+ 'Tôi bắt đầu 30 ngày trước, và tôi gần như bỏ cuộc ở ngày thứ 8.',
+ durationSeconds: 8,
+ order: 0,
+ },
+ {
+ sceneNumber: 2,
+ sceneType: 'INTRO',
+ shotType: 'MEDIUM',
+ voiceover:
+ 'Đây là Content Creator — production tool cá nhân tôi build để quản lý tất cả video tôi đăng lên TikTok, YouTube, Facebook và Instagram.',
+ durationSeconds: 12,
+ order: 1,
+ },
+ {
+ sceneNumber: 3,
+ sceneType: 'BROLL',
+ shotType: 'OVERHEAD',
+ action: 'Screen recording dashboard với cursor di chuyển giữa các tab',
+ durationSeconds: 6,
+ order: 2,
+ },
+ ],
+ },
+ },
+ {
+ dayNumber: 2,
+ date: new Date('2026-07-08'),
+ location: 'Quán cafe',
+ notes: 'Day 2: Bài học + interview mini với 2 dev khác',
+ order: 1,
+ scenes: {
+ create: [
+ {
+ sceneNumber: 1,
+ sceneType: 'HOOK',
+ shotType: 'WIDE',
+ voiceover:
+ 'Bài học #3: Đừng build dashboard trước khi biết daily workflow thật của bạn.',
+ durationSeconds: 10,
+ order: 0,
+ },
+ {
+ sceneNumber: 2,
+ sceneType: 'OUTRO',
+ shotType: 'MEDIUM',
+ voiceover:
+ 'Nếu bạn thích series này, subcribe để tuần sau có phần 2 — debug session thật.',
+ durationSeconds: 7,
+ order: 1,
+ },
+ ],
+ },
+ },
+ ],
+ },
+ affiliateProducts: {
+ create: [
+ {
+ name: 'Saramonic Vmic Mini',
+ url: 'https://example.com/vmic',
+ discountCode: 'CUONG10',
+ commissionPercent: 8,
+ revenue: 0,
+ notes: 'Mic gắn máy ảnh giá rẻ, dùng cho Day 2 ngoài trời',
+ order: 0,
+ },
+ ],
+ },
+ platformPosts: {
+ create: [
+ {
+ platform: 'TIKTOK',
+ caption:
+ '30 ngày, 1 production tool, 0 AI hype. Đây là 5 bài học đắt giá nhất 🧵',
+ hashtags: ['buildinpublic', 'productivity', 'vlog', 'ai'],
+ scheduledTime: new Date('2026-07-10T18:00:00Z'),
+ isPublished: false,
+ order: 0,
+ },
+ {
+ platform: 'YOUTUBE',
+ caption:
+ 'Vlog hậu trường AI — 30 ngày build Content Creator (full breakdown)',
+ hashtags: ['vlog', 'buildinpublic', 'productivity', 'ai', 'tutorial'],
+ scheduledTime: new Date('2026-07-12T17:00:00Z'),
+ isPublished: false,
+ order: 1,
+ },
+ ],
+ },
+ checklistItems: {
+ create: [
+ { phase: 'PRE', label: 'Outline 5 bài học + script hook 15s', done: true, order: 0 },
+ { phase: 'PRE', label: 'Thuê mic backup (SM7B)', done: false, order: 1 },
+ { phase: 'PRODUCTION', label: 'Quay Day 1 (3 scenes)', done: false, order: 0 },
+ { phase: 'PRODUCTION', label: 'Quay Day 2 (2 scenes + 2 interview)', done: false, order: 1 },
+ { phase: 'POST', label: 'Edit Day 1 cắt thô', done: false, order: 0 },
+ { phase: 'POST', label: 'Color grade + add subtitles', done: false, order: 1 },
+ { phase: 'PUBLISH', label: 'Upload TikTok (vertical 9:16)', done: false, order: 0 },
+ { phase: 'PUBLISH', label: 'Upload YouTube (16:9 long-form)', done: false, order: 1 },
+ ],
+ },
+ performance: {
+ create: {
+ views: 0,
+ likes: 0,
+ comments: 0,
+ shares: 0,
+ platformMetrics: {},
+ },
+ },
+ },
+ include: {
+ days: { include: { scenes: true } },
+ affiliateProducts: true,
+ platformPosts: true,
+ checklistItems: true,
+ performance: true,
+ },
+ });
+
+ const dayCount = project.days.length;
+ const sceneCount = project.days.reduce((sum, d) => sum + d.scenes.length, 0);
+ const productCount = project.affiliateProducts.length;
+ const postCount = project.platformPosts.length;
+ const checklistCount = project.checklistItems.length;
+ const hasPerformance = Boolean(project.performance);
+
+ console.log(
+ `✅ Seeded content project "${slug}" with ${dayCount} days, ${sceneCount} scenes, ${productCount} products, ${postCount} posts, ${checklistCount} checklist items, performance=${hasPerformance}`,
+ );
 }
 
 main()

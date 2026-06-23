@@ -2327,16 +2327,260 @@ model HubFile {
 
 // ─── Social Follow Graph ──────────────────────────────────
 model Follow {
-  id          Int      @id @default(autoincrement())
-  followerId  Int      @map("follower_id")
-  followingId Int      @map("following_id")
-  createdAt   DateTime @default(now()) @map("created_at")
+ id Int @id @default(autoincrement())
+ followerId Int @map("follower_id")
+ followingId Int @map("following_id")
+ createdAt DateTime @default(now()) @map("created_at")
 
-  follower  User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
-  following User @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+ follower User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+ following User @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
 
-  @@unique([followerId, followingId], map: "uk_follow_pair")
-  @@index([followingId], map: "idx_follow_following")
-  @@index([followerId], map: "idx_follow_follower")
-  @@map("follows")
+ @@unique([followerId, followingId], map: "uk_follow_pair")
+ @@index([followingId], map: "idx_follow_following")
+ @@index([followerId], map: "idx_follow_follower")
+ @@map("follows")
+}
+
+// ============================================================
+// CONTENT CREATOR (Phase 1)
+// ------------------------------------------------------------
+// Personal production tool for planning, scripting and
+// tracking videos posted to TikTok / YouTube / Facebook /
+// Instagram. All tables are additive — no existing model is
+// modified. The schema mirrors the data model the user
+// authored in the spec: ContentProject (top level) →
+// ProductionDay[] → Scene[]; plus 4 sibling child lists
+// (affiliateProducts, platformPosts, checklistItems) and a
+// one-to-one ContentPerformance. Order columns are kept on
+// every child list so the editor can drag-reorder and the
+// round-trip is deterministic.
+// ============================================================
+
+// ─── Enums ─────────────────────────────────────────────────────
+enum ContentType {
+ VLOG
+ AFFILIATE
+ CODE
+ REVIEW
+ IDEA
+ OTHER
+
+ @@map("content_type")
+}
+
+enum ContentStatus {
+ IDEA
+ SCRIPTING
+ FILMING
+ EDITING
+ SCHEDULED
+ PUBLISHED
+
+ @@map("content_status")
+}
+
+enum SceneType {
+ OPENING
+ HOOK
+ INTRO
+ BODY
+ BROLL
+ CTA
+ OUTRO
+
+ @@map("scene_type")
+}
+
+enum ShotType {
+ CLOSEUP
+ MEDIUM
+ WIDE
+ POV
+ OVERHEAD
+
+ @@map("shot_type")
+}
+
+enum ContentPlatform {
+ TIKTOK
+ YOUTUBE
+ FACEBOOK
+ INSTAGRAM
+
+ @@map("content_platform")
+}
+
+enum ChecklistPhase {
+ PRE
+ PRODUCTION
+ POST
+ PUBLISH
+
+ @@map("checklist_phase")
+}
+
+// ─── Top-level entity ──────────────────────────────────────────
+model ContentProject {
+ id Int @id @default(autoincrement())
+ slug String @unique @db.VarChar(120)
+ title String @db.VarChar(200)
+ type ContentType
+ status ContentStatus @default(IDEA)
+ ideaDate  DateTime? @map("idea_date")
+ filmDate DateTime? @map("film_date")
+ publishDate DateTime? @map("publish_date")
+ concept String? @db.Text
+ // Short opening hook (≤200 chars). Used as a teaser line
+ // in Pipeline cards and Calendar popups.
+ mainHook String? @map("main_hook") @db.VarChar(280)
+ thumbnailUrl String? @map("thumbnail_url") @db.VarChar(500)
+ // Free-form tags (lowercase kebab-case recommended).
+ tags String[] @default([])
+ // [{label: string, url: string}] — inspiration / competitor
+ // links, kept schema-free in JSONB.
+ referenceLinks Json @default("[]") @map("reference_links")
+ createdAt DateTime @default(now()) @map("created_at")
+ updatedAt DateTime @updatedAt @map("updated_at")
+
+ days ProductionDay[]
+ affiliateProducts AffiliateProduct[]
+ platformPosts PlatformPost[]
+ checklistItems ChecklistItem[]
+ performance ContentPerformance?
+
+ @@index([status, type], map: "idx_content_projects_status_type")
+ @@index([filmDate], map: "idx_content_projects_film_date")
+ @@index([publishDate], map: "idx_content_projects_publish_date")
+ @@index([type], map: "idx_content_projects_type")
+ @@map("content_projects")
+}
+
+// ─── ProductionDay (1-n) ───────────────────────────────────────
+model ProductionDay {
+ id Int @id @default(autoincrement())
+ contentProjectId Int @map("content_project_id")
+ dayNumber Int @map("day_number")
+ date DateTime?
+ location String? @db.VarChar(200)
+ notes String? @db.Text
+ order Int @default(0)
+ createdAt DateTime @default(now()) @map("created_at")
+ updatedAt DateTime @updatedAt @map("updated_at")
+
+ contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+ scenes Scene[]
+
+ @@index([contentProjectId, order], map: "idx_production_days_project_order")
+ @@map("production_days")
+}
+
+// ─── Scene (1-n) ───────────────────────────────────────────────
+model Scene {
+ id  Int @id @default(autoincrement())
+ productionDayId Int @map("production_day_id")
+ sceneNumber Int @map("scene_number")
+ sceneType SceneType @map("scene_type")
+ // On-screen dialogue (lời thoại nhân vật).
+ dialogue String? @db.Text
+ // Voiceover narration (lời dẫn ngoài).
+ voiceover  String? @db.Text
+ // Free-form camera direction (góc quay mô tả tự do).
+ cameraAngle String? @map("camera_angle") @db.VarChar(200)
+ shotType ShotType?  @map("shot_type")
+ action String? @db.Text
+ props String? @db.VarChar(300)
+ brollNotes String? @map("broll_notes") @db.Text
+ editingNotes String? @map("editing_notes") @db.Text
+ durationSeconds Int? @map("duration_seconds")
+ storyboardImageUrl String? @map("storyboard_image_url") @db.VarChar(500)
+ order Int @default(0)
+ createdAt DateTime @default(now()) @map("created_at")
+ updatedAt DateTime @updatedAt @map("updated_at")
+
+ productionDay ProductionDay @relation(fields: [productionDayId], references: [id], onDelete: Cascade)
+
+ @@index([productionDayId, order], map: "idx_scenes_day_order")
+ @@map("scenes")
+}
+
+// ─── AffiliateProduct (1-n) ────────────────────────────────────
+model AffiliateProduct {
+ id Int @id @default(autoincrement())
+ contentProjectId Int @map("content_project_id")
+ name String @db.VarChar(200)
+ url String @db.VarChar(500)
+ discountCode String? @map("discount_code") @db.VarChar(50)
+ commissionPercent Float? @map("commission_percent")
+ revenue Float? @default(0)
+ notes String? @db.Text
+ order Int @default(0)
+ createdAt DateTime @default(now()) @map("created_at")
+ updatedAt DateTime @updatedAt @map("updated_at")
+
+ contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+
+ @@index([contentProjectId, order], map: "idx_affiliate_products_project_order")
+ @@map("affiliate_products")
+}
+
+// ─── PlatformPost (1-n) ────────────────────────────────────────
+model PlatformPost {
+ id Int @id @default(autoincrement())
+ contentProjectId Int @map("content_project_id")
+ platform ContentPlatform
+ caption String? @db.Text
+ hashtags String[] @default([])
+ scheduledTime DateTime? @map("scheduled_time")
+ postUrl String? @map("post_url") @db.VarChar(500)
+ isPublished Boolean @default(false) @map("is_published")
+ order Int @default(0)
+ createdAt DateTime @default(now()) @map("created_at")
+ updatedAt DateTime @updatedAt @map("updated_at")
+
+ contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+
+ @@index([contentProjectId, order], map: "idx_platform_posts_project_order")
+ @@index([contentProjectId, platform], map: "idx_platform_posts_project_platform")
+ @@map("platform_posts")
+}
+
+// ─── ChecklistItem (1-n) ───────────────────────────────────────
+model ChecklistItem {
+ id Int @id @default(autoincrement())
+ contentProjectId Int @map("content_project_id")
+ phase ChecklistPhase
+ label String  @db.VarChar(300)
+ done Boolean @default(false)
+ order Int @default(0)
+ createdAt DateTime @default(now()) @map("created_at")
+ updatedAt DateTime @updatedAt @map("updated_at")
+
+ contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+
+ @@index([contentProjectId, phase, order], map: "idx_checklist_items_project_phase_order")
+ @@map("checklist_items")
+}
+
+// ─── ContentPerformance (1-1) ──────────────────────────────────
+model ContentPerformance {
+ id Int @id @default(autoincrement())
+ contentProjectId Int @unique @map("content_project_id")
+ views Int @default(0)
+ likes Int @default(0)
+ comments Int @default(0)
+ shares Int @default(0)
+ // Click-through rate as a fraction (0..1) — render as %.
+ ctr Float?
+ // Average watch time in seconds.
+ watchTimeSec Int? @map("watch_time_sec")
+ // Per-platform breakdown for future per-platform rollups.
+ // Shape: { TIKTOK: { views, likes, ... }, YOUTUBE: {...} }
+ platformMetrics Json @default("{}") @map("platform_metrics")
+ lessonsLearned String? @map("lessons_learned") @db.Text
+ createdAt DateTime @default(now()) @map("created_at")
+ updatedAt DateTime @updatedAt @map("updated_at")
+
+ contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+
+ @@map("content_performance")
 }

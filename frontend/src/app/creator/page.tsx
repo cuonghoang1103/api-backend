@@ -10,8 +10,8 @@
 // time on this page.
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
  ArrowRight,
@@ -29,6 +29,7 @@ import { useContentProjects } from '@/hooks/useContentQueries';
 import { CONTENT_STATUS_META, STATUS_ORDER } from '@/lib/studio-meta';
 import StatusPill from '@/components/studio/StatusPill';
 import TypePill from '@/components/studio/TypePill';
+import { useStudioStore } from '@/store/studioStore';
 import type { ContentProjectSummary, ContentStatus } from '@/types';
 
 function dayDiff(iso: string | null): number | null {
@@ -45,8 +46,33 @@ function fmtDay(iso: string | null): string {
 }
 
 export default function CreatorDashboardPage() {
+ return (
+ // useSearchParams() requires a Suspense boundary in
+ // Next 14 (CSR bailout for static generation). We keep
+ // the inner component thin so the rest of the page
+ // stays under the same code path.
+ <Suspense fallback={null}>
+ <CreatorDashboardInner />
+ </Suspense>
+ );
+}
+
+function CreatorDashboardInner() {
  const router = useRouter();
+ const search = useSearchParams();
+ const openCreateModal = useStudioStore((s) => s.openCreateModal);
  const { data: projects = [], isLoading } = useContentProjects();
+
+ // Deep-linkable "New project" — the URL ?new=1 opens
+ // the modal. We strip the param on close so reloading
+ // doesn't re-open it.
+ useEffect(() => {
+ if (search.get('new') === '1') {
+ openCreateModal();
+ // Clean up the URL without re-triggering the effect.
+ router.replace('/creator', { scroll: false });
+ }
+ }, [search, openCreateModal, router]);
 
  // ─── Aggregates ────────────────────────────────────────
  const counts = useMemo(() => {
@@ -124,7 +150,7 @@ export default function CreatorDashboardPage() {
  Open pipeline
  </Link>
  <button
- onClick={() => router.push('/creator?new=1')}
+ onClick={() => openCreateModal()}
  className="flex items-center gap-1.5 px-4 h-10 rounded-xl bg-studio-gradient text-studio-950 font-semibold text-sm shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_28px_rgba(245,158,11,0.45)] transition-shadow"
  >
  <Plus className="w-4 h-4" />
@@ -187,7 +213,7 @@ export default function CreatorDashboardPage() {
  a project with days, scenes, scripts and a publish plan.
  </p>
  <button
- onClick={() => router.push('/creator?new=1')}
+ onClick={() => openCreateModal()}
  className="inline-flex items-center gap-1.5 px-4 h-10 rounded-xl bg-studio-gradient text-studio-950 font-semibold text-sm"
  >
  <Plus className="w-4 h-4" />

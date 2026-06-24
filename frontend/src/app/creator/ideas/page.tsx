@@ -30,6 +30,7 @@ import {
  X,
  CheckCircle2,
  CircleDashed,
+ Download,
 } from 'lucide-react';
 import {
  useContentIdeas,
@@ -39,6 +40,7 @@ import {
  useUpdateContentIdea,
 } from '@/hooks/useContentQueries';
 import { IDEA_STATUS_META } from '@/lib/studio-meta';
+import { toCsv, downloadCsv, type CsvColumn } from '@/lib/csv';
 import type { ContentIdea, IdeaStatus } from '@/types';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 
@@ -467,6 +469,29 @@ export default function IdeasPage() {
  });
  };
 
+ // Export the currently-visible (filtered) ideas to
+ // a CSV file. The CSV opens in Excel and Google
+ // Sheets with Vietnamese characters intact.
+ const exportIdeasCsv = () => {
+ if (items.length === 0) return;
+ const cols: CsvColumn<ContentIdea>[] = [
+ { label: 'Title', value: (i) => i.title },
+ { label: 'Hook', value: (i) => i.hook },
+ { label: 'Notes', value: (i) => i.notes },
+ { label: 'Status', value: (i) => i.status },
+ { label: 'Score', value: (i) => i.score ?? 0 },
+ { label: 'Suggested type', value: (i) => i.suggestedType ?? '' },
+ { label: 'Tags', value: (i) => i.tags },
+ { label: 'Promoted to project', value: (i) => i.promotedToProjectId ?? '' },
+ { label: 'Promoted at', value: (i) => i.promotedAt ?? '' },
+ { label: 'Created at', value: (i) => i.createdAt },
+ { label: 'Updated at', value: (i) => i.updatedAt },
+ ];
+ const csv = toCsv(items, cols);
+ const stamp = new Date().toISOString().slice(0, 10);
+ downloadCsv(`content-ideas-${stamp}.csv`, csv);
+ };
+
  const handleArchive = (idea: ContentIdea) =>
  update.mutate({
  id: idea.id,
@@ -503,9 +528,21 @@ export default function IdeasPage() {
  Capture sparks. Promote to a project when ready.
  </p>
  </div>
- <div className="hidden sm:flex items-center gap-2 text-xs text-text-muted">
+ <div className="hidden sm:flex items-center gap-3">
+ <div className="flex items-center gap-2 text-xs text-text-muted">
  <Filter className="w-3.5 h-3.5" />
  {counts.ALL} idea{counts.ALL === 1 ? '' : 's'} total
+ </div>
+ <button
+ type="button"
+ onClick={exportIdeasCsv}
+ disabled={items.length === 0}
+ title="Export filtered ideas as CSV"
+ className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg bg-bg-elevated/40 hover:bg-bg-elevated/70 text-text-primary text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+ >
+ <Download className="w-3.5 h-3.5" />
+ Export CSV
+ </button>
  </div>
  </div>
 

@@ -33,6 +33,7 @@ import {
  X,
  CalendarDays,
  ArrowRight,
+ Plus,
 } from 'lucide-react';
 import {
  format,
@@ -54,6 +55,7 @@ import { useContentProjects } from '@/hooks/useContentQueries';
 import { CONTENT_STATUS_META, CONTENT_TYPE_META } from '@/lib/studio-meta';
 import StatusPill from '@/components/studio/StatusPill';
 import TypePill from '@/components/studio/TypePill';
+import { useStudioStore } from '@/store/studioStore';
 import type { ContentProjectSummary } from '@/types';
 
 // A project shows up on the calendar in two
@@ -263,10 +265,12 @@ function DayDetailPanel({
  date,
  events,
  onClose,
+ onPlanProject,
 }: {
  date: Date | undefined;
  events: CalEvent[];
  onClose: () => void;
+ onPlanProject: (date: Date, kind: 'film' | 'publish') => void;
 }) {
  if (!date) return null;
  const dayEvents = events
@@ -301,9 +305,29 @@ function DayDetailPanel({
  </button>
  </div>
  {dayEvents.length === 0 ? (
- <p className="text-sm text-text-muted py-4 text-center">
+ <div className="py-3 text-center space-y-3">
+ <p className="text-sm text-text-muted">
  Nothing scheduled on this day.
  </p>
+ <div className="flex flex-wrap items-center justify-center gap-2">
+ <button
+ type="button"
+ onClick={() => onPlanProject(date, 'film')}
+ className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-studio-500/15 text-studio-200 ring-1 ring-studio-500/30 hover:bg-studio-500/25 text-xs font-semibold transition-colors"
+ >
+ <Film className="w-3.5 h-3.5" />
+ Plan filming
+ </button>
+ <button
+ type="button"
+ onClick={() => onPlanProject(date, 'publish')}
+ className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-500/30 hover:bg-emerald-500/25 text-xs font-semibold transition-colors"
+ >
+ <Send className="w-3.5 h-3.5" />
+ Plan publish
+ </button>
+ </div>
+ </div>
  ) : (
  <div className="space-y-2">
  {dayEvents.map((e) => (
@@ -336,6 +360,23 @@ export default function CalendarPage() {
  const [month, setMonth] = useState<Date>(new Date());
  const [selected, setSelected] = useState<Date | undefined>(new Date());
  const [kindFilter, setKindFilter] = useState<'all' | 'film' | 'publish'>('all');
+ const openCreateModal = useStudioStore((s) => s.openCreateModal);
+
+ // Open the New Project modal with a pre-filled date so
+ // the user can plan content directly from a calendar
+ // day. We open the modal rather than navigate so the
+ // user doesn't lose their current calendar view.
+ const handlePlanProject = (
+ date: Date,
+ kind: 'film' | 'publish',
+ ) => {
+ const iso = format(date, 'yyyy-MM-dd');
+ openCreateModal(
+ kind === 'film'
+ ? { filmDate: iso, type: 'VLOG' }
+ : { publishDate: iso, type: 'VLOG' },
+ );
+ };
 
  // Compute the window the calendar is interested in.
  // Month view: full month ± 1 week padding.
@@ -567,6 +608,7 @@ export default function CalendarPage() {
  date={selected}
  events={events}
  onClose={() => setSelected(undefined)}
+ onPlanProject={handlePlanProject}
  />
  {/* Upcoming next 3 */}
  {stats.upcoming.length > 0 && (
@@ -621,10 +663,22 @@ export default function CalendarPage() {
  )}
 
  {/* Footer hint */}
- <div className="flex items-center gap-2 text-xs text-text-muted pt-2">
+ <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted pt-2">
  <span>
- Set a project's <Link href="/creator" className="text-studio-400 hover:text-studio-300 underline-offset-2 hover:underline">film date or publish date</Link> to see it here.
+ Set a project's film or publish date in the{' '}
+ <Link href="/creator/list" className="text-studio-400 hover:text-studio-300 underline-offset-2 hover:underline">
+ project list
+ </Link>
+ , or click any day to plan a new one.
  </span>
+ <button
+ type="button"
+ onClick={() => openCreateModal()}
+ className="ml-auto inline-flex items-center gap-1 h-7 px-2.5 rounded-md bg-studio-500/15 text-studio-200 ring-1 ring-studio-500/30 hover:bg-studio-500/25 text-xs font-semibold transition-colors"
+ >
+ <Plus className="w-3 h-3" />
+ New project
+ </button>
  </div>
  </div>
  );

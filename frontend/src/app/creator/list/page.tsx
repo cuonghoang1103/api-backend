@@ -32,6 +32,7 @@ import {
  ListChecks,
  Film,
  Youtube,
+ Download,
  ExternalLink,
  Sparkles,
  Plus,
@@ -45,10 +46,12 @@ import {
 } from '@/hooks/useContentQueries';
 import StatusPill from '@/components/studio/StatusPill';
 import TypePill from '@/components/studio/TypePill';
+import { useStudioStore } from '@/store/studioStore';
 import {
  CONTENT_STATUS_META,
  CONTENT_TYPE_META,
 } from '@/lib/studio-meta';
+import { toCsv, downloadCsv, type CsvColumn } from '@/lib/csv';
 import type {
  ContentProjectSummary,
  ContentStatus,
@@ -83,6 +86,7 @@ const TYPES: ContentType[] = [
 ];
 
 export default function CreatorListPage() {
+ const openCreateModal = useStudioStore((s) => s.openCreateModal);
  const [statusFilter, setStatusFilter] = useState<ContentStatus | 'ALL'>(
  'ALL',
  );
@@ -177,6 +181,37 @@ export default function CreatorListPage() {
  setSelected(new Set());
  };
 
+ // Export the currently-filtered + sorted rows to a
+ // CSV file. Excludes bulk-selected rows that are
+ // hidden by filters — we export "what you see".
+ //
+ // The list view only has access to the *summary*
+ // fields (no `concept`, `mainHook`, performance
+ // numbers, etc.) — for the full record, open the
+ // project in the editor.
+ const exportCsv = () => {
+ if (rows.length === 0) return;
+ const cols: CsvColumn<ContentProjectSummary>[] = [
+ { label: 'Title', value: (p) => p.title },
+ { label: 'Slug', value: (p) => p.slug },
+ { label: 'Type', value: (p) => p.type },
+ { label: 'Status', value: (p) => p.status },
+ { label: 'Idea date', value: (p) => p.ideaDate },
+ { label: 'Film date', value: (p) => p.filmDate },
+ { label: 'Publish date', value: (p) => p.publishDate },
+ { label: 'Tags', value: (p) => p.tags },
+ { label: 'Thumbnail URL', value: (p) => p.thumbnailUrl },
+ { label: 'Production days', value: (p) => p._count?.days ?? 0 },
+ { label: 'Affiliate products', value: (p) => p._count?.affiliateProducts ?? 0 },
+ { label: 'Platform posts', value: (p) => p._count?.platformPosts ?? 0 },
+ { label: 'Checklist items', value: (p) => p._count?.checklistItems ?? 0 },
+ { label: 'Updated at', value: (p) => p.updatedAt },
+ ];
+ const csv = toCsv(rows, cols);
+ const stamp = new Date().toISOString().slice(0, 10);
+ downloadCsv(`content-projects-${stamp}.csv`, csv);
+ };
+
  return (
  <div className="space-y-3">
  {/* Header */}
@@ -213,13 +248,24 @@ export default function CreatorListPage() {
  <Calendar className="w-3.5 h-3.5" />
  Calendar
  </Link>
- <Link
- href="/creator/ideas"
+ <button
+ type="button"
+ onClick={exportCsv}
+ disabled={rows.length === 0}
+ title="Export filtered projects as CSV"
+ className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg bg-bg-elevated/40 hover:bg-bg-elevated/70 text-text-primary text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+ >
+ <Download className="w-3.5 h-3.5" />
+ Export CSV
+ </button>
+ <button
+ type="button"
+ onClick={() => openCreateModal()}
  className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg bg-studio-500 text-bg-base text-xs font-semibold hover:bg-studio-400 transition-colors"
  >
  <Plus className="w-3.5 h-3.5" />
- New
- </Link>
+ New project
+ </button>
  </div>
  </div>
 

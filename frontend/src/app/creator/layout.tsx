@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Clapperboard } from 'lucide-react';
 import StudioShell from '@/components/studio/StudioShell';
+import CreateProjectModal from '@/components/studio/CreateProjectModal';
 
 export default function CreatorLayout({ children }: { children: React.ReactNode }) {
  const router = useRouter();
@@ -68,5 +69,14 @@ export default function CreatorLayout({ children }: { children: React.ReactNode 
  );
  }
 
- return <StudioShell>{children}</StudioShell>;
+ return (
+ <StudioShell>
+ {children}
+ {/* The "New project" modal is a single global dialog
+ controlled by `useStudioStore`. It lives in the layout
+ (not a page) so the topbar CTA can open it from any
+ /creator/* route, including the per-project editor. */}
+ <CreateProjectModal />
+ </StudioShell>
+ );
 }

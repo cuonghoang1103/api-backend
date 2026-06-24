@@ -67,6 +67,9 @@ interface FlatScene {
  day: ContentProductionDay;
  scene: ContentScene;
  dayNumber: number;
+ /** Array index of `day` in the sorted `days` list. */
+ dayIndex: number;
+ /** Array index of `scene` inside `day.scenes`. */
  sceneIndex: number;
 }
 
@@ -80,14 +83,26 @@ export default function ShotlistTab({
  // we sort by day.dayNumber then scene.sceneNumber
  // so any re-order they do on the storyboard shows
  // up here in the right place.
+ //
+ // We track both `dayIndex` and `sceneIndex` (not
+ // `day.id` / `scene.id`) because newly-added days
+ // and scenes have no server id yet — they'd be
+ // `undefined` until the autosave round-trip assigns
+ // them one. Index-based matching lets the user
+ // edit a brand-new scene immediately.
  const flat: FlatScene[] = useMemo(() => {
  const out: FlatScene[] = [];
- for (const d of [...days].sort((a, b) => a.dayNumber - b.dayNumber)) {
+ const sortedDays = [...days].sort(
+ (a, b) => a.dayNumber - b.dayNumber,
+ );
+ for (let di = 0; di < sortedDays.length; di++) {
+ const d = sortedDays[di];
  for (let i = 0; i < d.scenes.length; i++) {
  out.push({
  day: d,
  scene: d.scenes[i],
  dayNumber: d.dayNumber,
+ dayIndex: di,
  sceneIndex: i,
  });
  }
@@ -123,20 +138,33 @@ export default function ShotlistTab({
  // ─── Edit helpers ──────────────────────────────────────
  // We rebuild the days array with the patched scene
  // in place. Mirrors the Storyboard's edit pattern.
+ //
+ // IMPORTANT: scenes that the user just added in the
+ // Storyboard have NO server `id` yet — they only get
+ // an id after the autosave round-trip. So we can't
+ // match by `s.id === sceneId`; the call would silently
+ // no-op for every newly-added scene. Instead we match
+ // by array index (dayIndex + sceneIndex) which is
+ // stable across re-renders as long as the user doesn't
+ // re-order the storyboard.
  const updateScene = (
- dayId: number,
- sceneId: number,
+ dayIndex: number,
+ sceneIndex: number,
  patch: Partial<ContentScene>,
  ) => {
- const next = days.map((d) => {
- if (d.id !== dayId) return d;
- return {
+ // Re-derive the sorted day order so dayIndex lines up
+ // with the same `flat` array the user clicked on.
+ const sortedDays = [...days].sort(
+ (a, b) => a.dayNumber - b.dayNumber,
+ );
+ const target = sortedDays[dayIndex];
+ if (!target) return;
+ const next = days.map((d) => (d === target ? {
  ...d,
- scenes: d.scenes.map((s) =>
- s.id === sceneId ? { ...s, ...patch } : s,
+ scenes: d.scenes.map((s, i) =>
+ i === sceneIndex ? { ...s, ...patch } : s
  ),
- };
- });
+ } : d));
  onChange(next);
  };
 
@@ -184,7 +212,7 @@ export default function ShotlistTab({
 
  {/* Scene cards */}
  <div className="space-y-2">
- {flat.map(({ day, scene, dayNumber, sceneIndex }, idx) => {
+ {flat.map(({ day, scene, dayNumber, dayIndex, sceneIndex }, idx) => {
  const sceneMeta = SCENE_TYPE_META[scene.sceneType as SceneType];
  const shotMeta = scene.shotType
  ? SHOT_TYPE_META[scene.shotType as ShotType]
@@ -264,14 +292,14 @@ export default function ShotlistTab({
  icon={ImageIcon}
  label="B-roll notes"
  value={scene.brollNotes}
- onSave={(v) => updateScene(day.id!, scene.id!, { brollNotes: v })}
+ onSave={(v) => updateScene(dayIndex, sceneIndex, { brollNotes: v })}
  placeholder="What B-roll to drop in here…"
  />
  <InlineNote
  icon={StickyNote}
  label="Editing notes"
  value={scene.editingNotes}
- onSave={(v) => updateScene(day.id!, scene.id!, { editingNotes: v })}
+ onSave={(v) => updateScene(dayIndex, sceneIndex, { editingNotes: v })}
  placeholder="Cut, transition, music, SFX…"
  />
  </div>

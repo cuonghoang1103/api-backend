@@ -27,6 +27,7 @@ import {
  KanbanSquare,
  ListChecks,
 } from 'lucide-react';
+import { useStudioStore } from '@/store/studioStore';
 
 interface CreatorNavItem {
  label: string;
@@ -45,6 +46,7 @@ const CREATOR_NAV: CreatorNavItem[] = [
 export default function StudioTopbar() {
  const pathname = usePathname();
  const router = useRouter();
+ const openCreateModal = useStudioStore((s) => s.openCreateModal);
  const [user, setUser] = useState<{ name: string } | null>(null);
 
  // We don't need a hard auth gate here — middleware + the
@@ -139,9 +141,13 @@ export default function StudioTopbar() {
  <span>Admin</span>
  </Link>
 
- {/* New project CTA — primary amber. */}
+ {/* New project CTA — primary amber. Opens the global
+ CreateProjectModal via studioStore so this works from
+ any /creator/* route (including the per-project editor,
+ where navigating to /creator would lose the user's
+ in-flight edits). */}
  <button
- onClick={() => router.push('/creator?new=1')}
+ onClick={() => openCreateModal()}
  className="flex items-center gap-1.5 px-3 h-9 rounded-lg bg-studio-gradient text-studio-950 font-semibold text-sm shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_28px_rgba(245,158,11,0.45)] transition-shadow"
  >
  <Plus className="w-4 h-4" strokeWidth={2.6} />

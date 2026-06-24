@@ -21,7 +21,9 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
  ArrowLeft,
+ Check,
  CheckSquare,
+ ChevronDown,
  Clapperboard,
  Film,
  Image as ImageIcon,
@@ -50,7 +52,7 @@ import ShotlistTab from './ShotlistTab';
 import PlatformsTab from './PlatformsTab';
 import ChecklistTab from './ChecklistTab';
 import PerformanceTab from './PerformanceTab';
-import { CONTENT_STATUS_META } from '@/lib/studio-meta';
+import { CONTENT_STATUS_META, STATUS_ORDER } from '@/lib/studio-meta';
 import type {
  ContentAffiliateProduct,
  ContentChecklistItem,
@@ -58,6 +60,7 @@ import type {
  ContentPlatformPost,
  ContentProject,
  ContentProductionDay,
+ ContentStatus,
 } from '@/types';
 
 interface TabDef {
@@ -198,7 +201,12 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  </Link>
  <div className="min-w-0 flex-1">
  <div className="flex items-center gap-2 flex-wrap">
- <StatusPill status={form.status} size="sm" />
+ <StatusQuickPicker
+ current={form.status}
+ onChange={(s) =>
+ setForm((prev) => (prev ? { ...prev, status: s } : prev))
+ }
+ />
  <TypePill type={form.type} size="sm" />
  {form.tags.slice(0, 3).map((t) => (
  <span
@@ -454,6 +462,102 @@ function ComingSoonTab({
  <Package className="w-3.5 h-3.5" />
  Arriving in Phase {phase}
  </div>
+ </div>
+ );
+}
+
+// ─── Status quick-picker (topbar) ─────────────────────────────
+// A clickable status pill that opens a dropdown of all 6
+// statuses. Same shape as StatusPill but acts like a
+// <button> + popover. We can't easily extend StatusPill
+// to be a button (it's used as a static <span> in 6+
+// other places), so we wrap it in a small picker.
+function StatusQuickPicker({
+ current,
+ onChange,
+}: {
+ current: ContentStatus;
+ onChange: (s: ContentStatus) => void;
+}) {
+ const [open, setOpen] = useState(false);
+ const ref = useRef<HTMLDivElement>(null);
+
+ // Close on outside click + Escape.
+ useEffect(() => {
+ if (!open) return;
+ const onClick = (e: MouseEvent) => {
+ if (ref.current && !ref.current.contains(e.target as Node)) {
+ setOpen(false);
+ }
+ };
+ const onKey = (e: KeyboardEvent) => {
+ if (e.key === 'Escape') setOpen(false);
+ };
+ document.addEventListener('mousedown', onClick);
+ document.addEventListener('keydown', onKey);
+ return () => {
+ document.removeEventListener('mousedown', onClick);
+ document.removeEventListener('keydown', onKey);
+ };
+ }, [open]);
+
+ return (
+ <div ref={ref} className="relative">
+ <button
+ type="button"
+ onClick={() => setOpen((o) => !o)}
+ className="inline-flex items-center gap-1 group"
+ aria-haspopup="listbox"
+ aria-expanded={open}
+ title="Change status"
+ >
+ <StatusPill status={current} size="sm" />
+ <ChevronDown className="w-3 h-3 text-text-muted group-hover:text-studio-300 transition-colors" />
+ </button>
+ <AnimatePresence>
+ {open && (
+ <motion.ul
+ initial={{ opacity: 0, y: -4, scale: 0.97 }}
+ animate={{ opacity: 1, y: 0, scale: 1 }}
+ exit={{ opacity: 0, y: -2, scale: 0.97 }}
+ transition={{ duration: 0.15 }}
+ className="absolute left-0 top-full mt-1.5 z-30 min-w-[180px] py-1 rounded-xl border border-studio-500/20 bg-[#0d0f18]/95 backdrop-blur-2xl shadow-[0_12px_32px_rgba(0,0,0,0.5)]"
+ role="listbox"
+ >
+ {STATUS_ORDER.map((s) => {
+ const meta = CONTENT_STATUS_META[s];
+ const active = s === current;
+ return (
+ <li key={s}>
+ <button
+ type="button"
+ onClick={() => {
+ onChange(s);
+ setOpen(false);
+ }}
+ className={`w-full flex items-center gap-2 px-3 h-8 text-left text-xs font-medium transition-colors ${
+ active
+ ? 'bg-studio-500/15 text-studio-200'
+ : 'text-text-primary hover:bg-white/5'
+ }`}
+ role="option"
+ aria-selected={active}
+ >
+ <span
+ className="w-1.5 h-1.5 rounded-full"
+ style={{ background: meta.color }}
+ />
+ {meta.label}
+ {active && (
+ <Check className="w-3 h-3 ml-auto text-studio-400" />
+ )}
+ </button>
+ </li>
+ );
+ })}
+ </motion.ul>
+ )}
+ </AnimatePresence>
  </div>
  );
 }

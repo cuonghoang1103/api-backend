@@ -12,7 +12,7 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Plus, Trash2, Loader2, Volume2 } from 'lucide-react';
+import { GripVertical, Plus, Trash2, Loader2, Volume2, AlertCircle } from 'lucide-react';
 import { notesApi } from '@/lib/api';
 import type { NoteVocabEntry } from '@/types';
 
@@ -26,30 +26,63 @@ export default function VocabTable({ noteId, lang }: Props) {
   const [rows, setRows] = useState<NoteVocabEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
+  // Surface backend/network errors to the user instead of silently
+  // swallowing them. The previous version did `catch { /* ignore */ }`
+  // so a 400 ("term không được để trống") or a network blip looked
+  // like a dead button.
+  const [error, setError] = useState<string | null>(null);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
 
   const load = useCallback(async () => {
-    try { const r = await notesApi.listVocab(noteId); setRows(r.data.data); } catch { /* ignore */ }
+    try { const r = await notesApi.listVocab(noteId); setRows(r.data.data); setError(null); }
+    catch (e: unknown) { setError(extractMsg(e) || 'Không tải được danh sách từ vựng.'); }
     finally { setLoading(false); }
   }, [noteId]);
 
   useEffect(() => { setLoading(true); load(); }, [load]);
 
   const addRow = async () => {
-    setAdding(true);
-    try { const r = await notesApi.addVocab({ noteId, term: '' }); setRows((p) => [...p, r.data.data]); }
-    catch { /* ignore */ } finally { setAdding(false); }
+    // UX: show the row immediately with a placeholder so the user can
+    // type into it. The backend allows empty term on create (it's a
+    // "draft" row); the first blur on the term field commits the real
+    // value, and updateVocab's required check protects against ever
+    // persisting an empty term.
+    setAdding(true); setError(null);
+    try {
+      const r = await notesApi.addVocab({ noteId, term: '' });
+      const created = r.data.data;
+      setRows((p) => [...p, created]);
+    } catch (e: unknown) {
+      setError(extractMsg(e) || 'Không thêm được từ vựng. Thử lại.');
+    } finally { setAdding(false); }
   };
 
+  // When the user clears the term and blurs, drop the row (and the
+  // backend copy) — no point keeping an empty placeholder forever.
   const saveField = (id: number, field: 'term' | 'reading' | 'meaning' | 'example', value: string) => {
     setRows((p) => p.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
   };
   const commitField = async (id: number, field: 'term' | 'reading' | 'meaning' | 'example', value: string) => {
-    try { await notesApi.updateVocab(id, { [field]: value || null }); } catch { /* ignore */ }
+    const row = rows.find((r) => r.id === id);
+    // Treat empty/whitespace term as "abandon this draft row".
+    if (field === 'term' && (!value || !value.trim())) {
+      await removeRow(id);
+      return;
+    }
+    try {
+      await notesApi.updateVocab(id, { [field]: value || null });
+      setError(null);
+    } catch (e: unknown) {
+      setError(extractMsg(e) || 'Không lưu được thay đổi.');
+      // Revert local edit so UI matches server truth on next load.
+      void load();
+    }
+    void row;
   };
   const removeRow = async (id: number) => {
     setRows((p) => p.filter((r) => r.id !== id));
-    try { await notesApi.deleteVocab(id); } catch { load(); }
+    try { await notesApi.deleteVocab(id); setError(null); }
+    catch (e: unknown) { setError(extractMsg(e) || 'Không xoá được.'); load(); }
   };
 
   const onDragEnd = async (e: DragEndEvent) => {
@@ -60,7 +93,8 @@ export default function VocabTable({ noteId, lang }: Props) {
     if (oldIdx < 0 || newIdx < 0) return;
     const next = arrayMove(rows, oldIdx, newIdx);
     setRows(next);
-    try { await notesApi.reorderVocab(noteId, next.map((r) => r.id)); } catch { load(); }
+    try { await notesApi.reorderVocab(noteId, next.map((r) => r.id)); setError(null); }
+    catch (e: unknown) { setError(extractMsg(e) || 'Không sắp xếp lại được.'); load(); }
   };
 
   const speak = (entry: NoteVocabEntry) => {
@@ -75,6 +109,14 @@ export default function VocabTable({ noteId, lang }: Props) {
 
   return (
     <div className="space-y-2">
+      {error && (
+        <div role="alert" className="flex items-start gap-1.5 rounded-md border border-rose-500/30 bg-rose-500/10 px-2.5 py-1.5 text-[12px] text-rose-200">
+          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <span className="flex-1">{error}</span>
+          <button onClick={() => setError(null)} className="text-rose-300/70 hover:text-rose-200" aria-label="Đóng">×</button>
+        </div>
+      )}
+
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
         <SortableContext items={rows.map((r) => r.id)} strategy={verticalListSortingStrategy}>
           {rows.map((row) => (
@@ -90,6 +132,16 @@ export default function VocabTable({ noteId, lang }: Props) {
       </button>
     </div>
   );
+}
+
+/**
+ * Best-effort extraction of a human-readable message from an Axios
+ * error (`error.response.data.message`) or any thrown value. We fall
+ * back to a generic string so the UI always has something to show.
+ */
+function extractMsg(e: unknown): string | null {
+  const any = e as any;
+  return any?.response?.data?.message ?? any?.message ?? null;
 }
 
 function VocabRow({

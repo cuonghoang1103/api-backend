@@ -465,7 +465,12 @@ export async function addVocab(
 ) {
  const noteId = Number(data.noteId);
  await assertNoteOwnership(userId, noteId);
- const term = cleanStr(data.term, 500, 'Từ vựng', { required: true })!;
+ // term is OPTIONAL on create: the UI may add a row before the user
+ // has typed anything (Anki-style "draft placeholder"), then commit
+ // the real term on first blur via updateVocab. updateVocab still
+ // enforces required on term, so an abandoned empty row surfaces a
+ // validation error when (or if) the user tries to save one.
+ const term = cleanStr(data.term ?? undefined, 500, 'Từ vựng') ?? '';
  const reading = cleanStr(data.reading ?? undefined, 500, 'Phiên âm') ?? null;
  const meaning = cleanStr(data.meaning ?? undefined, 5000, 'Nghĩa') ?? null;
  const example = cleanStr(data.example ?? undefined, 5000, 'Ví dụ') ?? null;

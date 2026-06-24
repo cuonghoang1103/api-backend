@@ -16,6 +16,7 @@ import NotesSidebar from '@/components/notes/NotesSidebar';
 import NoteEditor from '@/components/notes/NoteEditor';
 import NoteResourcePanel from '@/components/notes/NoteResourcePanel';
 import VocabTable from '@/components/notes/VocabTable';
+import FlashcardReview from '@/components/notes/FlashcardReview';
 import SubjectView from '@/components/notes/SubjectView';
 import NotesSearch from '@/components/notes/NotesSearch';
 
@@ -29,6 +30,7 @@ export default function NotesPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [resourceOpen, setResourceOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
 
   const refreshTree = useCallback(async () => {
     const res = await notesApi.getTree();
@@ -291,14 +293,36 @@ export default function NotesPage() {
               <div className="space-y-6 p-4">
                 <NoteResourcePanel parent={{ noteId: selected.id }} attachments={selected.attachments} links={selected.links} onChanged={refreshSelected} />
                 <section>
-                  <h3 className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                    <GraduationCap className="h-3.5 w-3.5" /> Từ vựng
-                  </h3>
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <h3 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                      <GraduationCap className="h-3.5 w-3.5" /> Từ vựng
+                    </h3>
+                    <button
+                      onClick={() => { setResourceOpen(false); setReviewOpen(true); }}
+                      className="flex items-center gap-1.5 rounded-md border border-teal-500/30 bg-teal-500/10 px-2 py-1 text-[11px] font-medium text-teal-200 hover:bg-teal-500/20"
+                      aria-label="Ôn tập thẻ"
+                    >
+                      <GraduationCap className="h-3 w-3" /> Ôn tập
+                    </button>
+                  </div>
                   <VocabTable noteId={selected.id} />
                 </section>
               </div>
             </motion.aside>
           </>
+        )}
+      </AnimatePresence>
+
+      {/* Flashcard review (Phase 3b) — full-screen modal */}
+      <AnimatePresence>
+        {reviewOpen && selected && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex flex-col bg-[#0a0e14]"
+            role="dialog" aria-modal="true" aria-label="Ôn tập thẻ"
+          >
+            <FlashcardReview noteId={selected.id} onClose={() => setReviewOpen(false)} />
+          </motion.div>
         )}
       </AnimatePresence>
 

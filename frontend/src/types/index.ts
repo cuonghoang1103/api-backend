@@ -1140,6 +1140,28 @@ export interface NoteVocabEntry {
   meaning: string | null;
   example: string | null;
   sortOrder: number;
+  // Phase 3b: review state. Older rows fetched from a pre-3b backend
+  // may omit these — callers should treat them as unknown until they
+  // appear (default to false/0/null).
+  isKnown?: boolean;
+  reviewCount?: number;
+  knownStreak?: number;
+  lastReviewedAt?: string | null;
+}
+
+/** One card in a flashcard deck (same shape as a vocab entry). */
+export type Flashcard = NoteVocabEntry;
+
+/** Compact deck summary shown above the review UI. */
+export interface FlashcardDeckSummary {
+  total: number;
+  known: number;
+  reviewed: number;
+}
+
+export interface FlashcardDeck {
+  cards: Flashcard[];
+  summary: FlashcardDeckSummary;
 }
 
 export interface NoteFull {

@@ -303,6 +303,14 @@ export const notesApi = {
     api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/vocab/${id}`),
   reorderVocab: (noteId: number, orderedIds: number[]) =>
     api.patch<{ data: { reordered: number } }>('/notes/vocab/reorder', { noteId, orderedIds }),
+
+  // ── Phase 3b: flashcards (per note) ──
+  listFlashcards: (noteId: number) =>
+    api.get<{ data: import('@/types').FlashcardDeck }>('/notes/flashcards', { params: { noteId } }),
+  gradeFlashcard: (vocabId: number, known: boolean) =>
+    api.post<{ data: import('@/types').Flashcard }>('/notes/flashcards/grade', { vocabId, known }),
+  resetFlashcard: (vocabId: number) =>
+    api.post<{ data: { id: number; reset: boolean } }>('/notes/flashcards/reset', { vocabId }),
 };
 
 // Music API

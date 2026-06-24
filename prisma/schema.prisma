@@ -2810,9 +2810,20 @@ model NoteVocabEntry {
   sortOrder Int      @default(0) @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at")
 
+  // ── Phase 3b: flashcard review state (additive, all optional) ──
+  // `isKnown` is a coarse "marked known" flag — UI shows a checkmark
+  // and lets the user "reset" it. `reviewCount` / `lastReviewedAt` /
+  // `knownStreak` power a tiny stats line under the vocab table; we
+  // don't do SRS scheduling yet (could be added in 3d).
+  isKnown       Boolean   @default(false) @map("is_known")
+  reviewCount   Int       @default(0) @map("review_count")
+  knownStreak   Int       @default(0) @map("known_streak")
+  lastReviewedAt DateTime? @map("last_reviewed_at")
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
 
   @@index([userId, noteId, sortOrder], name: "idx_note_vocab_note")
+  @@index([userId, noteId, isKnown], name: "idx_note_vocab_known")
   @@map("note_vocab_entries")
 }

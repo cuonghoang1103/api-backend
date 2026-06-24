@@ -1710,3 +1710,54 @@ aside ::-webkit-scrollbar-thumb:hover {
   pointer-events: none;
   color: #475569;
 }
+
+/* ─── Flashcard 3D flip (Phase 3b) ───────────────────────────────
+   Pure CSS perspective + transform — no animation lib required.
+   Respects prefers-reduced-motion: when set, we skip the flip and
+   just crossfade faces. The card itself stays tappable either way. */
+.flashcard {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 4 / 3;
+  perspective: 1200px;
+  cursor: pointer;
+}
+.flashcard__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flashcard--flipped .flashcard__inner {
+  transform: rotateY(180deg);
+}
+.flashcard__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(20, 184, 166, 0.04), rgba(20, 184, 166, 0.01));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+.flashcard__face--back {
+  background: linear-gradient(180deg, rgba(20, 184, 166, 0.10), rgba(20, 184, 166, 0.02));
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flashcard__inner { transition: opacity 0.15s ease; }
+  .flashcard--flipped .flashcard__inner { transform: none; }
+  .flashcard__face--front,
+  .flashcard__face--back { transition: opacity 0.15s ease; }
+  .flashcard--flipped .flashcard__face--front { opacity: 0; }
+  .flashcard:not(.flashcard--flipped) .flashcard__face--back { opacity: 0; }
+}

@@ -562,3 +562,96 @@ export async function listTags(userId: number): Promise<string[]> {
   rows.forEach((r) => r.tags.forEach((t) => set.add(t)));
   return Array.from(set).sort();
 }
+
+// ─── Flashcards (Phase 3b) ──────────────────────────────────────
+// A "flashcard deck" is just the vocab list for a note, projected to
+// the fields the review UI needs. The review session is client-side
+// state — we only persist per-vocab review outcomes (`isKnown`,
+// `reviewCount`, `knownStreak`, `lastReviewedAt`) so progress
+// survives reloads. No SRS scheduling here; Phase 3d if needed.
+
+/**
+ * Deck for a note: vocab rows sorted as the user left them, with only
+ * the fields the front of the card needs (term is always the prompt;
+ * reading / meaning / example populate the back). We strip the review
+ * fields so the response stays compact.
+ */
+export async function listFlashcards(userId: number, noteId: number) {
+  await assertNoteOwnership(userId, noteId);
+  const rows = await prisma.noteVocabEntry.findMany({
+    where: { userId, noteId },
+    orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+    select: {
+      id: true, term: true, reading: true, meaning: true, example: true,
+      isKnown: true, reviewCount: true, knownStreak: true, lastReviewedAt: true,
+    },
+  });
+  // Lightweight deck summary so the UI can show "0 / 12 known" etc.
+  const total = rows.length;
+  const known = rows.filter((r) => r.isKnown).length;
+  const reviewed = rows.filter((r) => r.reviewCount > 0).length;
+  return { cards: rows, summary: { total, known, reviewed } };
+}
+
+/**
+ * Record a single review outcome for one vocab row.
+ *
+ *   known=true   → bump reviewCount, increment streak (cap 9999),
+ *                   mark isKnown, stamp lastReviewedAt.
+ *   known=false  → bump reviewCount, reset streak to 0, clear isKnown,
+ *                   stamp lastReviewedAt. (Resetting on "again" mirrors
+ *                   the most common Anki-like UX without the SRS math.)
+ *
+ * Cross-tenant guard: scope update by { id, userId } and verify count>0.
+ */
+export async function gradeFlashcard(
+  userId: number,
+  vocabId: number,
+  known: boolean,
+) {
+  assertId(vocabId, 'vocabId');
+  // Read current row to compute the new streak atomically. We do
+  // updateMany + count guard for ownership (consistent with the rest
+  // of the service), then a follow-up read to compute streak. Both
+  // writes run in a transaction so the count check and the bump are
+  // never racy with a delete.
+  return prisma.$transaction(async (tx) => {
+    const current = await tx.noteVocabEntry.findFirst({
+      where: { id: vocabId, userId },
+      select: { id: true, knownStreak: true, reviewCount: true },
+    });
+    if (!current) throw new AppError('Từ vựng không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+
+    const nextStreak = known
+      ? Math.min(9999, current.knownStreak + 1)
+      : 0;
+
+    const updated = await tx.noteVocabEntry.update({
+      where: { id: vocabId },
+      data: {
+        isKnown: known,
+        knownStreak: nextStreak,
+        reviewCount: { increment: 1 },
+        lastReviewedAt: new Date(),
+      },
+      select: {
+        id: true, isKnown: true, reviewCount: true, knownStreak: true, lastReviewedAt: true,
+      },
+    });
+    return updated;
+  });
+}
+
+/**
+ * Reset review state for one vocab row (user toggled "mark unknown").
+ * Same ownership guard as grade.
+ */
+export async function resetFlashcard(userId: number, vocabId: number) {
+  assertId(vocabId, 'vocabId');
+  const res = await prisma.noteVocabEntry.updateMany({
+    where: { id: vocabId, userId },
+    data: { isKnown: false, knownStreak: 0, lastReviewedAt: new Date() },
+  });
+  if (res.count === 0) throw new AppError('Từ vựng không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+  return { id: vocabId, reset: true };
+}

@@ -39,6 +39,9 @@ import {
   updateVocab,
   deleteVocab,
   reorderVocab,
+  listFlashcards,
+  gradeFlashcard,
+  resetFlashcard,
 } from '../services/notes.service.js';
 
 const router = Router();
@@ -241,6 +244,31 @@ router.patch('/vocab/:id', async (req: Request, res: Response<ApiResponse>, next
 router.delete('/vocab/:id', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const result = await deleteVocab(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+// ─── Flashcards (Phase 3b) ─────────────────────────────────────
+router.get('/flashcards', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const deck = await listFlashcards(req.userId!, Number(req.query.noteId));
+    res.json({ success: true, data: deck });
+  } catch (err) { next(err); }
+});
+
+router.post('/flashcards/grade', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const vocabId = Number(req.body?.vocabId);
+    const known = Boolean(req.body?.known);
+    const updated = await gradeFlashcard(req.userId!, vocabId, known);
+    res.json({ success: true, data: updated });
+  } catch (err) { next(err); }
+});
+
+router.post('/flashcards/reset', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const vocabId = Number(req.body?.vocabId);
+    const result = await resetFlashcard(req.userId!, vocabId);
     res.json({ success: true, data: result });
   } catch (err) { next(err); }
 });

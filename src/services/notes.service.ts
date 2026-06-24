@@ -423,10 +423,89 @@ export async function updateLink(userId: number, id: number, data: { label?: str
 }
 
 export async function deleteLink(userId: number, id: number) {
-  assertId(id);
-  const res = await prisma.noteLink.deleteMany({ where: { id, userId } });
-  if (res.count === 0) throw new AppError('Liên kết không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
-  return { id, deleted: true };
+ assertId(id);
+ const res = await prisma.noteLink.deleteMany({ where: { id, userId } });
+ if (res.count === 0) throw new AppError('Liên kết không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+ return { id, deleted: true };
+}
+
+// ─── Vocab (per note) ────────────────────────────────────────
+// A vocabulary row is a single (term, reading, meaning, example)
+// tuple owned by a note. We always scope reads / writes through
+// the parent note's userId so foreign-note ids 404 silently.
+
+/** Verify a note belongs to the user. Used before touching vocab. */
+async function assertNoteOwnership(userId: number, noteId: number): Promise<void> {
+ assertId(noteId, 'noteId');
+ const ok = await prisma.note.findFirst({ where: { id: noteId, userId }, select: { id: true } });
+ if (!ok) throw new AppError('Ghi chú không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+}
+
+export async function listVocab(userId: number, noteId: number) {
+ await assertNoteOwnership(userId, noteId);
+ return prisma.noteVocabEntry.findMany({
+ where: { userId, noteId },
+ orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+ });
+}
+
+export async function addVocab(
+ userId: number,
+  data: { noteId?: number; term?: string; reading?: string | null; meaning?: string | null; example?: string | null },
+) {
+ const noteId = Number(data.noteId);
+ await assertNoteOwnership(userId, noteId);
+ const term = cleanStr(data.term, 500, 'Từ vựng', { required: true })!;
+ const reading = cleanStr(data.reading ?? undefined, 500, 'Phiên âm') ?? null;
+ const meaning = cleanStr(data.meaning ?? undefined, 5000, 'Nghĩa') ?? null;
+ const example = cleanStr(data.example ?? undefined, 5000, 'Ví dụ') ?? null;
+  // Append to the end — last sortOrder + 1.
+ const last = await prisma.noteVocabEntry.findFirst({
+ where: { userId, noteId },
+ orderBy: { sortOrder: 'desc' }, select: { sortOrder: true },
+ });
+ return prisma.noteVocabEntry.create({
+ data: {
+ userId, noteId, term, reading, meaning, example,
+  sortOrder: (last?.sortOrder ?? -1) + 1,
+ },
+ });
+}
+
+export async function updateVocab(
+ userId: number,
+ id: number,
+ data: { term?: string; reading?: string | null; meaning?: string | null; example?: string | null },
+) {
+ assertId(id);
+ const d: Prisma.NoteVocabEntryUpdateManyMutationInput = {};
+ if (data.term !== undefined) d.term = cleanStr(data.term, 500, 'Từ vựng', { required: true })!;
+ if (data.reading !== undefined) d.reading = data.reading == null ? null : cleanStr(data.reading, 500, 'Phiên âm');
+ if (data.meaning !== undefined) d.meaning = data.meaning == null ? null : cleanStr(data.meaning, 5000, 'Nghĩa');
+ if (data.example !== undefined) d.example = data.example == null ? null : cleanStr(data.example, 5000, 'Ví dụ');
+ if (Object.keys(d).length === 0) throw new AppError('Không có trường hợp lệ để cập nhật', 400, 'EMPTY_UPDATE');
+ const res = await prisma.noteVocabEntry.updateMany({ where: { id, userId }, data: d });
+ if (res.count === 0) throw new AppError('Từ vựng không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+ return prisma.noteVocabEntry.findUnique({ where: { id } });
+}
+
+export async function deleteVocab(userId: number, id: number) {
+ assertId(id);
+ const res = await prisma.noteVocabEntry.deleteMany({ where: { id, userId } });
+ if (res.count === 0) throw new AppError('Từ vựng không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+ return { id, deleted: true };
+}
+
+/**
+ * Reorder vocab rows for a single note. orderedIds MUST belong to
+ * the same note (otherwise the WHERE would 0-row-update silently);
+ * we scope by { id, userId, noteId } so a foreign id is a no-op,
+ * matching the rest of the reorder endpoints.
+ */
+export function reorderVocab(userId: number, noteId: number, orderedIds: unknown) {
+ return applyOrder(orderedIds, (id, order) =>
+ prisma.noteVocabEntry.updateMany({ where: { id, userId, noteId }, data: { sortOrder: order } }),
+ );
 }
 
 // ─── Global search ───────────────────────────────────────────

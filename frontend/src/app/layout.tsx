@@ -144,6 +144,11 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  // `cover` lets content extend under the iOS notch / home
+  // indicator so we can pad with env(safe-area-inset-*).
+  // Desktop browsers ignore viewport-fit, so this is a
+  // mobile-only change with no effect on desktop layout.
+  viewportFit: 'cover',
   themeColor: '#0a0a14',
 }
 

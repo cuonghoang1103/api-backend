@@ -1617,4 +1617,32 @@ aside ::-webkit-scrollbar-thumb:hover {
  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
 
+/* ────────────────────────────────────────────────────────────
+ * MOBILE FIX — prevent iOS Safari focus auto-zoom
+ * ------------------------------------------------------------
+ * iOS Safari zooms the whole page when the user focuses a form
+ * control whose computed font-size is < 16px. Almost every input
+ * in this app uses Tailwind `text-sm` (14px) / `text-xs` (12px),
+ * which triggers the zoom-on-tap the user reported.
+ *
+ * We force a 16px floor on form controls ONLY at mobile widths
+ * (≤767px — i.e. below Tailwind's `md` breakpoint). Desktop
+ * (≥768px) is never matched by this media query, so existing
+ * desktop input sizing is completely untouched.
+ *
+ * `!important` is required so this wins over the `.text-sm`
+ * utility (equal-or-higher specificity otherwise). Scope is
+ * deliberately narrow: mobile width + text-bearing form controls
+ * + font-size only — no layout, color, or spacing is affected.
+ * checkbox / radio / range are excluded (font-size is irrelevant
+ * to them and we don't want to disturb custom-styled controls).
+ * ──────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+ input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+ textarea,
+ select {
+ font-size: 16px !important;
+ }
+}
+
 

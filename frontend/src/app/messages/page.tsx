@@ -194,7 +194,7 @@ function MessagesPageInner() {
     // the space scene.
     <div className="relative min-h-screen pt-16">
       <GalaxyBackground />
-      <div className="relative mx-auto flex h-[calc(100vh-4rem)] max-w-6xl flex-col px-4 py-6">
+      <div className="relative mx-auto flex h-[calc(100dvh-4rem)] max-w-6xl flex-col px-4 py-6">
         <header className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h1

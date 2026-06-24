@@ -47,7 +47,7 @@ export default function KanbanColumn({ status, count, children }: KanbanColumnPr
 
  {/* Drop zone — scroll if it overflows. Min-height so an
  empty column still shows a clear target. */}
- <div className="flex-1 p-2 space-y-2 overflow-y-auto min-h-[200px] max-h-[calc(100vh-20rem)]">
+ <div className="flex-1 p-2 space-y-2 overflow-y-auto min-h-[200px] max-h-[calc(100dvh-20rem)]">
  {children}
  {count === 0 && (
  <motion.p

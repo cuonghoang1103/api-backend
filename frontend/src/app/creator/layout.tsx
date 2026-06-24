@@ -48,7 +48,7 @@ export default function CreatorLayout({ children }: { children: React.ReactNode 
  // auth check resolves — no jarring flash from black→amber.
  if (!authChecked) {
  return (
- <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center bg-darkbg">
+ <div className="relative min-h-[calc(100dvh-4rem)] flex items-center justify-center bg-darkbg">
  <div className="flex flex-col items-center gap-4">
  <div className="w-12 h-12 rounded-2xl bg-studio-gradient flex items-center justify-center shadow-[0_0_24px_rgba(245,158,11,0.45)]">
  <Clapperboard className="w-6 h-6 text-studio-950" strokeWidth={2.4} />

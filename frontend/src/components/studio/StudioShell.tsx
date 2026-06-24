@@ -21,7 +21,7 @@ import StudioTopbar from './StudioTopbar';
 
 export default function StudioShell({ children }: { children: ReactNode }) {
  return (
- <div className="relative min-h-[calc(100vh-4rem)] text-text-primary">
+ <div className="relative min-h-[calc(100dvh-4rem)] text-text-primary">
  {/* z=0 — background grid + amber key light + vignette */}
  <StudioBackground />
  {/* z=1 — film grain + drifting practical-light bokeh */}

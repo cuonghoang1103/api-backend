@@ -300,7 +300,7 @@ export default function NotificationDropdown({ anchor, open, onClose }: Notifica
           top: pos.top,
           left: pos.left,
           width: 360,
-          maxHeight: 'min(520px, calc(100vh - 80px))',
+          maxHeight: 'min(520px, calc(100dvh - 80px))',
           zIndex: 9999,
         }}
         className={cn(

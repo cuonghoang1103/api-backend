@@ -477,7 +477,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 30 }}
         transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-        className="fixed bottom-24 right-6 z-[120] w-[390px] max-w-[calc(100vw-48px)] h-[580px] max-h-[calc(100vh-140px)]
+        className="fixed bottom-24 right-6 z-[120] w-[390px] max-w-[calc(100vw-48px)] h-[580px] max-h-[calc(100dvh-140px)]
           bg-[#0d1117]/95 backdrop-blur-xl
           rounded-2xl
           border border-[#22d3ee]/15

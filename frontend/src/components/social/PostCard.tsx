@@ -1411,7 +1411,7 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
         <video
           ref={videoRef}
           src={src}
-          className="max-h-[calc(100vh-80px)] w-full object-contain cursor-pointer"
+          className="max-h-[calc(100dvh-80px)] w-full object-contain cursor-pointer"
           autoPlay
           onClick={togglePlay}
           onPlay={() => setPlaying(true)}

@@ -58,7 +58,7 @@ export default function AdminMessagesPage() {
     });
 
   return (
-    <div className="flex h-[calc(100vh-100px)] flex-col gap-3">
+    <div className="flex h-[calc(100dvh-100px)] flex-col gap-3">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Inbox className="h-5 w-5 text-cyan-400" />

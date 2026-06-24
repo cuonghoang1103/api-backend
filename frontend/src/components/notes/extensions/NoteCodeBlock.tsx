@@ -14,7 +14,7 @@
 import { Node, mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer, NodeViewWrapper, type NodeViewProps } from '@tiptap/react';
 import dynamic from 'next/dynamic';
-import { Code } from 'lucide-react';
+import { Code, Trash2 } from 'lucide-react';
 
 // Lazy-load Shiki + the styling so the notes page doesn't pull in
 // ~1MB of grammars on first paint. `ssr: false` keeps it client-only
@@ -92,7 +92,14 @@ export const NoteCodeBlock = Node.create({
       toggleCodeBlock:
         (attributes?: { language?: string }) =>
         ({ commands }: { commands: any }) =>
+          // toggleNode(typeOrName, toggleTypeOrName, attributes?) — 3 args.
+          // 'paragraph' goes in slot 2 so the language attr is actually
+          // applied (not dropped on the floor).
           commands.toggleNode(this.name, 'paragraph', attributes),
+      deleteCodeBlock:
+        () =>
+        ({ commands }: { commands: any }) =>
+          commands.deleteNode(this.name),
     } as Partial<Record<string, (...args: any[]) => any>>;
   },
 });
@@ -126,6 +133,16 @@ function CodeBlockView({ node, updateAttributes, editor }: NodeViewProps) {
                 ))}
               </select>
             </div>
+            <button
+              type="button"
+              onClick={() => editor.chain().focus().deleteNode('codeBlock').run()}
+              aria-label="Xóa code block"
+              title="Xóa code block"
+              className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] text-slate-500 hover:bg-red-500/15 hover:text-red-300"
+            >
+              <Trash2 className="h-3 w-3" />
+              <span>Xóa</span>
+            </button>
           </div>
         )}
         <CodeBlock code={code} language={language || undefined} />

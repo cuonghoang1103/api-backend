@@ -32,6 +32,7 @@ import {
  Mic,
  Package,
  Pencil,
+ Save,
  ShoppingBag,
  Sparkles,
  Trash2,
@@ -234,6 +235,28 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  </h1>
  </div>
  <SaveIndicator status={derivedStatus} lastSavedAt={lastSavedAt} />
+ {/* Manual save — autosave runs 1.2s after the last
+ edit, but the user can force-save immediately. We
+ show the button prominently so people who don't
+ realise there's autosave don't feel stuck on
+ "Edting" / "Editing" (the production-stage pill
+ is a separate control, see StatusQuickPicker). */}
+ <button
+ type="button"
+ onClick={() => {
+ void flushNow();
+ }}
+ disabled={status === 'saving' || !isDirty}
+ title={
+ !isDirty
+ ? 'Nothing to save — already up to date'
+ : 'Save now (autosave runs 1.2s after the last edit)'
+ }
+ className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-studio-500/15 text-studio-200 ring-1 ring-studio-500/30 hover:bg-studio-500/25 hover:ring-studio-500/50 text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-studio-500/15"
+ >
+ <Save className="w-3.5 h-3.5" />
+ {status === 'saving' ? 'Saving…' : 'Save now'}
+ </button>
  <button
  type="button"
  onClick={handleDelete}

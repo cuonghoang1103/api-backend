@@ -16,17 +16,36 @@ interface SaveIndicatorProps {
 }
 
 export default function SaveIndicator({ status, lastSavedAt }: SaveIndicatorProps) {
+ // Labels are kept short to fit the topbar. The full
+ // meaning is in the title attribute below. The word
+ // "Editing" was renamed to "Unsaved" because users
+ // confused it with the *production-stage* pill
+ // (Idea / Scripting / Filming / Editing / …) shown
+ // right next to it.
  const config: Record<
  SaveStatus,
  { label: string; className: string; icon: React.ComponentType<{ className?: string }> }
  > = {
  idle: { label: 'Ready', className: 'text-text-muted', icon: Pencil },
- dirty: { label: 'Editing…', className: 'text-amber-300', icon: Pencil },
+ dirty: { label: 'Unsaved', className: 'text-amber-300', icon: Pencil },
  saving: { label: 'Saving…', className: 'text-blue-300', icon: Loader2 },
  saved: { label: 'Saved', className: 'text-emerald-300', icon: Check },
  error: { label: 'Save failed', className: 'text-red-300', icon: CircleAlert },
  };
  const { label, className, icon: Icon } = config[status];
+
+ // Tooltip on hover — clarifies what each state means.
+ // Without this, users couldn't tell the dirty state
+ // apart from the production stage pill.
+ const tooltip: Record<SaveStatus, string> = {
+ idle: 'No unsaved changes — autosave is up to date.',
+ dirty: 'You have unsaved changes. Autosave fires 1.2s after the last edit, or click “Save now”.',
+ saving: 'Sending your changes to the server…',
+ saved: lastSavedAt
+ ? `All changes saved at ${fmtTime(lastSavedAt)}.`
+ : 'All changes saved.',
+ error: 'Could not save. Check your connection and try “Save now”.',
+ };
 
  return (
  <AnimatePresence mode="wait">
@@ -36,6 +55,7 @@ export default function SaveIndicator({ status, lastSavedAt }: SaveIndicatorProp
  animate={{ opacity: 1, y: 0 }}
  exit={{ opacity: 0, y: 4 }}
  transition={{ duration: 0.15 }}
+ title={tooltip[status]}
  className={`inline-flex items-center gap-1.5 px-2 h-7 rounded-full text-xs font-medium ${className}`}
  >
  <Icon className={`w-3 h-3 ${status === 'saving' ? 'animate-spin' : ''}`} />

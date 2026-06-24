@@ -50,8 +50,13 @@ export const contentKeys = {
 export function useContentProjects(params?: ContentListParams) {
  return useQuery({
  queryKey: contentKeys.list(params),
+ // The API envelope is `{ success, data: [...] }`, so the
+ // project array is `r.data.data` — mirror the ideas hook.
+ // (The old `r.data as unknown as …` cast hid this mismatch
+ // and handed the whole envelope object to callers, which then
+ // threw "is not iterable" in `for…of` / `.map`.)
  queryFn: () =>
- contentApi.list(params).then((r) => r.data as unknown as ContentProjectSummary[]),
+ contentApi.list(params).then((r) => r.data.data),
  staleTime: 30_000,
  gcTime: 5 * 60_000,
  placeholderData: (prev) => prev,
@@ -69,7 +74,7 @@ export function useContentProjects(params?: ContentListParams) {
 export function useContentProject(id: number | null) {
  return useQuery({
  queryKey: contentKeys.detail(id ?? -1),
- queryFn: () => contentApi.get(id as number).then((r) => r.data as unknown as ContentProject),
+ queryFn: () => contentApi.get(id as number).then((r) => r.data.data),
  enabled: id != null && id > 0,
  staleTime: 60_000,
  gcTime: 10 * 60_000,

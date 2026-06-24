@@ -289,10 +289,22 @@ done
 info "Reloading nginx config..."
 $DC exec -T nginx nginx -s reload 2>/dev/null && ok "Nginx reloaded" || true
 
-# ── Step 6: Docker build cache cleanup (free SSD space) ───────────
-info "Pruning Docker build cache..."
+# ── Step 6: Docker cleanup (free SSD space) ───────────────────────
+# Every deploy builds a fresh repo-backend/repo-frontend image; the
+# previous tag is left behind. `docker image prune -f` only removes
+# *dangling* (untagged) images, so those accumulated until the disk
+# hit 94% and a frontend image export failed with "no space left on
+# device". Use `-af` to drop every image not referenced by a running
+# container — the live containers' images are protected, so this is
+# safe and reclaims the bulk of the space (~10GB observed).
+#
+# Build cache is pruned with `-f` (NOT `-af`) on purpose: keeping the
+# active BuildKit cache is what makes subsequent deploys ~30-60s
+# instead of a 3-5min cold build.
+info "Pruning Docker build cache + unused images..."
 docker builder prune -f &>/dev/null && ok "Build cache pruned" || true
-docker image prune -f &>/dev/null && ok "Dangling images removed" || true
+docker image prune -af &>/dev/null && ok "Unused images removed" || true
+df -h / | awk 'NR==2 {print "[disk] / now " $5 " used, " $4 " free"}' || true
 
 # ── Final report ──────────────────────────────────────────────────
 echo ""

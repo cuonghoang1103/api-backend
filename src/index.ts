@@ -94,6 +94,7 @@ const embedJobsRoutes = (await import(path.join(__dirname, 'routes', 'embedJobs.
 const { publicRouter: techTrendsPublicRoutes, adminRouter: techTrendsAdminRoutes } = (await import(path.join(__dirname, 'routes', 'techTrends.routes.js')));
 const { router: messagesRoutes, adminRouter: adminMessagesRoutes } = (await import(path.join(__dirname, 'routes', 'messages.routes.js')));
 const contentRoutes = (await import(path.join(__dirname, 'routes', 'content.routes.js'))).default;
+const notesRoutes = (await import(path.join(__dirname, 'routes', 'notes.routes.js'))).default;
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
 
 // ─── Express App ───────────────────────────────────────────
@@ -397,6 +398,8 @@ app.use('/api/v1/dashboard', dashboardRoutes);
 // (mounted on the same prefix but with no auth middleware).
 app.use('/api/v1/hub', hubRoutes);
 app.use('/api/v1/hub', hubPublicRouter);
+// Notes — personal study notebooks (per-user, authenticated).
+app.use('/api/v1/notes', notesRoutes);
 app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
 app.use('/api/v1/messages', messagesRoutes);

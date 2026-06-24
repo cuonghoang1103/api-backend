@@ -1,0 +1,181 @@
+'use client';
+
+// Notes — personal study workspace (per-user).
+// Phase 1: load the Subjects→Chapters→Notes tree, full CRUD from
+// the sidebar, and a TipTap editor with debounced auto-save +
+// image paste. Two-pane on desktop; the sidebar becomes a drawer
+// on mobile. Calm, low-distraction design — no animated bg.
+
+import { useCallback, useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, NotebookPen, Loader2 } from 'lucide-react';
+import { notesApi } from '@/lib/api';
+import { useAuthStore } from '@/store/authStore';
+import type { NoteSubjectTree, NoteRecent, NoteFull } from '@/types';
+import NotesSidebar from '@/components/notes/NotesSidebar';
+import NoteEditor from '@/components/notes/NoteEditor';
+
+export default function NotesPage() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const [tree, setTree] = useState<NoteSubjectTree[]>([]);
+  const [recent, setRecent] = useState<NoteRecent[]>([]);
+  const [selected, setSelected] = useState<NoteFull | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const refreshTree = useCallback(async () => {
+    const res = await notesApi.getTree();
+    const data = res.data.data;
+    setTree(data.tree);
+    setRecent(data.recent);
+    return data.tree;
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) { setLoading(false); return; }
+    refreshTree().finally(() => setLoading(false));
+  }, [isAuthenticated, refreshTree]);
+
+  // ─── Selection ─────────────────────────────────────────────
+  const selectNote = useCallback(async (id: number) => {
+    setDrawerOpen(false);
+    try {
+      const res = await notesApi.getNote(id);
+      setSelected(res.data.data);
+    } catch { /* note may have been deleted; ignore */ }
+  }, []);
+
+  // ─── Mutations (refresh tree after structural changes) ─────
+  const addSubject = useCallback(async () => {
+    await notesApi.createSubject({ name: 'Môn học mới', emoji: '📘' });
+    await refreshTree();
+  }, [refreshTree]);
+
+  const addChapter = useCallback(async (subjectId: number) => {
+    await notesApi.createChapter({ subjectId, title: 'Chương mới' });
+    await refreshTree();
+  }, [refreshTree]);
+
+  const addNote = useCallback(async (subjectId: number, chapterId: number | null) => {
+    const res = await notesApi.createNote({ subjectId, chapterId, title: 'Ghi chú mới' });
+    await refreshTree();
+    setSelected(res.data.data);
+  }, [refreshTree]);
+
+  const renameSubject = useCallback(async (id: number, name: string) => { await notesApi.updateSubject(id, { name }); await refreshTree(); }, [refreshTree]);
+  const renameChapter = useCallback(async (id: number, title: string) => { await notesApi.updateChapter(id, { title }); await refreshTree(); }, [refreshTree]);
+  const renameNote = useCallback(async (id: number, title: string) => {
+    await notesApi.updateNote(id, { title });
+    await refreshTree();
+    setSelected((s) => (s && s.id === id ? { ...s, title } : s));
+  }, [refreshTree]);
+
+  const delSubject = useCallback(async (id: number) => {
+    if (!confirm('Xoá môn học này và toàn bộ chương/ghi chú bên trong?')) return;
+    await notesApi.deleteSubject(id); setSelected((s) => (s?.subjectId === id ? null : s)); await refreshTree();
+  }, [refreshTree]);
+  const delChapter = useCallback(async (id: number) => {
+    if (!confirm('Xoá chương này? (ghi chú bên trong sẽ chuyển về môn học)')) return;
+    await notesApi.deleteChapter(id); await refreshTree();
+  }, [refreshTree]);
+  const delNote = useCallback(async (id: number) => {
+    if (!confirm('Xoá ghi chú này?')) return;
+    await notesApi.deleteNote(id); setSelected((s) => (s?.id === id ? null : s)); await refreshTree();
+  }, [refreshTree]);
+
+  // ─── Editor save ───────────────────────────────────────────
+  const saveNote = useCallback(async (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null }>) => {
+    if (!selected) return;
+    await notesApi.updateNote(selected.id, patch);
+    if (patch.title !== undefined) {
+      // Keep the sidebar title in sync without a full refetch.
+      const t = patch.title;
+      setTree((prev) => prev.map((subj) => ({
+        ...subj,
+        notes: subj.notes.map((n) => (n.id === selected.id ? { ...n, title: t } : n)),
+        chapters: subj.chapters.map((ch) => ({ ...ch, notes: ch.notes.map((n) => (n.id === selected.id ? { ...n, title: t } : n)) })),
+      })));
+    }
+  }, [selected]);
+
+  const callbacks = {
+    onSelectNote: selectNote,
+    onAddSubject: addSubject,
+    onAddChapter: addChapter,
+    onAddNote: addNote,
+    onRenameSubject: renameSubject,
+    onRenameChapter: renameChapter,
+    onRenameNote: renameNote,
+    onDeleteSubject: delSubject,
+    onDeleteChapter: delChapter,
+    onDeleteNote: delNote,
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex min-h-[100dvh] items-center justify-center bg-[#0c0f14] px-6 text-center">
+        <div>
+          <NotebookPen className="mx-auto mb-3 h-8 w-8 text-teal-400/70" />
+          <p className="text-slate-300">Đăng nhập để dùng Sổ tay học tập của bạn.</p>
+          <a href="/login?next=/notes" className="mt-4 inline-block rounded-lg border border-teal-500/30 bg-teal-500/10 px-4 py-2 text-sm text-teal-200 hover:bg-teal-500/20">Đăng nhập</a>
+        </div>
+      </div>
+    );
+  }
+
+  const sidebar = (
+    <NotesSidebar tree={tree} recent={recent} selectedNoteId={selected?.id ?? null} {...callbacks} />
+  );
+
+  return (
+    <div className="h-[100dvh] bg-[#0c0f14] pt-16 text-slate-200">
+      <div className="flex h-full">
+        {/* Desktop sidebar */}
+        <aside className="hidden w-72 shrink-0 border-r border-white/[0.06] bg-[#0e1218] md:block">
+          {sidebar}
+        </aside>
+
+        {/* Editor pane */}
+        <main className="relative min-w-0 flex-1 overflow-y-auto pb-24 sm:pb-0">
+          {/* Mobile top bar */}
+          <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-white/[0.06] bg-[#0c0f14]/90 px-3 py-2 backdrop-blur md:hidden">
+            <button onClick={() => setDrawerOpen(true)} className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-300 hover:bg-white/[0.05]" aria-label="Mở danh sách">
+              <Menu className="h-5 w-5" />
+            </button>
+            <span className="truncate text-sm font-medium text-slate-300">{selected?.title || 'Sổ tay'}</span>
+          </div>
+
+          {loading ? (
+            <div className="flex h-full items-center justify-center text-slate-500"><Loader2 className="h-5 w-5 animate-spin" /></div>
+          ) : selected ? (
+            <NoteEditor key={selected.id} note={selected} onSave={saveNote} />
+          ) : (
+            <div className="flex h-full flex-col items-center justify-center px-6 text-center text-slate-500">
+              <NotebookPen className="mb-3 h-9 w-9 text-teal-400/50" />
+              <p className="text-sm">Chọn một ghi chú để bắt đầu,<br />hoặc tạo môn học mới từ thanh bên.</p>
+            </div>
+          )}
+        </main>
+      </div>
+
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {drawerOpen && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDrawerOpen(false)} className="fixed inset-0 z-40 bg-black/55 md:hidden" />
+            <motion.aside
+              initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
+              transition={{ type: 'spring', stiffness: 380, damping: 36 }}
+              className="fixed inset-y-0 left-0 z-50 w-[82%] max-w-xs border-r border-white/[0.06] bg-[#0e1218] pt-16 md:hidden"
+            >
+              <button onClick={() => setDrawerOpen(false)} className="absolute right-2 top-[4.5rem] flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05]" aria-label="Đóng">
+                <X className="h-4 w-4" />
+              </button>
+              {sidebar}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}

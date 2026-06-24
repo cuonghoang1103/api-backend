@@ -1066,3 +1066,99 @@ export interface ContentIdeaUpdate extends Partial<ContentIdeaCreate> {
 
 // === SOCIAL TYPES ===
 export * from './social';
+
+// ════════════════════════════════════════════════════════════
+// NOTES — personal study notebooks (per-user)
+// ════════════════════════════════════════════════════════════
+export type NoteLinkType = 'WEB' | 'YOUTUBE' | 'OTHER';
+
+export interface NoteSummary {
+  id: number;
+  title: string;
+  sortOrder: number;
+  isPinned: boolean;
+  isFavorite: boolean;
+  needsReview: boolean;
+  updatedAt: string;
+}
+
+export interface NoteChapterTree {
+  id: number;
+  title: string;
+  sortOrder: number;
+  notes: NoteSummary[];
+}
+
+export interface NoteSubjectTree {
+  id: number;
+  name: string;
+  color: string | null;
+  emoji: string | null;
+  description: string | null;
+  sortOrder: number;
+  isPinned: boolean;
+  chapters: NoteChapterTree[];
+  notes: NoteSummary[]; // notes directly under the subject (no chapter)
+}
+
+export interface NoteRecent {
+  id: number;
+  title: string;
+  subjectId: number;
+  chapterId: number | null;
+  updatedAt: string;
+  isPinned: boolean;
+}
+
+export interface NotesTreeResponse {
+  tree: NoteSubjectTree[];
+  recent: NoteRecent[];
+}
+
+export interface NoteAttachment {
+  id: number;
+  fileName: string;
+  fileUrl: string;
+  fileType: string | null;
+  fileSizeBytes: number | null;
+  sortOrder: number;
+}
+
+export interface NoteLink {
+  id: number;
+  label: string;
+  url: string;
+  type: NoteLinkType;
+  thumbnailUrl: string | null;
+  sortOrder: number;
+}
+
+export interface NoteVocabEntry {
+  id: number;
+  term: string;
+  reading: string | null;
+  meaning: string | null;
+  example: string | null;
+  sortOrder: number;
+}
+
+export interface NoteFull {
+  id: number;
+  subjectId: number;
+  chapterId: number | null;
+  title: string;
+  contentJson: Record<string, unknown> | null;
+  contentHtml: string | null;
+  tags: string[];
+  isPinned: boolean;
+  isFavorite: boolean;
+  isArchived: boolean;
+  needsReview: boolean;
+  reviewDate: string | null;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+  attachments: NoteAttachment[];
+  links: NoteLink[];
+  vocabEntries: NoteVocabEntry[];
+}

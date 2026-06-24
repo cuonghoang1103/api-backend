@@ -218,6 +218,60 @@ export const fileApi = {
   delete: (id: number) => api.delete(`/files/${id}`),
 };
 
+// Notes API — personal study notebooks (per-user, authenticated).
+// Mirrors the envelope convention: every call resolves to
+// `{ data: <payload> }`; callers read `res.data.data`.
+export const notesApi = {
+  // Tree (sidebar) + recent rail
+  getTree: () =>
+    api.get<{ data: import('@/types').NotesTreeResponse }>('/notes/tree'),
+
+  // Subjects
+  createSubject: (data: { name: string; color?: string | null; emoji?: string | null; description?: string | null; sortOrder?: number }) =>
+    api.post<{ data: import('@/types').NoteSubjectTree }>('/notes/subjects', data),
+  updateSubject: (id: number, data: Partial<{ name: string; color: string | null; emoji: string | null; description: string | null; sortOrder: number; isPinned: boolean }>) =>
+    api.patch<{ data: import('@/types').NoteSubjectTree }>(`/notes/subjects/${id}`, data),
+  deleteSubject: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/subjects/${id}`),
+  reorderSubjects: (orderedIds: number[]) =>
+    api.patch<{ data: { reordered: number } }>('/notes/subjects/reorder', { orderedIds }),
+
+  // Chapters
+  createChapter: (data: { subjectId: number; title: string; sortOrder?: number }) =>
+    api.post<{ data: import('@/types').NoteChapterTree }>('/notes/chapters', data),
+  updateChapter: (id: number, data: Partial<{ title: string; sortOrder: number }>) =>
+    api.patch<{ data: import('@/types').NoteChapterTree }>(`/notes/chapters/${id}`, data),
+  deleteChapter: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/chapters/${id}`),
+  reorderChapters: (subjectId: number, orderedIds: number[]) =>
+    api.patch<{ data: { reordered: number } }>('/notes/chapters/reorder', { subjectId, orderedIds }),
+
+  // Notes
+  createNote: (data: { subjectId: number; chapterId?: number | null; title?: string }) =>
+    api.post<{ data: import('@/types').NoteFull }>('/notes/notes', data),
+  getNote: (id: number) =>
+    api.get<{ data: import('@/types').NoteFull }>(`/notes/notes/${id}`),
+  updateNote: (id: number, data: Partial<{
+    title: string;
+    contentJson: Record<string, unknown> | null;
+    contentHtml: string | null;
+    tags: string[];
+    isPinned: boolean;
+    isFavorite: boolean;
+    isArchived: boolean;
+    needsReview: boolean;
+    reviewDate: string | null;
+    sortOrder: number;
+    subjectId: number;
+    chapterId: number | null;
+  }>) =>
+    api.patch<{ data: import('@/types').NoteFull }>(`/notes/notes/${id}`, data),
+  deleteNote: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/notes/${id}`),
+  reorderNotes: (orderedIds: number[]) =>
+    api.patch<{ data: { reordered: number } }>('/notes/notes/reorder', { orderedIds }),
+};
+
 // Music API
 export const musicApi = {
   getTracks: (params?: { page?: number; size?: number; keyword?: string }) =>

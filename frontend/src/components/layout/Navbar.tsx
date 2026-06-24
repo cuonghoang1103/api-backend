@@ -14,7 +14,7 @@ import NotificationDropdown from '@/components/social/NotificationDropdown';
 import {
  Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles, TrendingUp,
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
- Globe, ShoppingBag, GraduationCap, Bell, Clapperboard,
+ Globe, ShoppingBag, GraduationCap, Bell, Clapperboard, NotebookPen,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -26,6 +26,7 @@ const TOP_NAV_LINKS = [
  { href: '/about', label: 'About', icon: User },
  { href: '/blog', label: 'Blog', icon: BookOpen },
  { href: '/projects', label: 'Projects', icon: FolderOpen },
+ { href: '/notes', label: 'Notes', icon: NotebookPen, authOnly: true },
  // Content Studio — admin-only. Filtered out at render
  // time unless the verified admin check passes. Distinct
  // amber accent vs the violet used everywhere else.

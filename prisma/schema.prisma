@@ -173,6 +173,18 @@ model User {
   hubLinks   HubLink[]
   hubFiles   HubFile[]
 
+  // ─── Notes — personal study notebooks ──────────────────
+  // User-owned subjects → chapters → notes (+ attachments,
+  // links, vocab). Same per-user scoping rule as Hub: every
+  // row carries userId and every query filters on it. Cascade
+  // on delete so removing a user removes their notes.
+  noteSubjects     NoteSubject[]
+  noteChapters     NoteChapter[]
+  notes            Note[]
+  noteAttachments  NoteAttachment[]
+  noteLinks        NoteLink[]
+  noteVocabEntries NoteVocabEntry[]
+
   // ─── Social Follow Graph ────────────────────────────────
   following Follow[] @relation("Following")
   followers Follow[] @relation("Followers")
@@ -2327,18 +2339,18 @@ model HubFile {
 
 // ─── Social Follow Graph ──────────────────────────────────
 model Follow {
- id Int @id @default(autoincrement())
- followerId Int @map("follower_id")
- followingId Int @map("following_id")
- createdAt DateTime @default(now()) @map("created_at")
+  id          Int      @id @default(autoincrement())
+  followerId  Int      @map("follower_id")
+  followingId Int      @map("following_id")
+  createdAt   DateTime @default(now()) @map("created_at")
 
- follower User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
- following User @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+  follower  User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
 
- @@unique([followerId, followingId], map: "uk_follow_pair")
- @@index([followingId], map: "idx_follow_following")
- @@index([followerId], map: "idx_follow_follower")
- @@map("follows")
+  @@unique([followerId, followingId], map: "uk_follow_pair")
+  @@index([followingId], map: "idx_follow_following")
+  @@index([followerId], map: "idx_follow_follower")
+  @@map("follows")
 }
 
 // ============================================================
@@ -2358,239 +2370,239 @@ model Follow {
 
 // ─── Enums ─────────────────────────────────────────────────────
 enum ContentType {
- VLOG
- AFFILIATE
- CODE
- REVIEW
- IDEA
- OTHER
+  VLOG
+  AFFILIATE
+  CODE
+  REVIEW
+  IDEA
+  OTHER
 
- @@map("content_type")
+  @@map("content_type")
 }
 
 enum ContentStatus {
- IDEA
- SCRIPTING
- FILMING
- EDITING
- SCHEDULED
- PUBLISHED
+  IDEA
+  SCRIPTING
+  FILMING
+  EDITING
+  SCHEDULED
+  PUBLISHED
 
- @@map("content_status")
+  @@map("content_status")
 }
 
 enum SceneType {
- OPENING
- HOOK
- INTRO
- BODY
- BROLL
- CTA
- OUTRO
+  OPENING
+  HOOK
+  INTRO
+  BODY
+  BROLL
+  CTA
+  OUTRO
 
- @@map("scene_type")
+  @@map("scene_type")
 }
 
 enum ShotType {
- CLOSEUP
- MEDIUM
- WIDE
- POV
- OVERHEAD
+  CLOSEUP
+  MEDIUM
+  WIDE
+  POV
+  OVERHEAD
 
- @@map("shot_type")
+  @@map("shot_type")
 }
 
 enum ContentPlatform {
- TIKTOK
- YOUTUBE
- FACEBOOK
- INSTAGRAM
+  TIKTOK
+  YOUTUBE
+  FACEBOOK
+  INSTAGRAM
 
- @@map("content_platform")
+  @@map("content_platform")
 }
 
 enum ChecklistPhase {
- PRE
- PRODUCTION
- POST
- PUBLISH
+  PRE
+  PRODUCTION
+  POST
+  PUBLISH
 
- @@map("checklist_phase")
+  @@map("checklist_phase")
 }
 
 // ─── Top-level entity ──────────────────────────────────────────
 model ContentProject {
- id Int @id @default(autoincrement())
- slug String @unique @db.VarChar(120)
- title String @db.VarChar(200)
- type ContentType
- status ContentStatus @default(IDEA)
- ideaDate  DateTime? @map("idea_date")
- filmDate DateTime? @map("film_date")
- publishDate DateTime? @map("publish_date")
- concept String? @db.Text
- // Phase 7: full freeform script body. Markdown-ish,
- // long-form (treated as @db.Text). Distinct from
- // `concept` (a 1-2 sentence description). The Script
- // editor tab owns this field.
- script String? @db.Text
- // Short opening hook (≤200 chars). Used as a teaser line
- // in Pipeline cards and Calendar popups.
- mainHook String? @map("main_hook") @db.VarChar(280)
- thumbnailUrl String? @map("thumbnail_url") @db.VarChar(500)
- // Free-form tags (lowercase kebab-case recommended).
- tags String[] @default([])
- // [{label: string, url: string}] — inspiration / competitor
- // links, kept schema-free in JSONB.
- referenceLinks Json @default("[]") @map("reference_links")
- createdAt DateTime @default(now()) @map("created_at")
- updatedAt DateTime @updatedAt @map("updated_at")
+  id             Int           @id @default(autoincrement())
+  slug           String        @unique @db.VarChar(120)
+  title          String        @db.VarChar(200)
+  type           ContentType
+  status         ContentStatus @default(IDEA)
+  ideaDate       DateTime?     @map("idea_date")
+  filmDate       DateTime?     @map("film_date")
+  publishDate    DateTime?     @map("publish_date")
+  concept        String?       @db.Text
+  // Phase 7: full freeform script body. Markdown-ish,
+  // long-form (treated as @db.Text). Distinct from
+  // `concept` (a 1-2 sentence description). The Script
+  // editor tab owns this field.
+  script         String?       @db.Text
+  // Short opening hook (≤200 chars). Used as a teaser line
+  // in Pipeline cards and Calendar popups.
+  mainHook       String?       @map("main_hook") @db.VarChar(280)
+  thumbnailUrl   String?       @map("thumbnail_url") @db.VarChar(500)
+  // Free-form tags (lowercase kebab-case recommended).
+  tags           String[]      @default([])
+  // [{label: string, url: string}] — inspiration / competitor
+  // links, kept schema-free in JSONB.
+  referenceLinks Json          @default("[]") @map("reference_links")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
 
- days ProductionDay[]
- affiliateProducts AffiliateProduct[]
- platformPosts PlatformPost[]
- checklistItems ChecklistItem[]
- performance ContentPerformance?
- // Reverse side: ideas that were promoted into this project.
- // Nullable, indexed so we can list "which ideas became this?".
- promotedFromIdeas ContentIdea[]
+  days              ProductionDay[]
+  affiliateProducts AffiliateProduct[]
+  platformPosts     PlatformPost[]
+  checklistItems    ChecklistItem[]
+  performance       ContentPerformance?
+  // Reverse side: ideas that were promoted into this project.
+  // Nullable, indexed so we can list "which ideas became this?".
+  promotedFromIdeas ContentIdea[]
 
- @@index([status, type], map: "idx_content_projects_status_type")
- @@index([filmDate], map: "idx_content_projects_film_date")
- @@index([publishDate], map: "idx_content_projects_publish_date")
- @@index([type], map: "idx_content_projects_type")
- @@map("content_projects")
+  @@index([status, type], map: "idx_content_projects_status_type")
+  @@index([filmDate], map: "idx_content_projects_film_date")
+  @@index([publishDate], map: "idx_content_projects_publish_date")
+  @@index([type], map: "idx_content_projects_type")
+  @@map("content_projects")
 }
 
 // ─── ProductionDay (1-n) ───────────────────────────────────────
 model ProductionDay {
- id Int @id @default(autoincrement())
- contentProjectId Int @map("content_project_id")
- dayNumber Int @map("day_number")
- date DateTime?
- location String? @db.VarChar(200)
- notes String? @db.Text
- order Int @default(0)
- createdAt DateTime @default(now()) @map("created_at")
- updatedAt DateTime @updatedAt @map("updated_at")
+  id               Int       @id @default(autoincrement())
+  contentProjectId Int       @map("content_project_id")
+  dayNumber        Int       @map("day_number")
+  date             DateTime?
+  location         String?   @db.VarChar(200)
+  notes            String?   @db.Text
+  order            Int       @default(0)
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
 
- contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
- scenes Scene[]
+  contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+  scenes         Scene[]
 
- @@index([contentProjectId, order], map: "idx_production_days_project_order")
- @@map("production_days")
+  @@index([contentProjectId, order], map: "idx_production_days_project_order")
+  @@map("production_days")
 }
 
 // ─── Scene (1-n) ───────────────────────────────────────────────
 model Scene {
- id  Int @id @default(autoincrement())
- productionDayId Int @map("production_day_id")
- sceneNumber Int @map("scene_number")
- sceneType SceneType @map("scene_type")
- // On-screen dialogue (lời thoại nhân vật).
- dialogue String? @db.Text
- // Voiceover narration (lời dẫn ngoài).
- voiceover  String? @db.Text
- // Free-form camera direction (góc quay mô tả tự do).
- cameraAngle String? @map("camera_angle") @db.VarChar(200)
- shotType ShotType?  @map("shot_type")
- action String? @db.Text
- props String? @db.VarChar(300)
- brollNotes String? @map("broll_notes") @db.Text
- editingNotes String? @map("editing_notes") @db.Text
- durationSeconds Int? @map("duration_seconds")
- storyboardImageUrl String? @map("storyboard_image_url") @db.VarChar(500)
- order Int @default(0)
- createdAt DateTime @default(now()) @map("created_at")
- updatedAt DateTime @updatedAt @map("updated_at")
+  id                 Int       @id @default(autoincrement())
+  productionDayId    Int       @map("production_day_id")
+  sceneNumber        Int       @map("scene_number")
+  sceneType          SceneType @map("scene_type")
+  // On-screen dialogue (lời thoại nhân vật).
+  dialogue           String?   @db.Text
+  // Voiceover narration (lời dẫn ngoài).
+  voiceover          String?   @db.Text
+  // Free-form camera direction (góc quay mô tả tự do).
+  cameraAngle        String?   @map("camera_angle") @db.VarChar(200)
+  shotType           ShotType? @map("shot_type")
+  action             String?   @db.Text
+  props              String?   @db.VarChar(300)
+  brollNotes         String?   @map("broll_notes") @db.Text
+  editingNotes       String?   @map("editing_notes") @db.Text
+  durationSeconds    Int?      @map("duration_seconds")
+  storyboardImageUrl String?   @map("storyboard_image_url") @db.VarChar(500)
+  order              Int       @default(0)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
 
- productionDay ProductionDay @relation(fields: [productionDayId], references: [id], onDelete: Cascade)
+  productionDay ProductionDay @relation(fields: [productionDayId], references: [id], onDelete: Cascade)
 
- @@index([productionDayId, order], map: "idx_scenes_day_order")
- @@map("scenes")
+  @@index([productionDayId, order], map: "idx_scenes_day_order")
+  @@map("scenes")
 }
 
 // ─── AffiliateProduct (1-n) ────────────────────────────────────
 model AffiliateProduct {
- id Int @id @default(autoincrement())
- contentProjectId Int @map("content_project_id")
- name String @db.VarChar(200)
- url String @db.VarChar(500)
- discountCode String? @map("discount_code") @db.VarChar(50)
- commissionPercent Float? @map("commission_percent")
- revenue Float? @default(0)
- notes String? @db.Text
- order Int @default(0)
- createdAt DateTime @default(now()) @map("created_at")
- updatedAt DateTime @updatedAt @map("updated_at")
+  id                Int      @id @default(autoincrement())
+  contentProjectId  Int      @map("content_project_id")
+  name              String   @db.VarChar(200)
+  url               String   @db.VarChar(500)
+  discountCode      String?  @map("discount_code") @db.VarChar(50)
+  commissionPercent Float?   @map("commission_percent")
+  revenue           Float?   @default(0)
+  notes             String?  @db.Text
+  order             Int      @default(0)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
- contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+  contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
 
- @@index([contentProjectId, order], map: "idx_affiliate_products_project_order")
- @@map("affiliate_products")
+  @@index([contentProjectId, order], map: "idx_affiliate_products_project_order")
+  @@map("affiliate_products")
 }
 
 // ─── PlatformPost (1-n) ────────────────────────────────────────
 model PlatformPost {
- id Int @id @default(autoincrement())
- contentProjectId Int @map("content_project_id")
- platform ContentPlatform
- caption String? @db.Text
- hashtags String[] @default([])
- scheduledTime DateTime? @map("scheduled_time")
- postUrl String? @map("post_url") @db.VarChar(500)
- isPublished Boolean @default(false) @map("is_published")
- order Int @default(0)
- createdAt DateTime @default(now()) @map("created_at")
- updatedAt DateTime @updatedAt @map("updated_at")
+  id               Int             @id @default(autoincrement())
+  contentProjectId Int             @map("content_project_id")
+  platform         ContentPlatform
+  caption          String?         @db.Text
+  hashtags         String[]        @default([])
+  scheduledTime    DateTime?       @map("scheduled_time")
+  postUrl          String?         @map("post_url") @db.VarChar(500)
+  isPublished      Boolean         @default(false) @map("is_published")
+  order            Int             @default(0)
+  createdAt        DateTime        @default(now()) @map("created_at")
+  updatedAt        DateTime        @updatedAt @map("updated_at")
 
- contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+  contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
 
- @@index([contentProjectId, order], map: "idx_platform_posts_project_order")
- @@index([contentProjectId, platform], map: "idx_platform_posts_project_platform")
- @@map("platform_posts")
+  @@index([contentProjectId, order], map: "idx_platform_posts_project_order")
+  @@index([contentProjectId, platform], map: "idx_platform_posts_project_platform")
+  @@map("platform_posts")
 }
 
 // ─── ChecklistItem (1-n) ───────────────────────────────────────
 model ChecklistItem {
- id Int @id @default(autoincrement())
- contentProjectId Int @map("content_project_id")
- phase ChecklistPhase
- label String  @db.VarChar(300)
- done Boolean @default(false)
- order Int @default(0)
- createdAt DateTime @default(now()) @map("created_at")
- updatedAt DateTime @updatedAt @map("updated_at")
+  id               Int            @id @default(autoincrement())
+  contentProjectId Int            @map("content_project_id")
+  phase            ChecklistPhase
+  label            String         @db.VarChar(300)
+  done             Boolean        @default(false)
+  order            Int            @default(0)
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
 
- contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+  contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
 
- @@index([contentProjectId, phase, order], map: "idx_checklist_items_project_phase_order")
- @@map("checklist_items")
+  @@index([contentProjectId, phase, order], map: "idx_checklist_items_project_phase_order")
+  @@map("checklist_items")
 }
 
 // ─── ContentPerformance (1-1) ──────────────────────────────────
 model ContentPerformance {
- id Int @id @default(autoincrement())
- contentProjectId Int @unique @map("content_project_id")
- views Int @default(0)
- likes Int @default(0)
- comments Int @default(0)
- shares Int @default(0)
- // Click-through rate as a fraction (0..1) — render as %.
- ctr Float?
- // Average watch time in seconds.
- watchTimeSec Int? @map("watch_time_sec")
- // Per-platform breakdown for future per-platform rollups.
- // Shape: { TIKTOK: { views, likes, ... }, YOUTUBE: {...} }
- platformMetrics Json @default("{}") @map("platform_metrics")
- lessonsLearned String? @map("lessons_learned") @db.Text
- createdAt DateTime @default(now()) @map("created_at")
- updatedAt DateTime @updatedAt @map("updated_at")
+  id               Int      @id @default(autoincrement())
+  contentProjectId Int      @unique @map("content_project_id")
+  views            Int      @default(0)
+  likes            Int      @default(0)
+  comments         Int      @default(0)
+  shares           Int      @default(0)
+  // Click-through rate as a fraction (0..1) — render as %.
+  ctr              Float?
+  // Average watch time in seconds.
+  watchTimeSec     Int?     @map("watch_time_sec")
+  // Per-platform breakdown for future per-platform rollups.
+  // Shape: { TIKTOK: { views, likes, ... }, YOUTUBE: {...} }
+  platformMetrics  Json     @default("{}") @map("platform_metrics")
+  lessonsLearned   String?  @map("lessons_learned") @db.Text
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
- contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+  contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
 
- @@map("content_performance")
+  @@map("content_performance")
 }
 
 // ─── ContentIdea (Idea Bank) ─────────────────────────────────────
@@ -2601,50 +2613,206 @@ model ContentPerformance {
 // a new ContentProject with title/concept/tags copied over and
 // links back via promotedToProjectId.
 enum IdeaStatus {
- CAPTURED // just dumped, not yet refined
- REFINED // fleshed out, ready to commit to a project
- PROMOTED // turned into a ContentProject
- ARCHIVED // explicitly killed
+  CAPTURED // just dumped, not yet refined
+  REFINED // fleshed out, ready to commit to a project
+  PROMOTED // turned into a ContentProject
+  ARCHIVED // explicitly killed
 
- @@map("idea_status")
+  @@map("idea_status")
 }
 
 model ContentIdea {
- id Int @id @default(autoincrement())
- // Short title (≤140 chars). The hero field of the card.
- title String @db.VarChar(140)
- // Optional one-liner hook (≤280 chars) — teaser for the
- // eventual video.
- hook String? @db.VarChar(280)
- // Free-form notes (any length). Why is this interesting?
- // What format? Who is the audience? This is the "long text"
- // of an idea, not a script.
- notes String? @db.Text
- // 1-5 personal score. Lets the user rank what to film next.
- // Optional: lots of users will just dump ideas without a
- // score, so this stays nullable.
- score Int? @db.SmallInt
- // Detected/favourite ContentType — used as a default when
- // the idea is promoted. Nullable so a raw idea can be just
- // "a thing I want to make" without committing to a format.
- suggestedType ContentType? @map("suggested_type")
- // Lifecycle status. CAPTURED is the default.
- status IdeaStatus @default(CAPTURED)
- // When the idea is promoted, points back at the resulting
- // ContentProject (nullable + onDelete: SetNull so deleting
- // the project doesn't delete the idea — the user can re-
- // promote it later).
- promotedToProjectId Int? @map("promoted_to_project_id")
- promotedAt DateTime? @map("promoted_at")
- // Free-form tags (same convention as ContentProject.tags).
- tags String[] @default([])
- createdAt DateTime @default(now()) @map("created_at")
- updatedAt DateTime @updatedAt @map("updated_at")
+  id                  Int          @id @default(autoincrement())
+  // Short title (≤140 chars). The hero field of the card.
+  title               String       @db.VarChar(140)
+  // Optional one-liner hook (≤280 chars) — teaser for the
+  // eventual video.
+  hook                String?      @db.VarChar(280)
+  // Free-form notes (any length). Why is this interesting?
+  // What format? Who is the audience? This is the "long text"
+  // of an idea, not a script.
+  notes               String?      @db.Text
+  // 1-5 personal score. Lets the user rank what to film next.
+  // Optional: lots of users will just dump ideas without a
+  // score, so this stays nullable.
+  score               Int?         @db.SmallInt
+  // Detected/favourite ContentType — used as a default when
+  // the idea is promoted. Nullable so a raw idea can be just
+  // "a thing I want to make" without committing to a format.
+  suggestedType       ContentType? @map("suggested_type")
+  // Lifecycle status. CAPTURED is the default.
+  status              IdeaStatus   @default(CAPTURED)
+  // When the idea is promoted, points back at the resulting
+  // ContentProject (nullable + onDelete: SetNull so deleting
+  // the project doesn't delete the idea — the user can re-
+  // promote it later).
+  promotedToProjectId Int?         @map("promoted_to_project_id")
+  promotedAt          DateTime?    @map("promoted_at")
+  // Free-form tags (same convention as ContentProject.tags).
+  tags                String[]     @default([])
+  createdAt           DateTime     @default(now()) @map("created_at")
+  updatedAt           DateTime     @updatedAt @map("updated_at")
 
- promotedToProject ContentProject? @relation(fields: [promotedToProjectId], references: [id], onDelete: SetNull)
+  promotedToProject ContentProject? @relation(fields: [promotedToProjectId], references: [id], onDelete: SetNull)
 
- @@index([status], map: "idx_content_ideas_status")
- @@index([score], map: "idx_content_ideas_score")
- @@index([createdAt(sort: Desc)], map: "idx_content_ideas_created_at")
- @@map("content_ideas")
+  @@index([status], map: "idx_content_ideas_status")
+  @@index([score], map: "idx_content_ideas_score")
+  @@index([createdAt(sort: Desc)], map: "idx_content_ideas_created_at")
+  @@map("content_ideas")
+}
+
+// ════════════════════════════════════════════════════════════
+// Notes — personal study notebooks (per-user, no admin)
+// ════════════════════════════════════════════════════════════
+// Hierarchy: NoteSubject → NoteChapter → Note. Attachments and
+// links may hang off a Subject, a Chapter, OR a Note (exactly
+// one parent set). Vocab entries belong to a Note. Every row is
+// scoped by userId and every query filters on it — same rule as
+// Hub. Cascade deletes flow down the tree.
+
+model NoteSubject {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  name        String   @db.VarChar(150)
+  // Restrained accent color (hex) used for the sidebar dot/spine.
+  color       String?  @db.VarChar(20)
+  // Emoji or short icon token rendered before the name.
+  emoji       String?  @db.VarChar(20)
+  description String?  @db.Text
+  sortOrder   Int      @default(0) @map("sort_order")
+  isPinned    Boolean  @default(false) @map("is_pinned")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chapters    NoteChapter[]
+  notes       Note[]
+  attachments NoteAttachment[]
+  links       NoteLink[]
+
+  @@index([userId, sortOrder], name: "idx_note_subjects_user_sort")
+  @@index([userId, isPinned], name: "idx_note_subjects_user_pinned")
+  @@map("note_subjects")
+}
+
+model NoteChapter {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  subjectId Int      @map("subject_id")
+  title     String   @db.VarChar(200)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject     NoteSubject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  notes       Note[]
+  attachments NoteAttachment[]
+  links       NoteLink[]
+
+  @@index([userId, subjectId, sortOrder], name: "idx_note_chapters_user_subject")
+  @@map("note_chapters")
+}
+
+model Note {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @map("user_id")
+  subjectId   Int       @map("subject_id")
+  // Optional: a note can live directly under a subject (no chapter).
+  chapterId   Int?      @map("chapter_id")
+  title       String    @default("Untitled") @db.VarChar(300)
+  // Rich editor document (TipTap/ProseMirror JSON). Source of truth.
+  contentJson Json?     @map("content_json")
+  // Server-rendered HTML cache of contentJson for fast read/print.
+  contentHtml String?   @map("content_html") @db.Text
+  tags        String[]  @default([])
+  isPinned    Boolean   @default(false) @map("is_pinned")
+  isFavorite  Boolean   @default(false) @map("is_favorite")
+  isArchived  Boolean   @default(false) @map("is_archived")
+  needsReview Boolean   @default(false) @map("needs_review")
+  reviewDate  DateTime? @map("review_date")
+  sortOrder   Int       @default(0) @map("sort_order")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject      NoteSubject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  chapter      NoteChapter?     @relation(fields: [chapterId], references: [id], onDelete: SetNull)
+  attachments  NoteAttachment[]
+  links        NoteLink[]
+  vocabEntries NoteVocabEntry[]
+
+  @@index([userId, subjectId, chapterId, sortOrder], name: "idx_notes_user_tree")
+  @@index([userId, updatedAt(sort: Desc)], name: "idx_notes_user_recent")
+  @@index([userId, isPinned], name: "idx_notes_user_pinned")
+  @@index([userId, isArchived], name: "idx_notes_user_archived")
+  @@map("notes")
+}
+
+model NoteAttachment {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  // Exactly one of these parents is set (Subject/Chapter/Note).
+  subjectId     Int?     @map("subject_id")
+  chapterId     Int?     @map("chapter_id")
+  noteId        Int?     @map("note_id")
+  fileName      String   @db.VarChar(300)
+  // Absolute URL (R2) returned by the existing /files/upload flow.
+  fileUrl       String   @db.VarChar(2000)
+  fileType      String?  @map("file_type") @db.VarChar(150)
+  fileSizeBytes Int?     @map("file_size_bytes")
+  sortOrder     Int      @default(0) @map("sort_order")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject NoteSubject? @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  chapter NoteChapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  note    Note?        @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@index([userId, noteId], name: "idx_note_attachments_note")
+  @@index([userId, subjectId], name: "idx_note_attachments_subject")
+  @@map("note_attachments")
+}
+
+model NoteLink {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  subjectId    Int?     @map("subject_id")
+  chapterId    Int?     @map("chapter_id")
+  noteId       Int?     @map("note_id")
+  label        String   @db.VarChar(500)
+  url          String   @db.VarChar(2000)
+  // "WEB" | "YOUTUBE" | "OTHER"
+  type         String   @default("WEB") @db.VarChar(20)
+  thumbnailUrl String?  @map("thumbnail_url") @db.VarChar(2000)
+  sortOrder    Int      @default(0) @map("sort_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject NoteSubject? @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  chapter NoteChapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  note    Note?        @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@index([userId, noteId], name: "idx_note_links_note")
+  @@index([userId, subjectId], name: "idx_note_links_subject")
+  @@map("note_links")
+}
+
+model NoteVocabEntry {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  noteId    Int      @map("note_id")
+  term      String   @db.VarChar(500)
+  // Furigana / pinyin / phonetic reading.
+  reading   String?  @db.VarChar(500)
+  meaning   String?  @db.Text
+  example   String?  @db.Text
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@index([userId, noteId, sortOrder], name: "idx_note_vocab_note")
+  @@map("note_vocab_entries")
 }

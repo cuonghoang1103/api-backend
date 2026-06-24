@@ -1,0 +1,136 @@
+/**
+ * Notes routes — personal study notebooks (per-user).
+ * ────────────────────────────────────────────────────────────
+ * Mounted at /api/v1/notes. `router.use(authenticate)` makes every
+ * route require a logged-in session; the handlers pass `req.userId!`
+ * into the service, which scopes every query by userId. There is no
+ * admin gate — each user manages only their own notes (mirrors the
+ * Hub routes pattern).
+ */
+import { Router, type Response, type Request } from 'express';
+import { authenticate } from '../middleware/auth.js';
+import type { ApiResponse } from '../types/index.js';
+import {
+  getTree,
+  getRecentNotes,
+  createSubject,
+  updateSubject,
+  deleteSubject,
+  reorderSubjects,
+  createChapter,
+  updateChapter,
+  deleteChapter,
+  reorderChapters,
+  createNote,
+  getNote,
+  updateNote,
+  deleteNote,
+  reorderNotes,
+} from '../services/notes.service.js';
+
+const router = Router();
+router.use(authenticate);
+
+// ─── Tree + recent ───────────────────────────────────────────
+router.get('/tree', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const [tree, recent] = await Promise.all([getTree(req.userId!), getRecentNotes(req.userId!)]);
+    res.json({ success: true, data: { tree, recent } });
+  } catch (err) { next(err); }
+});
+
+// ─── Subjects ────────────────────────────────────────────────
+router.post('/subjects', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const subject = await createSubject(req.userId!, req.body ?? {});
+    res.status(201).json({ success: true, data: subject });
+  } catch (err) { next(err); }
+});
+
+router.patch('/subjects/reorder', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await reorderSubjects(req.userId!, req.body?.orderedIds);
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+router.patch('/subjects/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const subject = await updateSubject(req.userId!, Number(req.params.id), req.body ?? {});
+    res.json({ success: true, data: subject });
+  } catch (err) { next(err); }
+});
+
+router.delete('/subjects/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await deleteSubject(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+// ─── Chapters ────────────────────────────────────────────────
+router.post('/chapters', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const chapter = await createChapter(req.userId!, req.body ?? {});
+    res.status(201).json({ success: true, data: chapter });
+  } catch (err) { next(err); }
+});
+
+router.patch('/chapters/reorder', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await reorderChapters(req.userId!, Number(req.body?.subjectId), req.body?.orderedIds);
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+router.patch('/chapters/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const chapter = await updateChapter(req.userId!, Number(req.params.id), req.body ?? {});
+    res.json({ success: true, data: chapter });
+  } catch (err) { next(err); }
+});
+
+router.delete('/chapters/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await deleteChapter(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+// ─── Notes ───────────────────────────────────────────────────
+router.post('/notes', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const note = await createNote(req.userId!, req.body ?? {});
+    res.status(201).json({ success: true, data: note });
+  } catch (err) { next(err); }
+});
+
+router.patch('/notes/reorder', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await reorderNotes(req.userId!, req.body?.orderedIds);
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+router.get('/notes/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const note = await getNote(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: note });
+  } catch (err) { next(err); }
+});
+
+router.patch('/notes/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const note = await updateNote(req.userId!, Number(req.params.id), req.body ?? {});
+    res.json({ success: true, data: note });
+  } catch (err) { next(err); }
+});
+
+router.delete('/notes/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await deleteNote(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+export default router;

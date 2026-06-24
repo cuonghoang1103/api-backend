@@ -144,7 +144,7 @@ function CardCarousel({
  e.stopPropagation();
  setCurrent((c) => (c === 0 ? allImages.length - 1 : c - 1));
  }}
- className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 z-10"
+ className="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 z-10"
  style={{
  background: 'rgba(0,0,0,0.5)',
  backdropFilter: 'blur(8px)',
@@ -160,7 +160,7 @@ function CardCarousel({
  e.stopPropagation();
  setCurrent((c) => (c === allImages.length - 1 ? 0 : c + 1));
  }}
- className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 z-10"
+ className="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 z-10"
  style={{
  background: 'rgba(0,0,0,0.5)',
  backdropFilter: 'blur(8px)',
@@ -441,7 +441,7 @@ export default function ProjectCardPremium({
  e.stopPropagation();
  router.push(`/projects/${project.slug}`);
  }}
- className="magnetic-press flex-1 h-9 inline-flex items-center justify-center gap-1.5 rounded-lg text-sm font-medium text-white"
+ className="magnetic-press flex-1 h-11 sm:h-9 inline-flex items-center justify-center gap-1.5 rounded-lg text-sm font-medium text-white"
  style={{
  // Inline so we can pass the gradient.
  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)',
@@ -458,7 +458,7 @@ export default function ProjectCardPremium({
  e.stopPropagation();
  window.open(project.projectUrl, '_blank', 'noopener,noreferrer');
  }}
- className="magnetic-press w-9 h-9 inline-flex items-center justify-center rounded-lg text-text-muted hover:text-emerald-300"
+ className="magnetic-press w-11 h-11 sm:w-9 sm:h-9 inline-flex items-center justify-center rounded-lg text-text-muted hover:text-emerald-300"
  style={{
  background: 'rgba(255,255,255,0.04)',
  border: '1px solid rgba(255,255,255,0.08)',
@@ -475,7 +475,7 @@ export default function ProjectCardPremium({
  e.stopPropagation();
  window.open(project.githubUrl, '_blank', 'noopener,noreferrer');
  }}
- className="magnetic-press w-9 h-9 inline-flex items-center justify-center rounded-lg text-text-muted hover:text-text-primary"
+ className="magnetic-press w-11 h-11 sm:w-9 sm:h-9 inline-flex items-center justify-center rounded-lg text-text-muted hover:text-text-primary"
  style={{
  background: 'rgba(255,255,255,0.04)',
  border: '1px solid rgba(255,255,255,0.08)',
@@ -492,7 +492,7 @@ export default function ProjectCardPremium({
  e.stopPropagation();
  onVideoClick?.((project as any).videoUrl);
  }}
- className="magnetic-press w-9 h-9 inline-flex items-center justify-center rounded-lg text-red-300"
+ className="magnetic-press w-11 h-11 sm:w-9 sm:h-9 inline-flex items-center justify-center rounded-lg text-red-300"
  style={{
  background: 'rgba(239, 68, 68, 0.08)',
  border: '1px solid rgba(239, 68, 68, 0.25)',

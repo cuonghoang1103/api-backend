@@ -12,7 +12,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ChevronRight, Plus, Trash2, FileText, FolderPlus, BookOpen, Pin, Clock,
+  ChevronRight, Plus, Trash2, FileText, FolderPlus, BookOpen, Pin, Clock, X,
 } from 'lucide-react';
 import type { NoteSubjectTree, NoteRecent, NoteSummary } from '@/types';
 
@@ -33,11 +33,13 @@ interface Props extends SidebarCallbacks {
   tree: NoteSubjectTree[];
   recent: NoteRecent[];
   selectedNoteId: number | null;
+  /** When provided (mobile drawer), renders a close button in the header. */
+  onClose?: () => void;
 }
 
 const SPRING = { type: 'spring' as const, stiffness: 380, damping: 32 };
 
-export default function NotesSidebar({ tree, recent, selectedNoteId, ...cb }: Props) {
+export default function NotesSidebar({ tree, recent, selectedNoteId, onClose, ...cb }: Props) {
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
   const toggle = (id: number) => setExpanded((e) => ({ ...e, [id]: !e[id] }));
 
@@ -46,14 +48,26 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, ...cb }: Pr
       {/* Header */}
       <div className="flex items-center justify-between px-3 pt-3 pb-2">
         <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Sổ tay</h2>
-        <button
-          onClick={cb.onAddSubject}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05] hover:text-teal-300 sm:h-7 sm:w-7"
-          title="Thêm môn học"
-          aria-label="Thêm môn học"
-        >
-          <Plus className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={cb.onAddSubject}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05] hover:text-teal-300 sm:h-7 sm:w-7"
+            title="Thêm môn học"
+            aria-label="Thêm môn học"
+          >
+            <Plus className="h-4 w-4" />
+          </button>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05] hover:text-slate-200 md:hidden"
+              title="Đóng"
+              aria-label="Đóng"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-1.5 pb-6">

@@ -8,7 +8,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, NotebookPen, Loader2 } from 'lucide-react';
+import { Menu, NotebookPen, Loader2 } from 'lucide-react';
 import { notesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import type { NoteSubjectTree, NoteRecent, NoteFull } from '@/types';
@@ -88,8 +88,9 @@ export default function NotesPage() {
     if (!selected) return;
     await notesApi.updateNote(selected.id, patch);
     if (patch.title !== undefined) {
-      // Keep the sidebar title in sync without a full refetch.
+      // Keep the sidebar + selected title in sync without a full refetch.
       const t = patch.title;
+      setSelected((s) => (s && s.id === selected.id ? { ...s, title: t } : s));
       setTree((prev) => prev.map((subj) => ({
         ...subj,
         notes: subj.notes.map((n) => (n.id === selected.id ? { ...n, title: t } : n)),
@@ -168,10 +169,7 @@ export default function NotesPage() {
               transition={{ type: 'spring', stiffness: 380, damping: 36 }}
               className="fixed inset-y-0 left-0 z-50 w-[82%] max-w-xs border-r border-white/[0.06] bg-[#0e1218] pt-16 md:hidden"
             >
-              <button onClick={() => setDrawerOpen(false)} className="absolute right-2 top-[4.5rem] flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05]" aria-label="Đóng">
-                <X className="h-4 w-4" />
-              </button>
-              {sidebar}
+              <NotesSidebar tree={tree} recent={recent} selectedNoteId={selected?.id ?? null} onClose={() => setDrawerOpen(false)} {...callbacks} />
             </motion.aside>
           </>
         )}

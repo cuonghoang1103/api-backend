@@ -33,6 +33,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
   const [title, setTitle] = useState(note.title);
   const [saveState, setSaveState] = useState<SaveState>('idle');
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
   // Track the note id so switching notes resets local state instead
   // of bleeding one note's title/content into another.
   const noteIdRef = useRef(note.id);
@@ -59,7 +60,21 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
     try {
       const res = await fileApi.upload(file, 'images');
       const url = (res.data as { data?: { url?: string } })?.data?.url;
-      if (url) editor.chain().focus().setImage({ src: url, alt: file.name }).run();
+      if (url) {
+        // Insert the image AND a trailing empty paragraph, then put
+        // the caret in that paragraph. A bare block image left as the
+        // last node traps the cursor on a NodeSelection — you can't
+        // type or paste again. The paragraph gives the caret a home.
+        editor
+          .chain()
+          .focus()
+          .insertContent([
+            { type: 'image', attrs: { src: url, alt: file.name } },
+            { type: 'paragraph' },
+          ])
+          .focus()
+          .run();
+      }
     } catch {
       // Silent: a failed paste shouldn't break typing. The image
       // simply isn't inserted; the user can retry.
@@ -114,6 +129,16 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [note.id]);
 
+  // Reflect an external rename (e.g. from the sidebar) in the title
+  // input — but never while the user is editing the title here, so
+  // we don't fight their caret.
+  useEffect(() => {
+    if (noteIdRef.current === note.id && document.activeElement !== titleRef.current) {
+      setTitle(note.title);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [note.title]);
+
   useEffect(() => () => { if (saveTimer.current) clearTimeout(saveTimer.current); }, []);
 
   return (
@@ -127,6 +152,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
 
       {/* Title */}
       <input
+        ref={titleRef}
         value={title}
         onChange={(e) => { setTitle(e.target.value); queueSave({ title: e.target.value }); }}
         placeholder="Tiêu đề ghi chú"

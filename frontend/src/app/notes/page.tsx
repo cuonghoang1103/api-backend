@@ -99,26 +99,83 @@ export default function NotesPage() {
     setSelected(res.data.data);
   }, [refreshTree]);
 
-  const renameSubject = useCallback(async (id: number, name: string) => { await notesApi.updateSubject(id, { name }); await refreshTree(); }, [refreshTree]);
-  const renameChapter = useCallback(async (id: number, title: string) => { await notesApi.updateChapter(id, { title }); await refreshTree(); }, [refreshTree]);
-  const renameNote = useCallback(async (id: number, title: string) => {
-    await notesApi.updateNote(id, { title });
-    await refreshTree();
-    setSelected((s) => (s && s.id === id ? { ...s, title } : s));
-  }, [refreshTree]);
+ const renameSubject = useCallback(async (id: number, name: string) => { await notesApi.updateSubject(id, { name }); await refreshTree(); }, [refreshTree]);
+ const renameChapter = useCallback(async (id: number, title: string) => { await notesApi.updateChapter(id, { title }); await refreshTree(); }, [refreshTree]);
+ const renameNote = useCallback(async (id: number, title: string) => {
+ await notesApi.updateNote(id, { title });
+ await refreshTree();
+ setSelected((s) => (s && s.id === id ? { ...s, title } : s));
+ }, [refreshTree]);
 
-  const delSubject = useCallback(async (id: number) => {
-    if (!confirm('Xoá môn học này và toàn bộ chương/ghi chú bên trong?')) return;
-    await notesApi.deleteSubject(id); setSelected((s) => (s?.subjectId === id ? null : s)); await refreshTree();
-  }, [refreshTree]);
-  const delChapter = useCallback(async (id: number) => {
-    if (!confirm('Xoá chương này? (ghi chú bên trong sẽ chuyển về môn học)')) return;
-    await notesApi.deleteChapter(id); await refreshTree();
-  }, [refreshTree]);
-  const delNote = useCallback(async (id: number) => {
-    if (!confirm('Xoá ghi chú này?')) return;
-    await notesApi.deleteNote(id); setSelected((s) => (s?.id === id ? null : s)); await refreshTree();
-  }, [refreshTree]);
+ const delSubject = useCallback(async (id: number) => {
+ if (!confirm('Xoá môn học này và toàn bộ chương/ghi chú bên trong?')) return;
+ await notesApi.deleteSubject(id); setSelected((s) => (s?.subjectId === id ? null : s)); await refreshTree();
+ }, [refreshTree]);
+ const delChapter = useCallback(async (id: number) => {
+ if (!confirm('Xoá chương này? (ghi chú bên trong sẽ chuyển về môn học)')) return;
+ await notesApi.deleteChapter(id); await refreshTree();
+ }, [refreshTree]);
+ const delNote = useCallback(async (id: number) => {
+ if (!confirm('Xoá ghi chú này?')) return;
+ await notesApi.deleteNote(id); setSelected((s) => (s?.id === id ? null : s)); await refreshTree();
+ }, [refreshTree]);
+
+ // ─── Reorder (Phase 2.5) ──────────────────────────────────
+ // Each reorder callback optimistically applies the new order to
+ // local state so the UI snaps to the drop position immediately,
+ // then asks the server to persist it. If the server rejects (e.g.
+ // 401, network error) we fall back to refreshTree() to restore
+ // the canonical order from the DB — the user sees a brief jitter
+ // but no data is lost. We do NOT block the UI on the API; the
+ // server endpoint is idempotent so a duplicate click is safe.
+ const reorderSubjectsCb = useCallback(async (orderedIds: number[]) => {
+ setTree((prev) => subjectOrderFromIds(prev, orderedIds));
+ try {
+ await notesApi.reorderSubjects(orderedIds);
+ } catch { await refreshTree(); }
+ }, [refreshTree]);
+
+ const reorderChaptersCb = useCallback(async (subjectId: number, orderedIds: number[]) => {
+ setTree((prev) => prev.map((s) => s.id === subjectId
+ ? { ...s, chapters: chapterOrderFromIds(s.chapters, orderedIds) }
+ : s));
+ try {
+ await notesApi.reorderChapters(subjectId, orderedIds);
+ } catch { await refreshTree(); }
+ }, [refreshTree]);
+
+ // Notes can be reordered either at subject-root scope (chapterId
+ // null) or inside a chapter. The sidebar sends a flat list of the
+ // row ids in the scope that was dragged; we cannot know here which
+ // scope it was, so we look up each id in the current tree and
+ // update sortOrder for the matching scope. If a note lives at
+ // subject-root (chapterId null) it appears in subject.notes;
+ // otherwise it appears in some chapter.notes of the same subject.
+ // The server's `reorderNotes` updates sortOrder for whatever note
+ // ids we send — we update BOTH the local state and the server in
+ // the same shape so the optimistic write stays consistent.
+ const reorderNotesCb = useCallback(async (orderedIds: number[]) => {
+ setTree((prev) => prev.map((s) => {
+ // Find which sub-list the orderedIds belong to
+ const inSubjectRoot = orderedIds.every((id) => s.notes.some((n) => n.id === id));
+ const inSomeChapter = orderedIds.every((id) => s.chapters.some((c) => c.notes.some((n) => n.id === id)));
+ if (inSubjectRoot) {
+ return { ...s, notes: noteOrderFromIds(s.notes, orderedIds) };
+ }
+ if (inSomeChapter) {
+ return {
+ ...s,
+ chapters: s.chapters.map((c) => orderedIds.every((id) => c.notes.some((n) => n.id === id))
+ ? { ...c, notes: noteOrderFromIds(c.notes, orderedIds) }
+ : c),
+ };
+ }
+ return s;
+ }));
+ try {
+ await notesApi.reorderNotes(orderedIds);
+ } catch { await refreshTree(); }
+ }, [refreshTree]);
 
   // ─── Editor save ───────────────────────────────────────────
   const saveNote = useCallback(async (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null }>) => {
@@ -136,19 +193,22 @@ export default function NotesPage() {
     }
   }, [selected]);
 
-  const callbacks = {
-    onSelectNote: selectNote,
-    onOpenSubject: openSubject,
-    onAddSubject: addSubject,
-    onAddChapter: addChapter,
-    onAddNote: addNote,
-    onRenameSubject: renameSubject,
-    onRenameChapter: renameChapter,
-    onRenameNote: renameNote,
-    onDeleteSubject: delSubject,
-    onDeleteChapter: delChapter,
-    onDeleteNote: delNote,
-  };
+ const callbacks = {
+ onSelectNote: selectNote,
+ onOpenSubject: openSubject,
+ onAddSubject: addSubject,
+ onAddChapter: addChapter,
+ onAddNote: addNote,
+ onRenameSubject: renameSubject,
+ onRenameChapter: renameChapter,
+ onRenameNote: renameNote,
+ onDeleteSubject: delSubject,
+ onDeleteChapter: delChapter,
+ onDeleteNote: delNote,
+ onReorderSubjects: reorderSubjectsCb,
+ onReorderChapters: reorderChaptersCb,
+ onReorderNotes: reorderNotesCb,
+ };
 
   const treeSubjectFor = (id: number) => tree.find((s) => s.id === id);
 
@@ -235,23 +295,43 @@ export default function NotesPage() {
         )}
       </AnimatePresence>
 
-      <NotesSearch open={searchOpen} onClose={() => setSearchOpen(false)} subjects={tree} onJump={selectNote} />
+ <NotesSearch open={searchOpen} onClose={() => setSearchOpen(false)} subjects={tree} onJump={selectNote} />
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {drawerOpen && (
-          <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDrawerOpen(false)} className="fixed inset-0 z-40 bg-black/55 md:hidden" />
-            <motion.aside
-              initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
-              transition={{ type: 'spring', stiffness: 380, damping: 36 }}
-              className="fixed inset-y-0 left-0 z-50 w-[82%] max-w-xs border-r border-white/[0.06] bg-[#0e1218] pt-16 md:hidden"
-            >
-              <NotesSidebar tree={tree} recent={recent} selectedNoteId={selected?.id ?? null} onClose={() => setDrawerOpen(false)} {...callbacks} />
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+ {/* Mobile drawer */}
+ <AnimatePresence>
+ {drawerOpen && (
+ <>
+ <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDrawerOpen(false)} className="fixed inset-0 z-40 bg-black/55 md:hidden" />
+ <motion.aside
+ initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
+ transition={{ type: 'spring', stiffness: 380, damping: 36 }}
+ className="fixed inset-y-0 left-0 z-50 w-[82%] max-w-xs border-r border-white/[0.06] bg-[#0e1218] pt-16 md:hidden"
+ >
+ <NotesSidebar tree={tree} recent={recent} selectedNoteId={selected?.id ?? null} onClose={() => setDrawerOpen(false)} {...callbacks} />
+ </motion.aside>
+ </>
+ )}
+ </AnimatePresence>
+  </div>
+ );
+}
+
+// ─── Optimistic reorder helpers (Phase 2.5) ──────────────────
+// Each helper takes the current list and the desired id order, and
+// returns a new list with the items reordered. The objects are
+// shallow-cloned only when their position changed, so React's
+// reconciliation can still see stable references for unchanged
+// rows and avoid re-rendering the whole tree.
+
+function subjectOrderFromIds<T extends { id: number }>(items: T[], order: number[]): T[] {
+ const map = new Map(items.map((it) => [it.id, it]));
+ return order.map((id) => map.get(id)).filter((x): x is T => Boolean(x));
+}
+
+function chapterOrderFromIds<T extends { id: number }>(items: T[], order: number[]): T[] {
+ return subjectOrderFromIds(items, order);
+}
+
+function noteOrderFromIds<T extends { id: number }>(items: T[], order: number[]): T[] {
+ return subjectOrderFromIds(items, order);
 }

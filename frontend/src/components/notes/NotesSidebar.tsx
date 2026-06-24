@@ -12,12 +12,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ChevronRight, Plus, Trash2, FileText, FolderPlus, BookOpen, Pin, Clock, X,
+  ChevronRight, Plus, Trash2, FileText, FolderPlus, BookOpen, Pin, Clock, X, PanelRight,
 } from 'lucide-react';
 import type { NoteSubjectTree, NoteRecent, NoteSummary } from '@/types';
 
 export interface SidebarCallbacks {
   onSelectNote: (id: number) => void;
+  onOpenSubject: (id: number) => void;
   onAddSubject: () => void;
   onAddChapter: (subjectId: number) => void;
   onAddNote: (subjectId: number, chapterId: number | null) => void;
@@ -116,6 +117,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, onClose, ..
                 onRename={(v) => cb.onRenameSubject(subject.id, v)}
                 onDelete={() => cb.onDeleteSubject(subject.id)}
                 actions={[
+                  { icon: PanelRight, title: 'Mở môn học (tệp & liên kết)', onClick: () => cb.onOpenSubject(subject.id) },
                   { icon: FolderPlus, title: 'Thêm chương', onClick: () => cb.onAddChapter(subject.id) },
                   { icon: Plus, title: 'Thêm ghi chú', onClick: () => cb.onAddNote(subject.id, null) },
                 ]}
@@ -240,8 +242,8 @@ function Row({
         </button>
       )}
 
-      {/* Hover actions */}
-      <div className="flex shrink-0 items-center opacity-0 transition-opacity group-hover:opacity-100">
+      {/* Row actions — always visible on touch, hover-reveal on desktop */}
+      <div className="flex shrink-0 items-center opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
         {actions.map((a, i) => (
           <button key={i} onClick={a.onClick} title={a.title} aria-label={a.title} className="flex h-7 w-7 items-center justify-center rounded text-slate-500 hover:bg-white/[0.06] hover:text-teal-300">
             <a.icon className="h-3.5 w-3.5" />

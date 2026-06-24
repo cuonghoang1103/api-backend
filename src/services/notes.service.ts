@@ -310,3 +310,176 @@ export function reorderNotes(userId: number, orderedIds: unknown) {
     prisma.note.updateMany({ where: { id, userId }, data: { sortOrder: order } }),
   );
 }
+
+// ════════════════════════════════════════════════════════════
+// Phase 2 — attachments, links, search
+// ════════════════════════════════════════════════════════════
+
+/** Resolve which parent an attachment/link hangs off. Exactly one
+ * of noteId / subjectId must be set, and it must belong to the user. */
+async function resolveParent(userId: number, p: { noteId?: number | null; subjectId?: number | null }): Promise<{ noteId: number | null; subjectId: number | null }> {
+  const hasNote = p.noteId != null;
+  const hasSubject = p.subjectId != null;
+  if (hasNote === hasSubject) {
+    throw new AppError('Phải gắn vào đúng một ghi chú hoặc một môn học', 400, 'INVALID_PARENT');
+  }
+  if (hasNote) {
+    const n = await prisma.note.findFirst({ where: { id: Number(p.noteId), userId }, select: { id: true } });
+    if (!n) throw new AppError('Ghi chú không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+    return { noteId: n.id, subjectId: null };
+  }
+  await assertSubjectOwnership(userId, Number(p.subjectId));
+  return { noteId: null, subjectId: Number(p.subjectId) };
+}
+
+// ─── Subject detail (for the subject resources view) ─────────
+export async function getSubject(userId: number, id: number) {
+  assertId(id);
+  const subject = await prisma.noteSubject.findFirst({
+    where: { id, userId },
+    include: {
+      attachments: { orderBy: { sortOrder: 'asc' } },
+      links: { orderBy: { sortOrder: 'asc' } },
+    },
+  });
+  if (!subject) throw new AppError('Môn học không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+  return subject;
+}
+
+// ─── Attachments ─────────────────────────────────────────────
+export async function addAttachment(
+  userId: number,
+  data: { noteId?: number | null; subjectId?: number | null; fileName?: string; fileUrl?: string; fileType?: string | null; fileSizeBytes?: number | null },
+) {
+  const parent = await resolveParent(userId, data);
+  const fileName = cleanStr(data.fileName, 300, 'Tên tệp', { required: true })!;
+  const fileUrl = cleanStr(data.fileUrl, 2000, 'Đường dẫn tệp', { required: true })!;
+  // Next sortOrder within the parent.
+  const last = await prisma.noteAttachment.findFirst({
+    where: { userId, noteId: parent.noteId, subjectId: parent.subjectId },
+    orderBy: { sortOrder: 'desc' }, select: { sortOrder: true },
+  });
+  return prisma.noteAttachment.create({
+    data: {
+      userId, noteId: parent.noteId, subjectId: parent.subjectId,
+      fileName, fileUrl,
+      fileType: cleanStr(data.fileType ?? undefined, 150, 'Loại tệp') ?? null,
+      fileSizeBytes: typeof data.fileSizeBytes === 'number' ? Math.max(0, Math.floor(data.fileSizeBytes)) : null,
+      sortOrder: (last?.sortOrder ?? -1) + 1,
+    },
+  });
+}
+
+export async function deleteAttachment(userId: number, id: number) {
+  assertId(id);
+  const res = await prisma.noteAttachment.deleteMany({ where: { id, userId } });
+  if (res.count === 0) throw new AppError('Tệp đính kèm không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+  return { id, deleted: true };
+}
+
+// ─── Links ───────────────────────────────────────────────────
+
+const YT_RE = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/i;
+
+/** Classify a URL and (for YouTube) keep the canonical type. */
+export function detectLinkType(url: string): 'WEB' | 'YOUTUBE' | 'OTHER' {
+  if (YT_RE.test(url)) return 'YOUTUBE';
+  if (/^https?:\/\//i.test(url)) return 'WEB';
+  return 'OTHER';
+}
+
+export async function addLink(
+  userId: number,
+  data: { noteId?: number | null; subjectId?: number | null; label?: string; url?: string; type?: string | null; thumbnailUrl?: string | null },
+) {
+  const parent = await resolveParent(userId, data);
+  const url = cleanStr(data.url, 2000, 'URL', { required: true })!;
+  const label = cleanStr(data.label, 500, 'Nhãn') || url;
+  const type = (data.type && ['WEB', 'YOUTUBE', 'OTHER'].includes(String(data.type))) ? String(data.type) : detectLinkType(url);
+  const last = await prisma.noteLink.findFirst({
+    where: { userId, noteId: parent.noteId, subjectId: parent.subjectId },
+    orderBy: { sortOrder: 'desc' }, select: { sortOrder: true },
+  });
+  return prisma.noteLink.create({
+    data: {
+      userId, noteId: parent.noteId, subjectId: parent.subjectId,
+      label, url, type,
+      thumbnailUrl: cleanStr(data.thumbnailUrl ?? undefined, 2000, 'Thumbnail') ?? null,
+      sortOrder: (last?.sortOrder ?? -1) + 1,
+    },
+  });
+}
+
+export async function updateLink(userId: number, id: number, data: { label?: string; url?: string; type?: string }) {
+  assertId(id);
+  const d: Prisma.NoteLinkUpdateManyMutationInput = {};
+  if (data.label !== undefined) d.label = cleanStr(data.label, 500, 'Nhãn', { required: true })!;
+  if (data.url !== undefined) { d.url = cleanStr(data.url, 2000, 'URL', { required: true })!; d.type = detectLinkType(d.url as string); }
+  if (data.type !== undefined && ['WEB', 'YOUTUBE', 'OTHER'].includes(String(data.type))) d.type = String(data.type);
+  if (Object.keys(d).length === 0) throw new AppError('Không có trường hợp lệ để cập nhật', 400, 'EMPTY_UPDATE');
+  const res = await prisma.noteLink.updateMany({ where: { id, userId }, data: d });
+  if (res.count === 0) throw new AppError('Liên kết không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+  return prisma.noteLink.findUnique({ where: { id } });
+}
+
+export async function deleteLink(userId: number, id: number) {
+  assertId(id);
+  const res = await prisma.noteLink.deleteMany({ where: { id, userId } });
+  if (res.count === 0) throw new AppError('Liên kết không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+  return { id, deleted: true };
+}
+
+// ─── Global search ───────────────────────────────────────────
+// Case-insensitive match across title + cached contentHtml, with
+// optional subject + tag filters. Personal note volumes are small,
+// so ILIKE is plenty fast; we return a short text snippet around
+// the match for context. Archived notes are excluded by default.
+
+function htmlToText(html: string | null): string {
+  if (!html) return '';
+  return html.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+}
+
+function snippet(text: string, q: string, radius = 60): string {
+  if (!text) return '';
+  const i = text.toLowerCase().indexOf(q.toLowerCase());
+  if (i < 0) return text.slice(0, radius * 2);
+  const start = Math.max(0, i - radius);
+  return (start > 0 ? '…' : '') + text.slice(start, i + q.length + radius) + (i + q.length + radius < text.length ? '…' : '');
+}
+
+export async function searchNotes(
+  userId: number,
+  opts: { q?: string; subjectId?: number; tag?: string; includeArchived?: boolean },
+) {
+  const q = (opts.q ?? '').trim();
+  const and: Prisma.NoteWhereInput[] = [{ userId }];
+  if (!opts.includeArchived) and.push({ isArchived: false });
+  if (opts.subjectId) and.push({ subjectId: Number(opts.subjectId) });
+  if (opts.tag) and.push({ tags: { has: String(opts.tag).toLowerCase() } });
+  if (q) and.push({ OR: [{ title: { contains: q, mode: 'insensitive' } }, { contentHtml: { contains: q, mode: 'insensitive' } }] });
+
+  const notes = await prisma.note.findMany({
+    where: { AND: and },
+    orderBy: { updatedAt: 'desc' },
+    take: 50,
+    select: { id: true, title: true, subjectId: true, chapterId: true, tags: true, updatedAt: true, contentHtml: true },
+  });
+
+  return notes.map((n) => {
+    const text = htmlToText(n.contentHtml);
+    return {
+      id: n.id, title: n.title, subjectId: n.subjectId, chapterId: n.chapterId,
+      tags: n.tags, updatedAt: n.updatedAt,
+      snippet: q ? snippet(text, q) : text.slice(0, 120),
+    };
+  });
+}
+
+/** Distinct tags across the user's notes (for the search tag filter). */
+export async function listTags(userId: number): Promise<string[]> {
+  const rows = await prisma.note.findMany({ where: { userId }, select: { tags: true } });
+  const set = new Set<string>();
+  rows.forEach((r) => r.tags.forEach((t) => set.add(t)));
+  return Array.from(set).sort();
+}

@@ -26,6 +26,14 @@ import {
   updateNote,
   deleteNote,
   reorderNotes,
+  getSubject,
+  addAttachment,
+  deleteAttachment,
+  addLink,
+  updateLink,
+  deleteLink,
+  searchNotes,
+  listTags,
 } from '../services/notes.service.js';
 
 const router = Router();
@@ -57,6 +65,13 @@ router.patch('/subjects/reorder', async (req: Request, res: Response<ApiResponse
 router.patch('/subjects/:id', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const subject = await updateSubject(req.userId!, Number(req.params.id), req.body ?? {});
+    res.json({ success: true, data: subject });
+  } catch (err) { next(err); }
+});
+
+router.get('/subjects/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const subject = await getSubject(req.userId!, Number(req.params.id));
     res.json({ success: true, data: subject });
   } catch (err) { next(err); }
 });
@@ -130,6 +145,62 @@ router.delete('/notes/:id', async (req: Request, res: Response<ApiResponse>, nex
   try {
     const result = await deleteNote(req.userId!, Number(req.params.id));
     res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+// ─── Attachments (note OR subject level) ─────────────────────
+router.post('/attachments', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const att = await addAttachment(req.userId!, req.body ?? {});
+    res.status(201).json({ success: true, data: att });
+  } catch (err) { next(err); }
+});
+
+router.delete('/attachments/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await deleteAttachment(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+// ─── Links (note OR subject level) ───────────────────────────
+router.post('/links', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const link = await addLink(req.userId!, req.body ?? {});
+    res.status(201).json({ success: true, data: link });
+  } catch (err) { next(err); }
+});
+
+router.patch('/links/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const link = await updateLink(req.userId!, Number(req.params.id), req.body ?? {});
+    res.json({ success: true, data: link });
+  } catch (err) { next(err); }
+});
+
+router.delete('/links/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await deleteLink(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+// ─── Search + tags ───────────────────────────────────────────
+router.get('/search', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const results = await searchNotes(req.userId!, {
+      q: typeof req.query.q === 'string' ? req.query.q : undefined,
+      subjectId: req.query.subjectId ? Number(req.query.subjectId) : undefined,
+      tag: typeof req.query.tag === 'string' ? req.query.tag : undefined,
+    });
+    res.json({ success: true, data: results });
+  } catch (err) { next(err); }
+});
+
+router.get('/tags', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const tags = await listTags(req.userId!);
+    res.json({ success: true, data: tags });
   } catch (err) { next(err); }
 });
 

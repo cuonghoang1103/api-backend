@@ -1162,3 +1162,26 @@ export interface NoteFull {
   links: NoteLink[];
   vocabEntries: NoteVocabEntry[];
 }
+
+// Phase 2 — subject detail + search
+export interface NoteSubjectFull {
+  id: number;
+  name: string;
+  color: string | null;
+  emoji: string | null;
+  description: string | null;
+  sortOrder: number;
+  isPinned: boolean;
+  attachments: NoteAttachment[];
+  links: NoteLink[];
+}
+
+export interface NoteSearchResult {
+  id: number;
+  title: string;
+  subjectId: number;
+  chapterId: number | null;
+  tags: string[];
+  updatedAt: string;
+  snippet: string;
+}

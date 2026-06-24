@@ -270,6 +270,27 @@ export const notesApi = {
     api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/notes/${id}`),
   reorderNotes: (orderedIds: number[]) =>
     api.patch<{ data: { reordered: number } }>('/notes/notes/reorder', { orderedIds }),
+
+  // ── Phase 2: subject detail, attachments, links, search ──
+  getSubject: (id: number) =>
+    api.get<{ data: import('@/types').NoteSubjectFull }>(`/notes/subjects/${id}`),
+
+  addAttachment: (data: { noteId?: number | null; subjectId?: number | null; fileName: string; fileUrl: string; fileType?: string | null; fileSizeBytes?: number | null }) =>
+    api.post<{ data: import('@/types').NoteAttachment }>('/notes/attachments', data),
+  deleteAttachment: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/attachments/${id}`),
+
+  addLink: (data: { noteId?: number | null; subjectId?: number | null; label?: string; url: string; type?: string | null; thumbnailUrl?: string | null }) =>
+    api.post<{ data: import('@/types').NoteLink }>('/notes/links', data),
+  updateLink: (id: number, data: Partial<{ label: string; url: string; type: string }>) =>
+    api.patch<{ data: import('@/types').NoteLink }>(`/notes/links/${id}`, data),
+  deleteLink: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/links/${id}`),
+
+  search: (params: { q?: string; subjectId?: number; tag?: string }) =>
+    api.get<{ data: import('@/types').NoteSearchResult[] }>('/notes/search', { params }),
+  getTags: () =>
+    api.get<{ data: string[] }>('/notes/tags'),
 };
 
 // Music API

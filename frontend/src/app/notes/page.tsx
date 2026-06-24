@@ -254,9 +254,17 @@ export default function NotesPage() {
             {selected && (
               <button onClick={() => setResourceOpen(true)} title="Tệp & liên kết" className="relative flex h-10 w-10 items-center justify-center rounded-lg text-slate-300 hover:bg-white/[0.05]" aria-label="Tệp & liên kết">
                 <Paperclip className="h-[18px] w-[18px]" />
-                {(selected.attachments.length + selected.links.length) > 0 && (
-                  <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-teal-500 px-1 text-[9px] font-bold text-white">{selected.attachments.length + selected.links.length}</span>
-                )}
+                {(() => {
+                  // Defence-in-depth: child collections should always be
+                  // arrays on the server, but a future code path that
+                  // forgets to include them would crash the whole page
+                  // here. Treat missing as empty instead.
+                  const att = selected.attachments?.length ?? 0;
+                  const lnk = selected.links?.length ?? 0;
+                  return att + lnk > 0 ? (
+                    <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-teal-500 px-1 text-[9px] font-bold text-white">{att + lnk}</span>
+                  ) : null;
+                })()}
               </button>
             )}
           </div>

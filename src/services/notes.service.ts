@@ -186,8 +186,18 @@ export async function createNote(userId: number, data: { subjectId?: number; cha
     await assertChapterOwnership(userId, chapterId, subjectId);
   }
   const title = cleanStr(data.title, 300, 'Tiêu đề') ?? 'Ghi chú mới';
+  // Match `getNote`'s shape so the frontend can set `selected` directly
+  // from a create response without a second round-trip. Without these
+  // includes, child collections are undefined and the UI crashes the
+  // first time the user opens the resource drawer on a freshly created
+  // note (Phase 3a regression — attachments/length access blows up).
   return prisma.note.create({
     data: { userId, subjectId, chapterId, title: title.length ? title : 'Ghi chú mới' },
+    include: {
+      attachments: { orderBy: { sortOrder: 'asc' } },
+      links: { orderBy: { sortOrder: 'asc' } },
+      vocabEntries: { orderBy: { sortOrder: 'asc' } },
+    },
   });
 }
 

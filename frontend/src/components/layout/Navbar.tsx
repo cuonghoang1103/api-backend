@@ -194,8 +194,13 @@ export default function Navbar() {
     window.location.href = '/login';
   };
 
-  const isAuthPage = pathname === '/login' || pathname === '/register';
-  if (isAuthPage) return null;
+ const isAuthPage = pathname === '/login' || pathname === '/register';
+ // /creator (Content Studio) is a full-screen workspace with
+ // its own amber-accent topbar. Hide the site-wide Navbar
+ // there so it doesn't sit on top of the studio topbar
+ // (z-40 > z-20) and clip the first row of editor controls.
+ const isStudioPage = pathname?.startsWith('/creator') ?? false;
+ if (isAuthPage || isStudioPage) return null;
 
   const contactItems = [
     { href: 'tel:+84399360938', icon: 'phone' },

@@ -21,17 +21,21 @@ import StudioTopbar from './StudioTopbar';
 
 export default function StudioShell({ children }: { children: ReactNode }) {
  return (
- <div className="relative min-h-[calc(100dvh-4rem)] text-text-primary">
+ <div className="relative min-h-[100dvh] text-text-primary">
  {/* z=0 — background grid + amber key light + vignette */}
  <StudioBackground />
  {/* z=1 — film grain + drifting practical-light bokeh */}
  <StudioAmbient />
- {/* z=20 — sticky amber topbar (sits above the global navbar
- pt-16 already accounted for by min-h calc) */}
+ {/* z=30 — sticky amber topbar. The site-wide Navbar +
+ NavigationDock + FloatingAIAssistant are all hidden on
+ /creator (see app/creator/layout.tsx and the path-aware
+ returns in those components), so z=30 only has to beat
+ the studio's own z=10 content — but we keep it above
+ the studio's bg/ambient layers (z=0/1) for clarity. */}
  <StudioTopbar />
- {/* z=10 — main content. Negative top pulls content up
- under the topbar so the page can scroll under it. */}
- <main className="relative" style={{ zIndex: 10 }}>
+ {/* z=10 — main content. Sits below the topbar so the
+ topbar can stick on top while the page scrolls under it. */}
+ <main className="relative pt-14" style={{ zIndex: 10 }}>
  {children}
  </main>
  </div>

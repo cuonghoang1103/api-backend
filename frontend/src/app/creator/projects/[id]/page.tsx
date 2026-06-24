@@ -4,16 +4,20 @@
 // id to the editor shell. Kept separate so we can later
 // add page-level concerns (analytics, breadcrumb schema)
 // without bloating the shell.
+//
+// Note: in Next.js 14, `params` is a plain object in client
+// components (NOT a Promise). In Next.js 15+ it becomes a
+// Promise that you unwrap with React.use(). We target
+// Next 14, so we destructure directly.
 
-import { use } from 'react';
 import ProjectEditorShell from '@/components/studio/editor/ProjectEditorShell';
 
 interface PageProps {
- params: Promise<{ id: string }>;
+ params: { id: string };
 }
 
 export default function CreatorProjectEditorPage({ params }: PageProps) {
- const { id } = use(params);
+ const { id } = params;
  const projectId = parseInt(id, 10);
  if (!Number.isFinite(projectId) || projectId <= 0) {
  return (

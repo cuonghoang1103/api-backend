@@ -79,7 +79,7 @@ export default function StudioTopbar() {
  initial={{ y: -10, opacity: 0 }}
  animate={{ y: 0, opacity: 1 }}
  transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
- className="sticky top-0 z-20 border-b border-studio-500/20 bg-darkcard/70 backdrop-blur-xl"
+ className="sticky top-0 z-30 border-b border-studio-500/20 bg-darkcard/70 backdrop-blur-xl"
  >
  <div className="flex items-center gap-4 px-4 sm:px-6 h-14">
  {/* Brand — amber gradient chip + name. */}

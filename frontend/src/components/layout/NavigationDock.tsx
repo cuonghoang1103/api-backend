@@ -114,8 +114,12 @@ const rowVariants: Variants = {
 };
 
 export default function NavigationDock() {
-  const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+ const pathname = usePathname();
+ // /creator has its own studio topbar; the dock's floating
+ // button would compete with it for the top-left slot.
+ if (pathname?.startsWith('/creator')) return null;
+
+ const [isOpen, setIsOpen] = useState(false);
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

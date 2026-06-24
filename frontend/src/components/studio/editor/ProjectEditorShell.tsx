@@ -71,11 +71,11 @@ const TABS: TabDef[] = [
  { id: 'overview', label: 'Overview', icon: LayoutDashboard },
  { id: 'storyboard', label: 'Storyboard', icon: Film },
  { id: 'teleprompter', label: 'Teleprompter', icon: Mic },
- { id: 'script', label: 'Script', icon: Pencil, phase: 7 },
- { id: 'shotlist', label: 'Shot list', icon: ImageIcon, phase: 7 },
- { id: 'platforms', label: 'Platforms', icon: Megaphone, phase: 7 },
- { id: 'checklist', label: 'Checklist', icon: CheckSquare, phase: 7 },
- { id: 'performance', label: 'Performance', icon: Sparkles, phase: 7 },
+ { id: 'script', label: 'Script', icon: Pencil },
+ { id: 'shotlist', label: 'Shot list', icon: ImageIcon },
+ { id: 'platforms', label: 'Platforms', icon: Megaphone },
+ { id: 'checklist', label: 'Checklist', icon: CheckSquare },
+ { id: 'performance', label: 'Performance', icon: Sparkles },
 ];
 
 interface ProjectEditorShellProps {

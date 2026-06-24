@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import LottieClient from '@/components/ui/LottieClient';
 import type { LottieRefCurrentProps } from 'lottie-react';
@@ -17,8 +18,15 @@ const IDLE_MESSAGES = [
 ];
 
 export default function FloatingAIAssistant() {
-  const { isStreaming, robotEmotion } = useChatStore();
-  const lottieRef = useRef<LottieRefCurrentProps>(null);
+ // /creator is a full-screen workspace with its own topbar
+ // and editor chrome. The floating AI bubble would cover
+ // bottom-right of the editor's autosave indicator and
+ // the platform-post publish toggles, so hide it there.
+ const pathname = usePathname();
+ if (pathname?.startsWith('/creator')) return null;
+
+ const { isStreaming, robotEmotion } = useChatStore();
+ const lottieRef = useRef<LottieRefCurrentProps>(null);
 
   const [isOpen, setIsOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);

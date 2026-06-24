@@ -1,23 +1,45 @@
 'use client';
 
 // NoteEditor — Notion-like rich editor (TipTap) for a single note.
-// Phase 1 scope: StarterKit blocks (headings, lists, blockquote,
-// code, hr), placeholder, image paste + drag-drop upload, and a
-// debounced auto-save that persists BOTH contentJson and a cached
-// contentHtml. A "saved / saving" indicator reflects status.
+// Phase 1: StarterKit blocks (headings, lists, blockquote, code, hr),
+// placeholder, image paste + drag-drop upload, debounced auto-save.
 //
-// Calm-study design: comfortable reading width, generous line
-// height, one restrained teal accent. Heavy effects are avoided
-// on purpose (this is a daily-use tool, not a showcase).
+// Phase 3c additions (all lazy-loaded so they don't bloat the
+// initial bundle for users who never use them):
+// • NoteCodeBlock  — Shiki-powered code blocks (replaces StarterKit's
+//                    bundled lowlight). NodeView wraps the shared
+//                    <CodeBlock /> component.
+// • NoteCallout    — admonition blocks (tip / note / warning).
+// • NoteMath       — KaTeX inline + block math.
+// • TaskList       — checklist with nested items.
+// • SlashMenu      — type "/" at line start to insert any block.
+// • NoteTableOfContents — auto-built outline of h1/h2/h3.
+// • MarkdownInput  — StarterKit already turns "# ", "> ", "- " into
+//                    blocks; we keep that behaviour.
+//
+// All new deps are loaded either via dynamic import (CodeBlock) or
+// only when their node is actually rendered (katex). The base
+// `StarterKit` is still imported eagerly because every note uses it.
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useEditor, EditorContent, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Image from '@tiptap/extension-image';
+import TaskList from '@tiptap/extension-task-list';
+import TaskItem from '@tiptap/extension-task-item';
+import Table from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
 import { fileApi } from '@/lib/api';
 import type { NoteFull } from '@/types';
 import { Check, Loader2, CloudOff } from 'lucide-react';
+import NoteCodeBlock from '@/components/notes/extensions/NoteCodeBlock';
+import NoteCallout from '@/components/notes/extensions/NoteCallout';
+import NoteMath from '@/components/notes/extensions/NoteMath';
+import SlashMenu, { type SlashMenuRef } from '@/components/notes/SlashMenu';
+import NoteTableOfContents from '@/components/notes/NoteTableOfContents';
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'error';
 
@@ -34,6 +56,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
   const [saveState, setSaveState] = useState<SaveState>('idle');
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const titleRef = useRef<HTMLInputElement>(null);
+  const slashRef = useRef<SlashMenuRef>(null);
   // Track the note id so switching notes resets local state instead
   // of bleeding one note's title/content into another.
   const noteIdRef = useRef(note.id);
@@ -81,12 +104,57 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
     }
   }, []);
 
+  // ─── Slash menu (open on "/" at the start of a line) ────────
+  // We listen on every transaction: if the new doc starts the just-
+  // typed character with "/" at the head of an empty paragraph,
+  // position the menu under the caret.
+  const handleSlashTrigger = useCallback((editorInstance: Editor) => {
+    const { selection, doc } = editorInstance.state;
+    const { $from } = selection;
+    // Only trigger when the caret is at the end of an empty paragraph
+    // that just received "/" as its first character.
+    if ($from.parent.type.name !== 'paragraph') return;
+    if ($from.parent.textContent !== '/') return;
+    if (doc.textBetween($from.before() + 1, $from.pos, '\n', '\n') !== '/') return;
+    // Get the caret rect for positioning. coordsAtPos gives us the
+    // line bounds (top/bottom are the line edges); width is implied
+    // by left/right.
+    const coords = editorInstance.view.coordsAtPos($from.pos);
+    const h = Math.max(20, coords.bottom - coords.top);
+    const fakeRect: DOMRect = {
+      top: coords.top,
+      bottom: coords.bottom,
+      left: coords.left,
+      right: coords.right,
+      width: coords.right - coords.left,
+      height: h,
+      x: coords.left,
+      y: coords.top,
+      toJSON: () => ({}),
+    } as DOMRect;
+    slashRef.current?.open(fakeRect);
+  }, []);
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
-      Placeholder.configure({ placeholder: 'Bắt đầu viết… (dán ảnh trực tiếp như Notion)' }),
+      // Override StarterKit's bundled CodeBlock with our Shiki-backed
+      // version. We disable it explicitly so we don't register twice.
+      StarterKit.configure({
+        heading: { levels: [1, 2, 3] },
+        codeBlock: false,
+      }),
+      Placeholder.configure({ placeholder: 'Bắt đầu viết… (dán ảnh trực tiếp như Notion, hoặc gõ "/" để chèn khối)' }),
       Image.configure({ inline: false, allowBase64: false, HTMLAttributes: { class: 'note-img', loading: 'lazy' } }),
+      NoteCodeBlock,
+      NoteCallout,
+      NoteMath,
+      TaskList.configure({ HTMLAttributes: { class: 'note-task-list' } }),
+      TaskItem.configure({ nested: true, HTMLAttributes: { class: 'note-task-item' } }),
+      Table.configure({ resizable: false, HTMLAttributes: { class: 'note-table' } }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: note.contentJson ?? '',
     editorProps: {
@@ -115,7 +183,12 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
     },
     onUpdate({ editor }) {
       queueSave({ contentJson: editor.getJSON() as Record<string, unknown>, contentHtml: editor.getHTML() });
+      // Slash menu trigger lives on every keystroke; the helper
+      // checks both the trigger and whether the menu is already open.
+      handleSlashTrigger(editor);
     },
+    // Close slash menu when the user clicks outside the editor.
+    onBlur() { slashRef.current?.close(); },
   });
 
   // When the selected note changes, reset title + editor content.
@@ -162,8 +235,15 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
 
       <div className="my-4 h-px w-full bg-white/[0.06]" />
 
+      {/* Auto-generated table of contents (only renders when headings exist). */}
+      <NoteTableOfContents editor={editor} />
+
       {/* Body */}
       <EditorContent editor={editor} />
+
+      {/* Slash menu — positioned absolutely; ref-driven so we don't
+          re-render on every keystroke. */}
+      <SlashMenu ref={slashRef} editor={editor} />
     </div>
   );
 }

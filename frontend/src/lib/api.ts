@@ -291,6 +291,18 @@ export const notesApi = {
     api.get<{ data: import('@/types').NoteSearchResult[] }>('/notes/search', { params }),
   getTags: () =>
     api.get<{ data: string[] }>('/notes/tags'),
+
+  // ── Phase 3a: vocabulary (per note) ──
+  listVocab: (noteId: number) =>
+    api.get<{ data: import('@/types').NoteVocabEntry[] }>('/notes/vocab', { params: { noteId } }),
+  addVocab: (data: { noteId: number; term: string; reading?: string | null; meaning?: string | null; example?: string | null }) =>
+    api.post<{ data: import('@/types').NoteVocabEntry }>('/notes/vocab', data),
+  updateVocab: (id: number, data: Partial<{ term: string; reading: string | null; meaning: string | null; example: string | null }>) =>
+    api.patch<{ data: import('@/types').NoteVocabEntry }>(`/notes/vocab/${id}`, data),
+  deleteVocab: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/vocab/${id}`),
+  reorderVocab: (noteId: number, orderedIds: number[]) =>
+    api.patch<{ data: { reordered: number } }>('/notes/vocab/reorder', { noteId, orderedIds }),
 };
 
 // Music API

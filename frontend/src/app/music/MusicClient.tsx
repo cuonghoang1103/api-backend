@@ -156,7 +156,7 @@ export default function CyberMusicPage() {
       </ClientOnly>
 
       {/* Main content — padded to clear Navbar + sticky header */}
-      <div className="relative z-10 flex flex-col min-h-screen pt-[8rem]">
+      <div className="relative z-10 flex flex-col min-h-screen pt-[8rem] pb-28 sm:pb-0">
       {/* iOS Cyber Dock — sticky glass header BELOW Navbar */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}

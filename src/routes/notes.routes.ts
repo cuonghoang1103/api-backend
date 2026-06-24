@@ -34,6 +34,11 @@ import {
   deleteLink,
   searchNotes,
   listTags,
+  listVocab,
+  addVocab,
+  updateVocab,
+  deleteVocab,
+  reorderVocab,
 } from '../services/notes.service.js';
 
 const router = Router();
@@ -201,6 +206,42 @@ router.get('/tags', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const tags = await listTags(req.userId!);
     res.json({ success: true, data: tags });
+  } catch (err) { next(err); }
+});
+
+// ─── Vocabulary (per note) ───────────────────────────────────
+router.get('/vocab', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const items = await listVocab(req.userId!, Number(req.query.noteId));
+    res.json({ success: true, data: items });
+  } catch (err) { next(err); }
+});
+
+router.post('/vocab', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const entry = await addVocab(req.userId!, req.body ?? {});
+    res.status(201).json({ success: true, data: entry });
+  } catch (err) { next(err); }
+});
+
+router.patch('/vocab/reorder', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await reorderVocab(req.userId!, Number(req.body?.noteId), req.body?.orderedIds);
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+router.patch('/vocab/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const entry = await updateVocab(req.userId!, Number(req.params.id), req.body ?? {});
+    res.json({ success: true, data: entry });
+  } catch (err) { next(err); }
+});
+
+router.delete('/vocab/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await deleteVocab(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: result });
   } catch (err) { next(err); }
 });
 

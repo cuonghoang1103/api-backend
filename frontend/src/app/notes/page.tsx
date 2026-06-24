@@ -8,13 +8,14 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, NotebookPen, Loader2, Search, Paperclip, X } from 'lucide-react';
+import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap } from 'lucide-react';
 import { notesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import type { NoteSubjectTree, NoteRecent, NoteFull, NoteSubjectFull } from '@/types';
 import NotesSidebar from '@/components/notes/NotesSidebar';
 import NoteEditor from '@/components/notes/NoteEditor';
 import NoteResourcePanel from '@/components/notes/NoteResourcePanel';
+import VocabTable from '@/components/notes/VocabTable';
 import SubjectView from '@/components/notes/SubjectView';
 import NotesSearch from '@/components/notes/NotesSearch';
 
@@ -284,11 +285,17 @@ export default function NotesPage() {
               className="fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm overflow-y-auto border-l border-white/[0.06] bg-[#0e1218] pt-16"
             >
               <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3">
-                <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Tệp & liên kết</h2>
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Tài nguyên</h2>
                 <button onClick={() => setResourceOpen(false)} className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05]" aria-label="Đóng"><X className="h-4 w-4" /></button>
               </div>
-              <div className="p-4">
+              <div className="space-y-6 p-4">
                 <NoteResourcePanel parent={{ noteId: selected.id }} attachments={selected.attachments} links={selected.links} onChanged={refreshSelected} />
+                <section>
+                  <h3 className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                    <GraduationCap className="h-3.5 w-3.5" /> Từ vựng
+                  </h3>
+                  <VocabTable noteId={selected.id} />
+                </section>
               </div>
             </motion.aside>
           </>

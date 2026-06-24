@@ -124,7 +124,19 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  onSaved: (saved) => {
  // Sync the local form to the server's response so
  // we pick up the assigned ids / normalised fields.
- setForm((prev) => (prev ? { ...prev, ...saved } : saved));
+ // CRITICAL: only setForm if the new data actually
+ // differs from what we already have — otherwise the
+ // useEffect on `[form]` below re-fires and re-arms
+ // the debounce, causing an infinite PUT loop every
+ // 1.2s. Comparing the JSON is cheap (the form is
+ // only ~30 fields) and bullet-proof.
+ setForm((prev) => {
+ if (!prev) return saved;
+ if (JSON.stringify(prev) === JSON.stringify({ ...prev, ...saved })) {
+ return prev; // no change — bail out
+ }
+ return { ...prev, ...saved };
+ });
  lastSavedRef.current = saved;
  },
  });

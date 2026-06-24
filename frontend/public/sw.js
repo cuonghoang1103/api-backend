@@ -6,12 +6,12 @@
 // even on flaky mobile networks. Network-first for HTML
 // (always fresh) and cache-first for static assets.
 
-const CACHE_NAME = 'cuongthai-v1';
+const CACHE_NAME = 'cuongthai-v2';
 const PRECACHE = [
-  '/',
-  '/manifest.json',
-  '/favicon.png',
-  '/offline',
+ '/',
+ '/manifest.json',
+ '/favicon.png',
+ '/offline',
 ];
 
 self.addEventListener('install', (event) => {

@@ -53,9 +53,23 @@ export function useProjectAutosave({
  const isFirstRender = useRef(true);
  const inFlight = useRef<AbortController | null>(null);
  const latestPayload = useRef<(() => ContentProjectUpdate) | null>(null);
+ // Track the last payload we actually sent over the wire
+ // so we can short-circuit the next debounced fire if the
+ // caller re-arms with the exact same payload (a common
+ // pattern when an `onSaved` callback re-renders the form
+ // and triggers the scheduleSave useEffect again).
+ const lastSentRef = useRef<string>('');
 
  const performSave = useCallback(
  async (payload: ContentProjectUpdate) => {
+ // De-dupe: if the payload is byte-identical to the
+ // last one we sent, do nothing. This kills the
+ // "onSaved re-fires scheduleSave" loop that would
+ // otherwise PUT every 1.2s indefinitely.
+ const sig = JSON.stringify(payload);
+ if (sig === lastSentRef.current) return;
+ lastSentRef.current = sig;
+
  // Cancel any in-flight save so we don't race two PUTs.
  if (inFlight.current) inFlight.current.abort();
  const ctrl = new AbortController();

@@ -284,7 +284,7 @@ function SocialRightWidgetInner() {
                     onClick={() => handleMessage(u.id)}
                     disabled={isStarting}
                     aria-label={`Nhắn tin với ${u.displayName || u.fullName || u.username}`}
-                    className="rounded-lg px-2.5 py-1 text-[10px] font-medium text-white transition-all hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 flex items-center gap-1"
+                    className="rounded-lg px-3 py-2.5 sm:px-2.5 sm:py-1 min-h-[44px] sm:min-h-0 text-[10px] font-medium text-white transition-all hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-1 shrink-0"
                     style={{ background: 'linear-gradient(90deg, #06B6D4, #6366F1)' }}
                   >
                     <MessageSquare className="h-2.5 w-2.5" />
@@ -293,7 +293,7 @@ function SocialRightWidgetInner() {
                   <Link
                     href={`/profile/${u.id}`}
                     aria-label={`Xem hồ sơ của ${u.displayName || u.fullName || u.username}`}
-                    className="rounded-lg px-2.5 py-1 text-[10px] font-medium text-text-secondary hover:text-text-primary border border-white/[0.08] hover:border-white/[0.2] transition-colors flex items-center gap-1"
+                    className="rounded-lg px-3 py-2.5 sm:px-2.5 sm:py-1 min-h-[44px] sm:min-h-0 text-[10px] font-medium text-text-secondary hover:text-text-primary border border-white/[0.08] hover:border-white/[0.2] transition-colors flex items-center justify-center gap-1 shrink-0"
                   >
                     Xem
                     <ExternalLink className="h-2.5 w-2.5" />

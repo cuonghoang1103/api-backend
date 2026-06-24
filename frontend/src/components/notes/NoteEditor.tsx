@@ -22,7 +22,7 @@
 // `StarterKit` is still imported eagerly because every note uses it.
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { useEditor, EditorContent, type Editor } from '@tiptap/react';
+import { useEditor, EditorContent, BubbleMenu, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Image from '@tiptap/extension-image';
@@ -34,7 +34,7 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import { fileApi } from '@/lib/api';
 import type { NoteFull } from '@/types';
-import { Check, Loader2, CloudOff } from 'lucide-react';
+import { Check, Loader2, CloudOff, Trash2, Plus, Minus } from 'lucide-react';
 import NoteCodeBlock from '@/components/notes/extensions/NoteCodeBlock';
 import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
@@ -240,6 +240,67 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
 
       {/* Body */}
       <EditorContent editor={editor} />
+
+      {/* Table floating toolbar — shows when caret is inside a table,
+          giving the user an obvious way to add/remove rows & columns
+          or delete the entire table. Tiptap's table extension
+          provides the commands but no UI for them. */}
+      {editor && (
+        <BubbleMenu
+          editor={editor}
+          tippyOptions={{ placement: 'top', duration: 120 }}
+          shouldShow={({ editor: ed }) => ed.isActive('table')}
+          className="flex items-center gap-1 rounded-lg border border-white/10 bg-slate-900/95 p-1 shadow-2xl backdrop-blur"
+        >
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().addRowAfter().run()}
+            aria-label="Thêm hàng"
+            title="Thêm hàng"
+            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10"
+          >
+            <Plus className="h-3 w-3" /> Hàng
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().addColumnAfter().run()}
+            aria-label="Thêm cột"
+            title="Thêm cột"
+            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10"
+          >
+            <Plus className="h-3 w-3" /> Cột
+          </button>
+          <span className="mx-1 h-4 w-px bg-white/10" />
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().deleteRow().run()}
+            aria-label="Xóa hàng"
+            title="Xóa hàng"
+            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10"
+          >
+            <Minus className="h-3 w-3" /> Hàng
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().deleteColumn().run()}
+            aria-label="Xóa cột"
+            title="Xóa cột"
+            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10"
+          >
+            <Minus className="h-3 w-3" /> Cột
+          </button>
+          <span className="mx-1 h-4 w-px bg-white/10" />
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().deleteTable().run()}
+            aria-label="Xóa bảng"
+            title="Xóa bảng"
+            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-red-300 hover:bg-red-500/20"
+          >
+            <Trash2 className="h-3 w-3" /> Xóa bảng
+          </button>
+        </BubbleMenu>
+      )}
 
       {/* Slash menu — positioned absolutely; ref-driven so we don't
           re-render on every keystroke. */}

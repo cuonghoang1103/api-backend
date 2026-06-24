@@ -80,17 +80,17 @@ function buildItems(editor: Editor): Item[] {
     {
       label: 'Callout — Mẹo', hint: 'Mẹo hữu ích',
       keywords: ['callout', 'tip', 'meo'],
-      run: (ed) => e.chain().focus().setCallout({ kind: 'tip' }).run(),
+      run: (ed) => e.chain().focus().toggleCallout({ kind: 'tip' }).run(),
     },
     {
       label: 'Callout — Ghi chú', hint: 'Ghi chú phụ',
       keywords: ['callout', 'note', 'ghichu'],
-      run: (ed) => e.chain().focus().setCallout({ kind: 'note' }).run(),
+      run: (ed) => e.chain().focus().toggleCallout({ kind: 'note' }).run(),
     },
     {
       label: 'Callout — Cảnh báo', hint: 'Cảnh báo / chú ý',
       keywords: ['callout', 'warning', 'canh bao'],
-      run: (ed) => e.chain().focus().setCallout({ kind: 'warning' }).run(),
+      run: (ed) => e.chain().focus().toggleCallout({ kind: 'warning' }).run(),
     },
     {
       label: 'Math (inline)', hint: '$E = mc^2$',

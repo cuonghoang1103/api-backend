@@ -9,7 +9,7 @@
 
 import { Node, mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer, NodeViewWrapper, NodeViewContent, type NodeViewProps } from '@tiptap/react';
-import { Lightbulb, Info, AlertTriangle } from 'lucide-react';
+import { Lightbulb, Info, AlertTriangle, Trash2 } from 'lucide-react';
 
 export type CalloutKind = 'tip' | 'note' | 'warning';
 
@@ -52,11 +52,25 @@ export const NoteCallout = Node.create({
       setCallout:
         (attrs?: { kind?: CalloutKind }) =>
         ({ commands }: { commands: any }) =>
-          commands.setNode(this.name, attrs),
+          commands.wrapIn(this.name, attrs),
       toggleCallout:
         (attrs?: { kind?: CalloutKind }) =>
+        ({ chain, state }: { chain: any; state: any }) => {
+          // toggleWrap(typeOrName, attrs?) only takes 2 args — it can't
+          // fall back to a paragraph on the second click. Implement the
+          // toggle by hand: if we're already inside a callout of the
+          // requested kind, lift it; otherwise wrap with the new kind.
+          const { $from } = state.selection;
+          const inCallout = $from.node(-1)?.type?.name === 'callout';
+          if (inCallout) {
+            return chain().focus().lift(this.name).run();
+          }
+          return chain().focus().wrapIn(this.name, attrs ?? {}).run();
+        },
+      deleteCallout:
+        () =>
         ({ commands }: { commands: any }) =>
-          commands.toggleNode(this.name, 'paragraph', attrs),
+          commands.deleteNode(this.name),
     } as Partial<Record<string, (...args: any[]) => any>>;
   },
 });
@@ -76,7 +90,7 @@ function CalloutView({ node, updateAttributes, editor }: NodeViewProps) {
         <meta.Icon className="h-4 w-4" />
       </div>
       <div className="min-w-0 flex-1">
-        <div className={`mb-1 text-[11px] font-semibold uppercase tracking-wider ${meta.text}`}>
+        <div className={`mb-1 flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider ${meta.text}`}>
           {isEditable ? (
             <select
               value={kind}
@@ -92,6 +106,18 @@ function CalloutView({ node, updateAttributes, editor }: NodeViewProps) {
             </select>
           ) : (
             meta.label
+          )}
+          {isEditable && (
+            <button
+              type="button"
+              onClick={() => editor.chain().focus().deleteNode('callout').run()}
+              aria-label="Xóa callout"
+              title="Xóa callout"
+              className="ml-auto flex items-center gap-1 rounded px-1.5 py-0.5 text-current opacity-60 hover:bg-red-500/20 hover:text-red-200 hover:opacity-100"
+            >
+              <Trash2 className="h-3 w-3" />
+              <span>Xóa</span>
+            </button>
           )}
         </div>
         <NodeViewContent className="note-prose-callout" />

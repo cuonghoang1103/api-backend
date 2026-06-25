@@ -22,11 +22,15 @@ import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { useMusicStore } from '@/store/musicStore';
 import { useListenTogetherStore } from '@/store/listenTogetherStore';
+import { useNowListeningStore } from '@/store/nowListeningStore';
 import {
   listenControl,
   onListenState,
   onListenMembers,
   onListenClosed,
+  emitNowPlaying,
+  requestNowPlaying,
+  onNowPlaying,
   type ListenState,
   type ListenTrackMeta,
 } from '@/lib/socket';
@@ -144,6 +148,41 @@ export default function ListenTogetherSync() {
       clearInterval(hb);
     };
   }, [roomId, isHost]);
+
+  // ── Now-listening presence: broadcast my current track + receive others' ──
+  useEffect(() => {
+    const setEntry = useNowListeningStore.getState().set;
+    const hydrate = useNowListeningStore.getState().hydrate;
+
+    // Receive others' now-listening updates.
+    const offNow = onNowPlaying((p) => {
+      setEntry(p.userId, p.track ? { username: p.username, title: p.track.title, artist: p.track.artist } : null);
+    });
+    // Hydrate the current snapshot once (best-effort).
+    requestNowPlaying()
+      .then((res) => res?.ok && hydrate(res.items ?? []))
+      .catch(() => {});
+
+    // Broadcast my own now-listening on track / play-pause change.
+    let lastKey = '';
+    const broadcast = () => {
+      const s = useMusicStore.getState();
+      const playing = s.isPlaying && !!s.currentTrack;
+      const key = playing ? `${s.currentTrack!.id}` : 'none';
+      if (key === lastKey) return;
+      lastKey = key;
+      emitNowPlaying(playing ? currentMeta() : null);
+    };
+    broadcast();
+    const unsub = useMusicStore.subscribe(broadcast);
+
+    return () => {
+      offNow();
+      unsub();
+      // Clear my presence when this bridge unmounts.
+      emitNowPlaying(null);
+    };
+  }, []);
 
   return null;
 }

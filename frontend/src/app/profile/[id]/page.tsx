@@ -27,7 +27,9 @@ import {
   WifiOff,
   Image,
   Loader2,
+  Headphones,
 } from 'lucide-react';
+import { useNowListeningStore } from '@/store/nowListeningStore';
 import { api, socialUserApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useQueryClient } from '@tanstack/react-query';
@@ -199,6 +201,8 @@ function ProfileCard({
   );
   const isAdmin = normalizedRoles.includes('ADMIN');
   const isAuthenticated = typeof window !== 'undefined';
+  // Phase 3: live "now listening" badge, fed by socket presence.
+  const nowListening = useNowListeningStore((s) => s.byUser[profile.id] ?? null);
 
   return (
     <motion.div
@@ -272,6 +276,15 @@ function ProfileCard({
             <p className="text-sm" style={{ color: '#94a3b8' }}>
               @{profile.username}
             </p>
+            {nowListening && (
+              <p className="mt-1 flex items-center gap-1.5 text-xs font-mono" style={{ color: '#06b6d4' }}>
+                <Headphones className="w-3.5 h-3.5" />
+                <span className="truncate">
+                  Đang nghe: <span className="text-text-primary">{nowListening.title}</span>
+                  {nowListening.artist ? ` — ${nowListening.artist}` : ''}
+                </span>
+              </p>
+            )}
             {/* Follower / Following stats */}
             <div className="mt-2 flex items-center gap-4">
               <Link

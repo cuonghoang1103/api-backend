@@ -27,10 +27,14 @@ function assert(cond: boolean, msg: string): void {
 interface Emitted { room: string; event: string; payload: any }
 
 function makeIO(emitted: Emitted[]) {
+  const sockets = new Map<string, any>();
   return {
+    sockets: { sockets },
     to: (room: string) => ({
       emit: (event: string, payload: any) => emitted.push({ room, event, payload }),
     }),
+    _register: (s: any) => sockets.set(s.id, s),
+    _unregister: (s: any) => sockets.delete(s.id),
   } as any;
 }
 
@@ -39,25 +43,30 @@ function makeClient(io: any, emitted: Emitted[], userId: number, username: strin
   const joined = new Set<string>();
   const socket = {
     id: `sock-${userId}-${Math.random().toString(36).slice(2)}`,
+    data: { user: { id: userId, username, roles: [] } },
     join: (r: string) => joined.add(r),
     leave: (r: string) => joined.delete(r),
     to: (room: string) => ({
       // socket.to(room).emit = broadcast to room excluding sender
       emit: (event: string, payload: any) => emitted.push({ room, event, payload }),
     }),
+    // socket.broadcast.emit = broadcast to everyone excluding sender
+    broadcast: { emit: (event: string, payload: any) => emitted.push({ room: '<broadcast>', event, payload }) },
     on: (ev: string, h: (...a: any[]) => void) => handlers.set(ev, h),
   } as any;
+  io._register(socket);
   registerListenTogether(io, socket, { id: userId, username, roles: [] });
   return {
     socket,
     joined,
     fire: (ev: string, payload?: any) =>
       new Promise<any>((resolve) => {
+        // Mirror real socket.io: a disconnecting socket is removed from
+        // io.sockets before its 'disconnect' handler runs.
+        if (ev === 'disconnect') io._unregister(socket);
         const h = handlers.get(ev);
         if (!h) return resolve(undefined);
-        // handlers take (payload, cb?) — pass a resolving cb
         h(payload, (res: any) => resolve(res));
-        // for handlers without a cb (leave/control/disconnect) resolve next tick
         setTimeout(() => resolve(undefined), 0);
       }),
   };
@@ -145,6 +154,30 @@ async function main(): Promise<void> {
   console.log('\n[8] Join missing room');
   const missing = await guest.fire('listen:join', { roomId: 'ZZZZZZ' });
   assert(missing?.ok === false && missing.error === 'not_found', 'join missing room → not_found');
+
+  // [9] NOW-LISTENING presence
+  console.log('\n[9] Now-listening presence');
+  const u1 = makeClient(io, emitted, 11, 'alice');
+  emitted.length = 0;
+  await u1.fire('nowplaying:set', { track: trackA });
+  const np = emitted.find((e) => e.event === 'nowplaying:update');
+  assert(!!np && np.payload.userId === 11 && np.payload.track?.id === '5', 'nowplaying:set broadcasts update with track');
+  const list1 = await u1.fire('nowplaying:list');
+  assert(list1?.ok === true && list1.items.some((i: any) => i.userId === 11), 'nowplaying:list includes the listener');
+
+  emitted.length = 0;
+  await u1.fire('nowplaying:set', { track: null });
+  const npClear = emitted.find((e) => e.event === 'nowplaying:update');
+  assert(!!npClear && npClear.payload.track === null, 'nowplaying:set(null) broadcasts cleared');
+  const list2 = await u1.fire('nowplaying:list');
+  assert(!list2.items.some((i: any) => i.userId === 11), 'cleared listener removed from list');
+
+  // disconnect clears presence (last socket)
+  await u1.fire('nowplaying:set', { track: trackB });
+  emitted.length = 0;
+  await u1.fire('disconnect');
+  const list3 = await guest.fire('nowplaying:list');
+  assert(!list3.items.some((i: any) => i.userId === 11), 'disconnect clears now-listening (last socket)');
 
   console.log('\n=== Result ===');
   if (failures === 0) {

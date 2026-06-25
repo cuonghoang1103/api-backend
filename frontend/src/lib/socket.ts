@@ -228,3 +228,21 @@ export function onListenClosed(cb: (p: { roomId: string }) => void): () => void 
   socket?.on('listen:closed', cb);
   return () => { socket?.off('listen:closed', cb); };
 }
+
+// ── Now-listening presence (best-effort; only when connected) ──
+export function emitNowPlaying(track: ListenTrackMeta | null) {
+  if (!socket?.connected) return;
+  socket.emit('nowplaying:set', { track });
+}
+export function requestNowPlaying(): Promise<{
+  ok: boolean;
+  items?: Array<{ userId: number; username: string; track: ListenTrackMeta }>;
+}> {
+  return emitAck('nowplaying:list', {});
+}
+export function onNowPlaying(
+  cb: (p: { userId: number; username: string; track: ListenTrackMeta | null }) => void,
+): () => void {
+  socket?.on('nowplaying:update', cb);
+  return () => { socket?.off('nowplaying:update', cb); };
+}

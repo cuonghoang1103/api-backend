@@ -67,6 +67,21 @@ interface Room {
 // Module-level registry — survives across connections (one process).
 const rooms = new Map<string, Room>();
 
+// ── Now-listening presence (Phase 3) ──────────────────────────────
+// userId → what they're currently playing. Broadcast to everyone so
+// friends/profiles can show a "🎧 đang nghe …" badge. Cleared when the
+// user pauses/stops or their last socket disconnects. Best-effort,
+// non-durable (in-memory).
+const nowListening = new Map<number, { username: string; track: TrackMeta; at: number }>();
+
+function nowPlayingList(): Array<{ userId: number; username: string; track: TrackMeta }> {
+  return Array.from(nowListening.entries()).map(([userId, v]) => ({
+    userId,
+    username: v.username,
+    track: v.track,
+  }));
+}
+
 interface ConnUser {
   id: number;
   username: string;
@@ -237,6 +252,26 @@ export function registerListenTogether(io: IOServer, socket: Socket, user: ConnU
     }
   });
 
+  // ── Now-listening presence handlers ──
+  socket.on('nowplaying:set', (payload: any) => {
+    const track = sanitizeTrack(payload?.track);
+    if (track) {
+      nowListening.set(user.id, { username: user.username, track, at: Date.now() });
+    } else {
+      nowListening.delete(user.id);
+    }
+    // Broadcast to everyone else (the sender already knows their own).
+    socket.broadcast.emit('nowplaying:update', {
+      userId: user.id,
+      username: user.username,
+      track: track ?? null,
+    });
+  });
+
+  socket.on('nowplaying:list', (_payload: any, cb?: (res: unknown) => void) => {
+    if (typeof cb === 'function') cb({ ok: true, items: nowPlayingList() });
+  });
+
   // Cleanup: when this socket disconnects, drop it from every room it
   // was in. Uses its OWN disconnect listener (additive) so the existing
   // presence/disconnect handler in messaging.socket.ts is untouched.
@@ -246,6 +281,18 @@ export function registerListenTogether(io: IOServer, socket: Socket, user: ConnU
       if (m && m.sockets.has(socket.id)) {
         const fullyLeft = removeSocket(room);
         if (fullyLeft) finalizeLeave(room);
+      }
+    }
+
+    // Clear now-listening only if this was the user's LAST socket
+    // (multi-tab safe — another tab may still be playing).
+    if (nowListening.has(user.id)) {
+      const stillConnected = Array.from(io.sockets.sockets.values()).some(
+        (s) => s.id !== socket.id && (s.data.user as { id?: number } | undefined)?.id === user.id,
+      );
+      if (!stillConnected) {
+        nowListening.delete(user.id);
+        socket.broadcast.emit('nowplaying:update', { userId: user.id, username: user.username, track: null });
       }
     }
   });

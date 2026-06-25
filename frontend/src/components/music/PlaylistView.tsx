@@ -2,7 +2,8 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Pause, ArrowLeft, ListMusic, Trash2, Clock, Loader2, Camera } from 'lucide-react';
+import { Play, Pause, ArrowLeft, ListMusic, Trash2, Clock, Loader2, Camera, Share2 } from 'lucide-react';
+import ShareTrackModal from '@/components/music/ShareTrackModal';
 import { usePlaylistDetail, useRemoveTrackFromPlaylist, useDeletePlaylist, useUploadPlaylistCover } from '@/hooks/useMusicQueries';
 import { toast } from 'sonner';
 import type { Playlist, Track } from '@/types';
@@ -127,6 +128,7 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
   const coverInputRef = useRef<HTMLInputElement>(null);
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const [coverImgError, setCoverImgError] = useState(false);
 
   const handleCoverSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -294,6 +296,13 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
           Nghe tat ca
         </button>
         <button
+          onClick={() => setShowShare(true)}
+          className="flex items-center gap-1.5 px-3 py-2 text-gray-400 hover:text-neon-violet text-sm transition-colors"
+        >
+          <Share2 className="w-4 h-4" />
+          Chia se
+        </button>
+        <button
           onClick={() => setShowDeleteConfirm(true)}
           className="flex items-center gap-1.5 px-3 py-2 text-gray-400 hover:text-red-400 text-sm transition-colors"
         >
@@ -301,6 +310,12 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
           Xoa Playlist
         </button>
       </div>
+
+      <ShareTrackModal
+        open={showShare}
+        onClose={() => setShowShare(false)}
+        item={{ kind: 'playlist', title: playlist.name }}
+      />
 
       {tracks.length === 0 ? (
         <div className="text-center py-12 text-gray-500">

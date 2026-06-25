@@ -8,6 +8,7 @@ import { useMusicStore } from '@/store/musicStore';
 import CyberAudioVisualizer from '@/components/music/CyberAudioVisualizer';
 import CyberLyrics from '@/components/music/CyberLyrics';
 import ListenTogether from '@/components/music/ListenTogether';
+import ShareTrackModal from '@/components/music/ShareTrackModal';
 
 function isSafeUrl(url: unknown): url is string {
   return typeof url === 'string' && url.trim().length > 0 && url.startsWith('http');
@@ -38,6 +39,7 @@ export default function NowPlayingPage() {
   const [isMounted, setIsMounted] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const progressRef = useRef<HTMLDivElement>(null);
   const volumeRef = useRef<HTMLDivElement>(null);
   const [crosshair, setCrosshair] = useState({ x: 0, y: 0 });
@@ -190,6 +192,14 @@ export default function NowPlayingPage() {
               <ListenTogether />
               <motion.button
                 whileTap={{ scale: 0.9 }}
+                onClick={() => setShowShare(true)}
+                className="text-xs font-mono font-bold transition-all"
+                style={{ color: C.primary }}
+              >
+                SHARE
+              </motion.button>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
                 onClick={() => setShowLyrics(true)}
                 className="text-xs font-mono font-bold transition-all"
                 style={{ color: C.secondary }}
@@ -215,6 +225,22 @@ export default function NowPlayingPage() {
           trackId={currentTrack?.id ? Number(currentTrack.id) : null}
           trackTitle={currentTrack?.title}
           trackArtist={currentTrack?.artist}
+        />
+
+        {/* Share track (Phase 3) */}
+        <ShareTrackModal
+          open={showShare}
+          onClose={() => setShowShare(false)}
+          item={
+            currentTrack
+              ? {
+                  kind: 'track',
+                  title: currentTrack.title,
+                  artist: currentTrack.artist,
+                  audioUrl: currentTrack.audioUrl,
+                }
+              : null
+          }
         />
 
         {/* Main content */}

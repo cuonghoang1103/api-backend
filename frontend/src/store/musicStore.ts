@@ -22,10 +22,24 @@ interface PersistedState {
   isShuffled: boolean;
   repeatMode: RepeatMode;
   lastPlaylistId: string | null;
+  // Cyber Phase 1 additions (optional so existing flush call sites
+  // that build the object inline don't need to be updated).
+  playbackRate?: number;
+  manualQueueIds?: string[];
 }
 
 function defaultPersisted(): PersistedState {
-  return { currentTrackId: null, currentTime: 0, volume: 0.7, isMuted: false, isShuffled: false, repeatMode: 'none', lastPlaylistId: null };
+  return {
+    currentTrackId: null,
+    currentTime: 0,
+    volume: 0.7,
+    isMuted: false,
+    isShuffled: false,
+    repeatMode: 'none',
+    lastPlaylistId: null,
+    playbackRate: 1.0,
+    manualQueueIds: [],
+  };
 }
 
 function loadPersisted(): PersistedState {
@@ -37,7 +51,25 @@ function loadPersisted(): PersistedState {
       const safeTime = typeof parsed.currentTime === 'number' && Number.isFinite(parsed.currentTime) && parsed.currentTime > 0
         ? parsed.currentTime
         : 0;
-      return { ...defaultPersisted(), ...parsed, currentTime: safeTime };
+      // Guard manualQueueIds so a corrupted localStorage payload can
+      // never make the store "x is not iterable" crash the page.
+      const safeManualQueueIds = Array.isArray(parsed?.manualQueueIds)
+        ? parsed.manualQueueIds.filter((x: unknown): x is string => typeof x === 'string')
+        : [];
+      // Guard playbackRate — clamp to [0.5, 2] to defend against
+      // hand-edited localStorage values that would make the audio
+      // API throw.
+      const rawRate = typeof parsed?.playbackRate === 'number' && Number.isFinite(parsed.playbackRate)
+        ? parsed.playbackRate
+        : 1.0;
+      const safeRate = Math.max(0.5, Math.min(2, rawRate));
+      return {
+        ...defaultPersisted(),
+        ...parsed,
+        currentTime: safeTime,
+        manualQueueIds: safeManualQueueIds,
+        playbackRate: safeRate,
+      };
     }
   } catch { /* ignore */ }
   return defaultPersisted();
@@ -148,6 +180,18 @@ interface MusicState {
   /** Smart Shuffle: avoid repeating recently played in shuffle mode */
   smartShufflePool: string[];
 
+  // Cyber Phase 2a additions
+  /** Server-hydrated set of numeric track IDs the user has liked. */
+  likedIds: number[];
+  /** Server-hydrated full track objects the user has liked. */
+  likedTracks: Track[];
+
+  // Cyber Phase 1 additions
+  /** Spotify-style manual play queue (wins over auto-feed). */
+  manualQueue: Track[];
+  /** Playback speed multiplier: 0.5 – 2.0 */
+  playbackRate: number;
+
   setTracks: (tracks: Track[]) => void;
   setAllTracks: (tracks: Track[]) => void;
   addTrack: (track: Track) => void;
@@ -177,6 +221,28 @@ interface MusicState {
   smartShuffleNext: () => Track | null;
   /** Clear entire playback history */
   clearHistory: () => void;
+
+  // Cyber Phase 2a actions
+  /** Like a track (optimistic update; server is fire-and-forget). */
+  toggleLike: (trackId: number, track: Track) => void;
+  /** Hydrate likedIds + likedTracks from the server snapshot. */
+  hydrateLikedFromServer: (likedIds: number[], likedTracks: Track[]) => void;
+
+  // Cyber Phase 1 queue actions
+  /** Insert a track as the very next item in the manual queue. */
+  playNext: (track: Track) => void;
+  /** Append a track to the end of the manual queue. */
+  addToManualQueue: (track: Track) => void;
+  /** Remove a track from the manual queue (no-op if not present). */
+  removeFromManualQueue: (trackId: string) => void;
+  /** Reorder the manual queue (e.g. after a drag-and-drop). */
+  reorderManualQueue: (orderedIds: string[]) => void;
+  /** Drop the entire manual queue. Does NOT touch auto-feed tracks. */
+  clearManualQueue: () => void;
+  /** Set playback speed (clamped to 0.5 – 2.0). */
+  setPlaybackRate: (rate: number) => void;
+  /** Sync the manual queue from the authoritative server copy. */
+  hydrateManualQueue: (serverQueue: Track[]) => void;
 }
 
 // ── store ───────────────────────────────────────────────────────────────────────
@@ -203,6 +269,15 @@ export const useMusicStore = create<MusicState>()((set, get) => {
     recentlyPlayed: hist.recentlyPlayed,
     history: hist.history,
     smartShufflePool: [],
+    // Cyber Phase 1: manual queue starts empty; the queue query hook
+    // hydrates it from the server copy once the user is auth'd.
+    manualQueue: [],
+    playbackRate: persisted.playbackRate ?? 1.0,
+    // Cyber Phase 2a: liked IDs/tracks start empty; the likes query
+    // hook hydrates them from the server snapshot once the user
+    // is auth'd.
+    likedIds: [],
+    likedTracks: [],
 
     setTracks: (tracks) => {
       const p = loadPersisted();
@@ -394,14 +469,38 @@ export const useMusicStore = create<MusicState>()((set, get) => {
     },
 
     next: () => {
-      const { tracks, currentIndex, currentTrack, repeatMode, isShuffled } = get();
-      if (tracks.length === 0) return;
+      const { tracks, currentIndex, currentTrack, repeatMode, isShuffled, manualQueue } = get();
+      if (tracks.length === 0 && (!Array.isArray(manualQueue) || manualQueue.length === 0)) return;
       const p = loadPersisted();
 
       // Apple Music parity: when repeat-one is on, it takes
       // precedence over shuffle — the user explicitly asked to loop
       // the current track, so restart it instead of advancing.
       if (repeatMode === 'one' && currentTrack) { set({ currentTime: 0 }); return; }
+
+      // Cyber Phase 1: manual queue wins over auto-feed.
+      // If the user has queued tracks ("Play next" / "Add to
+      // queue"), consume the FIRST one (oldest) and continue
+      // auto-feed afterwards. Spotify/Apple Music parity.
+      const safeManualQueue = Array.isArray(manualQueue) ? manualQueue : [];
+      if (safeManualQueue.length > 0) {
+        const [first, ...rest] = safeManualQueue;
+        get().addToHistory(first);
+        const idx = tracks.findIndex((t) => t.id === first.id);
+        set({
+          manualQueue: rest,
+          currentTrack: first,
+          currentIndex: idx >= 0 ? idx : 0,
+          isPlaying: true,
+          currentTime: 0,
+        });
+        savePersisted({
+          ...p,
+          currentTrackId: first.id,
+          manualQueueIds: rest.map((t) => t.id),
+        });
+        return;
+      }
 
       if (isShuffled) {
         let next = get().smartShuffleNext();
@@ -628,6 +727,119 @@ export const useMusicStore = create<MusicState>()((set, get) => {
     clearHistory: () => {
       set({ history: [], recentlyPlayed: [] });
       saveHistory({ history: [], recentlyPlayed: [] });
+    },
+
+    // ── Cyber Phase 1: manual play queue actions ──
+    //
+    // All mutators are IDEMPOTENT at the DB level (UNIQUE
+    // (user_id, track_id) on the music_queue_items table). The
+    // client-side mirror just needs the same property: repeated
+    // calls must not create duplicate entries.
+    playNext: (track) => {
+      const p = loadPersisted();
+      set((s) => {
+        const safeQueue = Array.isArray(s.manualQueue) ? s.manualQueue : [];
+        const filtered = safeQueue.filter((t) => t.id !== track.id);
+        const next = [track, ...filtered];
+        savePersisted({ ...p, manualQueueIds: next.map((t) => t.id) });
+        return { manualQueue: next };
+      });
+    },
+    addToManualQueue: (track) => {
+      const p = loadPersisted();
+      set((s) => {
+        const safeQueue = Array.isArray(s.manualQueue) ? s.manualQueue : [];
+        if (safeQueue.some((t) => t.id === track.id)) return s;
+        const next = [...safeQueue, track];
+        savePersisted({ ...p, manualQueueIds: next.map((t) => t.id) });
+        return { manualQueue: next };
+      });
+    },
+    removeFromManualQueue: (trackId) => {
+      const p = loadPersisted();
+      set((s) => {
+        const safeQueue = Array.isArray(s.manualQueue) ? s.manualQueue : [];
+        const next = safeQueue.filter((t) => t.id !== trackId);
+        savePersisted({ ...p, manualQueueIds: next.map((t) => t.id) });
+        return { manualQueue: next };
+      });
+    },
+    reorderManualQueue: (orderedIds) => {
+      const p = loadPersisted();
+      // Guard: `orderedIds` may be undefined if a caller passes
+      // a bad arg. Default to []. The reorder is then a no-op.
+      const safeIds = Array.isArray(orderedIds) ? orderedIds : [];
+      set((s) => {
+        const safeQueue = Array.isArray(s.manualQueue) ? s.manualQueue : [];
+        const byId = new Map(safeQueue.map((t) => [t.id, t]));
+        const next = safeIds
+          .map((id) => byId.get(id))
+          .filter((t): t is Track => Boolean(t));
+        savePersisted({ ...p, manualQueueIds: next.map((t) => t.id) });
+        return { manualQueue: next };
+      });
+    },
+    clearManualQueue: () => {
+      const p = loadPersisted();
+      savePersisted({ ...p, manualQueueIds: [] });
+      set({ manualQueue: [] });
+    },
+    setPlaybackRate: (rate) => {
+      // Clamp + sanity-check so a stray `Infinity` or `NaN` from a
+      // buggy caller can't propagate to the <audio> element (which
+      // throws on non-finite values).
+      const safe = Number.isFinite(rate) ? Math.max(0.5, Math.min(2, rate)) : 1.0;
+      const p = loadPersisted();
+      savePersisted({ ...p, playbackRate: safe });
+      set({ playbackRate: safe });
+    },
+    hydrateManualQueue: (serverQueue) => {
+      // Defensive: server may return null on cold start. Treat as [].
+      const safe = Array.isArray(serverQueue) ? serverQueue : [];
+      set({ manualQueue: safe });
+      const p = loadPersisted();
+      savePersisted({ ...p, manualQueueIds: safe.map((t) => t.id) });
+    },
+
+    // ── Cyber Phase 2a: like/unlike actions ──
+    //
+    // Optimistic: toggle state immediately, then the React Query
+    // mutation below sends the actual POST / DELETE to the server.
+    // On error, the mutation's onError restores the previous state.
+    toggleLike: (trackId, track) => {
+      const safeIds = Array.isArray(get().likedIds) ? get().likedIds : [];
+      const safeTracks = Array.isArray(get().likedTracks) ? get().likedTracks : [];
+      const isCurrentlyLiked = safeIds.includes(trackId);
+
+      if (isCurrentlyLiked) {
+        // Unlike — remove from both arrays, keep order otherwise.
+        set({
+          likedIds: safeIds.filter((id) => id !== trackId),
+          likedTracks: safeTracks.filter((t) => t.id !== String(trackId)),
+        });
+      } else {
+        // Like — add the numeric ID and prepend the track to the list
+        // so the user sees it instantly at the top.
+        set({
+          likedIds: [trackId, ...safeIds],
+          likedTracks: [track, ...safeTracks],
+        });
+      }
+    },
+    hydrateLikedFromServer: (likedIds, likedTracks) => {
+      // Defensive: server may return null on cold start. Treat as [].
+      // De-dupe likedIds defensively in case the server returns dupes.
+      const rawIds = Array.isArray(likedIds) ? likedIds : [];
+      const safeIds: number[] = [];
+      const seen = new Set<number>();
+      for (const id of rawIds) {
+        if (Number.isFinite(id) && !seen.has(id)) {
+          seen.add(id);
+          safeIds.push(id);
+        }
+      }
+      const safeTracks = Array.isArray(likedTracks) ? likedTracks : [];
+      set({ likedIds: safeIds, likedTracks: safeTracks });
     },
   };
 });

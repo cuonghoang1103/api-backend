@@ -34,6 +34,8 @@ interface YouTubePlayerInstance {
   destroy: () => void;
   addEventListener: (event: string, listener: (e: unknown) => void) => void;
   getVolume: () => number;
+  // Phase 1: playback speed. YouTube IFrame API supports 0.25–2.
+  setPlaybackRate?: (rate: number) => void;
 }
 
 let ytPlayerInstance: YouTubePlayerInstance | null = null;
@@ -324,6 +326,17 @@ export default function MusicAudioController() {
           }
           const d = ytPlayerInstance?.getDuration?.() ?? 0;
           if (d > 0) setDuration(d);
+          // Phase 1: apply the user's saved playback speed to a
+          // freshly-created YouTube player so it doesn't always
+          // start at 1.0 even if the user has 1.5× saved.
+          const savedRate = useMusicStore.getState().playbackRate;
+          if (ytPlayerInstance?.setPlaybackRate && Number.isFinite(savedRate)) {
+            try {
+              ytPlayerInstance.setPlaybackRate(Math.max(0.5, Math.min(2, savedRate)));
+            } catch {
+              /* ignore — player may not be fully ready */
+            }
+          }
           startYouTubePolling(ytPlayerInstance!);
         },
         (state) => {
@@ -496,6 +509,41 @@ export default function MusicAudioController() {
     if (!audio) return;
     audio.volume = isMuted ? 0 : Math.max(0, Math.min(1, volume));
   }, [volume, isMuted]);
+
+  // ── Phase 1: playback rate (speed) sync ─────────────────────────────
+  // Separate effect so changing the speed must NOT trigger a track
+  // reload (the existing load-track effect's dep array is carefully
+  // tuned — adding `playbackRate` there would break "pause then play
+  // rewinds YouTube to 0"). Subscribed via Zustand selector so the
+  // effect re-runs only when the rate actually changes. Also depends
+  // on `currentTrack?.id` so the rate is re-applied after a track
+  // switch (in case the new player started at default 1.0).
+  const playbackRate = useMusicStore((s) => s.playbackRate);
+  useEffect(() => {
+    const safeRate = Number.isFinite(playbackRate)
+      ? Math.max(0.5, Math.min(2, playbackRate))
+      : 1.0;
+
+    // Local <audio>: property is `playbackRate`, valid range 0.0625–16.
+    const audio = audioRef.current;
+    if (audio) {
+      try {
+        audio.playbackRate = safeRate;
+      } catch {
+        // Some browsers throw if the audio isn't ready yet — safe to ignore.
+      }
+    }
+
+    // YouTube IFrame: setPlaybackRate(suggestedRate) is a stable method.
+    if (ytPlayerInstance?.setPlaybackRate) {
+      try {
+        ytPlayerInstance.setPlaybackRate(safeRate);
+      } catch {
+        // Player may be mid-init — the onReady handler picks up the
+        // current store rate on next mount.
+      }
+    }
+  }, [playbackRate, currentTrack?.id]);
 
   // Keep the isPlayingRef in sync so callbacks attached inside the
   // load-track effect (e.g. the canplay retry handler) can read the

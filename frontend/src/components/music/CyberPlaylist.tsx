@@ -2,9 +2,11 @@
 
 import { useState, useRef, useEffect, useMemo, useCallback, type Dispatch, type SetStateAction } from 'react';
 import { motion } from 'framer-motion';
-import { Plus } from 'lucide-react';
+import { Plus, ListPlus, CornerDownLeft, Heart, Flame, Clock } from 'lucide-react';
 import { useMusicStore } from '@/store/musicStore';
 import { usePlaylistStore } from '@/store/playlistStore';
+import { useAddToQueue, useLikedTrackIds, useLikedTracks, useToggleLike, useMostPlayedTracks } from '@/hooks/useMusicQueries';
+import { toast } from 'sonner';
 import type { Track } from '@/types';
 
 function isSafeUrl(url: unknown): url is string {
@@ -44,15 +46,38 @@ function formatTotal(s: number): string {
   return `${m}m`;
 }
 
+// Phase 2a: which tab + sort the playlist is showing
+type PlaylistView = 'tracks' | 'liked' | 'history' | 'most-played' | 'info';
+
 export default function CyberPlaylist() {
   const {
     tracks, currentTrack, isPlaying, playTrackAtIndex,
     allTracks, savedAllTracks, restoreAllTracks, recentlyPlayed,
+    playNext, addToManualQueue,
+    likedIds, toggleLike,
   } = useMusicStore();
   const { openDrawer, setPendingTrack } = usePlaylistStore();
+  const addToQueueApi = useAddToQueue();
+  const toggleLikeApi = useToggleLike();
+
+  // Phase 2a: server-hydrated lists
+  const { data: serverLikedTracks = [] } = useLikedTracks(true, 200);
+  const { data: serverMostPlayed = [] } = useMostPlayedTracks(true, 50);
+
+  // Hydrate likedIds / likedTracks from the server snapshot.
+  // Phase 2a: keep the Zustand mirror in sync without spamming
+  // refetches. We do this in an effect so the hook-driven data
+  // (which updates on cache invalidation) flows into the store
+  // and the rest of the UI can read it synchronously.
+  const hydrateLikedFromServer = useMusicStore((s) => s.hydrateLikedFromServer);
+  useEffect(() => {
+    // Derive IDs from serverLikedTracks (so we always have both)
+    const ids = serverLikedTracks.map((t) => Number(t.id)).filter(Number.isFinite);
+    hydrateLikedFromServer(ids, serverLikedTracks);
+  }, [serverLikedTracks, hydrateLikedFromServer]);
 
   const [search, setSearch] = useState('');
-  const [activeTab, setActiveTab] = useState<'tracks' | 'history' | 'info'>('tracks');
+  const [activeTab, setActiveTab] = useState<PlaylistView>('tracks');
   const [imgError, setImgError] = useState(false);
   const [failedThumbs, setFailedThumbs] = useState<Set<string>>(new Set());
 
@@ -85,11 +110,35 @@ export default function CyberPlaylist() {
     );
   }, [tracks, debouncedSearch]);
 
+  const filteredLikedTracks = useMemo(() => {
+    // Safe-guard against server returning null/empty
+    const safe = Array.isArray(serverLikedTracks) ? serverLikedTracks : [];
+    if (!debouncedSearch) return safe;
+    const q = debouncedSearch.toLowerCase();
+    return safe.filter(
+      (track) =>
+        track.title.toLowerCase().includes(q) ||
+        track.artist.toLowerCase().includes(q),
+    );
+  }, [serverLikedTracks, debouncedSearch]);
+
+  const filteredMostPlayed = useMemo(() => {
+    const safe = Array.isArray(serverMostPlayed) ? serverMostPlayed : [];
+    if (!debouncedSearch) return safe;
+    const q = debouncedSearch.toLowerCase();
+    return safe.filter(
+      (track) =>
+        track.title.toLowerCase().includes(q) ||
+        track.artist.toLowerCase().includes(q),
+    );
+  }, [serverMostPlayed, debouncedSearch]);
+
   const totalDuration = useMemo(
     () => tracks.reduce((acc, t) => acc + parseDuration(t.duration), 0),
     [tracks],
   );
 
+  // ── Track action handlers ─────────────────────────────────────────
   const handlePlayTrack = useCallback(
     (track: Track) => {
       const state = useMusicStore.getState();
@@ -111,6 +160,83 @@ export default function CyberPlaylist() {
       openDrawer();
     },
     [setPendingTrack, openDrawer],
+  );
+
+  // Cyber Phase 1: queue actions. Local Zustand mirror is the
+  // source of truth for instant UX; the server hook is a best-effort
+  // sync for cross-device persistence.
+  const handlePlayNext = useCallback(
+    (track: Track) => {
+      playNext(track);
+      const numericId = Number(track.id);
+      if (Number.isFinite(numericId) && numericId > 0) {
+        addToQueueApi.mutate({ trackId: numericId, intent: 'next' });
+      }
+      toast.success(`"${track.title}" will play next`);
+    },
+    [playNext, addToQueueApi],
+  );
+
+  const handleAddToQueue = useCallback(
+    (track: Track) => {
+      addToManualQueue(track);
+      const numericId = Number(track.id);
+      if (Number.isFinite(numericId) && numericId > 0) {
+        addToQueueApi.mutate({ trackId: numericId, intent: 'queue' });
+      }
+      toast.success(`Added "${track.title}" to queue`);
+    },
+    [addToManualQueue, addToQueueApi],
+  );
+
+  // Cyber Phase 2a: like/unlike toggle (optimistic via store).
+  // Fire-and-forget: server errors surface via React Query, but
+  // the optimistic update already gave the user instant feedback.
+  const handleToggleLike = useCallback(
+    (track: Track) => {
+      const numericId = Number(track.id);
+      if (!Number.isFinite(numericId) || numericId <= 0) {
+        // YouTube / local- tracks don't have a server row to like.
+        // For consistency we still flip the local state but skip
+        // the server call.
+        toggleLike(numericId || -1, track);
+        return;
+      }
+      // Optimistic local flip first.
+      const isCurrentlyLiked = Array.isArray(likedIds) && likedIds.includes(numericId);
+      toggleLike(numericId, track);
+      toggleLikeApi.mutate(
+        { trackId: numericId, intent: isCurrentlyLiked ? 'unlike' : 'like' },
+        {
+          onError: () => {
+            // Revert on error.
+            toggleLike(numericId, track);
+            toast.error('Could not update like — try again');
+          },
+        },
+      );
+    },
+    [likedIds, toggleLike, toggleLikeApi],
+  );
+
+  const handlePlayLikedTrack = useCallback(
+    (track: Track) => {
+      const idx = tracks.findIndex((t) => t.id === track.id);
+      if (idx >= 0) {
+        playTrackAtIndex(idx);
+      } else {
+        // Liked track is in store but not in current playlist —
+        // play it via direct setCurrent + play.
+        const state = useMusicStore.getState();
+        state.playTrack(track);
+      }
+    },
+    [tracks, playTrackAtIndex],
+  );
+
+  const handlePlayMostPlayedTrack = useCallback(
+    (track: Track) => handlePlayLikedTrack(track),
+    [handlePlayLikedTrack],
   );
 
   return (
@@ -165,41 +291,57 @@ export default function CyberPlaylist() {
               Neural Playlist
             </span>
             <h2 className="text-base font-bold font-mono truncate mt-0.5" style={{ color: C.text }}>
-              {activeTab === 'history' ? 'RECENT_SIGNALS' : 'FULL_TRACKLIST'}
+              {activeTab === 'liked'
+                ? 'LIKED_SIGNALS'
+                : activeTab === 'most-played'
+                  ? 'NEURAL_HOT_PATH'
+                  : activeTab === 'history'
+                    ? 'RECENT_SIGNALS'
+                    : 'FULL_TRACKLIST'}
             </h2>
             <p className="text-[11px] font-mono" style={{ color: C.textMuted }}>
-              {activeTab === 'history'
-                ? `${recentlyPlayed.length} signals logged`
-                : `${tracks.length} tracks | ${formatTotal(totalDuration)}`}
+              {activeTab === 'liked'
+                ? `${serverLikedTracks.length} liked`
+                : activeTab === 'most-played'
+                  ? `${serverMostPlayed.length} tracks ranked by plays`
+                  : activeTab === 'history'
+                    ? `${recentlyPlayed.length} signals logged`
+                    : `${tracks.length} tracks | ${formatTotal(totalDuration)}`}
             </p>
           </div>
         </div>
 
-        {/* Tab bar */}
-        <div className="flex gap-2 mb-4">
-          {(['tracks', 'history', 'info'] as const).map((tab) => {
-            const labels = { tracks: 'TRACKS', history: 'HISTORY', info: 'SYS.INFO' };
-            const isActive = activeTab === tab;
+        {/* Tab bar — Phase 2a: now includes LIKED + MOST_PLAYED */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {([
+            { key: 'tracks', label: 'TRACKS', icon: null },
+            { key: 'liked', label: 'LIKED', icon: Heart },
+            { key: 'most-played', label: 'HOT', icon: Flame },
+            { key: 'history', label: 'HISTORY', icon: Clock },
+            { key: 'info', label: 'SYS.INFO', icon: null },
+          ] as const).map(({ key, label, icon: Icon }) => {
+            const isActive = activeTab === key;
             return (
               <motion.button
-                key={tab}
+                key={key}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setActiveTab(tab)}
-                className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all"
+                onClick={() => setActiveTab(key)}
+                className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5"
                 style={{
                   background: isActive ? `${C.primary}20` : 'rgba(255,255,255,0.03)',
                   border: `1px solid ${isActive ? `${C.primary}50` : C.border}`,
                   color: isActive ? C.primary : C.textMuted,
                 }}
               >
-                {labels[tab]}
+                {Icon && <Icon className="w-3 h-3" />}
+                {label}
               </motion.button>
             );
           })}
         </div>
 
-        {/* Search — tracks tab */}
-        {activeTab === 'tracks' && (
+        {/* Search — visible on track-listing tabs */}
+        {(activeTab === 'tracks' || activeTab === 'liked' || activeTab === 'most-played') && (
           <div className="relative mb-3">
             <svg
               className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
@@ -252,7 +394,7 @@ export default function CyberPlaylist() {
         )}
       </div>
 
-      {/* Track list */}
+      {/* Track list (TRACKS tab) */}
       {activeTab === 'tracks' && (
         <div
           className="overflow-y-auto px-3 pb-3"
@@ -282,8 +424,95 @@ export default function CyberPlaylist() {
                   index={idx}
                   isActive={currentTrack?.id === track.id}
                   isPlaying={currentTrack?.id === track.id && isPlaying}
+                  liked={Array.isArray(likedIds) && likedIds.includes(Number(track.id))}
                   onPlay={() => handlePlayTrack(track)}
                   onAddToPlaylist={() => handleAddToPlaylist(track)}
+                  onPlayNext={() => handlePlayNext(track)}
+                  onAddToQueue={() => handleAddToQueue(track)}
+                  onToggleLike={() => handleToggleLike(track)}
+                  colors={C}
+                  failedThumbs={failedThumbs}
+                  setFailedThumbs={setFailedThumbs}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Liked Songs tab — Phase 2a */}
+      {activeTab === 'liked' && (
+        <div
+          className="overflow-y-auto px-3 pb-3"
+          style={{ maxHeight: '460px', scrollbarWidth: 'thin', scrollbarColor: `${C.primary}40 transparent` }}
+        >
+          {filteredLikedTracks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 px-4">
+              <Heart className="w-12 h-12 mb-2" style={{ color: C.textMuted, opacity: 0.3 }} />
+              <p className="text-sm font-mono mt-3" style={{ color: C.textMuted }}>
+                {search ? 'No liked tracks match' : 'No liked tracks yet'}
+              </p>
+              <p className="text-[10px] font-mono text-text-muted/70 mt-1">
+                Tap the heart on any track to add it here
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-0.5">
+              {filteredLikedTracks.map((track, idx) => (
+                <CyberTrackItem
+                  key={track.id}
+                  track={track}
+                  index={idx}
+                  isActive={currentTrack?.id === track.id}
+                  isPlaying={currentTrack?.id === track.id && isPlaying}
+                  liked={true}
+                  onPlay={() => handlePlayLikedTrack(track)}
+                  onAddToPlaylist={() => handleAddToPlaylist(track)}
+                  onPlayNext={() => handlePlayNext(track)}
+                  onAddToQueue={() => handleAddToQueue(track)}
+                  onToggleLike={() => handleToggleLike(track)}
+                  colors={C}
+                  failedThumbs={failedThumbs}
+                  setFailedThumbs={setFailedThumbs}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Most Played tab — Phase 2a */}
+      {activeTab === 'most-played' && (
+        <div
+          className="overflow-y-auto px-3 pb-3"
+          style={{ maxHeight: '460px', scrollbarWidth: 'thin', scrollbarColor: `${C.primary}40 transparent` }}
+        >
+          {filteredMostPlayed.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 px-4">
+              <Flame className="w-12 h-12 mb-2" style={{ color: C.textMuted, opacity: 0.3 }} />
+              <p className="text-sm font-mono mt-3" style={{ color: C.textMuted }}>
+                {search ? 'No plays match' : 'No plays yet'}
+              </p>
+              <p className="text-[10px] font-mono text-text-muted/70 mt-1">
+                Play tracks to build your hot path
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-0.5">
+              {filteredMostPlayed.map((track, idx) => (
+                <CyberTrackItem
+                  key={track.id}
+                  track={track}
+                  index={idx}
+                  isActive={currentTrack?.id === track.id}
+                  isPlaying={currentTrack?.id === track.id && isPlaying}
+                  liked={Array.isArray(likedIds) && likedIds.includes(Number(track.id))}
+                  badge={`×${(track as Track & { count?: number }).count ?? 0}`}
+                  onPlay={() => handlePlayMostPlayedTrack(track)}
+                  onAddToPlaylist={() => handleAddToPlaylist(track)}
+                  onPlayNext={() => handlePlayNext(track)}
+                  onAddToQueue={() => handleAddToQueue(track)}
+                  onToggleLike={() => handleToggleLike(track)}
                   colors={C}
                   failedThumbs={failedThumbs}
                   setFailedThumbs={setFailedThumbs}
@@ -324,8 +553,12 @@ export default function CyberPlaylist() {
                     index={-1}
                     isActive={false}
                     isPlaying={false}
+                    liked={Array.isArray(likedIds) && likedIds.includes(Number(track.id))}
                     onPlay={() => handlePlayTrack(track)}
                     onAddToPlaylist={() => handleAddToPlaylist(track)}
+                    onPlayNext={() => handlePlayNext(track)}
+                    onAddToQueue={() => handleAddToQueue(track)}
+                    onToggleLike={() => handleToggleLike(track)}
                     colors={C}
                     dimmed
                     failedThumbs={failedThumbs}
@@ -345,6 +578,8 @@ export default function CyberPlaylist() {
             { label: 'TRACKS_LOADED', value: String(tracks.length) },
             { label: 'TOTAL_DURATION', value: formatTotal(totalDuration) },
             { label: 'SIGNALS_LOGGED', value: String(recentlyPlayed.length) },
+            { label: 'LIKED_TRACKS', value: String(serverLikedTracks.length) },
+            { label: 'UNIQUE_PLAYS', value: String(serverMostPlayed.length) },
             { label: 'MATRIX_VERSION', value: 'v2.0.0' },
             { label: 'ENGINE', value: 'ZUSTAND' },
             { label: 'AUDIO_API', value: 'HTML5' },
@@ -363,15 +598,22 @@ export default function CyberPlaylist() {
 
 // ── CyberTrackItem ──────────────────────────────────────────────────────────────────────
 const CyberTrackItem = motion(function CyberTrackItem({
-  track, index, isActive, isPlaying, onPlay, onAddToPlaylist, colors, dimmed = false,
+  track, index, isActive, isPlaying, liked, badge,
+  onPlay, onAddToPlaylist, onPlayNext, onAddToQueue, onToggleLike,
+  colors, dimmed = false,
   failedThumbs, setFailedThumbs,
 }: {
   track: Track;
   index: number;
   isActive: boolean;
   isPlaying: boolean;
+  liked?: boolean;
+  badge?: string;
   onPlay: () => void;
   onAddToPlaylist: () => void;
+  onPlayNext?: () => void;
+  onAddToQueue?: () => void;
+  onToggleLike?: () => void;
   colors: typeof C;
   dimmed?: boolean;
   failedThumbs: Set<string>;
@@ -393,7 +635,7 @@ const CyberTrackItem = motion(function CyberTrackItem({
         opacity: dimmed ? 0.6 : 1,
       }}
     >
-      {/* Index / playing indicator */}
+      {/* Index / playing indicator / badge */}
       <div className="w-7 flex items-center justify-center shrink-0">
         {isPlaying ? (
           <div className="flex items-end gap-0.5 h-5">
@@ -401,6 +643,14 @@ const CyberTrackItem = motion(function CyberTrackItem({
             <div className="w-1 rounded-full cyber-bar-2" style={{ background: colors.primary, height: 4 }} />
             <div className="w-1 rounded-full cyber-bar-3" style={{ background: colors.primary, height: 4 }} />
           </div>
+        ) : badge ? (
+          <span
+            className="text-[10px] font-mono tabular-nums font-bold"
+            style={{ color: colors.accent }}
+            title="Play count"
+          >
+            {badge}
+          </span>
         ) : (
           <span className="text-[11px] font-mono tabular-nums" style={{ color: isActive ? colors.primary : colors.textMuted }}>
             {index >= 0 ? String(index + 1).padStart(2, '0') : '—'}
@@ -477,17 +727,71 @@ const CyberTrackItem = motion(function CyberTrackItem({
         </p>
       </div>
 
-      {/* Add to playlist */}
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={(e) => { e.stopPropagation(); onAddToPlaylist(); }}
-        className="w-7 h-7 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-        style={{ background: `${colors.primary}15`, color: colors.primary }}
-        title="Add to playlist"
-      >
-        <Plus className="w-3.5 h-3.5" />
-      </motion.button>
+      {/* Queue + playlist + like actions (visible on hover or when liked) */}
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+        {/* Heart (Phase 2a) — visible at all times when liked, otherwise only on hover */}
+        {onToggleLike && (
+          <motion.button
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.85 }}
+            onClick={(e) => { e.stopPropagation(); onToggleLike(); }}
+            className="w-7 h-7 rounded-lg flex items-center justify-center"
+            style={{
+              // When liked, always show (with filled heart). Otherwise
+              // ghost it on hover only.
+              opacity: liked ? 1 : undefined,
+              background: liked ? `${colors.accent}25` : 'transparent',
+              color: liked ? colors.accent : colors.textMuted,
+            }}
+            title={liked ? 'Unlike' : 'Like'}
+            aria-label={liked ? 'Unlike' : 'Like'}
+            aria-pressed={liked ? true : false}
+          >
+            <Heart
+              className="w-3.5 h-3.5"
+              fill={liked ? colors.accent : 'none'}
+              strokeWidth={liked ? 2 : 1.5}
+            />
+          </motion.button>
+        )}
+        {onPlayNext && (
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => { e.stopPropagation(); onPlayNext(); }}
+            className="w-7 h-7 rounded-lg flex items-center justify-center"
+            style={{ background: `${colors.secondary}15`, color: colors.secondary }}
+            title="Play next"
+            aria-label="Play next"
+          >
+            <CornerDownLeft className="w-3.5 h-3.5" />
+          </motion.button>
+        )}
+        {onAddToQueue && (
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => { e.stopPropagation(); onAddToQueue(); }}
+            className="w-7 h-7 rounded-lg flex items-center justify-center"
+            style={{ background: `${colors.secondary}15`, color: colors.secondary }}
+            title="Add to queue"
+            aria-label="Add to queue"
+          >
+            <ListPlus className="w-3.5 h-3.5" />
+          </motion.button>
+        )}
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={(e) => { e.stopPropagation(); onAddToPlaylist(); }}
+          className="w-7 h-7 rounded-lg flex items-center justify-center"
+          style={{ background: `${colors.primary}15`, color: colors.primary }}
+          title="Add to playlist"
+          aria-label="Add to playlist"
+        >
+          <Plus className="w-3.5 h-3.5" />
+        </motion.button>
+      </div>
 
       {/* Duration */}
       <span className="text-[11px] tabular-nums font-mono shrink-0" style={{ color: colors.textMuted }}>

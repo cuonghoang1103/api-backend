@@ -110,6 +110,12 @@ export const musicKeys = {
   tracks: () => [...musicKeys.all, 'tracks'] as const,
   adminTracks: () => [...musicKeys.all, 'admin-tracks'] as const,
   history: () => [...musicKeys.all, 'history'] as const,
+  // Cyber Phase 1: persistent play queue (server-side mirror).
+  queue: () => [...musicKeys.all, 'queue'] as const,
+  // Cyber Phase 2a: per-user likes + per-user play counts.
+  likedIds: () => [...musicKeys.all, 'liked-ids'] as const,
+  likedTracks: () => [...musicKeys.all, 'liked-tracks'] as const,
+  mostPlayed: (limit: number) => [...musicKeys.all, 'most-played', limit] as const,
   youtubeSearch: (q: string) => [...musicKeys.all, 'youtube-search', q] as const,
 };
 
@@ -384,5 +390,303 @@ export function useRemoveTrackFromPlaylist() {
       qc.invalidateQueries({ queryKey: playlistDetailKey(vars.playlistId) });
       qc.invalidateQueries({ queryKey: playlistKeys() });
     },
+  });
+}
+
+// ─── Cyber Phase 1: play queue hooks ──────────────────────────
+
+/**
+ * Server-side raw queue item (joined with track data).
+ * The server only stores numeric (DB-backed) tracks in the queue;
+ * YouTube / local tracks without a numeric id are not server-replicated.
+ */
+export interface QueueItemDTO {
+  trackId: number;
+  position: number;
+  intent: 'next' | 'queue';
+  title: string;
+  artist: string;
+  coverImage: string | null;
+  audioUrl: string | null;
+  localPath: string | null;
+  durationSeconds: number | null;
+}
+
+/**
+ * Convert a server DTO into the frontend Track shape.
+ * Reuses `getMediaUrl` so the same R2 → backend-stream logic applies.
+ */
+function normalizeQueueItem(dto: QueueItemDTO): Track {
+  return {
+    id: String(dto.trackId),
+    title: dto.title ?? 'Unknown',
+    artist: dto.artist ?? 'Unknown Artist',
+    duration: dto.durationSeconds ? formatDuration(dto.durationSeconds) : '0:00',
+    durationSeconds: dto.durationSeconds ?? undefined,
+    audioUrl: getMediaUrl(dto.localPath, dto.audioUrl, dto.trackId),
+    coverImage: dto.coverImage ?? '',
+    localPath: dto.localPath ?? undefined,
+  };
+}
+
+/**
+ * Fetch the user's persistent play queue (authenticated).
+ * Always returns an array (never `undefined`) so consumers can
+ * iterate without the "x is not iterable" runtime crash.
+ *
+ * Stale time is short (30s) so cross-device additions show up
+ * quickly after a refresh, but the in-memory Zustand mirror is the
+ * source of truth during a session.
+ */
+export function useMusicQueue(enabled = true) {
+  return useQuery({
+    queryKey: musicKeys.queue(),
+    queryFn: async () => {
+      const res = await fetchJson<{ success: boolean; data: QueueItemDTO[] | null }>(
+        '/api/v1/music/queue',
+      );
+      const raw = Array.isArray(res?.data) ? res.data : [];
+      return raw.map(normalizeQueueItem);
+    },
+    enabled,
+    staleTime: 30_000,
+    gcTime: 5 * 60_000,
+  });
+}
+
+/**
+ * Add a track to the user's queue. Idempotent on the server
+ * (a repeat call updates the existing row's position instead of
+ * inserting a duplicate — UNIQUE (user_id, track_id) constraint).
+ *
+ * `intent: 'next'` → insert at the front (play immediately after
+ * the current track). `'queue'` → append.
+ */
+export function useAddToQueue() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ trackId, intent }: { trackId: number; intent?: 'next' | 'queue' }) =>
+      fetchJson<{ success: boolean; data: QueueItemDTO }>('/api/v1/music/queue', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trackId, intent: intent ?? 'queue' }),
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: musicKeys.queue() });
+    },
+  });
+}
+
+/**
+ * Remove a single track from the queue.
+ */
+export function useRemoveFromQueue() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (trackId: number) =>
+      fetchJson<{ success: boolean }>(`/api/v1/music/queue/${trackId}`, {
+        method: 'DELETE',
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: musicKeys.queue() });
+    },
+  });
+}
+
+/**
+ * Clear the user's entire queue.
+ */
+export function useClearQueue() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () =>
+      fetchJson<{ success: boolean }>('/api/v1/music/queue', { method: 'DELETE' }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: musicKeys.queue() });
+    },
+  });
+}
+
+/**
+ * Reorder the queue. `orderedTrackIds` is the desired order
+ * (oldest → newest). Replaces the entire server order in one
+ * transaction.
+ */
+export function useReorderQueue() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (orderedTrackIds: number[]) =>
+      fetchJson<{ success: boolean }>('/api/v1/music/queue/reorder', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trackIds: orderedTrackIds }),
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: musicKeys.queue() });
+    },
+  });
+}
+
+// ─── Cyber Phase 2a: likes + most-played hooks ───────────────────
+
+/**
+ * Raw DTO for a liked track (matches LikedTrackDTO on backend).
+ */
+export interface LikedTrackDTO {
+  trackId: number;
+  likedAt: string;
+  title: string;
+  artist: string;
+  coverImage: string | null;
+  audioUrl: string | null;
+  localPath: string | null;
+  durationSeconds: number | null;
+}
+
+/**
+ * Convert a server liked-track DTO into the frontend Track shape.
+ * Same audioUrl resolution logic as the queue hooks.
+ */
+function normalizeLikedTrack(dto: LikedTrackDTO): Track {
+  return {
+    id: String(dto.trackId),
+    title: dto.title ?? 'Unknown',
+    artist: dto.artist ?? 'Unknown Artist',
+    duration: dto.durationSeconds ? formatDuration(dto.durationSeconds) : '0:00',
+    durationSeconds: dto.durationSeconds ?? undefined,
+    audioUrl: getMediaUrl(dto.localPath, dto.audioUrl, dto.trackId),
+    coverImage: dto.coverImage ?? '',
+    localPath: dto.localPath ?? undefined,
+  };
+}
+
+/**
+ * Raw DTO for a most-played track (matches PlayCountTrackDTO on backend).
+ */
+export interface MostPlayedTrackDTO {
+  trackId: number;
+  count: number;
+  lastPlayedAt: string;
+  title: string;
+  artist: string;
+  coverImage: string | null;
+  audioUrl: string | null;
+  localPath: string | null;
+  durationSeconds: number | null;
+}
+
+function normalizeMostPlayed(dto: MostPlayedTrackDTO): Track & { count: number } {
+  return {
+    id: String(dto.trackId),
+    title: dto.title ?? 'Unknown',
+    artist: dto.artist ?? 'Unknown Artist',
+    duration: dto.durationSeconds ? formatDuration(dto.durationSeconds) : '0:00',
+    durationSeconds: dto.durationSeconds ?? undefined,
+    audioUrl: getMediaUrl(dto.localPath, dto.audioUrl, dto.trackId),
+    coverImage: dto.coverImage ?? '',
+    localPath: dto.localPath ?? undefined,
+    count: dto.count,
+  };
+}
+
+/**
+ * Fetch the IDs of tracks the current user has liked. Cheap
+ * hydration (single int[] payload) — used to flip the heart
+ * icon state on each track in the playlist without pulling full
+ * track data.
+ *
+ * Always returns a number array (never undefined).
+ */
+export function useLikedTrackIds(enabled = true) {
+  return useQuery({
+    queryKey: musicKeys.likedIds(),
+    queryFn: async () => {
+      const res = await fetchJson<{ success: boolean; data: number[] | null }>(
+        '/api/v1/music/likes/ids',
+      );
+      const raw = Array.isArray(res?.data) ? res.data : [];
+      // De-dupe + filter to finite numbers defensively.
+      const seen = new Set<number>();
+      const out: number[] = [];
+      for (const id of raw) {
+        if (Number.isFinite(id) && !seen.has(id)) {
+          seen.add(id);
+          out.push(id);
+        }
+      }
+      return out;
+    },
+    enabled,
+    staleTime: 30_000,
+    gcTime: 5 * 60_000,
+  });
+}
+
+/**
+ * Fetch the user's liked tracks with full metadata. Used to
+ * populate the "Liked Songs" tab in CyberPlaylist.
+ */
+export function useLikedTracks(enabled = true, limit = 200) {
+  return useQuery({
+    queryKey: [...musicKeys.likedTracks(), limit],
+    queryFn: async () => {
+      const res = await fetchJson<{ success: boolean; data: LikedTrackDTO[] | null }>(
+        `/api/v1/music/likes?limit=${Math.max(1, Math.min(limit, 500))}`,
+      );
+      const raw = Array.isArray(res?.data) ? res.data : [];
+      return raw.map(normalizeLikedTrack);
+    },
+    enabled,
+    staleTime: 60_000,
+    gcTime: 10 * 60_000,
+  });
+}
+
+/**
+ * Toggle (like/unlike) a track. The local store updates
+ * optimistically via `toggleLike` BEFORE this mutation fires,
+ * so the user sees instant feedback. On error, we invalidate
+ * the liked-ids query so the truth from the server is re-read.
+ *
+ * The backend route decides the new state based on whether the
+ * (userId, trackId) row already exists.
+ */
+export function useToggleLike() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ trackId, intent }: { trackId: number; intent: 'like' | 'unlike' }) =>
+      fetchJson<{ success: boolean; data: { liked: boolean; trackId: number } }>(
+        intent === 'like'
+          ? `/api/v1/music/likes/${trackId}`
+          : `/api/v1/music/likes/${trackId}`,
+        { method: intent === 'like' ? 'POST' : 'DELETE' },
+      ),
+    onSuccess: () => {
+      // Invalidate both queries so the cached list + the IDs stay
+      // in sync with the server.
+      qc.invalidateQueries({ queryKey: musicKeys.likedIds() });
+      qc.invalidateQueries({ queryKey: musicKeys.likedTracks() });
+    },
+  });
+}
+
+/**
+ * Fetch the user's most-played tracks, sorted by count DESC.
+ * Used to populate the "Most Played" sort option / tab in
+ * CyberPlaylist.
+ */
+export function useMostPlayedTracks(enabled = true, limit = 50) {
+  return useQuery({
+    queryKey: musicKeys.mostPlayed(limit),
+    queryFn: async () => {
+      const res = await fetchJson<{ success: boolean; data: MostPlayedTrackDTO[] | null }>(
+        `/api/v1/music/play-counts?limit=${Math.max(1, Math.min(limit, 200))}`,
+      );
+      const raw = Array.isArray(res?.data) ? res.data : [];
+      return raw.map(normalizeMostPlayed);
+    },
+    enabled,
+    staleTime: 60_000,
+    gcTime: 10 * 60_000,
   });
 }

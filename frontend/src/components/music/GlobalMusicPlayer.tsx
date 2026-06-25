@@ -7,11 +7,33 @@ import {
   Play, Pause, SkipBack, SkipForward,
   Shuffle, Repeat, Repeat1, Volume2, VolumeX,
   ChevronUp, Music, X,
+  ListMusic, Trash2, GripVertical,
 } from 'lucide-react';
+import {
+  DndContext, closestCenter,
+  useSensor, useSensors, PointerSensor, KeyboardSensor,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove, SortableContext, useSortable, verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { useMusicStore } from '@/store/musicStore';
+import { useMusicKeyboardShortcuts } from '@/hooks/useMusicKeyboardShortcuts';
+import {
+  useRemoveFromQueue, useClearQueue,
+} from '@/hooks/useMusicQueries';
 import { usePathname } from 'next/navigation';
+import type { Track } from '@/types';
 
 const AUTO_HIDE_DELAY = 5000; // 5 seconds
+
+// Playback speed presets, in display order.
+const SPEED_PRESETS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2] as const;
+function formatSpeed(r: number): string {
+  return r === 1 ? '1×' : `${r}×`;
+}
 
 function isSafeCoverUrl(url: unknown): url is string {
   if (typeof url !== 'string' || !url.trim()) return false;
@@ -19,9 +41,7 @@ function isSafeCoverUrl(url: unknown): url is string {
 }
 
 // ============================================================
-// SeekBar — click + drag to seek. While dragging, the store
-// is updated locally so the visual thumb follows the pointer,
-// and the audio element is seeked once on release.
+// SeekBar — click + drag to seek.
 // ============================================================
 function SeekBar({
   currentTime, duration, onSeek, onActivity,
@@ -106,6 +126,221 @@ function SeekBar({
 }
 
 // ============================================================
+// QueuePopover — drag-reorderable manual queue.
+// ============================================================
+function QueuePopover({ onClose }: { onClose: () => void }) {
+  const manualQueue = useMusicStore((s) => s.manualQueue);
+  const { reorderManualQueue, removeFromManualQueue, clearManualQueue } = useMusicStore();
+  const removeFromQueueApi = useRemoveFromQueue();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+    if (!over || active.id === over.id) return;
+    const ids = manualQueue.map((t) => t.id);
+    const oldIndex = ids.indexOf(String(active.id));
+    const newIndex = ids.indexOf(String(over.id));
+    if (oldIndex < 0 || newIndex < 0) return;
+    const reordered = arrayMove(manualQueue, oldIndex, newIndex);
+    reorderManualQueue(reordered.map((t) => t.id));
+  };
+
+  // Defensive array guard so the "x is not iterable" crash never happens.
+  const items = Array.isArray(manualQueue) ? manualQueue : [];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 10, scale: 0.98 }}
+      transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+      className="absolute bottom-full left-0 right-0 mb-2 mx-3 sm:mx-6 max-w-3xl sm:left-auto sm:right-6 sm:mx-0 bg-darkcard/95 backdrop-blur-md border border-darkborder rounded-2xl shadow-2xl z-[65] overflow-hidden"
+      role="dialog"
+      aria-label="Play queue"
+    >
+      <div className="flex items-center justify-between p-3 border-b border-darkborder">
+        <div className="flex items-center gap-2">
+          <ListMusic className="w-4 h-4 text-neon-violet" />
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-text-primary">
+            Play Queue
+          </span>
+          <span className="text-[10px] font-mono text-text-muted">
+            {items.length} {items.length === 1 ? 'track' : 'tracks'}
+          </span>
+        </div>
+        <div className="flex items-center gap-1">
+          {items.length > 0 && (
+            <button
+              onClick={() => {
+                // Local mirror first (instant UX); the ServerQueueSync
+                // child below fires the server DELETE for us.
+                clearManualQueue();
+              }}
+              className="px-2 py-1 text-[10px] font-mono text-text-muted hover:text-red-400 rounded-lg transition-colors"
+              title="Clear queue"
+              aria-label="Clear queue"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          )}
+          <button
+            onClick={onClose}
+            className="p-1 text-text-muted hover:text-text-primary rounded-lg transition-colors"
+            title="Close queue"
+            aria-label="Close queue"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+      <div className="max-h-72 overflow-y-auto p-2">
+        {items.length === 0 ? (
+          <div className="py-8 text-center">
+            <ListMusic className="w-8 h-8 mx-auto mb-2 text-text-muted opacity-40" />
+            <p className="text-xs font-mono text-text-muted">
+              Queue is empty
+            </p>
+            <p className="text-[10px] font-mono text-text-muted/70 mt-1">
+              Use &quot;Play next&quot; or &quot;Add to queue&quot; on any track
+            </p>
+          </div>
+        ) : (
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={items.map((t) => t.id)} strategy={verticalListSortingStrategy}>
+              {items.map((track) => (
+                <SortableQueueItem
+                  key={track.id}
+                  track={track}
+                  onRemove={() => {
+                    removeFromManualQueue(track.id);
+                    // Best-effort server sync if it's a numeric ID
+                    // (YouTube / local tracks don't have a server row).
+                    const numericId = Number(track.id);
+                    if (Number.isFinite(numericId) && numericId > 0) {
+                      removeFromQueueApi.mutate(numericId);
+                    }
+                  }}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
+        )}
+      </div>
+      {/* Side-effect-only child: watches the manualQueue length and
+          fires a server-side clear-all when the user empties it. */}
+      <ServerQueueSync />
+    </motion.div>
+  );
+}
+
+function SortableQueueItem({ track, onRemove }: { track: Track; onRemove: () => void }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: track.id });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.6 : 1,
+  };
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/5 group"
+    >
+      <button
+        {...attributes}
+        {...listeners}
+        className="p-1 text-text-muted hover:text-text-primary cursor-grab active:cursor-grabbing"
+        title="Drag to reorder"
+        aria-label="Drag handle"
+      >
+        <GripVertical className="w-3.5 h-3.5" />
+      </button>
+      <div className="relative w-8 h-8 rounded-md overflow-hidden shrink-0 bg-darkborder">
+        {track.coverImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={track.coverImage} alt="" className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center">
+            <Music className="w-3.5 h-3.5 text-white/50" />
+          </div>
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs font-semibold text-text-primary truncate">{track.title}</p>
+        <p className="text-[10px] text-text-muted truncate">{track.artist}</p>
+      </div>
+      <button
+        onClick={onRemove}
+        className="p-1 text-text-muted hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+        title="Remove from queue"
+        aria-label="Remove from queue"
+      >
+        <X className="w-3.5 h-3.5" />
+      </button>
+    </div>
+  );
+}
+
+// Side-effect-only child: watches the manualQueue length and
+// fires a server-side clear-all when the user empties it.
+function ServerQueueSync() {
+  const clearQueueApi = useClearQueue();
+  const manualQueue = useMusicStore((s) => s.manualQueue);
+  const lastSyncedLen = useRef<number | null>(null);
+  useEffect(() => {
+    if (
+      lastSyncedLen.current !== null &&
+      lastSyncedLen.current > 0 &&
+      manualQueue.length === 0
+    ) {
+      clearQueueApi.mutate();
+    }
+    lastSyncedLen.current = manualQueue.length;
+  }, [manualQueue.length, clearQueueApi]);
+  return null;
+}
+
+// ============================================================
+// SpeedMenu — playback rate picker.
+// ============================================================
+function SpeedMenu({ onClose }: { onClose: () => void }) {
+  const playbackRate = useMusicStore((s) => s.playbackRate);
+  const setPlaybackRate = useMusicStore((s) => s.setPlaybackRate);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 8, scale: 0.97 }}
+      transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+      className="absolute bottom-full mb-2 right-0 bg-darkcard/95 backdrop-blur-md border border-darkborder rounded-xl shadow-xl z-[65] py-1 min-w-[120px]"
+      role="menu"
+      aria-label="Playback speed"
+    >
+      {SPEED_PRESETS.map((r) => (
+        <button
+          key={r}
+          onClick={() => { setPlaybackRate(r); onClose(); }}
+          className={`w-full text-left px-3 py-1.5 text-xs font-mono transition-colors flex items-center justify-between ${
+            Math.abs(playbackRate - r) < 0.01
+              ? 'bg-neon-violet/15 text-neon-violet'
+              : 'text-text-secondary hover:bg-white/5 hover:text-text-primary'
+          }`}
+        >
+          <span>{formatSpeed(r)}</span>
+          {Math.abs(playbackRate - r) < 0.01 && (
+            <span className="text-[9px] text-neon-violet">●</span>
+          )}
+        </button>
+      ))}
+    </motion.div>
+  );
+}
+
+// ============================================================
 // ExpandedPlayer — full-width player view
 // ============================================================
 function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
@@ -115,12 +350,16 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
 }) {
   const {
     currentTrack, isPlaying, currentTime, duration, volume, isMuted,
-    isShuffled, repeatMode, tracks,
+    isShuffled, repeatMode, tracks, playbackRate, manualQueue,
     next, previous, togglePlay, setCurrentTime, setVolume, toggleMute,
     toggleShuffle, cycleRepeat,
   } = useMusicStore();
 
   const [imgError, setImgError] = useState(false);
+  // Cyber Phase 1: popover state for queue + speed menu.
+  const [queueOpen, setQueueOpen] = useState(false);
+  const [speedOpen, setSpeedOpen] = useState(false);
+  const manualQueueLen = Array.isArray(manualQueue) ? manualQueue.length : 0;
 
   const formatTime = (t: number) => {
     if (!t || isNaN(t)) return '0:00';
@@ -212,7 +451,7 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
             </div>
           </div>
 
-          {/* Volume */}
+          {/* Volume + secondary controls */}
           <div className="flex items-center gap-3 flex-1 justify-end">
             <div className="flex items-center gap-2 w-32">
               <button onClick={toggleMute} className="text-text-muted hover:text-text-primary transition-colors shrink-0">
@@ -238,6 +477,34 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
                 />
               </div>
             </div>
+            {/* Queue button — opens popover above */}
+            <button
+              onClick={() => { setQueueOpen((v) => !v); setSpeedOpen(false); onActivity(); }}
+              className={`relative p-1.5 rounded-lg transition-colors ${queueOpen ? 'text-neon-violet' : 'text-text-muted hover:text-text-primary'}`}
+              title="Play queue"
+              aria-label="Play queue"
+            >
+              <ListMusic className="w-4 h-4" />
+              {manualQueueLen > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-neon-violet text-white text-[9px] font-mono font-bold flex items-center justify-center">
+                  {manualQueueLen}
+                </span>
+              )}
+            </button>
+            {/* Speed button — opens preset menu */}
+            <div className="relative">
+              <button
+                onClick={() => { setSpeedOpen((v) => !v); setQueueOpen(false); onActivity(); }}
+                className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold transition-colors min-w-[36px] ${speedOpen ? 'text-neon-violet bg-neon-violet/10' : 'text-text-muted hover:text-text-primary'}`}
+                title="Playback speed"
+                aria-label="Playback speed"
+              >
+                {playbackRate === 1 ? '1×' : `${playbackRate}×`}
+              </button>
+              <AnimatePresence>
+                {speedOpen && <SpeedMenu onClose={() => setSpeedOpen(false)} />}
+              </AnimatePresence>
+            </div>
             <div className="text-xs text-text-muted tabular-nums hidden md:block">
               {currentIndex + 1} / {tracks.length}
             </div>
@@ -250,6 +517,10 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
           </div>
         </div>
       </div>
+      {/* Queue popover — floats just above the player */}
+      <AnimatePresence>
+        {queueOpen && <QueuePopover onClose={() => setQueueOpen(false)} />}
+      </AnimatePresence>
     </motion.div>
   );
 }
@@ -317,6 +588,10 @@ export default function GlobalMusicPlayer() {
   const [expanded, setExpanded] = useState(false);
   const [hidden, setHidden] = useState(false);
   const { currentTrack, tracks, isPlaying } = useMusicStore();
+
+  // Cyber Phase 1: keyboard shortcuts (music-scoped — see the hook
+  // for the input/textarea/contenteditable guard).
+  useMusicKeyboardShortcuts();
 
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);

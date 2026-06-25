@@ -10,6 +10,9 @@ export interface SocialFeedParams {
   authorId?: number;
   visibility?: string;
   hashtag?: string;
+  // Phase 5 home upgrade: feed filter tabs.
+  sort?: 'recent' | 'popular';
+  following?: boolean;
 }
 
 export interface SocialFeedResponse {

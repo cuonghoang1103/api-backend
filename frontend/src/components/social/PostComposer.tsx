@@ -32,7 +32,10 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
-import { socialApi, fileApi } from '@/lib/api';
+import { socialApi, fileApi, socialUserApi } from '@/lib/api';
+import { useComposerDraft } from '@/hooks/useComposerDraft';
+import { pickAiTemplate } from '@/lib/aiWriteTemplates';
+import MentionAutocomplete from '@/components/social/MentionAutocomplete';
 import type { MediaUploadItem } from '@/types/social';
 import { toast } from 'sonner';
 
@@ -64,9 +67,40 @@ export function PostComposer() {
   const {
     composerContent, composerVisibility, composerMedia, composerPoll, isPosting,
     composerYouTubeUrl,
-    setComposerContent, setComposerVisibility, setComposerPoll, setComposerYouTubeUrl,
+    setComposerContent: setComposerContentRaw, setComposerVisibility, setComposerPoll, setComposerYouTubeUrl,
     addComposerMedia, removeComposerMedia, submitPost, clearComposer,
   } = useSocialStore();
+
+  // Phase 5 home upgrade: composer draft auto-save. On first mount
+  // we hydrate from localStorage so a half-written post survives
+  // reloads / tab-switches. On every content change we schedule a
+  // debounced write (1.5s of inactivity). On a successful submit
+  // we clear the slot so the next session starts blank.
+  //
+  // Implementation: we wrap the store setter ONCE here. Every
+  // existing call site that does setComposerContent(next) in this
+  // file gets the draft-persist behaviour for free (markdown
+  // helpers, paste, AI Write, code block, etc.) without us
+  // touching each one.
+  const { initialContent, scheduleSave, clearDraft } = useComposerDraft();
+  const setComposerContent = useCallback(
+    (next: string) => {
+      setComposerContentRaw(next);
+      scheduleSave(next);
+    },
+    [setComposerContentRaw, scheduleSave],
+  );
+  useEffect(() => {
+    if (initialContent && !composerContent) {
+      // Restore on mount when the store is empty. We call the raw
+      // setter so the restoration itself doesn't trigger a save
+      // cycle (the persisted content is identical to what we just
+      // loaded, so it'd be a no-op write anyway).
+      setComposerContentRaw(initialContent);
+    }
+    // Run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Keep the local draft in sync with the store (e.g. after a
   // successful post, clearComposer resets the store to '').
@@ -340,6 +374,10 @@ export function PostComposer() {
     setPostError(null);
     try {
       await submitPost();
+      // Phase 5 home upgrade: clear the localStorage draft now that
+      // the post is committed. If submit fails we keep the draft so
+      // the user can retry without losing their text.
+      clearDraft();
       setIsExpanded(false);
       setShowPollEditor(false);
     } catch (err: unknown) {
@@ -404,25 +442,18 @@ export function PostComposer() {
 
               {/* AI Write shortcut — sits inside the textarea
                   wrapper, anchored to the bottom-right so it
-                  never overlaps typed text. Clicking it
-                  pre-fills the composer with a small AI-style
-                  starter prompt so the user can keep editing
-                  from there. The exact "AI generation" is left
-                  as a no-op here — the parent can wire it to a
-                  real /api/v1/ai endpoint in a later iteration
+                  never overlaps typed text. Phase 5 home upgrade:
+                  now picks from a curated bank of 16 contextual
+                  templates (share / ask / learn / goal / thought)
+                  instead of 4 random openers. The next iteration
+                  can swap pickAiTemplate() for a real LLM call
                   without changing the UI contract. */}
               {composerContent.length === 0 && (
                 <button
                   type="button"
                   onClick={() => {
-                    const starters = [
-                      '✨ Hôm nay mình vừa học được điều thú vị — ',
-                      '🚀 Đang khám phá một ý tưởng mới: ',
-                      '💡 Câu hỏi cho mọi người: ',
-                      '🎯 Mục tiêu tuần này của mình là ',
-                    ];
-                    const pick = starters[Math.floor(Math.random() * starters.length)];
-                    setComposerContent(pick);
+                    const tpl = pickAiTemplate();
+                    setComposerContent(`${tpl.emoji} ${tpl.text}`);
                     requestAnimationFrame(() => {
                       textareaRef.current?.focus();
                       const ta = textareaRef.current;
@@ -440,7 +471,7 @@ export function PostComposer() {
                     color: '#c4b5fd',
                     border: '1px solid rgba(139,92,246,0.35)',
                   }}
-                  title="AI Write — gợi ý nội dung bằng AI"
+                  title="AI Write — gợi ý nội dung theo ngữ cảnh"
                   aria-label="AI Write"
                 >
                   <Sparkles size={11} className="animate-pulse" />
@@ -820,6 +851,19 @@ export function PostComposer() {
           />
         )}
       </AnimatePresence>
+
+      {/* Phase 5 home upgrade: @mention autocomplete. Listens to
+          the textarea and pops up while the user is typing an
+          @-token. Picking an item replaces the @-token with the
+          username + space and restores caret. Wrapped in enabled
+          so the dropdown only mounts when the composer is
+          actually expanded (saves the textarea listener churn). */}
+      <MentionAutocomplete
+        textareaRef={textareaRef}
+        value={composerContent}
+        onChange={setComposerContent}
+        enabled={isExpanded}
+      />
     </div>
   );
 }

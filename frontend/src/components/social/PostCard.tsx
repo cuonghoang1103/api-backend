@@ -10,6 +10,7 @@ import {
   X, Youtube,
   Download, FileText, FileCode, FileArchive, FileSpreadsheet,
   CornerDownRight,
+  Loader2,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
 import { socialApi } from '@/lib/api';
@@ -440,6 +441,22 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
     } catch (err: any) {
       toast.error(err?.response?.data?.message || 'Gửi trả lời thất bại');
       throw err; // let CommentItem re-enable its submit button
+    }
+  };
+
+  // Phase 5 home upgrade: lazy-load replies beyond the first
+  // page. Called from CommentItem when the user clicks
+  // "Xem thêm N phản hồi". We just delegate to the API; the
+  // caller (CommentItem) merges the result into its local
+  // `extraReplies` state.
+  const handleLoadMoreReplies = async (rootId: number, cursor: number): Promise<SocialComment[] | null> => {
+    try {
+      const res = await socialApi.getCommentReplies(rootId, { cursor, limit: 10 });
+      const data = (res.data as unknown as { data: SocialComment[] }).data ?? [];
+      return data;
+    } catch (err) {
+      toast.error('Không tải được thêm phản hồi');
+      return null;
     }
   };
 
@@ -1265,6 +1282,11 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                           onReply={handleReplyComment}
                           canDelete={canDeleteComment}
                           postId={post.id}
+                          // Phase 5 home upgrade: lazy-load more
+                          // replies when the server says there
+                          // are more than the eagerly fetched
+                          // count.
+                          onLoadMoreReplies={handleLoadMoreReplies}
                         />
                       );
                     })}
@@ -2164,6 +2186,12 @@ function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
 
 // ─── Comment Item ─────────────────────────────────────────────────────────────
 
+// Phase 5 home upgrade: signature for the lazy-load-more-replies
+// callback. Extracted to a top-level alias so the `Promise<X[]>`
+// generic doesn't get parsed as JSX inside the inline object
+// type that follows it.
+type CommentLoadMoreFn = (rootId: number, cursor: number) => Promise<SocialComment[] | null | undefined>;
+
 function CommentItem({
   comment,
   onLike,
@@ -2174,15 +2202,10 @@ function CommentItem({
   canDelete,
   postId,
   depth = 0,
+  onLoadMoreReplies,
 }: {
   comment: SocialComment;
   onLike: () => void;
-  // Like handler that accepts a commentId. We need this for the
-  // nested-replies case because each reply's like lives in
-  // PostCard's closure (it has access to `socialApi` + the
-  // `loadComments` refresh). `onLike` is a no-arg variant
-  // reserved for the top-level "click to like this comment"
-  // path; for replies we always use `onLikeComment(id)`.
   onLikeComment?: (commentId: number) => void;
   onDelete?: () => void;
   onDeleteComment?: (commentId: number) => void;
@@ -2190,6 +2213,7 @@ function CommentItem({
   canDelete?: boolean;
   postId: number;
   depth?: number;
+  onLoadMoreReplies?: CommentLoadMoreFn;
 }) {  // Defensive defaults — a comment without a user object (e.g.
   // one that's been partially deleted on the server) should still
   // render without crashing the whole card.
@@ -2208,6 +2232,11 @@ function CommentItem({
   const [replyOpen, setReplyOpen] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [replySubmitting, setReplySubmitting] = useState(false);
+  // Phase 5 home upgrade: extra replies fetched lazily when the
+  // user clicks "Xem thêm N phản hồi". We track them locally so
+  // we can append without rebuilding the parent's tree.
+  const [extraReplies, setExtraReplies] = useState<SocialComment[]>([]);
+  const [loadingMoreReplies, setLoadingMoreReplies] = useState(false);
 
   // Pre-fill `@display ` when the user clicks the Reply button
   // for the first time. We use the display name with a trailing
@@ -2229,6 +2258,32 @@ function CommentItem({
       /* parent surfaces the error toast */
     } finally {
       setReplySubmitting(false);
+    }
+  };
+
+  // Phase 5 home upgrade: ref for the reply input so the
+  // MentionAutocomplete dropdown can hook into it. Same pattern
+  // as the top-level comment composer.
+  const replyInputRef = useRef<HTMLInputElement | null>(null);
+  // Phase 5 home upgrade: lazy-load more replies. We track the
+  // cursor (last reply id we've shown) so the parent can issue
+  // the next page request. The parent passes a callback so this
+  // component doesn't need to know about socialApi directly.
+  const handleLoadMoreReplies = async () => {
+    if (!onLoadMoreReplies) return;
+    const allShown = [...(comment.replies ?? []), ...extraReplies];
+    const last = allShown[allShown.length - 1];
+    if (!last) return;
+    setLoadingMoreReplies(true);
+    try {
+      const next = await onLoadMoreReplies(comment.id, last.id);
+      if (next && next.length > 0) {
+        setExtraReplies((prev) => [...prev, ...next]);
+      }
+    } catch {
+      // silent — parent can retry via refresh
+    } finally {
+      setLoadingMoreReplies(false);
     }
   };
 
@@ -2352,6 +2407,7 @@ function CommentItem({
           <div className="mt-2 ml-2 pl-3 border-l border-violet-500/30">
             <div className="flex items-center gap-2">
               <input
+                ref={replyInputRef}
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 onKeyDown={(e) => {
@@ -2363,7 +2419,7 @@ function CommentItem({
                   }
                 }}
                 autoFocus
-                placeholder={`Trả lời ${display}...`}
+                placeholder={`Trả lời ${display}... (gõ @ để tag)`}
                 className="flex-1 rounded-xl px-3 py-1.5 text-sm text-white placeholder-slate-500 outline-none"
                 style={{
                   background: 'rgba(255,255,255,0.04)',
@@ -2390,16 +2446,27 @@ function CommentItem({
               >
                 <X size={12} />
               </button>
+              {/* Phase 5 home upgrade: @mention autocomplete for the
+                  reply form. The reply input gets the same dropdown
+                  as the top-level composer. */}
+              <MentionAutocomplete
+                textareaRef={replyInputRef}
+                value={replyText}
+                onChange={setReplyText}
+                offsetY={36}
+              />
             </div>
           </div>
         )}
 
         {/* Replies — nested under the top-level comment. We
             only render one level deep (depth==0 → renders its
-            .replies[] with depth==1, those don't recurse). */}
-        {depth === 0 && Array.isArray(comment.replies) && comment.replies.length > 0 && (
+            .replies[] with depth==1, those don't recurse).
+            Phase 5 home upgrade: also append `extraReplies`
+            loaded lazily via "Xem thêm" button. */}
+        {depth === 0 && (Array.isArray(comment.replies) && comment.replies.length > 0 || extraReplies.length > 0) && (
           <div className="mt-3 ml-3 pl-3 space-y-2 border-l border-white/[0.06]">
-            {comment.replies.map((reply) => (
+            {[...(comment.replies ?? []), ...extraReplies].map((reply) => (
               <CommentItem
                 key={reply.id}
                 comment={reply}
@@ -2412,6 +2479,31 @@ function CommentItem({
                 depth={1}
               />
             ))}
+            {/* Phase 5 home upgrade: "Xem thêm N phản hồi" — only
+                shows when the server signalled there's more than
+                what we eagerly fetched. Clicking it calls
+                /comments/by-root/:rootId with the last shown
+                reply's id as cursor. */}
+            {comment.hasMoreReplies && onLoadMoreReplies && (
+              <button
+                type="button"
+                onClick={handleLoadMoreReplies}
+                disabled={loadingMoreReplies}
+                className="ml-2 flex items-center gap-1 text-xs font-medium text-violet-300 transition-colors hover:text-violet-200 disabled:opacity-50"
+              >
+                {loadingMoreReplies ? (
+                  <>
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    Đang tải…
+                  </>
+                ) : (
+                  <>
+                    <CornerDownRight className="h-3 w-3 rotate-180" />
+                    Xem thêm {Math.max(0, (comment.repliesCount ?? 0) - (comment.repliesShown ?? comment.replies?.length ?? 0) - extraReplies.length)} phản hồi
+                  </>
+                )}
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -2465,15 +2557,20 @@ function ActionButton({
   );
 }
 
+// Phase 5 home upgrade: shimmer skeleton (instead of the old
+// flat animate-pulse). The skeleton uses a moving linear-gradient
+// overlay so it reads as "real content loading" not "broken UI".
+// The gradient moves via a single CSS animation on the wrapper
+// — pure GPU work, no per-frame React renders.
 function CommentSkeleton() {
   return (
-    <div className="space-y-2">
-      {[1, 2].map((i) => (
+    <div className="space-y-3">
+      {[1, 2, 3].map((i) => (
         <div key={i} className="flex gap-2.5">
-          <div className="h-8 w-8 animate-pulse rounded-full" style={{ background: 'rgba(255,255,255,0.06)' }} />
+          <div className="shimmer h-8 w-8 flex-shrink-0 rounded-full" />
           <div className="flex-1 space-y-1.5 pt-1">
-            <div className="h-3 w-24 animate-pulse rounded" style={{ background: 'rgba(255,255,255,0.06)' }} />
-            <div className="h-3 w-4/5 animate-pulse rounded" style={{ background: 'rgba(255,255,255,0.04)' }} />
+            <div className="shimmer h-3 w-24 rounded" />
+            <div className="shimmer h-3 w-4/5 rounded" />
           </div>
         </div>
       ))}

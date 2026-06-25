@@ -958,6 +958,12 @@ export async function getComments(postId: number, options: { cursor?: number; li
     mentions: Array.isArray(c.mentions) ? c.mentions : [],
     likesCount: c._count?.likes ?? 0,
     repliesCount: c.repliesCount,
+    // Phase 5 home upgrade: when the stored repliesCount exceeds
+    // what we eagerly fetched (we capped at REPLIES_FETCH_LIMIT
+    // below), signal the client so it can render "Xem thêm N
+    // phản hồi" and lazy-load the rest on click.
+    repliesShown: c.replies.length,
+    hasMoreReplies: c.repliesCount > c.replies.length,
     isEdited: c.isEdited,
     createdAt: c.createdAt,
     updatedAt: c.updatedAt,
@@ -967,6 +973,7 @@ export async function getComments(postId: number, options: { cursor?: number; li
       id: r.id,
       postId: r.postId,
       parentId: r.parentId,
+      depth: r.depth ?? 1,
       content: r.content,
       mentions: Array.isArray(r.mentions) ? r.mentions : [],
       likesCount: r._count?.likes ?? 0,
@@ -980,6 +987,69 @@ export async function getComments(postId: number, options: { cursor?: number; li
   }));
 
   return { data: enriched, pagination: { nextCursor, hasNextPage, limit } };
+}
+
+// ─── Phase 5 home upgrade: lazy-load replies for a comment thread ─
+// When a thread has more than REPLIES_FETCH_LIMIT replies, the
+// PostCard shows "Xem thêm N phản hồi" and calls this endpoint
+// on click. We always fetch only depth=1 children of `rootId`
+// (Phase 5 enforces maxDepth=2 so no deeper nesting is possible).
+//
+// Cursor is the id of the last reply already shown; we return
+// replies with `id > cursor` in ASC order so the client can
+// append to the existing list.
+export async function getCommentReplies(
+  rootId: number,
+  _currentUserId: number | undefined,
+  options: { cursor?: number; limit?: number } = {},
+) {
+  const { cursor, limit = 10 } = options;
+
+  // Verify the root comment exists (so 404 surfaces clearly
+  // rather than returning an empty list).
+  const root = await prisma.socialComment.findUnique({
+    where: { id: rootId },
+    select: { id: true, postId: true, depth: true },
+  });
+  if (!root) throw new AppError('Root comment not found', 404, 'COMMENT_NOT_FOUND');
+
+  const replies = await prisma.socialComment.findMany({
+    where: {
+      rootId,
+      ...(cursor != null ? { id: { gt: cursor } } : {}),
+    },
+    orderBy: { id: 'asc' },
+    take: limit + 1,
+    include: {
+      user: {
+        select: { id: true, username: true, fullName: true, avatarUrl: true },
+      },
+      _count: { select: { likes: true } },
+      likes: { select: { userId: true } },
+    },
+  });
+
+  const hasNextPage = replies.length > limit;
+  const items = hasNextPage ? replies.slice(0, limit) : replies;
+  const nextCursor = hasNextPage ? items[items.length - 1]?.id : null;
+
+  const data = items.map((r: any) => ({
+    id: r.id,
+    postId: r.postId,
+    parentId: r.parentId,
+    depth: r.depth ?? 1,
+    content: r.content,
+    mentions: Array.isArray(r.mentions) ? r.mentions : [],
+    likesCount: r._count?.likes ?? 0,
+    repliesCount: r.repliesCount,
+    isEdited: r.isEdited,
+    createdAt: r.createdAt,
+    updatedAt: r.updatedAt,
+    user: r.user,
+    isLiked: (r.likes as any[]).some((l: any) => l.userId !== undefined),
+  }));
+
+  return { data, pagination: { nextCursor, hasNextPage, limit } };
 }
 
 export async function deleteComment(commentId: number, userId: number) {

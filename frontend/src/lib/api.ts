@@ -1012,6 +1012,12 @@ export const socialApi = {
   getComments: (postId: number, params?: { cursor?: number; limit?: number }) =>
     api.get(`/social/posts/${postId}/comments`, { params }),
 
+  // Phase 5 home upgrade: lazy-load more replies for a thread.
+  // Called when the user clicks "Xem thêm N phản hồi" on a
+  // top-level comment whose `hasMoreReplies` flag is true.
+  getCommentReplies: (rootId: number, params?: { cursor?: number; limit?: number }) =>
+    api.get(`/social/comments/by-root/${rootId}`, { params }),
+
   createComment: (data: {
     postId: number;
     parentId?: number;

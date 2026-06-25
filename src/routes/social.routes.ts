@@ -44,10 +44,11 @@ import {
   likePost,
   unlikePost,
   reactPost,
-  createComment,
   getComments,
-  deleteComment,
+  getCommentReplies,
+  createComment,
   updateComment,
+  deleteComment,
   likeComment,
   savePost,
   unsavePost,
@@ -376,6 +377,44 @@ router.get(
     ...(cursorId != null ? { cursor: cursorId } : {}),
     limit: parseInt(limit as string, 10) || 20,
     });
+
+      res.json({ success: true, ...result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/social/comments/by-root/:rootId — Lazy-load replies
+// Phase 5 home upgrade: when a comment thread has more than the
+// eagerly-fetched REPLIES_FETCH_LIMIT replies, the card shows
+// "Xem thêm N phản hồi". Clicking it calls this endpoint with
+// the top-level comment id (rootId) and a cursor to fetch the
+// next page. Cursor is the id of the last reply on screen.
+//
+// Must be defined BEFORE /comments/:id so Express doesn't match
+// "by-root" as :id.
+// ════════════════════════════════════════════════════════════════
+router.get(
+  '/comments/by-root/:rootId',
+  optionalAuth,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const rootId = parseInt(req.params.rootId, 10);
+      if (!Number.isInteger(rootId) || rootId < 1) {
+        throw new AppError('Invalid root comment ID', 400, 'INVALID_ID');
+      }
+      const cursor = req.query.cursor
+        ? parseInt(req.query.cursor as string, 10)
+        : undefined;
+      const limit = Math.min(parseInt(req.query.limit as string, 10) || 10, 30);
+
+      const currentUserId = req.user?.userId;
+      const result = await getCommentReplies(rootId, currentUserId, {
+        ...(cursor != null && Number.isInteger(cursor) ? { cursor } : {}),
+        limit,
+      });
 
       res.json({ success: true, ...result });
     } catch (error) {

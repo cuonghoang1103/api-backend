@@ -839,6 +839,24 @@ export const useMusicStore = create<MusicState>()((set, get) => {
         }
       }
       const safeTracks = Array.isArray(likedTracks) ? likedTracks : [];
+
+      // Idempotency guard — CRITICAL. The caller runs this from a
+      // useEffect whose dependency is `serverLikedTracks`, which gets
+      // a fresh `[]` default reference on every render while the query
+      // is loading. If we `set()` unconditionally we hand back new
+      // array references each call, forcing a re-render → the effect
+      // fires again → set() again → infinite loop (React #185
+      // "Maximum update depth exceeded"). So bail out when nothing
+      // actually changed.
+      const cur = get();
+      const sameIds =
+        cur.likedIds.length === safeIds.length &&
+        cur.likedIds.every((v, i) => v === safeIds[i]);
+      const sameTracks =
+        cur.likedTracks.length === safeTracks.length &&
+        cur.likedTracks.every((t, i) => t.id === safeTracks[i]?.id);
+      if (sameIds && sameTracks) return;
+
       set({ likedIds: safeIds, likedTracks: safeTracks });
     },
   };

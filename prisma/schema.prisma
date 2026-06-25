@@ -88,6 +88,11 @@ model User {
   enrollments             Enrollment[]
   certificates            Certificate[]
   musicPlaylists          MusicPlaylist[]
+  // Cyber-music Phase 1: per-user play queue (idempotent upsert).
+  musicQueueItems         MusicQueueItem[]
+  // Cyber-music Phase 2a: per-user likes + play counts (additive).
+  musicLikes             MusicLike[]
+  musicPlayCounts        MusicPlayCount[]
   fileAttachments         FileAttachment[]
   passwordResetTokens     PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
@@ -1091,6 +1096,9 @@ model MusicTrack {
 
   playlists MusicPlaylistTrack[]
   histories MusicHistory[]
+  queueItems MusicQueueItem[]
+  likes      MusicLike[]
+  playCounts MusicPlayCount[]
 
   @@map("music_tracks")
 }
@@ -1144,6 +1152,80 @@ model MusicHistory {
   @@index([userId, playedAt(sort: Desc)], name: "idx_history_user_time")
   @@index([userId], name: "idx_history_user")
   @@map("music_history")
+}
+
+// ============================================================
+// 8c. MUSIC PLAY QUEUE (Phase 1)
+// ============================================================
+model MusicQueueItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  trackId   Int      @map("track_id")
+  position  Float    @default(0)
+  intent    String   @default("queue") @db.VarChar(16)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track MusicTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trackId], name: "music_queue_user_track_unique")
+  @@index([userId, position], name: "idx_queue_user_position")
+  @@map("music_queue_items")
+}
+
+// ============================================================
+// 8d. MUSIC LIKES (Phase 2a)
+// ============================================================
+// One row per (userId, trackId). Idempotent: a "like" is an INSERT,
+// an "unlike" is a DELETE. The unique constraint enforces this at
+// the DB layer; the service uses upsert+delete to keep the API
+// "fire and forget".
+model MusicLike {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  trackId   Int      @map("track_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track MusicTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trackId], name: "music_likes_user_track_unique")
+  @@index([trackId], name: "idx_music_likes_track")
+  @@index([userId, createdAt(sort: Desc)], name: "idx_music_likes_user_recent")
+  @@map("music_likes")
+}
+
+// ============================================================
+// 8e. MUSIC PLAY COUNTS (Phase 2a)
+// ============================================================
+// One row per (userId, trackId). `count` is incremented each time
+// the user actually plays the track (driven by the existing
+// POST /api/v1/music/history endpoint, no new round-trip).
+//
+// Why a separate table instead of GROUP BY MusicHistory?
+// MusicHistory is unique-on-(userId, trackId) (last-play semantics),
+// so it can only count "did the user ever play this". To answer
+// "how many times has the user played this" we need an additive
+// counter that survives repeats — that's what this table is for.
+//
+// `lastPlayedAt` is denormalized so the "Most Played" sort can
+// break ties with recency without joining MusicHistory.
+model MusicPlayCount {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @map("user_id")
+  trackId     Int       @map("track_id")
+  count       Int       @default(0)
+  lastPlayedAt DateTime @default(now()) @map("last_played_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track MusicTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trackId], name: "music_play_counts_user_track_unique")
+  @@index([userId, count(sort: Desc)], name: "idx_music_play_counts_user_count")
+  @@map("music_play_counts")
 }
 
 // ============================================================

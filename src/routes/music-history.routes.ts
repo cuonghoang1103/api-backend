@@ -2,10 +2,16 @@
  * POST /api/v1/music/history
  * Records a track play event in the user's listening history.
  * Also upserts so the same track played again updates the timestamp.
+ *
+ * Phase 2a: ALSO atomically increments the user's MusicPlayCount
+ * for this track in the same request handler (no extra round-trip).
+ * The count drives the "Most Played" sort.
  */
 import { Router, type Response } from 'express';
 import { authenticate } from '../middleware/auth.js';
 import { prisma } from '../config/database.js';
+import { musicPlayCountsService } from '../services/music-play-counts.service.js';
+import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -69,6 +75,20 @@ router.post(
         });
         await prisma.musicHistory.deleteMany({
           where: { id: { in: oldestToDelete.map((e) => e.id) } },
+        });
+      }
+
+      // Phase 2a: atomically increment the play count for this user
+      // + track. Best-effort: a failure here must NOT break history
+      // recording (the user's listening log is the more critical
+      // feature; the count is just for sorting).
+      try {
+        await musicPlayCountsService.increment(userId, trackIdInt);
+      } catch (countErr: any) {
+        logger.warn('[music-history] play-count increment failed (non-fatal)', {
+          error: countErr instanceof Error ? countErr.message : String(countErr),
+          userId,
+          trackId: trackIdInt,
         });
       }
 

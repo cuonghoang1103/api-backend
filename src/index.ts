@@ -72,6 +72,11 @@ const shopRoutes = (await import(path.join(__dirname, 'routes', 'shop.routes.js'
 const musicRoutes = (await import(path.join(__dirname, 'routes', 'music.routes.js'))).default;
 const musicAdminRoutes = (await import(path.join(__dirname, 'routes', 'music-admin.routes.js'))).default;
 const musicHistoryRoutes = (await import(path.join(__dirname, 'routes', 'music-history.routes.js'))).default;
+// Cyber-music Phase 1: persistent play queue (idempotent upsert, sparse-float positions).
+const musicQueueRoutes = (await import(path.join(__dirname, 'routes', 'music-queue.routes.js'))).default;
+// Cyber-music Phase 2a: per-user likes + per-user play counts.
+const musicLikesRoutes = (await import(path.join(__dirname, 'routes', 'music-likes.routes.js'))).default;
+const musicPlayCountsRoutes = (await import(path.join(__dirname, 'routes', 'music-play-counts.routes.js'))).default;
 const aiRoutes = (await import(path.join(__dirname, 'routes', 'ai.routes.js'))).default;
 const adminRoutes = (await import(path.join(__dirname, 'routes', 'admin.routes.js'))).default;
 const skillRoutes = (await import(path.join(__dirname, 'routes', 'skill.routes.js'))).default;
@@ -361,6 +366,11 @@ app.use('/api/v1/shop', shopRoutes);
 app.use('/api/v1/music', musicRoutes);
 app.use('/api/v1/music/admin', musicAdminRoutes);
 app.use('/api/v1/music/history', musicHistoryRoutes);
+// Cyber-music Phase 1 — per-user play queue (Spotify-style hybrid).
+app.use('/api/v1/music/queue', musicQueueRoutes);
+// Cyber-music Phase 2a — likes + most-played.
+app.use('/api/v1/music/likes', musicLikesRoutes);
+app.use('/api/v1/music/play-counts', musicPlayCountsRoutes);
 app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/admin/embed-jobs', embedJobsRoutes);
 app.use('/api/v1/admin', adminRoutes);

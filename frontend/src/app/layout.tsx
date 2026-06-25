@@ -49,6 +49,13 @@ const GlobalMusicPlayer = dynamic(
   { ssr: false }
 )
 
+// Phase 3: Listen Together realtime bridge. Renders nothing; reuses the
+// existing socket. Mounted once here so sync survives route changes.
+const ListenTogetherSync = dynamic(
+  () => import('@/components/music/ListenTogetherSync'),
+  { ssr: false }
+)
+
 const FloatingAIAssistant = dynamic(
   () => import('@/components/chat/FloatingAIAssistant'),
   { ssr: false }
@@ -275,6 +282,7 @@ export default function RootLayout({
               <MusicAudioController />
               <MusicHistoryRecorder />
               <GlobalMusicPlayer />
+              <ListenTogetherSync />
               <FloatingAIAssistant />
               <SoundInitializer />
             </ClientOnly>

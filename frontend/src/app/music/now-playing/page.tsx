@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useMusicStore } from '@/store/musicStore';
 import CyberAudioVisualizer from '@/components/music/CyberAudioVisualizer';
 import CyberLyrics from '@/components/music/CyberLyrics';
+import ListenTogether from '@/components/music/ListenTogether';
 
 function isSafeUrl(url: unknown): url is string {
   return typeof url === 'string' && url.trim().length > 0 && url.startsWith('http');
@@ -186,6 +187,7 @@ export default function NowPlayingPage() {
             </span>
 
             <div className="flex items-center gap-4">
+              <ListenTogether />
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setShowLyrics(true)}

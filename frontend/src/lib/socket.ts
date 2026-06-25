@@ -124,3 +124,107 @@ export function emitTyping(threadId: number, isTyping: boolean) {
   if (!socket?.connected) return;
   socket.emit('thread:typing', { threadId, isTyping });
 }
+
+// ════════════════════════════════════════════════════════════════
+// Phase 3: Listen Together — synchronized listening rooms.
+// Reuses the SAME singleton socket above (never opens a second one).
+// All helpers no-op safely when the socket isn't connected.
+// ════════════════════════════════════════════════════════════════
+
+export interface ListenTrackMeta {
+  id: string;
+  title: string;
+  artist: string;
+  audioUrl: string | null;
+  coverImage: string | null;
+  durationSeconds: number | null;
+}
+export interface ListenState {
+  roomId?: string;
+  track: ListenTrackMeta | null;
+  isPlaying: boolean;
+  positionSec: number;
+  updatedAt?: number;
+}
+export interface ListenMember { userId: number; username: string }
+
+// Promise wrapper around an ack-based emit with a timeout so the UI
+// never hangs if the server doesn't answer.
+function emitAck<T>(event: string, payload: unknown, timeoutMs = 6000): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    if (!socket?.connected) {
+      reject(new Error('Socket not connected'));
+      return;
+    }
+    let done = false;
+    const t = setTimeout(() => {
+      if (!done) {
+        done = true;
+        reject(new Error('Listen request timed out'));
+      }
+    }, timeoutMs);
+    socket.emit(event, payload, (res: T) => {
+      if (done) return;
+      done = true;
+      clearTimeout(t);
+      resolve(res);
+    });
+  });
+}
+
+export function listenCreate(init: {
+  track: ListenTrackMeta | null;
+  isPlaying: boolean;
+  positionSec: number;
+}): Promise<{ ok: boolean; roomId?: string; hostId?: number; members?: ListenMember[]; state?: ListenState; error?: string }> {
+  return emitAck('listen:create', init);
+}
+
+export function listenJoin(roomId: string): Promise<{
+  ok: boolean;
+  hostId?: number;
+  members?: ListenMember[];
+  state?: ListenState;
+  error?: string;
+}> {
+  return emitAck('listen:join', { roomId });
+}
+
+export function listenLeave(roomId: string) {
+  socket?.emit('listen:leave', { roomId });
+}
+
+export function listenControl(payload: {
+  roomId: string;
+  track: ListenTrackMeta | null;
+  isPlaying: boolean;
+  positionSec: number;
+}) {
+  if (!socket?.connected) return;
+  socket.emit('listen:control', payload);
+}
+
+export function listenSyncRequest(roomId: string): Promise<{
+  ok: boolean;
+  state?: ListenState;
+  members?: ListenMember[];
+  hostId?: number;
+}> {
+  return emitAck('listen:sync-request', { roomId });
+}
+
+// Subscriptions — each returns an unsubscribe fn.
+export function onListenState(cb: (s: ListenState) => void): () => void {
+  socket?.on('listen:state', cb);
+  return () => { socket?.off('listen:state', cb); };
+}
+export function onListenMembers(
+  cb: (p: { roomId: string; members: ListenMember[]; hostId: number }) => void,
+): () => void {
+  socket?.on('listen:members', cb);
+  return () => { socket?.off('listen:members', cb); };
+}
+export function onListenClosed(cb: (p: { roomId: string }) => void): () => void {
+  socket?.on('listen:closed', cb);
+  return () => { socket?.off('listen:closed', cb); };
+}

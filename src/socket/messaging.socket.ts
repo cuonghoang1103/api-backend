@@ -31,6 +31,9 @@ import { prisma } from '../config/database.js';
 import { UnauthorizedError } from '../middleware/errorHandler.js';
 import { extractToken, type JwtPayload } from '../middleware/auth.js';
 import { logger } from '../utils/logger.js';
+// Phase 3: Listen Together. Additive — registers its own listen:* socket
+// handlers + listen:<roomId> rooms; does not touch the messaging logic.
+import { registerListenTogether } from './listen-together.js';
 
 export interface MessageEventPayload {
   threadId: number;
@@ -274,6 +277,11 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     socket.on('thread:leave', (threadId: number) => {
       if (typeof threadId === 'number') socket.leave(`thread:${threadId}`);
     });
+
+    // Phase 3: Listen Together — register the listen:* handlers for this
+    // connection. Self-contained (own rooms + own disconnect listener),
+    // so it can't interfere with messaging/presence above.
+    registerListenTogether(io!, socket, user);
 
     // Typing indicator — broadcast to the other side of the
     // conversation (excludes the sender by default).

@@ -5,23 +5,36 @@
 // Replaces StarterKit's bundled lowlight-backed code block so we
 // never ship two highlighting libraries.
 //
-// Lazy-loading: CodeBlock pulls in shiki (≈ 1MB gz of grammars/themes
-// once Shiki's own async JSON loads). We use a Next.js `dynamic()`
-// import with `ssr: false` so the bundle only loads when the user
-// actually opens a note. The server-rendered HTML (contentHtml) uses
-// Shiki too via the same component when the page renders statically.
+// Why this file exists:
+// Before this rewrite the editor shipped a Next.js `dynamic()`
+// import with `ssr: false` for the shared CodeBlock. That works
+// for top-level client components but inside a Tiptap NodeView
+// the dynamic chunk was kept in its loading state forever — the
+// user reported "renders as plain monochrome white text". The fix
+// is to drop `ssr: false` (the editor is already client-only via
+// `immediatelyRender: false` in NoteEditor) and let CodeBlock mount
+// normally on the client, then run its own Shiki async work in
+// useEffect.
+//
+// Lazy-loading strategy: the Notes editor doesn't pull in Shiki's
+// ~1MB of grammars until the user opens a note AND that note
+// actually contains a code block. Notes without code blocks never
+// touch Shiki.
 
 import { Node, mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer, NodeViewWrapper, type NodeViewProps } from '@tiptap/react';
 import dynamic from 'next/dynamic';
 import { Code, Trash2 } from 'lucide-react';
 
-// Lazy-load Shiki + the styling so the notes page doesn't pull in
-// ~1MB of grammars on first paint. `ssr: false` keeps it client-only
-// — the server emits a plain <pre><code> which the client upgrades
-// after mount.
+// Lazy-load the shared CodeBlock so the initial /notes bundle stays
+// small. We deliberately do NOT pass `ssr: false` here — the editor
+// itself is a client-only component (`'use client'` + immediatelyRender:
+// false), and inside a Tiptap NodeView the `ssr: false` flag would
+// keep the dynamic component pinned to its `loading` placeholder
+// forever. Without `ssr: false`, the chunk is still code-split (it's
+// fetched on demand) but the component mounts normally once loaded,
+// which lets CodeBlock's useEffect-driven Shiki work run.
 const CodeBlock = dynamic(() => import('@/components/markdown/CodeBlock'), {
-  ssr: false,
   loading: () => (
     <pre className="my-3 overflow-x-auto rounded-lg border border-white/[0.06] bg-slate-900/60 p-4 font-mono text-[13px] text-slate-300">
       <code>Đang tải trình highlight…</code>
@@ -29,26 +42,28 @@ const CodeBlock = dynamic(() => import('@/components/markdown/CodeBlock'), {
   ),
 });
 
-/** Languages we expose in the picker. Kept short on purpose — the
- *  Markdown CodeBlock component supports more, but the editor picker
- *  only shows the ones a study-notes user is likely to write. */
+/** Languages we expose in the picker. Every value below maps to a
+ *  grammar registered in CodeBlock's SUPPORTED_LANGS list — adding a
+ *  new option here without adding the grammar there would silently
+ *  fall back to plaintext. */
 export const NOTE_CODE_LANGS = [
   { value: '', label: 'Plain text' },
-  { value: 'javascript', label: 'JavaScript' },
   { value: 'typescript', label: 'TypeScript' },
   { value: 'tsx', label: 'TSX' },
+  { value: 'javascript', label: 'JavaScript' },
   { value: 'jsx', label: 'JSX' },
   { value: 'python', label: 'Python' },
   { value: 'java', label: 'Java' },
   { value: 'go', label: 'Go' },
   { value: 'rust', label: 'Rust' },
+  { value: 'prisma', label: 'Prisma' },
   { value: 'sql', label: 'SQL' },
   { value: 'bash', label: 'Bash' },
   { value: 'json', label: 'JSON' },
+  { value: 'yaml', label: 'YAML' },
   { value: 'css', label: 'CSS' },
   { value: 'html', label: 'HTML' },
   { value: 'markdown', label: 'Markdown' },
-  { value: 'yaml', label: 'YAML' },
 ];
 
 export const NoteCodeBlock = Node.create({

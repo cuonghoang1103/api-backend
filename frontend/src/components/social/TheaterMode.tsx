@@ -281,12 +281,35 @@ export default function TheaterMode({
               }`}
               aria-hidden={i !== activeIndex}
             >
-              <ReelVideo
-                slide={s}
-                isActive={i === activeIndex}
-                muted={muted}
-                onToggleMute={() => setMuted((m) => !m)}
-              />
+              {/* Phase 4 perf follow-up: only mount the active
+                  slide's <video> element. Previously every slide
+                  kept its <video> mounted and we toggled opacity to
+                  hide inactive ones — that meant the browser was
+                  decoding up to slides.length videos simultaneously
+                  while the user only watched one. For a 10-slide
+                  reel this was a huge waste of main-thread + decode
+                  bandwidth. Inactive slides now render a plain
+                  poster <img> instead; the transition still cross-
+                  fades via opacity so the UX feels the same. */}
+              {i === activeIndex ? (
+                <ReelVideo
+                  slide={s}
+                  isActive
+                  muted={muted}
+                  onToggleMute={() => setMuted((m) => !m)}
+                />
+              ) : (
+                <img
+                  src={
+                    s.post.media?.[0]?.thumbnail
+                      ? s.post.media[0].thumbnail
+                      : s.post.media?.[0]?.url ?? ''
+                  }
+                  alt=""
+                  className="h-full w-full object-cover"
+                  draggable={false}
+                />
+              )}
             </div>
           ))}
         </div>

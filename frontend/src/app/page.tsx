@@ -301,13 +301,17 @@ export default function SocialPage() {
                     const latest = posts.find((p) => p.id === post.id) ?? post;
                     return (
                       // Performance note (Phase 4 perf):
-                      // - `whileInView` + `viewport={{ once: true }}` so the
-                      //   fade-up plays the first time the card scrolls
-                      //   into view and never re-fires on re-render. This
-                      //   replaces the previous `initial` + per-index
-                      //   `delay` chain which staggered all visible cards
-                      //   on initial mount (every transition kicked the
-                      //   compositor for the entire list).
+                      // - `whileInView` was replaced with a plain
+                      //   mount-only animate because whileInView attaches
+                      //   a per-card IntersectionObserver that promotes
+                      //   the wrapper onto its own compositing layer
+                      //   — combined with the backdrop-filter the card
+                      //   used to have, this made video inside the card
+                      //   choppy (~10 FPS). With the backdrop-filter
+                      //   gone (see PostCard.tsx) the cost dropped, but
+                      //   we still want to avoid the extra observer per
+                      //   card. A 200ms fade-in on first mount is the
+                      //   cheapest possible entrance.
                       // - We dropped the `layout` prop: Framer's layout
                       //   animation forces a synchronous layout
                       //   measurement on every add/remove, which is
@@ -315,10 +319,9 @@ export default function SocialPage() {
                       //   and triggering infinite scroll.
                       <motion.div
                         key={post.id}
-                        initial={{ opacity: 0, y: 12 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: '0px 0px -80px 0px' }}
-                        transition={{ duration: 0.25, ease: 'easeOut' }}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
                       >
                         <PostCard
                           post={latest}

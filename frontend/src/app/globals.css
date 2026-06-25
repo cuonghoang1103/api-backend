@@ -1832,3 +1832,36 @@ aside ::-webkit-scrollbar-thumb:hover {
 .note-prose .note-table th.selectedCell {
   background: rgba(45, 212, 191, 0.18) !important;
 }
+
+/* ─── Phase 4 perf follow-up: post card frame ─────────────────
+   Phase 4 perf dropped the inline `backdrop-filter: blur(20px)` +
+   big `box-shadow` from the social PostCard <article> element
+   because those two together forced the browser to re-blur /
+   re-rasterize the card every time the <video> inside it
+   advanced a frame, dropping feed-video playback to ~10 FPS.
+   This utility replaces those styles with a cheap GPU-friendly
+   inset shadow that lives entirely on the compositor — no
+   per-frame paint. Visual feel is preserved: a soft inner glow
+   along the top edge of the card and a faint outer glow that
+   gives the card depth without forcing raster work. */
+.post-card-frame {
+  /* Inset top highlight — the only "shadow" we keep, runs on GPU. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  /* promote the card itself to its own compositing layer so it
+     doesn't re-rasterize when unrelated siblings (next/prev
+     cards in the feed) re-paint. transform: translateZ(0) is
+     the well-known cross-browser way to do this. */
+  transform: translateZ(0);
+  /* contain: layout paint so the card's internals never trigger
+     paint outside its own bounding box. Combined with translateZ,
+     this isolates the card's compositing from the rest of the
+     feed. */
+  contain: layout paint;
+  /* will-change: transform hints the browser that this element
+     will be composited; the browser can then allocate the
+     compositor layer upfront instead of promoting it on first
+     video frame. */
+  will-change: transform;
+}

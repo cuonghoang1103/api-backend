@@ -261,6 +261,30 @@ export default function SocialBackground() {
       else resume();
     }
 
+    // Phase 4 perf follow-up: pause the canvas while a feed video
+    // is actively playing. PostCard dispatches `social:video-playing`
+    // when its IntersectionObserver enters the autoplay zone and
+    // `social:video-paused` when it leaves. While a video is
+    // playing, the canvas's per-frame work (gradient draws, even
+    // with cached gradients, plus setTransform ops) competes with
+    // video decode on the main thread. Pausing the rAF loop while
+    // a video plays gives the decoder the full frame budget and
+    // brings the video back to native frame rate. The canvas still
+    // resumes on visibilitychange / scroll-idle as before, so the
+    // animation just freezes for the duration of playback.
+    function onVideoPlaying() { pause(); }
+    function onVideoPaused() {
+      // Only resume if no other reason is keeping us paused. The
+      // simplest correctness rule: only resume if the tab is
+      // visible AND we haven't been "paused because of scroll".
+      // scrollIdle will resume after its 120ms idle timer; this
+      // listener is called when a video exits the autoplay zone,
+      // which is a separate event from scroll.
+      if (!document.hidden && !scrollIdleTimer) resume();
+    }
+    window.addEventListener('social:video-playing', onVideoPlaying);
+    window.addEventListener('social:video-paused', onVideoPaused);
+
     // ── per-frame draw ─────────────────────────────────────
     let lastTs = 0;
     function draw(ts: number) {
@@ -371,6 +395,8 @@ export default function SocialBackground() {
     window.addEventListener('resize', resize, { passive: true });
     window.addEventListener('scroll', onScroll, { passive: true });
     document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('social:video-playing', onVideoPlaying);
+    window.addEventListener('social:video-paused', onVideoPaused);
 
     return () => {
       cancelAnimationFrame(rafId);
@@ -378,6 +404,8 @@ export default function SocialBackground() {
       window.removeEventListener('resize', resize);
       window.removeEventListener('scroll', onScroll);
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('social:video-playing', onVideoPlaying);
+      window.removeEventListener('social:video-paused', onVideoPaused);
     };
   }, []);
 

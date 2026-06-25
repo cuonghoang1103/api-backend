@@ -777,12 +777,20 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
 
   return (
     <article
-      className="group relative overflow-hidden rounded-3xl"
+      // Phase 4 perf follow-up: dropped the previous inline
+      // `backdropFilter: 'blur(20px)'` + `boxShadow: '0 8px 32px ...'`
+      // styles. Backdrop-filter was forcing the browser to re-blur
+      // the area behind every card on every frame the descendants
+      // painted — and with a `<video>` inside the card, that's
+      // ~60 re-blurs per second per card, which dropped video
+      // playback to ~10 FPS on mid-range laptops.
+      // The card keeps the same visual feel via the `.post-card-frame`
+      // utility class (see globals.css) which uses a cheap inset
+      // box-shadow that lives entirely on the GPU compositor.
+      className="post-card-frame group relative overflow-hidden rounded-3xl"
       style={{
         background: 'rgba(255,255,255,0.03)',
         border: '1px solid rgba(255,255,255,0.08)',
-        backdropFilter: 'blur(20px)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
       }}
     >
       {/* Top accent line */}
@@ -1845,8 +1853,19 @@ function MediaItem({
   const inlineHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ─── Auto-play on scroll: only when the video cell is at least
-  // 60% visible AND the user hasn't scrolled it out. We use an
-  // IntersectionObserver to avoid expensive scroll-listener math.
+  // 50% visible. We use an IntersectionObserver to avoid expensive
+  // scroll-listener math.
+  //
+  // Phase 4 perf follow-up: simplified from 4 thresholds
+  // ([0, 0.3, 0.6, 0.9]) down to a single 0.5 threshold with a
+  // 50px rootMargin. The old setup made the playback toggle
+  // (play/pause) flip-flop several times per scroll tick whenever
+  // a card was near the 60% boundary, which forced video decode
+  // to restart constantly — visible as a choppy ~10 FPS playback
+  // in the feed. One threshold + rootMargin keeps the toggle
+  // hysteresis wide enough to avoid that, while rootMargin gives
+  // the video a head-start (play before the user actually
+  // centres the card).
   useEffect(() => {
     if (!autoPlayEnabled || item.type !== 'VIDEO') return;
     const el = containerRef.current;
@@ -1854,10 +1873,10 @@ function MediaItem({
     const obs = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          setIsInView(e.isIntersecting && e.intersectionRatio >= 0.6);
+          setIsInView(e.isIntersecting && e.intersectionRatio >= 0.5);
         }
       },
-      { threshold: [0, 0.3, 0.6, 0.9] }
+      { threshold: 0.5, rootMargin: '50px' }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -1868,9 +1887,18 @@ function MediaItem({
     if (!v) return;
     if (isInView) {
       // Autoplay may fail (browser policy) but we swallow the error.
+      // Also broadcast a custom event so SocialBackground can pause
+      // its animated canvas and free up the main thread for video
+      // decode.
       v.play().catch(() => {});
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('social:video-playing', { detail: { src: v.currentSrc } }));
+      }
     } else {
       v.pause();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('social:video-paused', { detail: { src: v.currentSrc } }));
+      }
     }
   }, [isInView]);
 
@@ -1905,6 +1933,15 @@ function MediaItem({
             muted={muted}
             loop
             playsInline
+            preload="metadata"
+            // Phase 4 perf follow-up: promote the video onto its
+            // own GPU compositing layer so the browser doesn't
+            // re-composite the parent card (which still re-paints
+            // periodically — like buttons, comment counts, etc.)
+            // every time the video frame changes. Without this
+            // hint the video decode and the card repaint end up
+            // on the same compositor and contend for the GPU.
+            style={{ willChange: 'transform' }}
             className="h-full w-full object-cover"
             onClick={(e) => e.stopPropagation()}
             onPlay={() => setIsPlaying(true)}

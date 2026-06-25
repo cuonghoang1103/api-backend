@@ -7,7 +7,16 @@ import { PostComposer } from '@/components/social/PostComposer';
 import { PostCard, PostSkeleton } from '@/components/social/PostCard';
 import SocialSidebar from '@/components/social/SocialSidebar';
 import SocialRightWidget from '@/components/social/SocialRightWidget';
+import FeedFilterTabs, {
+  type FeedFilter,
+  parseFeedFilterFromUrl,
+  writeFeedFilterToUrl,
+  FEED_FILTER_URL_PARAM,
+} from '@/components/social/FeedFilterTabs';
+import FeedHasNewBanner from '@/components/social/FeedHasNewBanner';
+import { useFeedHasNew } from '@/hooks/useFeedHasNew';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, Loader2, Search, Sparkles, X } from 'lucide-react';
 import SocialBackground from '@/components/social/SocialBackground';
 import TheaterMode from '@/components/social/TheaterMode';
 import MiniChatDock from '@/components/social/MiniChatDock';
@@ -21,6 +30,25 @@ export default function SocialPage() {
   // Active hashtag filter set by the right-side trending widget.
   const [activeHashtag, setActiveHashtag] = useState<string | null>(null);
 
+  // Phase 5 home upgrade: feed filter tab (All / Following / Popular).
+  // Mirrored to the URL (?f=following|popular) so the tab survives
+  // reload + share-by-link. Hashtag filtering composes on top of the
+  // tab — picking a hashtag while on "Following" keeps the
+  // following scope + adds the hashtag scope.
+  const [feedFilter, setFeedFilter] = useState<FeedFilter>(() =>
+    typeof window !== 'undefined' ? parseFeedFilterFromUrl(window.location.search) : 'all',
+  );
+  const onFeedFilterChange = useCallback((next: FeedFilter) => {
+    setFeedFilter(next);
+    // Sync URL. `all` strips the param so the URL stays clean.
+    const url = new URL(window.location.href);
+    if (next === 'all') url.searchParams.delete(FEED_FILTER_URL_PARAM);
+    else url.searchParams.set(FEED_FILTER_URL_PARAM, next);
+    window.history.replaceState({}, '', url.toString());
+    // Reset feed pagination so the user sees a fresh list per tab.
+    useSocialStore.setState({ posts: [], cursor: null, hasNextPage: true });
+  }, []);
+
   useEffect(() => {
     const handler = (e: Event) => {
       const { hashtag } = (e as CustomEvent<{ hashtag: string | null }>).detail ?? {};
@@ -33,11 +61,22 @@ export default function SocialPage() {
     return () => window.removeEventListener('social:filter-hashtag', handler as EventListener);
   }, []);
 
+  // Phase 5 home upgrade: subscribe to feed:has-new pings so we
+  // can show the "X bài viết mới" banner. The page calls the
+  // returned onAck after the user clicks the banner and we've
+  // pulled the new posts.
+  const { count: newPostsCount, onAck: onNewPostsSeen } = useFeedHasNew();
+
   // TanStack Query feed — reads from cache if visited within 30s (no refetch),
   // falls back to Zustand store if cache is empty.
   const { data: feedData, isLoading: isLoadingFeed, error } = useSocialFeed({
     limit: 20,
     hashtag: activeHashtag ?? undefined,
+    // Phase 5 home upgrade: forward the active filter tab. Each
+    // tab gets its own TQ cache key so flipping back to "All"
+    // shows the cached "All" feed instantly.
+    sort: feedFilter === 'popular' ? 'popular' : 'recent',
+    following: feedFilter === 'following',
   });
 
   // Hydrate Zustand store from TanStack Query cache so PostCard mutations work.
@@ -75,6 +114,19 @@ export default function SocialPage() {
     };
   }, []);
 
+  // Phase 5 home upgrade: when the user clicks the "X bài viết mới"
+  // banner we invalidate the feed query so the cursor resets to
+  // "latest" and reload via the existing infinite-scroll trigger.
+  // We also scroll to the top so the freshly loaded posts appear
+  // at the top of the feed.
+  const onAckNewPosts = useCallback(() => {
+    onNewPostsSeen();
+    invalidateFeedRef.current();
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [onNewPostsSeen]);
+
   // ─── Theater Mode state (added 2026-06-22) ─────────────────
   // Page-level state for the fullscreen video modal. PostCard
   // emits `onOpenTheater(postId)`; we remember which post was
@@ -85,6 +137,29 @@ export default function SocialPage() {
   // button — without each card needing to know about the
   // others.
   const [theaterState, setTheaterState] = useState<{ postId: number } | null>(null);
+  // Phase 5 home upgrade: right sidebar toggle on mobile. Hidden
+  // by default on <lg breakpoints; the "Widgets" button in the
+  // composer / header bar opens a slide-in panel. Persisted across
+  // session via sessionStorage so the user's preference sticks.
+  const [rightOpen, setRightOpen] = useState(false);
+  useEffect(() => {
+    const saved = sessionStorage.getItem('right-open');
+    if (saved === 'true') setRightOpen(true);
+    const handler = () => setRightOpen(sessionStorage.getItem('right-open') === 'true');
+    window.addEventListener('storage', handler);
+    window.addEventListener('focus', handler);
+    return () => {
+      window.removeEventListener('storage', handler);
+      window.removeEventListener('focus', handler);
+    };
+  }, []);
+  const toggleRight = useCallback(() => {
+    setRightOpen((v) => {
+      const next = !v;
+      try { sessionStorage.setItem('right-open', String(next)); } catch { /* ignore */ }
+      return next;
+    });
+  }, []);
   const handleOpenTheater = useCallback((postId: number) => {
     setTheaterState({ postId });
   }, []);
@@ -258,8 +333,21 @@ export default function SocialPage() {
               </motion.div>
             )}
 
+            {/* Phase 5 home upgrade: filter tabs (All / Following / Popular).
+                Sits below the hashtag banner so the user sees both
+                composable scopes at once. */}
+            <div className="mt-4">
+              <FeedFilterTabs active={feedFilter} onChange={onFeedFilterChange} />
+            </div>
+
+            {/* Phase 5 home upgrade: "X bài viết mới" banner — drops in
+                above the list whenever a follower posts. Clicking it
+                resets the cursor and triggers an infinite-scroll
+                fetch via the existing observer. */}
+            <FeedHasNewBanner count={newPostsCount} onAck={onAckNewPosts} />
+
             {/* Feed — space-y-6 gives each post more breathing room */}
-            <div className="mt-6 space-y-6">
+            <div id="feed-list" className="mt-2 space-y-6">
               <AnimatePresence mode="popLayout">
                 {isLoadingFeed && displayPosts.length === 0 ? (
                   /* Use the PostSkeleton list during initial load so the
@@ -346,12 +434,66 @@ export default function SocialPage() {
             </div>
           </div>
 
-          {/* Right widget — trending + AI shortcut + suggestions */}
+          {/* Right widget — trending + AI shortcut + suggestions.
+              Phase 5 home upgrade: hidden on <lg by default; the
+              "Widgets" floating button opens a slide-in panel. */}
           <div className="hidden lg:block">
             <SocialRightWidget />
           </div>
         </div>
       </div>
+
+      {/* Phase 5 home upgrade: right-sidebar floating toggle + slide-in
+          panel for mobile / tablet. Sits OUTSIDE the grid so it
+          covers the right edge without disturbing layout. Closes
+          when the user taps the backdrop. */}
+      <button
+        type="button"
+        onClick={toggleRight}
+        aria-label={rightOpen ? 'Đóng widgets' : 'Mở widgets'}
+        aria-expanded={rightOpen}
+        className="fixed bottom-20 right-4 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[#0c0f14]/90 text-teal-200 shadow-[0_8px_24px_rgba(0,0,0,0.45)] backdrop-blur-md hover:bg-[#0c0f14] lg:hidden"
+        style={{ touchAction: 'manipulation' }}
+      >
+        <Sparkles size={18} />
+      </button>
+      <AnimatePresence>
+        {rightOpen && (
+          <>
+            <motion.div
+              key="right-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setRightOpen(false)}
+              className="fixed inset-0 z-40 bg-black/55 lg:hidden"
+            />
+            <motion.aside
+              key="right-panel"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', stiffness: 380, damping: 36 }}
+              className="fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm overflow-y-auto border-l border-white/[0.06] bg-[#0e1218] pt-16 lg:hidden"
+              role="dialog"
+              aria-label="Widgets"
+            >
+              <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3">
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Widgets</h2>
+                <button
+                  type="button"
+                  onClick={() => setRightOpen(false)}
+                  aria-label="Đóng"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05]"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <SocialRightWidget />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* ─── Theater Mode overlay (added 2026-06-22) ────────────
           Sits OUTSIDE the grid so it can cover the entire

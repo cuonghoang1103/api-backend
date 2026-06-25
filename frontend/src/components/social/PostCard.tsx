@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
 import { socialApi } from '@/lib/api';
+import MentionAutocomplete from '@/components/social/MentionAutocomplete';
 import { RenderContentWithCode } from '@/components/social/CodeBlock';
 import PostPoll from '@/components/social/PostPoll';
 import SocialSavePopover, {
@@ -81,6 +82,9 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
   //      for callers that still wire it up). ───────────────────
   const [showSavePopover, setShowSavePopover] = useState(false);
   const saveButtonRef = useRef<HTMLButtonElement | null>(null);
+  // Phase 5 home upgrade: ref for the comment composer input so the
+  // MentionAutocomplete component can listen to its caret position.
+  const commentInputRef = useRef<HTMLInputElement | null>(null);
   // Cache of the user's existing collections. We hydrate this on
   // first popover open. Lazily loaded so the PostCard stays cheap
   // when no one opens the popover.
@@ -1286,8 +1290,9 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     }}
                   >
                     <input
+                      ref={commentInputRef}
                       type="text"
-                      placeholder="Write a comment..."
+                      placeholder="Write a comment... (gõ @ để tag)"
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
                       className="flex-1 bg-transparent text-sm outline-none"
@@ -1302,6 +1307,16 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                       <Send size={14} />
                     </button>
                   </div>
+                  {/* Phase 5 home upgrade: @mention autocomplete for the
+                      comment composer. Listens to the input's caret
+                      and pops up a list of users to tag while they
+                      type @username. */}
+                  <MentionAutocomplete
+                    textareaRef={commentInputRef}
+                    value={commentText}
+                    onChange={setCommentText}
+                    offsetY={36}
+                  />
                 </form>
               </div>
               </div>

@@ -389,6 +389,13 @@ export const socialUserApi = {
   getFollowing: (id: number, cursor?: number, limit = 20) =>
     api.get(`/users/${id}/following`, { params: { cursor, limit } }),
   getSuggestions: (limit = 10) => api.get('/users/suggestions', { params: { limit } }),
+  // Phase 5 home upgrade: @mention autocomplete. Drives the dropdown
+  // in the post + comment composer. Followed users ranked first.
+  searchMentions: (q: string, limit = 8) =>
+    api.get<{ data: Array<{ id: number; username: string; displayName: string | null; avatarUrl: string | null; isFollowing: boolean }> }>(
+      '/users/search',
+      { params: { q, limit } },
+    ),
   updateStatus: () => api.post('/users/status'),
   updateCoverPhoto: (coverPhotoUrl: string) => api.post('/users/cover-photo', { coverPhotoUrl }),
 };
@@ -930,6 +937,12 @@ export const socialApi = {
     visibility?: string;
     /** Filter to posts containing this hashtag (backend handles # prefix). */
     hashtag?: string;
+    // Phase 5 home upgrade: filter tabs.
+    // • sort: 'recent' (default) | 'popular' (last 7 days, ranked
+    //   by likes+comments+saves).
+    // • following: when true, restrict to authors the viewer follows.
+    sort?: 'recent' | 'popular';
+    following?: boolean;
   }) => api.get('/social/posts', { params }),
 
   getPost: (id: number) => api.get(`/social/posts/${id}`),

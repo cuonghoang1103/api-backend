@@ -16,7 +16,7 @@ import FeedFilterTabs, {
 import FeedHasNewBanner from '@/components/social/FeedHasNewBanner';
 import { useFeedHasNew } from '@/hooks/useFeedHasNew';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, Loader2, Search, Sparkles, X } from 'lucide-react';
+import { Menu, Loader2, Search, Sparkles, X, RotateCw } from 'lucide-react';
 import SocialBackground from '@/components/social/SocialBackground';
 import TheaterMode from '@/components/social/TheaterMode';
 import MiniChatDock from '@/components/social/MiniChatDock';
@@ -386,26 +386,16 @@ export default function SocialPage() {
                     ))}
                   </div>
                 ) : error ? (
-                  <div
-                    className="rounded-2xl p-6 text-center"
-                    style={{
-                      background: 'rgba(139, 92, 246, 0.05)',
-                      border: '1px solid rgba(139, 92, 246, 0.15)',
-                    }}
-                  >
-                    <p style={{ color: '#f87171' }}>{String((error as any)?.message || error)}</p>
-                    <button
-                      onClick={() => invalidateFeedRef.current()}
-                      className="mt-3 rounded-xl px-4 py-2 text-sm font-medium transition-all"
-                      style={{
-                        background: 'rgba(139, 92, 246, 0.2)',
-                        color: '#a78bfa',
-                        border: '1px solid rgba(139, 92, 246, 0.3)',
-                      }}
-                    >
-                      Try again
-                    </button>
-                  </div>
+                  // Phase 5 home upgrade: friendly error state with
+                  // exponential-backoff auto-retry + a manual button.
+                  // The network can be flaky on mobile so we don't
+                  // want a single failure to leave the user with an
+                  // empty page — we silently retry up to 3 times with
+                  // 1s, 2s, 4s delays before showing the error UI.
+                  <FeedErrorState
+                    error={error as Error}
+                    onRetry={() => invalidateFeedRef.current()}
+                  />
                 ) : displayPosts.length === 0 ? (
                   <EmptyFeed />
                 ) : (
@@ -547,6 +537,102 @@ export default function SocialPage() {
 }
 
 // FeedSkeleton removed — replaced by PostSkeleton from PostCard.tsx
+
+// Phase 5 home upgrade: feed error state with auto-retry.
+// Renders a friendly error card with a "Thử lại" button + a
+// built-in exponential-backoff auto-retry (1s → 2s → 4s) so a
+// single network blip doesn't leave the user with an empty feed.
+// We deliberately cap auto-retry at 3 attempts so a real outage
+// still surfaces the manual "Thử lại" button quickly.
+function FeedErrorState({ error, onRetry }: { error: Error; onRetry: () => void }) {
+  const [attempt, setAttempt] = useState(0);
+  const [autoRetrying, setAutoRetrying] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const maxAutoRetries = 3;
+
+  useEffect(() => {
+    if (attempt >= maxAutoRetries) return;
+    const delay = 1000 * Math.pow(2, attempt); // 1s, 2s, 4s
+    setAutoRetrying(true);
+    setCountdown(Math.ceil(delay / 1000));
+    const tick = setInterval(() => {
+      setCountdown((c) => Math.max(0, c - 1));
+    }, 1000);
+    const timer = setTimeout(() => {
+      clearInterval(tick);
+      setAutoRetrying(false);
+      setAttempt((a) => a + 1);
+      onRetry();
+    }, delay);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(tick);
+    };
+    // We intentionally only re-run on attempt change so a manual
+    // retry doesn't loop forever.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [attempt]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+      className="flex flex-col items-center justify-center rounded-2xl p-6 text-center"
+      style={{
+        background: 'rgba(248, 113, 113, 0.04)',
+        border: '1px solid rgba(248, 113, 113, 0.18)',
+      }}
+    >
+      <div
+        className="mb-3 flex h-12 w-12 items-center justify-center rounded-full"
+        style={{ background: 'rgba(248,113,113,0.1)' }}
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+      </div>
+      <h3 className="text-base font-semibold" style={{ color: '#fca5a5' }}>
+        Không tải được bảng tin
+      </h3>
+      <p className="mt-1 max-w-sm text-[13px] leading-relaxed" style={{ color: '#94a3b8' }}>
+        {error?.message || 'Đã có lỗi mạng. Đang thử lại...'}
+      </p>
+      <div className="mt-4 flex items-center gap-2">
+        {autoRetrying ? (
+          <span className="flex items-center gap-1.5 text-[12px]" style={{ color: '#94a3b8' }}>
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            Tự thử lại sau {countdown}s...
+          </span>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              setAttempt(0); // reset auto-retry counter
+              onRetry();
+            }}
+            className="flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-sm font-medium transition-colors"
+            style={{
+              background: 'rgba(139,92,246,0.18)',
+              color: '#a78bfa',
+              border: '1px solid rgba(139,92,246,0.3)',
+            }}
+          >
+            <RotateCw className="h-3.5 w-3.5" />
+            Thử lại ngay
+          </button>
+        )}
+        {attempt > 0 && attempt < maxAutoRetries && (
+          <span className="text-[11px]" style={{ color: '#475569' }}>
+            ({attempt}/{maxAutoRetries} lần)
+          </span>
+        )}
+      </div>
+    </motion.div>
+  );
+}
 
 function EmptyFeed() {
   // Phase 5 home upgrade: friendly empty state with a hand-drawn

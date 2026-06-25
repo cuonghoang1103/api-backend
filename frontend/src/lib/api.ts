@@ -943,7 +943,12 @@ export const socialApi = {
     // • following: when true, restrict to authors the viewer follows.
     sort?: 'recent' | 'popular';
     following?: boolean;
+    // Content-type tab filter (Bài viết / Video / File). Omitted = all.
+    type?: 'POST' | 'VIDEO' | 'FILE';
   }) => api.get('/social/posts', { params }),
+
+  /** Per-content-type counts for the feed tab badges. */
+  getFeedCounts: () => api.get('/social/posts/counts'),
 
   getPost: (id: number) => api.get(`/social/posts/${id}`),
   createPost: (data: {
@@ -956,6 +961,9 @@ export const socialApi = {
     // on the post card). When provided, the user can paste a link
     // instead of uploading a video file.
     youtubeUrl?: string;
+    // Content-type bucket for the feed tabs. Optional — the server
+    // derives it from media/youtubeUrl when omitted.
+    type?: 'POST' | 'VIDEO' | 'FILE';
     media?: Array<{
       type: string;
       url: string;

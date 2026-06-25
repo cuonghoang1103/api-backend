@@ -13,6 +13,15 @@ export interface SocialFeedParams {
   // Phase 5 home upgrade: feed filter tabs.
   sort?: 'recent' | 'popular';
   following?: boolean;
+  // Content-type tab filter (Bài viết / Video / File). Omitted = all.
+  type?: 'POST' | 'VIDEO' | 'FILE';
+}
+
+export interface FeedCounts {
+  all: number;
+  post: number;
+  video: number;
+  file: number;
 }
 
 export interface SocialFeedResponse {
@@ -50,6 +59,23 @@ export function useSocialFeed(params?: SocialFeedParams) {
     staleTime: 30_000,    // 30 seconds
     gcTime: 5 * 60_000,  // 5 minutes
     placeholderData: (prev) => prev, // keep showing old data while refetching
+  });
+}
+
+// ─── Feed Counts Query (tab badges) ─────────────────────────────────────────────
+
+/**
+ * Per-content-type counts for the feed tab badges. Cheap, slow-moving,
+ * so a 60s staleTime is plenty; refetched after composing a post via the
+ * same feed invalidation path.
+ */
+export function useFeedCounts() {
+  return useQuery({
+    queryKey: [...socialKeys.all, 'feed-counts'] as const,
+    queryFn: () => socialApi.getFeedCounts().then((r) => (r.data as { data: FeedCounts }).data),
+    staleTime: 60_000,
+    gcTime: 5 * 60_000,
+    placeholderData: (prev) => prev,
   });
 }
 

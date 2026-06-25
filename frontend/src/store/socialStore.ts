@@ -10,6 +10,14 @@ import type {
   ReactionBreakdown,
 } from '@/types/social';
 
+/** Feed query scope shared between the initial load and loadMore. */
+export interface FeedQueryParams {
+  sort?: 'recent' | 'popular';
+  following?: boolean;
+  hashtag?: string;
+  type?: 'POST' | 'VIDEO' | 'FILE';
+}
+
 interface SocialState {
   // Feed
   posts: SocialPost[];
@@ -18,6 +26,12 @@ interface SocialState {
   hasNextPage: boolean;
   cursor: number | null;
   error: string | null;
+  // Active feed query scope (filter tabs + hashtag + content-type tab).
+  // loadMore() reuses these so infinite-scroll pages stay in the same
+  // scope as the initial load — previously loadMore ignored them and
+  // appended an unfiltered page. The page keeps this in sync whenever a
+  // tab / hashtag changes (alongside resetting `posts`).
+  feedParams: FeedQueryParams;
 
   // Comments
   commentsByPost: Record<number, SocialComment[]>;
@@ -36,6 +50,11 @@ interface SocialState {
   // When set, the backend stores it on the post and the renderer
   // embeds an inline player. Empty string means "no embed".
   composerYouTubeUrl: string;
+  // Content-type bucket the user is composing (feed tabs). Defaults to
+  // POST; the composer's segmented picker sets it. Sent to createPost so
+  // the post lands in the right tab. The server still derives a sensible
+  // type if this is somehow omitted.
+  composerType: 'POST' | 'VIDEO' | 'FILE';
   isPosting: boolean;
 
   // Saved posts
@@ -46,6 +65,8 @@ interface SocialState {
   // Actions
   loadFeed: (reset?: boolean) => Promise<void>;
   loadMore: () => Promise<void>;
+  /** Update the active feed scope used by loadMore (set by the page). */
+  setFeedParams: (params: FeedQueryParams) => void;
 
   // Like/unlike — legacy entry kept for callers that still use
   // the old "Like / Unlike" pair of buttons (e.g. profile pages
@@ -85,6 +106,7 @@ interface SocialState {
   setComposerPoll: (poll: { question: string; options: string[]; multiChoice: boolean } | null) => void;
   // Phase 3 — YouTube URL the composer is tracking
   setComposerYouTubeUrl: (url: string) => void;
+  setComposerType: (t: 'POST' | 'VIDEO' | 'FILE') => void;
   clearComposer: () => void;
   submitPost: () => Promise<SocialPost | null>;
 
@@ -106,6 +128,7 @@ export const useSocialStore = create<SocialState>((set, get) => ({
   hasNextPage: true,
   cursor: null,
   error: null,
+  feedParams: {},
 
   commentsByPost: {},
   commentsCursorByPost: {},
@@ -117,18 +140,21 @@ export const useSocialStore = create<SocialState>((set, get) => ({
   composerVisibility: 'PUBLIC',
   composerPoll: null,
   composerYouTubeUrl: '',
+  composerType: 'POST',
   isPosting: false,
 
   savedPosts: [],
   saveFolders: [],
   isLoadingSaves: false,
 
+  setFeedParams: (params) => set({ feedParams: params }),
+
   loadFeed: async (reset = false) => {
     if (get().isLoadingFeed) return;
     set({ isLoadingFeed: true, error: null });
 
     try {
-      const res = await socialApi.getFeed({ limit: 20 });
+      const res = await socialApi.getFeed({ ...get().feedParams, limit: 20 });
       set({
         posts: res.data.data,
         cursor: res.data.pagination.nextCursor,
@@ -142,13 +168,13 @@ export const useSocialStore = create<SocialState>((set, get) => ({
   },
 
   loadMore: async () => {
-    const { cursor, isLoadingMore, hasNextPage } = get();
+    const { cursor, isLoadingMore, hasNextPage, feedParams } = get();
     if (isLoadingMore || !hasNextPage || !cursor) return;
 
     set({ isLoadingMore: true });
 
     try {
-      const res = await socialApi.getFeed({ cursor, limit: 20 });
+      const res = await socialApi.getFeed({ ...feedParams, cursor, limit: 20 });
       set((s) => ({
         posts: [...s.posts, ...res.data.data],
         cursor: res.data.pagination.nextCursor,
@@ -431,13 +457,15 @@ export const useSocialStore = create<SocialState>((set, get) => ({
       composerVisibility: 'PUBLIC',
       composerPoll: null,
       composerYouTubeUrl: '',
+      composerType: 'POST',
     }),
 
   setComposerPoll: (poll) => set({ composerPoll: poll }),
   setComposerYouTubeUrl: (url) => set({ composerYouTubeUrl: url }),
+  setComposerType: (t) => set({ composerType: t }),
 
   submitPost: async () => {
-    const { composerContent, composerMedia, composerVisibility, composerPoll, composerYouTubeUrl } = get();
+    const { composerContent, composerMedia, composerVisibility, composerPoll, composerYouTubeUrl, composerType } = get();
     if (!composerContent.trim() && composerMedia.length === 0 && !composerPoll) return null;
 
     set({ isPosting: true });
@@ -481,6 +509,7 @@ export const useSocialStore = create<SocialState>((set, get) => ({
         media: mediaPayload.length > 0 ? mediaPayload : undefined,
         poll: pollPayload || undefined,
         youtubeUrl: (composerYouTubeUrl || '').trim() || undefined,
+        type: composerType,
       });
 
       // The backend returns an envelope { success, data, ... }.

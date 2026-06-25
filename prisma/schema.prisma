@@ -1326,6 +1326,12 @@ model SocialPost {
   // composer ("Paste YouTube URL") and rendered as an embedded
   // player on the post card when present.
   youtubeUrl   String?  @map("youtube_url") @db.VarChar(500)
+  // Content-type bucket for the home feed tabs (Tất cả / Bài viết /
+  // Video / File). Additive: defaults to POST so every existing row is
+  // valid the moment the column is added; old rows are backfilled to
+  // VIDEO/FILE by the migration based on their media/youtubeUrl. The
+  // composer sets this explicitly; getFeed filters by it per tab.
+  type         String   @default("POST") @map("type") @db.VarChar(20) // POST | VIDEO | FILE
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
@@ -1343,6 +1349,8 @@ model SocialPost {
 
   @@index([authorId], name: "idx_social_posts_author")
   @@index([createdAt(sort: Desc)], name: "idx_social_posts_created")
+  // Powers the content-type feed tabs (filter by type, newest first).
+  @@index([type, createdAt(sort: Desc)], name: "idx_social_posts_type_created")
   @@index([visibility], name: "idx_social_posts_visibility")
   @@index([status, createdAt(sort: Desc)], name: "idx_social_posts_status_created")
   @@index([authorId, createdAt(sort: Desc)], name: "idx_social_posts_author_created")

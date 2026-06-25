@@ -864,6 +864,21 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     Admin
                   </span>
                 )}
+                {/* Content-type badge — only for Video/File so normal
+                    posts (and non-social callers that don't set `type`)
+                    render exactly as before. */}
+                {(post.type === 'VIDEO' || post.type === 'FILE') && (
+                  <span
+                    className="text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md"
+                    style={
+                      post.type === 'VIDEO'
+                        ? { background: 'rgba(139,92,246,0.15)', color: '#c4b5fd', border: '1px solid rgba(139,92,246,0.3)' }
+                        : { background: 'rgba(6,182,212,0.12)', color: '#67e8f9', border: '1px solid rgba(6,182,212,0.3)' }
+                    }
+                  >
+                    {post.type === 'VIDEO' ? 'Video' : 'File'}
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-1.5 mt-0.5 text-xs flex-wrap" style={{ color: '#64748b' }}>
                 <span>@{authorObj?.username ?? 'user'}</span>

@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = "http://cuonghoangdev_backend:3001";
+// Server-side proxy target. Order matters:
+//   1. INTERNAL_BACKEND_URL / API_INTERNAL_URL — set in production
+//      docker-compose to http://backend:3001 (the fast internal
+//      Docker-network path; avoids a TLS handshake with public nginx
+//      and works even though the VPS bridge has no outbound internet).
+//   2. NEXT_PUBLIC_API_URL — local dev points this at localhost:3001.
+//   3. Docker service hostname — last-resort fallback.
+// NOTE: we deliberately do NOT read BACKEND_URL here — in production
+// that var is set to the PUBLIC url (https://api.cuongthai.com), and
+// routing internal container calls out through the public edge would
+// reintroduce the ~4s cold-start latency and can fail outright.
+const BACKEND_URL =
+  process.env.INTERNAL_BACKEND_URL ||
+  process.env.API_INTERNAL_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://cuonghoangdev_backend:3001";
 
 /**
  * POST /api/auth/register

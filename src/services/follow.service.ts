@@ -288,3 +288,89 @@ export async function getSuggestedUsers(
     followedAt: new Date(),
   }));
 }
+
+// ─── Phase 5 home upgrade: mention autocomplete ─────────────────
+// Drives the `@cuong` dropdown in the comment composer (and the
+// post composer hashtag/mention quick-insert). We match against
+// `username` (case-insensitive) OR `displayName` so users typing
+// either the handle or the friendly name surface.
+//
+// We deliberately:
+//  • cap at 8 results — the dropdown is small and we don't want
+//    to scroll a giant list while typing
+//  • require at least 1 character of query — empty returns nothing
+//    so the dropdown only appears once the user actually types
+//  • exclude the requester (don't suggest yourself in your own
+//    @-list)
+//  • prefer users the requester already follows (friends first)
+//    so the common "tag my friend" path needs zero scrolling
+export interface MentionSuggestion {
+  id: number;
+  username: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+  isFollowing: boolean;
+}
+
+export async function searchMentionableUsers(
+  viewerId: number,
+  query: string,
+  limit = 8,
+): Promise<MentionSuggestion[]> {
+  const q = (query ?? '').trim();
+  if (q.length < 1) return [];
+
+  const matches = await prisma.user.findMany({
+    where: {
+      enabled: true,
+      id: { not: viewerId },
+      OR: [
+        { username: { contains: q, mode: 'insensitive' } },
+        { displayName: { contains: q, mode: 'insensitive' } },
+        { fullName: { contains: q, mode: 'insensitive' } },
+      ],
+    },
+    select: {
+      id: true,
+      username: true,
+      displayName: true,
+      avatarUrl: true,
+    },
+    take: limit * 4, // overfetch a bit so we can re-rank by following
+    orderBy: [{ username: 'asc' }],
+  });
+
+  if (matches.length === 0) return [];
+
+  // Cheap follow-status lookup so we can put already-followed users
+  // first (the common case is "tag my friend").
+  const followingIds = new Set(
+    (
+      await prisma.follow.findMany({
+        where: { followerId: viewerId, followingId: { in: matches.map((m) => m.id) } },
+        select: { followingId: true },
+      })
+    ).map((f) => f.followingId),
+  );
+
+  const ranked = matches
+    .map((u) => ({ user: u, isFollowing: followingIds.has(u.id) }))
+    .sort((a, b) => {
+      // Following users first, then by username length (shorter =
+      // closer match), then alphabetical.
+      if (a.isFollowing !== b.isFollowing) return a.isFollowing ? -1 : 1;
+      if (a.user.username.length !== b.user.username.length) {
+        return a.user.username.length - b.user.username.length;
+      }
+      return a.user.username.localeCompare(b.user.username);
+    })
+    .slice(0, limit);
+
+  return ranked.map(({ user, isFollowing }) => ({
+    id: user.id,
+    username: user.username,
+    displayName: user.displayName,
+    avatarUrl: user.avatarUrl,
+    isFollowing,
+  }));
+}

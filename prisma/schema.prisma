@@ -1423,6 +1423,14 @@ model SocialComment {
   mentions     Int[]    @default([]) @map("mentions")
   likesCount   Int      @default(0) @map("likes_count")
   repliesCount Int      @default(0) @map("replies_count")
+  // ─── Phase 5 home upgrade: depth + rootId for 2-level threads ─
+  // `depth` is 0 for top-level comments, 1 for first-level replies.
+  // Service layer rejects parentId where the parent is already at
+  // depth >= 1, so maxDepth=2 stays enforced in code even if a
+  // client tries to bypass it. `rootId` lets us load the whole
+  // thread in one query (parent + all replies) without recursion.
+  depth        Int      @default(0) @map("depth")
+  rootId       Int?     @map("root_id")
   isEdited     Boolean  @default(false) @map("is_edited")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
@@ -1430,8 +1438,12 @@ model SocialComment {
   post    SocialPost          @relation(fields: [postId], references: [id], onDelete: Cascade)
   user    User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   parent  SocialComment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  root    SocialComment?      @relation("CommentThread", fields: [rootId], references: [id], onDelete: Cascade)
   replies SocialComment[]     @relation("CommentReplies")
+  inThread SocialComment[]    @relation("CommentThread")
   likes   SocialCommentLike[]
+
+  @@index([rootId], name: "idx_social_comments_root")
 
   @@index([postId], name: "idx_social_comments_post")
   @@index([userId], name: "idx_social_comments_user")
@@ -1589,6 +1601,12 @@ model SocialNotification {
   secondaryEntityId Int?     @map("secondary_entity_id")
   payload           Json?    @map("payload") @db.JsonB
   isRead            Boolean  @default(false) @map("is_read")
+  // ─── Phase 5 home upgrade: readAt timestamp ──────────────────
+  // We previously only had a boolean isRead; storing the
+  // timestamp lets the bell badge show "read 2h ago" without a
+  // extra query, and gives analytics a "time-to-read" signal.
+  // Nullable: existing rows + unread rows stay NULL.
+  readAt            DateTime? @map("read_at")
   createdAt         DateTime @default(now()) @map("created_at")
 
   receiver User @relation("NotificationsReceived", fields: [receiverId], references: [id], onDelete: Cascade)

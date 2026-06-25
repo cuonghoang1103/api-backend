@@ -58,6 +58,13 @@ export interface MessagingEmitter {
   // profile (we keep the type loose to avoid a circular
   // import on the Prisma model).
   emit(event: 'social:notification', payload: { receiverId: number; [k: string]: unknown }): void;
+  // ─── Feed has-new (Phase 5 home upgrade) ──────────────────
+  // Lightweight ping so the feed banner can show "X bài viết mới"
+  // without the client having to poll. Carries no payload besides
+  // the viewerId so we know which user room to route to. The
+  // client then calls /api/v1/social/posts?cursor=firstSeenId to
+  // fetch the new ones (keeps the socket payload tiny).
+  emit(event: 'feed:has-new', payload: { viewerId: number; count: number }): void;
   emit(event: string, payload: unknown): void;
 }
 
@@ -90,6 +97,15 @@ export function registerSocketEmitter(): MessagingEmitter | null {
         // "global" room because notifications are 1-to-1.
         if (event === 'social:notification' && p && typeof p.receiverId === 'number') {
           io?.to(`user:${p.receiverId}`).emit(event, payload);
+          return;
+        }
+
+        // Feed has-new: same 1-to-1 pattern — ping the viewer's
+        // user room so only that user sees the banner. The
+        // payload is tiny on purpose so the socket cost stays
+        // negligible regardless of follower count.
+        if (event === 'feed:has-new' && p && typeof (p as { viewerId?: number }).viewerId === 'number') {
+          io?.to(`user:${(p as { viewerId: number }).viewerId}`).emit(event, payload);
           return;
         }
 

@@ -271,6 +271,19 @@ export const notesApi = {
   reorderNotes: (orderedIds: number[]) =>
     api.patch<{ data: { reordered: number } }>('/notes/notes/reorder', { orderedIds }),
 
+  // ── Phase 3d: flag-filtered views for the sidebar pills ──
+  // ?f=all (default) | favorites | archive | needs-review
+  getFilteredNotes: (filter: 'all' | 'favorites' | 'archive' | 'needs-review') =>
+    api.get<{ data: { filter: string; notes: import('@/types').NoteSummary[] } }>('/notes/notes/filter', { params: { f: filter } }),
+
+  // ── Phase 3d: PDF export of a single note ──
+  // Returns the rendered HTML so the client can convert it to a
+  // PDF (jspdf + html2canvas). Server is the source of truth for
+  // the body — this prevents the editor's in-flight edits from
+  // appearing in the export.
+  exportNoteHtml: (id: number) =>
+    api.get<{ data: { id: number; title: string; contentHtml: string; updatedAt: string } }>(`/notes/notes/${id}/export`),
+
   // ── Phase 2: subject detail, attachments, links, search ──
   getSubject: (id: number) =>
     api.get<{ data: import('@/types').NoteSubjectFull }>(`/notes/subjects/${id}`),

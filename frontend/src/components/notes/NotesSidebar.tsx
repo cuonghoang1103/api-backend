@@ -15,6 +15,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
  ChevronRight, Plus, Trash2, FileText, FolderPlus, BookOpen, Pin, Clock, X, PanelRight, GripVertical,
+ Star, Archive, AlertCircle, FolderTree,
 } from 'lucide-react';
 import {
  DndContext, DragOverlay,
@@ -42,21 +43,30 @@ export interface SidebarCallbacks {
  onDeleteSubject: (id: number) => void;
  onDeleteChapter: (id: number) => void;
  onDeleteNote: (id: number) => void;
- // Phase 2.5 — drag-reorder callbacks. Each is given the full
- // ordered list of ids in the scope that was reordered. The page
- // forwards to the API and refreshes the tree. We keep the callback
- // shape small (just an id list) so the component does not need to
- // know about the API envelope.
- onReorderSubjects: (orderedIds: number[]) => void;
- onReorderChapters: (subjectId: number, orderedIds: number[]) => void;
- /** Reorder notes in a single scope (subject-root or chapter). */
- onReorderNotes: (orderedIds: number[]) => void;
+  // Phase 2.5 — drag-reorder callbacks. Each is given the full
+  // ordered list of ids in the scope that was reordered. The page
+  // forwards to the API and refreshes the tree. We keep the callback
+  // shape small (just an id list) so the component does not need to
+  // know about the API envelope.
+  onReorderSubjects: (orderedIds: number[]) => void;
+  onReorderChapters: (subjectId: number, orderedIds: number[]) => void;
+  /** Reorder notes in a single scope (subject-root or chapter). */
+  onReorderNotes: (orderedIds: number[]) => void;
+  // Phase 3d — filter pill switcher. `'tree'` is the default
+  // hierarchical view; the others flatten their matches.
+  onChangeFilter: (filter: 'tree' | 'favorites' | 'archive' | 'needs-review') => void;
 }
+
+export type NoteSidebarFilter = 'tree' | 'favorites' | 'archive' | 'needs-review';
 
 interface Props extends SidebarCallbacks {
   tree: NoteSubjectTree[];
   recent: NoteRecent[];
   selectedNoteId: number | null;
+  /** Active filter pill. `'tree'` = hierarchical Subjects/Chapters/Notes. */
+  filter: NoteSidebarFilter;
+  /** Flat list when `filter !== 'tree'`. Empty when filter is 'tree'. */
+  filteredNotes: NoteSummary[];
   /** When provided (mobile drawer), renders a close button in the header. */
   onClose?: () => void;
 }
@@ -96,7 +106,7 @@ function makeSensors(reduced: boolean) {
  );
 }
 
-export default function NotesSidebar({ tree, recent, selectedNoteId, onClose, ...cb }: Props) {
+export default function NotesSidebar({ tree, recent, selectedNoteId, filter, filteredNotes, onClose, ...cb }: Props) {
  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
  const toggle = (id: number) => setExpanded((e) => ({ ...e, [id]: !e[id] }));
  const reduced = usePrefersReducedMotion();
@@ -108,7 +118,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, onClose, ..
  const [activeId, setActiveId] = useState<{ scope: 'subject' | 'chapter' | 'note'; id: number } | null>(null);
 
  return (
- <div className="flex h-full flex-col text-sm">
+  <div className="flex h-full flex-col text-sm">
       {/* Header */}
       <div className="flex items-center justify-between px-3 pt-3 pb-2">
         <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Sổ tay</h2>
@@ -134,6 +144,16 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, onClose, ..
         </div>
       </div>
 
+      {/* Phase 3d — filter pills. Each pill swaps the body below for
+          a flat list view of the matching notes (favorites / archive
+          / needs-review), or back to the default tree. */}
+      <div className="mb-2 flex flex-wrap items-center gap-1 px-2">
+        <FilterPill active={filter === 'tree'} icon={<FolderTree className="h-3 w-3" />} label="Môn học" onClick={() => cb.onChangeFilter('tree')} />
+        <FilterPill active={filter === 'favorites'} icon={<Star className="h-3 w-3" />} label="Yêu thích" onClick={() => cb.onChangeFilter('favorites')} />
+        <FilterPill active={filter === 'needs-review'} icon={<AlertCircle className="h-3 w-3" />} label="Cần ôn" onClick={() => cb.onChangeFilter('needs-review')} />
+        <FilterPill active={filter === 'archive'} icon={<Archive className="h-3 w-3" />} label="Lưu trữ" onClick={() => cb.onChangeFilter('archive')} />
+      </div>
+
       <div className="min-h-0 flex-1 overflow-y-auto px-1.5 pb-6">
         {/* Recent rail */}
         {recent.length > 0 && (
@@ -157,12 +177,50 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, onClose, ..
           </div>
         )}
 
- {tree.length === 0 && (
- <div className="px-3 py-10 text-center text-xs text-slate-600">
- <BookOpen className="mx-auto mb-2 h-6 w-6 opacity-40" />
- Chưa có môn học nào.<br />Nhấn <span className="text-teal-400">+</span> để tạo môn đầu tiên.
- </div>
- )}
+  {tree.length === 0 && filter === 'tree' && (
+  <div className="px-3 py-10 text-center text-xs text-slate-600">
+  <BookOpen className="mx-auto mb-2 h-6 w-6 opacity-40" />
+  Chưa có môn học nào.<br />Nhấn <span className="text-teal-400">+</span> để tạo môn đầu tiên.
+  </div>
+  )}
+
+  {/* Phase 3d — flat list shown when a filter pill is active.
+      Replaces the hierarchical tree so the user sees just the
+      matching notes in a single column. */}
+  {filter !== 'tree' && (
+    <div className="mb-2 px-1.5">
+      <div className="mb-1 flex items-center gap-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
+        {filter === 'favorites' && (<><Star className="h-3 w-3" /> Yêu thích</>)}
+        {filter === 'archive' && (<><Archive className="h-3 w-3" /> Lưu trữ</>)}
+        {filter === 'needs-review' && (<><AlertCircle className="h-3 w-3" /> Cần ôn</>)}
+        <span className="ml-auto text-slate-500">{filteredNotes.length}</span>
+      </div>
+      {filteredNotes.length === 0 ? (
+        <div className="px-3 py-6 text-center text-[12px] text-slate-600">
+          {filter === 'favorites' && 'Chưa đánh dấu ghi chú nào.'}
+          {filter === 'archive' && 'Không có ghi chú trong lưu trữ.'}
+          {filter === 'needs-review' && 'Không có ghi chú cần ôn.'}
+        </div>
+      ) : (
+        filteredNotes.map((n) => (
+          <button
+            key={`f-${n.id}`}
+            onClick={() => cb.onSelectNote(n.id)}
+            className={`flex w-full items-center gap-2 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] min-h-[36px] ${
+              selectedNoteId === n.id ? 'bg-teal-500/10 text-teal-200' : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'
+            }`}
+          >
+            {n.isPinned ? <Pin className="h-3 w-3 shrink-0 text-amber-400" /> : <FileText className="h-3 w-3 shrink-0 opacity-60" />}
+            <span className="truncate">{n.title || 'Không có tiêu đề'}</span>
+            {n.isFavorite && <Star className="ml-auto h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />}
+            {n.needsReview && <AlertCircle className="ml-auto h-3 w-3 shrink-0 text-rose-400" />}
+            {n.isArchived && <Archive className="ml-auto h-3 w-3 shrink-0 text-slate-500" />}
+          </button>
+        ))
+      )}
+      <div className="my-2 h-px bg-white/[0.05]" />
+    </div>
+  )}
 
  {/*
  * DndContext for SUBJECTS (root scope). Each subject is also a
@@ -171,40 +229,42 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, onClose, ..
  * each scope independently (a chapter drag is distinct from a
  * subject drag from the user's perspective).
  */}
- <DndContext
- sensors={sensors}
- collisionDetection={closestCenter}
- onDragStart={(e) => {
- const id = Number(e.active.id);
- if (tree.some((s) => s.id === id)) setActiveId({ scope: 'subject', id });
- }}
- onDragEnd={handleSubjectDragEnd}
- onDragCancel={() => setActiveId(null)}
- >
- <SortableContext items={tree.map((s) => s.id)} strategy={verticalListSortingStrategy}>
- {tree.map((subject) => {
- const isOpen = expanded[subject.id] ?? true;
- return (
- <SubjectBranch
- key={subject.id}
- subject={subject}
- isOpen={isOpen}
- selectedNoteId={selectedNoteId}
- expanded={expanded}
- setExpanded={setExpanded}
- reduced={reduced}
- sensors={sensors}
- activeId={activeId}
- setActiveId={setActiveId}
- cb={cb}
- />
- );
- })}
- </SortableContext>
- <DragOverlay dropAnimation={reduced ? null : undefined}>
- {activeId ? <DragGhost scope={activeId.scope} activeId={activeId.id} tree={tree} /> : null}
- </DragOverlay>
- </DndContext>
+  {filter === 'tree' && (
+  <DndContext
+  sensors={sensors}
+  collisionDetection={closestCenter}
+  onDragStart={(e) => {
+  const id = Number(e.active.id);
+  if (tree.some((s) => s.id === id)) setActiveId({ scope: 'subject', id });
+  }}
+  onDragEnd={handleSubjectDragEnd}
+  onDragCancel={() => setActiveId(null)}
+  >
+  <SortableContext items={tree.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+  {tree.map((subject) => {
+  const isOpen = expanded[subject.id] ?? true;
+  return (
+  <SubjectBranch
+  key={subject.id}
+  subject={subject}
+  isOpen={isOpen}
+  selectedNoteId={selectedNoteId}
+  expanded={expanded}
+  setExpanded={setExpanded}
+  reduced={reduced}
+  sensors={sensors}
+  activeId={activeId}
+  setActiveId={setActiveId}
+  cb={cb}
+  />
+  );
+  })}
+  </SortableContext>
+  <DragOverlay dropAnimation={reduced ? null : undefined}>
+  {activeId ? <DragGhost scope={activeId.scope} activeId={activeId.id} tree={tree} /> : null}
+  </DragOverlay>
+  </DndContext>
+  )}
  </div>
  </div>
  );
@@ -566,3 +626,23 @@ function Row({
     </div>
   );
 }
+
+
+function FilterPill({ active, icon, label, onClick }: { active: boolean; icon: React.ReactNode; label: string; onClick: () => void }) {
+ return (
+  <button
+   type="button"
+   onClick={onClick}
+   className={`flex min-h-[28px] items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
+    active
+     ? 'border-teal-500/40 bg-teal-500/15 text-teal-100'
+     : 'border-white/10 bg-white/[0.02] text-slate-400 hover:border-white/20 hover:bg-white/[0.05] hover:text-slate-200'
+   }`}
+   aria-pressed={active}
+  >
+   {icon}
+   <span>{label}</span>
+  </button>
+ );
+}
+

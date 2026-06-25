@@ -42,6 +42,8 @@ import {
   listFlashcards,
   gradeFlashcard,
   resetFlashcard,
+  listFilteredNotes,
+  type NoteFilter,
 } from '../services/notes.service.js';
 
 const router = Router();
@@ -121,6 +123,20 @@ router.delete('/chapters/:id', async (req: Request, res: Response<ApiResponse>, 
 });
 
 // ─── Notes ───────────────────────────────────────────────────
+// Phase 3d: filter endpoint for the sidebar pills. Accepts
+// `?f=all|favorites|archive|needs-review` (default `all`). Returned
+// shape matches NoteSummary so the sidebar can render rows directly.
+router.get('/notes/filter', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const raw = String(req.query.f ?? 'all').toLowerCase();
+    const filter: NoteFilter = (['all', 'favorites', 'archive', 'needs-review'] as const).includes(raw as NoteFilter)
+      ? (raw as NoteFilter)
+      : 'all';
+    const notes = await listFilteredNotes(req.userId!, filter);
+    res.json({ success: true, data: { filter, notes } });
+  } catch (err) { next(err); }
+});
+
 router.post('/notes', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const note = await createNote(req.userId!, req.body ?? {});
@@ -153,6 +169,27 @@ router.delete('/notes/:id', async (req: Request, res: Response<ApiResponse>, nex
   try {
     const result = await deleteNote(req.userId!, Number(req.params.id));
     res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+// Phase 3d — PDF/print export. Returns the title + contentHtml
+// straight from the DB so the client can render it (the editor's
+// in-flight edits stay out of the export, and there's no need to
+// ship Tiptap to the server).
+router.get('/notes/:id/export', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const note = await getNote(req.userId!, Number(req.params.id));
+    res.json({
+      success: true,
+      data: {
+        id: note.id,
+        title: note.title,
+        // contentHtml is generated server-side from contentJson on
+        // every read so we never serve stale HTML.
+        contentHtml: note.contentHtml ?? '',
+        updatedAt: note.updatedAt instanceof Date ? note.updatedAt.toISOString() : String(note.updatedAt),
+      },
+    });
   } catch (err) { next(err); }
 });
 

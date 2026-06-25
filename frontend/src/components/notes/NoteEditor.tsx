@@ -34,7 +34,7 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import { fileApi } from '@/lib/api';
 import type { NoteFull } from '@/types';
-import { Check, Loader2, CloudOff, Trash2, Plus, Minus } from 'lucide-react';
+import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle } from 'lucide-react';
 import NoteCodeBlock from '@/components/notes/extensions/NoteCodeBlock';
 import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
@@ -46,7 +46,7 @@ type SaveState = 'idle' | 'saving' | 'saved' | 'error';
 interface NoteEditorProps {
   note: NoteFull;
   /** Persist a partial update. Should be idempotent on the server. */
-  onSave: (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null }>) => Promise<void>;
+  onSave: (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null; isFavorite: boolean; isArchived: boolean; needsReview: boolean }>) => Promise<void>;
 }
 
 const AUTOSAVE_MS = 900;
@@ -63,7 +63,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
 
   // ─── Debounced save ────────────────────────────────────────
   const queueSave = useCallback(
-    (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null }>) => {
+    (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null; isFavorite: boolean; isArchived: boolean; needsReview: boolean }>) => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
       setSaveState('saving');
       saveTimer.current = setTimeout(async () => {
@@ -233,6 +233,46 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
         className="w-full bg-transparent text-2xl sm:text-3xl font-semibold tracking-tight text-slate-100 placeholder:text-slate-600 focus:outline-none"
       />
 
+      {/* Phase 3d — flag toggles. Each is a one-click optimistic
+          write: we patch the local note so the icon flips instantly,
+          and queueSave fires the PATCH. The debounce timer is
+          cleared first so the click isn't merged with a pending
+          content save. */}
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        <FlagButton
+          active={note.isFavorite}
+          onClick={() => {
+            const next = !note.isFavorite;
+            onSave({ isFavorite: next });
+          }}
+          icon={<Star className="h-3.5 w-3.5" />}
+          activeIcon={<Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />}
+          label="Yêu thích"
+        />
+        <FlagButton
+          active={note.needsReview}
+          onClick={() => {
+            const next = !note.needsReview;
+            onSave({ needsReview: next });
+          }}
+          icon={<AlertCircle className="h-3.5 w-3.5" />}
+          activeIcon={<AlertCircle className="h-3.5 w-3.5 text-rose-400" />}
+          label="Cần ôn"
+          activeClass="border-rose-500/40 bg-rose-500/15 text-rose-100"
+        />
+        <FlagButton
+          active={note.isArchived}
+          onClick={() => {
+            const next = !note.isArchived;
+            onSave({ isArchived: next });
+          }}
+          icon={<Archive className="h-3.5 w-3.5" />}
+          activeIcon={<Archive className="h-3.5 w-3.5 text-slate-300" />}
+          label="Lưu trữ"
+          activeClass="border-slate-400/40 bg-slate-400/15 text-slate-100"
+        />
+      </div>
+
       <div className="my-4 h-px w-full bg-white/[0.06]" />
 
       {/* Auto-generated table of contents (only renders when headings exist). */}
@@ -306,5 +346,38 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
           re-render on every keystroke. */}
       <SlashMenu ref={slashRef} editor={editor} />
     </div>
+  );
+}
+
+// ─── Flag toggle (Phase 3d) ─────────────────────────────────
+// Small pill button used in the title row for one-click favourite /
+// needs-review / archive toggles. Click is wired through onSave
+// (no local state) so the parent owns the canonical value and
+// the sidebar pill + flat list views stay in sync.
+function FlagButton({
+  active, onClick, icon, activeIcon, label, activeClass,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  activeIcon?: React.ReactNode;
+  label: string;
+  activeClass?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`flex min-h-[30px] items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
+        active
+          ? activeClass ?? 'border-amber-500/40 bg-amber-500/15 text-amber-100'
+          : 'border-white/10 bg-white/[0.02] text-slate-400 hover:border-white/20 hover:bg-white/[0.05] hover:text-slate-200'
+      }`}
+      title={label}
+    >
+      {active && activeIcon ? activeIcon : icon}
+      <span>{label}</span>
+    </button>
   );
 }

@@ -69,9 +69,11 @@ export async function getTree(userId: number) {
         select: {
           id: true, title: true, sortOrder: true,
           notes: {
+            // Sidebar default view hides archived; the user can flip to
+            // the "Archive" filter pill to see them.
             where: { isArchived: false },
             orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
-            select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, needsReview: true, updatedAt: true },
+            select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, isArchived: true, needsReview: true, updatedAt: true },
           },
         },
       },
@@ -79,7 +81,7 @@ export async function getTree(userId: number) {
       notes: {
         where: { chapterId: null, isArchived: false },
         orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
-        select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, needsReview: true, updatedAt: true },
+        select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, isArchived: true, needsReview: true, updatedAt: true },
       },
     },
   });
@@ -93,6 +95,48 @@ export async function getRecentNotes(userId: number, limit = 8) {
     orderBy: { updatedAt: 'desc' },
     take: Math.min(20, Math.max(1, limit)),
     select: { id: true, title: true, subjectId: true, chapterId: true, updatedAt: true, isPinned: true },
+  });
+}
+
+// ─── Phase 3d — flag-filtered views (favorites / archive / needs review) ──
+//
+// The sidebar's filter pills use this so the user can flip between
+// "All" (the default tree) and one of the special-purpose views
+// without having to write a fresh Prisma query in the route.
+
+export type NoteFilter = 'all' | 'favorites' | 'archive' | 'needs-review';
+
+const FILTER_LIMIT = 200;
+
+export async function listFilteredNotes(userId: number, filter: NoteFilter) {
+  const where: Prisma.NoteWhereInput = { userId };
+  switch (filter) {
+    case 'favorites':
+      where.isFavorite = true;
+      where.isArchived = false;
+      break;
+    case 'archive':
+      where.isArchived = true;
+      break;
+    case 'needs-review':
+      where.needsReview = true;
+      where.isArchived = false;
+      break;
+    case 'all':
+    default:
+      // Include both archived and non-archived in the "All" view so
+      // the user can see everything they own at a glance.
+      break;
+  }
+  return prisma.note.findMany({
+    where,
+    orderBy: [{ isPinned: 'desc' }, { updatedAt: 'desc' }],
+    take: FILTER_LIMIT,
+    select: {
+      id: true, title: true, subjectId: true, chapterId: true,
+      isPinned: true, isFavorite: true, isArchived: true, needsReview: true,
+      updatedAt: true,
+    },
   });
 }
 

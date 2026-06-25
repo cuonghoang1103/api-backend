@@ -66,8 +66,9 @@ const VISIBILITY_OPTIONS = [
 export function PostComposer() {
   const {
     composerContent, composerVisibility, composerMedia, composerPoll, isPosting,
-    composerYouTubeUrl,
+    composerYouTubeUrl, composerType,
     setComposerContent: setComposerContentRaw, setComposerVisibility, setComposerPoll, setComposerYouTubeUrl,
+    setComposerType,
     addComposerMedia, removeComposerMedia, submitPost, clearComposer,
   } = useSocialStore();
 
@@ -533,6 +534,45 @@ export function PostComposer() {
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {/* Content-type picker — tells the post which feed tab it
+                  belongs to (Bài viết / Video / File). Defaults to Bài
+                  viết; the server still derives a sensible type if the
+                  user attaches video/file without switching. Only shown
+                  once the composer is expanded to keep the collapsed
+                  state minimal. */}
+              {isExpanded && (
+                <div
+                  role="radiogroup"
+                  aria-label="Loại bài đăng"
+                  className="mt-3 inline-flex items-center gap-1 rounded-full border border-white/[0.08] bg-white/[0.03] p-1"
+                >
+                  {([
+                    { value: 'POST', label: 'Bài viết', Icon: FileText },
+                    { value: 'VIDEO', label: 'Video', Icon: Video },
+                    { value: 'FILE', label: 'File', Icon: Paperclip },
+                  ] as const).map(({ value, label, Icon }) => {
+                    const active = composerType === value;
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        role="radio"
+                        aria-checked={active}
+                        onClick={() => setComposerType(value)}
+                        className={`flex min-h-[32px] items-center gap-1.5 rounded-full px-3 py-1 text-[12.5px] font-medium transition-colors ${
+                          active
+                            ? 'bg-neon-violet/20 text-violet-200 ring-1 ring-neon-violet/40'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        <Icon size={14} />
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* Drag overlay */}
               <AnimatePresence>

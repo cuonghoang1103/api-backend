@@ -61,6 +61,10 @@ export interface CreatePostInput {
   // video file. Validation lives in the service layer (light check
   // — we accept any URL the renderer can later embed).
   youtubeUrl?: string;
+  // Content-type bucket for the feed tabs. When omitted, the service
+  // derives it from the attached media / youtubeUrl (see
+  // deriveSocialPostType) so older API clients keep working.
+  type?: 'POST' | 'VIDEO' | 'FILE';
   media?: Array<{
     type: string;
     url: string;
@@ -70,6 +74,7 @@ export interface CreatePostInput {
     duration?: number;
     fileSize?: bigint;
     mimeType?: string;
+    fileName?: string;
     alt?: string;
     sortOrder?: number;
   }>;
@@ -97,6 +102,28 @@ export interface FeedOptions {
   //   in the viewer's following set. Requires `currentUserId`.
   sort?: 'recent' | 'popular';
   following?: boolean;
+  // Content-type tab filter (home feed). When set, restrict the feed
+  // to posts of this bucket; omitted/undefined = "Tất cả" (all types).
+  type?: 'POST' | 'VIDEO' | 'FILE';
+}
+
+/**
+ * Derive a post's content-type bucket from its media + youtubeUrl.
+ * Mirrors the SQL backfill in the add_social_post_type migration so a
+ * post created without an explicit `type` lands in the same tab whether
+ * it's classified at write time (here) or by the migration.
+ *   VIDEO: any VIDEO media or a YouTube link.
+ *   FILE:  no video, but has FILE / CODE_FILE media.
+ *   POST:  everything else (text, images, polls).
+ */
+export function deriveSocialPostType(
+  media: Array<{ type: string }> | undefined,
+  youtubeUrl?: string | null,
+): 'POST' | 'VIDEO' | 'FILE' {
+  const list = media ?? [];
+  if (youtubeUrl || list.some((m) => m.type === 'VIDEO')) return 'VIDEO';
+  if (list.some((m) => m.type === 'FILE' || m.type === 'CODE_FILE')) return 'FILE';
+  return 'POST';
 }
 
 export interface CommentInput {
@@ -145,9 +172,14 @@ export async function createPost(input: CreatePostInput) {
     };
   }
 
+  // Resolve the content-type bucket: trust an explicit choice from the
+  // composer, otherwise derive from the attached media / youtubeUrl.
+  const resolvedType = postData.type ?? deriveSocialPostType(media, postData.youtubeUrl);
+
   const post = await prisma.socialPost.create({
     data: {
       ...postData,
+      type: resolvedType,
       media: media ? {
         createMany: {
           data: media.map((m: any, idx: number) => ({
@@ -382,7 +414,7 @@ export async function updatePost(postId: number, userId: number, data: {
 // ─── Feed ────────────────────────────────────────────────────────
 
 export async function getFeed(options: FeedOptions & { currentUserId?: number }) {
-  const { cursor, limit = 20, authorId, visibility, currentUserId, hashtag, sort = 'recent', following } = options;
+  const { cursor, limit = 20, authorId, visibility, currentUserId, hashtag, sort = 'recent', following, type } = options;
 
   // Phase 5 home upgrade: "Following" tab. Only return posts from
   // authors the viewer follows. Anonymous viewers (no currentUserId)
@@ -409,6 +441,8 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       // Hashtag filter: ILIKE '%#tag%' — uses the GIN trigram index on
       // social_posts.content (created at startup if pg_trgm is available).
       ...(hashtag ? { content: { contains: `#${hashtag}`, mode: 'insensitive' as const } } : {}),
+      // Content-type tab filter (Bài viết / Video / File). Omitted = all.
+      ...(type ? { type } : {}),
       // "Popular" tab: scope to last 7 days so the ranking doesn't
       // freeze on all-time favourites. We sort by composite score
       // below (likes*2 + comments + saves).
@@ -439,6 +473,10 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
           height: true,
           duration: true,
           mimeType: true,
+          // fileName + fileSize power the File tab's download rows.
+          // Additive to the select; existing readers ignore them.
+          fileName: true,
+          fileSize: true,
           alt: true,
           sortOrder: true,
         },
@@ -535,6 +573,32 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
 }
 
 /**
+ * Per-content-type counts for the home feed tabs (Tất cả / Bài viết /
+ * Video / File). Mirrors the default feed scope so each tab's badge
+ * matches what it will actually show. One cheap GROUP BY; the frontend
+ * fetches it once per visit (and after composing a post).
+ */
+export async function getFeedCounts(options: { visibility?: string } = {}) {
+  const where = {
+    ...(options.visibility ? { visibility: options.visibility } : {}),
+  };
+  const grouped = await prisma.socialPost.groupBy({
+    by: ['type'],
+    where,
+    _count: { _all: true },
+  });
+  const counts = { all: 0, post: 0, video: 0, file: 0 };
+  for (const g of grouped as Array<{ type: string; _count: { _all: number } }>) {
+    const n = g._count._all;
+    counts.all += n;
+    if (g.type === 'VIDEO') counts.video += n;
+    else if (g.type === 'FILE') counts.file += n;
+    else counts.post += n;
+  }
+  return counts;
+}
+
+/**
  * Bulk-loads the viewer's poll votes for a list of poll ids. Used by
  * both the feed and the single-post page so the renderer can highlight
  * the options the viewer voted for.
@@ -587,6 +651,9 @@ function serializePost(
     // `youtubeUrl` may not be selected by every query — fall back to
     // null so the renderer can defensively check.
     youtubeUrl: post.youtubeUrl ?? null,
+    // Content-type bucket for the feed tabs / per-type badge. Falls back
+    // to POST for any row/query that didn't select it.
+    type: post.type ?? 'POST',
     viewCount: post.viewCount ?? 0,
     createdAt: post.createdAt,
     updatedAt: post.updatedAt,

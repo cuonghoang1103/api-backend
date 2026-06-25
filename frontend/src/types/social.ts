@@ -101,6 +101,10 @@ export const REACTION_PICKER_ORDER: ExtendedReactionType[] = [
 export interface SocialPost {
   id: number;
   content: string;
+  // Content-type bucket driving the home feed tabs (Tất cả / Bài viết /
+  // Video / File) and the per-type badge. Optional so older cached post
+  // shapes (pre-tabs) keep type-checking; readers default to 'POST'.
+  type?: 'POST' | 'VIDEO' | 'FILE';
   visibility: 'PUBLIC' | 'FRIENDS' | 'PRIVATE';
   latitude?: number | null;
   longitude?: number | null;

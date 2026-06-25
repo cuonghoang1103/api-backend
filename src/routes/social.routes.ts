@@ -41,6 +41,7 @@ import {
   deletePost,
   updatePost,
   getFeed,
+  getFeedCounts,
   likePost,
   unlikePost,
   reactPost,
@@ -98,7 +99,14 @@ router.post(
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = getUserId(req);
-      const { content, visibility, latitude, longitude, locationName, media, poll, youtubeUrl } = req.body;
+      const { content, visibility, latitude, longitude, locationName, media, poll, youtubeUrl, type } = req.body;
+
+      // Content-type bucket for the feed tabs. Accept only the known
+      // values; anything else (or omitted) → undefined, which lets the
+      // service derive the type from the attached media / youtubeUrl so
+      // older clients that don't send `type` keep working unchanged.
+      const allowedTypes = ['POST', 'VIDEO', 'FILE'] as const;
+      const cleanedType = allowedTypes.includes(type) ? (type as 'POST' | 'VIDEO' | 'FILE') : undefined;
 
       // A post is valid as long as *something* goes on the
       // timeline: text, at least one media row, a YouTube link,
@@ -138,6 +146,7 @@ router.post(
         longitude,
         locationName,
         youtubeUrl: cleanedYoutubeUrl,
+        type: cleanedType,
         media,
         poll,
       });
@@ -171,7 +180,10 @@ router.post(
   async (req: any, res: any, next) => {
     try {
       const currentUserId = req.user?.userId;
-      const { cursor, limit = '20', authorId, visibility, hashtag, sort, following } = req.query;
+      const { cursor, limit = '20', authorId, visibility, hashtag, sort, following, type } = req.query;
+      // Content-type tab filter. Only the known buckets pass through;
+      // anything else falls back to "all" (undefined).
+      const feedType = type === 'POST' || type === 'VIDEO' || type === 'FILE' ? type : undefined;
 
       const result = await getFeed({
         cursor: cursor ? parseInt(cursor as string, 10) : undefined,
@@ -185,6 +197,7 @@ router.post(
         // the feed to authors the viewer follows (requires auth).
         sort: sort === 'popular' ? 'popular' : 'recent',
         following: following === 'true' || following === '1',
+        type: feedType,
         currentUserId,
       });
 
@@ -193,6 +206,30 @@ router.post(
       // (if any) a window to serve stale while revalidating.
       res.set('Cache-Control', 'private, max-age=30, stale-while-revalidate=60');
       res.json({ success: true, ...result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/social/posts/counts — Per-content-type tab counts
+// Registered BEFORE /posts/:id so the literal "counts" segment isn't
+// swallowed by the :id param route.
+// ════════════════════════════════════════════════════════════════
+router.get(
+  '/posts/counts',
+  optionalAuth,
+  async (req: any, res: any, next) => {
+    try {
+      const { visibility } = req.query;
+      const counts = await getFeedCounts({
+        visibility: typeof visibility === 'string' ? visibility : undefined,
+      });
+      // Counts change slowly relative to the feed; a short cache keeps
+      // the tab badges cheap without going stale for long.
+      res.set('Cache-Control', 'private, max-age=30, stale-while-revalidate=60');
+      res.json({ success: true, data: counts });
     } catch (error) {
       next(error);
     }

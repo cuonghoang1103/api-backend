@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useSocialStore } from '@/store/socialStore';
-import { useSocialFeed, useInvalidateFeed } from '@/hooks/useSocialQueries';
+import { useSocialFeed, useInvalidateFeed, useFeedCounts } from '@/hooks/useSocialQueries';
 import { PostComposer } from '@/components/social/PostComposer';
 import { PostCard, PostSkeleton } from '@/components/social/PostCard';
 import SocialSidebar from '@/components/social/SocialSidebar';
@@ -13,6 +13,15 @@ import FeedFilterTabs, {
   writeFeedFilterToUrl,
   FEED_FILTER_URL_PARAM,
 } from '@/components/social/FeedFilterTabs';
+import FeedTypeTabs, {
+  type FeedType,
+  feedTypeToParam,
+  parseFeedTypeFromUrl,
+  writeFeedTypeToUrl,
+  FEED_TYPE_URL_PARAM,
+} from '@/components/social/FeedTypeTabs';
+import FeedFileList from '@/components/social/FeedFileList';
+import FeedVideoGrid from '@/components/social/FeedVideoGrid';
 import FeedHasNewBanner from '@/components/social/FeedHasNewBanner';
 import { useFeedHasNew } from '@/hooks/useFeedHasNew';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -49,6 +58,24 @@ export default function SocialPage() {
     useSocialStore.setState({ posts: [], cursor: null, hasNextPage: true });
   }, []);
 
+  // Content-type tab (Tất cả / Bài viết / Video / File) — the PRIMARY
+  // feed navigation. Mirrored to ?tab= so it survives reload + share.
+  // The all/following/popular filter is a SECONDARY control shown only
+  // on the "Tất cả" and "Bài viết" tabs.
+  const [feedType, setFeedType] = useState<FeedType>(() =>
+    typeof window !== 'undefined' ? parseFeedTypeFromUrl(window.location.search) : 'all',
+  );
+  const { data: feedCounts } = useFeedCounts();
+  const onFeedTypeChange = useCallback((next: FeedType) => {
+    setFeedType(next);
+    const url = new URL(window.location.href);
+    if (next === 'all') url.searchParams.delete(FEED_TYPE_URL_PARAM);
+    else url.searchParams.set(FEED_TYPE_URL_PARAM, next);
+    window.history.replaceState({}, '', url.toString());
+    // Fresh list per tab so we don't mix types while paginating.
+    useSocialStore.setState({ posts: [], cursor: null, hasNextPage: true });
+  }, []);
+
   useEffect(() => {
     const handler = (e: Event) => {
       const { hashtag } = (e as CustomEvent<{ hashtag: string | null }>).detail ?? {};
@@ -69,15 +96,38 @@ export default function SocialPage() {
 
   // TanStack Query feed — reads from cache if visited within 30s (no refetch),
   // falls back to Zustand store if cache is empty.
+  // Content-type tabs only carry the all/following/popular filter on the
+  // "Tất cả" and "Bài viết" tabs; Video/File ignore it (a "popular video"
+  // sub-filter would just confuse the grid).
+  const effectiveSort: 'recent' | 'popular' =
+    (feedType === 'all' || feedType === 'post') && feedFilter === 'popular' ? 'popular' : 'recent';
+  const effectiveFollowing =
+    (feedType === 'all' || feedType === 'post') && feedFilter === 'following';
+
   const { data: feedData, isLoading: isLoadingFeed, error } = useSocialFeed({
     limit: 20,
     hashtag: activeHashtag ?? undefined,
     // Phase 5 home upgrade: forward the active filter tab. Each
     // tab gets its own TQ cache key so flipping back to "All"
     // shows the cached "All" feed instantly.
-    sort: feedFilter === 'popular' ? 'popular' : 'recent',
-    following: feedFilter === 'following',
+    sort: effectiveSort,
+    following: effectiveFollowing,
+    // Content-type tab → backend `type` filter (undefined = all).
+    type: feedTypeToParam(feedType),
   });
+
+  // Keep the Zustand feed scope in sync so infinite-scroll loadMore()
+  // pages stay within the active tab/filter/hashtag (it reads
+  // store.feedParams). Without this, scrolling past the first page would
+  // append unfiltered posts.
+  useEffect(() => {
+    useSocialStore.getState().setFeedParams({
+      sort: effectiveSort,
+      following: effectiveFollowing,
+      hashtag: activeHashtag ?? undefined,
+      type: feedTypeToParam(feedType),
+    });
+  }, [effectiveSort, effectiveFollowing, activeHashtag, feedType]);
 
   // Hydrate Zustand store from TanStack Query cache so PostCard mutations work.
   // Invalidate the query after mutations to trigger a background refetch.
@@ -361,12 +411,20 @@ export default function SocialPage() {
               </motion.div>
             )}
 
-            {/* Phase 5 home upgrade: filter tabs (All / Following / Popular).
-                Sits below the hashtag banner so the user sees both
-                composable scopes at once. */}
+            {/* Primary navigation: content-type tabs (Tất cả / Bài viết
+                / Video / File) with per-tab counts. */}
             <div className="mt-4">
-              <FeedFilterTabs active={feedFilter} onChange={onFeedFilterChange} />
+              <FeedTypeTabs active={feedType} onChange={onFeedTypeChange} counts={feedCounts} />
             </div>
+
+            {/* Secondary control: all/following/popular filter. Only
+                meaningful for the post-style feeds, so we hide it on the
+                Video grid and File list to avoid a confusing combo. */}
+            {(feedType === 'all' || feedType === 'post') && (
+              <div className="mt-3">
+                <FeedFilterTabs active={feedFilter} onChange={onFeedFilterChange} />
+              </div>
+            )}
 
             {/* Phase 5 home upgrade: "X bài viết mới" banner — drops in
                 above the list whenever a follower posts. Clicking it
@@ -397,7 +455,14 @@ export default function SocialPage() {
                     onRetry={() => invalidateFeedRef.current()}
                   />
                 ) : displayPosts.length === 0 ? (
-                  <EmptyFeed />
+                  <EmptyFeed type={feedType} />
+                ) : feedType === 'video' ? (
+                  // TikTok-style: grid of poster thumbnails; tapping one
+                  // opens the dedicated full-screen /feed/video reel.
+                  <FeedVideoGrid posts={displayPosts} />
+                ) : feedType === 'file' ? (
+                  // File tab: download-focused list of shared files.
+                  <FeedFileList posts={displayPosts} />
                 ) : (
                   displayPosts.map((post) => {
                     // Find the latest version of this post from Zustand.
@@ -634,12 +699,33 @@ function FeedErrorState({ error, onRetry }: { error: Error; onRetry: () => void 
   );
 }
 
-function EmptyFeed() {
+function EmptyFeed({ type = 'all' }: { type?: FeedType }) {
   // Phase 5 home upgrade: friendly empty state with a hand-drawn
   // SVG illustration, gradient headline, and a primary CTA to
   // jump-start engagement. Empty states used to be just a
   // centred icon + 2 lines of English text; now they read as a
   // designed zero-screen that nudges the user to action.
+  //
+  // Per-tab copy so each content-type tab explains its own emptiness.
+  const copy: Record<FeedType, { title: string; body: string }> = {
+    all: {
+      title: 'Feed của bạn đang trống',
+      body: 'Hãy là người đầu tiên chia sẻ — một câu hỏi, một khoảnh khắc, hay đoạn code hay. Cộng đồng đang chờ bạn.',
+    },
+    post: {
+      title: 'Chưa có bài viết nào',
+      body: 'Viết chia sẻ đầu tiên — văn bản, ảnh hoặc một cuộc bình chọn.',
+    },
+    video: {
+      title: 'Chưa có video nào',
+      body: 'Đăng một video dọc (hoặc dán link YouTube/TikTok) để khởi động chế độ xem toàn màn hình.',
+    },
+    file: {
+      title: 'Chưa có file nào',
+      body: 'Chia sẻ tài nguyên dev — zip, markdown, source… mọi người tải về trực tiếp ở đây.',
+    },
+  };
+  const { title, body } = copy[type] ?? copy.all;
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -690,11 +776,10 @@ function EmptyFeed() {
         </svg>
       </motion.div>
       <h3 className="bg-gradient-to-r from-violet-300 via-cyan-300 to-violet-300 bg-clip-text text-xl font-bold tracking-tight text-transparent">
-        Feed của bạn đang trống
+        {title}
       </h3>
       <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: '#94a3b8' }}>
-        Hãy là người đầu tiên chia sẻ — một câu hỏi, một khoảnh khắc, hay đoạn code hay.
-        Cộng đồng đang chờ bạn.
+        {body}
       </p>
       <div className="mt-5 flex items-center gap-2 text-[11px]" style={{ color: '#64748b' }}>
         <span className="flex items-center gap-1">

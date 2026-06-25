@@ -989,29 +989,36 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
             setShowReactions(false);
           }}
         >
-          <button
+          <motion.button
             onClick={() => handleReact('LIKE')}
             onMouseEnter={(e) => { if (!myReaction) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = ''; }}
-            className="group inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium transition-colors"
+            whileTap={{ scale: 0.85 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: 'spring', stiffness: 480, damping: 22 }}
+            className="group inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium"
             style={{ color: myReaction ? reactionColor : '#94a3b8' }}
           >
-              {myReaction ? (
-                <span
-                  className="text-[15px] leading-none transition-transform group-active:scale-125"
-                  aria-label={REACTION_META[myReaction].label}
-                >
-                  {reactionEmoji}
-                </span>
-              ) : (
-                <Heart
-                  size={16}
-                  fill="none"
-                  className="transition-transform group-active:scale-125"
-                />
-              )}
-              <span className="tabular-nums">{safeLikesCount}</span>
-            </button>
+            {myReaction ? (
+              <motion.span
+                key={myReaction}
+                initial={{ scale: 0.6, rotate: -12 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 520, damping: 14 }}
+                className="text-[15px] leading-none"
+                aria-label={REACTION_META[myReaction].label}
+              >
+                {reactionEmoji}
+              </motion.span>
+            ) : (
+              <Heart
+                size={16}
+                fill="none"
+                className="transition-transform group-active:scale-125"
+              />
+            )}
+            <span className="tabular-nums">{safeLikesCount}</span>
+          </motion.button>
             <AnimatePresence>
               {showReactions && (
                 <motion.div
@@ -2528,14 +2535,24 @@ function ActionButton({
   label: string;
   onClick: () => void;
 }) {
+  // Phase 5 home upgrade: iOS-quality motion. Each tap fires a
+  // quick scale-down (whileTap) and a counter scale-up
+  // (whileHover) so the icon "pops" when the user interacts.
+  // The active state animates between inactive/active via the
+  // `animate` prop driven by `active` — no manual class
+  // swapping, so the colour transition is also spring-eased.
+  // This is cheap (no per-frame JS) because the values stay on
+  // the compositor.
   return (
     <motion.button
-      whileTap={{ scale: 0.9 }}
-      className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-medium transition-colors"
-      style={{
+      whileTap={{ scale: 0.88 }}
+      whileHover={{ scale: 1.04 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.6 }}
+      animate={{
         color: active ? activeColor : '#64748b',
-        background: active ? `${activeColor}10` : 'transparent',
+        backgroundColor: active ? `${activeColor}1A` : 'rgba(0,0,0,0)',
       }}
+      className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-medium"
       onMouseEnter={(e) => {
         if (!active) {
           e.currentTarget.style.background = 'rgba(255,255,255,0.04)';

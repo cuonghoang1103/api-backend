@@ -22,6 +22,7 @@ import { prisma } from '../src/config/database.js';
 import { musicQueueService } from '../src/services/music-queue.service.js';
 import { musicLikesService } from '../src/services/music-likes.service.js';
 import { musicPlayCountsService } from '../src/services/music-play-counts.service.js';
+import { musicLyricsService } from '../src/services/music-lyrics.service.js';
 
 let failures = 0;
 function assert(cond: boolean, msg: string): void {
@@ -120,9 +121,49 @@ async function main(): Promise<void> {
   await musicLikesService.unlike(userId, trackId);
   await prisma.musicPlayCount.deleteMany({ where: { userId, trackId } });
 
+  // ── 4. LYRICS: normalize + idempotent upsert + fallback ───────
+  console.log('\n[4] Synced lyrics');
+  await musicLyricsService.deleteLyrics(trackId);
+  assert((await musicLyricsService.getLyrics(trackId)) === null, 'getLyrics null when none exist (empty state)');
+
+  // Deliberately unsorted + with junk lines (bad t, empty text) to
+  // prove server-side normalization drops/sorts them.
+  await musicLyricsService.upsertLyrics(trackId, {
+    synced: [
+      { t: 30, text: 'third' },
+      { t: 10, text: 'first' },
+      { t: -5, text: 'dropped: negative t' },
+      { t: 'NaN', text: 'dropped: bad t' },
+      { t: 20, text: '   ' }, // dropped: empty text
+      { t: 20, text: 'second' },
+    ],
+  });
+  let lyr = await musicLyricsService.getLyrics(trackId);
+  assert(lyr !== null && lyr.format === 'synced', 'format=synced after upsert with timestamps');
+  assert(Array.isArray(lyr?.synced), 'synced is always an array');
+  assert(lyr?.synced.length === 3, `junk lines dropped (3 valid of 6, got ${lyr?.synced.length})`);
+  assert(
+    lyr?.synced.map((l) => l.text).join(',') === 'first,second,third',
+    'lines re-sorted ascending by time',
+  );
+
+  // Re-save is idempotent — still exactly one row for the track.
+  await musicLyricsService.upsertLyrics(trackId, { synced: [{ t: 5, text: 'only' }] });
+  const rowCount = await prisma.musicLyrics.count({ where: { trackId } });
+  assert(rowCount === 1, `no duplicate lyrics row after re-save (got ${rowCount}, want 1)`);
+
+  // Plain fallback when no timestamps.
+  await musicLyricsService.upsertLyrics(trackId, { plain: 'line A\nline B' });
+  lyr = await musicLyricsService.getLyrics(trackId);
+  assert(lyr?.format === 'plain', 'format=plain when only plain text given');
+  assert((lyr?.plain ?? '').includes('line A'), 'plain text round-trips');
+
+  await musicLyricsService.deleteLyrics(trackId);
+  assert((await musicLyricsService.getLyrics(trackId)) === null, 'lyrics deleted cleanly');
+
   console.log('\n=== Result ===');
   if (failures === 0) {
-    console.log('  ALL PASS ✅  (queue + likes + play-counts idempotent & round-trip clean)\n');
+    console.log('  ALL PASS ✅  (queue + likes + play-counts + lyrics idempotent & round-trip clean)\n');
   } else {
     console.error(`  ${failures} ASSERTION(S) FAILED ❌\n`);
   }

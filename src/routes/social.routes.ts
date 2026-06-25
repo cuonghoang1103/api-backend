@@ -170,7 +170,7 @@ router.post(
   async (req: any, res: any, next) => {
     try {
       const currentUserId = req.user?.userId;
-      const { cursor, limit = '20', authorId, visibility, hashtag } = req.query;
+      const { cursor, limit = '20', authorId, visibility, hashtag, sort, following } = req.query;
 
       const result = await getFeed({
         cursor: cursor ? parseInt(cursor as string, 10) : undefined,
@@ -179,6 +179,11 @@ router.post(
         visibility: visibility as string | undefined,
         // Hashtag filter — strip leading # if client included it
         hashtag: hashtag ? (hashtag as string).replace(/^#/, '').trim() || undefined : undefined,
+        // Phase 5 home upgrade: feed filter tabs. `sort` accepts
+        // 'recent' (default) or 'popular'. `following=true` restricts
+        // the feed to authors the viewer follows (requires auth).
+        sort: sort === 'popular' ? 'popular' : 'recent',
+        following: following === 'true' || following === '1',
         currentUserId,
       });
 

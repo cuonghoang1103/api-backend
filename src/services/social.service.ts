@@ -15,6 +15,7 @@
 
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { registerSocketEmitter } from '../socket/messaging.socket.js';
 
 /**
  * Returns true if the user has the ADMIN role. Used by delete
@@ -88,6 +89,14 @@ export interface FeedOptions {
   visibility?: string;
   /** Filter feed to posts whose content contains this hashtag (case-insensitive). */
   hashtag?: string;
+  // Phase 5 home upgrade: feed filter tabs.
+  // • sort: 'recent' (default) or 'popular' (last 7 days, top by
+  //   likes + comments + saves so the "Popular" tab feels alive
+  //   without exposing spam-prone ranking signals).
+  // • following: when true, restrict to posts whose authorId is
+  //   in the viewer's following set. Requires `currentUserId`.
+  sort?: 'recent' | 'popular';
+  following?: boolean;
 }
 
 export interface CommentInput {
@@ -195,9 +204,47 @@ export async function createPost(input: CreatePostInput) {
       })).map((v) => v.optionId)
     : [];
 
+  // Phase 5 home upgrade: ping every follower so the feed banner
+  // can show "X bài viết mới" without polling. We only ping
+  // PUBLIC + FRIENDS posts; PRIVATE never triggers a banner.
+  // The actual feed fetch is still on the client (cursor fetch) —
+  // we just emit a tiny ping here.
+  if (post.visibility !== 'PRIVATE') {
+    pingFollowersAboutNewPost(post.authorId, post.id);
+  }
+
   return serializePost(post, {
     currentUserId: input.authorId,
     pollUserVotes: freshUserVotes,
+  });
+}
+
+// ─── Phase 5 home upgrade: socket ping for "X bài viết mới" ─────
+// Fire-and-forget so the createPost response stays fast. We
+// intentionally do NOT await — the user is already seeing the
+// new post in their composer-out / optimistic-insert path; this
+// ping is only for *other* viewers' feeds.
+function pingFollowersAboutNewPost(authorId: number, _postId: number): void {
+  // Fetch the followers list in the background and emit a ping.
+  // We don't surface errors — socket unreachability is non-fatal.
+  setImmediate(async () => {
+    try {
+      const emitter = registerSocketEmitter();
+      if (!emitter) return; // socket not ready yet, skip
+      const followers = await prisma.follow.findMany({
+        where: { followingId: authorId },
+        select: { followerId: true },
+      });
+      // We send a single "new posts available" count rather than
+      // the post itself — the client calls /posts?cursor= to pick
+      // up new ones so the socket payload stays tiny.
+      for (const f of followers) {
+        emitter.emit('feed:has-new', { viewerId: f.followerId, count: 1 });
+      }
+    } catch {
+      // Swallow — logging here would just spam logs when socket
+      // is offline. Next REST poll will pick up the new post.
+    }
   });
 }
 
@@ -335,17 +382,40 @@ export async function updatePost(postId: number, userId: number, data: {
 // ─── Feed ────────────────────────────────────────────────────────
 
 export async function getFeed(options: FeedOptions & { currentUserId?: number }) {
-  const { cursor, limit = 20, authorId, visibility, currentUserId, hashtag } = options;
+  const { cursor, limit = 20, authorId, visibility, currentUserId, hashtag, sort = 'recent', following } = options;
+
+  // Phase 5 home upgrade: "Following" tab. Only return posts from
+  // authors the viewer follows. Anonymous viewers (no currentUserId)
+  // fall back to the public recent feed.
+  let followingAuthorIds: number[] | undefined;
+  if (following && currentUserId) {
+    const edges = await prisma.follow.findMany({
+      where: { followerId: currentUserId },
+      select: { followingId: true },
+    });
+    followingAuthorIds = edges.map((e) => e.followingId);
+    // No follows yet → empty feed rather than "show everyone".
+    if (followingAuthorIds.length === 0) {
+      return { items: [], nextCursor: null, hasMore: false, sort };
+    }
+  }
 
   const posts = await prisma.socialPost.findMany({
     where: {
       visibility: visibility as 'PUBLIC' | 'FRIENDS' | 'PRIVATE' | undefined,
       ...(authorId ? { authorId } : {}),
+      ...(followingAuthorIds ? { authorId: { in: followingAuthorIds } } : {}),
       ...(cursor ? { id: { lt: cursor } } : {}),
       // Hashtag filter: ILIKE '%#tag%' — uses the GIN trigram index on
       // social_posts.content (created at startup if pg_trgm is available).
       ...(hashtag ? { content: { contains: `#${hashtag}`, mode: 'insensitive' as const } } : {}),
+      // "Popular" tab: scope to last 7 days so the ranking doesn't
+      // freeze on all-time favourites. We sort by composite score
+      // below (likes*2 + comments + saves).
+      ...(sort === 'popular' ? { createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } } : {}),
     },
+    // For popular we want a weighted ranking, not pure createdAt;
+    // we still use id < cursor as a stable cursor for pagination.
     orderBy: { createdAt: 'desc' },
     take: limit + 1,
     include: {
@@ -395,7 +465,23 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
   });
 
   const hasNextPage = posts.length > limit;
-  const items = hasNextPage ? posts.slice(0, limit) : posts;
+  let items = hasNextPage ? posts.slice(0, limit) : posts;
+
+  // Phase 5 home upgrade: for the "Popular" tab we re-rank by a
+  // composite engagement score (likes*2 + comments + saves) so the
+  // feed shows what's trending, not just what's newest. The DB
+  // still scans by createdAt (with a 7-day cutoff), and we re-rank
+  // in memory — fine for limit<=50.
+  if (sort === 'popular') {
+    items = [...items].sort((a: any, b: any) => {
+      const scoreA = a._count.likes * 2 + a._count.comments + a._count.saves;
+      const scoreB = b._count.likes * 2 + b._count.comments + b._count.saves;
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      // Tiebreaker: newer wins.
+      return b.id - a.id;
+    });
+  }
+
   const nextCursor = hasNextPage ? items[items.length - 1]?.id : null;
 
   // Bulk-load the viewer's poll votes for the visible polls to avoid
@@ -728,10 +814,12 @@ export async function createComment(input: CommentInput) {
   // Optional parent comment for replies. We validate it belongs
   // to the same post so a reply can't be cross-attached.
   let resolvedParentId: number | null = null;
+  let parentDepth = -1;
+  let parentRootId: number | null = null;
   if (input.parentId != null) {
     const parent = await prisma.socialComment.findUnique({
       where: { id: input.parentId },
-      select: { id: true, postId: true },
+      select: { id: true, postId: true, depth: true, rootId: true },
     });
     if (!parent) {
       throw new AppError('Parent comment not found', 404, 'PARENT_COMMENT_NOT_FOUND');
@@ -739,8 +827,29 @@ export async function createComment(input: CommentInput) {
     if (parent.postId !== input.postId) {
       throw new AppError('Parent comment does not belong to this post', 400, 'PARENT_COMMENT_MISMATCH');
     }
+    // Phase 5 home upgrade: enforce maxDepth=2. A reply to a
+    // depth-1 comment (i.e. reply-to-reply) is rejected so the
+    // thread stays at 2 visible levels (top-level + one reply).
+    // Frontend also hides the reply button at depth>=1, so this
+    // is the server-side safety net.
+    if (parent.depth >= 1) {
+      throw new AppError(
+        'Đã đạt giới hạn 2 cấp trả lời. Hãy trả lời trực tiếp bình luận gốc.',
+        400,
+        'MAX_COMMENT_DEPTH',
+      );
+    }
     resolvedParentId = parent.id;
+    parentDepth = parent.depth;
+    parentRootId = parent.rootId ?? parent.id;
   }
+
+  // Phase 5 home upgrade: depth + rootId.
+  // • depth: 0 for top-level, 1 for first-level reply.
+  // • rootId: pointer to the top-level comment so the UI can load
+  //   the whole thread in one query (parent + all its replies).
+  const computedDepth = parentDepth + 1; // 0 → reply is 1
+  const computedRootId = parentRootId; // null for top-level, parent's root for reply
 
   // Optional @mentions. We accept either a number[] (preferred) or
   // a string[] that we'll attempt to coerce. De-dupe and drop
@@ -760,6 +869,8 @@ export async function createComment(input: CommentInput) {
       postId: input.postId,
       userId: input.userId,
       parentId: resolvedParentId,
+      depth: computedDepth,
+      rootId: computedRootId,
       content: input.content,
       mentions: cleanedMentions,
     },

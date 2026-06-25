@@ -27,6 +27,7 @@ import {
   updatePresence,
   updateCoverPhoto,
   getSuggestedUsers,
+  searchMentionableUsers,
 } from '../services/follow.service.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -43,6 +44,28 @@ router.get(
     try {
       const limit = Math.min(parseInt(req.query.limit as string, 10) || 10, 20);
       const users = await getSuggestedUsers(req.user.userId!, limit);
+      res.json({ success: true, data: users });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ─── GET /api/v1/users/search ────────────────────────────────
+// Phase 5 home upgrade: mention autocomplete. Drives the `@cuong`
+// dropdown in the comment + post composer. Matches `username`,
+// `displayName`, or `fullName` (case-insensitive). Capped at 8.
+//
+// NOTE: must be defined BEFORE /:id otherwise Express matches
+// "search" as :id.
+router.get(
+  '/search',
+  authenticate,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const q = (req.query.q as string | undefined) ?? '';
+      const limit = Math.min(parseInt(req.query.limit as string, 10) || 8, 8);
+      const users = await searchMentionableUsers(req.user.userId!, q, limit);
       res.json({ success: true, data: users });
     } catch (error) {
       next(error);

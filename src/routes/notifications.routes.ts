@@ -105,6 +105,10 @@ router.patch(
     try {
       const userId = getUserId(req);
       const { all, ids } = req.body ?? {};
+      // Phase 5 home upgrade: stamp readAt on the same write so the
+      // bell can render "read 2h ago" without a follow-up query
+      // and analytics get a real "time-to-read" signal.
+      const now = new Date();
 
       let updated = 0;
       if (Array.isArray(ids) && ids.length > 0) {
@@ -114,13 +118,13 @@ router.patch(
             id: { in: ids.filter((n: unknown) => Number.isFinite(Number(n))).map(Number) },
             isRead: false,
           },
-          data: { isRead: true },
+          data: { isRead: true, readAt: now },
         });
         updated = result.count;
       } else if (all === true || ids == null) {
         const result = await prisma.socialNotification.updateMany({
           where: { receiverId: userId, isRead: false },
-          data: { isRead: true },
+          data: { isRead: true, readAt: now },
         });
         updated = result.count;
       }

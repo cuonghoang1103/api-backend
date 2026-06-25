@@ -171,7 +171,7 @@ export default function ListenTogether() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[65] flex items-end sm:items-center justify-center p-0 sm:p-4"
+            className="fixed inset-0 z-[210] flex items-end sm:items-center justify-center p-0 sm:p-4"
             style={{ background: 'rgba(5,7,18,0.7)', backdropFilter: 'blur(8px)' }}
             onClick={() => setOpen(false)}
           >

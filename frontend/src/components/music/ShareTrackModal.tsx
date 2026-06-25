@@ -19,6 +19,7 @@ import { Share2, X, Send, MessageCircle, Rss, Loader2, Check } from 'lucide-reac
 import { toast } from 'sonner';
 import { useOptimisticPost } from '@/hooks/useSocialQueries';
 import { useMessagingStore } from '@/store/messagingStore';
+import { messagingApi } from '@/lib/api';
 import { isYouTubeUrl } from '@/lib/youtube-player';
 
 const C = {
@@ -57,10 +58,12 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
   const [caption, setCaption] = useState('');
   const [sentThreadId, setSentThreadId] = useState<number | null>(null);
 
+  const [loadingThreads, setLoadingThreads] = useState(false);
+  const [sendingThreadId, setSendingThreadId] = useState<number | null>(null);
+
   const createPost = useOptimisticPost();
   const threads = useMessagingStore((s) => s.threads);
   const loadThreads = useMessagingStore((s) => s.loadThreads);
-  const sendMessage = useMessagingStore((s) => s.sendMessage);
 
   // Reset caption whenever a new item is shared.
   useEffect(() => {
@@ -74,7 +77,8 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
   // Lazily load conversations when the chat tab opens.
   useEffect(() => {
     if (open && tab === 'chat' && threads.length === 0) {
-      loadThreads().catch(() => {});
+      setLoadingThreads(true);
+      loadThreads().finally(() => setLoadingThreads(false));
     }
   }, [open, tab, threads.length, loadThreads]);
 
@@ -106,12 +110,19 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
       toast.error('Nhập nội dung chia sẻ');
       return;
     }
+    // Call the REST API directly (not the store's optimistic sendMessage,
+    // which silently returns if the auth user isn't hydrated and carries
+    // chat-only side-effects). This is a reliable fire-and-forget send.
+    setSendingThreadId(threadId);
     try {
-      await sendMessage(threadId, content);
+      await messagingApi.sendMessage(threadId, { content });
       setSentThreadId(threadId);
       toast.success('Đã gửi vào cuộc trò chuyện');
     } catch (e: any) {
-      toast.error(e?.message || 'Gửi thất bại');
+      const status = e?.response?.status;
+      toast.error(status === 401 ? 'Bạn cần đăng nhập' : 'Gửi thất bại');
+    } finally {
+      setSendingThreadId(null);
     }
   };
 
@@ -122,7 +133,7 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[65] flex items-end sm:items-center justify-center p-0 sm:p-4"
+          className="fixed inset-0 z-[210] flex items-end sm:items-center justify-center p-0 sm:p-4"
           style={{ background: 'rgba(5,7,18,0.7)', backdropFilter: 'blur(8px)' }}
           onClick={onClose}
         >
@@ -202,16 +213,20 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
                 <p className="text-[10px] font-mono uppercase tracking-widest mb-1" style={{ color: C.muted }}>
                   Chọn cuộc trò chuyện
                 </p>
-                {threads.length === 0 ? (
+                {loadingThreads ? (
+                  <p className="text-xs font-mono py-4 text-center flex items-center justify-center gap-2" style={{ color: C.muted }}>
+                    <Loader2 className="w-4 h-4 animate-spin" /> Đang tải…
+                  </p>
+                ) : threads.length === 0 ? (
                   <p className="text-xs font-mono py-4 text-center" style={{ color: C.muted }}>
-                    Chưa có cuộc trò chuyện nào.
+                    Chưa có cuộc trò chuyện nào. Hãy nhắn tin với ai đó trước rồi quay lại chia sẻ.
                   </p>
                 ) : (
                   threads.map((t) => (
                     <button
                       key={t.id}
                       onClick={() => handleSendToChat(t.id)}
-                      disabled={sentThreadId === t.id}
+                      disabled={sentThreadId === t.id || sendingThreadId === t.id}
                       className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl transition-all hover:bg-white/5 disabled:opacity-60"
                       style={{ minHeight: 44, border: '1px solid rgba(255,255,255,0.06)' }}
                     >
@@ -220,6 +235,8 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
                       </span>
                       {sentThreadId === t.id ? (
                         <Check className="w-4 h-4 shrink-0" style={{ color: C.secondary }} />
+                      ) : sendingThreadId === t.id ? (
+                        <Loader2 className="w-4 h-4 shrink-0 animate-spin" style={{ color: C.muted }} />
                       ) : (
                         <Send className="w-4 h-4 shrink-0" style={{ color: C.muted }} />
                       )}

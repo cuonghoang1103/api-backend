@@ -210,10 +210,12 @@ export default function CyberPlaylist() {
     (track: Track) => {
       const numericId = Number(track.id);
       if (!Number.isFinite(numericId) || numericId <= 0) {
-        // YouTube / local- tracks don't have a server row to like.
-        // For consistency we still flip the local state but skip
-        // the server call.
-        toggleLike(numericId || -1, track);
+        // A just-searched YouTube track still has a transient `yt-<id>`
+        // id (no server row yet — it's persisted in the background and
+        // gets a numeric id on the next tracks refetch). Liking it now
+        // would corrupt likedIds with a bogus -1 entry, so we no-op and
+        // let the user like it once it has a real id.
+        toast('Bài này đang được lưu — thử lại sau giây lát');
         return;
       }
       // Optimistic local flip first.

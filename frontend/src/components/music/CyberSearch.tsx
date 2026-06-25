@@ -169,43 +169,14 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
         durationSeconds: normalizeDuration(result.duration),
       };
 
-      // Try to persist as a real DB row so the track is in the regular
-      // track list. If the user isn't logged in (e.g. JWT expired) the
-      // request will 401 — we fall back to the local-store-only flow so
-      // listening still works.
-      try {
-        const res = await fetch('/api/v1/music/tracks/remote', {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            title: trackData.title,
-            artist: trackData.artist,
-            audioUrl: trackData.audioUrl,
-            coverImage: trackData.coverImage,
-            durationSeconds: trackData.durationSeconds,
-            source: 'youtube',
-            videoId: result.videoId,
-          }),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          const numericId = data?.data?.id;
-          if (numericId) {
-            // Use the DB-assigned numeric id so this track matches what
-            // /api/v1/music/tracks will return on the next page load.
-            trackData.id = String(numericId);
-          }
-          // Invalidate the tracks query so MusicClient picks up the
-          // newly registered YouTube track on its next useEffect tick
-          // (and the next page navigation already has it in the list).
-          queryClient.invalidateQueries({ queryKey: musicKeys.tracks() });
-        }
-      } catch {
-        // Network/backend down — keep the yt-* id and continue
-      }
-
-      // Add to store tracks if not already there (with the updated id)
+      // ── PLAY FIRST (within the click gesture) ──────────────────
+      // CRITICAL: do NOT await the network before playing. The
+      // YouTube IFrame player can only autoplay inside the user-gesture
+      // window; awaiting POST /tracks/remote first consumed that window,
+      // so the very first YouTube pick was silent until the user had
+      // already interacted with the player (e.g. played a local track).
+      // We register + play synchronously here, then persist in the
+      // background below.
       const currentTracks = useMusicStore.getState().tracks;
       if (!currentTracks.find((t) => t.id === trackData.id)) {
         useMusicStore.setState({ tracks: [...currentTracks, trackData] });
@@ -213,6 +184,36 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
       const fresh = useMusicStore.getState().tracks;
       const idx = fresh.findIndex((t) => t.id === trackData.id);
       useMusicStore.getState().playTrackAtIndex(idx >= 0 ? idx : fresh.length - 1);
+
+      // ── PERSIST IN BACKGROUND ──────────────────────────────────
+      // Register the YT track as a real DB row so it survives reloads
+      // and shows up in the regular track list. We intentionally do NOT
+      // mutate the now-playing track's id (changing currentTrack.id mid-
+      // play would reload the player and restart from 0). The DB row is
+      // picked up on the next page load via the invalidated tracks query.
+      void (async () => {
+        try {
+          const res = await fetch('/api/v1/music/tracks/remote', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              title: trackData.title,
+              artist: trackData.artist,
+              audioUrl: trackData.audioUrl,
+              coverImage: trackData.coverImage,
+              durationSeconds: trackData.durationSeconds,
+              source: 'youtube',
+              videoId: result.videoId,
+            }),
+          });
+          if (res.ok) {
+            queryClient.invalidateQueries({ queryKey: musicKeys.tracks() });
+          }
+        } catch {
+          // Network/backend down — playback already works from the store.
+        }
+      })();
     }
     setOpen(false);
     setQuery('');

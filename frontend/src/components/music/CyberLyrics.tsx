@@ -182,7 +182,7 @@ export default function CyberLyrics({ open, onClose, trackId, trackTitle, trackA
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: prefersReducedMotion() ? 0 : 40 }}
           transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-          className="fixed inset-0 z-[60] flex flex-col"
+          className="fixed inset-0 z-[200] flex flex-col"
           style={{
             background: 'linear-gradient(160deg, rgba(10,12,28,0.97), rgba(15,23,42,0.98))',
             backdropFilter: 'blur(12px)',

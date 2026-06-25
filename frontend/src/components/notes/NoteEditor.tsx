@@ -38,6 +38,7 @@ import { Check, Loader2, CloudOff } from 'lucide-react';
 import NoteCodeBlock from '@/components/notes/extensions/NoteCodeBlock';
 import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
+import TabIndent from '@/components/notes/extensions/TabIndent';
 import SlashMenu, { type SlashMenuRef } from '@/components/notes/SlashMenu';
 import NoteTableOfContents from '@/components/notes/NoteTableOfContents';
 
@@ -155,6 +156,9 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
       TableRow,
       TableHeader,
       TableCell,
+      // Notepad-style Tab: inserts an 8-space indent at the caret in
+      // prose, while leaving list/task/table Tab behaviour untouched.
+      TabIndent,
     ],
     content: note.contentJson ?? '',
     editorProps: {

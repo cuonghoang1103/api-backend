@@ -19,6 +19,7 @@ import {
   ArrowLeft, ArrowRight, RotateCw, Check, X, Volume2, Loader2, GraduationCap, RefreshCcw,
 } from 'lucide-react';
 import { notesApi } from '@/lib/api';
+import { speakVocabEntry, langLabel } from '@/lib/notesTts';
 import type { Flashcard, FlashcardDeck } from '@/types';
 
 interface Props {
@@ -61,15 +62,16 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
   const total = cards.length;
   const done = deck ? deck.summary.known : 0;
 
-  const speak = useCallback((text?: string | null) => {
-    if (!text || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    try {
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = guessLang(text);
-      u.rate = 0.95;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(u);
-    } catch { /* ignore */ }
+  const [speakHint, setSpeakHint] = useState<string | null>(null);
+  const speak = useCallback(async (entry?: Flashcard | null) => {
+    if (!entry) return;
+    setSpeakHint(null);
+    // Auto-detects Japanese / Chinese / English and picks a matching
+    // voice; surfaces a hint if the device lacks the needed voice.
+    const res = await speakVocabEntry(entry, { rate: 0.95 });
+    if (!res.ok && res.missingVoice) {
+      setSpeakHint(`Thiết bị chưa cài giọng đọc ${langLabel(res.lang)}.`);
+    }
   }, []);
 
   // Keyboard: Space flip, ←/→ nav, 1 known, 2 unknown.
@@ -212,7 +214,7 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
               </div>
               {current.reading && (
                 <button
-                  onClick={(e) => { e.stopPropagation(); speak(current.term); }}
+                  onClick={(e) => { e.stopPropagation(); void speak(current); }}
                   className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-xs text-slate-300 hover:bg-white/5"
                   aria-label="Phát âm"
                 >
@@ -240,6 +242,14 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Non-blocking TTS hint (e.g. device lacks a Japanese voice). */}
+      {speakHint && (
+        <div className="mx-auto mb-2 flex max-w-md items-center gap-1.5 rounded-md border border-amber-500/25 bg-amber-500/10 px-3 py-1.5 text-center text-[12px] text-amber-200">
+          <span className="flex-1">{speakHint}</span>
+          <button onClick={() => setSpeakHint(null)} className="text-amber-300/70 hover:text-amber-200" aria-label="Đóng">×</button>
+        </div>
+      )}
 
       {/* Controls */}
       <footer className="border-t border-white/[0.06] px-4 py-3">
@@ -292,11 +302,6 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
   );
 }
 
-// Crude language guess from script: CJK → ja (best effort), Latin → en,
-// Cyrillic → ru, else unset so the browser picks.
-function guessLang(text: string): string {
-  if (/[\u3040-\u30ff\u4e00-\u9fff]/.test(text)) return 'ja-JP';
-  if (/[\u0400-\u04ff]/.test(text)) return 'ru-RU';
-  if (/[\u0e00-\u0e7f]/.test(text)) return 'th-TH';
-  return 'en-US';
-}
+// Language detection + voice selection now lives in lib/notesTts so it
+// is shared with VocabTable and tells Japanese vs Chinese apart (the old
+// heuristic here lumped Hanzi into Japanese).

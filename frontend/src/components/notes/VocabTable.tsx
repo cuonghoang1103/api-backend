@@ -14,12 +14,14 @@ import { SortableContext, useSortable, verticalListSortingStrategy, arrayMove } 
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Plus, Trash2, Loader2, Volume2, AlertCircle } from 'lucide-react';
 import { notesApi } from '@/lib/api';
+import { speakVocabEntry, langLabel, type VocabLang } from '@/lib/notesTts';
 import type { NoteVocabEntry } from '@/types';
 
 interface Props {
   noteId: number;
-  /** Optional language hint for TTS (e.g. 'ja', 'zh', 'en'). */
-  lang?: string;
+  /** Optional forced TTS language override (e.g. 'ja-JP'). When absent,
+   *  the language is auto-detected per entry from its script. */
+  lang?: VocabLang;
 }
 
 export default function VocabTable({ noteId, lang }: Props) {
@@ -31,6 +33,8 @@ export default function VocabTable({ noteId, lang }: Props) {
   // so a 400 ("term không được để trống") or a network blip looked
   // like a dead button.
   const [error, setError] = useState<string | null>(null);
+  // Transient, non-blocking hint (e.g. "no Japanese voice installed").
+  const [hint, setHint] = useState<string | null>(null);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
 
   const load = useCallback(async () => {
@@ -97,12 +101,14 @@ export default function VocabTable({ noteId, lang }: Props) {
     catch (e: unknown) { setError(extractMsg(e) || 'Không sắp xếp lại được.'); load(); }
   };
 
-  const speak = (entry: NoteVocabEntry) => {
-    if (typeof window === 'undefined' || !window.speechSynthesis) return;
-    const u = new SpeechSynthesisUtterance(entry.reading || entry.term);
-    if (lang) u.lang = lang;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(u);
+  const speak = async (entry: NoteVocabEntry) => {
+    setHint(null);
+    // Auto-detects Japanese / Chinese / English from the entry's script
+    // (or uses the optional `lang` override) and picks a matching voice.
+    const res = await speakVocabEntry(entry, { rate: 0.95, forceLang: lang });
+    if (!res.ok && res.missingVoice) {
+      setHint(`Thiết bị chưa cài giọng đọc ${langLabel(res.lang)}.`);
+    }
   };
 
   if (loading) return <div className="flex justify-center py-4 text-slate-500"><Loader2 className="h-4 w-4 animate-spin" /></div>;
@@ -114,6 +120,14 @@ export default function VocabTable({ noteId, lang }: Props) {
           <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           <span className="flex-1">{error}</span>
           <button onClick={() => setError(null)} className="text-rose-300/70 hover:text-rose-200" aria-label="Đóng">×</button>
+        </div>
+      )}
+
+      {hint && (
+        <div className="flex items-start gap-1.5 rounded-md border border-amber-500/25 bg-amber-500/10 px-2.5 py-1.5 text-[12px] text-amber-200">
+          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <span className="flex-1">{hint}</span>
+          <button onClick={() => setHint(null)} className="text-amber-300/70 hover:text-amber-200" aria-label="Đóng">×</button>
         </div>
       )}
 

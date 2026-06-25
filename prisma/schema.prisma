@@ -1099,6 +1099,7 @@ model MusicTrack {
   queueItems MusicQueueItem[]
   likes      MusicLike[]
   playCounts MusicPlayCount[]
+  lyrics     MusicLyrics?
 
   @@map("music_tracks")
 }
@@ -1226,6 +1227,31 @@ model MusicPlayCount {
   @@unique([userId, trackId], name: "music_play_counts_user_track_unique")
   @@index([userId, count(sort: Desc)], name: "idx_music_play_counts_user_count")
   @@map("music_play_counts")
+}
+
+// ============================================================
+// 8f. MUSIC LYRICS (Phase 2b) — synced karaoke lyrics
+// ============================================================
+// One row per track (1:1, UNIQUE track_id). `synced` holds the
+// time-synced lines as JSON: [{ "t": <seconds:number>, "text": <string> }]
+// sorted ascending by `t`. `plain` is a newline-separated fallback
+// used when a track has lyrics but no timestamps (format='plain').
+// `format` lets the client decide between karaoke-scroll and a plain
+// block without inspecting the JSON. Editing is an idempotent upsert
+// on the unique track_id, so re-saving never creates a duplicate row.
+model MusicLyrics {
+  id          Int      @id @default(autoincrement())
+  trackId     Int      @unique @map("track_id")
+  format      String   @default("synced") @db.VarChar(16)
+  synced      Json?
+  plain       String?  @db.Text
+  updatedById Int?     @map("updated_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  track MusicTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@map("music_lyrics")
 }
 
 // ============================================================

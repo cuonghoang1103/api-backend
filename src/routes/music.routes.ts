@@ -682,6 +682,68 @@ router.put(
 );
 
 // ════════════════════════════════════════════════════════════════
+// POST /api/v1/music/playlists/:id/cover  (Phase 2b)
+// Upload a custom cover image to R2 and set it on the playlist.
+// Multipart field name: `cover`. Reuses the same R2 image-upload
+// path as track covers ('images/playlist-covers'). Same owner/admin
+// guard as PUT /playlists/:id.
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/playlists/:id/cover',
+  authenticate,
+  uploadMiddleware.fields([{ name: 'cover', maxCount: 1 }]),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id) || id <= 0) {
+        throw new AppError('Invalid playlist ID', 400, 'INVALID_ID');
+      }
+
+      // ─── Ownership check: only the creator or an admin ───
+      const existing = await musicService.getPlaylistById(id);
+      if (!existing) {
+        throw new AppError('Playlist not found', 404, 'PLAYLIST_NOT_FOUND');
+      }
+      const isOwner = (existing as any).userId === req.userId;
+      const isAdmin = req.user?.roles?.some(
+        (r: string) => r.toUpperCase().replace('ROLE_', '') === 'ADMIN',
+      );
+      if (!isOwner && !isAdmin) {
+        throw new AppError('You do not have permission to edit this playlist', 403, 'FORBIDDEN');
+      }
+
+      const coverFile = req.files?.cover?.[0] as Express.Multer.File | undefined;
+      if (!coverFile) {
+        throw new AppError('No cover image uploaded (field name: cover)', 400, 'NO_COVER');
+      }
+
+      const coverRes = await uploadImage(
+        {
+          buffer: coverFile.buffer,
+          originalName: coverFile.originalname,
+          mimetype: coverFile.mimetype,
+          size: coverFile.size,
+        },
+        'images/playlist-covers',
+        { userId: req.userId },
+      );
+
+      const playlist: any = await musicService.updatePlaylist(id, {
+        coverUrl: coverRes.url,
+      });
+
+      const serialized = serializePlaylist(playlist);
+      res.json({ success: true, data: serialized, message: 'Cover updated' });
+    } catch (error) {
+      if (error instanceof UploadError) {
+        return next(new AppError(error.message, error.status, error.code));
+      }
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
 // DELETE /api/v1/music/playlists/:id
 // ════════════════════════════════════════════════════════════════
 router.delete(

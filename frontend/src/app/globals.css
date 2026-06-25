@@ -1865,3 +1865,33 @@ aside ::-webkit-scrollbar-thumb:hover {
      video frame. */
   will-change: transform;
 }
+
+/* ─── Phase 5 home upgrade: shimmer skeleton ──────────────────
+   Replaces the old `animate-pulse` flat grey blocks with a
+   moving linear-gradient overlay. Pure GPU — the keyframe
+   animates `background-position` on a 200%-width gradient, so
+   there's no layout/paint work each tick. The skeleton reads
+   as "real content loading" rather than "broken UI" and works
+   uniformly in dark + light themes because the colour is
+   theme-aware via the rgba alpha channel. */
+@keyframes shimmer-sweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.10) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer-sweep 1.6s ease-in-out infinite;
+  border-radius: 6px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+    background: rgba(255, 255, 255, 0.06);
+  }
+}

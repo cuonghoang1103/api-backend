@@ -138,6 +138,11 @@ export interface SocialComment {
   id: number;
   postId: number;
   parentId?: number | null;
+  // Phase 5 home upgrade: comment threading depth (0 = top-level,
+  // 1 = first reply). maxDepth=2 is enforced server-side; the
+  // frontend uses this to hide the reply button on depth=1
+  // comments.
+  depth?: number;
   content: string;
   // ─── @mentions (added 2026-06-20) ─────────────────────────────
   // User ids the commenter tagged with `@username`. PostCard
@@ -147,6 +152,12 @@ export interface SocialComment {
   mentions?: number[];
   likesCount: number;
   repliesCount: number;
+  // Phase 5 home upgrade: when the server fetched fewer replies
+  // than `repliesCount`, these two flags tell the UI to render a
+  // "Xem thêm N phản hồi" button that lazy-loads the rest via
+  // /comments/by-root/:rootId.
+  repliesShown?: number;
+  hasMoreReplies?: boolean;
   isEdited: boolean;
   createdAt: string;
   updatedAt: string;

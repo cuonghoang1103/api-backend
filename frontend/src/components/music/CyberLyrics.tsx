@@ -19,6 +19,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMusicStore } from '@/store/musicStore';
 import {
@@ -102,6 +103,9 @@ export default function CyberLyrics({ open, onClose, trackId, trackTitle, trackA
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
   const [saveErr, setSaveErr] = useState<string | null>(null);
+  // Portal mount guard (avoids SSR/hydration mismatch).
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLParagraphElement>(null);
@@ -174,7 +178,9 @@ export default function CyberLyrics({ open, onClose, trackId, trackTitle, trackA
     }
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -319,6 +325,7 @@ export default function CyberLyrics({ open, onClose, trackId, trackTitle, trackA
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

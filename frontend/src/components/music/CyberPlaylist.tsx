@@ -82,6 +82,26 @@ export default function CyberPlaylist() {
   const [activeTab, setActiveTab] = useState<PlaylistView>('tracks');
   const [imgError, setImgError] = useState(false);
   const [failedThumbs, setFailedThumbs] = useState<Set<string>>(new Set());
+  // Track the previous track id so we can clear failedThumbs when
+  // the user switches to a brand-new track (otherwise the previous
+  // track's broken-thumb state would keep its cover hidden until a
+  // page reload — the symptom the user described as "reload to see
+  // the YouTube cover").
+  const prevTrackIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    const id = tracks[0]?.id ?? null;
+    if (prevTrackIdRef.current !== null && prevTrackIdRef.current !== id) {
+      // The first listed track changed — its `failedThumbs` entry
+      // is no longer relevant and would otherwise hide the cover.
+      setFailedThumbs((prev) => {
+        if (!prev.has(id as string)) return prev;
+        const next = new Set(prev);
+        next.delete(id as string);
+        return next;
+      });
+    }
+    prevTrackIdRef.current = id;
+  }, [tracks]);
 
   // ── Debounced search ──────────────────────────────────────────────
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);

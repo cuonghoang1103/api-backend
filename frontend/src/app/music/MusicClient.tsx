@@ -109,15 +109,26 @@ export default function CyberMusicPage() {
     const newTracks = data?.data;
     if (!newTracks) return;
 
+    // Keep the currently-playing track in the list even if the DB
+    // refetch hasn't caught up yet. A just-searched YouTube track is
+    // persisted in the BACKGROUND (so playback can start inside the
+    // click gesture); if the user navigates to /music before that POST
+    // finishes, the fresh DB list won't include it and we'd drop the
+    // playing track + its cover until a manual reload. Merging it back
+    // here makes it appear immediately with its thumbnail.
+    const cur = useMusicStore.getState().currentTrack;
+    const finalTracks =
+      cur && !newTracks.some((t) => t.id === cur.id) ? [...newTracks, cur] : newTracks;
+
     const currentTracks = useMusicStore.getState().tracks;
-    if (currentTracks.length === newTracks.length) {
+    if (currentTracks.length === finalTracks.length) {
       let same = true;
-      for (let i = 0; i < newTracks.length; i++) {
-        if (currentTracks[i]?.id !== newTracks[i]?.id) { same = false; break; }
+      for (let i = 0; i < finalTracks.length; i++) {
+        if (currentTracks[i]?.id !== finalTracks[i]?.id) { same = false; break; }
       }
       if (same) return; // Skip — no real change, keep current playback state
     }
-    setTracks(newTracks);
+    setTracks(finalTracks);
   }, [data, isMounted, setTracks]);
 
   useEffect(() => { setIsMounted(true); }, []);

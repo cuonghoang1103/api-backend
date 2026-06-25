@@ -13,7 +13,8 @@
  * code to join and immediately syncs to the host's playback.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Radio, Copy, LogOut, Users, X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -69,10 +70,12 @@ function applyInitial(state: ListenState | undefined) {
   if (state.positionSec > 0) music.setCurrentTime(state.positionSec);
 }
 
-export default function ListenTogether() {
+export default function ListenTogether({ onOpen }: { onOpen?: () => void } = {}) {
   const [open, setOpen] = useState(false);
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState<'create' | 'join' | null>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const roomId = useListenTogetherStore((s) => s.roomId);
   const isHost = useListenTogetherStore((s) => s.isHost);
@@ -156,7 +159,14 @@ export default function ListenTogether() {
     <>
       <motion.button
         whileTap={{ scale: 0.9 }}
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          // Notify the parent so it can close any sibling modal
+          // (Lyrics / Share) BEFORE we open — otherwise they
+          // stack on top of each other at z-200/210 and the
+          // user can't reach the one underneath.
+          onOpen?.();
+          setOpen(true);
+        }}
         className="text-xs font-mono font-bold transition-all flex items-center gap-1.5"
         style={{ color: roomId ? C.accent : C.secondary }}
         title="Nghe chung"
@@ -165,6 +175,7 @@ export default function ListenTogether() {
         {roomId ? `LIVE·${members.length}` : 'LISTEN'}
       </motion.button>
 
+      {mounted && createPortal(
       <AnimatePresence>
         {open && (
           <motion.div
@@ -293,7 +304,9 @@ export default function ListenTogether() {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body,
+      )}
     </>
   );
 }

@@ -223,8 +223,17 @@ export default function MusicAudioController() {
   const handleYouTubeTrack = useCallback(
     (videoId: string, shouldPlay: boolean, startSeconds = 0) => {
       if (!window.YT?.Player) {
+        // API not ready yet. Wait for it, then immediately (no
+        // artificial 500ms delay) retry. The artificial delay was a
+        // root cause of the user-reported "first YouTube click does
+        // nothing — I have to play a local track first, then re-pick
+        // the YouTube one": by the time the player was created, the
+        // browser's user-gesture window had already closed and
+        // `playVideo()` was silently rejected. Retrying immediately
+        // keeps us inside the gesture window for the common case
+        // where the API was just about to finish loading.
         loadYouTubeAPI().then(() => {
-          setTimeout(() => handleYouTubeTrack(videoId, shouldPlay, startSeconds), 500);
+          handleYouTubeTrack(videoId, shouldPlay, startSeconds);
         });
         return;
       }

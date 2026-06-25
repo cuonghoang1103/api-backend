@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQueryClient } from '@tanstack/react-query';
 import { useYouTubeSearch, musicKeys } from '@/hooks/useMusicQueries';
 import { useMusicStore } from '@/store/musicStore';
+import { loadYouTubeAPI } from '@/lib/youtube-player';
 import type { Track } from '@/types';
 import type { YouTubeSearchResult } from '@/hooks/useMusicQueries';
 
@@ -83,6 +84,15 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
   // ── Debounce query for YouTube API calls ────────────────────────────
   const handleQueryChange = useCallback((value: string) => {
     setQuery(value);
+    // Eagerly start loading the YouTube IFrame API the moment the
+    // user types — so by the time they click a result, the YT.Player
+    // constructor is already available and `handleYouTubeTrack` can
+    // run inside the click's user-gesture window without needing the
+    // API-ready → setTimeout fallback (which used to wait 500ms and
+    // fall outside the gesture window, silently failing autoplay).
+    if (typeof window !== 'undefined') {
+      void loadYouTubeAPI();
+    }
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       setYtQuery(value);
@@ -265,7 +275,12 @@ export default function CyberSearch({ localTracks }: CyberSearchProps) {
             setOpen(true);
             setFocusedIdx(-1);
           }}
-          onFocus={() => setOpen(true)}
+          onFocus={() => {
+            // Preload the YT API on focus so the first click on a
+            // YouTube result lands inside the gesture window.
+            if (typeof window !== 'undefined') void loadYouTubeAPI();
+            setOpen(true);
+          }}
           onKeyDown={handleKeyDown}
           placeholder="Search local tracks or YouTube..."
           className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-mono outline-none transition-all"

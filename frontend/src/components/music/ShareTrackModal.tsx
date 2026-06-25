@@ -8,17 +8,19 @@
  * Reuses the EXISTING systems with zero backend change:
  *   - Feed: useCreatePost (POST /social/posts). YouTube tracks pass
  *     youtubeUrl so the post card renders an embedded player.
- *   - Chat: useMessagingStore.sendMessage to a chosen conversation.
+ *   - Chat: messagingApi.sendMessage to a chosen conversation.
  *
  * Cyber theme; mobile-friendly (44px targets, 16px inputs).
  */
 
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, X, Send, MessageCircle, Rss, Loader2, Check } from 'lucide-react';
+import { Share2, X, Send, MessageCircle, Rss, Loader2, Check, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
 import { useOptimisticPost } from '@/hooks/useSocialQueries';
 import { useMessagingStore } from '@/store/messagingStore';
+import { useAuthStore } from '@/store/authStore';
 import { messagingApi } from '@/lib/api';
 import { isYouTubeUrl } from '@/lib/youtube-player';
 
@@ -60,10 +62,15 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
 
   const [loadingThreads, setLoadingThreads] = useState(false);
   const [sendingThreadId, setSendingThreadId] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const createPost = useOptimisticPost();
   const threads = useMessagingStore((s) => s.threads);
+  const threadsLoaded = useMessagingStore((s) => s.threadsLoaded);
   const loadThreads = useMessagingStore((s) => s.loadThreads);
+  const initError = useMessagingStore((s) => s.initError);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   // Reset caption whenever a new item is shared.
   useEffect(() => {
@@ -75,12 +82,20 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
   }, [open, item]);
 
   // Lazily load conversations when the chat tab opens.
+  // IMPORTANT: also reload if we have no `peer` info on any thread
+  // (the share modal renders the peer name — without it the list is
+  // useless). And we always reload when opening fresh to pick up
+  // brand-new threads created since last open.
   useEffect(() => {
-    if (open && tab === 'chat' && threads.length === 0) {
+    if (open && tab === 'chat' && isAuthenticated) {
       setLoadingThreads(true);
+      // Always try to load — even if `threads.length > 0` — because
+      // a brand-new conversation may have appeared since the last
+      // open. The messaging store de-dupes by id.
       loadThreads().finally(() => setLoadingThreads(false));
     }
-  }, [open, tab, threads.length, loadThreads]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, tab, isAuthenticated]);
 
   if (!item) return null;
 
@@ -110,6 +125,12 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
       toast.error('Nhập nội dung chia sẻ');
       return;
     }
+    // Guard: if not authenticated, surface a clear message instead of
+    // a generic network error from the 401 response.
+    if (!isAuthenticated) {
+      toast.error('Bạn cần đăng nhập để gửi vào chat');
+      return;
+    }
     // Call the REST API directly (not the store's optimistic sendMessage,
     // which silently returns if the auth user isn't hydrated and carries
     // chat-only side-effects). This is a reliable fire-and-forget send.
@@ -118,15 +139,29 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
       await messagingApi.sendMessage(threadId, { content });
       setSentThreadId(threadId);
       toast.success('Đã gửi vào cuộc trò chuyện');
+      // Refresh the thread summary so the inbox shows the latest
+      // message preview (without this, the peer might still see the
+      // old "last message" until they reload).
+      useMessagingStore.getState().refreshThreadSummary(threadId).catch(() => {});
     } catch (e: any) {
-      const status = e?.response?.status;
-      toast.error(status === 401 ? 'Bạn cần đăng nhập' : 'Gửi thất bại');
+      const status = e?.response?.status ?? e?.status;
+      const msg =
+        status === 401
+          ? 'Phiên đăng nhập đã hết hạn — vui lòng đăng nhập lại'
+          : status === 403
+            ? 'Bạn không có quyền gửi vào cuộc trò chuyện này'
+            : status === 404
+              ? 'Cuộc trò chuyện không tồn tại'
+              : e?.response?.data?.message || e?.message || 'Gửi thất bại';
+      toast.error(msg);
     } finally {
       setSendingThreadId(null);
     }
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -213,14 +248,34 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
                 <p className="text-[10px] font-mono uppercase tracking-widest mb-1" style={{ color: C.muted }}>
                   Chọn cuộc trò chuyện
                 </p>
-                {loadingThreads ? (
+                {!isAuthenticated ? (
+                  <div className="flex flex-col items-center gap-2 py-4 text-center">
+                    <AlertTriangle className="w-5 h-5" style={{ color: C.accent }} />
+                    <p className="text-xs font-mono" style={{ color: C.muted }}>
+                      Bạn cần đăng nhập để gửi vào chat.
+                    </p>
+                  </div>
+                ) : loadingThreads && !threadsLoaded ? (
                   <p className="text-xs font-mono py-4 text-center flex items-center justify-center gap-2" style={{ color: C.muted }}>
                     <Loader2 className="w-4 h-4 animate-spin" /> Đang tải…
                   </p>
                 ) : threads.length === 0 ? (
-                  <p className="text-xs font-mono py-4 text-center" style={{ color: C.muted }}>
-                    Chưa có cuộc trò chuyện nào. Hãy nhắn tin với ai đó trước rồi quay lại chia sẻ.
-                  </p>
+                  <div className="flex flex-col items-center gap-2 py-4 text-center">
+                    <p className="text-xs font-mono" style={{ color: C.muted }}>
+                      {initError
+                        ? initError
+                        : 'Chưa có cuộc trò chuyện nào. Hãy nhắn tin với ai đó trước rồi quay lại chia sẻ.'}
+                    </p>
+                    {initError && (
+                      <button
+                        onClick={() => loadThreads()}
+                        className="text-[11px] font-mono underline"
+                        style={{ color: C.secondary }}
+                      >
+                        Thử lại
+                      </button>
+                    )}
+                  </div>
                 ) : (
                   threads.map((t) => (
                     <button
@@ -248,6 +303,7 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

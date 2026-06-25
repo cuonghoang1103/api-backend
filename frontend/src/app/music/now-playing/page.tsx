@@ -73,8 +73,27 @@ export default function NowPlayingPage() {
   if (!isMounted) return null;
 
   const bgImage = currentTrack?.coverImage;
+  // NOTE: bgImgError / vinylImgError are tracked per-track so a
+  // transient load failure on one track doesn't permanently hide the
+  // cover when the user switches to a different track (and a
+  // page reload — which resets React state — would mysteriously
+  // restore the cover). Without this reset, the user reported:
+  // "I have to reload the page to see the YouTube track's cover".
+  const currentTrackId = currentTrack?.id ?? null;
   const isBlurred = isSafeUrl(bgImage) && !bgImgError;
   const hasCover = isSafeUrl(currentTrack?.coverImage) && !vinylImgError;
+
+  // Reset the error flags whenever we switch to a different track.
+  // Same URL → keep the existing flag (likely a real failure). New
+  // URL → start fresh so a previously-failed cover can be retried.
+  useEffect(() => {
+    setBgImgError(false);
+    setVinylImgError(false);
+    // We intentionally depend on the track id (not the URL) so a
+    // single track re-emitting a fresh URL object doesn't reset
+    // a known-broken cover.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTrackId]);
 
   return (
     <div
@@ -189,10 +208,29 @@ export default function NowPlayingPage() {
             </span>
 
             <div className="flex items-center gap-4">
-              <ListenTogether />
+              <ListenTogether
+                // Close other modals so they don't overlap on top of
+                // each other when the user opens one then opens another.
+                // Without this, Listen Together (z-210) would cover the
+                // LYRICS overlay (z-200), making both feel "duplicated
+                // and stacked on top of each other".
+                onOpen={() => {
+                  setShowLyrics(false);
+                  setShowShare(false);
+                  setShowInfo(false);
+                }}
+              />
               <motion.button
                 whileTap={{ scale: 0.9 }}
-                onClick={() => setShowShare(true)}
+                onClick={() => {
+                  setShowShare((v) => {
+                    if (!v) {
+                      setShowLyrics(false);
+                      setShowInfo(false);
+                    }
+                    return !v;
+                  });
+                }}
                 className="text-xs font-mono font-bold transition-all"
                 style={{ color: C.primary }}
               >
@@ -200,7 +238,15 @@ export default function NowPlayingPage() {
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.9 }}
-                onClick={() => setShowLyrics(true)}
+                onClick={() => {
+                  setShowLyrics((v) => {
+                    if (!v) {
+                      setShowShare(false);
+                      setShowInfo(false);
+                    }
+                    return !v;
+                  });
+                }}
                 className="text-xs font-mono font-bold transition-all"
                 style={{ color: C.secondary }}
               >

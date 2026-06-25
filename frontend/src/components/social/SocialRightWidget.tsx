@@ -211,7 +211,10 @@ function SocialRightWidgetInner() {
         {!loaded ? (
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-9 rounded-lg animate-pulse" style={{ background: 'rgba(255,255,255,0.04)' }} />
+              // Phase 5 home upgrade: shimmer skeleton instead
+              // of the flat animate-pulse. Matches the post
+              // loading skeleton for a consistent feel.
+              <div key={i} className="shimmer h-9 rounded-lg" />
             ))}
           </div>
         ) : trending.length > 0 ? (
@@ -239,9 +242,16 @@ function SocialRightWidgetInner() {
             })}
           </ul>
         ) : (
-          <p className="text-xs text-text-muted">
-            Chưa có chủ đề thịnh hành. Hãy đăng bài với hashtag để tạo xu hướng!
-          </p>
+          // Phase 5 home upgrade: friendlier empty state with a
+          // subtle CTA hint.
+          <div className="rounded-lg px-2 py-3 text-center" style={{ background: 'rgba(255,255,255,0.02)' }}>
+            <p className="text-[12px] leading-relaxed" style={{ color: '#64748b' }}>
+              Chưa có chủ đề thịnh hành.
+            </p>
+            <p className="mt-1 text-[11px]" style={{ color: '#475569' }}>
+              Đăng bài với <span style={{ color: '#a78bfa' }}>#hashtag</span> để tạo xu hướng.
+            </p>
+          </div>
         )}
       </div>
 

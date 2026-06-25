@@ -391,11 +391,23 @@ export function PostComposer() {
     <div>
       <motion.div
         layout
+        // Phase 5 home upgrade: smoother expand animation.
+        // - `layout` keeps the composer from jumping when tools
+        //   (poll editor, media preview, etc.) appear.
+        // - The border colour + glow + accent line all transition
+        //   together via a single spring so the composer "breathes"
+        //   when the user focuses the textarea rather than snapping
+        //   open like a modal.
+        transition={{ layout: { type: 'spring', stiffness: 280, damping: 28 } }}
         className="overflow-hidden rounded-3xl"
         style={{
           background: 'rgba(255,255,255,0.03)',
           border: isExpanded ? '1px solid rgba(139,92,246,0.3)' : '1px solid rgba(255,255,255,0.08)',
           backdropFilter: 'blur(20px)',
+          boxShadow: isExpanded
+            ? '0 8px 32px rgba(139,92,246,0.18), inset 0 1px 0 rgba(255,255,255,0.04)'
+            : 'inset 0 1px 0 rgba(255,255,255,0.04)',
+          transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
         }}
       >
         {/* Top accent */}

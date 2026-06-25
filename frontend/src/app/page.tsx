@@ -275,21 +275,49 @@ export default function SocialPage() {
 
           {/* Center feed — bounded width so reading is comfortable */}
           <div className="mx-auto w-full min-w-0 lg:max-w-[740px] xl:max-w-[780px]">
-            {/* Header */}
+            {/* Header — Phase 5 home upgrade: refined typography.
+                Smaller, denser headline that fits the focused-study
+                vibe; subtle accent line under the title so the feed
+                doesn't look like a generic social page. */}
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6"
+              transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+              className="mb-5"
             >
-              <h1
-                className="bg-gradient-to-r from-violet-400 via-purple-400 to-cyan-400 bg-clip-text text-4xl font-black tracking-tight text-transparent"
-                style={{ fontSize: '2.5rem' }}
-              >
-                Feed
-              </h1>
-              <p className="mt-1 text-sm" style={{ color: '#64748b' }}>
-                Your personal space
-              </p>
+              <div className="flex items-end justify-between gap-3">
+                <div>
+                  <h1
+                    className="bg-gradient-to-r from-violet-300 via-purple-300 to-cyan-300 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent sm:text-[2rem]"
+                  >
+                    Bảng tin
+                  </h1>
+                  <p className="mt-0.5 text-[13px]" style={{ color: '#64748b' }}>
+                    Không gian học tập & chia sẻ của bạn
+                  </p>
+                </div>
+                {/* Tiny counter badge so the user knows how many posts
+                    they're seeing without scrolling. Updates live
+                    when filter tabs change. */}
+                <div
+                  className="flex shrink-0 items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.02] px-2.5 py-1 text-[11px] font-medium"
+                  style={{ color: '#94a3b8' }}
+                  title="Số bài viết đang hiển thị"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-teal-400" />
+                  {displayPosts.length} bài
+                </div>
+              </div>
+              {/* Accent underline — gradient fades from violet to cyan
+                  so the page header feels related to the brand
+                  identity without using a heavy box border. */}
+              <div
+                className="mt-3 h-px w-full"
+                style={{
+                  background:
+                    'linear-gradient(90deg, rgba(139,92,246,0.4) 0%, rgba(34,211,238,0.4) 50%, transparent 100%)',
+                }}
+              />
             </motion.div>
 
             {/* Composer */}
@@ -521,35 +549,75 @@ export default function SocialPage() {
 // FeedSkeleton removed — replaced by PostSkeleton from PostCard.tsx
 
 function EmptyFeed() {
+  // Phase 5 home upgrade: friendly empty state with a hand-drawn
+  // SVG illustration, gradient headline, and a primary CTA to
+  // jump-start engagement. Empty states used to be just a
+  // centred icon + 2 lines of English text; now they read as a
+  // designed zero-screen that nudges the user to action.
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="flex flex-col items-center justify-center rounded-2xl py-16 text-center"
+      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+      className="flex flex-col items-center justify-center rounded-2xl px-6 py-16 text-center"
       style={{
         background: 'rgba(255,255,255,0.02)',
         border: '1px solid rgba(255,255,255,0.06)',
-        backdropFilter: 'blur(20px)',
       }}
     >
-      <div
-        className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
+      {/* Animated SVG illustration: a floating notebook with a
+          sparkle. The SVG animates the sparkle pulse + a slow
+          float on the notebook so the empty state never reads as
+          "dead" while the user looks at it. */}
+      <motion.div
+        className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl"
         style={{
-          background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(6,182,212,0.2))',
+          background: 'linear-gradient(135deg, rgba(139,92,246,0.18), rgba(6,182,212,0.18))',
           border: '1px solid rgba(139,92,246,0.3)',
         }}
+        animate={{ y: [0, -4, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="1.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5z" />
-          <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#empty-gradient)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <defs>
+            <linearGradient id="empty-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#a78bfa" />
+              <stop offset="100%" stopColor="#22d3ee" />
+            </linearGradient>
+          </defs>
+          {/* Notebook */}
+          <path d="M4 4h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4z" />
+          <path d="M8 2v4M16 2v4M4 10h12" />
+          {/* Sparkle (top-right) */}
+          <motion.circle
+            cx="19" cy="4" r="1.5" fill="#a78bfa"
+            animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.path
+            d="M21 7 L22 8 L21 9 L20 8 Z"
+            fill="#22d3ee"
+            animate={{ opacity: [0.5, 1, 0.5], rotate: [0, 90, 180] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+            style={{ transformOrigin: '21px 8px' }}
+          />
         </svg>
+      </motion.div>
+      <h3 className="bg-gradient-to-r from-violet-300 via-cyan-300 to-violet-300 bg-clip-text text-xl font-bold tracking-tight text-transparent">
+        Feed của bạn đang trống
+      </h3>
+      <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: '#94a3b8' }}>
+        Hãy là người đầu tiên chia sẻ — một câu hỏi, một khoảnh khắc, hay đoạn code hay.
+        Cộng đồng đang chờ bạn.
+      </p>
+      <div className="mt-5 flex items-center gap-2 text-[11px]" style={{ color: '#64748b' }}>
+        <span className="flex items-center gap-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
+          Click ✨ AI Write để bắt đầu
+        </span>
+        <span style={{ color: '#334155' }}>·</span>
+        <span>Hoặc paste ảnh / video trực tiếp</span>
       </div>
-      <p className="text-lg font-semibold" style={{ color: '#94a3b8' }}>
-        No posts yet
-      </p>
-      <p className="mt-1 text-sm" style={{ color: '#475569' }}>
-        Be the first to share something
-      </p>
     </motion.div>
   );
 }

@@ -90,12 +90,23 @@ export const metadata: Metadata = {
     title: 'CuongThai',
   },
   icons: {
-    icon: '/favicon.png',
+    // SVG is the crispest option on modern browsers (Retina, dark
+    // mode color-scheme adjustments). PNG at 32x32 is the fallback
+    // for older browsers that don't parse SVG icons. `apple` is
+    // the iOS home-screen icon — needs a square PNG, 180x180 is
+    // the iOS recommendation.
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+    ],
     apple: '/favicon.png',
   },
   // Open Graph (Facebook, LinkedIn, Discord, …) — used when someone
   // shares the homepage on social. The og:image MUST be a 1200x630
-  // PNG/JPG; the default Next.js social card works as a fallback.
+  // PNG/JPG. We use Next.js's dynamic <AppRouter> OG image route
+  // (./opengraph-image.tsx) which auto-generates a branded card so
+  // we never have to ship a binary asset. Per-page OG overrides go
+  // in each page's metadata export.
   openGraph: {
     type: 'website',
     locale: 'vi_VN',
@@ -105,16 +116,25 @@ export const metadata: Metadata = {
     title: 'CuongThai — Portfolio, Academy & E-commerce with AI',
     description:
       'Portfolio, courses, music, blog & e-commerce platform built by Cuong Hoang.',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'CuongThai — Portfolio, Academy & E-commerce with AI',
+      },
+    ],
   },
-  // Twitter card — large image shows up nicely when the homepage is
-  // shared. Summary card is the safe default; large_image_card
-  // would be nicer but needs a 1200x675 image to be uploaded.
+  // Twitter card — large_image shows the branded image we generate
+  // in ./twitter-image.tsx. Same renderer as the OG card so both
+  // previews look identical.
   twitter: {
     card: 'summary_large_image',
     title: 'CuongThai — Portfolio, Academy & E-commerce with AI',
     description:
       'Portfolio, courses, music, blog & e-commerce platform built by Cuong Hoang.',
     creator: '@cuonghoang1103',
+    images: ['/twitter-image'],
   },
   // Robots: opt in to indexing by default. Pages that should NOT
   // be indexed (admin, auth, etc.) override this with their own

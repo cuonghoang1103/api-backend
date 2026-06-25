@@ -8,7 +8,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap } from 'lucide-react';
+import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown } from 'lucide-react';
 import { notesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import type { NoteSubjectTree, NoteRecent, NoteFull, NoteSubjectFull } from '@/types';
@@ -19,6 +19,7 @@ import VocabTable from '@/components/notes/VocabTable';
 import FlashcardReview from '@/components/notes/FlashcardReview';
 import SubjectView from '@/components/notes/SubjectView';
 import NotesSearch from '@/components/notes/NotesSearch';
+import { exportNoteAsPdf } from '@/lib/notesPdf';
 
 export default function NotesPage() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -31,6 +32,12 @@ export default function NotesPage() {
   const [resourceOpen, setResourceOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
+  // Phase 3d: sidebar filter pills. `tree` is the default hierarchical
+  // view; the other three flatten the matching notes into a single
+  // list (favorites / archive / needs-review) so the user can act
+  // on them in bulk without drilling into each subject.
+  const [filter, setFilter] = useState<'tree' | 'favorites' | 'archive' | 'needs-review'>('tree');
+  const [filteredNotes, setFilteredNotes] = useState<import('@/types').NoteSummary[]>([]);
 
   const refreshTree = useCallback(async () => {
     const res = await notesApi.getTree();
@@ -44,6 +51,20 @@ export default function NotesPage() {
     if (!isAuthenticated) { setLoading(false); return; }
     refreshTree().finally(() => setLoading(false));
   }, [isAuthenticated, refreshTree]);
+
+  // Phase 3d: when the user picks a filter pill, fetch the flat
+  // list. Cached in state so toggling back to "tree" is instant.
+  useEffect(() => {
+    if (!isAuthenticated || filter === 'tree') return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await notesApi.getFilteredNotes(filter);
+        if (!cancelled) setFilteredNotes(res.data.data.notes);
+      } catch { if (!cancelled) setFilteredNotes([]); }
+    })();
+    return () => { cancelled = true; };
+  }, [filter, isAuthenticated]);
 
   // ─── Selection ─────────────────────────────────────────────
   const selectNote = useCallback(async (id: number) => {
@@ -181,7 +202,7 @@ export default function NotesPage() {
  }, [refreshTree]);
 
   // ─── Editor save ───────────────────────────────────────────
-  const saveNote = useCallback(async (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null }>) => {
+  const saveNote = useCallback(async (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null; isFavorite: boolean; isArchived: boolean; needsReview: boolean }>) => {
     if (!selected) return;
     await notesApi.updateNote(selected.id, patch);
     if (patch.title !== undefined) {
@@ -194,7 +215,48 @@ export default function NotesPage() {
         chapters: subj.chapters.map((ch) => ({ ...ch, notes: ch.notes.map((n) => (n.id === selected.id ? { ...n, title: t } : n)) })),
       })));
     }
-  }, [selected]);
+  // Phase 3d — keep the open note + tree in sync after a flag toggle.
+  // We mutate the local copies so the sidebar's flat list view
+  // (favorites / archive / needs-review) updates without a refetch.
+  const flagPatch: Partial<Pick<import('@/types').NoteFull, 'isFavorite' | 'isArchived' | 'needsReview'>> = {};
+  if (patch.isFavorite !== undefined) flagPatch.isFavorite = patch.isFavorite;
+  if (patch.isArchived !== undefined) flagPatch.isArchived = patch.isArchived;
+  if (patch.needsReview !== undefined) flagPatch.needsReview = patch.needsReview;
+  if (Object.keys(flagPatch).length > 0) {
+    setSelected((s) => (s && s.id === selected.id ? { ...s, ...flagPatch } : s));
+    setTree((prev) => prev.map((subj) => ({
+      ...subj,
+      notes: subj.notes.map((n) => (n.id === selected.id ? { ...n, ...flagPatch } : n)),
+      chapters: subj.chapters.map((ch) => ({ ...ch, notes: ch.notes.map((n) => (n.id === selected.id ? { ...n, ...flagPatch } : n)) })),
+    })));
+    // If the active filter hides the newly-archived / un-favourited
+    // note, refresh the flat list so the count stays accurate.
+    if (filter !== 'tree') {
+      try {
+        const res = await notesApi.getFilteredNotes(filter);
+        setFilteredNotes(res.data.data.notes);
+      } catch { /* ignore */ }
+    }
+  }
+  }, [selected, filter]);
+
+  // Phase 3d — PDF export. Fetch the canonical HTML from the
+  // server (so the editor's in-flight edits stay out of the
+  // document) and feed it to the client-side jspdf pipeline.
+  const [pdfBusy, setPdfBusy] = useState(false);
+  const exportPdf = useCallback(async () => {
+    if (!selected || pdfBusy) return;
+    setPdfBusy(true);
+    try {
+      const res = await notesApi.exportNoteHtml(selected.id);
+      await exportNoteAsPdf(res.data.data);
+    } catch (e) {
+      // eslint-disable-next-line no-alert
+      alert('Xuất PDF thất bại: ' + (e instanceof Error ? e.message : 'lỗi không xác định'));
+    } finally {
+      setPdfBusy(false);
+    }
+  }, [selected, pdfBusy]);
 
  const callbacks = {
  onSelectNote: selectNote,
@@ -208,10 +270,11 @@ export default function NotesPage() {
  onDeleteSubject: delSubject,
  onDeleteChapter: delChapter,
  onDeleteNote: delNote,
- onReorderSubjects: reorderSubjectsCb,
- onReorderChapters: reorderChaptersCb,
- onReorderNotes: reorderNotesCb,
- };
+  onReorderSubjects: reorderSubjectsCb,
+  onReorderChapters: reorderChaptersCb,
+  onReorderNotes: reorderNotesCb,
+  onChangeFilter: setFilter,
+  };
 
   const treeSubjectFor = (id: number) => tree.find((s) => s.id === id);
 
@@ -228,7 +291,14 @@ export default function NotesPage() {
   }
 
   const sidebar = (
-    <NotesSidebar tree={tree} recent={recent} selectedNoteId={selected?.id ?? null} {...callbacks} />
+    <NotesSidebar
+      tree={tree}
+      recent={recent}
+      selectedNoteId={selected?.id ?? null}
+      filter={filter}
+      filteredNotes={filteredNotes}
+      {...callbacks}
+    />
   );
 
   return (
@@ -252,20 +322,31 @@ export default function NotesPage() {
             </button>
             <div className="flex-1" />
             {selected && (
-              <button onClick={() => setResourceOpen(true)} title="Tệp & liên kết" className="relative flex h-10 w-10 items-center justify-center rounded-lg text-slate-300 hover:bg-white/[0.05]" aria-label="Tệp & liên kết">
-                <Paperclip className="h-[18px] w-[18px]" />
-                {(() => {
-                  // Defence-in-depth: child collections should always be
-                  // arrays on the server, but a future code path that
-                  // forgets to include them would crash the whole page
-                  // here. Treat missing as empty instead.
-                  const att = selected.attachments?.length ?? 0;
-                  const lnk = selected.links?.length ?? 0;
-                  return att + lnk > 0 ? (
-                    <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-teal-500 px-1 text-[9px] font-bold text-white">{att + lnk}</span>
-                  ) : null;
-                })()}
-              </button>
+              <>
+                <button
+                  onClick={exportPdf}
+                  disabled={pdfBusy}
+                  title="Xuất PDF"
+                  aria-label="Xuất PDF"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-300 hover:bg-white/[0.05] disabled:opacity-50"
+                >
+                  <FileDown className="h-[18px] w-[18px]" />
+                </button>
+                <button onClick={() => setResourceOpen(true)} title="Tệp & liên kết" className="relative flex h-10 w-10 items-center justify-center rounded-lg text-slate-300 hover:bg-white/[0.05]" aria-label="Tệp & liên kết">
+                  <Paperclip className="h-[18px] w-[18px]" />
+                  {(() => {
+                    // Defence-in-depth: child collections should always be
+                    // arrays on the server, but a future code path that
+                    // forgets to include them would crash the whole page
+                    // here. Treat missing as empty instead.
+                    const att = selected.attachments?.length ?? 0;
+                    const lnk = selected.links?.length ?? 0;
+                    return att + lnk > 0 ? (
+                      <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-teal-500 px-1 text-[9px] font-bold text-white">{att + lnk}</span>
+                    ) : null;
+                  })()}
+                </button>
+              </>
             )}
           </div>
 
@@ -346,7 +427,15 @@ export default function NotesPage() {
  transition={{ type: 'spring', stiffness: 380, damping: 36 }}
  className="fixed inset-y-0 left-0 z-50 w-[82%] max-w-xs border-r border-white/[0.06] bg-[#0e1218] pt-16 md:hidden"
  >
- <NotesSidebar tree={tree} recent={recent} selectedNoteId={selected?.id ?? null} onClose={() => setDrawerOpen(false)} {...callbacks} />
+  <NotesSidebar
+   tree={tree}
+   recent={recent}
+   selectedNoteId={selected?.id ?? null}
+   filter={filter}
+   filteredNotes={filteredNotes}
+   onClose={() => setDrawerOpen(false)}
+   {...callbacks}
+  />
  </motion.aside>
  </>
  )}

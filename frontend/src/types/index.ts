@@ -1078,6 +1078,7 @@ export interface NoteSummary {
   sortOrder: number;
   isPinned: boolean;
   isFavorite: boolean;
+  isArchived: boolean;
   needsReview: boolean;
   updatedAt: string;
 }

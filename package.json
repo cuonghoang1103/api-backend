@@ -27,6 +27,7 @@
     "test:pipeline": "tsx scripts/test-pipeline.ts",
     "test:migration": "tsx scripts/test-migration.ts",
     "test:music": "tsx scripts/test-music-stream.ts",
+    "test:music:cyber": "tsx scripts/test-music-cyber.ts",
     "test:errors": "tsx scripts/test-errors.ts",
     "test:cdn": "tsx scripts/test-cdn.ts"
   },

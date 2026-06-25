@@ -116,6 +116,8 @@ export const musicKeys = {
   likedIds: () => [...musicKeys.all, 'liked-ids'] as const,
   likedTracks: () => [...musicKeys.all, 'liked-tracks'] as const,
   mostPlayed: (limit: number) => [...musicKeys.all, 'most-played', limit] as const,
+  // Cyber Phase 2b: per-track synced lyrics.
+  lyrics: (trackId: number) => [...musicKeys.all, 'lyrics', trackId] as const,
   youtubeSearch: (q: string) => [...musicKeys.all, 'youtube-search', q] as const,
 };
 
@@ -688,5 +690,116 @@ export function useMostPlayedTracks(enabled = true, limit = 50) {
     enabled,
     staleTime: 60_000,
     gcTime: 10 * 60_000,
+  });
+}
+
+// ─── Phase 2b: synced lyrics ──────────────────────────────────────────────────
+
+export interface SyncedLine {
+  t: number; // seconds from track start
+  text: string;
+}
+
+export interface LyricsDTO {
+  trackId: number;
+  format: 'synced' | 'plain';
+  synced: SyncedLine[];
+  plain: string | null;
+  updatedAt: string;
+}
+
+/**
+ * Fetch a track's lyrics. Returns `null` (not an error) when the
+ * track has no lyrics, so the now-playing screen can render its
+ * "add lyrics" empty state. `synced` is always an array.
+ */
+export function useTrackLyrics(trackId: number | null, enabled = true) {
+  return useQuery({
+    queryKey: musicKeys.lyrics(trackId ?? -1),
+    queryFn: async () => {
+      const res = await fetchJson<{ success: boolean; data: LyricsDTO | null }>(
+        `/api/v1/music/tracks/${trackId}/lyrics`,
+      );
+      const d = res?.data;
+      if (!d) return null;
+      // Guard every list with [] so the karaoke renderer can never
+      // hit "x is not iterable" on a malformed payload.
+      return {
+        trackId: d.trackId,
+        format: d.format === 'synced' ? 'synced' : 'plain',
+        synced: Array.isArray(d.synced) ? d.synced : [],
+        plain: d.plain ?? null,
+        updatedAt: d.updatedAt,
+      } as LyricsDTO;
+    },
+    enabled: enabled && typeof trackId === 'number' && trackId > 0,
+    staleTime: 5 * 60_000,
+    gcTime: 10 * 60_000,
+  });
+}
+
+/**
+ * Create/update a track's lyrics (idempotent upsert on the server).
+ * Pass `synced` lines (preferred) and/or a `plain` fallback.
+ */
+export function useSaveLyrics() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      trackId,
+      synced,
+      plain,
+    }: {
+      trackId: number;
+      synced?: SyncedLine[];
+      plain?: string;
+    }) =>
+      fetchJson<{ success: boolean; data: LyricsDTO }>(
+        `/api/v1/music/tracks/${trackId}/lyrics`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ synced, plain }),
+        },
+      ),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: musicKeys.lyrics(vars.trackId) });
+    },
+  });
+}
+
+/** Remove a track's lyrics. */
+export function useDeleteLyrics() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ trackId }: { trackId: number }) =>
+      fetchJson<{ success: boolean }>(`/api/v1/music/tracks/${trackId}/lyrics`, {
+        method: 'DELETE',
+      }),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: musicKeys.lyrics(vars.trackId) });
+    },
+  });
+}
+
+/**
+ * Upload a custom playlist cover to R2 (Phase 2b). Sends multipart
+ * with field name `cover`; the server stores it and returns the
+ * updated playlist with the new coverUrl.
+ */
+export function useUploadPlaylistCover() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ playlistId, file }: { playlistId: number; file: File }) => {
+      const fd = new FormData();
+      fd.append('cover', file);
+      return fetchJson<{ success: boolean; data: unknown }>(
+        `/api/v1/music/playlists/${playlistId}/cover`,
+        { method: 'POST', body: fd },
+      );
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [...musicKeys.all, 'playlists'] });
+    },
   });
 }

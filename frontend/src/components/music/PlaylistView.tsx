@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Pause, ArrowLeft, ListMusic, Trash2, Clock, Loader2 } from 'lucide-react';
-import { usePlaylistDetail, useRemoveTrackFromPlaylist, useDeletePlaylist } from '@/hooks/useMusicQueries';
+import { Play, Pause, ArrowLeft, ListMusic, Trash2, Clock, Loader2, Camera } from 'lucide-react';
+import { usePlaylistDetail, useRemoveTrackFromPlaylist, useDeletePlaylist, useUploadPlaylistCover } from '@/hooks/useMusicQueries';
+import { toast } from 'sonner';
 import type { Playlist, Track } from '@/types';
 import { formatDuration } from '@/hooks/useMusicQueries';
 import { SafeImage } from '@/components/ui/SafeImage';
@@ -122,8 +123,34 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
   const removeTrack = useRemoveTrackFromPlaylist();
   const deletePlaylist = useDeletePlaylist();
 
+  const uploadCover = useUploadPlaylistCover();
+  const coverInputRef = useRef<HTMLInputElement>(null);
+
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [coverImgError, setCoverImgError] = useState(false);
+
+  const handleCoverSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // allow re-selecting the same file
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Vui lòng chọn file ảnh');
+      return;
+    }
+    try {
+      await uploadCover.mutateAsync({ playlistId, file });
+      setCoverImgError(false);
+      toast.success('Đã cập nhật ảnh bìa');
+    } catch (err: any) {
+      toast.error(
+        err?.status === 401
+          ? 'Bạn cần đăng nhập'
+          : err?.status === 403
+            ? 'Bạn không có quyền sửa playlist này'
+            : err?.message || 'Tải ảnh thất bại',
+      );
+    }
+  };
 
   const playlist: Playlist | undefined = data?.data;
   // Backend returns flat tracks — no wrapper needed
@@ -191,7 +218,7 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
       </button>
 
       <div className="flex items-end gap-6 mb-8">
-        <div className="relative w-44 h-44 rounded-2xl overflow-hidden shadow-2xl shadow-neon-violet/20 shrink-0">
+        <div className="group relative w-44 h-44 rounded-2xl overflow-hidden shadow-2xl shadow-neon-violet/20 shrink-0">
           {playlist.coverUrl && !coverImgError ? (
             <img
               src={playlist.coverUrl}
@@ -210,6 +237,30 @@ export default function PlaylistView({ playlistId, onBack }: PlaylistViewProps) 
               <ListMusic className="w-16 h-16 text-white/30" />
             </div>
           )}
+
+          {/* Phase 2b: upload custom cover (owner/admin enforced server-side) */}
+          <input
+            ref={coverInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleCoverSelect}
+          />
+          <button
+            onClick={() => coverInputRef.current?.click()}
+            disabled={uploadCover.isPending}
+            className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-black/60 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity disabled:cursor-wait"
+            title="Đổi ảnh bìa"
+          >
+            {uploadCover.isPending ? (
+              <Loader2 className="w-7 h-7 text-white animate-spin" />
+            ) : (
+              <>
+                <Camera className="w-7 h-7 text-white" />
+                <span className="text-[10px] font-mono text-white uppercase tracking-wider">Đổi bìa</span>
+              </>
+            )}
+          </button>
         </div>
 
         <div className="flex-1 min-w-0">

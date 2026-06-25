@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useMusicStore } from '@/store/musicStore';
 import CyberAudioVisualizer from '@/components/music/CyberAudioVisualizer';
+import CyberLyrics from '@/components/music/CyberLyrics';
 
 function isSafeUrl(url: unknown): url is string {
   return typeof url === 'string' && url.trim().length > 0 && url.startsWith('http');
@@ -35,6 +36,7 @@ export default function NowPlayingPage() {
 
   const [isMounted, setIsMounted] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [showLyrics, setShowLyrics] = useState(false);
   const progressRef = useRef<HTMLDivElement>(null);
   const volumeRef = useRef<HTMLDivElement>(null);
   const [crosshair, setCrosshair] = useState({ x: 0, y: 0 });
@@ -183,16 +185,35 @@ export default function NowPlayingPage() {
               NOW_PLAYING
             </span>
 
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setShowInfo(!showInfo)}
-              className="text-xs font-mono transition-all"
-              style={{ color: C.textMuted }}
-            >
-              {showInfo ? 'HIDE' : 'INFO'}
-            </motion.button>
+            <div className="flex items-center gap-4">
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setShowLyrics(true)}
+                className="text-xs font-mono font-bold transition-all"
+                style={{ color: C.secondary }}
+              >
+                LYRICS
+              </motion.button>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setShowInfo(!showInfo)}
+                className="text-xs font-mono transition-all"
+                style={{ color: C.textMuted }}
+              >
+                {showInfo ? 'HIDE' : 'INFO'}
+              </motion.button>
+            </div>
           </div>
         </div>
+
+        {/* Synced lyrics overlay (Phase 2b) */}
+        <CyberLyrics
+          open={showLyrics}
+          onClose={() => setShowLyrics(false)}
+          trackId={currentTrack?.id ? Number(currentTrack.id) : null}
+          trackTitle={currentTrack?.title}
+          trackArtist={currentTrack?.artist}
+        />
 
         {/* Main content */}
         <div className="flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-28 gap-8">

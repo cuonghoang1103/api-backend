@@ -77,6 +77,8 @@ export default function CyberPlaylist() {
   }, [serverLikedTracks, hydrateLikedFromServer]);
 
   const [search, setSearch] = useState('');
+  // Phase 2b: tracklist sort. 'added' keeps the original order.
+  const [sortBy, setSortBy] = useState<'added' | 'title' | 'artist' | 'duration'>('added');
   const [activeTab, setActiveTab] = useState<PlaylistView>('tracks');
   const [imgError, setImgError] = useState(false);
   const [failedThumbs, setFailedThumbs] = useState<Set<string>>(new Set());
@@ -101,14 +103,26 @@ export default function CyberPlaylist() {
 
   // ── Memoized derived values ────────────────────────────────────────
   const filteredTracks = useMemo(() => {
-    if (!debouncedSearch) return tracks;
     const q = debouncedSearch.toLowerCase();
-    return tracks.filter(
-      (track) =>
-        track.title.toLowerCase().includes(q) ||
-        track.artist.toLowerCase().includes(q),
-    );
-  }, [tracks, debouncedSearch]);
+    const base = debouncedSearch
+      ? tracks.filter(
+          (track) =>
+            track.title.toLowerCase().includes(q) ||
+            track.artist.toLowerCase().includes(q),
+        )
+      : tracks;
+    if (sortBy === 'added') return base;
+    // Copy before sort so we never mutate the source array / store.
+    const sorted = [...base];
+    if (sortBy === 'title') {
+      sorted.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortBy === 'artist') {
+      sorted.sort((a, b) => a.artist.localeCompare(b.artist));
+    } else if (sortBy === 'duration') {
+      sorted.sort((a, b) => parseDuration(a.duration) - parseDuration(b.duration));
+    }
+    return sorted;
+  }, [tracks, debouncedSearch, sortBy]);
 
   const filteredLikedTracks = useMemo(() => {
     // Safe-guard against server returning null/empty
@@ -364,6 +378,37 @@ export default function CyberPlaylist() {
               onFocus={(e) => { (e.target as HTMLElement).style.borderColor = C.primary; }}
               onBlur={(e) => { (e.target as HTMLElement).style.borderColor = C.border; }}
             />
+          </div>
+        )}
+
+        {/* Sort control (Phase 2b) — tracks tab only */}
+        {activeTab === 'tracks' && (
+          <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+            <span className="text-[10px] font-mono uppercase tracking-wider mr-1" style={{ color: C.textMuted }}>
+              SORT
+            </span>
+            {([
+              { key: 'added', label: 'ADDED' },
+              { key: 'title', label: 'TITLE' },
+              { key: 'artist', label: 'ARTIST' },
+              { key: 'duration', label: 'TIME' },
+            ] as const).map(({ key, label }) => {
+              const isActive = sortBy === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSortBy(key)}
+                  className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all"
+                  style={{
+                    background: isActive ? `${C.secondary}20` : 'rgba(255,255,255,0.03)',
+                    border: `1px solid ${isActive ? `${C.secondary}50` : C.border}`,
+                    color: isActive ? C.secondary : C.textMuted,
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </div>
         )}
 

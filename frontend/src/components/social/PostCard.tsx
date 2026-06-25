@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { memo, useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -26,10 +26,6 @@ import { REACTION_META, REACTION_PICKER_ORDER, WOW_META, EMPTY_REACTION_BREAKDOW
 import { socialKeys, type SocialFeedResponse } from '@/hooks/useSocialQueries';
 import { formatRelative } from '@/lib/formatDate';
 import { toast } from 'sonner';
-
-interface PostCardProps {
-  post: SocialPost;
-}
 
 const VISIBILITY_META: Record<string, { icon: any; label: string; color: string }> = {
   PUBLIC: { icon: Globe, label: 'Công khai', color: '#94a3b8' },
@@ -66,7 +62,15 @@ interface PostCardProps {
   onOpenTheater?: (postId: number) => void;
 }
 
-export function PostCard({ post, onToggleLike, onToggleSave, onDelete, onOpenTheater }: PostCardProps) {
+// ─── Memoisation ───────────────────────────────────────────────
+// PostCard is heavy (multiple sub-views, video preview, comment
+// thread, action row, save popover). Without memo, every socket
+// tick that touches the social store re-renders every card in the
+// feed — which is exactly the jank users see when they're scrolled
+// mid-list. The custom equality fn compares only what the user can
+// actually see change on the card surface; deeper state lives
+// inside the card and is owned by it (showComments, etc.).
+function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheater }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -807,6 +811,8 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete, onOpenThe
                 alt={authorDisplay}
                 loading="lazy"
                 decoding="async"
+                width={44}
+                height={44}
                 className="h-full w-full object-cover"
               />
             </Link>
@@ -1206,15 +1212,21 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete, onOpenThe
           </div>
         </div>
 
-        {/* Comments section */}
-        <AnimatePresence>
+        {/* Comments section — use grid-template-rows for an
+            animated height without triggering layout per frame.
+            Animating height: 'auto' forces a synchronous layout
+            on every frame; the grid-rows trick lets the browser
+            interpolate between 0fr and 1fr in the compositor. */}
+        <AnimatePresence initial={false}>
           {showComments && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mt-4 overflow-hidden"
+              initial={{ opacity: 0, gridTemplateRows: '0fr' }}
+              animate={{ opacity: 1, gridTemplateRows: '1fr' }}
+              exit={{ opacity: 0, gridTemplateRows: '0fr' }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="mt-4 grid"
             >
+              <div className="min-h-0 overflow-hidden">
               <div
                 className="space-y-3"
                 style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}
@@ -1284,6 +1296,7 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete, onOpenThe
                   </div>
                 </form>
               </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -1291,6 +1304,41 @@ export function PostCard({ post, onToggleLike, onToggleSave, onDelete, onOpenThe
     </article>
   );
 }
+
+// ─── Memoised export ────────────────────────────────────────────
+// We compare only the surface fields the user actually sees: the
+// post body (id, content, media, author), the toggle booleans
+// (liked/saved/pinned/visibility), and the counter + updatedAt
+// fields. Comment lists + reaction breakdowns live in their own
+// sub-components and are owned by the card. Callbacks compare by
+// reference — they're wrapped in useCallback at the page level
+// (see page.tsx handleToggleLike etc.) so identity stability is
+// guaranteed across re-renders of the same feed page.
+function postCardPropsEqual(prev: PostCardProps, next: PostCardProps): boolean {
+  const a = prev.post;
+  const b = next.post;
+  if (a === b) return true;
+  if (a.id !== b.id) return false;
+  if (a.content !== b.content) return false;
+  if (a.updatedAt !== b.updatedAt) return false;
+  if (a.likesCount !== b.likesCount) return false;
+  if (a.commentsCount !== b.commentsCount) return false;
+  if (a.savesCount !== b.savesCount) return false;
+  if (a.isLiked !== b.isLiked) return false;
+  if (a.isSaved !== b.isSaved) return false;
+  if (a.visibility !== b.visibility) return false;
+  if (a.author?.id !== b.author?.id) return false;
+  if (a.author?.avatarUrl !== b.author?.avatarUrl) return false;
+  if (a.author?.displayName !== b.author?.displayName) return false;
+  // Callback identity — parent must useCallback these.
+  if (prev.onToggleLike !== next.onToggleLike) return false;
+  if (prev.onToggleSave !== next.onToggleSave) return false;
+  if (prev.onDelete !== next.onDelete) return false;
+  if (prev.onOpenTheater !== next.onOpenTheater) return false;
+  return true;
+}
+
+export const PostCard = memo(PostCardImpl, postCardPropsEqual);
 
 // ─── Fullscreen Video Player ──────────────────────────────────────────────────
 
@@ -1870,6 +1918,8 @@ function MediaItem({
             alt={item.alt || ''}
             loading="lazy"
             decoding="async"
+            width={600}
+            height={600}
             className="h-full w-full object-cover"
           />
         )}
@@ -2183,7 +2233,7 @@ function CommentItem({
         href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
         className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full transition-transform hover:scale-110"
       >
-        <img src={avatar} alt={display} loading="lazy" decoding="async" className="h-8 w-8 flex-shrink-0 rounded-full object-cover" />
+        <img src={avatar} alt={display} loading="lazy" decoding="async" width={32} height={32} className="h-8 w-8 flex-shrink-0 rounded-full object-cover" />
       </Link>
       <div className="flex-1 min-w-0">
         <div

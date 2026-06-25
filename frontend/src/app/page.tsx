@@ -293,20 +293,32 @@ export default function SocialPage() {
                 ) : displayPosts.length === 0 ? (
                   <EmptyFeed />
                 ) : (
-                  displayPosts.map((post, index) => {
+                  displayPosts.map((post) => {
                     // Find the latest version of this post from Zustand.
                     // Zustand is the single source of truth for mutations;
                     // TQ is used only for initial data hydration and
                     // background refetch reconciliation.
                     const latest = posts.find((p) => p.id === post.id) ?? post;
                     return (
+                      // Performance note (Phase 4 perf):
+                      // - `whileInView` + `viewport={{ once: true }}` so the
+                      //   fade-up plays the first time the card scrolls
+                      //   into view and never re-fires on re-render. This
+                      //   replaces the previous `initial` + per-index
+                      //   `delay` chain which staggered all visible cards
+                      //   on initial mount (every transition kicked the
+                      //   compositor for the entire list).
+                      // - We dropped the `layout` prop: Framer's layout
+                      //   animation forces a synchronous layout
+                      //   measurement on every add/remove, which is
+                      //   the dominant jank source while scrolling
+                      //   and triggering infinite scroll.
                       <motion.div
                         key={post.id}
-                        layout
-                        initial={{ opacity: 0, y: 20, scale: 0.97 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.3, delay: index < 5 ? index * 0.05 : 0 }}
+                        initial={{ opacity: 0, y: 12 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '0px 0px -80px 0px' }}
+                        transition={{ duration: 0.25, ease: 'easeOut' }}
                       >
                         <PostCard
                           post={latest}

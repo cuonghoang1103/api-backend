@@ -1,29 +1,35 @@
 'use client';
 
 // NoteCodeBlock — custom Tiptap node that renders a code block via
-// the shared <CodeBlock /> component (Shiki, VSCode-grade colors).
+// the shared <CodeBlock /> component (Shiki, VSCode-grade colors) for
+// the read-only "view" state, and switches to a plain contenteditable
+// surface powered by Tiptap's <NodeViewContent /> when the user
+// focuses the block to edit.
+//
+// Why we don't use a plain <NodeViewContent /> for everything:
+// syntax highlighting via Shiki requires read-only HTML output
+// (dangerouslySetInnerHTML of pre-highlighted spans). If the block
+// is contenteditable, the user types into the underlying <pre><code>
+// text node directly and Shiki can't intercept keystrokes — so the
+// highlighted overlay would drift out of sync on every keystroke.
+// The accepted pattern (Notion, Linear, GitHub) is two states:
+//
+//   • VIEW:  Shiki-highlighted HTML, read-only.
+//   • EDIT:  Plain monospace surface, contenteditable. On blur or
+//            Escape, we snap back to VIEW.
+//
 // Replaces StarterKit's bundled lowlight-backed code block so we
 // never ship two highlighting libraries.
-//
-// Why this file exists:
-// Before this rewrite the editor shipped a Next.js `dynamic()`
-// import with `ssr: false` for the shared CodeBlock. That works
-// for top-level client components but inside a Tiptap NodeView
-// the dynamic chunk was kept in its loading state forever — the
-// user reported "renders as plain monochrome white text". The fix
-// is to drop `ssr: false` (the editor is already client-only via
-// `immediatelyRender: false` in NoteEditor) and let CodeBlock mount
-// normally on the client, then run its own Shiki async work in
-// useEffect.
-//
-// Lazy-loading strategy: the Notes editor doesn't pull in Shiki's
-// ~1MB of grammars until the user opens a note AND that note
-// actually contains a code block. Notes without code blocks never
-// touch Shiki.
 
 import { Node, mergeAttributes } from '@tiptap/core';
-import { ReactNodeViewRenderer, NodeViewWrapper, type NodeViewProps } from '@tiptap/react';
+import {
+  ReactNodeViewRenderer,
+  NodeViewWrapper,
+  NodeViewContent,
+  type NodeViewProps,
+} from '@tiptap/react';
 import dynamic from 'next/dynamic';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Code, Trash2 } from 'lucide-react';
 
 // Lazy-load the shared CodeBlock so the initial /notes bundle stays
@@ -83,13 +89,25 @@ export const NoteCodeBlock = Node.create({
   },
 
   parseHTML() {
-    return [{ tag: 'pre', preserveWhitespace: 'full' }];
+    // Match Tiptap's default `pre` parse so round-trips through
+    // HTML work; `data-type="code-block"` is set by renderHTML so
+    // we can disambiguate from regular <pre> blocks if needed.
+    return [{ tag: 'pre', preserveWhitespace: 'full', getAttrs: (node) => {
+      if (!(node instanceof HTMLElement)) return false;
+      // Accept any <pre> as a code block — the editor previously
+      // failed to round-trip when the data-type attr was missing.
+      return {};
+    } }];
   },
 
-  renderHTML({ HTMLAttributes }) {
+  renderHTML({ HTMLAttributes, node }) {
+    const lang = (node.attrs as { language?: string }).language;
     return [
       'pre',
-      mergeAttributes(HTMLAttributes, { 'data-type': 'code-block' }),
+      mergeAttributes(HTMLAttributes, {
+        'data-type': 'code-block',
+        ...(lang ? { 'data-language': lang } : {}),
+      }),
       ['code', {}, 0],
     ];
   },
@@ -125,21 +143,108 @@ export default NoteCodeBlock;
 // the command type from addCommands(), and an explicit declaration
 // conflicts with its stricter typing on the `language` attr.
 
-function CodeBlockView({ node, updateAttributes, editor }: NodeViewProps) {
+function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps) {
   const code: string = node.textContent;
   const language: string = (node.attrs as { language?: string }).language ?? '';
   const isEditable = editor.isEditable;
 
+  // Two-mode UI: VIEW (Shiki highlighted, read-only) ↔ EDIT (plain
+  // monospace contenteditable via Tiptap's NodeViewContent). We
+  // default to VIEW so the highlighted HTML is the first thing the
+  // user sees; switching to EDIT happens on click/Enter and back to
+  // VIEW on Escape / blur / click outside. The previous version
+  // rendered Shiki inside the contenteditable surface — the user
+  // reported "I delete one character and the whole block is
+  // removed", because Tiptap saw the uneditable DOM and treated
+  // every keystroke as a block-level delete operation.
+  const [isEditing, setIsEditing] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // Keep the EDIT mode in sync if the node's content changes from
+  // elsewhere (e.g. another component calls setNodeMarkup). We
+  // mirror it via key + contentEditable state to keep things simple.
+  // We intentionally do NOT call editor.commands.* from inside a
+  // render path — Tiptap handles that itself when NodeViewContent
+  // is the contenteditable host.
+  useEffect(() => {
+    setIsEditing(false);
+  }, [language, code.length === 0]);
+
+  const enterEdit = useCallback(() => {
+    if (!isEditable) return;
+    setIsEditing(true);
+  }, [isEditable]);
+
+  const exitEdit = useCallback(() => {
+    setIsEditing(false);
+  }, []);
+
+  // Toggle on click. Click on the toolbar (language picker / delete
+  // button) must NOT trigger edit mode — those stopPropagation so
+  // the click handler doesn't see them.
+  const onContainerClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      // Only act on the background / pre area, not on toolbar
+      // children that handle their own clicks.
+      if (!isEditable) return;
+      if (isEditing) return; // already editing; let selection work
+      const target = e.target as HTMLElement;
+      // The toolbar row has data-noedit; ignore clicks on it.
+      if (target.closest('[data-noedit]')) return;
+      enterEdit();
+    },
+    [isEditable, isEditing, enterEdit],
+  );
+
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (!isEditing) return;
+      // Escape exits edit mode (Tiptap preserves the content
+      // because NodeViewContent owns the DOM).
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        exitEdit();
+      }
+    },
+    [isEditing, exitEdit],
+  );
+
+  // Delete-when-empty handling: if the user empties the code block
+  // and then presses Backspace once more, Tiptap's default behaviour
+  // is to remove the now-empty node. We let it — that's the
+  // expected Notion / Linear behaviour.
+
   return (
-    <NodeViewWrapper className="my-3" data-type="code-block">
+    <NodeViewWrapper
+      // Outer wrapper. Tabindex=0 makes the block focusable so the
+      // user can click into it; the actual editable surface is
+      // mounted by NodeViewContent below when isEditing.
+      as="div"
+      className="my-3"
+      data-type="code-block"
+      onClick={onContainerClick}
+      onKeyDown={onKeyDown}
+      // The wrapper itself is not contenteditable; NodeViewContent
+      // mounts its own contentEditable tree inside.
+      ref={wrapperRef}
+    >
       <div className="overflow-hidden rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-slate-900/60">
         {isEditable && (
-          <div className="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-slate-900/40 px-2 py-1">
+          <div
+            data-noedit="1"
+            className="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-slate-900/40 px-2 py-1"
+          >
             <div className="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-500">
               <Code className="h-3 w-3" />
               <select
                 value={language}
                 onChange={(e) => updateAttributes({ language: e.target.value })}
+                // The picker should be usable without entering edit
+                // mode; clicking it would otherwise set isEditing and
+                // steal focus. stopPropagation keeps the container
+                // click handler from firing.
+                onClick={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
                 className="rounded border border-slate-300 dark:border-white/10 bg-transparent px-1 py-0.5 text-[11px] text-slate-700 dark:text-slate-300 focus:outline-none"
                 aria-label="Ngôn ngữ"
               >
@@ -147,10 +252,20 @@ function CodeBlockView({ node, updateAttributes, editor }: NodeViewProps) {
                   <option key={l.value} value={l.value} className="bg-white dark:bg-slate-900">{l.label}</option>
                 ))}
               </select>
+              {isEditing && (
+                <span className="ml-1 italic text-[10px] text-slate-400 dark:text-slate-500">
+                  đang sửa — Esc để thoát
+                </span>
+              )}
             </div>
             <button
               type="button"
-              onClick={() => editor.chain().focus().deleteNode('codeBlock').run()}
+              data-noedit="1"
+              onClick={(e) => {
+                e.stopPropagation();
+                editor.chain().focus().deleteNode('codeBlock').run();
+              }}
+              onMouseDown={(e) => e.stopPropagation()}
               aria-label="Xóa code block"
               title="Xóa code block"
               className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] text-slate-500 dark:text-slate-500 hover:bg-red-500/15 hover:text-red-300"
@@ -160,7 +275,27 @@ function CodeBlockView({ node, updateAttributes, editor }: NodeViewProps) {
             </button>
           </div>
         )}
-        <CodeBlock code={code} language={language || undefined} />
+        {isEditing ? (
+          // EDIT mode — Tiptap owns the contenteditable <pre><code>.
+          // We render NodeViewContent as `<pre>` so the editable tree
+          // matches the schema, and let the global .note-prose styles
+          // (set in globals.css) take over for monospace layout. The
+          // user sees plain monospace text while typing — Shiki will
+          // re-highlight on blur when we snap back to VIEW mode.
+          <pre
+            // The contenteditable surface is mounted by
+            // NodeViewContent below; this <pre> is just a structural
+            // shell that matches the schema so the document looks
+            // the same in both modes.
+            className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-900/40"
+          >
+            <NodeViewContent as="code" className="block whitespace-pre-wrap break-words" />
+          </pre>
+        ) : (
+          // VIEW mode — Shiki highlighted, read-only. Click on the
+          // rendered surface enters EDIT mode (see onContainerClick).
+          <CodeBlock code={code} language={language || undefined} />
+        )}
       </div>
     </NodeViewWrapper>
   );

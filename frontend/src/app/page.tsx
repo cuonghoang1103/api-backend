@@ -4,6 +4,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSocialStore } from '@/store/socialStore';
 import { useSocialFeed, useInvalidateFeed, useFeedCounts } from '@/hooks/useSocialQueries';
+import { usePostReactionsSocket } from '@/hooks/usePostReactionsSocket';
 import { PostComposer } from '@/components/social/PostComposer';
 import { PostCard, PostSkeleton } from '@/components/social/PostCard';
 import SocialSidebar from '@/components/social/SocialSidebar';
@@ -67,6 +68,14 @@ export default function SocialPage() {
     typeof window !== 'undefined' ? parseFeedTypeFromUrl(window.location.search) : 'all',
   );
   const { data: feedCounts } = useFeedCounts();
+
+  // Real-time reaction updates for any PostCard currently in the
+  // feed slice. The hook attaches a single global socket listener
+  // and patches the matching post via updatePostReactions in
+  // socialStore (which was previously dead code). Bounded: zero
+  // effect on the working flows (Messenger / Notes / Music), only
+  // affects visible PostCards on the home page.
+  usePostReactionsSocket();
   const onFeedTypeChange = useCallback((next: FeedType) => {
     setFeedType(next);
     const url = new URL(window.location.href);
@@ -102,6 +111,14 @@ export default function SocialPage() {
     if (!postId) return;
     const tid = Number(postId);
     if (!Number.isFinite(tid)) return;
+    // If ?comment=N is also present, deep-link into the matching
+    // comment via the PostCard's imperative handle. The handle
+    // opens the comments section, loads them, and scrolls to
+    // the target with a brief ring highlight. Otherwise just
+    // scroll to the post.
+    const commentIdRaw = searchParams.get('comment');
+    const commentId = commentIdRaw ? Number(commentIdRaw) : null;
+
     // Wait two frames: one for React to commit the post nodes,
     // one for any layout/image-loading that might shift scrollHeight.
     const raf = requestAnimationFrame(() => {
@@ -111,25 +128,63 @@ export default function SocialPage() {
         );
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          // Brief highlight so the user sees what was opened.
           el.classList.add('ring-2', 'ring-violet-500/60', 'transition');
           window.setTimeout(() => {
             el.classList.remove('ring-2', 'ring-violet-500/60');
           }, 1800);
         }
+        if (commentId && Number.isFinite(commentId)) {
+          // Use the ref map if available; fall back to direct DOM
+          // walk (works for the first paint even before the ref
+          // map is populated by the second render).
+          const handle = postCardRefs.current.get(tid);
+          if (handle) {
+            handle.openComment(commentId);
+          } else {
+            // Fallback: simulate the imperative flow via DOM.
+            const card = el;
+            const toggle = card?.querySelector<HTMLButtonElement>('[data-comments-toggle="1"]');
+            const alreadyOpen = card?.querySelector('[data-comment-id]');
+            if (toggle && !alreadyOpen) toggle.click();
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                const target = document.querySelector<HTMLElement>(
+                  `[data-comment-id="${commentId}"]`,
+                );
+                if (target) {
+                  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  target.classList.add(
+                    'ring-2', 'ring-violet-500/60', 'rounded-2xl', 'transition',
+                  );
+                  window.setTimeout(() => {
+                    target.classList.remove(
+                      'ring-2', 'ring-violet-500/60', 'rounded-2xl',
+                    );
+                  }, 2400);
+                }
+              });
+            });
+          }
+        }
       });
     });
     return () => {
       cancelAnimationFrame(raf);
-      // Strip ?post from the URL after the scroll so a later
-      // socket append (which would re-run the effect) doesn't
-      // jump the user back to the old post.
+      // Strip ?post and ?comment from the URL after the scroll
+      // so a later socket append (which would re-run the effect)
+      // doesn't jump the user back to the old post / comment.
       try {
         const url = new URL(window.location.href);
+        let changed = false;
         if (url.searchParams.get('post') === String(tid)) {
           url.searchParams.delete('post');
-          window.history.replaceState({}, '', url.toString());
+          changed = true;
         }
+        if (commentId && url.searchParams.get('comment') === String(commentId)) {
+          url.searchParams.delete('comment');
+          changed = true;
+        }
+        if (changed) window.history.replaceState({}, '', url.toString());
       } catch { /* ignore */ }
     };
     // We intentionally depend on `posts` length so the effect
@@ -295,6 +350,16 @@ export default function SocialPage() {
 
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  // Map of postId → imperative handle on the corresponding PostCard.
+  // Used by the ?comment=N deep-link to ask the right card to open
+  // its comments and scroll to the matching comment.
+  const postCardRefs = useRef<Map<number, import('@/components/social/PostCard').PostCardHandle | null>>(
+    new Map(),
+  );
+  const setPostCardRef = (postId: number) => (handle: import('@/components/social/PostCard').PostCardHandle | null) => {
+    if (handle) postCardRefs.current.set(postId, handle);
+    else postCardRefs.current.delete(postId);
+  };
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -546,6 +611,7 @@ export default function SocialPage() {
                         transition={{ duration: 0.2, ease: 'easeOut' }}
                       >
                         <PostCard
+                          ref={setPostCardRef(latest.id)}
                           post={latest}
                           onOpenTheater={handleOpenTheater}
                         />

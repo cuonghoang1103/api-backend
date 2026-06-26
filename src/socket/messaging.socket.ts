@@ -68,6 +68,20 @@ export interface MessagingEmitter {
   // client then calls /api/v1/social/posts?cursor=firstSeenId to
   // fetch the new ones (keeps the socket payload tiny).
   emit(event: 'feed:has-new', payload: { viewerId: number; count: number }): void;
+  // ─── Post reactions (real-time breakdown) ───────────────
+  // Emitted by reactPost() after the SocialLike row is written.
+  // The frontend listener (usePostReactionsSocket) patches the
+  // matching PostCard in place via updatePostReactions so every
+  // connected viewer sees the new count without a refresh.
+  // The `actorId` is included so the receiver can ignore their
+  // own broadcast (their card already shows the optimistic
+  // update from the click handler).
+  emit(event: 'post:reacted', payload: {
+    postId: number;
+    likesCount: number;
+    breakdown: Record<string, number>;
+    actorId: number;
+  }): void;
   emit(event: string, payload: unknown): void;
 }
 
@@ -80,39 +94,56 @@ let emitter: MessagingEmitter | null = null;
  * message and silently no-ops if realtime isn't ready yet
  * (the next REST poll will catch the user up).
  */
-export function registerSocketEmitter(): MessagingEmitter | null {
-  if (!emitter && io) {
-    emitter = {
-      emit(event: string, payload: unknown) {
-        const p = payload as {
-          threadId?: number;
-          threadType?: string;
-          participantIds?: number[];
-          // ─── Social notifications (added 2026-06-20) ──────
-          // The notification service emits events with
-          // `receiverId` (single user) instead of a thread id.
-          // We route them to the receiver's `user:{id}` room.
-          receiverId?: number;
-        };
+  export function registerSocketEmitter(): MessagingEmitter | null {
+    if (!emitter && io) {
+      emitter = {
+        emit(event: string, payload: unknown) {
+          const p = payload as {
+            threadId?: number;
+            threadType?: string;
+            participantIds?: number[];
+            // ─── Social notifications (added 2026-06-20) ──────
+            // The notification service emits events with
+            // `receiverId` (single user) instead of a thread id.
+            // We route them to the receiver's `user:{id}` room.
+            receiverId?: number;
+            // ─── Post reactions (added 2026-06-26) ───────────
+            // Carries the postId whose counts just changed.
+            postId?: number;
+            actorId?: number;
+          };
 
-        // Notification path: route to the receiver's personal
-        // room only. We deliberately don't broadcast to a
-        // "global" room because notifications are 1-to-1.
-        if (event === 'social:notification' && p && typeof p.receiverId === 'number') {
-          io?.to(`user:${p.receiverId}`).emit(event, payload);
-          return;
-        }
+          // Notification path: route to the receiver's personal
+          // room only. We deliberately don't broadcast to a
+          // "global" room because notifications are 1-to-1.
+          if (event === 'social:notification' && p && typeof p.receiverId === 'number') {
+            io?.to(`user:${p.receiverId}`).emit(event, payload);
+            return;
+          }
 
-        // Feed has-new: same 1-to-1 pattern — ping the viewer's
-        // user room so only that user sees the banner. The
-        // payload is tiny on purpose so the socket cost stays
-        // negligible regardless of follower count.
-        if (event === 'feed:has-new' && p && typeof (p as { viewerId?: number }).viewerId === 'number') {
-          io?.to(`user:${(p as { viewerId: number }).viewerId}`).emit(event, payload);
-          return;
-        }
+          // Feed has-new: same 1-to-1 pattern — ping the viewer's
+          // user room so only that user sees the banner. The
+          // payload is tiny on purpose so the socket cost stays
+          // negligible regardless of follower count.
+          if (event === 'feed:has-new' && p && typeof (p as { viewerId?: number }).viewerId === 'number') {
+            io?.to(`user:${(p as { viewerId: number }).viewerId}`).emit(event, payload);
+            return;
+          }
 
-        if (!p || !p.threadId) return;
+          // Post reactions: broadcast to the global feed room so
+          // every connected viewer whose feed includes the post
+          // can patch the count in place. We don't track per-post
+          // rooms (would need a join on every feed page load);
+          // the global fan-out is small (one event per reaction
+          // click, payload is just counts) and the receiver-side
+          // updatePostReactions no-ops if the post isn't in the
+          // local feed slice.
+          if (event === 'post:reacted' && p && typeof p.postId === 'number') {
+            io?.emit('post:reacted', payload);
+            return;
+          }
+
+          if (!p || !p.threadId) return;
 
         // Broadcast the event into the per-thread room so anyone
         // who has joined the conversation (both the sender's

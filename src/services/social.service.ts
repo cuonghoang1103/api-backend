@@ -809,6 +809,26 @@ export async function reactPost(
     select: { type: true },
   });
 
+  // Real-time fan-out: anyone who has this post in their feed
+  // (and is currently connected) should see the new counts
+  // without a page refresh. We emit a per-post event so it
+  // doesn't leak to other posts. The frontend `usePostReactionsSocket`
+  // listener picks it up and patches the matching PostCard in
+  // place via the existing `updatePostReactions` store action.
+  //
+  // Note: the reactor's own card already shows the optimistic
+  // update so the server-side broadcast is mostly for *other*
+  // viewers — but emitting to everyone is safe and the
+  // receiver-side `myReaction` field is null in the payload,
+  // so the reactor's card doesn't double-update.
+  const emitter = registerSocketEmitter();
+  emitter?.emit('post:reacted' as any, {
+    postId,
+    likesCount: total,
+    breakdown,
+    actorId: userId,
+  });
+
   return {
     reacted: !!mine,
     myType: (mine?.type as ReactionType | undefined) ?? null,

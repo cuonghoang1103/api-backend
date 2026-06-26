@@ -132,11 +132,25 @@ function targetUrl(n: SocialNotification): string {
     return '/messages';
   }
   if (n.entityId) {
-    // entityId for social posts/comments is the post id we
-    // store on SocialNotification. The /app (home) page reads
-    // ?post=N and scrolls the matching card into view, so the
-    // user lands on the right card.
-    return `/?post=${n.entityId}`;
+    // entityId for social notifications is the post id. For
+    // post-targeted events (NEW_REACTION, NEW_POST) that's the
+    // whole story. For comment-targeted events (NEW_COMMENT,
+    // NEW_REPLY, NEW_MENTION) the comment id lives in
+    // secondaryEntityId and the user expects to be taken to the
+    // specific comment, not just the post — we add ?comment=N
+    // so the home page can open the comments section, scroll
+    // there, and highlight the right item.
+    const params = new URLSearchParams();
+    params.set('post', String(n.entityId));
+    if (
+      n.secondaryEntityId &&
+      (n.type === 'NEW_COMMENT' ||
+        n.type === 'NEW_REPLY' ||
+        n.type === 'NEW_MENTION')
+    ) {
+      params.set('comment', String(n.secondaryEntityId));
+    }
+    return `/?${params.toString()}`;
   }
   return '/';
 }

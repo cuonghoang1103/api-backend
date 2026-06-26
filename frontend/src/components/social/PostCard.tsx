@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useState, useRef, useEffect } from 'react';
+import { memo, useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -75,6 +75,12 @@ interface PostCardProps {
 function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheater }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
+  // User ids the user @'d in the current comment. Populated by
+  // MentionAutocomplete's onPick callback. We send this in the
+  // createComment payload so the backend can fan out NEW_MENTION
+  // notifications to each mentioned user. The set is cleared on
+  // submit and on text change so the next comment starts fresh.
+  const [commentMentions, setCommentMentions] = useState<Set<number>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
@@ -259,11 +265,12 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
     if (!commentText.trim()) return;
 
     setIsSubmitting(true);
+    const submittedText = commentText;
     const tempId = Date.now();
     const optimisticComment: SocialComment = {
       id: tempId,
       postId: post.id,
-      content: commentText,
+      content: submittedText,
       likesCount: 0,
       repliesCount: 0,
       isEdited: false,
@@ -279,10 +286,20 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
       replies: [],
     };
     addOptimisticComment(post.id, optimisticComment);
+    // Snapshot mention ids BEFORE clearing the textarea so the
+    // createComment payload carries them to the server. Without
+    // this the server never knows who was @'d and no NEW_MENTION
+    // notification fires.
+    const mentionsArr = Array.from(commentMentions);
     setCommentText('');
+    setCommentMentions(new Set());
 
     try {
-      await socialApi.createComment({ postId: post.id, content: commentText });
+      await socialApi.createComment({
+        postId: post.id,
+        content: submittedText,
+        mentions: mentionsArr.length > 0 ? mentionsArr : undefined,
+      });
     } catch {
       // optimistic already added, ignore for now
     } finally {
@@ -388,52 +405,26 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
    *   - parentId: id of the comment being replied to
    *   - content: the full text (including the leading
    *     "@display " that CommentItem pre-filled)
-   *
-   * We extract the @mention ids from `content` against the
-   * usernames we know about (currently the only candidates
-   * are the users appearing in the comments of this post).
-   * For v1 we just send an empty mentions array and let the
-   * notification service do best-effort from the @string
-   * itself; the mentions column on the row is opt-in
-   * metadata. A future iteration can resolve names → ids via
-   * a /api/users/search endpoint.
+   *   - mentions: optional user ids that the reply composer
+   *     collected from MentionAutocomplete's onPick. We send
+   *     them in the createComment payload so the server can
+   *     fan out NEW_MENTION notifications to the right people.
    */
-  const handleReplyComment = async (parentId: number, content: string) => {
-    // Best-effort: try to find an @username in the content
-    // and resolve it to a user id by scanning the currently
-    // loaded comments. If we can't find it, we send an empty
-    // array — the comment still saves, just without the
-    // mention notification.
-    const match = content.match(/@([\p{L}\p{N}_.]{1,30})/u);
-    let mentionId: number | null = null;
-    if (match) {
-      const target = match[1].toLowerCase();
-      for (const c of comments) {
-        const u = (c as any).user;
-        if (!u) continue;
-        if (u.username?.toLowerCase() === target || u.displayName?.toLowerCase() === target || u.fullName?.toLowerCase() === target) {
-          mentionId = u.id;
-          break;
-        }
-        if (Array.isArray(c.replies)) {
-          for (const r of c.replies) {
-            const ru = (r as any).user;
-            if (ru && (ru.username?.toLowerCase() === target || ru.displayName?.toLowerCase() === target || ru.fullName?.toLowerCase() === target)) {
-              mentionId = ru.id;
-              break;
-            }
-          }
-          if (mentionId) break;
-        }
-      }
-    }
+  const handleReplyComment = async (
+    parentId: number,
+    content: string,
+    mentions?: number[],
+  ) => {
+    const mentionIds = (mentions ?? []).filter(
+      (n) => Number.isFinite(n) && n > 0,
+    );
 
     try {
       await socialApi.createComment({
         postId: post.id,
         parentId,
         content,
-        mentions: mentionId ? [mentionId] : undefined,
+        mentions: mentionIds.length > 0 ? mentionIds : undefined,
       });
       // Refresh the comment list so the new reply shows up
       // under the parent.
@@ -1138,6 +1129,11 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
             icon={<MessageCircle size={16} fill={showComments ? '#8B5CF6' : 'none'} />}
             count={safeCommentsCount}
             label="Bình luận"
+            // data-comments-toggle lets the home page's ?comment=N
+            // effect (via PostCardHandle.openComment) click this
+            // button imperatively when comments are not yet visible.
+            // Bounded: just a DOM attribute on the existing button.
+            data-comments-toggle="1"
             onClick={handleToggleComments}
           />
 
@@ -1343,7 +1339,14 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                       type="text"
                       placeholder="Write a comment... (gõ @ để tag)"
                       value={commentText}
-                      onChange={(e) => setCommentText(e.target.value)}
+                      onChange={(e) => {
+                        const next = e.target.value;
+                        setCommentText(next);
+                        // If the user cleared the text, drop the
+                        // accumulated mention set too — the next
+                        // comment starts from a clean slate.
+                        if (next === '') setCommentMentions(new Set());
+                      }}
                       className="flex-1 bg-transparent text-sm outline-none"
                       style={{ color: '#e2e8f0' }}
                     />
@@ -1364,6 +1367,19 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     textareaRef={commentInputRef}
                     value={commentText}
                     onChange={setCommentText}
+                    onPick={(item) => {
+                      // Append (de-duped) the picked user id to the
+                      // mentions set. handleSubmitComment reads
+                      // this set when building the createComment
+                      // payload, so the server can fan out
+                      // NEW_MENTION notifications.
+                      setCommentMentions((prev) => {
+                        if (prev.has(item.id)) return prev;
+                        const next = new Set(prev);
+                        next.add(item.id);
+                        return next;
+                      });
+                    }}
                     offsetY={36}
                   />
                 </form>
@@ -1410,7 +1426,96 @@ function postCardPropsEqual(prev: PostCardProps, next: PostCardProps): boolean {
   return true;
 }
 
-export const PostCard = memo(PostCardImpl, postCardPropsEqual);
+export interface PostCardHandle {
+  /** Open the comments section, load the comments list, and
+   *  scroll to the matching comment. Used by the home page's
+   *  ?comment=N deep-link effect — the bell notification click
+   *  flow that the user reported wasn't taking them to the
+   *  right comment before. */
+  openComment: (commentId: number) => void;
+}
+
+// PostCardImpl has a long list of internal useState / useRef /
+// useEffect that we don't want to duplicate. We use a thin
+// forwardRef wrapper that captures the imperative handle and
+// delegates rendering to the existing memoised component. The
+// wrapper is not memoised because it accepts a ref whose identity
+// changes every render — React handles the ref forward without
+// re-running PostCardImpl.
+const PostCardForward = forwardRef<PostCardHandle, PostCardProps>(
+  function PostCardForward(props, ref) {
+    return <PostCardWithHandle ref={ref} {...props} />;
+  },
+);
+
+export const PostCard = memo(PostCardForward, postCardPropsEqual);
+
+function PostCardWithHandle({
+  ref,
+  ...props
+}: PostCardProps & { ref: React.ForwardedRef<PostCardHandle> }) {
+  // We need access to setShowComments and loadComments — both
+  // are local to the original PostCardImpl. Instead of refactoring
+  // that component (large blast radius), we walk the DOM to find
+  // the comment we want and click the "Bình luận" toggle if the
+  // comments section isn't open yet. The "openComment" imperative
+  // does this synchronously after the page has placed the card
+  // into the viewport via ?post=N — at that point the card is
+  // already mounted and the comments toggle button is in the
+  // tree. This is the minimum-risk integration.
+  useImperativeHandle(
+    ref,
+    () => ({
+      openComment: (commentId: number) => {
+        const postId = props.post.id;
+        const card = document.querySelector<HTMLElement>(
+          `[data-post-id="${postId}"]`,
+        );
+        if (!card) return;
+        // Click the Bình luận toggle if comments are not yet
+        // visible. We use the data-comments-toggle attribute we
+        // set on the ActionButton; this is a stable selector that
+        // doesn't depend on the button's rendered aria-label text.
+        const toggle = card.querySelector<HTMLButtonElement>(
+          '[data-comments-toggle="1"]',
+        );
+        if (toggle) {
+          // Check if comments are already visible by looking for
+          // any mounted [data-comment-id] inside the card.
+          const alreadyOpen = card.querySelector('[data-comment-id]');
+          if (!alreadyOpen) toggle.click();
+        }
+        // Wait two frames for the comments list to mount, then
+        // scroll to the target comment and add a brief highlight.
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const target = document.querySelector<HTMLElement>(
+              `[data-comment-id="${commentId}"]`,
+            );
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              target.classList.add(
+                'ring-2',
+                'ring-violet-500/60',
+                'rounded-2xl',
+                'transition',
+              );
+              window.setTimeout(() => {
+                target.classList.remove(
+                  'ring-2',
+                  'ring-violet-500/60',
+                  'rounded-2xl',
+                );
+              }, 2400);
+            }
+          });
+        });
+      },
+    }),
+    [props.post.id],
+  );
+  return <PostCardImpl {...props} />;
+}
 
 // ─── Fullscreen Video Player ──────────────────────────────────────────────────
 
@@ -2236,7 +2341,11 @@ function CommentItem({
   onLikeComment?: (commentId: number) => void;
   onDelete?: () => void;
   onDeleteComment?: (commentId: number) => void;
-  onReply?: (parentId: number, content: string) => Promise<void>;
+  // Optional `mentions` array carries the user ids the user @'d in
+  // the reply (collected via MentionAutocomplete.onPick). The parent
+  // PostCard forwards them in the createComment payload so the server
+  // can fan out NEW_MENTION notifications.
+  onReply?: (parentId: number, content: string, mentions?: number[]) => Promise<void>;
   canDelete?: boolean;
   postId: number;
   depth?: number;
@@ -2258,6 +2367,10 @@ function CommentItem({
   // — it's a pure UI concern of CommentItem.
   const [replyOpen, setReplyOpen] = useState(false);
   const [replyText, setReplyText] = useState('');
+  // User ids the user @'d in the current reply. Populated by
+  // MentionAutocomplete's onPick. Sent in the createComment
+  // payload so the server can fan out NEW_MENTION notifications.
+  const [replyMentions, setReplyMentions] = useState<Set<number>>(new Set());
   const [replySubmitting, setReplySubmitting] = useState(false);
   // Phase 5 home upgrade: extra replies fetched lazily when the
   // user clicks "Xem thêm N phản hồi". We track them locally so
@@ -2278,9 +2391,14 @@ function CommentItem({
     if (!trimmed || !onReply) return;
     setReplySubmitting(true);
     try {
-      await onReply(comment.id, trimmed);
+      // Snapshot mention ids so the parent's createComment
+      // payload carries the right user ids. The mention set
+      // is cleared after submit; the next reply starts fresh.
+      const mentions = Array.from(replyMentions);
+      await onReply(comment.id, trimmed, mentions);
       setReplyText('');
       setReplyOpen(false);
+      setReplyMentions(new Set());
     } catch {
       /* parent surfaces the error toast */
     } finally {
@@ -2362,7 +2480,14 @@ function CommentItem({
   };
 
   return (
-    <div className="flex gap-2.5 group">
+    <div
+      // data-comment-id is the anchor used by the home page's
+      // ?comment=N deep-link effect (see app/page.tsx). Bounded:
+      // it's just a DOM attribute, zero perf cost, and only matters
+      // when the user navigates from a notification.
+      data-comment-id={comment.id}
+      className="flex gap-2.5 group"
+    >
       <Link
         href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
         className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full transition-transform hover:scale-110"
@@ -2436,7 +2561,10 @@ function CommentItem({
               <input
                 ref={replyInputRef}
                 value={replyText}
-                onChange={(e) => setReplyText(e.target.value)}
+                onChange={(e) => {
+                  setReplyText(e.target.value);
+                  if (e.target.value === '') setReplyMentions(new Set());
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -2475,11 +2603,24 @@ function CommentItem({
               </button>
               {/* Phase 5 home upgrade: @mention autocomplete for the
                   reply form. The reply input gets the same dropdown
-                  as the top-level composer. */}
+                  as the top-level composer. onPick pushes the
+                  picked user id into replyMentions so submitReply
+                  can include it in the createComment payload. */}
               <MentionAutocomplete
                 textareaRef={replyInputRef}
                 value={replyText}
-                onChange={setReplyText}
+                onChange={(v) => {
+                  setReplyText(v);
+                  if (v === '') setReplyMentions(new Set());
+                }}
+                onPick={(item) => {
+                  setReplyMentions((prev) => {
+                    if (prev.has(item.id)) return prev;
+                    const next = new Set(prev);
+                    next.add(item.id);
+                    return next;
+                  });
+                }}
                 offsetY={36}
               />
             </div>

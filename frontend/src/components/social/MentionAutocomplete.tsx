@@ -47,6 +47,16 @@ interface Props {
   /** Optional: pixel offset from the textarea's top-left (for positioning). */
   offsetX?: number;
   offsetY?: number;
+  /**
+   * Fired when the user picks a suggestion (click or Enter). The
+   * parent uses this to remember the picked user ID so it can be
+   * sent as the `mentions` array in the createPost / createComment
+   * payload. Without this callback the autocomplete only ever
+   * injects a text token — the picked user's id is lost and the
+   * server never knows who was @'d, so no NEW_MENTION notification
+   * fires.
+   */
+  onPick?: (item: MentionSuggestion) => void;
 }
 
 interface ActiveToken {
@@ -91,6 +101,7 @@ export default function MentionAutocomplete({
   enabled = true,
   offsetX = 0,
   offsetY = 8,
+  onPick,
 }: Props) {
   const [token, setToken] = useState<ActiveToken | null>(null);
   const [items, setItems] = useState<MentionSuggestion[]>([]);
@@ -163,6 +174,11 @@ export default function MentionAutocomplete({
     const insert = `@${item.username} `;
     const next = `${before}${insert}${after}`;
     onChange(next);
+    // Tell the parent who was picked so it can add the user id
+    // to its `mentions` collection. The parent will send the
+    // collected ids in the createPost / createComment payload so
+    // the server can fan out NEW_MENTION notifications.
+    try { onPick?.(item); } catch { /* ignore */ }
     // Restore caret to end of the inserted mention so the user can
     // keep typing naturally.
     requestAnimationFrame(() => {
@@ -171,7 +187,7 @@ export default function MentionAutocomplete({
       el.setSelectionRange(caretPos, caretPos);
       setToken(null);
     });
-  }, [textareaRef, token, value, onChange]);
+  }, [textareaRef, token, value, onChange, onPick]);
 
   // Keyboard navigation inside the dropdown. We listen on the
   // textarea's keydown while a token is active so the user can

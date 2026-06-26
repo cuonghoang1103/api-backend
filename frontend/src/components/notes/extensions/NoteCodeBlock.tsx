@@ -30,7 +30,7 @@ import {
 } from '@tiptap/react';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Code, Trash2 } from 'lucide-react';
+import { Code, Trash2, Save, GripVertical } from 'lucide-react';
 
 // Lazy-load the shared CodeBlock so the initial /notes bundle stays
 // small. We deliberately do NOT pass `ssr: false` here — the editor
@@ -206,8 +206,26 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
     setIsEditing(true);
   }, [isEditable]);
 
-  const exitEdit = useCallback(() => {
+  // saveKey is bumped every time the user explicitly saves the
+  // code block (via the toolbar button or Esc). It is used as the
+  // React `key` of the <CodeBlock> child so a fresh CodeBlock
+  // mounts — and therefore Shiki re-runs its async highlight on
+  // the latest content — instead of the dynamic-import chunk
+  // being stuck on its previous render output. Without this the
+  // user reported 'after I edit the code the colours don't update
+  // until I reload the page'.
+  const [saveKey, setSaveKey] = useState(0);
+
+  // exitEdit now supports an optional focusNext option. The
+  // explicit "Save" button uses the focusNext=true path; Esc
+  // uses the default (focusNext=true) so the two behave
+  // identically. We split them so future tweaks (e.g. Esc
+  // shouldn't move the caret for some users) can change one
+  // without affecting the other.
+  const exitEdit = useCallback((focusNext: boolean = true) => {
     setIsEditing(false);
+    setSaveKey((k) => k + 1);
+    if (!focusNext) return;
     // After we drop the contenteditable surface, the browser
     // moves focus to document.body (no other focusable element
     // in the new render). That means the user's next keystroke —
@@ -233,19 +251,11 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
     // unmount and silently fail.
     queueMicrotask(() => {
       try {
-        // codeBlockEndPos was computed at render time from getPos().
-        // It's null if getPos isn't available (Tiptap always
-        // provides it but TypeScript widens the type to optional).
         if (codeBlockEndPos == null) {
           editor.commands.focus();
           return;
         }
         const { state, view } = editor;
-        // Clamp the target position to the document end. The
-        // doc length is state.doc.content.size, but to place the
-        // caret INSIDE the next block we want to land at
-        // min(codeBlockEndPos, doc.content.size - 1) — otherwise
-        // we land on the closing doc node which Tiptap can't focus.
         const docSize = state.doc.content.size;
         const target = Math.min(codeBlockEndPos, docSize - 1);
         if (target <= 0) {
@@ -253,24 +263,13 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
           return;
         }
         const tr = state.tr.setSelection(
-          // TextSelection.near() takes a $pos and snaps to the
-          // nearest valid text position. Importing TextSelection
-          // here would couple this NodeView to a deeper Tiptap
-          // path than necessary; reach it via the static
-          // TextSelection class which Tiptap re-exports.
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
           (require('@tiptap/pm/state') as typeof import('@tiptap/pm/state'))
             .TextSelection
             .near(state.doc.resolve(target)) as any,
         );
-        // Focus BEFORE dispatch so the editor's DOM updates know
-        // where to anchor the selection ring.
         view.focus();
         view.dispatch(tr);
       } catch {
-        // Best-effort — if anything throws (e.g. doc changed
-        // underneath us because the user typed during the
-        // microtask) just give up rather than break the editor.
         try { editor.commands.focus(); } catch { /* ignore */ }
       }
     });
@@ -421,14 +420,40 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
             className="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-slate-900/40 px-2 py-1"
           >
             <div className="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-500">
+              {/* Drag handle — native HTML5 drag/drop. The wrapper is
+                  the draggable element; the doc moves on drop. We
+                  only enable dragging from the handle (not the whole
+                  block) so users can still click to enter edit mode
+                  without accidentally starting a drag. */}
+              <span
+                role="button"
+                tabIndex={0}
+                draggable
+                onDragStart={(e) => {
+                  // dataTransfer must carry plain text for HTML5 DnD
+                  // to fire reliably across browsers.
+                  e.dataTransfer.setData('text/plain', 'codeBlock:' + (getPos?.() ?? -1));
+                  e.dataTransfer.effectAllowed = 'move';
+                }}
+                onDragEnd={(e) => {
+                  // Reset any visual drag state. The actual move is
+                  // handled by the editor-level drop handler in
+                  // NoteEditor (which reads the dataTransfer payload).
+                  e.preventDefault();
+                }}
+                aria-label="Kéo để di chuyển block code"
+                title="Kéo để di chuyển block code lên/xuống"
+                data-noedit="1"
+                onClick={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
+                className="flex h-5 w-4 cursor-grab items-center justify-center text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 active:cursor-grabbing"
+              >
+                <GripVertical className="h-3 w-3" />
+              </span>
               <Code className="h-3 w-3" />
               <select
                 value={language}
                 onChange={(e) => updateAttributes({ language: e.target.value })}
-                // The picker should be usable without entering edit
-                // mode; clicking it would otherwise set isEditing and
-                // steal focus. stopPropagation keeps the container
-                // click handler from firing.
                 onClick={(e) => e.stopPropagation()}
                 onMouseDown={(e) => e.stopPropagation()}
                 className="rounded border border-slate-300 dark:border-white/10 bg-transparent px-1 py-0.5 text-[11px] text-slate-700 dark:text-slate-300 focus:outline-none"
@@ -444,21 +469,40 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
                 </span>
               )}
             </div>
-            <button
-              type="button"
-              data-noedit="1"
-              onClick={(e) => {
-                e.stopPropagation();
-                editor.chain().focus().deleteNode('codeBlock').run();
-              }}
-              onMouseDown={(e) => e.stopPropagation()}
-              aria-label="Xóa code block"
-              title="Xóa code block"
-              className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] text-slate-500 dark:text-slate-500 hover:bg-red-500/15 hover:text-red-300"
-            >
-              <Trash2 className="h-3 w-3" />
-              <span>Xóa</span>
-            </button>
+            <div className="flex items-center gap-1">
+              {isEditing && (
+                <button
+                  type="button"
+                  data-noedit="1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    exitEdit(true);
+                  }}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  aria-label="Lưu code block"
+                  title="Lưu (Esc để thoát, con trỏ sẽ ra dòng kế tiếp)"
+                  className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] text-slate-500 dark:text-slate-500 hover:bg-teal-500/15 hover:text-teal-300"
+                >
+                  <Save className="h-3 w-3" />
+                  <span>Lưu</span>
+                </button>
+              )}
+              <button
+                type="button"
+                data-noedit="1"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  editor.chain().focus().deleteNode('codeBlock').run();
+                }}
+                onMouseDown={(e) => e.stopPropagation()}
+                aria-label="Xóa code block"
+                title="Xóa code block"
+                className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] text-slate-500 dark:text-slate-500 hover:bg-red-500/15 hover:text-red-300"
+              >
+                <Trash2 className="h-3 w-3" />
+                <span>Xóa</span>
+              </button>
+            </div>
           </div>
         )}
         {isEditing ? (
@@ -480,7 +524,13 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
         ) : (
           // VIEW mode — Shiki highlighted, read-only. Click on the
           // rendered surface enters EDIT mode (see onContainerClick).
-          <CodeBlock code={code} language={language || undefined} />
+          // The `key={saveKey}` forces React to mount a fresh
+          // CodeBlock every time the user explicitly saves, so Shiki
+          // re-runs its async highlight on the latest content
+          // instead of staying cached. Without this the dynamic
+          // chunk was reusing its previous render output and the
+          // user reported the colours never updated after edits.
+          <CodeBlock key={saveKey} code={code} language={language || undefined} />
         )}
       </div>
     </NodeViewWrapper>

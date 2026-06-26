@@ -200,10 +200,56 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
         return false;
       },
       handleDrop(view, event) {
-        const files = Array.from((event as DragEvent).dataTransfer?.files ?? []).filter((f) => f.type.startsWith('image/'));
+        const dt = (event as DragEvent).dataTransfer;
+        const files = dt?.files ? Array.from(dt.files).filter((f) => f.type.startsWith('image/')) : [];
         if (files.length && editor) {
           event.preventDefault();
           files.forEach((f) => void uploadAndInsert(editor, f));
+          return true;
+        }
+        // Native drag-and-drop reordering of code blocks. The
+        // handle inside the code-block toolbar sets the
+        // dataTransfer payload as plain text in the form
+        // 'codeBlock:<fromPos>'. We read that here, compute the
+        // drop target from the event coords, and dispatch a
+        // ProseMirror transaction that deletes the block at the
+        // original position and re-inserts it at the new one.
+        // Tiptap's dnd-kit integration (used by the slash menu
+        // for block insertion) would be cleaner but adds a
+        // dependency — this path uses only what the editor
+        // already exposes and works for the single-block case.
+        const payload = dt?.getData('text/plain') ?? '';
+        if (payload.startsWith('codeBlock:')) {
+          event.preventDefault();
+          const fromPos = Number(payload.slice('codeBlock:'.length));
+          if (!Number.isFinite(fromPos) || fromPos < 0) return false;
+          // Translate the drop coordinates to a document position
+          // via ProseMirror's posAtCoords. If the user dropped
+          // outside the editor, bail.
+          const targetPos = view.posAtCoords({
+            left: (event as DragEvent).clientX,
+            top: (event as DragEvent).clientY,
+          })?.pos;
+          if (targetPos == null) return false;
+          // Avoid dropping the block onto itself.
+          if (targetPos === fromPos || targetPos === fromPos + 1) return true;
+          try {
+            const { state } = view;
+            // Capture the node at fromPos before we mutate.
+            const node = state.doc.nodeAt(fromPos);
+            if (!node || node.type.name !== 'codeBlock') return false;
+            const tr = state.tr;
+            // Delete the block first; tr.mapping shifts later
+            // positions. We want to insert at the target pos
+            // computed BEFORE the deletion, so adjust it
+            // appropriately if the target is after the source.
+            const insertPos = targetPos > fromPos ? targetPos - node.nodeSize : targetPos;
+            tr.delete(fromPos, fromPos + node.nodeSize);
+            tr.insert(insertPos, node.type.create({ language: node.attrs.language }, node.content, node.marks));
+            view.dispatch(tr);
+          } catch {
+            /* best-effort */
+          }
           return true;
         }
         return false;

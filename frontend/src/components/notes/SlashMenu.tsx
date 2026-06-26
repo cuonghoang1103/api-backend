@@ -129,7 +129,20 @@ const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor }, ref) => {
 
   useImperativeHandle(ref, () => ({
     open: (rect) => {
-      setPos({ top: rect.bottom + window.scrollY + 4, left: rect.left + window.scrollX });
+      // rect comes from ProseMirror's coordsAtPos / getBoundingClientRect
+      // and is already in VIEWPORT coordinates (i.e. relative to the
+      // current visible area, NOT to the document). The menu is
+      // rendered with `position: absolute` and no `position:
+      // relative` ancestor (the editor root has no positioning), so
+      // it anchors relative to the initial containing block = the
+      // viewport. Adding window.scrollY here would push the menu
+      // DOWN by exactly the amount the user has scrolled — the
+      // menu would render far below the caret or off-screen, and
+      // the user would have to scroll back up to find it. The user
+      // reported exactly this: 'after I exit the code block and
+      // press /, the menu appears over the OLD code block, not at
+      // the current caret'.
+      setPos({ top: rect.bottom + 4, left: rect.left });
       setQuery('');
       setActive(0);
       setOpen(true);

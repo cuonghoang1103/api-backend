@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FileText, FileCode, Image, Film, Music, Archive, File,
-  MoreVertical, Hash, Globe2, Share2,
+  MoreVertical, Hash, Globe2, Share2, Users,
 } from 'lucide-react';
 
 import type { HubFile } from '@/lib/api';
@@ -17,6 +17,11 @@ interface HubFileCardProps {
   onStatusChange: (id: number, status: string) => void;
   // Phase 2 — owner-side: open the share modal for this file.
   onShare?: (file: HubFile) => void;
+  // Phase 2 — owner-side: open the manage-shares modal.
+  onManageShares?: (file: HubFile) => void;
+  // Number of recipients this file has been shared with — drives
+  // the count badge next to "Quản lý chia sẻ" in the menu.
+  sharedCount?: number;
 }
 
 function getFileCategory(mimeType: string): 'image' | 'pdf' | 'video' | 'audio' | 'code' | 'other' {
@@ -80,7 +85,7 @@ function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export default function HubFileCard({ file, onClick, onDelete, onStatusChange, onShare }: HubFileCardProps) {
+export default function HubFileCard({ file, onClick, onDelete, onStatusChange, onShare, onManageShares, sharedCount }: HubFileCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const category = getFileCategory(file.mimeType);
   const Icon = CATEGORY_ICON[category];
@@ -195,6 +200,20 @@ export default function HubFileCard({ file, onClick, onDelete, onStatusChange, o
                       className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
                     >
                       <Share2 className="h-3 w-3" /> Chia se
+                    </button>
+                  )}
+                  {onManageShares && (
+                    <button
+                      onClick={() => { setMenuOpen(false); onManageShares(file); }}
+                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+                    >
+                      <Users className="h-3 w-3" />
+                      <span className="flex-1">Quan ly chia se</span>
+                      {typeof sharedCount === 'number' && sharedCount > 0 && (
+                        <span className="rounded-full bg-neon-violet/20 px-1.5 py-0.5 text-[10px] font-semibold text-neon-violet">
+                          {sharedCount}
+                        </span>
+                      )}
                     </button>
                   )}
                 </div>

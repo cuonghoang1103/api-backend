@@ -23,6 +23,7 @@ import HubCommandPalette from '@/components/hub/HubCommandPalette';
 import HubBanner from '@/components/hub/HubBanner';
 import HubFileCard from '@/components/hub/HubFileCard';
 import HubShareModal from '@/components/hub/HubShareModal';
+import HubShareManagerModal from '@/components/hub/HubShareManagerModal';
 import HubSharedWithMe from '@/components/hub/HubSharedWithMe';
 import HubSharedItemViewer from '@/components/hub/HubSharedItemViewer';
 
@@ -107,6 +108,22 @@ export default function HubClient({
   const [shareModalItem, setShareModalItem] = useState<{ kind: 'folder' | 'link' | 'file'; id: number; label?: string } | null>(null);
   const [viewingShare, setViewingShare] = useState<HubShare | null>(null);
   const [shareItemModalOpen, setShareItemModalOpen] = useState(false);
+  // Manager modal — same item shape, but opens the revoke list
+  // instead of the new-share dialog.
+  const [manageItem, setManageItem] = useState<{ kind: 'folder' | 'link' | 'file'; id: number; label?: string } | null>(null);
+  // Recipient counts per item — drives the badge on the
+  // "Quản lý chia sẻ" button. Sparse — items with 0 shares
+  // simply aren't in the map (no badge shown).
+  const [outboxShares, setOutboxShares] = useState<HubShare[]>([]);
+  const reloadOutbox = useCallback(async () => {
+    try {
+      const r = await hubShareApi.listOutbox();
+      setOutboxShares(r.data.data ?? []);
+    } catch {
+      // Toast is noisy on initial load failures; the badge is
+      // best-effort UI. Leave the previous outbox in place.
+    }
+  }, []);
 
   // ── Refs
   const foldersRef = useRef(folders);
@@ -197,6 +214,17 @@ export default function HubClient({
     }
   }, [mounted, isAuthenticated, initialFolders.length, reloadFolders]);
 
+  // Load the outbox (shares I've sent) once on mount so the
+  // "Quản lý chia sẻ (N)" badges can render without per-card
+  // re-fetch. Refresh after every share / revoke mutation —
+  // hubShareModal + hubShareManagerModal call onChanged() which
+  // re-invokes this.
+  useEffect(() => {
+    if (mounted && isAuthenticated) {
+      void reloadOutbox();
+    }
+  }, [mounted, isAuthenticated, reloadOutbox]);
+
   // ── Handlers
   const handleCreateFolder = useCallback(async (
     name: string,
@@ -253,6 +281,7 @@ export default function HubClient({
       }
       void reloadLinks();
       void reloadFolders();
+      void reloadOutbox();
     } catch (err) {
       console.error(err);
       toast.error('Khong the luu link');
@@ -332,6 +361,20 @@ export default function HubClient({
   }, [files, statusFilter]);
 
   const total = filteredLinks.length + filteredFiles.length;
+
+  // Recipient count per item — drives the "Quản lý chia sẻ (N)"
+  // badge on the link/file/folder context menu. Built from the
+  // already-loaded outboxShares array; the map is recreated on
+  // every outbox refresh, but outbox refreshes are infrequent
+  // (only on share / revoke), so this stays cheap.
+  const sharedCounts = useMemo(() => {
+    const counts: Record<number, number> = {};
+    for (const s of outboxShares) {
+      const key = s.folderId ?? s.linkId ?? s.fileId ?? 0;
+      if (key > 0) counts[key] = (counts[key] ?? 0) + 1;
+    }
+    return counts;
+  }, [outboxShares]);
 
   // ── Render
   if (!mounted) {
@@ -423,6 +466,12 @@ export default function HubClient({
               id: folder.id,
               label: folder.name,
             })}
+            onManageSharesFolder={(folder) => setManageItem({
+              kind: 'folder',
+              id: folder.id,
+              label: folder.name,
+            })}
+            folderSharedCounts={sharedCounts}
           />
           {/* Phase 2 — sidebar widget showing users who have
               shared items with the current user. Lives below the
@@ -489,7 +538,9 @@ export default function HubClient({
                         onClick={setPreviewFile}
                         onDelete={handleDeleteFile}
                         onStatusChange={(id, status) => { void handleStatusChange('file', id, status); }}
-                        onShare={(file) => setShareModalItem({ kind: 'file', id: file.id, label: file.name })}
+                        onShare={(f) => setShareModalItem({ kind: 'file', id: f.id, label: f.name })}
+                        onManageShares={(f) => setManageItem({ kind: 'file', id: f.id, label: f.name })}
+                        sharedCount={sharedCounts[f.id]}
                       />
                     ))}
                     {filteredLinks.map((l) => (
@@ -500,6 +551,8 @@ export default function HubClient({
                           onDelete={handleDeleteLink}
                           onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
                           onShare={(link) => setShareModalItem({ kind: 'link', id: link.id, label: link.title })}
+                          onManageShares={(link) => setManageItem({ kind: 'link', id: link.id, label: link.title })}
+                          sharedCount={sharedCounts[l.id]}
                         />
                     ))}
                   </div>
@@ -536,6 +589,8 @@ export default function HubClient({
                       onDelete={handleDeleteLink}
                       onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
                       onShare={(l) => setShareModalItem({ kind: 'link', id: l.id, label: l.title })}
+                      onManageShares={(l) => setManageItem({ kind: 'link', id: l.id, label: l.title })}
+                      sharedCounts={sharedCounts}
                     />
                   </div>
                 )}
@@ -590,6 +645,18 @@ export default function HubClient({
         item={shareModalItem ? { kind: shareModalItem.kind, id: shareModalItem.id } : null}
         itemLabel={shareModalItem?.label}
         onClose={() => setShareModalItem(null)}
+      />
+
+      {/* Phase 2 — owner-side manage modal. Lists every recipient
+          the owner has shared this item with and lets them revoke
+          access one at a time. Re-uses the same shape as
+          HubShareModal so the open/close flow feels consistent. */}
+      <HubShareManagerModal
+        open={!!manageItem}
+        item={manageItem ? { kind: manageItem.kind, id: manageItem.id } : null}
+        itemLabel={manageItem?.label}
+        onClose={() => setManageItem(null)}
+        onChanged={() => void reloadOutbox()}
       />
 
       {/* Phase 2 — recipient-side viewer. Shows the underlying

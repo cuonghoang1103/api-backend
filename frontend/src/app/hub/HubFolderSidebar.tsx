@@ -26,11 +26,18 @@ interface HubFolderSidebarProps {
   // Optional so the sidebar still works when not wired (e.g.
   // in tests). When omitted, the "Chia sẻ" button is hidden.
   onShareFolder?: (folder: HubFolder) => void;
+  // Phase 2 — owner-side: open the manage-shares modal for the
+  // folder so the user can revoke previously-shared recipients.
+  onManageSharesFolder?: (folder: HubFolder) => void;
+  // Map from folderId → recipient count, drives the badge on
+  // the "Quản lý chia sẻ" button. Optional — when omitted the
+  // button shows without the count.
+  folderSharedCounts?: Record<number, number>;
 }
 
 export default function HubFolderSidebar({
   folders, selected, onSelect, onCreate, onDelete, addOpen, setAddOpen,
-  onShareFolder,
+  onShareFolder, onManageSharesFolder, folderSharedCounts,
 }: HubFolderSidebarProps) {
   const [newName, setNewName] = useState('');
   const [menuId, setMenuId] = useState<number | null>(null);
@@ -131,6 +138,8 @@ export default function HubFolderSidebar({
               childCount={childCount}
               totalCount={totalCount}
               onShareFolder={onShareFolder}
+              onManageSharesFolder={onManageSharesFolder}
+              folderSharedCounts={folderSharedCounts}
             />
           ))}
         </div>
@@ -201,13 +210,16 @@ interface FolderTreeItemProps {
   // Phase 2 — wired through to HubFolderMenu for the "Chia sẻ"
   // button. The button is hidden when undefined.
   onShareFolder?: (folder: HubFolder) => void;
+  // Phase 2 — wired through to HubFolderMenu for "Quản lý chia sẻ".
+  onManageSharesFolder?: (folder: HubFolder) => void;
+  folderSharedCounts?: Record<number, number>;
 }
 
 function FolderTreeItem({
   folder, folders, selected, onSelect, onToggleExpand,
   expandedFolders, renamingId, renameValue, setRenamingId, setRenameValue,
   menuId, setMenuId, onDelete, onSubmitRename, childCount, totalCount,
-  onShareFolder,
+  onShareFolder, onManageSharesFolder, folderSharedCounts,
 }: FolderTreeItemProps) {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const children = folders.filter((f) => f.parentId === folder.id);
@@ -312,6 +324,8 @@ function FolderTreeItem({
               }
             }}
             onShare={onShareFolder ? () => onShareFolder(folder) : undefined}
+            onManageShares={onManageSharesFolder ? () => onManageSharesFolder(folder) : undefined}
+            sharedCount={folderSharedCounts?.[folder.id]}
           />
         </div>
       )}
@@ -347,6 +361,8 @@ function FolderTreeItem({
                   childCount={childCount}
                   totalCount={totalCount}
                   onShareFolder={onShareFolder}
+                  onManageSharesFolder={onManageSharesFolder}
+                  folderSharedCounts={folderSharedCounts}
                 />
               ))}
             </div>

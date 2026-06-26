@@ -19,7 +19,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Edit3, FolderPlus, Trash2, Share2 } from 'lucide-react';
+import { Edit3, FolderPlus, Trash2, Share2, Users } from 'lucide-react';
 
 // SSR-safe layout effect (no window during SSR).
 const useIsoLayoutEffect =
@@ -35,10 +35,15 @@ interface HubFolderMenuProps {
   // Phase 2 — owner-side: open the share modal for this folder.
   // Optional so older callers (or tests) can omit it.
   onShare?: () => void;
+  // Phase 2 — owner-side: open the manage-shares modal for this
+  // folder so the user can revoke previously-shared recipients.
+  onManageShares?: () => void;
+  // Number of recipients this folder has been shared with.
+  sharedCount?: number;
 }
 
 export default function HubFolderMenu({
-  open, anchorRef, onClose, onRename, onCreateSubfolder, onDelete, onShare,
+  open, anchorRef, onClose, onRename, onCreateSubfolder, onDelete, onShare, onManageShares, sharedCount,
 }: HubFolderMenuProps) {
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -129,6 +134,20 @@ export default function HubFolderMenu({
                 className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
               >
                 <Share2 className="h-3 w-3" /> Chia se
+              </button>
+            )}
+            {onManageShares && (
+              <button
+                onClick={() => { onClose(); onManageShares(); }}
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+              >
+                <Users className="h-3 w-3" />
+                <span className="flex-1">Quan ly chia se</span>
+                {typeof sharedCount === 'number' && sharedCount > 0 && (
+                  <span className="rounded-full bg-neon-violet/20 px-1.5 py-0.5 text-[10px] font-semibold text-neon-violet">
+                    {sharedCount}
+                  </span>
+                )}
               </button>
             )}
             <button

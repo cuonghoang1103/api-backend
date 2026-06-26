@@ -16,6 +16,12 @@ interface HubLinkCardProps {
   onStatusChange?: (id: number, status: string) => void;
   // Phase 2 — owner-side: open the share modal for this link.
   onShare?: (link: HubLink) => void;
+  // Phase 2 — owner-side: open the manage-shares modal so the
+  // user can revoke access for previously-shared recipients.
+  onManageShares?: (link: HubLink) => void;
+  // Number of recipients this link has been shared with — drives
+  // the count badge next to "Quản lý chia sẻ" in the menu.
+  sharedCount?: number;
 }
 
 // Deterministic gradient per-link (so the same link always gets
@@ -32,7 +38,7 @@ function gradientFor(id: number) {
   return palettes[id % palettes.length];
 }
 
-export default function HubLinkCard({ link, onEdit, onDelete, onStatusChange, onShare }: HubLinkCardProps) {
+export default function HubLinkCard({ link, onEdit, onDelete, onStatusChange, onShare, onManageShares, sharedCount }: HubLinkCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -151,6 +157,8 @@ export default function HubLinkCard({ link, onEdit, onDelete, onStatusChange, on
               onDelete={onDelete}
               onStatusChange={onStatusChange ?? (() => {})}
               onShare={onShare}
+              onManageShares={onManageShares}
+              sharedCount={sharedCount}
             />
           </div>
         </div>

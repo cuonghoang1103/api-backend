@@ -191,6 +191,65 @@ interface MessagingState {
 const TYPING_TIMEOUT_MS = 3500;
 
 /**
+ * Merge a freshly-fetched server message list with whatever we
+ * currently have cached in `messagesByThread[threadId]`.
+ *
+ * The previous behaviour of `openThread` and `loadThreadMessages` was
+ * to *unconditionally overwrite* the cache with the server response.
+ * That looks innocent until you remember there are now TWO writers
+ * to the same cache slice:
+ *   1. The /messages page calls openThread (which fetches).
+ *   2. The popup mini-chat calls loadThreadMessages (which fetches).
+ *   3. The socket broadcasts `thread:new-message` via applyIncomingMessage
+ *      (which appends optimistically).
+ *
+ * All three run concurrently. Without a merge, a slow network fetch
+ * that started before a just-arrived optimistic message can resolve
+ * AFTER the optimistic append and clobber it. The user sees a chat
+ * that ends one message short.
+ *
+ * Merge contract:
+ *   - Real messages (`id > 0`) come from the server — server is the
+ *     source of truth, we replace whatever we have for those ids
+ *     (picks up edits, reactions, recalls).
+ *   - Optimistic messages (`id < 0`) come only from the cache; we
+ *     keep them so an in-flight POST that hasn't yet received its
+ *     server-side id stays visible until applyIncomingMessage
+ *     replaces it via the optimistic-id match.
+ *   - Anything in the server list with an id we don't have → append.
+ *   - Result is sorted by createdAt ASC so the chat is always
+ *     newest-at-the-bottom (applyIncomingMessage's append-by-id
+ *     relies on this invariant).
+ */
+function mergeMessages(
+  serverMsgs: MessagingMessage[],
+  cachedMsgs: MessagingMessage[],
+): MessagingMessage[] {
+  // Fast path: no cache (popup first-open OR cache miss) → trust
+  // server entirely. Nothing to merge.
+  if (cachedMsgs.length === 0) return serverMsgs;
+
+  const byId = new Map<number, MessagingMessage>();
+  // Cache goes in first so the server overwrites by id (server
+  // wins for any id present in BOTH sources).
+  for (const m of cachedMsgs) byId.set(m.id, m);
+  for (const m of serverMsgs) byId.set(m.id, m);
+
+  const merged = Array.from(byId.values());
+  // Stable sort by createdAt so newest-at-bottom holds even if the
+  // server returned messages in a different order than we cached.
+  merged.sort((a, b) => {
+    const ta = new Date(a.createdAt).getTime();
+    const tb = new Date(b.createdAt).getTime();
+    if (Number.isFinite(ta) && Number.isFinite(tb) && ta !== tb) return ta - tb;
+    // Fall back to id order so the sort is fully deterministic when
+    // timestamps are equal or missing.
+    return a.id - b.id;
+  });
+  return merged;
+}
+
+/**
  * Sort threads for the sidebar:
  *  1. Pinned threads first
  *  2. Then by lastMessageAt DESC (most recent activity)
@@ -238,87 +297,115 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   async init() {
     const auth = useAuthStore.getState();
     if (!auth.isAuthenticated) return;
-    if (getSocket()?.connected) return; // already connected
-    // De-dupe in-flight init calls
+    // De-dupe in-flight init calls (so a re-render storm doesn't
+    // queue dozens of connect attempts). The previous code also
+    // early-returned when the socket was already connected — that
+    // was a bug: the socket singleton outlives auth state (see the
+    // comment on `init()` in commit history). If a user logs out and
+    // back in, the previously-connected socket might belong to a
+    // DIFFERENT user, or its auth context could be stale. We must
+    // still refresh REST data on every init() call.
     if (get().isConnecting) return;
 
     set({ isConnecting: true, initError: null, lastConnectAttempt: Date.now() });
-    try {
-      await connectSocket();
-      const socket = getSocket();
-      if (socket) {
-        // Wire socket events into the store once
-        if (!(socket as any)._messagingWired) {
-          (socket as any)._messagingWired = true;
-          socket.on('thread:new-message', (payload: { threadId: number; message: MessagingMessage }) => {
-            get().applyIncomingMessage(payload.threadId, payload.message);
-          });
-          socket.on('thread:read', (payload: { threadId: number; readerId: number; readAt?: string | Date }) => {
-            get().applyReadReceipt(payload.threadId, payload.readerId, payload.readAt as any);
-          });
-          socket.on('thread:updated', (payload: { threadId: number; changes?: any }) => {
-            get().applyThreadUpdated(payload.threadId, payload?.changes);
-          });
-          // NEW: peer started a new conversation. Re-emitted to
-          // BOTH participants so the freshly-created thread shows
-          // up in both sidebars without a refresh. We treat the
-          // payload idempotently — if the row already exists we
-          // just refresh its summary.
-          socket.on('thread:created', (payload: { thread: MessagingThread }) => {
-            get().applyThreadCreated(payload.thread);
-          });
-          socket.on('thread:typing', (payload: { threadId: number; userId: number; isTyping: boolean }) => {
-            const cur = get().typing.byThread[payload.threadId] ?? {};
-            const next = { ...cur };
-            if (payload.isTyping) {
-              next[payload.userId] = Date.now() + TYPING_TIMEOUT_MS;
-            } else {
-              delete next[payload.userId];
-            }
-            set((s) => ({ typing: { byThread: { ...s.typing.byThread, [payload.threadId]: next } } }));
-          });
-          socket.on('presence:update', (payload: { userId: number; online: boolean; lastSeen: number }) => {
-            get().applyPeerPresence(payload.userId, payload.online, payload.lastSeen);
-          });
-          socket.on('connect', () => get().onConnectionChange(true));
-          socket.on('disconnect', () => get().onConnectionChange(false));
-          // Listen for in-place message updates (recall, delete,
-          // reactions) and per-thread metadata changes.
-          socket.on(
-            'message:updated',
-            (payload: {
-              threadId: number;
-              messageId: number;
-              changes: { deleted?: boolean; recalled?: boolean; recalledAt?: string; reactions?: unknown };
-            }) => {
-              get().applyMessageUpdated(payload.threadId, payload.messageId, payload.changes);
-            },
-          );
-          // CRITICAL: by the time we get here, the socket has ALREADY
-          // connected (connectSocket awaited on the 'connect' event).
-          // The listeners above will only fire on the NEXT (re)connect.
-          // We must mirror the live state into the store right now,
-          // otherwise the UI stays stuck on "Ngoại tuyến" forever.
-          if (socket.connected) {
-            get().onConnectionChange(true);
+
+    // ── 1. Ensure the socket is connected and its listeners are wired.
+    //       This is a no-op on subsequent init() calls because the
+    //       _messagingWired flag guards against double-binding.
+    const socketWasConnected = getSocket()?.connected === true;
+    if (!socketWasConnected) {
+      try {
+        await connectSocket();
+      } catch (e: any) {
+        // Socket connect failed. Don't bail — the REST endpoints
+        // still work over the httpOnly auth cookie (the socket uses
+        // the same cookie but with a different auth path that can
+        // legitimately 401 while the REST cookie is still valid).
+        // We surface the socket error AND continue to fetch REST
+        // data so the user at least sees their existing inbox.
+        set({ initError: e?.message ?? 'Không thể kết nối chat realtime' });
+      }
+    }
+
+    const socket = getSocket();
+    if (socket) {
+      if (!(socket as any)._messagingWired) {
+        (socket as any)._messagingWired = true;
+        socket.on('thread:new-message', (payload: { threadId: number; message: MessagingMessage }) => {
+          get().applyIncomingMessage(payload.threadId, payload.message);
+        });
+        socket.on('thread:read', (payload: { threadId: number; readerId: number; readAt?: string | Date }) => {
+          get().applyReadReceipt(payload.threadId, payload.readerId, payload.readAt as any);
+        });
+        socket.on('thread:updated', (payload: { threadId: number; changes?: any }) => {
+          get().applyThreadUpdated(payload.threadId, payload?.changes);
+        });
+        // NEW: peer started a new conversation. Re-emitted to
+        // BOTH participants so the freshly-created thread shows
+        // up in both sidebars without a refresh. We treat the
+        // payload idempotently — if the row already exists we
+        // just refresh its summary.
+        socket.on('thread:created', (payload: { thread: MessagingThread }) => {
+          get().applyThreadCreated(payload.thread);
+        });
+        socket.on('thread:typing', (payload: { threadId: number; userId: number; isTyping: boolean }) => {
+          const cur = get().typing.byThread[payload.threadId] ?? {};
+          const next = { ...cur };
+          if (payload.isTyping) {
+            next[payload.userId] = Date.now() + TYPING_TIMEOUT_MS;
+          } else {
+            delete next[payload.userId];
           }
+          set((s) => ({ typing: { byThread: { ...s.typing.byThread, [payload.threadId]: next } } }));
+        });
+        socket.on('presence:update', (payload: { userId: number; online: boolean; lastSeen: number }) => {
+          get().applyPeerPresence(payload.userId, payload.online, payload.lastSeen);
+        });
+        socket.on('connect', () => get().onConnectionChange(true));
+        socket.on('disconnect', () => get().onConnectionChange(false));
+        // Listen for in-place message updates (recall, delete,
+        // reactions) and per-thread metadata changes.
+        socket.on(
+          'message:updated',
+          (payload: {
+            threadId: number;
+            messageId: number;
+            changes: { deleted?: boolean; recalled?: boolean; recalledAt?: string; reactions?: unknown };
+          }) => {
+            get().applyMessageUpdated(payload.threadId, payload.messageId, payload.changes);
+          },
+        );
+        // CRITICAL: by the time we get here, the socket has ALREADY
+        // connected (connectSocket awaited on the 'connect' event).
+        // The listeners above will only fire on the NEXT (re)connect.
+        // We must mirror the live state into the store right now,
+        // otherwise the UI stays stuck on "Ngoại tuyến" forever.
+        if (socket.connected) {
+          get().onConnectionChange(true);
         }
       }
-      // Initial data load
-      await Promise.all([
-        get().loadThreads(),
-        get().refreshUnread(),
-        get().loadOnlineUsers(),
-        get().loadBlocked(),
-      ]);
-      set({ isConnecting: false, initError: null });
-    } catch (e: any) {
-      set({
-        isConnecting: false,
-        isConnected: false,
-        initError: e?.message ?? 'Failed to connect to chat server',
-      });
     }
+
+    // ── 2. REST data load — ALWAYS run, even if the socket failed.
+    //       The user has just landed on /messages (or remounted the
+    //       dock after a long absence); they need their thread list
+    //       and unread counts regardless of realtime status. Without
+    //       this step a stale-JWT-but-valid-cookie state would leave
+    //       them staring at an empty inbox.
+    //
+    //       We use Promise.allSettled (not Promise.all) so one
+    //       failed fetch doesn't abort the others — loadThreads is
+    //       the critical one, but the others (unread count, online
+    //       users, blocked list) are nice-to-have and shouldn't
+    //       gate the inbox.
+    await Promise.allSettled([
+      get().loadThreads(),
+      get().refreshUnread(),
+      get().loadOnlineUsers(),
+      get().loadBlocked(),
+    ]);
+
+    set({ isConnecting: false });
   },
 
   async retryConnection() {
@@ -520,17 +607,27 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       // previous open). Refetch in the background to pick up
       // anything new without blocking the UI. Failures here are
       // silent — the cached list is good enough.
+      //
+      // MERGE instead of overwrite: the popup mini-chat shares this
+      // same cache slice. If a user sent a message in the popup
+      // moments ago and the socket append raced ahead of THIS fetch,
+      // an unconditional overwrite would erase that optimistic
+      // message. The merge contract is documented on mergeMessages().
       try {
         const res = await messagingApi.listMessages(threadId, { limit: 50 });
-        const messages = (res.data.data ?? []) as MessagingMessage[];
-        set((s) => ({
-          messagesByThread: { ...s.messagesByThread, [threadId]: messages },
-          hasMoreByThread: { ...s.hasMoreByThread, [threadId]: messages.length >= 50 },
-          messageLoadError: null,
-        }));
+        const serverMsgs = (res.data.data ?? []) as MessagingMessage[];
+        set((s) => {
+          const cached = s.messagesByThread[threadId] ?? [];
+          const merged = mergeMessages(serverMsgs, cached);
+          return {
+            messagesByThread: { ...s.messagesByThread, [threadId]: merged },
+            hasMoreByThread: { ...s.hasMoreByThread, [threadId]: serverMsgs.length >= 50 },
+            messageLoadError: null,
+          };
+        });
         if (auth.user?.id != null) {
           await import('@/lib/messageCache').then((m) =>
-            m.saveMessages(threadId, auth.user!.id, messages as unknown[]),
+            m.saveMessages(threadId, auth.user!.id, serverMsgs as unknown[]),
           );
         }
       } catch {
@@ -589,22 +686,33 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
 
     // ── Authoritative fetch ───────────────────────────────────
     // Either we had nothing in memory + IndexedDB, OR we already
-    // had a list and want to pick up anything new. The same fetch
-    // path handles both — we just always overwrite the cache for
-    // this thread with the server response.
+    // had a list and want to pick up anything new. MERGE the
+    // server response with whatever is already cached for this
+    // threadId so we don't clobber a concurrent optimistic append
+    // from the socket (see mergeMessages() for the full contract).
     try {
       const res = await messagingApi.listMessages(threadId, { limit: 50 });
-      const messages = (res.data.data ?? []) as MessagingMessage[];
-      set((s) => ({
-        messagesByThread: { ...s.messagesByThread, [threadId]: messages },
-        hasMoreByThread: { ...s.hasMoreByThread, [threadId]: messages.length >= 50 },
-      }));
+      const serverMsgs = (res.data.data ?? []) as MessagingMessage[];
+      set((s) => {
+        const cached = s.messagesByThread[threadId] ?? [];
+        const merged = mergeMessages(serverMsgs, cached);
+        return {
+          messagesByThread: { ...s.messagesByThread, [threadId]: merged },
+          hasMoreByThread: { ...s.hasMoreByThread, [threadId]: serverMsgs.length >= 50 },
+        };
+      });
       // Mirror to IndexedDB so the next popup open in a future
       // session can restore from cache. Errors here are silent —
       // the cache is an optimisation, not a correctness requirement.
+      // We persist the MERGED list (not just the server slice) so
+      // any optimistic messages that haven't yet been confirmed by
+      // the server are still there next time the user opens the
+      // thread; applyIncomingMessage will de-dupe them by id when
+      // the real broadcast lands.
       if (auth.user?.id != null) {
+        const toPersist = get().messagesByThread[threadId] ?? serverMsgs;
         await import('@/lib/messageCache').then((m) =>
-          m.saveMessages(threadId, auth.user!.id, messages as unknown[]),
+          m.saveMessages(threadId, auth.user!.id, toPersist as unknown[]),
         );
       }
       // User is reading this thread — clear the unread badge on

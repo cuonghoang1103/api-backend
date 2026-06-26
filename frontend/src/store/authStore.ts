@@ -119,14 +119,33 @@ export const useAuthStore = create<AuthState>()(
         // 3. Dispatch auth-changed event
         window.dispatchEvent(new CustomEvent('auth-changed', { detail: { action: 'logout' } }));
 
-        // 4. Clear Zustand state
+        // 4. Tear down the messaging store BEFORE clearing local
+        //    state. This closes the socket, drops all cached
+        //    threads/messages/typing/presence, and resets the
+        //    flags that gate the boot effect on /messages.
+        //    Without this, after a hard-nav re-login the next
+        //    user could inherit a stale `threadsLoaded: true`
+        //    flag pointing at the previous user's now-empty
+        //    inbox, and the /messages boot effect would skip
+        //    loadThreads() — leaving them with no thread list.
+        try {
+          const { useMessagingStore } = await import('./messagingStore');
+          await useMessagingStore.getState().shutdown();
+        } catch {
+          // ignore — best effort; the hard nav below will reset
+          // the JS context anyway, but a clean shutdown here keeps
+          // state coherent for any code path that observes the
+          // store between now and the navigation.
+        }
+
+        // 5. Clear Zustand state
         set({ user: null, token: null, isAuthenticated: false, isLoading: false, isHydrated: true });
 
-        // 5. Clear localStorage / sessionStorage
+        // 6. Clear localStorage / sessionStorage
         localStorage.clear();
         sessionStorage.clear();
 
-        // 5b. Wipe the per-user message cache so the next user
+        // 6b. Wipe the per-user message cache so the next user
         // on a shared device doesn't see the previous user's
         // chat history appear from IndexedDB on next login.
         try {
@@ -138,7 +157,7 @@ export const useAuthStore = create<AuthState>()(
           // ignore — best effort
         }
 
-        // 6. Hard redirect — purges all client-side state buffers
+        // 7. Hard redirect — purges all client-side state buffers
         window.location.href = '/login';
       },
 

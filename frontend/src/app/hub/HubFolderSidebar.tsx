@@ -130,6 +130,7 @@ export default function HubFolderSidebar({
               onSubmitRename={submitRename}
               childCount={childCount}
               totalCount={totalCount}
+              onShareFolder={onShareFolder}
             />
           ))}
         </div>

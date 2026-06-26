@@ -22,7 +22,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { SoundKind } from '@/lib/soundStorage';
-import { configureSoundSources, invalidateCustomSoundCache } from '@/lib/sound';
+import { configureSoundSources, invalidateCustomSoundCache, stopAll, applyVolume } from '@/lib/sound';
 
 export type { SoundKind };
 
@@ -114,8 +114,25 @@ export const usePreferencesStore = create<PreferencesState>()(
       enabled: defaultEnabled(),
       customFileName: defaultCustomFileName(),
 
-      setMasterEnabled: (v) => set({ masterEnabled: v }),
-      setVolume: (v) => set({ volume: Math.max(0, Math.min(1, v)) }),
+      setMasterEnabled: (v) => {
+        set({ masterEnabled: v });
+        // The kill-switch should silence whatever's currently
+        // playing too — the user expects "off" to be silent, not
+        // "wait for the next event". pause() on each cached
+        // element; the audio instance stays in cache so flipping
+        // the switch back on resumes the same source.
+        if (!v) stopAll();
+      },
+      setVolume: (v) => {
+        const clamped = Math.max(0, Math.min(1, v));
+        set({ volume: clamped });
+        // Live-update the volume of any sound already mid-play.
+        // playSound reads the getter on every call so future
+        // plays pick up the new value automatically; this call
+        // covers the case where the slider is moved while a
+        // previous sound is still audible.
+        applyVolume(clamped);
+      },
       setKindEnabled: (kind, v) =>
         set((s) => ({ enabled: { ...s.enabled, [kind]: v } })),
       setCustomFileName: (kind, name) =>

@@ -177,6 +177,34 @@ function MessagesPageInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, auth.isAuthenticated, isConnected]);
 
+  // Auto-open a specific thread when the page is loaded with
+  // ?thread=N in the URL. The notification bell uses this for
+  // deep-links from NEW_MESSAGE rows (and any future caller that
+  // has the threadId but not the peerId). Unlike ?peer=, this
+  // path is idempotent and uses loadThreadMessages (no current
+  // state mutation beyond what openThread already does), so
+  // each rerun reuses the shared messagesByThread cache and
+  // is safe even when the user is already viewing the same
+  // thread.
+  useEffect(() => {
+    const threadId = searchParams.get('thread');
+    if (!threadId || !auth.isAuthenticated) return;
+    const tid = parseInt(threadId, 10);
+    if (isNaN(tid)) return;
+    let cancelled = false;
+    (async () => {
+      if (cancelled) return;
+      try {
+        const store = useMessagingStore.getState();
+        await store.openThread(tid);
+      } catch (e) {
+        console.warn('[messages] auto-open thread (by id) failed', e);
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, auth.isAuthenticated, isConnected]);
+
   if (!mounted || !auth.isAuthenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center">

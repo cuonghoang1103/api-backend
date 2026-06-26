@@ -120,12 +120,22 @@ function timeAgo(iso: string): string {
 /** Pick a target URL for a notification. We deep-link to the
  *  entity wherever possible; fall back to the social feed. */
 function targetUrl(n: SocialNotification): string {
-  if (n.type === 'NEW_MESSAGE') return '/messages';
+  if (n.type === 'NEW_MESSAGE') {
+    // Backend reserves threadId for NEW_MESSAGE but the existing
+    // REST endpoint doesn't surface it today. If the row carries
+    // one (e.g. an older payload or a future server fix), use it
+    // to deep-link straight into the right conversation; otherwise
+    // fall back to the messages inbox. Either way the user lands
+    // in the messenger, not on the home page.
+    if (n.threadId) return `/messages?thread=${n.threadId}`;
+    if (n.entityId) return `/messages?thread=${n.entityId}`;
+    return '/messages';
+  }
   if (n.entityId) {
     // entityId for social posts/comments is the post id we
-    // store on SocialNotification. Defer to the feed; the
-    // PostCard id-pinning logic could later add a deep-link
-    // with `?post=N` so the user lands on the right card.
+    // store on SocialNotification. The /app (home) page reads
+    // ?post=N and scrolls the matching card into view, so the
+    // user lands on the right card.
     return `/?post=${n.entityId}`;
   }
   return '/';

@@ -809,6 +809,11 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
       // utility class (see globals.css) which uses a cheap inset
       // box-shadow that lives entirely on the GPU compositor.
       className="post-card-frame group relative overflow-hidden rounded-3xl"
+      // data-post-id lets the home page deep-link from a
+      // notification (?post=N) to a specific card via querySelector
+      // + scrollIntoView. Bounded: zero perf cost, the value is
+      // already on the post object.
+      data-post-id={post.id}
       style={{
         background: 'rgba(255,255,255,0.03)',
         border: '1px solid rgba(255,255,255,0.08)',

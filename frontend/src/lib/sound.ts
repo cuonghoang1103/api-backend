@@ -226,3 +226,31 @@ export function invalidateCustomSoundCache(kind?: SoundKind): void {
 export function isContextReady(): boolean {
   return ctxReady;
 }
+
+/** Pause every cached <audio> element immediately. Used by the
+ *  master mute toggle — when the user flips the switch off we
+ *  stop whatever is currently playing, not just suppress the next
+ *  play(). The cache is preserved so flipping the switch back on
+ *  resumes the same audio instances. */
+export function stopAll(): void {
+  for (const k of Object.keys(cache) as SoundKind[]) {
+    const c = cache[k];
+    if (!c) continue;
+    try { c.element.pause(); } catch { /* ignore */ }
+    try { c.element.currentTime = 0; } catch { /* ignore */ }
+  }
+}
+
+/** Update the live volume of every cached <audio> element. We
+ *  apply the value to BOTH default and custom sources so the
+ *  slider in /settings/notifications takes effect on a sound
+ *  that's already mid-play (the previous behaviour only changed
+ *  the volume for the NEXT playSound call). */
+export function applyVolume(volume: number): void {
+  const v = Math.max(0, Math.min(1, volume));
+  for (const k of Object.keys(cache) as SoundKind[]) {
+    const c = cache[k];
+    if (!c) continue;
+    try { c.element.volume = v; } catch { /* ignore */ }
+  }
+}

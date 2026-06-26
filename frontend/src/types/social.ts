@@ -185,6 +185,15 @@ export interface SocialNotification {
   type: NotificationType;
   entityId: number | null;
   secondaryEntityId: number | null;
+  /**
+   * Thread id for NEW_MESSAGE notifications. The backend doesn't
+   * emit NEW_MESSAGE today but the field is reserved for when it
+   * does, so the dropdown can deep-link straight to the right
+   * conversation. Optional because the existing /api/v1/messages/
+   * notifications endpoint doesn't surface it; treat undefined as
+   * 'unknown' and fall back to /messages without a thread query.
+   */
+  threadId?: number | null;
   payload: { type?: string; parentCommentId?: number; [k: string]: unknown } | null;
   isRead: boolean;
   createdAt: string;

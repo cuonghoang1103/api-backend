@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useCallback, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useSocialStore } from '@/store/socialStore';
 import { useSocialFeed, useInvalidateFeed, useFeedCounts } from '@/hooks/useSocialQueries';
 import { PostComposer } from '@/components/social/PostComposer';
@@ -87,6 +88,56 @@ export default function SocialPage() {
     window.addEventListener('social:filter-hashtag', handler as EventListener);
     return () => window.removeEventListener('social:filter-hashtag', handler as EventListener);
   }, []);
+
+  // Notification deep-link: ?post=N scrolls the matching PostCard
+  // into view. We wait one extra frame after the posts array
+  // updates so the new DOM nodes are mounted before we query for
+  // them. The cleanup removes the ?post query so the page
+  // doesn't re-trigger the scroll on every subsequent
+  // useState/useReducer that touches `posts` (e.g. socket
+  // appends a new post, which would otherwise cause a jump).
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const postId = searchParams.get('post');
+    if (!postId) return;
+    const tid = Number(postId);
+    if (!Number.isFinite(tid)) return;
+    // Wait two frames: one for React to commit the post nodes,
+    // one for any layout/image-loading that might shift scrollHeight.
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = document.querySelector<HTMLElement>(
+          `[data-post-id="${tid}"]`,
+        );
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Brief highlight so the user sees what was opened.
+          el.classList.add('ring-2', 'ring-violet-500/60', 'transition');
+          window.setTimeout(() => {
+            el.classList.remove('ring-2', 'ring-violet-500/60');
+          }, 1800);
+        }
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf);
+      // Strip ?post from the URL after the scroll so a later
+      // socket append (which would re-run the effect) doesn't
+      // jump the user back to the old post.
+      try {
+        const url = new URL(window.location.href);
+        if (url.searchParams.get('post') === String(tid)) {
+          url.searchParams.delete('post');
+          window.history.replaceState({}, '', url.toString());
+        }
+      } catch { /* ignore */ }
+    };
+    // We intentionally depend on `posts` length so the effect
+    // re-runs when the feed arrives and the target post is
+    // mounted. We do NOT depend on `posts` reference identity
+    // because socket appends would otherwise cause re-scrolls.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, posts.length]);
 
   // Phase 5 home upgrade: subscribe to feed:has-new pings so we
   // can show the "X bài viết mới" banner. The page calls the

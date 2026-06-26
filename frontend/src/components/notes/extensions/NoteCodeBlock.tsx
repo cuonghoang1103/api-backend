@@ -191,6 +191,42 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
     setIsEditing(false);
   }, []);
 
+  // Native keydown listener on the wrapper DOM node. The
+  // wrapper's React `onKeyDown` prop is bound to the wrapper's
+  // DOM node, but React's synthetic events are attached at the
+  // root and dispatched via delegation. In practice the events
+  // DO bubble up, but ProseMirror (the Tiptap view underneath)
+  // attaches its own listeners on the editable DOM tree and is
+  // known to call stopPropagation in some cases — e.g. on Tab /
+  // Arrow keys, on Escape inside certain node types — so the
+  // wrapper-level React handler can miss the event entirely.
+  // The user reported 'I press Escape and the code block won't
+  // exit edit mode' — so we attach a NATIVE keydown listener
+  // directly on the wrapper DOM node via ref + useEffect. This
+  // bypasses both React's synthetic dispatch and ProseMirror's
+  // capture phase. Same pattern Notion / Linear use for
+  // editor-wide shortcuts.
+  useEffect(() => {
+    const node = wrapperRef.current;
+    if (!node) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (!isEditing) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        // stopPropagation so the editor's other listeners (e.g.
+        // SlashMenu's window-level Esc listener on line 159)
+        // don't also fire on this same Escape. The user is
+        // exiting edit mode, not closing a popup menu.
+        e.stopPropagation();
+        exitEdit();
+      }
+    };
+    node.addEventListener('keydown', onKey);
+    return () => {
+      node.removeEventListener('keydown', onKey);
+    };
+  }, [isEditing, exitEdit]);
+
   // Toggle on click. Click on the toolbar (language picker / delete
   // button) must NOT trigger edit mode — those stopPropagation so
   // the click handler doesn't see them.

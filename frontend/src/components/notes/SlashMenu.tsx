@@ -184,7 +184,29 @@ const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor }, ref) => {
           key={it.label}
           role="option"
           aria-selected={i === active}
-          onMouseDown={(e) => { e.preventDefault(); it.run(editor); setOpen(false); }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            it.run(editor);
+            setOpen(false);
+            // Restore focus to the editor after picking. Some
+            // commands (e.g. toggleHeading, toggleCodeBlock)
+            // already refocus internally, but a few (insertContent,
+            // insertTable, setHorizontalRule) do not — and even the
+            // ones that do can lose focus when the slash menu DOM
+            // is unmounted in the same tick. Without an explicit
+            // focus() call here the user's next keystroke lands
+            // on document.body, the editor's `onUpdate` never fires,
+            // and the slash menu cannot be re-opened by typing "/"
+            // — the user reported exactly this symptom ('after I
+            // pick a function the slash menu won't come back').
+            // The focus call is bounded (only one refocused node)
+            // and runs synchronously after the command, which keeps
+            // selection-caret behaviour identical to the inline
+            // "/" insertion path.
+            requestAnimationFrame(() => {
+              try { editor.commands.focus(); } catch { /* ignore */ }
+            });
+          }}
           onMouseEnter={() => setActive(i)}
           className={`flex w-full items-center justify-between gap-3 rounded-md px-2.5 py-1.5 text-left text-[13px] ${i === active ? 'bg-teal-100 dark:bg-teal-500/15 text-teal-800 dark:text-teal-100' : 'text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:bg-white/5'}`}
         >

@@ -221,7 +221,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
   return (
     <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
       {/* Save status */}
-      <div className="mb-3 flex h-5 items-center gap-1.5 text-[11px] text-slate-500">
+      <div className="mb-3 flex h-5 items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-500">
         {saveState === 'saving' && (<><Loader2 className="h-3 w-3 animate-spin" /> Đang lưu…</>)}
         {saveState === 'saved' && (<><Check className="h-3 w-3 text-teal-400" /> Đã lưu</>)}
         {saveState === 'error' && (<span className="flex items-center gap-1.5 text-amber-400"><CloudOff className="h-3 w-3" /> Lưu thất bại — sẽ thử lại khi bạn gõ tiếp</span>)}
@@ -234,7 +234,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
         onChange={(e) => { setTitle(e.target.value); queueSave({ title: e.target.value }); }}
         placeholder="Tiêu đề ghi chú"
         // text-base (16px) avoids iOS focus auto-zoom on mobile.
-        className="w-full bg-transparent text-2xl sm:text-3xl font-semibold tracking-tight text-slate-100 placeholder:text-slate-600 focus:outline-none"
+        className="w-full bg-transparent text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none"
       />
 
       {/* Phase 3d — flag toggles. Each is a one-click optimistic
@@ -271,13 +271,13 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
             onSave({ isArchived: next });
           }}
           icon={<Archive className="h-3.5 w-3.5" />}
-          activeIcon={<Archive className="h-3.5 w-3.5 text-slate-300" />}
+          activeIcon={<Archive className="h-3.5 w-3.5 text-slate-700 dark:text-slate-300" />}
           label="Lưu trữ"
-          activeClass="border-slate-400/40 bg-slate-400/15 text-slate-100"
+          activeClass="border-slate-400/40 bg-slate-400/15 text-slate-900 dark:text-slate-100"
         />
       </div>
 
-      <div className="my-4 h-px w-full bg-white/[0.06]" />
+      <div className="my-4 h-px w-full bg-slate-100 dark:bg-white/[0.06]" />
 
       {/* Auto-generated table of contents (only renders when headings exist). */}
       <NoteTableOfContents editor={editor} />
@@ -294,14 +294,14 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
           editor={editor}
           tippyOptions={{ placement: 'top', duration: 120 }}
           shouldShow={({ editor: ed }) => ed.isActive('table')}
-          className="flex items-center gap-1 rounded-lg border border-white/10 bg-slate-900/95 p-1 shadow-2xl backdrop-blur"
+          className="flex items-center gap-1 rounded-lg border border-slate-300 dark:border-white/10 bg-white dark:bg-slate-900/95 p-1 shadow-2xl backdrop-blur"
         >
           <button
             type="button"
             onClick={() => editor.chain().focus().addRowAfter().run()}
             aria-label="Thêm hàng"
             title="Thêm hàng"
-            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10"
+            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-700 dark:text-slate-300 hover:bg-white/10"
           >
             <Plus className="h-3 w-3" /> Hàng
           </button>
@@ -310,7 +310,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
             onClick={() => editor.chain().focus().addColumnAfter().run()}
             aria-label="Thêm cột"
             title="Thêm cột"
-            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10"
+            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-700 dark:text-slate-300 hover:bg-white/10"
           >
             <Plus className="h-3 w-3" /> Cột
           </button>
@@ -320,7 +320,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
             onClick={() => editor.chain().focus().deleteRow().run()}
             aria-label="Xóa hàng"
             title="Xóa hàng"
-            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10"
+            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-700 dark:text-slate-300 hover:bg-white/10"
           >
             <Minus className="h-3 w-3" /> Hàng
           </button>
@@ -329,7 +329,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
             onClick={() => editor.chain().focus().deleteColumn().run()}
             aria-label="Xóa cột"
             title="Xóa cột"
-            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10"
+            className="flex items-center gap-1 rounded px-2 py-1 text-[11px] text-slate-700 dark:text-slate-300 hover:bg-white/10"
           >
             <Minus className="h-3 w-3" /> Cột
           </button>
@@ -375,8 +375,8 @@ function FlagButton({
       aria-pressed={active}
       className={`flex min-h-[30px] items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
         active
-          ? activeClass ?? 'border-amber-500/40 bg-amber-500/15 text-amber-100'
-          : 'border-white/10 bg-white/[0.02] text-slate-400 hover:border-white/20 hover:bg-white/[0.05] hover:text-slate-200'
+          ? activeClass ?? 'border-amber-500/40 bg-amber-100 dark:bg-amber-500/15 text-amber-100'
+          : 'border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/[0.02] text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:border-white/20 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200'
       }`}
       title={label}
     >

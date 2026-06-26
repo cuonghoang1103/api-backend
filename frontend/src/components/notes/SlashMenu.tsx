@@ -177,7 +177,7 @@ const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor }, ref) => {
       ref={ref_div}
       role="listbox"
       style={{ position: 'absolute', top: pos.top, left: pos.left, zIndex: 60 }}
-      className="w-64 max-h-72 overflow-y-auto rounded-lg border border-white/[0.08] bg-slate-900/95 p-1 shadow-2xl backdrop-blur"
+      className="w-64 max-h-72 overflow-y-auto rounded-lg border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/95 p-1 shadow-2xl backdrop-blur"
     >
       {items.map((it, i) => (
         <button
@@ -186,10 +186,10 @@ const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor }, ref) => {
           aria-selected={i === active}
           onMouseDown={(e) => { e.preventDefault(); it.run(editor); setOpen(false); }}
           onMouseEnter={() => setActive(i)}
-          className={`flex w-full items-center justify-between gap-3 rounded-md px-2.5 py-1.5 text-left text-[13px] ${i === active ? 'bg-teal-500/15 text-teal-100' : 'text-slate-200 hover:bg-white/5'}`}
+          className={`flex w-full items-center justify-between gap-3 rounded-md px-2.5 py-1.5 text-left text-[13px] ${i === active ? 'bg-teal-100 dark:bg-teal-500/15 text-teal-800 dark:text-teal-100' : 'text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:bg-white/5'}`}
         >
           <span className="font-medium">{it.label}</span>
-          <span className="truncate text-[11px] text-slate-500">{it.hint}</span>
+          <span className="truncate text-[11px] text-slate-500 dark:text-slate-500">{it.hint}</span>
         </button>
       ))}
     </div>

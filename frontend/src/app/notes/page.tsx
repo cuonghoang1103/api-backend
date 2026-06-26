@@ -8,7 +8,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown } from 'lucide-react';
+import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon } from 'lucide-react';
 import { notesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import type { NoteSubjectTree, NoteRecent, NoteFull, NoteSubjectFull } from '@/types';
@@ -20,9 +20,23 @@ import FlashcardReview from '@/components/notes/FlashcardReview';
 import SubjectView from '@/components/notes/SubjectView';
 import NotesSearch from '@/components/notes/NotesSearch';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
+import { NotesThemeProvider, useNotesTheme } from '@/components/notes/NotesThemeProvider';
 
 export default function NotesPage() {
+  // Wrap với theme provider để tất cả component con (sidebar,
+  // editor, search, modal, ...) có thể đọc theme qua hook
+  // useNotesTheme() và Tailwind utility `dark:` hoạt động
+  // đúng nhờ class `dark` được thêm vào root wrapper.
+  return (
+    <NotesThemeProvider>
+      <NotesPageInner />
+    </NotesThemeProvider>
+  );
+}
+
+function NotesPageInner() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const { theme, toggleTheme } = useNotesTheme();
   const [tree, setTree] = useState<NoteSubjectTree[]>([]);
   const [recent, setRecent] = useState<NoteRecent[]>([]);
   const [selected, setSelected] = useState<NoteFull | null>(null);
@@ -302,25 +316,40 @@ export default function NotesPage() {
   );
 
   return (
-    <div className="h-[100dvh] bg-[#0c0f14] pt-16 text-slate-200">
+    <div className="notes-page h-[100dvh] bg-slate-50 pt-16 text-slate-800 dark:bg-[#0c0f14] dark:text-slate-200">
       <div className="flex h-full">
         {/* Desktop sidebar */}
-        <aside className="hidden w-72 shrink-0 border-r border-white/[0.06] bg-[#0e1218] md:block">
+        <aside className="hidden w-72 shrink-0 border-r border-slate-200 bg-white md:block dark:border-white/[0.06] dark:bg-[#0e1218]">
           {sidebar}
         </aside>
 
         {/* Editor pane */}
         <main className="relative min-w-0 flex-1 overflow-y-auto pb-24 sm:pb-0">
           {/* Toolbar (search always; menu + resources contextual) */}
-          <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-white/[0.06] bg-[#0c0f14]/90 px-3 py-2 backdrop-blur">
-            <button onClick={() => setDrawerOpen(true)} className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-300 hover:bg-white/[0.05] md:hidden" aria-label="Mở danh sách">
+          <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-slate-200 bg-white/90 px-3 py-2 backdrop-blur dark:border-white/[0.06] dark:bg-[#0c0f14]/90">
+            <button onClick={() => setDrawerOpen(true)} className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05] md:hidden" aria-label="Mở danh sách">
               <Menu className="h-5 w-5" />
             </button>
-            <button onClick={() => setSearchOpen(true)} className="flex min-h-[36px] items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-1.5 text-[13px] text-slate-400 hover:bg-white/[0.05] hover:text-slate-200">
+            <button onClick={() => setSearchOpen(true)} className="flex min-h-[36px] items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-[13px] text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:border-white/[0.06] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/[0.05] dark:hover:text-slate-200">
               <Search className="h-4 w-4" /> <span className="hidden sm:inline">Tìm kiếm</span>
-              <kbd className="ml-1 hidden rounded bg-white/[0.06] px-1.5 text-[10px] text-slate-500 md:inline">⌘K</kbd>
+              <kbd className="ml-1 hidden rounded bg-slate-200 px-1.5 text-[10px] text-slate-500 dark:bg-white/[0.06] md:inline">⌘K</kbd>
             </button>
             <div className="flex-1" />
+            {/* Theme toggle — đổi giữa nền sáng / tối. Lưu vào
+                localStorage để lần sau mở trang nhớ lại lựa chọn.
+                Hiển thị cả khi chưa chọn note nào. */}
+            <button
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Chuyển sang nền sáng' : 'Chuyển sang nền tối'}
+              aria-label={theme === 'dark' ? 'Chuyển sang nền sáng' : 'Chuyển sang nền tối'}
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05]"
+            >
+              {theme === 'dark' ? (
+                <Sun className="h-[18px] w-[18px]" />
+              ) : (
+                <Moon className="h-[18px] w-[18px]" />
+              )}
+            </button>
             {selected && (
               <>
                 <button
@@ -328,11 +357,11 @@ export default function NotesPage() {
                   disabled={pdfBusy}
                   title="Xuất PDF"
                   aria-label="Xuất PDF"
-                  className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-300 hover:bg-white/[0.05] disabled:opacity-50"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 disabled:opacity-50 dark:text-slate-300 dark:hover:bg-white/[0.05]"
                 >
                   <FileDown className="h-[18px] w-[18px]" />
                 </button>
-                <button onClick={() => setResourceOpen(true)} title="Tệp & liên kết" className="relative flex h-10 w-10 items-center justify-center rounded-lg text-slate-300 hover:bg-white/[0.05]" aria-label="Tệp & liên kết">
+                <button onClick={() => setResourceOpen(true)} title="Tệp & liên kết" className="relative flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05]" aria-label="Tệp & liên kết">
                   <Paperclip className="h-[18px] w-[18px]" />
                   {(() => {
                     // Defence-in-depth: child collections should always be
@@ -373,11 +402,11 @@ export default function NotesPage() {
             <motion.aside
               initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
               transition={{ type: 'spring', stiffness: 380, damping: 36 }}
-              className="fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm overflow-y-auto border-l border-white/[0.06] bg-[#0e1218] pt-16"
+              className="fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm overflow-y-auto border-l border-slate-200 bg-white pt-16 dark:border-white/[0.06] dark:bg-[#0e1218]"
             >
-              <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3">
+              <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 dark:border-white/[0.06]">
                 <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Tài nguyên</h2>
-                <button onClick={() => setResourceOpen(false)} className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05]" aria-label="Đóng"><X className="h-4 w-4" /></button>
+                <button onClick={() => setResourceOpen(false)} className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/[0.05]" aria-label="Đóng"><X className="h-4 w-4" /></button>
               </div>
               <div className="space-y-6 p-4">
                 <NoteResourcePanel parent={{ noteId: selected.id }} attachments={selected.attachments} links={selected.links} onChanged={refreshSelected} />
@@ -388,7 +417,7 @@ export default function NotesPage() {
                     </h3>
                     <button
                       onClick={() => { setResourceOpen(false); setReviewOpen(true); }}
-                      className="flex items-center gap-1.5 rounded-md border border-teal-500/30 bg-teal-500/10 px-2 py-1 text-[11px] font-medium text-teal-200 hover:bg-teal-500/20"
+                      className="flex items-center gap-1.5 rounded-md border border-teal-500/30 bg-teal-500/10 px-2 py-1 text-[11px] font-medium text-teal-700 hover:bg-teal-500/20 dark:text-teal-200"
                       aria-label="Ôn tập thẻ"
                     >
                       <GraduationCap className="h-3 w-3" /> Ôn tập
@@ -407,7 +436,7 @@ export default function NotesPage() {
         {reviewOpen && selected && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex flex-col bg-[#0a0e14]"
+            className="fixed inset-0 z-[60] flex flex-col bg-slate-50 dark:bg-[#0a0e14]"
             role="dialog" aria-modal="true" aria-label="Ôn tập thẻ"
           >
             <FlashcardReview noteId={selected.id} onClose={() => setReviewOpen(false)} />
@@ -425,7 +454,7 @@ export default function NotesPage() {
  <motion.aside
  initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
  transition={{ type: 'spring', stiffness: 380, damping: 36 }}
- className="fixed inset-y-0 left-0 z-50 w-[82%] max-w-xs border-r border-white/[0.06] bg-[#0e1218] pt-16 md:hidden"
+ className="fixed inset-y-0 left-0 z-50 w-[82%] max-w-xs border-r border-slate-200 bg-white pt-16 dark:border-white/[0.06] dark:bg-[#0e1218] md:hidden"
  >
   <NotesSidebar
    tree={tree}

@@ -116,13 +116,13 @@ function MathView({ node }: NodeViewProps) {
       as={mode === 'block' ? 'div' : 'span'}
       data-type={mode === 'block' ? 'math-block' : 'math-inline'}
       className={mode === 'block'
-        ? 'my-3 block overflow-x-auto rounded-md border border-white/[0.06] bg-slate-900/40 p-3 text-center'
-        : 'inline-block max-w-full align-baseline rounded bg-white/[0.04] px-1'}
+        ? 'my-3 block overflow-x-auto rounded-md border border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-slate-900/40 p-3 text-center'
+        : 'inline-block max-w-full align-baseline rounded bg-slate-100 dark:bg-white/[0.04] px-1'}
     >
       {ready ? (
         <span dangerouslySetInnerHTML={{ __html: html }} />
       ) : (
-        <span className="inline-flex items-center gap-1 font-mono text-[12px] text-slate-500">
+        <span className="inline-flex items-center gap-1 font-mono text-[12px] text-slate-500 dark:text-slate-500">
           <Sigma className="h-3 w-3" />
           {tex || '...'}
         </span>

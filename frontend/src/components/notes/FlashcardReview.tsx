@@ -144,7 +144,7 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center text-slate-400">
+      <div className="flex h-full items-center justify-center text-slate-600 dark:text-slate-400">
         <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Đang tải bộ thẻ…
       </div>
     );
@@ -155,9 +155,9 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
   if (!deck || total === 0) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
-        <GraduationCap className="h-8 w-8 text-slate-500" />
-        <p className="text-sm text-slate-400">Chưa có từ vựng nào trong ghi chú này.</p>
-        <button onClick={onClose} className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-slate-300 hover:bg-white/5">Đóng</button>
+        <GraduationCap className="h-8 w-8 text-slate-500 dark:text-slate-500" />
+        <p className="text-sm text-slate-600 dark:text-slate-400">Chưa có từ vựng nào trong ghi chú này.</p>
+        <button onClick={onClose} className="rounded-lg border border-slate-300 dark:border-white/10 px-3 py-1.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-white/5">Đóng</button>
       </div>
     );
   }
@@ -167,31 +167,31 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-3">
-        <div className="flex items-center gap-2 text-sm text-slate-300">
+      <header className="flex items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.06] px-4 py-3">
+        <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
           <GraduationCap className="h-4 w-4 text-teal-400" />
           <span className="font-semibold">Ôn tập thẻ</span>
-          <span className="text-xs text-slate-500">· {done}/{total} đã thuộc</span>
+          <span className="text-xs text-slate-500 dark:text-slate-500">· {done}/{total} đã thuộc</span>
         </div>
         <div className="flex items-center gap-1">
           <button
             onClick={resetAll}
             disabled={busy}
-            className="flex h-9 items-center gap-1 rounded-lg px-2 text-xs text-slate-400 hover:bg-white/[0.05] hover:text-slate-200 disabled:opacity-50"
+            className="flex h-9 items-center gap-1 rounded-lg px-2 text-xs text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200 disabled:opacity-50"
             aria-label="Đặt lại toàn bộ"
           >
             <RefreshCcw className="h-3.5 w-3.5" /> Đặt lại
           </button>
           <button
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05]"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05]"
             aria-label="Đóng"
           >×</button>
         </div>
       </header>
 
       {/* Progress bar */}
-      <div className="h-1 w-full bg-white/[0.04]">
+      <div className="h-1 w-full bg-slate-100 dark:bg-white/[0.04]">
         <div className="h-full bg-teal-500/70 transition-all" style={{ width: `${progressPct}%` }} />
       </div>
 
@@ -208,36 +208,36 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
           <div className="flashcard__inner">
             {/* Front */}
             <div className="flashcard__face flashcard__face--front">
-              <div className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Mặt trước</div>
-              <div className="mt-3 text-3xl font-semibold leading-tight text-slate-100 sm:text-4xl">
+              <div className="text-[11px] uppercase tracking-[0.18em] text-slate-500 dark:text-slate-500">Mặt trước</div>
+              <div className="mt-3 text-3xl font-semibold leading-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
                 {current.term}
               </div>
               {current.reading && (
                 <button
                   onClick={(e) => { e.stopPropagation(); void speak(current); }}
-                  className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-xs text-slate-300 hover:bg-white/5"
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-slate-300 dark:border-white/10 px-2.5 py-1 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-white/5"
                   aria-label="Phát âm"
                 >
                   <Volume2 className="h-3.5 w-3.5" /> {current.reading}
                 </button>
               )}
-              <div className="mt-auto text-xs text-slate-500">Nhấn để lật · phím cách</div>
+              <div className="mt-auto text-xs text-slate-500 dark:text-slate-500">Nhấn để lật · phím cách</div>
             </div>
             {/* Back */}
             <div className="flashcard__face flashcard__face--back">
-              <div className="text-[11px] uppercase tracking-[0.18em] text-teal-300">Mặt sau</div>
-              <div className="mt-3 text-2xl font-semibold text-slate-100 sm:text-3xl">
-                {current.meaning || <span className="italic text-slate-500">(chưa có nghĩa)</span>}
+              <div className="text-[11px] uppercase tracking-[0.18em] text-teal-600 dark:text-teal-300">Mặt sau</div>
+              <div className="mt-3 text-2xl font-semibold text-slate-900 dark:text-slate-100 sm:text-3xl">
+                {current.meaning || <span className="italic text-slate-500 dark:text-slate-500">(chưa có nghĩa)</span>}
               </div>
               {current.reading && (
-                <div className="mt-2 text-sm text-slate-400">{current.reading}</div>
+                <div className="mt-2 text-sm text-slate-600 dark:text-slate-400">{current.reading}</div>
               )}
               {current.example && (
-                <div className="mt-3 max-w-md rounded-lg border border-white/10 bg-white/[0.03] p-3 text-left text-sm italic text-slate-300">
+                <div className="mt-3 max-w-md rounded-lg border border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/[0.03] p-3 text-left text-sm italic text-slate-700 dark:text-slate-300">
                   {current.example}
                 </div>
               )}
-              <div className="mt-auto text-xs text-slate-500">Đánh dấu bên dưới · phím 1 / 2</div>
+              <div className="mt-auto text-xs text-slate-500 dark:text-slate-500">Đánh dấu bên dưới · phím 1 / 2</div>
             </div>
           </div>
         </div>
@@ -252,18 +252,18 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
       )}
 
       {/* Controls */}
-      <footer className="border-t border-white/[0.06] px-4 py-3">
+      <footer className="border-t border-slate-200 dark:border-white/[0.06] px-4 py-3">
         <div className="mx-auto flex max-w-md items-center justify-between gap-2">
           <button
             onClick={goPrev}
             disabled={index === 0}
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 text-slate-300 hover:bg-white/5 disabled:opacity-40"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-white/5 disabled:opacity-40"
             aria-label="Thẻ trước"
           ><ArrowLeft className="h-5 w-5" /></button>
 
           <button
             onClick={() => setFlipped((f) => !f)}
-            className="flex h-11 items-center gap-2 rounded-lg border border-white/10 px-4 text-sm text-slate-200 hover:bg-white/5"
+            className="flex h-11 items-center gap-2 rounded-lg border border-slate-300 dark:border-white/10 px-4 text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:bg-white/5"
             aria-label="Lật thẻ"
           >
             <RotateCw className="h-4 w-4" /> Lật
@@ -281,7 +281,7 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
           <button
             onClick={() => void grade(true)}
             disabled={busy}
-            className="flex h-11 items-center gap-1.5 rounded-lg border border-teal-500/30 bg-teal-500/10 px-3 text-sm text-teal-200 hover:bg-teal-500/20 disabled:opacity-50"
+            className="flex h-11 items-center gap-1.5 rounded-lg border border-teal-500/30 bg-teal-100 dark:bg-teal-500/10 px-3 text-sm text-teal-700 dark:text-teal-200 hover:bg-teal-100 dark:bg-teal-500/20 disabled:opacity-50"
             aria-label="Đã thuộc"
           >
             <Check className="h-4 w-4" /> Đã thuộc
@@ -290,11 +290,11 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
           <button
             onClick={goNext}
             disabled={index >= total - 1}
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 text-slate-300 hover:bg-white/5 disabled:opacity-40"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-white/5 disabled:opacity-40"
             aria-label="Thẻ tiếp"
           ><ArrowRight className="h-5 w-5" /></button>
         </div>
-        <p className="mt-2 text-center text-[11px] text-slate-500">
+        <p className="mt-2 text-center text-[11px] text-slate-500 dark:text-slate-500">
           {index + 1} / {total} · đã thuộc {done}
         </p>
       </footer>

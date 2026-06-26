@@ -36,7 +36,7 @@ import { Code, Trash2 } from 'lucide-react';
 // which lets CodeBlock's useEffect-driven Shiki work run.
 const CodeBlock = dynamic(() => import('@/components/markdown/CodeBlock'), {
   loading: () => (
-    <pre className="my-3 overflow-x-auto rounded-lg border border-white/[0.06] bg-slate-900/60 p-4 font-mono text-[13px] text-slate-300">
+    <pre className="my-3 overflow-x-auto rounded-lg border border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-slate-900/60 p-4 font-mono text-[13px] text-slate-700 dark:text-slate-300">
       <code>Đang tải trình highlight…</code>
     </pre>
   ),
@@ -132,19 +132,19 @@ function CodeBlockView({ node, updateAttributes, editor }: NodeViewProps) {
 
   return (
     <NodeViewWrapper className="my-3" data-type="code-block">
-      <div className="overflow-hidden rounded-lg border border-white/[0.08] bg-slate-900/60">
+      <div className="overflow-hidden rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-slate-900/60">
         {isEditable && (
-          <div className="flex items-center justify-between gap-2 border-b border-white/[0.06] bg-slate-900/40 px-2 py-1">
-            <div className="flex items-center gap-1 text-[11px] text-slate-500">
+          <div className="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-slate-900/40 px-2 py-1">
+            <div className="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-500">
               <Code className="h-3 w-3" />
               <select
                 value={language}
                 onChange={(e) => updateAttributes({ language: e.target.value })}
-                className="rounded border border-white/10 bg-transparent px-1 py-0.5 text-[11px] text-slate-300 focus:outline-none"
+                className="rounded border border-slate-300 dark:border-white/10 bg-transparent px-1 py-0.5 text-[11px] text-slate-700 dark:text-slate-300 focus:outline-none"
                 aria-label="Ngôn ngữ"
               >
                 {NOTE_CODE_LANGS.map((l) => (
-                  <option key={l.value} value={l.value} className="bg-slate-900">{l.label}</option>
+                  <option key={l.value} value={l.value} className="bg-white dark:bg-slate-900">{l.label}</option>
                 ))}
               </select>
             </div>
@@ -153,7 +153,7 @@ function CodeBlockView({ node, updateAttributes, editor }: NodeViewProps) {
               onClick={() => editor.chain().focus().deleteNode('codeBlock').run()}
               aria-label="Xóa code block"
               title="Xóa code block"
-              className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] text-slate-500 hover:bg-red-500/15 hover:text-red-300"
+              className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] text-slate-500 dark:text-slate-500 hover:bg-red-500/15 hover:text-red-300"
             >
               <Trash2 className="h-3 w-3" />
               <span>Xóa</span>

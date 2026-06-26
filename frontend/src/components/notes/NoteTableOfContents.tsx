@@ -43,8 +43,8 @@ export default function NoteTableOfContents({ editor }: Props) {
   if (headings.length === 0) return null;
 
   return (
-    <nav aria-label="Mục lục" className="my-4 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
-      <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+    <nav aria-label="Mục lục" className="my-4 rounded-lg border border-slate-200 dark:border-white/[0.06] bg-slate-100 dark:bg-white/[0.02] p-3">
+      <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-500">
         <List className="h-3.5 w-3.5" /> Mục lục
       </div>
       <ol className="space-y-0.5">
@@ -60,7 +60,7 @@ export default function NoteTableOfContents({ editor }: Props) {
                   if (dom instanceof HTMLElement) dom.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } catch { /* ignore */ }
               }}
-              className="block w-full truncate text-left text-[12.5px] text-slate-300 hover:text-teal-300"
+              className="block w-full truncate text-left text-[12.5px] text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-300"
             >
               {h.text}
             </button>

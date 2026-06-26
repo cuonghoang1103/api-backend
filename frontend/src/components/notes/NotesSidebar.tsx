@@ -121,11 +121,11 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
   <div className="flex h-full flex-col text-sm">
       {/* Header */}
       <div className="flex items-center justify-between px-3 pt-3 pb-2">
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Sổ tay</h2>
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-500">Sổ tay</h2>
         <div className="flex items-center gap-1">
           <button
             onClick={cb.onAddSubject}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05] hover:text-teal-300 sm:h-7 sm:w-7"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-teal-600 dark:hover:text-teal-300 sm:h-7 sm:w-7"
             title="Thêm môn học"
             aria-label="Thêm môn học"
           >
@@ -134,7 +134,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
           {onClose && (
             <button
               onClick={onClose}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05] hover:text-slate-200 md:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200 md:hidden"
               title="Đóng"
               aria-label="Đóng"
             >
@@ -158,7 +158,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
         {/* Recent rail */}
         {recent.length > 0 && (
           <div className="mb-2 px-1.5">
-            <div className="mb-1 flex items-center gap-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
+            <div className="mb-1 flex items-center gap-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-500 dark:text-slate-600">
               <Clock className="h-3 w-3" /> Gần đây
             </div>
             {recent.slice(0, 5).map((n) => (
@@ -166,19 +166,19 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
                 key={`r-${n.id}`}
                 onClick={() => cb.onSelectNote(n.id)}
                 className={`flex w-full items-center gap-2 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] min-h-[36px] ${
-                  selectedNoteId === n.id ? 'bg-teal-500/10 text-teal-200' : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'
+                  selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 {n.isPinned ? <Pin className="h-3 w-3 shrink-0 text-amber-400" /> : <FileText className="h-3 w-3 shrink-0 opacity-60" />}
                 <span className="truncate">{n.title || 'Không có tiêu đề'}</span>
               </button>
             ))}
-            <div className="my-2 h-px bg-white/[0.05]" />
+            <div className="my-2 h-px bg-slate-100 dark:bg-white/[0.05]" />
           </div>
         )}
 
   {tree.length === 0 && filter === 'tree' && (
-  <div className="px-3 py-10 text-center text-xs text-slate-600">
+  <div className="px-3 py-10 text-center text-xs text-slate-500 dark:text-slate-500 dark:text-slate-600">
   <BookOpen className="mx-auto mb-2 h-6 w-6 opacity-40" />
   Chưa có môn học nào.<br />Nhấn <span className="text-teal-400">+</span> để tạo môn đầu tiên.
   </div>
@@ -189,14 +189,14 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
       matching notes in a single column. */}
   {filter !== 'tree' && (
     <div className="mb-2 px-1.5">
-      <div className="mb-1 flex items-center gap-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
+      <div className="mb-1 flex items-center gap-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-500 dark:text-slate-600">
         {filter === 'favorites' && (<><Star className="h-3 w-3" /> Yêu thích</>)}
         {filter === 'archive' && (<><Archive className="h-3 w-3" /> Lưu trữ</>)}
         {filter === 'needs-review' && (<><AlertCircle className="h-3 w-3" /> Cần ôn</>)}
-        <span className="ml-auto text-slate-500">{filteredNotes.length}</span>
+        <span className="ml-auto text-slate-500 dark:text-slate-500">{filteredNotes.length}</span>
       </div>
       {filteredNotes.length === 0 ? (
-        <div className="px-3 py-6 text-center text-[12px] text-slate-600">
+        <div className="px-3 py-6 text-center text-[12px] text-slate-500 dark:text-slate-500 dark:text-slate-600">
           {filter === 'favorites' && 'Chưa đánh dấu ghi chú nào.'}
           {filter === 'archive' && 'Không có ghi chú trong lưu trữ.'}
           {filter === 'needs-review' && 'Không có ghi chú cần ôn.'}
@@ -207,18 +207,18 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
             key={`f-${n.id}`}
             onClick={() => cb.onSelectNote(n.id)}
             className={`flex w-full items-center gap-2 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] min-h-[36px] ${
-              selectedNoteId === n.id ? 'bg-teal-500/10 text-teal-200' : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'
+              selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             {n.isPinned ? <Pin className="h-3 w-3 shrink-0 text-amber-400" /> : <FileText className="h-3 w-3 shrink-0 opacity-60" />}
             <span className="truncate">{n.title || 'Không có tiêu đề'}</span>
             {n.isFavorite && <Star className="ml-auto h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />}
             {n.needsReview && <AlertCircle className="ml-auto h-3 w-3 shrink-0 text-rose-400" />}
-            {n.isArchived && <Archive className="ml-auto h-3 w-3 shrink-0 text-slate-500" />}
+            {n.isArchived && <Archive className="ml-auto h-3 w-3 shrink-0 text-slate-500 dark:text-slate-500" />}
           </button>
         ))
       )}
-      <div className="my-2 h-px bg-white/[0.05]" />
+      <div className="my-2 h-px bg-slate-100 dark:bg-white/[0.05]" />
     </div>
   )}
 
@@ -523,7 +523,7 @@ function DragGhost({ scope, activeId, tree }: { scope: 'subject' | 'chapter' | '
  }
  }
  return (
- <div className="w-72 rounded-md border border-teal-500/30 bg-[#10151c] shadow-2xl shadow-black/60">
+ <div className="w-72 rounded-md border border-teal-500/30 bg-white dark:bg-[#10151c] shadow-2xl shadow-black/60">
  {row}
  </div>
  );
@@ -563,7 +563,7 @@ function Row({
   return (
     <div
  className={`group relative flex items-center gap-1 rounded-md pr-1 min-h-[36px] ${
- active ? 'bg-teal-500/10' : 'hover:bg-white/[0.04]'
+ active ? 'bg-teal-100 dark:bg-teal-500/10' : 'hover:bg-slate-100 dark:bg-white/[0.04]'
  }`}
  style={pad}
  >
@@ -575,7 +575,7 @@ function Row({
  type="button"
  aria-label="Kéo để sắp xếp"
  title="Kéo để sắp xếp"
- className="flex h-6 w-4 shrink-0 cursor-grab touch-none items-center justify-center text-slate-600 hover:text-slate-300 active:cursor-grabbing"
+ className="flex h-6 w-4 shrink-0 cursor-grab touch-none items-center justify-center text-slate-500 dark:text-slate-500 dark:text-slate-600 hover:text-slate-800 dark:hover:text-slate-300 active:cursor-grabbing"
  {...((dragHandleProps.attributes ?? {}) as Record<string, unknown>)}
  {...((dragHandleProps.listeners ?? {}) as Record<string, unknown>)}
  onClick={(e) => e.preventDefault()}
@@ -584,13 +584,13 @@ function Row({
  </button>
  )}
  {!leaf && (
- <button onClick={onToggle} className="flex h-6 w-5 shrink-0 items-center justify-center text-slate-500 hover:text-slate-300" aria-label="Mở/đóng">
+ <button onClick={onToggle} className="flex h-6 w-5 shrink-0 items-center justify-center text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-300" aria-label="Mở/đóng">
  <ChevronRight className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-90' : ''}`} />
  </button>
  )}
       {color && <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: color }} />}
       {emoji && <span className="shrink-0 text-[13px] leading-none">{emoji}</span>}
-      {Icon && !emoji && !color && <Icon className={`h-3.5 w-3.5 shrink-0 ${active ? 'text-teal-300' : 'text-slate-500'}`} />}
+      {Icon && !emoji && !color && <Icon className={`h-3.5 w-3.5 shrink-0 ${active ? 'text-teal-600 dark:text-teal-300' : 'text-slate-500 dark:text-slate-500'}`} />}
 
       {editing ? (
         <input
@@ -599,13 +599,13 @@ function Row({
           onChange={(e) => setVal(e.target.value)}
           onBlur={commit}
           onKeyDown={(e) => { if (e.key === 'Enter') commit(); if (e.key === 'Escape') { setEditing(false); setVal(label); } }}
-          className="min-w-0 flex-1 rounded bg-slate-800 px-1 py-0.5 text-[13px] text-slate-100 focus:outline-none focus:ring-1 focus:ring-teal-500/50"
+          className="min-w-0 flex-1 rounded bg-slate-800 px-1 py-0.5 text-[13px] text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-teal-500/50"
         />
       ) : (
         <button
           onClick={onClick ?? onToggle}
           onDoubleClick={() => { setVal(label); setEditing(true); }}
-          className={`min-w-0 flex-1 truncate py-1.5 text-left text-[13px] ${active ? 'text-teal-100' : leaf ? 'text-slate-300' : 'font-medium text-slate-200'}`}
+          className={`min-w-0 flex-1 truncate py-1.5 text-left text-[13px] ${active ? 'text-teal-800 dark:text-teal-100' : leaf ? 'text-slate-700 dark:text-slate-300' : 'font-medium text-slate-800 dark:text-slate-200'}`}
           title={`${label} — nhấp đúp để đổi tên`}
         >
           {label}
@@ -615,11 +615,11 @@ function Row({
       {/* Row actions — always visible on touch, hover-reveal on desktop */}
       <div className="flex shrink-0 items-center opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
         {actions.map((a, i) => (
-          <button key={i} onClick={a.onClick} title={a.title} aria-label={a.title} className="flex h-7 w-7 items-center justify-center rounded text-slate-500 hover:bg-white/[0.06] hover:text-teal-300">
+          <button key={i} onClick={a.onClick} title={a.title} aria-label={a.title} className="flex h-7 w-7 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300">
             <a.icon className="h-3.5 w-3.5" />
           </button>
         ))}
-        <button onClick={onDelete} title="Xoá" aria-label="Xoá" className="flex h-7 w-7 items-center justify-center rounded text-slate-500 hover:bg-red-500/10 hover:text-red-400">
+        <button onClick={onDelete} title="Xoá" aria-label="Xoá" className="flex h-7 w-7 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-red-500/10 hover:text-red-400">
           <Trash2 className="h-3.5 w-3.5" />
         </button>
       </div>
@@ -635,8 +635,8 @@ function FilterPill({ active, icon, label, onClick }: { active: boolean; icon: R
    onClick={onClick}
    className={`flex min-h-[28px] items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
     active
-     ? 'border-teal-500/40 bg-teal-500/15 text-teal-100'
-     : 'border-white/10 bg-white/[0.02] text-slate-400 hover:border-white/20 hover:bg-white/[0.05] hover:text-slate-200'
+     ? 'border-teal-500/40 bg-teal-100 dark:bg-teal-500/15 text-teal-800 dark:text-teal-100'
+     : 'border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/[0.02] text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:border-white/20 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200'
    }`}
    aria-pressed={active}
   >

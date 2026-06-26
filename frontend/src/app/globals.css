@@ -1651,57 +1651,92 @@ aside ::-webkit-scrollbar-thumb:hover {
  * Notes editor (TipTap / ProseMirror) — calm study typography.
  * Scoped to .note-prose so it never leaks into other markdown
  * surfaces (.case-study-body, blog, chat).
+ *
+ * Phase 4 — hỗ trợ theme switcher sáng/tối:
+ *   - Light theme (default): dark text trên nền trắng
+ *   - Dark theme (khi wrapper cha có class `dark`): override
+ *     các màu sáng về bảng màu gốc của editor cũ
+ * Mọi rule dưới đây đều có selector `.dark .note-prose xxx`
+ * riêng để giữ nguyên giao diện cũ khi user đang ở dark mode.
  * ──────────────────────────────────────────────────────────── */
 .note-prose {
   font-size: 16px;          /* >= 16px: no iOS focus zoom */
   line-height: 1.75;
-  color: #cbd5e1;
+  color: #1f2937;            /* slate-800 — dễ đọc trên nền trắng */
   min-height: 60vh;
 }
 .note-prose > * + * { margin-top: 0.85em; }
-.note-prose h1 { font-size: 1.7rem; font-weight: 700; color: #f1f5f9; line-height: 1.25; margin-top: 1.4em; letter-spacing: -0.01em; }
-.note-prose h2 { font-size: 1.35rem; font-weight: 700; color: #f1f5f9; line-height: 1.3; margin-top: 1.3em; }
-.note-prose h3 { font-size: 1.12rem; font-weight: 600; color: #e2e8f0; margin-top: 1.1em; }
-.note-prose p { color: #cbd5e1; }
-.note-prose strong { color: #f1f5f9; font-weight: 600; }
-.note-prose em { color: #a5b4fc; }
-.note-prose a { color: #2dd4bf; text-decoration: underline; text-underline-offset: 2px; }
+.note-prose h1 { font-size: 1.7rem; font-weight: 700; color: #0f172a; line-height: 1.25; margin-top: 1.4em; letter-spacing: -0.01em; }
+.note-prose h2 { font-size: 1.35rem; font-weight: 700; color: #0f172a; line-height: 1.3; margin-top: 1.3em; }
+.note-prose h3 { font-size: 1.12rem; font-weight: 600; color: #1e293b; margin-top: 1.1em; }
+.note-prose p { color: #1f2937; }
+.note-prose strong { color: #0f172a; font-weight: 600; }
+.note-prose em { color: #4338ca; }
+.note-prose a { color: #0d9488; text-decoration: underline; text-underline-offset: 2px; }
 .note-prose ul { list-style: disc; padding-left: 1.4em; }
 .note-prose ol { list-style: decimal; padding-left: 1.4em; }
 .note-prose li { margin: 0.2em 0; }
 .note-prose li > ul, .note-prose li > ol { margin-top: 0.2em; }
 .note-prose blockquote {
-  border-left: 3px solid rgba(45, 212, 191, 0.5);
+  border-left: 3px solid rgba(13, 148, 136, 0.45);
   padding: 0.1em 0 0.1em 1em;
-  color: #94a3b8;
+  color: #475569;
   font-style: italic;
 }
 .note-prose :not(pre) > code {
-  background: rgba(45, 212, 191, 0.1);
-  color: #5eead4;
-  border: 1px solid rgba(45, 212, 191, 0.18);
+  background: rgba(13, 148, 136, 0.08);
+  color: #0f766e;
+  border: 1px solid rgba(13, 148, 136, 0.20);
   border-radius: 4px;
   padding: 0.08em 0.4em;
   font-size: 0.88em;
   font-family: var(--font-mono, ui-monospace, monospace);
 }
 .note-prose pre {
-  background: #0a0d12;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: #f1f5f9;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 10px;
   padding: 0.9em 1em;
   overflow-x: auto;
   font-size: 0.9em;
 }
-.note-prose pre code { background: none; border: none; color: #e2e8f0; padding: 0; }
-.note-prose hr { border: none; border-top: 1px solid rgba(255, 255, 255, 0.22); margin: 1.6em 0; }
+.note-prose pre code { background: none; border: none; color: #1e293b; padding: 0; }
+.note-prose hr { border: none; border-top: 1px solid rgba(0, 0, 0, 0.16); margin: 1.6em 0; }
 .note-prose img.note-img {
   max-width: 100%;
   height: auto;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.10);
   margin: 0.6em 0;
 }
+
+/* Dark theme override — khi wrapper có class `dark`, các quy tắc
+   này áp dụng vào .note-prose bên trong. Giữ nguyên bảng màu
+   gốc của editor cũ (chữ sáng trên nền tối). */
+.dark .note-prose { color: #cbd5e1; }
+.dark .note-prose h1 { color: #f1f5f9; }
+.dark .note-prose h2 { color: #f1f5f9; }
+.dark .note-prose h3 { color: #e2e8f0; }
+.dark .note-prose p { color: #cbd5e1; }
+.dark .note-prose strong { color: #f1f5f9; }
+.dark .note-prose em { color: #a5b4fc; }
+.dark .note-prose a { color: #2dd4bf; }
+.dark .note-prose blockquote {
+  border-left-color: rgba(45, 212, 191, 0.5);
+  color: #94a3b8;
+}
+.dark .note-prose :not(pre) > code {
+  background: rgba(45, 212, 191, 0.1);
+  color: #5eead4;
+  border-color: rgba(45, 212, 191, 0.18);
+}
+.dark .note-prose pre {
+  background: #0a0d12;
+  border-color: rgba(255, 255, 255, 0.07);
+}
+.dark .note-prose pre code { color: #e2e8f0; }
+.dark .note-prose hr { border-top-color: rgba(255, 255, 255, 0.22); }
+.dark .note-prose img.note-img { border-color: rgba(255, 255, 255, 0.06); }
 /* Placeholder (TipTap Placeholder extension) */
 .note-prose p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
@@ -1791,8 +1826,14 @@ aside ::-webkit-scrollbar-thumb:hover {
 }
 .note-prose ul.note-task-list li[data-checked="true"] > div,
 .note-prose li[data-checked="true"] > div {
-  color: #64748b;
+  color: #94a3b8;
   text-decoration: line-through;
+}
+
+/* Dark theme override cho task list checked */
+.dark .note-prose ul.note-task-list li[data-checked="true"] > div,
+.dark .note-prose li[data-checked="true"] > div {
+  color: #64748b;
 }
 
 /* Callout content — sit nicely inside the .note-prose padding. */
@@ -1803,33 +1844,47 @@ aside ::-webkit-scrollbar-thumb:hover {
 .note-prose [data-type="math-inline"] { font-size: 0.95em; }
 .note-prose [data-type="math-block"] { display: block; }
 
-/* Table — minimal styling so it reads on dark mode without clashing. */
+/* Table — minimal styling, hỗ trợ cả sáng lẫn tối. */
 .note-prose .note-table {
   width: 100%;
   border-collapse: collapse;
   margin: 1em 0;
   font-size: 0.92em;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.18);
   border-radius: 0.5rem;
   overflow: hidden;
   table-layout: fixed;
 }
 .note-prose .note-table th,
 .note-prose .note-table td {
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(0, 0, 0, 0.14);
   padding: 0.5em 0.75em;
   vertical-align: top;
   min-width: 1.5em;
 }
 .note-prose .note-table th {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(0, 0, 0, 0.05);
   font-weight: 600;
   text-align: left;
-  color: #f1f5f9;
+  color: #0f172a;
 }
-.note-prose .note-table tr:nth-child(even) td { background: rgba(255, 255, 255, 0.03); }
+.note-prose .note-table tr:nth-child(even) td { background: rgba(0, 0, 0, 0.025); }
 .note-prose .note-table td.selectedCell,
 .note-prose .note-table th.selectedCell {
+  background: rgba(13, 148, 136, 0.18) !important;
+}
+
+/* Dark theme override cho table */
+.dark .note-prose .note-table { border-color: rgba(255, 255, 255, 0.18); }
+.dark .note-prose .note-table th,
+.dark .note-prose .note-table td { border-color: rgba(255, 255, 255, 0.14); }
+.dark .note-prose .note-table th {
+  background: rgba(255, 255, 255, 0.07);
+  color: #f1f5f9;
+}
+.dark .note-prose .note-table tr:nth-child(even) td { background: rgba(255, 255, 255, 0.03); }
+.dark .note-prose .note-table td.selectedCell,
+.dark .note-prose .note-table th.selectedCell {
   background: rgba(45, 212, 191, 0.18) !important;
 }
 

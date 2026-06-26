@@ -111,7 +111,7 @@ export default function VocabTable({ noteId, lang }: Props) {
     }
   };
 
-  if (loading) return <div className="flex justify-center py-4 text-slate-500"><Loader2 className="h-4 w-4 animate-spin" /></div>;
+  if (loading) return <div className="flex justify-center py-4 text-slate-500 dark:text-slate-500"><Loader2 className="h-4 w-4 animate-spin" /></div>;
 
   return (
     <div className="space-y-2">
@@ -139,9 +139,9 @@ export default function VocabTable({ noteId, lang }: Props) {
         </SortableContext>
       </DndContext>
 
-      {rows.length === 0 && <p className="px-1 text-[12px] text-slate-600">Chưa có từ vựng. Thêm từ đầu tiên ↓</p>}
+      {rows.length === 0 && <p className="px-1 text-[12px] text-slate-500 dark:text-slate-500 dark:text-slate-600">Chưa có từ vựng. Thêm từ đầu tiên ↓</p>}
 
-      <button onClick={addRow} disabled={adding} className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-white/[0.1] py-2.5 text-[12px] text-slate-400 hover:border-teal-500/30 hover:text-teal-300 disabled:opacity-50 min-h-[44px]">
+      <button onClick={addRow} disabled={adding} className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-slate-200 dark:border-white/[0.1] py-2.5 text-[12px] text-slate-600 dark:text-slate-400 hover:border-teal-500/30 hover:text-teal-600 dark:hover:text-teal-300 disabled:opacity-50 min-h-[44px]">
         {adding ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />} Thêm từ
       </button>
     </div>
@@ -178,30 +178,30 @@ function VocabRow({
       onBlur={(e) => onCommit(row.id, f, e.target.value)}
       placeholder={placeholder}
       // text-base (16px) prevents iOS focus zoom.
-      className={`w-full rounded bg-transparent px-1.5 py-1 text-base text-slate-100 placeholder:text-slate-600 focus:bg-slate-800/60 focus:outline-none focus:ring-1 focus:ring-teal-500/30 ${cls}`}
+      className={`w-full rounded bg-transparent px-1.5 py-1 text-base text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:bg-slate-100 dark:bg-slate-800/60 focus:outline-none focus:ring-1 focus:ring-teal-500/30 ${cls}`}
     />
   );
 
   return (
-    <div ref={setNodeRef} style={style} className="group rounded-lg border border-white/[0.05] bg-white/[0.02] p-2">
+    <div ref={setNodeRef} style={style} className="group rounded-lg border border-slate-200 dark:border-white/[0.05] bg-slate-100 dark:bg-white/[0.02] p-2">
       <div className="flex items-center gap-1">
-        <button {...attributes} {...listeners} className="flex h-8 w-6 shrink-0 cursor-grab items-center justify-center text-slate-600 hover:text-slate-400 active:cursor-grabbing touch-none" aria-label="Kéo sắp xếp">
+        <button {...attributes} {...listeners} className="flex h-8 w-6 shrink-0 cursor-grab items-center justify-center text-slate-500 dark:text-slate-500 dark:text-slate-600 hover:text-slate-700 dark:hover:text-slate-400 active:cursor-grabbing touch-none" aria-label="Kéo sắp xếp">
           <GripVertical className="h-4 w-4" />
         </button>
         <div className="min-w-0 flex-1">{field('term', 'Từ / 単語 / 单词', 'font-medium')}</div>
         {ttsAvailable && (
-          <button onClick={() => onSpeak(row)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded text-slate-500 hover:text-teal-300" title="Phát âm" aria-label="Phát âm">
+          <button onClick={() => onSpeak(row)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:text-teal-600 dark:hover:text-teal-300" title="Phát âm" aria-label="Phát âm">
             <Volume2 className="h-4 w-4" />
           </button>
         )}
-        <button onClick={() => onRemove(row.id)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded text-slate-600 hover:text-red-400 sm:opacity-0 sm:group-hover:opacity-100" aria-label="Xoá từ">
+        <button onClick={() => onRemove(row.id)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded text-slate-500 dark:text-slate-500 dark:text-slate-600 hover:text-red-400 sm:opacity-0 sm:group-hover:opacity-100" aria-label="Xoá từ">
           <Trash2 className="h-3.5 w-3.5" />
         </button>
       </div>
       <div className="pl-7">
-        {field('reading', 'Phiên âm (furigana / pinyin)', 'text-[13px] text-teal-200/80')}
+        {field('reading', 'Phiên âm (furigana / pinyin)', 'text-[13px] text-teal-700 dark:text-teal-200/80')}
         {field('meaning', 'Nghĩa', 'text-[13px]')}
-        {field('example', 'Ví dụ', 'text-[13px] text-slate-400')}
+        {field('example', 'Ví dụ', 'text-[13px] text-slate-600 dark:text-slate-400')}
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ import { Lightbulb, Info, AlertTriangle, Trash2 } from 'lucide-react';
 export type CalloutKind = 'tip' | 'note' | 'warning';
 
 const KIND_META: Record<CalloutKind, { label: string; Icon: typeof Info; ring: string; bg: string; text: string }> = {
-  tip:     { label: 'Mẹo',      Icon: Lightbulb,     ring: 'border-teal-500/40',     bg: 'bg-teal-500/10',     text: 'text-teal-200' },
+  tip:     { label: 'Mẹo',      Icon: Lightbulb,     ring: 'border-teal-500/40',     bg: 'bg-teal-100 dark:bg-teal-500/10',     text: 'text-teal-700 dark:text-teal-200' },
   note:    { label: 'Ghi chú',  Icon: Info,          ring: 'border-sky-500/40',      bg: 'bg-sky-500/10',      text: 'text-sky-200' },
   warning: { label: 'Cảnh báo', Icon: AlertTriangle, ring: 'border-amber-500/50',    bg: 'bg-amber-500/10',    text: 'text-amber-200' },
 };
@@ -99,7 +99,7 @@ function CalloutView({ node, updateAttributes, editor }: NodeViewProps) {
               aria-label="Loại callout"
             >
               {(Object.keys(KIND_META) as CalloutKind[]).map((k) => (
-                <option key={k} value={k} className="bg-slate-900 text-slate-100">
+                <option key={k} value={k} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">
                   {KIND_META[k].label}
                 </option>
               ))}

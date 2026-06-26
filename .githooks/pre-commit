@@ -1,0 +1,52 @@
+#!/bin/sh
+# ============================================================
+# Pre-commit hook: gitleaks secret scanner
+# ============================================================
+# Blocks commits containing leaked secrets (API keys, tokens,
+# passwords, private keys, etc). Runs LOCALLY only.
+#
+# Bypass: git commit --no-verify
+# Disable: rm .git/hooks/pre-commit
+# ============================================================
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+CONFIG="$REPO_ROOT/.gitleaks.toml"
+
+# Get staged files (added/modified/copied/renamed — skip deleted)
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR 2>/dev/null)
+
+if [ -z "$STAGED_FILES" ]; then
+  exit 0  # Nothing to scan
+fi
+
+LEAK_FOUND=0
+for file in $STAGED_FILES; do
+  if [ ! -f "$file" ] || [ ! -r "$file" ]; then
+    continue
+  fi
+
+  # Run gitleaks, capture output + exit code
+  OUTPUT=$(gitleaks dir "$file" --config "$CONFIG" --no-banner 2>&1)
+  GITLEAKS_EXIT=$?
+
+  # gitleaks returns 1 when leaks found, 0 when clean
+  if [ $GITLEAKS_EXIT -ne 0 ]; then
+    echo "❌ Secret detected in: $file"
+    echo "$OUTPUT" | grep -E "Finding:|Secret:|RuleID:" | head -10
+    echo ""
+    LEAK_FOUND=1
+  fi
+done
+
+if [ $LEAK_FOUND -eq 1 ]; then
+  echo "❌ COMMIT BLOCKED: secrets detected in your changes."
+  echo ""
+  echo "Options:"
+  echo "  1. Remove the secret and use a placeholder (e.g. <your-api-key>)"
+  echo "  2. If false positive: git commit --no-verify"
+  echo "  3. To disable: rm .git/hooks/pre-commit"
+  echo ""
+  exit 1
+fi
+
+exit 0

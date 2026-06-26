@@ -481,6 +481,49 @@ export default function MusicAudioController() {
     };
     const handleError = () => {
       console.warn('[MusicAudioController] Audio error:', audio.src, audio.error?.message);
+
+      // Recovery: a single broken <audio> element stays broken
+      // for the rest of its lifetime (subsequent audio.play()
+      // calls reject with NotSupportedError, the one-shot canplay
+      // retry in tryPlay() never fires because the element can't
+      // progress). Previously this left the user stuck — pressing
+      // play did nothing, the spinning disc kept spinning, and
+      // the only fix was a hard reload. Now we rebuild the source:
+      //  - clear src, then re-set the same URL and reload()
+      //  - when canplay fires (only on a real recoverable failure),
+      //    re-attempt audio.play() if the store still says we
+      //    should be playing
+      //  - guard against an infinite loop: only retry once per
+      //    audio-element lifetime. A persistent 4xx/5xx on the
+      //    source URL will still surface, but the user's manual
+      //    next-track click will replace the src and try again.
+      const currentSrc = audio.src;
+      // Pull latest store state — handleError is bound to the
+      // initial-load useEffect closure so isPlaying/currentTrack
+      // may be stale; the store getters below always read fresh.
+      const s = useMusicStore.getState();
+      if (!currentSrc || !s.currentTrack || !s.isPlaying) return;
+      if (audio.dataset.recovered === '1') return; // already retried
+      audio.dataset.recovered = '1';
+      try {
+        audio.removeAttribute('src');
+        audio.load();
+        audio.src = currentSrc;
+        audio.load();
+      } catch {
+        /* load() can throw synchronously on detached nodes; ignore */
+      }
+      const onCanPlay = () => {
+        audio.removeEventListener('canplay', onCanPlay);
+        // Re-check the store at canplay time — the user may have
+        // paused or switched tracks during the recovery window.
+        const s2 = useMusicStore.getState();
+        if (!s2.isPlaying || !s2.currentTrack) return;
+        audio.play().catch(() => {
+          /* still blocked; the next user click will retry */
+        });
+      };
+      audio.addEventListener('canplay', onCanPlay);
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -829,7 +872,35 @@ export default function MusicAudioController() {
 
     const interval = setInterval(flush, 5000);
     const onVisibility = () => {
-      if (document.visibilityState === 'hidden') flush();
+      if (document.visibilityState === 'hidden') {
+        flush();
+        return;
+      }
+      // Tab became visible again. If the user expected music to be
+      // playing (store.isPlaying === true) but the underlying <audio>
+      // element was paused — typical after a long hidden-tab period
+      // where the browser suspended playback, or after the user
+      // navigated away and back while autoplay was blocked — restart
+      // it. Without this, the user's reported symptom is 'the music
+      // stops at the end of the previous track and won't resume until
+      // I click play'. The store flag is the source of truth; the
+      // <audio>.paused check makes this a no-op when playback is
+      // already healthy.
+      const audio = audioRef.current;
+      const s = useMusicStore.getState();
+      if (audio && s.isPlaying && s.currentTrack && audio.paused) {
+        // The current src should match s.currentTrack.id, but if a
+        // track swap raced with the visibility flip, we let the
+        // load-track effect do its thing instead of fighting it.
+        const expectedId = String(s.currentTrack.id);
+        if (audio.src && expectedId) {
+          audio.play().catch(() => {
+            // Silently swallow — the play() can still be blocked on
+            // some mobile browsers right after the tab wakes up.
+            // The next user click on the play button will retry.
+          });
+        }
+      }
     };
     document.addEventListener('visibilitychange', onVisibility);
     // Also flush on pagehide (closing tab / navigating away) so the

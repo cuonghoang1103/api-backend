@@ -356,6 +356,19 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
   } = useMusicStore();
 
   const [imgError, setImgError] = useState(false);
+  // Reset the error flag whenever the track changes. The GlobalMusicPlayer
+  // is mounted once at the root layout (it lives across page navigation
+  // and every track switch) — without this reset, a single transient
+  // load failure (R2 5xx, CSP block, YouTube 404, network race)
+  // would set imgError=true and stick forever, hiding the cover for
+  // every subsequent track until a hard reload. The user reported
+  // 'the cover disappears and I have to reload the page to see it'.
+  // CyberPlayer.tsx already does the same fix in its VinylDisc
+  // (see NoteCodeBlock discussion for the broader pattern); we
+  // mirror it here so the bottom player matches.
+  useEffect(() => {
+    setImgError(false);
+  }, [currentTrack?.id]);
   // Cyber Phase 1: popover state for queue + speed menu.
   const [queueOpen, setQueueOpen] = useState(false);
   const [speedOpen, setSpeedOpen] = useState(false);
@@ -531,6 +544,15 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
 function MiniBar({ onExpand, onClose }: { onExpand: () => void; onClose: () => void }) {
   const { currentTrack, isPlaying, togglePlay } = useMusicStore();
   const [imgError, setImgError] = useState(false);
+
+  // Same fix as ExpandedPlayer above: reset imgError whenever
+  // the track id changes so a transient load failure on one track
+  // doesn't permanently hide the cover for the rest of the
+  // session. Hooks must run unconditionally, so this lives
+  // BEFORE the `if (!currentTrack) return null` early return.
+  useEffect(() => {
+    setImgError(false);
+  }, [currentTrack?.id]);
 
   if (!currentTrack) return null;
 

@@ -97,16 +97,23 @@ export const metadata: Metadata = {
     title: 'CuongThai',
   },
   icons: {
-    // SVG is the crispest option on modern browsers (Retina, dark
-    // mode color-scheme adjustments). PNG at 32x32 is the fallback
-    // for older browsers that don't parse SVG icons. `apple` is
-    // the iOS home-screen icon — needs a square PNG, 180x180 is
-    // the iOS recommendation.
+    // PNG multi-resolution set (from /favicon_io): 16x16 is the
+    // browser tab favicon, 32x32 is the high-DPI tab/bookmark icon,
+    // apple-touch-icon is the iOS home-screen icon (180x180 is the
+    // iOS recommendation). android-chrome-* are PWA install icons
+    // declared in /public/manifest.json.
+    //
+    // Note: we no longer ship a SVG variant — the original SVG was a
+    // generic 'C' gradient placeholder from a code-generation tool
+    // (commit 7690cdc). Replaced with the actual brand mark
+    // (sleeping-cat with laptop + Zzz).
     icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.ico', sizes: '16x16 32x32', type: 'image/x-icon' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
     ],
-    apple: '/favicon.png',
+    apple: '/apple-touch-icon.png',
   },
   // Open Graph (Facebook, LinkedIn, Discord, …) — used when someone
   // shares the homepage on social. The og:image MUST be a 1200x630

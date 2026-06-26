@@ -168,33 +168,66 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
       },
       // Editor-level keyboard handler. Fires INSIDE ProseMirror
       // (before the contenteditable's native keydown reaches
-      // React's synthetic dispatch). We use it ONLY to handle
-      // Escape inside an editable code block: the codeBlock
-      // NodeView sets data-allow-escape='true' on its wrapper
-      // when in EDIT mode. We then dispatch a CustomEvent that
-      // the NodeView listens for to flip its React state. This
-      // bypasses both ProseMirror's internal capture AND React's
-      // synthetic dispatch, and is the only path that reliably
-      // gets through every browser / framework layer we tested.
+      // React's synthetic dispatch). We use it for two shortcuts:
+      //
+      //  • Escape inside an editable code block — the codeBlock
+      //    NodeView sets data-allow-escape='true' on its wrapper
+      //    when in EDIT mode. We dispatch a CustomEvent that the
+      //    NodeView listens for to flip its React state. This
+      //    bypasses both ProseMirror's internal capture AND React's
+      //    synthetic dispatch, and is the only path that reliably
+      //    gets through every browser / framework layer we tested.
+      //
+      //  • Shift+C — opens the slash menu without typing "/". Inserts
+      //    a single "/" at the caret if it's at the start of an
+      //    empty paragraph (the same pre-condition as the existing
+      //    "/" trigger). The existing onUpdate handler then fires
+      //    handleSlashTrigger which opens the menu. If the caret is
+      //    not at the start of an empty paragraph we fall through
+      //    (return false) so ProseMirror handles the key normally
+      //    — the user gets the literal "C" character. We avoid the
+      //    slash menu being inserted inside a code block, table,
+      //    or list, where its 3-condition check would refuse to
+      //    open anyway.
       handleKeyDown(_view, event) {
-        if (event.key !== 'Escape') return false;
-        const target = event.target as HTMLElement | null;
-        if (!target) return false;
-        // Walk up the DOM to find a code-block wrapper that's
-        // currently in EDIT mode (data-allow-escape='true'). The
-        // keydown event's target may be the inner <code> element
-        // (set by NodeViewContent as="code") rather than the
-        // wrapper itself, so we need to climb.
-        const editable = target.closest('[data-allow-escape="true"]');
-        if (!editable) return false;
-        event.preventDefault();
-        event.stopPropagation();
-        // Dispatch a CustomEvent so the NodeView's React state
-        // can flip without us having to thread a ref through
-        // ProseMirror's plugin system. The NodeView listens for
-        // this once on mount.
-        editable.dispatchEvent(new CustomEvent('notes:exit-code-edit'));
-        return true; // tell ProseMirror we handled it
+        // 1) Escape inside an editable code block.
+        if (event.key === 'Escape') {
+          const target = event.target as HTMLElement | null;
+          if (!target) return false;
+          // Walk up the DOM to find a code-block wrapper that's
+          // currently in EDIT mode (data-allow-escape='true').
+          const editable = target.closest('[data-allow-escape="true"]');
+          if (!editable) return false;
+          event.preventDefault();
+          event.stopPropagation();
+          editable.dispatchEvent(new CustomEvent('notes:exit-code-edit'));
+          return true;
+        }
+        // 2) Shift+C → open slash menu.
+        // We intentionally ignore the case where the user is in a
+        // non-Latin IME composition state — the underlying event
+        // reports key='C' but typing the literal letter is what
+        // the user wants, not a menu trigger.
+        if (event.key === 'C' && event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey && !event.isComposing) {
+          const { state } = _view;
+          const { selection } = state;
+          const { $from, empty } = selection;
+          // Require the caret to be in a paragraph and at the
+          // very start of an empty block — exact same pre-condition
+          // as the "/" trigger on line 117. Otherwise let the key
+          // through as a normal character.
+          if ($from.parent.type.name !== 'paragraph') return false;
+          if (!empty) return false;
+          if ($from.parentOffset !== 0) return false;
+          event.preventDefault();
+          _view.dispatch(
+            state.tr.insertText('/', $from.pos, $from.pos),
+          );
+          // handleSlashTrigger fires automatically from onUpdate
+          // for this transaction; nothing else to do here.
+          return true;
+        }
+        return false;
       },
       handlePaste(view, event) {
         const files = Array.from(event.clipboardData?.files ?? []).filter((f) => f.type.startsWith('image/'));

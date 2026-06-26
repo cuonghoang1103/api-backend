@@ -174,9 +174,9 @@ ssh -i ~/.ssh/id_rsa root@160.187.1.208 "
 ```
 
 ### ❌ `AIzaSy...: command not found` khi source .env
-**Nguyên nhân**: Trong `/opt/cuonghoangdev/.env` có dòng bị malformed (thiếu `=`, ví dụ dòng 14: `AIzaSyDSDK6Lb6uEDYUWXoRbMRcVLhE5g-pj8Rw`). `source` mặc định fail cả script.
+**Nguyên nhân**: Trong `/opt/cuonghoangdev/.env` có dòng bị malformed (thiếu `=`, ví dụ dòng chứa Google API key). `source` mặc định fail cả script.
 
-**Fix tạm thời**: `scripts/deploy-vps.sh` đã dùng parser robust bỏ qua dòng lỗi. **Fix vĩnh viễn**: mở `/opt/cuonghoangdev/.env` trên VPS, thêm `=` cho dòng 14 (thường là `GEMINI_API_KEY=AIzaSy...`):
+**Fix tạm thời**: `scripts/deploy-vps.sh` đã dùng parser robust bỏ qua dòng lỗi. **Fix vĩnh viễn**: mở `/opt/cuonghoangdev/.env` trên VPS, thêm `=` cho dòng bị malformed (thường là `GEMINI_API_KEY=<your-api-key>`):
 ```bash
 ssh -i ~/.ssh/id_rsa root@160.187.1.208 "nano /opt/cuonghoangdev/.env"
 ```

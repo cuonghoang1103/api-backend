@@ -160,15 +160,27 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
   const [isEditing, setIsEditing] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // Keep the EDIT mode in sync if the node's content changes from
-  // elsewhere (e.g. another component calls setNodeMarkup). We
-  // mirror it via key + contentEditable state to keep things simple.
-  // We intentionally do NOT call editor.commands.* from inside a
-  // render path — Tiptap handles that itself when NodeViewContent
-  // is the contenteditable host.
+  // NOTE: An earlier version of this component had a useEffect
+  // that called setIsEditing(false) whenever the node's text length
+  // crossed zero or the language changed. That looked harmless
+  // ("reset edit mode if the node becomes empty / switched lang")
+  // but it had a nasty side effect: Tiptap re-renders the NodeView
+  // on every transaction, and `code` changes on every keystroke.
+  // `code.length === 0` flips between true and false as the user
+  // types back and forth across a 1-character boundary, causing
+  // edit mode to flip off in the middle of typing — the user would
+  // lose focus mid-keystroke and see the Shiki-highlighted HTML
+  // appear and disappear, sometimes only after a hard reload. The
+  // fix is to NOT auto-exit edit mode based on content changes.
+  // Edit mode should only flip on explicit user actions (click
+  // outside, Escape, language switch, or delete-block).
+  //
+  // We intentionally call setIsEditing(false) on language change
+  // because the user is selecting a new value from a dropdown and
+  // is unlikely to want to keep typing in the old mode.
   useEffect(() => {
     setIsEditing(false);
-  }, [language, code.length === 0]);
+  }, [language]);
 
   const enterEdit = useCallback(() => {
     if (!isEditable) return;
@@ -209,6 +221,30 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
     [isEditing, exitEdit],
   );
 
+  // Blur handler: when focus moves OUT of the NodeViewContent
+  // contenteditable, drop back to VIEW mode. We detect this by
+  // listening to focusout on the wrapper and only fire when the
+  // new active element is genuinely outside this block (not just
+  // moving to the toolbar / select inside the same wrapper).
+  const onWrapperFocusOut = useCallback(
+    (e: React.FocusEvent<HTMLDivElement>) => {
+      if (!isEditing) return;
+      // `e.relatedTarget` is a real DOM Node, but TypeScript resolves
+      // the bare `Node` identifier in this file to Tiptap's @tiptap/core
+      // Node (imported at the top of the file). Use the DOM type via
+      // HTMLElement's prototype chain so the .contains() check below
+      // typechecks correctly without renaming the Tiptap import.
+      const next = e.relatedTarget as HTMLElement | null;
+      if (next && wrapperRef.current?.contains(next)) {
+        // Focus is still inside this block (toolbar, select, etc.).
+        // Stay in edit mode.
+        return;
+      }
+      exitEdit();
+    },
+    [isEditing, exitEdit],
+  );
+
   // Delete-when-empty handling: if the user empties the code block
   // and then presses Backspace once more, Tiptap's default behaviour
   // is to remove the now-empty node. We let it — that's the
@@ -224,6 +260,7 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
       data-type="code-block"
       onClick={onContainerClick}
       onKeyDown={onKeyDown}
+      onFocusOut={onWrapperFocusOut}
       // The wrapper itself is not contenteditable; NodeViewContent
       // mounts its own contentEditable tree inside.
       ref={wrapperRef}

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FileText, FileCode, Image, Film, Music, Archive, File,
-  MoreVertical, Hash, Globe2,
+  MoreVertical, Hash, Globe2, Share2,
 } from 'lucide-react';
 
 import type { HubFile } from '@/lib/api';
@@ -15,6 +15,8 @@ interface HubFileCardProps {
   onClick: (file: HubFile) => void;
   onDelete: (id: number) => void;
   onStatusChange: (id: number, status: string) => void;
+  // Phase 2 — owner-side: open the share modal for this file.
+  onShare?: (file: HubFile) => void;
 }
 
 function getFileCategory(mimeType: string): 'image' | 'pdf' | 'video' | 'audio' | 'code' | 'other' {
@@ -78,7 +80,7 @@ function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export default function HubFileCard({ file, onClick, onDelete, onStatusChange }: HubFileCardProps) {
+export default function HubFileCard({ file, onClick, onDelete, onStatusChange, onShare }: HubFileCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const category = getFileCategory(file.mimeType);
   const Icon = CATEGORY_ICON[category];
@@ -187,6 +189,14 @@ export default function HubFileCard({ file, onClick, onDelete, onStatusChange }:
                   >
                     Xoa
                   </button>
+                  {onShare && (
+                    <button
+                      onClick={() => { setMenuOpen(false); onShare(file); }}
+                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+                    >
+                      <Share2 className="h-3 w-3" /> Chia se
+                    </button>
+                  )}
                 </div>
               </>
             )}

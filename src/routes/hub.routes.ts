@@ -47,9 +47,21 @@ import {
   updateFile,
   deleteFile,
   getSignedFileUrl,
+  getSharedFileDownloadUrl,
   aiSuggestTags,
   getPublicFile,
 } from '../services/hub.service.js';
+import {
+  createShare,
+  deleteShare,
+  getSharedItem,
+  getShareForUser,
+  listInboxShares,
+  listOutboxShares,
+  listUsersSharingWithMe,
+  searchUsersForShare,
+  updateShare,
+} from '../services/hubShare.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -262,6 +274,21 @@ router.get('/files/:id/url', async (req: Request, res: Response<ApiResponse>, ne
   } catch (err) { next(err); }
 });
 
+// Recipient-side: download a file that was shared with the caller.
+// Only works if a HubShare row exists with permission = view_download.
+// 403 otherwise. Mirrors the owner-side /files/:id/url route shape
+// so the frontend can use the same response handler.
+router.get('/shared-files/:id/url', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new AppError('fileId khong hop le', 400, 'INVALID_ID');
+    }
+    const data = await getSharedFileDownloadUrl(req.userId!, id);
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+
 router.patch('/files/:id', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const id = Number(req.params.id);
@@ -290,6 +317,126 @@ router.post('/files/:id/ai-tags', async (req: Request, res: Response<ApiResponse
   try {
     const id = Number(req.params.id);
     const result = await aiSuggestTags(req.userId!, id);
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+// ─── Hub User-Sharing (Phase 2) ────────────────────────────────
+//
+// Authenticated endpoints that let a user share a folder, link,
+// or file with a specific recipient (view-only + optional
+// download). The recipient sees the share in their inbox at
+// GET /shares/inbox.
+//
+// We expose 4 buckets:
+//   - Outbox : shares I sent (the owner-side list + revoke)
+//   - Inbox  : shares others sent me (the recipient-side list)
+//   - Lookup : get a single share (must be owner OR recipient)
+//   - Users  : search users to share with + list users sharing
+//              with me (drives the sidebar widget)
+//
+// All write endpoints validate that the caller is the owner
+// (or recipient, where applicable). The service layer is the
+// authoritative gate; the route layer is just an HTTP shim.
+
+router.post('/shares', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { recipientId, folderId, linkId, fileId, permission, note } = req.body ?? {};
+    const share = await createShare(req.userId!, {
+      recipientId,
+      folderId,
+      linkId,
+      fileId,
+      permission,
+      note,
+    });
+    res.status(201).json({ success: true, data: share });
+  } catch (err) { next(err); }
+});
+
+router.get('/shares/outbox', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const shares = await listOutboxShares(req.userId!);
+    res.json({ success: true, data: shares });
+  } catch (err) { next(err); }
+});
+
+router.get('/shares/inbox', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const shares = await listInboxShares(req.userId!);
+    res.json({ success: true, data: shares });
+  } catch (err) { next(err); }
+});
+
+router.get('/shares/users-sharing-with-me', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const users = await listUsersSharingWithMe(req.userId!);
+    res.json({ success: true, data: users });
+  } catch (err) { next(err); }
+});
+
+router.get('/shares/users-search', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const q = String((req.query.q as string) ?? '');
+    const limit = req.query.limit ? Number(req.query.limit) : 10;
+    const users = await searchUsersForShare(req.userId!, q, limit);
+    res.json({ success: true, data: users });
+  } catch (err) { next(err); }
+});
+
+router.get('/shares/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new AppError('shareId khong hop le', 400, 'INVALID_SHARE_ID');
+    }
+    const share = await getShareForUser(id, req.userId!);
+    if (!share) {
+      // Indistinguishable from "doesn't exist" — we deliberately
+      // don't differentiate 403 from 404 to avoid leaking the
+      // share's existence to non-participants.
+      throw new AppError('Share khong ton tai', 404, 'SHARE_NOT_FOUND');
+    }
+    res.json({ success: true, data: share });
+  } catch (err) { next(err); }
+});
+
+// Recipient-only: fetch the actual item through the share gate.
+// Returns the underlying folder/link/file plus the share row so
+// the UI can render the "từ @username" badge.
+router.get('/shares/:id/item', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new AppError('shareId khong hop le', 400, 'INVALID_SHARE_ID');
+    }
+    const result = await getSharedItem(id, req.userId!);
+    if (!result) {
+      throw new AppError('Share khong ton tai hoac khong phai cua ban', 404, 'SHARE_NOT_FOUND');
+    }
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+router.patch('/shares/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new AppError('shareId khong hop le', 400, 'INVALID_SHARE_ID');
+    }
+    const { permission, note } = req.body ?? {};
+    const updated = await updateShare(req.userId!, id, { permission, note });
+    res.json({ success: true, data: updated });
+  } catch (err) { next(err); }
+});
+
+router.delete('/shares/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new AppError('shareId khong hop le', 400, 'INVALID_SHARE_ID');
+    }
+    const result = await deleteShare(req.userId!, id);
     res.json({ success: true, data: result });
   } catch (err) { next(err); }
 });

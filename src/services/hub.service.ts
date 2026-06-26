@@ -594,6 +594,47 @@ export async function getSignedFileUrl(userId: number, id: number) {
   return { url, mimeType: file.mimeType };
 }
 
+/**
+ * Recipient-side signed URL: returns a short-lived download URL
+ * ONLY if a HubShare row exists where the caller is the recipient
+ * AND the share's permission is "view_download". View-only shares
+ * cannot download — they can still preview via the public-by-id
+ * endpoint? No — files don't have public-by-id, only public-by-slug
+ * (isPublic=true). So view-only file shares can only see the file
+ * card (name, size, mime) but cannot stream its bytes. That's the
+ * intended "view-only" semantic.
+ *
+ * Note: this lives in hub.service.ts (not hubShare.service.ts)
+ * because it needs the R2 helper + the HubFile model. Splitting
+ * services by feature, not by table, so files-stuff stays here.
+ */
+export async function getSharedFileDownloadUrl(recipientId: number, fileId: number) {
+  if (!Number.isInteger(fileId) || fileId <= 0) {
+    throw new AppError('fileId khong hop le', 400, 'INVALID_ID');
+  }
+  const share = await prisma.hubShare.findFirst({
+    where: {
+      recipientId,
+      fileId,
+      permission: 'view_download',
+    },
+    select: {
+      id: true,
+      file: { select: { id: true, key: true, name: true, mimeType: true } },
+    },
+  });
+  if (!share || !share.file) {
+    throw new AppError(
+      'File khong duoc share cho ban hoac share la view-only (khong the download)',
+      403,
+      'NO_DOWNLOAD_PERMISSION',
+    );
+  }
+  const { getSignedDownloadUrl } = await import('../config/r2.js');
+  const url = await getSignedDownloadUrl(share.file.key, 300, share.file.name);
+  return { url, mimeType: share.file.mimeType };
+}
+
 // ─── AI Auto-tagging ────────────────────────────────────────
 
 const TAG_PROMPT_SYSTEM = 'Ban la mot chuyen gia phan loai tai lieu. Nhan vao ten file (name) va dinh dang (mimeType), tra ve danh sach tag phu hop. Chi tra ve danh sach tag, moi tag la mot chu thuong, khong dau, toi da 10 tag, phan cach nhau bang dau phay. Cac tag can phu hop voi noi dung tai lieu. Vi du: name="postgres_tuning.sql", mimeType="application/sql" => "database, postgresql, sql, performance, backend". Khong giai thich, chi tra ve tags.';
@@ -827,7 +868,16 @@ function serializeLink(l: {
   };
 }
 
-async function assertFolderOwnership(userId: number, folderId: number) {
+/**
+ * Hub ownership helpers — exported so hubShare.service.ts can
+ * reuse them when the share owner proves they own the item
+ * they're sharing. Centralising prevents "ownership check
+ * drift" between services. Throws 404 (not 403) when the item
+ * exists but belongs to someone else — that's the existing
+ * pattern in hub.service.ts and we mirror it here so the
+ * 404 vs 403 distinction stays consistent across the module.
+ */
+export async function assertFolderOwnership(userId: number, folderId: number) {
   if (!Number.isInteger(folderId) || folderId <= 0) {
     throw new AppError('folderId khong hop le', 400, 'INVALID_FOLDER_ID');
   }
@@ -837,6 +887,41 @@ async function assertFolderOwnership(userId: number, folderId: number) {
   });
   if (!folder) {
     throw new AppError('Folder khong ton tai hoac khong thuoc ve ban', 404, 'FOLDER_NOT_FOUND');
+  }
+}
+
+/**
+ * Hub ownership helpers — exported so hubShare.service.ts can
+ * reuse them when the share owner proves they own the item
+ * they're sharing. Centralising prevents "ownership check
+ * drift" between services. Throws 404 (not 403) when the item
+ * exists but belongs to someone else — that's the existing
+ * pattern in hub.service.ts and we mirror it here so the
+ * 404 vs 403 distinction stays consistent across the module.
+ */
+export async function assertLinkOwnership(userId: number, linkId: number) {
+  if (!Number.isInteger(linkId) || linkId <= 0) {
+    throw new AppError('linkId khong hop le', 400, 'INVALID_LINK_ID');
+  }
+  const link = await prisma.hubLink.findFirst({
+    where: { id: linkId, userId },
+    select: { id: true },
+  });
+  if (!link) {
+    throw new AppError('Link khong ton tai hoac khong thuoc ve ban', 404, 'LINK_NOT_FOUND');
+  }
+}
+
+export async function assertFileOwnership(userId: number, fileId: number) {
+  if (!Number.isInteger(fileId) || fileId <= 0) {
+    throw new AppError('fileId khong hop le', 400, 'INVALID_FILE_ID');
+  }
+  const file = await prisma.hubFile.findFirst({
+    where: { id: fileId, userId },
+    select: { id: true },
+  });
+  if (!file) {
+    throw new AppError('File khong ton tai hoac khong thuoc ve ban', 404, 'FILE_NOT_FOUND');
   }
 }
 

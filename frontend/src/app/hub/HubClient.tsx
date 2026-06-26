@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Layers, LogIn, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { hubApi, hubFileApi, type HubFolder, type HubLink, type HubFile } from '@/lib/api';
+import { hubApi, hubFileApi, hubShareApi, type HubFolder, type HubLink, type HubFile, type HubShare } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 
@@ -22,6 +22,9 @@ import HubKanbanBoard from '@/components/hub/HubKanbanBoard';
 import HubCommandPalette from '@/components/hub/HubCommandPalette';
 import HubBanner from '@/components/hub/HubBanner';
 import HubFileCard from '@/components/hub/HubFileCard';
+import HubShareModal from '@/components/hub/HubShareModal';
+import HubSharedWithMe from '@/components/hub/HubSharedWithMe';
+import HubSharedItemViewer from '@/components/hub/HubSharedItemViewer';
 
 type FolderSelection = number | 'all' | 'null';
 
@@ -100,6 +103,10 @@ export default function HubClient({
   const [uploadOpen, setUploadOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<HubLink | null>(null);
   const [previewFile, setPreviewFile] = useState<HubFile | null>(null);
+  // ── Phase 2 — Hub user-sharing modals
+  const [shareModalItem, setShareModalItem] = useState<{ kind: 'folder' | 'link' | 'file'; id: number; label?: string } | null>(null);
+  const [viewingShare, setViewingShare] = useState<HubShare | null>(null);
+  const [shareItemModalOpen, setShareItemModalOpen] = useState(false);
 
   // ── Refs
   const foldersRef = useRef(folders);
@@ -396,7 +403,7 @@ export default function HubClient({
       </header>
 
       <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[280px_1fr] lg:px-8">
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+        <aside className="lg:sticky lg:top-24 lg:self-start space-y-4">
           <HubFolderSidebar
             folders={folders}
             selected={selectedFolder}
@@ -405,6 +412,16 @@ export default function HubClient({
             onDelete={handleDeleteFolder}
             addOpen={addFolderOpen}
             setAddOpen={setAddFolderOpen}
+          />
+          {/* Phase 2 — sidebar widget showing users who have
+              shared items with the current user. Lives below the
+              folder list so we keep the existing 2-col grid that
+              the rest of the UI was designed for. */}
+          <HubSharedWithMe
+            onOpenShare={(s) => {
+              setViewingShare(s);
+              setShareItemModalOpen(true);
+            }}
           />
         </aside>
 
@@ -461,16 +478,18 @@ export default function HubClient({
                         onClick={setPreviewFile}
                         onDelete={handleDeleteFile}
                         onStatusChange={(id, status) => { void handleStatusChange('file', id, status); }}
+                        onShare={(file) => setShareModalItem({ kind: 'file', id: file.id, label: file.name })}
                       />
                     ))}
                     {filteredLinks.map((l) => (
-                      <HubLinkCard
-                        key={`link-${l.id}`}
-                        link={l}
-                        onEdit={(link) => { setEditingLink(link); setAddLinkOpen(true); }}
-                        onDelete={handleDeleteLink}
-                        onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
-                      />
+<HubLinkCard
+                          key={`link-${l.id}`}
+                          link={l}
+                          onEdit={(link) => { setEditingLink(link); setAddLinkOpen(true); }}
+                          onDelete={handleDeleteLink}
+                          onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
+                          onShare={(link) => setShareModalItem({ kind: 'link', id: link.id, label: link.title })}
+                        />
                     ))}
                   </div>
                 ) : (
@@ -505,6 +524,7 @@ export default function HubClient({
                       onEdit={(l) => { setEditingLink(l); setAddLinkOpen(true); }}
                       onDelete={handleDeleteLink}
                       onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
+                      onShare={(l) => setShareModalItem({ kind: 'link', id: l.id, label: l.title })}
                     />
                   </div>
                 )}
@@ -548,6 +568,26 @@ export default function HubClient({
             void hubFileApi.update(id, { notes: data.notes });
           }
         }}
+      />
+
+      {/* Phase 2 — owner-side share dialog. Triggered by the
+          "Share" button on HubLinkCard / HubFileCard / folder
+          row. Re-renders the outbox when a share is created so
+          the sidebar's "recent recipients" chips stay fresh. */}
+      <HubShareModal
+        open={!!shareModalItem}
+        item={shareModalItem ? { kind: shareModalItem.kind, id: shareModalItem.id } : null}
+        itemLabel={shareModalItem?.label}
+        onClose={() => setShareModalItem(null)}
+      />
+
+      {/* Phase 2 — recipient-side viewer. Shows the underlying
+          folder/link/file with read-only controls + (when
+          permission = view_download) a Download button. */}
+      <HubSharedItemViewer
+        share={viewingShare}
+        open={shareItemModalOpen}
+        onClose={() => { setShareItemModalOpen(false); setViewingShare(null); }}
       />
 
       <AnimatePresence>

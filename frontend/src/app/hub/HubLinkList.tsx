@@ -9,9 +9,10 @@ interface HubLinkListProps {
   onEdit: (link: HubLink) => void;
   onDelete: (id: number) => void;
   onStatusChange?: (id: number, status: string) => void;
+  onShare?: (link: HubLink) => void;
 }
 
-export default function HubLinkList({ links, onEdit, onDelete, onStatusChange }: HubLinkListProps) {
+export default function HubLinkList({ links, onEdit, onDelete, onStatusChange, onShare }: HubLinkListProps) {
   return (
     <motion.ul layout className="space-y-2">
       {links.map((link, i) => (
@@ -22,7 +23,7 @@ export default function HubLinkList({ links, onEdit, onDelete, onStatusChange }:
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.2, delay: Math.min(i, 8) * 0.015 }}
         >
-          <HubLinkRow link={link} onEdit={onEdit} onDelete={onDelete} />
+          <HubLinkRow link={link} onEdit={onEdit} onDelete={onDelete} onShare={onShare} />
         </motion.li>
       ))}
     </motion.ul>

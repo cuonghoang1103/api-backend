@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Edit3, Trash2 } from 'lucide-react';
+import { Edit3, Trash2, Share2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const STATUS_OPTIONS = [
@@ -26,6 +26,9 @@ interface HubLinkMenuProps {
   onEdit: (link: HubLink) => void;
   onDelete: (id: number) => void;
   onStatusChange: (id: number, status: string) => void;
+  // Phase 2 — owner-side: open the share modal for this link.
+  // Optional so older callers (e.g. tests) can omit it.
+  onShare?: (link: HubLink) => void;
 }
 
 /**
@@ -44,6 +47,7 @@ export default function HubLinkMenu({
   onEdit,
   onDelete,
   onStatusChange,
+  onShare,
 }: HubLinkMenuProps) {
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -143,6 +147,14 @@ export default function HubLinkMenu({
             >
               <Edit3 className="h-3 w-3" /> Sua
             </button>
+            {onShare && (
+              <button
+                onClick={() => { onClose(); onShare(link); }}
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+              >
+                <Share2 className="h-3 w-3" /> Chia se
+              </button>
+            )}
             <button
               onClick={() => {
                 onClose();

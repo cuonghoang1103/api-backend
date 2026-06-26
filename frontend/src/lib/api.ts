@@ -2322,6 +2322,145 @@ export const hubFileApi = {
   }>(`/hub/files/public/${slug}`),
 };
 
+// ─── Hub User-Sharing (Phase 2) ───────────────────────────────
+//
+// Lets the owner of a folder/link/file share it with a specific
+// recipient at view-only (or view+download) granularity. The
+// recipient is identified by username/email/id; the frontend
+// passes whatever the user typed and the service resolves it.
+//
+// `permission = 'view_download'` (default) means the recipient
+// can stream the file bytes via the signed URL endpoint. For
+// `permission = 'view'`, the recipient can see the file card
+// (name, size, mime) but cannot download. Links always allow
+// "download" in the sense that clicking the URL IS the
+// interaction — there's no separate download step.
+export interface HubShareOwnerMini {
+  id: number;
+  username: string;
+  fullName: string | null;
+  displayName: string | null;
+  avatarUrl: string | null;
+}
+export interface HubShareFolderMini {
+  id: number;
+  name: string;
+  icon: string | null;
+}
+export interface HubShareLinkMini {
+  id: number;
+  url: string;
+  title: string;
+  description: string | null;
+  thumbnailUrl: string | null;
+  faviconUrl: string | null;
+}
+export interface HubShareFileMini {
+  id: number;
+  name: string;
+  mimeType: string;
+  size: number;
+}
+export type SharePermission = 'view' | 'view_download';
+
+export interface HubShare {
+  id: number;
+  ownerId: number;
+  recipientId: number;
+  folderId: number | null;
+  linkId: number | null;
+  fileId: number | null;
+  permission: SharePermission;
+  note: string | null;
+  createdAt: string;
+  updatedAt: string;
+  owner: HubShareOwnerMini;
+  recipient: HubShareOwnerMini;
+  folder: HubShareFolderMini | null;
+  link: HubShareLinkMini | null;
+  file: HubShareFileMini | null;
+}
+
+export interface HubShareUserSummary {
+  user: HubShareOwnerMini;
+  shareCount: number;
+  latestSharedAt: string;
+}
+
+export interface HubSharedItemResponse {
+  share: HubShare;
+  folder?: (HubFolder & {
+    links?: HubLink[];
+    files?: HubFile[];
+  }) | null;
+  link?: HubLink | null;
+  file?: HubFile | null;
+}
+
+export const hubShareApi = {
+  // Owner-side: create or update a share.
+  // Idempotent on (ownerId, recipientId, itemId) — re-sharing
+  // the same item updates the existing row's permission/note.
+  create: (data: {
+    recipientId: string | number;
+    folderId?: number | null;
+    linkId?: number | null;
+    fileId?: number | null;
+    permission?: SharePermission;
+    note?: string | null;
+  }) => api.post<{ data: HubShare }>('/hub/shares', data),
+
+  listOutbox: () =>
+    api.get<{ data: HubShare[] }>('/hub/shares/outbox'),
+
+  listInbox: () =>
+    api.get<{ data: HubShare[] }>('/hub/shares/inbox'),
+
+  // List distinct users who shared something with me, sorted by
+  // most-recent share date. Drives the sidebar "Đang share với
+  // bạn" widget.
+  listUsersSharingWithMe: () =>
+    api.get<{ data: HubShareUserSummary[] }>(
+      '/hub/shares/users-sharing-with-me',
+    ),
+
+  // Typeahead search for the "share with user" modal. Excludes
+  // the caller themselves.
+  searchUsers: (q: string, limit = 10) =>
+    api.get<{
+      data: HubShareOwnerMini[];
+    }>('/hub/shares/users-search', { params: { q, limit } }),
+
+  get: (id: number) =>
+    api.get<{ data: HubShare }>(`/hub/shares/${id}`),
+
+  // Recipient-side: get the actual item through the share gate.
+  // Returns the share row + the underlying folder/link/file.
+  getSharedItem: (id: number) =>
+    api.get<{ data: HubSharedItemResponse }>(`/hub/shares/${id}/item`),
+
+  // Owner-side: flip permission / update note.
+  update: (
+    id: number,
+    data: { permission?: SharePermission; note?: string | null },
+  ) => api.patch<{ data: HubShare }>(`/hub/shares/${id}`, data),
+
+  // Owner-side: revoke.
+  delete: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(
+      `/hub/shares/${id}`,
+    ),
+
+  // Recipient-side: get a short-lived signed URL to download
+  // a shared file. Returns 403 if the share's permission is
+  // "view" (no downloads). Mirrors hubFileApi.getSignedUrl for
+  // owner-side access.
+  getSharedFileUrl: (fileId: number) =>
+    api.get<{ data: { url: string; mimeType: string } }>(
+      `/hub/shared-files/${fileId}/url`,
+    ),
+};
+
 // === CONTENT CREATOR ===
 // Phase 2 — admin API mounted at /api/v1/admin/content. All
 // routes require ROLE_ADMIN (handled by the server) and the

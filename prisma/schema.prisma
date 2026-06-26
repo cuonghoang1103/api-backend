@@ -177,6 +177,12 @@ model User {
   hubFolders HubFolder[]
   hubLinks   HubLink[]
   hubFiles   HubFile[]
+  // Hub user-sharing (Phase 2): the rows where this user is
+  // the owner (gave access) or the recipient (got access). Two
+  // named relations because Prisma requires a unique name per
+  // FK even when the target model is the same.
+  hubSharesOwned     HubShare[] @relation("HubShareOwner")
+  hubSharesReceived  HubShare[] @relation("HubShareRecipient")
 
   // ─── Notes — personal study notebooks ──────────────────
   // User-owned subjects → chapters → notes (+ attachments,
@@ -2394,6 +2400,9 @@ model HubFolder {
   files    HubFile[]
   parent   HubFolder?  @relation("HubSubFolders", fields: [parentId], references: [id], onDelete: Cascade)
   children HubFolder[] @relation("HubSubFolders")
+  // Phase 2: which shares expose this folder to which users.
+  // We only need the back-relation; the FK lives on HubShare.
+  shares   HubShare[]
 
   @@index([userId, sortOrder], name: "idx_hub_folders_user_sort")
   @@index([userId, name], name: "idx_hub_folders_user_name")
@@ -2433,6 +2442,8 @@ model HubLink {
 
   user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   folder HubFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  // Phase 2: shares that expose this link to specific recipients.
+  shares HubShare[]
 
   @@index([userId, createdAt(sort: Desc)], name: "idx_hub_links_user_recent")
   @@index([userId, folderId], name: "idx_hub_links_user_folder")
@@ -2464,11 +2475,64 @@ model HubFile {
 
   user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   folder HubFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  // Phase 2: shares that expose this file to specific recipients.
+  shares HubShare[]
 
   @@index([userId, folderId], name: "idx_hub_files_user_folder")
   @@index([userId, status], name: "idx_hub_files_user_status")
   @@index([userId], name: "idx_hub_files_user")
   @@map("hub_files")
+}
+
+// ─── Hub User-Sharing (Phase 2) ───────────────────────────────
+// One row = "user `ownerId` shares [folderId | linkId | fileId]
+// with user `recipientId`". Exactly one of folderId/linkId/fileId
+// is set per row. Recipient has read-only access by default; if
+// permission = "view_download" they can also download the file
+// (links are always "downloadable" — clicking the link IS the
+// download). The recipient NEVER gets edit/delete rights; the
+// owner can revoke at any time by deleting the share row.
+//
+// Discovery note: this row is created explicitly by the owner.
+// There is no auto-discovery — the recipient only sees the share
+// in their inbox if they navigate to /hub/shared. We deliberately
+// don't email them (privacy: don't leak which folder was shared).
+model HubShare {
+  id          Int      @id @default(autoincrement())
+  ownerId     Int      @map("owner_id")
+  recipientId Int      @map("recipient_id")
+  // Exactly one of these is set. Validated in the service layer
+  // — we throw AppError(400) if zero or more than one is set.
+  folderId    Int?     @map("folder_id")
+  linkId      Int?     @map("link_id")
+  fileId      Int?     @map("file_id")
+  // "view" (read-only) or "view_download" (file downloads too).
+  // Default to view_download because that's the common request
+  // pattern; if owner wants stricter, they can flip via PATCH.
+  permission  String   @default("view_download") @db.VarChar(20)
+  // Optional short note that rides along with the share (e.g.
+  // "Báo cáo cuối kỳ — xem giúp mình nhé"). Truncated to 500
+  // chars at the API layer.
+  note        String?  @db.VarChar(500)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  owner     User       @relation("HubShareOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  recipient User       @relation("HubShareRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  folder    HubFolder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  link      HubLink?   @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  file      HubFile?   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  // Anti-spam: a recipient can only have one share per item
+  // from the same owner. Re-sharing the same item updates the
+  // existing row (we use upsert in the service layer) so this
+  // unique constraint enforces "no duplicates" at the DB level.
+  @@unique([ownerId, recipientId, folderId], name: "uk_hub_share_owner_recipient_folder")
+  @@unique([ownerId, recipientId, linkId], name: "uk_hub_share_owner_recipient_link")
+  @@unique([ownerId, recipientId, fileId], name: "uk_hub_share_owner_recipient_file")
+  @@index([recipientId, createdAt(sort: Desc)], name: "idx_hub_share_recipient_recent")
+  @@index([ownerId, createdAt(sort: Desc)], name: "idx_hub_share_owner_recent")
+  @@map("hub_shares")
 }
 
 // ─── Social Follow Graph ──────────────────────────────────

@@ -148,6 +148,25 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
   const language: string = (node.attrs as { language?: string }).language ?? '';
   const isEditable = editor.isEditable;
 
+  // Compute the position just AFTER this codeBlock so we can
+  // move the selection there when the user exits edit mode.
+  // The previous fix only called editor.commands.focus() which
+  // kept the selection inside the codeBlock position — the
+  // user's next '/' keystroke then hit Tiptap with $from.parent
+  // === 'codeBlock', the slash trigger's 3-condition check failed,
+  // and the menu never opened. The user reported this as
+  // 'after I exit the code block I press / and the slash menu
+  // won't come back'. We now also move the caret to the next
+  // paragraph position so the slash trigger sees a paragraph
+  // parent and opens the menu normally.
+  //
+  // We deliberately do NOT call this on every render — only
+  // inside exitEdit, where we already have a transaction going.
+  // Calling commands.setTextSelection outside a transaction
+  // during render would create a render loop.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const codeBlockEndPos = typeof getPos === 'function' ? getPos() + node.nodeSize : null;
+
   // Two-mode UI: VIEW (Shiki highlighted, read-only) ↔ EDIT (plain
   // monospace contenteditable via Tiptap's NodeViewContent). We
   // default to VIEW so the highlighted HTML is the first thing the
@@ -194,17 +213,68 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
     // in the new render). That means the user's next keystroke —
     // typically typing "/" to re-open the slash menu — lands on
     // body, not on the editor, and `onUpdate` never fires.
-    // Restore focus to the editor synchronously after the state
-    // flip. We use a microtask so React has committed the new
-    // view first (and the old contenteditable is unmounted) but
-    // the user perceives no gap.
     //
-    // The user reported 'after I exit the code block I press /
-    // and the slash menu won't come back'. This is the fix.
+    // The user reported two related symptoms after Esc:
+    //   1) slash menu wouldn't reopen ('I press / and nothing')
+    //   2) focus is gone from the editor entirely
+    //
+    // The root cause of (1) was that even after focus was
+    // restored, the SELECTION was still anchored at the codeBlock
+    // position — so $from.parent.type.name was 'codeBlock' and
+    // the slash trigger's pre-condition check failed. Calling
+    // editor.commands.focus() alone is not enough; we also have
+    // to move the selection out of the codeBlock.
+    //
+    // Strategy: dispatch a single transaction that BOTH moves
+    // the selection to the paragraph after this codeBlock AND
+    // focuses the editor. Use queueMicrotask so React has
+    // committed the new view first (the contenteditable surface
+    // is unmounted) — otherwise the transaction can race the
+    // unmount and silently fail.
     queueMicrotask(() => {
-      try { editor.commands.focus(); } catch { /* ignore */ }
+      try {
+        // codeBlockEndPos was computed at render time from getPos().
+        // It's null if getPos isn't available (Tiptap always
+        // provides it but TypeScript widens the type to optional).
+        if (codeBlockEndPos == null) {
+          editor.commands.focus();
+          return;
+        }
+        const { state, view } = editor;
+        // Clamp the target position to the document end. The
+        // doc length is state.doc.content.size, but to place the
+        // caret INSIDE the next block we want to land at
+        // min(codeBlockEndPos, doc.content.size - 1) — otherwise
+        // we land on the closing doc node which Tiptap can't focus.
+        const docSize = state.doc.content.size;
+        const target = Math.min(codeBlockEndPos, docSize - 1);
+        if (target <= 0) {
+          editor.commands.focus();
+          return;
+        }
+        const tr = state.tr.setSelection(
+          // TextSelection.near() takes a $pos and snaps to the
+          // nearest valid text position. Importing TextSelection
+          // here would couple this NodeView to a deeper Tiptap
+          // path than necessary; reach it via the static
+          // TextSelection class which Tiptap re-exports.
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          (require('@tiptap/pm/state') as typeof import('@tiptap/pm/state'))
+            .TextSelection
+            .near(state.doc.resolve(target)) as any,
+        );
+        // Focus BEFORE dispatch so the editor's DOM updates know
+        // where to anchor the selection ring.
+        view.focus();
+        view.dispatch(tr);
+      } catch {
+        // Best-effort — if anything throws (e.g. doc changed
+        // underneath us because the user typed during the
+        // microtask) just give up rather than break the editor.
+        try { editor.commands.focus(); } catch { /* ignore */ }
+      }
     });
-  }, [editor]);
+  }, [editor, codeBlockEndPos]);
 
   // Native keydown listener on the wrapper DOM node. The
   // wrapper's React `onKeyDown` prop is bound to the wrapper's

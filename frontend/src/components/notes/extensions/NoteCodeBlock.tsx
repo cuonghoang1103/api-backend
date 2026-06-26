@@ -189,7 +189,22 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
 
   const exitEdit = useCallback(() => {
     setIsEditing(false);
-  }, []);
+    // After we drop the contenteditable surface, the browser
+    // moves focus to document.body (no other focusable element
+    // in the new render). That means the user's next keystroke —
+    // typically typing "/" to re-open the slash menu — lands on
+    // body, not on the editor, and `onUpdate` never fires.
+    // Restore focus to the editor synchronously after the state
+    // flip. We use a microtask so React has committed the new
+    // view first (and the old contenteditable is unmounted) but
+    // the user perceives no gap.
+    //
+    // The user reported 'after I exit the code block I press /
+    // and the slash menu won't come back'. This is the fix.
+    queueMicrotask(() => {
+      try { editor.commands.focus(); } catch { /* ignore */ }
+    });
+  }, [editor]);
 
   // Native keydown listener on the wrapper DOM node. The
   // wrapper's React `onKeyDown` prop is bound to the wrapper's
@@ -201,11 +216,34 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
   // Arrow keys, on Escape inside certain node types — so the
   // wrapper-level React handler can miss the event entirely.
   // The user reported 'I press Escape and the code block won't
-  // exit edit mode' — so we attach a NATIVE keydown listener
-  // directly on the wrapper DOM node via ref + useEffect. This
-  // bypasses both React's synthetic dispatch and ProseMirror's
-  // capture phase. Same pattern Notion / Linear use for
-  // editor-wide shortcuts.
+  // exit edit mode'. We use TWO redundant paths:
+  //
+  //   (a) the editor-level handleKeyDown in NoteEditor fires
+  //       INSIDE ProseMirror and dispatches a CustomEvent on
+  //       the wrapper; this NodeView listens for that event and
+  //       flips state. This is the most reliable path because it
+  //       runs before both ProseMirror's internal handlers and
+  //       the wrapper-level React listeners.
+  //
+  //   (b) a native capture-phase keydown on the wrapper itself.
+  //       This is a defensive fallback in case (a) is not wired
+  //       up (e.g. a future NoteEditor rewrite drops the editor-
+  //       level handleKeyDown by mistake). Capture phase fires
+  //       before any bubble-phase listener on the same node.
+  useEffect(() => {
+    const node = wrapperRef.current;
+    if (!node) return;
+    const onExitEvent = () => {
+      // From path (a): editor-level handler dispatched this on us.
+      // Use a fresh state read so we always flip out of edit mode.
+      if (isEditing) exitEdit();
+    };
+    node.addEventListener('notes:exit-code-edit', onExitEvent);
+    return () => {
+      node.removeEventListener('notes:exit-code-edit', onExitEvent);
+    };
+  }, [isEditing, exitEdit]);
+
   useEffect(() => {
     const node = wrapperRef.current;
     if (!node) return;
@@ -213,17 +251,15 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
       if (!isEditing) return;
       if (e.key === 'Escape') {
         e.preventDefault();
-        // stopPropagation so the editor's other listeners (e.g.
-        // SlashMenu's window-level Esc listener on line 159)
-        // don't also fire on this same Escape. The user is
-        // exiting edit mode, not closing a popup menu.
         e.stopPropagation();
         exitEdit();
       }
     };
-    node.addEventListener('keydown', onKey);
+    // Capture phase: fire BEFORE ProseMirror's bubble-phase
+    // listeners. If they call stopPropagation, we still got it.
+    node.addEventListener('keydown', onKey, true);
     return () => {
-      node.removeEventListener('keydown', onKey);
+      node.removeEventListener('keydown', onKey, true);
     };
   }, [isEditing, exitEdit]);
 
@@ -294,6 +330,13 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
       as="div"
       className="my-3"
       data-type="code-block"
+      // Mark the wrapper while it's in EDIT mode so the editor-
+      // level keyboard handler in NoteEditor can detect Escape and
+      // call our React state setter. ProseMirror's own keymap
+      // doesn't process Escape (no default), but the editor-
+      // level handler runs before the wrapper-level React handler
+      // and is the most reliable place to intercept the key.
+      data-allow-escape={isEditing ? 'true' : undefined}
       onClick={onContainerClick}
       onKeyDown={onKeyDown}
       onFocusOut={onWrapperFocusOut}

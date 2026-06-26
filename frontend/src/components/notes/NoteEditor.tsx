@@ -166,6 +166,36 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
         class: 'note-prose focus:outline-none',
         spellcheck: 'false',
       },
+      // Editor-level keyboard handler. Fires INSIDE ProseMirror
+      // (before the contenteditable's native keydown reaches
+      // React's synthetic dispatch). We use it ONLY to handle
+      // Escape inside an editable code block: the codeBlock
+      // NodeView sets data-allow-escape='true' on its wrapper
+      // when in EDIT mode. We then dispatch a CustomEvent that
+      // the NodeView listens for to flip its React state. This
+      // bypasses both ProseMirror's internal capture AND React's
+      // synthetic dispatch, and is the only path that reliably
+      // gets through every browser / framework layer we tested.
+      handleKeyDown(_view, event) {
+        if (event.key !== 'Escape') return false;
+        const target = event.target as HTMLElement | null;
+        if (!target) return false;
+        // Walk up the DOM to find a code-block wrapper that's
+        // currently in EDIT mode (data-allow-escape='true'). The
+        // keydown event's target may be the inner <code> element
+        // (set by NodeViewContent as="code") rather than the
+        // wrapper itself, so we need to climb.
+        const editable = target.closest('[data-allow-escape="true"]');
+        if (!editable) return false;
+        event.preventDefault();
+        event.stopPropagation();
+        // Dispatch a CustomEvent so the NodeView's React state
+        // can flip without us having to thread a ref through
+        // ProseMirror's plugin system. The NodeView listens for
+        // this once on mount.
+        editable.dispatchEvent(new CustomEvent('notes:exit-code-edit'));
+        return true; // tell ProseMirror we handled it
+      },
       handlePaste(view, event) {
         const files = Array.from(event.clipboardData?.files ?? []).filter((f) => f.type.startsWith('image/'));
         if (files.length && editor) {

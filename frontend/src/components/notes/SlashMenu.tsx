@@ -130,18 +130,26 @@ const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor }, ref) => {
   useImperativeHandle(ref, () => ({
     open: (rect) => {
       // rect comes from ProseMirror's coordsAtPos / getBoundingClientRect
-      // and is already in VIEWPORT coordinates (i.e. relative to the
-      // current visible area, NOT to the document). The menu is
-      // rendered with `position: absolute` and no `position:
-      // relative` ancestor (the editor root has no positioning), so
-      // it anchors relative to the initial containing block = the
-      // viewport. Adding window.scrollY here would push the menu
-      // DOWN by exactly the amount the user has scrolled — the
-      // menu would render far below the caret or off-screen, and
-      // the user would have to scroll back up to find it. The user
-      // reported exactly this: 'after I exit the code block and
-      // press /, the menu appears over the OLD code block, not at
-      // the current caret'.
+      // and is already in VIEWPORT coordinates (relative to the
+      // current visible area, NOT to the document).
+      //
+      // The previous fix dropped window.scrollY/+scrollX thinking
+      // the menu was `position: absolute` with no positioned
+      // ancestor (which would make the initial containing block =
+      // viewport). That assumption was wrong: the surrounding
+      // <main className="relative"> on /notes wraps the editor
+      // and is the positioned ancestor. With position: absolute,
+      // top/left are interpreted RELATIVE TO <main>, not the
+      // viewport. Without scrollY, a viewport coord of (1700)
+      // becomes 1700 px down from the top of <main> — which on
+      // a scrolled page is far below the actual caret and
+      // coincides with the OLD codeBlock's location.
+      //
+      // Switching to `position: fixed` makes the menu anchor to
+      // the viewport regardless of any ancestor positioning.
+      // Viewport coords from coordsAtPos are then usable
+      // directly with no conversion. The menu tracks the caret
+      // exactly as the user scrolls.
       setPos({ top: rect.bottom + 4, left: rect.left });
       setQuery('');
       setActive(0);
@@ -189,7 +197,7 @@ const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor }, ref) => {
     <div
       ref={ref_div}
       role="listbox"
-      style={{ position: 'absolute', top: pos.top, left: pos.left, zIndex: 60 }}
+      style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 60 }}
       className="w-64 max-h-72 overflow-y-auto rounded-lg border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/95 p-1 shadow-2xl backdrop-blur"
     >
       {items.map((it, i) => (

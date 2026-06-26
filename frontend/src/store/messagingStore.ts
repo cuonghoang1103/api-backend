@@ -87,6 +87,22 @@ interface MessagingState {
 
   // Open / switch thread
   openThread: (threadId: number) => Promise<void>;
+  /**
+   * Per-popup entry point: fetch a thread's message history into the
+   * `messagesByThread[threadId]` cache WITHOUT touching `currentThreadId`
+   * or `isWidgetOpen`. Use this from UI surfaces that need to render
+   * messages without becoming the active thread on the /messages page
+   * (e.g. the floating MiniChatDock — each popup window calls this so
+   * a peer popup never clobbers the user's currently-open conversation
+   * on the full Messenger page).
+   *
+   * Idempotent: safe to call repeatedly for the same threadId. Joins
+   * the socket room so `thread:new-message` events for this thread are
+   * delivered (and thus update `messagesByThread[threadId]` via
+   * `applyIncomingMessage`). Marks the thread as read on the server
+   * because the user is looking at it.
+   */
+  loadThreadMessages: (threadId: number) => Promise<void>;
   closeThread: () => void;
   startAdminThread: () => Promise<number>;
   startUserThread: (peerId: number) => Promise<number>;
@@ -529,6 +545,77 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       set({ currentThread: res.data.data as MessagingThread });
     } catch {
       // Best effort
+    }
+  },
+
+  // loadThreadMessages — see the action description in the
+  // MessagingState interface above. Behaviour is "load + cache +
+  // join + markRead", like openThread, but with NO side effects on
+  // currentThreadId / currentThread / isWidgetOpen so callers that
+  // only want a message-history snapshot (mini-chat popups, future
+  // embedded widgets) don't clobber the user's active conversation
+  // on the full /messages page.
+  async loadThreadMessages(threadId) {
+    if (!Number.isFinite(threadId)) return;
+
+    // Always (re-)join the socket room so `thread:new-message`
+    // events for this thread land in `messagesByThread[threadId]`
+    // via applyIncomingMessage. joinThread is queue-safe and
+    // idempotent at the socket layer.
+    joinThread(threadId);
+
+    const auth = useAuthStore.getState();
+
+    // ── Optimistic IndexedDB restore (mirrors openThread) ─────
+    // If we have nothing in the in-memory cache yet, try to surface
+    // the last known good list from IndexedDB so the user sees
+    // something immediately. The server fetch below still runs to
+    // reconcile any newer messages.
+    if (auth.user?.id != null && !get().messagesByThread[threadId]) {
+      try {
+        const cachedMsgs = await import('@/lib/messageCache').then((m) =>
+          m.loadMessages(threadId, auth.user!.id),
+        );
+        if (cachedMsgs && cachedMsgs.length > 0) {
+          set((s) => ({
+            messagesByThread: { ...s.messagesByThread, [threadId]: cachedMsgs as MessagingMessage[] },
+            hasMoreByThread: { ...s.hasMoreByThread, [threadId]: cachedMsgs.length >= 50 },
+          }));
+        }
+      } catch {
+        // Cache restore is best-effort; fall through to the network fetch.
+      }
+    }
+
+    // ── Authoritative fetch ───────────────────────────────────
+    // Either we had nothing in memory + IndexedDB, OR we already
+    // had a list and want to pick up anything new. The same fetch
+    // path handles both — we just always overwrite the cache for
+    // this thread with the server response.
+    try {
+      const res = await messagingApi.listMessages(threadId, { limit: 50 });
+      const messages = (res.data.data ?? []) as MessagingMessage[];
+      set((s) => ({
+        messagesByThread: { ...s.messagesByThread, [threadId]: messages },
+        hasMoreByThread: { ...s.hasMoreByThread, [threadId]: messages.length >= 50 },
+      }));
+      // Mirror to IndexedDB so the next popup open in a future
+      // session can restore from cache. Errors here are silent —
+      // the cache is an optimisation, not a correctness requirement.
+      if (auth.user?.id != null) {
+        await import('@/lib/messageCache').then((m) =>
+          m.saveMessages(threadId, auth.user!.id, messages as unknown[]),
+        );
+      }
+      // User is reading this thread — clear the unread badge on
+      // the server so other devices / sessions see this thread as
+      // up to date. markRead is a thin REST call + local clear.
+      await get().markRead(threadId);
+    } catch {
+      // Network blip: the user already has whatever was in cache
+      // (if anything). Surfacing a toast from here would compete
+      // with other toasts; the popup can render an error banner
+      // by checking `messageLoadError` if needed.
     }
   },
 

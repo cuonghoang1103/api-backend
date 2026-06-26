@@ -48,6 +48,25 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy rest of source
 COPY . .
 
+# ─── Defensive: nuke any pre-existing .next directory ──────────────
+# Next.js's incremental build uses `.next/cache/` to skip re-building
+# chunks that haven't changed. When the cache is present but stale
+# (e.g. BuildKit layer cache hit from an older commit), the resulting
+# image can ship pre-rendered HTML that references chunk hashes no
+# longer in `.next/static/chunks/` — the browser then 404s on those
+# scripts and the page hangs on the loading spinner.
+#
+# Deleting .next before `npm run build` forces a full rebuild from
+# scratch. Cost: ~1-2 min on top of the normal build, but the image
+# is guaranteed self-consistent (HTML + chunks + manifest all share
+# the same buildId). Bounded: only adds 1 line to the builder stage;
+# runner stage is unaffected. See the postmortem for the
+# 2026-06-26 outage: commit 309413f shipped a build where the
+# pre-rendered HTML still referenced the previous deploy's
+# `main-app-57e58c5…js` while the actual chunk file had been
+# regenerated with a new hash.
+RUN rm -rf .next
+
 # Build args for environment variables
 ARG NEXT_PUBLIC_API_URL
 ARG NEXTAUTH_URL
@@ -76,6 +95,10 @@ ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
 ENV NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE=$NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE
 ENV NEXT_PUBLIC_SENTRY_ENVIRONMENT=$NEXT_PUBLIC_SENTRY_ENVIRONMENT
 ENV NEXT_PUBLIC_SENTRY_RELEASE=$NEXT_PUBLIC_SENTRY_RELEASE
+
+# Clean build — prevents Next.js incremental build race condition
+# where HTML and JS chunks get mismatched hashes after source changes
+RUN rm -rf .next
 
 # Build Next.js (standalone output)
 RUN npm run build

@@ -412,6 +412,17 @@ export default function HubClient({
             onDelete={handleDeleteFolder}
             addOpen={addFolderOpen}
             setAddOpen={setAddFolderOpen}
+            // Phase 2 — owner-side: open the share modal pre-filled
+            // with the folder id. The backend already accepts
+            // folderId for HubShare (see src/services/hubShare.service.ts
+            // resolveAndAssertOwnedItem), and the recipient-side
+            // viewer walks the folder's links + files (see
+            // HubSharedItemViewer.FolderView).
+            onShareFolder={(folder) => setShareModalItem({
+              kind: 'folder',
+              id: folder.id,
+              label: folder.name,
+            })}
           />
           {/* Phase 2 — sidebar widget showing users who have
               shared items with the current user. Lives below the

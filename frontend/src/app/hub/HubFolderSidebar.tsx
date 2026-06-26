@@ -1,15 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Layers, Plus, FolderOpen, Inbox, MoreVertical, Trash2, Edit3, X, Check,
-  ChevronRight, FolderPlus,
+  Layers, Plus, FolderOpen, Inbox, MoreVertical, X, Check,
+  ChevronRight,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { hubApi, type HubFolder } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import HubFolderMenu from './HubFolderMenu';
 
 type Selection = number | 'all' | 'null';
 
@@ -21,10 +22,15 @@ interface HubFolderSidebarProps {
   onDelete: (id: number) => void;
   addOpen: boolean;
   setAddOpen: (open: boolean) => void;
+  // Phase 2 — owner-side: open the share modal for this folder.
+  // Optional so the sidebar still works when not wired (e.g.
+  // in tests). When omitted, the "Chia sẻ" button is hidden.
+  onShareFolder?: (folder: HubFolder) => void;
 }
 
 export default function HubFolderSidebar({
   folders, selected, onSelect, onCreate, onDelete, addOpen, setAddOpen,
+  onShareFolder,
 }: HubFolderSidebarProps) {
   const [newName, setNewName] = useState('');
   const [menuId, setMenuId] = useState<number | null>(null);
@@ -191,13 +197,18 @@ interface FolderTreeItemProps {
   onSubmitRename: () => void;
   childCount: (id: number) => number;
   totalCount: (f: HubFolder) => number;
+  // Phase 2 — wired through to HubFolderMenu for the "Chia sẻ"
+  // button. The button is hidden when undefined.
+  onShareFolder?: (folder: HubFolder) => void;
 }
 
 function FolderTreeItem({
   folder, folders, selected, onSelect, onToggleExpand,
   expandedFolders, renamingId, renameValue, setRenamingId, setRenameValue,
   menuId, setMenuId, onDelete, onSubmitRename, childCount, totalCount,
+  onShareFolder,
 }: FolderTreeItemProps) {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const children = folders.filter((f) => f.parentId === folder.id);
   const hasChildren = children.length > 0;
   const isExpanded = expandedFolders.has(folder.id);
@@ -258,9 +269,13 @@ function FolderTreeItem({
             onClick={() => onSelect(folder.id)}
           />
 
-          {/* Menu button */}
+          {/* Menu button — ref'd so the portal menu can anchor
+              to it. The portal lives in document.body, NOT in
+              this DOM subtree, so it escapes the sidebar's
+              overflow + the "Shared with me" widget below. */}
           {renamingId !== folder.id && (
             <button
+              ref={buttonRef}
               onClick={(e) => {
                 e.stopPropagation();
                 setMenuId(menuId === folder.id ? null : folder.id);
@@ -272,52 +287,31 @@ function FolderTreeItem({
             </button>
           )}
 
-          {/* Dropdown menu */}
-          <AnimatePresence>
-            {menuId === folder.id && (
-              <motion.div
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.12 }}
-                className="absolute right-1 top-full z-20 mt-1 w-36 overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/95 shadow-2xl backdrop-blur-xl"
-              >
-                <button
-                  onClick={() => { setRenamingId(folder.id); setRenameValue(folder.name); setMenuId(null); }}
-                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                >
-                  <Edit3 className="h-3 w-3" /> Doi ten
-                </button>
-                <button
-                  onClick={() => {
-                    setMenuId(null);
-                    if (confirm(`Tao thu muc con trong "${folder.name}"?`)) {
-                      const name = prompt('Ten thu muc con:');
-                      if (name?.trim()) {
-                        // We can't call onCreate with parentId here easily
-                        // Use API directly
-                        void hubApi.createFolder({ name: name.trim() }).then(() => {
-                          toast.success('Da tao thu muc con');
-                        }).catch(() => toast.error('Khong the tao thu muc'));
-                      }
-                    }
-                  }}
-                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                >
-                  <FolderPlus className="h-3 w-3" /> Them thu muc con
-                </button>
-                <button
-                  onClick={() => {
-                    setMenuId(null);
-                    if (confirm(`Xoa thu muc "${folder.name}"? Links va files se giu lai.`)) onDelete(folder.id);
-                  }}
-                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-red-400 transition-colors hover:bg-red-500/10"
-                >
-                  <Trash2 className="h-3 w-3" /> Xoa
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Portal-rendered dropdown menu. See HubFolderMenu for
+              the rationale — inline rendering got clipped by the
+              sidebar + the sibling "Shared with me" card. */}
+          <HubFolderMenu
+            open={menuId === folder.id}
+            anchorRef={buttonRef}
+            onClose={() => setMenuId(null)}
+            onRename={() => { setRenamingId(folder.id); setRenameValue(folder.name); }}
+            onCreateSubfolder={() => {
+              if (confirm(`Tao thu muc con trong "${folder.name}"?`)) {
+                const name = prompt('Ten thu muc con:');
+                if (name?.trim()) {
+                  void hubApi.createFolder({ name: name.trim() }).then(() => {
+                    toast.success('Da tao thu muc con');
+                  }).catch(() => toast.error('Khong the tao thu muc'));
+                }
+              }
+            }}
+            onDelete={() => {
+              if (confirm(`Xoa thu muc "${folder.name}"? Links va files se giu lai.`)) {
+                onDelete(folder.id);
+              }
+            }}
+            onShare={onShareFolder ? () => onShareFolder(folder) : undefined}
+          />
         </div>
       )}
 
@@ -351,6 +345,7 @@ function FolderTreeItem({
                   onSubmitRename={onSubmitRename}
                   childCount={childCount}
                   totalCount={totalCount}
+                  onShareFolder={onShareFolder}
                 />
               ))}
             </div>

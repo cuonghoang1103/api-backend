@@ -108,6 +108,20 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
     });
     try {
       await notificationApi.markRead({ all: true });
+      // After the server confirms all-read, the messenger badge
+      // (useMessagingStore.unreadTotal) may still be stale because
+      // it tracks DM unread via a separate counter. We re-fetch
+      // here so the two badges converge to 0 in lockstep. The
+      // lazy import avoids a hard module dependency between the
+      // two stores (and a potential circular import with
+      // messagingStore, which itself lazy-imports messageCache).
+      try {
+        const { useMessagingStore } = await import('./messagingStore');
+        await useMessagingStore.getState().refreshUnread();
+      } catch {
+        /* best-effort — the messenger badge will catch up on next
+           init() or the next thread:new-message event */
+      }
     } catch {
       // Roll back the optimistic flip on failure
       set({ items: before, unreadCount: unreadBefore });

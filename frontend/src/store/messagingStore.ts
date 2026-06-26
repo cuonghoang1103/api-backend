@@ -191,6 +191,18 @@ interface MessagingState {
 const TYPING_TIMEOUT_MS = 3500;
 
 /**
+ * In-flight de-dupe cache for startUserThread(peerId).
+ *
+ * See the long comment on startUserThread() below for the race
+ * this protects against. Module-level (not store state) because
+ * it must outlive any single component render: two components
+ * calling getState().startUserThread(N) concurrently need to
+ * share the SAME Promise, which Zustand state cannot provide
+ * (a `set` inside the second caller would race the first).
+ */
+const startUserThreadInFlight = new Map<number, Promise<number>>();
+
+/**
  * Merge a freshly-fetched server message list with whatever we
  * currently have cached in `messagesByThread[threadId]`.
  *
@@ -740,10 +752,39 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   },
 
   async startUserThread(peerId) {
-    const res = await messagingApi.getOrCreateUserThread(peerId);
-    const thread = res.data.data;
-    await get().loadThreads();
-    return thread.id;
+    // De-dupe in-flight calls for the same peerId.
+    //
+    // Why this exists: the right-rail "Gợi ý kết nối" widget
+    // (SocialRightWidget.handleMessage) and the /messages page
+    // `?peer=` effect both call startUserThread(pid) for the same
+    // peerId within a few hundred ms of each other. Both reach the
+    // store via getState(), so they're racing each other on the
+    // network. The backend's POST /messages/threads/user/{peerId}
+    // is documented as "get or create" but if BOTH requests land
+    // before either has committed a row, two distinct threads can
+    // be created. The user then sees an empty thread in the new
+    // sidebar slot, and the messages they sent earlier to that
+    // peer live on a different threadId they can't navigate to.
+    //
+    // Fix: hold an in-flight Promise per peerId. Concurrent
+    // callers await the SAME Promise, so the network only sees
+    // one request. The cache is dropped on settle (success or
+    // throw) so a later legit retry can re-fire.
+    const existing = startUserThreadInFlight.get(peerId);
+    if (existing) return existing;
+
+    const promise = (async () => {
+      try {
+        const res = await messagingApi.getOrCreateUserThread(peerId);
+        const thread = res.data.data;
+        await get().loadThreads();
+        return thread.id;
+      } finally {
+        startUserThreadInFlight.delete(peerId);
+      }
+    })();
+    startUserThreadInFlight.set(peerId, promise);
+    return promise;
   },
 
   async loadMoreMessages(threadId) {

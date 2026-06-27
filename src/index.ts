@@ -69,6 +69,13 @@ const paymentRoutes = (await import(path.join(__dirname, 'routes', 'payment.rout
 const academyRoutes = (await import(path.join(__dirname, 'routes', 'academy.routes.js'))).default;
 const courseCategoryRoutes = (await import(path.join(__dirname, 'routes', 'courseCategory.routes.js'))).default;
 const shopRoutes = (await import(path.join(__dirname, 'routes', 'shop.routes.js'))).default;
+// Phase 4 add — the curated Song pool that powers the
+// Instagram-style post-attached music sticker. We mount the
+// picker route at /api/v1/songs (public, auth-only) and the
+// admin CRUD at /api/v1/admin/songs (ROLE_ADMIN).
+const { songRoutes, songAdminRoutes } = await import(
+  path.join(__dirname, 'routes', 'songs.routes.js')
+);
 const musicRoutes = (await import(path.join(__dirname, 'routes', 'music.routes.js'))).default;
 const musicAdminRoutes = (await import(path.join(__dirname, 'routes', 'music-admin.routes.js'))).default;
 const musicHistoryRoutes = (await import(path.join(__dirname, 'routes', 'music-history.routes.js'))).default;
@@ -366,6 +373,8 @@ app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/academy', academyRoutes);
 app.use('/api/v1/course-categories', courseCategoryRoutes);
 app.use('/api/v1/shop', shopRoutes);
+app.use('/api/v1/songs', songRoutes);
+app.use('/api/v1/admin/songs', songAdminRoutes);
 app.use('/api/v1/music', musicRoutes);
 app.use('/api/v1/music/admin', musicAdminRoutes);
 app.use('/api/v1/music/history', musicHistoryRoutes);

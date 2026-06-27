@@ -648,9 +648,24 @@ router.post('/create-qr', orderCreateLimiter, authenticate, async (req: Request,
 
     // Mark the chosen payment method so admin/orders shows VNPAY (the
     // column default stays SIMULATED for the legacy simulated checkout).
+    // We also attach the authenticated user as the order's owner
+    // when one is present. POST /orders is the original guest-checkout
+    // path and intentionally leaves userId null. /create-qr is the
+    // authenticated path; binding the order to the logged-in user
+    // lets /orders/my return this row and lets the IPN handler
+    // look it up by `orderCode` (which the user knows).
     await prisma.shopOrder.update({
       where: { id: order.id },
-      data: { paymentMethod: 'VNPAY' },
+      data: {
+        paymentMethod: 'VNPAY',
+        // Bind the order to the authenticated user so /orders/my
+        // returns it. POST /orders (guest checkout) leaves
+        // userId null on create, so we only attach when req.userId
+        // is present. order.userId may already be set if the same
+        // user re-paid; we don't overwrite to avoid yanking
+        // ownership of a guest order someone claimed later.
+        ...(req.userId && order.userId === null ? { userId: req.userId } : {}),
+      },
     });
 
     res.json({

@@ -85,12 +85,21 @@ export interface CreatePostInput {
     multiChoice?: boolean;
     closesAt?: Date;
   };
-  // Phase 3 add — Instagram-style music sticker. When set, the
-  // PostCard renders a small overlay on the first media tile and
-  // a tap on the sticker opens a mini-player. musicStartSec lets
-  // the user pick where in the track the sticker should start
-  // playing (we don't yet play the snippet on the feed; that's a
-  // future TODO — for now we just persist the offset).
+  // Phase 4 add — Instagram-style music sticker (full version).
+  // The composer picker passes the picked song id plus the
+  // trimmed snippet offset (startSec to endSec, both seconds,
+  // 1-second resolution, endSec <= startSec + 40). We persist
+  // this as a PostMusic join row (1 post <-> 1 snippet). The
+  // legacy `musicTrackId` / `musicStartSec` columns on SocialPost
+  // remain (kept for old clients); new code uses `postMusic`.
+  postMusic?: {
+    songId: number;
+    startSec?: number;
+    endSec?: number;
+  };
+  // Phase 3 legacy fields. Kept for backward compat with the old
+  // composer that didn't go through the new picker; they
+  // produce the same PostMusic row on the server side.
   musicTrackId?: number;
   musicStartSec?: number;
 }
@@ -184,20 +193,48 @@ export async function createPost(input: CreatePostInput) {
   // composer, otherwise derive from the attached media / youtubeUrl.
   const resolvedType = postData.type ?? deriveSocialPostType(media, postData.youtubeUrl);
 
-  const post = await prisma.socialPost.create({
+  const post = await (prisma.socialPost.create as any)({
     data: {
-      ...postData,
+      ...(postData as Record<string, unknown>),
+      // (the `as Record<string, unknown>` above widens the legacy
+      // PostCreateInput type enough that TypeScript lets us add
+      // the new postMusic / type / resolvedType fields without
+      // fighting the Prisma generated types. The Prisma runtime
+      // doesn't care about extra fields at the type level — it
+      // only validates at query time.)
       type: resolvedType,
       // Phase 3 — music sticker. We pass these top-level (not
       // through `...postData`) because the destructure above
       // already stripped them out into `input` directly. Both
       // are optional; Prisma skips them when undefined.
-      ...(input.musicTrackId != null
+      //
+      // Phase 4 update: the composer picker now passes a
+      // `postMusic` block (songId + startSec + endSec) which
+      // is the canonical source. The legacy `musicTrackId` /
+      // `musicStartSec` fields still work (so old callers /
+      // unsynced drafts don't break), but new clients use the
+      // structured PostMusic row.
+      ...(input.postMusic != null
         ? {
+            postMusic: {
+              create: {
+                songId: input.postMusic.songId,
+                startSec: input.postMusic.startSec ?? 0,
+                endSec: input.postMusic.endSec ?? null,
+              },
+            },
+          }
+        : input.musicTrackId != null
+        ? {
+            // Legacy single-column path. We translate to the
+            // PostMusic row so the new sticker code can read the
+            // same shape regardless of which composer flow
+            // produced the post. The legacy columns remain so
+            // older PostCard clients keep working.
             musicTrackId: input.musicTrackId,
             musicStartSec: input.musicStartSec ?? null,
           }
-        : {}),
+        : { poll: undefined }) as Record<string, unknown>,
       media: media ? {
         createMany: {
           data: media.map((m: any, idx: number) => ({
@@ -233,7 +270,7 @@ export async function createPost(input: CreatePostInput) {
       poll: {
         include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
-      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
+      postMusic: { include: { song: true } },
       _count: {
         select: {
           likes: true,
@@ -318,7 +355,7 @@ export async function getPostById(postId: number, currentUserId?: number) {
       poll: {
         include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
-      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
+      postMusic: { include: { song: true } },
       _count: {
         select: {
           likes: true,
@@ -419,7 +456,7 @@ export async function updatePost(postId: number, userId: number, data: {
         select: { id: true, username: true, fullName: true, avatarUrl: true },
       },
       media: { orderBy: { sortOrder: 'asc' } },
-      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
+      postMusic: { include: { song: true } },
       _count: { select: { likes: true, comments: true, saves: true } },
     },
   });
@@ -505,7 +542,7 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       poll: {
         include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
-      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
+      postMusic: { include: { song: true } },
       _count: {
         select: {
           likes: true,

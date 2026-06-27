@@ -174,8 +174,48 @@ export async function listAllSongsForAdmin(limit = 100): Promise<unknown[]> {
     orderBy: { createdAt: 'desc' },
     take: limit,
     include: {
-      uploader: { select: { id: true, username: true, fullName: true, displayName: true } },
+      uploader: { select: { id: true, username: true, fullName: true } },
       _count: { select: { postMusic: true } },
+    },
+  });
+}
+
+/**
+ * Paginated user-facing feed of active songs for the composer
+ * picker. We do the cursor + search filter at the SQL level
+ * (prisma where + ilike) so a 1k-track library stays fast —
+ * no in-memory filtering. Returns the same shape as the route's
+ * raw prisma findMany so the route can just forward.
+ */
+export async function getFeed(opts: { cursor?: number; limit?: number; q?: string }): Promise<unknown[]> {
+  const cursor = opts.cursor;
+  const limit = Math.min(100, Math.max(1, opts.limit ?? 30));
+  const q = (opts.q ?? '').trim();
+
+  const where: Record<string, unknown> = { isActive: true };
+  if (q) {
+    where.OR = [
+      { title: { contains: q, mode: 'insensitive' } },
+      { artist: { contains: q, mode: 'insensitive' } },
+    ];
+  }
+  if (cursor != null && Number.isInteger(cursor) && cursor > 0) {
+    where.id = { lt: cursor };
+  }
+
+  return prisma.song.findMany({
+    where,
+    orderBy: { id: 'desc' },
+    take: limit,
+    select: {
+      id: true,
+      title: true,
+      artist: true,
+      audioUrl: true,
+      coverImage: true,
+      durationSec: true,
+      createdAt: true,
+      uploader: { select: { id: true, username: true, fullName: true, displayName: true } },
     },
   });
 }

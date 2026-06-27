@@ -18,16 +18,14 @@
 import { Router, type Response } from 'express';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
-import { prisma } from '../config/database.js';
 import {
   createSong,
-  listSongsForUser,
   listAllSongsForAdmin,
-  getSongById,
+  getFeed,
+  getSongForPlayback,
   updateSong,
   setActive,
   deleteSong,
-  getSongForPlayback,
 } from '../services/song.service.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -64,23 +62,9 @@ router.get('/', authenticate, async (req: any, res: Response<ApiResponse>, next)
       where.id = { lt: cursor };
     }
 
-    const items = await prisma.song.findMany({
-      where,
-      orderBy: { id: 'desc' },
-      take: limit,
-      select: {
-        id: true,
-        title: true,
-        artist: true,
-        audioUrl: true,
-        coverImage: true,
-        durationSec: true,
-        createdAt: true,
-        uploader: { select: { id: true, username: true, fullName: true, displayName: true } },
-      },
-    });
+    const items = await getFeed({ cursor: cursor ?? undefined, limit, q });
 
-    const nextCursor = items.length === limit ? items[items.length - 1].id : null;
+    const nextCursor = items.length === limit ? (items as { id: number }[])[items.length - 1].id : null;
     res.json({
       success: true,
       data: { items, nextCursor },
@@ -124,16 +108,8 @@ adminRouter.get('/', async (req: any, res: Response<ApiResponse>, next) => {
     if (cursor != null && Number.isInteger(cursor) && cursor > 0) {
       where.id = { lt: cursor };
     }
-    const items = await prisma.song.findMany({
-      where,
-      orderBy: { id: 'desc' },
-      take: limit,
-      include: {
-        uploader: { select: { id: true, username: true, fullName: true } },
-        _count: { select: { postMusic: true } },
-      },
-    });
-    const nextCursor = items.length === limit ? items[items.length - 1].id : null;
+    const items = await listAllSongsForAdmin(limit);
+    const nextCursor = items.length === limit ? (items as { id: number }[])[items.length - 1].id : null;
     res.json({ success: true, data: { items, nextCursor } });
   } catch (err) {
     next(err);

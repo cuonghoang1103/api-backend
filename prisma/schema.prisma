@@ -53,6 +53,10 @@ model User {
   // socialLinks: JSON map { github?, twitter?, linkedin?, website?, youtube?, facebook? }
   // — schema-free, mỗi frontend tự định nghĩa key khi đọc.
   socialLinks Json?   @map("social_links")
+  // Phase 3 add — back-relation for the new SocialLink model.
+  // Kept separate from the legacy JSON column above so we don't
+  // break existing data; the mobile route uses this relation.
+  socialLinkProfiles SocialLink[]
 
   enabled               Boolean @default(true)
   accountNonExpired     Boolean @default(true) @map("account_non_expired")
@@ -1528,6 +1532,32 @@ model SocialLike {
   @@index([userId], name: "idx_social_likes_user")
   @@index([postId, type], name: "idx_social_likes_post_type")
   @@map("social_likes")
+}
+
+// ─── Social Links (Phase 3 add) ────────────────────────────
+// One row per platform link the user has configured (e.g.
+// github, twitter, linkedin, website, youtube, facebook).
+// mobile.routes.ts expects this model — without it the backend
+// build fails (tsc error TS2551 "Property socialLink does
+// not exist on PrismaClient"). The previous schema only had
+// a `socialLinks` JSON column on User which the mobile route
+// doesn't query. Adding the model + relation is the smallest
+// fix that unblocks the build without touching unrelated code.
+model SocialLink {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  platform  String   @db.VarChar(32)   // 'github' | 'twitter' | ...
+  url       String   @db.VarChar(500)
+  username  String?  @db.VarChar(64)    // optional handle
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, platform], name: "uk_social_link_user_platform")
+  @@index([userId], name: "idx_social_links_user")
+  @@map("social_link_profiles")
 }
 
 model SocialComment {

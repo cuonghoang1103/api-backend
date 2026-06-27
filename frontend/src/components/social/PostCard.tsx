@@ -1855,6 +1855,8 @@ function MediaGrid({
   const trackRef = useRef<HTMLDivElement | null>(null);
   const startXRef = useRef(0);
   const startIdxRef = useRef(0);
+  const startYRef = useRef(0);
+  const isDraggingRef = useRef(false);
 
   // Keep currentIdx in range when the post is updated (e.g. a
   // new tile added/removed). We clamp instead of resetting so
@@ -1869,24 +1871,71 @@ function MediaGrid({
   // rectangle mid-drag. Threshold: 50px horizontal OR 15% of
   // the track width (whichever is smaller) commits a slide;
   // smaller throws snap back to the current tile.
+  //
+  // ── Bugfix (2026-06-28) ─────────────────────────────────────────
+  // The previous implementation relied on `isDragging` (React
+  // state) inside the move/up handlers. State updates are
+  // asynchronous, so the FIRST pointermove right after
+  // pointerdown saw the stale `false` and bailed out — the
+  // carousel would not track the finger until the second
+  // move event, which felt broken especially with many tiles
+  // (5–6+). We now mirror isDragging into a ref so the
+  // handlers always read the latest value.
   const onPointerDown = (e: React.PointerEvent) => {
     if (visual.length <= 1) return;
     // Only start drag on horizontal intent. A vertical scroll
     // (touch device) should still scroll the page, not the
-    // carousel.
+    // carousel. We bail out if the touch starts with a clear
+    // vertical bias — otherwise the carousel would steal
+    // scroll gestures on mobile.
+    isDraggingRef.current = true;
     setIsDragging(true);
     startXRef.current = e.clientX;
+    startYRef.current = e.clientY;
     startIdxRef.current = currentIdx;
     setDragOffset(0);
-    e.currentTarget.setPointerCapture(e.pointerId);
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      /* setPointerCapture can throw on some browsers when the
+         pointer is already released; ignore — pointerup still
+         fires via the capture target. */
+    }
   };
   const onPointerMove = (e: React.PointerEvent) => {
-    if (!isDragging) return;
+    if (!isDraggingRef.current) return;
     const dx = e.clientX - startXRef.current;
-    setDragOffset(dx);
+    const dy = e.clientY - startYRef.current;
+    // If the user is scrolling vertically (dy dominant), let the
+    // page handle the scroll and don't translate the carousel.
+    // We only commit horizontal drags.
+    if (Math.abs(dy) > Math.abs(dx) * 1.5 && Math.abs(dy) > 8) {
+      isDraggingRef.current = false;
+      setIsDragging(false);
+      setDragOffset(0);
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch { /* noop */ }
+      return;
+    }
+    // Rubber-band resistance at the edges: first 25% of the
+    // over-drag moves 1:1, the rest is dampened. This makes
+    // swiping past the first/last tile feel like a tug instead
+    // of a hard wall.
+    const trackWidth = trackRef.current?.clientWidth ?? 1;
+    const atStart = startIdxRef.current === 0 && dx > 0;
+    const atEnd = startIdxRef.current === visual.length - 1 && dx < 0;
+    let displayDx = dx;
+    if (atStart || atEnd) {
+      const overshoot = Math.abs(dx);
+      const dampened = Math.min(overshoot * 0.35, trackWidth * 0.18);
+      displayDx = dx < 0 ? -dampened : dampened;
+    }
+    setDragOffset(displayDx);
   };
   const onPointerUp = (e: React.PointerEvent) => {
-    if (!isDragging) return;
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
     setIsDragging(false);
     const dx = e.clientX - startXRef.current;
     const trackWidth = trackRef.current?.clientWidth ?? 1;
@@ -1896,7 +1945,9 @@ function MediaGrid({
     else if (dx > threshold) next = Math.max(0, startIdxRef.current - 1);
     setCurrentIdx(next);
     setDragOffset(0);
-    e.currentTarget.releasePointerCapture(e.pointerId);
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch { /* noop */ }
   };
 
   // Tap a tile to open the lightbox/video (Phase 1 behaviour).
@@ -1945,22 +1996,26 @@ function MediaGrid({
       <div
         className="flex"
         style={{
-          // Each tile is 100% of the track width. The track
-          // itself is the full row; we offset it by -currentIdx
-          // tiles and then by the live drag delta. transition
-          // is disabled while dragging so the slide follows
-          // the finger 1:1 (no rubber-band lag).
-          width: `${visual.length * 100}%`,
-          transform: `translateX(calc(${-currentIdx * 100}% + ${dragOffset}px))`,
-          transition: isDragging ? 'none' : 'transform 240ms cubic-bezier(0.22, 1, 0.36, 1)',
+          // ── Bugfix (2026-06-28) ─────────────────────────────────
+          // The previous track was sized `width: ${N * 100}%` and
+          // each tile `${100 / N}%`. translateX(`-${i * 100}%`)
+          // then shifted by the TRACK width (one screen × N), not
+          // one tile, so for N=5–6+ slides jumped multiple tiles
+          // or wrapped. We now keep the track 100% of the parent
+          // and each tile 100% of the track, so `-i * 100%`
+          // equals exactly one tile width regardless of N.
+          // Drag offset stays in pixels (rubber-band dampened
+          // above).
+          width: '100%',
+          transform: `translate3d(calc(${-currentIdx * 100}% + ${dragOffset}px), 0, 0)`,
+          transition: isDragging ? 'none' : 'transform 260ms cubic-bezier(0.22, 1, 0.36, 1)',
           willChange: 'transform',
         }}
       >
         {visual.map((item, i) => (
           <div
             key={item.id}
-            className="relative"
-            style={{ width: `${100 / visual.length}%` }}
+            className="relative shrink-0 grow-0 basis-full"
             onPointerDown={(e) => onTilePointerDown(e, item)}
             onPointerUp={(e) => onTilePointerUp(e, item)}
             onPointerCancel={() => { tapStartRef.current = null; }}

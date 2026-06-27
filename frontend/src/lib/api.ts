@@ -383,6 +383,23 @@ export const userApi = {
 // Social user API — public profiles, follow, presence
 export const socialUserApi = {
   getProfile: (id: number) => api.get(`/users/${id}`),
+  // Phase 4 add — getUserPosts / getUserMedia for the profile
+  // page tabs. Cursor-paginated. Returns the same shape as the
+  // feed (items + nextCursor + hasMore + limit) so the
+  // infinite-scroll handler in ProfileDetail is shared with
+  // the feed's hook.
+  getUserPosts: (
+    id: number,
+    params: { cursor?: number; limit?: number; type?: 'POST' | 'VIDEO' | 'FILE' } = {},
+  ) => api.get<{ data: { items: unknown[]; nextCursor: number | null; hasMore: boolean; limit: number } }>(`/users/${id}/posts`, { params }),
+  getUserMedia: (
+    id: number,
+    params: { cursor?: number; limit?: number; type?: 'IMAGE' | 'VIDEO' } = {},
+  ) => api.get<{ data: { items: unknown[]; nextCursor: number | null; hasMore: boolean; limit: number } }>(`/users/${id}/media`, { params }),
+  // Phase 4 add — own profile (incl. lazy-create) and update.
+  getOwnProfile: () => api.get('/users/me/profile'),
+  updateOwnProfile: (data: { bio?: string; coverPhoto?: string; location?: string; websiteUrl?: string; work?: string; education?: string }) =>
+    api.patch('/users/me/profile', data),
   toggleFollow: (targetId: number) => api.post('/users/follow', { targetId }),
   getFollowers: (id: number, cursor?: number, limit = 20) =>
     api.get(`/users/${id}/followers`, { params: { cursor, limit } }),
@@ -1170,6 +1187,20 @@ export const adminSongsApi = {
     api.patch<{ data: AdminSong }>(`/admin/songs/${id}/active`, { isActive }),
   remove: (id: number) =>
     api.delete<{ data: { id: number; deleted: boolean } }>(`/admin/songs/${id}`),
+};
+
+// Phase 4 add — public-facing read of the curated Song pool.
+// The composer uses this to populate MusicPickerModal. We
+// expose a generous limit (30) so the picker can show the
+// newest tracks first without paging.
+export const publicSongsApi = {
+  list: (params?: { q?: string; cursor?: number; limit?: number }) =>
+    api.get<{
+      data: { items: AdminSong[]; nextCursor: number | null };
+    }>('/songs', { params }),
+  get: (id: number) => api.get<{ data: AdminSong }>(`/songs/${id}`),
+  getFeed: (params?: { q?: string; cursor?: number; limit?: number }) =>
+    publicSongsApi.list(params),
 };
 
   // Polls

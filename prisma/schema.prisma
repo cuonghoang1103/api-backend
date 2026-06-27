@@ -188,6 +188,20 @@ model User {
   hubSharesOwned     HubShare[] @relation("HubShareOwner")
   hubSharesReceived  HubShare[] @relation("HubShareRecipient")
 
+  // Phase 4 add — Music Post. Admin uploads mp3 / m4a tracks
+  // to R2 and tags them with a title + artist + cover. Users
+  // pick one of these from the composer and clip a 1-second-
+  // resolution snippet (< 40s) onto their post. We use Restrict
+  // (not Cascade) on uploader so deleting the original admin
+  // doesn't silently wipe every post that referenced the track.
+  songsUploaded  Song[]      @relation("SongUploader")
+  // Phase 4 add — extended profile (bio, cover photo, location,
+  // education, work, links). Optional 1-1 with user so legacy
+  // rows keep working — defaults fill in on the next read.
+  profile       UserProfile?
+
+  // ─── Notes — personal study notebooks ──────────────────
+
   // ─── Notes — personal study notebooks ──────────────────
   // User-owned subjects → chapters → notes (+ attachments,
   // links, vocab). Same per-user scoping rule as Hub: every
@@ -1110,9 +1124,6 @@ model MusicTrack {
   likes      MusicLike[]
   playCounts MusicPlayCount[]
   lyrics     MusicLyrics?
-  // Phase 3 add — back-relation for posts that attached this
-  // track via the Instagram-style music sticker.
-  socialPosts SocialPost[]
 
   @@map("music_tracks")
 }
@@ -1461,6 +1472,14 @@ model SocialPost {
   // simply loses its music attachment.
   musicTrackId  Int?     @map("music_track_id")
   musicStartSec Int?     @map("music_start_sec") // optional: skip ahead to this point in the track
+  // Phase 4 add — when this post has a clipped song attached,
+  // a 1-row PostMusic record stores the song + start/end
+  // seconds (startSec to endSec must be < 40s — the user
+  // picked a 1-second-resolution snippet in the composer
+  // audio trimmer). The PostCard's MusicSticker uses this
+  // record to render the full sticker (cover, title, artist,
+  // play/pause with the snippet offset).
+  postMusic     PostMusic?
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
@@ -1470,10 +1489,6 @@ model SocialPost {
   comments       SocialComment[]
   saves          SocialSave[]
   shares         SocialShare[]
-  // Phase 3 add — back-relation for the music sticker. Each
-  // post can optionally reference one track; deleting a track
-  // just nulls out the reference (no cascade).
-  musicTrack     MusicTrack?  @relation(fields: [musicTrackId], references: [id], onDelete: SetNull)
   // Back-relation from the new multi-collection save table.
   // A post can be saved into N collections per user (one
   // row per (user, post, collection) triple).
@@ -3100,4 +3115,82 @@ model NoteVocabEntry {
   @@index([userId, noteId, sortOrder], name: "idx_note_vocab_note")
   @@index([userId, noteId, isKnown], name: "idx_note_vocab_known")
   @@map("note_vocab_entries")
+}
+
+// ============================================================
+// 30. MUSIC POST (Phase 4) — admin-curated song pool
+// ============================================================
+// Admin uploads mp3 / m4a tracks to R2 (capped at 50 MB,
+// validated on both the frontend and the API) and tags them
+// with a title + artist + cover image. Users pick one of
+// these from the composer and clip a 1-second-resolution
+// snippet (< 40 s) onto their post via the trimmer.
+//
+// Restrict on uploader so deleting the original admin
+// account doesn't silently wipe every post that referenced
+// the track — the post will need to be remapped first.
+model Song {
+  id           Int       @id @default(autoincrement())
+  title        String    @db.VarChar(255)
+  artist       String    @db.VarChar(255)
+  audioUrl     String    @db.VarChar(700)   // R2 URL to the mp3/m4a
+  coverImage   String?   @db.VarChar(700)   // R2 URL to the cover
+  durationSec  Int       @map("duration_sec")  // total track duration
+  fileSize     Int?      @map("file_size")  // bytes — audit + UI
+  isActive     Boolean   @default(true)  // admin can hide without deleting
+  uploadedById Int       @map("uploaded_by_id")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  uploader  User         @relation("SongUploader", fields: [uploadedById], references: [id], onDelete: Restrict)
+  postMusic PostMusic[]
+
+  @@index([isActive, createdAt(sort: Desc)], name: "idx_songs_active_created")
+  @@map("songs")
+}
+
+// 1 post <-> 1 song. startSec to endSec must be < 40s. The user
+// picks a 1-second-resolution snippet in the composer audio
+// trimmer. PostMusic is a separate table (not columns on
+// SocialPost) so that future feature work — e.g. song
+// analytics, multiple-attached tracks — can extend without
+// bloating the post row.
+model PostMusic {
+  id        Int      @id @default(autoincrement())
+  // 1-1 with SocialPost: each post can have at most one attached
+  // music snippet. The (postId, songId) composite unique keeps
+  // it a 1-1 relationship on the post side; a 2nd snippet would
+  // replace the first.
+  postId    Int      @unique @map("post_id")
+  songId    Int      @map("song_id")
+  startSec  Int      @default(0) @map("start_sec")
+  endSec    Int?     @map("end_sec")  // null = play to end of file
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  song Song       @relation(fields: [songId], references: [id], onDelete: Restrict)
+
+  @@index([songId], name: "idx_post_music_song")
+  @@map("post_music")
+}
+
+// 1-1 with User. Optional — every existing user row gets a
+// default empty profile the first time the row is touched. We
+// keep this in a separate table (instead of columns on User)
+// to avoid bloating the hot User row with profile fields
+// (the read path doesn't care about bio / cover photo / etc).
+model UserProfile {
+  userId        Int      @id @map("user_id")
+  bio           String?  @db.Text
+  coverPhoto    String?  @map("cover_photo") @db.VarChar(700)
+  location      String?  @db.VarChar(255)
+  websiteUrl    String?  @map("website_url") @db.VarChar(500)
+  work          String?  @db.VarChar(255)
+  education     String?  @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_profiles")
 }

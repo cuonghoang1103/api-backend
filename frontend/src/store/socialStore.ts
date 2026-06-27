@@ -50,6 +50,17 @@ interface SocialState {
   // When set, the backend stores it on the post and the renderer
   // embeds an inline player. Empty string means "no embed".
   composerYouTubeUrl: string;
+  // Phase 3 add — Instagram-style music sticker. When set, the
+  // post will be sent to the backend as a `musicTrackId` field
+  // along with `musicStartSec` (default 0). The PostCard renders
+  // a small "🎵 <title> — <artist>" overlay on the first media
+  // tile. Null = no music sticker.
+  composerMusicTrack: {
+    id: number;
+    title: string;
+    artist: string;
+    coverImage?: string | null;
+  } | null;
   // Content-type bucket the user is composing (feed tabs). Defaults to
   // POST; the composer's segmented picker sets it. Sent to createPost so
   // the post lands in the right tab. The server still derives a sensible
@@ -107,6 +118,10 @@ interface SocialState {
   // Phase 3 — YouTube URL the composer is tracking
   setComposerYouTubeUrl: (url: string) => void;
   setComposerType: (t: 'POST' | 'VIDEO' | 'FILE') => void;
+  // Phase 3 add — set the Instagram-style music sticker.
+  // `track === null` clears the sticker. The composer calls
+  // this from the music picker modal.
+  setComposerMusicTrack: (track: { id: number; title: string; artist: string; coverImage?: string | null } | null) => void;
   clearComposer: () => void;
   submitPost: () => Promise<SocialPost | null>;
 
@@ -140,6 +155,7 @@ export const useSocialStore = create<SocialState>((set, get) => ({
   composerVisibility: 'PUBLIC',
   composerPoll: null,
   composerYouTubeUrl: '',
+  composerMusicTrack: null,
   composerType: 'POST',
   isPosting: false,
 
@@ -457,15 +473,17 @@ export const useSocialStore = create<SocialState>((set, get) => ({
       composerVisibility: 'PUBLIC',
       composerPoll: null,
       composerYouTubeUrl: '',
+      composerMusicTrack: null,
       composerType: 'POST',
     }),
 
   setComposerPoll: (poll) => set({ composerPoll: poll }),
   setComposerYouTubeUrl: (url) => set({ composerYouTubeUrl: url }),
   setComposerType: (t) => set({ composerType: t }),
+  setComposerMusicTrack: (track) => set({ composerMusicTrack: track }),
 
   submitPost: async () => {
-    const { composerContent, composerMedia, composerVisibility, composerPoll, composerYouTubeUrl, composerType } = get();
+    const { composerContent, composerMedia, composerVisibility, composerPoll, composerYouTubeUrl, composerType, composerMusicTrack } = get();
     if (!composerContent.trim() && composerMedia.length === 0 && !composerPoll) return null;
 
     set({ isPosting: true });
@@ -509,6 +527,13 @@ export const useSocialStore = create<SocialState>((set, get) => ({
         media: mediaPayload.length > 0 ? mediaPayload : undefined,
         poll: pollPayload || undefined,
         youtubeUrl: (composerYouTubeUrl || '').trim() || undefined,
+        // Phase 3 add — Instagram-style music sticker. We only
+        // set musicTrackId when the user actually picked a
+        // track in the picker; null means "no music sticker"
+        // (which is also the default backend behaviour when
+        // the field is omitted).
+        musicTrackId: composerMusicTrack?.id,
+        musicStartSec: composerMusicTrack ? 0 : undefined,
         type: composerType,
       });
 

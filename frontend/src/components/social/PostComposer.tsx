@@ -36,8 +36,10 @@ import { socialApi, fileApi, socialUserApi } from '@/lib/api';
 import { useComposerDraft } from '@/hooks/useComposerDraft';
 import { pickAiTemplate } from '@/lib/aiWriteTemplates';
 import MentionAutocomplete from '@/components/social/MentionAutocomplete';
+import MusicPickerModal from '@/components/social/MusicPickerModal';
 import type { MediaUploadItem } from '@/types/social';
 import { toast } from 'sonner';
+import { Music as MusicIcon } from 'lucide-react';
 
 const VISIBILITY_OPTIONS = [
   {
@@ -121,6 +123,19 @@ export function PostComposer() {
   // with the post) is mirrored via setComposerYouTubeUrl.
   const [youtubeDraft, setYoutubeDraft] = useState('');
   const [showYouTubeModal, setShowYouTubeModal] = useState(false);
+  // Phase 3 add — Instagram-style music sticker. The
+  // composer fetches the music library when the user opens
+  // the picker; the picked track's id is sent to the backend
+  // as musicTrackId. startSec is currently fixed to 0 (the
+  // user can scrub the audio later, but the composer doesn't
+  // yet expose a slider for the start offset).
+  const [showMusicPicker, setShowMusicPicker] = useState(false);
+  const [composerMusicTrack, setComposerMusicTrack] = useState<{
+    id: number;
+    title: string;
+    artist: string;
+    coverImage?: string | null;
+  } | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -647,6 +662,19 @@ export function PostComposer() {
                       active={!!composerYouTubeUrl}
                     />
 
+                    {/* Phase 3 add — Instagram-style music sticker.
+                        Opens the music library picker; the selected
+                        track flows into the post body and is
+                        rendered as a sticker on the first media
+                        tile by PostCard. Highlighted when a track
+                        is already attached. */}
+                    <ToolbarButton
+                      icon={<MusicIcon size={18} />}
+                      label="Nhạc"
+                      onClick={() => setShowMusicPicker(true)}
+                      active={!!composerMusicTrack}
+                    />
+
                     {/* Generic file attachment (zip, md, pdf, source files,
                         …). The 10MB cap is enforced inside handleFiles. */}
                     <ToolbarButton
@@ -902,6 +930,26 @@ export function PostComposer() {
             }}
           />
         )}
+
+        {/* Phase 3 add — music sticker picker. The modal searches
+            the music library and on selection we save the track
+            to the composer store. The PostCard MusicSticker
+            then renders the chosen track on the first media
+            tile of the published post. */}
+        <MusicPickerModal
+          open={showMusicPicker}
+          onClose={() => setShowMusicPicker(false)}
+          onPick={(track) => {
+            setComposerMusicTrack({
+              id: track.musicTrackId,
+              title: track.title,
+              artist: track.artist,
+              coverImage: track.coverImage,
+            });
+            toast.success('Đã chọn nhạc cho bài viết');
+          }}
+          selectedTrackId={composerMusicTrack?.id}
+        />
       </AnimatePresence>
 
       {/* Phase 5 home upgrade: @mention autocomplete. Listens to

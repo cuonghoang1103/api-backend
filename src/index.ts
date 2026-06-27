@@ -102,6 +102,7 @@ const { publicRouter: techTrendsPublicRoutes, adminRouter: techTrendsAdminRoutes
 const { router: messagesRoutes, adminRouter: adminMessagesRoutes } = (await import(path.join(__dirname, 'routes', 'messages.routes.js')));
 const contentRoutes = (await import(path.join(__dirname, 'routes', 'content.routes.js'))).default;
 const notesRoutes = (await import(path.join(__dirname, 'routes', 'notes.routes.js'))).default;
+const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes.js'))).default;
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
 
 // ─── Express App ───────────────────────────────────────────
@@ -422,6 +423,8 @@ app.use('/api/v1/admin', adminMessagesRoutes);
 // Admin moderation queue for thread reports (block/report system).
 const { default: adminReportsRoutes } = (await import(path.join(__dirname, 'routes', 'admin.reports.routes.js')));
 app.use('/api/v1/admin/reports', adminReportsRoutes);
+
+app.use('/api/v1/mobile', mobileRoutes);
 
 // ─── 9b. Socket.IO (Direct Messaging) ─────────────────
 // Mount on the shared HTTP server so the existing trust-proxy /

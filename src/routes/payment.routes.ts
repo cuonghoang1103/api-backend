@@ -40,6 +40,7 @@ import {
   buildCoursePaymentUrl,
   buildVnpayPaymentUrl,
   getClientIp,
+  requestVnpayRefund,
   verifyIpnCall,
   verifyReturnUrl,
 } from '../services/payment/vnpay.service.js';
@@ -1277,6 +1278,60 @@ router.post(
         }
       });
 
+      // ── Call VNPay's refund API (best-effort, non-blocking) ──
+      // We do this AFTER the local DB update so the order is
+      // never in an inconsistent state (admin can re-trigger
+      // the gateway call from the dashboard if it fails).
+      // Skip if we don't have the original VNPay transaction
+      // details (older orders, manually-entered refunds, etc.).
+      if (order.paymentTxnNo && order.paymentPayDate) {
+        // paymentPayDate is stored as a Date; VNPay wants the
+        // yyyyMMddHHmmss string the IPN originally sent us.
+        const yyyy = order.paymentPayDate.getFullYear().toString();
+        const pad = (n: number) => String(n).padStart(2, '0');
+        const transactionDate = `${yyyy}${pad(order.paymentPayDate.getMonth() + 1)}${pad(order.paymentPayDate.getDate())}${pad(order.paymentPayDate.getHours())}${pad(order.paymentPayDate.getMinutes())}${pad(order.paymentPayDate.getSeconds())}`;
+        try {
+          const refundResult = await requestVnpayRefund({
+            transactionNo: order.paymentTxnNo,
+            transactionDate,
+            amount: refundAmount,
+            createdBy: adminId,
+            ipAddr: getClientIp(req),
+            reason: body.reason as string,
+          });
+          if (refundResult.ok) {
+            logger.info('vnpay-refund API success', {
+              orderCode: order.orderCode,
+              txnNo: order.paymentTxnNo,
+              amount: refundAmount,
+            });
+          } else {
+            // VNPay rejected the refund (insufficient funds, etc.)
+            // The DB is already marked REFUNDED so we don't fail
+            // the admin's request — they can see the error code
+            // and retry from the dashboard.
+            logger.warn('vnpay-refund API failed', {
+              orderCode: order.orderCode,
+              responseCode: refundResult.responseCode,
+              message: refundResult.message,
+            });
+          }
+          // Surface the gateway result so the admin can see it
+          // in the response. We don't fail the request — admin
+          // can re-call /admin/refund with a retry if needed.
+          // (Future: store refundAttempts[] on the order row so
+          // retries are auditable.)
+          res.locals.vnpayRefundResult = refundResult;
+        } catch (err) {
+          // Network error calling VNPay. The DB is updated; admin
+          // can retry from the dashboard. We log + continue.
+          logger.error('vnpay-refund API exception', {
+            orderCode: order.orderCode,
+            error: err instanceof Error ? err.message : String(err),
+          });
+        }
+      }
+
       // Send the refund email AFTER the transaction commits. We do
       // this outside the tx because email sends can take seconds; we
       // don't want to hold row locks that long. If the email fails
@@ -1311,6 +1366,18 @@ router.post(
           status: 'REFUNDED',
           refundAmount,
           isFullRefund,
+          // Phase 2 — surface the VNPay refund-gateway result so the
+          // admin dashboard can show "ok" or "needs retry". When
+          // VNPay rejected the refund (insufficient funds, order
+          // not yet settled, etc.), this lets the admin retry
+          // from the UI without digging through server logs.
+          vnpayRefund: res.locals.vnpayRefundResult
+            ? {
+                ok: res.locals.vnpayRefundResult.ok,
+                responseCode: res.locals.vnpayRefundResult.responseCode,
+                message: res.locals.vnpayRefundResult.message,
+              }
+            : null,
         },
       });
     } catch (error) {

@@ -14,10 +14,14 @@
  * because it shares infrastructure with their CDN). Set
  * `VNPAY_SANDBOX=1` in env to skip the IP gate.
  *
- * Production VNPay IPs (per their docs and community reports):
- *   203.171.20.0/24, 123.30.235.0/24, 113.161.69.0/24
- * We accept the most common ones here; admin can extend the list
- * later via env var (comma-separated) if VNPay adds more.
+ * Production VNPay IPs (consolidated 2026-Q1):
+ *   - 203.171.20.0/24    — primary production block (doc'd)
+ *   - 123.30.235.0/24    — production block (doc'd)
+ *   - 113.161.69.0/24     — production block (doc'd)
+ *   - 103.220.87.0/24    — Cloudflare-fronted (community)
+ *   - 103.220.88.0/24    — Cloudflare-fronted (community)
+ *   - 14.225.0.0/16      — newer range seen on tickets
+ *   - 27.71.0.0/16       — newer range seen on tickets
  */
 import { Request, Response, NextFunction } from 'express';
 import { isIpInAnyCidr } from '../utils/cidr.js';
@@ -26,9 +30,10 @@ const PROD_VNPAY_CIDRS = [
   '203.171.20.0/24',
   '123.30.235.0/24',
   '113.161.69.0/24',
-  // Cloudflare-fronted VNPay sometimes presents as:
   '103.220.87.0/24',
   '103.220.88.0/24',
+  '14.225.0.0/16',
+  '27.71.0.0/16',
 ];
 
 function getVnpayCidrs(): string[] {
@@ -65,6 +70,14 @@ export function vnpayIpnGuard(req: Request, res: Response, next: NextFunction): 
       '';
     const allowed = getVnpayCidrs();
     if (!isIpInAnyCidr(clientIp, allowed)) {
+      // Log the offending IP so the admin can extend the
+      // allowlist via VNPAY_IP_ALLOWLIST env var if VNPay
+      // moves their gateway to a new range. The 403 + RspCode
+      // 99 tells VNPay to stop retrying (any non-00 RspCode
+      // does; 99 specifically maps to "unknown error" so
+      // VNPay backs off without retrying).
+      // eslint-disable-next-line no-console
+      console.warn('[vnpay-ipn] IP not in allowlist', { clientIp });
       res.status(403).json({
         RspCode: '99',
         Message: 'Forbidden: IP not in VNPay allowlist',

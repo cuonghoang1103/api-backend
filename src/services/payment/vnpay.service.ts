@@ -23,6 +23,7 @@
  */
 import { VNPay, HashAlgorithm } from 'vnpay';
 import type { Request } from 'express';
+import { createHmac } from 'node:crypto';
 
 interface VnpayConfig {
   tmnCode: string;
@@ -291,10 +292,7 @@ function buildSignedVnpayQuery(params: Record<string, string>, secret: string): 
   const signData = sorted
     .map((k) => `${k}=${params[k]}`)
     .join('&');
-  // SHA-512 in hex, matching the SDK's default `secureHashType: 'SHA512'`.
-  const crypto = require('node:crypto') as typeof import('node:crypto');
-  return crypto
-    .createHmac('sha512', secret)
+  return createHmac('sha512', secret)
     .update(Buffer.from(signData, 'utf-8'))
     .digest('hex');
 }

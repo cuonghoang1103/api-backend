@@ -50,6 +50,7 @@ import {
   createComment,
   updateComment,
   deleteComment,
+  serializePost,
   likeComment,
   savePost,
   unsavePost,
@@ -198,7 +199,7 @@ router.post(
         } catch { /* non-fatal */ }
       })();
 
-      res.status(201).json({ success: true, data: post });
+      res.status(201).json({ success: true, data: serializePost(post) });
     } catch (error) {
       next(error);
     }

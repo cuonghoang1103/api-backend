@@ -648,7 +648,7 @@ async function loadPollVotes(
  * PostCard because `likesCount` / `isLiked` / `poll.userVotes` are
  * missing.
  */
-function serializePost(
+export function serializePost(
   post: any,
   opts: {
     currentUserId?: number;
@@ -672,6 +672,14 @@ function serializePost(
     // `youtubeUrl` may not be selected by every query — fall back to
     // null so the renderer can defensively check.
     youtubeUrl: post.youtubeUrl ?? null,
+    // Phase 3 add — Instagram-style music sticker. When the
+    // include selected `musicTrack`, we pass it through; when
+    // not, we still expose the raw musicTrackId so the client
+    // can fetch the track separately if it needs to render the
+    // sticker (it falls back to looking up by id).
+    musicTrackId: post.musicTrackId ?? null,
+    musicStartSec: post.musicStartSec ?? null,
+    musicTrack: post.musicTrack ?? null,
     // Content-type bucket for the feed tabs / per-type badge. Falls back
     // to POST for any row/query that didn't select it.
     type: post.type ?? 'POST',

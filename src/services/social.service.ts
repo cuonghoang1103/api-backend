@@ -230,10 +230,10 @@ export async function createPost(input: CreatePostInput) {
       media: {
         orderBy: { sortOrder: 'asc' as const },
       },
-      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
       poll: {
         include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
+      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
       _count: {
         select: {
           likes: true,
@@ -315,10 +315,10 @@ export async function getPostById(postId: number, currentUserId?: number) {
       media: {
         orderBy: { sortOrder: 'asc' as const },
       },
-      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
       poll: {
         include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
+      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
       _count: {
         select: {
           likes: true,
@@ -505,6 +505,7 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       poll: {
         include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
+      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
       _count: {
         select: {
           likes: true,

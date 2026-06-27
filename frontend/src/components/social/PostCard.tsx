@@ -21,6 +21,7 @@ import SocialSavePopover, {
   type SaveCollection,
 } from '@/components/social/SocialSavePopover';
 import SocialSavePopoverV2 from '@/components/social/SocialSavePopoverV2';
+import MusicSticker, { type MusicTrackMini } from '@/components/social/MusicSticker';
 import { useAuthStore } from '@/store/authStore';
 import { getMediaUrl } from '@/lib/utils';
 import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext, FeedSaveResult } from '@/types/social';
@@ -971,6 +972,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
             media={safeMedia}
             postId={post.id}
             onOpenTheater={onOpenTheater}
+            musicTrack={post.musicTrack ?? null}
+            musicStartSec={post.musicStartSec ?? null}
           />
         )}
 
@@ -1792,12 +1795,24 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
 
 // ─── Media Grid ───────────────────────────────────────────────────────────────
 
-function MediaGrid({ media, postId, onOpenTheater }: {
+function MediaGrid({
+  media,
+  postId,
+  onOpenTheater,
+  musicTrack,
+  musicStartSec,
+}: {
   media: SocialMedia[];
   /** Owning post id — passed down so MediaItem's Theater button
    *  can fire the right callback without re-deriving it. */
   postId?: number;
   onOpenTheater?: (postId: number) => void;
+  // Phase 3 add — Instagram-style music sticker. When set,
+  // the FIRST media tile gets the sticker overlay. We only
+  // render it on the first tile to avoid cluttering multi-image
+  // carousels (Instagram itself does the same).
+  musicTrack?: MusicTrackMini | null;
+  musicStartSec?: number | null;
 }) {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
@@ -1825,7 +1840,7 @@ function MediaGrid({ media, postId, onOpenTheater }: {
 
   if (visual.length === 1) {
     return (
-      <div className="mt-3">
+      <div className="mt-3 relative">
         <MediaItem
           item={visual[0]}
           onClick={() => handleMediaClick(visual[0])}
@@ -1836,6 +1851,17 @@ function MediaGrid({ media, postId, onOpenTheater }: {
               : undefined
           }
         />
+        {/* Phase 3 add — Instagram-style music sticker overlay
+            on the first media tile when the post has a track. We
+            only render it on the first tile so multi-image
+            carousels don't get cluttered (Instagram does the
+            same). */}
+        {musicTrack && (
+          <MusicSticker
+            track={musicTrack}
+            startSec={musicStartSec ?? 0}
+          />
+        )}
         {files.length > 0 && (
           <div className="mt-2">
             <FileAttachmentList media={files} />
@@ -1861,7 +1887,18 @@ function MediaGrid({ media, postId, onOpenTheater }: {
       : 'grid-cols-2';
 
   return (
-    <div className="mt-3">
+    <div className="mt-3 relative">
+      {/* Music sticker is on the first tile (i === 0) so the
+          carousel feels natural — the sticker sticks to the
+          "current" first image as the user swipes. Other tiles
+          stay clean. We use the first item's MediaItem wrapper
+          which already has `relative` positioning. */}
+      {musicTrack && visual[0] && (
+        <MusicSticker
+          track={musicTrack}
+          startSec={musicStartSec ?? 0}
+        />
+      )}
       <div className={`grid ${gridClass} gap-1.5 rounded-2xl overflow-hidden`}>
         {visual.slice(0, 4).map((item, i) => (
           <div

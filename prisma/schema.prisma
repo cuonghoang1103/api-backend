@@ -1110,6 +1110,9 @@ model MusicTrack {
   likes      MusicLike[]
   playCounts MusicPlayCount[]
   lyrics     MusicLyrics?
+  // Phase 3 add — back-relation for posts that attached this
+  // track via the Instagram-style music sticker.
+  socialPosts SocialPost[]
 
   @@map("music_tracks")
 }
@@ -1450,6 +1453,14 @@ model SocialPost {
   // VIDEO/FILE by the migration based on their media/youtubeUrl. The
   // composer sets this explicitly; getFeed filters by it per tab.
   type         String   @default("POST") @map("type") @db.VarChar(20) // POST | VIDEO | FILE
+  // Instagram-style music attach (Phase 3 add). When set, the
+  // PostCard renders a small "🎵 <track title> — <artist>" sticker
+  // overlay on the first media tile. Tapping the sticker opens
+  // a mini-player. We use SetNull (not Cascade) so deleting a
+  // track doesn't cascade-delete the user's post — the post
+  // simply loses its music attachment.
+  musicTrackId  Int?     @map("music_track_id")
+  musicStartSec Int?     @map("music_start_sec") // optional: skip ahead to this point in the track
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
@@ -1459,6 +1470,10 @@ model SocialPost {
   comments       SocialComment[]
   saves          SocialSave[]
   shares         SocialShare[]
+  // Phase 3 add — back-relation for the music sticker. Each
+  // post can optionally reference one track; deleting a track
+  // just nulls out the reference (no cascade).
+  musicTrack     MusicTrack?  @relation(fields: [musicTrackId], references: [id], onDelete: SetNull)
   // Back-relation from the new multi-collection save table.
   // A post can be saved into N collections per user (one
   // row per (user, post, collection) triple).

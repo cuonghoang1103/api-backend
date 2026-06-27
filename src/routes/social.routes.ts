@@ -90,6 +90,31 @@ function getUserId(req: any): number {
   return req.user.userId;
 }
 
+/**
+ * Validate and resolve a music track id from the composer. We
+ * require the track to exist and be active; otherwise we drop it
+ * silently (the post just won't have a music sticker). The
+ * caller can still create a normal post without music.
+ */
+async function resolveMusicTrackId(
+  rawTrackId: unknown,
+): Promise<number | undefined> {
+  if (rawTrackId == null) return undefined;
+  if (typeof rawTrackId !== 'number' || !Number.isInteger(rawTrackId) || rawTrackId <= 0) {
+    return undefined;
+  }
+  try {
+    const track = await prisma.musicTrack.findUnique({
+      where: { id: rawTrackId },
+      select: { id: true, active: true },
+    });
+    if (!track || !track.active) return undefined;
+    return track.id;
+  } catch {
+    return undefined;
+  }
+}
+
 // ════════════════════════════════════════════════════════════════
 // POST /api/v1/social/posts — Create post
 // ════════════════════════════════════════════════════════════════
@@ -99,7 +124,7 @@ router.post(
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = getUserId(req);
-      const { content, visibility, latitude, longitude, locationName, media, poll, youtubeUrl, type } = req.body;
+      const { content, visibility, latitude, longitude, locationName, media, poll, youtubeUrl, type, musicTrackId, musicStartSec } = req.body;
 
       // Content-type bucket for the feed tabs. Accept only the known
       // values; anything else (or omitted) → undefined, which lets the
@@ -147,6 +172,15 @@ router.post(
         locationName,
         youtubeUrl: cleanedYoutubeUrl,
         type: cleanedType,
+        // Phase 3 add — Instagram-style music sticker. When set,
+        // we look up the track exists + is active before passing
+        // through to the service. Invalid trackId is silently
+        // dropped (the post just won't have a music sticker).
+        musicTrackId: await resolveMusicTrackId(musicTrackId),
+        musicStartSec:
+          typeof musicStartSec === 'number' && musicStartSec >= 0
+            ? Math.min(musicStartSec, 24 * 60 * 60) // cap at 24h
+            : undefined,
         media,
         poll,
       });

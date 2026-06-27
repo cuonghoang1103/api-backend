@@ -986,6 +986,12 @@ export const socialApi = {
       multiChoice?: boolean;
       closesAt?: string;
     };
+    // Phase 3 add — Instagram-style music sticker. The composer
+    // searches the music library, picks a track, and sends the
+    // track id (plus optional start-seconds offset). The server
+    // validates the track exists and is active before persisting.
+    musicTrackId?: number;
+    musicStartSec?: number;
   }) => api.post('/social/posts', data),
 
   updatePost: (id: number, data: { content?: string; visibility?: string }) =>

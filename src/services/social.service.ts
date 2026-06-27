@@ -85,6 +85,14 @@ export interface CreatePostInput {
     multiChoice?: boolean;
     closesAt?: Date;
   };
+  // Phase 3 add — Instagram-style music sticker. When set, the
+  // PostCard renders a small overlay on the first media tile and
+  // a tap on the sticker opens a mini-player. musicStartSec lets
+  // the user pick where in the track the sticker should start
+  // playing (we don't yet play the snippet on the feed; that's a
+  // future TODO — for now we just persist the offset).
+  musicTrackId?: number;
+  musicStartSec?: number;
 }
 
 export interface FeedOptions {
@@ -180,6 +188,16 @@ export async function createPost(input: CreatePostInput) {
     data: {
       ...postData,
       type: resolvedType,
+      // Phase 3 — music sticker. We pass these top-level (not
+      // through `...postData`) because the destructure above
+      // already stripped them out into `input` directly. Both
+      // are optional; Prisma skips them when undefined.
+      ...(input.musicTrackId != null
+        ? {
+            musicTrackId: input.musicTrackId,
+            musicStartSec: input.musicStartSec ?? null,
+          }
+        : {}),
       media: media ? {
         createMany: {
           data: media.map((m: any, idx: number) => ({
@@ -212,6 +230,7 @@ export async function createPost(input: CreatePostInput) {
       media: {
         orderBy: { sortOrder: 'asc' as const },
       },
+      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
       poll: {
         include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
@@ -296,6 +315,7 @@ export async function getPostById(postId: number, currentUserId?: number) {
       media: {
         orderBy: { sortOrder: 'asc' as const },
       },
+      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
       poll: {
         include: { options: { orderBy: { sortOrder: 'asc' as const } } },
       },
@@ -399,6 +419,7 @@ export async function updatePost(postId: number, userId: number, data: {
         select: { id: true, username: true, fullName: true, avatarUrl: true },
       },
       media: { orderBy: { sortOrder: 'asc' } },
+      musicTrack: { select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSeconds: true } },
       _count: { select: { likes: true, comments: true, saves: true } },
     },
   });

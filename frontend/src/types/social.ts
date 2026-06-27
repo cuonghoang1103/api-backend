@@ -1,5 +1,18 @@
 // Social Feed Types
 
+// Phase 3 add — minimal track shape for the music sticker
+// (only fields the sticker needs). Matches what the backend
+// social.service.ts selects in the `include: { musicTrack: … }`
+// block: id, title, artist, audioUrl, coverImage, durationSeconds.
+export interface MusicTrackMini {
+  id: number;
+  title: string;
+  artist: string;
+  coverImage?: string | null;
+  audioUrl?: string | null;
+  durationSeconds?: number | null;
+}
+
 export interface SocialAuthor {
   id: number;
   username: string;
@@ -112,6 +125,13 @@ export interface SocialPost {
   // Optional YouTube URL the user pasted into the composer. The
   // post card renders this as an inline embed when present.
   youtubeUrl?: string | null;
+  // Phase 3 add — Instagram-style music sticker. When set,
+  // the post card renders a small overlay on the first media
+  // tile with track title + artist. musicStartSec is the
+  // optional snippet offset; not yet played in the feed (TODO).
+  musicTrackId?: number | null;
+  musicStartSec?: number | null;
+  musicTrack?: MusicTrackMini | null;
   viewCount: number;
   createdAt: string;
   updatedAt: string;

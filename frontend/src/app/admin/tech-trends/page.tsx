@@ -24,6 +24,7 @@ import {
 import type { ReactNode } from 'react';
 import { adminTechTrendsApi, type AdminTechTrendArticle } from '@/lib/api';
 import type { Category, ArticleCodeBlock } from '@/app/tech-trends/types';
+import TechArticleEditor from '@/components/tech-trends/TechArticleEditor';
 
 const CATEGORIES: Category[] = ['TechNews', 'FixBug', 'Experience', 'Interviews'];
 
@@ -37,13 +38,13 @@ const CATEGORY_STYLES: Record<Category, { bg: string; text: string; border: stri
 const LANGS = ['tsx', 'ts', 'js', 'java', 'bash', 'json', 'css', 'html', 'sql'] as const;
 
 // Form state for the create/edit modal. We keep it loose on
-// the codeBlock field (it can be null) and on the body
-// (string[]) so the form can round-trip the same shape the
-// backend stores.
+// the codeBlock field (it can be null). `bodyMdx` is the
+// canonical rich-body source (Tier 1A — TipTap / Markdown).
+// The server renders it to bodyHtml + toc at write time.
 type ArticleForm = {
   title: string;
   summary: string;
-  body: string;       // textarea string — split on \n\n on save
+  bodyMdx: string;
   category: Category;
   coverEmoji: string;
   coverImageUrl: string;
@@ -63,7 +64,7 @@ type ArticleForm = {
 const emptyForm: ArticleForm = {
   title: '',
   summary: '',
-  body: '',
+  bodyMdx: '',
   category: 'TechNews',
   coverEmoji: '',
   coverImageUrl: '',
@@ -80,10 +81,15 @@ const emptyForm: ArticleForm = {
 };
 
 function formFromArticle(a: AdminTechTrendArticle): ArticleForm {
+  // Prefer the new bodyMdx; fall back to joining legacy
+  // body[] paragraphs with blank lines so the editor has
+  // something to load.
+  const mdx = a.bodyMdx
+    ?? (Array.isArray(a.body) ? (a.body as string[]).join('\n\n') : '');
   return {
     title: a.title,
     summary: a.summary,
-    body: a.body.join('\n\n'),
+    bodyMdx: mdx,
     category: a.category,
     coverEmoji: a.coverEmoji ?? '',
     coverImageUrl: a.coverImageUrl ?? '',
@@ -106,7 +112,13 @@ function formToPayload(f: ArticleForm) {
     .map((t) => t.trim())
     .filter(Boolean);
 
-  const body = f.body
+  // Tier 1A — bodyMdx is canonical. We still send the legacy
+  // `body` array as empty (or, if the admin only typed
+  // paragraphs without any rich formatting, we synthesise one
+  // for backward compatibility with the pre-Tier 1A code that
+  // may still read it). The server prefers bodyMdx when both
+  // are present.
+  const body = f.bodyMdx
     .split(/\n\s*\n/)
     .map((p) => p.trim())
     .filter(Boolean);
@@ -128,6 +140,7 @@ function formToPayload(f: ArticleForm) {
   return {
     title: f.title.trim(),
     summary: f.summary.trim(),
+    bodyMdx: f.bodyMdx,
     body,
     category: f.category,
     coverEmoji: f.coverEmoji.trim() || undefined,
@@ -206,8 +219,8 @@ export default function AdminTechTrendsPage() {
       toast.error('Summary is required');
       return;
     }
-    if (!form.body.trim()) {
-      toast.error('Body is required — add at least one paragraph');
+    if (!form.bodyMdx.trim()) {
+      toast.error('Body is required — write at least one paragraph');
       return;
     }
     setSaving(true);
@@ -760,14 +773,19 @@ function ArticleFormModal({
             <span>Featured — span 2 columns in the bento grid</span>
           </label>
 
-          {/* Body */}
-          <FormField label="Body" required hint="Separate paragraphs with a blank line.">
-            <textarea
-              value={form.body}
-              onChange={(e) => update('body', e.target.value)}
-              rows={8}
-              className={inputClass + ' resize-y min-h-[180px] font-mono text-xs leading-relaxed'}
-              placeholder="First paragraph...&#10;&#10;Second paragraph..."
+          {/* Body — Tier 1A TipTap WYSIWYG editor. Hydrates from
+              `bodyMdx` (canonical markdown source); emits
+              markdown on every change. The server renders the
+              markdown to bodyHtml + toc on save. */}
+          <FormField
+            label="Body"
+            required
+            hint="Markdown được hỗ trợ: # heading, **bold**, - list, > quote, \`code\`. Server tự render sang HTML."
+          >
+            <TechArticleEditor
+              value={form.bodyMdx}
+              onChange={(md) => update('bodyMdx', md)}
+              minHeight={420}
             />
           </FormField>
 

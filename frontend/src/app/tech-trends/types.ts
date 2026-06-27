@@ -27,12 +27,20 @@ export type ArticleAuthor = {
   bio: string | null;
 } | null;
 
+// Tier 1A — sidebar TOC entries extracted server-side from
+// bodyMdx so the public page doesn't re-parse HTML on every read.
+export type TocItem = { id: string; text: string; level: 1 | 2 | 3 };
+
 export type Article = {
   id: number;
   title: string;
   slug: string;
   summary: string;
+  // Tier 1A — prefer rich bodyHtml; fall back to legacy
+  // body[] for articles written before the migration.
+  bodyHtml: string;
   body: string[];
+  toc: TocItem[];
   category: Category;
   coverEmoji: string | null;
   coverImageUrl: string | null;

@@ -1950,3 +1950,168 @@ aside ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.06);
   }
 }
+
+/* ────────────────────────────────────────────────────────────
+ * Tech Trends article body (Tier 1A) — TipTap / Markdown
+ * output. Mirrors the .note-prose block above but scoped to
+ * .tech-prose so we can tweak the public-read typography
+ * independently (e.g. wider line-length, larger h2 than the
+ * notes editor needs).
+ * All rules are nested under `.dark` so the light theme
+ * (when it ships) gets a sane default without us touching
+ * every selector again. */
+
+.tech-prose {
+  color: rgb(226, 232, 240);            /* slate-200 */
+  font-size: 16px;
+  line-height: 1.75;
+  max-width: 72ch;
+  margin-inline: auto;
+}
+
+.tech-prose > * + * {
+  margin-top: 1em;
+}
+
+.tech-prose h1,
+.tech-prose h2,
+.tech-prose h3 {
+  color: rgb(248, 250, 252);            /* near-white */
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  scroll-margin-top: 6rem;              /* anchor scroll offset */
+}
+
+.tech-prose h1 {
+  font-size: 2.25rem;
+  margin-top: 2em;
+}
+.tech-prose h2 {
+  font-size: 1.75rem;
+  margin-top: 1.75em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.tech-prose h3 {
+  font-size: 1.35rem;
+  margin-top: 1.4em;
+  color: rgb(241, 245, 249);
+}
+
+.tech-prose p {
+  margin: 0;
+}
+
+.tech-prose a {
+  color: rgb(167, 139, 250);            /* violet-400 */
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 120ms;
+}
+.tech-prose a:hover {
+  color: rgb(196, 181, 253);
+}
+
+.tech-prose ul,
+.tech-prose ol {
+  padding-left: 1.5em;
+  margin: 0;
+}
+.tech-prose ul { list-style: disc; }
+.tech-prose ol { list-style: decimal; }
+.tech-prose li + li {
+  margin-top: 0.35em;
+}
+.tech-prose li::marker {
+  color: rgb(148, 163, 184);
+}
+
+.tech-prose blockquote {
+  margin: 0;
+  padding: 0.6em 1em;
+  border-left: 3px solid rgb(167, 139, 250);
+  background: rgba(167, 139, 250, 0.06);
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: rgb(203, 213, 225);
+  font-style: italic;
+}
+.tech-prose blockquote p {
+  margin: 0;
+}
+
+.tech-prose code {
+  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  padding: 0.15em 0.4em;
+  border-radius: 0.3rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgb(252, 211, 77);
+}
+.tech-prose pre {
+  margin: 0;
+  padding: 1em 1.2em;
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.55;
+}
+.tech-prose pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: rgb(226, 232, 240);
+}
+
+.tech-prose hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 2.5em 0;
+}
+
+.tech-prose img,
+.tech-prose .tech-article-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin-inline: auto;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tech-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+.tech-prose th,
+.tech-prose td {
+  padding: 0.55em 0.8em;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+.tech-prose th {
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+}
+
+.tech-prose s {
+  color: rgb(148, 163, 184);
+  text-decoration: line-through;
+}
+
+.tech-prose mark {
+  background: rgba(252, 211, 77, 0.25);
+  color: rgb(254, 240, 138);
+  padding: 0.05em 0.25em;
+  border-radius: 0.2rem;
+}
+
+/* TipTap/ProseMirror injects <p> wrapping empty lines for
+ * trailing newlines. Hide those so the article doesn't have
+ * a phantom blank line at the bottom. */
+.tech-prose p:empty {
+  display: none;
+}

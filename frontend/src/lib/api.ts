@@ -1944,12 +1944,30 @@ export const dashboardApi = {
 // the backend `serializeForPublic()` output: body is a
 // `string[]` (paragraphs), codeBlock is a typed object, and
 // `author` is the joined user record (or null).
+// Tier 1A — sidebar table of contents. Server pre-extracts
+// these from bodyMdx so the public page can render a sticky
+// TOC without re-parsing HTML on every read.
+export interface TocItem {
+  id: string;
+  text: string;
+  level: 1 | 2 | 3;
+}
+
 export interface PublicTechTrendArticle {
   id: number;
   title: string;
   slug: string;
   summary: string;
-  body: string[];
+  // Tier 1A — rich body. Server-side rendered from bodyMdx
+  // and sanitised at write time, so the public page can
+  // dangerouslySetInnerHTML without an extra sanitiser. Legacy
+  // articles (pre-Tier 1A) get a fallback paragraph list
+  // synthesised on the server.
+  bodyHtml: string;
+  // Only present in admin responses — the canonical source
+  // for the editor.
+  bodyMdx?: string | null;
+  toc: TocItem[];
   category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
   coverEmoji: string | null;
   coverImageUrl: string | null;
@@ -1978,14 +1996,13 @@ export interface PublicTechTrendArticle {
 }
 
 // Admin-side view of an article — same shape as the public
-// one but with the raw DB fields (body is whatever was sent,
-// usually string[]). We keep the type loose on body so the
-// admin form can round-trip the JSONB as-is.
+// one but includes the canonical `bodyMdx` (markdown source)
+// so the TipTap editor can hydrate. Legacy `body` JsonB is
+// still accepted on the wire for back-compat with articles
+// written before the Tier 1A migration.
 export interface AdminTechTrendArticle extends Omit<PublicTechTrendArticle, 'body'> {
-  body: string[];
-  // Admin gets access to the raw category/author field that
-  // some server queries emit. We add it as optional so the
-  // type stays compatible with the public response too.
+  bodyMdx?: string | null;
+  body?: unknown; // legacy JsonB column, kept for back-compat
 }
 
 export const techTrendsApi = {

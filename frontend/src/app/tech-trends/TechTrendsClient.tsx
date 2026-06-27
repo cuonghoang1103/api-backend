@@ -481,9 +481,16 @@ function ArticleCard({
             />
           )}
 
-          {/* Expanded body */}
+          {/* Expanded body — Tier 1A. Prefer the server-rendered
+              bodyHtml (rich TipTap output); fall back to the
+              legacy paragraph array for articles written
+              before the migration. The CSS class
+              `.tech-prose` (in globals.css) styles headings,
+              lists, blockquote, code, images, links — the same
+              typography as the admin editor so what you write
+              is what readers see. */}
           <AnimatePresence>
-            {isExpanded && article.body.length > 0 && (
+            {isExpanded && (article.bodyHtml || article.body.length > 0) && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
@@ -491,11 +498,18 @@ function ArticleCard({
                 transition={{ duration: 0.25, ease: [0.32, 0.94, 0.6, 1] }}
                 className="overflow-hidden"
               >
-                <div className="pt-2 space-y-3 text-text-secondary text-sm leading-relaxed border-t border-darkborder">
-                  {article.body.map((para, i) => (
-                    <p key={i}>{para}</p>
-                  ))}
-                </div>
+                {article.bodyHtml ? (
+                  <div
+                    className="tech-prose pt-3 border-t border-darkborder"
+                    dangerouslySetInnerHTML={{ __html: article.bodyHtml }}
+                  />
+                ) : (
+                  <div className="pt-2 space-y-3 text-text-secondary text-sm leading-relaxed border-t border-darkborder">
+                    {article.body.map((para, i) => (
+                      <p key={i}>{para}</p>
+                    ))}
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

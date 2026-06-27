@@ -2343,7 +2343,22 @@ model TechTrendArticle {
   title         String    @db.VarChar(255)
   slug          String    @unique(map: "uk_tech_trend_slug") @db.VarChar(255)
   summary       String    @db.Text
+  // ─── Rich body (Tier 1A — TipTap / Markdown) ───────────────
+  // `bodyMdx` is the canonical Markdown source the admin edits
+  // via the TipTap-backed editor. `bodyHtml` is the rendered
+  // HTML cached server-side at write time so the public page
+  // doesn't pay a render cost on every request. The legacy
+  // `body` JsonB column is kept for backward compatibility with
+  // articles created before this migration — readers detect
+  // bodyMdx !== null and prefer it; otherwise they fall back to
+  // the legacy `body` array.
   body          Json      @db.JsonB
+  bodyMdx       String?   @map("body_mdx") @db.Text
+  bodyHtml      String?   @map("body_html") @db.Text
+  // Optional auto-extracted table of contents (heading list).
+  // Built when bodyHtml is rendered and stored alongside it so
+  // the public page can render a sidebar TOC without re-parsing.
+  toc           Json?     @db.JsonB
   category      String    @db.VarChar(20)
   coverEmoji    String?   @map("cover_emoji") @db.VarChar(16)
   coverImageUrl String?   @map("cover_image_url") @db.VarChar(500)

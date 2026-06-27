@@ -4,6 +4,7 @@ import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
+import { renderArticle } from '../services/techTrendsRenderer.service.js';
 
 /**
  * Tech Trends & Insights — public + admin REST API
@@ -69,6 +70,38 @@ async function ensureUniqueSlug(baseValue: string, excludeId?: number): Promise<
   }
 }
 
+/**
+ * Render Markdown to HTML + extract TOC for persistence.
+ * Called on every write so the cached `bodyHtml` stays in sync
+ * with `bodyMdx`. We intentionally cap bodyMdx at ~100KB so
+ * a runaway admin pasting a novel doesn't blow up the row.
+ */
+const MAX_BODY_MDX = 100 * 1024;
+function renderBodyMdx(mdx: unknown): { bodyMdx: string | null; bodyHtml: string | null; toc: Prisma.InputJsonValue } {
+  if (mdx == null) {
+    // Explicit null = clear the rich body. Legacy `body` column
+    // remains untouched so existing paragraphs still render.
+    // Cast to InputJsonValue so we can either write a JSON
+    // array (TocItem[]) or set DB NULL via Prisma.JsonNull.
+    return {
+      bodyMdx: null,
+      bodyHtml: null,
+      toc: Prisma.JsonNull as unknown as Prisma.InputJsonValue,
+    };
+  }
+  if (typeof mdx !== 'string') {
+    throw new AppError('bodyMdx phai la chuoi', 400, 'INVALID_BODY_MDX');
+  }
+  if (mdx.length > MAX_BODY_MDX) {
+    throw new AppError(`bodyMdx qua dai (toi da ${MAX_BODY_MDX} ky tu)`, 400, 'BODY_MDX_TOO_LONG');
+  }
+  if (mdx.trim().length === 0) {
+    return { bodyMdx: '', bodyHtml: '', toc: [] as unknown as Prisma.InputJsonValue };
+  }
+  const { html, toc } = renderArticle(mdx);
+  return { bodyMdx: mdx, bodyHtml: html, toc: toc as unknown as Prisma.InputJsonValue };
+}
+
 const authorInclude = {
   author: {
     select: {
@@ -82,18 +115,41 @@ const authorInclude = {
   },
 } as const;
 
-// Normalize for the public response: flatten the body JSON
-// back into a string[] shape, normalize the codeBlock, and
-// strip Prisma internals. The admin UI gets the raw DB
-// shape (with JSONB body) so it can edit it as-is.
+// Normalize for the public response: prefer the cached
+// rich-body fields (bodyHtml + toc) over the legacy `body`
+// JsonB column. Legacy articles without bodyMdx fall back to
+// joining the paragraph array into a <p>...</p> string so
+// the public page still renders something readable.
 function serializeForPublic(article: Record<string, unknown>) {
-  const body = article.body as unknown;
+  const bodyMdx = (article.bodyMdx as string | null | undefined) ?? null;
+  const bodyHtml = (article.bodyHtml as string | null | undefined) ?? null;
+  const toc = (article.toc as unknown) ?? null;
+  let html = bodyHtml;
+  if (!html) {
+    const legacy = article.body as unknown;
+    if (Array.isArray(legacy)) {
+      // Last-resort fallback for articles written before the
+      // TipTap migration. Sanitise each paragraph and wrap in
+      // <p>. Safe because we never inject HTML.
+      html = (legacy as string[])
+        .map((p) => String(p).replace(/</g, '&lt;').replace(/>/g, '&gt;'))
+        .map((p) => `<p>${p}</p>`)
+        .join('\n');
+    } else {
+      html = '';
+    }
+  }
   return {
     id: article.id,
     title: article.title,
     slug: article.slug,
     summary: article.summary,
-    body: Array.isArray(body) ? (body as string[]) : [],
+    // New public read surface: rich body + TOC. `bodyMdx` is
+    // intentionally NOT exposed here — only admins need it
+    // (they get it via the admin endpoint below).
+    bodyHtml: html,
+    bodyMdx,
+    toc: Array.isArray(toc) ? toc : [],
     category: article.category,
     coverEmoji: article.coverEmoji,
     coverImageUrl: article.coverImageUrl,
@@ -275,6 +331,7 @@ adminRouter.post('/', async (req, res: Response<ApiResponse>, next) => {
       title,
       summary,
       body,
+      bodyMdx,
       category,
       coverEmoji,
       coverImageUrl,
@@ -292,20 +349,31 @@ adminRouter.post('/', async (req, res: Response<ApiResponse>, next) => {
     if (!category || !CATEGORIES.includes(category as Category)) {
       throw new AppError('Category must be one of: TechNews, FixBug, Experience, Interviews', 400, 'INVALID_CATEGORY');
     }
-    if (!Array.isArray(body)) {
-      throw new AppError('Body must be an array of paragraphs', 400, 'INVALID_BODY');
+    // Tier 1A — accept either the new bodyMdx (TipTap markdown)
+    // OR the legacy `body` (paragraph array). If both are sent
+    // we prefer bodyMdx (the canonical source going forward).
+    if (bodyMdx == null && !Array.isArray(body)) {
+      throw new AppError('bodyMdx (string) hoac body (array) phai co it nhat 1', 400, 'INVALID_BODY');
     }
 
     const slug = await ensureUniqueSlug(String(title));
     const normalizedStatus = status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT';
     const shouldPublish = normalizedStatus === 'PUBLISHED';
 
+    // Render bodyMdx → HTML + TOC. The legacy `body` JsonB
+    // column is kept for back-compat with articles written
+    // before this migration.
+    const rendered = renderBodyMdx(bodyMdx);
+
     const article = await prisma.techTrendArticle.create({
       data: {
         title: String(title).trim(),
         slug,
         summary: String(summary).trim(),
-        body: body as unknown as Prisma.InputJsonValue,
+        body: (Array.isArray(body) ? body : []) as unknown as Prisma.InputJsonValue,
+        bodyMdx: rendered.bodyMdx,
+        bodyHtml: rendered.bodyHtml,
+        toc: rendered.toc,
         category: String(category),
         coverEmoji: coverEmoji ? String(coverEmoji).slice(0, 16) : null,
         coverImageUrl: coverImageUrl ? String(coverImageUrl).slice(0, 500) : null,
@@ -344,6 +412,7 @@ adminRouter.put('/:id', async (req, res: Response<ApiResponse>, next) => {
       title,
       summary,
       body,
+      bodyMdx,
       category,
       coverEmoji,
       coverImageUrl,
@@ -367,11 +436,21 @@ adminRouter.put('/:id', async (req, res: Response<ApiResponse>, next) => {
     const data: Record<string, unknown> = {};
     if (title !== undefined) data.title = String(title).trim();
     if (summary !== undefined) data.summary = String(summary).trim();
+    // Legacy body field. Kept for back-compat — new admin UI
+    // sends `bodyMdx` instead.
     if (body !== undefined) {
       if (!Array.isArray(body)) {
-        throw new AppError('Body must be an array of paragraphs', 400, 'INVALID_BODY');
+        throw new AppError('Body phai la array (legacy)', 400, 'INVALID_BODY');
       }
       data.body = body as unknown as Prisma.InputJsonValue;
+    }
+    // Tier 1A — re-render bodyMdx → bodyHtml + TOC whenever
+    // the admin sends a new bodyMdx. Sending `null` clears it.
+    if (bodyMdx !== undefined) {
+      const rendered = renderBodyMdx(bodyMdx);
+      data.bodyMdx = rendered.bodyMdx;
+      data.bodyHtml = rendered.bodyHtml;
+      data.toc = rendered.toc;
     }
     if (category !== undefined) {
       if (!CATEGORIES.includes(category as Category)) {

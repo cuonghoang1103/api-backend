@@ -2456,13 +2456,29 @@ function MediaItem({
   const imgUrl = getMediaUrl(item.url, item.url) || '';
 
   return (
-    <button onClick={onClick} className="relative h-full w-full overflow-hidden">
+    <button
+      onClick={(e) => {
+        // The carousel detects tap vs drag at the wrapper level
+        // and decides whether to advance the slide or open the
+        // lightbox. We stopPropagation here so the button's own
+        // onClick (which opens the lightbox) doesn't fire when the
+        // user is dragging — only when it's a clean tap.
+        e.stopPropagation();
+        onClick();
+      }}
+      className="relative h-full w-full overflow-hidden"
+    >
       <img
         src={imgUrl}
         alt={item.alt || ''}
         loading="lazy"
         decoding="async"
         className="h-full w-full object-cover transition-transform hover:scale-105"
+        // Drag protection: prevent the browser from interpreting
+        // the image drag as a file download. We still let the
+        // parent wrapper see pointerdown/pointermove for the
+        // carousel swipe.
+        onDragStart={(e) => e.preventDefault()}
       />
     </button>
   );

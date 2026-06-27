@@ -52,11 +52,29 @@ export default function HubLinkCard({ link, onEdit, onDelete, onStatusChange, on
       {/* Thumbnail */}
       <a
         href={link.url}
-        target="_blank"
+target="_blank"
         rel="noopener noreferrer"
         className="relative block aspect-[16/9] overflow-hidden bg-darkbg"
       >
-        {link.thumbnailUrl ? (
+        {/* Phase 3 — priority: coverImageUrl (owner upload) >
+            thumbnailUrl (auto-scraped) > gradient fallback. We
+            intentionally keep all three so the user can swap
+            between custom + scraped + fallback without losing
+            data. The "Custom" badge on the top-right tells the
+            user they're looking at their own upload vs the
+            auto-scraped image. */}
+        {link.coverImageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={link.coverImageUrl}
+            alt={link.title}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = 'none';
+            }}
+          />
+        ) : link.thumbnailUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={link.thumbnailUrl}
@@ -83,6 +101,15 @@ export default function HubLinkCard({ link, onEdit, onDelete, onStatusChange, on
         {link.isPublic && (
           <div className="absolute right-2 top-2 flex items-center gap-1 rounded-md bg-neon-emerald/20 px-1.5 py-1 text-[10px] font-semibold text-neon-emerald backdrop-blur-md">
             <Globe2 className="h-3 w-3" /> Public
+          </div>
+        )}
+        {/* Phase 3 — small "Custom" tag so the owner knows they're
+            looking at their own uploaded cover (not the scraped
+            og:image). Sits bottom-right so it doesn't fight with
+            the Public badge at top-right. */}
+        {link.coverImageUrl && (
+          <div className="absolute bottom-2 right-2 rounded-md bg-neon-violet/30 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white backdrop-blur-md">
+            Custom
           </div>
         )}
       </a>

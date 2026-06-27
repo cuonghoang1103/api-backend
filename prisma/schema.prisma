@@ -2390,6 +2390,12 @@ model HubFolder {
   // Either a Lucide icon name (frontend resolves to component)
   // or an absolute URL to an uploaded image on R2.
   icon      String?  @db.VarChar(500)
+  // Cover/banner image for the folder header — separate from
+  // the small `icon` so users can keep the sidebar compact while
+  // having a rich preview when the folder is open. Set by the
+  // owner via the Folder dialog, stored on R2. Null = use the
+  // auto-derived gradient fallback in the UI.
+  coverImageUrl String? @map("cover_image_url") @db.VarChar(2000)
   // Display order within the sidebar. Lower = first. Default 0.
   sortOrder Int      @default(0) @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at")
@@ -2418,6 +2424,11 @@ model HubLink {
   description  String?  @db.Text
   thumbnailUrl String?  @map("thumbnail_url") @db.VarChar(2000)
   faviconUrl   String?  @map("favicon_url") @db.VarChar(500)
+  // Owner-uploaded cover image (stored on R2). Overrides the
+  // auto-scraped `thumbnailUrl` for card display when set —
+  // useful when the web og:image is wrong/missing/ugly. UI
+  // shows coverImageUrl in priority: cover > thumbnail > gradient.
+  coverImageUrl String? @map("cover_image_url") @db.VarChar(2000)
   // Free-form note (markdown/plain). No length cap at the DB
   // level — the API layer trims to 5000 chars which is plenty
   // for a personal note while still letting Postgres TEXT be
@@ -2464,6 +2475,11 @@ model HubFile {
   key        String   @db.VarChar(500)
   size       Int // bytes
   mimeType   String   @db.VarChar(100)
+  // Owner-uploaded cover image (stored on R2). For images this
+  // is often the file's own bytes; for non-image files (pdf,
+  // docx…) the owner can pick a separate thumbnail. When set
+  // the card displays this instead of the mime icon.
+  coverImageUrl String? @map("cover_image_url") @db.VarChar(2000)
   // Progress status: "unread" | "learning" | "done"
   status     String   @default("unread")
   tags       String[] @default([])

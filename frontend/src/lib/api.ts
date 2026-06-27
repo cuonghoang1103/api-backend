@@ -2122,6 +2122,10 @@ export interface HubFolder {
   id: number;
   name: string;
   icon: string | null;
+  // Phase 3 — owner-uploaded cover image (R2). Used as the
+  // folder's header/banner when set; falls back to the gradient
+  // palette when null.
+  coverImageUrl: string | null;
   sortOrder: number;
   parentId: number | null;
   createdAt: string;
@@ -2137,6 +2141,9 @@ export interface HubLink {
   description: string | null;
   thumbnailUrl: string | null;
   faviconUrl: string | null;
+  // Phase 3 — owner-uploaded cover image (R2). Overrides the
+  // auto-scraped `thumbnailUrl` for card display when set.
+  coverImageUrl: string | null;
   notes: string | null;
   tags: string[];
   isPublic: boolean;
@@ -2162,6 +2169,10 @@ export interface HubFile {
   key: string;
   size: number;
   mimeType: string;
+  // Phase 3 — owner-uploaded cover image (R2). For images this
+  // is often the file's own bytes; for non-image files (pdf,
+  // docx…) the owner can pick a separate thumbnail.
+  coverImageUrl: string | null;
   status: 'unread' | 'learning' | 'done';
   tags: string[];
   notes: string | null;
@@ -2185,10 +2196,10 @@ export const hubApi = {
   // Folders ──────────────────────────────────────────────────────
   listFolders: () => api.get<{ data: HubFolder[] }>('/hub/folders'),
 
-  createFolder: (data: { name: string; icon?: string | null; sortOrder?: number; parentId?: number | null }) =>
+  createFolder: (data: { name: string; icon?: string | null; coverImageUrl?: string | null; sortOrder?: number; parentId?: number | null }) =>
     api.post<{ data: HubFolder }>('/hub/folders', data),
 
-  updateFolder: (id: number, data: { name?: string; icon?: string | null; sortOrder?: number; parentId?: number | null }) =>
+  updateFolder: (id: number, data: { name?: string; icon?: string | null; coverImageUrl?: string | null; sortOrder?: number; parentId?: number | null }) =>
     api.patch<{ data: HubFolder }>(`/hub/folders/${id}`, data),
 
   deleteFolder: (id: number) =>
@@ -2209,6 +2220,7 @@ export const hubApi = {
     description?: string | null;
     thumbnailUrl?: string | null;
     faviconUrl?: string | null;
+    coverImageUrl?: string | null;
     notes?: string | null;
     tags?: string[];
     isPublic?: boolean;
@@ -2223,6 +2235,7 @@ export const hubApi = {
       description: string | null;
       thumbnailUrl: string | null;
       faviconUrl: string | null;
+      coverImageUrl: string | null;
       notes: string | null;
       tags: string[];
       isPublic: boolean;
@@ -2266,6 +2279,7 @@ export const hubFileApi = {
     mimeType: string;
     size: number;
     folderId?: number | null;
+    coverImageUrl?: string | null;
     tags?: string[];
     notes?: string | null;
     isPublic?: boolean;
@@ -2296,6 +2310,7 @@ export const hubFileApi = {
     data: Partial<{
       folderId: number | null;
       name: string;
+      coverImageUrl: string | null;
       tags: string[];
       notes: string | null;
       status: 'unread' | 'learning' | 'done';

@@ -27,7 +27,7 @@ export async function listFolders(userId: number) {
 
 export async function createFolder(
   userId: number,
-  data: { name: string; icon?: string | null; sortOrder?: number; parentId?: number | null },
+  data: { name: string; icon?: string | null; coverImageUrl?: string | null; sortOrder?: number; parentId?: number | null },
 ) {
   const name = data.name.trim();
   if (name.length === 0 || name.length > 100) {
@@ -52,6 +52,7 @@ export async function createFolder(
       userId,
       name,
       icon: data.icon ?? null,
+      coverImageUrl: data.coverImageUrl?.trim() || null,
       sortOrder: typeof data.sortOrder === 'number' ? Math.floor(data.sortOrder) : 0,
       parentId: data.parentId ?? null,
     },
@@ -62,7 +63,7 @@ export async function createFolder(
 export async function updateFolder(
   userId: number,
   id: number,
-  data: { name?: string; icon?: string | null; sortOrder?: number; parentId?: number | null },
+  data: { name?: string; icon?: string | null; coverImageUrl?: string | null; sortOrder?: number; parentId?: number | null },
 ) {
   if (!Number.isInteger(id) || id <= 0) {
     throw new AppError('id khong hop le', 400, 'INVALID_ID');
@@ -80,6 +81,15 @@ export async function updateFolder(
       throw new AppError('Icon qua dai (max 500 ky tu)', 400, 'INVALID_ICON');
     }
     updateData.icon = data.icon;
+  }
+  if (data.coverImageUrl !== undefined) {
+    const v = data.coverImageUrl == null
+      ? null
+      : String(data.coverImageUrl).trim() || null;
+    if (v != null && v.length > 2000) {
+      throw new AppError('coverImageUrl qua dai (max 2000 ky tu)', 400, 'COVER_URL_TOO_LONG');
+    }
+    updateData.coverImageUrl = v;
   }
   if (data.sortOrder !== undefined) {
     if (typeof data.sortOrder !== 'number') {
@@ -210,6 +220,7 @@ export async function createLink(
     description?: string | null;
     thumbnailUrl?: string | null;
     faviconUrl?: string | null;
+    coverImageUrl?: string | null;
     notes?: string | null;
     tags?: string[];
     isPublic?: boolean;
@@ -247,6 +258,7 @@ export async function createLink(
       description: data.description?.trim() || null,
       thumbnailUrl: data.thumbnailUrl?.trim() || null,
       faviconUrl: data.faviconUrl?.trim() || null,
+      coverImageUrl: data.coverImageUrl?.trim() || null,
       notes: data.notes?.trim() || null,
       tags,
       isPublic: wantsPublic,
@@ -265,6 +277,7 @@ export async function updateLink(
     description?: string | null;
     thumbnailUrl?: string | null;
     faviconUrl?: string | null;
+    coverImageUrl?: string | null;
     notes?: string | null;
     tags?: string[];
     isPublic?: boolean;
@@ -304,6 +317,18 @@ export async function updateLink(
     updateData.faviconUrl = data.faviconUrl == null
       ? null
       : String(data.faviconUrl).trim() || null;
+  }
+  // Owner-uploaded cover image — same shape as thumbnail/favicon.
+  // Passing `null` clears it (reverts to scraped thumbnail or
+  // fallback). We validate length to avoid storing garbage URLs.
+  if (data.coverImageUrl !== undefined) {
+    const v = data.coverImageUrl == null
+      ? null
+      : String(data.coverImageUrl).trim() || null;
+    if (v != null && v.length > 2000) {
+      throw new AppError('coverImageUrl qua dai (max 2000 ky tu)', 400, 'COVER_URL_TOO_LONG');
+    }
+    updateData.coverImageUrl = v;
   }
   if (data.notes !== undefined) {
     updateData.notes = data.notes == null ? null : String(data.notes).trim() || null;
@@ -440,6 +465,7 @@ export async function createFile(
     key: string;
     size: number;
     mimeType: string;
+    coverImageUrl?: string | null;
     tags?: string[];
     notes?: string | null;
     isPublic?: boolean;
@@ -464,6 +490,7 @@ export async function createFile(
       key: String(data.key),
       size: Math.max(0, Math.floor(data.size)),
       mimeType: String(data.mimeType).slice(0, 100),
+      coverImageUrl: data.coverImageUrl?.trim() || null,
       tags,
       notes: data.notes?.trim() || null,
       isPublic: wantsPublic,
@@ -478,6 +505,7 @@ export async function updateFile(
   data: {
     folderId?: number | null;
     name?: string;
+    coverImageUrl?: string | null;
     tags?: string[];
     notes?: string | null;
     status?: string;
@@ -510,6 +538,18 @@ export async function updateFile(
   }
   if (data.notes !== undefined) {
     updateData.notes = data.notes == null ? null : String(data.notes).trim() || null;
+  }
+  // Owner-uploaded cover image — same shape as link's
+  // coverImageUrl handler. Length-capped so a typo can't fill
+  // the row with garbage.
+  if (data.coverImageUrl !== undefined) {
+    const v = data.coverImageUrl == null
+      ? null
+      : String(data.coverImageUrl).trim() || null;
+    if (v != null && v.length > 2000) {
+      throw new AppError('coverImageUrl qua dai (max 2000 ky tu)', 400, 'COVER_URL_TOO_LONG');
+    }
+    updateData.coverImageUrl = v;
   }
   if (data.status !== undefined) {
     if (!VALID_STATUSES.includes(data.status)) {

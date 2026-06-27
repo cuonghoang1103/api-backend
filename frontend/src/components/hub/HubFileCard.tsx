@@ -98,14 +98,38 @@ export default function HubFileCard({ file, onClick, onDelete, onStatusChange, o
         onClick={() => onClick(file)}
         className="relative flex aspect-square w-full cursor-pointer items-center justify-center overflow-hidden bg-darkbg"
       >
-        <div className={cn('absolute inset-0 bg-gradient-to-br', GRADIENT[category])} />
-        <motion.div
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.3 }}
-          className="relative z-10"
-        >
-          <Icon className={cn('h-16 w-16', color)} />
-        </motion.div>
+        {/* Phase 3 — owner-uploaded cover image (R2). When set,
+            we hide the gradient + icon and let the image fill the
+            card. Falls back to the gradient + icon for files
+            without a custom cover. We keep the aspect-square so
+            the layout doesn't shift between covered / uncovered
+            cards in the grid. */}
+        {file.coverImageUrl ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={file.coverImageUrl}
+              alt={file.name}
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+              loading="lazy"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.opacity = '0';
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          </>
+        ) : (
+          <>
+            <div className={cn('absolute inset-0 bg-gradient-to-br', GRADIENT[category])} />
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.3 }}
+              className="relative z-10"
+            >
+              <Icon className={cn('h-16 w-16', color)} />
+            </motion.div>
+          </>
+        )}
         {/* File size badge */}
         <div className="absolute bottom-2 right-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-md">
           {formatBytes(file.size)}
@@ -121,6 +145,14 @@ export default function HubFileCard({ file, onClick, onDelete, onStatusChange, o
         {file.isPublic && (
           <div className="absolute right-2 top-2 rounded-md bg-neon-emerald/20 px-1.5 py-1 text-[10px] font-semibold text-neon-emerald backdrop-blur-md">
             <Globe2 className="h-3 w-3 inline" />
+          </div>
+        )}
+        {/* Phase 3 — "Custom" tag so the owner knows the cover is
+            their upload (not the auto-generated mime icon). Sits
+            top-right under the public badge when both apply. */}
+        {file.coverImageUrl && (
+          <div className="absolute right-2 bottom-2 rounded-md bg-neon-violet/30 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white backdrop-blur-md">
+            Custom
           </div>
         )}
       </button>

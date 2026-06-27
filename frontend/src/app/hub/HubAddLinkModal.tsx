@@ -9,6 +9,7 @@ import {
 import { toast } from 'sonner';
 
 import { hubApi, type HubFolder, type HubLink, type HubScrapeResult } from '@/lib/api';
+import HubCoverUpload from '@/components/hub/HubCoverUpload';
 import { cn } from '@/lib/utils';
 
 interface HubAddLinkModalProps {
@@ -24,6 +25,7 @@ interface HubAddLinkModalProps {
     description?: string | null;
     thumbnailUrl?: string | null;
     faviconUrl?: string | null;
+    coverImageUrl?: string | null;
     notes?: string | null;
     tags?: string[];
     isPublic?: boolean;
@@ -38,6 +40,11 @@ export default function HubAddLinkModal({
   const [description, setDescription] = useState('');
   const [thumbnailUrl, setThumbnailUrl] = useState('');
   const [faviconUrl, setFaviconUrl] = useState('');
+  // Phase 3 — owner-uploaded cover image. Lives separately from
+  // `thumbnailUrl` so the user can clear the custom cover and
+  // fall back to the auto-scraped og:image. The UI covers
+  // `coverImageUrl` in priority: cover > thumbnail > gradient.
+  const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
   const [notes, setNotes] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
@@ -57,6 +64,7 @@ export default function HubAddLinkModal({
       setDescription(initial.description ?? '');
       setThumbnailUrl(initial.thumbnailUrl ?? '');
       setFaviconUrl(initial.faviconUrl ?? '');
+      setCoverImageUrl(initial.coverImageUrl ?? null);
       setNotes(initial.notes ?? '');
       setTags(initial.tags);
       setFolderId(initial.folderId ?? '');
@@ -65,6 +73,7 @@ export default function HubAddLinkModal({
     } else {
       setUrl(''); setTitle(''); setDescription('');
       setThumbnailUrl(''); setFaviconUrl('');
+      setCoverImageUrl(null);
       setNotes(''); setTags([]); setFolderId(''); setIsPublic(false);
       lastScrapedRef.current = '';
     }
@@ -122,6 +131,7 @@ export default function HubAddLinkModal({
         title: title.trim(),
         description: description.trim() || null,
         thumbnailUrl: thumbnailUrl.trim() || null,
+        coverImageUrl: coverImageUrl ?? null,
         faviconUrl: faviconUrl.trim() || null,
         notes: notes.trim() || null,
         tags,
@@ -181,6 +191,15 @@ export default function HubAddLinkModal({
 
               {/* Body */}
               <div className="flex-1 space-y-4 overflow-y-auto p-5">
+                {/* Cover image upload (Phase 3). Owner-uploaded
+                    cover overrides the auto-scraped thumbnail
+                    when set; clearing it falls back to thumbnail. */}
+                <HubCoverUpload
+                  value={coverImageUrl}
+                  onChange={setCoverImageUrl}
+                  label={title || 'Cover'}
+                />
+
                 {/* URL */}
                 <div>
                   <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-text-secondary">

@@ -633,6 +633,30 @@ export default function HubClient({
           if (data.notes !== undefined) {
             void hubFileApi.update(id, { notes: data.notes });
           }
+          if (data.coverImageUrl !== undefined) {
+            // Optimistic local update + PATCH to backend. The
+            // PATCH returns the updated row, so we replace the
+            // local file entry to keep the card in sync. If the
+            // PATCH fails we revert via reloadFiles().
+            const previous = previewFile;
+            setPreviewFile((cur) => (cur && cur.id === id ? { ...cur, coverImageUrl: data.coverImageUrl ?? null } : cur));
+            setFiles((cur) => cur.map((f) => f.id === id ? { ...f, coverImageUrl: data.coverImageUrl ?? null } : f));
+            hubFileApi.update(id, { coverImageUrl: data.coverImageUrl ?? null })
+              .then((r) => {
+                const updated = r.data.data;
+                setFiles((cur) => cur.map((f) => f.id === id ? updated : f));
+                setPreviewFile((cur) => (cur && cur.id === id ? updated : cur));
+                toast.success('Da cap nhat anh bia');
+              })
+              .catch(() => {
+                // Revert on failure
+                if (previous) {
+                  setFiles((cur) => cur.map((f) => f.id === id ? previous : f));
+                  setPreviewFile(previous);
+                }
+                toast.error('Khong the cap nhat anh bia');
+              });
+          }
         }}
       />
 

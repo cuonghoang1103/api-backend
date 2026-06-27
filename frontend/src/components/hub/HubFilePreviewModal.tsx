@@ -11,6 +11,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { toast } from 'sonner';
 
 import { hubFileApi, type HubFile } from '@/lib/api';
+import HubCoverUpload from './HubCoverUpload';
 import { cn } from '@/lib/utils';
 
 interface HubFilePreviewModalProps {
@@ -18,7 +19,11 @@ interface HubFilePreviewModalProps {
   open: boolean;
   onClose: () => void;
   onDelete?: (id: number) => void;
-  onUpdate?: (id: number, data: { status?: string; notes?: string; tags?: string[] }) => void;
+  // Phase 3 — pass coverImageUrl updates so the parent can
+  // either refresh the file row (preferred) or we update
+  // locally and persist on close. We keep the existing
+  // status/notes/tags surface intact.
+  onUpdate?: (id: number, data: { status?: string; notes?: string; tags?: string[]; coverImageUrl?: string | null }) => void;
 }
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
@@ -84,6 +89,11 @@ export default function HubFilePreviewModal({
   file, open, onClose, onDelete, onUpdate,
 }: HubFilePreviewModalProps) {
   const [signedUrl, setSignedUrl] = useState<string | null>(null);
+  // Phase 3 — local cover URL state. We keep it in sync with
+  // `file.coverImageUrl` whenever the modal opens (so editing
+  // a file shows its current cover), and propagate changes back
+  // via `onUpdate` so the HubClient store refreshes the card.
+  const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [codeContent, setCodeContent] = useState<string | null>(null);
   const [loadingCode, setLoadingCode] = useState(false);
@@ -112,6 +122,10 @@ export default function HubFilePreviewModal({
     if (!open || !file) return;
     setCodeContent(null);
     setCurrentPage(1);
+    // Sync the local cover from the file — the parent passes a
+    // fresh file object each time it re-fetches, so this is the
+    // authoritative source for "what's the current cover?".
+    setCoverImageUrl(file.coverImageUrl ?? null);
     void fetchSignedUrl(file);
     return () => {
       if (refreshTimer.current) clearTimeout(refreshTimer.current);
@@ -209,6 +223,26 @@ export default function HubFilePreviewModal({
                   </button>
                 </div>
               </div>
+
+              {/* Phase 3 — owner cover image (Phase 3). Lives in
+                  its own band between header and preview so it
+                  doesn't fight for attention with the file viewer.
+                  Hidden when the file IS the cover (image mime)
+                  because the file's own bytes already serve as the
+                  cover — uploading a separate cover would just
+                  duplicate it. */}
+              {!file.mimeType.startsWith('image/') && (
+                <div className="shrink-0 border-b border-white/[0.06] px-5 py-4">
+                  <HubCoverUpload
+                    value={coverImageUrl}
+                    onChange={(url) => {
+                      setCoverImageUrl(url);
+                      onUpdate?.(file.id, { coverImageUrl: url });
+                    }}
+                    label={file.name}
+                  />
+                </div>
+              )}
 
               {/* Content */}
               <div className="flex flex-1 overflow-hidden">

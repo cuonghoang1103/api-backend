@@ -75,6 +75,18 @@ export function ProfileDetail() {
   const [loadingMedia, setLoadingMedia] = useState(false);
   const mediaSentinelRef = useRef<HTMLDivElement | null>(null);
 
+  // --- Liked posts (cursor-paginated, "Đã thích" tab) ---
+  // Privacy: backend only returns the OWNER's liked list. Anyone
+  // else gets a 404, so we gate the tab UI on `isOwn` and only
+  // show the tab when the viewer is the profile owner. We also
+  // keep `likedForbidden` so the tab can render a clear
+  // explanation when the viewer isn't the owner.
+  const [liked, setLiked] = useState<Post[]>([]);
+  const [likedCursor, setLikedCursor] = useState<number | null>(null);
+  const [likedHasMore, setLikedHasMore] = useState(true);
+  const [loadingLiked, setLoadingLiked] = useState(false);
+  const likedSentinelRef = useRef<HTMLDivElement | null>(null);
+
   // --- Bio edit modal ---
   const [editingBio, setEditingBio] = useState(false);
   const [bioDraft, setBioDraft] = useState('');
@@ -200,6 +212,61 @@ export function ProfileDetail() {
     return () => obs.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, mediaHasMore, loadingMedia]);
+
+  // --- Load liked posts (cursor-paginated) ---
+  // Only the OWN profile can fetch this; backend returns 404 for
+  // anyone else. We rely on the same `isOwn` check below in the
+  // tab UI to hide the tab itself for non-owners, but defensively
+  // also short-circuit here.
+  const loadLiked = useCallback(
+    async (reset = false) => {
+      if (!id || loadingLiked) return;
+      if (!reset && !likedHasMore) return;
+      if (!isOwn) return;
+      setLoadingLiked(true);
+      try {
+        const res: any = await socialUserApi.getUserLiked(id, {
+          cursor: reset ? null : likedCursor,
+          limit: 20,
+        });
+        const { items, nextCursor, hasMore } = res.data?.data ?? {};
+        setLiked((prev) => (reset ? items ?? [] : [...prev, ...(items ?? [])]));
+        setLikedCursor(nextCursor);
+        setLikedHasMore(hasMore);
+      } catch {
+        toast.error('Khong tai duoc bai viet da thich');
+      } finally {
+        setLoadingLiked(false);
+      }
+    },
+    [id, likedCursor, likedHasMore, loadingLiked, isOwn],
+  );
+
+  useEffect(() => {
+    if (tab !== 'liked') return;
+    // Reset cursor every time the tab opens so the list reflects
+    // the latest likes (the user may have just liked something).
+    void loadLiked(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab]);
+
+  // --- Infinite scroll: liked tab ---
+  useEffect(() => {
+    if (tab !== 'liked') return;
+    const node = likedSentinelRef.current;
+    if (!node) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && likedHasMore && !loadingLiked) {
+          void loadLiked(false);
+        }
+      },
+      { rootMargin: '300px' },
+    );
+    obs.observe(node);
+    return () => obs.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, likedHasMore, loadingLiked]);
 
   // --- Bio edit ---
   const openBioEdit = () => {
@@ -353,7 +420,12 @@ export function ProfileDetail() {
           {([
             { id: 'posts' as Tab, label: 'Bài viết' },
             { id: 'media' as Tab, label: 'Ảnh' },
-            { id: 'liked' as Tab, label: 'Đã thích' },
+            // Privacy: "Đã thích" only makes sense for the owner.
+            // Other viewers can't see what you liked (matches
+            // Twitter/Facebook). The backend also 404s if a non-
+            // owner hits /users/:id/liked, so this tab would be
+            // empty for everyone else.
+            ...(isOwn ? [{ id: 'liked' as Tab, label: 'Đã thích' }] : []),
           ]).map((t) => (
             <button
               key={t.id}
@@ -479,8 +551,35 @@ export function ProfileDetail() {
       )}
 
       {tab === 'liked' && (
-        <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center text-text-muted">
-          Bài viết đã thích — đang phát triển.
+        <div className="space-y-3">
+          {!isOwn ? (
+            <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center text-text-muted">
+              Chỉ chủ sở hữu trang cá nhân mới xem được danh sách bài viết đã thích.
+            </div>
+          ) : liked.length === 0 && !loadingLiked ? (
+            <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center text-text-muted">
+              Bạn chưa thích bài viết nào.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              {liked.map((post: any) => (
+                <PostCardLite
+                  key={post.id}
+                  post={post}
+                  onToggleLike={() => {
+                    // Optimistic: invalidate the liked list so the
+                    // next visit reflects the new state.
+                    queryClient.invalidateQueries({ queryKey: ['profile', id, 'liked'] });
+                  }}
+                />
+              ))}
+            </div>
+          )}
+          {isOwn && likedHasMore && (
+            <div ref={likedSentinelRef} className="flex items-center justify-center py-6">
+              {loadingLiked && <Loader2 className="h-5 w-5 animate-spin text-text-muted" />}
+            </div>
+          )}
         </div>
       )}
 

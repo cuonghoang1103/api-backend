@@ -710,14 +710,35 @@ export function serializePost(
     // `youtubeUrl` may not be selected by every query — fall back to
     // null so the renderer can defensively check.
     youtubeUrl: post.youtubeUrl ?? null,
-    // Phase 3 add — Instagram-style music sticker. When the
+// Phase 3 add — Instagram-style music sticker. When the
     // include selected `musicTrack`, we pass it through; when
     // not, we still expose the raw musicTrackId so the client
     // can fetch the track separately if it needs to render the
     // sticker (it falls back to looking up by id).
-    musicTrackId: post.musicTrackId ?? null,
-    musicStartSec: post.musicStartSec ?? null,
-    musicTrack: post.musicTrack ?? null,
+    //
+    // ─── Phase 4 fix (2026-06-28) ────────────────────────────
+    // The old SocialPost had a `musicTrack` relation directly on
+    // the post. Phase 4 moved the relation to a separate
+    // PostMusic join table (1-1 with the post + song metadata),
+    // so the legacy `post.musicTrack` field is now always
+    // `undefined`. The PostCard frontend, however, still reads
+    // `post.musicTrack` — and `MusicSticker.tsx` expects a
+    // shape compatible with `MusicTrackMini`. Without this
+    // mapping, the sticker NEVER renders on the new posts
+    // written via the Phase-4 composer. We map the join into
+    // the legacy field here so the frontend keeps working.
+    musicTrackId: post.musicTrackId ?? (post.postMusic?.songId ?? null),
+    musicStartSec: post.musicStartSec ?? (post.postMusic?.startSec ?? null),
+    musicTrack: post.postMusic?.song
+      ? {
+          id: post.postMusic.song.id,
+          title: post.postMusic.song.title,
+          artist: post.postMusic.song.artist,
+          coverImage: post.postMusic.song.coverImage ?? null,
+          audioUrl: post.postMusic.song.audioUrl ?? null,
+          durationSeconds: post.postMusic.song.durationSec ?? null,
+        }
+      : (post.musicTrack ?? null),
     // Content-type bucket for the feed tabs / per-type badge. Falls back
     // to POST for any row/query that didn't select it.
     type: post.type ?? 'POST',

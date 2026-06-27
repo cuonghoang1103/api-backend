@@ -396,6 +396,15 @@ export const socialUserApi = {
     id: number,
     params: { cursor?: number; limit?: number; type?: 'IMAGE' | 'VIDEO' } = {},
   ) => api.get<{ data: { items: unknown[]; nextCursor: number | null; hasMore: boolean; limit: number } }>(`/users/${id}/media`, { params }),
+  // Phase 8 add — list posts the user has LIKED. Cursor-paginated,
+  // returns the same `{ items, nextCursor, hasMore, limit }` shape
+  // as getUserPosts/getUserMedia so the profile page can reuse
+  // its infinite-scroll handler. Privacy: the backend only allows
+  // the owner to fetch this (404 for anyone else).
+  getUserLiked: (
+    id: number,
+    params: { cursor?: number; limit?: number } = {},
+  ) => api.get<{ data: { items: unknown[]; nextCursor: number | null; hasMore: boolean; limit: number } }>(`/users/${id}/liked`, { params }),
   // Phase 4 add — own profile (incl. lazy-create) and update.
   getOwnProfile: () => api.get('/users/me/profile'),
   updateOwnProfile: (data: { bio?: string; coverPhoto?: string; location?: string; websiteUrl?: string; work?: string; education?: string }) =>

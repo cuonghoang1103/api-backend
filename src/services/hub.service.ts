@@ -886,7 +886,8 @@ export async function getPublicLink(slug: string) {
 function serializeLink(l: {
   id: number; folderId: number | null; url: string; title: string;
   description: string | null; thumbnailUrl: string | null;
-  faviconUrl: string | null; notes: string | null; tags: string[];
+  faviconUrl: string | null; coverImageUrl: string | null;
+  notes: string | null; tags: string[];
   isPublic: boolean; publicSlug: string | null; status: string;
   createdAt: Date; updatedAt: Date;
 }) {
@@ -898,6 +899,11 @@ function serializeLink(l: {
     description: l.description,
     thumbnailUrl: l.thumbnailUrl,
     faviconUrl: l.faviconUrl,
+    // Phase 3 — owner-uploaded cover image. Must be in the
+    // serialized response or the frontend has no way to render
+    // it (this was the bug where DB had the URL but the API
+    // never returned it to the client).
+    coverImageUrl: l.coverImageUrl ?? null,
     notes: l.notes,
     tags: l.tags,
     isPublic: l.isPublic,
@@ -981,7 +987,8 @@ async function getDescendantFolderIds(folderId: number): Promise<number[]> {
 
 function serializeFile(f: {
   id: number; folderId: number | null; name: string; key: string;
-  size: number; mimeType: string; status: string; tags: string[];
+  size: number; mimeType: string; coverImageUrl: string | null;
+  status: string; tags: string[];
   notes: string | null; isPublic: boolean; publicSlug: string | null;
   createdAt: Date; updatedAt: Date;
 }) {
@@ -992,6 +999,8 @@ function serializeFile(f: {
     key: f.key,
     size: f.size,
     mimeType: f.mimeType,
+    // Phase 3 — same bug as serializeLink above.
+    coverImageUrl: f.coverImageUrl ?? null,
     status: f.status,
     tags: f.tags,
     notes: f.notes,

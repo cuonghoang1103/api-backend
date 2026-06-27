@@ -975,6 +975,47 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
             onOpenTheater={onOpenTheater}
             musicTrack={post.musicTrack ?? null}
             musicStartSec={post.musicStartSec ?? null}
+            // Floating action bar lives INSIDE the media wrapper
+            // so its `position: absolute` anchors to the image
+            // box. The same component instance is reused for
+            // posts without media (overlay=false → block bar).
+            actionsOverlay={
+              <PostActionsBar
+                myReaction={myReaction}
+                reactionColor={reactionColor}
+                reactionEmoji={reactionEmoji}
+                safeLikesCount={safeLikesCount}
+                handleReact={handleReact}
+                cancelLongPress={cancelLongPress}
+                showReactions={showReactions}
+                setShowReactions={setShowReactions}
+                REACTION_PICKER_ORDER={REACTION_PICKER_ORDER}
+                activeReactions={activeReactions}
+                showComments={showComments}
+                safeCommentsCount={safeCommentsCount}
+                handleToggleComments={handleToggleComments}
+                handleShare={handleShare}
+                showShareMenu={showShareMenu}
+                setShowShareMenu={setShowShareMenu}
+                safeIsSaved={safeIsSaved}
+                safeSavesCount={safeSavesCount}
+                saveButtonRef={saveButtonRef}
+                handleSaveClick={handleSaveClick}
+                post={post}
+                showSavePopover={showSavePopover}
+                setShowSavePopover={setShowSavePopover}
+                cachedCollections={cachedCollections}
+                handleSaveCommit={handleSaveCommit}
+                showSavePopoverV2={showSavePopoverV2}
+                setShowSavePopoverV2={setShowSavePopoverV2}
+                collectionsV2={collectionsV2}
+                saveContext={saveContext}
+                collectionsV2Loading={collectionsV2Loading}
+                handleCommitV2={handleCommitV2}
+                handleCreateV2={handleCreateV2}
+                overlay
+              />
+            }
           />
         )}
 
@@ -985,288 +1026,47 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
           <YouTubeEmbed url={post.youtubeUrl} />
         )}
 
-        {/* Action bar */}
-        <div
-          className="mt-4 flex items-center gap-1"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}
-        >
-          {/* ─── Like button wrapper ────────────────────────────────────
-              HOVER: popover opens on mouse enter (no long-press delay).
-              Mouse-leave from the ENTIRE wrapper zone closes it,
-              giving the user a generous 12px invisible bridge so the
-              cursor can safely travel from the button edge to the
-              popover without triggering onMouseLeave. ────────────────── */}
-        <div
-          className="relative"
-          onMouseEnter={() => setShowReactions(true)}
-          onMouseLeave={() => {
-            cancelLongPress();
-            setShowReactions(false);
-          }}
-        >
-          <motion.button
-            onClick={() => handleReact('LIKE')}
-            onMouseEnter={(e) => { if (!myReaction) e.currentTarget.style.background = 'rgba(236,72,153,0.08)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = ''; }}
-            whileTap={{ scale: 0.85 }}
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: 'spring', stiffness: 480, damping: 22 }}
-            className="group inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-medium"
-            style={{ color: myReaction ? reactionColor : '#94a3b8' }}
-          >
-            {myReaction ? (
-              <motion.span
-                key={myReaction}
-                initial={{ scale: 0.6, rotate: -12 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 520, damping: 14 }}
-                className="text-[15px] leading-none"
-                aria-label={REACTION_META[myReaction].label}
-              >
-                {reactionEmoji}
-              </motion.span>
-            ) : (
-              <Heart
-                size={16}
-                fill="none"
-                className="transition-transform group-active:scale-125"
-              />
-            )}
-            <span className="tabular-nums">{safeLikesCount}</span>
-          </motion.button>
-            <AnimatePresence>
-              {showReactions && (
-                <motion.div
-                  key="reaction-picker"
-                  initial={{ opacity: 0, y: 8, scale: 0.85 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.85 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 380,
-                    damping: 22,
-                    mass: 0.6,
-                  }}
-                  className="absolute bottom-full left-0 z-50 flex flex-col items-start pointer-events-auto"
-                >
-                  {/* Invisible bridge: fills the gap between the button
-                      and the popover so the cursor never "falls through"
-                      and triggers onMouseLeave on the wrapper. */}
-                  <div className="w-full cursor-default" style={{ height: '12px', pointerEvents: 'none' }} />
-                  {/* Emoji picker — 6-emoji Facebook-style bar. The popover
-                      enters with a spring (overshoot) so the emojis feel
-                      "popped up". WOW is a visual-only reaction that maps
-                      to a normal LIKE on the wire. */}
-                  <div
-                    className="relative z-50 flex gap-0.5 rounded-2xl p-1.5 shadow-2xl"
-                    style={{
-                      background: 'rgba(15,15,25,0.96)',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      backdropFilter: 'blur(20px)',
-                    }}
-                  >
-                    {REACTION_PICKER_ORDER.map((k, idx) => {
-                      const isWow = k === 'WOW';
-                      const r = isWow ? WOW_META : REACTION_META[k as ReactionType];
-                      const isMine = !isWow && myReaction === k;
-                      return (
-                        <motion.button
-                          key={k}
-                          initial={{ opacity: 0, y: 6, scale: 0.6 }}
-                          animate={{
-                            opacity: 1,
-                            y: 0,
-                            scale: 1,
-                            transition: { delay: idx * 0.03, type: 'spring', stiffness: 420, damping: 18 },
-                          }}
-                          exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.1 } }}
-                          whileHover={{ scale: 1.45, y: -6, transition: { duration: 0.15 } }}
-                          whileTap={{ scale: 1.1 }}
-                          onClick={() => {
-                            // WOW is a visual alias for LIKE on the server.
-                            handleReact(isWow ? 'LIKE' : (k as ReactionType));
-                          }}
-                          className="text-2xl px-1.5 py-0.5 cursor-pointer origin-bottom"
-                          title={r.label}
-                          style={{
-                            transform: isMine ? 'scale(1.18)' : 'scale(1)',
-                            filter: isMine ? `drop-shadow(0 0 6px ${r.color})` : undefined,
-                          }}
-                        >
-                          {r.emoji}
-                        </motion.button>
-                      );
-                    })}
-                  </div>
-                  {/* Emoji stack */}
-                  {activeReactions.length > 0 && safeLikesCount > 0 && (
-                    <div className="flex items-center gap-1 pl-1.5">
-                      <div className="flex -space-x-1">
-                        {activeReactions.slice(0, 3).map((k) => (
-                          <span
-                            key={k}
-                            className="inline-flex items-center justify-center w-4 h-4 rounded-full text-[10px] leading-none"
-                            style={{
-                              background: 'rgba(15,15,25,0.95)',
-                              border: '1px solid rgba(255,255,255,0.1)',
-                            }}
-                            title={REACTION_META[k].label}
-                          >
-                            {REACTION_META[k].emoji}
-                          </span>
-                        ))}
-                      </div>
-                      <span className="text-[10px] text-slate-500 tabular-nums">
-                        {safeLikesCount}
-                      </span>
-                    </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Comment */}
-          <ActionButton
-            active={showComments}
-            activeColor="#8B5CF6"
-            icon={<MessageCircle size={16} fill={showComments ? '#8B5CF6' : 'none'} />}
-            count={safeCommentsCount}
-            label="Bình luận"
-            // data-comments-toggle lets the home page's ?comment=N
-            // effect (via PostCardHandle.openComment) click this
-            // button imperatively when comments are not yet visible.
-            // Bounded: just a DOM attribute on the existing button.
-            data-comments-toggle="1"
-            onClick={handleToggleComments}
+        {/* Action bar — fallback for posts with NO media. We
+            render it here as a normal block row above the
+            comments so the interaction buttons are still
+            reachable (text-only / file-only posts). */}
+        {safeMedia.length === 0 && (
+          <PostActionsBar
+            myReaction={myReaction}
+            reactionColor={reactionColor}
+            reactionEmoji={reactionEmoji}
+            safeLikesCount={safeLikesCount}
+            handleReact={handleReact}
+            cancelLongPress={cancelLongPress}
+            showReactions={showReactions}
+            setShowReactions={setShowReactions}
+            REACTION_PICKER_ORDER={REACTION_PICKER_ORDER}
+            activeReactions={activeReactions}
+            showComments={showComments}
+            safeCommentsCount={safeCommentsCount}
+            handleToggleComments={handleToggleComments}
+            handleShare={handleShare}
+            showShareMenu={showShareMenu}
+            setShowShareMenu={setShowShareMenu}
+            safeIsSaved={safeIsSaved}
+            safeSavesCount={safeSavesCount}
+            saveButtonRef={saveButtonRef}
+            handleSaveClick={handleSaveClick}
+            post={post}
+            showSavePopover={showSavePopover}
+            setShowSavePopover={setShowSavePopover}
+            cachedCollections={cachedCollections}
+            handleSaveCommit={handleSaveCommit}
+            showSavePopoverV2={showSavePopoverV2}
+            setShowSavePopoverV2={setShowSavePopoverV2}
+            collectionsV2={collectionsV2}
+            saveContext={saveContext}
+            collectionsV2Loading={collectionsV2Loading}
+            handleCommitV2={handleCommitV2}
+            handleCreateV2={handleCreateV2}
+            overlay={false}
           />
-
-          {/* Repost */}
-          <ActionButton
-            active={false}
-            activeColor="#22c55e"
-            icon={<Repeat2 size={16} />}
-            count={0}
-            label="Repost"
-            onClick={() => handleShare('repost')}
-          />
-
-          {/* Save — opens the Saved Collections popover on click.
-              The button's own ref is forwarded so the popover can
-              anchor itself below it. We keep the ActionButton
-              wrapper so the visual style is identical to before. */}
-          <button
-            ref={saveButtonRef}
-            onClick={handleSaveClick}
-            className="group flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-medium transition-colors"
-            style={{
-              color: safeIsSaved ? NEON_AMBER : '#64748b',
-              background: safeIsSaved ? 'rgba(245,158,11,0.08)' : 'transparent',
-            }}
-            onMouseEnter={(e) => {
-              if (!safeIsSaved) {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
-                e.currentTarget.style.color = '#94a3b8';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!safeIsSaved) {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = '#64748b';
-              }
-            }}
-            title={safeIsSaved ? `Đã lưu${post.savedFolder ? ` vào "${post.savedFolder}"` : ''}` : 'Lưu bài viết'}
-            aria-label={safeIsSaved ? 'Đã lưu bài viết' : 'Lưu bài viết'}
-            aria-haspopup="dialog"
-            aria-expanded={showSavePopover}
-          >
-            <Bookmark
-              size={16}
-              fill={safeIsSaved ? NEON_AMBER : 'none'}
-              className="transition-transform group-active:scale-125"
-            />
-            {safeSavesCount > 0 && <span className="tabular-nums">{safeSavesCount}</span>}
-          </button>
-          <SocialSavePopover
-            postId={post.id}
-            currentFolder={post.savedFolder ?? null}
-            isSaved={safeIsSaved}
-            collections={cachedCollections}
-            onCommit={handleSaveCommit}
-            anchorRef={saveButtonRef}
-            open={showSavePopover}
-            onClose={() => setShowSavePopover(false)}
-          />
-          {/* V2 multi-collection popover (added 2026-06-20).
-              Wired alongside the legacy one; the bookmark
-              button now opens this one. The legacy remains
-              for callers that explicitly toggle
-              `showSavePopover` themselves. */}
-          <SocialSavePopoverV2
-            postId={post.id}
-            collections={collectionsV2}
-            context={saveContext}
-            loading={collectionsV2Loading}
-            onCommit={handleCommitV2}
-            onCreateCollection={handleCreateV2}
-            anchorRef={saveButtonRef}
-            open={showSavePopoverV2}
-            onClose={() => setShowSavePopoverV2(false)}
-          />
-
-          {/* Share menu */}
-          <div className="relative ml-auto">
-            <ActionButton
-              active={showShareMenu}
-              activeColor="#06b6d4"
-              icon={<Share2 size={16} />}
-              label="Chia sẻ"
-              onClick={() => setShowShareMenu(!showShareMenu)}
-            />
-            <AnimatePresence>
-              {showShareMenu && (
-                <>
-                  <div className="fixed inset-0 z-20" onClick={() => setShowShareMenu(false)} />
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9, y: 5 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, y: 5 }}
-                    className="absolute right-0 top-full z-30 mt-1 w-44 overflow-hidden rounded-2xl py-1"
-                    style={{
-                      background: 'rgba(15,15,25,0.95)',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      backdropFilter: 'blur(20px)',
-                    }}
-                  >
-                    {[
-                      { key: 'copy', label: 'Sao chép liên kết' },
-                      { key: 'twitter', label: 'Chia sẻ lên X' },
-                      { key: 'facebook', label: 'Chia sẻ lên Facebook' },
-                      { key: 'repost', label: 'Repost về trang cá nhân' },
-                    ].map((item) => (
-                      <button
-                        key={item.key}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
-                        style={{ color: '#94a3b8' }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                          e.currentTarget.style.color = '#e2e8f0';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = 'transparent';
-                          e.currentTarget.style.color = '#94a3b8';
-                        }}
-                        onClick={() => handleShare(item.key)}
-                      >
-                        {item.label}
-                      </button>
-                    ))}
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
+        )}
 
         {/* Comments section — use grid-template-rows for an
             animated height without triggering layout per frame.
@@ -1802,6 +1602,7 @@ function MediaGrid({
   onOpenTheater,
   musicTrack,
   musicStartSec,
+  actionsOverlay,
 }: {
   media: SocialMedia[];
   /** Owning post id — passed down so MediaItem's Theater button
@@ -1814,6 +1615,12 @@ function MediaGrid({
   // carousels (Instagram itself does the same).
   musicTrack?: MusicTrackMini | null;
   musicStartSec?: number | null;
+  // Phase 6 home upgrade (2026-06-28) — the post's action
+  // bar (Like / Comment / Repost / Share / Bookmark) is
+  // rendered as a floating pill ABOVE the media. We accept
+  // it as a ReactNode so the parent owns the state; we just
+  // provide the positioning context (the relative wrapper).
+  actionsOverlay?: React.ReactNode;
 }) {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
@@ -2073,13 +1880,15 @@ function MediaGrid({
         </>
       )}
 
-      {/* Counter pill (top-right) + dots (bottom-center). Both
-          match Instagram's overlay style: white text on a
-          semi-transparent black pill, and small dots showing
-          position. Hidden on 1-image posts where they add noise. */}
+      {/* Counter pill (bottom-left) + dots (bottom-center). Both
+          match Instagram's overlay style. The counter used to be
+          top-right but the floating action bar now occupies the
+          top edge, so we moved the counter to bottom-left so it
+          doesn't fight for the same corner. Dots stay bottom-center
+          as before. Hidden on 1-image posts where they add noise. */}
       {visual.length > 1 && (
         <>
-          <div className="pointer-events-none absolute right-2 top-2 z-10 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-semibold text-white">
+          <div className="pointer-events-none absolute left-2 bottom-2 z-10 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-semibold text-white shadow">
             {currentIdx + 1}/{visual.length}
           </div>
           <div
@@ -2112,6 +1921,7 @@ function MediaGrid({
   if (visual.length === 1) {
     return (
       <div className="mt-3 relative">
+        {actionsOverlay}
         {renderCarousel()}
         {files.length > 0 && (
           <div className="mt-2">
@@ -2132,6 +1942,7 @@ function MediaGrid({
 
   return (
     <div className="mt-3 relative">
+      {actionsOverlay}
       {renderCarousel()}
       {files.length > 0 && (
         <div className="mt-2">
@@ -2989,6 +2800,406 @@ function ActionButton({
       {icon}
       {count != null && count > 0 && <span>{count}</span>}
     </motion.button>
+  );
+}
+
+// ─── PostActionsBar (rebuilt 2026-06-28) ─────────────────────────────
+// Renders the Like / Comment / Repost / Share / Bookmark row as
+// ONE rounded "pill" container that can either float over the
+// top edge of the post image (when `overlay` is true) or sit
+// as a normal block above the comments (when there is no media).
+//
+// The bookmark button is positioned at the far-right via
+// `ml-auto`, while the Like/Comment/Repost/Share cluster sits
+// to the left — exactly the new L→R order requested.
+//
+// We accept every state/callback needed as props (rather than
+// importing the parent closure) so the component remains easy
+// to swap out or move later. The popover anchors (save popover
+// V1 + V2, share menu, reaction picker) are still owned by the
+// parent — we only forward the refs that the popovers expect.
+function PostActionsBar(props: {
+  // Like + reactions
+  myReaction: ReactionType | null;
+  reactionColor: string;
+  reactionEmoji: string;
+  safeLikesCount: number;
+  handleReact: (r: ReactionType) => void;
+  cancelLongPress: () => void;
+  showReactions: boolean;
+  setShowReactions: (v: boolean) => void;
+  REACTION_PICKER_ORDER: any[];
+  activeReactions: ReactionType[];
+  // Comment
+  showComments: boolean;
+  safeCommentsCount: number;
+  handleToggleComments: () => void;
+  // Share / Repost
+  handleShare: (kind: string) => void;
+  showShareMenu: boolean;
+  setShowShareMenu: (v: boolean) => void;
+  // Bookmark + save popovers
+  safeIsSaved: boolean;
+  safeSavesCount: number;
+  saveButtonRef: React.RefObject<HTMLButtonElement>;
+  handleSaveClick: () => void;
+  post: SocialPost;
+  showSavePopover: boolean;
+  setShowSavePopover: (v: boolean) => void;
+  cachedCollections: SaveCollection[];
+  handleSaveCommit: (folder: string | null) => Promise<void>;
+  showSavePopoverV2: boolean;
+  setShowSavePopoverV2: (v: boolean) => void;
+  collectionsV2: FeedCollection[];
+  saveContext: FeedPostSaveContext | null;
+  collectionsV2Loading: boolean;
+  handleCommitV2: (selected: FeedCollection[]) => Promise<FeedSaveResult>;
+  handleCreateV2: (name: string) => Promise<FeedCollection>;
+  // Visual mode
+  overlay: boolean;
+}) {
+  const {
+    myReaction,
+    reactionColor,
+    reactionEmoji,
+    safeLikesCount,
+    handleReact,
+    cancelLongPress,
+    showReactions,
+    setShowReactions,
+    REACTION_PICKER_ORDER,
+    activeReactions,
+    showComments,
+    safeCommentsCount,
+    handleToggleComments,
+    handleShare,
+    showShareMenu,
+    setShowShareMenu,
+    safeIsSaved,
+    safeSavesCount,
+    saveButtonRef,
+    handleSaveClick,
+    post,
+    showSavePopover,
+    setShowSavePopover,
+    cachedCollections,
+    handleSaveCommit,
+    showSavePopoverV2,
+    setShowSavePopoverV2,
+    collectionsV2,
+    saveContext,
+    collectionsV2Loading,
+    handleCommitV2,
+    handleCreateV2,
+    overlay,
+  } = props;
+
+  // Pill container styling. `overlay=true` positions the bar
+  // absolutely so it sits ON the top edge of the media
+  // container; the parent (MediaGrid) gives us 16px of
+  // padding-top so the bar doesn't collide with the image.
+  // `overlay=false` renders a normal block row above the
+  // comments for posts without images.
+  const containerStyle: React.CSSProperties = overlay
+    ? {
+        position: 'absolute',
+        top: 12,
+        left: 12,
+        right: 12,
+        zIndex: 20,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 4,
+        padding: '6px 8px',
+        borderRadius: 9999,
+        background: 'rgba(15,15,25,0.78)',
+        border: '1px solid rgba(255,255,255,0.10)',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+      }
+    : {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 4,
+        padding: '6px 8px',
+        marginTop: 12,
+        marginBottom: 4,
+        borderRadius: 9999,
+        background: 'rgba(15,15,25,0.55)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+      };
+
+  return (
+    <>
+      <div style={containerStyle} className="select-none">
+        {/* ─── Like (with hover reaction picker) ──────────── */}
+        <div
+          className="relative"
+          onMouseEnter={() => setShowReactions(true)}
+          onMouseLeave={() => {
+            cancelLongPress();
+            setShowReactions(false);
+          }}
+        >
+          <motion.button
+            onClick={() => handleReact('LIKE')}
+            whileTap={{ scale: 0.85 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: 'spring', stiffness: 480, damping: 22 }}
+            className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
+            style={{ color: myReaction ? reactionColor : '#cbd5e1' }}
+            aria-label="Thích bài viết"
+            aria-pressed={myReaction === 'LIKE'}
+          >
+            {myReaction ? (
+              <motion.span
+                key={myReaction}
+                initial={{ scale: 0.6, rotate: -12 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 520, damping: 14 }}
+                className="text-[15px] leading-none"
+                aria-label={REACTION_META[myReaction].label}
+              >
+                {reactionEmoji}
+              </motion.span>
+            ) : (
+              <Heart size={15} fill="none" className="transition-transform group-active:scale-125" />
+            )}
+            <span className="tabular-nums">{safeLikesCount}</span>
+          </motion.button>
+          <AnimatePresence>
+            {showReactions && (
+              <motion.div
+                key="reaction-picker"
+                initial={{ opacity: 0, y: 8, scale: 0.85 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.85 }}
+                transition={{ type: 'spring', stiffness: 380, damping: 22, mass: 0.6 }}
+                className="absolute bottom-full left-0 z-50 flex flex-col items-start pointer-events-auto"
+              >
+                <div className="w-full cursor-default" style={{ height: '12px', pointerEvents: 'none' }} />
+                <div
+                  className="relative z-50 flex gap-0.5 rounded-2xl p-1.5 shadow-2xl"
+                  style={{
+                    background: 'rgba(15,15,25,0.96)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    backdropFilter: 'blur(20px)',
+                  }}
+                >
+                  {REACTION_PICKER_ORDER.map((k, idx) => {
+                    const isWow = k === 'WOW';
+                    const r = isWow ? WOW_META : REACTION_META[k as ReactionType];
+                    const isMine = !isWow && myReaction === k;
+                    return (
+                      <motion.button
+                        key={k}
+                        initial={{ opacity: 0, y: 6, scale: 0.6 }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                          scale: 1,
+                          transition: { delay: idx * 0.03, type: 'spring', stiffness: 420, damping: 18 },
+                        }}
+                        exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.1 } }}
+                        whileHover={{ scale: 1.45, y: -6, transition: { duration: 0.15 } }}
+                        whileTap={{ scale: 1.1 }}
+                        onClick={() => {
+                          handleReact(isWow ? 'LIKE' : (k as ReactionType));
+                        }}
+                        className="text-2xl px-1.5 py-0.5 cursor-pointer origin-bottom"
+                        title={r.label}
+                        style={{
+                          transform: isMine ? 'scale(1.18)' : 'scale(1)',
+                          filter: isMine ? `drop-shadow(0 0 6px ${r.color})` : undefined,
+                        }}
+                      >
+                        {r.emoji}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+                {activeReactions.length > 0 && safeLikesCount > 0 && (
+                  <div className="flex items-center gap-1 pl-1.5">
+                    <div className="flex -space-x-1">
+                      {activeReactions.slice(0, 3).map((k) => (
+                        <span
+                          key={k}
+                          className="inline-flex items-center justify-center w-4 h-4 rounded-full text-[10px] leading-none"
+                          style={{
+                            background: 'rgba(15,15,25,0.95)',
+                            border: '1px solid rgba(255,255,255,0.1)',
+                          }}
+                          title={REACTION_META[k].label}
+                        >
+                          {REACTION_META[k].emoji}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="text-[10px] text-slate-500 tabular-nums">
+                      {safeLikesCount}
+                    </span>
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* ─── Comment ─────────────────────────────────────── */}
+        <motion.button
+          onClick={handleToggleComments}
+          whileTap={{ scale: 0.88 }}
+          whileHover={{ scale: 1.04 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.6 }}
+          className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
+          style={{
+            color: showComments ? '#a78bfa' : '#cbd5e1',
+            background: showComments ? 'rgba(139,92,246,0.16)' : 'transparent',
+          }}
+          data-comments-toggle="1"
+          aria-label="Bình luận"
+          aria-pressed={showComments}
+          title="Bình luận"
+        >
+          <MessageCircle size={15} fill={showComments ? '#8B5CF6' : 'none'} />
+          <span className="tabular-nums">{safeCommentsCount}</span>
+        </motion.button>
+
+        {/* ─── Repost ──────────────────────────────────────── */}
+        <motion.button
+          onClick={() => handleShare('repost')}
+          whileTap={{ scale: 0.88 }}
+          whileHover={{ scale: 1.04 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.6 }}
+          className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
+          style={{ color: '#cbd5e1' }}
+          aria-label="Đăng lại"
+          title="Đăng lại"
+        >
+          <Repeat2 size={15} />
+        </motion.button>
+
+        {/* ─── Share (opens dropdown menu) ──────────────────── */}
+        <div className="relative">
+          <motion.button
+            onClick={() => setShowShareMenu(!showShareMenu)}
+            whileTap={{ scale: 0.88 }}
+            whileHover={{ scale: 1.04 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.6 }}
+            className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
+            style={{
+              color: showShareMenu ? '#22d3ee' : '#cbd5e1',
+              background: showShareMenu ? 'rgba(6,182,212,0.16)' : 'transparent',
+            }}
+            aria-label="Chia sẻ"
+            aria-haspopup="menu"
+            aria-expanded={showShareMenu}
+            title="Chia sẻ"
+          >
+            <Share2 size={15} />
+          </motion.button>
+          <AnimatePresence>
+            {showShareMenu && (
+              <>
+                <div className="fixed inset-0 z-30" onClick={() => setShowShareMenu(false)} />
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, y: 5 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: 5 }}
+                  className="absolute left-0 top-full z-40 mt-1 w-44 overflow-hidden rounded-2xl py-1"
+                  style={{
+                    background: 'rgba(15,15,25,0.95)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    backdropFilter: 'blur(20px)',
+                  }}
+                >
+                  {[
+                    { key: 'copy', label: 'Sao chép liên kết' },
+                    { key: 'twitter', label: 'Chia sẻ lên X' },
+                    { key: 'facebook', label: 'Chia sẻ lên Facebook' },
+                    { key: 'repost', label: 'Repost về trang cá nhân' },
+                  ].map((item) => (
+                    <button
+                      key={item.key}
+                      className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                      style={{ color: '#94a3b8' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                        e.currentTarget.style.color = '#e2e8f0';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = '#94a3b8';
+                      }}
+                      onClick={() => handleShare(item.key)}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Spacer pushes the bookmark button to the far right */}
+        <div className="flex-1" />
+
+        {/* ─── Bookmark (far-right) ────────────────────────── */}
+        <motion.button
+          ref={saveButtonRef}
+          onClick={handleSaveClick}
+          whileTap={{ scale: 0.85 }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: 'spring', stiffness: 480, damping: 22 }}
+          className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
+          style={{
+            color: safeIsSaved ? NEON_AMBER : '#cbd5e1',
+            background: safeIsSaved ? 'rgba(245,158,11,0.16)' : 'transparent',
+          }}
+          title={safeIsSaved ? `Đã lưu${post.savedFolder ? ` vào "${post.savedFolder}"` : ''}` : 'Lưu bài viết'}
+          aria-label={safeIsSaved ? 'Đã lưu bài viết' : 'Lưu bài viết'}
+          aria-haspopup="dialog"
+          aria-expanded={showSavePopover || showSavePopoverV2}
+        >
+          <Bookmark
+            size={15}
+            fill={safeIsSaved ? NEON_AMBER : 'none'}
+            className="transition-transform group-active:scale-125"
+          />
+          {safeSavesCount > 0 && <span className="tabular-nums">{safeSavesCount}</span>}
+        </motion.button>
+      </div>
+
+      {/* Save popovers (V1 + V2) — still anchored to the
+          bookmark button ref forwarded from the parent. They
+          must live OUTSIDE the rounded container so they
+          don't get clipped by the overflow-hidden pill. */}
+      <SocialSavePopover
+        postId={post.id}
+        currentFolder={post.savedFolder ?? null}
+        isSaved={safeIsSaved}
+        collections={cachedCollections}
+        onCommit={handleSaveCommit}
+        anchorRef={saveButtonRef}
+        open={showSavePopover}
+        onClose={() => setShowSavePopover(false)}
+      />
+      <SocialSavePopoverV2
+        postId={post.id}
+        collections={collectionsV2}
+        context={saveContext}
+        loading={collectionsV2Loading}
+        onCommit={handleCommitV2}
+        onCreateCollection={handleCreateV2}
+        anchorRef={saveButtonRef}
+        open={showSavePopoverV2}
+        onClose={() => setShowSavePopoverV2(false)}
+      />
+    </>
   );
 }
 

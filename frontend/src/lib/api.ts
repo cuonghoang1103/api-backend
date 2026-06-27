@@ -1157,6 +1157,21 @@ export const socialApi = {
   sharePost: (id: number, platform?: string) =>
     api.post(`/social/posts/${id}/share`, { platform }),
 
+  // Polls
+  votePoll: (pollId: number, optionIds: number[]) =>
+    api.post(`/social/polls/${pollId}/vote`, { optionIds }),
+
+  getPoll: (pollId: number) => api.get(`/social/polls/${pollId}`),
+
+  // Media upload via signed URL
+  // Note: Uses /files/upload endpoint directly since Nginx routes /api/v1 to backend
+  getSignedUploadUrl: (filename: string, type: 'IMAGE' | 'VIDEO' | 'CODE_FILE') => {
+    const folder = type === 'VIDEO' ? 'social/videos' : type === 'CODE_FILE' ? 'social/files' : 'social/images';
+    const mimeType = type === 'VIDEO' ? 'video/mp4' : type === 'CODE_FILE' ? 'application/zip' : 'image/jpeg';
+    return api.get('/files/upload/signed-url', {
+      params: { filename, folder, contentType: mimeType },
+    });
+  },
 };
 
 // ─── Music Post admin (Phase 4 add) ─────────────────────────────
@@ -1210,23 +1225,6 @@ export const publicSongsApi = {
   get: (id: number) => api.get<{ data: AdminSong }>(`/songs/${id}`),
   getFeed: (params?: { q?: string; cursor?: number; limit?: number }) =>
     publicSongsApi.list(params),
-};
-
-  // Polls
-  votePoll: (pollId: number, optionIds: number[]) =>
-    api.post(`/social/polls/${pollId}/vote`, { optionIds }),
-
-  getPoll: (pollId: number) => api.get(`/social/polls/${pollId}`),
-
-  // Media upload via signed URL
-  // Note: Uses /files/upload endpoint directly since Nginx routes /api/v1 to backend
-  getSignedUploadUrl: (filename: string, type: 'IMAGE' | 'VIDEO' | 'CODE_FILE') => {
-    const folder = type === 'VIDEO' ? 'social/videos' : type === 'CODE_FILE' ? 'social/files' : 'social/images';
-    const mimeType = type === 'VIDEO' ? 'video/mp4' : type === 'CODE_FILE' ? 'application/zip' : 'image/jpeg';
-    return api.get('/files/upload/signed-url', {
-      params: { filename, folder, contentType: mimeType },
-    });
-  },
 };
 
 // ─── In-app social notifications (added 2026-06-20) ──────────────────

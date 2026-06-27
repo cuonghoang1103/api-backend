@@ -40,7 +40,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Music2, Upload, X, Loader2, AlertCircle, Check } from 'lucide-react';
-import { fileApi, socialApi } from '@/lib/api';
+import { fileApi, adminSongsApi } from '@/lib/api';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -170,12 +170,12 @@ export default function AdminMusicUploadForm({ initial, onSaved }: AdminMusicUpl
       };
       let result;
       if (initial?.id) {
-        result = await socialApi.adminUpdateSong(initial.id, payload);
+        result = await adminSongsApi.update(initial.id, payload);
       } else {
-        result = await socialApi.adminCreateSong(payload);
+        result = await adminSongsApi.create(payload);
       }
       toast.success(initial?.id ? 'Da cap nhat nhac' : 'Da upload nhac thanh cong');
-      onSaved?.(result as { id: number; title: string; artist: string });
+      onSaved?.(result.data.data as { id: number; title: string; artist: string });
       // Reset only on create so the edit form stays filled.
       if (!initial?.id) {
         setTitle(''); setArtist(''); setAudioFile(null); setAudioUrl('');

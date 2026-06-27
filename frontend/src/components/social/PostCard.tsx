@@ -630,7 +630,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
    * - `folder === 'X'` + `remove === false`: save into "X".
    * - `remove === true`: unsave entirely.
    */
-  const handleSaveCommit = async (folder: string | null, remove: boolean) => {
+  const handleSaveCommit = async (folder: string | null, remove?: boolean) => {
     // Optimistic cache patch — the popover always saves INTO a
     // folder (or removes). We patch `isSaved` + `savesCount` so
     // the bookmark icon reflects the action immediately.
@@ -2820,9 +2820,9 @@ function ActionButton({
 // parent — we only forward the refs that the popovers expect.
 function PostActionsBar(props: {
   // Like + reactions
-  myReaction: ReactionType | null;
-  reactionColor: string;
-  reactionEmoji: string;
+  myReaction: ReactionType | null | undefined;
+  reactionColor: string | null | undefined;
+  reactionEmoji: string | null | undefined;
   safeLikesCount: number;
   handleReact: (r: ReactionType) => void;
   cancelLongPress: () => void;
@@ -2847,14 +2847,14 @@ function PostActionsBar(props: {
   showSavePopover: boolean;
   setShowSavePopover: (v: boolean) => void;
   cachedCollections: SaveCollection[];
-  handleSaveCommit: (folder: string | null) => Promise<void>;
+  handleSaveCommit: (folder: string | null, remove?: boolean) => Promise<void>;
   showSavePopoverV2: boolean;
   setShowSavePopoverV2: (v: boolean) => void;
   collectionsV2: FeedCollection[];
   saveContext: FeedPostSaveContext | null;
   collectionsV2Loading: boolean;
-  handleCommitV2: (selected: FeedCollection[]) => Promise<FeedSaveResult>;
-  handleCreateV2: (name: string) => Promise<FeedCollection>;
+  handleCommitV2: (collectionIds: number[]) => Promise<void>;
+  handleCreateV2: (name: string) => Promise<FeedCollection | null>;
   // Visual mode
   overlay: boolean;
 }) {
@@ -2950,7 +2950,7 @@ function PostActionsBar(props: {
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 480, damping: 22 }}
             className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
-            style={{ color: myReaction ? reactionColor : '#cbd5e1' }}
+            style={{ color: myReaction && reactionColor ? reactionColor : '#cbd5e1' }}
             aria-label="Thích bài viết"
             aria-pressed={myReaction === 'LIKE'}
           >

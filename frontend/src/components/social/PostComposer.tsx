@@ -939,16 +939,15 @@ export function PostComposer() {
         <MusicPickerModal
           open={showMusicPicker}
           onClose={() => setShowMusicPicker(false)}
-          onPick={(track) => {
+          onPick={(result) => {
             setComposerMusicTrack({
-              id: track.musicTrackId,
-              title: track.title,
-              artist: track.artist,
-              coverImage: track.coverImage,
+              id: result.musicTrackId,
+              title: result.track.title,
+              artist: result.track.artist,
+              coverImage: result.track.coverImage ?? null,
             });
             toast.success('Đã chọn nhạc cho bài viết');
           }}
-          selectedTrackId={composerMusicTrack?.id}
         />
       </AnimatePresence>
 

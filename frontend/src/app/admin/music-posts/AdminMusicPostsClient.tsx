@@ -21,7 +21,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, Music, Trash2, Power, Search } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { socialApi, type AdminSong } from '@/lib/api';
+import { adminSongsApi, type AdminSong } from '@/lib/api';
 import { toast } from 'sonner';
 import AdminMusicUploadForm from '@/components/music-posts/AdminMusicUploadForm';
 
@@ -37,7 +37,7 @@ export default function AdminMusicPostsClient() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await socialApi.adminListSongs();
+      const res = await adminSongsApi.list({ limit: 100 });
       setSongs((res.data?.data?.items ?? []) as AdminSong[]);
     } catch (err) {
       toast.error('Khong tai duoc danh sach nhac');
@@ -61,7 +61,7 @@ export default function AdminMusicPostsClient() {
   const toggleActive = async (song: AdminSong) => {
     setBusyId(song.id);
     try {
-      await socialApi.adminToggleSongActive(song.id, !song.isActive);
+      await adminSongsApi.setActive(song.id, !song.isActive);
       toast.success(!song.isActive ? 'Da hien nhac' : 'Da an nhac');
       await load();
     } catch (err) {
@@ -75,7 +75,7 @@ export default function AdminMusicPostsClient() {
     if (!window.confirm(`Xoa bai hat "${song.title}" cua ${song.artist}?`)) return;
     setBusyId(song.id);
     try {
-      await socialApi.adminDeleteSong(song.id);
+      await adminSongsApi.remove(song.id);
       toast.success('Da xoa bai hat');
       await load();
     } catch (err: any) {
@@ -130,7 +130,11 @@ export default function AdminMusicPostsClient() {
               </button>
             </div>
             <AdminMusicUploadForm
-              initial={editing ?? undefined}
+              initial={editing ? {
+                ...editing,
+                coverImage: editing.coverImage ?? undefined,
+                fileSize: editing.fileSize ?? undefined,
+              } : undefined}
               onSaved={() => { setShowForm(false); setEditing(null); void load(); }}
             />
           </motion.div>

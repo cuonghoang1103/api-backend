@@ -183,7 +183,7 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
           setPreviewing(false);
         }
       };
-      audioRef.current.addEventListener('timeupdate', onTimeUpdate);
+      audioRef.current?.addEventListener('timeupdate', onTimeUpdate);
     }).catch(() => setPreviewing(false));
   };
 

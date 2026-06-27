@@ -92,6 +92,14 @@ export function ProfileDetail() {
   const [bioDraft, setBioDraft] = useState('');
   const [savingBio, setSavingBio] = useState(false);
 
+  // --- Own-vs-other (declared BEFORE the loadXxx callbacks so
+  // the 'Đã thích' loader can gate on it). The original code
+  // declared this near the follow button, which worked until
+  // the new liked tab was added — its loader needs to know
+  // whether the viewer is the owner (privacy: backend 404s
+  // for non-owners). ---
+  const isOwn = currentUser?.id === id;
+
   // --- Load profile ---
   useEffect(() => {
     if (!id || !Number.isFinite(id)) return;
@@ -122,11 +130,11 @@ export function ProfileDetail() {
       setLoadingPosts(true);
       try {
         const res: any = await socialUserApi.getUserPosts(id, {
-          cursor: reset ? null : postsCursor,
+          cursor: reset ? undefined : postsCursor ?? undefined,
           limit: 20,
         });
         const { items, nextCursor, hasMore } = res.data?.data ?? {};
-        setPosts((prev) => (reset ? items ?? [] : [...prev, ...(items ?? [])]));
+        setPosts((prev: any[]) => (reset ? items ?? [] : [...prev, ...(items ?? [])]));
         setPostsCursor(nextCursor);
         setPostsHasMore(hasMore);
       } catch {
@@ -173,11 +181,11 @@ export function ProfileDetail() {
       setLoadingMedia(true);
       try {
         const res: any = await socialUserApi.getUserMedia(id, {
-          cursor: reset ? null : mediaCursor,
+          cursor: reset ? undefined : mediaCursor ?? undefined,
           limit: 30,
         });
         const { items, nextCursor, hasMore } = res.data?.data ?? {};
-        setMedia((prev) => (reset ? items ?? [] : [...prev, ...(items ?? [])]));
+        setMedia((prev: any[]) => (reset ? items ?? [] : [...prev, ...(items ?? [])]));
         setMediaCursor(nextCursor);
         setMediaHasMore(hasMore);
       } catch {
@@ -226,11 +234,11 @@ export function ProfileDetail() {
       setLoadingLiked(true);
       try {
         const res: any = await socialUserApi.getUserLiked(id, {
-          cursor: reset ? null : likedCursor,
+          cursor: reset ? undefined : likedCursor ?? undefined,
           limit: 20,
         });
         const { items, nextCursor, hasMore } = res.data?.data ?? {};
-        setLiked((prev) => (reset ? items ?? [] : [...prev, ...(items ?? [])]));
+        setLiked((prev: any[]) => (reset ? items ?? [] : [...prev, ...(items ?? [])]));
         setLikedCursor(nextCursor);
         setLikedHasMore(hasMore);
       } catch {
@@ -279,7 +287,7 @@ export function ProfileDetail() {
     setSavingBio(true);
     try {
       await socialUserApi.updateOwnProfile({ bio: bioDraft });
-      setProfile((prev) => prev ? { ...prev, bio: bioDraft } : prev);
+      setProfile((prev: any) => prev ? { ...prev, bio: bioDraft } : prev);
       setEditingBio(false);
       toast.success('Da cap nhat tieu su');
     } catch {
@@ -290,7 +298,6 @@ export function ProfileDetail() {
   };
 
   // --- Follow/unfollow ---
-  const isOwn = currentUser?.id === id;
   const [following, setFollowing] = useState<boolean | null>(null);
   const [followBusy, setFollowBusy] = useState(false);
   useEffect(() => {
@@ -308,7 +315,7 @@ export function ProfileDetail() {
       // canonical route.
       const res: any = await socialUserApi.toggleFollow(id);
       setFollowing(!!(res?.data?.following ?? !following));
-      setProfile((prev) => prev ? {
+      setProfile((prev: any) => prev ? {
         ...prev,
         isFollowing: !(prev as any).isFollowing,
         followerCount: ((prev as any).followerCount ?? 0) + (((prev as any).isFollowing) ? -1 : 1),

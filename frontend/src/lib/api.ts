@@ -1131,6 +1131,47 @@ export const socialApi = {
   sharePost: (id: number, platform?: string) =>
     api.post(`/social/posts/${id}/share`, { platform }),
 
+};
+
+// ─── Music Post admin (Phase 4 add) ─────────────────────────────
+
+export interface AdminSong {
+  id: number;
+  title: string;
+  artist: string;
+  audioUrl: string;
+  coverImage: string | null;
+  durationSec: number;
+  fileSize: number | null;
+  isActive: boolean;
+  uploadedById: number;
+  createdAt: string;
+  updatedAt: string;
+  _count?: { postMusic: number };
+}
+
+export const adminSongsApi = {
+  list: (params?: { cursor?: number; limit?: number }) =>
+    api.get<{
+      data: { items: AdminSong[]; nextCursor: number | null };
+    }>('/admin/songs', { params }),
+  get: (id: number) => api.get<{ data: AdminSong }>(`/admin/songs/${id}`),
+  create: (data: {
+    title: string;
+    artist: string;
+    audioUrl: string;
+    coverImage?: string;
+    durationSec?: number;
+    fileSize?: number;
+  }) => api.post<{ data: AdminSong }>('/admin/songs', data),
+  update: (id: number, data: Partial<Omit<AdminSong, 'id' | 'createdAt' | 'updatedAt' | 'uploadedById'>>) =>
+    api.patch<{ data: AdminSong }>(`/admin/songs/${id}`, data),
+  setActive: (id: number, isActive: boolean) =>
+    api.patch<{ data: AdminSong }>(`/admin/songs/${id}/active`, { isActive }),
+  remove: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/admin/songs/${id}`),
+};
+
   // Polls
   votePoll: (pollId: number, optionIds: number[]) =>
     api.post(`/social/polls/${pollId}/vote`, { optionIds }),

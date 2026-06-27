@@ -24,6 +24,7 @@ import SocialSavePopoverV2 from '@/components/social/SocialSavePopoverV2';
 import MusicSticker, { type MusicTrackMini } from '@/components/social/MusicSticker';
 import { useAuthStore } from '@/store/authStore';
 import { getMediaUrl } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext, FeedSaveResult } from '@/types/social';
 import { REACTION_META, REACTION_PICKER_ORDER, WOW_META, EMPTY_REACTION_BREAKDOWN } from '@/types/social';
 import { socialKeys, type SocialFeedResponse } from '@/hooks/useSocialQueries';
@@ -1838,30 +1839,225 @@ function MediaGrid({
     );
   }
 
+  // Single-image path is a degenerate case of the carousel
+  // (no dots, no arrows) so the JSX below handles 1+ uniformly.
+  // (Bypasses the grid layout — Instagram itself does the same.)
+
+  // Horizontal swipeable carousel state. We track:
+  //  - currentIdx: which tile is in view
+  //  - dragOffset: how many px the user is currently dragging —
+  //    applied as translate-x on the inner track so the slide
+  //    follows the finger 1:1 while dragging. Released via the
+  //    snapTo logic below.
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const startXRef = useRef(0);
+  const startIdxRef = useRef(0);
+
+  // Keep currentIdx in range when the post is updated (e.g. a
+  // new tile added/removed). We clamp instead of resetting so
+  // the user keeps their place.
+  useEffect(() => {
+    if (currentIdx >= visual.length) setCurrentIdx(Math.max(0, visual.length - 1));
+  }, [visual.length, currentIdx]);
+
+  // Pointer drag handlers (mouse + touch). We use Pointer Events
+  // so the same code handles both — pointer capture means the
+  // drag keeps tracking even if the user leaves the track
+  // rectangle mid-drag. Threshold: 50px horizontal OR 15% of
+  // the track width (whichever is smaller) commits a slide;
+  // smaller throws snap back to the current tile.
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (visual.length <= 1) return;
+    // Only start drag on horizontal intent. A vertical scroll
+    // (touch device) should still scroll the page, not the
+    // carousel.
+    setIsDragging(true);
+    startXRef.current = e.clientX;
+    startIdxRef.current = currentIdx;
+    setDragOffset(0);
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startXRef.current;
+    setDragOffset(dx);
+  };
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const dx = e.clientX - startXRef.current;
+    const trackWidth = trackRef.current?.clientWidth ?? 1;
+    const threshold = Math.min(50, trackWidth * 0.15);
+    let next = startIdxRef.current;
+    if (dx < -threshold) next = Math.min(visual.length - 1, startIdxRef.current + 1);
+    else if (dx > threshold) next = Math.max(0, startIdxRef.current - 1);
+    setCurrentIdx(next);
+    setDragOffset(0);
+    e.currentTarget.releasePointerCapture(e.pointerId);
+  };
+
+  // Tap a tile to open the lightbox/video (Phase 1 behaviour).
+  // We keep tap-to-open for the lightbox-style zoom-in and add
+  // swipe for the carousel navigation. Tap is detected by
+  // pointerdown + pointerup on the same target within a small
+  // distance + short time — anything else is a drag.
+  const tapStartRef = useRef<{ x: number; y: number; t: number; target: EventTarget | null } | null>(null);
+  const onTilePointerDown = (e: React.PointerEvent, item: SocialMedia) => {
+    tapStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      t: Date.now(),
+      target: e.currentTarget,
+    };
+  };
+  const onTilePointerUp = (e: React.PointerEvent, item: SocialMedia) => {
+    const start = tapStartRef.current;
+    tapStartRef.current = null;
+    if (!start) return;
+    const dx = Math.abs(e.clientX - start.x);
+    const dy = Math.abs(e.clientY - start.y);
+    const dt = Date.now() - start.t;
+    if (dt > 250 || dx > 6 || dy > 6) return; // it was a drag
+    handleMediaClick(item);
+  };
+
+  // Phase 3 add — music sticker always rides on the FIRST tile
+  // (per Instagram convention). When the user navigates the
+  // carousel, the sticker follows the active tile (which is
+  // visually always index 0, so it stays put at the bottom).
+  // We use `key` on the inner track so framer-motion remounts
+  // the active tile cleanly when items change.
+  const renderCarousel = () => (
+    <div
+      ref={trackRef}
+      data-testid="media-carousel"
+      data-current-idx={currentIdx}
+      data-total={visual.length}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      className="relative w-full overflow-hidden rounded-2xl touch-pan-y select-none"
+    >
+      <div
+        className="flex"
+        style={{
+          // Each tile is 100% of the track width. The track
+          // itself is the full row; we offset it by -currentIdx
+          // tiles and then by the live drag delta. transition
+          // is disabled while dragging so the slide follows
+          // the finger 1:1 (no rubber-band lag).
+          width: `${visual.length * 100}%`,
+          transform: `translateX(calc(${-currentIdx * 100}% + ${dragOffset}px))`,
+          transition: isDragging ? 'none' : 'transform 240ms cubic-bezier(0.22, 1, 0.36, 1)',
+          willChange: 'transform',
+        }}
+      >
+        {visual.map((item, i) => (
+          <div
+            key={item.id}
+            className="relative"
+            style={{ width: `${100 / visual.length}%` }}
+            onPointerDown={(e) => onTilePointerDown(e, item)}
+            onPointerUp={(e) => onTilePointerUp(e, item)}
+            onPointerCancel={() => { tapStartRef.current = null; }}
+          >
+            <MediaItem
+              item={item}
+              onClick={() => { /* taps handled by pointerup above */ }}
+              autoPlayEnabled={item.type === 'VIDEO' && i === currentIdx}
+              onOpenTheater={
+                onOpenTheater && postId != null
+                  ? () => onOpenTheater(postId)
+                  : undefined
+              }
+            />
+            {/* Sticker only on the FIRST tile — it stays put
+                visually (we always render at index 0). */}
+            {i === 0 && musicTrack && (
+              <MusicSticker
+                track={musicTrack}
+                startSec={musicStartSec ?? 0}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Side arrows (desktop). Show on hover only so they
+          don't crowd the mobile layout. The arrows are 40px
+          squares centered vertically on each edge with a
+          dark translucent background. */}
+      {visual.length > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={() => setCurrentIdx((i) => Math.max(0, i - 1))}
+            disabled={currentIdx === 0}
+            aria-label="Ảnh trước"
+            className="absolute left-2 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center h-9 w-9 rounded-full bg-black/60 text-white transition-opacity hover:bg-black/80 disabled:opacity-0 md:flex"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => setCurrentIdx((i) => Math.min(visual.length - 1, i + 1))}
+            disabled={currentIdx === visual.length - 1}
+            aria-label="Ảnh sau"
+            className="absolute right-2 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center h-9 w-9 rounded-full bg-black/60 text-white transition-opacity hover:bg-black/80 disabled:opacity-0 md:flex"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </>
+      )}
+
+      {/* Counter pill (top-right) + dots (bottom-center). Both
+          match Instagram's overlay style: white text on a
+          semi-transparent black pill, and small dots showing
+          position. Hidden on 1-image posts where they add noise. */}
+      {visual.length > 1 && (
+        <>
+          <div className="pointer-events-none absolute right-2 top-2 z-10 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-semibold text-white">
+            {currentIdx + 1}/{visual.length}
+          </div>
+          <div
+            role="tablist"
+            aria-label="Carousel position"
+            className="pointer-events-auto absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-1.5"
+          >
+            {visual.map((_, i) => (
+              <button
+                key={i}
+                role="tab"
+                aria-selected={i === currentIdx}
+                aria-label={`Ảnh ${i + 1}`}
+                onClick={() => setCurrentIdx(i)}
+                data-testid={`media-dot-${i}`}
+                className={cn(
+                  'h-1.5 rounded-full transition-all',
+                  i === currentIdx
+                    ? 'w-5 bg-white shadow'
+                    : 'w-1.5 bg-white/60 hover:bg-white/80',
+                )}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+
   if (visual.length === 1) {
     return (
       <div className="mt-3 relative">
-        <MediaItem
-          item={visual[0]}
-          onClick={() => handleMediaClick(visual[0])}
-          autoPlayEnabled={visual[0].type === 'VIDEO'}
-          onOpenTheater={
-            onOpenTheater && postId != null
-              ? () => onOpenTheater(postId)
-              : undefined
-          }
-        />
-        {/* Phase 3 add — Instagram-style music sticker overlay
-            on the first media tile when the post has a track. We
-            only render it on the first tile so multi-image
-            carousels don't get cluttered (Instagram does the
-            same). */}
-        {musicTrack && (
-          <MusicSticker
-            track={musicTrack}
-            startSec={musicStartSec ?? 0}
-          />
-        )}
+        {renderCarousel()}
         {files.length > 0 && (
           <div className="mt-2">
             <FileAttachmentList media={files} />
@@ -1879,56 +2075,9 @@ function MediaGrid({
     );
   }
 
-  const gridClass =
-    visual.length === 2
-      ? 'grid-cols-2'
-      : visual.length === 3
-      ? 'grid-cols-2'
-      : 'grid-cols-2';
-
   return (
     <div className="mt-3 relative">
-      {/* Music sticker is on the first tile (i === 0) so the
-          carousel feels natural — the sticker sticks to the
-          "current" first image as the user swipes. Other tiles
-          stay clean. We use the first item's MediaItem wrapper
-          which already has `relative` positioning. */}
-      {musicTrack && visual[0] && (
-        <MusicSticker
-          track={musicTrack}
-          startSec={musicStartSec ?? 0}
-        />
-      )}
-      <div className={`grid ${gridClass} gap-1.5 rounded-2xl overflow-hidden`}>
-        {visual.slice(0, 4).map((item, i) => (
-          <div
-            key={item.id}
-            className="relative overflow-hidden rounded-xl"
-            style={{
-              aspectRatio: '1',
-              gridColumn: i === 0 && visual.length === 3 ? 'span 2' : 'span 1',
-            }}
-          >
-            <MediaItem
-              item={item}
-              onClick={() => handleMediaClick(item)}
-              onOpenTheater={
-                item.type === 'VIDEO' && onOpenTheater && postId != null
-                  ? () => onOpenTheater(postId)
-                  : undefined
-              }
-            />
-            {i === 3 && visual.length > 4 && (
-              <div
-                className="absolute inset-0 flex items-center justify-center text-2xl font-bold"
-                style={{ background: 'rgba(0,0,0,0.6)', color: 'white' }}
-              >
-                +{visual.length - 4}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      {renderCarousel()}
       {files.length > 0 && (
         <div className="mt-2">
           <FileAttachmentList media={files} />

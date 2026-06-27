@@ -77,11 +77,13 @@ router.get('/folders', async (req: Request, res: Response<ApiResponse>, next) =>
 
 router.post('/folders', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
-    const { name, icon, sortOrder } = req.body ?? {};
+    const { name, icon, coverImageUrl, sortOrder } = req.body ?? {};
     if (typeof name !== 'string') {
       throw new AppError('name phai la chuoi', 400, 'INVALID_NAME');
     }
-    const folder = await createFolder(req.userId!, { name, icon, sortOrder });
+    const folder = await createFolder(req.userId!, {
+      name, icon, coverImageUrl, sortOrder,
+    });
     res.status(201).json({ success: true, data: folder });
   } catch (err) { next(err); }
 });
@@ -89,8 +91,10 @@ router.post('/folders', async (req: Request, res: Response<ApiResponse>, next) =
 router.patch('/folders/:id', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const id = Number(req.params.id);
-    const { name, icon, sortOrder } = req.body ?? {};
-    const folder = await updateFolder(req.userId!, id, { name, icon, sortOrder });
+    const { name, icon, coverImageUrl, sortOrder } = req.body ?? {};
+    const folder = await updateFolder(req.userId!, id, {
+      name, icon, coverImageUrl, sortOrder,
+    });
     res.json({ success: true, data: folder });
   } catch (err) { next(err); }
 });
@@ -144,6 +148,7 @@ router.post('/links', async (req: Request, res: Response<ApiResponse>, next) => 
       description: body.description,
       thumbnailUrl: body.thumbnailUrl,
       faviconUrl: body.faviconUrl,
+      coverImageUrl: body.coverImageUrl,
       notes: body.notes,
       tags: body.tags,
       isPublic: body.isPublic,
@@ -163,6 +168,7 @@ router.patch('/links/:id', async (req: Request, res: Response<ApiResponse>, next
       description: body.description,
       thumbnailUrl: body.thumbnailUrl,
       faviconUrl: body.faviconUrl,
+      coverImageUrl: body.coverImageUrl,
       notes: body.notes,
       tags: body.tags,
       isPublic: body.isPublic,
@@ -235,6 +241,7 @@ router.post('/files', async (req: Request, res: Response<ApiResponse>, next) => 
       name: body.name,
       mimeType: body.mimeType,
       size: Number(body.size) || 0,
+      coverImageUrl: body.coverImageUrl,
       tags: body.tags,
       notes: body.notes,
       isPublic: body.isPublic,
@@ -296,6 +303,7 @@ router.patch('/files/:id', async (req: Request, res: Response<ApiResponse>, next
     const file = await updateFile(req.userId!, id, {
       folderId: body.folderId,
       name: body.name,
+      coverImageUrl: body.coverImageUrl,
       tags: body.tags,
       notes: body.notes,
       status: body.status,

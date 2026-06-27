@@ -267,11 +267,16 @@ export default function HubClient({
     description?: string | null;
     thumbnailUrl?: string | null;
     faviconUrl?: string | null;
+    coverImageUrl?: string | null;
     notes?: string | null;
     tags?: string[];
     isPublic?: boolean;
   }) => {
     try {
+      // Pass the entire `data` object straight through so any
+      // field the modal sends (incl. coverImageUrl added in
+      // Phase 3) lands on the API call. We previously whitelisted
+      // fields manually and that bug-bit us when adding new ones.
       if (data.id) {
         await hubApi.updateLink(data.id, data);
         toast.success('Da cap nhat link');

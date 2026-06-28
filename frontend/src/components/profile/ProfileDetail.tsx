@@ -1,33 +1,29 @@
 'use client';
 
 /**
- * ProfileDetail — Enhanced profile page (2026-06-28)
- *
- * Layout: 3-column grid like Facebook (90% viewport width)
- * - Left sidebar (300px): About, Contact, Personal, Stats, Friends
- * - Main (1fr, max 700px): Tabs + Posts feed
- * - Right sidebar (300px): empty / suggestions
- *
+ * ProfileDetail — Professional Facebook/Instagram Style Profile Page
+ * Redesigned for enterprise quality
+ * 
  * Features:
- * - Expanded 90% viewport width for better visual experience
- * - Separate avatar from cover photo (classic profile header style)
- * - Avatar and cover photo upload/edit functionality
- * - Contact section: name, email, phone, gender, birth year, location, work, links
- * - Personal section: bio, website, education, interests
- * - Tabs: Bài viết | Ảnh | Đã thích
- * - Posts tab shows vertical feed with full PostCard (not grid)
- * - Left sidebar widgets for profile info
+ * - Facebook-style avatar overlapping cover photo
+ * - Professional cover/avatar upload with preview
+ * - 90% width responsive layout (2-column)
+ * - Contact section with view/edit functionality
+ * - Personal/About section with tabbed navigation
+ * - Smooth animations and transitions
  */
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ArrowLeft, X, Edit3, Globe, MapPin, Calendar, Camera,
-  Link2, Users, Image as ImageIcon, Loader2, Check,
-  Mail, Phone, Briefcase, GraduationCap, Heart,
+  X, Edit3, Globe, MapPin, Calendar, Camera, Loader2, Check,
+  Mail, Phone, Briefcase, GraduationCap, Heart, User, Shield,
+  Link2, Users, Image as ImageIcon, Settings, ChevronRight,
   Facebook, Twitter, Github, Linkedin, Youtube, Instagram,
-  User, Shield, Plus, Trash2
+  Plus, Home, School, MapPinHouse, Flag, Language, CalendarDays,
+  Gender, BookOpen, Star, Grid3X3, UserPlus, MoreHorizontal,
+  Info, MapPinned, Building, BookText, Eye, EyeOff
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import type { ComponentType } from 'react';
@@ -38,16 +34,16 @@ import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
-// Dynamic import PostCard for the feed (named export)
+// Dynamic import PostCard
 const PostCard = dynamic(
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
   () => import('@/components/social/PostCard').then((m) => m.PostCard as ComponentType<{ post: any }>),
   { loading: () => <div className="h-48 animate-pulse rounded-2xl bg-darkcard/30" /> },
 );
 
-type Tab = 'posts' | 'media' | 'liked';
+type ContentTab = 'posts' | 'media' | 'liked';
+type AboutTab = 'overview' | 'work' | 'places' | 'contact' | 'details';
 
-// Extended profile type
+// Profile interface
 interface ExtendedProfile {
   id: number;
   username: string;
@@ -62,156 +58,156 @@ interface ExtendedProfile {
   birthYear?: number;
   phone?: string;
   location?: string;
+  hometown?: string;
   work?: string;
-  education?: string;
+  workplace?: string;
+  jobTitle?: string;
+  school?: string;
+  college?: string;
   websiteUrl?: string;
+  relationshipStatus?: string;
+  languages?: string[];
+  hobbies?: string;
   socialLinks?: Record<string, string>;
   followerCount?: number;
   followingCount?: number;
   isFollowing?: boolean;
   isOnline?: boolean;
+  relationship?: { id: number; name: string; avatarUrl?: string } | null;
+  postCount?: number;
+  mediaCount?: number;
 }
 
+// Social icons mapping
+const socialIcons: Record<string, ComponentType<{ className?: string }>> = {
+  facebook: Facebook,
+  twitter: Twitter,
+  github: Github,
+  linkedin: Linkedin,
+  youtube: Youtube,
+  instagram: Instagram,
+  website: Globe,
+  web: Globe,
+};
+
+// About tab config
+const aboutTabs: { id: AboutTab; label: string; icon: ComponentType<{ className?: string }> }[] = [
+  { id: 'overview', label: 'Tổng quan', icon: Grid3X3 },
+  { id: 'work', label: 'Công việc', icon: Briefcase },
+  { id: 'places', label: 'Địa điểm', icon: MapPinned },
+  { id: 'contact', label: 'Liên hệ', icon: Phone },
+  { id: 'details', label: 'Chi tiết', icon: Info },
+];
+
 export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) {
-  const router = useRouter();
   const params = useParams<{ id: string }>();
   const id = propUserId ?? Number(params?.id);
   const { user: currentUser } = useAuthStore();
   const queryClient = useQueryClient();
 
-  // --- Profile state ---
+  // ─── State ───────────────────────────────────────────────────
   const [profile, setProfile] = useState<ExtendedProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [contentTab, setContentTab] = useState<ContentTab>('posts');
+  const [aboutTab, setAboutTab] = useState<AboutTab>('overview');
+  const [editingSection, setEditingSection] = useState<AboutTab | null>(null);
 
-  // --- Tabs ---
-  const [tab, setTab] = useState<Tab>('posts');
-
-  // --- Posts (cursor-paginated) ---
-  type Post = any;
-  const [posts, setPosts] = useState<Post[]>([]);
+  // Posts state
+  const [posts, setPosts] = useState<any[]>([]);
   const [postsCursor, setPostsCursor] = useState<number | null>(null);
   const [postsHasMore, setPostsHasMore] = useState(true);
   const [loadingPosts, setLoadingPosts] = useState(false);
   const postsSentinelRef = useRef<HTMLDivElement | null>(null);
 
-  // --- Media (cursor-paginated, 3-col grid) ---
-  type Media = any;
-  const [media, setMedia] = useState<Media[]>([]);
+  // Media state
+  const [media, setMedia] = useState<any[]>([]);
   const [mediaCursor, setMediaCursor] = useState<number | null>(null);
   const [mediaHasMore, setMediaHasMore] = useState(true);
   const [loadingMedia, setLoadingMedia] = useState(false);
   const mediaSentinelRef = useRef<HTMLDivElement | null>(null);
 
-  // --- Liked posts ---
-  const [liked, setLiked] = useState<Post[]>([]);
+  // Liked state
+  const [liked, setLiked] = useState<any[]>([]);
   const [likedCursor, setLikedCursor] = useState<number | null>(null);
   const [likedHasMore, setLikedHasMore] = useState(true);
   const [loadingLiked, setLoadingLiked] = useState(false);
   const likedSentinelRef = useRef<HTMLDivElement | null>(null);
 
-  // --- Modal states ---
-  const [activeModal, setActiveModal] = useState<'bio' | 'contact' | 'personal' | 'avatar' | 'cover' | null>(null);
-  const [savingModal, setSavingModal] = useState(false);
-
-  // --- Bio/Personal form state ---
-  const [bioDraft, setBioDraft] = useState('');
-  const [personalDraft, setPersonalDraft] = useState({
-    websiteUrl: '',
-    education: '',
-  });
-
-  // --- Contact form state ---
-  const [contactDraft, setContactDraft] = useState({
-    fullName: '',
-    displayName: '',
-    phone: '',
-    gender: '' as '' | 'MALE' | 'FEMALE' | 'OTHER',
-    birthYear: '',
-    location: '',
-    work: '',
-    email: '',
-  });
-
-  // --- Avatar/Cover upload state ---
+  // Upload state
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
+  const [showImageCropper, setShowImageCropper] = useState<'avatar' | 'cover' | null>(null);
+
+  // Follow state
+  const [following, setFollowing] = useState<boolean | null>(null);
+  const [followBusy, setFollowBusy] = useState(false);
+
+  // Edit form state
+  const [editForm, setEditForm] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
 
   const isOwn = currentUser?.id === id;
 
-  // --- Load profile ---
+  // ─── Load Profile ─────────────────────────────────────────────
   useEffect(() => {
     if (!id || !Number.isFinite(id)) return;
     let cancelled = false;
     setLoading(true);
-    socialUserApi
-      .getProfile(id)
+    
+    socialUserApi.getProfile(id)
       .then((res: any) => {
         if (cancelled) return;
         const data = res.data?.data ?? res.data;
         setProfile(data);
-        // Initialize drafts
-        setBioDraft(data.bio ?? '');
-        setPersonalDraft({
-          websiteUrl: data.websiteUrl ?? '',
-          education: data.education ?? '',
-        });
-        setContactDraft({
-          fullName: data.fullName ?? '',
-          displayName: data.displayName ?? '',
-          phone: data.phone ?? '',
-          gender: data.gender ?? '',
-          birthYear: data.birthYear?.toString() ?? '',
-          location: data.location ?? '',
-          work: data.work ?? '',
-          email: data.email ?? '',
-        });
         setLoading(false);
       })
       .catch(() => {
         if (cancelled) return;
         setLoading(false);
-        toast.error('Khong tai duoc profile');
+        toast.error('Không tải được profile');
       });
+      
     return () => { cancelled = true; };
   }, [id]);
 
-  // --- Load posts ---
-  const loadPosts = useCallback(
-    async (reset = false) => {
-      if (!id || loadingPosts) return;
-      if (!reset && !postsHasMore) return;
-      setLoadingPosts(true);
-      try {
-        const res: any = await socialUserApi.getUserPosts(id, {
-          cursor: reset ? undefined : postsCursor ?? undefined,
-          limit: 20,
-        });
-        const { items, nextCursor, hasMore } = res.data?.data ?? {};
-        setPosts((prev: any[]) => (reset ? items ?? [] : [...prev, ...(items ?? [])]));
-        setPostsCursor(nextCursor);
-        setPostsHasMore(hasMore);
-      } catch {
-        toast.error('Khong tai duoc bai viet');
-      } finally {
-        setLoadingPosts(false);
-      }
-    },
-    [id, postsCursor, postsHasMore, loadingPosts],
-  );
+  // Update following state
+  useEffect(() => {
+    if (profile) setFollowing(profile.isFollowing ?? null);
+  }, [profile]);
+
+  // ─── Load Posts ───────────────────────────────────────────────
+  const loadPosts = useCallback(async (reset = false) => {
+    if (!id || loadingPosts || !reset && !postsHasMore) return;
+    setLoadingPosts(true);
+    try {
+      const res: any = await socialUserApi.getUserPosts(id, {
+        cursor: reset ? undefined : postsCursor ?? undefined,
+        limit: 20,
+      });
+      const { items, nextCursor, hasMore } = res.data?.data ?? {};
+      setPosts(prev => reset ? (items ?? []) : [...prev, ...(items ?? [])]);
+      setPostsCursor(nextCursor);
+      setPostsHasMore(hasMore);
+    } catch {
+      toast.error('Không tải được bài viết');
+    } finally {
+      setLoadingPosts(false);
+    }
+  }, [id, postsCursor, postsHasMore, loadingPosts]);
 
   useEffect(() => {
-    if (tab !== 'posts') return;
+    if (contentTab !== 'posts') return;
     void loadPosts(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab]);
+  }, [contentTab]);
 
   useEffect(() => {
-    if (tab !== 'posts') return;
+    if (contentTab !== 'posts') return;
     const node = postsSentinelRef.current;
     if (!node) return;
     const obs = new IntersectionObserver(
-      (entries) => {
+      entries => {
         if (entries[0].isIntersecting && postsHasMore && !loadingPosts) {
           void loadPosts(false);
         }
@@ -220,45 +216,39 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
     );
     obs.observe(node);
     return () => obs.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, postsHasMore, loadingPosts]);
+  }, [contentTab, postsHasMore, loadingPosts]);
 
-  // --- Load media ---
-  const loadMedia = useCallback(
-    async (reset = false) => {
-      if (!id || loadingMedia) return;
-      if (!reset && !mediaHasMore) return;
-      setLoadingMedia(true);
-      try {
-        const res: any = await socialUserApi.getUserMedia(id, {
-          cursor: reset ? undefined : mediaCursor ?? undefined,
-          limit: 30,
-        });
-        const { items, nextCursor, hasMore } = res.data?.data ?? {};
-        setMedia((prev: any[]) => (reset ? items ?? [] : [...prev, ...(items ?? [])]));
-        setMediaCursor(nextCursor);
-        setMediaHasMore(hasMore);
-      } catch {
-        toast.error('Khong tai duoc media');
-      } finally {
-        setLoadingMedia(false);
-      }
-    },
-    [id, mediaCursor, mediaHasMore, loadingMedia],
-  );
+  // ─── Load Media ───────────────────────────────────────────────
+  const loadMedia = useCallback(async (reset = false) => {
+    if (!id || loadingMedia || !reset && !mediaHasMore) return;
+    setLoadingMedia(true);
+    try {
+      const res: any = await socialUserApi.getUserMedia(id, {
+        cursor: reset ? undefined : mediaCursor ?? undefined,
+        limit: 30,
+      });
+      const { items, nextCursor, hasMore } = res.data?.data ?? {};
+      setMedia(prev => reset ? (items ?? []) : [...prev, ...(items ?? [])]);
+      setMediaCursor(nextCursor);
+      setMediaHasMore(hasMore);
+    } catch {
+      toast.error('Không tải được media');
+    } finally {
+      setLoadingMedia(false);
+    }
+  }, [id, mediaCursor, mediaHasMore, loadingMedia]);
 
   useEffect(() => {
-    if (tab !== 'media') return;
+    if (contentTab !== 'media') return;
     void loadMedia(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab]);
+  }, [contentTab]);
 
   useEffect(() => {
-    if (tab !== 'media') return;
+    if (contentTab !== 'media') return;
     const node = mediaSentinelRef.current;
     if (!node) return;
     const obs = new IntersectionObserver(
-      (entries) => {
+      entries => {
         if (entries[0].isIntersecting && mediaHasMore && !loadingMedia) {
           void loadMedia(false);
         }
@@ -267,46 +257,39 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
     );
     obs.observe(node);
     return () => obs.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, mediaHasMore, loadingMedia]);
+  }, [contentTab, mediaHasMore, loadingMedia]);
 
-  // --- Load liked posts ---
-  const loadLiked = useCallback(
-    async (reset = false) => {
-      if (!id || loadingLiked) return;
-      if (!reset && !likedHasMore) return;
-      if (!isOwn) return;
-      setLoadingLiked(true);
-      try {
-        const res: any = await socialUserApi.getUserLiked(id, {
-          cursor: reset ? undefined : likedCursor ?? undefined,
-          limit: 20,
-        });
-        const { items, nextCursor, hasMore } = res.data?.data ?? {};
-        setLiked((prev: any[]) => (reset ? items ?? [] : [...prev, ...(items ?? [])]));
-        setLikedCursor(nextCursor);
-        setLikedHasMore(hasMore);
-      } catch {
-        toast.error('Khong tai duoc bai viet da thich');
-      } finally {
-        setLoadingLiked(false);
-      }
-    },
-    [id, likedCursor, likedHasMore, loadingLiked, isOwn],
-  );
+  // ─── Load Liked ───────────────────────────────────────────────
+  const loadLiked = useCallback(async (reset = false) => {
+    if (!id || loadingLiked || !isOwn || !reset && !likedHasMore) return;
+    setLoadingLiked(true);
+    try {
+      const res: any = await socialUserApi.getUserLiked(id, {
+        cursor: reset ? undefined : likedCursor ?? undefined,
+        limit: 20,
+      });
+      const { items, nextCursor, hasMore } = res.data?.data ?? {};
+      setLiked(prev => reset ? (items ?? []) : [...prev, ...(items ?? [])]);
+      setLikedCursor(nextCursor);
+      setLikedHasMore(hasMore);
+    } catch {
+      toast.error('Không tải được bài viết đã thích');
+    } finally {
+      setLoadingLiked(false);
+    }
+  }, [id, likedCursor, likedHasMore, loadingLiked, isOwn]);
 
   useEffect(() => {
-    if (tab !== 'liked') return;
+    if (contentTab !== 'liked') return;
     void loadLiked(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab]);
+  }, [contentTab]);
 
   useEffect(() => {
-    if (tab !== 'liked') return;
+    if (contentTab !== 'liked') return;
     const node = likedSentinelRef.current;
     if (!node) return;
     const obs = new IntersectionObserver(
-      (entries) => {
+      entries => {
         if (entries[0].isIntersecting && likedHasMore && !loadingLiked) {
           void loadLiked(false);
         }
@@ -315,47 +298,60 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
     );
     obs.observe(node);
     return () => obs.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, likedHasMore, loadingLiked]);
+  }, [contentTab, likedHasMore, loadingLiked]);
 
-  // --- Image upload handler ---
-  const handleImageUpload = async (file: File, type: 'avatar' | 'cover') => {
+  // ─── Image Upload ─────────────────────────────────────────────
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>, type: 'avatar' | 'cover') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
     if (!file.type.startsWith('image/')) {
       toast.error('Vui lòng chọn file hình ảnh');
       return;
     }
 
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
       toast.error('Kích thước file quá lớn (tối đa 5MB)');
       return;
     }
 
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImagePreview(reader.result as string);
+      setShowImageCropper(type);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  const handleImageUpload = async () => {
+    if (!imagePreview) return;
+    
     setUploadingImage(true);
     try {
-      // Get signed URL
-      const signedRes = await socialApi.getSignedUploadUrl(file.name, file.type === 'video/mp4' ? 'VIDEO' : 'IMAGE', file.size);
+      // Convert data URL to blob
+      const response = await fetch(imagePreview);
+      const blob = await response.blob();
+      const file = new File([blob], 'profile-image.jpg', { type: 'image/jpeg' });
+
+      const signedRes = await socialApi.getSignedUploadUrl(file.name, 'IMAGE', file.size);
       if (!signedRes.success || !signedRes.data) {
-        throw new Error(signedRes.message || 'Failed to get upload URL');
+        throw new Error(signedRes.message || 'Không lấy được URL upload');
       }
 
-      // Upload to signed URL
       const uploadRes = await fetch(signedRes.data.uploadUrl, {
         method: 'PUT',
         body: file,
-        headers: {
-          'Content-Type': file.type,
-        },
+        headers: { 'Content-Type': file.type },
       });
 
-      if (!uploadRes.ok) {
-        throw new Error('Upload failed');
-      }
+      if (!uploadRes.ok) throw new Error('Upload thất bại');
 
       const imageUrl = signedRes.data.publicUrl;
 
-      // Update profile
-      if (type === 'avatar') {
+      if (showImageCropper === 'avatar') {
         await authApi.updateProfile({ avatarUrl: imageUrl });
         setProfile(prev => prev ? { ...prev, avatarUrl: imageUrl } : prev);
         toast.success('Cập nhật ảnh đại diện thành công');
@@ -365,8 +361,9 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         toast.success('Cập nhật ảnh bìa thành công');
       }
 
-      // Refresh auth store
       queryClient.invalidateQueries({ queryKey: ['profile'] });
+      setShowImageCropper(null);
+      setImagePreview(null);
     } catch (err: any) {
       toast.error(err.message || 'Không thể tải lên hình ảnh');
     } finally {
@@ -374,135 +371,319 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
     }
   };
 
-  // --- Bio save ---
-  const saveBio = async () => {
-    setSavingModal(true);
-    try {
-      await socialUserApi.updateOwnProfile({ bio: bioDraft });
-      setProfile(prev => prev ? { ...prev, bio: bioDraft } : prev);
-      setActiveModal(null);
-      toast.success('Đã cập nhật tiểu sử');
-    } catch {
-      toast.error('Không thể cập nhật tiểu sử');
-    } finally {
-      setSavingModal(false);
-    }
-  };
-
-  // --- Contact save ---
-  const saveContact = async () => {
-    setSavingModal(true);
-    try {
-      const updateData: any = {
-        fullName: contactDraft.fullName || undefined,
-        displayName: contactDraft.displayName || undefined,
-        phone: contactDraft.phone || undefined,
-        gender: contactDraft.gender || undefined,
-        birthYear: contactDraft.birthYear ? parseInt(contactDraft.birthYear) : undefined,
-      };
-      await authApi.updateProfile(updateData);
-      await socialUserApi.updateOwnProfile({
-        location: contactDraft.location || undefined,
-        work: contactDraft.work || undefined,
-      });
-      setProfile(prev => prev ? {
-        ...prev,
-        fullName: contactDraft.fullName,
-        displayName: contactDraft.displayName,
-        phone: contactDraft.phone,
-        gender: contactDraft.gender,
-        birthYear: contactDraft.birthYear ? parseInt(contactDraft.birthYear) : undefined,
-        location: contactDraft.location,
-        work: contactDraft.work,
-      } : prev);
-      setActiveModal(null);
-      toast.success('Đã cập nhật thông tin liên hệ');
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
-    } catch {
-      toast.error('Không thể cập nhật thông tin');
-    } finally {
-      setSavingModal(false);
-    }
-  };
-
-  // --- Personal save ---
-  const savePersonal = async () => {
-    setSavingModal(true);
-    try {
-      await socialUserApi.updateOwnProfile({
-        websiteUrl: personalDraft.websiteUrl || undefined,
-        education: personalDraft.education || undefined,
-      });
-      setProfile(prev => prev ? {
-        ...prev,
-        websiteUrl: personalDraft.websiteUrl,
-        education: personalDraft.education,
-      } : prev);
-      setActiveModal(null);
-      toast.success('Đã cập nhật thông tin cá nhân');
-    } catch {
-      toast.error('Không thể cập nhật thông tin');
-    } finally {
-      setSavingModal(false);
-    }
-  };
-
-  // --- Follow/unfollow ---
-  const [following, setFollowing] = useState<boolean | null>(null);
-  const [followBusy, setFollowBusy] = useState(false);
-  useEffect(() => {
-    if (profile) setFollowing(profile.isFollowing ?? null);
-  }, [profile]);
-
+  // ─── Follow/Unfollow ──────────────────────────────────────────
   const toggleFollow = async () => {
     if (!id || followBusy) return;
     setFollowBusy(true);
     try {
       const res: any = await socialUserApi.toggleFollow(id);
       setFollowing(!!(res?.data?.following ?? !following));
-      setProfile((prev) => prev ? {
+      setProfile(prev => prev ? {
         ...prev,
         isFollowing: !prev.isFollowing,
         followerCount: (prev.followerCount ?? 0) + (prev.isFollowing ? -1 : 1),
       } : prev);
     } catch {
-      toast.error('Khong the theo doi');
+      toast.error('Không thể thực hiện');
     } finally {
       setFollowBusy(false);
     }
   };
 
-  // --- Social link icons ---
-  const getSocialIcon = (key: string) => {
-    const icons: Record<string, any> = {
-      facebook: Facebook,
-      twitter: Twitter,
-      github: Github,
-      linkedin: Linkedin,
-      youtube: Youtube,
-      instagram: Instagram,
-      website: Globe,
-    };
-    return icons[key.toLowerCase()] || Link2;
+  // ─── Save Profile Updates ─────────────────────────────────────
+  const saveProfileUpdate = async () => {
+    setSaving(true);
+    try {
+      // Split updates between auth and userProfile services
+      const authFields = ['fullName', 'displayName', 'phone', 'gender', 'birthYear'];
+      const profileFields = ['bio', 'location', 'work', 'education', 'websiteUrl', 'hometown', 'workplace', 'jobTitle', 'school', 'relationshipStatus'];
+      
+      const authUpdates: any = {};
+      const profileUpdates: any = {};
+
+      for (const [key, value] of Object.entries(editForm)) {
+        if (authFields.includes(key)) {
+          if (key === 'birthYear') {
+            authUpdates[key] = value ? parseInt(value) : null;
+          } else {
+            authUpdates[key] = value || null;
+          }
+        } else if (profileFields.includes(key)) {
+          profileUpdates[key] = value || null;
+        }
+      }
+
+      if (Object.keys(authUpdates).length > 0) {
+        await authApi.updateProfile(authUpdates);
+      }
+      if (Object.keys(profileUpdates).length > 0) {
+        await socialUserApi.updateOwnProfile(profileUpdates);
+      }
+
+      // Update local state
+      setProfile(prev => prev ? { ...prev, ...editForm } : prev);
+      setEditingSection(null);
+      setEditForm({});
+      toast.success('Đã cập nhật thông tin');
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    } catch {
+      toast.error('Không thể cập nhật thông tin');
+    } finally {
+      setSaving(false);
+    }
   };
 
-  // ─── Loading skeleton ───────────────────────────────────────────
+  const startEditing = (section: AboutTab) => {
+    if (!profile) return;
+    
+    const formData: Record<string, string> = {};
+    switch (section) {
+      case 'overview':
+        formData.bio = profile.bio || '';
+        formData.websiteUrl = profile.websiteUrl || '';
+        formData.relationshipStatus = profile.relationshipStatus || '';
+        break;
+      case 'work':
+        formData.work = profile.work || '';
+        formData.workplace = profile.workplace || '';
+        formData.jobTitle = profile.jobTitle || '';
+        formData.school = profile.school || '';
+        break;
+      case 'places':
+        formData.location = profile.location || '';
+        formData.hometown = profile.hometown || '';
+        break;
+      case 'contact':
+        formData.email = profile.email || '';
+        formData.phone = profile.phone || '';
+        formData.gender = profile.gender || '';
+        formData.birthYear = profile.birthYear?.toString() || '';
+        break;
+      case 'details':
+        formData.bio = profile.bio || '';
+        formData.hobbies = profile.hobbies || '';
+        formData.languages = (profile.languages || []).join(', ');
+        break;
+    }
+    setEditForm(formData);
+    setEditingSection(section);
+  };
+
+  // ─── Render About Section Content ────────────────────────────
+  const renderAboutContent = () => {
+    if (!profile) return null;
+    const p = profile;
+
+    switch (aboutTab) {
+      case 'overview':
+        return (
+          <div className="space-y-4">
+            {p.bio ? (
+              <p className="text-text-secondary whitespace-pre-wrap">{p.bio}</p>
+            ) : (
+              <p className="text-text-muted italic">Chưa có tiểu sử</p>
+            )}
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {p.work && (
+                <InfoItem icon={Briefcase} label="Công việc" value={p.work} />
+              )}
+              {p.workplace && (
+                <InfoItem icon={Building} label="Nơi làm việc" value={p.workplace} />
+              )}
+              {p.jobTitle && (
+                <InfoItem icon={Star} label="Vị trí" value={p.jobTitle} />
+              )}
+              {p.location && (
+                <InfoItem icon={MapPinHouse} label="Sống tại" value={p.location} />
+              )}
+              {p.hometown && (
+                <InfoItem icon={Home} label="Đến từ" value={p.hometown} />
+              )}
+              {p.relationshipStatus && (
+                <InfoItem icon={Heart} label="Tình trạng" value={p.relationshipStatus} />
+              )}
+              {p.websiteUrl && (
+                <InfoItem icon={Globe} label="Website" value={p.websiteUrl} isLink />
+              )}
+            </div>
+          </div>
+        );
+
+      case 'work':
+        return (
+          <div className="space-y-4">
+            {p.work ? (
+              <div className="p-4 rounded-xl bg-darkbg/50 border border-darkborder/50">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-neon-violet/10">
+                    <Briefcase className="h-5 w-5 text-neon-violet" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-text-primary">{p.work}</p>
+                    {p.jobTitle && <p className="text-sm text-text-muted">{p.jobTitle}</p>}
+                    {p.workplace && <p className="text-sm text-text-muted">{p.workplace}</p>}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-text-muted italic">Chưa cập nhật thông tin công việc</p>
+            )}
+
+            {p.school && (
+              <div className="p-4 rounded-xl bg-darkbg/50 border border-darkborder/50">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-emerald-500/10">
+                    <GraduationCap className="h-5 w-5 text-emerald-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-text-primary">{p.school}</p>
+                    {p.college && <p className="text-sm text-text-muted">{p.college}</p>}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+
+      case 'places':
+        return (
+          <div className="space-y-4">
+            {p.location ? (
+              <div className="flex items-center gap-3 p-4 rounded-xl bg-darkbg/50 border border-darkborder/50">
+                <MapPinHouse className="h-5 w-5 text-neon-violet" />
+                <div>
+                  <p className="text-sm text-text-muted">Thành phố hiện tại</p>
+                  <p className="font-medium text-text-primary">{p.location}</p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-text-muted italic">Chưa cập nhật nơi ở</p>
+            )}
+
+            {p.hometown && (
+              <div className="flex items-center gap-3 p-4 rounded-xl bg-darkbg/50 border border-darkborder/50">
+                <Home className="h-5 w-5 text-emerald-500" />
+                <div>
+                  <p className="text-sm text-text-muted">Quê quán</p>
+                  <p className="font-medium text-text-primary">{p.hometown}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+
+      case 'contact':
+        return (
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium text-text-muted mb-3">Liên hệ</h3>
+            
+            {p.email && (
+              <InfoItem icon={Mail} label="Email" value={p.email} />
+            )}
+            {p.phone && (
+              <InfoItem icon={Phone} label="Điện thoại" value={p.phone} />
+            )}
+            
+            <h3 className="text-sm font-medium text-text-muted mt-6 mb-3">Cá nhân</h3>
+            
+            {p.gender && (
+              <InfoItem 
+                icon={Gender} 
+                label="Giới tính" 
+                value={p.gender === 'MALE' ? 'Nam' : p.gender === 'FEMALE' ? 'Nữ' : 'Khác'} 
+              />
+            )}
+            {p.birthYear && (
+              <InfoItem icon={CalendarDays} label="Ngày sinh" value={`Năm ${p.birthYear}`} />
+            )}
+            
+            {p.websiteUrl && (
+              <InfoItem icon={Globe} label="Website" value={p.websiteUrl} isLink />
+            )}
+
+            {/* Social Links */}
+            {p.socialLinks && Object.keys(p.socialLinks).length > 0 && (
+              <>
+                <h3 className="text-sm font-medium text-text-muted mt-6 mb-3">Liên kết</h3>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(p.socialLinks).map(([key, url]) => {
+                    const Icon = socialIcons[key.toLowerCase()] || Link2;
+                    return (
+                      <a
+                        key={key}
+                        href={String(url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-darkbg/50 border border-darkborder/50 text-sm text-text-secondary hover:text-neon-violet hover:border-neon-violet/50 transition-colors"
+                      >
+                        <Icon className="h-4 w-4" />
+                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                      </a>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+        );
+
+      case 'details':
+        return (
+          <div className="space-y-4">
+            {p.bio && (
+              <div>
+                <h3 className="text-sm font-medium text-text-muted mb-2">Giới thiệu</h3>
+                <p className="text-text-secondary whitespace-pre-wrap">{p.bio}</p>
+              </div>
+            )}
+            
+            {p.hobbies && (
+              <div>
+                <h3 className="text-sm font-medium text-text-muted mb-2">Sở thích</h3>
+                <p className="text-text-secondary">{p.hobbies}</p>
+              </div>
+            )}
+
+            {p.languages && p.languages.length > 0 && (
+              <div>
+                <h3 className="text-sm font-medium text-text-muted mb-2">Ngôn ngữ</h3>
+                <div className="flex flex-wrap gap-2">
+                  {p.languages.map((lang, i) => (
+                    <span key={i} className="px-3 py-1 rounded-full bg-darkbg/50 border border-darkborder/50 text-sm text-text-secondary">
+                      {lang}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {!p.bio && !p.hobbies && (!p.languages || p.languages.length === 0) && (
+              <p className="text-text-muted italic">Chưa có thông tin chi tiết</p>
+            )}
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  // ─── Loading Skeleton ──────────────────────────────────────────
   if (loading) {
     return (
-      <div className="w-[90vw] max-w-7xl mx-auto">
+      <div className="w-[92vw] max-w-[1500px] mx-auto">
         {/* Cover skeleton */}
-        <div className="h-56 animate-pulse rounded-2xl bg-darkcard/40 mb-6" />
-        <div className="flex gap-6">
-          {/* Sidebar skeleton */}
-          <div className="w-80 shrink-0 space-y-4">
-            <div className="h-80 animate-pulse rounded-2xl bg-darkcard/30" />
+        <div className="h-80 animate-pulse rounded-2xl bg-darkcard/40 mb-4" />
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="w-full lg:w-[380px] shrink-0 space-y-4">
+            <div className="h-[500px] animate-pulse rounded-2xl bg-darkcard/30" />
             <div className="h-48 animate-pulse rounded-2xl bg-darkcard/30" />
           </div>
-          {/* Main skeleton */}
           <div className="flex-1 space-y-4">
             <div className="h-14 animate-pulse rounded-xl bg-darkcard/30" />
-            <div className="h-56 animate-pulse rounded-2xl bg-darkcard/30" />
-            <div className="h-56 animate-pulse rounded-2xl bg-darkcard/30" />
+            <div className="h-64 animate-pulse rounded-2xl bg-darkcard/30" />
+            <div className="h-64 animate-pulse rounded-2xl bg-darkcard/30" />
           </div>
         </div>
       </div>
@@ -521,401 +702,349 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const cover = p.coverPhoto ?? p.coverPhotoUrl;
   const genderLabel = p.gender === 'MALE' ? 'Nam' : p.gender === 'FEMALE' ? 'Nữ' : p.gender === 'OTHER' ? 'Khác' : null;
 
+  // ─── Render ────────────────────────────────────────────────────
   return (
-    <div className="w-[90vw] max-w-7xl mx-auto">
-      {/* ─── Cover Header ─────────────────────────────────────── */}
-      <div className="rounded-2xl overflow-hidden border border-darkborder bg-darkcard/40 mb-6">
-        {/* Cover image - full width */}
-        <div
-          className="relative h-56"
-          style={cover ? undefined : { background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
+    <div className="w-[92vw] max-w-[1500px] mx-auto pb-8">
+      {/* ─── Cover + Avatar Header ───────────────────────────── */}
+      <div className="relative rounded-2xl overflow-visible bg-darkcard border border-darkborder mb-6">
+        {/* Cover Photo - positioned to allow avatar overlap */}
+        <div 
+          className="h-72 sm:h-80 lg:h-[400px] w-full relative overflow-hidden rounded-t-2xl"
+          style={!cover ? { background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)' } : undefined}
         >
           {cover && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={cover} alt="" className="h-full w-full object-cover" />
+            <img src={cover} alt="" className="w-full h-full object-cover" />
           )}
+          
+          {/* Cover gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
-          {/* Cover photo upload button */}
+          {/* Cover actions */}
           {isOwn && (
-            <label className="absolute bottom-3 right-3 cursor-pointer inline-flex items-center gap-2 rounded-lg bg-black/60 hover:bg-black/70 px-3 py-1.5 text-sm font-medium text-white transition-colors">
-              {uploadingImage ? (
+            <label className="absolute bottom-4 right-4 cursor-pointer inline-flex items-center gap-2 rounded-xl bg-black/60 hover:bg-black/80 backdrop-blur-sm px-4 py-2.5 text-sm font-medium text-white transition-all hover:scale-105 shadow-lg">
+              {uploadingImage && showImageCropper === 'cover' ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <Camera className="h-4 w-4" />
               )}
-              <span>Đổi ảnh bìa</span>
+              <span>Cập nhật ảnh bìa</span>
               <input
                 ref={coverInputRef}
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) handleImageUpload(file, 'cover');
-                  e.target.value = '';
-                }}
+                onChange={(e) => handleImageSelect(e, 'cover')}
               />
             </label>
           )}
         </div>
 
-        {/* Avatar + Info row - positioned below cover */}
-        <div className="px-6 pb-5">
-          <div className="flex items-end justify-between -mt-16 gap-4">
-            {/* Avatar - separated from cover */}
-            <div className="relative">
-              <div className="h-32 w-32 sm:h-36 sm:w-36 shrink-0 rounded-full border-4 border-darkcard bg-darkcard overflow-hidden shadow-2xl">
+        {/* Avatar - Overlapping cover photo (Facebook style) */}
+        {/* Positioned to overlap cover by ~40% from top */}
+        <div className="absolute left-6 sm:left-10 -mt-16 sm:-mt-20 z-10">
+          <div className="relative group">
+            {/* Avatar container with ring */}
+            <div className={cn(
+              "relative rounded-full overflow-hidden shadow-2xl transition-all duration-300",
+              "ring-4 ring-darkcard",
+              "group-hover:ring-neon-violet/30"
+            )}>
+              {/* Avatar size: 160px desktop, 120px mobile */}
+              <div className="h-36 w-36 sm:h-44 sm:w-44 lg:h-52 lg:w-52">
                 {p.avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={p.avatarUrl} alt="" className="h-full w-full object-cover" />
+                  <img src={p.avatarUrl} alt="" className="w-full h-full object-cover" />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neon-violet to-neon-pink text-4xl sm:text-5xl font-bold text-white">
-                    {(p.displayName || p.fullName || p.username || '?').slice(0, 1).toUpperCase()}
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neon-violet via-neon-purple to-neon-pink">
+                    <span className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white drop-shadow-lg">
+                      {(p.displayName || p.fullName || p.username || '?').slice(0, 1).toUpperCase()}
+                    </span>
                   </div>
                 )}
               </div>
 
-              {/* Avatar upload button */}
+              {/* Online indicator */}
+              {p.isOnline && (
+                <div className="absolute bottom-2 right-2 h-5 w-5 rounded-full bg-emerald-500 ring-2 ring-darkcard" />
+              )}
+
+              {/* Avatar camera button */}
               {isOwn && (
-                <label className="absolute bottom-1 right-1 cursor-pointer h-8 w-8 rounded-full bg-black/70 hover:bg-black/80 flex items-center justify-center border-2 border-darkcard transition-colors">
-                  {uploadingImage ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin text-white" />
-                  ) : (
-                    <Camera className="h-3.5 w-3.5 text-white" />
-                  )}
+                <label className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/40 transition-colors cursor-pointer rounded-full">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="h-11 w-11 rounded-full bg-black/70 backdrop-blur-sm flex items-center justify-center border-2 border-white/20">
+                      {uploadingImage && showImageCropper === 'avatar' ? (
+                        <Loader2 className="h-5 w-5 animate-spin text-white" />
+                      ) : (
+                        <Camera className="h-5 w-5 text-white" />
+                      )}
+                    </div>
+                  </div>
                   <input
                     ref={avatarInputRef}
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) handleImageUpload(file, 'avatar');
-                      e.target.value = '';
-                    }}
+                    onChange={(e) => handleImageSelect(e, 'avatar')}
                   />
                 </label>
               )}
             </div>
+          </div>
+        </div>
 
-            {/* Actions */}
-            <div className="flex gap-2 mb-1">
+        {/* Profile Header Info - positioned below avatar */}
+        <div className="px-6 sm:px-10 pb-6 pt-2 sm:pt-4">
+          <div className="ml-36 sm:ml-48 lg:ml-56 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-text-primary">
+                {p.displayName || p.fullName || p.username}
+              </h1>
+              <p className="text-text-muted mt-0.5">@{p.username}</p>
+              <div className="flex items-center gap-4 mt-3 text-sm text-text-muted flex-wrap">
+                <span>
+                  <strong className="text-text-primary font-semibold">{p.followerCount ?? 0}</strong> người theo dõi
+                </span>
+                <span>
+                  <strong className="text-text-primary font-semibold">{p.followingCount ?? 0}</strong> đang theo dõi
+                </span>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-2 flex-wrap">
               {isOwn ? (
                 <>
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal('contact')}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-darkborder bg-darkcard/60 px-3 py-1.5 text-sm font-medium text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                  >
-                    <Edit3 className="h-3.5 w-3.5" />
-                    Chỉnh sửa
+                  <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-neon-violet to-neon-purple text-white px-5 py-2.5 font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-neon-violet/20">
+                    <Plus className="h-4 w-4" />
+                    Thêm vào tin
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal('bio')}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-darkborder bg-darkcard/60 px-3 py-1.5 text-sm font-medium text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                  >
-                    <User className="h-3.5 w-3.5" />
-                    Cá nhân
+                  <button className="inline-flex items-center gap-2 rounded-xl bg-darkcard/80 border border-darkborder text-text-primary px-5 py-2.5 font-medium hover:bg-darkcard transition-colors">
+                    <Edit3 className="h-4 w-4" />
+                    Chỉnh sửa trang cá nhân
+                  </button>
+                  <button className="inline-flex items-center justify-center rounded-xl bg-darkcard/60 border border-darkborder p-2.5 hover:bg-darkcard/80 transition-colors">
+                    <Settings className="h-5 w-5 text-text-secondary" />
                   </button>
                 </>
               ) : (
                 <>
                   <button
-                    type="button"
                     onClick={toggleFollow}
                     disabled={followBusy || following === null}
                     className={cn(
-                      'inline-flex items-center gap-1.5 rounded-lg px-5 py-1.5 text-sm font-semibold transition-colors',
+                      'inline-flex items-center gap-2 px-5 py-2.5 font-semibold rounded-xl transition-all shadow-lg',
                       following
-                        ? 'border border-darkborder bg-darkcard/60 text-text-secondary hover:bg-white/5'
-                        : 'bg-gradient-to-r from-neon-violet to-neon-pink text-white hover:opacity-90',
+                        ? 'bg-darkcard/80 border border-darkborder text-text-primary hover:bg-darkcard'
+                        : 'bg-gradient-to-r from-neon-violet to-neon-purple text-white hover:opacity-90 shadow-neon-violet/20',
                       followBusy && 'opacity-50',
                     )}
                   >
-                    {following ? 'Đang theo dõi' : 'Theo dõi'}
+                    {following ? (
+                      <>
+                        <Check className="h-4 w-4" />
+                        Đang theo dõi
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="h-4 w-4" />
+                        Theo dõi
+                      </>
+                    )}
                   </button>
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-darkborder bg-darkcard/60 px-3 py-1.5 text-sm font-medium text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                  >
+                  <button className="inline-flex items-center gap-2 rounded-xl bg-darkcard/80 border border-darkborder px-5 py-2.5 font-medium text-text-primary hover:bg-darkcard transition-colors">
+                    <Mail className="h-4 w-4" />
                     Nhắn tin
+                  </button>
+                  <button className="inline-flex items-center justify-center rounded-xl bg-darkcard/60 border border-darkborder p-2.5 hover:bg-darkcard/80 transition-colors">
+                    <MoreHorizontal className="h-5 w-5 text-text-secondary" />
                   </button>
                 </>
               )}
             </div>
           </div>
+        </div>
 
-          {/* Name + stats */}
-          <div className="mt-3">
-            <h1 className="text-2xl sm:text-3xl font-bold text-text-primary">
-              {p.displayName || p.fullName || p.username}
-            </h1>
-            <p className="text-sm text-text-muted">@{p.username}</p>
-            <div className="mt-2 flex items-center gap-5 text-sm text-text-muted">
-              <span><strong className="text-text-primary">{p.followerCount ?? 0}</strong> người theo dõi</span>
-              <span><strong className="text-text-primary">{p.followingCount ?? 0}</strong> đang theo dõi</span>
-              {p.isOnline && (
-                <span className="flex items-center gap-1 text-emerald-400">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                  online
-                </span>
-              )}
-            </div>
+        {/* Navigation Tabs */}
+        <div className="px-6 sm:px-10 border-t border-darkborder/50">
+          <div className="flex gap-1 overflow-x-auto scrollbar-hide">
+            {['posts', 'about', 'friends', 'photos', 'videos'].map(tab => (
+              <button
+                key={tab}
+                className={cn(
+                  'px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2',
+                  tab === 'posts' || tab === 'about'
+                    ? 'text-text-primary border-neon-violet'
+                    : 'text-text-muted border-transparent hover:text-text-primary hover:bg-white/[0.02]'
+                )}
+                onClick={() => tab === 'about' && setAboutTab('overview')}
+              >
+                {tab === 'posts' ? 'Bài viết' : 
+                 tab === 'about' ? 'Giới thiệu' :
+                 tab === 'friends' ? 'Bạn bè' :
+                 tab === 'photos' ? 'Ảnh' : 'Video'}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* ─── Main Layout: Sidebar + Main + Right ─────────────── */}
-      <div className="flex gap-6 items-start">
-        {/* ─── LEFT SIDEBAR ──────────────────────────────────── */}
-        <div className="w-80 shrink-0 space-y-4">
-          {/* Contact Card */}
-          <div className="rounded-2xl border border-darkborder bg-darkcard/40 p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-base font-semibold text-text-primary flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                Liên hệ
-              </h2>
+      {/* ─── Main Content Layout ──────────────────────────────── */}
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* ─── Left Sidebar (About/Intro) ───────────────────── */}
+        <div className="w-full lg:w-[380px] shrink-0 space-y-4">
+          {/* About Card with Tabs */}
+          <div className="rounded-2xl border border-darkborder bg-darkcard/40 overflow-hidden">
+            {/* About Header */}
+            <div className="p-4 flex items-center justify-between border-b border-darkborder/50">
+              <h2 className="text-lg font-semibold text-text-primary">Giới thiệu</h2>
               {isOwn && (
-                <button
-                  type="button"
-                  onClick={() => setActiveModal('contact')}
-                  className="text-xs text-neon-violet hover:underline"
+                <button 
+                  onClick={() => startEditing(aboutTab)}
+                  className="p-2 rounded-lg hover:bg-white/5 text-text-muted hover:text-text-primary transition-colors"
                 >
-                  Chỉnh sửa
+                  <Edit3 className="h-4 w-4" />
                 </button>
               )}
             </div>
-            <div className="space-y-2 text-sm">
-              {p.fullName && (
-                <div className="flex items-center gap-2 text-text-secondary">
-                  <User className="h-4 w-4 shrink-0 text-text-muted" />
-                  <span>{p.fullName}</span>
-                </div>
-              )}
-              {p.email && (
-                <div className="flex items-center gap-2 text-text-secondary">
-                  <Mail className="h-4 w-4 shrink-0 text-text-muted" />
-                  <span className="truncate">{p.email}</span>
-                </div>
-              )}
-              {p.phone && (
-                <div className="flex items-center gap-2 text-text-secondary">
-                  <Phone className="h-4 w-4 shrink-0 text-text-muted" />
-                  <span>{p.phone}</span>
-                </div>
-              )}
-              {genderLabel && (
-                <div className="flex items-center gap-2 text-text-secondary">
-                  <Heart className="h-4 w-4 shrink-0 text-text-muted" />
-                  <span>{genderLabel}</span>
-                </div>
-              )}
-              {p.birthYear && (
-                <div className="flex items-center gap-2 text-text-secondary">
-                  <Calendar className="h-4 w-4 shrink-0 text-text-muted" />
-                  <span>Sinh năm {p.birthYear}</span>
-                </div>
-              )}
-              {p.location && (
-                <div className="flex items-center gap-2 text-text-secondary">
-                  <MapPin className="h-4 w-4 shrink-0 text-text-muted" />
-                  <span>{p.location}</span>
-                </div>
-              )}
-              {p.work && (
-                <div className="flex items-center gap-2 text-text-secondary">
-                  <Briefcase className="h-4 w-4 shrink-0 text-text-muted" />
-                  <span>{p.work}</span>
-                </div>
-              )}
-            </div>
 
-            {/* Social Links */}
-            {p.socialLinks && Object.keys(p.socialLinks).length > 0 && (
-              <div className="mt-3 pt-3 border-t border-darkborder/40">
-                <div className="flex flex-wrap gap-2">
-                  {Object.entries(p.socialLinks).map(([k, v]) => {
-                    const Icon = getSocialIcon(k);
-                    return (
-                      <a
-                        key={k}
-                        href={String(v).startsWith('http') ? String(v) : `https://${v}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-neon-violet transition-colors bg-white/[0.03] px-2 py-1 rounded-lg"
-                      >
-                        <Icon className="h-3.5 w-3.5" /> {k}
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Personal Card */}
-          <div className="rounded-2xl border border-darkborder bg-darkcard/40 p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-base font-semibold text-text-primary flex items-center gap-2">
-                <Shield className="h-4 w-4" />
-                Cá nhân
-              </h2>
-              {isOwn && (
+            {/* About Tab Navigation */}
+            <div className="flex gap-1 px-4 pt-2 overflow-x-auto scrollbar-hide">
+              {aboutTabs.map(tab => (
                 <button
-                  type="button"
-                  onClick={() => setActiveModal('personal')}
-                  className="text-xs text-neon-violet hover:underline"
+                  key={tab.id}
+                  onClick={() => setAboutTab(tab.id)}
+                  className={cn(
+                    'flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-colors whitespace-nowrap',
+                    aboutTab === tab.id
+                      ? 'bg-neon-violet/10 text-neon-violet'
+                      : 'text-text-muted hover:text-text-primary hover:bg-white/[0.02]'
+                  )}
                 >
-                  Chỉnh sửa
+                  <tab.icon className="h-3.5 w-3.5" />
+                  {tab.label}
                 </button>
-              )}
+              ))}
             </div>
-            <div className="space-y-2 text-sm">
-              {p.bio && (
-                <div className="text-text-secondary whitespace-pre-wrap">{p.bio}</div>
-              )}
-              {p.websiteUrl && (
-                <div className="flex items-center gap-2 text-text-secondary">
-                  <Link2 className="h-4 w-4 shrink-0 text-text-muted" />
-                  <a href={p.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-neon-violet hover:underline truncate">
-                    {p.websiteUrl.replace(/^https?:\/\//, '')}
-                  </a>
-                </div>
-              )}
-              {p.education && (
-                <div className="flex items-center gap-2 text-text-secondary">
-                  <GraduationCap className="h-4 w-4 shrink-0 text-text-muted" />
-                  <span>{p.education}</span>
-                </div>
-              )}
+
+            {/* About Content */}
+            <div className="p-4">
+              {renderAboutContent()}
             </div>
           </div>
 
-          {/* Stats Card */}
-          <div className="rounded-2xl border border-darkborder bg-darkcard/40 p-4">
-            <h2 className="text-base font-semibold text-text-primary mb-3">Thống kê</h2>
-            <div className="grid grid-cols-2 gap-3 text-center">
-              <div className="p-2 rounded-lg bg-white/[0.03]">
-                <div className="text-xl font-bold text-text-primary">{p.followerCount ?? 0}</div>
-                <div className="text-xs text-text-muted">Người theo dõi</div>
-              </div>
-              <div className="p-2 rounded-lg bg-white/[0.03]">
-                <div className="text-xl font-bold text-text-primary">{p.followingCount ?? 0}</div>
-                <div className="text-xs text-text-muted">Đang theo dõi</div>
-              </div>
-              <div className="p-2 rounded-lg bg-white/[0.03]">
-                <div className="text-xl font-bold text-text-primary">{posts.length || 0}</div>
-                <div className="text-xs text-text-muted">Bài viết</div>
-              </div>
-              <div className="p-2 rounded-lg bg-white/[0.03]">
-                <div className="text-xl font-bold text-text-primary">{media.length || 0}</div>
-                <div className="text-xs text-text-muted">Ảnh</div>
-              </div>
+          {/* Photos Card */}
+          <div className="rounded-2xl border border-darkborder bg-darkcard/40 overflow-hidden">
+            <div className="p-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-text-primary">Ảnh</h2>
+              <button className="text-sm text-neon-violet hover:underline">Xem tất cả</button>
+            </div>
+            <div className="grid grid-cols-3 gap-0.5">
+              {media.slice(0, 9).map((m, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={m.id || i}
+                  src={m.url || m.thumbnail}
+                  alt=""
+                  className="aspect-square object-cover hover:opacity-80 transition-opacity cursor-pointer"
+                />
+              ))}
+              {Array.from({ length: Math.max(0, 9 - media.length) }).map((_, i) => (
+                <div key={`empty-${i}`} className="aspect-square bg-darkbg/50" />
+              ))}
             </div>
           </div>
 
-          {/* Friends hint */}
-          <div className="rounded-2xl border border-darkborder bg-darkcard/40 p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-base font-semibold text-text-primary">Bạn bè</h2>
-              <button type="button" className="text-xs text-neon-violet hover:underline">Xem tất cả</button>
+          {/* Friends Card */}
+          <div className="rounded-2xl border border-darkborder bg-darkcard/40 overflow-hidden">
+            <div className="p-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-text-primary">Bạn bè</h2>
+              <button className="text-sm text-neon-violet hover:underline">Xem tất cả</button>
             </div>
-            <div className="flex gap-2">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="flex-1">
-                  <div className="aspect-square rounded-lg bg-gradient-to-br from-neon-violet/20 to-neon-pink/20 mb-1" />
-                  <div className="h-2 rounded bg-white/[0.05]" />
+            <div className="grid grid-cols-3 gap-2 p-2">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-neon-violet/20 to-neon-pink/20">
+                  <div className="w-full h-full flex items-center justify-center text-text-muted text-xs">
+                    Avatar
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* ─── MAIN CONTENT ───────────────────────────────────── */}
-        <div className="flex-1 min-w-0 max-w-[700px]">
-          {/* Tabs */}
-          <div className="rounded-2xl border border-darkborder bg-darkcard/40 mb-4 overflow-hidden">
+        {/* ─── Right Content Area ─────────────────────────────── */}
+        <div className="flex-1 min-w-0">
+          {/* Tab Navigation */}
+          <div className="rounded-2xl border border-darkborder bg-darkcard/40 overflow-hidden mb-4">
             <div className="flex">
               {([
-                { id: 'posts' as Tab, label: 'Bài viết' },
-                { id: 'media' as Tab, label: 'Ảnh' },
-                ...(isOwn ? [{ id: 'liked' as Tab, label: 'Đã thích' }] : []),
-              ]).map((t) => (
+                { id: 'posts' as ContentTab, label: 'Bài viết', icon: BookText },
+                { id: 'media' as ContentTab, label: 'Ảnh', icon: Grid3X3 },
+                ...(isOwn ? [{ id: 'liked' as ContentTab, label: 'Đã thích', icon: Heart }] : []),
+              ]).map(tab => (
                 <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => setTab(t.id)}
+                  key={tab.id}
+                  onClick={() => setContentTab(tab.id)}
                   className={cn(
-                    'flex-1 py-3 text-sm font-medium transition-colors',
-                    tab === t.id
-                      ? 'text-text-primary border-b-2 border-neon-violet bg-white/[0.02]'
+                    'flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-medium transition-colors',
+                    contentTab === tab.id
+                      ? 'text-text-primary bg-white/[0.03] border-b-2 border-neon-violet'
                       : 'text-text-muted hover:text-text-primary hover:bg-white/[0.02]',
                   )}
                 >
-                  {t.label}
+                  <tab.icon className="h-4 w-4" />
+                  {tab.label}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* ─── POSTS TAB ─────────────────────────────────── */}
-          {tab === 'posts' && (
+          {/* Tab Content */}
+          {contentTab === 'posts' && (
             <div className="space-y-4">
               {posts.length === 0 && !loadingPosts ? (
-                <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center text-text-muted">
-                  Chưa có bài viết nào.
+                <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center">
+                  <Edit3 className="h-12 w-12 mx-auto text-text-muted mb-3" />
+                  <p className="text-text-muted">Chưa có bài viết nào</p>
+                  {isOwn && (
+                    <button className="mt-4 px-4 py-2 rounded-lg bg-neon-violet text-white text-sm font-medium hover:opacity-90 transition-opacity">
+                      Tạo bài viết đầu tiên
+                    </button>
+                  )}
                 </div>
               ) : (
-                <>
-                  {posts.map((post: any) => (
-                    <PostCard key={post.id} post={post} />
-                  ))}
-                </>
+                posts.map(post => <PostCard key={post.id} post={post} />)
               )}
               {postsHasMore && (
-                <div ref={postsSentinelRef} className="flex items-center justify-center py-6">
-                  {loadingPosts && <Loader2 className="h-5 w-5 animate-spin text-text-muted" />}
+                <div ref={postsSentinelRef} className="flex justify-center py-4">
+                  {loadingPosts && <Loader2 className="h-6 w-6 animate-spin text-text-muted" />}
                 </div>
               )}
             </div>
           )}
 
-          {/* ─── MEDIA TAB ──────────────────────────────────── */}
-          {tab === 'media' && (
+          {contentTab === 'media' && (
             <div>
               {media.length === 0 && !loadingMedia ? (
-                <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center text-text-muted">
-                  Chưa có ảnh / video nào.
+                <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center">
+                  <ImageIcon className="h-12 w-12 mx-auto text-text-muted mb-3" />
+                  <p className="text-text-muted">Chưa có ảnh nào</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-3 gap-1 rounded-2xl overflow-hidden border border-darkborder">
-                  {media.map((m: any) => (
-                    <a
-                      key={m.id}
-                      href={`/social/post/${m.postId}`}
-                      className="group relative aspect-square overflow-hidden bg-darkbg"
-                    >
-                      {m.type === 'VIDEO' ? (
-                        <video
-                          src={m.url}
-                          poster={m.thumbnail}
-                          className="h-full w-full object-cover"
-                          muted
-                        />
-                      ) : (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={m.url || m.thumbnail}
-                          alt={m.alt || ''}
-                          className="h-full w-full object-cover transition-transform group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      )}
+                  {media.map(m => (
+                    <a key={m.id} href={`/social/post/${m.postId}`} className="group relative aspect-square bg-darkbg">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={m.url || m.thumbnail}
+                        alt=""
+                        className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                      />
                       {m.type === 'VIDEO' && (
-                        <div className="absolute right-1.5 top-1.5 rounded-full bg-black/60 px-1.5 text-[10px] font-bold text-white">
-                          ▶
+                        <div className="absolute top-2 right-2 bg-black/60 rounded-full p-1.5">
+                          <ImageIcon className="h-4 w-4 text-white" />
                         </div>
                       )}
                     </a>
@@ -923,350 +1052,391 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                 </div>
               )}
               {mediaHasMore && (
-                <div ref={mediaSentinelRef} className="flex items-center justify-center py-6">
-                  {loadingMedia && <Loader2 className="h-5 w-5 animate-spin text-text-muted" />}
+                <div ref={mediaSentinelRef} className="flex justify-center py-4">
+                  {loadingMedia && <Loader2 className="h-6 w-6 animate-spin text-text-muted" />}
                 </div>
               )}
             </div>
           )}
 
-          {/* ─── LIKED TAB ──────────────────────────────────── */}
-          {tab === 'liked' && (
+          {contentTab === 'liked' && (
             <div className="space-y-4">
               {!isOwn ? (
                 <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center text-text-muted">
-                  Chỉ chủ sở hữu trang cá nhân mới xem được danh sách bài viết đã thích.
+                  Chỉ chủ sở hữu mới xem được
                 </div>
               ) : liked.length === 0 && !loadingLiked ? (
-                <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center text-text-muted">
-                  Bạn chưa thích bài viết nào.
+                <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center">
+                  <Heart className="h-12 w-12 mx-auto text-text-muted mb-3" />
+                  <p className="text-text-muted">Chưa thích bài viết nào</p>
                 </div>
               ) : (
-                <>
-                  {liked.map((post: any) => (
-                    <PostCard key={post.id} post={post} />
-                  ))}
-                </>
+                liked.map(post => <PostCard key={post.id} post={post} />)
               )}
               {isOwn && likedHasMore && (
-                <div ref={likedSentinelRef} className="flex items-center justify-center py-6">
-                  {loadingLiked && <Loader2 className="h-5 w-5 animate-spin text-text-muted" />}
+                <div ref={likedSentinelRef} className="flex justify-center py-4">
+                  {loadingLiked && <Loader2 className="h-6 w-6 animate-spin text-text-muted" />}
                 </div>
               )}
             </div>
           )}
         </div>
-
-        {/* ─── RIGHT SIDEBAR (empty / future suggestions) ─────── */}
-        <div className="w-80 shrink-0">
-          {/* Placeholder for future content */}
-        </div>
       </div>
 
-      {/* ─── Bio Edit Modal ─────────────────────────────────── */}
+      {/* ─── Image Cropper Modal ──────────────────────────────── */}
       <AnimatePresence>
-        {activeModal === 'bio' && (
+        {showImageCropper && imagePreview && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
-            onClick={() => !savingModal && setActiveModal(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg overflow-hidden rounded-2xl border border-darkborder bg-[#0d0f18] shadow-2xl"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              className="bg-darkcard rounded-2xl border border-darkborder p-6 max-w-lg w-full mx-4 shadow-2xl"
             >
-              <div className="flex items-center justify-between border-b border-darkborder/60 px-5 py-3.5">
-                <h3 className="text-sm font-semibold text-text-primary">Sửa tiểu sử</h3>
-                <button
-                  type="button"
-                  onClick={() => setActiveModal(null)}
-                  className="rounded-lg p-1 text-text-muted hover:bg-white/5 hover:text-text-primary"
-                >
-                  <X className="h-4 w-4" />
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-text-primary">
+                  {showImageCropper === 'avatar' ? 'Cập nhật ảnh đại diện' : 'Cập nhật ảnh bìa'}
+                </h3>
+                <button onClick={() => { setShowImageCropper(null); setImagePreview(null); }}>
+                  <X className="h-5 w-5 text-text-muted hover:text-text-primary" />
                 </button>
               </div>
-              <div className="p-5 space-y-4">
-                <textarea
-                  value={bioDraft}
-                  onChange={(e) => setBioDraft(e.target.value)}
-                  maxLength={2000}
-                  rows={6}
-                  className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none resize-none"
-                  placeholder="Viết vài dòng về bạn..."
-                />
-                <div className="flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal(null)}
-                    className="rounded-lg px-3 py-1.5 text-sm text-text-secondary hover:bg-white/5"
-                  >
-                    Hủy
-                  </button>
-                  <button
-                    type="button"
-                    onClick={saveBio}
-                    disabled={savingModal}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-neon-violet to-neon-pink px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-40"
-                  >
-                    {savingModal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
-                    Lưu
-                  </button>
-                </div>
+              
+              <div className={cn(
+                'relative overflow-hidden mb-4 bg-darkbg/50',
+                showImageCropper === 'avatar' ? 'aspect-square rounded-full max-w-[280px] mx-auto' : 'aspect-video rounded-xl'
+              )}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={imagePreview} alt="" className="w-full h-full object-cover" />
+              </div>
+              
+              <p className="text-sm text-text-muted mb-4 text-center">
+                {showImageCropper === 'avatar' 
+                  ? 'Ảnh đại diện sẽ hiển thị dạng tròn'
+                  : 'Ảnh bìa sẽ hiển thị ở đầu trang cá nhân'
+                }
+              </p>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setShowImageCropper(null); setImagePreview(null); }}
+                  className="flex-1 py-2.5 rounded-xl border border-darkborder text-text-secondary hover:bg-darkcard/50 transition-colors"
+                >
+                  Hủy
+                </button>
+                <button
+                  onClick={handleImageUpload}
+                  disabled={uploadingImage}
+                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-neon-violet to-neon-purple text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-neon-violet/20"
+                >
+                  {uploadingImage ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Đang tải lên...
+                    </>
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4" />
+                      Lưu
+                    </>
+                  )}
+                </button>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ─── Contact Edit Modal ─────────────────────────────────── */}
+      {/* ─── Edit Profile Modal ────────────────────────────────── */}
       <AnimatePresence>
-        {activeModal === 'contact' && (
+        {editingSection && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
-            onClick={() => !savingModal && setActiveModal(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+            onClick={() => !saving && setEditingSection(null)}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg overflow-hidden rounded-2xl border border-darkborder bg-[#0d0f18] shadow-2xl max-h-[85vh] overflow-y-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              onClick={e => e.stopPropagation()}
+              className="bg-darkcard rounded-2xl border border-darkborder w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col shadow-2xl"
             >
-              <div className="flex items-center justify-between border-b border-darkborder/60 px-5 py-3.5 sticky top-0 bg-[#0d0f18] z-10">
-                <h3 className="text-sm font-semibold text-text-primary">Chỉnh sửa thông tin liên hệ</h3>
-                <button
-                  type="button"
-                  onClick={() => setActiveModal(null)}
-                  className="rounded-lg p-1 text-text-muted hover:bg-white/5 hover:text-text-primary"
-                >
-                  <X className="h-4 w-4" />
+              <div className="flex items-center justify-between p-4 border-b border-darkborder">
+                <h3 className="text-lg font-semibold text-text-primary">
+                  Chỉnh sửa {editingSection === 'overview' ? 'Tổng quan' : editingSection === 'work' ? 'Công việc & Học vấn' : editingSection === 'places' ? 'Địa điểm' : editingSection === 'contact' ? 'Thông tin liên hệ' : 'Chi tiết'}
+                </h3>
+                <button onClick={() => setEditingSection(null)}>
+                  <X className="h-5 w-5 text-text-muted hover:text-text-primary" />
                 </button>
               </div>
-              <div className="p-5 space-y-4">
-                {/* Full Name */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Họ và tên</label>
-                  <input
-                    type="text"
-                    value={contactDraft.fullName}
-                    onChange={(e) => setContactDraft(prev => ({ ...prev, fullName: e.target.value }))}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
-                    placeholder="Nguyễn Văn A"
-                  />
-                </div>
 
-                {/* Display Name */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Tên hiển thị</label>
-                  <input
-                    type="text"
-                    value={contactDraft.displayName}
-                    onChange={(e) => setContactDraft(prev => ({ ...prev, displayName: e.target.value }))}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
-                    placeholder="Tên bạn muốn hiển thị"
-                  />
-                </div>
+              <div className="p-5 space-y-4 overflow-y-auto flex-1">
+                {editingSection === 'overview' && (
+                  <>
+                    <EditField
+                      label="Tiểu sử"
+                      value={editForm.bio || ''}
+                      onChange={v => setEditForm(p => ({ ...p, bio: v }))}
+                      type="textarea"
+                      placeholder="Viết vài dòng về bạn..."
+                    />
+                    <EditField
+                      label="Website"
+                      value={editForm.websiteUrl || ''}
+                      onChange={v => setEditForm(p => ({ ...p, websiteUrl: v }))}
+                      type="url"
+                      placeholder="https://yourwebsite.com"
+                    />
+                    <EditField
+                      label="Tình trạng mối quan hệ"
+                      value={editForm.relationshipStatus || ''}
+                      onChange={v => setEditForm(p => ({ ...p, relationshipStatus: v }))}
+                      type="select"
+                      options={[
+                        { value: '', label: 'Chọn...' },
+                        { value: 'Độc thân', label: 'Độc thân' },
+                        { value: 'Đang hẹn hò', label: 'Đang hẹn hò' },
+                        { value: 'Đã kết hôn', label: 'Đã kết hôn' },
+                        { value: 'Phức tạp', label: 'Phức tạp' },
+                        { value: 'Đang có người yêu', label: 'Đang có người yêu' },
+                      ]}
+                    />
+                  </>
+                )}
 
-                {/* Email */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Email</label>
-                  <input
-                    type="email"
-                    value={contactDraft.email}
-                    onChange={(e) => setContactDraft(prev => ({ ...prev, email: e.target.value }))}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
-                    placeholder="email@example.com"
-                  />
-                </div>
+                {editingSection === 'work' && (
+                  <>
+                    <EditField
+                      label="Nghề nghiệp"
+                      value={editForm.work || ''}
+                      onChange={v => setEditForm(p => ({ ...p, work: v }))}
+                      type="text"
+                      placeholder="Ví dụ: Lập trình viên"
+                    />
+                    <EditField
+                      label="Nơi làm việc"
+                      value={editForm.workplace || ''}
+                      onChange={v => setEditForm(p => ({ ...p, workplace: v }))}
+                      type="text"
+                      placeholder="Tên công ty"
+                    />
+                    <EditField
+                      label="Vị trí công việc"
+                      value={editForm.jobTitle || ''}
+                      onChange={v => setEditForm(p => ({ ...p, jobTitle: v }))}
+                      type="text"
+                      placeholder="Chức danh"
+                    />
+                    <EditField
+                      label="Trường học"
+                      value={editForm.school || ''}
+                      onChange={v => setEditForm(p => ({ ...p, school: v }))}
+                      type="text"
+                      placeholder="Tên trường"
+                    />
+                  </>
+                )}
 
-                {/* Phone */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Số điện thoại</label>
-                  <input
-                    type="tel"
-                    value={contactDraft.phone}
-                    onChange={(e) => setContactDraft(prev => ({ ...prev, phone: e.target.value }))}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
-                    placeholder="0123456789"
-                  />
-                </div>
+                {editingSection === 'places' && (
+                  <>
+                    <EditField
+                      label="Thành phố hiện tại"
+                      value={editForm.location || ''}
+                      onChange={v => setEditForm(p => ({ ...p, location: v }))}
+                      type="text"
+                      placeholder="TP. Hồ Chí Minh"
+                    />
+                    <EditField
+                      label="Quê quán"
+                      value={editForm.hometown || ''}
+                      onChange={v => setEditForm(p => ({ ...p, hometown: v }))}
+                      type="text"
+                      placeholder="Hà Nội"
+                    />
+                  </>
+                )}
 
-                {/* Gender */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Giới tính</label>
-                  <select
-                    value={contactDraft.gender}
-                    onChange={(e) => setContactDraft(prev => ({ ...prev, gender: e.target.value as any }))}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary focus:border-neon-violet/50 focus:outline-none"
-                  >
-                    <option value="">Chọn giới tính</option>
-                    <option value="MALE">Nam</option>
-                    <option value="FEMALE">Nữ</option>
-                    <option value="OTHER">Khác</option>
-                  </select>
-                </div>
+                {editingSection === 'contact' && (
+                  <>
+                    <EditField
+                      label="Email"
+                      value={editForm.email || ''}
+                      onChange={v => setEditForm(p => ({ ...p, email: v }))}
+                      type="email"
+                      placeholder="email@example.com"
+                    />
+                    <EditField
+                      label="Số điện thoại"
+                      value={editForm.phone || ''}
+                      onChange={v => setEditForm(p => ({ ...p, phone: v }))}
+                      type="tel"
+                      placeholder="0123456789"
+                    />
+                    <EditField
+                      label="Giới tính"
+                      value={editForm.gender || ''}
+                      onChange={v => setEditForm(p => ({ ...p, gender: v }))}
+                      type="select"
+                      options={[
+                        { value: '', label: 'Chọn...' },
+                        { value: 'MALE', label: 'Nam' },
+                        { value: 'FEMALE', label: 'Nữ' },
+                        { value: 'OTHER', label: 'Khác' },
+                      ]}
+                    />
+                    <EditField
+                      label="Năm sinh"
+                      value={editForm.birthYear || ''}
+                      onChange={v => setEditForm(p => ({ ...p, birthYear: v }))}
+                      type="number"
+                      placeholder="1990"
+                    />
+                  </>
+                )}
 
-                {/* Birth Year */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Năm sinh</label>
-                  <input
-                    type="number"
-                    min="1900"
-                    max={new Date().getFullYear()}
-                    value={contactDraft.birthYear}
-                    onChange={(e) => setContactDraft(prev => ({ ...prev, birthYear: e.target.value }))}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
-                    placeholder="1990"
-                  />
-                </div>
+                {editingSection === 'details' && (
+                  <>
+                    <EditField
+                      label="Giới thiệu"
+                      value={editForm.bio || ''}
+                      onChange={v => setEditForm(p => ({ ...p, bio: v }))}
+                      type="textarea"
+                      placeholder="Viết vài dòng về bạn..."
+                    />
+                    <EditField
+                      label="Sở thích"
+                      value={editForm.hobbies || ''}
+                      onChange={v => setEditForm(p => ({ ...p, hobbies: v }))}
+                      type="textarea"
+                      placeholder="Sở thích của bạn..."
+                    />
+                    <EditField
+                      label="Ngôn ngữ (phân cách bằng dấu phẩy)"
+                      value={editForm.languages || ''}
+                      onChange={v => setEditForm(p => ({ ...p, languages: v }))}
+                      type="text"
+                      placeholder="Tiếng Việt, English, Español"
+                    />
+                  </>
+                )}
+              </div>
 
-                {/* Location */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Địa chỉ</label>
-                  <input
-                    type="text"
-                    value={contactDraft.location}
-                    onChange={(e) => setContactDraft(prev => ({ ...prev, location: e.target.value }))}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
-                    placeholder="TP. Hồ Chí Minh, Việt Nam"
-                  />
-                </div>
-
-                {/* Work */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Nơi làm việc</label>
-                  <input
-                    type="text"
-                    value={contactDraft.work}
-                    onChange={(e) => setContactDraft(prev => ({ ...prev, work: e.target.value }))}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
-                    placeholder="Công ty ABC"
-                  />
-                </div>
-
-                <div className="flex justify-end gap-2 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal(null)}
-                    className="rounded-lg px-3 py-1.5 text-sm text-text-secondary hover:bg-white/5"
-                  >
-                    Hủy
-                  </button>
-                  <button
-                    type="button"
-                    onClick={saveContact}
-                    disabled={savingModal}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-neon-violet to-neon-pink px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-40"
-                  >
-                    {savingModal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
-                    Lưu
-                  </button>
-                </div>
+              <div className="flex gap-3 p-4 border-t border-darkborder bg-darkcard/50">
+                <button
+                  onClick={() => setEditingSection(null)}
+                  className="flex-1 py-2.5 rounded-xl border border-darkborder text-text-secondary hover:bg-darkcard/50 transition-colors"
+                >
+                  Hủy
+                </button>
+                <button
+                  onClick={saveProfileUpdate}
+                  disabled={saving}
+                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-neon-violet to-neon-purple text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-neon-violet/20"
+                >
+                  {saving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Check className="h-4 w-4" />
+                  )}
+                  Lưu
+                </button>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
 
-      {/* ─── Personal Edit Modal ─────────────────────────────────── */}
-      <AnimatePresence>
-        {activeModal === 'personal' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
-            onClick={() => !savingModal && setActiveModal(null)}
+// ─── Sub-components ────────────────────────────────────────────
+
+function InfoItem({ 
+  icon: Icon, 
+  label, 
+  value, 
+  isLink 
+}: { 
+  icon: ComponentType<{ className?: string }>; 
+  label: string; 
+  value: string; 
+  isLink?: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-3 p-3 rounded-lg bg-darkbg/30 hover:bg-darkbg/50 transition-colors">
+      <Icon className="h-4 w-4 text-neon-violet shrink-0" />
+      <div className="min-w-0 flex-1">
+        <p className="text-xs text-text-muted">{label}</p>
+        {isLink ? (
+          <a 
+            href={value} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-sm text-neon-violet hover:underline truncate block"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg overflow-hidden rounded-2xl border border-darkborder bg-[#0d0f18] shadow-2xl"
-            >
-              <div className="flex items-center justify-between border-b border-darkborder/60 px-5 py-3.5">
-                <h3 className="text-sm font-semibold text-text-primary">Chỉnh sửa thông tin cá nhân</h3>
-                <button
-                  type="button"
-                  onClick={() => setActiveModal(null)}
-                  className="rounded-lg p-1 text-text-muted hover:bg-white/5 hover:text-text-primary"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-              <div className="p-5 space-y-4">
-                {/* Bio */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Tiểu sử</label>
-                  <textarea
-                    value={bioDraft}
-                    onChange={(e) => setBioDraft(e.target.value)}
-                    maxLength={2000}
-                    rows={4}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none resize-none"
-                    placeholder="Viết vài dòng về bạn..."
-                  />
-                </div>
-
-                {/* Website */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Website</label>
-                  <input
-                    type="url"
-                    value={personalDraft.websiteUrl}
-                    onChange={(e) => setPersonalDraft(prev => ({ ...prev, websiteUrl: e.target.value }))}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
-                    placeholder="https://yourwebsite.com"
-                  />
-                </div>
-
-                {/* Education */}
-                <div>
-                  <label className="block text-xs text-text-muted mb-1.5">Học vấn</label>
-                  <input
-                    type="text"
-                    value={personalDraft.education}
-                    onChange={(e) => setPersonalDraft(prev => ({ ...prev, education: e.target.value }))}
-                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
-                    placeholder="Đại học XYZ"
-                  />
-                </div>
-
-                <div className="flex justify-end gap-2 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal(null)}
-                    className="rounded-lg px-3 py-1.5 text-sm text-text-secondary hover:bg-white/5"
-                  >
-                    Hủy
-                  </button>
-                  <button
-                    type="button"
-                    onClick={savePersonal}
-                    disabled={savingModal}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-neon-violet to-neon-pink px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-40"
-                  >
-                    {savingModal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
-                    Lưu
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+            {value.replace(/^https?:\/\//, '')}
+          </a>
+        ) : (
+          <p className="text-sm text-text-primary truncate">{value}</p>
         )}
-      </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
+function EditField({ 
+  label, 
+  value, 
+  onChange, 
+  type, 
+  placeholder,
+  options = []
+}: { 
+  label: string; 
+  value: string; 
+  onChange: (v: string) => void; 
+  type: string;
+  placeholder: string;
+  options?: { value: string; label: string }[];
+}) {
+  return (
+    <div>
+      <label className="block text-xs text-text-muted mb-1.5">{label}</label>
+      {type === 'textarea' ? (
+        <textarea
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          placeholder={placeholder}
+          rows={3}
+          className="w-full rounded-xl border border-darkborder bg-darkbg/60 px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none resize-none"
+        />
+      ) : type === 'select' ? (
+        <select
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          className="w-full rounded-xl border border-darkborder bg-darkbg/60 px-3 py-2.5 text-sm text-text-primary focus:border-neon-violet/50 focus:outline-none"
+        >
+          {options.map(opt => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type={type}
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          placeholder={placeholder}
+          className="w-full rounded-xl border border-darkborder bg-darkbg/60 px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+        />
+      )}
     </div>
   );
 }

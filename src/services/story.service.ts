@@ -283,7 +283,7 @@ export async function viewStory(storyId: number, userId: number) {
 
   await prisma.storyView.upsert({
     where: {
-      storyId_userId: { storyId, userId },
+      uk_story_view: { storyId, userId },
     },
     create: { storyId, userId },
     update: {},
@@ -354,7 +354,7 @@ export async function hideStory(storyId: number, userId: number) {
 
   await prisma.storyHide.upsert({
     where: {
-      storyId_userId: { storyId, userId },
+      uk_story_hide: { storyId, userId },
     },
     create: { storyId, userId },
     update: {},

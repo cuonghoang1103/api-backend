@@ -1521,7 +1521,7 @@ export async function sharePost(postId: number, userId: number, platform?: strin
   // Check if already shared
   const existing = await prisma.socialShare.findUnique({
     where: {
-      postId_userId: { postId, userId },
+      uk_social_share_post_user: { postId, userId },
     },
   });
 
@@ -1546,7 +1546,7 @@ export async function sharePost(postId: number, userId: number, platform?: strin
  */
 export async function getShareStatus(postId: number, userId: number) {
   const share = await prisma.socialShare.findUnique({
-    where: { postId_userId: { postId, userId } },
+    where: { uk_social_share_post_user: { postId, userId } },
   });
   return { isShared: !!share };
 }

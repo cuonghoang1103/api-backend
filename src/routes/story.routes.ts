@@ -191,6 +191,21 @@ router.delete('/highlights', authenticate, async (req: any, res: Response<ApiRes
   }
 });
 
+// ─── PATCH /api/v1/stories/highlights/rename — Rename highlight ─
+router.patch('/highlights/rename', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { oldName, newName } = req.body;
+    if (!oldName || !newName) {
+      throw new AppError('oldName and newName are required', 400, 'MISSING_PARAMS');
+    }
+
+    const result = await renameHighlight(req.user.userId!, oldName, newName);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ─── PATCH /api/v1/stories/:id/privacy — Update privacy ─────
 router.patch('/:id/privacy', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
   try {

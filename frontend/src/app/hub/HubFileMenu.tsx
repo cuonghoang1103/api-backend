@@ -5,7 +5,7 @@
  * Provides status change, delete, share, and manage shares functionality
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Trash2, Share2, Users, MoreVertical } from 'lucide-react';
 import type { HubFile } from '@/lib/api';
 import { cn } from '@/lib/utils';
@@ -34,9 +34,32 @@ export default function HubFileMenu({
   sharedCount,
 }: HubFileMenuProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close on click outside
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [menuOpen]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [menuOpen]);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={menuRef}>
       <button
         onClick={() => setMenuOpen((v) => !v)}
         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-white/5 hover:text-text-primary"
@@ -46,12 +69,14 @@ export default function HubFileMenu({
       </button>
 
       {menuOpen && (
-        <>
+        <div className="fixed z-[9999] mt-1 w-48 overflow-visible">
+          {/* Backdrop */}
           <div
-            className="fixed inset-0 z-10"
+            className="fixed inset-0 z-[-1]"
             onClick={() => setMenuOpen(false)}
           />
-          <div className="absolute right-0 top-full z-20 mt-1 w-44 overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/95 shadow-2xl backdrop-blur-xl">
+
+          <div className="overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/98 shadow-2xl backdrop-blur-xl">
             {/* Status options */}
             <div className="border-b border-white/[0.06] px-2 py-1.5">
               <p className="mb-1 px-1 text-[9px] font-semibold uppercase tracking-wider text-text-muted">
@@ -122,7 +147,7 @@ export default function HubFileMenu({
               </button>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

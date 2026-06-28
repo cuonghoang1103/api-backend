@@ -326,16 +326,18 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
     setShowShareMenu(false);
     const wasShared = (post as any).isShared ?? false;
     const willBeShared = !wasShared;
+    const currentSharesCount = (post as any).sharesCount ?? 0;
+    const willBeSharesCount = willBeShared ? currentSharesCount + 1 : Math.max(0, currentSharesCount - 1);
 
     // Snapshot TQ cache + Zustand for rollback
     const snapshot = snapshotFeed();
 
     // Optimistic UI — patch TQ cache
-    patchFeed(post.id, (p) => ({ ...p, isShared: willBeShared }));
+    patchFeed(post.id, (p) => ({ ...p, isShared: willBeShared, sharesCount: willBeSharesCount }));
     // Optimistic UI — patch Zustand
     useSocialStore.setState((s) => ({
       posts: s.posts.map((p) =>
-        p.id === post.id ? { ...p, isShared: willBeShared } : p
+        p.id === post.id ? { ...p, isShared: willBeShared, sharesCount: willBeSharesCount } : p
       ),
     }));
 
@@ -356,7 +358,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
       restoreSnapshot(snapshot);
       useSocialStore.setState((s) => ({
         posts: s.posts.map((p) =>
-          p.id === post.id ? { ...p, isShared: wasShared } : p
+          p.id === post.id ? { ...p, isShared: wasShared, sharesCount: currentSharesCount } : p
         ),
       }));
       toast.error(err?.response?.data?.message || 'Không thể đăng lại');
@@ -1102,6 +1104,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
           handleShare={handleShare}
           handleRepost={handleRepost}
           isShared={(post as any).isShared ?? false}
+          sharesCount={(post as any).sharesCount ?? 0}
           showShareMenu={showShareMenu}
           setShowShareMenu={setShowShareMenu}
           showMessengerPicker={showMessengerPicker}
@@ -2990,6 +2993,7 @@ function PostActionsBar(props: {
   handleShare: (kind: string) => void;
   handleRepost: () => void; // Phase 6 — repost toggle
   isShared: boolean;
+  sharesCount: number; // Phase 6 — repost count
   showShareMenu: boolean;
   setShowShareMenu: (v: boolean) => void;
   // Phase 6 — Send-to-Messenger picker state (Instagram-style).
@@ -3032,6 +3036,7 @@ function PostActionsBar(props: {
     handleShare,
     handleRepost,
     isShared,
+    sharesCount,
     showShareMenu,
     setShowShareMenu,
     showMessengerPicker,
@@ -3227,6 +3232,9 @@ function PostActionsBar(props: {
           title={isShared ? 'Huỷ đăng lại' : 'Đăng lại'}
         >
           <Repeat2 size={15} fill={isShared ? '#22c55e' : 'none'} />
+          {sharesCount > 0 && (
+            <span className="tabular-nums">{sharesCount}</span>
+          )}
         </motion.button>
 
         {/* ─── Share (opens Send-to-Messenger modal) ─────────── */}

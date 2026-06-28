@@ -1518,26 +1518,39 @@ export async function sharePost(postId: number, userId: number, platform?: strin
   });
   if (!post) throw new AppError('Post not found', 404, 'POST_NOT_FOUND');
 
-  // Check if already shared
-  const existing = await prisma.socialShare.findUnique({
-    where: {
-      uk_social_share_post_user: { postId, userId },
-    },
-  });
+  // Use transaction to update sharesCount atomically
+  return prisma.$transaction(async (tx) => {
+    // Check if already shared
+    const existing = await tx.socialShare.findUnique({
+      where: {
+        uk_social_share_post_user: { postId, userId },
+      },
+    });
 
-  if (existing) {
-    // Already shared → unshare (toggle off)
-    await prisma.socialShare.delete({
-      where: { id: existing.id },
-    });
-    return { shared: false };
-  } else {
-    // Not shared → create share (toggle on)
-    await prisma.socialShare.create({
-      data: { postId, userId, platform },
-    });
-    return { shared: true };
-  }
+    if (existing) {
+      // Already shared → unshare (toggle off)
+      await tx.socialShare.delete({
+        where: { id: existing.id },
+      });
+      // Decrement sharesCount
+      await tx.socialPost.update({
+        where: { id: postId },
+        data: { sharesCount: { decrement: 1 } },
+      });
+      return { shared: false };
+    } else {
+      // Not shared → create share (toggle on)
+      await tx.socialShare.create({
+        data: { postId, userId, platform },
+      });
+      // Increment sharesCount
+      await tx.socialPost.update({
+        where: { id: postId },
+        data: { sharesCount: { increment: 1 } },
+      });
+      return { shared: true };
+    }
+  });
 }
 
 /**

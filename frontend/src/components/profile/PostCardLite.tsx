@@ -10,7 +10,7 @@
  *   - author + time
  *   - first image preview (single-tile, 4:5)
  *   - caption (truncated)
- *   - counts: like, comment
+ *   - counts: like, comment, shares
  *   - "Open" link to the full post page
  *
  * Tapping the like button triggers an OPTIMISTIC update on the
@@ -19,10 +19,12 @@
  * the full feed uses.
  */
 
-import { Heart, MessageCircle, Image as ImageIcon, ExternalLink } from 'lucide-react';
+import { Heart, MessageCircle, Image as ImageIcon, ExternalLink, Repeat2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { socialApi } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 export interface PostCardLiteProps {
   post: {
@@ -32,13 +34,19 @@ export interface PostCardLiteProps {
     author?: { id: number; username: string; displayName?: string; avatarUrl?: string | null };
     media?: Array<{ type: 'IMAGE' | 'VIDEO'; url: string; thumbnail?: string | null; alt?: string | null }>;
     _count?: { likes: number; comments: number };
+    sharesCount?: number;
+    isShared?: boolean;
   };
   onToggleLike: () => void;
+  onRepostChange?: (isShared: boolean, sharesCount: number) => void;
 }
 
-export default function PostCardLite({ post, onToggleLike }: PostCardLiteProps) {
+export default function PostCardLite({ post, onToggleLike, onRepostChange }: PostCardLiteProps) {
+  const router = useRouter();
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post._count?.likes ?? 0);
+  const [isShared, setIsShared] = useState(post.isShared ?? false);
+  const [sharesCount, setSharesCount] = useState(post.sharesCount ?? 0);
   const firstImage = post.media?.find((m) => m.type === 'IMAGE') ?? post.media?.[0];
 
   const handleLike = (e: React.MouseEvent) => {
@@ -47,6 +55,31 @@ export default function PostCardLite({ post, onToggleLike }: PostCardLiteProps) 
     setLiked((v) => !v);
     setLikeCount((c) => c + (liked ? -1 : 1));
     onToggleLike();
+  };
+
+  const handleRepost = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const willBeShared = !isShared;
+    const willBeSharesCount = willBeShared ? sharesCount + 1 : Math.max(0, sharesCount - 1);
+
+    // Optimistic update
+    setIsShared(willBeShared);
+    setSharesCount(willBeSharesCount);
+
+    try {
+      const res = await socialApi.sharePost(post.id);
+      const data = (res as any)?.data?.data;
+      const nowShared = data?.shared ?? willBeShared;
+      const nowSharesCount = nowShared ? sharesCount + 1 : Math.max(0, sharesCount - 1);
+      setIsShared(nowShared);
+      setSharesCount(nowSharesCount);
+      onRepostChange?.(nowShared, nowSharesCount);
+    } catch {
+      // Rollback
+      setIsShared(isShared);
+      setSharesCount(sharesCount);
+    }
   };
 
   return (
@@ -129,6 +162,20 @@ export default function PostCardLite({ post, onToggleLike }: PostCardLiteProps) 
             <MessageCircle className="h-3.5 w-3.5" />
             {post._count?.comments ?? 0}
           </div>
+          <button
+            type="button"
+            onClick={handleRepost}
+            className={cn(
+              'inline-flex items-center gap-1 rounded-full px-2 py-1 transition-colors',
+              isShared
+                ? 'bg-green-500/15 text-green-400'
+                : 'hover:bg-white/5 hover:text-text-primary',
+            )}
+            aria-label={isShared ? 'Huỷ đăng lại' : 'Đăng lại'}
+          >
+            <Repeat2 className={cn('h-3.5 w-3.5', isShared && 'fill-current')} />
+            {sharesCount > 0 && sharesCount}
+          </button>
           <div className="ml-auto inline-flex items-center gap-1 text-text-muted">
             <ExternalLink className="h-3.5 w-3.5" />
           </div>

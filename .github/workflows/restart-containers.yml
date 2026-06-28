@@ -22,16 +22,15 @@ jobs:
 
       - name: Restart all containers
         run: |
-          echo "--- Stopping containers ---"
-          ssh vps "cd /opt/cuonghoangdev && docker compose stop backend frontend nginx 2>&1 || true"
-          sleep 3
-          echo "--- Starting all services ---"
-          ssh vps "cd /opt/cuonghoangdev && docker compose up -d 2>&1"
-          sleep 15
-          echo "--- Container status ---"
+          echo "--- Current container status ---"
+          ssh vps "docker ps --filter name=cuonghoangdev --format 'table {{.Names}}\t{{.Status}}'"
+          echo "--- Restarting nginx ---"
+          ssh vps "cd /opt/cuonghoangdev && docker compose restart nginx 2>&1"
+          sleep 5
+          echo "--- Container status after restart ---"
           ssh vps "docker ps --filter name=cuonghoangdev --format 'table {{.Names}}\t{{.Status}}'"
 
       - name: Verify site
         run: |
-          sleep 10
+          sleep 5
           ssh vps "curl -sf https://cuongthai.com/ >/dev/null && echo 'Site is UP' || echo 'Site check failed'"

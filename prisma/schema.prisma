@@ -219,8 +219,9 @@ model User {
   noteLinks        NoteLink[]
   noteVocabEntries NoteVocabEntry[]
   // Phase 4 add — notes subject sharing
-  noteSubjectsOwned  NoteSubjectShare[] @relation("NoteSubjectSharesOwned")
-  noteSubjectsReceived NoteSubjectShare[] @relation("NoteSubjectSharesReceived")
+  noteSubjectsOwned  NoteSubjectShare[]          @relation("NoteSubjectSharesOwned")
+  noteSubjectsReceived NoteSubjectShare[]        @relation("NoteSubjectSharesReceived")
+  noteSubjectShareRecipients NoteSubjectShareRecipient[] @relation("UserShareRecipients")
 
   // ─── Social Follow Graph ────────────────────────────────
   following Follow[] @relation("Following")
@@ -3025,6 +3026,7 @@ model NoteSubject {
   links       NoteLink[]
   // Phase 4 add — subject-level sharing
   shares      NoteSubjectShare[]
+  shareRecipients NoteSubjectShareRecipient[] @relation("SubjectShareRecipients")
 
   @@index([userId, sortOrder], name: "idx_note_subjects_user_sort")
   @@index([userId, isPinned], name: "idx_note_subjects_user_pinned")
@@ -3046,9 +3048,10 @@ model NoteSubjectShare {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  subject   NoteSubject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  owner    User        @relation("NoteSubjectSharesOwned", fields: [ownerId], references: [id], onDelete: Cascade)
-  recipient User        @relation("NoteSubjectSharesReceived", fields: [recipientId], references: [id], onDelete: Cascade)
+  subject   NoteSubject              @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  owner    User                      @relation("NoteSubjectSharesOwned", fields: [ownerId], references: [id], onDelete: Cascade)
+  recipient User                     @relation("NoteSubjectSharesReceived", fields: [recipientId], references: [id], onDelete: Cascade)
+  recipients NoteSubjectShareRecipient[]
 
   @@unique([subjectId, recipientId], name: "uk_note_subject_share")
   @@index([ownerId], name: "idx_note_subject_share_owner")
@@ -3066,8 +3069,8 @@ model NoteSubjectShareRecipient {
   createdAt   DateTime @default(now()) @map("created_at")
 
   share    NoteSubjectShare @relation(fields: [shareId], references: [id], onDelete: Cascade)
-  subject  NoteSubject     @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  user    User             @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  subject  NoteSubject     @relation("SubjectShareRecipients", fields: [subjectId], references: [id], onDelete: Cascade)
+  user     User            @relation("UserShareRecipients", fields: [recipientId], references: [id], onDelete: Cascade)
 
   @@unique([shareId, recipientId], name: "uk_note_share_recipient")
   @@map("note_subject_share_recipients")

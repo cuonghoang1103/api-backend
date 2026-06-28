@@ -453,6 +453,16 @@ export async function getPostById(postId: number, currentUserId?: number) {
     ? (post.likes as Array<{ type: string }> | undefined)?.[0]?.type ?? null
     : null;
 
+  // Phase 6 — legacy music lookup. Same pattern as in getFeed.
+  // See the comment there for the rationale.
+  if (post.musicTrackId && !post.postMusic?.song) {
+    const song = await prisma.song.findUnique({
+      where: { id: post.musicTrackId },
+      select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSec: true },
+    });
+    if (song) (post as any)._song = song;
+  }
+
   return serializePost(post, {
     currentUserId,
     pollUserVotes,
@@ -656,17 +666,44 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
     }
   }
 
+  // Phase 6 — bulk-load songs for legacy posts. Posts created
+  // BEFORE the Phase-4 / Phase-5 fixes only have the legacy
+  // `musicTrackId` column populated (the PostMusic join row was
+  // never created). The new serializer handles the canonical
+  // `post.postMusic.song` join, but legacy posts need a direct
+  // song lookup. We do ONE query per feed load (instead of N+1)
+  // and attach the song row to each legacy post as `_song`.
+  const legacySongIds = items
+    .filter((p: any) => p.musicTrackId && !p.postMusic?.song)
+    .map((p: any) => p.musicTrackId)
+    .filter((id: any, idx: number, arr: any[]) => arr.indexOf(id) === idx);
+  let songsById = new Map<number, any>();
+  if (legacySongIds.length > 0) {
+    const songs = await prisma.song.findMany({
+      where: { id: { in: legacySongIds } },
+      select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSec: true },
+    });
+    songsById = new Map(songs.map((s) => [s.id, s]));
+  }
+
   return {
-    data: items.map((post: any) => serializePost(post, {
-      currentUserId,
-      pollUserVotes: pollVotesByPollId[post.poll?.id] || [],
-      reactionBreakdown: breakdownByPost.get(post.id) ?? { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
-      // SocialLike.type stores the reaction type (LIKE / LOVE / HAHA /
-      // SAD / ANGRY). Both the legacy LIKE button and the new emoji
-      // picker write to this column so this single read covers both.
-      myReactionType:
-        (post.likes as Array<{ type: string }> | undefined)?.[0]?.type ?? null,
-    })),
+    data: items.map((post: any) => {
+      // Attach the pre-loaded song as `_song` for legacy posts so
+      // serializePost can read it without a per-post query.
+      if (post.musicTrackId && !post.postMusic?.song && songsById.has(post.musicTrackId)) {
+        post._song = songsById.get(post.musicTrackId);
+      }
+      return serializePost(post, {
+        currentUserId,
+        pollUserVotes: pollVotesByPollId[post.poll?.id] || [],
+        reactionBreakdown: breakdownByPost.get(post.id) ?? { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
+        // SocialLike.type stores the reaction type (LIKE / LOVE / HAHA /
+        // SAD / ANGRY). Both the legacy LIKE button and the new emoji
+        // picker write to this column so this single read covers both.
+        myReactionType:
+          (post.likes as Array<{ type: string }> | undefined)?.[0]?.type ?? null,
+      });
+    }),
     pagination: {
       nextCursor,
       hasNextPage,
@@ -771,6 +808,23 @@ export function serializePost(
     // mapping, the sticker NEVER renders on the new posts
     // written via the Phase-4 composer. We map the join into
     // the legacy field here so the frontend keeps working.
+    //
+    // ─── Phase 6 fix (2026-06-28) ────────────────────────────
+    // Legacy posts written BEFORE the Phase-4 / Phase-5 fixes
+    // only have the legacy `musicTrackId` column populated (the
+    // PostMusic join row was never created — see the
+    // `createPost` legacy-branch fix earlier). For those posts
+    // `post.postMusic` is null but `post.musicTrackId` is set,
+    // so the `post.postMusic?.song` check above would yield
+    // null and the user would see a post-with-no-music.
+    //
+    // The serializer does an extra Prisma lookup (`song` here)
+    // ONLY when (a) the new join row is missing AND (b) the
+    // legacy musicTrackId column is populated. The lookup is
+    // cheap because the Song table is small (≤ a few hundred
+    // rows in practice) AND we cache nothing — the same lookup
+    // was effectively being done on every feed load anyway via
+    // the (broken) postMusic join.
     musicTrackId: post.musicTrackId ?? (post.postMusic?.songId ?? null),
     musicStartSec: post.musicStartSec ?? (post.postMusic?.startSec ?? null),
     musicTrack: post.postMusic?.song
@@ -782,7 +836,22 @@ export function serializePost(
           audioUrl: post.postMusic.song.audioUrl ?? null,
           durationSeconds: post.postMusic.song.durationSec ?? null,
         }
-      : (post.musicTrack ?? null),
+      : post._song
+      ? {
+          // Legacy posts (Phase 3/4) only have the `musicTrackId`
+          // column populated — no PostMusic join row exists.
+          // getFeed/getPostById bulk-load the Song row for these
+          // posts and attach it as `post._song` so we can ship the
+          // same shape as the canonical join path without a
+          // per-post query.
+          id: post._song.id,
+          title: post._song.title,
+          artist: post._song.artist,
+          coverImage: post._song.coverImage ?? null,
+          audioUrl: post._song.audioUrl ?? null,
+          durationSeconds: post._song.durationSec ?? null,
+        }
+      : ((post as any).musicTrack ?? null),
     // Content-type bucket for the feed tabs / per-type badge. Falls back
     // to POST for any row/query that didn't select it.
     type: post.type ?? 'POST',

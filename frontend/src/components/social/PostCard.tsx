@@ -7,13 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Heart, MessageCircle, Bookmark, Share2, MoreHorizontal, Send,
   Repeat2, Trash2, Copy, Flag, Eye, Globe, Users, Lock,
-  X, Youtube,
+  X, Youtube, Music2,
   Download, FileText, FileCode, FileArchive, FileSpreadsheet,
   CornerDownRight,
   Loader2,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
-import { socialApi } from '@/lib/api';
+import { socialApi, messagingApi, type MessagingThread } from '@/lib/api';
 import MentionAutocomplete from '@/components/social/MentionAutocomplete';
 import { RenderContentWithCode } from '@/components/social/CodeBlock';
 import PostPoll from '@/components/social/PostPoll';
@@ -23,6 +23,7 @@ import SocialSavePopover, {
 import SocialSavePopoverV2 from '@/components/social/SocialSavePopoverV2';
 import MusicSticker, { type MusicTrackMini } from '@/components/social/MusicSticker';
 import { useAuthStore } from '@/store/authStore';
+import { useMessagingStore } from '@/store/messagingStore';
 import { getMediaUrl } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext, FeedSaveResult } from '@/types/social';
@@ -85,6 +86,10 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
   const [commentMentions, setCommentMentions] = useState<Set<number>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  // Phase 6 — "Gửi qua Messenger" picker. True when the user
+  // taps the Send icon on the action bar and the thread picker
+  // modal is open.
+  const [showMessengerPicker, setShowMessengerPicker] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showReactions, setShowReactions] = useState(false);
   // ─── Saved Collections popover (legacy single-folder, kept
@@ -131,6 +136,11 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
   // popover is left alone.
   const { toggleLike, toggleReaction, toggleSave, loadComments, commentsByPost, loadMoreComments, commentsHasMoreByPost, isLoadingComments, addOptimisticComment, deletePost } = useSocialStore();
   const { user: currentUser } = useAuthStore();
+  // Phase 6 — "Send to Messenger" picker. We don't load the threads
+  // on mount because most users won't tap Share on every card;
+  // instead the modal triggers loadThreads() lazily when it opens
+  // so we don't hammer the API on feed scroll.
+  const loadThreads = useMessagingStore((s) => s.loadThreads);
   const qc = useQueryClient();
 
   // ─── Query cache helpers (added 2026-06-20) ────────────────────
@@ -823,7 +833,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
         // Default: clip overflow so rounded corners + shadows stay clean.
         // Open menu: escape the card boundary so dropdowns can
         // overlay the NEXT post in the feed.
-        (showShareMenu || showMoreMenu || showReactions || showSavePopover || showSavePopoverV2)
+        (showShareMenu || showMoreMenu || showReactions || showSavePopover || showSavePopoverV2 || showMessengerPicker)
           ? 'overflow-visible z-30'
           : 'overflow-hidden',
       )}
@@ -844,6 +854,33 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
           background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.4), rgba(6,182,212,0.4), transparent)',
         }}
       />
+
+      {/* Music banner — Instagram-style header showing the
+          attached track ABOVE the post body. Renders only when
+          the post has a musicTrack. Tapping the banner is a
+          no-op for now (the user can still play via the
+          sticker on the media tile). */}
+      {post.musicTrack && (
+        <div
+          className="flex items-center gap-2 px-5 pt-3 pb-1 text-xs"
+          style={{ color: '#cbd5e1' }}
+        >
+          <span
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
+            style={{ background: 'rgba(139,92,246,0.18)', color: '#c4b5fd' }}
+            aria-hidden
+          >
+            <Music2 size={12} />
+          </span>
+          <span className="truncate">
+            <span className="text-text-muted">Nhạc nền · </span>
+            <span className="font-semibold text-text-primary">
+              {post.musicTrack.title}
+            </span>
+            <span className="text-text-muted"> — {post.musicTrack.artist}</span>
+          </span>
+        </div>
+      )}
 
       <div className="p-5">
         {/* Author row */}
@@ -1036,6 +1073,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
           handleShare={handleShare}
           showShareMenu={showShareMenu}
           setShowShareMenu={setShowShareMenu}
+          showMessengerPicker={showMessengerPicker}
+          setShowMessengerPicker={setShowMessengerPicker}
           safeIsSaved={safeIsSaved}
           safeSavesCount={safeSavesCount}
           saveButtonRef={saveButtonRef}
@@ -2399,14 +2438,29 @@ function MediaItem({
         e.stopPropagation();
         onClick();
       }}
-      className="relative h-full w-full overflow-hidden"
+      // Phase 6 — preserve the image's native aspect ratio.
+      // Previously the container was `overflow-hidden` and the
+      // img was `object-cover`, which CROPPED portraits/landscapes
+      // to a square. We now render the img at intrinsic size
+      // (width=100% of container, height driven by the image's
+      // intrinsic aspect ratio). The container is letterboxed
+      // black where the image doesn't fill, and the post card
+      // grows vertically to fit the image — same behaviour as
+      // Instagram's feed. The carousel's outer overflow-hidden
+      // container keeps the rounded corners clean.
+      className="relative block w-full overflow-hidden bg-black/40"
     >
       <img
         src={imgUrl}
         alt={item.alt || ''}
         loading="lazy"
         decoding="async"
-        className="h-full w-full object-cover transition-transform hover:scale-105"
+        // `block w-full h-auto` = image fills container width,
+        // height = natural aspect ratio. `mx-auto` centers the
+        // image when the parent is wider than the image (e.g.
+        // very-wide landscape images get letterboxed left/right).
+        className="block w-full h-auto mx-auto"
+        style={{ maxHeight: '80vh', objectFit: 'contain' }}
         // Drag protection: prevent the browser from interpreting
         // the image drag as a file download. We still let the
         // parent wrapper see pointerdown/pointermove for the
@@ -2905,6 +2959,9 @@ function PostActionsBar(props: {
   handleShare: (kind: string) => void;
   showShareMenu: boolean;
   setShowShareMenu: (v: boolean) => void;
+  // Phase 6 — Send-to-Messenger picker state (Instagram-style).
+  showMessengerPicker: boolean;
+  setShowMessengerPicker: (v: boolean) => void;
   // Bookmark + save popovers
   safeIsSaved: boolean;
   safeSavesCount: number;
@@ -2942,6 +2999,8 @@ function PostActionsBar(props: {
     handleShare,
     showShareMenu,
     setShowShareMenu,
+    showMessengerPicker,
+    setShowMessengerPicker,
     safeIsSaved,
     safeSavesCount,
     saveButtonRef,
@@ -3132,75 +3191,56 @@ function PostActionsBar(props: {
           <Repeat2 size={15} />
         </motion.button>
 
-        {/* ─── Share (opens dropdown menu) ──────────────────── */}
+        {/* ─── Share (opens Send-to-Messenger modal) ─────────── */}
         <div className="relative">
           <motion.button
-            onClick={() => setShowShareMenu(!showShareMenu)}
+            onClick={() => {
+              setShowShareMenu(false);
+              setShowMessengerPicker(true);
+              // The SendToMessengerModal lazy-loads the thread
+              // list via useMessagingStore on mount — no work
+              // needed here.
+            }}
             whileTap={{ scale: 0.88 }}
             whileHover={{ scale: 1.04 }}
             transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.6 }}
             className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
             style={{
-              color: showShareMenu ? '#22d3ee' : '#cbd5e1',
-              background: showShareMenu ? 'rgba(6,182,212,0.16)' : 'transparent',
+              color: showMessengerPicker ? '#22d3ee' : '#cbd5e1',
+              background: showMessengerPicker ? 'rgba(6,182,212,0.16)' : 'transparent',
             }}
-            aria-label="Chia sẻ"
-            aria-haspopup="menu"
-            aria-expanded={showShareMenu}
-            title="Chia sẻ"
+            aria-label="Gửi qua Messenger"
+            aria-haspopup="dialog"
+            aria-expanded={showMessengerPicker}
+            title="Gửi qua Messenger"
           >
-            <Share2 size={15} />
+            <Send size={15} />
           </motion.button>
-          <AnimatePresence>
-            {showShareMenu && (
-              <>
-                <div className="fixed inset-0 z-30" onClick={() => setShowShareMenu(false)} />
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 5 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: 5 }}
-                  // z-50 = above the click-outside catcher (z-30)
-                  // and above any sibling post's overflow-hidden
-                  // container. Combined with the PostCard's
-                  // conditional `z-30` + `overflow-visible`, this
-                  // guarantees the "Sao chép liên kết" / "Chia sẻ
-                  // lên X" menu floats above the next post in
-                  // the feed rather than being clipped at the
-                  // card boundary.
-                  className="absolute left-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-2xl py-1"
-                  style={{
-                    background: 'rgba(15,15,25,0.95)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    backdropFilter: 'blur(20px)',
-                  }}
-                >
-                  {[
-                    { key: 'copy', label: 'Sao chép liên kết' },
-                    { key: 'twitter', label: 'Chia sẻ lên X' },
-                    { key: 'facebook', label: 'Chia sẻ lên Facebook' },
-                    { key: 'repost', label: 'Repost về trang cá nhân' },
-                  ].map((item) => (
-                    <button
-                      key={item.key}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
-                      style={{ color: '#94a3b8' }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                        e.currentTarget.style.color = '#e2e8f0';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'transparent';
-                        e.currentTarget.style.color = '#94a3b8';
-                      }}
-                      onClick={() => handleShare(item.key)}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
+          {/* Phase 6 — keep the legacy copy-link / repost as a small
+              dropdown reachable via a long-press / right-click
+              escape hatch. Default flow is the Instagram-style
+              messenger picker above. */}
+          {showShareMenu && (
+            <div
+              className="absolute right-0 top-full z-50 mt-1 w-48 overflow-hidden rounded-2xl py-1"
+              style={{
+                background: 'rgba(15,15,25,0.95)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                backdropFilter: 'blur(20px)',
+              }}
+            >
+              <button
+                className="flex w-full items-center gap-2 px-3 py-2 text-sm"
+                style={{ color: '#94a3b8' }}
+                onClick={() => { setShowShareMenu(false); handleShare('copy'); }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = '#e2e8f0'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#94a3b8'; }}
+              >
+                <Copy size={14} />
+                Sao chép liên kết
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Spacer pushes the bookmark button to the far right */}
@@ -3257,7 +3297,185 @@ function PostActionsBar(props: {
         open={showSavePopoverV2}
         onClose={() => setShowSavePopoverV2(false)}
       />
+      {/* ─── Phase 6 — Send-to-Messenger modal (Instagram-style) ──── */}
+      <SendToMessengerModal
+        open={showMessengerPicker}
+        onClose={() => setShowMessengerPicker(false)}
+        post={post}
+        authorDisplay={
+          (post as any)?.author?.displayName
+          || (post as any)?.author?.fullName
+          || (post as any)?.author?.username
+          || 'Bài viết'
+        }
+      />
     </>
+  );
+}
+
+// ─── SendToMessengerModal ───────────────────────────────────────────────
+// Phase 6 — Instagram-style "Send post to a chat thread" modal.
+// Opens when the user taps the Send icon in the action bar. Shows
+// the recent threads list; tapping a row sends a message with the
+// post URL + a short preview. The action bar triggers this via
+// the `showMessengerPicker` / `setShowMessengerPicker` props.
+function SendToMessengerModal({
+  open,
+  onClose,
+  post,
+  authorDisplay,
+}: {
+  open: boolean;
+  onClose: () => void;
+  post: SocialPost;
+  authorDisplay: string;
+}) {
+  // Lazily fetch the thread list when the modal opens so we don't
+  // burn an API call on every feed card.
+  const threads = useMessagingStore((s) => s.threads);
+  const threadsLoading = useMessagingStore((s) => s.threadsLoading);
+  const threadsLoaded = useMessagingStore((s) => s.threadsLoaded);
+  const loadThreads = useMessagingStore((s) => s.loadThreads);
+  const sendMessage = useMessagingStore((s) => s.sendMessage);
+
+  useEffect(() => {
+    if (open && !threadsLoaded && !threadsLoading) {
+      loadThreads().catch(() => { /* toast handled in store */ });
+    }
+    // We intentionally depend only on `open` so a re-fetch happens
+    // only when the modal opens, not on every thread update.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  const [sendingTo, setSendingTo] = useState<number | null>(null);
+
+  const postUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}/social/post/${post.id}`
+    : `/social/post/${post.id}`;
+  const previewText = `📌 Bài viết của ${authorDisplay}${post.content ? `: ${post.content.slice(0, 120)}` : ''}\n${postUrl}`;
+
+  const handleSend = async (thread: MessagingThread) => {
+    if (sendingTo) return;
+    setSendingTo(thread.id);
+    try {
+      await sendMessage(thread.id, previewText);
+      toast.success(`Đã gửi tới ${thread.peer?.displayName || thread.peer?.username || 'cuộc trò chuyện'}`);
+      onClose();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Gửi thất bại');
+    } finally {
+      setSendingTo(null);
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
+          onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Gửi qua Messenger"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.2 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative flex max-h-[80vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-darkborder bg-[#0d0f18] shadow-2xl"
+          >
+            <div className="flex items-center justify-between border-b border-darkborder/60 px-5 py-3.5">
+              <h3 className="flex items-center gap-2 text-sm font-semibold text-text-primary">
+                <Send size={16} className="text-neon-violet" />
+                Gửi qua Messenger
+              </h3>
+              <button
+                type="button"
+                onClick={onClose}
+                className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-white/5 hover:text-text-primary"
+                aria-label="Đóng"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Post preview chip — Instagram shows the post as a
+                visual chip above the thread list. We render the
+                author + a one-line content snippet so the user
+                knows what they're about to send. */}
+            <div className="border-b border-darkborder/40 bg-darkcard/30 px-5 py-3">
+              <div className="text-xs text-text-muted">Bài viết sẽ được gửi:</div>
+              <div className="mt-1 truncate text-sm font-medium text-text-primary">
+                {authorDisplay}
+                {post.content && (
+                  <span className="text-text-muted"> — {post.content.slice(0, 80)}{post.content.length > 80 ? '…' : ''}</span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto">
+              {threadsLoading && threads.length === 0 ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="h-5 w-5 animate-spin text-text-muted" />
+                </div>
+              ) : threads.length === 0 ? (
+                <div className="px-5 py-10 text-center text-sm text-text-muted">
+                  Bạn chưa có cuộc trò chuyện nào.
+                  <br />
+                  Hãy bắt đầu một cuộc trò chuyện trong trang Messenger trước.
+                </div>
+              ) : (
+                <ul className="divide-y divide-darkborder/40">
+                  {threads.map((t) => {
+                    const peer = t.peer;
+                    const lastMsg = t.lastMessage;
+                    const isSending = sendingTo === t.id;
+                    return (
+                      <li key={t.id}>
+                        <button
+                          type="button"
+                          onClick={() => handleSend(t)}
+                          disabled={!!sendingTo}
+                          className="flex w-full items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-white/[0.04] disabled:opacity-60"
+                        >
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-neon-violet/40 to-neon-pink/40 text-sm font-bold text-white">
+                            {peer?.avatarUrl ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={peer.avatarUrl} alt="" className="h-full w-full object-cover" />
+                            ) : (
+                              <span>{(peer?.displayName || peer?.username || '?').charAt(0).toUpperCase()}</span>
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate text-sm font-semibold text-text-primary">
+                              {peer?.displayName || peer?.username || 'Cuộc trò chuyện'}
+                            </div>
+                            <div className="truncate text-xs text-text-muted">
+                              {lastMsg?.content?.slice(0, 60) || (t.type === 'ADMIN' ? 'Hỗ trợ' : 'Bắt đầu trò chuyện')}
+                            </div>
+                          </div>
+                          {isSending ? (
+                            <Loader2 className="h-4 w-4 shrink-0 animate-spin text-neon-violet" />
+                          ) : (
+                            <Send className="h-4 w-4 shrink-0 text-text-muted" />
+                          )}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

@@ -318,13 +318,33 @@ router.get('/:id/posts', authenticate, async (req: any, res: Response<ApiRespons
     const sliced = items.slice(0, limit);
     const nextCursor = hasMore ? sliced[sliced.length - 1]?.id : null;
 
+    // Phase 6 — legacy music lookup for posts that have only the
+    // legacy `musicTrackId` column populated (no PostMusic join row).
+    // getFeed does this with a bulk query; here we just do a single
+    // per-id lookup since the profile tab loads ≤ limit posts.
+    const legacySongIds = sliced
+      .filter((p: any) => p.musicTrackId && !p.postMusic?.song)
+      .map((p: any) => p.musicTrackId);
+    const legacySongs = legacySongIds.length > 0
+      ? await prisma.song.findMany({
+          where: { id: { in: legacySongIds } },
+          select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSec: true },
+        })
+      : [];
+    const legacySongById = new Map(legacySongs.map((s) => [s.id, s]));
+
     const { serializePost } = await import('../services/social.service.js');
-    const data = sliced.map((post: any) => serializePost(post, {
-      currentUserId: req.user.userId,
-      pollUserVotes: [],
-      reactionBreakdown: { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
-      myReactionType: null,
-    }));
+    const data = sliced.map((post: any) => {
+      if (post.musicTrackId && !post.postMusic?.song && legacySongById.has(post.musicTrackId)) {
+        post._song = legacySongById.get(post.musicTrackId);
+      }
+      return serializePost(post, {
+        currentUserId: req.user.userId,
+        pollUserVotes: [],
+        reactionBreakdown: { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
+        myReactionType: null,
+      });
+    });
 
     res.json({ success: true, data: { items: data, nextCursor, hasMore, limit } });
   } catch (err) {
@@ -477,8 +497,25 @@ router.get('/:id/liked', authenticate, async (req: any, res: Response<ApiRespons
     // Serialize using the same helper as the feed so PostCard
     // gets the canonical shape (including postMusic.song →
     // musicTrack mapping fixed below).
+    //
+    // Phase 6 — legacy music lookup for posts that have only the
+    // legacy `musicTrackId` column populated (no PostMusic join row).
+    const legacySongIdsLiked = orderedPosts
+      .filter((p: any) => p.musicTrackId && !p.postMusic?.song)
+      .map((p: any) => p.musicTrackId);
+    const legacySongsLiked = legacySongIdsLiked.length > 0
+      ? await prisma.song.findMany({
+          where: { id: { in: legacySongIdsLiked } },
+          select: { id: true, title: true, artist: true, audioUrl: true, coverImage: true, durationSec: true },
+        })
+      : [];
+    const legacySongByIdLiked = new Map(legacySongsLiked.map((s) => [s.id, s]));
+
     const { serializePost } = await import('../services/social.service.js');
     const data = orderedPosts.map((post: any) => {
+      if (post.musicTrackId && !post.postMusic?.song && legacySongByIdLiked.has(post.musicTrackId)) {
+        post._song = legacySongByIdLiked.get(post.musicTrackId);
+      }
       // Compute the viewer's reaction breakdown for THIS post so
       // PostCard highlights the correct emoji.
       const breakdown = { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 };

@@ -305,6 +305,7 @@ export default function NotesShareManagerModal({
                     </div>
                   )}
                 </div>
+                </div>
               ) : null}
 
               {/* Permission select */}

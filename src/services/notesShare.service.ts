@@ -105,7 +105,7 @@ export async function createNoteShare(
   // Check if already shared
   const existing = await prisma.noteSubjectShare.findUnique({
     where: {
-      subjectId_recipientId: {
+      uk_note_subject_share: {
         subjectId: input.subjectId,
         recipientId: resolvedRecipientId,
       },
@@ -250,7 +250,7 @@ export async function checkNoteAccess(userId: number, subjectId: number): Promis
   // Check for active share
   const share = await prisma.noteSubjectShare.findUnique({
     where: {
-      subjectId_recipientId: { subjectId, recipientId: userId },
+      uk_note_subject_share: { subjectId, recipientId: userId },
     },
   });
   if (!share) {

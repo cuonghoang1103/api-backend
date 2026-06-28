@@ -319,6 +319,50 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
     }
   };
 
+  // ─── Repost toggle (Phase 6) ─────────────────────────────────
+  // Snapshot the feed cache + Zustand before mutation so we can
+  // roll back on error.
+  const handleRepost = async () => {
+    setShowShareMenu(false);
+    const wasShared = (post as any).isShared ?? false;
+    const willBeShared = !wasShared;
+
+    // Snapshot TQ cache + Zustand for rollback
+    const snapshot = snapshotFeed();
+
+    // Optimistic UI — patch TQ cache
+    patchFeed(post.id, (p) => ({ ...p, isShared: willBeShared }));
+    // Optimistic UI — patch Zustand
+    useSocialStore.setState((s) => ({
+      posts: s.posts.map((p) =>
+        p.id === post.id ? { ...p, isShared: willBeShared } : p
+      ),
+    }));
+
+    try {
+      const res = await socialApi.sharePost(post.id);
+      const data = (res as any)?.data?.data;
+      // Server confirms the new state
+      const nowShared = data?.shared ?? willBeShared;
+      patchFeed(post.id, (p) => ({ ...p, isShared: nowShared }));
+      useSocialStore.setState((s) => ({
+        posts: s.posts.map((p) =>
+          p.id === post.id ? { ...p, isShared: nowShared } : p
+        ),
+      }));
+      toast.success(nowShared ? 'Đã đăng lại' : 'Đã huỷ đăng lại');
+    } catch (err: any) {
+      // Roll back on error
+      restoreSnapshot(snapshot);
+      useSocialStore.setState((s) => ({
+        posts: s.posts.map((p) =>
+          p.id === post.id ? { ...p, isShared: wasShared } : p
+        ),
+      }));
+      toast.error(err?.response?.data?.message || 'Không thể đăng lại');
+    }
+  };
+
   const handleShare = (platform: string) => {
     setShowShareMenu(false);
     if (platform === 'copy') {
@@ -327,25 +371,10 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
       return;
     }
     if (platform === 'repost') {
-      // Retweet-style share: create a new post with the same content
-      // prefixed by "🔁 Repost from @author". We keep the link back
-      // to the original so credit is preserved.
-      const link = `${window.location.origin}/social/post/${post.id}`;
-      const text = `🔁 Repost từ @${authorObj?.username ?? 'user'}\n\n${safeContent.slice(0, 280)}`;
-      const composer = document.querySelector<HTMLTextAreaElement>('textarea[placeholder*="nghĩ"]');
-      if (composer) {
-        composer.value = text;
-        composer.dispatchEvent(new Event('input', { bubbles: true }));
-        composer.focus();
-        composer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        toast.success('Đã điền vào khung soạn — bấm "Đăng" để repost');
-      } else {
-        navigator.clipboard.writeText(`${text}\n\n${link}`);
-        toast.success('Đã sao chép nội dung repost');
-      }
+      void handleRepost();
       return;
     }
-    socialApi.sharePost(post.id, platform).catch(() => {});
+    void socialApi.sharePost(post.id, platform);
     const urls: Record<string, string> = {
       twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(safeContent.slice(0, 100))}&url=${encodeURIComponent(window.location.origin + '/social/post/' + post.id)}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/social/post/' + post.id)}`,
@@ -1071,6 +1100,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
           safeCommentsCount={safeCommentsCount}
           handleToggleComments={handleToggleComments}
           handleShare={handleShare}
+          handleRepost={handleRepost}
+          isShared={(post as any).isShared ?? false}
           showShareMenu={showShareMenu}
           setShowShareMenu={setShowShareMenu}
           showMessengerPicker={showMessengerPicker}
@@ -2957,6 +2988,8 @@ function PostActionsBar(props: {
   handleToggleComments: () => void;
   // Share / Repost
   handleShare: (kind: string) => void;
+  handleRepost: () => void; // Phase 6 — repost toggle
+  isShared: boolean;
   showShareMenu: boolean;
   setShowShareMenu: (v: boolean) => void;
   // Phase 6 — Send-to-Messenger picker state (Instagram-style).
@@ -2997,6 +3030,8 @@ function PostActionsBar(props: {
     safeCommentsCount,
     handleToggleComments,
     handleShare,
+    handleRepost,
+    isShared,
     showShareMenu,
     setShowShareMenu,
     showMessengerPicker,
@@ -3179,16 +3214,19 @@ function PostActionsBar(props: {
 
         {/* ─── Repost ──────────────────────────────────────── */}
         <motion.button
-          onClick={() => handleShare('repost')}
+          onClick={handleRepost}
           whileTap={{ scale: 0.88 }}
           whileHover={{ scale: 1.04 }}
           transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.6 }}
           className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
-          style={{ color: '#cbd5e1' }}
-          aria-label="Đăng lại"
-          title="Đăng lại"
+          style={{
+            color: isShared ? '#22c55e' : '#cbd5e1',
+            background: isShared ? 'rgba(34,197,94,0.16)' : 'transparent',
+          }}
+          aria-label={isShared ? 'Huỷ đăng lại' : 'Đăng lại'}
+          title={isShared ? 'Huỷ đăng lại' : 'Đăng lại'}
         >
-          <Repeat2 size={15} />
+          <Repeat2 size={15} fill={isShared ? '#22c55e' : 'none'} />
         </motion.button>
 
         {/* ─── Share (opens Send-to-Messenger modal) ─────────── */}
@@ -3358,7 +3396,11 @@ function SendToMessengerModal({
     if (sendingTo) return;
     setSendingTo(thread.id);
     try {
-      await sendMessage(thread.id, previewText);
+      // Phase 6: Send with postShare for clickable post preview card
+      await sendMessage(thread.id, {
+        content: previewText,
+        postShare: { postId: post.id },
+      });
       toast.success(`Đã gửi tới ${thread.peer?.displayName || thread.peer?.username || 'cuộc trò chuyện'}`);
       onClose();
     } catch (err: any) {

@@ -881,8 +881,11 @@ export function serializePost(
     likesCount: post._count?.likes ?? 0,
     commentsCount: post._count?.comments ?? 0,
     savesCount: post._count?.saves ?? 0,
+    // Phase 6 — sharesCount and isShared
+    sharesCount: post.sharesCount ?? 0,
     isLiked: currentUserId ? (post.likes as unknown[] | undefined)?.length ?? 0 > 0 : false,
     isSaved: currentUserId ? (post.saves as unknown[] | undefined)?.length ?? 0 > 0 : false,
+    isShared: currentUserId ? (post.shares as unknown[] | undefined)?.length ?? 0 > 0 : false,
     // ─── Reaction fields (added 2026-06-20) ────────────────────
     // The user's current reaction type (or null if they haven't
     // reacted). PostCard reads this to highlight the right emoji.
@@ -1501,7 +1504,12 @@ export async function getSaveFolders(userId: number) {
   };
 }
 
-// ─── Share ──────────────────────────────────────────────────────
+// ─── Share / Repost ─────────────────────────────────────────────
+//
+// Repost is a toggle: first click = repost (create SocialShare row),
+// second click = un-repost (delete the row). We use a unique
+// constraint on (postId, userId) to guarantee idempotency — if the
+// row already exists, upsert-delete handles it safely.
 
 export async function sharePost(postId: number, userId: number, platform?: string) {
   const post = await prisma.socialPost.findUnique({
@@ -1510,11 +1518,37 @@ export async function sharePost(postId: number, userId: number, platform?: strin
   });
   if (!post) throw new AppError('Post not found', 404, 'POST_NOT_FOUND');
 
-  await prisma.socialShare.create({
-    data: { postId, userId, platform },
+  // Check if already shared
+  const existing = await prisma.socialShare.findUnique({
+    where: {
+      postId_userId: { postId, userId },
+    },
   });
 
-  return { shared: true };
+  if (existing) {
+    // Already shared → unshare (toggle off)
+    await prisma.socialShare.delete({
+      where: { id: existing.id },
+    });
+    return { shared: false };
+  } else {
+    // Not shared → create share (toggle on)
+    await prisma.socialShare.create({
+      data: { postId, userId, platform },
+    });
+    return { shared: true };
+  }
+}
+
+/**
+ * Get share status for a post — returns whether the current user
+ * has shared this post.
+ */
+export async function getShareStatus(postId: number, userId: number) {
+  const share = await prisma.socialShare.findUnique({
+    where: { postId_userId: { postId, userId } },
+  });
+  return { isShared: !!share };
 }
 
 // ════════════════════════════════════════════════════════════════

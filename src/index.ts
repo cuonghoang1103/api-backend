@@ -400,6 +400,9 @@ app.use('/api/v1/admin/content', contentRoutes);
 app.use('/api/v1/system', systemRoutes);
 app.use('/api/v1/social', socialRoutes);
 app.use('/api/v1/social/notifications', notificationRoutes);
+// Stories / Tin (Phase 6)
+const storyRoutes = (await import(path.join(__dirname, 'routes', 'story.routes.js'))).default;
+app.use('/api/v1/stories', storyRoutes);
 // ─── Saved Collections alias (2026-06-20) ─────────────────────────
 // The Saved Collections endpoints are exposed under /api/v1/feed
 // per spec, but live in social.routes.ts (next to the existing

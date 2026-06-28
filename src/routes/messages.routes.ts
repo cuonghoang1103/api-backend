@@ -126,6 +126,7 @@ router.get('/threads/:id/messages', async (req: Request, res: Response, next: Ne
 });
 
 // ─── POST /api/v1/messages/threads/:id/messages ───────
+// Body: { content?, fileIds?, parentMessageId?, postShare?: { postId } }
 router.post('/threads/:id/messages', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -134,6 +135,8 @@ router.post('/threads/:id/messages', async (req: Request, res: Response, next: N
       content: req.body?.content,
       fileIds: req.body?.fileIds,
       parentMessageId: req.body?.parentMessageId ?? null,
+      // Phase 6: Post share preview in chat
+      postShare: req.body?.postShare,
     });
     res.status(201).json({ success: true, data: message });
   } catch (error) {

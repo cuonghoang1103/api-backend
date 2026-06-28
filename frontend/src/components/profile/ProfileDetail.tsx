@@ -44,10 +44,15 @@ import { cn } from '@/lib/utils';
 
 type Tab = 'posts' | 'media' | 'liked';
 
-export function ProfileDetail() {
+export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) {
   const router = useRouter();
   const params = useParams<{ id: string }>();
-  const id = Number(params?.id);
+  // When called without an explicit userId prop (e.g. from
+  // /profile — the OWN profile route), fall back to the [id]
+  // param. This lets the same component serve both the public
+  // /profile/[id]/v2 route and the own /profile route without
+  // duplicating fetch logic.
+  const id = propUserId ?? Number(params?.id);
   const { user: currentUser } = useAuthStore();
   const queryClient = useQueryClient();
 

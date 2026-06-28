@@ -124,6 +124,11 @@ model User {
   // into which collections.
   feedCollections         FeedCollection[]         @relation("FeedCollectionOwner")
   feedSavedPosts          FeedSavedPost[]
+  // Stories (Phase 6)
+  stories               Story[]
+  storyHighlights       StoryHighlight[]
+  storyViews           StoryView[]
+  storyHides           StoryHide[]
 
   // Notification graph — who is the receiver / sender on social
   // notifications. The reverse relations are defined on
@@ -1454,6 +1459,10 @@ model SocialPost {
   longitude    Float?   @db.DoublePrecision
   locationName String?  @map("location_name") @db.VarChar(255)
   viewCount    Int      @default(0) @map("view_count")
+  // Phase 6 — shares/reposts count. Tracks how many users have
+  // shared this post (via the repost toggle). Incremented on
+  // share, decremented on unshare.
+  sharesCount  Int      @default(0) @map("shares_count")
   // Optional YouTube link attached to the post. Used by the feed
   // composer ("Paste YouTube URL") and rendered as an embedded
   // player on the post card when present.
@@ -1739,6 +1748,10 @@ model SocialShare {
   post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
   user User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Phase 6 — unique constraint for repost toggle. One user can
+  // only share a post once. This enables the toggle semantics
+  // (first click = share, second click = unshare) in the service.
+  @@unique([postId, userId], name: "uk_social_share_post_user")
   @@index([postId], name: "idx_social_shares_post")
   @@index([userId], name: "idx_social_shares_user")
   @@index([createdAt(sort: Desc)], name: "idx_social_shares_created")
@@ -1997,6 +2010,8 @@ model Message {
   replies       Message[]           @relation("MessageReplies")
   attachments   MessageAttachment[]
   reactions     MessageReaction[]
+  // Phase 6 — shared social post preview in chat
+  postShare     MessagePostShare?
 
   @@index([threadId, createdAt], name: "idx_msg_thread_time")
   @@index([senderId], name: "idx_msg_sender")
@@ -2068,6 +2083,33 @@ model MessageAttachment {
 
   @@index([messageId], name: "idx_msg_attach_msg")
   @@map("message_attachments")
+}
+
+// ─── Message Post Share (Phase 6) ───────────────────────────────
+// When a user shares a social post into a chat thread, we store
+// the post preview (author, content snippet, media URL) here so
+// the message bubble can render a clickable card that links to
+// the original post at /social/post/:postId. The preview is
+// denormalised from the SocialPost at share-time so the card
+// remains readable even if the original post is later deleted
+// (we show a "bài viết đã bị xoá" stub in that case).
+model MessagePostShare {
+  id          Int      @id @default(autoincrement())
+  messageId   Int      @map("message_id")
+  postId      Int      @map("post_id")
+  // Denormalised preview data — copied from the post at share time
+  authorUsername String  @map("author_username") @db.VarChar(64)
+  authorDisplay  String? @map("author_display") @db.VarChar(128)
+  authorAvatar   String? @map("author_avatar") @db.VarChar(500)
+  contentPreview String  @map("content_preview") @db.Text
+  mediaThumbnail String? @map("media_thumbnail") @db.VarChar(700)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId], name: "uk_msg_post_share_msg")
+  @@index([postId], name: "idx_msg_post_share_post")
+  @@map("message_post_shares")
 }
 
 model MessageRead {
@@ -3193,4 +3235,90 @@ model UserProfile {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_profiles")
+}
+
+// ─── Stories / Tin (Phase 6) ──────────────────────────────────────
+// Instagram/Facebook-style ephemeral stories. Stories disappear after
+// 24h. Users can group them into Highlights (StoryHighlight) that
+// persist on the profile permanently.
+
+model Story {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  // Visibility: PUBLIC, FRIENDS, or PRIVATE (only the owner can see)
+  visibility  String   @default("PUBLIC") @map("visibility") @db.VarChar(20)
+  // Optional text overlay on the story (Instagram-style)
+  caption     String?  @db.Text
+  // Media URL (image or video) - can be empty for text-only stories
+  mediaUrl    String?  @map("media_url") @db.VarChar(700)
+  mediaType   String   @default("IMAGE") @map("media_type") @db.VarChar(10) // IMAGE | VIDEO
+  // Video duration in seconds (null for images)
+  duration    Int?     @map("duration_seconds")
+  // Thumbnail for video stories
+  thumbnail   String?  @db.VarChar(700)
+  // Background color for text-only stories (hex)
+  backgroundColor String? @map("background_color") @db.VarChar(7)
+  // When this story expires (24h from creation by default)
+  expiresAt   DateTime @map("expires_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  views        StoryView[]
+  highlights   StoryHighlight[]
+  hiddenBy     StoryHide[]
+
+  @@index([userId], name: "idx_story_user")
+  @@index([expiresAt], name: "idx_story_expires")
+  @@map("stories")
+}
+
+// Who has viewed a story
+model StoryView {
+  id        Int      @id @default(autoincrement())
+  storyId   Int      @map("story_id")
+  userId    Int      @map("user_id")
+  viewedAt  DateTime @default(now()) @map("viewed_at")
+
+  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([storyId, userId], name: "uk_story_view")
+  @@index([storyId], name: "idx_story_view_story")
+  @@index([userId], name: "idx_story_view_user")
+  @@map("story_views")
+}
+
+// Story Highlight - permanently pinned story on profile (like Facebook Highlights)
+model StoryHighlight {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  name      String   @db.VarChar(50)
+  // Stories in this highlight (can have multiple)
+  storyId   Int      @map("story_id")
+  // Order within the highlight
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  story  Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, storyId], name: "uk_highlight_story")
+  @@index([userId], name: "idx_highlight_user")
+  @@map("story_highlights")
+}
+
+// Hidden stories - users who can't see a story
+model StoryHide {
+  id        Int      @id @default(autoincrement())
+  storyId   Int      @map("story_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([storyId, userId], name: "uk_story_hide")
+  @@index([storyId], name: "idx_story_hide_story")
+  @@index([userId], name: "idx_story_hide_user")
+  @@map("story_hides")
 }

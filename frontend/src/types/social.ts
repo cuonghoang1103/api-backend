@@ -142,8 +142,10 @@ export interface SocialPost {
   likesCount: number;
   commentsCount: number;
   savesCount: number;
+  sharesCount?: number; // Phase 6 — repost count
   isLiked: boolean;
   isSaved: boolean;
+  isShared?: boolean; // Phase 6 — whether current user has shared/reposted
   savedFolder?: string | null;
   // ─── Multi-emoji reactions (added 2026-06-20) ──────────────────
   // The viewer's CURRENT reaction (one of ReactionType) or null

@@ -57,6 +57,7 @@ import {
   getSavedPosts,
   getSaveFolders,
   sharePost,
+  getShareStatus,
   votePoll,
   getPollForViewer,
   // Saved Collections v2 (added 2026-06-20) — multi-folder
@@ -990,7 +991,7 @@ router.get(
 );
 
 // ════════════════════════════════════════════════════════════════
-// POST /api/v1/social/posts/:id/share — Share post
+// POST /api/v1/social/posts/:id/share — Share/Repost post (toggle)
 // ════════════════════════════════════════════════════════════════
 router.post(
   '/posts/:id/share',
@@ -1003,6 +1004,26 @@ router.post(
 
       const { platform } = req.body;
       const result = await sharePost(postId, userId, platform);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/social/posts/:id/share-status — Get repost status
+// ════════════════════════════════════════════════════════════════
+router.get(
+  '/posts/:id/share-status',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = getUserId(req);
+      const postId = parseInt(req.params.id, 10);
+      if (isNaN(postId)) throw new AppError('Invalid post ID', 400, 'INVALID_ID');
+
+      const result = await getShareStatus(postId, userId);
       res.json({ success: true, data: result });
     } catch (error) {
       next(error);

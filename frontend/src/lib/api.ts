@@ -1166,9 +1166,14 @@ export const socialApi = {
       { params },
     ),
 
-  // Share
+  // Share / Repost — toggle endpoint (Phase 6)
+  // Returns { shared: boolean } — true = now shared, false = now unshared
   sharePost: (id: number, platform?: string) =>
-    api.post(`/social/posts/${id}/share`, { platform }),
+    api.post<{ success: true; data: { shared: boolean } }>(`/social/posts/${id}/share`, { platform }),
+
+  // Get share status for a post
+  getShareStatus: (id: number) =>
+    api.get<{ success: true; data: { isShared: boolean } }>(`/social/posts/${id}/share-status`),
 
   // Polls
   votePoll: (pollId: number, optionIds: number[]) =>
@@ -1264,6 +1269,109 @@ export const notificationApi = {
     api.patch<{ success: true; data: { updated: number } }>(
       '/social/notifications',
       body,
+    ),
+};
+
+// ─── Stories / Tin API (Phase 6) ────────────────────────────────────────────────
+
+export interface Story {
+  id: number;
+  userId: number;
+  visibility: 'PUBLIC' | 'FRIENDS' | 'PRIVATE';
+  caption: string | null;
+  mediaUrl: string | null;
+  mediaType: 'IMAGE' | 'VIDEO';
+  duration: number | null;
+  thumbnail: string | null;
+  backgroundColor: string | null;
+  expiresAt: string;
+  createdAt: string;
+  isOwn: boolean;
+  hasViewed: boolean;
+  viewsCount: number;
+  user: {
+    id: number;
+    username: string;
+    displayName: string | null;
+    avatarUrl: string | null;
+  };
+}
+
+export interface StoryHighlight {
+  id: number;
+  name: string;
+  sortOrder: number;
+  stories: Array<{
+    id: number;
+    thumbnail: string | null;
+    mediaUrl: string | null;
+    createdAt: string;
+  }>;
+}
+
+export const storiesApi = {
+  // Create story
+  create: (data: {
+    visibility?: 'PUBLIC' | 'FRIENDS' | 'PRIVATE';
+    caption?: string;
+    mediaUrl?: string;
+    mediaType?: 'IMAGE' | 'VIDEO';
+    duration?: number;
+    thumbnail?: string;
+    backgroundColor?: string;
+  }) =>
+    api.post<{ success: true; data: Story }>('/stories', data),
+
+  // Get stories for home feed bar
+  getFeedStories: () =>
+    api.get<{ success: true; data: Story[] }>('/stories/feed'),
+
+  // Get user's stories (for profile)
+  getUserStories: (userId: number) =>
+    api.get<{ success: true; data: Story[] }>(`/stories/user/${userId}`),
+
+  // Get all stories for viewer (ring)
+  getRingStories: () =>
+    api.get<{ success: true; data: Story[] }>('/stories/ring'),
+
+  // Get single story
+  getStory: (storyId: number) =>
+    api.get<{ success: true; data: Story }>(`/stories/${storyId}`),
+
+  // View a story
+  viewStory: (storyId: number) =>
+    api.post<{ success: true; data: { viewed: boolean } }>(`/stories/${storyId}/view`),
+
+  // Delete story
+  deleteStory: (storyId: number) =>
+    api.delete<{ success: true; data: { deleted: boolean } }>(`/stories/${storyId}`),
+
+  // Hide story
+  hideStory: (storyId: number) =>
+    api.post<{ success: true; data: { hidden: boolean } }>(`/stories/${storyId}/hide`),
+
+  // Add to highlight
+  addToHighlight: (storyId: number, name: string) =>
+    api.post<{ success: true; data: { added: boolean; highlightId: number } }>(
+      `/stories/${storyId}/highlight`,
+      { name },
+    ),
+
+  // Get user's highlights
+  getHighlights: (userId: number) =>
+    api.get<{ success: true; data: StoryHighlight[] }>(`/stories/highlights/${userId}`),
+
+  // Delete highlight
+  deleteHighlight: (name: string) =>
+    api.delete<{ success: true; data: { deleted: boolean } }>('/stories/highlights', {
+      data: { name },
+    }),
+
+  // Update privacy
+  updatePrivacy: (storyId: number, visibility: 'PUBLIC' | 'FRIENDS' | 'PRIVATE') =>
+    api.patch<{ success: true; data: { updated: boolean } }>(
+      `/stories/${storyId}/privacy`,
+      { visibility },
     ),
 };
 
@@ -1391,7 +1499,8 @@ export const messagingApi = {
   // Messages
   listMessages: (threadId: number, params?: { cursor?: number; limit?: number }) =>
     api.get<ApiResponse<MessagingMessage[]>>(`/messages/threads/${threadId}/messages`, { params }),
-  sendMessage: (threadId: number, data: { content?: string; fileIds?: number[]; parentMessageId?: number | null }) =>
+  // Phase 6: postShare param for sharing social posts into chat
+  sendMessage: (threadId: number, data: { content?: string; fileIds?: number[]; parentMessageId?: number | null; postShare?: { postId: number } }) =>
     api.post<ApiResponse<MessagingMessage>>(`/messages/threads/${threadId}/messages`, data),
   markRead: (threadId: number) =>
     api.patch<ApiResponse<{ success: boolean }>>(`/messages/threads/${threadId}/read`),
@@ -1654,6 +1763,16 @@ export interface MessagingMessage {
     senderId: number;
     senderName: string;
     content: string;
+  } | null;
+  // Phase 6: Shared post preview in chat
+  postShare?: {
+    id: number;
+    postId: number;
+    authorUsername: string;
+    authorDisplay?: string | null;
+    authorAvatar?: string | null;
+    contentPreview: string;
+    mediaThumbnail?: string | null;
   } | null;
 }
 

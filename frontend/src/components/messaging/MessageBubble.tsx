@@ -235,6 +235,70 @@ export default function MessageBubble({
           </div>
         )}
 
+        {/* Phase 6: Shared post preview card — clickable to view original post */}
+        {message.postShare && (
+          <a
+            href={`/social/post/${message.postShare.postId}`}
+            className={cn(
+              'mt-2 mx-3.5 mb-1 block rounded-xl overflow-hidden transition-opacity hover:opacity-90',
+              isOwn
+                ? 'bg-white/10 border border-white/10'
+                : 'bg-white/[0.04] border border-white/[0.06]',
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {/* Thumbnail if available */}
+            {message.postShare.mediaThumbnail && (
+              <div className="w-full h-32 overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={resolveUrl(message.postShare.mediaThumbnail)}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            {/* Content */}
+            <div className="p-2.5">
+              {/* Author row */}
+              <div className="flex items-center gap-2 mb-1.5">
+                {message.postShare.authorAvatar ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={message.postShare.authorAvatar}
+                    alt=""
+                    className="w-6 h-6 rounded-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold"
+                    style={{ background: 'linear-gradient(135deg, #06B6D4, #6366F1)', color: 'white' }}
+                  >
+                    {(message.postShare.authorDisplay || message.postShare.authorUsername).charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="text-xs font-semibold text-text-primary truncate">
+                  {message.postShare.authorDisplay || `@${message.postShare.authorUsername}`}
+                </span>
+              </div>
+              {/* Content preview */}
+              <p className="text-xs text-text-secondary line-clamp-3 leading-relaxed">
+                {message.postShare.contentPreview || 'Bài viết đã được chia sẻ'}
+              </p>
+              {/* Link indicator */}
+              <div className="mt-1.5 flex items-center gap-1 text-[10px] text-text-muted">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+                Xem bài viết
+              </div>
+            </div>
+          </a>
+        )}
+
         <div
           className={cn('mt-0.5 flex items-center gap-1 px-3.5 pb-1.5 text-[10px]', {
             'text-white/70': isOwn,

@@ -461,7 +461,7 @@ export class MessagesService {
   async sendMessage(
     threadId: number,
     senderId: number,
-    data: { content?: string; fileIds?: number[]; parentMessageId?: number | null },
+    data: { content?: string; fileIds?: number[]; parentMessageId?: number | null; postShare?: { postId: number } },
   ) {
     const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
     if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');
@@ -484,8 +484,10 @@ export class MessagesService {
 
     const content = (data.content ?? '').trim();
     const fileIds = Array.isArray(data.fileIds) ? data.fileIds.slice(0, MAX_ATTACHMENTS_PER_MESSAGE) : [];
-    if (!content && fileIds.length === 0) {
-      throw new AppError('Message must include text or at least one file', 400, 'EMPTY_MESSAGE');
+    const hasPostShare = !!data.postShare;
+
+    if (!content && fileIds.length === 0 && !hasPostShare) {
+      throw new AppError('Message must include text, files, or a post share', 400, 'EMPTY_MESSAGE');
     }
     if (content.length > MAX_CONTENT_LENGTH) {
       throw new AppError(
@@ -523,6 +525,36 @@ export class MessagesService {
       }
     }
 
+    // Phase 6: Build post share preview data if a post share is included
+    let postShareData: {
+      postId: number;
+      authorUsername: string;
+      authorDisplay: string | null;
+      authorAvatar: string | null;
+      contentPreview: string;
+      mediaThumbnail: string | null;
+    } | null = null;
+
+    if (hasPostShare && data.postShare) {
+      const post = await prisma.socialPost.findUnique({
+        where: { id: data.postShare.postId },
+        include: {
+          author: { select: { username: true, displayName: true, avatarUrl: true } },
+          media: { where: { type: 'IMAGE' }, take: 1, orderBy: { sortOrder: 'asc' } },
+        },
+      });
+      if (!post) throw new AppError('Bài viết không tồn tại', 404, 'POST_NOT_FOUND');
+
+      postShareData = {
+        postId: post.id,
+        authorUsername: post.author.username,
+        authorDisplay: post.author.displayName,
+        authorAvatar: post.author.avatarUrl,
+        contentPreview: post.content.slice(0, 200),
+        mediaThumbnail: post.media[0]?.thumbnail ?? post.media[0]?.url ?? null,
+      };
+    }
+
     const message = await prisma.message.create({
       data: {
         threadId,
@@ -532,6 +564,12 @@ export class MessagesService {
         attachments: fileIds.length
           ? {
               create: await this.buildAttachmentCreates(fileIds),
+            }
+          : undefined,
+        // Phase 6: Post share preview
+        postShare: postShareData
+          ? {
+              create: postShareData,
             }
           : undefined,
       },
@@ -552,6 +590,8 @@ export class MessagesService {
             sender: { select: { displayName: true, fullName: true, username: true } },
           },
         },
+        // Phase 6: Include post share in response
+        postShare: postShareData ? true : false,
       },
     });
 

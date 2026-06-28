@@ -312,6 +312,8 @@ router.get('/:id/posts', authenticate, async (req: any, res: Response<ApiRespons
         _count: { select: { likes: true, comments: true, saves: true } },
         likes: req.user.userId ? { where: { userId: req.user.userId }, select: { id: true } } : false,
         saves: req.user.userId ? { where: { userId: req.user.userId }, select: { id: true } } : false,
+        // Phase 6: Include shares to determine if current user has shared this post
+        shares: req.user.userId ? { where: { userId: req.user.userId }, select: { id: true } } : false,
       },
     });
     const hasMore = items.length === limit;

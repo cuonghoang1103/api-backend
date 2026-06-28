@@ -1,0 +1,48 @@
+name: Full Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Setup SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Full Deploy
+        run: |
+          echo "=== Current container status ==="
+          ssh vps "docker ps -a --filter name=cuonghoangdev --format 'table {{.Names}}\t{{.Status}}'"
+          
+          echo "=== Stopping all containers ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose down 2>&1 || true"
+          sleep 5
+          
+          echo "=== Starting all containers ==="
+          ssh vps "cd /opt/cuonghoangdev && docker compose up -d 2>&1"
+          sleep 30
+          
+          echo "=== Container status ==="
+          ssh vps "docker ps --filter name=cuonghoangdev --format 'table {{.Names}}\t{{.Status}}'"
+          
+          echo "=== Check frontend ==="
+          ssh vps "docker exec cuonghoangdev_frontend sh -c 'wget -qO- http://localhost:3000/ >/dev/null 2>&1 && echo FRONTEND_UP || echo FRONTEND_DOWN' 2>&1"
+          
+          echo "=== Check backend ==="
+          ssh vps "curl -sf http://localhost:3001/api/v1/health 2>&1 || curl -sf http://localhost:3001/ 2>&1"
+
+      - name: Verify site
+        run: |
+          sleep 10
+          ssh vps "curl -sf https://cuongthai.com/ >/dev/null && echo 'Site is UP' || echo 'Site check failed'"

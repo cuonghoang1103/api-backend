@@ -114,7 +114,8 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       .getProfile(id)
       .then((res: any) => {
         if (cancelled) return;
-        setProfile(res.data);
+        // API returns { success: true, data: profileData } - unwrap properly
+        setProfile(res.data?.data ?? res.data);
         setLoading(false);
       })
       .catch(() => {

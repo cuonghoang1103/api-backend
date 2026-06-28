@@ -3229,6 +3229,19 @@ model UserProfile {
   websiteUrl    String?  @map("website_url") @db.VarChar(500)
   work          String?  @db.VarChar(255)
   education     String?  @db.VarChar(255)
+
+  // ─── Extended "About" fields (FB-style profile) ─────────
+  // All optional. languages is stored as a comma-joined string
+  // (the UI splits/joins on ", ") to avoid a Postgres array column.
+  hometown           String? @db.VarChar(255)
+  jobTitle           String? @map("job_title") @db.VarChar(255)
+  workplace          String? @db.VarChar(255)
+  school             String? @db.VarChar(255)
+  college            String? @db.VarChar(255)
+  relationshipStatus String? @map("relationship_status") @db.VarChar(50)
+  hobbies            String? @db.Text
+  languages          String? @db.VarChar(255)
+
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 

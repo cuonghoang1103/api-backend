@@ -407,7 +407,12 @@ export const socialUserApi = {
   ) => api.get<{ data: { items: unknown[]; nextCursor: number | null; hasMore: boolean; limit: number } }>(`/users/${id}/liked`, { params }),
   // Phase 4 add — own profile (incl. lazy-create) and update.
   getOwnProfile: () => api.get('/users/me/profile'),
-  updateOwnProfile: (data: { bio?: string; coverPhoto?: string; location?: string; websiteUrl?: string; work?: string; education?: string }) =>
+  updateOwnProfile: (data: {
+    bio?: string; coverPhoto?: string; location?: string; websiteUrl?: string; work?: string; education?: string;
+    // Extended FB-style "About" fields
+    hometown?: string; jobTitle?: string; workplace?: string; school?: string; college?: string;
+    relationshipStatus?: string; hobbies?: string; languages?: string;
+  }) =>
     api.patch('/users/me/profile', data),
   toggleFollow: (targetId: number) => api.post('/users/follow', { targetId }),
   getFollowers: (id: number, cursor?: number, limit = 20) =>

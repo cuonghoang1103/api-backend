@@ -52,11 +52,23 @@ export interface UpdateProfileInput {
   websiteUrl?: string | null;
   work?: string | null;
   education?: string | null;
+  // ─── Extended "About" fields (FB-style profile) ─────────
+  hometown?: string | null;
+  jobTitle?: string | null;
+  workplace?: string | null;
+  school?: string | null;
+  college?: string | null;
+  relationshipStatus?: string | null;
+  hobbies?: string | null;
+  languages?: string | null;
 }
 
 const MAX_FIELD_LEN = 500;
 const MAX_BIO_LEN = 2000;
 const MAX_URL_LEN = 500;
+// Extended-field length caps (mirror the @db.VarChar sizes; longer
+// text fields use MAX_BIO_LEN, the 50-char relationship enum its own).
+const MAX_REL_LEN = 50;
 
 function validateInput(input: UpdateProfileInput): void {
   for (const [k, v] of Object.entries(input)) {
@@ -64,13 +76,17 @@ function validateInput(input: UpdateProfileInput): void {
     if (typeof v !== 'string') {
       throw new AppError(`${k} phai la chuoi hoac null`, 400, 'INVALID_FIELD');
     }
-    if (k === 'bio' && v.length > MAX_BIO_LEN) {
-      throw new AppError(`bio qua dai (max ${MAX_BIO_LEN})`, 400, 'BIO_TOO_LONG');
+    if ((k === 'bio' || k === 'hobbies') && v.length > MAX_BIO_LEN) {
+      throw new AppError(`${k} qua dai (max ${MAX_BIO_LEN})`, 400, `${k.toUpperCase()}_TOO_LONG`);
     }
     if ((k === 'websiteUrl' || k === 'coverPhoto') && v.length > MAX_URL_LEN) {
       throw new AppError(`${k} qua dai (max ${MAX_URL_LEN})`, 400, `${k.toUpperCase()}_TOO_LONG`);
     }
-    if ((k === 'location' || k === 'work' || k === 'education') && v.length > MAX_FIELD_LEN) {
+    if (k === 'relationshipStatus' && v.length > MAX_REL_LEN) {
+      throw new AppError(`${k} qua dai (max ${MAX_REL_LEN})`, 400, 'RELATIONSHIPSTATUS_TOO_LONG');
+    }
+    const fieldLenKeys = ['location', 'work', 'education', 'hometown', 'jobTitle', 'workplace', 'school', 'college', 'languages'];
+    if (fieldLenKeys.includes(k) && v.length > MAX_FIELD_LEN) {
       throw new AppError(`${k} qua dai (max ${MAX_FIELD_LEN})`, 400, `${k.toUpperCase()}_TOO_LONG`);
     }
     if (k === 'websiteUrl' && v && !/^https?:\/\//.test(v)) {
@@ -169,6 +185,14 @@ export async function updateOwnProfile(userId: number, input: UpdateProfileInput
   if ('websiteUrl' in input) data.websiteUrl = input.websiteUrl;
   if ('work' in input) data.work = input.work;
   if ('education' in input) data.education = input.education;
+  if ('hometown' in input) data.hometown = input.hometown;
+  if ('jobTitle' in input) data.jobTitle = input.jobTitle;
+  if ('workplace' in input) data.workplace = input.workplace;
+  if ('school' in input) data.school = input.school;
+  if ('college' in input) data.college = input.college;
+  if ('relationshipStatus' in input) data.relationshipStatus = input.relationshipStatus;
+  if ('hobbies' in input) data.hobbies = input.hobbies;
+  if ('languages' in input) data.languages = input.languages;
   await prisma.userProfile.update({ where: { userId }, data });
   return getOwnProfile(userId);
 }

@@ -39,6 +39,25 @@ export interface PublicProfileEnhanced {
   followerCount: number;
   followingCount: number;
   isFollowing: boolean;
+  // ─── Extended profile fields (FB-style About) ──────────
+  // User-level columns:
+  gender: string | null;
+  birthYear: number | null;
+  phone: string | null;
+  socialLinks: Record<string, string> | null;
+  // UserProfile-level columns (joined from user_profiles):
+  location: string | null;
+  websiteUrl: string | null;
+  work: string | null;
+  education: string | null;
+  hometown: string | null;
+  jobTitle: string | null;
+  workplace: string | null;
+  school: string | null;
+  college: string | null;
+  relationshipStatus: string | null;
+  hobbies: string | null;
+  languages: string | null;
 }
 
 export interface FollowerInfo {
@@ -109,7 +128,7 @@ export async function getFollowStatus(viewerId: number, targetId: number): Promi
 export async function getEnhancedPublicProfile(targetId: number, viewerId?: number): Promise<PublicProfileEnhanced | null> {
   const user = await prisma.user.findUnique({
     where: { id: targetId },
-    include: { roles: { include: { role: true } } },
+    include: { roles: { include: { role: true } }, profile: true },
   });
 
   if (!user) return null;
@@ -124,6 +143,7 @@ export async function getEnhancedPublicProfile(targetId: number, viewerId?: numb
       : Promise.resolve(null),
   ]);
 
+  const profile = user.profile;
   return {
     id: user.id,
     username: user.username,
@@ -139,6 +159,24 @@ export async function getEnhancedPublicProfile(targetId: number, viewerId?: numb
     followerCount,
     followingCount,
     isFollowing: !!isFollowingRow,
+    // ─── Extended profile (User-level) ──────────────────
+    gender: user.gender,
+    birthYear: user.birthYear,
+    phone: user.phone,
+    socialLinks: (user.socialLinks as Record<string, string> | null) ?? null,
+    // ─── Extended profile (UserProfile-level) ───────────
+    location: profile?.location ?? null,
+    websiteUrl: profile?.websiteUrl ?? null,
+    work: profile?.work ?? null,
+    education: profile?.education ?? null,
+    hometown: profile?.hometown ?? null,
+    jobTitle: profile?.jobTitle ?? null,
+    workplace: profile?.workplace ?? null,
+    school: profile?.school ?? null,
+    college: profile?.college ?? null,
+    relationshipStatus: profile?.relationshipStatus ?? null,
+    hobbies: profile?.hobbies ?? null,
+    languages: profile?.languages ?? null,
   };
 }
 

@@ -227,8 +227,9 @@ router.get('/me/profile', authenticate, async (req: any, res: Response<ApiRespon
 });
 
 // ─── PATCH /api/v1/users/me/profile ──────────────────────────
-// Body: any subset of { bio, coverPhoto, location,
-//                        websiteUrl, work, education }.
+// Body: any subset of { bio, coverPhoto, location, websiteUrl, work,
+//   education, hometown, jobTitle, workplace, school, college,
+//   relationshipStatus, hobbies, languages }.
 // Empty string sets the field to NULL.
 router.patch('/me/profile', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
   try {
@@ -239,6 +240,14 @@ router.patch('/me/profile', authenticate, async (req: any, res: Response<ApiResp
       websiteUrl: req.body.websiteUrl,
       work: req.body.work,
       education: req.body.education,
+      hometown: req.body.hometown,
+      jobTitle: req.body.jobTitle,
+      workplace: req.body.workplace,
+      school: req.body.school,
+      college: req.body.college,
+      relationshipStatus: req.body.relationshipStatus,
+      hobbies: req.body.hobbies,
+      languages: req.body.languages,
     };
     // "" → null so the UI can clear a field by sending an empty
     // string (e.g. user removes the bio textarea and hits save).

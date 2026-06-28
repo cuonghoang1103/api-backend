@@ -1642,15 +1642,25 @@ function MediaGrid({
   const onPointerDown = (e: React.PointerEvent) => {
     if (visual.length <= 1) return;
     // ─── Critical: don't capture the pointer if the user is
-    // touching an interactive element (the prev/next arrows,
-    // the dot pager, the counter pill). Capturing a pointer
-    // when the click started on a button REDIRECTS all
-    // subsequent pointer events to the carousel wrapper, which
-    // suppresses the synthetic click event on the button. The
-    // user sees a frozen carousel on every Next/Prev click.
-    // We bail out early so the button's own onClick fires. ───
+    // touching one of the carousel's OWN interactive elements
+    // (the prev/next arrows, the dot pager, the counter pill).
+    // Capturing a pointer when the click started on one of
+    // those buttons REDIRECTS all subsequent pointer events to
+    // the carousel wrapper and suppresses the synthetic click
+    // event on the button — the user sees a frozen carousel on
+    // every Next/Prev click.
+    //
+    // We match on aria-label / data-testid instead of the
+    // generic <button> selector because the IMAGE/VIDEO tiles
+    // themselves are wrapped in <button> for tap-to-open, and
+    // we DO want to start a drag from the tile body. ───
     const target = e.target as HTMLElement;
-    if (target.closest('button, [role="tab"], a, [role="button"]')) {
+    if (
+      target.closest('[data-carousel-control="1"]') ||
+      target.closest('[aria-label="Ảnh trước"], [aria-label="Ảnh sau"]') ||
+      target.closest('[data-testid^="media-dot-"]') ||
+      target.closest('a[href]')
+    ) {
       return;
     }
     // Only start drag on horizontal intent. A vertical scroll
@@ -1665,8 +1675,8 @@ function MediaGrid({
     startIdxRef.current = currentIdx;
     setDragOffset(0);
     // Capture on the INNER track (the flex container being
-    // transformed), not the outer wrapper. The buttons are
-    // siblings of the inner track so their pointer events
+    // transformed), not the outer wrapper. The control buttons
+    // are siblings of the inner track so their pointer events
     // don't fire here at all — which is exactly what we want.
     const inner = trackRef.current?.querySelector('[data-carousel-track]') as HTMLElement | null;
     try {
@@ -1679,11 +1689,17 @@ function MediaGrid({
   };
   const onPointerMove = (e: React.PointerEvent) => {
     if (!isDraggingRef.current) return;
-    // Defensive: if the move somehow originated on an
-    // interactive element, ignore. (Shouldn't happen now that
-    // onPointerDown bails out, but keep this as a safety net.)
+    // Defensive: if the move somehow originated on one of the
+    // carousel's own controls, ignore. (Shouldn't happen now
+    // that onPointerDown bails out, but keep this as a safety
+    // net.) We use the same selector logic as onPointerDown.
     const target = e.target as HTMLElement;
-    if (target.closest('button, [role="tab"], a, [role="button"]')) return;
+    if (
+      target.closest('[data-carousel-control="1"]') ||
+      target.closest('[aria-label="Ảnh trước"], [aria-label="Ảnh sau"]') ||
+      target.closest('[data-testid^="media-dot-"]') ||
+      target.closest('a[href]')
+    ) return;
 
     const dx = e.clientX - startXRef.current;
     const dy = e.clientY - startYRef.current;
@@ -1835,6 +1851,7 @@ function MediaGrid({
             onClick={() => setCurrentIdx((i) => Math.max(0, i - 1))}
             disabled={currentIdx === 0}
             aria-label="Ảnh trước"
+            data-carousel-control="1"
             className="absolute left-2 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center h-9 w-9 rounded-full bg-black/60 text-white transition-opacity hover:bg-black/80 disabled:opacity-0 md:flex"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -1846,6 +1863,7 @@ function MediaGrid({
             onClick={() => setCurrentIdx((i) => Math.min(visual.length - 1, i + 1))}
             disabled={currentIdx === visual.length - 1}
             aria-label="Ảnh sau"
+            data-carousel-control="1"
             className="absolute right-2 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center h-9 w-9 rounded-full bg-black/60 text-white transition-opacity hover:bg-black/80 disabled:opacity-0 md:flex"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

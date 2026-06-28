@@ -3397,10 +3397,7 @@ function SendToMessengerModal({
     setSendingTo(thread.id);
     try {
       // Phase 6: Send with postShare for clickable post preview card
-      await sendMessage(thread.id, {
-        content: previewText,
-        postShare: { postId: post.id },
-      });
+      await sendMessage(thread.id, previewText, undefined, undefined, { postId: post.id });
       toast.success(`Đã gửi tới ${thread.peer?.displayName || thread.peer?.username || 'cuộc trò chuyện'}`);
       onClose();
     } catch (err: any) {

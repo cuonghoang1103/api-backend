@@ -113,7 +113,8 @@ interface MessagingState {
 
   // Messages
   loadMoreMessages: (threadId: number) => Promise<void>;
-  sendMessage: (threadId: number, content: string, fileIds?: number[], parentMessageId?: number | null) => Promise<void>;
+  // Phase 6: postShare param for sharing social posts into chat
+  sendMessage: (threadId: number, content: string, fileIds?: number[], parentMessageId?: number | null, postShare?: { postId: number }) => Promise<void>;
   deleteMessage: (threadId: number, messageId: number) => Promise<void>;
   recallMessage: (threadId: number, messageId: number) => Promise<void>;
   toggleReaction: (threadId: number, messageId: number, emoji: string) => Promise<void>;
@@ -805,9 +806,9 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     }
   },
 
-  async sendMessage(threadId, content, fileIds, parentMessageId) {
+  async sendMessage(threadId, content, fileIds, parentMessageId, postShare) {
     const trimmed = content.trim();
-    if (!trimmed && !(fileIds && fileIds.length)) return;
+    if (!trimmed && !(fileIds && fileIds.length) && !postShare) return;
     const auth = useAuthStore.getState();
     const senderId = auth.user?.id;
     if (!senderId) return;
@@ -840,7 +841,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
             content: replySnap.content,
           }
         : null,
-    };
+      };
 
     // Clear reply state immediately on send
     set((s) => ({
@@ -856,6 +857,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
         content: trimmed,
         fileIds,
         parentMessageId: parentMessageId ?? replySnap?.id ?? null,
+        postShare,
       });
       const real = res.data.data;
       // Replace optimistic with real

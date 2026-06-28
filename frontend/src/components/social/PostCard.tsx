@@ -801,7 +801,32 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
       // The card keeps the same visual feel via the `.post-card-frame`
       // utility class (see globals.css) which uses a cheap inset
       // box-shadow that lives entirely on the GPU compositor.
-      className="post-card-frame group relative overflow-hidden rounded-3xl"
+      //
+      // Phase 6 — overflow + z-index: when ANY menu is open
+      // (share / save / reactions / more) we need the dropdowns
+      // to escape the card boundary (so they overlay the NEXT
+      // post instead of being clipped). Switching to
+      // `overflow-visible` is the simplest fix. The rounded
+      // corners stay intact because:
+      //   • The card's `border-radius` rounds the visible
+      //     background, which is fine — children that overflow
+      //     just show against the page background.
+      //   • The `.post-card-frame` inset box-shadow lives on the
+      //     GPU compositor and is independent of overflow.
+      //
+      // We also bump the z-index of THIS post card so its
+      // dropdowns always sit above sibling cards' content
+      // (otherwise two posts with dropdowns at the same z-40
+      // would each be clipped by the OTHER's overflow:hidden).
+      className={cn(
+        'post-card-frame group relative rounded-3xl',
+        // Default: clip overflow so rounded corners + shadows stay clean.
+        // Open menu: escape the card boundary so dropdowns can
+        // overlay the NEXT post in the feed.
+        (showShareMenu || showMoreMenu || showReactions || showSavePopover || showSavePopoverV2)
+          ? 'overflow-visible z-30'
+          : 'overflow-hidden',
+      )}
       // data-post-id lets the home page deep-link from a
       // notification (?post=N) to a specific card via querySelector
       // + scrollIntoView. Bounded: zero perf cost, the value is
@@ -918,7 +943,11 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     initial={{ opacity: 0, scale: 0.95, y: -5 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -5 }}
-                    className="absolute right-0 top-full z-40 mt-1 w-44 overflow-hidden rounded-2xl py-1"
+                    // Phase 6 — bump z-index from z-40 to z-50 so the
+                    // menu escapes the PostCard boundary (now
+                    // overflow-visible when any menu is open) and
+                    // overlays the next post in the feed.
+                    className="absolute right-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-2xl py-1"
                     style={{ background: 'rgba(15,15,25,0.95)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}
                   >
                     <button
@@ -1615,6 +1644,16 @@ function MediaGrid({
   const startIdxRef = useRef(0);
   const startYRef = useRef(0);
   const isDraggingRef = useRef(false);
+  // Phase 6 — trackpad / mouse-wheel horizontal swipe support.
+  // On macOS a two-finger trackpad swipe fires a `wheel` event
+  // with deltaX (not a pointer/touch event). We accumulate the
+  // deltaX and once it crosses a threshold we advance / rewind
+  // the carousel by one slide. wheelLockRef prevents the wheel
+  // events from queueing up while the slide transition is still
+  // animating (otherwise a single fast swipe would jump several
+  // slides at once).
+  const wheelAccumRef = useRef(0);
+  const wheelLockRef = useRef(false);
 
   // Keep currentIdx in range when the post is updated (e.g. a
   // new tile added/removed). We clamp instead of resetting so
@@ -1747,6 +1786,42 @@ function MediaGrid({
     } catch { /* noop */ }
   };
 
+  // Phase 6 — trackpad / mouse-wheel horizontal swipe. Two-finger
+  // swipes on macOS trackpads (and middle-button drags on Windows
+  // precision touchpads) deliver `wheel` events with deltaX values.
+  // We accumulate the delta until it crosses a threshold (~25% of
+  // the carousel width) and then advance / rewind by ONE slide. We
+  // lock for 350ms after a wheel-triggered advance so a single
+  // continuous gesture only registers as a single slide change.
+  //
+  // We do NOT preventDefault on vertical wheel events — page scroll
+  // should still work while the cursor is over the carousel.
+  const onWheel = (e: React.WheelEvent) => {
+    if (visual.length <= 1) return;
+    // Ignore pure vertical scroll so the page can still scroll
+    // past the post while the cursor is on the carousel.
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX) * 1.2) return;
+    if (wheelLockRef.current) return;
+    wheelAccumRef.current += e.deltaX;
+    const trackWidth = trackRef.current?.clientWidth ?? 1;
+    const threshold = trackWidth * 0.25;
+    if (wheelAccumRef.current <= -threshold) {
+      wheelLockRef.current = true;
+      setCurrentIdx((i) => Math.min(visual.length - 1, i + 1));
+      wheelAccumRef.current = 0;
+      setTimeout(() => { wheelLockRef.current = false; }, 350);
+    } else if (wheelAccumRef.current >= threshold) {
+      wheelLockRef.current = true;
+      setCurrentIdx((i) => Math.max(0, i - 1));
+      wheelAccumRef.current = 0;
+      setTimeout(() => { wheelLockRef.current = false; }, 350);
+    }
+    // preventDefault is intentional — without it the wheel
+    // event also triggers the page's vertical scroll, which
+    // makes the carousel feel janky.
+    e.preventDefault();
+  };
+
   // Tap a tile to open the lightbox/video (Phase 1 behaviour).
   // We keep tap-to-open for the lightbox-style zoom-in and add
   // swipe for the carousel navigation. Tap is detected by
@@ -1788,6 +1863,7 @@ function MediaGrid({
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
+      onWheel={onWheel}
       className="relative w-full overflow-hidden rounded-2xl touch-pan-y select-none"
     >
       <div
@@ -3083,7 +3159,15 @@ function PostActionsBar(props: {
                   initial={{ opacity: 0, scale: 0.9, y: 5 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9, y: 5 }}
-                  className="absolute left-0 top-full z-40 mt-1 w-44 overflow-hidden rounded-2xl py-1"
+                  // z-50 = above the click-outside catcher (z-30)
+                  // and above any sibling post's overflow-hidden
+                  // container. Combined with the PostCard's
+                  // conditional `z-30` + `overflow-visible`, this
+                  // guarantees the "Sao chép liên kết" / "Chia sẻ
+                  // lên X" menu floats above the next post in
+                  // the feed rather than being clipped at the
+                  // card boundary.
+                  className="absolute left-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-2xl py-1"
                   style={{
                     background: 'rgba(15,15,25,0.95)',
                     border: '1px solid rgba(255,255,255,0.1)',

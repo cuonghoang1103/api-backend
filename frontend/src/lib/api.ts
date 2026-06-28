@@ -1016,8 +1016,21 @@ export const socialApi = {
     // searches the music library, picks a track, and sends the
     // track id (plus optional start-seconds offset). The server
     // validates the track exists and is active before persisting.
+    //
+    // Phase 5: also send `musicEndSec` and the canonical
+    // `postMusic` block so the trimmed snippet the user picked
+    // in MusicPickerModal actually makes it through to the
+    // published post. Backend's createPost prefers `postMusic`
+    // when present (and falls back to legacy `musicTrackId`
+    // for backward compatibility with older composer flows).
     musicTrackId?: number;
     musicStartSec?: number;
+    musicEndSec?: number;
+    postMusic?: {
+      songId: number;
+      startSec?: number;
+      endSec?: number;
+    };
   }) => api.post('/social/posts', data),
 
   updatePost: (id: number, data: { content?: string; visibility?: string }) =>

@@ -69,8 +69,14 @@ export function PostComposer() {
   const {
     composerContent, composerVisibility, composerMedia, composerPoll, isPosting,
     composerYouTubeUrl, composerType,
+    composerMusicTrack,
     setComposerContent: setComposerContentRaw, setComposerVisibility, setComposerPoll, setComposerYouTubeUrl,
     setComposerType,
+    // Phase 5: music picker now writes the picked track + snippet
+    // bounds into the store (not local state). Previously the
+    // local state was used which meant the value never made it
+    // to submitPost() and the post went out without music.
+    setComposerMusicTrack,
     addComposerMedia, removeComposerMedia, submitPost, clearComposer,
   } = useSocialStore();
 
@@ -125,17 +131,13 @@ export function PostComposer() {
   const [showYouTubeModal, setShowYouTubeModal] = useState(false);
   // Phase 3 add — Instagram-style music sticker. The
   // composer fetches the music library when the user opens
-  // the picker; the picked track's id is sent to the backend
-  // as musicTrackId. startSec is currently fixed to 0 (the
-  // user can scrub the audio later, but the composer doesn't
-  // yet expose a slider for the start offset).
+  // the picker. The picked track (id, title, artist, cover,
+  // audioUrl, start/end snippet bounds) is written straight
+  // into the STORE (composerMusicTrack) so submitPost picks
+  // it up on POST. There's no separate local state because
+  // the previous version had it disconnected from the store
+  // and posts went out silently without the music.
   const [showMusicPicker, setShowMusicPicker] = useState(false);
-  const [composerMusicTrack, setComposerMusicTrack] = useState<{
-    id: number;
-    title: string;
-    artist: string;
-    coverImage?: string | null;
-  } | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -933,18 +935,24 @@ export function PostComposer() {
 
         {/* Phase 3 add — music sticker picker. The modal searches
             the music library and on selection we save the track
-            to the composer store. The PostCard MusicSticker
-            then renders the chosen track on the first media
-            tile of the published post. */}
+            + the trimmed snippet bounds to the composer store.
+            The PostCard MusicSticker then renders the chosen
+            track on the first media tile of the published post. */}
         <MusicPickerModal
           open={showMusicPicker}
           onClose={() => setShowMusicPicker(false)}
           onPick={(result) => {
+            // Phase 5 fix — write into the STORE (not local state)
+            // and include audioUrl + the trim bounds so the post
+            // is actually published with the picked snippet.
             setComposerMusicTrack({
               id: result.musicTrackId,
               title: result.track.title,
               artist: result.track.artist,
               coverImage: result.track.coverImage ?? null,
+              audioUrl: result.track.audioUrl ?? null,
+              startSec: result.musicStartSec,
+              endSec: result.musicEndSec,
             });
             toast.success('Đã chọn nhạc cho bài viết');
           }}

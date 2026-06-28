@@ -193,6 +193,38 @@ export async function createPost(input: CreatePostInput) {
   // composer, otherwise derive from the attached media / youtubeUrl.
   const resolvedType = postData.type ?? deriveSocialPostType(media, postData.youtubeUrl);
 
+  // ─── Phase 5 — music sticker sanity-check ───────────────────────
+  // If the composer is attaching a track, validate it exists AND
+  // is active BEFORE we touch the social_posts table. Without this
+  // check a typo'd / hidden / deleted songId would either:
+  //   1. fail with an opaque Prisma FK error after the post row is
+  //      created, leaving a half-built post in the DB, OR
+  //   2. succeed with an orphaned PostMusic row pointing at a
+  //      non-existent Song.
+  // We surface a clear 400 to the composer so the picker can react.
+  const songId =
+    input.postMusic?.songId ?? input.musicTrackId ?? null;
+  if (songId != null) {
+    const song = await prisma.song.findUnique({
+      where: { id: songId },
+      select: { id: true, isActive: true },
+    });
+    if (!song) {
+      throw new AppError(
+        `Bài nhạc #${songId} không tồn tại — vui lòng chọn bài khác.`,
+        400,
+        'SONG_NOT_FOUND',
+      );
+    }
+    if (!song.isActive) {
+      throw new AppError(
+        `Bài nhạc "${songId}" đã bị ẩn — vui lòng chọn bài khác.`,
+        400,
+        'SONG_INACTIVE',
+      );
+    }
+  }
+
   const post = await (prisma.socialPost.create as any)({
     data: {
       ...(postData as Record<string, unknown>),

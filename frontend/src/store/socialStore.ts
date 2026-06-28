@@ -51,15 +51,24 @@ interface SocialState {
   // embeds an inline player. Empty string means "no embed".
   composerYouTubeUrl: string;
   // Phase 3 add — Instagram-style music sticker. When set, the
-  // post will be sent to the backend as a `musicTrackId` field
-  // along with `musicStartSec` (default 0). The PostCard renders
-  // a small "🎵 <title> — <artist>" overlay on the first media
-  // tile. Null = no music sticker.
+  // post will be sent to the backend as a `postMusic` block
+  // (canonical) OR a legacy `musicTrackId` field. The PostCard
+  // renders a small "🎵 <title> — <artist>" overlay on the first
+  // media tile. Null = no music sticker.
+  //
+  // startSec / endSec / audioUrl were added in Phase 5 so the
+  // trimmed snippet the user picked in MusicPickerModal actually
+  // makes it through the round-trip (the previous version dropped
+  // them on the floor and the sticker always played from 0 with
+  // the full track duration).
   composerMusicTrack: {
     id: number;
     title: string;
     artist: string;
     coverImage?: string | null;
+    audioUrl?: string | null;
+    startSec?: number;
+    endSec?: number;
   } | null;
   // Content-type bucket the user is composing (feed tabs). Defaults to
   // POST; the composer's segmented picker sets it. Sent to createPost so
@@ -120,8 +129,18 @@ interface SocialState {
   setComposerType: (t: 'POST' | 'VIDEO' | 'FILE') => void;
   // Phase 3 add — set the Instagram-style music sticker.
   // `track === null` clears the sticker. The composer calls
-  // this from the music picker modal.
-  setComposerMusicTrack: (track: { id: number; title: string; artist: string; coverImage?: string | null } | null) => void;
+  // this from the music picker modal. The audioUrl + start/end
+  // fields are optional but the snippet bounds are needed for
+  // the trim UI to take effect on the published post.
+  setComposerMusicTrack: (track: {
+    id: number;
+    title: string;
+    artist: string;
+    coverImage?: string | null;
+    audioUrl?: string | null;
+    startSec?: number;
+    endSec?: number;
+  } | null) => void;
   clearComposer: () => void;
   submitPost: () => Promise<SocialPost | null>;
 
@@ -527,13 +546,24 @@ export const useSocialStore = create<SocialState>((set, get) => ({
         media: mediaPayload.length > 0 ? mediaPayload : undefined,
         poll: pollPayload || undefined,
         youtubeUrl: (composerYouTubeUrl || '').trim() || undefined,
-        // Phase 3 add — Instagram-style music sticker. We only
-        // set musicTrackId when the user actually picked a
-        // track in the picker; null means "no music sticker"
-        // (which is also the default backend behaviour when
-        // the field is omitted).
+        // Phase 5 — Instagram-style music sticker with snippet
+        // bounds. We send the canonical `postMusic` block so the
+        // backend creates a PostMusic join row with the trim
+        // values the user picked in MusicPickerModal. We still
+        // pass the legacy `musicTrackId` / `musicStartSec`
+        // fields too so any older backend code path keeps
+        // working (the backend's createPost prefers postMusic
+        // when both are present).
         musicTrackId: composerMusicTrack?.id,
-        musicStartSec: composerMusicTrack ? 0 : undefined,
+        musicStartSec: composerMusicTrack?.startSec ?? 0,
+        musicEndSec: composerMusicTrack?.endSec,
+        postMusic: composerMusicTrack
+          ? {
+              songId: composerMusicTrack.id,
+              startSec: composerMusicTrack.startSec ?? 0,
+              endSec: composerMusicTrack.endSec,
+            }
+          : undefined,
         type: composerType,
       });
 

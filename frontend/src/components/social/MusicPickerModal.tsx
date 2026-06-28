@@ -35,13 +35,18 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { Search, Play, Pause, X, Scissors, Check } from 'lucide-react';
+import { Search, Play, Pause, X, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { adminSongsApi, type AdminSong } from '@/lib/api';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
-const MAX_SNIPPET_SEC = 40; // hard cap per the spec
+// No hard cap. Earlier versions limited the snippet to 40s
+// (Instagram's "music sticker" cap), but users want to pick
+// any segment of the song — intro, chorus, drop, anywhere.
+// The backend PostMusic row stores any start/end values as
+// integers with no upper bound, so we just pass through what
+// the user picked.
 
 export interface MusicPickerResult {
   musicTrackId: number;
@@ -71,11 +76,11 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
   const [selected, setSelected] = useState<SearchHit | null>(null);
   const [previewingId, setPreviewingId] = useState<number | null>(null);
   const [previewing, setPreviewing] = useState(false);
-  // Snippet bounds in seconds. Defaults to the first 40s of the
-  // track, or the full track if it's shorter than 40s.
+  // Snippet bounds in seconds. Defaults to the full track length
+  // — the user can drag the dual-thumb slider to pick any
+  // segment (intro, chorus, drop, anywhere in the song).
   const [startSec, setStartSec] = useState(0);
   const [endSec, setEndSec] = useState(0);
-  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -159,13 +164,13 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
 
   const pickTrack = (track: SearchHit) => {
     setSelected(track);
-    // Reset snippet bounds to defaults.
+    // Default snippet = the WHOLE track (user can trim further
+    // if they want). Previously we capped at 40s which forced
+    // long songs to play only the intro.
     const dur = Math.max(1, track.durationSec);
-    const end = Math.min(dur, MAX_SNIPPET_SEC);
     setStartSec(0);
-    setEndSec(end);
+    setEndSec(dur);
     setStep('trim');
-    setShowAdvanced(false);
     if (audioRef.current) {
       audioRef.current.pause();
     }
@@ -208,7 +213,8 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
   };
 
   const trackDuration = (selected?.durationSec ?? 0);
-  const maxSec = Math.min(trackDuration, MAX_SNIPPET_SEC);
+  // Slider max = the FULL track duration. No cap.
+  const maxSec = trackDuration;
 
   if (!open) return null;
 
@@ -354,55 +360,41 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
                     </button>
                   </div>
 
-                  {/* Advanced trimmer — hidden behind toggle by default
-                      so the standard "tap to attach" path stays
-                      short. */}
-                  <button
-                    type="button"
-                    onClick={() => setShowAdvanced((v) => !v)}
-                    className="inline-flex items-center gap-1.5 text-[11px] text-text-muted hover:text-text-primary"
-                  >
-                    <Scissors className="h-3 w-3" />
-                    {showAdvanced ? 'Ẩn tuỳ chỉnh nâng cao' : 'Tuỳ chỉnh nâng cao (cắt 15-40s)'}
-                  </button>
-
-                  {showAdvanced ? (
-                    <div className="rounded-xl border border-darkborder bg-darkcard/40 p-4 space-y-3">
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={toggleSnippetPlay}
-                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
-                          aria-label="Phát đoạn"
-                        >
-                          {previewing && previewingId === selected.id ? (
-                            <Pause className="h-3.5 w-3.5" />
-                          ) : (
-                            <Play className="h-3.5 w-3.5 translate-x-[1px]" />
-                          )}
-                        </button>
-                        <div className="flex-1 min-w-0 text-xs">
-                          <div className="flex items-center justify-between text-text-muted">
-                            <span>Bắt đầu: {formatSec(startSec)}</span>
-                            <span>Kết thúc: {formatSec(endSec)}</span>
-                            <span>{Math.round(endSec - startSec)}s</span>
-                          </div>
-                          <RangeDual
-                            min={0}
-                            max={maxSec || 1}
-                            step={0.5}
-                            valueMin={startSec}
-                            valueMax={endSec}
-                            onChange={(lo, hi) => { setStartSec(lo); setEndSec(hi); }}
-                          />
+                  {/* Trimmer — always visible (no "Advanced" toggle). The user
+                      can pick any segment of the song. Default is
+                      the FULL track, so a user who doesn't touch
+                      the slider still gets the whole song attached. */}
+                  <div className="rounded-xl border border-darkborder bg-darkcard/40 p-4 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={toggleSnippetPlay}
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+                        aria-label="Phát đoạn"
+                      >
+                        {previewing && previewingId === selected.id ? (
+                          <Pause className="h-3.5 w-3.5" />
+                        ) : (
+                          <Play className="h-3.5 w-3.5 translate-x-[1px]" />
+                        )}
+                      </button>
+                      <div className="flex-1 min-w-0 text-xs">
+                        <div className="flex items-center justify-between text-text-muted">
+                          <span>Bắt đầu: {formatSec(startSec)}</span>
+                          <span>Kết thúc: {formatSec(endSec)}</span>
+                          <span>{Math.round(endSec - startSec)}s</span>
                         </div>
+                        <RangeDual
+                          min={0}
+                          max={maxSec || 1}
+                          step={0.5}
+                          valueMin={startSec}
+                          valueMax={endSec}
+                          onChange={(lo, hi) => { setStartSec(lo); setEndSec(hi); }}
+                        />
                       </div>
                     </div>
-                  ) : (
-                    <div className="text-xs text-text-muted text-center py-1">
-                      Sẽ lấy {formatSec(0)} → {formatSec(endSec)} ({Math.round(endSec - startSec)}s)
-                    </div>
-                  )}
+                  </div>
                 </>
               )}
 

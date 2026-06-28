@@ -542,10 +542,11 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   // ─── Render ───────────────────────────────────────────────────
   return (
     <div className="mx-auto w-full max-w-[1050px] px-4 pb-10">
-      {/* Cover + avatar header */}
-      <div className="relative rounded-2xl overflow-visible bg-darkcard border border-darkborder">
+      {/* Cover + avatar header (avatar overlaps cover via negative margin, not clipped) */}
+      <div className="relative rounded-2xl bg-darkcard border border-darkborder">
+        {/* Cover photo — its own overflow-hidden box; the avatar is a SIBLING so it is never clipped */}
         <div
-          className="h-[220px] sm:h-[300px] lg:h-[350px] w-full relative overflow-hidden rounded-t-2xl"
+          className="h-[200px] sm:h-[280px] lg:h-[350px] w-full relative overflow-hidden rounded-t-2xl"
           style={!cover ? { background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)' } : undefined}
         >
           {cover && (/* eslint-disable-next-line @next/next/no-img-element */ <img src={cover} alt="Ảnh bìa" className="w-full h-full object-cover" />)}
@@ -553,48 +554,46 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
           {isOwn && (
             <label className="absolute bottom-4 right-4 cursor-pointer inline-flex items-center gap-2 rounded-xl bg-black/60 hover:bg-black/80 backdrop-blur-sm px-4 py-2.5 text-sm font-medium text-white transition-all hover:scale-105 shadow-lg" aria-label="Cập nhật ảnh bìa">
               {uploadingImage && showImageCropper === 'cover' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
-              <span>Cập nhật ảnh bìa</span>
+              <span className="hidden sm:inline">Cập nhật ảnh bìa</span>
               <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(e, 'cover')} />
             </label>
           )}
         </div>
 
-        {/* Avatar — 168px, overlaps cover bottom-left */}
-        <div className="absolute left-5 sm:left-8 -bottom-14 sm:-bottom-16 z-10">
-          <div className="relative group">
-            <div className="relative rounded-full overflow-hidden shadow-2xl ring-4 ring-darkcard transition-all duration-300 group-hover:ring-neon-violet/30">
-              <div className="h-[120px] w-[120px] sm:h-[168px] sm:w-[168px]">
+        {/* Avatar + name + actions row */}
+        <div className="px-4 sm:px-6 pb-4">
+          <div className="flex flex-col items-center sm:flex-row sm:items-end gap-3 sm:gap-5">
+            {/* Avatar — pulled UP over the cover bottom edge; z-10 keeps it above the cover */}
+            <div className="relative z-10 -mt-14 sm:-mt-[80px] shrink-0">
+              <div className="group relative h-[120px] w-[120px] sm:h-[168px] sm:w-[168px] rounded-full ring-4 ring-darkcard shadow-2xl overflow-hidden transition-all duration-300 hover:ring-neon-violet/40">
                 {p.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={p.avatarUrl} alt="Ảnh đại diện" className="w-full h-full object-cover" />) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neon-violet via-neon-purple to-neon-pink">
                     <span className="text-5xl sm:text-6xl font-bold text-white drop-shadow-lg">{(p.displayName || p.fullName || p.username || '?').slice(0, 1).toUpperCase()}</span>
                   </div>
                 )}
+                {p.isOnline && <div className="absolute bottom-2.5 right-2.5 h-5 w-5 rounded-full bg-emerald-500 ring-2 ring-darkcard" />}
+                {isOwn && (
+                  <label className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/40 transition-colors cursor-pointer rounded-full" aria-label="Đổi ảnh đại diện">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity h-11 w-11 rounded-full bg-black/70 backdrop-blur-sm flex items-center justify-center border-2 border-white/20">
+                      {uploadingImage && showImageCropper === 'avatar' ? <Loader2 className="h-5 w-5 animate-spin text-white" /> : <Camera className="h-5 w-5 text-white" />}
+                    </div>
+                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(e, 'avatar')} />
+                  </label>
+                )}
               </div>
-              {p.isOnline && <div className="absolute bottom-3 right-3 h-5 w-5 rounded-full bg-emerald-500 ring-2 ring-darkcard" />}
-              {isOwn && (
-                <label className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/40 transition-colors cursor-pointer rounded-full" aria-label="Đổi ảnh đại diện">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity h-11 w-11 rounded-full bg-black/70 backdrop-blur-sm flex items-center justify-center border-2 border-white/20">
-                    {uploadingImage && showImageCropper === 'avatar' ? <Loader2 className="h-5 w-5 animate-spin text-white" /> : <Camera className="h-5 w-5 text-white" />}
-                  </div>
-                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(e, 'avatar')} />
-                </label>
-              )}
             </div>
-          </div>
-        </div>
 
-        {/* Header info */}
-        <div className="px-5 sm:px-8 pb-5 pt-20 sm:pt-6">
-          <div className="sm:ml-[200px] flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            {/* Header info */}
+            <div className="flex-1 min-w-0 w-full flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-1 text-center sm:text-left">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-text-primary">{p.displayName || p.fullName || p.username}</h1>
               <p className="text-text-muted mt-0.5">@{p.username}</p>
-              <div className="flex items-center gap-4 mt-2 text-sm text-text-muted flex-wrap">
+              <div className="flex items-center justify-center sm:justify-start gap-4 mt-2 text-sm text-text-muted flex-wrap">
                 <span><strong className="text-text-primary font-semibold">{p.followerCount ?? 0}</strong> người theo dõi</span>
                 <span><strong className="text-text-primary font-semibold">{p.followingCount ?? 0}</strong> đang theo dõi</span>
               </div>
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 flex-wrap justify-center sm:justify-end max-sm:w-full">
               {isOwn ? (
                 <>
                   <button onClick={() => { setMainTab('about'); startEditing(aboutTab); }} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-neon-violet to-neon-purple text-white px-5 py-2.5 font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-neon-violet/20">
@@ -630,29 +629,31 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                 </>
               )}
             </div>
-          </div>
-        </div>
-
-        {/* Sticky tab bar */}
-        <div className="sticky top-0 z-20 px-3 sm:px-6 border-t border-darkborder/50 bg-darkcard/80 backdrop-blur rounded-b-2xl">
-          <div className="flex gap-1 overflow-x-auto scrollbar-hide" role="tablist">
-            {mainTabs.map((tab) => (
-              <button key={tab.id} role="tab" aria-selected={mainTab === tab.id} onClick={() => setMainTab(tab.id)}
-                className={cn('px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2',
-                  mainTab === tab.id ? 'text-text-primary border-neon-violet' : 'text-text-muted border-transparent hover:text-text-primary hover:bg-white/[0.02]')}>
-                {tab.label}
-              </button>
-            ))}
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Sticky tab bar — sibling of the header card so it stays pinned while the feed scrolls
+          (top-16 clears the fixed 64px navbar; z-30 sits below the navbar's z-40) */}
+      <div className="sticky top-16 z-30 mt-2 rounded-xl border border-darkborder bg-darkcard/90 backdrop-blur supports-[backdrop-filter]:bg-darkcard/75">
+        <div className="flex gap-1 overflow-x-auto scrollbar-hide px-1.5" role="tablist">
+          {mainTabs.map((tab) => (
+            <button key={tab.id} role="tab" aria-selected={mainTab === tab.id} onClick={() => setMainTab(tab.id)}
+              className={cn('px-4 py-3.5 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px',
+                mainTab === tab.id ? 'text-text-primary border-neon-violet' : 'text-text-muted border-transparent hover:text-text-primary hover:bg-white/[0.03]')}>
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Body */}
-      <div className="mt-5">
+      <div className="mt-4">
         {mainTab === 'posts' && (
-          <div className="flex flex-col lg:flex-row gap-5">
-            {/* Left sidebar */}
-            <div className="w-full lg:w-2/5 space-y-4">
+          <div className="flex flex-col lg:flex-row items-start gap-5">
+            {/* Left sidebar — sticky below the pinned tab bar; only the right feed scrolls */}
+            <div className="w-full lg:w-2/5 lg:sticky lg:top-[132px] self-start space-y-4">
               <IntroCard profile={p} isOwn={isOwn} onEdit={() => { setMainTab('about'); startEditing('overview'); }} onShowAbout={() => setMainTab('about')} />
               <PhotosCard photos={photos} onSeeAll={() => setMainTab('photos')} />
               <FriendsCard friends={friends} count={p.followerCount ?? 0} onSeeAll={() => setMainTab('friends')} />

@@ -34,7 +34,7 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import { fileApi } from '@/lib/api';
 import type { NoteFull } from '@/types';
-import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle } from 'lucide-react';
+import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle, Undo2, Redo2 } from 'lucide-react';
 import NoteCodeBlock from '@/components/notes/extensions/NoteCodeBlock';
 import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
@@ -55,6 +55,8 @@ const AUTOSAVE_MS = 900;
 export default function NoteEditor({ note, onSave }: NoteEditorProps) {
   const [title, setTitle] = useState(note.title);
   const [saveState, setSaveState] = useState<SaveState>('idle');
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const slashRef = useRef<SlashMenuRef>(null);
@@ -257,6 +259,9 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
     },
     onUpdate({ editor }) {
       queueSave({ contentJson: editor.getJSON() as Record<string, unknown>, contentHtml: editor.getHTML() });
+      // Update undo/redo state
+      setCanUndo(editor.can().undo());
+      setCanRedo(editor.can().redo());
       // Slash menu trigger lives on every keystroke; the helper
       // checks both the trigger and whether the menu is already open.
       handleSlashTrigger(editor);
@@ -288,13 +293,59 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
 
   useEffect(() => () => { if (saveTimer.current) clearTimeout(saveTimer.current); }, []);
 
+  // Keyboard shortcuts for Undo/Redo
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Undo: Ctrl+Z (Windows/Linux) or Cmd+Z (Mac)
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        editor?.chain().focus().undo().run();
+      }
+      // Redo: Ctrl+Shift+Z or Cmd+Shift+Z (Mac)
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) {
+        e.preventDefault();
+        editor?.chain().focus().redo().run();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [editor]);
+
   return (
     <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
-      {/* Save status */}
-      <div className="mb-3 flex h-5 items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-500">
-        {saveState === 'saving' && (<><Loader2 className="h-3 w-3 animate-spin" /> Đang lưu…</>)}
-        {saveState === 'saved' && (<><Check className="h-3 w-3 text-teal-400" /> Đã lưu</>)}
-        {saveState === 'error' && (<span className="flex items-center gap-1.5 text-amber-400"><CloudOff className="h-3 w-3" /> Lưu thất bại — sẽ thử lại khi bạn gõ tiếp</span>)}
+      {/* Save status + Undo/Redo toolbar */}
+      <div className="mb-3 flex h-5 items-center justify-between text-[11px] text-slate-500 dark:text-slate-500">
+        {/* Left: save status */}
+        <div className="flex h-5 items-center gap-1.5">
+          {saveState === 'saving' && (<><Loader2 className="h-3 w-3 animate-spin" /> Đang lưu…</>)}
+          {saveState === 'saved' && (<><Check className="h-3 w-3 text-teal-400" /> Đã lưu</>)}
+          {saveState === 'error' && (<span className="flex items-center gap-1.5 text-amber-400"><CloudOff className="h-3 w-3" /> Lưu thất bại — sẽ thử lại khi bạn gõ tiếp</span>)}
+        </div>
+
+        {/* Right: Undo/Redo buttons */}
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => editor?.chain().focus().undo().run()}
+            disabled={!canUndo}
+            title="Hoàn tác (Ctrl+Z)"
+            className="flex items-center gap-1 rounded px-2 py-1 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          >
+            <Undo2 className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Hoàn tác</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => editor?.chain().focus().redo().run()}
+            disabled={!canRedo}
+            title="Làm lại (Ctrl+Shift+Z)"
+            className="flex items-center gap-1 rounded px-2 py-1 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          >
+            <Redo2 className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Làm lại</span>
+          </button>
+        </div>
       </div>
 
       {/* Title */}

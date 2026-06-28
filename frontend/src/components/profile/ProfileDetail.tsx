@@ -536,8 +536,9 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
 
   const p = profile;
   const cover = p.coverPhotoUrl;
-  const videos = media.filter((m) => m.type === 'VIDEO');
-  const photos = media.filter((m) => m.type !== 'VIDEO');
+  // Guard against empty/null media URLs so they never render as black tiles.
+  const videos = media.filter((m) => m.type === 'VIDEO' && (m.url || m.thumbnail));
+  const photos = media.filter((m) => m.type !== 'VIDEO' && (m.url || m.thumbnail));
 
   // ─── Render ───────────────────────────────────────────────────
   return (
@@ -624,7 +625,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                       followBusy && 'opacity-50')}>
                     {following ? <><Check className="h-4 w-4" />Đang theo dõi</> : <><UserPlus className="h-4 w-4" />Theo dõi</>}
                   </button>
-                  <a href={`/chat?user=${id}`} className="inline-flex items-center gap-2 rounded-xl bg-darkcard/80 border border-darkborder px-5 py-2.5 font-medium text-text-primary hover:bg-darkcard transition-colors"><Mail className="h-4 w-4" />Nhắn tin</a>
+                  <a href={`/messages?peer=${id}`} className="inline-flex items-center gap-2 rounded-xl bg-darkcard/80 border border-darkborder px-5 py-2.5 font-medium text-text-primary hover:bg-darkcard transition-colors"><Mail className="h-4 w-4" />Nhắn tin</a>
                   <button aria-label="Thêm" className="inline-flex items-center justify-center rounded-xl bg-darkcard/60 border border-darkborder p-2.5 hover:bg-darkcard/80 transition-colors"><MoreHorizontal className="h-5 w-5 text-text-secondary" /></button>
                 </>
               )}
@@ -726,9 +727,8 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
               return (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 rounded-2xl overflow-hidden border border-darkborder">
                   {items.map((m) => (
-                    <a key={m.id} href={`/social/post/${m.postId}`} className="group relative aspect-square bg-darkbg">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={m.url || m.thumbnail} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                    <a key={m.id} href={`/social/post/${m.postId}`} className="group relative aspect-square overflow-hidden bg-darkcard/40">
+                      <MediaThumb url={m.url || m.thumbnail} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                       {m.type === 'VIDEO' && <div className="absolute top-2 right-2 bg-black/60 rounded-full p-1.5"><ImageIcon className="h-4 w-4 text-white" /></div>}
                     </a>
                   ))}
@@ -864,12 +864,36 @@ function PhotosCard({ photos, onSeeAll }: { photos: any[]; onSeeAll: () => void 
         <h2 className="text-lg font-semibold text-text-primary">Ảnh</h2>
         <button onClick={onSeeAll} className="text-sm text-neon-violet hover:underline">Xem tất cả</button>
       </div>
-      <div className="grid grid-cols-3 gap-0.5 px-1 pb-1">
-        {photos.slice(0, 9).map((m, i) => (/* eslint-disable-next-line @next/next/no-img-element */ <img key={m.id || i} src={m.url || m.thumbnail} alt="" className="aspect-square object-cover hover:opacity-80 transition-opacity cursor-pointer rounded" />))}
-        {Array.from({ length: Math.max(0, 9 - photos.length) }).map((_, i) => <div key={`e-${i}`} className="aspect-square bg-darkbg/50 rounded" />)}
-      </div>
+      {photos.length === 0 ? (
+        <div className="px-4 pb-5 pt-1 flex flex-col items-center text-center text-text-muted">
+          <ImageIcon className="h-9 w-9 mb-2 opacity-50" />
+          <p className="text-sm">Chưa có ảnh nào</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-3 gap-0.5 px-1 pb-1">
+          {photos.slice(0, 9).map((m, i) => (
+            <MediaThumb key={m.id || i} url={m.url || m.thumbnail} className="aspect-square w-full object-cover rounded hover:opacity-80 transition-opacity cursor-pointer" />
+          ))}
+        </div>
+      )}
     </div>
   );
+}
+
+/** Media thumbnail with a graceful fallback: renders a muted icon
+ *  placeholder instead of a black tile when the URL is empty or the
+ *  image fails to load. Used by the Photos card + Photos/Video tabs. */
+function MediaThumb({ url, className }: { url?: string | null; className?: string }) {
+  const [failed, setFailed] = useState(false);
+  if (!url || failed) {
+    return (
+      <div className={cn('flex items-center justify-center bg-darkbg/60', className)}>
+        <ImageIcon className="h-6 w-6 text-text-muted/50" />
+      </div>
+    );
+  }
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={url} alt="" onError={() => setFailed(true)} className={className} />;
 }
 
 function FriendsCard({ friends, count, onSeeAll }: { friends: any[]; count: number; onSeeAll: () => void }) {

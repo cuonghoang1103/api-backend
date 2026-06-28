@@ -19,6 +19,7 @@ import VocabTable from '@/components/notes/VocabTable';
 import FlashcardReview from '@/components/notes/FlashcardReview';
 import SubjectView from '@/components/notes/SubjectView';
 import NotesSearch from '@/components/notes/NotesSearch';
+import NotesShareManagerModal from '@/components/notes/NotesShareManagerModal';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
 import { NotesThemeProvider, useNotesTheme } from '@/components/notes/NotesThemeProvider';
 
@@ -52,6 +53,19 @@ function NotesPageInner() {
   // on them in bulk without drilling into each subject.
   const [filter, setFilter] = useState<'tree' | 'favorites' | 'archive' | 'needs-review'>('tree');
   const [filteredNotes, setFilteredNotes] = useState<import('@/types').NoteSummary[]>([]);
+
+  // Phase 4: Share modal state
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [sharingSubject, setSharingSubject] = useState<NoteSubjectTree | null>(null);
+
+  const handleOpenShare = useCallback((subject: NoteSubjectTree) => {
+    setSharingSubject(subject);
+    setShareModalOpen(true);
+  }, []);
+
+  const handleShareChanged = useCallback(() => {
+    // Refresh will happen naturally when user interacts
+  }, []);
 
   const refreshTree = useCallback(async () => {
     const res = await notesApi.getTree();
@@ -272,25 +286,26 @@ function NotesPageInner() {
     }
   }, [selected, pdfBusy]);
 
- const callbacks = {
- onSelectNote: selectNote,
- onOpenSubject: openSubject,
- onAddSubject: addSubject,
- onAddChapter: addChapter,
- onAddNote: addNote,
- onRenameSubject: renameSubject,
- onRenameChapter: renameChapter,
- onRenameNote: renameNote,
- onDeleteSubject: delSubject,
- onDeleteChapter: delChapter,
- onDeleteNote: delNote,
-  onReorderSubjects: reorderSubjectsCb,
-  onReorderChapters: reorderChaptersCb,
-  onReorderNotes: reorderNotesCb,
-  onChangeFilter: setFilter,
-  };
+  const callbacks = {
+   onSelectNote: selectNote,
+   onOpenSubject: openSubject,
+   onAddSubject: addSubject,
+   onAddChapter: addChapter,
+   onAddNote: addNote,
+   onRenameSubject: renameSubject,
+   onRenameChapter: renameChapter,
+   onRenameNote: renameNote,
+   onDeleteSubject: delSubject,
+   onDeleteChapter: delChapter,
+   onDeleteNote: delNote,
+   onReorderSubjects: reorderSubjectsCb,
+   onReorderChapters: reorderChaptersCb,
+   onReorderNotes: reorderNotesCb,
+   onChangeFilter: setFilter,
+   onShareSubject: handleOpenShare,
+   };
 
-  const treeSubjectFor = (id: number) => tree.find((s) => s.id === id);
+   const treeSubjectFor = (id: number) => tree.find((s) => s.id === id);
 
   if (!isAuthenticated) {
     return (
@@ -444,9 +459,17 @@ function NotesPageInner() {
         )}
       </AnimatePresence>
 
- <NotesSearch open={searchOpen} onClose={() => setSearchOpen(false)} subjects={tree} onJump={selectNote} />
+  <NotesSearch open={searchOpen} onClose={() => setSearchOpen(false)} subjects={tree} onJump={selectNote} />
 
- {/* Mobile drawer */}
+  {/* Share Modal (Phase 4) */}
+  <NotesShareManagerModal
+    open={shareModalOpen}
+    subject={sharingSubject}
+    onClose={() => { setShareModalOpen(false); setSharingSubject(null); }}
+    onChanged={handleShareChanged}
+  />
+
+  {/* Mobile drawer */}
  <AnimatePresence>
  {drawerOpen && (
  <>

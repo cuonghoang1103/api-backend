@@ -326,6 +326,63 @@ export const notesApi = {
     api.post<{ data: { id: number; reset: boolean } }>('/notes/flashcards/reset', { vocabId }),
 };
 
+// Notes Share API — Phase 4
+export interface NoteShare {
+  id: number;
+  subjectId: number;
+  ownerId: number;
+  recipientId: number;
+  permission: 'view' | 'edit';
+  note: string | null;
+  createdAt: string;
+  updatedAt: string;
+  subject?: { id: number; name: string; emoji: string | null; color: string | null };
+  recipient?: { id: number; username: string; email: string; avatarUrl: string | null; displayName: string | null };
+  owner?: { id: number; username: string; avatarUrl: string | null; displayName: string | null };
+}
+
+export interface NoteShareRecipientMini {
+  id: number;
+  username: string;
+  email: string;
+  avatarUrl: string | null;
+  displayName: string | null;
+}
+
+export const noteShareApi = {
+  // Share a subject with another user
+  create: (data: { subjectId: number; recipientId: number; permission?: 'view' | 'edit'; note?: string }) =>
+    api.post<{ data: NoteShare }>('/notes-shares', data),
+
+  // List all shares I own (outbox)
+  list: () =>
+    api.get<{ data: NoteShare[] }>('/notes-shares'),
+
+  // Revoke a share
+  delete: (shareId: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes-shares/${shareId}`),
+
+  // Update share permission or note
+  update: (shareId: number, data: { permission?: 'view' | 'edit'; note?: string | null }) =>
+    api.patch<{ data: NoteShare }>(`/notes-shares/${shareId}`, data),
+
+  // List shares for a specific subject (owner only)
+  listBySubject: (subjectId: number) =>
+    api.get<{ data: NoteShare[] }>(`/notes-shares/subject/${subjectId}`),
+
+  // List subjects shared with me (inbox)
+  listReceived: () =>
+    api.get<{ data: NoteShare[] }>('/notes-shares/received'),
+
+  // Get a shared subject with full tree
+  getReceivedSubject: (subjectId: number) =>
+    api.get<{ data: any }>(`/notes-shares/received/${subjectId}`),
+
+  // Search users to share with
+  searchUsers: (q: string, limit = 8) =>
+    api.get<{ data: NoteShareRecipientMini[] }>('/notes-shares/search-users', { params: { q, limit } }),
+};
+
 // Music API
 export const musicApi = {
   getTracks: (params?: { page?: number; size?: number; keyword?: string }) =>

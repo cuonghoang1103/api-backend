@@ -109,6 +109,7 @@ const { publicRouter: techTrendsPublicRoutes, adminRouter: techTrendsAdminRoutes
 const { router: messagesRoutes, adminRouter: adminMessagesRoutes } = (await import(path.join(__dirname, 'routes', 'messages.routes.js')));
 const contentRoutes = (await import(path.join(__dirname, 'routes', 'content.routes.js'))).default;
 const notesRoutes = (await import(path.join(__dirname, 'routes', 'notes.routes.js'))).default;
+const notesShareRoutes = (await import(path.join(__dirname, 'routes', 'notesShare.routes.js'))).default;
 const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes.js'))).default;
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
 
@@ -427,6 +428,8 @@ app.use('/api/v1/hub', hubRoutes);
 app.use('/api/v1/hub', hubPublicRouter);
 // Notes — personal study notebooks (per-user, authenticated).
 app.use('/api/v1/notes', notesRoutes);
+// Notes Share — share subjects with other users
+app.use('/api/v1/notes-shares', notesShareRoutes);
 app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
 app.use('/api/v1/messages', messagesRoutes);

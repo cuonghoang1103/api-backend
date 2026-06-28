@@ -218,6 +218,9 @@ model User {
   noteAttachments  NoteAttachment[]
   noteLinks        NoteLink[]
   noteVocabEntries NoteVocabEntry[]
+  // Phase 4 add — notes subject sharing
+  noteSubjectsOwned  NoteSubjectShare[] @relation("NoteSubjectSharesOwned")
+  noteSubjectsReceived NoteSubjectShare[] @relation("NoteSubjectSharesReceived")
 
   // ─── Social Follow Graph ────────────────────────────────
   following Follow[] @relation("Following")
@@ -3020,10 +3023,54 @@ model NoteSubject {
   notes       Note[]
   attachments NoteAttachment[]
   links       NoteLink[]
+  // Phase 4 add — subject-level sharing
+  shares      NoteSubjectShare[]
 
   @@index([userId, sortOrder], name: "idx_note_subjects_user_sort")
   @@index([userId, isPinned], name: "idx_note_subjects_user_pinned")
   @@map("note_subjects")
+}
+
+// Phase 4 add — share a NoteSubject (folder) with other users
+model NoteSubjectShare {
+  id           Int      @id @default(autoincrement())
+  subjectId    Int      @map("subject_id")
+  // Owner = the user who created the subject and is sharing it
+  ownerId     Int      @map("owner_id")
+  // Recipient = the user who has been granted access
+  recipientId Int      @map("recipient_id")
+  // 'view' = read-only | 'edit' = can modify notes inside
+  permission  String   @default("view") @db.VarChar(20)
+  // Optional note from the owner
+  note        String?  @db.VarChar(500)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  subject   NoteSubject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  owner    User        @relation("NoteSubjectSharesOwned", fields: [ownerId], references: [id], onDelete: Cascade)
+  recipient User        @relation("NoteSubjectSharesReceived", fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@unique([subjectId, recipientId], name: "uk_note_subject_share")
+  @@index([ownerId], name: "idx_note_subject_share_owner")
+  @@index([recipientId], name: "idx_note_subject_share_recipient")
+  @@map("note_subject_shares")
+}
+
+// Phase 4 add — recipient side: folders shared with current user
+model NoteSubjectShareRecipient {
+  id           Int      @id @default(autoincrement())
+  shareId      Int      @map("share_id")
+  subjectId    Int      @map("subject_id")
+  recipientId Int      @map("recipient_id")
+  seenAt      DateTime? @map("seen_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  share    NoteSubjectShare @relation(fields: [shareId], references: [id], onDelete: Cascade)
+  subject  NoteSubject     @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  user    User             @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@unique([shareId, recipientId], name: "uk_note_share_recipient")
+  @@map("note_subject_share_recipients")
 }
 
 model NoteChapter {

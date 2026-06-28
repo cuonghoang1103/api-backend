@@ -15,7 +15,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
  ChevronRight, Plus, Trash2, FileText, FolderPlus, BookOpen, Pin, Clock, X, PanelRight, GripVertical,
- Star, Archive, AlertCircle, FolderTree,
+ Star, Archive, AlertCircle, FolderTree, Share2,
 } from 'lucide-react';
 import {
  DndContext, DragOverlay,
@@ -43,6 +43,8 @@ export interface SidebarCallbacks {
  onDeleteSubject: (id: number) => void;
  onDeleteChapter: (id: number) => void;
  onDeleteNote: (id: number) => void;
+ // Phase 4 — share callbacks
+ onShareSubject: (subject: NoteSubjectTree) => void;
   // Phase 2.5 — drag-reorder callbacks. Each is given the full
   // ordered list of ids in the scope that was reordered. The page
   // forwards to the API and refreshes the tree. We keep the callback
@@ -345,19 +347,20 @@ function SubjectBranch({
  onToggle={() => setExpanded((e) => ({ ...e, [subject.id]: !e[subject.id] }))}
  color={subject.color}
  emoji={subject.emoji}
- label={subject.name}
- active={false}
- onRename={(v) => cb.onRenameSubject(subject.id, v)}
- onDelete={() => cb.onDeleteSubject(subject.id)}
- actions={[
- { icon: PanelRight, title: 'Mở môn học (tệp & liên kết)', onClick: () => cb.onOpenSubject(subject.id) },
- { icon: FolderPlus, title: 'Thêm chương', onClick: () => cb.onAddChapter(subject.id) },
- { icon: Plus, title: 'Thêm ghi chú', onClick: () => cb.onAddNote(subject.id, null) },
- ]}
- dragHandleProps={handleProps}
- />
- )}
- </SortableRow>
+  label={subject.name}
+  active={false}
+  onRename={(v) => cb.onRenameSubject(subject.id, v)}
+  onDelete={() => cb.onDeleteSubject(subject.id)}
+  actions={[
+  { icon: PanelRight, title: 'Mở môn học (tệp & liên kết)', onClick: () => cb.onOpenSubject(subject.id) },
+  { icon: Share2, title: 'Chia sẻ', onClick: () => cb.onShareSubject(subject) },
+  { icon: FolderPlus, title: 'Thêm chương', onClick: () => cb.onAddChapter(subject.id) },
+  { icon: Plus, title: 'Thêm ghi chú', onClick: () => cb.onAddNote(subject.id, null) },
+  ]}
+  dragHandleProps={handleProps}
+  />
+  )}
+  </SortableRow>
  <AnimatePresence initial={false}>
  {isOpen && (
  <motion.div

@@ -21,13 +21,13 @@ import {
   Mail, Phone, Briefcase, GraduationCap, Heart, User, Shield,
   Link2, Users, Image as ImageIcon, Settings, ChevronRight,
   Facebook, Twitter, Github, Linkedin, Youtube, Instagram,
-  Plus, Home, School, MapPinHouse, Flag, Language, CalendarDays,
-  Gender, BookOpen, Star, Grid3X3, UserPlus, MoreHorizontal,
+  Plus, Home, School, MapPinHouse, Flag, CalendarDays,
+  BookOpen, Star, Grid3X3, UserPlus, MoreHorizontal,
   Info, MapPinned, Building, BookText, Eye, EyeOff
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import type { ComponentType } from 'react';
-import { socialUserApi, socialApi } from '@/lib/api';
+import { socialUserApi, fileApi } from '@/lib/api';
 import { authApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useQueryClient } from '@tanstack/react-query';
@@ -336,20 +336,9 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       const blob = await response.blob();
       const file = new File([blob], 'profile-image.jpg', { type: 'image/jpeg' });
 
-      const signedRes = await socialApi.getSignedUploadUrl(file.name, 'IMAGE', file.size);
-      if (!signedRes.success || !signedRes.data) {
-        throw new Error(signedRes.message || 'Không lấy được URL upload');
-      }
-
-      const uploadRes = await fetch(signedRes.data.uploadUrl, {
-        method: 'PUT',
-        body: file,
-        headers: { 'Content-Type': file.type },
-      });
-
-      if (!uploadRes.ok) throw new Error('Upload thất bại');
-
-      const imageUrl = signedRes.data.publicUrl;
+      const uploadRes: any = await fileApi.upload(file, 'images');
+      const imageUrl = uploadRes.data?.data?.url;
+      if (!imageUrl) throw new Error('Upload thất bại');
 
       if (showImageCropper === 'avatar') {
         await authApi.updateProfile({ avatarUrl: imageUrl });
@@ -589,7 +578,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
             
             {p.gender && (
               <InfoItem 
-                icon={Gender} 
+                icon={User}
                 label="Giới tính" 
                 value={p.gender === 'MALE' ? 'Nam' : p.gender === 'FEMALE' ? 'Nữ' : 'Khác'} 
               />
@@ -1400,11 +1389,11 @@ function EditField({
   placeholder,
   options = []
 }: { 
-  label: string; 
-  value: string; 
-  onChange: (v: string) => void; 
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
   type: string;
-  placeholder: string;
+  placeholder?: string;
   options?: { value: string; label: string }[];
 }) {
   return (

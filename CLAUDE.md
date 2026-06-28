@@ -93,8 +93,8 @@ cd frontend && npm run build
 ### Error 1: Deploy Failed - JSX Syntax Error
 **Date:** 2026-06-29
 **File:** `frontend/src/components/notes/NotesShareManagerModal.tsx`
-**Issue:** Extra `</div>` closing tag
-**Fix:** Remove duplicate closing tag, verify JSX structure
+**Issue:** Missing closing `</div>` tag in conditional render block
+**Fix:** Verify JSX structure, ensure every opening tag has matching close
 
 ### Error 2: Deploy Failed - Prisma Schema Relations
 **Date:** 2026-06-29
@@ -121,6 +121,37 @@ user     User           @relation("UserShareRecipients", ...)
 ### Error 3: Prisma Generate Failed
 **Issue:** Schema validation errors
 **Fix:** Always run `npx prisma format` after editing schema
+
+### Error 4: Prisma Unique Constraint Naming
+**Date:** 2026-06-29
+**File:** `src/services/notesShare.service.ts`
+**Issue:** Wrong unique constraint name `subjectId_recipientId` instead of `uk_note_subject_share`
+**Fix:** When using `@@unique` with custom name, use that name in Prisma queries:
+```typescript
+// Wrong
+where: { subjectId_recipientId: { subjectId, recipientId } }
+
+// Correct
+where: { uk_note_subject_share: { subjectId, recipientId } }
+```
+
+### Error 5: Migration Failed - Table Already Exists
+**Date:** 2026-06-29
+**Issue:** Migration failed because table already exists in DB
+**Fix:** Make migrations idempotent:
+```sql
+CREATE TABLE IF NOT EXISTS "table_name" (...);
+-- For constraints:
+DO $$ BEGIN IF NOT EXISTS (...) THEN ALTER TABLE ... END $$;
+```
+
+### Error 6: Migration Stuck in Failed State (P3009)
+**Date:** 2026-06-29
+**Issue:** Previous failed migration blocks new migrations
+**Fix:** In deploy workflow, handle P3009 by marking as rolled back:
+```bash
+npx prisma migrate resolve --rolled-back "migration_name"
+```
 
 ## Feature Implementation Guidelines
 

@@ -91,7 +91,16 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
       setLoading(true);
       try {
         const res = await adminSongsApi.list({ limit: 30 });
-        const items = (res.data?.data?.items ?? []) as SearchHit[];
+        const rawItems = (res.data?.data?.items ?? []) as AdminSong[];
+        // Map AdminSong → SearchHit by aliasing audioUrl → url so
+        // the rest of the component can use the shorter name.
+        // The adminSongsApi shape returns `audioUrl`; without this
+        // mapping, the audio src becomes undefined and the player
+        // fires its 'error' event with "Khong the phat track nay".
+        const items: SearchHit[] = rawItems.map((t) => ({
+          ...t,
+          url: t.audioUrl,
+        }));
         const q = query.trim().toLowerCase();
         setHits(q ? items.filter(
           (t) => t.title.toLowerCase().includes(q) || t.artist.toLowerCase().includes(q),

@@ -975,47 +975,6 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
             onOpenTheater={onOpenTheater}
             musicTrack={post.musicTrack ?? null}
             musicStartSec={post.musicStartSec ?? null}
-            // Floating action bar lives INSIDE the media wrapper
-            // so its `position: absolute` anchors to the image
-            // box. The same component instance is reused for
-            // posts without media (overlay=false → block bar).
-            actionsOverlay={
-              <PostActionsBar
-                myReaction={myReaction}
-                reactionColor={reactionColor}
-                reactionEmoji={reactionEmoji}
-                safeLikesCount={safeLikesCount}
-                handleReact={handleReact}
-                cancelLongPress={cancelLongPress}
-                showReactions={showReactions}
-                setShowReactions={setShowReactions}
-                REACTION_PICKER_ORDER={REACTION_PICKER_ORDER}
-                activeReactions={activeReactions}
-                showComments={showComments}
-                safeCommentsCount={safeCommentsCount}
-                handleToggleComments={handleToggleComments}
-                handleShare={handleShare}
-                showShareMenu={showShareMenu}
-                setShowShareMenu={setShowShareMenu}
-                safeIsSaved={safeIsSaved}
-                safeSavesCount={safeSavesCount}
-                saveButtonRef={saveButtonRef}
-                handleSaveClick={handleSaveClick}
-                post={post}
-                showSavePopover={showSavePopover}
-                setShowSavePopover={setShowSavePopover}
-                cachedCollections={cachedCollections}
-                handleSaveCommit={handleSaveCommit}
-                showSavePopoverV2={showSavePopoverV2}
-                setShowSavePopoverV2={setShowSavePopoverV2}
-                collectionsV2={collectionsV2}
-                saveContext={saveContext}
-                collectionsV2Loading={collectionsV2Loading}
-                handleCommitV2={handleCommitV2}
-                handleCreateV2={handleCreateV2}
-                overlay
-              />
-            }
           />
         )}
 
@@ -1026,47 +985,46 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
           <YouTubeEmbed url={post.youtubeUrl} />
         )}
 
-        {/* Action bar — fallback for posts with NO media. We
-            render it here as a normal block row above the
-            comments so the interaction buttons are still
-            reachable (text-only / file-only posts). */}
-        {safeMedia.length === 0 && (
-          <PostActionsBar
-            myReaction={myReaction}
-            reactionColor={reactionColor}
-            reactionEmoji={reactionEmoji}
-            safeLikesCount={safeLikesCount}
-            handleReact={handleReact}
-            cancelLongPress={cancelLongPress}
-            showReactions={showReactions}
-            setShowReactions={setShowReactions}
-            REACTION_PICKER_ORDER={REACTION_PICKER_ORDER}
-            activeReactions={activeReactions}
-            showComments={showComments}
-            safeCommentsCount={safeCommentsCount}
-            handleToggleComments={handleToggleComments}
-            handleShare={handleShare}
-            showShareMenu={showShareMenu}
-            setShowShareMenu={setShowShareMenu}
-            safeIsSaved={safeIsSaved}
-            safeSavesCount={safeSavesCount}
-            saveButtonRef={saveButtonRef}
-            handleSaveClick={handleSaveClick}
-            post={post}
-            showSavePopover={showSavePopover}
-            setShowSavePopover={setShowSavePopover}
-            cachedCollections={cachedCollections}
-            handleSaveCommit={handleSaveCommit}
-            showSavePopoverV2={showSavePopoverV2}
-            setShowSavePopoverV2={setShowSavePopoverV2}
-            collectionsV2={collectionsV2}
-            saveContext={saveContext}
-            collectionsV2Loading={collectionsV2Loading}
-            handleCommitV2={handleCommitV2}
-            handleCreateV2={handleCreateV2}
-            overlay={false}
-          />
-        )}
+        {/* Action bar — placed BELOW the post content (after the
+            image / YouTube embed) so it doesn't overlay the media.
+            The previous overlay design blocked carousel swipe gestures
+            in the top zone of the image, which broke Next/Prev
+            navigation on every post that had an image. */}
+        <PostActionsBar
+          myReaction={myReaction}
+          reactionColor={reactionColor}
+          reactionEmoji={reactionEmoji}
+          safeLikesCount={safeLikesCount}
+          handleReact={handleReact}
+          cancelLongPress={cancelLongPress}
+          showReactions={showReactions}
+          setShowReactions={setShowReactions}
+          REACTION_PICKER_ORDER={REACTION_PICKER_ORDER}
+          activeReactions={activeReactions}
+          showComments={showComments}
+          safeCommentsCount={safeCommentsCount}
+          handleToggleComments={handleToggleComments}
+          handleShare={handleShare}
+          showShareMenu={showShareMenu}
+          setShowShareMenu={setShowShareMenu}
+          safeIsSaved={safeIsSaved}
+          safeSavesCount={safeSavesCount}
+          saveButtonRef={saveButtonRef}
+          handleSaveClick={handleSaveClick}
+          post={post}
+          showSavePopover={showSavePopover}
+          setShowSavePopover={setShowSavePopover}
+          cachedCollections={cachedCollections}
+          handleSaveCommit={handleSaveCommit}
+          showSavePopoverV2={showSavePopoverV2}
+          setShowSavePopoverV2={setShowSavePopoverV2}
+          collectionsV2={collectionsV2}
+          saveContext={saveContext}
+          collectionsV2Loading={collectionsV2Loading}
+          handleCommitV2={handleCommitV2}
+          handleCreateV2={handleCreateV2}
+          overlay={false}
+        />
 
         {/* Comments section — use grid-template-rows for an
             animated height without triggering layout per frame.
@@ -1602,7 +1560,6 @@ function MediaGrid({
   onOpenTheater,
   musicTrack,
   musicStartSec,
-  actionsOverlay,
 }: {
   media: SocialMedia[];
   /** Owning post id — passed down so MediaItem's Theater button
@@ -1615,12 +1572,6 @@ function MediaGrid({
   // carousels (Instagram itself does the same).
   musicTrack?: MusicTrackMini | null;
   musicStartSec?: number | null;
-  // Phase 6 home upgrade (2026-06-28) — the post's action
-  // bar (Like / Comment / Repost / Share / Bookmark) is
-  // rendered as a floating pill ABOVE the media. We accept
-  // it as a ReactNode so the parent owns the state; we just
-  // provide the positioning context (the relative wrapper).
-  actionsOverlay?: React.ReactNode;
 }) {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
@@ -1690,6 +1641,18 @@ function MediaGrid({
   // handlers always read the latest value.
   const onPointerDown = (e: React.PointerEvent) => {
     if (visual.length <= 1) return;
+    // ─── Critical: don't capture the pointer if the user is
+    // touching an interactive element (the prev/next arrows,
+    // the dot pager, the counter pill). Capturing a pointer
+    // when the click started on a button REDIRECTS all
+    // subsequent pointer events to the carousel wrapper, which
+    // suppresses the synthetic click event on the button. The
+    // user sees a frozen carousel on every Next/Prev click.
+    // We bail out early so the button's own onClick fires. ───
+    const target = e.target as HTMLElement;
+    if (target.closest('button, [role="tab"], a, [role="button"]')) {
+      return;
+    }
     // Only start drag on horizontal intent. A vertical scroll
     // (touch device) should still scroll the page, not the
     // carousel. We bail out if the touch starts with a clear
@@ -1701,8 +1664,13 @@ function MediaGrid({
     startYRef.current = e.clientY;
     startIdxRef.current = currentIdx;
     setDragOffset(0);
+    // Capture on the INNER track (the flex container being
+    // transformed), not the outer wrapper. The buttons are
+    // siblings of the inner track so their pointer events
+    // don't fire here at all — which is exactly what we want.
+    const inner = trackRef.current?.querySelector('[data-carousel-track]') as HTMLElement | null;
     try {
-      e.currentTarget.setPointerCapture(e.pointerId);
+      (inner || e.currentTarget).setPointerCapture(e.pointerId);
     } catch {
       /* setPointerCapture can throw on some browsers when the
          pointer is already released; ignore — pointerup still
@@ -1711,6 +1679,12 @@ function MediaGrid({
   };
   const onPointerMove = (e: React.PointerEvent) => {
     if (!isDraggingRef.current) return;
+    // Defensive: if the move somehow originated on an
+    // interactive element, ignore. (Shouldn't happen now that
+    // onPointerDown bails out, but keep this as a safety net.)
+    const target = e.target as HTMLElement;
+    if (target.closest('button, [role="tab"], a, [role="button"]')) return;
+
     const dx = e.clientX - startXRef.current;
     const dy = e.clientY - startYRef.current;
     // If the user is scrolling vertically (dy dominant), let the
@@ -1801,6 +1775,7 @@ function MediaGrid({
       className="relative w-full overflow-hidden rounded-2xl touch-pan-y select-none"
     >
       <div
+        data-carousel-track
         className="flex"
         style={{
           // ── Bugfix (2026-06-28) ─────────────────────────────────
@@ -1921,7 +1896,6 @@ function MediaGrid({
   if (visual.length === 1) {
     return (
       <div className="mt-3 relative">
-        {actionsOverlay}
         {renderCarousel()}
         {files.length > 0 && (
           <div className="mt-2">
@@ -1942,7 +1916,6 @@ function MediaGrid({
 
   return (
     <div className="mt-3 relative">
-      {actionsOverlay}
       {renderCarousel()}
       {files.length > 0 && (
         <div className="mt-2">
@@ -2894,43 +2867,26 @@ function PostActionsBar(props: {
     overlay,
   } = props;
 
-  // Pill container styling. `overlay=true` positions the bar
-  // absolutely so it sits ON the top edge of the media
-  // container; the parent (MediaGrid) gives us 16px of
-  // padding-top so the bar doesn't collide with the image.
-  // `overlay=false` renders a normal block row above the
-  // comments for posts without images.
-  const containerStyle: React.CSSProperties = overlay
-    ? {
-        position: 'absolute',
-        top: 12,
-        left: 12,
-        right: 12,
-        zIndex: 20,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 4,
-        padding: '6px 8px',
-        borderRadius: 9999,
-        background: 'rgba(15,15,25,0.78)',
-        border: '1px solid rgba(255,255,255,0.10)',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
-        backdropFilter: 'blur(14px)',
-        WebkitBackdropFilter: 'blur(14px)',
-      }
-    : {
-        display: 'flex',
-        alignItems: 'center',
-        gap: 4,
-        padding: '6px 8px',
-        marginTop: 12,
-        marginBottom: 4,
-        borderRadius: 9999,
-        background: 'rgba(15,15,25,0.55)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-      };
+  // Pill container styling. The action bar now sits BELOW the
+  // post content (not overlaid on the image), matching the
+  // Instagram layout. We render it as a full-width rounded
+  // pill with a subtle top divider so it reads as part of
+  // the post card while still being visually distinct from
+  // the media above. `overlay` is kept for type compatibility
+  // but is no longer honoured (always rendered as a block row).
+  const containerStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 4,
+    padding: '8px 8px',
+    marginTop: 10,
+    marginBottom: 4,
+    borderRadius: 9999,
+    background: 'rgba(15,15,25,0.55)',
+    border: '1px solid rgba(255,255,255,0.08)',
+    backdropFilter: 'blur(10px)',
+    WebkitBackdropFilter: 'blur(10px)',
+  };
 
   return (
     <>

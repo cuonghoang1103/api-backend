@@ -226,13 +226,25 @@ export async function createPost(input: CreatePostInput) {
           }
         : input.musicTrackId != null
         ? {
-            // Legacy single-column path. We translate to the
-            // PostMusic row so the new sticker code can read the
-            // same shape regardless of which composer flow
-            // produced the post. The legacy columns remain so
-            // older PostCard clients keep working.
+            // Legacy single-column path. The comment promised
+            // "translate to the PostMusic row" but the code
+            // only wrote the legacy columns — the actual
+            // PostMusic join was never created. The serializer
+            // reads from `post.postMusic.song`, so without the
+            // join row the music sticker has no audio data on
+            // the frontend and MusicSticker errors out with
+            // "Khong the phat track nay". Create the join row
+            // here too so both legacy and new composer flows
+            // produce the same shape.
             musicTrackId: input.musicTrackId,
             musicStartSec: input.musicStartSec ?? null,
+            postMusic: {
+              create: {
+                songId: input.musicTrackId,
+                startSec: input.musicStartSec ?? 0,
+                endSec: null,
+              },
+            },
           }
         : { poll: undefined }) as Record<string, unknown>,
       media: media ? {

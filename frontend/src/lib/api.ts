@@ -349,6 +349,89 @@ export interface NoteShareRecipientMini {
   displayName: string | null;
 }
 
+// Shared subject received from another user
+export interface NoteSharedSubject {
+  id: number;
+  shareId: number;
+  subjectId: number;
+  permission: 'view' | 'edit';
+  sharedAt: string;
+  owner: {
+    id: number;
+    username: string;
+    avatarUrl: string | null;
+    displayName: string | null;
+  };
+  subject: {
+    id: number;
+    name: string;
+    emoji: string | null;
+    color: string | null;
+    chapters: Array<{ id: number; title: string }>;
+    notes: Array<{ id: number; title: string; updatedAt: string }>;
+  };
+}
+
+// Full shared subject with notes content
+export interface NoteSharedSubjectFull {
+  id: number;
+  name: string;
+  emoji: string | null;
+  color: string | null;
+  userId: number;
+  myPermission: 'view' | 'edit';
+  isOwner: boolean;
+  chapters: Array<{
+    id: number;
+    title: string;
+    sortOrder: number;
+    notes: Array<{
+      id: number;
+      title: string;
+      contentJson: any;
+      contentHtml: string | null;
+      isPinned: boolean;
+      isFavorite: boolean;
+      isArchived: boolean;
+      sortOrder: number;
+    }>;
+  }>;
+  notes: Array<{
+    id: number;
+    title: string;
+    contentJson: any;
+    contentHtml: string | null;
+    isPinned: boolean;
+    isFavorite: boolean;
+    isArchived: boolean;
+    sortOrder: number;
+  }>;
+}
+
+// Summary for sidebar - matches backend listSharedWithMe response
+export interface NoteSharedSummary {
+  id: number;
+  subjectId: number;
+  ownerId: number;
+  recipientId: number;
+  permission: string;
+  createdAt: string;
+  owner: {
+    id: number;
+    username: string;
+    avatarUrl: string | null;
+    displayName: string | null;
+  };
+  subject: {
+    id: number;
+    name: string;
+    emoji: string | null;
+    color: string | null;
+    chapters: Array<{ id: number; title: string }>;
+    notes: Array<{ id: number; title: string; updatedAt: string }>;
+  };
+}
+
 export const noteShareApi = {
   // Share a subject with another user
   create: (data: { subjectId: number; recipientId: number; permission?: 'view' | 'edit'; note?: string }) =>
@@ -372,11 +455,11 @@ export const noteShareApi = {
 
   // List subjects shared with me (inbox)
   listReceived: () =>
-    api.get<{ data: NoteShare[] }>('/notes-shares/received'),
+    api.get<{ data: NoteSharedSummary[] }>('/notes-shares/received'),
 
   // Get a shared subject with full tree
   getReceivedSubject: (subjectId: number) =>
-    api.get<{ data: any }>(`/notes-shares/received/${subjectId}`),
+    api.get<{ data: NoteSharedSubjectFull }>(`/notes-shares/received/${subjectId}`),
 
   // Search users to share with
   searchUsers: (q: string, limit = 8) =>

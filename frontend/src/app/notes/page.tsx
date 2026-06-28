@@ -8,10 +8,12 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon } from 'lucide-react';
-import { notesApi } from '@/lib/api';
+import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText } from 'lucide-react';
+import { toast } from 'sonner';
+import { notesApi, noteShareApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import type { NoteSubjectTree, NoteRecent, NoteFull, NoteSubjectFull } from '@/types';
+import type { NoteSharedSubjectFull } from '@/lib/api';
 import NotesSidebar from '@/components/notes/NotesSidebar';
 import NoteEditor from '@/components/notes/NoteEditor';
 import NoteResourcePanel from '@/components/notes/NoteResourcePanel';
@@ -20,6 +22,7 @@ import FlashcardReview from '@/components/notes/FlashcardReview';
 import SubjectView from '@/components/notes/SubjectView';
 import NotesSearch from '@/components/notes/NotesSearch';
 import NotesShareManagerModal from '@/components/notes/NotesShareManagerModal';
+import NotesSharedWithMe from '@/components/notes/NotesSharedWithMe';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
 import { NotesThemeProvider, useNotesTheme } from '@/components/notes/NotesThemeProvider';
 
@@ -58,10 +61,41 @@ function NotesPageInner() {
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [sharingSubject, setSharingSubject] = useState<NoteSubjectTree | null>(null);
 
+  // Phase 4: Shared with me state
+  const [sharedSubject, setSharedSubject] = useState<NoteSharedSubjectFull | null>(null);
+  const [sharedSelectedNote, setSharedSelectedNote] = useState<any | null>(null);
+
   const handleOpenShare = useCallback((subject: NoteSubjectTree) => {
     setSharingSubject(subject);
     setShareModalOpen(true);
   }, []);
+
+  // Handle opening a shared subject
+  const handleOpenSharedSubject = useCallback(async (subjectId: number) => {
+    try {
+      const res = await noteShareApi.getReceivedSubject(subjectId);
+      setSharedSubject(res.data.data);
+      setSelected(null);
+      setSubjectView(null);
+      setSharedSelectedNote(null);
+    } catch {
+      toast.error('Không tải được nội dung chia sẻ');
+    }
+  }, []);
+
+  // Handle opening a note from shared subject
+  const handleOpenSharedNote = useCallback(async (subjectId: number, noteId: number) => {
+    if (!sharedSubject) {
+      // Load the subject first
+      await handleOpenSharedSubject(subjectId);
+    }
+    // Find the note in the loaded subject
+    const note = sharedSubject?.notes?.find(n => n.id === noteId) ||
+      sharedSubject?.chapters?.flatMap(c => c.notes).find(n => n.id === noteId);
+    if (note) {
+      setSharedSelectedNote(note);
+    }
+  }, [sharedSubject, handleOpenSharedSubject]);
 
   const handleShareChanged = useCallback(() => {
     // Refresh will happen naturally when user interacts
@@ -320,14 +354,21 @@ function NotesPageInner() {
   }
 
   const sidebar = (
-    <NotesSidebar
-      tree={tree}
-      recent={recent}
-      selectedNoteId={selected?.id ?? null}
-      filter={filter}
-      filteredNotes={filteredNotes}
-      {...callbacks}
-    />
+    <>
+      <NotesSidebar
+        tree={tree}
+        recent={recent}
+        selectedNoteId={selected?.id ?? null}
+        filter={filter}
+        filteredNotes={filteredNotes}
+        {...callbacks}
+      />
+      <NotesSharedWithMe
+        onOpenSharedSubject={handleOpenSharedSubject}
+        onOpenSharedNote={handleOpenSharedNote}
+        selectedNoteId={sharedSelectedNote?.id ?? null}
+      />
+    </>
   );
 
   return (
@@ -396,10 +437,89 @@ function NotesPageInner() {
 
           {loading ? (
             <div className="flex h-[60vh] items-center justify-center text-slate-500"><Loader2 className="h-5 w-5 animate-spin" /></div>
+          ) : sharedSubject ? (
+            // Phase 4: Shared subject view
+            <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
+              {/* Shared subject header */}
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-neon-violet/10">
+                  <span className="text-2xl">{sharedSubject.emoji || '📁'}</span>
+                </div>
+                <div>
+                  <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">{sharedSubject.name}</h1>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Được chia sẻ với bạn • Quyền: {sharedSubject.myPermission === 'edit' ? 'Chỉnh sửa' : 'Xem'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Notes at root level */}
+              {sharedSubject.notes?.length > 0 && (
+                <div className="mb-6">
+                  <h2 className="mb-2 text-sm font-medium text-slate-500">Ghi chú</h2>
+                  <div className="space-y-2">
+                    {sharedSubject.notes.map((note) => (
+                      <button
+                        key={note.id}
+                        onClick={() => setSharedSelectedNote(note)}
+                        className="w-full rounded-xl border border-slate-200 bg-white p-4 text-left transition-colors hover:bg-slate-50 dark:border-white/[0.06] dark:bg-[#1a1f27] dark:hover:bg-white/[0.03]"
+                      >
+                        <h3 className="font-medium text-slate-900 dark:text-slate-100">{note.title}</h3>
+                        {note.contentHtml && (
+                          <div className="mt-2 text-sm text-slate-500 line-clamp-2" dangerouslySetInnerHTML={{ __html: note.contentHtml }} />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Chapters */}
+              {sharedSubject.chapters?.map((chapter) => (
+                <div key={chapter.id} className="mb-6">
+                  <h2 className="mb-2 text-sm font-medium text-slate-500">{chapter.title}</h2>
+                  <div className="space-y-2">
+                    {chapter.notes.map((note) => (
+                      <button
+                        key={note.id}
+                        onClick={() => setSharedSelectedNote(note)}
+                        className="w-full rounded-xl border border-slate-200 bg-white p-4 text-left transition-colors hover:bg-slate-50 dark:border-white/[0.06] dark:bg-[#1a1f27] dark:hover:bg-white/[0.03]"
+                      >
+                        <h3 className="font-medium text-slate-900 dark:text-slate-100">{note.title}</h3>
+                        {note.contentHtml && (
+                          <div className="mt-2 text-sm text-slate-500 line-clamp-2" dangerouslySetInnerHTML={{ __html: note.contentHtml }} />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              {sharedSubject.notes?.length === 0 && sharedSubject.chapters?.length === 0 && (
+                <div className="flex h-[40vh] flex-col items-center justify-center text-slate-500">
+                  <FileText className="mb-3 h-9 w-9 text-slate-400/50" />
+                  <p className="text-sm">Không có ghi chú nào trong mục này</p>
+                </div>
+              )}
+            </div>
           ) : subjectView ? (
             <SubjectView subject={subjectView} treeSubject={treeSubjectFor(subjectView.id)} onChanged={refreshSubject} onSelectNote={selectNote} onAddNote={addNote} />
           ) : selected ? (
             <NoteEditor key={selected.id} note={selected} onSave={saveNote} />
+          ) : sharedSelectedNote ? (
+            // Phase 4: Read-only note view for shared notes
+            <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
+              <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6">{sharedSelectedNote.title}</h1>
+              {sharedSelectedNote.contentHtml && (
+                <div className="prose prose-slate dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sharedSelectedNote.contentHtml }} />
+              )}
+              <button
+                onClick={() => setSharedSelectedNote(null)}
+                className="mt-6 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
+              >
+                ← Quay lại danh sách
+              </button>
+            </div>
           ) : (
             <div className="flex h-[60vh] flex-col items-center justify-center px-6 text-center text-slate-500">
               <NotebookPen className="mb-3 h-9 w-9 text-teal-400/50" />
@@ -470,28 +590,33 @@ function NotesPageInner() {
   />
 
   {/* Mobile drawer */}
- <AnimatePresence>
- {drawerOpen && (
- <>
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDrawerOpen(false)} className="fixed inset-0 z-40 bg-black/55 md:hidden" />
- <motion.aside
- initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
- transition={{ type: 'spring', stiffness: 380, damping: 36 }}
- className="fixed inset-y-0 left-0 z-50 w-[82%] max-w-xs border-r border-slate-200 bg-white pt-16 dark:border-white/[0.06] dark:bg-[#0e1218] md:hidden"
- >
-  <NotesSidebar
-   tree={tree}
-   recent={recent}
-   selectedNoteId={selected?.id ?? null}
-   filter={filter}
-   filteredNotes={filteredNotes}
-   onClose={() => setDrawerOpen(false)}
-   {...callbacks}
-  />
- </motion.aside>
- </>
- )}
- </AnimatePresence>
+  <AnimatePresence>
+  {drawerOpen && (
+  <>
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDrawerOpen(false)} className="fixed inset-0 z-40 bg-black/55 md:hidden" />
+  <motion.aside
+  initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
+  transition={{ type: 'spring', stiffness: 380, damping: 36 }}
+  className="fixed inset-y-0 left-0 z-50 w-[82%] max-w-xs border-r border-slate-200 bg-white pt-16 dark:border-white/[0.06] dark:bg-[#0e1218] md:hidden overflow-y-auto"
+  >
+   <NotesSidebar
+    tree={tree}
+    recent={recent}
+    selectedNoteId={selected?.id ?? null}
+    filter={filter}
+    filteredNotes={filteredNotes}
+    onClose={() => setDrawerOpen(false)}
+    {...callbacks}
+   />
+   <NotesSharedWithMe
+    onOpenSharedSubject={handleOpenSharedSubject}
+    onOpenSharedNote={handleOpenSharedNote}
+    selectedNoteId={sharedSelectedNote?.id ?? null}
+   />
+  </motion.aside>
+  </>
+  )}
+  </AnimatePresence>
   </div>
  );
 }

@@ -33,6 +33,7 @@ export default function HubLinkList({ links, onEdit, onDelete, onStatusChange, o
             link={link}
             onEdit={onEdit}
             onDelete={onDelete}
+            onStatusChange={onStatusChange}
             onShare={onShare}
             onManageShares={onManageShares}
             sharedCount={sharedCounts?.[link.id]}

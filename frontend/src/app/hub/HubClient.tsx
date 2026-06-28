@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Layers, LogIn, Trash2 } from 'lucide-react';
+import { Sparkles, Layers, LogIn, Trash2, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { hubApi, hubFileApi, hubShareApi, type HubFolder, type HubLink, type HubFile, type HubShare } from '@/lib/api';
@@ -26,6 +26,7 @@ import HubShareModal from '@/components/hub/HubShareModal';
 import HubShareManagerModal from '@/components/hub/HubShareManagerModal';
 import HubSharedWithMe from '@/components/hub/HubSharedWithMe';
 import HubSharedItemViewer from '@/components/hub/HubSharedItemViewer';
+import HubFileMenu from './HubFileMenu';
 
 type FolderSelection = number | 'all' | 'null';
 
@@ -579,13 +580,14 @@ export default function HubClient({
                             </p>
                           </div>
                         </button>
-                        <button
-                          onClick={() => { if (confirm(`Xoa file "${f.name}"?`)) void handleDeleteFile(f.id); }}
-                          className="rounded p-1.5 text-text-muted hover:text-red-400"
-                          aria-label="Xoa file"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        <HubFileMenu
+                          file={f}
+                          onDelete={handleDeleteFile}
+                          onStatusChange={(id, status) => { void handleStatusChange('file', id, status); }}
+                          onShare={(f) => setShareModalItem({ kind: 'file', id: f.id, label: f.name })}
+                          onManageShares={(f) => setManageItem({ kind: 'file', id: f.id, label: f.name })}
+                          sharedCount={sharedCounts[f.id]}
+                        />
                       </div>
                     ))}
                     <HubLinkList

@@ -1,15 +1,19 @@
 'use client';
 
 /**
- * ProfileDetail — Redesigned profile page (2026-06-28)
+ * ProfileDetail — Enhanced profile page (2026-06-28)
  *
- * Layout: 3-column grid like Facebook
- * - Left sidebar (280px): About, Stats, Friends
- * - Main (1fr, max 600px): Tabs + Posts feed
- * - Right sidebar (280px): empty / suggestions
+ * Layout: 3-column grid like Facebook (90% viewport width)
+ * - Left sidebar (300px): About, Contact, Personal, Stats, Friends
+ * - Main (1fr, max 700px): Tabs + Posts feed
+ * - Right sidebar (300px): empty / suggestions
  *
  * Features:
- * - Compact cover header with avatar, name, bio, follow button
+ * - Expanded 90% viewport width for better visual experience
+ * - Separate avatar from cover photo (classic profile header style)
+ * - Avatar and cover photo upload/edit functionality
+ * - Contact section: name, email, phone, gender, birth year, location, work, links
+ * - Personal section: bio, website, education, interests
  * - Tabs: Bài viết | Ảnh | Đã thích
  * - Posts tab shows vertical feed with full PostCard (not grid)
  * - Left sidebar widgets for profile info
@@ -19,18 +23,20 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ArrowLeft, X, Edit3, Globe, MapPin, Calendar,
+  ArrowLeft, X, Edit3, Globe, MapPin, Calendar, Camera,
   Link2, Users, Image as ImageIcon, Loader2, Check,
+  Mail, Phone, Briefcase, GraduationCap, Heart,
+  Facebook, Twitter, Github, Linkedin, Youtube, Instagram,
+  User, Shield, Plus, Trash2
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import type { ComponentType } from 'react';
 import { socialUserApi, socialApi } from '@/lib/api';
+import { authApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-
-type Tab = 'posts' | 'media' | 'liked';
 
 // Dynamic import PostCard for the feed (named export)
 const PostCard = dynamic(
@@ -38,6 +44,33 @@ const PostCard = dynamic(
   () => import('@/components/social/PostCard').then((m) => m.PostCard as ComponentType<{ post: any }>),
   { loading: () => <div className="h-48 animate-pulse rounded-2xl bg-darkcard/30" /> },
 );
+
+type Tab = 'posts' | 'media' | 'liked';
+
+// Extended profile type
+interface ExtendedProfile {
+  id: number;
+  username: string;
+  email: string;
+  fullName?: string;
+  displayName?: string;
+  bio?: string;
+  avatarUrl?: string;
+  coverPhoto?: string;
+  coverPhotoUrl?: string;
+  gender?: string;
+  birthYear?: number;
+  phone?: string;
+  location?: string;
+  work?: string;
+  education?: string;
+  websiteUrl?: string;
+  socialLinks?: Record<string, string>;
+  followerCount?: number;
+  followingCount?: number;
+  isFollowing?: boolean;
+  isOnline?: boolean;
+}
 
 export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) {
   const router = useRouter();
@@ -47,8 +80,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const queryClient = useQueryClient();
 
   // --- Profile state ---
-  type ProfileWithExtras = Awaited<ReturnType<typeof socialUserApi.getProfile>> extends { data: infer T } ? T : never;
-  const [profile, setProfile] = useState<ProfileWithExtras | null>(null);
+  const [profile, setProfile] = useState<ExtendedProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   // --- Tabs ---
@@ -77,10 +109,33 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const [loadingLiked, setLoadingLiked] = useState(false);
   const likedSentinelRef = useRef<HTMLDivElement | null>(null);
 
-  // --- Bio edit modal ---
-  const [editingBio, setEditingBio] = useState(false);
+  // --- Modal states ---
+  const [activeModal, setActiveModal] = useState<'bio' | 'contact' | 'personal' | 'avatar' | 'cover' | null>(null);
+  const [savingModal, setSavingModal] = useState(false);
+
+  // --- Bio/Personal form state ---
   const [bioDraft, setBioDraft] = useState('');
-  const [savingBio, setSavingBio] = useState(false);
+  const [personalDraft, setPersonalDraft] = useState({
+    websiteUrl: '',
+    education: '',
+  });
+
+  // --- Contact form state ---
+  const [contactDraft, setContactDraft] = useState({
+    fullName: '',
+    displayName: '',
+    phone: '',
+    gender: '' as '' | 'MALE' | 'FEMALE' | 'OTHER',
+    birthYear: '',
+    location: '',
+    work: '',
+    email: '',
+  });
+
+  // --- Avatar/Cover upload state ---
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   const isOwn = currentUser?.id === id;
 
@@ -93,7 +148,24 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       .getProfile(id)
       .then((res: any) => {
         if (cancelled) return;
-        setProfile(res.data?.data ?? res.data);
+        const data = res.data?.data ?? res.data;
+        setProfile(data);
+        // Initialize drafts
+        setBioDraft(data.bio ?? '');
+        setPersonalDraft({
+          websiteUrl: data.websiteUrl ?? '',
+          education: data.education ?? '',
+        });
+        setContactDraft({
+          fullName: data.fullName ?? '',
+          displayName: data.displayName ?? '',
+          phone: data.phone ?? '',
+          gender: data.gender ?? '',
+          birthYear: data.birthYear?.toString() ?? '',
+          location: data.location ?? '',
+          work: data.work ?? '',
+          email: data.email ?? '',
+        });
         setLoading(false);
       })
       .catch(() => {
@@ -246,24 +318,132 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, likedHasMore, loadingLiked]);
 
-  // --- Bio edit ---
-  const openBioEdit = () => {
-    if (!profile) return;
-    setBioDraft(profile.bio ?? '');
-    setEditingBio(true);
+  // --- Image upload handler ---
+  const handleImageUpload = async (file: File, type: 'avatar' | 'cover') => {
+    if (!file.type.startsWith('image/')) {
+      toast.error('Vui lòng chọn file hình ảnh');
+      return;
+    }
+
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      toast.error('Kích thước file quá lớn (tối đa 5MB)');
+      return;
+    }
+
+    setUploadingImage(true);
+    try {
+      // Get signed URL
+      const signedRes = await socialApi.getSignedUploadUrl(file.name, file.type === 'video/mp4' ? 'VIDEO' : 'IMAGE', file.size);
+      if (!signedRes.success || !signedRes.data) {
+        throw new Error(signedRes.message || 'Failed to get upload URL');
+      }
+
+      // Upload to signed URL
+      const uploadRes = await fetch(signedRes.data.uploadUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+        },
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const imageUrl = signedRes.data.publicUrl;
+
+      // Update profile
+      if (type === 'avatar') {
+        await authApi.updateProfile({ avatarUrl: imageUrl });
+        setProfile(prev => prev ? { ...prev, avatarUrl: imageUrl } : prev);
+        toast.success('Cập nhật ảnh đại diện thành công');
+      } else {
+        await socialUserApi.updateCoverPhoto(imageUrl);
+        setProfile(prev => prev ? { ...prev, coverPhoto: imageUrl, coverPhotoUrl: imageUrl } : prev);
+        toast.success('Cập nhật ảnh bìa thành công');
+      }
+
+      // Refresh auth store
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    } catch (err: any) {
+      toast.error(err.message || 'Không thể tải lên hình ảnh');
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
+  // --- Bio save ---
   const saveBio = async () => {
-    setSavingBio(true);
+    setSavingModal(true);
     try {
       await socialUserApi.updateOwnProfile({ bio: bioDraft });
-      setProfile((prev: any) => prev ? { ...prev, bio: bioDraft } : prev);
-      setEditingBio(false);
-      toast.success('Da cap nhat tieu su');
+      setProfile(prev => prev ? { ...prev, bio: bioDraft } : prev);
+      setActiveModal(null);
+      toast.success('Đã cập nhật tiểu sử');
     } catch {
-      toast.error('Khong the cap nhat tieu su');
+      toast.error('Không thể cập nhật tiểu sử');
     } finally {
-      setSavingBio(false);
+      setSavingModal(false);
+    }
+  };
+
+  // --- Contact save ---
+  const saveContact = async () => {
+    setSavingModal(true);
+    try {
+      const updateData: any = {
+        fullName: contactDraft.fullName || undefined,
+        displayName: contactDraft.displayName || undefined,
+        phone: contactDraft.phone || undefined,
+        gender: contactDraft.gender || undefined,
+        birthYear: contactDraft.birthYear ? parseInt(contactDraft.birthYear) : undefined,
+      };
+      await authApi.updateProfile(updateData);
+      await socialUserApi.updateOwnProfile({
+        location: contactDraft.location || undefined,
+        work: contactDraft.work || undefined,
+      });
+      setProfile(prev => prev ? {
+        ...prev,
+        fullName: contactDraft.fullName,
+        displayName: contactDraft.displayName,
+        phone: contactDraft.phone,
+        gender: contactDraft.gender,
+        birthYear: contactDraft.birthYear ? parseInt(contactDraft.birthYear) : undefined,
+        location: contactDraft.location,
+        work: contactDraft.work,
+      } : prev);
+      setActiveModal(null);
+      toast.success('Đã cập nhật thông tin liên hệ');
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    } catch {
+      toast.error('Không thể cập nhật thông tin');
+    } finally {
+      setSavingModal(false);
+    }
+  };
+
+  // --- Personal save ---
+  const savePersonal = async () => {
+    setSavingModal(true);
+    try {
+      await socialUserApi.updateOwnProfile({
+        websiteUrl: personalDraft.websiteUrl || undefined,
+        education: personalDraft.education || undefined,
+      });
+      setProfile(prev => prev ? {
+        ...prev,
+        websiteUrl: personalDraft.websiteUrl,
+        education: personalDraft.education,
+      } : prev);
+      setActiveModal(null);
+      toast.success('Đã cập nhật thông tin cá nhân');
+    } catch {
+      toast.error('Không thể cập nhật thông tin');
+    } finally {
+      setSavingModal(false);
     }
   };
 
@@ -271,7 +451,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const [following, setFollowing] = useState<boolean | null>(null);
   const [followBusy, setFollowBusy] = useState(false);
   useEffect(() => {
-    if (profile) setFollowing((profile as any).isFollowing ?? null);
+    if (profile) setFollowing(profile.isFollowing ?? null);
   }, [profile]);
 
   const toggleFollow = async () => {
@@ -280,11 +460,11 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
     try {
       const res: any = await socialUserApi.toggleFollow(id);
       setFollowing(!!(res?.data?.following ?? !following));
-      setProfile((prev: any) => prev ? {
+      setProfile((prev) => prev ? {
         ...prev,
-        isFollowing: !(prev as any).isFollowing,
-        followerCount: ((prev as any).followerCount ?? 0) + (((prev as any).isFollowing) ? -1 : 1),
-      } as any : prev);
+        isFollowing: !prev.isFollowing,
+        followerCount: (prev.followerCount ?? 0) + (prev.isFollowing ? -1 : 1),
+      } : prev);
     } catch {
       toast.error('Khong the theo doi');
     } finally {
@@ -292,23 +472,37 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
     }
   };
 
+  // --- Social link icons ---
+  const getSocialIcon = (key: string) => {
+    const icons: Record<string, any> = {
+      facebook: Facebook,
+      twitter: Twitter,
+      github: Github,
+      linkedin: Linkedin,
+      youtube: Youtube,
+      instagram: Instagram,
+      website: Globe,
+    };
+    return icons[key.toLowerCase()] || Link2;
+  };
+
   // ─── Loading skeleton ───────────────────────────────────────────
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto">
+      <div className="w-[90vw] max-w-7xl mx-auto">
         {/* Cover skeleton */}
-        <div className="h-48 animate-pulse rounded-2xl bg-darkcard/40 mb-4" />
+        <div className="h-56 animate-pulse rounded-2xl bg-darkcard/40 mb-6" />
         <div className="flex gap-6">
           {/* Sidebar skeleton */}
-          <div className="w-72 shrink-0 space-y-4">
-            <div className="h-64 animate-pulse rounded-2xl bg-darkcard/30" />
-            <div className="h-32 animate-pulse rounded-2xl bg-darkcard/30" />
+          <div className="w-80 shrink-0 space-y-4">
+            <div className="h-80 animate-pulse rounded-2xl bg-darkcard/30" />
+            <div className="h-48 animate-pulse rounded-2xl bg-darkcard/30" />
           </div>
           {/* Main skeleton */}
           <div className="flex-1 space-y-4">
-            <div className="h-12 animate-pulse rounded-xl bg-darkcard/30" />
-            <div className="h-48 animate-pulse rounded-2xl bg-darkcard/30" />
-            <div className="h-48 animate-pulse rounded-2xl bg-darkcard/30" />
+            <div className="h-14 animate-pulse rounded-xl bg-darkcard/30" />
+            <div className="h-56 animate-pulse rounded-2xl bg-darkcard/30" />
+            <div className="h-56 animate-pulse rounded-2xl bg-darkcard/30" />
           </div>
         </div>
       </div>
@@ -323,50 +517,108 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
     );
   }
 
-  const p = profile as any;
+  const p = profile;
   const cover = p.coverPhoto ?? p.coverPhotoUrl;
+  const genderLabel = p.gender === 'MALE' ? 'Nam' : p.gender === 'FEMALE' ? 'Nữ' : p.gender === 'OTHER' ? 'Khác' : null;
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="w-[90vw] max-w-7xl mx-auto">
       {/* ─── Cover Header ─────────────────────────────────────── */}
-      <div className="rounded-2xl overflow-hidden border border-darkborder bg-darkcard/40 mb-4">
-        {/* Cover image */}
+      <div className="rounded-2xl overflow-hidden border border-darkborder bg-darkcard/40 mb-6">
+        {/* Cover image - full width */}
         <div
-          className="relative h-48 sm:h-56"
+          className="relative h-56"
           style={cover ? undefined : { background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
         >
           {cover && (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={cover} alt="" className="h-full w-full object-cover" />
           )}
+
+          {/* Cover photo upload button */}
+          {isOwn && (
+            <label className="absolute bottom-3 right-3 cursor-pointer inline-flex items-center gap-2 rounded-lg bg-black/60 hover:bg-black/70 px-3 py-1.5 text-sm font-medium text-white transition-colors">
+              {uploadingImage ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Camera className="h-4 w-4" />
+              )}
+              <span>Đổi ảnh bìa</span>
+              <input
+                ref={coverInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImageUpload(file, 'cover');
+                  e.target.value = '';
+                }}
+              />
+            </label>
+          )}
         </div>
 
-        {/* Avatar + Info row */}
-        <div className="px-4 pb-4 sm:px-6">
-          <div className="flex items-end justify-between -mt-12 sm:-mt-14 gap-4">
-            {/* Avatar */}
-            <div className="h-24 w-24 sm:h-28 sm:w-28 shrink-0 rounded-full border-4 border-darkcard bg-darkcard overflow-hidden shadow-xl">
-              {p.avatarUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={p.avatarUrl} alt="" className="h-full w-full object-cover" />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neon-violet to-neon-pink text-3xl font-bold text-white">
-                  {(p.displayName || p.username || '?').slice(0, 1).toUpperCase()}
-                </div>
+        {/* Avatar + Info row - positioned below cover */}
+        <div className="px-6 pb-5">
+          <div className="flex items-end justify-between -mt-16 gap-4">
+            {/* Avatar - separated from cover */}
+            <div className="relative">
+              <div className="h-32 w-32 sm:h-36 sm:w-36 shrink-0 rounded-full border-4 border-darkcard bg-darkcard overflow-hidden shadow-2xl">
+                {p.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.avatarUrl} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neon-violet to-neon-pink text-4xl sm:text-5xl font-bold text-white">
+                    {(p.displayName || p.fullName || p.username || '?').slice(0, 1).toUpperCase()}
+                  </div>
+                )}
+              </div>
+
+              {/* Avatar upload button */}
+              {isOwn && (
+                <label className="absolute bottom-1 right-1 cursor-pointer h-8 w-8 rounded-full bg-black/70 hover:bg-black/80 flex items-center justify-center border-2 border-darkcard transition-colors">
+                  {uploadingImage ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-white" />
+                  ) : (
+                    <Camera className="h-3.5 w-3.5 text-white" />
+                  )}
+                  <input
+                    ref={avatarInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImageUpload(file, 'avatar');
+                      e.target.value = '';
+                    }}
+                  />
+                </label>
               )}
             </div>
 
             {/* Actions */}
             <div className="flex gap-2 mb-1">
               {isOwn ? (
-                <button
-                  type="button"
-                  onClick={openBioEdit}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-darkborder bg-darkcard/60 px-3 py-1.5 text-sm font-medium text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                >
-                  <Edit3 className="h-3.5 w-3.5" />
-                  Sửa tiểu sử
-                </button>
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal('contact')}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-darkborder bg-darkcard/60 px-3 py-1.5 text-sm font-medium text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+                  >
+                    <Edit3 className="h-3.5 w-3.5" />
+                    Chỉnh sửa
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal('bio')}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-darkborder bg-darkcard/60 px-3 py-1.5 text-sm font-medium text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+                  >
+                    <User className="h-3.5 w-3.5" />
+                    Cá nhân
+                  </button>
+                </>
               ) : (
                 <>
                   <button
@@ -374,7 +626,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                     onClick={toggleFollow}
                     disabled={followBusy || following === null}
                     className={cn(
-                      'inline-flex items-center gap-1.5 rounded-lg px-4 py-1.5 text-sm font-semibold transition-colors',
+                      'inline-flex items-center gap-1.5 rounded-lg px-5 py-1.5 text-sm font-semibold transition-colors',
                       following
                         ? 'border border-darkborder bg-darkcard/60 text-text-secondary hover:bg-white/5'
                         : 'bg-gradient-to-r from-neon-violet to-neon-pink text-white hover:opacity-90',
@@ -395,12 +647,12 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
           </div>
 
           {/* Name + stats */}
-          <div className="mt-2">
-            <h1 className="text-2xl font-bold text-text-primary">
+          <div className="mt-3">
+            <h1 className="text-2xl sm:text-3xl font-bold text-text-primary">
               {p.displayName || p.fullName || p.username}
             </h1>
             <p className="text-sm text-text-muted">@{p.username}</p>
-            <div className="mt-2 flex items-center gap-4 text-sm text-text-muted">
+            <div className="mt-2 flex items-center gap-5 text-sm text-text-muted">
               <span><strong className="text-text-primary">{p.followerCount ?? 0}</strong> người theo dõi</span>
               <span><strong className="text-text-primary">{p.followingCount ?? 0}</strong> đang theo dõi</span>
               {p.isOnline && (
@@ -417,32 +669,65 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       {/* ─── Main Layout: Sidebar + Main + Right ─────────────── */}
       <div className="flex gap-6 items-start">
         {/* ─── LEFT SIDEBAR ──────────────────────────────────── */}
-        <div className="w-72 shrink-0 space-y-4">
-          {/* About Card */}
+        <div className="w-80 shrink-0 space-y-4">
+          {/* Contact Card */}
           <div className="rounded-2xl border border-darkborder bg-darkcard/40 p-4">
-            <h2 className="text-base font-semibold text-text-primary mb-3">Giới thiệu</h2>
-            {p.bio && (
-              <p className="text-sm text-text-secondary mb-3 whitespace-pre-wrap">{p.bio}</p>
-            )}
-            <div className="space-y-2 text-sm text-text-muted">
-              {p.location && (
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 shrink-0" />
-                  <span>{p.location}</span>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-base font-semibold text-text-primary flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                Liên hệ
+              </h2>
+              {isOwn && (
+                <button
+                  type="button"
+                  onClick={() => setActiveModal('contact')}
+                  className="text-xs text-neon-violet hover:underline"
+                >
+                  Chỉnh sửa
+                </button>
+              )}
+            </div>
+            <div className="space-y-2 text-sm">
+              {p.fullName && (
+                <div className="flex items-center gap-2 text-text-secondary">
+                  <User className="h-4 w-4 shrink-0 text-text-muted" />
+                  <span>{p.fullName}</span>
+                </div>
+              )}
+              {p.email && (
+                <div className="flex items-center gap-2 text-text-secondary">
+                  <Mail className="h-4 w-4 shrink-0 text-text-muted" />
+                  <span className="truncate">{p.email}</span>
+                </div>
+              )}
+              {p.phone && (
+                <div className="flex items-center gap-2 text-text-secondary">
+                  <Phone className="h-4 w-4 shrink-0 text-text-muted" />
+                  <span>{p.phone}</span>
+                </div>
+              )}
+              {genderLabel && (
+                <div className="flex items-center gap-2 text-text-secondary">
+                  <Heart className="h-4 w-4 shrink-0 text-text-muted" />
+                  <span>{genderLabel}</span>
                 </div>
               )}
               {p.birthYear && (
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 shrink-0" />
+                <div className="flex items-center gap-2 text-text-secondary">
+                  <Calendar className="h-4 w-4 shrink-0 text-text-muted" />
                   <span>Sinh năm {p.birthYear}</span>
                 </div>
               )}
-              {p.websiteUrl && (
-                <div className="flex items-center gap-2">
-                  <Link2 className="h-4 w-4 shrink-0" />
-                  <a href={p.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-neon-violet hover:underline truncate">
-                    {p.websiteUrl.replace(/^https?:\/\//, '')}
-                  </a>
+              {p.location && (
+                <div className="flex items-center gap-2 text-text-secondary">
+                  <MapPin className="h-4 w-4 shrink-0 text-text-muted" />
+                  <span>{p.location}</span>
+                </div>
+              )}
+              {p.work && (
+                <div className="flex items-center gap-2 text-text-secondary">
+                  <Briefcase className="h-4 w-4 shrink-0 text-text-muted" />
+                  <span>{p.work}</span>
                 </div>
               )}
             </div>
@@ -451,20 +736,61 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
             {p.socialLinks && Object.keys(p.socialLinks).length > 0 && (
               <div className="mt-3 pt-3 border-t border-darkborder/40">
                 <div className="flex flex-wrap gap-2">
-                  {Object.entries(p.socialLinks).map(([k, v]) => (
-                    <a
-                      key={k}
-                      href={String(v)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs text-text-muted hover:text-text-primary transition-colors"
-                    >
-                      <Globe className="h-3 w-3" /> {k}
-                    </a>
-                  ))}
+                  {Object.entries(p.socialLinks).map(([k, v]) => {
+                    const Icon = getSocialIcon(k);
+                    return (
+                      <a
+                        key={k}
+                        href={String(v).startsWith('http') ? String(v) : `https://${v}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-neon-violet transition-colors bg-white/[0.03] px-2 py-1 rounded-lg"
+                      >
+                        <Icon className="h-3.5 w-3.5" /> {k}
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Personal Card */}
+          <div className="rounded-2xl border border-darkborder bg-darkcard/40 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-base font-semibold text-text-primary flex items-center gap-2">
+                <Shield className="h-4 w-4" />
+                Cá nhân
+              </h2>
+              {isOwn && (
+                <button
+                  type="button"
+                  onClick={() => setActiveModal('personal')}
+                  className="text-xs text-neon-violet hover:underline"
+                >
+                  Chỉnh sửa
+                </button>
+              )}
+            </div>
+            <div className="space-y-2 text-sm">
+              {p.bio && (
+                <div className="text-text-secondary whitespace-pre-wrap">{p.bio}</div>
+              )}
+              {p.websiteUrl && (
+                <div className="flex items-center gap-2 text-text-secondary">
+                  <Link2 className="h-4 w-4 shrink-0 text-text-muted" />
+                  <a href={p.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-neon-violet hover:underline truncate">
+                    {p.websiteUrl.replace(/^https?:\/\//, '')}
+                  </a>
+                </div>
+              )}
+              {p.education && (
+                <div className="flex items-center gap-2 text-text-secondary">
+                  <GraduationCap className="h-4 w-4 shrink-0 text-text-muted" />
+                  <span>{p.education}</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Stats Card */}
@@ -508,7 +834,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         </div>
 
         {/* ─── MAIN CONTENT ───────────────────────────────────── */}
-        <div className="flex-1 min-w-0 max-w-[600px]">
+        <div className="flex-1 min-w-0 max-w-[700px]">
           {/* Tabs */}
           <div className="rounded-2xl border border-darkborder bg-darkcard/40 mb-4 overflow-hidden">
             <div className="flex">
@@ -632,34 +958,34 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         </div>
 
         {/* ─── RIGHT SIDEBAR (empty / future suggestions) ─────── */}
-        <div className="w-72 shrink-0">
+        <div className="w-80 shrink-0">
           {/* Placeholder for future content */}
         </div>
       </div>
 
       {/* ─── Bio Edit Modal ─────────────────────────────────── */}
       <AnimatePresence>
-        {editingBio && (
+        {activeModal === 'bio' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
-            onClick={() => !savingBio && setEditingBio(false)}
+            onClick={() => !savingModal && setActiveModal(null)}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md overflow-hidden rounded-2xl border border-darkborder bg-[#0d0f18] shadow-2xl"
+              className="w-full max-w-lg overflow-hidden rounded-2xl border border-darkborder bg-[#0d0f18] shadow-2xl"
             >
               <div className="flex items-center justify-between border-b border-darkborder/60 px-5 py-3.5">
                 <h3 className="text-sm font-semibold text-text-primary">Sửa tiểu sử</h3>
                 <button
                   type="button"
-                  onClick={() => setEditingBio(false)}
+                  onClick={() => setActiveModal(null)}
                   className="rounded-lg p-1 text-text-muted hover:bg-white/5 hover:text-text-primary"
                 >
                   <X className="h-4 w-4" />
@@ -670,14 +996,14 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                   value={bioDraft}
                   onChange={(e) => setBioDraft(e.target.value)}
                   maxLength={2000}
-                  rows={5}
+                  rows={6}
                   className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none resize-none"
                   placeholder="Viết vài dòng về bạn..."
                 />
                 <div className="flex justify-end gap-2">
                   <button
                     type="button"
-                    onClick={() => setEditingBio(false)}
+                    onClick={() => setActiveModal(null)}
                     className="rounded-lg px-3 py-1.5 text-sm text-text-secondary hover:bg-white/5"
                   >
                     Hủy
@@ -685,10 +1011,254 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                   <button
                     type="button"
                     onClick={saveBio}
-                    disabled={savingBio}
+                    disabled={savingModal}
                     className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-neon-violet to-neon-pink px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-40"
                   >
-                    {savingBio ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+                    {savingModal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+                    Lưu
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ─── Contact Edit Modal ─────────────────────────────────── */}
+      <AnimatePresence>
+        {activeModal === 'contact' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
+            onClick={() => !savingModal && setActiveModal(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-lg overflow-hidden rounded-2xl border border-darkborder bg-[#0d0f18] shadow-2xl max-h-[85vh] overflow-y-auto"
+            >
+              <div className="flex items-center justify-between border-b border-darkborder/60 px-5 py-3.5 sticky top-0 bg-[#0d0f18] z-10">
+                <h3 className="text-sm font-semibold text-text-primary">Chỉnh sửa thông tin liên hệ</h3>
+                <button
+                  type="button"
+                  onClick={() => setActiveModal(null)}
+                  className="rounded-lg p-1 text-text-muted hover:bg-white/5 hover:text-text-primary"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="p-5 space-y-4">
+                {/* Full Name */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Họ và tên</label>
+                  <input
+                    type="text"
+                    value={contactDraft.fullName}
+                    onChange={(e) => setContactDraft(prev => ({ ...prev, fullName: e.target.value }))}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+                    placeholder="Nguyễn Văn A"
+                  />
+                </div>
+
+                {/* Display Name */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Tên hiển thị</label>
+                  <input
+                    type="text"
+                    value={contactDraft.displayName}
+                    onChange={(e) => setContactDraft(prev => ({ ...prev, displayName: e.target.value }))}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+                    placeholder="Tên bạn muốn hiển thị"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Email</label>
+                  <input
+                    type="email"
+                    value={contactDraft.email}
+                    onChange={(e) => setContactDraft(prev => ({ ...prev, email: e.target.value }))}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+                    placeholder="email@example.com"
+                  />
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Số điện thoại</label>
+                  <input
+                    type="tel"
+                    value={contactDraft.phone}
+                    onChange={(e) => setContactDraft(prev => ({ ...prev, phone: e.target.value }))}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+                    placeholder="0123456789"
+                  />
+                </div>
+
+                {/* Gender */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Giới tính</label>
+                  <select
+                    value={contactDraft.gender}
+                    onChange={(e) => setContactDraft(prev => ({ ...prev, gender: e.target.value as any }))}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary focus:border-neon-violet/50 focus:outline-none"
+                  >
+                    <option value="">Chọn giới tính</option>
+                    <option value="MALE">Nam</option>
+                    <option value="FEMALE">Nữ</option>
+                    <option value="OTHER">Khác</option>
+                  </select>
+                </div>
+
+                {/* Birth Year */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Năm sinh</label>
+                  <input
+                    type="number"
+                    min="1900"
+                    max={new Date().getFullYear()}
+                    value={contactDraft.birthYear}
+                    onChange={(e) => setContactDraft(prev => ({ ...prev, birthYear: e.target.value }))}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+                    placeholder="1990"
+                  />
+                </div>
+
+                {/* Location */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Địa chỉ</label>
+                  <input
+                    type="text"
+                    value={contactDraft.location}
+                    onChange={(e) => setContactDraft(prev => ({ ...prev, location: e.target.value }))}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+                    placeholder="TP. Hồ Chí Minh, Việt Nam"
+                  />
+                </div>
+
+                {/* Work */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Nơi làm việc</label>
+                  <input
+                    type="text"
+                    value={contactDraft.work}
+                    onChange={(e) => setContactDraft(prev => ({ ...prev, work: e.target.value }))}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+                    placeholder="Công ty ABC"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal(null)}
+                    className="rounded-lg px-3 py-1.5 text-sm text-text-secondary hover:bg-white/5"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    type="button"
+                    onClick={saveContact}
+                    disabled={savingModal}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-neon-violet to-neon-pink px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-40"
+                  >
+                    {savingModal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+                    Lưu
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ─── Personal Edit Modal ─────────────────────────────────── */}
+      <AnimatePresence>
+        {activeModal === 'personal' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
+            onClick={() => !savingModal && setActiveModal(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-lg overflow-hidden rounded-2xl border border-darkborder bg-[#0d0f18] shadow-2xl"
+            >
+              <div className="flex items-center justify-between border-b border-darkborder/60 px-5 py-3.5">
+                <h3 className="text-sm font-semibold text-text-primary">Chỉnh sửa thông tin cá nhân</h3>
+                <button
+                  type="button"
+                  onClick={() => setActiveModal(null)}
+                  className="rounded-lg p-1 text-text-muted hover:bg-white/5 hover:text-text-primary"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="p-5 space-y-4">
+                {/* Bio */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Tiểu sử</label>
+                  <textarea
+                    value={bioDraft}
+                    onChange={(e) => setBioDraft(e.target.value)}
+                    maxLength={2000}
+                    rows={4}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none resize-none"
+                    placeholder="Viết vài dòng về bạn..."
+                  />
+                </div>
+
+                {/* Website */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Website</label>
+                  <input
+                    type="url"
+                    value={personalDraft.websiteUrl}
+                    onChange={(e) => setPersonalDraft(prev => ({ ...prev, websiteUrl: e.target.value }))}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+                    placeholder="https://yourwebsite.com"
+                  />
+                </div>
+
+                {/* Education */}
+                <div>
+                  <label className="block text-xs text-text-muted mb-1.5">Học vấn</label>
+                  <input
+                    type="text"
+                    value={personalDraft.education}
+                    onChange={(e) => setPersonalDraft(prev => ({ ...prev, education: e.target.value }))}
+                    className="w-full rounded-lg border border-darkborder bg-darkbg/60 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+                    placeholder="Đại học XYZ"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal(null)}
+                    className="rounded-lg px-3 py-1.5 text-sm text-text-secondary hover:bg-white/5"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    type="button"
+                    onClick={savePersonal}
+                    disabled={savingModal}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-neon-violet to-neon-pink px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-40"
+                  >
+                    {savingModal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
                     Lưu
                   </button>
                 </div>

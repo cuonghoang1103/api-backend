@@ -28,19 +28,43 @@ import type { Project } from '@/types';
 import { SafeImage } from '@/components/ui/SafeImage';
 
 const STATUS_LABELS: Record<string, string> = {
- COMPLETED: 'Done',
- IN_PROGRESS: 'Building',
- PLANNING: 'Planned',
- MAINTENANCE: 'Maint.',
- ON_HOLD: 'Paused',
+  COMPLETED: 'Done',
+  IN_PROGRESS: 'Building',
+  PLANNING: 'Planned',
+  MAINTENANCE: 'Maint.',
+  ON_HOLD: 'Paused',
 };
 
 const STATUS_COLORS: Record<string, { fg: string; border: string }> = {
- COMPLETED: { fg: '#6ee7b7', border: 'rgba(110, 231, 183, 0.45)' },
- IN_PROGRESS: { fg: '#fde047', border: 'rgba(253, 224, 71, 0.45)' },
- PLANNING: { fg: '#93c5fd', border: 'rgba(147, 197, 253, 0.45)' },
- MAINTENANCE: { fg: '#c4b5fd', border: 'rgba(196, 181, 253, 0.45)' },
- ON_HOLD: { fg: '#94a3b8', border: 'rgba(148, 163, 184, 0.45)' },
+  COMPLETED: { fg: '#6ee7b7', border: 'rgba(110, 231, 183, 0.45)' },
+  IN_PROGRESS: { fg: '#fde047', border: 'rgba(253, 224, 71, 0.45)' },
+  PLANNING: { fg: '#93c5fd', border: 'rgba(147, 197, 253, 0.45)' },
+  MAINTENANCE: { fg: '#c4b5fd', border: 'rgba(196, 181, 253, 0.45)' },
+  ON_HOLD: { fg: '#94a3b8', border: 'rgba(148, 163, 184, 0.45)' },
+};
+
+// Level badges
+const LEVEL_LABELS: Record<string, string> = {
+  BEGINNER: 'Cơ bản',
+  INTERMEDIATE: 'Trung bình',
+  ADVANCED: 'Nâng cao',
+};
+
+const LEVEL_COLORS: Record<string, { bg: string; text: string }> = {
+  BEGINNER: { bg: 'rgba(52, 211, 153, 0.15)', text: '#34d399' },
+  INTERMEDIATE: { bg: 'rgba(251, 191, 36, 0.15)', text: '#fbbf24' },
+  ADVANCED: { bg: 'rgba(248, 113, 113, 0.15)', text: '#f87171' },
+};
+
+const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
+  Web: { bg: 'rgba(99, 102, 241, 0.15)', text: '#818cf8' },
+  Mobile: { bg: 'rgba(168, 85, 247, 0.15)', text: '#a78bfa' },
+  AI: { bg: 'rgba(236, 72, 153, 0.15)', text: '#f472b6' },
+  DevOps: { bg: 'rgba(14, 165, 233, 0.15)', text: '#38bdf8' },
+  Game: { bg: 'rgba(249, 115, 22, 0.15)', text: '#fb923c' },
+  IoT: { bg: 'rgba(74, 222, 128, 0.15)', text: '#4ade80' },
+  Data: { bg: 'rgba(56, 189, 248, 0.15)', text: '#38bdf8' },
+  Tooling: { bg: 'rgba(161, 161, 170, 0.15)', text: '#a1a1aa' },
 };
 
 // ─── Carousel (preserved from legacy card) ───────────────
@@ -409,12 +433,42 @@ export default function ProjectCardPremium({
  )}
  </div>
 
- {/* Description — line-clamp 2. */}
- <p className="text-sm text-text-secondary line-clamp-2 leading-relaxed">
- {project.description}
- </p>
+  {/* Description — line-clamp 2. */}
+  <p className="text-sm text-text-secondary line-clamp-2 leading-relaxed">
+  {project.description}
+  </p>
 
- {/* Tech chips. */}
+  {/* Level + Category badges */}
+  {(project.difficulty || project.category) && (
+    <div className="flex flex-wrap gap-1.5">
+      {project.difficulty && LEVEL_COLORS[project.difficulty] && (
+        <span
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium border"
+          style={{
+            background: LEVEL_COLORS[project.difficulty].bg,
+            color: LEVEL_COLORS[project.difficulty].text,
+            borderColor: LEVEL_COLORS[project.difficulty].text + '30',
+          }}
+        >
+          {LEVEL_LABELS[project.difficulty] || project.difficulty}
+        </span>
+      )}
+      {project.category && CATEGORY_COLORS[project.category] && (
+        <span
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium border"
+          style={{
+            background: CATEGORY_COLORS[project.category].bg,
+            color: CATEGORY_COLORS[project.category].text,
+            borderColor: CATEGORY_COLORS[project.category].text + '30',
+          }}
+        >
+          {project.category}
+        </span>
+      )}
+    </div>
+  )}
+
+  {/* Tech chips. */}
  {visibleTechs.length > 0 && (
  <div className="flex flex-wrap gap-1.5 pt-1">
  {visibleTechs.map((t) => (

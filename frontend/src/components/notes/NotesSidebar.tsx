@@ -819,8 +819,16 @@ function Row({
         {/* Rename — always present so it's discoverable (double-click still works) */}
         {!editing && (
           <button
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={(e) => { e.stopPropagation(); setVal(label); setEditing(true); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              // Use a native prompt for rename — reliable everywhere. The
+              // inline <input> inside the dnd-kit sortable row was fragile
+              // (lost focus/keystrokes), so this guarantees rename works.
+              const next = window.prompt('Đổi tên:', label);
+              if (next === null) return;
+              const v = next.trim();
+              if (v && v !== label) onRename(v);
+            }}
             title="Đổi tên"
             aria-label="Đổi tên"
             className="flex h-7 w-7 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300"

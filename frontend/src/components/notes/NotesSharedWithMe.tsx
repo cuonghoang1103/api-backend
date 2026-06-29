@@ -240,15 +240,34 @@ export default function NotesSharedWithMe({
                         </button>
                       ))}
 
-                      {/* Chapters */}
-                      {chapters.map((chapter) => (
-                        <div key={chapter.id} className="mt-1">
-                          <div className="flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium text-text-muted">
-                            <ChevronRight className="h-3 w-3" />
-                            <span className="truncate">{chapter.title}</span>
+                      {/* Chapters — render each chapter's notes too, so the
+                          recipient can open every note (not just the title). */}
+                      {chapters.map((chapter) => {
+                        const chapterNotes = (chapter as any).notes ?? [];
+                        return (
+                          <div key={chapter.id} className="mt-1">
+                            <div className="flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium text-text-muted">
+                              <ChevronRight className="h-3 w-3" />
+                              <span className="truncate">{chapter.title}</span>
+                            </div>
+                            {chapterNotes.map((note: { id: number; title: string }) => (
+                              <button
+                                key={note.id}
+                                onClick={() => handleOpenNote(share.subjectId, note.id)}
+                                className={cn(
+                                  'ml-4 flex w-[calc(100%-1rem)] items-center gap-2 rounded-md px-2 py-1.5 text-xs transition-colors',
+                                  selectedNoteId === note.id
+                                    ? 'bg-teal-500/10 text-teal-400'
+                                    : 'text-text-secondary hover:bg-slate-100 dark:hover:bg-white/[0.03]'
+                                )}
+                              >
+                                <FileText className="h-3 w-3 shrink-0" />
+                                <span className="truncate">{note.title}</span>
+                              </button>
+                            ))}
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
 
                       {chapters.length === 0 && notes.length === 0 && (
                         <p className="px-2 py-1 text-[11px] text-text-muted italic">

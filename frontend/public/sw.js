@@ -6,7 +6,12 @@
 // even on flaky mobile networks. Network-first for HTML
 // (always fresh) and cache-first for static assets.
 
-const CACHE_NAME = 'cuongthai-v2';
+// Bump this version on every deploy that ships new JS/CSS. The `activate`
+// handler deletes every cache whose name !== CACHE_NAME, so bumping forces
+// all clients (incl. desktops stuck on cache-first chunks) to purge the old
+// bundle and re-fetch fresh assets. Stale-bundle symptom this fixes: notes
+// Light theme / shared-folder fixes showed on mobile but not desktop.
+const CACHE_NAME = 'cuongthai-v3';
 const PRECACHE = [
  '/',
  '/manifest.json',

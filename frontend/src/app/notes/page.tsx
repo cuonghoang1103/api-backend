@@ -697,7 +697,7 @@ function NotesPageInner() {
                         </h3>
                         {note.contentHtml && (
                           <div
-                            className="line-clamp-3 text-sm text-slate-500 dark:text-slate-400 [&_p]:m-0"
+                            className="note-prose text-sm text-slate-600 dark:text-slate-300 [&_p]:my-1"
                             dangerouslySetInnerHTML={{ __html: note.contentHtml }}
                           />
                         )}
@@ -733,7 +733,7 @@ function NotesPageInner() {
                                 </h3>
                                 {note.contentHtml && (
                                   <div
-                                    className="line-clamp-2 text-xs text-slate-500 dark:text-slate-400 [&_p]:m-0"
+                                    className="note-prose text-xs text-slate-600 dark:text-slate-300 [&_p]:my-1"
                                     dangerouslySetInnerHTML={{ __html: note.contentHtml }}
                                   />
                                 )}

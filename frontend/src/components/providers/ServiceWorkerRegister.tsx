@@ -1,32 +1,29 @@
 'use client';
 import { useEffect } from 'react';
 
+// Service worker DISABLED. The old PWA SW cached JS/CSS cache-first and left
+// desktops stuck on a stale bundle (dark Notes theme / old shared view) while
+// mobile + localhost showed the new code. Instead of registering a SW we now
+// actively unregister any existing one and wipe its caches, so every visitor
+// loads fresh from the network. `/sw.js` is now a kill-switch that does the
+// same for tabs still controlled by the old worker. Re-introduce a versioned
+// SW later only if PWA/offline support is genuinely needed.
 export default function ServiceWorkerRegister() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (!('serviceWorker' in navigator)) return;
-    // Only register on https / localhost
-    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') return;
-    const onLoad = () => {
-      navigator.serviceWorker
-        .register('/sw.js', { scope: '/' })
-        .then((reg) => {
-          // Optional: listen for updates
-          reg.addEventListener('updatefound', () => {
-            const w = reg.installing;
-            if (!w) return;
-            w.addEventListener('statechange', () => {
-              if (w.state === 'installed' && navigator.serviceWorker.controller) {
-                // New SW available — could show a toast
-                // (debug log removed 2026-06-17)
-              }
-            });
-          });
-        })
-        .catch((err) => console.warn('[PWA] SW registration failed:', err));
-    };
-    if (document.readyState === 'complete') onLoad();
-    else window.addEventListener('load', onLoad);
+
+    navigator.serviceWorker
+      .getRegistrations()
+      .then((regs) => regs.forEach((r) => r.unregister()))
+      .catch(() => {});
+
+    if (typeof caches !== 'undefined') {
+      caches
+        .keys()
+        .then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
+        .catch(() => {});
+    }
   }, []);
   return null;
 }

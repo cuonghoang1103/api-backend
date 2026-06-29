@@ -11,7 +11,7 @@
 // all clients (incl. desktops stuck on cache-first chunks) to purge the old
 // bundle and re-fetch fresh assets. Stale-bundle symptom this fixes: notes
 // Light theme / shared-folder fixes showed on mobile but not desktop.
-const CACHE_NAME = 'cuongthai-v3';
+const CACHE_NAME = 'cuongthai-v4';
 const PRECACHE = [
  '/',
  '/manifest.json',

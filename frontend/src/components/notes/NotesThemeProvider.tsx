@@ -29,10 +29,14 @@ import {
 export type NotesTheme = 'dark' | 'brown' | 'light';
 
 const STORAGE_KEY = 'notes-theme';
-const DEFAULT_THEME: NotesTheme = 'dark';
+// Default to the clean white theme (Google-Docs style). This is also the
+// fallback whenever localStorage is empty — e.g. a new visitor, or after the
+// user clears site data — so the Notes UI opens white instead of reverting to
+// dark. Existing users who picked another theme keep their saved choice.
+const DEFAULT_THEME: NotesTheme = 'light';
 
-// Theme cycle order: dark → brown → light (clean white)
-const THEME_CYCLE: NotesTheme[] = ['dark', 'brown', 'light'];
+// Theme cycle order starts from the default (white): light → dark → brown.
+const THEME_CYCLE: NotesTheme[] = ['light', 'dark', 'brown'];
 
 interface NotesThemeContextValue {
   theme: NotesTheme;

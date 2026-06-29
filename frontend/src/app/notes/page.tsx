@@ -83,7 +83,7 @@ function saveTabsToStorage(tabs: NoteTab[], activeTabId: string | null) {
 
 function NotesPageInner() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const { theme, toggleTheme, themeInfo } = useNotesTheme();
+  const { theme, setTheme } = useNotesTheme();
   const [tree, setTree] = useState<NoteSubjectTree[]>([]);
   const [recent, setRecent] = useState<NoteRecent[]>([]);
   const [selected, setSelected] = useState<NoteFull | null>(null);
@@ -555,21 +555,32 @@ function NotesPageInner() {
               <kbd className="ml-1 hidden rounded bg-slate-200 px-1.5 text-[10px] text-slate-500 dark:bg-white/[0.06] md:inline">⌘K</kbd>
             </button>
             <div className="flex-1" />
-            {/* Theme toggle — đổi giữa nền tối / nền nâu ấm / nền trắng sáng. */}
-            <button
-              onClick={toggleTheme}
-              title={`${themeInfo.label} — nhấn để đổi`}
-              aria-label={`Đổi theme (hiện tại: ${themeInfo.label})`}
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05]"
-            >
-              {theme === 'dark' ? (
-                <Sun className="h-[18px] w-[18px]" />
-              ) : theme === 'brown' ? (
-                <Moon className="h-[18px] w-[18px]" />
-              ) : (
-                <Sparkles className="h-[18px] w-[18px]" />
-              )}
-            </button>
+            {/* Theme picker — chọn rõ ràng: Trắng / Tối / Nâu. Dùng nút
+                riêng cho từng theme (thay vì 1 nút xoay vòng khó hiểu) để
+                người dùng bấm thẳng vào "Trắng" là ra giao diện trắng. */}
+            <div className="flex items-center gap-0.5 rounded-lg border border-slate-200 p-0.5 dark:border-white/[0.08]">
+              {([
+                { key: 'light', label: 'Trắng', Icon: Sun },
+                { key: 'dark', label: 'Tối', Icon: Moon },
+                { key: 'brown', label: 'Nâu', Icon: Sparkles },
+              ] as const).map(({ key, label, Icon }) => (
+                <button
+                  key={key}
+                  onClick={() => setTheme(key)}
+                  title={`Giao diện ${label}`}
+                  aria-label={`Giao diện ${label}`}
+                  aria-pressed={theme === key}
+                  className={`flex h-8 items-center gap-1 rounded-md px-2 text-xs font-medium transition-colors ${
+                    theme === key
+                      ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
+                      : 'text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/[0.05]'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span className="hidden sm:inline">{label}</span>
+                </button>
+              ))}
+            </div>
             {selected && (
               <>
                 <button

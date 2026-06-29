@@ -138,6 +138,34 @@ function SortableTab({
 function NotesPageInner() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const { theme, setTheme } = useNotesTheme();
+
+  // Resizable desktop sidebar (Notion-style). Persisted to localStorage.
+  const [sidebarWidth, setSidebarWidth] = useState(288);
+  useEffect(() => {
+    const raw = window.localStorage.getItem('notes-sidebar-width');
+    if (raw) { const n = parseInt(raw, 10); if (!Number.isNaN(n)) setSidebarWidth(Math.min(560, Math.max(240, n))); }
+  }, []);
+  useEffect(() => {
+    try { window.localStorage.setItem('notes-sidebar-width', String(sidebarWidth)); } catch { /* ignore */ }
+  }, [sidebarWidth]);
+  const startSidebarResize = useCallback((e: React.PointerEvent) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    let startW = 288;
+    setSidebarWidth((w) => { startW = w; return w; });
+    const onMove = (ev: PointerEvent) => {
+      const next = Math.min(560, Math.max(240, startW + (ev.clientX - startX)));
+      setSidebarWidth(next);
+    };
+    const onUp = () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      document.body.style.userSelect = '';
+    };
+    document.body.style.userSelect = 'none';
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }, []);
   const [tree, setTree] = useState<NoteSubjectTree[]>([]);
   const [recent, setRecent] = useState<NoteRecent[]>([]);
   const [selected, setSelected] = useState<NoteFull | null>(null);
@@ -603,12 +631,21 @@ function NotesPageInner() {
       bg-[var(--notes-bg,#ffffff)] text-[var(--notes-text,#1e293b)]
       dark:bg-[#0c0f14] dark:text-slate-200">
       <div className="flex h-full">
-        {/* Desktop sidebar */}
-        <aside className="hidden w-72 shrink-0 border-r
+        {/* Desktop sidebar — resizable (drag the right edge, Notion-style) */}
+        <aside
+          style={{ width: sidebarWidth }}
+          className="relative hidden shrink-0 border-r
           border-[var(--notes-border,#e2e8f0)] bg-[var(--notes-sidebar-bg,#ffffff)]
           md:block
           dark:border-white/[0.06] dark:bg-[#0e1218]">
           {sidebar}
+          {/* Resize handle */}
+          <div
+            onPointerDown={startSidebarResize}
+            onDoubleClick={() => setSidebarWidth(288)}
+            title="Kéo để đổi rộng (nhấp đúp để về mặc định)"
+            className="absolute -right-0.5 top-0 z-20 h-full w-1.5 cursor-col-resize hover:bg-teal-500/40 active:bg-teal-500/60"
+          />
         </aside>
 
         {/* Editor pane */}

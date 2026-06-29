@@ -114,7 +114,16 @@ function makeSensors(reduced: boolean) {
 }
 
 export default function NotesSidebar({ tree, recent, selectedNoteId, filter, filteredNotes, onClose, ...cb }: Props) {
-  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
+  // Persist which subjects/chapters are open/closed so the tree keeps its
+  // shape when the user leaves /notes and comes back (it used to reset to
+  // all-open on every remount).
+  const [expanded, setExpanded] = useState<Record<number, boolean>>(() => {
+    if (typeof window === 'undefined') return {};
+    try { return JSON.parse(window.localStorage.getItem('notes-expanded') || '{}'); } catch { return {}; }
+  });
+  useEffect(() => {
+    try { window.localStorage.setItem('notes-expanded', JSON.stringify(expanded)); } catch { /* ignore */ }
+  }, [expanded]);
   const toggle = (id: number) => setExpanded((e) => ({ ...e, [id]: !e[id] }));
   const reduced = usePrefersReducedMotion();
   const sensors = makeSensors(reduced);
@@ -840,14 +849,16 @@ function Row({
             <Pencil className="h-3.5 w-3.5" />
           </button>
         )}
+        {/* Delete kept leading (right after rename) so it's never the button
+            clipped off the right edge when the row is narrow. */}
+        <button onClick={onDelete} title="Xoá" aria-label="Xoá" className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-red-500/10 hover:text-red-400">
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
         {actions.map((a, i) => (
-          <button key={i} onClick={a.onClick} title={a.title} aria-label={a.title} className="flex h-7 w-7 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300">
+          <button key={i} onClick={a.onClick} title={a.title} aria-label={a.title} className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300">
             <a.icon className="h-3.5 w-3.5" />
           </button>
         ))}
-        <button onClick={onDelete} title="Xoá" aria-label="Xoá" className="flex h-7 w-7 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-red-500/10 hover:text-red-400">
-          <Trash2 className="h-3.5 w-3.5" />
-        </button>
       </div>
     </div>
   );

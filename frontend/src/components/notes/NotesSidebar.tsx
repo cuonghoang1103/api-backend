@@ -716,7 +716,20 @@ function Row({
 }) {
   const [editing, setEditing] = useState(false);
   const [val, setVal] = useState(label);
+  const inputRef = useRef<HTMLInputElement>(null);
   const pad = { paddingLeft: 8 + depth * 14 };
+
+  // Focus + select the rename field when editing starts. autoFocus is
+  // unreliable inside a dnd-kit sortable (the draggable wrapper competes for
+  // focus), so we focus explicitly on the next frame.
+  useEffect(() => {
+    if (!editing) return;
+    const id = requestAnimationFrame(() => {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    });
+    return () => cancelAnimationFrame(id);
+  }, [editing]);
 
   const commit = () => { setEditing(false); const v = val.trim(); if (v && v !== label) onRename(v); else setVal(label); };
 
@@ -774,11 +787,20 @@ function Row({
 
       {editing ? (
         <input
-          autoFocus
+          ref={inputRef}
           value={val}
           onChange={(e) => setVal(e.target.value)}
           onBlur={commit}
-          onKeyDown={(e) => { if (e.key === 'Enter') commit(); if (e.key === 'Escape') { setEditing(false); setVal(label); } }}
+          // Keep pointer/key events from bubbling to the draggable wrapper
+          // (dnd-kit) so focus, caret and typing are not hijacked.
+          onPointerDown={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => {
+            e.stopPropagation();
+            if (e.key === 'Enter') commit();
+            if (e.key === 'Escape') { setEditing(false); setVal(label); }
+          }}
           className="min-w-0 flex-1 rounded bg-white px-1 py-0.5 text-[13px] text-slate-900 ring-1 ring-slate-300 dark:bg-slate-800 dark:text-slate-100 dark:ring-white/15 focus:outline-none focus:ring-1 focus:ring-teal-500/50"
         />
       ) : (
@@ -797,6 +819,7 @@ function Row({
         {/* Rename — always present so it's discoverable (double-click still works) */}
         {!editing && (
           <button
+            onMouseDown={(e) => e.preventDefault()}
             onClick={(e) => { e.stopPropagation(); setVal(label); setEditing(true); }}
             title="Đổi tên"
             aria-label="Đổi tên"

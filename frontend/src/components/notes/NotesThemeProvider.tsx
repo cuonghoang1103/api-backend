@@ -28,7 +28,12 @@ import {
 
 export type NotesTheme = 'dark' | 'brown' | 'light';
 
-const STORAGE_KEY = 'notes-theme';
+// Storage key is versioned (-v2): the previous key ('notes-theme') had 'dark'
+// persisted for existing desktops, which overrode the new light default and
+// kept the UI dark even after redeploys. Bumping the key ignores that stale
+// value once so everyone resets to the white default; users can re-pick a
+// theme and it saves under the new key.
+const STORAGE_KEY = 'notes-theme-v2';
 // Default to the clean white theme (Google-Docs style). This is also the
 // fallback whenever localStorage is empty — e.g. a new visitor, or after the
 // user clears site data — so the Notes UI opens white instead of reverting to

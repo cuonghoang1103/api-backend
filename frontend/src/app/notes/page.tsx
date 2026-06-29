@@ -6,13 +6,13 @@
 // image paste. Two-pane on desktop; the sidebar becomes a drawer
 // on mobile. Calm, low-distraction design — no animated bg.
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText } from 'lucide-react';
+import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight, BookOpen } from 'lucide-react';
 import { toast } from 'sonner';
 import { notesApi, noteShareApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
-import type { NoteSubjectTree, NoteRecent, NoteFull, NoteSubjectFull } from '@/types';
+import type { NoteSubjectTree, NoteRecent, NoteFull, NoteSubjectFull, NoteTab } from '@/types';
 import type { NoteSharedSubjectFull } from '@/lib/api';
 import NotesSidebar from '@/components/notes/NotesSidebar';
 import NoteEditor from '@/components/notes/NoteEditor';
@@ -25,6 +25,7 @@ import NotesShareManagerModal from '@/components/notes/NotesShareManagerModal';
 import NotesSharedWithMe from '@/components/notes/NotesSharedWithMe';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
 import { NotesThemeProvider, useNotesTheme } from '@/components/notes/NotesThemeProvider';
+import { Sparkles } from 'lucide-react';
 
 export default function NotesPage() {
   // Wrap với theme provider để tất cả component con (sidebar,
@@ -38,9 +39,51 @@ export default function NotesPage() {
   );
 }
 
+// ─── Tab Persistence ──────────────────────────────────────────────
+const TABS_STORAGE_KEY = 'notes-open-tabs';
+const ACTIVE_TAB_KEY = 'notes-active-tab';
+
+// Helper to generate unique tab id
+function makeTabId(type: 'note' | 'subject', entityId: number): string {
+  return `${type}-${entityId}`;
+}
+
+// Load persisted tabs from localStorage
+function loadPersistedTabs(): { tabs: NoteTab[]; activeTabId: string | null } {
+  if (typeof window === 'undefined') return { tabs: [], activeTabId: null };
+  try {
+    const raw = window.localStorage.getItem(TABS_STORAGE_KEY);
+    const activeTabId = window.localStorage.getItem(ACTIVE_TAB_KEY);
+    if (raw) {
+      const tabs = JSON.parse(raw);
+      if (Array.isArray(tabs) && tabs.length > 0) {
+        return { tabs, activeTabId: activeTabId || tabs[0]?.id || null };
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return { tabs: [], activeTabId: null };
+}
+
+// Save tabs to localStorage
+function saveTabsToStorage(tabs: NoteTab[], activeTabId: string | null) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(TABS_STORAGE_KEY, JSON.stringify(tabs));
+    if (activeTabId) {
+      window.localStorage.setItem(ACTIVE_TAB_KEY, activeTabId);
+    } else {
+      window.localStorage.removeItem(ACTIVE_TAB_KEY);
+    }
+  } catch {
+    // ignore
+  }
+}
+
 function NotesPageInner() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const { theme, toggleTheme } = useNotesTheme();
+  const { theme, toggleTheme, themeInfo } = useNotesTheme();
   const [tree, setTree] = useState<NoteSubjectTree[]>([]);
   const [recent, setRecent] = useState<NoteRecent[]>([]);
   const [selected, setSelected] = useState<NoteFull | null>(null);
@@ -50,6 +93,84 @@ function NotesPageInner() {
   const [resourceOpen, setResourceOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
+
+  // ─── PART 1: Multi-tab state ──────────────────────────────────
+  const [openTabs, setOpenTabs] = useState<NoteTab[]>([]);
+  const [activeTabId, setActiveTabId] = useState<string | null>(null);
+  const tabsRestoredRef = useRef(false);
+
+  // Load persisted tabs on mount (only once)
+  useEffect(() => {
+    if (!isAuthenticated || tabsRestoredRef.current) return;
+    const { tabs, activeTabId: savedActiveTabId } = loadPersistedTabs();
+    if (tabs.length > 0) {
+      setOpenTabs(tabs);
+      setActiveTabId(savedActiveTabId);
+      tabsRestoredRef.current = true;
+    }
+  }, [isAuthenticated]);
+
+  // Persist tabs whenever they change
+  useEffect(() => {
+    if (!tabsRestoredRef.current || openTabs.length === 0) return;
+    saveTabsToStorage(openTabs, activeTabId);
+  }, [openTabs, activeTabId]);
+
+  // ─── Tab actions ───────────────────────────────────────────────
+  const openTab = useCallback((type: 'note' | 'subject', entityId: number, title: string, emoji?: string | null, color?: string | null) => {
+    const tabId = makeTabId(type, entityId);
+    setOpenTabs(prev => {
+      const existing = prev.find(t => t.id === tabId);
+      if (existing) {
+        return prev; // Already open
+      }
+      const newTab: NoteTab = { id: tabId, type, entityId, title, emoji, color };
+      const next = [...prev, newTab];
+      saveTabsToStorage(next, tabId);
+      return next;
+    });
+    setActiveTabId(tabId);
+  }, []);
+
+  const closeTab = useCallback((tabId: string) => {
+    setOpenTabs(prev => {
+      const idx = prev.findIndex(t => t.id === tabId);
+      const next = prev.filter(t => t.id !== tabId);
+      // If closing active tab, switch to adjacent tab
+      if (activeTabId === tabId && next.length > 0) {
+        const newActiveIdx = Math.min(idx, next.length - 1);
+        const newActiveTab = next[newActiveIdx];
+        setActiveTabId(newActiveTab.id);
+        saveTabsToStorage(next, newActiveTab.id);
+      } else {
+        saveTabsToStorage(next, activeTabId);
+      }
+      return next;
+    });
+  }, [activeTabId]);
+
+  const switchToTab = useCallback((tabId: string) => {
+    setActiveTabId(tabId);
+    saveTabsToStorage(openTabs, tabId);
+  }, [openTabs]);
+
+  // When a tab is activated by user, update the view
+  const activateTabView = useCallback((tab: NoteTab) => {
+    if (tab.type === 'note') {
+      selectNote(tab.entityId);
+    } else {
+      openSubject(tab.entityId);
+    }
+  }, []);
+
+  // Activate tab view when activeTabId changes
+  useEffect(() => {
+    if (!activeTabId) return;
+    const tab = openTabs.find(t => t.id === activeTabId);
+    if (tab) {
+      activateTabView(tab);
+    }
+  }, [activeTabId, openTabs, activateTabView]);
   // Phase 3d: sidebar filter pills. `tree` is the default hierarchical
   // view; the other three flatten the matching notes into a single
   // list (favorites / archive / needs-review) so the user can act
@@ -132,20 +253,30 @@ function NotesPageInner() {
   const selectNote = useCallback(async (id: number) => {
     setDrawerOpen(false);
     setSubjectView(null);
+    setSharedSubject(null); // Close shared subject view
+    setSharedSelectedNote(null);
     try {
       const res = await notesApi.getNote(id);
       setSelected(res.data.data);
+      // Open in tab
+      const note = res.data.data;
+      openTab('note', id, note.title);
     } catch { /* note may have been deleted; ignore */ }
-  }, []);
+  }, [openTab]);
 
   const openSubject = useCallback(async (id: number) => {
     setDrawerOpen(false);
     setSelected(null);
+    setSharedSubject(null); // Close shared subject view
+    setSharedSelectedNote(null);
     try {
       const res = await notesApi.getSubject(id);
       setSubjectView(res.data.data);
+      // Open in tab
+      const subject = res.data.data;
+      openTab('subject', id, subject.name, subject.emoji, subject.color);
     } catch { /* ignore */ }
-  }, []);
+  }, [openTab]);
 
   // Re-fetch the open note (after attachment/link changes) so the
   // resource panel reflects the latest without a full tree refresh.
@@ -320,24 +451,51 @@ function NotesPageInner() {
     }
   }, [selected, pdfBusy]);
 
-  const callbacks = {
-   onSelectNote: selectNote,
-   onOpenSubject: openSubject,
-   onAddSubject: addSubject,
-   onAddChapter: addChapter,
-   onAddNote: addNote,
-   onRenameSubject: renameSubject,
-   onRenameChapter: renameChapter,
-   onRenameNote: renameNote,
-   onDeleteSubject: delSubject,
-   onDeleteChapter: delChapter,
-   onDeleteNote: delNote,
-   onReorderSubjects: reorderSubjectsCb,
-   onReorderChapters: reorderChaptersCb,
-   onReorderNotes: reorderNotesCb,
-   onChangeFilter: setFilter,
-   onShareSubject: handleOpenShare,
-   };
+   // ─── PART 2: Pin callbacks ─────────────────────────────────────
+   const togglePinSubject = useCallback(async (id: number, pinned: boolean) => {
+     await notesApi.updateSubject(id, { isPinned: pinned });
+     await refreshTree();
+   }, [refreshTree]);
+
+   const togglePinNote = useCallback(async (id: number, pinned: boolean) => {
+     await notesApi.updateNote(id, { isPinned: pinned });
+     await refreshTree();
+   }, [refreshTree]);
+
+   // ─── PART 3: Change subject icon ─────────────────────────────────
+   const changeSubjectIcon = useCallback(async (id: number, emoji: string) => {
+     await notesApi.updateSubject(id, { emoji });
+     await refreshTree();
+   }, [refreshTree]);
+
+   // Emoji picker is managed in the sidebar component, not here
+   const openEmojiPicker = useCallback(async (subjectId: number) => {
+     // The emoji picker state is in the sidebar, but we need to get the current emoji
+     // from the tree. For now, this is handled by the sidebar component directly.
+     // This callback is just a placeholder for potential future use.
+   }, []);
+
+   const callbacks = {
+    onSelectNote: selectNote,
+    onOpenSubject: openSubject,
+    onAddSubject: addSubject,
+    onAddChapter: addChapter,
+    onAddNote: addNote,
+    onRenameSubject: renameSubject,
+    onRenameChapter: renameChapter,
+    onRenameNote: renameNote,
+    onDeleteSubject: delSubject,
+    onDeleteChapter: delChapter,
+    onDeleteNote: delNote,
+    onReorderSubjects: reorderSubjectsCb,
+    onReorderChapters: reorderChaptersCb,
+    onReorderNotes: reorderNotesCb,
+    onChangeFilter: setFilter,
+    onShareSubject: handleOpenShare,
+    onPinSubject: togglePinSubject,
+    onPinNote: togglePinNote,
+    onChangeSubjectIcon: changeSubjectIcon,
+    };
 
    const treeSubjectFor = (id: number) => tree.find((s) => s.id === id);
 
@@ -372,17 +530,24 @@ function NotesPageInner() {
   );
 
   return (
-    <div className="notes-page h-[100dvh] bg-slate-50 pt-16 text-slate-800 dark:bg-[#0c0f14] dark:text-slate-200">
+    <div className="notes-page h-[100dvh] pt-16
+      bg-[var(--notes-bg,#f8fafc)] text-[var(--notes-text,#1e293b)]
+      dark:bg-[#0c0f14] dark:text-slate-200
+      light-white:bg-white light-white:text-slate-800">
       <div className="flex h-full">
         {/* Desktop sidebar */}
-        <aside className="hidden w-72 shrink-0 border-r border-slate-200 bg-white md:block dark:border-white/[0.06] dark:bg-[#0e1218]">
+        <aside className="hidden w-72 shrink-0 border-r
+          border-[var(--notes-border,#e2e8f0)] bg-[var(--notes-sidebar-bg,#ffffff)]
+          md:block
+          dark:border-white/[0.06] dark:bg-[#0e1218]">
           {sidebar}
         </aside>
 
         {/* Editor pane */}
         <main className="relative min-w-0 flex-1 overflow-y-auto pb-24 sm:pb-0">
           {/* Toolbar (search always; menu + resources contextual) */}
-          <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-slate-200 bg-white/90 px-3 py-2 backdrop-blur dark:border-white/[0.06] dark:bg-[#0c0f14]/90">
+          <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-[var(--notes-border,#e2e8f0)] bg-[var(--notes-toolbar-bg,#ffffff)]/90 px-3 py-2 backdrop-blur
+            dark:border-white/[0.06] dark:bg-[#0c0f14]/90">
             <button onClick={() => setDrawerOpen(true)} className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05] md:hidden" aria-label="Mở danh sách">
               <Menu className="h-5 w-5" />
             </button>
@@ -391,19 +556,21 @@ function NotesPageInner() {
               <kbd className="ml-1 hidden rounded bg-slate-200 px-1.5 text-[10px] text-slate-500 dark:bg-white/[0.06] md:inline">⌘K</kbd>
             </button>
             <div className="flex-1" />
-            {/* Theme toggle — đổi giữa nền sáng / tối. Lưu vào
+            {/* Theme toggle — đổi giữa nền tối / nền sáng / nền trắng. Lưu vào
                 localStorage để lần sau mở trang nhớ lại lựa chọn.
                 Hiển thị cả khi chưa chọn note nào. */}
             <button
               onClick={toggleTheme}
-              title={theme === 'dark' ? 'Chuyển sang nền sáng' : 'Chuyển sang nền tối'}
-              aria-label={theme === 'dark' ? 'Chuyển sang nền sáng' : 'Chuyển sang nền tối'}
+              title={`${themeInfo.label} — nhấn để đổi`}
+              aria-label={`Đổi theme (hiện tại: ${themeInfo.label})`}
               className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05]"
             >
               {theme === 'dark' ? (
                 <Sun className="h-[18px] w-[18px]" />
-              ) : (
+              ) : theme === 'light' ? (
                 <Moon className="h-[18px] w-[18px]" />
+              ) : (
+                <Sparkles className="h-[18px] w-[18px]" />
               )}
             </button>
             {selected && (
@@ -435,38 +602,107 @@ function NotesPageInner() {
             )}
           </div>
 
+          {/* PART 1: Tab Bar */}
+          {openTabs.length > 0 && (
+            <div className="flex items-center gap-1 border-b border-slate-200 bg-white px-3 py-1.5 overflow-x-auto dark:border-white/[0.06] dark:bg-[#0e1218]">
+              {openTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => switchToTab(tab.id)}
+                  className={`group flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap min-w-0 ${
+                    activeTabId === tab.id
+                      ? 'bg-teal-100 text-teal-800 dark:bg-teal-500/15 dark:text-teal-100'
+                      : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/[0.05]'
+                  }`}
+                >
+                  {/* Tab icon */}
+                  {tab.type === 'subject' ? (
+                    tab.emoji ? (
+                      <span className="text-[13px]">{tab.emoji}</span>
+                    ) : tab.color ? (
+                      <span className="h-2 w-2 rounded-full shrink-0" style={{ background: tab.color }} />
+                    ) : (
+                      <span className="text-[13px]">📁</span>
+                    )
+                  ) : (
+                    <FileText className="h-3.5 w-3.5 shrink-0" />
+                  )}
+                  <span className="truncate max-w-[120px]">{tab.title || 'Không có tiêu đề'}</span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      closeTab(tab.id);
+                    }}
+                    className="ml-1 flex h-5 w-5 items-center justify-center rounded opacity-0 transition-opacity group-hover:opacity-100 hover:bg-slate-200 dark:hover:bg-white/10"
+                    aria-label="Đóng tab"
+                  >
+                    <XCircle className="h-3 w-3" />
+                  </button>
+                </button>
+              ))}
+            </div>
+          )}
+
           {loading ? (
             <div className="flex h-[60vh] items-center justify-center text-slate-500"><Loader2 className="h-5 w-5 animate-spin" /></div>
           ) : sharedSubject ? (
-            // Phase 4: Shared subject view
-            <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
+            // Phase 4 & 5: Redesigned shared subject view - clean and professional
+            <div className="mx-auto w-full max-w-[800px] px-4 sm:px-6 py-6">
+              {/* Back button to close shared view */}
+              <button
+                onClick={() => { setSharedSubject(null); setSharedSelectedNote(null); }}
+                className="mb-4 flex items-center gap-2 text-sm text-slate-500 hover:text-teal-600 dark:text-slate-400 dark:hover:text-teal-400 transition-colors"
+              >
+                <ChevronRight className="h-4 w-4 rotate-180" />
+                Quay lại Sổ tay của tôi
+              </button>
+
               {/* Shared subject header */}
-              <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-neon-violet/10">
-                  <span className="text-2xl">{sharedSubject.emoji || '📁'}</span>
-                </div>
-                <div>
-                  <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">{sharedSubject.name}</h1>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Được chia sẻ với bạn • Quyền: {sharedSubject.myPermission === 'edit' ? 'Chỉnh sửa' : 'Xem'}
-                  </p>
+              <div className="mb-6 rounded-2xl border border-slate-200 bg-gradient-to-r from-teal-50 to-cyan-50 p-5 dark:border-white/[0.08] dark:from-teal-500/5 dark:to-cyan-500/5">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white shadow-sm dark:bg-[#1a1f27]">
+                    <span className="text-3xl">{sharedSubject.emoji || '📁'}</span>
+                  </div>
+                  <div className="flex-1">
+                    <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">{sharedSubject.name}</h1>
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                      Được chia sẻ với bạn
+                      <span className={`ml-2 rounded-full px-2 py-0.5 text-xs font-medium ${
+                        sharedSubject.myPermission === 'edit'
+                          ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
+                          : 'bg-slate-100 text-slate-600 dark:bg-slate-500/15 dark:text-slate-300'
+                      }`}>
+                        {sharedSubject.myPermission === 'edit' ? '✏️ Chỉnh sửa' : '👁️ Chỉ�nh sửa'}
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
 
               {/* Notes at root level */}
-              {sharedSubject.notes?.length > 0 && (
-                <div className="mb-6">
-                  <h2 className="mb-2 text-sm font-medium text-slate-500">Ghi chú</h2>
-                  <div className="space-y-2">
+              {sharedSubject.notes && sharedSubject.notes.length > 0 && (
+                <div className="mb-8">
+                  <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    <FileText className="h-4 w-4" /> Ghi chú trực tiếp
+                    <span className="ml-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-normal dark:bg-white/10">
+                      {sharedSubject.notes.length}
+                    </span>
+                  </h2>
+                  <div className="grid gap-3 sm:grid-cols-2">
                     {sharedSubject.notes.map((note) => (
                       <button
                         key={note.id}
                         onClick={() => setSharedSelectedNote(note)}
-                        className="w-full rounded-xl border border-slate-200 bg-white p-4 text-left transition-colors hover:bg-slate-50 dark:border-white/[0.06] dark:bg-[#1a1f27] dark:hover:bg-white/[0.03]"
+                        className="group rounded-xl border border-slate-200 bg-white p-4 text-left transition-all hover:border-teal-300 hover:shadow-md hover:shadow-teal-500/10 dark:border-white/[0.08] dark:bg-[#1a1f27] dark:hover:border-teal-500/30"
                       >
-                        <h3 className="font-medium text-slate-900 dark:text-slate-100">{note.title}</h3>
+                        <h3 className="mb-2 font-medium text-slate-900 group-hover:text-teal-600 dark:text-slate-100 dark:group-hover:text-teal-300">
+                          {note.title || 'Không có tiêu đề'}
+                        </h3>
                         {note.contentHtml && (
-                          <div className="mt-2 text-sm text-slate-500 line-clamp-2" dangerouslySetInnerHTML={{ __html: note.contentHtml }} />
+                          <div
+                            className="line-clamp-3 text-sm text-slate-500 dark:text-slate-400 [&_p]:m-0"
+                            dangerouslySetInnerHTML={{ __html: note.contentHtml }}
+                          />
                         )}
                       </button>
                     ))}
@@ -474,52 +710,81 @@ function NotesPageInner() {
                 </div>
               )}
 
-              {/* Chapters */}
-              {sharedSubject.chapters?.map((chapter) => (
-                <div key={chapter.id} className="mb-6">
-                  <h2 className="mb-2 text-sm font-medium text-slate-500">{chapter.title}</h2>
-                  <div className="space-y-2">
-                    {chapter.notes.map((note) => (
-                      <button
-                        key={note.id}
-                        onClick={() => setSharedSelectedNote(note)}
-                        className="w-full rounded-xl border border-slate-200 bg-white p-4 text-left transition-colors hover:bg-slate-50 dark:border-white/[0.06] dark:bg-[#1a1f27] dark:hover:bg-white/[0.03]"
-                      >
-                        <h3 className="font-medium text-slate-900 dark:text-slate-100">{note.title}</h3>
-                        {note.contentHtml && (
-                          <div className="mt-2 text-sm text-slate-500 line-clamp-2" dangerouslySetInnerHTML={{ __html: note.contentHtml }} />
+              {/* Chapters with notes */}
+              {sharedSubject.chapters && sharedSubject.chapters.length > 0 && (
+                <div className="space-y-6">
+                  {sharedSubject.chapters.map((chapter) => (
+                    <div key={chapter.id} className="rounded-xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-[#0e1218]">
+                      <div className="flex items-center gap-3 border-b border-slate-100 px-4 py-3 dark:border-white/[0.05]">
+                        <BookOpen className="h-5 w-5 text-teal-500" />
+                        <h2 className="font-medium text-slate-800 dark:text-slate-200">{chapter.title}</h2>
+                        <span className="ml-auto rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500 dark:bg-white/10 dark:text-slate-400">
+                          {chapter.notes?.length || 0} ghi chú
+                        </span>
+                      </div>
+                      <div className="p-4">
+                        {chapter.notes && chapter.notes.length > 0 ? (
+                          <div className="grid gap-3 sm:grid-cols-2">
+                            {chapter.notes.map((note) => (
+                              <button
+                                key={note.id}
+                                onClick={() => setSharedSelectedNote(note)}
+                                className="group rounded-lg border border-slate-100 bg-slate-50 p-3 text-left transition-all hover:border-teal-300 hover:bg-teal-50 dark:border-white/[0.05] dark:bg-white/[0.02] dark:hover:border-teal-500/30 dark:hover:bg-teal-500/5"
+                              >
+                                <h3 className="mb-1 font-medium text-slate-700 group-hover:text-teal-600 dark:text-slate-200 dark:group-hover:text-teal-300">
+                                  {note.title || 'Không có tiêu đề'}
+                                </h3>
+                                {note.contentHtml && (
+                                  <div
+                                    className="line-clamp-2 text-xs text-slate-500 dark:text-slate-400 [&_p]:m-0"
+                                    dangerouslySetInnerHTML={{ __html: note.contentHtml }}
+                                  />
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-center text-sm text-slate-400 dark:text-slate-500">
+                            Chưa có ghi chú nào trong chương này
+                          </p>
                         )}
-                      </button>
-                    ))}
-                  </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
 
-              {sharedSubject.notes?.length === 0 && sharedSubject.chapters?.length === 0 && (
+              {((!sharedSubject.notes || sharedSubject.notes.length === 0) &&
+               (!sharedSubject.chapters || sharedSubject.chapters.length === 0)) && (
                 <div className="flex h-[40vh] flex-col items-center justify-center text-slate-500">
                   <FileText className="mb-3 h-9 w-9 text-slate-400/50" />
                   <p className="text-sm">Không có ghi chú nào trong mục này</p>
                 </div>
               )}
             </div>
+          ) : sharedSelectedNote ? (
+            // Phase 4 & 5: Read-only note view for shared notes - redesigned
+            <div className="mx-auto w-full max-w-[800px] px-4 sm:px-6 py-6">
+              <button
+                onClick={() => setSharedSelectedNote(null)}
+                className="mb-4 flex items-center gap-2 text-sm text-slate-500 hover:text-teal-600 dark:text-slate-400 dark:hover:text-teal-400 transition-colors"
+              >
+                <ChevronRight className="h-4 w-4 rotate-180" />
+                Quay lại danh sách
+              </button>
+              <h1 className="mb-6 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                {sharedSelectedNote.title || 'Không có tiêu đề'}
+              </h1>
+              {sharedSelectedNote.contentHtml && (
+                <div className="prose prose-slate dark:prose-invert max-w-none rounded-xl border border-slate-200 bg-white p-6 dark:border-white/[0.08] dark:bg-[#0e1218]"
+                  dangerouslySetInnerHTML={{ __html: sharedSelectedNote.contentHtml }}
+                />
+              )}
+            </div>
           ) : subjectView ? (
             <SubjectView subject={subjectView} treeSubject={treeSubjectFor(subjectView.id)} onChanged={refreshSubject} onSelectNote={selectNote} onAddNote={addNote} />
           ) : selected ? (
             <NoteEditor key={selected.id} note={selected} onSave={saveNote} />
-          ) : sharedSelectedNote ? (
-            // Phase 4: Read-only note view for shared notes
-            <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
-              <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-6">{sharedSelectedNote.title}</h1>
-              {sharedSelectedNote.contentHtml && (
-                <div className="prose prose-slate dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sharedSelectedNote.contentHtml }} />
-              )}
-              <button
-                onClick={() => setSharedSelectedNote(null)}
-                className="mt-6 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
-              >
-                ← Quay lại danh sách
-              </button>
-            </div>
           ) : (
             <div className="flex h-[60vh] flex-col items-center justify-center px-6 text-center text-slate-500">
               <NotebookPen className="mb-3 h-9 w-9 text-teal-400/50" />

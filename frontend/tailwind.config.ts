@@ -7,6 +7,8 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
+  // Support multiple theme classes: 'dark', 'light-white'
+  // Use :is() to apply theme styles conditionally
   theme: {
     extend: {
       colors: {

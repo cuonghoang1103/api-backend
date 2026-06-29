@@ -3,9 +3,9 @@
 /**
  * NotesThemeProvider — Phase 4 (theme switcher cho trang /notes)
  *
- * Cung cấp theme 'dark' / 'light' cho toàn bộ cây component dưới
- * /notes thông qua React Context + `class` attribute trên root
- * container. Tailwind `darkMode: 'class'` đã được bật trong
+ * Cung cấp theme 'dark' / 'light' / 'light-white' cho toàn bộ cây
+ * component dưới /notes thông qua React Context + `class` attribute
+ * trên root container. Tailwind `darkMode: 'class'` đã được bật trong
  * tailwind.config.ts, nên các utility `dark:` sẽ tự động áp dụng
  * khi wrapper có class `dark`.
  *
@@ -26,16 +26,21 @@ import {
   type ReactNode,
 } from 'react';
 
-export type NotesTheme = 'dark' | 'light';
+export type NotesTheme = 'dark' | 'light' | 'light-white';
 
 const STORAGE_KEY = 'notes-theme';
 const DEFAULT_THEME: NotesTheme = 'dark';
 
+// Theme cycle order
+const THEME_CYCLE: NotesTheme[] = ['dark', 'light', 'light-white'];
+
 interface NotesThemeContextValue {
   theme: NotesTheme;
   setTheme: (next: NotesTheme) => void;
-  /** Convenience: toggle between the two supported themes. */
+  /** Convenience: cycle through the supported themes. */
   toggleTheme: () => void;
+  /** Get display info for the current theme. */
+  themeInfo: { label: string; icon: 'moon' | 'sun' | 'sparkles' };
 }
 
 const NotesThemeContext = createContext<NotesThemeContextValue | null>(null);
@@ -44,7 +49,7 @@ function readStoredTheme(): NotesTheme {
   if (typeof window === 'undefined') return DEFAULT_THEME;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (raw === 'light' || raw === 'dark') return raw;
+    if (raw === 'light' || raw === 'dark' || raw === 'light-white') return raw as NotesTheme;
   } catch {
     /* localStorage không khả dụng (Safari private mode, quota...) — bỏ qua */
   }
@@ -87,17 +92,67 @@ export function NotesThemeProvider({ children }: { children: ReactNode }) {
     document.documentElement.setAttribute('data-notes-theme', theme);
   }, [theme]);
 
+  // Inject CSS custom properties for light-white theme
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const root = document.documentElement;
+    if (theme === 'light-white') {
+      root.style.setProperty('--notes-bg', '#ffffff');
+      root.style.setProperty('--notes-surface', '#ffffff');
+      root.style.setProperty('--notes-border', '#e2e8f0');
+      root.style.setProperty('--notes-text', '#1e293b');
+      root.style.setProperty('--notes-text-muted', '#64748b');
+      root.style.setProperty('--notes-accent', '#0d9488');
+      root.style.setProperty('--notes-sidebar-bg', '#ffffff');
+      root.style.setProperty('--notes-toolbar-bg', '#ffffff');
+    } else if (theme === 'light') {
+      root.style.setProperty('--notes-bg', '#faf6f1');
+      root.style.setProperty('--notes-surface', '#f5f0e8');
+      root.style.setProperty('--notes-border', '#e7d9c6');
+      root.style.setProperty('--notes-text', '#3d3526');
+      root.style.setProperty('--notes-text-muted', '#7a6b52');
+      root.style.setProperty('--notes-accent', '#0d9488');
+      root.style.setProperty('--notes-sidebar-bg', '#faf6f1');
+      root.style.setProperty('--notes-toolbar-bg', '#faf6f1');
+    } else {
+      // dark theme
+      root.style.setProperty('--notes-bg', '#0c0f14');
+      root.style.setProperty('--notes-surface', '#0e1218');
+      root.style.setProperty('--notes-border', 'rgba(255,255,255,0.06)');
+      root.style.setProperty('--notes-text', '#e2e8f0');
+      root.style.setProperty('--notes-text-muted', '#64748b');
+      root.style.setProperty('--notes-accent', '#14b8a6');
+      root.style.setProperty('--notes-sidebar-bg', '#0e1218');
+      root.style.setProperty('--notes-toolbar-bg', 'rgba(12,15,20,0.9)');
+    }
+  }, [theme]);
+
   const setTheme = useCallback((next: NotesTheme) => {
     setThemeState(next);
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setThemeState((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    setThemeState((prev) => {
+      const currentIndex = THEME_CYCLE.indexOf(prev);
+      const nextIndex = (currentIndex + 1) % THEME_CYCLE.length;
+      return THEME_CYCLE[nextIndex];
+    });
   }, []);
 
+  const themeInfo = useMemo(() => {
+    switch (theme) {
+      case 'dark':
+        return { label: 'Nền tối', icon: 'moon' as const };
+      case 'light':
+        return { label: 'Nền sáng', icon: 'sun' as const };
+      case 'light-white':
+        return { label: 'Nền trắng sáng', icon: 'sparkles' as const };
+    }
+  }, [theme]);
+
   const value = useMemo<NotesThemeContextValue>(
-    () => ({ theme, setTheme, toggleTheme }),
-    [theme, setTheme, toggleTheme],
+    () => ({ theme, setTheme, toggleTheme, themeInfo }),
+    [theme, setTheme, toggleTheme, themeInfo],
   );
 
   return (
@@ -107,9 +162,14 @@ export function NotesThemeProvider({ children }: { children: ReactNode }) {
         darkMode: 'class' sẽ kích hoạt tất cả utility `dark:xxx`
         bên trong cây con. className `notes-theme-root` chỉ để
         tiện debug / style override toàn cục nếu cần sau này.
+
+        Theme classes:
+        - 'dark': Dark background (#0c0f14), dark text
+        - 'light': Brown-ish light background (#faf6f1)
+        - 'light-white': Pure white background (#ffffff), clean light UI
       */}
       <div
-        className={`notes-theme-root h-full ${theme === 'dark' ? 'dark' : ''}`}
+        className={`notes-theme-root h-full ${theme === 'dark' ? 'dark' : theme === 'light-white' ? 'light-white' : ''}`}
         data-notes-theme={theme}
       >
         {children}

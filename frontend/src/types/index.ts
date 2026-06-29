@@ -1208,3 +1208,16 @@ export interface NoteSearchResult {
   updatedAt: string;
   snippet: string;
 }
+
+// ─── Notes Tab System (Phase 5) ──────────────────────────────────
+// Tab types for the Notion-style multi-tab interface
+export type NoteTabType = 'note' | 'subject';
+
+export interface NoteTab {
+  id: string; // unique tab identifier (e.g., "note-123" or "subject-456")
+  type: NoteTabType;
+  entityId: number; // note id or subject id
+  title: string;
+  emoji?: string | null;
+  color?: string | null;
+}

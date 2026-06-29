@@ -15,7 +15,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
  ChevronRight, Plus, Trash2, FileText, FolderPlus, BookOpen, Pin, Clock, X, PanelRight, GripVertical,
- Star, Archive, AlertCircle, FolderTree, Share2,
+ Star, Archive, AlertCircle, FolderTree, Share2, PinOff, Smile,
 } from 'lucide-react';
 import {
  DndContext, DragOverlay,
@@ -45,6 +45,11 @@ export interface SidebarCallbacks {
  onDeleteNote: (id: number) => void;
  // Phase 4 — share callbacks
  onShareSubject: (subject: NoteSubjectTree) => void;
+ // Phase 5 — pin callbacks
+ onPinSubject: (id: number, pinned: boolean) => void;
+ onPinNote: (id: number, pinned: boolean) => void;
+ // Phase 5 — icon callbacks
+ onChangeSubjectIcon: (id: number, emoji: string) => void;
   // Phase 2.5 — drag-reorder callbacks. Each is given the full
   // ordered list of ids in the scope that was reordered. The page
   // forwards to the API and refreshes the tree. We keep the callback
@@ -109,42 +114,64 @@ function makeSensors(reduced: boolean) {
 }
 
 export default function NotesSidebar({ tree, recent, selectedNoteId, filter, filteredNotes, onClose, ...cb }: Props) {
- const [expanded, setExpanded] = useState<Record<number, boolean>>({});
- const toggle = (id: number) => setExpanded((e) => ({ ...e, [id]: !e[id] }));
- const reduced = usePrefersReducedMotion();
- const sensors = makeSensors(reduced);
- // Track which scope is currently being dragged so we can render a
- // single DragOverlay across the 3 nested DndContexts. Without this,
- // the overlay would only follow the row inside the scope that owns
- // the draggable.
- const [activeId, setActiveId] = useState<{ scope: 'subject' | 'chapter' | 'note'; id: number } | null>(null);
+  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
+  const toggle = (id: number) => setExpanded((e) => ({ ...e, [id]: !e[id] }));
+  const reduced = usePrefersReducedMotion();
+  const sensors = makeSensors(reduced);
+  // Track which scope is currently being dragged so we can render a
+  // single DragOverlay across the 3 nested DndContexts. Without this,
+  // the overlay would only follow the row inside the scope that owns
+  // the draggable.
+  const [activeId, setActiveId] = useState<{ scope: 'subject' | 'chapter' | 'note'; id: number } | null>(null);
 
- return (
-  <div className="flex h-full flex-col text-sm">
-      {/* Header */}
-      <div className="flex items-center justify-between px-3 pt-3 pb-2">
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-500">Sổ tay</h2>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={cb.onAddSubject}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-teal-600 dark:hover:text-teal-300 sm:h-7 sm:w-7"
-            title="Thêm môn học"
-            aria-label="Thêm môn học"
-          >
-            <Plus className="h-4 w-4" />
-          </button>
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200 md:hidden"
-              title="Đóng"
-              aria-label="Đóng"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-        </div>
-      </div>
+  // ─── PART 2: Separate pinned items ───────────────────────────────
+  const pinnedSubjects = tree.filter(s => s.isPinned);
+  const unpinnedSubjects = tree.filter(s => !s.isPinned);
+  const pinnedNotes = recent.filter(n => n.isPinned).slice(0, 5);
+
+  // ─── PART 3: Emoji picker state ─────────────────────────────────
+  const [emojiPickerSubject, setEmojiPickerSubject] = useState<{ id: number; emoji: string } | null>(null);
+
+  const openEmojiPicker = (subjectId: number) => {
+    const subject = tree.find(s => s.id === subjectId);
+    if (subject) {
+      setEmojiPickerSubject({ id: subjectId, emoji: subject.emoji || '📁' });
+    }
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    if (emojiPickerSubject) {
+      cb.onChangeSubjectIcon(emojiPickerSubject.id, emoji);
+      setEmojiPickerSubject(null);
+    }
+  };
+
+  return (
+   <div className="flex h-full flex-col text-sm">
+       {/* Header */}
+       <div className="flex items-center justify-between px-3 pt-3 pb-2">
+         <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-500">Sổ tay</h2>
+         <div className="flex items-center gap-1">
+           <button
+             onClick={cb.onAddSubject}
+             className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-teal-600 dark:hover:text-teal-300 sm:h-7 sm:w-7"
+             title="Thêm môn học"
+             aria-label="Thêm môn học"
+           >
+             <Plus className="h-4 w-4" />
+           </button>
+           {onClose && (
+             <button
+               onClick={onClose}
+               className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200 md:hidden"
+               title="Đóng"
+               aria-label="Đóng"
+             >
+               <X className="h-4 w-4" />
+             </button>
+           )}
+         </div>
+       </div>
 
       {/* Phase 3d — filter pills. Each pill swaps the body below for
           a flat list view of the matching notes (favorites / archive
@@ -155,6 +182,44 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
         <FilterPill active={filter === 'needs-review'} icon={<AlertCircle className="h-3 w-3" />} label="Cần ôn" onClick={() => cb.onChangeFilter('needs-review')} />
         <FilterPill active={filter === 'archive'} icon={<Archive className="h-3 w-3" />} label="Lưu trữ" onClick={() => cb.onChangeFilter('archive')} />
       </div>
+
+      {/* PART 2: Pinned section */}
+      {filter === 'tree' && (pinnedSubjects.length > 0 || pinnedNotes.length > 0) && (
+        <div className="mb-2 px-1.5">
+          <div className="mb-1 flex items-center gap-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-amber-500">
+            <Pin className="h-3 w-3" /> Đã ghim
+          </div>
+          {/* Pinned subjects */}
+          {pinnedSubjects.map((subject) => (
+            <PinnedSubjectRow
+              key={`pinned-subject-${subject.id}`}
+              subject={subject}
+              selectedNoteId={selectedNoteId}
+              expanded={expanded}
+              setExpanded={setExpanded}
+              reduced={reduced}
+              sensors={sensors}
+              activeId={activeId}
+              setActiveId={setActiveId}
+              cb={cb}
+            />
+          ))}
+          {/* Pinned notes */}
+          {pinnedNotes.map((n) => (
+            <button
+              key={`pinned-note-${n.id}`}
+              onClick={() => cb.onSelectNote(n.id)}
+              className={`group flex w-full items-center gap-2 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] min-h-[36px] ${
+                selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
+              }`}
+            >
+              <Pin className="h-3 w-3 shrink-0 text-amber-400" />
+              <span className="truncate">{n.title || 'Không có tiêu đề'}</span>
+            </button>
+          ))}
+          <div className="my-2 h-px bg-slate-100 dark:bg-white/[0.05]" />
+        </div>
+      )}
 
       <div className="min-h-0 flex-1 overflow-y-auto px-1.5 pb-6">
         {/* Recent rail */}
@@ -224,13 +289,14 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
     </div>
   )}
 
- {/*
- * DndContext for SUBJECTS (root scope). Each subject is also a
- * SortableContext of its chapters and subject-level notes, but those
- * are nested with their own DndContext so dnd-kit can reason about
- * each scope independently (a chapter drag is distinct from a
- * subject drag from the user's perspective).
- */}
+{/*
+  * DndContext for SUBJECTS (root scope). Each subject is also a
+  * SortableContext of its chapters and subject-level notes, but those
+  * are nested with their own DndContext so dnd-kit can reason about
+  * each scope independently (a chapter drag is distinct from a
+  * subject drag from the user's perspective).
+  * PART 2: Only show unpinned subjects in main tree; pinned show in Pinned section.
+  */}
   {filter === 'tree' && (
   <DndContext
   sensors={sensors}
@@ -242,34 +308,44 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
   onDragEnd={handleSubjectDragEnd}
   onDragCancel={() => setActiveId(null)}
   >
-  <SortableContext items={tree.map((s) => s.id)} strategy={verticalListSortingStrategy}>
-  {tree.map((subject) => {
+  <SortableContext items={unpinnedSubjects.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+  {unpinnedSubjects.map((subject) => {
   const isOpen = expanded[subject.id] ?? true;
   return (
-  <SubjectBranch
-  key={subject.id}
-  subject={subject}
-  isOpen={isOpen}
-  selectedNoteId={selectedNoteId}
-  expanded={expanded}
-  setExpanded={setExpanded}
-  reduced={reduced}
-  sensors={sensors}
-  activeId={activeId}
-  setActiveId={setActiveId}
-  cb={cb}
-  />
-  );
+   <SubjectBranch
+   key={subject.id}
+   subject={subject}
+   isOpen={isOpen}
+   selectedNoteId={selectedNoteId}
+   expanded={expanded}
+   setExpanded={setExpanded}
+   reduced={reduced}
+   sensors={sensors}
+   activeId={activeId}
+   setActiveId={setActiveId}
+   cb={cb}
+   onOpenEmojiPicker={openEmojiPicker}
+   />
+   );
   })}
   </SortableContext>
-  <DragOverlay dropAnimation={reduced ? null : undefined}>
-  {activeId ? <DragGhost scope={activeId.scope} activeId={activeId.id} tree={tree} /> : null}
-  </DragOverlay>
-  </DndContext>
-  )}
- </div>
- </div>
- );
+   <DragOverlay dropAnimation={reduced ? null : undefined}>
+   {activeId ? <DragGhost scope={activeId.scope} activeId={activeId.id} tree={tree} /> : null}
+   </DragOverlay>
+   </DndContext>
+   )}
+
+   {/* PART 3: Emoji picker modal */}
+   {emojiPickerSubject && (
+     <EmojiPicker
+       currentEmoji={emojiPickerSubject.emoji}
+       onSelect={handleEmojiSelect}
+       onClose={() => setEmojiPickerSubject(null)}
+     />
+   )}
+  </div>
+  </div>
+  );
 
  // ─── Reorder handlers ────────────────────────────────────────
  // Each handler converts the dnd-kit event into the ordered id list
@@ -296,7 +372,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
 // - 1 SortableContext of its chapters (reorders chapter rows)
 // - per-chapter SortableContext of chapter notes
 function SubjectBranch({
- subject, isOpen, selectedNoteId, expanded, setExpanded, reduced, sensors, activeId, setActiveId, cb,
+ subject, isOpen, selectedNoteId, expanded, setExpanded, reduced, sensors, activeId, setActiveId, cb, onOpenEmojiPicker,
 }: {
  subject: NoteSubjectTree;
  isOpen: boolean;
@@ -308,6 +384,7 @@ function SubjectBranch({
  activeId: { scope: 'subject' | 'chapter' | 'note'; id: number } | null;
  setActiveId: (v: { scope: 'subject' | 'chapter' | 'note'; id: number } | null) => void;
  cb: SidebarCallbacks;
+ onOpenEmojiPicker: (subjectId: number) => void;
 }) {
  const handleNoteScopeDragEnd = (scopeNoteIds: number[], e: DragEndEvent) => {
  setActiveId(null);
@@ -336,31 +413,33 @@ function SubjectBranch({
  // for drag-reorder. They are a flat list, siblings to chapters.
  const subjectRootNoteIds = subject.notes.map((n) => n.id);
 
- return (
- <div className="mb-0.5">
- {/* Subject row (draggable — handled by parent DndContext) */}
- <SortableRow id={subject.id}>
- {(handleProps) => (
- <Row
- depth={0}
- open={isOpen}
- onToggle={() => setExpanded((e) => ({ ...e, [subject.id]: !e[subject.id] }))}
- color={subject.color}
- emoji={subject.emoji}
-  label={subject.name}
-  active={false}
-  onRename={(v) => cb.onRenameSubject(subject.id, v)}
-  onDelete={() => cb.onDeleteSubject(subject.id)}
-  actions={[
-  { icon: PanelRight, title: 'Mở môn học (tệp & liên kết)', onClick: () => cb.onOpenSubject(subject.id) },
-  { icon: Share2, title: 'Chia sẻ', onClick: () => cb.onShareSubject(subject) },
-  { icon: FolderPlus, title: 'Thêm chương', onClick: () => cb.onAddChapter(subject.id) },
-  { icon: Plus, title: 'Thêm ghi chú', onClick: () => cb.onAddNote(subject.id, null) },
-  ]}
-  dragHandleProps={handleProps}
-  />
-  )}
-  </SortableRow>
+  return (
+  <div className="mb-0.5">
+  {/* Subject row (draggable — handled by parent DndContext) */}
+  <SortableRow id={subject.id}>
+  {(handleProps) => (
+  <Row
+  depth={0}
+  open={isOpen}
+  onToggle={() => setExpanded((e) => ({ ...e, [subject.id]: !e[subject.id] }))}
+  color={subject.color}
+  emoji={subject.emoji}
+   label={subject.name}
+   active={false}
+   onRename={(v) => cb.onRenameSubject(subject.id, v)}
+   onDelete={() => cb.onDeleteSubject(subject.id)}
+   actions={[
+     { icon: Smile, title: 'Đổi biểu tượng', onClick: () => onOpenEmojiPicker(subject.id) },
+     { icon: subject.isPinned ? PinOff : Pin, title: subject.isPinned ? 'Bỏ ghim' : 'Ghim', onClick: () => cb.onPinSubject(subject.id, !subject.isPinned) },
+     { icon: PanelRight, title: 'Mở môn học (tệp & liên kết)', onClick: () => cb.onOpenSubject(subject.id) },
+     { icon: Share2, title: 'Chia sẻ', onClick: () => cb.onShareSubject(subject) },
+     { icon: FolderPlus, title: 'Thêm chương', onClick: () => cb.onAddChapter(subject.id) },
+     { icon: Plus, title: 'Thêm ghi chú', onClick: () => cb.onAddNote(subject.id, null) },
+    ]}
+   dragHandleProps={handleProps}
+   />
+   )}
+   </SortableRow>
  <AnimatePresence initial={false}>
  {isOpen && (
  <motion.div
@@ -462,6 +541,79 @@ function SubjectBranch({
  );
 }
 
+// ─── PinnedSubjectRow — compact pinned subject for the Pinned section ─
+function PinnedSubjectRow({
+  subject, selectedNoteId, expanded, setExpanded, reduced, sensors, activeId, setActiveId, cb,
+}: {
+  subject: NoteSubjectTree;
+  selectedNoteId: number | null;
+  expanded: Record<number, boolean>;
+  setExpanded: React.Dispatch<React.SetStateAction<Record<number, boolean>>>;
+  reduced: boolean;
+  sensors: ReturnType<typeof makeSensors>;
+  activeId: { scope: 'subject' | 'chapter' | 'note'; id: number } | null;
+  setActiveId: (v: { scope: 'subject' | 'chapter' | 'note'; id: number } | null) => void;
+  cb: SidebarCallbacks;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="mb-0.5">
+      <div className="flex items-center">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[13px] font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.05]"
+        >
+          <ChevronRight className={`h-3.5 w-3.5 transition-transform ${isOpen ? 'rotate-90' : ''}`} />
+          <Pin className="h-3 w-3 shrink-0 text-amber-400" />
+          {subject.emoji && <span className="text-[13px]">{subject.emoji}</span>}
+          {subject.color && !subject.emoji && <span className="h-2 w-2 rounded-full shrink-0" style={{ background: subject.color }} />}
+          {!subject.emoji && !subject.color && <span className="text-[13px]">📁</span>}
+          <span className="truncate">{subject.name}</span>
+        </button>
+        <button
+          onClick={() => cb.onPinSubject(subject.id, false)}
+          className="ml-auto mr-2 flex h-6 w-6 items-center justify-center rounded text-amber-400 opacity-0 transition-opacity hover:bg-slate-100 group-hover:opacity-100 dark:hover:bg-white/10"
+          title="Bỏ ghim"
+        >
+          <PinOff className="h-3 w-3" />
+        </button>
+      </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={reduced ? false : { height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
+            transition={SPRING}
+            className="overflow-hidden pl-6"
+          >
+            {/* Subject-level notes */}
+            {subject.notes.map((note) => (
+              <NoteRow key={note.id} note={note} depth={1} active={selectedNoteId === note.id} cb={cb} />
+            ))}
+            {/* Chapters with notes */}
+            {subject.chapters.map((chapter) => (
+              <div key={chapter.id}>
+                <div className="flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-500">
+                  <ChevronRight className="h-3 w-3" />
+                  <BookOpen className="h-3 w-3" />
+                  <span className="truncate">{chapter.title}</span>
+                </div>
+                <div className="pl-6">
+                  {chapter.notes.map((note) => (
+                    <NoteRow key={note.id} note={note} depth={2} active={selectedNoteId === note.id} cb={cb} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // ─── A note leaf row ─────────────────────────────────────────
 function NoteRow({ note, depth, active, cb }: { note: NoteSummary; depth: number; active: boolean; cb: SidebarCallbacks }) {
  return (
@@ -476,6 +628,9 @@ function NoteRow({ note, depth, active, cb }: { note: NoteSummary; depth: number
  onClick={() => cb.onSelectNote(note.id)}
  onRename={(v) => cb.onRenameNote(note.id, v)}
  onDelete={() => cb.onDeleteNote(note.id)}
+ actions={[
+ { icon: note.isPinned ? PinOff : Pin, title: note.isPinned ? 'Bỏ ghim' : 'Ghim', onClick: () => cb.onPinNote(note.id, !note.isPinned) },
+ ]}
  dragHandleProps={handleProps}
  />
  )}
@@ -639,7 +794,7 @@ function FilterPill({ active, icon, label, onClick }: { active: boolean; icon: R
    className={`flex min-h-[28px] items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
     active
      ? 'border-teal-500/40 bg-teal-100 dark:bg-teal-500/15 text-teal-800 dark:text-teal-100'
-     : 'border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/[0.02] text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:border-white/20 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200'
+     : 'border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/[0.02] text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:border-white/20 hover:bg-slate-100 dark:hover:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200'
    }`}
    aria-pressed={active}
   >
@@ -647,5 +802,75 @@ function FilterPill({ active, icon, label, onClick }: { active: boolean; icon: R
    <span>{label}</span>
   </button>
  );
+}
+
+// ─── PART 3: Emoji Picker for folder icons ─────────────────────────
+const FOLDER_EMOJIS = [
+ '📁', '📚', '📗', '📘', '📙', '📕',
+ '📓', '📒', '📔', '📑', '🔖', '📌',
+ '💻', '🖥️', '⌨️', '🖱️', '💾', '📀',
+ '🔢', '🔣', '🔤', '📝', '✏️', '🖊️',
+ '🖋️', '📖', '📃', '📄', '📰', '🗞️',
+ '📋', '📌', '📎', '🗂️', '📁', '🗃️',
+ '🗄️', '🗑️', '💰', '💵', '💴', '💶',
+ '💷', '💸', '💳', '🧾', '💹', '📊',
+ '📈', '📉', '📆', '📅', '🗓️', '📇',
+ '🔗', '🌐', '🌍', '🌎', '🌏', '🗺️',
+ '🏫', '🏢', '🏣', '🏤', '🏥', '🏦',
+ '🏨', '🏩', '🏪', '🏬', '🏭', '🏯',
+ '🏰', '💒', '🗼', '🗽', '⛪', '⛩️',
+ '🔭', '🔬', '🧬', '🧪', '🧫', '🧬',
+ '🧮', '🧲', '⚗️', '🔭', '🔬', '💡',
+ '🎓', '🎒', '🎒', '🎨', '🎭', '🎪',
+ '🎬', '🎤', '🎧', '🎹', '🎸', '🎷',
+ '🎺', '🎻', '🥁', '🎷', '🎵', '🎶',
+ '⭐', '🌟', '✨', '💫', '🌙', '🌞',
+ '❤️', '🧡', '💛', '💚', '💙', '💜',
+ '🖤', '🤍', '🤎', '💔', '❣️', '💕',
+ '☮️', '✝️', '☯️', '🕉️', '☪️', '🔯',
+ '🛐', '⛎', '♈', '♉', '♊', '♋',
+ '♌', '♍', '♎', '♏', '♐', '♑',
+ '♒', '♓', '🆔', '⚛️', '🉑', '☢️',
+ '☣️', '📴', '📳', '🈶', '🈚', '🈸',
+ '🈺', '🈷️', '✴️', '🆚', '💮', '🉐',
+ '㊙️', '㊗️', '🈴', '🈵', '🈹', '🈲',
+ '🅰️', '🅱️', '🆎', '🆑', '🅾️', '🆘',
+];
+
+interface EmojiPickerProps {
+  currentEmoji: string;
+  onSelect: (emoji: string) => void;
+  onClose: () => void;
+}
+
+function EmojiPicker({ currentEmoji, onSelect, onClose }: EmojiPickerProps) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative z-10 w-80 max-h-80 overflow-y-auto rounded-xl border border-slate-200 bg-white p-3 shadow-2xl dark:border-white/10 dark:bg-[#1a1f27]">
+        <div className="mb-2 flex items-center justify-between">
+          <h3 className="text-sm font-medium text-slate-700 dark:text-slate-200">Chọn biểu tượng</h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="grid grid-cols-8 gap-1">
+          {FOLDER_EMOJIS.map((emoji) => (
+            <button
+              key={emoji}
+              onClick={() => onSelect(emoji)}
+              className={`flex h-8 w-8 items-center justify-center rounded-md text-lg transition-colors ${
+                emoji === currentEmoji
+                  ? 'bg-teal-100 ring-2 ring-teal-500 dark:bg-teal-500/20'
+                  : 'hover:bg-slate-100 dark:hover:bg-white/10'
+              }`}
+            >
+              {emoji}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 

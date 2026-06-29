@@ -36,6 +36,7 @@ export default function NotesSharedWithMe({
   const [loading, setLoading] = useState(true);
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
   const [loadingSubjects, setLoadingSubjects] = useState<Set<number>>(new Set());
+  const [loadedFullDataIds, setLoadedFullDataIds] = useState<Set<number>>(new Set());
 
   const loadShared = async () => {
     setLoading(true);
@@ -64,24 +65,27 @@ export default function NotesSharedWithMe({
     }
 
     // Load full subject data if not already loaded
-    if (!sharedSubjects.find(s => s.subjectId === subjectId)?.subject.chapters) {
+    if (!loadedFullDataIds.has(subjectId)) {
       setLoadingSubjects(prev => new Set(prev).add(subjectId));
       try {
         const res = await noteShareApi.getReceivedSubject(subjectId);
         const fullData = res.data.data;
+        // Cast to any to allow mixing summary + full data shapes
         setSharedSubjects(prev => prev.map(s => {
           if (s.subjectId === subjectId) {
             return {
               ...s,
               subject: {
                 ...s.subject,
-                chapters: fullData.chapters?.map((c: any) => ({ id: c.id, title: c.title })) ?? [],
-                notes: fullData.notes?.map((n: any) => ({ id: n.id, title: n.title, updatedAt: n.updatedAt })) ?? [],
+                // Update with full data from API
+                chapters: fullData.chapters ?? s.subject.chapters,
+                notes: fullData.notes ?? s.subject.notes,
               },
-            };
+            } as any;
           }
           return s;
         }));
+        setLoadedFullDataIds(prev => new Set(prev).add(subjectId));
       } catch {
         toast.error('Không tải được nội dung');
       } finally {

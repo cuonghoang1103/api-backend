@@ -531,9 +531,8 @@ function NotesPageInner() {
 
   return (
     <div className="notes-page h-[100dvh] pt-16
-      bg-[var(--notes-bg,#f8fafc)] text-[var(--notes-text,#1e293b)]
-      dark:bg-[#0c0f14] dark:text-slate-200
-      light-white:bg-white light-white:text-slate-800">
+      bg-[var(--notes-bg,#ffffff)] text-[var(--notes-text,#1e293b)]
+      dark:bg-[#0c0f14] dark:text-slate-200">
       <div className="flex h-full">
         {/* Desktop sidebar */}
         <aside className="hidden w-72 shrink-0 border-r
@@ -556,9 +555,7 @@ function NotesPageInner() {
               <kbd className="ml-1 hidden rounded bg-slate-200 px-1.5 text-[10px] text-slate-500 dark:bg-white/[0.06] md:inline">⌘K</kbd>
             </button>
             <div className="flex-1" />
-            {/* Theme toggle — đổi giữa nền tối / nền sáng / nền trắng. Lưu vào
-                localStorage để lần sau mở trang nhớ lại lựa chọn.
-                Hiển thị cả khi chưa chọn note nào. */}
+            {/* Theme toggle — đổi giữa nền tối / nền nâu ấm / nền trắng sáng. */}
             <button
               onClick={toggleTheme}
               title={`${themeInfo.label} — nhấn để đổi`}
@@ -567,7 +564,7 @@ function NotesPageInner() {
             >
               {theme === 'dark' ? (
                 <Sun className="h-[18px] w-[18px]" />
-              ) : theme === 'light' ? (
+              ) : theme === 'brown' ? (
                 <Moon className="h-[18px] w-[18px]" />
               ) : (
                 <Sparkles className="h-[18px] w-[18px]" />

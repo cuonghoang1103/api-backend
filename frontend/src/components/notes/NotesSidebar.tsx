@@ -815,7 +815,11 @@ function Row({
       )}
 
       {/* Row actions — always visible on touch, hover-reveal on desktop */}
-      <div className="flex shrink-0 items-center opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
+      {/* On desktop the actions are display:none until hover so they don't
+          occupy layout width — otherwise 8 invisible buttons squeeze the
+          flex-1 label to ~0 and the folder name disappears. Always shown on
+          touch (mobile). */}
+      <div className="flex shrink-0 items-center sm:hidden sm:group-hover:flex">
         {/* Rename — always present so it's discoverable (double-click still works) */}
         {!editing && (
           <button

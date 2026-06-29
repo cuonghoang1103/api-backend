@@ -26,6 +26,9 @@ import NotesSharedWithMe from '@/components/notes/NotesSharedWithMe';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
 import { NotesThemeProvider, useNotesTheme } from '@/components/notes/NotesThemeProvider';
 import { Sparkles } from 'lucide-react';
+import { DndContext, PointerSensor, useSensor, useSensors, closestCenter, type DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, useSortable, horizontalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 export default function NotesPage() {
   // Wrap với theme provider để tất cả component con (sidebar,
@@ -79,6 +82,57 @@ function saveTabsToStorage(tabs: NoteTab[], activeTabId: string | null) {
   } catch {
     // ignore
   }
+}
+
+// A single draggable tab in the tab bar. The whole tab is the drag handle
+// (with a small distance constraint so plain clicks still select); the close
+// button stops propagation so it never starts a drag.
+function SortableTab({
+  tab, active, onSwitch, onClose,
+}: {
+  tab: NoteTab; active: boolean; onSwitch: () => void; onClose: () => void;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: tab.id });
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.6 : 1,
+  };
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      onClick={onSwitch}
+      {...attributes}
+      {...listeners}
+      className={`group flex cursor-grab items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap min-w-0 active:cursor-grabbing ${
+        active
+          ? 'bg-teal-100 text-teal-800 dark:bg-teal-500/15 dark:text-teal-100'
+          : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/[0.05]'
+      }`}
+    >
+      {tab.type === 'subject' ? (
+        tab.emoji ? (
+          <span className="text-[13px]">{tab.emoji}</span>
+        ) : tab.color ? (
+          <span className="h-2 w-2 rounded-full shrink-0" style={{ background: tab.color }} />
+        ) : (
+          <span className="text-[13px]">📁</span>
+        )
+      ) : (
+        <FileText className="h-3.5 w-3.5 shrink-0" />
+      )}
+      <span className="truncate max-w-[120px]">{tab.title || 'Không có tiêu đề'}</span>
+      <button
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        onPointerDown={(e) => e.stopPropagation()}
+        className="ml-1 flex h-5 w-5 items-center justify-center rounded opacity-0 transition-opacity group-hover:opacity-100 hover:bg-slate-200 dark:hover:bg-white/10"
+        aria-label="Đóng tab"
+      >
+        <XCircle className="h-3 w-3" />
+      </button>
+    </div>
+  );
 }
 
 function NotesPageInner() {
@@ -153,6 +207,21 @@ function NotesPageInner() {
     setActiveTabId(tabId);
     saveTabsToStorage(openTabs, tabId);
   }, [openTabs]);
+
+  // Drag-to-reorder the open tabs (dnd-kit, horizontal).
+  const tabSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const handleTabDragEnd = useCallback((e: DragEndEvent) => {
+    const { active, over } = e;
+    if (!over || active.id === over.id) return;
+    setOpenTabs((prev) => {
+      const oldIndex = prev.findIndex((t) => t.id === active.id);
+      const newIndex = prev.findIndex((t) => t.id === over.id);
+      if (oldIndex < 0 || newIndex < 0) return prev;
+      const next = arrayMove(prev, oldIndex, newIndex);
+      saveTabsToStorage(next, activeTabId);
+      return next;
+    });
+  }, [activeTabId]);
 
   // When a tab is activated by user, update the view
   const activateTabView = useCallback((tab: NoteTab) => {
@@ -610,44 +679,24 @@ function NotesPageInner() {
             )}
           </div>
 
-          {/* PART 1: Tab Bar */}
+          {/* PART 1: Tab Bar — drag to reorder (dnd-kit, horizontal) */}
           {openTabs.length > 0 && (
             <div className="flex items-center gap-1 border-b border-slate-200 bg-white px-3 py-1.5 overflow-x-auto dark:border-white/[0.06] dark:bg-[#0e1218]">
-              {openTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => switchToTab(tab.id)}
-                  className={`group flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap min-w-0 ${
-                    activeTabId === tab.id
-                      ? 'bg-teal-100 text-teal-800 dark:bg-teal-500/15 dark:text-teal-100'
-                      : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/[0.05]'
-                  }`}
-                >
-                  {/* Tab icon */}
-                  {tab.type === 'subject' ? (
-                    tab.emoji ? (
-                      <span className="text-[13px]">{tab.emoji}</span>
-                    ) : tab.color ? (
-                      <span className="h-2 w-2 rounded-full shrink-0" style={{ background: tab.color }} />
-                    ) : (
-                      <span className="text-[13px]">📁</span>
-                    )
-                  ) : (
-                    <FileText className="h-3.5 w-3.5 shrink-0" />
-                  )}
-                  <span className="truncate max-w-[120px]">{tab.title || 'Không có tiêu đề'}</span>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      closeTab(tab.id);
-                    }}
-                    className="ml-1 flex h-5 w-5 items-center justify-center rounded opacity-0 transition-opacity group-hover:opacity-100 hover:bg-slate-200 dark:hover:bg-white/10"
-                    aria-label="Đóng tab"
-                  >
-                    <XCircle className="h-3 w-3" />
-                  </button>
-                </button>
-              ))}
+              <DndContext sensors={tabSensors} collisionDetection={closestCenter} onDragEnd={handleTabDragEnd}>
+                <SortableContext items={openTabs.map((t) => t.id)} strategy={horizontalListSortingStrategy}>
+                  <div className="flex items-center gap-1">
+                    {openTabs.map((tab) => (
+                      <SortableTab
+                        key={tab.id}
+                        tab={tab}
+                        active={activeTabId === tab.id}
+                        onSwitch={() => switchToTab(tab.id)}
+                        onClose={() => closeTab(tab.id)}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
             </div>
           )}
 

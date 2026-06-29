@@ -21,8 +21,9 @@
 
 import { Extension } from '@tiptap/core';
 
-const NBSP_INDENT = '\u00A0'.repeat(8); // 8 non-breaking spaces
-const PLAIN_INDENT = ' '.repeat(8);     // 8 regular spaces (code blocks)
+const TAB_WIDTH = 8;            // columns per tab stop
+const NBSP = '\u00A0';         // prose: regular spaces collapse, NBSP doesn't
+const SPACE = ' ';             // code blocks: <pre> preserves plain spaces
 
 export const TabIndent = Extension.create({
   name: 'tabIndent',
@@ -39,9 +40,24 @@ export const TabIndent = Extension.create({
     return {
       Tab: () => {
         if (deferToNative()) return false;
-        const indent = this.editor.isActive('codeBlock') ? PLAIN_INDENT : NBSP_INDENT;
+
+        // Column-aware Tab: advance to the NEXT tab stop (a multiple of
+        // TAB_WIDTH) relative to the caret's current column, instead of
+        // always inserting 8 spaces. This makes rows line up — e.g. `from`
+        // (col 4) and `to` (col 2) both jump to column 8, so the text that
+        // follows them aligns vertically, like Tab in a text/code editor.
+        const { state } = this.editor;
+        const { from, $from } = state.selection;
+        // Text from the start of this text block to the caret; hard breaks
+        // render as '\n', so the column is measured from the last line break.
+        const before = state.doc.textBetween($from.start(), from, '\n', '\0');
+        const lastBreak = before.lastIndexOf('\n');
+        const col = before.length - (lastBreak + 1);
+        const count = TAB_WIDTH - (col % TAB_WIDTH); // 1..TAB_WIDTH (never 0)
+
+        const ch = this.editor.isActive('codeBlock') ? SPACE : NBSP;
         // insertContent at the caret only — never touches other nodes.
-        return this.editor.commands.insertContent(indent);
+        return this.editor.commands.insertContent(ch.repeat(count));
       },
 
       'Shift-Tab': () => {

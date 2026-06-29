@@ -15,7 +15,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
  ChevronRight, Plus, Trash2, FileText, FolderPlus, BookOpen, Pin, Clock, X, PanelRight, GripVertical,
- Star, Archive, AlertCircle, FolderTree, Share2, PinOff, Smile,
+ Star, Archive, AlertCircle, FolderTree, Share2, PinOff, Smile, Pencil,
 } from 'lucide-react';
 import {
  DndContext, DragOverlay,
@@ -428,6 +428,7 @@ function SubjectBranch({
    active={false}
    onRename={(v) => cb.onRenameSubject(subject.id, v)}
    onDelete={() => cb.onDeleteSubject(subject.id)}
+   onIconClick={() => onOpenEmojiPicker(subject.id)}
    actions={[
      { icon: Smile, title: 'Đổi biểu tượng', onClick: () => onOpenEmojiPicker(subject.id) },
      { icon: subject.isPinned ? PinOff : Pin, title: subject.isPinned ? 'Bỏ ghim' : 'Ghim', onClick: () => cb.onPinSubject(subject.id, !subject.isPinned) },
@@ -705,11 +706,12 @@ interface DragHandleProps {
 }
 function Row({
  depth, label, color, emoji, icon: Icon, open, leaf, active,
- onToggle, onClick, onRename, onDelete, actions = [], dragHandleProps,
+ onToggle, onClick, onRename, onDelete, onIconClick, actions = [], dragHandleProps,
 }: {
  depth: number; label: string; color?: string | null; emoji?: string | null;
  icon?: React.ComponentType<{ className?: string }>; open?: boolean; leaf?: boolean; active: boolean;
- onToggle?: () => void; onClick?: () => void; onRename: (v: string) => void; onDelete: () => void; actions?: RowAction[];
+ onToggle?: () => void; onClick?: () => void; onRename: (v: string) => void; onDelete: () => void;
+ onIconClick?: () => void; actions?: RowAction[];
  dragHandleProps?: DragHandleProps;
 }) {
   const [editing, setEditing] = useState(false);
@@ -746,9 +748,29 @@ function Row({
  <ChevronRight className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-90' : ''}`} />
  </button>
  )}
-      {color && <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: color }} />}
-      {emoji && <span className="shrink-0 text-[13px] leading-none">{emoji}</span>}
-      {Icon && !emoji && !color && <Icon className={`h-3.5 w-3.5 shrink-0 ${active ? 'text-teal-600 dark:text-teal-300' : 'text-slate-500 dark:text-slate-500'}`} />}
+      {/* Leading icon. When onIconClick is provided (subjects), clicking the
+          icon opens the emoji picker so changing a folder's icon is obvious. */}
+      {(() => {
+        const iconEl = (
+          <>
+            {color && <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: color }} />}
+            {emoji && <span className="shrink-0 text-[13px] leading-none">{emoji}</span>}
+            {Icon && !emoji && !color && <Icon className={`h-3.5 w-3.5 shrink-0 ${active ? 'text-teal-600 dark:text-teal-300' : 'text-slate-500 dark:text-slate-500'}`} />}
+            {!emoji && !color && !Icon && <span className="shrink-0 text-[13px] leading-none">📁</span>}
+          </>
+        );
+        return onIconClick ? (
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onIconClick(); }}
+            title="Đổi biểu tượng"
+            aria-label="Đổi biểu tượng"
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded hover:bg-slate-200 dark:hover:bg-white/10"
+          >
+            {iconEl}
+          </button>
+        ) : iconEl;
+      })()}
 
       {editing ? (
         <input
@@ -757,7 +779,7 @@ function Row({
           onChange={(e) => setVal(e.target.value)}
           onBlur={commit}
           onKeyDown={(e) => { if (e.key === 'Enter') commit(); if (e.key === 'Escape') { setEditing(false); setVal(label); } }}
-          className="min-w-0 flex-1 rounded bg-slate-800 px-1 py-0.5 text-[13px] text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-teal-500/50"
+          className="min-w-0 flex-1 rounded bg-white px-1 py-0.5 text-[13px] text-slate-900 ring-1 ring-slate-300 dark:bg-slate-800 dark:text-slate-100 dark:ring-white/15 focus:outline-none focus:ring-1 focus:ring-teal-500/50"
         />
       ) : (
         <button
@@ -772,6 +794,17 @@ function Row({
 
       {/* Row actions — always visible on touch, hover-reveal on desktop */}
       <div className="flex shrink-0 items-center opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
+        {/* Rename — always present so it's discoverable (double-click still works) */}
+        {!editing && (
+          <button
+            onClick={(e) => { e.stopPropagation(); setVal(label); setEditing(true); }}
+            title="Đổi tên"
+            aria-label="Đổi tên"
+            className="flex h-7 w-7 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+          </button>
+        )}
         {actions.map((a, i) => (
           <button key={i} onClick={a.onClick} title={a.title} aria-label={a.title} className="flex h-7 w-7 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300">
             <a.icon className="h-3.5 w-3.5" />

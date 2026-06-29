@@ -85,48 +85,10 @@ export function NotesThemeProvider({ children }: { children: ReactNode }) {
 
   // Sync theme vào <html data-theme="..."> để:
   //   1. CSS `html[data-theme="light"] .x { ... }` có thể override
-  //   2. CSS variables (nếu có) được cập nhật
-  //   3. Trình duyệt không flash sai màu khi reload
+  //   2. Trình duyệt không flash sai màu khi reload
   useEffect(() => {
     if (typeof document === 'undefined') return;
     document.documentElement.setAttribute('data-notes-theme', theme);
-  }, [theme]);
-
-  // Inject CSS custom properties for themes
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    const root = document.documentElement;
-    if (theme === 'light') {
-      // Clean white theme
-      root.style.setProperty('--notes-bg', '#ffffff');
-      root.style.setProperty('--notes-surface', '#ffffff');
-      root.style.setProperty('--notes-border', '#e2e8f0');
-      root.style.setProperty('--notes-text', '#1e293b');
-      root.style.setProperty('--notes-text-muted', '#64748b');
-      root.style.setProperty('--notes-accent', '#0d9488');
-      root.style.setProperty('--notes-sidebar-bg', '#ffffff');
-      root.style.setProperty('--notes-toolbar-bg', '#ffffff');
-    } else if (theme === 'brown') {
-      // Warm brown theme (original "light" theme)
-      root.style.setProperty('--notes-bg', '#faf6f1');
-      root.style.setProperty('--notes-surface', '#f5f0e8');
-      root.style.setProperty('--notes-border', '#e7d9c6');
-      root.style.setProperty('--notes-text', '#3d3526');
-      root.style.setProperty('--notes-text-muted', '#7a6b52');
-      root.style.setProperty('--notes-accent', '#0d9488');
-      root.style.setProperty('--notes-sidebar-bg', '#faf6f1');
-      root.style.setProperty('--notes-toolbar-bg', '#faf6f1');
-    } else {
-      // dark theme
-      root.style.setProperty('--notes-bg', '#0c0f14');
-      root.style.setProperty('--notes-surface', '#0e1218');
-      root.style.setProperty('--notes-border', 'rgba(255,255,255,0.06)');
-      root.style.setProperty('--notes-text', '#e2e8f0');
-      root.style.setProperty('--notes-text-muted', '#64748b');
-      root.style.setProperty('--notes-accent', '#14b8a6');
-      root.style.setProperty('--notes-sidebar-bg', '#0e1218');
-      root.style.setProperty('--notes-toolbar-bg', 'rgba(12,15,20,0.9)');
-    }
   }, [theme]);
 
   const setTheme = useCallback((next: NotesTheme) => {
@@ -157,6 +119,47 @@ export function NotesThemeProvider({ children }: { children: ReactNode }) {
     [theme, setTheme, toggleTheme, themeInfo],
   );
 
+  // Build CSS variables object based on theme
+  const themeStyles = useMemo(() => {
+    if (theme === 'light') {
+      // Clean white theme
+      return {
+        '--notes-bg': '#ffffff',
+        '--notes-surface': '#ffffff',
+        '--notes-border': '#e2e8f0',
+        '--notes-text': '#1e293b',
+        '--notes-text-muted': '#64748b',
+        '--notes-accent': '#0d9488',
+        '--notes-sidebar-bg': '#ffffff',
+        '--notes-toolbar-bg': '#ffffff',
+      } as React.CSSProperties;
+    } else if (theme === 'brown') {
+      // Warm brown theme
+      return {
+        '--notes-bg': '#faf6f1',
+        '--notes-surface': '#f5f0e8',
+        '--notes-border': '#e7d9c6',
+        '--notes-text': '#3d3526',
+        '--notes-text-muted': '#7a6b52',
+        '--notes-accent': '#0d9488',
+        '--notes-sidebar-bg': '#faf6f1',
+        '--notes-toolbar-bg': '#faf6f1',
+      } as React.CSSProperties;
+    } else {
+      // Dark theme
+      return {
+        '--notes-bg': '#0c0f14',
+        '--notes-surface': '#0e1218',
+        '--notes-border': 'rgba(255,255,255,0.06)',
+        '--notes-text': '#e2e8f0',
+        '--notes-text-muted': '#64748b',
+        '--notes-accent': '#14b8a6',
+        '--notes-sidebar-bg': '#0e1218',
+        '--notes-toolbar-bg': 'rgba(12,15,20,0.9)',
+      } as React.CSSProperties;
+    }
+  }, [theme]);
+
   return (
     <NotesThemeContext.Provider value={value}>
       {/*
@@ -171,8 +174,9 @@ export function NotesThemeProvider({ children }: { children: ReactNode }) {
         - 'light': Pure white background (#ffffff), clean light UI
       */}
       <div
-        className={`notes-theme-root h-full ${theme === 'dark' ? 'dark' : theme === 'light' ? '' : ''}`}
+        className={`notes-theme-root h-full ${theme === 'dark' ? 'dark' : ''}`}
         data-notes-theme={theme}
+        style={themeStyles}
       >
         {children}
       </div>

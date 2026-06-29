@@ -133,6 +133,9 @@ export function NotesThemeProvider({ children }: { children: ReactNode }) {
     if (theme === 'light') {
       // Clean white theme
       return {
+        // Declare the scheme so the browser's "force dark mode for web"
+        // (e.g. Cốc Cốc/Chrome auto-dark) does NOT invert this subtree.
+        colorScheme: 'light',
         '--notes-bg': '#ffffff',
         '--notes-surface': '#ffffff',
         '--notes-border': '#e2e8f0',
@@ -143,20 +146,23 @@ export function NotesThemeProvider({ children }: { children: ReactNode }) {
         '--notes-toolbar-bg': '#ffffff',
       } as React.CSSProperties;
     } else if (theme === 'brown') {
-      // Warm brown theme
+      // Warm brown / sepia theme — clearly tan so "Nâu" actually looks brown
+      // (the old #faf6f1 was nearly white). Reads like aged paper.
       return {
-        '--notes-bg': '#faf6f1',
-        '--notes-surface': '#f5f0e8',
-        '--notes-border': '#e7d9c6',
-        '--notes-text': '#3d3526',
-        '--notes-text-muted': '#7a6b52',
+        colorScheme: 'light',
+        '--notes-bg': '#e7d9bf',
+        '--notes-surface': '#ddccae',
+        '--notes-border': '#c9b491',
+        '--notes-text': '#43361f',
+        '--notes-text-muted': '#6e5c3f',
         '--notes-accent': '#0d9488',
-        '--notes-sidebar-bg': '#faf6f1',
-        '--notes-toolbar-bg': '#faf6f1',
+        '--notes-sidebar-bg': '#e0d2b6',
+        '--notes-toolbar-bg': '#e7d9bf',
       } as React.CSSProperties;
     } else {
       // Dark theme
       return {
+        colorScheme: 'dark',
         '--notes-bg': '#0c0f14',
         '--notes-surface': '#0e1218',
         '--notes-border': 'rgba(255,255,255,0.06)',

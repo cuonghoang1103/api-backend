@@ -5,7 +5,9 @@
 # ============================================================
 
 # ─── Stage 1: Deps (cache-friendly layer for node_modules) ───
-FROM node:22-alpine AS deps
+# NOTE: Use node:22-slim (Debian-based) instead of node:22-alpine because
+# Next.js SWC requires glibc (ld-linux-x86-64.so.2) which Alpine/musl lacks.
+FROM node:22-slim AS deps
 
 WORKDIR /app
 
@@ -35,7 +37,9 @@ RUN npm install --no-audit --fetch-timeout=60000 || \
      fi)
 
 # ─── Stage 2: Builder (compile code) ─────────────────────────
-FROM node:22-alpine AS builder
+# NOTE: Use node:22-slim (Debian-based) instead of node:22-alpine because
+# Next.js SWC requires glibc (ld-linux-x86-64.so.2) which Alpine/musl lacks.
+FROM node:22-slim AS builder
 
 WORKDIR /app
 
@@ -104,7 +108,9 @@ RUN rm -rf .next
 RUN npm run build
 
 # ─── Stage 3: Runner (production container) ───────────────────
-FROM node:22-alpine AS runner
+# NOTE: Use node:22-slim (Debian-based) instead of node:22-alpine because
+# Next.js SWC requires glibc (ld-linux-x86-64.so.2) which Alpine/musl lacks.
+FROM node:22-slim AS runner
 
 WORKDIR /app
 
@@ -113,12 +119,12 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Install wget for healthcheck only
-RUN apk add --no-cache wget
+# Install wget for healthcheck only (Debian uses apt-get, not apk)
+RUN apt-get update && apt-get install -y --no-install-recommends wget && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user (security best practice)
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
+RUN groupadd --system --gid 1001 nodejs && \
+    useradd --system --uid 1001 --gid 1001 --shell /bin/bash nextjs
 
 # Copy only what standalone needs:
 #   1. standalone server directory (contains compiled server.js)

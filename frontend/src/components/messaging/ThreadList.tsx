@@ -12,8 +12,6 @@ import {
   MoreHorizontal,
   X,
   Inbox,
-  ChevronUp,
-  ChevronDown,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -43,10 +41,6 @@ export default function ThreadList() {
   const [filter, setFilter] = useState<FilterMode>('all');
   const [activeMenuThreadId, setActiveMenuThreadId] = useState<number | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
-  // Scroll position tracking for up/down buttons
-  const [isNearTop, setIsNearTop] = useState(true);
-  const [isNearBottom, setIsNearBottom] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Re-load the thread list when the panel first opens
   useEffect(() => {
@@ -125,23 +119,6 @@ export default function ThreadList() {
       setFilter('all');
     }
   }, [visibleThreads.length, filter, counts.archived, counts.unread, counts.pinned, store.threadsLoaded]);
-
-  // Track scroll position for up/down buttons
-  const handleScroll = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const { scrollTop, scrollHeight, clientHeight } = el;
-    setIsNearTop(scrollTop < 50);
-    setIsNearBottom(scrollTop + clientHeight >= scrollHeight - 50);
-  };
-
-  const scrollToTop = () => {
-    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const scrollToBottom = () => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-  };
 
   return (
     <div ref={containerRef} className="flex min-h-0 flex-1 flex-col">
@@ -238,12 +215,7 @@ export default function ThreadList() {
         </div>
       </div>
 
-      <div className="relative min-h-0 flex-1">
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="absolute inset-0 overflow-y-auto px-2 py-1"
-        >
+      <div className="min-h-0 flex-1 overflow-y-auto px-2 py-1">
         {store.threadsLoading && !store.threadsLoaded ? (
           <div className="space-y-2 p-2">
             {[1, 2, 3].map((i) => (
@@ -411,37 +383,6 @@ export default function ThreadList() {
               );
             })}
           </ul>
-        )}
-        {/* Scroll navigation buttons */}
-        {visibleThreads.length > 5 && (
-          <div className="absolute right-1 top-1/2 flex -translate-y-1/2 flex-col gap-1">
-            <button
-              onClick={scrollToTop}
-              disabled={isNearTop}
-              className={cn(
-                'flex h-7 w-7 items-center justify-center rounded-full transition-all',
-                isNearTop
-                  ? 'cursor-not-allowed opacity-20'
-                  : 'bg-white/10 hover:bg-white/20 active:scale-95',
-              )}
-              title="Cuộn lên đầu"
-            >
-              <ChevronUp className="h-4 w-4 text-white/80" />
-            </button>
-            <button
-              onClick={scrollToBottom}
-              disabled={isNearBottom}
-              className={cn(
-                'flex h-7 w-7 items-center justify-center rounded-full transition-all',
-                isNearBottom
-                  ? 'cursor-not-allowed opacity-20'
-                  : 'bg-white/10 hover:bg-white/20 active:scale-95',
-              )}
-              title="Cuộn xuống cuối"
-            >
-              <ChevronDown className="h-4 w-4 text-white/80" />
-            </button>
-          </div>
         )}
       </div>
     </div>

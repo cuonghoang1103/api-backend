@@ -30,9 +30,22 @@ export function useAuth() {
         const authData = response.data.data as AuthResponse;
         setAuth(authData);
 
-        // Fetch full profile (including avatarUrl) immediately after login
-        // so the navbar / composer show the user's photo without delay.
-        await refreshProfileWithToken(authData);
+        // CRITICAL: fetch full profile (including avatarUrl) BEFORE returning.
+        // Without this await, login() returns immediately so the navbar/composer
+        // render with no avatar. The cookie is already set at this point so
+        // authApi.getProfile() will succeed.
+        try {
+          const res = await authApi.getProfile();
+          if (res.data?.data) {
+            updateProfile({
+              ...authData,
+              ...res.data.data,
+              id: authData.userId,
+            });
+          }
+        } catch {
+          // silently ignore — user still has a valid session
+        }
 
         const roles = authData.roles || (authData.role ? [authData.role] : []);
         const isAdmin = roles.some(
@@ -50,7 +63,7 @@ export function useAuth() {
         setLoading(false);
       }
     },
-    [setAuth, setLoading]
+    [setAuth, setLoading, updateProfile]
   );
 
   const register = useCallback(

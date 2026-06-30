@@ -53,6 +53,8 @@ export interface AuthResponse {
   success?: boolean;
   message?: string;
   fullName?: string;
+  /** Avatar URL returned by the login response and profile endpoint. */
+  avatarUrl?: string;
 }
 
 export interface LoginRequest {

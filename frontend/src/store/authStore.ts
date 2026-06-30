@@ -42,6 +42,7 @@ export const useAuthStore = create<AuthState>()(
           username: auth.username,
           email: auth.email,
           displayName: auth.username,
+          avatarUrl: auth.avatarUrl,
           roles: auth.roles || [auth.role],
           enabled: true,
           accountNonLocked: true,

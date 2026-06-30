@@ -144,10 +144,14 @@ function LoginForm() {
       const loginUserId: number = loginData.data?.userId ?? 0;
       const loginEmail: string = loginData.data?.email ?? '';
 
-      // ─── Step 3: Fetch profile to confirm roles ──────────────────
+      // ─── Step 3: Fetch full profile (including avatarUrl) ───────
+      // We MUST get avatarUrl here and merge it into authData before
+      // setAuth(), otherwise the Navbar/PostComposer render with no
+      // avatar and AuthBoot hasn't run yet (hard navigation wipes state).
       let profileRoles: string[] = loginRoles;
       let profileUserId = loginUserId;
       let profileEmail = loginEmail;
+      let profileAvatarUrl: string | undefined = loginData.data?.avatarUrl;
 
       if (token) {
         try {
@@ -162,6 +166,7 @@ function LoginForm() {
               profileRoles = profileData.data.roles ?? loginRoles;
               profileUserId = profileData.data.id ?? loginUserId;
               profileEmail = profileData.data.email ?? loginEmail;
+              profileAvatarUrl = profileData.data.avatarUrl ?? profileAvatarUrl;
             }
           }
         } catch (e) {
@@ -170,6 +175,7 @@ function LoginForm() {
       }
 
       // ─── Step 4: Build auth state and update store ──────────────
+      // avatarUrl must be included so Navbar/PostComposer render immediately.
       const authData: AuthResponse = {
         token,
         userId: profileUserId,
@@ -177,6 +183,7 @@ function LoginForm() {
         email: profileEmail,
         role: profileRoles[0] ?? 'ROLE_USER',
         roles: profileRoles,
+        avatarUrl: profileAvatarUrl,
       };
 
       useAuthStore.getState().setAuth(authData);

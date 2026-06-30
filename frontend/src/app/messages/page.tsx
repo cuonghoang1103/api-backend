@@ -256,9 +256,9 @@ function MessagesPageInner() {
               the panel so the two columns read as distinct
               surfaces. Fully opaque so the galaxy (now just
               a thin page-edge decoration) is not visible
-              through it. */}
+              through it. min-h-0 enables proper flex scrolling. */}
           <div
-            className="hidden w-80 shrink-0 flex-col border-r border-black/40 md:flex"
+            className="hidden w-80 shrink-0 flex-col border-r border-black/40 md:flex md:min-h-0"
             style={{
               background: 'linear-gradient(180deg, #20212e 0%, #161724 100%)',
             }}

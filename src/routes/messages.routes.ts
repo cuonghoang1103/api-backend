@@ -84,15 +84,24 @@ router.get('/threads', async (req: Request, res: Response, next: NextFunction) =
       (ur: { role: { name: string } }) =>
         ur.role.name.toUpperCase().replace('ROLE_', '') === 'ADMIN',
     ) ?? false;
+    // Check for super admin (can see ALL support threads)
+    const isSuperAdmin = (user?.username === 'cuong03dx' || user?.username === 'cuong123')
+      || user?.email === 'cuong03dx@gmail.com';
     // Default to the viewer's PERSONAL inbox for everyone — admin-role
     // users have their own DMs too and must see them on /messages.
-    // The support-agent queue (all ADMIN-type threads assigned to this
-    // admin) is opt-in via ?scope=support, used by /admin/messages.
+    // The support-agent queue (all ADMIN-type threads) is opt-in via
+    // ?scope=support, used by /admin/messages.
+    // Super admins see ALL admin threads; regular admins see only theirs.
     const scope = typeof req.query.scope === 'string' ? req.query.scope : undefined;
-    const threads = scope === 'support' && isAdmin
-      ? await messagesService.listThreadsForAdmin(req.userId!)
-      : await messagesService.listThreadsForUser(req.userId!);
-    res.json({ success: true, data: threads });
+    if (scope === 'support' && isAdmin) {
+      const threads = isSuperAdmin
+        ? await messagesService.listAllAdminThreads()  // Super admin: see all
+        : await messagesService.listThreadsForAdmin(req.userId!);  // Regular admin: see only theirs
+      res.json({ success: true, data: threads });
+    } else {
+      const threads = await messagesService.listThreadsForUser(req.userId!);
+      res.json({ success: true, data: threads });
+    }
   } catch (error) {
     next(error);
   }

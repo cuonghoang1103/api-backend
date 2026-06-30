@@ -391,6 +391,69 @@ export class MessagesService {
     });
   }
 
+  /**
+   * List ALL admin support threads for super admins.
+   * Unlike listThreadsForAdmin which filters by adminUserId, this returns
+   * all ADMIN-type threads regardless of which admin they are assigned to.
+   */
+  async listAllAdminThreads() {
+    const threads = await prisma.messageThread.findMany({
+      where: { type: 'ADMIN' },
+      orderBy: [{ lastMessageAt: { sort: 'desc', nulls: 'last' } }, { id: 'desc' }],
+      include: {
+        user: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
+        adminUser: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
+        userA: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
+        userB: { select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } },
+        messages: {
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+          select: {
+            id: true,
+            content: true,
+            senderId: true,
+            createdAt: true,
+            mediaKind: true,
+            attachments: { select: { id: true, mimeType: true, fileName: true } },
+          },
+        },
+      },
+    });
+
+    // For super admin, we don't filter by deletedAt since they can see all
+    const reads = await prisma.messageRead.findMany({
+      where: { threadId: { in: threads.map((t) => t.id) } },
+    });
+    const readMap = new Map(reads.map((r) => [r.threadId, r.lastReadAt]));
+
+    // Super admin sees all threads with all admin info
+    const serialized = await Promise.all(
+      threads.map((t) => this.serializeThreadAsync(t, 0)), // viewerId 0 for super admin
+    );
+
+    return threads.map((t, idx) => {
+      const lastMsg = t.messages[0] ?? null;
+      // Find which admin this thread is assigned to for display
+      const assignedAdmin = t.adminUser;
+      // Find the user for this thread
+      const peerUser = t.user;
+      // Calculate unread (any unread from user to any admin)
+      const lastRead = readMap.get(t.id) ?? new Date(0);
+      const unread =
+        lastMsg && lastMsg.senderId !== t.adminUserId && lastMsg.createdAt > lastRead ? 1 : 0;
+
+      return {
+        ...serialized[idx],
+        // Include the assigned admin info
+        adminUser: assignedAdmin,
+        // Include the user who initiated the thread
+        peer: peerUser,
+        lastMessage: lastMsg ? this.serializeMessagePreview(lastMsg) : null,
+        unreadCount: unread,
+      };
+    });
+  }
+
   // ─── Messages ──────────────────────────────────────────
 
   async listMessages(

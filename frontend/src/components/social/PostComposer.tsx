@@ -32,6 +32,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
+import { UserAvatar } from '@/components/common/UserAvatar';
 import { socialApi, fileApi, socialUserApi } from '@/lib/api';
 import { useComposerDraft } from '@/hooks/useComposerDraft';
 import { pickAiTemplate } from '@/lib/aiWriteTemplates';
@@ -447,16 +448,8 @@ export function PostComposer() {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            <div
-              className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full ring-2"
-              style={{ boxShadow: '0 0 0 2px rgba(139,92,246,0.3)' }}
-            >
-              <img
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=currentuser"
-                alt="Your avatar"
-                className="h-full w-full object-cover"
-              />
-            </div>
+            {/* Logged-in user's avatar, links to own profile */}
+            <UserAvatar size={40} linkToProfile ariaLabel="Trang cá nhân của bạn" />
 
             <div className="flex-1 relative">
               <textarea

@@ -9,6 +9,7 @@ import AuthProvider from '@/components/providers/AuthProvider'
 import ToasterProvider from '@/components/providers/ToasterProvider'
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider'
 import ServiceWorkerRegister from '@/components/providers/ServiceWorkerRegister'
+import AuthBoot from '@/components/providers/AuthBoot'
 import MusicAudioController from '@/components/music/MusicAudioController'
 import MusicHistoryRecorder from '@/components/music/MusicHistoryRecorder'
 import CyberCursor from '@/components/ui/CyberCursor'
@@ -270,6 +271,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       <AuthProvider>
+        {/* Must be inside AuthProvider so useAuth() works if any future
+            callers need it, and inside SessionProvider for consistency. */}
+        <AuthBoot />
         <ToasterProvider />
         <TanStackQueryProvider>
           <LocaleWrapper>

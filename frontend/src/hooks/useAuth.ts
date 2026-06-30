@@ -30,6 +30,10 @@ export function useAuth() {
         const authData = response.data.data as AuthResponse;
         setAuth(authData);
 
+        // Fetch full profile (including avatarUrl) immediately after login
+        // so the navbar / composer show the user's photo without delay.
+        await refreshProfileWithToken(authData);
+
         const roles = authData.roles || (authData.role ? [authData.role] : []);
         const isAdmin = roles.some(
           (r: string) => (r || '').replace('ROLE_', '').toUpperCase() === 'ADMIN'
@@ -115,6 +119,31 @@ export function useAuth() {
     }
   }, [token, updateProfile]);
 
+  /**
+   * Fetches the full profile right after login — accepts the raw auth
+   * response so it works even when the cookie hasn't propagated yet.
+   * Merges avatarUrl + displayName into the auth store.
+   */
+  const refreshProfileWithToken = useCallback(
+    async (authData: AuthResponse) => {
+      try {
+        const res = await authApi.getProfile();
+        if (res.data?.data) {
+          // Merge: keep the id/username/email from setAuth, add the rest
+          // from the full profile response (avatarUrl, displayName, bio, …).
+          updateProfile({
+            ...authData,
+            ...res.data.data,
+            id: authData.userId,
+          });
+        }
+      } catch {
+        // silently ignore — the user still has a valid session
+      }
+    },
+    [updateProfile]
+  );
+
   return {
     user,
     token,
@@ -125,5 +154,6 @@ export function useAuth() {
     logout: logoutAndRedirect,
     logoutSilently,
     refreshProfile,
+    refreshProfileWithToken,
   };
 }

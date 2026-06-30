@@ -102,7 +102,7 @@ const mainTabs: { id: MainTab; label: string }[] = [
 export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) {
   const params = useParams<{ id: string }>();
   const id = propUserId ?? Number(params?.id);
-  const { user: currentUser } = useAuthStore();
+  const { user: currentUser, updateProfile: updateAuthProfile } = useAuthStore();
   const queryClient = useQueryClient();
 
   // ─── State ───────────────────────────────────────────────────
@@ -309,6 +309,8 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       if (showImageCropper === 'avatar') {
         await authApi.updateProfile({ avatarUrl: imageUrl });
         setProfile((prev) => (prev ? { ...prev, avatarUrl: imageUrl } : prev));
+        // Sync the auth store so the navbar/composer show the new photo immediately.
+        updateAuthProfile({ avatarUrl: imageUrl });
         toast.success('Cập nhật ảnh đại diện thành công');
       } else {
         await socialUserApi.updateCoverPhoto(imageUrl);

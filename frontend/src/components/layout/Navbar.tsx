@@ -12,6 +12,7 @@ import { useNotificationStore } from '@/store/notificationStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import NotificationDropdown from '@/components/social/NotificationDropdown';
 import UserSearchBox from '@/components/social/UserSearchBox';
+import { UserAvatar } from '@/components/common/UserAvatar';
 import {
  Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles, TrendingUp,
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
@@ -360,13 +361,8 @@ export default function Navbar() {
                       bg-white/[0.04] border border-white/[0.06]
                       hover:border-neon-violet/30 transition-all"
                   >
-                    {displayUser?.avatarUrl ? (
-                      <img src={displayUser.avatarUrl} alt={displayUser.displayName || displayUser.username || 'User'} className="w-6 h-6 rounded-lg object-cover" />
-                    ) : (
-                      <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center">
-                        <User className="w-3 h-3 text-white" />
-                      </div>
-                    )}
+                    {/* Use UserAvatar component - it auto-reads from auth store */}
+                    <UserAvatar size={24} className="rounded-lg" />
                     <ChevronDown className={`w-3 h-3 text-text-muted transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
 

@@ -530,10 +530,10 @@ router.patch('/users/:id/roles', authenticate, requireAdmin('ROLE_ADMIN'), async
     // clients send `ROLE_USER` / `ROLE_ADMIN`; the rest of the
     // code base normalizes both ways via `.replace('ROLE_', '')`
     // so we accept either spelling here.
-    const normalizedRoles = roles
+    const normalizedRoles = [...new Set(roles
       .filter((r): r is string => typeof r === 'string')
       .map((r) => r.replace(/^ROLE_/i, '').trim().toLowerCase())
-      .filter((r) => r.length > 0);
+      .filter((r) => r.length > 0))];
 
     if (normalizedRoles.length === 0) {
       throw new AppError('roles must contain at least one role name', 400, 'EMPTY_ROLES');

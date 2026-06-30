@@ -91,7 +91,7 @@ const FILTER_OPTIONS: { value: FilterMode; label: string }[] = [
   { value: 'facebook',    label: 'Facebook' },
 ];
 
-const ALL_ROLES = ['ADMIN', 'USER', 'MODERATOR', 'EDITOR'];
+const ALL_ROLES = ['admin', 'user'];
 
 function getRoles(user: BackendUser): string[] {
   if (!user.roles) return [];
@@ -106,7 +106,7 @@ function getRoles(user: BackendUser): string[] {
       return '';
     })
     .filter((name) => name.length > 0)
-    .map((name) => name.replace('ROLE_', ''));
+    .map((name) => name.replace('ROLE_', '').toLowerCase());
 }
 
 function RoleBadge({ role }: { role: string }) {
@@ -292,7 +292,7 @@ function EditUserModal({
                       : 'bg-darkbg text-text-muted border-darkborder hover:border-neon-violet/20'
                   }`}
                 >
-                  {role}
+                  {role.toUpperCase()}
                 </button>
               ))}
             </div>

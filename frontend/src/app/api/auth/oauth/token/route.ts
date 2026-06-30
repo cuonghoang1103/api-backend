@@ -58,7 +58,13 @@ export async function POST(request: NextRequest) {
   if (!backendRes.ok) {
     const err = await backendRes.json().catch(() => ({}));
     console.error("[oauth/token] Backend error:", err);
-    return NextResponse.json({ success: false, message: "Failed to generate token" }, { status: 500 });
+    // Forward the exact status code so the client can distinguish
+    // 403 (account locked/disabled) from 500 (server error).
+    // The error message from the backend is user-friendly and safe to expose.
+    return NextResponse.json(
+      { success: false, message: err.message || "Failed to generate token", code: err.code },
+      { status: backendRes.status }
+    );
   }
 
   const data = await backendRes.json();

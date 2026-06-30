@@ -60,6 +60,8 @@ function LoginForm() {
       toast.error('Vui lòng đăng nhập để vào khoá học');
     } else if (loginError === 'not_admin') {
       toast.error('Bạn không có quyền truy cập trang quản trị');
+    } else if (loginError === 'account_blocked') {
+      toast.error('Tài khoản của bạn đã bị khoá hoặc vô hiệu hoá. Liên hệ quản trị viên để được hỗ trợ.');
     }
   }, [loginError]);
 

@@ -57,6 +57,7 @@ export type StorageCategory =
   | 'images/cover'
   | 'images/post'
   | 'images/chat'
+  | 'images/sticker'
   | 'images/project'
   | 'images/playlist-covers'
   | 'images/thumbnails'

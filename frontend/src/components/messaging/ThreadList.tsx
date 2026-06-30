@@ -21,6 +21,7 @@ import { vi } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import ThreadRowMenu from './ThreadRowMenu';
+import NewMessageModal from './NewMessageModal';
 
 // iOS-like spring transition — feels premium and "lightweight"
 const HOVER_SPRING = 'transition-[background-color,transform,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]';
@@ -39,6 +40,7 @@ export default function ThreadList() {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<FilterMode>('all');
   const [activeMenuThreadId, setActiveMenuThreadId] = useState<number | null>(null);
+  const [composeOpen, setComposeOpen] = useState(false);
 
   // Re-load the thread list when the panel first opens
   useEffect(() => {
@@ -120,8 +122,25 @@ export default function ThreadList() {
 
   return (
     <div ref={containerRef} className="flex min-h-0 flex-1 flex-col">
+      <NewMessageModal open={composeOpen} onClose={() => setComposeOpen(false)} />
       {/* Quick action — chat with admin (sticky) */}
       <div className="shrink-0 space-y-1.5 border-b border-white/[0.04] p-3">
+        <button
+          onClick={() => setComposeOpen(true)}
+          className={cn(
+            'group flex w-full items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2.5 text-left text-sm text-text-primary',
+            HOVER_SPRING,
+            'hover:scale-[1.01] hover:border-cyan-500/30 hover:bg-white/[0.05] active:scale-[0.99]',
+          )}
+        >
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/[0.06]">
+            <MessageCirclePlus className="h-4 w-4 text-cyan-300" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="font-medium">Tin nhắn mới</p>
+            <p className="truncate text-[11px] text-text-muted">Tìm bạn bè / người dùng để nhắn</p>
+          </div>
+        </button>
         <button
           onClick={handleStartAdmin}
           className={cn(

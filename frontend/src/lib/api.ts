@@ -1723,7 +1723,7 @@ export const messagingApi = {
   listMessages: (threadId: number, params?: { cursor?: number; limit?: number }) =>
     api.get<ApiResponse<MessagingMessage[]>>(`/messages/threads/${threadId}/messages`, { params }),
   // Phase 6: postShare param for sharing social posts into chat
-  sendMessage: (threadId: number, data: { content?: string; fileIds?: number[]; parentMessageId?: number | null; postShare?: { postId: number } }) =>
+  sendMessage: (threadId: number, data: { content?: string; fileIds?: number[]; parentMessageId?: number | null; postShare?: { postId: number }; media?: { url: string; kind: 'gif' | 'sticker' } }) =>
     api.post<ApiResponse<MessagingMessage>>(`/messages/threads/${threadId}/messages`, data),
   markRead: (threadId: number) =>
     api.patch<ApiResponse<{ success: boolean }>>(`/messages/threads/${threadId}/read`),
@@ -1820,6 +1820,47 @@ export const messagingApi = {
     api.delete<ApiResponse<{ ok: boolean; blockedId: number }>>(
       `/messages/blocks/${userId}`,
     ),
+};
+
+// ─── Stickers ───────────────────────────────────────────────
+export interface StickerPack {
+  id: number;
+  slug: string;
+  name: string;
+  coverUrl: string | null;
+  stickerCount?: number;
+  isActive?: boolean;
+}
+export interface Sticker {
+  id: number;
+  packId: number;
+  url: string;
+  label: string | null;
+}
+
+export const stickerApi = {
+  // Public (chat picker)
+  listPacks: () => api.get<ApiResponse<StickerPack[]>>('/stickers/packs'),
+  listStickers: (packId: number) =>
+    api.get<ApiResponse<Sticker[]>>(`/stickers/packs/${packId}/stickers`),
+  // Admin
+  adminListPacks: () => api.get<ApiResponse<StickerPack[]>>('/stickers/admin/packs'),
+  adminCreatePack: (name: string, slug?: string) =>
+    api.post<ApiResponse<StickerPack>>('/stickers/admin/packs', { name, slug }),
+  adminUpdatePack: (id: number, data: { name?: string; isActive?: boolean; coverUrl?: string }) =>
+    api.patch<ApiResponse<unknown>>(`/stickers/admin/packs/${id}`, data),
+  adminDeletePack: (id: number) =>
+    api.delete<ApiResponse<unknown>>(`/stickers/admin/packs/${id}`),
+  adminDeleteSticker: (id: number) =>
+    api.delete<ApiResponse<unknown>>(`/stickers/admin/stickers/${id}`),
+  adminAddSticker: (packId: number, file: File, label?: string) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    if (label) fd.append('label', label);
+    return api.post<ApiResponse<Sticker>>(`/stickers/admin/packs/${packId}/stickers`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 export interface MessagingBlockedUser {
@@ -1971,6 +2012,9 @@ export interface MessagingMessage {
   threadId: number;
   senderId: number;
   content: string;
+  // Rich media (GIF / sticker). Both null for plain messages.
+  mediaUrl?: string | null;
+  mediaKind?: 'gif' | 'sticker' | null;
   deleted: boolean;
   recalled?: boolean;
   recalledAt?: string | null;

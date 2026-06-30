@@ -236,6 +236,7 @@ export class MessagesService {
             content: true,
             senderId: true,
             createdAt: true,
+            mediaKind: true,
             attachments: { select: { id: true, mimeType: true, fileName: true } },
           },
         },
@@ -326,6 +327,7 @@ export class MessagesService {
             content: true,
             senderId: true,
             createdAt: true,
+            mediaKind: true,
             attachments: { select: { id: true, mimeType: true, fileName: true } },
           },
         },
@@ -461,7 +463,14 @@ export class MessagesService {
   async sendMessage(
     threadId: number,
     senderId: number,
-    data: { content?: string; fileIds?: number[]; parentMessageId?: number | null; postShare?: { postId: number } },
+    data: {
+      content?: string;
+      fileIds?: number[];
+      parentMessageId?: number | null;
+      postShare?: { postId: number };
+      // Rich media: GIF (from GIPHY) or a sticker (our storage).
+      media?: { url: string; kind: 'gif' | 'sticker' };
+    },
   ) {
     const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
     if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');
@@ -486,8 +495,27 @@ export class MessagesService {
     const fileIds = Array.isArray(data.fileIds) ? data.fileIds.slice(0, MAX_ATTACHMENTS_PER_MESSAGE) : [];
     const hasPostShare = !!data.postShare;
 
-    if (!content && fileIds.length === 0 && !hasPostShare) {
-      throw new AppError('Message must include text, files, or a post share', 400, 'EMPTY_MESSAGE');
+    // Rich media (GIF / sticker). We accept a single URL + kind.
+    // GIF urls come from GIPHY's CDN; sticker urls come from our own
+    // sticker list (the client only ever sends URLs we served). We
+    // validate the kind and basic URL shape; the URL is stored as-is.
+    let mediaUrl: string | null = null;
+    let mediaKind: string | null = null;
+    if (data.media && data.media.url) {
+      const kind = data.media.kind;
+      if (kind !== 'gif' && kind !== 'sticker') {
+        throw new AppError('Invalid media kind', 400, 'INVALID_MEDIA_KIND');
+      }
+      const url = data.media.url.trim();
+      if (!/^https?:\/\//i.test(url) || url.length > 2000) {
+        throw new AppError('Invalid media url', 400, 'INVALID_MEDIA_URL');
+      }
+      mediaUrl = url;
+      mediaKind = kind;
+    }
+
+    if (!content && fileIds.length === 0 && !hasPostShare && !mediaUrl) {
+      throw new AppError('Message must include text, files, media, or a post share', 400, 'EMPTY_MESSAGE');
     }
     if (content.length > MAX_CONTENT_LENGTH) {
       throw new AppError(
@@ -560,6 +588,8 @@ export class MessagesService {
         threadId,
         senderId,
         content,
+        mediaUrl,
+        mediaKind,
         parentMessageId: data.parentMessageId ?? null,
         attachments: fileIds.length
           ? {
@@ -1172,11 +1202,17 @@ export class MessagesService {
     content: string;
     senderId: number;
     createdAt: Date;
+    mediaKind?: string | null;
     attachments: { id: number; mimeType: string; fileName: string }[];
   }) {
+    // For media-only messages the content is empty, so give the inbox
+    // a friendly preview label instead of a blank last-message line.
+    const content =
+      m.content ||
+      (m.mediaKind === 'gif' ? '🎬 GIF' : m.mediaKind === 'sticker' ? '🪄 Nhãn dán' : '');
     return {
       id: m.id,
-      content: m.content,
+      content,
       senderId: m.senderId,
       createdAt: m.createdAt,
       hasAttachment: m.attachments.length > 0,
@@ -1220,6 +1256,9 @@ export class MessagesService {
       // Recalled: content wiped, show empty (UI shows a stub).
       // Deleted: same — UI shows the "đã xoá" stub.
       content: m.deletedAt || m.recalledAt ? '' : m.content,
+      // Rich media (GIF / sticker). Wiped on delete/recall like content.
+      mediaUrl: m.deletedAt || m.recalledAt ? null : ((m as any).mediaUrl ?? null),
+      mediaKind: m.deletedAt || m.recalledAt ? null : ((m as any).mediaKind ?? null),
       deleted: m.deletedAt !== null,
       recalled: m.recalledAt !== null,
       recalledAt: m.recalledAt,

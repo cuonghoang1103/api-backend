@@ -235,6 +235,9 @@ model User {
   friendshipsSent     Friendship[] @relation("FriendshipsSent")
   friendshipsReceived Friendship[] @relation("FriendshipsReceived")
 
+  // Sticker packs this user (an admin) created.
+  stickerPacksCreated StickerPack[] @relation("StickerPacksCreated")
+
   @@index([email], name: "idx_users_email")
   @@map("users")
 }
@@ -2002,6 +2005,13 @@ model Message {
   threadId        Int       @map("thread_id")
   senderId        Int       @map("sender_id")
   content         String    @db.Text
+  // Rich media payload (GIF or sticker). `mediaUrl` is a fully
+  // qualified URL: GIFs point at GIPHY's CDN; stickers point at our
+  // own storage/R2 (never hotlinked). `mediaKind` distinguishes how
+  // the client renders it ('gif' | 'sticker'). Both null for plain
+  // text/file/post-share messages — fully additive, old rows unaffected.
+  mediaUrl        String?   @map("media_url") @db.Text
+  mediaKind       String?   @map("media_kind") @db.VarChar(12)
   // Reply-to: optional reference to the parent message this is replying to.
   parentMessageId Int?      @map("parent_message_id")
   // Soft delete: message hidden from UI but kept for audit.
@@ -2135,6 +2145,54 @@ model MessageRead {
 
   @@unique([threadId, userId], name: "uk_read_thread_user")
   @@map("message_reads")
+}
+
+// ============================================================
+// STICKERS (chat sticker packs)
+// ------------------------------------------------------------
+// Facebook-Messenger-style stickers. A StickerPack groups many
+// Sticker images. Images are uploaded by an ADMIN and stored in
+// our own storage/R2 (never hotlinked from a third party). The
+// picker lists active packs; a message sends a sticker by storing
+// its URL in Message.mediaUrl with mediaKind = 'sticker'.
+// Fully additive — independent of the existing messaging tables.
+// ============================================================
+model StickerPack {
+  id        Int      @id @default(autoincrement())
+  // URL-friendly unique key, e.g. "openmoji-faces".
+  slug      String   @unique(map: "uk_sticker_pack_slug") @db.VarChar(60)
+  name      String   @db.VarChar(80)
+  // Optional cover image (one of the stickers) shown as the pack tab.
+  coverUrl  String?  @map("cover_url") @db.Text
+  // Hidden packs stay in the DB but are excluded from the picker.
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order")
+  // Admin who created the pack (nullable for seeded packs).
+  createdBy Int?     @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  creator  User?     @relation("StickerPacksCreated", fields: [createdBy], references: [id], onDelete: SetNull)
+  stickers Sticker[]
+
+  @@index([isActive, sortOrder], map: "idx_sticker_pack_active")
+  @@map("sticker_packs")
+}
+
+model Sticker {
+  id        Int      @id @default(autoincrement())
+  packId    Int      @map("pack_id")
+  // Fully qualified URL in our storage/R2.
+  url       String   @db.Text
+  // Optional short label / keywords for future sticker search.
+  label     String?  @db.VarChar(80)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  pack StickerPack @relation(fields: [packId], references: [id], onDelete: Cascade)
+
+  @@index([packId, sortOrder], map: "idx_sticker_pack_sort")
+  @@map("stickers")
 }
 
 // ============================================================

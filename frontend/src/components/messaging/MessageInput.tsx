@@ -1,11 +1,16 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Paperclip, X, Loader2, FileText, Reply } from 'lucide-react';
+import { Send, Paperclip, X, Loader2, FileText, Reply, Smile, Film, Sticker } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { messagingApi } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
+import EmojiPickerPopover from './EmojiPickerPopover';
+import GifPicker from './GifPicker';
+import StickerPicker from './StickerPicker';
+
+type ActivePicker = 'emoji' | 'gif' | 'sticker' | null;
 
 interface PendingAttachment {
   id: string;
@@ -36,6 +41,7 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
   const [pending, setPending] = useState<PendingAttachment[]>([]);
   const [sending, setSending] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [activePicker, setActivePicker] = useState<ActivePicker>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -188,6 +194,35 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
     }
   };
 
+  // Insert an emoji at the current caret position in the textarea.
+  const insertEmoji = (emoji: string) => {
+    const el = textareaRef.current;
+    if (!el) { setText((t) => t + emoji); return; }
+    const start = el.selectionStart ?? text.length;
+    const end = el.selectionEnd ?? text.length;
+    const next = text.slice(0, start) + emoji + text.slice(end);
+    setText(next);
+    requestAnimationFrame(() => {
+      el.focus();
+      const pos = start + emoji.length;
+      el.setSelectionRange(pos, pos);
+    });
+  };
+
+  // Send a GIF or sticker immediately (no text needed). Reuses the
+  // store's optimistic send path.
+  const sendMedia = async (url: string, kind: 'gif' | 'sticker') => {
+    if (disabled) return;
+    setActivePicker(null);
+    try {
+      await store.sendMessage(threadId, '', undefined, null, undefined, { url, kind });
+    } catch (e: any) {
+      toast.error(e?.userFriendlyMessage ?? e?.message ?? 'Gửi thất bại');
+    }
+  };
+
+  const togglePicker = (p: ActivePicker) => setActivePicker((cur) => (cur === p ? null : p));
+
   const hasReadyAttachments = pending.some((p) => p.fileId);
   const hasContent = text.trim().length > 0 || hasReadyAttachments;
 
@@ -196,7 +231,7 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
     // than a divider. The linear-gradient gives a sense of light
     // coming from the top, matching the ThreadHeader above.
     <div
-      className="shrink-0 border-t border-white/[0.04] p-3"
+      className="relative shrink-0 border-t border-white/[0.04] p-3"
       style={{
         background:
           'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.25) 100%)',
@@ -205,6 +240,10 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
+      {/* Media pickers — anchored above the input bar */}
+      <EmojiPickerPopover open={activePicker === 'emoji'} onClose={() => setActivePicker(null)} onPick={(e) => insertEmoji(e)} />
+      <GifPicker open={activePicker === 'gif'} onClose={() => setActivePicker(null)} onPick={(url) => sendMedia(url, 'gif')} />
+      <StickerPicker open={activePicker === 'sticker'} onClose={() => setActivePicker(null)} onPick={(url) => sendMedia(url, 'sticker')} />
       {/* Reply strip — shown when replying to a message */}
       <AnimatePresence>
         {replyTo && (
@@ -320,6 +359,33 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
           title="Đính kèm file (kéo-thả hoặc dán ảnh)"
         >
           <Paperclip className="h-[18px] w-[18px]" strokeWidth={1.75} />
+        </button>
+        <button
+          onClick={() => togglePicker('emoji')}
+          disabled={disabled}
+          className={`shrink-0 rounded-xl p-2 transition-colors hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40 ${activePicker === 'emoji' ? 'text-cyan-300' : 'text-text-secondary hover:text-text-primary'}`}
+          aria-label="Emoji"
+          title="Emoji"
+        >
+          <Smile className="h-[18px] w-[18px]" strokeWidth={1.75} />
+        </button>
+        <button
+          onClick={() => togglePicker('sticker')}
+          disabled={disabled}
+          className={`shrink-0 rounded-xl p-2 transition-colors hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40 ${activePicker === 'sticker' ? 'text-cyan-300' : 'text-text-secondary hover:text-text-primary'}`}
+          aria-label="Nhãn dán"
+          title="Nhãn dán"
+        >
+          <Sticker className="h-[18px] w-[18px]" strokeWidth={1.75} />
+        </button>
+        <button
+          onClick={() => togglePicker('gif')}
+          disabled={disabled}
+          className={`shrink-0 rounded-xl p-2 transition-colors hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40 ${activePicker === 'gif' ? 'text-cyan-300' : 'text-text-secondary hover:text-text-primary'}`}
+          aria-label="GIF"
+          title="GIF"
+        >
+          <Film className="h-[18px] w-[18px]" strokeWidth={1.75} />
         </button>
         <input
           ref={fileInputRef}

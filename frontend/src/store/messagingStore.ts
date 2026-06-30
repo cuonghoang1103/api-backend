@@ -114,7 +114,7 @@ interface MessagingState {
   // Messages
   loadMoreMessages: (threadId: number) => Promise<void>;
   // Phase 6: postShare param for sharing social posts into chat
-  sendMessage: (threadId: number, content: string, fileIds?: number[], parentMessageId?: number | null, postShare?: { postId: number }) => Promise<void>;
+  sendMessage: (threadId: number, content: string, fileIds?: number[], parentMessageId?: number | null, postShare?: { postId: number }, media?: { url: string; kind: 'gif' | 'sticker' }) => Promise<void>;
   deleteMessage: (threadId: number, messageId: number) => Promise<void>;
   recallMessage: (threadId: number, messageId: number) => Promise<void>;
   toggleReaction: (threadId: number, messageId: number, emoji: string) => Promise<void>;
@@ -806,9 +806,9 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     }
   },
 
-  async sendMessage(threadId, content, fileIds, parentMessageId, postShare) {
+  async sendMessage(threadId, content, fileIds, parentMessageId, postShare, media) {
     const trimmed = content.trim();
-    if (!trimmed && !(fileIds && fileIds.length) && !postShare) return;
+    if (!trimmed && !(fileIds && fileIds.length) && !postShare && !media) return;
     const auth = useAuthStore.getState();
     const senderId = auth.user?.id;
     if (!senderId) return;
@@ -821,6 +821,8 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       threadId,
       senderId,
       content: trimmed,
+      mediaUrl: media?.url ?? null,
+      mediaKind: media?.kind ?? null,
       deleted: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -858,6 +860,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
         fileIds,
         parentMessageId: parentMessageId ?? replySnap?.id ?? null,
         postShare,
+        media,
       });
       const real = res.data.data;
       // Replace optimistic with real

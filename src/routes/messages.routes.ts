@@ -137,6 +137,8 @@ router.post('/threads/:id/messages', async (req: Request, res: Response, next: N
       parentMessageId: req.body?.parentMessageId ?? null,
       // Phase 6: Post share preview in chat
       postShare: req.body?.postShare,
+      // Rich media: GIF (GIPHY) or sticker (our storage)
+      media: req.body?.media,
     });
     res.status(201).json({ success: true, data: message });
   } catch (error) {

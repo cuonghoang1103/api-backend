@@ -75,6 +75,14 @@ export default function MessageBubble({
 
   const senderName = message.sender?.displayName ?? message.sender?.username ?? 'Người dùng';
 
+  // A sticker sent on its own renders "bare" (no chat-bubble
+  // background/tail), matching Messenger. GIFs and stickers-with-text
+  // still sit inside the bubble.
+  const isStickerOnly =
+    message.mediaKind === 'sticker' &&
+    !message.content &&
+    (message.attachments?.length ?? 0) === 0;
+
   // Read state for own messages: "sent" (1 tick) if no read receipt,
   // "delivered/read" (2 ticks, cyan) if at least one peer has read.
   const isRead = isOwn && Array.isArray(message.readBy) && message.readBy.length > 0;
@@ -153,7 +161,9 @@ export default function MessageBubble({
               : 'mr-auto rounded-2xl rounded-bl-md text-text-primary',
           )}
           style={
-            isOwn
+            isStickerOnly
+              ? { background: 'transparent' }
+              : isOwn
               ? {
                   background:
                     'linear-gradient(135deg, #06B6D4 0%, #6366F1 100%)',
@@ -192,6 +202,26 @@ export default function MessageBubble({
         )}
 
         {message.content && <p className="whitespace-pre-wrap break-words px-3.5 py-1.5">{message.content}</p>}
+
+        {/* Rich media: GIF or sticker. */}
+        {message.mediaUrl && message.mediaKind === 'sticker' && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={message.mediaUrl}
+            alt="sticker"
+            className={cn('h-28 w-28 object-contain', isStickerOnly ? '' : 'mx-3.5 my-1.5')}
+            loading="lazy"
+          />
+        )}
+        {message.mediaUrl && message.mediaKind === 'gif' && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={message.mediaUrl}
+            alt="gif"
+            className={cn('block max-w-[220px] rounded-lg', message.content ? 'mx-3.5 mb-1.5' : 'm-1')}
+            loading="lazy"
+          />
+        )}
 
         {message.attachments.length > 0 && (
           <div className={cn('mt-1 space-y-1.5 px-3.5 pb-1.5', message.content ? 'border-t border-white/10 pt-1.5' : '')}>

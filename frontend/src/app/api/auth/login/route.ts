@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await res.json();
-    const { token, userId, email, role, roles } = data.data ?? {};
+    const { token, userId, email, role, roles, avatarUrl, fullName } = data.data ?? {};
 
     if (!token) {
       return NextResponse.json(
@@ -88,7 +88,11 @@ export async function POST(request: NextRequest) {
 
     const response = NextResponse.json({
       success: true,
-      data: { userId, username, email, role, roles: backendRoles },
+      // Forward avatarUrl + fullName from the backend login response so the
+      // client store gets the avatar immediately on login (the Navbar/
+      // PostComposer read it from the auth store). Previously these were
+      // dropped here, so avatars vanished after logout→login.
+      data: { userId, username, email, role, roles: backendRoles, avatarUrl, fullName },
     });
 
     // httpOnly cookie — backend JWT for all authenticated API calls

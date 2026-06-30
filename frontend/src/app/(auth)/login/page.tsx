@@ -144,44 +144,35 @@ function LoginForm() {
       const loginUserId: number = loginData.data?.userId ?? 0;
       const loginEmail: string = loginData.data?.email ?? '';
 
-      // ─── Step 3: Fetch full profile (including avatarUrl) ───────
-      // We MUST get avatarUrl here and merge it into authData before
-      // setAuth(), otherwise the Navbar/PostComposer render with no
-      // avatar and AuthBoot hasn't run yet (hard navigation wipes state).
+      // ─── Step 3: Enrich from full profile (avatarUrl primary) ───
+      // avatarUrl now comes straight from the login response (the
+      // /api/auth/login route forwards it). We still fetch /profile to
+      // refine roles/email and pick up the avatar if it was missing.
+      // The proxy authenticates via the httpOnly backend_token cookie
+      // (set by the login response), so credentials:'include' is all we
+      // need — a client Authorization header would be ignored. AuthBoot
+      // re-syncs the profile on mount too, as a backstop.
       let profileRoles: string[] = loginRoles;
       let profileUserId = loginUserId;
       let profileEmail = loginEmail;
       let profileAvatarUrl: string | undefined = loginData.data?.avatarUrl;
 
-      if (token) {
-        try {
-          const profileRes = await fetch('/api/v1/profile', {
-            headers: { Authorization: `Bearer ${token}` },
-            credentials: 'include',
-          });
-
-          if (profileRes.ok) {
-            const profileData = await profileRes.json();
-            console.log('[login DEBUG] profileRes ok, avatarUrl:', profileData?.data?.avatarUrl);
-            if (profileData?.data) {
-              profileRoles = profileData.data.roles ?? loginRoles;
-              profileUserId = profileData.data.id ?? profileUserId;
-              profileEmail = profileData.data.email ?? profileEmail;
-              profileAvatarUrl = profileData.data.avatarUrl ?? profileAvatarUrl;
-            }
-          } else {
-            console.log('[login DEBUG] profileRes NOT ok, status:', profileRes.status);
+      try {
+        const profileRes = await fetch('/api/v1/profile', { credentials: 'include' });
+        if (profileRes.ok) {
+          const profileData = await profileRes.json();
+          if (profileData?.data) {
+            profileRoles = profileData.data.roles ?? loginRoles;
+            profileUserId = profileData.data.id ?? profileUserId;
+            profileEmail = profileData.data.email ?? profileEmail;
+            profileAvatarUrl = profileData.data.avatarUrl ?? profileAvatarUrl;
           }
-        } catch (e) {
-          console.log('[login DEBUG] profile fetch error:', e);
-          // silently ignore — use whatever we got from the login response
         }
-      } else {
-        console.log('[login DEBUG] no token, skipping profile fetch. loginData.data?.token:', loginData.data?.token);
+      } catch {
+        // silently ignore — use whatever we got from the login response
       }
 
       // ─── Step 4: Build auth state and update store ──────────────
-      console.log('[login DEBUG] Final profileAvatarUrl:', profileAvatarUrl);
       const authData: AuthResponse = {
         token,
         userId: profileUserId,
@@ -193,7 +184,6 @@ function LoginForm() {
       };
 
       useAuthStore.getState().setAuth(authData);
-      console.log('[login DEBUG] after setAuth, store user:', JSON.stringify(useAuthStore.getState().user));
 
       // ─── Step 5: Redirect based on role ─────────────────────────
       const isAdmin = isAdminRole(profileRoles);

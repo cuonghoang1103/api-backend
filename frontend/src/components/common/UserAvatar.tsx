@@ -115,11 +115,9 @@ export function UserAvatar({
 }: UserAvatarProps) {
   // ── Read from auth store when no user is passed ──────────────────────────
   const storeUser = useAuthStore((s) => s.user);
-  console.log('[UserAvatar] storeUser:', JSON.stringify(storeUser));
   const resolvedUser = user ?? storeUser ?? undefined;
 
   const avatarUrl = useMemo(() => resolveAvatarUrl(resolvedUser), [resolvedUser]);
-  console.log('[UserAvatar] resolvedUser avatarUrl:', avatarUrl);
   const displayName = useMemo(() => resolveDisplayName(resolvedUser), [resolvedUser]);
   const userId = resolvedUser?.id;
 

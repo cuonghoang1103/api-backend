@@ -31,6 +31,8 @@ import {
   AtSign,
   MessageSquare,
   User as UserIcon,
+  UserPlus,
+  UserCheck,
   Check,
   X,
   Loader2,
@@ -72,6 +74,12 @@ function describeNotification(n: SocialNotification): string {
       return `${name} đã nhắc đến bạn trong một bình luận`;
     case 'NEW_MESSAGE':
       return `${name} đã gửi cho bạn một tin nhắn mới`;
+    case 'FRIEND_REQUEST':
+      return `${name} đã gửi cho bạn lời mời kết bạn`;
+    case 'FRIEND_ACCEPT':
+      return `${name} đã chấp nhận lời mời kết bạn`;
+    case 'NEW_FOLLOW':
+      return `${name} đã bắt đầu theo dõi bạn`;
     case 'NEW_POST':
     default:
       return `${name} đã đăng bài viết mới`;
@@ -85,6 +93,9 @@ function typeIcon(t: NotificationType) {
     case 'NEW_REPLY': return MessageCircle;
     case 'NEW_MENTION': return AtSign;
     case 'NEW_MESSAGE': return MessageSquare;
+    case 'FRIEND_REQUEST': return UserPlus;
+    case 'FRIEND_ACCEPT': return UserCheck;
+    case 'NEW_FOLLOW': return UserPlus;
     default: return Bell;
   }
 }
@@ -96,6 +107,9 @@ function typeIconColor(t: NotificationType): string {
     case 'NEW_REPLY': return '#22d3ee'; // cyan
     case 'NEW_MENTION': return '#a855f7'; // violet
     case 'NEW_MESSAGE': return '#10b981'; // green
+    case 'FRIEND_REQUEST': return '#8b5cf6'; // violet
+    case 'FRIEND_ACCEPT': return '#10b981'; // green
+    case 'NEW_FOLLOW': return '#06b6d4'; // cyan
     default: return '#94a3b8';
   }
 }
@@ -130,6 +144,11 @@ function targetUrl(n: SocialNotification): string {
     if (n.threadId) return `/messages?thread=${n.threadId}`;
     if (n.entityId) return `/messages?thread=${n.entityId}`;
     return '/messages';
+  }
+  // Friend graph + follow: entityId is the ACTOR's user id, not a post.
+  if (n.type === 'FRIEND_REQUEST') return '/friends';
+  if (n.type === 'FRIEND_ACCEPT' || n.type === 'NEW_FOLLOW') {
+    return n.entityId ? `/profile/${n.entityId}` : '/friends';
   }
   if (n.entityId) {
     // entityId for social notifications is the post id. For

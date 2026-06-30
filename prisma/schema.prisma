@@ -40,19 +40,19 @@ model User {
   // ─── Extended profile (Phase 1) ─────────────────────────
   // displayName: tên hiển thị (có thể khác username, dùng cho UI
   // trên header feed). Null → fallback về fullName → username.
-  displayName String? @map("display_name") @db.VarChar(100)
+  displayName        String?      @map("display_name") @db.VarChar(100)
   // gender: 'MALE' | 'FEMALE' | 'OTHER' | null (tuỳ chọn).
-  gender      String? @db.VarChar(20)
+  gender             String?      @db.VarChar(20)
   // birthYear: năm sinh 4 chữ số (1900..currentYear). Null nếu user
   // không muốn tiết lộ. Lưu riêng năm (không phải full DOB) để
   // giảm thiểu PII và dễ tính tuổi trên feed.
-  birthYear   Int?    @map("birth_year")
+  birthYear          Int?         @map("birth_year")
   // phone: optional, không bắt buộc (giữ nguyên pattern 10-15 số
   // quốc tế). Không dùng cho 2FA trong phase này.
-  phone       String? @db.VarChar(20)
+  phone              String?      @db.VarChar(20)
   // socialLinks: JSON map { github?, twitter?, linkedin?, website?, youtube?, facebook? }
   // — schema-free, mỗi frontend tự định nghĩa key khi đọc.
-  socialLinks Json?   @map("social_links")
+  socialLinks        Json?        @map("social_links")
   // Phase 3 add — back-relation for the new SocialLink model.
   // Kept separate from the legacy JSON column above so we don't
   // break existing data; the mobile route uses this relation.
@@ -95,8 +95,8 @@ model User {
   // Cyber-music Phase 1: per-user play queue (idempotent upsert).
   musicQueueItems         MusicQueueItem[]
   // Cyber-music Phase 2a: per-user likes + play counts (additive).
-  musicLikes             MusicLike[]
-  musicPlayCounts        MusicPlayCount[]
+  musicLikes              MusicLike[]
+  musicPlayCounts         MusicPlayCount[]
   fileAttachments         FileAttachment[]
   passwordResetTokens     PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
@@ -125,10 +125,10 @@ model User {
   feedCollections         FeedCollection[]         @relation("FeedCollectionOwner")
   feedSavedPosts          FeedSavedPost[]
   // Stories (Phase 6)
-  stories               Story[]
-  storyHighlights       StoryHighlight[]
-  storyViews           StoryView[]
-  storyHides           StoryHide[]
+  stories                 Story[]
+  storyHighlights         StoryHighlight[]
+  storyViews              StoryView[]
+  storyHides              StoryHide[]
 
   // Notification graph — who is the receiver / sender on social
   // notifications. The reverse relations are defined on
@@ -183,15 +183,15 @@ model User {
   // all routes put `userId` in their WHERE clause to prevent
   // cross-tenant reads. Cascade on delete so removing a user
   // takes their Hub data with it (no orphans).
-  hubFolders HubFolder[]
-  hubLinks   HubLink[]
-  hubFiles   HubFile[]
+  hubFolders        HubFolder[]
+  hubLinks          HubLink[]
+  hubFiles          HubFile[]
   // Hub user-sharing (Phase 2): the rows where this user is
   // the owner (gave access) or the recipient (got access). Two
   // named relations because Prisma requires a unique name per
   // FK even when the target model is the same.
-  hubSharesOwned     HubShare[] @relation("HubShareOwner")
-  hubSharesReceived  HubShare[] @relation("HubShareRecipient")
+  hubSharesOwned    HubShare[]  @relation("HubShareOwner")
+  hubSharesReceived HubShare[]  @relation("HubShareRecipient")
 
   // Phase 4 add — Music Post. Admin uploads mp3 / m4a tracks
   // to R2 and tags them with a title + artist + cover. Users
@@ -199,7 +199,7 @@ model User {
   // resolution snippet (< 40s) onto their post. We use Restrict
   // (not Cascade) on uploader so deleting the original admin
   // doesn't silently wipe every post that referenced the track.
-  songsUploaded  Song[]      @relation("SongUploader")
+  songsUploaded Song[]       @relation("SongUploader")
   // Phase 4 add — extended profile (bio, cover photo, location,
   // education, work, links). Optional 1-1 with user so legacy
   // rows keep working — defaults fill in on the next read.
@@ -212,20 +212,28 @@ model User {
   // links, vocab). Same per-user scoping rule as Hub: every
   // row carries userId and every query filters on it. Cascade
   // on delete so removing a user removes their notes.
-  noteSubjects     NoteSubject[]
-  noteChapters     NoteChapter[]
-  notes            Note[]
-  noteAttachments  NoteAttachment[]
-  noteLinks        NoteLink[]
-  noteVocabEntries NoteVocabEntry[]
+  noteSubjects               NoteSubject[]
+  noteChapters               NoteChapter[]
+  notes                      Note[]
+  noteAttachments            NoteAttachment[]
+  noteLinks                  NoteLink[]
+  noteVocabEntries           NoteVocabEntry[]
   // Phase 4 add — notes subject sharing
-  noteSubjectsOwned  NoteSubjectShare[]          @relation("NoteSubjectSharesOwned")
-  noteSubjectsReceived NoteSubjectShare[]        @relation("NoteSubjectSharesReceived")
+  noteSubjectsOwned          NoteSubjectShare[]          @relation("NoteSubjectSharesOwned")
+  noteSubjectsReceived       NoteSubjectShare[]          @relation("NoteSubjectSharesReceived")
   noteSubjectShareRecipients NoteSubjectShareRecipient[] @relation("UserShareRecipients")
 
   // ─── Social Follow Graph ────────────────────────────────
   following Follow[] @relation("Following")
   followers Follow[] @relation("Followers")
+
+  // ─── Friend Graph (two-way, FB-style requests) ──────────
+  // Additive alongside the follow graph above. `friendshipsSent`
+  // are rows where this user is the requester; `friendshipsReceived`
+  // are rows where this user is the addressee (the one who
+  // accepts/declines). See model Friendship below.
+  friendshipsSent     Friendship[] @relation("FriendshipsSent")
+  friendshipsReceived Friendship[] @relation("FriendshipsReceived")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -1127,8 +1135,8 @@ model MusicTrack {
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime? @updatedAt @map("updated_at")
 
-  playlists MusicPlaylistTrack[]
-  histories MusicHistory[]
+  playlists  MusicPlaylistTrack[]
+  histories  MusicHistory[]
   queueItems MusicQueueItem[]
   likes      MusicLike[]
   playCounts MusicPlayCount[]
@@ -1246,13 +1254,13 @@ model MusicLike {
 // `lastPlayedAt` is denormalized so the "Most Played" sort can
 // break ties with recency without joining MusicHistory.
 model MusicPlayCount {
-  id          Int       @id @default(autoincrement())
-  userId      Int       @map("user_id")
-  trackId     Int       @map("track_id")
-  count       Int       @default(0)
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  trackId      Int      @map("track_id")
+  count        Int      @default(0)
   lastPlayedAt DateTime @default(now()) @map("last_played_at")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   track MusicTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
@@ -1454,37 +1462,37 @@ model DocumentChunk {
 // ============================================================
 
 model SocialPost {
-  id           Int      @id @default(autoincrement())
-  authorId     Int      @map("author_id")
-  content      String   @db.Text
-  visibility   String   @default("PUBLIC") @map("visibility") @db.VarChar(20)
-  status       String   @default("PUBLISHED") @db.VarChar(20)
-  latitude     Float?   @db.DoublePrecision
-  longitude    Float?   @db.DoublePrecision
-  locationName String?  @map("location_name") @db.VarChar(255)
-  viewCount    Int      @default(0) @map("view_count")
+  id            Int        @id @default(autoincrement())
+  authorId      Int        @map("author_id")
+  content       String     @db.Text
+  visibility    String     @default("PUBLIC") @map("visibility") @db.VarChar(20)
+  status        String     @default("PUBLISHED") @db.VarChar(20)
+  latitude      Float?     @db.DoublePrecision
+  longitude     Float?     @db.DoublePrecision
+  locationName  String?    @map("location_name") @db.VarChar(255)
+  viewCount     Int        @default(0) @map("view_count")
   // Phase 6 — shares/reposts count. Tracks how many users have
   // shared this post (via the repost toggle). Incremented on
   // share, decremented on unshare.
-  sharesCount  Int      @default(0) @map("shares_count")
+  sharesCount   Int        @default(0) @map("shares_count")
   // Optional YouTube link attached to the post. Used by the feed
   // composer ("Paste YouTube URL") and rendered as an embedded
   // player on the post card when present.
-  youtubeUrl   String?  @map("youtube_url") @db.VarChar(500)
+  youtubeUrl    String?    @map("youtube_url") @db.VarChar(500)
   // Content-type bucket for the home feed tabs (Tất cả / Bài viết /
   // Video / File). Additive: defaults to POST so every existing row is
   // valid the moment the column is added; old rows are backfilled to
   // VIDEO/FILE by the migration based on their media/youtubeUrl. The
   // composer sets this explicitly; getFeed filters by it per tab.
-  type         String   @default("POST") @map("type") @db.VarChar(20) // POST | VIDEO | FILE
+  type          String     @default("POST") @map("type") @db.VarChar(20) // POST | VIDEO | FILE
   // Instagram-style music attach (Phase 3 add). When set, the
   // PostCard renders a small "🎵 <track title> — <artist>" sticker
   // overlay on the first media tile. Tapping the sticker opens
   // a mini-player. We use SetNull (not Cascade) so deleting a
   // track doesn't cascade-delete the user's post — the post
   // simply loses its music attachment.
-  musicTrackId  Int?     @map("music_track_id")
-  musicStartSec Int?     @map("music_start_sec") // optional: skip ahead to this point in the track
+  musicTrackId  Int?       @map("music_track_id")
+  musicStartSec Int?       @map("music_start_sec") // optional: skip ahead to this point in the track
   // Phase 4 add — when this post has a clipped song attached,
   // a 1-row PostMusic record stores the song + start/end
   // seconds (startSec to endSec must be < 40s — the user
@@ -1493,8 +1501,8 @@ model SocialPost {
   // record to render the full sticker (cover, title, artist,
   // play/pause with the snippet offset).
   postMusic     PostMusic?
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
 
   author         User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
   media          SocialMedia[]
@@ -1589,9 +1597,9 @@ model SocialLike {
 model SocialLink {
   id        Int      @id @default(autoincrement())
   userId    Int      @map("user_id")
-  platform  String   @db.VarChar(32)   // 'github' | 'twitter' | ...
+  platform  String   @db.VarChar(32) // 'github' | 'twitter' | ...
   url       String   @db.VarChar(500)
-  username  String?  @db.VarChar(64)    // optional handle
+  username  String?  @db.VarChar(64) // optional handle
   sortOrder Int      @default(0) @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -1630,16 +1638,15 @@ model SocialComment {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  post    SocialPost          @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user    User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parent  SocialComment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  root    SocialComment?      @relation("CommentThread", fields: [rootId], references: [id], onDelete: Cascade)
-  replies SocialComment[]     @relation("CommentReplies")
-  inThread SocialComment[]    @relation("CommentThread")
-  likes   SocialCommentLike[]
+  post     SocialPost          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user     User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent   SocialComment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  root     SocialComment?      @relation("CommentThread", fields: [rootId], references: [id], onDelete: Cascade)
+  replies  SocialComment[]     @relation("CommentReplies")
+  inThread SocialComment[]     @relation("CommentThread")
+  likes    SocialCommentLike[]
 
   @@index([rootId], name: "idx_social_comments_root")
-
   @@index([postId], name: "idx_social_comments_post")
   @@index([userId], name: "idx_social_comments_user")
   @@index([parentId], name: "idx_social_comments_parent")
@@ -1786,27 +1793,27 @@ model SocialShare {
 // per-notification "seen at" timestamp yet.
 
 model SocialNotification {
-  id                Int      @id @default(autoincrement())
-  receiverId        Int      @map("receiver_id")
-  senderId          Int      @map("sender_id")
+  id                Int       @id @default(autoincrement())
+  receiverId        Int       @map("receiver_id")
+  senderId          Int       @map("sender_id")
   // NEW_POST | NEW_REACTION | NEW_COMMENT | NEW_REPLY |
   // NEW_MENTION | NEW_MESSAGE
-  type              String   @db.VarChar(20)
+  type              String    @db.VarChar(20)
   // Polymorphic pointer — meaning depends on `type`. We keep it
   // as Int (no FK) for forward flexibility.
-  entityId          Int?     @map("entity_id")
+  entityId          Int?      @map("entity_id")
   // Optional second polymorphic pointer (e.g. comment.parentId
   // for a reply so the bell can deep-link into the right thread).
-  secondaryEntityId Int?     @map("secondary_entity_id")
-  payload           Json?    @map("payload") @db.JsonB
-  isRead            Boolean  @default(false) @map("is_read")
+  secondaryEntityId Int?      @map("secondary_entity_id")
+  payload           Json?     @map("payload") @db.JsonB
+  isRead            Boolean   @default(false) @map("is_read")
   // ─── Phase 5 home upgrade: readAt timestamp ──────────────────
   // We previously only had a boolean isRead; storing the
   // timestamp lets the bell badge show "read 2h ago" without a
   // extra query, and gives analytics a "time-to-read" signal.
   // Nullable: existing rows + unread rows stay NULL.
   readAt            DateTime? @map("read_at")
-  createdAt         DateTime @default(now()) @map("created_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
 
   receiver User @relation("NotificationsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
   sender   User @relation("NotificationsSent", fields: [senderId], references: [id], onDelete: Cascade)
@@ -2098,16 +2105,16 @@ model MessageAttachment {
 // remains readable even if the original post is later deleted
 // (we show a "bài viết đã bị xoá" stub in that case).
 model MessagePostShare {
-  id          Int      @id @default(autoincrement())
-  messageId   Int      @map("message_id")
-  postId      Int      @map("post_id")
+  id             Int      @id @default(autoincrement())
+  messageId      Int      @map("message_id")
+  postId         Int      @map("post_id")
   // Denormalised preview data — copied from the post at share time
-  authorUsername String  @map("author_username") @db.VarChar(64)
-  authorDisplay  String? @map("author_display") @db.VarChar(128)
-  authorAvatar   String? @map("author_avatar") @db.VarChar(500)
-  contentPreview String  @map("content_preview") @db.Text
-  mediaThumbnail String? @map("media_thumbnail") @db.VarChar(700)
-  createdAt   DateTime @default(now()) @map("created_at")
+  authorUsername String   @map("author_username") @db.VarChar(64)
+  authorDisplay  String?  @map("author_display") @db.VarChar(128)
+  authorAvatar   String?  @map("author_avatar") @db.VarChar(500)
+  contentPreview String   @map("content_preview") @db.Text
+  mediaThumbnail String?  @map("media_thumbnail") @db.VarChar(700)
+  createdAt      DateTime @default(now()) @map("created_at")
 
   message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
 
@@ -2504,23 +2511,23 @@ model TechTrendArticle {
 // whether the value starts with "/" or "http".
 
 model HubFolder {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  parentId  Int?     @map("parent_id")
-  name      String   @db.VarChar(100)
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  parentId      Int?     @map("parent_id")
+  name          String   @db.VarChar(100)
   // Either a Lucide icon name (frontend resolves to component)
   // or an absolute URL to an uploaded image on R2.
-  icon      String?  @db.VarChar(500)
+  icon          String?  @db.VarChar(500)
   // Cover/banner image for the folder header — separate from
   // the small `icon` so users can keep the sidebar compact while
   // having a rich preview when the folder is open. Set by the
   // owner via the Folder dialog, stored on R2. Null = use the
   // auto-derived gradient fallback in the UI.
-  coverImageUrl String? @map("cover_image_url") @db.VarChar(2000)
+  coverImageUrl String?  @map("cover_image_url") @db.VarChar(2000)
   // Display order within the sidebar. Lower = first. Default 0.
-  sortOrder Int      @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  sortOrder     Int      @default(0) @map("sort_order")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   links    HubLink[]
@@ -2537,40 +2544,40 @@ model HubFolder {
 }
 
 model HubLink {
-  id           Int      @id @default(autoincrement())
-  userId       Int      @map("user_id")
-  folderId     Int?     @map("folder_id")
-  url          String   @db.VarChar(2000)
-  title        String   @db.VarChar(500)
-  description  String?  @db.Text
-  thumbnailUrl String?  @map("thumbnail_url") @db.VarChar(2000)
-  faviconUrl   String?  @map("favicon_url") @db.VarChar(500)
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  folderId      Int?     @map("folder_id")
+  url           String   @db.VarChar(2000)
+  title         String   @db.VarChar(500)
+  description   String?  @db.Text
+  thumbnailUrl  String?  @map("thumbnail_url") @db.VarChar(2000)
+  faviconUrl    String?  @map("favicon_url") @db.VarChar(500)
   // Owner-uploaded cover image (stored on R2). Overrides the
   // auto-scraped `thumbnailUrl` for card display when set —
   // useful when the web og:image is wrong/missing/ugly. UI
   // shows coverImageUrl in priority: cover > thumbnail > gradient.
-  coverImageUrl String? @map("cover_image_url") @db.VarChar(2000)
+  coverImageUrl String?  @map("cover_image_url") @db.VarChar(2000)
   // Free-form note (markdown/plain). No length cap at the DB
   // level — the API layer trims to 5000 chars which is plenty
   // for a personal note while still letting Postgres TEXT be
   // efficient.
-  notes        String?  @db.Text
+  notes         String?  @db.Text
   // String[] tags. Native Postgres array — no join table needed
   // for a small set (typically < 20 per link). The API normalises
   // each tag to lowercase + trim before insert.
-  tags         String[] @default([])
+  tags          String[] @default([])
   // Progress status: "unread" | "learning" | "done"
-  status       String   @default("unread") @map("status")
+  status        String   @default("unread") @map("status")
   // When true the link is reachable via /api/v1/hub/public/:slug
   // without auth. We never expose userId, notes, or personal
   // tags in the public payload.
-  isPublic     Boolean  @default(false) @map("is_public")
+  isPublic      Boolean  @default(false) @map("is_public")
   // Public slug used by /api/hub/public/:slug. Null until first
   // share; we generate it server-side with nanoid(10) for
   // unguessability.
-  publicSlug   String?  @unique @map("public_slug") @db.VarChar(32)
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  publicSlug    String?  @unique @map("public_slug") @db.VarChar(32)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   folder HubFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
@@ -2587,28 +2594,28 @@ model HubLink {
 // ─── Hub File Storage ─────────────────────────────────────────
 
 model HubFile {
-  id         Int      @id @default(autoincrement())
-  userId     Int      @map("user_id")
-  folderId   Int?     @map("folder_id")
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  folderId      Int?     @map("folder_id")
   // Display name shown in the UI (original filename).
-  name       String   @db.VarChar(255)
+  name          String   @db.VarChar(255)
   // R2 object key, e.g. "hub-files/user42/abc123.pdf"
-  key        String   @db.VarChar(500)
-  size       Int // bytes
-  mimeType   String   @db.VarChar(100)
+  key           String   @db.VarChar(500)
+  size          Int // bytes
+  mimeType      String   @db.VarChar(100)
   // Owner-uploaded cover image (stored on R2). For images this
   // is often the file's own bytes; for non-image files (pdf,
   // docx…) the owner can pick a separate thumbnail. When set
   // the card displays this instead of the mime icon.
-  coverImageUrl String? @map("cover_image_url") @db.VarChar(2000)
+  coverImageUrl String?  @map("cover_image_url") @db.VarChar(2000)
   // Progress status: "unread" | "learning" | "done"
-  status     String   @default("unread")
-  tags       String[] @default([])
-  notes      String?  @db.Text
-  isPublic   Boolean  @default(false)
-  publicSlug String?  @unique @map("public_slug") @db.VarChar(32)
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  status        String   @default("unread")
+  tags          String[] @default([])
+  notes         String?  @db.Text
+  isPublic      Boolean  @default(false)
+  publicSlug    String?  @unique @map("public_slug") @db.VarChar(32)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   folder HubFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
@@ -2686,6 +2693,39 @@ model Follow {
   @@index([followingId], map: "idx_follow_following")
   @@index([followerId], map: "idx_follow_follower")
   @@map("follows")
+}
+
+// ============================================================
+// FRIEND GRAPH (two-way, Facebook-style requests)
+// ------------------------------------------------------------
+// Sits ALONGSIDE the follow graph above — the two are
+// independent. Follow is asymmetric (Twitter/IG style);
+// Friendship is a mutual relationship that must be confirmed.
+//
+// One row per unordered pair (enforced at the app layer + the
+// uk_friendship_pair unique on the ordered pair). `requesterId`
+// is whoever sent the invite; `addresseeId` is whoever must
+// Confirm/Delete it. Lifecycle:
+//   PENDING  → invite sent, awaiting the addressee
+//   ACCEPTED → mutual friends
+// A declined/cancelled invite is DELETED (FB doesn't keep a
+// rejected record), so there is no REJECTED status.
+// ============================================================
+model Friendship {
+  id          Int       @id @default(autoincrement())
+  requesterId Int       @map("requester_id")
+  addresseeId Int       @map("addressee_id")
+  status      String    @default("PENDING") @db.VarChar(12) // PENDING | ACCEPTED
+  createdAt   DateTime  @default(now()) @map("created_at")
+  respondedAt DateTime? @map("responded_at")
+
+  requester User @relation("FriendshipsSent", fields: [requesterId], references: [id], onDelete: Cascade)
+  addressee User @relation("FriendshipsReceived", fields: [addresseeId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, addresseeId], map: "uk_friendship_pair")
+  @@index([addresseeId, status], map: "idx_friendship_addressee_status")
+  @@index([requesterId, status], map: "idx_friendship_requester_status")
+  @@map("friendships")
 }
 
 // ============================================================
@@ -3019,13 +3059,13 @@ model NoteSubject {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  chapters    NoteChapter[]
-  notes       Note[]
-  attachments NoteAttachment[]
-  links       NoteLink[]
+  user            User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chapters        NoteChapter[]
+  notes           Note[]
+  attachments     NoteAttachment[]
+  links           NoteLink[]
   // Phase 4 add — subject-level sharing
-  shares      NoteSubjectShare[]
+  shares          NoteSubjectShare[]
   shareRecipients NoteSubjectShareRecipient[] @relation("SubjectShareRecipients")
 
   @@index([userId, sortOrder], name: "idx_note_subjects_user_sort")
@@ -3035,8 +3075,8 @@ model NoteSubject {
 
 // Phase 4 add — share a NoteSubject (folder) with other users
 model NoteSubjectShare {
-  id           Int      @id @default(autoincrement())
-  subjectId    Int      @map("subject_id")
+  id          Int      @id @default(autoincrement())
+  subjectId   Int      @map("subject_id")
   // Owner = the user who created the subject and is sharing it
   ownerId     Int      @map("owner_id")
   // Recipient = the user who has been granted access
@@ -3048,9 +3088,9 @@ model NoteSubjectShare {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  subject   NoteSubject              @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  owner    User                      @relation("NoteSubjectSharesOwned", fields: [ownerId], references: [id], onDelete: Cascade)
-  recipient User                     @relation("NoteSubjectSharesReceived", fields: [recipientId], references: [id], onDelete: Cascade)
+  subject    NoteSubject                 @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  owner      User                        @relation("NoteSubjectSharesOwned", fields: [ownerId], references: [id], onDelete: Cascade)
+  recipient  User                        @relation("NoteSubjectSharesReceived", fields: [recipientId], references: [id], onDelete: Cascade)
   recipients NoteSubjectShareRecipient[]
 
   @@unique([subjectId, recipientId], name: "uk_note_subject_share")
@@ -3061,16 +3101,16 @@ model NoteSubjectShare {
 
 // Phase 4 add — recipient side: folders shared with current user
 model NoteSubjectShareRecipient {
-  id           Int      @id @default(autoincrement())
-  shareId      Int      @map("share_id")
-  subjectId    Int      @map("subject_id")
-  recipientId Int      @map("recipient_id")
+  id          Int       @id @default(autoincrement())
+  shareId     Int       @map("share_id")
+  subjectId   Int       @map("subject_id")
+  recipientId Int       @map("recipient_id")
   seenAt      DateTime? @map("seen_at")
-  createdAt   DateTime @default(now()) @map("created_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
 
-  share    NoteSubjectShare @relation(fields: [shareId], references: [id], onDelete: Cascade)
-  subject  NoteSubject     @relation("SubjectShareRecipients", fields: [subjectId], references: [id], onDelete: Cascade)
-  user     User            @relation("UserShareRecipients", fields: [recipientId], references: [id], onDelete: Cascade)
+  share   NoteSubjectShare @relation(fields: [shareId], references: [id], onDelete: Cascade)
+  subject NoteSubject      @relation("SubjectShareRecipients", fields: [subjectId], references: [id], onDelete: Cascade)
+  user    User             @relation("UserShareRecipients", fields: [recipientId], references: [id], onDelete: Cascade)
 
   @@unique([shareId, recipientId], name: "uk_note_share_recipient")
   @@map("note_subject_share_recipients")
@@ -3196,9 +3236,9 @@ model NoteVocabEntry {
   // and lets the user "reset" it. `reviewCount` / `lastReviewedAt` /
   // `knownStreak` power a tiny stats line under the vocab table; we
   // don't do SRS scheduling yet (could be added in 3d).
-  isKnown       Boolean   @default(false) @map("is_known")
-  reviewCount   Int       @default(0) @map("review_count")
-  knownStreak   Int       @default(0) @map("known_streak")
+  isKnown        Boolean   @default(false) @map("is_known")
+  reviewCount    Int       @default(0) @map("review_count")
+  knownStreak    Int       @default(0) @map("known_streak")
   lastReviewedAt DateTime? @map("last_reviewed_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -3222,19 +3262,19 @@ model NoteVocabEntry {
 // account doesn't silently wipe every post that referenced
 // the track — the post will need to be remapped first.
 model Song {
-  id           Int       @id @default(autoincrement())
-  title        String    @db.VarChar(255)
-  artist       String    @db.VarChar(255)
-  audioUrl     String    @db.VarChar(700)   // R2 URL to the mp3/m4a
-  coverImage   String?   @db.VarChar(700)   // R2 URL to the cover
-  durationSec  Int       @map("duration_sec")  // total track duration
-  fileSize     Int?      @map("file_size")  // bytes — audit + UI
-  isActive     Boolean   @default(true)  // admin can hide without deleting
-  uploadedById Int       @map("uploaded_by_id")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  id           Int      @id @default(autoincrement())
+  title        String   @db.VarChar(255)
+  artist       String   @db.VarChar(255)
+  audioUrl     String   @db.VarChar(700) // R2 URL to the mp3/m4a
+  coverImage   String?  @db.VarChar(700) // R2 URL to the cover
+  durationSec  Int      @map("duration_sec") // total track duration
+  fileSize     Int?     @map("file_size") // bytes — audit + UI
+  isActive     Boolean  @default(true) // admin can hide without deleting
+  uploadedById Int      @map("uploaded_by_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  uploader  User         @relation("SongUploader", fields: [uploadedById], references: [id], onDelete: Restrict)
+  uploader  User        @relation("SongUploader", fields: [uploadedById], references: [id], onDelete: Restrict)
   postMusic PostMusic[]
 
   @@index([isActive, createdAt(sort: Desc)], name: "idx_songs_active_created")
@@ -3256,7 +3296,7 @@ model PostMusic {
   postId    Int      @unique @map("post_id")
   songId    Int      @map("song_id")
   startSec  Int      @default(0) @map("start_sec")
-  endSec    Int?     @map("end_sec")  // null = play to end of file
+  endSec    Int?     @map("end_sec") // null = play to end of file
   createdAt DateTime @default(now()) @map("created_at")
 
   post SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
@@ -3272,13 +3312,13 @@ model PostMusic {
 // to avoid bloating the hot User row with profile fields
 // (the read path doesn't care about bio / cover photo / etc).
 model UserProfile {
-  userId        Int      @id @map("user_id")
-  bio           String?  @db.Text
-  coverPhoto    String?  @map("cover_photo") @db.VarChar(700)
-  location      String?  @db.VarChar(255)
-  websiteUrl    String?  @map("website_url") @db.VarChar(500)
-  work          String?  @db.VarChar(255)
-  education     String?  @db.VarChar(255)
+  userId     Int     @id @map("user_id")
+  bio        String? @db.Text
+  coverPhoto String? @map("cover_photo") @db.VarChar(700)
+  location   String? @db.VarChar(255)
+  websiteUrl String? @map("website_url") @db.VarChar(500)
+  work       String? @db.VarChar(255)
+  education  String? @db.VarChar(255)
 
   // ─── Extended "About" fields (FB-style profile) ─────────
   // All optional. languages is stored as a comma-joined string
@@ -3292,8 +3332,8 @@ model UserProfile {
   hobbies            String? @db.Text
   languages          String? @db.VarChar(255)
 
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -3306,29 +3346,29 @@ model UserProfile {
 // persist on the profile permanently.
 
 model Story {
-  id          Int      @id @default(autoincrement())
-  userId      Int      @map("user_id")
+  id              Int      @id @default(autoincrement())
+  userId          Int      @map("user_id")
   // Visibility: PUBLIC, FRIENDS, or PRIVATE (only the owner can see)
-  visibility  String   @default("PUBLIC") @map("visibility") @db.VarChar(20)
+  visibility      String   @default("PUBLIC") @map("visibility") @db.VarChar(20)
   // Optional text overlay on the story (Instagram-style)
-  caption     String?  @db.Text
+  caption         String?  @db.Text
   // Media URL (image or video) - can be empty for text-only stories
-  mediaUrl    String?  @map("media_url") @db.VarChar(700)
-  mediaType   String   @default("IMAGE") @map("media_type") @db.VarChar(10) // IMAGE | VIDEO
+  mediaUrl        String?  @map("media_url") @db.VarChar(700)
+  mediaType       String   @default("IMAGE") @map("media_type") @db.VarChar(10) // IMAGE | VIDEO
   // Video duration in seconds (null for images)
-  duration    Int?     @map("duration_seconds")
+  duration        Int?     @map("duration_seconds")
   // Thumbnail for video stories
-  thumbnail   String?  @db.VarChar(700)
+  thumbnail       String?  @db.VarChar(700)
   // Background color for text-only stories (hex)
-  backgroundColor String? @map("background_color") @db.VarChar(7)
+  backgroundColor String?  @map("background_color") @db.VarChar(7)
   // When this story expires (24h from creation by default)
-  expiresAt   DateTime @map("expires_at")
-  createdAt  DateTime @default(now()) @map("created_at")
+  expiresAt       DateTime @map("expires_at")
+  createdAt       DateTime @default(now()) @map("created_at")
 
-  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  views        StoryView[]
-  highlights   StoryHighlight[]
-  hiddenBy     StoryHide[]
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  views      StoryView[]
+  highlights StoryHighlight[]
+  hiddenBy   StoryHide[]
 
   @@index([userId], name: "idx_story_user")
   @@index([expiresAt], name: "idx_story_expires")
@@ -3337,10 +3377,10 @@ model Story {
 
 // Who has viewed a story
 model StoryView {
-  id        Int      @id @default(autoincrement())
-  storyId   Int      @map("story_id")
-  userId    Int      @map("user_id")
-  viewedAt  DateTime @default(now()) @map("viewed_at")
+  id       Int      @id @default(autoincrement())
+  storyId  Int      @map("story_id")
+  userId   Int      @map("user_id")
+  viewedAt DateTime @default(now()) @map("viewed_at")
 
   story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -3362,8 +3402,8 @@ model StoryHighlight {
   sortOrder Int      @default(0) @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at")
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  story  Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
 
   @@unique([userId, storyId], name: "uk_highlight_story")
   @@index([userId], name: "idx_highlight_user")

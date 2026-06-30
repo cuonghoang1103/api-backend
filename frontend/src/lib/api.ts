@@ -569,6 +569,84 @@ export const socialUserApi = {
     ),
   updateStatus: () => api.post('/users/status'),
   updateCoverPhoto: (coverPhotoUrl: string) => api.post('/users/cover-photo', { coverPhotoUrl }),
+  // People search / discovery — drives the global Navbar search box
+  // and the /friends page. Returns richer cards than searchMentions:
+  // includes fullName, isOnline, isFollowing and friendStatus so each
+  // result can render the correct action button. Empty q → "people
+  // you may know". Cursor-paginated.
+  discover: (q: string, limit = 12, cursor?: number) =>
+    api.get<{ data: { users: DiscoverUser[]; nextCursor?: number } }>(
+      '/users/discover',
+      { params: { q, limit, cursor } },
+    ),
+};
+
+// ─── Friend graph (two-way, Facebook-style) ──────────────────────
+// Independent of the follow graph above. A request must be confirmed
+// by the addressee. Backend: src/routes/friend.routes.ts (/api/v1/friends).
+export type FriendStatus =
+  | 'none'
+  | 'pending_outgoing'
+  | 'pending_incoming'
+  | 'friends';
+
+export interface DiscoverUser {
+  id: number;
+  username: string;
+  fullName: string | null;
+  displayName: string | null;
+  avatarUrl: string | null;
+  isOnline: boolean;
+  isFollowing: boolean;
+  friendStatus: FriendStatus;
+}
+
+export interface FriendUser {
+  id: number;
+  username: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+  isOnline: boolean;
+  since: string;
+}
+
+export interface FriendRequest {
+  friendshipId: number;
+  user: FriendUser;
+  createdAt: string;
+}
+
+export const friendApi = {
+  /** List my accepted friends (cursor-paginated). */
+  listFriends: (cursor?: number, limit = 20) =>
+    api.get<{ data: { users: FriendUser[]; nextCursor?: number } }>(
+      '/friends',
+      { params: { cursor, limit } },
+    ),
+  /** Pending requests sent TO me (Confirm / Delete). */
+  incoming: (limit = 30) =>
+    api.get<{ data: FriendRequest[] }>('/friends/requests/incoming', { params: { limit } }),
+  /** Pending requests I sent (can Cancel). */
+  outgoing: (limit = 30) =>
+    api.get<{ data: FriendRequest[] }>('/friends/requests/outgoing', { params: { limit } }),
+  /** Incoming count for the sidebar badge. */
+  requestCount: () =>
+    api.get<{ data: { count: number } }>('/friends/requests/count'),
+  /** Relationship between me and another user. */
+  getStatus: (id: number) =>
+    api.get<{ data: { status: FriendStatus } }>(`/friends/status/${id}`),
+  /** Send a friend request. Auto-accepts if they already invited me. */
+  sendRequest: (targetId: number) =>
+    api.post<{ data: { status: FriendStatus; autoAccepted: boolean } }>('/friends/request', { targetId }),
+  /** Accept / decline an incoming request. */
+  respond: (requesterId: number, accept: boolean) =>
+    api.post<{ data: { status: FriendStatus; requesterId: number } }>('/friends/respond', { requesterId, accept }),
+  /** Cancel a request I sent. */
+  cancel: (targetId: number) =>
+    api.post<{ data: { status: FriendStatus } }>('/friends/cancel', { targetId }),
+  /** Remove an existing friend. */
+  unfriend: (id: number) =>
+    api.delete<{ data: { status: FriendStatus } }>(`/friends/${id}`),
 };
 
 // Blog API

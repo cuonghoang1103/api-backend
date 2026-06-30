@@ -22,7 +22,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { socialApi } from '@/lib/api';
-import { socialUserApi } from '@/lib/api';
+import { socialUserApi, friendApi } from '@/lib/api';
 import type { FeedCollection } from '@/types/social';
 import SafeAvatar from '@/components/ui/SafeAvatar';
 
@@ -74,8 +74,19 @@ export default function SocialSidebar({
     ['admin', 'ADMIN', 'ROLE_ADMIN', 'SUPER_ADMIN'].includes(r)
   );
 
+  // Pending incoming friend-request count → drives the badge on the
+  // "Bạn bè" nav row. Stale for 30s; only when logged in.
+  const { data: friendRequestCount = 0 } = useQuery({
+    queryKey: ['friend-request-count'] as const,
+    queryFn: () => friendApi.requestCount().then((r) => r.data.data.count),
+    staleTime: 30_000,
+    retry: false,
+    enabled: mounted && !!user,
+  });
+
   const items = [
     { href: '/', label: 'Home', icon: Home, exact: true },
+    { href: '/friends', label: 'Bạn bè', icon: Users, badge: friendRequestCount },
     { href: '/messages', label: 'Messages', icon: MessageCircle, badge: unreadMessages },
     { href: '/about', label: 'About', icon: UserIcon },
   ];

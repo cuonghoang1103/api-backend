@@ -18,7 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   X, Edit3, Globe, Camera, Loader2, Check,
   Mail, Phone, Briefcase, GraduationCap, Heart, User,
-  Link2, Image as ImageIcon, Settings, Grid3X3, UserPlus, MoreHorizontal,
+  Link2, Image as ImageIcon, Settings, Grid3X3, UserPlus, UserCheck, Clock, MoreHorizontal,
   Facebook, Twitter, Github, Linkedin, Youtube, Instagram,
   Plus, Home, Star, Building, MapPinned, MapPinHouse, Info,
   BookText, CalendarDays, Briefcase as WorkIcon, Link as LinkIcon, Copy, Lock,
@@ -26,7 +26,7 @@ import {
 import dynamic from 'next/dynamic';
 import type { ComponentType } from 'react';
 import Cropper from 'react-easy-crop';
-import { socialUserApi, fileApi } from '@/lib/api';
+import { socialUserApi, fileApi, friendApi, type FriendStatus } from '@/lib/api';
 import { authApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useQueryClient } from '@tanstack/react-query';
@@ -140,6 +140,10 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   // Follow
   const [following, setFollowing] = useState<boolean | null>(null);
   const [followBusy, setFollowBusy] = useState(false);
+  // Two-way friend relationship (independent of follow). Comes from
+  // the enhanced profile payload (getEnhancedPublicProfile).
+  const [friendStatus, setFriendStatus] = useState<FriendStatus | null>(null);
+  const [friendBusy, setFriendBusy] = useState(false);
 
   // Settings menu
   const [showSettings, setShowSettings] = useState(false);
@@ -165,6 +169,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       };
       setProfile(normalized);
       setFollowing(normalized.isFollowing ?? null);
+      setFriendStatus((data.friendStatus as FriendStatus) ?? 'none');
     } catch {
       toast.error('Không tải được profile');
     } finally {
@@ -336,6 +341,31 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       toast.error('Không thể thực hiện');
     } finally {
       setFollowBusy(false);
+    }
+  };
+
+  // ─── Friend (two-way, independent of follow) ──────────────────
+  const toggleFriend = async () => {
+    if (!id || friendBusy || friendStatus === null) return;
+    setFriendBusy(true);
+    try {
+      if (friendStatus === 'none') {
+        const res = await friendApi.sendRequest(id);
+        setFriendStatus(res.data.data.status);
+      } else if (friendStatus === 'pending_outgoing') {
+        await friendApi.cancel(id);
+        setFriendStatus('none');
+      } else if (friendStatus === 'pending_incoming') {
+        await friendApi.respond(id, true);
+        setFriendStatus('friends');
+      } else if (friendStatus === 'friends') {
+        await friendApi.unfriend(id);
+        setFriendStatus('none');
+      }
+    } catch {
+      toast.error('Không thể thực hiện');
+    } finally {
+      setFriendBusy(false);
     }
   };
 
@@ -619,6 +649,18 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                 </>
               ) : (
                 <>
+                  {/* Two-way friend button (independent of follow). */}
+                  <button onClick={toggleFriend} disabled={friendBusy || friendStatus === null}
+                    className={cn('inline-flex items-center gap-2 px-5 py-2.5 font-semibold rounded-xl transition-all shadow-lg',
+                      friendStatus === 'none'
+                        ? 'bg-gradient-to-r from-neon-violet to-neon-purple text-white hover:opacity-90 shadow-neon-violet/20'
+                        : 'bg-darkcard/80 border border-darkborder text-text-primary hover:bg-darkcard',
+                      friendBusy && 'opacity-50')}>
+                    {friendStatus === 'friends' ? <><UserCheck className="h-4 w-4" />Bạn bè</>
+                      : friendStatus === 'pending_outgoing' ? <><Clock className="h-4 w-4" />Đã gửi lời mời</>
+                      : friendStatus === 'pending_incoming' ? <><Check className="h-4 w-4" />Đồng ý kết bạn</>
+                      : <><UserPlus className="h-4 w-4" />Kết bạn</>}
+                  </button>
                   <button onClick={toggleFollow} disabled={followBusy || following === null}
                     className={cn('inline-flex items-center gap-2 px-5 py-2.5 font-semibold rounded-xl transition-all shadow-lg',
                       following ? 'bg-darkcard/80 border border-darkborder text-text-primary hover:bg-darkcard' : 'bg-gradient-to-r from-neon-violet to-neon-purple text-white hover:opacity-90 shadow-neon-violet/20',

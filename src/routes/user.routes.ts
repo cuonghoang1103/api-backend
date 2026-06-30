@@ -36,7 +36,9 @@ import {
   updateCoverPhoto,
   getSuggestedUsers,
   searchMentionableUsers,
+  discoverUsers,
 } from '../services/follow.service.js';
+import { notifyNewFollow } from '../services/notification.service.js';
 import {
   getOwnProfile,
   getProfileById,
@@ -86,6 +88,31 @@ router.get(
   },
 );
 
+// ─── GET /api/v1/users/discover ──────────────────────────────
+// People search / discovery for the global Navbar search box and
+// the /friends page. Richer than /search (mention autocomplete):
+// returns isFollowing + friendStatus so result cards render the
+// right action. Empty query → "people you may know". Supports a
+// larger limit + cursor pagination.
+//
+// NOTE: must be defined BEFORE /:id otherwise Express matches
+// "discover" as :id.
+router.get(
+  '/discover',
+  authenticate,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const q = (req.query.q as string | undefined) ?? '';
+      const limit = Math.min(parseInt(req.query.limit as string, 10) || 12, 30);
+      const cursor = req.query.cursor ? parseInt(req.query.cursor as string, 10) : undefined;
+      const result = await discoverUsers(req.user.userId!, q, limit, cursor);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 // ─── GET /api/v1/users/:id ──────────────────────────────────
 // Enhanced public profile: follows counts, isFollowing, isOnline
 router.get(
@@ -119,6 +146,12 @@ router.post(
       }
 
       const result = await toggleFollow(req.user.userId!, targetId);
+
+      // Notify the target on a NEW follow (not on unfollow). Fire and
+      // forget — never block the follow action on a notification.
+      if (result.action === 'followed') {
+        void notifyNewFollow(targetId, req.user.userId!).catch(() => {});
+      }
 
       // Re-fetch counts so frontend can update its local state
       const status = await getFollowStatus(req.user.userId!, targetId);

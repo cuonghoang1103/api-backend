@@ -12,6 +12,7 @@
  */
 
 import { prisma } from '../config/database.js';
+import { getStatus, getStatusMap, type FriendStatus } from './friend.service.js';
 
 /** Online threshold: a user is considered "online" if they were
  * active within this many seconds. Matches Socket.IO ping interval
@@ -39,6 +40,9 @@ export interface PublicProfileEnhanced {
   followerCount: number;
   followingCount: number;
   isFollowing: boolean;
+  // Two-way friend relationship between the viewer and this user.
+  // 'none' for logged-out viewers. Independent of isFollowing.
+  friendStatus: FriendStatus;
   // ─── Extended profile fields (FB-style About) ──────────
   // User-level columns:
   gender: string | null;
@@ -133,7 +137,7 @@ export async function getEnhancedPublicProfile(targetId: number, viewerId?: numb
 
   if (!user) return null;
 
-  const [followerCount, followingCount, isFollowingRow] = await Promise.all([
+  const [followerCount, followingCount, isFollowingRow, friendStatus] = await Promise.all([
     prisma.follow.count({ where: { followingId: targetId } }),
     prisma.follow.count({ where: { followerId: targetId } }),
     viewerId
@@ -141,6 +145,7 @@ export async function getEnhancedPublicProfile(targetId: number, viewerId?: numb
           where: { followerId_followingId: { followerId: viewerId, followingId: targetId } },
         })
       : Promise.resolve(null),
+    viewerId ? getStatus(viewerId, targetId) : Promise.resolve<FriendStatus>('none'),
   ]);
 
   const profile = user.profile;
@@ -159,6 +164,7 @@ export async function getEnhancedPublicProfile(targetId: number, viewerId?: numb
     followerCount,
     followingCount,
     isFollowing: !!isFollowingRow,
+    friendStatus,
     // ─── Extended profile (User-level) ──────────────────
     gender: user.gender,
     birthYear: user.birthYear,
@@ -411,4 +417,101 @@ export async function searchMentionableUsers(
     avatarUrl: user.avatarUrl,
     isFollowing,
   }));
+}
+
+// ─── People search / discovery (Navbar + /friends page) ─────────
+// Richer cousin of searchMentionableUsers: drives the global
+// "Search Facebook"-style box and the People page. Unlike the
+// mention search (capped at 8, no relationship data) this:
+//  • supports a larger limit + cursor pagination
+//  • returns isFollowing + friendStatus so each result card can
+//    render the right action button (Theo dõi / Kết bạn / Bạn bè)
+//  • includes fullName + isOnline for a fuller identity row
+//
+// An empty query returns "people you may know"-style results
+// (recent enabled users excluding self) so the dropdown / page is
+// never blank before the user types.
+export interface DiscoverUser {
+  id: number;
+  username: string;
+  fullName: string | null;
+  displayName: string | null;
+  avatarUrl: string | null;
+  isOnline: boolean;
+  isFollowing: boolean;
+  friendStatus: FriendStatus;
+}
+
+export async function discoverUsers(
+  viewerId: number,
+  query: string,
+  limit = 12,
+  cursor?: number,
+): Promise<{ users: DiscoverUser[]; nextCursor?: number }> {
+  const q = (query ?? '').trim();
+  const take = Math.min(Math.max(limit, 1), 30);
+
+  const where = {
+    enabled: true,
+    id: { not: viewerId },
+    ...(q.length > 0
+      ? {
+          OR: [
+            { username: { contains: q, mode: 'insensitive' as const } },
+            { displayName: { contains: q, mode: 'insensitive' as const } },
+            { fullName: { contains: q, mode: 'insensitive' as const } },
+          ],
+        }
+      : {}),
+  };
+
+  const rows = await prisma.user.findMany({
+    where,
+    select: {
+      id: true,
+      username: true,
+      fullName: true,
+      displayName: true,
+      avatarUrl: true,
+      lastActiveAt: true,
+    },
+    // Cursor pagination keyed on id keeps the order stable across
+    // pages. When searching we still order by id desc (newest first)
+    // — relevance ranking would need a tsvector index; not worth it
+    // for the small result sets here.
+    orderBy: { id: 'desc' },
+    take: take + 1,
+    skip: cursor ? 1 : 0,
+    cursor: cursor ? { id: cursor } : undefined,
+  });
+
+  const hasMore = rows.length > take;
+  const items = hasMore ? rows.slice(0, -1) : rows;
+  const nextCursor = hasMore && items.length > 0 ? items[items.length - 1].id : undefined;
+
+  if (items.length === 0) return { users: [], nextCursor: undefined };
+
+  const ids = items.map((u) => u.id);
+  const [followingIds, friendStatusMap] = await Promise.all([
+    prisma.follow
+      .findMany({
+        where: { followerId: viewerId, followingId: { in: ids } },
+        select: { followingId: true },
+      })
+      .then((rows) => new Set(rows.map((r) => r.followingId))),
+    getStatusMap(viewerId, ids),
+  ]);
+
+  const users: DiscoverUser[] = items.map((u) => ({
+    id: u.id,
+    username: u.username,
+    fullName: u.fullName,
+    displayName: u.displayName,
+    avatarUrl: u.avatarUrl,
+    isOnline: isOnline(u.lastActiveAt),
+    isFollowing: followingIds.has(u.id),
+    friendStatus: friendStatusMap.get(u.id) ?? 'none',
+  }));
+
+  return { users, nextCursor };
 }

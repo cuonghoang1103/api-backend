@@ -200,7 +200,11 @@ export type NotificationType =
   | 'NEW_COMMENT'
   | 'NEW_REPLY'
   | 'NEW_MENTION'
-  | 'NEW_MESSAGE';
+  | 'NEW_MESSAGE'
+  // Friend graph + follow (additive). entityId = the actor's user id.
+  | 'FRIEND_REQUEST'
+  | 'FRIEND_ACCEPT'
+  | 'NEW_FOLLOW';
 
 export interface SocialNotification {
   id: number;

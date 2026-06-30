@@ -11,6 +11,7 @@ import { useMessagingStore } from '@/store/messagingStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import NotificationDropdown from '@/components/social/NotificationDropdown';
+import UserSearchBox from '@/components/social/UserSearchBox';
 import {
  Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles, TrendingUp,
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
@@ -237,6 +238,12 @@ export default function Navbar() {
                 CuongHoang
               </span>
             </Link>
+
+            {/* People search (global) — additive; sits between the
+                logo and the center nav links. */}
+            <div className="ml-2 shrink-0">
+              <UserSearchBox />
+            </div>
 
             {/* Center: nav links — icons only, no labels. */}
             <div className="hidden sm:flex items-center ml-1">

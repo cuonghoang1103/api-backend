@@ -40,6 +40,12 @@ export const NOTIFICATION_TYPES = [
   'NEW_REPLY',
   'NEW_MENTION',
   'NEW_MESSAGE',
+  // ─── Friend graph + follow (additive) ───────────────────
+  // entityId = the actor's user id (sender) so the bell can
+  // deep-link to /friends or /profile/:id without an extra blob.
+  'FRIEND_REQUEST',
+  'FRIEND_ACCEPT',
+  'NEW_FOLLOW',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
@@ -187,6 +193,48 @@ export async function notifyPostLike(
   const numericLiker = typeof likerId === 'string' ? parseInt(likerId, 10) : likerId;
   if (!Number.isFinite(numericLiker)) return;
   await notifyPostReaction(recipientId, numericLiker, postId, 'LIKE');
+}
+
+/* ─── Friend graph + follow notifications (NEW) ─────────────── */
+
+/** Someone sent the recipient a friend request. entityId = sender. */
+export async function notifyFriendRequest(
+  recipientId: number,
+  senderId: number,
+): Promise<void> {
+  await pushNotification({
+    receiverId: recipientId,
+    senderId,
+    type: 'FRIEND_REQUEST',
+    entityId: senderId,
+  });
+}
+
+/** The recipient's friend request was accepted. entityId = sender
+ *  (the person who accepted), so the bell links to their profile. */
+export async function notifyFriendAccept(
+  recipientId: number,
+  senderId: number,
+): Promise<void> {
+  await pushNotification({
+    receiverId: recipientId,
+    senderId,
+    type: 'FRIEND_ACCEPT',
+    entityId: senderId,
+  });
+}
+
+/** Someone started following the recipient. entityId = follower. */
+export async function notifyNewFollow(
+  recipientId: number,
+  followerId: number,
+): Promise<void> {
+  await pushNotification({
+    receiverId: recipientId,
+    senderId: followerId,
+    type: 'NEW_FOLLOW',
+    entityId: followerId,
+  });
 }
 
 /* ─── Email-only admin alerts (unchanged contract) ─────────── */

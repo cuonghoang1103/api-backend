@@ -14,9 +14,11 @@ import {
   X,
 } from 'lucide-react';
 import { Component, type ReactNode, useEffect, useState } from 'react';
-import { api } from '@/lib/api';
+import { UserPlus, Check } from 'lucide-react';
+import { api, friendApi, type FriendRequest } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
+import SafeAvatar from '@/components/ui/SafeAvatar';
 import toast from 'react-hot-toast';
 
 interface TrendingTopic {
@@ -255,6 +257,9 @@ function SocialRightWidgetInner() {
         )}
       </div>
 
+      {/* Friend requests (incoming) — FB-style Confirm/Delete box */}
+      <FriendRequestsPanel />
+
       {/* Suggested connections */}
       {loaded && suggestions.length > 0 && (
         <div
@@ -319,6 +324,94 @@ function SocialRightWidgetInner() {
         © CuongHoangDev · Social feed
       </p>
     </aside>
+  );
+}
+
+/**
+ * Incoming friend-requests box. Mirrors Facebook's "Friend requests"
+ * panel: avatar + name + Confirm / Delete. Self-hides when empty so
+ * it never adds visual noise. Independent fetch (best-effort).
+ */
+function FriendRequestsPanel() {
+  const auth = useAuthStore();
+  const [requests, setRequests] = useState<FriendRequest[]>([]);
+  const [busy, setBusy] = useState<Record<number, boolean>>({});
+
+  useEffect(() => {
+    if (!auth.isAuthenticated) return;
+    let cancelled = false;
+    friendApi
+      .incoming(6)
+      .then((r) => { if (!cancelled) setRequests(r.data.data ?? []); })
+      .catch(() => {/* ignore */});
+    return () => { cancelled = true; };
+  }, [auth.isAuthenticated]);
+
+  const act = async (requesterId: number, accept: boolean) => {
+    if (busy[requesterId]) return;
+    setBusy((b) => ({ ...b, [requesterId]: true }));
+    try {
+      await friendApi.respond(requesterId, accept);
+      setRequests((prev) => prev.filter((x) => x.user.id !== requesterId));
+    } catch {
+      toast.error('Không thực hiện được, thử lại sau');
+      setBusy((b) => ({ ...b, [requesterId]: false }));
+    }
+  };
+
+  if (!auth.isAuthenticated || requests.length === 0) return null;
+
+  return (
+    <div
+      className="rounded-2xl p-4"
+      style={{
+        background: 'rgba(255,255,255,0.03)',
+        border: '1px solid rgba(255,255,255,0.06)',
+        backdropFilter: 'blur(20px)',
+      }}
+    >
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <UserPlus className="h-4 w-4 text-neon-violet" />
+          <h3 className="text-sm font-semibold text-text-primary">Lời mời kết bạn</h3>
+        </div>
+        <Link href="/friends" className="text-[11px] text-neon-violet hover:underline">Xem tất cả</Link>
+      </div>
+      <ul className="space-y-3">
+        {requests.map((r) => {
+          const name = r.user.displayName?.trim() || r.user.username;
+          const isBusy = !!busy[r.user.id];
+          return (
+            <li key={r.friendshipId} className="flex items-center gap-2.5">
+              <Link href={`/profile/${r.user.id}`} className="shrink-0">
+                <SafeAvatar src={r.user.avatarUrl} alt={name} seed={r.user.username} size={36} rounded="full" />
+              </Link>
+              <div className="min-w-0 flex-1">
+                <Link href={`/profile/${r.user.id}`} className="block truncate text-xs font-medium text-text-primary hover:underline">{name}</Link>
+                <div className="mt-1 flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => act(r.user.id, true)}
+                    disabled={isBusy}
+                    className="flex items-center gap-1 rounded-lg bg-neon-violet/25 px-2 py-1 text-[10px] font-medium text-neon-violet hover:bg-neon-violet/35 transition-colors disabled:opacity-50"
+                  >
+                    <Check className="h-2.5 w-2.5" /> Xác nhận
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => act(r.user.id, false)}
+                    disabled={isBusy}
+                    className="flex items-center gap-1 rounded-lg bg-white/[0.05] px-2 py-1 text-[10px] font-medium text-text-secondary hover:bg-white/[0.08] transition-colors disabled:opacity-50"
+                  >
+                    <X className="h-2.5 w-2.5" /> Xoá
+                  </button>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
 

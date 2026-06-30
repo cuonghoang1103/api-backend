@@ -63,6 +63,7 @@ const { errorHandler, notFoundHandler } = await import(path.join(__dirname, 'mid
 const authRoutes = (await import(path.join(__dirname, 'routes', 'auth.routes.js'))).default;
 const profileRoutes = (await import(path.join(__dirname, 'routes', 'profile.routes.js'))).default;
 const userRoutes = (await import(path.join(__dirname, 'routes', 'user.routes.js'))).default;
+const friendRoutes = (await import(path.join(__dirname, 'routes', 'friend.routes.js'))).default;
 const blogRoutes = (await import(path.join(__dirname, 'routes', 'blog.routes.js'))).default;
 const courseRoutes = (await import(path.join(__dirname, 'routes', 'course.routes.js'))).default;
 const paymentRoutes = (await import(path.join(__dirname, 'routes', 'payment.routes.js'))).default;
@@ -368,6 +369,7 @@ app.use('/api/', sentryRequestMiddleware);
 app.use('/api/v1/auth', authLimiter, authRoutes);
 app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/friends', friendRoutes);
 app.use('/api/v1/blog', blogRoutes);
 app.use('/api/v1/courses', courseRoutes);
 app.use('/api/v1/payments', paymentRoutes);

@@ -9,14 +9,12 @@ import {
   LayoutDashboard, Shield, BookMarked, Receipt,
   Sparkles, User,
   GraduationCap, ShoppingBag, Gamepad2, Layers,
-  Menu, X, ChevronRight, Bell,
+  Menu, X, ChevronRight,
   Github,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
-import { useNotificationStore } from '@/store/notificationStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
-import NotificationDropdown from '@/components/social/NotificationDropdown';
 import { cn } from '@/lib/utils';
 
 // ── iOS-style floating sidebar ────────────────────────────────
@@ -128,16 +126,9 @@ export default function NavigationDock() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // ── Notification bell (added 2026-06-20) ──────────────────────
-  // The bell lives at the top-right of the viewport (mirrors
-  // the iOS Notification Center pin) and is always visible.
-  // It reads its badge count from the notification store; the
-  // socket hook below keeps that count accurate in real time.
-  const unreadNotifications = useNotificationStore((s) => s.unreadCount);
-  const [notifOpen, setNotifOpen] = useState(false);
-  const bellRef = useRef<HTMLButtonElement | null>(null);
-  // Activate the socket listener exactly once for the lifetime
-  // of the dock. The hook itself is idempotent.
+  // Activate the notification socket listener exactly once for
+  // the lifetime of the dock. The hook itself is idempotent and
+  // keeps the toolbar bell's unread count accurate in real time.
   useNotificationSocket();
 
   const sections = useMemo(
@@ -221,58 +212,6 @@ export default function NavigationDock() {
 
   return (
     <>
-      {/* ── Notification bell (top-right) ───────────────────
-          Always-visible pin. Clicking it opens a portal
-          dropdown that lists the latest social notifications.
-          When the user is not authenticated we hide the bell
-          so guests don't see an empty state. */}
-      {mounted && isAuthenticated && (
-        <motion.button
-          ref={bellRef}
-          type="button"
-          aria-label={notifOpen ? 'Đóng thông báo' : 'Mở thông báo'}
-          aria-expanded={notifOpen}
-          onClick={() => setNotifOpen((v) => !v)}
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.94 }}
-          transition={ICON_SPRING}
-          className={cn(
-            'fixed top-4 right-6 z-[70]',
-            'w-11 h-11 rounded-2xl',
-            'flex items-center justify-center',
-            'bg-[#0d1117]/85 backdrop-blur-2xl',
-            'border border-white/10',
-            'shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)]',
-            'text-text-primary',
-            'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22d3ee]/40',
-          )}
-        >
-          <Bell className="w-5 h-5" />
-          {unreadNotifications > 0 && (
-            <span
-              aria-label={`${unreadNotifications} thông báo chưa đọc`}
-              className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1
-                bg-gradient-to-br from-[#ef4444] to-[#dc2626]
-                text-white text-[10px] font-bold rounded-full
-                flex items-center justify-center
-                shadow-[0_0_10px_rgba(239,68,68,0.5)]
-                border-2 border-[#0d1117]"
-            >
-              {unreadNotifications > 99 ? '99+' : unreadNotifications}
-            </span>
-          )}
-        </motion.button>
-      )}
-
-      {/* The dropdown panel — portaled into document.body */}
-      {mounted && isAuthenticated && (
-        <NotificationDropdown
-          anchor={bellRef.current}
-          open={notifOpen}
-          onClose={() => setNotifOpen(false)}
-        />
-      )}
-
       {/* ── Toggle button (always visible) ────────────────
           A small floating button in the top-left of the
           viewport. Tapping it opens the sidebar panel.

@@ -56,6 +56,9 @@ export default function Navbar() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const { user: backendUser, isAuthenticated: isBackendAuth } = useAuthStore();
+
+  // Debug logging
+  console.log('[Navbar] Render - backendUser:', JSON.stringify(backendUser), 'isBackendAuth:', isBackendAuth);
   const { getTotalItems, openDrawer } = useCartStore();
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
   const initMessaging = useMessagingStore((s) => s.init);
@@ -154,6 +157,7 @@ export default function Navbar() {
   const displayUser = mounted
     ? ((isBackendAuth ? backendUser : session?.user) as any)
     : null;
+  console.log('[Navbar] displayUser:', JSON.stringify(displayUser));
   const isAdmin = mounted && verifiedAdmin;
 
   // Connect messaging socket as soon as the user is authenticated so

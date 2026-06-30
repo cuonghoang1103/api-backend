@@ -1395,6 +1395,12 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
   const [isFullscreen, setIsFullscreen] = useState(false);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Notify other videos on the page to pause when this modal opens.
+  // The inline video in this card listens for this event and pauses itself.
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('social:video-playing', { detail: { src } }));
+  }, [src]);
+
   // Close on Escape (global so it fires even without focus)
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -2212,6 +2218,26 @@ function MediaItem({
   const [duration, setDuration] = useState(0);
   const [showInlineControls, setShowInlineControls] = useState(false);
   const inlineHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Pause this inline video when another video starts playing
+  // (e.g. VideoPlayerModal opens from this card's media).
+  // Skip if the new playing video is the same source as this one.
+  useEffect(() => {
+    if (!autoPlayEnabled || item.type !== 'VIDEO') return;
+    const v = videoRef.current;
+    if (!v) return;
+    const src = v.currentSrc;
+    const handler = (e: Event) => {
+      const newSrc = (e as CustomEvent).detail?.src as string | undefined;
+      // Don't pause if the same video started (e.g. re-autoplay after pause)
+      if (newSrc && newSrc !== src) {
+        v.pause();
+        setIsPlaying(false);
+      }
+    };
+    window.addEventListener('social:video-playing', handler);
+    return () => window.removeEventListener('social:video-playing', handler);
+  }, [autoPlayEnabled, item.type]);
 
   // ─── Auto-play on scroll: only when the video cell is at least
   // 50% visible. We use an IntersectionObserver to avoid expensive

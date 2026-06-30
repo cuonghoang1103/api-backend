@@ -41,6 +41,7 @@ function OAuthCallbackContent() {
       // affect `freshRole` if we ever set it before declaring.
       let freshRole = 'USER';
       let freshRoles: string[] = [];
+      let freshAvatarUrl: string | undefined = undefined;
       try {
         const res = await fetch('/api/auth/oauth/token', { method: 'POST' });
         // Account disabled/locked by an admin → bounce out of the app.
@@ -75,6 +76,7 @@ function OAuthCallbackContent() {
           if (profileRes.ok) {
             const profileData = await profileRes.json();
             freshRoles = profileData?.data?.roles ?? [];
+            freshAvatarUrl = profileData?.data?.avatarUrl;
             const isAdmin = freshRoles.some(
               (r: string) => (r || '').replace('ROLE_', '').toUpperCase() === 'ADMIN'
             );
@@ -95,6 +97,7 @@ function OAuthCallbackContent() {
             ...existingUser,
             email: freshEmail,
             roles: freshRoles,
+            avatarUrl: freshAvatarUrl ?? existingUser.avatarUrl,
           }));
         } catch {}
 
@@ -116,6 +119,7 @@ function OAuthCallbackContent() {
             fullName: session.user.name ?? freshEmail.split('@')[0],
             roles: freshRoles.length > 0 ? freshRoles : ['user'],
             role: freshRoles[0] ?? 'user',
+            avatarUrl: freshAvatarUrl,
           });
         } catch (e) {
           console.warn('[oauth-callback] setAuth failed:', e);

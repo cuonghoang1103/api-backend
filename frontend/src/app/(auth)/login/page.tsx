@@ -162,31 +162,20 @@ function LoginForm() {
 
           if (profileRes.ok) {
             const profileData = await profileRes.json();
-            console.log('[login] Profile response:', JSON.stringify(profileData?.data));
             if (profileData?.data) {
               profileRoles = profileData.data.roles ?? loginRoles;
               profileUserId = profileData.data.id ?? profileUserId;
               profileEmail = profileData.data.email ?? profileEmail;
               profileAvatarUrl = profileData.data.avatarUrl ?? profileAvatarUrl;
             }
-          } else {
-            console.warn('[login] Profile fetch failed:', profileRes.status, await profileRes.text());
           }
-        } catch (e) {
-          console.warn('[login] Profile fetch failed, using login response roles:', e);
+        } catch {
+          // silently ignore — use whatever we got from the login response
         }
       }
 
-      console.log('[login] Final authData:', {
-        userId: profileUserId,
-        username: data.username,
-        email: profileEmail,
-        avatarUrl: profileAvatarUrl,
-      });
-
       // ─── Step 4: Build auth state and update store ──────────────
       // avatarUrl must be included so Navbar/PostComposer render immediately.
-      // displayName is set by setAuth() from username, then updated by AuthBoot from profile.
       const authData: AuthResponse = {
         token,
         userId: profileUserId,
@@ -198,7 +187,6 @@ function LoginForm() {
       };
 
       useAuthStore.getState().setAuth(authData);
-      console.log('[login] Auth store set, user:', JSON.stringify(useAuthStore.getState().user));
 
       // ─── Step 5: Redirect based on role ─────────────────────────
       const isAdmin = isAdminRole(profileRoles);

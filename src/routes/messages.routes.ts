@@ -84,7 +84,12 @@ router.get('/threads', async (req: Request, res: Response, next: NextFunction) =
       (ur: { role: { name: string } }) =>
         ur.role.name.toUpperCase().replace('ROLE_', '') === 'ADMIN',
     ) ?? false;
-    const threads = isAdmin
+    // Default to the viewer's PERSONAL inbox for everyone — admin-role
+    // users have their own DMs too and must see them on /messages.
+    // The support-agent queue (all ADMIN-type threads assigned to this
+    // admin) is opt-in via ?scope=support, used by /admin/messages.
+    const scope = typeof req.query.scope === 'string' ? req.query.scope : undefined;
+    const threads = scope === 'support' && isAdmin
       ? await messagesService.listThreadsForAdmin(req.userId!)
       : await messagesService.listThreadsForUser(req.userId!);
     res.json({ success: true, data: threads });

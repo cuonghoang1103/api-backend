@@ -1714,8 +1714,10 @@ export const messagingApi = {
     api.post<ApiResponse<MessagingThread>>('/messages/threads/admin'),
   getOrCreateUserThread: (peerId: number) =>
     api.post<ApiResponse<MessagingThread>>(`/messages/threads/user/${peerId}`),
-  listThreads: () =>
-    api.get<ApiResponse<MessagingThread[]>>('/messages/threads'),
+  listThreads: (scope?: 'personal' | 'support') =>
+    api.get<ApiResponse<MessagingThread[]>>('/messages/threads', {
+      params: scope === 'support' ? { scope } : undefined,
+    }),
   getThread: (threadId: number) =>
     api.get<ApiResponse<MessagingThread>>(`/messages/threads/${threadId}`),
 

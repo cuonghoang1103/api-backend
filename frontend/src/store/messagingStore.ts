@@ -49,6 +49,10 @@ interface MessagingState {
   threads: MessagingThread[];
   threadsLoaded: boolean;
   threadsLoading: boolean;
+  /** Which inbox `loadThreads` fetches: the viewer's personal DMs
+   *  (default) or, for /admin/messages, the support-agent queue.
+   *  Stored so reloads/retries keep the same scope. */
+  threadScope: 'personal' | 'support';
   /** "Active" = visible in the default inbox. Archived threads are kept
    *  in this list (so we can show them under the "Archived" tab) but
    *  excluded from the default render. */
@@ -73,7 +77,7 @@ interface MessagingState {
   presence: PresenceState;
 
   // Lifecycle
-  init: () => Promise<void>;
+  init: (scope?: 'personal' | 'support') => Promise<void>;
   shutdown: () => void;
   retryConnection: () => Promise<void>;
   setWidgetOpen: (open: boolean) => void;
@@ -284,6 +288,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   threads: [],
   threadsLoaded: false,
   threadsLoading: false,
+  threadScope: 'personal',
   showArchived: false,
   currentThreadId: null,
   currentThread: null,
@@ -307,9 +312,12 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     set({ replyTo: message });
   },
 
-  async init() {
+  async init(scope: 'personal' | 'support' = 'personal') {
     const auth = useAuthStore.getState();
     if (!auth.isAuthenticated) return;
+    // Remember which inbox to fetch so loadThreads (here and on every
+    // later reload/retry) pulls the right scope.
+    set({ threadScope: scope });
     // De-dupe in-flight init calls (so a re-render storm doesn't
     // queue dozens of connect attempts). The previous code also
     // early-returned when the socket was already connected — that
@@ -426,7 +434,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     if (get().isConnecting) return;
     try { disconnectSocket(); } catch {}
     set({ isConnected: false, initError: null });
-    await get().init();
+    await get().init(get().threadScope);
   },
 
   shutdown() {
@@ -460,7 +468,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   async loadThreads() {
     set({ threadsLoading: true });
     try {
-      const res = await messagingApi.listThreads();
+      const res = await messagingApi.listThreads(get().threadScope);
       const raw = res.data.data ?? [];
       set({
         threads: sortThreads(raw),

@@ -34,7 +34,7 @@ export default function AdminMessagesPage() {
 
   useEffect(() => {
     if (!mounted || !auth.isAuthenticated) return;
-    store.init();
+    store.init('support');
   }, [mounted, auth.isAuthenticated, store]);
 
   if (!mounted || !auth.isAuthenticated) {

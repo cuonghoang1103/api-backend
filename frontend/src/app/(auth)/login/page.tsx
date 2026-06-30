@@ -162,20 +162,26 @@ function LoginForm() {
 
           if (profileRes.ok) {
             const profileData = await profileRes.json();
+            console.log('[login DEBUG] profileRes ok, avatarUrl:', profileData?.data?.avatarUrl);
             if (profileData?.data) {
               profileRoles = profileData.data.roles ?? loginRoles;
               profileUserId = profileData.data.id ?? profileUserId;
               profileEmail = profileData.data.email ?? profileEmail;
               profileAvatarUrl = profileData.data.avatarUrl ?? profileAvatarUrl;
             }
+          } else {
+            console.log('[login DEBUG] profileRes NOT ok, status:', profileRes.status);
           }
-        } catch {
+        } catch (e) {
+          console.log('[login DEBUG] profile fetch error:', e);
           // silently ignore — use whatever we got from the login response
         }
+      } else {
+        console.log('[login DEBUG] no token, skipping profile fetch. loginData.data?.token:', loginData.data?.token);
       }
 
       // ─── Step 4: Build auth state and update store ──────────────
-      // avatarUrl must be included so Navbar/PostComposer render immediately.
+      console.log('[login DEBUG] Final profileAvatarUrl:', profileAvatarUrl);
       const authData: AuthResponse = {
         token,
         userId: profileUserId,
@@ -187,6 +193,7 @@ function LoginForm() {
       };
 
       useAuthStore.getState().setAuth(authData);
+      console.log('[login DEBUG] after setAuth, store user:', JSON.stringify(useAuthStore.getState().user));
 
       // ─── Step 5: Redirect based on role ─────────────────────────
       const isAdmin = isAdminRole(profileRoles);

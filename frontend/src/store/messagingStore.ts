@@ -473,10 +473,14 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       // a clear error so the UI can prompt the user to re-login
       // instead of silently showing an empty inbox.
       const status = e?.response?.status;
-      set({ threadsLoading: false });
+      set({ threadsLoading: false, threadsLoaded: true });
       if (status === 401 || status === 403) {
         set({ initError: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.' });
       }
+      // For other errors (network, server 500, etc.) we still mark
+      // threadsLoaded=true so the ThreadList shows the empty state
+      // instead of a spinning skeleton forever. The user can retry
+      // via the connection pill button.
     }
   },
 

@@ -471,6 +471,16 @@ export class AuthService {
       });
     }
 
+    // Enforce admin lock/disable for OAuth logins too (password login
+    // already does this). A newly-created OAuth user defaults to
+    // enabled=true so this only blocks accounts an admin has acted on.
+    if (!user.enabled) {
+      throw new AppError('Account is disabled', 403, 'ACCOUNT_DISABLED');
+    }
+    if (!user.accountNonLocked) {
+      throw new AppError('Account is locked', 403, 'ACCOUNT_LOCKED');
+    }
+
     return this.buildAuthResponse(user);
   }
 

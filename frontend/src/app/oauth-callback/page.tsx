@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
@@ -43,6 +43,12 @@ function OAuthCallbackContent() {
       let freshRoles: string[] = [];
       try {
         const res = await fetch('/api/auth/oauth/token', { method: 'POST' });
+        // Account disabled/locked by an admin → bounce out of the app.
+        if (res.status === 403) {
+          await signOut({ redirect: false });
+          router.replace('/login?error=account_blocked');
+          return;
+        }
         if (res.ok) {
           const data = await res.json();
           backendToken = data?.token ?? '';

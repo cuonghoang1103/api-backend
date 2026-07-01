@@ -2292,13 +2292,21 @@ function MediaItem({
     if (!autoPlayEnabled || item.type !== 'VIDEO') return;
     const el = containerRef.current;
     if (!el) return;
+    // "In view" = the video overlaps the vertical CENTRE band of the
+    // viewport (the middle ~20%), not a 50% area ratio. A big ~90vh
+    // video can be as tall as the viewport — on Safari especially `vh`
+    // counts the area under the URL bar — so it may NEVER reach a 0.5
+    // area ratio, which left autoplay never firing. A centre-band test
+    // (rootMargin shrinks the root to a thin middle strip, threshold 0)
+    // is height-independent and matches TikTok "whatever is centred
+    // plays". The wide band also gives stable hysteresis (no flip-flop).
     const obs = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          setIsInView(e.isIntersecting && e.intersectionRatio >= 0.5);
+          setIsInView(e.isIntersecting);
         }
       },
-      { threshold: 0.5, rootMargin: '50px' }
+      { root: null, rootMargin: '-40% 0px -40% 0px', threshold: 0 }
     );
     obs.observe(el);
     return () => obs.disconnect();

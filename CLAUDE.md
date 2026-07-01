@@ -1,6 +1,7 @@
 # Claude Code Instructions - api-backend
 
 ## Project Overview
+
 This is a full-stack application with:
 - **Backend**: Node.js + Express + TypeScript
 - **Database**: PostgreSQL with Prisma ORM
@@ -14,21 +15,28 @@ This is a full-stack application with:
 **ALWAYS run these commands BEFORE pushing code:**
 
 ```bash
-# 1. TypeScript check for backend
+# 1. TypeScript check for backend (run from project root)
 npx tsc --noEmit
 
-# 2. Prisma generate (when schema changes)
+# 2. TypeScript check for frontend
+cd frontend && npx tsc --noEmit
+
+# 3. Frontend build
+cd frontend && npm run build
+
+# 4. Prisma generate (when schema changes)
 npx prisma generate
 
-# 3. Prisma format (when schema changes)
+# 5. Prisma format (when schema changes)
 npx prisma format
 ```
 
 **ALWAYS check these BEFORE pushing:**
 
-- [ ] `npx tsc --noEmit` passes (no TypeScript errors)
+- [ ] `npx tsc --noEmit` passes (no TypeScript errors in backend)
+- [ ] `cd frontend && npx tsc --noEmit` passes (no TypeScript errors in frontend)
+- [ ] `cd frontend && npm run build` succeeds (frontend builds)
 - [ ] `npx prisma generate` succeeds (Prisma client generated)
-- [ ] Frontend builds successfully: `cd frontend && npm run build`
 - [ ] No JSX syntax errors (missing/extra closing tags)
 - [ ] All new Prisma models have proper back-relations defined
 
@@ -45,14 +53,14 @@ npx prisma format
 **Back-relation pattern:**
 ```prisma
 model Parent {
-  id        Int      @id
-  children  Child[]  @relation("ChildRelation")
+  id       Int     @id
+  children Child[]  @relation("ChildRelation")
 }
 
 model Child {
-  id       Int   @id
+  id       Int     @id
   parentId Int
-  parent   Parent @relation("ChildRelation", fields: [parentId], references: [id])
+  parent   Parent  @relation("ChildRelation", fields: [parentId], references: [id])
 }
 ```
 
@@ -84,9 +92,9 @@ cd frontend && npm run build
 **If deploy fails:**
 1. Check GitHub Actions logs for specific error
 2. Common failures:
-   - TypeScript errors → Run `npx tsc --noEmit` locally
-   - Frontend build errors → Check JSX syntax
-   - Prisma errors → Run `npx prisma generate`
+   - TypeScript errors → Run `npx tsc --noEmit` and `cd frontend && npx tsc --noEmit`
+   - Frontend build errors → Check JSX syntax with `cd frontend && npm run build`
+   - Prisma errors → Run `npx prisma generate` and `npx prisma format`
 
 ## Previous Errors - DO NOT REPEAT
 
@@ -113,9 +121,9 @@ shareRecipients NoteSubjectShareRecipient[] @relation("SubjectShareRecipients")
 recipients NoteSubjectShareRecipient[]
 
 // In NoteSubjectShareRecipient model
-share    NoteSubjectShare @relation(...)
-subject  NoteSubject     @relation("SubjectShareRecipients", ...)
-user     User           @relation("UserShareRecipients", ...)
+share    NoteSubjectShare   @relation(...)
+subject  NoteSubject      @relation("SubjectShareRecipients", ...)
+user     User            @relation("UserShareRecipients", ...)
 ```
 
 ### Error 3: Prisma Generate Failed
@@ -191,7 +199,7 @@ npx prisma migrate resolve --rolled-back "migration_name"
 
 Before deploying any feature:
 - [ ] `npx tsc --noEmit` passes
-- [ ] `npx prisma generate` succeeds
+- [ ] `cd frontend && npx tsc --noEmit` passes
 - [ ] `cd frontend && npm run build` succeeds
 - [ ] All new migrations created
 - [ ] GitHub Actions CI passes

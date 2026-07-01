@@ -2232,6 +2232,9 @@ function MediaItem({
   const [duration, setDuration] = useState(0);
   const [showInlineControls, setShowInlineControls] = useState(false);
   const inlineHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Flips true once the <video> can actually play; used to retry the
+  // autoplay if the first play() call raced ahead of the media loading.
+  const [canPlay, setCanPlay] = useState(false);
   // True while a VideoPlayerModal is open anywhere on the page. Inline
   // videos must NOT play while a modal is up (only the modal should have
   // sound/motion), and must resume — if still in view — once it closes.
@@ -2325,6 +2328,10 @@ function MediaItem({
       // muted autoplay is allowed. `playsInline` avoids iOS fullscreen.
       v.muted = muted;
       v.playsInline = true;
+      // Upgrade THIS in-view video to eager loading so play() has data
+      // (the element defaults to preload="metadata" to spare the rest of
+      // the feed). Then start it.
+      if (v.preload !== 'auto') v.preload = 'auto';
       // Autoplay may still fail (very strict policies) but we swallow it.
       v.play().catch(() => {});
       if (typeof window !== 'undefined') {
@@ -2336,7 +2343,7 @@ function MediaItem({
         window.dispatchEvent(new CustomEvent('social:video-paused', { detail: { src: v.currentSrc } }));
       }
     }
-  }, [isInView, modalOpen]);
+  }, [isInView, modalOpen, canPlay]);
 
   const resetInlineHideTimer = () => {
     setShowInlineControls(true);
@@ -2384,6 +2391,10 @@ function MediaItem({
             onPause={() => { setIsPlaying(false); setShowInlineControls(true); }}
             onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime ?? 0)}
             onLoadedMetadata={() => setDuration(videoRef.current?.duration ?? 0)}
+            // Retry autoplay once the media is actually playable. A
+            // play() fired before data is buffered can no-op on some
+            // browsers; flipping canPlay re-runs the play effect.
+            onCanPlay={() => setCanPlay(true)}
           />
         ) : (
           <img

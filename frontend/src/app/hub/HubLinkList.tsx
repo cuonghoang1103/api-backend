@@ -8,7 +8,7 @@ interface HubLinkListProps {
   links: HubLink[];
   onEdit: (link: HubLink) => void;
   onDelete: (id: number) => void;
-  onStatusChange?: (id: number, status: string) => void;
+  onViewDetail: (link: HubLink) => void;
   onShare?: (link: HubLink) => void;
   onManageShares?: (link: HubLink) => void;
   // Sparse map from linkId → recipient count so the menu can
@@ -18,7 +18,7 @@ interface HubLinkListProps {
   sharedCounts?: Record<number, number>;
 }
 
-export default function HubLinkList({ links, onEdit, onDelete, onStatusChange, onShare, onManageShares, sharedCounts }: HubLinkListProps) {
+export default function HubLinkList({ links, onEdit, onDelete, onViewDetail, onShare, onManageShares, sharedCounts }: HubLinkListProps) {
   return (
     <motion.ul layout className="space-y-2">
       {links.map((link, i) => (
@@ -33,7 +33,7 @@ export default function HubLinkList({ links, onEdit, onDelete, onStatusChange, o
             link={link}
             onEdit={onEdit}
             onDelete={onDelete}
-            onStatusChange={onStatusChange}
+            onViewDetail={onViewDetail}
             onShare={onShare}
             onManageShares={onManageShares}
             sharedCount={sharedCounts?.[link.id]}

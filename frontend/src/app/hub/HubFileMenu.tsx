@@ -2,33 +2,26 @@
 
 /**
  * HubFileMenu - Context menu for files in list view
- * Provides status change, delete, share, and manage shares functionality
+ * Provides view detail, delete, share, and manage shares functionality
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { Trash2, Share2, Users, MoreVertical } from 'lucide-react';
+import { Trash2, Share2, Users, MoreVertical, Info } from 'lucide-react';
 import type { HubFile } from '@/lib/api';
-import { cn } from '@/lib/utils';
 
 interface HubFileMenuProps {
   file: HubFile;
   onDelete: (id: number) => void;
-  onStatusChange: (id: number, status: string) => void;
+  onClick: (file: HubFile) => void;
   onShare?: (file: HubFile) => void;
   onManageShares?: (file: HubFile) => void;
   sharedCount?: number;
 }
 
-const STATUS_OPTIONS = [
-  { value: 'unread', label: 'Chua doc', color: 'text-text-muted' },
-  { value: 'learning', label: 'Dang hoc', color: 'text-neon-orange' },
-  { value: 'done', label: 'Hoan thanh', color: 'text-neon-emerald' },
-];
-
 export default function HubFileMenu({
   file,
   onDelete,
-  onStatusChange,
+  onClick,
   onShare,
   onManageShares,
   sharedCount,
@@ -77,32 +70,16 @@ export default function HubFileMenu({
           />
 
           <div className="overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/98 shadow-2xl backdrop-blur-xl">
-            {/* Status options */}
-            <div className="border-b border-white/[0.06] px-2 py-1.5">
-              <p className="mb-1 px-1 text-[9px] font-semibold uppercase tracking-wider text-text-muted">
-                Trang thai
-              </p>
-              <div className="flex flex-col gap-0.5">
-                {STATUS_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => {
-                      onStatusChange(file.id, opt.value);
-                      setMenuOpen(false);
-                    }}
-                    className={cn(
-                      'flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium transition-colors',
-                      file.status === opt.value
-                        ? `${opt.color} bg-white/5`
-                        : 'text-text-secondary hover:bg-white/5 hover:text-text-primary',
-                    )}
-                  >
-                    <span className={cn('h-1.5 w-1.5 rounded-full', opt.color.replace('text-', 'bg-'))} />
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* View detail / open */}
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                onClick(file);
+              }}
+              className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
+            >
+              <Info className="h-3 w-3" /> Chi tiet
+            </button>
 
             {/* Delete */}
             <button

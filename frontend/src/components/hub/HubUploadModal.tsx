@@ -18,7 +18,10 @@ interface HubUploadModalProps {
   onUploaded: (file: HubFile) => void;
 }
 
-type UploadState = 'idle' | 'uploading' | 'ai-tagging' | 'done' | 'error';
+// 70MB max for documents
+const MAX_FILE_SIZE = 70 * 1024 * 1024;
+
+type UploadState = 'idle' | 'uploading' | 'ai-tagging' | 'done' | 'error' | 'rejected';
 type FileEntry = {
   id: string;
   file: File;
@@ -37,13 +40,20 @@ export default function HubUploadModal({ open, folders, onClose, onUploaded }: H
   const inputRef = useRef<HTMLInputElement>(null);
 
   const addFiles = useCallback((rawFiles: FileList | File[]) => {
-    const newEntries: FileEntry[] = Array.from(rawFiles).map((f) => ({
-      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-      file: f,
-      state: 'idle' as UploadState,
-      progress: 0,
-      selectedTags: [],
-    }));
+    const newEntries: FileEntry[] = [];
+    for (const f of Array.from(rawFiles)) {
+      if (f.size > MAX_FILE_SIZE) {
+        toast.error(`${f.name} vuot qua 70MB`);
+        continue;
+      }
+      newEntries.push({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        file: f,
+        state: 'idle' as UploadState,
+        progress: 0,
+        selectedTags: [],
+      });
+    }
     setFiles((prev) => [...prev, ...newEntries]);
   }, []);
 
@@ -291,6 +301,9 @@ export default function HubUploadModal({ open, folders, onClose, onUploaded }: H
                           )}
                           {entry.state === 'error' && (
                             <AlertCircle className="h-4 w-4 text-red-400" />
+                          )}
+                          {entry.state === 'rejected' && (
+                            <AlertCircle className="h-4 w-4 text-amber-400" />
                           )}
                         </div>
                       </div>

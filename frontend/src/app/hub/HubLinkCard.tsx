@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import {
-  ExternalLink, MoreVertical, Globe, Link2, Hash, Lock, Globe2,
+  ExternalLink, MoreVertical, Globe, Link2, Hash, Lock, Globe2, Info,
 } from 'lucide-react';
 
 import type { HubLink } from '@/lib/api';
@@ -13,7 +13,7 @@ interface HubLinkCardProps {
   link: HubLink;
   onEdit: (link: HubLink) => void;
   onDelete: (id: number) => void;
-  onStatusChange?: (id: number, status: string) => void;
+  onViewDetail: (link: HubLink) => void;
   // Phase 2 — owner-side: open the share modal for this link.
   onShare?: (link: HubLink) => void;
   // Phase 2 — owner-side: open the manage-shares modal so the
@@ -38,7 +38,7 @@ function gradientFor(id: number) {
   return palettes[id % palettes.length];
 }
 
-export default function HubLinkCard({ link, onEdit, onDelete, onStatusChange, onShare, onManageShares, sharedCount }: HubLinkCardProps) {
+export default function HubLinkCard({ link, onEdit, onDelete, onViewDetail, onShare, onManageShares, sharedCount }: HubLinkCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -158,14 +158,22 @@ target="_blank"
 
         {/* Footer actions */}
         <div className="mt-auto flex items-center justify-between border-t border-white/[0.04] pt-3">
-          <a
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-text-muted transition-colors hover:text-neon-violet"
-          >
-            <ExternalLink className="h-3 w-3" /> Mo
-          </a>
+          <div className="flex items-center gap-3">
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-text-muted transition-colors hover:text-neon-violet"
+            >
+              <ExternalLink className="h-3 w-3" /> Mo
+            </a>
+            <button
+              onClick={() => onViewDetail(link)}
+              className="inline-flex items-center gap-1 text-xs text-text-muted transition-colors hover:text-neon-violet"
+            >
+              <Info className="h-3 w-3" /> Chi tiet
+            </button>
+          </div>
           <div className="relative">
             <button
               ref={buttonRef}
@@ -182,7 +190,7 @@ target="_blank"
               onClose={() => setMenuOpen(false)}
               onEdit={onEdit}
               onDelete={onDelete}
-              onStatusChange={onStatusChange ?? (() => {})}
+              onViewDetail={onViewDetail}
               onShare={onShare}
               onManageShares={onManageShares}
               sharedCount={sharedCount}

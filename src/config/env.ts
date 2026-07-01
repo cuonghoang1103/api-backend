@@ -77,7 +77,7 @@ const envSchema = z.object({
   MAX_FILE_SIZE_IMAGES: z.string().regex(/^\d+$/).default('10485760'),
   MAX_FILE_SIZE_AUDIO: z.string().regex(/^\d+$/).default('104857600'),
   MAX_FILE_SIZE_VIDEO: z.string().regex(/^\d+$/).default('524288000'),
-  MAX_FILE_SIZE_DOCUMENT: z.string().regex(/^\d+$/).default('52428800'),
+  MAX_FILE_SIZE_DOCUMENT: z.string().regex(/^\d+$/).default('73400320'), // 70MB
 
   // Rate Limiting
   RATE_LIMIT_WINDOW_MS: z.string().regex(/^\d+$/).default('900000'),

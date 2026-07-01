@@ -2,223 +2,218 @@
 
 ## Project Overview
 
-This is a full-stack application with:
-- **Backend**: Node.js + Express + TypeScript
+Full-stack application:
+- **Backend**: Node.js + Express + TypeScript (project root)
+- **Frontend**: Next.js (in `frontend/`)
 - **Database**: PostgreSQL with Prisma ORM
-- **Frontend**: Next.js
-- **Deployment**: Docker containers on VPS via GitHub Actions
+- **Storage**: Cloudflare R2
+- **Deployment**: Docker containers on VPS via GitHub Actions (push to `main` = deploy to production)
 
-## Critical Rules - MUST FOLLOW
+## Environment
 
-### 1. BEFORE COMMITTING/DEPLOYING - Mandatory Checklist
+- Node version: 22.x (see `package.json engines`)
+- Local dev: `npm run dev` (backend), `cd frontend && npm run dev` (frontend)
+- Local DB: PostgreSQL via `docker compose up -d postgres` (or local install)
+- Env files: `.env` (backend), `frontend/.env.local` — NEVER commit these
 
-**ALWAYS run these commands BEFORE pushing code:**
+---
 
+## NEVER DO - Forbidden Actions
+
+**These actions are forbidden without explicit user approval:**
+
+- **NEVER** run `npx prisma migrate reset` — it wipes ALL data
+- **NEVER** run `npx prisma db push` against production/VPS — bypasses migration history
+- **NEVER** run `git push --force` or `--force-with-lease` to `main`
+- **NEVER** push to `main` without completing the pre-push checklist below. Since push = production deploy, ask the user for confirmation before pushing
+- **NEVER** auto-resolve failed migrations (`prisma migrate resolve`) — see Migration Failure Protocol
+- **NEVER** commit `.env`, `.env.local`, secrets, API keys, or credentials
+- **NEVER** SSH into VPS to modify database or containers directly, unless user explicitly asks
+- **NEVER** delete or edit files in `prisma/migrations/` that have already been deployed
+- **NEVER** downgrade or remove dependencies to "fix" a type error without asking first
+
+---
+
+## Pre-Push Checklist (Conditional)
+
+Run checks based on what changed. **All commands run from project root.**
+
+### If backend code changed (`src/**`):
 ```bash
-# 1. TypeScript check for backend (run from project root)
 npx tsc --noEmit
-
-# 2. TypeScript check for frontend
-cd frontend && npx tsc --noEmit
-
-# 3. Frontend build
-cd frontend && npm run build
-
-# 4. Prisma generate (when schema changes)
-npx prisma generate
-
-# 5. Prisma format (when schema changes)
-npx prisma format
 ```
 
-**ALWAYS check these BEFORE pushing:**
+### If frontend code changed (`frontend/**`):
+```bash
+(cd frontend && npx tsc --noEmit)
+(cd frontend && npm run build)
+```
 
-- [ ] `npx tsc --noEmit` passes (no TypeScript errors in backend)
-- [ ] `cd frontend && npx tsc --noEmit` passes (no TypeScript errors in frontend)
-- [ ] `cd frontend && npm run build` succeeds (frontend builds)
-- [ ] `npx prisma generate` succeeds (Prisma client generated)
-- [ ] No JSX syntax errors (missing/extra closing tags)
-- [ ] All new Prisma models have proper back-relations defined
+### If Prisma schema changed (`prisma/schema.prisma`):
+```bash
+npx prisma format
+npx prisma generate
+npx prisma migrate dev --name descriptive_name   # verify migration file is created
+npx tsc --noEmit                                  # schema changes affect backend types
+```
 
-### 2. Prisma Schema Rules
+### If Dockerfile / docker-compose / CI workflow changed:
+```bash
+docker build -t backend-test .                          # test backend image builds
+docker build -t frontend-test ./frontend                 # test frontend image builds
+```
 
-**CRITICAL: When adding new models, you MUST:**
+### If both backend and frontend changed: run all of the above.
+
+Final step before push, always:
+- [ ] `git status` — verify no unintended files (especially `.env`, build artifacts)
+- [ ] Confirm with user before pushing to `main` (push triggers production deploy)
+
+---
+
+## Prisma Rules
+
+### Adding/Changing Models
 
 1. Define the model with all fields
-2. Add back-relation in parent models using unique `@relation("Name")` attributes
-3. Run `npx prisma generate` to generate client
-4. Create migration: `npx prisma migrate dev --name descriptive_name`
-5. Verify migration file is created in `prisma/migrations/`
+2. Add back-relations in parent models. Use unique `@relation("Name")` when a model has multiple relations to the same target
+3. `npx prisma format` (catches validation errors early)
+4. `npx prisma generate`
+5. `npx prisma migrate dev --name descriptive_name`
+6. Verify the migration file exists in `prisma/migrations/`
 
 **Back-relation pattern:**
 ```prisma
 model Parent {
   id       Int     @id
-  children Child[]  @relation("ChildRelation")
+  children Child[] @relation("ChildRelation")
 }
 
 model Child {
-  id       Int     @id
+  id       Int    @id
   parentId Int
-  parent   Parent  @relation("ChildRelation", fields: [parentId], references: [id])
+  parent   Parent @relation("ChildRelation", fields: [parentId], references: [id])
 }
 ```
 
-**Common errors to avoid:**
-- Missing opposite relation field in parent model
-- Duplicate `@relation()` names
-- Ambiguous relations (two fields pointing to same model without distinct names)
-
-### 3. Frontend JSX/TSX Rules
-
-**CRITICAL: Always verify JSX structure:**
-- Match every opening tag with closing tag
-- No duplicate closing tags
-- Proper nesting of elements
-
-**Before building frontend:**
-```bash
-cd frontend && npm run build
+**Common pitfalls:**
+- Missing opposite relation field in parent model → `prisma generate` fails
+- Duplicate or ambiguous `@relation()` names
+- When using `@@unique([a, b], name: "custom_name")`, queries must use `custom_name`, NOT the default `a_b` compound key:
+```typescript
+// Wrong:   where: { subjectId_recipientId: { subjectId, recipientId } }
+// Correct: where: { uk_note_subject_share: { subjectId, recipientId } }
 ```
 
-### 4. GitHub Actions Deploy Rules
+### Migration Failure Protocol
 
-**Deploy workflow (`deploy-ghcr.yml`) runs:**
-1. CI - Lint & Type Check (must pass)
-2. Deploy via GHCR (builds Docker images)
-3. Deploy Backend to VPS (pushes to server)
-4. Prisma migration (runs on VPS)
+**If a migration fails on deploy (including P3009 "migration failed to apply"):**
+
+1. **STOP. Do not attempt to auto-fix.**
+2. Do NOT run `prisma migrate resolve --rolled-back` or `--applied` automatically
+3. Do NOT rewrite the migration with `CREATE TABLE IF NOT EXISTS` hacks to force it through
+4. Instead, report to the user:
+   - The exact error message and migration name
+   - Whether the migration partially applied (check which statements ran)
+   - A recommended fix, and wait for user approval
+5. If schema drift is suspected (DB doesn't match migration history), suggest running:
+   ```bash
+   npx prisma migrate diff --from-migrations ./prisma/migrations --to-database-url "$DATABASE_URL" --script
+   ```
+   to see the actual difference before deciding anything.
+
+Rationale: auto-resolving partially-applied migrations can silently corrupt schema/data on production.
+
+---
+
+## Frontend JSX/TSX Rules
+
+- Match every opening tag with a closing tag; no duplicate closing tags
+- Verify structure of conditional render blocks especially (`{condition && (...)}`)
+- `(cd frontend && npm run build)` is the source of truth — TypeScript passing does not guarantee the build passes
+
+---
+
+## Docker & Deploy
+
+**Deploy workflow (`deploy-ghcr.yml`) on push to `main`:**
+1. CI — Lint & Type Check (must pass)
+2. Build Docker images → push to GHCR
+3. Deploy backend to VPS
+4. Run Prisma migrations on VPS
+
+**When adding a new environment variable:**
+1. Add to local `.env` / `frontend/.env.local`
+2. Add to `.env.example` (documentation)
+3. Add to docker-compose / Dockerfile `ENV`/`ARG` if needed
+4. **Remind the user** to add it to GitHub Actions secrets and the VPS environment — Claude cannot do this; missing this step is a common cause of deploy failures that local CI won't catch
+5. For Next.js: `NEXT_PUBLIC_*` vars are baked in at **build time** — changing them requires a rebuild, not just a restart
+
+**When adding a new dependency:**
+- Verify it installs in the Docker build (some packages need system libs) — test with `docker build` locally if unsure
 
 **If deploy fails:**
-1. Check GitHub Actions logs for specific error
-2. Common failures:
-   - TypeScript errors → Run `npx tsc --noEmit` and `cd frontend && npx tsc --noEmit`
-   - Frontend build errors → Check JSX syntax with `cd frontend && npm run build`
-   - Prisma errors → Run `npx prisma generate` and `npx prisma format`
+1. Check GitHub Actions logs (`gh run list`, `gh run view <id> --log-failed`)
+2. Map error to fix:
+   - TypeScript errors → run the relevant `tsc --noEmit` locally
+   - Frontend build errors → `(cd frontend && npm run build)`
+   - Prisma errors → see Migration Failure Protocol above; do NOT auto-resolve
+   - Missing env var → check GitHub secrets / VPS env (ask user)
 
-## Previous Errors - DO NOT REPEAT
-
-### Error 1: Deploy Failed - JSX Syntax Error
-**Date:** 2026-06-29
-**File:** `frontend/src/components/notes/NotesShareManagerModal.tsx`
-**Issue:** Missing closing `</div>` tag in conditional render block
-**Fix:** Verify JSX structure, ensure every opening tag has matching close
-
-### Error 2: Deploy Failed - Prisma Schema Relations
-**Date:** 2026-06-29
-**Issue:** Missing back-relation fields in Prisma models
-**Models affected:**
-- `NoteSubjectShare` - missing back-relation in `NoteSubject`
-- `NoteSubjectShareRecipient` - missing back-relations in `NoteSubject` and `User`
-
-**Fix:** Add proper `@relation()` attributes and back-relation arrays:
-```prisma
-// In NoteSubject model
-shares         NoteSubjectShare[]
-shareRecipients NoteSubjectShareRecipient[] @relation("SubjectShareRecipients")
-
-// In NoteSubjectShare model
-recipients NoteSubjectShareRecipient[]
-
-// In NoteSubjectShareRecipient model
-share    NoteSubjectShare   @relation(...)
-subject  NoteSubject      @relation("SubjectShareRecipients", ...)
-user     User            @relation("UserShareRecipients", ...)
-```
-
-### Error 3: Prisma Generate Failed
-**Issue:** Schema validation errors
-**Fix:** Always run `npx prisma format` after editing schema
-
-### Error 4: Prisma Unique Constraint Naming
-**Date:** 2026-06-29
-**File:** `src/services/notesShare.service.ts`
-**Issue:** Wrong unique constraint name `subjectId_recipientId` instead of `uk_note_subject_share`
-**Fix:** When using `@@unique` with custom name, use that name in Prisma queries:
-```typescript
-// Wrong
-where: { subjectId_recipientId: { subjectId, recipientId } }
-
-// Correct
-where: { uk_note_subject_share: { subjectId, recipientId } }
-```
-
-### Error 5: Migration Failed - Table Already Exists
-**Date:** 2026-06-29
-**Issue:** Migration failed because table already exists in DB
-**Fix:** Make migrations idempotent:
-```sql
-CREATE TABLE IF NOT EXISTS "table_name" (...);
--- For constraints:
-DO $$ BEGIN IF NOT EXISTS (...) THEN ALTER TABLE ... END $$;
-```
-
-### Error 6: Migration Stuck in Failed State (P3009)
-**Date:** 2026-06-29
-**Issue:** Previous failed migration blocks new migrations
-**Fix:** In deploy workflow, handle P3009 by marking as rolled back:
+**Rollback procedure (if a bad deploy reaches production):**
 ```bash
-npx prisma migrate resolve --rolled-back "migration_name"
+git revert <bad_commit_sha>
+# run pre-push checklist, then push (with user confirmation)
 ```
+- NEVER `git push --force` to roll back
+- If the bad deploy included a migration, discuss with the user before reverting — reverting code does not revert the database
 
-## Feature Implementation Guidelines
+---
 
-### Adding New Features
+## Feature Implementation Workflow
 
-1. **Plan first:** Understand the full scope
-2. **Backend first:**
-   - Add Prisma models (with proper relations)
-   - Run `npx prisma generate`
-   - Create migration
-   - Add service layer
-   - Add routes
-3. **Frontend second:**
-   - Add API methods
-   - Add components
-   - Test locally
-4. **Verify:**
-   - TypeScript passes
-   - Frontend builds
-   - Commit and push
+1. **Plan first** — understand full scope, list files to change
+2. **Backend first**: Prisma models (+ relations) → generate → migration → service layer → routes
+3. **Frontend second**: API methods in `frontend/src/lib/api.ts` → components → test locally
+4. **Verify**: run conditional pre-push checklist → confirm with user → push
 
-### Notes Sharing Feature (Phase 4)
+---
 
-**Backend:**
-- Service: `src/services/notesShare.service.ts`
-- Routes: `src/routes/notesShare.routes.ts`
+## Known Error Patterns (History)
 
-**Frontend:**
-- Component: `frontend/src/components/notes/NotesShareManagerModal.tsx`
-- API: `noteShareApi` in `frontend/src/lib/api.ts`
+Condensed log of past failures — do not repeat:
 
-**Database:**
-- `note_subject_shares` - stores share records
-- `note_subject_share_recipients` - tracks seen status
+| Date | Error | Lesson |
+|------|-------|--------|
+| 2026-06-29 | JSX missing closing `</div>` in conditional block broke frontend build | Always run frontend build before push |
+| 2026-06-29 | Missing Prisma back-relations (`NoteSubjectShare`, `NoteSubjectShareRecipient`) | Every relation needs its opposite field |
+| 2026-06-29 | Used default compound key name instead of custom `@@unique` name in queries | Use the custom constraint name |
+| 2026-06-29 | Migration failed: table already exists; then P3009 blocked deploys | DB had drifted from migration history — follow Migration Failure Protocol, don't hack around it |
 
-## Testing Checklist
-
-Before deploying any feature:
-- [ ] `npx tsc --noEmit` passes
-- [ ] `cd frontend && npx tsc --noEmit` passes
-- [ ] `cd frontend && npm run build` succeeds
-- [ ] All new migrations created
-- [ ] GitHub Actions CI passes
+---
 
 ## Useful Commands
 
 ```bash
-# Backend
-npx tsc --noEmit                    # Type check
-npx prisma generate                  # Generate Prisma client
-npx prisma format                    # Format schema
-npx prisma migrate dev --name <name> # Create migration
+# Backend (from project root)
+npx tsc --noEmit                       # type check
+npx prisma format                      # format & validate schema
+npx prisma generate                    # generate client
+npx prisma migrate dev --name <name>   # create migration
+npx prisma migrate status              # check migration state
 
-# Frontend
-cd frontend && npm run build        # Build
-cd frontend && npm run lint          # Lint
+# Frontend (subshell so cwd stays at root)
+(cd frontend && npx tsc --noEmit)
+(cd frontend && npm run build)
+(cd frontend && npm run lint)
 
-# Git
-git status                          # Check changes
-git log --oneline -5                 # Recent commits
-gh run list                         # Check GitHub Actions
+# Docker
+docker build -t backend-test .
+docker compose up -d
+
+# Git / CI
+git status
+git log --oneline -5
+gh run list
+gh run view <run_id> --log-failed
 ```

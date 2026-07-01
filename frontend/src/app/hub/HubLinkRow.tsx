@@ -11,7 +11,7 @@ interface HubLinkRowProps {
   link: HubLink;
   onEdit: (link: HubLink) => void;
   onDelete: (id: number) => void;
-  onStatusChange?: (id: number, status: string) => void;
+  onViewDetail: (link: HubLink) => void;
   onShare?: (link: HubLink) => void;
   onManageShares?: (link: HubLink) => void;
   sharedCount?: number;
@@ -29,7 +29,7 @@ function gradientFor(id: number) {
   return palettes[id % palettes.length];
 }
 
-export default function HubLinkRow({ link, onEdit, onDelete, onStatusChange, onShare, onManageShares, sharedCount }: HubLinkRowProps) {
+export default function HubLinkRow({ link, onEdit, onDelete, onViewDetail, onShare, onManageShares, sharedCount }: HubLinkRowProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -131,7 +131,7 @@ export default function HubLinkRow({ link, onEdit, onDelete, onStatusChange, onS
             onClose={() => setMenuOpen(false)}
             onEdit={onEdit}
             onDelete={onDelete}
-            onStatusChange={onStatusChange ?? (() => {})}
+            onViewDetail={onViewDetail}
             onShare={onShare}
             onManageShares={onManageShares}
             sharedCount={sharedCount}

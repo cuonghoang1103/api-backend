@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FileText, FileCode, Image, Film, Music, Archive, File,
-  MoreVertical, Hash, Globe2, Share2, Users,
+  MoreVertical, Hash, Globe2, Share2, Users, Info,
 } from 'lucide-react';
 
 import type { HubFile } from '@/lib/api';
@@ -14,7 +14,7 @@ interface HubFileCardProps {
   file: HubFile;
   onClick: (file: HubFile) => void;
   onDelete: (id: number) => void;
-  onStatusChange: (id: number, status: string) => void;
+  onViewDetail: (file: HubFile) => void;
   // Phase 2 — owner-side: open the share modal for this file.
   onShare?: (file: HubFile) => void;
   // Phase 2 — owner-side: open the manage-shares modal.
@@ -67,25 +67,13 @@ const GRADIENT = {
   other: 'from-neon-orange/20 via-neon-pink/15 to-neon-fuchsia/20',
 } as const;
 
-const STATUS_COLORS: Record<string, string> = {
-  unread: 'bg-text-muted/20 text-text-muted',
-  learning: 'bg-neon-orange/20 text-neon-orange',
-  done: 'bg-neon-emerald/20 text-neon-emerald',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  unread: 'Chua doc',
-  learning: 'Dang hoc',
-  done: 'Hoan thanh',
-};
-
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export default function HubFileCard({ file, onClick, onDelete, onStatusChange, onShare, onManageShares, sharedCount }: HubFileCardProps) {
+export default function HubFileCard({ file, onClick, onDelete, onViewDetail, onShare, onManageShares, sharedCount }: HubFileCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const category = getFileCategory(file.mimeType);
   const Icon = CATEGORY_ICON[category];
@@ -134,13 +122,6 @@ export default function HubFileCard({ file, onClick, onDelete, onStatusChange, o
         <div className="absolute bottom-2 right-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-md">
           {formatBytes(file.size)}
         </div>
-        {/* Status badge */}
-        <div className={cn(
-          'absolute left-2 top-2 rounded-md px-1.5 py-1 text-[10px] font-semibold backdrop-blur-md',
-          STATUS_COLORS[file.status],
-        )}>
-          {STATUS_LABELS[file.status]}
-        </div>
         {/* Public badge */}
         {file.isPublic && (
           <div className="absolute right-2 top-2 rounded-md bg-neon-emerald/20 px-1.5 py-1 text-[10px] font-semibold text-neon-emerald backdrop-blur-md">
@@ -182,9 +163,12 @@ export default function HubFileCard({ file, onClick, onDelete, onStatusChange, o
 
         {/* Footer */}
         <div className="mt-auto flex items-center justify-between border-t border-white/[0.04] pt-2">
-          <span className="text-[10px] text-text-muted">
-            {file.mimeType.split('/')[1]?.toUpperCase() ?? 'FILE'}
-          </span>
+          <button
+            onClick={() => onViewDetail(file)}
+            className="inline-flex items-center gap-1 text-[10px] text-text-muted transition-colors hover:text-neon-violet"
+          >
+            <Info className="h-3 w-3" /> Chi tiet
+          </button>
           <div className="relative">
             <button
               onClick={(e) => { e.stopPropagation(); setMenuOpen(v => !v); }}
@@ -199,24 +183,6 @@ export default function HubFileCard({ file, onClick, onDelete, onStatusChange, o
                   onClick={() => setMenuOpen(false)}
                 />
                 <div className="absolute right-0 top-full z-20 mt-1 w-36 overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/95 shadow-2xl backdrop-blur-xl">
-                  <button
-                    onClick={() => { onStatusChange(file.id, 'unread'); setMenuOpen(false); }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                  >
-                    Chua doc
-                  </button>
-                  <button
-                    onClick={() => { onStatusChange(file.id, 'learning'); setMenuOpen(false); }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                  >
-                    Dang hoc
-                  </button>
-                  <button
-                    onClick={() => { onStatusChange(file.id, 'done'); setMenuOpen(false); }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                  >
-                    Hoan thanh
-                  </button>
                   <button
                     onClick={() => {
                       setMenuOpen(false);

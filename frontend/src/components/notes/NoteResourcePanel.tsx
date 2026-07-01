@@ -26,7 +26,7 @@ interface Props {
   onChanged: () => void;
 }
 
-const MAX_BYTES = 25 * 1024 * 1024; // 25 MB
+const MAX_BYTES = 70 * 1024 * 1024; // 70 MB
 
 function fmtSize(b: number | null): string {
   if (!b && b !== 0) return '';
@@ -64,7 +64,7 @@ export default function NoteResourcePanel({ parent, attachments, links, onChange
     e.target.value = '';
     if (!file) return;
     setErr(null);
-    if (file.size > MAX_BYTES) { setErr('Tệp quá lớn (tối đa 25MB)'); return; }
+    if (file.size > MAX_BYTES) { setErr('Tệp quá lớn (tối đa 70MB)'); return; }
     setUploading(true);
     try {
       const up = await fileApi.upload(file, 'documents');

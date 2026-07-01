@@ -12,10 +12,10 @@ import { cn } from '@/lib/utils';
 
 import HubFolderSidebar from './HubFolderSidebar';
 import HubToolbar, { type ViewMode, type StatusFilter } from './HubToolbar';
-import HubLinkGrid from './HubLinkGrid';
 import HubLinkList from './HubLinkList';
 import HubLinkCard from './HubLinkCard';
 import HubAddLinkModal from './HubAddLinkModal';
+import HubLinkDetailModal from './HubLinkDetailModal';
 import HubFilePreviewModal from '@/components/hub/HubFilePreviewModal';
 import HubUploadModal from '@/components/hub/HubUploadModal';
 import HubKanbanBoard from '@/components/hub/HubKanbanBoard';
@@ -105,6 +105,7 @@ export default function HubClient({
   const [uploadOpen, setUploadOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<HubLink | null>(null);
   const [previewFile, setPreviewFile] = useState<HubFile | null>(null);
+  const [detailLink, setDetailLink] = useState<HubLink | null>(null);
   // ── Phase 2 — Hub user-sharing modals
   const [shareModalItem, setShareModalItem] = useState<{ kind: 'folder' | 'link' | 'file'; id: number; label?: string } | null>(null);
   const [viewingShare, setViewingShare] = useState<HubShare | null>(null);
@@ -543,23 +544,23 @@ export default function HubClient({
                         file={f}
                         onClick={setPreviewFile}
                         onDelete={handleDeleteFile}
-                        onStatusChange={(id, status) => { void handleStatusChange('file', id, status); }}
+                        onViewDetail={(file) => setPreviewFile(file)}
                         onShare={(f) => setShareModalItem({ kind: 'file', id: f.id, label: f.name })}
                         onManageShares={(f) => setManageItem({ kind: 'file', id: f.id, label: f.name })}
                         sharedCount={sharedCounts[f.id]}
                       />
                     ))}
                     {filteredLinks.map((l) => (
-<HubLinkCard
-                          key={`link-${l.id}`}
-                          link={l}
-                          onEdit={(link) => { setEditingLink(link); setAddLinkOpen(true); }}
-                          onDelete={handleDeleteLink}
-                          onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
-                          onShare={(link) => setShareModalItem({ kind: 'link', id: link.id, label: link.title })}
-                          onManageShares={(link) => setManageItem({ kind: 'link', id: link.id, label: link.title })}
-                          sharedCount={sharedCounts[l.id]}
-                        />
+                      <HubLinkCard
+                        key={`link-${l.id}`}
+                        link={l}
+                        onEdit={(link) => { setEditingLink(link); setAddLinkOpen(true); }}
+                        onDelete={handleDeleteLink}
+                        onViewDetail={(link) => setDetailLink(link)}
+                        onShare={(link) => setShareModalItem({ kind: 'link', id: link.id, label: link.title })}
+                        onManageShares={(link) => setManageItem({ kind: 'link', id: link.id, label: link.title })}
+                        sharedCount={sharedCounts[l.id]}
+                      />
                     ))}
                   </div>
                 ) : (
@@ -583,7 +584,7 @@ export default function HubClient({
                         <HubFileMenu
                           file={f}
                           onDelete={handleDeleteFile}
-                          onStatusChange={(id, status) => { void handleStatusChange('file', id, status); }}
+                          onClick={(file) => setPreviewFile(file)}
                           onShare={(f) => setShareModalItem({ kind: 'file', id: f.id, label: f.name })}
                           onManageShares={(f) => setManageItem({ kind: 'file', id: f.id, label: f.name })}
                           sharedCount={sharedCounts[f.id]}
@@ -594,7 +595,7 @@ export default function HubClient({
                       links={filteredLinks}
                       onEdit={(l) => { setEditingLink(l); setAddLinkOpen(true); }}
                       onDelete={handleDeleteLink}
-                      onStatusChange={(id, status) => { void handleStatusChange('link', id, status); }}
+                      onViewDetail={(l) => setDetailLink(l)}
                       onShare={(l) => setShareModalItem({ kind: 'link', id: l.id, label: l.title })}
                       onManageShares={(l) => setManageItem({ kind: 'link', id: l.id, label: l.title })}
                       sharedCounts={sharedCounts}
@@ -614,6 +615,14 @@ export default function HubClient({
         folders={folders}
         onClose={() => { setAddLinkOpen(false); setEditingLink(null); }}
         onSave={handleSaveLink}
+      />
+
+      <HubLinkDetailModal
+        link={detailLink}
+        open={!!detailLink}
+        onClose={() => setDetailLink(null)}
+        onEdit={(link) => { setDetailLink(null); setEditingLink(link); setAddLinkOpen(true); }}
+        onDelete={(id) => { setDetailLink(null); void handleDeleteLink(id); }}
       />
 
       <HubUploadModal

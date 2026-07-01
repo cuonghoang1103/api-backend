@@ -1395,11 +1395,20 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
   const [isFullscreen, setIsFullscreen] = useState(false);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Notify other videos on the page to pause when this modal opens.
-  // The inline video in this card listens for this event and pauses itself.
+  // Pause EVERY inline feed video while this modal is open, and keep
+  // them paused until it closes. We can't rely on the src-diff check
+  // the inline videos do for `social:video-playing`, because the modal
+  // almost always plays the SAME source as the inline video that opened
+  // it — so that check would let the inline copy keep playing (the
+  // "both videos play / double audio" bug). A dedicated open/close
+  // signal pauses them unconditionally and lets in-view ones resume
+  // only after the modal closes.
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent('social:video-playing', { detail: { src } }));
-  }, [src]);
+    window.dispatchEvent(new CustomEvent('social:video-modal-open'));
+    return () => {
+      window.dispatchEvent(new CustomEvent('social:video-modal-close'));
+    };
+  }, []);
 
   // Close on Escape (global so it fires even without focus)
   useEffect(() => {
@@ -2218,10 +2227,14 @@ function MediaItem({
   const [duration, setDuration] = useState(0);
   const [showInlineControls, setShowInlineControls] = useState(false);
   const inlineHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // True while a VideoPlayerModal is open anywhere on the page. Inline
+  // videos must NOT play while a modal is up (only the modal should have
+  // sound/motion), and must resume — if still in view — once it closes.
+  const [modalOpen, setModalOpen] = useState(false);
 
-  // Pause this inline video when another video starts playing
-  // (e.g. VideoPlayerModal opens from this card's media).
-  // Skip if the new playing video is the same source as this one.
+  // Pause this inline video when another inline video starts playing
+  // (only one autoplaying feed video at a time). Skip if the same source
+  // re-started (e.g. re-autoplay after a scroll pause).
   useEffect(() => {
     if (!autoPlayEnabled || item.type !== 'VIDEO') return;
     const v = videoRef.current;
@@ -2229,7 +2242,6 @@ function MediaItem({
     const src = v.currentSrc;
     const handler = (e: Event) => {
       const newSrc = (e as CustomEvent).detail?.src as string | undefined;
-      // Don't pause if the same video started (e.g. re-autoplay after pause)
       if (newSrc && newSrc !== src) {
         v.pause();
         setIsPlaying(false);
@@ -2238,6 +2250,24 @@ function MediaItem({
     window.addEventListener('social:video-playing', handler);
     return () => window.removeEventListener('social:video-playing', handler);
   }, [autoPlayEnabled, item.type]);
+
+  // Modal open/close: pause immediately when a fullscreen player opens,
+  // regardless of source, and let the isInView effect resume on close.
+  useEffect(() => {
+    if (item.type !== 'VIDEO') return;
+    const onOpen = () => {
+      setModalOpen(true);
+      const v = videoRef.current;
+      if (v) { v.pause(); setIsPlaying(false); }
+    };
+    const onClose = () => setModalOpen(false);
+    window.addEventListener('social:video-modal-open', onOpen);
+    window.addEventListener('social:video-modal-close', onClose);
+    return () => {
+      window.removeEventListener('social:video-modal-open', onOpen);
+      window.removeEventListener('social:video-modal-close', onClose);
+    };
+  }, [item.type]);
 
   // ─── Auto-play on scroll: only when the video cell is at least
   // 50% visible. We use an IntersectionObserver to avoid expensive
@@ -2272,7 +2302,8 @@ function MediaItem({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    if (isInView) {
+    // Play only when the cell is in view AND no fullscreen modal is open.
+    if (isInView && !modalOpen) {
       // Autoplay may fail (browser policy) but we swallow the error.
       // Also broadcast a custom event so SocialBackground can pause
       // its animated canvas and free up the main thread for video
@@ -2287,7 +2318,7 @@ function MediaItem({
         window.dispatchEvent(new CustomEvent('social:video-paused', { detail: { src: v.currentSrc } }));
       }
     }
-  }, [isInView]);
+  }, [isInView, modalOpen]);
 
   const resetInlineHideTimer = () => {
     setShowInlineControls(true);

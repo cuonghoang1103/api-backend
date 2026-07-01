@@ -12,6 +12,8 @@ import {
   MoreHorizontal,
   X,
   Inbox,
+  ChevronUp,
+  ChevronDown,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -215,7 +217,7 @@ export default function ThreadList() {
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-2 py-1">
+      <div className="chat-messages-scroll min-h-0 flex-1 overflow-y-auto px-2 py-1">
         {store.threadsLoading && !store.threadsLoaded ? (
           <div className="space-y-2 p-2">
             {[1, 2, 3].map((i) => (

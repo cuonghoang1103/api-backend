@@ -1694,6 +1694,10 @@ function MediaGrid({
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const visual = media.filter((m) => m.type !== 'FILE');
   const files = media.filter((m) => m.type === 'FILE');
+  // Feed video posts render in a tall FB/TikTok-style frame (~90% of the
+  // screen height) instead of a tiny collapsed cell. Scoped to posts
+  // whose visual media are ALL videos so image posts keep their layout.
+  const allVideos = visual.length > 0 && visual.every((m) => m.type === 'VIDEO');
 
   const handleMediaClick = (item: SocialMedia) => {
     const url = getMediaUrl(item.url, item.url);
@@ -1953,10 +1957,11 @@ function MediaGrid({
       onPointerCancel={onPointerUp}
       onWheel={onWheel}
       className="relative w-full overflow-hidden rounded-2xl touch-pan-y select-none"
+      style={allVideos ? { height: 'min(88vh, 880px)' } : undefined}
     >
       <div
         data-carousel-track
-        className="flex"
+        className="flex h-full"
         style={{
           // ── Bugfix (2026-06-28) ─────────────────────────────────
           // The previous track was sized `width: ${N * 100}%` and
@@ -2360,7 +2365,7 @@ function MediaItem({
             // hint the video decode and the card repaint end up
             // on the same compositor and contend for the GPU.
             style={{ willChange: 'transform' }}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain"
             onClick={(e) => e.stopPropagation()}
             onPlay={() => setIsPlaying(true)}
             onPause={() => { setIsPlaying(false); setShowInlineControls(true); }}
@@ -2375,7 +2380,7 @@ function MediaItem({
             decoding="async"
             width={600}
             height={600}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain"
           />
         )}
 

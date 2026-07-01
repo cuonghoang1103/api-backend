@@ -88,13 +88,13 @@ export default function GifPicker({
       ref={ref}
       className={
         anchorRef
-          ? 'w-[340px] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0e1218] shadow-[0_16px_48px_rgba(0,0,0,0.55)]'
-          : 'absolute bottom-full left-0 z-50 mb-2 w-[340px] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0e1218] shadow-[0_16px_48px_rgba(0,0,0,0.55)]'
+          ? 'w-[340px] overflow-hidden rounded-2xl border border-theme bg-theme shadow-[0_16px_48px_rgba(0,0,0,0.35)]'
+          : 'absolute bottom-full left-0 z-50 mb-2 w-[340px] overflow-hidden rounded-2xl border border-theme bg-theme shadow-[0_16px_48px_rgba(0,0,0,0.35)]'
       }
       style={anchorRef ? fixedStyle : undefined}
     >
-      <div className="flex items-center gap-2 border-b border-white/[0.06] p-2">
-        <div className="flex flex-1 items-center gap-2 rounded-full bg-white/[0.05] px-3 py-1.5">
+      <div className="flex items-center gap-2 border-b border-theme-light p-2">
+        <div className="flex flex-1 items-center gap-2 rounded-full bg-[var(--bg-surface)] px-3 py-1.5">
           <Search className="h-3.5 w-3.5 text-text-muted" />
           <input
             value={query}
@@ -104,7 +104,7 @@ export default function GifPicker({
             className="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted/70"
           />
         </div>
-        <button onClick={onClose} className="rounded-lg p-1.5 text-text-muted hover:bg-white/[0.06] hover:text-text-primary">
+        <button onClick={onClose} className="rounded-lg p-1.5 text-text-muted hover:bg-[var(--bg-surface-hover)] hover:text-text-primary">
           <X className="h-4 w-4" />
         </button>
       </div>
@@ -131,7 +131,7 @@ export default function GifPicker({
           </div>
         )}
       </div>
-      <div className="border-t border-white/[0.06] px-3 py-1 text-center text-[10px] text-text-muted">
+      <div className="border-t border-theme-light px-3 py-1 text-center text-[10px] text-text-muted">
         Powered by GIPHY
       </div>
     </div>

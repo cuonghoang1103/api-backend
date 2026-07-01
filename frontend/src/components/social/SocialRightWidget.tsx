@@ -183,8 +183,8 @@ function SocialRightWidgetInner() {
       <div
         className="rounded-2xl p-4"
         style={{
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.06)',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border-color)',
           backdropFilter: 'blur(20px)',
         }}
       >
@@ -231,7 +231,7 @@ function SocialRightWidgetInner() {
                     className={`w-full flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs transition-colors group text-left ${
                       isActive
                         ? 'bg-neon-violet/10 text-neon-violet'
-                        : 'hover:bg-white/[0.04]'
+                        : 'hover:bg-[var(--bg-surface-hover)]'
                     }`}
                   >
                     <span className="text-text-muted font-mono w-5 text-right">{idx + 1}.</span>
@@ -246,8 +246,8 @@ function SocialRightWidgetInner() {
         ) : (
           // Phase 5 home upgrade: friendlier empty state with a
           // subtle CTA hint.
-          <div className="rounded-lg px-2 py-3 text-center" style={{ background: 'rgba(255,255,255,0.02)' }}>
-            <p className="text-[12px] leading-relaxed" style={{ color: '#64748b' }}>
+          <div className="rounded-lg px-2 py-3 text-center" style={{ background: 'var(--bg-surface)' }}>
+            <p className="text-[12px] leading-relaxed" style={{ color: 'var(--text-muted)' }}>
               Chưa có chủ đề thịnh hành.
             </p>
             <p className="mt-1 text-[11px]" style={{ color: '#475569' }}>
@@ -265,8 +265,8 @@ function SocialRightWidgetInner() {
         <div
           className="rounded-2xl p-4"
           style={{
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.06)',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-color)',
             backdropFilter: 'blur(20px)',
           }}
         >
@@ -278,7 +278,7 @@ function SocialRightWidgetInner() {
                 <li key={u.id} className="flex items-center gap-2.5">
                   <Link
                     href={`/profile/${u.id}`}
-                    className="flex flex-1 items-center gap-2.5 min-w-0 rounded-lg px-1 py-1 -mx-1 hover:bg-white/[0.04] transition-colors"
+                    className="flex flex-1 items-center gap-2.5 min-w-0 rounded-lg px-1 py-1 -mx-1 hover:bg-[var(--bg-surface-hover)] transition-colors"
                   >
                     {u.avatarUrl ? (
                       <img src={u.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
@@ -308,7 +308,7 @@ function SocialRightWidgetInner() {
                   <Link
                     href={`/profile/${u.id}`}
                     aria-label={`Xem hồ sơ của ${u.displayName || u.fullName || u.username}`}
-                    className="rounded-lg px-3 py-2.5 sm:px-2.5 sm:py-1 min-h-[44px] sm:min-h-0 text-[10px] font-medium text-text-secondary hover:text-text-primary border border-white/[0.08] hover:border-white/[0.2] transition-colors flex items-center justify-center gap-1 shrink-0"
+                    className="rounded-lg px-3 py-2.5 sm:px-2.5 sm:py-1 min-h-[44px] sm:min-h-0 text-[10px] font-medium text-text-secondary hover:text-text-primary border border-theme-light border-theme-light-hover transition-colors flex items-center justify-center gap-1 shrink-0"
                   >
                     Xem
                     <ExternalLink className="h-2.5 w-2.5" />
@@ -365,8 +365,8 @@ function FriendRequestsPanel() {
     <div
       className="rounded-2xl p-4"
       style={{
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border-color)',
         backdropFilter: 'blur(20px)',
       }}
     >
@@ -401,7 +401,7 @@ function FriendRequestsPanel() {
                     type="button"
                     onClick={() => act(r.user.id, false)}
                     disabled={isBusy}
-                    className="flex items-center gap-1 rounded-lg bg-white/[0.05] px-2 py-1 text-[10px] font-medium text-text-secondary hover:bg-white/[0.08] transition-colors disabled:opacity-50"
+                    className="flex items-center gap-1 rounded-lg bg-[var(--bg-surface)] px-2 py-1 text-[10px] font-medium text-text-secondary hover:bg-[var(--bg-surface-active)] transition-colors disabled:opacity-50"
                   >
                     <X className="h-2.5 w-2.5" /> Xoá
                   </button>

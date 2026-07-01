@@ -489,19 +489,19 @@ function ChatWindow({
         height: w.isMinimized ? 56 : WINDOW_HEIGHT,
         right: rightOffset,
         bottom: BOTTOM_OFFSET,
-        background: 'rgba(15,15,25,0.97)',
-        border: '1px solid rgba(255,255,255,0.1)',
+        background: 'var(--bg-overlay)',
+        border: '1px solid var(--border-light)',
         backdropFilter: 'blur(20px)',
         transition: 'height 0.18s ease',
       }}
     >
       {/* Header */}
-      <div className="flex w-full items-center gap-2 border-b border-white/5 px-3 py-2">
+      <div className="flex w-full items-center gap-2 border-b border-theme-light px-3 py-2">
         <button
           type="button"
           onClick={onToggleMinimize}
           aria-label={w.isMinimized ? 'Mở rộng' : 'Thu nhỏ'}
-          className="flex min-w-0 flex-1 items-center gap-2 text-left transition-colors hover:bg-white/[0.04] rounded-md py-0.5 pl-0.5 pr-1"
+          className="flex min-w-0 flex-1 items-center gap-2 text-left transition-colors hover:bg-[var(--bg-surface-hover)] rounded-md py-0.5 pl-0.5 pr-1"
         >
           <div className="relative shrink-0">
             <SafeAvatar
@@ -525,10 +525,10 @@ function ChatWindow({
             </span>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-white">
+            <p className="truncate text-sm font-semibold text-text-primary">
               {w.peer?.displayName ?? w.peer?.username ?? ''}
             </p>
-            <p className="truncate text-[10px] text-white/50">
+            <p className="truncate text-[10px] text-text-muted">
               {w.isTyping ? (
                 <span className="text-neon-emerald">đang nhập…</span>
               ) : isPeerOnline ? (
@@ -553,7 +553,7 @@ function ChatWindow({
           type="button"
           onClick={(e) => { e.stopPropagation(); onToggleMinimize(); }}
           aria-label={w.isMinimized ? 'Mở rộng' : 'Thu nhỏ'}
-          className="rounded-md p-1 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+          className="rounded-md p-1 text-text-muted transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-text-primary"
           style={{ minHeight: 28, minWidth: 28 }}
         >
           <Minus size={14} />
@@ -562,7 +562,7 @@ function ChatWindow({
           type="button"
           onClick={(e) => { e.stopPropagation(); onClose(); }}
           aria-label="Đóng"
-          className="rounded-md p-1 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+          className="rounded-md p-1 text-text-muted transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-text-primary"
           style={{ minHeight: 28, minWidth: 28 }}
         >
           <X size={14} />
@@ -580,13 +580,13 @@ function ChatWindow({
           >
             {/* History states */}
             {!w.threadId || w.historyLoading ? (
-              <div className="flex h-full flex-col items-center justify-center gap-2 py-8 text-center text-[11px] italic text-white/40">
+              <div className="flex h-full flex-col items-center justify-center gap-2 py-8 text-center text-[11px] italic text-text-muted">
                 <LoaderDot />
                 <span>Đang tải hội thoại…</span>
               </div>
             ) : messages.length === 0 ? (
               <>
-                <p className="mb-3 text-center text-[11px] italic text-white/40">
+                <p className="mb-3 text-center text-[11px] italic text-text-muted">
                   Chưa có tin nhắn nào — hãy bắt đầu cuộc trò chuyện.
                 </p>
                 {/* Quick-reply chips — only as a friendly empty-state
@@ -598,7 +598,7 @@ function ChatWindow({
                       key={r}
                       type="button"
                       onClick={() => onUpdateDraft(r)}
-                      className="rounded-full bg-white/5 px-2.5 py-1 text-[11px] text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                      className="rounded-full bg-[var(--bg-surface)] px-2.5 py-1 text-[11px] text-text-secondary transition-colors hover:bg-[var(--bg-surface-active)] hover:text-text-primary"
                       style={{ minHeight: 28 }}
                     >
                       {r}
@@ -620,7 +620,7 @@ function ChatWindow({
                         className={`relative max-w-[80%] rounded-2xl px-3 py-1.5 text-[13px] leading-snug break-words shadow-sm ${
                           isOwn
                             ? 'bg-neon-violet text-white rounded-br-md'
-                            : 'bg-white/[0.08] text-white/90 rounded-bl-md'
+                            : 'bg-[var(--bg-surface)] text-text-primary rounded-bl-md'
                         }`}
                         title={formatTime(m.createdAt)}
                       >
@@ -631,7 +631,7 @@ function ChatWindow({
                             <span>{m.content}</span>
                             <span
                               className={`ml-1.5 inline-block align-baseline text-[9px] ${
-                                isOwn ? 'text-white/70' : 'text-white/40'
+                                isOwn ? 'text-white/70' : 'text-text-muted'
                               }`}
                             >
                               {formatTime(m.createdAt)}
@@ -647,7 +647,7 @@ function ChatWindow({
 
             {/* Typing indicator — shown when peer is typing */}
             {w.isTyping && (
-              <div className="mt-2 flex items-center gap-2 text-xs text-white/50">
+              <div className="mt-2 flex items-center gap-2 text-xs text-text-muted">
                 <TypingDots />
                 <span className="italic">
                   {w.peer?.displayName ?? w.peer?.username ?? ''} đang nhập…
@@ -659,7 +659,7 @@ function ChatWindow({
           {/* Composer */}
           <form
             onSubmit={(e) => { e.preventDefault(); void onSend(); }}
-            className="flex items-center gap-2 border-t border-white/5 p-2"
+            className="flex items-center gap-2 border-t border-theme-light p-2"
           >
             <input
               ref={inputRefSetter}
@@ -679,7 +679,7 @@ function ChatWindow({
               }
               // text-base (16px) prevents iOS Safari from auto-zooming
               // the input on focus, which would shift the dock off-screen.
-              className="flex-1 rounded-full bg-white/5 px-3 py-2 text-base text-white placeholder-white/40 outline-none focus:bg-white/10"
+              className="flex-1 rounded-full bg-[var(--bg-surface)] px-3 py-2 text-base text-text-primary placeholder-text-muted outline-none focus:bg-[var(--bg-surface-active)]"
               disabled={!w.threadId}
               autoComplete="off"
               spellCheck={false}
@@ -714,7 +714,7 @@ export default function MiniChatDock() {
 
 function LoaderDot() {
   return (
-    <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/15 border-t-white/60" />
+    <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-[var(--border-light)] border-t-[var(--text-muted)]" />
   );
 }
 

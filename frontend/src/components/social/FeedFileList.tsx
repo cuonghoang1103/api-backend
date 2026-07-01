@@ -53,7 +53,7 @@ export default function FeedFileList({ posts }: { posts: SocialPost[] }) {
   return (
     <ul
       className="overflow-hidden rounded-2xl"
-      style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}
+      style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-light)' }}
     >
       {rows.map(({ media: m, post }, i) => {
         const name = m.fileName || m.alt || 'Tệp đính kèm';
@@ -65,7 +65,7 @@ export default function FeedFileList({ posts }: { posts: SocialPost[] }) {
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.18, delay: Math.min(i * 0.02, 0.2) }}
-            className="flex items-center gap-3 border-b border-white/[0.04] px-3 py-3 last:border-b-0"
+            className="flex items-center gap-3 border-b border-theme-light px-3 py-3 last:border-b-0"
           >
             <div
               className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
@@ -77,7 +77,7 @@ export default function FeedFileList({ posts }: { posts: SocialPost[] }) {
               <p className="truncate text-sm font-medium text-text-primary" title={name}>
                 {name}
               </p>
-              <p className="truncate text-[11px]" style={{ color: '#64748b' }}>
+              <p className="truncate text-[11px]" style={{ color: 'var(--text-muted)' }}>
                 {[humanFileSize(m.fileSize), m.mimeType, `bởi ${author}`].filter(Boolean).join(' · ')}
               </p>
             </div>

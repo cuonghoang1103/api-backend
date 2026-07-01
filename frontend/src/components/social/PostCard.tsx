@@ -912,7 +912,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
       {post.musicTrack && (
         <div
           className="flex items-center gap-2 px-5 pt-3 pb-1 text-xs"
-          style={{ color: '#cbd5e1' }}
+          style={{ color: 'var(--text-secondary)' }}
         >
           <span
             className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
@@ -960,7 +960,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
               <div className="flex items-center gap-1.5 flex-wrap">
                 <Link
                   href={isAuthor ? '/profile' : `/profile/${authorId ?? ''}`}
-                  className="font-semibold text-white truncate hover:underline"
+                  className="font-semibold text-text-primary truncate hover:underline"
                   title={authorDisplay}
                 >
                   {authorDisplay}
@@ -989,7 +989,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-1.5 mt-0.5 text-xs flex-wrap" style={{ color: '#64748b' }}>
+              <div className="flex items-center gap-1.5 mt-0.5 text-xs flex-wrap" style={{ color: 'var(--text-muted)' }}>
                 <span>@{authorObj?.username ?? 'user'}</span>
                 <span style={{ color: '#334155' }}>·</span>
                 <span>{formatRelative(post.createdAt)}</span>
@@ -2451,7 +2451,7 @@ function FileAttachmentList({ media }: { media: SocialMedia[] }) {
   return (
     <ul
       className="overflow-hidden rounded-2xl"
-      style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}
+      style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-light)' }}
     >
       {media.map((m) => {
         const name = m.fileName || m.alt || 'Tệp đính kèm';
@@ -2459,7 +2459,7 @@ function FileAttachmentList({ media }: { media: SocialMedia[] }) {
         return (
           <li
             key={m.id}
-            className="flex items-center gap-3 border-b border-white/[0.04] px-3 py-2.5 last:border-b-0"
+            className="flex items-center gap-3 border-b border-theme-light px-3 py-2.5 last:border-b-0"
           >
             <div
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
@@ -2471,7 +2471,7 @@ function FileAttachmentList({ media }: { media: SocialMedia[] }) {
               <p className="truncate text-sm font-medium text-text-primary" title={name}>
                 {name}
               </p>
-              <p className="text-[10px]" style={{ color: '#64748b' }}>
+              <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
                 {humanFileSizePostCard(m.fileSize)}
                 {m.mimeType ? ` · ${m.mimeType}` : ''}
               </p>
@@ -3094,16 +3094,16 @@ function CommentItem({
       <div className="flex-1 min-w-0">
         <div
           className="inline-block max-w-full rounded-2xl px-3 py-2"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+          style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-light)' }}
         >
           <Link
             href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
-            className="text-xs font-semibold text-white hover:underline"
+            className="text-xs font-semibold text-text-primary hover:underline"
           >
             {display}
           </Link>
           {comment.content ? (
-            <p className="mt-0.5 text-sm break-words" style={{ color: '#cbd5e1' }}>
+            <p className="mt-0.5 text-sm break-words" style={{ color: 'var(--text-primary)' }}>
               {renderContent()}
             </p>
           ) : null}
@@ -3182,9 +3182,9 @@ function CommentItem({
                 }}
                 autoFocus
                 placeholder={`Trả lời ${display}... (gõ @ để tag)`}
-                className="flex-1 rounded-xl px-3 py-1.5 text-sm text-white placeholder-slate-500 outline-none"
+                className="flex-1 rounded-xl px-3 py-1.5 text-sm text-text-primary placeholder-text-muted outline-none"
                 style={{
-                  background: 'rgba(255,255,255,0.04)',
+                  background: 'var(--bg-surface)',
                   border: '1px solid rgba(139,92,246,0.3)',
                 }}
                 disabled={replySubmitting}
@@ -3203,7 +3203,7 @@ function CommentItem({
               </button>
               <button
                 onClick={() => setReplyOpen(false)}
-                className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300"
+                className="p-1.5 rounded-lg text-text-muted hover:text-text-secondary"
                 title="Huỷ (Esc)"
               >
                 <X size={12} />
@@ -3240,7 +3240,7 @@ function CommentItem({
             Phase 5 home upgrade: also append `extraReplies`
             loaded lazily via "Xem thêm" button. */}
         {depth === 0 && (Array.isArray(comment.replies) && comment.replies.length > 0 || extraReplies.length > 0) && (
-          <div className="mt-3 ml-3 pl-3 space-y-2 border-l border-white/[0.06]">
+          <div className="mt-3 ml-3 pl-3 space-y-2 border-l border-theme-light">
             {[...(comment.replies ?? []), ...extraReplies].map((reply) => (
               <CommentItem
                 key={reply.id}
@@ -3323,8 +3323,8 @@ function ActionButton({
       className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-medium"
       onMouseEnter={(e) => {
         if (!active) {
-          e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
-          e.currentTarget.style.color = '#94a3b8';
+          e.currentTarget.style.background = 'var(--bg-surface-hover)';
+          e.currentTarget.style.color = 'var(--text-secondary)';
         }
       }}
       onMouseLeave={(e) => {
@@ -3459,8 +3459,8 @@ function PostActionsBar(props: {
     marginTop: 10,
     marginBottom: 4,
     borderRadius: 9999,
-    background: 'rgba(15,15,25,0.55)',
-    border: '1px solid rgba(255,255,255,0.08)',
+    background: 'var(--bg-glass)',
+    border: '1px solid var(--border-light)',
     backdropFilter: 'blur(10px)',
     WebkitBackdropFilter: 'blur(10px)',
   };
@@ -3483,7 +3483,7 @@ function PostActionsBar(props: {
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 480, damping: 22 }}
             className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
-            style={{ color: myReaction && reactionColor ? reactionColor : '#cbd5e1' }}
+            style={{ color: myReaction && reactionColor ? reactionColor : 'var(--text-secondary)' }}
             aria-label="Thích bài viết"
             aria-pressed={myReaction === 'LIKE'}
           >
@@ -3517,8 +3517,8 @@ function PostActionsBar(props: {
                 <div
                   className="relative z-50 flex gap-0.5 rounded-2xl p-1.5 shadow-2xl"
                   style={{
-                    background: 'rgba(15,15,25,0.96)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    background: 'var(--bg-overlay)',
+                    border: '1px solid var(--border-light)',
                     backdropFilter: 'blur(20px)',
                   }}
                 >
@@ -3562,8 +3562,8 @@ function PostActionsBar(props: {
                           key={k}
                           className="inline-flex items-center justify-center w-4 h-4 rounded-full text-[10px] leading-none"
                           style={{
-                            background: 'rgba(15,15,25,0.95)',
-                            border: '1px solid rgba(255,255,255,0.1)',
+                            background: 'var(--bg-overlay)',
+                            border: '1px solid var(--border-light)',
                           }}
                           title={REACTION_META[k].label}
                         >
@@ -3571,7 +3571,7 @@ function PostActionsBar(props: {
                         </span>
                       ))}
                     </div>
-                    <span className="text-[10px] text-slate-500 tabular-nums">
+                    <span className="text-[10px] text-text-muted tabular-nums">
                       {safeLikesCount}
                     </span>
                   </div>
@@ -3589,7 +3589,7 @@ function PostActionsBar(props: {
           transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.6 }}
           className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
           style={{
-            color: showComments ? '#a78bfa' : '#cbd5e1',
+            color: showComments ? '#a78bfa' : 'var(--text-secondary)',
             background: showComments ? 'rgba(139,92,246,0.16)' : 'transparent',
           }}
           data-comments-toggle="1"
@@ -3609,7 +3609,7 @@ function PostActionsBar(props: {
           transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.6 }}
           className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
           style={{
-            color: isShared ? '#22c55e' : '#cbd5e1',
+            color: isShared ? '#22c55e' : 'var(--text-secondary)',
             background: isShared ? 'rgba(34,197,94,0.16)' : 'transparent',
           }}
           aria-label={isShared ? 'Huỷ đăng lại' : 'Đăng lại'}
@@ -3636,7 +3636,7 @@ function PostActionsBar(props: {
             transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.6 }}
             className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
             style={{
-              color: showMessengerPicker ? '#22d3ee' : '#cbd5e1',
+              color: showMessengerPicker ? '#22d3ee' : 'var(--text-secondary)',
               background: showMessengerPicker ? 'rgba(6,182,212,0.16)' : 'transparent',
             }}
             aria-label="Gửi qua Messenger"
@@ -3654,17 +3654,17 @@ function PostActionsBar(props: {
             <div
               className="absolute right-0 top-full z-50 mt-1 w-48 overflow-hidden rounded-2xl py-1"
               style={{
-                background: 'rgba(15,15,25,0.95)',
-                border: '1px solid rgba(255,255,255,0.1)',
+                background: 'var(--bg-overlay)',
+                border: '1px solid var(--border-light)',
                 backdropFilter: 'blur(20px)',
               }}
             >
               <button
                 className="flex w-full items-center gap-2 px-3 py-2 text-sm"
-                style={{ color: '#94a3b8' }}
+                style={{ color: 'var(--text-secondary)' }}
                 onClick={() => { setShowShareMenu(false); handleShare('copy'); }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = '#e2e8f0'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#94a3b8'; }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-surface-hover)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
               >
                 <Copy size={14} />
                 Sao chép liên kết
@@ -3685,7 +3685,7 @@ function PostActionsBar(props: {
           transition={{ type: 'spring', stiffness: 480, damping: 22 }}
           className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium"
           style={{
-            color: safeIsSaved ? NEON_AMBER : '#cbd5e1',
+            color: safeIsSaved ? NEON_AMBER : 'var(--text-secondary)',
             background: safeIsSaved ? 'rgba(245,158,11,0.16)' : 'transparent',
           }}
           title={safeIsSaved ? `Đã lưu${post.savedFolder ? ` vào "${post.savedFolder}"` : ''}` : 'Lưu bài viết'}
@@ -3819,9 +3819,9 @@ function SendToMessengerModal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative flex max-h-[80vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-darkborder bg-[#0d0f18] shadow-2xl"
+            className="relative flex max-h-[80vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-theme bg-theme shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-darkborder/60 px-5 py-3.5">
+            <div className="flex items-center justify-between border-b border-theme px-5 py-3.5">
               <h3 className="flex items-center gap-2 text-sm font-semibold text-text-primary">
                 <Send size={16} className="text-neon-violet" />
                 Gửi qua Messenger
@@ -3829,7 +3829,7 @@ function SendToMessengerModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-white/5 hover:text-text-primary"
+                className="rounded-lg p-1.5 text-text-muted transition-colors bg-theme-hover hover:text-text-primary"
                 aria-label="Đóng"
               >
                 <X className="h-4 w-4" />
@@ -3840,7 +3840,7 @@ function SendToMessengerModal({
                 visual chip above the thread list. We render the
                 author + a one-line content snippet so the user
                 knows what they're about to send. */}
-            <div className="border-b border-darkborder/40 bg-darkcard/30 px-5 py-3">
+            <div className="border-b border-theme bg-theme-surface px-5 py-3">
               <div className="text-xs text-text-muted">Bài viết sẽ được gửi:</div>
               <div className="mt-1 truncate text-sm font-medium text-text-primary">
                 {authorDisplay}
@@ -3873,7 +3873,7 @@ function SendToMessengerModal({
                           type="button"
                           onClick={() => handleSend(t)}
                           disabled={!!sendingTo}
-                          className="flex w-full items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-white/[0.04] disabled:opacity-60"
+                          className="flex w-full items-center gap-3 px-5 py-3 text-left transition-colors bg-theme-hover disabled:opacity-60"
                         >
                           <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-neon-violet/40 to-neon-pink/40 text-sm font-bold text-white">
                             {peer?.avatarUrl ? (
@@ -3964,10 +3964,10 @@ function YouTubeEmbed({ url }: { url: string }) {
         target="_blank"
         rel="noopener noreferrer"
         className="mt-3 flex items-center gap-3 rounded-2xl p-3 transition-colors"
-        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+        style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-light)' }}
       >
         <Youtube className="h-6 w-6 text-red-500 shrink-0" />
-        <span className="truncate text-sm" style={{ color: '#cbd5e1' }}>{url}</span>
+        <span className="truncate text-sm" style={{ color: 'var(--text-secondary)' }}>{url}</span>
       </a>
     );
   }
@@ -3975,7 +3975,7 @@ function YouTubeEmbed({ url }: { url: string }) {
   return (
     <div
       className="mt-3 overflow-hidden rounded-2xl"
-      style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.08)' }}
+      style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid var(--border-light)' }}
     >
       <div className="relative aspect-video">
         <iframe
@@ -4007,7 +4007,7 @@ function ShimmerBlock({
   return (
     <div
       className={`relative overflow-hidden ${rounded} ${className}`}
-      style={{ background: 'rgba(255,255,255,0.04)' }}
+      style={{ background: 'var(--bg-surface-active)' }}
     >
       <div
         className="absolute inset-0"
@@ -4026,8 +4026,8 @@ export function PostSkeleton() {
     <div
       className="rounded-2xl p-5"
       style={{
-        background: 'rgba(255,255,255,0.02)',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border-light)',
         backdropFilter: 'blur(20px)',
       }}
     >
@@ -4049,7 +4049,7 @@ export function PostSkeleton() {
       {/* Action bar */}
       <div
         className="flex items-center gap-6 pt-3"
-        style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+        style={{ borderTop: '1px solid var(--border-light)' }}
       >
         <ShimmerBlock className="h-7 w-16" rounded="rounded-lg" />
         <ShimmerBlock className="h-7 w-16" rounded="rounded-lg" />

@@ -257,7 +257,20 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable}`}
     >
-      <body suppressHydrationWarning className="bg-darkbg text-text-primary antialiased">
+      <body suppressHydrationWarning className="antialiased">
+        {/* No-flash theme boot: runs synchronously BEFORE first paint
+            so the html element already carries .dark/.light when the
+            CSS variables in globals.css resolve. Without this, SSR
+            ships a class-less <html> (= light :root variables) and
+            ThemeProvider only applies the stored theme in a useEffect
+            — a visible wrong-theme flash on every load. Default is
+            'dark' to match ThemeContext's getServerSnapshot(). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var t=localStorage.getItem('theme');document.documentElement.classList.add(t==='light'?'light':'dark')}catch(e){document.documentElement.classList.add('dark')}",
+          }}
+        />
         {/* Site-wide JSON-LD. The next/script wrapper defers it
             so it doesn't block first paint. Pages that need
             per-page structured data (Course, BlogPosting,

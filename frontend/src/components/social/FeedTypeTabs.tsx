@@ -87,7 +87,7 @@ export default function FeedTypeTabs({ active, onChange, counts }: Props) {
             aria-controls="feed-list"
             onClick={() => onChange(value)}
             className={`relative flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors duration-150 ${
-              isActive ? 'text-slate-100' : 'text-slate-400 hover:text-slate-200'
+              isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             {isActive && (
@@ -102,7 +102,7 @@ export default function FeedTypeTabs({ active, onChange, counts }: Props) {
             {count != null && count > 0 && (
               <span
                 className={`relative rounded-full px-1.5 text-[11px] tabular-nums ${
-                  isActive ? 'bg-white/15 text-slate-100' : 'bg-white/[0.06] text-slate-400'
+                  isActive ? 'bg-[var(--bg-surface-active)] text-text-primary' : 'bg-[var(--bg-surface)] text-text-secondary'
                 }`}
               >
                 {fmtCount(count)}

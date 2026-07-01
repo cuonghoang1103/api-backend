@@ -59,9 +59,13 @@ const config: Config = {
   950: "#451a03",
   },
   text: {
-           primary: "#050505",
-           secondary: "#65676b",
-           muted: "#8a8d91",
+           // Theme-aware: resolve to the CSS variables set on
+           // :root / html.dark in globals.css. Hardcoding the
+           // light-theme hex here made `text-text-primary`
+           // render near-black in dark mode (invisible text).
+           primary: "var(--text-primary)",
+           secondary: "var(--text-secondary)",
+           muted: "var(--text-muted)",
          },
        },
   backgroundImage: {

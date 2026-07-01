@@ -5,6 +5,7 @@
 @layer base {
   /* Default: no class = light theme (Facebook-like) */
   :root {
+    color-scheme: light;
     --bg-primary: #f0f2f5;
     --bg-card: #ffffff;
     --bg-surface: #f0f2f5;
@@ -28,6 +29,7 @@
 
   /* Dark theme - add 'dark' class to html */
   html.dark {
+    color-scheme: dark;
     --bg-primary: #18191a;
     --bg-card: #242526;
     --bg-surface: #303031;
@@ -51,6 +53,7 @@
 
   /* Legacy light class - keep for backward compat (same as :root) */
   html.light {
+    color-scheme: light;
     --bg-primary: #f0f2f5;
     --bg-card: #ffffff;
     --bg-surface: #f0f2f5;
@@ -127,7 +130,10 @@
     border: 1px solid var(--border-color);
     border-radius: 1rem;
     padding: 1.5rem;
-    transition: all 0.3s ease;
+    /* Only animate hover-related properties — NOT background/color.
+       `transition: all` made every theme toggle fade colors for
+       0.3s, which reads as a muddy gray in-between frame. */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
   .card:hover {
@@ -141,7 +147,7 @@
     border-radius: 0.75rem;
     font-weight: 500;
     color: white;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-position 0.3s ease;
     background: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
     background-size: 200% 200%;
   }
@@ -162,7 +168,7 @@
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
-    transition: all 0.3s ease;
+    transition: box-shadow 0.3s ease;
   }
 
   .btn-secondary:hover {
@@ -177,7 +183,7 @@
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
   .input-field::placeholder {

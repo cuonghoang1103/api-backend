@@ -458,7 +458,7 @@ export default function SocialPage() {
                   >
                     Bảng tin
                   </h1>
-                  <p className="mt-0.5 text-[13px]" style={{ color: '#64748b' }}>
+                  <p className="mt-0.5 text-[13px]" style={{ color: 'var(--text-muted)' }}>
                     Không gian học tập & chia sẻ của bạn
                   </p>
                 </div>
@@ -466,8 +466,8 @@ export default function SocialPage() {
                     they're seeing without scrolling. Updates live
                     when filter tabs change. */}
                 <div
-                  className="flex shrink-0 items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.02] px-2.5 py-1 text-[11px] font-medium"
-                  style={{ color: '#94a3b8' }}
+                  className="flex shrink-0 items-center gap-1.5 rounded-full border border-theme-light bg-[var(--bg-surface)] px-2.5 py-1 text-[11px] font-medium"
+                  style={{ color: 'var(--text-secondary)' }}
                   title="Số bài viết đang hiển thị"
                 >
                   <span className="h-1.5 w-1.5 rounded-full bg-teal-400" />
@@ -652,7 +652,7 @@ export default function SocialPage() {
         onClick={toggleRight}
         aria-label={rightOpen ? 'Đóng widgets' : 'Mở widgets'}
         aria-expanded={rightOpen}
-        className="fixed bottom-20 right-4 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[#0c0f14]/90 text-teal-200 shadow-[0_8px_24px_rgba(0,0,0,0.45)] backdrop-blur-md hover:bg-[#0c0f14] lg:hidden"
+        className="fixed bottom-20 right-4 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-theme bg-theme-glass text-teal-500 shadow-theme-lg backdrop-blur-md lg:hidden"
         style={{ touchAction: 'manipulation' }}
       >
         <Sparkles size={18} />
@@ -674,17 +674,17 @@ export default function SocialPage() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', stiffness: 380, damping: 36 }}
-              className="fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm overflow-y-auto border-l border-white/[0.06] bg-[#0e1218] pt-16 lg:hidden"
+              className="fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm overflow-y-auto border-l border-theme bg-theme pt-16 lg:hidden"
               role="dialog"
               aria-label="Widgets"
             >
-              <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3">
-                <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Widgets</h2>
+              <div className="flex items-center justify-between border-b border-theme-light px-4 py-3">
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted">Widgets</h2>
                 <button
                   type="button"
                   onClick={() => setRightOpen(false)}
                   aria-label="Đóng"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/[0.05]"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary hover:bg-[var(--bg-surface-hover)]"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -779,12 +779,12 @@ function FeedErrorState({ error, onRetry }: { error: Error; onRetry: () => void 
       <h3 className="text-base font-semibold" style={{ color: '#fca5a5' }}>
         Không tải được bảng tin
       </h3>
-      <p className="mt-1 max-w-sm text-[13px] leading-relaxed" style={{ color: '#94a3b8' }}>
+      <p className="mt-1 max-w-sm text-[13px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
         {error?.message || 'Đã có lỗi mạng. Đang thử lại...'}
       </p>
       <div className="mt-4 flex items-center gap-2">
         {autoRetrying ? (
-          <span className="flex items-center gap-1.5 text-[12px]" style={{ color: '#94a3b8' }}>
+          <span className="flex items-center gap-1.5 text-[12px]" style={{ color: 'var(--text-secondary)' }}>
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
             Tự thử lại sau {countdown}s...
           </span>
@@ -895,10 +895,10 @@ function EmptyFeed({ type = 'all' }: { type?: FeedType }) {
       <h3 className="bg-gradient-to-r from-violet-300 via-cyan-300 to-violet-300 bg-clip-text text-xl font-bold tracking-tight text-transparent">
         {title}
       </h3>
-      <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: '#94a3b8' }}>
+      <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
         {body}
       </p>
-      <div className="mt-5 flex items-center gap-2 text-[11px]" style={{ color: '#64748b' }}>
+      <div className="mt-5 flex items-center gap-2 text-[11px]" style={{ color: 'var(--text-muted)' }}>
         <span className="flex items-center gap-1">
           <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
           Click ✨ AI Write để bắt đầu

@@ -468,7 +468,7 @@ export function PostComposer() {
                 placeholder="Bạn đang nghĩ gì thế?"
                 rows={1}
                 className="w-full resize-none bg-transparent text-sm outline-none placeholder:text-sm"
-                style={{ color: '#e2e8f0' }}
+                style={{ color: 'var(--text-primary)' }}
               />
 
               {/* AI Write shortcut — sits inside the textarea
@@ -575,7 +575,7 @@ export function PostComposer() {
                         setComposerYouTubeUrl('');
                         setYoutubeDraft('');
                       }}
-                      className="rounded-lg p-1 text-text-muted transition-colors hover:bg-white/[0.05] hover:text-red-400"
+                      className="rounded-lg p-1 text-text-muted transition-colors bg-theme-hover hover:text-red-400"
                       title="Bỏ đính kèm"
                     >
                       <X className="h-3.5 w-3.5" />
@@ -594,7 +594,7 @@ export function PostComposer() {
                 <div
                   role="radiogroup"
                   aria-label="Loại bài đăng"
-                  className="mt-3 inline-flex items-center gap-1 rounded-full border border-white/[0.08] bg-white/[0.03] p-1"
+                  className="mt-3 inline-flex items-center gap-1 rounded-full border border-theme-light bg-theme-surface p-1"
                 >
                   {([
                     { value: 'POST', label: 'Bài viết', Icon: FileText },
@@ -612,7 +612,7 @@ export function PostComposer() {
                         className={`flex min-h-[32px] items-center gap-1.5 rounded-full px-3 py-1 text-[12.5px] font-medium transition-colors ${
                           active
                             ? 'bg-neon-violet/20 text-violet-200 ring-1 ring-neon-violet/40'
-                            : 'text-slate-400 hover:text-slate-200'
+                            : 'text-text-secondary hover:text-text-primary'
                         }`}
                       >
                         <Icon size={14} />
@@ -668,7 +668,7 @@ export function PostComposer() {
                 {/* Toolbar */}
                 <div
                   className="mt-3 flex items-center justify-between"
-                  style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}
+                  style={{ borderTop: '1px solid var(--border-light)', paddingTop: '12px' }}
                 >
                   <div className="flex items-center gap-1 flex-wrap">
                     {/* Image upload (also accepts drag-and-drop on the textarea) */}
@@ -785,7 +785,7 @@ export function PostComposer() {
                       className={`group relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
                         showPollEditor
                           ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-400/40'
-                          : 'text-text-secondary hover:bg-white/[0.05] border border-transparent hover:border-white/10'
+                          : 'text-text-secondary bg-theme-hover border border-transparent border-theme-light-hover'
                       }`}
                       title="Thêm khảo sát"
                     >
@@ -828,7 +828,7 @@ export function PostComposer() {
                             exit={{ opacity: 0, y: -5, scale: 0.95 }}
                             className="absolute left-0 top-full z-20 mt-1 w-48 overflow-hidden rounded-2xl py-1"
                             style={{
-                              background: 'rgba(15,15,25,0.98)',
+                              background: 'var(--bg-overlay)',
                               border: '1px solid rgba(255,255,255,0.1)',
                               backdropFilter: 'blur(20px)',
                             }}
@@ -846,13 +846,13 @@ export function PostComposer() {
                                     composerVisibility === option.value
                                       ? `${option.color}15`
                                       : 'transparent',
-                                  color: '#e2e8f0',
+                                  color: 'var(--text-primary)',
                                 }}
                               >
                                 <option.icon size={16} style={{ color: option.color }} />
                                 <div className="flex-1">
                                   <p className="text-sm font-medium">{option.label}</p>
-                                  <p className="text-xs" style={{ color: '#64748b' }}>
+                                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
                                     {option.desc}
                                   </p>
                                 </div>
@@ -881,7 +881,7 @@ export function PostComposer() {
                         clearComposer();
                       }}
                       className="rounded-xl px-4 py-2 text-sm font-medium transition-colors"
-                      style={{ color: '#94a3b8' }}
+                      style={{ color: 'var(--text-secondary)' }}
                     >
                       Cancel
                     </button>
@@ -1057,16 +1057,16 @@ function YouTubeModal({
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-md overflow-hidden rounded-2xl"
         style={{
-          background: 'rgba(15,15,25,0.98)',
+          background: 'var(--bg-overlay)',
           border: '1px solid rgba(255,255,255,0.1)',
         }}
       >
-        <div className="flex items-center justify-between p-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="flex items-center justify-between p-4" style={{ borderBottom: '1px solid var(--border-light)' }}>
           <div className="flex items-center gap-2">
             <Youtube className="h-5 w-5 text-red-500" />
             <h3 className="text-sm font-semibold text-text-primary">Đính kèm video YouTube</h3>
           </div>
-          <button onClick={onClose} className="rounded-lg p-1.5 text-text-muted hover:bg-white/[0.05] hover:text-text-primary">
+          <button onClick={onClose} className="rounded-lg p-1.5 text-text-muted bg-theme-hover hover:text-text-primary">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -1074,7 +1074,7 @@ function YouTubeModal({
           <p className="text-xs text-text-muted">
             Dán liên kết YouTube (youtube.com/watch, youtu.be, hoặc /shorts). Video sẽ hiển thị inline trong bài viết.
           </p>
-          <div className="flex items-center gap-2 rounded-xl px-3 py-2.5" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="flex items-center gap-2 rounded-xl px-3 py-2.5" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-light)' }}>
             <LinkIcon className="h-4 w-4 text-text-muted shrink-0" />
             <input
               autoFocus
@@ -1101,7 +1101,7 @@ function YouTubeModal({
             )}
             <button
               onClick={onClose}
-              className="rounded-xl px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-white/[0.05]"
+              className="rounded-xl px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors bg-theme-hover"
             >
               Huỷ
             </button>
@@ -1179,7 +1179,7 @@ function PollEditor({ poll, onChange, onClose }: PollEditorProps) {
         value={local.question}
         onChange={(e) => setQ(e.target.value)}
         placeholder="Câu hỏi khảo sát..."
-        className="w-full rounded-lg bg-darkbg/50 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted border border-white/[0.06] focus:border-neon-violet/50 focus:outline-none"
+        className="w-full rounded-lg bg-theme-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted border border-theme-light focus:border-neon-violet/50 focus:outline-none"
         maxLength={500}
       />
 
@@ -1191,7 +1191,7 @@ function PollEditor({ poll, onChange, onClose }: PollEditorProps) {
               value={opt}
               onChange={(e) => setOpt(i, e.target.value)}
               placeholder={`Lựa chọn ${i + 1}`}
-              className="flex-1 rounded-lg bg-darkbg/50 px-3 py-1.5 text-xs text-text-primary placeholder:text-text-muted border border-white/[0.06] focus:border-neon-violet/50 focus:outline-none"
+              className="flex-1 rounded-lg bg-theme-surface px-3 py-1.5 text-xs text-text-primary placeholder:text-text-muted border border-theme-light focus:border-neon-violet/50 focus:outline-none"
               maxLength={255}
             />
             {local.options.length > 2 && (
@@ -1279,7 +1279,7 @@ function FileChip({
   return (
     <div
       className="relative flex items-center gap-2 rounded-xl p-2 pr-7"
-      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+      style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-light)' }}
     >
       <div
         className="flex shrink-0 items-center justify-center rounded-lg"
@@ -1296,14 +1296,14 @@ function FileChip({
         <p className="truncate text-xs font-medium text-text-primary" title={item.file?.name}>
           {item.file?.name || 'Tệp đính kèm'}
         </p>
-        <p className="text-[10px]" style={{ color: '#64748b' }}>
+        <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
           {humanFileSize(item.file?.size)}
           {item.progress < 100 ? ` · ${item.progress}%` : ''}
         </p>
       </div>
       <button
         onClick={onRemove}
-        className="absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full text-text-muted hover:bg-white/[0.06] hover:text-red-400"
+        className="absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full text-text-muted bg-theme-hover hover:text-red-400"
         title="Bỏ tệp"
       >
         <X size={11} />
@@ -1311,7 +1311,7 @@ function FileChip({
       {item.progress < 100 && (
         <div
           className="absolute inset-x-0 bottom-0 h-0.5 overflow-hidden rounded-b-xl"
-          style={{ background: 'rgba(255,255,255,0.06)' }}
+          style={{ background: 'var(--bg-surface-active)' }}
         >
           <div className="h-full transition-all" style={{ width: `${item.progress}%`, background: color }} />
         </div>
@@ -1442,8 +1442,8 @@ function ToolbarButton({
       }}
       onMouseEnter={(e) => {
         if (active) return;
-        e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-        e.currentTarget.style.color = '#94a3b8';
+        e.currentTarget.style.background = 'var(--bg-surface-hover)';
+        e.currentTarget.style.color = 'var(--text-secondary)';
       }}
       onMouseLeave={(e) => {
         if (active) return;

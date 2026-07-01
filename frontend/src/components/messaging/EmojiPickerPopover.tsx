@@ -12,6 +12,7 @@ import { createPortal } from 'react-dom';
 import dynamic from 'next/dynamic';
 import data from '@emoji-mart/data';
 import { useAnchoredFixedStyle } from './useAnchoredPopover';
+import { useThemeClass } from '@/context/ThemeContext';
 
 // emoji-mart's React wrapper. Loaded only on the client.
 const Picker = dynamic(() => import('@emoji-mart/react'), { ssr: false });
@@ -29,6 +30,9 @@ export default function EmojiPickerPopover({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const fixedStyle = useAnchoredFixedStyle(anchorRef, open, 352);
+  // Follow the app theme instead of hardcoding dark — otherwise the
+  // picker renders a dark panel with dark labels in light mode.
+  const themeClass = useThemeClass();
 
   useEffect(() => {
     if (!open) return;
@@ -56,7 +60,7 @@ export default function EmojiPickerPopover({
         onEmojiSelect={(e: { native?: string }) => {
           if (e.native) onPick(e.native);
         }}
-        theme="dark"
+        theme={themeClass}
         previewPosition="none"
         skinTonePosition="search"
         navPosition="top"

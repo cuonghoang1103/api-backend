@@ -108,7 +108,7 @@ export default function SocialSidebar({
               key={it.href}
               href={it.href}
               className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                active ? 'bg-white/[0.06] text-text-primary' : 'text-text-secondary hover:bg-white/[0.04] hover:text-text-primary'
+                active ? 'bg-[var(--bg-surface-active)] text-text-primary' : 'text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary'
               }`}
             >
               {active && (
@@ -149,7 +149,7 @@ export default function SocialSidebar({
               key={it.href}
               href={it.href}
               className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-all ${
-                active ? 'bg-white/[0.06] text-text-primary' : 'text-text-secondary hover:bg-white/[0.04] hover:text-text-primary'
+                active ? 'bg-[var(--bg-surface-active)] text-text-primary' : 'text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -224,8 +224,8 @@ function CollectionsSection() {
           href="/saved"
           className={`group relative flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
             isActive
-              ? 'bg-white/[0.06] text-text-primary'
-              : 'text-text-secondary hover:bg-white/[0.04] hover:text-text-primary'
+              ? 'bg-[var(--bg-surface-active)] text-text-primary'
+              : 'text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary'
           }`}
         >
           {total > 0 ? (
@@ -265,7 +265,7 @@ function CollectionsSection() {
               >
                 <span className="text-[13px]">📥</span>
                 <span className="flex-1 truncate">Chưa phân loại</span>
-                <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[10px] tabular-nums">
+                <span className="rounded-full bg-[var(--bg-surface-active)] px-1.5 py-0.5 text-[10px] tabular-nums">
                   {uncategorized}
                 </span>
               </Link>
@@ -280,7 +280,7 @@ function CollectionsSection() {
               >
                 <span className="text-[13px]">{c.icon ?? '📁'}</span>
                 <span className="flex-1 truncate">{c.name}</span>
-                <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[10px] tabular-nums">
+                <span className="rounded-full bg-[var(--bg-surface-active)] px-1.5 py-0.5 text-[10px] tabular-nums">
                   {c.count}
                 </span>
               </Link>
@@ -320,7 +320,7 @@ function CollectionsSection() {
             }}
             maxLength={80}
             placeholder="+ Tạo bộ sưu tập mới"
-            className="flex-1 rounded-lg border border-white/[0.06] bg-white/[0.03] px-2.5 py-1.5 text-xs text-text-primary outline-none placeholder:text-text-muted/60 transition-colors focus:border-amber-400/40"
+            className="flex-1 rounded-lg border border-theme-light bg-theme-surface px-2.5 py-1.5 text-xs text-text-primary outline-none placeholder:text-text-muted/60 transition-colors focus:border-amber-400/40"
           />
           {newName.trim() && (
             <button
@@ -416,7 +416,7 @@ function FriendsSection() {
                     );
                   }
                 }}
-                className="group flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-xs transition-all hover:bg-white/[0.04] text-left"
+                className="group flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-xs transition-all hover:bg-[var(--bg-surface-hover)] text-left"
               >
                 <div className="relative shrink-0">
                   <SafeAvatar
@@ -473,7 +473,7 @@ function FriendsSection() {
                         void handleFollow(u.id);
                       }
                     }}
-                    className="shrink-0 rounded-lg p-1 text-text-muted hover:text-neon-violet hover:bg-white/5 transition-all"
+                    className="shrink-0 rounded-lg p-1 text-text-muted hover:text-neon-violet hover:bg-[var(--bg-surface-hover)] transition-all"
                     title="Theo dõi"
                   >
                     <UserPlus size={14} />

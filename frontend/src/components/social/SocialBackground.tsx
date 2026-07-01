@@ -284,8 +284,7 @@ export default function SocialBackground() {
       // which is a separate event from scroll.
       if (!document.hidden && !scrollIdleTimer) resume();
     }
-    window.addEventListener('social:video-playing', onVideoPlaying);
-    window.addEventListener('social:video-paused', onVideoPaused);
+    // (registered once below, together with the other listeners)
 
     // ── per-frame draw ─────────────────────────────────────
     let lastTs = 0;
@@ -410,7 +409,13 @@ export default function SocialBackground() {
       window.removeEventListener('social:video-playing', onVideoPlaying);
       window.removeEventListener('social:video-paused', onVideoPaused);
     };
-  }, []);
+    // `theme` MUST be a dep: in light mode the canvas isn't rendered
+    // (we return null below), so when the user toggles to dark the
+    // canvas mounts for the first time AFTER this effect already ran
+    // and bailed on `!canvas`. Without re-running here, nothing ever
+    // draws and the page shows the flat #18191a body color ("gray
+    // until reload" bug).
+  }, [theme]);
 
   // Reduced-motion or weak-device fallback: a single static radial
   // gradient via CSS. Zero JS cost, keeps the dark-mode vibe.

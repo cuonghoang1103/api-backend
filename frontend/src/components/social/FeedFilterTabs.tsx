@@ -78,7 +78,7 @@ export default function FeedFilterTabs({ active, onChange }: Props) {
       role="tablist"
       aria-label="Bộ lọc feed"
       onKeyDown={onKeyDown}
-      className="sticky top-[60px] z-20 -mx-3 flex items-center gap-1 border-b border-white/[0.06] bg-[#0c0f14]/85 px-3 py-2 backdrop-blur-md sm:mx-0 sm:rounded-full sm:border sm:bg-white/[0.03] sm:px-2 sm:py-1"
+      className="sticky top-[60px] z-20 -mx-3 flex items-center gap-1 border-b border-theme-light bg-theme-glass px-3 py-2 backdrop-blur-md sm:mx-0 sm:rounded-full sm:border sm:bg-[var(--bg-surface)] sm:px-2 sm:py-1"
     >
       {FILTERS.map((f) => {
         const isActive = f.value === active;
@@ -93,13 +93,13 @@ export default function FeedFilterTabs({ active, onChange }: Props) {
             aria-label={f.hint}
             onClick={() => onChange(f.value)}
             className={`relative flex min-h-[28px] flex-1 items-center justify-center rounded-full px-3 py-1.5 text-[12.5px] font-medium transition-colors duration-150 sm:flex-none ${
-              isActive ? 'text-slate-100' : 'text-slate-400 hover:text-slate-200'
+              isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             {isActive && (
               <motion.span
                 layoutId="feed-tab-indicator"
-                className="absolute inset-0 rounded-full bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+                className="absolute inset-0 rounded-full bg-[var(--bg-surface-active)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
                 transition={{ type: 'spring', stiffness: 480, damping: 38 }}
               />
             )}

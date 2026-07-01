@@ -221,7 +221,7 @@ export default function Navbar() {
       <nav
         className={`fixed top-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? 'h-16 bg-[#0d0f18]/85 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.4)]'
+            ? 'h-16 bg-theme-glass backdrop-blur-xl border-b border-theme-light shadow-theme-lg'
             : 'h-16 bg-transparent'
         }`}
         style={{ left: 'var(--dock-shift, 0px)' }}
@@ -297,7 +297,7 @@ export default function Navbar() {
                       href={href}
                       target={href.startsWith('http') ? '_blank' : undefined}
                       rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-white/[0.04] transition-all"
+                      className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-[var(--bg-surface-hover)] transition-all"
                       title={icon}
                     >
                       {icons[icon]}
@@ -310,7 +310,7 @@ export default function Navbar() {
               <button
                 onClick={openDrawer}
                 className="relative flex items-center justify-center w-9 h-9 rounded-xl
-                  bg-white/[0.04] border border-white/[0.06]
+                  bg-[var(--bg-surface)] border border-theme-light
                   hover:border-neon-violet/30 hover:bg-neon-violet/5 transition-all"
                 title="Shopping Cart"
               >
@@ -335,7 +335,7 @@ export default function Navbar() {
                     }
                   }}
                   className="relative flex items-center justify-center w-9 h-9 rounded-xl
-                    bg-white/[0.04] border border-white/[0.06]
+                    bg-[var(--bg-surface)] border border-theme-light
                     hover:border-neon-violet/30 hover:bg-neon-violet/5 transition-all"
                   title="Thông báo"
                   aria-label="Notifications"

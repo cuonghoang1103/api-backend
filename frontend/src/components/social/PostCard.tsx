@@ -875,8 +875,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
       // already on the post object.
       data-post-id={post.id}
       style={{
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border-color)',
       }}
     >
       {/* Top accent line */}
@@ -994,12 +994,12 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
           <div className="relative flex-shrink-0">
             <button
               className="rounded-xl p-2 transition-colors"
-              style={{ color: '#64748b' }}
+              style={{ color: 'var(--text-muted)' }}
               onClick={(e) => {
                 e.stopPropagation();
                 setShowMoreMenu(!showMoreMenu);
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-surface-hover)')}
               onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
             >
               <MoreHorizontal size={18} />
@@ -1012,23 +1012,40 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     initial={{ opacity: 0, scale: 0.95, y: -5 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -5 }}
-                    // Phase 6 — bump z-index from z-40 to z-50 so the
-                    // menu escapes the PostCard boundary (now
-                    // overflow-visible when any menu is open) and
-                    // overlays the next post in the feed.
                     className="absolute right-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-2xl py-1"
-                    style={{ background: 'rgba(15,15,25,0.95)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}
+                    style={{
+                      background: 'var(--bg-overlay)',
+                      border: '1px solid var(--border-light)',
+                      backdropFilter: 'blur(20px)',
+                      boxShadow: 'var(--shadow-xl)',
+                    }}
                   >
                     <button
-                      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] hover:text-text-primary transition-colors"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                      style={{ color: 'var(--text-secondary)' }}
                       onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/social/post/${post.id}`); setShowMoreMenu(false); toast.success('Đã sao chép liên kết'); }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = 'var(--text-primary)';
+                        e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = 'var(--text-secondary)';
+                        e.currentTarget.style.background = 'transparent';
+                      }}
                     >
                       <Copy className="h-3.5 w-3.5" /> Sao chép liên kết
                     </button>
                     {canDelete && (
                       <button
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        style={{ color: '#ef4444' }}
                         onClick={handleDelete}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'transparent';
+                        }}
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                         {isAuthor ? 'Xoá bài viết' : 'Xoá (quyền admin)'}
@@ -1036,8 +1053,17 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     )}
                     {!isAuthor && (
                       <button
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        style={{ color: 'var(--text-secondary)' }}
                         onClick={() => { toast.info('Đã gửi báo cáo'); setShowMoreMenu(false); }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = 'var(--text-primary)';
+                          e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'var(--text-secondary)';
+                          e.currentTarget.style.background = 'transparent';
+                        }}
                       >
                         <Flag className="h-3.5 w-3.5" /> Báo cáo
                       </button>
@@ -1046,7 +1072,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     {/* Phase 3: Interested */}
                     {!isAuthor && (
                       <button
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        style={{ color: 'var(--text-secondary)' }}
                         onClick={async () => {
                           setShowMoreMenu(false);
                           try {
@@ -1056,6 +1083,14 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                             toast.error('Không thể gửi phản hồi');
                           }
                         }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = 'var(--text-primary)';
+                          e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'var(--text-secondary)';
+                          e.currentTarget.style.background = 'transparent';
+                        }}
                       >
                         <Flag className="h-3.5 w-3.5" /> Quan tâm
                       </button>
@@ -1064,8 +1099,17 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     {/* Phase 3: Save */}
                     {!isAuthor && (
                       <button
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        style={{ color: 'var(--text-secondary)' }}
                         onClick={() => { setShowMoreMenu(false); }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = 'var(--text-primary)';
+                          e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'var(--text-secondary)';
+                          e.currentTarget.style.background = 'transparent';
+                        }}
                       >
                         <Bookmark className="h-3.5 w-3.5" /> Lưu bài viết
                       </button>
@@ -1074,7 +1118,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     {/* Phase 3: Subscribe */}
                     {!isAuthor && (
                       <button
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        style={{ color: 'var(--text-secondary)' }}
                         onClick={async () => {
                           setShowMoreMenu(false);
                           try {
@@ -1084,6 +1129,14 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                             toast.error('Không thể bật thông báo');
                           }
                         }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = 'var(--text-primary)';
+                          e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'var(--text-secondary)';
+                          e.currentTarget.style.background = 'transparent';
+                        }}
                       >
                         <Bell className="h-3.5 w-3.5" /> Bật thông báo
                       </button>
@@ -1092,7 +1145,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     {/* Phase 3: Pin */}
                     {isAuthor && (
                       <button
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        style={{ color: 'var(--text-secondary)' }}
                         onClick={async () => {
                           setShowMoreMenu(false);
                           try {
@@ -1102,6 +1156,14 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                             toast.error('Không thể ghim');
                           }
                         }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = 'var(--text-primary)';
+                          e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'var(--text-secondary)';
+                          e.currentTarget.style.background = 'transparent';
+                        }}
                       >
                         <Pin className="h-3.5 w-3.5" /> Ghim bài viết
                       </button>
@@ -1110,7 +1172,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     {/* Phase 3: Archive */}
                     {isAuthor && (
                       <button
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        style={{ color: 'var(--text-secondary)' }}
                         onClick={async () => {
                           setShowMoreMenu(false);
                           try {
@@ -1120,6 +1183,14 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                             toast.error('Không thể lưu trữ');
                           }
                         }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = 'var(--text-primary)';
+                          e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'var(--text-secondary)';
+                          e.currentTarget.style.background = 'transparent';
+                        }}
                       >
                         <Archive className="h-3.5 w-3.5" /> Lưu vào kho lưu trữ
                       </button>
@@ -1128,13 +1199,22 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     {/* Phase 3: Hide */}
                     {!isAuthor && (
                       <button
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        style={{ color: 'var(--text-secondary)' }}
                         onClick={async () => {
                           setShowMoreMenu(false);
                           try {
                             await api.post(`/social/posts/${post.id}/hide`);
                             toast.success('Đã ẩn bài viết');
                           } catch {}
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = 'var(--text-primary)';
+                          e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'var(--text-secondary)';
+                          e.currentTarget.style.background = 'transparent';
                         }}
                       >
                         <EyeOff className="h-3.5 w-3.5" /> Ẩn bài viết
@@ -1144,7 +1224,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     {/* Phase 3: Snooze */}
                     {!isAuthor && (
                       <button
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        style={{ color: 'var(--text-secondary)' }}
                         onClick={async () => {
                           setShowMoreMenu(false);
                           const authorId = (post as any)?.author?.id;
@@ -1155,6 +1236,14 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                           } catch {
                             toast.error('Không thể tạm ẩn');
                           }
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = 'var(--text-primary)';
+                          e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'var(--text-secondary)';
+                          e.currentTarget.style.background = 'transparent';
                         }}
                       >
                         <Clock className="h-3.5 w-3.5" /> Tạm ẩn 30 ngày
@@ -1264,7 +1353,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
               <div className="min-h-0 overflow-hidden">
               <div
                 className="space-y-3"
-                style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}
+                style={{ borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}
               >
                 {loadingComments && comments.length === 0 ? (
                   <CommentSkeleton />
@@ -1313,8 +1402,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                   <div
                     className="flex flex-1 items-center gap-2 rounded-2xl px-4 py-2.5"
                     style={{
-                      background: 'rgba(255,255,255,0.04)',
-                      border: '1px solid rgba(255,255,255,0.08)',
+                      background: 'var(--bg-surface)',
+                      border: '1px solid var(--border-color)',
                     }}
                   >
                     <input
@@ -1331,7 +1420,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                         if (next === '') setCommentMentions(new Set());
                       }}
                       className="flex-1 bg-transparent text-sm outline-none"
-                      style={{ color: '#e2e8f0' }}
+                      style={{ color: 'var(--text-primary)' }}
                     />
                     <button
                       type="submit"

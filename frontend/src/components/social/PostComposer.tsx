@@ -428,8 +428,8 @@ export function PostComposer() {
         transition={{ layout: { type: 'spring', stiffness: 280, damping: 28 } }}
         className="overflow-hidden rounded-3xl"
         style={{
-          background: 'rgba(255,255,255,0.03)',
-          border: isExpanded ? '1px solid rgba(139,92,246,0.3)' : '1px solid rgba(255,255,255,0.08)',
+          background: 'var(--bg-card)',
+          border: isExpanded ? '1px solid rgba(139,92,246,0.3)' : '1px solid var(--border-color)',
           backdropFilter: 'blur(20px)',
           boxShadow: isExpanded
             ? '0 8px 32px rgba(139,92,246,0.18), inset 0 1px 0 rgba(255,255,255,0.04)'

@@ -217,24 +217,38 @@ export default function SocialSavePopover({
               top: pos.top,
               left: pos.left,
               zIndex: 9999,
+              background: 'var(--bg-overlay)',
+              border: '1px solid var(--border-light)',
             }}
-            className="w-72 overflow-hidden rounded-2xl border border-white/10 bg-[rgba(15,15,25,0.96)] shadow-2xl backdrop-blur-xl"
+            className="w-72 overflow-hidden rounded-2xl shadow-2xl backdrop-blur-xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3">
+            <div
+              className="flex items-center justify-between px-4 py-3"
+              style={{ borderBottom: '1px solid var(--border-light)' }}
+            >
               <div className="flex items-center gap-2">
                 {isSaved ? (
                   <BookmarkCheck size={16} style={{ color: NEON_AMBER }} />
                 ) : (
-                  <Bookmark size={16} className="text-text-muted" />
+                  <Bookmark size={16} style={{ color: 'var(--text-muted)' }} />
                 )}
-                <span className="text-sm font-semibold text-text-primary">
+                <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
                   {isSaved ? 'Đã lưu vào...' : 'Lưu vào collection'}
                 </span>
               </div>
               <button
                 onClick={onClose}
-                className="rounded-md p-1 text-text-muted transition-colors hover:bg-white/5 hover:text-text-primary"
+                className="rounded-md p-1 transition-colors"
+                style={{ color: 'var(--text-muted)' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                  e.currentTarget.style.color = 'var(--text-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = 'var(--text-muted)';
+                }}
                 title="Đóng"
               >
                 <X size={14} />
@@ -244,7 +258,7 @@ export default function SocialSavePopover({
             {/* Existing collections */}
             <div className="max-h-64 overflow-y-auto py-1.5">
               {collections.length === 0 && (
-                <p className="px-4 py-3 text-xs italic text-text-muted">
+                <p className="px-4 py-3 text-xs italic" style={{ color: 'var(--text-muted)' }}>
                   Bạn chưa có collection nào. Tạo mới bên dưới.
                 </p>
               )}
@@ -258,9 +272,16 @@ export default function SocialSavePopover({
                     disabled={busy}
                     className={cn(
                       'flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors',
-                      'hover:bg-white/[0.04]',
-                      isSelected ? 'text-text-primary' : 'text-text-secondary',
                     )}
+                    style={{
+                      color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                    }}
                   >
                     <span
                       className={cn(

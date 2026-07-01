@@ -356,51 +356,112 @@ export default function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl
-                      bg-white/[0.04] border border-white/[0.06]
-                      hover:border-neon-violet/30 transition-all"
+                    className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl transition-all"
+                    style={{
+                      background: 'var(--bg-surface)',
+                      border: '1px solid var(--border-color)',
+                    }}
                   >
                     {/* Use UserAvatar component - it auto-reads from auth store */}
                     <UserAvatar size={24} className="rounded-lg" />
-                    <ChevronDown className={`w-3 h-3 text-text-muted transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown
+                      className={`w-3 h-3 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`}
+                      style={{ color: 'var(--text-muted)' }}
+                    />
                   </button>
 
                   {userMenuOpen && (
                     <>
                       <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
-                      <div className="absolute right-0 top-full mt-2 w-52 rounded-xl
-                        bg-[#0d0f18]/95 backdrop-blur-xl border border-white/[0.08]
-                        shadow-[0_8px_32px_rgba(0,0,0,0.5)]
-                        z-50 overflow-hidden">
-                        <div className="px-4 py-3 border-b border-white/[0.06]">
-                          <p className="text-sm font-medium text-text-primary">
+                      <div
+                        className="absolute right-0 top-full mt-2 w-52 rounded-xl backdrop-blur-xl z-50 overflow-hidden"
+                        style={{
+                          background: 'var(--bg-overlay)',
+                          border: '1px solid var(--border-light)',
+                          boxShadow: 'var(--shadow-lg)',
+                        }}
+                      >
+                        <div
+                          className="px-4 py-3"
+                          style={{ borderBottom: '1px solid var(--border-light)' }}
+                        >
+                          <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
                             {displayUser?.displayName || displayUser?.name || displayUser?.username}
                           </p>
-                          <p className="text-xs text-text-muted truncate">{displayUser?.email}</p>
+                          <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{displayUser?.email}</p>
                         </div>
                         {isAdmin && (
                           <Link href="/admin" onClick={() => setUserMenuOpen(false)}
-                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
+                            className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                            style={{ color: 'var(--text-secondary)' }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = 'var(--text-primary)';
+                              e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = 'var(--text-secondary)';
+                              e.currentTarget.style.background = 'transparent';
+                            }}
+                          >
                             <Settings className="w-4 h-4" />Admin Dashboard
                           </Link>
                         )}
                         <Link href="/dashboard" onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = 'var(--text-secondary)';
+                            e.currentTarget.style.background = 'transparent';
+                          }}
+                        >
                           <Globe className="w-4 h-4" />Dashboard
                         </Link>
                         <Link href="/profile" onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = 'var(--text-secondary)';
+                            e.currentTarget.style.background = 'transparent';
+                          }}
+                        >
                           <UserCircle className="w-4 h-4" />Profile
                         </Link>
                         <button
-          onClick={() => { toggleTheme(); setUserMenuOpen(false); }}
-          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors"
-        >
-          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          {theme === 'dark' ? 'Chế độ sáng' : 'Chế độ tối'}
-        </button>
-        <Link href="/settings/notifications" onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
+                          onClick={() => { toggleTheme(); setUserMenuOpen(false); }}
+                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = 'var(--text-secondary)';
+                            e.currentTarget.style.background = 'transparent';
+                          }}
+                        >
+                          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                          {theme === 'dark' ? 'Chế độ sáng' : 'Chế độ tối'}
+                        </button>
+                        <Link href="/settings/notifications" onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = 'var(--text-secondary)';
+                            e.currentTarget.style.background = 'transparent';
+                          }}
+                        >
                           <Settings className="w-4 h-4" />Notification sounds
                         </Link>
                         <button
@@ -408,13 +469,30 @@ export default function Navbar() {
                             setUserMenuOpen(false);
                             setChangePasswordOpen(true);
                           }}
-                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors"
+                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.background = 'var(--bg-surface-hover)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = 'var(--text-secondary)';
+                            e.currentTarget.style.background = 'transparent';
+                          }}
                         >
                           <KeyRound className="w-4 h-4" />
                           Change password
                         </button>
                         <button onClick={handleLogout}
-                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors">
+                          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                          style={{ color: '#ef4444' }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'transparent';
+                          }}
+                        >
                           <LogOut className="w-4 h-4" />Logout
                         </button>
                       </div>
@@ -424,11 +502,15 @@ export default function Navbar() {
               ) : (
                 <div className="hidden md:flex items-center gap-1.5">
                   <Link href="/login"
-                    className="px-3 py-1.5 text-xs font-medium text-text-secondary hover:text-text-primary transition-colors">
+                    className="px-3 py-1.5 text-xs font-medium transition-colors"
+                    style={{ color: 'var(--text-secondary)' }}
+                  >
                     Login
                   </Link>
                   <Link href="/register"
-                    className="px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-neon-indigo to-neon-violet text-white rounded-lg hover:opacity-90 transition-opacity">
+                    className="px-3 py-1.5 text-xs font-medium text-white rounded-lg transition-opacity"
+                    style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
+                  >
                     Sign Up
                   </Link>
                 </div>
@@ -439,9 +521,12 @@ export default function Navbar() {
 
       {/* Mobile nav */}
       <div
-        className="sm:hidden fixed bottom-0 right-0 z-40
-        bg-[#0d0f18]/90 backdrop-blur-xl border-t border-white/[0.06] transition-[left] duration-300"
-        style={{ left: 'var(--dock-shift, 0px)' }}
+        className="sm:hidden fixed bottom-0 right-0 z-40 transition-[left] duration-300"
+        style={{
+          background: 'var(--bg-overlay)',
+          borderTop: '1px solid var(--border-light)',
+          left: 'var(--dock-shift, 0px)',
+        }}
       >
         <div className="flex items-center justify-around px-2 py-2">
           {TOP_NAV_LINKS.filter((l) => {

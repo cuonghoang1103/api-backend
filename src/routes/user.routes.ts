@@ -595,4 +595,139 @@ router.get('/:id/liked', authenticate, async (req: any, res: Response<ApiRespons
   }
 });
 
+// ════════════════════════════════════════════════════════════════
+// PATCH /api/v1/users/me/preferences — Update user preferences
+// ════════════════════════════════════════════════════════════════
+router.patch(
+  '/me/preferences',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const { theme } = req.body;
+
+      const updateData: Record<string, any> = {};
+      if (theme !== undefined) {
+        if (!['dark', 'light'].includes(theme)) {
+          throw new AppError('Invalid theme value. Must be "dark" or "light"', 400, 'INVALID_THEME');
+        }
+        updateData.theme = theme;
+      }
+
+      if (Object.keys(updateData).length === 0) {
+        throw new AppError('No preferences provided', 400, 'NO_PREFERENCES');
+      }
+
+      await prisma.user.update({
+        where: { id: userId },
+        data: updateData,
+      });
+
+      res.json({ success: true, data: { theme }, message: 'Preferences updated' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/users/me/preferences — Get user preferences
+// ════════════════════════════════════════════════════════════════
+router.get(
+  '/me/preferences',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { theme: true },
+      });
+      res.json({ success: true, data: { theme: user?.theme ?? 'dark' } });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/users/:id/snooze — Snooze user for 30 days
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/:id/snooze',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const snoozedUserId = parseInt(req.params.id, 10);
+
+      if (isNaN(snoozedUserId)) throw new AppError('Invalid user ID', 400, 'INVALID_ID');
+      if (userId === snoozedUserId) throw new AppError('Cannot snooze yourself', 400, 'INVALID');
+
+      const until = new Date();
+      until.setDate(until.getDate() + 30);
+
+      await prisma.userSnooze.upsert({
+        where: { uk_user_snooze: { userId, snoozedUserId } },
+        create: { userId, snoozedUserId, until },
+        update: { until },
+      });
+
+      res.json({ success: true, data: { until }, message: 'User snoozed for 30 days' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// DELETE /api/v1/users/:id/snooze — Unsnooze user
+// ════════════════════════════════════════════════════════════════
+router.delete(
+  '/:id/snooze',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const snoozedUserId = parseInt(req.params.id, 10);
+
+      if (isNaN(snoozedUserId)) throw new AppError('Invalid user ID', 400, 'INVALID_ID');
+
+      await prisma.userSnooze.deleteMany({
+        where: { userId, snoozedUserId },
+      });
+
+      res.json({ success: true, data: null, message: 'User unsnoozed' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/users/:id/snooze — Check snooze status
+// ════════════════════════════════════════════════════════════════
+router.get(
+  '/:id/snooze',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const snoozedUserId = parseInt(req.params.id, 10);
+
+      if (isNaN(snoozedUserId)) throw new AppError('Invalid user ID', 400, 'INVALID_ID');
+
+      const snooze = await prisma.userSnooze.findUnique({
+        where: { uk_user_snooze: { userId, snoozedUserId } },
+      });
+
+      const isSnoozed = snooze ? snooze.until > new Date() : false;
+
+      res.json({ success: true, data: { snoozed: isSnoozed, until: snooze?.until ?? null } });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 export default router;

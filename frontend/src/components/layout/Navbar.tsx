@@ -13,10 +13,12 @@ import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import NotificationDropdown from '@/components/social/NotificationDropdown';
 import UserSearchBox from '@/components/social/UserSearchBox';
 import { UserAvatar } from '@/components/common/UserAvatar';
+import { useTheme } from '@/context/ThemeContext';
 import {
  Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles, TrendingUp,
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
  Globe, ShoppingBag, GraduationCap, Bell, Clapperboard, NotebookPen,
+Sun, Moon,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -57,6 +59,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const { user: backendUser, isAuthenticated: isBackendAuth } = useAuthStore();
+  const { theme, toggleTheme } = useTheme();
   const { getTotalItems, openDrawer } = useCartStore();
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
   const initMessaging = useMessagingStore((s) => s.init);
@@ -389,7 +392,14 @@ export default function Navbar() {
                           className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
                           <UserCircle className="w-4 h-4" />Profile
                         </Link>
-                        <Link href="/settings/notifications" onClick={() => setUserMenuOpen(false)}
+                        <button
+          onClick={() => { toggleTheme(); setUserMenuOpen(false); }}
+          className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors"
+        >
+          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          {theme === 'dark' ? 'Chế độ sáng' : 'Chế độ tối'}
+        </button>
+        <Link href="/settings/notifications" onClick={() => setUserMenuOpen(false)}
                           className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors">
                           <Settings className="w-4 h-4" />Notification sounds
                         </Link>

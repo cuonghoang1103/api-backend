@@ -38,6 +38,7 @@ import { useComposerDraft } from '@/hooks/useComposerDraft';
 import { pickAiTemplate } from '@/lib/aiWriteTemplates';
 import MentionAutocomplete from '@/components/social/MentionAutocomplete';
 import MusicPickerModal from '@/components/social/MusicPickerModal';
+import VideoCoverPicker from '@/components/social/VideoCoverPicker';
 import type { MediaUploadItem } from '@/types/social';
 import { toast } from 'sonner';
 import { Music as MusicIcon } from 'lucide-react';
@@ -511,7 +512,38 @@ export function PostComposer() {
                     exit={{ opacity: 0, height: 0 }}
                     className="mt-3"
                   >
-                    <MediaPreview media={composerMedia} onRemove={removeComposerMedia} />
+                    <MediaPreview
+      media={composerMedia}
+      onRemove={removeComposerMedia}
+      onSelectCover={(itemId, thumbnailUrl) => {
+        useSocialStore.setState((s) => ({
+          composerMedia: s.composerMedia.map((m) =>
+            m.id === itemId ? { ...m, thumbnail: thumbnailUrl } : m,
+          ),
+        }));
+      }}
+    />
+    {/* TikTok-style cover picker for single video */}
+    {(() => {
+      const firstVideo = composerMedia.find((m) => m.type === 'VIDEO' && m.url);
+      if (!firstVideo || !firstVideo.url) return null;
+      return (
+        <VideoCoverPicker
+          key={firstVideo.id}
+          itemId={firstVideo.id}
+          videoUrl={firstVideo.url}
+          serverThumbnail={firstVideo.thumbnail}
+          currentThumbnail={firstVideo.thumbnail}
+          onSelect={(thumb) => {
+            useSocialStore.setState((s) => ({
+              composerMedia: s.composerMedia.map((m) =>
+                m.id === firstVideo.id ? { ...m, thumbnail: thumb } : m,
+              ),
+            }));
+          }}
+        />
+      );
+    })()}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -1284,9 +1316,11 @@ function FileChip({
 function MediaPreview({
   media,
   onRemove,
+  onSelectCover,
 }: {
   media: MediaUploadItem[];
   onRemove: (id: string) => void;
+  onSelectCover: (itemId: string, thumbnailUrl: string) => void;
 }) {
   const imageVideo = media.filter((m) => m.type !== 'FILE');
   const files = media.filter((m) => m.type === 'FILE');

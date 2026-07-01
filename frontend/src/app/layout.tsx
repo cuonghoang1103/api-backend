@@ -15,6 +15,7 @@ import MusicHistoryRecorder from '@/components/music/MusicHistoryRecorder'
 import CyberCursor from '@/components/ui/CyberCursor'
 import LocaleWrapper from '@/components/providers/LocaleWrapper'
 import ClientOnly from '@/components/providers/ClientOnly'
+import { ThemeProvider } from '@/context/ThemeContext'
 
 // Self-host Google Fonts via next/font so the CSS bundle does
 // NOT @import fonts.googleapis.com at runtime — that request
@@ -276,6 +277,7 @@ export default function RootLayout({
         <AuthBoot />
         <ToasterProvider />
         <TanStackQueryProvider>
+       <ThemeProvider>
           <LocaleWrapper>
             <ServiceWorkerRegister />
             <ClientOnly>
@@ -298,6 +300,7 @@ export default function RootLayout({
               <SoundInitializer />
             </ClientOnly>
           </LocaleWrapper>
+        </ThemeProvider>
         </TanStackQueryProvider>
       </AuthProvider>
       </body>

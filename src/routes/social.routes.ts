@@ -1195,4 +1195,249 @@ router.get(
   },
 );
 
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/social/posts/:id/feedback — Interested / Not interested
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/posts/:id/feedback',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const postId = parseInt(req.params.id, 10);
+      const { type } = req.body as { type?: string };
+
+      if (!type || !['INTERESTED', 'NOT_INTERESTED'].includes(type)) {
+        throw new AppError('Invalid feedback type', 400, 'INVALID_FEEDBACK_TYPE');
+      }
+
+      const feedbackType = type as 'INTERESTED' | 'NOT_INTERESTED';
+
+      await prisma.postFeedback.upsert({
+        where: { uk_post_feedback: { postId, userId } },
+        create: { postId, userId, type: feedbackType },
+        update: { type: feedbackType },
+      });
+
+      res.json({ success: true, data: { type: feedbackType }, message: 'Feedback saved' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// DELETE /api/v1/social/posts/:id/feedback — Remove feedback
+// ════════════════════════════════════════════════════════════════
+router.delete(
+  '/posts/:id/feedback',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const postId = parseInt(req.params.id, 10);
+
+      await prisma.postFeedback.deleteMany({
+        where: { postId, userId },
+      });
+
+      res.json({ success: true, data: null, message: 'Feedback removed' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/social/posts/:id/subscribe — Subscribe to notifications
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/posts/:id/subscribe',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const postId = parseInt(req.params.id, 10);
+
+      await prisma.postNotification.upsert({
+        where: { uk_post_notification: { postId, userId } },
+        create: { postId, userId },
+        update: {},
+      });
+
+      res.json({ success: true, data: { subscribed: true }, message: 'Subscribed' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// DELETE /api/v1/social/posts/:id/subscribe — Unsubscribe
+// ════════════════════════════════════════════════════════════════
+router.delete(
+  '/posts/:id/subscribe',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const postId = parseInt(req.params.id, 10);
+
+      await prisma.postNotification.deleteMany({
+        where: { postId, userId },
+      });
+
+      res.json({ success: true, data: { subscribed: false }, message: 'Unsubscribed' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/social/posts/:id/hide — Hide post
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/posts/:id/hide',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const postId = parseInt(req.params.id, 10);
+
+      await prisma.postFeedback.upsert({
+        where: { uk_post_feedback: { postId, userId } },
+        create: { postId, userId, type: 'NOT_INTERESTED' },
+        update: { type: 'NOT_INTERESTED' },
+      });
+
+      res.json({ success: true, data: { hidden: true }, message: 'Post hidden' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/social/posts/:id/report — Report post
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/posts/:id/report',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const reporterId = req.user.userId!;
+      const postId = parseInt(req.params.id, 10);
+      const { reason, details } = req.body as { reason?: string; details?: string };
+
+      const validReasons = ['SPAM', 'MISINFORMATION', 'HARASSMENT', 'VIOLENCE', 'OTHER'];
+      if (!reason || !validReasons.includes(reason)) {
+        throw new AppError('Invalid reason', 400, 'INVALID_REASON');
+      }
+
+      await prisma.postReport.create({
+        data: { postId, reporterId, reason: reason as string, details },
+      });
+
+      res.json({ success: true, data: { reported: true }, message: 'Report submitted' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/social/posts/:id/archive — Archive post
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/posts/:id/archive',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const postId = parseInt(req.params.id, 10);
+
+      const post = await prisma.socialPost.findUnique({
+        where: { id: postId },
+        select: { authorId: true },
+      });
+
+      if (!post) throw new AppError('Post not found', 404, 'NOT_FOUND');
+      if (post.authorId !== userId) throw new AppError('Not authorized', 403, 'FORBIDDEN');
+
+      await prisma.postArchive.upsert({
+        where: { postId },
+        create: { postId, userId },
+        update: {},
+      });
+
+      res.json({ success: true, data: { archived: true }, message: 'Post archived' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// DELETE /api/v1/social/posts/:id/archive — Unarchive post
+// ════════════════════════════════════════════════════════════════
+router.delete(
+  '/posts/:id/archive',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const postId = parseInt(req.params.id, 10);
+
+      await prisma.postArchive.deleteMany({
+        where: { postId, userId },
+      });
+
+      res.json({ success: true, data: { archived: false }, message: 'Post unarchived' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/social/posts/:id/pin — Pin/unpin post
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/posts/:id/pin',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const userId = req.user.userId!;
+      const postId = parseInt(req.params.id, 10);
+
+      const post = await prisma.socialPost.findUnique({
+        where: { id: postId },
+        select: { authorId: true },
+      });
+
+      if (!post) throw new AppError('Post not found', 404, 'NOT_FOUND');
+      if (post.authorId !== userId) throw new AppError('Not authorized', 403, 'FORBIDDEN');
+
+      const existing = await prisma.userProfile.findUnique({
+        where: { userId },
+        select: { pinnedPostId: true },
+      });
+
+      const currentlyPinned = existing?.pinnedPostId === postId;
+      const newPinnedId = currentlyPinned ? null : postId;
+
+      await prisma.userProfile.upsert({
+        where: { userId },
+        create: { userId, pinnedPostId: newPinnedId },
+        update: { pinnedPostId: newPinnedId },
+      });
+
+      res.json({ success: true, data: { pinned: !currentlyPinned } });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 export default router;

@@ -1266,6 +1266,34 @@ export const socialApi = {
   likePost: (id: number) => api.post(`/social/posts/${id}/like`),
   unlikePost: (id: number) => api.delete(`/social/posts/${id}/like`),
 
+// ─── Post actions (Phase 3: FB-style menu) ─────────────────
+feedbackPost: (id: number, type: 'INTERESTED' | 'NOT_INTERESTED') =>
+  api.post(`/social/posts/${id}/feedback`, { type }),
+removeFeedback: (id: number) =>
+  api.delete(`/social/posts/${id}/feedback`),
+subscribePost: (id: number) =>
+  api.post(`/social/posts/${id}/subscribe`),
+unsubscribePost: (id: number) =>
+  api.delete(`/social/posts/${id}/subscribe`),
+hidePost: (id: number) =>
+  api.post(`/social/posts/${id}/hide`),
+reportPost: (id: number, reason: string, details?: string) =>
+  api.post(`/social/posts/${id}/report`, { reason, details }),
+archivePost: (id: number) =>
+  api.post(`/social/posts/${id}/archive`),
+unarchivePost: (id: number) =>
+  api.delete(`/social/posts/${id}/archive`),
+pinPost: (id: number) =>
+  api.post(`/social/posts/${id}/pin`),
+snoozeUser: (userId: number) =>
+  api.post(`/users/${userId}/snooze`),
+unsnoozeUser: (userId: number) =>
+  api.delete(`/users/${userId}/snooze`),
+followUser: (targetId: number) =>
+  api.post('/users/follow', { targetId }),
+unfollowUser: (targetId: number) =>
+  api.post('/users/follow', { targetId }),
+
   // ─── Multi-emoji reactions (added 2026-06-20) ──────────────────
   // Toggle semantics:
   //   first click T    → insert T

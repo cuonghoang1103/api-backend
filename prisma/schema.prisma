@@ -77,6 +77,9 @@ model User {
   lastLoginAt        DateTime? @map("last_login_at")
   lastLoginIp        String?   @map("last_login_ip") @db.VarChar(64)
   lastLoginUserAgent String?   @map("last_login_user_agent") @db.VarChar(500)
+// Theme preference: dark or light
+ theme String? @default("dark") @map("theme") @db.VarChar(10)
+
 
   provider   String? @db.VarChar(50)
   providerId String? @map("provider_id") @db.VarChar(255)
@@ -226,6 +229,13 @@ model User {
   // ─── Social Follow Graph ────────────────────────────────
   following Follow[] @relation("Following")
   followers Follow[] @relation("Followers")
+ // Phase 3: Post actions back-relations
+ postFeedbacks PostFeedback[]
+ postNotifications PostNotification[]
+ postReports PostReport[] @relation("PostReports")
+ snoozesGiven UserSnooze[] @relation("Snoozer")
+ snoozesReceived UserSnooze[] @relation("SnoozedBy")
+ postArchives PostArchive[]
 
   // ─── Friend Graph (two-way, FB-style requests) ──────────
   // Additive alongside the follow graph above. `friendshipsSent`
@@ -1533,6 +1543,12 @@ model SocialPost {
   // migration SQL; `raw("gin_trgm_ops")` selects the trigram
   // operator class.
   @@index([content(ops: raw("gin_trgm_ops"))], type: Gin, map: "idx_social_posts_content_trgm")
+ archivedAt DateTime? @map("archived_at")
+ // Phase 3 relations
+ feedbacks PostFeedback[]
+ notifications PostNotification[]
+ reports PostReport[]
+ archive PostArchive?
   @@map("social_posts")
 }
 
@@ -3389,6 +3405,7 @@ model UserProfile {
   relationshipStatus String? @map("relationship_status") @db.VarChar(50)
   hobbies            String? @db.Text
   languages          String? @db.VarChar(255)
+ pinnedPostId Int? @map("pinned_post_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -3482,4 +3499,77 @@ model StoryHide {
   @@index([storyId], name: "idx_story_hide_story")
   @@index([userId], name: "idx_story_hide_user")
   @@map("story_hides")
+}
+
+// ════════════════════════════════════════════════════════════════
+// PHASE 3: Facebook-style Post Action Menu
+// ────────────────────────────────────────────────────────────────
+
+// Feedback on posts (Interested / Not Interested)
+model PostFeedback {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  type      String
+  createdAt DateTime @default(now()) @map("created_at")
+  post      SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([postId, userId], name: "uk_post_feedback")
+  @@index([postId], name: "idx_feedback_post")
+  @@map("post_feedbacks")
+}
+
+// Subscribe to post update notifications
+model PostNotification {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  post      SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([postId, userId], name: "uk_post_notification")
+  @@index([postId], name: "idx_notification_post")
+  @@map("post_notifications")
+}
+
+// Report a post
+model PostReport {
+  id         Int      @id @default(autoincrement())
+  postId     Int      @map("post_id")
+  reporterId Int      @map("reporter_id")
+  reason     String
+  details    String?  @db.Text
+  status     String   @default("PENDING") @map("status")
+  createdAt  DateTime @default(now()) @map("created_at")
+  post       SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  reporter   User     @relation("PostReports", fields: [reporterId], references: [id], onDelete: Cascade)
+  @@index([postId], name: "idx_report_post")
+  @@index([status], name: "idx_report_status")
+  @@map("post_reports")
+}
+
+// Snooze a user (hide their posts for 30 days)
+model UserSnooze {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  snoozedUserId Int      @map("snoozed_user_id")
+  until         DateTime @map("until")
+  createdAt     DateTime @default(now()) @map("created_at")
+  user          User     @relation("Snoozer", fields: [userId], references: [id], onDelete: Cascade)
+  snoozedUser  User     @relation("SnoozedBy", fields: [snoozedUserId], references: [id], onDelete: Cascade)
+  @@unique([userId, snoozedUserId], name: "uk_user_snooze")
+  @@index([userId], name: "idx_snooze_user")
+  @@index([until], name: "idx_snooze_until")
+  @@map("user_snoozes")
+}
+
+// Archive a post (soft delete)
+model PostArchive {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id") @unique
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  post      SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("post_archives")
 }

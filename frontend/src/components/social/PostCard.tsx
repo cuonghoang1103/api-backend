@@ -2309,10 +2309,15 @@ function MediaItem({
     if (!v) return;
     // Play only when the cell is in view AND no fullscreen modal is open.
     if (isInView && !modalOpen) {
-      // Autoplay may fail (browser policy) but we swallow the error.
-      // Also broadcast a custom event so SocialBackground can pause
-      // its animated canvas and free up the main thread for video
-      // decode.
+      // CRITICAL for TikTok-style autoplay: force the muted *property*
+      // (not just the attribute) right before play(). React only sets
+      // the `muted` attribute reliably, so the browser can see a
+      // not-actually-muted video and BLOCK autoplay — leaving the video
+      // paused until the user taps play. Setting the property guarantees
+      // muted autoplay is allowed. `playsInline` avoids iOS fullscreen.
+      v.muted = muted;
+      v.playsInline = true;
+      // Autoplay may still fail (very strict policies) but we swallow it.
       v.play().catch(() => {});
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('social:video-playing', { detail: { src: v.currentSrc } }));

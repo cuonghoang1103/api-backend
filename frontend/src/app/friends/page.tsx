@@ -118,7 +118,7 @@ function FriendsPageInner() {
 
   if (!isAuthenticated) {
     return (
-      <main className="min-h-screen pt-24" style={{ background: '#03020c' }}>
+      <main className="min-h-screen pt-24" style={{ background: 'var(--bg-primary)' }}>
         <div className="mx-auto max-w-md px-6">
           <LoginRequired message="Đăng nhập để tìm và kết nối với bạn bè." />
         </div>
@@ -129,7 +129,7 @@ function FriendsPageInner() {
   const showingSearch = query.trim().length > 0;
 
   return (
-    <main className="min-h-screen pt-20 pb-16" style={{ background: '#03020c' }}>
+    <main className="min-h-screen pt-20 pb-16" style={{ background: 'var(--bg-primary)' }}>
       <div className="mx-auto w-full max-w-4xl px-4 sm:px-6">
         {/* Header */}
         <div className="mb-5">
@@ -278,7 +278,7 @@ function Empty({ text }: { text: string }) {
 
 export default function FriendsPage() {
   return (
-    <Suspense fallback={<main className="min-h-screen pt-24" style={{ background: '#03020c' }} />}>
+    <Suspense fallback={<main className="min-h-screen pt-24" style={{ background: 'var(--bg-primary)' }} />}>
       <FriendsPageInner />
     </Suspense>
   );

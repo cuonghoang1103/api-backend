@@ -2,7 +2,7 @@ export default function RootLoading() {
   return (
     <div
       className="min-h-screen flex items-center justify-center"
-      style={{ background: '#03020c' }}
+      style={{ background: 'var(--bg-primary)' }}
     >
       <div className="flex flex-col items-center gap-3">
         <div

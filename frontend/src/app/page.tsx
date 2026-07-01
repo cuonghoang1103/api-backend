@@ -407,11 +407,11 @@ export default function SocialPage() {
   }, [displayPosts, isLoadingMore]);
 
   return (
-    <main className="min-h-screen pt-16" style={{ background: '#03020c' }}>
+    <main className="min-h-screen pt-16" style={{ background: 'var(--bg-primary)' }}>
       <SocialBackground />
-      {/* Ambient glow */}
+      {/* Ambient glow - dark mode only */}
       <div
-        className="pointer-events-none fixed inset-0 z-[1]"
+        className="pointer-events-none fixed inset-0 z-[1] hidden dark:block"
         style={{
           background:
             'radial-gradient(ellipse 800px 600px at 50% 0%, rgba(139, 92, 246, 0.06) 0%, transparent 70%), radial-gradient(ellipse 600px 400px at 80% 50%, rgba(6, 182, 212, 0.04) 0%, transparent 60%)',

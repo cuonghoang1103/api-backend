@@ -44,6 +44,7 @@
 //  with zero JS cost.
 
 import { useEffect, useRef, useState } from 'react';
+import { useTheme } from '@/context/ThemeContext';
 
 interface Bubble {
   x: number;
@@ -109,6 +110,7 @@ function prefersReducedMotion(): boolean {
 export default function SocialBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [fallback, setFallback] = useState<{ reduced: boolean; weak: boolean } | null>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const reduced = prefersReducedMotion();
@@ -295,11 +297,12 @@ export default function SocialBackground() {
 
       cx.clearRect(0, 0, w, h);
 
-      // 1. Background fill (cached)
-      if (bgGrad) {
+      // 1. Background fill (cached) — only draw dark bg in dark mode
+      if (bgGrad && theme === 'dark') {
         cx.fillStyle = bgGrad;
         cx.fillRect(0, 0, w, h);
       }
+      // In light mode, canvas is transparent so CSS bg shows through
 
       // 2. Wisps — single glow gradient per wisp, no shadow blur.
       // We draw the gradient at scale (setTransform per draw is
@@ -411,7 +414,11 @@ export default function SocialBackground() {
 
   // Reduced-motion or weak-device fallback: a single static radial
   // gradient via CSS. Zero JS cost, keeps the dark-mode vibe.
+  // In light mode, render nothing so CSS background shows through.
   if (fallback) {
+    if (theme === 'light') {
+      return null; // CSS background handles light mode
+    }
     return (
       <div
         aria-hidden="true"
@@ -423,6 +430,11 @@ export default function SocialBackground() {
         }}
       />
     );
+  }
+
+  // In light mode, don't render the canvas at all
+  if (theme === 'light') {
+    return null;
   }
 
   return (

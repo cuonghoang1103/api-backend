@@ -3,7 +3,29 @@
 @tailwind utilities;
 
 @layer base {
+  /* Default: no class = light theme */
   :root {
+    --bg-primary: #ffffff;
+    --bg-card: #f8fafc;
+    --bg-surface: #f1f5f9;
+    --bg-surface-hover: rgba(0, 0, 0, 0.04);
+    --bg-surface-active: rgba(0, 0, 0, 0.06);
+    --bg-overlay: rgba(255, 255, 255, 0.98);
+    --bg-glass: rgba(248, 250, 252, 0.9);
+    --border-color: #e2e8f0;
+    --border-light: rgba(0, 0, 0, 0.1);
+    --border-light-hover: rgba(0, 0, 0, 0.15);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Dark theme - add 'dark' class to html */
+  html.dark {
     --bg-primary: #0a0a0f;
     --bg-card: #12121a;
     --bg-surface: #1a1a24;
@@ -14,10 +36,6 @@
     --border-color: #27272a;
     --border-light: rgba(255, 255, 255, 0.1);
     --border-light-hover: rgba(255, 255, 255, 0.15);
-    --neon-indigo: #6366f1;
-    --neon-violet: #8b5cf6;
-    --neon-fuchsia: #d946ef;
-    --neon-cyan: #22d3ee;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
@@ -27,7 +45,7 @@
     --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
   }
 
-  /* Light theme */
+  /* Legacy light class - keep for backward compat */
   html.light {
     --bg-primary: #ffffff;
     --bg-card: #f8fafc;

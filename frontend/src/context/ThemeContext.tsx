@@ -37,12 +37,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const applyTheme = useCallback((t: Theme) => {
-    if (t === 'light') {
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
-    } else {
+    // Use html.dark class for dark mode, html.light for light mode
+    // Default is dark (no class needed for dark mode with the CSS setup)
+    if (t === 'dark') {
       document.documentElement.classList.add('dark');
       document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 

@@ -130,7 +130,7 @@ export function RenderContentWithCode({ content }: { content: string }) {
 
   if (codeBlocks.length === 0) {
     return (
-      <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: '#e2e8f0' }}>
+      <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }}>
         {content}
       </p>
     );
@@ -144,7 +144,7 @@ export function RenderContentWithCode({ content }: { content: string }) {
     const beforeText = content.slice(lastIndex, content.indexOf(block.fullMatch, lastIndex));
     if (beforeText.trim()) {
       parts.push(
-        <p key={`text-${i}`} className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: '#e2e8f0' }}>
+        <p key={`text-${i}`} className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }}>
           {beforeText}
         </p>
       );
@@ -164,7 +164,7 @@ export function RenderContentWithCode({ content }: { content: string }) {
   const afterText = content.slice(lastIndex);
   if (afterText.trim()) {
     parts.push(
-      <p key="text-end" className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: '#e2e8f0' }}>
+      <p key="text-end" className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }}>
         {afterText}
       </p>
     );

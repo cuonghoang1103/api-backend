@@ -539,7 +539,7 @@ export default function ChatPage() {
   }, [addSession, setCurrentSessionId, clearMessages, setSuggestedPrompts, setRobotEmotion, setLimitedMode]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden cyber-grid-bg pt-16">
+    <div className="force-dark relative min-h-screen w-full overflow-hidden cyber-grid-bg pt-16">
       {/* Matrix rain background */}
       <MatrixRain />
 

@@ -523,6 +523,37 @@
   letter-spacing: 4px;
 }
 
+/* ── Force-dark scope ───────────────────────────────────────────
+   Pages designed dark-only (AI chat bot /chat) opt OUT of the
+   light theme by adding this class to their root element: every
+   var(--*) consumer inside resolves to the dark palette again and
+   the solid dark background is restored, regardless of the html
+   .light/.dark class. */
+.force-dark {
+  color-scheme: dark;
+  --bg-primary: #18191a;
+  --bg-card: #242526;
+  --bg-surface: #303031;
+  --bg-surface-hover: rgba(255, 255, 255, 0.08);
+  --bg-surface-active: rgba(255, 255, 255, 0.12);
+  --bg-overlay: rgba(36, 37, 38, 0.98);
+  --bg-glass: rgba(36, 37, 38, 0.95);
+  --border-color: #3e4042;
+  --border-light: rgba(255, 255, 255, 0.1);
+  --border-light-hover: rgba(255, 255, 255, 0.15);
+  --text-primary: #e4e6eb;
+  --text-secondary: #b0b3b8;
+  --text-muted: #8a8d91;
+  --accent-color: #4599ff;
+  --accent-hover: #66b3ff;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.6);
+  background-color: #18191a;
+  color: var(--text-primary);
+}
+
 /* ── Cyber grid background ──────────────────────────────────── */
 .cyber-grid-bg {
   background-image:

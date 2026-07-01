@@ -7,52 +7,64 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
-  // Support multiple theme classes: 'dark', 'light-white'
+  // Support multiple theme classes: 'dark', 'light'
   // Use :is() to apply theme styles conditionally
   theme: {
     extend: {
       colors: {
-        darkbg: "#0a0a0f",
-        darkcard: "#12121a",
-        darksurface: "#1a1a24",
-        darkborder: "#27272a",
- neon: {
- indigo: "#6366f1",
- violet: "#8b5cf6",
- fuchsia: "#d946ef",
- cyan: "#22d3ee",
- green: "#4ade80",
- emerald: "#10b981",
- blue: "#3b82f6",
- orange: "#fb923c",
- red: "#f43f5e",
- pink: "#ec4899",
- },
- // Studio palette (Content Creator area) — warm amber
- // distinct from the violet used by /projects. Each step
- // mirrors Tailwind's amber scale so `bg-studio-500/30`
- // etc. Just Work. The 50/950 extremes are slightly
- // nudged for legibility on a dark surface.
- studio: {
- 50: "#fffbeb",
- 100: "#fef3c7",
- 200: "#fde68a",
- 300: "#fcd34d",
- 400: "#fbbf24",
- 500: "#f59e0b",
- 600: "#d97706",
- 700: "#b45309",
- 800: "#92400e",
- 900: "#78350f",
- 950: "#451a03",
- },
- text: {
-          primary: "#f8fafc",
-          secondary: "#94a3b8",
-          muted: "#64748b",
-        },
-      },
- backgroundImage: {
+        // Dark theme colors
+        darkbg: "#18191a",
+        darkcard: "#242526",
+        darksurface: "#303031",
+        darkborder: "#3e4042",
+        // Light theme colors (Facebook-like)
+        lightbg: "#f0f2f5",
+        lightcard: "#ffffff",
+        lightsurface: "#f0f2f5",
+        lightborder: "#dddfe2",
+  neon: {
+  indigo: "#6366f1",
+  violet: "#8b5cf6",
+  fuchsia: "#d946ef",
+  cyan: "#22d3ee",
+  green: "#4ade80",
+  emerald: "#10b981",
+  blue: "#3b82f6",
+  orange: "#fb923c",
+  red: "#f43f5e",
+  pink: "#ec4899",
+  },
+  // Accent colors
+  accent: {
+    DEFAULT: "#1877f2",
+    hover: "#166fe5",
+    light: "#4599ff",
+  },
+  // Studio palette (Content Creator area) — warm amber
+  // distinct from the violet used by /projects. Each step
+  // mirrors Tailwind's amber scale so `bg-studio-500/30`
+  // etc. Just Work. The 50/950 extremes are slightly
+  // nudged for legibility on a dark surface.
+  studio: {
+  50: "#fffbeb",
+  100: "#fef3c7",
+  200: "#fde68a",
+  300: "#fcd34d",
+  400: "#fbbf24",
+  500: "#f59e0b",
+  600: "#d97706",
+  700: "#b45309",
+  800: "#92400e",
+  900: "#78350f",
+  950: "#451a03",
+  },
+  text: {
+           primary: "#050505",
+           secondary: "#65676b",
+           muted: "#8a8d91",
+         },
+       },
+  backgroundImage: {
  "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
  "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
  "neon-gradient": "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)",

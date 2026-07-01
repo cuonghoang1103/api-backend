@@ -24,6 +24,7 @@ import {
   deleteByKey,
   UploadError,
 } from '../storage/uploadService.js';
+import { extractVideoThumbnail } from '../services/video.service.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { generateSignedUploadUrl, verifySignedUploadToken } from '../services/upload.service.js';
 import { logger } from '../utils/logger.js';
@@ -86,9 +87,19 @@ router.post(
         ? await uploadImage(input, bucket, { userId: req.userId })
         : await uploadGeneric(input, bucket, { userId: req.userId, optimize: false });
 
+      // Auto-generate thumbnail for uploaded videos
+      let thumbnail: string | null = null;
+      if (req.file.mimetype.includes('video')) {
+        thumbnail = await extractVideoThumbnail(
+          req.file.buffer,
+          req.file.originalname,
+          req.userId,
+        );
+      }
+
       res.status(201).json({
         success: true,
-        data: result,
+        data: { ...result, thumbnail },
         message: 'File uploaded successfully',
       });
     } catch (error) {
@@ -122,7 +133,14 @@ router.post(
         const out = optimize
           ? await uploadImage(input, bucket, { userId: req.userId })
           : await uploadGeneric(input, bucket, { userId: req.userId, optimize: false });
-        results.push(out);
+
+        // Auto-generate thumbnail for uploaded videos
+        let thumbnail: string | null = null;
+        if (f.mimetype.includes('video')) {
+          thumbnail = await extractVideoThumbnail(f.buffer, f.originalname, req.userId);
+        }
+
+        results.push({ ...out, thumbnail });
       }
       res.status(201).json({
         success: true,

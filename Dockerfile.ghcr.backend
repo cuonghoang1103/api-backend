@@ -9,8 +9,8 @@
 FROM node:22-slim AS deps
 WORKDIR /app
 
-# System deps needed at runtime (curl for healthcheck, tini for signal handling)
-RUN apt-get update && apt-get install -y --no-install-recommends curl tini && rm -rf /var/lib/apt/lists/*
+# System deps needed at runtime (curl for healthcheck, tini for signal handling, ffmpeg for video thumbnails)
+RUN apt-get update && apt-get install -y --no-install-recommends curl tini ffmpeg && rm -rf /var/lib/apt/lists/*
 
 # Install ONLY production deps. The CI runner pre-compiles src/ → dist/
 # and runs `npm prune --omit=dev` on a fresh copy of node_modules before
@@ -26,10 +26,10 @@ RUN npm ci --omit=dev --prefer-offline --no-audit --fetch-timeout=60000 \
 FROM node:22-slim AS runtime
 WORKDIR /app
 
-# Re-install runtime system deps (curl, tini). The deps stage is
+# Re-install runtime system deps (curl, tini, ffmpeg). The deps stage is
 # discarded; this keeps the final image lean without inheriting
 # npm cache or build toolchain.
-RUN apt-get update && apt-get install -y --no-install-recommends curl tini && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends curl tini ffmpeg && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
 RUN useradd --uid 1001 --gid 0 --shell /bin/bash --create-home nodejs

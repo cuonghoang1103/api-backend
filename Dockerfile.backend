@@ -61,8 +61,8 @@ RUN npm run build
 FROM node:22-slim AS runner
 WORKDIR /app
 
-# Security: run as non-root user, install curl for healthcheck
-RUN apt-get update && apt-get install -y --no-install-recommends curl tini && rm -rf /var/lib/apt/lists/* && \
+# Security: run as non-root user, install curl for healthcheck and ffmpeg for video thumbnails
+RUN apt-get update && apt-get install -y --no-install-recommends curl tini ffmpeg && rm -rf /var/lib/apt/lists/* && \
     useradd --uid 1001 --gid 0 --shell /bin/bash --create-home nodejs
 
 # Create uploads directory

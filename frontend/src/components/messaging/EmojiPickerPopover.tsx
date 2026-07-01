@@ -7,9 +7,11 @@
  * until `open`.
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
+import { createPortal } from 'react-dom';
 import dynamic from 'next/dynamic';
 import data from '@emoji-mart/data';
+import { useAnchoredFixedStyle } from './useAnchoredPopover';
 
 // emoji-mart's React wrapper. Loaded only on the client.
 const Picker = dynamic(() => import('@emoji-mart/react'), { ssr: false });
@@ -18,12 +20,15 @@ export default function EmojiPickerPopover({
   open,
   onClose,
   onPick,
+  anchorRef,
 }: {
   open: boolean;
   onClose: () => void;
   onPick: (emoji: string) => void;
+  anchorRef?: RefObject<HTMLElement | null>;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const fixedStyle = useAnchoredFixedStyle(anchorRef, open, 352);
 
   useEffect(() => {
     if (!open) return;
@@ -40,8 +45,12 @@ export default function EmojiPickerPopover({
 
   if (!open) return null;
 
-  return (
-    <div ref={ref} className="absolute bottom-full left-0 z-50 mb-2">
+  const body = (
+    <div
+      ref={ref}
+      className={anchorRef ? 'z-[60]' : 'absolute bottom-full left-0 z-50 mb-2'}
+      style={anchorRef ? fixedStyle : undefined}
+    >
       <Picker
         data={data}
         onEmojiSelect={(e: { native?: string }) => {
@@ -56,4 +65,6 @@ export default function EmojiPickerPopover({
       />
     </div>
   );
+
+  return anchorRef ? createPortal(body, document.body) : body;
 }

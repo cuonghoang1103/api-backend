@@ -107,6 +107,9 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
   // Phase 5 home upgrade: ref for the comment composer input so the
   // MentionAutocomplete component can listen to its caret position.
   const commentInputRef = useRef<HTMLInputElement | null>(null);
+  // Anchor for the comment media pickers so they portal above this row
+  // (escaping the post card's overflow-hidden that was clipping them).
+  const commentBarRef = useRef<HTMLDivElement | null>(null);
   // Cache of the user's existing collections. We hydrate this on
   // first popover open. Lazily loaded so the PostCard stays cheap
   // when no one opens the popover.
@@ -1418,16 +1421,19 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     open={commentPicker === 'emoji'}
                     onClose={() => setCommentPicker(null)}
                     onPick={(e) => setCommentText((t) => t + e)}
+                    anchorRef={commentBarRef}
                   />
                   <GifPicker
                     open={commentPicker === 'gif'}
                     onClose={() => setCommentPicker(null)}
                     onPick={(url) => { setCommentMedia({ url, kind: 'gif' }); setCommentPicker(null); }}
+                    anchorRef={commentBarRef}
                   />
                   <StickerPicker
                     open={commentPicker === 'sticker'}
                     onClose={() => setCommentPicker(null)}
                     onPick={(url) => { setCommentMedia({ url, kind: 'sticker' }); setCommentPicker(null); }}
+                    anchorRef={commentBarRef}
                   />
                   <div
                     className="flex flex-1 flex-col gap-2 rounded-2xl px-4 py-2.5"
@@ -1453,7 +1459,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                         </button>
                       </div>
                     )}
-                    <div className="flex items-center gap-2">
+                    <div ref={commentBarRef} className="flex items-center gap-2">
                       <input
                         ref={commentInputRef}
                         type="text"

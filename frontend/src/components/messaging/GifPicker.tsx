@@ -8,8 +8,10 @@
  * which is rate-limited and only suitable for testing).
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
+import { createPortal } from 'react-dom';
 import { Search, Loader2, X } from 'lucide-react';
+import { useAnchoredFixedStyle } from './useAnchoredPopover';
 
 const GIPHY_KEY = process.env.NEXT_PUBLIC_GIPHY_API_KEY || 'dc6zaTOxFJmzC';
 const GIPHY_BASE = 'https://api.giphy.com/v1/gifs';
@@ -33,15 +35,18 @@ export default function GifPicker({
   open,
   onClose,
   onPick,
+  anchorRef,
 }: {
   open: boolean;
   onClose: () => void;
   onPick: (url: string) => void;
+  anchorRef?: RefObject<HTMLElement | null>;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
   const [gifs, setGifs] = useState<GifItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const fixedStyle = useAnchoredFixedStyle(anchorRef, open, 340);
 
   const load = useCallback(async (q: string) => {
     setLoading(true);
@@ -78,10 +83,15 @@ export default function GifPicker({
 
   if (!open) return null;
 
-  return (
+  const body = (
     <div
       ref={ref}
-      className="absolute bottom-full left-0 z-50 mb-2 w-[340px] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0e1218] shadow-[0_16px_48px_rgba(0,0,0,0.55)]"
+      className={
+        anchorRef
+          ? 'w-[340px] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0e1218] shadow-[0_16px_48px_rgba(0,0,0,0.55)]'
+          : 'absolute bottom-full left-0 z-50 mb-2 w-[340px] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0e1218] shadow-[0_16px_48px_rgba(0,0,0,0.55)]'
+      }
+      style={anchorRef ? fixedStyle : undefined}
     >
       <div className="flex items-center gap-2 border-b border-white/[0.06] p-2">
         <div className="flex flex-1 items-center gap-2 rounded-full bg-white/[0.05] px-3 py-1.5">
@@ -126,4 +136,6 @@ export default function GifPicker({
       </div>
     </div>
   );
+
+  return anchorRef ? createPortal(body, document.body) : body;
 }

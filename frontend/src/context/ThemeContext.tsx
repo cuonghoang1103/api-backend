@@ -50,11 +50,14 @@ function getStoredTheme(): Theme {
 // Apply theme to DOM immediately
 function applyThemeToDOM(t: Theme) {
   const html = document.documentElement;
+  // Global dark class is 'theme-dark', NOT 'dark' — Tailwind's `dark:`
+  // variant ('.dark' ancestor) is reserved for the Notes page's own
+  // wrapper-scoped 3-theme system.
   if (t === 'dark') {
     html.classList.remove('light');
-    html.classList.add('dark');
+    html.classList.add('theme-dark');
   } else {
-    html.classList.remove('dark');
+    html.classList.remove('theme-dark');
     html.classList.add('light');
   }
 }

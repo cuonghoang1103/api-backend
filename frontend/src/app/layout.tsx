@@ -268,7 +268,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{var t=localStorage.getItem('theme');document.documentElement.classList.add(t==='light'?'light':'dark')}catch(e){document.documentElement.classList.add('dark')}",
+              "try{var t=localStorage.getItem('theme');document.documentElement.classList.add(t==='light'?'light':'theme-dark')}catch(e){document.documentElement.classList.add('theme-dark')}",
           }}
         />
         {/* Site-wide JSON-LD. The next/script wrapper defers it

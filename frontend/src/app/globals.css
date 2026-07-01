@@ -27,8 +27,14 @@
     --shadow-xl: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 
-  /* Dark theme - add 'dark' class to html */
-  html.dark {
+  /* Dark theme — add 'theme-dark' class to html.
+     IMPORTANT: the class is deliberately NOT 'dark'. Tailwind's
+     darkMode:'class' keys every `dark:` variant off ANY ancestor
+     with `.dark`, and the Notes page scopes its own 3-theme system
+     (light/dark/brown) with a `.dark` wrapper. Putting `.dark` on
+     <html> force-activated all `dark:` styles inside Notes and
+     broke its theme switcher. */
+  html.theme-dark {
     color-scheme: dark;
     --bg-primary: #18191a;
     --bg-card: #242526;
@@ -209,6 +215,12 @@
   .text-theme-primary { color: var(--text-primary); }
   .text-theme-secondary { color: var(--text-secondary); }
   .text-theme-muted { color: var(--text-muted); }
+  /* Global-theme replacements for Tailwind `dark:` variants, which
+     are reserved for the Notes wrapper (see html.theme-dark note). */
+  .theme-dark-only { display: none; }
+  html.theme-dark .theme-dark-only { display: block; }
+  .text-violet-theme { color: #6d28d9; }
+  html.theme-dark .text-violet-theme { color: #c4b5fd; }
   .shadow-theme { box-shadow: var(--shadow-md); }
   .shadow-theme-lg { box-shadow: var(--shadow-lg); }
 }

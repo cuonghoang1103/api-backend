@@ -611,7 +611,7 @@ export function PostComposer() {
                         onClick={() => setComposerType(value)}
                         className={`flex min-h-[32px] items-center gap-1.5 rounded-full px-3 py-1 text-[12.5px] font-medium transition-colors ${
                           active
-                            ? 'bg-neon-violet/20 text-violet-700 dark:text-violet-200 ring-1 ring-neon-violet/40'
+                            ? 'bg-neon-violet/20 text-violet-theme ring-1 ring-neon-violet/40'
                             : 'text-text-secondary hover:text-text-primary'
                         }`}
                       >

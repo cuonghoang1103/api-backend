@@ -81,7 +81,7 @@ const envSchema = z.object({
 
   // Rate Limiting
   RATE_LIMIT_WINDOW_MS: z.string().regex(/^\d+$/).default('900000'),
-  RATE_LIMIT_MAX_REQUESTS: z.string().regex(/^\d+$/).default('100'),
+  RATE_LIMIT_MAX_REQUESTS: z.string().regex(/^\d+$/).default('1000'),
 
   // Signed URL secret — required in production, no placeholder default
   SIGNED_URL_SECRET: z

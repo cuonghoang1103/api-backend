@@ -355,13 +355,20 @@ export function PostComposer() {
           const category = isFile ? 'documents' : isVideo ? 'video' : 'images';
           const res = await fileApi.upload(file, category);
           const url = res.data?.data?.url;
+          const serverThumbnail = res.data?.data?.thumbnail; // Auto-generated video thumbnail
           if (!url) {
             throw new Error('Upload response missing url');
           }
           useSocialStore.setState((s) => ({
             composerMedia: s.composerMedia.map((m) =>
               m.id === id
-                ? { ...m, progress: 100, url, thumbnail: isVideo ? preview : url }
+                ? {
+                    ...m,
+                    progress: 100,
+                    url,
+                    // For videos, use server-generated thumbnail; for images, use the uploaded URL
+                    thumbnail: isVideo ? (serverThumbnail || preview) : url
+                  }
                 : m
             ),
           }));

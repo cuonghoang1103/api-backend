@@ -1042,125 +1042,125 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                         <Flag className="h-3.5 w-3.5" /> Báo cáo
                       </button>
                     )}
+
+                    {/* Phase 3: Interested */}
+                    {!isAuthor && (
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        onClick={async () => {
+                          setShowMoreMenu(false);
+                          try {
+                            await api.post(`/social/posts/${post.id}/feedback`, { type: 'INTERESTED' });
+                            toast.success('Cảm ơn phản hồi của bạn');
+                          } catch {
+                            toast.error('Không thể gửi phản hồi');
+                          }
+                        }}
+                      >
+                        <Flag className="h-3.5 w-3.5" /> Quan tâm
+                      </button>
+                    )}
+
+                    {/* Phase 3: Save */}
+                    {!isAuthor && (
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        onClick={() => { setShowMoreMenu(false); }}
+                      >
+                        <Bookmark className="h-3.5 w-3.5" /> Lưu bài viết
+                      </button>
+                    )}
+
+                    {/* Phase 3: Subscribe */}
+                    {!isAuthor && (
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        onClick={async () => {
+                          setShowMoreMenu(false);
+                          try {
+                            await api.post(`/social/posts/${post.id}/subscribe`);
+                            toast.success('Đã bật thông báo');
+                          } catch {
+                            toast.error('Không thể bật thông báo');
+                          }
+                        }}
+                      >
+                        <Bell className="h-3.5 w-3.5" /> Bật thông báo
+                      </button>
+                    )}
+
+                    {/* Phase 3: Pin */}
+                    {isAuthor && (
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        onClick={async () => {
+                          setShowMoreMenu(false);
+                          try {
+                            await api.post(`/social/posts/${post.id}/pin`);
+                            toast.success('Đã ghim bài viết');
+                          } catch {
+                            toast.error('Không thể ghim');
+                          }
+                        }}
+                      >
+                        <Pin className="h-3.5 w-3.5" /> Ghim bài viết
+                      </button>
+                    )}
+
+                    {/* Phase 3: Archive */}
+                    {isAuthor && (
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        onClick={async () => {
+                          setShowMoreMenu(false);
+                          try {
+                            await api.post(`/social/posts/${post.id}/archive`);
+                            toast.success('Đã chuyển vào lưu trữ');
+                          } catch {
+                            toast.error('Không thể lưu trữ');
+                          }
+                        }}
+                      >
+                        <Archive className="h-3.5 w-3.5" /> Lưu vào kho lưu trữ
+                      </button>
+                    )}
+
+                    {/* Phase 3: Hide */}
+                    {!isAuthor && (
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        onClick={async () => {
+                          setShowMoreMenu(false);
+                          try {
+                            await api.post(`/social/posts/${post.id}/hide`);
+                            toast.success('Đã ẩn bài viết');
+                          } catch {}
+                        }}
+                      >
+                        <EyeOff className="h-3.5 w-3.5" /> Ẩn bài viết
+                      </button>
+                    )}
+
+                    {/* Phase 3: Snooze */}
+                    {!isAuthor && (
+                      <button
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
+                        onClick={async () => {
+                          setShowMoreMenu(false);
+                          const authorId = (post as any)?.author?.id;
+                          if (!authorId) return;
+                          try {
+                            await api.post(`/users/${authorId}/snooze`);
+                            toast.success('Đã tạm ẩn bài từ người này trong 30 ngày');
+                          } catch {
+                            toast.error('Không thể tạm ẩn');
+                          }
+                        }}
+                      >
+                        <Clock className="h-3.5 w-3.5" /> Tạm ẩn 30 ngày
+                      </button>
+                    )}
                   </motion.div>
-
-            {/* Phase 3: Interested */}
-            {!isAuthor && (
-              <button
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
-                onClick={async () => {
-                  setShowMoreMenu(false);
-                  try {
-                    await api.post(`/social/posts/${post.id}/feedback`, { type: 'INTERESTED' });
-                    toast.success('Cảm ơn phản hồi của bạn');
-                  } catch {
-                    toast.error('Không thể gửi phản hồi');
-                  }
-                }}
-              >
-                <Flag className="h-3.5 w-3.5" /> Quan tâm
-              </button>
-            )}
-
-            {/* Phase 3: Save */}
-            {!isAuthor && (
-              <button
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
-                onClick={() => { setShowMoreMenu(false); }}
-              >
-                <Bookmark className="h-3.5 w-3.5" /> Lưu bài viết
-              </button>
-            )}
-
-            {/* Phase 3: Subscribe */}
-            {!isAuthor && (
-              <button
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
-                onClick={async () => {
-                  setShowMoreMenu(false);
-                  try {
-                    await api.post(`/social/posts/${post.id}/subscribe`);
-                    toast.success('Đã bật thông báo');
-                  } catch {
-                    toast.error('Không thể bật thông báo');
-                  }
-                }}
-              >
-                <Bell className="h-3.5 w-3.5" /> Bật thông báo
-              </button>
-            )}
-
-            {/* Phase 3: Pin */}
-            {isAuthor && (
-              <button
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
-                onClick={async () => {
-                  setShowMoreMenu(false);
-                  try {
-                    await api.post(`/social/posts/${post.id}/pin`);
-                    toast.success('Đã ghim bài viết');
-                  } catch {
-                    toast.error('Không thể ghim');
-                  }
-                }}
-              >
-                <Pin className="h-3.5 w-3.5" /> Ghim bài viết
-              </button>
-            )}
-
-            {/* Phase 3: Archive */}
-            {isAuthor && (
-              <button
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
-                onClick={async () => {
-                  setShowMoreMenu(false);
-                  try {
-                    await api.post(`/social/posts/${post.id}/archive`);
-                    toast.success('Đã chuyển vào lưu trữ');
-                  } catch {
-                    toast.error('Không thể lưu trữ');
-                  }
-                }}
-              >
-                <Archive className="h-3.5 w-3.5" /> Lưu vào kho lưu trữ
-              </button>
-            )}
-
-            {/* Phase 3: Hide */}
-            {!isAuthor && (
-              <button
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
-                onClick={async () => {
-                  setShowMoreMenu(false);
-                  try {
-                    await api.post(`/social/posts/${post.id}/hide`);
-                    toast.success('Đã ẩn bài viết');
-                  } catch {}
-                }}
-              >
-                <EyeOff className="h-3.5 w-3.5" /> Ẩn bài viết
-              </button>
-            )}
-
-            {/* Phase 3: Snooze */}
-            {!isAuthor && (
-              <button
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:bg-white/[0.05] transition-colors"
-                onClick={async () => {
-                  setShowMoreMenu(false);
-                  const authorId = (post as any)?.author?.id;
-                  if (!authorId) return;
-                  try {
-                    await api.post(`/users/${authorId}/snooze`);
-                    toast.success('Đã tạm ẩn bài từ người này trong 30 ngày');
-                  } catch {
-                    toast.error('Không thể tạm ẩn');
-                  }
-                }}
-              >
-                <Clock className="h-3.5 w-3.5" /> Tạm ẩn 30 ngày
-              </button>
-            )}
                 </>
               )}
             </AnimatePresence>

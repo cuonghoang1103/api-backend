@@ -17,6 +17,9 @@ import { useSocialStore } from '@/store/socialStore';
 import { socialApi, messagingApi, type MessagingThread, api } from '@/lib/api';
 import MentionAutocomplete from '@/components/social/MentionAutocomplete';
 import { RenderContentWithCode } from '@/components/social/CodeBlock';
+import EmojiPickerPopover from '@/components/messaging/EmojiPickerPopover';
+import GifPicker from '@/components/messaging/GifPicker';
+import StickerPicker from '@/components/messaging/StickerPicker';
 import PostPoll from '@/components/social/PostPoll';
 import SocialSavePopover, {
   type SaveCollection,
@@ -86,6 +89,10 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
   // submit and on text change so the next comment starts fresh.
   const [commentMentions, setCommentMentions] = useState<Set<number>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Rich media (GIF / sticker) pending on the comment composer, and
+  // which media picker popover is open. Mirrors the messenger composer.
+  const [commentMedia, setCommentMedia] = useState<{ url: string; kind: 'gif' | 'sticker' } | null>(null);
+  const [commentPicker, setCommentPicker] = useState<'emoji' | 'gif' | 'sticker' | null>(null);
   const [showShareMenu, setShowShareMenu] = useState(false);
   // Phase 6 — "Gửi qua Messenger" picker. True when the user
   // taps the Send icon on the action bar and the thread picker
@@ -275,15 +282,18 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!commentText.trim()) return;
+    if (!commentText.trim() && !commentMedia) return;
 
     setIsSubmitting(true);
     const submittedText = commentText;
+    const submittedMedia = commentMedia;
     const tempId = Date.now();
     const optimisticComment: SocialComment = {
       id: tempId,
       postId: post.id,
       content: submittedText,
+      mediaUrl: submittedMedia?.url ?? null,
+      mediaKind: submittedMedia?.kind ?? null,
       likesCount: 0,
       repliesCount: 0,
       isEdited: false,
@@ -306,12 +316,16 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
     const mentionsArr = Array.from(commentMentions);
     setCommentText('');
     setCommentMentions(new Set());
+    setCommentMedia(null);
+    setCommentPicker(null);
 
     try {
       await socialApi.createComment({
         postId: post.id,
         content: submittedText,
         mentions: mentionsArr.length > 0 ? mentionsArr : undefined,
+        mediaUrl: submittedMedia?.url,
+        mediaKind: submittedMedia?.kind,
       });
     } catch {
       // optimistic already added, ignore for now
@@ -1398,38 +1412,98 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                 )}
 
                 {/* Comment input */}
-                <form onSubmit={handleSubmitComment} className="mt-3 flex items-center gap-2">
+                <form onSubmit={handleSubmitComment} className="relative mt-3 flex items-center gap-2">
+                  {/* Media pickers — anchored above the composer (self-position) */}
+                  <EmojiPickerPopover
+                    open={commentPicker === 'emoji'}
+                    onClose={() => setCommentPicker(null)}
+                    onPick={(e) => setCommentText((t) => t + e)}
+                  />
+                  <GifPicker
+                    open={commentPicker === 'gif'}
+                    onClose={() => setCommentPicker(null)}
+                    onPick={(url) => { setCommentMedia({ url, kind: 'gif' }); setCommentPicker(null); }}
+                  />
+                  <StickerPicker
+                    open={commentPicker === 'sticker'}
+                    onClose={() => setCommentPicker(null)}
+                    onPick={(url) => { setCommentMedia({ url, kind: 'sticker' }); setCommentPicker(null); }}
+                  />
                   <div
-                    className="flex flex-1 items-center gap-2 rounded-2xl px-4 py-2.5"
+                    className="flex flex-1 flex-col gap-2 rounded-2xl px-4 py-2.5"
                     style={{
                       background: 'var(--bg-surface)',
                       border: '1px solid var(--border-color)',
                     }}
                   >
-                    <input
-                      ref={commentInputRef}
-                      type="text"
-                      placeholder="Write a comment... (gõ @ để tag)"
-                      value={commentText}
-                      onChange={(e) => {
-                        const next = e.target.value;
-                        setCommentText(next);
-                        // If the user cleared the text, drop the
-                        // accumulated mention set too — the next
-                        // comment starts from a clean slate.
-                        if (next === '') setCommentMentions(new Set());
-                      }}
-                      className="flex-1 bg-transparent text-sm outline-none"
-                      style={{ color: 'var(--text-primary)' }}
-                    />
-                    <button
-                      type="submit"
-                      disabled={!commentText.trim() || isSubmitting}
-                      className="flex-shrink-0 rounded-xl p-1.5 transition-all disabled:opacity-40"
-                      style={{ background: 'rgba(139,92,246,0.2)', color: '#8B5CF6' }}
-                    >
-                      <Send size={14} />
-                    </button>
+                    {commentMedia && (
+                      <div className="relative w-fit">
+                        <img
+                          src={commentMedia.url}
+                          alt={commentMedia.kind}
+                          className="max-h-28 w-auto max-w-[160px] rounded-lg object-contain"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setCommentMedia(null)}
+                          className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-[11px] leading-none text-white"
+                          aria-label="Bỏ media"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2">
+                      <input
+                        ref={commentInputRef}
+                        type="text"
+                        placeholder="Write a comment... (gõ @ để tag)"
+                        value={commentText}
+                        onChange={(e) => {
+                          const next = e.target.value;
+                          setCommentText(next);
+                          // If the user cleared the text, drop the
+                          // accumulated mention set too — the next
+                          // comment starts from a clean slate.
+                          if (next === '') setCommentMentions(new Set());
+                        }}
+                        className="flex-1 bg-transparent text-sm outline-none"
+                        style={{ color: 'var(--text-primary)' }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setCommentPicker((p) => (p === 'emoji' ? null : 'emoji'))}
+                        className="flex-shrink-0 text-base leading-none opacity-80 hover:opacity-100"
+                        title="Emoji"
+                      >
+                        😊
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCommentPicker((p) => (p === 'gif' ? null : 'gif'))}
+                        className="flex-shrink-0 rounded px-1 text-[11px] font-bold opacity-80 hover:opacity-100"
+                        style={{ color: '#8B5CF6' }}
+                        title="GIF"
+                      >
+                        GIF
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCommentPicker((p) => (p === 'sticker' ? null : 'sticker'))}
+                        className="flex-shrink-0 text-base leading-none opacity-80 hover:opacity-100"
+                        title="Nhãn dán"
+                      >
+                        🏷️
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={(!commentText.trim() && !commentMedia) || isSubmitting}
+                        className="flex-shrink-0 rounded-xl p-1.5 transition-all disabled:opacity-40"
+                        style={{ background: 'rgba(139,92,246,0.2)', color: '#8B5CF6' }}
+                      >
+                        <Send size={14} />
+                      </button>
+                    </div>
                   </div>
                   {/* Phase 5 home upgrade: @mention autocomplete for the
                       comment composer. Listens to the input's caret
@@ -3022,9 +3096,19 @@ function CommentItem({
           >
             {display}
           </Link>
-          <p className="mt-0.5 text-sm break-words" style={{ color: '#cbd5e1' }}>
-            {renderContent()}
-          </p>
+          {comment.content ? (
+            <p className="mt-0.5 text-sm break-words" style={{ color: '#cbd5e1' }}>
+              {renderContent()}
+            </p>
+          ) : null}
+          {(comment as any).mediaUrl && (
+            <img
+              src={(comment as any).mediaUrl}
+              alt={(comment as any).mediaKind === 'sticker' ? 'sticker' : 'GIF'}
+              loading="lazy"
+              className="mt-1 max-h-48 w-auto max-w-[220px] rounded-xl object-contain"
+            />
+          )}
         </div>
         <div className="mt-1 flex items-center gap-3 pl-1 flex-wrap">
           <button

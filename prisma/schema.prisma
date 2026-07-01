@@ -1636,6 +1636,13 @@ model SocialComment {
   userId       Int      @map("user_id")
   parentId     Int?     @map("parent_id")
   content      String   @db.Text
+  // ─── Rich media (GIF / sticker), added 2026-07-02 ─────────────
+  // Mirrors Message.mediaUrl/mediaKind. `mediaUrl` is fully qualified
+  // (GIFs → GIPHY CDN; stickers → our R2). `mediaKind` = 'gif' |
+  // 'sticker'. Both null for a plain text comment. Content may be
+  // empty when a comment is media-only.
+  mediaUrl     String?  @map("media_url") @db.Text
+  mediaKind    String?  @map("media_kind") @db.VarChar(12)
   // ─── @mentions (added 2026-06-20) ─────────────────────────────
   // Array of user IDs the commenter tagged with @username. Stored
   // on the comment so the notification job can fan out a single

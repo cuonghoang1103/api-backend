@@ -170,6 +170,11 @@ export interface SocialComment {
   // comments.
   depth?: number;
   content: string;
+  // ─── Rich media (GIF / sticker), added 2026-07-02 ─────────────
+  // Mirrors messages: a comment may carry one GIF (giphy CDN url) or
+  // sticker (our R2 url). Null/absent for a plain text comment.
+  mediaUrl?: string | null;
+  mediaKind?: 'gif' | 'sticker' | null;
   // ─── @mentions (added 2026-06-20) ─────────────────────────────
   // User ids the commenter tagged with `@username`. PostCard
   // reads this to render clickable mention chips inside the

@@ -153,6 +153,9 @@ export interface CommentInput {
   // so the notification job can fan out without re-parsing the
   // text body.
   mentions?: Array<number | string>;
+  // Optional rich media (GIF / sticker), mirrors Message.mediaUrl/Kind.
+  mediaUrl?: string | null;
+  mediaKind?: string | null;
 }
 
 // ─── Post CRUD ────────────────────────────────────────────────────
@@ -1155,6 +1158,14 @@ export async function createComment(input: CommentInput) {
       ))
     : [];
 
+  // Optional rich media (GIF / sticker) — mirrors Message.mediaUrl/Kind.
+  // Only a valid kind + fully-qualified URL is stored; otherwise null.
+  const kind = input.mediaKind === 'gif' || input.mediaKind === 'sticker' ? input.mediaKind : null;
+  const mediaUrl = kind && typeof input.mediaUrl === 'string' && /^https?:\/\//i.test(input.mediaUrl.trim())
+    ? input.mediaUrl.trim()
+    : null;
+  const mediaKind = mediaUrl ? kind : null;
+
   const comment = await prisma.socialComment.create({
     data: {
       postId: input.postId,
@@ -1164,6 +1175,8 @@ export async function createComment(input: CommentInput) {
       rootId: computedRootId,
       content: input.content,
       mentions: cleanedMentions,
+      mediaUrl,
+      mediaKind,
     },
     include: {
       user: {
@@ -1244,6 +1257,8 @@ export async function getComments(postId: number, options: { cursor?: number; li
     id: c.id,
     postId: c.postId,
     content: c.content,
+    mediaUrl: c.mediaUrl ?? null,
+    mediaKind: c.mediaKind ?? null,
     // @mention ids — the PostCard reads this to render
     // `<a>@username</a>` inside the comment body.
     mentions: Array.isArray(c.mentions) ? c.mentions : [],
@@ -1266,6 +1281,8 @@ export async function getComments(postId: number, options: { cursor?: number; li
       parentId: r.parentId,
       depth: r.depth ?? 1,
       content: r.content,
+      mediaUrl: r.mediaUrl ?? null,
+      mediaKind: r.mediaKind ?? null,
       mentions: Array.isArray(r.mentions) ? r.mentions : [],
       likesCount: r._count?.likes ?? 0,
       repliesCount: r.repliesCount,
@@ -1330,6 +1347,8 @@ export async function getCommentReplies(
     parentId: r.parentId,
     depth: r.depth ?? 1,
     content: r.content,
+    mediaUrl: r.mediaUrl ?? null,
+    mediaKind: r.mediaKind ?? null,
     mentions: Array.isArray(r.mentions) ? r.mentions : [],
     likesCount: r._count?.likes ?? 0,
     repliesCount: r.repliesCount,

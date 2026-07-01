@@ -505,12 +505,18 @@ router.post(
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = getUserId(req);
-      const { postId, parentId, content, mentions } = req.body;
+      const { postId, parentId, content, mentions, mediaUrl, mediaKind } = req.body;
 
       if (!postId || isNaN(parseInt(postId, 10))) {
         throw new AppError('Valid postId is required', 400, 'INVALID_POST_ID');
       }
-      if (!content?.trim()) {
+      // A comment needs either text OR a valid rich-media attachment
+      // (GIF / sticker). Media-only comments are allowed.
+      const hasMedia =
+        (mediaKind === 'gif' || mediaKind === 'sticker') &&
+        typeof mediaUrl === 'string' &&
+        /^https?:\/\//i.test(mediaUrl.trim());
+      if (!content?.trim() && !hasMedia) {
         throw new AppError('Comment content is required', 400, 'MISSING_CONTENT');
       }
 
@@ -518,8 +524,10 @@ router.post(
         userId,
         postId: parseInt(postId, 10),
         parentId: parentId ? parseInt(parentId, 10) : undefined,
-        content: content.trim(),
+        content: content?.trim() ?? '',
         mentions: Array.isArray(mentions) ? mentions : undefined,
+        mediaUrl: hasMedia ? mediaUrl.trim() : undefined,
+        mediaKind: hasMedia ? mediaKind : undefined,
       });
 
       // Notification fan-out (fire-and-forget; helpers self-log

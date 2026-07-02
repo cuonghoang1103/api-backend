@@ -35,6 +35,7 @@ const LANGUAGES = [
   'javascript', 'typescript', 'python', 'java', 'sql', 'bash', 'json',
   'yaml', 'html', 'css', 'go', 'rust', 'php', 'ruby', 'csharp', 'cpp',
   'kotlin', 'swift', 'markdown', 'plaintext',
+  'mermaid', // renders as a diagram (flowchart/sequence/…) instead of code
 ];
 
 // Extension → language for bulk import auto-detection
@@ -214,6 +215,7 @@ interface EditorState {
   code: string;
   explanation: string;
   youtubeUrl: string;
+  referenceUrl: string;
   categoryId: number | null;
   tagIds: number[];
   status: Snippet['status'];
@@ -223,7 +225,7 @@ interface EditorState {
 
 const EMPTY_EDITOR: EditorState = {
   id: null, title: '', description: '', language: 'javascript', code: '',
-  explanation: '', youtubeUrl: '',
+  explanation: '', youtubeUrl: '', referenceUrl: '',
   categoryId: null, tagIds: [], status: 'DRAFT', previewUrl: '', variables: [],
 };
 
@@ -278,6 +280,7 @@ function SnippetsTab({
         code: s.code,
         explanation: s.explanation ?? '',
         youtubeUrl: s.youtubeUrl ?? '',
+        referenceUrl: s.referenceUrl ?? '',
         categoryId: s.categoryId,
         tagIds: (s.tags ?? []).map(t => t.id),
         status: s.status,
@@ -303,6 +306,7 @@ function SnippetsTab({
       code: editor.code,
       explanation: editor.explanation.trim() || undefined,
       youtubeUrl: editor.youtubeUrl.trim() || undefined,
+      referenceUrl: editor.referenceUrl.trim() || undefined,
       categoryId: editor.categoryId,
       tagIds: editor.tagIds,
       status: editor.status,
@@ -530,6 +534,20 @@ function SnippetsTab({
                 value={editor.youtubeUrl || ''}
                 onChange={(e) => setEditor(prev => (prev ? { ...prev, youtubeUrl: e.target.value } : prev))}
                 placeholder="https://www.youtube.com/watch?v=..."
+                className="w-full rounded-lg border border-white/10 bg-[#0d1117] px-4 py-2 text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none"
+              />
+            </div>
+
+            {/* Reference website URL (embedded like the tutorial video) */}
+            <div className="mt-4">
+              <div className="mb-1.5 text-xs text-slate-400">
+                Trang web tham khảo
+                <span className="ml-2 text-slate-500">(nhúng iframe trong mục &quot;More&quot; cho user tham khảo)</span>
+              </div>
+              <input
+                value={editor.referenceUrl || ''}
+                onChange={(e) => setEditor(prev => (prev ? { ...prev, referenceUrl: e.target.value } : prev))}
+                placeholder="https://en.wikipedia.org/wiki/Bubble_sort"
                 className="w-full rounded-lg border border-white/10 bg-[#0d1117] px-4 py-2 text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none"
               />
             </div>

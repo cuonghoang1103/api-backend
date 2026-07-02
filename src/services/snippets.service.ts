@@ -232,6 +232,7 @@ export async function createSnippet(
     code: string;
     explanation?: string;
     youtubeUrl?: string;
+    referenceUrl?: string;
     categoryId?: number | null;
     tagIds?: number[];
     variables?: Array<{ key: string; label: string; defaultValue?: string }>;
@@ -253,6 +254,7 @@ export async function createSnippet(
       code: data.code,
       explanation: data.explanation,
       youtubeUrl: data.youtubeUrl,
+      referenceUrl: data.referenceUrl,
       categoryId: data.categoryId,
       previewUrl: data.previewUrl,
       status: data.status ?? 'DRAFT',
@@ -283,6 +285,7 @@ export async function updateSnippet(
     code?: string;
     explanation?: string;
     youtubeUrl?: string;
+    referenceUrl?: string;
     categoryId?: number | null;
     tagIds?: number[];
     variables?: Array<{ key: string; label: string; defaultValue?: string }>;
@@ -308,6 +311,7 @@ export async function updateSnippet(
   if (data.previewUrl !== undefined) updateData.previewUrl = data.previewUrl;
   if (data.explanation !== undefined) updateData.explanation = data.explanation;
   if (data.youtubeUrl !== undefined) updateData.youtubeUrl = data.youtubeUrl;
+  if (data.referenceUrl !== undefined) updateData.referenceUrl = data.referenceUrl;
   if (data.categoryId !== undefined) updateData.category = data.categoryId === null ? { disconnect: true } : { connect: { id: data.categoryId } };
   if (data.status) updateData.status = data.status;
 

@@ -298,6 +298,7 @@ router.post('/', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: 
       code: string;
       explanation?: string;
       youtubeUrl?: string;
+      referenceUrl?: string;
       categoryId?: number | null;
       tagIds?: number[];
       variables?: Array<{ key: string; label: string; defaultValue?: string }>;
@@ -331,6 +332,7 @@ router.put('/:id(\\d+)', authenticate, requireRole('ADMIN', 'EDITOR'), async (re
       code?: string;
       explanation?: string;
       youtubeUrl?: string;
+      referenceUrl?: string;
       categoryId?: number | null;
       tagIds?: number[];
       variables?: Array<{ key: string; label: string; defaultValue?: string }>;

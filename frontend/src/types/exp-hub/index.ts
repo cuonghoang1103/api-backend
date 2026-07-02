@@ -36,6 +36,7 @@ export interface Snippet {
   code: string;
   explanation: string | null;
   youtubeUrl: string | null;
+  referenceUrl: string | null;
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   viewCount: number;
   copyCount: number;

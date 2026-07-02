@@ -3660,25 +3660,27 @@ model SnippetTag {
 // ─── Snippets ───────────────────────────────────────────────────
 
 model Snippet {
-  id          Int           @id @default(autoincrement())
-  title       String        @db.VarChar(255)
-  slug        String        @unique(map: "uk_snippet_slug") @db.VarChar(255)
-  description String?       @db.Text
+  id           Int           @id @default(autoincrement())
+  title        String        @db.VarChar(255)
+  slug         String        @unique(map: "uk_snippet_slug") @db.VarChar(255)
+  description  String?       @db.Text
   // Programming language (e.g. "javascript", "python", "java", "sql")
-  language    String        @db.VarChar(40)
+  language     String        @db.VarChar(40)
   // The actual code content
-  code        String        @db.Text
+  code         String        @db.Text
   // Detailed explanation for the code (HTML content)
-  explanation String?       @map("explanation") @db.Text
+  explanation  String?       @map("explanation") @db.Text
   // YouTube video URL for tutorial
-  youtubeUrl  String?       @map("youtube_url") @db.VarChar(500)
-  status      SnippetStatus @default(DRAFT)
+  youtubeUrl   String?       @map("youtube_url") @db.VarChar(500)
+  // External reference website URL (embedded like the tutorial video)
+  referenceUrl String?       @map("reference_url") @db.VarChar(500)
+  status       SnippetStatus @default(DRAFT)
   // Denormalised counters (updated by API, not transactions)
-  viewCount   Int           @default(0) @map("view_count")
-  copyCount   Int           @default(0) @map("copy_count")
-  upvoteCount Int           @default(0) @map("upvote_count")
+  viewCount    Int           @default(0) @map("view_count")
+  copyCount    Int           @default(0) @map("copy_count")
+  upvoteCount  Int           @default(0) @map("upvote_count")
   // Optional: a preview/test URL for the snippet
-  previewUrl  String?       @map("preview_url") @db.VarChar(500)
+  previewUrl   String?       @map("preview_url") @db.VarChar(500)
 
   categoryId Int? @map("category_id")
   authorId   Int? @map("author_id")

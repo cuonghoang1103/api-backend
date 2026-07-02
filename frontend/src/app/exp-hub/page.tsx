@@ -234,7 +234,7 @@ export default function ExpHubPage() {
   };
 
   return (
-    <div className="relative flex flex-col h-screen overflow-hidden text-slate-200 bg-[#0d1120]">
+    <div className="relative flex flex-col h-[100dvh] pt-16 overflow-hidden text-slate-200 bg-[#0d1120]">
       {/* ── Ambient dark background (sits behind everything, never over
           text/code — pointer-events-none, low opacity). ── */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
@@ -486,10 +486,10 @@ export default function ExpHubPage() {
                   variables={view.variables}
                   variant="button"
                 />
-                {(view.explanation || view.youtubeUrl) && (
+                {(view.explanation || view.youtubeUrl || view.referenceUrl) && (
                   <button
                     onClick={() => setShowExplanation(true)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/40 hover:bg-blue-500/25 rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500/15 text-blue-300 border border-blue-500/40 hover:bg-blue-500/25 rounded-lg transition-colors"
                   >
                     <Info className="w-4 h-4" />
                     More
@@ -529,7 +529,7 @@ export default function ExpHubPage() {
               </div>
 
               {/* Explanation Modal */}
-              {showExplanation && (view.explanation || view.youtubeUrl) && (
+              {showExplanation && (view.explanation || view.youtubeUrl || view.referenceUrl) && (
                 <div
                   className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
                   onClick={() => setShowExplanation(false)}
@@ -568,6 +568,38 @@ export default function ExpHubPage() {
                               allowFullScreen
                             />
                           </div>
+                        </div>
+                      )}
+
+                      {/* Reference website (embedded iframe) */}
+                      {view.referenceUrl && (
+                        <div>
+                          <div className="flex items-center justify-between gap-2 mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                            <span className="flex items-center gap-2">
+                              <ExternalLink className="w-4 h-4 text-cyan-500" />
+                              Trang web tham khảo
+                            </span>
+                            <a
+                              href={view.referenceUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-cyan-600 hover:underline"
+                            >
+                              Mở tab mới ↗
+                            </a>
+                          </div>
+                          <div className="relative aspect-video rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-white">
+                            <iframe
+                              src={view.referenceUrl}
+                              className="absolute inset-0 w-full h-full"
+                              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                              referrerPolicy="no-referrer"
+                              loading="lazy"
+                            />
+                          </div>
+                          <p className="mt-1.5 text-xs text-neutral-500">
+                            Một số trang chặn nhúng — nếu trống, bấm &quot;Mở tab mới&quot;.
+                          </p>
                         </div>
                       )}
 

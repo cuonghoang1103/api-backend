@@ -3647,8 +3647,11 @@ model SnippetTag {
   name String @unique(map: "uk_snippet_tag_name") @db.VarChar(50)
   slug String @unique(map: "uk_snippet_tag_slug") @db.VarChar(50)
 
-  snippets     Snippet[]
-  SnippetToTag SnippetToTag[]
+  // M:N with Snippet goes THROUGH the SnippetToTag join table only —
+  // do NOT add a direct `snippets Snippet[]` here (prisma format would
+  // auto-invent a bogus `snippets.snippetTagId` column that doesn't
+  // exist in the migration/DB).
+  snippetToTags SnippetToTag[]
 
   @@index([slug], name: "idx_snippet_tag_slug")
   @@map("snippet_tags")
@@ -3683,14 +3686,14 @@ model Snippet {
   category SnippetCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   author   User?            @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
-  tags         SnippetTag[]
-  versions     SnippetVersion[]
-  variables    SnippetVariable[]
-  attachments  SnippetAttachment[]
-  comments     SnippetComment[]
-  upvotes      SnippetUpvote[]
-  bookmarks    SnippetBookmark[]
-  SnippetToTag SnippetToTag[]
+  // Many-to-many via SnippetToTag join table
+  snippetToTags SnippetToTag[]
+  versions      SnippetVersion[]
+  variables     SnippetVariable[]
+  attachments   SnippetAttachment[]
+  comments      SnippetComment[]
+  upvotes       SnippetUpvote[]
+  bookmarks     SnippetBookmark[]
 
   @@index([categoryId], name: "idx_snippets_category")
   @@index([authorId], name: "idx_snippets_author")
@@ -3706,8 +3709,8 @@ model Snippet {
 // ─── Snippet <-> Tag join table ─────────────────────────────────
 
 model SnippetToTag {
-  snippetId Int
-  tagId     Int
+  snippetId Int @map("snippet_id")
+  tagId     Int @map("tag_id")
 
   snippet Snippet    @relation(fields: [snippetId], references: [id], onDelete: Cascade)
   tag     SnippetTag @relation(fields: [tagId], references: [id], onDelete: Cascade)

@@ -115,6 +115,8 @@ const notesRoutes = (await import(path.join(__dirname, 'routes', 'notes.routes.j
 const notesShareRoutes = (await import(path.join(__dirname, 'routes', 'notesShare.routes.js'))).default;
 const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes.js'))).default;
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
+// EXP_Hub — Code Snippet Library
+const snippetRoutes = (await import(path.join(__dirname, 'routes', 'snippets.routes.js'))).default;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -437,6 +439,8 @@ app.use('/api/v1/notes', notesRoutes);
 app.use('/api/v1/notes-shares', notesShareRoutes);
 app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
+// EXP_Hub — Code Snippet Library
+app.use('/api/v1/snippets', snippetRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);
 app.use('/api/v1/admin', adminRoutes);

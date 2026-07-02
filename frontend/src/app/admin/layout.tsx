@@ -32,6 +32,7 @@ const adminNav = [
  { label: 'Hoc vien khoa hoc', href: '/admin/course-enrollments', icon: UsersRound },
  { label: 'Quản lý Posts', href: '/admin/posts', icon: FileText },
  { label: 'GitHub Repo Hub', href: '/admin/repos', icon: Github },
+ { label: 'EXP Hub — Snippets', href: '/admin/exp-hub', icon: Code2 },
  { label: 'Quản lý Users', href: '/admin/users', icon: Users },
  { label: 'Quản lý Skills', href: '/admin/skills', icon: Code2 },
  { label: 'Quản lý Projects', href: '/admin/projects', icon: Sparkles },

@@ -1987,6 +1987,23 @@ function MediaGrid({
   // whose visual media are ALL videos so image posts keep their layout.
   const allVideos = visual.length > 0 && visual.every((m) => m.type === 'VIDEO');
 
+  // ── Landscape-video fix (2026-07-02) ────────────────────────────────
+  // The tall frame above is right for PORTRAIT videos, but a LANDSCAPE
+  // video letterboxed inside it shows two huge black bars above/below
+  // (object-contain in a ~880px-tall box). We measure each video's
+  // intrinsic ratio (server width/height metadata when present, else
+  // the <video>'s loadedmetadata / poster's naturalWidth) and, when the
+  // active tile is landscape or square, size the frame to the video's
+  // OWN aspect ratio instead of forcing the tall frame. Portrait keeps
+  // the TikTok-style frame unchanged.
+  const [measuredAspects, setMeasuredAspects] = useState<Record<number, number>>({});
+  const reportAspect = (idx: number, ratio: number) => {
+    if (!ratio || !isFinite(ratio)) return;
+    setMeasuredAspects((prev) => (prev[idx] === ratio ? prev : { ...prev, [idx]: ratio }));
+  };
+  const metaAspect = (m?: SocialMedia) =>
+    m && m.width && m.height ? m.width / m.height : null;
+
   const handleMediaClick = (item: SocialMedia) => {
     const url = getMediaUrl(item.url, item.url);
     if (item.type === 'VIDEO') {
@@ -2245,7 +2262,21 @@ function MediaGrid({
       onPointerCancel={onPointerUp}
       onWheel={onWheel}
       className="relative w-full overflow-hidden rounded-2xl touch-pan-y select-none"
-      style={allVideos ? { height: 'min(88vh, 880px)' } : undefined}
+      style={(() => {
+        if (!allVideos) return undefined;
+        // Active tile's ratio, falling back to the first tile's, then to
+        // server metadata. Unknown → keep the tall frame (portrait default).
+        const aspect =
+          measuredAspects[currentIdx] ?? metaAspect(visual[currentIdx]) ??
+          measuredAspects[0] ?? metaAspect(visual[0]) ?? null;
+        if (aspect && aspect >= 1) {
+          // Landscape / square: frame matches the video exactly — no
+          // letterbox bars. maxHeight is a safety net for ultra-wide
+          // parents; in the ~600px feed column it never kicks in.
+          return { aspectRatio: String(aspect), maxHeight: 'min(88vh, 880px)' };
+        }
+        return { height: 'min(88vh, 880px)' };
+      })()}
     >
       <div
         data-carousel-track
@@ -2279,6 +2310,7 @@ function MediaGrid({
               item={item}
               onClick={() => { /* taps handled by pointerup above */ }}
               autoPlayEnabled={item.type === 'VIDEO' && i === currentIdx}
+              onAspect={allVideos ? (r) => reportAspect(i, r) : undefined}
               onOpenTheater={
                 onOpenTheater && postId != null
                   ? () => onOpenTheater(postId)
@@ -2504,11 +2536,15 @@ function MediaItem({
   onClick,
   autoPlayEnabled = false,
   onOpenTheater,
+  onAspect,
 }: {
   item: SocialMedia;
   onClick: () => void;
   autoPlayEnabled?: boolean;
   onOpenTheater?: () => void;
+  /** Reports the media's intrinsic width/height ratio once known —
+      used by the all-video frame to size itself to landscape videos. */
+  onAspect?: (ratio: number) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLButtonElement | null>(null);
@@ -2678,7 +2714,13 @@ function MediaItem({
             onPlay={() => setIsPlaying(true)}
             onPause={() => { setIsPlaying(false); setShowInlineControls(true); }}
             onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime ?? 0)}
-            onLoadedMetadata={() => setDuration(videoRef.current?.duration ?? 0)}
+            onLoadedMetadata={() => {
+              const v = videoRef.current;
+              setDuration(v?.duration ?? 0);
+              if (v && v.videoWidth > 0 && v.videoHeight > 0) {
+                onAspect?.(v.videoWidth / v.videoHeight);
+              }
+            }}
             // Retry autoplay once the media is actually playable. A
             // play() fired before data is buffered can no-op on some
             // browsers; flipping canPlay re-runs the play effect.
@@ -2693,6 +2735,12 @@ function MediaItem({
             width={600}
             height={600}
             className="h-full w-full object-contain"
+            onLoad={(e) => {
+              const img = e.currentTarget;
+              if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+                onAspect?.(img.naturalWidth / img.naturalHeight);
+              }
+            }}
           />
         )}
 

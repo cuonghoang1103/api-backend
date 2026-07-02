@@ -743,6 +743,34 @@ function NotesPageInner() {
 
           {loading ? (
             <div className="flex h-[60vh] items-center justify-center text-slate-500"><Loader2 className="h-5 w-5 animate-spin" /></div>
+          ) : sharedSelectedNote ? (
+            // Read-only note view for shared notes - full TipTap rendering.
+            // ── MUST be checked BEFORE sharedSubject: opening a note from
+            // inside a shared-subject view sets sharedSelectedNote while
+            // sharedSubject stays non-null (so "back" returns to the list).
+            // With the old order the subject list kept rendering and the
+            // note never appeared.
+            <>
+              <button
+                onClick={() => setSharedSelectedNote(null)}
+                className="sticky top-0 z-10 flex items-center gap-2 px-4 sm:px-6 py-2 text-sm text-slate-500 hover:text-teal-600 dark:text-slate-400 dark:hover:text-teal-400 transition-colors border-b border-slate-200 dark:border-white/[0.06] bg-[var(--notes-bg,#ffffff)] dark:bg-[#0c0f14]"
+              >
+                <ChevronRight className="h-4 w-4 rotate-180" />
+                Quay lại danh sách
+              </button>
+              {/* key: remount the viewer per note — TipTap's useEditor only
+                  loads `content` on mount, so switching note 1 → note 2
+                  without a key kept showing note 1's body. */}
+              <SharedNoteViewer
+                key={sharedSelectedNote.id}
+                title={sharedSelectedNote.title}
+                contentJson={sharedSelectedNote.contentJson as Record<string, unknown> | null}
+                contentHtml={sharedSelectedNote.contentHtml}
+                isFavorite={sharedSelectedNote.isFavorite}
+                needsReview={sharedSelectedNote.needsReview}
+                isArchived={sharedSelectedNote.isArchived}
+              />
+            </>
           ) : sharedSubject ? (
             // Shared subject view - full width for better readability
             <div className="w-full px-4 sm:px-6 py-6">
@@ -845,25 +873,6 @@ function NotesPageInner() {
                 </div>
               )}
             </div>
-          ) : sharedSelectedNote ? (
-            // Read-only note view for shared notes - full TipTap rendering
-            <>
-              <button
-                onClick={() => setSharedSelectedNote(null)}
-                className="sticky top-0 z-10 flex items-center gap-2 px-4 sm:px-6 py-2 text-sm text-slate-500 hover:text-teal-600 dark:text-slate-400 dark:hover:text-teal-400 transition-colors border-b border-slate-200 dark:border-white/[0.06] bg-[var(--notes-bg,#ffffff)] dark:bg-[#0c0f14]"
-              >
-                <ChevronRight className="h-4 w-4 rotate-180" />
-                Quay lại danh sách
-              </button>
-              <SharedNoteViewer
-                title={sharedSelectedNote.title}
-                contentJson={sharedSelectedNote.contentJson as Record<string, unknown> | null}
-                contentHtml={sharedSelectedNote.contentHtml}
-                isFavorite={sharedSelectedNote.isFavorite}
-                needsReview={sharedSelectedNote.needsReview}
-                isArchived={sharedSelectedNote.isArchived}
-              />
-            </>
           ) : subjectView ? (
             <SubjectView subject={subjectView} treeSubject={treeSubjectFor(subjectView.id)} onChanged={refreshSubject} onSelectNote={selectNote} onAddNote={addNote} />
           ) : selected ? (

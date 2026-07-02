@@ -148,6 +148,8 @@ Rationale: auto-resolving partially-applied migrations can silently corrupt sche
 3. Add to docker-compose / Dockerfile `ENV`/`ARG` if needed
 4. **Remind the user** to add it to GitHub Actions secrets and the VPS environment — Claude cannot do this; missing this step is a common cause of deploy failures that local CI won't catch
 5. For Next.js: `NEXT_PUBLIC_*` vars are baked in at **build time** — changing them requires a rebuild, not just a restart
+6. **Third-party API keys must NOT be `NEXT_PUBLIC_*`** — never ship keys in the client bundle. Add a small authenticated backend proxy route instead (pattern: `src/routes/gifs.routes.ts` for GIPHY) and read the key from runtime env
+7. **Production runtime env lives in `/opt/cuonghoangdev/.env` on the VPS.** `deploy.sh` loads it on every deploy and rsync EXCLUDES `.env*`, so values there survive deploys permanently. Caveat: if you append a var while a deploy is already running, that deploy loaded env before your change — recreate the container (`docker compose -p cuonghoangdev up -d --no-build <service>` with env loaded) or redeploy
 
 **When adding a new dependency:**
 - Verify it installs in the Docker build (some packages need system libs) — test with `docker build` locally if unsure
@@ -189,6 +191,9 @@ Condensed log of past failures — do not repeat:
 | 2026-06-29 | Missing Prisma back-relations (`NoteSubjectShare`, `NoteSubjectShareRecipient`) | Every relation needs its opposite field |
 | 2026-06-29 | Used default compound key name instead of custom `@@unique` name in queries | Use the custom constraint name |
 | 2026-06-29 | Migration failed: table already exists; then P3009 blocked deploys | DB had drifted from migration history — follow Migration Failure Protocol, don't hack around it |
+| 2026-07-02 | GIF picker flaky then dead: client called GIPHY directly with `NEXT_PUBLIC_GIPHY_API_KEY` (baked at build time), fell back to GIPHY's revoked public beta key (403) when the env was missing at build | Browser-facing third-party APIs go through a backend proxy (see `/api/v1/gifs` in `src/routes/gifs.routes.ts`): key stays server-side as runtime env, responses cached, key rotation = container restart, no rebuild |
+| 2026-07-02 | Global theme put `.dark` class on `<html>` → force-activated every Tailwind `dark:` utility inside Notes, breaking its own 3-theme (light/dark/brown) switcher | The global dark theme class is **`theme-dark`**, NEVER `dark`. Tailwind `dark:` variants are RESERVED for the Notes wrapper (`NotesThemeProvider` puts `.dark` on `.notes-theme-root`). Global theme-dependent styles use `html.theme-dark ...` CSS or the theme CSS variables (`var(--text-primary)` etc.), not `dark:` |
+| 2026-07-02 | Admin's support chat history "disappeared" from /messages — it was never lost, just filtered out (`listThreadsForUser` only matched the user side of `type='ADMIN'` threads) | Support chats and DMs share ONE system (`MessageThread`, type `ADMIN`/`USER`). Before assuming data loss, check the query filters. The old `/admin/messages` page was removed on purpose — do not recreate it; admin handles support threads in /messages |
 
 ---
 

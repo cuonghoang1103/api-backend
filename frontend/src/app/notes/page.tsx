@@ -8,7 +8,7 @@
 
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight, BookOpen } from 'lucide-react';
+import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { notesApi, noteShareApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -84,9 +84,10 @@ function saveTabsToStorage(tabs: NoteTab[], activeTabId: string | null) {
   }
 }
 
-// A single draggable tab in the tab bar. The whole tab is the drag handle
-// (with a small distance constraint so plain clicks still select); the close
-// button stops propagation so it never starts a drag.
+// A single draggable tab in the tab bar. Only the drag handle (left side)
+// receives the dnd-kit listeners to prevent keyboard characters like "_"
+// from triggering drag activation. The close button and rest of the tab
+// only receive click events.
 function SortableTab({
   tab, active, onSwitch, onClose,
 }: {
@@ -104,24 +105,29 @@ function SortableTab({
       style={style}
       onClick={onSwitch}
       {...attributes}
-      {...listeners}
-      className={`group flex cursor-grab items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap min-w-0 active:cursor-grabbing ${
+      className={`group flex cursor-grab items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap min-w-0 ${
         active
           ? 'bg-teal-100 text-teal-800 dark:bg-teal-500/15 dark:text-teal-100'
           : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/[0.05]'
       }`}
     >
-      {tab.type === 'subject' ? (
-        tab.emoji ? (
-          <span className="text-[13px]">{tab.emoji}</span>
-        ) : tab.color ? (
-          <span className="h-2 w-2 rounded-full shrink-0" style={{ background: tab.color }} />
+      {/* Drag handle — only this gets the dnd-kit keyboard listeners */}
+      <div
+        {...listeners}
+        className="flex items-center gap-1 shrink-0"
+      >
+        {tab.type === 'subject' ? (
+          tab.emoji ? (
+            <span className="text-[13px]">{tab.emoji}</span>
+          ) : tab.color ? (
+            <span className="h-2 w-2 rounded-full" style={{ background: tab.color }} />
+          ) : (
+            <span className="text-[13px]">📁</span>
+          )
         ) : (
-          <span className="text-[13px]">📁</span>
-        )
-      ) : (
-        <FileText className="h-3.5 w-3.5 shrink-0" />
-      )}
+          <FileText className="h-3.5 w-3.5" />
+        )}
+      </div>
       <span className="truncate max-w-[120px]">{tab.title || 'Không có tiêu đề'}</span>
       <button
         onClick={(e) => { e.stopPropagation(); onClose(); }}
@@ -740,8 +746,8 @@ function NotesPageInner() {
           {loading ? (
             <div className="flex h-[60vh] items-center justify-center text-slate-500"><Loader2 className="h-5 w-5 animate-spin" /></div>
           ) : sharedSubject ? (
-            // Phase 4 & 5: Redesigned shared subject view - clean and professional
-            <div className="mx-auto w-full max-w-[800px] px-4 sm:px-6 py-6">
+            // Shared subject view - matches SubjectView styling for consistency
+            <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
               {/* Back button to close shared view */}
               <button
                 onClick={() => { setSharedSubject(null); setSharedSelectedNote(null); }}
@@ -751,105 +757,86 @@ function NotesPageInner() {
                 Quay lại Sổ tay của tôi
               </button>
 
-              {/* Shared subject header */}
-              <div className="mb-6 rounded-2xl border border-slate-200 bg-gradient-to-r from-teal-50 to-cyan-50 p-5 dark:border-white/[0.08] dark:from-teal-500/5 dark:to-cyan-500/5">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white shadow-sm dark:bg-[#1a1f27]">
-                    <span className="text-3xl">{sharedSubject.emoji || '📁'}</span>
-                  </div>
-                  <div className="flex-1">
-                    <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">{sharedSubject.name}</h1>
-                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                      Được chia sẻ với bạn
-                      <span className={`ml-2 rounded-full px-2 py-0.5 text-xs font-medium ${
-                        sharedSubject.myPermission === 'edit'
-                          ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
-                          : 'bg-slate-100 text-slate-600 dark:bg-slate-500/15 dark:text-slate-300'
-                      }`}>
-                        {sharedSubject.myPermission === 'edit' ? '✏️ Chỉnh sửa' : '👁️ Chỉ�nh sửa'}
-                      </span>
-                    </p>
-                  </div>
-                </div>
+              {/* Shared subject header - matches SubjectView styling */}
+              <div className="mb-6 flex items-center gap-3">
+                {sharedSubject.emoji && <span className="text-2xl">{sharedSubject.emoji}</span>}
+                {!sharedSubject.emoji && sharedSubject.color && (
+                  <span className="h-4 w-4 rounded-full" style={{ background: sharedSubject.color }} />
+                )}
+                <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                  {sharedSubject.name}
+                </h1>
+                <span className={`ml-2 rounded-full px-2 py-0.5 text-xs font-medium ${
+                  sharedSubject.myPermission === 'edit'
+                    ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
+                    : 'bg-slate-100 text-slate-600 dark:bg-slate-500/15 dark:text-slate-300'
+                }`}>
+                  {sharedSubject.myPermission === 'edit' ? '✏️ Chỉnh sửa' : '👁️ Xem'}
+                </span>
               </div>
 
               {/* Notes at root level */}
-              {sharedSubject.notes && sharedSubject.notes.length > 0 && (
-                <div className="mb-8">
-                  <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                    <FileText className="h-4 w-4" /> Ghi chú trực tiếp
-                    <span className="ml-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-normal dark:bg-white/10">
-                      {sharedSubject.notes.length}
-                    </span>
-                  </h2>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {sharedSubject.notes.map((note) => (
-                      <button
-                        key={note.id}
-                        onClick={() => setSharedSelectedNote(note)}
-                        className="group rounded-xl border border-slate-200 bg-white p-4 text-left transition-all hover:border-teal-300 hover:shadow-md hover:shadow-teal-500/10 dark:border-white/[0.08] dark:bg-[#1a1f27] dark:hover:border-teal-500/30"
-                      >
-                        <h3 className="mb-2 font-medium text-slate-900 group-hover:text-teal-600 dark:text-slate-100 dark:group-hover:text-teal-300">
-                          {note.title || 'Không có tiêu đề'}
-                        </h3>
-                        {note.contentHtml && (
-                          <div
-                            className="note-prose text-sm text-slate-600 dark:text-slate-300 [&_p]:my-1"
-                            dangerouslySetInnerHTML={{ __html: note.contentHtml }}
-                          />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Chapters with notes */}
-              {sharedSubject.chapters && sharedSubject.chapters.length > 0 && (
-                <div className="space-y-6">
-                  {sharedSubject.chapters.map((chapter) => (
-                    <div key={chapter.id} className="rounded-xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-[#0e1218]">
-                      <div className="flex items-center gap-3 border-b border-slate-100 px-4 py-3 dark:border-white/[0.05]">
-                        <BookOpen className="h-5 w-5 text-teal-500" />
-                        <h2 className="font-medium text-slate-800 dark:text-slate-200">{chapter.title}</h2>
-                        <span className="ml-auto rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500 dark:bg-white/10 dark:text-slate-400">
-                          {chapter.notes?.length || 0} ghi chú
-                        </span>
-                      </div>
-                      <div className="p-4">
-                        {chapter.notes && chapter.notes.length > 0 ? (
-                          <div className="grid gap-3 sm:grid-cols-2">
-                            {chapter.notes.map((note) => (
-                              <button
-                                key={note.id}
-                                onClick={() => setSharedSelectedNote(note)}
-                                className="group rounded-lg border border-slate-100 bg-slate-50 p-3 text-left transition-all hover:border-teal-300 hover:bg-teal-50 dark:border-white/[0.05] dark:bg-white/[0.02] dark:hover:border-teal-500/30 dark:hover:bg-teal-500/5"
-                              >
-                                <h3 className="mb-1 font-medium text-slate-700 group-hover:text-teal-600 dark:text-slate-200 dark:group-hover:text-teal-300">
-                                  {note.title || 'Không có tiêu đề'}
-                                </h3>
-                                {note.contentHtml && (
-                                  <div
-                                    className="note-prose text-xs text-slate-600 dark:text-slate-300 [&_p]:my-1"
-                                    dangerouslySetInnerHTML={{ __html: note.contentHtml }}
-                                  />
-                                )}
-                              </button>
-                            ))}
-                          </div>
-                        ) : (
-                          <p className="text-center text-sm text-slate-400 dark:text-slate-500">
-                            Chưa có ghi chú nào trong chương này
-                          </p>
-                        )}
-                      </div>
+              {(sharedSubject.notes && sharedSubject.notes.length > 0) || (sharedSubject.chapters && sharedSubject.chapters.length > 0) ? (
+                <section>
+                  {/* Direct notes */}
+                  {sharedSubject.notes && sharedSubject.notes.length > 0 && (
+                    <div className="mb-7">
+                      <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-500">
+                        Ghi chú
+                      </h3>
+                      <ul className="space-y-1">
+                        {sharedSubject.notes.map((note) => (
+                          <li key={note.id}>
+                            <button
+                              onClick={() => setSharedSelectedNote(note)}
+                              className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left hover:bg-slate-100 dark:bg-white/[0.04] min-h-[40px]"
+                            >
+                              <FileText className="h-3.5 w-3.5 shrink-0 text-slate-500 dark:text-slate-500" />
+                              <span className="truncate text-[13px] text-slate-800 dark:text-slate-200">
+                                {note.title || 'Không có tiêu đề'}
+                              </span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  ))}
-                </div>
-              )}
+                  )}
 
-              {((!sharedSubject.notes || sharedSubject.notes.length === 0) &&
-               (!sharedSubject.chapters || sharedSubject.chapters.length === 0)) && (
+                  {/* Chapters with notes */}
+                  {sharedSubject.chapters && sharedSubject.chapters.length > 0 && (
+                    <div className="space-y-1">
+                      {sharedSubject.chapters.map((chapter) => (
+                        <div key={chapter.id} className="pt-1">
+                          <div className="px-1 pb-1 text-[11px] font-medium text-slate-500 dark:text-slate-500">
+                            {chapter.title}
+                          </div>
+                          {chapter.notes && chapter.notes.length > 0 ? (
+                            <ul className="space-y-1">
+                              {chapter.notes.map((note) => (
+                                <li key={note.id}>
+                                  <button
+                                    onClick={() => setSharedSelectedNote(note)}
+                                    className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 pl-4 text-left hover:bg-slate-100 dark:bg-white/[0.04] min-h-[40px]"
+                                  >
+                                    <FileText className="h-3.5 w-3.5 shrink-0 text-slate-500 dark:text-slate-500" />
+                                    <span className="truncate text-[13px] text-slate-800 dark:text-slate-200">
+                                      {note.title || 'Không có tiêu đề'}
+                                    </span>
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="px-1 text-[12px] text-slate-500 dark:text-slate-500 pl-4">
+                              Chưa có ghi chú trong chương này
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </section>
+              ) : (
                 <div className="flex h-[40vh] flex-col items-center justify-center text-slate-500">
                   <FileText className="mb-3 h-9 w-9 text-slate-400/50" />
                   <p className="text-sm">Không có ghi chú nào trong mục này</p>
@@ -857,8 +844,8 @@ function NotesPageInner() {
               )}
             </div>
           ) : sharedSelectedNote ? (
-            // Phase 4 & 5: Read-only note view for shared notes - redesigned
-            <div className="mx-auto w-full max-w-[800px] px-4 sm:px-6 py-6">
+            // Read-only note view for shared notes - matches NoteEditor styling
+            <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
               <button
                 onClick={() => setSharedSelectedNote(null)}
                 className="mb-4 flex items-center gap-2 text-sm text-slate-500 hover:text-teal-600 dark:text-slate-400 dark:hover:text-teal-400 transition-colors"
@@ -870,7 +857,7 @@ function NotesPageInner() {
                 {sharedSelectedNote.title || 'Không có tiêu đề'}
               </h1>
               {sharedSelectedNote.contentHtml && (
-                <div className="prose prose-slate dark:prose-invert max-w-none rounded-xl border border-slate-200 bg-white p-6 dark:border-white/[0.08] dark:bg-[#0e1218]"
+                <div className="note-prose max-w-none rounded-xl border border-slate-200 bg-white p-6 dark:border-white/[0.08] dark:bg-[#0e1218]"
                   dangerouslySetInnerHTML={{ __html: sharedSelectedNote.contentHtml }}
                 />
               )}

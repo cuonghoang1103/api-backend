@@ -209,7 +209,10 @@ export type NotificationType =
   // Friend graph + follow (additive). entityId = the actor's user id.
   | 'FRIEND_REQUEST'
   | 'FRIEND_ACCEPT'
-  | 'NEW_FOLLOW';
+  | 'NEW_FOLLOW'
+  // Sharing notifications (added 2026-07-02)
+  | 'NOTE_SHARE'   // Note subject (folder) was shared with you
+  | 'HUB_SHARE';   // Hub folder/file/link was shared with you
 
 export interface SocialNotification {
   id: number;

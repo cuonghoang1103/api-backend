@@ -33,6 +33,7 @@ import {
   assertLinkOwnership,
   assertFileOwnership,
 } from './hub.service.js';
+import { notifyHubShare } from './notification.service.js';
 import type { Prisma } from '@prisma/client';
 
 /** Permission values stored in `hub_shares.permission`. */
@@ -175,6 +176,28 @@ export async function createShare(
     update: updateData,
     include: SHARE_INCLUDE,
   });
+
+  // Send notification to recipient (only on create, not update)
+  const isNewShare = !updateData.permission;
+  if (isNewShare) {
+    // Get folder name for notification
+    let folderName = 'tài liệu';
+    if (item.kind === 'folder') {
+      const folder = await prisma.hubFolder.findUnique({
+        where: { id: item.folderId },
+        select: { name: true },
+      });
+      if (folder) folderName = folder.name;
+    }
+    await notifyHubShare(
+      recipientId,
+      ownerId,
+      item.kind === 'folder' ? item.folderId : 0,
+      folderName,
+      share.permission,
+    );
+  }
+
   return share;
 }
 

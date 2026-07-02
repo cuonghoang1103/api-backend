@@ -17,6 +17,7 @@
 
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { notifyNoteShare } from './notification.service.js';
 
 /** Permission values stored in `note_subject_shares.permission`. */
 export const NOTE_SHARE_PERMISSIONS = ['view', 'edit'] as const;
@@ -136,6 +137,16 @@ export async function createNoteShare(
       },
     },
   });
+
+  // Send notification to recipient
+  await notifyNoteShare(
+    resolvedRecipientId,
+    ownerId,
+    share.subject.id,
+    share.subject.name,
+    share.subject.emoji,
+    share.permission,
+  );
 
   return share;
 }

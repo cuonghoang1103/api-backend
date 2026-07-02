@@ -36,6 +36,8 @@ import {
   Check,
   X,
   Loader2,
+  FolderOpen,
+  Share2,
 } from 'lucide-react';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
@@ -80,6 +82,10 @@ function describeNotification(n: SocialNotification): string {
       return `${name} đã chấp nhận lời mời kết bạn`;
     case 'NEW_FOLLOW':
       return `${name} đã bắt đầu theo dõi bạn`;
+    case 'NOTE_SHARE':
+      return `${name} đã chia sẻ một ghi chú với bạn`;
+    case 'HUB_SHARE':
+      return `${name} đã chia sẻ một thư mục tài liệu với bạn`;
     case 'NEW_POST':
     default:
       return `${name} đã đăng bài viết mới`;
@@ -96,6 +102,8 @@ function typeIcon(t: NotificationType) {
     case 'FRIEND_REQUEST': return UserPlus;
     case 'FRIEND_ACCEPT': return UserCheck;
     case 'NEW_FOLLOW': return UserPlus;
+    case 'NOTE_SHARE': return FolderOpen;
+    case 'HUB_SHARE': return Share2;
     default: return Bell;
   }
 }
@@ -110,6 +118,8 @@ function typeIconColor(t: NotificationType): string {
     case 'FRIEND_REQUEST': return '#8b5cf6'; // violet
     case 'FRIEND_ACCEPT': return '#10b981'; // green
     case 'NEW_FOLLOW': return '#06b6d4'; // cyan
+    case 'NOTE_SHARE': return '#14b8a6'; // teal
+    case 'HUB_SHARE': return '#f59e0b'; // amber
     default: return '#94a3b8';
   }
 }
@@ -150,6 +160,9 @@ function targetUrl(n: SocialNotification): string {
   if (n.type === 'FRIEND_ACCEPT' || n.type === 'NEW_FOLLOW') {
     return n.entityId ? `/profile/${n.entityId}` : '/friends';
   }
+  // Sharing notifications: entityId is the subject/folder id
+  if (n.type === 'NOTE_SHARE') return '/notes';
+  if (n.type === 'HUB_SHARE') return '/hub';
   if (n.entityId) {
     // entityId for social notifications is the post id. For
     // post-targeted events (NEW_REACTION, NEW_POST) that's the

@@ -46,6 +46,9 @@ export const NOTIFICATION_TYPES = [
   'FRIEND_REQUEST',
   'FRIEND_ACCEPT',
   'NEW_FOLLOW',
+  // ─── Sharing notifications (added 2026-07-02) ─────────────
+  'NOTE_SHARE',   // Note subject (folder) was shared with recipient
+  'HUB_SHARE',    // Hub folder/file/link was shared with recipient
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
@@ -234,6 +237,43 @@ export async function notifyNewFollow(
     senderId: followerId,
     type: 'NEW_FOLLOW',
     entityId: followerId,
+  });
+}
+
+/* ─── Sharing notifications (added 2026-07-02) ─────────────── */
+
+/** User shared a note subject (folder) with the recipient. */
+export async function notifyNoteShare(
+  recipientId: number,
+  senderId: number,
+  subjectId: number,
+  subjectName: string,
+  subjectEmoji: string | null,
+  permission: string,
+): Promise<void> {
+  await pushNotification({
+    receiverId: recipientId,
+    senderId,
+    type: 'NOTE_SHARE',
+    entityId: subjectId,
+    payload: { subjectName, subjectEmoji, permission },
+  });
+}
+
+/** User shared a hub folder/file/link with the recipient. */
+export async function notifyHubShare(
+  recipientId: number,
+  senderId: number,
+  hubFolderId: number,
+  folderName: string,
+  permission: string,
+): Promise<void> {
+  await pushNotification({
+    receiverId: recipientId,
+    senderId,
+    type: 'HUB_SHARE',
+    entityId: hubFolderId,
+    payload: { folderName, permission },
   });
 }
 

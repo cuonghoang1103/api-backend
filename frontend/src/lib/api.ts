@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import type { ApiResponse, AuthResponse } from '@/types';
+import type { ApiResponse, AuthResponse, NoteFull } from '@/types';
 import type { ReactionType, ReactionBreakdown } from '@/types/social';
 
 const DEFAULT_UPLOAD_CATEGORY = 'images';
@@ -491,6 +491,10 @@ export const noteShareApi = {
   // Get a shared subject with full tree
   getReceivedSubject: (subjectId: number) =>
     api.get<{ data: NoteSharedSubjectFull }>(`/notes-shares/received/${subjectId}`),
+
+  // Get full content of a shared note
+  getSharedNote: (subjectId: number, noteId: number) =>
+    api.get<{ data: NoteFull }>(`/notes-shares/received/${subjectId}/notes/${noteId}`),
 
   // Search users to share with
   searchUsers: (q: string, limit = 8) =>

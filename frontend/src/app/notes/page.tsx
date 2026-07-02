@@ -308,19 +308,16 @@ function NotesPageInner() {
     }
   }, []);
 
-  // Handle opening a note from shared subject
+  // Handle opening a note from shared subject - fetch full content
   const handleOpenSharedNote = useCallback(async (subjectId: number, noteId: number) => {
-    if (!sharedSubject) {
-      // Load the subject first
-      await handleOpenSharedSubject(subjectId);
+    try {
+      // Load full note content from API
+      const res = await noteShareApi.getSharedNote(subjectId, noteId);
+      setSharedSelectedNote(res.data.data);
+    } catch {
+      toast.error('Không tải được nội dung ghi chú');
     }
-    // Find the note in the loaded subject
-    const note = sharedSubject?.notes?.find(n => n.id === noteId) ||
-      sharedSubject?.chapters?.flatMap(c => c.notes).find(n => n.id === noteId);
-    if (note) {
-      setSharedSelectedNote(note);
-    }
-  }, [sharedSubject, handleOpenSharedSubject]);
+  }, []);
 
   const handleShareChanged = useCallback(() => {
     // Refresh will happen naturally when user interacts

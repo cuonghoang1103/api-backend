@@ -127,6 +127,49 @@ router.get('/received/:subjectId', async (req: any, res: Response<ApiResponse>, 
   }
 });
 
+// ─── GET /api/v1/notes-shares/received/:subjectId/notes/:noteId ──
+// Get full content of a single note when shared
+router.get('/received/:subjectId/notes/:noteId', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const subjectId = parseInt(req.params.subjectId, 10);
+    const noteId = parseInt(req.params.noteId, 10);
+    if (isNaN(subjectId) || isNaN(noteId)) {
+      throw new AppError('Invalid subjectId or noteId', 400, 'INVALID_ID');
+    }
+    // Check access to the subject
+    const access = await checkNoteAccess(req.user.userId, subjectId);
+    if (!access.hasAccess) {
+      throw new AppError('You do not have access to this subject', 403, 'ACCESS_DENIED');
+    }
+    // Get the note with full content
+    const { prisma } = await import('../config/database.js');
+    const note = await prisma.note.findFirst({
+      where: {
+        id: noteId,
+        subjectId: subjectId,
+        ...(access.isOwner ? {} : { isArchived: false }),
+      },
+      include: {
+        attachments: true,
+        links: true,
+      },
+    });
+    if (!note) {
+      throw new AppError('Note not found', 404, 'NOTE_NOT_FOUND');
+    }
+    res.json({
+      success: true,
+      data: {
+        ...note,
+        myPermission: access.permission,
+        isOwner: access.isOwner,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // ─── GET /api/v1/notes-shares/subject/:subjectId ──
 // List shares for a specific subject (owner only)
 router.get('/subject/:subjectId', async (req: any, res: Response<ApiResponse>, next) => {

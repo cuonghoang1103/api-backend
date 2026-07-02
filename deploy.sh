@@ -294,13 +294,33 @@ done
 # container still reported "healthy" (health check only hits one route).
 # GIF picker died silently and only surfaced via user reports.
 #
-# Guard: assert core auth-gated routes are actually MOUNTED. Hit them
-# UNAUTHENTICATED over the internal port — a mounted route returns 401
-# ("needs auth"); a missing route (stale/partial build) returns 404.
-# Any 404 here fails the deploy loudly instead of shipping a broken build.
+# Guard: assert core routes across every major module are actually
+# MOUNTED. Hit them UNAUTHENTICATED over the internal port — a mounted
+# route returns 401 ("needs auth") or 200 (public); a missing route
+# (stale/partial build) returns 404. Any 404 here fails the deploy loudly
+# instead of shipping a broken build.
+#
+# IMPORTANT: only list GET routes that return NON-404 on a bare, param-less,
+# unauthenticated request (verified 2026-07-02). Do NOT add POST-only or
+# param-required routes (e.g. /stickers, /auth/login) — they 404 on bare GET
+# and would fail every deploy. When you add a new feature module, add one of
+# its GET routes here so a future partial build can't drop it silently.
 info "Smoke-testing core API routes are mounted..."
 smoke_failed=false
-for route in gifs messages/threads profile; do
+for route in \
+    gifs \
+    messages/threads \
+    messages/unread-count \
+    profile \
+    social/posts \
+    feed/posts \
+    social/notifications \
+    friends \
+    notes \
+    music/tracks \
+    courses \
+    hub/folders \
+    cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)
     if [ "$code" = "404" ]; then

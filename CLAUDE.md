@@ -154,6 +154,12 @@ Rationale: auto-resolving partially-applied migrations can silently corrupt sche
 **When adding a new dependency:**
 - Verify it installs in the Docker build (some packages need system libs) — test with `docker build` locally if unsure
 
+**Deploy hygiene (avoid stale/partial builds):**
+- **Always run a FULL `bash deploy.sh`** after any code change. **NEVER** use `bash deploy.sh --no-build` after changing code — it only rsyncs, does NOT rebuild, so the container keeps running the OLD image (this caused the 2026-07-02 GIF 404 below) and it also **skips the smoke-test**.
+- `deploy.sh` runs a **post-deploy smoke-test**: it hits core GET routes on the internal backend and **FAILS the deploy if any returns 404** (404 = route not mounted → stale/partial build). 401/200 = healthy.
+- **When you add a new feature module/router**, add one of its param-less, unauth GET routes to the smoke-test list in `deploy.sh` (search `Smoke-testing core API routes`). Only add routes that return **non-404** on a bare unauth GET — do NOT add POST-only or param-required routes (e.g. `/stickers`, `/auth/login`) or every deploy will false-fail.
+- Diagnose "is a route actually live?" with: `curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/api/v1/<route>` → **401 = mounted (needs auth), 200 = mounted (public), 404 = NOT mounted / stale build**.
+
 **If deploy fails:**
 1. Check GitHub Actions logs (`gh run list`, `gh run view <id> --log-failed`)
 2. Map error to fix:
@@ -194,6 +200,9 @@ Condensed log of past failures — do not repeat:
 | 2026-07-02 | GIF picker flaky then dead: client called GIPHY directly with `NEXT_PUBLIC_GIPHY_API_KEY` (baked at build time), fell back to GIPHY's revoked public beta key (403) when the env was missing at build | Browser-facing third-party APIs go through a backend proxy (see `/api/v1/gifs` in `src/routes/gifs.routes.ts`): key stays server-side as runtime env, responses cached, key rotation = container restart, no rebuild |
 | 2026-07-02 | Global theme put `.dark` class on `<html>` → force-activated every Tailwind `dark:` utility inside Notes, breaking its own 3-theme (light/dark/brown) switcher | The global dark theme class is **`theme-dark`**, NEVER `dark`. Tailwind `dark:` variants are RESERVED for the Notes wrapper (`NotesThemeProvider` puts `.dark` on `.notes-theme-root`). Global theme-dependent styles use `html.theme-dark ...` CSS or the theme CSS variables (`var(--text-primary)` etc.), not `dark:` |
 | 2026-07-02 | Admin's support chat history "disappeared" from /messages — it was never lost, just filtered out (`listThreadsForUser` only matched the user side of `type='ADMIN'` threads) | Support chats and DMs share ONE system (`MessageThread`, type `ADMIN`/`USER`). Before assuming data loss, check the query filters. The old `/admin/messages` page was removed on purpose — do not recreate it; admin handles support threads in /messages |
+| 2026-07-02 | GIF picker dead + "chats disappearing" together, survived re-login. Root cause: prod ran a **stale `dist/index.js`** that never mounted `/api/v1/gifs` (route 404'd) while `/messages/threads` 401'd — a partial/`--no-build` deploy shipped an old image even though `dist/routes/gifs.routes.js` existed. Fixed by a full clean `bash deploy.sh` | Diagnose route health with unauth `curl` (401/200 = mounted, **404 = stale build**), not the browser. Always full `deploy.sh` (never `--no-build` after code changes). `deploy.sh` now smoke-tests core routes and fails on 404. Chats "disappearing" was separate: per-viewer `deletedAt` (delete-for-me) — now recoverable via the "Đã xoá" tab (`restoreThreadForViewer` + `GET /threads?view=deleted` + `POST /threads/:id/restore`) |
+| 2026-07-02 | `getMediaUrl` (frontend `lib/utils.ts`) prefixed the R2 CDN base onto `blob:`/`data:` preview URLs → `https://<r2>/blob:...` → 400 when rendering optimistic upload previews | Object/data URLs are already renderable — return them as-is; only prepend the CDN base to bare R2 keys |
+| 2026-07-02 | Session died silently after 24h: JWT `JWT_EXPIRES_IN=24h` but `backend_token` cookie lives 7d, and there was **no working `/auth/refresh`** (FE proxy called a non-existent backend route) → every authed call 401'd (GIF, messenger) though the cookie was present | Added `POST /api/v1/auth/refresh` (`authService.refreshToken`: verify `ignoreExpiration` + re-check account) + axios 401 interceptor that refreshes once and retries. Sessions self-heal; no env change needed |
 
 ---
 

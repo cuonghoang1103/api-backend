@@ -81,6 +81,10 @@ services:
       COOKIE_SECRET: ${COOKIE_SECRET:?COOKIE_SECRET is required - set it in /opt/cuonghoangdev/.env}
       FRONTEND_URL: ${FRONTEND_URL:-https://cuongthai.com}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://cuongthai.com}
+      # GIF picker proxy (/api/v1/gifs). Server-side only — never
+      # shipped to the browser. Optional: without it the picker
+      # shows a clear "not configured" error instead of GIFs.
+      GIPHY_API_KEY: ${GIPHY_API_KEY:-}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}

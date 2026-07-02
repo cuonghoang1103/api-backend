@@ -109,6 +109,7 @@ const quotaRoutes = (await import(path.join(__dirname, 'routes', 'quota.routes.j
 const embedJobsRoutes = (await import(path.join(__dirname, 'routes', 'embedJobs.routes.js'))).default;
 const { publicRouter: techTrendsPublicRoutes, adminRouter: techTrendsAdminRoutes } = (await import(path.join(__dirname, 'routes', 'techTrends.routes.js')));
 const { router: messagesRoutes, adminRouter: adminMessagesRoutes } = (await import(path.join(__dirname, 'routes', 'messages.routes.js')));
+const gifsRoutes = (await import(path.join(__dirname, 'routes', 'gifs.routes.js'))).default;
 const contentRoutes = (await import(path.join(__dirname, 'routes', 'content.routes.js'))).default;
 const notesRoutes = (await import(path.join(__dirname, 'routes', 'notes.routes.js'))).default;
 const notesShareRoutes = (await import(path.join(__dirname, 'routes', 'notesShare.routes.js'))).default;
@@ -437,6 +438,7 @@ app.use('/api/v1/notes-shares', notesShareRoutes);
 app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
 app.use('/api/v1/messages', messagesRoutes);
+app.use('/api/v1/gifs', gifsRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/admin', adminMessagesRoutes);
 // Admin moderation queue for thread reports (block/report system).

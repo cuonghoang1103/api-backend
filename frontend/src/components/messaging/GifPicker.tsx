@@ -1,35 +1,27 @@
 'use client';
 
 /**
- * GIPHY GIF picker popover. Shows trending GIFs by default and
- * searches as the user types. Uses the public GIPHY API; set
- * NEXT_PUBLIC_GIPHY_API_KEY to your own free key for production
- * (the bundled fallback is GIPHY's well-known public beta key,
- * which is rate-limited and only suitable for testing).
+ * GIF picker popover. Shows trending GIFs by default and searches
+ * as the user types. Calls OUR backend proxy (/api/v1/gifs) instead
+ * of GIPHY directly: the old client-side fallback key (GIPHY public
+ * beta key) was revoked by GIPHY (403), which is why the picker was
+ * flaky and then died. The real key now lives server-side in
+ * GIPHY_API_KEY, is never shipped to the browser, and responses are
+ * cached on the backend to stay under rate limits.
  */
 
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { Search, Loader2, X, AlertCircle, RefreshCw } from 'lucide-react';
 import { useAnchoredFixedStyle } from './useAnchoredPopover';
+import { api } from '@/lib/api';
 
-const GIPHY_KEY = process.env.NEXT_PUBLIC_GIPHY_API_KEY || 'dc6zaTOxFJmzC';
-const GIPHY_BASE = 'https://api.giphy.com/v1/gifs';
 const MAX_RETRIES = 2;
 
 interface GifItem {
   id: string;
   url: string; // downsized image URL we actually send
   previewUrl: string; // small still/preview for the grid
-}
-
-function mapGif(g: any): GifItem {
-  const img = g.images ?? {};
-  return {
-    id: g.id,
-    url: img.downsized_medium?.url || img.downsized?.url || img.original?.url,
-    previewUrl: img.fixed_width_small?.url || img.preview_gif?.url || img.fixed_width?.url,
-  };
 }
 
 export default function GifPicker({
@@ -64,24 +56,29 @@ export default function GifPicker({
 
     const attemptLoad = async (): Promise<void> => {
       try {
-        const endpoint = q.trim()
-          ? `${GIPHY_BASE}/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(q)}&limit=24&rating=pg-13`
-          : `${GIPHY_BASE}/trending?api_key=${GIPHY_KEY}&limit=24&rating=pg-13`;
-
-        const res = await fetch(endpoint, { signal: abortRef.current?.signal });
-
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`);
-        }
-
-        const json = await res.json();
-        const newGifs = (json.data ?? []).map(mapGif).filter((g: GifItem) => g.url);
+        const res = await api.get('/gifs', {
+          params: q.trim() ? { q: q.trim() } : {},
+          signal: abortRef.current?.signal,
+        });
+        // Backend already maps GIPHY rows to { id, url, previewUrl }.
+        const newGifs: GifItem[] = (res.data?.data ?? []).filter((g: GifItem) => g.url);
 
         setGifs(newGifs);
         retryCountRef.current = 0;
-      } catch (err) {
-        if (err instanceof Error && err.name === 'AbortError') {
+      } catch (err: any) {
+        if (
+          (err instanceof Error && err.name === 'AbortError') ||
+          err?.code === 'ERR_CANCELED'
+        ) {
           // Request was cancelled, ignore
+          return;
+        }
+
+        // 503 = server has no GIPHY_API_KEY configured — retrying
+        // won't help, show the config error immediately.
+        if (err?.response?.status === 503) {
+          setError('GIF chua duoc cau hinh tren server (thieu GIPHY_API_KEY).');
+          setGifs([]);
           return;
         }
 

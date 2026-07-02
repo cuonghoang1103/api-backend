@@ -218,7 +218,13 @@ export class MessagesService {
     const threads = await prisma.messageThread.findMany({
       where: {
         OR: [
-          { type: 'ADMIN', userId },
+          // ADMIN support threads appear for BOTH sides: the user who
+          // opened the ticket AND the admin assigned to it. This is what
+          // merges the old "Tin nhắn hỗ trợ" admin inbox into the normal
+          // /messages page — support history shows up alongside DMs.
+          // (adminUserId only ever holds an admin's id, so the extra OR
+          // clause can never match a regular user.)
+          { type: 'ADMIN', OR: [{ userId }, { adminUserId: userId }] },
           { type: 'USER', OR: [{ userAId: userId }, { userBId: userId }] },
         ],
       },
@@ -717,7 +723,9 @@ export class MessagesService {
     const threads = await prisma.messageThread.findMany({
       where: {
         OR: [
-          { type: 'ADMIN', userId },
+          // Keep in sync with listThreadsForUser: admins also count
+          // unread on the support threads assigned to them.
+          { type: 'ADMIN', OR: [{ userId }, { adminUserId: userId }] },
           { type: 'USER', OR: [{ userAId: userId }, { userBId: userId }] },
         ],
       },

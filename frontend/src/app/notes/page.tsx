@@ -786,7 +786,9 @@ function NotesPageInner() {
                         {sharedSubject.notes.map((note) => (
                           <li key={note.id}>
                             <button
-                              onClick={() => setSharedSelectedNote(note)}
+                              onClick={async () => {
+                                await handleOpenSharedNote(sharedSubject.id, note.id);
+                              }}
                               className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left hover:bg-slate-100 dark:bg-white/[0.04] min-h-[40px]"
                             >
                               <FileText className="h-3.5 w-3.5 shrink-0 text-slate-500 dark:text-slate-500" />
@@ -813,7 +815,9 @@ function NotesPageInner() {
                               {chapter.notes.map((note) => (
                                 <li key={note.id}>
                                   <button
-                                    onClick={() => setSharedSelectedNote(note)}
+                                    onClick={async () => {
+                                      await handleOpenSharedNote(sharedSubject.id, note.id);
+                                    }}
                                     className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 pl-4 text-left hover:bg-slate-100 dark:bg-white/[0.04] min-h-[40px]"
                                   >
                                     <FileText className="h-3.5 w-3.5 shrink-0 text-slate-500 dark:text-slate-500" />

@@ -77,9 +77,8 @@ model User {
   lastLoginAt        DateTime? @map("last_login_at")
   lastLoginIp        String?   @map("last_login_ip") @db.VarChar(64)
   lastLoginUserAgent String?   @map("last_login_user_agent") @db.VarChar(500)
-// Theme preference: dark or light
- theme String? @default("dark") @map("theme") @db.VarChar(10)
-
+  // Theme preference: dark or light
+  theme              String?   @default("dark") @map("theme") @db.VarChar(10)
 
   provider   String? @db.VarChar(50)
   providerId String? @map("provider_id") @db.VarChar(255)
@@ -227,15 +226,15 @@ model User {
   noteSubjectShareRecipients NoteSubjectShareRecipient[] @relation("UserShareRecipients")
 
   // ─── Social Follow Graph ────────────────────────────────
-  following Follow[] @relation("Following")
-  followers Follow[] @relation("Followers")
- // Phase 3: Post actions back-relations
- postFeedbacks PostFeedback[]
- postNotifications PostNotification[]
- postReports PostReport[] @relation("PostReports")
- snoozesGiven UserSnooze[] @relation("Snoozer")
- snoozesReceived UserSnooze[] @relation("SnoozedBy")
- postArchives PostArchive[]
+  following         Follow[]           @relation("Following")
+  followers         Follow[]           @relation("Followers")
+  // Phase 3: Post actions back-relations
+  postFeedbacks     PostFeedback[]
+  postNotifications PostNotification[]
+  postReports       PostReport[]       @relation("PostReports")
+  snoozesGiven      UserSnooze[]       @relation("Snoozer")
+  snoozesReceived   UserSnooze[]       @relation("SnoozedBy")
+  postArchives      PostArchive[]
 
   // ─── Friend Graph (two-way, FB-style requests) ──────────
   // Additive alongside the follow graph above. `friendshipsSent`
@@ -247,6 +246,19 @@ model User {
 
   // Sticker packs this user (an admin) created.
   stickerPacksCreated StickerPack[] @relation("StickerPacksCreated")
+
+  // ─── EXP_Hub — Snippet Library ──────────────────────────────
+  // Snippets authored by this user
+  snippets         Snippet[]
+  // Bookmarks saved by this user (authenticated)
+  snippetBookmarks SnippetBookmark[]
+  // Upvotes by this user (authenticated)
+  snippetUpvotes   SnippetUpvote[]
+  // Comments on snippets
+  snippetComments  SnippetComment[]
+  // Webhooks configured by this user
+  snippetWebhooks  SnippetWebhook[]
+  SnippetVersion   SnippetVersion[]
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -1517,7 +1529,7 @@ model SocialPost {
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
 
-  author         User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author         User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
   media          SocialMedia[]
   likes          SocialLike[]
   comments       SocialComment[]
@@ -1528,6 +1540,12 @@ model SocialPost {
   // row per (user, post, collection) triple).
   feedSavedPosts FeedSavedPost[]
   poll           SocialPoll?
+  archivedAt     DateTime?          @map("archived_at")
+  // Phase 3 relations
+  feedbacks      PostFeedback[]
+  notifications  PostNotification[]
+  reports        PostReport[]
+  archive        PostArchive?
 
   @@index([authorId], name: "idx_social_posts_author")
   @@index([createdAt(sort: Desc)], name: "idx_social_posts_created")
@@ -1543,12 +1561,6 @@ model SocialPost {
   // migration SQL; `raw("gin_trgm_ops")` selects the trigram
   // operator class.
   @@index([content(ops: raw("gin_trgm_ops"))], type: Gin, map: "idx_social_posts_content_trgm")
- archivedAt DateTime? @map("archived_at")
- // Phase 3 relations
- feedbacks PostFeedback[]
- notifications PostNotification[]
- reports PostReport[]
- archive PostArchive?
   @@map("social_posts")
 }
 
@@ -3412,7 +3424,7 @@ model UserProfile {
   relationshipStatus String? @map("relationship_status") @db.VarChar(50)
   hobbies            String? @db.Text
   languages          String? @db.VarChar(255)
- pinnedPostId Int? @map("pinned_post_id")
+  pinnedPostId       Int?    @map("pinned_post_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -3514,13 +3526,14 @@ model StoryHide {
 
 // Feedback on posts (Interested / Not Interested)
 model PostFeedback {
-  id        Int      @id @default(autoincrement())
-  postId    Int      @map("post_id")
-  userId    Int      @map("user_id")
+  id        Int        @id @default(autoincrement())
+  postId    Int        @map("post_id")
+  userId    Int        @map("user_id")
   type      String
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime   @default(now()) @map("created_at")
   post      SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([postId, userId], name: "uk_post_feedback")
   @@index([postId], name: "idx_feedback_post")
   @@map("post_feedbacks")
@@ -3528,12 +3541,13 @@ model PostFeedback {
 
 // Subscribe to post update notifications
 model PostNotification {
-  id        Int      @id @default(autoincrement())
-  postId    Int      @map("post_id")
-  userId    Int      @map("user_id")
-  createdAt DateTime @default(now()) @map("created_at")
+  id        Int        @id @default(autoincrement())
+  postId    Int        @map("post_id")
+  userId    Int        @map("user_id")
+  createdAt DateTime   @default(now()) @map("created_at")
   post      SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([postId, userId], name: "uk_post_notification")
   @@index([postId], name: "idx_notification_post")
   @@map("post_notifications")
@@ -3541,15 +3555,16 @@ model PostNotification {
 
 // Report a post
 model PostReport {
-  id         Int      @id @default(autoincrement())
-  postId     Int      @map("post_id")
-  reporterId Int      @map("reporter_id")
+  id         Int        @id @default(autoincrement())
+  postId     Int        @map("post_id")
+  reporterId Int        @map("reporter_id")
   reason     String
-  details    String?  @db.Text
-  status     String   @default("PENDING") @map("status")
-  createdAt  DateTime @default(now()) @map("created_at")
+  details    String?    @db.Text
+  status     String     @default("PENDING") @map("status")
+  createdAt  DateTime   @default(now()) @map("created_at")
   post       SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-  reporter   User     @relation("PostReports", fields: [reporterId], references: [id], onDelete: Cascade)
+  reporter   User       @relation("PostReports", fields: [reporterId], references: [id], onDelete: Cascade)
+
   @@index([postId], name: "idx_report_post")
   @@index([status], name: "idx_report_status")
   @@map("post_reports")
@@ -3563,7 +3578,8 @@ model UserSnooze {
   until         DateTime @map("until")
   createdAt     DateTime @default(now()) @map("created_at")
   user          User     @relation("Snoozer", fields: [userId], references: [id], onDelete: Cascade)
-  snoozedUser  User     @relation("SnoozedBy", fields: [snoozedUserId], references: [id], onDelete: Cascade)
+  snoozedUser   User     @relation("SnoozedBy", fields: [snoozedUserId], references: [id], onDelete: Cascade)
+
   @@unique([userId, snoozedUserId], name: "uk_user_snooze")
   @@index([userId], name: "idx_snooze_user")
   @@index([until], name: "idx_snooze_until")
@@ -3572,11 +3588,288 @@ model UserSnooze {
 
 // Archive a post (soft delete)
 model PostArchive {
-  id        Int      @id @default(autoincrement())
-  postId    Int      @map("post_id") @unique
-  userId    Int      @map("user_id")
-  createdAt DateTime @default(now()) @map("created_at")
+  id        Int        @id @default(autoincrement())
+  postId    Int        @unique @map("post_id")
+  userId    Int        @map("user_id")
+  createdAt DateTime   @default(now()) @map("created_at")
   post      SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("post_archives")
 }
+
+// ════════════════════════════════════════════════════════════════
+// EXP_HUB — Code Snippet Library
+// ────────────────────────────────────────────────────────────────
+// A read-mostly internal library of code snippets, organized into
+// a nested folder tree. Admins upload/edit; all users browse/copy.
+// ════════════════════════════════════════════════════════════════
+
+// ─── Enums ─────────────────────────────────────────────────────
+
+enum SnippetStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+
+  @@map("snippet_status")
+}
+
+// ─── Nested Folder Tree ─────────────────────────────────────────
+
+model SnippetCategory {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  slug      String   @unique(map: "uk_snippet_category_slug") @db.VarChar(100)
+  // parentId = null means root-level category
+  parentId  Int?     @map("parent_id")
+  // Display order within the same parent (null parent = root level)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Self-relation for nested tree
+  parent   SnippetCategory?  @relation("SnippetCategoryParent", fields: [parentId], references: [id], onDelete: Cascade)
+  children SnippetCategory[] @relation("SnippetCategoryParent")
+
+  // Snippets in this category
+  snippets Snippet[]
+
+  @@index([parentId, sortOrder], name: "idx_snippet_category_parent_order")
+  @@index([slug], name: "idx_snippet_category_slug")
+  @@map("snippet_categories")
+}
+
+// ─── Tags ───────────────────────────────────────────────────────
+
+model SnippetTag {
+  id   Int    @id @default(autoincrement())
+  name String @unique(map: "uk_snippet_tag_name") @db.VarChar(50)
+  slug String @unique(map: "uk_snippet_tag_slug") @db.VarChar(50)
+
+  snippets     Snippet[]
+  SnippetToTag SnippetToTag[]
+
+  @@index([slug], name: "idx_snippet_tag_slug")
+  @@map("snippet_tags")
+}
+
+// ─── Snippets ───────────────────────────────────────────────────
+
+model Snippet {
+  id          Int           @id @default(autoincrement())
+  title       String        @db.VarChar(255)
+  slug        String        @unique(map: "uk_snippet_slug") @db.VarChar(255)
+  description String?       @db.Text
+  // Programming language (e.g. "javascript", "python", "java", "sql")
+  language    String        @db.VarChar(40)
+  // The actual code content
+  code        String        @db.Text
+  status      SnippetStatus @default(DRAFT)
+  // Denormalised counters (updated by API, not transactions)
+  viewCount   Int           @default(0) @map("view_count")
+  copyCount   Int           @default(0) @map("copy_count")
+  upvoteCount Int           @default(0) @map("upvote_count")
+  // Optional: a preview/test URL for the snippet
+  previewUrl  String?       @map("preview_url") @db.VarChar(500)
+
+  categoryId Int? @map("category_id")
+  authorId   Int? @map("author_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // ─── Relations ───────────────────────────────────────────────
+  category SnippetCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  author   User?            @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  tags         SnippetTag[]
+  versions     SnippetVersion[]
+  variables    SnippetVariable[]
+  attachments  SnippetAttachment[]
+  comments     SnippetComment[]
+  upvotes      SnippetUpvote[]
+  bookmarks    SnippetBookmark[]
+  SnippetToTag SnippetToTag[]
+
+  @@index([categoryId], name: "idx_snippets_category")
+  @@index([authorId], name: "idx_snippets_author")
+  @@index([status], name: "idx_snippets_status")
+  @@index([language], name: "idx_snippets_language")
+  @@index([slug], name: "idx_snippets_slug")
+  @@index([status, copyCount(sort: Desc)], name: "idx_snippets_status_copy")
+  @@index([status, createdAt(sort: Desc)], name: "idx_snippets_status_created")
+  @@index([status, upvoteCount(sort: Desc)], name: "idx_snippets_status_upvote")
+  @@map("snippets")
+}
+
+// ─── Snippet <-> Tag join table ─────────────────────────────────
+
+model SnippetToTag {
+  snippetId Int
+  tagId     Int
+
+  snippet Snippet    @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+  tag     SnippetTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([snippetId, tagId], map: "pk_snippet_to_tag")
+  @@index([tagId], name: "idx_snippet_to_tag_tag")
+  @@map("snippet_to_tags")
+}
+
+// ─── Version History ─────────────────────────────────────────────
+// Every snippet update creates a new version row so we can diff.
+
+model SnippetVersion {
+  id         Int      @id @default(autoincrement())
+  snippetId  Int      @map("snippet_id")
+  code       String   @db.Text
+  // Who made the edit (nullable for the initial version)
+  editedById Int?     @map("edited_by_id")
+  editedAt   DateTime @default(now()) @map("edited_at")
+
+  snippet  Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+  editedBy User?   @relation(fields: [editedById], references: [id], onDelete: SetNull)
+
+  @@index([snippetId, editedAt(sort: Desc)], name: "idx_snippet_versions_snippet_time")
+  @@map("snippet_versions")
+}
+
+// ─── Template Variables ───────────────────────────────────────────
+// For snippets with {{variable}} placeholders.
+// When a user copies, they fill in values before the final code is copied.
+
+model SnippetVariable {
+  id           Int     @id @default(autoincrement())
+  snippetId    Int     @map("snippet_id")
+  // Key must match the placeholder text, e.g. "apiKey" for {{apiKey}}
+  key          String  @db.VarChar(100)
+  // Human-readable label shown in the form, e.g. "API Key"
+  label        String  @db.VarChar(200)
+  // Default value pre-filled in the copy form
+  defaultValue String? @map("default_value") @db.Text
+  // Display order
+  sortOrder    Int     @default(0) @map("sort_order")
+
+  snippet Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+
+  @@unique([snippetId, key], name: "uk_snippet_variable_snippet_key")
+  @@index([snippetId], name: "idx_snippet_variables_snippet")
+  @@map("snippet_variables")
+}
+
+// ─── File Attachments (optional) ────────────────────────────────
+// Optional files attached to a snippet (e.g. a sample JSON config,
+// an image, a diagram). Stored on R2.
+
+model SnippetAttachment {
+  id           Int      @id @default(autoincrement())
+  snippetId    Int      @map("snippet_id")
+  // Fully qualified R2/public URL
+  fileUrl      String   @map("file_url") @db.VarChar(2000)
+  originalName String   @map("original_name") @db.VarChar(255)
+  fileType     String?  @map("file_type") @db.VarChar(100)
+  fileSize     Int?     @map("file_size") // bytes
+  sortOrder    Int      @default(0) @map("sort_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  snippet Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+
+  @@index([snippetId], name: "idx_snippet_attachments_snippet")
+  @@map("snippet_attachments")
+}
+
+// ─── Comments (Phase 2) ─────────────────────────────────────────
+
+model SnippetComment {
+  id        Int      @id @default(autoincrement())
+  snippetId Int      @map("snippet_id")
+  userId    Int?     @map("user_id")
+  // Optional parentId for threaded replies (nullable = top-level)
+  parentId  Int?     @map("parent_id")
+  content   String   @db.Text
+  isEdited  Boolean  @default(false) @map("is_edited")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  snippet Snippet          @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+  user    User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  parent  SnippetComment?  @relation("SnippetCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies SnippetComment[] @relation("SnippetCommentReplies")
+
+  @@index([snippetId, createdAt(sort: Desc)], name: "idx_snippet_comments_snippet_time")
+  @@index([parentId], name: "idx_snippet_comments_parent")
+  @@map("snippet_comments")
+}
+
+// ─── Upvotes (Phase 2) ──────────────────────────────────────────
+// IP hash for anonymous upvotes, userId for authenticated upvotes.
+
+model SnippetUpvote {
+  // Exactly one of userId / ipHash is set
+  id        Int      @id @default(autoincrement())
+  snippetId Int      @map("snippet_id")
+  userId    Int?     @map("user_id")
+  ipHash    String?  @map("ip_hash") @db.VarChar(128)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  snippet Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Enforce unique upvote per snippet+ipHash (IP-based anonymous upvotes)
+  // For authenticated users: service layer checks userId uniqueness separately
+  @@unique([snippetId, ipHash], name: "uk_snippet_upvote_snippet_ip")
+  @@index([snippetId], name: "idx_snippet_upvotes_snippet")
+  @@index([userId], name: "idx_snippet_upvotes_user")
+  @@map("snippet_upvotes")
+}
+
+// ─── Bookmarks ───────────────────────────────────────────────────
+// Bookmarks are scoped to the current user (by userId if logged in,
+// by ipHash for anonymous users). Anonymous and authenticated
+// bookmarks are kept separate so a logged-in user sees only their
+// own list when they sign in.
+
+model SnippetBookmark {
+  id        Int      @id @default(autoincrement())
+  snippetId Int      @map("snippet_id")
+  userId    Int?     @map("user_id")
+  ipHash    String?  @map("ip_hash") @db.VarChar(128)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  snippet Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Prevent duplicate bookmarks for the same snippet+ipHash
+  // For authenticated users: service layer checks userId uniqueness
+  @@unique([snippetId, ipHash], name: "uk_snippet_bookmark_snippet_ip")
+  @@index([snippetId], name: "idx_snippet_bookmarks_snippet")
+  @@index([userId, createdAt(sort: Desc)], name: "idx_snippet_bookmarks_user_recent")
+  @@index([ipHash, createdAt(sort: Desc)], name: "idx_snippet_bookmarks_ip_recent")
+  @@map("snippet_bookmarks")
+}
+
+// ─── Webhook Configurations (Phase 2) ────────────────────────────
+
+model SnippetWebhook {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  url         String   @db.VarChar(2000)
+  // Event types: "snippet.published" | "snippet.updated" | "snippet.created"
+  event       String   @db.VarChar(50)
+  // Optional custom headers (JSON: { "Authorization": "Bearer ..." })
+  headers     Json?    @db.JsonB
+  isActive    Boolean  @default(true) @map("is_active")
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  creator User? @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([isActive, event], name: "idx_snippet_webhooks_active_event")
+  @@map("snippet_webhooks")
+}
+
+// ─── User Back-Relations (add to existing User model) ────────────
+// These are ADDITIVE — they reference the new models above.
+// The existing User model stays unchanged; Prisma merges them.

@@ -288,6 +288,33 @@ for i in $(seq 1 6); do
     [ "$i" -lt 6 ] && sleep 5
 done
 
+# ── Step 4b: Route smoke-test — catch stale/partial builds ────────
+# Incident 2026-07-02: the backend image shipped a stale dist/index.js
+# that never mounted /api/v1/gifs, so the route 404'd in prod while the
+# container still reported "healthy" (health check only hits one route).
+# GIF picker died silently and only surfaced via user reports.
+#
+# Guard: assert core auth-gated routes are actually MOUNTED. Hit them
+# UNAUTHENTICATED over the internal port — a mounted route returns 401
+# ("needs auth"); a missing route (stale/partial build) returns 404.
+# Any 404 here fails the deploy loudly instead of shipping a broken build.
+info "Smoke-testing core API routes are mounted..."
+smoke_failed=false
+for route in gifs messages/threads profile; do
+    code=$(docker exec cuonghoangdev_backend \
+        sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)
+    if [ "$code" = "404" ]; then
+        fail "Route /api/v1/${route} → 404 (NOT mounted — stale/partial build)"
+        smoke_failed=true
+    else
+        ok "Route /api/v1/${route} mounted (HTTP ${code})"
+    fi
+done
+if [ "$smoke_failed" = true ]; then
+    fail "Smoke-test FAILED: a core route is missing → the running image is a stale build. Re-run a FULL 'bash deploy.sh' (never --no-build after code changes)."
+    exit 1
+fi
+
 # ── Step 5: Reload nginx ───────────────────────────────────────────
 info "Reloading nginx config..."
 $DC exec -T nginx nginx -s reload 2>/dev/null && ok "Nginx reloaded" || true

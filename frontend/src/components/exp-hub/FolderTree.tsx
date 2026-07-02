@@ -43,20 +43,20 @@ function CategoryItem({
       <div
         className={`group flex items-center gap-1 px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
           isSelected
-            ? 'bg-accent/20 text-accent'
-            : 'hover:bg-neutral-200 dark:hover:bg-neutral-800'
+            ? 'bg-violet-500/15 text-violet-200'
+            : 'text-slate-300 hover:bg-white/5'
         }`}
         style={{ paddingLeft: `${level * 16 + 8}px` }}
       >
         {hasChildren ? (
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-0.5 hover:bg-neutral-300 dark:hover:bg-neutral-700 rounded"
+            className="p-0.5 hover:bg-white/10 rounded"
           >
             {isOpen ? (
-              <ChevronDown className="w-3.5 h-3.5 text-neutral-500" />
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
             ) : (
-              <ChevronRight className="w-3.5 h-3.5 text-neutral-500" />
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
             )}
           </button>
         ) : (
@@ -68,13 +68,13 @@ function CategoryItem({
           className="flex-1 flex items-center gap-2 min-w-0"
         >
           {isOpen && hasChildren ? (
-            <FolderOpen className="w-4 h-4 text-yellow-500 shrink-0" />
+            <FolderOpen className="w-4 h-4 text-amber-400 shrink-0" />
           ) : (
-            <Folder className="w-4 h-4 text-yellow-500 shrink-0" />
+            <Folder className="w-4 h-4 text-amber-400 shrink-0" />
           )}
           <span className="truncate text-sm font-medium">{category.name}</span>
           {snippetCount > 0 && (
-            <span className="text-xs text-neutral-500 bg-neutral-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
+            <span className="text-xs text-slate-400 bg-white/10 px-1.5 py-0.5 rounded-full">
               {snippetCount}
             </span>
           )}
@@ -84,14 +84,14 @@ function CategoryItem({
           <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 shrink-0">
             <button
               onClick={() => onCreate?.(category.id)}
-              className="p-1 hover:bg-neutral-300 dark:hover:bg-neutral-600 rounded"
+              className="p-1 hover:bg-white/10 rounded"
               title="Add subfolder"
             >
               <Plus className="w-3 h-3" />
             </button>
             <button
               onClick={() => onEdit?.(category)}
-              className="p-1 hover:bg-neutral-300 dark:hover:bg-neutral-600 rounded"
+              className="p-1 hover:bg-white/10 rounded"
             >
               <MoreHorizontal className="w-3 h-3" />
             </button>
@@ -131,14 +131,14 @@ export function FolderTree({
 }: FolderTreeProps) {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-3 py-2 border-b border-neutral-200 dark:border-neutral-800">
-        <h3 className="text-sm font-semibold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-white/10">
+        <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
           Categories
         </h3>
         {isAdmin && onCreateCategory && (
           <button
             onClick={() => onCreateCategory()}
-            className="p-1 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded"
+            className="p-1 hover:bg-white/10 rounded"
             title="Add category"
           >
             <Plus className="w-4 h-4" />
@@ -150,12 +150,12 @@ export function FolderTree({
         <div
           className={`group flex items-center gap-1 px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
             selectedCategoryId === undefined
-              ? 'bg-accent/20 text-accent'
-              : 'hover:bg-neutral-200 dark:hover:bg-neutral-800'
+              ? 'bg-violet-500/15 text-violet-200'
+              : 'text-slate-300 hover:bg-white/5'
           }`}
           onClick={() => onSelectCategory(null)}
         >
-          <Folder className="w-4 h-4 text-yellow-500 shrink-0" />
+          <Folder className="w-4 h-4 text-amber-400 shrink-0" />
           <span className="text-sm font-medium">All Snippets</span>
         </div>
 

@@ -2270,3 +2270,41 @@ aside ::-webkit-scrollbar-thumb:hover {
 .tech-prose p:empty {
   display: none;
 }
+
+/* ─── EXP_Hub ambient background ─────────────────────────────────────
+ * Two slow-drifting radial blobs behind the dark UI. Transform/opacity
+ * only (compositor-cheap — same lesson as CyberBackground). They sit at
+ * low opacity BEHIND the panels, so they never wash out code/text.
+ * Respects reduced-motion. */
+@keyframes exphub-drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, 8%, 0) scale(1.12);
+  }
+}
+@keyframes exphub-drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(-7%, -6%, 0) scale(0.95);
+  }
+}
+.exphub-blob-a {
+  animation: exphub-drift-a 22s ease-in-out infinite;
+  will-change: transform;
+}
+.exphub-blob-b {
+  animation: exphub-drift-b 28s ease-in-out infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .exphub-blob-a,
+  .exphub-blob-b {
+    animation: none;
+  }
+}

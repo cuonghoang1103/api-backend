@@ -1805,6 +1805,8 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
           src={src}
           className="max-h-[calc(100dvh-80px)] w-full object-contain cursor-pointer"
           autoPlay
+          loop
+          playsInline
           onClick={togglePlay}
           onPlay={() => setPlaying(true)}
           onPause={handlePause}
@@ -2651,8 +2653,10 @@ function MediaItem({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    // Play only when the cell is in view AND no fullscreen modal is open.
-    if (isInView && !modalOpen) {
+    // Play only when the cell is in view, no fullscreen modal is open,
+    // AND the user hasn't explicitly paused this video. A user pause
+    // "sticks" across scroll (TikTok behaviour) until they press play.
+    if (isInView && !modalOpen && !userPausedRef.current) {
       // CRITICAL for TikTok-style autoplay: force the muted *property*
       // (not just the attribute) right before play(). React only sets
       // the `muted` attribute reliably, so the browser can see a
@@ -2826,7 +2830,16 @@ function MediaItem({
                   e.stopPropagation();
                   const v = videoRef.current;
                   if (!v) return;
-                  if (v.paused) { v.play().catch(() => {}); } else { v.pause(); }
+                  if (v.paused) {
+                    // User resumes → clear the sticky pause so scroll
+                    // autoplay works again.
+                    userPausedRef.current = false;
+                    v.play().catch(() => {});
+                  } else {
+                    // User pauses → make it stick across scroll.
+                    userPausedRef.current = true;
+                    v.pause();
+                  }
                 }}
                 className="shrink-0 transition-opacity hover:opacity-75"
                 aria-label={isPlaying ? 'Pause' : 'Play'}

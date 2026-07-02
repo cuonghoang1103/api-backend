@@ -234,13 +234,42 @@ export default function ExpHubPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-white dark:bg-neutral-950">
+    <div className="relative flex flex-col h-screen overflow-hidden text-slate-200 bg-[#0d1120]">
+      {/* ── Ambient dark background (sits behind everything, never over
+          text/code — pointer-events-none, low opacity). ── */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(160deg, #0d1120 0%, #111832 55%, #0b0f1e 100%)' }}
+        />
+        {/* faint grid */}
+        <div
+          className="absolute inset-0 opacity-[0.25]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.06) 1px, transparent 1px)',
+            backgroundSize: '46px 46px',
+          }}
+        />
+        {/* drifting neon blobs */}
+        <div
+          className="exphub-blob-a absolute -top-32 -left-24 h-[42rem] w-[42rem] rounded-full opacity-[0.16]"
+          style={{ background: 'radial-gradient(circle, #8b5cf6 0%, transparent 62%)' }}
+        />
+        <div
+          className="exphub-blob-b absolute -bottom-40 -right-28 h-[46rem] w-[46rem] rounded-full opacity-[0.14]"
+          style={{ background: 'radial-gradient(circle, #22d3ee 0%, transparent 62%)' }}
+        />
+      </div>
+
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-neutral-800">
+      <header className="relative z-10 flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#0d1120]/80 backdrop-blur-md">
         <div className="flex items-center gap-4">
-          <h1 className="text-lg font-bold">EXP_Hub</h1>
+          <h1 className="text-lg font-bold bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300 bg-clip-text text-transparent">
+            EXP_Hub
+          </h1>
           {stats && (
-            <span className="text-sm text-neutral-500">
+            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-slate-400">
               {stats.totalSnippets} snippets
             </span>
           )}
@@ -255,8 +284,8 @@ export default function ExpHubPage() {
             onClick={() => setShowSaved((v) => !v)}
             className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg border transition-colors ${
               showSaved
-                ? 'bg-accent/15 border-accent/40 text-accent'
-                : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800'
+                ? 'bg-violet-500/20 border-violet-400/50 text-violet-200 shadow-[0_0_18px_rgba(139,92,246,0.35)]'
+                : 'border-white/10 text-slate-400 hover:bg-white/5 hover:text-slate-200'
             }`}
             title="Snippets đã lưu"
           >
@@ -267,9 +296,9 @@ export default function ExpHubPage() {
       </header>
 
       {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="relative z-10 flex flex-1 overflow-hidden">
         {/* Left Sidebar - Folder Tree */}
-        <aside className="w-72 border-r border-neutral-200 dark:border-neutral-800 overflow-y-auto">
+        <aside className="w-72 border-r border-white/10 overflow-y-auto bg-white/[0.02]">
           <FolderTree
             categories={categories}
             selectedCategoryId={selectedCategoryId}
@@ -278,9 +307,9 @@ export default function ExpHubPage() {
         </aside>
 
         {/* Middle Column - Snippet List */}
-        <div className="w-96 border-r border-neutral-200 dark:border-neutral-800 flex flex-col">
+        <div className="w-96 border-r border-white/10 flex flex-col bg-white/[0.02]">
           {/* Filters */}
-          <div className="p-3 border-b border-neutral-200 dark:border-neutral-800 space-y-3">
+          <div className="p-3 border-b border-white/10 space-y-3">
             <FilterPanel
               tags={tags}
               languages={languages}
@@ -296,13 +325,13 @@ export default function ExpHubPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'popular' | 'newest' | 'upvotes')}
-                className="text-sm px-2 py-1 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded"
+                className="text-sm px-2 py-1 bg-white/5 border border-white/10 text-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-violet-500/40 [&>option]:bg-[#131a2e] [&>option]:text-slate-200"
               >
                 <option value="newest">Newest</option>
                 <option value="popular">Most Popular</option>
                 <option value="upvotes">Top Rated</option>
               </select>
-              <span className="text-sm text-neutral-500">{snippets.length} results</span>
+              <span className="text-sm text-slate-500">{snippets.length} results</span>
             </div>
           </div>
 
@@ -311,10 +340,10 @@ export default function ExpHubPage() {
             {showSaved ? (
               savedLoading ? (
                 <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
+                  <Loader2 className="w-6 h-6 animate-spin text-violet-400" />
                 </div>
               ) : savedSnippets.length === 0 ? (
-                <div className="p-8 text-center text-neutral-500">
+                <div className="p-8 text-center text-slate-500">
                   <p>Chưa có snippet nào được lưu</p>
                 </div>
               ) : (
@@ -330,10 +359,10 @@ export default function ExpHubPage() {
               )
             ) : isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
+                <Loader2 className="w-6 h-6 animate-spin text-violet-400" />
               </div>
             ) : snippets.length === 0 ? (
-              <div className="p-8 text-center text-neutral-500">
+              <div className="p-8 text-center text-slate-500">
                 <p>No snippets found</p>
               </div>
             ) : (
@@ -351,21 +380,21 @@ export default function ExpHubPage() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="p-3 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-center gap-2">
+            <div className="p-3 border-t border-white/10 flex items-center justify-center gap-2">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="px-3 py-1 text-sm bg-neutral-100 dark:bg-neutral-800 rounded disabled:opacity-50"
+                className="px-3 py-1 text-sm bg-white/5 border border-white/10 text-slate-300 rounded hover:bg-white/10 disabled:opacity-40 transition-colors"
               >
                 Prev
               </button>
-              <span className="text-sm text-neutral-500">
+              <span className="text-sm text-slate-500">
                 {page} / {totalPages}
               </span>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="px-3 py-1 text-sm bg-neutral-100 dark:bg-neutral-800 rounded disabled:opacity-50"
+                className="px-3 py-1 text-sm bg-white/5 border border-white/10 text-slate-300 rounded hover:bg-white/10 disabled:opacity-40 transition-colors"
               >
                 Next
               </button>
@@ -380,7 +409,7 @@ export default function ExpHubPage() {
             const view = detail ?? selectedSnippet;
             if (!view) {
               return (
-                <div className="flex items-center justify-center h-full text-neutral-400">
+                <div className="flex items-center justify-center h-full text-slate-500">
                   Select a snippet to view its details
                 </div>
               );
@@ -388,11 +417,11 @@ export default function ExpHubPage() {
             return (
             <div className="p-6">
               {/* Breadcrumbs */}
-              <div className="flex items-center gap-2 text-sm text-neutral-500 mb-4">
+              <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
                 {getBreadcrumbs().map((crumb, i, arr) => (
                   <span key={i} className="flex items-center gap-2">
                     {i > 0 && <ChevronRight className="w-3.5 h-3.5" />}
-                    <span className={i === arr.length - 1 ? 'text-neutral-900 dark:text-neutral-100 font-medium' : ''}>
+                    <span className={i === arr.length - 1 ? 'text-slate-100 font-medium' : ''}>
                       {crumb.label}
                     </span>
                   </span>
@@ -402,11 +431,11 @@ export default function ExpHubPage() {
               {/* Title */}
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                  <h2 className="text-2xl font-bold text-slate-50">
                     {view.title}
                   </h2>
                   {view.description && (
-                    <p className="mt-1 text-neutral-600 dark:text-neutral-400">
+                    <p className="mt-1 text-slate-400">
                       {view.description}
                     </p>
                   )}
@@ -418,7 +447,7 @@ export default function ExpHubPage() {
                       href={view.previewUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded"
+                      className="p-2 text-slate-400 hover:bg-white/10 hover:text-slate-200 rounded transition-colors"
                     >
                       <ExternalLink className="w-4 h-4" />
                     </a>
@@ -432,7 +461,7 @@ export default function ExpHubPage() {
                   {view.tags.map((tag) => (
                     <span
                       key={tag.id}
-                      className="px-2 py-1 text-xs bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded"
+                      className="px-2 py-1 text-xs bg-white/5 border border-white/10 text-slate-400 rounded"
                     >
                       {tag.name}
                     </span>
@@ -469,10 +498,10 @@ export default function ExpHubPage() {
                 <button
                   onClick={handleToggleBookmark}
                   disabled={voteBusy || !detail}
-                  className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-colors disabled:opacity-60 ${
+                  className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-colors disabled:opacity-60 border ${
                     view.hasBookmarked
-                      ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/40'
-                      : 'bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                      ? 'bg-amber-500/15 text-amber-300 border-amber-500/40'
+                      : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
                   }`}
                 >
                   <Bookmark className={`w-4 h-4 ${view.hasBookmarked ? 'fill-current' : ''}`} />
@@ -481,10 +510,10 @@ export default function ExpHubPage() {
                 <button
                   onClick={handleToggleUpvote}
                   disabled={voteBusy || !detail}
-                  className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-colors disabled:opacity-60 ${
+                  className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-colors disabled:opacity-60 border ${
                     view.hasUpvoted
-                      ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/40'
-                      : 'bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                      ? 'bg-rose-500/15 text-rose-300 border-rose-500/40'
+                      : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
                   }`}
                 >
                   <Heart className={`w-4 h-4 ${view.hasUpvoted ? 'fill-current' : ''}`} />
@@ -492,7 +521,7 @@ export default function ExpHubPage() {
                 </button>
                 <button
                   onClick={handleToggleVersions}
-                  className="flex items-center gap-2 px-4 py-2 text-sm bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 rounded-lg transition-colors"
                 >
                   <History className="w-4 h-4" />
                   Lịch sử
@@ -562,23 +591,23 @@ export default function ExpHubPage() {
 
               {/* Version history (lazy) */}
               {showVersions && (
-                <div className="mt-4 rounded-lg border border-neutral-200 dark:border-neutral-800 p-3">
-                  <h3 className="mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                  <h3 className="mb-2 text-sm font-semibold text-slate-300">
                     Lịch sử phiên bản
                   </h3>
                   {versions == null ? (
-                    <div className="flex justify-center py-4"><Loader2 className="w-4 h-4 animate-spin text-neutral-400" /></div>
+                    <div className="flex justify-center py-4"><Loader2 className="w-4 h-4 animate-spin text-violet-400" /></div>
                   ) : versions.length === 0 ? (
-                    <p className="text-sm text-neutral-500">Chưa có phiên bản nào</p>
+                    <p className="text-sm text-slate-500">Chưa có phiên bản nào</p>
                   ) : (
                     <div className="space-y-2">
                       {versions.map((v, i) => (
-                        <details key={v.id} className="rounded border border-neutral-200 dark:border-neutral-800">
-                          <summary className="cursor-pointer px-3 py-2 text-sm text-neutral-600 dark:text-neutral-400">
+                        <details key={v.id} className="rounded border border-white/10">
+                          <summary className="cursor-pointer px-3 py-2 text-sm text-slate-400 hover:text-slate-200">
                             v{versions.length - i} — {new Date(v.editedAt).toLocaleString('vi-VN')}
                             {v.editedBy ? ` — ${v.editedBy.username}` : ''}
                           </summary>
-                          <div className="border-t border-neutral-200 dark:border-neutral-800">
+                          <div className="border-t border-white/10">
                             <CodeViewer code={v.code} language={view.language} />
                           </div>
                         </details>
@@ -589,7 +618,7 @@ export default function ExpHubPage() {
               )}
 
               {/* Meta */}
-              <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-800 text-sm text-neutral-500">
+              <div className="mt-6 pt-6 border-t border-white/10 text-sm text-slate-500">
                 <p>Created {new Date(view.createdAt).toLocaleDateString()}</p>
                 {view.author && (
                   <p>By {view.author.username}</p>

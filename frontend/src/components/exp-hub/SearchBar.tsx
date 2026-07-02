@@ -40,21 +40,21 @@ export function SearchBar({ initialQuery = '', placeholder = 'Search snippets...
 
   return (
     <form onSubmit={handleSearch} className={`relative ${className}`}>
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-10 pr-10 py-2 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-colors"
+        className="w-full pl-10 pr-10 py-2 bg-white/5 border border-white/10 text-slate-200 placeholder:text-slate-500 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/50 transition-colors"
       />
       {query && (
         <button
           type="button"
           onClick={handleClear}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded"
+          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-white/10 rounded"
         >
-          <X className="w-3.5 h-3.5 text-neutral-400" />
+          <X className="w-3.5 h-3.5 text-slate-400" />
         </button>
       )}
     </form>

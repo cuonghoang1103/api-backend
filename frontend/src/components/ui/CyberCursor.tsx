@@ -11,6 +11,18 @@ export default function CyberCursor() {
     const ring = ringRef.current;
     if (!dot || !ring) return;
 
+    // Skip entirely on touch / no-fine-pointer devices (no custom cursor
+    // is shown there anyway) and when the user prefers reduced motion.
+    // This removes the global per-frame rAF tax on mobile and for
+    // reduced-motion users — desktop pointer users are unaffected.
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!finePointer || reducedMotion) {
+      dot.style.display = 'none';
+      ring.style.display = 'none';
+      return;
+    }
+
     let ringX = 0;
     let ringY = 0;
     let dotX = 0;
@@ -20,17 +32,26 @@ export default function CyberCursor() {
 
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-    const onMouseMove = (e: MouseEvent) => {
-      dotX = e.clientX;
-      dotY = e.clientY;
-      dot.style.transform = `translate(${dotX}px, ${dotY}px)`;
-    };
-
     const loop = () => {
       ringX = lerp(ringX, dotX, 0.12);
       ringY = lerp(ringY, dotY, 0.12);
       ring.style.transform = `translate(${ringX}px, ${ringY}px) scale(${isHovering ? 1.6 : 1})`;
+      // Once the trailing ring has caught up to the cursor, stop the
+      // loop — it restarts on the next move/hover change. An idle mouse
+      // now costs zero rAF instead of running forever. Visuals identical.
+      if (Math.abs(ringX - dotX) < 0.1 && Math.abs(ringY - dotY) < 0.1) {
+        rafId = 0;
+        return;
+      }
       rafId = requestAnimationFrame(loop);
+    };
+    const kick = () => { if (!rafId) rafId = requestAnimationFrame(loop); };
+
+    const onMouseMove = (e: MouseEvent) => {
+      dotX = e.clientX;
+      dotY = e.clientY;
+      dot.style.transform = `translate(${dotX}px, ${dotY}px)`;
+      kick();
     };
 
     const onMouseOver = (e: MouseEvent) => {
@@ -38,6 +59,7 @@ export default function CyberCursor() {
       if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button') || target.closest('a')) {
         isHovering = true;
         ring.style.borderColor = '#ec4899';
+        kick();
       }
     };
 
@@ -46,13 +68,13 @@ export default function CyberCursor() {
       if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button') || target.closest('a')) {
         isHovering = false;
         ring.style.borderColor = '#8B5CF6';
+        kick();
       }
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseover', onMouseOver);
-    document.addEventListener('mouseout', onMouseOut);
-    rafId = requestAnimationFrame(loop);
+    document.addEventListener('mousemove', onMouseMove, { passive: true });
+    document.addEventListener('mouseover', onMouseOver, { passive: true });
+    document.addEventListener('mouseout', onMouseOut, { passive: true });
 
     return () => {
       document.removeEventListener('mousemove', onMouseMove);

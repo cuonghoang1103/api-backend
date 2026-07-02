@@ -27,9 +27,56 @@ export default function CyberBackground() {
     const COLORS = ['#8B5CF6', '#06b6d4', '#ec4899', '#a855f7', '#22d3ee'];
     const PARTICLE_COUNT = 60;
 
+    // Static layers (opaque base fill + grid, and the scanline overlay)
+    // never change between frames — only the window size. We paint them
+    // ONCE onto offscreen canvases and blit them each frame instead of
+    // re-stroking 80 grid lines + hundreds of scanline rects every frame.
+    // Pixels are identical; per-frame work drops sharply.
+    const baseLayer = document.createElement('canvas');   // #0f172a + grid
+    const scanLayer = document.createElement('canvas');   // scanline overlay
+    const baseCtx = baseLayer.getContext('2d');
+    const scanCtx = scanLayer.getContext('2d');
+
+    const buildStaticLayers = () => {
+      baseLayer.width = canvas.width;
+      baseLayer.height = canvas.height;
+      scanLayer.width = canvas.width;
+      scanLayer.height = canvas.height;
+      if (baseCtx) {
+        baseCtx.fillStyle = '#0f172a';
+        baseCtx.fillRect(0, 0, canvas.width, canvas.height);
+        const cols = 40;
+        const rows = 40;
+        const w = canvas.width / cols;
+        const h = canvas.height / rows;
+        baseCtx.strokeStyle = 'rgba(139, 92, 246, 0.04)';
+        baseCtx.lineWidth = 0.5;
+        for (let i = 0; i <= cols; i++) {
+          baseCtx.beginPath();
+          baseCtx.moveTo(i * w, 0);
+          baseCtx.lineTo(i * w, canvas.height);
+          baseCtx.stroke();
+        }
+        for (let j = 0; j <= rows; j++) {
+          baseCtx.beginPath();
+          baseCtx.moveTo(0, j * h);
+          baseCtx.lineTo(canvas.width, j * h);
+          baseCtx.stroke();
+        }
+      }
+      if (scanCtx) {
+        scanCtx.clearRect(0, 0, canvas.width, canvas.height);
+        scanCtx.fillStyle = 'rgba(0,0,0,0.03)';
+        for (let y = 0; y < canvas.height; y += 4) {
+          scanCtx.fillRect(0, y, canvas.width, 2);
+        }
+      }
+    };
+
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      buildStaticLayers();
     };
     resize();
     window.addEventListener('resize', resize);
@@ -47,28 +94,6 @@ export default function CyberBackground() {
       }));
     };
     initParticles();
-
-    const drawGrid = () => {
-      const cols = 40;
-      const rows = 40;
-      const w = canvas.width / cols;
-      const h = canvas.height / rows;
-
-      ctx.strokeStyle = 'rgba(139, 92, 246, 0.04)';
-      ctx.lineWidth = 0.5;
-      for (let i = 0; i <= cols; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * w, 0);
-        ctx.lineTo(i * w, canvas.height);
-        ctx.stroke();
-      }
-      for (let j = 0; j <= rows; j++) {
-        ctx.beginPath();
-        ctx.moveTo(0, j * h);
-        ctx.lineTo(canvas.width, j * h);
-        ctx.stroke();
-      }
-    };
 
     const drawGlows = () => {
       const time = Date.now() * 0.001;
@@ -100,21 +125,11 @@ export default function CyberBackground() {
       }
     };
 
-    const drawScanlines = () => {
-      ctx.fillStyle = 'rgba(0,0,0,0.03)';
-      for (let y = 0; y < canvas.height; y += 4) {
-        ctx.fillRect(0, y, canvas.width, 2);
-      }
-    };
-
     const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Opaque base (fill + grid) blitted from the prebuilt layer —
+      // replaces the per-frame clearRect + fill + 80 grid strokes.
+      ctx.drawImage(baseLayer, 0, 0);
 
-      // Background
-      ctx.fillStyle = '#0f172a';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      drawGrid();
       drawGlows();
 
       // Particles
@@ -150,15 +165,30 @@ export default function CyberBackground() {
         }
       });
 
-      drawScanlines();
+      // Scanline overlay blitted on top (replaces the per-frame
+      // fillRect loop). Same result, one drawImage.
+      ctx.drawImage(scanLayer, 0, 0);
       rafRef.current = requestAnimationFrame(draw);
     };
+
+    // Pause the whole loop while the tab is hidden — a background music
+    // page shouldn't burn frames when the user isn't looking.
+    const onVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
+      } else if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(draw);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
 
     draw();
 
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
 

@@ -1749,6 +1749,11 @@ export const messagingApi = {
     api.get<ApiResponse<MessagingThread[]>>('/messages/threads', {
       params: scope === 'support' ? { scope } : undefined,
     }),
+  // The "Đã xoá" recovery tab — threads the viewer soft-deleted.
+  listDeletedThreads: () =>
+    api.get<ApiResponse<MessagingThread[]>>('/messages/threads', {
+      params: { view: 'deleted' },
+    }),
   getThread: (threadId: number) =>
     api.get<ApiResponse<MessagingThread>>(`/messages/threads/${threadId}`),
 
@@ -1819,6 +1824,13 @@ export const messagingApi = {
   deleteChat: (threadId: number) =>
     api.delete<ApiResponse<{ preferences: MessagingThreadPreference | null; deleted: boolean }>>(
       `/messages/threads/${threadId}/hard`,
+    ),
+
+  // Undo a "Delete chat" — restores the thread (and its history) to
+  // the inbox. Backs the "Đã xoá" recovery tab.
+  restoreChat: (threadId: number) =>
+    api.post<ApiResponse<{ preferences: MessagingThreadPreference | null; restored: boolean }>>(
+      `/messages/threads/${threadId}/restore`,
     ),
 
   // Mute with a duration. Body: { durationMinutes: number | null }

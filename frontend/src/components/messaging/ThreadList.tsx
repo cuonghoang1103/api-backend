@@ -14,9 +14,12 @@ import {
   Inbox,
   ChevronUp,
   ChevronDown,
+  Trash2,
+  RotateCcw,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
+import type { MessagingThread } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -28,7 +31,7 @@ import NewMessageModal from './NewMessageModal';
 // iOS-like spring transition — feels premium and "lightweight"
 const HOVER_SPRING = 'transition-[background-color,transform,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]';
 
-type FilterMode = 'all' | 'unread' | 'pinned' | 'archived';
+type FilterMode = 'all' | 'unread' | 'pinned' | 'archived' | 'deleted';
 
 export default function ThreadList() {
   const store = useMessagingStore();
@@ -50,6 +53,16 @@ export default function ThreadList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Lazily load the "Đã xoá" recovery list the first time that tab
+  // is opened (and after a fresh delete invalidates it). Kept out of
+  // the default inbox payload so it only costs a fetch on demand.
+  useEffect(() => {
+    if (filter === 'deleted' && !store.deletedThreadsLoaded) {
+      store.loadDeletedThreads();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, store.deletedThreadsLoaded]);
+
   // Close any open row menu when clicking outside
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -69,6 +82,15 @@ export default function ThreadList() {
       await store.openThread(id);
     } catch (e: any) {
       toast.error(e?.userFriendlyMessage ?? e?.message ?? 'Không thể mở cuộc trò chuyện với admin');
+    }
+  };
+
+  const handleRestore = async (threadId: number) => {
+    try {
+      await store.restoreChat(threadId);
+      toast.success('Đã khôi phục cuộc trò chuyện');
+    } catch {
+      toast.error('Không thể khôi phục cuộc trò chuyện');
     }
   };
 
@@ -97,13 +119,37 @@ export default function ThreadList() {
     });
   }, [store.threads, query, filter]);
 
+  // Deleted ("Đã xoá") recovery list — sourced from the separate
+  // `deletedThreads` slice (NOT `store.threads`, which never holds
+  // deleted rows). Search-filtered the same way as the active list.
+  const visibleDeleted = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return store.deletedThreads.filter((t) => {
+      if (!q) return true;
+      const name = (
+        t.peer?.alias ||
+        t.peer?.displayName ||
+        t.peer?.username ||
+        ''
+      ).toLowerCase();
+      const last = t.lastMessage?.content?.toLowerCase() ?? '';
+      return name.includes(q) || last.includes(q);
+    });
+  }, [store.deletedThreads, query]);
+
   // Counts for the chip labels
   const counts = useMemo(() => {
     const archived = store.threads.filter((t) => t.preferences?.archivedAt).length;
     const pinned = store.threads.filter((t) => t.preferences?.pinnedAt).length;
     const unread = store.threads.filter((t) => (t.unreadCount ?? 0) > 0).length;
-    return { archived, pinned, unread, all: store.threads.length };
-  }, [store.threads]);
+    return {
+      archived,
+      pinned,
+      unread,
+      all: store.threads.length,
+      deleted: store.deletedThreads.length,
+    };
+  }, [store.threads, store.deletedThreads]);
 
   // Auto-bounce the user out of the "Lưu trữ" / "Chưa đọc" /
   // "Ghim" tab when the current list empties out (e.g. they
@@ -214,11 +260,26 @@ export default function ThreadList() {
             active={filter === 'archived'}
             onClick={() => setFilter('archived')}
           />
+          <FilterChip
+            label="Đã xoá"
+            count={counts.deleted}
+            active={filter === 'deleted'}
+            onClick={() => setFilter('deleted')}
+          />
         </div>
       </div>
 
       <div className="chat-messages-scroll min-h-0 flex-1 overflow-y-auto px-2 py-1">
-        {store.threadsLoading && !store.threadsLoaded ? (
+        {filter === 'deleted' ? (
+          <DeletedList
+            loading={store.deletedThreadsLoading && !store.deletedThreadsLoaded}
+            threads={visibleDeleted}
+            hasQuery={!!query.trim()}
+            getPresence={getPresence}
+            onRestore={handleRestore}
+            onClearSearch={() => setQuery('')}
+          />
+        ) : store.threadsLoading && !store.threadsLoaded ? (
           <div className="space-y-2 p-2">
             {[1, 2, 3].map((i) => (
               <div
@@ -388,6 +449,129 @@ export default function ThreadList() {
         )}
       </div>
     </div>
+  );
+}
+
+// ── "Đã xoá" recovery tab ───────────────────────────────────
+// Lists the viewer's soft-deleted threads so any "Delete chat" can
+// be undone. Sourced from `store.deletedThreads` (loaded lazily),
+// NOT the active inbox. Each row has a single "Khôi phục" action.
+function DeletedList({
+  loading,
+  threads,
+  hasQuery,
+  getPresence,
+  onRestore,
+  onClearSearch,
+}: {
+  loading: boolean;
+  threads: MessagingThread[];
+  hasQuery: boolean;
+  getPresence: (uid: number) => { online: boolean; lastSeen: number };
+  onRestore: (threadId: number) => void;
+  onClearSearch: () => void;
+}) {
+  if (loading) {
+    return (
+      <div className="space-y-2 p-2">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="h-14 animate-pulse rounded-xl"
+            style={{ background: 'rgba(255,255,255,0.04)' }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (threads.length === 0) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-2 p-6 text-center text-text-muted">
+        <Trash2 className="h-8 w-8 opacity-50" />
+        <p className="text-xs">
+          {hasQuery ? 'Không tìm thấy kết quả' : 'Chưa có cuộc trò chuyện đã xoá'}
+        </p>
+        <p className="text-[10px] opacity-70">
+          {hasQuery
+            ? 'Thử từ khoá khác hoặc xoá bộ lọc'
+            : 'Cuộc trò chuyện bạn xoá sẽ nằm ở đây và có thể khôi phục bất cứ lúc nào'}
+        </p>
+        {hasQuery && (
+          <button
+            onClick={onClearSearch}
+            className="mt-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] text-text-secondary transition-colors hover:bg-white/[0.08]"
+          >
+            <Inbox className="mr-1 inline h-3 w-3" /> Xoá tìm kiếm
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <ul className="space-y-0.5">
+      {threads.map((t) => (
+        <DeletedRow key={t.id} thread={t} online={!!(t.peer && getPresence(t.peer.id).online)} onRestore={onRestore} />
+      ))}
+    </ul>
+  );
+}
+
+function DeletedRow({
+  thread,
+  online,
+  onRestore,
+}: {
+  thread: MessagingThread;
+  online: boolean;
+  onRestore: (threadId: number) => void;
+}) {
+  const [restoring, setRestoring] = useState(false);
+  const name =
+    thread.peer?.alias ?? thread.peer?.displayName ?? thread.peer?.username ?? 'Cuộc trò chuyện';
+
+  const handle = async () => {
+    if (restoring) return;
+    setRestoring(true);
+    try {
+      await onRestore(thread.id);
+    } finally {
+      setRestoring(false);
+    }
+  };
+
+  return (
+    <li className="flex items-center gap-3 rounded-xl p-2.5">
+      <Avatar
+        src={thread.peer?.avatarUrl}
+        name={name}
+        badge={thread.type === 'ADMIN' ? 'admin' : null}
+        online={online}
+      />
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-semibold text-text-primary">{name}</p>
+        <p className="truncate text-[11.5px] text-text-muted/70">
+          {thread.lastMessage?.hasAttachment ? (
+            <>
+              <span className="text-cyan-400">📎</span>{' '}
+              {thread.lastMessage.attachmentName ?? 'Đính kèm'}
+            </>
+          ) : (
+            thread.lastMessage?.content || <span className="italic opacity-60">Chưa có tin nhắn</span>
+          )}
+        </p>
+      </div>
+      <button
+        onClick={handle}
+        disabled={restoring}
+        className="flex shrink-0 items-center gap-1.5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.08] px-2.5 py-1.5 text-[11px] font-medium text-cyan-200 transition-colors hover:bg-cyan-500/[0.16] disabled:opacity-50"
+        title="Khôi phục cuộc trò chuyện"
+      >
+        <RotateCcw className={cn('h-3.5 w-3.5', restoring && 'animate-spin')} />
+        <span>Khôi phục</span>
+      </button>
+    </li>
   );
 }
 

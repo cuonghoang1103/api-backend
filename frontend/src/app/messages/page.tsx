@@ -120,7 +120,7 @@ function MessagesPageInner() {
       // the same auth middleware) and, if it 401s, force a
       // logout so the user can re-authenticate.
       try {
-        const probe = await fetch('/api/v1/auth/profile', { credentials: 'include' });
+        const probe = await fetch('/api/v1/profile', { credentials: 'include' });
         if (probe.status === 401 || probe.status === 403) {
           // Cookie is bad — log out and bounce to /login.
           await useAuthStore.getState().logout();

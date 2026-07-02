@@ -101,23 +101,29 @@ async function toNextResponse(response: Response): Promise<NextResponse> {
     });
   }
 
-  // Collect Set-Cookie headers from the backend response.
-  // NextResponse does not support Set-Cookie via its constructor headers
-  // param on all versions, so we handle it via cookies() helper.
+  // Collect Set-Cookie headers from the backend response and forward
+  // them VERBATIM. NOTE: `next.cookies.set(name, value)` takes a cookie
+  // NAME + value — passing the whole "name=value; Path=…; HttpOnly" header
+  // string as the name (the previous bug) created a garbage cookie and
+  // dropped the real one, so backend token rotation never reached the
+  // browser. Appending the raw Set-Cookie header preserves all attributes.
   const setCookieHeaders = response.headers.getSetCookie?.() ?? [];
+  const forwardSetCookies = (next: NextResponse) => {
+    for (const sc of setCookieHeaders) next.headers.append("set-cookie", sc);
+  };
 
   // For JSON responses: parse and return as NextResponse.json
   if (contentType.includes("application/json")) {
     const text = await response.text();
     if (!text.trim()) {
       const next = new NextResponse(null, { status: response.status });
-      for (const sc of setCookieHeaders) next.cookies.set(sc as unknown as string, "");
+      forwardSetCookies(next);
       return next;
     }
     try {
       const data = JSON.parse(text);
       const next = NextResponse.json(data, { status: response.status });
-      for (const sc of setCookieHeaders) next.cookies.set(sc as unknown as string, "");
+      forwardSetCookies(next);
       return next;
     } catch {
       return NextResponse.json({ success: false, message: text }, { status: response.status });
@@ -128,7 +134,7 @@ async function toNextResponse(response: Response): Promise<NextResponse> {
   const arrayBuffer = await response.arrayBuffer();
   if (arrayBuffer.byteLength === 0) {
     const next = new NextResponse(null, { status: response.status });
-    for (const sc of setCookieHeaders) next.cookies.set(sc as unknown as string, "");
+    forwardSetCookies(next);
     return next;
   }
 

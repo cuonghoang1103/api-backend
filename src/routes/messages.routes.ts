@@ -93,13 +93,16 @@ router.get('/threads', async (req: Request, res: Response, next: NextFunction) =
     // ?scope=support, used by /admin/messages.
     // Super admins see ALL admin threads; regular admins see only theirs.
     const scope = typeof req.query.scope === 'string' ? req.query.scope : undefined;
+    // ?view=deleted returns the viewer's soft-deleted threads (the
+    // "Đã xoá" recovery tab). Only applies to the personal inbox.
+    const view = req.query.view === 'deleted' ? 'deleted' : 'active';
     if (scope === 'support' && isAdmin) {
       const threads = isSuperAdmin
         ? await messagesService.listAllAdminThreads()  // Super admin: see all
         : await messagesService.listThreadsForAdmin(req.userId!);  // Regular admin: see only theirs
       res.json({ success: true, data: threads });
     } else {
-      const threads = await messagesService.listThreadsForUser(req.userId!);
+      const threads = await messagesService.listThreadsForUser(req.userId!, { view });
       res.json({ success: true, data: threads });
     }
   } catch (error) {
@@ -422,6 +425,21 @@ router.delete('/threads/:id/hard', async (req: Request, res: Response, next: Nex
     if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
     const preferences = await messagesService.deleteThreadForViewer(id, req.userId!);
     res.json({ success: true, data: { preferences, deleted: true } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── POST /api/v1/messages/threads/:id/restore ──────────
+// Undo a "Delete chat" — clears the viewer's deletedAt/archivedAt
+// so the conversation (with full history) returns to the inbox.
+// Backs the "Đã xoá" recovery tab; delete-for-me is never permanent.
+router.post('/threads/:id/restore', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const preferences = await messagesService.restoreThreadForViewer(id, req.userId!);
+    res.json({ success: true, data: { preferences, restored: true } });
   } catch (error) {
     next(error);
   }

@@ -49,6 +49,13 @@ interface MessagingState {
   threads: MessagingThread[];
   threadsLoaded: boolean;
   threadsLoading: boolean;
+  /** The viewer's soft-deleted threads, shown in the "Đã xoá"
+   *  recovery tab. Loaded lazily the first time that tab is opened
+   *  (kept separate from `threads` so the normal inbox payload stays
+   *  lean). Restoring a thread moves it back into `threads`. */
+  deletedThreads: MessagingThread[];
+  deletedThreadsLoaded: boolean;
+  deletedThreadsLoading: boolean;
   /** Which inbox `loadThreads` fetches: the viewer's personal DMs
    *  (default) or, for /admin/messages, the support-agent queue.
    *  Stored so reloads/retries keep the same scope. */
@@ -85,6 +92,8 @@ interface MessagingState {
 
   // Threads
   loadThreads: () => Promise<void>;
+  loadDeletedThreads: () => Promise<void>;
+  restoreChat: (threadId: number) => Promise<void>;
   refreshThreadSummary: (threadId: number) => Promise<void>;
   loadOnlineUsers: () => Promise<void>;
   refreshUnread: () => Promise<void>;
@@ -288,6 +297,9 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   threads: [],
   threadsLoaded: false,
   threadsLoading: false,
+  deletedThreads: [],
+  deletedThreadsLoaded: false,
+  deletedThreadsLoading: false,
   threadScope: 'personal',
   showArchived: false,
   currentThreadId: null,
@@ -490,6 +502,37 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       // instead of a spinning skeleton forever. The user can retry
       // via the connection pill button.
     }
+  },
+
+  // Load the "Đã xoá" recovery tab (viewer's soft-deleted threads).
+  // Lazy: only called when that tab is opened. Kept separate from
+  // `threads` so the normal inbox payload isn't bloated.
+  async loadDeletedThreads() {
+    set({ deletedThreadsLoading: true });
+    try {
+      const res = await messagingApi.listDeletedThreads();
+      set({
+        deletedThreads: sortThreads(res.data.data ?? []),
+        deletedThreadsLoaded: true,
+        deletedThreadsLoading: false,
+      });
+    } catch {
+      // Best-effort: mark loaded so the tab shows an empty state
+      // instead of a forever-spinning skeleton. Re-open to retry.
+      set({ deletedThreadsLoading: false, deletedThreadsLoaded: true });
+    }
+  },
+
+  // Undo a "Delete chat". Removes the row from the deleted list and
+  // pulls the freshly-restored thread back into the active inbox.
+  async restoreChat(threadId) {
+    await messagingApi.restoreChat(threadId);
+    set((s) => ({
+      deletedThreads: s.deletedThreads.filter((t) => t.id !== threadId),
+    }));
+    // Refetch the active inbox so the restored thread reappears with
+    // its up-to-date summary/unread state.
+    await get().loadThreads();
   },
 
   async refreshThreadSummary(threadId) {
@@ -1441,6 +1484,9 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       // for a refetch.
       set((s) => ({
         threads: s.threads.filter((t) => t.id !== threadId),
+        // Invalidate the "Đã xoá" tab so it re-fetches (and now
+        // includes this thread) the next time it's opened.
+        deletedThreadsLoaded: false,
         currentThread:
           s.currentThread && s.currentThread.id === threadId ? null : s.currentThread,
         currentThreadId:

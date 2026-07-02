@@ -214,7 +214,21 @@ export class MessagesService {
    * profile so the frontend can render the sidebar without a
    * second round-trip.
    */
-  async listThreadsForUser(userId: number) {
+  /**
+   * List a viewer's threads.
+   *
+   * `view` selects which slice:
+   *   - 'active'  (default) → normal inbox: every thread the viewer
+   *                 has NOT deleted-for-themselves.
+   *   - 'deleted'           → the "Đã xoá" recovery tab: ONLY threads
+   *                 the viewer soft-deleted (preferences.deletedAt set),
+   *                 so they can restore them. Delete-for-me is never
+   *                 permanent — this is how the row comes back.
+   *
+   * Blocked-peer threads are hidden in BOTH views (unblock restores).
+   */
+  async listThreadsForUser(userId: number, opts: { view?: 'active' | 'deleted' } = {}) {
+    const view = opts.view ?? 'active';
     const threads = await prisma.messageThread.findMany({
       where: {
         OR: [
@@ -256,12 +270,13 @@ export class MessagesService {
     const filtered = threads.filter((t) => {
       const peers = this.collectThreadPeerIds(t);
       if (peers.some((pid) => blockedIds.has(pid))) return false;
-      // Hard-deleted threads leave the sidebar entirely. We keep
-      // the row in the DB so the other participant still has their
-      // copy, but the deleter sees no trace in any tab.
+      // Soft-deleted ("Delete chat") threads leave the normal
+      // sidebar, but they are NOT gone: the row stays in the DB and
+      // the viewer can restore it from the "Đã xoá" tab. The two
+      // views are mutually exclusive on the deletedAt flag.
       const pref = this.getPreferenceForViewer(t.preferences, userId);
-      if (pref?.deletedAt) return false;
-      return true;
+      const isDeleted = !!pref?.deletedAt;
+      return view === 'deleted' ? isDeleted : !isDeleted;
     });
 
     const reads = await prisma.messageRead.findMany({
@@ -1059,6 +1074,32 @@ export class MessagesService {
     });
 
     this.emitThreadUpdated(thread, { preferenceChanged: { userId, slot: 'deletedAt', value: now } });
+    return this.getPreferenceForViewer(next, userId);
+  }
+
+  /**
+   * Undo a "Delete chat" for the current viewer. Clears both
+   * `deletedAt` and `archivedAt` (deleteThreadForViewer stamps both
+   * with the same timestamp) so the conversation returns to the
+   * normal inbox with its full history intact. Backs the "Đã xoá"
+   * recovery tab — makes delete-for-me non-destructive.
+   */
+  async restoreThreadForViewer(threadId: number, userId: number) {
+    const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
+    if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');
+    this.assertParticipant(thread, userId);
+
+    const current = (thread.preferences ?? {}) as ThreadPreferencesMap;
+    const mine = { ...(current[String(userId)] ?? {}) };
+    delete mine.deletedAt;
+    delete mine.archivedAt;
+    const next: ThreadPreferencesMap = { ...current, [String(userId)]: mine };
+    await prisma.messageThread.update({
+      where: { id: threadId },
+      data: { preferences: next as any },
+    });
+
+    this.emitThreadUpdated(thread, { preferenceChanged: { userId, slot: 'deletedAt', value: null } });
     return this.getPreferenceForViewer(next, userId);
   }
 

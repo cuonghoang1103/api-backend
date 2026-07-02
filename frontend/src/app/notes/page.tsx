@@ -16,6 +16,7 @@ import type { NoteSubjectTree, NoteRecent, NoteFull, NoteSubjectFull, NoteTab } 
 import type { NoteSharedSubjectFull } from '@/lib/api';
 import NotesSidebar from '@/components/notes/NotesSidebar';
 import NoteEditor from '@/components/notes/NoteEditor';
+import SharedNoteViewer from '@/components/notes/SharedNoteViewer';
 import NoteResourcePanel from '@/components/notes/NoteResourcePanel';
 import VocabTable from '@/components/notes/VocabTable';
 import FlashcardReview from '@/components/notes/FlashcardReview';
@@ -844,24 +845,24 @@ function NotesPageInner() {
               )}
             </div>
           ) : sharedSelectedNote ? (
-            // Read-only note view for shared notes - full width
-            <div className="w-full px-4 sm:px-6 py-6">
+            // Read-only note view for shared notes - full TipTap rendering
+            <>
               <button
                 onClick={() => setSharedSelectedNote(null)}
-                className="mb-4 flex items-center gap-2 text-sm text-slate-500 hover:text-teal-600 dark:text-slate-400 dark:hover:text-teal-400 transition-colors"
+                className="sticky top-0 z-10 flex items-center gap-2 px-4 sm:px-6 py-2 text-sm text-slate-500 hover:text-teal-600 dark:text-slate-400 dark:hover:text-teal-400 transition-colors border-b border-slate-200 dark:border-white/[0.06] bg-[var(--notes-bg,#ffffff)] dark:bg-[#0c0f14]"
               >
                 <ChevronRight className="h-4 w-4 rotate-180" />
                 Quay lại danh sách
               </button>
-              <h1 className="mb-6 text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                {sharedSelectedNote.title || 'Không có tiêu đề'}
-              </h1>
-              {sharedSelectedNote.contentHtml && (
-                <div className="note-prose max-w-none rounded-xl border border-slate-200 bg-white px-6 py-6 dark:border-white/[0.08] dark:bg-[#0e1218]"
-                  dangerouslySetInnerHTML={{ __html: sharedSelectedNote.contentHtml }}
-                />
-              )}
-            </div>
+              <SharedNoteViewer
+                title={sharedSelectedNote.title}
+                contentJson={sharedSelectedNote.contentJson as Record<string, unknown> | null}
+                contentHtml={sharedSelectedNote.contentHtml}
+                isFavorite={sharedSelectedNote.isFavorite}
+                needsReview={sharedSelectedNote.needsReview}
+                isArchived={sharedSelectedNote.isArchived}
+              />
+            </>
           ) : subjectView ? (
             <SubjectView subject={subjectView} treeSubject={treeSubjectFor(subjectView.id)} onChanged={refreshSubject} onSelectNote={selectNote} onAddNote={addNote} />
           ) : selected ? (

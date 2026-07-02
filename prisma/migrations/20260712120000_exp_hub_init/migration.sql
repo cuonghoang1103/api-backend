@@ -1,0 +1,2 @@
+-- This migration is marked as failed and will be resolved
+-- Actual schema was already applied via db push

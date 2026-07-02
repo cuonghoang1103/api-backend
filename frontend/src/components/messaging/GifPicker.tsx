@@ -10,11 +10,12 @@
 
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
-import { Search, Loader2, X } from 'lucide-react';
+import { Search, Loader2, X, AlertCircle, RefreshCw } from 'lucide-react';
 import { useAnchoredFixedStyle } from './useAnchoredPopover';
 
 const GIPHY_KEY = process.env.NEXT_PUBLIC_GIPHY_API_KEY || 'dc6zaTOxFJmzC';
 const GIPHY_BASE = 'https://api.giphy.com/v1/gifs';
+const MAX_RETRIES = 2;
 
 interface GifItem {
   id: string;
@@ -46,30 +47,78 @@ export default function GifPicker({
   const [query, setQuery] = useState('');
   const [gifs, setGifs] = useState<GifItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const retryCountRef = useRef(0);
   const fixedStyle = useAnchoredFixedStyle(anchorRef, open, 340);
 
   const load = useCallback(async (q: string) => {
-    setLoading(true);
-    try {
-      const endpoint = q.trim()
-        ? `${GIPHY_BASE}/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(q)}&limit=24&rating=pg-13`
-        : `${GIPHY_BASE}/trending?api_key=${GIPHY_KEY}&limit=24&rating=pg-13`;
-      const res = await fetch(endpoint);
-      const json = await res.json();
-      setGifs((json.data ?? []).map(mapGif).filter((g: GifItem) => g.url));
-    } catch {
-      setGifs([]);
-    } finally {
-      setLoading(false);
+    // Cancel any in-flight request
+    if (abortRef.current) {
+      abortRef.current.abort();
     }
+    abortRef.current = new AbortController();
+    setError(null);
+    setLoading(true);
+    retryCountRef.current = 0;
+
+    const attemptLoad = async (): Promise<void> => {
+      try {
+        const endpoint = q.trim()
+          ? `${GIPHY_BASE}/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(q)}&limit=24&rating=pg-13`
+          : `${GIPHY_BASE}/trending?api_key=${GIPHY_KEY}&limit=24&rating=pg-13`;
+
+        const res = await fetch(endpoint, { signal: abortRef.current?.signal });
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const json = await res.json();
+        const newGifs = (json.data ?? []).map(mapGif).filter((g: GifItem) => g.url);
+
+        setGifs(newGifs);
+        retryCountRef.current = 0;
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          // Request was cancelled, ignore
+          return;
+        }
+
+        // Retry logic with exponential backoff
+        if (retryCountRef.current < MAX_RETRIES) {
+          retryCountRef.current++;
+          const delay = 500 * Math.pow(2, retryCountRef.current - 1);
+          await new Promise(r => setTimeout(r, delay));
+          return attemptLoad();
+        }
+
+        // All retries exhausted
+        setError('Khong the tai GIF. Thu lai sau.');
+        setGifs([]);
+      }
+    };
+
+    await attemptLoad();
+    setLoading(false);
   }, []);
 
   // Load trending on open; debounce search.
   useEffect(() => {
     if (!open) return;
+    retryCountRef.current = 0;
     const t = setTimeout(() => load(query), query ? 300 : 0);
     return () => clearTimeout(t);
   }, [open, query, load]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
+    };
+  }, []);
 
   // Close on outside click.
   useEffect(() => {
@@ -80,6 +129,11 @@ export default function GifPicker({
     const t = setTimeout(() => document.addEventListener('mousedown', onDoc), 0);
     return () => { clearTimeout(t); document.removeEventListener('mousedown', onDoc); };
   }, [open, onClose]);
+
+  const handleRetry = () => {
+    setError(null);
+    load(query);
+  };
 
   if (!open) return null;
 
@@ -95,11 +149,11 @@ export default function GifPicker({
     >
       <div className="flex items-center gap-2 border-b border-theme-light p-2">
         <div className="flex flex-1 items-center gap-2 rounded-full bg-[var(--bg-surface)] px-3 py-1.5">
-          <Search className="h-3.5 w-3.5 text-text-muted" />
+          <Search className="h-3.5 w-3.5 shrink-0 text-text-muted" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Tìm GIF trên GIPHY…"
+            placeholder="Tim GIF tren GIPHY..."
             autoFocus
             className="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted/70"
           />
@@ -113,16 +167,29 @@ export default function GifPicker({
           <div className="flex h-full items-center justify-center">
             <Loader2 className="h-5 w-5 animate-spin text-text-muted" />
           </div>
+        ) : error ? (
+          <div className="flex h-full flex-col items-center justify-center gap-2 text-xs text-text-muted">
+            <AlertCircle className="h-5 w-5 text-amber-500" />
+            <span className="text-center px-4">{error}</span>
+            <button
+              onClick={handleRetry}
+              className="mt-1 flex items-center gap-1 text-neon-violet hover:underline"
+            >
+              <RefreshCw className="h-3 w-3" /> Thu lai
+            </button>
+          </div>
         ) : gifs.length === 0 ? (
-          <div className="flex h-full items-center justify-center text-xs text-text-muted">Không có GIF nào.</div>
+          <div className="flex h-full items-center justify-center text-xs text-text-muted">
+            {query ? 'Khong tim thay GIF nao.' : 'Khong co GIF nao.'}
+          </div>
         ) : (
-          <div className="columns-2 gap-2 [&>button]:mb-2">
+          <div className="columns-2 gap-2">
             {gifs.map((g) => (
               <button
                 key={g.id}
                 type="button"
                 onClick={() => { onPick(g.url); onClose(); }}
-                className="block w-full overflow-hidden rounded-lg transition-transform hover:scale-[1.02]"
+                className="mb-2 block w-full overflow-hidden rounded-lg transition-transform hover:scale-[1.02]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={g.previewUrl} alt="" className="w-full" loading="lazy" />

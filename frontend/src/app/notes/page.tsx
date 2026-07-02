@@ -746,8 +746,8 @@ function NotesPageInner() {
           {loading ? (
             <div className="flex h-[60vh] items-center justify-center text-slate-500"><Loader2 className="h-5 w-5 animate-spin" /></div>
           ) : sharedSubject ? (
-            // Shared subject view - matches SubjectView styling for consistency
-            <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
+            // Shared subject view - full width for better readability
+            <div className="w-full px-4 sm:px-6 py-6">
               {/* Back button to close shared view */}
               <button
                 onClick={() => { setSharedSubject(null); setSharedSelectedNote(null); }}
@@ -757,7 +757,7 @@ function NotesPageInner() {
                 Quay lại Sổ tay của tôi
               </button>
 
-              {/* Shared subject header - matches SubjectView styling */}
+              {/* Shared subject header - full width */}
               <div className="mb-6 flex items-center gap-3">
                 {sharedSubject.emoji && <span className="text-2xl">{sharedSubject.emoji}</span>}
                 {!sharedSubject.emoji && sharedSubject.color && (
@@ -844,8 +844,8 @@ function NotesPageInner() {
               )}
             </div>
           ) : sharedSelectedNote ? (
-            // Read-only note view for shared notes - matches NoteEditor styling
-            <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
+            // Read-only note view for shared notes - full width
+            <div className="w-full px-4 sm:px-6 py-6">
               <button
                 onClick={() => setSharedSelectedNote(null)}
                 className="mb-4 flex items-center gap-2 text-sm text-slate-500 hover:text-teal-600 dark:text-slate-400 dark:hover:text-teal-400 transition-colors"
@@ -857,7 +857,7 @@ function NotesPageInner() {
                 {sharedSelectedNote.title || 'Không có tiêu đề'}
               </h1>
               {sharedSelectedNote.contentHtml && (
-                <div className="note-prose max-w-none rounded-xl border border-slate-200 bg-white p-6 dark:border-white/[0.08] dark:bg-[#0e1218]"
+                <div className="note-prose max-w-none rounded-xl border border-slate-200 bg-white px-6 py-6 dark:border-white/[0.08] dark:bg-[#0e1218]"
                   dangerouslySetInnerHTML={{ __html: sharedSelectedNote.contentHtml }}
                 />
               )}

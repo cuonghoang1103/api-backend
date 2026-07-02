@@ -854,6 +854,42 @@ export class AuthService {
     return { token, refreshToken };
   }
 
+  // ─── Refresh (reissue a fresh access token) ────────────
+  /**
+   * Reissue a fresh JWT from the caller's current token.
+   *
+   * Why: the `backend_token` cookie lives 7 days but each JWT only
+   * lasts `JWT_EXPIRES_IN` (24h by default). Without a refresh path
+   * every authenticated call started 401-ing after a day even though
+   * the cookie was still present — the session "died silently" and the
+   * UI (GIF proxy, messenger, etc.) broke until a manual re-login.
+   *
+   * We verify the signature but IGNORE expiration so a lapsed session
+   * can self-heal, then re-validate the account against the DB (so a
+   * disabled/locked/deleted user is still rejected). The cookie's own
+   * 7-day TTL bounds how stale a token can be presented here.
+   */
+  async refreshToken(oldToken: string): Promise<AuthResponse> {
+    let decoded: JwtPayload;
+    try {
+      decoded = jwt.verify(oldToken, config.jwtSecret, {
+        ignoreExpiration: true,
+      }) as JwtPayload;
+    } catch {
+      throw new AppError('Invalid session token', 401, 'INVALID_TOKEN');
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      include: { roles: { include: { role: true } } },
+    });
+    if (!user) throw new AppError('User not found', 401, 'USER_NOT_FOUND');
+    if (!user.enabled) throw new AppError('Account is disabled', 403, 'ACCOUNT_DISABLED');
+    if (!user.accountNonLocked) throw new AppError('Account is locked', 403, 'ACCOUNT_LOCKED');
+
+    return this.buildAuthResponse(user);
+  }
+
   // ─── Build Auth Response ───────────────────────────────
   private buildAuthResponse(user: {
     id: number;

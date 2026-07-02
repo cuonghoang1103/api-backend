@@ -121,6 +121,16 @@ export const getMediaUrl = (
   const lp = (localPath ?? '').trim();
   const au = (audioUrl ?? '').trim();
 
+  // (0) Object/data URLs are optimistic local previews created with
+  // URL.createObjectURL()/FileReader while an upload is in flight
+  // (e.g. avatar/cover cropper, image message preview). They are
+  // already directly renderable by the browser — NEVER prepend the
+  // CDN base to them. Doing so produced
+  // `https://<r2>.cloudflarestorage.com/blob:https://.../<uuid>`
+  // which 400s at R2. Return them untouched.
+  if (lp.startsWith('blob:') || lp.startsWith('data:')) return lp;
+  if (au.startsWith('blob:') || au.startsWith('data:')) return au;
+
   // (1) R2 key → backend stream endpoint. We deliberately go
   // through the API instead of pointing directly at
   // `https://media.cuongthai.com/<key>` because:

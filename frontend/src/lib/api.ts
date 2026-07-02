@@ -89,16 +89,47 @@ const api: AxiosInstance = axios.create({
 
 api.interceptors.request.use((config) => config);
 
+// ─── Silent session refresh ──────────────────────────────────
+// The backend_token cookie lives 7 days but each JWT only lasts ~24h.
+// Without a refresh, every authenticated call started 401-ing after a
+// day even though the cookie was present — the session "died silently"
+// and GIF/messenger/etc. broke until a manual re-login. Here, the first
+// 401 on a normal request triggers ONE refresh (POST /api/auth/refresh,
+// a Next.js route that re-issues + re-sets the cookie) and then retries
+// the original request. Concurrent 401s share a single in-flight
+// refresh. Auth endpoints are skipped so we never loop on a real logout.
+let refreshInFlight: Promise<boolean> | null = null;
+function refreshSession(): Promise<boolean> {
+  if (!refreshInFlight) {
+    refreshInFlight = fetch('/api/auth/refresh', {
+      method: 'POST',
+      credentials: 'include',
+    })
+      .then((r) => r.ok)
+      .catch(() => false)
+      .finally(() => { refreshInFlight = null; });
+  }
+  return refreshInFlight;
+}
+
 api.interceptors.response.use(
   (response) => response,
-  (error: ApiError) => {
-    const friendlyMsg = getFriendlyErrorMessage(error);
-    error.userFriendlyMessage = friendlyMsg;
+  async (error: ApiError) => {
+    error.userFriendlyMessage = getFriendlyErrorMessage(error);
 
-    if (error.response?.status === 401) {
-      // Auth errors are handled by Next.js middleware on the server side.
-      // Client-side redirect here causes a race condition with admin layout checks.
-      // We only clear the toast/error state, not navigate.
+    const original = error.config as (typeof error.config & { _retried?: boolean }) | undefined;
+    const url = String(original?.url ?? '');
+    // Auto-heal an expired session ONCE, then replay the request. Skip
+    // /auth/* so a genuinely-invalid login/refresh doesn't loop.
+    if (
+      error.response?.status === 401 &&
+      original &&
+      !original._retried &&
+      !url.includes('/auth/')
+    ) {
+      original._retried = true;
+      const ok = await refreshSession();
+      if (ok) return api(original);
     }
     return Promise.reject(error);
   }

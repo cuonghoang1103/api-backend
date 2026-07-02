@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 import { authService } from '../services/auth.service.js';
 import { validate } from '../middleware/validate.js';
 import { authenticate } from '../middleware/auth.js';
+import { AppError } from '../middleware/errorHandler.js';
 import { softCaptchaMiddleware } from '../middleware/captcha.js';
 import type { ApiResponse, AuthResponse } from '../types/index.js';
 
@@ -367,6 +368,32 @@ router.post(
     try {
       await authService.resetPassword(req.body.token, req.body.newPassword);
       res.json({ success: true, message: 'Password has been reset successfully.' });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ─── POST /api/v1/auth/refresh ──────────────────────────
+// Reissue a fresh JWT from the caller's current (possibly just-expired)
+// token so a session self-heals instead of dying silently after 24h
+// while the 7-day cookie is still present. NOT behind `authenticate`
+// (that would reject the expired token); we read the token manually and
+// the service verifies it with ignoreExpiration + re-checks the account.
+// The Next.js /api/auth/refresh proxy calls this and re-sets the cookie.
+router.post(
+  '/refresh',
+  async (req: Request, res: Response<ApiResponse<AuthResponse>>, next: NextFunction) => {
+    try {
+      const header = req.headers.authorization;
+      const token = header?.startsWith('Bearer ')
+        ? header.slice(7)
+        : (req.cookies?.backend_token as string | undefined);
+      if (!token) {
+        throw new AppError('No active session to refresh', 401, 'NO_SESSION');
+      }
+      const result = await authService.refreshToken(token);
+      res.json({ success: true, data: result });
     } catch (error) {
       next(error);
     }

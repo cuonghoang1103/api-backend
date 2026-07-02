@@ -7,8 +7,8 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   Home, BookOpen, FolderOpen, Music, MessagesSquare,
   LayoutDashboard, Shield, BookMarked, Receipt,
-  Sparkles, User,
-  GraduationCap, ShoppingBag, Gamepad2, Layers,
+  Sparkles, FileCode2,
+  GraduationCap, ShoppingBag, Layers,
   Menu, X, ChevronRight,
   Github,
 } from 'lucide-react';
@@ -47,22 +47,25 @@ interface DockItem {
   showUnread?: boolean;
 }
 
+// Full vertical nav (2026-07-03) — ordered per spec:
+//   main:  Home, Academy, Shop, Messages, Courses, Orders
+//   user:  Blog, Projects, Exp Hub, Hub, GitHub Repos, AI Chat, Music, Dashboard
+//   admin: Admin (admin-only entry point, kept in its own section)
 const DOCK_ITEMS: DockItem[] = [
   { href: '/', label: 'Home', icon: Home, section: 'main' },
-  { href: '/blog', label: 'Blog', icon: BookOpen, section: 'main' },
-  { href: '/projects', label: 'Projects', icon: FolderOpen, section: 'main' },
-  { href: '/music', label: 'Music', icon: Music, section: 'main' },
+  { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'main' },
+  { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'main' },
   { href: '/messages', label: 'Messages', icon: MessagesSquare, section: 'main', showUnread: true },
-  { href: '/chat', label: 'AI Chat', icon: Sparkles, section: 'main' },
-  { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'user' },
-  { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'user' },
-  { href: '/games', label: 'Games', icon: Gamepad2, section: 'user' },
+  { href: '/courses', label: 'Courses', icon: BookMarked, section: 'main' },
+  { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'main' },
+  { href: '/blog', label: 'Blog', icon: BookOpen, section: 'user' },
+  { href: '/projects', label: 'Projects', icon: FolderOpen, section: 'user' },
+  { href: '/exp-hub', label: 'Exp Hub', icon: FileCode2, section: 'user' },
   { href: '/hub', label: 'Hub', icon: Layers, section: 'user' },
-  { href: '/about', label: 'About', icon: User, section: 'user' },
-  { href: '/courses', label: 'Courses', icon: BookMarked, section: 'user' },
-  { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'user' },
   { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'user' },
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'admin' },
+  { href: '/chat', label: 'AI Chat', icon: Sparkles, section: 'user' },
+  { href: '/music', label: 'Music', icon: Music, section: 'user' },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'user' },
   { href: '/admin', label: 'Admin', icon: Shield, section: 'admin' },
 ];
 

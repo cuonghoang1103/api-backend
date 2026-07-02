@@ -15,27 +15,31 @@ import UserSearchBox from '@/components/social/UserSearchBox';
 import { UserAvatar } from '@/components/common/UserAvatar';
 import { useTheme } from '@/context/ThemeContext';
 import {
- Home, BookOpen, FolderOpen, Music, MessageCircle, Sparkles, TrendingUp,
+ Home, FolderOpen, Music, MessageCircle, Sparkles,
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
- Globe, ShoppingBag, GraduationCap, Bell, Clapperboard, NotebookPen,
+ Globe, ShoppingBag, Bell, NotebookPen,
 Sun, Moon,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { ChangePasswordModal } from '@/components/auth/ChangePasswordModal';
 
-const TOP_NAV_LINKS = [
+// Compact top bar (2026-07-03): only the 7 everyday destinations, in
+// this exact order. Everything else (Academy, Shop, Blog, Repos,
+// Studio, Tech Trends, …) lives in the full vertical NavigationDock.
+interface TopNavLink {
+ href: string;
+ label: string;
+ icon: React.ElementType;
+ authOnly?: boolean;
+ adminOnly?: boolean;
+}
+
+const TOP_NAV_LINKS: TopNavLink[] = [
  { href: '/', label: 'Home', icon: Home },
- { href: '/academy', label: 'Academy', icon: GraduationCap },
  { href: '/about', label: 'About', icon: User },
- { href: '/blog', label: 'Blog', icon: BookOpen },
  { href: '/projects', label: 'Projects', icon: FolderOpen },
  { href: '/notes', label: 'Notes', icon: NotebookPen, authOnly: true },
- // Content Studio — admin-only. Filtered out at render
- // time unless the verified admin check passes. Distinct
- // amber accent vs the violet used everywhere else.
- { href: '/creator', label: 'Studio', icon: Clapperboard, adminOnly: true },
- { href: '/tech-trends', label: 'Tech Trends', icon: TrendingUp },
  { href: '/music', label: 'Music', icon: Music },
  { href: '/messages', label: 'Messages', icon: MessageCircle, authOnly: true },
  { href: '/chat', label: 'AI Chat', icon: Sparkles },

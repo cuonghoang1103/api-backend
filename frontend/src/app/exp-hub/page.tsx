@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Loader2, ChevronRight, ExternalLink, Bookmark, Heart, History, BookmarkCheck } from 'lucide-react';
+import { Loader2, ChevronRight, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play } from 'lucide-react';
 import { toast } from 'sonner';
 import { FolderTree } from '@/components/exp-hub/FolderTree';
 import { SnippetCard } from '@/components/exp-hub/SnippetCard';
@@ -43,6 +43,8 @@ export default function ExpHubPage() {
   // Version history (lazy-loaded on expand)
   const [showVersions, setShowVersions] = useState(false);
   const [versions, setVersions] = useState<SnippetVersion[] | null>(null);
+  // Explanation modal
+  const [showExplanation, setShowExplanation] = useState(false);
 
   const languages = [...new Set(snippets.map((s) => s.language))].slice(0, 10);
 
@@ -196,6 +198,20 @@ export default function ExpHubPage() {
 
   const handleCopySnippet = async (snippet: Snippet) => {
     await navigator.clipboard.writeText(snippet.code);
+  };
+
+  // Helper to convert YouTube URL to embed URL
+  const getYouTubeEmbedUrl = (url: string): string => {
+    if (!url) return '';
+    // Already embed URL
+    if (url.includes('youtube.com/embed/')) return url;
+    // Short URL youtu.be
+    const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+    if (shortMatch) return `https://www.youtube.com/embed/${shortMatch[1]}`;
+    // Standard watch URL
+    const watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+    if (watchMatch) return `https://www.youtube.com/embed/${watchMatch[1]}`;
+    return url;
   };
 
   const getBreadcrumbs = (): Array<{ label: string; id?: number }> => {
@@ -432,7 +448,7 @@ export default function ExpHubPage() {
               />
 
               {/* Actions */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <CopyButton
                   key={view.id}
                   snippetId={view.id}
@@ -441,6 +457,15 @@ export default function ExpHubPage() {
                   variables={view.variables}
                   variant="button"
                 />
+                {(view.explanation || view.youtubeUrl) && (
+                  <button
+                    onClick={() => setShowExplanation(true)}
+                    className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/40 hover:bg-blue-500/25 rounded-lg transition-colors"
+                  >
+                    <Info className="w-4 h-4" />
+                    More
+                  </button>
+                )}
                 <button
                   onClick={handleToggleBookmark}
                   disabled={voteBusy || !detail}
@@ -473,6 +498,67 @@ export default function ExpHubPage() {
                   Lịch sử
                 </button>
               </div>
+
+              {/* Explanation Modal */}
+              {showExplanation && (view.explanation || view.youtubeUrl) && (
+                <div
+                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+                  onClick={() => setShowExplanation(false)}
+                >
+                  <div
+                    className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    {/* Modal Header */}
+                    <div className="sticky top-0 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 rounded-t-2xl">
+                      <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
+                        {view.title}
+                      </h2>
+                      <button
+                        onClick={() => setShowExplanation(false)}
+                        className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                      >
+                        <X className="w-5 h-5 text-neutral-500" />
+                      </button>
+                    </div>
+
+                    {/* Modal Content */}
+                    <div className="p-6 space-y-6">
+                      {/* YouTube Video */}
+                      {view.youtubeUrl && (
+                        <div>
+                          <div className="flex items-center gap-2 mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                            <Play className="w-4 h-4 text-red-500" />
+                            Video hướng dẫn
+                          </div>
+                          <div className="relative aspect-video rounded-xl overflow-hidden bg-neutral-900">
+                            <iframe
+                              src={getYouTubeEmbedUrl(view.youtubeUrl)}
+                              className="absolute inset-0 w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Explanation Text */}
+                      {view.explanation && (
+                        <div>
+                          <div className="flex items-center gap-2 mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                            <Info className="w-4 h-4" />
+                            Giải thích
+                          </div>
+                          <div
+                            className="prose prose-neutral dark:prose-invert max-w-none text-neutral-600 dark:text-neutral-400"
+                            dangerouslySetInnerHTML={{ __html: view.explanation }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Version history (lazy) */}
               {showVersions && (

@@ -3668,6 +3668,10 @@ model Snippet {
   language    String        @db.VarChar(40)
   // The actual code content
   code        String        @db.Text
+  // Detailed explanation for the code (HTML content)
+  explanation String?       @map("explanation") @db.Text
+  // YouTube video URL for tutorial
+  youtubeUrl  String?       @map("youtube_url") @db.VarChar(500)
   status      SnippetStatus @default(DRAFT)
   // Denormalised counters (updated by API, not transactions)
   viewCount   Int           @default(0) @map("view_count")

@@ -16,7 +16,6 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
 import {
   Plus, Trash2, Pencil, Loader2, Code2, FolderTree as FolderTreeIcon,
   Tags as TagsIcon, Upload, LayoutDashboard, X, ChevronRight, Save,
@@ -29,17 +28,6 @@ import {
 import type {
   Snippet, SnippetCategory, SnippetTag, DashboardStats, BulkImportResult,
 } from '@/types/exp-hub';
-
-// Monaco is client-only (it touches `window`) — load it lazily so the
-// admin bundle stays small and SSR never sees it.
-const MonacoEditor = dynamic(() => import('@monaco-editor/react'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-72 items-center justify-center rounded-lg border border-white/10 bg-[#0d1117] text-slate-500">
-      <Loader2 className="h-5 w-5 animate-spin" />
-    </div>
-  ),
-});
 
 type Tab = 'dashboard' | 'snippets' | 'categories' | 'tags' | 'import';
 
@@ -58,9 +46,6 @@ const EXT_LANG: Record<string, string> = {
   rs: 'rust', php: 'php', rb: 'ruby', cs: 'csharp', c: 'cpp', cpp: 'cpp',
   h: 'cpp', kt: 'kotlin', swift: 'swift', md: 'markdown',
 };
-
-// Monaco uses slightly different ids for a few languages
-const MONACO_LANG: Record<string, string> = { bash: 'shell', plaintext: 'plaintext' };
 
 const STATUS_META: Record<Snippet['status'], { label: string; cls: string }> = {
   DRAFT: { label: 'Nháp', cls: 'bg-amber-500/15 text-amber-300' },
@@ -227,6 +212,8 @@ interface EditorState {
   description: string;
   language: string;
   code: string;
+  explanation: string;
+  youtubeUrl: string;
   categoryId: number | null;
   tagIds: number[];
   status: Snippet['status'];
@@ -236,6 +223,7 @@ interface EditorState {
 
 const EMPTY_EDITOR: EditorState = {
   id: null, title: '', description: '', language: 'javascript', code: '',
+  explanation: '', youtubeUrl: '',
   categoryId: null, tagIds: [], status: 'DRAFT', previewUrl: '', variables: [],
 };
 
@@ -288,6 +276,8 @@ function SnippetsTab({
         description: s.description ?? '',
         language: s.language,
         code: s.code,
+        explanation: s.explanation ?? '',
+        youtubeUrl: s.youtubeUrl ?? '',
         categoryId: s.categoryId,
         tagIds: (s.tags ?? []).map(t => t.id),
         status: s.status,
@@ -311,6 +301,8 @@ function SnippetsTab({
       description: editor.description.trim() || undefined,
       language: editor.language,
       code: editor.code,
+      explanation: editor.explanation.trim() || undefined,
+      youtubeUrl: editor.youtubeUrl.trim() || undefined,
       categoryId: editor.categoryId,
       tagIds: editor.tagIds,
       status: editor.status,
@@ -499,54 +491,47 @@ function SnippetsTab({
               </div>
             </div>
 
-            {/* Code (Monaco) */}
+            {/* Code */}
             <div className="mt-4">
-              <div className="mb-1.5 flex items-center justify-between text-xs text-slate-400">
-                <span>Code * <span className="text-slate-500">(dùng {'{{tenBien}}'} cho template variables)</span></span>
+              <div className="mb-1.5 text-xs text-slate-400">
+                Code *
               </div>
-              <div className="overflow-hidden rounded-lg border border-white/10">
-                <MonacoEditor
-                  height="320px"
-                  language={MONACO_LANG[editor.language] ?? editor.language}
-                  value={editor.code}
-                  theme="vs-dark"
-                  onChange={(v) => setEditor(prev => (prev ? { ...prev, code: v ?? '' } : prev))}
-                  options={{
-                    minimap: { enabled: false },
-                    fontSize: 13,
-                    scrollBeyondLastLine: false,
-                    wordWrap: 'on',
-                    tabSize: 2,
-                  }}
-                />
-              </div>
+              <textarea
+                value={editor.code}
+                onChange={(e) => setEditor(prev => (prev ? { ...prev, code: e.target.value } : prev))}
+                placeholder="Paste code của bạn vào đây..."
+                className="w-full rounded-lg border border-white/10 bg-[#0d1117] px-4 py-3 font-mono text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none resize-none"
+                style={{ height: '320px' }}
+              />
             </div>
 
-            {/* Template variables */}
+            {/* Explanation */}
             <div className="mt-4">
-              <div className="mb-1.5 flex items-center justify-between">
-                <span className="text-xs text-slate-400">Template variables</span>
-                <button
-                  onClick={() => setEditor({ ...editor, variables: [...editor.variables, { key: '', label: '', defaultValue: '' }] })}
-                  className="flex items-center gap-1 rounded px-2 py-1 text-xs text-teal-300 hover:bg-teal-500/10"
-                >
-                  <Plus className="h-3.5 w-3.5" /> Thêm biến
-                </button>
+              <div className="mb-1.5 text-xs text-slate-400">
+                Giải thích / Hướng dẫn
+                <span className="ml-2 text-slate-500">(hiển thị khi user bấm "More")</span>
               </div>
-              {editor.variables.length > 0 && (
-                <div className="space-y-2">
-                  {editor.variables.map((v, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <input value={v.key} onChange={e => updateVar(editor, setEditor, i, { key: e.target.value })} placeholder="key (vd: apiKey)" className={`${inpCls} !mt-0 flex-1`} />
-                      <input value={v.label} onChange={e => updateVar(editor, setEditor, i, { label: e.target.value })} placeholder="Nhãn hiển thị" className={`${inpCls} !mt-0 flex-1`} />
-                      <input value={v.defaultValue} onChange={e => updateVar(editor, setEditor, i, { defaultValue: e.target.value })} placeholder="Giá trị mặc định" className={`${inpCls} !mt-0 flex-1`} />
-                      <button onClick={() => setEditor({ ...editor, variables: editor.variables.filter((_, j) => j !== i) })} className="rounded p-1.5 text-slate-500 hover:bg-rose-500/20 hover:text-rose-300">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <textarea
+                value={editor.explanation || ''}
+                onChange={(e) => setEditor(prev => (prev ? { ...prev, explanation: e.target.value } : prev))}
+                placeholder="Viết giải thích chi tiết về đoạn code này... (hỗ trợ HTML cơ bản)"
+                className="w-full rounded-lg border border-white/10 bg-[#0d1117] px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none resize-none"
+                style={{ height: '150px' }}
+              />
+            </div>
+
+            {/* YouTube URL */}
+            <div className="mt-4">
+              <div className="mb-1.5 text-xs text-slate-400">
+                Video YouTube hướng dẫn
+                <span className="ml-2 text-slate-500">(dán link video YouTube)</span>
+              </div>
+              <input
+                value={editor.youtubeUrl || ''}
+                onChange={(e) => setEditor(prev => (prev ? { ...prev, youtubeUrl: e.target.value } : prev))}
+                placeholder="https://www.youtube.com/watch?v=..."
+                className="w-full rounded-lg border border-white/10 bg-[#0d1117] px-4 py-2 text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none"
+              />
             </div>
 
             <div className="mt-5 flex justify-end gap-2">
@@ -561,18 +546,6 @@ function SnippetsTab({
       )}
     </div>
   );
-}
-
-function updateVar(
-  editor: EditorState,
-  setEditor: (e: EditorState) => void,
-  i: number,
-  patch: Partial<{ key: string; label: string; defaultValue: string }>,
-) {
-  setEditor({
-    ...editor,
-    variables: editor.variables.map((v, j) => (j === i ? { ...v, ...patch } : v)),
-  });
 }
 
 // ─── Categories tab ────────────────────────────────────────────────────

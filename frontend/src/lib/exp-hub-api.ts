@@ -73,6 +73,8 @@ export const snippetsApi = {
     description?: string;
     language: string;
     code: string;
+    explanation?: string;
+    youtubeUrl?: string;
     categoryId?: number | null;
     tagIds?: number[];
     variables?: Array<{ key: string; label: string; defaultValue?: string }>;
@@ -86,6 +88,8 @@ export const snippetsApi = {
     description?: string;
     language: string;
     code: string;
+    explanation?: string;
+    youtubeUrl?: string;
     categoryId?: number | null;
     tagIds?: number[];
     variables?: Array<{ key: string; label: string; defaultValue?: string }>;

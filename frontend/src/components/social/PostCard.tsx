@@ -2563,6 +2563,11 @@ function MediaItem({
   // videos must NOT play while a modal is up (only the modal should have
   // sound/motion), and must resume — if still in view — once it closes.
   const [modalOpen, setModalOpen] = useState(false);
+  // TikTok rule: a video the USER explicitly paused stays paused — no
+  // re-autoplay when it scrolls back into view — until the user presses
+  // play again. Only the inline pause button sets this; system pauses
+  // (scroll-out, another video starting, a modal opening) must not.
+  const userPausedRef = useRef(false);
 
   // Pause this inline video when another inline video starts playing
   // (only one autoplaying feed video at a time). Skip if the same source
@@ -2627,13 +2632,17 @@ function MediaItem({
     // (rootMargin shrinks the root to a thin middle strip, threshold 0)
     // is height-independent and matches TikTok "whatever is centred
     // plays". The wide band also gives stable hysteresis (no flip-flop).
+    // Band widened -40% → -30% (middle 40% of the viewport): videos
+    // start sooner and keep playing longer while the user scrolls,
+    // closer to TikTok's "always playing" feel. Still one observer,
+    // one threshold — the flip-flop perf fix above is preserved.
     const obs = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           setIsInView(e.isIntersecting);
         }
       },
-      { root: null, rootMargin: '-40% 0px -40% 0px', threshold: 0 }
+      { root: null, rootMargin: '-30% 0px -30% 0px', threshold: 0 }
     );
     obs.observe(el);
     return () => obs.disconnect();

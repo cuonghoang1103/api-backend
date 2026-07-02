@@ -96,6 +96,18 @@
   }
 }
 
+/* Code syntax highlighting (VS Code Dark+ style) */
+.token-string { color: #ce9178; }
+.token-comment { color: #6a9955; font-style: italic; }
+.token-keyword { color: #569cd6; }
+.token-number { color: #b5cea8; }
+.token-function { color: #dcdcaa; }
+.token-tag { color: #569cd6; }
+.token-attr { color: #9cdcfe; }
+.token-operator { color: #d4d4d4; }
+.token-variable { color: #9cdcfe; }
+.token-constant { color: #4ec9b0; }
+
 @layer components {
   .gradient-text {
     background-clip: text;

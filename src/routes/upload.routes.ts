@@ -24,9 +24,17 @@ import {
   deleteByKey,
   UploadError,
 } from '../storage/uploadService.js';
-import { extractVideoThumbnail } from '../services/video.service.js';
+import { extractVideoThumbnail, extractVideoThumbnailFromUrl } from '../services/video.service.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { generateSignedUploadUrl, verifySignedUploadToken } from '../services/upload.service.js';
+import { buildKey } from '../storage/keys.js';
+import {
+  getSignedUploadUrl as r2SignedUploadUrl,
+  getSignedDownloadUrl as r2SignedDownloadUrl,
+  headObject as r2HeadObject,
+  buildPublicUrl as r2BuildPublicUrl,
+} from '../config/r2.js';
+import { config } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -36,7 +44,7 @@ const SIGNED_URL_EXPIRY_MS = 30 * 60 * 1000;
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 100 * 1024 * 1024, // 100MB hard cap; per-category caps live in uploadService
+    fileSize: 160 * 1024 * 1024, // 160MB hard cap (150MB videos + headroom); per-category caps live in uploadService
   },
 });
 
@@ -241,7 +249,7 @@ router.get('/upload/signed-url', authenticate, (req, res: Response<ApiResponse>,
 // ─── PUT /api/v1/files/upload/signed/:token ────────────────
 router.put(
   '/upload/signed/:token',
-  multer({ storage: multer.memoryStorage(), limits: { fileSize: 100 * 1024 * 1024 } }).single('file'),
+  multer({ storage: multer.memoryStorage(), limits: { fileSize: 160 * 1024 * 1024 } }).single('file'),
   async (req, res: Response<ApiResponse>, next) => {
     try {
       const { token } = req.params;
@@ -289,5 +297,98 @@ router.put(
     }
   },
 );
+
+// ─── Presigned DIRECT-to-R2 upload (large videos) ─────────────────────────
+//
+// The normal multipart path buffers the file on the API server AND flows
+// through the Cloudflare proxy, whose free/pro plans cap request bodies at
+// 100MB. For 150MB feed videos the browser instead:
+//   1. POST /upload/presign-r2            → presigned PUT URL + object key
+//   2. PUT <presigned URL> (file body)    → straight to r2.cloudflarestorage.com
+//   3. POST /upload/presign-r2/complete   → server verifies the object landed,
+//      extracts the poster thumbnail (ffmpeg reads a signed GET URL), and
+//      returns the same payload shape as POST /upload.
+//
+// Requires a CORS rule on the R2 bucket allowing PUT from the site origin.
+// Video-only on purpose — every other category fits the normal path.
+
+const PRESIGN_KEY_RE = /^video\/[\w./-]+$/;
+
+router.post('/upload/presign-r2', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    if (getStorageProvider().kind !== 'r2') {
+      // Local-dev storage — client should fall back to the multipart path.
+      throw new AppError('Direct upload unavailable on this storage backend', 400, 'PRESIGN_UNAVAILABLE');
+    }
+    const { filename, contentType, size } = req.body ?? {};
+    if (!filename || typeof filename !== 'string') {
+      throw new AppError('filename is required', 400, 'MISSING_FILENAME');
+    }
+    if (!contentType || typeof contentType !== 'string' || !contentType.startsWith('video/')) {
+      throw new AppError('Only video uploads may use the direct path', 400, 'INVALID_CONTENT_TYPE');
+    }
+    const numSize = Number(size);
+    if (!Number.isFinite(numSize) || numSize <= 0 || numSize > config.maxFileSizeVideo) {
+      throw new AppError(
+        `Video exceeds the ${Math.round(config.maxFileSizeVideo / (1024 * 1024))}MB limit`,
+        400,
+        'FILE_TOO_LARGE',
+      );
+    }
+
+    const key = buildKey('video', filename, { userId: req.userId });
+    const uploadUrl = await r2SignedUploadUrl(key, contentType, 3600);
+
+    res.json({
+      success: true,
+      data: { uploadUrl, key, method: 'PUT', headers: { 'Content-Type': contentType }, expiresIn: 3600 },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/upload/presign-r2/complete', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    if (getStorageProvider().kind !== 'r2') {
+      throw new AppError('Direct upload unavailable on this storage backend', 400, 'PRESIGN_UNAVAILABLE');
+    }
+    const { key, originalName } = req.body ?? {};
+    if (!key || typeof key !== 'string' || !PRESIGN_KEY_RE.test(key) || key.includes('..')) {
+      throw new AppError('Invalid object key', 400, 'INVALID_KEY');
+    }
+
+    const head = await r2HeadObject(key);
+    if (!head) {
+      throw new AppError('Uploaded object not found — did the PUT succeed?', 404, 'OBJECT_NOT_FOUND');
+    }
+    if (head.size > config.maxFileSizeVideo) {
+      // Guard against a client uploading more than it declared at presign.
+      throw new AppError('Uploaded object exceeds the video size limit', 400, 'FILE_TOO_LARGE');
+    }
+
+    // Poster thumbnail: ffmpeg reads a short-lived signed GET URL (Range
+    // requests — it only pulls the first ~seconds of the file).
+    const name = typeof originalName === 'string' && originalName ? originalName : key.split('/').pop() || 'video.mp4';
+    const signedGet = await r2SignedDownloadUrl(key, 600);
+    const thumbnail = await extractVideoThumbnailFromUrl(signedGet, name, req.userId);
+
+    logger.info(`[upload] presigned direct video ${key} (${head.size}B)`);
+
+    res.status(201).json({
+      success: true,
+      data: {
+        key,
+        url: r2BuildPublicUrl(key),
+        size: head.size,
+        contentType: head.contentType,
+        thumbnail,
+      },
+      message: 'File uploaded successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;

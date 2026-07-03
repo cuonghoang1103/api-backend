@@ -247,6 +247,44 @@ export const fileApi = {
     });
   },
   delete: (id: number) => api.delete(`/files/${id}`),
+
+  /**
+   * Large-video path: PUT the file DIRECTLY to R2 via a presigned URL, then
+   * confirm with the API (which verifies the object + extracts the poster).
+   * Bypasses the Cloudflare proxy's 100MB request-body cap. Resolves to the
+   * same `{ data: { data: { url, thumbnail, ... } } }` shape as `upload`.
+   * Throws with code PRESIGN_UNAVAILABLE on non-R2 backends — callers should
+   * fall back to `upload`.
+   */
+  uploadVideoDirect: async (file: File, onProgress?: (pct: number) => void) => {
+    const presign = await api.post('/files/upload/presign-r2', {
+      filename: file.name,
+      contentType: file.type,
+      size: file.size,
+    });
+    const { uploadUrl, key } = presign.data?.data ?? {};
+    if (!uploadUrl || !key) throw new Error('Presign response missing uploadUrl/key');
+
+    // Raw PUT to R2 — NOT through the api axios instance (no auth header,
+    // different origin). XHR for upload progress.
+    await new Promise<void>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', uploadUrl);
+      xhr.setRequestHeader('Content-Type', file.type);
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 90));
+      };
+      xhr.onload = () =>
+        xhr.status >= 200 && xhr.status < 300
+          ? resolve()
+          : reject(new Error(`R2 PUT failed (${xhr.status})`));
+      xhr.onerror = () => reject(new Error('R2 PUT network error (check bucket CORS)'));
+      xhr.send(file);
+    });
+
+    onProgress?.(95);
+    return api.post('/files/upload/presign-r2/complete', { key, originalName: file.name });
+  },
 };
 
 // Notes API — personal study notebooks (per-user, authenticated).

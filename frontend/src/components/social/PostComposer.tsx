@@ -294,8 +294,8 @@ export function PostComposer() {
     async (files: File[]) => {
       const limited = files.slice(0, 6);
       for (const file of limited) {
-        if (file.size > 50 * 1024 * 1024) {
-          setPostError('File too large (max 50MB)');
+        if (file.size > 150 * 1024 * 1024) {
+          setPostError('File too large (max 150MB)');
           continue;
         }
 
@@ -304,7 +304,7 @@ export function PostComposer() {
         // Anything that's not a recognised image / video goes
         // through the FILE pipeline so the post card can render a
         // download link instead of a media tile. 10MB cap to keep
-        // a single post from holding 50MB of binaries.
+        // a single post from holding 150MB of binaries.
         const isFile = !isImage && !isVideo;
         const FILE_MAX = 10 * 1024 * 1024;
         if (isFile && file.size > FILE_MAX) {
@@ -345,7 +345,7 @@ export function PostComposer() {
         // Real upload. We report a coarse progress while the
         // request is in flight — browser-side XHR progress would
         // be more accurate but axios progress events require
-        // additional wiring we don't need for a 50MB cap.
+        // additional wiring; the >45MB direct-to-R2 path has real progress.
         useSocialStore.setState((s) => ({
           composerMedia: s.composerMedia.map((m) => (m.id === id ? { ...m, progress: 25 } : m)),
         }));
@@ -354,8 +354,29 @@ export function PostComposer() {
           // bucket that accepts everything). Images and videos
           // keep their tight allow-lists so the backend still
           // rejects arbitrary blobs being smuggled in.
+          //
+          // Big videos (>45MB) go DIRECTLY to R2 via a presigned PUT —
+          // the multipart path flows through the Cloudflare proxy, which
+          // caps request bodies at 100MB. Falls back to multipart when
+          // the backend isn't on R2 (local dev).
           const category = isFile ? 'documents' : isVideo ? 'video' : 'images';
-          const res = await fileApi.upload(file, category);
+          const useDirect = isVideo && file.size > 45 * 1024 * 1024;
+          const res = useDirect
+            ? await fileApi
+                .uploadVideoDirect(file, (pct) => {
+                  useSocialStore.setState((s) => ({
+                    composerMedia: s.composerMedia.map((m) =>
+                      m.id === id ? { ...m, progress: Math.max(25, pct) } : m
+                    ),
+                  }));
+                })
+                .catch((err) => {
+                  // PRESIGN_UNAVAILABLE (or CORS hiccup) → try the normal
+                  // path; it works up to the proxy limit.
+                  console.warn('Direct R2 upload failed, falling back to multipart:', err);
+                  return fileApi.upload(file, category);
+                })
+            : await fileApi.upload(file, category);
           const url = res.data?.data?.url;
           const serverThumbnail = res.data?.data?.thumbnail; // Auto-generated video thumbnail
           if (!url) {

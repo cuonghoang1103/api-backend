@@ -95,6 +95,51 @@ export async function putObject(
 }
 
 /**
+ * Presigned PUT URL — lets the browser upload a large file DIRECTLY to R2
+ * (r2.cloudflarestorage.com), bypassing the API server and the Cloudflare
+ * proxy's 100MB request-body limit. The signature pins bucket + key +
+ * content type; the URL is only valid for `expiresInSeconds`.
+ *
+ * NOTE: the R2 bucket needs a CORS rule allowing PUT from the site origin
+ * for this to work from a browser.
+ */
+export async function getSignedUploadUrl(
+  key: string,
+  contentType: string,
+  expiresInSeconds: number = 3600,
+): Promise<string> {
+  const client = getR2Client();
+  const cmd = new PutObjectCommand({
+    Bucket: config.r2.bucketName,
+    Key: key,
+    ContentType: contentType,
+  });
+  return getSignedUrl(client, cmd, { expiresIn: expiresInSeconds });
+}
+
+/**
+ * HEAD an object — returns size/contentType, or null when it doesn't exist.
+ * Used to verify a presigned direct upload actually landed before we hand
+ * the public URL back to the client.
+ */
+export async function headObject(
+  key: string,
+): Promise<{ size: number; contentType: string } | null> {
+  const client = getR2Client();
+  try {
+    const res = await client.send(
+      new HeadObjectCommand({ Bucket: config.r2.bucketName, Key: key }),
+    );
+    return {
+      size: typeof res.ContentLength === 'number' ? res.ContentLength : 0,
+      contentType: res.ContentType || 'application/octet-stream',
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Delete a single object. We don't throw on `NoSuchKey` — the
  * desired end state ("object doesn't exist") is already met, and
  * a missing file shouldn't break the parent operation (e.g. a

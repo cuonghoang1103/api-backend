@@ -21,7 +21,8 @@ declare global {
 }
 
 interface YouTubePlayerInstance {
-  loadVideoById: (videoId: string, startSeconds?: number) => void;
+  loadVideoById: (videoId: string | { videoId: string; startSeconds?: number }, startSeconds?: number) => void;
+  cueVideoById?: (videoId: string | { videoId: string; startSeconds?: number }, startSeconds?: number) => void;
   playVideo: () => void;
   pauseVideo: () => void;
   seekTo: (seconds: number, allowSeekAhead: boolean) => void;
@@ -40,6 +41,14 @@ interface YouTubePlayerInstance {
 
 let ytPlayerInstance: YouTubePlayerInstance | null = null;
 let ytContainerMounted = false;
+// Flag: true once the YouTube IFrame API has loaded and we've created
+// the hidden player. This player stays alive for the entire session,
+// which is critical for mobile: every new YouTube iframe starts in a
+// "no gesture yet" state and needs a user tap before it can autoplay.
+// By creating ONE hidden player on app load (or on first music interaction)
+// and keeping it alive, all subsequent track changes via loadVideoById()
+// inherit that gesture context — no more "ấn play nhiều lần mới nghe được".
+let ytPlayerWarmedUp = false;
 
 // Export for use by other components
 export function getYouTubePlayer(): YouTubePlayerInstance | null {
@@ -51,13 +60,115 @@ function mountYouTubeContainer() {
   if (!document.getElementById('youtube-player-container')) {
     const container = document.createElement('div');
     container.id = 'youtube-player-container';
-    // Use 1x1 but visible (not z-index:-1 / opacity:0.01) so mobile browsers
-    // allow audio playback. Hidden via absolute positioning off-screen.
-    container.style.cssText = 'position:fixed;width:1px;height:1px;bottom:0;left:-9999px;pointer-events:none;overflow:hidden;z-index:1;';
+    // MUST stay INSIDE the viewport: iOS Safari throttles/pauses media in
+    // iframes positioned off-screen (the old `left:-9999px` was the root
+    // cause of YouTube tracks cutting out mid-play on phones). A 2×2px
+    // corner box is visually invisible but counts as on-screen.
+    container.style.cssText = 'position:fixed;width:2px;height:2px;bottom:0;left:0;pointer-events:none;overflow:hidden;z-index:1;';
     container.innerHTML = '<div id="youtube-player"></div>';
     document.body.appendChild(container);
   }
   ytContainerMounted = true;
+}
+
+/**
+ * Nudge a YouTube player that *should* be playing but silently isn't —
+ * mobile browsers sometimes swallow the first `playVideo()` after a
+ * load when it lands outside the user-gesture window. Polls briefly,
+ * then forces the pause→play cycle the user otherwise does by hand.
+ */
+function ensureYouTubePlaying(player: YouTubePlayerInstance) {
+  let attempts = 0;
+  const probe = setInterval(() => {
+    attempts++;
+    try {
+      const state = player.getPlayerState?.();
+      if (state === window.YT?.PlayerState?.PLAYING) {
+        clearInterval(probe);
+        return;
+      }
+    } catch {
+      clearInterval(probe);
+      return;
+    }
+    if (attempts >= 3) {
+      clearInterval(probe);
+      try {
+        player.pauseVideo();
+        setTimeout(() => {
+          try { player.playVideo(); } catch { /* ignore */ }
+        }, 100);
+      } catch {
+        /* ignore */
+      }
+    }
+  }, 500);
+}
+
+/**
+ * Create (or reuse) the hidden YouTube player so it can be "warmed up"
+ * during the user-gesture window. Once created the iframe stays alive for
+ * the session — every subsequent loadVideoById() call inherits its gesture
+ * context, which eliminates the "ấn play nhiều lần mới nghe được" problem.
+ *
+ * On mobile, YouTube iframes require a user gesture before they can
+ * autoplay. By creating this iframe while we're still inside a gesture
+ * event (e.g. the user just tapped a search result), the iframe's
+ * `activated` state is set and subsequent playVideo() calls succeed
+ * even when they fire from setTimeout/requestAnimationFrame callbacks.
+ *
+ * NOTE: This function does NOT set up playback event listeners
+ * (onStateChange, onEnded, onError). Those are set up by handleYouTubeTrack
+ * when a real track is loaded. This keeps the warm-up player "dumb" —
+ * it just creates the iframe in an activated state.
+ */
+function warmUpYouTubePlayer() {
+  if (ytPlayerWarmedUp || !window.YT?.Player) return;
+
+  mountYouTubeContainer();
+
+  // If a player already exists, just mark as warmed.
+  if (ytPlayerInstance) {
+    ytPlayerWarmedUp = true;
+    return;
+  }
+
+  const player = new window.YT.Player('youtube-player', {
+    height: '1',
+    width: '1',
+    videoId: 'dQw4w9WgXcQ', // dummy placeholder — never visible
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      disablekb: 1,
+      enablejsapi: 1,
+      fs: 0,
+      iv_load_policy: 3,
+      modestbranding: 1,
+      origin: window.location.origin,
+      playsinline: 1,
+      rel: 0,
+      cc_load_policy: 0,
+    },
+    events: {
+      onReady: () => {
+        ytPlayerWarmedUp = true;
+        // Set volume to the user's saved level so the warm-up iframe
+        // doesn't blast audio if somehow play gets called on it.
+        if (ytMuted) {
+          ytPlayerInstance?.mute();
+        } else {
+          const ytVol = Math.round(Math.max(0, Math.min(1, useMusicStore.getState().volume)) * 100);
+          ytPlayerInstance?.setVolume(ytVol);
+          ytVolume = ytVol;
+        }
+      },
+      // Intentionally NO onStateChange/onEnded/onError here — those
+      // are registered by handleYouTubeTrack when real playback starts.
+      // The warm-up player just holds the iframe in an activated state.
+    },
+  });
+  ytPlayerInstance = player;
 }
 
 function unmountYouTubeContainer() {
@@ -66,10 +177,20 @@ function unmountYouTubeContainer() {
   if (container) container.remove();
   ytContainerMounted = false;
   ytPlayerInstance = null;
+  ytPlayerWarmedUp = false;
 }
 
 let ytVolume = 70;
 let ytMuted = false;
+
+// Module-level callback refs so warmUpYouTubePlayer can set them once
+// and handleYouTubeTrack can update them per track without recreating
+// the iframe. This is critical for mobile: destroying/recreating the
+// iframe per track resets the gesture context and causes the
+// "ấn play nhiều lần" problem.
+let ytOnStateChange: ((state: number) => void) | null = null;
+let ytOnEnded: (() => void) | null = null;
+let ytOnError: ((err: unknown) => void) | null = null;
 
 function createYouTubePlayer(
   videoId: string,
@@ -79,8 +200,43 @@ function createYouTubePlayer(
   onEnded: () => void,
   onError: (err: unknown) => void,
 ): YouTubePlayerInstance {
-  const existing = document.getElementById('youtube-player');
-  if (existing) existing.innerHTML = '';
+  // If we already have a warm player, we don't need to recreate it.
+  // The caller (handleYouTubeTrack) will use loadVideoById on the
+  // existing instance. This is the fix for the "ấn play nhiều lần"
+  // bug: previously, every new track destroyed and recreated the
+  // YouTube iframe, which reset its gesture context on mobile.
+  if (ytPlayerInstance) {
+    // Store the new callbacks so they override any from previous tracks.
+    ytOnStateChange = onStateChange;
+    ytOnEnded = onEnded;
+    ytOnError = onError;
+
+    // Attach listeners to the existing iframe. Note: YouTube IFrame API
+    // addEventListener replaces the previous listener for the same event
+    // type, so this is safe to call per-track without accumulating handlers.
+    try {
+      if (ytPlayerInstance.addEventListener) {
+        ytPlayerInstance.addEventListener('onStateChange', onStateChange as (e: unknown) => void);
+        ytPlayerInstance.addEventListener('onError', onError as (e: unknown) => void);
+      }
+    } catch {
+      /* ignore — player may not support addEventListener */
+    }
+
+    // Invoke onReady to unblock the track-loading flow.
+    // The warm player is already initialized, so this is synchronous.
+    setTimeout(onReady, 0);
+    return ytPlayerInstance;
+  }
+
+  // Store callbacks so the warm-up player can pick them up.
+  // This allows handleYouTubeTrack to set up events even when
+  // the iframe was created by warmUpYouTubePlayer.
+  ytOnStateChange = onStateChange;
+  ytOnEnded = onEnded;
+  ytOnError = onError;
+
+  mountYouTubeContainer();
 
   const player = new window.YT.Player('youtube-player', {
     height: '1',
@@ -282,12 +438,40 @@ export default function MusicAudioController() {
     };
   }, [stopYouTubePolling]);
 
-  // Load YouTube API once
+  // ── Warm up YouTube player on first user interaction ─────────────────
+  // This is the KEY fix for mobile: we create the hidden YouTube iframe
+  // during a user gesture (click/touch) so it inherits the gesture context.
+  // Once created, the iframe stays alive for the session. Every subsequent
+  // loadVideoById() inherits that context and can autoplay without
+  // additional taps. This eliminates the "ấn play nhiều lần mới nghe được"
+  // problem entirely.
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    loadYouTubeAPI();
-    window.onYouTubeIframeAPIReady = () => {
-      /* API ready */
+
+    const handleFirstInteraction = () => {
+      loadYouTubeAPI().then(() => {
+        // Only warm up if we don't already have a player.
+        // This is safe to call multiple times.
+        if (!ytPlayerWarmedUp && !ytPlayerInstance) {
+          warmUpYouTubePlayer();
+        }
+      });
+      // Remove listener after first interaction — one warm-up is enough.
+      document.removeEventListener('click', handleFirstInteraction, true);
+      document.removeEventListener('touchstart', handleFirstInteraction, true);
+    };
+
+    // If API is already loaded, warm up immediately.
+    if (window.YT?.Player) {
+      warmUpYouTubePlayer();
+    } else {
+      document.addEventListener('click', handleFirstInteraction, true);
+      document.addEventListener('touchstart', handleFirstInteraction, true);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction, true);
+      document.removeEventListener('touchstart', handleFirstInteraction, true);
     };
   }, []);
 
@@ -295,25 +479,94 @@ export default function MusicAudioController() {
   const handleYouTubeTrack = useCallback(
     (videoId: string, shouldPlay: boolean, startSeconds = 0) => {
       if (!window.YT?.Player) {
-        // API not ready yet. Wait for it, then immediately (no
-        // artificial 500ms delay) retry. The artificial delay was a
-        // root cause of the user-reported "first YouTube click does
-        // nothing — I have to play a local track first, then re-pick
-        // the YouTube one": by the time the player was created, the
-        // browser's user-gesture window had already closed and
-        // `playVideo()` was silently rejected. Retrying immediately
-        // keeps us inside the gesture window for the common case
-        // where the API was just about to finish loading.
+        // API not ready — trigger warm-up (creates the iframe during the
+        // current gesture context) and retry once the API loads.
         loadYouTubeAPI().then(() => {
-          handleYouTubeTrack(videoId, shouldPlay, startSeconds);
+          warmUpYouTubePlayer();
+          // Use setTimeout 0 to let the iframe initialize, then load the track.
+          // This gives YouTube's IFrame API time to be ready for loadVideoById.
+          setTimeout(() => {
+            handleYouTubeTrack(videoId, shouldPlay, startSeconds);
+          }, 50);
         });
         return;
       }
 
-      // Always recreate to load the new video
-      if (ytPlayerInstance) {
-        try { ytPlayerInstance.destroy(); } catch { /* ignore */ }
-        ytPlayerInstance = null;
+      // Ensure iframe is created before we try to load the track.
+      // This handles the case where the API is ready but warmUp hasn't run yet.
+      if (!ytPlayerInstance) {
+        warmUpYouTubePlayer();
+        // Retry after warm-up — the iframe will be created synchronously
+        // (or microtask-delayed) so this recursive call will hit the
+        // ytPlayerInstance path below.
+        setTimeout(() => {
+          handleYouTubeTrack(videoId, shouldPlay, startSeconds);
+        }, 50);
+        return;
+      }
+
+      // Reuse the existing player whenever possible. Destroy+recreate per
+      // track (the old behaviour) resets the iframe's user-gesture
+      // activation on iOS — every new YouTube track needed fresh taps to
+      // make sound ("ấn play nhiều lần mới nghe được") and the teardown/
+      // reload churn caused mid-track dropouts. loadVideoById keeps the
+      // same activated iframe alive, switches instantly, and autoplays.
+      if (ytPlayerInstance && typeof ytPlayerInstance.loadVideoById === 'function') {
+        const player = ytPlayerInstance;
+        try {
+          stopYouTubePolling();
+          const wantPlay = shouldPlay || useMusicStore.getState().isPlaying;
+
+          // Build the state-change handler that drives polling + track-end logic.
+          // Using addEventListener per track replaces the previous listener
+          // (YouTube IFrame API semantics), so we don't accumulate handlers.
+          const onStateChangeHandler = (e: unknown) => {
+            const evt = e as { data: number };
+            const { ENDED } = window.YT?.PlayerState ?? {};
+            if (evt.data === ENDED) {
+              stopYouTubePolling();
+              setTimeout(() => next(), 0);
+            }
+          };
+
+          // Register onStateChange so track-end fires next() correctly.
+          // NOTE: addEventListener REPLACES the previous handler for the same
+          // event (YouTube IFrame API), so this is safe per-track.
+          try {
+            if (player.addEventListener) {
+              player.addEventListener('onStateChange', onStateChangeHandler);
+            }
+          } catch { /* ignore */ }
+
+          if (wantPlay) {
+            player.loadVideoById({ videoId, startSeconds });
+          } else if (typeof player.cueVideoById === 'function') {
+            player.cueVideoById({ videoId, startSeconds });
+          } else {
+            player.loadVideoById({ videoId, startSeconds });
+            player.pauseVideo();
+          }
+          // Re-apply audio settings — a load keeps them, but be explicit.
+          if (ytMuted) {
+            player.mute();
+          } else {
+            const ytVol = Math.round(Math.max(0, Math.min(1, useMusicStore.getState().volume)) * 100);
+            player.setVolume(ytVol);
+            ytVolume = ytVol;
+          }
+          const savedRate = useMusicStore.getState().playbackRate;
+          if (player.setPlaybackRate && Number.isFinite(savedRate)) {
+            try { player.setPlaybackRate(Math.max(0.5, Math.min(2, savedRate))); } catch { /* ignore */ }
+          }
+          startYouTubePolling(player);
+          if (wantPlay) ensureYouTubePlaying(player);
+          return;
+        } catch {
+          // Player wedged — fall through to a clean recreate below.
+          try { player.destroy(); } catch { /* ignore */ }
+          ytPlayerInstance = null;
+          ytPlayerWarmedUp = false;
+        }
       }
 
       stopYouTubePolling();
@@ -354,56 +607,12 @@ export default function MusicAudioController() {
           if (wantPlay) {
             const player = ytPlayerInstance!;
             player.playVideo();
-
-            // ── Autoplay-block detection ──
-            // Some browsers reject `playVideo()` from inside the
-            // `onReady` callback if there hasn't been a recent user
-            // gesture (e.g. user typed a search term in the input and
-            // hit Enter, but no click event was registered against the
-            // page body). YouTube silently swallows the rejection, the
-            // player state stays in BUFFERING, the disc keeps spinning
-            // because `isPlaying=true` in the store, but no audio comes
-            // out. The user reported: "đĩa vẫn quay và đang phát nhưng
-            // tôi không nghe thấy nhạc. Tôi phải ấn paused và ấn play
-            // lại mới nghe được."
-            //
-            // Fix: poll the player state for ~1.5s. If it's still not
-            // PLAYING, force a pause+play sequence which DOES count as
-            // a programmatic re-trigger that YouTube accepts. The
-            // pause+play also fires a state-change event, which the
-            // play/pause toggle effect listens for.
-            let attempts = 0;
-            const probe = setInterval(() => {
-              attempts++;
-              try {
-                const state = player.getPlayerState?.();
-                if (state === window.YT?.PlayerState?.PLAYING) {
-                  clearInterval(probe);
-                  return;
-                }
-              } catch {
-                // Player gone
-                clearInterval(probe);
-                return;
-              }
-              if (attempts >= 3) {
-                clearInterval(probe);
-                // Last resort: pause + play to force a re-trigger.
-                // This is exactly what the user had to do manually
-                // (click pause then play). The `playVideo()` here runs
-                // from a setTimeout callback, which most browsers
-                // consider a valid user-gesture follow-up because the
-                // search-result click already counted as a gesture.
-                try {
-                  player.pauseVideo();
-                  setTimeout(() => {
-                    try { player.playVideo(); } catch { /* ignore */ }
-                  }, 100);
-                } catch {
-                  /* ignore */
-                }
-              }
-            }, 500);
+            // Autoplay-block detection: some browsers reject playVideo()
+            // from onReady when it lands outside the user-gesture window —
+            // the disc spins but no audio. ensureYouTubePlaying probes for
+            // ~1.5s and forces the pause→play cycle the user otherwise
+            // does by hand.
+            ensureYouTubePlaying(player);
           }
           const d = ytPlayerInstance?.getDuration?.() ?? 0;
           if (d > 0) setDuration(d);

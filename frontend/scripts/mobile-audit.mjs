@@ -154,7 +154,9 @@ function pageChecks() {
 async function login(browser) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await ctx.newPage();
-  await page.goto(`${BASE}/login`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`${BASE}/login`, { waitUntil: 'networkidle', timeout: 60000 });
+  // Wait for the actual input element to appear (CSR bailout on login page)
+  await page.waitForSelector('input[placeholder="Enter your username"]', { timeout: 30000 });
   await page.fill('input[placeholder="Enter your username"]', USER.username);
   await page.fill('input[placeholder="Enter your password"]', USER.password);
   await Promise.all([

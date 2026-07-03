@@ -147,8 +147,9 @@ export default function AboutPage() {
 
       {/* Hero Section */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden pt-16 pb-8">
-        {/* Layered background glows */}
-        <div className="absolute inset-0 pointer-events-none">
+        {/* Layered background glows — overflow-hidden clips the 500px blur divs
+            so they never widen the mobile viewport. */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-[15%] left-[10%] w-[500px] h-[500px] bg-neon-indigo/15 rounded-full blur-[160px] animate-pulse" />
           <div className="absolute bottom-[20%] right-[5%] w-[450px] h-[450px] bg-neon-violet/15 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '0.8s' }} />
           <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-neon-fuchsia/8 rounded-full blur-[100px]" />
@@ -537,6 +538,9 @@ export default function AboutPage() {
               {/* Right fade */}
               <div className="w-20 h-6 bg-gradient-to-l from-darkbg to-transparent shrink-0 z-10 absolute right-0" />
 
+              {/* overflow-hidden clips the marquee animation on mobile (320-414px)
+                  where the ticker would otherwise widen the viewport. */}
+              <div className="overflow-hidden min-w-0 flex-1">
               <div className="flex items-center gap-0 animate-[marquee_30s_linear_infinite] whitespace-nowrap"
                 style={{ animation: 'marquee 30s linear infinite' }}>
                 {[...systemStats, ...systemStats].map((stat, i) => (
@@ -552,6 +556,7 @@ export default function AboutPage() {
                     <span className="text-text-muted/30 mx-2">|</span>
                   </div>
                 ))}
+              </div>
               </div>
             </div>
             <style>{`

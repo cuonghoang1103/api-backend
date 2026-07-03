@@ -2368,6 +2368,7 @@ aside ::-webkit-scrollbar-thumb:hover {
 /* Kill accidental horizontal scroll / layout shift ("phân bố không đồng đều")
    and the grey tap flash on iOS/Android. */
 html {
+  overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }

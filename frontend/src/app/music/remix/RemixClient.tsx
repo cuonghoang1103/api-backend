@@ -71,19 +71,21 @@ export default function RemixClient() {
     const newTracks = data?.data;
     if (!newTracks) return;
 
-    const cur = useMusicStore.getState().currentTrack;
-    const finalTracks =
-      cur && !newTracks.some((t) => t.id === cur.id) ? [...newTracks, cur] : newTracks;
-
+    // Pass the REMIX list as-is. We do NOT merge the currently-playing
+    // track back in: if a NORMAL track is playing (from /music),
+    // appending it here would leak it into the remix crate. The store's
+    // setTracks keeps playback smooth on its own (cross-section swap),
+    // so audio continues without the other bucket's track joining this
+    // list. See musicStore.setTracks cross-section handling.
     const currentTracks = useMusicStore.getState().tracks;
-    if (currentTracks.length === finalTracks.length) {
+    if (currentTracks.length === newTracks.length) {
       let same = true;
-      for (let i = 0; i < finalTracks.length; i++) {
-        if (currentTracks[i]?.id !== finalTracks[i]?.id) { same = false; break; }
+      for (let i = 0; i < newTracks.length; i++) {
+        if (currentTracks[i]?.id !== newTracks[i]?.id) { same = false; break; }
       }
       if (same) return;
     }
-    setTracks(finalTracks);
+    setTracks(newTracks);
   }, [data, isMounted, setTracks]);
 
   const refresh = useCallback(async () => {

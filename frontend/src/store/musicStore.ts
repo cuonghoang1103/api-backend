@@ -299,6 +299,34 @@ export const useMusicStore = create<MusicState>()((set, get) => {
         if (same) return;
       }
 
+      // ── Cross-section swap (normal library ↔ remix deck) ─────────
+      // /music (NORMAL) and /music/remix (REMIX) share this store but
+      // must stay fully isolated: a REMIX track must NEVER appear in —
+      // or auto-play from — the normal deck's list, and vice versa.
+      //
+      // When the incoming list's bucket differs from the currently
+      // loaded track's bucket, we're navigating BETWEEN the two
+      // sections. Just swap the visible list and leave the global
+      // player (currentTrack / currentTime / isPlaying) untouched so
+      // audio keeps playing smoothly — and, crucially, do NOT append
+      // the playing track into the other section's list (that append,
+      // below, is what used to leak a remix into the normal deck).
+      // currentIndex is reset so the next auto-advance starts from the
+      // new list's first track instead of a stale cross-section index.
+      const incomingCat = tracks.find((t) => t.category)?.category;
+      if (currentTrack?.category && incomingCat && currentTrack.category !== incomingCat) {
+        set({
+          tracks,
+          allTracks: tracks,
+          savedAllTracks: tracks,
+          queue: tracks,
+          currentIndex: -1,
+          lastPlaylistId: null,
+          smartShufflePool: [],
+        });
+        return;
+      }
+
       // ── Bug 4 fix: stronger safety net for in-progress playback ──
       // If the user is currently playing a track, do NOT reset any of
       // the playback state (currentTrack / currentIndex / currentTime

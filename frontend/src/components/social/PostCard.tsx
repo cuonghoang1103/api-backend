@@ -2265,6 +2265,19 @@ function MediaGrid({
           // parents; in the ~600px feed column it never kicks in.
           return { aspectRatio: String(aspect), maxHeight: 'min(88vh, 880px)' };
         }
+        if (aspect) {
+          // Portrait: frame also tracks the real ratio. When the height
+          // cap binds, maxWidth shrinks with it (height × aspect) and the
+          // frame centers — otherwise object-contain would leave big black
+          // bands above/below 4:5 / 3:4 clips inside a fixed tall box.
+          return {
+            aspectRatio: String(aspect),
+            maxHeight: 'min(88vh, 880px)',
+            maxWidth: `calc(min(88vh, 880px) * ${aspect})`,
+            marginInline: 'auto',
+          };
+        }
+        // Ratio unknown (metadata not loaded yet): keep the tall frame.
         return { height: 'min(88vh, 880px)' };
       })()}
     >
@@ -2304,6 +2317,11 @@ function MediaGrid({
               onOpenTheater={
                 onOpenTheater && postId != null
                   ? () => onOpenTheater(postId)
+                  : undefined
+              }
+              reelHref={
+                item.type === 'VIDEO' && postId != null
+                  ? `/feed/video?start=${postId}`
                   : undefined
               }
             />
@@ -2527,6 +2545,7 @@ function MediaItem({
   autoPlayEnabled = false,
   onOpenTheater,
   onAspect,
+  reelHref,
 }: {
   item: SocialMedia;
   onClick: () => void;
@@ -2535,6 +2554,8 @@ function MediaItem({
   /** Reports the media's intrinsic width/height ratio once known —
       used by the all-video frame to size itself to landscape videos. */
   onAspect?: (ratio: number) => void;
+  /** Link into the TikTok-style vertical reel seeded at this post. */
+  reelHref?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLButtonElement | null>(null);
@@ -2758,25 +2779,44 @@ function MediaItem({
           </div>
         )}
 
-        {/* Theater-mode shortcut */}
-        {onOpenTheater && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onOpenTheater();
-            }}
-            className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-[10px] font-semibold text-white backdrop-blur-md transition-colors hover:bg-neon-violet"
-            title="Mở Theater Mode (toàn màn hình)"
-            aria-label="Mở Theater Mode"
-          >
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M8 3H5a2 2 0 0 0-2 2v3" />
-              <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
-              <path d="M3 16v3a2 2 0 0 0 2 2h3" />
-              <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
-            </svg>
-            Theater
-          </button>
+        {/* Top-right shortcuts: Reel (vertical fullscreen feed) + Theater */}
+        {(onOpenTheater || reelHref) && (
+          <div className="absolute top-2 right-2 flex items-center gap-1.5">
+            {reelHref && (
+              <Link
+                href={reelHref}
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-[10px] font-semibold text-white backdrop-blur-md transition-colors hover:bg-neon-violet"
+                title="Xem dạng Reel (vuốt dọc toàn màn hình)"
+                aria-label="Xem dạng Reel"
+              >
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="7" y="2" width="10" height="20" rx="2.5" />
+                  <path d="M11 9.5v5l4-2.5z" fill="currentColor" stroke="none" />
+                </svg>
+                Reel
+              </Link>
+            )}
+            {onOpenTheater && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenTheater();
+                }}
+                className="flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-[10px] font-semibold text-white backdrop-blur-md transition-colors hover:bg-neon-violet"
+                title="Mở Theater Mode (toàn màn hình)"
+                aria-label="Mở Theater Mode"
+              >
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                  <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                  <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                  <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                </svg>
+                Theater
+              </button>
+            )}
+          </div>
         )}
 
         {/* Inline control bar (auto-play mode only) */}

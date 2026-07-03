@@ -218,14 +218,14 @@ export default function VerticalVideoFeed({ startPostId }: { startPostId?: numbe
       <button
         onClick={exit}
         aria-label="Thoát"
-        className="fixed left-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white ring-1 ring-white/15 hover:bg-black/60"
+        className="fixed left-4 top-[max(1rem,env(safe-area-inset-top,0px))] z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white ring-1 ring-white/15 hover:bg-black/60"
       >
         <X size={20} />
       </button>
       <button
         onClick={() => setMuted((m) => !m)}
         aria-label={muted ? 'Bật tiếng' : 'Tắt tiếng'}
-        className="fixed right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white ring-1 ring-white/15 hover:bg-black/60"
+        className="fixed right-4 top-[max(1rem,env(safe-area-inset-top,0px))] z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white ring-1 ring-white/15 hover:bg-black/60"
       >
         {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
       </button>
@@ -325,8 +325,8 @@ function VideoSlide({
         )}
       </div>
 
-      {/* Right action rail */}
-      <div className="absolute bottom-24 right-3 z-20 flex flex-col items-center gap-5 text-white">
+      {/* Right action rail — lifted by the home-indicator inset on iPhone */}
+      <div className="absolute bottom-[calc(6rem+env(safe-area-inset-bottom,0px))] right-3 z-20 flex flex-col items-center gap-5 text-white">
         <Link href={`/profile/${post.author?.id ?? ''}`} className="mb-1 block h-12 w-12 overflow-hidden rounded-full ring-2 ring-white/70">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={avatar} alt={author} className="h-full w-full object-cover" />
@@ -346,7 +346,7 @@ function VideoSlide({
       </div>
 
       {/* Caption + author footer */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-4 pb-8 pr-20">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-4 pb-[max(2rem,calc(1rem+env(safe-area-inset-bottom,0px)))] pr-20">
         <p className="text-sm font-semibold text-white">@{post.author?.username ?? 'user'}</p>
         {post.content?.trim() && (
           <p className="mt-1 line-clamp-3 text-sm text-white/85">{post.content.trim()}</p>

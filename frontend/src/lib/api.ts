@@ -503,7 +503,7 @@ export const noteShareApi = {
 
 // Music API
 export const musicApi = {
-  getTracks: (params?: { page?: number; size?: number; keyword?: string }) =>
+  getTracks: (params?: { page?: number; size?: number; keyword?: string; category?: 'NORMAL' | 'REMIX' }) =>
     api.get('/music/tracks', { params }),
   getTrack: (id: number) => api.get(`/music/tracks/${id}`),
   getStreamUrl: (id: number) => `/api/v1/music/stream/${id}`,

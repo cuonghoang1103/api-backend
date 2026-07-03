@@ -165,6 +165,8 @@ export default function AdminMusicPage() {
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [audioPreviewUrl, setAudioPreviewUrl] = useState('');
   const [isActive, setIsActive] = useState(true);
+  // Content bucket: NORMAL (regular library / "Tất cả") vs REMIX (DJ deck).
+  const [category, setCategory] = useState<'NORMAL' | 'REMIX'>('NORMAL');
 
   const audioInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
@@ -204,6 +206,7 @@ export default function AdminMusicPage() {
     setCoverFile(null);
     setAudioPreviewUrl('');
     setIsActive(true);
+    setCategory('NORMAL');
     if (audioInputRef.current) audioInputRef.current.value = '';
     if (coverInputRef.current) coverInputRef.current.value = '';
     if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
@@ -233,6 +236,7 @@ export default function AdminMusicPage() {
     setAudioUrl(track.audioUrl || track.localPath || '');
     setDurationSeconds(track.durationSeconds || 0);
     setIsActive(track.active !== false);
+    setCategory((track as { category?: string }).category === 'REMIX' ? 'REMIX' : 'NORMAL');
     setAudioFile(null);
     setCoverFile(null);
     // Show audio preview for existing tracks (even without new file)
@@ -382,6 +386,7 @@ export default function AdminMusicPage() {
           artist: artist.trim(),
           durationSeconds,
           active: isActive,
+          category,
         };
         if (coverImageValue) body.coverImage = coverImageValue;
 
@@ -399,6 +404,7 @@ export default function AdminMusicPage() {
         formData.append('title', title.trim());
         formData.append('artist', artist.trim());
         formData.append('durationSeconds', String(durationSeconds || 0));
+        formData.append('category', category);
 
         // Add audio file (correct MIME type already set in handleAudioChange)
         if (audioFile) {
@@ -640,7 +646,14 @@ export default function AdminMusicPage() {
                           <TrackCoverImage track={track} className="object-cover" />
                         </div>
                         <div className="min-w-0">
-                          <p className="font-semibold text-text-primary truncate max-w-[200px]">{track.title}</p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-text-primary truncate max-w-[200px]">{track.title}</p>
+                            {(track as { category?: string }).category === 'REMIX' && (
+                              <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wide bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/40">
+                                REMIX
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -766,6 +779,32 @@ export default function AdminMusicPage() {
                 <input type="text" value={artist} onChange={(e) => setArtist(e.target.value)}
                   placeholder="VD: LoFi Beats"
                   className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+              </div>
+
+              {/* Category — NORMAL (regular library / "Tất cả") vs REMIX (DJ deck) */}
+              <div>
+                <label className="block text-xs font-medium text-text-muted mb-1.5">Danh muc</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {(['NORMAL', 'REMIX'] as const).map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setCategory(c)}
+                      className={`px-4 py-2.5 rounded-xl text-sm font-medium border transition-colors ${
+                        category === c
+                          ? c === 'REMIX'
+                            ? 'border-fuchsia-500/60 bg-fuchsia-500/15 text-fuchsia-300'
+                            : 'border-neon-violet/60 bg-neon-violet/15 text-violet-200'
+                          : 'border-darkborder bg-darkbg text-text-muted hover:border-neon-violet/30'
+                      }`}
+                    >
+                      {c === 'REMIX' ? '🎛️ Remix' : '🎵 Thường'}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-text-muted/60 mt-1.5">
+                  Remix chi hien o trang /music/remix (ban DJ). Thuong hien o trang nhac + &quot;Tat ca&quot;.
+                </p>
               </div>
 
               {/* Cover Image */}

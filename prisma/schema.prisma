@@ -1156,6 +1156,11 @@ model MusicTrack {
   cloudinaryUrl   String?   @map("cloudinary_url") @db.VarChar(700)
   supabasePath    String?   @map("supabase_path") @db.VarChar(500)
   localPath       String?   @map("local_path") @db.VarChar(500)
+  // Content bucket: "NORMAL" (regular music, the default) or "REMIX"
+  // (DJ / remix tracks shown ONLY on the /music/remix deck, never in the
+  // normal library or the "Tất cả" listing). Filtered server-side in
+  // musicService.getTracks so the two libraries stay fully separated.
+  category        String    @default("NORMAL") @db.VarChar(16)
   active          Boolean   @default(true)
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime? @updatedAt @map("updated_at")
@@ -1167,6 +1172,7 @@ model MusicTrack {
   playCounts MusicPlayCount[]
   lyrics     MusicLyrics?
 
+  @@index([category], name: "idx_music_tracks_category")
   @@map("music_tracks")
 }
 

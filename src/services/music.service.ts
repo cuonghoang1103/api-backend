@@ -344,6 +344,16 @@ export function createRangeStream(options: StreamOptions): StreamResult {
   };
 }
 
+// ─── Content-bucket helper ──────────────────────────────────
+// Tracks live in one of two mutually-exclusive buckets:
+//   • NORMAL — the regular music library (default)
+//   • REMIX  — DJ/remix tracks, shown ONLY on the /music/remix deck.
+// Any unknown/empty value collapses to NORMAL so a bad query param
+// can never leak REMIX content into the normal library.
+export function normalizeCategory(value: unknown): 'NORMAL' | 'REMIX' {
+  return String(value ?? '').toUpperCase() === 'REMIX' ? 'REMIX' : 'NORMAL';
+}
+
 // ─── Music Service Class ────────────────────────────────────
 
 export class MusicService {
@@ -354,13 +364,20 @@ export class MusicService {
     keyword?: string;
     sortBy?: string;
     sortDir?: string;
+    category?: string;
   }): Promise<PaginatedResult<unknown>> {
     const page = Math.max(1, params.page ?? 1);
     const size = Math.min(100, Math.max(1, params.size ?? 20));
     const skip = (page - 1) * size;
 
+    // Content bucket separation. Default to NORMAL so the regular music
+    // library (and the "Tất cả" listing) never shows REMIX tracks. The
+    // /music/remix deck passes category=REMIX to get only remixes.
+    const category = normalizeCategory(params.category);
+
     const where = {
       active: true,
+      category,
       ...(params.keyword && {
         OR: [
           { title: { contains: params.keyword, mode: 'insensitive' as const } },
@@ -386,6 +403,7 @@ export class MusicService {
           durationSeconds: true,
           audioUrl: true,
           localPath: true,
+          category: true,
           createdAt: true,
         },
       }),
@@ -421,6 +439,7 @@ export class MusicService {
     sortBy?: string;
     sortDir?: string;
     includeInactive?: boolean;
+    category?: string;
   }): Promise<PaginatedResult<unknown>> {
     const page = Math.max(1, params.page ?? 1);
     const size = Math.min(100, Math.max(1, params.size ?? 20));
@@ -428,6 +447,9 @@ export class MusicService {
 
     const where = {
       ...(params.includeInactive ? {} : { active: true }),
+      // Admin sees BOTH buckets by default; only filter when a valid
+      // category is explicitly requested.
+      ...(params.category ? { category: normalizeCategory(params.category) } : {}),
       ...(params.keyword && {
         OR: [
           { title: { contains: params.keyword, mode: 'insensitive' as const } },
@@ -454,6 +476,7 @@ export class MusicService {
           audioUrl: true,
           localPath: true,
           fileSize: true,
+          category: true,
           active: true,
           createdAt: true,
         },
@@ -713,6 +736,7 @@ export class MusicService {
     coverImage?: string;
     durationSeconds?: number;
     fileSize?: number;
+    category?: string;
   }): Promise<unknown> {
     // Validate the audio reference. Two cases:
     //   1. R2 bucket key — e.g. "audio/songs/1234-abcd.mp3". No
@@ -767,6 +791,7 @@ export class MusicService {
         coverImage: data.coverImage,
         durationSeconds: data.durationSeconds,
         fileSize: data.fileSize,
+        category: normalizeCategory(data.category),
         active: true,
       },
     });
@@ -783,14 +808,21 @@ export class MusicService {
       localPath?: string;
       audioUrl?: string;
       active?: boolean;
+      category?: string;
     },
   ): Promise<unknown> {
     // Allow updating inactive tracks (admin restore)
     await this.getTrackById(id, true);
 
+    // Normalise category only when the caller actually sends one, so an
+    // edit that omits it doesn't silently reset the bucket to NORMAL.
+    const { category, ...rest } = data;
     return prisma.musicTrack.update({
       where: { id },
-      data,
+      data: {
+        ...rest,
+        ...(category !== undefined ? { category: normalizeCategory(category) } : {}),
+      },
     });
   }
 

@@ -30,6 +30,7 @@ interface RawTrack {
   fileSize?: number | null;
   active?: boolean | null;
   createdAt?: string | null;
+  category?: string | null;
 }
 
 /**
@@ -50,6 +51,7 @@ function normalizeTrack(raw: RawTrack): Track {
     fileSize: raw.fileSize ?? undefined,
     active: raw.active ?? undefined,
     createdAt: raw.createdAt ?? undefined,
+    category: raw.category ?? undefined,
   };
 }
 
@@ -127,7 +129,7 @@ export const musicKeys = {
  * Fetch all public tracks (with TanStack Query caching).
  * Stale time: 5 minutes — cache survives page navigations.
  */
-export function useTracks(params?: { page?: number; size?: number; keyword?: string }) {
+export function useTracks(params?: { page?: number; size?: number; keyword?: string; category?: 'NORMAL' | 'REMIX' }) {
   return useQuery({
     queryKey: [...musicKeys.tracks(), params],
     queryFn: () => {
@@ -135,6 +137,7 @@ export function useTracks(params?: { page?: number; size?: number; keyword?: str
       if (params?.page) sp.set('page', String(params.page));
       if (params?.size) sp.set('size', String(params.size));
       if (params?.keyword) sp.set('keyword', params.keyword);
+      if (params?.category) sp.set('category', params.category);
       const qs = sp.toString();
       return fetchJson<TracksResponse>(`/api/v1/music/tracks${qs ? `?${qs}` : ''}`);
     },

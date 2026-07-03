@@ -744,6 +744,8 @@ export interface Track {
   fileSize?: number;
   active?: boolean;
   createdAt?: string;
+  /** Content bucket: 'NORMAL' (regular library) or 'REMIX' (DJ deck). */
+  category?: string;
 }
 
 export interface Playlist {

@@ -76,7 +76,10 @@ export default function CyberMusicPage() {
   const [activePlaylistId, setActivePlaylistId] = useState<number | null>(null);
 
   // TanStack Query — replaces manual fetch with caching
-  const { data, isLoading, isError, refetch, dataUpdatedAt } = useTracks({ size: 100 });
+  // Regular library only — REMIX tracks live on the /music/remix deck and
+  // must never appear here (or in the "Tất cả" listing). Backend already
+  // defaults to NORMAL, but we pass it explicitly for clarity + cache split.
+  const { data, isLoading, isError, refetch, dataUpdatedAt } = useTracks({ size: 100, category: 'NORMAL' });
 
   // ── Manual refetch on every /music mount ──
   // The user reports that the YouTube track they played on /music is
@@ -212,6 +215,26 @@ export default function CyberMusicPage() {
                     Neural Audio Matrix v2.0
                   </p>
                 </div>
+              </div>
+
+              {/* Mode toggle: regular library ↔ Remix booth */}
+              <div
+                className="inline-flex items-center gap-1 p-1 rounded-xl shrink-0"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                <span
+                  className="px-3 py-1.5 rounded-lg text-xs font-mono tracking-widest uppercase"
+                  style={{ background: `${C.secondary}22`, color: C.secondary, border: `1px solid ${C.secondary}55` }}
+                >
+                  Nhạc thường
+                </span>
+                <Link
+                  href="/music/remix"
+                  className="px-3 py-1.5 rounded-lg text-xs font-mono tracking-widest uppercase transition-colors"
+                  style={{ color: 'rgba(255,255,255,0.55)' }}
+                >
+                  Remix
+                </Link>
               </div>
 
               {/* Unified Search */}

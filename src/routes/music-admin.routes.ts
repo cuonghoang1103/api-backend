@@ -99,6 +99,8 @@ router.post(
           ? parseInt(durationSeconds as string, 10)
           : undefined,
         fileSize: audioFileSize,
+        // NORMAL (default) or REMIX — matches the main /tracks upload route.
+        category: req.body.category as string | undefined,
       });
 
       // Serialize BigInt fields for JSON response

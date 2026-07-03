@@ -89,6 +89,9 @@ router.get(
         keyword: req.query.keyword as string | undefined,
         sortBy: req.query.sortBy as string | undefined,
         sortDir: req.query.sortDir as string | undefined,
+        // Content bucket: omitted/invalid → NORMAL (regular library, the
+        // "Tất cả" listing). Pass ?category=REMIX for the /music/remix deck.
+        category: req.query.category as string | undefined,
       });
 
       const serializedData = result.data.map((track: any) => {
@@ -209,6 +212,8 @@ router.get(
         sortBy: req.query.sortBy as string | undefined,
         sortDir: req.query.sortDir as string | undefined,
         includeInactive: req.query.includeInactive === 'true',
+        // Admin sees both buckets unless a category filter is passed.
+        category: req.query.category as string | undefined,
       });
 
       // Serialize BigInt fields in data array
@@ -466,6 +471,8 @@ router.post(
           ? parseInt(durationSeconds as string, 10)
           : undefined,
         fileSize: audioFileSize,
+        // NORMAL (default) or REMIX — picked in the admin upload form.
+        category: req.body.category as string | undefined,
       });
 
       // Serialize BigInt fields for JSON response
@@ -508,6 +515,7 @@ router.put(
         coverImage,
         durationSeconds,
         active,
+        category,
       } = req.body;
 
       const track: any = await musicService.updateTrack(id, {
@@ -516,6 +524,7 @@ router.put(
         ...(coverImage !== undefined && { coverImage }),
         ...(durationSeconds !== undefined && { durationSeconds }),
         ...(active !== undefined && { active }),
+        ...(category !== undefined && { category }),
       });
 
       const serialized: any = { ...track };
@@ -1065,6 +1074,8 @@ router.post(
         audioUrl,
         coverImage: thumbnail || undefined,
         durationSeconds: durationSeconds || undefined,
+        // Optional — defaults to NORMAL when omitted by the importer.
+        category: (req.body as { category?: string }).category,
       });
 
       const serialized = track as Record<string, unknown>;

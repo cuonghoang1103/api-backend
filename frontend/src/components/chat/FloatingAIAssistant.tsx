@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import LottieClient from '@/components/ui/LottieClient';
 import type { LottieRefCurrentProps } from 'lottie-react';
 import { useChatStore } from '@/store/chatStore';
+import { useMusicStore } from '@/store/musicStore';
 import ChatModal from './ChatModal';
 
 type RobotState = 'idle' | 'thinking' | 'typing';
@@ -26,6 +27,10 @@ export default function FloatingAIAssistant() {
  if (pathname?.startsWith('/creator')) return null;
 
  const { isStreaming, robotEmotion } = useChatStore();
+ // When a track is loaded the mobile music bar sits above the bottom nav;
+ // lift the robot above the bar too so it never overlaps it (mobile only —
+ // see `.ai-robot-fab` in globals.css). 84px ≈ the mini-bar's height.
+ const musicActive = useMusicStore((s) => !!s.currentTrack);
  const lottieRef = useRef<LottieRefCurrentProps>(null);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -121,7 +126,8 @@ export default function FloatingAIAssistant() {
     <>
       {/* Floating Robot */}
       <motion.div
-        className="fixed bottom-6 right-6 z-[100]"
+        className="ai-robot-fab fixed bottom-6 right-6 z-[100]"
+        style={{ ['--music-offset' as string]: musicActive ? '84px' : '0px' } as React.CSSProperties}
         initial={{ scale: 0, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         transition={{ delay: 0.5, type: 'spring', stiffness: 300, damping: 20 }}

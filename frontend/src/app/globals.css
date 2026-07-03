@@ -2308,3 +2308,86 @@ aside ::-webkit-scrollbar-thumb:hover {
     animation: none;
   }
 }
+
+/* =========================================================================
+   Mobile & PWA hardening (2026-07-03)
+   -------------------------------------------------------------------------
+   Fixes the "loạn nút / bấm chat nhảy trang" bug. Three FIXED bottom-anchored
+   elements used to overlap on small screens:
+     • mobile bottom nav      — fixed bottom-0, z-40, full width (7 tabs)
+     • global music bar       — fixed bottom-0, z-60, full width  (covered it)
+     • AI robot FAB           — fixed bottom-6 right-6, z-100      (over tabs)
+   Because the music bar (z-60) and robot (z-100) render ON TOP of the nav
+   (z-40) at the same spot, tapping "Messages"/"AI Chat" actually hit the
+   music bar or robot → navigated to the wrong place. We give the bottom nav
+   its own reserved band at the very bottom and lift the music bar + robot
+   ABOVE it, add iOS safe-area insets, and harden touch behaviour so the app
+   is usable + installable on every mobile browser (incl. iOS Safari / PWA).
+   ========================================================================= */
+
+/* Height of the mobile bottom-nav content (excluding the safe-area inset).
+   Stays 0 above the Tailwind `sm` breakpoint where the bottom nav is hidden,
+   so floating UI keeps its desktop position untouched. */
+:root {
+  --app-bottom-nav-h: 0px;
+}
+
+/* Kill accidental horizontal scroll / layout shift ("phân bố không đồng đều")
+   and the grey tap flash on iOS/Android. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  overflow-x: hidden;
+}
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe-area padding for the fixed mobile bottom nav (iPhone home indicator). */
+.app-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+/* Minimum 44px touch targets for the bottom-nav tabs (Apple HIG). */
+.app-bottom-nav a {
+  min-height: 44px;
+}
+
+/* Below Tailwind `sm` (640px) the mobile bottom nav is visible: reserve its
+   height + safe area and STACK the floating music bar / robot above it. */
+@media (max-width: 639.98px) {
+  :root {
+    --app-bottom-nav-h: 58px;
+  }
+
+  /* Keep page content clear of the fixed bottom nav. */
+  .app-main {
+    padding-bottom: calc(var(--app-bottom-nav-h) + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Global music bar sits directly ABOVE the bottom nav — never over it. */
+  .music-bar-fixed {
+    bottom: calc(var(--app-bottom-nav-h) + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* AI robot FAB floats above the nav, and above the music bar when a track
+     is loaded (--music-offset is set inline by FloatingAIAssistant). */
+  .ai-robot-fab {
+    right: 12px !important;
+    bottom: calc(
+      env(safe-area-inset-bottom, 0px) + var(--app-bottom-nav-h) +
+        var(--music-offset, 0px) + 12px
+    ) !important;
+  }
+}
+
+/* Installed-PWA (standalone) only: the notch overlaps the fixed top bar, so
+   pad it down by the top safe-area inset. Browser mode is left untouched —
+   Safari's own chrome already handles the notch there. */
+@media (display-mode: standalone) {
+  .app-top-nav {
+    height: calc(4rem + env(safe-area-inset-top, 0px)) !important;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+}

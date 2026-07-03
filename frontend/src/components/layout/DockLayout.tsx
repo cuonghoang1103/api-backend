@@ -17,7 +17,7 @@ export default function DockLayout({ children }: { children: React.ReactNode }) 
   return (
     <>
       <NavigationDock />
-      <main className="min-h-screen w-full">
+      <main className="app-main min-h-screen w-full">
         {children}
       </main>
     </>

@@ -223,7 +223,7 @@ export default function Navbar() {
     <div suppressHydrationWarning>
       {/* ── Top Navbar ───────────────────────────────────────── */}
       <nav
-        className={`fixed top-0 right-0 z-40 transition-all duration-300 ${
+        className={`app-top-nav fixed top-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
             ? 'h-16 bg-theme-glass backdrop-blur-xl border-b border-theme-light shadow-theme-lg'
             : 'h-16 bg-transparent'
@@ -525,7 +525,7 @@ export default function Navbar() {
 
       {/* Mobile nav */}
       <div
-        className="sm:hidden fixed bottom-0 right-0 z-40 transition-[left] duration-300"
+        className="app-bottom-nav sm:hidden fixed bottom-0 right-0 z-[61] transition-[left] duration-300"
         style={{
           background: 'var(--bg-overlay)',
           borderTop: '1px solid var(--border-light)',

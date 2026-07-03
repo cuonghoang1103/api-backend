@@ -68,6 +68,11 @@ const SoundInitializer = dynamic(
   { ssr: false }
 )
 
+const PWAInstallPrompt = dynamic(
+  () => import('@/components/providers/PWAInstallPrompt'),
+  { ssr: false }
+)
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://cuongthai.com'),
   title: {
@@ -311,6 +316,7 @@ export default function RootLayout({
               <ListenTogetherSync />
               <FloatingAIAssistant />
               <SoundInitializer />
+              <PWAInstallPrompt />
             </ClientOnly>
           </LocaleWrapper>
         </ThemeProvider>

@@ -66,6 +66,16 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
         ],
       },
+      {
+        // The service worker script must never be HTTP-cached, otherwise a new
+        // deploy's SW would not be picked up. `Service-Worker-Allowed: /` lets
+        // it control the whole origin even though it lives at /sw.js.
+        source: '/sw.js',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+          { key: 'Service-Worker-Allowed', value: '/' },
+        ],
+      },
       // ─── Global security headers ──────────────────────────────────
       // These run on every response served by the Next.js server
       // (both static and dynamic). The headers are also relevant

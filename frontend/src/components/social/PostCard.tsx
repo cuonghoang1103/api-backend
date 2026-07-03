@@ -559,7 +559,11 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
     const nextLikesCount = Object.values(nextBreakdown).reduce((a, b) => a + b, 0);
     const nextMyType: ReactionType | null = willRemove ? null : type;
 
-    // 1. Patch TQ cache (covers TQ-driven feed renders)
+    // 1. Patch the TQ cache (covers TQ-driven renders). Zustand is
+    //    handled EXCLUSIVELY by toggleReaction below — patching it here
+    //    too caused a double count: toggleReaction reads the current
+    //    store state (already incremented) and incremented again, so the
+    //    number jumped by 2 until the server response corrected it.
     patchFeed(post.id, (p) => ({
       ...p,
       myReaction: nextMyType,
@@ -568,27 +572,11 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
       reactionBreakdown: nextBreakdown,
     }));
 
-    // 2. Update Zustand directly (covers Zustand-driven renders —
-    //    PostCard reads from the Zustand store, not TQ)
-    useSocialStore.setState((s) => ({
-      posts: s.posts.map((p) =>
-        p.id === post.id
-          ? { ...p, myReaction: nextMyType, isLiked: !!nextMyType, likesCount: nextLikesCount, reactionBreakdown: nextBreakdown }
-          : p
-      ),
-    }));
-
-    // 3. Fire API — on failure revert both TQ cache and Zustand
+    // 2. Fire the store action — it owns the Zustand optimistic update,
+    //    the API call, and the server-truth reconcile. On failure it
+    //    reverts Zustand itself; we only roll back the TQ cache here.
     toggleReaction(post.id, type).catch(() => {
       restoreSnapshot(snapshot);
-      // Revert Zustand too
-      useSocialStore.setState((s) => ({
-        posts: s.posts.map((p) =>
-          p.id === post.id
-            ? { ...p, myReaction: prevMyType, isLiked: !!prevMyType, likesCount: Object.values(prevBreakdown).reduce((a, b) => a + b, 0), reactionBreakdown: prevBreakdown }
-            : p
-        ),
-      }));
     });
   };
 

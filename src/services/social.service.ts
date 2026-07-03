@@ -773,6 +773,41 @@ async function loadPollVotes(
 }
 
 /**
+ * Bulk-load per-post reaction breakdown + the viewer's poll votes for a
+ * list of already-fetched posts. Extracted from getFeed so OTHER readers
+ * (e.g. the profile "Bài viết" tab in user.routes) produce the SAME
+ * interaction data — without this, reactions/poll state render empty on
+ * those surfaces even though the counts exist in the DB. One groupBy +
+ * one votes query, no N+1.
+ */
+export async function loadReactionData(
+  posts: Array<{ id: number; poll?: { id: number } | null }>,
+  currentUserId?: number,
+): Promise<{
+  breakdownByPost: Map<number, Record<ReactionType, number>>;
+  pollVotesByPollId: Record<number, number[]>;
+}> {
+  const postIds = posts.map((p) => p.id);
+  const pollIds = posts.map((p) => p.poll?.id).filter((x): x is number => Boolean(x));
+  const [reactionGrouped, pollVotesByPollId] = await Promise.all([
+    postIds.length > 0
+      ? prisma.socialLike.groupBy({ by: ['postId', 'type'], where: { postId: { in: postIds } }, _count: { type: true } })
+      : Promise.resolve([] as Array<{ postId: number; type: string; _count: { type: number } }>),
+    currentUserId ? loadPollVotes(pollIds, currentUserId) : Promise.resolve({} as Record<number, number[]>),
+  ]);
+  const breakdownByPost = new Map<number, Record<ReactionType, number>>();
+  for (const row of reactionGrouped as Array<{ postId: number; type: string; _count: { type: number } }>) {
+    let cur = breakdownByPost.get(row.postId);
+    if (!cur) {
+      cur = { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 };
+      breakdownByPost.set(row.postId, cur);
+    }
+    if (row.type in cur) cur[row.type as ReactionType] = row._count.type;
+  }
+  return { breakdownByPost, pollVotesByPollId };
+}
+
+/**
  * Shape a Prisma post + viewer-scoped data into the wire format the
  * frontend expects. Centralised so createPost, getFeed, getPostById
  * and any other reader all return the same shape — otherwise a

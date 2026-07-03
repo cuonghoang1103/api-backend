@@ -29,6 +29,7 @@ import Cropper from 'react-easy-crop';
 import { socialUserApi, fileApi, friendApi, type FriendStatus } from '@/lib/api';
 import { authApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
+import { useSocialStore } from '@/store/socialStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -113,7 +114,13 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const [editingSection, setEditingSection] = useState<AboutTab | null>(null);
 
   // Posts
-  const [posts, setPosts] = useState<any[]>([]);
+  // Profile posts are rendered THROUGH the shared social store so the
+  // full PostCard (which optimistically mutates useSocialStore.posts on
+  // like/react/comment/save) reflects those interactions here too. We
+  // seed the store from getUserPosts in loadPosts below. The home feed
+  // refetches into the store on its own mount, so replacing it here is
+  // safe.
+  const storePosts = useSocialStore((s) => s.posts);
   const [postsCursor, setPostsCursor] = useState<number | null>(null);
   const [postsHasMore, setPostsHasMore] = useState(true);
   const [loadingPosts, setLoadingPosts] = useState(false);
@@ -186,12 +193,20 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const loadPosts = useCallback(async (reset = false) => {
     if (!id || loadingPosts || (!reset && !postsHasMore)) return;
     setLoadingPosts(true);
+    // On a fresh load, clear the store first so we never briefly show the
+    // home feed's posts (which may still be in the store from a prior
+    // page) before this profile's posts arrive.
+    if (reset) useSocialStore.setState({ posts: [] });
     try {
       const res: any = await socialUserApi.getUserPosts(id, {
         cursor: reset ? undefined : postsCursor ?? undefined, limit: 20,
       });
       const { items, nextCursor, hasMore } = res.data?.data ?? {};
-      setPosts((prev) => (reset ? (items ?? []) : [...prev, ...(items ?? [])]));
+      // Render THROUGH the store so PostCard's optimistic interaction
+      // updates (like/react/comment/save) land where the profile reads.
+      useSocialStore.setState((s) => ({
+        posts: reset ? (items ?? []) : [...s.posts, ...(items ?? [])],
+      }));
       setPostsCursor(nextCursor);
       setPostsHasMore(hasMore);
     } catch {
@@ -640,7 +655,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                     <AnimatePresence>
                       {showSettings && (
                         <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
-                          role="menu" className="absolute right-0 mt-2 w-56 rounded-xl border border-darkborder bg-darkcard shadow-2xl overflow-hidden z-30">
+                          role="menu" className="absolute right-0 mt-2 w-56 rounded-xl border border-darkborder bg-darkcard shadow-2xl overflow-hidden z-50">
                           <button role="menuitem" onClick={() => { setShowSettings(false); setMainTab('about'); startEditing('overview'); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-white/5 hover:text-text-primary transition-colors"><Edit3 className="h-4 w-4" />Chỉnh sửa trang cá nhân</button>
                           <button role="menuitem" onClick={copyProfileLink} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-white/5 hover:text-text-primary transition-colors"><Copy className="h-4 w-4" />Sao chép liên kết</button>
                           <button role="menuitem" onClick={() => { setShowSettings(false); toast.info('Cài đặt quyền riêng tư sẽ sớm ra mắt'); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-white/5 hover:text-text-primary transition-colors"><Lock className="h-4 w-4" />Quyền riêng tư</button>
@@ -706,12 +721,12 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
             {/* Right feed */}
             <div className="flex-1 min-w-0 space-y-4">
               {isOwn && <PostComposer />}
-              {posts.length === 0 && !loadingPosts ? (
+              {storePosts.length === 0 && !loadingPosts ? (
                 <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center">
                   <Edit3 className="h-12 w-12 mx-auto text-text-muted mb-3" />
                   <p className="text-text-muted">Chưa có bài viết nào</p>
                 </div>
-              ) : posts.map((post) => <PostCard key={post.id} post={post} />)}
+              ) : storePosts.map((post) => <PostCard key={post.id} post={post} />)}
               {postsHasMore && <div ref={postsSentinelRef} className="flex justify-center py-4">{loadingPosts && <Loader2 className="h-6 w-6 animate-spin text-text-muted" />}</div>}
             </div>
           </div>

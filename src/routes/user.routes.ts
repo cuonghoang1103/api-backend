@@ -352,7 +352,9 @@ router.get('/:id/posts', authenticate, async (req: any, res: Response<ApiRespons
         poll: { include: { options: { orderBy: { sortOrder: 'asc' as const } } } },
         postMusic: { include: { song: true } },
         _count: { select: { likes: true, comments: true, saves: true } },
-        likes: req.user.userId ? { where: { userId: req.user.userId }, select: { id: true } } : false,
+        // select `type` so serializePost can surface the viewer's own
+        // reaction (myReactionType) — not just whether they reacted.
+        likes: req.user.userId ? { where: { userId: req.user.userId }, select: { id: true, type: true } } : false,
         saves: req.user.userId ? { where: { userId: req.user.userId }, select: { id: true } } : false,
         // Phase 6: Include shares to determine if current user has shared this post
         shares: req.user.userId ? { where: { userId: req.user.userId }, select: { id: true } } : false,
@@ -377,16 +379,25 @@ router.get('/:id/posts', authenticate, async (req: any, res: Response<ApiRespons
       : [];
     const legacySongById = new Map(legacySongs.map((s) => [s.id, s]));
 
-    const { serializePost } = await import('../services/social.service.js');
+    const { serializePost, loadReactionData } = await import('../services/social.service.js');
+
+    // Hydrate the SAME reaction + poll-vote data getFeed produces, so
+    // like/reaction counts, the viewer's own reaction, and poll state
+    // render correctly on the profile "Bài viết" tab (previously these
+    // were hardcoded to empty → interactions looked broken there).
+    const { breakdownByPost, pollVotesByPollId } = await loadReactionData(sliced, req.user.userId);
+
     const data = sliced.map((post: any) => {
       if (post.musicTrackId && !post.postMusic?.song && legacySongById.has(post.musicTrackId)) {
         post._song = legacySongById.get(post.musicTrackId);
       }
       return serializePost(post, {
         currentUserId: req.user.userId,
-        pollUserVotes: [],
-        reactionBreakdown: { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
-        myReactionType: null,
+        pollUserVotes: pollVotesByPollId[post.poll?.id] || [],
+        reactionBreakdown: breakdownByPost.get(post.id) ?? { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
+        // SocialLike.type carries the reaction type; the include selects
+        // the viewer's own row so [0].type is their reaction.
+        myReactionType: (post.likes as Array<{ type: string }> | undefined)?.[0]?.type ?? null,
       });
     });
 

@@ -41,6 +41,15 @@ export default function PostPoll({ postId, poll }: PostPollProps) {
   const hasVoted = safeUserVotes.length > 0;
   const showResults = hasVoted;
 
+  // Whether the current selection differs from what's already saved.
+  // Drives the submit button so the user can CHANGE their vote after
+  // voting (previously the button was hidden once results showed, so a
+  // vote was permanent — the real bug the user hit).
+  const votedSet = new Set(safeUserVotes);
+  const pendingChanged =
+    pending.length > 0 &&
+    (pending.length !== safeUserVotes.length || pending.some((id) => !votedSet.has(id)));
+
   const handleVote = async (optionId: number) => {
     if (submitting) return;
     if (poll.multiChoice) {
@@ -119,7 +128,9 @@ export default function PostPoll({ postId, poll }: PostPollProps) {
               )}
               <span className="relative z-10 flex items-center justify-between gap-2">
                 <span className="flex items-center gap-1.5 truncate">
-                  {showResults && isVoted && <Check className="h-3 w-3 text-neon-violet shrink-0" />}
+                  {/* Check follows the CURRENT selection (pending) so
+                      re-selecting before submit gives instant feedback. */}
+                  {isPending && <Check className="h-3 w-3 text-neon-violet shrink-0" />}
                   <span className="truncate">{opt.text}</span>
                 </span>
                 {showResults && (
@@ -131,14 +142,14 @@ export default function PostPoll({ postId, poll }: PostPollProps) {
         })}
       </div>
 
-      {!showResults && pending.length > 0 && (
+      {pendingChanged && (
         <button
           onClick={handleSubmit}
           disabled={submitting}
           className="mt-2 w-full rounded-lg py-1.5 text-xs font-medium text-white transition-opacity disabled:opacity-50"
           style={{ background: 'linear-gradient(90deg, #8B5CF6, #6366F1)' }}
         >
-          {submitting ? 'Đang gửi...' : 'Bình chọn'}
+          {submitting ? 'Đang gửi...' : hasVoted ? 'Cập nhật lựa chọn' : 'Bình chọn'}
         </button>
       )}
 

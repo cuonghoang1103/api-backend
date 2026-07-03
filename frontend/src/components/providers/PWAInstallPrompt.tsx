@@ -73,6 +73,15 @@ export default function PWAInstallPrompt() {
     return () => window.removeEventListener('beforeinstallprompt', onBeforeInstall);
   }, []);
 
+  // While the banner is up, hide the AI robot FAB (globals.css rule keyed on
+  // this class) — they float in the same bottom-right band.
+  useEffect(() => {
+    const cls = 'pwa-banner-open';
+    if (visible) document.documentElement.classList.add(cls);
+    else document.documentElement.classList.remove(cls);
+    return () => document.documentElement.classList.remove(cls);
+  }, [visible]);
+
   const dismiss = () => {
     try {
       localStorage.setItem(DISMISS_KEY, String(Date.now()));
@@ -96,8 +105,11 @@ export default function PWAInstallPrompt() {
     <div
       className="fixed inset-x-0 z-[90] px-3"
       style={{
-        // Sit above the mobile bottom nav + safe area.
-        bottom: 'calc(var(--app-bottom-nav-h, 0px) + env(safe-area-inset-bottom, 0px) + 12px)',
+        // Sit above the mobile bottom nav + safe area, AND above the AI
+        // robot FAB band (which floats at nav + music-offset + 12px with a
+        // ~64px body) so the banner never covers the robot or its bubble.
+        bottom:
+          'calc(var(--app-bottom-nav-h, 0px) + env(safe-area-inset-bottom, 0px) + var(--music-offset, 0px) + 88px)',
       }}
       role="dialog"
       aria-label="Cài đặt ứng dụng"

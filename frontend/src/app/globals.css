@@ -2443,6 +2443,14 @@ body {
   }
 }
 
+/* While the PWA install banner is showing, hide the AI robot FAB — both
+   float in the same bottom-right band and the banner (z-90) would cover the
+   robot and steal its taps. The class is toggled by PWAInstallPrompt. */
+html.pwa-banner-open .ai-robot-fab {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* Touch devices: the top-nav icon buttons (cart, bell, user menu, …) are
    ~30px hit areas. Enlarge the tappable box without changing the icon size —
    pointer:coarse keeps desktop mouse layouts pixel-identical. */

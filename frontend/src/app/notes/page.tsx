@@ -613,21 +613,25 @@ function NotesPageInner() {
   }
 
   const sidebar = (
-    <>
-      <NotesSidebar
-        tree={tree}
-        recent={recent}
-        selectedNoteId={selected?.id ?? null}
-        filter={filter}
-        filteredNotes={filteredNotes}
-        {...callbacks}
-      />
+    <div className="flex h-full min-h-0 flex-col">
+      {/* Shared-with-me sits ABOVE the notebook so it reads as a
+          first-class section, not an afterthought at the bottom. */}
       <NotesSharedWithMe
         onOpenSharedSubject={handleOpenSharedSubject}
         onOpenSharedNote={handleOpenSharedNote}
         selectedNoteId={sharedSelectedNote?.id ?? null}
       />
-    </>
+      <div className="min-h-0 flex-1">
+        <NotesSidebar
+          tree={tree}
+          recent={recent}
+          selectedNoteId={selected?.id ?? null}
+          filter={filter}
+          filteredNotes={filteredNotes}
+          {...callbacks}
+        />
+      </div>
+    </div>
   );
 
   return (
@@ -956,6 +960,11 @@ function NotesPageInner() {
   transition={{ type: 'spring', stiffness: 380, damping: 36 }}
   className="fixed inset-y-0 left-0 z-50 w-[82%] max-w-xs border-r border-slate-200 bg-white pt-16 dark:border-white/[0.06] dark:bg-[#0e1218] md:hidden overflow-y-auto"
   >
+   <NotesSharedWithMe
+    onOpenSharedSubject={handleOpenSharedSubject}
+    onOpenSharedNote={handleOpenSharedNote}
+    selectedNoteId={sharedSelectedNote?.id ?? null}
+   />
    <NotesSidebar
     tree={tree}
     recent={recent}
@@ -964,11 +973,6 @@ function NotesPageInner() {
     filteredNotes={filteredNotes}
     onClose={() => setDrawerOpen(false)}
     {...callbacks}
-   />
-   <NotesSharedWithMe
-    onOpenSharedSubject={handleOpenSharedSubject}
-    onOpenSharedNote={handleOpenSharedNote}
-    selectedNoteId={sharedSelectedNote?.id ?? null}
    />
   </motion.aside>
   </>

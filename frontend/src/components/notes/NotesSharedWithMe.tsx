@@ -14,7 +14,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Inbox, ChevronRight, ChevronDown, Loader2,
+  ChevronRight, ChevronDown, Loader2,
   FolderOpen, FileText, Eye, Edit3, Users,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -34,6 +34,7 @@ export default function NotesSharedWithMe({
 }: NotesSharedWithMeProps) {
   const [sharedSubjects, setSharedSubjects] = useState<NoteSharedSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
   const [loadingSubjects, setLoadingSubjects] = useState<Set<number>>(new Set());
   const [loadedFullDataIds, setLoadedFullDataIds] = useState<Set<number>>(new Set());
@@ -110,12 +111,12 @@ export default function NotesSharedWithMe({
 
   if (loading) {
     return (
-      <div className="px-3 py-4">
-        <div className="flex items-center gap-2 text-xs font-medium text-text-muted mb-3">
-          <Inbox className="h-3.5 w-3.5" />
+      <div className="shrink-0 border-b border-slate-200 px-3 pt-3 pb-3 dark:border-white/[0.06]">
+        <div className="flex items-center gap-2 px-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-500">
+          <Users className="h-3.5 w-3.5" />
           Được chia sẻ với tôi
         </div>
-        <div className="flex items-center justify-center py-4">
+        <div className="flex items-center justify-center py-3">
           <Loader2 className="h-4 w-4 animate-spin text-text-muted" />
         </div>
       </div>
@@ -127,18 +128,33 @@ export default function NotesSharedWithMe({
   }
 
   return (
-    <div className="px-3 py-4 border-t border-slate-200 dark:border-white/[0.06]">
-      {/* Header */}
-      <div className="flex items-center gap-2 text-xs font-semibold text-text-muted mb-3">
-        <Users className="h-3.5 w-3.5" />
-        Được chia sẻ với tôi
-        <span className="ml-auto rounded-full bg-neon-violet/15 px-1.5 py-0.5 text-[10px] font-medium text-neon-violet">
+    <section className="shrink-0 border-b border-slate-200 dark:border-white/[0.06]">
+      {/* Section header — mirrors the "Sổ tay" header style, click to
+          collapse. Count badge on the right for a professional feel. */}
+      <button
+        type="button"
+        onClick={() => setCollapsed((c) => !c)}
+        className="flex w-full items-center gap-2 px-3 pt-3 pb-2 text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300"
+      >
+        <Users className="h-3.5 w-3.5 shrink-0" />
+        <span className="text-[11px] font-semibold uppercase tracking-[0.12em]">
+          Được chia sẻ với tôi
+        </span>
+        <span className="rounded-full bg-neon-violet/15 px-1.5 py-0.5 text-[10px] font-semibold text-neon-violet">
           {sharedSubjects.length}
         </span>
-      </div>
+        <ChevronDown
+          className={cn(
+            'ml-auto h-3.5 w-3.5 shrink-0 transition-transform',
+            collapsed && '-rotate-90',
+          )}
+        />
+      </button>
 
-      {/* Shared subjects list */}
-      <div className="space-y-1">
+      {/* Shared subjects list — capped so it never crowds the notebook
+          below; scrolls internally when there are many shares. */}
+      {!collapsed && (
+      <div className="max-h-[40vh] space-y-1 overflow-y-auto px-2 pb-3">
         {sharedSubjects.map((share) => {
           const isExpanded = expandedIds.has(share.subjectId);
           const isLoadingSubject = loadingSubjects.has(share.subjectId);
@@ -282,6 +298,7 @@ export default function NotesSharedWithMe({
           );
         })}
       </div>
-    </div>
+      )}
+    </section>
   );
 }

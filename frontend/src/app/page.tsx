@@ -247,8 +247,8 @@ export default function SocialPage() {
     following: effectiveFollowing,
     // Content-type tab → backend `type` filter (undefined = all).
     type: feedTypeToParam(feedType),
-    // Video-category filter only applies on the Video tab.
-    videoCategoryId: feedType === 'video' ? (videoCategoryId ?? undefined) : undefined,
+    // Video-category filter applies on the Video tab and the "Tất cả" tab.
+    videoCategoryId: (feedType === 'video' || feedType === 'all') ? (videoCategoryId ?? undefined) : undefined,
   });
 
   // Keep the Zustand feed scope in sync so infinite-scroll loadMore()
@@ -261,7 +261,7 @@ export default function SocialPage() {
       following: effectiveFollowing,
       hashtag: activeHashtag ?? undefined,
       type: feedTypeToParam(feedType),
-      videoCategoryId: feedType === 'video' ? (videoCategoryId ?? undefined) : undefined,
+      videoCategoryId: (feedType === 'video' || feedType === 'all') ? (videoCategoryId ?? undefined) : undefined,
     });
   }, [effectiveSort, effectiveFollowing, activeHashtag, feedType, videoCategoryId]);
 
@@ -576,7 +576,7 @@ export default function SocialPage() {
                 only when the admin has created categories. "Tất cả" +
                 one pill per active category; selecting one scopes the
                 video grid to that category. */}
-            {feedType === 'video' && videoCategories.length > 0 && (
+            {(feedType === 'video' || feedType === 'all') && videoCategories.length > 0 && (
               <div className="mt-3 flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Danh mục video">
                 <button
                   type="button"

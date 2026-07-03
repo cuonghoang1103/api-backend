@@ -94,7 +94,11 @@ export default function BlogPostDetailModal({ postId, onClose }: BlogPostDetailM
         commentText: commentText.trim(),
       });
       if (res.data.success && res.data.data) {
-        setPost((p) => p ? { ...p, commentCount: (p.commentCount ?? 0) + 1 } : p);
+        setPost((p) => p ? {
+          ...p,
+          commentCount: (p.commentCount ?? 0) + 1,
+          comments: [res.data.data, ...(p.comments ?? [])],
+        } : p);
         setCommentText('');
         setCommentName('');
       }
@@ -237,13 +241,13 @@ export default function BlogPostDetailModal({ postId, onClose }: BlogPostDetailM
                     {/* Comments list */}
                     <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3"
                       style={{ maxHeight: 'calc(70vh - 200px)', minHeight: '200px' }}>
-                      {(post.commentCount ?? 0) === 0 ? (
+                      {(post.comments?.length ?? 0) === 0 ? (
                         <div className="text-center py-8">
                           <MessageSquare className="w-8 h-8 mx-auto mb-2" style={{ color: `${C.primary}40` }} />
                           <p className="text-xs" style={{ color: C.textMuted }}>No comments yet. Start the discussion.</p>
                         </div>
                       ) : (
-                        (post as any)._comments?.map((comment: BlogComment) => (
+                        post.comments?.map((comment: BlogComment) => (
                           <CommentItem key={comment.id} comment={comment} />
                         ))
                       )}

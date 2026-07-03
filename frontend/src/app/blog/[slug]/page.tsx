@@ -282,12 +282,14 @@ function CommentItem({ comment }: { comment: BlogComment }) {
 
 // ─── Comment Form ─────────────────────────────────────────────────────────────
 
-function CommentForm({ postId, onSuccess }: { postId: number; onSuccess: (comment: BlogComment) => void }) {
+function CommentForm({ postId, initialComments, onSuccess }: { postId: number; initialComments?: BlogComment[]; onSuccess: (comment: BlogComment) => void }) {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const [localComments, setLocalComments] = useState<BlogComment[]>([]);
+  // The visible comment thread: existing comments (from the loaded post)
+  // plus any submitted in this session, newest first.
+  const [comments, setComments] = useState<BlogComment[]>(initialComments ?? []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -302,7 +304,7 @@ function CommentForm({ postId, onSuccess }: { postId: number; onSuccess: (commen
         commentText: text.trim(),
       });
       if (res.data.success && res.data.data) {
-        setLocalComments(prev => [...prev, res.data.data]);
+        setComments(prev => [res.data.data, ...prev]);
         onSuccess(res.data.data);
         setText('');
         setName('');
@@ -345,9 +347,16 @@ function CommentForm({ postId, onSuccess }: { postId: number; onSuccess: (commen
         Submit Comment
       </button>
 
-      {localComments.map(c => (
-        <CommentItem key={c.id} comment={c} />
-      ))}
+      {/* Comment thread — existing comments + newly posted ones. */}
+      <div className="pt-2 space-y-3">
+        {comments.length === 0 ? (
+          <p className="text-xs text-center py-3" style={{ color: '#64748b' }}>
+            Chưa có bình luận. Hãy là người đầu tiên chia sẻ!
+          </p>
+        ) : (
+          comments.map(c => <CommentItem key={c.id} comment={c} />)
+        )}
+      </div>
     </form>
   );
 }
@@ -750,6 +759,7 @@ export default function BlogDetailPage() {
               <div className="mb-4">
                 <CommentForm
                   postId={post.id}
+                  initialComments={post.comments ?? []}
                   onSuccess={(c) => setPost(p => p ? { ...p, commentCount: (p.commentCount ?? 0) + 1 } : p)}
                 />
               </div>

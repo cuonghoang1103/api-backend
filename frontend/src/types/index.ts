@@ -261,6 +261,8 @@ export interface Post {
   sourceUrl?: string;
   downloadCount?: number;
   commentCount?: number;
+  // Populated by getPostBySlug / getPostById (includes latest comments).
+  comments?: BlogComment[];
 }
 
 export interface BlogComment {

@@ -257,7 +257,7 @@ export default function ProductDetailPage() {
               </button>
 
               {/* Trust badges */}
-              <div className="grid grid-cols-2 gap-3 mt-4">
+              <div className="grid grid-cols-1 gap-3 mt-4 sm:grid-cols-2">
                 {[
                   { icon: ShieldCheck, text: t('shop.detail.securePayment') },
                   { icon: Download, text: t('shop.detail.instantDownload') },

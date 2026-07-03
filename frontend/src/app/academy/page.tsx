@@ -66,7 +66,7 @@ export default function AcademyPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="rounded-2xl border border-darkborder bg-darkbg/80 p-5">
                 <p className="text-text-muted text-sm">Kỳ học</p>
                 <p className="text-3xl font-bold text-text-primary mt-2">{semesters.length}</p>

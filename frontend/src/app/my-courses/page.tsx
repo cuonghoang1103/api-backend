@@ -115,7 +115,7 @@ export default function MyCoursesPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-3">
           {[
             { label: 'Total Courses', value: stats.total, color: 'text-neon-violet' },
             { label: 'In Progress', value: stats.inProgress, color: 'text-yellow-400' },

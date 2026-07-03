@@ -316,7 +316,9 @@ export default function AdminTechTrendsPage() {
           </h1>
           <p className="mt-1 text-sm text-text-secondary">
             Curate the long-form editorial content shown on{' '}
-            <a href="/tech-trends" target="_blank" rel="noopener noreferrer" className="text-neon-violet hover:underline">
+            {/* No target=_blank on internal routes: iOS standalone PWA
+                bounces new tabs out to Safari and loses the session. */}
+            <a href="/tech-trends" className="text-neon-violet hover:underline">
               /tech-trends
             </a>
             . Drafts are private; published articles are live immediately.

@@ -218,7 +218,7 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.35 }}
-                className="grid grid-cols-3 gap-3 mb-6"
+                className="grid grid-cols-1 gap-3 mb-6 sm:grid-cols-3"
               >
                 {bentoCards.map((card, idx) => (
                   <motion.div

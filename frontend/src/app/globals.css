@@ -960,6 +960,36 @@ aside ::-webkit-scrollbar-thumb:hover {
   padding: 1px 6px;
 }
 
+/* Authored/user-generated HTML (blog posts, course descriptions, learn
+   lessons) can contain arbitrarily wide tables, images and code. Never let
+   it force horizontal page scroll on phones: wide blocks scroll inside
+   their own box instead. `.prose` is our authored-content hook class (the
+   typography plugin is NOT installed, so these are the only .prose rules). */
+.prose img,
+.rich-content img {
+  max-width: 100%;
+  height: auto;
+}
+.prose table,
+.rich-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+.prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.prose code,
+.rich-content code {
+  word-break: break-word;
+}
+.prose pre code,
+.rich-content pre code {
+  word-break: normal; /* code blocks scroll, never wrap-break */
+}
+
 .rich-content pre {
   background: #0d1117; /* VSCode dark+ */
   color: #c9d1d9;

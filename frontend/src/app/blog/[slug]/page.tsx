@@ -653,7 +653,7 @@ export default function BlogDetailPage() {
                   rehypePlugins={[rehypeRaw]}
                   components={{
                     pre: ({ children }) => (
-                      <pre className="relative group rounded-xl overflow-hidden" style={{ background: 'rgba(5,3,15,0.9)', border: '1px solid rgba(168,85,247,0.15)' }}>
+                      <pre className="relative group rounded-xl overflow-x-auto" style={{ background: 'rgba(5,3,15,0.9)', border: '1px solid rgba(168,85,247,0.15)' }}>
                         <CopyCodeBtn />
                         {children}
                       </pre>

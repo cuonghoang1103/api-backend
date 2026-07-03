@@ -7,14 +7,16 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   Home, BookOpen, FolderOpen, Music, MessagesSquare,
   LayoutDashboard, Shield, BookMarked, Receipt,
-  Sparkles, FileCode2,
-  GraduationCap, ShoppingBag, Layers,
-  Menu, X, ChevronRight,
-  Github,
+  Sparkles, FileCode2, LogOut, User, Settings,
+  GraduationCap, ShoppingBag, Layers, ChevronRight,
+  Github, Menu, X,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
+import { UserAvatar } from '@/components/common/UserAvatar';
+import { useSession, signOut } from 'next-auth/react';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 // ── iOS-style floating sidebar ────────────────────────────────
@@ -72,7 +74,7 @@ const DOCK_ITEMS: DockItem[] = [
 const SECTIONS = {
   main: { label: 'Navigate' },
   user: { label: 'Personal' },
-  admin: { label: 'System' },
+  admin: { label: 'Account' },
 } as const;
 
 // Magnify weights — iOS dock feel: hovered icon is the
@@ -115,19 +117,45 @@ const rowVariants: Variants = {
 };
 
 export default function NavigationDock() {
- const pathname = usePathname();
- // /creator has its own studio topbar; the dock's floating
- // button would compete with it for the top-left slot.
- if (pathname?.startsWith('/creator')) return null;
+  const pathname = usePathname();
+  // /creator has its own studio topbar; the dock's floating
+  // button would compete with it for the top-left slot.
+  if (pathname?.startsWith('/creator')) return null;
 
- const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const { user: backendUser, isAuthenticated: isBackendAuth } = useAuthStore();
+  const { data: session } = useSession();
   const [mounted, setMounted] = useState(false);
+  const [verifiedAdmin, setVerifiedAdmin] = useState(false);
   useEffect(() => setMounted(true), []);
+
+  // Admin check
+  useEffect(() => {
+    if (!mounted) return;
+    const verifyAdmin = async () => {
+      try {
+        const res = await fetch('/api/auth/admin-check', { credentials: 'include', cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          const isAdmin = (data.data?.roles ?? []).some(
+            (r: string) => (r || '').replace('ROLE_', '').toUpperCase() === 'ADMIN',
+          );
+          setVerifiedAdmin(isAdmin);
+        }
+      } catch {}
+    };
+    verifyAdmin();
+  }, [mounted]);
+
+  const isAuthenticated = mounted && (isBackendAuth || !!session);
+  const displayUser = mounted
+    ? ((isBackendAuth ? backendUser : session?.user) as any)
+    : null;
+  const isAdmin = mounted && verifiedAdmin;
 
   // Activate the notification socket listener exactly once for
   // the lifetime of the dock. The hook itself is idempotent and
@@ -340,6 +368,29 @@ export default function NavigationDock() {
                 so they don't overlap; grows by the notch inset in the
                 installed PWA (where the toggle is pushed down too). */}
             <div className="shrink-0 px-5 pb-3 pt-[calc(4rem+env(safe-area-inset-top,0px))]">
+              {/* Account section - shows for authenticated users */}
+              {isAuthenticated ? (
+                <div className="flex items-center gap-3 mb-3 px-2 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06]">
+                  <UserAvatar size={36} className="rounded-lg shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-slate-100 truncate">
+                      {displayUser?.displayName || displayUser?.name || displayUser?.username || 'User'}
+                    </p>
+                    <p className="text-xs text-slate-400 truncate">{displayUser?.email}</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 rounded-lg bg-white/[0.06] flex items-center justify-center">
+                    <User className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <div className="flex gap-2">
+                    <a href="/login" className="text-xs text-slate-400 hover:text-slate-200">Login</a>
+                    <span className="text-slate-600">/</span>
+                    <a href="/register" className="text-xs text-slate-400 hover:text-slate-200">Register</a>
+                  </div>
+                </div>
+              )}
               <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-text-muted">
                 navigation
               </p>
@@ -364,50 +415,115 @@ export default function NavigationDock() {
                   animate="visible"
                   className="space-y-0.5 mb-3"
                 >
-                  <p className="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-[0.16em] text-text-muted/70">
-                    {SECTIONS[key].label}
-                  </p>
-                  {items.map((item, rowIndex) => {
-                    const flatIdx = flatItems.findIndex((i) => i.href === item.href);
-                    const isActive =
-                      pathname === item.href ||
-                      (item.href !== '/' && pathname.startsWith(item.href));
-                    const isHovered = hoveredHref === item.href;
-                    let scale = 1;
-                    if (hoveredIdx >= 0) {
-                      const d = Math.abs(flatIdx - hoveredIdx);
-                      if (d === 0) scale = MAGNIFY.hovered;
-                      else if (d === 1) scale = MAGNIFY.neighbor;
-                      else if (d === 2) scale = MAGNIFY.farNeighbor;
-                    }
-                    const showUnread =
-                      !!item.showUnread && mounted && isAuthenticated && unreadMessages > 0;
-                    const Icon = item.icon;
-
-                    return (
-                      <motion.div
-                        key={item.href}
-                        custom={rowIndex}
-                        variants={rowVariants}
-                        initial="hidden"
-                        animate="visible"
-                      >
-                        <DockRow
-                          item={item}
-                          Icon={Icon}
-                          isActive={isActive}
-                          isHovered={isHovered}
-                          scale={scale}
-                          showUnread={showUnread}
-                          unreadCount={unreadMessages}
-                          onHover={() => setHoveredHref(item.href)}
-                          onLeave={() => {
-                            setHoveredHref((prev) => (prev === item.href ? null : prev));
-                          }}
+                  {/* For 'admin' section, show Account section with user actions */}
+                  {key === 'admin' ? (
+                    <>
+                      <p className="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-[0.16em] text-text-muted/70">
+                        {SECTIONS[key].label}
+                      </p>
+                      {/* Admin Dashboard - only for admins */}
+                      {isAdmin && (
+                        <DockRowLink
+                          href="/admin"
+                          Icon={Shield}
+                          label="Admin Dashboard"
+                          isActive={pathname === '/admin'}
+                          isHovered={hoveredHref === '/admin'}
+                          scale={1}
+                          onHover={() => setHoveredHref('/admin')}
+                          onLeave={() => setHoveredHref(null)}
                         />
-                      </motion.div>
-                    );
-                  })}
+                      )}
+                      {/* Profile */}
+                      <DockRowLink
+                        href="/profile"
+                        Icon={User}
+                        label="Profile"
+                        isActive={pathname === '/profile'}
+                        isHovered={hoveredHref === '/profile'}
+                        scale={1}
+                        onHover={() => setHoveredHref('/profile')}
+                        onLeave={() => setHoveredHref(null)}
+                      />
+                      {/* Settings */}
+                      <DockRowLink
+                        href="/settings/notifications"
+                        Icon={Settings}
+                        label="Settings"
+                        isActive={pathname === '/settings/notifications'}
+                        isHovered={hoveredHref === '/settings/notifications'}
+                        scale={1}
+                        onHover={() => setHoveredHref('/settings/notifications')}
+                        onLeave={() => setHoveredHref(null)}
+                      />
+                      {/* Logout - only for authenticated */}
+                      {isAuthenticated && (
+                        <button
+                          onClick={() => {
+                            close();
+                            useAuthStore.getState().logout();
+                            signOut({ redirect: false }).catch(() => {});
+                            fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
+                            toast.success('Logged out successfully');
+                            window.location.href = '/login';
+                          }}
+                          className="flex items-center w-full pl-3 pr-3 h-12 rounded-2xl text-slate-400 hover:text-red-400 hover:bg-white/[0.04] transition-colors"
+                        >
+                          <div className="flex items-center justify-center w-7 h-7">
+                            <LogOut className="w-[18px] h-[18px]" />
+                          </div>
+                          <span className="ml-3 flex-1 text-[14px] font-medium text-left">Logout</span>
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <p className="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-[0.16em] text-text-muted/70">
+                        {SECTIONS[key].label}
+                      </p>
+                      {items.map((item, rowIndex) => {
+                        const flatIdx = flatItems.findIndex((i) => i.href === item.href);
+                        const isActive =
+                          pathname === item.href ||
+                          (item.href !== '/' && pathname.startsWith(item.href));
+                        const isHovered = hoveredHref === item.href;
+                        let scale = 1;
+                        if (hoveredIdx >= 0) {
+                          const d = Math.abs(flatIdx - hoveredIdx);
+                          if (d === 0) scale = MAGNIFY.hovered;
+                          else if (d === 1) scale = MAGNIFY.neighbor;
+                          else if (d === 2) scale = MAGNIFY.farNeighbor;
+                        }
+                        const showUnread =
+                          !!item.showUnread && mounted && isAuthenticated && unreadMessages > 0;
+                        const Icon = item.icon;
+
+                        return (
+                          <motion.div
+                            key={item.href}
+                            custom={rowIndex}
+                            variants={rowVariants}
+                            initial="hidden"
+                            animate="visible"
+                          >
+                            <DockRow
+                              item={item}
+                              Icon={Icon}
+                              isActive={isActive}
+                              isHovered={isHovered}
+                              scale={scale}
+                              showUnread={showUnread}
+                              unreadCount={unreadMessages}
+                              onHover={() => setHoveredHref(item.href)}
+                              onLeave={() => {
+                                setHoveredHref((prev) => (prev === item.href ? null : prev));
+                              }}
+                            />
+                          </motion.div>
+                        );
+                      })}
+                    </>
+                  )}
                 </motion.div>
               ))}
             </div>
@@ -539,6 +655,85 @@ function DockRow({
         {showUnread && (
           <UnreadBadge count={unreadCount} />
         )}
+      </Link>
+    </div>
+  );
+}
+
+// ── Single dock row (Link version for manual items) ──────────
+function DockRowLink({
+  href,
+  Icon,
+  label,
+  isActive,
+  isHovered,
+  scale,
+  onHover,
+  onLeave,
+}: {
+  href: string;
+  Icon: React.ElementType;
+  label: string;
+  isActive: boolean;
+  isHovered: boolean;
+  scale: number;
+  onHover: () => void;
+  onLeave: () => void;
+}) {
+  return (
+    <div
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      className="relative"
+    >
+      <Link
+        href={href}
+        className={cn(
+          'relative flex items-center w-full pl-3 pr-3 h-12 rounded-2xl',
+          'transition-colors duration-150',
+          isActive
+            ? 'bg-gradient-to-r from-[#22d3ee]/15 to-[#8b5cf6]/10 text-text-primary'
+            : isHovered
+              ? 'bg-white/[0.06] text-text-primary'
+              : 'text-text-muted hover:text-text-primary',
+        )}
+      >
+        {/* Active bar */}
+        {isActive && (
+          <motion.div
+            layoutId="navActiveIndicator"
+            className="absolute -left-1 top-2 bottom-2 w-[3px] rounded-full"
+            style={{
+              background: 'linear-gradient(180deg, #22d3ee, #8b5cf6)',
+              boxShadow: '0 0 12px rgba(34, 211, 238, 0.4)',
+            }}
+            transition={{ type: 'spring', stiffness: 380, damping: 30, mass: 0.5 }}
+          />
+        )}
+
+        {/* Icon */}
+        <motion.div
+          className="flex items-center justify-center w-7 h-7 origin-center"
+          animate={{ scale }}
+          transition={ICON_SPRING}
+        >
+          <Icon
+            className={cn(
+              'w-[18px] h-[18px] transition-colors duration-150',
+              isActive || isHovered ? 'text-text-primary' : 'text-text-muted',
+            )}
+          />
+        </motion.div>
+
+        {/* Label */}
+        <span
+          className={cn(
+            'ml-3 flex-1 whitespace-nowrap text-[14px] font-medium select-none transition-colors duration-150',
+            isActive || isHovered ? 'text-text-primary' : 'text-text-muted',
+          )}
+        >
+          {label}
+        </span>
       </Link>
     </div>
   );

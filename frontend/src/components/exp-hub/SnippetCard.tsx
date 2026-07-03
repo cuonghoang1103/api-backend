@@ -59,7 +59,7 @@ export function SnippetCard({ snippet, isSelected, onClick, onCopy }: SnippetCar
 
         <button
           onClick={handleCopy}
-          className="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-white/10 rounded transition-opacity"
+          className="p-1.5 hover:bg-white/10 rounded transition-colors opacity-60 hover:opacity-100 active:scale-90"
           title="Copy code"
         >
           <Copy className="w-3.5 h-3.5 text-slate-400" />

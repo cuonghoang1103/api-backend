@@ -794,8 +794,8 @@ const CyberTrackItem = motion(function CyberTrackItem({
         </p>
       </div>
 
-      {/* Queue + playlist + like actions (visible on hover or when liked) */}
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+      {/* Queue + playlist + like actions — always visible on mobile, hover-only on desktop */}
+      <div className="flex items-center gap-1 opacity-60 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
         {/* Heart (Phase 2a) — visible at all times when liked, otherwise only on hover */}
         {onToggleLike && (
           <motion.button

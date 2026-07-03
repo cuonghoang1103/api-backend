@@ -630,11 +630,13 @@ export default function MusicAudioController() {
           startYouTubePolling(ytPlayerInstance!);
         },
         (state) => {
-          // onStateChange
+          // onStateChange — handles track-end only here. We DON'T also
+          // listen to onEnded because both fire for the same end event,
+          // which caused next() to be called twice (skipping a track).
           const { PLAYING, PAUSED, ENDED } = window.YT?.PlayerState ?? {};
           if (state === ENDED) {
             stopYouTubePolling();
-            // Defer one tick so we don't fire `next` from inside the
+            // Defer so we don't fire `next` from inside the
             // YouTube IFrame callback (it can cause the new track to
             // race the player teardown). The store's `next()` already
             // handles all three repeat modes:
@@ -645,9 +647,10 @@ export default function MusicAudioController() {
           }
         },
         () => {
-          // onEnded
-          stopYouTubePolling();
-          next();
+          // onEnded — intentionally EMPTY. onStateChange with data=ENDED
+          // already fires next() above. Having both handlers caused next()
+          // to be called twice per track end (race between setTimeout and
+          // synchronous call), skipping every other track in repeat-all mode.
         },
         (err) => {
           // onError

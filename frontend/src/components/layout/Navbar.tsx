@@ -385,13 +385,25 @@ export default function Navbar() {
                     <>
                       <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
                       <div
-                        className="absolute right-0 top-full mt-2 w-52 max-w-[calc(100vw-16px)] rounded-xl backdrop-blur-xl z-50 overflow-hidden"
+                        className="absolute right-0 top-full mt-2 w-60 max-w-[calc(100vw-16px)] rounded-xl backdrop-blur-xl z-50 overflow-hidden"
                         style={{
                           background: 'var(--bg-overlay)',
                           border: '1px solid var(--border-light)',
                           boxShadow: 'var(--shadow-lg)',
+                          maxHeight: 'calc(100vh - 80px)',
+                          overflowY: 'auto',
                         }}
                       >
+                        {/* Account header */}
+                        <div className="flex items-center gap-3 px-4 py-3" style={{ borderBottom: '1px solid var(--border-light)' }}>
+                          <UserAvatar size={36} className="rounded-xl shrink-0" />
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>
+                              {displayUser?.displayName || displayUser?.name || displayUser?.username || 'User'}
+                            </p>
+                            <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{displayUser?.email}</p>
+                          </div>
+                        </div>
                         <div
                           className="px-4 py-3"
                           style={{ borderBottom: '1px solid var(--border-light)' }}

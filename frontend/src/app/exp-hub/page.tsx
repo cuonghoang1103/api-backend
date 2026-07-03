@@ -234,7 +234,7 @@ export default function ExpHubPage() {
   };
 
   return (
-    <div className="relative flex flex-col h-[calc(100dvh-var(--app-chrome-bottom))] pt-16 overflow-hidden text-slate-200 bg-[#0d1120]">
+    <div className="relative flex flex-col h-[calc(100dvh-var(--app-chrome-bottom))] pt-16 sm:pt-20 overflow-hidden text-slate-200 bg-[#0d1120]">
       {/* ── Ambient dark background (sits behind everything, never over
           text/code — pointer-events-none, low opacity). ── */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">

@@ -2455,11 +2455,41 @@ body {
 }
 
 /* Installed-PWA (standalone) only: the notch overlaps the fixed top bar, so
-   pad it down by the top safe-area inset. Browser mode is left untouched —
-   Safari's own chrome already handles the notch there. */
+   pad everything at the top edge down by the safe-area inset. Browser mode is
+   left untouched — Safari's own chrome handles the notch there.
+
+   Two triggers for the same rules: the `display-mode: standalone` media query
+   (spec) AND an `html.pwa-standalone` class stamped from JS via the legacy
+   `navigator.standalone` flag (older iOS reports only the latter). Keep both
+   blocks in sync. */
 @media (display-mode: standalone) {
   .app-top-nav {
     height: calc(4rem + env(safe-area-inset-top, 0px)) !important;
     padding-top: env(safe-area-inset-top, 0px);
   }
+  /* pt-16 pages assume a 4rem nav — add the extra standalone nav height. */
+  .app-main {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  /* Floating top-left toggles (NavigationDock + chat sessions) sit at
+     top-4 — push them below the notch too. */
+  button[aria-label='Open navigation'],
+  button[aria-label='Close navigation'],
+  button[aria-label='Open chat sessions'],
+  button[aria-label='Close chat sessions'] {
+    top: calc(1rem + env(safe-area-inset-top, 0px));
+  }
+}
+html.pwa-standalone .app-top-nav {
+  height: calc(4rem + env(safe-area-inset-top, 0px)) !important;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+html.pwa-standalone .app-main {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+html.pwa-standalone button[aria-label='Open navigation'],
+html.pwa-standalone button[aria-label='Close navigation'],
+html.pwa-standalone button[aria-label='Open chat sessions'],
+html.pwa-standalone button[aria-label='Close chat sessions'] {
+  top: calc(1rem + env(safe-area-inset-top, 0px));
 }

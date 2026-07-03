@@ -336,9 +336,10 @@ export default function NavigationDock() {
               'overflow-hidden',
             )}
           >
-            {/* Panel header — leaves room for the toggle
-                button at the top so they don't overlap. */}
-            <div className="shrink-0 px-5 pt-16 pb-3">
+            {/* Panel header — leaves room for the toggle button at the top
+                so they don't overlap; grows by the notch inset in the
+                installed PWA (where the toggle is pushed down too). */}
+            <div className="shrink-0 px-5 pb-3 pt-[calc(4rem+env(safe-area-inset-top,0px))]">
               <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-text-muted">
                 navigation
               </p>

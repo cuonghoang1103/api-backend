@@ -14,6 +14,15 @@ import { useEffect } from 'react';
 export default function ServiceWorkerRegister() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    // Older iOS only reports installed-PWA mode via the legacy
+    // `navigator.standalone` flag, not the `display-mode: standalone` media
+    // query. Stamp a class so globals.css can apply the safe-area rules
+    // through either signal (see the standalone block in globals.css).
+    if ((navigator as { standalone?: boolean }).standalone === true) {
+      document.documentElement.classList.add('pwa-standalone');
+    }
+
     if (!('serviceWorker' in navigator)) return;
     // Skip on localhost dev to avoid caching the dev server; only run on
     // https (or the http->https-upgraded production origin).

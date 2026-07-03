@@ -230,13 +230,16 @@ export default function Navbar() {
         }`}
         style={{ left: 'var(--dock-shift, 0px)' }}
       >
-        <div className="h-full pl-28 pr-28 flex items-center justify-between gap-2">
+        {/* Phone: tight paddings (just clear the dock toggle at left-6 w-11)
+            so the right controls (bell/avatar) stay ON-SCREEN; ≥sm keeps the
+            original wide gutters. pr also honors the landscape notch. */}
+        <div className="h-full pl-[4.5rem] pr-[max(0.5rem,env(safe-area-inset-right,0px))] sm:pl-28 sm:pr-28 flex items-center justify-between gap-2">
 
             {/* Left: Logo (avatar + wordmark) — pulled in past
                 the screen edge so the row never overlaps the
                 floating iOS dock toggle on the left, even
                 when the dock is pinned open. */}
-            <Link href="/" className="flex items-center gap-2.5 ml-8 shrink-0 group">
+            <Link href="/" className="flex items-center gap-2.5 ml-0 sm:ml-8 shrink-0 group">
               <img
                 src="/images/avatar.png"
                 alt="CuongHoang"
@@ -283,8 +286,9 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* Right: controls */}
-            <div className="flex items-center gap-1.5">
+            {/* Right: controls — shrink-0 so the cluster is never squeezed
+                or pushed off-screen; the left side yields instead. */}
+            <div className="flex items-center gap-1.5 shrink-0">
 
               {/* Contact icons */}
               <div className="hidden lg:flex items-center gap-0.5 mr-1">
@@ -378,7 +382,7 @@ export default function Navbar() {
                     <>
                       <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
                       <div
-                        className="absolute right-0 top-full mt-2 w-52 rounded-xl backdrop-blur-xl z-50 overflow-hidden"
+                        className="absolute right-0 top-full mt-2 w-52 max-w-[calc(100vw-16px)] rounded-xl backdrop-blur-xl z-50 overflow-hidden"
                         style={{
                           background: 'var(--bg-overlay)',
                           border: '1px solid var(--border-light)',

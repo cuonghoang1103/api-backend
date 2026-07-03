@@ -18,6 +18,16 @@ export default function MatrixRain() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // The rain sits at opacity 0.06 — pure ambience. Don't burn battery on
+    // phones/tablets or for reduced-motion users: draw one static frame's
+    // worth of nothing (transparent canvas) and stop.
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      window.matchMedia('(pointer: coarse)').matches
+    ) {
+      return;
+    }
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -85,9 +95,19 @@ export default function MatrixRain() {
 
     frame = requestAnimationFrame(draw);
 
+    // Pause completely while the tab is hidden.
+    const onVisibility = () => {
+      cancelAnimationFrame(frame);
+      if (document.visibilityState === 'visible') {
+        frame = requestAnimationFrame(draw);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
 

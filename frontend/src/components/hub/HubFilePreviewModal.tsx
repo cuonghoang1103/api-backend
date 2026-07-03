@@ -6,9 +6,16 @@ import {
   X, Download, Loader2, FileText, FileCode, Image, Film,
   Music, Archive, File, ChevronLeft, ChevronRight,
 } from 'lucide-react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import dynamic from 'next/dynamic';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { toast } from 'sonner';
+
+// react-syntax-highlighter's Prism build ships every grammar — load it on
+// demand so it stays out of page-initial JS chunks.
+const SyntaxHighlighter = dynamic(
+  () => import('react-syntax-highlighter').then((m) => m.Prism),
+  { ssr: false, loading: () => null },
+);
 
 import { hubFileApi, type HubFile } from '@/lib/api';
 import HubCoverUpload from './HubCoverUpload';

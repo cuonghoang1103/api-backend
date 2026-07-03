@@ -19,6 +19,9 @@ export default function ParticleRain({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // Ambient effect only — skip it entirely for reduced-motion users.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 

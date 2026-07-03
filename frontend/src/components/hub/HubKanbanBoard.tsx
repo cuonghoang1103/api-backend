@@ -21,8 +21,12 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { motion } from 'framer-motion';
 import { ExternalLink, GripVertical, Image } from 'lucide-react';
-import ReactPlayer from 'react-player';
+import dynamicImport from 'next/dynamic';
 import { toast } from 'sonner';
+
+// react-player is heavy and only needed when a media card is present —
+// load it on demand, client-only.
+const ReactPlayer = dynamicImport(() => import('react-player'), { ssr: false });
 
 import type { HubFile, HubLink } from '@/lib/api';
 import { hubApi, hubFileApi } from '@/lib/api';

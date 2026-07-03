@@ -1,9 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Check, Copy } from 'lucide-react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+// react-syntax-highlighter's Prism build ships every grammar — load it on
+// demand so it stays out of page-initial JS chunks.
+const SyntaxHighlighter = dynamic(
+  () => import('react-syntax-highlighter').then((m) => m.Prism),
+  { ssr: false, loading: () => null },
+);
 
 interface CodeBlockProps {
   code: string;

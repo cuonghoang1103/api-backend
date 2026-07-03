@@ -53,8 +53,14 @@ export default function ParticleBackground({
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
+    // Reduced-motion users get no particle loop at all; touch devices get a
+    // cheaper scene (fewer particles, 1x pixel ratio) so iOS Safari doesn't
+    // heat up on an ambient background.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+
     // ─── Sizing ────────────────────────────────────────────────
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let dpr = coarsePointer ? 1 : Math.min(window.devicePixelRatio || 1, 2);
     let width = 0;
     let height = 0;
 
@@ -76,9 +82,10 @@ export default function ParticleBackground({
     // ─── Particle count ──────────────────────────────────────
     const area = width * height;
     const densityMap = { low: 0.00004, medium: 0.00008, high: 0.00015 };
+    const effectiveDensity = coarsePointer ? 'low' : density;
     const totalCount = Math.min(
-      Math.max(40, Math.floor(area * densityMap[density])),
-      220,
+      Math.max(coarsePointer ? 24 : 40, Math.floor(area * densityMap[effectiveDensity])),
+      coarsePointer ? 80 : 220,
     );
     const glyphCount = Math.floor(totalCount * 0.55);
     const dotCount = totalCount - glyphCount;
@@ -226,8 +233,20 @@ export default function ParticleBackground({
     };
     rafId = requestAnimationFrame(render);
 
+    // Fully stop the loop while the tab is hidden (the in-loop
+    // `document.hidden` check still schedules wakeups every frame).
+    const onVisibility = () => {
+      cancelAnimationFrame(rafId);
+      if (document.visibilityState === 'visible') {
+        lastTs = performance.now();
+        rafId = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
     return () => {
       cancelAnimationFrame(rafId);
+      document.removeEventListener('visibilitychange', onVisibility);
       observer.disconnect();
       if (followPointer) {
         window.removeEventListener('pointermove', onPointerMove);

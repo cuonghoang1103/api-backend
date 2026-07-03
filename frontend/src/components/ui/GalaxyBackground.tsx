@@ -330,24 +330,46 @@ export default function GalaxyBackground({
       ctx.fillStyle = vg;
       ctx.fillRect(0, 0, width, height);
 
-      raf = requestAnimationFrame(draw);
+      if (!staticOnly) raf = requestAnimationFrame(draw);
       // `dt` is available if we ever want frame-rate aware
       // animations; the current scene is purely time-based.
       void dt;
     };
 
+    // Touch devices + reduced-motion users get ONE beautifully drawn frame
+    // instead of a 60fps full-viewport gradient loop — the scene is ambient,
+    // the stars just stop twinkling. Big battery/thermal win on iOS Safari.
+    const staticOnly =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      window.matchMedia('(pointer: coarse)').matches;
+
     resize();
     raf = requestAnimationFrame(draw);
+
+    // Pause the animated loop while the tab is hidden.
+    const onVisibility = () => {
+      cancelAnimationFrame(raf);
+      if (document.visibilityState === 'visible') {
+        raf = requestAnimationFrame(draw);
+      }
+    };
+    if (!staticOnly) document.addEventListener('visibilitychange', onVisibility);
+
     // ResizeObserver catches both window resizes AND parent
     // container resizes (e.g. when the messenger panel
     // changes height because the user opened a thread). It
     // fires once on observe so we don't need a separate
     // initial resize call.
-    const ro = new ResizeObserver(() => resize());
+    const ro = new ResizeObserver(() => {
+      resize();
+      // Static mode: repaint the single frame at the new size.
+      if (staticOnly) raf = requestAnimationFrame(draw);
+    });
     ro.observe(canvas);
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
 

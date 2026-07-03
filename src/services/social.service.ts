@@ -16,6 +16,7 @@
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { registerSocketEmitter } from '../socket/messaging.socket.js';
+import { deleteByUrls } from '../storage/uploadService.js';
 
 /**
  * Returns true if the user has the ADMIN role. Used by delete
@@ -484,7 +485,13 @@ export async function getPostById(postId: number, currentUserId?: number) {
 export async function deletePost(postId: number, userId: number) {
   const post = await prisma.socialPost.findUnique({
     where: { id: postId },
-    select: { authorId: true },
+    select: {
+      authorId: true,
+      // Fetch media URLs BEFORE deleting — needed to clean up R2.
+      // SocialMedia has `onDelete: Cascade`, so media rows vanish
+      // the moment we delete the post. We must grab URLs first.
+      media: { select: { url: true, thumbnail: true } },
+    },
   });
 
   if (!post) throw new AppError('Post not found', 404, 'POST_NOT_FOUND');
@@ -495,6 +502,25 @@ export async function deletePost(postId: number, userId: number) {
   if (post.authorId !== userId && !(await isUserAdmin(userId))) {
     throw new AppError('Unauthorized', 403, 'FORBIDDEN');
   }
+
+  // ── Best-effort R2 cleanup ─────────────────────────────────────
+  // Collect every storage URL attached to this post so we can delete
+  // the backing R2 objects after the DB row is gone.
+  // deleteByUrls() is safe to call even when URLs point to
+  // local/dev storage or are null/empty — it only acts on real R2 keys.
+  const urlsToDelete: string[] = [];
+
+  for (const m of post.media) {
+    if (m.url) urlsToDelete.push(m.url);
+    if (m.thumbnail) urlsToDelete.push(m.thumbnail);
+  }
+
+  // Fire-and-forget: deleting R2 objects must NOT block or fail the
+  // DB transaction. If the R2 delete fails we log a warning but still
+  // confirm the post deletion so the user's delete action succeeds.
+  void deleteByUrls(urlsToDelete).catch((err) => {
+    console.warn('[social] R2 cleanup failed after post delete:', postId, err?.message);
+  });
 
   await prisma.socialPost.delete({ where: { id: postId } });
   return { message: 'Post deleted' };

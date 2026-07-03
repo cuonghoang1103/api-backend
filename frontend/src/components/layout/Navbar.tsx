@@ -239,7 +239,10 @@ export default function Navbar() {
                 the screen edge so the row never overlaps the
                 floating iOS dock toggle on the left, even
                 when the dock is pinned open. */}
-            <Link href="/" className="flex items-center gap-2.5 ml-0 sm:ml-8 shrink-0 group">
+            {/* Hidden on phones: the dock toggle already sits in this corner
+                and the right-side controls need the width (they clipped off
+                the screen edge at 390px). */}
+            <Link href="/" className="hidden sm:flex items-center gap-2.5 ml-0 sm:ml-8 shrink-0 group">
               <img
                 src="/images/avatar.png"
                 alt="CuongHoang"

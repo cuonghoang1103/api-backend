@@ -95,8 +95,9 @@ export default function ServicesSection() {
 
   return (
     <section id="services" className="py-24 relative">
-      {/* Background glow */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Background glow — overflow-hidden so the 600px blob can't widen
+          the mobile layout viewport (it escapes body overflow-x). */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full blur-[150px]"
           style={{ background: `${activeContent.color}08` }}
@@ -116,7 +117,7 @@ export default function ServicesSection() {
               {t('services.header')}
             </span>
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-text-primary mb-4">
-              {t('services.title')}&nbsp;<span className="text-neon-violet">{t('services.provide')}</span>
+              {t('services.title')} <span className="text-neon-violet">{t('services.provide')}</span>
             </h2>
             <p className="text-text-secondary text-lg max-w-2xl mx-auto">
               {t('services.subtitle')}

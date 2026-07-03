@@ -92,7 +92,7 @@ export default function ContactSection() {
               {t('contact.title')}
             </span>
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-text-primary mb-4">
-              {t('letsWorkTogether')}&nbsp;<span className="text-neon-fuchsia">{t('workTogether')}</span>
+              {t('letsWorkTogether')} <span className="text-neon-fuchsia">{t('workTogether')}</span>
             </h2>
             <p className="text-text-secondary text-lg max-w-2xl mx-auto">
               {t('workTogetherSubtitle')}

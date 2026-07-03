@@ -592,8 +592,9 @@ export default function AboutPage() {
           in a follow-up. Keeping the fetch + state above so the future
           section can drop in without re-wiring anything. */}
 
-      {/* About Section */}
-      <section className="py-24">
+      {/* About Section — overflow-hidden: the avatar card's decorative
+          -right-4 blob must not widen the mobile layout viewport. */}
+      <section className="py-24 overflow-hidden">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -603,7 +604,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-4xl font-heading font-bold text-text-primary mb-6">
-                {t('about.title')}&nbsp;<span className="text-neon-violet">{t('about.subtitle')}</span>
+                {t('about.title')} <span className="text-neon-violet">{t('about.subtitle')}</span>
               </h2>
               <p className="text-text-secondary text-lg leading-relaxed mb-6">
                 {t('about.description1')}
@@ -656,7 +657,7 @@ export default function AboutPage() {
               <span className="text-xs font-mono text-neon-violet tracking-widest uppercase">AI Knowledge Stream</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary">
-              {t('latestArticles')}&nbsp;<span className="text-neon-violet">{t('articles')}</span>
+              {t('latestArticles')} <span className="text-neon-violet">{t('articles')}</span>
             </h2>
             <p className="text-text-secondary text-sm mt-1 max-w-xl">{t('blog.subtitle')}</p>
           </motion.div>
@@ -788,7 +789,7 @@ export default function AboutPage() {
               {t('blogCategories') || 'Blog'}
             </span>
             <h2 className="text-4xl font-heading font-bold text-text-primary mb-4">
-              Bài viết&nbsp;<span className="text-neon-fuchsia">mới nhất</span>
+              Bài viết <span className="text-neon-fuchsia">mới nhất</span>
             </h2>
             <p className="text-text-secondary text-lg max-w-2xl mx-auto">
               Những bài viết mới nhất được đăng tải lên hệ thống.
@@ -895,7 +896,7 @@ export default function AboutPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-heading font-bold text-text-primary mb-4">
-              {t('skillsTech')}&nbsp;<span className="text-neon-indigo">{t('about.title')}</span>
+              {t('skillsTech')} <span className="text-neon-indigo">{t('about.title')}</span>
             </h2>
             <p className="text-text-secondary text-lg max-w-2xl mx-auto">
               {t('skillsTechSubtitle')}

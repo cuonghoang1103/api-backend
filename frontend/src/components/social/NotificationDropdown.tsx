@@ -192,7 +192,7 @@ export default function NotificationDropdown({ anchor, open, onClose }: Notifica
     useNotificationStore();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const [pos, setPos] = useState<{ top: number; left: number; width: number } | null>(null);
 
   // Re-position on every open so the panel stays glued to the
   // bell even after the user resizes the window. We use
@@ -202,12 +202,13 @@ export default function NotificationDropdown({ anchor, open, onClose }: Notifica
     if (!open || !anchor) return;
     const place = () => {
       const r = anchor.getBoundingClientRect();
-      const PANEL_WIDTH = 360;
+      // Never wider than the viewport (360px panel vs 320px phones).
+      const width = Math.min(360, window.innerWidth - 16);
       // Prefer the right edge of the bell; if there's not
       // enough room we flip to the left side.
-      const left = Math.max(8, Math.min(window.innerWidth - PANEL_WIDTH - 8, r.right - PANEL_WIDTH));
+      const left = Math.max(8, Math.min(window.innerWidth - width - 8, r.right - width));
       const top = r.bottom + 8;
-      setPos({ top, left });
+      setPos({ top, left, width });
     };
     place();
     window.addEventListener('resize', place);
@@ -355,7 +356,7 @@ export default function NotificationDropdown({ anchor, open, onClose }: Notifica
           position: 'fixed',
           top: pos.top,
           left: pos.left,
-          width: 360,
+          width: pos.width,
           maxHeight: 'min(520px, calc(100dvh - 80px))',
           zIndex: 9999,
         }}

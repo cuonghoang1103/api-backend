@@ -252,7 +252,7 @@ function BlogContent() {
               />
               {searchKeyword && (
                 <button type="button" onClick={() => { setSearchKeyword(''); fetchPosts(); }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
+                  className="absolute right-1 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center transition-colors"
                   style={{ color: '#64748b' }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#f8fafc'; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#64748b'; }}>
@@ -285,7 +285,7 @@ function BlogContent() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleTagToggle(tag)}
-                className="shrink-0 px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200"
+                className="shrink-0 px-3 py-1 min-h-[36px] rounded-lg text-xs font-medium transition-all duration-200"
                 style={{
                   background: selectedTags.includes(tag)
                     ? 'linear-gradient(135deg, #8b5cf6, #ec4899)'

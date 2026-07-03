@@ -2380,6 +2380,43 @@ body {
         var(--music-offset, 0px) + 12px
     ) !important;
   }
+
+}
+
+/* iOS Safari (iPhone AND portrait iPad) auto-zooms the page when a focused
+   form control is <16px. Force a 16px floor below the `lg` breakpoint, then
+   restore every explicitly LARGER Tailwind size so big inputs keep their
+   look. !important is required to beat utility classes like `text-sm`;
+   desktop (≥1024px) is untouched. */
+@media (max-width: 1023.98px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+  input.text-lg, textarea.text-lg, select.text-lg {
+    font-size: 1.125rem !important;
+  }
+  input.text-xl, textarea.text-xl, select.text-xl {
+    font-size: 1.25rem !important;
+  }
+  input.text-2xl, textarea.text-2xl, select.text-2xl {
+    font-size: 1.5rem !important;
+  }
+  input.text-3xl, textarea.text-3xl, select.text-3xl {
+    font-size: 1.875rem !important;
+  }
+}
+
+/* Touch devices: the top-nav icon buttons (cart, bell, user menu, …) are
+   ~30px hit areas. Enlarge the tappable box without changing the icon size —
+   pointer:coarse keeps desktop mouse layouts pixel-identical. */
+@media (pointer: coarse) {
+  .app-top-nav button,
+  .app-bottom-nav a {
+    min-width: 44px;
+    min-height: 44px;
+  }
 }
 
 /* Installed-PWA (standalone) only: the notch overlaps the fixed top bar, so

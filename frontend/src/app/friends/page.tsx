@@ -186,7 +186,7 @@ function FriendsPageInner() {
                     key={t.key}
                     type="button"
                     onClick={() => setActiveTab(t.key)}
-                    className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                    className={`flex min-h-[40px] shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
                       active ? 'bg-neon-violet/20 text-neon-violet' : 'text-text-secondary hover:bg-white/[0.05]'
                     }`}
                   >

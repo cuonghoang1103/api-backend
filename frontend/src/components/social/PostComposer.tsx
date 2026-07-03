@@ -510,7 +510,7 @@ export function PostComposer() {
                     });
                     toast.success('AI Write đã tạo gợi ý — tiếp tục soạn nhé!');
                   }}
-                  className="absolute bottom-1.5 right-2 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold transition-all hover:scale-105"
+                  className="absolute bottom-1.5 right-2 flex min-h-[32px] items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-semibold transition-all hover:scale-105"
                   style={{
                     background: 'linear-gradient(135deg, rgba(139,92,246,0.18), rgba(34,211,238,0.18))',
                     color: '#c4b5fd',

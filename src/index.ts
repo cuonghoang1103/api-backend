@@ -117,6 +117,8 @@ const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
 // EXP_Hub — Code Snippet Library
 const snippetRoutes = (await import(path.join(__dirname, 'routes', 'snippets.routes.js'))).default;
+// Video categories (home-feed video classification)
+const videoCategoryRoutes = (await import(path.join(__dirname, 'routes', 'videoCategories.routes.js'))).default;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -441,6 +443,7 @@ app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
 // EXP_Hub — Code Snippet Library
 app.use('/api/v1/snippets', snippetRoutes);
+app.use('/api/v1/video-categories', videoCategoryRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);
 app.use('/api/v1/admin', adminRoutes);

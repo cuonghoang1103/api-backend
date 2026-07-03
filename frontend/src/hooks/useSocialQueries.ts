@@ -15,6 +15,8 @@ export interface SocialFeedParams {
   following?: boolean;
   // Content-type tab filter (Bài viết / Video / File). Omitted = all.
   type?: 'POST' | 'VIDEO' | 'FILE';
+  // Video-category filter (home feed video pills). Omitted = all.
+  videoCategoryId?: number;
 }
 
 export interface FeedCounts {

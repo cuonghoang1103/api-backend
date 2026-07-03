@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -31,6 +31,7 @@ const adminNav = [
  { label: 'Đơn hàng khoá học (VNPay)', href: '/admin/course-orders', icon: CreditCard },
  { label: 'Hoc vien khoa hoc', href: '/admin/course-enrollments', icon: UsersRound },
  { label: 'Quản lý Posts', href: '/admin/posts', icon: FileText },
+ { label: 'Danh mục Video', href: '/admin/video-categories', icon: Clapperboard },
  { label: 'GitHub Repo Hub', href: '/admin/repos', icon: Github },
  { label: 'EXP Hub — Snippets', href: '/admin/exp-hub', icon: Code2 },
  { label: 'Quản lý Users', href: '/admin/users', icon: Users },
@@ -54,9 +55,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
 
-  // Server-side admin verification using admin-check endpoint
-  // This validates the backend_token cookie against the backend.
-  // It returns user data (fullName, email) on success, redirects on failure.
+  // Server-side admin verification using admin-check endpoint.
+  // Validates the backend_token cookie against the backend and returns
+  // user data (fullName, email) on success, redirects on failure.
+  //
+  // IMPORTANT: this runs ONCE on mount, not on every navigation. The
+  // admin layout persists across all /admin/* child navigations (Next.js
+  // app-router keeps the layout mounted), so re-checking on every
+  // pathname change was both wasteful AND fragile — a single flaky
+  // response from /api/auth/admin-check on a click would bounce the user
+  // to /login, making the admin panel feel like it "kicks you out" the
+  // moment you touch any menu item. One check per admin session is enough.
+  const pathnameRef = useRef(pathname);
+  pathnameRef.current = pathname;
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -76,12 +87,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }
       } catch {}
 
-      // Not admin or not logged in → redirect to login
-      router.push('/login?redirect=' + encodeURIComponent(pathname));
+      // Not admin or not logged in → redirect to login (preserve where
+      // they were headed via the ref so we don't depend on pathname).
+      router.push('/login?redirect=' + encodeURIComponent(pathnameRef.current));
     };
 
     checkAuth();
-  }, [pathname, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   const handleLogout = async () => {
     try {

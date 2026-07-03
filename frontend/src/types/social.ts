@@ -118,6 +118,9 @@ export interface SocialPost {
   // Video / File) and the per-type badge. Optional so older cached post
   // shapes (pre-tabs) keep type-checking; readers default to 'POST'.
   type?: 'POST' | 'VIDEO' | 'FILE';
+  // Optional video category (IT, Game, Music…) — only set on VIDEO posts.
+  videoCategoryId?: number | null;
+  videoCategory?: { id: number; name: string; slug: string } | null;
   visibility: 'PUBLIC' | 'FRIENDS' | 'PRIVATE';
   latitude?: number | null;
   longitude?: number | null;

@@ -65,6 +65,10 @@ export interface CreatePostInput {
   // derives it from the attached media / youtubeUrl (see
   // deriveSocialPostType) so older API clients keep working.
   type?: 'POST' | 'VIDEO' | 'FILE';
+  // Optional video category id (only meaningful for VIDEO posts). Flows
+  // straight through `...postData` into the create, so no extra wiring
+  // is needed beyond accepting it here.
+  videoCategoryId?: number | null;
   media?: Array<{
     type: string;
     url: string;
@@ -122,6 +126,9 @@ export interface FeedOptions {
   // Content-type tab filter (home feed). When set, restrict the feed
   // to posts of this bucket; omitted/undefined = "Tất cả" (all types).
   type?: 'POST' | 'VIDEO' | 'FILE';
+  // Video-category filter (home feed video pills). When set, restrict to
+  // posts with this videoCategoryId. Only used alongside type=VIDEO.
+  videoCategoryId?: number;
 }
 
 /**
@@ -529,7 +536,7 @@ export async function updatePost(postId: number, userId: number, data: {
 // ─── Feed ────────────────────────────────────────────────────────
 
 export async function getFeed(options: FeedOptions & { currentUserId?: number }) {
-  const { cursor, limit = 20, authorId, visibility, currentUserId, hashtag, sort = 'recent', following, type } = options;
+  const { cursor, limit = 20, authorId, visibility, currentUserId, hashtag, sort = 'recent', following, type, videoCategoryId } = options;
 
   // Phase 5 home upgrade: "Following" tab. Only return posts from
   // authors the viewer follows. Anonymous viewers (no currentUserId)
@@ -558,6 +565,8 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       ...(hashtag ? { content: { contains: `#${hashtag}`, mode: 'insensitive' as const } } : {}),
       // Content-type tab filter (Bài viết / Video / File). Omitted = all.
       ...(type ? { type } : {}),
+      // Video-category filter (home feed video pills). Omitted = all categories.
+      ...(videoCategoryId ? { videoCategoryId } : {}),
       // "Popular" tab: scope to last 7 days so the ranking doesn't
       // freeze on all-time favourites. We sort by composite score
       // below (likes*2 + comments + saves).
@@ -577,6 +586,7 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
           avatarUrl: true,
         },
       },
+      videoCategory: { select: { id: true, name: true, slug: true } },
       media: {
         orderBy: { sortOrder: 'asc' as const },
         select: {

@@ -126,7 +126,7 @@ router.post(
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = getUserId(req);
-      const { content, visibility, latitude, longitude, locationName, media, poll, youtubeUrl, type, musicTrackId, musicStartSec } = req.body;
+      const { content, visibility, latitude, longitude, locationName, media, poll, youtubeUrl, type, musicTrackId, musicStartSec, videoCategoryId } = req.body;
 
       // Content-type bucket for the feed tabs. Accept only the known
       // values; anything else (or omitted) → undefined, which lets the
@@ -134,6 +134,13 @@ router.post(
       // older clients that don't send `type` keep working unchanged.
       const allowedTypes = ['POST', 'VIDEO', 'FILE'] as const;
       const cleanedType = allowedTypes.includes(type) ? (type as 'POST' | 'VIDEO' | 'FILE') : undefined;
+
+      // Optional video category. Coerce to a positive int or null; the
+      // service passes it straight through to the create.
+      const cleanedVideoCategoryId =
+        videoCategoryId != null && Number.isFinite(Number(videoCategoryId)) && Number(videoCategoryId) > 0
+          ? Number(videoCategoryId)
+          : null;
 
       // A post is valid as long as *something* goes on the
       // timeline: text, at least one media row, a YouTube link,
@@ -174,6 +181,7 @@ router.post(
         locationName,
         youtubeUrl: cleanedYoutubeUrl,
         type: cleanedType,
+        videoCategoryId: cleanedVideoCategoryId,
         // Phase 3 add — Instagram-style music sticker. When set,
         // we look up the track exists + is active before passing
         // through to the service. Invalid trackId is silently
@@ -216,10 +224,15 @@ router.post(
   async (req: any, res: any, next) => {
     try {
       const currentUserId = req.user?.userId;
-      const { cursor, limit = '20', authorId, visibility, hashtag, sort, following, type } = req.query;
+      const { cursor, limit = '20', authorId, visibility, hashtag, sort, following, type, videoCategoryId } = req.query;
       // Content-type tab filter. Only the known buckets pass through;
       // anything else falls back to "all" (undefined).
       const feedType = type === 'POST' || type === 'VIDEO' || type === 'FILE' ? type : undefined;
+      // Video-category filter (positive int, else ignored).
+      const feedVideoCategoryId =
+        videoCategoryId && Number.isFinite(Number(videoCategoryId)) && Number(videoCategoryId) > 0
+          ? Number(videoCategoryId)
+          : undefined;
 
       const result = await getFeed({
         cursor: cursor ? parseInt(cursor as string, 10) : undefined,
@@ -234,6 +247,7 @@ router.post(
         sort: sort === 'popular' ? 'popular' : 'recent',
         following: following === 'true' || following === '1',
         type: feedType,
+        videoCategoryId: feedVideoCategoryId,
         currentUserId,
       });
 

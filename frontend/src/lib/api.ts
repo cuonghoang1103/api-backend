@@ -1229,6 +1229,8 @@ export const socialApi = {
     following?: boolean;
     // Content-type tab filter (Bài viết / Video / File). Omitted = all.
     type?: 'POST' | 'VIDEO' | 'FILE';
+    // Video-category filter (home feed video pills). Omitted = all.
+    videoCategoryId?: number;
   }) => api.get('/social/posts', { params }),
 
   /** Per-content-type counts for the feed tab badges. */
@@ -1248,6 +1250,8 @@ export const socialApi = {
     // Content-type bucket for the feed tabs. Optional — the server
     // derives it from media/youtubeUrl when omitted.
     type?: 'POST' | 'VIDEO' | 'FILE';
+    // Optional video category (only meaningful for VIDEO posts).
+    videoCategoryId?: number | null;
     media?: Array<{
       type: string;
       url: string;
@@ -1479,6 +1483,19 @@ unfollowUser: (targetId: number) =>
       params: { filename, folder, contentType: mimeType },
     });
   },
+};
+
+// ─── Video categories (home-feed video classification) ──────────
+export const videoCategoriesApi = {
+  /** Public: active categories for the feed filter pills. */
+  list: () => api.get('/video-categories'),
+  /** Admin: every category (active + hidden) with post counts. */
+  listAll: () => api.get('/video-categories/all'),
+  create: (data: { name: string; sortOrder?: number; isActive?: boolean }) =>
+    api.post('/video-categories', data),
+  update: (id: number, data: { name?: string; sortOrder?: number; isActive?: boolean }) =>
+    api.put(`/video-categories/${id}`, data),
+  remove: (id: number) => api.delete(`/video-categories/${id}`),
 };
 
 // ─── Music Post admin (Phase 4 add) ─────────────────────────────

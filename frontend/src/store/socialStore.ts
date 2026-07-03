@@ -16,6 +16,8 @@ export interface FeedQueryParams {
   following?: boolean;
   hashtag?: string;
   type?: 'POST' | 'VIDEO' | 'FILE';
+  // Video-category filter (home feed video pills). Omitted = all.
+  videoCategoryId?: number;
 }
 
 interface SocialState {
@@ -75,6 +77,9 @@ interface SocialState {
   // the post lands in the right tab. The server still derives a sensible
   // type if this is somehow omitted.
   composerType: 'POST' | 'VIDEO' | 'FILE';
+  // Optional video category id chosen in the composer (only used when
+  // composerType === 'VIDEO'). null = "Chưa phân loại".
+  composerVideoCategoryId: number | null;
   isPosting: boolean;
 
   // Saved posts
@@ -127,6 +132,7 @@ interface SocialState {
   // Phase 3 — YouTube URL the composer is tracking
   setComposerYouTubeUrl: (url: string) => void;
   setComposerType: (t: 'POST' | 'VIDEO' | 'FILE') => void;
+  setComposerVideoCategoryId: (id: number | null) => void;
   // Phase 3 add — set the Instagram-style music sticker.
   // `track === null` clears the sticker. The composer calls
   // this from the music picker modal. The audioUrl + start/end
@@ -176,6 +182,7 @@ export const useSocialStore = create<SocialState>((set, get) => ({
   composerYouTubeUrl: '',
   composerMusicTrack: null,
   composerType: 'POST',
+  composerVideoCategoryId: null,
   isPosting: false,
 
   savedPosts: [],
@@ -494,15 +501,17 @@ export const useSocialStore = create<SocialState>((set, get) => ({
       composerYouTubeUrl: '',
       composerMusicTrack: null,
       composerType: 'POST',
+      composerVideoCategoryId: null,
     }),
 
   setComposerPoll: (poll) => set({ composerPoll: poll }),
   setComposerYouTubeUrl: (url) => set({ composerYouTubeUrl: url }),
   setComposerType: (t) => set({ composerType: t }),
+  setComposerVideoCategoryId: (id) => set({ composerVideoCategoryId: id }),
   setComposerMusicTrack: (track) => set({ composerMusicTrack: track }),
 
   submitPost: async () => {
-    const { composerContent, composerMedia, composerVisibility, composerPoll, composerYouTubeUrl, composerType, composerMusicTrack } = get();
+    const { composerContent, composerMedia, composerVisibility, composerPoll, composerYouTubeUrl, composerType, composerMusicTrack, composerVideoCategoryId } = get();
     if (!composerContent.trim() && composerMedia.length === 0 && !composerPoll) return null;
 
     set({ isPosting: true });
@@ -565,6 +574,8 @@ export const useSocialStore = create<SocialState>((set, get) => ({
             }
           : undefined,
         type: composerType,
+        // Only attach a category to VIDEO posts.
+        videoCategoryId: composerType === 'VIDEO' ? (composerVideoCategoryId ?? undefined) : undefined,
       });
 
       // The backend returns an envelope { success, data, ... }.

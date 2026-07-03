@@ -33,7 +33,7 @@ import {
 } from 'lucide-react';
 import { useSocialStore } from '@/store/socialStore';
 import { UserAvatar } from '@/components/common/UserAvatar';
-import { socialApi, fileApi, socialUserApi } from '@/lib/api';
+import { socialApi, fileApi, socialUserApi, videoCategoriesApi } from '@/lib/api';
 import { useComposerDraft } from '@/hooks/useComposerDraft';
 import { pickAiTemplate } from '@/lib/aiWriteTemplates';
 import MentionAutocomplete from '@/components/social/MentionAutocomplete';
@@ -70,10 +70,10 @@ const VISIBILITY_OPTIONS = [
 export function PostComposer() {
   const {
     composerContent, composerVisibility, composerMedia, composerPoll, isPosting,
-    composerYouTubeUrl, composerType,
+    composerYouTubeUrl, composerType, composerVideoCategoryId,
     composerMusicTrack,
     setComposerContent: setComposerContentRaw, setComposerVisibility, setComposerPoll, setComposerYouTubeUrl,
-    setComposerType,
+    setComposerType, setComposerVideoCategoryId,
     // Phase 5: music picker now writes the picked track + snippet
     // bounds into the store (not local state). Previously the
     // local state was used which meant the value never made it
@@ -131,6 +131,8 @@ export function PostComposer() {
   // with the post) is mirrored via setComposerYouTubeUrl.
   const [youtubeDraft, setYoutubeDraft] = useState('');
   const [showYouTubeModal, setShowYouTubeModal] = useState(false);
+  // Video categories (fetched once) for the composer's category picker.
+  const [videoCategories, setVideoCategories] = useState<Array<{ id: number; name: string }>>([]);
   // Phase 3 add — Instagram-style music sticker. The
   // composer fetches the music library when the user opens
   // the picker. The picked track (id, title, artist, cover,
@@ -414,6 +416,18 @@ export function PostComposer() {
 
   const hasContent = composerContent.trim() || composerMedia.length > 0;
 
+  // Load active video categories once (for the composer's category picker).
+  useEffect(() => {
+    let cancelled = false;
+    videoCategoriesApi
+      .list()
+      .then((res: any) => {
+        if (!cancelled) setVideoCategories(res.data?.data ?? []);
+      })
+      .catch(() => { /* non-fatal — picker just stays empty */ });
+    return () => { cancelled = true; };
+  }, []);
+
   return (
     <div>
       <motion.div
@@ -620,6 +634,27 @@ export function PostComposer() {
                       </button>
                     );
                   })}
+                </div>
+              )}
+
+              {/* Video category picker — only for VIDEO posts. Lets the
+                  poster classify the clip (IT / Game / Music…) so it shows
+                  up under the matching feed pill. Categories are managed
+                  in the admin panel; when there are none the picker is
+                  hidden entirely. */}
+              {isExpanded && composerType === 'VIDEO' && videoCategories.length > 0 && (
+                <div className="mt-3 flex items-center gap-2">
+                  <label className="text-[12.5px] font-medium text-text-secondary">Danh mục</label>
+                  <select
+                    value={composerVideoCategoryId ?? ''}
+                    onChange={(e) => setComposerVideoCategoryId(e.target.value ? Number(e.target.value) : null)}
+                    className="min-h-[32px] rounded-full border border-theme-light bg-theme-surface px-3 py-1 text-[12.5px] text-text-primary outline-none focus:ring-1 focus:ring-neon-violet/40"
+                  >
+                    <option value="">— Chưa phân loại —</option>
+                    {videoCategories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
                 </div>
               )}
 

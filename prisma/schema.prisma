@@ -1486,38 +1486,60 @@ model DocumentChunk {
 // 14. SOCIAL FEED MODULE (Personal Social Network)
 // ============================================================
 
+// Video categories (IT, Giải trí, Game, Music, Vlog, Reaction…) used to
+// classify + filter VIDEO posts on the home feed. Managed in the admin
+// panel; the feed shows active ones as filter pills.
+model VideoCategory {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(80)
+  slug      String   @unique @db.VarChar(100)
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  posts SocialPost[]
+
+  @@index([isActive, sortOrder], name: "idx_video_categories_active_sort")
+  @@map("video_categories")
+}
+
 model SocialPost {
-  id            Int        @id @default(autoincrement())
-  authorId      Int        @map("author_id")
-  content       String     @db.Text
-  visibility    String     @default("PUBLIC") @map("visibility") @db.VarChar(20)
-  status        String     @default("PUBLISHED") @db.VarChar(20)
-  latitude      Float?     @db.DoublePrecision
-  longitude     Float?     @db.DoublePrecision
-  locationName  String?    @map("location_name") @db.VarChar(255)
-  viewCount     Int        @default(0) @map("view_count")
+  id              Int        @id @default(autoincrement())
+  authorId        Int        @map("author_id")
+  content         String     @db.Text
+  visibility      String     @default("PUBLIC") @map("visibility") @db.VarChar(20)
+  status          String     @default("PUBLISHED") @db.VarChar(20)
+  latitude        Float?     @db.DoublePrecision
+  longitude       Float?     @db.DoublePrecision
+  locationName    String?    @map("location_name") @db.VarChar(255)
+  viewCount       Int        @default(0) @map("view_count")
   // Phase 6 — shares/reposts count. Tracks how many users have
   // shared this post (via the repost toggle). Incremented on
   // share, decremented on unshare.
-  sharesCount   Int        @default(0) @map("shares_count")
+  sharesCount     Int        @default(0) @map("shares_count")
   // Optional YouTube link attached to the post. Used by the feed
   // composer ("Paste YouTube URL") and rendered as an embedded
   // player on the post card when present.
-  youtubeUrl    String?    @map("youtube_url") @db.VarChar(500)
+  youtubeUrl      String?    @map("youtube_url") @db.VarChar(500)
   // Content-type bucket for the home feed tabs (Tất cả / Bài viết /
   // Video / File). Additive: defaults to POST so every existing row is
   // valid the moment the column is added; old rows are backfilled to
   // VIDEO/FILE by the migration based on their media/youtubeUrl. The
   // composer sets this explicitly; getFeed filters by it per tab.
-  type          String     @default("POST") @map("type") @db.VarChar(20) // POST | VIDEO | FILE
+  type            String     @default("POST") @map("type") @db.VarChar(20) // POST | VIDEO | FILE
+  // Optional video category (IT, Game, Music, Vlog…) — only meaningful
+  // for VIDEO posts. Powers the per-category filter pills on the home
+  // feed. SetNull so deleting a category doesn't delete the videos.
+  videoCategoryId Int?       @map("video_category_id")
   // Instagram-style music attach (Phase 3 add). When set, the
   // PostCard renders a small "🎵 <track title> — <artist>" sticker
   // overlay on the first media tile. Tapping the sticker opens
   // a mini-player. We use SetNull (not Cascade) so deleting a
   // track doesn't cascade-delete the user's post — the post
   // simply loses its music attachment.
-  musicTrackId  Int?       @map("music_track_id")
-  musicStartSec Int?       @map("music_start_sec") // optional: skip ahead to this point in the track
+  musicTrackId    Int?       @map("music_track_id")
+  musicStartSec   Int?       @map("music_start_sec") // optional: skip ahead to this point in the track
   // Phase 4 add — when this post has a clipped song attached,
   // a 1-row PostMusic record stores the song + start/end
   // seconds (startSec to endSec must be < 40s — the user
@@ -1525,11 +1547,12 @@ model SocialPost {
   // audio trimmer). The PostCard's MusicSticker uses this
   // record to render the full sticker (cover, title, artist,
   // play/pause with the snippet offset).
-  postMusic     PostMusic?
-  createdAt     DateTime   @default(now()) @map("created_at")
-  updatedAt     DateTime   @updatedAt @map("updated_at")
+  postMusic       PostMusic?
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
 
   author         User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  videoCategory  VideoCategory?     @relation(fields: [videoCategoryId], references: [id], onDelete: SetNull)
   media          SocialMedia[]
   likes          SocialLike[]
   comments       SocialComment[]
@@ -1555,6 +1578,8 @@ model SocialPost {
   @@index([status, createdAt(sort: Desc)], name: "idx_social_posts_status_created")
   @@index([authorId, createdAt(sort: Desc)], name: "idx_social_posts_author_created")
   @@index([visibility, status, createdAt(sort: Desc)], name: "idx_social_posts_vis_status_created")
+  // Powers per-category video filtering on the home feed.
+  @@index([videoCategoryId, createdAt(sort: Desc)], name: "idx_social_posts_vidcat_created")
   // GIN trigram index powering fast ILIKE/substring search on
   // post content (see social.service.ts). Requires the pg_trgm
   // extension. `map:` pins the DB index name to match the

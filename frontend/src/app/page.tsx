@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSocialStore } from '@/store/socialStore';
+import { videoCategoriesApi } from '@/lib/api';
 import { useSocialFeed, useInvalidateFeed, useFeedCounts } from '@/hooks/useSocialQueries';
 import { usePostReactionsSocket } from '@/hooks/usePostReactionsSocket';
 import { PostComposer } from '@/components/social/PostComposer';
@@ -68,6 +69,32 @@ export default function SocialPage() {
     typeof window !== 'undefined' ? parseFeedTypeFromUrl(window.location.search) : 'all',
   );
   const { data: feedCounts } = useFeedCounts();
+
+  // Video-category filter (only meaningful on the Video tab). null = "Tất cả".
+  // Synced to ?vc= so it survives reload / share.
+  const [videoCategoryId, setVideoCategoryId] = useState<number | null>(() => {
+    if (typeof window === 'undefined') return null;
+    const raw = new URLSearchParams(window.location.search).get('vc');
+    const n = raw ? Number(raw) : NaN;
+    return Number.isFinite(n) && n > 0 ? n : null;
+  });
+  const [videoCategories, setVideoCategories] = useState<Array<{ id: number; name: string }>>([]);
+  useEffect(() => {
+    let cancelled = false;
+    videoCategoriesApi.list()
+      .then((res: any) => { if (!cancelled) setVideoCategories(res.data?.data ?? []); })
+      .catch(() => { /* non-fatal */ });
+    return () => { cancelled = true; };
+  }, []);
+
+  const onVideoCategoryChange = useCallback((next: number | null) => {
+    setVideoCategoryId(next);
+    const url = new URL(window.location.href);
+    if (next == null) url.searchParams.delete('vc');
+    else url.searchParams.set('vc', String(next));
+    window.history.replaceState({}, '', url.toString());
+    useSocialStore.setState({ posts: [], cursor: null, hasNextPage: true });
+  }, []);
 
   // Real-time reaction updates for any PostCard currently in the
   // feed slice. The hook attaches a single global socket listener
@@ -220,6 +247,8 @@ export default function SocialPage() {
     following: effectiveFollowing,
     // Content-type tab → backend `type` filter (undefined = all).
     type: feedTypeToParam(feedType),
+    // Video-category filter only applies on the Video tab.
+    videoCategoryId: feedType === 'video' ? (videoCategoryId ?? undefined) : undefined,
   });
 
   // Keep the Zustand feed scope in sync so infinite-scroll loadMore()
@@ -232,8 +261,9 @@ export default function SocialPage() {
       following: effectiveFollowing,
       hashtag: activeHashtag ?? undefined,
       type: feedTypeToParam(feedType),
+      videoCategoryId: feedType === 'video' ? (videoCategoryId ?? undefined) : undefined,
     });
-  }, [effectiveSort, effectiveFollowing, activeHashtag, feedType]);
+  }, [effectiveSort, effectiveFollowing, activeHashtag, feedType, videoCategoryId]);
 
   // Hydrate Zustand store from TanStack Query cache so PostCard mutations work.
   // Invalidate the query after mutations to trigger a background refetch.
@@ -539,6 +569,47 @@ export default function SocialPage() {
             {(feedType === 'all' || feedType === 'post') && (
               <div className="mt-3">
                 <FeedFilterTabs active={feedFilter} onChange={onFeedFilterChange} />
+              </div>
+            )}
+
+            {/* Video-category filter pills — only on the Video tab, and
+                only when the admin has created categories. "Tất cả" +
+                one pill per active category; selecting one scopes the
+                video grid to that category. */}
+            {feedType === 'video' && videoCategories.length > 0 && (
+              <div className="mt-3 flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Danh mục video">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={videoCategoryId == null}
+                  onClick={() => onVideoCategoryChange(null)}
+                  className={`min-h-[28px] rounded-full px-3 py-1 text-[12.5px] font-medium transition-colors ${
+                    videoCategoryId == null
+                      ? 'bg-neon-violet/20 text-violet-theme ring-1 ring-neon-violet/40'
+                      : 'text-text-secondary hover:text-text-primary bg-theme-surface'
+                  }`}
+                >
+                  Tất cả
+                </button>
+                {videoCategories.map((c) => {
+                  const active = videoCategoryId === c.id;
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={active}
+                      onClick={() => onVideoCategoryChange(c.id)}
+                      className={`min-h-[28px] rounded-full px-3 py-1 text-[12.5px] font-medium transition-colors ${
+                        active
+                          ? 'bg-neon-violet/20 text-violet-theme ring-1 ring-neon-violet/40'
+                          : 'text-text-secondary hover:text-text-primary bg-theme-surface'
+                      }`}
+                    >
+                      {c.name}
+                    </button>
+                  );
+                })}
               </div>
             )}
 

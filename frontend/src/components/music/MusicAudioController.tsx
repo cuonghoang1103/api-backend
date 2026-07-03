@@ -153,6 +153,78 @@ export default function MusicAudioController() {
   const prevTrackIdRef = useRef<string | null>(null);
   const ytPollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // ── Media Session: lock-screen / control-center transport ─────────────
+  // Without this, the lock screen shows a play button that does nothing —
+  // the <audio> element keeps playing in the background, but iOS/Android
+  // have no handlers to control it. Handlers read the store via getState()
+  // so they never go stale.
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return;
+    const ms = navigator.mediaSession;
+    const safeSet = (action: MediaSessionAction, handler: MediaSessionActionHandler | null) => {
+      try {
+        ms.setActionHandler(action, handler);
+      } catch {
+        /* action not supported on this platform — ignore */
+      }
+    };
+    safeSet('play', () => useMusicStore.getState().play());
+    safeSet('pause', () => useMusicStore.getState().pause());
+    safeSet('nexttrack', () => useMusicStore.getState().next());
+    safeSet('previoustrack', () => useMusicStore.getState().previous());
+    safeSet('seekto', (d) => {
+      const a = audioRef.current;
+      if (a && d.seekTime != null && Number.isFinite(d.seekTime)) {
+        a.currentTime = d.seekTime;
+        useMusicStore.getState().setCurrentTime(d.seekTime);
+      }
+    });
+    safeSet('seekbackward', (d) => {
+      const a = audioRef.current;
+      if (a) a.currentTime = Math.max(0, a.currentTime - (d.seekOffset || 10));
+    });
+    safeSet('seekforward', (d) => {
+      const a = audioRef.current;
+      if (a && Number.isFinite(a.duration)) a.currentTime = Math.min(a.duration, a.currentTime + (d.seekOffset || 10));
+    });
+    return () => {
+      (
+        ['play', 'pause', 'nexttrack', 'previoustrack', 'seekto', 'seekbackward', 'seekforward'] as MediaSessionAction[]
+      ).forEach((a) => safeSet(a, null));
+    };
+  }, []);
+
+  // Lock-screen metadata (title / artist / cover art) per track.
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return;
+    try {
+      if (!currentTrack) {
+        navigator.mediaSession.metadata = null;
+        return;
+      }
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: currentTrack.title || 'CuongThai Music',
+        artist: currentTrack.artist || '',
+        artwork: currentTrack.coverImage
+          ? [{ src: currentTrack.coverImage, sizes: '512x512', type: 'image/jpeg' }]
+          : [],
+      });
+    } catch {
+      /* MediaMetadata unavailable — ignore */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTrack?.id]);
+
+  // Reflect play/pause into the lock-screen UI.
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return;
+    try {
+      navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+    } catch {
+      /* ignore */
+    }
+  }, [isPlaying]);
+
   // Lazily creates AudioContext + AnalyserNode for local audio
   const ensureAnalyser = useCallback(() => {
     if (audioContextRef.current || !audioRef.current) return;
@@ -531,6 +603,34 @@ export default function MusicAudioController() {
     audio.addEventListener('ended', handleEnded);
     audio.addEventListener('error', handleError);
 
+    // Media Session position (lock-screen scrubber). Throttled — the exact
+    // position only needs to be re-synced every few seconds and on seeks.
+    let lastPositionSync = 0;
+    const syncPositionState = () => {
+      if (!('mediaSession' in navigator)) return;
+      if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+      const now = Date.now();
+      if (now - lastPositionSync < 4000) return;
+      lastPositionSync = now;
+      try {
+        navigator.mediaSession.setPositionState({
+          duration: audio.duration,
+          position: Math.min(audio.currentTime, audio.duration),
+          playbackRate: audio.playbackRate || 1,
+        });
+      } catch {
+        /* ignore */
+      }
+    };
+    const syncPositionNow = () => {
+      lastPositionSync = 0;
+      syncPositionState();
+    };
+    audio.addEventListener('timeupdate', syncPositionState);
+    audio.addEventListener('seeked', syncPositionNow);
+    audio.addEventListener('ratechange', syncPositionNow);
+    audio.addEventListener('loadedmetadata', syncPositionNow);
+
     audioRef.current = audio;
 
     const handleInteraction = () => {
@@ -546,6 +646,10 @@ export default function MusicAudioController() {
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('error', handleError);
+      audio.removeEventListener('timeupdate', syncPositionState);
+      audio.removeEventListener('seeked', syncPositionNow);
+      audio.removeEventListener('ratechange', syncPositionNow);
+      audio.removeEventListener('loadedmetadata', syncPositionNow);
       audio.pause();
       audio.src = '';
       audioRef.current = null;

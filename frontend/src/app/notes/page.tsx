@@ -635,7 +635,7 @@ function NotesPageInner() {
   );
 
   return (
-    <div className="notes-page h-[100dvh] pt-16
+    <div className="notes-page h-[calc(100dvh-var(--app-chrome-bottom))] pt-16
       bg-[var(--notes-bg,#ffffff)] text-[var(--notes-text,#1e293b)]
       dark:bg-[#0c0f14] dark:text-slate-200">
       <div className="flex h-full">

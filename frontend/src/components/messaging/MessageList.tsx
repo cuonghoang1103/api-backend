@@ -40,6 +40,26 @@ export default function MessageList() {
     el.scrollTo({ top: el.scrollHeight, behavior: 'auto' });
   }, [threadId]);
 
+  // Keep the latest message visible when the list itself shrinks — on
+  // mobile the shell height changes when the on-screen keyboard opens.
+  // Same "only if near the bottom" rule as the new-message autoscroll.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    let lastHeight = el.clientHeight;
+    const ro = new ResizeObserver(() => {
+      const shrunk = el.clientHeight < lastHeight;
+      lastHeight = el.clientHeight;
+      if (!shrunk) return;
+      const distanceFromBottom = el.scrollHeight - (el.scrollTop + el.clientHeight);
+      if (distanceFromBottom < 200) {
+        el.scrollTo({ top: el.scrollHeight, behavior: 'auto' });
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [threadId]);
+
   // Typing users (excluding self) — evict stale
   const typingMap = store.typing.byThread[threadId] ?? {};
   const now = Date.now();

@@ -9,7 +9,7 @@ import { NotesListSkeleton } from '@/components/ui/Skeleton'
 // right one at hydration time.
 export default function Loading() {
   return (
-    <div className="flex h-[calc(100dvh-4rem)]">
+    <div className="flex h-[calc(100dvh-4rem-var(--app-chrome-bottom))]">
       {/* Sidebar tree skeleton */}
       <div
         className="hidden md:flex flex-col w-72 border-r border-white/5 overflow-hidden"

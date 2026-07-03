@@ -18,6 +18,7 @@ import QuotaIndicator from '@/components/chat/QuotaIndicator';
 import LottieClient from '@/components/ui/LottieClient';
 import type { ChatMessage, ChatSession } from '@/types';
 import { findStaticResponse, getDefaultGreeting, getFallbackResponse } from '@/lib/ai-static-responses';
+import { useKeyboardInset } from '@/hooks/useKeyboardInset';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
@@ -131,6 +132,9 @@ export default function ChatPage() {
   // global dock is closed, the chat-aside toggle still
   // works on its own.
   const [chatAsideOpen, setChatAsideOpen] = useState(false);
+  // iOS on-screen keyboard: shrink the app shell so the composer stays
+  // visible above the keyboard (which also covers the bottom nav).
+  const keyboardInset = useKeyboardInset();
   const [chatAsideHovered, setChatAsideHovered] = useState<string | null>(null);
   useEffect(() => {
     if (!chatAsideOpen) return;
@@ -539,7 +543,7 @@ export default function ChatPage() {
   }, [addSession, setCurrentSessionId, clearMessages, setSuggestedPrompts, setRobotEmotion, setLimitedMode]);
 
   return (
-    <div className="force-dark relative min-h-screen w-full overflow-hidden cyber-grid-bg pt-16">
+    <div className="force-dark relative min-h-dvh w-full overflow-hidden cyber-grid-bg pt-16">
       {/* Matrix rain background */}
       <MatrixRain />
 
@@ -774,7 +778,13 @@ export default function ChatPage() {
           button sits at top-4 left-16, so we add a small
           pl-4 on the header content to keep it clear of the
           two toggle buttons in the corner. */}
-      <main className="pt-16 flex flex-col min-h-screen">
+      {/* Fixed app-shell height (not min-h): the message list scrolls
+          internally (flex-1 overflow-y-auto) and the composer stays visible
+          above the mobile bottom nav (--app-chrome-bottom = 0 on desktop). */}
+      <main
+        className="pt-16 flex flex-col h-[calc(100dvh-4rem-var(--app-chrome-bottom))]"
+        style={keyboardInset > 0 ? { height: `calc(100dvh - 4rem - ${keyboardInset}px)` } : undefined}
+      >
         {/* Cyber Terminal Header */}
         <motion.header
           initial={{ opacity: 0, y: -10 }}

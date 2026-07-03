@@ -28,6 +28,7 @@ import ThreadHeaderMenu from '@/components/messaging/ThreadHeaderMenu';
 import BlockedUsersModal from '@/components/messaging/BlockedUsersModal';
 import GalaxyBackground from '@/components/ui/GalaxyBackground';
 import { cn } from '@/lib/utils';
+import { useKeyboardInset } from '@/hooks/useKeyboardInset';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import toast from 'react-hot-toast';
@@ -38,7 +39,7 @@ const IOS_SPRING = 'cubic-bezier(0.16, 1, 0.3, 1)';
 export default function MessagesPage() {
   return (
     <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-dvh items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-cyan-400" />
       </div>
     }>
@@ -63,6 +64,10 @@ function MessagesPageInner() {
   const openThread = useMessagingStore((s) => s.openThread);
   const [mounted, setMounted] = useState(false);
   const [blockedModalOpen, setBlockedModalOpen] = useState(false);
+  // iOS on-screen keyboard: shrink the fixed-height shell so the composer
+  // rides above the keyboard (the keyboard also covers the bottom nav, so
+  // the shell reclaims that band while typing).
+  const keyboardInset = useKeyboardInset();
   const blockedCount = useMessagingStore((s) => s.blockedUsers.length);
 
   const isAdmin = (auth.user?.roles ?? []).some(
@@ -207,7 +212,7 @@ function MessagesPageInner() {
 
   if (!mounted || !auth.isAuthenticated) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-dvh items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-cyan-400" />
       </div>
     );
@@ -220,9 +225,12 @@ function MessagesPageInner() {
     // The three messenger panels each carry their own
     // gradient so they read as solid surfaces floating over
     // the space scene.
-    <div className="relative min-h-screen pt-16">
+    <div className="relative min-h-dvh pt-16">
       <GalaxyBackground />
-      <div className="relative mx-auto flex h-[calc(100dvh-4rem)] max-w-6xl flex-col px-4 py-6">
+      <div
+        className="relative mx-auto flex h-[calc(100dvh-4rem-var(--app-chrome-bottom))] max-w-6xl flex-col px-4 py-6"
+        style={keyboardInset > 0 ? { height: `calc(100dvh - 4rem - ${keyboardInset}px)` } : undefined}
+      >
         <header className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h1

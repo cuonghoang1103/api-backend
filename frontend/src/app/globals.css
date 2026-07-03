@@ -2330,6 +2330,9 @@ aside ::-webkit-scrollbar-thumb:hover {
    so floating UI keeps its desktop position untouched. */
 :root {
   --app-bottom-nav-h: 0px;
+  /* Total bottom chrome (nav + home-indicator inset) that full-height app
+     shells must subtract so composers/toolbars stay visible. 0 on desktop. */
+  --app-chrome-bottom: 0px;
 }
 
 /* Kill accidental horizontal scroll / layout shift ("phân bố không đồng đều")
@@ -2359,6 +2362,7 @@ body {
 @media (max-width: 639.98px) {
   :root {
     --app-bottom-nav-h: 58px;
+    --app-chrome-bottom: calc(58px + env(safe-area-inset-bottom, 0px));
   }
 
   /* Keep page content clear of the fixed bottom nav. */

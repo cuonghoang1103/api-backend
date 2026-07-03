@@ -220,7 +220,7 @@ export const NotesListSkeleton = memo(function NotesListSkeleton() {
  */
 export const MessageThreadSkeleton = memo(function MessageThreadSkeleton() {
   return (
-    <div className="flex h-[calc(100dvh-4rem)]" role="status" aria-busy="true" aria-label="Loading messages">
+    <div className="flex h-[calc(100dvh-4rem-var(--app-chrome-bottom))]" role="status" aria-busy="true" aria-label="Loading messages">
       {/* Sidebar */}
       <div
         className="w-72 border-r border-white/5 p-3 space-y-2 hidden md:block"
@@ -341,7 +341,7 @@ export function CourseCardSkeletonList({ count = 6 }: { count?: number }) {
  */
 export const ChatHistorySkeleton = memo(function ChatHistorySkeleton() {
   return (
-    <div className="flex h-[calc(100dvh-4rem)]" role="status" aria-busy="true" aria-label="Loading chat history">
+    <div className="flex h-[calc(100dvh-4rem-var(--app-chrome-bottom))]" role="status" aria-busy="true" aria-label="Loading chat history">
       {/* Sessions sidebar */}
       <div
         className="w-72 border-r border-white/5 p-3 space-y-2 hidden md:block overflow-hidden"

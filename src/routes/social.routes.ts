@@ -326,9 +326,41 @@ router.delete(
   },
 );
 
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// POST /api/v1/social/media/cleanup — Best-effort orphan R2 cleanup
+// Called by the frontend when post creation fails after media was uploaded
+// to R2 (network drop, user cancel, auth expiry mid-flow).
+// We intentionally do NOT auth-check the URLs — the signed upload URL
+// is already scoped to the user's upload bucket prefix. Deleting a URL
+// that was never ours is a no-op (keyFromUrl returns null).
+import { deleteByUrls } from '../storage/uploadService.js';
+
+router.post(
+  '/media/cleanup',
+  authenticate,
+  async (req: any, res: Response<any>, next) => {
+    try {
+      const { urls } = req.body as { urls?: string[] };
+      if (!Array.isArray(urls) || urls.length === 0) {
+        res.json({ success: true, cleaned: 0 });
+        return;
+      }
+      // Fire-and-forget: the R2 delete must not block or fail the response.
+      // Failures are non-fatal: orphan files cost storage fees; a failed
+      // cleanup just leaves them orphaned (logged for manual recovery).
+      void deleteByUrls(urls).catch((err: unknown) => {
+        console.warn('[social] orphan cleanup failed:', (err as Error)?.message);
+      });
+      res.json({ success: true, cleaned: urls.length });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ═══════════════════════════════════════════════════
 // PATCH /api/v1/social/posts/:id — Update post
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 router.patch(
   '/posts/:id',
   authenticate,

@@ -103,6 +103,34 @@ router.post(
           req.file.originalname,
           req.userId,
         );
+
+        // ─── Track pending video upload for cleanup ──────────────────────
+        // For videos, record in pending_uploads so orphaned R2 objects
+        // from interrupted posts can be cleaned up by the cron job.
+        const pendingExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        const videoKey = result.key || result.url?.split('/').pop() || '';
+        if (videoKey) {
+          await prisma.pendingUpload.upsert({
+            where: { userId_r2Key: { userId: req.userId!, r2Key: videoKey } },
+            create: {
+              userId: req.userId!,
+              r2Key: videoKey,
+              url: result.url,
+              thumbnail: thumbnail || null,
+              fileSize: BigInt(req.file.size),
+              mimeType: req.file.mimetype,
+              fileName: req.file.originalname,
+              status: 'PENDING',
+              expiresAt: pendingExpiry,
+            },
+            update: {
+              status: 'PENDING',
+              expiresAt: pendingExpiry,
+            },
+          }).catch(() => {
+            logger.warn('[upload] pending_upload tracking skipped (table may not exist)');
+          });
+        }
       }
 
       res.status(201).json({
@@ -372,6 +400,35 @@ router.post('/upload/presign-r2/complete', authenticate, async (req, res: Respon
     const name = typeof originalName === 'string' && originalName ? originalName : key.split('/').pop() || 'video.mp4';
     const signedGet = await r2SignedDownloadUrl(key, 600);
     const thumbnail = await extractVideoThumbnailFromUrl(signedGet, name, req.userId);
+
+    // ─── Track pending upload for cleanup ──────────────────────────────────
+    // Record this upload so a cron job can clean up orphaned R2 objects
+    // if the user navigates away mid-post or the browser crashes.
+    // PendingUpload rows are marked CONFIRMED when the post is successfully
+    // created, and EXPIRED + deleted by the nightly cron.
+    const pendingExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h TTL
+    await prisma.pendingUpload.upsert({
+      where: { userId_r2Key: { userId: req.userId!, r2Key: key } },
+      create: {
+        userId: req.userId!,
+        r2Key: key,
+        url: r2BuildPublicUrl(key),
+        thumbnail: thumbnail || null,
+        fileSize: BigInt(head.size),
+        mimeType: head.contentType || 'video/mp4',
+        fileName: name,
+        status: 'PENDING',
+        expiresAt: pendingExpiry,
+      },
+      update: {
+        // Re-upload of the same key — refresh TTL and status
+        status: 'PENDING',
+        expiresAt: pendingExpiry,
+      },
+    }).catch(() => {
+      // Non-fatal: if the table doesn't exist yet (pre-migration), skip
+      logger.warn('[upload] pending_upload tracking skipped (table may not exist)');
+    });
 
     logger.info(`[upload] presigned direct video ${key} (${head.size}B)`);
 

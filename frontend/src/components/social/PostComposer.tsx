@@ -119,6 +119,28 @@ export function PostComposer() {
     setYoutubeDraft(composerYouTubeUrl);
   }, [composerYouTubeUrl]);
 
+  // ─── Browser beforeunload guard ──────────────────────────────────────────
+  // Warn the user if they try to close the tab / navigate away while a
+  // video is still uploading. This prevents the "orphaned upload" case
+  // where the user loses both the video AND their post content.
+  // The guard is only active when there are pending uploads (progress < 100).
+  useEffect(() => {
+    const hasPendingUploads = composerMedia.some((m) => m.progress < 100);
+    if (!hasPendingUploads) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // Modern browsers require a returnValue to show the dialog.
+      // The message itself is ignored in most browsers (security policy)
+      // but we keep it for older Safari compatibility.
+      e.preventDefault();
+      e.returnValue = 'Bạn đang tải video lên. Nếu rời trang, video sẽ bị mất và bài viết sẽ trống.';
+      return e.returnValue;
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [composerMedia]);
+
   const [isExpanded, setIsExpanded] = useState(false);
   const [showVisibilityMenu, setShowVisibilityMenu] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -435,7 +457,16 @@ export function PostComposer() {
     }
   };
 
+  // ─── Post button gate ─────────────────────────────────────────────
+  // The button is enabled only when:
+  //   1. The user has typed text OR attached media
+  //   2. No media is currently uploading (progress < 100)
+  //      → prevents empty posts when user clicks Post before a large
+  //        video finishes uploading to R2
+  //   3. We are not already in the posting state
+  const isUploadingMedia = composerMedia.some((m) => m.progress < 100);
   const hasContent = composerContent.trim() || composerMedia.length > 0;
+  const canPost = hasContent && !isUploadingMedia && !isPosting;
 
   // Load active video categories once (for the composer's category picker).
   useEffect(() => {
@@ -945,7 +976,7 @@ export function PostComposer() {
                     <motion.button
                       whileTap={{ scale: 0.95 }}
                       onClick={handleSubmit}
-                      disabled={!hasContent || isPosting}
+                      disabled={!canPost}
                       className="flex items-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-semibold transition-all disabled:opacity-50"
                       style={{
                         background: 'linear-gradient(135deg, #8B5CF6, #06b6d4)',
@@ -957,6 +988,11 @@ export function PostComposer() {
                         <>
                           <Loader2 size={14} className="animate-spin" />
                           Posting...
+                        </>
+                      ) : isUploadingMedia ? (
+                        <>
+                          <Loader2 size={14} className="animate-spin" />
+                          Đang tải video...
                         </>
                       ) : (
                         'Post'

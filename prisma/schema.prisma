@@ -195,6 +195,11 @@ model User {
   hubSharesOwned    HubShare[]  @relation("HubShareOwner")
   hubSharesReceived HubShare[]  @relation("HubShareRecipient")
 
+  // ─── Orphaned upload cleanup (Phase 7) ─────────────────────────
+  // PendingUpload rows track video uploads that have been started
+  // but not yet linked to a post. Cron job cleans up expired rows.
+  pendingUploads PendingUpload[]
+
   // Phase 4 add — Music Post. Admin uploads mp3 / m4a tracks
   // to R2 and tags them with a title + artist + cover. Users
   // pick one of these from the composer and clip a 1-second-
@@ -1138,6 +1143,42 @@ model DiscountCode {
   @@index([code], name: "idx_discount_code")
   @@index([userId], name: "idx_discount_code_user_id")
   @@map("discount_codes")
+}
+
+// ============================================================
+// 7b. ORPHANED UPLOAD CLEANUP
+// Tracks uploads that have been started but not yet linked to a post.
+// Used to clean up orphaned R2 objects from:
+//   - User navigated away mid-upload
+//   - Network timeout / browser crash
+//   - Post submission that somehow skipped the media (e.g. bug)
+// ============================================================
+model PendingUpload {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  r2Key     String   @map("r2_key") @db.VarChar(700)
+  url       String   @db.VarChar(700)
+  thumbnail String?  @db.VarChar(700)
+  fileSize  BigInt   @map("file_size")
+  mimeType  String   @map("mime_type") @db.VarChar(100)
+  fileName  String?  @map("file_name") @db.VarChar(255)
+  status    String   @default("PENDING") @map("status") @db.VarChar(20)
+  // PENDING = uploaded to R2, waiting to be linked to a post
+  // CONFIRMED = successfully linked to a SocialMedia row
+  // EXPIRED = cron job marked as orphaned, R2 object deleted
+  expiresAt DateTime @updatedAt @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // One pending upload per (user, R2 key). If the user re-uploads
+  // the same file, we refresh the TTL instead of creating a duplicate.
+  @@unique([userId, r2Key], map: "uk_pending_upload_user_key")
+  @@index([userId, status], name: "idx_pending_upload_user_status")
+  @@index([status, expiresAt], name: "idx_pending_upload_status_expires")
+  @@map("pending_uploads")
 }
 
 // ============================================================

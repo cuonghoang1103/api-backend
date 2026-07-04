@@ -22,6 +22,7 @@ import { pingQuotaRedis } from './quota.service.js';
 import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
 import { completedExpiryCutoff, COMPLETED_TASK_RETENTION_DAYS } from '../utils/dashboard.js';
+import { deleteByKey } from '../storage/uploadService.js';
 
 let _started = false;
 
@@ -61,13 +62,91 @@ export function startCronJobs(): void {
   cron.schedule('0 * * * *', async () => {
     const redisOk = await pingQuotaRedis();
     if (!redisOk) {
- logger.warn('cron Redis unreachable — quota service running in Postgres fallback mode');
- }
- try {
- await prisma.$queryRaw`SELECT 1`;
- } catch (err) {
- logger.error('cron Postgres unreachable', { error: (err as Error).message });
- }
+      logger.warn('cron Redis unreachable — quota service running in Postgres fallback mode');
+    }
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+    } catch (err) {
+      logger.error('cron Postgres unreachable', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
+  // ─── Orphaned upload cleanup (every 4 hours) ────────────────────────────
+  // Find PendingUpload rows that:
+  //   1. Are still PENDING (not confirmed by a successful post)
+  //   2. Have expired (expiresAt < now)
+  // Mark them as EXPIRED and delete the corresponding R2 objects.
+  // This handles cases where:
+  //   - User navigated away mid-upload
+  //   - Browser crashed after upload but before post submission
+  //   - Network timeout caused the post to fail silently
+  //
+  // The 24h TTL on each pending upload gives users ~24h to complete
+  // their post before the R2 object gets cleaned up. Videos that
+  // were successfully POSTED are marked CONFIRMED by createPost and
+  // are skipped by this job.
+  cron.schedule('0 */4 * * *', async () => {
+    logger.info('cron orphaned upload cleanup starting');
+    try {
+      // Get pending uploads that have expired (TTL exceeded)
+      const expiredUploads = await prisma.pendingUpload.findMany({
+        where: {
+          status: 'PENDING',
+          expiresAt: { lt: new Date() },
+        },
+        select: {
+          id: true,
+          r2Key: true,
+          url: true,
+          userId: true,
+        },
+        take: 50, // Process in batches to avoid overwhelming R2
+      });
+
+      if (expiredUploads.length === 0) {
+        logger.info('cron orphaned upload cleanup: no expired uploads found');
+        return;
+      }
+
+      logger.info('cron orphaned upload cleanup', { count: expiredUploads.length });
+
+      for (const upload of expiredUploads) {
+        try {
+          // Delete from R2
+          await deleteByKey(upload.r2Key);
+          // Mark as expired in DB
+          await prisma.pendingUpload.update({
+            where: { id: upload.id },
+            data: { status: 'EXPIRED' },
+          });
+          logger.info('cron orphaned upload cleaned up', {
+            uploadId: upload.id,
+            r2Key: upload.r2Key,
+            userId: upload.userId,
+          });
+        } catch (err) {
+          logger.error('cron failed to clean up orphaned upload', {
+            uploadId: upload.id,
+            r2Key: upload.r2Key,
+            error: (err as Error).message,
+          });
+        }
+      }
+
+      // Delete all EXPIRED uploads older than 7 days to keep the table lean
+      const cleanupCutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      const { count: deletedCount } = await prisma.pendingUpload.deleteMany({
+        where: {
+          status: 'EXPIRED',
+          updatedAt: { lt: cleanupCutoff },
+        },
+      });
+      if (deletedCount > 0) {
+        logger.info('cron purged expired upload records', { count: deletedCount });
+      }
+    } catch (err) {
+      logger.error('cron orphaned upload cleanup failed', { error: (err as Error).message });
+    }
   }, { timezone: 'UTC' });
 
   // ─── Payment order cleanup (every 15 min) ───
@@ -159,15 +238,16 @@ export function startCronJobs(): void {
   // ─── Startup recovery ───
   void recoverPendingJobs();
 
- logger.info('cron all jobs registered', {
- jobs: [
- 'Nightly cleanup @ 03:00 Vietnam',
- 'Weekly re-embed @ Sun 02:00 Vietnam',
- 'Hourly health check',
- `Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`,
- `Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d, completed-expiry ${COMPLETED_TASK_RETENTION_DAYS}d)`,
- ],
- });
+  logger.info('cron all jobs registered', {
+  jobs: [
+  'Nightly cleanup @ 03:00 Vietnam',
+  'Weekly re-embed @ Sun 02:00 Vietnam',
+  'Hourly health check',
+  `Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`,
+  `Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d, completed-expiry ${COMPLETED_TASK_RETENTION_DAYS}d)`,
+  'Orphaned upload cleanup every 4 hours (24h TTL, 50/batch)',
+  ],
+  });
 }
 
 /**

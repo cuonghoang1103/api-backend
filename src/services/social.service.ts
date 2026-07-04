@@ -17,6 +17,7 @@ import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { registerSocketEmitter } from '../socket/messaging.socket.js';
 import { deleteByUrls } from '../storage/uploadService.js';
+import { logger } from '../utils/logger.js';
 
 /**
  * Returns true if the user has the ADMIN role. Used by delete
@@ -354,6 +355,26 @@ export async function createPost(input: CreatePostInput) {
   // we just emit a tiny ping here.
   if (post.visibility !== 'PRIVATE') {
     pingFollowersAboutNewPost(post.authorId, post.id);
+  }
+
+  // ─── Confirm pending uploads ─────────────────────────────────────────────
+  // Any PendingUpload rows whose r2Key matches a media URL on this
+  // post should be marked CONFIRMED so the nightly cron skips them
+  // during cleanup. This handles the case where the user successfully
+  // posts — the uploaded videos should NOT be deleted as orphans.
+  if (media && media.length > 0) {
+    const mediaUrls = media.map((m) => m.url);
+    await prisma.pendingUpload.updateMany({
+      where: {
+        userId: input.authorId,
+        status: 'PENDING',
+        url: { in: mediaUrls },
+      },
+      data: { status: 'CONFIRMED' },
+    }).catch(() => {
+      // Non-fatal: if the table doesn't exist yet, skip
+      logger.warn('[social] pending_upload confirmation skipped');
+    });
   }
 
   return serializePost(post, {

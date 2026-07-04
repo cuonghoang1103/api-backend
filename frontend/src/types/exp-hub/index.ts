@@ -32,8 +32,11 @@ export interface Snippet {
   title: string;
   slug: string;
   description: string | null;
+  // CODE = code snippet; NOTE = rich-text note (HTML in noteContent) with images.
+  kind: 'CODE' | 'NOTE';
   language: string;
   code: string;
+  noteContent: string | null;
   explanation: string | null;
   youtubeUrl: string | null;
   referenceUrl: string | null;

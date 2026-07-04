@@ -119,6 +119,29 @@ export async function deleteTag(id: number) {
   return prisma.snippetTag.delete({ where: { id } });
 }
 
+// Collect a category id plus ALL of its descendant ids (recursive tree walk).
+// Used so that selecting a PARENT folder in the sidebar shows every snippet/note
+// nested underneath it — a folder-explorer expectation — instead of only the
+// items assigned directly to that exact category.
+async function getCategoryAndDescendantIds(rootId: number): Promise<number[]> {
+  const all = await prisma.snippetCategory.findMany({ select: { id: true, parentId: true } });
+  const childrenOf = new Map<number, number[]>();
+  for (const c of all) {
+    if (c.parentId == null) continue;
+    if (!childrenOf.has(c.parentId)) childrenOf.set(c.parentId, []);
+    childrenOf.get(c.parentId)!.push(c.id);
+  }
+  const ids: number[] = [];
+  const stack = [rootId];
+  while (stack.length) {
+    const id = stack.pop()!;
+    ids.push(id);
+    const kids = childrenOf.get(id);
+    if (kids) stack.push(...kids);
+  }
+  return ids;
+}
+
 // ─── Snippets ────────────────────────────────────────────────────────────────
 
 export interface SnippetFilters {
@@ -138,7 +161,12 @@ export async function getSnippets(filters: SnippetFilters = {}) {
 
   const where: Prisma.SnippetWhereInput = {};
   if (status) where.status = status as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
-  if (categoryId) where.categoryId = categoryId;
+  if (categoryId) {
+    // Include the folder itself AND all nested sub-folders so a parent
+    // selection surfaces everything underneath it.
+    const categoryIds = await getCategoryAndDescendantIds(categoryId);
+    where.categoryId = { in: categoryIds };
+  }
   if (language) where.language = language;
   if (tagIds?.length) where.snippetToTags = { some: { tagId: { in: tagIds } } };
   if (search) {
@@ -230,6 +258,8 @@ export async function createSnippet(
     description?: string;
     language: string;
     code: string;
+    kind?: 'CODE' | 'NOTE';
+    noteContent?: string | null;
     explanation?: string;
     youtubeUrl?: string;
     referenceUrl?: string;
@@ -250,8 +280,10 @@ export async function createSnippet(
       title: data.title,
       slug,
       description: data.description,
+      kind: data.kind ?? 'CODE',
       language: data.language,
       code: data.code,
+      noteContent: data.noteContent,
       explanation: data.explanation,
       youtubeUrl: data.youtubeUrl,
       referenceUrl: data.referenceUrl,
@@ -283,6 +315,8 @@ export async function updateSnippet(
     description?: string;
     language?: string;
     code?: string;
+    kind?: 'CODE' | 'NOTE';
+    noteContent?: string | null;
     explanation?: string;
     youtubeUrl?: string;
     referenceUrl?: string;
@@ -307,7 +341,9 @@ export async function updateSnippet(
   }
 
   if (data.description !== undefined) updateData.description = data.description;
-  if (data.language) updateData.language = data.language;
+  if (data.kind) updateData.kind = data.kind;
+  if (data.noteContent !== undefined) updateData.noteContent = data.noteContent;
+  if (data.language !== undefined) updateData.language = data.language;
   if (data.previewUrl !== undefined) updateData.previewUrl = data.previewUrl;
   if (data.explanation !== undefined) updateData.explanation = data.explanation;
   if (data.youtubeUrl !== undefined) updateData.youtubeUrl = data.youtubeUrl;

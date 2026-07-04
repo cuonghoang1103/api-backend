@@ -296,6 +296,8 @@ router.post('/', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: 
       description?: string;
       language: string;
       code: string;
+      kind?: 'CODE' | 'NOTE';
+      noteContent?: string | null;
       explanation?: string;
       youtubeUrl?: string;
       referenceUrl?: string;
@@ -309,11 +311,21 @@ router.post('/', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: 
     if (!data.title?.trim()) {
       throw new BadRequestError('Snippet title is required');
     }
-    if (!data.code?.trim()) {
-      throw new BadRequestError('Snippet code is required');
-    }
-    if (!data.language?.trim()) {
-      throw new BadRequestError('Snippet language is required');
+    if (data.kind === 'NOTE') {
+      // NOTE records carry rich-text HTML instead of code — code/language
+      // are irrelevant, so store empty defaults and validate the note body.
+      if (!data.noteContent?.trim()) {
+        throw new BadRequestError('Note content is required');
+      }
+      data.code = '';
+      data.language = '';
+    } else {
+      if (!data.code?.trim()) {
+        throw new BadRequestError('Snippet code is required');
+      }
+      if (!data.language?.trim()) {
+        throw new BadRequestError('Snippet language is required');
+      }
     }
 
     const snippet = await snippetsService.createSnippet(data, req.user?.userId);
@@ -330,6 +342,8 @@ router.put('/:id(\\d+)', authenticate, requireRole('ADMIN', 'EDITOR'), async (re
       description?: string;
       language?: string;
       code?: string;
+      kind?: 'CODE' | 'NOTE';
+      noteContent?: string | null;
       explanation?: string;
       youtubeUrl?: string;
       referenceUrl?: string;

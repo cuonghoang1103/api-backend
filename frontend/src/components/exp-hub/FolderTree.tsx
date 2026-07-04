@@ -40,7 +40,14 @@ function CategoryItem({
 
   return (
     <div>
+      {/* Whole row is the click target for selecting the folder — not just
+          the label — so taps don't miss. The chevron / admin actions
+          stopPropagation so they don't also trigger a select. */}
       <div
+        role="button"
+        tabIndex={0}
+        onClick={() => onSelect(category)}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(category); } }}
         className={`group flex items-center gap-1 px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
           isSelected
             ? 'bg-violet-500/15 text-violet-200'
@@ -50,8 +57,10 @@ function CategoryItem({
       >
         {hasChildren ? (
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            type="button"
+            onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
             className="p-0.5 hover:bg-white/10 rounded"
+            aria-label={isOpen ? 'Thu gọn' : 'Mở rộng'}
           >
             {isOpen ? (
               <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
@@ -63,10 +72,7 @@ function CategoryItem({
           <span className="w-4" />
         )}
 
-        <button
-          onClick={() => onSelect(category)}
-          className="flex-1 flex items-center gap-2 min-w-0"
-        >
+        <span className="flex-1 flex items-center gap-2 min-w-0">
           {isOpen && hasChildren ? (
             <FolderOpen className="w-4 h-4 text-amber-400 shrink-0" />
           ) : (
@@ -78,19 +84,21 @@ function CategoryItem({
               {snippetCount}
             </span>
           )}
-        </button>
+        </span>
 
         {isAdmin && (
           <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 shrink-0">
             <button
-              onClick={() => onCreate?.(category.id)}
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onCreate?.(category.id); }}
               className="p-1 hover:bg-white/10 rounded"
               title="Add subfolder"
             >
               <Plus className="w-3 h-3" />
             </button>
             <button
-              onClick={() => onEdit?.(category)}
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onEdit?.(category); }}
               className="p-1 hover:bg-white/10 rounded"
             >
               <MoreHorizontal className="w-3 h-3" />
@@ -137,6 +145,7 @@ export function FolderTree({
         </h3>
         {isAdmin && onCreateCategory && (
           <button
+            type="button"
             onClick={() => onCreateCategory()}
             className="p-1 hover:bg-white/10 rounded"
             title="Add category"

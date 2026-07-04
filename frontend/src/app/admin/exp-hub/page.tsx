@@ -28,6 +28,7 @@ import {
 import type {
   Snippet, SnippetCategory, SnippetTag, DashboardStats, BulkImportResult,
 } from '@/types/exp-hub';
+import NoteContentEditor from '@/components/exp-hub/NoteContentEditor';
 
 type Tab = 'dashboard' | 'snippets' | 'categories' | 'tags' | 'import';
 
@@ -209,10 +210,12 @@ function DashboardTab() {
 
 interface EditorState {
   id: number | null; // null = creating
+  kind: 'CODE' | 'NOTE';
   title: string;
   description: string;
   language: string;
   code: string;
+  noteContent: string;
   explanation: string;
   youtubeUrl: string;
   referenceUrl: string;
@@ -224,8 +227,8 @@ interface EditorState {
 }
 
 const EMPTY_EDITOR: EditorState = {
-  id: null, title: '', description: '', language: 'javascript', code: '',
-  explanation: '', youtubeUrl: '', referenceUrl: '',
+  id: null, kind: 'CODE', title: '', description: '', language: 'javascript', code: '',
+  noteContent: '', explanation: '', youtubeUrl: '', referenceUrl: '',
   categoryId: null, tagIds: [], status: 'DRAFT', previewUrl: '', variables: [],
 };
 
@@ -274,10 +277,12 @@ function SnippetsTab({
       const s = r.data.data;
       setEditor({
         id: s.id,
+        kind: s.kind ?? 'CODE',
         title: s.title,
         description: s.description ?? '',
         language: s.language,
         code: s.code,
+        noteContent: s.noteContent ?? '',
         explanation: s.explanation ?? '',
         youtubeUrl: s.youtubeUrl ?? '',
         referenceUrl: s.referenceUrl ?? '',
@@ -297,13 +302,20 @@ function SnippetsTab({
   const save = async () => {
     if (!editor || saving) return;
     if (!editor.title.trim()) { toast.error('Cần tiêu đề'); return; }
-    if (!editor.code.trim()) { toast.error('Cần code'); return; }
+    const isNote = editor.kind === 'NOTE';
+    if (isNote) {
+      if (!editor.noteContent.trim()) { toast.error('Cần nội dung ghi chú'); return; }
+    } else if (!editor.code.trim()) {
+      toast.error('Cần code'); return;
+    }
     setSaving(true);
     const payload = {
+      kind: editor.kind,
       title: editor.title.trim(),
       description: editor.description.trim() || undefined,
-      language: editor.language,
-      code: editor.code,
+      language: isNote ? '' : editor.language,
+      code: isNote ? '' : editor.code,
+      noteContent: isNote ? editor.noteContent : undefined,
       explanation: editor.explanation.trim() || undefined,
       youtubeUrl: editor.youtubeUrl.trim() || undefined,
       referenceUrl: editor.referenceUrl.trim() || undefined,
@@ -440,6 +452,22 @@ function SnippetsTab({
               <button onClick={() => setEditor(null)} className="rounded p-1.5 text-slate-400 hover:bg-white/10"><X className="h-5 w-5" /></button>
             </div>
 
+            {/* Loại: Code snippet hay Note (rich-text + ảnh) */}
+            <div className="mb-4 inline-flex rounded-lg border border-white/10 bg-white/5 p-1">
+              {(['CODE', 'NOTE'] as const).map(k => (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => setEditor({ ...editor, kind: k })}
+                  className={`rounded-md px-4 py-1.5 text-sm font-medium transition-colors ${
+                    editor.kind === k ? 'bg-teal-500 text-black' : 'text-slate-300 hover:bg-white/10'
+                  }`}
+                >
+                  {k === 'CODE' ? 'Code' : 'Note (ghi chú + ảnh)'}
+                </button>
+              ))}
+            </div>
+
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="sm:col-span-2 text-xs text-slate-400">Tiêu đề *
                 <input value={editor.title} onChange={e => setEditor({ ...editor, title: e.target.value })} className={inpCls} placeholder="VD: JWT Authentication Middleware" />
@@ -447,11 +475,13 @@ function SnippetsTab({
               <label className="sm:col-span-2 text-xs text-slate-400">Mô tả
                 <input value={editor.description} onChange={e => setEditor({ ...editor, description: e.target.value })} className={inpCls} placeholder="Mô tả ngắn gọn" />
               </label>
-              <label className="text-xs text-slate-400">Ngôn ngữ *
-                <select value={editor.language} onChange={e => setEditor({ ...editor, language: e.target.value })} className={inpCls}>
-                  {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
-                </select>
-              </label>
+              {editor.kind === 'CODE' && (
+                <label className="text-xs text-slate-400">Ngôn ngữ *
+                  <select value={editor.language} onChange={e => setEditor({ ...editor, language: e.target.value })} className={inpCls}>
+                    {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
+                  </select>
+                </label>
+              )}
               <label className="text-xs text-slate-400">Thư mục
                 <select value={editor.categoryId ?? ''} onChange={e => setEditor({ ...editor, categoryId: e.target.value ? Number(e.target.value) : null })} className={inpCls}>
                   <option value="">— Không có —</option>
@@ -495,19 +525,32 @@ function SnippetsTab({
               </div>
             </div>
 
-            {/* Code */}
-            <div className="mt-4">
-              <div className="mb-1.5 text-xs text-slate-400">
-                Code *
+            {/* Code (CODE) hoặc Note rich-text + ảnh (NOTE) */}
+            {editor.kind === 'CODE' ? (
+              <div className="mt-4">
+                <div className="mb-1.5 text-xs text-slate-400">
+                  Code *
+                </div>
+                <textarea
+                  value={editor.code}
+                  onChange={(e) => setEditor(prev => (prev ? { ...prev, code: e.target.value } : prev))}
+                  placeholder="Paste code của bạn vào đây..."
+                  className="w-full rounded-lg border border-white/10 bg-[#0d1117] px-4 py-3 font-mono text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none resize-none"
+                  style={{ height: '320px' }}
+                />
               </div>
-              <textarea
-                value={editor.code}
-                onChange={(e) => setEditor(prev => (prev ? { ...prev, code: e.target.value } : prev))}
-                placeholder="Paste code của bạn vào đây..."
-                className="w-full rounded-lg border border-white/10 bg-[#0d1117] px-4 py-3 font-mono text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none resize-none"
-                style={{ height: '320px' }}
-              />
-            </div>
+            ) : (
+              <div className="mt-4">
+                <div className="mb-1.5 text-xs text-slate-400">
+                  Nội dung ghi chú *
+                  <span className="ml-2 text-slate-500">(dán ảnh trực tiếp — Ctrl/Cmd+V hoặc kéo thả)</span>
+                </div>
+                <NoteContentEditor
+                  value={editor.noteContent}
+                  onChange={(html) => setEditor(prev => (prev ? { ...prev, noteContent: html } : prev))}
+                />
+              </div>
+            )}
 
             {/* Explanation */}
             <div className="mt-4">

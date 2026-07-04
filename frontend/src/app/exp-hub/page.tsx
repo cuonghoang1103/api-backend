@@ -46,7 +46,8 @@ export default function ExpHubPage() {
   // Explanation modal
   const [showExplanation, setShowExplanation] = useState(false);
 
-  const languages = [...new Set(snippets.map((s) => s.language))].slice(0, 10);
+  // Only CODE snippets contribute a language filter — NOTE records have none.
+  const languages = [...new Set(snippets.filter((s) => s.kind !== 'NOTE' && s.language).map((s) => s.language))].slice(0, 10);
 
   // Fetch categories
   useEffect(() => {
@@ -441,7 +442,13 @@ export default function ExpHubPage() {
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  <LanguageBadge language={view.language} />
+                  {view.kind === 'NOTE' ? (
+                    <span className="rounded-full border border-cyan-400/40 bg-cyan-500/15 px-2.5 py-0.5 text-xs font-medium text-cyan-200">
+                      Note
+                    </span>
+                  ) : (
+                    <LanguageBadge language={view.language} />
+                  )}
                   {view.previewUrl && (
                     <a
                       href={view.previewUrl}
@@ -469,23 +476,36 @@ export default function ExpHubPage() {
                 </div>
               )}
 
-              {/* Code */}
-              <CodeViewer
-                code={view.code}
-                language={view.language}
-                className="mb-6"
-              />
+              {/* Body — code viewer for CODE, rich-text note (with images) for NOTE */}
+              {view.kind === 'NOTE' ? (
+                view.noteContent?.trim() ? (
+                  <div
+                    className="prose prose-invert mb-6 max-w-none prose-img:rounded-lg prose-img:border prose-img:border-white/10"
+                    dangerouslySetInnerHTML={{ __html: view.noteContent }}
+                  />
+                ) : (
+                  <p className="mb-6 text-slate-500">Ghi chú trống.</p>
+                )
+              ) : (
+                <CodeViewer
+                  code={view.code}
+                  language={view.language}
+                  className="mb-6"
+                />
+              )}
 
               {/* Actions */}
               <div className="flex items-center gap-3">
-                <CopyButton
-                  key={view.id}
-                  snippetId={view.id}
-                  code={view.code}
-                  language={view.language}
-                  variables={view.variables}
-                  variant="button"
-                />
+                {view.kind !== 'NOTE' && (
+                  <CopyButton
+                    key={view.id}
+                    snippetId={view.id}
+                    code={view.code}
+                    language={view.language}
+                    variables={view.variables}
+                    variant="button"
+                  />
+                )}
                 {(view.explanation || view.youtubeUrl || view.referenceUrl) && (
                   <button
                     onClick={() => setShowExplanation(true)}
@@ -519,13 +539,15 @@ export default function ExpHubPage() {
                   <Heart className={`w-4 h-4 ${view.hasUpvoted ? 'fill-current' : ''}`} />
                   {view.upvoteCount > 0 ? view.upvoteCount : ''}
                 </button>
-                <button
-                  onClick={handleToggleVersions}
-                  className="flex items-center gap-2 px-4 py-2 text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 rounded-lg transition-colors"
-                >
-                  <History className="w-4 h-4" />
-                  Lịch sử
-                </button>
+                {view.kind !== 'NOTE' && (
+                  <button
+                    onClick={handleToggleVersions}
+                    className="flex items-center gap-2 px-4 py-2 text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 rounded-lg transition-colors"
+                  >
+                    <History className="w-4 h-4" />
+                    Lịch sử
+                  </button>
+                )}
               </div>
 
               {/* Explanation Modal */}

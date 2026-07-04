@@ -3687,6 +3687,16 @@ enum SnippetStatus {
   @@map("snippet_status")
 }
 
+// CODE = a normal code snippet; NOTE = a rich-text note (HTML in
+// `noteContent`) that can embed pasted images. Both live in the same
+// nested folder tree and share the list / search / bookmark pipeline.
+enum SnippetKind {
+  CODE
+  NOTE
+
+  @@map("snippet_kind")
+}
+
 // ─── Nested Folder Tree ─────────────────────────────────────────
 
 model SnippetCategory {
@@ -3736,10 +3746,15 @@ model Snippet {
   title        String        @db.VarChar(255)
   slug         String        @unique(map: "uk_snippet_slug") @db.VarChar(255)
   description  String?       @db.Text
-  // Programming language (e.g. "javascript", "python", "java", "sql")
+  // CODE = normal code snippet; NOTE = rich-text note with embedded images.
+  kind         SnippetKind   @default(CODE)
+  // Programming language (e.g. "javascript", "python", "java", "sql").
+  // For NOTE records this is unused (stored as empty string).
   language     String        @db.VarChar(40)
-  // The actual code content
+  // The actual code content (empty for NOTE records).
   code         String        @db.Text
+  // Rich-text (HTML) body for NOTE records — supports pasted images.
+  noteContent  String?       @map("note_content") @db.Text
   // Detailed explanation for the code (HTML content)
   explanation  String?       @map("explanation") @db.Text
   // YouTube video URL for tutorial

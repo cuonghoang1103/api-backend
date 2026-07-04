@@ -1,6 +1,6 @@
 'use client';
 
-import { Copy, Eye, Heart } from 'lucide-react';
+import { Copy, Eye, Heart, FileText } from 'lucide-react';
 import { LanguageIcon } from './LanguageIcon';
 import type { Snippet } from '@/types/exp-hub';
 
@@ -27,7 +27,13 @@ export function SnippetCard({ snippet, isSelected, onClick, onCopy }: SnippetCar
       }`}
     >
       <div className="flex items-start gap-2">
-        <LanguageIcon language={snippet.language} className="mt-0.5 shrink-0" />
+        {snippet.kind === 'NOTE' ? (
+          <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-cyan-500/15 text-cyan-300">
+            <FileText className="h-4 w-4" />
+          </span>
+        ) : (
+          <LanguageIcon language={snippet.language} className="mt-0.5 shrink-0" />
+        )}
 
         <div className="flex-1 min-w-0">
           <h4 className="text-sm font-medium text-slate-200 truncate">

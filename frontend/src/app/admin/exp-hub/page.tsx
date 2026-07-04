@@ -311,9 +311,19 @@ function SnippetsTab({
     const hasNote = editor.noteContent.trim().length > 0;
     if (!hasCode && !hasNote) { toast.error('Cần ít nhất một khối code hoặc ghi chú'); return; }
     setSaving(true);
+    // Derive the legacy `language` + `code` fields from the first non-empty
+    // code block. The DB schema requires these to be non-null even when we
+    // also send codeBlocks (they mirror the first block for legacy queries).
+    // Without this, Prisma throws "Argument language must not be null" and
+    // the admin can never create a snippet.
+    const firstBlock = editor.codeBlocks.find((b) => b.code.trim().length > 0);
     const payload = {
       title: editor.title.trim(),
       description: editor.description.trim() || undefined,
+      // Fall back to a placeholder for NOTE-only snippets so the schema's
+      // non-null requirement is satisfied; the visible block array is empty.
+      language: firstBlock?.language || 'text',
+      code: firstBlock?.code || '',
       codeBlocks: editor.codeBlocks.map((b, i) => ({
         name: b.name.trim() || `Code ${i + 1}`,
         language: b.language || 'text',

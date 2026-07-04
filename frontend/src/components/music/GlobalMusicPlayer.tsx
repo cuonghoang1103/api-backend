@@ -397,8 +397,15 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
       transition={{ duration: 0.25 }}
       className="music-bar-fixed fixed bottom-0 left-0 right-0 z-[60] bg-darkbg/95 border-t border-darkborder shadow-2xl"
     >
-      {/* Invisible activity tracker */}
-      <div onClick={onActivity} onMouseDown={onActivity} onTouchStart={onActivity} className="absolute inset-0 cursor-default" />
+      {/* Invisible activity tracker — stopPropagation prevents clicks from
+          bubbling to the motion wrapper and accidentally triggering
+          navigation on other pages. */}
+      <div
+        onClick={(e) => { e.stopPropagation(); onActivity(); }}
+        onMouseDown={(e) => { e.stopPropagation(); onActivity(); }}
+        onTouchStart={(e) => { e.stopPropagation(); onActivity(); }}
+        className="absolute inset-0 cursor-default"
+      />
       <div className="max-w-7xl mx-auto px-4 py-4 relative z-10">
         <div className="flex items-center gap-5">
           {/* Cover + Info */}

@@ -246,7 +246,7 @@ export default function CyberPlayer() {
   const {
     currentTrack, isPlaying, currentTime, duration, volume, isMuted,
     isShuffled, repeatMode, next, previous, togglePlay,
-    setCurrentTime, setVolume, toggleMute, toggleShuffle, cycleRepeat,
+    setCurrentTime, setVolume, toggleMute, toggleShuffle, cycleRepeat, setIsSeeking,
   } = useMusicStore();
 
   const progressRef = useRef<HTMLDivElement>(null);
@@ -287,10 +287,11 @@ export default function CyberPlayer() {
     if (!progressRef.current || !duration) return;
     e.preventDefault();
     (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    setIsSeeking(true);
     const rect = progressRef.current.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     setCurrentTime(pct * duration);
-  }, [duration, setCurrentTime]);
+  }, [duration, setCurrentTime, setIsSeeking]);
 
   const handleProgressPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (e.buttons !== 1) return;
@@ -302,7 +303,8 @@ export default function CyberPlayer() {
 
   const handleProgressPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
-  }, []);
+    setIsSeeking(false);
+  }, [setIsSeeking]);
 
   const handleVolumeClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!volumeRef.current) return;

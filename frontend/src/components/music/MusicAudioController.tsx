@@ -298,6 +298,7 @@ export default function MusicAudioController() {
     currentTrack,
     isPlaying,
     currentTime,
+    isSeeking,
     volume,
     isMuted,
     repeatMode,
@@ -697,18 +698,24 @@ export default function MusicAudioController() {
   // Seek YouTube
   useEffect(() => {
     if (!ytPlayerInstance || !currentTrack) return;
+    // Skip if user is dragging the seek bar — the polling loop will update
+    // currentTime naturally once they release, so there's no need to
+    // constantly re-seek and fight the feedback loop.
+    if (isSeeking) return;
     const { isYT } = isYouTubeUrl(currentTrack.audioUrl);
     if (!isYT) return;
     const diff = Math.abs((ytPlayerInstance.getCurrentTime?.() ?? 0) - currentTime);
     if (diff > 1) {
       ytPlayerInstance.seekTo(currentTime, true);
     }
-  }, [currentTime, currentTrack]);
+  }, [currentTime, currentTrack, isSeeking]);
 
   // Seek local audio (when user drags seek bar or restoring position)
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !currentTrack) return;
+    // Skip if user is dragging the seek bar
+    if (isSeeking) return;
     const { isYT } = isYouTubeUrl(currentTrack.audioUrl);
     if (isYT) return;
     // Wait until metadata is loaded so we can seek reliably
@@ -720,7 +727,7 @@ export default function MusicAudioController() {
         // ignore seek errors (e.g. audio not yet ready)
       }
     }
-  }, [currentTime, currentTrack]);
+  }, [currentTime, currentTrack, isSeeking]);
 
   // Create audio element once — SSR-safe
   useEffect(() => {

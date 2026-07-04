@@ -163,6 +163,8 @@ interface MusicState {
   isPlaying: boolean;
   isHydrated: boolean;
   currentTime: number;
+  /** True while the user is actively dragging the seek bar. */
+  isSeeking: boolean;
   duration: number;
   volume: number;
   isMuted: boolean;
@@ -205,6 +207,10 @@ interface MusicState {
   previous: () => void;
   setCurrentTime: (time: number) => void;
   setDuration: (duration: number) => void;
+  /** Set true when user starts dragging the seek bar, false when done.
+   *  Used to prevent the seek-feedback loop when YouTube polling
+   *  temporarily reads an old currentTime. */
+  setIsSeeking: (v: boolean) => void;
   setVolume: (volume: number) => void;
   toggleMute: () => void;
   toggleShuffle: () => void;
@@ -257,6 +263,7 @@ export const useMusicStore = create<MusicState>()((set, get) => {
     isPlaying: false,
     isHydrated: true,
     currentTime: persisted.currentTime,
+    isSeeking: false,
     duration: 0,
     volume: persisted.volume,
     isMuted: persisted.isMuted,
@@ -600,6 +607,7 @@ export const useMusicStore = create<MusicState>()((set, get) => {
     },
 
     setDuration: (duration) => set({ duration }),
+    setIsSeeking: (v) => set({ isSeeking: v }),
     setVolume: (volume) => {
       set({ volume });
     },

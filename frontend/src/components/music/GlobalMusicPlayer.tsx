@@ -44,12 +44,14 @@ function isSafeCoverUrl(url: unknown): url is string {
 // SeekBar — click + drag to seek.
 // ============================================================
 function SeekBar({
-  currentTime, duration, onSeek, onActivity,
+  currentTime, duration, onSeek, onActivity, setIsSeeking,
 }: {
   currentTime: number;
   duration: number;
   onSeek: (time: number) => void;
   onActivity: () => void;
+  /** Called when drag starts/stops to prevent seek-feedback loops */
+  setIsSeeking: (v: boolean) => void;
 }) {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -73,7 +75,8 @@ function SeekBar({
     setDragValue(v);
     onSeek(v);
     onActivity();
-  }, [duration, valueFromPointer, onSeek, onActivity]);
+    setIsSeeking(true);
+  }, [duration, valueFromPointer, onSeek, onActivity, setIsSeeking]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!dragging) return;
@@ -88,7 +91,8 @@ function SeekBar({
     setDragging(false);
     setDragValue(null);
     onActivity();
-  }, [dragging, onActivity]);
+    setIsSeeking(false);
+  }, [dragging, onActivity, setIsSeeking]);
 
   const displayValue = dragging && dragValue !== null ? dragValue : currentTime;
   const progress = duration > 0 ? Math.max(0, Math.min(100, (displayValue / duration) * 100)) : 0;
@@ -352,7 +356,7 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
     currentTrack, isPlaying, currentTime, duration, volume, isMuted,
     isShuffled, repeatMode, tracks, playbackRate, manualQueue,
     next, previous, togglePlay, setCurrentTime, setVolume, toggleMute,
-    toggleShuffle, cycleRepeat,
+    toggleShuffle, cycleRepeat, setIsSeeking,
   } = useMusicStore();
 
   const [imgError, setImgError] = useState(false);
@@ -459,6 +463,7 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
                 duration={duration}
                 onSeek={setCurrentTime}
                 onActivity={onActivity}
+                setIsSeeking={setIsSeeking}
               />
               <span className="text-xs text-text-muted w-10 tabular-nums">{formatTime(duration)}</span>
             </div>

@@ -123,6 +123,20 @@ export default function NavigationDock() {
   // button would compete with it for the top-left slot.
   if (pathname?.startsWith('/creator')) return null;
 
+  // Pages that already have a left-side sidebar of their own.
+  // The dock's floating button sits at top-4 left-6 (z-70) and
+  // visually + interactively overlaps any sidebar collapsed into
+  // the same top-left region (e.g. /exp-hub FolderTree collapses
+  // to a 44px strip directly under the dock button, so every
+  // click on the collapsed chevron opened the dock panel and
+  // stranded the user on the page-list). On these pages we hide
+  // only the trigger button — the dock panel itself can still be
+  // opened programmatically if a page needs it.
+  const hideTriggerButton =
+    pathname?.startsWith('/exp-hub') ||
+    pathname?.startsWith('/admin') ||
+    pathname?.startsWith('/messages');
+
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
@@ -244,12 +258,14 @@ export default function NavigationDock() {
 
   return (
     <>
-      {/* ── Toggle button (always visible) ────────────────
+      {/* ── Toggle button (always visible, hidden on pages with
+          their own left sidebar — see hideTriggerButton above) ──
           A small floating button in the top-left of the
           viewport. Tapping it opens the sidebar panel.
           The button stays put while the panel animates in
           / out — it does NOT slide away, and the icon
           crossfades from Menu to X via AnimatePresence. */}
+      {!hideTriggerButton && (
       <motion.button
         type="button"
         aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
@@ -260,13 +276,7 @@ export default function NavigationDock() {
         whileTap={{ scale: 0.94 }}
         transition={ICON_SPRING}
         className={cn(
-          // Positioned on the RIGHT instead of the left to avoid
-          // overlapping the /exp-hub left sidebar (which can collapse
-          // to a 44px strip). Clicking inside that strip used to hit
-          // the dock button instead of the chevron toggle, opening
-          // the nav panel mid-interaction. The right edge stays out
-          // of every page's left-side content.
-          'fixed top-4 right-6 z-[70]',
+          'fixed top-4 left-6 z-[70]',
           'w-11 h-11 rounded-2xl',
           'flex items-center justify-center',
           'bg-[#0d1117]/85 backdrop-blur-2xl',
@@ -302,6 +312,7 @@ export default function NavigationDock() {
           )}
         </AnimatePresence>
       </motion.button>
+      )}
 
       {/* ── Backdrop dim + blur (only when panel is open) ──
           Full-screen transparent layer that darkens and

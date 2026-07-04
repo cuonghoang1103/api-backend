@@ -321,10 +321,12 @@ export default function ExpHubPage() {
             folderTreeOpen ? 'lg:w-72' : 'lg:w-11'
           }`}
         >
-          <div className="flex items-center justify-between px-3 py-2 border-b border-white/10">
+          <div className={`flex items-center border-b border-white/10 ${
+            folderTreeOpen ? 'justify-between px-3 py-2' : 'justify-center py-2'
+          }`}>
             <span
               className={`flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-slate-300 transition-opacity ${
-                folderTreeOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                folderTreeOpen ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden pointer-events-none'
               }`}
             >
               <FolderOpen className="w-4 h-4 text-violet-400" />
@@ -353,19 +355,6 @@ export default function ExpHubPage() {
               onSelectCategory={handleCategorySelect}
             />
           </div>
-          {/* Floating toggle — visible when sidebar is collapsed (desktop only)
-              so users can re-open it from the icon-only strip. */}
-          {!folderTreeOpen && (
-            <button
-              type="button"
-              onClick={() => setFolderTreeOpen(true)}
-              className="absolute inset-0 hidden lg:flex items-center justify-center text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-colors"
-              title="Hiện Categories"
-              aria-label="Hiện sidebar Categories"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          )}
         </aside>
 
         {/* Middle Column - Snippet List */}

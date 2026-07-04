@@ -481,7 +481,17 @@ export function PostComposer() {
   }, []);
 
   return (
-    <div>
+    // On mobile, an expanded composer becomes a full-screen "create post"
+    // sheet (Facebook-style) so typing/attaching isn't cramped inside the
+    // feed. ≥sm it stays an inline card. Additive wrapper only — the
+    // composer internals are untouched.
+    <div
+      className={
+        isExpanded
+          ? 'max-sm:fixed max-sm:inset-0 max-sm:z-[70] max-sm:overflow-y-auto max-sm:bg-[var(--bg-primary)] max-sm:p-2 max-sm:pb-[max(1rem,env(safe-area-inset-bottom))] max-sm:pt-[max(0.5rem,env(safe-area-inset-top))]'
+          : ''
+      }
+    >
       <motion.div
         layout
         // Phase 5 home upgrade: smoother expand animation.

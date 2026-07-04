@@ -63,12 +63,14 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
           `}
         >
           {/* Terminal prompt prefix */}
+          {/* Terminal prompt — the full host string is hidden on mobile
+              (it ate the typing space); just the `>` caret remains. */}
           <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none select-none">
             <span className="text-[#22d3ee] font-mono text-sm font-bold">&gt;</span>
-            <span className="text-[#64748b] font-mono text-xs">root@cuongmini-os</span>
-            <span className="text-[#64748b] font-mono text-xs">:</span>
-            <span className="text-[#22d3ee]/60 font-mono text-xs">~</span>
-            <span className="text-[#64748b] font-mono text-xs">$</span>
+            <span className="hidden sm:inline text-[#64748b] font-mono text-xs">root@cuongmini-os</span>
+            <span className="hidden sm:inline text-[#64748b] font-mono text-xs">:</span>
+            <span className="hidden sm:inline text-[#22d3ee]/60 font-mono text-xs">~</span>
+            <span className="hidden sm:inline text-[#64748b] font-mono text-xs">$</span>
           </div>
 
           <textarea
@@ -81,7 +83,7 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
             placeholder="enter command..."
             disabled={isDisabled}
             rows={1}
-            className="w-full pl-[170px] pr-14 py-3 bg-transparent text-[#f8fafc] placeholder:text-[#64748b]/40 font-mono text-sm focus:outline-none resize-none transition-all disabled:opacity-50"
+            className="w-full pl-9 sm:pl-[170px] pr-14 py-3 bg-transparent text-[#f8fafc] placeholder:text-[#64748b]/40 font-mono text-base sm:text-sm focus:outline-none resize-none transition-all disabled:opacity-50"
             style={{ minHeight: '48px', maxHeight: '160px' }}
           />
 
@@ -116,7 +118,8 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
         </div>
 
         <p className="text-[11px] text-[#64748b]/50 text-center mt-1.5 font-mono">
-          <span className="text-[#22d3ee]/40">//</span> Press Enter to execute &bull; Shift+Enter for new line &bull; CuongMini responses may be incorrect
+          <span className="text-[#22d3ee]/40">//</span>
+          <span className="hidden sm:inline"> Press Enter to execute &bull; Shift+Enter for new line &bull;</span> CuongMini responses may be incorrect
         </p>
       </div>
     </motion.div>

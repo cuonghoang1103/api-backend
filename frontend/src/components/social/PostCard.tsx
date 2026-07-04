@@ -31,6 +31,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
 import { getMediaUrl } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { getFeedSound, setFeedSound, subscribeFeedSound } from '@/lib/feedVideoSound';
 import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext, FeedSaveResult } from '@/types/social';
 import { REACTION_META, REACTION_PICKER_ORDER, WOW_META, EMPTY_REACTION_BREAKDOWN } from '@/types/social';
 import { socialKeys, type SocialFeedResponse } from '@/hooks/useSocialQueries';
@@ -2582,7 +2583,12 @@ function MediaItem({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLButtonElement | null>(null);
   const [isInView, setIsInView] = useState(false);
-  const [muted, setMuted] = useState(true);
+  // Sound is a GLOBAL, persisted preference (Facebook-style): enabling it on
+  // one feed video makes every subsequent in-view video play with sound, and
+  // the choice survives reloads. `muted` is derived from it.
+  const [soundOn, setSoundOn] = useState<boolean>(getFeedSound);
+  useEffect(() => subscribeFeedSound(setSoundOn), []);
+  const muted = !soundOn;
   // Inline playback state for the control bar
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -2700,18 +2706,29 @@ function MediaItem({
       // (the element defaults to preload="metadata" to spare the rest of
       // the feed). Then start it.
       if (v.preload !== 'auto') v.preload = 'auto';
-      // Autoplay may still fail (very strict policies) but we swallow it.
-      v.play().catch(() => {});
+      // Try to play with the global sound preference. If the browser blocks
+      // UNMUTED autoplay (no user gesture yet), fall back to muted playback so
+      // the video still plays — sound kicks in on the next video once the
+      // user has tapped the speaker once.
+      v.play().catch(() => {
+        if (!v.muted) {
+          v.muted = true;
+          v.play().catch(() => {});
+        }
+      });
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('social:video-playing', { detail: { src: v.currentSrc } }));
       }
     } else {
       v.pause();
+      // Leaving the viewport also drops sound (Facebook behaviour): the next
+      // time it scrolls in it re-applies the current global sound preference.
+      v.muted = true;
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('social:video-paused', { detail: { src: v.currentSrc } }));
       }
     }
-  }, [isInView, modalOpen, canPlay]);
+  }, [isInView, modalOpen, canPlay, muted]);
 
   const resetInlineHideTimer = () => {
     setShowInlineControls(true);
@@ -2909,11 +2926,11 @@ function MediaItem({
                 {fmtInline(currentTime)} / {fmtInline(duration)}
               </span>
               <div className="flex-1" />
-              {/* Mute */}
+              {/* Mute — toggles the GLOBAL feed sound preference */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setMuted((m) => !m);
+                  setFeedSound(!soundOn);
                 }}
                 className="transition-opacity hover:opacity-75"
                 aria-label={muted ? 'Unmute' : 'Mute'}
@@ -2932,6 +2949,30 @@ function MediaItem({
               </button>
             </div>
           </div>
+        )}
+
+        {/* Always-visible sound toggle (Facebook-style) — shown when the full
+            control bar is hidden (e.g. on mobile with no hover) so the user
+            can enable sound with a single tap. Tapping it is the gesture that
+            unlocks unmuted autoplay for every following in-view video. */}
+        {autoPlayEnabled && !showInlineControls && (
+          <button
+            onClick={(e) => { e.stopPropagation(); setFeedSound(!soundOn); }}
+            className="absolute bottom-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white ring-1 ring-white/15 backdrop-blur-sm transition-opacity hover:bg-black/70"
+            aria-label={muted ? 'Bật tiếng' : 'Tắt tiếng'}
+          >
+            {muted ? (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            ) : (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+            )}
+          </button>
         )}
 
         {/* Static duration badge (non-autoplay) */}

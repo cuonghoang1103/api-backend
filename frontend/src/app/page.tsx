@@ -619,8 +619,11 @@ export default function SocialPage() {
                 fetch via the existing observer. */}
             <FeedHasNewBanner count={newPostsCount} onAck={onAckNewPosts} />
 
-            {/* Feed — space-y-6 gives each post more breathing room */}
-            <div id="feed-list" className="mt-2 space-y-6">
+            {/* Feed — on mobile the list breaks out of the page's px-6
+                gutter so posts sit edge-to-edge (Facebook-style), with a
+                thin gap between them; on ≥sm it returns to the padded,
+                rounded card layout. */}
+            <div id="feed-list" className="mt-2 -mx-6 space-y-2 sm:mx-0 sm:space-y-6">
               <AnimatePresence mode="popLayout">
                 {isLoadingFeed && displayPosts.length === 0 ? (
                   /* Use the PostSkeleton list during initial load so the

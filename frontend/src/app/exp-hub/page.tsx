@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { FolderTree } from '@/components/exp-hub/FolderTree';
 import { SnippetCard } from '@/components/exp-hub/SnippetCard';
 import { CodeViewer } from '@/components/exp-hub/CodeViewer';
-import { CopyButton } from '@/components/exp-hub/CopyButton';
+import { SnippetCodeTabs } from '@/components/exp-hub/SnippetCodeTabs';
 import { SearchBar } from '@/components/exp-hub/SearchBar';
 import { FilterPanel } from '@/components/exp-hub/FilterPanel';
 import { snippetsApi, snippetCategoriesApi, snippetTagsApi, snippetStatsApi, snippetBookmarksApi } from '@/lib/exp-hub-api';
@@ -46,8 +46,7 @@ export default function ExpHubPage() {
   // Explanation modal
   const [showExplanation, setShowExplanation] = useState(false);
 
-  // Only CODE snippets contribute a language filter — NOTE records have none.
-  const languages = [...new Set(snippets.filter((s) => s.kind !== 'NOTE' && s.language).map((s) => s.language))].slice(0, 10);
+  const languages = [...new Set(snippets.filter((s) => s.language).map((s) => s.language))].slice(0, 10);
 
   // Fetch categories
   useEffect(() => {
@@ -296,10 +295,11 @@ export default function ExpHubPage() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="relative z-10 flex flex-1 overflow-hidden">
+      {/* Main Content — stacks vertically on mobile so all three panels are
+          reachable (no horizontal overflow), side-by-side columns on ≥lg. */}
+      <div className="relative z-10 flex flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
         {/* Left Sidebar - Folder Tree */}
-        <aside className="w-72 border-r border-white/10 overflow-y-auto bg-white/[0.02]">
+        <aside className="w-full shrink-0 max-h-52 overflow-y-auto border-b border-white/10 bg-white/[0.02] lg:w-72 lg:max-h-none lg:border-b-0 lg:border-r">
           <FolderTree
             categories={categories}
             selectedCategoryId={selectedCategoryId}
@@ -308,7 +308,7 @@ export default function ExpHubPage() {
         </aside>
 
         {/* Middle Column - Snippet List */}
-        <div className="w-96 border-r border-white/10 flex flex-col bg-white/[0.02]">
+        <div className="flex w-full shrink-0 flex-col border-b border-white/10 bg-white/[0.02] lg:w-96 lg:border-b-0 lg:border-r">
           {/* Filters */}
           <div className="p-3 border-b border-white/10 space-y-3">
             <FilterPanel
@@ -405,7 +405,7 @@ export default function ExpHubPage() {
 
         {/* Right Column - Snippet Detail (full record fetched on select:
             includes variables, hasUpvoted/hasBookmarked and counts views) */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="w-full overflow-y-auto lg:flex-1">
           {(() => {
             const view = detail ?? selectedSnippet;
             if (!view) {
@@ -442,13 +442,7 @@ export default function ExpHubPage() {
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  {view.kind === 'NOTE' ? (
-                    <span className="rounded-full border border-cyan-400/40 bg-cyan-500/15 px-2.5 py-0.5 text-xs font-medium text-cyan-200">
-                      Note
-                    </span>
-                  ) : (
-                    <LanguageBadge language={view.language} />
-                  )}
+                  <LanguageBadge language={view.language} />
                   {view.previewUrl && (
                     <a
                       href={view.previewUrl}
@@ -476,36 +470,19 @@ export default function ExpHubPage() {
                 </div>
               )}
 
-              {/* Body — code viewer for CODE, rich-text note (with images) for NOTE */}
-              {view.kind === 'NOTE' ? (
-                view.noteContent?.trim() ? (
-                  <div
-                    className="prose prose-invert mb-6 max-w-none prose-img:rounded-lg prose-img:border prose-img:border-white/10"
-                    dangerouslySetInnerHTML={{ __html: view.noteContent }}
-                  />
-                ) : (
-                  <p className="mb-6 text-slate-500">Ghi chú trống.</p>
-                )
-              ) : (
-                <CodeViewer
-                  code={view.code}
-                  language={view.language}
-                  className="mb-6"
+              {/* Code blocks — tabbed (Code 1, Code 2, …), each with its own copy */}
+              <SnippetCodeTabs snippet={view} />
+
+              {/* Note section — optional rich text (with images), alongside the code */}
+              {view.noteContent?.trim() && (
+                <div
+                  className="prose prose-invert mb-6 max-w-none prose-img:rounded-lg prose-img:border prose-img:border-white/10"
+                  dangerouslySetInnerHTML={{ __html: view.noteContent }}
                 />
               )}
 
               {/* Actions */}
               <div className="flex items-center gap-3">
-                {view.kind !== 'NOTE' && (
-                  <CopyButton
-                    key={view.id}
-                    snippetId={view.id}
-                    code={view.code}
-                    language={view.language}
-                    variables={view.variables}
-                    variant="button"
-                  />
-                )}
                 {(view.explanation || view.youtubeUrl || view.referenceUrl) && (
                   <button
                     onClick={() => setShowExplanation(true)}
@@ -539,15 +516,13 @@ export default function ExpHubPage() {
                   <Heart className={`w-4 h-4 ${view.hasUpvoted ? 'fill-current' : ''}`} />
                   {view.upvoteCount > 0 ? view.upvoteCount : ''}
                 </button>
-                {view.kind !== 'NOTE' && (
-                  <button
-                    onClick={handleToggleVersions}
-                    className="flex items-center gap-2 px-4 py-2 text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 rounded-lg transition-colors"
-                  >
-                    <History className="w-4 h-4" />
-                    Lịch sử
-                  </button>
-                )}
+                <button
+                  onClick={handleToggleVersions}
+                  className="flex items-center gap-2 px-4 py-2 text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 rounded-lg transition-colors"
+                >
+                  <History className="w-4 h-4" />
+                  Lịch sử
+                </button>
               </div>
 
               {/* Explanation Modal */}

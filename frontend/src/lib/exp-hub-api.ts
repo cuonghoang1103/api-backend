@@ -71,8 +71,10 @@ export const snippetsApi = {
   create: (data: {
     title: string;
     description?: string;
-    language: string;
-    code: string;
+    language?: string;
+    code?: string;
+    codeBlocks?: Array<{ name: string; language: string; code: string }>;
+    noteContent?: string;
     explanation?: string;
     youtubeUrl?: string;
     referenceUrl?: string;
@@ -89,6 +91,8 @@ export const snippetsApi = {
     description?: string;
     language: string;
     code: string;
+    codeBlocks: Array<{ name: string; language: string; code: string }>;
+    noteContent: string;
     explanation?: string;
     youtubeUrl?: string;
     referenceUrl?: string;

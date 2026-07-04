@@ -296,6 +296,7 @@ router.post('/', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: 
       description?: string;
       language: string;
       code: string;
+      codeBlocks?: Array<{ name?: string; language?: string; code?: string }>;
       kind?: 'CODE' | 'NOTE';
       noteContent?: string | null;
       explanation?: string;
@@ -311,21 +312,11 @@ router.post('/', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: 
     if (!data.title?.trim()) {
       throw new BadRequestError('Snippet title is required');
     }
-    if (data.kind === 'NOTE') {
-      // NOTE records carry rich-text HTML instead of code — code/language
-      // are irrelevant, so store empty defaults and validate the note body.
-      if (!data.noteContent?.trim()) {
-        throw new BadRequestError('Note content is required');
-      }
-      data.code = '';
-      data.language = '';
-    } else {
-      if (!data.code?.trim()) {
-        throw new BadRequestError('Snippet code is required');
-      }
-      if (!data.language?.trim()) {
-        throw new BadRequestError('Snippet language is required');
-      }
+    // A snippet needs at least one non-empty code block OR a note section.
+    const hasCode = (data.codeBlocks?.some((b) => (b.code ?? '').trim().length > 0)) || !!data.code?.trim();
+    const hasNote = !!data.noteContent?.trim();
+    if (!hasCode && !hasNote) {
+      throw new BadRequestError('Cần ít nhất một khối code hoặc ghi chú');
     }
 
     const snippet = await snippetsService.createSnippet(data, req.user?.userId);
@@ -342,6 +333,7 @@ router.put('/:id(\\d+)', authenticate, requireRole('ADMIN', 'EDITOR'), async (re
       description?: string;
       language?: string;
       code?: string;
+      codeBlocks?: Array<{ name?: string; language?: string; code?: string }>;
       kind?: 'CODE' | 'NOTE';
       noteContent?: string | null;
       explanation?: string;

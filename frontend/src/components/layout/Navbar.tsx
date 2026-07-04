@@ -45,6 +45,10 @@ const TOP_NAV_LINKS: TopNavLink[] = [
  { href: '/chat', label: 'AI Chat', icon: Sparkles },
 ];
 
+// Mobile bottom tab bar — Facebook-style, kept to 4 essential tabs.
+// The rest (Notes, Music, Messages, …) live in the top ☰ menu.
+const MOBILE_TAB_HREFS = ['/', '/about', '/projects', '/chat'];
+
 // Facebook Messenger bubble — official-style lightning chat icon.
 function MessengerIcon({ className }: { className?: string }) {
   return (
@@ -552,11 +556,14 @@ export default function Navbar() {
         }}
       >
         <div className="flex items-center justify-around px-2 py-2">
-          {TOP_NAV_LINKS.filter((l) => {
- if (l.adminOnly) return isAdmin;
- if (l.authOnly) return isAuthenticated;
- return true;
- }).map((link) => {
+          {MOBILE_TAB_HREFS
+            .map((href) => TOP_NAV_LINKS.find((l) => l.href === href))
+            .filter((l): l is TopNavLink => {
+              if (!l) return false;
+              if (l.adminOnly) return isAdmin;
+              if (l.authOnly) return isAuthenticated;
+              return true;
+            }).map((link) => {
             const isActive = pathname === link.href ||
               (link.href === '/messages' && pathname?.startsWith('/messages'));
             const isMessages = link.href === '/messages';

@@ -252,12 +252,40 @@ export async function getSnippetBySlug(slug: string, ip?: string) {
   return { ...normalized, hasUpvoted: false, hasBookmarked: false };
 }
 
+export type CodeBlockInput = { name?: string; language?: string; code?: string };
+
+// Normalize incoming code blocks: drop empty ones, ensure each has a name +
+// language, and mirror the FIRST block onto the legacy `code`/`language`
+// columns so old readers and search keep working.
+function normalizeCodeBlocks(
+  blocks: CodeBlockInput[] | undefined,
+  legacyCode?: string,
+  legacyLanguage?: string,
+): { codeBlocks: Array<{ name: string; language: string; code: string }>; code: string; language: string } {
+  let list = (blocks ?? [])
+    .filter((b) => (b.code ?? '').trim().length > 0)
+    .map((b, i) => ({
+      name: (b.name ?? '').trim() || `Code ${i + 1}`,
+      language: (b.language ?? '').trim() || 'text',
+      code: b.code ?? '',
+    }));
+  if (list.length === 0 && (legacyCode ?? '').trim()) {
+    list = [{ name: 'Code', language: (legacyLanguage ?? '').trim() || 'text', code: legacyCode ?? '' }];
+  }
+  return {
+    codeBlocks: list,
+    code: list[0]?.code ?? '',
+    language: list[0]?.language ?? (legacyLanguage ?? ''),
+  };
+}
+
 export async function createSnippet(
   data: {
     title: string;
     description?: string;
     language: string;
     code: string;
+    codeBlocks?: CodeBlockInput[];
     kind?: 'CODE' | 'NOTE';
     noteContent?: string | null;
     explanation?: string;
@@ -275,14 +303,17 @@ export async function createSnippet(
   const existing = await prisma.snippet.findUnique({ where: { slug } });
   if (existing) throw new BadRequestError('A snippet with this title already exists');
 
+  const cb = normalizeCodeBlocks(data.codeBlocks, data.code, data.language);
+
   const snippet = await prisma.snippet.create({
     data: {
       title: data.title,
       slug,
       description: data.description,
       kind: data.kind ?? 'CODE',
-      language: data.language,
-      code: data.code,
+      language: cb.language,
+      code: cb.code,
+      codeBlocks: cb.codeBlocks as unknown as Prisma.InputJsonValue,
       noteContent: data.noteContent,
       explanation: data.explanation,
       youtubeUrl: data.youtubeUrl,
@@ -304,7 +335,7 @@ export async function createSnippet(
     });
   }
 
-  await prisma.snippetVersion.create({ data: { snippetId: snippet.id, code: data.code, editedById: authorId } });
+  await prisma.snippetVersion.create({ data: { snippetId: snippet.id, code: cb.code, editedById: authorId } });
   return normalizeSnippet(snippet);
 }
 
@@ -315,6 +346,7 @@ export async function updateSnippet(
     description?: string;
     language?: string;
     code?: string;
+    codeBlocks?: CodeBlockInput[];
     kind?: 'CODE' | 'NOTE';
     noteContent?: string | null;
     explanation?: string;
@@ -350,6 +382,15 @@ export async function updateSnippet(
   if (data.referenceUrl !== undefined) updateData.referenceUrl = data.referenceUrl;
   if (data.categoryId !== undefined) updateData.category = data.categoryId === null ? { disconnect: true } : { connect: { id: data.categoryId } };
   if (data.status) updateData.status = data.status;
+
+  // Multi-block code: when the editor sends codeBlocks, they are the source
+  // of truth — recompute the legacy code/language mirror from the first block.
+  if (data.codeBlocks !== undefined) {
+    const cb = normalizeCodeBlocks(data.codeBlocks, data.code ?? existing.code, data.language ?? existing.language);
+    updateData.code = cb.code;
+    updateData.language = cb.language;
+    updateData.codeBlocks = cb.codeBlocks as unknown as Prisma.InputJsonValue;
+  }
 
   // Handle tags separately
   if (data.tagIds !== undefined) {

@@ -3751,9 +3751,16 @@ model Snippet {
   // Programming language (e.g. "javascript", "python", "java", "sql").
   // For NOTE records this is unused (stored as empty string).
   language     String        @db.VarChar(40)
-  // The actual code content (empty for NOTE records).
+  // Legacy single code content — kept as a fallback / the first block for
+  // snippets created before multi-block support. New snippets store their
+  // named blocks in `codeBlocks` below.
   code         String        @db.Text
-  // Rich-text (HTML) body for NOTE records — supports pasted images.
+  // Named, ordered code blocks: JSON array of { name, language, code }.
+  // A snippet can hold several ("Code 1", "Code 2", …). When present this is
+  // the source of truth; `code`/`language` above mirror the first block.
+  codeBlocks   Json?         @map("code_blocks")
+  // Optional rich-text (HTML) NOTE section of the snippet — supports pasted
+  // images. This is a SECTION of the snippet, shown alongside its code.
   noteContent  String?       @map("note_content") @db.Text
   // Detailed explanation for the code (HTML content)
   explanation  String?       @map("explanation") @db.Text

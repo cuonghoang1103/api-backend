@@ -867,7 +867,9 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
       // (otherwise two posts with dropdowns at the same z-40
       // would each be clipped by the OTHER's overflow:hidden).
       className={cn(
-        'post-card-frame group relative rounded-3xl',
+        // Mobile: edge-to-edge (no side rounding/border, thin top+bottom
+        // dividers) like the Facebook feed. ≥sm: rounded bordered card.
+        'post-card-frame group relative rounded-none border-y border-x-0 border-[color:var(--border-color)] sm:rounded-3xl sm:border-x',
         // Default: clip overflow so rounded corners + shadows stay clean.
         // Open menu: escape the card boundary so dropdowns can
         // overlay the NEXT post in the feed.
@@ -882,7 +884,6 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
       data-post-id={post.id}
       style={{
         background: 'var(--bg-card)',
-        border: '1px solid var(--border-color)',
       }}
     >
       {/* Top accent line */}
@@ -1278,15 +1279,19 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
         {/* Poll */}
         {safePoll && <PostPoll postId={post.id} poll={safePoll} />}
 
-        {/* Media */}
+        {/* Media — on mobile it breaks out of the card's p-5 gutter so
+            images/video fill the full screen width (Facebook-style);
+            ≥sm it stays inside the padded card. */}
         {safeMedia.length > 0 && (
-          <MediaGrid
-            media={safeMedia}
-            postId={post.id}
-            onOpenTheater={onOpenTheater}
-            musicTrack={post.musicTrack ?? null}
-            musicStartSec={post.musicStartSec ?? null}
-          />
+          <div className="-mx-5 sm:mx-0">
+            <MediaGrid
+              media={safeMedia}
+              postId={post.id}
+              onOpenTheater={onOpenTheater}
+              musicTrack={post.musicTrack ?? null}
+              musicStartSec={post.musicStartSec ?? null}
+            />
+          </div>
         )}
 
         {/* YouTube embed — shown after media if a URL is attached.
@@ -2268,7 +2273,7 @@ function MediaGrid({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       onWheel={onWheel}
-      className="relative w-full overflow-hidden rounded-2xl touch-pan-y select-none"
+      className="relative w-full overflow-hidden rounded-none sm:rounded-2xl touch-pan-y select-none"
       style={(() => {
         if (!allVideos) return undefined;
         // Active tile's ratio, falling back to the first tile's, then to

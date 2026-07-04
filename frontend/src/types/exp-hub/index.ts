@@ -32,10 +32,15 @@ export interface Snippet {
   title: string;
   slug: string;
   description: string | null;
-  // CODE = code snippet; NOTE = rich-text note (HTML in noteContent) with images.
-  kind: 'CODE' | 'NOTE';
+  // kind is legacy (no longer surfaced in the UI). A snippet can now carry
+  // several named code blocks AND an optional rich-text note section.
+  kind?: 'CODE' | 'NOTE';
   language: string;
   code: string;
+  // Named, ordered code blocks. Falls back to a single { code, language }
+  // block for legacy snippets (the backend synthesises it).
+  codeBlocks?: Array<{ name: string; language: string; code: string }> | null;
+  // Optional rich-text (HTML) note section shown alongside the code.
   noteContent: string | null;
   explanation: string | null;
   youtubeUrl: string | null;

@@ -208,14 +208,17 @@ function DashboardTab() {
 
 // ─── Snippets tab ──────────────────────────────────────────────────────
 
+interface CodeBlockDraft { name: string; language: string; code: string }
+
 interface EditorState {
   id: number | null; // null = creating
-  kind: 'CODE' | 'NOTE';
   title: string;
   description: string;
-  language: string;
-  code: string;
+  // One or more named code blocks (Code 1, Code 2, …).
+  codeBlocks: CodeBlockDraft[];
+  // Optional rich-text note section (HTML with pasted images).
   noteContent: string;
+  // Rich-text explanation shown under "More" (HTML with pasted images).
   explanation: string;
   youtubeUrl: string;
   referenceUrl: string;
@@ -227,7 +230,8 @@ interface EditorState {
 }
 
 const EMPTY_EDITOR: EditorState = {
-  id: null, kind: 'CODE', title: '', description: '', language: 'javascript', code: '',
+  id: null, title: '', description: '',
+  codeBlocks: [{ name: 'Code 1', language: 'javascript', code: '' }],
   noteContent: '', explanation: '', youtubeUrl: '', referenceUrl: '',
   categoryId: null, tagIds: [], status: 'DRAFT', previewUrl: '', variables: [],
 };
@@ -275,13 +279,14 @@ function SnippetsTab({
     try {
       const r = await snippetsApi.getById(id);
       const s = r.data.data;
+      const blocks: CodeBlockDraft[] = (s.codeBlocks && s.codeBlocks.length)
+        ? s.codeBlocks.map((b, i) => ({ name: b.name || `Code ${i + 1}`, language: b.language || 'text', code: b.code || '' }))
+        : [{ name: 'Code 1', language: s.language || 'javascript', code: s.code || '' }];
       setEditor({
         id: s.id,
-        kind: s.kind ?? 'CODE',
         title: s.title,
         description: s.description ?? '',
-        language: s.language,
-        code: s.code,
+        codeBlocks: blocks,
         noteContent: s.noteContent ?? '',
         explanation: s.explanation ?? '',
         youtubeUrl: s.youtubeUrl ?? '',
@@ -302,20 +307,19 @@ function SnippetsTab({
   const save = async () => {
     if (!editor || saving) return;
     if (!editor.title.trim()) { toast.error('Cần tiêu đề'); return; }
-    const isNote = editor.kind === 'NOTE';
-    if (isNote) {
-      if (!editor.noteContent.trim()) { toast.error('Cần nội dung ghi chú'); return; }
-    } else if (!editor.code.trim()) {
-      toast.error('Cần code'); return;
-    }
+    const hasCode = editor.codeBlocks.some((b) => b.code.trim().length > 0);
+    const hasNote = editor.noteContent.trim().length > 0;
+    if (!hasCode && !hasNote) { toast.error('Cần ít nhất một khối code hoặc ghi chú'); return; }
     setSaving(true);
     const payload = {
-      kind: editor.kind,
       title: editor.title.trim(),
       description: editor.description.trim() || undefined,
-      language: isNote ? '' : editor.language,
-      code: isNote ? '' : editor.code,
-      noteContent: isNote ? editor.noteContent : undefined,
+      codeBlocks: editor.codeBlocks.map((b, i) => ({
+        name: b.name.trim() || `Code ${i + 1}`,
+        language: b.language || 'text',
+        code: b.code,
+      })),
+      noteContent: hasNote ? editor.noteContent : undefined,
       explanation: editor.explanation.trim() || undefined,
       youtubeUrl: editor.youtubeUrl.trim() || undefined,
       referenceUrl: editor.referenceUrl.trim() || undefined,
@@ -452,22 +456,6 @@ function SnippetsTab({
               <button onClick={() => setEditor(null)} className="rounded p-1.5 text-slate-400 hover:bg-white/10"><X className="h-5 w-5" /></button>
             </div>
 
-            {/* Loại: Code snippet hay Note (rich-text + ảnh) */}
-            <div className="mb-4 inline-flex rounded-lg border border-white/10 bg-white/5 p-1">
-              {(['CODE', 'NOTE'] as const).map(k => (
-                <button
-                  key={k}
-                  type="button"
-                  onClick={() => setEditor({ ...editor, kind: k })}
-                  className={`rounded-md px-4 py-1.5 text-sm font-medium transition-colors ${
-                    editor.kind === k ? 'bg-teal-500 text-black' : 'text-slate-300 hover:bg-white/10'
-                  }`}
-                >
-                  {k === 'CODE' ? 'Code' : 'Note (ghi chú + ảnh)'}
-                </button>
-              ))}
-            </div>
-
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="sm:col-span-2 text-xs text-slate-400">Tiêu đề *
                 <input value={editor.title} onChange={e => setEditor({ ...editor, title: e.target.value })} className={inpCls} placeholder="VD: JWT Authentication Middleware" />
@@ -475,13 +463,6 @@ function SnippetsTab({
               <label className="sm:col-span-2 text-xs text-slate-400">Mô tả
                 <input value={editor.description} onChange={e => setEditor({ ...editor, description: e.target.value })} className={inpCls} placeholder="Mô tả ngắn gọn" />
               </label>
-              {editor.kind === 'CODE' && (
-                <label className="text-xs text-slate-400">Ngôn ngữ *
-                  <select value={editor.language} onChange={e => setEditor({ ...editor, language: e.target.value })} className={inpCls}>
-                    {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
-                  </select>
-                </label>
-              )}
               <label className="text-xs text-slate-400">Thư mục
                 <select value={editor.categoryId ?? ''} onChange={e => setEditor({ ...editor, categoryId: e.target.value ? Number(e.target.value) : null })} className={inpCls}>
                   <option value="">— Không có —</option>
@@ -525,45 +506,81 @@ function SnippetsTab({
               </div>
             </div>
 
-            {/* Code (CODE) hoặc Note rich-text + ảnh (NOTE) */}
-            {editor.kind === 'CODE' ? (
-              <div className="mt-4">
-                <div className="mb-1.5 text-xs text-slate-400">
-                  Code *
-                </div>
-                <textarea
-                  value={editor.code}
-                  onChange={(e) => setEditor(prev => (prev ? { ...prev, code: e.target.value } : prev))}
-                  placeholder="Paste code của bạn vào đây..."
-                  className="w-full rounded-lg border border-white/10 bg-[#0d1117] px-4 py-3 font-mono text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none resize-none"
-                  style={{ height: '320px' }}
-                />
+            {/* Code blocks — one or more named blocks (Code 1, Code 2, …) */}
+            <div className="mt-4">
+              <div className="mb-2 flex items-center justify-between">
+                <div className="text-xs text-slate-400">Các khối code</div>
+                <button
+                  type="button"
+                  onClick={() => setEditor(prev => prev ? { ...prev, codeBlocks: [...prev.codeBlocks, { name: `Code ${prev.codeBlocks.length + 1}`, language: 'javascript', code: '' }] } : prev)}
+                  className="flex items-center gap-1 rounded-lg border border-teal-500/40 bg-teal-500/15 px-2.5 py-1 text-xs font-medium text-teal-300 hover:bg-teal-500/25"
+                >
+                  <Plus className="h-3.5 w-3.5" /> Thêm code
+                </button>
               </div>
-            ) : (
-              <div className="mt-4">
-                <div className="mb-1.5 text-xs text-slate-400">
-                  Nội dung ghi chú *
-                  <span className="ml-2 text-slate-500">(dán ảnh trực tiếp — Ctrl/Cmd+V hoặc kéo thả)</span>
-                </div>
-                <NoteContentEditor
-                  value={editor.noteContent}
-                  onChange={(html) => setEditor(prev => (prev ? { ...prev, noteContent: html } : prev))}
-                />
+              <div className="space-y-3">
+                {editor.codeBlocks.map((blk, idx) => (
+                  <div key={idx} className="rounded-lg border border-white/10 bg-white/[0.02] p-3">
+                    <div className="mb-2 flex items-center gap-2">
+                      <input
+                        value={blk.name}
+                        onChange={e => setEditor(prev => { if (!prev) return prev; const cb = [...prev.codeBlocks]; cb[idx] = { ...cb[idx], name: e.target.value }; return { ...prev, codeBlocks: cb }; })}
+                        placeholder={`Code ${idx + 1}`}
+                        className="flex-1 rounded border border-white/10 bg-[#0d1117] px-2 py-1 text-sm font-medium text-slate-200 focus:border-teal-500/50 focus:outline-none"
+                      />
+                      <select
+                        value={blk.language}
+                        onChange={e => setEditor(prev => { if (!prev) return prev; const cb = [...prev.codeBlocks]; cb[idx] = { ...cb[idx], language: e.target.value }; return { ...prev, codeBlocks: cb }; })}
+                        className="rounded border border-white/10 bg-[#0d1117] px-2 py-1 text-sm text-slate-200 focus:border-teal-500/50 focus:outline-none [&>option]:bg-[#131a2e]"
+                      >
+                        {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
+                      </select>
+                      {editor.codeBlocks.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setEditor(prev => prev ? { ...prev, codeBlocks: prev.codeBlocks.filter((_, i) => i !== idx) } : prev)}
+                          className="rounded p-1.5 text-slate-400 hover:bg-rose-500/20 hover:text-rose-300"
+                          title="Xoá khối code"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                    <textarea
+                      value={blk.code}
+                      onChange={e => setEditor(prev => { if (!prev) return prev; const cb = [...prev.codeBlocks]; cb[idx] = { ...cb[idx], code: e.target.value }; return { ...prev, codeBlocks: cb }; })}
+                      placeholder="Paste code của bạn vào đây..."
+                      className="w-full rounded border border-white/10 bg-[#0d1117] px-3 py-2 font-mono text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none resize-none"
+                      style={{ height: '200px' }}
+                    />
+                  </div>
+                ))}
               </div>
-            )}
+            </div>
+
+            {/* Note section — optional rich-text (paste images directly) */}
+            <div className="mt-4">
+              <div className="mb-1.5 text-xs text-slate-400">
+                Ghi chú (Note)
+                <span className="ml-2 text-slate-500">(tuỳ chọn — dán ảnh trực tiếp, Ctrl/Cmd+V hoặc kéo thả)</span>
+              </div>
+              <NoteContentEditor
+                value={editor.noteContent}
+                onChange={(html) => setEditor(prev => (prev ? { ...prev, noteContent: html } : prev))}
+                minHeight={200}
+              />
+            </div>
 
             {/* Explanation */}
             <div className="mt-4">
               <div className="mb-1.5 text-xs text-slate-400">
                 Giải thích / Hướng dẫn
-                <span className="ml-2 text-slate-500">(hiển thị khi user bấm "More")</span>
+                <span className="ml-2 text-slate-500">(hiển thị khi user bấm &quot;More&quot; — dán ảnh trực tiếp)</span>
               </div>
-              <textarea
-                value={editor.explanation || ''}
-                onChange={(e) => setEditor(prev => (prev ? { ...prev, explanation: e.target.value } : prev))}
-                placeholder="Viết giải thích chi tiết về đoạn code này... (hỗ trợ HTML cơ bản)"
-                className="w-full rounded-lg border border-white/10 bg-[#0d1117] px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none resize-none"
-                style={{ height: '150px' }}
+              <NoteContentEditor
+                value={editor.explanation}
+                onChange={(html) => setEditor(prev => (prev ? { ...prev, explanation: html } : prev))}
+                minHeight={180}
               />
             </div>
 

@@ -260,7 +260,13 @@ export default function NavigationDock() {
         whileTap={{ scale: 0.94 }}
         transition={ICON_SPRING}
         className={cn(
-          'fixed top-4 left-6 z-[70]',
+          // Positioned on the RIGHT instead of the left to avoid
+          // overlapping the /exp-hub left sidebar (which can collapse
+          // to a 44px strip). Clicking inside that strip used to hit
+          // the dock button instead of the chevron toggle, opening
+          // the nav panel mid-interaction. The right edge stays out
+          // of every page's left-side content.
+          'fixed top-4 right-6 z-[70]',
           'w-11 h-11 rounded-2xl',
           'flex items-center justify-center',
           'bg-[#0d1117]/85 backdrop-blur-2xl',

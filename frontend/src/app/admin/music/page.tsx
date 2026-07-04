@@ -140,6 +140,11 @@ export default function AdminMusicPage() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalTracks, setTotalTracks] = useState(0);
+  const PAGE_SIZE = 20;
 
   // YouTube search state
   const [showYouTubeSearch, setShowYouTubeSearch] = useState(false);
@@ -173,12 +178,15 @@ export default function AdminMusicPage() {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Fetch tracks list — goes through the proxy so auth cookie is forwarded
-  const fetchTracks = async () => {
+  const fetchTracks = async (page = 1) => {
     setLoading(true);
     try {
-      const data = await apiFetch('/admin/tracks');
-      debug('fetchTracks OK, count:', data.data?.length);
+      const data = await apiFetch(`/admin/tracks?page=${page}&size=${PAGE_SIZE}`);
+      debug('fetchTracks OK, count:', data.data?.length, 'total:', data.pagination?.total);
       setTracks(data.data || []);
+      setTotalTracks(data.pagination?.total || 0);
+      setTotalPages(data.pagination?.totalPages || 1);
+      setCurrentPage(page);
     } catch (err: any) {
       console.error('[AdminMusic] fetchTracks error:', err);
       toast.error('Khong the tai danh sach nhac: ' + (err?.message || String(err)));
@@ -468,7 +476,10 @@ export default function AdminMusicPage() {
             <Headphones className="w-6 h-6 text-neon-violet" />
             Quan ly Nhac
           </h1>
-          <p className="text-text-muted text-sm mt-1">{tracks.length} tracks</p>
+          <p className="text-text-muted text-sm mt-1">
+            {loading ? 'Đang tải...' : `${totalTracks} tracks`}
+            {totalPages > 1 && ` (Trang ${currentPage}/${totalPages})`}
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -703,6 +714,53 @@ export default function AdminMusicPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 py-4 border-t border-darkborder">
+            <button
+              onClick={() => fetchTracks(currentPage - 1)}
+              disabled={currentPage <= 1}
+              className="px-3 py-1.5 rounded-lg text-sm text-text-secondary hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              ← Prev
+            </button>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum: number;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => fetchTracks(pageNum)}
+                    className={`w-8 h-8 rounded-lg text-xs font-medium transition-colors ${
+                      currentPage === pageNum
+                        ? 'bg-neon-violet text-white'
+                        : 'text-text-secondary hover:bg-white/5'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              onClick={() => fetchTracks(currentPage + 1)}
+              disabled={currentPage >= totalPages}
+              className="px-3 py-1.5 rounded-lg text-sm text-text-secondary hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              Next →
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Modal Form */}

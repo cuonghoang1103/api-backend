@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Loader2, ChevronRight, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play } from 'lucide-react';
+import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen } from 'lucide-react';
 import { toast } from 'sonner';
 import { FolderTree } from '@/components/exp-hub/FolderTree';
 import { SnippetCard } from '@/components/exp-hub/SnippetCard';
@@ -45,6 +45,9 @@ export default function ExpHubPage() {
   const [versions, setVersions] = useState<SnippetVersion[] | null>(null);
   // Explanation modal
   const [showExplanation, setShowExplanation] = useState(false);
+  // Left sidebar (FolderTree) collapse — persisted to localStorage so the
+  // user keeps their preference across page reloads.
+  const [folderTreeOpen, setFolderTreeOpen] = useState(true);
 
   const languages = [...new Set(snippets.filter((s) => s.language).map((s) => s.language))].slice(0, 10);
 
@@ -68,6 +71,17 @@ export default function ExpHubPage() {
       .then((res) => setStats(res.data.data))
       .catch(console.error);
   }, []);
+
+  // Restore + persist the FolderTree sidebar open/closed state
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('exp-hub-folder-tree-open');
+      if (saved !== null) setFolderTreeOpen(saved !== 'false');
+    } catch { /* ignore */ }
+  }, []);
+  useEffect(() => {
+    try { localStorage.setItem('exp-hub-folder-tree-open', String(folderTreeOpen)); } catch { /* ignore */ }
+  }, [folderTreeOpen]);
 
   // Fetch snippets
   const fetchSnippets = useCallback(async () => {
@@ -298,13 +312,60 @@ export default function ExpHubPage() {
       {/* Main Content — stacks vertically on mobile so all three panels are
           reachable (no horizontal overflow), side-by-side columns on ≥lg. */}
       <div className="relative z-10 flex flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
-        {/* Left Sidebar - Folder Tree */}
-        <aside className="w-full shrink-0 max-h-52 overflow-y-auto border-b border-white/10 bg-white/[0.02] lg:w-72 lg:max-h-none lg:border-b-0 lg:border-r">
-          <FolderTree
-            categories={categories}
-            selectedCategoryId={selectedCategoryId}
-            onSelectCategory={handleCategorySelect}
-          />
+        {/* Left Sidebar - Folder Tree (collapsible).
+            Mobile: collapses into the top stacked row.
+            Desktop (≥lg): width animates between 288px (open) and 44px (closed)
+            via inline width — the FolderTree itself hides when closed. */}
+        <aside
+          className={`relative shrink-0 border-b border-white/10 bg-white/[0.02] lg:border-b-0 lg:border-r ${
+            folderTreeOpen ? 'lg:w-72' : 'lg:w-11'
+          }`}
+        >
+          <div className="flex items-center justify-between px-3 py-2 border-b border-white/10">
+            <span
+              className={`flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-slate-300 transition-opacity ${
+                folderTreeOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              <FolderOpen className="w-4 h-4 text-violet-400" />
+              Categories
+            </span>
+            <button
+              type="button"
+              onClick={() => setFolderTreeOpen((v) => !v)}
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-white/10 hover:text-slate-100"
+              title={folderTreeOpen ? 'Ẩn Categories' : 'Hiện Categories'}
+              aria-label={folderTreeOpen ? 'Ẩn sidebar Categories' : 'Hiện sidebar Categories'}
+            >
+              {folderTreeOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+            </button>
+          </div>
+          {/* FolderTree — render normally but hide when collapsed so the
+              toggle button above stays the only control visible. */}
+          <div
+            className={`max-h-52 overflow-y-auto lg:max-h-none ${
+              folderTreeOpen ? '' : 'hidden'
+            }`}
+          >
+            <FolderTree
+              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              onSelectCategory={handleCategorySelect}
+            />
+          </div>
+          {/* Floating toggle — visible when sidebar is collapsed (desktop only)
+              so users can re-open it from the icon-only strip. */}
+          {!folderTreeOpen && (
+            <button
+              type="button"
+              onClick={() => setFolderTreeOpen(true)}
+              className="absolute inset-0 hidden lg:flex items-center justify-center text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-colors"
+              title="Hiện Categories"
+              aria-label="Hiện sidebar Categories"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
         </aside>
 
         {/* Middle Column - Snippet List */}

@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Code2, Terminal, Loader2, TerminalSquare, Database, Cpu, Zap, Package, ChevronLeft, ChevronRight, FolderOpen } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Code2, Terminal, Loader2, TerminalSquare, Database, Cpu, Zap, Package } from 'lucide-react';
 import ClientOnly from '@/components/providers/ClientOnly';
 import DevPostCard from '@/components/dev-hub/DevPostCard';
 import PostDetailModal from '@/components/dev-hub/PostDetailModal';
@@ -149,20 +149,8 @@ export default function DevHubPage() {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [loading, setLoading] = useState(true);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
-  // Sidebar collapse state — persisted to localStorage so it survives
-  // navigation. Defaults to OPEN so first-time visitors see the categories.
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => { setMounted(true); }, []);
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('dev-hub-sidebar-open');
-      if (saved !== null) setSidebarOpen(saved !== 'false');
-    } catch { /* ignore */ }
-  }, []);
-  useEffect(() => {
-    try { localStorage.setItem('dev-hub-sidebar-open', String(sidebarOpen)); } catch { /* ignore */ }
-  }, [sidebarOpen]);
 
   const loadPosts = useCallback(async (category?: string) => {
     setLoading(true);
@@ -217,162 +205,87 @@ export default function DevHubPage() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         <HeroSection postCount={posts.length} totalDownloads={totalDownloads} />
 
-        <div className="flex gap-6 items-start">
-          {/* Sidebar — vertical category list with collapse toggle */}
-          <motion.aside
-            initial={false}
-            animate={{ width: sidebarOpen ? 240 : 56 }}
-            transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-            className="shrink-0 sticky top-24 self-start hidden md:block"
-          >
-            <div
-              className="rounded-2xl border overflow-hidden"
+        {/* Category Filter */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="mb-10 flex flex-wrap items-center gap-2"
+        >
+          {categories.map((cat) => (
+            <motion.button
+              key={cat}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setActiveCategory(cat)}
+              className="px-4 py-1.5 rounded-full text-xs font-mono font-semibold transition-all duration-200"
               style={{
-                background: 'rgba(10,5,25,0.5)',
-                borderColor: 'rgba(168,85,247,0.15)',
-                backdropFilter: 'blur(12px)',
+                background: activeCategory === cat
+                  ? `linear-gradient(135deg, ${C.primary}, ${C.secondary})`
+                  : 'rgba(255,255,255,0.03)',
+                border: `1px solid ${activeCategory === cat ? 'transparent' : C.border}`,
+                color: activeCategory === cat ? '#fff' : C.textMuted,
+                boxShadow: activeCategory === cat ? `0 0 20px rgba(168,85,247,0.4)` : 'none',
               }}
             >
-              {/* Header — always visible so the toggle is reachable when collapsed */}
-              <div className="flex items-center justify-between px-3 py-3 border-b" style={{ borderColor: 'rgba(168,85,247,0.1)' }}>
-                <AnimatePresence mode="wait" initial={false}>
-                  {sidebarOpen ? (
-                    <motion.div
-                      key="header-open"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
-                      className="flex items-center gap-2"
-                    >
-                      <FolderOpen className="w-4 h-4 shrink-0" style={{ color: C.primary }} />
-                      <span className="text-xs font-mono font-bold uppercase tracking-wider" style={{ color: C.text }}>
-                        Categories
-                      </span>
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="header-closed"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
-                      className="flex items-center gap-2"
-                    >
-                      <FolderOpen className="w-4 h-4 shrink-0" style={{ color: C.primary }} />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                <button
-                  type="button"
-                  onClick={() => setSidebarOpen((v) => !v)}
-                  className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center transition-colors hover:bg-white/5"
-                  style={{ color: C.textMuted }}
-                  title={sidebarOpen ? 'Thu gọn' : 'Mở rộng'}
-                  aria-label={sidebarOpen ? 'Thu gọn sidebar' : 'Mở rộng sidebar'}
-                >
-                  {sidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-                </button>
-              </div>
+              {cat}
+            </motion.button>
+          ))}
+        </motion.div>
 
-              {/* Category list */}
-              <AnimatePresence initial={false}>
-                {sidebarOpen && (
-                  <motion.ul
-                    key="cat-list"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="p-2 space-y-1"
-                  >
-                    {categories.map((cat) => {
-                      const active = activeCategory === cat;
-                      return (
-                        <li key={cat}>
-                          <button
-                            type="button"
-                            onClick={() => setActiveCategory(cat)}
-                            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-mono font-semibold transition-all duration-200 flex items-center gap-2 ${
-                              active ? 'shadow-md' : 'hover:bg-white/5'
-                            }`}
-                            style={{
-                              background: active
-                                ? `linear-gradient(135deg, ${C.primary}, ${C.secondary})`
-                                : 'transparent',
-                              color: active ? '#fff' : C.textMuted,
-                              boxShadow: active ? `0 0 16px rgba(168,85,247,0.35)` : 'none',
-                            }}
-                          >
-                            <Code2 className="w-3 h-3 shrink-0" />
-                            <span className="truncate">{cat}</span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </motion.ul>
-                )}
-              </AnimatePresence>
-            </div>
-          </motion.aside>
-
-          {/* Content — fills remaining space; width changes when sidebar collapses */}
-          <div className="flex-1 min-w-0">
-            {/* Loading */}
-            {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="rounded-2xl overflow-hidden border"
-                    style={{
-                      background: C.glassBg,
-                      borderColor: C.border,
-                      height: '260px',
-                      animation: 'pulse 1.5s ease-in-out infinite',
-                    }}
-                  />
-                ))}
-              </div>
-            ) : posts.length === 0 ? (
-              /* Empty state */
+        {/* Loading */}
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
               <motion.div
+                key={i}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col items-center justify-center py-24 gap-4 rounded-2xl border"
+                transition={{ delay: i * 0.05 }}
+                className="rounded-2xl overflow-hidden border"
                 style={{
-                  background: 'rgba(10,5,25,0.5)',
-                  borderColor: 'rgba(168,85,247,0.08)',
+                  background: C.glassBg,
+                  borderColor: C.border,
+                  height: '260px',
+                  animation: 'pulse 1.5s ease-in-out infinite',
                 }}
-              >
-                <div
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center"
-                  style={{ background: 'rgba(168,85,247,0.08)', border: `1px solid ${C.border}` }}
-                >
-                  <Code2 className="w-8 h-8" style={{ color: `${C.primary}50` }} />
-                </div>
-                <p className="text-sm font-medium" style={{ color: C.textMuted }}>
-                  No articles in this category yet.
-                </p>
-              </motion.div>
-            ) : (
-              /* Cards Grid */
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {posts.map((post, i) => (
-                  <DevPostCard
-                    key={post.id}
-                    post={post}
-                    index={i}
-                    onClick={() => setSelectedPostId(post.id)}
-                  />
-                ))}
-              </div>
-            )}
+              />
+            ))}
           </div>
-        </div>
+        ) : posts.length === 0 ? (
+          /* Empty state */
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center justify-center py-24 gap-4 rounded-2xl border"
+            style={{
+              background: 'rgba(10,5,25,0.5)',
+              borderColor: 'rgba(168,85,247,0.08)',
+            }}
+          >
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center"
+              style={{ background: 'rgba(168,85,247,0.08)', border: `1px solid ${C.border}` }}
+            >
+              <Code2 className="w-8 h-8" style={{ color: `${C.primary}50` }} />
+            </div>
+            <p className="text-sm font-medium" style={{ color: C.textMuted }}>
+              No articles in this category yet.
+            </p>
+          </motion.div>
+        ) : (
+          /* Cards Grid */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((post, i) => (
+              <DevPostCard
+                key={post.id}
+                post={post}
+                index={i}
+                onClick={() => setSelectedPostId(post.id)}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Post Detail Modal */}

@@ -420,11 +420,14 @@ export default function MusicAudioController() {
           const t = player.getCurrentTime?.() ?? 0;
           setCurrentTime(t);
         }
+        // Also update duration in case it wasn't available when the track loaded.
+        const d = player.getDuration?.() ?? 0;
+        if (d > 0) setDuration(d);
       } catch {
         // Player may be destroyed
       }
     }, 250);
-  }, [stopYouTubePolling, setCurrentTime]);
+  }, [stopYouTubePolling, setCurrentTime, setDuration]);
 
   // Mount YouTube container once
   useEffect(() => {
@@ -547,6 +550,10 @@ export default function MusicAudioController() {
             player.loadVideoById({ videoId, startSeconds });
             player.pauseVideo();
           }
+          // Set duration immediately (YouTube may have it cached).
+          // Also poll via the interval in case it loads async.
+          const d = player.getDuration?.() ?? 0;
+          if (d > 0) setDuration(d);
           // Re-apply audio settings — a load keeps them, but be explicit.
           if (ytMuted) {
             player.mute();

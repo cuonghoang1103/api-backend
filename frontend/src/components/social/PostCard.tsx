@@ -2,6 +2,7 @@
 
 import { memo, useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -1968,6 +1969,7 @@ function MediaGrid({
   musicTrack?: MusicTrackMini | null;
   musicStartSec?: number | null;
 }) {
+  const router = useRouter();
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const visual = media.filter((m) => m.type !== 'FILE');
@@ -1997,7 +1999,22 @@ function MediaGrid({
   const handleMediaClick = (item: SocialMedia) => {
     const url = getMediaUrl(item.url, item.url);
     if (item.type === 'VIDEO') {
-      setVideoSrc(url);
+      // Facebook-style: tapping a feed video opens the full-screen
+      // vertical Reels player seeded at this post. We carry over the
+      // active video-category filter (?vc=) from the current URL so the
+      // reel stays scoped to the same category the user was browsing.
+      // Falls back to the inline theater modal only when we have no post
+      // id to seed the reel with (e.g. detached previews).
+      if (postId != null) {
+        let href = `/feed/video?start=${postId}`;
+        if (typeof window !== 'undefined') {
+          const vc = new URLSearchParams(window.location.search).get('vc');
+          if (vc) href += `&vc=${vc}`;
+        }
+        router.push(href);
+      } else {
+        setVideoSrc(url);
+      }
     } else {
       setLightboxSrc(url);
     }

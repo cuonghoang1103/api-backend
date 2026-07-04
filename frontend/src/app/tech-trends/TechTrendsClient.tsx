@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useEffect, useCallback, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bookmark, Share2, Clock, TrendingUp, Search, Sparkles, Code2, AlertTriangle, CheckCircle2, X, Loader2 } from 'lucide-react';
+import { Bookmark, Share2, Clock, TrendingUp, Search, Sparkles, Code2, AlertTriangle, CheckCircle2, X } from 'lucide-react';
+import { Skeleton } from '@/components/ui/Skeleton';
 import { techTrendsApi } from '@/lib/api';
 import {
   CATEGORY_TABS,
@@ -752,10 +753,37 @@ function Widget({ title, icon, children }: { title: string; icon: ReactNode; chi
 // ── States ─────────────────────────────────────────────────
 
 function LoadingState() {
+  // Skeleton grid mirroring the 2-col ArticleCard layout — no bare spinner,
+  // so the page reads as "content arriving" (FB-style perceived speed).
   return (
-    <div className="col-span-full flex flex-col items-center justify-center py-20 gap-3">
-      <Loader2 className="w-7 h-7 text-neon-violet animate-spin" />
-      <p className="text-sm text-text-muted">Loading articles…</p>
+    <div
+      className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-5"
+      role="status"
+      aria-busy="true"
+      aria-label="Đang tải bài viết"
+    >
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={i}
+          className="rounded-2xl overflow-hidden border border-darkborder bg-darkcard/60 backdrop-blur-sm"
+          style={{ animationDelay: `${i * 60}ms` }}
+        >
+          <Skeleton className="h-40 w-full" />
+          <div className="p-5 space-y-3">
+            <div className="flex gap-2">
+              <Skeleton className="h-5 w-16" rounded="rounded-full" />
+              <Skeleton className="h-5 w-20" rounded="rounded-full" />
+            </div>
+            <Skeleton className="h-5 w-11/12" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-4/5" />
+            <div className="flex items-center gap-2 pt-2">
+              <Skeleton className="h-6 w-6" rounded="rounded-full" />
+              <Skeleton className="h-3 w-24" />
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

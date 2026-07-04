@@ -2,8 +2,9 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Shield, Clock, Star, ShoppingBag, Loader2 } from 'lucide-react';
+import { Zap, Shield, Clock, Star, ShoppingBag } from 'lucide-react';
 import ProductCard from '@/components/shop/ProductCard';
+import { Skeleton } from '@/components/ui/Skeleton';
 import ProductFilter from '@/components/shop/ProductFilter';
 import CartDrawer from '@/components/shop/CartDrawer';
 import ShopBackground from '@/components/shop/ShopBackground';
@@ -77,9 +78,35 @@ export default function ShopPage() {
   }, [products, search, category, priceRange, sort]);
 
   if (!mounted) {
+    // Skeleton grid (FB-style) instead of a bare spinner so the product
+    // layout is mirrored before hydration — no white flash / layout jump.
     return (
-      <div className="min-h-screen bg-darkbg pt-20 flex items-center justify-center">
-        <Loader2 className="w-10 h-10 animate-spin text-neon-violet" />
+      <div className="min-h-screen bg-darkbg pt-20 px-4 sm:px-6 lg:px-8">
+        <div
+          className="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          role="status"
+          aria-busy="true"
+          aria-label="Đang tải sản phẩm"
+        >
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-2xl overflow-hidden border border-darkborder bg-darkcard/40"
+              style={{ animationDelay: `${i * 50}ms` }}
+            >
+              <Skeleton className="h-44 w-full" />
+              <div className="p-4 space-y-3">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-3 w-5/6" />
+                <div className="flex items-center justify-between pt-2">
+                  <Skeleton className="h-5 w-16" />
+                  <Skeleton className="h-8 w-24" rounded="rounded-lg" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

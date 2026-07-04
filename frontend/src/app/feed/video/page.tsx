@@ -13,7 +13,16 @@ function VideoReel() {
   const params = useSearchParams();
   const startRaw = params.get('start');
   const startPostId = startRaw ? Number(startRaw) : undefined;
-  return <VerticalVideoFeed startPostId={Number.isNaN(startPostId) ? undefined : startPostId} />;
+  // Carry over the video-category filter (?vc=) so the reel stays scoped to
+  // the same category the user tapped from on the home feed.
+  const vcRaw = params.get('vc');
+  const videoCategoryId = vcRaw ? Number(vcRaw) : undefined;
+  return (
+    <VerticalVideoFeed
+      startPostId={Number.isNaN(startPostId) ? undefined : startPostId}
+      videoCategoryId={videoCategoryId && !Number.isNaN(videoCategoryId) ? videoCategoryId : undefined}
+    />
+  );
 }
 
 export default function FeedVideoPage() {

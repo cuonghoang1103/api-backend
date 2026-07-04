@@ -32,7 +32,7 @@ import {
 } from '@/lib/videoEmbed';
 import VideoCommentsSheet from '@/components/social/VideoCommentsSheet';
 
-export default function VerticalVideoFeed({ startPostId }: { startPostId?: number }) {
+export default function VerticalVideoFeed({ startPostId, videoCategoryId }: { startPostId?: number; videoCategoryId?: number }) {
   const router = useRouter();
   const [posts, setPosts] = useState<SocialPost[]>([]);
   const [cursor, setCursor] = useState<number | null>(null);
@@ -53,7 +53,7 @@ export default function VerticalVideoFeed({ startPostId }: { startPostId?: numbe
     (async () => {
       setLoading(true);
       try {
-        const res = await socialApi.getFeed({ type: 'VIDEO', limit: 8 });
+        const res = await socialApi.getFeed({ type: 'VIDEO', limit: 8, videoCategoryId });
         if (cancelled) return;
         const data = (res.data?.data ?? []) as SocialPost[];
         setPosts(data);
@@ -68,14 +68,14 @@ export default function VerticalVideoFeed({ startPostId }: { startPostId?: numbe
       }
     })();
     return () => { cancelled = true; };
-  }, [startPostId]);
+  }, [startPostId, videoCategoryId]);
 
   // ─── Infinite load-more ──────────────────────────────────────
   const loadMore = useCallback(async () => {
     if (loadingMore || !hasMore || cursor == null) return;
     setLoadingMore(true);
     try {
-      const res = await socialApi.getFeed({ type: 'VIDEO', cursor, limit: 8 });
+      const res = await socialApi.getFeed({ type: 'VIDEO', cursor, limit: 8, videoCategoryId });
       const data = (res.data?.data ?? []) as SocialPost[];
       setPosts((prev) => {
         const seen = new Set(prev.map((p) => p.id));
@@ -86,7 +86,7 @@ export default function VerticalVideoFeed({ startPostId }: { startPostId?: numbe
     } finally {
       setLoadingMore(false);
     }
-  }, [loadingMore, hasMore, cursor]);
+  }, [loadingMore, hasMore, cursor, videoCategoryId]);
 
   // ─── IntersectionObserver: pick the single in-view slide ─────
   useEffect(() => {
@@ -298,7 +298,23 @@ function VideoSlide({
   return (
     <>
       {/* Media layer — NO transform/filter ancestors to keep the GPU path */}
-      <div className="absolute inset-0 flex items-center justify-center bg-black">
+      <div className="absolute inset-0 bg-black">
+        {/* Blurred backdrop fills the letterbox gaps of LANDSCAPE videos so
+            they never show black bars (FB Reels / YouTube Shorts style).
+            It's a SIBLING of the player — the blur/scale live only on this
+            poster <img>, never on a <video> ancestor, so the clip stays on
+            the GPU path (see the perf note above). Portrait 9:16 videos
+            cover it entirely, so it's a no-op for them. */}
+        {poster && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={poster}
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover opacity-50 blur-2xl"
+          />
+        )}
+        <div className="absolute inset-0 flex items-center justify-center">
         {active && uploaded ? (
           <UploadedVideo url={uploaded.url} poster={poster} muted={muted} onToggleMute={onToggleMute} />
         ) : active && ytId ? (
@@ -323,6 +339,7 @@ function VideoSlide({
           // Inactive (or no player resolvable): poster only — no decode.
           <PosterFallback poster={poster} />
         )}
+        </div>
       </div>
 
       {/* Right action rail — lifted by the home-indicator inset on iPhone */}

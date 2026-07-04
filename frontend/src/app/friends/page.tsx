@@ -19,7 +19,8 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Search, X, Loader2, Users, UserPlus, UserCheck, Heart } from 'lucide-react';
+import { Search, X, Users, UserPlus, UserCheck, Heart } from 'lucide-react';
+import { Skeleton } from '@/components/ui/Skeleton';
 import PersonCard, { FriendRequestCard, type PersonCardData } from '@/components/social/friends/PersonCard';
 import { friendApi, socialUserApi, type DiscoverUser, type FriendRequest, type FriendUser } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -164,7 +165,7 @@ function FriendsPageInner() {
               Kết quả cho “{query.trim()}”
             </h2>
             {searchLoading ? (
-              <Centered><Loader2 className="h-5 w-5 animate-spin text-text-muted" /></Centered>
+              <ListSkeleton />
             ) : searchResults.length === 0 ? (
               <Empty text="Không tìm thấy người dùng nào khớp." />
             ) : (
@@ -201,7 +202,7 @@ function FriendsPageInner() {
             </div>
 
             {tabLoading ? (
-              <Centered><Loader2 className="h-5 w-5 animate-spin text-text-muted" /></Centered>
+              <ListSkeleton />
             ) : activeTab === 'requests' ? (
               requests.length === 0 ? (
                 <Empty text="Bạn không có lời mời kết bạn nào." />
@@ -265,8 +266,32 @@ function FriendsPageInner() {
 function Grid({ children }: { children: React.ReactNode }) {
   return <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">{children}</div>;
 }
-function Centered({ children }: { children: React.ReactNode }) {
-  return <div className="flex justify-center py-12">{children}</div>;
+function ListSkeleton({ rows = 6 }: { rows?: number }) {
+  // FB-style: mirror the PersonCard grid so switching tabs / searching shows
+  // structured placeholders instead of a lone spinner.
+  return (
+    <div
+      className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
+      role="status"
+      aria-busy="true"
+      aria-label="Đang tải"
+    >
+      {Array.from({ length: rows }).map((_, i) => (
+        <div
+          key={i}
+          className="flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-3"
+          style={{ animationDelay: `${i * 50}ms` }}
+        >
+          <Skeleton className="h-12 w-12 shrink-0" rounded="rounded-full" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-3.5 w-1/2" />
+            <Skeleton className="h-3 w-1/3" />
+          </div>
+          <Skeleton className="h-8 w-20" rounded="rounded-lg" />
+        </div>
+      ))}
+    </div>
+  );
 }
 function Empty({ text }: { text: string }) {
   return (

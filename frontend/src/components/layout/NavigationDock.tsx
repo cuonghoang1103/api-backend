@@ -327,7 +327,10 @@ export default function NavigationDock() {
             key="dock-backdrop"
             initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
             animate={{ opacity: 1, backdropFilter: 'blur(14px)' }}
-            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            // pointerEvents none applies INSTANTLY at exit start — even if
+            // the exit animation stalls and the element zombies in the DOM,
+            // it can never swallow clicks meant for the page underneath.
+            exit={{ opacity: 0, backdropFilter: 'blur(0px)', pointerEvents: 'none' }}
             transition={{ duration: 0.32, ease: [0.32, 0.94, 0.6, 1] }}
             className="fixed inset-0 z-[65] bg-black/55"
             onMouseDown={close}
@@ -361,7 +364,25 @@ export default function NavigationDock() {
             aria-label="Primary navigation"
             initial={{ opacity: 0, x: -40, scale: 0.92 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -32, scale: 0.96 }}
+            // Exit hardening (2026-07-05). The old exit relied on the
+            // PANEL_SPRING finishing so AnimatePresence could unmount the
+            // panel. When the panel closed BECAUSE of a route change, the
+            // exit sometimes never completed and the panel stayed mounted at
+            // opacity:0 with pointer-events:auto — an invisible 288px sheet
+            // over the new page's left sidebar (exp-hub/notes) whose hidden
+            // nav links swallowed every click ("click folder → jump to a
+            // random page"). Two defenses:
+            //   1. pointerEvents:'none' is a non-animatable value, applied
+            //      the instant the exit starts — a stuck panel is harmless.
+            //   2. exit uses a fixed-duration tween (springs + in-flight
+            //      layout changes are what stalled completion).
+            exit={{
+              opacity: 0,
+              x: -32,
+              scale: 0.96,
+              pointerEvents: 'none',
+              transition: { duration: 0.22, ease: [0.32, 0.94, 0.6, 1] },
+            }}
             transition={PANEL_SPRING}
             onMouseLeave={() => setHoveredHref(null)}
             className={cn(
@@ -617,16 +638,19 @@ function DockRow({
               : 'text-text-muted hover:text-text-primary',
         )}
       >
-        {/* Active bar — flat gradient on the left edge. */}
+        {/* Active bar — flat gradient on the left edge.
+            NOTE: deliberately NOT a layoutId shared-layout element. The
+            active row changes at the same moment the panel starts its exit
+            (route change closes the panel), and a layoutId re-parenting
+            mid-exit stalled AnimatePresence — the panel never unmounted and
+            its invisible links ate clicks on the next page's sidebar. */}
         {isActive && (
-          <motion.div
-            layoutId="navActiveIndicator"
+          <div
             className="absolute -left-1 top-2 bottom-2 w-[3px] rounded-full"
             style={{
               background: 'linear-gradient(180deg, #22d3ee, #8b5cf6)',
               boxShadow: '0 0 12px rgba(34, 211, 238, 0.4)',
             }}
-            transition={{ type: 'spring', stiffness: 380, damping: 30, mass: 0.5 }}
           />
         )}
 
@@ -717,16 +741,14 @@ function DockRowLink({
               : 'text-text-muted hover:text-text-primary',
         )}
       >
-        {/* Active bar */}
+        {/* Active bar (plain div — see DockRow note about layoutId) */}
         {isActive && (
-          <motion.div
-            layoutId="navActiveIndicator"
+          <div
             className="absolute -left-1 top-2 bottom-2 w-[3px] rounded-full"
             style={{
               background: 'linear-gradient(180deg, #22d3ee, #8b5cf6)',
               boxShadow: '0 0 12px rgba(34, 211, 238, 0.4)',
             }}
-            transition={{ type: 'spring', stiffness: 380, damping: 30, mass: 0.5 }}
           />
         )}
 

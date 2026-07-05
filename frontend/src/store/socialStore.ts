@@ -521,7 +521,10 @@ export const useSocialStore = create<SocialState>((set, get) => ({
         .map((m, i) => ({
           type: m.type,
           url: m.url!,
-          thumbnail: m.thumbnail,
+          // Belt-and-braces: never ship browser-local object/data URLs —
+          // they only resolve in this session, so persisting one bakes a
+          // permanently broken poster into the post (2026-06 blob: incident).
+          thumbnail: m.thumbnail && !/^(blob|data):/i.test(m.thumbnail) ? m.thumbnail : undefined,
           width: m.width,
           height: m.height,
           duration: m.duration,

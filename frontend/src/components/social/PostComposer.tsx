@@ -411,8 +411,14 @@ export function PostComposer() {
                     ...m,
                     progress: 100,
                     url,
-                    // For videos, use server-generated thumbnail; for images, use the uploaded URL
-                    thumbnail: isVideo ? (serverThumbnail || preview) : url
+                    // For videos, use the server-generated thumbnail; for
+                    // images, the uploaded URL. NEVER fall back to the blob
+                    // preview here — `thumbnail` is persisted with the post,
+                    // and blob: URLs die with the browser session (8 posts
+                    // shipped broken posters this way, 2026-06-20→27). The
+                    // composer tile renders from `preview`, so no thumbnail
+                    // is fine — the player just starts without a poster.
+                    thumbnail: isVideo ? (serverThumbnail || undefined) : url
                   }
                 : m
             ),

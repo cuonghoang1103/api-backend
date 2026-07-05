@@ -293,10 +293,19 @@ export async function createPost(input: CreatePostInput) {
         : { poll: undefined }) as Record<string, unknown>,
       media: media ? {
         createMany: {
-          data: media.map((m: any, idx: number) => ({
+          // Server-side sanitizing: browser-local object/data URLs must never
+          // be persisted — they only resolve inside the session that created
+          // them, so a stored one is a permanently broken asset for every
+          // viewer (8 posts shipped blob: posters this way, 2026-06-20→27).
+          // A blob/data `url` means the upload never actually happened, so
+          // the whole item is dropped; a blob/data `thumbnail` is nulled and
+          // the player simply starts without a poster.
+          data: media
+            .filter((m: any) => m.url && !/^(blob|data):/i.test(m.url))
+            .map((m: any, idx: number) => ({
             type: m.type,
             url: m.url,
-            thumbnail: m.thumbnail,
+            thumbnail: m.thumbnail && !/^(blob|data):/i.test(m.thumbnail) ? m.thumbnail : null,
             width: m.width,
             height: m.height,
             duration: m.duration,

@@ -20,6 +20,8 @@ export const metadata: Metadata = {
  description:
  'A curated showcase of products and tools built by Cuong Hoang.',
  url: 'https://cuongthai.com/projects',
+ // Re-declare: this block replaces the root openGraph (incl. images).
+ images: ['/opengraph-image'],
  },
  alternates: {
  canonical: 'https://cuongthai.com/projects',

@@ -109,10 +109,12 @@ export default function Navbar() {
 
   const verifyAdmin = useCallback(async () => {
     let cachedAdmin = false;
+    let anyAuthEvidence = false;
     if (typeof window !== 'undefined') {
       try {
         const stored = localStorage.getItem('user');
         if (stored) {
+          anyAuthEvidence = true;
           const user = JSON.parse(stored);
           cachedAdmin = (user?.roles || []).some(
             (r: string) => (r || '').replace('ROLE_', '').toUpperCase() === 'ADMIN',
@@ -120,6 +122,14 @@ export default function Navbar() {
           if (cachedAdmin) setVerifiedAdmin(true);
         }
       } catch {}
+    }
+    // Guests can't be admins — skip the network round-trip entirely
+    // (it fired a guaranteed-401 on every anonymous page view; audit
+    // 2026-07-05). The login/role-updated event below re-invokes this
+    // after sign-in, at which point the store/localStorage are populated.
+    if (!anyAuthEvidence && !useAuthStore.getState().isAuthenticated) {
+      setVerifiedAdmin(false);
+      return;
     }
     try {
       const res = await fetch('/api/auth/admin-check', { credentials: 'include', cache: 'no-store' });
@@ -140,7 +150,11 @@ export default function Navbar() {
   useEffect(() => {
     if (!mounted) return;
     verifyAdmin();
-  }, [mounted, verifyAdmin]);
+    // isBackendAuth/session in deps: re-run when auth hydrates after mount
+    // (persisted-store rehydration or OAuth session arriving) so admins
+    // still get verified even though the guest short-circuit above bailed
+    // on the very first run.
+  }, [mounted, verifyAdmin, isBackendAuth, session]);
 
   useEffect(() => {
     if (!mounted) return;

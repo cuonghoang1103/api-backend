@@ -16,6 +16,8 @@ export const metadata: Metadata = {
       'Tech news, bug-fix guides, interview experiences, and architecture tutorials.',
     url: 'https://cuongthai.com/tech-trends',
     type: 'website',
+    // Re-declare: this block replaces the root openGraph (incl. images).
+    images: ['/opengraph-image'],
   },
   alternates: {
     canonical: 'https://cuongthai.com/tech-trends',

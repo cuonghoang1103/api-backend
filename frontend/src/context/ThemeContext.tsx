@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, useSyncExternalStore, type ReactNode } from 'react';
 import { api } from '@/lib/api';
+import { useAuthStore } from '@/store/authStore';
 
 type Theme = 'dark' | 'light';
 
@@ -71,28 +72,50 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const stored = getStoredTheme();
     applyThemeToDOM(stored);
 
-    // Then sync with server (non-blocking)
-    api.get('/users/me/preferences')
-      .then((res) => {
-        const serverTheme = res.data?.data?.theme as Theme | undefined;
-        if (serverTheme === 'light' || serverTheme === 'dark') {
-          if (serverTheme !== stored) {
-            applyThemeToDOM(serverTheme);
-            localStorage.setItem(STORAGE_KEY, serverTheme);
+    // Server sync is auth-only: /users/me/preferences 401s for guests, and
+    // ThemeProvider wraps the whole app — every anonymous page view fired a
+    // guaranteed-401 (audit 2026-07-05). The auth store hydrates async, so
+    // instead of a one-shot check we sync once auth is (or becomes) ready.
+    let synced = false;
+    const syncFromServer = () => {
+      if (synced) return;
+      synced = true;
+      api.get('/users/me/preferences')
+        .then((res) => {
+          const serverTheme = res.data?.data?.theme as Theme | undefined;
+          if (serverTheme === 'light' || serverTheme === 'dark') {
+            if (serverTheme !== getStoredTheme()) {
+              applyThemeToDOM(serverTheme);
+              localStorage.setItem(STORAGE_KEY, serverTheme);
+            }
           }
-        }
-      })
-      .catch(() => {
-        // Ignore server errors
-      });
+        })
+        .catch(() => {
+          // Ignore server errors
+        });
+    };
+
+    if (useAuthStore.getState().isAuthenticated) {
+      syncFromServer();
+      return;
+    }
+    const unsub = useAuthStore.subscribe((s) => {
+      if (s.isAuthenticated) {
+        syncFromServer();
+        unsub();
+      }
+    });
+    return () => unsub();
   }, []);
 
   const setTheme = useCallback((t: Theme) => {
     applyThemeToDOM(t);
     localStorage.setItem(STORAGE_KEY, t);
 
-    // Sync to server (fire and forget)
-    api.patch('/users/me/preferences', { theme: t }).catch(() => {});
+    // Sync to server (fire and forget) — skip for guests (401 otherwise)
+    if (useAuthStore.getState().isAuthenticated) {
+      api.patch('/users/me/preferences', { theme: t }).catch(() => {});
+    }
   }, []);
 
   const toggleTheme = useCallback(() => {

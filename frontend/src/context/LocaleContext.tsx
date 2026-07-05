@@ -1,6 +1,15 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+// Static imports (≈17–19KB raw each) so translations exist during SSR and
+// the very first client render alike. The old dynamic import() left the
+// cache EMPTY at SSR — t() rendered raw keys ("hero.badge") into the server
+// HTML, then React 18 selective hydration sometimes ran after the import
+// resolved, so the client rendered the real text → hydration error #425
+// on /about. Deterministic data on both sides kills the mismatch AND puts
+// real copy (not i18n keys) in the SEO-visible server HTML.
+import enMessages from '../../messages/en.json';
+import viMessages from '../../messages/vi.json';
 
 type Locale = 'vi' | 'en';
 
@@ -13,22 +22,15 @@ interface LocaleContextType {
 
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
-// Translation cache
+// Translation data — statically bundled, identical on server and client.
 const translations: Record<Locale, Record<string, any>> = {
-  vi: {},
-  en: {}
+  vi: viMessages as Record<string, any>,
+  en: enMessages as Record<string, any>,
 };
 
-async function loadTranslations(locale: Locale): Promise<void> {
-  if (Object.keys(translations[locale]).length === 0) {
-    try {
-      const messages = await import(`../../messages/${locale}.json`);
-      translations[locale] = messages.default;
-    } catch (e) {
-      console.error('Failed to load translations:', e);
-    }
-  }
-}
+// Kept as an async no-op so existing `loadTranslations(x).then(...)`
+// call sites keep working unchanged.
+async function loadTranslations(_locale: Locale): Promise<void> {}
 
 function getNestedValue(obj: any, path: string): string | undefined {
   const keys = path.split('.');

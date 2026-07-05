@@ -29,6 +29,8 @@ export const metadata: Metadata = {
       'A curated hub of GitHub repositories with reviews and engineering write-ups.',
     url: 'https://cuongthai.com/repos',
     type: 'website',
+    // Re-declare: this block replaces the root openGraph (incl. images).
+    images: ['/opengraph-image'],
   },
   alternates: {
     canonical: 'https://cuongthai.com/repos',

@@ -149,9 +149,12 @@ export default function NavigationDock() {
   const [verifiedAdmin, setVerifiedAdmin] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Admin check
+  // Admin check — only for signed-in users; guests can't be admins and
+  // the unconditional call fired a guaranteed-401 on every anonymous
+  // page view (audit 2026-07-05).
   useEffect(() => {
     if (!mounted) return;
+    if (!isBackendAuth && !session) return;
     const verifyAdmin = async () => {
       try {
         const res = await fetch('/api/auth/admin-check', { credentials: 'include', cache: 'no-store' });
@@ -165,7 +168,9 @@ export default function NavigationDock() {
       } catch {}
     };
     verifyAdmin();
-  }, [mounted]);
+    // isBackendAuth/session in deps so the check re-runs when auth hydrates
+    // after mount (persisted-store rehydration or a fresh login).
+  }, [mounted, isBackendAuth, session]);
 
   const isAuthenticated = mounted && (isBackendAuth || !!session);
   const displayUser = mounted

@@ -32,8 +32,11 @@ interface SocialSidebarProps {
 }
 
 /** Fetches the user's collection list. Stale for 30s so the
- *  sidebar always shows fresh counts without hammering the API. */
-function useCollections() {
+ *  sidebar always shows fresh counts without hammering the API.
+ *  `enabled` must be auth-gated by the caller — /feed/collections is a
+ *  per-user endpoint and 401s for guests (same pattern as the
+ *  friend-request-count query below). */
+function useCollections(enabled: boolean) {
   return useQuery({
     queryKey: ['sidebar-collections'] as const,
     queryFn: () =>
@@ -46,7 +49,7 @@ function useCollections() {
         }),
     staleTime: 30_000,
     retry: false,
-    enabled: typeof window !== 'undefined',
+    enabled: typeof window !== 'undefined' && enabled,
   });
 }
 
@@ -187,7 +190,12 @@ export default function SocialSidebar({
 function CollectionsSection() {
   const pathname = usePathname();
   const qc = useQueryClient();
-  const collectionsQuery = useCollections();
+  // Auth-gate the fetch (401 for guests otherwise). `mounted` avoids the
+  // SSR/first-render mismatch, same pattern as the parent sidebar.
+  const { user } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const collectionsQuery = useCollections(mounted && !!user);
   const collections = collectionsQuery.data?.collections ?? [];
   const uncategorized = collectionsQuery.data?.uncategorized ?? 0;
   const total = collectionsQuery.data?.total ?? 0;

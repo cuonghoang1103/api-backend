@@ -16,7 +16,10 @@ import HubClient from './HubClient';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Hub | CuongThai',
+  // Bare name only — the root layout's title template appends
+  // " | CuongThai" (the old value double-suffixed to
+  // "Hub | CuongThai | CuongThai").
+  title: 'Hub',
   description:
     'Personal bookmark manager — save, organize, and quickly access ' +
     'your favorite links, articles, and tools.',
@@ -25,6 +28,9 @@ export const metadata: Metadata = {
     description: 'Personal bookmark manager with smart auto-fill metadata.',
     url: 'https://cuongthai.com/hub',
     type: 'website',
+    // This block REPLACES the root openGraph, so images must be re-declared
+    // or share previews lose their card image.
+    images: ['/opengraph-image'],
   },
   alternates: { canonical: 'https://cuongthai.com/hub' },
 };

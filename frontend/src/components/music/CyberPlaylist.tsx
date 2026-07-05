@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Plus, ListPlus, CornerDownLeft, Heart, Flame, Clock } from 'lucide-react';
 import { useMusicStore } from '@/store/musicStore';
 import { usePlaylistStore } from '@/store/playlistStore';
+import { useAuthStore } from '@/store/authStore';
 import { useAddToQueue, useLikedTrackIds, useLikedTracks, useToggleLike, useMostPlayedTracks } from '@/hooks/useMusicQueries';
 import { toast } from 'sonner';
 import type { Track } from '@/types';
@@ -60,9 +61,13 @@ export default function CyberPlaylist() {
   const addToQueueApi = useAddToQueue();
   const toggleLikeApi = useToggleLike();
 
-  // Phase 2a: server-hydrated lists
-  const { data: serverLikedTracks = [] } = useLikedTracks(true, 200);
-  const { data: serverMostPlayed = [] } = useMostPlayedTracks(true, 50);
+  // Phase 2a: server-hydrated lists — auth-gated: /music/likes and
+  // /music/play-counts are per-user endpoints that 401 for guests, and the
+  // playlist mounts on every /music visit (audit 2026-07-05). Guests keep
+  // the local Zustand likes/history exactly as before.
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const { data: serverLikedTracks = [] } = useLikedTracks(isAuthenticated, 200);
+  const { data: serverMostPlayed = [] } = useMostPlayedTracks(isAuthenticated, 50);
 
   // Hydrate likedIds / likedTracks from the server snapshot.
   // Phase 2a: keep the Zustand mirror in sync without spamming

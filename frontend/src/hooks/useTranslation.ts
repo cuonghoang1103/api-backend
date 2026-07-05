@@ -2,34 +2,24 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useLocaleContext } from '@/context/LocaleContext';
+// Statically bundled so SSR and the first client render see identical data.
+// The old dynamic import() left this cache empty at SSR → t() rendered raw
+// keys into server HTML → hydration mismatch #425 (see LocaleContext.tsx,
+// which had the same bug and the same fix).
+import enMessages from '../../messages/en.json';
+import viMessages from '../../messages/vi.json';
 
 // Translation type
 type Locale = 'vi' | 'en';
 
-// Translation cache — shared across all hook instances
+// Translation data — shared across all hook instances
 const translations: Record<Locale, Record<string, any>> = {
-  vi: {},
-  en: {}
+  vi: viMessages as Record<string, any>,
+  en: enMessages as Record<string, any>,
 };
 
-let isLoading = false;
-let loadPromise: Promise<void> | null = null;
-
-async function loadTranslations(locale: Locale): Promise<void> {
-  if (Object.keys(translations[locale]).length > 0) return;
-  if (isLoading) return loadPromise!;
-
-  isLoading = true;
-  loadPromise = import(`../../messages/${locale}.json`).then((mod) => {
-    translations[locale] = mod.default;
-    isLoading = false;
-  }).catch((err) => {
-    console.error('Failed to load translations:', err);
-    isLoading = false;
-  });
-
-  return loadPromise;
-}
+// Async no-op kept so existing `loadTranslations(x).then(...)` calls work.
+async function loadTranslations(_locale: Locale): Promise<void> {}
 
 // Get nested translation value from an object
 function getNestedValue(obj: any, path: string): string | undefined {

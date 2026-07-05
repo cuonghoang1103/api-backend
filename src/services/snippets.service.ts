@@ -10,11 +10,34 @@ function slugify(text: string): string {
   return text
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
+    // NFD doesn't decompose \u0111/\u0110 \u2014 without this "Code \u0111\u1eb9p" became "code-ep".
+    .replace(/[\u0111\u0110]/g, 'd')
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
+}
+
+/**
+ * Diacritic-stripped Vietnamese titles collide easily ("S\u1eafp x\u1ebfp" and
+ * "Sap xep" \u2192 the same slug), and rejecting the create with an English
+ * 400 looked like a dead Save button to admins (2026-07-06). Standard
+ * CMS behavior instead: auto-suffix -2, -3, \u2026 until the slug is free.
+ */
+async function uniqueSnippetSlug(title: string, excludeId?: number): Promise<string> {
+  const base = slugify(title) || 'snippet';
+  let candidate = base;
+  for (let n = 2; n < 100; n++) {
+    const existing = await prisma.snippet.findFirst({
+      where: excludeId != null ? { slug: candidate, NOT: { id: excludeId } } : { slug: candidate },
+      select: { id: true },
+    });
+    if (!existing) return candidate;
+    candidate = `${base}-${n}`;
+  }
+  // Practically unreachable; guarantees termination.
+  return `${base}-${Date.now()}`;
 }
 
 function getIpHash(ip: string): string {
@@ -299,9 +322,8 @@ export async function createSnippet(
   },
   authorId?: number
 ) {
-  const slug = slugify(data.title);
-  const existing = await prisma.snippet.findUnique({ where: { slug } });
-  if (existing) throw new BadRequestError('A snippet with this title already exists');
+  // Auto-unique instead of rejecting — see uniqueSnippetSlug.
+  const slug = await uniqueSnippetSlug(data.title);
 
   const cb = normalizeCodeBlocks(data.codeBlocks, data.code, data.language);
 
@@ -367,9 +389,8 @@ export async function updateSnippet(
 
   if (data.title && data.title !== existing.title) {
     updateData.title = data.title;
-    updateData.slug = slugify(data.title);
-    const duplicate = await prisma.snippet.findFirst({ where: { slug: updateData.slug as string, NOT: { id } } });
-    if (duplicate) throw new BadRequestError('A snippet with this title already exists');
+    // Auto-unique instead of rejecting — see uniqueSnippetSlug.
+    updateData.slug = await uniqueSnippetSlug(data.title, id);
   }
 
   if (data.description !== undefined) updateData.description = data.description;

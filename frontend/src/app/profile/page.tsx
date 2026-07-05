@@ -24,15 +24,29 @@ import { useAuthStore } from '@/store/authStore';
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, isAuthenticated: isBackendAuth } = useAuthStore();
+  const { user } = useAuthStore();
 
   useEffect(() => {
-    if (!user?.id) return;
-    // Hand off to the same tabbed view the public route uses.
-    // Passing the id explicitly (rather than relying on the
-    // useParams hook inside ProfileDetail) means the same
-    // component instance serves both routes.
-    router.replace(`/profile/${user.id}/v2`);
+    if (user?.id) {
+      // Hand off to the same tabbed view the public route uses.
+      // Passing the id explicitly (rather than relying on the
+      // useParams hook inside ProfileDetail) means the same
+      // component instance serves both routes.
+      router.replace(`/profile/${user.id}/v2`);
+      return;
+    }
+    // Guest: without this branch the page spun forever — `user.id` never
+    // arrives when logged out, so the redirect above never fired
+    // (reported 2026-07-06). The persisted auth state restores
+    // synchronously from localStorage, but `isHydrated` never flips for
+    // first-visit guests (no auth-storage key), so instead of waiting on
+    // it we give restoration a beat and read the store directly.
+    const t = setTimeout(() => {
+      if (!useAuthStore.getState().isAuthenticated) {
+        router.replace('/login?next=/profile');
+      }
+    }, 400);
+    return () => clearTimeout(t);
   }, [user?.id, router]);
 
   return (

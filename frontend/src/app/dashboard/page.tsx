@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ChevronRight, Zap, Clock, Bot, Download, Upload, RefreshCw, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -29,7 +30,24 @@ const ACT_LABELS: Record<ActivityType, string> = {
 };
 
 export default function DashboardPage() {
+  const router = useRouter();
   const { user, isAuthenticated } = useAuthStore();
+
+  // Dashboard is a personal surface — guests get bounced to login
+  // (requested 2026-07-06). Persisted auth restores synchronously from
+  // localStorage, but `isHydrated` never flips for first-visit guests
+  // (no auth-storage key), so give restoration a beat and read the
+  // store directly. The store's guest seeding logic is untouched;
+  // this is purely a page-level gate.
+  useEffect(() => {
+    if (isAuthenticated) return;
+    const t = setTimeout(() => {
+      if (!useAuthStore.getState().isAuthenticated) {
+        router.replace('/login?next=/dashboard');
+      }
+    }, 400);
+    return () => clearTimeout(t);
+  }, [isAuthenticated, router]);
 
   // Destructuring from the dashboard hook. `isHydrating` lets
   // us show a small loading badge on first paint so the user
@@ -272,7 +290,9 @@ export default function DashboardPage() {
           forces React to fully unmount and remount the entire page
           tree when mounted flips, which is a belt-and-braces
           safeguard against any subtle DOM-level mismatch. */}
-      {!mounted ? (
+      {/* `!isAuthenticated` keeps the guest on the spinner while the
+          redirect-to-login effect above runs — no dashboard flash. */}
+      {!mounted || !isAuthenticated ? (
         <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
           <div className="relative w-16 h-16">
             <div className="absolute inset-0 rounded-full border-2 border-violet-500/20" />

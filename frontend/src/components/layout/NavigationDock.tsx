@@ -132,9 +132,13 @@ export default function NavigationDock() {
   // stranded the user on the page-list). On these pages we hide
   // only the trigger button — the dock panel itself can still be
   // opened programmatically if a page needs it.
+  // NOTE: /notes was briefly in this list (5b8cbfc) on the theory the
+  // trigger overlapped its sidebar — the real culprit turned out to be
+  // the zombie exit panel (fixed in 5a3a59a), and the notes sidebar
+  // starts below the pt-16 top bar anyway, so the trigger is restored
+  // there (users lost their nav menu, reported 2026-07-06).
   const hideTriggerButton =
     pathname?.startsWith('/exp-hub') ||
-    pathname?.startsWith('/notes') ||
     pathname?.startsWith('/admin') ||
     pathname?.startsWith('/messages');
 

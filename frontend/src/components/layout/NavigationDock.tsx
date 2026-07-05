@@ -134,6 +134,7 @@ export default function NavigationDock() {
   // opened programmatically if a page needs it.
   const hideTriggerButton =
     pathname?.startsWith('/exp-hub') ||
+    pathname?.startsWith('/notes') ||
     pathname?.startsWith('/admin') ||
     pathname?.startsWith('/messages');
 

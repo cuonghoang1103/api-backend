@@ -3,6 +3,7 @@
 import { useRef, useEffect, useCallback, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMusicStore } from '@/store/musicStore';
+import { useAuthStore } from '@/store/authStore';
 import CyberAudioVisualizer from './CyberAudioVisualizer';
 
 function isSafeUrl(url: unknown): url is string {
@@ -262,6 +263,9 @@ export default function CyberPlayer() {
     if (!currentTrack || !isPlaying) return;
     if (prevTrackRef.current === currentTrack.id) return;
     prevTrackRef.current = currentTrack.id;
+    // Per-user endpoint — 401s for guests, so don't fire it for them
+    // (guests keep their localStorage history; audit 2026-07-05).
+    if (!useAuthStore.getState().isAuthenticated) return;
 
     // Fire and forget — don't block playback for history recording
     fetch('/api/music/history', {

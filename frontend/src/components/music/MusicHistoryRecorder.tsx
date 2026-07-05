@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useMusicStore } from '@/store/musicStore';
+import { useAuthStore } from '@/store/authStore';
 import { useRecordPlay } from '@/hooks/useMusicQueries';
 
 /**
@@ -20,6 +21,11 @@ export default function MusicHistoryRecorder() {
 
   useEffect(() => {
     if (!currentTrack) return;
+    // History is a per-user feature — the endpoint 401s for guests, and the
+    // music page auto-selects a first track on mount, so without this guard
+    // every anonymous visit to /music fired a guaranteed-401 POST
+    // (audit 2026-07-05). Guests keep their localStorage history as before.
+    if (!useAuthStore.getState().isAuthenticated) return;
     const id = currentTrack.id;
 
     // Only fire when the actual track changes (not on every re-render).

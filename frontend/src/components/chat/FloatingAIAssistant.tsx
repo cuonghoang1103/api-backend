@@ -23,8 +23,12 @@ export default function FloatingAIAssistant() {
  // and editor chrome. The floating AI bubble would cover
  // bottom-right of the editor's autosave indicator and
  // the platform-post publish toggles, so hide it there.
+ // /admin: the customer-facing AI bubble has no business on admin
+ // surfaces, and at z-100 it floated over admin modals' bottom-right
+ // action buttons (blocked snippet creation in /admin/exp-hub,
+ // 2026-07-06) — hide it there too.
  const pathname = usePathname();
- if (pathname?.startsWith('/creator')) return null;
+ if (pathname?.startsWith('/creator') || pathname?.startsWith('/admin')) return null;
 
  const { isStreaming, robotEmotion } = useChatStore();
  // When a track is loaded the mobile music bar sits above the bottom nav;
@@ -140,7 +144,11 @@ export default function FloatingAIAssistant() {
               animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: 10, x: 10 }}
               transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-              className="absolute bottom-full right-0 mb-3 whitespace-nowrap"
+              // pointer-events-none: the bubble is purely decorative — with
+              // default pointer events it silently swallowed clicks meant
+              // for UI underneath (e.g. the admin exp-hub modal's Tạo/Lưu
+              // buttons, 2026-07-06).
+              className="pointer-events-none absolute bottom-full right-0 mb-3 whitespace-nowrap"
             >
               <div className="relative bg-darkcard border border-neon-violet/30 rounded-2xl px-4 py-2.5 shadow-2xl shadow-neon-violet/10">
                 <div className="absolute -bottom-2 right-6 w-4 h-4 bg-darkcard border-r border-b border-neon-violet/30 transform rotate-45" />

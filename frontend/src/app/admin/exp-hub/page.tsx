@@ -457,9 +457,13 @@ function SnippetsTab({
         </div>
       )}
 
-      {/* Editor modal */}
+      {/* Editor modal — z-[130]: MUST sit above every piece of floating
+          chrome (AI robot FAB z-100, MiniChatDock z-120, music bar z-60).
+          At the old z-50 the robot FAB + its tooltip floated OVER the
+          modal's bottom-right "Tạo/Lưu" button, silently swallowing the
+          click — admins couldn't create snippets at all (2026-07-06). */}
       {editor && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-10" onClick={() => !saving && setEditor(null)}>
+        <div className="fixed inset-0 z-[130] flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-10" onClick={() => !saving && setEditor(null)}>
           <div className="w-full max-w-4xl rounded-2xl border border-white/10 bg-[#12161d] p-5 shadow-2xl" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-white">{editor.id == null ? 'Tạo snippet' : `Sửa snippet #${editor.id}`}</h2>

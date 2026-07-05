@@ -92,9 +92,14 @@ const RobotSVG = ({ isHovered }: { isHovered: boolean }) => (
       fill="#0f111a"
     />
     <motion.rect
-      x="48" y="82" width={isHovered ? 20 : 10}
+      x="48" y="82"
       height="4" rx="2"
       fill={isHovered ? '#06b6d4' : '#8b5cf6'}
+      // Explicit numeric `initial` — without it framer-motion's first frame
+      // reads the (unset) DOM attribute and writes width="undefined",
+      // spamming `<rect> attribute width: Expected length` in the console
+      // (site audit 2026-07-05). Keyframe arrays don't seed an initial value.
+      initial={{ width: 10 }}
       animate={{ width: isHovered ? [10, 20, 14] : [20, 14, 10], fill: isHovered ? '#06b6d4' : '#8b5cf6' }}
       style={{ filter: isHovered ? 'drop-shadow(0 0 4px #06b6d4)' : 'drop-shadow(0 0 4px #8b5cf6)' }}
     />

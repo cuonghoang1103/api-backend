@@ -8,12 +8,18 @@ FROM node:22-slim AS builder
 WORKDIR /app
 
 # Install build dependencies for native modules + TypeScript.
-# libvips-dev: sharp (bundled by @xenova/transformers) downloads prebuilt
-# binaries from GitHub at install time — that download times out from this
-# VPS (3 failed deploys on 2026-07-06). With libvips headers present, sharp's
-# compile-from-source fallback succeeds, so npm ci no longer depends on
-# GitHub connectivity. Debian mirrors are proven reliable from the VPS.
-RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ libvips-dev && rm -rf /var/lib/apt/lists/*
+# libvips-dev + pkg-config: sharp (bundled by @xenova/transformers) downloads
+# prebuilt binaries from GitHub at install time — that download times out
+# from this VPS (4 failed deploys on 2026-07-06). pkg-config lets sharp's
+# install detect the system libvips so its compile-from-source fallback
+# actually works. Debian mirrors are proven reliable from the VPS.
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ pkg-config libvips-dev && rm -rf /var/lib/apt/lists/*
+
+# Primary fix for the GitHub timeouts: fetch sharp's prebuilt binaries from
+# the npmmirror CDN (fast/reliable from Asia) instead of github.com. With
+# these set, `node install/libvips` + prebuild-install never touch GitHub.
+ENV npm_config_sharp_binary_host="https://npmmirror.com/mirrors/sharp" \
+    npm_config_sharp_libvips_binary_host="https://npmmirror.com/mirrors/sharp-libvips"
 
 # Copy package files
 COPY package*.json ./

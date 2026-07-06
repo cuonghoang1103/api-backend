@@ -7,8 +7,13 @@
 FROM node:22-slim AS builder
 WORKDIR /app
 
-# Install build dependencies for native modules + TypeScript
-RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ && rm -rf /var/lib/apt/lists/*
+# Install build dependencies for native modules + TypeScript.
+# libvips-dev: sharp (bundled by @xenova/transformers) downloads prebuilt
+# binaries from GitHub at install time — that download times out from this
+# VPS (3 failed deploys on 2026-07-06). With libvips headers present, sharp's
+# compile-from-source fallback succeeds, so npm ci no longer depends on
+# GitHub connectivity. Debian mirrors are proven reliable from the VPS.
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ libvips-dev && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
 COPY package*.json ./
@@ -61,8 +66,11 @@ RUN npm run build
 FROM node:22-slim AS runner
 WORKDIR /app
 
-# Security: run as non-root user, install curl for healthcheck and ffmpeg for video thumbnails
-RUN apt-get update && apt-get install -y --no-install-recommends curl tini ffmpeg && rm -rf /var/lib/apt/lists/* && \
+# Security: run as non-root user, install curl for healthcheck and ffmpeg for video thumbnails.
+# libvips42: runtime lib for sharp when it was compiled from source against
+# the system libvips in the builder stage (prebuilt sharp bundles libvips
+# statically, but the source-built fallback links the shared lib).
+RUN apt-get update && apt-get install -y --no-install-recommends curl tini ffmpeg libvips42 && rm -rf /var/lib/apt/lists/* && \
     useradd --uid 1001 --gid 0 --shell /bin/bash --create-home nodejs
 
 # Create uploads directory

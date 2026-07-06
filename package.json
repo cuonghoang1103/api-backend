@@ -34,7 +34,8 @@
     "test:errors": "tsx scripts/test-errors.ts",
     "test:cdn": "tsx scripts/test-cdn.ts",
     "test:finance": "tsx scripts/test-finance-calc.ts",
-    "db:seed:finance": "tsx prisma/seed.finance.ts"
+    "db:seed:finance": "tsx prisma/seed.finance.ts",
+    "db:seed:finance:demo": "tsx prisma/seed.finance.demo.ts"
   },
   "keywords": [
     "portfolio",

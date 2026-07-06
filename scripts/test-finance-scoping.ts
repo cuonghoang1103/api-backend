@@ -12,6 +12,8 @@ import * as wallet from '../src/services/finance/wallet.service.js';
 import * as expense from '../src/services/finance/expense.service.js';
 import * as income from '../src/services/finance/income.service.js';
 import * as debt from '../src/services/finance/debt.service.js';
+import * as investment from '../src/services/finance/investment.service.js';
+import * as savings from '../src/services/finance/savings.service.js';
 
 const A = Number(process.argv[2] || 3);
 const B = Number(process.argv[3] || 7);
@@ -32,7 +34,7 @@ function ok(label: string, cond: boolean) { assert.ok(cond, `FAIL: ${label}`); c
 
 async function main() {
   console.log(`\nCross-user scoping: A=#${A} must NOT touch B=#${B}'s data\n`);
-  const created: { wallets: number[]; debts: number[]; expenses: number[]; income: number[]; cats: number[] } = { wallets: [], debts: [], expenses: [], income: [], cats: [] };
+  const created: { wallets: number[]; debts: number[]; expenses: number[]; income: number[]; cats: number[]; investments: number[]; savings: number[]; goals: number[] } = { wallets: [], debts: [], expenses: [], income: [], cats: [], investments: [], savings: [], goals: [] };
 
   // ── Seed data owned by B ──
   const bWallet = await wallet.createWallet(B, { name: 'B-secret-wallet', type: 'CASH', balance: 1_000_000 });
@@ -45,6 +47,14 @@ async function main() {
   const bDebt = await debt.createDebt(B, { lenderName: 'B-lender', lenderType: 'PERSON', principal: 3_000_000, interestType: 'NO_INTEREST', termMonths: 3, paymentDay: 5 });
   created.debts.push(bDebt!.id);
   const bItem = bDebt!.schedule![0];
+
+  // Phase 2 data owned by B
+  const bInvest = await investment.createInvestment(B, { type: 'ASSET', name: 'B-gold', amount: 1_000_000, currentValue: 1_200_000 });
+  created.investments.push(bInvest.id);
+  const bSavings = await savings.createSavingsAccount(B, { bankName: 'B-bank', amount: 5_000_000, interestRatePerYear: 6, termMonths: 6 });
+  created.savings.push(bSavings.id);
+  const bGoal = await savings.createSavingsGoal(B, { name: 'B-goal', targetAmount: 10_000_000 });
+  created.goals.push(bGoal.id);
 
   // Also give A its own wallet so list checks are meaningful
   const aWallet = await wallet.createWallet(A, { name: 'A-wallet', type: 'CASH', balance: 500_000 });
@@ -69,6 +79,16 @@ async function main() {
   await denied('A updates B debt', () => debt.updateDebt(A, bDebt!.id, { note: 'x' }));
   await denied('A deletes B debt', () => debt.deleteDebt(A, bDebt!.id));
   await denied('A pays B debt schedule item', () => debt.payScheduleItem(A, bDebt!.id, bItem.id, {}));
+  await denied('A updates B investment', () => investment.updateInvestment(A, bInvest.id, { name: 'x' }));
+  await denied('A sells B investment', () => investment.sellInvestment(A, bInvest.id, {}));
+  await denied('A deletes B investment', () => investment.deleteInvestment(A, bInvest.id));
+  await denied('A withdraws B savings account', () => savings.withdrawSavingsAccount(A, bSavings.id, {}));
+  await denied('A deletes B savings account', () => savings.deleteSavingsAccount(A, bSavings.id));
+  await denied('A contributes to B goal', () => savings.contributeToGoal(A, bGoal.id, { amount: 1000 }));
+  await denied('A deletes B goal', () => savings.deleteSavingsGoal(A, bGoal.id));
+  ok('A investment list excludes B investment', (await investment.listInvestments(A)).every((i) => i.id !== bInvest.id));
+  ok('A savings list excludes B account', (await savings.listSavingsAccounts(A)).every((s) => s.id !== bSavings.id));
+  ok('A goal list excludes B goal', (await savings.listSavingsGoals(A)).every((g) => g.id !== bGoal.id));
 
   // ── Verify B's data is intact (nothing A did leaked through) ──
   console.log('\nIntegrity after attacks:');
@@ -78,6 +98,9 @@ async function main() {
   ok('B debt still ACTIVE + unpaid', (await debt.getDebt(B, bDebt!.id)).schedule!.every((s) => !s.isPaid));
 
   // ── Cleanup ──
+  for (const id of created.investments) await prisma.investment.deleteMany({ where: { id } });
+  for (const id of created.savings) await prisma.savingsAccount.deleteMany({ where: { id } });
+  for (const id of created.goals) await prisma.savingsGoal.deleteMany({ where: { id } });
   for (const id of created.debts) await prisma.debt.deleteMany({ where: { id } });
   for (const id of created.expenses) await prisma.expense.deleteMany({ where: { id } });
   for (const id of created.income) await prisma.incomeEntry.deleteMany({ where: { id } });

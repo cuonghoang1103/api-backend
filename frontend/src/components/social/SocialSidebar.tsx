@@ -11,6 +11,7 @@ import {
   Users,
   Music,
   Code2,
+  Wallet,
   Bookmark,
   BookmarkCheck,
   Plus,
@@ -98,6 +99,7 @@ export default function SocialSidebar({
     { href: '/blog', label: 'Blog', icon: Sparkles },
     { href: '/projects', label: 'Projects', icon: Code2 },
     { href: '/music', label: 'Music', icon: Music },
+    { href: '/finance', label: 'MoneyFlow', icon: Wallet },
   ];
 
   return (

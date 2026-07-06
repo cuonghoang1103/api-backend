@@ -73,6 +73,39 @@ export function IncomeMonthBars({ months }: { months: Array<{ month: number; tot
   );
 }
 
+export function IncomeExpenseBars({ months }: { months: Array<{ month: number; income: string; expense: string }> }) {
+  const rows = months.map((m) => ({ month: `T${m.month}`, income: Number(m.income), expense: Number(m.expense) }));
+  return (
+    <ResponsiveContainer width="100%" height={260}>
+      <BarChart data={rows} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
+        <CartesianGrid stroke={GRID} vertical={false} />
+        <XAxis dataKey="month" tick={{ fill: AXIS, fontSize: 11 }} tickLine={false} axisLine={false} />
+        <YAxis tick={{ fill: AXIS, fontSize: 11 }} tickFormatter={(v) => formatVndCompact(v)} tickLine={false} axisLine={false} width={40} />
+        <Tooltip contentStyle={tooltipStyle} formatter={(v: number, n) => [formatVnd(v), n === 'income' ? 'Thu' : 'Chi']} />
+        <Legend wrapperStyle={{ fontSize: 11, color: AXIS }} iconType="circle" />
+        <Bar dataKey="income" name="Thu" fill="#22c55e" radius={[6, 6, 0, 0]} />
+        <Bar dataKey="expense" name="Chi" fill="#f97316" radius={[6, 6, 0, 0]} />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+export function NetWorthLine({ months }: { months: Array<{ month: number; cumulative: string }> }) {
+  const rows = months.map((m) => ({ month: `T${m.month}`, value: Number(m.cumulative) }));
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <AreaChart data={rows} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
+        <defs><linearGradient id="nw" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#22d3ee" stopOpacity={0.5} /><stop offset="100%" stopColor="#22d3ee" stopOpacity={0} /></linearGradient></defs>
+        <CartesianGrid stroke={GRID} vertical={false} />
+        <XAxis dataKey="month" tick={{ fill: AXIS, fontSize: 11 }} tickLine={false} axisLine={false} />
+        <YAxis tick={{ fill: AXIS, fontSize: 11 }} tickFormatter={(v) => formatVndCompact(v)} tickLine={false} axisLine={false} width={40} />
+        <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [formatVnd(v), 'Tích luỹ']} />
+        <Area type="monotone" dataKey="value" stroke="#22d3ee" strokeWidth={2} fill="url(#nw)" />
+      </AreaChart>
+    </ResponsiveContainer>
+  );
+}
+
 export function DebtBalanceChart({ data }: { data: Array<{ label: string; remaining: number }> }) {
   return (
     <ResponsiveContainer width="100%" height={200}>

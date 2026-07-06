@@ -24,9 +24,9 @@ const NAV: NavItem[] = [
   { href: '/finance/debts', label: 'Khoản nợ', icon: CreditCard },
   { href: '/finance/expenses', label: 'Chi tiêu', icon: Receipt },
   { href: '/finance/wallets', label: 'Ví', icon: WalletIcon },
-  { href: '/finance/investments', label: 'Đầu tư', icon: TrendingUp, soon: true },
-  { href: '/finance/savings', label: 'Tiết kiệm', icon: PiggyBank, soon: true },
-  { href: '/finance/reports', label: 'Báo cáo', icon: BarChart3, soon: true },
+  { href: '/finance/investments', label: 'Đầu tư', icon: TrendingUp },
+  { href: '/finance/savings', label: 'Tiết kiệm', icon: PiggyBank },
+  { href: '/finance/reports', label: 'Báo cáo', icon: BarChart3 },
 ];
 // Mobile bottom tabs (4 + center FAB)
 const MOBILE_TABS: NavItem[] = [NAV[0], NAV[3], NAV[2], NAV[4]];

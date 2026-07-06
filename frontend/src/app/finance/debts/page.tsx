@@ -7,11 +7,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, CalendarDays } from 'lucide-react';
-import { financeApi, type Debt } from '@/lib/finance-api';
-import { formatVnd } from '@/lib/utils';
+import { Plus, CalendarDays, Scale } from 'lucide-react';
+import { financeApi, type Debt, type PayoffComparison } from '@/lib/finance-api';
+import { cn, formatVnd } from '@/lib/utils';
 import { FinanceShell } from '@/components/finance/FinanceShell';
-import { Card, Button, Sheet, Spinner, EmptyState } from '@/components/finance/primitives';
+import { Card, Button, Sheet, Field, inputCls, Spinner, EmptyState } from '@/components/finance/primitives';
 import { DebtCard, DebtForm } from '@/components/finance/debt-ui';
 
 export default function DebtsPage() {
@@ -20,6 +20,7 @@ export default function DebtsPage() {
   const [summary, setSummary] = useState<{ totalRemaining: string; dueThisMonth: string; activeLenders: number; totalInterestPaid: string; projectedTotalInterest: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
+  const [payoff, setPayoff] = useState(false);
 
   const load = useCallback(() => {
     Promise.all([financeApi.listDebts(), financeApi.debtSummary()])
@@ -33,6 +34,7 @@ export default function DebtsPage() {
       <div className="mb-4 flex items-center justify-between">
         <h1 className="font-heading text-2xl font-bold text-text-primary">Khoản nợ</h1>
         <div className="flex gap-2">
+          <button onClick={() => setPayoff(true)} className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--border-color)] px-3 py-2 text-sm text-text-secondary hover:border-neon-violet/50"><Scale size={15} /> Chiến lược</button>
           <Link href="/finance/debts/calendar" className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--border-color)] px-3 py-2 text-sm text-text-secondary hover:border-neon-violet/50"><CalendarDays size={15} /> Lịch</Link>
           <Button onClick={() => setCreating(true)}><Plus size={15} /> Thêm nợ</Button>
         </div>
@@ -62,6 +64,52 @@ export default function DebtsPage() {
           <DebtForm onSaved={(d) => { setCreating(false); router.push(`/finance/debts/${d.id}`); }} onCancel={() => setCreating(false)} />
         </Sheet>
       )}
+      {payoff && <PayoffSheet onClose={() => setPayoff(false)} />}
     </FinanceShell>
+  );
+}
+
+function PayoffSheet({ onClose }: { onClose: () => void }) {
+  const [extra, setExtra] = useState('2000000');
+  const [data, setData] = useState<PayoffComparison | null>(null);
+  const [loading, setLoading] = useState(false);
+  const run = () => { setLoading(true); financeApi.payoffStrategy(Number(extra) || 0).then((d) => setData(d)).catch(() => setData(null)).finally(() => setLoading(false)); };
+  useEffect(() => { run(); /* eslint-disable-next-line */ }, []);
+
+  return (
+    <Sheet open onClose={onClose} title="Chiến lược trả nợ" size="lg">
+      <div className="space-y-4">
+        <div className="flex items-end gap-2">
+          <Field label="Trả thêm mỗi tháng (ngoài mức tối thiểu)"><input inputMode="numeric" value={extra} onChange={(e) => setExtra(e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>
+          <Button onClick={run}>Tính</Button>
+        </div>
+        {loading ? <Spinner /> : !data ? (
+          <div className="py-6 text-center text-sm text-text-muted">Không có khoản nợ nào đang hoạt động để so sánh.</div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-3">
+              {([['snowball', 'Snowball (nợ nhỏ trước)'], ['avalanche', 'Avalanche (lãi cao trước)']] as const).map(([k, label]) => {
+                const s = data[k];
+                const best = k === 'avalanche' && Number(data.avalancheInterestSaved) > 0;
+                return (
+                  <div key={k} className={cn('rounded-xl border p-3', best ? 'border-neon-green/50 bg-neon-green/5' : 'border-[var(--border-color)]')}>
+                    <div className="text-xs font-semibold text-text-secondary">{label}</div>
+                    <div className="mt-1 text-sm text-text-muted">Tổng lãi: <b className="text-neon-orange">{formatVnd(s.totalInterest)}</b></div>
+                    <div className="text-sm text-text-muted">Thời gian: <b className="text-text-primary">{s.months} tháng</b></div>
+                    <div className="mt-1 text-xs text-text-muted">Thứ tự: {s.order.map((o) => o.name).join(' → ')}</div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="rounded-xl bg-neon-cyan/10 p-3 text-sm text-neon-cyan">
+              {Number(data.avalancheInterestSaved) > 0
+                ? <>Avalanche tiết kiệm <b>{formatVnd(data.avalancheInterestSaved)}</b> tiền lãi so với Snowball.</>
+                : <>Hai chiến lược cho kết quả tương đương với ngân sách này.</>}
+            </div>
+            <p className="text-xs text-text-muted">{data.recommendationNote}</p>
+          </>
+        )}
+      </div>
+    </Sheet>
   );
 }

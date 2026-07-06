@@ -58,6 +58,37 @@ export interface DashboardData {
   upcomingPayments: Array<{ id: number; debtId: number; lenderName: string; lenderType: string; dueDate: string; amountDue: Money; isOverdue: boolean }>;
 }
 
+// ── Phase 2 types ──
+export interface Investment {
+  id: number; type: string; name: string; amount: Money; date: string; walletId: number | null;
+  expectedOutcome: string | null; currentValue: Money | null; status: string; outcomeNote: string | null; note: string | null;
+}
+export interface SavingsAccount {
+  id: number; bankName: string; amount: Money; interestRatePerYear: Money; termMonths: number;
+  startDate: string; maturityDate: string; autoRenew: boolean; status: string; note: string | null;
+  computed?: { projectedInterest: Money; maturityValue: Money; daysToMaturity: number; isMatured: boolean };
+}
+export interface SavingsGoal {
+  id: number; name: string; targetAmount: Money; currentAmount: Money; deadline: string | null; icon: string | null; status: string;
+  computed?: { pct: number; remaining: Money; perMonthHint: Money | null };
+}
+export interface MonthlyReport {
+  month: string; income: Money; expense: Money; net: Money; savingsRate: number | null;
+  vsPrev: { income: Money; expense: Money };
+  categoryBreakdown: Array<{ category: { id: number; name: string; icon: string | null; color: string | null } | null; total: Money }>;
+  topExpenses: Array<{ id: number; amount: Money; date: string; description: string | null; category: { name: string; icon: string | null } | null }>;
+  debtPaid: { principal: Money; interest: Money; total: Money };
+}
+export interface YearlyReport {
+  year: number; months: Array<{ month: number; income: Money; expense: Money; net: Money; cumulative: Money }>;
+  totalIncome: Money; totalExpense: Money; totalInterestPaid: Money; selfInvested: Money;
+}
+export interface PayoffComparison {
+  monthlyBudget: Money; minimumsSum: Money; extraMonthly: Money; avalancheInterestSaved: Money; recommendationNote: string;
+  snowball: { strategy: string; order: Array<{ id: number; name: string }>; months: number; totalInterest: Money; totalPaid: Money };
+  avalanche: { strategy: string; order: Array<{ id: number; name: string }>; months: number; totalInterest: Money; totalPaid: Money };
+}
+
 type Res<T> = Promise<{ data: { success: boolean; data: T; message?: string; pagination?: { page: number; limit: number; total: number; totalPages: number } } }>;
 const unwrap = <T,>(p: Res<T>): Promise<T> => p.then((r) => r.data.data);
 
@@ -125,6 +156,34 @@ export const financeApi = {
   debtCalendar: (month?: string) => unwrap<{ month: number; year: number; days: Array<{ date: string; total: Money; items: Array<ScheduleItem & { debt: { id: number; lenderName: string; lenderType: string } }> }> }>(api.get('/finance/debts/calendar', { params: { month } })),
   payScheduleItem: (debtId: number, itemId: number, body: { walletId?: number | null; actualAmount?: number; date?: string; note?: string }) => unwrap<Debt>(api.post(`/finance/debts/${debtId}/schedule/${itemId}/pay`, body)),
   unpayScheduleItem: (debtId: number, itemId: number) => unwrap<Debt>(api.post(`/finance/debts/${debtId}/schedule/${itemId}/unpay`)),
+  payoffStrategy: (extraMonthly?: number) => unwrap<PayoffComparison | null>(api.get('/finance/debts/payoff-strategy', { params: { extraMonthly } })),
+
+  // ── Phase 2: Investments ──
+  investmentSummary: () => unwrap<{ totalInvested: Money; selfInvested: Money; selfInvestedThisYear: Money; assetCost: Money; currentAssetValue: Money; unrealizedGain: Money; unrealizedGainPct: number; counts: { self: number; asset: number } }>(api.get('/finance/investments/summary')),
+  listInvestments: (type?: string) => unwrap<Investment[]>(api.get('/finance/investments', { params: { type } })),
+  createInvestment: (body: Record<string, unknown>) => unwrap<Investment>(api.post('/finance/investments', body)),
+  updateInvestment: (id: number, body: Record<string, unknown>) => unwrap<Investment>(api.put(`/finance/investments/${id}`, body)),
+  completeInvestment: (id: number, outcomeNote?: string) => unwrap<Investment>(api.post(`/finance/investments/${id}/complete`, { outcomeNote })),
+  sellInvestment: (id: number, body: { saleAmount?: number; walletId?: number | null }) => unwrap<Investment>(api.post(`/finance/investments/${id}/sell`, body)),
+  deleteInvestment: (id: number) => unwrap(api.delete(`/finance/investments/${id}`)),
+
+  // ── Phase 2: Savings ──
+  savingsSummary: () => unwrap<{ totalSaved: Money; projectedInterest: Money; accountsCount: number; goalsSaved: Money; goalsCount: number }>(api.get('/finance/savings/summary')),
+  listSavingsAccounts: () => unwrap<SavingsAccount[]>(api.get('/finance/savings/accounts')),
+  createSavingsAccount: (body: Record<string, unknown>) => unwrap<SavingsAccount>(api.post('/finance/savings/accounts', body)),
+  updateSavingsAccount: (id: number, body: Record<string, unknown>) => unwrap<SavingsAccount>(api.put(`/finance/savings/accounts/${id}`, body)),
+  withdrawSavingsAccount: (id: number, body: { walletId?: number | null; includeInterest?: boolean }) => unwrap<SavingsAccount>(api.post(`/finance/savings/accounts/${id}/withdraw`, body)),
+  deleteSavingsAccount: (id: number) => unwrap(api.delete(`/finance/savings/accounts/${id}`)),
+  listSavingsGoals: () => unwrap<SavingsGoal[]>(api.get('/finance/savings/goals')),
+  createSavingsGoal: (body: Record<string, unknown>) => unwrap<SavingsGoal>(api.post('/finance/savings/goals', body)),
+  updateSavingsGoal: (id: number, body: Record<string, unknown>) => unwrap<SavingsGoal>(api.put(`/finance/savings/goals/${id}`, body)),
+  contributeToGoal: (id: number, body: { amount: number; walletId?: number | null }) => unwrap<SavingsGoal>(api.post(`/finance/savings/goals/${id}/contribute`, body)),
+  deleteSavingsGoal: (id: number) => unwrap(api.delete(`/finance/savings/goals/${id}`)),
+
+  // ── Phase 2: Reports ──
+  monthlyReport: (month?: string) => unwrap<MonthlyReport>(api.get('/finance/reports/monthly', { params: { month } })),
+  yearlyReport: (year?: string) => unwrap<YearlyReport>(api.get('/finance/reports/yearly', { params: { year } })),
+  reportCsvUrl: (month: string) => `/api/v1/finance/reports/monthly/export?month=${month}`,
 };
 
 // ─── UI label helpers ────────────────────────────────────────

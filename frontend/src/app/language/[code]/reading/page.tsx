@@ -505,7 +505,7 @@ function TextReader({
             <div className="mt-4 rounded-2xl border border-neon-cyan/30 bg-neon-cyan/5 p-4 sm:p-6">
               <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-neon-cyan">Bản dịch</p>
               <div
-                className="prose-language leading-relaxed text-text-secondary"
+                className="prose-language lang-prose leading-relaxed text-text-secondary"
                 dangerouslySetInnerHTML={{ __html: article.translation }}
               />
             </div>

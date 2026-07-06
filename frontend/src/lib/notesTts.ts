@@ -171,6 +171,9 @@ export async function speakVocabEntry(
   const synth = window.speechSynthesis;
   const voices = await loadVoices();
   const voice = pickVoice(voices, lang);
+  // Diagnostic: which installed voice won (visible in DevTools console with
+  // "Verbose" level). Helps debug per-device voice availability.
+  console.debug('[TTS]', lang, voice ? `${voice.name} (${voice.lang})` : 'no matching voice → browser default');
 
   // Don't read a CJK/foreign term with a mismatched English voice — that
   // produces gibberish. Tell the caller so it can show a hint instead.

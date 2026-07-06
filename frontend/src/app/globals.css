@@ -2501,3 +2501,28 @@ html.pwa-standalone button[aria-label='Open chat sessions'],
 html.pwa-standalone button[aria-label='Close chat sessions'] {
   top: calc(1rem + env(safe-area-inset-top, 0px));
 }
+
+/* ── My Language: readable admin HTML on the site theme ─────────────
+ * Grammar explanations / reading translations render admin-entered HTML
+ * (dangerouslySetInnerHTML). `.note-prose` defaults to LIGHT-theme text
+ * colors (#0f172a…) and its dark overrides are scoped to `.dark`, which
+ * is reserved for the Notes wrapper — so on the language pages' dark
+ * background that text was invisible. Pasted HTML also carries inline
+ * light-theme colors. `.lang-prose` forces theme-variable colors.
+ */
+.lang-prose,
+.lang-prose :is(p, li, span, div, em, i, u, s, blockquote, td, th, figcaption) {
+  color: var(--text-secondary) !important;
+}
+.lang-prose :is(h1, h2, h3, h4, h5, h6, strong, b) {
+  color: var(--text-primary) !important;
+}
+.lang-prose a {
+  color: #a78bfa !important; /* neon violet */
+}
+.lang-prose :is(code, pre, kbd) {
+  color: #67e8f9 !important; /* neon cyan */
+}
+.lang-prose [style*='background'] {
+  background: transparent !important;
+}

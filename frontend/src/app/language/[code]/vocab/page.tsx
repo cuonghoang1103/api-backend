@@ -464,12 +464,31 @@ function FlashcardsView({
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [done, setDone] = useState(false);
+  // Which face's CONTENT is rendered. Only one face exists in the DOM —
+  // two-face flips relying on preserve-3d + backface-visibility break on
+  // some Chromium builds (Cốc Cốc flattens the 3D context: faces bleed
+  // through or vanish entirely). Instead the card rotates as a whole and
+  // the content swaps exactly at the flip midpoint (edge-on, invisible).
+  const [showBack, setShowBack] = useState(false);
+  const flipDur = reduced ? 0 : 0.3;
 
   useEffect(() => {
     setIndex(0);
     setFlipped(false);
+    setShowBack(false);
     setDone(false);
   }, [words]);
+
+  // New card must show its front immediately — never leak the answer.
+  useEffect(() => {
+    setShowBack(false);
+  }, [index]);
+
+  useEffect(() => {
+    if (flipped === showBack) return;
+    const t = setTimeout(() => setShowBack(flipped), (flipDur * 1000) / 2);
+    return () => clearTimeout(t);
+  }, [flipped, showBack, flipDur]);
 
   const advance = useCallback(() => {
     setFlipped(false);
@@ -522,15 +541,6 @@ function FlashcardsView({
 
   const w = words[index];
   if (!w) return null;
-  const flipDur = reduced ? 0 : 0.3;
-  // Some Chromium builds (Cốc Cốc…) ignore backface-visibility inside
-  // preserve-3d, so the front face bleeds through the back mirrored and the
-  // text overlaps. Swapping face opacity exactly at the flip midpoint
-  // guarantees only one face is ever visible.
-  const faceStyle = (visible: boolean) => ({
-    opacity: visible ? 1 : 0,
-    transition: `opacity 0s linear ${flipDur / 2}s`,
-  });
 
   return (
     <div className="mx-auto max-w-xl">
@@ -542,40 +552,45 @@ function FlashcardsView({
         <motion.button
           type="button"
           onClick={() => setFlipped((f) => !f)}
-          className="relative block h-72 w-full cursor-pointer rounded-2xl [transform-style:preserve-3d]"
+          className="relative block h-72 w-full cursor-pointer rounded-2xl"
           animate={{ rotateY: flipped ? 180 : 0 }}
           transition={{ duration: flipDur, ease: 'easeInOut' }}
           aria-label="Lật thẻ"
         >
-          {/* Front */}
+          {/* Single face: content swaps at the flip midpoint (card edge-on).
+              The back content gets its own rotateY(180) so it isn't mirrored
+              inside the 180°-rotated button. Plain flat transforms only. */}
           <div
-            className="card absolute inset-0 flex flex-col items-center justify-center gap-4 [backface-visibility:hidden]"
-            style={faceStyle(!flipped)}
+            className={`card absolute inset-0 flex flex-col items-center justify-center ${
+              showBack ? 'gap-3 overflow-auto px-6 py-5 text-center' : 'gap-4'
+            }`}
+            style={showBack ? { transform: 'rotateY(180deg)' } : undefined}
           >
-            <span className="text-4xl font-bold text-text-primary">{w.word}</span>
-            <SpeakerButton text={w.word} reading={w.pronunciations?.[0]?.value} audioUrl={w.audioUrl} />
-            <span className="text-xs text-text-muted">Chạm để lật</span>
-          </div>
-          {/* Back */}
-          <div
-            className="card absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-auto px-6 py-5 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]"
-            style={faceStyle(flipped)}
-          >
-            {(w.pronunciations?.length ?? 0) > 0 && (
-              <div className="flex flex-wrap justify-center gap-1.5">
-                {w.pronunciations.map((p, i) => (
-                  <span
-                    key={p.id ?? i}
-                    className="rounded-full bg-[var(--bg-surface)] px-2 py-0.5 text-[11px] text-text-secondary ring-1 ring-[var(--border-color)]"
-                  >
-                    <span className="text-text-muted">{p.type}:</span> {p.value}
-                  </span>
-                ))}
-              </div>
+            {showBack ? (
+              <>
+                {(w.pronunciations?.length ?? 0) > 0 && (
+                  <div className="flex flex-wrap justify-center gap-1.5">
+                    {w.pronunciations.map((p, i) => (
+                      <span
+                        key={p.id ?? i}
+                        className="rounded-full bg-[var(--bg-surface)] px-2 py-0.5 text-[11px] text-text-secondary ring-1 ring-[var(--border-color)]"
+                      >
+                        <span className="text-text-muted">{p.type}:</span> {p.value}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <span className="text-2xl font-semibold text-text-primary">{w.meaningVi}</span>
+                {w.exampleSentence && <p className="text-sm text-text-secondary">{w.exampleSentence}</p>}
+                {w.exampleMeaning && <p className="text-sm text-text-muted">{w.exampleMeaning}</p>}
+              </>
+            ) : (
+              <>
+                <span className="text-4xl font-bold text-text-primary">{w.word}</span>
+                <SpeakerButton text={w.word} reading={w.pronunciations?.[0]?.value} audioUrl={w.audioUrl} />
+                <span className="text-xs text-text-muted">Chạm để lật</span>
+              </>
             )}
-            <span className="text-2xl font-semibold text-text-primary">{w.meaningVi}</span>
-            {w.exampleSentence && <p className="text-sm text-text-secondary">{w.exampleSentence}</p>}
-            {w.exampleMeaning && <p className="text-sm text-text-muted">{w.exampleMeaning}</p>}
           </div>
         </motion.button>
       </div>

@@ -201,14 +201,30 @@ for dir in "${DATA_DIR}/postgres" "${DATA_DIR}/redis" "${DATA_DIR}/uploads"; do
     [ -d "$dir" ] || { mkdir -p "$dir"; ok "Created $dir"; }
 done
 
-# ── Step 2: Atomic build & restart (zero-downtime) ────────────────
+# ── Step 2a: Build images ONE AT A TIME (OOM guard) ───────────────
+# The VPS has 6GB RAM shared with the live stack. When the build cache
+# is cold (it is pruned at the end of every deploy), building backend
+# and frontend in parallel peaks above available RAM and the kernel
+# kills `next build` (exit 137, seen 2026-07-06). Building sequentially
+# keeps the peak to one image at a time; with a warm cache each build
+# is a fast no-op, so normal deploys lose no time.
+info "Building backend image..."
+$DC build backend
+ok "Backend image built"
+info "Building frontend image..."
+$DC build frontend
+ok "Frontend image built"
+
+# ── Step 2b: Atomic restart (zero-downtime) ───────────────────────
 # `up -d --build` builds the new image, then atomically swaps the
 # running container — no downtime window unlike `down && up`.
+# The images were just built above, so `--build` here is an instant
+# cache hit — kept so the swap semantics stay exactly as before.
 # `--force-recreate` ensures containers with the same name but a
 # stale image get torn down before the new one is created
 # (otherwise Compose refuses to bind a duplicate container_name).
 # `--remove-orphans` cleans up containers for removed services.
-info "Building images and restarting containers (zero-downtime)..."
+info "Restarting containers (zero-downtime)..."
 $DC up -d --build --force-recreate --remove-orphans
 ok "Containers built and swapped"
 

@@ -1,14 +1,10 @@
 name: CI/CD Guard - Prevent duplicate frontend containers
 
+# Manual-only since 2026-07-06: this job SSHes into the VPS and stops/removes
+# containers, so it must never run automatically on push (push = pure code
+# sync; prod is only touched by `bash deploy.sh` — see CLAUDE.md).
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'docker-compose*.yml'
-      - 'frontend/**'
-      - '.github/workflows/backend-vps.yml'
-      - '.github/workflows/sync-frontend.yml'
 
 jobs:
   guard:

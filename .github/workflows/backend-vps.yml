@@ -1,20 +1,9 @@
 name: Deploy Backend to VPS
 
+# Manual-only since 2026-07-06: deploys go through `bash deploy.sh` from the
+# local machine (see CLAUDE.md "STANDARD deploy + push flow"). Auto-deploy on
+# push raced deploy-ghcr.yml into prod outages (2026-07-03, 2026-07-06).
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'src/**'
-      - 'prisma/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'Dockerfile.backend'
-      - 'docker-compose.yml'
-      - 'frontend/**'
-      - 'nginx/**'
-      - '.github/workflows/backend-vps.yml'
-      - 'scripts/**'
-      - '.dockerignore'
   workflow_dispatch:
 
 jobs:

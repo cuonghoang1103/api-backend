@@ -1,21 +1,9 @@
 name: Deploy via GHCR (fast path)
 
+# Manual-only since 2026-07-06: deploys go through `bash deploy.sh` from the
+# local machine (see CLAUDE.md "STANDARD deploy + push flow"). Auto-deploy on
+# push raced backend-vps.yml into prod outages (2026-07-03, 2026-07-06).
 on:
-  push:
-    branches: [main]
-    paths:
-      # Only run when backend/frontend/schemas/deploy files change.
-      # All other commits (docs, scripts) keep using backend-vps.yml.
-      - 'src/**'
-      - 'prisma/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'frontend/**'
-      - 'Dockerfile*'
-      - 'docker-compose*'
-      - 'nginx/**'
-      - '.github/workflows/deploy-ghcr.yml'
-      - 'scripts/fix-uploads-perms.sh'
   workflow_dispatch:
 
 # Allow only one concurrent deploy; cancel older in-flight runs so

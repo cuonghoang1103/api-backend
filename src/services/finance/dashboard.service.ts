@@ -13,6 +13,7 @@ import { D, round2, sum, clampZero } from './money.js';
 import { monthWindow, todayUtc, addDaysUtc } from './helpers.js';
 import { runDue } from './recurring.service.js';
 import { sweepOverdue } from './debt.service.js';
+import { getCurrentFxRate, toVnd } from './fx.service.js';
 
 export async function getDashboard(userId: number, month?: string) {
   // lazy maintenance — safe & idempotent
@@ -23,34 +24,49 @@ export async function getDashboard(userId: number, month?: string) {
   const today = todayUtc();
   const in14 = addDaysUtc(today, 14);
 
-  const [wallets, incomeAgg, expenseAgg, budgetCats, debts, upcomingItems, cashflowRows, savingsAccounts, assetInvestments] =
+  const [fxRow, wallets, incomeByCur, expenseByCur, budgetCats, debts, upcomingItems, cashflowRows, savingsAccounts, assetInvestments] =
     await Promise.all([
+      getCurrentFxRate(userId),
       prisma.wallet.findMany({ where: { userId, isArchived: false }, orderBy: [{ order: 'asc' }] }),
-      prisma.incomeEntry.aggregate({ where: { userId, date: { gte: start, lt: end } }, _sum: { amount: true } }),
-      prisma.expense.aggregate({ where: { userId, date: { gte: start, lt: end } }, _sum: { amount: true } }),
+      prisma.incomeEntry.groupBy({ by: ['currency'], where: { userId, date: { gte: start, lt: end } }, _sum: { amount: true } }),
+      prisma.expense.groupBy({ by: ['currency'], where: { userId, date: { gte: start, lt: end } }, _sum: { amount: true } }),
       prisma.expenseCategory.findMany({ where: { userId, monthlyBudget: { not: null } }, select: { id: true, name: true, icon: true, color: true, monthlyBudget: true } }),
       prisma.debt.findMany({ where: { userId }, include: { schedule: true } }),
       prisma.debtScheduleItem.findMany({
         where: { userId, isPaid: false, dueDate: { lte: in14 } },
-        include: { debt: { select: { id: true, lenderName: true, lenderType: true } } },
+        include: { debt: { select: { id: true, lenderName: true, lenderType: true, currency: true } } },
         orderBy: { dueDate: 'asc' },
       }),
-      prisma.expense.findMany({ where: { userId, date: { gte: start, lt: end } }, select: { amount: true, date: true } }),
-      prisma.savingsAccount.findMany({ where: { userId, status: { not: 'WITHDRAWN' } }, select: { amount: true } }),
-      prisma.investment.findMany({ where: { userId, type: 'ASSET', status: { not: 'SOLD' } }, select: { amount: true, currentValue: true } }),
+      prisma.expense.findMany({ where: { userId, date: { gte: start, lt: end } }, select: { amount: true, date: true, currency: true } }),
+      prisma.savingsAccount.findMany({ where: { userId, status: { not: 'WITHDRAWN' } }, select: { amount: true, currency: true } }),
+      prisma.investment.findMany({ where: { userId, type: 'ASSET', status: { not: 'SOLD' } }, select: { amount: true, currentValue: true, currency: true } }),
     ]);
 
-  const totalBalance = sum(wallets.map((w) => w.balance));
-  const incomeThisMonth = D(incomeAgg._sum.amount ?? 0);
-  const expenseThisMonth = D(expenseAgg._sum.amount ?? 0);
+  // Every aggregate below is expressed in VND: USD amounts convert through
+  // the user's latest self-entered rate. Pure-VND users hit the identity
+  // path (`toVnd` returns the value untouched), so nothing changes for them.
+  const rate = fxRow ? D(fxRow.vndPerUsd) : null;
+  let usdSeen = false;
+  const conv = (amount: Prisma.Decimal.Value | null | undefined, currency: string | null | undefined) => {
+    if (currency === 'USD') usdSeen = true;
+    return toVnd(amount ?? 0, currency, rate);
+  };
 
-  // per-category budget status
+  const totalBalance = round2(sum(wallets.map((w) => conv(w.balance, w.currency))));
+  const incomeThisMonth = round2(sum(incomeByCur.map((g) => conv(g._sum.amount, g.currency))));
+  const expenseThisMonth = round2(sum(expenseByCur.map((g) => conv(g._sum.amount, g.currency))));
+
+  // per-category budget status (budgets are VND; USD spend converts in)
   const perCat = await prisma.expense.groupBy({
-    by: ['categoryId'],
+    by: ['categoryId', 'currency'],
     where: { userId, date: { gte: start, lt: end }, categoryId: { in: budgetCats.map((c) => c.id) } },
     _sum: { amount: true },
   });
-  const spentByCat = new Map(perCat.map((g) => [g.categoryId, D(g._sum.amount ?? 0)]));
+  const spentByCat = new Map<number, Prisma.Decimal>();
+  for (const g of perCat) {
+    const prev = spentByCat.get(g.categoryId) ?? new Prisma.Decimal(0);
+    spentByCat.set(g.categoryId, prev.plus(conv(g._sum.amount, g.currency)));
+  }
   const budgets = budgetCats.map((c) => {
     const used = spentByCat.get(c.id) ?? new Prisma.Decimal(0);
     const budget = D(c.monthlyBudget);
@@ -59,37 +75,46 @@ export async function getDashboard(userId: number, month?: string) {
   });
 
   // net worth = wallets + savings + asset investments − remaining debt
-  const totalRemainingDebt = sum(
+  const totalRemainingDebt = round2(sum(
     debts
       .filter((dbt) => dbt.status !== 'PAID_OFF')
-      .map((dbt) => clampZero(round2(D(dbt.principal).minus(sum(dbt.schedule.filter((s) => s.isPaid).map((s) => s.principalPart)))))),
-  );
-  const totalSavings = sum(savingsAccounts.map((s) => s.amount));
-  const totalAssetValue = sum(assetInvestments.map((i) => i.currentValue ?? i.amount));
+      .map((dbt) => conv(clampZero(round2(D(dbt.principal).minus(sum(dbt.schedule.filter((s) => s.isPaid).map((s) => s.principalPart))))), dbt.currency)),
+  ));
+  const totalSavings = round2(sum(savingsAccounts.map((s) => conv(s.amount, s.currency))));
+  const totalAssetValue = round2(sum(assetInvestments.map((i) => conv(i.currentValue ?? i.amount, i.currency))));
   const netWorth = round2(totalBalance.plus(totalSavings).plus(totalAssetValue).minus(totalRemainingDebt));
 
   // income vs expense per DAY for the month (chart-ready)
   const dayMap = new Map<string, { income: Prisma.Decimal; expense: Prisma.Decimal }>();
-  const incomeRows = await prisma.incomeEntry.findMany({ where: { userId, date: { gte: start, lt: end } }, select: { amount: true, date: true } });
+  const incomeRows = await prisma.incomeEntry.findMany({ where: { userId, date: { gte: start, lt: end } }, select: { amount: true, date: true, currency: true } });
   for (let d = new Date(start); d < end; d = addDaysUtc(d, 1)) {
     dayMap.set(d.toISOString().slice(0, 10), { income: new Prisma.Decimal(0), expense: new Prisma.Decimal(0) });
   }
-  for (const r of incomeRows) { const k = r.date.toISOString().slice(0, 10); const e = dayMap.get(k); if (e) e.income = e.income.plus(D(r.amount)); }
-  for (const r of cashflowRows) { const k = r.date.toISOString().slice(0, 10); const e = dayMap.get(k); if (e) e.expense = e.expense.plus(D(r.amount)); }
+  for (const r of incomeRows) { const k = r.date.toISOString().slice(0, 10); const e = dayMap.get(k); if (e) e.income = e.income.plus(conv(r.amount, r.currency)); }
+  for (const r of cashflowRows) { const k = r.date.toISOString().slice(0, 10); const e = dayMap.get(k); if (e) e.expense = e.expense.plus(conv(r.amount, r.currency)); }
   const cashflow = [...dayMap.entries()].map(([date, v]) => ({ date, income: v.income, expense: v.expense }));
 
   // expense donut by category
-  const donutAgg = await prisma.expense.groupBy({ by: ['categoryId'], where: { userId, date: { gte: start, lt: end } }, _sum: { amount: true } });
+  const donutAgg = await prisma.expense.groupBy({ by: ['categoryId', 'currency'], where: { userId, date: { gte: start, lt: end } }, _sum: { amount: true } });
   const allCats = await prisma.expenseCategory.findMany({ where: { userId }, select: { id: true, name: true, icon: true, color: true } });
   const catMap = new Map(allCats.map((c) => [c.id, c]));
-  const expenseByCategory = donutAgg
-    .map((g) => ({ category: catMap.get(g.categoryId) ?? null, total: D(g._sum.amount ?? 0) }))
+  const donutByCat = new Map<number, Prisma.Decimal>();
+  for (const g of donutAgg) {
+    const prev = donutByCat.get(g.categoryId) ?? new Prisma.Decimal(0);
+    donutByCat.set(g.categoryId, prev.plus(conv(g._sum.amount, g.currency)));
+  }
+  const expenseByCategory = [...donutByCat.entries()]
+    .map(([categoryId, total]) => ({ category: catMap.get(categoryId) ?? null, total }))
     .sort((a, b) => b.total.minus(a.total).toNumber());
 
   const spendingVsIncomePct = incomeThisMonth.isZero() ? null : round2(expenseThisMonth.dividedBy(incomeThisMonth).times(100)).toNumber();
 
   return {
     month: `${year}-${String(mNum).padStart(2, '0')}`,
+    fx: fxRow ? { rate: fxRow.vndPerUsd, updatedAt: fxRow.createdAt } : null,
+    // true = user has USD amounts but never set a rate → they are NOT
+    // included in the VND totals; the UI nudges toward the Tỷ giá page.
+    hasUnconvertedUsd: usdSeen && !rate,
     totalBalance,
     netWorth,
     totalRemainingDebt,
@@ -108,6 +133,7 @@ export async function getDashboard(userId: number, month?: string) {
       debtId: i.debtId,
       lenderName: i.debt.lenderName,
       lenderType: i.debt.lenderType,
+      currency: i.debt.currency,
       dueDate: i.dueDate,
       amountDue: i.amountDue,
       isOverdue: i.dueDate.getTime() < today.getTime(),

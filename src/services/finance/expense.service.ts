@@ -124,13 +124,14 @@ export async function createExpense(
 
   return prisma.$transaction(async (tx) => {
     // debit the wallet (ownership verified inside applyWalletDelta)
-    await applyWalletDelta(tx, userId, data.walletId, amount.negated());
+    const wallet = await applyWalletDelta(tx, userId, data.walletId, amount.negated());
     return tx.expense.create({
       data: {
         userId,
         categoryId: data.categoryId,
         walletId: data.walletId,
         amount,
+        currency: wallet.currency,
         date,
         description: data.description?.toString().slice(0, 500) || null,
         receiptUrl: data.receiptUrl?.toString().slice(0, 500) || null,
@@ -167,7 +168,7 @@ export async function updateExpense(
 
     // Reverse the old debit, then apply the new one (handles wallet change).
     await applyWalletDelta(tx, userId, existing.walletId, D(existing.amount)); // credit back old
-    await applyWalletDelta(tx, userId, newWalletId, newAmount.negated()); // debit new
+    const newWallet = await applyWalletDelta(tx, userId, newWalletId, newAmount.negated()); // debit new
 
     return tx.expense.update({
       where: { id },
@@ -175,6 +176,7 @@ export async function updateExpense(
         categoryId: data.categoryId ?? existing.categoryId,
         walletId: newWalletId,
         amount: newAmount,
+        currency: newWallet.currency,
         date: data.date ? toDateOnly(data.date) : existing.date,
         description: data.description !== undefined ? (data.description?.toString().slice(0, 500) || null) : existing.description,
         receiptUrl: data.receiptUrl !== undefined ? (data.receiptUrl?.toString().slice(0, 500) || null) : existing.receiptUrl,

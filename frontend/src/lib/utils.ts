@@ -75,6 +75,17 @@ export const formatVnd = (value: number | string | null | undefined): string => 
   return `${Math.round(n).toLocaleString('vi-VN')} ₫`;
 };
 
+/** Format a USD amount as "$1,234.56" (2 decimals, en-US grouping). */
+export const formatUsd = (value: number | string | null | undefined): string => {
+  const n = typeof value === 'string' ? Number(value) : (value ?? 0);
+  if (!Number.isFinite(n)) return '$0.00';
+  return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+};
+
+/** Currency-aware money formatter for MoneyFlow: VND (default) or USD. */
+export const formatMoney = (value: number | string | null | undefined, currency?: string | null): string =>
+  currency === 'USD' ? formatUsd(value) : formatVnd(value);
+
 /** Compact VND for tight spaces: 1.2tr / 950k / 500. */
 export const formatVndCompact = (value: number | string | null | undefined): string => {
   const n = typeof value === 'string' ? Number(value) : (value ?? 0);

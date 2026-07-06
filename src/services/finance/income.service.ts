@@ -167,9 +167,10 @@ export async function createIncomeEntry(
   const date = data.date ? toDateOnly(data.date) : toDateOnly(new Date());
 
   return prisma.$transaction(async (tx) => {
-    await applyWalletDelta(tx, userId, data.walletId, amount); // credit
+    const wallet = await applyWalletDelta(tx, userId, data.walletId, amount); // credit
     return tx.incomeEntry.create({
-      data: { userId, sourceId: data.sourceId ?? null, walletId: data.walletId, amount, date, type, note: data.note?.toString().slice(0, 1000) || null },
+      // entry currency always follows the wallet it lands in
+      data: { userId, sourceId: data.sourceId ?? null, walletId: data.walletId, amount, currency: wallet.currency, date, type, note: data.note?.toString().slice(0, 1000) || null },
     });
   });
 }
@@ -191,7 +192,7 @@ export async function updateIncomeEntry(
 
     // reverse old credit, apply new credit
     await applyWalletDelta(tx, userId, existing.walletId, D(existing.amount).negated());
-    await applyWalletDelta(tx, userId, newWalletId, newAmount);
+    const newWallet = await applyWalletDelta(tx, userId, newWalletId, newAmount);
 
     return tx.incomeEntry.update({
       where: { id },
@@ -199,6 +200,7 @@ export async function updateIncomeEntry(
         sourceId: data.sourceId !== undefined ? data.sourceId : existing.sourceId,
         walletId: newWalletId,
         amount: newAmount,
+        currency: newWallet.currency,
         date: data.date ? toDateOnly(data.date) : existing.date,
         type: data.type ? assertOneOf(data.type, INCOME_TYPES, 'Loại thu nhập') : existing.type,
         note: data.note !== undefined ? (data.note?.toString().slice(0, 1000) || null) : existing.note,

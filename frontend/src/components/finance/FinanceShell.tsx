@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Banknote, CreditCard, Receipt, Wallet as WalletIcon,
-  TrendingUp, PiggyBank, BarChart3, Plus, LogIn,
+  TrendingUp, PiggyBank, BarChart3, Plus, LogIn, ArrowLeftRight,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
@@ -26,6 +26,7 @@ const NAV: NavItem[] = [
   { href: '/finance/wallets', label: 'Ví', icon: WalletIcon },
   { href: '/finance/investments', label: 'Đầu tư', icon: TrendingUp },
   { href: '/finance/savings', label: 'Tiết kiệm', icon: PiggyBank },
+  { href: '/finance/currency', label: 'Tỷ giá', icon: ArrowLeftRight },
   { href: '/finance/reports', label: 'Báo cáo', icon: BarChart3 },
 ];
 // Mobile bottom tabs (4 + center FAB)

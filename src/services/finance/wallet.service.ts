@@ -12,6 +12,7 @@ import { Prisma } from '@prisma/client';
 import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
 import { D, round2, isPositive } from './money.js';
 import { assertId, assertOneOf, pageParams } from './helpers.js';
+import { CURRENCIES, getCurrentFxRate, toVnd, vndToUsd } from './fx.service.js';
 
 type Tx = Prisma.TransactionClient;
 
@@ -28,7 +29,7 @@ export async function applyWalletDelta(
   userId: number,
   walletId: number,
   delta: Prisma.Decimal | number | string,
-): Promise<{ id: number; balance: Prisma.Decimal }> {
+): Promise<{ id: number; balance: Prisma.Decimal; currency: string }> {
   const owned = await tx.wallet.findFirst({
     where: { id: walletId, userId },
     select: { id: true },
@@ -37,7 +38,7 @@ export async function applyWalletDelta(
   const updated = await tx.wallet.update({
     where: { id: walletId },
     data: { balance: { increment: round2(delta) } },
-    select: { id: true, balance: true },
+    select: { id: true, balance: true, currency: true },
   });
   return updated;
 }
@@ -74,6 +75,7 @@ export async function createWallet(
   if (!name) throw new BadRequestError('Tên ví không được để trống');
   const type = assertOneOf(data.type ?? 'CASH', WALLET_TYPES, 'Loại ví');
   const balance = round2(D(data.balance ?? 0));
+  const currency = assertOneOf(data.currency ?? 'VND', CURRENCIES, 'Tiền tệ');
 
   const count = await prisma.wallet.count({ where: { userId } });
   return prisma.wallet.create({
@@ -84,7 +86,7 @@ export async function createWallet(
       icon: data.icon?.toString().slice(0, 40) || null,
       color: data.color?.toString().slice(0, 20) || null,
       balance,
-      currency: (data.currency || 'VND').slice(0, 8),
+      currency,
       order: Number.isFinite(data.order) ? Number(data.order) : count,
     },
   });
@@ -181,10 +183,30 @@ export async function transferBetweenWallets(
   const amount = round2(D(input.amount));
   if (!isPositive(amount)) throw new BadRequestError('Số tiền chuyển phải lớn hơn 0');
 
+  // Cross-currency transfers convert at the user's current rate. `amount`
+  // is always in the SOURCE wallet's currency; the destination is credited
+  // with the converted figure and the rate is stamped into the audit note.
+  const [fromWallet, toWallet] = await Promise.all([
+    prisma.wallet.findFirst({ where: { id: fromWalletId, userId }, select: { currency: true } }),
+    prisma.wallet.findFirst({ where: { id: toWalletId, userId }, select: { currency: true } }),
+  ]);
+  if (!fromWallet || !toWallet) throw new NotFoundError('Không tìm thấy ví');
+
+  let creditAmount = amount;
+  let fxNote: string | null = null;
+  if (fromWallet.currency !== toWallet.currency) {
+    const fx = await getCurrentFxRate(userId);
+    if (!fx) throw new BadRequestError('Hai ví khác tiền tệ — hãy đặt tỷ giá trong mục Tỷ giá trước khi chuyển');
+    const rate = D(fx.vndPerUsd);
+    creditAmount = fromWallet.currency === 'USD' ? toVnd(amount, 'USD', rate) : vndToUsd(amount, rate);
+    fxNote = `Tỷ giá ${round2(rate).toFixed(0)} ₫/$`;
+  }
+
   return prisma.$transaction(async (tx) => {
     const from = await applyWalletDelta(tx, userId, fromWalletId, amount.negated());
-    const to = await applyWalletDelta(tx, userId, toWalletId, amount);
-    const note = input.note?.toString().slice(0, 500) || null;
+    const to = await applyWalletDelta(tx, userId, toWalletId, creditAmount);
+    const userNote = input.note?.toString().slice(0, 480) || null;
+    const note = [userNote, fxNote].filter(Boolean).join(' · ') || null;
     await tx.walletAdjustment.createMany({
       data: [
         {
@@ -200,7 +222,7 @@ export async function transferBetweenWallets(
           userId,
           walletId: toWalletId,
           kind: 'TRANSFER',
-          amount,
+          amount: creditAmount,
           balanceAfter: to.balance,
           counterpartyWalletId: fromWalletId,
           reason: note,

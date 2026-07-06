@@ -25,6 +25,7 @@ import * as debtService from '../services/finance/debt.service.js';
 import * as investmentService from '../services/finance/investment.service.js';
 import * as savingsService from '../services/finance/savings.service.js';
 import * as reportsService from '../services/finance/reports.service.js';
+import * as fxService from '../services/finance/fx.service.js';
 import { getDashboard } from '../services/finance/dashboard.service.js';
 import { comparePayoff, type PayoffDebt } from '../services/finance/payoffStrategy.js';
 
@@ -288,6 +289,20 @@ router.post('/savings/goals/:id(\\d+)/contribute', amount(), validate, async (re
 });
 router.delete('/savings/goals/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => {
   try { ok(res, await savingsService.deleteSavingsGoal(uid(req), Number(req.params.id))); } catch (e) { next(e); }
+});
+
+// ─── Exchange rate (VND↔USD, user-entered, append-only history) ──
+router.get('/fx/current', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await fxService.getCurrentFxRate(uid(req))); } catch (e) { next(e); }
+});
+router.get('/fx/history', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await fxService.listFxRates(uid(req), req.query.page, req.query.limit)); } catch (e) { next(e); }
+});
+router.post('/fx', amount('vndPerUsd'), validate, async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await fxService.setFxRate(uid(req), req.body), 201); } catch (e) { next(e); }
+});
+router.delete('/fx/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await fxService.deleteFxRate(uid(req), Number(req.params.id))); } catch (e) { next(e); }
 });
 
 // ─── Reports ─────────────────────────────────────────────────

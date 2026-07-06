@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { Plus, ArrowLeftRight, Pencil, Archive, SlidersHorizontal, ArrowRight } from 'lucide-react';
 import { financeApi, WALLET_TYPE_LABELS, type Wallet } from '@/lib/finance-api';
-import { cn, formatVnd } from '@/lib/utils';
+import { cn, formatUsd, formatMoney } from '@/lib/utils';
 import { FinanceShell } from '@/components/finance/FinanceShell';
 import { Card, StatCard, Button, Sheet, Field, inputCls, Spinner, EmptyState, Pill } from '@/components/finance/primitives';
 
@@ -26,7 +26,12 @@ export default function WalletsPage() {
   }, []);
   useEffect(() => { load(); }, [load]);
 
-  const total = wallets.filter((w) => !w.isArchived).reduce((a, w) => a + Number(w.balance), 0);
+  const active = wallets.filter((w) => !w.isArchived);
+  // Client-side sums stay per-currency — the VND-converted grand total
+  // (via the user's rate) lives on the dashboard.
+  const totalVnd = active.filter((w) => w.currency !== 'USD').reduce((a, w) => a + Number(w.balance), 0);
+  const totalUsd = active.filter((w) => w.currency === 'USD').reduce((a, w) => a + Number(w.balance), 0);
+  const hasUsdWallet = active.some((w) => w.currency === 'USD');
 
   return (
     <FinanceShell onQuickAddSuccess={load}>
@@ -38,7 +43,10 @@ export default function WalletsPage() {
         </div>
       </div>
 
-      <div className="mb-4"><StatCard label="Tổng số dư (ví hoạt động)" value={total} /></div>
+      <div className={cn('mb-4 grid gap-3', hasUsdWallet && 'sm:grid-cols-2')}>
+        <StatCard label="Tổng số dư ₫ (ví hoạt động)" value={totalVnd} />
+        {hasUsdWallet && <StatCard label="Tổng số dư $ (ví hoạt động)" value={totalUsd} format={formatUsd} />}
+      </div>
 
       {loading ? <Spinner /> : wallets.length === 0 ? (
         <EmptyState icon="👛" title="Chưa có ví nào" action={<Button onClick={() => setEdit('new')}><Plus size={15} /> Thêm ví</Button>} />
@@ -55,7 +63,8 @@ export default function WalletsPage() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-heading text-lg font-bold tabular-nums text-text-primary">{formatVnd(w.balance)}</div>
+                  <div className="font-heading text-lg font-bold tabular-nums text-text-primary">{formatMoney(w.balance, w.currency)}</div>
+                  {w.currency === 'USD' && <div className="text-[10px] font-semibold uppercase tracking-wide text-neon-cyan">USD</div>}
                 </div>
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs">
@@ -82,6 +91,7 @@ function WalletFormSheet({ wallet, onClose, onSaved }: { wallet: Wallet | null; 
   const [type, setType] = useState(wallet?.type ?? 'CASH');
   const [icon, setIcon] = useState(wallet?.icon ?? '👛');
   const [color, setColor] = useState(wallet?.color ?? '#8b5cf6');
+  const [currency, setCurrency] = useState(wallet?.currency ?? 'VND');
   const [balance, setBalance] = useState(wallet ? '' : '0');
   const [saving, setSaving] = useState(false);
 
@@ -90,7 +100,7 @@ function WalletFormSheet({ wallet, onClose, onSaved }: { wallet: Wallet | null; 
     setSaving(true);
     try {
       if (wallet) await financeApi.updateWallet(wallet.id, { name, type, icon, color });
-      else await financeApi.createWallet({ name, type, icon, color, balance: Number(balance) || 0 } as never);
+      else await financeApi.createWallet({ name, type, icon, color, currency, balance: Number(balance) || 0 } as never);
       toast.success('Đã lưu ví'); onSaved();
     } catch { toast.error('Lưu thất bại'); } finally { setSaving(false); }
   };
@@ -105,8 +115,23 @@ function WalletFormSheet({ wallet, onClose, onSaved }: { wallet: Wallet | null; 
         </div>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Màu"><input type="color" value={color} onChange={(e) => setColor(e.target.value)} className={cn(inputCls, 'h-10 p-1')} /></Field>
-          {!wallet && <Field label="Số dư ban đầu"><input inputMode="numeric" value={balance} onChange={(e) => setBalance(e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>}
+          {/* Currency is fixed at creation — changing it later would corrupt the balance semantics */}
+          {!wallet ? (
+            <Field label="Tiền tệ">
+              <select value={currency} onChange={(e) => setCurrency(e.target.value)} className={inputCls}>
+                <option value="VND">₫ VND</option>
+                <option value="USD">$ USD</option>
+              </select>
+            </Field>
+          ) : (
+            <Field label="Tiền tệ"><input value={wallet.currency === 'USD' ? '$ USD' : '₫ VND'} disabled className={cn(inputCls, 'opacity-60')} /></Field>
+          )}
         </div>
+        {!wallet && (
+          <Field label={`Số dư ban đầu (${currency === 'USD' ? '$' : '₫'})`}>
+            <input inputMode="decimal" value={balance} onChange={(e) => setBalance(e.target.value.replace(/[^\d.]/g, ''))} className={inputCls} />
+          </Field>
+        )}
         <Button onClick={save} disabled={saving} className="w-full">{saving ? 'Đang lưu…' : 'Lưu'}</Button>
       </div>
     </Sheet>
@@ -118,19 +143,32 @@ function TransferSheet({ wallets, onClose, onDone }: { wallets: Wallet[]; onClos
   const [to, setTo] = useState(wallets[1]?.id ?? wallets[0]?.id ?? 0);
   const [amount, setAmount] = useState('');
   const [saving, setSaving] = useState(false);
+  const fromW = wallets.find((w) => w.id === from);
+  const toW = wallets.find((w) => w.id === to);
+  const crossCurrency = !!fromW && !!toW && fromW.currency !== toW.currency;
   const go = async () => {
     if (from === to) { toast.error('Chọn hai ví khác nhau'); return; }
     if (!Number(amount)) { toast.error('Nhập số tiền'); return; }
     setSaving(true);
     try { await financeApi.transfer({ fromWalletId: from, toWalletId: to, amount: Number(amount) }); toast.success('Đã chuyển'); onDone(); }
-    catch { toast.error('Chuyển thất bại'); } finally { setSaving(false); }
+    catch (e) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'Chuyển thất bại');
+    } finally { setSaving(false); }
   };
   return (
     <Sheet open onClose={onClose} title="Chuyển tiền giữa ví">
       <div className="space-y-3">
-        <Field label="Từ ví"><select value={from} onChange={(e) => setFrom(Number(e.target.value))} className={inputCls}>{wallets.map((w) => <option key={w.id} value={w.id}>{w.icon} {w.name} — {formatVnd(w.balance)}</option>)}</select></Field>
-        <Field label="Đến ví"><select value={to} onChange={(e) => setTo(Number(e.target.value))} className={inputCls}>{wallets.map((w) => <option key={w.id} value={w.id}>{w.icon} {w.name}</option>)}</select></Field>
-        <Field label="Số tiền"><input inputMode="numeric" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>
+        <Field label="Từ ví"><select value={from} onChange={(e) => setFrom(Number(e.target.value))} className={inputCls}>{wallets.map((w) => <option key={w.id} value={w.id}>{w.icon} {w.name} — {formatMoney(w.balance, w.currency)}</option>)}</select></Field>
+        <Field label="Đến ví"><select value={to} onChange={(e) => setTo(Number(e.target.value))} className={inputCls}>{wallets.map((w) => <option key={w.id} value={w.id}>{w.icon} {w.name}{w.currency === 'USD' ? ' ($)' : ''}</option>)}</select></Field>
+        <Field label={`Số tiền (${fromW?.currency === 'USD' ? '$' : '₫'} — theo ví nguồn)`}>
+          <input inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ''))} className={inputCls} />
+        </Field>
+        {crossCurrency && (
+          <div className="rounded-xl bg-neon-cyan/10 px-3 py-2 text-xs text-neon-cyan">
+            Hai ví khác tiền tệ — số tiền sẽ được quy đổi tự động theo tỷ giá hiện hành (xem mục Tỷ giá).
+          </div>
+        )}
         <Button onClick={go} disabled={saving} className="w-full">{saving ? 'Đang chuyển…' : 'Chuyển'}</Button>
       </div>
     </Sheet>
@@ -149,7 +187,7 @@ function AdjustSheet({ wallet, onClose, onDone }: { wallet: Wallet; onClose: () 
   return (
     <Sheet open onClose={onClose} title={`Điều chỉnh số dư — ${wallet.name}`}>
       <div className="space-y-3">
-        <div className="text-sm text-text-muted">Số dư hiện tại: <b className="text-text-primary">{formatVnd(wallet.balance)}</b></div>
+        <div className="text-sm text-text-muted">Số dư hiện tại: <b className="text-text-primary">{formatMoney(wallet.balance, wallet.currency)}</b></div>
         <Field label="Số dư mới"><input inputMode="numeric" value={target} onChange={(e) => setTarget(e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>
         <Field label="Lý do (ghi vào lịch sử)"><input value={reason} onChange={(e) => setReason(e.target.value)} className={inputCls} placeholder="VD: kiểm kê tiền mặt" /></Field>
         <Button onClick={go} disabled={saving} className="w-full">{saving ? 'Đang lưu…' : 'Cập nhật số dư'}</Button>

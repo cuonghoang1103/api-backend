@@ -4580,3 +4580,17 @@ model SavingsGoal {
   @@index([userId], name: "idx_fin_savings_goals_user")
   @@map("finance_savings_goals")
 }
+
+// User-entered VND↔USD exchange rate. Append-only history: each update
+// inserts a row; the newest row is the current rate used to convert USD
+// amounts into VND across dashboard/report aggregations.
+model FinanceFxRate {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  vndPerUsd Decimal  @map("vnd_per_usd") @db.Decimal(18, 2) // ₫ for 1 $
+  note      String?  @db.VarChar(200)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId, createdAt], name: "idx_fin_fx_rates_user_created")
+  @@map("finance_fx_rates")
+}

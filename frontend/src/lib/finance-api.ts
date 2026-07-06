@@ -49,13 +49,16 @@ export interface DebtComputation {
   schedule: Array<{ installmentNo: number; dueDate: string; amountDue: Money; principalPart: Money; interestPart: Money }>;
   totalPrincipal: Money; totalInterest: Money; totalPayable: Money; interestPerDay?: Money;
 }
+export interface FxRate { id: number; userId: number; vndPerUsd: Money; note: string | null; createdAt: string; }
 export interface DashboardData {
   month: string; totalBalance: Money; netWorth: Money; totalRemainingDebt: Money; incomeThisMonth: Money;
   expenseThisMonth: Money; savingsThisMonth: Money; spendingVsIncomePct: number | null; wallets: Wallet[];
+  fx: { rate: Money; updatedAt: string } | null;
+  hasUnconvertedUsd: boolean;
   budgets: Array<{ category: { id: number; name: string; icon: string | null; color: string | null }; budget: Money; used: Money; ratio: number; status: string }>;
   cashflow: Array<{ date: string; income: Money; expense: Money }>;
   expenseByCategory: Array<{ category: { id: number; name: string; icon: string | null; color: string | null } | null; total: Money }>;
-  upcomingPayments: Array<{ id: number; debtId: number; lenderName: string; lenderType: string; dueDate: string; amountDue: Money; isOverdue: boolean }>;
+  upcomingPayments: Array<{ id: number; debtId: number; lenderName: string; lenderType: string; currency: string; dueDate: string; amountDue: Money; isOverdue: boolean }>;
 }
 
 // ── Phase 2 types ──
@@ -95,6 +98,12 @@ const unwrap = <T,>(p: Res<T>): Promise<T> => p.then((r) => r.data.data);
 export const financeApi = {
   // Dashboard
   dashboard: (month?: string) => unwrap<DashboardData>(api.get('/finance/dashboard', { params: { month } })),
+
+  // Exchange rate (VND↔USD, user-entered)
+  fxCurrent: () => unwrap<FxRate | null>(api.get('/finance/fx/current')),
+  fxHistory: (page = 1, limit = 20) => unwrap<{ items: FxRate[]; total: number; page: number; limit: number }>(api.get('/finance/fx/history', { params: { page, limit } })),
+  fxSet: (body: { vndPerUsd: number; note?: string }) => unwrap<FxRate>(api.post('/finance/fx', body)),
+  fxDelete: (id: number) => unwrap<{ deleted: boolean }>(api.delete(`/finance/fx/${id}`)),
 
   // Wallets
   listWallets: (includeArchived = false) => unwrap<Wallet[]>(api.get('/finance/wallets', { params: { includeArchived } })),

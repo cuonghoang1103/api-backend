@@ -272,6 +272,18 @@ else
  echo "$LANG_SEED_OUT" | tail -11 | sed 's/^/ /'
 fi
 
+# ── Step 3.7: Japanese extended kana seed (dakuten/yōon/special) ─
+info "Running Japanese extended kana seed..."
+KANA_SEED_OUT=$($DC exec -T backend sh -c \
+ "npx tsx prisma/seed.ja-kana.ts" 2>&1) || true
+if echo "$KANA_SEED_OUT" | grep -qiE "error|cannot find|exception|not found"; then
+ warn "JA kana seed reported errors — see /tmp/seed-ja-kana.log"
+ echo "$KANA_SEED_OUT" > /tmp/seed-ja-kana.log
+else
+ ok "JA kana seed complete"
+ echo "$KANA_SEED_OUT" | tail -4 | sed 's/^/ /'
+fi
+
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."
 backend_ok=false

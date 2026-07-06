@@ -17,6 +17,7 @@
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
     "db:seed:lang": "tsx prisma/seed.my-language.ts",
+    "db:seed:ja-kana": "tsx prisma/seed.ja-kana.ts",
     "lint": "eslint src --ext .ts",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist",

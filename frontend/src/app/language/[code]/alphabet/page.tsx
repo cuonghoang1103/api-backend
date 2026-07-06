@@ -9,7 +9,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Type, Eye, EyeOff } from 'lucide-react';
+import Link from 'next/link';
+import { Type, Eye, EyeOff, Dumbbell } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
 import { getImageUrl } from '@/lib/utils';
 import type { AlphabetGroup, AlphabetItem } from '@/types/language';
@@ -68,6 +69,12 @@ export default function AlphabetPage() {
 
   const toolbar = (
     <div className="flex flex-wrap items-center gap-2">
+      <Link
+        href={`/language/${code}/alphabet/practice`}
+        className="inline-flex items-center gap-1.5 rounded-full bg-neon-gradient px-3.5 py-1.5 text-sm font-semibold text-white shadow-neon transition hover:opacity-95"
+      >
+        <Dumbbell size={16} /> Luyện tập
+      </Link>
       <button
         type="button"
         onClick={() => setHideRomanization((v) => !v)}

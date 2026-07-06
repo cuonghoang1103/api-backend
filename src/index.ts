@@ -123,6 +123,8 @@ const videoCategoryRoutes = (await import(path.join(__dirname, 'routes', 'videoC
 const myLanguageModule = await import(path.join(__dirname, 'routes', 'myLanguage.routes.js'));
 const myLanguagePublicRoutes = myLanguageModule.publicRouter;
 const myLanguageAdminRoutes = myLanguageModule.adminRouter;
+// MoneyFlow — private per-user personal finance module
+const financeRoutes = (await import(path.join(__dirname, 'routes', 'finance.routes.js'))).default;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -451,6 +453,7 @@ app.use('/api/v1/video-categories', videoCategoryRoutes);
 // My Language — public reads + authed SRS at /my-language, admin CRUD at /admin/my-language
 app.use('/api/v1/my-language', myLanguagePublicRoutes);
 app.use('/api/v1/admin/my-language', myLanguageAdminRoutes);
+app.use('/api/v1/finance', financeRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);
 app.use('/api/v1/admin', adminRoutes);

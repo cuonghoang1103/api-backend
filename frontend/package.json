@@ -64,6 +64,7 @@
     "react-markdown": "^9.1.0",
     "react-player": "^3.4.0",
     "react-syntax-highlighter": "^15.6.1",
+    "recharts": "^2.15.4",
     "rehype-highlight": "^7.0.2",
     "rehype-pretty-code": "^0.14.3",
     "rehype-raw": "^7.0.0",

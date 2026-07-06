@@ -64,6 +64,28 @@ export const formatNumber = (num: number): string => {
   return num.toString();
 };
 
+/**
+ * Format a VND amount as "1.234.567 ₫" (no decimals). Accepts number | string
+ * (the finance API returns Decimal fields as strings to preserve precision).
+ * Used everywhere in the MoneyFlow module.
+ */
+export const formatVnd = (value: number | string | null | undefined): string => {
+  const n = typeof value === 'string' ? Number(value) : (value ?? 0);
+  if (!Number.isFinite(n)) return '0 ₫';
+  return `${Math.round(n).toLocaleString('vi-VN')} ₫`;
+};
+
+/** Compact VND for tight spaces: 1.2tr / 950k / 500. */
+export const formatVndCompact = (value: number | string | null | undefined): string => {
+  const n = typeof value === 'string' ? Number(value) : (value ?? 0);
+  if (!Number.isFinite(n)) return '0';
+  const abs = Math.abs(n);
+  if (abs >= 1_000_000_000) return `${(n / 1_000_000_000).toFixed(1)}tỷ`;
+  if (abs >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}tr`;
+  if (abs >= 1_000) return `${Math.round(n / 1_000)}k`;
+  return String(Math.round(n));
+};
+
 export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + '...';

@@ -18,7 +18,7 @@ import {
  Home, FolderOpen, Music, MessageCircle, Sparkles,
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
  Globe, ShoppingBag, Bell, NotebookPen,
-Sun, Moon,
+Sun, Moon, Wallet,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -40,6 +40,7 @@ const TOP_NAV_LINKS: TopNavLink[] = [
  { href: '/about', label: 'About', icon: User },
  { href: '/projects', label: 'Projects', icon: FolderOpen },
  { href: '/notes', label: 'Notes', icon: NotebookPen, authOnly: true },
+ { href: '/finance', label: 'MoneyFlow', icon: Wallet, authOnly: true },
  { href: '/music', label: 'Music', icon: Music },
  { href: '/messages', label: 'Messages', icon: MessageCircle, authOnly: true },
  { href: '/chat', label: 'AI Chat', icon: Sparkles },

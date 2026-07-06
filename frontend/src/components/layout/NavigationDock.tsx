@@ -9,7 +9,7 @@ import {
   LayoutDashboard, Shield, BookMarked, Receipt,
   Sparkles, FileCode2, LogOut, User, Settings,
   GraduationCap, ShoppingBag, Layers, ChevronRight,
-  Github, Menu, X, NotebookPen, Languages,
+  Github, Menu, X, NotebookPen, Languages, Wallet,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -69,6 +69,7 @@ const DOCK_ITEMS: DockItem[] = [
   { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'user' },
   { href: '/chat', label: 'AI Chat', icon: Sparkles, section: 'user' },
   { href: '/music', label: 'Music', icon: Music, section: 'user' },
+  { href: '/finance', label: 'MoneyFlow', icon: Wallet, section: 'user' },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'user' },
   { href: '/admin', label: 'Admin', icon: Shield, section: 'admin' },
 ];

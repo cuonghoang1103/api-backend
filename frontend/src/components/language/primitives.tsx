@@ -68,8 +68,8 @@ export function SpeakerButton({
       }
       setBusy(true);
       try {
-        // Slower, clearer delivery for learners; Japanese a touch slower still.
-        const rate = forceLang === 'ja-JP' ? 0.7 : forceLang === 'zh-CN' ? 0.75 : 0.85;
+        // CJK stays slow for learners; English at natural (Siri-like) pace.
+        const rate = forceLang === 'ja-JP' ? 0.7 : forceLang === 'zh-CN' ? 0.75 : 1.0;
         await speakVocabEntry({ term: text, reading: reading ?? undefined }, { forceLang, rate });
       } finally {
         setBusy(false);

@@ -10,8 +10,9 @@
 //   • refuses to read a CJK term with a mismatched English voice,
 //     signalling the caller to show a "no voice installed" hint instead.
 //
-// Used ONLY by the Notes feature (VocabTable + FlashcardReview). It does
-// not touch any global/shared behaviour.
+// Used by the Notes feature (VocabTable + FlashcardReview) and the whole
+// My Language module (via SpeakerButton in components/language/primitives).
+// It does not touch any global/shared behaviour.
 
 export type VocabLang = 'ja-JP' | 'zh-CN' | 'en-US' | 'ru-RU' | 'th-TH';
 
@@ -82,7 +83,16 @@ export function loadVoices(): Promise<SpeechSynthesisVoice[]> {
 // happens to be first in the list.
 const VOICE_HINTS: Record<string, string[]> = {
   ja: ['google 日本語', 'google japanese', 'kyoko', 'o-ren', 'oren', 'otoya', 'hattori', 'sora', 'nanami', 'ayumi', 'natural', 'neural', 'online', 'enhanced', 'premium', 'google'],
-  en: ['google us english', 'google uk english', 'samantha', 'ava', 'allison', 'evan', 'nathan', 'aaron', 'jenny', 'aria', 'guy', 'natural', 'neural', 'online', 'enhanced', 'premium', 'google', 'siri'],
+  en: [
+    // Apple Siri-quality US voices (Safari on macOS/iOS exposes them once downloaded)
+    'siri', 'ava', 'zoe', 'allison', 'samantha', 'evan', 'nathan', 'noelle', 'joelle', 'aaron', 'tom',
+    // Windows Edge neural US voices
+    'aria', 'jenny', 'michelle', 'christopher', 'guy', 'andrew', 'emma',
+    // Chrome network voice
+    'google us english',
+    // generic quality markers
+    'natural', 'neural', 'online', 'enhanced', 'premium', 'google',
+  ],
   zh: ['google 普通话', 'google mandarin', 'tingting', 'meijia', 'sinji', 'xiaoxiao', 'yunyang', 'natural', 'neural', 'online', 'google'],
   ru: ['google русский', 'milena', 'yuri', 'natural', 'neural', 'google'],
   th: ['google', 'kanya', 'narisa', 'natural', 'neural'],
@@ -117,8 +127,12 @@ function pickVoice(voices: SpeechSynthesisVoice[], lang: VocabLang): SpeechSynth
   const prefix = want.slice(0, 2);
   const candidates = voices.filter((v) => (v.lang || '').toLowerCase().replace('_', '-').startsWith(prefix));
   if (!candidates.length) return null;
-  candidates.sort((a, b) => scoreVoice(b, prefix, want) - scoreVoice(a, prefix, want));
-  return candidates[0] ?? null;
+  // When the exact region is installed (en-US, ja-JP, …), never let another
+  // accent (en-GB/en-AU, …) win on name score alone.
+  const exact = candidates.filter((v) => (v.lang || '').toLowerCase().replace('_', '-') === want);
+  const pool = exact.length ? exact : candidates;
+  pool.sort((a, b) => scoreVoice(b, prefix, want) - scoreVoice(a, prefix, want));
+  return pool[0] ?? null;
 }
 
 export interface SpeakResult {
@@ -132,10 +146,10 @@ export interface SpeakResult {
 
 /**
  * Speak a vocab entry with the correct voice/language.
- * - For Chinese, speaks the Hanzi term (pinyin readings can't be voiced
- *   correctly by a zh voice).
- * - For Japanese / others, prefers the reading (furigana / phonetic)
- *   then falls back to the term — matching the prior behaviour.
+ * - For Japanese, prefers the reading (kana furigana) — safer than raw kanji.
+ * - For everything else (en/zh/ru/th), speaks the TERM: the reading there is
+ *   a phonetic transcription (IPA / pinyin / romanization) that a voice
+ *   engine would garble.
  * Returns a result so the caller can surface a "no voice installed" hint.
  */
 export async function speakVocabEntry(
@@ -144,9 +158,9 @@ export async function speakVocabEntry(
 ): Promise<SpeakResult> {
   const lang = opts.forceLang ?? detectVocabLang(entry.term, entry.reading);
   const text =
-    lang === 'zh-CN'
-      ? (entry.term || entry.reading || '')
-      : (entry.reading || entry.term || '');
+    lang === 'ja-JP'
+      ? (entry.reading || entry.term || '')
+      : (entry.term || entry.reading || '');
 
   if (typeof window === 'undefined' || !window.speechSynthesis || !text.trim()) {
     return { ok: false, lang, missingVoice: false };

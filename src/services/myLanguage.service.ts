@@ -180,26 +180,51 @@ export async function getVocab(
   return { items, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 
-/** Full-text vocab search using the raw-SQL tsvector column + ranking. */
+/**
+ * Full-text vocab search. Prefers the raw-SQL `search_vector` tsvector column
+ * (ranked), but transparently falls back to an ILIKE scan when that column is
+ * absent — some prod deploy paths run `prisma db push --accept-data-loss`,
+ * which drops raw-SQL columns not declared in schema.prisma. This keeps search
+ * working either way.
+ */
 export async function searchVocab(code: string, q: string) {
   const lang = await getLanguageOrThrow(code);
   const query = String(q ?? '').trim();
   if (!query) return [];
 
-  const rows = await prisma.$queryRawUnsafe<Array<{ id: number }>>(
-    `SELECT w.id
-       FROM lang_vocab_words w
-       JOIN lang_vocab_categories c ON c.id = w.category_id
-      WHERE c.language_id = $1
-        AND w.search_vector @@ websearch_to_tsquery('simple', $2)
-      ORDER BY ts_rank(w.search_vector, websearch_to_tsquery('simple', $2)) DESC, w.id ASC
-      LIMIT 50`,
-    lang.id,
-    query,
-  );
-  const ids = rows.map((r) => r.id);
-  if (!ids.length) return [];
+  let ids: number[] = [];
+  try {
+    const rows = await prisma.$queryRawUnsafe<Array<{ id: number }>>(
+      `SELECT w.id
+         FROM lang_vocab_words w
+         JOIN lang_vocab_categories c ON c.id = w.category_id
+        WHERE c.language_id = $1
+          AND w.search_vector @@ websearch_to_tsquery('simple', $2)
+        ORDER BY ts_rank(w.search_vector, websearch_to_tsquery('simple', $2)) DESC, w.id ASC
+        LIMIT 50`,
+      lang.id,
+      query,
+    );
+    ids = rows.map((r) => r.id);
+  } catch {
+    // search_vector column missing (dropped by db push) → ILIKE fallback
+    const words = await prisma.langVocabWord.findMany({
+      where: {
+        category: { languageId: lang.id },
+        OR: [
+          { word: { contains: query, mode: 'insensitive' } },
+          { meaningVi: { contains: query, mode: 'insensitive' } },
+          { exampleSentence: { contains: query, mode: 'insensitive' } },
+        ],
+      },
+      orderBy: { id: 'asc' },
+      take: 50,
+      include: { pronunciations: { orderBy: { order: 'asc' } }, category: { select: { id: true, name: true } } },
+    });
+    return words;
+  }
 
+  if (!ids.length) return [];
   const words = await prisma.langVocabWord.findMany({
     where: { id: { in: ids } },
     include: { pronunciations: { orderBy: { order: 'asc' } }, category: { select: { id: true, name: true } } },

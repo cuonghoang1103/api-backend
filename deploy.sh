@@ -257,6 +257,21 @@ else
  echo "$SEED_OUT" | tail -5 | sed 's/^/ /'
 fi
 
+# ── Step 3.6: My Language content seed (EN roadmap + JA kana) ────
+# Separate idempotent seed (find-before-create everywhere; upsert
+# language by code) so /language always has real content on prod.
+# Safe to re-run on every deploy — skips anything already present.
+info "Running My Language content seed (English + Japanese)..."
+LANG_SEED_OUT=$($DC exec -T backend sh -c \
+ "npx tsx prisma/seed.my-language.ts" 2>&1) || true
+if echo "$LANG_SEED_OUT" | grep -qiE "error|cannot find|exception"; then
+ warn "My Language seed reported errors — see /tmp/seed-lang.log"
+ echo "$LANG_SEED_OUT" > /tmp/seed-lang.log
+else
+ ok "My Language seed complete"
+ echo "$LANG_SEED_OUT" | tail -11 | sed 's/^/ /'
+fi
+
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."
 backend_ok=false
@@ -322,6 +337,7 @@ for route in \
     hub/folders \
     snippets \
     video-categories \
+    my-language \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

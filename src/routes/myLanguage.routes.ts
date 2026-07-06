@@ -1,0 +1,321 @@
+/**
+ * My Language — routes.
+ *
+ * Exposes two routers:
+ *   publicRouter → mounted at /api/v1/my-language     (public reads + authed SRS)
+ *   adminRouter  → mounted at /api/v1/admin/my-language (ADMIN-only CRUD + uploads)
+ *
+ * Envelope { success, data, pagination? }; handlers try/catch → next(error).
+ * Uploads reuse ../storage/uploadService (images → url, audio → key).
+ */
+import { Router, type Request, type Response } from 'express';
+import multer from 'multer';
+import { authenticate, optionalAuth, requireRole } from '../middleware/auth.js';
+import { AppError, BadRequestError } from '../middleware/errorHandler.js';
+import { uploadImage, uploadAudio, UploadError } from '../storage/uploadService.js';
+import type { ApiResponse } from '../types/index.js';
+import * as svc from '../services/myLanguage.service.js';
+
+// ─── Public + authed-user router ─────────────────────────────────
+const publicRouter = Router();
+
+publicRouter.get('/', optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getLanguages(req.user?.userId) });
+  } catch (err) { next(err); }
+});
+
+// Authed-user learning engine (SRS / quiz / stats). Declared BEFORE '/:code'
+// so these fixed paths are not captured by the dynamic language-code param.
+publicRouter.post('/progress', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.recordProgress(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/review-queue', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getReviewQueue(req.userId!, req.query.languageCode as string | undefined) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.post('/quiz-result', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.status(201).json({ success: true, data: await svc.recordQuizResult(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/stats', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getStats(req.userId!, req.query.languageCode as string | undefined) });
+  } catch (err) { next(err); }
+});
+
+// Per-language public content
+publicRouter.get('/:code', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getLanguageOverview(req.params.code) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/alphabet', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getAlphabet(req.params.code) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/vocab/categories', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getVocabCategories(req.params.code) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/vocab/search', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.searchVocab(req.params.code, String(req.query.q ?? '')) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/vocab', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { items, pagination } = await svc.getVocab(req.params.code, req.query);
+    res.json({ success: true, data: items, pagination });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/dictionary', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getDictionary(req.params.code) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/grammar', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { items, levels, pagination } = await svc.getGrammar(req.params.code, req.query);
+    res.json({ success: true, data: { items, levels }, pagination });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/listening', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { items, pagination } = await svc.getListening(req.params.code, req.query);
+    res.json({ success: true, data: items, pagination });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/conversation', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { items, pagination } = await svc.getConversation(req.params.code, req.query);
+    res.json({ success: true, data: items, pagination });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/reading', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { items, pagination } = await svc.getReading(req.params.code, req.query);
+    res.json({ success: true, data: items, pagination });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/qna', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { items, pagination } = await svc.getQna(req.params.code, req.query);
+    res.json({ success: true, data: items, pagination });
+  } catch (err) { next(err); }
+});
+
+// ─── Admin router (ADMIN only) ───────────────────────────────────
+const adminRouter = Router();
+adminRouter.use(authenticate, requireRole('ADMIN'));
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 30 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    const images = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const audios = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/x-wav', 'audio/mp4', 'audio/m4a', 'audio/x-m4a', 'audio/webm', 'audio/ogg'];
+    if (file.fieldname === 'image' && images.includes(file.mimetype)) return cb(null, true);
+    if (file.fieldname === 'audio' && audios.includes(file.mimetype)) return cb(null, true);
+    cb(new Error(`Định dạng không hỗ trợ: ${file.mimetype}`));
+  },
+});
+
+function toId(req: Request, key = 'id'): number {
+  return svc.toInt(req.params[key], key);
+}
+
+// Uploads → return url/key for the admin form to persist on a model
+adminRouter.post('/upload/image', upload.single('image'), async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const file = req.file;
+    if (!file) throw new BadRequestError('Thiếu file ảnh');
+    if (file.size > 10 * 1024 * 1024) throw new BadRequestError('Ảnh quá lớn (tối đa 10MB)');
+    const r = await uploadImage(
+      { buffer: file.buffer, originalName: file.originalname, mimetype: file.mimetype, size: file.size },
+      'images/thumbnails',
+      { userId: req.userId },
+    );
+    res.status(201).json({ success: true, data: { url: r.url, key: r.key } });
+  } catch (err) {
+    if (err instanceof UploadError) return next(new AppError(err.message, err.status, err.code));
+    next(err);
+  }
+});
+
+adminRouter.post('/upload/audio', upload.single('audio'), async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const file = req.file;
+    if (!file) throw new BadRequestError('Thiếu file audio');
+    const r = await uploadAudio(
+      { buffer: file.buffer, originalName: file.originalname, mimetype: file.mimetype, size: file.size },
+      { userId: req.userId, kind: 'songs' },
+    );
+    res.status(201).json({ success: true, data: { key: r.key, url: r.url } });
+  } catch (err) {
+    if (err instanceof UploadError) return next(new AppError(err.message, err.status, err.code));
+    next(err);
+  }
+});
+
+// Languages
+adminRouter.get('/languages', async (_req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.adminListLanguages() }); } catch (err) { next(err); }
+});
+adminRouter.post('/languages', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.createLanguage(req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/languages/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.updateLanguage(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/languages/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.deleteLanguage(toId(req)) }); } catch (err) { next(err); }
+});
+
+// Reorder (generic): body { model, items:[{id,order}] }
+adminRouter.patch('/reorder', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { model, items } = req.body as { model: svc.ReorderModel; items: Array<{ id: number; order: number }> };
+    res.json({ success: true, data: await svc.reorder(model, items) });
+  } catch (err) { next(err); }
+});
+
+// Content fetch (all rows for a language section)
+adminRouter.get('/:code/content/:section', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.adminGetLanguageContent(req.params.code, req.params.section) }); } catch (err) { next(err); }
+});
+adminRouter.get('/vocab/categories/:id/words', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { items, pagination } = await svc.adminGetVocabWords(toId(req), req.query);
+    res.json({ success: true, data: items, pagination });
+  } catch (err) { next(err); }
+});
+
+// Alphabet groups + items (languageId / groupId in path where needed)
+adminRouter.post('/languages/:id/alphabet-groups', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.createAlphabetGroup(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/alphabet-groups/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.updateAlphabetGroup(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/alphabet-groups/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.deleteAlphabetGroup(toId(req)) }); } catch (err) { next(err); }
+});
+adminRouter.post('/alphabet-groups/:id/items', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.createAlphabetItem(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.post('/alphabet-groups/:id/bulk', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.bulkAddAlphabetItems(toId(req), String(req.body?.text ?? '')) }); } catch (err) { next(err); }
+});
+adminRouter.put('/alphabet-items/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.updateAlphabetItem(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/alphabet-items/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.deleteAlphabetItem(toId(req)) }); } catch (err) { next(err); }
+});
+
+// Vocab categories / words / CSV
+adminRouter.post('/languages/:id/vocab-categories', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.createVocabCategory(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/vocab-categories/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.updateVocabCategory(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/vocab-categories/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.deleteVocabCategory(toId(req)) }); } catch (err) { next(err); }
+});
+adminRouter.post('/vocab-categories/:id/words', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.createVocabWord(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/vocab-words/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.updateVocabWord(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/vocab-words/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.deleteVocabWord(toId(req)) }); } catch (err) { next(err); }
+});
+// CSV: preview (validate only) + import (commit)
+adminRouter.post('/vocab-categories/:id/csv/preview', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    toId(req); // validate id
+    res.json({ success: true, data: svc.parseVocabCsv(String(req.body?.csv ?? '')).results });
+  } catch (err) { next(err); }
+});
+adminRouter.post('/vocab-categories/:id/csv/import', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.importVocabCsv(toId(req), String(req.body?.csv ?? '')) }); } catch (err) { next(err); }
+});
+
+// Grammar
+adminRouter.post('/languages/:id/grammar', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.createGrammar(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/grammar/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.updateGrammar(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/grammar/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.deleteGrammar(toId(req)) }); } catch (err) { next(err); }
+});
+
+// Listening
+adminRouter.post('/languages/:id/listening', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.createListening(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/listening/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.updateListening(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/listening/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.deleteListening(toId(req)) }); } catch (err) { next(err); }
+});
+
+// Conversation
+adminRouter.post('/languages/:id/conversation', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.createConversation(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/conversation/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.updateConversation(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/conversation/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.deleteConversation(toId(req)) }); } catch (err) { next(err); }
+});
+
+// Reading
+adminRouter.post('/languages/:id/reading', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.createReading(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/reading/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.updateReading(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/reading/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.deleteReading(toId(req)) }); } catch (err) { next(err); }
+});
+
+// Q&A
+adminRouter.post('/languages/:id/qna', async (req, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await svc.createQna(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/qna/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.updateQna(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/qna/:id', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await svc.deleteQna(toId(req)) }); } catch (err) { next(err); }
+});
+
+export { publicRouter, adminRouter };

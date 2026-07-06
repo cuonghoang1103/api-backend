@@ -119,6 +119,10 @@ const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messag
 const snippetRoutes = (await import(path.join(__dirname, 'routes', 'snippets.routes.js'))).default;
 // Video categories (home-feed video classification)
 const videoCategoryRoutes = (await import(path.join(__dirname, 'routes', 'videoCategories.routes.js'))).default;
+// My Language — language-learning platform (public reads + admin CRUD)
+const myLanguageModule = await import(path.join(__dirname, 'routes', 'myLanguage.routes.js'));
+const myLanguagePublicRoutes = myLanguageModule.publicRouter;
+const myLanguageAdminRoutes = myLanguageModule.adminRouter;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -444,6 +448,9 @@ app.use('/api/v1/quota', quotaRoutes);
 // EXP_Hub — Code Snippet Library
 app.use('/api/v1/snippets', snippetRoutes);
 app.use('/api/v1/video-categories', videoCategoryRoutes);
+// My Language — public reads + authed SRS at /my-language, admin CRUD at /admin/my-language
+app.use('/api/v1/my-language', myLanguagePublicRoutes);
+app.use('/api/v1/admin/my-language', myLanguageAdminRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);
 app.use('/api/v1/admin', adminRoutes);

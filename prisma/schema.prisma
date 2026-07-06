@@ -265,6 +265,12 @@ model User {
   snippetWebhooks  SnippetWebhook[]
   SnippetVersion   SnippetVersion[]
 
+  // ─── My Language — learning progress (per-user, SRS) ─────────
+  // Additive. Every row is scoped by userId; SM-2 spaced repetition
+  // progress + quiz history live here. See models at end of file.
+  languageProgress LangUserProgress[]
+  languageQuizzes  LangQuizResult[]
+
   @@index([email], name: "idx_users_email")
   @@map("users")
 }
@@ -3973,6 +3979,302 @@ model SnippetWebhook {
   @@map("snippet_webhooks")
 }
 
-// ─── User Back-Relations (add to existing User model) ────────────
-// These are ADDITIVE — they reference the new models above.
-// The existing User model stays unchanged; Prisma merges them.
+// ============================================================
+// MY LANGUAGE — multi-language learning platform (additive)
+// Public read + admin CRUD content, plus per-user SRS progress.
+// All IDs Int autoincrement, snake_case @map, plural @@map — matches
+// the rest of this schema. Content cascades on Language delete.
+// Full-text search on vocab_words uses a raw-SQL tsvector column
+// (created in the migration, NOT declared here) — same pattern as
+// the projects module.
+// ============================================================
+
+model Language {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100) // "Tiếng Nhật"
+  nameEn    String   @map("name_en") @db.VarChar(100) // "Japanese"
+  code      String   @unique(map: "uk_language_code") @db.VarChar(10) // "ja", "en"
+  flagEmoji String   @map("flag_emoji") @db.VarChar(16)
+  coverUrl  String?  @map("cover_url") @db.VarChar(500)
+  order     Int      @default(0)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  alphabetGroups    LangAlphabetGroup[]
+  vocabCategories   LangVocabCategory[]
+  grammarPoints     LangGrammarPoint[]
+  listeningItems    LangListeningItem[]
+  conversationItems LangConversationItem[]
+  readingArticles   LangReadingArticle[]
+  qnaItems          LangQnaItem[]
+  quizResults       LangQuizResult[]
+
+  @@index([isActive, order], name: "idx_languages_active_order")
+  @@map("languages")
+}
+
+// ===== 1. ALPHABET =====
+model LangAlphabetGroup {
+  id          Int      @id @default(autoincrement())
+  languageId  Int      @map("language_id")
+  name        String   @db.VarChar(100) // "Hiragana", "Katakana", "Kanji N5"
+  description String?  @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  language Language           @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  items    LangAlphabetItem[]
+
+  @@index([languageId, order], name: "idx_lang_alphabet_groups_lang")
+  @@map("lang_alphabet_groups")
+}
+
+model LangAlphabetItem {
+  id           Int      @id @default(autoincrement())
+  groupId      Int      @map("group_id")
+  character    String   @db.VarChar(32) // "あ"
+  romanization String?  @db.VarChar(64) // "a"
+  audioUrl     String?  @map("audio_url") @db.VarChar(500)
+  imageUrl     String?  @map("image_url") @db.VarChar(500)
+  note         String?  @db.Text
+  order        Int      @default(0)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  group LangAlphabetGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([groupId, order], name: "idx_lang_alphabet_items_group")
+  @@map("lang_alphabet_items")
+}
+
+// ===== 2. VOCABULARY =====
+model LangVocabCategory {
+  id         Int      @id @default(autoincrement())
+  languageId Int      @map("language_id")
+  name       String   @db.VarChar(150) // "Công nghệ"
+  icon       String?  @db.VarChar(64) // emoji or lucide icon name
+  order      Int      @default(0)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  language Language        @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  words    LangVocabWord[]
+
+  @@index([languageId, order], name: "idx_lang_vocab_categories_lang")
+  @@map("lang_vocab_categories")
+}
+
+model LangVocabWord {
+  id              Int      @id @default(autoincrement())
+  categoryId      Int      @map("category_id")
+  word            String   @db.VarChar(255) // "時間" / "variable"
+  meaningVi       String   @map("meaning_vi") @db.Text
+  exampleSentence String?  @map("example_sentence") @db.Text
+  exampleMeaning  String?  @map("example_meaning") @db.Text
+  imageUrl        String?  @map("image_url") @db.VarChar(500)
+  audioUrl        String?  @map("audio_url") @db.VarChar(500)
+  note            String?  @db.Text
+  order           Int      @default(0)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  // NOTE: a raw-SQL `search_vector tsvector` column + GIN index is
+  // added by the migration and queried via $queryRawUnsafe. It is
+  // intentionally NOT declared here (Prisma can't express it).
+
+  category       LangVocabCategory        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  pronunciations LangVocabPronunciation[]
+
+  @@index([categoryId, order], name: "idx_lang_vocab_words_category")
+  @@map("lang_vocab_words")
+}
+
+model LangVocabPronunciation {
+  id     Int    @id @default(autoincrement())
+  wordId Int    @map("word_id")
+  type   String @db.VarChar(40) // "hiragana", "romaji", "pinyin", "IPA"
+  value  String @db.VarChar(255) // "じかん", "jikan"
+  order  Int    @default(0)
+
+  word LangVocabWord @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  @@index([wordId, order], name: "idx_lang_vocab_pron_word")
+  @@map("lang_vocab_pronunciations")
+}
+
+// ===== 3. GRAMMAR =====
+model LangGrammarPoint {
+  id             Int      @id @default(autoincrement())
+  languageId     Int      @map("language_id")
+  level          String?  @db.VarChar(20) // "N5".."N1" | "A1".."C2" — free text
+  title          String   @db.VarChar(255)
+  structure      String   @db.Text // formula
+  explanation    Json?    @db.JsonB // TipTap rich text (HTML string or JSON)
+  examples       Json?    @db.JsonB // [{ sentence, pronunciation, meaningVi }]
+  commonMistakes String?  @map("common_mistakes") @db.Text
+  comparedWith   String?  @map("compared_with") @db.Text
+  order          Int      @default(0)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@index([languageId, order], name: "idx_lang_grammar_points_lang")
+  @@map("lang_grammar_points")
+}
+
+// ===== 4. LISTENING =====
+model LangListeningItem {
+  id          Int                 @id @default(autoincrement())
+  languageId  Int                 @map("language_id")
+  title       String              @db.VarChar(255)
+  sourceType  LangListeningSource @default(UPLOAD) @map("source_type")
+  audioUrl    String?             @map("audio_url") @db.VarChar(500)
+  youtubeUrl  String?             @map("youtube_url") @db.VarChar(500)
+  transcript  String?             @db.Text
+  translation String?             @db.Text
+  questions   Json?               @db.JsonB // [{ question, answer }]
+  order       Int                 @default(0)
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+
+  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@index([languageId, order], name: "idx_lang_listening_items_lang")
+  @@map("lang_listening_items")
+}
+
+// ===== 5. DAILY CONVERSATION =====
+model LangConversationItem {
+  id                    Int      @id @default(autoincrement())
+  languageId            Int      @map("language_id")
+  question              String   @db.Text
+  answer                String   @db.Text
+  questionPronunciation String?  @map("question_pronunciation") @db.Text
+  answerPronunciation   String?  @map("answer_pronunciation") @db.Text
+  meaningVi             String?  @map("meaning_vi") @db.Text
+  voiceUrl              String?  @map("voice_url") @db.VarChar(500)
+  imageUrl              String?  @map("image_url") @db.VarChar(500)
+  note                  String?  @db.Text
+  order                 Int      @default(0)
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@index([languageId, order], name: "idx_lang_conversation_items_lang")
+  @@map("lang_conversation_items")
+}
+
+// ===== 6. READING =====
+model LangReadingArticle {
+  id          Int             @id @default(autoincrement())
+  languageId  Int             @map("language_id")
+  title       String          @db.VarChar(255)
+  type        LangReadingType @default(TEXT)
+  images      Json?           @db.JsonB // [imageUrl]
+  content     Json?           @db.JsonB // TipTap rich text when TEXT
+  translation Json?           @db.JsonB // optional VI translation
+  order       Int             @default(0)
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+
+  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@index([languageId, order], name: "idx_lang_reading_articles_lang")
+  @@map("lang_reading_articles")
+}
+
+// ===== 7. Q&A =====
+model LangQnaItem {
+  id            Int      @id @default(autoincrement())
+  languageId    Int      @map("language_id")
+  question      String   @db.Text
+  answer        String   @db.Text
+  pronunciation String?  @db.Text
+  meaningVi     String?  @map("meaning_vi") @db.Text
+  audioUrl      String?  @map("audio_url") @db.VarChar(500)
+  order         Int      @default(0)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@index([languageId, order], name: "idx_lang_qna_items_lang")
+  @@map("lang_qna_items")
+}
+
+// ===== USER PROGRESS & SRS =====
+model LangUserProgress {
+  id             Int             @id @default(autoincrement())
+  userId         Int             @map("user_id")
+  itemType       LangItemType    @map("item_type")
+  itemId         Int             @map("item_id")
+  status         LangLearnStatus @default(NEW)
+  // SRS fields (simplified SM-2)
+  easeFactor     Float           @default(2.5) @map("ease_factor")
+  intervalDays   Int             @default(0) @map("interval_days")
+  repetitions    Int             @default(0)
+  nextReviewAt   DateTime?       @map("next_review_at")
+  lastReviewedAt DateTime?       @map("last_reviewed_at")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemType, itemId], map: "uk_lang_progress_user_item")
+  @@index([userId, nextReviewAt], name: "idx_lang_progress_user_due")
+  @@map("lang_user_progress")
+}
+
+model LangQuizResult {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  languageId Int      @map("language_id")
+  categoryId Int?     @map("category_id")
+  score      Int
+  total      Int
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@index([userId, languageId, createdAt(sort: Desc)], name: "idx_lang_quiz_user_lang")
+  @@map("lang_quiz_results")
+}
+
+enum LangListeningSource {
+  UPLOAD
+  YOUTUBE
+
+  @@map("lang_listening_source")
+}
+
+enum LangReadingType {
+  IMAGE_LIST
+  TEXT
+
+  @@map("lang_reading_type")
+}
+
+enum LangItemType {
+  VOCAB
+  ALPHABET
+  GRAMMAR
+  LISTENING
+  CONVERSATION
+  READING
+  QNA
+
+  @@map("lang_item_type")
+}
+
+enum LangLearnStatus {
+  NEW
+  LEARNING
+  REVIEWING
+  MASTERED
+
+  @@map("lang_learn_status")
+}

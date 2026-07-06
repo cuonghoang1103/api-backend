@@ -6,7 +6,7 @@
  * investment = purple. All animations respect prefers-reduced-motion.
  */
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, useDragControls } from 'framer-motion';
 import { X } from 'lucide-react';
 import { cn, formatVnd } from '@/lib/utils';
 
@@ -122,6 +122,11 @@ export function Sheet({ open, onClose, title, children, size = 'md' }: {
   open: boolean; onClose: () => void; title?: string; children: ReactNode; size?: 'md' | 'lg';
 }) {
   const reduced = useReducedMotion();
+  // Drag the dialog around from its header (desktop UX ask: tall forms
+  // used to get stuck half below the fold). Constrained to the viewport
+  // wrapper so it can never be dragged fully off-screen.
+  const dragControls = useDragControls();
+  const viewportRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -134,25 +139,39 @@ export function Sheet({ open, onClose, title, children, size = 'md' }: {
       {open && (
         <>
           <motion.div className="fixed inset-0 z-[70] bg-black/55" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: reduced ? 0 : 0.15 } }} onClick={onClose} />
-          <motion.div
-            role="dialog" aria-modal="true"
-            className={cn(
-              'fixed z-[71] bg-[var(--bg-card)] shadow-2xl',
-              'inset-x-0 bottom-0 max-h-[92dvh] overflow-y-auto rounded-t-3xl',
-              'sm:inset-auto sm:right-1/2 sm:top-1/2 sm:max-h-[85dvh] sm:w-full sm:translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl',
-              size === 'lg' ? 'sm:max-w-2xl' : 'sm:max-w-md',
-            )}
-            initial={reduced ? { opacity: 0 } : { y: '100%' }}
-            animate={reduced ? { opacity: 1 } : { y: 0 }}
-            exit={reduced ? { opacity: 0 } : { y: '100%', transition: { duration: 0.2 } }}
-            transition={{ type: 'tween', ease: 'easeOut', duration: 0.25 }}
-          >
-            <div className="sticky top-0 flex items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-3">
-              <h3 className="font-heading font-semibold text-text-primary">{title}</h3>
-              <button onClick={onClose} className="rounded-lg p-1.5 text-text-muted hover:bg-[var(--border-color)]"><X size={18} /></button>
-            </div>
-            <div className="p-4">{children}</div>
-          </motion.div>
+          {/* Flex wrapper does the centering — motion's `y`/drag transforms
+              live on the card itself, so they never fight a translate-based
+              centering (the old sm:-translate-y-1/2 was wiped by framer's
+              inline transform, anchoring tall sheets below mid-screen). */}
+          <div ref={viewportRef} className="pointer-events-none fixed inset-0 z-[71] flex items-end justify-center sm:items-center sm:p-4">
+            <motion.div
+              role="dialog" aria-modal="true"
+              drag
+              dragListener={false}
+              dragControls={dragControls}
+              dragConstraints={viewportRef}
+              dragElastic={0.08}
+              dragMomentum={false}
+              className={cn(
+                'pointer-events-auto flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl bg-[var(--bg-card)] shadow-2xl',
+                'sm:max-h-[85dvh] sm:rounded-2xl',
+                size === 'lg' ? 'sm:max-w-2xl' : 'sm:max-w-md',
+              )}
+              initial={reduced ? { opacity: 0 } : { y: '100%' }}
+              animate={reduced ? { opacity: 1 } : { y: 0 }}
+              exit={reduced ? { opacity: 0 } : { y: '100%', transition: { duration: 0.2 } }}
+              transition={{ type: 'tween', ease: 'easeOut', duration: 0.25 }}
+            >
+              <div
+                onPointerDown={(e) => dragControls.start(e)}
+                className="flex shrink-0 cursor-grab touch-none items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-3 active:cursor-grabbing"
+              >
+                <h3 className="font-heading font-semibold text-text-primary">{title}</h3>
+                <button onClick={onClose} onPointerDown={(e) => e.stopPropagation()} className="rounded-lg p-1.5 text-text-muted hover:bg-[var(--border-color)]"><X size={18} /></button>
+              </div>
+              <div className="overflow-y-auto p-4">{children}</div>
+            </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>

@@ -84,11 +84,14 @@ export function loadVoices(): Promise<SpeechSynthesisVoice[]> {
 const VOICE_HINTS: Record<string, string[]> = {
   ja: ['google 日本語', 'google japanese', 'kyoko', 'o-ren', 'oren', 'otoya', 'hattori', 'sora', 'nanami', 'ayumi', 'natural', 'neural', 'online', 'enhanced', 'premium', 'google'],
   en: [
-    // Apple Siri-quality US voices (Safari on macOS/iOS exposes them once downloaded)
-    'siri', 'ava', 'zoe', 'allison', 'samantha', 'evan', 'nathan', 'noelle', 'joelle', 'aaron', 'tom',
-    // Windows Edge neural US voices
-    'aria', 'jenny', 'michelle', 'christopher', 'guy', 'andrew', 'emma',
-    // Chrome network voice
+    // MALE US voices first (user preference): Apple (Evan/Nathan/Aaron/Tom
+    // need a download in Settings; Alex ships with macOS), then Edge neural.
+    'evan', 'nathan', 'aaron', 'tom', 'alex',
+    'guy', 'christopher', 'andrew', 'brian', 'davis', 'jacob',
+    // Siri voices (gender follows the device's Siri setting)
+    'siri',
+    // Female fallbacks — still high quality when no male voice is installed
+    'ava', 'zoe', 'allison', 'samantha', 'aria', 'jenny', 'michelle', 'emma',
     'google us english',
     // generic quality markers
     'natural', 'neural', 'online', 'enhanced', 'premium', 'google',

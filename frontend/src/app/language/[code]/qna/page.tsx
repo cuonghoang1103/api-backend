@@ -128,7 +128,7 @@ function AnswerBody({ item }: { item: QnaItem }) {
     <div className="border-t border-[var(--border-color)] px-4 pb-4 pt-3">
       <div className="flex items-start gap-2">
         <p className="flex-1 text-lg font-semibold text-neon-violet">{item.answer}</p>
-        <SpeakerButton text={item.answer} audioUrl={item.audioUrl} />
+        <SpeakerButton text={item.answer} audioUrl={item.audioUrl} rate={0.85} />
       </div>
       {item.pronunciation && <p className="mt-1 text-sm text-text-muted">{item.pronunciation}</p>}
       {item.meaningVi && <p className="mt-2 text-text-secondary">{item.meaningVi}</p>}
@@ -187,7 +187,7 @@ function RandomMode({ items, reduced }: { items: QnaItem[]; reduced: boolean }) 
               <div className="mt-2 w-full border-t border-[var(--border-color)] pt-4">
                 <div className="flex items-center justify-center gap-2">
                   <p className="text-lg font-semibold text-neon-violet sm:text-xl">{current.answer}</p>
-                  <SpeakerButton text={current.answer} audioUrl={current.audioUrl} />
+                  <SpeakerButton text={current.answer} audioUrl={current.audioUrl} rate={0.85} />
                 </div>
                 {current.pronunciation && (
                   <p className="mt-1 text-sm text-text-muted">{current.pronunciation}</p>

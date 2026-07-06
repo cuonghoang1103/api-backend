@@ -251,7 +251,7 @@ function ConversationCard({
           {item.questionPronunciation && (
             <span className="text-[11px] italic text-text-muted">{item.questionPronunciation}</span>
           )}
-          <SpeakerButton text={item.question} reading={item.questionPronunciation} audioUrl={null} size={15} />
+          <SpeakerButton text={item.question} reading={item.questionPronunciation} audioUrl={null} size={15} rate={0.85} />
         </div>
       </div>
 
@@ -264,7 +264,7 @@ function ConversationCard({
           {item.answerPronunciation && (
             <span className="text-[11px] italic text-text-muted">{item.answerPronunciation}</span>
           )}
-          <SpeakerButton text={item.answer} reading={item.answerPronunciation} audioUrl={null} size={15} />
+          <SpeakerButton text={item.answer} reading={item.answerPronunciation} audioUrl={null} size={15} rate={0.85} />
         </div>
         {voiceSrc && (
           <div className="mt-1.5 pr-1">

@@ -523,6 +523,14 @@ function FlashcardsView({
   const w = words[index];
   if (!w) return null;
   const flipDur = reduced ? 0 : 0.3;
+  // Some Chromium builds (Cốc Cốc…) ignore backface-visibility inside
+  // preserve-3d, so the front face bleeds through the back mirrored and the
+  // text overlaps. Swapping face opacity exactly at the flip midpoint
+  // guarantees only one face is ever visible.
+  const faceStyle = (visible: boolean) => ({
+    opacity: visible ? 1 : 0,
+    transition: `opacity 0s linear ${flipDur / 2}s`,
+  });
 
   return (
     <div className="mx-auto max-w-xl">
@@ -540,13 +548,19 @@ function FlashcardsView({
           aria-label="Lật thẻ"
         >
           {/* Front */}
-          <div className="card absolute inset-0 flex flex-col items-center justify-center gap-4 [backface-visibility:hidden]">
+          <div
+            className="card absolute inset-0 flex flex-col items-center justify-center gap-4 [backface-visibility:hidden]"
+            style={faceStyle(!flipped)}
+          >
             <span className="text-4xl font-bold text-text-primary">{w.word}</span>
             <SpeakerButton text={w.word} reading={w.pronunciations?.[0]?.value} audioUrl={w.audioUrl} />
             <span className="text-xs text-text-muted">Chạm để lật</span>
           </div>
           {/* Back */}
-          <div className="card absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-auto px-6 py-5 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
+          <div
+            className="card absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-auto px-6 py-5 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]"
+            style={faceStyle(flipped)}
+          >
             {(w.pronunciations?.length ?? 0) > 0 && (
               <div className="flex flex-wrap justify-center gap-1.5">
                 {w.pronunciations.map((p, i) => (

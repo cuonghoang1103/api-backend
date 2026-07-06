@@ -196,7 +196,7 @@ function GrammarRow({
                         className="flex items-start gap-2 rounded-xl bg-[var(--bg-surface)] p-3 ring-1 ring-[var(--border-color)]"
                       >
                         <div className="mt-0.5 shrink-0">
-                          <SpeakerButton text={ex.sentence} size={16} className="h-7 w-7" />
+                          <SpeakerButton text={ex.sentence} size={16} className="h-7 w-7" rate={0.85} />
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-text-primary">{ex.sentence}</p>

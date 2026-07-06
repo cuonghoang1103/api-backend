@@ -37,6 +37,7 @@ export function SpeakerButton({
   reading,
   forceLang,
   audioUrl,
+  rate,
   size = 18,
   className = '',
   label = 'Phát âm',
@@ -45,6 +46,8 @@ export function SpeakerButton({
   reading?: string | null;
   forceLang?: VocabLang;
   audioUrl?: string | null;
+  /** Speech rate override — full sentences read best around 0.85. */
+  rate?: number;
   size?: number;
   className?: string;
   label?: string;
@@ -69,13 +72,13 @@ export function SpeakerButton({
       setBusy(true);
       try {
         // CJK stays slow for learners; English at natural (Siri-like) pace.
-        const rate = forceLang === 'ja-JP' ? 0.7 : forceLang === 'zh-CN' ? 0.75 : 1.0;
-        await speakVocabEntry({ term: text, reading: reading ?? undefined }, { forceLang, rate });
+        const defaultRate = forceLang === 'ja-JP' ? 0.7 : forceLang === 'zh-CN' ? 0.75 : 1.0;
+        await speakVocabEntry({ term: text, reading: reading ?? undefined }, { forceLang, rate: rate ?? defaultRate });
       } finally {
         setBusy(false);
       }
     },
-    [audioUrl, text, reading, forceLang],
+    [audioUrl, text, reading, forceLang, rate],
   );
 
   return (

@@ -136,6 +136,15 @@ Rationale: auto-resolving partially-applied migrations can silently corrupt sche
 
 ## Docker & Deploy
 
+**STANDARD deploy + push flow (2026-07-06 — follow this order):**
+1. Run the conditional pre-push checklist locally (tsc / build)
+2. Commit to **local `main`**
+3. Deploy with a full **`bash deploy.sh`** from the local machine (rsync → sequential image builds on VPS → zero-downtime swap → smoke-test). This is the ONLY deploy path — do NOT deploy by pushing to GitHub
+4. **Wait for the user to test production and confirm the fix works**
+5. Only THEN `git push` to origin (with user confirmation, per Forbidden Actions). At this point the push is just syncing GitHub with what prod already runs
+
+Why not push-to-deploy: a push to `main` triggers BOTH `deploy-ghcr.yml` and `backend-vps` workflows, which have raced each other and caused real outages (2026-07-03: feed 500 while schema lagged the image; 2026-07-06: backend recreate race → `Exited(137)` + orphan containers, recovered via `docker start cuonghoangdev_backend`). After a step-5 push, the Actions re-deploy of identical code is normally harmless, but verify the site stays up (`docker ps` symptoms above) once the workflows finish.
+
 **Deploy workflow (`deploy-ghcr.yml`) on push to `main`:**
 1. CI — Lint & Type Check (must pass)
 2. Build Docker images → push to GHCR
@@ -156,6 +165,7 @@ Rationale: auto-resolving partially-applied migrations can silently corrupt sche
 
 **Deploy hygiene (avoid stale/partial builds):**
 - **Always run a FULL `bash deploy.sh`** after any code change. **NEVER** use `bash deploy.sh --no-build` after changing code — it only rsyncs, does NOT rebuild, so the container keeps running the OLD image (this caused the 2026-07-02 GIF 404 below) and it also **skips the smoke-test**.
+- `deploy.sh` builds backend and frontend images **sequentially** (Step 2a) — an OOM guard for the 6GB VPS: parallel cold builds (cache is pruned after every deploy) killed `next build` with exit 137 on 2026-07-06. Keep it sequential; with a warm cache both builds are near-instant no-ops. If a deploy still fails on `npm ci`/network fetching prebuilt binaries (e.g. sharp), a simple retry usually succeeds and reuses the cached layers.
 - `deploy.sh` runs a **post-deploy smoke-test**: it hits core GET routes on the internal backend and **FAILS the deploy if any returns 404** (404 = route not mounted → stale/partial build). 401/200 = healthy.
 - **When you add a new feature module/router**, add one of its param-less, unauth GET routes to the smoke-test list in `deploy.sh` (search `Smoke-testing core API routes`). Only add routes that return **non-404** on a bare unauth GET — do NOT add POST-only or param-required routes (e.g. `/stickers`, `/auth/login`) or every deploy will false-fail.
 - Diagnose "is a route actually live?" with: `curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/api/v1/<route>` → **401 = mounted (needs auth), 200 = mounted (public), 404 = NOT mounted / stale build**.

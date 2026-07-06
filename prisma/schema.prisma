@@ -4278,3 +4278,240 @@ enum LangLearnStatus {
 
   @@map("lang_learn_status")
 }
+
+// ============================================================
+// MONEYFLOW — Personal finance module (Phase 1)
+// ------------------------------------------------------------
+// Private, per-user data. Every model carries `userId Int` and is
+// ALWAYS queried with `where: { userId }` in the service layer —
+// the id is derived from the server session (req.userId), never
+// from the client. Money is Decimal(18,2); no floats anywhere.
+// Type/status fields are plain strings (validated in the route
+// layer with express-validator) rather than Prisma enums so the
+// vocab can grow without a migration.
+// ============================================================
+
+// ===== WALLETS (accounts) =====
+model Wallet {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  name       String   @db.VarChar(120) // "Tiền mặt", "Vietcombank", "Momo"
+  type       String   @db.VarChar(20) // CASH | BANK | EWALLET | OTHER
+  icon       String?  @db.VarChar(40) // emoji or icon name
+  color      String?  @db.VarChar(20) // hex for UI
+  balance    Decimal  @default(0) @db.Decimal(18, 2) // maintained by transactions
+  currency   String   @default("VND") @db.VarChar(8)
+  isArchived Boolean  @default(false) @map("is_archived")
+  order      Int      @default(0)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  adjustments WalletAdjustment[]
+
+  @@index([userId], name: "idx_fin_wallets_user")
+  @@map("finance_wallets")
+}
+
+// Audit trail for manual balance adjustments and wallet-to-wallet
+// transfers. A transfer creates a matched pair (out of A, into B).
+model WalletAdjustment {
+  id                   Int      @id @default(autoincrement())
+  userId               Int      @map("user_id")
+  walletId             Int      @map("wallet_id")
+  kind                 String   @db.VarChar(20) // ADJUSTMENT | TRANSFER
+  amount               Decimal  @db.Decimal(18, 2) // signed: + credit, - debit
+  balanceAfter         Decimal  @map("balance_after") @db.Decimal(18, 2)
+  counterpartyWalletId Int?     @map("counterparty_wallet_id") // the other side of a transfer
+  reason               String?  @db.Text
+  createdAt            DateTime @default(now()) @map("created_at")
+
+  wallet Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@index([userId, walletId], name: "idx_fin_wallet_adj_user_wallet")
+  @@map("finance_wallet_adjustments")
+}
+
+// ===== INCOME / SALARY =====
+model IncomeSource {
+  id                  Int      @id @default(autoincrement())
+  userId              Int      @map("user_id")
+  name                String   @db.VarChar(150) // "Công ty A", "Freelance"
+  type                String   @db.VarChar(20) // SALARY | FREELANCE | PART_TIME | OTHER
+  payType             String   @map("pay_type") @db.VarChar(20) // MONTHLY | HOURLY | PER_JOB
+  baseSalary          Decimal? @map("base_salary") @db.Decimal(18, 2) // for MONTHLY
+  hourlyRate          Decimal? @map("hourly_rate") @db.Decimal(18, 2) // for HOURLY
+  otMultiplierNormal  Decimal  @default(1.5) @map("ot_multiplier_normal") @db.Decimal(4, 2)
+  otMultiplierHoliday Decimal  @default(2.0) @map("ot_multiplier_holiday") @db.Decimal(4, 2)
+  isActive            Boolean  @default(true) @map("is_active")
+  note                String?  @db.Text
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  workLogs      WorkLog[]
+  incomeEntries IncomeEntry[]
+
+  @@index([userId], name: "idx_fin_income_sources_user")
+  @@map("finance_income_sources")
+}
+
+model WorkLog {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @map("user_id")
+  sourceId       Int      @map("source_id")
+  date           DateTime @db.Date
+  hoursNormal    Decimal  @default(0) @map("hours_normal") @db.Decimal(5, 2)
+  hoursOT        Decimal  @default(0) @map("hours_ot") @db.Decimal(5, 2)
+  hoursOTHoliday Decimal  @default(0) @map("hours_ot_holiday") @db.Decimal(5, 2)
+  note           String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  source IncomeSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sourceId, date], name: "uk_fin_worklog_user_source_date")
+  @@index([userId, date], name: "idx_fin_worklogs_user_date")
+  @@map("finance_work_logs")
+}
+
+model IncomeEntry {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  sourceId  Int?     @map("source_id")
+  walletId  Int      @map("wallet_id") // which wallet it went into
+  amount    Decimal  @db.Decimal(18, 2)
+  currency  String   @default("VND") @db.VarChar(8)
+  date      DateTime @db.Date
+  type      String   @db.VarChar(20) // SALARY | BONUS | OT_PAYOUT | FREELANCE | OTHER
+  note      String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  source IncomeSource? @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+
+  @@index([userId, date], name: "idx_fin_income_entries_user_date")
+  @@index([userId, sourceId], name: "idx_fin_income_entries_user_source")
+  @@map("finance_income_entries")
+}
+
+// ===== DEBTS =====
+model Debt {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  lenderName    String   @map("lender_name") @db.VarChar(150) // "App X", "Ngân hàng Y"
+  lenderType    String   @map("lender_type") @db.VarChar(20) // LOAN_APP | BANK | PERSON | CREDIT_CARD | OTHER
+  principal     Decimal  @db.Decimal(18, 2) // original amount borrowed
+  currency      String   @default("VND") @db.VarChar(8)
+  interestType  String   @map("interest_type") @db.VarChar(20) // FLAT_MONTHLY | REDUCING_BALANCE | DAILY_PERCENT | NO_INTEREST
+  interestRate  Decimal  @map("interest_rate") @db.Decimal(8, 4) // %/month (FLAT/REDUCING) or %/day (DAILY_PERCENT)
+  startDate     DateTime @map("start_date") @db.Date
+  termMonths    Int?     @map("term_months")
+  paymentDay    Int?     @map("payment_day") // day of month due (1-31)
+  status        String   @default("ACTIVE") @db.VarChar(20) // ACTIVE | PAID_OFF | OVERDUE
+  note          String?  @db.Text
+  attachmentUrl String?  @map("attachment_url") @db.VarChar(500) // contract photo on R2
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  payments DebtPayment[]      @relation("DebtToPayment")
+  schedule DebtScheduleItem[] @relation("DebtToSchedule")
+
+  @@index([userId, status], name: "idx_fin_debts_user_status")
+  @@map("finance_debts")
+}
+
+model DebtScheduleItem {
+  id            Int       @id @default(autoincrement())
+  userId        Int       @map("user_id")
+  debtId        Int       @map("debt_id")
+  installmentNo Int       @map("installment_no") // 1-based sequence
+  dueDate       DateTime  @map("due_date") @db.Date
+  amountDue     Decimal   @map("amount_due") @db.Decimal(18, 2) // principalPart + interestPart
+  principalPart Decimal   @map("principal_part") @db.Decimal(18, 2)
+  interestPart  Decimal   @map("interest_part") @db.Decimal(18, 2)
+  isPaid        Boolean   @default(false) @map("is_paid")
+  paidAt        DateTime? @map("paid_at")
+  paymentId     Int?      @map("payment_id") // link to the DebtPayment that settled it
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  debt Debt @relation("DebtToSchedule", fields: [debtId], references: [id], onDelete: Cascade)
+
+  @@index([userId, dueDate, isPaid], name: "idx_fin_debt_sched_user_due_paid")
+  @@index([debtId, installmentNo], name: "idx_fin_debt_sched_debt_seq")
+  @@map("finance_debt_schedule_items")
+}
+
+model DebtPayment {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  debtId    Int      @map("debt_id")
+  walletId  Int?     @map("wallet_id") // which wallet the payment came from
+  amount    Decimal  @db.Decimal(18, 2)
+  date      DateTime @db.Date
+  note      String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  debt Debt @relation("DebtToPayment", fields: [debtId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date], name: "idx_fin_debt_payments_user_date")
+  @@index([debtId], name: "idx_fin_debt_payments_debt")
+  @@map("finance_debt_payments")
+}
+
+// ===== EXPENSES =====
+model ExpenseCategory {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  name          String   @db.VarChar(120) // "Ăn uống", "Đi lại"
+  icon          String?  @db.VarChar(40)
+  color         String?  @db.VarChar(20)
+  order         Int      @default(0)
+  monthlyBudget Decimal? @map("monthly_budget") @db.Decimal(18, 2)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  expenses Expense[]
+
+  @@index([userId], name: "idx_fin_expense_categories_user")
+  @@map("finance_expense_categories")
+}
+
+model Expense {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  categoryId  Int      @map("category_id")
+  walletId    Int      @map("wallet_id")
+  amount      Decimal  @db.Decimal(18, 2)
+  currency    String   @default("VND") @db.VarChar(8)
+  date        DateTime @db.Date
+  description String?  @db.VarChar(500)
+  receiptUrl  String?  @map("receipt_url") @db.VarChar(500) // photo on R2
+  isRecurring Boolean  @default(false) @map("is_recurring")
+  recurringId Int?     @map("recurring_id") // link to RecurringTransaction
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  category ExpenseCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@index([userId, date], name: "idx_fin_expenses_user_date")
+  @@index([userId, categoryId], name: "idx_fin_expenses_user_category")
+  @@map("finance_expenses")
+}
+
+model RecurringTransaction {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  kind        String   @db.VarChar(10) // EXPENSE | INCOME
+  amount      Decimal  @db.Decimal(18, 2)
+  categoryId  Int?     @map("category_id")
+  walletId    Int      @map("wallet_id")
+  description String   @db.VarChar(200) // "Tiền nhà", "Netflix"
+  frequency   String   @db.VarChar(10) // MONTHLY | WEEKLY | YEARLY
+  dayOfMonth  Int?     @map("day_of_month")
+  nextRunAt   DateTime @map("next_run_at")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, nextRunAt, isActive], name: "idx_fin_recurring_user_next_active")
+  @@map("finance_recurring_transactions")
+}

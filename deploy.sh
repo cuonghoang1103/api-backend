@@ -216,17 +216,19 @@ $DC build frontend
 ok "Frontend image built"
 
 # ── Step 2b: Atomic restart (zero-downtime) ───────────────────────
-# `up -d --build` builds the new image, then atomically swaps the
-# running container — no downtime window unlike `down && up`.
-# The images were just built above, so `--build` here is an instant
-# cache hit — kept so the swap semantics stay exactly as before.
+# `up -d` atomically swaps the running containers to the images
+# built in Step 2a — no downtime window unlike `down && up`.
+# Do NOT pass `--build` here: compose bake treats it as a fresh
+# parallel build of BOTH images (observed 2026-07-07 — it re-ran
+# `next build` alongside the backend export and the kernel OOM-killed
+# it, exit 137), defeating the sequential OOM guard above.
 # `--force-recreate` ensures containers with the same name but a
 # stale image get torn down before the new one is created
 # (otherwise Compose refuses to bind a duplicate container_name).
 # `--remove-orphans` cleans up containers for removed services.
 info "Restarting containers (zero-downtime)..."
-$DC up -d --build --force-recreate --remove-orphans
-ok "Containers built and swapped"
+$DC up -d --force-recreate --remove-orphans
+ok "Containers swapped to freshly built images"
 
 # ── Step 3: Database schema sync (migration deploy) ──────────────
 # We use `migrate deploy` (not `db push`) so that:

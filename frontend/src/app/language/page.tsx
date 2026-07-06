@@ -29,7 +29,7 @@ export default function LanguageLandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-screen bg-[var(--bg-primary)] pt-16">
       <div className="mx-auto max-w-5xl px-3 py-8 sm:px-5 sm:py-12">
         {/* Hero */}
         <motion.header

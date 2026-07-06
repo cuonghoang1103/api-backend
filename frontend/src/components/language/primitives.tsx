@@ -209,7 +209,7 @@ export function SectionShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="mx-auto max-w-5xl px-3 py-5 sm:px-5 sm:py-8">
+    <div className="mx-auto max-w-5xl px-3 pb-8 pt-20 sm:px-5 sm:pt-24">
       <Breadcrumb code={code} section={section ?? title} />
       <div className="mt-3 mb-5 flex flex-wrap items-center justify-between gap-3">
         <h1 className="flex items-center gap-2.5 font-heading text-2xl font-bold text-text-primary sm:text-3xl">

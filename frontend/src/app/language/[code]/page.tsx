@@ -74,9 +74,9 @@ export default function LanguageHomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
-      {/* Sticky top bar */}
-      <div className="sticky top-0 z-20 border-b border-[var(--border-color)] bg-[var(--bg-glass)] backdrop-blur-md">
+    <div className="min-h-screen bg-[var(--bg-primary)] pt-16">
+      {/* Sticky top bar — sits just below the fixed 4rem site navbar */}
+      <div className="sticky top-16 z-20 border-b border-[var(--border-color)] bg-[var(--bg-glass)] backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-3 py-3 sm:px-5">
           <Link href="/language" className="text-text-muted hover:text-neon-violet" aria-label="Quay lại">
             <ArrowLeft size={20} />

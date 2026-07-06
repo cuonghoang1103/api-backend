@@ -9,7 +9,7 @@ import {
   LayoutDashboard, Shield, BookMarked, Receipt,
   Sparkles, FileCode2, LogOut, User, Settings,
   GraduationCap, ShoppingBag, Layers, ChevronRight,
-  Github, Menu, X, NotebookPen,
+  Github, Menu, X, NotebookPen, Languages,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -62,6 +62,7 @@ const DOCK_ITEMS: DockItem[] = [
   { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'main' },
   { href: '/blog', label: 'Blog', icon: BookOpen, section: 'user' },
   { href: '/notes', label: 'Notes', icon: NotebookPen, section: 'user' },
+  { href: '/language', label: 'My Language', icon: Languages, section: 'user' },
   { href: '/projects', label: 'Projects', icon: FolderOpen, section: 'user' },
   { href: '/exp-hub', label: 'Exp Hub', icon: FileCode2, section: 'user' },
   { href: '/hub', label: 'Hub', icon: Layers, section: 'user' },

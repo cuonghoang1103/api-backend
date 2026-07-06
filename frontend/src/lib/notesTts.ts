@@ -74,14 +74,51 @@ export function loadVoices(): Promise<SpeechSynthesisVoice[]> {
   return voicesPromise;
 }
 
+// Per-language name hints for the HIGHEST-quality installed voices, best
+// first. Chrome ships network "Google …" voices (very natural); macOS/iOS
+// ship premium named voices (Kyoko/O-ren/Otoya for JA, Samantha/Ava/Allison
+// for EN); Windows ships "… Natural"/"Online" neural voices. We score by
+// these so learners hear a clear, native-sounding voice instead of whatever
+// happens to be first in the list.
+const VOICE_HINTS: Record<string, string[]> = {
+  ja: ['google 日本語', 'google japanese', 'kyoko', 'o-ren', 'oren', 'otoya', 'hattori', 'sora', 'nanami', 'ayumi', 'natural', 'neural', 'online', 'enhanced', 'premium', 'google'],
+  en: ['google us english', 'google uk english', 'samantha', 'ava', 'allison', 'evan', 'nathan', 'aaron', 'jenny', 'aria', 'guy', 'natural', 'neural', 'online', 'enhanced', 'premium', 'google', 'siri'],
+  zh: ['google 普通话', 'google mandarin', 'tingting', 'meijia', 'sinji', 'xiaoxiao', 'yunyang', 'natural', 'neural', 'online', 'google'],
+  ru: ['google русский', 'milena', 'yuri', 'natural', 'neural', 'google'],
+  th: ['google', 'kanya', 'narisa', 'natural', 'neural'],
+};
+
+function scoreVoice(v: SpeechSynthesisVoice, prefix: string, want: string): number {
+  const name = (v.name || '').toLowerCase();
+  const vlang = (v.lang || '').toLowerCase().replace('_', '-');
+  let s = 0;
+  // Exact region match (ja-JP, en-US) beats a generic prefix match.
+  if (vlang === want) s += 40;
+  else if (vlang.startsWith(prefix)) s += 15;
+  // For English, prefer US then GB accents for clarity.
+  if (prefix === 'en') {
+    if (vlang === 'en-us') s += 12;
+    else if (vlang === 'en-gb') s += 6;
+  }
+  // Quality by known high-fidelity voice names (best first → higher score).
+  const hints = VOICE_HINTS[prefix] ?? [];
+  hints.forEach((h, i) => {
+    if (name.includes(h)) s += (hints.length - i) * 4;
+  });
+  // Network (non-local) voices on Chrome are the natural "Google" ones.
+  if (v.localService === false) s += 8;
+  // Penalise obviously low-quality / novelty voices.
+  if (/(compact|eloquence|zarvox|albert|bad news|bells|bahh|boing|jester|whisper|wobble|organ|cellos|trinoids|deranged|hysterical)/.test(name)) s -= 25;
+  return s;
+}
+
 function pickVoice(voices: SpeechSynthesisVoice[], lang: VocabLang): SpeechSynthesisVoice | null {
   const want = lang.toLowerCase();
   const prefix = want.slice(0, 2);
-  return (
-    voices.find((v) => v.lang?.toLowerCase() === want) ?? // exact (zh-CN)
-    voices.find((v) => v.lang?.toLowerCase().replace('_', '-').startsWith(prefix)) ?? // any zh*
-    null
-  );
+  const candidates = voices.filter((v) => (v.lang || '').toLowerCase().replace('_', '-').startsWith(prefix));
+  if (!candidates.length) return null;
+  candidates.sort((a, b) => scoreVoice(b, prefix, want) - scoreVoice(a, prefix, want));
+  return candidates[0] ?? null;
 }
 
 export interface SpeakResult {

@@ -90,7 +90,7 @@ export function DrawKanaStage({ target, onResult, onNext, reduced }: StageProps)
     onResult(ok);
   };
 
-  const speak = () => void speakVocabEntry({ term: target.kana }, { forceLang: 'ja-JP' });
+  const speak = () => void speakVocabEntry({ term: target.kana }, { forceLang: 'ja-JP', rate: 0.7 });
 
   return (
     <div>

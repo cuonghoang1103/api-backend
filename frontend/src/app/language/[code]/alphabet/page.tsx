@@ -1,37 +1,91 @@
 'use client';
 /**
  * My Language — Alphabet (Bảng chữ cái) section page.
- * Group tabs (Chip row) → responsive character grid of flip-cards.
- * Front: big character (+ romanization unless "Ẩn phiên âm" self-test).
- * Back: romanization + note + optional image.
+ * Professional kana chart: a collapsible accordion with top-level sections
+ * (Hiragana / Katakana / Kanji / special marks), each holding selectable
+ * sub-tables rendered as a vowel-aligned gojūon grid (KanaGrid).
+ * Theme-aware (CSS vars, never `dark:`); neon accents; mobile-first.
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Type, Eye, EyeOff, Dumbbell } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Type, Eye, EyeOff, Dumbbell, ChevronDown } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
-import { getImageUrl } from '@/lib/utils';
-import type { AlphabetGroup, AlphabetItem } from '@/types/language';
+import type { AlphabetGroup } from '@/types/language';
 import {
   SectionShell,
-  SpeakerButton,
   Chip,
   EmptyState,
   CardsSkeleton,
   usePrefersReducedMotion,
 } from '@/components/language/primitives';
+import KanaGrid, { type KanaMode } from '@/components/language/kana/KanaGrid';
 
+// ─── Grouping model ──────────────────────────────────────────────
+interface ChildGroup {
+  group: AlphabetGroup;
+  subLabel: string;
+  mode: KanaMode;
+}
+interface ParentSection {
+  key: string;
+  label: string;
+  children: ChildGroup[];
+}
+
+/** Which top-level section a DB group belongs to, by name prefix. */
+function parentOf(name: string): { key: string; label: string; priority: number } {
+  if (name.startsWith('Hiragana')) return { key: 'hiragana', label: 'Hiragana', priority: 0 };
+  if (name.startsWith('Katakana')) return { key: 'katakana', label: 'Katakana', priority: 1 };
+  if (name.startsWith('Kanji')) return { key: 'kanji', label: 'Kanji', priority: 2 };
+  if (name.startsWith('Ký hiệu')) return { key: 'special', label: 'Ký hiệu đặc biệt', priority: 3 };
+  // Unknown group (non-JA languages) → its own section, keeps them working.
+  return { key: `other:${name}`, label: name, priority: 10 };
+}
+
+/** Short chip label: the part after "– " if present, else "Cơ bản". */
+function subLabelOf(name: string): string {
+  const idx = name.indexOf('– ');
+  if (idx >= 0) return name.slice(idx + 2).trim();
+  return 'Cơ bản';
+}
+
+/** KanaGrid rendering mode for a group. */
+function modeOf(name: string): KanaMode {
+  if (name.includes('ghép') || name.includes('Yōon')) return 'yoon';
+  if (name.includes('Ký hiệu') || name.includes('đặc biệt')) return 'flat';
+  if (name.startsWith('Kanji')) return 'flat';
+  return 'gojuon';
+}
+
+function buildSections(groups: AlphabetGroup[]): ParentSection[] {
+  const byKey = new Map<string, { section: ParentSection; priority: number }>();
+  for (const group of groups) {
+    const p = parentOf(group.name);
+    let entry = byKey.get(p.key);
+    if (!entry) {
+      entry = { section: { key: p.key, label: p.label, children: [] }, priority: p.priority };
+      byKey.set(p.key, entry);
+    }
+    entry.section.children.push({
+      group,
+      subLabel: subLabelOf(group.name),
+      mode: modeOf(group.name),
+    });
+  }
+  return [...byKey.values()].sort((a, b) => a.priority - b.priority).map((e) => e.section);
+}
+
+// ─── Page ────────────────────────────────────────────────────────
 export default function AlphabetPage() {
   const code = String(useParams().code);
   const reduced = usePrefersReducedMotion();
 
   const [groups, setGroups] = useState<AlphabetGroup[] | null>(null);
-  const [activeGroupId, setActiveGroupId] = useState<number | null>(null);
-  const [flipped, setFlipped] = useState<Set<number>>(new Set());
-  const [hideRomanization, setHideRomanization] = useState(false);
-  const [flipAll, setFlipAll] = useState(false);
+  const [hideRomaji, setHideRomaji] = useState(false);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [active, setActive] = useState<{ parentKey: string; groupId: number } | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -41,7 +95,13 @@ export default function AlphabetPage() {
         if (!alive) return;
         const data = res.data.data ?? [];
         setGroups(data);
-        setActiveGroupId(data[0]?.id ?? null);
+        const sections = buildSections(data);
+        const first = sections[0];
+        if (first) {
+          setExpanded(new Set([first.key]));
+          const firstChild = first.children[0];
+          if (firstChild) setActive({ parentKey: first.key, groupId: firstChild.group.id });
+        }
       })
       .catch(() => {
         if (alive) setGroups([]);
@@ -51,21 +111,21 @@ export default function AlphabetPage() {
     };
   }, [code]);
 
-  const activeGroup = useMemo(
-    () => groups?.find((g) => g.id === activeGroupId) ?? null,
-    [groups, activeGroupId],
-  );
+  const sections = useMemo(() => (groups ? buildSections(groups) : []), [groups]);
 
-  const toggleFlip = useCallback((id: number) => {
-    setFlipped((prev) => {
+  const toggleParent = (section: ParentSection) => {
+    const willOpen = !expanded.has(section.key);
+    setExpanded((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(section.key)) next.delete(section.key);
+      else next.add(section.key);
       return next;
     });
-  }, []);
-
-  const isFaceUp = useCallback((id: number) => flipAll !== flipped.has(id), [flipAll, flipped]);
+    if (willOpen && active?.parentKey !== section.key) {
+      const firstChild = section.children[0];
+      if (firstChild) setActive({ parentKey: section.key, groupId: firstChild.group.id });
+    }
+  };
 
   const toolbar = (
     <div className="flex flex-wrap items-center gap-2">
@@ -77,153 +137,105 @@ export default function AlphabetPage() {
       </Link>
       <button
         type="button"
-        onClick={() => setHideRomanization((v) => !v)}
-        aria-pressed={hideRomanization}
+        onClick={() => setHideRomaji((v) => !v)}
+        aria-pressed={hideRomaji}
         className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium ring-1 transition ${
-          hideRomanization
+          hideRomaji
             ? 'bg-neon-violet/20 text-neon-violet ring-neon-violet/40'
             : 'bg-[var(--bg-surface)] text-text-secondary ring-[var(--border-color)] hover:text-text-primary'
         }`}
       >
-        {hideRomanization ? <EyeOff size={16} /> : <Eye size={16} />}
+        {hideRomaji ? <EyeOff size={16} /> : <Eye size={16} />}
         Ẩn phiên âm
-      </button>
-      <button
-        type="button"
-        onClick={() => setFlipAll((v) => !v)}
-        aria-pressed={flipAll}
-        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium ring-1 transition ${
-          flipAll
-            ? 'bg-neon-cyan/20 text-neon-cyan ring-neon-cyan/40'
-            : 'bg-[var(--bg-surface)] text-text-secondary ring-[var(--border-color)] hover:text-text-primary'
-        }`}
-      >
-        Lật tất cả
       </button>
     </div>
   );
 
   return (
-    <SectionShell code={code} title="Bảng chữ cái" icon={<Type />} right={toolbar}>
+    <SectionShell code={code} title="Bảng chữ cái" icon={<Type />} section="Bảng chữ cái" right={toolbar}>
       {groups === null ? (
         <CardsSkeleton count={8} />
-      ) : groups.length === 0 ? (
+      ) : sections.length === 0 ? (
         <EmptyState
-          emoji="🔤"
-          title="Chưa có chữ cái"
+          emoji="🈳"
+          title="Chưa có bảng chữ cái"
           hint="Nội dung bảng chữ cái cho ngôn ngữ này sẽ sớm được thêm."
         />
       ) : (
-        <>
-          {groups.length > 1 && (
-            <div role="tablist" aria-label="Nhóm chữ cái" className="mb-5 flex flex-wrap gap-2">
-              {groups.map((g) => (
-                <Chip key={g.id} active={g.id === activeGroupId} onClick={() => setActiveGroupId(g.id)}>
-                  {g.name}
-                </Chip>
-              ))}
-            </div>
-          )}
+        <div className="space-y-3">
+          {sections.map((section) => {
+            const isOpen = expanded.has(section.key);
+            const activeChild =
+              active?.parentKey === section.key
+                ? section.children.find((c) => c.group.id === active.groupId) ?? null
+                : null;
+            return (
+              <div key={section.key} className="card overflow-hidden rounded-2xl p-0">
+                <button
+                  type="button"
+                  onClick={() => toggleParent(section)}
+                  aria-expanded={isOpen}
+                  className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left transition hover:bg-[var(--bg-surface)]"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <span className="font-heading text-lg font-bold text-text-primary">{section.label}</span>
+                    <span className="rounded-full bg-[var(--bg-surface)] px-2 py-0.5 text-[11px] font-medium text-text-muted ring-1 ring-[var(--border-color)]">
+                      {section.children.length} bảng
+                    </span>
+                  </span>
+                  <motion.span
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={reduced ? { duration: 0 } : { duration: 0.2 }}
+                    className="text-text-muted"
+                  >
+                    <ChevronDown size={20} />
+                  </motion.span>
+                </button>
 
-          {activeGroup?.description && (
-            <p className="mb-4 text-sm text-text-muted">{activeGroup.description}</p>
-          )}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="body"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0, pointerEvents: 'none' }}
+                      transition={reduced ? { duration: 0 } : { duration: 0.25, ease: 'easeInOut' }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <div className="border-t border-[var(--border-color)] px-4 py-4">
+                        {section.children.length > 1 && (
+                          <div className="mb-4 flex flex-wrap gap-2">
+                            {section.children.map((child) => (
+                              <Chip
+                                key={child.group.id}
+                                active={active?.parentKey === section.key && active.groupId === child.group.id}
+                                onClick={() => setActive({ parentKey: section.key, groupId: child.group.id })}
+                              >
+                                {child.subLabel}
+                              </Chip>
+                            ))}
+                          </div>
+                        )}
 
-          {!activeGroup || activeGroup.items.length === 0 ? (
-            <EmptyState emoji="🌱" title="Nhóm này chưa có chữ" />
-          ) : (
-            <div className="grid grid-cols-4 gap-2.5 sm:grid-cols-6 sm:gap-3 lg:grid-cols-8">
-              {activeGroup.items.map((item) => (
-                <CharacterCard
-                  key={item.id}
-                  item={item}
-                  faceUp={isFaceUp(item.id)}
-                  onFlip={() => toggleFlip(item.id)}
-                  hideRomanization={hideRomanization}
-                  reduced={reduced}
-                />
-              ))}
-            </div>
-          )}
-        </>
+                        {activeChild ? (
+                          <>
+                            {activeChild.group.description && (
+                              <p className="mb-3 text-sm text-text-muted">{activeChild.group.description}</p>
+                            )}
+                            <KanaGrid items={activeChild.group.items} hideRomaji={hideRomaji} mode={activeChild.mode} />
+                          </>
+                        ) : (
+                          <p className="py-6 text-center text-sm text-text-muted">Chọn một bảng để xem.</p>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
       )}
     </SectionShell>
-  );
-}
-
-function CharacterCard({
-  item,
-  faceUp,
-  onFlip,
-  hideRomanization,
-  reduced,
-}: {
-  item: AlphabetItem;
-  faceUp: boolean;
-  onFlip: () => void;
-  hideRomanization: boolean;
-  reduced: boolean;
-}) {
-  const img = item.imageUrl ? getImageUrl(item.imageUrl) : null;
-  const duration = reduced ? 0 : 0.28;
-
-  return (
-    <div
-      role="button"
-      tabIndex={0}
-      aria-pressed={!faceUp}
-      aria-label={`Chữ ${item.character}`}
-      onClick={onFlip}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onFlip();
-        }
-      }}
-      className="group relative aspect-square cursor-pointer select-none rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet/50"
-      style={{ perspective: 800 }}
-    >
-      <motion.div
-        className="relative h-full w-full"
-        style={{ transformStyle: 'preserve-3d' }}
-        animate={{ rotateY: faceUp ? 0 : 180 }}
-        transition={reduced ? { duration: 0 } : { duration, ease: 'easeInOut' }}
-      >
-        {/* Front */}
-        <div
-          className="card absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-2xl p-1.5"
-          style={{ backfaceVisibility: 'hidden' }}
-        >
-          <span className="font-heading text-2xl font-bold leading-none text-text-primary sm:text-3xl">
-            {item.character}
-          </span>
-          {!hideRomanization && item.romanization && (
-            <span className="text-[11px] text-text-muted">{item.romanization}</span>
-          )}
-          <div className="absolute right-0.5 top-0.5">
-            <SpeakerButton text={item.character} audioUrl={item.audioUrl} size={15} className="h-7 w-7" />
-          </div>
-        </div>
-
-        {/* Back */}
-        <div
-          className="card absolute inset-0 flex flex-col items-center justify-center gap-1 overflow-hidden rounded-2xl border border-neon-violet/40 bg-[var(--bg-surface)] p-1.5 text-center"
-          style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-        >
-          {img && (
-            <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg">
-              <Image src={img} alt={item.character} fill sizes="48px" className="object-cover" />
-            </div>
-          )}
-          <span className="text-sm font-semibold text-neon-cyan">{item.romanization ?? item.character}</span>
-          {item.note && (
-            <span className="line-clamp-3 text-[10px] leading-tight text-text-muted">{item.note}</span>
-          )}
-          <div className="absolute right-0.5 top-0.5">
-            <SpeakerButton text={item.character} audioUrl={item.audioUrl} size={15} className="h-7 w-7" />
-          </div>
-        </div>
-      </motion.div>
-    </div>
   );
 }

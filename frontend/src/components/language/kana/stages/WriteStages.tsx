@@ -150,7 +150,7 @@ export function ListenStage({ target, onResult, onNext, reduced }: StageProps) {
   const play = useCallback(async () => {
     setBusy(true);
     try {
-      const res = await speakVocabEntry({ term: target.kana }, { forceLang: 'ja-JP' });
+      const res = await speakVocabEntry({ term: target.kana }, { forceLang: 'ja-JP', rate: 0.7 });
       setMissingVoice(!res.ok && res.missingVoice);
     } finally {
       setBusy(false);

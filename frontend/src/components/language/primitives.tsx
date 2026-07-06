@@ -68,7 +68,9 @@ export function SpeakerButton({
       }
       setBusy(true);
       try {
-        await speakVocabEntry({ term: text, reading: reading ?? undefined }, { forceLang });
+        // Slower, clearer delivery for learners; Japanese a touch slower still.
+        const rate = forceLang === 'ja-JP' ? 0.7 : forceLang === 'zh-CN' ? 0.75 : 0.85;
+        await speakVocabEntry({ term: text, reading: reading ?? undefined }, { forceLang, rate });
       } finally {
         setBusy(false);
       }

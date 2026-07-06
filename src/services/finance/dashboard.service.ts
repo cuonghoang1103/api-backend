@@ -23,7 +23,7 @@ export async function getDashboard(userId: number, month?: string) {
   const today = todayUtc();
   const in14 = addDaysUtc(today, 14);
 
-  const [wallets, incomeAgg, expenseAgg, budgetCats, debts, upcomingItems, cashflowRows] =
+  const [wallets, incomeAgg, expenseAgg, budgetCats, debts, upcomingItems, cashflowRows, savingsAccounts, assetInvestments] =
     await Promise.all([
       prisma.wallet.findMany({ where: { userId, isArchived: false }, orderBy: [{ order: 'asc' }] }),
       prisma.incomeEntry.aggregate({ where: { userId, date: { gte: start, lt: end } }, _sum: { amount: true } }),
@@ -36,6 +36,8 @@ export async function getDashboard(userId: number, month?: string) {
         orderBy: { dueDate: 'asc' },
       }),
       prisma.expense.findMany({ where: { userId, date: { gte: start, lt: end } }, select: { amount: true, date: true } }),
+      prisma.savingsAccount.findMany({ where: { userId, status: { not: 'WITHDRAWN' } }, select: { amount: true } }),
+      prisma.investment.findMany({ where: { userId, type: 'ASSET', status: { not: 'SOLD' } }, select: { amount: true, currentValue: true } }),
     ]);
 
   const totalBalance = sum(wallets.map((w) => w.balance));
@@ -56,13 +58,15 @@ export async function getDashboard(userId: number, month?: string) {
     return { category: { id: c.id, name: c.name, icon: c.icon, color: c.color }, budget, used, ratio, status: ratio > 100 ? 'over' : ratio >= 70 ? 'warn' : 'ok' };
   });
 
-  // net worth (Phase-1 subset): wallets − remaining debt (savings/investments in Phase 2)
+  // net worth = wallets + savings + asset investments − remaining debt
   const totalRemainingDebt = sum(
     debts
       .filter((dbt) => dbt.status !== 'PAID_OFF')
       .map((dbt) => clampZero(round2(D(dbt.principal).minus(sum(dbt.schedule.filter((s) => s.isPaid).map((s) => s.principalPart)))))),
   );
-  const netWorth = round2(totalBalance.minus(totalRemainingDebt));
+  const totalSavings = sum(savingsAccounts.map((s) => s.amount));
+  const totalAssetValue = sum(assetInvestments.map((i) => i.currentValue ?? i.amount));
+  const netWorth = round2(totalBalance.plus(totalSavings).plus(totalAssetValue).minus(totalRemainingDebt));
 
   // income vs expense per DAY for the month (chart-ready)
   const dayMap = new Map<string, { income: Prisma.Decimal; expense: Prisma.Decimal }>();
@@ -89,6 +93,8 @@ export async function getDashboard(userId: number, month?: string) {
     totalBalance,
     netWorth,
     totalRemainingDebt,
+    totalSavings,
+    totalAssetValue,
     incomeThisMonth,
     expenseThisMonth,
     savingsThisMonth: round2(incomeThisMonth.minus(expenseThisMonth)),

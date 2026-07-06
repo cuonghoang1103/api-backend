@@ -22,7 +22,11 @@ import * as expenseService from '../services/finance/expense.service.js';
 import * as recurringService from '../services/finance/recurring.service.js';
 import * as incomeService from '../services/finance/income.service.js';
 import * as debtService from '../services/finance/debt.service.js';
+import * as investmentService from '../services/finance/investment.service.js';
+import * as savingsService from '../services/finance/savings.service.js';
+import * as reportsService from '../services/finance/reports.service.js';
 import { getDashboard } from '../services/finance/dashboard.service.js';
+import { comparePayoff, type PayoffDebt } from '../services/finance/payoffStrategy.js';
 
 const router = Router();
 router.use(authenticate);
@@ -223,6 +227,99 @@ router.get('/export', async (req, res, next) => {
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
     res.setHeader('Content-Disposition', `attachment; filename="moneyflow-${type}-${Date.now()}.csv"`);
     res.send(csv);
+  } catch (e) { next(e); }
+});
+
+// ─── Investments ─────────────────────────────────────────────
+router.get('/investments/summary', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await investmentService.investmentSummary(uid(req))); } catch (e) { next(e); }
+});
+router.get('/investments', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await investmentService.listInvestments(uid(req), req.query.type as string)); } catch (e) { next(e); }
+});
+router.post('/investments', amount(), body('name').trim().notEmpty(), validate, async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await investmentService.createInvestment(uid(req), req.body), 201); } catch (e) { next(e); }
+});
+router.put('/investments/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await investmentService.updateInvestment(uid(req), Number(req.params.id), req.body)); } catch (e) { next(e); }
+});
+router.post('/investments/:id(\\d+)/complete', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await investmentService.completeInvestment(uid(req), Number(req.params.id), req.body?.outcomeNote)); } catch (e) { next(e); }
+});
+router.post('/investments/:id(\\d+)/sell', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await investmentService.sellInvestment(uid(req), Number(req.params.id), req.body)); } catch (e) { next(e); }
+});
+router.delete('/investments/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await investmentService.deleteInvestment(uid(req), Number(req.params.id))); } catch (e) { next(e); }
+});
+
+// ─── Savings: accounts ───────────────────────────────────────
+router.get('/savings/summary', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.savingsSummary(uid(req))); } catch (e) { next(e); }
+});
+router.get('/savings/accounts', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.listSavingsAccounts(uid(req))); } catch (e) { next(e); }
+});
+router.post('/savings/accounts', body('bankName').trim().notEmpty(), amount(), body('termMonths').isInt({ gt: 0 }), validate, async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.createSavingsAccount(uid(req), req.body), 201); } catch (e) { next(e); }
+});
+router.put('/savings/accounts/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.updateSavingsAccount(uid(req), Number(req.params.id), req.body)); } catch (e) { next(e); }
+});
+router.post('/savings/accounts/:id(\\d+)/withdraw', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.withdrawSavingsAccount(uid(req), Number(req.params.id), req.body)); } catch (e) { next(e); }
+});
+router.delete('/savings/accounts/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.deleteSavingsAccount(uid(req), Number(req.params.id))); } catch (e) { next(e); }
+});
+
+// ─── Savings: goals ──────────────────────────────────────────
+router.get('/savings/goals', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.listSavingsGoals(uid(req))); } catch (e) { next(e); }
+});
+router.post('/savings/goals', body('name').trim().notEmpty(), amount('targetAmount'), validate, async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.createSavingsGoal(uid(req), req.body), 201); } catch (e) { next(e); }
+});
+router.put('/savings/goals/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.updateSavingsGoal(uid(req), Number(req.params.id), req.body)); } catch (e) { next(e); }
+});
+router.post('/savings/goals/:id(\\d+)/contribute', amount(), validate, async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.contributeToGoal(uid(req), Number(req.params.id), req.body)); } catch (e) { next(e); }
+});
+router.delete('/savings/goals/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await savingsService.deleteSavingsGoal(uid(req), Number(req.params.id))); } catch (e) { next(e); }
+});
+
+// ─── Reports ─────────────────────────────────────────────────
+router.get('/reports/monthly', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await reportsService.monthlyReport(uid(req), req.query.month as string)); } catch (e) { next(e); }
+});
+router.get('/reports/yearly', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await reportsService.yearlyReport(uid(req), req.query.year as string)); } catch (e) { next(e); }
+});
+router.get('/reports/monthly/export', async (req, res, next) => {
+  try {
+    const csv = await reportsService.monthlyReportCsv(uid(req), req.query.month as string);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="moneyflow-report-${(req.query.month as string) || 'month'}.csv"`);
+    res.send(csv);
+  } catch (e) { next(e); }
+});
+
+// ─── Payoff strategy (snowball vs avalanche) ─────────────────
+router.get('/debts/payoff-strategy', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const debts = await debtService.listDebts(uid(req));
+    const active = debts.filter((d) => d.status !== 'PAID_OFF' && Number(d.computed.remaining) > 0);
+    const inputs: PayoffDebt[] = active.map((d) => {
+      const rate = Number(d.interestRate);
+      const monthlyRatePct = d.interestType === 'DAILY_PERCENT' ? rate * 30 : d.interestType === 'NO_INTEREST' ? 0 : rate;
+      const unpaid = (d.schedule ?? []).filter((s) => !s.isPaid);
+      const minPayment = unpaid.length ? Number(unpaid[0].amountDue) : Number(d.computed.remaining) * 0.1;
+      return { id: d.id, name: d.lenderName, balance: Number(d.computed.remaining), monthlyRatePct, minPayment };
+    });
+    const extra = req.query.extraMonthly ? Number(req.query.extraMonthly) : 0;
+    ok(res, comparePayoff(inputs, extra));
   } catch (e) { next(e); }
 });
 

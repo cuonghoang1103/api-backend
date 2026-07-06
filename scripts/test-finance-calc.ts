@@ -12,6 +12,7 @@ import {
   dailyInterestAccrued,
   savingsMaturityInterest,
 } from '../src/services/finance/debtCalculator.js';
+import { comparePayoff } from '../src/services/finance/payoffStrategy.js';
 
 let passed = 0;
 function check(label: string, cond: boolean, detail?: string) {
@@ -151,6 +152,22 @@ console.log('\n── SAVINGS simple interest ───────────�
   check('6-month interest = 3.000.000', i.equals(3_000_000), `got ${n(i)}`);
   check('12-month @ 6% = 6.000.000', savingsMaturityInterest(100_000_000, 6, 12).equals(6_000_000));
   check('3-month @ 5% on 50M = 625.000', savingsMaturityInterest(50_000_000, 5, 3).equals(625_000));
+}
+
+console.log('\n── PAYOFF: snowball vs avalanche ─────────────');
+{
+  // Two debts: small balance @ low rate, big balance @ high rate.
+  const debts = [
+    { id: 1, name: 'Nhỏ-rẻ', balance: 2_000_000, monthlyRatePct: 1, minPayment: 200_000 },
+    { id: 2, name: 'To-đắt', balance: 8_000_000, monthlyRatePct: 5, minPayment: 300_000 },
+  ];
+  const r = comparePayoff(debts, 2_000_000)!; // 2tr extra/month
+  console.log(`  budget ${n(r.monthlyBudget)}/tháng → avalanche tiết kiệm lãi ${n(r.avalancheInterestSaved)} (snowball ${n(r.snowball.totalInterest)} vs avalanche ${n(r.avalanche.totalInterest)})`);
+  check('snowball orders smallest-balance first', r.snowball.order[0].id === 1);
+  check('avalanche orders highest-rate first', r.avalanche.order[0].id === 2);
+  check('avalanche pays ≤ interest than snowball', r.avalanche.totalInterest.lessThanOrEqualTo(r.snowball.totalInterest));
+  check('both strategies clear the debt (months < cap)', r.snowball.months < 600 && r.avalanche.months < 600);
+  check('empty debt list → null', comparePayoff([]) === null);
 }
 
 console.log(`\n✅ All ${passed} assertions passed.\n`);

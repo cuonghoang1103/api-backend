@@ -4515,3 +4515,68 @@ model RecurringTransaction {
   @@index([userId, nextRunAt, isActive], name: "idx_fin_recurring_user_next_active")
   @@map("finance_recurring_transactions")
 }
+
+// ============================================================
+// MONEYFLOW — Phase 2 (Investments & Savings). Same rules as Phase 1:
+// per-user (userId Int), Decimal(18,2) money, no floats, scoped in service.
+// ============================================================
+
+// ===== INVESTMENTS =====
+model Investment {
+  id              Int      @id @default(autoincrement())
+  userId          Int      @map("user_id")
+  type            String   @db.VarChar(10) // SELF (skills/courses) | ASSET (stocks/gold/crypto)
+  name            String   @db.VarChar(200) // "Khóa Unity", "Vàng SJC"
+  amount          Decimal  @db.Decimal(18, 2) // money put in
+  currency        String   @default("VND") @db.VarChar(8)
+  date            DateTime @db.Date
+  walletId        Int?     @map("wallet_id") // wallet the money came from (optional)
+  expectedOutcome String?  @map("expected_outcome") @db.Text // SELF: expected skill/return
+  currentValue    Decimal? @map("current_value") @db.Decimal(18, 2) // ASSET: manually updated value
+  status          String   @default("ACTIVE") @db.VarChar(12) // ACTIVE | COMPLETED | SOLD
+  outcomeNote     String?  @map("outcome_note") @db.Text // SELF: "kết quả nhận được" on completion
+  note            String?  @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, type], name: "idx_fin_investments_user_type")
+  @@map("finance_investments")
+}
+
+// ===== SAVINGS =====
+model SavingsAccount {
+  id                  Int      @id @default(autoincrement())
+  userId              Int      @map("user_id")
+  bankName            String   @map("bank_name") @db.VarChar(150)
+  amount              Decimal  @db.Decimal(18, 2)
+  currency            String   @default("VND") @db.VarChar(8)
+  interestRatePerYear Decimal  @map("interest_rate_per_year") @db.Decimal(6, 3) // %/year
+  termMonths          Int      @map("term_months")
+  startDate           DateTime @map("start_date") @db.Date
+  maturityDate        DateTime @map("maturity_date") @db.Date // computed on create
+  autoRenew           Boolean  @default(false) @map("auto_renew")
+  walletId            Int?     @map("wallet_id") // funding wallet (optional)
+  status              String   @default("ACTIVE") @db.VarChar(12) // ACTIVE | MATURED | WITHDRAWN
+  note                String?  @db.Text
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, status], name: "idx_fin_savings_accounts_user_status")
+  @@map("finance_savings_accounts")
+}
+
+model SavingsGoal {
+  id            Int       @id @default(autoincrement())
+  userId        Int       @map("user_id")
+  name          String    @db.VarChar(150) // "Mua MacBook", "Quỹ khẩn cấp"
+  targetAmount  Decimal   @map("target_amount") @db.Decimal(18, 2)
+  currentAmount Decimal   @default(0) @map("current_amount") @db.Decimal(18, 2)
+  deadline      DateTime? @db.Date
+  icon          String?   @db.VarChar(40)
+  status        String    @default("ACTIVE") @db.VarChar(12) // ACTIVE | ACHIEVED
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@index([userId], name: "idx_fin_savings_goals_user")
+  @@map("finance_savings_goals")
+}

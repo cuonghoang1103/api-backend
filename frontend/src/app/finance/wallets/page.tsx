@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { Plus, ArrowLeftRight, Pencil, Archive, SlidersHorizontal, ArrowRight } from 'lucide-react';
-import { financeApi, WALLET_TYPE_LABELS, type Wallet } from '@/lib/finance-api';
+import { financeApi, WALLET_TYPE_LABELS, type Wallet, type FxRate } from '@/lib/finance-api';
 import { cn, formatUsd, formatMoney } from '@/lib/utils';
 import { FinanceShell } from '@/components/finance/FinanceShell';
 import { Card, StatCard, Button, Sheet, Field, inputCls, Spinner, EmptyState, Pill } from '@/components/finance/primitives';
@@ -16,13 +16,16 @@ const TYPES = Object.keys(WALLET_TYPE_LABELS);
 
 export default function WalletsPage() {
   const [wallets, setWallets] = useState<Wallet[]>([]);
+  const [fxRate, setFxRate] = useState<FxRate | null>(null);
   const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState<Wallet | 'new' | null>(null);
   const [transfer, setTransfer] = useState(false);
   const [adjust, setAdjust] = useState<Wallet | null>(null);
 
   const load = useCallback(() => {
-    financeApi.listWallets(true).then(setWallets).catch(() => undefined).finally(() => setLoading(false));
+    Promise.all([financeApi.listWallets(true), financeApi.fxCurrent().catch(() => null)])
+      .then(([ws, fx]) => { setWallets(ws); setFxRate(fx); })
+      .catch(() => undefined).finally(() => setLoading(false));
   }, []);
   useEffect(() => { load(); }, [load]);
 
@@ -32,6 +35,10 @@ export default function WalletsPage() {
   const totalVnd = active.filter((w) => w.currency !== 'USD').reduce((a, w) => a + Number(w.balance), 0);
   const totalUsd = active.filter((w) => w.currency === 'USD').reduce((a, w) => a + Number(w.balance), 0);
   const hasUsdWallet = active.some((w) => w.currency === 'USD');
+  const rate = fxRate ? Number(fxRate.vndPerUsd) : null;
+  // "≈" mirror of a balance in the other currency at the latest user rate
+  const eqUsd = (vnd: number | string) => (rate ? formatUsd(Number(vnd) / rate) : null);
+  const eqVnd = (usd: number | string) => (rate ? formatMoney(Number(usd) * rate, 'VND') : null);
 
   return (
     <FinanceShell onQuickAddSuccess={load}>
@@ -44,8 +51,10 @@ export default function WalletsPage() {
       </div>
 
       <div className={cn('mb-4 grid gap-3', hasUsdWallet && 'sm:grid-cols-2')}>
-        <StatCard label="Tổng số dư ₫ (ví hoạt động)" value={totalVnd} />
-        {hasUsdWallet && <StatCard label="Tổng số dư $ (ví hoạt động)" value={totalUsd} format={formatUsd} />}
+        <StatCard label="Tổng số dư ₫ (ví hoạt động)" value={totalVnd}
+          sub={rate ? <span className="text-text-muted">≈ <b className="text-neon-cyan">{eqUsd(totalVnd)}</b> · tỷ giá {formatMoney(rate, 'VND')}/$</span> : undefined} />
+        {hasUsdWallet && <StatCard label="Tổng số dư $ (ví hoạt động)" value={totalUsd} format={formatUsd}
+          sub={rate ? <span className="text-text-muted">≈ <b className="text-neon-green">{eqVnd(totalUsd)}</b></span> : undefined} />}
       </div>
 
       {loading ? <Spinner /> : wallets.length === 0 ? (
@@ -65,6 +74,9 @@ export default function WalletsPage() {
                 <div className="text-right">
                   <div className="font-heading text-lg font-bold tabular-nums text-text-primary">{formatMoney(w.balance, w.currency)}</div>
                   {w.currency === 'USD' && <div className="text-[10px] font-semibold uppercase tracking-wide text-neon-cyan">USD</div>}
+                  {rate && (
+                    <div className="text-[11px] tabular-nums text-text-muted">≈ {w.currency === 'USD' ? eqVnd(w.balance) : eqUsd(w.balance)}</div>
+                  )}
                 </div>
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs">

@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { ShoppingCart, Eye, Flame, Sparkles, Package, TrendingUp, AlertCircle, Zap, ShieldCheck, FileCode, HardDrive, Tag } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
+import SmartImage from '@/components/ui/SmartImage';
 import type { Product } from '@/types';
 import { useCartStore } from '@/store/cartStore';
 import StarRating from './StarRating';
@@ -66,13 +66,11 @@ function MicroFilePreview({ product, meta, isSpotlight }: { product: Product; me
       }}
     >
       {hasThumb ? (
-        <Image
+        <SmartImage
           src={product.thumbnail}
           alt={product.name}
-          fill
-          className="object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
           style={{ filter: isSpotlight ? 'brightness(0.7)' : undefined }}
-          sizes={isSpotlight ? '100vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'}
         />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center">
@@ -229,12 +227,10 @@ function SpotlightCard({ product, meta }: { product: Product; meta: ReturnType<t
           <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-2/5 relative" style={{ minHeight: '240px' }}>
               {product.thumbnail ? (
-                <Image
+                <SmartImage
                   src={product.thumbnail}
                   alt={product.name}
-                  fill
-                  className="object-cover"
-                  sizes="40vw"
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
               ) : (
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-indigo/20 to-neon-violet/20 flex items-center justify-center">

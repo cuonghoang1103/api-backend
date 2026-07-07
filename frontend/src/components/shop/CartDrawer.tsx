@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight, BookOpen, Package } from 'lucide-react';
-import Image from 'next/image';
+import SmartImage from '@/components/ui/SmartImage';
 import Link from 'next/link';
 import { useCartStore } from '@/store/cartStore';
 
@@ -116,11 +116,10 @@ export default function CartDrawer() {
                               className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0"
                             >
                               {item.product.thumbnail ? (
-                                <Image
+                                <SmartImage
                                   src={item.product.thumbnail}
                                   alt={item.product.name}
-                                  fill
-                                  className="object-cover"
+                                  className="absolute inset-0 h-full w-full object-cover"
                                 />
                               ) : (
                                 <div className="w-full h-full bg-darkcard flex items-center justify-center">
@@ -199,11 +198,10 @@ export default function CartDrawer() {
                               className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0"
                             >
                               {item.product.thumbnail ? (
-                                <Image
+                                <SmartImage
                                   src={item.product.thumbnail}
                                   alt={item.course?.title || 'Khóa học'}
-                                  fill
-                                  className="object-cover"
+                                  className="absolute inset-0 h-full w-full object-cover"
                                 />
                               ) : (
                                 <div className="w-full h-full bg-darkcard flex items-center justify-center">

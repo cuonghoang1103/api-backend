@@ -56,15 +56,18 @@ class SocialRightWidgetErrorBoundary extends Component<
  * 2. Trending topics — pulled from GET /api/v1/social/trending
  *    (best-effort; falls back to a curated list if the endpoint
  *    isn't reachable so the layout never collapses).
- * 3. Suggested connections — a lightweight "people to follow"
- *    panel. The data comes from a lightweight /api/v1/social/suggestions
- *    call; on failure we just show a small note.
+ * 3. Liên hệ admin — a single-row panel for the site's primary
+ *    admin (Cuong03dx1), from GET /api/v1/social/admin-contact.
+ *    Lets any visitor DM or view the admin directly; self-hides
+ *    when the admin is the one viewing.
  */
 function SocialRightWidgetInner() {
   const router = useRouter();
   const auth = useAuthStore();
   const [trending, setTrending] = useState<TrendingTopic[]>([]);
-  const [suggestions, setSuggestions] = useState<SuggestedUser[]>([]);
+  // The site's primary admin (Cuong03dx1) shown in the "Liên hệ admin"
+  // widget. Replaces the old generic "people you may know" list.
+  const [admin, setAdmin] = useState<SuggestedUser | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [activeHashtag, setActiveHashtag] = useState<string | null>(null);
 
@@ -127,14 +130,14 @@ function SocialRightWidgetInner() {
       try {
         const [t, s] = await Promise.allSettled([
           api.get('/social/trending', { params: { limit: 5 } }),
-          api.get('/social/suggestions', { params: { limit: 3 } }),
+          api.get('/social/admin-contact'),
         ]);
         if (cancelled) return;
         if (t.status === 'fulfilled') {
           setTrending((t.value.data?.data as TrendingTopic[]) || []);
         }
         if (s.status === 'fulfilled') {
-          setSuggestions((s.value.data?.data as SuggestedUser[]) || []);
+          setAdmin((s.value.data?.data as SuggestedUser) || null);
         }
       } finally {
         if (!cancelled) setLoaded(true);
@@ -260,8 +263,9 @@ function SocialRightWidgetInner() {
       {/* Friend requests (incoming) — FB-style Confirm/Delete box */}
       <FriendRequestsPanel />
 
-      {/* Suggested connections */}
-      {loaded && suggestions.length > 0 && (
+      {/* Liên hệ admin — single row for the site's primary admin.
+          Hidden when the admin is the one viewing (no self-contact). */}
+      {loaded && admin && (auth.user as any)?.id !== admin.id && (
         <div
           className="rounded-2xl p-4"
           style={{
@@ -270,53 +274,46 @@ function SocialRightWidgetInner() {
             backdropFilter: 'blur(20px)',
           }}
         >
-          <h3 className="text-sm font-semibold text-text-primary mb-3">Gợi ý kết nối</h3>
-          <ul className="space-y-3">
-            {suggestions.map((u) => {
-              const isStarting = !!starting[u.id];
-              return (
-                <li key={u.id} className="flex items-center gap-2.5">
-                  <Link
-                    href={`/profile/${u.id}`}
-                    className="flex flex-1 items-center gap-2.5 min-w-0 rounded-lg px-1 py-1 -mx-1 hover:bg-[var(--bg-surface-hover)] transition-colors"
-                  >
-                    {u.avatarUrl ? (
-                      <img src={u.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
-                    ) : (
-                      <div className="h-8 w-8 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-xs font-bold text-white">
-                        {(u.displayName || u.fullName || u.username || '?').charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-text-primary truncate">
-                        {u.displayName || u.fullName || u.username}
-                      </p>
-                      <p className="text-[10px] text-text-muted truncate">@{u.username}</p>
-                    </div>
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => handleMessage(u.id)}
-                    disabled={isStarting}
-                    aria-label={`Nhắn tin với ${u.displayName || u.fullName || u.username}`}
-                    className="rounded-lg px-3 py-2.5 sm:px-2.5 sm:py-1 min-h-[44px] sm:min-h-0 text-[10px] font-medium text-white transition-all hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-1 shrink-0"
-                    style={{ background: 'linear-gradient(90deg, #06B6D4, #6366F1)' }}
-                  >
-                    <MessageSquare className="h-2.5 w-2.5" />
-                    {isStarting ? 'Đang mở…' : 'Nhắn tin'}
-                  </button>
-                  <Link
-                    href={`/profile/${u.id}`}
-                    aria-label={`Xem hồ sơ của ${u.displayName || u.fullName || u.username}`}
-                    className="rounded-lg px-3 py-2.5 sm:px-2.5 sm:py-1 min-h-[44px] sm:min-h-0 text-[10px] font-medium text-text-secondary hover:text-text-primary border border-theme-light border-theme-light-hover transition-colors flex items-center justify-center gap-1 shrink-0"
-                  >
-                    Xem
-                    <ExternalLink className="h-2.5 w-2.5" />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <h3 className="text-sm font-semibold text-text-primary mb-3">Liên hệ admin</h3>
+          <div className="flex items-center gap-2.5">
+            <Link
+              href={`/profile/${admin.id}`}
+              className="flex flex-1 items-center gap-2.5 min-w-0 rounded-lg px-1 py-1 -mx-1 hover:bg-[var(--bg-surface-hover)] transition-colors"
+            >
+              {admin.avatarUrl ? (
+                <img src={admin.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
+              ) : (
+                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-xs font-bold text-white">
+                  {(admin.displayName || admin.fullName || admin.username || '?').charAt(0).toUpperCase()}
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-text-primary truncate">
+                  {admin.displayName || admin.fullName || admin.username}
+                </p>
+                <p className="text-[10px] text-text-muted truncate">@{admin.username}</p>
+              </div>
+            </Link>
+            <button
+              type="button"
+              onClick={() => handleMessage(admin.id)}
+              disabled={!!starting[admin.id]}
+              aria-label={`Nhắn tin với ${admin.displayName || admin.fullName || admin.username}`}
+              className="rounded-lg px-3 py-2.5 sm:px-2.5 sm:py-1 min-h-[44px] sm:min-h-0 text-[10px] font-medium text-white transition-all hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-1 shrink-0"
+              style={{ background: 'linear-gradient(90deg, #06B6D4, #6366F1)' }}
+            >
+              <MessageSquare className="h-2.5 w-2.5" />
+              {starting[admin.id] ? 'Đang mở…' : 'Nhắn tin'}
+            </button>
+            <Link
+              href={`/profile/${admin.id}`}
+              aria-label={`Xem hồ sơ của ${admin.displayName || admin.fullName || admin.username}`}
+              className="rounded-lg px-3 py-2.5 sm:px-2.5 sm:py-1 min-h-[44px] sm:min-h-0 text-[10px] font-medium text-text-secondary hover:text-text-primary border border-theme-light border-theme-light-hover transition-colors flex items-center justify-center gap-1 shrink-0"
+            >
+              Xem
+              <ExternalLink className="h-2.5 w-2.5" />
+            </Link>
+          </div>
         </div>
       )}
 

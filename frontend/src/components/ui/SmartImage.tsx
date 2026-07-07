@@ -28,24 +28,33 @@ type SmartImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   alt?: string;
 };
 
-const RETRY_DELAY_MS = 600;
+// Increasing backoff between retries. A freshly-uploaded R2 object can
+// take a couple of seconds to become reliably reachable through the
+// Cloudflare edge (cache MISS race / HTTP-3 blip), so a single quick
+// retry often lands inside the same failure window. Spreading 3 retries
+// over ~700ms → 1.6s → 3.2s covers that propagation gap without making
+// a genuinely-dead image hang too long before the placeholder shows.
+const RETRY_DELAYS_MS = [700, 1600, 3200];
 
-function withCacheBuster(url: string): string {
-  // Preserve existing query string; append a retry marker.
-  return url + (url.includes('?') ? '&' : '?') + 'r=1';
+function withCacheBuster(url: string, attempt: number): string {
+  // Fresh query param each attempt → new cache key, forces the browser
+  // to re-fetch instead of reusing the cached failure, and nudges a new
+  // connection (helps past a stuck HTTP-3 attempt).
+  return url + (url.includes('?') ? '&' : '?') + `r=${attempt}`;
 }
 
 export default function SmartImage({ src, alt = '', className, style, onError, ...rest }: SmartImageProps) {
   const original = src ?? '';
   const [currentSrc, setCurrentSrc] = useState(original);
   const [failed, setFailed] = useState(false);
-  const [retried, setRetried] = useState(false);
+  // How many retries we've already scheduled (0 = none yet).
+  const [attempt, setAttempt] = useState(0);
 
   // Reset when the incoming src changes (e.g. carousel swipe, new post).
   useEffect(() => {
     setCurrentSrc(original);
     setFailed(false);
-    setRetried(false);
+    setAttempt(0);
   }, [original]);
 
   if (failed || !original) {
@@ -77,12 +86,13 @@ export default function SmartImage({ src, alt = '', className, style, onError, .
       className={className}
       style={style}
       onError={(e) => {
-        if (!retried) {
-          // First failure: retry once after a short delay with a
-          // cache-buster so the browser doesn't reuse the failed entry.
-          setRetried(true);
-          setTimeout(() => setCurrentSrc(withCacheBuster(original)), RETRY_DELAY_MS);
+        if (attempt < RETRY_DELAYS_MS.length) {
+          // Schedule the next retry with a fresh cache-buster.
+          const next = attempt + 1;
+          setAttempt(next);
+          setTimeout(() => setCurrentSrc(withCacheBuster(original, next)), RETRY_DELAYS_MS[attempt]);
         } else {
+          // Exhausted all retries → show the placeholder.
           setFailed(true);
         }
         onError?.(e);

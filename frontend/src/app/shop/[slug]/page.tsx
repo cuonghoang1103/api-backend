@@ -16,7 +16,7 @@ import {
   Package,
   TrendingUp,
 } from 'lucide-react';
-import Image from 'next/image';
+import SmartImage from '@/components/ui/SmartImage';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useProductStore } from '@/store/productStore';
@@ -126,12 +126,10 @@ export default function ProductDetailPage() {
           >
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-darkcard border border-darkborder group">
               {product.thumbnail ? (
-                <Image
+                <SmartImage
                   src={product.thumbnail}
                   alt={product.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  priority
+                  className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               ) : (
                 <div className="absolute inset-0 bg-gradient-to-br from-neon-indigo/20 to-neon-violet/20 flex items-center justify-center">

@@ -1214,6 +1214,55 @@ router.get(
 );
 
 // ════════════════════════════════════════════════════════════════
+// GET /api/v1/social/admin-contact — The site's primary admin
+// ════════════════════════════════════════════════════════════════
+// Powers the "Liên hệ admin" widget in the social right rail: any
+// visitor can DM or view the admin directly instead of a generic
+// "people you may know" list. We resolve the super-admin by the
+// known username first, then fall back to the lowest-id user that
+// carries an admin role, so it keeps working if the username changes.
+router.get(
+  '/admin-contact',
+  optionalAuth,
+  async (_req: any, res: Response<any>, next) => {
+    try {
+      const SUPER_ADMIN_USERNAME = 'Cuong03dx';
+      const select = {
+        id: true,
+        username: true,
+        fullName: true,
+        displayName: true,
+        avatarUrl: true,
+        bio: true,
+      } as const;
+
+      let admin = await prisma.user.findFirst({
+        where: { username: SUPER_ADMIN_USERNAME },
+        select,
+      });
+
+      if (!admin) {
+        admin = await prisma.user.findFirst({
+          where: {
+            roles: {
+              some: {
+                role: { name: { in: ['admin', 'ADMIN', 'ROLE_ADMIN', 'SUPER_ADMIN'] } },
+              },
+            },
+          },
+          orderBy: { id: 'asc' },
+          select,
+        });
+      }
+
+      res.json({ success: true, data: admin || null });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
 // POST /api/v1/social/polls/:id/vote — Cast a vote on a poll
 // ════════════════════════════════════════════════════════════════
 router.post(

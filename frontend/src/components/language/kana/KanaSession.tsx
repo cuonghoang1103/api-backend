@@ -105,11 +105,19 @@ export function KanaSession({
   const meta = STAGE_META[current.stage];
   const StageIcon = meta.icon;
   const progress = total ? (index / total) * 100 : 0;
+  // What's being practiced — so Hiragana vs Katakana is never ambiguous.
+  const groupLabel =
+    selectedGroups.length <= 2
+      ? selectedGroups.map((g) => g.name).join(' · ')
+      : `${selectedGroups[0].name} +${selectedGroups.length - 1} nhóm khác`;
 
   return (
     <div className="mx-auto max-w-lg">
-      {/* Header: progress + score + exit */}
+      {/* Header: groups + progress + score + exit */}
       <div className="mb-4">
+        <p className="mb-2 truncate text-center text-xs font-medium text-text-muted" title={selectedGroups.map((g) => g.name).join(', ')}>
+          Đang luyện: <span className="font-semibold text-text-secondary">{groupLabel}</span>
+        </p>
         <div className="flex items-center justify-between gap-3">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1 text-xs font-semibold text-text-secondary ring-1 ring-[var(--border-color)]">
             <StageIcon size={13} className="text-neon-violet" />

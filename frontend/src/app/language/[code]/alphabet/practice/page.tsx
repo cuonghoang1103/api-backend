@@ -102,7 +102,7 @@ export default function KanaPracticePage() {
   return (
     <SectionShell
       code={code}
-      title="Luyện tập Kana"
+      title="Luyện tập bảng chữ cái"
       section="Luyện tập"
       icon={<GraduationCap className="text-neon-violet" />}
       right={
@@ -114,7 +114,15 @@ export default function KanaPracticePage() {
         </Link>
       }
     >
-      {groups === null || settings === null ? (
+      {code !== 'ja' ? (
+        // The practice engine quizzes kana ↔ romaji typing — EN (IPA) and ZH
+        // (pinyin) alphabet entries aren't typeable answers, so gate it to ja.
+        <EmptyState
+          emoji="🈳"
+          title="Luyện tập hiện chỉ hỗ trợ bảng kana tiếng Nhật"
+          hint="Với ngôn ngữ này, hãy học qua bảng chữ cái, từ vựng và quiz từ vựng nhé."
+        />
+      ) : groups === null || settings === null ? (
         groups !== null && groups.length === 0 ? (
           <EmptyState
             emoji="🈳"

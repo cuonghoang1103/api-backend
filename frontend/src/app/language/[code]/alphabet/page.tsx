@@ -126,12 +126,15 @@ export default function AlphabetPage() {
 
   const toolbar = (
     <div className="flex flex-wrap items-center gap-2">
-      <Link
-        href={`/language/${code}/alphabet/practice`}
-        className="inline-flex items-center gap-1.5 rounded-full bg-neon-gradient px-3.5 py-1.5 text-sm font-semibold text-white shadow-neon transition hover:opacity-95"
-      >
-        <Dumbbell size={16} /> Luyện tập
-      </Link>
+      {/* The practice engine is kana↔romaji typing — only meaningful for ja. */}
+      {code === 'ja' && (
+        <Link
+          href={`/language/${code}/alphabet/practice`}
+          className="inline-flex items-center gap-1.5 rounded-full bg-neon-gradient px-3.5 py-1.5 text-sm font-semibold text-white shadow-neon transition hover:opacity-95"
+        >
+          <Dumbbell size={16} /> Luyện tập
+        </Link>
+      )}
       <button
         type="button"
         onClick={() => setHideRomaji((v) => !v)}

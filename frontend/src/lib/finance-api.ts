@@ -21,11 +21,11 @@ export interface Expense {
   receiptUrl: string | null; isRecurring: boolean; category?: Pick<ExpenseCategory, 'id' | 'name' | 'icon' | 'color'>;
 }
 export interface IncomeSource {
-  id: number; name: string; type: string; payType: string; baseSalary: Money | null; hourlyRate: Money | null;
+  id: number; name: string; type: string; payType: string; currency: string; baseSalary: Money | null; hourlyRate: Money | null;
   otMultiplierNormal: Money; otMultiplierHoliday: Money; isActive: boolean; note: string | null;
 }
 export interface WorkLog { id: number; sourceId: number; date: string; hoursNormal: Money; hoursOT: Money; hoursOTHoliday: Money; note: string | null; }
-export interface IncomeEntry { id: number; sourceId: number | null; walletId: number; amount: Money; date: string; type: string; note: string | null; }
+export interface IncomeEntry { id: number; sourceId: number | null; walletId: number; amount: Money; currency: string; date: string; type: string; note: string | null; }
 export interface ScheduleItem {
   id: number; debtId: number; installmentNo: number; dueDate: string; amountDue: Money; principalPart: Money;
   interestPart: Money; isPaid: boolean; paidAt: string | null; paymentId: number | null;

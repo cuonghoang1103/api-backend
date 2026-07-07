@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { financeApi, type IncomeSource, type IncomeEntry, type WorkLog, type Wallet } from '@/lib/finance-api';
-import { cn, formatVnd } from '@/lib/utils';
+import { cn, formatVnd, formatMoney } from '@/lib/utils';
 import { FinanceShell } from '@/components/finance/FinanceShell';
 import { Card, StatCard, Button, Sheet, Field, inputCls, Spinner, EmptyState, Pill } from '@/components/finance/primitives';
 import { IncomeMonthBars } from '@/components/finance/charts';
@@ -54,13 +54,13 @@ function SourcesTab() {
               <div className="flex items-start justify-between">
                 <div>
                   <div className="font-semibold text-text-primary">{s.name}</div>
-                  <div className="mt-1 flex gap-1"><Pill>{SOURCE_TYPES[s.type]}</Pill><Pill tone="violet">{PAY_TYPES[s.payType]}</Pill>{!s.isActive && <Pill>Ngừng</Pill>}</div>
+                  <div className="mt-1 flex gap-1"><Pill>{SOURCE_TYPES[s.type]}</Pill><Pill tone="violet">{PAY_TYPES[s.payType]}</Pill>{s.currency === 'USD' && <Pill>$ USD</Pill>}{!s.isActive && <Pill>Ngừng</Pill>}</div>
                 </div>
                 <button onClick={() => setEdit(s)} className="rounded-lg p-1 text-text-muted hover:text-neon-violet"><Pencil size={15} /></button>
               </div>
               <div className="mt-2 text-sm text-text-secondary">
-                {s.payType === 'MONTHLY' && s.baseSalary && <>Lương cơ bản: <b className="text-text-primary">{formatVnd(s.baseSalary)}</b></>}
-                {s.payType === 'HOURLY' && s.hourlyRate && <>Lương giờ: <b className="text-text-primary">{formatVnd(s.hourlyRate)}</b> · OT ×{Number(s.otMultiplierNormal)} / lễ ×{Number(s.otMultiplierHoliday)}</>}
+                {s.payType === 'MONTHLY' && s.baseSalary && <>Lương cơ bản: <b className="text-text-primary">{formatMoney(s.baseSalary, s.currency)}</b></>}
+                {s.payType === 'HOURLY' && s.hourlyRate && <>Lương giờ: <b className="text-text-primary">{formatMoney(s.hourlyRate, s.currency)}</b> · OT ×{Number(s.otMultiplierNormal)} / lễ ×{Number(s.otMultiplierHoliday)}</>}
               </div>
             </Card>
           ))}
@@ -79,7 +79,9 @@ function SourceForm({ source, onClose, onSaved }: { source: IncomeSource | null;
     otMultiplierNormal: source ? String(Number(source.otMultiplierNormal)) : '1.5',
     otMultiplierHoliday: source ? String(Number(source.otMultiplierHoliday)) : '2',
     isActive: source?.isActive ?? true,
+    currency: source?.currency ?? 'VND',
   });
+  const sym = f.currency === 'USD' ? '$' : '₫';
   const [saving, setSaving] = useState(false);
   const set = (k: string, v: string | boolean) => setF((p) => ({ ...p, [k]: v }));
   const save = async () => {
@@ -99,10 +101,16 @@ function SourceForm({ source, onClose, onSaved }: { source: IncomeSource | null;
           <Field label="Loại"><select value={f.type} onChange={(e) => set('type', e.target.value)} className={inputCls}>{Object.keys(SOURCE_TYPES).map((t) => <option key={t} value={t}>{SOURCE_TYPES[t]}</option>)}</select></Field>
           <Field label="Hình thức trả"><select value={f.payType} onChange={(e) => set('payType', e.target.value)} className={inputCls}>{Object.keys(PAY_TYPES).map((t) => <option key={t} value={t}>{PAY_TYPES[t]}</option>)}</select></Field>
         </div>
-        {f.payType === 'MONTHLY' && <Field label="Lương cơ bản/tháng"><input inputMode="numeric" value={f.baseSalary} onChange={(e) => set('baseSalary', e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>}
+        <Field label="Tiền tệ (lương)">
+          <select value={f.currency} onChange={(e) => set('currency', e.target.value)} className={inputCls}>
+            <option value="VND">₫ VND</option>
+            <option value="USD">$ USD</option>
+          </select>
+        </Field>
+        {f.payType === 'MONTHLY' && <Field label={`Lương cơ bản/tháng (${sym})`}><input inputMode="decimal" value={f.baseSalary} onChange={(e) => set('baseSalary', e.target.value.replace(/[^\d.]/g, ''))} className={inputCls} /></Field>}
         {f.payType === 'HOURLY' && (
           <div className="grid grid-cols-3 gap-3">
-            <Field label="Lương/giờ"><input inputMode="numeric" value={f.hourlyRate} onChange={(e) => set('hourlyRate', e.target.value.replace(/[^\d]/g, ''))} className={inputCls} /></Field>
+            <Field label={`Lương/giờ (${sym})`}><input inputMode="decimal" value={f.hourlyRate} onChange={(e) => set('hourlyRate', e.target.value.replace(/[^\d.]/g, ''))} className={inputCls} /></Field>
             <Field label="Hệ số OT"><input inputMode="decimal" value={f.otMultiplierNormal} onChange={(e) => set('otMultiplierNormal', e.target.value)} className={inputCls} /></Field>
             <Field label="Hệ số OT lễ"><input inputMode="decimal" value={f.otMultiplierHoliday} onChange={(e) => set('otMultiplierHoliday', e.target.value)} className={inputCls} /></Field>
           </div>
@@ -120,7 +128,7 @@ function WorkLogTab() {
   const [sourceId, setSourceId] = useState<number | null>(null);
   const [month, setMonth] = useState(monthStr());
   const [logs, setLogs] = useState<WorkLog[]>([]);
-  const [totals, setTotals] = useState<{ hoursNormal: string; hoursOT: string; hoursOTHoliday: string; expectedPay: string } | null>(null);
+  const [totals, setTotals] = useState<{ hoursNormal: string; hoursOT: string; hoursOTHoliday: string; expectedPay: string; currency?: string } | null>(null);
   const [dayEdit, setDayEdit] = useState<string | null>(null);
 
   useEffect(() => { financeApi.listSources().then((s) => { const hourly = s.filter((x) => x.payType === 'HOURLY'); setSources(hourly); setSourceId(hourly[0]?.id ?? null); }); }, []);
@@ -169,7 +177,7 @@ function WorkLogTab() {
             <div><div className="text-text-muted">Giờ thường</div><div className="font-semibold text-text-primary">{Number(totals.hoursNormal)}h</div></div>
             <div><div className="text-text-muted">Giờ OT</div><div className="font-semibold text-text-primary">{Number(totals.hoursOT)}h</div></div>
             <div><div className="text-text-muted">OT lễ</div><div className="font-semibold text-text-primary">{Number(totals.hoursOTHoliday)}h</div></div>
-            <div><div className="text-text-muted">Lương dự kiến</div><div className="font-semibold text-neon-green">{formatVnd(totals.expectedPay)}</div></div>
+            <div><div className="text-text-muted">Lương dự kiến</div><div className="font-semibold text-neon-green">{formatMoney(totals.expectedPay, totals.currency ?? 'VND')}</div></div>
           </div>
         </Card>
       )}
@@ -246,7 +254,7 @@ function EntriesTab() {
                   <div className="truncate text-sm text-text-primary">{e.note || INCOME_TYPES[e.type] || 'Thu nhập'}</div>
                   <div className="text-xs text-text-muted">{INCOME_TYPES[e.type]} · {e.date.slice(0, 10)}</div>
                 </div>
-                <div className="text-sm font-medium tabular-nums text-neon-green">+{formatVnd(e.amount)}</div>
+                <div className="text-sm font-medium tabular-nums text-neon-green">+{formatMoney(e.amount, e.currency)}</div>
                 <button onClick={async () => { if (confirm('Xoá?')) { await financeApi.deleteIncomeEntry(e.id); toast.success('Đã xoá'); load(); } }} className="rounded-lg p-1 text-text-muted opacity-0 transition-opacity hover:text-neon-red group-hover:opacity-100"><Trash2 size={14} /></button>
               </div>
             ))}
@@ -267,24 +275,48 @@ function IncomeEntryForm({ sources, wallets, onClose, onSaved }: { sources: Inco
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [note, setNote] = useState('');
   const [saving, setSaving] = useState(false);
+
+  const selectedSource = sources.find((s) => s.id === sourceId) ?? null;
+  const walletCurrency = wallets.find((w) => w.id === walletId)?.currency ?? 'VND';
+  // Amount is entered in the source's currency (or the wallet's when no source).
+  const inputCurrency = selectedSource?.currency ?? walletCurrency;
+  const sym = inputCurrency === 'USD' ? '$' : '₫';
+  const crossCurrency = inputCurrency !== walletCurrency;
+
+  // When picking a source, prefer a wallet that already matches its currency.
+  useEffect(() => {
+    if (!selectedSource) return;
+    const match = wallets.find((w) => w.currency === selectedSource.currency);
+    if (match && match.currency !== walletCurrency) setWalletId(match.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceId]);
+
   const save = async () => {
     if (!Number(amount)) { toast.error('Nhập số tiền'); return; }
     setSaving(true);
     try { await financeApi.createIncomeEntry({ amount: Number(amount), type, sourceId: sourceId || null, walletId, date, note: note || undefined }); toast.success('Đã ghi thu'); onSaved(); }
-    catch { toast.error('Lưu thất bại'); } finally { setSaving(false); }
+    catch (e) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'Lưu thất bại');
+    } finally { setSaving(false); }
   };
   return (
     <Sheet open onClose={onClose} title="Ghi khoản thu">
       <div className="space-y-3">
-        <Field label="Số tiền"><input inputMode="numeric" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))} className={cn(inputCls, 'text-lg font-semibold')} /></Field>
+        <Field label={`Số tiền (${sym})`}><input inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ''))} className={cn(inputCls, 'text-lg font-semibold')} /></Field>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Loại"><select value={type} onChange={(e) => setType(e.target.value)} className={inputCls}>{Object.keys(INCOME_TYPES).map((t) => <option key={t} value={t}>{INCOME_TYPES[t]}</option>)}</select></Field>
-          <Field label="Nguồn"><select value={sourceId} onChange={(e) => setSourceId(e.target.value ? Number(e.target.value) : '')} className={inputCls}><option value="">— Không —</option>{sources.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select></Field>
+          <Field label="Nguồn"><select value={sourceId} onChange={(e) => setSourceId(e.target.value ? Number(e.target.value) : '')} className={inputCls}><option value="">— Không —</option>{sources.map((s) => <option key={s.id} value={s.id}>{s.name}{s.currency === 'USD' ? ' ($)' : ''}</option>)}</select></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Ví nhận"><select value={walletId} onChange={(e) => setWalletId(Number(e.target.value))} className={inputCls}>{wallets.map((w) => <option key={w.id} value={w.id}>{w.icon} {w.name}</option>)}</select></Field>
+          <Field label="Ví nhận"><select value={walletId} onChange={(e) => setWalletId(Number(e.target.value))} className={inputCls}>{wallets.map((w) => <option key={w.id} value={w.id}>{w.icon} {w.name}{w.currency === 'USD' ? ' ($)' : ''}</option>)}</select></Field>
           <Field label="Ngày"><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputCls} /></Field>
         </div>
+        {crossCurrency && (
+          <div className="rounded-xl bg-neon-cyan/10 px-3 py-2 text-xs text-neon-cyan">
+            Nguồn thu khác tiền tệ với ví — số tiền ({sym}) sẽ được quy đổi sang {walletCurrency === 'USD' ? '$' : '₫'} theo tỷ giá hiện hành (xem mục Tỷ giá).
+          </div>
+        )}
         <Field label="Ghi chú"><input value={note} onChange={(e) => setNote(e.target.value)} className={inputCls} /></Field>
         <Button onClick={save} disabled={saving} className="w-full">{saving ? 'Đang lưu…' : 'Lưu'}</Button>
       </div>

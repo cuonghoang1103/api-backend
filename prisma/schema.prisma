@@ -4400,6 +4400,7 @@ model IncomeSource {
   payType             String   @map("pay_type") @db.VarChar(20) // MONTHLY | HOURLY | PER_JOB
   baseSalary          Decimal? @map("base_salary") @db.Decimal(18, 2) // for MONTHLY
   hourlyRate          Decimal? @map("hourly_rate") @db.Decimal(18, 2) // for HOURLY
+  currency            String   @default("VND") @db.VarChar(8) // VND | USD — what baseSalary/hourlyRate are denominated in
   otMultiplierNormal  Decimal  @default(1.5) @map("ot_multiplier_normal") @db.Decimal(4, 2)
   otMultiplierHoliday Decimal  @default(2.0) @map("ot_multiplier_holiday") @db.Decimal(4, 2)
   isActive            Boolean  @default(true) @map("is_active")

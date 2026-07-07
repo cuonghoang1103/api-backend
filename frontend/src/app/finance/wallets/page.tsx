@@ -50,6 +50,15 @@ export default function WalletsPage() {
         </div>
       </div>
 
+      {/* Grand total across both currencies — only meaningful once a USD wallet
+          exists AND a rate is set (otherwise USD can't be folded into VND). */}
+      {hasUsdWallet && rate && (
+        <div className="mb-3">
+          <StatCard label="Tổng số dư (quy đổi ₫)" value={totalVnd + totalUsd * rate} accent="savings"
+            sub={<span className="text-text-muted">≈ <b className="text-neon-green">{eqUsd(totalVnd + totalUsd * rate)}</b> · tỷ giá {formatMoney(rate, 'VND')}/$</span>} />
+        </div>
+      )}
+
       <div className={cn('mb-4 grid gap-3', hasUsdWallet && 'sm:grid-cols-2')}>
         <StatCard label="Tổng số dư ₫ (ví hoạt động)" value={totalVnd}
           sub={rate ? <span className="text-text-muted">≈ <b className="text-neon-cyan">{eqUsd(totalVnd)}</b> · tỷ giá {formatMoney(rate, 'VND')}/$</span> : undefined} />

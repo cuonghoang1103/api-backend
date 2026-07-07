@@ -549,9 +549,18 @@ export async function createCollection(
   if (existing) throw new BadRequestError('Bạn đã có bộ sưu tập trùng tên');
   const count = await prisma.langVocabCollection.count({ where: { userId, languageId: language.id } });
   if (count >= 50) throw new BadRequestError('Tối đa 50 bộ sưu tập mỗi ngôn ngữ');
-  return prisma.langVocabCollection.create({
-    data: { userId, languageId: language.id, name, icon, order: count },
-  });
+  try {
+    return await prisma.langVocabCollection.create({
+      data: { userId, languageId: language.id, name, icon, order: count },
+    });
+  } catch (err) {
+    // Double-submit (Enter + click) races past the findFirst check and hits
+    // the unique constraint — the first request already created it.
+    if ((err as { code?: string } | null)?.code === 'P2002') {
+      throw new BadRequestError('Bạn đã có bộ sưu tập trùng tên');
+    }
+    throw err;
+  }
 }
 
 async function getOwnedCollection(userId: number, collectionId: number) {
@@ -581,7 +590,14 @@ export async function updateCollection(
     data.name = name;
   }
   if (body.icon !== undefined) data.icon = optStr(body.icon, 16);
-  return prisma.langVocabCollection.update({ where: { id: collectionId }, data });
+  try {
+    return await prisma.langVocabCollection.update({ where: { id: collectionId }, data });
+  } catch (err) {
+    if ((err as { code?: string } | null)?.code === 'P2002') {
+      throw new BadRequestError('Bạn đã có bộ sưu tập trùng tên');
+    }
+    throw err;
+  }
 }
 
 export async function deleteCollection(userId: number, collectionId: number) {

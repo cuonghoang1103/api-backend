@@ -11,7 +11,7 @@ import { useParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, Eye, Gauge, Headphones, Pause, Play, Repeat } from 'lucide-react';
 import { toast } from 'sonner';
-import { languageApi } from '@/lib/language-api';
+import { fetchAllPages, languageApi } from '@/lib/language-api';
 import type { ListeningItem } from '@/types/language';
 import {
   CardsSkeleton,
@@ -326,10 +326,12 @@ export default function ListeningPage() {
   useEffect(() => {
     let alive = true;
     setLoading(true);
-    languageApi
-      .listening(code)
-      .then((res) => {
-        if (alive) setItems(res.data.data ?? []);
+    fetchAllPages(async ({ page, limit }) => {
+      const res = await languageApi.listening(code, { page, limit });
+      return res.data.data ?? [];
+    })
+      .then((all) => {
+        if (alive) setItems(all);
       })
       .catch(() => {
         if (alive) toast.error('Không tải được danh sách bài nghe');

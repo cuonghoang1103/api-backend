@@ -88,7 +88,10 @@ export default function AlphabetPage() {
   const [groups, setGroups] = useState<AlphabetGroup[] | null>(null);
   const [hideRomaji, setHideRomaji] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
-  const [active, setActive] = useState<{ parentKey: string; groupId: number } | null>(null);
+  // Selected sub-board PER section (key → groupId) so several sections can be
+  // open — each showing its own board — at the same time. Sections without an
+  // entry fall back to their first board, so an opened section always renders.
+  const [activeBoard, setActiveBoard] = useState<Record<string, number>>({});
 
   useEffect(() => {
     let alive = true;
@@ -100,11 +103,7 @@ export default function AlphabetPage() {
         setGroups(data);
         const sections = buildSections(data, code);
         const first = sections[0];
-        if (first) {
-          setExpanded(new Set([first.key]));
-          const firstChild = first.children[0];
-          if (firstChild) setActive({ parentKey: first.key, groupId: firstChild.group.id });
-        }
+        if (first) setExpanded(new Set([first.key]));
       })
       .catch(() => {
         if (alive) setGroups([]);
@@ -117,17 +116,12 @@ export default function AlphabetPage() {
   const sections = useMemo(() => (groups ? buildSections(groups, code) : []), [groups, code]);
 
   const toggleParent = (section: ParentSection) => {
-    const willOpen = !expanded.has(section.key);
     setExpanded((prev) => {
       const next = new Set(prev);
       if (next.has(section.key)) next.delete(section.key);
       else next.add(section.key);
       return next;
     });
-    if (willOpen && active?.parentKey !== section.key) {
-      const firstChild = section.children[0];
-      if (firstChild) setActive({ parentKey: section.key, groupId: firstChild.group.id });
-    }
   };
 
   const toolbar = (
@@ -169,9 +163,9 @@ export default function AlphabetPage() {
           {sections.map((section) => {
             const isOpen = expanded.has(section.key);
             const activeChild =
-              active?.parentKey === section.key
-                ? section.children.find((c) => c.group.id === active.groupId) ?? null
-                : null;
+              section.children.find((c) => c.group.id === activeBoard[section.key]) ??
+              section.children[0] ??
+              null;
             return (
               <div key={section.key} className="card overflow-hidden rounded-2xl p-0">
                 <button
@@ -211,8 +205,10 @@ export default function AlphabetPage() {
                             {section.children.map((child) => (
                               <Chip
                                 key={child.group.id}
-                                active={active?.parentKey === section.key && active.groupId === child.group.id}
-                                onClick={() => setActive({ parentKey: section.key, groupId: child.group.id })}
+                                active={activeChild?.group.id === child.group.id}
+                                onClick={() =>
+                                  setActiveBoard((prev) => ({ ...prev, [section.key]: child.group.id }))
+                                }
                               >
                                 {child.subLabel}
                               </Chip>
@@ -225,10 +221,15 @@ export default function AlphabetPage() {
                             {activeChild.group.description && (
                               <p className="mb-3 text-sm text-text-muted">{activeChild.group.description}</p>
                             )}
-                            <KanaGrid items={activeChild.group.items} hideRomaji={hideRomaji} mode={activeChild.mode} />
+                            <KanaGrid
+                              items={activeChild.group.items}
+                              hideRomaji={hideRomaji}
+                              mode={activeChild.mode}
+                              code={code}
+                            />
                           </>
                         ) : (
-                          <p className="py-6 text-center text-sm text-text-muted">Chọn một bảng để xem.</p>
+                          <p className="py-6 text-center text-sm text-text-muted">Nhóm này chưa có bảng.</p>
                         )}
                       </div>
                     </motion.div>

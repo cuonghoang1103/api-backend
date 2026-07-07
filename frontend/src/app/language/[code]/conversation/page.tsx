@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MessagesSquare, Mic, Pause, Play, Square, X } from 'lucide-react';
 import { toast } from 'sonner';
-import { languageApi } from '@/lib/language-api';
+import { fetchAllPages, languageApi } from '@/lib/language-api';
 import type { ConversationItem } from '@/types/language';
 import {
   CardsSkeleton,
@@ -306,10 +306,12 @@ export default function ConversationPage() {
   useEffect(() => {
     let alive = true;
     setLoading(true);
-    languageApi
-      .conversation(code)
-      .then((res) => {
-        if (alive) setItems(res.data.data ?? []);
+    fetchAllPages(async ({ page, limit }) => {
+      const res = await languageApi.conversation(code, { page, limit });
+      return res.data.data ?? [];
+    })
+      .then((all) => {
+        if (alive) setItems(all);
       })
       .catch(() => {
         if (alive) toast.error('Không tải được nội dung giao tiếp');

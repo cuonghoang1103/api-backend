@@ -10,7 +10,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { HelpCircle, ChevronDown, Shuffle } from 'lucide-react';
-import { languageApi } from '@/lib/language-api';
+import { fetchAllPages, languageApi } from '@/lib/language-api';
 import type { QnaItem } from '@/types/language';
 import {
   SectionShell,
@@ -29,10 +29,12 @@ export default function QnaPage() {
 
   useEffect(() => {
     let alive = true;
-    languageApi
-      .qna(code)
-      .then((res) => {
-        if (alive) setItems(res.data.data ?? []);
+    fetchAllPages(async ({ page, limit }) => {
+      const res = await languageApi.qna(code, { page, limit });
+      return res.data.data ?? [];
+    })
+      .then((all) => {
+        if (alive) setItems(all);
       })
       .catch(() => {
         if (alive) setItems([]);

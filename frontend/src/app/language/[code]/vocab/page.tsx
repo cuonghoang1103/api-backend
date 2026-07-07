@@ -1127,7 +1127,9 @@ function CollectionSheet({
 
   const create = async () => {
     const n = name.trim();
-    if (!n) return;
+    // busy guard: Enter + click "Tạo" can fire together — the second request
+    // would trip the DB unique constraint after the first one succeeds.
+    if (!n || busy) return;
     setBusy(true);
     try {
       await languageApi.createCollection({ code, name: n });
@@ -1144,7 +1146,7 @@ function CollectionSheet({
 
   const rename = async (id: number) => {
     const n = editName.trim();
-    if (!n) return;
+    if (!n || busy) return;
     setBusy(true);
     try {
       await languageApi.updateCollection(id, { name: n });

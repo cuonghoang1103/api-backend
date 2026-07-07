@@ -81,6 +81,24 @@ export const languageApi = {
     api.delete(`/my-language/collections/${id}/words/${wordId}`),
 };
 
+/**
+ * Drain a paginated list endpoint (backend caps limit at 100, default 20).
+ * Section pages (grammar/conversation/qna/reading/listening) show the whole
+ * catalogue at once, so they loop pages until a short batch signals the end.
+ */
+export async function fetchAllPages<T>(
+  fetchPage: (params: { page: number; limit: number }) => Promise<T[]>,
+): Promise<T[]> {
+  const limit = 100;
+  const all: T[] = [];
+  for (let page = 1; page <= 30; page++) {
+    const batch = await fetchPage({ page, limit });
+    all.push(...batch);
+    if (batch.length < limit) break;
+  }
+  return all;
+}
+
 // ─── Admin CRUD ──────────────────────────────────────────────────
 type AnyRecord = Record<string, unknown>;
 

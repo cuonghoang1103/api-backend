@@ -10,7 +10,7 @@ import { useParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { GraduationCap, ChevronDown, AlertTriangle, GitCompare, Check } from 'lucide-react';
 import { toast } from 'sonner';
-import { languageApi } from '@/lib/language-api';
+import { fetchAllPages, languageApi } from '@/lib/language-api';
 import type { GrammarPoint } from '@/types/language';
 import {
   SectionShell,
@@ -39,15 +39,19 @@ export default function GrammarPage() {
   useEffect(() => {
     let alive = true;
     setLoading(true);
-    languageApi
-      .grammar(code, level === ALL ? {} : { level })
-      .then((res) => {
-        if (!alive) return;
-        const data = res.data.data;
-        setItems(data?.items ?? []);
-        // Only replace the level set from the unfiltered ("Tất cả") view so
-        // filtering never shrinks the available chips.
-        if (level === ALL) setLevels(data?.levels ?? []);
+    fetchAllPages(async ({ page, limit }) => {
+      const res = await languageApi.grammar(code, {
+        ...(level === ALL ? {} : { level }),
+        page,
+        limit,
+      });
+      // Only replace the level set from the unfiltered ("Tất cả") view so
+      // filtering never shrinks the available chips.
+      if (alive && page === 1 && level === ALL) setLevels(res.data.data?.levels ?? []);
+      return res.data.data?.items ?? [];
+    })
+      .then((all) => {
+        if (alive) setItems(all);
       })
       .catch(() => {
         if (alive) setItems([]);

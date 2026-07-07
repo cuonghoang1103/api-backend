@@ -22,7 +22,7 @@ import {
   AArrowDown,
   Type,
 } from 'lucide-react';
-import { languageApi } from '@/lib/language-api';
+import { fetchAllPages, languageApi } from '@/lib/language-api';
 import { getImageUrl } from '@/lib/utils';
 import type { ReadingArticle, DictionaryEntry } from '@/types/language';
 import {
@@ -85,10 +85,12 @@ export default function ReadingPage() {
 
   useEffect(() => {
     let alive = true;
-    languageApi
-      .reading(code)
-      .then((res) => {
-        if (alive) setArticles(res.data.data ?? []);
+    fetchAllPages(async ({ page, limit }) => {
+      const res = await languageApi.reading(code, { page, limit });
+      return res.data.data ?? [];
+    })
+      .then((all) => {
+        if (alive) setArticles(all);
       })
       .catch(() => {
         if (alive) setArticles([]);

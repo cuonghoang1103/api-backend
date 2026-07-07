@@ -265,14 +265,29 @@ if (config.nodeEnv === 'development' || config.nodeEnv === 'test') {
 }
 
 // ─── 8. Rate Limiting ───────────────────────────────────────
+// Rate-limit key: the RIGHTMOST X-Forwarded-For entry — the one our
+// own Nginx appended — falling back to req.ip. The first/leftmost
+// entry is client-supplied and therefore spoofable: keying on it let
+// anyone bypass the limiter entirely by rotating fake XFF values
+// (verified 2026-07-07). The rightmost entry is written by our proxy,
+// so clients can't forge it.
+const clientIpKey = (req: Request): string => {
+  const xff = (req.headers['x-forwarded-for'] as string | undefined)
+    ?.split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return xff?.[xff.length - 1] || req.ip || 'unknown';
+};
+
 // Giới hạn chung cho tất cả /api/* endpoints
-// Raised from 100 → 500 per 15min to accommodate:
-//   - QuotaIndicator polling every 30s
-//   - Embed jobs auto-refresh every 10s
-//   - Multiple browser tabs
+// Raised 100 → 500 → 2000 per 15min: 500 (~33 req/min) was exhausted
+// by a single legitimate power user (several tabs: QuotaIndicator
+// polls every 30s, embed jobs every 10s, messenger, music player),
+// which locked their IP out of the whole API for the rest of the
+// window and looked like a full backend outage (2026-07-07).
 const generalLimiter = rateLimit({
   windowMs: config.rateLimitWindowMs, // 15 phút
-  max: parseInt(process.env.RATE_LIMIT_MAX || '500', 10),
+  max: parseInt(process.env.RATE_LIMIT_MAX || '2000', 10),
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -287,12 +302,7 @@ const generalLimiter = rateLimit({
       || path.startsWith('/v1/admin/embed-jobs')
       || path.startsWith('/auth/admin-check');
   },
-  keyGenerator: (req: Request): string => {
-    // Dùng X-Forwarded-For nếu có proxy
-    return (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()
-      || req.ip
-      || 'unknown';
-  },
+  keyGenerator: clientIpKey,
 });
 
 // Giới hạn riêng cho auth endpoints (ngăn brute force)
@@ -316,16 +326,14 @@ const authLimiter = rateLimit({
   // in on phone, then desktop) tripped the limit.
   windowMs: config.nodeEnv === 'production' ? 60 * 1000 : 60 * 1000,
   max: (req: Request) => {
+    // Judge "local" by the unspoofable client key, not the forgeable
+    // first X-Forwarded-For entry (spoofing XFF: 127.0.0.1 used to
+    // grant the relaxed 100/min budget to anyone).
+    const clientIp = clientIpKey(req);
     const host = req.headers.host || '';
-    const forwardedFor = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || '';
-    const ip = req.ip || '';
-    const isLocalDebug = host.includes('localhost')
-      || host.includes('127.0.0.1')
-      || forwardedFor === '127.0.0.1'
-      || forwardedFor === '::1'
-      || ip === '127.0.0.1'
-      || ip === '::1'
-      || ip.endsWith('127.0.0.1');
+    const isLocalDebug = (host.includes('localhost') || host.includes('127.0.0.1'))
+      ? (clientIp === '127.0.0.1' || clientIp === '::1' || clientIp.endsWith('127.0.0.1'))
+      : (clientIp === '127.0.0.1' || clientIp === '::1');
 
     if (isLocalDebug) {
       return 100;
@@ -345,17 +353,11 @@ const authLimiter = rateLimit({
     message: 'Too many authentication attempts. Please wait 1 minute and try again.',
     code: 'AUTH_RATE_LIMITED',
   },
-  keyGenerator: (req: Request): string => {
-    // Prefer Cloudflare's CF-Connecting-IP header (the user's real
-    // IP, set by the Cloudflare edge). Fall back to the first hop in
-    // X-Forwarded-For, then req.ip (which now correctly resolves
-    // through our updated `trust proxy` setting).
-    const cfIp = (req.headers['cf-connecting-ip'] as string | undefined)?.trim();
-    if (cfIp) return cfIp;
-    return (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()
-      || req.ip
-      || 'unknown';
-  },
+  // Same unspoofable key as the general limiter. The previous version
+  // preferred CF-Connecting-IP / the first X-Forwarded-For entry, but
+  // with no Cloudflare in front both are client-forgeable headers —
+  // an attacker could rotate them to sidestep the brute-force limit.
+  keyGenerator: clientIpKey,
 });
 
 // Giới hạn riêng cho upload endpoint

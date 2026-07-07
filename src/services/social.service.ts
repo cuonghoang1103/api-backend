@@ -71,6 +71,10 @@ export interface CreatePostInput {
   // straight through `...postData` into the create, so no extra wiring
   // is needed beyond accepting it here.
   videoCategoryId?: number | null;
+  // Composer checkbox "Hiện ở mục Tất cả". Only honoured for VIDEO posts
+  // that picked a category; every other combination is forced to true in
+  // createPost so a post can never become invisible on every surface.
+  showInAll?: boolean;
   media?: Array<{
     type: string;
     url: string;
@@ -247,6 +251,14 @@ export async function createPost(input: CreatePostInput) {
       // doesn't care about extra fields at the type level — it
       // only validates at query time.)
       type: resolvedType,
+      // "Hiện ở mục Tất cả" — only a VIDEO post WITH a category may opt
+      // out of the no-category feeds; anything else is forced visible so
+      // a post can't end up hidden everywhere (e.g. unchecked box but no
+      // category picked, or a plain text post).
+      showInAll:
+        resolvedType === 'VIDEO' && postData.videoCategoryId
+          ? postData.showInAll !== false
+          : true,
       // Phase 3 — music sticker. We pass these top-level (not
       // through `...postData`) because the destructure above
       // already stripped them out into `input` directly. Both
@@ -621,8 +633,11 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       ...(hashtag ? { content: { contains: `#${hashtag}`, mode: 'insensitive' as const } } : {}),
       // Content-type tab filter (Bài viết / Video / File). Omitted = all.
       ...(type ? { type } : {}),
-      // Video-category filter (home feed video pills). Omitted = all categories.
-      ...(videoCategoryId ? { videoCategoryId } : {}),
+      // Video-category filter (home feed video pills). Omitted = all
+      // categories — but then posts that opted out of "Tất cả"
+      // (showInAll=false) are excluded. Profile feeds (authorId) skip the
+      // exclusion so an author always sees their own posts in full.
+      ...(videoCategoryId ? { videoCategoryId } : authorId ? {} : { showInAll: true }),
       // "Popular" tab: scope to last 7 days so the ranking doesn't
       // freeze on all-time favourites. We sort by composite score
       // below (likes*2 + comments + saves).
@@ -790,6 +805,9 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
 export async function getFeedCounts(options: { visibility?: string } = {}) {
   const where = {
     ...(options.visibility ? { visibility: options.visibility } : {}),
+    // Match what the "Tất cả" surfaces actually render: posts that opted
+    // out of the no-category feeds don't count toward the tab badges.
+    showInAll: true,
   };
   const grouped = await prisma.socialPost.groupBy({
     by: ['type'],

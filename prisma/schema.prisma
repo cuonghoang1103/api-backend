@@ -1585,6 +1585,13 @@ model SocialPost {
   // for VIDEO posts. Powers the per-category filter pills on the home
   // feed. SetNull so deleting a category doesn't delete the videos.
   videoCategoryId Int?       @map("video_category_id")
+  // Composer checkbox "Hiện ở mục Tất cả". Only meaningful for VIDEO
+  // posts that picked a category: when false the post is EXCLUDED from
+  // every feed query that has no videoCategoryId filter (the "Tất cả"
+  // type tab and the "Tất cả" video pill) and only surfaces under its
+  // own category pill. Defaults to true so all existing rows and all
+  // non-video posts keep today's behaviour unchanged.
+  showInAll       Boolean    @default(true) @map("show_in_all")
   // Instagram-style music attach (Phase 3 add). When set, the
   // PostCard renders a small "🎵 <track title> — <artist>" sticker
   // overlay on the first media tile. Tapping the sticker opens

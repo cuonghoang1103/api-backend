@@ -121,6 +121,9 @@ export interface SocialPost {
   // Optional video category (IT, Game, Music…) — only set on VIDEO posts.
   videoCategoryId?: number | null;
   videoCategory?: { id: number; name: string; slug: string } | null;
+  // "Hiện ở mục Tất cả" — false only for VIDEO posts with a category
+  // that opted out of the no-category feeds. Default true.
+  showInAll?: boolean;
   visibility: 'PUBLIC' | 'FRIENDS' | 'PRIVATE';
   latitude?: number | null;
   longitude?: number | null;

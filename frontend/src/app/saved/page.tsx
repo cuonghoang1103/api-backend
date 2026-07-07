@@ -150,7 +150,7 @@ export default function SavedPostsPage() {
 
   return (
     <main
-      className="relative mx-auto w-full max-w-3xl px-4 pt-6 pb-24"
+      className="relative mx-auto w-full max-w-3xl px-4 pt-24 pb-24"
       style={{ color: '#e2e8f0' }}
     >
       {/* Page header */}

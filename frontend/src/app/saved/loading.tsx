@@ -2,7 +2,7 @@
 // the layout: tab pills + post grid.
 export default function Loading() {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6 sm:py-10">
+    <div className="max-w-5xl mx-auto px-4 pt-24 pb-6 sm:pb-10">
       {/* Header */}
       <div className="mb-6 space-y-2">
         <div className="shimmer-track h-9 w-40 rounded" />

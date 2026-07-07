@@ -1290,6 +1290,9 @@ export const socialApi = {
     type?: 'POST' | 'VIDEO' | 'FILE';
     // Optional video category (only meaningful for VIDEO posts).
     videoCategoryId?: number | null;
+    // "Hiện ở mục Tất cả" checkbox. Only honoured for VIDEO posts with a
+    // category; false = the post only surfaces under its category pill.
+    showInAll?: boolean;
     media?: Array<{
       type: string;
       url: string;

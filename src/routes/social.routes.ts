@@ -126,7 +126,7 @@ router.post(
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = getUserId(req);
-      const { content, visibility, latitude, longitude, locationName, media, poll, youtubeUrl, type, musicTrackId, musicStartSec, videoCategoryId } = req.body;
+      const { content, visibility, latitude, longitude, locationName, media, poll, youtubeUrl, type, musicTrackId, musicStartSec, videoCategoryId, showInAll } = req.body;
 
       // Content-type bucket for the feed tabs. Accept only the known
       // values; anything else (or omitted) → undefined, which lets the
@@ -182,6 +182,9 @@ router.post(
         youtubeUrl: cleanedYoutubeUrl,
         type: cleanedType,
         videoCategoryId: cleanedVideoCategoryId,
+        // "Hiện ở mục Tất cả" checkbox. Non-boolean → undefined, which the
+        // service treats as the default (visible everywhere).
+        showInAll: typeof showInAll === 'boolean' ? showInAll : undefined,
         // Phase 3 add — Instagram-style music sticker. When set,
         // we look up the track exists + is active before passing
         // through to the service. Invalid trackId is silently

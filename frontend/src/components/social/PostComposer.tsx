@@ -71,9 +71,10 @@ export function PostComposer() {
   const {
     composerContent, composerVisibility, composerMedia, composerPoll, isPosting,
     composerYouTubeUrl, composerType, composerVideoCategoryId,
+    composerVideoShowInAll,
     composerMusicTrack,
     setComposerContent: setComposerContentRaw, setComposerVisibility, setComposerPoll, setComposerYouTubeUrl,
-    setComposerType, setComposerVideoCategoryId,
+    setComposerType, setComposerVideoCategoryId, setComposerVideoShowInAll,
     // Phase 5: music picker now writes the picked track + snippet
     // bounds into the store (not local state). Previously the
     // local state was used which meant the value never made it
@@ -271,6 +272,22 @@ export function PostComposer() {
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComposerContent(e.target.value);
     adjustTextareaHeight();
+  };
+
+  // ─── Clipboard paste (Cmd/Ctrl+V) ────────────────────────────────
+  // Pasting a screenshot / copied image (or any file) into the
+  // textarea routes it through the same handleFiles pipeline as the
+  // file picker and drag-and-drop — signed upload, progress, preview,
+  // rollback all shared. Plain text pastes are untouched: we only
+  // preventDefault when the clipboard actually carries files, so the
+  // browser would otherwise paste the file NAME as text.
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const files = Array.from(e.clipboardData?.files ?? []);
+    if (files.length === 0) return;
+    e.preventDefault();
+    setIsExpanded(true);
+    handleFiles(files);
+    toast.success(files.length === 1 ? 'Đã dán ảnh — đang tải lên…' : `Đã dán ${files.length} tệp — đang tải lên…`);
   };
 
   const handleImageUpload = useCallback(() => {
@@ -546,6 +563,7 @@ export function PostComposer() {
                 ref={textareaRef}
                 value={composerContent}
                 onChange={handleContentChange}
+                onPaste={handlePaste}
                 onFocus={() => setIsExpanded(true)}
                 placeholder="Bạn đang nghĩ gì thế?"
                 rows={1}
@@ -711,18 +729,39 @@ export function PostComposer() {
                   in the admin panel; when there are none the picker is
                   hidden entirely. */}
               {isExpanded && composerType === 'VIDEO' && videoCategories.length > 0 && (
-                <div className="mt-3 flex items-center gap-2">
-                  <label className="text-[12.5px] font-medium text-text-secondary">Danh mục</label>
-                  <select
-                    value={composerVideoCategoryId ?? ''}
-                    onChange={(e) => setComposerVideoCategoryId(e.target.value ? Number(e.target.value) : null)}
-                    className="min-h-[32px] rounded-full border border-theme-light bg-theme-surface px-3 py-1 text-[12.5px] text-text-primary outline-none focus:ring-1 focus:ring-neon-violet/40"
-                  >
-                    <option value="">— Chưa phân loại —</option>
-                    {videoCategories.map((c) => (
-                      <option key={c.id} value={c.id}>{c.name}</option>
-                    ))}
-                  </select>
+                <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <div className="flex items-center gap-2">
+                    <label className="text-[12.5px] font-medium text-text-secondary">Danh mục</label>
+                    <select
+                      value={composerVideoCategoryId ?? ''}
+                      onChange={(e) => setComposerVideoCategoryId(e.target.value ? Number(e.target.value) : null)}
+                      className="min-h-[32px] rounded-full border border-theme-light bg-theme-surface px-3 py-1 text-[12.5px] text-text-primary outline-none focus:ring-1 focus:ring-neon-violet/40"
+                    >
+                      <option value="">— Chưa phân loại —</option>
+                      {videoCategories.map((c) => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  {/* "Hiện ở mục Tất cả" — only offered once a category is
+                      picked (unchecking without a category would make the
+                      video invisible everywhere; the backend forces it to
+                      true in that case anyway). Checked by default so the
+                      existing behaviour is a no-op unless the user opts out. */}
+                  {composerVideoCategoryId != null && (
+                    <label
+                      className="flex min-h-[32px] cursor-pointer select-none items-center gap-1.5 text-[12.5px] font-medium text-text-secondary hover:text-text-primary"
+                      title="Bỏ tích: video chỉ hiện trong danh mục đã chọn, không hiện ở mục Tất cả"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={composerVideoShowInAll}
+                        onChange={(e) => setComposerVideoShowInAll(e.target.checked)}
+                        className="h-3.5 w-3.5 accent-violet-500"
+                      />
+                      Hiện ở mục Tất cả
+                    </label>
+                  )}
                 </div>
               )}
 

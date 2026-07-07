@@ -26,11 +26,17 @@ import {
   X,
   RotateCcw,
   ChevronRight,
+  Heart,
+  FolderPlus,
+  Folder,
+  Pencil,
+  Trash2,
+  Plus,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { languageApi } from '@/lib/language-api';
-import type { VocabCategory, VocabWord, LangLearnStatus } from '@/types/language';
+import type { VocabCategory, VocabCollection, VocabWord, LangLearnStatus } from '@/types/language';
 import {
   SectionShell,
   SpeakerButton,
@@ -46,6 +52,8 @@ import { getImageUrl } from '@/lib/utils';
 
 // ─── Constants / helpers ─────────────────────────────────────────
 type View = 'list' | 'cards' | 'quiz';
+/** Word source: a vocab category, the ❤️ favorites deck, or a user collection. */
+type SourceKind = 'category' | 'favorites' | 'collection';
 
 const STATUS_ORDER: LangLearnStatus[] = ['NEW', 'LEARNING', 'REVIEWING', 'MASTERED'];
 const PAGE_SIZE = 20;
@@ -100,6 +108,24 @@ function VocabInner() {
   const [reviewMode, setReviewMode] = useState(false);
   const [statuses, setStatuses] = useState<Map<number, LangLearnStatus>>(new Map());
 
+  // Favorites & user collections (word sources besides categories)
+  const [srcKind, setSrcKind] = useState<SourceKind>('category');
+  const [activeColl, setActiveColl] = useState<number | null>(null);
+  const [collections, setCollections] = useState<VocabCollection[]>([]);
+  const [favIds, setFavIds] = useState<Set<number>>(new Set());
+  // null = closed; 'manage' = manage-only; otherwise the add-target
+  const [collSheet, setCollSheet] = useState<null | 'manage' | { word?: VocabWord; categoryId?: number }>(null);
+
+  const refreshCollections = useCallback(async () => {
+    if (!isAuthenticated) return;
+    try {
+      const res = await languageApi.collections(code);
+      setCollections(res.data.data);
+    } catch {
+      /* non-fatal */
+    }
+  }, [code, isAuthenticated]);
+
   // ─── Bootstrap: categories + languageId + optional review deck ──
   useEffect(() => {
     let alive = true;
@@ -146,6 +172,28 @@ function VocabInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
+  // ─── Favorites ids + collections (hearts & source chips) ────────
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    let alive = true;
+    (async () => {
+      try {
+        const [idsRes, collRes] = await Promise.all([
+          languageApi.favoriteIds(code),
+          languageApi.collections(code),
+        ]);
+        if (!alive) return;
+        setFavIds(new Set(idsRes.data.data));
+        setCollections(collRes.data.data);
+      } catch {
+        /* non-fatal — hearts just stay empty */
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [code, isAuthenticated]);
+
   // ─── Debounce search ───────────────────────────────────────────
   useEffect(() => {
     const t = setTimeout(() => setDebounced(search), 350);
@@ -163,6 +211,14 @@ function VocabInner() {
         if (q) {
           const res = await languageApi.vocabSearch(code, q);
           setWords(res.data.data);
+          setTotalPages(1);
+        } else if (srcKind === 'favorites') {
+          const res = await languageApi.favorites(code);
+          setWords(res.data.data.items);
+          setTotalPages(1);
+        } else if (srcKind === 'collection' && activeColl != null) {
+          const res = await languageApi.collectionWords(activeColl);
+          setWords(res.data.data.items);
           setTotalPages(1);
         } else if (activeCat != null) {
           const res = await languageApi.vocab(code, {
@@ -184,7 +240,7 @@ function VocabInner() {
         setLoadingMore(false);
       }
     },
-    [code, debounced, activeCat, reviewMode],
+    [code, debounced, activeCat, reviewMode, srcKind, activeColl],
   );
 
   useEffect(() => {
@@ -213,6 +269,94 @@ function VocabInner() {
       }
     },
     [statuses],
+  );
+
+  // ─── Favorite toggle (optimistic) ──────────────────────────────
+  const toggleFav = useCallback(
+    async (word: VocabWord) => {
+      if (!isAuthenticated) {
+        toast.error('Đăng nhập để lưu từ yêu thích');
+        return;
+      }
+      const wasFav = favIds.has(word.id);
+      setFavIds((prev) => {
+        const nx = new Set(prev);
+        if (wasFav) nx.delete(word.id);
+        else nx.add(word.id);
+        return nx;
+      });
+      // Bỏ tim khi đang xem danh sách Yêu thích → gỡ khỏi list luôn
+      if (wasFav && srcKind === 'favorites') setWords((prev) => prev.filter((w) => w.id !== word.id));
+      try {
+        await languageApi.favoriteToggle(word.id);
+      } catch {
+        setFavIds((prev) => {
+          const nx = new Set(prev);
+          if (wasFav) nx.add(word.id);
+          else nx.delete(word.id);
+          return nx;
+        });
+        toast.error('Không lưu được, thử lại nhé');
+      }
+    },
+    [favIds, isAuthenticated, srcKind],
+  );
+
+  const pickCategory = useCallback((id: number) => {
+    setSrcKind('category');
+    setActiveColl(null);
+    setActiveCat(id);
+  }, []);
+
+  const pickFavorites = useCallback(() => {
+    setSrcKind('favorites');
+    setActiveColl(null);
+  }, []);
+
+  const pickCollection = useCallback((id: number) => {
+    setSrcKind('collection');
+    setActiveColl(id);
+  }, []);
+
+  // Add a word / a whole category into a collection (from the sheet)
+  const addToCollection = useCallback(
+    async (collectionId: number, target: { word?: VocabWord; categoryId?: number }) => {
+      try {
+        const body = target.word ? { wordIds: [target.word.id] } : { categoryId: target.categoryId };
+        const res = await languageApi.addToCollection(collectionId, body);
+        const { added } = res.data.data;
+        const collName = collections.find((c) => c.id === collectionId)?.name ?? 'bộ sưu tập';
+        toast.success(
+          added > 0
+            ? `Đã thêm ${added} từ vào “${collName}”`
+            : `Tất cả từ đã có sẵn trong “${collName}”`,
+        );
+        setCollSheet(null);
+        void refreshCollections();
+        if (srcKind === 'collection' && activeColl === collectionId) {
+          void loadWords({ append: false, page: 1 });
+        }
+      } catch {
+        toast.error('Không thêm được vào bộ sưu tập');
+      }
+    },
+    [collections, refreshCollections, srcKind, activeColl, loadWords],
+  );
+
+  // Remove one word while viewing a collection
+  const removeFromActiveCollection = useCallback(
+    async (word: VocabWord) => {
+      if (activeColl == null) return;
+      setWords((prev) => prev.filter((w) => w.id !== word.id));
+      try {
+        await languageApi.removeFromCollection(activeColl, word.id);
+        void refreshCollections();
+      } catch {
+        toast.error('Không gỡ được từ khỏi bộ sưu tập');
+        void loadWords({ append: false, page: 1 });
+      }
+    },
+    [activeColl, refreshCollections, loadWords],
   );
 
   // ─── CSV export ────────────────────────────────────────────────
@@ -285,7 +429,11 @@ function VocabInner() {
         <div className="mb-4 space-y-3">
           <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {categories.map((c) => (
-              <Chip key={c.id} active={c.id === activeCat} onClick={() => setActiveCat(c.id)}>
+              <Chip
+                key={c.id}
+                active={srcKind === 'category' && c.id === activeCat}
+                onClick={() => pickCategory(c.id)}
+              >
                 <span className="inline-flex items-center gap-1.5">
                   {c.icon && <span aria-hidden>{c.icon}</span>}
                   {c.name}
@@ -296,6 +444,49 @@ function VocabInner() {
               </Chip>
             ))}
           </div>
+
+          {/* Personal sources: ❤️ favorites + named collections (playlists) */}
+          {isAuthenticated && (
+            <div className="-mx-1 flex items-center gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <Chip active={srcKind === 'favorites'} onClick={pickFavorites}>
+                <span className="inline-flex items-center gap-1.5">
+                  <Heart size={13} className={srcKind === 'favorites' ? 'fill-current' : ''} />
+                  Yêu thích
+                  <span className="text-text-muted">({favIds.size})</span>
+                </span>
+              </Chip>
+              {collections.map((cl) => (
+                <Chip
+                  key={cl.id}
+                  active={srcKind === 'collection' && cl.id === activeColl}
+                  onClick={() => pickCollection(cl.id)}
+                >
+                  <span className="inline-flex items-center gap-1.5">
+                    <span aria-hidden>{cl.icon || '📁'}</span>
+                    {cl.name}
+                    <span className="text-text-muted">({cl.wordCount})</span>
+                  </span>
+                </Chip>
+              ))}
+              <button
+                type="button"
+                onClick={() => setCollSheet('manage')}
+                className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-text-muted ring-1 ring-[var(--border-color)] transition hover:text-neon-violet hover:ring-neon-violet/40"
+              >
+                <Plus size={13} /> Bộ sưu tập
+              </button>
+              {srcKind === 'category' && activeCat != null && (
+                <button
+                  type="button"
+                  onClick={() => setCollSheet({ categoryId: activeCat })}
+                  title="Lưu cả chủ đề này vào một bộ sưu tập"
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-text-muted ring-1 ring-[var(--border-color)] transition hover:text-neon-violet hover:ring-neon-violet/40"
+                >
+                  <FolderPlus size={13} /> Lưu cả chủ đề
+                </button>
+              )}
+            </div>
+          )}
           <div className="relative">
             <Search
               size={16}
@@ -326,11 +517,15 @@ function VocabInner() {
         <CardsSkeleton />
       ) : empty ? (
         <EmptyState
-          title="Chưa có từ vựng"
+          title={srcKind === 'favorites' ? 'Chưa có từ yêu thích' : srcKind === 'collection' ? 'Bộ sưu tập trống' : 'Chưa có từ vựng'}
           hint={
             reviewMode
               ? 'Không có từ nào cần ôn hôm nay. Quay lại sau nhé!'
-              : 'Danh mục này chưa có từ, hãy chọn danh mục khác.'
+              : srcKind === 'favorites'
+                ? 'Bấm ♥ trên một từ bất kỳ để thêm vào đây.'
+                : srcKind === 'collection'
+                  ? 'Bấm nút ＋ trên từ (hoặc "Lưu cả chủ đề") để thêm từ vào bộ sưu tập.'
+                  : 'Danh mục này chưa có từ, hãy chọn danh mục khác.'
           }
         />
       ) : view === 'list' ? (
@@ -339,22 +534,72 @@ function VocabInner() {
           statuses={statuses}
           isAuthenticated={isAuthenticated}
           onCycle={cycleStatus}
-          canLoadMore={!debounced.trim() && page < totalPages}
+          favIds={favIds}
+          onToggleFav={toggleFav}
+          onAddToCollection={(w) => setCollSheet({ word: w })}
+          onRemoveFromCollection={srcKind === 'collection' ? removeFromActiveCollection : undefined}
+          canLoadMore={srcKind === 'category' && !debounced.trim() && page < totalPages}
           loadingMore={loadingMore}
           onLoadMore={loadMore}
         />
       ) : view === 'cards' ? (
-        <FlashcardsView words={words} isAuthenticated={isAuthenticated} reduced={reduced} />
+        <FlashcardsView
+          words={words}
+          isAuthenticated={isAuthenticated}
+          reduced={reduced}
+          favIds={favIds}
+          onToggleFav={toggleFav}
+        />
       ) : (
         <QuizView
           words={words}
           languageId={languageId}
-          categoryId={reviewMode ? null : activeCat}
+          categoryId={srcKind === 'category' && !reviewMode ? activeCat : null}
           isAuthenticated={isAuthenticated}
           reduced={reduced}
         />
       )}
+
+      {/* Collection sheet: create/rename/delete + add word/category target */}
+      {collSheet !== null && (
+        <CollectionSheet
+          code={code}
+          collections={collections}
+          target={collSheet === 'manage' ? null : collSheet}
+          onPick={(id) => {
+            if (collSheet !== 'manage') void addToCollection(id, collSheet);
+          }}
+          onChanged={refreshCollections}
+          onClose={() => setCollSheet(null)}
+          onDeleted={(id) => {
+            if (srcKind === 'collection' && activeColl === id) {
+              setSrcKind('category');
+              setActiveColl(null);
+            }
+          }}
+        />
+      )}
     </SectionShell>
+  );
+}
+
+// ─── Heart button (favorite toggle) ──────────────────────────────
+function HeartButton({ active, onClick, size = 15 }: { active: boolean; onClick: () => void; size?: number }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={active ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}
+      aria-label={active ? 'Bỏ yêu thích' : 'Thêm vào yêu thích'}
+      aria-pressed={active}
+      className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition ${
+        active
+          ? 'text-neon-pink'
+          : 'text-text-muted hover:text-neon-pink'
+      }`}
+    >
+      <Heart size={size} className={active ? 'fill-current' : ''} />
+    </button>
   );
 }
 
@@ -364,6 +609,10 @@ function ListView({
   statuses,
   isAuthenticated,
   onCycle,
+  favIds,
+  onToggleFav,
+  onAddToCollection,
+  onRemoveFromCollection,
   canLoadMore,
   loadingMore,
   onLoadMore,
@@ -372,6 +621,10 @@ function ListView({
   statuses: Map<number, LangLearnStatus>;
   isAuthenticated: boolean;
   onCycle: (w: VocabWord) => void;
+  favIds: Set<number>;
+  onToggleFav: (w: VocabWord) => void;
+  onAddToCollection: (w: VocabWord) => void;
+  onRemoveFromCollection?: (w: VocabWord) => void;
   canLoadMore: boolean;
   loadingMore: boolean;
   onLoadMore: () => void;
@@ -414,7 +667,30 @@ function ListView({
                   )}
                 </div>
                 {isAuthenticated && (
-                  <StatusPill status={statuses.get(w.id) ?? 'NEW'} onClick={() => onCycle(w)} />
+                  <div className="flex shrink-0 items-center gap-0.5">
+                    <HeartButton active={favIds.has(w.id)} onClick={() => onToggleFav(w)} />
+                    <button
+                      type="button"
+                      onClick={() => onAddToCollection(w)}
+                      title="Lưu vào bộ sưu tập"
+                      aria-label="Lưu vào bộ sưu tập"
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-full text-text-muted transition hover:text-neon-violet"
+                    >
+                      <FolderPlus size={15} />
+                    </button>
+                    {onRemoveFromCollection && (
+                      <button
+                        type="button"
+                        onClick={() => onRemoveFromCollection(w)}
+                        title="Gỡ khỏi bộ sưu tập này"
+                        aria-label="Gỡ khỏi bộ sưu tập này"
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-full text-text-muted transition hover:text-neon-pink"
+                      >
+                        <X size={15} />
+                      </button>
+                    )}
+                    <StatusPill status={statuses.get(w.id) ?? 'NEW'} onClick={() => onCycle(w)} />
+                  </div>
                 )}
               </div>
               <p className="mt-2 text-text-primary">{w.meaningVi}</p>
@@ -456,10 +732,14 @@ function FlashcardsView({
   words,
   isAuthenticated,
   reduced,
+  favIds,
+  onToggleFav,
 }: {
   words: VocabWord[];
   isAuthenticated: boolean;
   reduced: boolean;
+  favIds: Set<number>;
+  onToggleFav: (w: VocabWord) => void;
 }) {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -544,8 +824,11 @@ function FlashcardsView({
 
   return (
     <div className="mx-auto max-w-xl">
-      <div className="mb-3 text-center text-sm font-medium text-text-muted">
-        {index + 1} / {words.length}
+      <div className="mb-3 flex items-center justify-center gap-2 text-sm font-medium text-text-muted">
+        <span>
+          {index + 1} / {words.length}
+        </span>
+        {isAuthenticated && <HeartButton active={favIds.has(w.id)} onClick={() => onToggleFav(w)} size={14} />}
       </div>
 
       <div className="[perspective:1200px]">
@@ -814,6 +1097,216 @@ function QuizView({
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+// ─── Collection sheet (create / rename / delete / pick target) ───
+function CollectionSheet({
+  code,
+  collections,
+  target,
+  onPick,
+  onChanged,
+  onClose,
+  onDeleted,
+}: {
+  code: string;
+  collections: VocabCollection[];
+  /** When set, clicking a collection adds this word/category into it. */
+  target: { word?: VocabWord; categoryId?: number } | null;
+  onPick: (collectionId: number) => void;
+  onChanged: () => void;
+  onClose: () => void;
+  onDeleted: (collectionId: number) => void;
+}) {
+  const [name, setName] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editName, setEditName] = useState('');
+
+  const create = async () => {
+    const n = name.trim();
+    if (!n) return;
+    setBusy(true);
+    try {
+      await languageApi.createCollection({ code, name: n });
+      setName('');
+      onChanged();
+      toast.success(`Đã tạo bộ sưu tập “${n}”`);
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'Không tạo được bộ sưu tập');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const rename = async (id: number) => {
+    const n = editName.trim();
+    if (!n) return;
+    setBusy(true);
+    try {
+      await languageApi.updateCollection(id, { name: n });
+      setEditingId(null);
+      onChanged();
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'Không đổi tên được');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const remove = async (cl: VocabCollection) => {
+    if (!window.confirm(`Xoá bộ sưu tập “${cl.name}”? Các từ trong đó không bị mất khỏi từ điển.`)) return;
+    setBusy(true);
+    try {
+      await languageApi.deleteCollection(cl.id);
+      onDeleted(cl.id);
+      onChanged();
+      toast.success('Đã xoá bộ sưu tập');
+    } catch {
+      toast.error('Không xoá được bộ sưu tập');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Bộ sưu tập từ vựng"
+    >
+      <div
+        className="max-h-[80vh] w-full max-w-md overflow-y-auto rounded-t-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 shadow-2xl sm:rounded-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-base font-semibold text-text-primary">
+            {target
+              ? target.word
+                ? `Lưu “${target.word.word}” vào…`
+                : 'Lưu cả chủ đề vào…'
+              : 'Bộ sưu tập của bạn'}
+          </h3>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Đóng"
+            className="rounded-full p-1.5 text-text-muted hover:text-text-primary"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Create new */}
+        <div className="mb-3 flex gap-2">
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') void create();
+            }}
+            placeholder="Tên bộ sưu tập mới… (vd: Từ khó, Ôn thi N5)"
+            maxLength={120}
+            className="min-w-0 flex-1 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => void create()}
+            disabled={busy || !name.trim()}
+            className="inline-flex shrink-0 items-center gap-1 rounded-xl bg-neon-violet/20 px-3 py-2 text-sm font-medium text-neon-violet ring-1 ring-neon-violet/40 transition hover:bg-neon-violet/30 disabled:opacity-50"
+          >
+            <Plus size={14} /> Tạo
+          </button>
+        </div>
+
+        {/* List */}
+        {collections.length === 0 ? (
+          <p className="py-6 text-center text-sm text-text-muted">
+            Chưa có bộ sưu tập nào — tạo một cái ở trên nhé.
+          </p>
+        ) : (
+          <div className="space-y-1.5">
+            {collections.map((cl) => (
+              <div
+                key={cl.id}
+                className="flex items-center gap-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2"
+              >
+                {editingId === cl.id ? (
+                  <>
+                    <input
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') void rename(cl.id);
+                        if (e.key === 'Escape') setEditingId(null);
+                      }}
+                      maxLength={120}
+                      autoFocus
+                      className="min-w-0 flex-1 rounded-lg border border-neon-violet/40 bg-[var(--bg-card)] px-2 py-1 text-sm text-text-primary focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => void rename(cl.id)}
+                      disabled={busy}
+                      className="rounded-full p-1.5 text-neon-green hover:bg-neon-green/10"
+                      aria-label="Lưu tên"
+                    >
+                      <Check size={15} />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => (target ? onPick(cl.id) : undefined)}
+                      disabled={busy}
+                      className={`flex min-w-0 flex-1 items-center gap-2 text-left text-sm text-text-primary ${
+                        target ? 'cursor-pointer hover:text-neon-violet' : 'cursor-default'
+                      }`}
+                    >
+                      <span aria-hidden>{cl.icon || <Folder size={15} className="text-text-muted" />}</span>
+                      <span className="truncate font-medium">{cl.name}</span>
+                      <span className="shrink-0 text-xs text-text-muted">({cl.wordCount} từ)</span>
+                      {target && <ChevronRight size={14} className="ml-auto shrink-0 text-text-muted" />}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingId(cl.id);
+                        setEditName(cl.name);
+                      }}
+                      className="rounded-full p-1.5 text-text-muted hover:text-neon-violet"
+                      aria-label={`Đổi tên ${cl.name}`}
+                    >
+                      <Pencil size={13} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void remove(cl)}
+                      className="rounded-full p-1.5 text-text-muted hover:text-neon-pink"
+                      aria-label={`Xoá ${cl.name}`}
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {target && (
+          <p className="mt-3 text-center text-xs text-text-muted">
+            Chạm vào một bộ sưu tập để lưu. Từ trùng sẽ tự bỏ qua.
+          </p>
+        )}
+      </div>
     </div>
   );
 }

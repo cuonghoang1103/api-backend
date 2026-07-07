@@ -51,6 +51,68 @@ publicRouter.get('/stats', authenticate, async (req: Request, res: Response<ApiR
   } catch (err) { next(err); }
 });
 
+// Favorites & collections (per-user vocab playlists). Fixed paths — must
+// stay above the '/:code' wildcard like the SRS routes.
+publicRouter.post('/favorites/toggle', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.toggleFavorite(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/favorites/:code', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getFavorites(req.userId!, req.params.code) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/favorites/:code/ids', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getFavoriteIds(req.userId!, req.params.code) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/collections', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.listCollections(req.userId!, String(req.query.code ?? '')) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.post('/collections', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.status(201).json({ success: true, data: await svc.createCollection(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.put('/collections/:id', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.updateCollection(req.userId!, Number(req.params.id), req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.delete('/collections/:id', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.deleteCollection(req.userId!, Number(req.params.id)) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/collections/:id/words', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getCollectionWords(req.userId!, Number(req.params.id)) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.post('/collections/:id/words', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.addWordsToCollection(req.userId!, Number(req.params.id), req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.delete('/collections/:id/words/:wordId', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.removeWordFromCollection(req.userId!, Number(req.params.id), Number(req.params.wordId)) });
+  } catch (err) { next(err); }
+});
+
 // Per-language public content
 publicRouter.get('/:code', async (req, res: Response<ApiResponse>, next) => {
   try {

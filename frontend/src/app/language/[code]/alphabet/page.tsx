@@ -51,15 +51,18 @@ function subLabelOf(name: string): string {
   return 'Cơ bản';
 }
 
-/** KanaGrid rendering mode for a group. */
-function modeOf(name: string): KanaMode {
+/** KanaGrid rendering mode for a group. Vowel-aligned gojūon columns are a
+ * kana-specific layout — every other language (EN A–Z/IPA, ZH pinyin…) gets
+ * the plain wrapped `flat` grid. */
+function modeOf(name: string, code: string): KanaMode {
+  if (code !== 'ja') return 'flat';
   if (name.includes('ghép') || name.includes('Yōon')) return 'yoon';
   if (name.includes('Ký hiệu') || name.includes('đặc biệt')) return 'flat';
   if (name.startsWith('Kanji')) return 'flat';
   return 'gojuon';
 }
 
-function buildSections(groups: AlphabetGroup[]): ParentSection[] {
+function buildSections(groups: AlphabetGroup[], code: string): ParentSection[] {
   const byKey = new Map<string, { section: ParentSection; priority: number }>();
   for (const group of groups) {
     const p = parentOf(group.name);
@@ -71,7 +74,7 @@ function buildSections(groups: AlphabetGroup[]): ParentSection[] {
     entry.section.children.push({
       group,
       subLabel: subLabelOf(group.name),
-      mode: modeOf(group.name),
+      mode: modeOf(group.name, code),
     });
   }
   return [...byKey.values()].sort((a, b) => a.priority - b.priority).map((e) => e.section);
@@ -95,7 +98,7 @@ export default function AlphabetPage() {
         if (!alive) return;
         const data = res.data.data ?? [];
         setGroups(data);
-        const sections = buildSections(data);
+        const sections = buildSections(data, code);
         const first = sections[0];
         if (first) {
           setExpanded(new Set([first.key]));
@@ -111,7 +114,7 @@ export default function AlphabetPage() {
     };
   }, [code]);
 
-  const sections = useMemo(() => (groups ? buildSections(groups) : []), [groups]);
+  const sections = useMemo(() => (groups ? buildSections(groups, code) : []), [groups, code]);
 
   const toggleParent = (section: ParentSection) => {
     const willOpen = !expanded.has(section.key);

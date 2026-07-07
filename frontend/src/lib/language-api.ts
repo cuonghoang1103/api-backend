@@ -12,6 +12,7 @@ import type {
   LanguageOverview,
   AlphabetGroup,
   VocabCategory,
+  VocabCollection,
   VocabWord,
   GrammarPoint,
   ListeningItem,
@@ -58,6 +59,26 @@ export const languageApi = {
   quizResult: (body: { languageId: number; categoryId?: number | null; score: number; total: number }): Res<unknown> =>
     api.post('/my-language/quiz-result', body),
   stats: (languageCode?: string): Res<LearningStats> => api.get('/my-language/stats', { params: { languageCode } }),
+
+  // ─── Favorites & collections (per-user vocab playlists) ──────
+  favoriteToggle: (wordId: number): Res<{ wordId: number; favorited: boolean }> =>
+    api.post('/my-language/favorites/toggle', { wordId }),
+  favorites: (code: string): Res<{ count: number; items: VocabWord[] }> =>
+    api.get(`/my-language/favorites/${code}`),
+  favoriteIds: (code: string): Res<number[]> => api.get(`/my-language/favorites/${code}/ids`),
+  collections: (code: string): Res<VocabCollection[]> =>
+    api.get('/my-language/collections', { params: { code } }),
+  createCollection: (body: { code: string; name: string; icon?: string | null }): Res<VocabCollection> =>
+    api.post('/my-language/collections', body),
+  updateCollection: (id: number, body: { name?: string; icon?: string | null }): Res<VocabCollection> =>
+    api.put(`/my-language/collections/${id}`, body),
+  deleteCollection: (id: number): Res<{ deleted: boolean }> => api.delete(`/my-language/collections/${id}`),
+  collectionWords: (id: number): Res<{ collection: { id: number; name: string; icon?: string | null }; count: number; items: VocabWord[] }> =>
+    api.get(`/my-language/collections/${id}/words`),
+  addToCollection: (id: number, body: { wordIds?: number[]; categoryId?: number }): Res<{ added: number; requested: number }> =>
+    api.post(`/my-language/collections/${id}/words`, body),
+  removeFromCollection: (id: number, wordId: number): Res<{ removed: boolean }> =>
+    api.delete(`/my-language/collections/${id}/words/${wordId}`),
 };
 
 // ─── Admin CRUD ──────────────────────────────────────────────────

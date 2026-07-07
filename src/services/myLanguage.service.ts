@@ -473,6 +473,178 @@ export async function getStats(userId: number, languageCode?: string) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// FAVORITES & COLLECTIONS (per-user vocab playlists)
+// ═══════════════════════════════════════════════════════════════
+
+const WORD_INCLUDE = {
+  pronunciations: { orderBy: { order: 'asc' } },
+  category: { select: { id: true, name: true, icon: true, languageId: true } },
+} satisfies Prisma.LangVocabWordInclude;
+
+/** Toggle ❤️ on a vocab word. Returns the new state. */
+export async function toggleFavorite(userId: number, body: { wordId?: unknown }) {
+  const wordId = toInt(body.wordId, 'wordId');
+  const word = await prisma.langVocabWord.findUnique({ where: { id: wordId }, select: { id: true } });
+  if (!word) throw new NotFoundError('Không tìm thấy từ vựng');
+
+  const existing = await prisma.langVocabFavorite.findUnique({
+    where: { userId_wordId: { userId, wordId } },
+  });
+  if (existing) {
+    await prisma.langVocabFavorite.delete({ where: { id: existing.id } });
+    return { wordId, favorited: false };
+  }
+  await prisma.langVocabFavorite.create({ data: { userId, wordId } });
+  return { wordId, favorited: true };
+}
+
+/** All favorited words of one language, hydrated for list/flashcards/quiz. */
+export async function getFavorites(userId: number, code: string) {
+  const language = await getLanguageOrThrow(code);
+  const favorites = await prisma.langVocabFavorite.findMany({
+    where: { userId, word: { category: { languageId: language.id } } },
+    orderBy: { createdAt: 'desc' },
+    include: { word: { include: WORD_INCLUDE } },
+  });
+  return { count: favorites.length, items: favorites.map((f) => f.word) };
+}
+
+/** Only the favorited word ids of one language — cheap call for painting hearts. */
+export async function getFavoriteIds(userId: number, code: string) {
+  const language = await getLanguageOrThrow(code);
+  const favorites = await prisma.langVocabFavorite.findMany({
+    where: { userId, word: { category: { languageId: language.id } } },
+    select: { wordId: true },
+  });
+  return favorites.map((f) => f.wordId);
+}
+
+export async function listCollections(userId: number, code: string) {
+  const language = await getLanguageOrThrow(code);
+  const collections = await prisma.langVocabCollection.findMany({
+    where: { userId, languageId: language.id },
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
+    include: { _count: { select: { words: true } } },
+  });
+  return collections.map((c) => ({
+    id: c.id,
+    name: c.name,
+    icon: c.icon,
+    order: c.order,
+    wordCount: c._count.words,
+    createdAt: c.createdAt,
+  }));
+}
+
+export async function createCollection(
+  userId: number,
+  body: { code?: unknown; name?: unknown; icon?: unknown },
+) {
+  const language = await getLanguageOrThrow(String(body.code ?? ''));
+  const name = cleanStr(body.name, 'Tên bộ sưu tập', { required: true, max: 120 });
+  const icon = optStr(body.icon, 16);
+  const existing = await prisma.langVocabCollection.findFirst({
+    where: { userId, languageId: language.id, name: { equals: name, mode: 'insensitive' } },
+  });
+  if (existing) throw new BadRequestError('Bạn đã có bộ sưu tập trùng tên');
+  const count = await prisma.langVocabCollection.count({ where: { userId, languageId: language.id } });
+  if (count >= 50) throw new BadRequestError('Tối đa 50 bộ sưu tập mỗi ngôn ngữ');
+  return prisma.langVocabCollection.create({
+    data: { userId, languageId: language.id, name, icon, order: count },
+  });
+}
+
+async function getOwnedCollection(userId: number, collectionId: number) {
+  const collection = await prisma.langVocabCollection.findUnique({ where: { id: collectionId } });
+  if (!collection || collection.userId !== userId) throw new NotFoundError('Không tìm thấy bộ sưu tập');
+  return collection;
+}
+
+export async function updateCollection(
+  userId: number,
+  collectionId: number,
+  body: { name?: unknown; icon?: unknown },
+) {
+  const collection = await getOwnedCollection(userId, collectionId);
+  const data: Prisma.LangVocabCollectionUpdateInput = {};
+  if (body.name !== undefined) {
+    const name = cleanStr(body.name, 'Tên bộ sưu tập', { required: true, max: 120 });
+    const dup = await prisma.langVocabCollection.findFirst({
+      where: {
+        userId,
+        languageId: collection.languageId,
+        name: { equals: name, mode: 'insensitive' },
+        id: { not: collectionId },
+      },
+    });
+    if (dup) throw new BadRequestError('Bạn đã có bộ sưu tập trùng tên');
+    data.name = name;
+  }
+  if (body.icon !== undefined) data.icon = optStr(body.icon, 16);
+  return prisma.langVocabCollection.update({ where: { id: collectionId }, data });
+}
+
+export async function deleteCollection(userId: number, collectionId: number) {
+  await getOwnedCollection(userId, collectionId);
+  await prisma.langVocabCollection.delete({ where: { id: collectionId } });
+  return { deleted: true };
+}
+
+/**
+ * Add words to a collection — either an explicit `wordIds` list or a whole
+ * vocab category (`categoryId`, "lưu cả chủ đề"). Duplicates are skipped.
+ */
+export async function addWordsToCollection(
+  userId: number,
+  collectionId: number,
+  body: { wordIds?: unknown; categoryId?: unknown },
+) {
+  const collection = await getOwnedCollection(userId, collectionId);
+
+  let wordIds: number[] = [];
+  if (Array.isArray(body.wordIds)) {
+    wordIds = body.wordIds.map((v) => toInt(v, 'wordId'));
+    if (wordIds.length > 500) throw new BadRequestError('Tối đa 500 từ mỗi lần thêm');
+  }
+  const categoryId = optInt(body.categoryId);
+  if (!wordIds.length && !categoryId) throw new BadRequestError('Cần wordIds hoặc categoryId');
+
+  // Only accept words that exist AND belong to the collection's language.
+  const where: Prisma.LangVocabWordWhereInput = categoryId
+    ? { categoryId, category: { languageId: collection.languageId } }
+    : { id: { in: wordIds }, category: { languageId: collection.languageId } };
+  const words = await prisma.langVocabWord.findMany({ where, select: { id: true } });
+  if (!words.length) throw new BadRequestError('Không có từ hợp lệ để thêm');
+
+  const result = await prisma.langVocabCollectionWord.createMany({
+    data: words.map((w) => ({ collectionId, wordId: w.id })),
+    skipDuplicates: true,
+  });
+  return { added: result.count, requested: words.length };
+}
+
+export async function removeWordFromCollection(userId: number, collectionId: number, wordId: number) {
+  await getOwnedCollection(userId, collectionId);
+  await prisma.langVocabCollectionWord.deleteMany({ where: { collectionId, wordId } });
+  return { removed: true };
+}
+
+/** Hydrated words of one collection — source for list/flashcards/quiz. */
+export async function getCollectionWords(userId: number, collectionId: number) {
+  const collection = await getOwnedCollection(userId, collectionId);
+  const rows = await prisma.langVocabCollectionWord.findMany({
+    where: { collectionId },
+    orderBy: { createdAt: 'asc' },
+    include: { word: { include: WORD_INCLUDE } },
+  });
+  return {
+    collection: { id: collection.id, name: collection.name, icon: collection.icon },
+    count: rows.length,
+    items: rows.map((r) => r.word),
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
 // ADMIN CRUD
 // ═══════════════════════════════════════════════════════════════
 

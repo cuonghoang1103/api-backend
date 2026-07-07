@@ -268,8 +268,10 @@ model User {
   // ─── My Language — learning progress (per-user, SRS) ─────────
   // Additive. Every row is scoped by userId; SM-2 spaced repetition
   // progress + quiz history live here. See models at end of file.
-  languageProgress LangUserProgress[]
-  languageQuizzes  LangQuizResult[]
+  languageProgress     LangUserProgress[]
+  languageQuizzes      LangQuizResult[]
+  langVocabFavorites   LangVocabFavorite[]
+  langVocabCollections LangVocabCollection[]
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -4016,6 +4018,7 @@ model Language {
   readingArticles   LangReadingArticle[]
   qnaItems          LangQnaItem[]
   quizResults       LangQuizResult[]
+  vocabCollections  LangVocabCollection[]
 
   @@index([isActive, order], name: "idx_languages_active_order")
   @@map("languages")
@@ -4090,8 +4093,10 @@ model LangVocabWord {
   // added by the migration and queried via $queryRawUnsafe. It is
   // intentionally NOT declared here (Prisma can't express it).
 
-  category       LangVocabCategory        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  pronunciations LangVocabPronunciation[]
+  category        LangVocabCategory         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  pronunciations  LangVocabPronunciation[]
+  favorites       LangVocabFavorite[]
+  collectionWords LangVocabCollectionWord[]
 
   @@index([categoryId, order], name: "idx_lang_vocab_words_category")
   @@map("lang_vocab_words")
@@ -4249,6 +4254,54 @@ model LangQuizResult {
 
   @@index([userId, languageId, createdAt(sort: Desc)], name: "idx_lang_quiz_user_lang")
   @@map("lang_quiz_results")
+}
+
+// ===== FAVORITES & COLLECTIONS (per-user vocab playlists) =====
+model LangVocabFavorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  wordId    Int      @map("word_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  word LangVocabWord @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, wordId], map: "uk_lang_vocab_fav_user_word")
+  @@index([userId, createdAt(sort: Desc)], name: "idx_lang_vocab_fav_user")
+  @@map("lang_vocab_favorites")
+}
+
+model LangVocabCollection {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  languageId Int      @map("language_id")
+  name       String   @db.VarChar(120)
+  icon       String?  @db.VarChar(16) // emoji
+  order      Int      @default(0)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user     User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language Language                  @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  words    LangVocabCollectionWord[]
+
+  @@unique([userId, languageId, name], map: "uk_lang_vocab_coll_user_name")
+  @@index([userId, languageId, order], name: "idx_lang_vocab_coll_user_lang")
+  @@map("lang_vocab_collections")
+}
+
+model LangVocabCollectionWord {
+  id           Int      @id @default(autoincrement())
+  collectionId Int      @map("collection_id")
+  wordId       Int      @map("word_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  collection LangVocabCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  word       LangVocabWord       @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, wordId], map: "uk_lang_vocab_coll_word")
+  @@index([wordId], name: "idx_lang_vocab_coll_word_word")
+  @@map("lang_vocab_collection_words")
 }
 
 enum LangListeningSource {

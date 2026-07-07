@@ -100,6 +100,14 @@ export interface VocabCategory {
   wordCount?: number;
   _count?: { words: number };
 }
+export interface VocabCollection {
+  id: number;
+  name: string;
+  icon?: string | null;
+  order: number;
+  wordCount: number;
+  createdAt?: string;
+}
 
 export interface GrammarExample {
   sentence: string;

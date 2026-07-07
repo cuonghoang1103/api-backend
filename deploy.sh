@@ -302,6 +302,42 @@ else
  echo "$KANA_SEED_OUT" | tail -4 | sed 's/^/ /'
 fi
 
+# ── Step 3.8: English extra seed (alphabet/IPA + grammar A1→C1) ──
+info "Running English extra seed (alphabet + grammar)..."
+EN_EXTRA_OUT=$($DC exec -T backend sh -c \
+ "npx tsx prisma/seed.en-extra.ts" 2>&1) || true
+if echo "$EN_EXTRA_OUT" | grep -qiE "error|cannot find|exception|not found"; then
+ warn "EN extra seed reported errors — see /tmp/seed-en-extra.log"
+ echo "$EN_EXTRA_OUT" > /tmp/seed-en-extra.log
+else
+ ok "EN extra seed complete"
+ echo "$EN_EXTRA_OUT" | tail -4 | sed 's/^/ /'
+fi
+
+# ── Step 3.9: Japanese extra seed (vocab/grammar/conv/reading/qna) ─
+info "Running Japanese extra seed..."
+JA_EXTRA_OUT=$($DC exec -T backend sh -c \
+ "npx tsx prisma/seed.ja-extra.ts" 2>&1) || true
+if echo "$JA_EXTRA_OUT" | grep -qiE "error|cannot find|exception|not found"; then
+ warn "JA extra seed reported errors — see /tmp/seed-ja-extra.log"
+ echo "$JA_EXTRA_OUT" > /tmp/seed-ja-extra.log
+else
+ ok "JA extra seed complete"
+ echo "$JA_EXTRA_OUT" | tail -9 | sed 's/^/ /'
+fi
+
+# ── Step 3.10: Chinese seed (language + full HSK1-3 content) ─────
+info "Running Chinese (zh) seed..."
+ZH_SEED_OUT=$($DC exec -T backend sh -c \
+ "npx tsx prisma/seed.zh.ts" 2>&1) || true
+if echo "$ZH_SEED_OUT" | grep -qiE "error|cannot find|exception"; then
+ warn "ZH seed reported errors — see /tmp/seed-zh.log"
+ echo "$ZH_SEED_OUT" > /tmp/seed-zh.log
+else
+ ok "ZH seed complete"
+ echo "$ZH_SEED_OUT" | tail -12 | sed 's/^/ /'
+fi
+
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."
 backend_ok=false

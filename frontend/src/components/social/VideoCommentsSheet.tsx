@@ -12,6 +12,7 @@ import type { SocialPost } from '@/types/social';
 import { useSocialStore } from '@/store/socialStore';
 import { formatRelative } from '@/lib/formatDate';
 import { socialApi } from '@/lib/api';
+import { linkifyToNodes } from '@/lib/linkify';
 
 export default function VideoCommentsSheet({
   post, onClose, onCommentAdded,
@@ -114,7 +115,7 @@ export default function VideoCommentsSheet({
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-xs font-semibold text-white/90">{display}</p>
-                    <p className="break-words text-sm text-white/80">{c.content}</p>
+                    <p className="break-words text-sm text-white/80">{linkifyToNodes(c.content)}</p>
                     <p className="mt-0.5 text-[10px] text-white/40">{formatRelative(c.createdAt)}</p>
                   </div>
                 </div>

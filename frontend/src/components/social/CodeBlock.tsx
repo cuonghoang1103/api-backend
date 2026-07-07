@@ -4,6 +4,7 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Check, Copy } from 'lucide-react';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { linkifyToNodes } from '@/lib/linkify';
 
 // react-syntax-highlighter's Prism build ships every grammar — load it on
 // demand so it stays out of page-initial JS chunks.
@@ -138,7 +139,7 @@ export function RenderContentWithCode({ content }: { content: string }) {
   if (codeBlocks.length === 0) {
     return (
       <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }}>
-        {content}
+        {linkifyToNodes(content)}
       </p>
     );
   }
@@ -152,7 +153,7 @@ export function RenderContentWithCode({ content }: { content: string }) {
     if (beforeText.trim()) {
       parts.push(
         <p key={`text-${i}`} className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }}>
-          {beforeText}
+          {linkifyToNodes(beforeText)}
         </p>
       );
     }
@@ -172,7 +173,7 @@ export function RenderContentWithCode({ content }: { content: string }) {
   if (afterText.trim()) {
     parts.push(
       <p key="text-end" className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }}>
-        {afterText}
+        {linkifyToNodes(afterText)}
       </p>
     );
   }

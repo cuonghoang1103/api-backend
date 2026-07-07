@@ -163,7 +163,7 @@ const nextConfig = {
               // the Web Audio API. R2 music tracks are streamed
               // directly from the CDN (no backend hop), so the
               // domain must be allowed here.
-              "media-src 'self' https://api.cuongthai.com https://media.cuongthai.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com blob:",
+              "media-src 'self' https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev blob:",
               "worker-src 'self' blob:",
               "object-src 'none'",
               "base-uri 'self'",

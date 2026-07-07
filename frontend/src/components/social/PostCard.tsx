@@ -31,6 +31,8 @@ import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
 import { getMediaUrl } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { linkifyToNodes } from '@/lib/linkify';
+import SmartImage from '@/components/ui/SmartImage';
 import { getFeedSound, setFeedSound, subscribeFeedSound } from '@/lib/feedVideoSound';
 import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext, FeedSaveResult } from '@/types/social';
 import { REACTION_META, REACTION_PICKER_ORDER, WOW_META, EMPTY_REACTION_BREAKDOWN } from '@/types/social';
@@ -935,7 +937,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
               className="relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-full ring-2 ring-violet-500/20 transition-transform hover:scale-105"
               aria-label={`Xem trang cá nhân của ${authorDisplay}`}
             >
-              <img
+              <SmartImage
                 src={authorAvatar}
                 alt={authorDisplay}
                 loading="lazy"
@@ -3019,7 +3021,7 @@ function MediaItem({
       // container keeps the rounded corners clean.
       className="relative block w-full overflow-hidden bg-black/40"
     >
-      <img
+      <SmartImage
         src={imgUrl}
         alt={item.alt || ''}
         loading="lazy"
@@ -3056,7 +3058,7 @@ function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
         className="relative max-h-full max-w-3xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <img
+        <SmartImage
           src={src}
           alt="Full size"
           className="rounded-2xl"
@@ -3198,43 +3200,11 @@ function CommentItem({
     ? ((comment as any).mentions as number[])
     : [];
   const renderContent = () => {
-    const text = comment.content || '';
-    // Match @ followed by non-whitespace characters, max 30
-    // chars (matches the username limit in the registration
-    // form).
-    const re = /@([\p{L}\p{N}_.]{1,30})/gu;
-    const parts: Array<{ type: 'text' | 'mention'; value: string; idx: number }> = [];
-    let last = 0;
-    let i = 0;
-    let m: RegExpExecArray | null;
-    while ((m = re.exec(text)) !== null) {
-      if (m.index > last) {
-        parts.push({ type: 'text', value: text.slice(last, m.index), idx: i++ });
-      }
-      // We don't know the userId from the username alone
-      // (the API only stores userId, not name). The link
-      // still works as a visual hint — clicking jumps to
-      // the commenter's own profile (searchable on the
-      // server). In a future iteration the backend can
-      // resolve usernames to ids in the response.
-      parts.push({ type: 'mention', value: m[0], idx: i++ });
-      last = m.index + m[0].length;
-    }
-    if (last < text.length) {
-      parts.push({ type: 'text', value: text.slice(last), idx: i++ });
-    }
-    return parts.map((p) =>
-      p.type === 'mention' ? (
-        <span
-          key={p.idx}
-          className="text-violet-300 font-medium"
-        >
-          {p.value}
-        </span>
-      ) : (
-        <span key={p.idx}>{p.value}</span>
-      ),
-    );
+    // linkifyToNodes turns pasted URLs into clickable links AND keeps
+    // the existing @mention styling (mentions: true). @mentions are a
+    // visual hint only — clicking a link opens it in a new tab; the
+    // click is stopped from bubbling so it doesn't open the post.
+    return linkifyToNodes(comment.content || '', { mentions: true });
   };
 
   return (
@@ -3250,7 +3220,7 @@ function CommentItem({
         href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
         className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full transition-transform hover:scale-110"
       >
-        <img src={avatar} alt={display} loading="lazy" decoding="async" width={32} height={32} className="h-8 w-8 flex-shrink-0 rounded-full object-cover" />
+        <SmartImage src={avatar} alt={display} loading="lazy" decoding="async" width={32} height={32} className="h-8 w-8 flex-shrink-0 rounded-full object-cover" />
       </Link>
       <div className="flex-1 min-w-0">
         <div

@@ -9,6 +9,7 @@ import { useMessagingStore } from '@/store/messagingStore';
 import { format, formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { linkifyToNodes } from '@/lib/linkify';
 import ReactionBar from './ReactionBar';
 import toast from 'react-hot-toast';
 
@@ -201,7 +202,22 @@ export default function MessageBubble({
           </div>
         )}
 
-        {message.content && <p className="whitespace-pre-wrap break-words px-3.5 py-1.5">{message.content}</p>}
+        {message.content && (
+          <p className="whitespace-pre-wrap break-words px-3.5 py-1.5">
+            {linkifyToNodes(
+              message.content,
+              // Own bubbles have a colored background + white text, so
+              // make links white/underlined instead of the default blue.
+              isOwn
+                ? {
+                    linkClassName:
+                      'font-medium underline decoration-1 underline-offset-2 break-all hover:opacity-80 text-white',
+                    linkStyle: undefined,
+                  }
+                : {},
+            )}
+          </p>
+        )}
 
         {/* Rich media: GIF or sticker. */}
         {message.mediaUrl && message.mediaKind === 'sticker' && (

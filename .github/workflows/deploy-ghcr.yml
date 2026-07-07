@@ -212,12 +212,23 @@ jobs:
         # container and start the new one. Nginx is unaffected
         # because it talks to containers by network alias, not
         # by container name.
+        #
+        # `-p repo` pins the Compose project name. The live
+        # containers were created under project "repo", but this
+        # command runs from /opt/cuonghoangdev, where Compose would
+        # otherwise default the project to "cuonghoangdev". Without
+        # the pin, `up --force-recreate` tries to CREATE a new
+        # container named cuonghoangdev_backend while one already
+        # exists (owned by project "repo"), and Docker aborts with
+        # "container name is already in use". Pinning to "repo"
+        # makes Compose ADOPT and recreate the existing containers
+        # (and reference the same repo_* volumes/network) instead.
         run: |
           ssh vps "
             cd /opt/cuonghoangdev
             export CUONG_BACKEND_IMAGE=${{ env.BACKEND_IMAGE }}:main
             export CUONG_FRONTEND_IMAGE=${{ env.FRONTEND_IMAGE }}:main
-            docker compose \
+            docker compose -p repo \
               -f docker-compose.yml \
               -f docker-compose.ghcr.yml \
               up -d --force-recreate --no-deps backend frontend

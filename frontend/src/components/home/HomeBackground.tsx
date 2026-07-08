@@ -80,7 +80,12 @@ export default function HomeBackground() {
   const [useFallback, setUseFallback] = useState(false);
 
   useEffect(() => {
-    if (prefersReducedMotion() || isWeakDevice()) { setUseFallback(true); return; }
+    // Touch / coarse-pointer devices (phones, most tablets) get the static
+    // CSS-gradient fallback and NEVER start the rAF loop — cuts heat/jank on
+    // mobile. Desktop (fine pointer) is unaffected.
+    const coarse =
+      typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)')?.matches;
+    if (prefersReducedMotion() || isWeakDevice() || coarse) { setUseFallback(true); return; }
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d', { alpha: true });

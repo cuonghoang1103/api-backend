@@ -175,15 +175,43 @@ export default function ParticleGridBackground() {
       rafRef.current = requestAnimationFrame(loop);
     }
 
+    // Touch / coarse-pointer devices (phones, most tablets): paint one static
+    // frame and NEVER start the rAF loop — cuts heat/jank on mobile. Desktop
+    // (fine pointer) is unaffected.
+    const isCoarse =
+      typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)')?.matches;
+
     resize();
     initParticles();
+
+    const onResize = () => { resize(); initParticles(); if (isCoarse) draw(); };
+    window.addEventListener('resize', onResize);
+
+    if (isCoarse) {
+      draw(); // one static frame (grid already painted in resize())
+      return () => {
+        cancelAnimationFrame(rafRef.current);
+        window.removeEventListener('resize', onResize);
+      };
+    }
+
     loop();
 
-    const onResize = () => { resize(); initParticles(); };
-    window.addEventListener('resize', onResize);
+    // Desktop: pause the loop while the tab is hidden.
+    const onVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
+      } else if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(loop);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener('resize', onResize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
 

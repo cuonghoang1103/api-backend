@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useReduceAnimations } from '@/hooks/useIsTouch';
 import { ShoppingCart, Eye, Flame, Sparkles, Package, TrendingUp, AlertCircle, Zap, ShieldCheck, FileCode, HardDrive, Tag } from 'lucide-react';
 import Link from 'next/link';
 import SmartImage from '@/components/ui/SmartImage';
@@ -146,6 +147,7 @@ function MicroFilePreview({ product, meta, isSpotlight }: { product: Product; me
 
 // ── Trust Badges ───────────────────────────────────────────────────────────────
 function TrustBadges({ meta }: { meta: ReturnType<typeof getAssetMeta> }) {
+  const reduce = useReduceAnimations();
   return (
     <div className="flex items-center gap-3 pt-2.5 border-t" style={{ borderColor: `${c.border}40` }}>
       {/* Download counter */}
@@ -160,8 +162,8 @@ function TrustBadges({ meta }: { meta: ReturnType<typeof getAssetMeta> }) {
         <motion.div
           className="w-1.5 h-1.5 rounded-full"
           style={{ background: '#4ade80', boxShadow: '0 0 6px #4ade80' }}
-          animate={{ scale: [1, 1.3, 1], opacity: [0.8, 0.4, 0.8] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          animate={reduce ? undefined : { scale: [1, 1.3, 1], opacity: [0.8, 0.4, 0.8] }}
+          transition={reduce ? undefined : { duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         />
         <span className="font-mono font-medium">Verified Build</span>
       </div>
@@ -179,6 +181,7 @@ function TrustBadges({ meta }: { meta: ReturnType<typeof getAssetMeta> }) {
 
 // ── Spotlight Card ─────────────────────────────────────────────────────────────
 function SpotlightCard({ product, meta }: { product: Product; meta: ReturnType<typeof getAssetMeta> }) {
+  const reduce = useReduceAnimations();
   const addShopItem = useCartStore((s) => s.addShopItem);
   const discountPercent = calcDiscount(product.originalPrice, product.price);
   const safeStock = product.stock ?? 0;
@@ -211,14 +214,14 @@ function SpotlightCard({ product, meta }: { product: Product; meta: ReturnType<t
               boxShadow: `0 0 20px ${c.primary}40, 0 0 40px ${c.primary}20`,
               textShadow: '0 0 12px #e879f9',
             }}
-            animate={{ boxShadow: [`0 0 20px ${c.primary}40`, `0 0 40px ${c.primary}60`, `0 0 20px ${c.primary}40`] }}
-            transition={{ duration: 3, repeat: Infinity }}
+            animate={reduce ? undefined : { boxShadow: [`0 0 20px ${c.primary}40`, `0 0 40px ${c.primary}60`, `0 0 20px ${c.primary}40`] }}
+            transition={reduce ? undefined : { duration: 3, repeat: Infinity }}
           >
             <motion.div
               className="w-1.5 h-1.5 rounded-full bg-red-400"
               style={{ boxShadow: '0 0 8px #f87171' }}
-              animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
+              animate={reduce ? undefined : { scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
+              transition={reduce ? undefined : { duration: 1, repeat: Infinity }}
             />
             BESTSELLER ARCHITECTURE
           </motion.div>

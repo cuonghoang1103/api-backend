@@ -115,10 +115,15 @@ export default function SocialBackground() {
   useEffect(() => {
     const reduced = prefersReducedMotion();
     const weak = isWeakDevice();
+    // Touch / coarse-pointer devices (phones, most tablets): treat like a
+    // weak device — render the static gradient and NEVER start the rAF loop.
+    // Cuts heat/jank on mobile. Desktop (fine pointer) is unaffected.
+    const coarse =
+      typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)')?.matches;
     // Reduced-motion always wins: zero animation.
     if (reduced) { setFallback({ reduced: true, weak }); return; }
-    // Weak devices: static gradient only.
-    if (weak) { setFallback({ reduced: false, weak: true }); return; }
+    // Weak devices OR touch/mobile: static gradient only.
+    if (weak || coarse) { setFallback({ reduced: false, weak: true }); return; }
 
     const canvas = canvasRef.current;
     if (!canvas) return;

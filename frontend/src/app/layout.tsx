@@ -9,6 +9,7 @@ import AuthProvider from '@/components/providers/AuthProvider'
 import ToasterProvider from '@/components/providers/ToasterProvider'
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider'
 import ServiceWorkerRegister from '@/components/providers/ServiceWorkerRegister'
+import AppBootSplash from '@/components/ui/AppBootSplash'
 import AuthBoot from '@/components/providers/AuthBoot'
 import MusicAudioController from '@/components/music/MusicAudioController'
 import MusicHistoryRecorder from '@/components/music/MusicHistoryRecorder'
@@ -263,6 +264,23 @@ export default function RootLayout({
       className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable}`}
     >
       <body suppressHydrationWarning className="antialiased">
+        {/* Boot splash — rendered in the server HTML so it paints INSTANTLY
+            on first load / PWA launch (before React hydrates). AppBootSplash
+            (a client component below) fades it out once the app is ready.
+            A tiny inline script is the hard fallback so it can never stick. */}
+        <div id="app-splash" aria-hidden="true">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/favicon.png" alt="" width={96} height={96} />
+          <div className="app-splash__bar" />
+          <div className="app-splash__brand">CuongThai</div>
+        </div>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "setTimeout(function(){var s=document.getElementById('app-splash');if(s)s.remove();},7000)",
+          }}
+        />
+
         {/* No-flash theme boot: runs synchronously BEFORE first paint
             so the html element already carries .dark/.light when the
             CSS variables in globals.css resolve. Without this, SSR
@@ -298,6 +316,7 @@ export default function RootLayout({
        <ThemeProvider>
           <LocaleWrapper>
             <ServiceWorkerRegister />
+            <AppBootSplash />
             <ClientOnly>
               <Navbar />
               <CartDrawer />

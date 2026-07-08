@@ -24,6 +24,11 @@ export default function ShopBackground() {
     if (!ctx) return;
 
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    // Touch / coarse-pointer devices (phones, most tablets): paint one static
+    // frame and NEVER start the rAF loop — cuts heat/jank on mobile. Desktop
+    // (fine pointer) is unaffected.
+    const coarse =
+      typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)')?.matches;
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -94,15 +99,34 @@ export default function ShopBackground() {
     initGlows();
     drawFrame(); // paint once immediately
 
-    if (!reduce) {
-      rafRef.current = requestAnimationFrame(loop);
-    }
-
     const onResize = () => { resize(); initGlows(); drawFrame(); };
     window.addEventListener('resize', onResize);
+
+    // Mobile / reduced-motion: keep the single static frame, no loop.
+    if (reduce || coarse) {
+      return () => {
+        cancelAnimationFrame(rafRef.current);
+        window.removeEventListener('resize', onResize);
+      };
+    }
+
+    rafRef.current = requestAnimationFrame(loop);
+
+    // Desktop: pause the loop while the tab is hidden.
+    const onVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
+      } else if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(loop);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener('resize', onResize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
 

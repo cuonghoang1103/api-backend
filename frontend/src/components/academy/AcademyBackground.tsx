@@ -207,15 +207,45 @@ export default function AcademyBackground() {
       rafRef.current = requestAnimationFrame(draw);
     }
 
+    // Touch / coarse-pointer devices (phones, most tablets): paint one static
+    // frame and NEVER start the rAF loop — cuts heat/jank on mobile. Desktop
+    // (fine pointer) is unaffected.
+    const isCoarse =
+      typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)')?.matches;
+
     resize();
     init();
+
+    const onResize = () => { resize(); init(); if (isCoarse) { draw(0); cancelAnimationFrame(rafRef.current); } };
+    window.addEventListener('resize', onResize);
+
+    if (isCoarse) {
+      draw(0);                              // one static frame
+      cancelAnimationFrame(rafRef.current); // ...but don't animate
+      return () => {
+        cancelAnimationFrame(rafRef.current);
+        window.removeEventListener('resize', onResize);
+      };
+    }
+
     rafRef.current = requestAnimationFrame(draw);
 
-    const onResize = () => { resize(); init(); };
-    window.addEventListener('resize', onResize);
+    // Desktop: pause the loop while the tab is hidden.
+    const onVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
+      } else if (!rafRef.current) {
+        lastTime = performance.now();
+        rafRef.current = requestAnimationFrame(draw);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener('resize', onResize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
 

@@ -7,6 +7,7 @@ import LottieClient from '@/components/ui/LottieClient';
 import type { LottieRefCurrentProps } from 'lottie-react';
 import { useChatStore } from '@/store/chatStore';
 import { useMusicStore } from '@/store/musicStore';
+import { useReduceAnimations } from '@/hooks/useIsTouch';
 import ChatModal from './ChatModal';
 
 type RobotState = 'idle' | 'thinking' | 'typing';
@@ -35,6 +36,10 @@ export default function FloatingAIAssistant() {
  // lift the robot above the bar too so it never overlaps it (mobile only —
  // see `.ai-robot-fab` in globals.css). 84px ≈ the mini-bar's height.
  const musicActive = useMusicStore((s) => !!s.currentTrack);
+ // On touch / reduced-motion devices, render the idle bubble WITHOUT the
+ // always-looping framer animations (this component is mounted on every page,
+ // so those infinite loops run globally). Desktop/fine-pointer is unaffected.
+ const reduceAnim = useReduceAnimations();
  const lottieRef = useRef<LottieRefCurrentProps>(null);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -175,8 +180,8 @@ export default function FloatingAIAssistant() {
                       <motion.div
                         key={i}
                         className="w-1.5 h-1.5 rounded-full bg-neon-violet"
-                        animate={{ y: [0, -3, 0], opacity: [0.3, 1, 0.3] }}
-                        transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.15 }}
+                        animate={reduceAnim ? undefined : { y: [0, -3, 0], opacity: [0.3, 1, 0.3] }}
+                        transition={reduceAnim ? undefined : { duration: 0.8, repeat: Infinity, delay: i * 0.15 }}
                       />
                     ))}
                   </div>
@@ -193,7 +198,9 @@ export default function FloatingAIAssistant() {
             whileHover={{ scale: 1.12 }}
             whileTap={{ scale: 0.92 }}
             animate={
-              robotState === 'thinking'
+              reduceAnim
+                ? undefined
+                : robotState === 'thinking'
                 ? { rotate: [-3, 3, -3], transition: { duration: 0.5, repeat: Infinity } }
                 : { y: [0, -4, 0], transition: { duration: 3, repeat: Infinity, ease: 'easeInOut' } }
             }
@@ -203,8 +210,8 @@ export default function FloatingAIAssistant() {
           >
             {/* Glow ring */}
             <motion.div
-              animate={{ scale: [1, 1.12, 1], opacity: [0.25, 0.5, 0.25] }}
-              transition={{ duration: 2.5, repeat: Infinity }}
+              animate={reduceAnim ? undefined : { scale: [1, 1.12, 1], opacity: [0.25, 0.5, 0.25] }}
+              transition={reduceAnim ? undefined : { duration: 2.5, repeat: Infinity }}
               className="absolute inset-0 rounded-3xl bg-gradient-to-br from-neon-indigo via-neon-violet to-neon-fuchsia"
             />
 
@@ -223,13 +230,13 @@ export default function FloatingAIAssistant() {
           {/* Streaming dot */}
           {isStreaming && (
             <motion.div
-              animate={{ scale: [1, 1.3, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
+              animate={reduceAnim ? undefined : { scale: [1, 1.3, 1] }}
+              transition={reduceAnim ? undefined : { duration: 1, repeat: Infinity }}
               className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full border-2 border-darkbg flex items-center justify-center"
             >
               <motion.div
-                animate={{ opacity: [0.4, 1] }}
-                transition={{ duration: 0.5, repeat: Infinity }}
+                animate={reduceAnim ? undefined : { opacity: [0.4, 1] }}
+                transition={reduceAnim ? undefined : { duration: 0.5, repeat: Infinity }}
                 className="w-2 h-2 bg-white rounded-full"
               />
             </motion.div>

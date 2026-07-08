@@ -633,6 +633,31 @@ router.post(
 );
 
 // ════════════════════════════════════════════════════════════════
+// POST /api/v1/music/admin/tracks/refresh-covers
+// ────────────────────────────────────────────────────────────────
+// Batch-copy YouTube-thumbnail covers to R2 for older tracks (admin).
+// Idempotent + re-runnable: processes up to N per call, once a cover is
+// on R2 it stops matching. Long-running (fetch+upload per track).
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/admin/tracks/refresh-covers',
+  authenticate,
+  requireRole('ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const result = await musicService.refreshYoutubeCovers({ userId: req.user?.userId });
+      res.json({
+        success: true,
+        message: `Đã cập nhật ${result.updated}/${result.scanned} ảnh bìa lên R2`,
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
 // GET /api/v1/music/playlists
 // ════════════════════════════════════════════════════════════════
 router.get(

@@ -467,6 +467,23 @@ export default function AdminMusicPage() {
     }
   };
 
+  // Batch-copy old tracks' YouTube-thumbnail covers to R2. Re-runnable.
+  const [refreshingCovers, setRefreshingCovers] = useState(false);
+  const handleRefreshCovers = async () => {
+    if (refreshingCovers) return;
+    setRefreshingCovers(true);
+    const tid = toast.loading('Dang tai anh bia cu ve R2...');
+    try {
+      const res = await apiFetch('/admin/tracks/refresh-covers', { method: 'POST' });
+      toast.success(res?.message || 'Da lam moi anh bia', { id: tid });
+      fetchTracks();
+    } catch (err: any) {
+      toast.error(err?.message || 'Lam moi anh bia that bai', { id: tid });
+    } finally {
+      setRefreshingCovers(false);
+    }
+  };
+
   return (
     <div className="p-6">
       {/* Header */}
@@ -501,6 +518,15 @@ export default function AdminMusicPage() {
           >
             <Youtube className="w-4 h-4" />
             Tai YouTube URL
+          </button>
+          <button
+            onClick={handleRefreshCovers}
+            disabled={refreshingCovers}
+            title="Tai anh bia (thumbnail YouTube) cua cac bai cu ve R2"
+            className="flex items-center gap-2 px-4 py-2.5 border border-cyan-500/30 text-cyan-300 font-medium rounded-xl hover:bg-cyan-500/10 transition-colors disabled:opacity-60"
+          >
+            {refreshingCovers ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
+            Lam moi anh bia
           </button>
           <button
             onClick={() => openCreate()}

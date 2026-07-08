@@ -96,8 +96,10 @@ export default function CyberAudioVisualizer({ isPlaying }: CyberAudioVisualizer
     resize();
 
     let freqData: Uint8Array | null = null;
+    let stopped = false;
 
-    const loop = () => {
+    const frame = () => {
+      if (stopped || document.hidden) { rafRef.current = 0; return; }
       const analyser = getAudioAnalyser();
       if (analyser) {
         if (!freqData || freqData.length !== analyser.frequencyBinCount) {
@@ -108,16 +110,43 @@ export default function CyberAudioVisualizer({ isPlaying }: CyberAudioVisualizer
         freqData = null;
       }
       draw(ctx, width, height, freqData);
-      rafRef.current = requestAnimationFrame(loop);
+      rafRef.current = requestAnimationFrame(frame);
     };
 
-    loop();
+    // Only spin a continuous rAF when there's a REAL analyser AND we're
+    // playing AND the tab is visible. On mobile the Web Audio analyser is
+    // deliberately disabled (so R2 audio can play in the background), which
+    // used to leave this loop drawing a FAKE random 80-bar animation at
+    // 60fps forever — a big CPU/heat/battery drain on the phone. Now, with
+    // no analyser (or paused / hidden) we just draw ONE static frame.
+    const start = () => {
+      if (rafRef.current) return; // already running
+      if (isPlaying && !document.hidden && getAudioAnalyser()) {
+        frame();
+      } else {
+        draw(ctx, width, height, null);
+      }
+    };
+    start();
+
+    const onVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
+      } else {
+        start();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
 
     const handleResize = () => { resize(); };
     window.addEventListener('resize', handleResize);
 
     return () => {
+      stopped = true;
       cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
+      document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('resize', handleResize);
     };
   }, [isPlaying, draw]);

@@ -40,6 +40,19 @@ function isSafeCoverUrl(url: unknown): url is string {
   return url.startsWith('http') || url.startsWith('/uploads/');
 }
 
+// iOS forces HTMLMediaElement.volume to be read-only (only the hardware
+// buttons change it), so the on-screen volume slider does nothing there —
+// we hide it on iOS and keep the mute toggle (which uses `.muted`, which
+// IS settable). iPadOS reports as "MacIntel" so also check maxTouchPoints.
+function isIOSDevice(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  return (
+    /iP(hone|od|ad)/.test(ua) ||
+    (navigator.platform === 'MacIntel' && (navigator.maxTouchPoints ?? 0) > 1)
+  );
+}
+
 // ============================================================
 // SeekBar — click + drag to seek.
 // ============================================================
@@ -360,6 +373,11 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
   } = useMusicStore();
 
   const [imgError, setImgError] = useState(false);
+  // iOS can't change <audio>.volume programmatically → hide the slider
+  // there (keep the mute button). Computed after mount to avoid SSR
+  // hydration mismatch.
+  const [iosNoVolume, setIosNoVolume] = useState(false);
+  useEffect(() => { setIosNoVolume(isIOSDevice()); }, []);
   // Reset the error flag whenever the track changes. The GlobalMusicPlayer
   // is mounted once at the root layout (it lives across page navigation
   // and every track switch) — without this reset, a single transient
@@ -478,29 +496,36 @@ function ExpandedPlayer({ onCollapse, onClose, onActivity }: {
 
           {/* Volume + secondary controls */}
           <div className="flex items-center gap-3 flex-1 justify-end">
-            <div className="flex items-center gap-2 w-32">
-              <button onClick={toggleMute} className="text-text-muted hover:text-text-primary transition-colors shrink-0">
+            <div className={`flex items-center gap-2 ${iosNoVolume ? 'w-auto' : 'w-32'}`}>
+              <button onClick={toggleMute} className="text-text-muted hover:text-text-primary transition-colors shrink-0" title={iosNoVolume ? 'Tắt/bật tiếng (dùng phím âm lượng máy để chỉnh mức)' : undefined}>
                 {isMuted || volume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
               </button>
-              <div className="relative h-2 flex-1 bg-darkborder rounded-full cursor-pointer group/vol">
-                <div
-                  className="absolute top-0 left-0 h-full bg-neon-violet/70 rounded-full"
-                  style={{ width: `${isMuted ? 0 : volume * 100}%` }}
-                />
-                <div
-                  className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white shadow-md pointer-events-none opacity-0 group-hover/vol:opacity-100"
-                  style={{
-                    left: `calc(${isMuted ? 0 : volume * 100}% - 5px)`,
-                    boxShadow: '0 0 6px rgba(139,92,246,0.6)',
-                  }}
-                />
-                <input
-                  type="range" min={0} max={1} step={0.01}
-                  value={isMuted ? 0 : volume}
-                  onChange={(e) => { setVolume(parseFloat(e.target.value)); onActivity(); }}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                />
-              </div>
+              {iosNoVolume ? (
+                // iOS: the OS owns the volume level (hardware buttons). The
+                // web slider is a no-op there, so we omit it and keep only
+                // the mute toggle.
+                <span className="text-[10px] text-text-muted whitespace-nowrap">Phím âm lượng máy</span>
+              ) : (
+                <div className="relative h-2 flex-1 bg-darkborder rounded-full cursor-pointer group/vol">
+                  <div
+                    className="absolute top-0 left-0 h-full bg-neon-violet/70 rounded-full"
+                    style={{ width: `${isMuted ? 0 : volume * 100}%` }}
+                  />
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white shadow-md pointer-events-none opacity-0 group-hover/vol:opacity-100"
+                    style={{
+                      left: `calc(${isMuted ? 0 : volume * 100}% - 5px)`,
+                      boxShadow: '0 0 6px rgba(139,92,246,0.6)',
+                    }}
+                  />
+                  <input
+                    type="range" min={0} max={1} step={0.01}
+                    value={isMuted ? 0 : volume}
+                    onChange={(e) => { setVolume(parseFloat(e.target.value)); onActivity(); }}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                </div>
+              )}
             </div>
             {/* Queue button — opens popover above */}
             <button

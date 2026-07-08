@@ -346,14 +346,11 @@ export default function MusicAudioController() {
         useMusicStore.getState().setCurrentTime(d.seekTime);
       }
     });
-    safeSet('seekbackward', (d) => {
-      const a = audioRef.current;
-      if (a) a.currentTime = Math.max(0, a.currentTime - (d.seekOffset || 10));
-    });
-    safeSet('seekforward', (d) => {
-      const a = audioRef.current;
-      if (a && Number.isFinite(a.duration)) a.currentTime = Math.min(a.duration, a.currentTime + (d.seekOffset || 10));
-    });
+    // Deliberately DO NOT register seekbackward/seekforward. On iOS, if
+    // those handlers exist the lock screen shows ±10s skip buttons; with
+    // them absent it shows prev/next TRACK buttons instead (which is what
+    // the user wants). Track skipping is handled by nexttrack/previoustrack
+    // above; the scrubber still works via seekto.
     return () => {
       (
         ['play', 'pause', 'nexttrack', 'previoustrack', 'seekto', 'seekbackward', 'seekforward'] as MediaSessionAction[]
@@ -448,7 +445,10 @@ export default function MusicAudioController() {
       } catch {
         // Player may be destroyed
       }
-    }, 250);
+      // 500ms (was 250ms): halves the store-update / re-render rate during
+      // YouTube playback — lighter on mobile, still smooth enough for the
+      // 1s-resolution progress bar.
+    }, 500);
   }, [stopYouTubePolling, setCurrentTime, setDuration]);
 
   // Mount YouTube container once
@@ -908,7 +908,14 @@ export default function MusicAudioController() {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.volume = isMuted ? 0 : Math.max(0, Math.min(1, volume));
+    // iOS makes HTMLMediaElement.volume READ-ONLY (system/hardware controls
+    // it), so setting `.volume` there — including `.volume = 0` for mute —
+    // is silently ignored. `.muted` IS settable on iOS, so drive mute
+    // through `.muted` (works everywhere) and still set `.volume` for the
+    // level (works on Android/desktop; no-op on iOS where the on-screen
+    // slider is hidden and the hardware buttons take over).
+    audio.muted = isMuted;
+    audio.volume = Math.max(0, Math.min(1, volume));
   }, [volume, isMuted]);
 
   // ── Phase 1: playback rate (speed) sync ─────────────────────────────

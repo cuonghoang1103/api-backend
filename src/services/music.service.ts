@@ -885,6 +885,48 @@ export class MusicService {
     return this.getTrackById(id, true);
   }
 
+  // ─── Batch: copy YouTube-thumbnail covers to R2 (admin) ──
+  // For tracks whose coverImage is still a YouTube thumbnail URL, download
+  // it to R2 and repoint coverImage — makes older downloaded tracks fully
+  // self-contained. Idempotent: once a cover is on R2 it no longer matches
+  // the filter, so re-running only touches the remaining ones. Sequential
+  // to protect the 1G VPS.
+  async refreshYoutubeCovers(
+    options: { userId?: number; limit?: number } = {},
+  ): Promise<{ scanned: number; updated: number; failed: number }> {
+    const limit = Math.min(Math.max(1, options.limit ?? 100), 300);
+    const rows = await prisma.musicTrack.findMany({
+      where: {
+        OR: [
+          { coverImage: { contains: 'ytimg.com' } },
+          { coverImage: { contains: 'ggpht.com' } },
+          { coverImage: { contains: 'youtube.com' } },
+        ],
+      },
+      select: { id: true, coverImage: true },
+      take: limit,
+    });
+
+    const { downloadImageToR2 } = await import('./youtubeAudio.service.js');
+    let updated = 0;
+    let failed = 0;
+    for (const row of rows) {
+      if (!row.coverImage) continue;
+      try {
+        const url = await downloadImageToR2(row.coverImage, { userId: options.userId });
+        if (url) {
+          await this.updateTrack(row.id, { coverImage: url });
+          updated += 1;
+        } else {
+          failed += 1;
+        }
+      } catch {
+        failed += 1;
+      }
+    }
+    return { scanned: rows.length, updated, failed };
+  }
+
   // ─── Hard delete (admin cleanup) ─────────────────────────
   async hardDeleteTrack(id: number): Promise<void> {
     // Capture the storage references BEFORE we delete the row

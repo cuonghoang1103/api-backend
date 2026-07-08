@@ -25,7 +25,12 @@ export default function CyberBackground() {
     if (!ctx) return;
 
     const COLORS = ['#8B5CF6', '#06b6d4', '#ec4899', '#a855f7', '#22d3ee'];
-    const PARTICLE_COUNT = 60;
+    // Lighten the animation on phones: fewer particles and skip the
+    // O(n²) connection-line pass (see below) — this background otherwise
+    // runs at 60fps and was a real contributor to heat/jank on mobile.
+    const isCoarse =
+      typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)')?.matches;
+    const PARTICLE_COUNT = isCoarse ? 18 : 60;
 
     // Static layers (opaque base fill + grid, and the scanline overlay)
     // never change between frames — only the window size. We paint them
@@ -148,19 +153,22 @@ export default function CyberBackground() {
         ctx.fillStyle = p.color + Math.round(p.opacity * 255).toString(16).padStart(2, '0');
         ctx.fill();
 
-        // Draw connection lines to nearby particles
-        for (let j = i + 1; j < particlesRef.current.length; j++) {
-          const p2 = particlesRef.current[j];
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(139, 92, 246, ${0.08 * (1 - dist / 120)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+        // Draw connection lines to nearby particles — desktop only. This
+        // is an O(n²) pass per frame; skipping it on phones is a big win.
+        if (!isCoarse) {
+          for (let j = i + 1; j < particlesRef.current.length; j++) {
+            const p2 = particlesRef.current[j];
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(139, 92, 246, ${0.08 * (1 - dist / 120)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
       });

@@ -260,7 +260,7 @@ export default function CyberPlaylist() {
       try {
         const res = await musicApi.downloadToSite(numericId);
         const updated = (res?.data?.data ?? null) as
-          | { id?: number; localPath?: string; audioUrl?: string }
+          | { id?: number; localPath?: string; audioUrl?: string; coverImage?: string }
           | null;
         toast.success('Đã tải về site — giờ nghe nền / khoá màn hình được', { id: toastId });
         // Patch the track in-place so the row immediately switches to its
@@ -271,7 +271,12 @@ export default function CyberPlaylist() {
           useMusicStore.setState((s) => {
             const patch = (t: Track) =>
               Number(t.id) === Number(updated.id)
-                ? { ...t, localPath: updated.localPath ?? t.localPath, audioUrl: updated.audioUrl ?? '' }
+                ? {
+                    ...t,
+                    localPath: updated.localPath ?? t.localPath,
+                    audioUrl: updated.audioUrl ?? '',
+                    coverImage: updated.coverImage ?? t.coverImage,
+                  }
                 : t;
             return {
               tracks: s.tracks.map(patch),

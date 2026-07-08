@@ -29,7 +29,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import { config } from '../config/env.js';
 import { logger } from '../utils/logger.js';
-import { uploadAudio } from '../storage/uploadService.js';
+import { uploadAudio, uploadImage } from '../storage/uploadService.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -57,6 +57,36 @@ export interface ExtractResult {
   key: string;
   url: string;
   size: number;
+}
+
+/**
+ * Fetch a remote image (e.g. the YouTube thumbnail stored as the track's
+ * coverImage) and copy it to R2 via the shared image pipeline, so the
+ * downloaded track is fully self-contained (its cover no longer depends
+ * on YouTube's CDN). Best-effort: returns the R2 CDN url, or null on any
+ * failure — the caller keeps the original cover url in that case.
+ */
+export async function downloadImageToR2(
+  imageUrl: string,
+  options: { userId?: number } = {},
+): Promise<string | null> {
+  if (!imageUrl || !/^https?:\/\//.test(imageUrl)) return null;
+  try {
+    const resp = await fetch(imageUrl, { signal: AbortSignal.timeout(15_000) });
+    if (!resp.ok) return null;
+    const buffer = Buffer.from(await resp.arrayBuffer());
+    if (buffer.length === 0) return null;
+    const mimetype = resp.headers.get('content-type') || 'image/jpeg';
+    const stored = await uploadImage(
+      { buffer, originalName: 'cover.jpg', mimetype, size: buffer.length },
+      'images/playlist-covers',
+      { userId: options.userId },
+    );
+    return stored.url;
+  } catch (e) {
+    logger.warn(`[ytdl] cover copy failed for ${imageUrl}: ${(e as Error).message}`);
+    return null;
+  }
 }
 
 /**

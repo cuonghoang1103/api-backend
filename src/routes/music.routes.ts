@@ -588,6 +588,7 @@ router.post(
       const track = (await musicService.getTrackById(id, true)) as {
         audioUrl?: string | null;
         localPath?: string | null;
+        coverImage?: string | null;
       };
 
       // Already backed by an R2 object → nothing to do (idempotent).
@@ -600,14 +601,24 @@ router.post(
       // watch URL (buildAudioUrl passes it through when set).
       const youtubeUrl = track.audioUrl || '';
 
-      const { extractYoutubeAudioToR2, YoutubeAudioError } = await import(
+      const { extractYoutubeAudioToR2, downloadImageToR2, YoutubeAudioError } = await import(
         '../services/youtubeAudio.service.js'
       );
       try {
         const { key, size } = await extractYoutubeAudioToR2(youtubeUrl, {
           userId: req.user?.userId,
         });
-        const updated = await musicService.markTrackDownloaded(id, key, size);
+
+        // Also copy the cover to R2 when it's still a YouTube thumbnail, so
+        // the track is fully self-contained (cover never breaks if YouTube
+        // removes the video). Best-effort — audio already succeeded.
+        let coverUrl: string | null = null;
+        const cover = track.coverImage || '';
+        if (/ytimg\.com|ggpht\.com|youtube\.com/.test(cover)) {
+          coverUrl = await downloadImageToR2(cover, { userId: req.user?.userId });
+        }
+
+        const updated = await musicService.markTrackDownloaded(id, key, size, coverUrl);
         res.json({ success: true, message: 'Đã tải nhạc về site', data: updated });
       } catch (e) {
         if (e instanceof YoutubeAudioError) {

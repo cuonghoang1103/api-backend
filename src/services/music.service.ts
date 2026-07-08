@@ -865,13 +865,21 @@ export class MusicService {
   // the R2 object: `localPath` = bucket key, and CLEAR `audioUrl` so it
   // no longer looks like a YouTube URL (getMediaUrl/isYouTubeUrl then
   // route it through the <audio> stream endpoint → background playback).
-  async markTrackDownloaded(id: number, key: string, size: number): Promise<unknown> {
+  async markTrackDownloaded(
+    id: number,
+    key: string,
+    size: number,
+    coverUrl?: string | null,
+  ): Promise<unknown> {
     await prisma.musicTrack.update({
       where: { id },
       data: {
         localPath: key,
         audioUrl: null,
         fileSize: BigInt(Math.max(0, Math.floor(size))),
+        // Only overwrite the cover when we successfully copied it to R2;
+        // otherwise keep the existing (YouTube thumbnail) url.
+        ...(coverUrl ? { coverImage: coverUrl } : {}),
       },
     });
     return this.getTrackById(id, true);

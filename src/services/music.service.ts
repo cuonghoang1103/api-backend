@@ -44,6 +44,7 @@ import { createReadStream, statSync, existsSync } from 'fs';
 import { prisma } from '../config/database.js';
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { logger } from '../utils/logger.js';
 
 // ─── Types ────────────────────────────────────────────────────
 
@@ -831,10 +832,49 @@ export class MusicService {
     // Allow deleting inactive tracks (idempotent)
     await this.getTrackById(id, true);
 
+    // Free the R2 storage when we delete a track. If the track's audio
+    // was downloaded to R2 (`localPath` = bucket key), remove that object;
+    // if it's still a remote YouTube track (`localPath` null / an http
+    // URL) there's nothing to delete. Cover images that live on R2 are
+    // removed too. deleteByUrls is a safe no-op for non-R2 URLs (e.g. a
+    // YouTube thumbnail cover), so this never touches external assets.
+    try {
+      const row = await prisma.musicTrack.findUnique({ where: { id } });
+      if (row) {
+        const { deleteByUrls } = await import('../storage/uploadService.js');
+        const urls: Array<string | null | undefined> = [row.coverImage];
+        if (row.localPath && !row.localPath.startsWith('http')) {
+          const { getStorageProvider } = await import('../storage/StorageProvider.js');
+          urls.push(getStorageProvider().publicUrl(row.localPath));
+        }
+        await deleteByUrls(urls);
+      }
+    } catch (e) {
+      // R2 cleanup is best-effort — never block the delete on it.
+      logger.warn(`[music] R2 cleanup failed for track ${id}: ${(e as Error).message}`);
+    }
+
     await prisma.musicTrack.update({
       where: { id },
       data: { active: false },
     });
+  }
+
+  // ─── Mark a track as downloaded-to-R2 ────────────────────
+  // After a YouTube track's audio is extracted to R2, point the row at
+  // the R2 object: `localPath` = bucket key, and CLEAR `audioUrl` so it
+  // no longer looks like a YouTube URL (getMediaUrl/isYouTubeUrl then
+  // route it through the <audio> stream endpoint → background playback).
+  async markTrackDownloaded(id: number, key: string, size: number): Promise<unknown> {
+    await prisma.musicTrack.update({
+      where: { id },
+      data: {
+        localPath: key,
+        audioUrl: null,
+        fileSize: BigInt(Math.max(0, Math.floor(size))),
+      },
+    });
+    return this.getTrackById(id, true);
   }
 
   // ─── Hard delete (admin cleanup) ─────────────────────────

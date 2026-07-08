@@ -76,8 +76,16 @@ WORKDIR /app
 # libvips42: runtime lib for sharp when it was compiled from source against
 # the system libvips in the builder stage (prebuilt sharp bundles libvips
 # statically, but the source-built fallback links the shared lib).
-RUN apt-get update && apt-get install -y --no-install-recommends curl tini ffmpeg libvips42 && rm -rf /var/lib/apt/lists/* && \
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates tini ffmpeg libvips42 && rm -rf /var/lib/apt/lists/* && \
     useradd --uid 1001 --gid 0 --shell /bin/bash --create-home nodejs
+
+# yt-dlp: extracts YouTube audio for the "Download to site" music feature
+# (POST /api/v1/music/tracks/:id/download-audio). We use the self-contained
+# Linux binary so we DON'T need python3 in the runtime image; it shells out
+# to the ffmpeg installed above to transcode to mp3. Redeploy re-pulls the
+# latest build (yt-dlp needs to stay current as YouTube changes).
+RUN curl -fsSL https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux \
+      -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp
 
 # Create uploads directory
 RUN mkdir -p /app/uploads/images /app/uploads/audio /app/uploads/video /app/uploads/documents \

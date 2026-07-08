@@ -288,7 +288,7 @@ export const useMusicStore = create<MusicState>()((set, get) => {
 
     setTracks: (tracks) => {
       const p = loadPersisted();
-      const { savedAllTracks, currentTrack, tracks: existingTracks, isPlaying, currentTime, isPlaying: isPlayingNow } = get();
+      const { savedAllTracks, currentTrack, tracks: existingTracks } = get();
 
       // ── No-op guard ───────────────────────────────────────────────
       // If the new tracks list is identical to what the store already
@@ -351,9 +351,15 @@ export const useMusicStore = create<MusicState>()((set, get) => {
       // lists (tracks / allTracks / savedAllTracks / queue). The
       // playing track is already in `existingTracks` (or we append
       // it), so the next track has somewhere to live.
-      const isActivelyPlaying = currentTrack && isPlayingNow;
-
-      if (isActivelyPlaying && currentTrack) {
+      // Preserve playback whenever a track is LOADED — playing OR paused.
+      // Previously this only guarded `currentTrack && isPlaying`, so a
+      // paused track (e.g. user paused then navigated to another page and
+      // back) fell through to the restore-from-persisted branch below,
+      // which re-created the `currentTrack` reference and reset
+      // `currentTime` → the controller saw a "new track" and reloaded the
+      // audio from 0s. Guarding on just `currentTrack` keeps the paused
+      // position intact across navigation.
+      if (currentTrack) {
         let workingTracks = tracks;
         if (!tracks.some((t) => t.id === currentTrack.id)) {
           // The currently playing track is missing from the new list
@@ -377,24 +383,13 @@ export const useMusicStore = create<MusicState>()((set, get) => {
         return;
       }
 
-      // ── SAFETY NET for in-progress YouTube playback (legacy) ────
-      // If the user is currently listening to a track and the new
-      // list from the server doesn't contain it (e.g. they searched
-      // a YouTube track that hadn't been registered to the DB yet),
-      // APPEND the current track to the incoming list so it isn't
-      // lost. This is the last line of defense — the primary fix
-      // is in CyberSearch.handleSelect which calls
-      // /api/v1/music/tracks/remote BEFORE adding to the store.
-      let workingTracks = tracks;
-      if (
-        currentTrack &&
-        isPlaying &&
-        !tracks.some((t) => t.id === currentTrack.id)
-      ) {
-        // Preserve playback across the page navigation
-        workingTracks = [...tracks, currentTrack];
-      }
-
+      // ── Fresh load (no track loaded yet) ────────────────────────
+      // We only reach here when `currentTrack` is null — any loaded
+      // track (playing OR paused) was fully preserved by the guard
+      // above. So this branch just seeds the store from the incoming
+      // list and restores the last-listened position from persisted
+      // state; there is no live playback to protect.
+      const workingTracks = tracks;
       const first = workingTracks[0] || null;
       let restored: Track | null = null;
       let restoredIdx = -1;
@@ -403,9 +398,8 @@ export const useMusicStore = create<MusicState>()((set, get) => {
         if (idx >= 0) { restored = workingTracks[idx]; restoredIdx = idx; }
       }
       const newSaved = savedAllTracks.length === 0 ? workingTracks : savedAllTracks;
-      // Preserve currentTime so reload restores the listening position
-      const isSameTrack = restored && currentTrack?.id === restored.id;
-      const restoredTime = isSameTrack ? get().currentTime : p.currentTime;
+      // Restore the persisted listening position for the seeded track.
+      const restoredTime = p.currentTime;
       set({
         tracks: workingTracks,
         allTracks: workingTracks,

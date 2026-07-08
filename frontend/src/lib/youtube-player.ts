@@ -15,6 +15,15 @@ export function loadYouTubeAPI(): Promise<void> {
     ytApiCallbacks.push(resolve);
     if (document.getElementById('youtube-iframe-api')) return;
 
+    // The YouTube IFrame script calls `window.onYouTubeIframeAPIReady`
+    // when it finishes loading. It MUST be assigned on `window` — a
+    // module-local function is never seen by the script, so the queued
+    // resolve callbacks would hang on first load (the first play only
+    // worked by luck once `window.YT` happened to exist on a later
+    // call). Assign it here so the very first load resolves promptly.
+    (window as unknown as { onYouTubeIframeAPIReady: () => void }).onYouTubeIframeAPIReady =
+      onYouTubeIframeAPIReady;
+
     const tag = document.createElement('script');
     tag.id = 'youtube-iframe-api';
     tag.src = 'https://www.youtube.com/iframe_api';

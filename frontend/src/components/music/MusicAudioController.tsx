@@ -163,9 +163,23 @@ function warmUpYouTubePlayer() {
           ytVolume = ytVol;
         }
       },
-      // Intentionally NO onStateChange/onEnded/onError here — those
-      // are registered by handleYouTubeTrack when real playback starts.
-      // The warm-up player just holds the iframe in an activated state.
+      // ONE delegating onStateChange/onError, registered here at
+      // creation and NEVER again. They forward to the per-track
+      // `ytOnStateChange` / `ytOnError` refs, which handleYouTubeTrack
+      // swaps per track. This is the fix for the "queue jumps to the
+      // last song after ~7 tracks" bug: previously every track called
+      // player.addEventListener('onStateChange', ...) — and the YT
+      // IFrame API ACCUMULATES listeners (it does NOT replace), so on
+      // the Nth track all N handlers fired next() at once, skipping
+      // ~N tracks per end event. A single delegating listener fires
+      // exactly once.
+      onStateChange: (e: unknown) => {
+        const evt = e as { data: number };
+        ytOnStateChange?.(evt.data);
+      },
+      onError: (e: unknown) => {
+        ytOnError?.(e);
+      },
     },
   });
   ytPlayerInstance = player;
@@ -206,22 +220,14 @@ function createYouTubePlayer(
   // bug: previously, every new track destroyed and recreated the
   // YouTube iframe, which reset its gesture context on mobile.
   if (ytPlayerInstance) {
-    // Store the new callbacks so they override any from previous tracks.
+    // Just swap the delegated callback refs — the player's SINGLE
+    // onStateChange/onError listeners (registered once at creation)
+    // already forward to these refs. Do NOT call addEventListener here:
+    // the YT IFrame API accumulates listeners, which was the root cause
+    // of the "queue jumps to the last song" bug.
     ytOnStateChange = onStateChange;
     ytOnEnded = onEnded;
     ytOnError = onError;
-
-    // Attach listeners to the existing iframe. Note: YouTube IFrame API
-    // addEventListener replaces the previous listener for the same event
-    // type, so this is safe to call per-track without accumulating handlers.
-    try {
-      if (ytPlayerInstance.addEventListener) {
-        ytPlayerInstance.addEventListener('onStateChange', onStateChange as (e: unknown) => void);
-        ytPlayerInstance.addEventListener('onError', onError as (e: unknown) => void);
-      }
-    } catch {
-      /* ignore — player may not support addEventListener */
-    }
 
     // Invoke onReady to unblock the track-loading flow.
     // The warm player is already initialized, so this is synchronous.
@@ -262,12 +268,16 @@ function createYouTubePlayer(
         ytVolume = evt.target.getVolume();
         onReady();
       },
+      // Delegate to the module-level refs (set above + swapped per track
+      // by handleYouTubeTrack) instead of the captured closures, so this
+      // is the ONE and only onStateChange/onError listener for the life
+      // of the player — no per-track accumulation.
       onStateChange: (e: unknown) => {
         const evt = e as { data: number };
-        onStateChange(evt.data);
+        ytOnStateChange?.(evt.data);
       },
       onError: (e: unknown) => {
-        onError(e);
+        ytOnError?.(e);
       },
     },
   });
@@ -385,6 +395,18 @@ export default function MusicAudioController() {
   // Lazily creates AudioContext + AnalyserNode for local audio
   const ensureAnalyser = useCallback(() => {
     if (audioContextRef.current || !audioRef.current) return;
+    // Skip Web Audio on touch / mobile devices. createMediaElementSource
+    // captures the <audio> element's output INTO the AudioContext, and
+    // mobile browsers SUSPEND the AudioContext when the app is
+    // backgrounded / the screen locks — so the track keeps advancing but
+    // goes SILENT until you refocus (the exact "no sound in background,
+    // resumes when I reopen the app" bug). Playing the element natively
+    // (no capture) lets lock-screen / background audio work like Spotify.
+    // Trade-off: the frequency-reactive visualizer is desktop-only — on a
+    // phone the screen is off in the background anyway.
+    if (typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)')?.matches) {
+      return;
+    }
     try {
       const ctx = new AudioContext();
       audioContextRef.current = ctx;
@@ -521,26 +543,23 @@ export default function MusicAudioController() {
           stopYouTubePolling();
           const wantPlay = shouldPlay || useMusicStore.getState().isPlaying;
 
-          // Build the state-change handler that drives polling + track-end logic.
-          // Using addEventListener per track replaces the previous listener
-          // (YouTube IFrame API semantics), so we don't accumulate handlers.
-          const onStateChangeHandler = (e: unknown) => {
-            const evt = e as { data: number };
+          // Swap the delegated track-end handler (the player already has
+          // its ONE onStateChange listener from creation, which forwards
+          // the raw state number here). ENDED → advance exactly once.
+          // We do NOT call addEventListener — that accumulates handlers on
+          // the YT IFrame API and was the root cause of the queue jumping
+          // to the last song. next() is read fresh from the store so it
+          // can never fire on a stale index.
+          ytOnStateChange = (state: number) => {
             const { ENDED } = window.YT?.PlayerState ?? {};
-            if (evt.data === ENDED) {
+            if (state === ENDED) {
               stopYouTubePolling();
-              setTimeout(() => next(), 0);
+              setTimeout(() => useMusicStore.getState().next(), 0);
             }
           };
-
-          // Register onStateChange so track-end fires next() correctly.
-          // NOTE: addEventListener REPLACES the previous handler for the same
-          // event (YouTube IFrame API), so this is safe per-track.
-          try {
-            if (player.addEventListener) {
-              player.addEventListener('onStateChange', onStateChangeHandler);
-            }
-          } catch { /* ignore */ }
+          ytOnError = (err: unknown) => {
+            console.warn('[YouTube] Player error:', err);
+          };
 
           if (wantPlay) {
             player.loadVideoById({ videoId, startSeconds });
@@ -1218,7 +1237,24 @@ export default function MusicAudioController() {
       // already healthy.
       const audio = audioRef.current;
       const s = useMusicStore.getState();
-      if (audio && s.isPlaying && s.currentTrack && audio.paused) {
+      if (!s.isPlaying || !s.currentTrack) return;
+
+      // Is the current track a YouTube track or a local/R2 <audio> one?
+      const rawUrl = getMediaUrl(s.currentTrack.localPath, s.currentTrack.audioUrl, s.currentTrack.id);
+      const { isYT } = isYouTubeUrl(rawUrl);
+
+      if (isYT) {
+        // YouTube tracks: mobile browsers suspend the hidden iframe when
+        // the tab is backgrounded / screen locks. On refocus, nudge it
+        // back to playing so the user doesn't have to hit play again.
+        // (True lock-screen background playback is not possible for a
+        // YouTube iframe — that requires a real <audio> element, i.e. an
+        // R2-uploaded track.)
+        try { ytPlayerInstance?.playVideo(); } catch { /* ignore */ }
+        return;
+      }
+
+      if (audio && audio.paused) {
         // The current src should match s.currentTrack.id, but if a
         // track swap raced with the visibility flip, we let the
         // load-track effect do its thing instead of fighting it.

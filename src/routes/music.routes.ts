@@ -34,7 +34,7 @@ import multer from 'multer';
 
 import { musicService } from '../services/music.service.js';
 import { normalizeAudio, isFFmpegAvailable } from '../services/ffmpeg.service.js';
-import { optionalAuth, authenticate } from '../middleware/auth.js';
+import { optionalAuth, authenticate, requireRole } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { uploadAudio, uploadImage, UploadError } from '../storage/uploadService.js';
 import { config } from '../config/env.js';
@@ -560,6 +560,61 @@ router.delete(
         success: true,
         message: 'Track deleted (soft delete)',
       });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/music/tracks/:id/download-audio
+// ────────────────────────────────────────────────────────────────
+// Extract a YouTube track's audio to R2 so it plays via <audio>
+// (background + lock-screen on mobile) instead of the YouTube iframe.
+// Admin-only: extraction is expensive (yt-dlp + ffmpeg, 1G container)
+// and downloading YouTube audio is a personal-use / ToS-sensitive op.
+// ════════════════════════════════════════════════════════════════
+router.post(
+  '/tracks/:id/download-audio',
+  authenticate,
+  requireRole('ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id) || id <= 0) {
+        throw new AppError('Invalid track ID', 400, 'INVALID_ID');
+      }
+
+      const track = (await musicService.getTrackById(id, true)) as {
+        audioUrl?: string | null;
+        localPath?: string | null;
+      };
+
+      // Already backed by an R2 object → nothing to do (idempotent).
+      if (track.localPath && !track.localPath.startsWith('http')) {
+        res.json({ success: true, message: 'Đã tải về site rồi', data: track });
+        return;
+      }
+
+      // For a YouTube track, getTrackById returns audioUrl = the YouTube
+      // watch URL (buildAudioUrl passes it through when set).
+      const youtubeUrl = track.audioUrl || '';
+
+      const { extractYoutubeAudioToR2, YoutubeAudioError } = await import(
+        '../services/youtubeAudio.service.js'
+      );
+      try {
+        const { key, size } = await extractYoutubeAudioToR2(youtubeUrl, {
+          userId: req.user?.userId,
+        });
+        const updated = await musicService.markTrackDownloaded(id, key, size);
+        res.json({ success: true, message: 'Đã tải nhạc về site', data: updated });
+      } catch (e) {
+        if (e instanceof YoutubeAudioError) {
+          throw new AppError(e.message, e.status, e.code);
+        }
+        throw e;
+      }
     } catch (error) {
       next(error);
     }

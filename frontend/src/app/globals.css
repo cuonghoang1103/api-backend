@@ -2366,14 +2366,20 @@ aside ::-webkit-scrollbar-thumb:hover {
 }
 
 /* Kill accidental horizontal scroll / layout shift ("phân bố không đồng đều")
-   and the grey tap flash on iOS/Android. */
+   and the grey tap flash on iOS/Android.
+   NOTE: use `overflow-x: clip`, NOT `hidden`. `hidden` turns html/body into
+   a scroll container, which silently breaks every `position: sticky`
+   descendant (e.g. the profile page's left sidebar) — the sticky element
+   sticks to a container that never scrolls, so it just scrolls away. `clip`
+   prevents horizontal overflow the same way WITHOUT establishing a scroll
+   container, so sticky keeps working. */
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 body {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 * {
   -webkit-tap-highlight-color: transparent;

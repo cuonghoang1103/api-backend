@@ -2,11 +2,14 @@
 
 import { useState, useRef, useEffect, useMemo, useCallback, type Dispatch, type SetStateAction } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, ListPlus, CornerDownLeft, Heart, Flame, Clock } from 'lucide-react';
+import { Plus, ListPlus, CornerDownLeft, Heart, Flame, Clock, Download, Loader2 } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useMusicStore } from '@/store/musicStore';
 import { usePlaylistStore } from '@/store/playlistStore';
 import { useAuthStore } from '@/store/authStore';
-import { useAddToQueue, useLikedTrackIds, useLikedTracks, useToggleLike, useMostPlayedTracks } from '@/hooks/useMusicQueries';
+import { useAddToQueue, useLikedTrackIds, useLikedTracks, useToggleLike, useMostPlayedTracks, musicKeys } from '@/hooks/useMusicQueries';
+import { musicApi } from '@/lib/api';
+import { isYouTubeUrl } from '@/lib/youtube-player';
 import { toast } from 'sonner';
 import type { Track } from '@/types';
 
@@ -66,6 +69,15 @@ export default function CyberPlaylist() {
   // playlist mounts on every /music visit (audit 2026-07-05). Guests keep
   // the local Zustand likes/history exactly as before.
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const user = useAuthStore((s) => s.user);
+  // Admin gate for the "Download to site" button (backend also enforces
+  // requireRole('ADMIN')). Mirrors SocialSidebar's admin check.
+  const isAdmin = !!(user as any)?.roles?.some((r: string) =>
+    ['admin', 'ADMIN', 'ROLE_ADMIN', 'SUPER_ADMIN'].includes(r),
+  );
+  const queryClient = useQueryClient();
+  // Which track is currently being extracted → R2 (spinner on its button).
+  const [downloadingId, setDownloadingId] = useState<string | number | null>(null);
   const { data: serverLikedTracks = [] } = useLikedTracks(isAuthenticated, 200);
   const { data: serverMostPlayed = [] } = useMostPlayedTracks(isAuthenticated, 50);
 
@@ -226,6 +238,60 @@ export default function CyberPlaylist() {
       toast.success(`Added "${track.title}" to queue`);
     },
     [addToManualQueue, addToQueueApi],
+  );
+
+  // Download a YouTube track's audio to R2 (admin only). Once stored, the
+  // row becomes an <audio>-backed track → plays in the background / with
+  // the screen locked on mobile. Extraction is server-side (yt-dlp+ffmpeg)
+  // and can take 10-60s, so we show a spinner and a loading toast.
+  const handleDownloadToSite = useCallback(
+    async (track: Track) => {
+      const numericId = Number(track.id);
+      if (!Number.isFinite(numericId) || numericId <= 0) {
+        toast('Bài này đang được lưu — thử lại sau giây lát');
+        return;
+      }
+      if (downloadingId != null) {
+        toast('Đang tải một bài khác về, đợi xong đã nhé');
+        return;
+      }
+      setDownloadingId(track.id);
+      const toastId = toast.loading(`Đang tải "${track.title}" về site…`);
+      try {
+        const res = await musicApi.downloadToSite(numericId);
+        const updated = (res?.data?.data ?? null) as
+          | { id?: number; localPath?: string; audioUrl?: string }
+          | null;
+        toast.success('Đã tải về site — giờ nghe nền / khoá màn hình được', { id: toastId });
+        // Patch the track in-place so the row immediately switches to its
+        // R2 source and the download button hides. A plain refetch won't
+        // do it: setTracks no-ops on a same-id/length list, so the store
+        // would keep the old YouTube audioUrl.
+        if (updated?.id != null) {
+          useMusicStore.setState((s) => {
+            const patch = (t: Track) =>
+              Number(t.id) === Number(updated.id)
+                ? { ...t, localPath: updated.localPath ?? t.localPath, audioUrl: updated.audioUrl ?? '' }
+                : t;
+            return {
+              tracks: s.tracks.map(patch),
+              allTracks: s.allTracks.map(patch),
+              savedAllTracks: s.savedAllTracks.map(patch),
+              queue: s.queue.map(patch),
+            };
+          });
+        }
+        queryClient.invalidateQueries({ queryKey: musicKeys.tracks() });
+      } catch (e: any) {
+        toast.error(
+          e?.response?.data?.message || e?.userFriendlyMessage || 'Tải nhạc thất bại',
+          { id: toastId },
+        );
+      } finally {
+        setDownloadingId(null);
+      }
+    },
+    [downloadingId, queryClient],
   );
 
   // Cyber Phase 2a: like/unlike toggle (optimistic via store).
@@ -502,6 +568,8 @@ export default function CyberPlaylist() {
                   onPlayNext={() => handlePlayNext(track)}
                   onAddToQueue={() => handleAddToQueue(track)}
                   onToggleLike={() => handleToggleLike(track)}
+                  onDownloadToSite={isAdmin ? () => handleDownloadToSite(track) : undefined}
+                  downloading={downloadingId === track.id}
                   colors={C}
                   failedThumbs={failedThumbs}
                   setFailedThumbs={setFailedThumbs}
@@ -543,6 +611,8 @@ export default function CyberPlaylist() {
                   onPlayNext={() => handlePlayNext(track)}
                   onAddToQueue={() => handleAddToQueue(track)}
                   onToggleLike={() => handleToggleLike(track)}
+                  onDownloadToSite={isAdmin ? () => handleDownloadToSite(track) : undefined}
+                  downloading={downloadingId === track.id}
                   colors={C}
                   failedThumbs={failedThumbs}
                   setFailedThumbs={setFailedThumbs}
@@ -585,6 +655,8 @@ export default function CyberPlaylist() {
                   onPlayNext={() => handlePlayNext(track)}
                   onAddToQueue={() => handleAddToQueue(track)}
                   onToggleLike={() => handleToggleLike(track)}
+                  onDownloadToSite={isAdmin ? () => handleDownloadToSite(track) : undefined}
+                  downloading={downloadingId === track.id}
                   colors={C}
                   failedThumbs={failedThumbs}
                   setFailedThumbs={setFailedThumbs}
@@ -631,6 +703,8 @@ export default function CyberPlaylist() {
                     onPlayNext={() => handlePlayNext(track)}
                     onAddToQueue={() => handleAddToQueue(track)}
                     onToggleLike={() => handleToggleLike(track)}
+                  onDownloadToSite={isAdmin ? () => handleDownloadToSite(track) : undefined}
+                  downloading={downloadingId === track.id}
                     colors={C}
                     dimmed
                     failedThumbs={failedThumbs}
@@ -672,6 +746,7 @@ export default function CyberPlaylist() {
 const CyberTrackItem = motion(function CyberTrackItem({
   track, index, isActive, isPlaying, liked, badge,
   onPlay, onAddToPlaylist, onPlayNext, onAddToQueue, onToggleLike,
+  onDownloadToSite, downloading = false,
   colors, dimmed = false,
   failedThumbs, setFailedThumbs,
 }: {
@@ -686,6 +761,8 @@ const CyberTrackItem = motion(function CyberTrackItem({
   onPlayNext?: () => void;
   onAddToQueue?: () => void;
   onToggleLike?: () => void;
+  onDownloadToSite?: () => void;
+  downloading?: boolean;
   colors: typeof C;
   dimmed?: boolean;
   failedThumbs: Set<string>;
@@ -850,6 +927,25 @@ const CyberTrackItem = motion(function CyberTrackItem({
             aria-label="Add to queue"
           >
             <ListPlus className="w-3.5 h-3.5" />
+          </motion.button>
+        )}
+        {/* Download-to-site: only for YouTube tracks (admin). Converts the
+            track to an R2 mp3 so it plays in the background / with the
+            screen locked on mobile. Hidden once it's no longer a YT track. */}
+        {onDownloadToSite && isYouTubeUrl(track.audioUrl).isYT && (
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => { e.stopPropagation(); if (!downloading) onDownloadToSite(); }}
+            disabled={downloading}
+            className="w-7 h-7 rounded-lg flex items-center justify-center disabled:opacity-70"
+            style={{ background: `${colors.accent}15`, color: colors.accent }}
+            title="Tải về site (nghe nền / khoá màn hình)"
+            aria-label="Tải nhạc về site"
+          >
+            {downloading
+              ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              : <Download className="w-3.5 h-3.5" />}
           </motion.button>
         )}
         <motion.button

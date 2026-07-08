@@ -545,6 +545,11 @@ export const musicApi = {
     api.get('/music/tracks', { params }),
   getTrack: (id: number) => api.get(`/music/tracks/${id}`),
   getStreamUrl: (id: number) => `/api/v1/music/stream/${id}`,
+  // Admin: extract a YouTube track's audio to R2 so it plays via <audio>
+  // (background + lock-screen). Long timeout — server-side yt-dlp+ffmpeg
+  // extraction can take 10-60s.
+  downloadToSite: (trackId: number) =>
+    api.post(`/music/tracks/${trackId}/download-audio`, {}, { timeout: 180000 }),
   getHistory: () => api.get('/music/history'),
   recordPlay: (trackId: number) =>
     api.post('/music/history', { trackId }),

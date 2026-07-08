@@ -16,6 +16,10 @@ import {
   Headphones,
   ShieldOff,
   MoreHorizontal,
+  ChevronLeft,
+  Phone,
+  Video,
+  Info,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
@@ -26,6 +30,7 @@ import MessageInput from '@/components/messaging/MessageInput';
 import NicknamePopover from '@/components/messaging/NicknamePopover';
 import ThreadHeaderMenu from '@/components/messaging/ThreadHeaderMenu';
 import BlockedUsersModal from '@/components/messaging/BlockedUsersModal';
+import ChatInfoPanel from '@/components/messaging/ChatInfoPanel';
 import GalaxyBackground from '@/components/ui/GalaxyBackground';
 import { cn } from '@/lib/utils';
 import { useKeyboardInset } from '@/hooks/useKeyboardInset';
@@ -59,11 +64,15 @@ function MessagesPageInner() {
   const retry = useMessagingStore((s) => s.retryConnection);
   const currentThreadId = useMessagingStore((s) => s.currentThreadId);
   const currentThread = useMessagingStore((s) => s.currentThread);
+  const closeThread = useMessagingStore((s) => s.closeThread);
   const getPresence = useMessagingStore((s) => s.getPresence);
   const startAdminThread = useMessagingStore((s) => s.startAdminThread);
   const openThread = useMessagingStore((s) => s.openThread);
   const [mounted, setMounted] = useState(false);
   const [blockedModalOpen, setBlockedModalOpen] = useState(false);
+  // Desktop (xl+) Messenger-style details column; toggled by the ⓘ button
+  // in the thread header. Open by default like facebook.com/messages.
+  const [infoOpen, setInfoOpen] = useState(true);
   // iOS on-screen keyboard: shrink the fixed-height shell so the composer
   // rides above the keyboard (the keyboard also covers the bottom nav, so
   // the shell reclaims that band while typing).
@@ -225,7 +234,15 @@ function MessagesPageInner() {
     // The three messenger panels each carry their own
     // gradient so they read as solid surfaces floating over
     // the space scene.
-    <div className="relative min-h-dvh pt-16">
+    <div
+      className="relative min-h-dvh pt-16"
+      // The global mobile bottom-nav is hidden on /messages (see Navbar), so
+      // here the only bottom chrome to reserve is the iPhone home-indicator
+      // safe area — NOT the 58px nav. Overriding the var locally keeps the
+      // existing `100dvh - 4rem - var(--app-chrome-bottom)` math correct and
+      // makes the composer always sit flush above the safe area.
+      style={{ ['--app-chrome-bottom' as string]: 'env(safe-area-inset-bottom, 0px)' }}
+    >
       <GalaxyBackground />
       <div
         className="relative mx-auto flex h-[calc(100dvh-4rem-var(--app-chrome-bottom))] max-w-6xl flex-col px-4 py-6"
@@ -266,7 +283,13 @@ function MessagesPageInner() {
               a thin page-edge decoration) is not visible
               through it. min-h-0 enables proper flex scrolling. */}
           <div
-            className="hidden w-80 shrink-0 flex-col border-r border-black/40 md:flex md:min-h-0"
+            className={cn(
+              // Mobile master/detail: the thread list is full-width when no
+              // conversation is open, and hidden once one is (the chat pane
+              // takes over). On md+ it's the fixed 320px sidebar as before.
+              'shrink-0 flex-col border-r border-black/40 md:flex md:w-80 md:min-h-0',
+              currentThreadId ? 'hidden md:flex' : 'flex w-full',
+            )}
             style={{
               background: 'linear-gradient(180deg, #20212e 0%, #161724 100%)',
             }}
@@ -299,6 +322,30 @@ function MessagesPageInner() {
               extra +0.05 brightness on a deep navy tint makes the
               message list visually pop, mimicking the way iMessage
               lifts the active conversation off the sidebar. */}
+          {/* Chat pane.
+              MOBILE (<md): a FIXED full-screen overlay, like the Facebook
+              Messenger app. This is deliberate and load-bearing: the page's
+              previous in-flow `100dvh - navbar - var(--app-chrome-bottom)`
+              height chain (plus DockLayout's .app-main bottom padding) kept
+              mis-summing on iOS and pushed the composer below the fold /
+              under the bottom nav — twice. A fixed inset-0 overlay escapes
+              every ancestor height calculation, so header/list/composer are
+              guaranteed on-screen. When the keyboard opens we lift the
+              overlay's bottom edge by the measured keyboard inset.
+              DESKTOP (md+): back to a normal in-flow flex column. */}
+          <div
+            className={cn(
+              'min-w-0 flex-col',
+              currentThreadId
+                ? 'fixed inset-0 z-[80] flex bg-[#0f1019] md:static md:z-auto md:min-h-0 md:flex-1 md:bg-transparent'
+                : 'hidden min-h-0 flex-1 md:flex',
+            )}
+            style={
+              currentThreadId && keyboardInset > 0
+                ? { bottom: keyboardInset }
+                : undefined
+            }
+          >
           <AnimatePresence mode="wait">
             {currentThreadId && currentThread ? (
               <motion.div
@@ -307,7 +354,12 @@ function MessagesPageInner() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -8 }}
                 transition={{ duration: 0.22, ease: IOS_SPRING as any }}
-                className="flex min-w-0 flex-1 flex-col"
+                // min-h-0 is load-bearing: without it a long thread (or one
+                // with tall image/file attachments) makes this flex child grow
+                // past the container instead of letting MessageList scroll, so
+                // the composer gets pushed below the viewport. THAT was the
+                // "composer disappears on my active chats" bug.
+                className="flex min-h-0 min-w-0 flex-1 flex-col"
                 style={{
                   // Fully opaque dark gray. The slight tonal
                   // shift from the sidebar makes the active
@@ -318,6 +370,8 @@ function MessagesPageInner() {
                 <ThreadHeader
                   thread={currentThread}
                   getPresence={getPresence}
+                  onBack={closeThread}
+                  onToggleInfo={() => setInfoOpen((v) => !v)}
                 />
                 <div className="min-h-0 flex-1">
                   <MessageList />
@@ -331,7 +385,7 @@ function MessagesPageInner() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.25, ease: IOS_SPRING as any }}
-                className="flex h-full min-w-0 flex-1 flex-col"
+                className="flex h-full min-h-0 min-w-0 flex-1 flex-col"
                 style={{
                   background: 'linear-gradient(180deg, #15161f 0%, #0f1019 100%)',
                 }}
@@ -340,6 +394,18 @@ function MessagesPageInner() {
               </motion.div>
             )}
           </AnimatePresence>
+          </div>
+
+          {/* Desktop details column (facebook.com/messages right pane) —
+              xl+ only, toggled by the ⓘ button in the thread header. */}
+          {currentThreadId && currentThread && infoOpen && (
+            <div className="hidden shrink-0 border-l border-black/40 xl:flex">
+              <ChatInfoPanel
+                thread={currentThread}
+                onClose={() => setInfoOpen(false)}
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -424,9 +490,13 @@ function ConnectionPill({
 function ThreadHeader({
   thread,
   getPresence,
+  onBack,
+  onToggleInfo,
 }: {
   thread: ReturnType<typeof useMessagingStore.getState>['currentThread'];
   getPresence: (uid: number) => { online: boolean; lastSeen: number };
+  onBack?: () => void;
+  onToggleInfo?: () => void;
 }) {
   const peer = thread?.peer;
   const presence = peer ? getPresence(peer.id) : null;
@@ -439,12 +509,24 @@ function ThreadHeader({
 
   return (
     <div
-      className="flex shrink-0 items-center gap-3 border-b border-white/[0.04] px-4 py-3.5"
+      // pt-[max(...)] keeps the header clear of the iPhone notch/status bar
+      // when the mobile chat renders as a full-screen fixed overlay; on md+
+      // the safe-area env() is 0 so it falls back to the normal padding.
+      className="flex shrink-0 items-center gap-3 border-b border-white/[0.04] px-4 py-3.5 pt-[max(0.875rem,env(safe-area-inset-top))] md:pt-3.5"
       style={{
         background:
           'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 100%)',
       }}
     >
+      {onBack && (
+        <button
+          onClick={onBack}
+          aria-label="Quay lại danh sách"
+          className="-ml-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-white/[0.06] hover:text-text-primary md:hidden"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </button>
+      )}
       <div className="relative shrink-0">
         {peer?.avatarUrl ? (
           <SafeImage
@@ -496,7 +578,41 @@ function ThreadHeader({
           {statusText}
         </p>
       </div>
-      {peer && <ThreadHeaderMenu threadId={thread!.id} peerId={peer.id} />}
+      {/* Messenger-style action cluster: call/video are visual placeholders
+          (no call infra yet — dimmed with a "coming soon" title), info
+          toggles the desktop details panel. */}
+      <div className="flex shrink-0 items-center gap-1">
+        <button
+          type="button"
+          disabled
+          title="Gọi thoại — sắp có"
+          aria-label="Gọi thoại (sắp có)"
+          className="flex h-9 w-9 cursor-default items-center justify-center rounded-full text-cyan-400/40"
+        >
+          <Phone className="h-[18px] w-[18px]" />
+        </button>
+        <button
+          type="button"
+          disabled
+          title="Gọi video — sắp có"
+          aria-label="Gọi video (sắp có)"
+          className="flex h-9 w-9 cursor-default items-center justify-center rounded-full text-cyan-400/40"
+        >
+          <Video className="h-[18px] w-[18px]" />
+        </button>
+        {onToggleInfo && (
+          <button
+            type="button"
+            onClick={onToggleInfo}
+            title="Thông tin đoạn chat"
+            aria-label="Thông tin đoạn chat"
+            className="hidden h-9 w-9 items-center justify-center rounded-full text-cyan-400 transition-colors hover:bg-white/[0.06] xl:flex"
+          >
+            <Info className="h-[18px] w-[18px]" />
+          </button>
+        )}
+        {peer && <ThreadHeaderMenu threadId={thread!.id} peerId={peer.id} />}
+      </div>
     </div>
   );
 }

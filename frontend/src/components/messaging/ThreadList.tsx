@@ -27,6 +27,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import ThreadRowMenu from './ThreadRowMenu';
 import NewMessageModal from './NewMessageModal';
+import ActiveNowRow from './ActiveNowRow';
 
 // iOS-like spring transition — feels premium and "lightweight"
 const HOVER_SPRING = 'transition-[background-color,transform,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]';
@@ -218,7 +219,7 @@ export default function ThreadList() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Tìm kiếm cuộc trò chuyện…"
-            className="w-full rounded-lg border border-white/[0.06] bg-white/[0.03] py-1.5 pl-8 pr-7 text-[12px] text-text-primary placeholder:text-text-muted focus:border-cyan-500/40 focus:bg-white/[0.05] focus:outline-none"
+            className="w-full rounded-full border border-transparent bg-white/[0.06] py-1.5 pl-8 pr-7 text-[12px] text-text-primary placeholder:text-text-muted focus:border-cyan-500/40 focus:bg-white/[0.08] focus:outline-none"
           />
           {query && (
             <button
@@ -230,6 +231,13 @@ export default function ThreadList() {
             </button>
           )}
         </div>
+      </div>
+
+      {/* Messenger-style "Đang hoạt động" strip — mobile only
+          (the Messenger app shows it on mobile; desktop md+ keeps
+          the compact inbox). Self-hides when no friends online. */}
+      <div className="md:hidden">
+        <ActiveNowRow />
       </div>
 
       {/* Filter chips (Messenger-style segmented control) */}
@@ -322,7 +330,7 @@ export default function ThreadList() {
                       setActiveMenuThreadId(t.id);
                     }}
                     className={cn(
-                      'group flex w-full items-center gap-3 rounded-xl p-2.5 text-left',
+                      'group flex w-full items-center gap-3 rounded-xl px-2.5 py-2.5 text-left md:py-2',
                       HOVER_SPRING,
                       'hover:scale-[1.005] hover:bg-white/[0.04] active:scale-[0.995]',
                       store.currentThreadId === t.id &&
@@ -347,7 +355,11 @@ export default function ThreadList() {
                             cyan to make the row pop. */}
                         <p
                           className={cn(
-                            'flex min-w-0 items-center gap-1 truncate text-sm font-semibold text-text-primary',
+                            'flex min-w-0 items-center gap-1 truncate text-[15px] text-text-primary md:text-sm',
+                            // Messenger-style: unread rows read bold,
+                            // read rows drop to medium so the contrast
+                            // is visible at a glance.
+                            isUnreadLooking ? 'font-semibold' : 'font-medium',
                           )}
                         >
                           <span className="truncate">
@@ -389,12 +401,17 @@ export default function ThreadList() {
                         {/* Preview — bolder + brighter when unread */}
                         <p
                           className={cn(
-                            'truncate text-[11.5px]',
+                            'truncate text-[13px] md:text-xs',
                             isUnreadLooking
-                              ? 'font-semibold text-text-secondary'
+                              ? 'font-semibold text-text-primary'
                               : 'font-normal text-text-muted/70',
                           )}
                         >
+                          {/* Messenger-style "Bạn: " prefix when the
+                              last message was sent by the viewer */}
+                          {t.lastMessage && t.lastMessage.senderId === auth.user?.id && (
+                            <span>Bạn: </span>
+                          )}
                           {t.lastMessage?.hasAttachment ? (
                             <>
                               <span className="text-cyan-400">📎</span> {t.lastMessage.attachmentName ?? 'Đính kèm'}
@@ -673,14 +690,16 @@ function EmptyState({
 }
 
 function Avatar({ src, name, badge, online }: { src?: string | null; name: string; badge: 'admin' | null; online: boolean }) {
+  // Messenger-style responsive sizing: large 56px avatars on mobile,
+  // the original compact 40px on desktop (md+).
   return (
-    <div className="relative h-10 w-10 shrink-0">
+    <div className="relative h-14 w-14 shrink-0 md:h-10 md:w-10">
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={name} className="h-10 w-10 rounded-full object-cover" />
+        <img src={src} alt={name} className="h-14 w-14 rounded-full object-cover md:h-10 md:w-10" />
       ) : (
         <div
-          className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white"
+          className="flex h-14 w-14 items-center justify-center rounded-full text-base font-bold text-white md:h-10 md:w-10 md:text-sm"
           style={{ background: 'linear-gradient(135deg, #06B6D4, #6366F1)' }}
         >
           {name.charAt(0).toUpperCase()}

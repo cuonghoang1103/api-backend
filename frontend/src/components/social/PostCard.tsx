@@ -1022,7 +1022,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     initial={{ opacity: 0, scale: 0.95, y: -5 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -5 }}
-                    className="absolute right-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-2xl py-1"
+                    className="absolute right-0 top-full z-50 mt-1 w-44 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl py-1"
                     style={{
                       background: 'var(--bg-overlay)',
                       border: '1px solid var(--border-light)',
@@ -1412,7 +1412,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                 )}
 
                 {/* Comment input */}
-                <form onSubmit={handleSubmitComment} className="relative mt-3 flex items-center gap-2">
+                <form onSubmit={handleSubmitComment} className="relative mt-3 flex items-center gap-2 min-w-0">
                   {/* Media pickers — anchored above the composer (self-position) */}
                   <EmojiPickerPopover
                     open={commentPicker === 'emoji'}
@@ -1433,7 +1433,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     anchorRef={commentBarRef}
                   />
                   <div
-                    className="flex flex-1 flex-col gap-2 rounded-2xl px-4 py-2.5"
+                    className="flex flex-1 flex-col gap-2 rounded-2xl px-4 py-2.5 min-w-0"
                     style={{
                       background: 'var(--bg-surface)',
                       border: '1px solid var(--border-color)',
@@ -1456,7 +1456,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                         </button>
                       </div>
                     )}
-                    <div ref={commentBarRef} className="flex items-center gap-2">
+                    <div ref={commentBarRef} className="flex items-center gap-2 min-w-0">
                       <input
                         ref={commentInputRef}
                         type="text"
@@ -1470,7 +1470,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                           // comment starts from a clean slate.
                           if (next === '') setCommentMentions(new Set());
                         }}
-                        className="flex-1 bg-transparent text-sm outline-none"
+                        className="flex-1 bg-transparent text-sm outline-none min-w-0"
                         style={{ color: 'var(--text-primary)' }}
                       />
                       <button
@@ -3598,7 +3598,7 @@ function PostActionsBar(props: {
 
   return (
     <>
-      <div style={containerStyle} className="select-none">
+      <div style={containerStyle} className="select-none min-w-0">
         {/* ─── Like (with hover reaction picker) ──────────── */}
         <div
           className="relative"
@@ -3783,7 +3783,7 @@ function PostActionsBar(props: {
               messenger picker above. */}
           {showShareMenu && (
             <div
-              className="absolute right-0 top-full z-50 mt-1 w-48 overflow-hidden rounded-2xl py-1"
+              className="absolute right-0 top-full z-50 mt-1 w-48 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl py-1"
               style={{
                 background: 'var(--bg-overlay)',
                 border: '1px solid var(--border-light)',

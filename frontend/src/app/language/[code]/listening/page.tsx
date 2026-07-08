@@ -275,7 +275,7 @@ function LessonDetail({ item, onBack }: { item: ListeningItem; onBack: () => voi
               </button>
             ) : (
               <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3">
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
+                <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-text-primary">
                   {item.transcript}
                 </p>
                 {item.translation && (
@@ -289,7 +289,7 @@ function LessonDetail({ item, onBack }: { item: ListeningItem; onBack: () => voi
                         <Eye size={15} /> Hiện bản dịch
                       </button>
                     ) : (
-                      <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-secondary">
+                      <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-text-secondary">
                         {item.translation}
                       </p>
                     )}

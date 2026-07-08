@@ -561,9 +561,13 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile nav */}
+      {/* Mobile nav — hidden on /messages so it can't cover the chat
+          composer and the messenger reads as a full-screen app (like the
+          Facebook Messenger app, which has no site tab bar while chatting). */}
       <div
-        className="app-bottom-nav sm:hidden fixed bottom-0 right-0 z-[61] transition-[left] duration-300"
+        className={`app-bottom-nav sm:hidden fixed bottom-0 right-0 z-[61] transition-[left] duration-300 ${
+          pathname?.startsWith('/messages') ? 'hidden' : ''
+        }`}
         style={{
           background: 'var(--bg-overlay)',
           borderTop: '1px solid var(--border-light)',

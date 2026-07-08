@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import MessageBubble from './MessageBubble';
 import TypingIndicator from './TypingIndicator';
-import { AlertCircle, Loader2, RefreshCcw } from 'lucide-react';
+import { AlertCircle, ChevronDown, Loader2, RefreshCcw } from 'lucide-react';
 import { format } from 'date-fns';
 import type { MessagingMessage } from '@/lib/api';
 
@@ -16,6 +16,21 @@ export default function MessageList() {
   const messages = store.messagesByThread[threadId] ?? [];
   const scrollRef = useRef<HTMLDivElement>(null);
   const setReplyTo = store.setReplyTo;
+  // Messenger-style "jump to latest" FAB — appears once the user has
+  // scrolled a screenful away from the newest message.
+  const [showJump, setShowJump] = useState(false);
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const distanceFromBottom = el.scrollHeight - (el.scrollTop + el.clientHeight);
+    setShowJump(distanceFromBottom > 320);
+  };
+  const jumpToBottom = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    setShowJump(false);
+  };
 
   const handleReply = (msg: MessagingMessage) => {
     setReplyTo(msg);
@@ -78,8 +93,10 @@ export default function MessageList() {
   }
 
   return (
+    <div className="relative h-full">
     <div
       ref={scrollRef}
+      onScroll={handleScroll}
       className="chat-messages-scroll h-full overflow-y-auto px-3 py-2"
       style={{ scrollbarWidth: 'thin' }}
     >
@@ -157,6 +174,18 @@ export default function MessageList() {
       ))}
 
       {typingUserIds.length > 0 && <TypingIndicator />}
+    </div>
+
+    {/* Messenger-style jump-to-latest FAB */}
+    {showJump && (
+      <button
+        onClick={jumpToBottom}
+        aria-label="Xuống tin nhắn mới nhất"
+        className="absolute bottom-3 left-1/2 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border border-white/10 bg-[#20212e] text-text-primary shadow-[0_4px_16px_rgba(0,0,0,0.5)] transition-transform hover:scale-105"
+      >
+        <ChevronDown className="h-5 w-5" />
+      </button>
+    )}
     </div>
   );
 }

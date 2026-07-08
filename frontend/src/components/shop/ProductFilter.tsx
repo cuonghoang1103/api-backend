@@ -159,6 +159,25 @@ export default function ProductFilter({
                     <p className="text-[10px] uppercase tracking-widest text-text-muted mb-2 font-semibold">Price</p>
                     <PriceChips priceRange={priceRange} onPriceRangeChange={onPriceRangeChange} />
                   </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest text-text-muted mb-2 font-semibold">Sort</p>
+                    <select
+                      value={sort}
+                      onChange={(e) => onSortChange(e.target.value as SortOption)}
+                      className="w-full px-4 py-2.5 rounded-xl text-sm cursor-pointer focus:outline-none transition-colors appearance-none pr-8"
+                      style={{
+                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid rgba(255,255,255,0.06)',
+                        color: 'rgba(148,163,184,0.9)',
+                      }}
+                    >
+                      {SORT_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value} style={{ background: '#1a1625', color: '#f8fafc' }}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -188,7 +207,7 @@ export default function ProductFilter({
 
 function FilterChips({ category, onCategoryChange }: { category: string; onCategoryChange: (v: any) => void }) {
   return (
-    <div className="flex gap-1.5 flex-wrap">
+    <div className="flex gap-1.5 flex-wrap max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:pb-1">
       {CATEGORIES.map((cat) => {
         const active = category === cat.value;
         return (
@@ -196,7 +215,7 @@ function FilterChips({ category, onCategoryChange }: { category: string; onCateg
             key={cat.value}
             layout
             onClick={() => onCategoryChange(cat.value as any)}
-            className="relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer"
+            className="relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer max-sm:shrink-0 max-sm:whitespace-nowrap"
             style={{
               background: active ? `${NEON}20` : 'transparent',
               border: `1px solid ${active ? `${NEON}50` : 'rgba(255,255,255,0.06)'}`,
@@ -215,7 +234,7 @@ function FilterChips({ category, onCategoryChange }: { category: string; onCateg
 
 function PriceChips({ priceRange, onPriceRangeChange }: { priceRange: string; onPriceRangeChange: (v: any) => void }) {
   return (
-    <div className="flex gap-1.5 flex-wrap">
+    <div className="flex gap-1.5 flex-wrap max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:pb-1">
       {PRICE_RANGES.map((range) => {
         const active = priceRange === range.value;
         return (
@@ -223,7 +242,7 @@ function PriceChips({ priceRange, onPriceRangeChange }: { priceRange: string; on
             key={range.value}
             layout
             onClick={() => onPriceRangeChange(range.value as any)}
-            className="relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer"
+            className="relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer max-sm:shrink-0 max-sm:whitespace-nowrap"
             style={{
               background: active ? `${NEON_CYAN}15` : 'transparent',
               border: `1px solid ${active ? `${NEON_CYAN}40` : 'rgba(255,255,255,0.06)'}`,

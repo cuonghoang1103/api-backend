@@ -2509,6 +2509,42 @@ html.light #app-splash { background: #f6f7fb; }
   }
 }
 
+/* Facebook-mobile-style hide-on-scroll chrome — MOBILE / TABLET ONLY.
+   When `html.chrome-hidden` is set (by useChromeAutoHide on the home
+   feed) the top navbar slides up and the mobile bottom nav slides down,
+   giving posts the full viewport like the FB app. Gated to <1024px so
+   desktop (lg+) is pixel-identical — the translate never applies there.
+
+   The top nav already carries Tailwind `transition-all duration-300`, so
+   its transform animates without us overriding its scroll bg/backdrop
+   transitions. The bottom nav only transitions `left`, so we extend its
+   transition here to cover `transform` too. */
+@media (max-width: 1023.98px) {
+  html.chrome-hidden .app-top-nav {
+    transform: translateY(-100%);
+  }
+  .app-bottom-nav {
+    transition: left 0.3s ease, transform 0.28s ease;
+  }
+  html.chrome-hidden .app-bottom-nav {
+    transform: translateY(120%);
+  }
+}
+/* Reduced motion: keep the show/hide behavior but drop the slide. */
+@media (prefers-reduced-motion: reduce) {
+  html.chrome-hidden .app-top-nav,
+  html.chrome-hidden .app-bottom-nav {
+    transition: none;
+  }
+}
+
+/* Pull-to-refresh panda spinner — spin only when NOT reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  .ptr-panda {
+    animation: none !important;
+  }
+}
+
 /* While the PWA install banner is showing, hide the AI robot FAB — both
    float in the same bottom-right band and the banner (z-90) would cover the
    robot and steal its taps. The class is toggled by PWAInstallPrompt. */

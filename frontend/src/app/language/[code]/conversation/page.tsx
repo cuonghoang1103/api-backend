@@ -245,11 +245,11 @@ function ConversationCard({
       {/* Question bubble (left) */}
       <div className="flex flex-col items-start">
         <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-[var(--bg-surface)] px-3.5 py-2 ring-1 ring-[var(--border-color)]">
-          <p className="text-sm text-text-primary">{item.question}</p>
+          <p className="break-words text-sm text-text-primary">{item.question}</p>
         </div>
-        <div className="mt-1 flex items-center gap-2 pl-1">
+        <div className="mt-1 flex min-w-0 flex-wrap items-center gap-2 pl-1">
           {item.questionPronunciation && (
-            <span className="text-[11px] italic text-text-muted">{item.questionPronunciation}</span>
+            <span className="min-w-0 break-words text-[11px] italic text-text-muted">{item.questionPronunciation}</span>
           )}
           <SpeakerButton text={item.question} reading={item.questionPronunciation} audioUrl={null} size={15} rate={0.85} />
         </div>
@@ -258,11 +258,11 @@ function ConversationCard({
       {/* Answer bubble (right) */}
       <div className="mt-3 flex flex-col items-end">
         <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-neon-violet/20 px-3.5 py-2 ring-1 ring-neon-violet/30">
-          <p className="text-sm text-text-primary">{item.answer}</p>
+          <p className="break-words text-sm text-text-primary">{item.answer}</p>
         </div>
-        <div className="mt-1 flex items-center gap-2 pr-1">
+        <div className="mt-1 flex min-w-0 flex-wrap items-center justify-end gap-2 pr-1">
           {item.answerPronunciation && (
-            <span className="text-[11px] italic text-text-muted">{item.answerPronunciation}</span>
+            <span className="min-w-0 break-words text-[11px] italic text-text-muted">{item.answerPronunciation}</span>
           )}
           <SpeakerButton text={item.answer} reading={item.answerPronunciation} audioUrl={null} size={15} rate={0.85} />
         </div>

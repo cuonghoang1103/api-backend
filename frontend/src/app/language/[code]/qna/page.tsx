@@ -95,7 +95,7 @@ function Accordion({ items, reduced }: { items: QnaItem[]; reduced: boolean }) {
               aria-expanded={open}
               className="flex w-full items-center gap-3 p-4 text-left transition hover:bg-[var(--bg-surface)]"
             >
-              <span className="flex-1 font-medium text-text-primary">{item.question}</span>
+              <span className="min-w-0 flex-1 break-words font-medium text-text-primary">{item.question}</span>
               <motion.span
                 animate={{ rotate: open ? 180 : 0 }}
                 transition={{ duration: reduced ? 0 : 0.2, ease: 'easeOut' }}
@@ -129,7 +129,7 @@ function AnswerBody({ item }: { item: QnaItem }) {
   return (
     <div className="border-t border-[var(--border-color)] px-4 pb-4 pt-3">
       <div className="flex items-start gap-2">
-        <p className="flex-1 text-lg font-semibold text-neon-violet">{item.answer}</p>
+        <p className="min-w-0 flex-1 break-words text-lg font-semibold text-neon-violet">{item.answer}</p>
         <SpeakerButton text={item.answer} audioUrl={item.audioUrl} rate={0.85} />
       </div>
       {item.pronunciation && <p className="mt-1 text-sm text-text-muted">{item.pronunciation}</p>}
@@ -183,12 +183,12 @@ function RandomMode({ items, reduced }: { items: QnaItem[]; reduced: boolean }) 
             className="card flex min-h-[320px] flex-col items-center justify-center gap-4 rounded-3xl p-6 text-center"
           >
             <span className="text-xs font-semibold uppercase tracking-wide text-neon-orange">Câu hỏi</span>
-            <p className="text-xl font-bold text-text-primary sm:text-2xl">{current.question}</p>
+            <p className="max-w-full break-words text-xl font-bold text-text-primary sm:text-2xl">{current.question}</p>
 
             {answered && (
               <div className="mt-2 w-full border-t border-[var(--border-color)] pt-4">
                 <div className="flex items-center justify-center gap-2">
-                  <p className="text-lg font-semibold text-neon-violet sm:text-xl">{current.answer}</p>
+                  <p className="max-w-full break-words text-lg font-semibold text-neon-violet sm:text-xl">{current.answer}</p>
                   <SpeakerButton text={current.answer} audioUrl={current.audioUrl} rate={0.85} />
                 </div>
                 {current.pronunciation && (

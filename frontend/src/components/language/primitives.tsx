@@ -139,7 +139,7 @@ export function Segmented<T extends string>({
             role="tab"
             aria-selected={active}
             onClick={() => onChange(o.value)}
-            className="relative rounded-full px-3.5 py-1.5 text-sm font-medium transition"
+            className="relative rounded-full px-2.5 py-2.5 text-sm font-medium transition sm:px-3.5 sm:py-1.5"
           >
             {active && (
               <motion.span
@@ -165,7 +165,7 @@ export function Chip({ active, onClick, children }: { active?: boolean; onClick?
     <button
       type="button"
       onClick={onClick}
-      className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-medium transition ${
+      className={`shrink-0 rounded-full px-3.5 py-2.5 text-sm font-medium transition sm:py-1.5 ${
         active
           ? 'bg-neon-violet/20 text-neon-violet ring-1 ring-neon-violet/40'
           : 'bg-[var(--bg-surface)] text-text-secondary ring-1 ring-[var(--border-color)] hover:text-text-primary'

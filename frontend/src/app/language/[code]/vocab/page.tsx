@@ -387,7 +387,7 @@ function VocabInner() {
 
   // ─── Header right slot ─────────────────────────────────────────
   const headerRight = (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <Segmented<View>
         idBase="vocab-view"
         value={view}
@@ -645,8 +645,8 @@ function ListView({
             <div className="min-w-0 flex-1">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="truncate text-xl font-bold text-text-primary">{w.word}</span>
+                  <div className="flex min-w-0 items-center gap-2">
+                    <span className="min-w-0 truncate text-xl font-bold text-text-primary">{w.word}</span>
                     <SpeakerButton
                       text={w.word}
                       reading={w.pronunciations?.[0]?.value}
@@ -863,13 +863,13 @@ function FlashcardsView({
                     ))}
                   </div>
                 )}
-                <span className="text-2xl font-semibold text-text-primary">{w.meaningVi}</span>
+                <span className="max-w-full break-words text-2xl font-semibold text-text-primary">{w.meaningVi}</span>
                 {w.exampleSentence && <p className="text-sm text-text-secondary">{w.exampleSentence}</p>}
                 {w.exampleMeaning && <p className="text-sm text-text-muted">{w.exampleMeaning}</p>}
               </>
             ) : (
               <>
-                <span className="text-4xl font-bold text-text-primary">{w.word}</span>
+                <span className="max-w-full break-words px-3 text-4xl font-bold text-text-primary sm:px-0">{w.word}</span>
                 <SpeakerButton text={w.word} reading={w.pronunciations?.[0]?.value} audioUrl={w.audioUrl} />
                 <span className="text-xs text-text-muted">Chạm để lật</span>
               </>
@@ -1053,7 +1053,7 @@ function QuizView({
           transition={{ duration: reduced ? 0 : 0.2, ease: 'easeOut' }}
         >
           <div className="card mb-4 flex min-h-24 items-center justify-center gap-3 p-6 text-center">
-            <span className="text-2xl font-bold text-text-primary">{q.prompt}</span>
+            <span className="min-w-0 break-words text-2xl font-bold text-text-primary">{q.prompt}</span>
             <SpeakerButton text={q.word.word} reading={q.word.pronunciations?.[0]?.value} audioUrl={q.word.audioUrl} />
           </div>
 
@@ -1076,7 +1076,7 @@ function QuizView({
                   disabled={answered}
                   className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-medium transition ${cls}`}
                 >
-                  <span>{opt}</span>
+                  <span className="min-w-0 break-words">{opt}</span>
                   {answered && isCorrect && <Check size={16} />}
                   {answered && isPicked && !isCorrect && <X size={16} />}
                 </button>

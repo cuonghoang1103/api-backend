@@ -185,7 +185,7 @@ function GrammarRow({
             <div className="space-y-4 border-t border-[var(--border-color)] px-4 py-4">
               {point.explanation && (
                 <div
-                  className="note-prose lang-prose text-sm leading-relaxed text-text-secondary"
+                  className="note-prose lang-prose max-w-full break-words text-sm leading-relaxed text-text-secondary"
                   dangerouslySetInnerHTML={{ __html: point.explanation }}
                 />
               )}

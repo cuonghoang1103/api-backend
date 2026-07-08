@@ -809,10 +809,10 @@ export function PostComposer() {
               >
                 {/* Toolbar */}
                 <div
-                  className="mt-3 flex items-center justify-between"
+                  className="mt-3 flex items-center justify-between max-sm:flex-wrap max-sm:gap-y-2"
                   style={{ borderTop: '1px solid var(--border-light)', paddingTop: '12px' }}
                 >
-                  <div className="flex items-center gap-1 flex-wrap">
+                  <div className="flex items-center gap-1 flex-wrap min-w-0">
                     {/* Image upload (also accepts drag-and-drop on the textarea) */}
                     <ToolbarButton
                       icon={<ImageIcon size={18} />}
@@ -924,7 +924,7 @@ export function PostComposer() {
                     <button
                       type="button"
                       onClick={() => setShowPollEditor((v) => !v)}
-                      className={`group relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                      className={`group relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all shrink-0 max-sm:min-h-10 ${
                         showPollEditor
                           ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-400/40'
                           : 'text-text-secondary bg-theme-hover border border-transparent border-theme-light-hover'
@@ -950,7 +950,7 @@ export function PostComposer() {
                     <div className="relative">
                       <button
                         onClick={() => setShowVisibilityMenu(!showVisibilityMenu)}
-                        className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium transition-colors"
+                        className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium transition-colors shrink-0 max-sm:min-h-10"
                         style={{
                           color: currentVisibility.color,
                           background: `${currentVisibility.color}15`,
@@ -1010,7 +1010,7 @@ export function PostComposer() {
                   </div>
 
                   {/* Submit */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 shrink-0">
                     {postError && (
                       <p className="text-xs" style={{ color: '#f87171' }}>
                         {postError}
@@ -1582,7 +1582,7 @@ function ToolbarButton({
     <button
       onClick={onClick}
       title={label}
-      className="flex items-center gap-2 rounded-xl p-2.5 text-xs font-medium transition-colors"
+      className="flex items-center gap-2 rounded-xl p-2.5 text-xs font-medium transition-colors shrink-0 max-sm:min-h-10 max-sm:min-w-10 max-sm:justify-center"
       style={{
         color: active ? '#a78bfa' : '#64748b',
         background: active ? 'rgba(139,92,246,0.12)' : 'transparent',

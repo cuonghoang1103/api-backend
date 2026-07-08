@@ -177,16 +177,16 @@ export default function AlphabetPage() {
                   aria-expanded={isOpen}
                   className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left transition hover:bg-[var(--bg-surface)]"
                 >
-                  <span className="flex items-center gap-2.5">
-                    <span className="font-heading text-lg font-bold text-text-primary">{section.label}</span>
-                    <span className="rounded-full bg-[var(--bg-surface)] px-2 py-0.5 text-[11px] font-medium text-text-muted ring-1 ring-[var(--border-color)]">
+                  <span className="flex min-w-0 flex-wrap items-center gap-2.5">
+                    <span className="min-w-0 break-words font-heading text-lg font-bold text-text-primary">{section.label}</span>
+                    <span className="shrink-0 rounded-full bg-[var(--bg-surface)] px-2 py-0.5 text-[11px] font-medium text-text-muted ring-1 ring-[var(--border-color)]">
                       {section.children.length} bảng
                     </span>
                   </span>
                   <motion.span
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={reduced ? { duration: 0 } : { duration: 0.2 }}
-                    className="text-text-muted"
+                    className="shrink-0 text-text-muted"
                   >
                     <ChevronDown size={20} />
                   </motion.span>

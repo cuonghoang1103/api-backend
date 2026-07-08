@@ -608,10 +608,10 @@ export default function BlogDetailPage() {
       </section>
 
       {/* Content: Two-column layout */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 overflow-x-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Left: Article content (3 cols) */}
-          <div className="lg:col-span-3 space-y-8">
+          <div className="lg:col-span-3 space-y-8 min-w-0">
             {/* Share bar */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -646,14 +646,18 @@ export default function BlogDetailPage() {
                   prose-pre:bg-[rgba(5,3,15,0.9)] prose-pre:border prose-pre:border-darkborder prose-pre:rounded-xl prose-pre:relative prose-pre:group
                   prose-blockquote:border-neon-violet prose-blockquote:text-text-muted
                   prose-img:rounded-2xl
-                  prose-li:text-text-secondary"
+                  prose-li:text-text-secondary
+                  [&_pre]:max-w-full [&_pre]:overflow-x-auto
+                  [&_img]:max-w-full [&_img]:h-auto
+                  max-sm:[&_table]:block max-sm:[&_table]:max-w-full max-sm:[&_table]:overflow-x-auto
+                  max-sm:break-words"
               >
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeRaw]}
                   components={{
                     pre: ({ children }) => (
-                      <pre className="relative group rounded-xl overflow-x-auto" style={{ background: 'rgba(5,3,15,0.9)', border: '1px solid rgba(168,85,247,0.15)' }}>
+                      <pre className="relative group rounded-xl max-w-full overflow-x-auto" style={{ background: 'rgba(5,3,15,0.9)', border: '1px solid rgba(168,85,247,0.15)' }}>
                         <CopyCodeBtn />
                         {children}
                       </pre>

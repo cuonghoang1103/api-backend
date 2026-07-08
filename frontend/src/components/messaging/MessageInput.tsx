@@ -231,7 +231,10 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
     // than a divider. The linear-gradient gives a sense of light
     // coming from the top, matching the ThreadHeader above.
     <div
-      className="relative shrink-0 border-t border-white/[0.04] p-3"
+      // pb-[max(...)] keeps the composer above the iPhone home indicator
+      // when the mobile chat renders as a full-screen fixed overlay; on
+      // md+ the env() resolves to 0 so the normal p-3 applies.
+      className="relative shrink-0 border-t border-white/[0.04] p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:pb-3"
       style={{
         background:
           'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.25) 100%)',

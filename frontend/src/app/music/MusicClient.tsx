@@ -74,6 +74,10 @@ export default function CyberMusicPage() {
   const [isMounted, setIsMounted] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [activePlaylistId, setActivePlaylistId] = useState<number | null>(null);
+  // Mobile-only (below xl): the playlist + player normally stack, making a very
+  // long scroll on phones. This segmented control shows one pane at a time.
+  // On xl the pane classes below force BOTH panes visible (desktop unchanged).
+  const [mobilePane, setMobilePane] = useState<'list' | 'player'>('list');
 
   // TanStack Query — replaces manual fetch with caching
   // Regular library only — REMIX tracks live on the /music/remix deck and
@@ -307,6 +311,47 @@ export default function CyberMusicPage() {
                 </Link>
               </div>
             </div>
+
+            {/* Mobile-only pane switcher (below xl). Sits inside the sticky
+                glass header so it stays pinned under the page title. xl shows
+                both panes, so this control is hidden there. */}
+            {activePlaylistId === null && !isLoading && !isError && (
+              <div
+                className="mt-3 flex gap-1 rounded-xl p-1 xl:hidden"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+                role="tablist"
+                aria-label="Chuyển danh sách / trình phát"
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={mobilePane === 'list'}
+                  onClick={() => setMobilePane('list')}
+                  className="flex-1 rounded-lg px-3 py-2 text-xs font-mono uppercase tracking-widest transition-colors"
+                  style={
+                    mobilePane === 'list'
+                      ? { background: `${C.secondary}22`, color: C.secondary, border: `1px solid ${C.secondary}55` }
+                      : { color: 'rgba(255,255,255,0.55)', border: '1px solid transparent' }
+                  }
+                >
+                  Danh sách
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={mobilePane === 'player'}
+                  onClick={() => setMobilePane('player')}
+                  className="flex-1 rounded-lg px-3 py-2 text-xs font-mono uppercase tracking-widest transition-colors"
+                  style={
+                    mobilePane === 'player'
+                      ? { background: `${C.primary}22`, color: C.primary, border: `1px solid ${C.primary}55` }
+                      : { color: 'rgba(255,255,255,0.55)', border: '1px solid transparent' }
+                  }
+                >
+                  Trình phát
+                </button>
+              </div>
+            )}
           </div>
         </motion.header>
 
@@ -381,7 +426,7 @@ export default function CyberMusicPage() {
                       initial={{ opacity: 0, x: -30 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.1 }}
-                      className="w-full xl:w-[38%] xl:shrink-0"
+                      className={`w-full xl:w-[38%] xl:shrink-0 xl:block ${mobilePane === 'list' ? 'block' : 'hidden'}`}
                     >
                       <ClientOnly>
                         <CyberPlaylist />
@@ -393,7 +438,7 @@ export default function CyberMusicPage() {
                       initial={{ opacity: 0, x: 30 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
-                      className="flex-1 w-full"
+                      className={`flex-1 w-full xl:block ${mobilePane === 'player' ? 'block' : 'hidden'}`}
                     >
                       <ClientOnly>
                         <CyberPlayer />

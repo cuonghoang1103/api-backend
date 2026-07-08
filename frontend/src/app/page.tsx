@@ -3,6 +3,8 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSocialStore } from '@/store/socialStore';
+import { useIsTouch, usePrefersReducedMotion } from '@/hooks/useIsTouch';
+import { useChromeAutoHide } from '@/hooks/useChromeAutoHide';
 import { videoCategoriesApi } from '@/lib/api';
 import { useSocialFeed, useInvalidateFeed, useFeedCounts } from '@/hooks/useSocialQueries';
 import { usePostReactionsSocket } from '@/hooks/usePostReactionsSocket';
@@ -28,7 +30,7 @@ import FeedVideoGrid from '@/components/social/FeedVideoGrid';
 import FeedHasNewBanner from '@/components/social/FeedHasNewBanner';
 import { useFeedHasNew } from '@/hooks/useFeedHasNew';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, Loader2, Search, Sparkles, X, RotateCw } from 'lucide-react';
+import { Menu, Loader2, Search, Sparkles, Users, X, RotateCw } from 'lucide-react';
 import SocialBackground from '@/components/social/SocialBackground';
 import TheaterMode from '@/components/social/TheaterMode';
 import MiniChatDock from '@/components/social/MiniChatDock';
@@ -283,6 +285,160 @@ export default function SocialPage() {
   const feedNextCursor = feedData?.nextCursor ?? null;
   const feedHasMore = feedData?.hasMore ?? hasNextPage;
 
+  // ─── Facebook-mobile behaviors (MOBILE-ONLY) ──────────────────────
+  // All three are gated to touch / <lg so desktop stays pixel-identical.
+  const isTouch = useIsTouch();
+  const reducedMotion = usePrefersReducedMotion();
+
+  // Behavior 2 — hide the top navbar + bottom nav while scrolling DOWN,
+  // reveal on scroll UP. The hook toggles `html.chrome-hidden`; the
+  // translate rules (globals.css) are gated @media(max-width:1023.98px)
+  // so lg+ never moves. This IS the home route, so calling it here
+  // scopes it to home only.
+  useChromeAutoHide(true);
+
+  // Behavior 1 — pull-to-refresh at the very top of the feed. `pullY` is
+  // the current (damped) pull distance in px; `refreshing` holds the
+  // spinner in place while the refresh promise is in flight.
+  const [pullY, setPullY] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const pullStartYRef = useRef<number | null>(null);
+  const pullActiveRef = useRef(false);
+  const refreshingRef = useRef(false);
+  const PULL_THRESHOLD = 70; // px past which release triggers a refresh
+  const PULL_MAX = 90; // clamp so the spinner never flies off-screen
+  const PULL_REST = 56; // spinner offset while the refresh is running
+
+  // Short, subtle two-note "refresh" blip via the Web Audio API — no
+  // asset file needed. Skipped under reduced-motion and wrapped in
+  // try/catch so a missing/blocked AudioContext never blocks the
+  // refresh itself.
+  const playRefreshBlip = useCallback(() => {
+    if (reducedMotion) return;
+    try {
+      const AC =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AC) return;
+      const ctx = new AC();
+      const now = ctx.currentTime;
+      const master = ctx.createGain();
+      master.gain.value = 0.15; // low volume
+      master.connect(ctx.destination);
+      const notes = [
+        { f: 660, t: now, d: 0.075 },
+        { f: 880, t: now + 0.075, d: 0.075 },
+      ];
+      notes.forEach(({ f, t, d }) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, t);
+        // Quick attack/decay so each note is a soft blip.
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(1, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+        osc.connect(g);
+        g.connect(master);
+        osc.start(t);
+        osc.stop(t + d + 0.02);
+      });
+      // Close the context shortly after the blip finishes.
+      window.setTimeout(() => { ctx.close().catch(() => {}); }, 300);
+    } catch {
+      /* audio unavailable — ignore, never block refresh */
+    }
+  }, [reducedMotion]);
+
+  const doRefresh = useCallback(async () => {
+    // Fire-and-forget blip (not awaited so audio never delays the fetch).
+    playRefreshBlip();
+    try {
+      // Reuse the feed's existing refresh: reload newest posts into the
+      // store (what the list renders from) + sync the TanStack cache.
+      await useSocialStore.getState().loadFeed(true);
+      invalidateFeedRef.current?.();
+    } catch {
+      /* loadFeed swallows its own errors into store.error; ignore here */
+    }
+  }, [playRefreshBlip]);
+
+  useEffect(() => {
+    if (!isTouch) return;
+    if (typeof window === 'undefined') return;
+
+    const onTouchStart = (e: TouchEvent) => {
+      // Only arm when already at the very top and not mid-refresh.
+      if (refreshingRef.current) return;
+      if (window.scrollY > 0) return;
+      if (e.touches.length !== 1) return;
+      pullStartYRef.current = e.touches[0].clientY;
+      pullActiveRef.current = true;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!pullActiveRef.current || pullStartYRef.current === null) return;
+      // If the user scrolled off the top since touchstart, cancel.
+      if (window.scrollY > 0) {
+        pullActiveRef.current = false;
+        pullStartYRef.current = null;
+        setPullY(0);
+        return;
+      }
+      const dy = e.touches[0].clientY - pullStartYRef.current;
+      if (dy <= 0) {
+        // Pulling up / not down → let the page scroll normally.
+        setPullY(0);
+        return;
+      }
+      // Downward pull at the top: damp it and prevent the native
+      // rubber-band so our spinner is the only thing that moves.
+      if (e.cancelable) e.preventDefault();
+      const damped = Math.min(PULL_MAX, dy * 0.5);
+      setPullY(damped);
+    };
+
+    const onTouchEnd = () => {
+      if (!pullActiveRef.current) return;
+      pullActiveRef.current = false;
+      pullStartYRef.current = null;
+      setPullY((cur) => {
+        if (cur >= PULL_THRESHOLD && !refreshingRef.current) {
+          refreshingRef.current = true;
+          setRefreshing(true);
+          doRefresh().finally(() => {
+            refreshingRef.current = false;
+            setRefreshing(false);
+            setPullY(0);
+          });
+          return PULL_REST; // hold the spinner in place during the fetch
+        }
+        return 0; // snap back
+      });
+    };
+
+    // touchmove must be non-passive so preventDefault() can stop the
+    // native pull-to-refresh / rubber-band.
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('touchcancel', onTouchEnd);
+    };
+  }, [isTouch, doRefresh]);
+
+  // Behavior 3 — tap the thin strip at the very top edge to smooth-scroll
+  // back to the top (mimics iOS status-bar tap) and reveal the chrome.
+  const scrollToTop = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    document.documentElement.classList.remove('chrome-hidden');
+    window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+  }, [reducedMotion]);
+
   // Track whether the NavigationDock is open so we can push the page
   // content left and avoid the panel covering the header / composer.
   const [dockOpen, setDockOpen] = useState(false);
@@ -328,6 +484,10 @@ export default function SocialPage() {
   // composer / header bar opens a slide-in panel. Persisted across
   // session via sessionStorage so the user's preference sticks.
   const [rightOpen, setRightOpen] = useState(false);
+  // Mobile-only left sidebar (friends/shortcuts) slide-in panel.
+  // Mirrors the right-widget pattern below; hidden on lg+ where the
+  // sidebar renders inline in the grid.
+  const [leftOpen, setLeftOpen] = useState(false);
   useEffect(() => {
     const saved = sessionStorage.getItem('right-open');
     if (saved === 'true') setRightOpen(true);
@@ -439,6 +599,44 @@ export default function SocialPage() {
   return (
     <main className="min-h-screen pt-16" style={{ background: 'var(--bg-primary)' }}>
       <SocialBackground />
+
+      {/* Behavior 1 — pull-to-refresh panda spinner (mobile-only). */}
+      {isTouch && (pullY > 0 || refreshing) && (
+        <div
+          className="pointer-events-none fixed inset-x-0 top-0 z-[45] flex justify-center lg:hidden"
+          style={{
+            transform: `translateY(${(refreshing ? PULL_REST : pullY) - 40}px)`,
+            opacity: refreshing ? 1 : Math.min(1, pullY / PULL_THRESHOLD),
+            transition: refreshing ? 'transform 0.2s ease' : 'none',
+          }}
+          aria-hidden
+        >
+          <div
+            className="mt-2 flex h-10 w-10 items-center justify-center rounded-full shadow-theme-lg"
+            style={{ background: 'var(--bg-overlay)', border: '1px solid var(--border-light)' }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/favicon.png"
+              alt=""
+              width={32}
+              height={32}
+              className={`h-8 w-8 ${refreshing && !reducedMotion ? 'ptr-panda animate-spin' : ''}`}
+              style={!refreshing ? { transform: `rotate(${pullY * 3}deg)` } : undefined}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Behavior 3 — thin top-edge tap strip → scroll to top + reveal chrome. */}
+      <button
+        type="button"
+        aria-label="Lên đầu trang"
+        onClick={scrollToTop}
+        className="fixed inset-x-0 top-0 z-[55] h-6 lg:hidden"
+        style={{ background: 'transparent' }}
+      />
+
       {/* Ambient glow - dark mode only */}
       <div
         className="pointer-events-none fixed inset-0 z-[1] theme-dark-only"
@@ -716,6 +914,60 @@ export default function SocialPage() {
           </div>
         </div>
       </div>
+
+      {/* Mobile left-sidebar floating toggle + slide-in panel.
+          Mirror of the right-widget pattern below: bottom-LEFT button
+          (clear of the right-side Widgets button and the AI bubble)
+          opens a left slide-in with the friends/shortcuts sidebar. */}
+      <button
+        type="button"
+        onClick={() => setLeftOpen((v) => !v)}
+        aria-label="Mở menu bạn bè"
+        aria-expanded={leftOpen}
+        className="fixed bottom-24 left-4 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-theme bg-theme-glass text-neon-violet shadow-theme-lg backdrop-blur-md lg:hidden"
+        style={{ touchAction: 'manipulation' }}
+      >
+        <Users size={18} />
+      </button>
+      <AnimatePresence>
+        {leftOpen && (
+          <>
+            <motion.div
+              key="left-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setLeftOpen(false)}
+              className="fixed inset-0 z-40 bg-black/55 lg:hidden"
+            />
+            <motion.aside
+              key="left-panel"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', stiffness: 380, damping: 36 }}
+              className="fixed inset-y-0 left-0 z-50 w-[300px] max-w-[85vw] overflow-y-auto border-r border-theme bg-theme pt-16 lg:hidden"
+              role="dialog"
+              aria-label="Menu bạn bè"
+            >
+              <div className="flex items-center justify-between border-b border-theme-light px-4 py-3">
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted">Menu</h2>
+                <button
+                  type="button"
+                  onClick={() => setLeftOpen(false)}
+                  aria-label="Đóng"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary hover:bg-[var(--bg-surface-hover)]"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="px-2 pb-6">
+                <SocialSidebar />
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Phase 5 home upgrade: right-sidebar floating toggle + slide-in
           panel for mobile / tablet. Sits OUTSIDE the grid so it

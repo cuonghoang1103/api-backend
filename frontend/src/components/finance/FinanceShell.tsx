@@ -2,8 +2,10 @@
 /**
  * MoneyFlow shell — shared layout for every /finance page.
  * - Auth gate (private module): redirects to /login?next when logged out.
- * - Desktop: left sidebar with the 8 sections (Phase-2 ones disabled).
- * - Mobile: bottom tab bar with a center floating "+" (Quick Add) button.
+ * - Desktop: left sidebar with every section (Phase-2 ones disabled).
+ * - Mobile: horizontally scrollable bottom tab strip with ALL sections +
+ *   a fixed floating "+" (Quick Add) button on the right. The bar sits
+ *   ABOVE the global site bottom nav via --app-bottom-nav-h.
  * Root uses pt-16 (fixed navbar) + reserves the mobile bottom-nav height.
  */
 import { useState, type ReactNode } from 'react';
@@ -29,9 +31,6 @@ const NAV: NavItem[] = [
   { href: '/finance/currency', label: 'Tỷ giá', icon: ArrowLeftRight },
   { href: '/finance/reports', label: 'Báo cáo', icon: BarChart3 },
 ];
-// Mobile bottom tabs (4 + center FAB)
-const MOBILE_TABS: NavItem[] = [NAV[0], NAV[3], NAV[2], NAV[4]];
-
 function isActive(pathname: string, href: string) {
   return href === '/finance' ? pathname === '/finance' : pathname.startsWith(href);
 }
@@ -97,17 +96,20 @@ export function FinanceShell({ children, onQuickAddSuccess }: { children: ReactN
         <main className="min-w-0 flex-1 pt-4">{children}</main>
       </div>
 
-      {/* Mobile bottom tab bar + center FAB */}
-      <nav className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[var(--border-color)] bg-[var(--bg-card)]/95 backdrop-blur pb-[env(safe-area-inset-bottom)]">
-        <div className="relative mx-auto grid max-w-md grid-cols-5 items-center px-2">
-          {MOBILE_TABS.slice(0, 2).map((item) => <MobileTab key={item.href} item={item} pathname={pathname} />)}
-          <div className="flex justify-center">
+      {/* Mobile bottom tab bar: scrollable strip with ALL sections + fixed
+          Quick-Add FAB on the right. bottom-[--app-bottom-nav-h] stacks it
+          cleanly ABOVE the global site bottom nav on phones (<640px). */}
+      <nav className="md:hidden fixed inset-x-0 bottom-[var(--app-bottom-nav-h,0px)] z-40 border-t border-[var(--border-color)] bg-[var(--bg-card)]/95 backdrop-blur pb-[env(safe-area-inset-bottom)]">
+        <div className="relative mx-auto flex max-w-md items-center gap-1 px-2">
+          <div className="flex flex-1 items-center overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {NAV.map((item) => <MobileTab key={item.href} item={item} pathname={pathname} />)}
+          </div>
+          <div className="flex shrink-0 justify-center pl-1">
             <button onClick={() => setQuickAdd(true)} aria-label="Ghi nhanh"
-              className="-mt-6 flex h-14 w-14 items-center justify-center rounded-full bg-neon-violet text-white shadow-lg shadow-neon-violet/40 active:scale-95">
-              <Plus size={26} />
+              className="-mt-6 flex h-12 w-12 items-center justify-center rounded-full bg-neon-violet text-white shadow-lg shadow-neon-violet/40 active:scale-95">
+              <Plus size={24} />
             </button>
           </div>
-          {MOBILE_TABS.slice(2).map((item) => <MobileTab key={item.href} item={item} pathname={pathname} />)}
         </div>
       </nav>
 
@@ -120,7 +122,7 @@ function MobileTab({ item, pathname }: { item: NavItem; pathname: string }) {
   const active = isActive(pathname, item.href);
   const Icon = item.icon;
   return (
-    <Link href={item.href} className={cn('flex flex-col items-center gap-0.5 py-2 text-[10px]', active ? 'text-neon-violet' : 'text-text-muted')}>
+    <Link href={item.href} className={cn('flex shrink-0 min-w-[64px] flex-col items-center gap-0.5 px-1 py-2 text-[10px]', active ? 'text-neon-violet' : 'text-text-muted')}>
       <Icon size={20} />
       <span>{item.label}</span>
     </Link>

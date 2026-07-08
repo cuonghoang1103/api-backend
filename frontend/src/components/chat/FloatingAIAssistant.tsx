@@ -29,7 +29,15 @@ export default function FloatingAIAssistant() {
  // action buttons (blocked snippet creation in /admin/exp-hub,
  // 2026-07-06) — hide it there too.
  const pathname = usePathname();
- if (pathname?.startsWith('/creator') || pathname?.startsWith('/admin')) return null;
+ // On MOBILE, show the AI bubble only on the home feed ('/') — on every other
+ // page it covered content/action buttons (user request 2026-07-09). Desktop
+ // is unaffected. Uses matchMedia (not the hook) because this early return
+ // must run before the component's other hooks, mirroring the existing guards.
+ const hiddenOnMobile =
+   pathname !== '/' &&
+   typeof window !== 'undefined' &&
+   window.matchMedia?.('(pointer: coarse)')?.matches;
+ if (pathname?.startsWith('/creator') || pathname?.startsWith('/admin') || hiddenOnMobile) return null;
 
  const { isStreaming, robotEmotion } = useChatStore();
  // When a track is loaded the mobile music bar sits above the bottom nav;

@@ -31,7 +31,8 @@ import NicknamePopover from '@/components/messaging/NicknamePopover';
 import ThreadHeaderMenu from '@/components/messaging/ThreadHeaderMenu';
 import BlockedUsersModal from '@/components/messaging/BlockedUsersModal';
 import ChatInfoPanel from '@/components/messaging/ChatInfoPanel';
-import GalaxyBackground from '@/components/ui/GalaxyBackground';
+// (GalaxyBackground removed — messages now uses a soft, eye-friendly dark
+//  backdrop instead of the busy dotted starfield.)
 import { cn } from '@/lib/utils';
 import { useKeyboardInset } from '@/hooks/useKeyboardInset';
 import { formatDistanceToNow } from 'date-fns';
@@ -72,7 +73,7 @@ function MessagesPageInner() {
   const [blockedModalOpen, setBlockedModalOpen] = useState(false);
   // Desktop (xl+) Messenger-style details column; toggled by the ⓘ button
   // in the thread header. Open by default like facebook.com/messages.
-  const [infoOpen, setInfoOpen] = useState(true);
+  const [infoOpen, setInfoOpen] = useState(false);
   // iOS on-screen keyboard: shrink the fixed-height shell so the composer
   // rides above the keyboard (the keyboard also covers the bottom nav, so
   // the shell reclaims that band while typing).
@@ -243,7 +244,15 @@ function MessagesPageInner() {
       // makes the composer always sit flush above the safe area.
       style={{ ['--app-chrome-bottom' as string]: 'env(safe-area-inset-bottom, 0px)' }}
     >
-      <GalaxyBackground />
+      {/* Soft, eye-friendly dark backdrop (replaces the busy starfield). */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10"
+        aria-hidden
+        style={{
+          background:
+            'radial-gradient(1200px 700px at 50% -8%, #191b24 0%, #14151d 42%, #0f1015 100%)',
+        }}
+      />
       <div
         className="relative mx-auto flex h-[calc(100dvh-4rem-var(--app-chrome-bottom))] max-w-6xl flex-col px-4 py-6"
         style={keyboardInset > 0 ? { height: `calc(100dvh - 4rem - ${keyboardInset}px)` } : undefined}

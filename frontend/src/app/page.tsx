@@ -4,7 +4,6 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSocialStore } from '@/store/socialStore';
 import { useIsTouch, usePrefersReducedMotion } from '@/hooks/useIsTouch';
-import { useChromeAutoHide } from '@/hooks/useChromeAutoHide';
 import { videoCategoriesApi } from '@/lib/api';
 import { useSocialFeed, useInvalidateFeed, useFeedCounts } from '@/hooks/useSocialQueries';
 import { usePostReactionsSocket } from '@/hooks/usePostReactionsSocket';
@@ -295,7 +294,8 @@ export default function SocialPage() {
   // translate rules (globals.css) are gated @media(max-width:1023.98px)
   // so lg+ never moves. This IS the home route, so calling it here
   // scopes it to home only.
-  useChromeAutoHide(true);
+  // (chrome auto-hide now lives globally in Navbar — one listener for all
+  //  routes including home; home keeps its own pull-to-refresh + tap-top.)
 
   // Behavior 1 — pull-to-refresh at the very top of the feed. `pullY` is
   // the current (damped) pull distance in px; `refreshing` holds the
@@ -669,50 +669,9 @@ export default function SocialPage() {
 
           {/* Center feed — bounded width so reading is comfortable */}
           <div className="mx-auto w-full min-w-0 lg:max-w-[740px] xl:max-w-[780px]">
-            {/* Header — Phase 5 home upgrade: refined typography.
-                Smaller, denser headline that fits the focused-study
-                vibe; subtle accent line under the title so the feed
-                doesn't look like a generic social page. */}
-            <motion.div
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ type: 'spring', stiffness: 240, damping: 26 }}
-              className="mb-5"
-            >
-              <div className="flex items-end justify-between gap-3">
-                <div>
-                  <h1
-                    className="bg-gradient-to-r from-violet-300 via-purple-300 to-cyan-300 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent sm:text-[2rem]"
-                  >
-                    Bảng tin
-                  </h1>
-                  <p className="mt-0.5 text-[13px]" style={{ color: 'var(--text-muted)' }}>
-                    Không gian học tập & chia sẻ của bạn
-                  </p>
-                </div>
-                {/* Tiny counter badge so the user knows how many posts
-                    they're seeing without scrolling. Updates live
-                    when filter tabs change. */}
-                <div
-                  className="flex shrink-0 items-center gap-1.5 rounded-full border border-theme-light bg-[var(--bg-surface)] px-2.5 py-1 text-[11px] font-medium"
-                  style={{ color: 'var(--text-secondary)' }}
-                  title="Số bài viết đang hiển thị"
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-teal-400" />
-                  {displayPosts.length} bài
-                </div>
-              </div>
-              {/* Accent underline — gradient fades from violet to cyan
-                  so the page header feels related to the brand
-                  identity without using a heavy box border. */}
-              <div
-                className="mt-3 h-px w-full"
-                style={{
-                  background:
-                    'linear-gradient(90deg, rgba(139,92,246,0.4) 0%, rgba(34,211,238,0.4) 50%, transparent 100%)',
-                }}
-              />
-            </motion.div>
+            {/* "Bảng tin" page header removed per request — the feed now
+                starts straight at the composer for a roomier, cleaner
+                layout on both mobile and desktop. */}
 
             {/* Composer */}
             <motion.div

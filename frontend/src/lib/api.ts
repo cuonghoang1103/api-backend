@@ -308,7 +308,7 @@ export const notesApi = {
   // Chapters
   createChapter: (data: { subjectId: number; title: string; sortOrder?: number }) =>
     api.post<{ data: import('@/types').NoteChapterTree }>('/notes/chapters', data),
-  updateChapter: (id: number, data: Partial<{ title: string; sortOrder: number }>) =>
+  updateChapter: (id: number, data: Partial<{ title: string; sortOrder: number; isPinned: boolean }>) =>
     api.patch<{ data: import('@/types').NoteChapterTree }>(`/notes/chapters/${id}`, data),
   deleteChapter: (id: number) =>
     api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/chapters/${id}`),

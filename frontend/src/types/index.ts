@@ -1093,6 +1093,7 @@ export interface NoteChapterTree {
   id: number;
   title: string;
   sortOrder: number;
+  isPinned: boolean;
   notes: NoteSummary[];
 }
 

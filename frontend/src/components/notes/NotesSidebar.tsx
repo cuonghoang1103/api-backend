@@ -47,6 +47,7 @@ export interface SidebarCallbacks {
  onShareSubject: (subject: NoteSubjectTree) => void;
  // Phase 5 — pin callbacks
  onPinSubject: (id: number, pinned: boolean) => void;
+ onPinChapter: (id: number, pinned: boolean) => void;
  onPinNote: (id: number, pinned: boolean) => void;
  // Phase 5 — icon callbacks
  onChangeSubjectIcon: (id: number, emoji: string) => void;
@@ -505,7 +506,10 @@ function SubjectBranch({
  active={false}
  onRename={(v) => cb.onRenameChapter(chapter.id, v)}
  onDelete={() => cb.onDeleteChapter(chapter.id)}
- actions={[{ icon: Plus, title: 'Thêm ghi chú', onClick: () => cb.onAddNote(subject.id, chapter.id) }]}
+ actions={[
+ { icon: chapter.isPinned ? PinOff : Pin, title: chapter.isPinned ? 'Bỏ ghim' : 'Ghim', onClick: () => cb.onPinChapter(chapter.id, !chapter.isPinned) },
+ { icon: Plus, title: 'Thêm ghi chú', onClick: () => cb.onAddNote(subject.id, chapter.id) },
+ ]}
  dragHandleProps={handleProps}
  />
  )}

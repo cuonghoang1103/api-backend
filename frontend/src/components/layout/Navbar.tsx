@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useChromeAutoHide } from '@/hooks/useChromeAutoHide';
 import { useSession, signOut } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '@/store/authStore';
@@ -18,7 +19,7 @@ import {
  Home, FolderOpen, Music, MessageCircle, Sparkles,
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
  Globe, ShoppingBag, Bell, NotebookPen,
-Sun, Moon, Wallet,
+Sun, Moon, Wallet, ArrowLeft,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -66,6 +67,16 @@ function MessengerIcon({ className }: { className?: string }) {
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  // Facebook-app-style: hide the top + bottom nav on scroll-down / reveal on
+  // scroll-up, on ALL pages (mobile/tablet only; desktop lg+ never hides —
+  // gated inside the hook + globals.css). Home also uses this (its own extra
+  // pull-to-refresh/tap-top logic lives in the home page). Reveal chrome on
+  // every route change so a new page never starts with the nav hidden.
+  useChromeAutoHide(true);
+  useEffect(() => {
+    document.documentElement.classList.remove('chrome-hidden');
+  }, [pathname]);
   const { data: session } = useSession();
   const { user: backendUser, isAuthenticated: isBackendAuth } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
@@ -271,6 +282,20 @@ export default function Navbar() {
                 CuongHoang
               </span>
             </Link>
+
+            {/* Mobile back button — every page EXCEPT the home feed gets a
+                ← at the top-left to return to the previous page (Facebook-app
+                style). Phones only (sm:hidden); desktop uses the logo/links. */}
+            {pathname !== '/' && (
+              <button
+                type="button"
+                onClick={() => router.back()}
+                aria-label="Quay lại trang trước"
+                className="sm:hidden shrink-0 flex h-9 w-9 items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-white/[0.06] hover:text-text-primary"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+            )}
 
             {/* People search (global) — additive; sits between the
                 logo and the center nav links. */}

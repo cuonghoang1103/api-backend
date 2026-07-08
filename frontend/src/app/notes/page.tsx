@@ -563,6 +563,11 @@ function NotesPageInner() {
      await refreshTree();
    }, [refreshTree]);
 
+   const togglePinChapter = useCallback(async (id: number, pinned: boolean) => {
+     await notesApi.updateChapter(id, { isPinned: pinned });
+     await refreshTree();
+   }, [refreshTree]);
+
    // ─── PART 3: Change subject icon ─────────────────────────────────
    const changeSubjectIcon = useCallback(async (id: number, emoji: string) => {
      await notesApi.updateSubject(id, { emoji });
@@ -594,6 +599,7 @@ function NotesPageInner() {
     onChangeFilter: setFilter,
     onShareSubject: handleOpenShare,
     onPinSubject: togglePinSubject,
+    onPinChapter: togglePinChapter,
     onPinNote: togglePinNote,
     onChangeSubjectIcon: changeSubjectIcon,
     };

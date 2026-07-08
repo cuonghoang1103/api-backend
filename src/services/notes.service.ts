@@ -65,9 +65,9 @@ export async function getTree(userId: number) {
       id: true, name: true, color: true, emoji: true, description: true,
       sortOrder: true, isPinned: true,
       chapters: {
-        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+        orderBy: [{ isPinned: 'desc' }, { sortOrder: 'asc' }, { createdAt: 'asc' }],
         select: {
-          id: true, title: true, sortOrder: true,
+          id: true, title: true, sortOrder: true, isPinned: true,
           notes: {
             // Sidebar default view hides archived; the user can flip to
             // the "Archive" filter pill to see them.
@@ -198,11 +198,12 @@ export async function createChapter(userId: number, data: { subjectId?: number; 
   });
 }
 
-export async function updateChapter(userId: number, id: number, data: { title?: string; sortOrder?: number }) {
+export async function updateChapter(userId: number, id: number, data: { title?: string; sortOrder?: number; isPinned?: boolean }) {
   assertId(id);
   const d: Prisma.NoteChapterUpdateManyMutationInput = {};
   if (data.title !== undefined) d.title = cleanStr(data.title, 200, 'Tiêu đề chương', { required: true })!;
   if (data.sortOrder !== undefined) d.sortOrder = Math.floor(Number(data.sortOrder) || 0);
+  if (data.isPinned !== undefined) d.isPinned = !!data.isPinned;
   if (Object.keys(d).length === 0) throw new AppError('Không có trường hợp lệ để cập nhật', 400, 'EMPTY_UPDATE');
 
   const res = await prisma.noteChapter.updateMany({ where: { id, userId }, data: d });

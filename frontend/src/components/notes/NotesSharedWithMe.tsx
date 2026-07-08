@@ -34,7 +34,8 @@ export default function NotesSharedWithMe({
 }: NotesSharedWithMeProps) {
   const [sharedSubjects, setSharedSubjects] = useState<NoteSharedSummary[]>([]);
   const [loading, setLoading] = useState(true);
-  const [collapsed, setCollapsed] = useState(false);
+  // Default collapsed — shared subjects are noisy on open; user expands when needed.
+  const [collapsed, setCollapsed] = useState(true);
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
   const [loadingSubjects, setLoadingSubjects] = useState<Set<number>>(new Set());
   const [loadedFullDataIds, setLoadedFullDataIds] = useState<Set<number>>(new Set());

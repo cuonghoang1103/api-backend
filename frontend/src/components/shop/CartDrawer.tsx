@@ -44,7 +44,7 @@ export default function CartDrawer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={closeDrawer}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70]"
           />
 
           {/* Drawer */}
@@ -53,10 +53,11 @@ export default function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-darkcard border-l border-darkborder z-50 flex flex-col shadow-2xl"
+            className="fixed right-0 top-0 h-full w-full max-w-md bg-darkcard border-l border-darkborder z-[70] flex flex-col shadow-2xl"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-darkborder">
+            {/* Header — pt clears the iPhone notch/status bar so the X is
+                always tappable (the drawer is a full-height overlay). */}
+            <div className="flex items-center justify-between p-5 pt-[max(1.25rem,env(safe-area-inset-top))] border-b border-darkborder">
               <div className="flex items-center gap-2">
                 <ShoppingBag className="w-5 h-5 text-neon-violet" />
                 <h2 className="font-heading font-bold text-text-primary">
@@ -239,9 +240,9 @@ export default function CartDrawer() {
               )}
             </div>
 
-            {/* Footer */}
+            {/* Footer — pb clears the iPhone home indicator. */}
             {mounted && items.length > 0 && (
-              <div className="p-5 border-t border-darkborder bg-darkbg/50">
+              <div className="p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] border-t border-darkborder bg-darkbg/50">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-text-secondary text-sm">Tổng cộng</span>
                   <span className="font-heading font-bold text-xl text-neon-violet">

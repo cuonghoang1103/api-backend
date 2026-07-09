@@ -22,6 +22,7 @@ import {
   uploadGeneric,
   uploadImage,
   deleteByKey,
+  assertSafeUploadType,
   UploadError,
 } from '../storage/uploadService.js';
 import { extractVideoThumbnail, extractVideoThumbnailFromUrl } from '../services/video.service.js';
@@ -85,6 +86,8 @@ router.post(
         throw new AppError('No file provided', 400, 'NO_FILE');
       }
       const { bucket, optimize } = resolveCategory(req.body.category);
+      // SECURITY: reject active-content uploads (HTML/SVG/JS) before storing.
+      assertSafeUploadType(req.file.mimetype, req.file.originalname, bucket);
       const input = {
         buffer: req.file.buffer,
         originalName: req.file.originalname,
@@ -160,6 +163,8 @@ router.post(
       const { bucket, optimize } = resolveCategory(req.body.category);
       const results = [];
       for (const f of req.files as Express.Multer.File[]) {
+        // SECURITY: reject active-content uploads (HTML/SVG/JS).
+        assertSafeUploadType(f.mimetype, f.originalname, bucket);
         const input = {
           buffer: f.buffer,
           originalName: f.originalname,
@@ -300,6 +305,8 @@ router.put(
       }
 
       const { bucket, optimize } = resolveCategory(payload.folder);
+      // SECURITY: reject active-content uploads (HTML/SVG/JS).
+      assertSafeUploadType(req.file.mimetype, payload.filename || req.file.originalname, bucket);
       const input = {
         buffer: req.file.buffer,
         originalName: payload.filename || req.file.originalname,

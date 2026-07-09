@@ -272,3 +272,92 @@ export async function deleteByKey(key: string): Promise<void> {
     logger.warn(`[upload] failed to delete ${key}: ${(err as Error).message}`);
   }
 }
+
+// ─── Ownership & safety guards ─────────────────────────────
+//
+// SECURITY: keys created via buildKey() carry a `u<userId>` path
+// segment (see storage/keys.ts). `keyBelongsToUser` verifies a key
+// was uploaded by the given user — used by the orphan-media cleanup
+// endpoint so a caller can only delete their OWN media, not anyone's
+// public post images.
+
+/** True when `key` was uploaded by `userId` (has the `u<id>` segment). */
+export function keyBelongsToUser(
+  key: string | null | undefined,
+  userId: number,
+): boolean {
+  if (!key || !Number.isInteger(userId)) return false;
+  return new RegExp(`(?:^|/)u${userId}(?:/|$)`).test(key);
+}
+
+/** Resolve a public URL to its bucket key and check ownership. */
+export function urlBelongsToUser(
+  url: string | null | undefined,
+  userId: number,
+): boolean {
+  if (!url) return false;
+  const key = getStorageProvider().keyFromUrl(url);
+  return keyBelongsToUser(key, userId);
+}
+
+// Content-types that render as active content in the browser and
+// therefore enable stored-XSS / phishing if served inline from our
+// media domain. Rejected on every upload path regardless of bucket.
+const DANGEROUS_MIME = new Set([
+  'text/html',
+  'application/xhtml+xml',
+  'image/svg+xml',
+  'text/xml',
+  'application/xml',
+  'text/javascript',
+  'application/javascript',
+  'application/x-javascript',
+]);
+const DANGEROUS_EXT = /\.(html?|xhtml|svg|js|mjs|xml|php|phtml)$/i;
+
+/**
+ * SECURITY: reject uploads that could be served as active content.
+ * We validate BOTH the declared mimetype and the filename extension
+ * (the client controls the mimetype, so the extension is a second
+ * gate). Per-bucket family checks stop e.g. an HTML file sneaking in
+ * under an "images" category. Throws UploadError(400) on rejection.
+ */
+export function assertSafeUploadType(
+  mimetype: string,
+  originalName: string,
+  bucket: StorageCategory,
+): void {
+  const mime = (mimetype || '').toLowerCase().split(';')[0].trim();
+  const name = originalName || '';
+
+  if (DANGEROUS_MIME.has(mime) || DANGEROUS_EXT.test(name)) {
+    throw new UploadError('File type not allowed', 'UNSAFE_FILE_TYPE', 400);
+  }
+
+  // When the browser/multer can't determine the type it sends an empty
+  // or `application/octet-stream` mimetype — common for drag-drop and
+  // some mobile browsers with legitimate photos/videos. We skip the
+  // family check for those (the dangerous-extension block above already
+  // stops active content) so we never reject a real upload. The stored
+  // content-type is later derived from the extension (uploadGeneric),
+  // so an octet-stream file is never served as HTML.
+  const unknownMime = mime === '' || mime === 'application/octet-stream';
+  if (!unknownMime) {
+    const family = bucket.split('/')[0]; // images | audio | video | documents
+    if (family === 'images') {
+      if (!mime.startsWith('image/')) {
+        throw new UploadError('Expected an image file', 'INVALID_IMAGE_TYPE', 400);
+      }
+    } else if (family === 'audio') {
+      if (!mime.startsWith('audio/')) {
+        throw new UploadError('Expected an audio file', 'INVALID_AUDIO_TYPE', 400);
+      }
+    } else if (family === 'video') {
+      if (!mime.startsWith('video/')) {
+        throw new UploadError('Expected a video file', 'INVALID_VIDEO_TYPE', 400);
+      }
+    }
+    // documents/* — anything not in the dangerous set above is allowed
+    // (pdf, zip, office, txt, csv, …): permissive but no active content.
+  }
+}

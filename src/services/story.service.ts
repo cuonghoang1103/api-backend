@@ -14,6 +14,7 @@
 
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { getAcceptedFriendIds } from './friend.service.js';
 
 const STORY_DURATION_HOURS = 24;
 const STORY_EXPIRES_MS = STORY_DURATION_HOURS * 60 * 60 * 1000;
@@ -105,10 +106,20 @@ export async function createStory(input: CreateStoryInput) {
 export async function getHomeFeedStories(currentUserId: number) {
   const now = new Date();
 
+  // SECURITY: only show stories the viewer is allowed to see —
+  // PUBLIC, their own, or a friend's FRIENDS story. Previously
+  // every active story (incl. PRIVATE/FRIENDS of strangers) leaked.
+  const friendIds = await getAcceptedFriendIds(currentUserId);
+
   // Get all active stories grouped by user
   const stories = await prisma.story.findMany({
     where: {
       expiresAt: { gt: now },
+      OR: [
+        { visibility: 'PUBLIC' },
+        { userId: currentUserId },
+        { visibility: 'FRIENDS', userId: { in: friendIds } },
+      ],
       // Exclude stories from users the current user has hidden
       NOT: {
         userId: {
@@ -168,10 +179,25 @@ export async function getHomeFeedStories(currentUserId: number) {
 export async function getUserStories(userId: number, currentUserId: number) {
   const now = new Date();
 
+  // SECURITY: a viewer other than the owner only sees PUBLIC stories,
+  // plus FRIENDS stories when they are an accepted friend.
+  let visibilityWhere: Record<string, unknown> = {};
+  if (currentUserId !== userId) {
+    const friendIds = await getAcceptedFriendIds(currentUserId);
+    const isFriend = friendIds.includes(userId);
+    visibilityWhere = {
+      OR: [
+        { visibility: 'PUBLIC' },
+        ...(isFriend ? [{ visibility: 'FRIENDS' }] : []),
+      ],
+    };
+  }
+
   const stories = await prisma.story.findMany({
     where: {
       userId,
       expiresAt: { gt: now },
+      ...visibilityWhere,
     },
     include: {
       user: {
@@ -309,6 +335,17 @@ export async function getStoryById(storyId: number, currentUserId?: number) {
   });
 
   if (!story) throw new AppError('Story not found', 404, 'STORY_NOT_FOUND');
+
+  // SECURITY: enforce visibility on by-id reads. Owner sees all;
+  // others need PUBLIC, or FRIENDS + accepted friendship. Return
+  // 404 (not 403) so a private story's existence isn't leaked.
+  if (story.userId !== currentUserId && story.visibility !== 'PUBLIC') {
+    const canView =
+      story.visibility === 'FRIENDS' &&
+      currentUserId != null &&
+      (await getAcceptedFriendIds(currentUserId)).includes(story.userId);
+    if (!canView) throw new AppError('Story not found', 404, 'STORY_NOT_FOUND');
+  }
 
   const now = new Date();
   if (story.expiresAt < now) {

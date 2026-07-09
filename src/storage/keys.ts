@@ -44,7 +44,16 @@ export function buildKey(
   const suffix = randomSuffix();
   const filename = `${stamp}-${suffix}${ext}`;
   const sub = options.subPrefix ? `${options.subPrefix}/` : '';
-  return normalize(`${category}/${sub}${filename}`);
+  // SECURITY: embed the uploader id as a `u<id>` path segment so
+  // ownership can be verified later (e.g. the orphan-media cleanup
+  // endpoint only deletes keys belonging to the caller). See
+  // `keyBelongsToUser` in uploadService. Existing keys without the
+  // segment keep working — only new uploads carry it.
+  const owner =
+    options.userId != null && Number.isInteger(options.userId)
+      ? `u${options.userId}/`
+      : '';
+  return normalize(`${category}/${owner}${sub}${filename}`);
 }
 
 /**

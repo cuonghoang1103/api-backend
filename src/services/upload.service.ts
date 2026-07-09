@@ -13,7 +13,9 @@ import {
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { logger } from '../utils/logger.js';
 
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+// SECURITY: SVG intentionally excluded — it can carry <script> and
+// would be served as active content (stored XSS). See assertSafeUploadType.
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const ALLOWED_AUDIO_TYPES = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg', 'audio/flac', 'audio/aac'];
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime', 'video/x-msvideo'];
 const ALLOWED_DOCUMENT_TYPES = [

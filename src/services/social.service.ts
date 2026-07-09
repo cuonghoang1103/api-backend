@@ -17,7 +17,52 @@ import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { registerSocketEmitter } from '../socket/messaging.socket.js';
 import { deleteByUrls } from '../storage/uploadService.js';
+import { getAcceptedFriendIds } from './friend.service.js';
 import { logger } from '../utils/logger.js';
+
+// ─── Access control: post visibility ─────────────────────────────
+//
+// SECURITY: post `visibility` (PUBLIC | FRIENDS | PRIVATE) MUST be
+// enforced server-side on every read path. We never trust a
+// client-supplied `visibility` filter — doing so let anonymous
+// callers pull everyone's PRIVATE posts via `?visibility=PRIVATE`.
+//
+// Rules:
+//   • anonymous viewer → PUBLIC posts only
+//   • logged-in viewer → PUBLIC, their OWN posts (any visibility),
+//     or FRIENDS posts authored by an accepted friend
+//
+// `buildPostVisibilityWhere` returns a Prisma `where` fragment that
+// AND-combines with the caller's other filters (authorId, cursor,
+// type, …). `canViewPost` is the single-row equivalent for by-id
+// reads.
+
+export async function buildPostVisibilityWhere(
+  currentUserId?: number,
+): Promise<Record<string, unknown>> {
+  if (!currentUserId) return { visibility: 'PUBLIC' };
+  const friendIds = await getAcceptedFriendIds(currentUserId);
+  return {
+    OR: [
+      { visibility: 'PUBLIC' },
+      { authorId: currentUserId },
+      { visibility: 'FRIENDS', authorId: { in: friendIds } },
+    ],
+  };
+}
+
+export async function canViewPost(
+  post: { authorId: number; visibility: string },
+  currentUserId?: number,
+): Promise<boolean> {
+  if (post.visibility === 'PUBLIC') return true;
+  if (currentUserId && post.authorId === currentUserId) return true;
+  if (post.visibility === 'FRIENDS' && currentUserId) {
+    const friendIds = await getAcceptedFriendIds(currentUserId);
+    return friendIds.includes(post.authorId);
+  }
+  return false;
+}
 
 /**
  * Returns true if the user has the ADMIN role. Used by delete
@@ -473,6 +518,12 @@ export async function getPostById(postId: number, currentUserId?: number) {
 
   if (!post) throw new AppError('Post not found', 404, 'POST_NOT_FOUND');
 
+  // SECURITY: enforce visibility on by-id reads. Return 404 (not
+  // 403) so we don't leak the existence of a private post.
+  if (!(await canViewPost(post, currentUserId))) {
+    throw new AppError('Post not found', 404, 'POST_NOT_FOUND');
+  }
+
   // Augment poll with the viewer's vote(s) so the UI can show the
   // selected state immediately. Skip for anonymous viewers.
   const pollUserVotes = post.poll && currentUserId
@@ -604,7 +655,12 @@ export async function updatePost(postId: number, userId: number, data: {
 // ─── Feed ────────────────────────────────────────────────────────
 
 export async function getFeed(options: FeedOptions & { currentUserId?: number }) {
-  const { cursor, limit = 20, authorId, visibility, currentUserId, hashtag, sort = 'recent', following, type, videoCategoryId } = options;
+  const { cursor, limit = 20, authorId, currentUserId, hashtag, sort = 'recent', following, type, videoCategoryId } = options;
+
+  // SECURITY: enforce post visibility server-side. We intentionally
+  // ignore any client-supplied `visibility` filter — it was the
+  // vector that let anonymous callers read everyone's PRIVATE posts.
+  const visibilityWhere = await buildPostVisibilityWhere(currentUserId);
 
   // Phase 5 home upgrade: "Following" tab. Only return posts from
   // authors the viewer follows. Anonymous viewers (no currentUserId)
@@ -624,7 +680,7 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
 
   const posts = await prisma.socialPost.findMany({
     where: {
-      visibility: visibility as 'PUBLIC' | 'FRIENDS' | 'PRIVATE' | undefined,
+      ...visibilityWhere,
       ...(authorId ? { authorId } : {}),
       ...(followingAuthorIds ? { authorId: { in: followingAuthorIds } } : {}),
       ...(cursor ? { id: { lt: cursor } } : {}),

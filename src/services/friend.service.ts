@@ -238,6 +238,24 @@ export async function getStatusMap(
   return result;
 }
 
+/**
+ * Return the ids of every user who is an ACCEPTED friend of
+ * `userId` (either direction). Used by the access-control
+ * predicates that gate FRIENDS-visibility posts/stories — see
+ * `buildPostVisibilityWhere` in social.service and the story
+ * read paths. Returns [] when the user has no friends.
+ */
+export async function getAcceptedFriendIds(userId: number): Promise<number[]> {
+  const rows = await prisma.friendship.findMany({
+    where: {
+      status: 'ACCEPTED',
+      OR: [{ requesterId: userId }, { addresseeId: userId }],
+    },
+    select: { requesterId: true, addresseeId: true },
+  });
+  return rows.map((r) => (r.requesterId === userId ? r.addresseeId : r.requesterId));
+}
+
 // ─── List Friends (ACCEPTED, both directions) ────────────────
 
 export async function listFriends(

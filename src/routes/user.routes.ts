@@ -323,9 +323,16 @@ router.get('/:id/posts', authenticate, async (req: any, res: Response<ApiRespons
     const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
     const type = req.query.type as string | undefined;
 
+    // SECURITY: only surface posts the viewer is allowed to see.
+    // Previously this returned any PUBLISHED post regardless of
+    // visibility, leaking the profile owner's PRIVATE/FRIENDS posts.
+    const { buildPostVisibilityWhere } = await import('../services/social.service.js');
+    const visibilityWhere = await buildPostVisibilityWhere(req.user.userId);
+
     const where: Record<string, unknown> = {
       authorId: id,
       status: 'PUBLISHED',
+      ...visibilityWhere,
     };
     if (type && ['POST', 'VIDEO', 'FILE'].includes(type)) {
       where.type = type;
@@ -420,8 +427,12 @@ router.get('/:id/media', authenticate, async (req: any, res: Response<ApiRespons
     const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 30));
     const type = req.query.type as string | undefined;
 
+    // SECURITY: restrict the media grid to posts the viewer may see.
+    const { buildPostVisibilityWhere } = await import('../services/social.service.js');
+    const visibilityWhere = await buildPostVisibilityWhere(req.user.userId);
+
     const where: Record<string, unknown> = {
-      post: { authorId: id, status: 'PUBLISHED' as const },
+      post: { authorId: id, status: 'PUBLISHED' as const, ...visibilityWhere },
     };
     if (type && type !== 'FILE') where.type = type; // grid = IMAGE | VIDEO
     if (cursor != null && Number.isInteger(cursor) && cursor > 0) {

@@ -1,6 +1,27 @@
 import '@/app/globals.css'
 import type { Metadata, Viewport } from 'next'
-import { Inter, Poppins, JetBrains_Mono } from 'next/font/google'
+// Self-hosted fonts via @fontsource (npm) instead of next/font/google.
+// The Google-Fonts build-time fetch (fonts.gstatic.com) was flaky from
+// the VPS and repeatedly failed the deploy ("Failed to fetch Poppins from
+// Google Fonts"). @fontsource ships the woff2 in node_modules, so the
+// build is fully offline. We import the per-WEIGHT css (not the
+// per-subset one): each weight file declares every subset with its own
+// `unicode-range`, so the browser still downloads only latin+vietnamese
+// on demand AND Vietnamese renders correctly. (The per-subset files omit
+// unicode-range, which would make same-weight faces override each other
+// and drop Vietnamese glyphs.) Families 'Inter'/'Poppins'/'JetBrains
+// Mono' are wired to --font-* in globals.css :root.
+import '@fontsource/inter/300.css'
+import '@fontsource/inter/400.css'
+import '@fontsource/inter/500.css'
+import '@fontsource/inter/600.css'
+import '@fontsource/inter/700.css'
+import '@fontsource/poppins/400.css'
+import '@fontsource/poppins/500.css'
+import '@fontsource/poppins/600.css'
+import '@fontsource/poppins/700.css'
+import '@fontsource/jetbrains-mono/400.css'
+import '@fontsource/jetbrains-mono/500.css'
 import dynamic from 'next/dynamic'
 import Navbar from '@/components/layout/Navbar'
 import DockLayout from '@/components/layout/DockLayout'
@@ -18,34 +39,9 @@ import LocaleWrapper from '@/components/providers/LocaleWrapper'
 import ClientOnly from '@/components/providers/ClientOnly'
 import { ThemeProvider } from '@/context/ThemeContext'
 
-// Self-host Google Fonts via next/font so the CSS bundle does
-// NOT @import fonts.googleapis.com at runtime — that request
-// was being blocked / slow from Vietnam, which caused the
-// whole stylesheet to fail parsing and left the page unstyled
-// (a black screen with a centered spinner, which the user
-// described as "stuck loading"). next/font downloads the
-// font files at build time and serves them from the same
-// origin as the app.
-const inter = Inter({
-  subsets: ['latin', 'vietnamese'],
-  weight: ['300', '400', '500', '600', '700'],
-  display: 'swap',
-  variable: '--font-inter',
-})
-
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-  variable: '--font-poppins',
-})
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  display: 'swap',
-  variable: '--font-jetbrains-mono',
-})
+// Font families are self-hosted via the @fontsource CSS imports above
+// and exposed as --font-inter / --font-poppins / --font-jetbrains-mono
+// in globals.css :root (consumed by tailwind fontFamily + globals).
 
 const GlobalMusicPlayer = dynamic(
   () => import('@/components/music/GlobalMusicPlayer'),
@@ -277,7 +273,6 @@ export default function RootLayout({
     <html
       lang="vi"
       suppressHydrationWarning
-      className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable}`}
     >
       <body suppressHydrationWarning className="antialiased">
         {/* Boot splash — rendered in the server HTML so it paints INSTANTLY

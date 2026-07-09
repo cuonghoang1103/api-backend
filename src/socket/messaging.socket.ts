@@ -180,6 +180,23 @@ export function getOnlineUserIds(): number[] {
 }
 
 /**
+ * Emit a presence update ONLY to the given audience (their per-user
+ * rooms), instead of `io.emit` to every connected socket. The FE only
+ * ever renders presence for friends (ActiveNowRow) and chat peers
+ * (ThreadList / MiniChatDock / ChatInfoPanel / /messages), so a global
+ * broadcast was O(all sockets) per connect/disconnect — an O(N²) storm
+ * during deploy reconnects. `audience` = friends ∪ thread peers.
+ */
+function emitPresenceTo(
+  audience: number[],
+  payload: { userId: number; online: boolean; lastSeen: number },
+): void {
+  for (const uid of audience) {
+    io?.to(`user:${uid}`).emit('presence:update', payload);
+  }
+}
+
+/**
  * Attach a Socket.IO server to the existing HTTP server. Idempotent
  * — calling twice is a no-op so hot reload doesn't double-bind.
  */
@@ -260,27 +277,6 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     // hash lookups per connection. Reconnect logic is also
     // covered — the rooms are re-established on every
     // `connect` event.
-    void (async () => {
-      try {
-        const threads = await prisma.messageThread.findMany({
-          where: {
-            OR: [
-              { type: 'ADMIN', OR: [{ userId: user.id }, { adminUserId: user.id }] },
-              { type: 'USER', OR: [{ userAId: user.id }, { userBId: user.id }] },
-            ],
-          },
-          select: { id: true },
-        });
-        for (const t of threads) {
-          socket.join(`thread:${t.id}`);
-        }
-      } catch (err) {
-        // Non-fatal: realtime still works for explicit joins
-        // and the user:* room below.
-        logger.error('auto-join threads failed', { error: err instanceof Error ? err.message : String(err) });
-      }
-    })();
-
     // Track this connection. A user can be connected from multiple
     // tabs/devices — only mark them offline once every connection
     // for that user has closed.
@@ -288,15 +284,55 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     onlineUserIds.add(user.id);
     socket.data.isLastSocket = false;
 
-    if (wasOffline) {
-      // Broadcast "came online" to everyone (cheap — one event per
-      // status change, not per socket).
-      socket.broadcast.emit('presence:update', {
-        userId: user.id,
-        online: true,
-        lastSeen: Date.now(),
-      });
-    }
+    // AUTO-JOIN thread rooms + compute this user's PRESENCE AUDIENCE
+    // (friends ∪ thread peers) in ONE pass, then emit "came online" only
+    // to that audience instead of every connected socket. We fetch the
+    // thread participant columns (not just id) so we can derive peers.
+    void (async () => {
+      try {
+        const [threads, friendships] = await Promise.all([
+          prisma.messageThread.findMany({
+            where: {
+              OR: [
+                { type: 'ADMIN', OR: [{ userId: user.id }, { adminUserId: user.id }] },
+                { type: 'USER', OR: [{ userAId: user.id }, { userBId: user.id }] },
+              ],
+            },
+            select: { id: true, userId: true, adminUserId: true, userAId: true, userBId: true },
+          }),
+          prisma.friendship.findMany({
+            where: { status: 'ACCEPTED', OR: [{ requesterId: user.id }, { addresseeId: user.id }] },
+            select: { requesterId: true, addresseeId: true },
+          }),
+        ]);
+        const audience = new Set<number>();
+        for (const t of threads) {
+          socket.join(`thread:${t.id}`);
+          for (const pid of [t.userId, t.adminUserId, t.userAId, t.userBId]) {
+            if (typeof pid === 'number' && pid !== user.id) audience.add(pid);
+          }
+        }
+        for (const f of friendships) {
+          audience.add(f.requesterId === user.id ? f.addresseeId : f.requesterId);
+        }
+        const audienceArr = Array.from(audience);
+        socket.data.presenceAudience = audienceArr;
+        if (wasOffline) {
+          emitPresenceTo(audienceArr, { userId: user.id, online: true, lastSeen: Date.now() });
+        }
+      } catch (err) {
+        logger.error('auto-join/presence-audience failed', { error: err instanceof Error ? err.message : String(err) });
+        // Fallback: don't lose the presence signal — broadcast globally
+        // (the old behavior) so the online dot still appears.
+        if (wasOffline) {
+          socket.broadcast.emit('presence:update', {
+            userId: user.id,
+            online: true,
+            lastSeen: Date.now(),
+          });
+        }
+      }
+    })();
 
     // Client can opt-in to a thread room explicitly (e.g. when the
     // user opens the panel for that thread). Idempotent — already
@@ -332,12 +368,17 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
         .filter((s) => (s.data.user as { id: number } | undefined)?.id === user.id);
       if (socketsForUser.length === 0) {
         onlineUserIds.delete(user.id);
-        // Broadcast "went offline" to everyone
-        io?.emit('presence:update', {
-          userId: user.id,
-          online: false,
-          lastSeen: Date.now(),
-        });
+        // Emit "went offline" only to this user's presence audience
+        // (friends ∪ thread peers) computed at connect. Fall back to a
+        // global broadcast if the audience wasn't computed (early
+        // disconnect / connect-time error) so presence isn't lost.
+        const payload = { userId: user.id, online: false, lastSeen: Date.now() };
+        const audience = socket.data.presenceAudience as number[] | undefined;
+        if (audience && audience.length > 0) {
+          emitPresenceTo(audience, payload);
+        } else {
+          io?.emit('presence:update', payload);
+        }
       }
     });
   });

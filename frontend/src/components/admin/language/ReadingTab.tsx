@@ -5,10 +5,10 @@
 // translation editor for both.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Plus, Pencil, Loader2, Upload, Trash2, FileText, Images } from 'lucide-react';
+import { Plus, Pencil, Loader2, Upload, Trash2, FileText, Images, ChevronUp, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { languageAdminApi } from '@/lib/language-api';
-import type { ReadingArticle, ReadingType } from '@/types/language';
+import type { ReadingArticle, ReadingType, ReadingQuestion } from '@/types/language';
 import { getImageUrl } from '@/lib/utils';
 import NoteContentEditor from '@/components/exp-hub/NoteContentEditor';
 import {
@@ -36,9 +36,10 @@ interface Editor {
   images: string[];
   content: string;
   translation: string;
+  questions: ReadingQuestion[];
 }
 
-const EMPTY: Editor = { id: null, title: '', type: 'IMAGE_LIST', images: [], content: '', translation: '' };
+const EMPTY: Editor = { id: null, title: '', type: 'IMAGE_LIST', images: [], content: '', translation: '', questions: [] };
 
 export default function ReadingTab({ languageId, code }: TabProps) {
   const [items, setItems] = useState<ReadingArticle[]>([]);
@@ -76,6 +77,7 @@ export default function ReadingTab({ languageId, code }: TabProps) {
       images: editor.type === 'IMAGE_LIST' ? editor.images : undefined,
       content: editor.type === 'TEXT' ? editor.content || undefined : undefined,
       translation: editor.translation || undefined,
+      questions: sanitizeQuestions(editor.questions),
     };
     try {
       if (editor.id == null) {
@@ -155,7 +157,7 @@ export default function ReadingTab({ languageId, code }: TabProps) {
                 <div className="truncate font-medium text-text-primary">{r.title}</div>
                 <div className="text-[11px] text-text-muted">{r.type === 'IMAGE_LIST' ? `${r.images?.length ?? 0} ảnh` : 'Văn bản'}</div>
               </div>
-              <button onClick={() => setEditor({ id: r.id, title: r.title, type: r.type, images: r.images ?? [], content: r.content ?? '', translation: r.translation ?? '' })} className="rounded p-1.5 text-text-muted hover:bg-white/5 hover:text-neon-violet"><Pencil className="h-3.5 w-3.5" /></button>
+              <button onClick={() => setEditor({ id: r.id, title: r.title, type: r.type, images: r.images ?? [], content: r.content ?? '', translation: r.translation ?? '', questions: r.questions ?? [] })} className="rounded p-1.5 text-text-muted hover:bg-white/5 hover:text-neon-violet"><Pencil className="h-3.5 w-3.5" /></button>
               <RowActions onDelete={() => remove(r)} />
             </div>
           )}
@@ -224,9 +226,142 @@ export default function ReadingTab({ languageId, code }: TabProps) {
               <span className={labelCls}>Bản dịch (tùy chọn)</span>
               <div className="mt-1"><NoteContentEditor value={editor.translation} onChange={(html) => setEditor((prev) => (prev ? { ...prev, translation: html } : prev))} minHeight={160} /></div>
             </div>
+
+            <div>
+              <span className={labelCls}>Câu hỏi (tùy chọn)</span>
+              <p className="mb-2 text-[11px] text-text-muted">Người học sẽ trả lời sau khi đọc. Trắc nghiệm được tự chấm; Tự luận hiện đáp án mẫu để tự đối chiếu.</p>
+              <QuestionsBuilder value={editor.questions} onChange={(questions) => setEditor((prev) => (prev ? { ...prev, questions } : prev))} />
+            </div>
           </>
         )}
       </Modal>
+    </div>
+  );
+}
+
+// ── Comprehension-question builder ─────────────────────────────────────
+function newId(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID();
+  return `q_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+}
+
+function newQuestion(kind: 'mc' | 'open'): ReadingQuestion {
+  return kind === 'mc'
+    ? { id: newId(), kind: 'mc', prompt: '', options: ['', ''], correctIndex: 0, explanation: '' }
+    : { id: newId(), kind: 'open', prompt: '', sampleAnswer: '', explanation: '' };
+}
+
+// Drop empty questions/options + clamp correctIndex before sending to the API.
+function sanitizeQuestions(qs: ReadingQuestion[]): ReadingQuestion[] {
+  const out: ReadingQuestion[] = [];
+  for (const q of qs) {
+    const prompt = q.prompt.trim();
+    if (!prompt) continue;
+    if (q.kind === 'mc') {
+      const options = q.options.map((o) => o.trim()).filter(Boolean);
+      if (options.length < 2) continue;
+      const correctIndex = Math.min(Math.max(0, q.correctIndex), options.length - 1);
+      out.push({ id: q.id, kind: 'mc', prompt, options, correctIndex, explanation: q.explanation?.trim() || undefined });
+    } else {
+      out.push({ id: q.id, kind: 'open', prompt, sampleAnswer: q.sampleAnswer.trim(), explanation: q.explanation?.trim() || undefined });
+    }
+  }
+  return out;
+}
+
+function QuestionsBuilder({ value, onChange }: { value: ReadingQuestion[]; onChange: (q: ReadingQuestion[]) => void }) {
+  const patchAt = (i: number, patch: Partial<ReadingQuestion>) =>
+    onChange(value.map((q, j) => (j === i ? ({ ...q, ...patch } as ReadingQuestion) : q)));
+
+  const setKind = (i: number, kind: 'mc' | 'open') =>
+    onChange(
+      value.map((q, j) => {
+        if (j !== i || q.kind === kind) return q;
+        return kind === 'mc'
+          ? { id: q.id, kind: 'mc', prompt: q.prompt, options: ['', ''], correctIndex: 0, explanation: q.explanation }
+          : { id: q.id, kind: 'open', prompt: q.prompt, sampleAnswer: '', explanation: q.explanation };
+      }),
+    );
+
+  const remove = (i: number) => onChange(value.filter((_, j) => j !== i));
+  const move = (i: number, dir: -1 | 1) => {
+    const j = i + dir;
+    if (j < 0 || j >= value.length) return;
+    const next = [...value];
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange(next);
+  };
+
+  return (
+    <div className="space-y-3">
+      {value.map((q, i) => (
+        <div key={q.id} className="rounded-lg border border-darkborder bg-white/[0.02] p-3 space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-text-secondary">Câu {i + 1}</span>
+            <div className="inline-flex rounded-md border border-darkborder p-0.5">
+              {(['mc', 'open'] as const).map((k) => (
+                <button key={k} type="button" onClick={() => setKind(i, k)} className={`rounded px-2 py-1 text-[11px] font-medium ${q.kind === k ? 'bg-neon-violet/20 text-violet-200' : 'text-text-secondary'}`}>
+                  {k === 'mc' ? 'Trắc nghiệm' : 'Tự luận'}
+                </button>
+              ))}
+            </div>
+            <div className="ml-auto flex items-center gap-1">
+              <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="rounded p-1 text-text-muted hover:bg-white/5 disabled:opacity-30"><ChevronUp className="h-4 w-4" /></button>
+              <button type="button" onClick={() => move(i, 1)} disabled={i === value.length - 1} className="rounded p-1 text-text-muted hover:bg-white/5 disabled:opacity-30"><ChevronDown className="h-4 w-4" /></button>
+              <button type="button" onClick={() => remove(i)} className="rounded p-1 text-text-muted hover:bg-red-500/10 hover:text-red-400"><Trash2 className="h-4 w-4" /></button>
+            </div>
+          </div>
+
+          <input value={q.prompt} onChange={(e) => patchAt(i, { prompt: e.target.value })} placeholder="Nội dung câu hỏi" className={inputCls} />
+
+          {q.kind === 'mc' ? (
+            <div className="space-y-1.5">
+              {q.options.map((opt, oi) => (
+                <div key={oi} className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name={`correct-${q.id}`}
+                    checked={q.correctIndex === oi}
+                    onChange={() => patchAt(i, { correctIndex: oi })}
+                    title="Đáp án đúng"
+                    className="h-4 w-4 accent-emerald-500"
+                  />
+                  <input
+                    value={opt}
+                    onChange={(e) => patchAt(i, { options: q.options.map((o, k) => (k === oi ? e.target.value : o)) })}
+                    placeholder={`Đáp án ${oi + 1}`}
+                    className={`flex-1 ${inputCls}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (q.options.length <= 2) return;
+                      const options = q.options.filter((_, k) => k !== oi);
+                      const correctIndex = q.correctIndex >= options.length ? options.length - 1 : q.correctIndex > oi ? q.correctIndex - 1 : q.correctIndex;
+                      patchAt(i, { options, correctIndex });
+                    }}
+                    disabled={q.options.length <= 2}
+                    className="rounded p-1.5 text-text-muted hover:bg-red-500/10 hover:text-red-400 disabled:opacity-30"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+              <button type="button" onClick={() => patchAt(i, { options: [...q.options, ''] })} className={btnGhost}><Plus className="h-3.5 w-3.5" /> Thêm đáp án</button>
+              <p className="text-[11px] text-text-muted">Chọn nút tròn ở đáp án đúng.</p>
+            </div>
+          ) : (
+            <textarea value={q.sampleAnswer} onChange={(e) => patchAt(i, { sampleAnswer: e.target.value })} placeholder="Đáp án mẫu (hiện cho người học tự đối chiếu)" rows={3} className={inputCls} />
+          )}
+
+          <input value={q.explanation ?? ''} onChange={(e) => patchAt(i, { explanation: e.target.value })} placeholder="Giải thích (tùy chọn)" className={inputCls} />
+        </div>
+      ))}
+
+      <div className="flex gap-2">
+        <button type="button" onClick={() => onChange([...value, newQuestion('mc')])} className={btnAdd}><Plus className="h-4 w-4" /> Trắc nghiệm</button>
+        <button type="button" onClick={() => onChange([...value, newQuestion('open')])} className={btnAdd}><Plus className="h-4 w-4" /> Tự luận</button>
+      </div>
     </div>
   );
 }

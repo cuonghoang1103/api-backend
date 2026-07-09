@@ -158,6 +158,26 @@ export interface ConversationItem {
   order: number;
 }
 
+// Comprehension questions attached to a reading passage. Two kinds:
+//   mc   — multiple choice, auto-graded (correctIndex).
+//   open — free written answer, self-checked against sampleAnswer.
+export type ReadingQuestion =
+  | {
+      id: string;
+      kind: 'mc';
+      prompt: string;
+      options: string[];
+      correctIndex: number;
+      explanation?: string;
+    }
+  | {
+      id: string;
+      kind: 'open';
+      prompt: string;
+      sampleAnswer: string;
+      explanation?: string;
+    };
+
 export interface ReadingArticle {
   id: number;
   languageId: number;
@@ -166,6 +186,7 @@ export interface ReadingArticle {
   images?: string[] | null;
   content?: string | null; // HTML string
   translation?: string | null; // HTML string
+  questions?: ReadingQuestion[] | null;
   order: number;
 }
 

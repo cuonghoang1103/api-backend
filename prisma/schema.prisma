@@ -4190,6 +4190,7 @@ model LangReadingArticle {
   images      Json?           @db.JsonB // [imageUrl]
   content     Json?           @db.JsonB // TipTap rich text when TEXT
   translation Json?           @db.JsonB // optional VI translation
+  questions   Json?           @db.JsonB // optional comprehension Q&A: ReadingQuestion[]
   order       Int             @default(0)
   createdAt   DateTime        @default(now()) @map("created_at")
   updatedAt   DateTime        @updatedAt @map("updated_at")

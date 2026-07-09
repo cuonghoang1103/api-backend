@@ -21,10 +21,14 @@ import {
   AArrowUp,
   AArrowDown,
   Type,
+  CheckCircle2,
+  XCircle,
+  Eye,
+  HelpCircle,
 } from 'lucide-react';
 import { fetchAllPages, languageApi } from '@/lib/language-api';
 import { getImageUrl } from '@/lib/utils';
-import type { ReadingArticle, DictionaryEntry } from '@/types/language';
+import type { ReadingArticle, DictionaryEntry, ReadingQuestion } from '@/types/language';
 import {
   SectionShell,
   SpeakerButton,
@@ -216,6 +220,184 @@ function ArticleDetail({
         <ImageReader images={article.images ?? []} reduced={reduced} />
       ) : (
         <TextReader article={article} reduced={reduced} dict={dict} onNeedDictionary={onNeedDictionary} />
+      )}
+
+      <ReadingQuestions questions={article.questions ?? []} />
+    </div>
+  );
+}
+
+// ─── Comprehension questions (learner answers; nothing persisted) ──
+function ReadingQuestions({ questions }: { questions: ReadingQuestion[] }) {
+  // Per-question learner state, keyed by question id.
+  const [picked, setPicked] = useState<Record<string, number>>({});
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const [written, setWritten] = useState<Record<string, string>>({});
+  const [revealed, setRevealed] = useState<Record<string, boolean>>({});
+
+  const mcQuestions = useMemo(() => questions.filter((q) => q.kind === 'mc'), [questions]);
+  const allMcChecked = mcQuestions.length > 0 && mcQuestions.every((q) => checked[q.id]);
+  const mcScore = mcQuestions.reduce(
+    (n, q) => (q.kind === 'mc' && checked[q.id] && picked[q.id] === q.correctIndex ? n + 1 : n),
+    0,
+  );
+
+  if (!questions.length) return null;
+
+  return (
+    <section className="mt-8 border-t border-[var(--border-color)] pt-6">
+      <div className="mb-4 flex items-center gap-2">
+        <HelpCircle size={18} className="text-neon-violet" />
+        <h3 className="font-heading text-lg font-bold text-text-primary">Câu hỏi ({questions.length})</h3>
+        {allMcChecked && (
+          <span className="ml-auto rounded-full bg-neon-violet/15 px-3 py-1 text-sm font-semibold text-violet-300">
+            Trắc nghiệm: {mcScore}/{mcQuestions.length}
+          </span>
+        )}
+      </div>
+
+      <ol className="space-y-4">
+        {questions.map((q, i) => (
+          <li key={q.id} className="rounded-2xl bg-[var(--bg-surface)] p-4 ring-1 ring-[var(--border-color)]">
+            <p className="mb-3 font-medium text-text-primary">
+              <span className="mr-1.5 text-text-muted">{i + 1}.</span>
+              {q.prompt}
+            </p>
+
+            {q.kind === 'mc' ? (
+              <McBlock
+                q={q}
+                picked={picked[q.id]}
+                isChecked={!!checked[q.id]}
+                onPick={(oi) => !checked[q.id] && setPicked((p) => ({ ...p, [q.id]: oi }))}
+                onCheck={() => picked[q.id] != null && setChecked((c) => ({ ...c, [q.id]: true }))}
+              />
+            ) : (
+              <OpenBlock
+                q={q}
+                value={written[q.id] ?? ''}
+                revealed={!!revealed[q.id]}
+                onWrite={(v) => setWritten((w) => ({ ...w, [q.id]: v }))}
+                onReveal={() => setRevealed((r) => ({ ...r, [q.id]: true }))}
+              />
+            )}
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+function McBlock({
+  q,
+  picked,
+  isChecked,
+  onPick,
+  onCheck,
+}: {
+  q: Extract<ReadingQuestion, { kind: 'mc' }>;
+  picked: number | undefined;
+  isChecked: boolean;
+  onPick: (oi: number) => void;
+  onCheck: () => void;
+}) {
+  return (
+    <div className="space-y-2">
+      {q.options.map((opt, oi) => {
+        const isPicked = picked === oi;
+        const isCorrect = q.correctIndex === oi;
+        // After checking: correct answer → green; the wrong one you picked → red.
+        let cls = 'border-[var(--border-color)] bg-[var(--bg-primary)]';
+        if (isChecked && isCorrect) cls = 'border-emerald-500/60 bg-emerald-500/10';
+        else if (isChecked && isPicked && !isCorrect) cls = 'border-red-500/60 bg-red-500/10';
+        else if (!isChecked && isPicked) cls = 'border-neon-violet/60 bg-neon-violet/10';
+        return (
+          <button
+            key={oi}
+            type="button"
+            onClick={() => onPick(oi)}
+            disabled={isChecked}
+            className={`flex w-full items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left text-sm transition ${cls}`}
+          >
+            <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold ${isPicked ? 'border-neon-violet text-neon-violet' : 'border-[var(--border-color)] text-text-muted'}`}>
+              {String.fromCharCode(65 + oi)}
+            </span>
+            <span className="flex-1 text-text-primary">{opt}</span>
+            {isChecked && isCorrect && <CheckCircle2 size={18} className="text-emerald-500" />}
+            {isChecked && isPicked && !isCorrect && <XCircle size={18} className="text-red-500" />}
+          </button>
+        );
+      })}
+
+      {!isChecked ? (
+        <button
+          type="button"
+          onClick={onCheck}
+          disabled={picked == null}
+          className="mt-1 rounded-xl bg-neon-violet px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-40"
+        >
+          Kiểm tra
+        </button>
+      ) : (
+        <p className={`mt-1 text-sm font-medium ${picked === q.correctIndex ? 'text-emerald-500' : 'text-red-500'}`}>
+          {picked === q.correctIndex ? 'Chính xác!' : `Chưa đúng — đáp án: ${String.fromCharCode(65 + q.correctIndex)}`}
+        </p>
+      )}
+
+      {isChecked && q.explanation && (
+        <p className="rounded-xl bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-secondary ring-1 ring-[var(--border-color)]">
+          💡 {q.explanation}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function OpenBlock({
+  q,
+  value,
+  revealed,
+  onWrite,
+  onReveal,
+}: {
+  q: Extract<ReadingQuestion, { kind: 'open' }>;
+  value: string;
+  revealed: boolean;
+  onWrite: (v: string) => void;
+  onReveal: () => void;
+}) {
+  return (
+    <div className="space-y-2">
+      <textarea
+        value={value}
+        onChange={(e) => onWrite(e.target.value)}
+        placeholder="Viết câu trả lời của bạn…"
+        rows={3}
+        className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/60"
+      />
+      {(q.sampleAnswer || q.explanation) && !revealed && (
+        <button
+          type="button"
+          onClick={onReveal}
+          className="inline-flex items-center gap-1.5 rounded-xl bg-[var(--bg-primary)] px-3 py-2 text-sm font-medium text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-text-primary"
+        >
+          <Eye size={15} /> Xem đáp án mẫu
+        </button>
+      )}
+      {revealed && (
+        <div className="space-y-2">
+          {q.sampleAnswer && (
+            <div className="rounded-xl bg-emerald-500/10 px-3 py-2 text-sm ring-1 ring-emerald-500/30">
+              <span className="mb-0.5 block text-xs font-semibold text-emerald-500">Đáp án mẫu</span>
+              <span className="whitespace-pre-wrap text-text-primary">{q.sampleAnswer}</span>
+            </div>
+          )}
+          {q.explanation && (
+            <p className="rounded-xl bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-secondary ring-1 ring-[var(--border-color)]">
+              💡 {q.explanation}
+            </p>
+          )}
+        </div>
       )}
     </div>
   );

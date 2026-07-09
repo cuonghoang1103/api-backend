@@ -381,7 +381,7 @@ export default function Navbar() {
               {isAuthenticated && mounted && (
                 <Link
                   href="/forum"
-                  className="relative flex items-center justify-center w-9 h-9 rounded-xl
+                  className="relative hidden sm:flex items-center justify-center w-9 h-9 rounded-xl
                     bg-[var(--bg-surface)] border border-theme-light
                     hover:border-neon-violet/30 hover:bg-neon-violet/5 transition-all"
                   title="Diễn đàn"

@@ -1099,6 +1099,7 @@ export async function createReading(languageId: number, body: Record<string, unk
       images: (body.images ?? null) as Prisma.InputJsonValue,
       content: (body.content ?? null) as Prisma.InputJsonValue,
       translation: (body.translation ?? null) as Prisma.InputJsonValue,
+      questions: (body.questions ?? null) as Prisma.InputJsonValue,
       order: optInt(body.order) ?? 0,
     },
   });
@@ -1110,6 +1111,7 @@ export async function updateReading(id: number, body: Record<string, unknown>) {
   if (body.images !== undefined) data.images = (body.images ?? null) as Prisma.InputJsonValue;
   if (body.content !== undefined) data.content = (body.content ?? null) as Prisma.InputJsonValue;
   if (body.translation !== undefined) data.translation = (body.translation ?? null) as Prisma.InputJsonValue;
+  if (body.questions !== undefined) data.questions = (body.questions ?? null) as Prisma.InputJsonValue;
   if (body.order !== undefined) data.order = optInt(body.order) ?? 0;
   return prisma.langReadingArticle.update({ where: { id }, data });
 }

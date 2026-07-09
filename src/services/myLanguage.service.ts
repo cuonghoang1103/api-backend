@@ -68,50 +68,72 @@ export async function getLanguages(userId?: number) {
     orderBy: [{ order: 'asc' }, { id: 'asc' }],
   });
 
-  const result = await Promise.all(
-    languages.map(async (lang) => {
-      const [wordCount, grammarCount, listeningCount, conversationCount, readingCount, qnaCount, alphabetCount] =
-        await Promise.all([
-          prisma.langVocabWord.count({ where: { category: { languageId: lang.id } } }),
-          prisma.langGrammarPoint.count({ where: { languageId: lang.id } }),
-          prisma.langListeningItem.count({ where: { languageId: lang.id } }),
-          prisma.langConversationItem.count({ where: { languageId: lang.id } }),
-          prisma.langReadingArticle.count({ where: { languageId: lang.id } }),
-          prisma.langQnaItem.count({ where: { languageId: lang.id } }),
-          prisma.langAlphabetItem.count({ where: { group: { languageId: lang.id } } }),
-        ]);
+  // PERF: previously this fired 7 content COUNTs + 3 progress COUNTs PER
+  // language (10N queries) on a public landing page. We now compute all
+  // per-language content counts in a FIXED number of grouped queries and
+  // the (language-independent) progress counts ONCE. Values are identical
+  // to before.
+  const sumInto = (map: Map<number, number>, rows: Array<{ languageId: number; n: number }>) => {
+    for (const r of rows) map.set(r.languageId, (map.get(r.languageId) ?? 0) + r.n);
+    return map;
+  };
 
-      let progress: { learned: number; mastered: number; total: number; due: number } | null = null;
-      if (userId) {
-        const total = wordCount + grammarCount + alphabetCount + listeningCount + conversationCount + qnaCount;
-        const [learned, mastered, due] = await Promise.all([
-          prisma.langUserProgress.count({
-            where: { userId, status: { in: ['LEARNING', 'REVIEWING', 'MASTERED'] } },
-          }),
-          prisma.langUserProgress.count({ where: { userId, status: 'MASTERED' } }),
-          prisma.langUserProgress.count({ where: { userId, nextReviewAt: { lte: new Date() } } }),
-        ]);
-        progress = { learned, mastered, total, due };
-      }
+  const [grammarG, listeningG, conversationG, readingG, qnaG, vocabCats, alphaGroups] = await Promise.all([
+    prisma.langGrammarPoint.groupBy({ by: ['languageId'], _count: { _all: true } }),
+    prisma.langListeningItem.groupBy({ by: ['languageId'], _count: { _all: true } }),
+    prisma.langConversationItem.groupBy({ by: ['languageId'], _count: { _all: true } }),
+    prisma.langReadingArticle.groupBy({ by: ['languageId'], _count: { _all: true } }),
+    prisma.langQnaItem.groupBy({ by: ['languageId'], _count: { _all: true } }),
+    // vocab words live under a category (2-hop) → sum per-category word counts
+    prisma.langVocabCategory.findMany({ select: { languageId: true, _count: { select: { words: true } } } }),
+    // alphabet items live under a group (2-hop) → sum per-group item counts
+    prisma.langAlphabetGroup.findMany({ select: { languageId: true, _count: { select: { items: true } } } }),
+  ]);
 
-      return {
-        ...lang,
-        counts: {
-          words: wordCount,
-          grammar: grammarCount,
-          listening: listeningCount,
-          conversation: conversationCount,
-          reading: readingCount,
-          qna: qnaCount,
-          alphabet: alphabetCount,
-          lessons: listeningCount + conversationCount + qnaCount + readingCount,
-        },
-        progress,
-      };
-    }),
-  );
+  const grammarMap = sumInto(new Map(), grammarG.map((r) => ({ languageId: r.languageId, n: r._count._all })));
+  const listeningMap = sumInto(new Map(), listeningG.map((r) => ({ languageId: r.languageId, n: r._count._all })));
+  const conversationMap = sumInto(new Map(), conversationG.map((r) => ({ languageId: r.languageId, n: r._count._all })));
+  const readingMap = sumInto(new Map(), readingG.map((r) => ({ languageId: r.languageId, n: r._count._all })));
+  const qnaMap = sumInto(new Map(), qnaG.map((r) => ({ languageId: r.languageId, n: r._count._all })));
+  const wordMap = sumInto(new Map(), vocabCats.map((c) => ({ languageId: c.languageId, n: c._count.words })));
+  const alphabetMap = sumInto(new Map(), alphaGroups.map((g) => ({ languageId: g.languageId, n: g._count.items })));
 
-  return result;
+  // Progress counts never filtered by language in the original code, so
+  // every language showed the same totals — compute them a single time.
+  let progressGlobal: { learned: number; mastered: number; due: number } | null = null;
+  if (userId) {
+    const [learned, mastered, due] = await Promise.all([
+      prisma.langUserProgress.count({ where: { userId, status: { in: ['LEARNING', 'REVIEWING', 'MASTERED'] } } }),
+      prisma.langUserProgress.count({ where: { userId, status: 'MASTERED' } }),
+      prisma.langUserProgress.count({ where: { userId, nextReviewAt: { lte: new Date() } } }),
+    ]);
+    progressGlobal = { learned, mastered, due };
+  }
+
+  return languages.map((lang) => {
+    const wordCount = wordMap.get(lang.id) ?? 0;
+    const grammarCount = grammarMap.get(lang.id) ?? 0;
+    const listeningCount = listeningMap.get(lang.id) ?? 0;
+    const conversationCount = conversationMap.get(lang.id) ?? 0;
+    const readingCount = readingMap.get(lang.id) ?? 0;
+    const qnaCount = qnaMap.get(lang.id) ?? 0;
+    const alphabetCount = alphabetMap.get(lang.id) ?? 0;
+    const total = wordCount + grammarCount + alphabetCount + listeningCount + conversationCount + qnaCount;
+    return {
+      ...lang,
+      counts: {
+        words: wordCount,
+        grammar: grammarCount,
+        listening: listeningCount,
+        conversation: conversationCount,
+        reading: readingCount,
+        qna: qnaCount,
+        alphabet: alphabetCount,
+        lessons: listeningCount + conversationCount + qnaCount + readingCount,
+      },
+      progress: progressGlobal ? { ...progressGlobal, total } : null,
+    };
+  });
 }
 
 /** One language with per-section counts. */

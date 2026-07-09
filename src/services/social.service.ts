@@ -1391,8 +1391,23 @@ export async function createComment(input: CommentInput) {
   };
 }
 
-export async function getComments(postId: number, options: { cursor?: number; limit?: number } = {}) {
-  const { cursor, limit = 20 } = options;
+// How many replies to eagerly load per top-level comment. Beyond this
+// the card shows "Xem thêm N phản hồi" and lazy-loads via
+// getCommentReplies. Previously replies had no `take` and pulled the
+// ENTIRE thread (a viral comment = thousands of rows per page fetch).
+const REPLIES_FETCH_LIMIT = 3;
+
+export async function getComments(
+  postId: number,
+  options: { cursor?: number; limit?: number; currentUserId?: number } = {},
+) {
+  const { cursor, limit = 20, currentUserId } = options;
+  // Only load the VIEWER's own like row (≤1) to compute `isLiked`,
+  // instead of every like on every comment/reply. Anonymous viewers
+  // skip it entirely (isLiked=false).
+  const viewerLike = currentUserId
+    ? ({ where: { userId: currentUserId }, select: { userId: true } } as const)
+    : (false as const);
 
   // Cursor-based pagination. The frontend (`socialStore.ts:514`)
   // uses a "load more" pattern: store `nextCursor` from the response
@@ -1419,15 +1434,16 @@ export async function getComments(postId: number, options: { cursor?: number; li
       _count: { select: { likes: true } },
       replies: {
         orderBy: { createdAt: 'asc' as const },
+        take: REPLIES_FETCH_LIMIT,
         include: {
           user: {
             select: { id: true, username: true, fullName: true, avatarUrl: true },
           },
           _count: { select: { likes: true } },
-          likes: { select: { userId: true } },
+          likes: viewerLike,
         },
       },
-      likes: { select: { userId: true } },
+      likes: viewerLike,
     },
   });
 
@@ -1456,7 +1472,10 @@ export async function getComments(postId: number, options: { cursor?: number; li
     createdAt: c.createdAt,
     updatedAt: c.updatedAt,
     user: c.user,
-    isLiked: (c.likes as any[]).some((l: any) => l.userId !== undefined),
+    // viewerLike is scoped to the current user, so a non-empty array
+    // means THIS viewer liked it (fixes the old bug where any like
+    // made isLiked=true for everyone).
+    isLiked: Array.isArray(c.likes) && c.likes.length > 0,
     replies: c.replies.map((r: any) => ({
       id: r.id,
       postId: r.postId,
@@ -1472,7 +1491,7 @@ export async function getComments(postId: number, options: { cursor?: number; li
       createdAt: r.createdAt,
       updatedAt: r.updatedAt,
       user: r.user,
-      isLiked: (r.likes as any[]).some((l: any) => l.userId !== undefined),
+      isLiked: Array.isArray(r.likes) && r.likes.length > 0,
     })),
   }));
 
@@ -2171,8 +2190,11 @@ export async function listSavedPostsInCollection(
             author: true,
             media: true,
             poll: true,
-            likes: true,
-            saves: true,
+            // viewer-scoped (≤1 row each) so serializePost computes
+            // isLiked/isSaved/savedFolder without pulling EVERY like+save
+            // of each post (thousands on popular posts).
+            likes: { where: { userId }, select: { id: true } },
+            saves: { where: { userId }, select: { id: true, folder: true } },
           },
         },
       },
@@ -2202,8 +2224,9 @@ export async function listSavedPostsInCollection(
           author: true,
           media: true,
           poll: true,
-          likes: true,
-          saves: true,
+          // viewer-scoped (≤1 row each) — see the legacy branch above.
+          likes: { where: { userId }, select: { id: true } },
+          saves: { where: { userId }, select: { id: true, folder: true } },
         },
       },
       collection: { select: { id: true, name: true } },

@@ -507,6 +507,7 @@ router.get(
     const result = await getComments(postId, {
     ...(cursorId != null ? { cursor: cursorId } : {}),
     limit: parseInt(limit as string, 10) || 20,
+    currentUserId: req.userId,
     });
 
       res.json({ success: true, ...result });

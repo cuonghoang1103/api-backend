@@ -699,13 +699,16 @@ router.get('/vnpay/return', async (req: Request, res, next) => {
     const frontendBase = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, '');
 
     const params = new URLSearchParams({ orderCode });
-    if (verify.isSuccess) {
-      params.set('status', 'success');
-    } else if (verify.isVerified) {
-      params.set('status', 'failed');
-    } else {
-      // checksum mismatch — treat as suspicious
+    // SECURITY: check the checksum FIRST. `verify.isSuccess` only reflects
+    // vnp_ResponseCode==='00' and is true even for a forged query string;
+    // never render success/failed for a return whose HMAC doesn't verify
+    // (would let an attacker craft a convincing fake "success" receipt).
+    if (!verify.isVerified) {
       params.set('status', 'invalid');
+    } else if (verify.isSuccess) {
+      params.set('status', 'success');
+    } else {
+      params.set('status', 'failed');
     }
 
     res.redirect(`${frontendBase}/payment/return?${params.toString()}`);

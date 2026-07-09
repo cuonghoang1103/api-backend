@@ -2,6 +2,20 @@ import { Request, Response, NextFunction } from 'express';
 import { captureException } from '../services/sentry.service.js';
 import { logger } from '../utils/logger.js';
 
+/**
+ * Wrap an async route handler so a rejected promise is forwarded to the
+ * Express error handler via next(err) instead of becoming a process-level
+ * `unhandledRejection`. Adopt incrementally on new/edited handlers:
+ *   router.get('/x', asyncHandler(async (req, res) => { ... }))
+ */
+export function asyncHandler(
+  fn: (req: Request, res: Response, next: NextFunction) => Promise<unknown>,
+) {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
+}
+
 export function notFoundHandler(req: Request, res: Response): void {
   res.status(404).json({
     success: false,
@@ -25,8 +39,24 @@ export function errorHandler(
  method: req.method,
  });
 
-  const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
+  let statusCode = err.statusCode || 500;
+  let message = err.message || 'Internal Server Error';
+
+  // Map well-known Prisma errors (code `Pxxxx`) to a proper 4xx with a
+  // safe message, so an uncaught Prisma error surfaces as e.g. 409/404
+  // instead of a raw 500 that leaks table/column/query internals.
+  if (!err.statusCode && typeof err.code === 'string' && /^P\d{4}$/.test(err.code)) {
+    if (err.code === 'P2002') { statusCode = 409; message = 'Giá trị đã tồn tại'; }
+    else if (err.code === 'P2025') { statusCode = 404; message = 'Không tìm thấy dữ liệu'; }
+    else { statusCode = 400; message = 'Yêu cầu không hợp lệ'; }
+  }
+
+  // SECURITY: never leak internal error details to clients on 5xx.
+  // Return a generic message; the real one is logged above + captured
+  // by Sentry below. 4xx (AppError) messages are intentional & safe.
+  if (statusCode >= 500) {
+    message = 'Internal Server Error';
+  }
 
   // Report to Sentry — but only for 5xx errors. Client errors (4xx)
   // are not bugs and would just spam the dashboard.

@@ -17,6 +17,8 @@ declare global {
     interface Request {
       user?: JwtPayload;
       userId?: number;
+      /** Per-request correlation id (set by the request-id middleware). */
+      id?: string;
     }
   }
 }

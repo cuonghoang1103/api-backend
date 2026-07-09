@@ -37,7 +37,7 @@ router.get('/me', authenticate, async (req: Request, res: Response, next: NextFu
 });
 
 // ─── GET /aggregate — admin only ─────────────────────────
-router.get('/aggregate', authenticate, requireAdmin, async (_req: Request, res: Response, next: NextFunction) => {
+router.get('/aggregate', authenticate, requireAdmin(), async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const stats = await getAggregateQuota();
     const response: ApiResponse = {
@@ -51,7 +51,7 @@ router.get('/aggregate', authenticate, requireAdmin, async (_req: Request, res: 
 });
 
 // ─── POST /reset/:userId — admin only ────────────────────
-router.post('/reset/:userId', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction) => {
+router.post('/reset/:userId', authenticate, requireAdmin(), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { userId } = req.params;
     const scope = (req.body?.scope || 'all') as 'minute' | 'day' | 'month' | 'all';

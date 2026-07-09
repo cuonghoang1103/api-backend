@@ -118,12 +118,14 @@ RUN chmod +x /usr/local/bin/fix-uploads-perms.sh
 # Set environment
 ENV NODE_ENV=production
 ENV PORT=3001
-# Allow Node.js to use up to 1.5 GB of RAM. The default 512 MB cap caused
-# OOM crashes when a single large RAG document was indexed (infinite
-# chunking loop multiplied by parallel Prisma writes). 1.5 GB is a
-# comfortable headroom on the 2 GB VPS while still leaving room for
-# Postgres / Nginx / Frontend in the same container group.
-ENV NODE_OPTIONS=--max-old-space-size=1536
+# Node old-space heap cap. MUST stay BELOW the backend container's memory
+# limit in docker-compose.yml (currently `memory: 1G`) or the kernel
+# OOM-kills the container (exit 137) once the heap grows past the cgroup
+# limit — the old value here was 1536 MB against a 1 GB cgroup, a
+# guaranteed OOM. 768 MB ≈ 75% of 1 GB, leaving ~256 MB for non-heap
+# (buffers, sharp, stack, code). If the backend genuinely needs more heap,
+# raise BOTH this value and the compose memory limit together.
+ENV NODE_OPTIONS=--max-old-space-size=768
 
 # Expose port
 EXPOSE 3001

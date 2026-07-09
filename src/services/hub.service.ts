@@ -14,6 +14,8 @@
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { nanoid } from 'nanoid';
+import dns from 'node:dns/promises';
+import net from 'node:net';
 
 // ─── Folder CRUD ────────────────────────────────────────────
 
@@ -823,10 +825,11 @@ export async function scrapeUrl(_userId: number, rawUrl: string): Promise<Scrape
   if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
     throw new AppError('url phai la http hoac https', 400, 'INVALID_PROTOCOL');
   }
-  // Basic SSRF block — keep it short, the goal is just to refuse
-  // loopback / private addresses. A real production system would
-  // also resolve DNS and re-check at the end of each redirect.
-  if (isPrivateHost(parsed.hostname)) {
+  // SSRF block — resolve DNS and reject loopback/private/metadata targets.
+  // Re-checked on every redirect hop inside fetchWithCap.
+  try {
+    await assertPublicHost(parsed.hostname);
+  } catch {
     throw new AppError('url khong duoc tro vao mang noi bo', 400, 'PRIVATE_HOST');
   }
 
@@ -1121,24 +1124,75 @@ function decodeHtmlEntities(s: string): string {
     });
 }
 
-function isPrivateHost(hostname: string): boolean {
-  const h = hostname.toLowerCase();
-  if (h === 'localhost' || h === '::1' || h === '0.0.0.0') return true;
-  // IPv4
-  const ipv4 = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/.exec(h);
-  if (ipv4) {
-    const [, a, b] = ipv4.map(Number) as unknown as [string, number, number, number, number];
-    if (a === 10) return true;
-    if (a === 127) return true;
-    if (a === 172 && b >= 16 && b <= 31) return true;
-    if (a === 192 && b === 168) return true;
-    if (a === 169 && b === 254) return true;
-    if (a === 0) return true;
+/** True if an IPv4 dotted string is in a private/reserved range. */
+function isPrivateV4(ip: string): boolean {
+  const p = ip.split('.').map(Number);
+  if (p.length !== 4 || p.some((n) => !Number.isInteger(n) || n < 0 || n > 255)) {
+    return true; // malformed → treat as unsafe
   }
-  // IPv6 (very rough)
-  if (h.startsWith('fc') || h.startsWith('fd')) return true;
-  if (h.startsWith('fe80:')) return true;
+  const [a, b] = p;
+  if (a === 0 || a === 10 || a === 127) return true; // this-host / private / loopback
+  if (a === 169 && b === 254) return true; // link-local (incl. 169.254.169.254 metadata)
+  if (a === 172 && b >= 16 && b <= 31) return true; // private
+  if (a === 192 && b === 168) return true; // private
+  if (a === 100 && b >= 64 && b <= 127) return true; // CGNAT 100.64.0.0/10
+  if (a >= 224) return true; // multicast + reserved
   return false;
+}
+
+/** True if a normalized IP literal (v4 or v6) is private/reserved. */
+function isPrivateIp(ipRaw: string): boolean {
+  const ip = ipRaw.replace(/^\[|\]$/g, '').toLowerCase();
+  const fam = net.isIP(ip);
+  if (fam === 4) return isPrivateV4(ip);
+  if (fam === 6) {
+    if (ip === '::1' || ip === '::') return true; // loopback / unspecified
+    if (ip.startsWith('fc') || ip.startsWith('fd')) return true; // unique-local
+    if (ip.startsWith('fe80')) return true; // link-local
+    const mapped = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/.exec(ip); // IPv4-mapped
+    if (mapped) return isPrivateV4(mapped[1]);
+    // ::ffff:a9fe:a9fe style (hex) — expand the last 32 bits to dotted v4
+    const hexMapped = /^::ffff:([0-9a-f]{1,4}):([0-9a-f]{1,4})$/.exec(ip);
+    if (hexMapped) {
+      const hi = parseInt(hexMapped[1], 16);
+      const lo = parseInt(hexMapped[2], 16);
+      return isPrivateV4(`${hi >> 8}.${hi & 255}.${lo >> 8}.${lo & 255}`);
+    }
+    return false;
+  }
+  return true; // not a recognizable IP → unsafe
+}
+
+/**
+ * SSRF guard. Throws if `hostname` is (or resolves to) a private/internal
+ * address. Unlike the old string-only check, this:
+ *   - handles IPv6 literals (brackets defeated the previous checks),
+ *   - resolves DNS names and rejects if ANY resolved A/AAAA is private
+ *     (blocks DNS-rebinding names + hosts pointing at cloud metadata),
+ *   - covers 100.64/10 CGNAT and multicast/reserved ranges.
+ * Note: a determined attacker could still race DNS between this check and
+ * fetch()'s own resolution (TOCTOU) — fully closing that needs IP pinning
+ * via a custom dispatcher; tracked as a follow-up.
+ */
+async function assertPublicHost(hostname: string): Promise<void> {
+  const h = hostname.replace(/^\[|\]$/g, '').toLowerCase();
+  if (!h || h === 'localhost' || h.endsWith('.localhost') || h.endsWith('.local') || h.endsWith('.internal')) {
+    throw new Error('blocked internal host');
+  }
+  if (net.isIP(h)) {
+    if (isPrivateIp(h)) throw new Error('blocked private ip');
+    return;
+  }
+  let addrs: Array<{ address: string }>;
+  try {
+    addrs = await dns.lookup(h, { all: true });
+  } catch {
+    throw new Error('dns resolution failed');
+  }
+  if (addrs.length === 0) throw new Error('no dns records');
+  for (const { address } of addrs) {
+    if (isPrivateIp(address)) throw new Error('host resolves to a private ip');
+  }
 }
 
 /**
@@ -1155,9 +1209,7 @@ async function fetchWithCap(
 ): Promise<{ html: string; finalUrl: string }> {
   let currentUrl = startUrl;
   for (let i = 0; i <= maxRedirects; i++) {
-    if (isPrivateHost(new URL(currentUrl).hostname)) {
-      throw new Error('redirect went to a private host');
-    }
+    await assertPublicHost(new URL(currentUrl).hostname);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     let res: Response;

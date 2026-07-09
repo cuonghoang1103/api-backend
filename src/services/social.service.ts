@@ -70,22 +70,29 @@ export async function canViewPost(
  * We cache the check per-request via a Map because the same
  * userId can call multiple admin-gated deletes in one request.
  */
-const adminCheckCache = new Map<number, boolean>();
+// SECURITY: cache admin status with a SHORT TTL (not process-lifetime).
+// A demoted admin previously kept moderation powers until the process
+// restarted because entries were never invalidated. 30s bounds the
+// window while still absorbing bursts of admin-gated deletes in one
+// request. (The requireRole/requireAdmin middlewares still re-check the
+// DB every request — this cache only backs the social service-layer
+// override.)
+const ADMIN_CACHE_TTL_MS = 30_000;
+const adminCheckCache = new Map<number, { value: boolean; expiresAt: number }>();
 async function isUserAdmin(userId: number): Promise<boolean> {
-  if (adminCheckCache.has(userId)) return adminCheckCache.get(userId)!;
+  const cached = adminCheckCache.get(userId);
+  if (cached && cached.expiresAt > Date.now()) return cached.value;
   const user = await prisma.user.findUnique({
     where: { id: userId },
     include: { roles: { include: { role: true } } },
   });
-  if (!user) {
-    adminCheckCache.set(userId, false);
-    return false;
-  }
-  const isAdmin = user.roles.some((ur) => {
-    const name = ur.role.name.toUpperCase();
-    return name === 'ADMIN' || name === 'ROLE_ADMIN' || name === 'SUPER_ADMIN' || name === 'ROLE_SUPER_ADMIN';
-  });
-  adminCheckCache.set(userId, isAdmin);
+  const isAdmin = !user
+    ? false
+    : user.roles.some((ur) => {
+        const name = ur.role.name.toUpperCase();
+        return name === 'ADMIN' || name === 'ROLE_ADMIN' || name === 'SUPER_ADMIN' || name === 'ROLE_SUPER_ADMIN';
+      });
+  adminCheckCache.set(userId, { value: isAdmin, expiresAt: Date.now() + ADMIN_CACHE_TTL_MS });
   return isAdmin;
 }
 

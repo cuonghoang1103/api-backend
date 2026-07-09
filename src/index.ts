@@ -53,6 +53,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import { nanoid } from 'nanoid';
 
 // Dynamic imports với absolute path
 const { config } = await import(path.join(__dirname, 'config', 'env.js'));
@@ -160,6 +161,20 @@ app.set('trust proxy', (ip: string, hop: number): boolean => {
   return false;
 });
 
+// ─── 1b. Request ID (correlation) ──────────────────────────
+// OBSERVABILITY: stamp every request with a short correlation id,
+// echo it back in `X-Request-ID`, and expose it on `req.id` so logs
+// and error reports can be tied to a single request during an
+// incident. Honours an inbound `X-Request-ID` (e.g. from Nginx) when
+// present so the id is stable across the proxy hop.
+app.use((req: Request, res: Response, next) => {
+  const incoming = (req.headers['x-request-id'] as string | undefined)?.trim();
+  const id = incoming && incoming.length <= 64 ? incoming : nanoid(12);
+  (req as any).id = id;
+  res.setHeader('X-Request-ID', id);
+  next();
+});
+
 // ─── 2. Security Headers ───────────────────────────────────
 app.use(
   helmet({
@@ -239,6 +254,13 @@ app.use(compression({
 }));
 
 // ─── 6. HTTP Logging ──────────────────────────────────────
+// SECURITY: some endpoints accept a JWT via `?token=` (SSE streaming).
+// The default morgan `:url` token would write that JWT into access logs
+// verbatim. Override the token to redact any `token`/`code` query value.
+morgan.token('url', (req: any) => {
+  const url = (req.originalUrl || req.url || '') as string;
+  return url.replace(/([?&](?:token|code)=)[^&]+/gi, '$1[REDACTED]');
+});
 if (config.nodeEnv !== 'test') {
   app.use(
     morgan('combined', {
@@ -568,9 +590,15 @@ function setupGracefulShutdown(): void {
  shutdown('UNCAUGHT_EXCEPTION');
  });
 
- // Xử lý unhandled promise rejection
+ // Xử lý unhandled promise rejection.
+ // RESILIENCE: do NOT shut down on an unhandled rejection. Express keeps
+ // serving fine after a single floating promise (e.g. a fire-and-forget
+ // notification that failed); killing the whole process would drop every
+ // in-flight request + websocket for one stray promise. We log it loudly
+ // and report to Sentry so it still gets fixed. Only a true
+ // `uncaughtException` (above) is treated as unrecoverable → shutdown.
  process.on('unhandledRejection', (reason: unknown) => {
- logger.error('UNHANDLED REJECTION! Shutting down...', { reason: reason instanceof Error ? reason.message : String(reason) });
+ logger.error('UNHANDLED REJECTION (kept process alive)', { reason: reason instanceof Error ? reason.message : String(reason), stack: reason instanceof Error ? reason.stack : undefined });
     // Sentry expects an Error. Wrap non-Error values so the stack
     // trace is captured.
     const err =
@@ -580,7 +608,6 @@ function setupGracefulShutdown(): void {
             typeof reason === 'string' ? reason : 'Unhandled rejection',
           );
     captureException(err, { type: 'unhandledRejection' });
-    shutdown('UNHANDLED_REJECTION');
   });
 }
 

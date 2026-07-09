@@ -287,7 +287,7 @@ router.post(
   authenticate,
   [
     body('currentPassword').notEmpty().withMessage('Current password is required'),
-    body('newPassword').isLength({ min: 6 }).withMessage('New password must be at least 6 characters'),
+    body('newPassword').isLength({ min: 12, max: 100 }).withMessage('New password must be at least 12 characters'),
     body('confirmPassword').custom((value, { req }) => {
       if (value !== req.body.newPassword) {
         throw new Error('Passwords do not match');
@@ -361,7 +361,7 @@ router.post(
   '/reset-password',
   [
     body('token').notEmpty().withMessage('Token is required'),
-    body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('newPassword').isLength({ min: 12, max: 100 }).withMessage('Password must be at least 12 characters'),
   ],
   validate,
   async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {

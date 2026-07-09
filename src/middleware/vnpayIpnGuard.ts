@@ -64,10 +64,11 @@ export function vnpayIpnGuard(req: Request, res: Response, next: NextFunction): 
   // 2. IP allowlist (sandbox-bypassable)
   const isSandbox = process.env.VNPAY_SANDBOX === '1';
   if (!isSandbox) {
-    const clientIp =
-      (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
-      req.ip ||
-      '';
+    // SECURITY: use req.ip — Express resolves it from the TRUSTED end of
+    // the X-Forwarded-For chain per `trust proxy`. The left-most XFF entry
+    // is attacker-controlled and must never be used for an allowlist
+    // (same fix already applied to the rate-limiter).
+    const clientIp = req.ip || '';
     const allowed = getVnpayCidrs();
     if (!isIpInAnyCidr(clientIp, allowed)) {
       // Log the offending IP so the admin can extend the

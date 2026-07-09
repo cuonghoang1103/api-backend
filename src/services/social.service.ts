@@ -1828,29 +1828,30 @@ export async function votePoll(pollId: number, userId: number, optionIds: number
     if (previous.length > 0) {
       const prevOptionIds = previous.map((v: any) => v.optionId);
       await tx.socialPollVote.deleteMany({ where: { pollId, userId } });
-      // Decrement counts
-      for (const prevOptId of prevOptionIds) {
-        await tx.socialPollOption.update({
-          where: { id: prevOptId },
-          data: { votesCount: { decrement: 1 } },
-        });
-      }
+      // Decrement counts — one batched updateMany instead of N updates.
+      // prevOptionIds are distinct (unique constraint on (pollId,userId)
+      // means at most one prior vote row per user, hence one option id).
+      await tx.socialPollOption.updateMany({
+        where: { id: { in: prevOptionIds } },
+        data: { votesCount: { decrement: 1 } },
+      });
       await tx.socialPoll.update({
         where: { id: pollId },
         data: { totalVotes: { decrement: previous.length } },
       });
     }
 
-    // Apply new votes
-    for (const optionId of optionIds) {
-      await tx.socialPollVote.create({
-        data: { pollId, optionId, userId },
-      });
-      await tx.socialPollOption.update({
-        where: { id: optionId },
-        data: { votesCount: { increment: 1 } },
-      });
-    }
+    // Apply new votes — one createMany + one updateMany instead of 2N
+    // statements. Semantics are identical: a multi-option payload that
+    // would violate the (pollId,userId) unique still throws and rolls the
+    // whole transaction back, exactly as the per-row create loop did.
+    await tx.socialPollVote.createMany({
+      data: optionIds.map((optionId) => ({ pollId, optionId, userId })),
+    });
+    await tx.socialPollOption.updateMany({
+      where: { id: { in: optionIds } },
+      data: { votesCount: { increment: 1 } },
+    });
 
     await tx.socialPoll.update({
       where: { id: pollId },
@@ -2088,10 +2089,14 @@ export async function savePostToCollections(
     const toAdd   = validIds.filter((id) => !prev.has(id));
     const toRemove = Array.from(prev).filter((id) => !next.has(id));
 
-    // 4. Insert the new rows (unique constraint dedupes dupes).
-    for (const cid of toAdd) {
-      await tx.feedSavedPost.create({
-        data: { userId, postId, collectionId: cid },
+    // 4. Insert the new rows in one batch. toAdd already excludes
+    //    existing memberships and validIds was de-duplicated, so a
+    //    single createMany replaces the per-row create loop;
+    //    skipDuplicates guards against a concurrent double-save race.
+    if (toAdd.length > 0) {
+      await tx.feedSavedPost.createMany({
+        data: toAdd.map((cid) => ({ userId, postId, collectionId: cid })),
+        skipDuplicates: true,
       });
     }
 

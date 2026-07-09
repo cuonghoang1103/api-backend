@@ -13,6 +13,7 @@
  */
 import { prisma } from '../config/database.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
+import { cached, CacheKeys } from '../utils/cache.js';
 import type { Prisma, LangItemType, LangLearnStatus } from '@prisma/client';
 
 // ─── Shared helpers ──────────────────────────────────────────────
@@ -61,18 +62,21 @@ async function getLanguageOrThrow(code: string) {
 // PUBLIC READS
 // ═══════════════════════════════════════════════════════════════
 
-/** Landing: active languages with content counts + (optional) per-user progress summary. */
-export async function getLanguages(userId?: number) {
+/**
+ * GLOBAL part of the landing payload: active languages + per-language
+ * content counts. Identical for every viewer, so it's cached (P2-3).
+ * The per-USER progress summary is computed live in `getLanguages` and
+ * merged on top — it must NOT be cached under this shared key.
+ */
+async function computeLanguagesGlobal() {
   const languages = await prisma.language.findMany({
     where: { isActive: true },
     orderBy: [{ order: 'asc' }, { id: 'asc' }],
   });
 
-  // PERF: previously this fired 7 content COUNTs + 3 progress COUNTs PER
-  // language (10N queries) on a public landing page. We now compute all
-  // per-language content counts in a FIXED number of grouped queries and
-  // the (language-independent) progress counts ONCE. Values are identical
-  // to before.
+  // PERF: previously this fired 7 content COUNTs PER language (N×7 queries)
+  // on a public landing page. We now compute all per-language content
+  // counts in a FIXED number of grouped queries. Values are identical.
   const sumInto = (map: Map<number, number>, rows: Array<{ languageId: number; n: number }>) => {
     for (const r of rows) map.set(r.languageId, (map.get(r.languageId) ?? 0) + r.n);
     return map;
@@ -98,18 +102,6 @@ export async function getLanguages(userId?: number) {
   const wordMap = sumInto(new Map(), vocabCats.map((c) => ({ languageId: c.languageId, n: c._count.words })));
   const alphabetMap = sumInto(new Map(), alphaGroups.map((g) => ({ languageId: g.languageId, n: g._count.items })));
 
-  // Progress counts never filtered by language in the original code, so
-  // every language showed the same totals — compute them a single time.
-  let progressGlobal: { learned: number; mastered: number; due: number } | null = null;
-  if (userId) {
-    const [learned, mastered, due] = await Promise.all([
-      prisma.langUserProgress.count({ where: { userId, status: { in: ['LEARNING', 'REVIEWING', 'MASTERED'] } } }),
-      prisma.langUserProgress.count({ where: { userId, status: 'MASTERED' } }),
-      prisma.langUserProgress.count({ where: { userId, nextReviewAt: { lte: new Date() } } }),
-    ]);
-    progressGlobal = { learned, mastered, due };
-  }
-
   return languages.map((lang) => {
     const wordCount = wordMap.get(lang.id) ?? 0;
     const grammarCount = grammarMap.get(lang.id) ?? 0;
@@ -118,7 +110,6 @@ export async function getLanguages(userId?: number) {
     const readingCount = readingMap.get(lang.id) ?? 0;
     const qnaCount = qnaMap.get(lang.id) ?? 0;
     const alphabetCount = alphabetMap.get(lang.id) ?? 0;
-    const total = wordCount + grammarCount + alphabetCount + listeningCount + conversationCount + qnaCount;
     return {
       ...lang,
       counts: {
@@ -131,8 +122,35 @@ export async function getLanguages(userId?: number) {
         alphabet: alphabetCount,
         lessons: listeningCount + conversationCount + qnaCount + readingCount,
       },
-      progress: progressGlobal ? { ...progressGlobal, total } : null,
     };
+  });
+}
+
+/** Landing: active languages with content counts + (optional) per-user progress summary. */
+export async function getLanguages(userId?: number) {
+  // GLOBAL content counts are cached (120s) — same for everyone. Falls
+  // back to a live compute if Redis is unavailable (see utils/cache).
+  const globalLangs = await cached(CacheKeys.languagesGlobal, 120, computeLanguagesGlobal);
+
+  if (!userId) {
+    return globalLangs.map((lang) => ({ ...lang, progress: null }));
+  }
+
+  // PER-USER progress — computed LIVE (never cached under a shared key).
+  // These counts were never filtered by language in the original code, so
+  // every language shows the same totals. `due` is time-sensitive
+  // (nextReviewAt <= now) so it must stay live regardless.
+  const [learned, mastered, due] = await Promise.all([
+    prisma.langUserProgress.count({ where: { userId, status: { in: ['LEARNING', 'REVIEWING', 'MASTERED'] } } }),
+    prisma.langUserProgress.count({ where: { userId, status: 'MASTERED' } }),
+    prisma.langUserProgress.count({ where: { userId, nextReviewAt: { lte: new Date() } } }),
+  ]);
+
+  return globalLangs.map((lang) => {
+    const c = lang.counts;
+    // `total` intentionally excludes `reading` (preserves original formula).
+    const total = c.words + c.grammar + c.alphabet + c.listening + c.conversation + c.qna;
+    return { ...lang, progress: { learned, mastered, due, total } };
   });
 }
 

@@ -1,5 +1,6 @@
 import { prisma } from '../config/database.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
+import { cached, invalidateCache, CacheKeys } from '../utils/cache.js';
 
 // Slugify a category name into a URL-safe id (ASCII-fold Vietnamese so
 // "Giải trí" → "giai-tri"). Mirrors the approach used elsewhere.
@@ -15,13 +16,19 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
-/** Public list — only active categories, ordered for the feed pills. */
+/**
+ * Public list — only active categories, ordered for the feed pills.
+ * GLOBAL (same for every viewer) and hit on nearly every feed load, so
+ * it's cached (P2-3). Any admin mutation below busts the cache.
+ */
 export async function listActiveCategories() {
-  return prisma.videoCategory.findMany({
-    where: { isActive: true },
-    orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
-    select: { id: true, name: true, slug: true, sortOrder: true },
-  });
+  return cached(CacheKeys.videoCategoriesActive, 300, () =>
+    prisma.videoCategory.findMany({
+      where: { isActive: true },
+      orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+      select: { id: true, name: true, slug: true, sortOrder: true },
+    }),
+  );
 }
 
 /** Admin list — every category (active + hidden) with a post count. */
@@ -41,9 +48,11 @@ export async function createCategory(data: { name: string; sortOrder?: number; i
   const clash = await prisma.videoCategory.findFirst({ where: { OR: [{ name }, { slug }] } });
   if (clash) throw new BadRequestError('A category with this name already exists');
 
-  return prisma.videoCategory.create({
+  const created = await prisma.videoCategory.create({
     data: { name, slug, sortOrder: data.sortOrder ?? 0, isActive: data.isActive ?? true },
   });
+  await invalidateCache(CacheKeys.videoCategoriesActive);
+  return created;
 }
 
 export async function updateCategory(
@@ -69,7 +78,9 @@ export async function updateCategory(
   if (data.sortOrder !== undefined) updateData.sortOrder = data.sortOrder;
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
 
-  return prisma.videoCategory.update({ where: { id }, data: updateData });
+  const updated = await prisma.videoCategory.update({ where: { id }, data: updateData });
+  await invalidateCache(CacheKeys.videoCategoriesActive);
+  return updated;
 }
 
 /**
@@ -80,5 +91,6 @@ export async function deleteCategory(id: number) {
   const existing = await prisma.videoCategory.findUnique({ where: { id } });
   if (!existing) throw new NotFoundError('Category not found');
   await prisma.videoCategory.delete({ where: { id } });
+  await invalidateCache(CacheKeys.videoCategoriesActive);
   return { id };
 }

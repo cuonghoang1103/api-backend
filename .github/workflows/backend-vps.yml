@@ -219,10 +219,14 @@ jobs:
           # "Cannot read properties of undefined (reading 'findMany')"
           # errors when the new code touches prisma.<newModel>.
           ssh vps "docker exec cuonghoangdev_backend sh -c 'npx prisma generate' 2>&1" | tail -5
-          echo "--- Apply any new migrations / schema changes ---"
-          # Push schema deltas (e.g. new columns/tables). This is
-          # idempotent and safe to run on every deploy.
-          ssh vps "docker exec cuonghoangdev_backend sh -c 'npx prisma db push --accept-data-loss --skip-generate' 2>&1" | tail -10
+          echo "--- Apply pending migrations (migrate deploy) ---"
+          # SECURITY/SAFETY: use `migrate deploy` (applies only pending
+          # migrations via _prisma_migrations history) — NEVER
+          # `db push --accept-data-loss`, which can silently DROP
+          # columns/tables to match the schema. `migrate deploy` is
+          # idempotent; if it fails, the step fails loudly and a human
+          # follows the Migration Failure Protocol (CLAUDE.md).
+          ssh vps "docker exec cuonghoangdev_backend sh -c 'npx prisma migrate deploy'"
           echo "--- Restarting backend to load new code + new Prisma client ---"
           ssh vps "docker restart cuonghoangdev_backend"
           echo "--- Waiting for reload ---"

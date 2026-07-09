@@ -248,34 +248,16 @@ jobs:
           set -e
           echo "$OUT"
           if [ "$RC" -ne 0 ]; then
-            if echo "$OUT" | grep -q "P3009"; then
-              # P3009: migrate found failed migrations, mark them as rolled back
-              echo "--- P3009: Found failed migrations, marking as rolled back ---"
-              for d in prisma/migrations/*/; do
-                [ -f "${d}migration.sql" ] || continue
-                name=$(basename "$d")
-                echo "resolve --rolled-back $name"
-                npx prisma migrate resolve --rolled-back "$name" || true
-              done
-              echo "--- Re-running migrate deploy ---"
-              npx prisma migrate deploy
-            elif echo "$OUT" | grep -q "P3005"; then
-              echo "--- P3005: DB not baselined; marking existing migrations as already-applied ---"
-              for d in prisma/migrations/*/; do
-                [ -f "${d}migration.sql" ] || continue
-                name=$(basename "$d")
-                echo "resolve --applied $name"
-                npx prisma migrate resolve --applied "$name" || true
-              done
-              echo "--- Reconciling residual schema delta (one-time db push) ---"
-              npx prisma db push --accept-data-loss --skip-generate
-              echo "--- Re-running migrate deploy to confirm clean state ---"
-              npx prisma migrate deploy
-            else
-              echo "[FAIL] migrate deploy failed for a non-baseline reason"
-              echo "$OUT"
-              exit 1
-            fi
+            # SECURITY/SAFETY: do NOT auto-resolve failed migrations and do
+            # NOT run `db push --accept-data-loss` (both can silently corrupt
+            # or drop data on prod). Per the Migration Failure Protocol in
+            # CLAUDE.md, fail loudly and require a human to inspect the
+            # failure (P3009/P3005/other) and decide the fix.
+            echo "[FAIL] prisma migrate deploy failed (rc=$RC)."
+            echo "NOT auto-resolving — a human must follow the Migration Failure Protocol (CLAUDE.md)."
+            echo "--- error output ---"
+            echo "$OUT"
+            exit 1
           fi
           echo "[OK] database schema is up to date"
           REMOTE

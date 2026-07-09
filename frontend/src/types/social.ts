@@ -218,7 +218,11 @@ export type NotificationType =
   | 'NEW_FOLLOW'
   // Sharing notifications (added 2026-07-02)
   | 'NOTE_SHARE'   // Note subject (folder) was shared with you
-  | 'HUB_SHARE';   // Hub folder/file/link was shared with you
+  | 'HUB_SHARE'    // Hub folder/file/link was shared with you
+  // Admin announcement (added 2026-07-09). Synthetic client-side type
+  // built from the `admin:announcement` socket event; entityId = the
+  // announcement id, payload.title = its title. Deep-links to /forum/:id.
+  | 'ADMIN_ANNOUNCEMENT';
 
 export interface SocialNotification {
   id: number;

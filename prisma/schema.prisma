@@ -139,6 +139,7 @@ model User {
   socialNotificationsSent     SocialNotification[] @relation("NotificationsSent")
   socialPollVotes             SocialPollVote[]
   techTrendArticles           TechTrendArticle[]   @relation("TechTrendAuthor")
+  announcements               Announcement[]       @relation("AnnouncementAuthor")
 
   cyberProfile   CyberProfile?
   cyberTasks     CyberTask[]
@@ -4655,4 +4656,25 @@ model FinanceFxRate {
 
   @@index([userId, createdAt], name: "idx_fin_fx_rates_user_created")
   @@map("finance_fx_rates")
+}
+
+// ── Admin announcements ("Diễn đàn / Tin tức") ────────────────────
+// Site-wide announcements the super-admin posts (maintenance, updates,
+// new docs, general notices). Broadcast to all online users via socket
+// on create; the /forum page is the persistent record.
+model Announcement {
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(255)
+  body          String   @db.Text
+  // 'maintenance' | 'update' | 'docs' | 'general'
+  category      String   @default("general") @db.VarChar(20)
+  coverImageUrl String?  @map("cover_image_url") @db.VarChar(500)
+  isPinned      Boolean  @default(false) @map("is_pinned")
+  authorId      Int?     @map("author_id")
+  author        User?    @relation("AnnouncementAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([isPinned, createdAt], name: "idx_announcements_pinned_created")
+  @@map("announcements")
 }

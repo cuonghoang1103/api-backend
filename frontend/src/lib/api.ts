@@ -2632,6 +2632,72 @@ export interface AdminTechTrendArticle extends Omit<PublicTechTrendArticle, 'bod
   body?: unknown; // legacy JsonB column, kept for back-compat
 }
 
+// ── Announcements ("Diễn đàn / Tin tức") ──────────────────────
+// Admin-authored announcements shown on /forum. Public list/detail;
+// create/update/delete are admin-only (enforced server-side). Mirrors
+// the shared envelope: every call resolves to `{ data: <payload> }`.
+export type AnnouncementCategory = 'maintenance' | 'update' | 'docs' | 'general';
+
+export interface Announcement {
+  id: number;
+  title: string;
+  body: string;
+  category: AnnouncementCategory;
+  coverImageUrl: string | null;
+  isPinned: boolean;
+  author: {
+    id: number;
+    username: string;
+    displayName: string | null;
+    fullName: string | null;
+    avatarUrl: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AnnouncementListResponse {
+  items: Announcement[];
+  nextCursor: number | null;
+}
+
+export interface AnnouncementCreateInput {
+  title: string;
+  body: string;
+  category: AnnouncementCategory;
+  coverImageUrl?: string | null;
+  isPinned?: boolean;
+}
+
+export const announcementApi = {
+  // Public: cursor-paginated list (pinned first is decided server-side).
+  list(cursor?: number | null, limit = 20) {
+    return api.get<{ success: boolean; data: AnnouncementListResponse }>('/announcements', {
+      params: { cursor: cursor ?? undefined, limit },
+    });
+  },
+
+  // Public: single announcement by id.
+  get(id: number) {
+    return api.get<{ success: boolean; data: Announcement }>(`/announcements/${id}`);
+  },
+
+  // Admin: create.
+  create(data: AnnouncementCreateInput) {
+    return api.post<{ success: boolean; data: Announcement }>('/announcements', data);
+  },
+
+  // Admin: update.
+  update(id: number, data: Partial<AnnouncementCreateInput>) {
+    return api.patch<{ success: boolean; data: Announcement }>(`/announcements/${id}`, data);
+  },
+
+  // Admin: delete.
+  remove(id: number) {
+    return api.delete<{ success: boolean; data: { id: number } }>(`/announcements/${id}`);
+  },
+};
+
 export const techTrendsApi = {
   // Public: list published articles. Supports filtering
   // by category, keyword, and the `featured` flag. The

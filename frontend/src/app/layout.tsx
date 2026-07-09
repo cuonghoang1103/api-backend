@@ -82,6 +82,14 @@ const PostCommentModal = dynamic(
   { ssr: false }
 )
 
+// Realtime admin-announcement robot popup (2026-07-09). Store-driven,
+// mounted once so an admin announcement flies in on EVERY page — even
+// where the FloatingAIAssistant idle bubble is hidden (mobile/admin).
+const AnnouncementBotPopup = dynamic(
+  () => import('@/components/social/AnnouncementBotPopup'),
+  { ssr: false }
+)
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://cuongthai.com'),
   title: {
@@ -345,6 +353,7 @@ export default function RootLayout({
               <SoundInitializer />
               <PWAInstallPrompt />
               <PostCommentModal />
+              <AnnouncementBotPopup />
             </ClientOnly>
           </LocaleWrapper>
         </ThemeProvider>

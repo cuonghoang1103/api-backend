@@ -403,6 +403,7 @@ for route in \
     hub/folders \
     snippets \
     video-categories \
+    announcements \
     my-language \
     finance/wallets \
     cyber/profile; do

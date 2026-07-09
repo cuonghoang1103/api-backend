@@ -31,7 +31,16 @@ import { useEffect } from 'react';
 import { getSocket, connectSocket } from '@/lib/socket';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
+import { useAnnouncementPopup } from '@/store/useAnnouncementPopup';
 import type { SocialNotification } from '@/types/social';
+
+/** Payload shape of the `admin:announcement` socket event. */
+interface AdminAnnouncementEvent {
+  id: number;
+  title: string;
+  category: string;
+  createdAt: string;
+}
 
 let attached = false;
 let cleanupFn: (() => void) | null = null;
@@ -69,7 +78,18 @@ export function useNotificationSocket(): void {
           // and 'notification' respectively. The user
           // can swap the actual MP3 in /settings/notifications.
           if (typeof window === 'undefined') return;
-          const kind = payload.type === 'NEW_MESSAGE' ? 'message' : 'notification';
+          // When the super-admin (Cuong03dx) is the actor — e.g. they liked /
+          // commented on the recipient's post — play the dedicated "admin
+          // notification" sound the user configured in /settings/notifications.
+          // The notification payload carries the actor as `sender`, so this
+          // needs no backend change for admin INTERACTIONS.
+          const isAdminActor = payload.sender?.username === 'Cuong03dx';
+          const kind =
+            payload.type === 'NEW_MESSAGE'
+              ? 'message'
+              : isAdminActor
+                ? 'admin-notification'
+                : 'notification';
           import('@/lib/sound')
             .then(({ playSound }) => {
               void playSound(kind);
@@ -79,8 +99,57 @@ export function useNotificationSocket(): void {
 
         socket.on('social:notification', onNotification);
 
+        // Admin announcement broadcast (added 2026-07-09). Fired to
+        // EVERY connected client when an admin posts to /forum. Three
+        // effects: (1) play the dedicated admin sound, (2) drop a
+        // synthetic notification into the bell (so it persists + bumps
+        // unread), (3) trigger the fly-in robot popup (AnnouncementBotPopup).
+        const onAnnouncement = (a: AdminAnnouncementEvent) => {
+          if (!a || typeof a.id !== 'number') return;
+
+          // (2) Synthetic bell notification. entityId = announcement id so
+          // the dropdown deep-links to /forum/:id; payload.title feeds the
+          // "Thông báo mới từ Admin: …" label. Negative id keeps it from
+          // colliding with real server notification ids in the de-dupe set.
+          useNotificationStore.getState().prepend({
+            id: -a.id,
+            type: 'ADMIN_ANNOUNCEMENT',
+            entityId: a.id,
+            secondaryEntityId: null,
+            payload: { title: a.title },
+            isRead: false,
+            createdAt: a.createdAt || new Date().toISOString(),
+            receiverId: 0,
+            sender: {
+              id: 0,
+              username: 'admin',
+              fullName: 'Admin',
+              displayName: 'Admin',
+              avatarUrl: null,
+            },
+          } as SocialNotification);
+
+          // (3) Robot fly-in popup. Standalone store — no circular import.
+          useAnnouncementPopup.getState().show({
+            message: 'Bạn có thông báo mới từ admin ở trang diễn đàn',
+            href: `/forum/${a.id}`,
+          });
+
+          // (1) Play the admin sound (lazy-import to keep AudioContext off
+          // the server + out of the initial bundle).
+          if (typeof window === 'undefined') return;
+          import('@/lib/sound')
+            .then(({ playSound }) => {
+              void playSound('admin-notification');
+            })
+            .catch(() => { /* ignore */ });
+        };
+
+        socket.on('admin:announcement', onAnnouncement);
+
         cleanupFn = () => {
           socket.off('social:notification', onNotification);
+          socket.off('admin:announcement', onAnnouncement);
         };
       } catch (err) {
         // The socket failed to connect — that's fine, the

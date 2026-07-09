@@ -86,6 +86,10 @@ function describeNotification(n: SocialNotification): string {
       return `${name} đã chia sẻ một ghi chú với bạn`;
     case 'HUB_SHARE':
       return `${name} đã chia sẻ một thư mục tài liệu với bạn`;
+    case 'ADMIN_ANNOUNCEMENT': {
+      const title = (n.payload?.title as string) || 'Thông báo mới';
+      return `Thông báo mới từ Admin: ${title}`;
+    }
     case 'NEW_POST':
     default:
       return `${name} đã đăng bài viết mới`;
@@ -163,6 +167,10 @@ function targetUrl(n: SocialNotification): string {
   // Sharing notifications: entityId is the subject/folder id
   if (n.type === 'NOTE_SHARE') return '/notes';
   if (n.type === 'HUB_SHARE') return '/hub';
+  // Admin announcement: entityId is the announcement id → /forum/:id
+  if (n.type === 'ADMIN_ANNOUNCEMENT') {
+    return n.entityId ? `/forum/${n.entityId}` : '/forum';
+  }
   if (n.entityId) {
     // entityId for social notifications is the post id. For
     // post-targeted events (NEW_REACTION, NEW_POST) that's the

@@ -29,6 +29,7 @@ import { socialApi } from '@/lib/api';
 import { PostCard } from '@/components/social/PostCard';
 import CommentComposer from '@/components/social/CommentComposer';
 import { useKeyboardInset } from '@/hooks/useKeyboardInset';
+import { lockScroll, unlockScroll } from '@/lib/scrollLock';
 import type { SocialPost } from '@/types/social';
 
 export default function PostCommentModal() {
@@ -78,12 +79,14 @@ function ModalContent({ postId }: { postId: number }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
 
-  // ── Scroll-lock the body while open (mirror TheaterMode) ─────
+  // ── Freeze the page behind the modal while open ─────────────
+  // Locks the real document scroller (documentElement) — setting
+  // body.overflow alone was a no-op when the viewport scrolls on
+  // <html>, which let the / feed keep scrolling underneath.
   useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    lockScroll();
     return () => {
-      document.body.style.overflow = prev;
+      unlockScroll();
     };
   }, []);
 
@@ -188,7 +191,7 @@ function ModalContent({ postId }: { postId: number }) {
         </div>
 
         {/* ── Scrollable body: the whole post + comment list ──── */}
-        <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
+        <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
           {post ? (
             <PostCard post={post} detailMode />
           ) : (

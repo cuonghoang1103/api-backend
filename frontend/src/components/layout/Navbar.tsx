@@ -19,7 +19,7 @@ import {
  Home, FolderOpen, Music, MessageCircle, Sparkles,
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
  Globe, ShoppingBag, Bell, NotebookPen,
-Sun, Moon, Wallet, ArrowLeft,
+Sun, Moon, Wallet, ArrowLeft, Megaphone,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -376,6 +376,20 @@ export default function Navbar() {
                   </span>
                 )}
               </button>
+
+              {/* Diễn đàn / Tin tức — quick shortcut next to the bell */}
+              {isAuthenticated && mounted && (
+                <Link
+                  href="/forum"
+                  className="relative flex items-center justify-center w-9 h-9 rounded-xl
+                    bg-[var(--bg-surface)] border border-theme-light
+                    hover:border-neon-violet/30 hover:bg-neon-violet/5 transition-all"
+                  title="Diễn đàn"
+                  aria-label="Diễn đàn"
+                >
+                  <Megaphone className="w-3.5 h-3.5 text-text-secondary" />
+                </Link>
+              )}
 
               {/* Notification bell — only for authenticated users */}
               {isAuthenticated && mounted && (

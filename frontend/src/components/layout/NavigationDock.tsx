@@ -10,7 +10,7 @@ import {
   Sparkles, FileCode2, LogOut, User, Settings,
   GraduationCap, ShoppingBag, Layers, ChevronRight,
   Github, Menu, X, NotebookPen, Languages, Wallet,
-  TrendingUp, Gamepad2, Users, PlayCircle,
+  TrendingUp, Gamepad2, Users, PlayCircle, Megaphone,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -19,6 +19,7 @@ import { UserAvatar } from '@/components/common/UserAvatar';
 import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { lockScroll, unlockScroll } from '@/lib/scrollLock';
 
 // ── iOS-style floating sidebar ────────────────────────────────
 //
@@ -63,6 +64,7 @@ const DOCK_ITEMS: DockItem[] = [
   { href: '/my-courses', label: 'My Courses', icon: PlayCircle, section: 'main' },
   { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'main' },
   { href: '/blog', label: 'Blog', icon: BookOpen, section: 'user' },
+  { href: '/forum', label: 'Diễn đàn', icon: Megaphone, section: 'user' },
   { href: '/tech-trends', label: 'Tech Trends', icon: TrendingUp, section: 'user' },
   { href: '/games', label: 'Games', icon: Gamepad2, section: 'user' },
   { href: '/notes', label: 'Notes', icon: NotebookPen, section: 'user' },
@@ -248,16 +250,16 @@ export default function NavigationDock() {
     };
   }, [isOpen, close]);
 
-  // Lock body scroll while open.
+  // Freeze the page behind the panel while open. Locks the real
+  // document scroller (documentElement) — body.overflow alone was a
+  // no-op when the viewport scrolls on <html>, so the / feed kept
+  // scrolling underneath the open sidebar.
   useEffect(() => {
-    if (typeof document === 'undefined') return;
-    if (isOpen) {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = prev;
-      };
-    }
+    if (!isOpen) return;
+    lockScroll();
+    return () => {
+      unlockScroll();
+    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -461,7 +463,7 @@ export default function NavigationDock() {
                 read `hoveredHref` from the parent state
                 to compute their own magnify scale based
                 on distance from the hovered item. */}
-            <div className="flex-1 overflow-y-auto overflow-x-visible px-3 pb-3">
+            <div className="flex-1 overflow-y-auto overflow-x-visible overscroll-contain px-3 pb-3">
               {sections.map(({ key, items, index }) => (
                 <motion.div
                   key={key}

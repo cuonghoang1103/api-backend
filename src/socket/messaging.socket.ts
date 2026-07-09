@@ -130,16 +130,16 @@ let emitter: MessagingEmitter | null = null;
             return;
           }
 
-          // Post reactions: broadcast to the global feed room so
-          // every connected viewer whose feed includes the post
-          // can patch the count in place. We don't track per-post
-          // rooms (would need a join on every feed page load);
-          // the global fan-out is small (one event per reaction
-          // click, payload is just counts) and the receiver-side
-          // updatePostReactions no-ops if the post isn't in the
-          // local feed slice.
+          // Post reactions: emit ONLY to the `post:<id>` room —
+          // clients join that room for the posts currently in their
+          // feed slice (see `post:subscribe`). Previously this was a
+          // global `io.emit` to EVERY socket on every reaction click
+          // (O(all sockets) per like — the biggest realtime fan-out).
+          // If a viewer's client hasn't subscribed (old cached FE,
+          // socket not yet connected), they just miss the live patch
+          // and pick it up on the next feed refresh — graceful.
           if (event === 'post:reacted' && p && typeof p.postId === 'number') {
-            io?.emit('post:reacted', payload);
+            io?.to(`post:${p.postId}`).emit('post:reacted', payload);
             return;
           }
 
@@ -343,6 +343,29 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     });
     socket.on('thread:leave', (threadId: number) => {
       if (typeof threadId === 'number') socket.leave(`thread:${threadId}`);
+    });
+
+    // Per-post reaction rooms. The feed subscribes to the posts it has
+    // loaded so it receives `post:reacted` only for those — instead of
+    // the old global broadcast to every socket. Accepts one id or an
+    // array. Capped so a pathological client can't join unbounded rooms.
+    const POST_ROOM_CAP = 500;
+    socket.on('post:subscribe', (ids: number | number[]) => {
+      const arr = Array.isArray(ids) ? ids : [ids];
+      let joined = 0;
+      for (const id of arr) {
+        if (joined >= POST_ROOM_CAP) break;
+        if (typeof id === 'number' && Number.isInteger(id) && id > 0) {
+          socket.join(`post:${id}`);
+          joined += 1;
+        }
+      }
+    });
+    socket.on('post:unsubscribe', (ids: number | number[]) => {
+      const arr = Array.isArray(ids) ? ids : [ids];
+      for (const id of arr) {
+        if (typeof id === 'number') socket.leave(`post:${id}`);
+      }
     });
 
     // Phase 3: Listen Together — register the listen:* handlers for this

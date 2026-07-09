@@ -120,6 +120,28 @@ export function leaveThread(threadId: number) {
   socket?.emit('thread:leave', threadId);
 }
 
+/**
+ * Subscribe to per-post reaction rooms so this client receives
+ * `post:reacted` for the posts currently in its feed (the backend now
+ * emits reactions per-`post:<id>` room instead of a global broadcast).
+ * Queues on the next `connect` if the socket isn't up yet, mirroring
+ * `joinThread`, so subscriptions survive a fresh page load / reconnect.
+ */
+export function subscribePosts(ids: number[]) {
+  if (!socket || ids.length === 0) return;
+  if (socket.connected) {
+    socket.emit('post:subscribe', ids);
+    return;
+  }
+  const s = socket as Socket;
+  s.once('connect', () => s.emit('post:subscribe', ids));
+}
+
+export function unsubscribePosts(ids: number[]) {
+  if (!socket?.connected || ids.length === 0) return;
+  socket.emit('post:unsubscribe', ids);
+}
+
 export function emitTyping(threadId: number, isTyping: boolean) {
   if (!socket?.connected) return;
   socket.emit('thread:typing', { threadId, isTyping });

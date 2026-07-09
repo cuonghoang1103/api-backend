@@ -31,7 +31,7 @@
  */
 
 import { useEffect } from 'react';
-import { getSocket, connectSocket } from '@/lib/socket';
+import { getSocket, connectSocket, subscribePosts, unsubscribePosts } from '@/lib/socket';
 import { useSocialStore } from '@/store/socialStore';
 import { useAuthStore } from '@/store/authStore';
 import type { ReactionBreakdown } from '@/types/social';
@@ -106,8 +106,38 @@ export function usePostReactionsSocket(): void {
         };
 
         socket.on('post:reacted', onPostReacted as any);
+
+        // Keep this client's per-post room subscriptions in sync with
+        // the posts currently loaded in the social store, so it only
+        // receives `post:reacted` for posts it's actually showing
+        // (the backend now emits per-`post:<id>` room, not globally).
+        const subscribed = new Set<number>();
+        const syncPostSubscriptions = () => {
+          try {
+            const posts = (useSocialStore.getState().posts ?? []) as Array<{ id?: number }>;
+            const current = new Set<number>();
+            for (const p of posts) if (typeof p?.id === 'number') current.add(p.id);
+            const toAdd: number[] = [];
+            const toRemove: number[] = [];
+            current.forEach((id) => { if (!subscribed.has(id)) toAdd.push(id); });
+            subscribed.forEach((id) => { if (!current.has(id)) toRemove.push(id); });
+            if (toAdd.length) { subscribePosts(toAdd); toAdd.forEach((id) => subscribed.add(id)); }
+            if (toRemove.length) { unsubscribePosts(toRemove); toRemove.forEach((id) => subscribed.delete(id)); }
+          } catch { /* best-effort */ }
+        };
+        syncPostSubscriptions();
+        // Re-sync whenever the feed slice changes (cheap set diff; only
+        // emits when the set of loaded post ids actually changes).
+        const unsubStore = useSocialStore.subscribe(syncPostSubscriptions);
+        // On (re)connect the server has no memory of our rooms — rejoin.
+        const onReconnect = () => { subscribed.clear(); syncPostSubscriptions(); };
+        socket.on('connect', onReconnect);
+
         cleanupFn = () => {
           socket.off('post:reacted', onPostReacted as any);
+          socket.off('connect', onReconnect);
+          try { unsubStore(); } catch { /* noop */ }
+          if (subscribed.size) { try { unsubscribePosts(Array.from(subscribed)); } catch { /* noop */ } }
         };
       } catch (err) {
         // Socket failed to connect — the next REST poll on

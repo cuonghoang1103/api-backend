@@ -52,7 +52,7 @@ export default function EmojiPickerPopover({
   const body = (
     <div
       ref={ref}
-      className={anchorRef ? 'z-[60]' : 'absolute bottom-full left-0 z-50 mb-2'}
+      className={anchorRef ? 'z-[220]' : 'absolute bottom-full left-0 z-50 mb-2'}
       style={anchorRef ? fixedStyle : undefined}
     >
       <Picker

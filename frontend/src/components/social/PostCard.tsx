@@ -73,6 +73,14 @@ interface PostCardProps {
    * only emits the intent.
    */
   onOpenTheater?: (postId: number) => void;
+  /**
+   * Detail mode (used by <PostCommentModal />). When true the card
+   * renders with the comment LIST always expanded and does NOT
+   * render its own inline comment composer — the modal supplies a
+   * pinned composer. The "Bình luận" button becomes a no-op so it
+   * can't recursively re-open the modal.
+   */
+  detailMode?: boolean;
 }
 
 // ─── Memoisation ───────────────────────────────────────────────
@@ -83,8 +91,11 @@ interface PostCardProps {
 // mid-list. The custom equality fn compares only what the user can
 // actually see change on the card surface; deeper state lives
 // inside the card and is owned by it (showComments, etc.).
-function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheater }: PostCardProps) {
+function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheater, detailMode = false }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
+  // In detail mode (inside the comment modal) the comment list is
+  // always open and cannot be collapsed.
+  const commentsOpen = detailMode || showComments;
   const [commentText, setCommentText] = useState('');
   // User ids the user @'d in the current comment. Populated by
   // MentionAutocomplete's onPick callback. We send this in the
@@ -279,12 +290,13 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
   }, []);
 
   const handleToggleComments = () => {
-    if (!showComments) {
-      setShowComments(true);
-      loadComments(post.id);
-    } else {
-      setShowComments(false);
-    }
+    // Detail mode (inside the modal): the list is already open and
+    // the modal owns the composer — don't recursively open a modal.
+    if (detailMode) return;
+    // Facebook-style: the comment button opens the dedicated comment
+    // modal (centered dialog on desktop, full-screen sheet on mobile)
+    // instead of expanding inline. The modal loads the comments.
+    useSocialStore.getState().openCommentModal(post.id);
   };
 
   const handleSubmitComment = async (e: React.FormEvent) => {
@@ -1320,7 +1332,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
           setShowReactions={setShowReactions}
           REACTION_PICKER_ORDER={REACTION_PICKER_ORDER}
           activeReactions={activeReactions}
-          showComments={showComments}
+          showComments={commentsOpen}
           safeCommentsCount={safeCommentsCount}
           handleToggleComments={handleToggleComments}
           handleShare={handleShare}
@@ -1356,7 +1368,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
             on every frame; the grid-rows trick lets the browser
             interpolate between 0fr and 1fr in the compositor. */}
         <AnimatePresence initial={false}>
-          {showComments && (
+          {commentsOpen && (
             <motion.div
               initial={{ opacity: 0, gridTemplateRows: '0fr' }}
               animate={{ opacity: 1, gridTemplateRows: '1fr' }}
@@ -1411,7 +1423,9 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                   </>
                 )}
 
-                {/* Comment input */}
+                {/* Comment input — hidden in detail mode; the comment
+                    modal supplies its own pinned composer (CommentComposer). */}
+                {!detailMode && (
                 <form onSubmit={handleSubmitComment} className="relative mt-3 flex items-center gap-2 min-w-0">
                   {/* Media pickers — anchored above the composer (self-position) */}
                   <EmojiPickerPopover
@@ -1532,6 +1546,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     offsetY={36}
                   />
                 </form>
+                )}
               </div>
               </div>
             </motion.div>
@@ -1572,6 +1587,7 @@ function postCardPropsEqual(prev: PostCardProps, next: PostCardProps): boolean {
   if (prev.onToggleSave !== next.onToggleSave) return false;
   if (prev.onDelete !== next.onDelete) return false;
   if (prev.onOpenTheater !== next.onOpenTheater) return false;
+  if (prev.detailMode !== next.detailMode) return false;
   return true;
 }
 

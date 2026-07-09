@@ -162,37 +162,12 @@ export default function SocialPage() {
           }, 1800);
         }
         if (commentId && Number.isFinite(commentId)) {
-          // Use the ref map if available; fall back to direct DOM
-          // walk (works for the first paint even before the ref
-          // map is populated by the second render).
-          const handle = postCardRefs.current.get(tid);
-          if (handle) {
-            handle.openComment(commentId);
-          } else {
-            // Fallback: simulate the imperative flow via DOM.
-            const card = el;
-            const toggle = card?.querySelector<HTMLButtonElement>('[data-comments-toggle="1"]');
-            const alreadyOpen = card?.querySelector('[data-comment-id]');
-            if (toggle && !alreadyOpen) toggle.click();
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                const target = document.querySelector<HTMLElement>(
-                  `[data-comment-id="${commentId}"]`,
-                );
-                if (target) {
-                  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  target.classList.add(
-                    'ring-2', 'ring-violet-500/60', 'rounded-2xl', 'transition',
-                  );
-                  window.setTimeout(() => {
-                    target.classList.remove(
-                      'ring-2', 'ring-violet-500/60', 'rounded-2xl',
-                    );
-                  }, 2400);
-                }
-              });
-            });
-          }
+          // Facebook-style: open the dedicated comment modal focused
+          // on the target comment. <PostCommentModal /> (mounted in
+          // the root layout) reads this store state, loads the post
+          // (fetching it if it's not in the feed) + comments, and
+          // scrolls to [data-comment-id="N"] once mounted.
+          useSocialStore.getState().openCommentModal(tid, commentId);
         }
       });
     });

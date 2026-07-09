@@ -14,6 +14,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Search, X, Loader2, UserPlus, UserCheck, Clock, MessageSquare } from 'lucide-react';
@@ -242,9 +243,11 @@ export default function UserSearchBox() {
         {dropdown}
       </div>
 
-      {/* Mobile: magnifier button → expanding overlay */}
-      <div className="md:hidden" ref={expanded ? boxRef : undefined}>
-        {!expanded ? (
+      {/* Mobile: magnifier button → expanding overlay. The overlay is
+          PORTALED to <body> so it escapes the top-nav's z-40 stacking
+          context (otherwise the results were trapped/covered). */}
+      <div className="md:hidden">
+        {!expanded && (
           <button
             type="button"
             onClick={() => { setExpanded(true); setOpen(true); setTimeout(() => inputRef.current?.focus(), 50); }}
@@ -253,28 +256,34 @@ export default function UserSearchBox() {
           >
             <Search className="h-4 w-4" />
           </button>
-        ) : (
-          <div className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-[#0d0f18]/95 p-2 backdrop-blur-xl">
-            <div className="relative">
-              <div className="flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.05] px-3 py-2">
-                <Search className="h-4 w-4 shrink-0 text-text-muted" />
-                <input
-                  ref={inputRef}
-                  value={query}
-                  onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
-                  onKeyDown={(e) => { if (e.key === 'Enter') goToResults(); if (e.key === 'Escape') { setExpanded(false); setOpen(false); } }}
-                  placeholder="Tìm bạn bè, người dùng…"
-                  className="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted/70"
-                />
-                <button type="button" onClick={() => { setExpanded(false); setOpen(false); setQuery(''); }} className="text-text-muted hover:text-text-primary">
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-              {dropdown}
-            </div>
-          </div>
         )}
       </div>
+      {expanded && typeof document !== 'undefined' && createPortal(
+        <div
+          ref={boxRef}
+          className="fixed inset-x-0 top-0 z-[130] border-b border-white/[0.06] bg-[#0d0f18]/95 p-2 backdrop-blur-xl md:hidden"
+          style={{ paddingTop: 'max(0.5rem, env(safe-area-inset-top))' }}
+        >
+          <div className="relative">
+            <div className="flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.05] px-3 py-2">
+              <Search className="h-4 w-4 shrink-0 text-text-muted" />
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
+                onKeyDown={(e) => { if (e.key === 'Enter') goToResults(); if (e.key === 'Escape') { setExpanded(false); setOpen(false); } }}
+                placeholder="Tìm bạn bè, người dùng…"
+                className="w-full bg-transparent text-base text-text-primary outline-none placeholder:text-text-muted/70"
+              />
+              <button type="button" onClick={() => { setExpanded(false); setOpen(false); setQuery(''); }} className="text-text-muted hover:text-text-primary">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            {dropdown}
+          </div>
+        </div>,
+        document.body,
+      )}
     </>
   );
 }

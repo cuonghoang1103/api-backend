@@ -41,6 +41,18 @@ interface SocialState {
   commentsHasMoreByPost: Record<number, boolean>;
   isLoadingComments: Record<number, boolean>;
 
+  // ─── Facebook-style comment modal (added 2026-07-09) ──────────
+  // Which post's comment modal is currently open (null = closed).
+  // <PostCommentModal /> is mounted once in the root layout and
+  // reads this to render a centered dialog (desktop) / full-screen
+  // sheet (mobile). The PostCard "Bình luận" button opens it via
+  // openCommentModal instead of expanding inline.
+  commentModalPostId: number | null;
+  // Optional comment id to scroll to after the modal opens — used
+  // by the ?comment=N deep-link so a notification click lands on
+  // the exact comment.
+  commentModalFocusCommentId: number | null;
+
   // Composer
   composerContent: string;
   composerMedia: MediaUploadItem[];
@@ -161,6 +173,12 @@ interface SocialState {
   addOptimisticComment: (postId: number, comment: SocialComment) => void;
   removeOptimisticComment: (postId: number, commentId: number) => void;
 
+  // Comment modal (Facebook-style). openCommentModal sets the
+  // active post (and optional comment to focus); closeCommentModal
+  // clears both.
+  openCommentModal: (postId: number, focusCommentId?: number) => void;
+  closeCommentModal: () => void;
+
   // Saved
   loadSaved: () => Promise<void>;
   loadSaveFolders: () => Promise<void>;
@@ -179,6 +197,8 @@ export const useSocialStore = create<SocialState>((set, get) => ({
   commentsCursorByPost: {},
   commentsHasMoreByPost: {},
   isLoadingComments: {},
+  commentModalPostId: null,
+  commentModalFocusCommentId: null,
 
   composerContent: '',
   composerMedia: [],
@@ -677,6 +697,15 @@ export const useSocialStore = create<SocialState>((set, get) => ({
         p.id === postId ? { ...p, commentsCount: Math.max(0, p.commentsCount - 1) } : p
       ),
     })),
+
+  openCommentModal: (postId, focusCommentId) =>
+    set({
+      commentModalPostId: postId,
+      commentModalFocusCommentId: focusCommentId ?? null,
+    }),
+
+  closeCommentModal: () =>
+    set({ commentModalPostId: null, commentModalFocusCommentId: null }),
 
   loadSaved: async () => {
     set({ isLoadingSaves: true });

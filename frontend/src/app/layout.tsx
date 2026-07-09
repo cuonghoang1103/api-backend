@@ -74,6 +74,14 @@ const PWAInstallPrompt = dynamic(
   { ssr: false }
 )
 
+// Facebook-style comment modal. Store-driven, mounted once so it's
+// available on every surface (feed, profile, saved). Opens whenever
+// a PostCard's "Bình luận" button (or a ?comment=N deep-link) fires.
+const PostCommentModal = dynamic(
+  () => import('@/components/social/PostCommentModal'),
+  { ssr: false }
+)
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://cuongthai.com'),
   title: {
@@ -336,6 +344,7 @@ export default function RootLayout({
               <FloatingAIAssistant />
               <SoundInitializer />
               <PWAInstallPrompt />
+              <PostCommentModal />
             </ClientOnly>
           </LocaleWrapper>
         </ThemeProvider>

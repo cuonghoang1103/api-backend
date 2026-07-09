@@ -10,6 +10,7 @@ import {
   Sparkles, FileCode2, LogOut, User, Settings,
   GraduationCap, ShoppingBag, Layers, ChevronRight,
   Github, Menu, X, NotebookPen, Languages, Wallet,
+  TrendingUp, Gamepad2, Users, PlayCircle,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -59,14 +60,18 @@ const DOCK_ITEMS: DockItem[] = [
   { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'main' },
   { href: '/messages', label: 'Messages', icon: MessagesSquare, section: 'main', showUnread: true },
   { href: '/courses', label: 'Courses', icon: BookMarked, section: 'main' },
+  { href: '/my-courses', label: 'My Courses', icon: PlayCircle, section: 'main' },
   { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'main' },
   { href: '/blog', label: 'Blog', icon: BookOpen, section: 'user' },
+  { href: '/tech-trends', label: 'Tech Trends', icon: TrendingUp, section: 'user' },
+  { href: '/games', label: 'Games', icon: Gamepad2, section: 'user' },
   { href: '/notes', label: 'Notes', icon: NotebookPen, section: 'user' },
   { href: '/language', label: 'My Language', icon: Languages, section: 'user' },
   { href: '/projects', label: 'Projects', icon: FolderOpen, section: 'user' },
   { href: '/exp-hub', label: 'Exp Hub', icon: FileCode2, section: 'user' },
   { href: '/hub', label: 'Hub', icon: Layers, section: 'user' },
   { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'user' },
+  { href: '/friends', label: 'Friends', icon: Users, section: 'user' },
   { href: '/chat', label: 'AI Chat', icon: Sparkles, section: 'user' },
   { href: '/music', label: 'Music', icon: Music, section: 'user' },
   { href: '/finance', label: 'MoneyFlow', icon: Wallet, section: 'user' },

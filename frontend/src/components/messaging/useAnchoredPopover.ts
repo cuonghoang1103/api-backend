@@ -30,7 +30,9 @@ export function useAnchoredFixedStyle(
       // Anchor the popover's BOTTOM just above the anchor's top edge so it
       // opens upward, like the original `bottom-full` behaviour.
       const bottom = window.innerHeight - r.top + 8;
-      setStyle({ position: 'fixed', left, bottom, width: w, zIndex: 60 });
+      // z 220 so the picker sits ABOVE the comment modal (z-200) and every
+      // other overlay; it's portaled to <body>, so this is always safe.
+      setStyle({ position: 'fixed', left, bottom, width: w, zIndex: 220 });
     };
     compute();
     window.addEventListener('resize', compute);

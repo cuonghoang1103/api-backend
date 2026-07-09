@@ -281,18 +281,18 @@ export default function MessageBubble({
           </div>
         )}
 
-        {/* Phase 6: Shared post preview card — clickable to view original post */}
+        {/* Shared post preview card — opens the post via the home comment
+            modal (`/?post=N`). The old `/social/post/[id]` route never
+            existed → this link used to 404. Same-tab so the SPA handles it. */}
         {message.postShare && (
           <a
-            href={`/social/post/${message.postShare.postId}`}
+            href={`/?post=${message.postShare.postId}`}
             className={cn(
               'mt-2 mx-3.5 mb-1 block rounded-xl overflow-hidden transition-opacity hover:opacity-90',
               isOwn
                 ? 'bg-white/10 border border-white/10'
                 : 'bg-white/[0.04] border border-white/[0.06]',
             )}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             {/* Thumbnail if available */}
             {message.postShare.mediaThumbnail && (

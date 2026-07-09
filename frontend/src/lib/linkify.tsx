@@ -98,11 +98,20 @@ export function linkifyToNodes(
       );
       if (trail) nodes.push(trail);
     } else if (mention) {
+      // When mentions are enabled, make @name CLICKABLE → the people-search
+      // (`/friends?q=name`) so it resolves to the person (there's no
+      // username-based profile route; profile is /profile/[id], and linkify
+      // only has the text, not the id). Previously it was a dead <span>.
       nodes.push(
         mentions ? (
-          <span key={key++} className={mentionClassName}>
+          <a
+            key={key++}
+            href={`/friends?q=${encodeURIComponent(mention.replace(/^@/, ''))}`}
+            onClick={(e) => e.stopPropagation()}
+            className={mentionClassName}
+          >
             {mention}
-          </span>
+          </a>
         ) : (
           mention
         ),

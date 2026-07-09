@@ -147,9 +147,27 @@ export interface PlayOptions {
   volume?: number;
 }
 
-let volumeGetter: () => number = () => 0.5;
-let enabledGetter: (kind: SoundKind) => boolean = () => true;
-let masterEnabledGetter: () => boolean = () => true;
+// Defaults READ THE PERSISTED PREFS DIRECTLY FROM localStorage (the Zustand
+// `preferencesStore` persists to `cuong-sound-prefs-v1` on every change). This
+// is the real fix for "mute still plays" + "volume stuck at 50%": those bugs
+// happened when `configureSoundSources` hadn't wired yet (SoundInitializer is a
+// lazy ssr:false chunk) and the old hardcoded fallbacks (0.5 / true) were used.
+// IMPORTANT: we read localStorage rather than `import`ing the store — importing
+// preferencesStore here creates a circular import (it imports this module) that
+// crashed the whole app with a TDZ "Cannot access before initialization".
+function readSoundPrefs(): { masterEnabled?: boolean; volume?: number; enabled?: Record<string, boolean> } | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem('cuong-sound-prefs-v1');
+    if (!raw) return null;
+    return JSON.parse(raw)?.state ?? null;
+  } catch {
+    return null;
+  }
+}
+let volumeGetter: () => number = () => readSoundPrefs()?.volume ?? 0.5;
+let enabledGetter: (kind: SoundKind) => boolean = (k) => readSoundPrefs()?.enabled?.[k] ?? true;
+let masterEnabledGetter: () => boolean = () => readSoundPrefs()?.masterEnabled ?? true;
 
 /** Called by the preferences store to wire live getters. We use
  *  getters (not a stored copy) so changes to the slider take effect

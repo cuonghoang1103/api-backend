@@ -1279,7 +1279,7 @@ export async function createComment(input: CommentInput) {
 
   // Optional rich media (GIF / sticker) — mirrors Message.mediaUrl/Kind.
   // Only a valid kind + fully-qualified URL is stored; otherwise null.
-  const kind = input.mediaKind === 'gif' || input.mediaKind === 'sticker' ? input.mediaKind : null;
+  const kind = input.mediaKind === 'gif' || input.mediaKind === 'sticker' || input.mediaKind === 'image' ? input.mediaKind : null;
   const mediaUrl = kind && typeof input.mediaUrl === 'string' && /^https?:\/\//i.test(input.mediaUrl.trim())
     ? input.mediaUrl.trim()
     : null;

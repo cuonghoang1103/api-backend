@@ -8,9 +8,10 @@
 // scrolling comment list.
 
 import { useEffect, useRef, useState } from 'react';
-import { Send } from 'lucide-react';
+import { Send, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useSocialStore } from '@/store/socialStore';
-import { socialApi } from '@/lib/api';
+import { socialApi, fileApi } from '@/lib/api';
 import MentionAutocomplete from '@/components/social/MentionAutocomplete';
 import EmojiPickerPopover from '@/components/messaging/EmojiPickerPopover';
 import GifPicker from '@/components/messaging/GifPicker';
@@ -37,11 +38,31 @@ export default function CommentComposer({
   // out NEW_MENTION notifications. Cleared on submit / when the
   // input is emptied.
   const [mentions, setMentions] = useState<Set<number>>(new Set());
-  const [media, setMedia] = useState<{ url: string; kind: 'gif' | 'sticker' } | null>(null);
+  const [media, setMedia] = useState<{ url: string; kind: 'gif' | 'sticker' | 'image' } | null>(null);
   const [picker, setPicker] = useState<'emoji' | 'gif' | 'sticker' | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Upload an image file to R2 and attach it as the comment's media. Reuses
+  // the shared /files/upload endpoint (category 'images' → webp-optimised).
+  const uploadImageFile = async (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    if (file.size > 10 * 1024 * 1024) { toast.error('Ảnh tối đa 10MB'); return; }
+    setUploading(true);
+    try {
+      const res = await fileApi.upload(file, 'images');
+      const url = (res.data as any)?.data?.url ?? (res.data as any)?.url;
+      if (url) setMedia({ url, kind: 'image' });
+      else toast.error('Tải ảnh thất bại');
+    } catch {
+      toast.error('Tải ảnh thất bại');
+    } finally {
+      setUploading(false);
+    }
+  };
   // Anchor so the media pickers portal ABOVE the bar (they use
   // fixed positioning relative to this element).
   const barRef = useRef<HTMLDivElement | null>(null);
@@ -163,6 +184,18 @@ export default function CommentComposer({
           </div>
         )}
         <div ref={barRef} className="flex items-center gap-2 min-w-0">
+          {/* Hidden file input for the 📷 upload button. */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) void uploadImageFile(f);
+              e.target.value = '';
+            }}
+          />
           <input
             ref={inputRef}
             type="text"
@@ -173,10 +206,29 @@ export default function CommentComposer({
               setText(next);
               if (next === '') setMentions(new Set());
             }}
+            // Paste an image straight into the comment (Cmd/Ctrl+V of a
+            // screenshot or copied picture) → upload + attach.
+            onPaste={(e) => {
+              const img = Array.from(e.clipboardData?.items ?? []).find((it) => it.type.startsWith('image/'));
+              if (img) {
+                const f = img.getAsFile();
+                if (f) { e.preventDefault(); void uploadImageFile(f); }
+              }
+            }}
             // text-base (16px) avoids iOS focus zoom.
             className="flex-1 bg-transparent text-base outline-none min-w-0"
             style={{ color: 'var(--text-primary)' }}
           />
+          {/* Image upload */}
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="flex-shrink-0 opacity-80 hover:opacity-100 disabled:opacity-40"
+            title="Thêm ảnh"
+          >
+            {uploading ? <Loader2 className="h-[18px] w-[18px] animate-spin" /> : <ImageIcon className="h-[18px] w-[18px]" style={{ color: '#22c55e' }} />}
+          </button>
           <button
             type="button"
             onClick={() => setPicker((p) => (p === 'emoji' ? null : 'emoji'))}

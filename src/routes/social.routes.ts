@@ -560,9 +560,9 @@ router.post(
         throw new AppError('Valid postId is required', 400, 'INVALID_POST_ID');
       }
       // A comment needs either text OR a valid rich-media attachment
-      // (GIF / sticker). Media-only comments are allowed.
+      // (GIF / sticker / uploaded image). Media-only comments are allowed.
       const hasMedia =
-        (mediaKind === 'gif' || mediaKind === 'sticker') &&
+        (mediaKind === 'gif' || mediaKind === 'sticker' || mediaKind === 'image') &&
         typeof mediaUrl === 'string' &&
         /^https?:\/\//i.test(mediaUrl.trim());
       if (!content?.trim() && !hasMedia) {

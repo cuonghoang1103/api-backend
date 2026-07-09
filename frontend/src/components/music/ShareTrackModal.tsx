@@ -72,14 +72,21 @@ export default function ShareTrackModal({ open, onClose, item }: Props) {
   const initError = useMessagingStore((s) => s.initError);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
-  // Reset caption whenever a new item is shared.
+  // Reset caption/tab whenever a DIFFERENT item is shared (or on open).
+  // Depend on stable primitives — NOT the `item` object — because the parent
+  // (now-playing page / PlaylistView) rebuilds `item={{...}}` on every render,
+  // and that page re-renders every second as playback time ticks. Keying on
+  // the object reference re-fired this effect each second and yanked the user
+  // back to the FEED tab (+ wiped their caption) 1-2s after they switched to
+  // CHAT — which is exactly the "share sheet won't let me send to chat" bug.
   useEffect(() => {
     if (open && item) {
       setCaption(defaultCaption(item));
       setSentThreadId(null);
       setTab('feed');
     }
-  }, [open, item]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, item?.title, item?.audioUrl]);
 
   // Lazily load conversations when the chat tab opens.
   // IMPORTANT: also reload if we have no `peer` info on any thread

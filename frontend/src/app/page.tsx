@@ -147,33 +147,18 @@ export default function SocialPage() {
     const commentIdRaw = searchParams.get('comment');
     const commentId = commentIdRaw ? Number(commentIdRaw) : null;
 
-    // Wait two frames: one for React to commit the post nodes,
-    // one for any layout/image-loading that might shift scrollHeight.
-    const raf = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const el = document.querySelector<HTMLElement>(
-          `[data-post-id="${tid}"]`,
-        );
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          el.classList.add('ring-2', 'ring-violet-500/60', 'transition');
-          window.setTimeout(() => {
-            el.classList.remove('ring-2', 'ring-violet-500/60');
-          }, 1800);
-        }
-        if (commentId && Number.isFinite(commentId)) {
-          // Facebook-style: open the dedicated comment modal focused
-          // on the target comment. <PostCommentModal /> (mounted in
-          // the root layout) reads this store state, loads the post
-          // (fetching it if it's not in the feed) + comments, and
-          // scrolls to [data-comment-id="N"] once mounted.
-          useSocialStore.getState().openCommentModal(tid, commentId);
-        }
-      });
-    });
+    // ANY ?post=N link (notification bell, shared-in-chat post card, etc.)
+    // now opens the Facebook-style comment modal. <PostCommentModal /> (in the
+    // root layout) fetches the post if it isn't already in the feed, so the
+    // link ALWAYS resolves — the old behaviour only scrolled to a DOM node and
+    // silently did nothing when the post wasn't in the loaded slice (that was
+    // the "notification / shared links don't work" bug). ?comment=M focuses
+    // that comment.
+    useSocialStore
+      .getState()
+      .openCommentModal(tid, commentId && Number.isFinite(commentId) ? commentId : undefined);
     return () => {
-      cancelAnimationFrame(raf);
-      // Strip ?post and ?comment from the URL after the scroll
+      // Strip ?post and ?comment from the URL after opening
       // so a later socket append (which would re-run the effect)
       // doesn't jump the user back to the old post / comment.
       try {

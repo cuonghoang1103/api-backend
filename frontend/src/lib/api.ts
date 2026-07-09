@@ -1416,9 +1416,9 @@ unfollowUser: (targetId: number) =>
     // likes. The CommentSection builds this list from the
     // @-picker UI it owns.
     mentions?: number[];
-    // Rich media (GIF / sticker). content may be empty when media-only.
+    // Rich media (GIF / sticker / uploaded image). content may be empty.
     mediaUrl?: string;
-    mediaKind?: 'gif' | 'sticker';
+    mediaKind?: 'gif' | 'sticker' | 'image';
   }) => api.post('/social/comments', data),
 
   updateComment: (id: number, content: string) =>
@@ -2157,7 +2157,7 @@ export interface MessagingMessage {
   content: string;
   // Rich media (GIF / sticker). Both null for plain messages.
   mediaUrl?: string | null;
-  mediaKind?: 'gif' | 'sticker' | null;
+  mediaKind?: 'gif' | 'sticker' | 'image' | null;
   deleted: boolean;
   recalled?: boolean;
   recalledAt?: string | null;

@@ -1017,7 +1017,12 @@ export const coursesApi = {
     keyword?: string;
     category?: string;
     level?: string;
+    academy?: string; // 'fpt' → only FPTU Academy courses; omit → only GENERAL
   }) => api.get('/courses', { params }),
+
+  // Report a lesson's measured video duration (0-fill only, server-side).
+  reportLessonDuration: (lessonId: number, seconds: number) =>
+    api.post(`/courses/lessons/${lessonId}/duration`, { seconds }),
 
   getFeatured: (limit = 6) =>
     api.get('/courses/featured', { params: { limit } }),

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { Course, Semester } from '@/types';
-import { BookOpen, ChevronDown, ChevronRight, GraduationCap, Layers3, PlayCircle } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronRight, GraduationCap, Layers3, PlayCircle, Search, X } from 'lucide-react';
 import { toast } from 'sonner';
 import AcademyBackground from '@/components/academy/AcademyBackground';
 import { SafeImage } from '@/components/ui/SafeImage';
@@ -41,6 +41,36 @@ export default function AcademyPage() {
     [coursesBySemester]
   );
 
+  // Flat list of every academy course (dedup across semesters) for search.
+  const allCourses = useMemo(() => {
+    const seen = new Set<number>();
+    const out: Course[] = [];
+    semesters.forEach((s) => (coursesBySemester[s.id] || []).forEach((c) => {
+      if (!seen.has(c.id)) { seen.add(c.id); out.push(c); }
+    }));
+    return out;
+  }, [semesters, coursesBySemester]);
+
+  // Search by course code (also matches title). An exact code match is
+  // ranked first, so typing "CEA" lists CEA203/CEA102… while "CEA203"
+  // surfaces exactly that course at the top.
+  const [query, setQuery] = useState('');
+  const searchResults = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return allCourses
+      .filter((c) => (c.courseCode || '').toLowerCase().includes(q) || c.title.toLowerCase().includes(q))
+      .sort((a, b) => {
+        const ac = (a.courseCode || '').toLowerCase();
+        const bc = (b.courseCode || '').toLowerCase();
+        const aExact = ac === q ? 0 : 1;
+        const bExact = bc === q ? 0 : 1;
+        if (aExact !== bExact) return aExact - bExact;
+        return ac.localeCompare(bc);
+      })
+      .slice(0, 12);
+  }, [query, allCourses]);
+
   const toggleSemester = (semesterId: number) => {
     setExpanded((prev) => prev.includes(semesterId)
       ? prev.filter((item) => item !== semesterId)
@@ -64,6 +94,55 @@ export default function AcademyPage() {
               <p className="text-text-secondary text-lg mt-4 max-w-3xl">
                 Học theo đúng cấu trúc môn học, chương, bài giảng, ghi chú và bài tập. Chọn kỳ học để khám phá từng môn và vào ngay bài học cần xem.
               </p>
+
+              {/* Search by course code (e.g. CEA → CEA203, CEA102…). */}
+              <div className="relative mt-6 max-w-xl">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted pointer-events-none" />
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Tìm môn học theo mã (VD: CEA203, PRO192)…"
+                  className="w-full pl-12 pr-10 py-3.5 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
+                />
+                {query && (
+                  <button
+                    onClick={() => setQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
+                    aria-label="Xoá tìm kiếm"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+                {query.trim() && (
+                  <div className="absolute z-30 mt-2 w-full rounded-2xl border border-darkborder bg-darkcard shadow-2xl shadow-black/40 overflow-hidden max-h-[420px] overflow-y-auto">
+                    {searchResults.length === 0 ? (
+                      <div className="px-4 py-6 text-center text-text-muted text-sm">Không tìm thấy môn học khớp “{query.trim()}”.</div>
+                    ) : (
+                      searchResults.map((course) => (
+                        <Link
+                          key={course.id}
+                          href={`/courses/${course.slug}`}
+                          onClick={() => setQuery('')}
+                          className="flex items-center gap-3 px-3 py-2.5 hover:bg-neon-violet/10 transition border-b border-darkborder/50 last:border-b-0"
+                        >
+                          <div className="w-16 h-10 rounded-lg overflow-hidden bg-darkbg shrink-0 flex items-center justify-center">
+                            {course.thumbnailUrl ? (
+                              <SafeImage src={course.thumbnailUrl} alt={course.title} label={course.title} className="w-full h-full object-cover" />
+                            ) : (
+                              <PlayCircle className="w-5 h-5 text-white/60" />
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-semibold text-neon-violet truncate">{course.courseCode || 'COURSE'}</p>
+                            <p className="text-sm text-text-secondary truncate">{course.title}</p>
+                          </div>
+                          <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
+                        </Link>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

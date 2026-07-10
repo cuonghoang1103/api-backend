@@ -29,6 +29,10 @@ function CoursesContent() {
   const [page, setPage] = useState(0);
   const [size] = useState(12);
   const [showFilters, setShowFilters] = useState(false);
+  // Top-level tab: general Courses vs the FPTU Academy sub-catalog.
+  // Academy courses live in the same table (academyType != 'GENERAL')
+  // but are surfaced ONLY here, never in the general "All" list.
+  const [academyMode, setAcademyMode] = useState(false);
 
   useEffect(() => {
     courseCategoryApi.getAll().then(r => setCategories(r.data.data || [])).catch(() => {});
@@ -37,7 +41,15 @@ function CoursesContent() {
   const fetchCourses = async () => {
     setLoading(true);
     try {
-      const res = await coursesApi.getAll({ page: page + 1, size, keyword: keyword || undefined, category: category || undefined, level: level || undefined });
+      const res = await coursesApi.getAll({
+        page: page + 1,
+        size,
+        keyword: keyword || undefined,
+        // Categories don't apply to the Academy sub-catalog.
+        category: academyMode ? undefined : (category || undefined),
+        level: level || undefined,
+        academy: academyMode ? 'fpt' : undefined,
+      });
       const coursesData = res.data?.data;
       const pagination = res.data?.pagination;
       setCourses(Array.isArray(coursesData) ? coursesData : []);
@@ -52,7 +64,8 @@ function CoursesContent() {
 
   useEffect(() => {
     fetchCourses();
-  }, [page, category, level]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, category, level, academyMode]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,6 +110,27 @@ function CoursesContent() {
       </section>
 
       <div className="max-w-6xl mx-auto px-4 pb-20">
+        {/* Top-level tabs: general Courses vs FPTU Academy. Academy
+            courses only appear under their own tab. */}
+        <div className="flex items-center gap-2 mb-6 border-b border-darkborder">
+          <button
+            onClick={() => { setAcademyMode(false); setPage(0); }}
+            className={`px-4 py-2.5 text-sm font-medium -mb-px border-b-2 transition-colors ${
+              !academyMode ? 'border-neon-violet text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
+            }`}
+          >
+            Tất cả khoá học
+          </button>
+          <button
+            onClick={() => { setAcademyMode(true); setCategory(''); setPage(0); }}
+            className={`px-4 py-2.5 text-sm font-medium -mb-px border-b-2 transition-colors flex items-center gap-1.5 ${
+              academyMode ? 'border-neon-violet text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
+            }`}
+          >
+            🎓 FPTU Academy
+          </button>
+        </div>
+
         {/* Filter bar */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3 flex-wrap">
@@ -109,7 +143,7 @@ function CoursesContent() {
               <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
             </button>
 
-            {categories.length > 0 && (
+            {categories.length > 0 && !academyMode && (
               <div className="flex items-center gap-2 flex-wrap">
                 <button
                   onClick={() => { setCategory(''); setPage(0); }}

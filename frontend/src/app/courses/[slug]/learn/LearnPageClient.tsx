@@ -14,6 +14,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import { sanitizeHtml } from '@/lib/utils';
+import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
 import type { Course, LessonDto, LessonProgress, LessonDetail } from '@/types';
 
 function formatDuration(seconds: number): string {
@@ -95,6 +96,10 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     Array<{ id: number; title: string; fileUrl: string; fileType?: string | null; fileSizeBytes: number }>
   >([]);
   const [docsOpen, setDocsOpen] = useState(true);
+  // Durations measured client-side this session (lessonId → seconds).
+  // Overlays the stored videoDurationSeconds so section/lesson labels
+  // update in real time as each video's metadata loads — no reload.
+  const [durationOverrides, setDurationOverrides] = useState<Record<number, number>>({});
   // Certificate (earned at 100%) + the 10%-off code redeemed from it.
   const [certificate, setCertificate] = useState<{ id: number; certificateNumber: string } | null>(null);
   const [redeemCode, setRedeemCode] = useState<{ code: string; expiresAt: string | null } | null>(null);
@@ -294,6 +299,24 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
       .updateProgress(course.id, { lessonId: currentLesson.id, watchTimeSeconds: secs, lastPositionSeconds: secs })
       .catch(() => { /* best-effort — never block playback */ });
   }, [course, currentLesson]);
+
+  // Effective duration = this session's measured value (if any) else the
+  // stored one. Used for the sidebar labels + section totals.
+  const lessonDuration = (lesson: { id: number; videoDurationSeconds?: number }) =>
+    durationOverrides[lesson.id] ?? lesson.videoDurationSeconds ?? 0;
+  const sectionDuration = (section: { lessons?: Array<{ id: number; videoDurationSeconds?: number }> }) =>
+    (section.lessons || []).reduce((sum, l) => sum + lessonDuration(l), 0);
+
+  // Record a lesson's measured duration once per session, and persist it
+  // server-side (the API only fills in when the stored value is 0).
+  const reportedDurRef = useRef<Set<number>>(new Set());
+  const reportDuration = useCallback((lessonId: number, seconds: number) => {
+    const secs = Math.round(seconds);
+    if (!Number.isFinite(secs) || secs <= 0 || reportedDurRef.current.has(lessonId)) return;
+    reportedDurRef.current.add(lessonId);
+    setDurationOverrides(prev => ({ ...prev, [lessonId]: secs }));
+    coursesApi.reportLessonDuration(lessonId, secs).catch(() => { /* best-effort */ });
+  }, []);
 
   // Once every lesson is complete the backend has issued a certificate
   // (auto-issued by the progress endpoint). Fetch it so we can show the
@@ -515,7 +538,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     <div className="flex-1 min-w-0 pr-2">
                       <p className="text-sm font-medium text-text-primary line-clamp-2">{section.title}</p>
                       <p className="text-xs text-text-muted mt-0.5">
-                        {section.lessonCount} lessons • {section.lessons?.filter(l => isCompleted(l.id)).length || 0}/{section.lessonCount} completed
+                        {section.lessonCount} lessons{sectionDuration(section) > 0 ? ` • ${formatDuration(sectionDuration(section))}` : ''} • {section.lessons?.filter(l => isCompleted(l.id)).length || 0}/{section.lessonCount} completed
                       </p>
                     </div>
                     {expandedSections.has(section.id)
@@ -555,7 +578,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                                 <span className="text-xs text-green-400 font-medium">Preview</span>
                               )}
                               <span className="text-xs text-text-muted">
-                                {formatDuration(lesson.videoDurationSeconds)}
+                                {formatDuration(lessonDuration(lesson))}
                               </span>
                             </div>
                           </div>
@@ -644,6 +667,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                           src={url}
                           startAt={resumeAt}
                           onProgressTick={savePosition}
+                          onDuration={(secs) => { if (lessonDuration(currentLesson) === 0) reportDuration(currentLesson.id, secs); }}
                           onEnded={() => {
                             // Native video fires a real 'ended' — this is
                             // genuine completion (unlike the old YouTube
@@ -659,11 +683,29 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                         />
                       );
                     }
-                    // YouTube / embed (default) — use embed URL so the
-                    // student can watch inside the web app, not be sent
-                    // off to youtube.com. We do NOT auto-mark completion
-                    // here: an iframe can't tell us when the video truly
-                    // ends, so the student confirms via "Mark as Complete".
+                    // YouTube — use the IFrame API player so we can read the
+                    // real duration (fills in "0 min") AND detect genuine
+                    // completion via the ENDED state (no more load-hack).
+                    const { isYT, videoId } = isYouTubeUrl(url);
+                    if (isYT && videoId) {
+                      return (
+                        <LessonYouTubePlayer
+                          key={videoKey}
+                          videoId={videoId}
+                          title={currentLesson.title}
+                          onDuration={(secs) => { if (lessonDuration(currentLesson) === 0) reportDuration(currentLesson.id, secs); }}
+                          onEnded={() => {
+                            if (!isCompleted(currentLesson.id)) markComplete();
+                            if (nextLesson) {
+                              toast.info('Chuyển sang bài tiếp theo…');
+                              window.setTimeout(() => selectLesson(nextLesson), 1500);
+                            }
+                          }}
+                        />
+                      );
+                    }
+                    // Non-YouTube embed fallback — plain iframe (no duration
+                    // / ended signals available; manual "Mark as Complete").
                     const embedUrl = toEmbedUrl(url);
                     return (
                       <iframe
@@ -851,6 +893,68 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   );
 }
 
+// ─── YouTube player (IFrame API) ───────────────────────────────────────────
+// Renders a lesson's YouTube video via the IFrame API instead of a bare
+// <iframe> so we can (1) read the real duration on ready → fill in the
+// "0 min" labels, and (2) fire onEnded on genuine completion. The player
+// target is created imperatively inside a React-owned wrapper so YT's
+// DOM replacement never collides with React reconciliation.
+function LessonYouTubePlayer({
+  videoId,
+  title,
+  onDuration,
+  onEnded,
+}: {
+  videoId: string;
+  title: string;
+  onDuration?: (seconds: number) => void;
+  onEnded?: () => void;
+}) {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const playerRef = useRef<{ destroy?: () => void } | null>(null);
+  const onDurationRef = useRef(onDuration);
+  const onEndedRef = useRef(onEnded);
+  onDurationRef.current = onDuration;
+  onEndedRef.current = onEnded;
+
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    let cancelled = false;
+
+    const target = document.createElement('div');
+    const elId = `yt-lesson-${videoId}-${Math.floor(Math.random() * 1e9)}`;
+    target.id = elId;
+    target.className = 'w-full h-full';
+    wrapper.appendChild(target);
+
+    loadYouTubeAPI().then(() => {
+      if (cancelled || !window.YT?.Player) return;
+      playerRef.current = new window.YT.Player(elId, {
+        videoId,
+        playerVars: { rel: 0, modestbranding: 1, playsinline: 1 },
+        events: {
+          onReady: (e: unknown) => {
+            const d = (e as { target?: { getDuration?: () => number } })?.target?.getDuration?.();
+            if (d && d > 0) onDurationRef.current?.(d);
+          },
+          onStateChange: (e: unknown) => {
+            if ((e as { data?: number })?.data === window.YT.PlayerState.ENDED) onEndedRef.current?.();
+          },
+        },
+      }) as unknown as { destroy?: () => void };
+    });
+
+    return () => {
+      cancelled = true;
+      try { playerRef.current?.destroy?.(); } catch { /* ignore */ }
+      try { wrapper.innerHTML = ''; } catch { /* ignore */ }
+    };
+  }, [videoId]);
+
+  return <div ref={wrapperRef} title={title} className="w-full h-full" />;
+}
+
 // ─── Custom video player for direct course videos ──────────────────────────
 // Replaces the native <video controls> with the same dark translucent control
 // bar used across the app: layered input-range scrubber, auto-hide overlay,
@@ -863,11 +967,13 @@ function CourseVideoPlayer({
   onEnded,
   startAt = 0,
   onProgressTick,
+  onDuration,
 }: {
   src: string;
   onEnded?: () => void;
   startAt?: number;
   onProgressTick?: (seconds: number, force?: boolean) => void;
+  onDuration?: (seconds: number) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -991,6 +1097,7 @@ function CourseVideoPlayer({
         onLoadedMetadata={() => {
           const d = videoRef.current?.duration ?? 0;
           setDuration(d);
+          if (d > 0) onDuration?.(d);
           // Resume from the last saved position (only once, and never
           // so close to the end that it feels like nothing happened).
           if (!didSeekRef.current && startAt > 2 && startAt < d - 5 && videoRef.current) {

@@ -605,16 +605,25 @@ async function serializeCourse(
 
 router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
-    const { page = 1, size = 12, keyword, category, level } = req.query;
+    const { page = 1, size = 12, keyword, category, level, academy } = req.query;
     const skip = (Number(page) - 1) * Number(size);
 
     const where: Record<string, unknown> = { isPublished: true };
     if (keyword) where.OR = [
       { title: { contains: String(keyword), mode: 'insensitive' } },
       { shortDescription: { contains: String(keyword), mode: 'insensitive' } },
+      { courseCode: { contains: String(keyword), mode: 'insensitive' } },
     ];
     if (category) where.category = { slug: String(category) };
     if (level) where.level = String(level);
+    // Academy (FPTU) courses live in the same table but are surfaced ONLY
+    // under the dedicated "FPTU Academy" tab — never in the general "All"
+    // list. The reliable discriminator is membership in an FPT semester
+    // (semesterId), the same filter the /academy page groups by — NOT
+    // academyType, whose default ('FPT') makes it unreliable for this.
+    // academy=1/fpt/true switches to the Academy-only view.
+    const wantAcademy = ['1', 'fpt', 'true', 'FPT'].includes(String(academy));
+    where.semesterId = wantAcademy ? { not: null } : null;
 
     const [courses, total] = await Promise.all([
       prisma.course.findMany({
@@ -1478,6 +1487,35 @@ router.get('/:id/progress', authenticate, async (req, res: Response<ApiResponse>
       include: { lessonProgress: true },
     });
     res.json({ success: true, data: enrollment?.lessonProgress || [] });
+  } catch (error) { next(error); }
+});
+
+// Report a lesson's real video duration (measured client-side once the
+// video's metadata loads — works for BOTH uploaded R2 videos and YouTube
+// embeds via the IFrame API). We only fill in when the stored value is 0
+// (unknown), so the first accurate reading wins and no authed user can
+// overwrite an admin-set duration. Re-syncs the course/section totals.
+router.post('/lessons/:lessonId/duration', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const lessonId = parseInt(req.params.lessonId, 10);
+    if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400);
+    const seconds = Math.round(Number(req.body?.seconds));
+    if (!Number.isFinite(seconds) || seconds <= 0 || seconds > 24 * 3600) {
+      throw new AppError('Invalid duration', 400);
+    }
+    const lesson = await prisma.lesson.findUnique({
+      where: { id: lessonId },
+      select: { id: true, videoDurationSeconds: true, section: { select: { courseId: true } } },
+    });
+    if (!lesson) throw new AppError('Lesson not found', 404);
+
+    let value = lesson.videoDurationSeconds;
+    if (lesson.videoDurationSeconds === 0) {
+      await prisma.lesson.update({ where: { id: lessonId }, data: { videoDurationSeconds: seconds } });
+      value = seconds;
+      if (lesson.section?.courseId) await syncCourseStats(lesson.section.courseId);
+    }
+    res.json({ success: true, data: { lessonId, videoDurationSeconds: value } });
   } catch (error) { next(error); }
 });
 

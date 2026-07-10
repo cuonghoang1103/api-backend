@@ -13,6 +13,7 @@ import {
 import { useOrderStore } from '@/store/orderStore';
 import { useAuthStore } from '@/store/authStore';
 import { getOrderByCode, getMyOrders, type OrderResponse } from '@/lib/api/shop';
+import { courseOrdersApi, type MyCourseOrder } from '@/lib/api';
 import { generateInvoicePDF } from '@/lib/invoice';
 import type { Order } from '@/types';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -67,10 +68,19 @@ export default function MyOrdersPage() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [localOrders, setLocalOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
+  const [courseOrders, setCourseOrders] = useState<MyCourseOrder[]>([]);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Course purchases (VNPay) — shown as their own section above shop orders.
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    courseOrdersApi.getMine()
+      .then((res) => setCourseOrders(res.data.data || []))
+      .catch(() => setCourseOrders([]));
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const storedOrders = getAllOrders();
@@ -199,7 +209,51 @@ export default function MyOrdersPage() {
           </div>
         </div>
 
-        {localOrders.length === 0 ? (
+        {/* Course purchases (VNPay) */}
+        {courseOrders.length > 0 && (
+          <div className="mb-10">
+            <h2 className="text-lg font-heading font-semibold text-text-primary mb-4 flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-neon-violet" /> Khoá học đã mua
+            </h2>
+            <div className="space-y-3">
+              {courseOrders.map((o) => {
+                const paid = o.status === 'PAID' || o.status === 'COMPLETED';
+                const failed = o.status === 'FAILED' || o.status === 'CANCELLED' || o.status === 'REFUNDED';
+                return (
+                  <div key={o.id} className="rounded-2xl border border-darkborder bg-darkcard p-4 flex items-center gap-4">
+                    <div className="w-16 h-11 rounded-lg overflow-hidden bg-darkbg shrink-0">
+                      {o.course?.thumbnailUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={o.course.thumbnailUrl} alt={o.course.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center"><BookOpen className="w-5 h-5 text-text-muted" /></div>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-text-primary truncate">{o.course?.title || 'Khoá học'}</p>
+                      <p className="text-xs text-text-muted mt-0.5">
+                        <span className="font-mono">{o.orderCode}</span> · {new Date(o.createdAt).toLocaleDateString('vi-VN')} · {o.paymentMethod}
+                        {o.discountCode ? <> · mã {o.discountCode}</> : null}
+                      </p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-sm font-semibold text-text-primary">{formatPrice(o.amount)}</p>
+                      <span className={`inline-flex items-center gap-1 text-xs font-semibold ${paid ? 'text-green-400' : failed ? 'text-red-400' : 'text-yellow-400'}`}>
+                        {paid ? <CheckCircle className="w-3.5 h-3.5" /> : failed ? <XCircle className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+                        {paid ? 'Đã thanh toán' : failed ? 'Thất bại' : 'Chờ thanh toán'}
+                      </span>
+                      {paid && o.course?.slug && (
+                        <Link href={`/courses/${o.course.slug}/learn`} className="block text-xs text-neon-violet hover:underline mt-1">Vào học →</Link>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {localOrders.length === 0 && courseOrders.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

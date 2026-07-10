@@ -20,6 +20,7 @@ import {
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
  Globe, ShoppingBag, Bell, NotebookPen,
 Sun, Moon, Wallet, ArrowLeft, Megaphone,
+PlayCircle, Receipt, Ticket,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -514,6 +515,30 @@ export default function Navbar() {
                           }}
                         >
                           <UserCircle className="w-4 h-4" />Profile
+                        </Link>
+                        <Link href="/my-courses" onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.background = 'var(--bg-surface-hover)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'transparent'; }}
+                        >
+                          <PlayCircle className="w-4 h-4" />My Courses
+                        </Link>
+                        <Link href="/my-orders" onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.background = 'var(--bg-surface-hover)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'transparent'; }}
+                        >
+                          <Receipt className="w-4 h-4" />Lịch sử mua hàng
+                        </Link>
+                        <Link href="/my-codes" onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.background = 'var(--bg-surface-hover)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'transparent'; }}
+                        >
+                          <Ticket className="w-4 h-4" />My Code
                         </Link>
                         <button
                           onClick={() => { toggleTheme(); setUserMenuOpen(false); }}

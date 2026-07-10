@@ -97,6 +97,7 @@ const adminRoutes = (await import(path.join(__dirname, 'routes', 'admin.routes.j
 const skillRoutes = (await import(path.join(__dirname, 'routes', 'skill.routes.js'))).default;
 const projectRoutes = (await import(path.join(__dirname, 'routes', 'project.routes.js'))).default;
 const certificateRoutes = (await import(path.join(__dirname, 'routes', 'certificate.routes.js'))).default;
+const savedCodesRoutes = (await import(path.join(__dirname, 'routes', 'savedCodes.routes.js'))).default;
 const contactRoutes = (await import(path.join(__dirname, 'routes', 'contact.routes.js'))).default;
 const uploadRoutes = (await import(path.join(__dirname, 'routes', 'upload.routes.js'))).default;
 const devPostRoutes = (await import(path.join(__dirname, 'routes', 'devPost.routes.js'))).default;
@@ -464,6 +465,7 @@ app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/skills', skillRoutes);
 app.use('/api/v1/projects', projectRoutes);
 app.use('/api/v1/certificates', certificateRoutes);
+app.use('/api/v1/my-codes', savedCodesRoutes);
 app.use('/api/v1/contact', contactRoutes);
 app.use('/api/v1/files', failOpen(uploadLimiter), uploadRoutes);
 app.use('/api/v1/dev-posts', devPostRoutes);

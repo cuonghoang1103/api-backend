@@ -477,7 +477,11 @@ async function serializeCourse(
     publishedAt: course.publishedAt,
     totalDurationSeconds: course.totalDurationSeconds,
     totalLessons: course.totalLessons,
-    totalStudents: course.totalStudents,
+    // Real enrollment count (accurate on every load) instead of the
+    // drifting totalStudents counter — the counter wasn't incremented on
+    // every enroll path (paid/code), so it under-reported. _count is the
+    // source of truth.
+    totalStudents: course._count.enrollments,
     totalReviews: course.totalReviews,
     avgRating: Number(course.avgRating),
     requirements: course.requirements,

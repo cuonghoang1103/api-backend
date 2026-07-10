@@ -1385,6 +1385,45 @@ export const certificatesApi = {
     ),
 };
 
+export interface SavedCode {
+  id: number;
+  label: string;
+  code: string;
+  codeType: 'DISCOUNT' | 'COURSE' | 'OTHER';
+  note?: string;
+  expiresAt?: string | null;
+  source: 'MANUAL' | 'AUTO';
+  createdAt: string;
+}
+
+// "My Code" — the user's personal code wallet (discount + course codes).
+export const myCodesApi = {
+  getAll: () => api.get<{ data: SavedCode[] }>('/my-codes'),
+  add: (data: { label: string; code: string; codeType?: string; note?: string; expiresAt?: string }) =>
+    api.post<{ data: SavedCode }>('/my-codes', data),
+  remove: (id: number) => api.delete(`/my-codes/${id}`),
+};
+
+export interface MyCourseOrder {
+  id: number;
+  orderCode: string;
+  status: string;
+  amount: number;
+  originalAmount?: number;
+  discountCode?: string;
+  paymentMethod: string;
+  paymentTxnNo?: string;
+  paymentBankCode?: string;
+  paymentPayDate?: string | null;
+  createdAt: string;
+  course: { id: number; slug: string; title: string; thumbnailUrl?: string | null } | null;
+}
+
+// The user's course-purchase history (VNPay), for the Lịch sử mua hàng page.
+export const courseOrdersApi = {
+  getMine: () => api.get<{ data: MyCourseOrder[] }>('/payments/orders/my'),
+};
+
 export default api;
 
 // ─── Social Feed API ──────────────────────────────────────────────────────────

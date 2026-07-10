@@ -2,6 +2,7 @@ import { Router, Response } from 'express';
 import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { saveUserCode } from './savedCodes.routes.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -410,6 +411,14 @@ router.post('/activate-code', authenticate, async (req, res: Response<ApiRespons
           where: { id: courseCode.id },
           data: { usedCount: { increment: 1 } },
         });
+        await saveUserCode(userId, {
+          label: `Mã kích hoạt: ${course.title}`,
+          code,
+          codeType: 'COURSE',
+          note: 'Mã vào học khoá này',
+          expiresAt: courseCode.expiresAt,
+          source: 'AUTO',
+        });
         res.json({
           success: true,
           data: { message: 'Kich hoat thanh cong! Ban co the bat dau hoc ngay.', courseId },
@@ -439,6 +448,17 @@ router.post('/activate-code', authenticate, async (req, res: Response<ApiRespons
         },
       }),
     ]);
+
+    // Auto-save the activation code into the user's "My Code" wallet so
+    // they don't have to remember it for the next study session.
+    await saveUserCode(userId, {
+      label: `Mã kích hoạt: ${course.title}`,
+      code,
+      codeType: 'COURSE',
+      note: 'Mã vào học khoá này',
+      expiresAt: courseCode.expiresAt,
+      source: 'AUTO',
+    });
 
     res.json({
       success: true,

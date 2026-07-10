@@ -145,6 +145,7 @@ model User {
   cyberTasks     CyberTask[]
   cyberInventory CyberInventory?
   discountCodes  DiscountCode[]
+  savedCodes     UserSavedCode[]
 
   // ─── Direct messaging (Phase 6) ─────────────────────────
   // Per-user flag controlling whether strangers (users with no
@@ -1133,6 +1134,30 @@ model ShopOrderItem {
 
   @@index([orderId], name: "idx_order_items_order")
   @@map("shop_order_items")
+}
+
+// A user's personal "code wallet" — discount codes, course activation
+// codes, etc. Rows are either typed in by the user (source=MANUAL) or
+// auto-saved when the user actually uses a code (source=AUTO), e.g. on
+// course-code activation or certificate → 10% coupon redemption.
+model UserSavedCode {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  label     String    @db.VarChar(120)
+  code      String    @db.VarChar(80)
+  // DISCOUNT | COURSE | OTHER
+  codeType  String    @default("OTHER") @map("code_type") @db.VarChar(20)
+  note      String?   @db.VarChar(255)
+  expiresAt DateTime? @map("expires_at")
+  // MANUAL (typed by the user) | AUTO (saved on use)
+  source    String    @default("MANUAL") @db.VarChar(20)
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, code], map: "uk_user_saved_code")
+  @@index([userId], name: "idx_user_saved_code_user")
+  @@map("user_saved_codes")
 }
 
 model DiscountCode {

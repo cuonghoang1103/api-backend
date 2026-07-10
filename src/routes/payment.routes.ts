@@ -944,6 +944,37 @@ router.get('/order/:orderCode', authenticate, async (req: Request, res: Response
   }
 });
 
+// ─── GET /api/v1/payments/orders/my ──────────────────────────
+// The authenticated user's own course-purchase history (all statuses,
+// newest first) for the "Lịch sử mua hàng" page.
+router.get('/orders/my', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const orders = await prisma.courseOrder.findMany({
+      where: { userId: req.userId },
+      include: { course: { select: { id: true, slug: true, title: true, thumbnailUrl: true } } },
+      orderBy: { createdAt: 'desc' },
+      take: 200,
+    });
+    res.json({
+      success: true,
+      data: orders.map((o) => ({
+        id: o.id,
+        orderCode: o.orderCode,
+        status: o.status,
+        amount: Number(o.amount),
+        originalAmount: o.originalAmount != null ? Number(o.originalAmount) : undefined,
+        discountCode: o.discountCode ?? undefined,
+        paymentMethod: o.paymentMethod,
+        paymentTxnNo: o.paymentTxnNo ?? undefined,
+        paymentBankCode: o.paymentBankCode ?? undefined,
+        paymentPayDate: o.paymentPayDate,
+        createdAt: o.createdAt,
+        course: o.course,
+      })),
+    });
+  } catch (error) { next(error); }
+});
+
 // ─── 5. GET /api/v1/payments/admin/orders (admin) ────────────
 // Lists course orders with filters for the admin dashboard.
 // Query params:

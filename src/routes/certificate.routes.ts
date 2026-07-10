@@ -2,6 +2,7 @@ import { Router, type Response } from 'express';
 import { prisma } from '../config/database.js';
 import { authenticate, optionalAuth } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { saveUserCode } from './savedCodes.routes.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -103,6 +104,16 @@ router.post('/:id/redeem', authenticate, async (req: any, res: Response<ApiRespo
         expiresAt,
         description: `Ưu đãi hoàn thành khoá học (chứng chỉ ${cert.certificateNumber})`,
       },
+    });
+
+    // Auto-save into the user's "My Code" wallet so they can find it later.
+    await saveUserCode(req.userId, {
+      label: 'Ưu đãi hoàn thành khoá học (giảm 10%)',
+      code: created.code,
+      codeType: 'DISCOUNT',
+      note: 'Áp dụng cho khoá học tiếp theo · dùng 1 lần',
+      expiresAt: created.expiresAt,
+      source: 'AUTO',
     });
 
     res.status(201).json({

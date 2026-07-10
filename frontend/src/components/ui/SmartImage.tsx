@@ -78,8 +78,13 @@ export default function SmartImage({ src, alt = '', className, style, onError, .
   }
 
   return (
+    // Default loading/decoding are set before {...rest} so callers can
+    // override them (e.g. loading="eager" for an above-the-fold LCP image);
+    // lazy-loading keeps off-screen feed images/avatars from blocking render.
     // eslint-disable-next-line @next/next/no-img-element
     <img
+      loading="lazy"
+      decoding="async"
       {...rest}
       src={currentSrc}
       alt={alt}

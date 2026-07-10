@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSocialStore } from '@/store/socialStore';
+import { useShallow } from 'zustand/react/shallow';
 import { useIsTouch, usePrefersReducedMotion } from '@/hooks/useIsTouch';
 import { videoCategoriesApi } from '@/lib/api';
 import { useSocialFeed, useInvalidateFeed, useFeedCounts } from '@/hooks/useSocialQueries';
@@ -35,7 +36,18 @@ import TheaterMode from '@/components/social/TheaterMode';
 import MiniChatDock from '@/components/social/MiniChatDock';
 
 export default function SocialPage() {
-  const { posts, loadMore, isLoadingMore, hasNextPage } = useSocialStore();
+  // Subscribe only to the fields this page renders (with a shallow compare)
+  // so unrelated store writes don't re-render the whole feed. Behaviour is
+  // unchanged: `posts` is replaced immutably on every mutation, so its
+  // reference still changes and the feed re-renders when it should.
+  const { posts, loadMore, isLoadingMore, hasNextPage } = useSocialStore(
+    useShallow((s) => ({
+      posts: s.posts,
+      loadMore: s.loadMore,
+      isLoadingMore: s.isLoadingMore,
+      hasNextPage: s.hasNextPage,
+    })),
+  );
   const invalidateFeed = useInvalidateFeed();
   const invalidateFeedRef = useRef(invalidateFeed);
   invalidateFeedRef.current = invalidateFeed;
@@ -228,17 +240,19 @@ export default function SocialPage() {
 
   // Hydrate Zustand store from TanStack Query cache so PostCard mutations work.
   // Invalidate the query after mutations to trigger a background refetch.
-  const { toggleLike, toggleSave, loadComments, commentsByPost, loadMoreComments, commentsHasMoreByPost, isLoadingComments, addOptimisticComment, deletePost } = useSocialStore((s) => ({
-    toggleLike: s.toggleLike,
-    toggleSave: s.toggleSave,
-    loadComments: s.loadComments,
-    commentsByPost: s.commentsByPost,
-    loadMoreComments: s.loadMoreComments,
-    commentsHasMoreByPost: s.commentsHasMoreByPost,
-    isLoadingComments: s.isLoadingComments,
-    addOptimisticComment: s.addOptimisticComment,
-    deletePost: s.deletePost,
-  }));
+  const { toggleLike, toggleSave, loadComments, commentsByPost, loadMoreComments, commentsHasMoreByPost, isLoadingComments, addOptimisticComment, deletePost } = useSocialStore(
+    useShallow((s) => ({
+      toggleLike: s.toggleLike,
+      toggleSave: s.toggleSave,
+      loadComments: s.loadComments,
+      commentsByPost: s.commentsByPost,
+      loadMoreComments: s.loadMoreComments,
+      commentsHasMoreByPost: s.commentsHasMoreByPost,
+      isLoadingComments: s.isLoadingComments,
+      addOptimisticComment: s.addOptimisticComment,
+      deletePost: s.deletePost,
+    })),
+  );
 
   const feedPosts = feedData?.data ?? posts;
   const feedNextCursor = feedData?.nextCursor ?? null;
@@ -772,11 +786,11 @@ export default function SocialPage() {
                   <FeedFileList posts={displayPosts} />
                 ) : (
                   displayPosts.map((post) => {
-                    // Find the latest version of this post from Zustand.
-                    // Zustand is the single source of truth for mutations;
-                    // TQ is used only for initial data hydration and
-                    // background refetch reconciliation.
-                    const latest = posts.find((p) => p.id === post.id) ?? post;
+                    // `displayPosts === posts` (the Zustand array is the
+                    // single source of truth), so `post` is already the live
+                    // item — no per-card O(n) `find` needed (was O(n²) over
+                    // the feed).
+                    const latest = post;
                     return (
                       // Performance note (Phase 4 perf):
                       // - `whileInView` was replaced with a plain

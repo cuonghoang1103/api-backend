@@ -311,6 +311,11 @@ export default function CourseDetailPage() {
   const [accessCode, setAccessCode] = useState('');
   const [codeError, setCodeError] = useState('');
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
+  // Review form (enrolled learners only).
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewHover, setReviewHover] = useState(0);
+  const [reviewContent, setReviewContent] = useState('');
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   // ── Render-storm tripwire. Counter updates on every render (via ref
   // so it doesn't itself trigger a re-render). If we ever exceed 50
@@ -478,6 +483,35 @@ export default function CourseDetailPage() {
   const isCodeCourse = accessType === 'CODE';
   const whatYouLearnList = course.whatYouLearn ? course.whatYouLearn.split('\n').filter(Boolean) : [];
   const requirementsList = course.requirements ? course.requirements.split('\n').filter(Boolean) : [];
+
+  // Only enrolled learners (or admin/instructor) may post a review.
+  const canReview = Boolean(course.isEnrolled || course.hasPaidAccess || (course as any).isAdmin);
+  // Display rating: compute from the loaded reviews so it's accurate the
+  // moment a new one is posted (falls back to the stored aggregate).
+  const displayReviewCount = reviews.length || course.totalReviews || 0;
+  const displayAvgRating = reviews.length
+    ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
+    : Number(course.avgRating) || 0;
+
+  const submitReview = async () => {
+    if (!course || submittingReview) return;
+    if (!(reviewRating >= 1 && reviewRating <= 5)) {
+      toast.error('Vui lòng chọn số sao (1–5)');
+      return;
+    }
+    setSubmittingReview(true);
+    try {
+      await coursesApi.createReview({ courseId: course.id, rating: reviewRating, content: reviewContent.trim() || undefined });
+      const rev = await coursesApi.getReviews(course.id);
+      setReviews(rev.data.data || []);
+      setReviewContent('');
+      toast.success('Cảm ơn bạn đã đánh giá khoá học!');
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Không gửi được đánh giá');
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-darkbg">
@@ -745,12 +779,72 @@ export default function CourseDetailPage() {
               </section>
             )}
 
-            {/* Reviews */}
-            {reviews.length > 0 && (
-              <section className="bg-darkcard border border-darkborder/50 rounded-2xl p-6">
-                <h2 className="text-xl font-heading font-bold text-text-primary mb-5">
-                  Reviews ({course.totalReviews})
+            {/* Reviews & ratings */}
+            <section className="bg-darkcard border border-darkborder/50 rounded-2xl p-6">
+              <div className="flex items-center justify-between gap-4 mb-5 flex-wrap">
+                <h2 className="text-xl font-heading font-bold text-text-primary flex items-center gap-2">
+                  <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                  Đánh giá học viên
                 </h2>
+                {displayReviewCount > 0 && (
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star key={i} className={`w-4 h-4 ${i < Math.round(displayAvgRating) ? 'text-yellow-400 fill-yellow-400' : 'text-darkborder'}`} />
+                      ))}
+                    </div>
+                    <span className="text-sm text-text-secondary">{displayAvgRating.toFixed(1)} · {displayReviewCount} đánh giá</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Review form — enrolled learners (or admin) only. Others read-only. */}
+              {canReview ? (
+                <div className="mb-6 rounded-2xl border border-darkborder bg-darkbg/50 p-4">
+                  <p className="text-sm font-medium text-text-primary mb-2">Đánh giá của bạn</p>
+                  <div className="flex items-center gap-1 mb-3">
+                    {Array.from({ length: 5 }).map((_, i) => {
+                      const val = i + 1;
+                      return (
+                        <button
+                          key={i}
+                          type="button"
+                          onMouseEnter={() => setReviewHover(val)}
+                          onMouseLeave={() => setReviewHover(0)}
+                          onClick={() => setReviewRating(val)}
+                          className="p-0.5"
+                          aria-label={`${val} sao`}
+                        >
+                          <Star className={`w-7 h-7 transition-colors ${val <= (reviewHover || reviewRating) ? 'text-yellow-400 fill-yellow-400' : 'text-darkborder'}`} />
+                        </button>
+                      );
+                    })}
+                    {reviewRating > 0 && <span className="ml-2 text-sm text-text-muted">{reviewRating}/5</span>}
+                  </div>
+                  <textarea
+                    value={reviewContent}
+                    onChange={(e) => setReviewContent(e.target.value)}
+                    rows={3}
+                    placeholder="Chia sẻ cảm nhận của bạn về khoá học (không bắt buộc)…"
+                    className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none mb-3"
+                  />
+                  <button
+                    onClick={submitReview}
+                    disabled={submittingReview || reviewRating < 1}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+                  >
+                    {submittingReview ? <Loader2 className="w-4 h-4 animate-spin" /> : <Star className="w-4 h-4" />}
+                    Gửi đánh giá
+                  </button>
+                </div>
+              ) : (
+                <div className="mb-6 rounded-xl border border-darkborder bg-darkbg/40 p-4 text-sm text-text-muted">
+                  Đăng ký và học khoá này để có thể đánh giá.
+                </div>
+              )}
+
+              {/* Review list */}
+              {reviews.length > 0 ? (
                 <div className="space-y-4">
                   {reviews.map((review) => (
                     <div key={review.id} className="border-b border-darkborder/20 pb-4 last:border-0">
@@ -777,8 +871,10 @@ export default function CourseDetailPage() {
                     </div>
                   ))}
                 </div>
-              </section>
-            )}
+              ) : (
+                <p className="text-sm text-text-muted">Chưa có đánh giá nào. Hãy là người đầu tiên!</p>
+              )}
+            </section>
           </div>
         </div>
       </div>

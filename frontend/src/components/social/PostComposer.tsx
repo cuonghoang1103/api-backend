@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Image as ImageIcon,
@@ -144,6 +145,36 @@ export function PostComposer() {
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [showVisibilityMenu, setShowVisibilityMenu] = useState(false);
+  // The visibility menu is portaled to <body> so the composer's
+  // overflow-hidden rounded card can't clip it. We anchor it to the
+  // trigger button with a computed fixed position.
+  const visBtnRef = useRef<HTMLButtonElement | null>(null);
+  const [visMenuStyle, setVisMenuStyle] = useState<React.CSSProperties>({ position: 'fixed', left: -9999, top: -9999 });
+  useEffect(() => {
+    if (!showVisibilityMenu) return;
+    const compute = () => {
+      const el = visBtnRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const width = 208; // w-52
+      let left = r.left;
+      if (left + width > window.innerWidth - 8) left = window.innerWidth - 8 - width;
+      if (left < 8) left = 8;
+      // Open downward if there's room, else upward.
+      const openUp = r.bottom + 220 > window.innerHeight && r.top > 240;
+      const style: React.CSSProperties = openUp
+        ? { position: 'fixed', left, bottom: window.innerHeight - r.top + 6, width, zIndex: 1000 }
+        : { position: 'fixed', left, top: r.bottom + 6, width, zIndex: 1000 };
+      setVisMenuStyle(style);
+    };
+    compute();
+    window.addEventListener('resize', compute);
+    window.addEventListener('scroll', compute, true);
+    return () => {
+      window.removeEventListener('resize', compute);
+      window.removeEventListener('scroll', compute, true);
+    };
+  }, [showVisibilityMenu]);
   const [showPreview, setShowPreview] = useState(false);
   const [postError, setPostError] = useState<string | null>(null);
   const [showPollEditor, setShowPollEditor] = useState(false);
@@ -949,6 +980,7 @@ export function PostComposer() {
                     {/* Visibility */}
                     <div className="relative">
                       <button
+                        ref={visBtnRef}
                         onClick={() => setShowVisibilityMenu(!showVisibilityMenu)}
                         className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium transition-colors shrink-0 max-sm:min-h-10"
                         style={{
@@ -962,50 +994,64 @@ export function PostComposer() {
                         <ChevronDown size={12} />
                       </button>
 
-                      <AnimatePresence>
-                        {showVisibilityMenu && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -5, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -5, scale: 0.95 }}
-                            className="absolute left-0 top-full z-20 mt-1 w-48 overflow-hidden rounded-2xl py-1"
-                            style={{
-                              background: 'var(--bg-overlay)',
-                              border: '1px solid rgba(255,255,255,0.1)',
-                              backdropFilter: 'blur(20px)',
-                            }}
-                          >
-                            {VISIBILITY_OPTIONS.map((option) => (
-                              <button
-                                key={option.value}
-                                className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors"
-                                onClick={() => {
-                                  setComposerVisibility(option.value);
-                                  setShowVisibilityMenu(false);
-                                }}
+                      {typeof document !== 'undefined' && createPortal(
+                        <AnimatePresence>
+                          {showVisibilityMenu && (
+                            <>
+                              {/* Click-outside backdrop (menu is portaled, so
+                                  a plain document click won't reach the old
+                                  in-flow parent). */}
+                              <div
+                                className="fixed inset-0"
+                                style={{ zIndex: 999 }}
+                                onClick={() => setShowVisibilityMenu(false)}
+                              />
+                              <motion.div
+                                initial={{ opacity: 0, y: -5, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: -5, scale: 0.95 }}
+                                className="overflow-hidden rounded-2xl py-1 shadow-2xl shadow-black/40"
                                 style={{
-                                  background:
-                                    composerVisibility === option.value
-                                      ? `${option.color}15`
-                                      : 'transparent',
-                                  color: 'var(--text-primary)',
+                                  ...visMenuStyle,
+                                  background: 'var(--bg-overlay)',
+                                  border: '1px solid rgba(255,255,255,0.1)',
+                                  backdropFilter: 'blur(20px)',
                                 }}
                               >
-                                <option.icon size={16} style={{ color: option.color }} />
-                                <div className="flex-1">
-                                  <p className="text-sm font-medium">{option.label}</p>
-                                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                                    {option.desc}
-                                  </p>
-                                </div>
-                                {composerVisibility === option.value && (
-                                  <Check size={14} style={{ color: option.color }} />
-                                )}
-                              </button>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                                {VISIBILITY_OPTIONS.map((option) => (
+                                  <button
+                                    key={option.value}
+                                    className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors"
+                                    onClick={() => {
+                                      setComposerVisibility(option.value);
+                                      setShowVisibilityMenu(false);
+                                    }}
+                                    style={{
+                                      background:
+                                        composerVisibility === option.value
+                                          ? `${option.color}15`
+                                          : 'transparent',
+                                      color: 'var(--text-primary)',
+                                    }}
+                                  >
+                                    <option.icon size={16} style={{ color: option.color }} />
+                                    <div className="flex-1">
+                                      <p className="text-sm font-medium">{option.label}</p>
+                                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                                        {option.desc}
+                                      </p>
+                                    </div>
+                                    {composerVisibility === option.value && (
+                                      <Check size={14} style={{ color: option.color }} />
+                                    )}
+                                  </button>
+                                ))}
+                              </motion.div>
+                            </>
+                          )}
+                        </AnimatePresence>,
+                        document.body,
+                      )}
                     </div>
                   </div>
 

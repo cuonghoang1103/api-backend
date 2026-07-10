@@ -440,6 +440,12 @@ async function serializeCourse(
     || (hasPaidOrder && !enrollmentExpired)
     || (isPaidOrCodeCourse && hasCodeEnrollment);
 
+  // Admin/builder view (includeDraftLessons): return the REAL DIRECT video
+  // URL, never the redacted null — otherwise the /admin builder loads an
+  // empty field and a subsequent save wipes the uploaded video. Students
+  // still get the redacted URL + a signed one at play time.
+  const isAdminView = Boolean(options?.includeDraftLessons);
+
   const totalPublishedLessons = course.sections.reduce(
     (sum, section) => sum + section.lessons.length,
     0,
@@ -538,12 +544,12 @@ async function serializeCourse(
           return {
             ...base,
             content: lesson.content,
-            videoUrl: redactDirectVideoUrl(platform, lesson.videoUrl),
+            videoUrl: isAdminView ? lesson.videoUrl : redactDirectVideoUrl(platform, lesson.videoUrl),
             videoPlatform: platform,
             sourceCodeUrl: lesson.details?.sourceCodeUrl,
             teachingNotes: lesson.details?.teachingNotes,
             details: lesson.details
-              ? { ...lesson.details, videoUrl: redactDirectVideoUrl(platform, lesson.details.videoUrl) }
+              ? { ...lesson.details, videoUrl: isAdminView ? lesson.details.videoUrl : redactDirectVideoUrl(platform, lesson.details.videoUrl) }
               : lesson.details,
           };
         }
@@ -1326,6 +1332,79 @@ router.post('/assignments/submit', authenticate, async (req, res: Response<ApiRe
     });
 
     res.json({ success: true, data: saved });
+  } catch (error) { next(error); }
+});
+
+// ─── Course reviews (ratings 1–5) ──────────────────────────────────
+// Public list; only enrolled learners (or admin/instructor) may post.
+// New reviews are auto-approved (isApproved=true) so they appear at once.
+function serializeReview(r: {
+  id: number; courseId: number; userId: number; rating: number; title: string | null; content: string | null; createdAt: Date;
+  user?: { id: number; username: string | null; fullName: string | null; avatarUrl: string | null } | null;
+}) {
+  return {
+    id: r.id,
+    courseId: r.courseId,
+    userId: r.userId,
+    userFullName: r.user?.fullName || r.user?.username || 'Học viên',
+    userAvatar: r.user?.avatarUrl ?? undefined,
+    rating: r.rating,
+    title: r.title ?? undefined,
+    content: r.content ?? undefined,
+    createdAt: r.createdAt,
+  };
+}
+
+router.get('/:id/reviews', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const courseId = parseInt(req.params.id, 10);
+    if (isNaN(courseId)) throw new AppError('Invalid course ID', 400);
+    const reviews = await prisma.courseReview.findMany({
+      where: { courseId, isApproved: true },
+      include: { user: { select: { id: true, username: true, fullName: true, avatarUrl: true } } },
+      orderBy: { createdAt: 'desc' },
+      take: 100,
+    });
+    res.json({ success: true, data: reviews.map(serializeReview) });
+  } catch (error) { next(error); }
+});
+
+router.post('/reviews', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const courseId = Number(req.body.courseId);
+    const rating = Math.round(Number(req.body.rating));
+    if (!courseId || !(rating >= 1 && rating <= 5)) {
+      throw new AppError('courseId và rating (1-5) là bắt buộc', 400);
+    }
+    // Gate: only enrolled learners (or admin/instructor) may review. The
+    // 'admin-or-enrolled' mode does NOT take the free-course bypass, so a
+    // free course still requires an actual enrollment here.
+    await assertCanAccessCourseContent(req.userId, courseId, 'admin-or-enrolled');
+
+    const title = toNullableString(req.body.title);
+    const content = toNullableString(req.body.content);
+    const review = await prisma.courseReview.upsert({
+      where: { courseId_userId: { courseId, userId: req.userId! } },
+      create: { courseId, userId: req.userId!, rating, title, content, isApproved: true },
+      update: { rating, title, content, isApproved: true },
+    });
+
+    // Recompute the course's aggregate rating + count.
+    const agg = await prisma.courseReview.aggregate({
+      where: { courseId, isApproved: true },
+      _avg: { rating: true },
+      _count: { _all: true },
+    });
+    await prisma.course.update({
+      where: { id: courseId },
+      data: { avgRating: agg._avg.rating ?? 0, totalReviews: agg._count._all },
+    });
+
+    const withUser = await prisma.courseReview.findUnique({
+      where: { id: review.id },
+      include: { user: { select: { id: true, username: true, fullName: true, avatarUrl: true } } },
+    });
+    res.status(201).json({ success: true, data: withUser ? serializeReview(withUser) : null });
   } catch (error) { next(error); }
 });
 

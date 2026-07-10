@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { BookOpen, ChevronDown, ChevronRight, ClipboardList, Code2, ExternalLink, FileText, FolderTree, GraduationCap, Star, Image as ImageIcon, Link2, Pencil, Plus, Save, Send, Settings, Trash2, Video, X } from 'lucide-react';
-import { academyApi, adminCoursesApi } from '@/lib/api';
+import { BookOpen, ChevronDown, ChevronRight, ClipboardList, Code2, ExternalLink, FileText, FolderTree, GraduationCap, Star, Image as ImageIcon, Link2, Loader2, Pencil, Plus, Save, Send, Settings, Trash2, Video, X } from 'lucide-react';
+import { academyApi, adminCoursesApi, coursesApi } from '@/lib/api';
 import type { Assignment, Course, LessonDto, Semester, SubmissionWithUser } from '@/types';
 import ImageUpload from '@/components/admin/ImageUpload';
 import RichTextEditor from '@/components/admin/RichTextEditor';
@@ -871,6 +871,48 @@ export default function AdminAcademyPage() {
       : section));
   };
 
+  // DIRECT video upload (private R2) — one lesson at a time.
+  const [videoUpload, setVideoUpload] = useState<{ lessonId: number; pct: number } | null>(null);
+
+  // Probe a video's duration in the browser so we can keep the lesson's
+  // duration (and course totals) accurate without server-side ffprobe.
+  const probeVideoDuration = (file: File): Promise<number> =>
+    new Promise((resolve) => {
+      try {
+        const el = document.createElement('video');
+        el.preload = 'metadata';
+        const url = URL.createObjectURL(file);
+        el.onloadedmetadata = () => { URL.revokeObjectURL(url); resolve(Number.isFinite(el.duration) ? el.duration : 0); };
+        el.onerror = () => { URL.revokeObjectURL(url); resolve(0); };
+        el.src = url;
+      } catch { resolve(0); }
+    });
+
+  const handleVideoUpload = async (sectionIndex: number, lessonIndex: number, lessonId: number, file: File) => {
+    if (!file.type.startsWith('video/')) { toast.error('Vui lòng chọn tệp video (mp4, webm, mov…)'); return; }
+    setVideoUpload({ lessonId, pct: 0 });
+    try {
+      const duration = await probeVideoDuration(file);
+      const res = await coursesApi.uploadLessonVideoDirect(
+        lessonId,
+        file,
+        (frac) => setVideoUpload({ lessonId, pct: Math.round(frac * 100) }),
+        duration,
+      );
+      const data = res.data?.data as { videoUrl?: string; videoDurationSeconds?: number } | undefined;
+      updateLesson(sectionIndex, lessonIndex, {
+        videoPlatform: 'DIRECT',
+        videoUrl: data?.videoUrl || '',
+        ...(data?.videoDurationSeconds ? { videoDurationSeconds: data.videoDurationSeconds } : duration ? { videoDurationSeconds: Math.round(duration) } : {}),
+      });
+      toast.success('Tải video lên R2 thành công (riêng tư, phát qua link ký ngắn hạn)');
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || err?.message || 'Tải video thất bại');
+    } finally {
+      setVideoUpload(null);
+    }
+  };
+
   const addAssignment = (sectionIndex: number, lessonIndex: number) => {
     setSections((prev) => prev.map((section, sIndex) => sIndex === sectionIndex
       ? {
@@ -1229,8 +1271,44 @@ export default function AdminAcademyPage() {
                                   <option value="DIRECT">Direct video</option>
                                 </select>
                               </label>
-                              <input value={lesson.videoUrl} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoUrl: e.target.value })} placeholder="Video URL / YouTube URL" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary lg:col-span-2" />
+                              <input value={lesson.videoUrl} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoUrl: e.target.value })} placeholder={lesson.videoPlatform === 'DIRECT' ? 'Link .mp4 ngoài — hoặc tải video lên R2 bên dưới' : 'Video URL / YouTube URL'} className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary lg:col-span-2" />
                             </div>
+
+                            {/* DIRECT: tải video thẳng lên R2 (riêng tư, ≤2GB).
+                                Học viên xem qua link ký ngắn hạn — URL thô
+                                không bao giờ lộ. Cần lesson.id (đã lưu). */}
+                            {lesson.videoPlatform === 'DIRECT' && (
+                              <div className="rounded-xl border border-dashed border-neon-violet/40 bg-neon-violet/5 p-3">
+                                <div className="flex items-center justify-between gap-3 flex-wrap">
+                                  <p className="text-xs text-text-muted">Tải video lên R2 (riêng tư, tối đa 2GB) — hoặc dán link .mp4 ngoài ở ô trên.</p>
+                                  {lesson.id ? (
+                                    <label className={`shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                                      videoUpload?.lessonId === lesson.id ? 'bg-darkbg text-text-muted cursor-wait' : 'bg-neon-violet/15 text-neon-violet hover:bg-neon-violet/25 cursor-pointer'
+                                    }`}>
+                                      {videoUpload?.lessonId === lesson.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Video className="w-3.5 h-3.5" />}
+                                      {videoUpload?.lessonId === lesson.id ? `Đang tải ${videoUpload?.pct ?? 0}%` : 'Chọn video…'}
+                                      <input
+                                        type="file"
+                                        accept="video/*"
+                                        className="hidden"
+                                        disabled={!!videoUpload}
+                                        onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f && lesson.id) handleVideoUpload(sectionIndex, lessonIndex, lesson.id, f); }}
+                                      />
+                                    </label>
+                                  ) : (
+                                    <span className="text-xs text-amber-400">Lưu bài học trước để tải video.</span>
+                                  )}
+                                </div>
+                                {videoUpload?.lessonId === lesson.id && (
+                                  <div className="mt-2 h-1.5 w-full rounded-full bg-darkbg overflow-hidden">
+                                    <div className="h-full bg-neon-violet transition-all" style={{ width: `${videoUpload?.pct ?? 0}%` }} />
+                                  </div>
+                                )}
+                                {lesson.videoUrl && videoUpload?.lessonId !== lesson.id && (
+                                  <p className="text-xs text-green-400 mt-2 truncate">✓ Đã có video</p>
+                                )}
+                              </div>
+                            )}
 
                             <div className="grid gap-3 md:grid-cols-2">
                               <input value={lesson.sourceCodeUrl} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { sourceCodeUrl: e.target.value })} placeholder="GitHub / source code URL" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />

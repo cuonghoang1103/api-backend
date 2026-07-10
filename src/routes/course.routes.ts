@@ -96,7 +96,7 @@ async function assertCanAccessCourseContent(
       },
     });
     const roleNames = user?.roles?.map((ur) => ur.role.name) || [];
-    const isAdmin = roleNames.includes('ROLE_ADMIN') || roleNames.includes('ROLE_SUPERADMIN');
+    const isAdmin = roleNames.some((n) => /^(role_)?(admin|superadmin)$/i.test(n));
     if (isAdmin || course.instructorId === userId) {
       return { isAdmin: true, isEnrolled: true, isFree, hasCodeEnrollment: false };
     }
@@ -540,7 +540,14 @@ async function serializeCourse(
       }),
     })),
     reviews: course.reviews,
-    isEnrolled: Boolean(enrollment),
+    // Admins / the instructor (includeDraftLessons) get direct access with
+    // no enrollment row, so report them as enrolled — otherwise the learn
+    // page bounces them back to the detail page.
+    isEnrolled: Boolean(enrollment) || Boolean(options?.includeDraftLessons),
+    // Admins / the instructor: surface an explicit flag so the detail page
+    // can show a direct "Vào học ngay" button that bypasses the
+    // free/code/paid enrollment options entirely.
+    isAdmin: Boolean(options?.includeDraftLessons),
     hasPaidAccess,
     enrollmentProgress,
     enrollmentSource: enrollment?.source,
@@ -1280,7 +1287,22 @@ router.get('/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next)
       },
     });
     if (!course) throw new AppError('Course not found', 404);
-    const serializedCourse = await serializeCourse(course.id, req.userId ? { userId: req.userId } : undefined);
+    // Admins (and the course's instructor) get direct access to any course
+    // — no free/code/payment required. Detect the role here and pass the
+    // trust flag so serializeCourse marks them enrolled + unlocks content.
+    let isAdminViewer = false;
+    if (req.userId) {
+      const viewer = await prisma.user.findUnique({
+        where: { id: req.userId },
+        select: { roles: { select: { role: { select: { name: true } } } } },
+      });
+      const roleNames = viewer?.roles?.map((ur) => ur.role.name) || [];
+      isAdminViewer = roleNames.some((n) => /^(role_)?(admin|superadmin)$/i.test(n));
+    }
+    const serializedCourse = await serializeCourse(
+      course.id,
+      req.userId ? { userId: req.userId, includeDraftLessons: isAdminViewer } : undefined,
+    );
     res.json({ success: true, data: serializedCourse });
   } catch (error) { next(error); }
 });

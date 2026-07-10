@@ -78,6 +78,38 @@ function OldCourseAccessOptions({
 
   const isPaidType = course.accessType === 'PAID';
 
+  // Direct-access shortcut. Admins/instructor ((course as any).isAdmin) get in
+  // with no free/code/paid step at all — this is the requested "admin học
+  // trực tiếp". A learner already enrolled in a FREE course also lands here so
+  // they resume instead of re-hitting enroll (which 409s "already enrolled")
+  // — the FREE course path otherwise has no "continue" button. PAID/CODE keep
+  // their existing gated flow below (session re-entry etc.).
+  const isAdminViewer = Boolean((course as any).isAdmin);
+  const canEnterDirectly =
+    isAdminViewer || (course.accessType === 'FREE' && course.isEnrolled);
+
+  if (canEnterDirectly) {
+    return (
+      <div className="space-y-3">
+        <button
+          onClick={() => router.push(`/courses/${course.slug}/learn`)}
+          className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-neon-violet/30 bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 hover:from-neon-indigo/20 hover:to-neon-violet/20 transition-all"
+        >
+          <div className="flex items-center gap-3">
+            <CheckCircle className="w-5 h-5 text-neon-violet" />
+            <div className="text-left">
+              <p className="text-sm font-semibold text-neon-violet">Vào học ngay</p>
+              <p className="text-xs text-neon-violet/60">
+                {isAdminViewer ? 'Truy cập admin — không cần đăng ký' : 'Bạn đã đăng ký khoá này'}
+              </p>
+            </div>
+          </div>
+          <ChevronRight className="w-4 h-4 text-neon-violet/60" />
+        </button>
+      </div>
+    );
+  }
+
   const handleFreeClick = async () => {
     if (!isAuthenticated) {
       router.push(`/login?callbackUrl=${encodeURIComponent(`/courses/${course.slug}`)}`);

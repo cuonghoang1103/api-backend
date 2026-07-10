@@ -1,6 +1,18 @@
 import { create } from 'zustand';
 import { toast } from 'sonner';
 import type { Track } from '@/types';
+import { getQueryClient } from '@/lib/queryClient';
+
+// Keep the TanStack-driven playlist UI (PlaylistSection / PlaylistView on
+// the /music page) in sync after a store mutation. The list key is
+// ['music','playlists']; playlist-detail keys are prefixed by it, so this
+// one invalidation refreshes both. Without it, changes made through this
+// store (e.g. the "add to playlist" drawer) only showed after a reload.
+function invalidatePlaylistQueries() {
+  try {
+    getQueryClient().invalidateQueries({ queryKey: ['music', 'playlists'] });
+  } catch { /* no-op if the query client isn't ready */ }
+}
 
 interface PlaylistItem {
   id: number;
@@ -101,6 +113,7 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
         const created = parsePlaylist(data.data);
         set((s) => ({ playlists: [created, ...s.playlists] }));
         set({ isOpen: false, pendingTrack: null });
+        invalidatePlaylistQueries();
         toast.success(`Đã tạo playlist "${created.name}"`);
         return created;
       }
@@ -122,6 +135,7 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
       const data = await res.json();
       if (data.success) {
         set((s) => ({ playlists: s.playlists.filter((p) => p.id !== id) }));
+        invalidatePlaylistQueries();
         toast.success('Đã xóa playlist');
       }
     } catch (err) {
@@ -194,6 +208,7 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
         set((s) => ({
           playlists: s.playlists.map((p) => (p.id === playlistId ? updated : p)),
         }));
+        invalidatePlaylistQueries();
         toast.success(`Đã thêm "${track.title}" vào playlist`);
         return { success: true };
       }
@@ -218,6 +233,7 @@ export const usePlaylistStore = create<PlaylistState>()((set, get) => ({
         set((s) => ({
           playlists: s.playlists.map((p) => (p.id === playlistId ? updated : p)),
         }));
+        invalidatePlaylistQueries();
       }
     } catch (err) {
       console.error('[PlaylistStore] removeTrack error:', err);

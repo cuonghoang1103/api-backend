@@ -3,6 +3,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Track, Playlist, PlaylistSummary } from '@/types';
 import { getMediaUrl } from '@/lib/utils';
+import { usePlaylistStore } from '@/store/playlistStore';
+
+// Playlists live in TWO places: TanStack cache (the /music page lists) and
+// the Zustand playlist store (the "add to playlist" drawer). After a
+// TanStack mutation we refresh the Zustand copy too, so both surfaces stay
+// in sync no matter which one triggered the change.
+function syncPlaylistStore() {
+  try { usePlaylistStore.getState().fetchPlaylists(); } catch { /* no-op */ }
+}
 
 // ─── API fetch helpers ────────────────────────────────────────────────────────
 
@@ -316,6 +325,7 @@ export function useCreatePlaylist() {
       }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: playlistKeys() });
+      syncPlaylistStore();
     },
   });
 }
@@ -341,6 +351,7 @@ export function useUpdatePlaylist() {
     onSuccess: (_d, vars) => {
       qc.invalidateQueries({ queryKey: playlistKeys() });
       qc.invalidateQueries({ queryKey: playlistDetailKey(vars.id) });
+      syncPlaylistStore();
     },
   });
 }
@@ -357,6 +368,7 @@ export function useDeletePlaylist() {
       }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: playlistKeys() });
+      syncPlaylistStore();
     },
   });
 }
@@ -376,6 +388,7 @@ export function useAddTrackToPlaylist() {
     onSuccess: (_d, vars) => {
       qc.invalidateQueries({ queryKey: playlistDetailKey(vars.playlistId) });
       qc.invalidateQueries({ queryKey: playlistKeys() });
+      syncPlaylistStore();
     },
   });
 }
@@ -394,6 +407,7 @@ export function useRemoveTrackFromPlaylist() {
     onSuccess: (_d, vars) => {
       qc.invalidateQueries({ queryKey: playlistDetailKey(vars.playlistId) });
       qc.invalidateQueries({ queryKey: playlistKeys() });
+      syncPlaylistStore();
     },
   });
 }

@@ -405,6 +405,57 @@ export default function SocialPage() {
     };
   }, [isTouch, doRefresh]);
 
+  // Behavior 1b (DESKTOP) — wheel-driven pull-to-refresh. There's no
+  // touchend on a mouse, so we detect "overscroll" at the very top:
+  // when already at scrollY 0 and the user keeps scrolling UP (deltaY<0,
+  // i.e. dragging the content DOWN), we grow the panda spinner and fire
+  // the refresh the moment it crosses the threshold. A short idle timer
+  // snaps it back if they stop before then. Same spinner + blip as touch.
+  useEffect(() => {
+    if (isTouch) return; // desktop / non-touch only
+    if (typeof window === 'undefined') return;
+    let idleTimer: number | null = null;
+
+    const snapBack = () => {
+      if (!refreshingRef.current) { pullActiveRef.current = false; setPullY(0); }
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (refreshingRef.current) return;
+      // Not at the top, or scrolling DOWN → normal scroll; clear any pull.
+      if (window.scrollY > 0 || e.deltaY >= 0) {
+        if (pullActiveRef.current) { pullActiveRef.current = false; setPullY(0); }
+        return;
+      }
+      // At the top, scrolling UP → treat as a downward pull.
+      pullActiveRef.current = true;
+      setPullY((cur) => {
+        if (cur >= PULL_THRESHOLD && !refreshingRef.current) return cur;
+        const next = Math.min(PULL_MAX, cur + Math.min(24, -e.deltaY) * 0.6);
+        if (next >= PULL_THRESHOLD && !refreshingRef.current) {
+          refreshingRef.current = true;
+          setRefreshing(true);
+          pullActiveRef.current = false;
+          doRefresh().finally(() => {
+            refreshingRef.current = false;
+            setRefreshing(false);
+            setPullY(0);
+          });
+          return PULL_REST; // hold the spinner during the fetch
+        }
+        return next;
+      });
+      if (idleTimer) window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(snapBack, 200);
+    };
+
+    window.addEventListener('wheel', onWheel, { passive: true });
+    return () => {
+      window.removeEventListener('wheel', onWheel);
+      if (idleTimer) window.clearTimeout(idleTimer);
+    };
+  }, [isTouch, doRefresh]);
+
   // Behavior 3 — tap the thin strip at the very top edge to smooth-scroll
   // back to the top (mimics iOS status-bar tap) and reveal the chrome.
   const scrollToTop = useCallback(() => {
@@ -574,8 +625,8 @@ export default function SocialPage() {
     <main className="min-h-screen pt-16" style={{ background: 'var(--bg-primary)' }}>
       <SocialBackground />
 
-      {/* Behavior 1 — pull-to-refresh panda spinner (mobile-only). */}
-      {isTouch && (pullY > 0 || refreshing) && (
+      {/* Behavior 1 — pull-to-refresh panda spinner (touch + desktop wheel). */}
+      {(pullY > 0 || refreshing) && (
         <div
           className="pointer-events-none fixed inset-x-0 top-0 z-[45] flex justify-center lg:hidden"
           style={{

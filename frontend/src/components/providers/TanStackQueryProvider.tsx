@@ -1,7 +1,8 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
+import { getQueryClient } from '@/lib/queryClient';
 
 /**
  * TanStack Query provider — enables caching for music data.
@@ -13,23 +14,10 @@ import { useState } from 'react';
  * - refetchOnWindowFocus: false (don't interrupt playback)
  */
 export default function TanStackQueryProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 5 * 60 * 1000, // 5 minutes — music metadata is relatively stable
-            gcTime: 30 * 60 * 1000, // 30 minutes — keep cached data
-            retry: 2,
-            refetchOnWindowFocus: false, // Don't refetch when user returns from another tab — playback shouldn't be interrupted
-            refetchOnReconnect: true,
-          },
-          mutations: {
-            retry: 1,
-          },
-        },
-      }),
-  );
+  // Use the shared browser singleton so code outside React (Zustand
+  // stores) can invalidate the same cache — keeps the music playlist UI
+  // in sync no matter which surface triggered the change.
+  const [queryClient] = useState(getQueryClient);
 
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

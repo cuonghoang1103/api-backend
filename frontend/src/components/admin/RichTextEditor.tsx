@@ -5,8 +5,10 @@ import {
   Bold, Italic, Underline, Strikethrough,
   Heading1, Heading2, Heading3, Heading4,
   Link2, List, ListOrdered, Quote, Code, Code2,
-  Minus, Palette, Type, ChevronDown,
+  Minus, Palette, Type, ChevronDown, Image as ImageIcon, Loader2,
 } from 'lucide-react';
+import { fileApi } from '@/lib/api';
+import { toast } from 'sonner';
 
 interface RichTextEditorProps {
   value: string;
@@ -168,25 +170,23 @@ export default function RichTextEditor({ value, onChange, placeholder, minHeight
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [, force] = useState(0);
 
-  // Initial mount: if value is non-empty, write it into the
-  // contenteditable. Subsequent changes flow from the editor
-  // back into React via the input handler below — we do NOT
-  // re-write `value` on every render or the cursor will jump
-  // to the start.
+  // Sync the `value` prop into the contenteditable whenever it changes
+  // FROM OUTSIDE — e.g. the admin builder fetching a saved lesson AFTER
+  // this component mounted (that async load previously never appeared,
+  // so re-editing looked like the notes were lost). We skip the write
+  // while the user is actively editing (activeElement === el) so we never
+  // fight their cursor; their own edits flow out via onInput instead.
+  const [uploadingImg, setUploadingImg] = useState(false);
   useEffect(() => {
     const el = editorRef.current;
     if (!el) return;
-    if (value && value !== lastHtmlRef.current) {
-      el.innerHTML = value;
-      lastHtmlRef.current = value;
-    } else if (!value) {
-      el.innerHTML = '';
-      lastHtmlRef.current = '';
+    if (document.activeElement === el) return; // don't clobber active typing
+    const incoming = value || '';
+    if (incoming !== el.innerHTML) {
+      el.innerHTML = incoming;
+      lastHtmlRef.current = incoming;
     }
-    // We intentionally do NOT depend on `value` here. Re-running
-    // on every value change would fight the user's cursor.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [value]);
 
   const exec = useCallback((command: string, valueArg?: string) => {
     // execCommand is deprecated but still universally supported,
@@ -219,12 +219,48 @@ export default function RichTextEditor({ value, onChange, placeholder, minHeight
     }
   }, [onChange]);
 
+  // Upload an image to R2 and insert it at the cursor. Used by BOTH the
+  // toolbar button and pasting a screenshot straight into the editor.
+  const uploadAndInsertImage = useCallback(async (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    if (file.size > 10 * 1024 * 1024) { toast.error('Ảnh tối đa 10MB'); return; }
+    setUploadingImg(true);
+    try {
+      const res = await fileApi.upload(file, 'images');
+      const url = res.data?.data?.url as string | undefined;
+      if (!url) { toast.error('Tải ảnh thất bại'); return; }
+      editorRef.current?.focus();
+      insertHtml(`<img src="${url}" alt="" style="max-width:100%;border-radius:8px" /><p><br></p>`);
+    } catch {
+      toast.error('Tải ảnh thất bại');
+    } finally {
+      setUploadingImg(false);
+    }
+  }, [insertHtml]);
+
+  const pickImage = useCallback(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = () => { const f = input.files?.[0]; if (f) uploadAndInsertImage(f); };
+    input.click();
+  }, [uploadAndInsertImage]);
+
   // ── Paste: keep formatting, but strip any image the user
   // might be trying to upload (we don't host external images
   // in lesson content for security/perf reasons) and any
   // style attributes that aren't `color` (the rest are reset
   // to keep the editor output clean and small).
   const handlePaste = useCallback((e: React.ClipboardEvent<HTMLDivElement>) => {
+    // 1) Screenshot / image paste → upload to R2 and insert it.
+    const imageFile = Array.from(e.clipboardData.items || [])
+      .find((it) => it.kind === 'file' && it.type.startsWith('image/'))
+      ?.getAsFile();
+    if (imageFile) {
+      e.preventDefault();
+      uploadAndInsertImage(imageFile);
+      return;
+    }
     e.preventDefault();
     const html = e.clipboardData.getData('text/html');
     const text = e.clipboardData.getData('text/plain');
@@ -246,17 +282,13 @@ export default function RichTextEditor({ value, onChange, placeholder, minHeight
     const doc = new DOMParser().parseFromString(html, 'text/html');
     doc.querySelectorAll('img, script, style, iframe, object, embed').forEach((n) => n.remove());
     doc.querySelectorAll('*').forEach((el) => {
-      // Keep only color in inline style. Drop font-size, font-family,
-      // background-color, etc. — they make the editor messy and
-      // bloat the DB.
-      const style = (el as HTMLElement).getAttribute('style');
-      if (style) {
-        const colorMatch = style.match(/color\s*:\s*([^;]+)/i);
-        if (colorMatch) {
-          el.setAttribute('style', `color: ${colorMatch[1].trim()}`);
-        } else {
-          el.removeAttribute('style');
-        }
+      // Strip ALL inline styles — including `color`. Pasting from Word /
+      // Docs / a website carries the SOURCE text color (usually dark),
+      // which is invisible on our dark editor + dark lesson page. Text now
+      // inherits the theme colour (always readable); use the toolbar's
+      // colour picker to set a deliberate, visible colour instead.
+      if ((el as HTMLElement).getAttribute('style')) {
+        el.removeAttribute('style');
       }
       // Strip every attribute except href (a), src (a/img), class
       // (we use it for the .tok-* token classes), and style (handled
@@ -278,7 +310,7 @@ export default function RichTextEditor({ value, onChange, placeholder, minHeight
       }
     });
     insertHtml(doc.body.innerHTML);
-  }, [insertHtml]);
+  }, [insertHtml, uploadAndInsertImage]);
 
   const insertLink = useCallback(() => {
     const url = window.prompt('URL:');
@@ -346,6 +378,9 @@ export default function RichTextEditor({ value, onChange, placeholder, minHeight
         <ToolbarDivider />
         <ToolbarButton onClick={insertLink} title="Chèn link">
           <Link2 className="w-4 h-4" />
+        </ToolbarButton>
+        <ToolbarButton onClick={pickImage} title="Chèn ảnh (hoặc dán ảnh trực tiếp)">
+          {uploadingImg ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
         </ToolbarButton>
         <ToolbarButton onClick={() => exec('formatBlock', '<pre>')} title="Code inline">
           <Code className="w-4 h-4" />

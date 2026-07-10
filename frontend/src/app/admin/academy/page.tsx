@@ -192,6 +192,7 @@ interface CourseFormState {
   status: string;
   requirements: string;
   whatYouLearn: string;
+  documentsNote: string;
   startDate: string;
   endDate: string;
 }
@@ -258,6 +259,7 @@ const emptyCourse: CourseFormState = {
   status: 'DRAFT',
   requirements: '',
   whatYouLearn: '',
+  documentsNote: '',
   startDate: '',
   endDate: '',
 };
@@ -358,6 +360,7 @@ export default function AdminAcademyPage() {
           status: course.status || 'DRAFT',
           requirements: course.requirements || '',
           whatYouLearn: course.whatYouLearn || '',
+          documentsNote: (course as { documentsNote?: string }).documentsNote || '',
           startDate: course.startDate ? course.startDate.slice(0, 10) : '',
           endDate: course.endDate ? course.endDate.slice(0, 10) : '',
         });
@@ -504,6 +507,7 @@ export default function AdminAcademyPage() {
         status: courseForm.status,
         requirements: courseForm.requirements,
         whatYouLearn: courseForm.whatYouLearn,
+        documentsNote: courseForm.documentsNote,
         startDate: courseForm.startDate || null,
         endDate: courseForm.endDate || null,
       };
@@ -779,6 +783,7 @@ export default function AdminAcademyPage() {
           isPublished: courseForm.status === 'PUBLISHED',
           requirements: courseForm.requirements,
           whatYouLearn: courseForm.whatYouLearn,
+        documentsNote: courseForm.documentsNote,
           status: courseForm.status,
           totalLessons: newSections.reduce((sum, section) => sum + section.lessons.length, 0),
           totalDurationSeconds: newSections.reduce((sum, section) => sum + section.lessons.reduce((lessonSum, lesson) => lessonSum + (lesson.videoDurationSeconds || 0), 0), 0),
@@ -1121,6 +1126,18 @@ export default function AdminAcademyPage() {
             <button onClick={addSection} className="px-4 py-2 rounded-xl border border-neon-violet/30 text-neon-violet hover:bg-neon-violet/10 flex items-center gap-2">
               <Plus className="w-4 h-4" /> Thêm chương
             </button>
+          </div>
+
+          {/* Note guiding students on how to use the attached materials. */}
+          <div className="mb-3">
+            <label className="block text-sm font-medium text-text-primary mb-1.5">📝 Ghi chú cho mục Tài liệu (hướng dẫn học viên)</label>
+            <textarea
+              value={courseForm.documentsNote}
+              onChange={(e) => setCourseForm((prev) => ({ ...prev, documentsNote: e.target.value }))}
+              rows={2}
+              placeholder="VD: Tải tài liệu về, giải nén rồi mở file hướng dẫn.pdf trước khi xem video…"
+              className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted"
+            />
           </div>
 
           {/* Fixed COURSE-LEVEL documents — sits above the chapters, at the

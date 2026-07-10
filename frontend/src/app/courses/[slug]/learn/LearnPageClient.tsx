@@ -495,7 +495,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
             <h2 className="font-semibold text-text-primary text-sm mb-4">Course Content</h2>
             <div className="space-y-1">
               {/* Fixed COURSE-LEVEL documents — top of Course Content, above chapters. */}
-              {courseDocs.length > 0 && (
+              {(courseDocs.length > 0 || (course as { documentsNote?: string }).documentsNote) && (
                 <div className="border border-neon-violet/30 rounded-xl overflow-hidden bg-neon-violet/[0.04]">
                   <button
                     onClick={() => setDocsOpen(o => !o)}
@@ -503,7 +503,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="text-base">📁</span>
-                      <p className="text-sm font-medium text-text-primary truncate">Tài liệu ({courseDocs.length})</p>
+                      <p className="text-sm font-medium text-text-primary truncate">Tài liệu{courseDocs.length > 0 ? ` (${courseDocs.length})` : ''}</p>
                     </div>
                     {docsOpen
                       ? <ChevronUp className="w-4 h-4 text-text-muted shrink-0" />
@@ -512,6 +512,11 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   </button>
                   {docsOpen && (
                     <div className="divide-y divide-darkborder/10">
+                      {(course as { documentsNote?: string }).documentsNote && (
+                        <p className="p-3 pl-4 text-xs text-text-secondary whitespace-pre-wrap leading-relaxed">
+                          {(course as { documentsNote?: string }).documentsNote}
+                        </p>
+                      )}
                       {courseDocs.map(doc => (
                         <a
                           key={doc.id}

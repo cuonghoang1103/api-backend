@@ -539,6 +539,7 @@ export interface Course {
   avgRating: number;
   requirements?: string;
   whatYouLearn?: string;
+  documentsNote?: string;
   startDate?: string;
   endDate?: string;
   status: 'DRAFT' | 'PUBLISHED' | string;

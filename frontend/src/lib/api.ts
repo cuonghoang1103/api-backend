@@ -1249,6 +1249,7 @@ export const adminCoursesApi = {
     accessType?: string;
     requirements?: string;
     whatYouLearn?: string;
+    documentsNote?: string;
     status?: string;
     tags?: string[];
   }) => api.post('/courses', data),
@@ -1275,6 +1276,7 @@ export const adminCoursesApi = {
     isPublished: boolean;
     requirements: string;
     whatYouLearn: string;
+    documentsNote: string;
     status: string;
     tags: string[];
   }>) => api.put(`/courses/${id}`, data),

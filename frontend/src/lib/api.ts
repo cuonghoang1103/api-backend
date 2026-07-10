@@ -1149,6 +1149,14 @@ export const coursesApi = {
     });
   },
 
+  // Admin: short signed URL to preview a lesson's saved DIRECT video.
+  getLessonVideoPreview: (lessonId: number) =>
+    api.get<{ data: { videoPlatform: string; videoUrl: string | null } }>(`/courses/lessons/${lessonId}/video-preview`),
+
+  // Admin: remove a lesson's video (clears lesson + deletes the R2 object).
+  deleteLessonVideo: (lessonId: number) =>
+    api.delete(`/courses/lessons/${lessonId}/video`),
+
   // ── Course-LEVEL documents (the fixed "Tài liệu" area) ──
   getCourseDocuments: (courseId: number) => api.get(`/courses/${courseId}/documents`),
   addCourseDocumentLink: (courseId: number, title: string, url: string) =>

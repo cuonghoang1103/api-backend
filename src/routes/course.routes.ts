@@ -2040,7 +2040,10 @@ router.post(
       if (!key || typeof key !== 'string' || !VIDEO_KEY_RE.test(key) || key.includes('..')) {
         throw new AppError('Invalid object key', 400, 'INVALID_KEY');
       }
-      const lesson = await prisma.lesson.findUnique({ where: { id: lessonId }, select: { id: true } });
+      const lesson = await prisma.lesson.findUnique({
+        where: { id: lessonId },
+        select: { id: true, videoUrl: true, details: { select: { videoPlatform: true } } },
+      });
       if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
 
       const head = await r2HeadObject(key);
@@ -2050,6 +2053,11 @@ router.post(
       const publicUrl = r2BuildPublicUrl(key);
       const dur = Number(durationSeconds);
       const hasDur = Number.isFinite(dur) && dur > 0;
+
+      // Remember the OLD DIRECT video so we can delete it from R2 after we
+      // swap in the new one — no orphaned/duplicated objects on replace.
+      const oldUrl = lesson.videoUrl;
+      const oldWasPrivateDirect = isPrivateDirectVideo(lesson.details?.videoPlatform, oldUrl) && oldUrl !== publicUrl;
 
       await prisma.lesson.update({
         where: { id: lessonId },
@@ -2064,6 +2072,12 @@ router.post(
           },
         },
       });
+
+      // Fire-and-forget delete of the previous R2 object (never block the
+      // response; a failed delete just leaves one object the sweep can catch).
+      if (oldWasPrivateDirect && oldUrl) {
+        deleteByUrl(oldUrl).catch((err) => logger.warn(`[video] old object delete failed: ${err?.message || err}`));
+      }
 
       // Keep course aggregates (totalDuration) in sync when we learned a duration.
       if (hasDur) {
@@ -2085,6 +2099,64 @@ router.post(
         },
         message: 'Video uploaded successfully',
       });
+    } catch (error) { next(error); }
+  },
+);
+
+// Admin preview: a short signed URL to play a lesson's saved DIRECT video
+// inside the builder (the stored URL is a private object). Non-DIRECT
+// (YouTube/embed/external) URLs are returned as-is.
+router.get(
+  '/lessons/:lessonId/video-preview',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const lessonId = parseInt(req.params.lessonId, 10);
+      if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
+      const lesson = await prisma.lesson.findUnique({
+        where: { id: lessonId },
+        select: { videoUrl: true, details: { select: { videoPlatform: true } } },
+      });
+      if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
+      const platform = lesson.details?.videoPlatform ?? 'EMBED';
+      const url = await signDirectVideoUrl(platform, lesson.videoUrl);
+      res.json({ success: true, data: { videoPlatform: platform, videoUrl: url } });
+    } catch (error) { next(error); }
+  },
+);
+
+// Admin: remove a lesson's video — clears the lesson fields AND deletes the
+// R2 object (only when it's our own private DIRECT object) to free storage.
+router.delete(
+  '/lessons/:lessonId/video',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const lessonId = parseInt(req.params.lessonId, 10);
+      if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
+      const lesson = await prisma.lesson.findUnique({
+        where: { id: lessonId },
+        select: { id: true, videoUrl: true, details: { select: { videoPlatform: true } } },
+      });
+      if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
+
+      const wasPrivateDirect = isPrivateDirectVideo(lesson.details?.videoPlatform, lesson.videoUrl);
+      const oldUrl = lesson.videoUrl;
+
+      await prisma.lesson.update({
+        where: { id: lessonId },
+        data: {
+          videoUrl: null,
+          details: { upsert: { create: { videoPlatform: 'EMBED', videoUrl: null }, update: { videoPlatform: 'EMBED', videoUrl: null } } },
+        },
+      });
+
+      if (wasPrivateDirect && oldUrl) {
+        deleteByUrl(oldUrl).catch((err) => logger.warn(`[video] delete failed: ${err?.message || err}`));
+      }
+      res.json({ success: true, data: { lessonId }, message: 'Video removed' });
     } catch (error) { next(error); }
   },
 );

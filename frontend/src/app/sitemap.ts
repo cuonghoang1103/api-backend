@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { getServerApiBaseUrl } from '@/lib/server-api'
 
 /**
  * sitemap.xml — auto-generated at build time + ISR'd by Next.
@@ -22,11 +23,13 @@ import type { MetadataRoute } from 'next'
  */
 
 const SITE_URL = 'https://cuongthai.com'
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.cuongthai.com'
 
-// How often the sitemap re-generates (seconds). 1h balances freshness
-// with the API's rate limits.
-export const revalidate = 3600
+// Generate on-demand (per request) so the dynamic URLs are always fetched
+// at runtime against the INTERNAL backend. A build-time prerender can't
+// reach the API (it isn't running during `npm run build`) — that's why the
+// deployed sitemap only ever had the static pages. Crawlers fetch
+// sitemap.xml rarely, so a few list queries per request are cheap.
+export const dynamic = 'force-dynamic'
 
 type ListResp<T> = {
   success: boolean
@@ -36,11 +39,10 @@ type ListResp<T> = {
 
 async function safeFetch<T>(path: string): Promise<T[]> {
   try {
-    const res = await fetch(`${API_URL}${path}`, {
-      // sitemap runs on the server (build + revalidate), so we
-      // don't need cookies. cache: 'no-store' here would defeat
-      // ISR; rely on Next's revalidate + the default fetch cache.
+    const res = await fetch(`${getServerApiBaseUrl()}/api/v1${path}`, {
+      // sitemap runs on the server, hitting the internal backend directly.
       headers: { 'User-Agent': 'cuongthai-sitemap/1.0' },
+      cache: 'no-store',
       signal: AbortSignal.timeout(8000), // 8s ceiling
     })
     if (!res.ok) return []
@@ -68,7 +70,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/repos`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${SITE_URL}/projects`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${SITE_URL}/games`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${SITE_URL}/social`, lastModified: now, changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${SITE_URL}/language`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${SITE_URL}/tech-trends`, lastModified: now, changeFrequency: 'daily', priority: 0.6 },
+    { url: `${SITE_URL}/forum`, lastModified: now, changeFrequency: 'daily', priority: 0.5 },
+    // (`/social` removed — that route 404s; the public feed lives at `/`.)
   ]
 
   // ── Dynamic: courses ──────────────────────────────────────
@@ -116,10 +121,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: s.thumbnailUrl ? [s.thumbnailUrl] : undefined,
     }))
 
+  // ── Dynamic: projects ─────────────────────────────────────
+  type ProjectItem = { id: number | string; slug?: string; updatedAt?: string; createdAt?: string; thumbnailUrl?: string; thumbnail?: string }
+  const projects = await safeFetch<ProjectItem>('/projects?limit=100')
+  const projectUrls: MetadataRoute.Sitemap = projects
+    .filter((p) => p.slug)
+    .map((p) => {
+      const img = p.thumbnailUrl || p.thumbnail
+      return {
+        url: `${SITE_URL}/projects/${p.slug}`,
+        lastModified: p.updatedAt ? new Date(p.updatedAt) : p.createdAt ? new Date(p.createdAt) : now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+        images: img ? [img] : undefined,
+      }
+    })
+
   // ── Dynamic: music tracks (no per-track page; link to /music) ──
   // The music player is on /music itself. Individual tracks don't
   // have a dedicated URL — they're played in-place. Skip the
   // per-track URLs to avoid linking to /music/:id which would 404.
 
-  return [...staticPages, ...courseUrls, ...blogUrls, ...shopUrls]
+  return [...staticPages, ...courseUrls, ...blogUrls, ...shopUrls, ...projectUrls]
 }

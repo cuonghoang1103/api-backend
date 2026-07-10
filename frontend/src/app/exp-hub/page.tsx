@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen } from 'lucide-react';
 import { toast } from 'sonner';
 import { FolderTree } from '@/components/exp-hub/FolderTree';
@@ -527,7 +528,7 @@ export default function ExpHubPage() {
               {view.noteContent?.trim() && (
                 <div
                   className="prose prose-invert mb-6 max-w-none prose-img:rounded-lg prose-img:border prose-img:border-white/10"
-                  dangerouslySetInnerHTML={{ __html: view.noteContent }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(view.noteContent) }}
                 />
               )}
 
@@ -659,7 +660,7 @@ export default function ExpHubPage() {
                           </div>
                           <div
                             className="prose prose-neutral dark:prose-invert max-w-none text-neutral-600 dark:text-neutral-400"
-                            dangerouslySetInnerHTML={{ __html: view.explanation }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(view.explanation) }}
                           />
                         </div>
                       )}

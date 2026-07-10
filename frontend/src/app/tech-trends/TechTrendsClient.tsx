@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, useCallback, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { Bookmark, Share2, Clock, TrendingUp, Search, Sparkles, Code2, AlertTriangle, CheckCircle2, X } from 'lucide-react';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { techTrendsApi } from '@/lib/api';
@@ -502,7 +503,7 @@ function ArticleCard({
                 {article.bodyHtml ? (
                   <div
                     className="tech-prose pt-3 border-t border-darkborder"
-                    dangerouslySetInnerHTML={{ __html: article.bodyHtml }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.bodyHtml) }}
                   />
                 ) : (
                   <div className="pt-2 space-y-3 text-text-secondary text-sm leading-relaxed border-t border-darkborder">

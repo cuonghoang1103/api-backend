@@ -46,6 +46,7 @@ import express, {
   type Express,
   type Request,
   type Response,
+  type RequestHandler,
 } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -53,6 +54,8 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import { RedisStore } from 'rate-limit-redis';
+import { getRedis } from './config/redis.js';
 import { nanoid } from 'nanoid';
 
 // Dynamic imports với absolute path
@@ -303,6 +306,31 @@ const clientIpKey = (req: Request): string => {
   return xff?.[xff.length - 1] || req.ip || 'unknown';
 };
 
+// ── Rate-limit store (P1-15) ─────────────────────────────────────────
+// Redis-backed so counters survive deploys and are shared across
+// instances (a prerequisite for running more than one backend process).
+// FAIL-OPEN: if Redis is unreachable the store rejects; rather than
+// letting express-rate-limit forward that error and 500 the whole API,
+// `failOpen` swallows it and lets the request through. A rate-limit
+// outage must never take the site down. Each limiter uses its own key
+// prefix so their buckets don't collide.
+const rlSendCommand = async (...args: string[]): Promise<unknown> => {
+  const client = await getRedis();
+  return client.sendCommand(args);
+};
+const makeRlStore = (prefix: string) => new RedisStore({ sendCommand: rlSendCommand as never, prefix });
+
+const failOpen = (limiter: RequestHandler): RequestHandler => (req, res, next) =>
+  limiter(req, res, (err?: unknown) => {
+    if (err) {
+      logger.warn('rate limiter store error — failing open', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return next();
+    }
+    next();
+  });
+
 // Giới hạn chung cho tất cả /api/* endpoints
 // Raised 100 → 500 → 2000 per 15min: 500 (~33 req/min) was exhausted
 // by a single legitimate power user (several tabs: QuotaIndicator
@@ -311,6 +339,7 @@ const clientIpKey = (req: Request): string => {
 // window and looked like a full backend outage (2026-07-07).
 const generalLimiter = rateLimit({
   windowMs: config.rateLimitWindowMs, // 15 phút
+  store: makeRlStore('rl:general:'),
   max: parseInt(process.env.RATE_LIMIT_MAX || '2000', 10),
   standardHeaders: true,
   legacyHeaders: false,
@@ -349,6 +378,7 @@ const authLimiter = rateLimit({
   // aggressive — legitimate cross-device logins (e.g. user signing
   // in on phone, then desktop) tripped the limit.
   windowMs: config.nodeEnv === 'production' ? 60 * 1000 : 60 * 1000,
+  store: makeRlStore('rl:auth:'),
   max: (req: Request) => {
     // Judge "local" by the unspoofable client key, not the forgeable
     // first X-Forwarded-For entry (spoofing XFF: 127.0.0.1 used to
@@ -387,6 +417,7 @@ const authLimiter = rateLimit({
 // Giới hạn riêng cho upload endpoint
 const uploadLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 phút
+  store: makeRlStore('rl:upload:'),
   max: 20,
   standardHeaders: true,
   legacyHeaders: false,
@@ -397,14 +428,14 @@ const uploadLimiter = rateLimit({
   },
 });
 
-app.use('/api/', generalLimiter);
+app.use('/api/', failOpen(generalLimiter));
 
 // Tag incoming API requests with the route template so Sentry
 // transactions don't explode into one entry per dynamic id.
 app.use('/api/', sentryRequestMiddleware);
 
 // ─── 9. API Routes ─────────────────────────────────────────
-app.use('/api/v1/auth', authLimiter, authRoutes);
+app.use('/api/v1/auth', failOpen(authLimiter), authRoutes);
 app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/friends', friendRoutes);
@@ -434,7 +465,7 @@ app.use('/api/v1/skills', skillRoutes);
 app.use('/api/v1/projects', projectRoutes);
 app.use('/api/v1/certificates', certificateRoutes);
 app.use('/api/v1/contact', contactRoutes);
-app.use('/api/v1/files', uploadLimiter, uploadRoutes);
+app.use('/api/v1/files', failOpen(uploadLimiter), uploadRoutes);
 app.use('/api/v1/dev-posts', devPostRoutes);
 app.use('/api/v1/tech-trends', techTrendsPublicRoutes);
 app.use('/api/v1/admin/tech-trends', techTrendsAdminRoutes);

@@ -74,6 +74,7 @@
     "node-cron": "^3.0.3",
     "openai": "^4.77.0",
     "pgvector": "0.3.0",
+    "rate-limit-redis": "^4.3.1",
     "redis": "^4.7.1",
     "rehype-highlight": "^7.0.2",
     "rehype-raw": "^7.0.0",

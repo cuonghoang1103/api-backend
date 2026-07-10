@@ -1,6 +1,7 @@
 import { Router, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
+import { randomBytes } from 'crypto';
 import { prisma } from '../config/database.js';
 import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
@@ -264,6 +265,45 @@ function normalizeVideoPlatform(videoPlatform?: unknown): string {
   return normalized || 'EMBED';
 }
 
+// ─── DIRECT (R2-hosted) video privacy ──────────────────────────────
+// Videos uploaded to R2 live in a PRIVATE space (videos/lesson/...).
+// We NEVER expose the raw object URL: at play time the single-lesson
+// endpoint hands the enrolled student a short-lived signed GET URL; in
+// list/curriculum payloads we redact the raw URL so it can't be scraped
+// by anyone who can read the course JSON.
+const VIDEO_MAX_BYTES = 2 * 1024 * 1024 * 1024; // 2 GB — direct-to-R2, off the API server heap
+const VIDEO_KEY_RE = /^videos\/lesson\/[\w./-]+$/;
+const VIDEO_SIGNED_TTL = 6 * 60 * 60; // 6h — a full watch + seeking within one session
+
+// True when a DIRECT video URL points at OUR OWN R2 (vs an external
+// .mp4 link an admin pasted). Only our own objects are private/signed.
+function isPrivateDirectVideo(videoPlatform: string | undefined, videoUrl: string | null | undefined): boolean {
+  return videoPlatform === 'DIRECT' && !!videoUrl && !!getStorageProvider().keyFromUrl(videoUrl);
+}
+
+// List/curriculum payloads: strip the raw URL of a private DIRECT video.
+function redactDirectVideoUrl(videoPlatform: string | undefined, videoUrl: string | null | undefined): string | null {
+  if (isPrivateDirectVideo(videoPlatform, videoUrl)) return null;
+  return videoUrl ?? null;
+}
+
+// Play-time: hand back a short-lived signed GET URL for a private
+// DIRECT video; pass through external DIRECT links and non-DIRECT URLs.
+async function signDirectVideoUrl(videoPlatform: string | undefined, videoUrl: string | null | undefined): Promise<string | null> {
+  if (!videoUrl) return null;
+  if (!isPrivateDirectVideo(videoPlatform, videoUrl)) return videoUrl;
+  const provider = getStorageProvider();
+  const key = provider.keyFromUrl(videoUrl);
+  if (!key) return videoUrl;
+  try {
+    // No filename arg → no Content-Disposition attachment → the browser
+    // streams the video inline (and honours Range requests for seeking).
+    return await provider.signedUrl(key, VIDEO_SIGNED_TTL);
+  } catch {
+    return null;
+  }
+}
+
 function normalizePublishedAt(status: string, currentPublishedAt?: Date | null): Date | null {
   if (status === 'PUBLISHED') {
     return currentPublishedAt ?? new Date();
@@ -491,14 +531,20 @@ async function serializeCourse(
         if (hasPaidAccess) {
           // Enrolled / admin / free-course: full content. The
           // learn page renders this without a second API call.
+          // DIRECT (private R2) video URLs are redacted here — the
+          // learn page fetches a signed URL from the single-lesson
+          // endpoint at play time.
+          const platform = lesson.details?.videoPlatform ?? 'EMBED';
           return {
             ...base,
             content: lesson.content,
-            videoUrl: lesson.videoUrl,
-            videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
+            videoUrl: redactDirectVideoUrl(platform, lesson.videoUrl),
+            videoPlatform: platform,
             sourceCodeUrl: lesson.details?.sourceCodeUrl,
             teachingNotes: lesson.details?.teachingNotes,
-            details: lesson.details,
+            details: lesson.details
+              ? { ...lesson.details, videoUrl: redactDirectVideoUrl(platform, lesson.details.videoUrl) }
+              : lesson.details,
           };
         }
 
@@ -513,7 +559,7 @@ async function serializeCourse(
           return {
             ...base,
             content: lesson.content,
-            videoUrl: lesson.videoUrl,
+            videoUrl: redactDirectVideoUrl(lesson.details?.videoPlatform, lesson.videoUrl),
             videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
             sourceCodeUrl: lesson.details?.sourceCodeUrl,
             teachingNotes: undefined,
@@ -1153,7 +1199,10 @@ router.get('/:courseId/lessons/:lessonId', optionalAuth, async (req, res: Respon
         videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
         sourceCodeUrl: showFull ? lesson.details?.sourceCodeUrl : undefined,
         teachingNotes: showFull ? lesson.details?.teachingNotes : undefined,
-        videoUrl: showFull ? lesson.videoUrl : undefined,
+        // For a private DIRECT video this returns a short-lived signed
+        // GET URL the browser can stream; for YouTube/embed/external it
+        // passes the URL through unchanged.
+        videoUrl: showFull ? await signDirectVideoUrl(lesson.details?.videoPlatform, lesson.videoUrl) : undefined,
         // Lesson body text is paid content too. Even a free
         // preview gets the marketing copy via description, but
         // `content` (the full article) is gated.
@@ -1392,7 +1441,7 @@ router.get('/:id/curriculum', optionalAuth, async (req, res: Response<ApiRespons
               thumbnailUrl: lesson.thumbnailUrl,
               isFreePreview: lesson.isFreePreview,
               sortOrder: lesson.sortOrder,
-              videoUrl: lesson.videoUrl,
+              videoUrl: redactDirectVideoUrl(lesson.details?.videoPlatform, lesson.videoUrl),
               videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
               sourceCodeUrl: lesson.details?.sourceCodeUrl,
               teachingNotes: lesson.details?.teachingNotes,
@@ -1409,7 +1458,7 @@ router.get('/:id/curriculum', optionalAuth, async (req, res: Response<ApiRespons
             thumbnailUrl: lesson.thumbnailUrl,
             isFreePreview: lesson.isFreePreview,
             sortOrder: lesson.sortOrder,
-            videoUrl: lesson.videoUrl,
+            videoUrl: redactDirectVideoUrl(lesson.details?.videoPlatform, lesson.videoUrl),
             videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
             // We deliberately omit teachingNotes + sourceCodeUrl
             // for preview lessons — those are bonus materials
@@ -1504,17 +1553,53 @@ router.post('/:id/progress', authenticate, async (req, res: Response<ApiResponse
       },
     });
 
+    const isCourseComplete = courseLessons > 0 && completedCount >= courseLessons;
+
     await prisma.enrollment.update({
       where: { id: enrollment.id },
       data: {
         progressPercent: courseLessons > 0 ? (completedCount / courseLessons) * 100 : 0,
         lastLessonId: lessonId,
         lastAccessedAt: new Date(),
-        status: completedCount >= courseLessons && courseLessons > 0 ? 'COMPLETED' : 'ACTIVE',
+        status: isCourseComplete ? 'COMPLETED' : 'ACTIVE',
       },
     });
 
-    res.json({ success: true, data: progress });
+    // Issue a certificate the moment the student reaches 100%. Idempotent:
+    // one certificate per (user, course). We swallow a unique-constraint
+    // race (two lessons finishing near-simultaneously) so it never 500s.
+    let certificateNumber: string | undefined;
+    if (isCourseComplete) {
+      const existingCert = await prisma.certificate.findUnique({
+        where: { userId_courseId: { userId: req.userId!, courseId } },
+        select: { certificateNumber: true },
+      });
+      if (existingCert) {
+        certificateNumber = existingCert.certificateNumber;
+      } else {
+        certificateNumber = `CUONGTHAI-${new Date().getFullYear()}-${randomBytes(5).toString('hex').toUpperCase()}`;
+        try {
+          await prisma.certificate.create({
+            data: {
+              userId: req.userId!,
+              courseId,
+              enrollmentId: enrollment.id,
+              certificateNumber,
+              issuedAt: new Date(),
+            },
+          });
+        } catch {
+          // Lost a race — read back whatever landed.
+          const c = await prisma.certificate.findUnique({
+            where: { userId_courseId: { userId: req.userId!, courseId } },
+            select: { certificateNumber: true },
+          });
+          certificateNumber = c?.certificateNumber;
+        }
+      }
+    }
+
+    res.json({ success: true, data: { ...progress, isCourseComplete, certificateNumber } });
   } catch (error) { next(error); }
 });
 
@@ -1774,6 +1859,110 @@ router.post(
           createdAt: document.createdAt,
         },
         message: 'Document uploaded successfully',
+      });
+    } catch (error) { next(error); }
+  },
+);
+
+// ─── Lesson video — DIRECT-to-R2 upload (private, signed playback) ──────────
+// Same two-step presign → PUT → register as documents, but the object lives in
+// a PRIVATE space (videos/lesson/...) and is NEVER served via its public URL.
+// On register we set the lesson's videoUrl (both Lesson.videoUrl and
+// LessonDetail.videoUrl, so every serving path is consistent) and mark
+// LessonDetail.videoPlatform='DIRECT'. Enrolled students receive a 6-hour
+// signed GET URL from the single-lesson endpoint at play time.
+router.post(
+  '/lessons/:lessonId/video/presign',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      if (getStorageProvider().kind !== 'r2') {
+        throw new AppError('Direct upload unavailable on this storage backend', 400, 'PRESIGN_UNAVAILABLE');
+      }
+      const lessonId = parseInt(req.params.lessonId, 10);
+      if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
+      const { filename, contentType, size } = req.body ?? {};
+      if (!filename || typeof filename !== 'string') {
+        throw new AppError('filename is required', 400, 'MISSING_FILENAME');
+      }
+      const numSize = Number(size);
+      if (!Number.isFinite(numSize) || numSize <= 0 || numSize > VIDEO_MAX_BYTES) {
+        throw new AppError(`Video exceeds the ${Math.round(VIDEO_MAX_BYTES / (1024 * 1024 * 1024))}GB limit`, 400, 'FILE_TOO_LARGE');
+      }
+      const lesson = await prisma.lesson.findUnique({ where: { id: lessonId }, select: { id: true } });
+      if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
+
+      const ct = typeof contentType === 'string' && contentType.startsWith('video/') ? contentType : 'video/mp4';
+      const key = buildKey('videos/lesson', filename, { userId: req.userId });
+      const uploadUrl = await r2SignedUploadUrl(key, ct, 3600);
+      res.json({
+        success: true,
+        data: { uploadUrl, key, method: 'PUT', headers: { 'Content-Type': ct }, expiresIn: 3600 },
+      });
+    } catch (error) { next(error); }
+  },
+);
+
+router.post(
+  '/lessons/:lessonId/video/register',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      if (getStorageProvider().kind !== 'r2') {
+        throw new AppError('Direct upload unavailable on this storage backend', 400, 'PRESIGN_UNAVAILABLE');
+      }
+      const lessonId = parseInt(req.params.lessonId, 10);
+      if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
+      const { key, durationSeconds } = req.body ?? {};
+      if (!key || typeof key !== 'string' || !VIDEO_KEY_RE.test(key) || key.includes('..')) {
+        throw new AppError('Invalid object key', 400, 'INVALID_KEY');
+      }
+      const lesson = await prisma.lesson.findUnique({ where: { id: lessonId }, select: { id: true } });
+      if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
+
+      const head = await r2HeadObject(key);
+      if (!head) throw new AppError('Uploaded object not found — did the PUT succeed?', 404, 'OBJECT_NOT_FOUND');
+      if (head.size > VIDEO_MAX_BYTES) throw new AppError('Uploaded object exceeds the size limit', 400, 'FILE_TOO_LARGE');
+
+      const publicUrl = r2BuildPublicUrl(key);
+      const dur = Number(durationSeconds);
+      const hasDur = Number.isFinite(dur) && dur > 0;
+
+      await prisma.lesson.update({
+        where: { id: lessonId },
+        data: {
+          videoUrl: publicUrl,
+          ...(hasDur ? { videoDurationSeconds: Math.round(dur) } : {}),
+          details: {
+            upsert: {
+              create: { videoPlatform: 'DIRECT', videoUrl: publicUrl },
+              update: { videoPlatform: 'DIRECT', videoUrl: publicUrl },
+            },
+          },
+        },
+      });
+
+      // Keep course aggregates (totalDuration) in sync when we learned a duration.
+      if (hasDur) {
+        const sectionCourse = await prisma.lesson.findUnique({
+          where: { id: lessonId },
+          select: { section: { select: { courseId: true } } },
+        });
+        const courseId = sectionCourse?.section?.courseId;
+        if (courseId) await syncCourseStats(courseId);
+      }
+
+      res.status(201).json({
+        success: true,
+        data: {
+          lessonId,
+          videoPlatform: 'DIRECT',
+          videoUrl: publicUrl,
+          ...(hasDur ? { videoDurationSeconds: Math.round(dur) } : {}),
+        },
+        message: 'Video uploaded successfully',
       });
     } catch (error) { next(error); }
   },

@@ -7,9 +7,9 @@ import Link from 'next/link';
 import {
   ChevronLeft, ChevronRight, CheckCircle, Circle, Lock, Menu, X,
   Download, BookOpen, Loader2, Play, ChevronDown, ChevronUp, ArrowLeft,
-  Code2, ExternalLink, FileText, Github
+  Code2, ExternalLink, FileText, Github, Award, Ticket
 } from 'lucide-react';
-import { coursesApi } from '@/lib/api';
+import { coursesApi, certificatesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -86,13 +86,19 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
   const [videoKey, setVideoKey] = useState(0);
-  const [videoCompleted, setVideoCompleted] = useState(false);
+  // Only the setter is used now (we reset it on lesson change / completion);
+  // the value itself is no longer read since we dropped the YouTube auto-mark.
+  const [, setVideoCompleted] = useState(false);
   // Course-level documents (the fixed "Tài liệu" area shown at the top of
   // Course Content, above the chapters).
   const [courseDocs, setCourseDocs] = useState<
     Array<{ id: number; title: string; fileUrl: string; fileType?: string | null; fileSizeBytes: number }>
   >([]);
   const [docsOpen, setDocsOpen] = useState(true);
+  // Certificate (earned at 100%) + the 10%-off code redeemed from it.
+  const [certificate, setCertificate] = useState<{ id: number; certificateNumber: string } | null>(null);
+  const [redeemCode, setRedeemCode] = useState<{ code: string; expiresAt: string | null } | null>(null);
+  const [redeeming, setRedeeming] = useState(false);
 
   useEffect(() => {
     loadCourse();
@@ -262,6 +268,64 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     }
   };
 
+  // Periodically persist the playhead so the student resumes exactly
+  // where they left off. Throttled (12s) to avoid hammering the API;
+  // also called on pause and when leaving a lesson. We deliberately
+  // omit isCompleted so a partial watch never flips completion state.
+  const lastPosSaveRef = useRef(0);
+  const savePosition = useCallback((seconds: number, force = false) => {
+    if (!course || !currentLesson || !Number.isFinite(seconds) || seconds < 1) return;
+    const now = Date.now();
+    if (!force && now - lastPosSaveRef.current < 12000) return;
+    lastPosSaveRef.current = now;
+    const secs = Math.round(seconds);
+    setProgress(prev => {
+      const existing = prev.find(p => p.lessonId === currentLesson.id);
+      const merged: LessonProgress = {
+        ...(existing as LessonProgress),
+        lessonId: currentLesson.id,
+        isCompleted: existing?.isCompleted || false,
+        watchTimeSeconds: Math.max(existing?.watchTimeSeconds || 0, secs),
+        lastPositionSeconds: secs,
+      };
+      return [...prev.filter(p => p.lessonId !== currentLesson.id), merged];
+    });
+    coursesApi
+      .updateProgress(course.id, { lessonId: currentLesson.id, watchTimeSeconds: secs, lastPositionSeconds: secs })
+      .catch(() => { /* best-effort — never block playback */ });
+  }, [course, currentLesson]);
+
+  // Once every lesson is complete the backend has issued a certificate
+  // (auto-issued by the progress endpoint). Fetch it so we can show the
+  // completion banner + redeem CTA.
+  useEffect(() => {
+    if (!course || !course.totalLessons || certificate) return;
+    const completed = progress.filter(p => p.isCompleted).length;
+    if (completed >= course.totalLessons) {
+      certificatesApi.getForCourse(course.id)
+        .then(res => {
+          const c = res.data?.data as { id: number; certificateNumber: string } | undefined;
+          if (c?.id) setCertificate({ id: c.id, certificateNumber: c.certificateNumber });
+        })
+        .catch(() => { /* not issued yet / race — the effect re-runs on next progress change */ });
+    }
+  }, [progress, course, certificate]);
+
+  const handleRedeem = async () => {
+    if (!certificate || redeeming) return;
+    setRedeeming(true);
+    try {
+      const res = await certificatesApi.redeem(certificate.id);
+      const d = res.data.data;
+      setRedeemCode({ code: d.code, expiresAt: d.expiresAt });
+      toast.success(d.alreadyRedeemed ? 'Đây là mã giảm giá của bạn' : 'Đổi mã giảm 10% thành công!');
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Đổi mã thất bại');
+    } finally {
+      setRedeeming(false);
+    }
+  };
+
   const getFlatLessons = (): FlatLesson[] => {
     if (!course?.sections) return [];
     return course.sections.flatMap(section =>
@@ -278,6 +342,13 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   const currentIndex = currentLesson ? flatLessons.findIndex(f => f.lesson.id === currentLesson.id) : -1;
   const prevLesson = currentIndex > 0 ? flatLessons[currentIndex - 1]?.lesson : null;
   const nextLesson = currentIndex < flatLessons.length - 1 ? flatLessons[currentIndex + 1]?.lesson : null;
+
+  // Resume the current lesson's video from the last saved position —
+  // but only if the lesson isn't already completed (a finished lesson
+  // should start from the top on rewatch).
+  const resumeAt = currentLesson
+    ? (progress.find(p => p.lessonId === currentLesson.id && !p.isCompleted)?.lastPositionSeconds || 0)
+    : 0;
 
   const toggleSection = (id: number) => {
     setExpandedSections(prev => {
@@ -502,6 +573,62 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
         <main className="flex-1 overflow-y-auto">
           {currentLesson ? (
             <div className="max-w-4xl mx-auto px-4 py-8">
+              {/* Course-completion banner — appears once every lesson is
+                  done. Links to the issued certificate and lets the
+                  student redeem a one-time 10%-off code for their next
+                  course. */}
+              {certificate && (
+                <div className="mb-6 rounded-2xl border border-green-500/30 bg-gradient-to-r from-green-500/10 to-neon-violet/10 p-5">
+                  <div className="flex items-start gap-4 flex-wrap">
+                    <div className="w-12 h-12 rounded-xl bg-green-500/15 text-green-400 flex items-center justify-center shrink-0">
+                      <Award className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-heading font-bold text-text-primary">🎉 Chúc mừng! Bạn đã hoàn thành khóa học</h3>
+                      <p className="text-sm text-text-secondary mt-0.5">
+                        Chứng chỉ đã được cấp. Xem/in chứng chỉ và đổi mã giảm 10% cho khóa học tiếp theo.
+                      </p>
+                      <div className="flex items-center gap-3 mt-3 flex-wrap">
+                        <Link
+                          href={`/certificates/${certificate.certificateNumber}`}
+                          target="_blank"
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium hover:opacity-90 transition-opacity"
+                        >
+                          <Award className="w-4 h-4" /> Xem chứng chỉ
+                        </Link>
+                        {redeemCode ? (
+                          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-darkbg border border-green-500/40 text-sm">
+                            <Ticket className="w-4 h-4 text-green-400" />
+                            <span className="text-text-secondary">Mã giảm 10%:</span>
+                            <button
+                              onClick={() => { navigator.clipboard.writeText(redeemCode.code); toast.success('Đã copy mã'); }}
+                              className="font-mono font-bold text-green-400 hover:underline"
+                              title="Bấm để copy"
+                            >
+                              {redeemCode.code}
+                            </button>
+                          </span>
+                        ) : (
+                          <button
+                            onClick={handleRedeem}
+                            disabled={redeeming}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-neon-violet/40 text-neon-violet text-sm font-medium hover:bg-neon-violet/10 transition-colors disabled:opacity-60"
+                          >
+                            {redeeming ? <Loader2 className="w-4 h-4 animate-spin" /> : <Ticket className="w-4 h-4" />}
+                            Đổi mã giảm 10%
+                          </button>
+                        )}
+                      </div>
+                      {redeemCode?.expiresAt && (
+                        <p className="text-xs text-text-muted mt-2">
+                          Hạn dùng đến {new Date(redeemCode.expiresAt).toLocaleDateString('vi-VN')} · dùng 1 lần cho khóa tiếp theo.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Video — supports YouTube embed + direct file (mp4/webm)
                   based on videoPlatform. Falls back to a clickable
                   thumbnail if we don't have a playble URL at all. */}
@@ -515,15 +642,28 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                         <CourseVideoPlayer
                           key={videoKey}
                           src={url}
+                          startAt={resumeAt}
+                          onProgressTick={savePosition}
                           onEnded={() => {
+                            // Native video fires a real 'ended' — this is
+                            // genuine completion (unlike the old YouTube
+                            // 1.5s-after-load hack we removed).
                             if (!isCompleted(currentLesson.id)) markComplete();
+                            // Professional touch: auto-advance to the next
+                            // lesson so a binge session flows hands-free.
+                            if (nextLesson) {
+                              toast.info('Chuyển sang bài tiếp theo…');
+                              window.setTimeout(() => selectLesson(nextLesson), 1500);
+                            }
                           }}
                         />
                       );
                     }
                     // YouTube / embed (default) — use embed URL so the
                     // student can watch inside the web app, not be sent
-                    // off to youtube.com.
+                    // off to youtube.com. We do NOT auto-mark completion
+                    // here: an iframe can't tell us when the video truly
+                    // ends, so the student confirms via "Mark as Complete".
                     const embedUrl = toEmbedUrl(url);
                     return (
                       <iframe
@@ -533,17 +673,6 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
                         className="w-full h-full"
-                        onLoad={() => {
-                          // YouTube iframes don't fire 'ended', so we
-                          // mark complete optimistically after a small
-                          // delay; the user can always toggle manually.
-                          // Guarded so a slow network reload doesn't
-                          // re-fire the auto-mark and double-count.
-                          if (!isCompleted(currentLesson.id) && !videoCompleted) {
-                            setVideoCompleted(true);
-                            window.setTimeout(() => markComplete(), 1500);
-                          }
-                        }}
                       />
                     );
                   })()}
@@ -729,9 +858,31 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
 // The key={videoKey} prop on the call site causes React to remount this
 // component on lesson change, resetting all internal state automatically.
 
-function CourseVideoPlayer({ src, onEnded }: { src: string; onEnded?: () => void }) {
+function CourseVideoPlayer({
+  src,
+  onEnded,
+  startAt = 0,
+  onProgressTick,
+}: {
+  src: string;
+  onEnded?: () => void;
+  startAt?: number;
+  onProgressTick?: (seconds: number, force?: boolean) => void;
+}) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const didSeekRef = useRef(false);
+  const onProgressRef = useRef(onProgressTick);
+  onProgressRef.current = onProgressTick;
+
+  // On unmount (lesson change / navigate away) flush the final position
+  // so resume is accurate even if the 12s throttle hadn't fired yet.
+  useEffect(() => {
+    return () => {
+      const v = videoRef.current;
+      if (v && v.currentTime > 1) onProgressRef.current?.(v.currentTime, true);
+    };
+  }, []);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -770,6 +921,8 @@ function CourseVideoPlayer({ src, onEnded }: { src: string; onEnded?: () => void
     setPlaying(false);
     setShowControls(true);
     if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
+    // Flush position on pause so resume is precise even for a short watch.
+    onProgressTick?.(videoRef.current?.currentTime ?? 0, true);
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -830,8 +983,22 @@ function CourseVideoPlayer({ src, onEnded }: { src: string; onEnded?: () => void
         onClick={togglePlay}
         onPlay={() => setPlaying(true)}
         onPause={handlePause}
-        onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime ?? 0)}
-        onLoadedMetadata={() => setDuration(videoRef.current?.duration ?? 0)}
+        onTimeUpdate={() => {
+          const t = videoRef.current?.currentTime ?? 0;
+          setCurrentTime(t);
+          onProgressTick?.(t);
+        }}
+        onLoadedMetadata={() => {
+          const d = videoRef.current?.duration ?? 0;
+          setDuration(d);
+          // Resume from the last saved position (only once, and never
+          // so close to the end that it feels like nothing happened).
+          if (!didSeekRef.current && startAt > 2 && startAt < d - 5 && videoRef.current) {
+            videoRef.current.currentTime = startAt;
+            setCurrentTime(startAt);
+          }
+          didSeekRef.current = true;
+        }}
         onVolumeChange={() => {
           const v = videoRef.current;
           if (!v) return;

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { Award, CheckCircle2, Download, GraduationCap, Loader2 } from 'lucide-react';
+import { Award, CheckCircle2, Download, Loader2 } from 'lucide-react';
 import { certificatesApi } from '@/lib/api';
 import type { Certificate } from '@/types';
 import { toast } from 'sonner';
@@ -60,7 +60,7 @@ export default function CertificatePage() {
             {/* Header */}
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neon-violet/10 border border-neon-violet/20 text-neon-violet text-sm">
-                <GraduationCap className="w-4 h-4" /> FPT University Academy
+                <span className="text-base leading-none">🐼</span> CuongThai Academy
               </div>
               <h1 className="text-3xl md:text-5xl font-heading font-bold text-text-primary">
                 Certificate of Completion
@@ -70,7 +70,7 @@ export default function CertificatePage() {
 
             {/* Recipient */}
             <div className="space-y-2 py-6 border-y border-neon-violet/20">
-              <p className="text-sm text-text-muted uppercase tracking-[0.2em]">This is to certify that</p>
+              <p className="text-sm text-text-muted uppercase tracking-[0.2em]">🎉 Congratulations! This is to certify that</p>
               <p className="text-3xl md:text-4xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-indigo to-neon-violet">
                 {cert.userName || 'Student'}
               </p>
@@ -110,7 +110,7 @@ export default function CertificatePage() {
                 <Award className="w-8 h-8 text-neon-violet" />
                 <div className="text-left">
                   <p className="text-sm font-semibold text-text-primary">Verified Certificate</p>
-                  <p className="text-xs text-text-muted">cuonghoang.dev/academy</p>
+                  <p className="text-xs text-text-muted">Issued by CuongThai · cuongthai.com</p>
                 </div>
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function CertificatePage() {
 
         {/* Verify info */}
         <p className="text-center text-xs text-text-muted mt-4">
-          Verify at: cuonghoang.dev/certificates/{cert.certificateNumber}
+          Verify at: cuongthai.com/certificates/{cert.certificateNumber}
         </p>
       </div>
 

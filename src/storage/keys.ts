@@ -73,6 +73,7 @@ export type StorageCategory =
   | 'audio/songs'
   | 'audio/notifications'
   | 'video'
+  | 'videos/lesson'
   | 'documents/lesson'
   | 'documents/chat';
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { BookOpen, Code2, ExternalLink, FileText, Loader2, PlayCircle, Save, Search, Video } from 'lucide-react';
 import Link from 'next/link';
-import { academyApi, adminCoursesApi } from '@/lib/api';
+import { academyApi, adminCoursesApi, coursesApi } from '@/lib/api';
 import type { Semester, Course } from '@/types';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import LessonDocumentsManager from '@/components/admin/LessonDocumentsManager';
@@ -63,6 +63,8 @@ export default function AdminLessonsPage() {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<LessonInfo>(emptyLesson);
   const [search, setSearch] = useState('');
+  const [videoUploading, setVideoUploading] = useState(false);
+  const [videoUploadPct, setVideoUploadPct] = useState(0);
 
   useEffect(() => {
     academyApi.getSemesters()
@@ -150,6 +152,60 @@ export default function AdminLessonsPage() {
       toast.error(err?.response?.data?.message || 'Lưu thất bại');
     } finally {
       setSaving(false);
+    }
+  };
+
+  // Probe a video file's duration in the browser before upload so we
+  // can keep the lesson's videoDurationSeconds (and course totals) right.
+  const probeDuration = (file: File): Promise<number> =>
+    new Promise((resolve) => {
+      try {
+        const el = document.createElement('video');
+        el.preload = 'metadata';
+        const url = URL.createObjectURL(file);
+        el.onloadedmetadata = () => {
+          URL.revokeObjectURL(url);
+          resolve(Number.isFinite(el.duration) ? el.duration : 0);
+        };
+        el.onerror = () => { URL.revokeObjectURL(url); resolve(0); };
+        el.src = url;
+      } catch { resolve(0); }
+    });
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // allow re-selecting the same file
+    if (!file) return;
+    if (!selectedLessonId) {
+      toast.error('Hãy lưu bài giảng trước khi tải video lên');
+      return;
+    }
+    if (!file.type.startsWith('video/')) {
+      toast.error('Vui lòng chọn tệp video (mp4, webm, mov…)');
+      return;
+    }
+    setVideoUploading(true);
+    setVideoUploadPct(0);
+    try {
+      const duration = await probeDuration(file);
+      const res = await coursesApi.uploadLessonVideoDirect(
+        selectedLessonId,
+        file,
+        (frac) => setVideoUploadPct(Math.round(frac * 100)),
+        duration,
+      );
+      const data = res.data?.data as { videoUrl?: string; videoDurationSeconds?: number } | undefined;
+      setForm((p) => ({
+        ...p,
+        videoPlatform: 'DIRECT',
+        videoUrl: data?.videoUrl || p.videoUrl,
+        videoDurationSeconds: data?.videoDurationSeconds ?? (duration ? Math.round(duration) : p.videoDurationSeconds),
+      }));
+      toast.success('Tải video lên R2 thành công (video riêng tư, phát qua link ký ngắn hạn)');
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || err?.message || 'Tải video thất bại');
+    } finally {
+      setVideoUploading(false);
     }
   };
 
@@ -288,11 +344,54 @@ export default function AdminLessonsPage() {
                   <input
                     value={form.videoUrl}
                     onChange={(e) => setForm((p) => ({ ...p, videoUrl: e.target.value }))}
-                    placeholder="YouTube URL hoặc video embed URL"
+                    placeholder={form.videoPlatform === 'DIRECT' ? 'Link .mp4 bên ngoài — hoặc tải video lên R2 bên dưới' : 'YouTube URL hoặc video embed URL'}
                     className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
                   />
                 </div>
               </div>
+
+              {/* DIRECT: upload the video straight to R2 (private, ≤2GB).
+                  Students get a short-lived signed URL at play time — the
+                  raw object URL is never exposed. External .mp4 links can
+                  still be pasted in the field above instead. */}
+              {form.videoPlatform === 'DIRECT' && (
+                <div className="mt-4 rounded-xl border border-dashed border-neon-violet/40 bg-neon-violet/5 p-4">
+                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-text-primary">Tải video lên R2 (riêng tư)</p>
+                      <p className="text-xs text-text-muted mt-0.5">
+                        Tối đa 2GB, mọi định dạng video. Bảo vệ bằng link ký hết hạn 6 giờ — chỉ học viên đã đăng ký xem được.
+                      </p>
+                    </div>
+                    <label className={`shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium cursor-pointer transition-colors ${
+                      videoUploading || !selectedLessonId
+                        ? 'bg-darkbg text-text-muted cursor-not-allowed'
+                        : 'bg-neon-violet/15 text-neon-violet hover:bg-neon-violet/25'
+                    }`}>
+                      {videoUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Video className="w-4 h-4" />}
+                      {videoUploading ? `Đang tải ${videoUploadPct}%` : 'Chọn video…'}
+                      <input
+                        type="file"
+                        accept="video/*"
+                        className="hidden"
+                        disabled={videoUploading || !selectedLessonId}
+                        onChange={handleVideoUpload}
+                      />
+                    </label>
+                  </div>
+                  {!selectedLessonId && (
+                    <p className="text-xs text-amber-400 mt-2">Hãy lưu bài giảng trước để có thể tải video lên.</p>
+                  )}
+                  {videoUploading && (
+                    <div className="mt-3 h-1.5 w-full rounded-full bg-darkbg overflow-hidden">
+                      <div className="h-full bg-neon-violet transition-all" style={{ width: `${videoUploadPct}%` }} />
+                    </div>
+                  )}
+                  {!videoUploading && form.videoUrl && (
+                    <p className="text-xs text-green-400 mt-2 truncate">✓ Đã có video: {form.videoUrl}</p>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Source code */}

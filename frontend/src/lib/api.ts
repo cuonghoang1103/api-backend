@@ -1106,6 +1106,44 @@ export const coursesApi = {
     });
   },
 
+  // Direct-to-R2 video upload for a lesson (up to 2GB): presign → PUT to R2 →
+  // register. The object is PRIVATE; students receive a signed URL at play
+  // time. `durationSeconds` (probed client-side) keeps course totals accurate.
+  uploadLessonVideoDirect: async (
+    lessonId: number,
+    file: File,
+    onProgress?: (fraction: number) => void,
+    durationSeconds?: number,
+  ) => {
+    const presign = await api.post(`/courses/lessons/${lessonId}/video/presign`, {
+      filename: file.name,
+      contentType: file.type || 'video/mp4',
+      size: file.size,
+    });
+    const { uploadUrl, key, headers } = presign.data.data as {
+      uploadUrl: string;
+      key: string;
+      headers?: Record<string, string>;
+    };
+    await new Promise<void>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', uploadUrl, true);
+      Object.entries(headers ?? { 'Content-Type': file.type || 'video/mp4' }).forEach(
+        ([k, v]) => xhr.setRequestHeader(k, v),
+      );
+      xhr.upload.onprogress = (e) => {
+        if (onProgress && e.lengthComputable) onProgress(e.loaded / e.total);
+      };
+      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`R2 PUT failed (${xhr.status})`)));
+      xhr.onerror = () => reject(new Error('R2 PUT network error (kiểm tra CORS bucket)'));
+      xhr.send(file);
+    });
+    return api.post(`/courses/lessons/${lessonId}/video/register`, {
+      key,
+      ...(durationSeconds && durationSeconds > 0 ? { durationSeconds: Math.round(durationSeconds) } : {}),
+    });
+  },
+
   // ── Course-LEVEL documents (the fixed "Tài liệu" area) ──
   getCourseDocuments: (courseId: number) => api.get(`/courses/${courseId}/documents`),
   addCourseDocumentLink: (courseId: number, title: string, url: string) =>
@@ -1332,6 +1370,14 @@ export const certificatesApi = {
     api.get(`/certificates/verify/${certificateNumber}`),
   getByEnrollment: (enrollmentId: number) =>
     api.get(`/certificates/enrollment/${enrollmentId}`),
+  // The signed-in user's certificate for a course (404 if not earned yet).
+  getForCourse: (courseId: number) =>
+    api.get(`/certificates/course/${courseId}`),
+  // Redeem a certificate for a one-time 10% discount code (idempotent).
+  redeem: (certificateId: number) =>
+    api.post<{ data: { code: string; discountValue: number; expiresAt: string | null; alreadyRedeemed: boolean } }>(
+      `/certificates/${certificateId}/redeem`,
+    ),
 };
 
 export default api;

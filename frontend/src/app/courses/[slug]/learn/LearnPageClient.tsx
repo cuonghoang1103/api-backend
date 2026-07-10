@@ -15,6 +15,8 @@ import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import { sanitizeHtml } from '@/lib/utils';
 import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
+import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
+import LessonPdfViewer from './LessonPdfViewer';
 import type { Course, LessonDto, LessonProgress, LessonDetail } from '@/types';
 
 function formatDuration(seconds: number): string {
@@ -583,7 +585,10 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                                 <span className="text-xs text-green-400 font-medium">Preview</span>
                               )}
                               <span className="text-xs text-text-muted">
-                                {formatDuration(lessonDuration(lesson))}
+                                {lesson.lessonType === 'QUIZ' ? '📝 Trắc nghiệm'
+                                  : lesson.lessonType === 'EXERCISE' ? '📄 Bài tập'
+                                  : lesson.lessonType === 'SOLUTION' ? '✅ Đáp án'
+                                  : formatDuration(lessonDuration(lesson))}
                               </span>
                             </div>
                           </div>
@@ -656,6 +661,36 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   </div>
                 </div>
               )}
+
+              {/* QUIZ lesson — timer + MCQ, auto-graded, replayable. */}
+              {currentLesson.lessonType === 'QUIZ' && (currentLesson as { quizData?: QuizData }).quizData && (
+                <div className="mb-6">
+                  <LessonQuizPlayer
+                    key={currentLesson.id}
+                    quiz={(currentLesson as { quizData?: QuizData }).quizData as QuizData}
+                    onSubmitted={() => { if (!isCompleted(currentLesson.id)) markComplete(); }}
+                  />
+                </div>
+              )}
+
+              {/* EXERCISE / SOLUTION lesson — inline PDF (first PDF attachment). */}
+              {(currentLesson.lessonType === 'EXERCISE' || currentLesson.lessonType === 'SOLUTION') && (() => {
+                const pdf = (currentLesson.documents || []).find(
+                  (d) => (d.fileType || '').toLowerCase().includes('pdf')
+                    || /\.pdf(\?|$)/i.test(d.fileUrl || '')
+                    || /\.pdf(\?|$)/i.test(d.title || ''),
+                );
+                if (!pdf) return (
+                  <div className="mb-6 rounded-2xl border border-darkborder bg-darkcard p-6 text-sm text-text-muted">
+                    Chưa có file PDF cho bài này.
+                  </div>
+                );
+                return (
+                  <div className="mb-6">
+                    <LessonPdfViewer key={pdf.id} url={coursesApi.downloadDocumentUrl(pdf.id)} title={pdf.title} />
+                  </div>
+                );
+              })()}
 
               {/* Video — supports YouTube embed + direct file (mp4/webm)
                   based on videoPlatform. Falls back to a clickable

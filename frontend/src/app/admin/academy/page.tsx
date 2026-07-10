@@ -8,6 +8,7 @@ import ImageUpload from '@/components/admin/ImageUpload';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import LessonDocumentsManager from '@/components/admin/LessonDocumentsManager';
 import LessonVideoManager from '@/components/admin/LessonVideoManager';
+import LessonQuizBuilder, { type QuizData } from '@/components/admin/LessonQuizBuilder';
 import { toast } from 'sonner';
 
 interface SemesterFormState {
@@ -217,6 +218,7 @@ interface LessonFormState {
   videoPlatform: 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT';
   sourceCodeUrl: string;
   teachingNotes: string;
+  quizData?: QuizData | null;
   videoDurationSeconds: number;
   thumbnailUrl: string;
   isFreePreview: boolean;
@@ -275,6 +277,7 @@ function buildEmptyLesson(sortOrder: number): LessonFormState {
     videoPlatform: 'EMBED',
     sourceCodeUrl: '',
     teachingNotes: '',
+    quizData: null,
     videoDurationSeconds: 0,
     thumbnailUrl: '',
     isFreePreview: true,
@@ -382,6 +385,9 @@ export default function AdminAcademyPage() {
             videoPlatform: (lesson.videoPlatform as 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT') || 'EMBED',
             sourceCodeUrl: lesson.sourceCodeUrl || '',
             teachingNotes: lesson.teachingNotes || '',
+            quizData: (lesson as unknown as { quizData?: QuizData; details?: { quizData?: QuizData } }).quizData
+              ?? (lesson as unknown as { details?: { quizData?: QuizData } }).details?.quizData
+              ?? null,
             videoDurationSeconds: lesson.videoDurationSeconds || 0,
             thumbnailUrl: lesson.thumbnailUrl || '',
             isFreePreview: lesson.isFreePreview,
@@ -659,6 +665,7 @@ export default function AdminAcademyPage() {
                 videoPlatform: lesson.videoPlatform,
                 sourceCodeUrl: lesson.sourceCodeUrl,
                 teachingNotes: lesson.teachingNotes,
+                quizData: lesson.lessonType === 'QUIZ' ? (lesson.quizData ?? null) : null,
                 videoDurationSeconds: lesson.videoDurationSeconds,
                 thumbnailUrl: lesson.thumbnailUrl,
                 isFreePreview: lesson.isFreePreview,
@@ -678,6 +685,7 @@ export default function AdminAcademyPage() {
                 videoPlatform: lesson.videoPlatform,
                 sourceCodeUrl: lesson.sourceCodeUrl,
                 teachingNotes: lesson.teachingNotes,
+                quizData: lesson.lessonType === 'QUIZ' ? (lesson.quizData ?? null) : null,
                 videoDurationSeconds: lesson.videoDurationSeconds,
                 thumbnailUrl: lesson.thumbnailUrl,
                 isFreePreview: lesson.isFreePreview,
@@ -1216,10 +1224,12 @@ export default function AdminAcademyPage() {
                               <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-sm text-text-secondary">
                                 <span className="text-text-muted text-xs shrink-0">Loại:</span>
                                 <select value={lesson.lessonType} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { lessonType: e.target.value })} className="bg-transparent text-text-primary outline-none w-full">
-                                  <option value="VIDEO">VIDEO</option>
-                                  <option value="TEXT">TEXT</option>
-                                  <option value="QUIZ">QUIZ</option>
-                                  <option value="PROJECT">PROJECT</option>
+                                  <option value="VIDEO">🎬 Video</option>
+                                  <option value="QUIZ">📝 Quizz (trắc nghiệm)</option>
+                                  <option value="EXERCISE">📄 Bài tập (PDF)</option>
+                                  <option value="SOLUTION">✅ Đáp án (PDF)</option>
+                                  <option value="TEXT">Text</option>
+                                  <option value="PROJECT">Project</option>
                                 </select>
                               </div>
                               <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-darkbg border border-darkborder">
@@ -1239,37 +1249,54 @@ export default function AdminAcademyPage() {
 
                             <textarea value={lesson.description} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { description: e.target.value })} rows={2} placeholder="Mô tả bài học" className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
 
-                            <div className="grid gap-3 lg:grid-cols-3">
-                              <label className="rounded-xl border border-darkborder bg-darkbg px-4 py-3 text-sm text-text-secondary flex items-center gap-2"><Video className="w-4 h-4 text-neon-violet" />
-                                <select value={lesson.videoPlatform} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoPlatform: e.target.value as LessonFormState['videoPlatform'] })} className="bg-transparent text-text-primary outline-none w-full">
-                                  <option value="EMBED">Embed trên web</option>
-                                  <option value="YOUTUBE_TAB">Mở tab YouTube</option>
-                                  <option value="DIRECT">Direct video</option>
-                                </select>
-                              </label>
-                              <input value={lesson.videoUrl} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoUrl: e.target.value })} placeholder={lesson.videoPlatform === 'DIRECT' ? 'Link .mp4 ngoài — hoặc tải video lên R2 bên dưới' : 'Video URL / YouTube URL'} className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary lg:col-span-2" />
-                            </div>
+                            {lesson.lessonType === 'VIDEO' && (
+                              <>
+                                <div className="grid gap-3 lg:grid-cols-3">
+                                  <label className="rounded-xl border border-darkborder bg-darkbg px-4 py-3 text-sm text-text-secondary flex items-center gap-2"><Video className="w-4 h-4 text-neon-violet" />
+                                    <select value={lesson.videoPlatform} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoPlatform: e.target.value as LessonFormState['videoPlatform'] })} className="bg-transparent text-text-primary outline-none w-full">
+                                      <option value="EMBED">Embed trên web</option>
+                                      <option value="YOUTUBE_TAB">Mở tab YouTube</option>
+                                      <option value="DIRECT">Direct video</option>
+                                    </select>
+                                  </label>
+                                  <input value={lesson.videoUrl} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoUrl: e.target.value })} placeholder={lesson.videoPlatform === 'DIRECT' ? 'Link .mp4 ngoài — hoặc tải video lên R2 bên dưới' : 'Video URL / YouTube URL'} className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary lg:col-span-2" />
+                                </div>
 
-                            {/* DIRECT: tải video thẳng lên R2 (riêng tư, ≤2GB).
-                                Học viên xem qua link ký ngắn hạn — URL thô
-                                không bao giờ lộ. Cần lesson.id (đã lưu). */}
-                            {lesson.videoPlatform === 'DIRECT' && (
-                              <LessonVideoManager
-                                lessonId={lesson.id}
-                                videoUrl={lesson.videoUrl}
-                                onSaved={(data) => updateLesson(sectionIndex, lessonIndex, {
-                                  videoPlatform: 'DIRECT',
-                                  videoUrl: data.videoUrl,
-                                  ...(data.videoDurationSeconds ? { videoDurationSeconds: data.videoDurationSeconds } : {}),
-                                })}
-                                onDeleted={() => updateLesson(sectionIndex, lessonIndex, { videoUrl: '' })}
+                                {lesson.videoPlatform === 'DIRECT' && (
+                                  <LessonVideoManager
+                                    lessonId={lesson.id}
+                                    videoUrl={lesson.videoUrl}
+                                    onSaved={(data) => updateLesson(sectionIndex, lessonIndex, {
+                                      videoPlatform: 'DIRECT',
+                                      videoUrl: data.videoUrl,
+                                      ...(data.videoDurationSeconds ? { videoDurationSeconds: data.videoDurationSeconds } : {}),
+                                    })}
+                                    onDeleted={() => updateLesson(sectionIndex, lessonIndex, { videoUrl: '' })}
+                                  />
+                                )}
+
+                                <div className="grid gap-3 md:grid-cols-2">
+                                  <input value={lesson.sourceCodeUrl} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { sourceCodeUrl: e.target.value })} placeholder="GitHub / source code URL" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+                                  <input type="number" value={lesson.videoDurationSeconds} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoDurationSeconds: Number(e.target.value) })} placeholder="Thời lượng video (giây)" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
+                                </div>
+                              </>
+                            )}
+
+                            {/* QUIZ builder */}
+                            {lesson.lessonType === 'QUIZ' && (
+                              <LessonQuizBuilder
+                                value={lesson.quizData}
+                                onChange={(data) => updateLesson(sectionIndex, lessonIndex, { quizData: data })}
                               />
                             )}
 
-                            <div className="grid gap-3 md:grid-cols-2">
-                              <input value={lesson.sourceCodeUrl} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { sourceCodeUrl: e.target.value })} placeholder="GitHub / source code URL" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
-                              <input type="number" value={lesson.videoDurationSeconds} onChange={(e) => updateLesson(sectionIndex, lessonIndex, { videoDurationSeconds: Number(e.target.value) })} placeholder="Thời lượng video (giây)" className="px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary" />
-                            </div>
+                            {/* EXERCISE / SOLUTION: PDF is uploaded via the
+                                "Tài liệu đính kèm" section below. */}
+                            {(lesson.lessonType === 'EXERCISE' || lesson.lessonType === 'SOLUTION') && (
+                              <div className="rounded-xl border border-dashed border-neon-violet/40 bg-neon-violet/5 p-3 text-xs text-text-secondary">
+                                📄 Tải file <b>PDF</b> {lesson.lessonType === 'EXERCISE' ? 'bài tập' : 'đáp án'} lên mục <b>Tài liệu đính kèm</b> bên dưới. Học viên sẽ xem PDF ngay trong trang học (tải về, phóng to, copy chữ/code được).
+                              </div>
+                            )}
 
                             <div>
                               <p className="mb-2 flex items-center gap-2 text-sm font-medium text-text-primary"><FileText className="w-4 h-4 text-neon-violet" /> Ghi chú giảng dạy</p>

@@ -1317,6 +1317,7 @@ export const adminCoursesApi = {
     videoPlatform?: 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT' | string;
     sourceCodeUrl?: string;
     teachingNotes?: string;
+    quizData?: unknown;
   }) => api.post('/courses/lessons', data),
 
   updateLesson: (id: number, data: Partial<{
@@ -1335,6 +1336,7 @@ export const adminCoursesApi = {
     videoPlatform: 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT' | string;
     sourceCodeUrl: string;
     teachingNotes: string;
+    quizData: unknown;
   }>) => api.put(`/courses/lessons/${id}`, data),
 
   deleteLesson: (id: number) => api.delete(`/courses/lessons/${id}`),

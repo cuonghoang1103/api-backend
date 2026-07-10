@@ -851,6 +851,10 @@ model LessonDetail {
   videoUrl      String?  @map("video_url") @db.VarChar(500)
   sourceCodeUrl String?  @map("source_code_url") @db.VarChar(500)
   teachingNotes String?  @map("teaching_notes") @db.Text
+  // Quiz (lessonType=QUIZ): { timeLimitSeconds, questions: [{ id, question,
+  // options: string[], correctIndex, points }] }. Student answers are NOT
+  // stored — the quiz is replayable and scored client-side on submit.
+  quizData      Json?    @map("quiz_data")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 

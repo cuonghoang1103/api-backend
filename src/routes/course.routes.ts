@@ -978,6 +978,7 @@ router.post('/lessons', authenticate, requireAdmin('ROLE_ADMIN'), async (req, re
             videoUrl: toNullableString(req.body.videoUrl),
             sourceCodeUrl: toNullableString(req.body.sourceCodeUrl),
             teachingNotes: toNullableString(req.body.teachingNotes),
+            ...(req.body.quizData !== undefined ? { quizData: req.body.quizData ?? undefined } : {}),
           },
         },
       },
@@ -1049,12 +1050,14 @@ router.put('/lessons/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req,
           videoUrl: toNullableString(req.body.videoUrl),
           sourceCodeUrl: toNullableString(req.body.sourceCodeUrl),
           teachingNotes: toNullableString(req.body.teachingNotes),
+          ...(req.body.quizData !== undefined ? { quizData: req.body.quizData ?? undefined } : {}),
         },
         update: {
           ...(req.body.videoPlatform !== undefined ? { videoPlatform: normalizeVideoPlatform(req.body.videoPlatform) } : {}),
           ...(req.body.videoUrl !== undefined ? { videoUrl: toNullableString(req.body.videoUrl) } : {}),
           ...(req.body.sourceCodeUrl !== undefined ? { sourceCodeUrl: toNullableString(req.body.sourceCodeUrl) } : {}),
           ...(req.body.teachingNotes !== undefined ? { teachingNotes: toNullableString(req.body.teachingNotes) } : {}),
+          ...(req.body.quizData !== undefined ? { quizData: req.body.quizData ?? undefined } : {}),
         },
       });
     }
@@ -1109,12 +1112,14 @@ router.put('/lessons/:lessonId/detail', authenticate, requireAdmin('ROLE_ADMIN')
         videoUrl: toNullableString(req.body.videoUrl),
         sourceCodeUrl: toNullableString(req.body.sourceCodeUrl),
         teachingNotes: toNullableString(req.body.teachingNotes),
+        ...(req.body.quizData !== undefined ? { quizData: req.body.quizData ?? undefined } : {}),
       },
       update: {
         ...(req.body.videoPlatform !== undefined ? { videoPlatform: normalizeVideoPlatform(req.body.videoPlatform) } : {}),
         ...(req.body.videoUrl !== undefined ? { videoUrl: toNullableString(req.body.videoUrl) } : {}),
         ...(req.body.sourceCodeUrl !== undefined ? { sourceCodeUrl: toNullableString(req.body.sourceCodeUrl) } : {}),
         ...(req.body.teachingNotes !== undefined ? { teachingNotes: toNullableString(req.body.teachingNotes) } : {}),
+        ...(req.body.quizData !== undefined ? { quizData: req.body.quizData ?? undefined } : {}),
       },
     });
     res.json({ success: true, data: detail });
@@ -1221,6 +1226,7 @@ router.get('/:courseId/lessons/:lessonId', optionalAuth, async (req, res: Respon
         videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
         sourceCodeUrl: showFull ? lesson.details?.sourceCodeUrl : undefined,
         teachingNotes: showFull ? lesson.details?.teachingNotes : undefined,
+        quizData: showFull ? lesson.details?.quizData : undefined,
         // For a private DIRECT video this returns a short-lived signed
         // GET URL the browser can stream; for YouTube/embed/external it
         // passes the URL through unchanged.

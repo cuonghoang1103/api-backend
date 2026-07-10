@@ -23,6 +23,7 @@
     "clean": "rm -rf dist",
     "migrate:r2": "tsx scripts/migrate-to-r2.ts",
     "migrate:r2:dry": "tsx scripts/migrate-to-r2.ts --dry-run",
+    "test": "tsx --test src/services/finance/money.test.ts src/services/payment/vnpay.test.ts",
     "test:smoke": "tsx scripts/test-all.ts",
     "test:image": "tsx scripts/test-image-optimizer.ts",
     "test:r2": "tsx scripts/test-r2.ts",

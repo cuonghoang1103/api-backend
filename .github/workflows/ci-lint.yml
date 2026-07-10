@@ -35,6 +35,8 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: TypeScript type-check (required)
         run: npx tsc --noEmit
+      - name: Unit tests — money math + payment signature (required)
+        run: npm test
       - name: ESLint (informational)
         continue-on-error: true
         run: npm run lint 2>&1 | tail -30 || echo "(lint warnings — pre-existing)"

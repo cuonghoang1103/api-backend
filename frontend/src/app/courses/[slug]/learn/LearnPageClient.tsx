@@ -87,6 +87,12 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
   const [videoKey, setVideoKey] = useState(0);
   const [videoCompleted, setVideoCompleted] = useState(false);
+  // Course-level documents (the fixed "Tài liệu" area shown at the top of
+  // Course Content, above the chapters).
+  const [courseDocs, setCourseDocs] = useState<
+    Array<{ id: number; title: string; fileUrl: string; fileType?: string | null; fileSizeBytes: number }>
+  >([]);
+  const [docsOpen, setDocsOpen] = useState(true);
 
   useEffect(() => {
     loadCourse();
@@ -130,9 +136,17 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
       }
       setCourse(data);
 
-      // Expand all sections by default
-      const sectionIds = new Set(data.sections?.map(s => s.id) || []);
-      setExpandedSections(sectionIds);
+      // Fixed course-level documents — shown at the top of Course Content.
+      try {
+        const dr = await coursesApi.getCourseDocuments(data.id);
+        setCourseDocs((dr.data?.data as typeof courseDocs) ?? []);
+      } catch {
+        setCourseDocs([]);
+      }
+
+      // Sections start COLLAPSED by default (per request). The section
+      // holding the active lesson is auto-expanded in selectLesson().
+      setExpandedSections(new Set());
 
       // Load progress
       try {
@@ -205,6 +219,10 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   const selectLesson = useCallback(async (lesson: LessonDto) => {
     if (!course) return;
     setCurrentLesson(lesson);
+    // Keep the section that holds this lesson expanded (sections are
+    // collapsed by default).
+    const sec = course.sections?.find(s => s.lessons?.some(l => l.id === lesson.id));
+    if (sec) setExpandedSections(prev => new Set(prev).add(sec.id));
     setVideoKey(k => k + 1);
     setVideoCompleted(false);
     try {
@@ -382,6 +400,41 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
           <div className="p-4">
             <h2 className="font-semibold text-text-primary text-sm mb-4">Course Content</h2>
             <div className="space-y-1">
+              {/* Fixed COURSE-LEVEL documents — top of Course Content, above chapters. */}
+              {courseDocs.length > 0 && (
+                <div className="border border-neon-violet/30 rounded-xl overflow-hidden bg-neon-violet/[0.04]">
+                  <button
+                    onClick={() => setDocsOpen(o => !o)}
+                    className="w-full flex items-center justify-between p-3 hover:bg-white/5 transition-colors text-left"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-base">📁</span>
+                      <p className="text-sm font-medium text-text-primary truncate">Tài liệu ({courseDocs.length})</p>
+                    </div>
+                    {docsOpen
+                      ? <ChevronUp className="w-4 h-4 text-text-muted shrink-0" />
+                      : <ChevronDown className="w-4 h-4 text-text-muted shrink-0" />
+                    }
+                  </button>
+                  {docsOpen && (
+                    <div className="divide-y divide-darkborder/10">
+                      {courseDocs.map(doc => (
+                        <a
+                          key={doc.id}
+                          href={coursesApi.downloadDocumentUrl(doc.id)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2.5 p-3 pl-4 text-left hover:bg-darkbg/50 transition-colors"
+                        >
+                          <span className="shrink-0">{doc.fileType === 'link' ? '🔗' : '📄'}</span>
+                          <span className="text-sm text-text-secondary truncate flex-1">{doc.title}</span>
+                          <Download className="w-3.5 h-3.5 text-text-muted shrink-0" />
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
               {course.sections?.map(section => (
                 <div key={section.id} className="border border-darkborder/20 rounded-xl overflow-hidden">
                   <button

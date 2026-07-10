@@ -1122,6 +1122,16 @@ export default function AdminAcademyPage() {
             </button>
           </div>
 
+          {/* Fixed COURSE-LEVEL documents — sits above the chapters, at the
+              same level as "Thêm chương". Tài liệu chung cho cả khoá. */}
+          {courseForm.id ? (
+            <LessonDocumentsManager courseId={courseForm.id} />
+          ) : (
+            <p className="text-sm text-text-muted border border-dashed border-darkborder rounded-xl px-4 py-3">
+              📁 Lưu khoá học trước để thêm <b>Tài liệu chung của khoá</b> (hiển thị ở đầu, ngang với chương).
+            </p>
+          )}
+
           <div className="space-y-4">
             {sections.map((section, sectionIndex) => {
               const expanded = expandedSections.includes(sectionIndex);

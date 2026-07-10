@@ -1063,6 +1063,89 @@ export const coursesApi = {
   downloadDocumentUrl: (documentId: number) =>
     `/api/v1/courses/documents/${documentId}/download`,
 
+  // Add an external-link document (e.g. a Google Drive folder).
+  addDocumentLink: (lessonId: number, title: string, url: string) =>
+    api.post(`/courses/lessons/${lessonId}/documents/link`, { title, url }),
+
+  // Direct-to-R2 upload for large files (up to 150MB, any type):
+  // presign → PUT straight to R2 → register. `onProgress` (0..1) is driven
+  // by the R2 PUT via XHR. Needs an R2 CORS rule allowing PUT from the origin.
+  uploadDocumentDirect: async (
+    lessonId: number,
+    file: File,
+    title?: string,
+    onProgress?: (fraction: number) => void,
+  ) => {
+    const presign = await api.post(`/courses/lessons/${lessonId}/documents/presign`, {
+      filename: file.name,
+      contentType: file.type || 'application/octet-stream',
+      size: file.size,
+    });
+    const { uploadUrl, key, headers } = presign.data.data as {
+      uploadUrl: string;
+      key: string;
+      headers?: Record<string, string>;
+    };
+    await new Promise<void>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', uploadUrl, true);
+      Object.entries(headers ?? { 'Content-Type': file.type || 'application/octet-stream' }).forEach(
+        ([k, v]) => xhr.setRequestHeader(k, v),
+      );
+      xhr.upload.onprogress = (e) => {
+        if (onProgress && e.lengthComputable) onProgress(e.loaded / e.total);
+      };
+      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`R2 PUT failed (${xhr.status})`)));
+      xhr.onerror = () => reject(new Error('R2 PUT network error (kiểm tra CORS bucket)'));
+      xhr.send(file);
+    });
+    return api.post(`/courses/lessons/${lessonId}/documents/register`, {
+      key,
+      title: title || file.name,
+      originalName: file.name,
+    });
+  },
+
+  // ── Course-LEVEL documents (the fixed "Tài liệu" area) ──
+  getCourseDocuments: (courseId: number) => api.get(`/courses/${courseId}/documents`),
+  addCourseDocumentLink: (courseId: number, title: string, url: string) =>
+    api.post(`/courses/${courseId}/documents/link`, { title, url }),
+  uploadCourseDocumentDirect: async (
+    courseId: number,
+    file: File,
+    title?: string,
+    onProgress?: (fraction: number) => void,
+  ) => {
+    const presign = await api.post(`/courses/${courseId}/documents/presign`, {
+      filename: file.name,
+      contentType: file.type || 'application/octet-stream',
+      size: file.size,
+    });
+    const { uploadUrl, key, headers } = presign.data.data as {
+      uploadUrl: string;
+      key: string;
+      headers?: Record<string, string>;
+    };
+    await new Promise<void>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', uploadUrl, true);
+      Object.entries(headers ?? { 'Content-Type': file.type || 'application/octet-stream' }).forEach(
+        ([k, v]) => xhr.setRequestHeader(k, v),
+      );
+      xhr.upload.onprogress = (e) => {
+        if (onProgress && e.lengthComputable) onProgress(e.loaded / e.total);
+      };
+      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`R2 PUT failed (${xhr.status})`)));
+      xhr.onerror = () => reject(new Error('R2 PUT network error (kiểm tra CORS bucket)'));
+      xhr.send(file);
+    });
+    return api.post(`/courses/${courseId}/documents/register`, {
+      key,
+      title: title || file.name,
+      originalName: file.name,
+    });
+  },
+
   getMyCourses: (params?: {
     page?: number;
     size?: number;

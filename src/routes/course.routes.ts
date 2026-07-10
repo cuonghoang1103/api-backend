@@ -6,6 +6,12 @@ import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js'
 import { AppError } from '../middleware/errorHandler.js';
 import { uploadDocument, deleteByUrl, UploadError } from '../storage/uploadService.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
+import { buildKey } from '../storage/keys.js';
+import {
+  getSignedUploadUrl as r2SignedUploadUrl,
+  headObject as r2HeadObject,
+  buildPublicUrl as r2BuildPublicUrl,
+} from '../config/r2.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -1611,6 +1617,289 @@ router.post(
   }
 );
 
+// ─── Lesson documents — Google Drive / external LINK ──────────────────────
+// A "link" document has no R2 object: fileUrl is the external URL (e.g. a
+// Google Drive folder). The download endpoint's keyFromUrl() returns null
+// for a non-R2 URL, so it already 302-redirects straight to it (still
+// enrollment-gated). fileType 'link' lets the UI render it distinctly.
+router.post(
+  '/lessons/:lessonId/documents/link',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const lessonId = parseInt(req.params.lessonId, 10);
+      if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
+      const url = (req.body?.url || '').toString().trim();
+      const title = (req.body?.title || '').toString().trim().slice(0, 255) || 'Tài liệu';
+      if (!/^https?:\/\/.+/i.test(url) || url.length > 500) {
+        throw new AppError('A valid http(s) URL is required', 400, 'INVALID_URL');
+      }
+      const lesson = await prisma.lesson.findUnique({ where: { id: lessonId }, select: { id: true } });
+      if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
+
+      const document = await prisma.courseDocument.create({
+        data: { lessonId, title, fileUrl: url, fileSizeBytes: BigInt(0), fileType: 'link' },
+      });
+      res.status(201).json({
+        success: true,
+        data: {
+          id: document.id,
+          lessonId: document.lessonId,
+          title: document.title,
+          fileUrl: document.fileUrl,
+          fileSizeBytes: 0,
+          fileType: document.fileType,
+          downloadCount: document.downloadCount,
+          createdAt: document.createdAt,
+        },
+        message: 'Link added',
+      });
+    } catch (error) { next(error); }
+  },
+);
+
+// ─── Lesson documents — DIRECT-to-R2 upload (files up to 150MB, any type) ──
+// Two-step: (1) /presign returns a presigned PUT URL + object key, the
+// browser PUTs the file straight to R2 (needs an R2 CORS rule allowing PUT
+// from the site origin); (2) /register verifies the object landed and
+// creates the CourseDocument row. This keeps big files off the API server's
+// memory/bandwidth. Course documents are ADMIN-authored and served as
+// attachments through the enrollment-gated download endpoint, so any file
+// type is allowed here (unlike the public media upload guard).
+const DOC_MAX_BYTES = 150 * 1024 * 1024; // 150 MB
+const DOC_KEY_RE = /^documents\/lesson\/[\w./-]+$/;
+
+router.post(
+  '/lessons/:lessonId/documents/presign',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      if (getStorageProvider().kind !== 'r2') {
+        throw new AppError('Direct upload unavailable on this storage backend', 400, 'PRESIGN_UNAVAILABLE');
+      }
+      const lessonId = parseInt(req.params.lessonId, 10);
+      if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
+      const { filename, contentType, size } = req.body ?? {};
+      if (!filename || typeof filename !== 'string') {
+        throw new AppError('filename is required', 400, 'MISSING_FILENAME');
+      }
+      const numSize = Number(size);
+      if (!Number.isFinite(numSize) || numSize <= 0 || numSize > DOC_MAX_BYTES) {
+        throw new AppError(`File exceeds the ${Math.round(DOC_MAX_BYTES / (1024 * 1024))}MB limit`, 400, 'FILE_TOO_LARGE');
+      }
+      const lesson = await prisma.lesson.findUnique({ where: { id: lessonId }, select: { id: true } });
+      if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
+
+      const ct = typeof contentType === 'string' && contentType ? contentType : 'application/octet-stream';
+      const key = buildKey('documents/lesson', filename, { userId: req.userId });
+      const uploadUrl = await r2SignedUploadUrl(key, ct, 3600);
+      res.json({
+        success: true,
+        data: { uploadUrl, key, method: 'PUT', headers: { 'Content-Type': ct }, expiresIn: 3600 },
+      });
+    } catch (error) { next(error); }
+  },
+);
+
+router.post(
+  '/lessons/:lessonId/documents/register',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      if (getStorageProvider().kind !== 'r2') {
+        throw new AppError('Direct upload unavailable on this storage backend', 400, 'PRESIGN_UNAVAILABLE');
+      }
+      const lessonId = parseInt(req.params.lessonId, 10);
+      if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
+      const { key, title: rawTitle, originalName } = req.body ?? {};
+      if (!key || typeof key !== 'string' || !DOC_KEY_RE.test(key) || key.includes('..')) {
+        throw new AppError('Invalid object key', 400, 'INVALID_KEY');
+      }
+      const lesson = await prisma.lesson.findUnique({ where: { id: lessonId }, select: { id: true } });
+      if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
+
+      const head = await r2HeadObject(key);
+      if (!head) throw new AppError('Uploaded object not found — did the PUT succeed?', 404, 'OBJECT_NOT_FOUND');
+      if (head.size > DOC_MAX_BYTES) throw new AppError('Uploaded object exceeds the size limit', 400, 'FILE_TOO_LARGE');
+
+      const name = (typeof originalName === 'string' && originalName) ? originalName : key.split('/').pop() || 'document';
+      const title = (rawTitle || name || 'Document').toString().trim().slice(0, 255) || 'Document';
+      const ext = path.extname(name).toLowerCase().replace('.', '').slice(0, 50) || null;
+      const fileType = (head.contentType && head.contentType !== 'application/octet-stream') ? head.contentType.slice(0, 50) : ext;
+
+      const document = await prisma.courseDocument.create({
+        data: {
+          lessonId,
+          title,
+          fileUrl: r2BuildPublicUrl(key),
+          fileSizeBytes: BigInt(head.size),
+          fileType,
+        },
+      });
+      res.status(201).json({
+        success: true,
+        data: {
+          id: document.id,
+          lessonId: document.lessonId,
+          title: document.title,
+          fileUrl: document.fileUrl,
+          fileSizeBytes: Number(document.fileSizeBytes),
+          fileType: document.fileType,
+          downloadCount: document.downloadCount,
+          createdAt: document.createdAt,
+        },
+        message: 'Document uploaded successfully',
+      });
+    } catch (error) { next(error); }
+  },
+);
+
+// ─── COURSE-LEVEL documents (the fixed "Tài liệu" area, alongside chapters) ─
+// Same three flows as lesson documents but scoped to a whole course
+// (CourseDocument.courseId set, lessonId null). Reuses the documents/lesson
+// R2 key prefix + DOC_KEY_RE; only the DB row differs.
+
+// List a course's course-level documents (admin builder + enrolled learners).
+router.get(
+  '/:courseId/documents',
+  authenticate,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const courseId = parseInt(req.params.courseId, 10);
+      if (isNaN(courseId)) throw new AppError('Invalid course ID', 400, 'INVALID_ID');
+      await assertCanAccessCourseContent(req.userId, courseId, 'admin-or-enrolled');
+      const docs = await prisma.courseDocument.findMany({
+        where: { courseId, isActive: true },
+        orderBy: { createdAt: 'asc' },
+      });
+      res.json({
+        success: true,
+        data: docs.map((d) => ({
+          id: d.id,
+          courseId: d.courseId,
+          title: d.title,
+          fileUrl: d.fileUrl,
+          fileSizeBytes: Number(d.fileSizeBytes),
+          fileType: d.fileType,
+          downloadCount: d.downloadCount,
+          createdAt: d.createdAt,
+        })),
+      });
+    } catch (error) { next(error); }
+  },
+);
+
+router.post(
+  '/:courseId/documents/link',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const courseId = parseInt(req.params.courseId, 10);
+      if (isNaN(courseId)) throw new AppError('Invalid course ID', 400, 'INVALID_ID');
+      const url = (req.body?.url || '').toString().trim();
+      const title = (req.body?.title || '').toString().trim().slice(0, 255) || 'Tài liệu';
+      if (!/^https?:\/\/.+/i.test(url) || url.length > 500) {
+        throw new AppError('A valid http(s) URL is required', 400, 'INVALID_URL');
+      }
+      const course = await prisma.course.findUnique({ where: { id: courseId }, select: { id: true } });
+      if (!course) throw new AppError('Course not found', 404, 'COURSE_NOT_FOUND');
+      const document = await prisma.courseDocument.create({
+        data: { courseId, title, fileUrl: url, fileSizeBytes: BigInt(0), fileType: 'link' },
+      });
+      res.status(201).json({
+        success: true,
+        data: {
+          id: document.id,
+          courseId: document.courseId,
+          title: document.title,
+          fileUrl: document.fileUrl,
+          fileSizeBytes: 0,
+          fileType: document.fileType,
+          downloadCount: document.downloadCount,
+          createdAt: document.createdAt,
+        },
+        message: 'Link added',
+      });
+    } catch (error) { next(error); }
+  },
+);
+
+router.post(
+  '/:courseId/documents/presign',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      if (getStorageProvider().kind !== 'r2') {
+        throw new AppError('Direct upload unavailable on this storage backend', 400, 'PRESIGN_UNAVAILABLE');
+      }
+      const courseId = parseInt(req.params.courseId, 10);
+      if (isNaN(courseId)) throw new AppError('Invalid course ID', 400, 'INVALID_ID');
+      const { filename, contentType, size } = req.body ?? {};
+      if (!filename || typeof filename !== 'string') throw new AppError('filename is required', 400, 'MISSING_FILENAME');
+      const numSize = Number(size);
+      if (!Number.isFinite(numSize) || numSize <= 0 || numSize > DOC_MAX_BYTES) {
+        throw new AppError(`File exceeds the ${Math.round(DOC_MAX_BYTES / (1024 * 1024))}MB limit`, 400, 'FILE_TOO_LARGE');
+      }
+      const course = await prisma.course.findUnique({ where: { id: courseId }, select: { id: true } });
+      if (!course) throw new AppError('Course not found', 404, 'COURSE_NOT_FOUND');
+      const ct = typeof contentType === 'string' && contentType ? contentType : 'application/octet-stream';
+      const key = buildKey('documents/lesson', filename, { userId: req.userId });
+      const uploadUrl = await r2SignedUploadUrl(key, ct, 3600);
+      res.json({ success: true, data: { uploadUrl, key, method: 'PUT', headers: { 'Content-Type': ct }, expiresIn: 3600 } });
+    } catch (error) { next(error); }
+  },
+);
+
+router.post(
+  '/:courseId/documents/register',
+  authenticate,
+  requireAdmin('ROLE_ADMIN'),
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      if (getStorageProvider().kind !== 'r2') {
+        throw new AppError('Direct upload unavailable on this storage backend', 400, 'PRESIGN_UNAVAILABLE');
+      }
+      const courseId = parseInt(req.params.courseId, 10);
+      if (isNaN(courseId)) throw new AppError('Invalid course ID', 400, 'INVALID_ID');
+      const { key, title: rawTitle, originalName } = req.body ?? {};
+      if (!key || typeof key !== 'string' || !DOC_KEY_RE.test(key) || key.includes('..')) {
+        throw new AppError('Invalid object key', 400, 'INVALID_KEY');
+      }
+      const course = await prisma.course.findUnique({ where: { id: courseId }, select: { id: true } });
+      if (!course) throw new AppError('Course not found', 404, 'COURSE_NOT_FOUND');
+      const head = await r2HeadObject(key);
+      if (!head) throw new AppError('Uploaded object not found — did the PUT succeed?', 404, 'OBJECT_NOT_FOUND');
+      if (head.size > DOC_MAX_BYTES) throw new AppError('Uploaded object exceeds the size limit', 400, 'FILE_TOO_LARGE');
+      const name = (typeof originalName === 'string' && originalName) ? originalName : key.split('/').pop() || 'document';
+      const title = (rawTitle || name || 'Document').toString().trim().slice(0, 255) || 'Document';
+      const ext = path.extname(name).toLowerCase().replace('.', '').slice(0, 50) || null;
+      const fileType = (head.contentType && head.contentType !== 'application/octet-stream') ? head.contentType.slice(0, 50) : ext;
+      const document = await prisma.courseDocument.create({
+        data: { courseId, title, fileUrl: r2BuildPublicUrl(key), fileSizeBytes: BigInt(head.size), fileType },
+      });
+      res.status(201).json({
+        success: true,
+        data: {
+          id: document.id,
+          courseId: document.courseId,
+          title: document.title,
+          fileUrl: document.fileUrl,
+          fileSizeBytes: Number(document.fileSizeBytes),
+          fileType: document.fileType,
+          downloadCount: document.downloadCount,
+          createdAt: document.createdAt,
+        },
+        message: 'Document uploaded successfully',
+      });
+    } catch (error) { next(error); }
+  },
+);
+
 /**
  * DELETE /api/v1/courses/documents/:id
  *
@@ -1686,8 +1975,9 @@ router.get(
       // Paywall check: documents are gated on enrollment, just
       // like the lesson content itself. We do this BEFORE
       // incrementing the download counter so denied attempts
-      // don't pollute analytics.
-      const courseId = document.lesson?.section?.courseId;
+      // don't pollute analytics. A doc is either course-level
+      // (document.courseId) or lesson-level (via its section).
+      const courseId = document.courseId ?? document.lesson?.section?.courseId;
       if (courseId) {
         await assertCanAccessCourseContent(req.userId, courseId, 'admin-or-enrolled');
       }

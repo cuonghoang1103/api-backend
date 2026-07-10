@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { Download, FileText, Loader2, Trash2, Upload } from 'lucide-react';
+import { Download, FileText, Link2, Loader2, Trash2, Upload } from 'lucide-react';
 import { coursesApi } from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -16,15 +16,21 @@ interface DocumentItem {
 }
 
 interface LessonDocumentsManagerProps {
-  lessonId: number;
+  // Provide exactly one: a lesson-level manager (lessonId) or the
+  // course-level "Tài liệu" area (courseId). Course mode loads its own
+  // documents on mount via the API.
+  lessonId?: number;
+  courseId?: number;
   initialDocuments?: DocumentItem[];
 }
 
-const MAX_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB — must match backend multer limit
+const MAX_SIZE_BYTES = 150 * 1024 * 1024; // 150 MB — matches backend DOC_MAX_BYTES
 
-// Map a filename to a human-friendly icon. We don't pull in
-// a giant mime-type table; the extension is enough for the
-// common cases.
+function isLinkDoc(doc: DocumentItem): boolean {
+  return doc.fileType === 'link';
+}
+
+// Map a filename to a human-friendly icon.
 function pickFileIcon(name: string) {
   const ext = name.split('.').pop()?.toLowerCase() || '';
   if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return '📦';
@@ -34,6 +40,7 @@ function pickFileIcon(name: string) {
   if (['ppt', 'pptx'].includes(ext)) return '📙';
   if (['txt', 'md'].includes(ext)) return '📄';
   if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext)) return '🖼️';
+  if (['mp4', 'mov', 'webm', 'mkv'].includes(ext)) return '🎬';
   return '📄';
 }
 
@@ -46,33 +53,51 @@ function formatBytes(bytes: number): string {
   return `${v.toFixed(v >= 10 ? 0 : 1)} ${units[i]}`;
 }
 
-export default function LessonDocumentsManager({ lessonId, initialDocuments = [] }: LessonDocumentsManagerProps) {
+export default function LessonDocumentsManager({ lessonId, courseId, initialDocuments = [] }: LessonDocumentsManagerProps) {
   const [documents, setDocuments] = useState<DocumentItem[]>(initialDocuments);
   const [uploading, setUploading] = useState(false);
+  const [uploadPct, setUploadPct] = useState(0);
+  const [linkTitle, setLinkTitle] = useState('');
+  const [linkUrl, setLinkUrl] = useState('');
+  const [addingLink, setAddingLink] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Whenever the admin switches to a different lesson, reset
-  // the list to the new lesson's documents. The parent passes
-  // `initialDocuments` from the lesson payload.
+  // Course mode: fetch the course's documents ONCE per course. Depends
+  // only on `courseId` — NOT on `initialDocuments`, whose default `[]` is a
+  // fresh reference every render and would otherwise loop the fetch forever.
   useEffect(() => {
+    if (!courseId) return;
+    let cancelled = false;
+    coursesApi
+      .getCourseDocuments(courseId)
+      .then((r) => { if (!cancelled) setDocuments((r.data?.data as DocumentItem[]) ?? []); })
+      .catch(() => { if (!cancelled) setDocuments([]); });
+    return () => { cancelled = true; };
+  }, [courseId]);
+
+  // Lesson mode: mirror the list the parent loaded from the lesson payload.
+  useEffect(() => {
+    if (courseId) return;
     setDocuments(initialDocuments);
-  }, [lessonId, initialDocuments]);
+  }, [lessonId, courseId, initialDocuments]);
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
     const file = files[0];
 
-    // Client-side pre-flight — the server enforces the same
-    // limit but failing fast gives a clearer error message
-    // and skips the round-trip for huge files.
     if (file.size > MAX_SIZE_BYTES) {
-      toast.error(`File quá lớn (${formatBytes(file.size)}). Giới hạn 20 MB.`);
+      toast.error(`File quá lớn (${formatBytes(file.size)}). Giới hạn 150 MB.`);
       return;
     }
 
     setUploading(true);
+    setUploadPct(0);
     try {
-      const res = await coursesApi.uploadDocument(lessonId, file, file.name);
+      // Direct-to-R2 (presign → PUT → register). Progress from the R2 PUT.
+      const onProg = (f: number) => setUploadPct(Math.round(f * 100));
+      const res = courseId
+        ? await coursesApi.uploadCourseDocumentDirect(courseId, file, file.name, onProg)
+        : await coursesApi.uploadDocumentDirect(lessonId!, file, file.name, onProg);
       const created = res.data?.data as DocumentItem;
       if (created) {
         setDocuments((prev) => [...prev, created]);
@@ -83,7 +108,34 @@ export default function LessonDocumentsManager({ lessonId, initialDocuments = []
       toast.error(msg);
     } finally {
       setUploading(false);
+      setUploadPct(0);
       if (inputRef.current) inputRef.current.value = '';
+    }
+  };
+
+  const handleAddLink = async () => {
+    const url = linkUrl.trim();
+    if (!/^https?:\/\/.+/i.test(url)) {
+      toast.error('Dán link http(s) hợp lệ (vd Google Drive)');
+      return;
+    }
+    setAddingLink(true);
+    try {
+      const res = courseId
+        ? await coursesApi.addCourseDocumentLink(courseId, linkTitle.trim() || 'Tài liệu', url)
+        : await coursesApi.addDocumentLink(lessonId!, linkTitle.trim() || 'Tài liệu', url);
+      const created = res.data?.data as DocumentItem;
+      if (created) {
+        setDocuments((prev) => [...prev, created]);
+        setLinkTitle('');
+        setLinkUrl('');
+        toast.success('Đã thêm link');
+      }
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err?.message || 'Thêm link thất bại';
+      toast.error(msg);
+    } finally {
+      setAddingLink(false);
     }
   };
 
@@ -106,14 +158,38 @@ export default function LessonDocumentsManager({ lessonId, initialDocuments = []
           <FileText className="w-5 h-5 text-neon-violet" /> Tài liệu đính kèm
         </h2>
         <span className="text-xs text-text-muted">
-          {documents.length} file{documents.length === 1 ? '' : 's'} • tối đa 20 MB / file
+          {documents.length} mục • file tối đa 150 MB
         </span>
       </div>
 
-      {/* Upload dropzone — clicking it opens the file picker.
-          The drag-and-drop behaviour is intentionally minimal:
-          the input is the only entry point so we don't have
-          to manage drag counter state. */}
+      {/* ── Add a Google Drive / external link ─────────────────── */}
+      <div className="mb-3 flex flex-col sm:flex-row gap-2">
+        <input
+          type="text"
+          value={linkTitle}
+          onChange={(e) => setLinkTitle(e.target.value)}
+          placeholder="Tên tài liệu (vd: Slide + Source)"
+          className="sm:w-56 px-3 py-2 rounded-xl bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+        />
+        <input
+          type="url"
+          value={linkUrl}
+          onChange={(e) => setLinkUrl(e.target.value)}
+          placeholder="Dán link Google Drive / URL…"
+          className="flex-1 px-3 py-2 rounded-xl bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
+        />
+        <button
+          type="button"
+          onClick={handleAddLink}
+          disabled={addingLink || !linkUrl.trim()}
+          className="px-4 py-2 rounded-xl bg-neon-indigo/15 text-neon-indigo text-sm font-medium hover:bg-neon-indigo/25 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+        >
+          {addingLink ? <Loader2 className="w-4 h-4 animate-spin" /> : <Link2 className="w-4 h-4" />}
+          Thêm link
+        </button>
+      </div>
+
+      {/* ── Upload a file (direct to R2, up to 150MB, any type) ── */}
       <div className="mb-4">
         <label
           className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-dashed cursor-pointer transition-colors ${
@@ -128,69 +204,76 @@ export default function LessonDocumentsManager({ lessonId, initialDocuments = []
             className="hidden"
             disabled={uploading}
             onChange={(e) => handleFiles(e.target.files)}
-            // No `accept` attribute — the user wants to upload
-            // zip/doc/pdf/etc and we don't want to whitelist
-            // a fixed set that would have to be updated every
-            // time a new file type is supported.
           />
           {uploading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin text-neon-violet" />
-              <span className="text-sm text-text-secondary">Đang upload…</span>
+              <span className="text-sm text-text-secondary">Đang upload… {uploadPct}%</span>
             </>
           ) : (
             <>
               <Upload className="w-4 h-4 text-text-muted" />
               <span className="text-sm text-text-secondary">
-                Click để upload file (zip, doc, pdf, …)
+                Click để upload file (zip, rar, doc, pdf, mp4, … tối đa 150 MB)
               </span>
             </>
           )}
         </label>
+        {uploading && (
+          <div className="mt-2 h-1.5 rounded-full bg-darkborder overflow-hidden">
+            <div
+              className="h-full bg-neon-violet transition-[width] duration-150"
+              style={{ width: `${uploadPct}%` }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Document list */}
       {documents.length === 0 ? (
         <p className="text-sm text-text-muted text-center py-4">
-          Chưa có tài liệu nào. Upload file để học viên tải về.
+          Chưa có tài liệu nào. Thêm link hoặc upload file để học viên tải về.
         </p>
       ) : (
         <div className="space-y-2">
-          {documents.map((doc) => (
-            <div
-              key={doc.id}
-              className="flex items-center gap-3 p-3 bg-darkbg rounded-xl border border-darkborder/40 hover:border-darkborder/80 transition-colors"
-            >
-              <div className="w-10 h-10 rounded-lg bg-neon-indigo/10 flex items-center justify-center text-lg shrink-0">
-                {pickFileIcon(doc.title)}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-text-primary truncate">
-                  {doc.title}
-                </p>
-                <p className="text-xs text-text-muted">
-                  {formatBytes(doc.fileSizeBytes)} • {doc.downloadCount} lượt tải
-                </p>
-              </div>
-              <a
-                href={doc.fileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg text-text-muted hover:text-neon-indigo hover:bg-white/5 transition-colors"
-                title="Mở file"
+          {documents.map((doc) => {
+            const link = isLinkDoc(doc);
+            return (
+              <div
+                key={doc.id}
+                className="flex items-center gap-3 p-3 bg-darkbg rounded-xl border border-darkborder/40 hover:border-darkborder/80 transition-colors"
               >
-                <Download className="w-4 h-4" />
-              </a>
-              <button
-                type="button"
-                onClick={() => handleDelete(doc)}
-                className="p-2 rounded-lg text-text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                title="Xoá"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
+                <div className="w-10 h-10 rounded-lg bg-neon-indigo/10 flex items-center justify-center text-lg shrink-0">
+                  {link ? '🔗' : pickFileIcon(doc.title)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-text-primary truncate">{doc.title}</p>
+                  <p className="text-xs text-text-muted truncate">
+                    {link
+                      ? doc.fileUrl
+                      : `${formatBytes(doc.fileSizeBytes)} • ${doc.downloadCount} lượt tải`}
+                  </p>
+                </div>
+                <a
+                  href={doc.fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-lg text-text-muted hover:text-neon-indigo hover:bg-white/5 transition-colors"
+                  title={link ? 'Mở link' : 'Mở file'}
+                >
+                  {link ? <Link2 className="w-4 h-4" /> : <Download className="w-4 h-4" />}
+                </a>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(doc)}
+                  className="p-2 rounded-lg text-text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                  title="Xoá"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

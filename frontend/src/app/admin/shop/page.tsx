@@ -11,7 +11,7 @@ import {
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { useProductStore } from '@/store/productStore';
-import { adminCreateProduct, adminUpdateProduct, adminDeleteProduct, getProducts, mapProductFromBackend, adminGetCategories, type AdminCategoryResponse } from '@/lib/api/shop';
+import { adminCreateProduct, adminUpdateProduct, adminDeleteProduct, adminGetProducts, mapProductFromBackend, adminGetCategories, type AdminCategoryResponse } from '@/lib/api/shop';
 import { fileApi } from '@/lib/api';
 import type { Product, ProductSpec } from '@/types';
 import ImageUpload from '@/components/admin/ImageUpload';
@@ -109,7 +109,10 @@ const emptyProduct = {
   isFeatured: false,
   soldCount: 0,
   tags: [] as string[],
+  type: 'DIGITAL' as string,
   fileUrl: '',
+  digitalContent: '',
+  images: [] as string[],
 };
 
 function formatPrice(price: number): string {
@@ -274,7 +277,7 @@ function SpecsEditor({
 // ─── Main Admin Shop Page ────────────────────────────────────────────────────────
 export default function AdminShopPage() {
   const { t } = useTranslation();
-  const { products, fetchProducts, isLoaded, updateProduct, deleteProduct, toggleFeatured, toggleHot, toggleNew } = useProductStore();
+  const { products, updateProduct, deleteProduct, toggleFeatured, toggleHot, toggleNew } = useProductStore();
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -299,15 +302,17 @@ export default function AdminShopPage() {
 
   useEffect(() => {
     setMounted(true);
-    if (!isLoaded) fetchProducts();
+    reloadProducts();
     loadCategories();
   }, []);
 
   const reloadProducts = async () => {
     setLoading(true);
     try {
-      const pageData = await getProducts({ size: 100 });
-      const mapped = pageData.content.map(mapProductFromBackend);
+      // Admin endpoint includes fileUrl / digitalContent so the edit form can
+      // load them (the public endpoint intentionally hides the deliverables).
+      const products = await adminGetProducts(200);
+      const mapped = products.map(mapProductFromBackend);
       useProductStore.setState({ products: mapped, isLoaded: true, isLoading: false, error: null });
     } catch {
       toast.error('Không thể tải lại sản phẩm từ backend');
@@ -365,7 +370,10 @@ export default function AdminShopPage() {
       isFeatured: Boolean(product.isFeatured),
       soldCount: product.soldCount || 0,
       tags: product.tags || [],
+      type: product.productType || 'DIGITAL',
       fileUrl: product.fileUrl || '',
+      digitalContent: product.digitalContent || '',
+      images: product.images || [],
     });
     setFeatureInput('');
     setTagInput('');
@@ -411,7 +419,10 @@ export default function AdminShopPage() {
         isHot: productForm.isHot,
         isNew: productForm.isNew,
         categoryName: productForm.category,
+        type: productForm.type,
         fileUrl: productForm.fileUrl.trim(),
+        digitalContent: productForm.type === 'DIGITAL' ? productForm.digitalContent.trim() : '',
+        images: productForm.images,
         specs: productForm.specs,
         guidance: productForm.guidance.trim(),
         active: true,
@@ -883,6 +894,31 @@ export default function AdminShopPage() {
                 </div>
               </div>
 
+              {/* Product type */}
+              <div>
+                <label className="block text-xs font-medium text-text-muted mb-1.5">Loại sản phẩm</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { v: 'DIGITAL', label: '💻 Hàng số / công nghệ', desc: 'Giao ngay: file / tài khoản-mã / hướng dẫn' },
+                    { v: 'PHYSICAL', label: '📦 Hàng vật lý', desc: 'Cần giao vận + tồn kho' },
+                  ].map((opt) => (
+                    <button
+                      type="button"
+                      key={opt.v}
+                      onClick={() => setProductForm((f) => ({ ...f, type: opt.v }))}
+                      className={`text-left p-3 rounded-xl border transition-all ${
+                        productForm.type === opt.v
+                          ? 'bg-neon-violet/15 border-neon-violet text-text-primary'
+                          : 'bg-darkbg border-darkborder text-text-secondary hover:border-neon-violet/30'
+                      }`}
+                    >
+                      <p className="text-sm font-semibold">{opt.label}</p>
+                      <p className="text-[10px] text-text-muted mt-0.5">{opt.desc}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Thumbnail */}
               <div>
                 <label className="block text-xs font-medium text-text-muted mb-1.5">{t('admin.shop.productImage')}</label>
@@ -892,48 +928,100 @@ export default function AdminShopPage() {
                 />
               </div>
 
-              {/* Digital File Upload */}
+              {/* Gallery (extra images) */}
               <div>
-                <label className="block text-xs font-medium text-text-muted mb-1.5">File sản phẩm số (tải về)</label>
-                {productForm.fileUrl ? (
-                  <div className="flex items-center gap-3 p-3 bg-darkbg border border-darkborder rounded-xl">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-text-primary truncate">{productForm.fileUrl.split('/').pop()?.split('?')[0]}</p>
-                      <p className="text-xs text-neon-emerald">Đã tải lên</p>
-                    </div>
-                    <button
-                      onClick={clearFileUrl}
-                      className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 text-xs hover:bg-red-500/20 transition-colors"
-                    >
-                      Xóa file
-                    </button>
+                <label className="block text-xs font-medium text-text-muted mb-1.5">Thư viện ảnh (tùy chọn)</label>
+                {productForm.images.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {productForm.images.map((img, i) => (
+                      <div key={i} className="relative w-16 h-16 rounded-lg overflow-hidden border border-darkborder">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={img} alt="" className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => setProductForm((f) => ({ ...f, images: f.images.filter((_, idx) => idx !== i) }))}
+                          className="absolute top-0 right-0 bg-red-500/80 text-white rounded-bl p-0.5"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                ) : (
-                  <label className="flex items-center gap-3 p-4 border-2 border-dashed border-darkborder rounded-xl cursor-pointer hover:border-neon-violet/40 transition-colors">
-                    <input
-                      type="file"
-                      accept=".zip,.rar,.pdf,.doc,.docx,.exe,.dmg,.pkg"
-                      onChange={handleFileUpload}
-                      disabled={uploadingFile}
-                      className="hidden"
-                    />
-                    {uploadingFile ? (
-                      <>
-                        <Loader2 className="w-5 h-5 text-neon-violet animate-spin" />
-                        <span className="text-sm text-text-muted">Đang tải...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Upload className="w-5 h-5 text-text-muted" />
-                        <div>
-                          <p className="text-sm text-text-primary">Tải lên file sản phẩm</p>
-                          <p className="text-xs text-text-muted">ZIP, PDF, DOC, EXE, DMG — tối đa 100MB</p>
-                        </div>
-                      </>
-                    )}
-                  </label>
                 )}
+                <ImageUpload
+                  key={productForm.images.length}
+                  value=""
+                  onChange={(url) => { if (url) setProductForm((f) => ({ ...f, images: [...f.images, url] })); }}
+                />
+                <p className="text-[10px] text-text-muted mt-1">Thêm nhiều ảnh để hiển thị dạng thư viện ở trang sản phẩm.</p>
               </div>
+
+              {/* Digital delivery — only for DIGITAL products */}
+              {productForm.type === 'DIGITAL' ? (
+                <>
+                  <div>
+                    <label className="block text-xs font-medium text-text-muted mb-1.5">File sản phẩm số (tải về)</label>
+                    {productForm.fileUrl ? (
+                      <div className="flex items-center gap-3 p-3 bg-darkbg border border-darkborder rounded-xl">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-text-primary truncate">{productForm.fileUrl.split('/').pop()?.split('?')[0]}</p>
+                          <p className="text-xs text-neon-emerald">Đã tải lên</p>
+                        </div>
+                        <button
+                          onClick={clearFileUrl}
+                          className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 text-xs hover:bg-red-500/20 transition-colors"
+                        >
+                          Xóa file
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="flex items-center gap-3 p-4 border-2 border-dashed border-darkborder rounded-xl cursor-pointer hover:border-neon-violet/40 transition-colors">
+                        <input
+                          type="file"
+                          accept=".zip,.rar,.pdf,.doc,.docx,.exe,.dmg,.pkg"
+                          onChange={handleFileUpload}
+                          disabled={uploadingFile}
+                          className="hidden"
+                        />
+                        {uploadingFile ? (
+                          <>
+                            <Loader2 className="w-5 h-5 text-neon-violet animate-spin" />
+                            <span className="text-sm text-text-muted">Đang tải...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-5 h-5 text-text-muted" />
+                            <div>
+                              <p className="text-sm text-text-primary">Tải lên file sản phẩm</p>
+                              <p className="text-xs text-text-muted">ZIP, PDF, DOC, EXE, DMG — tối đa 100MB</p>
+                            </div>
+                          </>
+                        )}
+                      </label>
+                    )}
+                  </div>
+
+                  {/* Tài khoản / mã kích hoạt giao cho khách */}
+                  <div>
+                    <label className="block text-xs font-medium text-text-muted mb-1.5">
+                      Tài khoản / Mã kích hoạt <span className="text-text-muted font-normal">(giao cho khách sau khi thanh toán)</span>
+                    </label>
+                    <textarea
+                      value={productForm.digitalContent}
+                      onChange={(e) => setProductForm((f) => ({ ...f, digitalContent: e.target.value }))}
+                      rows={3}
+                      placeholder={`VD:\nTài khoản: user@example.com\nMật khẩu: ******\nMã kích hoạt: XXXX-XXXX-XXXX`}
+                      className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none font-mono"
+                    />
+                    <p className="text-[10px] text-text-muted mt-1">Chỉ khách đã mua (đơn đã thanh toán) mới xem được. Để trống nếu chỉ giao file.</p>
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-center gap-2 text-xs text-text-muted bg-darkbg border border-darkborder rounded-xl p-3">
+                  <Package className="w-4 h-4 text-neon-violet flex-shrink-0" />
+                  <span>Hàng vật lý — cần <strong>tồn kho</strong> và sẽ được <strong>giao vận</strong> (địa chỉ + phí ship + theo dõi đơn).</span>
+                </div>
+              )}
 
               {/* Description */}
               <div>

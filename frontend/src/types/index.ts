@@ -640,10 +640,14 @@ export interface Product {
   price: number;
   originalPrice?: number;
   thumbnail: string;
+  /** Extra gallery images (URLs) beyond the thumbnail. */
+  images?: string[];
   // Category NAME (dynamic — admin-managed shop categories). Kept as a free
   // string so newly-added categories (Sách, Tài liệu, …) flow through the
   // grid/filters instead of being coerced into a fixed enum.
   category: string;
+  /** PHYSICAL | DIGITAL — drives shipping vs instant delivery. */
+  productType?: string;
   rating: number;
   reviewCount: number;
   description: string;
@@ -661,6 +665,8 @@ export interface Product {
   tags?: string[];
   /** URL of the downloadable digital file (e.g. ebook, software zip) */
   fileUrl?: string;
+  /** Digital deliverable text (account/key/guide) — admin views only. */
+  digitalContent?: string;
 }
 
 // Unified cart item — works for both Shop products and Academy courses

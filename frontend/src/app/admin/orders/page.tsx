@@ -9,7 +9,7 @@ import {
   FileText, Eye, Filter, Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { adminGetOrders, adminUpdateOrderStatus } from '@/lib/api/shop';
+import { adminGetOrders, adminUpdateOrderStatus, adminUpdateFulfillment, type OrderResponse } from '@/lib/api/shop';
 import { generateInvoicePDF } from '@/lib/invoice';
 import type { Order } from '@/types';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -83,8 +83,10 @@ function mapOrderFromBackend(bo: any): Order {
 export default function AdminOrdersPage() {
   const { t } = useTranslation();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [rawOrders, setRawOrders] = useState<Record<string, OrderResponse>>({});
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
+  const [trackingDraft, setTrackingDraft] = useState<Record<string, string>>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
 
@@ -96,11 +98,27 @@ export default function AdminOrdersPage() {
     setLoading(true);
     try {
       const res = await adminGetOrders({ size: 100 });
-      setOrders((res.content || []).map(mapOrderFromBackend));
+      const content = res.content || [];
+      setOrders(content.map(mapOrderFromBackend));
+      setRawOrders(Object.fromEntries(content.map((o) => [String(o.id), o])));
       } catch {
       toast.error(t('admin.orders.loadError'));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleUpdateFulfillment = async (id: number, data: { fulfillmentStatus?: string; trackingNumber?: string }) => {
+    setUpdating(String(id));
+    try {
+      const res = await adminUpdateFulfillment(id, data);
+      const updated = res.data;
+      setRawOrders((prev) => ({ ...prev, [String(id)]: { ...prev[String(id)], ...updated } }));
+      toast.success('Đã cập nhật trạng thái giao hàng');
+    } catch {
+      toast.error('Không cập nhật được trạng thái giao hàng');
+    } finally {
+      setUpdating(null);
     }
   };
 
@@ -392,6 +410,47 @@ export default function AdminOrdersPage() {
                         <option value="COMPLETED">{t('orders.status.Completed')}</option>
                         <option value="CANCELLED">{t('orders.adminStatus.Cancelled')}</option>
                       </select>
+
+                      {/* Physical shipping lifecycle */}
+                      {(() => {
+                        const raw = rawOrders[order.id];
+                        const isPhysical = raw && (raw.orderType === 'PHYSICAL' || raw.orderType === 'MIXED');
+                        if (!isPhysical) return null;
+                        return (
+                          <>
+                            <select
+                              value={raw.fulfillmentStatus || 'PENDING'}
+                              onChange={(e) => handleUpdateFulfillment(parseInt(order.id), { fulfillmentStatus: e.target.value })}
+                              disabled={updating === order.id}
+                              className="px-3 py-2 bg-darkcard border border-amber-500/30 rounded-xl text-sm text-amber-300 focus:outline-none focus:border-amber-500/60 cursor-pointer disabled:opacity-50"
+                              title="Trạng thái giao hàng"
+                            >
+                              <option value="PENDING">🕒 Chờ xác nhận</option>
+                              <option value="PROCESSING">📦 Đang chuẩn bị</option>
+                              <option value="SHIPPED">🚚 Đang giao</option>
+                              <option value="DELIVERED">✅ Đã giao</option>
+                              <option value="COMPLETED">🎉 Hoàn thành</option>
+                            </select>
+                            <div className="flex items-center gap-1">
+                              <input
+                                type="text"
+                                value={trackingDraft[order.id] ?? raw.trackingNumber ?? ''}
+                                onChange={(e) => setTrackingDraft((p) => ({ ...p, [order.id]: e.target.value }))}
+                                placeholder="Mã vận đơn"
+                                className="px-3 py-2 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 w-32"
+                              />
+                              <button
+                                onClick={() => handleUpdateFulfillment(parseInt(order.id), { trackingNumber: trackingDraft[order.id] ?? raw.trackingNumber ?? '' })}
+                                disabled={updating === order.id}
+                                className="px-3 py-2 bg-darkcard border border-darkborder rounded-xl text-xs text-text-secondary hover:border-neon-violet/40 transition-colors disabled:opacity-50"
+                              >
+                                Lưu
+                              </button>
+                            </div>
+                          </>
+                        );
+                      })()}
+
                       <button
                         onClick={() => handleDownloadInvoice(order)}
                         className="flex items-center gap-2 px-4 py-2 bg-neon-violet/10 hover:bg-neon-violet/20 border border-neon-violet/30 text-neon-violet text-sm font-semibold rounded-xl transition-colors"

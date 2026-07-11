@@ -46,7 +46,7 @@ export interface ProductResponse {
   description?: string;
   shortDescription?: string;
   thumbnailUrl?: string;
-  images?: string;
+  images?: string[];
   price: number;
   originalPrice?: number;
   stockQuantity: number;
@@ -58,8 +58,12 @@ export interface ProductResponse {
   categoryId?: number;
   categoryName?: string;
   categorySlug?: string;
+  // PHYSICAL | DIGITAL
   type: string;
   fileUrl?: string;
+  digitalContent?: string;
+  ratingAvg?: number;
+  ratingCount?: number;
   specs?: ProductSpec[];
   guidance?: string;
   createdAt: string;
@@ -98,6 +102,7 @@ export interface CreateOrderRequest {
   buyerEmail: string;
   buyerPhone?: string;
   buyerAddress?: string;
+  shippingProvince?: string;
   items: CreateOrderItem[];
   discountCode?: string;
   notes?: string;
@@ -111,7 +116,9 @@ export interface OrderItemResponse {
   price: number;
   quantity: number;
   total: number;
+  productType?: string;
   fileUrl?: string;
+  digitalContent?: string;
   credentials?: string;
 }
 
@@ -136,11 +143,18 @@ export interface OrderResponse {
   buyerEmail: string;
   buyerPhone?: string;
   buyerAddress?: string;
+  shippingProvince?: string;
   subtotal: number;
   discountAmount: number;
   discountCode?: string;
+  shippingFee?: number;
   total: number;
   status: string;
+  orderType?: string;
+  fulfillmentStatus?: string;
+  trackingNumber?: string;
+  shippedAt?: string;
+  deliveredAt?: string;
   paymentMethod: string;
   paymentStatus: string;
   paidAt?: string;
@@ -297,6 +311,89 @@ export async function getSimilarProducts(slug: string, limit = 8): Promise<Produ
   return Array.isArray(res.data) ? res.data : [];
 }
 
+// ─── Shipping ─────────────────────────────────────────────────────────────────
+
+export interface ShippingConfig { flatFee: number; freeThreshold: number }
+
+export async function getShippingConfig(): Promise<ShippingConfig> {
+  try {
+    const res = await request<ApiResponse<ShippingConfig>>('/shop/shipping-config');
+    return res.data;
+  } catch {
+    return { flatFee: 30000, freeThreshold: 500000 };
+  }
+}
+
+// ─── Product reviews ───────────────────────────────────────────────────────────
+
+export interface ProductReview {
+  id: number;
+  rating: number;
+  comment?: string | null;
+  createdAt: string;
+  userId: number;
+  userName: string;
+  userAvatar?: string | null;
+}
+
+export interface ProductReviewsResponse {
+  average: number;
+  count: number;
+  reviews: ProductReview[];
+}
+
+export async function getProductReviews(slug: string): Promise<ProductReviewsResponse> {
+  const res = await request<ApiResponse<ProductReviewsResponse>>(`/shop/products/${slug}/reviews`);
+  return res.data;
+}
+
+export async function postProductReview(productId: number, rating: number, comment?: string): Promise<ApiResponse<void>> {
+  return request(`/shop/products/${productId}/reviews`, {
+    method: 'POST',
+    body: JSON.stringify({ rating, comment }),
+  });
+}
+
+export async function deleteMyReview(reviewId: number): Promise<ApiResponse<void>> {
+  return request(`/shop/reviews/${reviewId}`, { method: 'DELETE' });
+}
+
+export interface AdminReview {
+  id: number;
+  rating: number;
+  comment?: string | null;
+  isApproved: boolean;
+  createdAt: string;
+  userName: string;
+  productName?: string;
+  productSlug?: string;
+}
+
+export async function adminGetReviews(): Promise<AdminReview[]> {
+  const res = await request<ApiResponse<AdminReview[]>>('/shop/admin/reviews');
+  return Array.isArray(res.data) ? res.data : [];
+}
+
+export async function adminModerateReview(id: number, isApproved: boolean): Promise<ApiResponse<void>> {
+  return request(`/shop/admin/reviews/${id}`, { method: 'PATCH', body: JSON.stringify({ isApproved }) });
+}
+
+export async function adminDeleteReview(id: number): Promise<ApiResponse<void>> {
+  return request(`/shop/admin/reviews/${id}`, { method: 'DELETE' });
+}
+
+// ─── Admin fulfillment (physical order shipping lifecycle) ──────────────────────
+
+export async function adminUpdateFulfillment(
+  orderId: number,
+  data: { fulfillmentStatus?: string; trackingNumber?: string }
+): Promise<ApiResponse<OrderResponse>> {
+  return request(`/shop/admin/orders/${orderId}/fulfillment`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+}
+
 export async function getMyOrders(): Promise<ApiResponse<OrderResponse[]>> {
   return request('/shop/orders/my');
 }
@@ -328,6 +425,13 @@ export async function adminDeleteProduct(
   return request(`/shop/admin/products/${id}`, {
     method: 'DELETE',
   });
+}
+
+// Admin product list — unlike the public endpoint this INCLUDES the digital
+// deliverables (fileUrl / digitalContent) so the edit form can load them.
+export async function adminGetProducts(size = 200): Promise<ProductResponse[]> {
+  const res = await request<ApiResponse<ProductResponse[]>>(`/shop/admin/products?size=${size}`);
+  return Array.isArray(res.data) ? res.data : [];
 }
 
 // ─── Admin Categories ─────────────────────────────────────────────────────────
@@ -458,9 +562,11 @@ export function mapProductFromBackend(bp: ProductResponse) {
     price: bp.price ?? 0,
     originalPrice: bp.originalPrice,
     thumbnail: bp.thumbnailUrl || '/images/products/default.jpg',
+    images: Array.isArray(bp.images) ? bp.images : [],
     category: bp.categoryName || 'Khác',
-    rating: 5,
-    reviewCount: 0,
+    productType: bp.type || 'DIGITAL',
+    rating: bp.ratingAvg ?? 0,
+    reviewCount: bp.ratingCount ?? 0,
     description: bp.shortDescription || bp.description || '',
     features: [],
     specs: bp.specs ?? [],
@@ -468,6 +574,7 @@ export function mapProductFromBackend(bp: ProductResponse) {
     isHot: bp.isHot ?? false,
     isNew: bp.isNew ?? false,
     fileUrl: bp.fileUrl,
+    digitalContent: bp.digitalContent,
     stock: bp.stockQuantity ?? 0,
     isFeatured: bp.featured ?? false,
     soldCount: bp.soldCount ?? 0,

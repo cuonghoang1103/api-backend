@@ -26,6 +26,7 @@ import StarRating from '@/components/shop/StarRating';
 import ProductCard from '@/components/shop/ProductCard';
 import CartDrawer from '@/components/shop/CartDrawer';
 import ProductDetailTabs from '@/components/shop/ProductDetailTabs';
+import ProductReviews from '@/components/shop/ProductReviews';
 import type { Product } from '@/types';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -49,6 +50,7 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { fetchProducts, isLoaded } = useProductStore();
   const addShopItem = useCartStore((state) => state.addShopItem);
 
@@ -88,6 +90,9 @@ export default function ProductDetailPage() {
 
   const discountPercent = calcDiscount(product.originalPrice, product.price);
   const totalSold = product.soldCount ?? 0;
+  const allImages = Array.from(new Set([product.thumbnail, ...(product.images || [])].filter(Boolean))) as string[];
+  const mainImage = selectedImage || allImages[0] || product.thumbnail;
+  const isPhysical = product.productType === 'PHYSICAL';
 
   const c = {
     primary: '#a855f7',
@@ -123,9 +128,9 @@ export default function ProductDetailPage() {
             transition={{ duration: 0.5 }}
           >
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-darkcard border border-darkborder group">
-              {product.thumbnail ? (
+              {mainImage ? (
                 <SmartImage
-                  src={product.thumbnail}
+                  src={mainImage}
                   alt={product.name}
                   className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -159,6 +164,21 @@ export default function ProductDetailPage() {
                 )}
               </div>
             </div>
+
+            {/* Thumbnail strip */}
+            {allImages.length > 1 && (
+              <div className="flex gap-2 mt-3 flex-wrap">
+                {allImages.map((img) => (
+                  <button
+                    key={img}
+                    onClick={() => setSelectedImage(img)}
+                    className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${mainImage === img ? 'border-neon-violet' : 'border-darkborder hover:border-neon-violet/40'}`}
+                  >
+                    <SmartImage src={img} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </motion.div>
 
           {/* Info */}
@@ -168,10 +188,15 @@ export default function ProductDetailPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex flex-col"
           >
-            <span className="inline-flex items-center gap-1 text-sm font-medium text-neon-violet mb-3">
-              <Tag className="w-4 h-4" />
-              {product.category}
-            </span>
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+              <span className="inline-flex items-center gap-1 text-sm font-medium text-neon-violet">
+                <Tag className="w-4 h-4" />
+                {product.category}
+              </span>
+              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${isPhysical ? 'bg-amber-500/15 text-amber-400' : 'bg-emerald-500/15 text-emerald-400'}`}>
+                {isPhysical ? '📦 Hàng vật lý' : '💻 Hàng số'}
+              </span>
+            </div>
 
             <h1 className="text-2xl md:text-3xl font-heading font-bold text-text-primary mb-3">
               {product.name}
@@ -312,6 +337,9 @@ export default function ProductDetailPage() {
         >
           <ProductDetailTabs product={product} />
         </motion.div>
+
+        {/* ── Reviews ──────────────────────────────────────────────────── */}
+        <ProductReviews productId={Number(product.id)} productSlug={product.slug} />
 
         {/* ── Related Products ─────────────────────────────────────────── */}
         {relatedProducts.length > 0 && (

@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
-import { createOrder as apiCreateOrder, validateDiscount, createShopPayos } from '@/lib/api/shop';
+import { createOrder as apiCreateOrder, validateDiscount, createShopPayos, getShippingConfig } from '@/lib/api/shop';
 import type { BuyerInfo } from '@/types';
 import { toast } from 'sonner';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -49,11 +49,14 @@ export default function CheckoutPage() {
     phone: '',
     address: '',
   });
+  const [province, setProvince] = useState('');
+  const [shipCfg, setShipCfg] = useState({ flatFee: 30000, freeThreshold: 500000 });
 
   const [errors, setErrors] = useState<Partial<BuyerInfo>>({});
 
   useEffect(() => {
     setMounted(true);
+    getShippingConfig().then(setShipCfg).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -62,12 +65,17 @@ export default function CheckoutPage() {
     }
   }, [mounted, items.length, router]);
 
-  const subtotal = getTotalPrice();
-  const discountAmount = appliedCoupon?.discountAmount || 0;
-  const total = Math.max(0, subtotal - discountAmount);
-
   const shopItems = items.filter((i) => i.itemType === 'shop');
   const academyItems = items.filter((i) => i.itemType === 'academy');
+
+  const subtotal = getTotalPrice();
+  const discountAmount = appliedCoupon?.discountAmount || 0;
+  const goodsTotal = Math.max(0, subtotal - discountAmount);
+  // Any physical item → shipping applies (waived over the free-ship threshold).
+  // This is a display estimate; the backend recomputes the charged total.
+  const hasPhysical = shopItems.some((i) => (i.product as { productType?: string }).productType === 'PHYSICAL');
+  const shippingFee = hasPhysical && goodsTotal < shipCfg.freeThreshold ? shipCfg.flatFee : 0;
+  const total = goodsTotal + shippingFee;
 
   if (!mounted) {
     return (
@@ -125,6 +133,11 @@ export default function CheckoutPage() {
     if (buyerInfo.phone && !/^[\d\s\-+()]{8,}$/.test(buyerInfo.phone)) {
       newErrors.phone = t('checkout.invalidPhone');
     }
+    // Physical goods need a delivery address + phone.
+    if (hasPhysical) {
+      if (!buyerInfo.address?.trim()) newErrors.address = 'Vui lòng nhập địa chỉ giao hàng';
+      if (!buyerInfo.phone?.trim()) newErrors.phone = 'Vui lòng nhập số điện thoại nhận hàng';
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -153,6 +166,7 @@ export default function CheckoutPage() {
       buyerEmail: buyerInfo.email,
       buyerPhone: buyerInfo.phone || undefined,
       buyerAddress: buyerInfo.address || undefined,
+      shippingProvince: province || undefined,
       items: orderItems,
       discountCode: appliedCoupon?.code,
     });
@@ -300,16 +314,39 @@ export default function CheckoutPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-text-secondary mb-1.5">
-                      {t('checkout.address')}
+                      {t('checkout.address')} {hasPhysical && <span className="text-red-400">*</span>}
                     </label>
                     <input
                       type="text"
                       value={buyerInfo.address}
                       onChange={(e) => setBuyerInfo({ ...buyerInfo, address: e.target.value })}
-                      placeholder={t('checkout.addressPlaceholder')}
-                      className="w-full px-4 py-3 bg-darkbg border border-darkborder rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
+                      placeholder={hasPhysical ? 'Số nhà, đường, phường/xã, quận/huyện' : t('checkout.addressPlaceholder')}
+                      className={`w-full px-4 py-3 bg-darkbg border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors ${errors.address ? 'border-red-500' : 'border-darkborder'}`}
                     />
+                    {errors.address && (
+                      <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
+                        <XCircle className="w-3 h-3" />
+                        {errors.address}
+                      </p>
+                    )}
                   </div>
+                  {hasPhysical && (
+                    <div>
+                      <label className="block text-sm font-medium text-text-secondary mb-1.5">
+                        Tỉnh / Thành phố
+                      </label>
+                      <input
+                        type="text"
+                        value={province}
+                        onChange={(e) => setProvince(e.target.value)}
+                        placeholder="VD: Hà Nội, TP. Hồ Chí Minh…"
+                        className="w-full px-4 py-3 bg-darkbg border border-darkborder rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
+                      />
+                      <p className="text-[11px] text-text-muted mt-1.5">
+                        🚚 Phí giao hàng: {formatPrice(shipCfg.flatFee)} — miễn phí cho đơn từ {formatPrice(shipCfg.freeThreshold)}.
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <button
                   onClick={handleProceedToPayment}
@@ -482,6 +519,14 @@ export default function CheckoutPage() {
                   <div className="flex justify-between text-sm">
                     <span className="text-text-secondary">{t('checkout.discount')}</span>
                     <span className="text-green-400 font-medium">-{formatPrice(discountAmount)}</span>
+                  </div>
+                )}
+                {hasPhysical && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-text-secondary">Phí giao hàng</span>
+                    <span className={shippingFee === 0 ? 'text-green-400 font-medium' : 'text-text-primary font-medium'}>
+                      {shippingFee === 0 ? 'Miễn phí' : formatPrice(shippingFee)}
+                    </span>
                   </div>
                 )}
                 <div className="flex justify-between items-end pt-2 border-t border-darkborder">

@@ -8,6 +8,18 @@ import { reconcilePayosShopOrder, PAYOS_SHOP_ORDER_OFFSET } from '../services/sh
 
 const router = Router();
 
+// Flat shipping fee for physical goods, waived over a threshold. Env-overridable.
+const SHIPPING_FLAT_FEE = Number(process.env.SHIPPING_FLAT_FEE ?? 30000);
+const SHIPPING_FREE_THRESHOLD = Number(process.env.SHIPPING_FREE_THRESHOLD ?? 500000);
+
+// Shipping fee for an order: 0 for digital-only or when the goods subtotal
+// reaches the free-ship threshold; otherwise the flat fee.
+function computeShippingFee(hasPhysical: boolean, goodsSubtotalAfterDiscount: number): number {
+  if (!hasPhysical) return 0;
+  if (goodsSubtotalAfterDiscount >= SHIPPING_FREE_THRESHOLD) return 0;
+  return SHIPPING_FLAT_FEE;
+}
+
 function normalizeProductCategoryName(name?: string | null): string | null {
   if (!name) return null;
   const trimmed = name.trim();
@@ -81,7 +93,31 @@ function parseProductSpecs(specs: unknown): Array<{ label: string; value: string
     .filter((spec) => spec.label || spec.value);
 }
 
-function serializeProduct(product: {
+// Store an images array as a JSON string (the `images` Text column).
+function serializeImagesForStore(images: unknown): string | null {
+  if (Array.isArray(images)) {
+    const arr = images.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
+    return arr.length ? JSON.stringify(arr) : null;
+  }
+  if (typeof images === 'string') return images.trim() || null;
+  return null;
+}
+
+function normalizeProductType(t: unknown): 'PHYSICAL' | 'DIGITAL' {
+  return t === 'PHYSICAL' ? 'PHYSICAL' : 'DIGITAL';
+}
+
+// Parse the `images` Text column (JSON array of URLs) into a string[].
+function parseProductImages(raw: string | null): string[] {
+  if (!raw) return [];
+  try {
+    const arr = JSON.parse(raw);
+    if (Array.isArray(arr)) return arr.filter((u) => typeof u === 'string');
+  } catch { /* legacy comma-separated fallback */ }
+  return String(raw).split(',').map((s) => s.trim()).filter(Boolean);
+}
+
+interface SerializableProduct {
   id: number;
   name: string;
   slug: string;
@@ -100,20 +136,28 @@ function serializeProduct(product: {
   categoryId: number | null;
   type: string;
   fileUrl: string | null;
+  digitalContent?: string | null;
+  ratingAvg?: any;
+  ratingCount?: number;
   specs: unknown;
   guidance: string | null;
   createdAt: Date;
   updatedAt: Date;
   category?: { id: number; name: string; slug: string | null; description: string | null; sortOrder: number } | null;
-}) {
-  return {
+}
+
+// `admin=true` includes the digital deliverables (fileUrl / digitalContent).
+// Public responses MUST NOT include them — otherwise anyone could download a
+// paid digital product for free.
+function serializeProduct(product: SerializableProduct, admin = false) {
+  const base = {
     id: product.id,
     name: product.name,
     slug: product.slug,
     description: product.description,
     shortDescription: product.shortDescription,
     thumbnailUrl: product.thumbnailUrl,
-    images: product.images,
+    images: parseProductImages(product.images),
     price: Number(product.price),
     originalPrice: product.originalPrice ? Number(product.originalPrice) : undefined,
     stockQuantity: product.stockQuantity,
@@ -126,12 +170,17 @@ function serializeProduct(product: {
     categoryName: product.category?.name,
     categorySlug: product.category?.slug,
     type: product.type,
-    fileUrl: product.fileUrl,
+    ratingAvg: product.ratingAvg !== undefined && product.ratingAvg !== null ? Number(product.ratingAvg) : 0,
+    ratingCount: product.ratingCount ?? 0,
     specs: Array.isArray(product.specs) ? product.specs : parseProductSpecs(product.specs),
     guidance: product.guidance,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
   };
+  if (admin) {
+    return { ...base, fileUrl: product.fileUrl, digitalContent: product.digitalContent ?? null };
+  }
+  return base;
 }
 
 // ─── GET /api/v1/shop/categories ─────────────────────
@@ -154,7 +203,7 @@ router.get('/products/featured', async (req, res: Response<ApiResponse>, next) =
       orderBy: { createdAt: 'desc' },
       include: { category: true },
     });
-    res.json({ success: true, data: products.map(serializeProduct) });
+    res.json({ success: true, data: products.map((p) => serializeProduct(p)) });
   } catch (error) { next(error); }
 });
 
@@ -188,7 +237,7 @@ router.get('/products', async (req, res: Response<ApiResponse>, next) => {
       prisma.product.findMany({ where, skip, take: pageSize, orderBy, include: { category: true } }),
       prisma.product.count({ where }),
     ]);
-    res.json({ success: true, data: products.map(serializeProduct), pagination: { page: pageNumber, limit: pageSize, total, totalPages: Math.ceil(total / pageSize) } });
+    res.json({ success: true, data: products.map((p) => serializeProduct(p)), pagination: { page: pageNumber, limit: pageSize, total, totalPages: Math.ceil(total / pageSize) } });
   } catch (error) { next(error); }
 });
 
@@ -238,7 +287,146 @@ router.get('/products/:slug/similar', async (req, res: Response<ApiResponse>, ne
       products = [...products, ...fill];
     }
 
-    res.json({ success: true, data: products.map(serializeProduct) });
+    res.json({ success: true, data: products.map((p) => serializeProduct(p)) });
+  } catch (error) { next(error); }
+});
+
+// ─── Product reviews (verified purchase) ─────────────
+// Recompute the denormalized rating aggregate from approved reviews.
+async function recomputeProductRating(productId: number): Promise<void> {
+  const agg = await prisma.productReview.aggregate({
+    where: { productId, isApproved: true },
+    _avg: { rating: true },
+    _count: { _all: true },
+  });
+  await prisma.product.update({
+    where: { id: productId },
+    data: {
+      ratingAvg: agg._avg.rating ? Math.round(agg._avg.rating * 100) / 100 : 0,
+      ratingCount: agg._count._all,
+    },
+  });
+}
+
+// Has this user actually bought this product (a PAID order containing it)?
+async function hasPurchasedProduct(userId: number, productName: string): Promise<boolean> {
+  const order = await prisma.shopOrder.findFirst({
+    where: { userId, status: 'PAID', items: { some: { productName } } },
+    select: { id: true },
+  });
+  return !!order;
+}
+
+// GET reviews for a product (public — approved only) + summary.
+router.get('/products/:slug/reviews', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const product = await prisma.product.findUnique({ where: { slug: req.params.slug }, select: { id: true, ratingAvg: true, ratingCount: true } });
+    if (!product) throw new AppError('Product not found', 404);
+    const reviews = await prisma.productReview.findMany({
+      where: { productId: product.id, isApproved: true },
+      orderBy: { createdAt: 'desc' },
+      take: 100,
+      include: { user: { select: { id: true, fullName: true, username: true, avatarUrl: true } } },
+    });
+    res.json({
+      success: true,
+      data: {
+        average: Number(product.ratingAvg),
+        count: product.ratingCount,
+        reviews: reviews.map((r) => ({
+          id: r.id,
+          rating: r.rating,
+          comment: r.comment,
+          createdAt: r.createdAt,
+          userId: r.userId,
+          userName: r.user?.fullName || r.user?.username || 'Người dùng',
+          userAvatar: r.user?.avatarUrl || null,
+        })),
+      },
+    });
+  } catch (error) { next(error); }
+});
+
+// POST a review (auth + verified purchase). Upserts (one per user/product).
+router.post('/products/:id/reviews', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const productId = parseInt(req.params.id, 10);
+    if (!Number.isInteger(productId)) throw new AppError('ID san pham khong hop le', 400);
+    const rating = Math.round(Number((req.body as { rating?: unknown }).rating));
+    const comment = String((req.body as { comment?: unknown }).comment ?? '').trim() || null;
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) throw new AppError('So sao phai tu 1 den 5', 400);
+
+    const product = await prisma.product.findUnique({ where: { id: productId }, select: { id: true, name: true } });
+    if (!product) throw new AppError('Product not found', 404);
+    if (!(await hasPurchasedProduct(req.userId, product.name))) {
+      throw new AppError('Chi khach da mua san pham moi duoc danh gia', 403);
+    }
+
+    await prisma.productReview.upsert({
+      where: { productId_userId: { productId, userId: req.userId } },
+      create: { productId, userId: req.userId, rating, comment, isApproved: true },
+      update: { rating, comment, isApproved: true },
+    });
+    await recomputeProductRating(productId);
+    res.status(201).json({ success: true, message: 'Da gui danh gia' });
+  } catch (error) { next(error); }
+});
+
+// DELETE own review (the author).
+router.delete('/reviews/:id', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const review = await prisma.productReview.findUnique({ where: { id } });
+    if (!review) throw new AppError('Review not found', 404);
+    if (review.userId !== req.userId) throw new AppError('Khong co quyen', 403);
+    await prisma.productReview.delete({ where: { id } });
+    await recomputeProductRating(review.productId);
+    res.json({ success: true, message: 'Da xoa danh gia' });
+  } catch (error) { next(error); }
+});
+
+// Admin: hard-delete any review.
+router.delete('/admin/reviews/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const review = await prisma.productReview.findUnique({ where: { id } });
+    if (!review) throw new AppError('Review not found', 404);
+    await prisma.productReview.delete({ where: { id } });
+    await recomputeProductRating(review.productId);
+    res.json({ success: true, message: 'Da xoa danh gia' });
+  } catch (error) { next(error); }
+});
+
+// Admin: list all reviews for moderation.
+router.get('/admin/reviews', authenticate, requireAdmin('ROLE_ADMIN'), async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const reviews = await prisma.productReview.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 300,
+      include: {
+        user: { select: { fullName: true, username: true } },
+        product: { select: { name: true, slug: true } },
+      },
+    });
+    res.json({
+      success: true,
+      data: reviews.map((r) => ({
+        id: r.id, rating: r.rating, comment: r.comment, isApproved: r.isApproved, createdAt: r.createdAt,
+        userName: r.user?.fullName || r.user?.username || 'Người dùng',
+        productName: r.product?.name, productSlug: r.product?.slug,
+      })),
+    });
+  } catch (error) { next(error); }
+});
+
+// Admin: approve/hide a review.
+router.patch('/admin/reviews/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const isApproved = Boolean((req.body as { isApproved?: unknown }).isApproved);
+    const review = await prisma.productReview.update({ where: { id }, data: { isApproved } });
+    await recomputeProductRating(review.productId);
+    res.json({ success: true, message: 'Da cap nhat danh gia' });
   } catch (error) { next(error); }
 });
 
@@ -270,7 +458,7 @@ router.get('/admin/products', authenticate, requireAdmin('ROLE_ADMIN'), async (r
 
     res.json({
       success: true,
-      data: products.map(serializeProduct),
+      data: products.map((p) => serializeProduct(p, true)),
       pagination: { page: pageNumber, limit: pageSize, total, totalPages: Math.ceil(total / pageSize) },
     });
   } catch (error) { next(error); }
@@ -293,7 +481,10 @@ router.post('/admin/products', authenticate, requireAdmin('ROLE_ADMIN'), async (
       isNew,
       categoryId: categoryIdInput,
       categoryName,
+      type,
       fileUrl,
+      digitalContent,
+      images,
       specs,
       guidance,
       active,
@@ -324,14 +515,17 @@ router.post('/admin/products', authenticate, requireAdmin('ROLE_ADMIN'), async (
         isNew: Boolean(isNew),
         active: active !== undefined ? Boolean(active) : true,
         categoryId,
+        type: normalizeProductType(type),
         fileUrl: fileUrl?.trim() || null,
+        digitalContent: digitalContent?.trim() || null,
+        images: serializeImagesForStore(images),
         specs: parseProductSpecs(specs),
         guidance: guidance?.trim() || null,
       },
       include: { category: true },
     });
 
-    res.status(201).json({ success: true, data: serializeProduct(created), message: 'Product created successfully' });
+    res.status(201).json({ success: true, data: serializeProduct(created, true), message: 'Product created successfully' });
   } catch (error) { next(error); }
 });
 
@@ -356,7 +550,10 @@ router.put('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), asyn
       isNew,
       categoryId: categoryIdInput,
       categoryName,
+      type,
       fileUrl,
+      digitalContent,
+      images,
       specs,
       guidance,
       active,
@@ -384,14 +581,17 @@ router.put('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), asyn
         ...(isNew !== undefined && { isNew: Boolean(isNew) }),
         ...(active !== undefined && { active: Boolean(active) }),
         ...(categoryProvided && { categoryId }),
+        ...(type !== undefined && { type: normalizeProductType(type) }),
         ...(fileUrl !== undefined && { fileUrl: fileUrl?.trim() || null }),
+        ...(digitalContent !== undefined && { digitalContent: digitalContent?.trim() || null }),
+        ...(images !== undefined && { images: serializeImagesForStore(images) }),
         ...(specs !== undefined && { specs: parseProductSpecs(specs) }),
         ...(guidance !== undefined && { guidance: guidance?.trim() || null }),
       },
       include: { category: true },
     });
 
-    res.json({ success: true, data: serializeProduct(updated), message: 'Product updated successfully' });
+    res.json({ success: true, data: serializeProduct(updated, true), message: 'Product updated successfully' });
   } catch (error) { next(error); }
 });
 
@@ -550,6 +750,31 @@ router.put('/admin/orders/:id/status', authenticate, requireAdmin('ROLE_ADMIN'),
   } catch (error) { next(error); }
 });
 
+// ─── PATCH /api/v1/shop/admin/orders/:id/fulfillment ─
+// Physical-order shipping lifecycle: PROCESSING → SHIPPED → DELIVERED →
+// COMPLETED (+ tracking number). Stamps shippedAt / deliveredAt.
+router.patch('/admin/orders/:id/fulfillment', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const { fulfillmentStatus, trackingNumber } = req.body as { fulfillmentStatus?: string; trackingNumber?: string };
+    const allowed = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'COMPLETED'];
+    if (fulfillmentStatus !== undefined && !allowed.includes(String(fulfillmentStatus))) {
+      throw new AppError('Trang thai giao hang khong hop le', 400);
+    }
+    const updated = await prisma.shopOrder.update({
+      where: { id },
+      data: {
+        ...(fulfillmentStatus !== undefined && { fulfillmentStatus: String(fulfillmentStatus) }),
+        ...(trackingNumber !== undefined && { trackingNumber: String(trackingNumber).trim() || null }),
+        ...(fulfillmentStatus === 'SHIPPED' && { shippedAt: new Date() }),
+        ...(fulfillmentStatus === 'DELIVERED' && { deliveredAt: new Date() }),
+      },
+      include: { items: true },
+    });
+    res.json({ success: true, data: updated, message: 'Da cap nhat trang thai giao hang' });
+  } catch (error) { next(error); }
+});
+
 // ─── GET /api/v1/shop/admin/discounts ────────────────
 router.get('/admin/discounts', authenticate, requireAdmin('ROLE_ADMIN'), async (_req, res: Response<ApiResponse>, next) => {
   try {
@@ -623,7 +848,7 @@ router.get('/discount/:code', async (req, res: Response<ApiResponse>, next) => {
 // ─── POST /api/v1/shop/orders ────────────────────────
 router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
   try {
-    const { buyerName, buyerEmail, buyerPhone, buyerAddress, items, discountCode } = req.body;
+    const { buyerName, buyerEmail, buyerPhone, buyerAddress, shippingProvince, items, discountCode } = req.body;
 
     if (!buyerName || !buyerEmail || !items?.length) {
       throw new AppError('Missing required fields', 400);
@@ -632,6 +857,8 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
     // Calculate totals
     let subtotal = 0;
     const orderItems = [];
+    let hasPhysical = false;
+    let hasDigital = false;
 
     for (const item of items) {
       // Validate quantity — a client-controlled multiplier. Reject
@@ -645,6 +872,8 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
       if (!product) throw new AppError(`Product ${item.productId} not found`, 404);
       const itemTotal = Number(product.price) * qty;
       subtotal += itemTotal;
+      const pType = normalizeProductType(product.type);
+      if (pType === 'PHYSICAL') hasPhysical = true; else hasDigital = true;
       orderItems.push({
         productName: product.name,
         productSlug: product.slug,
@@ -652,9 +881,20 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
         price: product.price,
         quantity: qty,
         total: itemTotal,
-        fileUrl: product.fileUrl,
+        productType: pType,
+        // The digital deliverable (fileUrl / digitalContent) is copied onto the
+        // item ONLY at fulfillment (payment) — never on an unpaid order, or the
+        // owner could read it before paying.
+        fileUrl: null,
+        digitalContent: null,
       });
     }
+
+    // Physical goods require a delivery address.
+    if (hasPhysical && !String(buyerAddress || '').trim()) {
+      throw new AppError('Vui long nhap dia chi giao hang cho san pham vat ly', 400);
+    }
+    const orderType = hasPhysical && hasDigital ? 'MIXED' : hasPhysical ? 'PHYSICAL' : 'DIGITAL';
 
     let discountAmount = 0;
     if (discountCode) {
@@ -682,8 +922,11 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
       }
     }
 
-    // Clamp so a discount can never make the total negative.
-    const total = Math.max(0, subtotal - discountAmount);
+    // Clamp so a discount can never make the goods total negative, then add
+    // shipping (physical only, waived over the free-ship threshold).
+    const goodsTotal = Math.max(0, subtotal - discountAmount);
+    const shippingFee = computeShippingFee(hasPhysical, goodsTotal);
+    const total = goodsTotal + shippingFee;
     const orderCode = `ORD-${Date.now()}-${nanoid(6).toUpperCase()}`;
 
     const order = await prisma.shopOrder.create({
@@ -693,10 +936,16 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
         buyerEmail,
         buyerPhone,
         buyerAddress,
+        shippingProvince: shippingProvince?.trim() || null,
         subtotal,
         discountAmount,
         discountCode,
+        shippingFee,
         total,
+        orderType,
+        // Digital-only orders are "fulfilled" the moment they're paid; physical
+        // orders start their shipping lifecycle at PROCESSING (set on payment).
+        fulfillmentStatus: 'PENDING',
         status: 'PENDING',
         items: { create: orderItems },
       },
@@ -705,6 +954,12 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
 
     res.status(201).json({ success: true, data: order });
   } catch (error) { next(error); }
+});
+
+// ─── GET /api/v1/shop/shipping-config ────────────────
+// Public: lets the checkout show the flat fee + free-ship threshold.
+router.get('/shipping-config', (_req, res: Response<ApiResponse>) => {
+  res.json({ success: true, data: { flatFee: SHIPPING_FLAT_FEE, freeThreshold: SHIPPING_FREE_THRESHOLD } });
 });
 
 // ─── GET /api/v1/shop/orders/my ─────────────────────
@@ -762,7 +1017,22 @@ router.get('/orders/:code', optionalAuth, async (req: any, res: Response<ApiResp
 
     const isOwner = order.userId != null && req.userId === order.userId;
     if (isOwner) {
-      res.json({ success: true, data: order });
+      // Digital deliverables (file / account-key / credentials) are released to
+      // the owner ONLY once PAID — defense-in-depth on top of only snapshotting
+      // them at fulfillment.
+      const paid = order.status === 'PAID';
+      res.json({
+        success: true,
+        data: {
+          ...order,
+          items: order.items.map((it) => ({
+            ...it,
+            fileUrl: paid ? it.fileUrl : null,
+            digitalContent: paid ? it.digitalContent : null,
+            credentials: paid ? it.credentials : null,
+          })),
+        },
+      });
       return;
     }
 
@@ -772,9 +1042,12 @@ router.get('/orders/:code', optionalAuth, async (req: any, res: Response<ApiResp
       data: {
         orderCode: order.orderCode,
         status: order.status,
+        orderType: order.orderType,
+        fulfillmentStatus: order.fulfillmentStatus,
         total: Number(order.total),
         subtotal: Number(order.subtotal),
         discountAmount: Number(order.discountAmount),
+        shippingFee: Number(order.shippingFee),
         createdAt: order.createdAt,
         completedAt: (order as { completedAt?: Date | null }).completedAt ?? null,
         items: order.items.map((it) => ({

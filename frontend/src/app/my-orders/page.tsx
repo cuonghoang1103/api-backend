@@ -15,6 +15,7 @@ import { useAuthStore } from '@/store/authStore';
 import { getOrderByCode, getMyOrders, type OrderResponse } from '@/lib/api/shop';
 import { courseOrdersApi, type MyCourseOrder } from '@/lib/api';
 import { generateInvoicePDF } from '@/lib/invoice';
+import ShopOrderExtras from '@/components/shop/ShopOrderExtras';
 import type { Order } from '@/types';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -90,6 +91,9 @@ export default function MyOrdersPage() {
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [localOrders, setLocalOrders] = useState<Order[]>([]);
+  // Raw backend shop orders (keyed by orderCode) — carry delivery + shipping
+  // fields the local Order shape drops, used by ShopOrderExtras.
+  const [rawOrders, setRawOrders] = useState<Record<string, OrderResponse>>({});
   const [loading, setLoading] = useState(false);
   const [courseOrders, setCourseOrders] = useState<MyCourseOrder[]>([]);
 
@@ -116,6 +120,7 @@ export default function MyOrdersPage() {
           const res = await getMyOrders();
           const backendOrders = Array.isArray(res.data) ? res.data : [];
           if (backendOrders.length > 0) {
+            setRawOrders(Object.fromEntries(backendOrders.map((bo) => [bo.orderCode, bo])));
             const mappedOrders = backendOrders.map((bo) => ({
               id: String(bo.id),
               orderCode: bo.orderCode,
@@ -160,6 +165,7 @@ export default function MyOrdersPage() {
             .map((r) => (r as any).value as OrderResponse);
 
           if (backendOrders.length > 0) {
+            setRawOrders(Object.fromEntries(backendOrders.map((bo) => [bo.orderCode, bo])));
             setLocalOrders(
               backendOrders.map((bo) => ({
                 id: String(bo.id),
@@ -377,6 +383,9 @@ export default function MyOrdersPage() {
                       className="border-t border-darkborder"
                     >
                       <div className="p-5 space-y-6">
+                        {/* Digital delivery + physical shipping timeline */}
+                        <ShopOrderExtras order={rawOrders[(order as Order).orderCode || order.id]} />
+
                         {/* Buyer info */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="bg-darkbg rounded-xl p-4">

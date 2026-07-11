@@ -6,6 +6,7 @@
 import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
 import { getPayosStatus, isPayosConfigured } from '../config/payos.js';
+import { emailService } from './email.service.js';
 
 // PayOS `orderCode` must be a single positive integer that is unique across
 // the WHOLE merchant. Course orders use `CourseOrder.id` directly (small
@@ -43,38 +44,56 @@ export async function markShopOrderPaidAndFulfill(
   const oversoldItems: string[] = [];
   let flippedOk = false;
 
+  // Digital-only orders are done the instant they're paid; physical/mixed
+  // orders enter the shipping lifecycle at PROCESSING.
+  const fulfillmentStatus = order.orderType === 'DIGITAL' ? 'COMPLETED' : 'PROCESSING';
+
   await prisma.$transaction(async (tx) => {
     const flipped = await tx.shopOrder.updateMany({
       where: { id: order.id, status: 'PENDING' },
       data: {
         status: 'PAID',
         paymentStatus: 'PAID',
+        fulfillmentStatus,
         ...(meta.method ? { paymentMethod: meta.method } : {}),
         paymentId: meta.txnNo ?? null,
         paidAt: meta.payDate ?? new Date(),
       },
     });
-    // Someone else already transitioned it — skip stock side effects.
+    // Someone else already transitioned it — skip side effects.
     if (flipped.count !== 1) return;
     flippedOk = true;
 
-    // Decrement stock + bump sold count. Items link to Product by name (the
-    // relation FK). The `stockQuantity >= quantity` guard avoids driving
-    // stock negative; only bump soldCount when the decrement matched a row,
-    // and flag oversell for manual review (money received — never blindly
-    // claim stock we don't have).
     for (const item of order.items) {
-      const dec = await tx.product.updateMany({
-        where: { name: item.productName, stockQuantity: { gte: item.quantity } },
-        data: { stockQuantity: { decrement: item.quantity } },
+      const product = await tx.product.findFirst({
+        where: { name: item.productName },
+        select: { type: true, fileUrl: true, digitalContent: true },
       });
-      if (dec.count === 1) {
-        await tx.product.updateMany({
-          where: { name: item.productName },
-          data: { soldCount: { increment: item.quantity } },
+      const pType = item.productType || product?.type || 'DIGITAL';
+
+      if (pType === 'PHYSICAL') {
+        // Physical: guarded stock decrement (never negative); only bump
+        // soldCount when it matched, else flag oversell (money's in — never
+        // blindly claim stock we don't have).
+        const dec = await tx.product.updateMany({
+          where: { name: item.productName, stockQuantity: { gte: item.quantity } },
+          data: { stockQuantity: { decrement: item.quantity } },
         });
+        if (dec.count === 1) {
+          await tx.product.updateMany({ where: { name: item.productName }, data: { soldCount: { increment: item.quantity } } });
+        } else {
+          oversoldItems.push(`${item.productName} x${item.quantity}`);
+        }
       } else {
-        oversoldItems.push(`${item.productName} x${item.quantity}`);
+        // Digital: unlimited stock; bump soldCount and RELEASE the deliverable
+        // onto the order item (only now that it's paid).
+        await tx.product.updateMany({ where: { name: item.productName }, data: { soldCount: { increment: item.quantity } } });
+        if (product && (product.fileUrl || product.digitalContent)) {
+          await tx.shopOrderItem.update({
+            where: { id: item.id },
+            data: { fileUrl: product.fileUrl, digitalContent: product.digitalContent },
+          });
+        }
       }
     }
   });
@@ -86,8 +105,25 @@ export async function markShopOrderPaidAndFulfill(
   }
   if (flippedOk) {
     logger.info('shop order fulfilled', {
-      orderCode: order.orderCode, shopOrderId: order.id, method: meta.method, txnNo: meta.txnNo,
+      orderCode: order.orderCode, shopOrderId: order.id, method: meta.method, txnNo: meta.txnNo, orderType: order.orderType,
     });
+    // Confirmation email (best-effort — never block/undo fulfillment on failure).
+    try {
+      await emailService.sendShopReceiptEmail({
+        to: order.buyerEmail,
+        fullName: order.buyerName,
+        orderCode: order.orderCode,
+        orderType: order.orderType,
+        items: order.items.map((it) => ({ name: it.productName, quantity: it.quantity, total: Number(it.total) })),
+        subtotal: Number(order.subtotal),
+        shippingFee: Number(order.shippingFee),
+        total: Number(order.total),
+        paidAt: meta.payDate ?? new Date(),
+        shippingAddress: order.buyerAddress,
+      });
+    } catch (err) {
+      logger.error('shop receipt email failed', { orderCode: order.orderCode, error: err instanceof Error ? err.message : String(err) });
+    }
   }
   return flippedOk ? 'paid' : 'already';
 }

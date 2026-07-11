@@ -105,6 +105,7 @@ model User {
   blogComments            Comment[]
   devPostComments         PostComment[]
   courseReviews           CourseReview[]
+  productReviews          ProductReview[]
   shopOrders              ShopOrder[]
   courseOrders            CourseOrder[]
   refundedCourseOrders    CourseOrder[]            @relation("CourseOrderRefunder")
@@ -1077,14 +1078,22 @@ model Product {
   isNew            Boolean  @default(false) @map("is_new")
   active           Boolean  @default(true)
   categoryId       Int?     @map("category_id")
+  // PHYSICAL (needs shipping) | DIGITAL (delivered instantly on payment)
   type             String   @default("DIGITAL") @db.VarChar(20)
   fileUrl          String?  @map("file_url") @db.VarChar(500)
+  // Digital deliverable shown to the buyer after payment: account info,
+  // activation/license key, redemption link, etc. (guidance = how to use it).
+  digitalContent   String?  @map("digital_content") @db.Text
   specs            Json     @default("{}") @db.JsonB
   guidance         String?  @db.Text
+  // Denormalized review aggregates (recomputed on review add/moderate/delete).
+  ratingAvg        Decimal  @default(0) @map("rating_avg") @db.Decimal(3, 2)
+  ratingCount      Int      @default(0) @map("rating_count")
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
   category ProductCategory? @relation(fields: [categoryId], references: [id])
+  reviews  ProductReview[]
 
   @@index([categoryId], name: "idx_products_category")
   @@index([active], map: "idx_products_active")
@@ -1094,25 +1103,36 @@ model Product {
 }
 
 model ShopOrder {
-  id             Int       @id @default(autoincrement())
-  orderCode      String    @unique(map: "uk_order_code") @db.VarChar(50)
-  userId         Int?      @map("user_id")
-  buyerName      String    @map("buyer_name") @db.VarChar(255)
-  buyerEmail     String    @map("buyer_email") @db.VarChar(255)
-  buyerPhone     String?   @map("buyer_phone") @db.VarChar(50)
-  buyerAddress   String?   @map("buyer_address") @db.Text
-  subtotal       Decimal   @db.Decimal(10, 2)
-  discountAmount Decimal   @default(0) @map("discount_amount")
-  discountCode   String?   @map("discount_code") @db.VarChar(50)
-  total          Decimal   @db.Decimal(10, 2)
-  status         String    @db.VarChar(20)
-  paymentMethod  String    @default("SIMULATED") @map("payment_method") @db.VarChar(50)
-  paymentStatus  String    @default("PENDING") @map("payment_status") @db.VarChar(20)
-  paymentId      String?   @map("payment_id") @db.VarChar(100)
-  paidAt         DateTime? @map("paid_at")
-  notes          String?   @db.Text
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime  @updatedAt @map("updated_at")
+  id                Int       @id @default(autoincrement())
+  orderCode         String    @unique(map: "uk_order_code") @db.VarChar(50)
+  userId            Int?      @map("user_id")
+  buyerName         String    @map("buyer_name") @db.VarChar(255)
+  buyerEmail        String    @map("buyer_email") @db.VarChar(255)
+  buyerPhone        String?   @map("buyer_phone") @db.VarChar(50)
+  buyerAddress      String?   @map("buyer_address") @db.Text
+  subtotal          Decimal   @db.Decimal(10, 2)
+  discountAmount    Decimal   @default(0) @map("discount_amount")
+  discountCode      String?   @map("discount_code") @db.VarChar(50)
+  total             Decimal   @db.Decimal(10, 2)
+  // Payment/main status: PENDING | PAID | CANCELLED | FAILED | REFUNDED
+  status            String    @db.VarChar(20)
+  // PHYSICAL | DIGITAL | MIXED — derived from the items at checkout.
+  orderType         String    @default("DIGITAL") @map("order_type") @db.VarChar(20)
+  // Shipping / fulfillment lifecycle (physical goods): PENDING | PROCESSING |
+  // SHIPPED | DELIVERED | COMPLETED. Digital orders jump straight to COMPLETED.
+  fulfillmentStatus String    @default("PENDING") @map("fulfillment_status") @db.VarChar(20)
+  shippingFee       Decimal   @default(0) @map("shipping_fee") @db.Decimal(10, 2)
+  shippingProvince  String?   @map("shipping_province") @db.VarChar(120)
+  trackingNumber    String?   @map("tracking_number") @db.VarChar(120)
+  shippedAt         DateTime? @map("shipped_at")
+  deliveredAt       DateTime? @map("delivered_at")
+  paymentMethod     String    @default("SIMULATED") @map("payment_method") @db.VarChar(50)
+  paymentStatus     String    @default("PENDING") @map("payment_status") @db.VarChar(20)
+  paymentId         String?   @map("payment_id") @db.VarChar(100)
+  paidAt            DateTime? @map("paid_at")
+  notes             String?   @db.Text
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
 
   user  User?           @relation(fields: [userId], references: [id])
   items ShopOrderItem[]
@@ -1124,16 +1144,19 @@ model ShopOrder {
 }
 
 model ShopOrderItem {
-  id           Int     @id @default(autoincrement())
-  orderId      Int     @map("order_id")
-  productName  String  @map("product_name") @db.VarChar(255)
-  productSlug  String? @map("product_slug") @db.VarChar(255)
-  productImage String? @map("product_image") @db.VarChar(500)
-  price        Decimal @db.Decimal(10, 2)
-  quantity     Int     @default(1)
-  total        Decimal @db.Decimal(10, 2)
-  fileUrl      String? @map("file_url") @db.VarChar(500)
-  credentials  String? @db.Text
+  id             Int     @id @default(autoincrement())
+  orderId        Int     @map("order_id")
+  productName    String  @map("product_name") @db.VarChar(255)
+  productSlug    String? @map("product_slug") @db.VarChar(255)
+  productImage   String? @map("product_image") @db.VarChar(500)
+  price          Decimal @db.Decimal(10, 2)
+  quantity       Int     @default(1)
+  total          Decimal @db.Decimal(10, 2)
+  productType    String? @map("product_type") @db.VarChar(20)
+  fileUrl        String? @map("file_url") @db.VarChar(500)
+  // Snapshot of the digital deliverable at purchase time (account/key/guide).
+  digitalContent String? @map("digital_content") @db.Text
+  credentials    String? @db.Text
 
   order ShopOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
@@ -1168,6 +1191,26 @@ model UserSavedCode {
   @@unique([userId, code], map: "uk_user_saved_code")
   @@index([userId], name: "idx_user_saved_code_user")
   @@map("user_saved_codes")
+}
+
+// Verified-purchase product reviews (star rating + optional comment). One
+// review per user per product; the aggregate is denormalized onto Product.
+model ProductReview {
+  id         Int      @id @default(autoincrement())
+  productId  Int      @map("product_id")
+  userId     Int      @map("user_id")
+  rating     Int
+  comment    String?  @db.Text
+  isApproved Boolean  @default(true) @map("is_approved")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, userId], map: "uk_product_review_user")
+  @@index([productId], name: "idx_product_review_product")
+  @@map("product_reviews")
 }
 
 model DiscountCode {

@@ -309,6 +309,93 @@ export class EmailService {
   }
 
   /**
+   * Shop order confirmation — sent after an order is marked PAID.
+   * Digital orders point to the delivery on /my-orders; physical orders
+   * confirm the shipping address and that the order is being prepared.
+   */
+  async sendShopReceiptEmail(opts: {
+    to: string;
+    fullName?: string;
+    orderCode: string;
+    orderType: string; // PHYSICAL | DIGITAL | MIXED
+    items: Array<{ name: string; quantity: number; total: number }>;
+    subtotal: number;
+    shippingFee: number;
+    total: number;
+    paidAt: Date;
+    shippingAddress?: string | null;
+  }): Promise<{ success: boolean; error?: string }> {
+    const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, '');
+    const ordersUrl = `${frontendUrl}/my-orders`;
+    const greeting = opts.fullName ? `Xin chào ${opts.fullName},` : 'Xin chào,';
+    const money = (n: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
+    const paidAtStr = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'long', timeStyle: 'short' }).format(opts.paidAt);
+    const hasPhysical = opts.orderType === 'PHYSICAL' || opts.orderType === 'MIXED';
+    const hasDigital = opts.orderType === 'DIGITAL' || opts.orderType === 'MIXED';
+
+    const itemRows = opts.items.map((it) => `
+      <div class="receipt-row">
+        <span class="receipt-label">${it.name} × ${it.quantity}</span>
+        <span class="receipt-value">${money(it.total)}</span>
+      </div>`).join('');
+
+    const deliveryNote = hasPhysical
+      ? `<p>Đơn hàng của bạn đang được <strong>chuẩn bị và đóng gói</strong>. Chúng tôi sẽ cập nhật trạng thái giao hàng${opts.shippingAddress ? ` tới: <strong>${opts.shippingAddress}</strong>` : ''}.</p>`
+      : '';
+    const digitalNote = hasDigital
+      ? `<p>Sản phẩm số của bạn đã sẵn sàng — mở mục <strong>Đơn hàng của tôi</strong> để tải file / xem tài khoản-mã và hướng dẫn sử dụng.</p>`
+      : '';
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 40px 0; }
+    .container { max-width: 560px; margin: 0 auto; background: #1a1b2e; border-radius: 16px; padding: 40px; }
+    h1 { color: #a78bfa; font-size: 24px; margin: 0 0 16px; }
+    p { color: #cbd5e1; line-height: 1.6; margin: 0 0 16px; }
+    .button { display: inline-block; padding: 14px 32px; background: linear-gradient(90deg, #6366f1, #a855f7); color: #fff !important; text-decoration: none; border-radius: 12px; font-weight: 600; margin: 16px 0; }
+    .receipt { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 20px; margin: 24px 0; }
+    .receipt-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .receipt-row:last-child { border-bottom: none; }
+    .receipt-label { color: #94a3b8; font-size: 14px; }
+    .receipt-value { color: #e2e8f0; font-weight: 600; font-size: 14px; }
+    .footer { color: #64748b; font-size: 12px; margin-top: 32px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Đặt hàng thành công!</h1>
+    <p>${greeting}</p>
+    <p>Cảm ơn bạn đã mua sắm tại <strong>CuongThai</strong>. Đơn hàng <strong>${opts.orderCode}</strong> đã được thanh toán.</p>
+    <div class="receipt">
+      ${itemRows}
+      <div class="receipt-row"><span class="receipt-label">Tạm tính</span><span class="receipt-value">${money(opts.subtotal)}</span></div>
+      ${opts.shippingFee > 0 ? `<div class="receipt-row"><span class="receipt-label">Phí giao hàng</span><span class="receipt-value">${money(opts.shippingFee)}</span></div>` : ''}
+      <div class="receipt-row"><span class="receipt-label">Tổng cộng</span><span class="receipt-value">${money(opts.total)}</span></div>
+      <div class="receipt-row"><span class="receipt-label">Thời gian</span><span class="receipt-value">${paidAtStr}</span></div>
+    </div>
+    ${digitalNote}
+    ${deliveryNote}
+    <p style="text-align: center; margin: 32px 0;">
+      <a href="${ordersUrl}" class="button">Xem đơn hàng của tôi</a>
+    </p>
+    <div class="footer">© ${new Date().getFullYear()} CuongThai. All rights reserved.</div>
+  </div>
+</body>
+</html>`.trim();
+
+    return this.send({
+      to: opts.to,
+      subject: `Xác nhận đơn hàng — ${opts.orderCode}`,
+      html,
+      text: `${greeting}\n\nĐơn hàng ${opts.orderCode} đã thanh toán.\nTổng cộng: ${money(opts.total)}\nThời gian: ${paidAtStr}\n\nXem đơn hàng: ${ordersUrl}`,
+    });
+  }
+
+  /**
    * Course refund confirmation — sent when an admin issues a refund.
    * Includes the amount returned, the original order code, and the
    * admin's reason. We DO NOT promise a refund timeline here because

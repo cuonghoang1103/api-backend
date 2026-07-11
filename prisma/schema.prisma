@@ -1084,8 +1084,7 @@ model Product {
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
-  category   ProductCategory? @relation(fields: [categoryId], references: [id])
-  orderItems ShopOrderItem[]
+  category ProductCategory? @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId], name: "idx_products_category")
   @@index([active], map: "idx_products_active")
@@ -1136,8 +1135,12 @@ model ShopOrderItem {
   fileUrl      String? @map("file_url") @db.VarChar(500)
   credentials  String? @db.Text
 
-  order   ShopOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product?  @relation(fields: [productName], references: [name])
+  order ShopOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // NOTE: productName/productImage/price/fileUrl are DENORMALIZED snapshots of
+  // the product at purchase time — intentionally NOT a live FK to Product, so
+  // a product can be renamed or deleted without breaking order history. The
+  // fulfillment path matches products by name separately (no relation needed).
 
   @@index([orderId], name: "idx_order_items_order")
   @@map("shop_order_items")

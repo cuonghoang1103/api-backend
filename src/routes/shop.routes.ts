@@ -399,10 +399,23 @@ router.put('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), asyn
 router.delete('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
   try {
     const id = parseInt(req.params.id, 10);
+    if (!Number.isInteger(id)) throw new AppError('ID san pham khong hop le', 400);
     const existing = await prisma.product.findUnique({ where: { id } });
     if (!existing) throw new AppError('Product not found', 404);
 
-    await prisma.product.delete({ where: { id } });
+    try {
+      await prisma.product.delete({ where: { id } });
+    } catch (e) {
+      // P2003 = FK still references this product (e.g. an old order row on a
+      // DB where the FK-drop migration hasn't run). Order items keep their own
+      // name snapshot, so it's safe to just deactivate instead of hard-delete.
+      if ((e as { code?: string })?.code === 'P2003') {
+        await prisma.product.update({ where: { id }, data: { active: false } });
+        res.json({ success: true, message: 'San pham dang duoc tham chieu boi don hang cu — da an khoi cua hang.' });
+        return;
+      }
+      throw e;
+    }
     res.json({ success: true, message: 'Product deleted successfully' });
   } catch (error) { next(error); }
 });

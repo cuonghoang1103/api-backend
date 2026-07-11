@@ -82,10 +82,6 @@ const SPEC_TEMPLATES: Record<string, SpecTemplate[]> = {
   ],
 };
 
-// Fallback category names used only until the admin-managed categories load
-// (or if none exist yet). Real categories come from the DB (adminGetCategories).
-const FALLBACK_CATEGORIES = ['Web Template', 'Tools', 'Software', 'Accounts', 'Ebook'];
-
 function getSpecTemplates(category: string): SpecTemplate[] {
   return SPEC_TEMPLATES[category as keyof typeof SPEC_TEMPLATES] ?? SPEC_TEMPLATES.default;
 }
@@ -100,7 +96,7 @@ const emptyProduct = {
   price: 0,
   originalPrice: 0,
   thumbnail: '',
-  category: 'Web Template' as string,
+  category: '' as string,
   rating: 5,
   reviewCount: 0,
   description: '',
@@ -285,9 +281,10 @@ export default function AdminShopPage() {
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [dbCategories, setDbCategories] = useState<AdminCategoryResponse[]>([]);
   const [page, setPage] = useState(0);
-  // Category names for the filter tabs + product-form dropdown. Prefer the
-  // admin-managed categories; fall back to the static list until they load.
-  const categoryNames = dbCategories.length > 0 ? dbCategories.map((c) => c.name) : FALLBACK_CATEGORIES;
+  // Category names for the filter tabs + product-form dropdown — ONLY the
+  // real admin-managed categories (no phantom demo names). Empty until the
+  // admin creates some in the category manager.
+  const categoryNames = dbCategories.map((c) => c.name);
   const loadCategories = () => { adminGetCategories().then(setDbCategories).catch(() => {}); };
   const [pageSize] = useState(8);
 
@@ -846,9 +843,16 @@ export default function AdminShopPage() {
                     }}
                     className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50 cursor-pointer"
                   >
-                    {/* Ensure the current value is selectable even if it's not in the managed list yet */}
-                    {(categoryNames.includes(productForm.category) ? categoryNames : [productForm.category, ...categoryNames]).map((c) => <option key={c} value={c}>{c}</option>)}
+                    <option value="">— Chưa phân loại —</option>
+                    {/* Real categories; keep the current value selectable even if not in the managed list */}
+                    {(productForm.category && !categoryNames.includes(productForm.category)
+                      ? [productForm.category, ...categoryNames]
+                      : categoryNames
+                    ).map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
+                  {categoryNames.length === 0 && (
+                    <p className="text-[11px] text-text-muted mt-1">Chưa có danh mục — thêm ở mục &quot;Danh mục sản phẩm&quot; phía trên.</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-text-muted mb-1.5">{t('admin.shop.price')} (VND)</label>

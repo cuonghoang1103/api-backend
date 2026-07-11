@@ -46,3 +46,10 @@ export function unlockScroll(): void {
   document.documentElement.style.overflow = prevHtmlOverflow;
   document.body.style.paddingRight = prevBodyPaddingRight;
 }
+
+/** True while any overlay (modal / menu / sidebar) has the page scroll locked.
+ *  Used by the home feed's pull-to-refresh so its window-level touch handlers
+ *  don't hijack scrolling INSIDE an open overlay (menu stuck-at-bottom bug). */
+export function isScrollLocked(): boolean {
+  return locks > 0;
+}

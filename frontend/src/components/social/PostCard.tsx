@@ -32,6 +32,7 @@ import { useMessagingStore } from '@/store/messagingStore';
 import { getMediaUrl } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { linkifyToNodes } from '@/lib/linkify';
+import { playPop } from '@/lib/uiSound';
 import SmartImage from '@/components/ui/SmartImage';
 import { getFeedSound, setFeedSound, subscribeFeedSound } from '@/lib/feedVideoSound';
 import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext, FeedSaveResult } from '@/types/social';
@@ -296,6 +297,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
     // Facebook-style: the comment button opens the dedicated comment
     // modal (centered dialog on desktop, full-screen sheet on mobile)
     // instead of expanding inline. The modal loads the comments.
+    playPop(); // one clean sound on open, like Facebook
     useSocialStore.getState().openCommentModal(post.id);
   };
 

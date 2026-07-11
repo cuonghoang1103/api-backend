@@ -34,6 +34,8 @@ import { Menu, Loader2, Search, Sparkles, Users, X, RotateCw } from 'lucide-reac
 import SocialBackground from '@/components/social/SocialBackground';
 import TheaterMode from '@/components/social/TheaterMode';
 import MiniChatDock from '@/components/social/MiniChatDock';
+import { isScrollLocked } from '@/lib/scrollLock';
+import { playPop } from '@/lib/uiSound';
 
 export default function SocialPage() {
   // Subscribe only to the fields this page renders (with a shallow compare)
@@ -283,50 +285,11 @@ export default function SocialPage() {
   const PULL_MAX = 90; // clamp so the spinner never flies off-screen
   const PULL_REST = 56; // spinner offset while the refresh is running
 
-  // Short, subtle two-note "refresh" blip via the Web Audio API — no
-  // asset file needed. Skipped under reduced-motion and wrapped in
-  // try/catch so a missing/blocked AudioContext never blocks the
-  // refresh itself.
-  const playRefreshBlip = useCallback(() => {
-    if (reducedMotion) return;
-    try {
-      const AC =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-      if (!AC) return;
-      const ctx = new AC();
-      const now = ctx.currentTime;
-      const master = ctx.createGain();
-      master.gain.value = 0.15; // low volume
-      master.connect(ctx.destination);
-      const notes = [
-        { f: 660, t: now, d: 0.075 },
-        { f: 880, t: now + 0.075, d: 0.075 },
-      ];
-      notes.forEach(({ f, t, d }) => {
-        const osc = ctx.createOscillator();
-        const g = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(f, t);
-        // Quick attack/decay so each note is a soft blip.
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.exponentialRampToValueAtTime(1, t + 0.01);
-        g.gain.exponentialRampToValueAtTime(0.0001, t + d);
-        osc.connect(g);
-        g.connect(master);
-        osc.start(t);
-        osc.stop(t + d + 0.02);
-      });
-      // Close the context shortly after the blip finishes.
-      window.setTimeout(() => { ctx.close().catch(() => {}); }, 300);
-    } catch {
-      /* audio unavailable — ignore, never block refresh */
-    }
-  }, [reducedMotion]);
-
   const doRefresh = useCallback(async () => {
-    // Fire-and-forget blip (not awaited so audio never delays the fetch).
-    playRefreshBlip();
+    // One clean "pop" (fire-and-forget so audio never delays the fetch),
+    // then reload the newest posts from all users into the feed — a single
+    // professional sound, not the old two-note "tạch tạch" blip.
+    playPop();
     try {
       // Reuse the feed's existing refresh: reload newest posts into the
       // store (what the list renders from) + sync the TanStack cache.
@@ -335,7 +298,7 @@ export default function SocialPage() {
     } catch {
       /* loadFeed swallows its own errors into store.error; ignore here */
     }
-  }, [playRefreshBlip]);
+  }, []);
 
   useEffect(() => {
     if (!isTouch) return;
@@ -344,6 +307,10 @@ export default function SocialPage() {
     const onTouchStart = (e: TouchEvent) => {
       // Only arm when already at the very top and not mid-refresh.
       if (refreshingRef.current) return;
+      // Never arm while an overlay (menu / comment modal / sidebar) has the
+      // page scroll-locked — otherwise this window-level handler hijacks
+      // scrolling INSIDE the overlay (the menu-stuck-at-bottom bug).
+      if (isScrollLocked()) return;
       if (window.scrollY > 0) return;
       if (e.touches.length !== 1) return;
       pullStartYRef.current = e.touches[0].clientY;
@@ -422,6 +389,7 @@ export default function SocialPage() {
 
     const onWheel = (e: WheelEvent) => {
       if (refreshingRef.current) return;
+      if (isScrollLocked()) { if (pullActiveRef.current) { pullActiveRef.current = false; setPullY(0); } return; }
       // Not at the top, or scrolling DOWN → normal scroll; clear any pull.
       if (window.scrollY > 0 || e.deltaY >= 0) {
         if (pullActiveRef.current) { pullActiveRef.current = false; setPullY(0); }
@@ -647,7 +615,9 @@ export default function SocialPage() {
               width={32}
               height={32}
               className={`h-8 w-8 ${refreshing && !reducedMotion ? 'ptr-panda animate-spin' : ''}`}
-              style={!refreshing ? { transform: `rotate(${pullY * 3}deg)` } : undefined}
+              // Smooth the rotation while pulling so the desktop wheel-pull
+              // doesn't look like a "ratcheting" wheel (each wheel step jumped).
+              style={!refreshing ? { transform: `rotate(${pullY * 2}deg)`, transition: 'transform 0.12s ease-out' } : undefined}
             />
           </div>
         </div>

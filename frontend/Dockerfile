@@ -43,7 +43,13 @@ FROM node:22-slim AS builder
 
 WORKDIR /app
 
-ENV NODE_OPTIONS="--max-old-space-size=3072"
+# 2048 (was 3072): `next build` static generation spawns MULTIPLE worker
+# processes, each inheriting this NODE_OPTIONS heap cap. At 3072 the workers'
+# combined heaps spiked past the 6GB VPS's available RAM during the
+# static-generation phase and the OS OOM-killer killed the build (exit 137),
+# even though the single-process webpack compile fit fine. A 2048 cap keeps the
+# per-worker peak low enough that the whole build stays within available RAM.
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Copy cached node_modules from deps stage

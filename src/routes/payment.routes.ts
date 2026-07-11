@@ -1029,14 +1029,15 @@ router.post('/vnpay/ipn', vnpayIpnGuard, handleVnpayIpn);
 router.get('/order/:orderCode', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const { orderCode } = req.params;
-    const order = await prisma.courseOrder.findUnique({
-      where: { orderCode },
-      include: {
-        course: {
-          select: { id: true, slug: true, title: true },
-        },
-      },
-    });
+    const courseSel = { course: { select: { id: true, slug: true, title: true } } };
+    let order = await prisma.courseOrder.findUnique({ where: { orderCode }, include: courseSel });
+    // PayOS rewrites the return URL's `orderCode` to ITS numeric orderCode
+    // (= our CourseOrder.id), so /payment/return polls e.g. /order/37. Fall
+    // back to an id lookup when the param is all digits and the string
+    // orderCode didn't match — otherwise the poll 404s and spins forever.
+    if (!order && /^\d+$/.test(orderCode)) {
+      order = await prisma.courseOrder.findUnique({ where: { id: parseInt(orderCode, 10) }, include: courseSel });
+    }
     if (!order) {
       throw new AppError('Order khong ton tai', 404);
     }

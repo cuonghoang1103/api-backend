@@ -2428,6 +2428,11 @@ export const paymentApi = {
   createPaymentQr(orderId: number, orderType: 'COURSE' | 'PRODUCT') {
     return api.post('/payments/create-qr', { orderId, orderType });
   },
+  // PayOS (primary). Creates a checkout link for an existing course order
+  // → { checkoutUrl }. Returns 503 if PayOS isn't configured yet.
+  createPayos(orderCode: string) {
+    return api.post<{ data: { checkoutUrl: string; qrCode: string; orderCode: string } }>('/payments/payos/create', { orderCode });
+  },
   // Poll order status after redirect from VNPay
   getOrderStatus(orderCode: string) {
     return api.get(`/payments/order/${encodeURIComponent(orderCode)}`);

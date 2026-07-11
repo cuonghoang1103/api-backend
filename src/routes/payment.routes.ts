@@ -36,6 +36,8 @@ import { AppError } from '../middleware/errorHandler.js';
 import { vnpayIpnGuard } from '../middleware/vnpayIpnGuard.js';
 import { emailService } from '../services/email.service.js';
 import { logger } from '../utils/logger.js';
+import { config } from '../config/env.js';
+import { createPayosLink, getPayosLink, verifyPayosWebhook, isPayosConfigured } from '../config/payos.js';
 import {
   buildCoursePaymentUrl,
   buildVnpayPaymentUrl,
@@ -679,6 +681,117 @@ router.post('/create-qr', orderCreateLimiter, authenticate, async (req: Request,
     });
   } catch (error) {
     next(error);
+  }
+});
+
+// ─── PayOS (primary course payment gateway) ─────────────────
+// Reusable: mark a course order PAID and enroll the buyer. Atomic
+// PENDING→PAID guard makes it idempotent (safe under webhook retries).
+async function markCourseOrderPaidAndEnroll(orderId: number, meta: { txnNo?: string; payDate?: Date }): Promise<'paid' | 'already' | 'notfound'> {
+  const order = await prisma.courseOrder.findUnique({ where: { id: orderId } });
+  if (!order) return 'notfound';
+  if (order.status === 'PAID') return 'already';
+
+  let receiptCtx: { to: string; fullName: string | null; courseTitle: string; courseSlug: string } | null = null;
+  let flippedOk = false;
+
+  await prisma.$transaction(async (tx) => {
+    const flipped = await tx.courseOrder.updateMany({
+      where: { id: order.id, status: 'PENDING' },
+      data: { status: 'PAID', paymentTxnNo: meta.txnNo ?? null, paymentPayDate: meta.payDate ?? new Date(), enrolled: true },
+    });
+    if (flipped.count !== 1) return;
+    flippedOk = true;
+    const [user, course] = await Promise.all([
+      tx.user.findUnique({ where: { id: order.userId }, select: { email: true, fullName: true } }),
+      tx.course.findUnique({ where: { id: order.courseId }, select: { title: true, slug: true, enrollmentDurationDays: true } }),
+    ]);
+    const durationDays = course?.enrollmentDurationDays ?? 0;
+    const expiresAt = durationDays > 0 ? new Date(Date.now() + durationDays * 86_400_000) : null;
+    await tx.enrollment.upsert({
+      where: { userId_courseId: { userId: order.userId, courseId: order.courseId } },
+      create: { userId: order.userId, courseId: order.courseId, source: 'PAID', expiresAt },
+      update: { status: 'ACTIVE', source: 'PAID', expiresAt },
+    });
+    await tx.course.update({ where: { id: order.courseId }, data: { totalStudents: { increment: 1 } } });
+    if (user && course) receiptCtx = { to: user.email, fullName: user.fullName, courseTitle: course.title, courseSlug: course.slug };
+  });
+
+  if (receiptCtx) {
+    const c = receiptCtx as { to: string; fullName: string | null; courseTitle: string; courseSlug: string };
+    try {
+      await emailService.sendCourseReceiptEmail({
+        to: c.to, fullName: c.fullName ?? undefined, orderCode: order.orderCode,
+        courseTitle: c.courseTitle, courseSlug: c.courseSlug, amount: Number(order.amount), paidAt: meta.payDate ?? new Date(),
+      });
+    } catch (err) { logger.error('receipt email failed', { error: err instanceof Error ? err.message : String(err) }); }
+  }
+  return flippedOk ? 'paid' : 'already';
+}
+
+// Create a PayOS checkout link for an existing PENDING course order.
+// Body: { orderCode }  →  { checkoutUrl, qrCode }
+router.post('/payos/create', orderCreateLimiter, authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    if (!isPayosConfigured()) throw new AppError('PayOS chua duoc cau hinh', 503, 'PAYOS_NOT_CONFIGURED');
+    const orderCode = String((req.body as { orderCode?: unknown })?.orderCode || '');
+    const order = await prisma.courseOrder.findUnique({ where: { orderCode }, include: { course: { select: { title: true } } } });
+    if (!order) throw new AppError('Don hang khong ton tai', 404);
+    if (order.userId !== req.userId!) throw new AppError('Ban khong co quyen thanh toan don hang nay', 403);
+    if (order.status !== 'PENDING') throw new AppError(`Don hang da o trang thai ${order.status}`, 409);
+
+    const returnUrl = `${config.frontendUrl}/payment/return?orderCode=${encodeURIComponent(order.orderCode)}`;
+    const cancelUrl = `${config.frontendUrl}/payment/return?orderCode=${encodeURIComponent(order.orderCode)}&cancel=1`;
+
+    let link;
+    try {
+      // orderCode for PayOS = the numeric CourseOrder.id (unique per order).
+      link = await createPayosLink({
+        orderCode: order.id,
+        amount: Number(order.amount),
+        description: `Khoa hoc #${order.id}`,
+        returnUrl,
+        cancelUrl,
+      });
+    } catch (e) {
+      // 231 = orderCode already has a link (retry) → fetch the existing one.
+      if ((e as Error & { payosCode?: string })?.payosCode === '231') {
+        link = await getPayosLink(order.id);
+      }
+      if (!link) throw e;
+    }
+
+    await prisma.courseOrder.update({ where: { id: order.id }, data: { paymentMethod: 'PAYOS' } });
+    res.json({ success: true, data: { checkoutUrl: link.checkoutUrl, qrCode: link.qrCode, orderCode: order.orderCode } });
+  } catch (error) { next(error); }
+});
+
+// PayOS server-to-server webhook. Verifies the signature, then marks the
+// order paid + enrolls (success) or failed. Always 200 so PayOS stops retrying.
+router.post('/payos/webhook', async (req: Request, res: Response) => {
+  try {
+    const body = req.body as { data?: Record<string, unknown>; signature?: string };
+    if (!body?.data) { res.json({ success: true }); return; } // registration ping
+    if (!verifyPayosWebhook(body)) { res.status(400).json({ success: false, message: 'invalid signature' }); return; }
+
+    const data = body.data;
+    const orderId = Number(data.orderCode);
+    if (orderId) {
+      if (String(data.code) === '00') {
+        await markCourseOrderPaidAndEnroll(orderId, {
+          txnNo: String(data.reference || data.paymentLinkId || ''),
+          payDate: new Date(),
+        });
+        logger.info('payos webhook PAID', { orderId, ref: data.reference });
+      } else {
+        const o = await prisma.courseOrder.findUnique({ where: { id: orderId }, select: { id: true, status: true } });
+        if (o && o.status === 'PENDING') await prisma.courseOrder.update({ where: { id: o.id }, data: { status: 'FAILED' } });
+      }
+    }
+    res.json({ success: true });
+  } catch (err) {
+    logger.error('payos webhook error', { error: err instanceof Error ? err.message : String(err) });
+    res.json({ success: true });
   }
 });
 

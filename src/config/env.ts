@@ -133,6 +133,11 @@ const envSchema = z.object({
   // YouTube
   YOUTUBE_API_KEY: z.string().optional().default(''),
 
+  // PayOS (primary course payment gateway)
+  PAYOS_CLIENT_ID: z.string().optional().default(''),
+  PAYOS_API_KEY: z.string().optional().default(''),
+  PAYOS_CHECKSUM_KEY: z.string().optional().default(''),
+
   // Public base URL
   PUBLIC_BASE_URL: z.string().url().default('https://api.cuongthai.com'),
 
@@ -277,6 +282,13 @@ export const config = {
 
   // YouTube
   youtubeApiKey: env.YOUTUBE_API_KEY,
+
+  // PayOS
+  payos: {
+    clientId: env.PAYOS_CLIENT_ID,
+    apiKey: env.PAYOS_API_KEY,
+    checksumKey: env.PAYOS_CHECKSUM_KEY,
+  },
 
   // Public base URL
   publicBaseUrl: env.PUBLIC_BASE_URL,

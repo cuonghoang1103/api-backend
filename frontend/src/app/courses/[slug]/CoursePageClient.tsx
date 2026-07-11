@@ -234,7 +234,7 @@ function OldCourseAccessOptions({
               </div>
 
               <div className="px-4 pb-4 space-y-3 pt-3">
-                {/* VNPay */}
+                {/* Online payment — PayOS (primary), auto-falls back to VNPay */}
                 <button
                   onClick={handleBuyCourse}
                   disabled={buying}
@@ -244,8 +244,8 @@ function OldCourseAccessOptions({
                     ? <Loader2 className="w-4 h-4 text-neon-violet animate-spin" />
                     : <CreditCard className="w-4 h-4 text-neon-violet" />}
                   <div className="text-left">
-                    <p className="text-sm font-medium text-text-primary">Thanh toán VNPay</p>
-                    <p className="text-xs text-text-muted">Mua ngay – {priceLabel}</p>
+                    <p className="text-sm font-medium text-text-primary">Thanh toán online (PayOS)</p>
+                    <p className="text-xs text-text-muted">Mua ngay – {priceLabel} · QR/ATM/Visa</p>
                   </div>
                 </button>
 
@@ -408,10 +408,21 @@ export default function CourseDetailPage() {
     setBuying(true);
     try {
       const res = await paymentApi.createCourseOrder(course.id);
-      const { paymentUrl } = res.data.data;
-      // Redirect to VNPay gateway. The user pays (QR/ATM/Visa) and
-      // lands back on /payment/return which polls for status.
-      window.location.href = paymentUrl;
+      const { orderCode, paymentUrl } = res.data.data as { orderCode: string; paymentUrl?: string };
+      // PayOS is the PRIMARY gateway. Fall back to VNPay only when PayOS
+      // isn't configured yet (503) or its link creation fails — so the buy
+      // flow keeps working until the PayOS credentials are added.
+      try {
+        const p = await paymentApi.createPayos(orderCode);
+        window.location.href = p.data.data.checkoutUrl;
+        return;
+      } catch (payErr: unknown) {
+        if (paymentUrl) {
+          window.location.href = paymentUrl; // VNPay fallback
+          return;
+        }
+        throw payErr;
+      }
     } catch (err: unknown) {
       const e = err as { response?: { data?: { message?: string } } };
       toast.error(e?.response?.data?.message || 'Khong the tao don thanh toan');

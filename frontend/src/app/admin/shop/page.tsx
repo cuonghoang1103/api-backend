@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Plus, Search, Trash2, X, Loader2,
   Edit, Star, Flame, Sparkles, CheckCircle2,
@@ -512,6 +512,41 @@ export default function AdminShopPage() {
     const res = await fileApi.upload(file, category);
     const url = res.data?.data?.url;
     return typeof url === 'string' ? url : null;
+  };
+
+  // ── Guidance editor helpers (image paste + "tại đây" links) ──
+  const guidanceRef = useRef<HTMLTextAreaElement>(null);
+  const [guidanceUploading, setGuidanceUploading] = useState(false);
+
+  const insertGuidance = (snippet: string) => {
+    const el = guidanceRef.current;
+    const cur = productForm.guidance;
+    if (!el) { setProductForm((f) => ({ ...f, guidance: (cur ? cur + '\n' : '') + snippet })); return; }
+    const start = el.selectionStart ?? cur.length;
+    const end = el.selectionEnd ?? cur.length;
+    const next = cur.slice(0, start) + snippet + cur.slice(end);
+    setProductForm((f) => ({ ...f, guidance: next }));
+    requestAnimationFrame(() => { el.focus(); const pos = start + snippet.length; el.setSelectionRange(pos, pos); });
+  };
+
+  const uploadGuidanceImage = async (file: File) => {
+    setGuidanceUploading(true);
+    try {
+      const url = await uploadFile(file, 'products');
+      if (url) insertGuidance(`\n![](${url})\n`);
+      else toast.error('Tải ảnh thất bại');
+    } catch { toast.error('Tải ảnh thất bại'); }
+    finally { setGuidanceUploading(false); }
+  };
+
+  const onGuidancePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const item = Array.from(e.clipboardData.items).find((i) => i.type.startsWith('image/'));
+    if (item) { e.preventDefault(); const file = item.getAsFile(); if (file) await uploadGuidanceImage(file); }
+  };
+
+  const insertGuidanceLink = () => {
+    const url = window.prompt('Dán URL — khi hiển thị sẽ là chữ “tại đây” để khách bấm:');
+    if (url?.trim()) insertGuidance(`[tại đây](${url.trim()})`);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1087,15 +1122,38 @@ export default function AdminShopPage() {
                   Hướng dẫn & Bảo hành
                   <span className="ml-1 text-text-muted font-normal">(hiển thị ở Tab 3)</span>
                 </label>
+                {/* Toolbar: insert image + "tại đây" link */}
+                <div className="flex flex-wrap gap-2 mb-2">
+                  <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-darkbg border border-darkborder rounded-lg text-xs text-text-secondary hover:border-neon-violet/40 cursor-pointer transition-colors">
+                    {guidanceUploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+                    Chèn ảnh
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={guidanceUploading}
+                      onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadGuidanceImage(f); e.target.value = ''; }}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={insertGuidanceLink}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-darkbg border border-darkborder rounded-lg text-xs text-text-secondary hover:border-neon-violet/40 transition-colors"
+                  >
+                    <Tag className="w-3.5 h-3.5" /> Chèn link “tại đây”
+                  </button>
+                </div>
                 <textarea
+                  ref={guidanceRef}
                   value={productForm.guidance}
                   onChange={(e) => setProductForm((f) => ({ ...f, guidance: e.target.value }))}
-                  rows={5}
-                  placeholder={`## Hướng dẫn cài đặt\n\n1. Giải nén file ZIP\n2. Chạy lệnh cài đặt...\n\n## Bảo hành\n\n- Hoàn tiền trong 7 ngày\n- Hỗ trợ qua email`}
+                  onPaste={onGuidancePaste}
+                  rows={6}
+                  placeholder={`## Hướng dẫn cài đặt\n\n1. Giải nén file ZIP\n2. Xem video hướng dẫn [tại đây](https://...)\n\nDán ảnh trực tiếp vào đây để chèn ảnh minh hoạ.\n\n## Bảo hành\n- Hoàn tiền trong 7 ngày`}
                   className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none font-mono"
                 />
                 <p className="text-[10px] text-text-muted mt-1">
-                  Hỗ trợ Markdown đơn giản: ## Tiêu đề, **bold**, `code`, - danh sách
+                  Dán ảnh trực tiếp để chèn. Link hiển thị dạng chữ: <code className="text-neon-violet">[tại đây](https://link)</code>. Hỗ trợ ## Tiêu đề, **đậm**, - danh sách.
                 </p>
               </div>
 

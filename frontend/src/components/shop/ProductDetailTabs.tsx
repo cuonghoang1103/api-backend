@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import type { Product, ProductSpec } from '@/types';
 import { useTranslation } from '@/hooks/useTranslation';
-import { sanitizeHtml } from '@/lib/utils';
+import ProductMarkdown from './ProductMarkdown';
 
 type TabId = 'overview' | 'specs' | 'guidance';
 
@@ -84,46 +84,6 @@ function SpecTable({ specs, category }: { specs?: ProductSpec[]; category: strin
       ))}
     </div>
   );
-}
-
-// ─── Guidance Renderer ─────────────────────────────────────────────────────────
-function parseSimpleMarkdown(text: string): string {
-  if (!text) return '';
-  return text
-    .replace(/^## (.+)$/gm,
-      '<h3 class="text-base font-bold text-text-primary mt-6 mb-3 flex items-center gap-2"><span class="w-1 h-5 rounded-full shrink-0" style="background:linear-gradient(180deg,#a855f7,#ec4899)"></span>$1</h3>')
-    .replace(/^### (.+)$/gm,
-      '<h4 class="text-sm font-semibold text-neon-violet mt-4 mb-2">$1</h4>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-neon-violet font-semibold">$1</strong>')
-    .replace(/`([^`]+)`/g,
-      '<code class="px-1.5 py-0.5 rounded text-xs" style="background:rgba(139,92,246,0.12);color:#c4b5fd">$1</code>')
-    .replace(/^(\d+)\. (.+)$/gm,
-      '<li class="flex items-start gap-2.5 text-text-secondary my-1.5 text-sm list-none"><span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5" style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#818cf8">$1</span>$2</li>')
-    .replace(/^- (.+)$/gm,
-      '<li class="flex items-start gap-2.5 text-text-secondary my-1.5 text-sm"><span class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style="background:linear-gradient(135deg,#a855f7,#ec4899)"></span>$1</li>')
-    .replace(/^---$/gm,
-      '<hr class="my-5 border-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(168,85,247,0.3),transparent)" />')
-    .replace(/\n\n/g, '</p><p class="text-text-secondary leading-relaxed mt-3 text-sm">')
-    .replace(/^(?!<[hla]|<code|<li|<hr)(.+)$/gm, '$1');
-}
-
-function renderGuidance(text: string): string {
-  if (!text) return '';
-  const paragraphs = text.split(/\n\n+/);
-  return paragraphs
-    .map((p) => {
-      const trimmed = p.trim();
-      if (!trimmed) return '';
-      if (
-        trimmed.startsWith('<h') ||
-        trimmed.startsWith('<li') ||
-        trimmed.startsWith('<hr')
-      ) {
-        return trimmed;
-      }
-      return `<p class="text-text-secondary leading-relaxed mt-3 text-sm">${parseSimpleMarkdown(trimmed)}</p>`;
-    })
-    .join('\n');
 }
 
 // ─── Main Component ────────────────────────────────────────────────────────────
@@ -199,11 +159,7 @@ export default function ProductDetailTabs({ product }: ProductDetailTabsProps) {
                 <BookOpen className="w-5 h-5" style={{ color: c.primary }} />
                 Mô tả sản phẩm
               </h3>
-              <div
-                className="text-sm leading-relaxed"
-                style={{ color: c.textSecondary }}
-                dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.description || '') }}
-              />
+              <ProductMarkdown content={product.description || ''} />
             </div>
 
             {/* Feature bullets */}
@@ -329,10 +285,7 @@ export default function ProductDetailTabs({ product }: ProductDetailTabsProps) {
                   borderColor: c.border,
                 }}
               >
-                <div
-                  className="text-sm"
-                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(renderGuidance(product.guidance)) }}
-                />
+                <ProductMarkdown content={product.guidance} />
               </div>
             ) : (
               <div

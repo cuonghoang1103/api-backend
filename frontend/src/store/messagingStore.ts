@@ -1139,9 +1139,9 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
         content: message.content,
         senderId: message.senderId,
         createdAt: message.createdAt,
-        hasAttachment: message.attachments.length > 0,
-        attachmentMime: message.attachments[0]?.mimeType,
-        attachmentName: message.attachments[0]?.fileName,
+        hasAttachment: (message.attachments?.length ?? 0) > 0,
+        attachmentMime: message.attachments?.[0]?.mimeType,
+        attachmentName: message.attachments?.[0]?.fileName,
       };
       // Bump lastMessage + unreadCount on the matching row.
       // We re-sort the list because lastMessageAt changes and

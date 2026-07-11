@@ -35,6 +35,7 @@ import {
   updatePresence,
   updateCoverPhoto,
   getSuggestedUsers,
+  getNetworkUsers,
   searchMentionableUsers,
   discoverUsers,
 } from '../services/follow.service.js';
@@ -59,6 +60,24 @@ router.get(
     try {
       const limit = Math.min(parseInt(req.query.limit as string, 10) || 10, 20);
       const users = await getSuggestedUsers(req.user.userId!, limit);
+      res.json({ success: true, data: users });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ─── GET /api/v1/users/network ─────────────────────────────
+// The viewer's real connections: ACCEPTED friends ∪ people they
+// follow (de-duplicated, online first). Backs the home "Bạn bè"
+// sidebar. MUST be defined BEFORE /:id (same reason as /suggestions).
+router.get(
+  '/network',
+  authenticate,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string, 10) || 30, 50);
+      const users = await getNetworkUsers(req.user.userId!, limit);
       res.json({ success: true, data: users });
     } catch (error) {
       next(error);

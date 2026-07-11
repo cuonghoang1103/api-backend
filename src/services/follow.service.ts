@@ -12,7 +12,7 @@
  */
 
 import { prisma } from '../config/database.js';
-import { getStatus, getStatusMap, type FriendStatus } from './friend.service.js';
+import { getStatus, getStatusMap, getAcceptedFriendIds, type FriendStatus } from './friend.service.js';
 
 /** Online threshold: a user is considered "online" if they were
  * active within this many seconds. Matches Socket.IO ping interval
@@ -278,6 +278,50 @@ export async function updateCoverPhoto(userId: number, coverPhotoUrl: string): P
     where: { id: userId },
     data: { coverPhotoUrl },
   });
+}
+
+// ─── Get "My Network" (accepted friends ∪ people I follow) ───
+
+/**
+ * The union of the viewer's ACCEPTED friends (both directions) and everyone
+ * they follow, de-duplicated. This backs the home "Bạn bè" sidebar, which must
+ * show only people the user actually has a relationship with — NOT the
+ * who-to-follow suggestions (`getSuggestedUsers`), which deliberately surfaces
+ * strangers and therefore looked like "all users" on a small site.
+ * Online users are returned first, then most-recently-active.
+ */
+export async function getNetworkUsers(
+  userId: number,
+  limit = 30,
+): Promise<FollowerInfo[]> {
+  const [friendIds, following] = await Promise.all([
+    getAcceptedFriendIds(userId),
+    prisma.follow.findMany({ where: { followerId: userId }, select: { followingId: true } }),
+  ]);
+  const ids = new Set<number>([...friendIds, ...following.map((f) => f.followingId)]);
+  ids.delete(userId);
+  if (ids.size === 0) return [];
+
+  const users = await prisma.user.findMany({
+    where: { id: { in: [...ids] }, enabled: true },
+    select: { id: true, username: true, displayName: true, avatarUrl: true, lastActiveAt: true },
+  });
+
+  return users
+    .sort((a, b) => {
+      const onlineDelta = Number(isOnline(b.lastActiveAt)) - Number(isOnline(a.lastActiveAt));
+      if (onlineDelta !== 0) return onlineDelta;
+      return (b.lastActiveAt?.getTime() ?? 0) - (a.lastActiveAt?.getTime() ?? 0);
+    })
+    .slice(0, limit)
+    .map((u) => ({
+      id: u.id,
+      username: u.username,
+      displayName: u.displayName,
+      avatarUrl: u.avatarUrl,
+      isOnline: isOnline(u.lastActiveAt),
+      followedAt: u.lastActiveAt ?? new Date(0),
+    }));
 }
 
 // ─── Get People Suggestions (who to follow) ─────────────────

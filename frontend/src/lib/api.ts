@@ -413,7 +413,7 @@ export interface NoteShare {
 export interface NoteShareRecipientMini {
   id: number;
   username: string;
-  email: string;
+  email?: string; // no longer returned by search-users (PII); kept optional for recipient payloads
   avatarUrl: string | null;
   displayName: string | null;
 }
@@ -638,6 +638,9 @@ export const socialUserApi = {
   getFollowing: (id: number, cursor?: number, limit = 20) =>
     api.get(`/users/${id}/following`, { params: { cursor, limit } }),
   getSuggestions: (limit = 10) => api.get('/users/suggestions', { params: { limit } }),
+  // "My network": accepted friends ∪ people I follow (online first). Backs the
+  // home "Bạn bè" sidebar — real connections only, not who-to-follow.
+  getNetwork: (limit = 30) => api.get('/users/network', { params: { limit } }),
   // Phase 5 home upgrade: @mention autocomplete. Drives the dropdown
   // in the post + comment composer. Followed users ranked first.
   searchMentions: (q: string, limit = 8) =>

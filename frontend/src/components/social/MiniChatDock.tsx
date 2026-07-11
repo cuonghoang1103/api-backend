@@ -146,21 +146,41 @@ function MiniChatDockInner() {
     if (!isAuthenticated) return;
     try {
       const threadId = await useMessagingStore.getState().startUserThread(peerId);
+      // Reconcile the peer from the authoritative thread record (startUserThread
+      // ran loadThreads()). The sidebar-supplied avatar/name can be null or
+      // stale; the thread's peer carries the canonical values, which fixes the
+      // "header shows initials instead of the real avatar" case.
+      const storeThread = useMessagingStore
+        .getState()
+        .threads.find((t) => t.id === threadId || t.peer?.id === peerId);
+      const canonicalPeer = storeThread?.peer;
       setWindows((prev) =>
         prev.map((w) =>
           w.peer.id === peerId
-            ? { ...w, threadId, historyLoading: true }
+            ? {
+                ...w,
+                threadId,
+                historyLoading: true,
+                peer: canonicalPeer
+                  ? {
+                      ...w.peer,
+                      avatarUrl: canonicalPeer.avatarUrl ?? w.peer.avatarUrl,
+                      displayName: canonicalPeer.displayName ?? w.peer.displayName,
+                      username: canonicalPeer.username ?? w.peer.username,
+                    }
+                  : w.peer,
+              }
             : w,
         ),
       );
-      // Make sure the socket is connected (idempotent singleton)
-      // before we ask loadThreadMessages to join the room. We don't
-      // need the resolved `socket` here — loadThreadMessages calls
-      // joinThread(threadId) internally which is queue-safe.
-      await connectSocket();
-      // Fetch + cache + join + markRead. Reuses the same REST + cache
-      // + socket plumbing the /messages page uses, just without
-      // setting currentThreadId.
+      // Connect the socket for live updates, but DON'T await it here: if
+      // connectSocket() rejects/times out it must not abort the history fetch
+      // below (that left the dock permanently on the empty "start a
+      // conversation" state). loadThreadMessages' internal joinThread is
+      // queue-safe and joins the room once the socket comes up.
+      connectSocket().catch(() => {});
+      // Fetch + cache + join + markRead via the same REST + cache plumbing the
+      // /messages page uses, just without setting currentThreadId.
       await useMessagingStore.getState().loadThreadMessages(threadId);
       setWindows((prev) =>
         prev.map((w) =>

@@ -16,8 +16,6 @@ import {
   BookmarkCheck,
   Plus,
   Loader2,
-  UserPlus,
-  UserCheck,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useEffect, useState } from 'react';
@@ -364,29 +362,20 @@ interface SuggestedUser {
 
 function FriendsSection() {
   const { user } = useAuthStore();
-  const [suggestedUsers, setSuggestedUsers] = useState<SuggestedUser[]>([]);
+  // "My network": accepted friends ∪ people I follow — real connections only.
+  // (Previously used getSuggestions, the who-to-follow list, which surfaced
+  // strangers and looked like "all users".)
+  const [friends, setFriends] = useState<SuggestedUser[]>([]);
   const [loading, setLoading] = useState(false);
-  const [followingIds, setFollowingIds] = useState<ReadonlySet<number>>(new Set<number>());
 
   useEffect(() => {
     if (!user) return;
     setLoading(true);
-    socialUserApi.getSuggestions(10)
-      .then((r: any) => setSuggestedUsers(r.data?.data ?? []))
+    socialUserApi.getNetwork(30)
+      .then((r: any) => setFriends(r.data?.data ?? []))
       .catch(() => {/* ignore */})
       .finally(() => setLoading(false));
   }, [user]);
-
-  const handleFollow = async (targetId: number) => {
-    try {
-      const res = await socialUserApi.toggleFollow(targetId);
-      const data = res.data?.data;
-      if (data?.isFollowing) {
-        setFollowingIds(prev => new Set([...Array.from(prev), targetId]));
-        setSuggestedUsers(prev => prev.filter(u => u.id !== targetId));
-      }
-    } catch { /* ignore */ }
-  };
 
   if (!user) return null;
 
@@ -400,9 +389,12 @@ function FriendsSection() {
           <div className="px-3 py-3 text-center">
             <Loader2 size={14} className="animate-spin mx-auto text-text-muted" />
           </div>
-        ) : suggestedUsers.length === 0 ? null : (
-          suggestedUsers.map(u => {
-            const isFollowing = followingIds.has(u.id);
+        ) : friends.length === 0 ? (
+          <div className="px-3 py-3 text-center text-[11px] text-text-muted/70 leading-relaxed">
+            Chưa có bạn bè. Kết bạn hoặc theo dõi ai đó để họ hiện ở đây.
+          </div>
+        ) : (
+          friends.map(u => {
             // Prefer the friendly displayName; fall back to the username.
             // The grey secondary line is always the raw @username so the
             // user can still reference the handle when searching for the
@@ -468,32 +460,12 @@ function FriendsSection() {
                     {u.username}
                   </p>
                 </div>
-                {!isFollowing && (
-                  <span
-                    role="button"
-                    tabIndex={-1}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      void handleFollow(u.id);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        void handleFollow(u.id);
-                      }
-                    }}
-                    className="shrink-0 rounded-lg p-1 text-text-muted hover:text-neon-violet hover:bg-[var(--bg-surface-hover)] transition-all"
-                    title="Theo dõi"
-                  >
-                    <UserPlus size={14} />
-                  </span>
-                )}
-                {isFollowing && (
-                  <span className="shrink-0 text-neon-violet">
-                    <UserCheck size={14} />
-                  </span>
-                )}
+                {/* Chat affordance — the whole row already opens the mini
+                    chat; this icon just signals it (FB-style). These are
+                    already-connected people, so no follow button here. */}
+                <span className="shrink-0 rounded-lg p-1 text-text-muted opacity-0 group-hover:opacity-100 group-hover:text-neon-violet transition-all">
+                  <MessageCircle size={14} />
+                </span>
               </button>
             );
           })

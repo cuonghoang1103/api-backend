@@ -198,9 +198,16 @@ export default function CyberPlaylist() {
         state.togglePlay();
         return;
       }
-      const idx = tracks.indexOf(track);
-      if (idx < 0) return;
-      playTrackAtIndex(idx);
+      // Match by id, NOT reference: history rows come from `recentlyPlayed`,
+      // which rebuilds fresh objects on reload, so `indexOf(track)` returned
+      // -1 and the click did nothing. Fall back to a direct play when the
+      // track isn't in the current playlist (same as handlePlayLikedTrack).
+      const idx = tracks.findIndex((t) => t.id === track.id);
+      if (idx >= 0) {
+        playTrackAtIndex(idx);
+      } else {
+        state.playTrack(track);
+      }
     },
     [tracks, playTrackAtIndex],
   );

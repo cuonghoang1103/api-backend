@@ -1,6 +1,7 @@
 import { Router, type Response } from 'express';
 import type { ApiResponse } from '../types/index.js';
 import { listActiveProviders, getAllCircuitStates, resetCircuitManually } from '../services/aiProviders.js';
+import { authenticate, requireAdmin } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -11,7 +12,7 @@ router.get('/health', async (_req, res: Response<ApiResponse>) => {
 
 // ─── GET /api/v1/system/ai-providers ─────────────────
 // Lists active AI providers (those with API keys set) for admin debug.
-router.get('/ai-providers', async (_req, res: Response<ApiResponse>) => {
+router.get('/ai-providers', authenticate, requireAdmin(), async (_req, res: Response<ApiResponse>) => {
   const providers = listActiveProviders();
   const circuits = getAllCircuitStates();
   res.json({
@@ -26,7 +27,7 @@ router.get('/ai-providers', async (_req, res: Response<ApiResponse>) => {
 
 // ─── POST /api/v1/system/ai-providers/reset-circuit ────
 // Manually reset circuit breaker (admin tool, dùng khi cần recover nhanh)
-router.post('/ai-providers/reset-circuit', async (req, res: Response<ApiResponse>) => {
+router.post('/ai-providers/reset-circuit', authenticate, requireAdmin(), async (req, res: Response<ApiResponse>) => {
   const { provider } = req.body as { provider?: string };
   if (provider) {
     resetCircuitManually(provider);
@@ -40,7 +41,7 @@ router.post('/ai-providers/reset-circuit', async (req, res: Response<ApiResponse
 
 // ─── GET /api/v1/system/gemini-models ─────────────────
 // Debug endpoint: tests which model names are valid on the v1beta endpoint
-router.get('/gemini-models', async (_req, res: Response<ApiResponse>) => {
+router.get('/gemini-models', authenticate, requireAdmin(), async (_req, res: Response<ApiResponse>) => {
   const testModels = ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-3-flash', 'gemini-3.5-flash'];
   const results: Record<string, string> = {};
   for (const model of testModels) {

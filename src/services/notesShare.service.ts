@@ -323,9 +323,11 @@ export async function searchUsersToShare(
       AND: [
         { id: { not: currentUserId } },
         {
+          // Match on public identifiers only. Matching on `email` let a
+          // caller confirm/enumerate other users' email addresses by probing
+          // the search box; usernames/display names are the public handles.
           OR: [
             { username: { contains: query, mode: 'insensitive' } },
-            { email: { contains: query, mode: 'insensitive' } },
             { displayName: { contains: query, mode: 'insensitive' } },
             { fullName: { contains: query, mode: 'insensitive' } },
           ],
@@ -335,7 +337,6 @@ export async function searchUsersToShare(
     select: {
       id: true,
       username: true,
-      email: true,
       avatarUrl: true,
       displayName: true,
       fullName: true,

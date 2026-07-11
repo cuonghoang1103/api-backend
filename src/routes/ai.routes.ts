@@ -279,6 +279,19 @@ router.get('/chat/history/:sessionId', optionalAuth, async (req: any, res: Respo
     const { sessionId } = req.params;
     if (!sessionId) throw new AppError('Session ID required', 400);
 
+    // Ownership check (mirror of the DELETE route): a session that belongs
+    // to a user may only be read by that user. Anonymous sessions
+    // (userId = null, created before login) stay readable by anyone holding
+    // the id — that's the anonymous chat case. Without this an IDOR let any
+    // caller read another user's conversation by its session id.
+    const session = await prisma.chatSession.findUnique({
+      where: { id: sessionId },
+      select: { userId: true },
+    });
+    if (session?.userId && session.userId !== req.user?.userId) {
+      throw new AppError('You are not allowed to view this session', 403, 'FORBIDDEN');
+    }
+
     const messages = await aiService.getChatHistory(sessionId);
     res.json({ success: true, data: messages });
   } catch (error) {

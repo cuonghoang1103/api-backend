@@ -330,6 +330,12 @@ const CATEGORY_STYLES: Record<Category, { bg: string; text: string; border: stri
   Interviews: { bg: 'bg-neon-fuchsia/10',   text: 'text-neon-fuchsia',   border: 'border-neon-fuchsia/20',   emoji: '🎯' },
 };
 
+// Runtime fallback: the backend could return a category not in the `Category`
+// union (e.g. a newly added one). Without this, `style.bg`/`style.emoji` below
+// would throw and crash the whole grid. TS thinks the lookup is always defined,
+// so we coerce through `?? DEFAULT_CATEGORY_STYLE`.
+const DEFAULT_CATEGORY_STYLE = { bg: 'bg-neon-violet/10', text: 'text-neon-violet', border: 'border-neon-violet/20', emoji: '🏷️' };
+
 const FALLBACK_GRADIENTS = [
   'from-neon-indigo to-neon-violet',
   'from-neon-cyan to-neon-blue',
@@ -370,9 +376,9 @@ function ArticleCard({
   isExpanded: boolean;
   onToggleExpand: () => void;
 }) {
-  const style = CATEGORY_STYLES[article.category];
+  const style = CATEGORY_STYLES[article.category] ?? DEFAULT_CATEGORY_STYLE;
   const spanClass = article.isFeatured ? 'md:col-span-2' : 'md:col-span-1';
-  const displayCover = article.coverEmoji || CATEGORY_DEFAULT_EMOJI[article.category];
+  const displayCover = article.coverEmoji || CATEGORY_DEFAULT_EMOJI[article.category] || DEFAULT_CATEGORY_STYLE.emoji;
 
   return (
     <motion.article

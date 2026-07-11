@@ -1249,9 +1249,25 @@ router.get('/:courseId/lessons/:lessonId', optionalAuth, async (req, res: Respon
   } catch (error) { next(error); }
 });
 
-router.get('/lessons/:lessonId/assignments', async (req, res: Response<ApiResponse>, next) => {
+router.get('/lessons/:lessonId/assignments', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
     const lessonId = parseInt(req.params.lessonId, 10);
+    if (isNaN(lessonId)) throw new AppError('Invalid lesson id', 400);
+
+    // Paywall: assignments (instructions, deadlines) are paid content. Without
+    // this gate a guest could enumerate lesson ids and read assignments for any
+    // paid/unpublished course. Resolve the lesson's course + free-preview flag
+    // and apply the same access check as the lesson-detail route.
+    const lessonMeta = await prisma.lesson.findUnique({
+      where: { id: lessonId },
+      select: { isFreePreview: true, section: { select: { courseId: true } } },
+    });
+    if (!lessonMeta?.section) throw new AppError('Lesson not found', 404);
+    const access = await assertCanAccessCourseContent(req.userId, lessonMeta.section.courseId, 'preview');
+    if (!lessonMeta.isFreePreview && !access.isEnrolled) {
+      throw new AppError('Vui long dang ky khoa hoc de xem noi dung nay', req.userId ? 402 : 401);
+    }
+
     const assignments = await prisma.assignment.findMany({
       where: { lessonId },
       orderBy: { sortOrder: 'asc' },

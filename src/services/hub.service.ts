@@ -1174,7 +1174,7 @@ function isPrivateIp(ipRaw: string): boolean {
  * fetch()'s own resolution (TOCTOU) — fully closing that needs IP pinning
  * via a custom dispatcher; tracked as a follow-up.
  */
-async function assertPublicHost(hostname: string): Promise<void> {
+export async function assertPublicHost(hostname: string): Promise<void> {
   const h = hostname.replace(/^\[|\]$/g, '').toLowerCase();
   if (!h || h === 'localhost' || h.endsWith('.localhost') || h.endsWith('.local') || h.endsWith('.internal')) {
     throw new Error('blocked internal host');

@@ -30,6 +30,7 @@ import fs from 'fs/promises';
 import { config } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 import { uploadAudio, uploadImage } from '../storage/uploadService.js';
+import { assertPublicHost } from './hub.service.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -72,7 +73,18 @@ export async function downloadImageToR2(
 ): Promise<string | null> {
   if (!imageUrl || !/^https?:\/\//.test(imageUrl)) return null;
   try {
-    const resp = await fetch(imageUrl, { signal: AbortSignal.timeout(15_000) });
+    // SSRF guard: block internal hostnames / private-IP targets before
+    // fetching an admin-supplied cover url (mirrors hub.service's importer).
+    // Without it, a cover like http://169.254.169.254/... would hit internal
+    // metadata endpoints from the server.
+    let parsedHost: string;
+    try {
+      parsedHost = new URL(imageUrl).hostname;
+    } catch {
+      return null;
+    }
+    await assertPublicHost(parsedHost);
+    const resp = await fetch(imageUrl, { redirect: 'error', signal: AbortSignal.timeout(15_000) });
     if (!resp.ok) return null;
     const buffer = Buffer.from(await resp.arrayBuffer());
     if (buffer.length === 0) return null;

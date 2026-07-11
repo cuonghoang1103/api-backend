@@ -146,8 +146,15 @@ export class MessagesService {
     // enforce this when no existing thread exists — once two
     // users have a thread, they can keep using it.
     const [a, b] = userId < peerId ? [userId, peerId] : [peerId, userId];
+    // If a duplicate pair-thread ever got created (documented race — see
+    // startUserThread on the client), `findFirst` with no ordering could
+    // return the EMPTY duplicate while the real history lives on the other
+    // row, which surfaces as "chat shows no messages". Prefer the thread with
+    // the most recent activity (nulls — never-used threads — sort last) so the
+    // populated thread always wins.
     const existing = await prisma.messageThread.findFirst({
       where: { type: 'USER', userAId: a, userBId: b },
+      orderBy: { lastMessageAt: { sort: 'desc', nulls: 'last' } },
       include: this.threadIncludeForViewer(userId),
     });
     if (existing) return existing;

@@ -239,9 +239,9 @@ export default function MessageBubble({
           />
         )}
 
-        {message.attachments.length > 0 && (
+        {(message.attachments?.length ?? 0) > 0 && (
           <div className={cn('mt-1 space-y-1.5 px-3.5 pb-1.5', message.content ? 'border-t border-white/10 pt-1.5' : '')}>
-            {message.attachments.map((a) => {
+            {message.attachments!.map((a) => {
               const resolvedUrl = resolveUrl(a.url);
               if (a.mimeType.startsWith('image/')) {
                 return (

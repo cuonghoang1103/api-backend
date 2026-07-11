@@ -55,7 +55,21 @@ export default function VerticalVideoFeed({ startPostId, videoCategoryId }: { st
       try {
         const res = await socialApi.getFeed({ type: 'VIDEO', limit: 8, videoCategoryId });
         if (cancelled) return;
-        const data = (res.data?.data ?? []) as SocialPost[];
+        let data = (res.data?.data ?? []) as SocialPost[];
+        // Seed the reel on the requested post even when it isn't on the newest
+        // page — e.g. opening a SAVED (older) video. Without this the viewer
+        // fell back to data[0] (the newest video) and never showed the one the
+        // user actually opened.
+        if (startPostId && !data.some((p) => p.id === startPostId)) {
+          try {
+            const one = await socialApi.getPost(startPostId);
+            if (cancelled) return;
+            const post = ((one.data as { data?: SocialPost })?.data ?? one.data) as SocialPost;
+            if (post?.id) data = [post, ...data.filter((p) => p.id !== post.id)];
+          } catch {
+            /* fall back to newest if the post can't be fetched */
+          }
+        }
         setPosts(data);
         setCursor(res.data?.pagination?.nextCursor ?? null);
         setHasMore(res.data?.pagination?.hasNextPage ?? false);

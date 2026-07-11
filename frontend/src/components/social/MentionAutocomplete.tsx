@@ -123,17 +123,24 @@ export default function MentionAutocomplete({
       setToken(t);
     };
     recompute();
+    // Defer close on blur so a click on a suggestion still fires first.
+    // NOTE: must be a NAMED handler and removed in cleanup — this effect
+    // re-runs on every keystroke (`value` dep), so an anonymous blur listener
+    // (which removeEventListener can't target) leaked one listener per char.
+    let blurTimer: ReturnType<typeof setTimeout> | null = null;
+    const onBlur = () => {
+      blurTimer = setTimeout(() => setToken(null), 150);
+    };
     el.addEventListener('input', recompute);
     el.addEventListener('keyup', recompute);
     el.addEventListener('click', recompute);
-    el.addEventListener('blur', () => {
-      // Defer close so click on a suggestion still fires.
-      setTimeout(() => setToken(null), 150);
-    });
+    el.addEventListener('blur', onBlur);
     return () => {
       el.removeEventListener('input', recompute);
       el.removeEventListener('keyup', recompute);
       el.removeEventListener('click', recompute);
+      el.removeEventListener('blur', onBlur);
+      if (blurTimer) clearTimeout(blurTimer);
     };
   }, [textareaRef, enabled, value]);
 

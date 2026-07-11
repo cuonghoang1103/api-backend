@@ -792,7 +792,9 @@ export default function MusicAudioController() {
       // Some browsers don't fire timeupdate right at the end, so
       // `ended` is a safety net. `triggered` may already be true from
       // the timeupdate path, in which case next() was already called
-      // and we should not call it again.
+      // and we must NOT call it again — a double next() is exactly the
+      // "repeat-all skips a song on wrap" bug this guard prevents.
+      if (triggered) return;
       triggered = true;
       next();
     };

@@ -158,7 +158,11 @@ const nextConfig = {
               "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com https://*.giphy.com",
               "font-src 'self' data:",
               "connect-src 'self' wss://cuongthai.com https://cuongthai.com https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://*.sentry.io wss://*.sentry.io https://www.youtube.com https://api.giphy.com",
-              "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com",
+              // frame-src also allows R2 / media so lesson PDF (Bài tập/Đáp
+              // án) can render inline in an <iframe> — the doc download
+              // endpoint 302s to a signed R2 URL, and CSP applies to the
+              // final framed origin.
+              "frame-src 'self' blob: https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev",
               // `media-src` controls <audio>/<video> elements and
               // the Web Audio API. R2 music tracks are streamed
               // directly from the CDN (no backend hop), so the

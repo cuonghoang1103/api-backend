@@ -2467,7 +2467,14 @@ router.get(
       const provider = getStorageProvider();
       const key = provider.keyFromUrl(document.fileUrl);
       if (key) {
-        const signed = await provider.signedUrl(key, 300, document.title);
+        // ?inline=1 → sign WITHOUT a filename so no Content-Disposition
+        // attachment is set → the browser renders it inline (PDF viewer in
+        // an <iframe>) instead of forcing a download. Default keeps the
+        // attachment behaviour for the "Tải về" button.
+        const inline = String((req as any).query?.inline || '') === '1';
+        const signed = inline
+          ? await provider.signedUrl(key, 300)
+          : await provider.signedUrl(key, 300, document.title);
         return res.redirect(302, signed);
       }
       // Legacy local file (`/uploads/...`) — keep the old 302

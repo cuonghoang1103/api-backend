@@ -13,6 +13,10 @@ import { Download, Maximize2, FileText } from 'lucide-react';
 export default function LessonPdfViewer({ url, title }: { url: string; title?: string }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [tall, setTall] = useState(false);
+  // Inline variant (no attachment disposition) so the browser RENDERS the
+  // PDF in the iframe instead of downloading it. The plain `url` keeps the
+  // attachment behaviour for the "Tải về" button.
+  const inlineUrl = url + (url.includes('?') ? '&' : '?') + 'inline=1';
 
   const fullscreen = () => {
     const el = wrapRef.current;
@@ -40,7 +44,7 @@ export default function LessonPdfViewer({ url, title }: { url: string; title?: s
         </div>
       </div>
       <iframe
-        src={url}
+        src={inlineUrl}
         title={title || 'PDF'}
         className="w-full bg-white"
         style={{ height: tall ? '85vh' : '75vh' }}

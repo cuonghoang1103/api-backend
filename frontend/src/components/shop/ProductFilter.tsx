@@ -3,19 +3,23 @@
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
-import type { ProductCategory, PriceRange, SortOption } from '@/types';
+import type { PriceRange, SortOption } from '@/types';
 import { CATEGORIES, PRICE_RANGES, SORT_OPTIONS } from '@/data/products';
+
+interface CategoryOption { value: string; label: string }
 
 interface ProductFilterProps {
   search: string;
   onSearchChange: (value: string) => void;
-  category: ProductCategory | 'all';
-  onCategoryChange: (value: ProductCategory | 'all') => void;
+  category: string;
+  onCategoryChange: (value: string) => void;
   priceRange: PriceRange;
   onPriceRangeChange: (value: PriceRange) => void;
   sort: SortOption;
   onSortChange: (value: SortOption) => void;
   totalResults: number;
+  /** Dynamic (admin-managed) categories. Falls back to the static list. */
+  categories?: CategoryOption[];
 }
 
 const NEON = '#a855f7';
@@ -32,8 +36,12 @@ export default function ProductFilter({
   sort,
   onSortChange,
   totalResults,
+  categories,
 }: ProductFilterProps) {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const categoryOptions: CategoryOption[] = categories && categories.length > 0
+    ? categories
+    : (CATEGORIES as unknown as CategoryOption[]);
 
   const activeFiltersCount = [
     category !== 'all',
@@ -134,7 +142,7 @@ export default function ProductFilter({
         {/* Category + Price tabs — always visible on desktop, collapsible on mobile */}
         <LayoutGroup>
           <div className="hidden sm:flex gap-2 items-center flex-wrap mt-1 px-1 pb-1">
-            <FilterChips category={category} onCategoryChange={onCategoryChange} />
+            <FilterChips category={category} onCategoryChange={onCategoryChange} options={categoryOptions} />
             <div className="w-px h-4 mx-1" style={{ background: 'rgba(255,255,255,0.08)' }} />
             <PriceChips priceRange={priceRange} onPriceRangeChange={onPriceRangeChange} />
           </div>
@@ -153,7 +161,7 @@ export default function ProductFilter({
                 <div className="flex flex-col gap-3 p-3 rounded-xl mt-1" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
                   <div>
                     <p className="text-[10px] uppercase tracking-widest text-text-muted mb-2 font-semibold">Category</p>
-                    <FilterChips category={category} onCategoryChange={onCategoryChange} />
+                    <FilterChips category={category} onCategoryChange={onCategoryChange} options={categoryOptions} />
                   </div>
                   <div>
                     <p className="text-[10px] uppercase tracking-widest text-text-muted mb-2 font-semibold">Price</p>
@@ -205,16 +213,16 @@ export default function ProductFilter({
   );
 }
 
-function FilterChips({ category, onCategoryChange }: { category: string; onCategoryChange: (v: any) => void }) {
+function FilterChips({ category, onCategoryChange, options }: { category: string; onCategoryChange: (v: string) => void; options: CategoryOption[] }) {
   return (
     <div className="flex gap-1.5 flex-wrap max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:pb-1">
-      {CATEGORIES.map((cat) => {
+      {options.map((cat) => {
         const active = category === cat.value;
         return (
           <motion.button
             key={cat.value}
             layout
-            onClick={() => onCategoryChange(cat.value as any)}
+            onClick={() => onCategoryChange(cat.value)}
             className="relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer max-sm:shrink-0 max-sm:whitespace-nowrap"
             style={{
               background: active ? `${NEON}20` : 'transparent',

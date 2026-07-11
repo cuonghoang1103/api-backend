@@ -4,6 +4,7 @@ import { prisma } from '../config/database.js';
 import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
+import { reconcilePayosShopOrder, PAYOS_SHOP_ORDER_OFFSET } from '../services/shopFulfillment.js';
 
 const router = Router();
 
@@ -166,7 +167,7 @@ router.get('/products', async (req, res: Response<ApiResponse>, next) => {
     // omitted the page query (e.g. the admin reload fetcher
     // `getProducts({ size: 100 })`). Public `/shop` would show 0
     // products even though the total count was correct.
-    const { page = 0, size = 12, keyword, search, category, featured } = req.query;
+    const { page = 0, size = 12, keyword, search, category, featured, sort } = req.query;
     const pageNumber = Math.max(0, Number(page) || 0);
     const pageSize = Math.max(1, Number(size) || 12);
     const skip = pageNumber * pageSize;
@@ -176,8 +177,15 @@ router.get('/products', async (req, res: Response<ApiResponse>, next) => {
     if (category) where.category = { slug: String(category) };
     if (featured !== undefined) where.featured = String(featured) === 'true';
 
+    // Sort options for the shop grid. Default = newest first.
+    const orderBy =
+      sort === 'price_asc' ? { price: 'asc' as const }
+      : sort === 'price_desc' ? { price: 'desc' as const }
+      : sort === 'bestselling' ? { soldCount: 'desc' as const }
+      : { createdAt: 'desc' as const };
+
     const [products, total] = await Promise.all([
-      prisma.product.findMany({ where, skip, take: pageSize, orderBy: { createdAt: 'desc' }, include: { category: true } }),
+      prisma.product.findMany({ where, skip, take: pageSize, orderBy, include: { category: true } }),
       prisma.product.count({ where }),
     ]);
     res.json({ success: true, data: products.map(serializeProduct), pagination: { page: pageNumber, limit: pageSize, total, totalPages: Math.ceil(total / pageSize) } });
@@ -193,6 +201,44 @@ router.get('/products/:slug', async (req, res: Response<ApiResponse>, next) => {
     });
     if (!product || !product.active) throw new AppError('Product not found', 404);
     res.json({ success: true, data: serializeProduct(product) });
+  } catch (error) { next(error); }
+});
+
+// ─── GET /api/v1/shop/products/:slug/similar ──────────
+// "Sản phẩm tương tự": other active products in the same category (falls
+// back to newest overall if the product has no category), most-sold first.
+router.get('/products/:slug/similar', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const limit = Math.min(12, Math.max(1, parseInt(String(req.query.limit || '8'), 10)));
+    const product = await prisma.product.findUnique({
+      where: { slug: req.params.slug },
+      select: { id: true, categoryId: true },
+    });
+    if (!product) throw new AppError('Product not found', 404);
+
+    const baseWhere: Record<string, unknown> = { active: true, NOT: { id: product.id } };
+    let products = product.categoryId
+      ? await prisma.product.findMany({
+          where: { ...baseWhere, categoryId: product.categoryId },
+          take: limit,
+          orderBy: [{ soldCount: 'desc' }, { createdAt: 'desc' }],
+          include: { category: true },
+        })
+      : [];
+
+    // Backfill with newest products if the category didn't yield enough.
+    if (products.length < limit) {
+      const excludeIds = [product.id, ...products.map((p) => p.id)];
+      const fill = await prisma.product.findMany({
+        where: { active: true, NOT: { id: { in: excludeIds } } },
+        take: limit - products.length,
+        orderBy: { createdAt: 'desc' },
+        include: { category: true },
+      });
+      products = [...products, ...fill];
+    }
+
+    res.json({ success: true, data: products.map(serializeProduct) });
   } catch (error) { next(error); }
 });
 
@@ -245,6 +291,7 @@ router.post('/admin/products', authenticate, requireAdmin('ROLE_ADMIN'), async (
       featured,
       isHot,
       isNew,
+      categoryId: categoryIdInput,
       categoryName,
       fileUrl,
       specs,
@@ -255,7 +302,11 @@ router.post('/admin/products', authenticate, requireAdmin('ROLE_ADMIN'), async (
     if (!name?.trim()) throw new AppError('Product name is required', 400);
     if (price === undefined || Number(price) < 0) throw new AppError('Valid price is required', 400);
 
-    const categoryId = await resolveProductCategoryId(categoryName);
+    // Prefer an explicit categoryId (dropdown); fall back to categoryName
+    // (legacy free-text, which upserts a category).
+    const categoryId = categoryIdInput !== undefined && categoryIdInput !== null && categoryIdInput !== ''
+      ? Number(categoryIdInput)
+      : await resolveProductCategoryId(categoryName);
     const normalizedSlug = await ensureUniqueProductSlug(slug?.trim() || name, undefined);
 
     const created = await prisma.product.create({
@@ -303,6 +354,7 @@ router.put('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), asyn
       featured,
       isHot,
       isNew,
+      categoryId: categoryIdInput,
       categoryName,
       fileUrl,
       specs,
@@ -310,7 +362,10 @@ router.put('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), asyn
       active,
     } = req.body;
 
-    const categoryId = categoryName !== undefined ? await resolveProductCategoryId(categoryName) : existing.categoryId;
+    const categoryProvided = categoryIdInput !== undefined || categoryName !== undefined;
+    const categoryId = categoryIdInput !== undefined
+      ? (categoryIdInput === null || categoryIdInput === '' ? null : Number(categoryIdInput))
+      : (categoryName !== undefined ? await resolveProductCategoryId(categoryName) : existing.categoryId);
     const normalizedSlug = name || slug ? await ensureUniqueProductSlug(slug?.trim() || name || existing.name, id) : existing.slug;
 
     const updated = await prisma.product.update({
@@ -328,7 +383,7 @@ router.put('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), asyn
         ...(isHot !== undefined && { isHot: Boolean(isHot) }),
         ...(isNew !== undefined && { isNew: Boolean(isNew) }),
         ...(active !== undefined && { active: Boolean(active) }),
-        ...(categoryName !== undefined && { categoryId }),
+        ...(categoryProvided && { categoryId }),
         ...(fileUrl !== undefined && { fileUrl: fileUrl?.trim() || null }),
         ...(specs !== undefined && { specs: parseProductSpecs(specs) }),
         ...(guidance !== undefined && { guidance: guidance?.trim() || null }),
@@ -349,6 +404,91 @@ router.delete('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), a
 
     await prisma.product.delete({ where: { id } });
     res.json({ success: true, message: 'Product deleted successfully' });
+  } catch (error) { next(error); }
+});
+
+// ─── Admin: product categories CRUD ──────────────────
+// Lets the admin add/rename/reorder/delete shop categories freely
+// (tool / sách / tài liệu / sản phẩm thật / ...).
+async function ensureUniqueCategorySlug(name: string, excludeId?: number): Promise<string> {
+  const base = productSlugify(name) || `cat-${Date.now()}`;
+  let candidate = base;
+  let suffix = 1;
+  while (true) {
+    const existing = await prisma.productCategory.findFirst({
+      where: { slug: candidate, ...(excludeId ? { NOT: { id: excludeId } } : {}) },
+      select: { id: true },
+    });
+    if (!existing) return candidate;
+    candidate = `${base}-${suffix++}`;
+  }
+}
+
+// GET admin categories with product counts.
+router.get('/admin/categories', authenticate, requireAdmin('ROLE_ADMIN'), async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const categories = await prisma.productCategory.findMany({
+      orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+      include: { _count: { select: { products: true } } },
+    });
+    res.json({
+      success: true,
+      data: categories.map((c) => ({
+        id: c.id, name: c.name, slug: c.slug, description: c.description,
+        sortOrder: c.sortOrder, productCount: c._count.products,
+      })),
+    });
+  } catch (error) { next(error); }
+});
+
+router.post('/admin/categories', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const name = normalizeProductCategoryName(req.body?.name);
+    if (!name) throw new AppError('Ten danh muc khong duoc de trong', 400);
+    const dup = await prisma.productCategory.findFirst({ where: { name: { equals: name, mode: 'insensitive' } }, select: { id: true } });
+    if (dup) throw new AppError('Danh muc da ton tai', 409);
+    const created = await prisma.productCategory.create({
+      data: {
+        name,
+        slug: await ensureUniqueCategorySlug(name),
+        description: req.body?.description?.trim() || null,
+        sortOrder: Number.isFinite(Number(req.body?.sortOrder)) ? Number(req.body.sortOrder) : 0,
+      },
+    });
+    res.status(201).json({ success: true, data: created, message: 'Category created' });
+  } catch (error) { next(error); }
+});
+
+router.put('/admin/categories/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const existing = await prisma.productCategory.findUnique({ where: { id } });
+    if (!existing) throw new AppError('Category not found', 404);
+    const nextName = req.body?.name !== undefined ? normalizeProductCategoryName(req.body.name) : existing.name;
+    if (!nextName) throw new AppError('Ten danh muc khong duoc de trong', 400);
+    const updated = await prisma.productCategory.update({
+      where: { id },
+      data: {
+        name: nextName,
+        ...(req.body?.name !== undefined && nextName !== existing.name ? { slug: await ensureUniqueCategorySlug(nextName, id) } : {}),
+        ...(req.body?.description !== undefined && { description: req.body.description?.trim() || null }),
+        ...(req.body?.sortOrder !== undefined && { sortOrder: Number(req.body.sortOrder) || 0 }),
+      },
+    });
+    res.json({ success: true, data: updated, message: 'Category updated' });
+  } catch (error) { next(error); }
+});
+
+router.delete('/admin/categories/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const existing = await prisma.productCategory.findUnique({ where: { id } });
+    if (!existing) throw new AppError('Category not found', 404);
+    // Detach products first (categoryId is a nullable FK) so deleting a
+    // category never orphans / cascades products.
+    await prisma.product.updateMany({ where: { categoryId: id }, data: { categoryId: null } });
+    await prisma.productCategory.delete({ where: { id } });
+    res.json({ success: true, message: 'Category deleted' });
   } catch (error) { next(error); }
 });
 
@@ -557,6 +697,15 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
 // ─── GET /api/v1/shop/orders/my ─────────────────────
 router.get('/orders/my', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
   try {
+    // Reconcile recent PENDING PayOS orders against PayOS first (webhook may
+    // have lagged / not been wired), so the list reflects real paid state.
+    const pending = await prisma.shopOrder.findMany({
+      where: { userId: req.userId, status: 'PENDING', paymentMethod: 'PAYOS' },
+      select: { id: true, status: true, paymentMethod: true },
+      take: 20,
+    });
+    for (const o of pending) await reconcilePayosShopOrder(o);
+
     const orders = await prisma.shopOrder.findMany({
       where: { userId: req.userId },
       orderBy: { createdAt: 'desc' },
@@ -575,11 +724,28 @@ router.get('/orders/my', authenticate, async (req: any, res: Response<ApiRespons
 // status shape only.
 router.get('/orders/:code', optionalAuth, async (req: any, res: Response<ApiResponse>, next) => {
   try {
-    const order = await prisma.shopOrder.findUnique({
-      where: { orderCode: req.params.code },
+    const code = req.params.code;
+    let order = await prisma.shopOrder.findUnique({
+      where: { orderCode: code },
       include: { items: true },
     });
+    // PayOS rewrites the return URL's `orderCode` to ITS numeric code
+    // (PAYOS_SHOP_ORDER_OFFSET + ShopOrder.id). Recover the order from it so
+    // the shop return page can poll after a PayOS redirect.
+    if (!order && /^\d+$/.test(code)) {
+      const n = parseInt(code, 10);
+      const id = n >= PAYOS_SHOP_ORDER_OFFSET ? n - PAYOS_SHOP_ORDER_OFFSET : n;
+      order = await prisma.shopOrder.findUnique({ where: { id }, include: { items: true } });
+    }
     if (!order) throw new AppError('Order not found', 404);
+
+    // Webhook-independent confirmation: a still-PENDING PayOS order asks PayOS
+    // directly whether it was paid and fulfills, then we re-read so the poller
+    // immediately sees PAID (no "Đang xác nhận" spin forever).
+    if (order.status === 'PENDING' && order.paymentMethod === 'PAYOS') {
+      await reconcilePayosShopOrder(order);
+      order = (await prisma.shopOrder.findUnique({ where: { id: order.id }, include: { items: true } })) ?? order;
+    }
 
     const isOwner = order.userId != null && req.userId === order.userId;
     if (isOwner) {

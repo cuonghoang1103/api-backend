@@ -11,10 +11,11 @@ import {
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { useProductStore } from '@/store/productStore';
-import { adminCreateProduct, adminUpdateProduct, adminDeleteProduct, getProducts, mapProductFromBackend } from '@/lib/api/shop';
+import { adminCreateProduct, adminUpdateProduct, adminDeleteProduct, getProducts, mapProductFromBackend, adminGetCategories, type AdminCategoryResponse } from '@/lib/api/shop';
 import { fileApi } from '@/lib/api';
-import type { Product, ProductCategory, ProductSpec } from '@/types';
+import type { Product, ProductSpec } from '@/types';
 import ImageUpload from '@/components/admin/ImageUpload';
+import ShopCategoryManager from '@/components/admin/ShopCategoryManager';
 import { useTranslation } from '@/hooks/useTranslation';
 
 const REVALIDATE_SECRET = process.env.NEXT_PUBLIC_REVALIDATE_SECRET ?? '';
@@ -39,7 +40,7 @@ interface SpecTemplate {
   placeholderValue: string;
 }
 
-const SPEC_TEMPLATES: Record<ProductCategory | 'default', SpecTemplate[]> = {
+const SPEC_TEMPLATES: Record<string, SpecTemplate[]> = {
   'Accounts': [
     { placeholderLabel: 'Warranty Period', placeholderValue: '12 months' },
     { placeholderLabel: 'Login Method', placeholderValue: 'Email + Password' },
@@ -81,10 +82,12 @@ const SPEC_TEMPLATES: Record<ProductCategory | 'default', SpecTemplate[]> = {
   ],
 };
 
-const CATEGORIES: ProductCategory[] = ['Web Template', 'Tools', 'Software', 'Accounts', 'Ebook'];
+// Fallback category names used only until the admin-managed categories load
+// (or if none exist yet). Real categories come from the DB (adminGetCategories).
+const FALLBACK_CATEGORIES = ['Web Template', 'Tools', 'Software', 'Accounts', 'Ebook'];
 
-function getSpecTemplates(category: ProductCategory): SpecTemplate[] {
-  return SPEC_TEMPLATES[category] ?? SPEC_TEMPLATES.default;
+function getSpecTemplates(category: string): SpecTemplate[] {
+  return SPEC_TEMPLATES[category as keyof typeof SPEC_TEMPLATES] ?? SPEC_TEMPLATES.default;
 }
 
 function emptySpec(): ProductSpec {
@@ -97,7 +100,7 @@ const emptyProduct = {
   price: 0,
   originalPrice: 0,
   thumbnail: '',
-  category: 'Web Template' as ProductCategory,
+  category: 'Web Template' as string,
   rating: 5,
   reviewCount: 0,
   description: '',
@@ -138,7 +141,7 @@ function SpecsEditor({
 }: {
   specs: ProductSpec[];
   onChange: (specs: ProductSpec[]) => void;
-  category: ProductCategory;
+  category: string;
 }) {
   const templates = getSpecTemplates(category);
   const [showTemplates, setShowTemplates] = useState(false);
@@ -279,8 +282,13 @@ export default function AdminShopPage() {
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState<ProductCategory | 'all'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [dbCategories, setDbCategories] = useState<AdminCategoryResponse[]>([]);
   const [page, setPage] = useState(0);
+  // Category names for the filter tabs + product-form dropdown. Prefer the
+  // admin-managed categories; fall back to the static list until they load.
+  const categoryNames = dbCategories.length > 0 ? dbCategories.map((c) => c.name) : FALLBACK_CATEGORIES;
+  const loadCategories = () => { adminGetCategories().then(setDbCategories).catch(() => {}); };
   const [pageSize] = useState(8);
 
   // Form state
@@ -295,6 +303,7 @@ export default function AdminShopPage() {
   useEffect(() => {
     setMounted(true);
     if (!isLoaded) fetchProducts();
+    loadCategories();
   }, []);
 
   const reloadProducts = async () => {
@@ -553,6 +562,11 @@ export default function AdminShopPage() {
         </button>
       </div>
 
+      {/* Category manager */}
+      <div className="mb-6">
+        <ShopCategoryManager onChange={() => { loadCategories(); reloadProducts(); }} />
+      </div>
+
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-6">
         <div className="relative flex-1 min-w-[200px]">
@@ -576,7 +590,7 @@ export default function AdminShopPage() {
           >
             {t('admin.shop.all')}
           </button>
-          {CATEGORIES.map((cat) => (
+          {categoryNames.map((cat) => (
             <button
               key={cat}
               onClick={() => { setCategoryFilter(cat); setPage(0); }}
@@ -827,12 +841,13 @@ export default function AdminShopPage() {
                   <select
                     value={productForm.category}
                     onChange={(e) => {
-                      const cat = e.target.value as ProductCategory;
+                      const cat = e.target.value;
                       setProductForm((f) => ({ ...f, category: cat }));
                     }}
                     className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50 cursor-pointer"
                   >
-                    {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                    {/* Ensure the current value is selectable even if it's not in the managed list yet */}
+                    {(categoryNames.includes(productForm.category) ? categoryNames : [productForm.category, ...categoryNames]).map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>

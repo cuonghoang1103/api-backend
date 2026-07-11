@@ -157,6 +157,7 @@ export async function getProducts(params?: {
   category?: string;
   featured?: boolean;
   search?: string;
+  sort?: 'newest' | 'price_asc' | 'price_desc' | 'bestselling';
 }): Promise<PageResponse<ProductResponse>> {
   const sp = new URLSearchParams();
   if (params?.page !== undefined) sp.set('page', String(params.page));
@@ -164,6 +165,7 @@ export async function getProducts(params?: {
   if (params?.category) sp.set('category', params.category);
   if (params?.featured !== undefined) sp.set('featured', String(params.featured));
   if (params?.search) sp.set('search', params.search);
+  if (params?.sort) sp.set('sort', params.sort);
 
   const qs = sp.toString();
   const res = await request<ApiResponse<ProductResponse[]>>(
@@ -273,6 +275,28 @@ export async function createShopPaymentQr(
   });
 }
 
+/**
+ * Create a PayOS checkout link for an existing shop order (PRIMARY gateway).
+ * Returns the hosted `checkoutUrl` — redirect the browser to it. On return,
+ * PayOS sends the user to /shop/payment-return which polls the order status.
+ */
+export async function createShopPayos(
+  orderCode: string
+): Promise<ApiResponse<{ checkoutUrl: string; qrCode: string; orderCode: string }>> {
+  return request('/payments/payos/shop/create', {
+    method: 'POST',
+    body: JSON.stringify({ orderCode }),
+  });
+}
+
+// "Sản phẩm tương tự" — same category, most-sold first.
+export async function getSimilarProducts(slug: string, limit = 8): Promise<ProductResponse[]> {
+  const res = await request<ApiResponse<ProductResponse[]>>(
+    `/shop/products/${slug}/similar?limit=${limit}`
+  );
+  return Array.isArray(res.data) ? res.data : [];
+}
+
 export async function getMyOrders(): Promise<ApiResponse<OrderResponse[]>> {
   return request('/shop/orders/my');
 }
@@ -304,6 +328,40 @@ export async function adminDeleteProduct(
   return request(`/shop/admin/products/${id}`, {
     method: 'DELETE',
   });
+}
+
+// ─── Admin Categories ─────────────────────────────────────────────────────────
+
+export interface AdminCategoryResponse extends CategoryResponse {
+  productCount: number;
+}
+
+export async function adminGetCategories(): Promise<AdminCategoryResponse[]> {
+  const res = await request<ApiResponse<AdminCategoryResponse[]>>('/shop/admin/categories');
+  return Array.isArray(res.data) ? res.data : [];
+}
+
+export async function adminCreateCategory(
+  data: { name: string; description?: string; sortOrder?: number }
+): Promise<ApiResponse<CategoryResponse>> {
+  return request('/shop/admin/categories', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function adminUpdateCategory(
+  id: number,
+  data: { name?: string; description?: string; sortOrder?: number }
+): Promise<ApiResponse<CategoryResponse>> {
+  return request(`/shop/admin/categories/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function adminDeleteCategory(id: number): Promise<ApiResponse<void>> {
+  return request(`/shop/admin/categories/${id}`, { method: 'DELETE' });
 }
 
 // ─── Admin Orders ─────────────────────────────────────────────────────────────
@@ -400,7 +458,7 @@ export function mapProductFromBackend(bp: ProductResponse) {
     price: bp.price ?? 0,
     originalPrice: bp.originalPrice,
     thumbnail: bp.thumbnailUrl || '/images/products/default.jpg',
-    category: (bp.categoryName as 'Web Template' | 'Tools' | 'Software' | 'Accounts' | 'Ebook') || 'Web Template',
+    category: bp.categoryName || 'Khác',
     rating: 5,
     reviewCount: 0,
     description: bp.shortDescription || bp.description || '',

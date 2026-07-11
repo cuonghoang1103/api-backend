@@ -21,7 +21,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useProductStore } from '@/store/productStore';
 import { useCartStore } from '@/store/cartStore';
-import { getProductBySlug, getProducts, mapProductFromBackend } from '@/lib/api/shop';
+import { getProductBySlug, getSimilarProducts, mapProductFromBackend } from '@/lib/api/shop';
 import StarRating from '@/components/shop/StarRating';
 import ProductCard from '@/components/shop/ProductCard';
 import CartDrawer from '@/components/shop/CartDrawer';
@@ -49,7 +49,7 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const { products, fetchProducts, isLoaded } = useProductStore();
+  const { fetchProducts, isLoaded } = useProductStore();
   const addShopItem = useCartStore((state) => state.addShopItem);
 
   useEffect(() => {
@@ -61,12 +61,10 @@ export default function ProductDetailPage() {
 
         if (!isLoaded) await fetchProducts();
 
-        const allProds = await getProducts({ size: 100 });
-        const mapped = allProds.content.map(mapProductFromBackend);
-        const related = mapped
-          .filter((p) => p.category === mapProductFromBackend(bp).category && p.id !== String(bp.id))
-          .slice(0, 4);
-        setRelatedProducts(related);
+        // "Sản phẩm tương tự" — same category (server-side, most-sold first,
+        // backfilled with newest so the row is never empty).
+        const similar = await getSimilarProducts(slug, 8);
+        setRelatedProducts(similar.map(mapProductFromBackend));
       } catch {
         setProduct(null);
       } finally {

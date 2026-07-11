@@ -5,20 +5,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  ArrowLeft, ShieldCheck, CreditCard, Lock, Tag,
+  ArrowLeft, ShieldCheck, CreditCard, Tag,
   CheckCircle, XCircle, AlertCircle, Package,
-  BookOpen, Loader2, QrCode,
+  BookOpen, Loader2,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
-import { useOrderStore } from '@/store/orderStore';
-import { createOrder as apiCreateOrder, validateDiscount, createShopPaymentQr, getOrderByCode } from '@/lib/api/shop';
-import { generateInvoicePDF } from '@/lib/invoice';
-import PaymentQrModal, { type QrPaymentStatus } from '@/components/payment/PaymentQrModal';
+import { createOrder as apiCreateOrder, validateDiscount, createShopPayos } from '@/lib/api/shop';
 import type { BuyerInfo } from '@/types';
 import { toast } from 'sonner';
 import { useTranslation } from '@/hooks/useTranslation';
-import type { Order } from '@/types';
 
 function formatPrice(price: number): string {
   return new Intl.NumberFormat('vi-VN', {
@@ -28,13 +24,12 @@ function formatPrice(price: number): string {
   }).format(price);
 }
 
-type CheckoutStep = 'cart' | 'info' | 'payment' | 'success';
+type CheckoutStep = 'info' | 'payment';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { items, getTotalPrice, clearCart } = useCartStore();
-  const { saveBackendOrder } = useOrderStore();
+  const { items, getTotalPrice } = useCartStore();
 
   const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState<CheckoutStep>('info');
@@ -47,7 +42,6 @@ export default function CheckoutPage() {
   const [couponError, setCouponError] = useState('');
   const [couponLoading, setCouponLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [successOrderCode, setSuccessOrderCode] = useState('');
 
   const [buyerInfo, setBuyerInfo] = useState<BuyerInfo>({
     fullName: '',
@@ -58,18 +52,15 @@ export default function CheckoutPage() {
 
   const [errors, setErrors] = useState<Partial<BuyerInfo>>({});
 
-  const [qr, setQr] = useState<{ paymentUrl: string; orderCode: string; amount: number } | null>(null);
-  const [pendingOrder, setPendingOrder] = useState<Order | null>(null);
-
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mounted && items.length === 0 && step !== 'success') {
+    if (mounted && items.length === 0) {
       router.push('/cart');
     }
-  }, [mounted, items.length, step, router]);
+  }, [mounted, items.length, router]);
 
   const subtotal = getTotalPrice();
   const discountAmount = appliedCoupon?.discountAmount || 0;
@@ -144,8 +135,9 @@ export default function CheckoutPage() {
     }
   };
 
-  // Create the backend order from the current cart + buyer info.
-  // Shared by the simulated and VNPAY flows.
+  // Create the backend order from the current cart + buyer info. The backend
+  // recomputes prices/discount authoritatively — the client total is display
+  // only.
   const createBackendOrder = async () => {
     const orderItems = shopItems.map((item) => ({
       productId: parseInt(item.product.id),
@@ -167,143 +159,30 @@ export default function CheckoutPage() {
     return res.data;
   };
 
-  // Map a backend order payload to the local Order shape used by the store.
-  const buildLocalOrder = (backendOrder: any): Order => {
-    const backendItems = Array.isArray(backendOrder?.items) ? backendOrder.items : [];
-    return {
-      id: String(backendOrder.id), // numeric ID from backend for status updates
-      orderCode: backendOrder.orderCode, // display code
-      items: backendItems.map((item: any) => ({
-        id: String(item.id),
-        itemType: 'shop' as const,
-        name: item.productName,
-        thumbnail: item.productImage || '/images/products/default.jpg',
-        price: item.price,
-        quantity: item.quantity,
-        category: 'Web Template' as const,
-      })),
-      subtotal: backendOrder.subtotal,
-      discountAmount: backendOrder.discountAmount,
-      discountCode: backendOrder.discountCode,
-      total: backendOrder.total,
-      status: backendOrder.status as Order['status'],
-      buyerInfo,
-      createdAt: backendOrder.createdAt,
-      completedAt: backendOrder.paidAt,
-    };
-  };
-
-  // Finalize the success UI: persist, show success step, clear cart, invoice.
-  const finalizeSuccess = (order: Order) => {
-    saveBackendOrder(order);
-    setSuccessOrderCode(order.orderCode ?? '');
-    setStep('success');
-    clearCart();
-    generateInvoicePDF(order);
-    toast.success(t('checkout.paymentSuccess'));
-  };
-
-  const handleFakePayment = async () => {
+  // PayOS flow (primary): create the order → get the hosted checkout link →
+  // redirect. PayOS returns to /shop/payment-return which confirms + clears
+  // the cart + offers the invoice. Buyer info is stashed so the return page
+  // can print it on the invoice.
+  const handlePayosPayment = async () => {
     setIsProcessing(true);
     try {
       const backendOrder = await createBackendOrder();
-      const order = buildLocalOrder(backendOrder);
-      setIsProcessing(false);
-      finalizeSuccess(order);
+      try {
+        sessionStorage.setItem(
+          `shop_buyer_${backendOrder.orderCode}`,
+          JSON.stringify(buyerInfo),
+        );
+      } catch { /* sessionStorage may be unavailable — invoice still works without buyer PII */ }
+      const res = await createShopPayos(backendOrder.orderCode);
+      const checkoutUrl = res.data?.checkoutUrl;
+      if (!checkoutUrl) throw new Error('Không tạo được liên kết thanh toán');
+      window.location.href = checkoutUrl;
     } catch (err) {
       const message = err instanceof Error ? err.message : t('checkout.paymentError');
       setIsProcessing(false);
       toast.error(message);
     }
   };
-
-  // VNPAY-QR flow: create order → get QR payment URL → open modal → poll
-  // until the backend IPN confirms PAID, then finalize.
-  const handleVnpayPayment = async () => {
-    setIsProcessing(true);
-    try {
-      const backendOrder = await createBackendOrder();
-      const qrRes = await createShopPaymentQr(Number(backendOrder.id));
-      const data = (qrRes as any).data;
-      setPendingOrder(buildLocalOrder(backendOrder));
-      setQr({
-        paymentUrl: data.paymentUrl,
-        orderCode: backendOrder.orderCode,
-        amount: Number(data.amount ?? backendOrder.total),
-      });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : t('checkout.paymentError');
-      toast.error(message);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  // Poll the shop order status for the QR modal.
-  const pollShopStatus = async (): Promise<QrPaymentStatus> => {
-    if (!qr) return 'PENDING';
-    const res = await getOrderByCode(qr.orderCode);
-    const status = (res as any)?.data?.status as string | undefined;
-    if (status === 'PAID') return 'PAID';
-    if (status === 'CANCELLED' || status === 'FAILED') return 'FAILED';
-    return 'PENDING';
-  };
-
-  const handleShopPaid = () => {
-    const order = pendingOrder;
-    setQr(null);
-    setPendingOrder(null);
-    if (order) finalizeSuccess({ ...order, status: 'PAID' as Order['status'] });
-  };
-
-  if (step === 'success') {
-    return (
-      <div className="min-h-screen bg-darkbg pt-20">
-        <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', damping: 15 }}
-          >
-            <div className="w-24 h-24 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-14 h-14 text-green-400" />
-            </div>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <h1 className="text-3xl font-heading font-bold text-text-primary mb-3">
-              {t('checkout.paymentSuccess')}
-            </h1>
-            {successOrderCode && (
-              <p className="text-text-muted mb-2">
-                {t('checkout.orderCode')}: <span className="font-mono text-neon-violet">{successOrderCode}</span>
-              </p>
-            )}
-            <p className="text-text-muted mb-8">
-              {t('checkout.paymentSuccessDesc')}
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/my-orders"
-                className="px-6 py-3 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
-              >
-                {t('orders.title')}
-              </Link>
-              <Link
-                href="/shop"
-                className="px-6 py-3 bg-darkcard border border-darkborder text-text-primary font-semibold rounded-xl hover:border-neon-violet/30 transition-colors"
-              >
-                {t('common.shop')}
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-darkbg pt-20">
@@ -457,71 +336,39 @@ export default function CheckoutPage() {
                       <CreditCard className="w-5 h-5 text-neon-violet" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-text-primary">{t('checkout.simulatedPayment')}</p>
-                      <p className="text-xs text-text-muted">{t('checkout.simulatedPaymentDesc')}</p>
+                      <p className="text-sm font-semibold text-text-primary">Thanh toán qua PayOS</p>
+                      <p className="text-xs text-text-muted">Quét mã QR ngân hàng / ví — an toàn, tự động xác nhận</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-text-muted bg-darkcard rounded-lg p-3">
-                    <AlertCircle className="w-4 h-4 text-yellow-400 flex-shrink-0" />
-                    <span>{t('checkout.demoNote')}</span>
+                    <AlertCircle className="w-4 h-4 text-neon-violet flex-shrink-0" />
+                    <span>Bạn sẽ được chuyển sang cổng PayOS. Sau khi thanh toán, hệ thống tự động xác nhận và gửi sản phẩm.</span>
                   </div>
                 </div>
-                {/* Primary: VNPAY-QR (scan to pay) */}
                 <button
-                  onClick={handleVnpayPayment}
+                  onClick={handlePayosPayment}
                   disabled={isProcessing}
                   className="w-full mb-3 py-4 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-60"
                 >
                   {isProcessing ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      {t('contact.sending')}
+                      Đang chuyển tới cổng thanh toán…
                     </>
                   ) : (
                     <>
-                      <QrCode className="w-4 h-4" />
-                      Thanh toán VNPAY-QR — {formatPrice(total)}
+                      <ShieldCheck className="w-4 h-4" />
+                      Thanh toán {formatPrice(total)}
                     </>
                   )}
                 </button>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setStep('info')}
-                    className="flex-1 py-4 bg-darkbg border border-darkborder text-text-primary font-semibold rounded-xl hover:border-neon-violet/30 transition-colors"
-                  >
-                    {t('common.home')}
-                  </button>
-                  <button
-                    onClick={handleFakePayment}
-                    disabled={isProcessing}
-                    className="flex-[2] py-4 bg-darkbg border border-darkborder text-text-primary font-semibold rounded-xl hover:border-neon-violet/30 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        {t('contact.sending')}
-                      </>
-                    ) : (
-                      <>
-                        <Lock className="w-4 h-4" />
-                        {t('checkout.simulatedPayment')}
-                      </>
-                    )}
-                  </button>
-                </div>
-
-                {qr && (
-                  <PaymentQrModal
-                    open={!!qr}
-                    paymentUrl={qr.paymentUrl}
-                    amount={qr.amount}
-                    orderCode={qr.orderCode}
-                    title="Thanh toán đơn hàng"
-                    pollStatus={pollShopStatus}
-                    onPaid={handleShopPaid}
-                    onClose={() => { setQr(null); setPendingOrder(null); }}
-                  />
-                )}
+                <button
+                  onClick={() => setStep('info')}
+                  disabled={isProcessing}
+                  className="w-full py-4 bg-darkbg border border-darkborder text-text-primary font-semibold rounded-xl hover:border-neon-violet/30 transition-colors disabled:opacity-60"
+                >
+                  Quay lại
+                </button>
               </motion.div>
             )}
           </div>

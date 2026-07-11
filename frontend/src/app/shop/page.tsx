@@ -9,25 +9,34 @@ import ProductFilter from '@/components/shop/ProductFilter';
 import CartDrawer from '@/components/shop/CartDrawer';
 import ShopBackground from '@/components/shop/ShopBackground';
 import { useProductStore } from '@/store/productStore';
-import { PRICE_RANGES, SORT_OPTIONS } from '@/data/products';
-import type { ProductCategory, PriceRange, SortOption } from '@/types';
+import type { PriceRange, SortOption } from '@/types';
+import { getCategories, type CategoryResponse } from '@/lib/api/shop';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export default function ShopPage() {
   const { t } = useTranslation();
   const { products, fetchProducts, isLoaded } = useProductStore();
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState<ProductCategory | 'all'>('all');
+  const [category, setCategory] = useState<string>('all');
   const [priceRange, setPriceRange] = useState<PriceRange>('all');
   const [sort, setSort] = useState<SortOption>('newest');
   const [mounted, setMounted] = useState(false);
+  const [categories, setCategories] = useState<CategoryResponse[]>([]);
 
   useEffect(() => {
     setMounted(true);
     if (!isLoaded) {
       fetchProducts();
     }
+    getCategories().then(setCategories).catch(() => {});
   }, []);
+
+  // Dynamic category chips: "Tất cả" + admin-managed categories, filtered by
+  // category NAME (which is what the mapped product carries).
+  const categoryOptions = useMemo(
+    () => [{ value: 'all', label: 'Tất cả' }, ...categories.map((c) => ({ value: c.name, label: c.name }))],
+    [categories],
+  );
 
   const filtered = useMemo(() => {
     let result = [...products];
@@ -170,6 +179,7 @@ export default function ShopPage() {
             sort={sort}
             onSortChange={setSort}
             totalResults={filtered.length}
+            categories={categoryOptions}
           />
         </div>
 

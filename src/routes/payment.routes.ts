@@ -38,6 +38,7 @@ import { emailService } from '../services/email.service.js';
 import { logger } from '../utils/logger.js';
 import { config } from '../config/env.js';
 import { createPayosLink, getPayosLink, getPayosStatus, verifyPayosWebhook, isPayosConfigured } from '../config/payos.js';
+import { markShopOrderPaidAndFulfill, PAYOS_SHOP_ORDER_OFFSET } from '../services/shopFulfillment.js';
 import {
   buildCoursePaymentUrl,
   buildVnpayPaymentUrl,
@@ -287,59 +288,14 @@ async function handleProductIpn(
     return;
   }
 
-  // ── SUCCESS PATH ──
-  const oversoldItems: string[] = [];
-  await prisma.$transaction(async (tx) => {
-    // Atomic PENDING → PAID. updateMany returns the affected count, our
-    // idempotency guard against concurrent / retried IPNs.
-    const flipped = await tx.shopOrder.updateMany({
-      where: { id: order.id, status: 'PENDING' },
-      data: {
-        status: 'PAID',
-        paymentStatus: 'PAID',
-        paymentMethod: 'VNPAY',
-        paymentId: ipn.transactionNo,
-        paidAt: ipn.payDate || new Date(),
-      },
-    });
-
-    // Someone else already transitioned it — skip stock side effects.
-    if (flipped.count !== 1) return;
-
-    // Decrement stock + bump sold count for each line item. Items link
-    // to Product by name (the relation FK). The `stockQuantity >= quantity`
-    // guard avoids driving stock negative; we only bump soldCount when the
-    // decrement actually matched a row, and flag oversell for manual review
-    // (money's received — never blindly claim stock we don't have).
-    for (const item of order.items) {
-      const dec = await tx.product.updateMany({
-        where: { name: item.productName, stockQuantity: { gte: item.quantity } },
-        data: { stockQuantity: { decrement: item.quantity } },
-      });
-      if (dec.count === 1) {
-        await tx.product.updateMany({
-          where: { name: item.productName },
-          data: { soldCount: { increment: item.quantity } },
-        });
-      } else {
-        // Not enough stock (or product renamed → 0 rows). Order stays PAID
-        // (we took the money) but needs fulfillment attention.
-        oversoldItems.push(`${item.productName} x${item.quantity}`);
-      }
-    }
+  // ── SUCCESS PATH ── shared fulfillment (atomic PENDING→PAID, stock,
+  // oversell handling). Idempotent under retried/concurrent IPNs.
+  await markShopOrderPaidAndFulfill(order.id, {
+    txnNo: ipn.transactionNo ?? undefined,
+    payDate: ipn.payDate || new Date(),
+    amountPaid: ipn.amountVnd,
+    method: 'VNPAY',
   });
-  if (oversoldItems.length > 0) {
-    logger.error('shop order PAID but stock insufficient — manual fulfillment needed', {
-      orderCode: order.orderCode, shopOrderId: order.id, oversold: oversoldItems,
-    });
-  }
-
- logger.info('payment-ipn PRODUCT PAID', {
- orderCode: order.orderCode,
- shopOrderId: order.id,
- amountVnd: ipn.amountVnd,
- txnNo: ipn.transactionNo,
- });
 
   res.status(200).json({ RspCode: '00', Message: 'Confirm Success' });
 }
@@ -788,8 +744,63 @@ router.post('/payos/create', orderCreateLimiter, authenticate, async (req: Reque
   } catch (error) { next(error); }
 });
 
+// Create a PayOS checkout link for an existing PENDING shop order.
+// Body: { orderCode }  →  { checkoutUrl, qrCode, orderCode }
+// PayOS orderCode = PAYOS_SHOP_ORDER_OFFSET + ShopOrder.id (disjoint from
+// the course-order numeric range so the shared webhook can tell them apart).
+router.post('/payos/shop/create', orderCreateLimiter, authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    if (!isPayosConfigured()) throw new AppError('PayOS chua duoc cau hinh', 503, 'PAYOS_NOT_CONFIGURED');
+    const orderCode = String((req.body as { orderCode?: unknown })?.orderCode || '');
+    const order = await prisma.shopOrder.findUnique({ where: { orderCode } });
+    if (!order) throw new AppError('Don hang khong ton tai', 404);
+    // Guest orders (userId null) are payable by the authenticated holder of
+    // the orderCode; owned orders enforce ownership.
+    if (order.userId !== null && order.userId !== req.userId!) {
+      throw new AppError('Ban khong co quyen thanh toan don hang nay', 403);
+    }
+    if (order.status !== 'PENDING') throw new AppError(`Don hang da o trang thai ${order.status}`, 409);
+    const amount = Number(order.total);
+    if (!(amount > 0)) throw new AppError('Gia tri don hang khong hop le', 400);
+
+    const payosCode = PAYOS_SHOP_ORDER_OFFSET + order.id;
+    const returnUrl = `${config.frontendUrl}/shop/payment-return`;
+    const cancelUrl = `${config.frontendUrl}/shop/payment-return?cancel=1`;
+
+    let link;
+    try {
+      link = await createPayosLink({
+        orderCode: payosCode,
+        amount,
+        description: `Don hang #${order.id}`,
+        returnUrl,
+        cancelUrl,
+        buyerName: order.buyerName,
+      });
+    } catch (e) {
+      // 231 = orderCode already has a link (retry) → fetch the existing one.
+      if ((e as Error & { payosCode?: string })?.payosCode === '231') {
+        link = await getPayosLink(payosCode);
+      }
+      if (!link) throw e;
+    }
+
+    // Mark method + bind the authenticated user (so /orders/my returns it),
+    // only when the order was a guest order (don't yank an existing owner).
+    await prisma.shopOrder.update({
+      where: { id: order.id },
+      data: {
+        paymentMethod: 'PAYOS',
+        ...(req.userId && order.userId === null ? { userId: req.userId } : {}),
+      },
+    });
+    res.json({ success: true, data: { checkoutUrl: link.checkoutUrl, qrCode: link.qrCode, orderCode: order.orderCode } });
+  } catch (error) { next(error); }
+});
+
 // PayOS server-to-server webhook. Verifies the signature, then marks the
-// order paid + enrolls (success) or failed. Always 200 so PayOS stops retrying.
+// order paid (course → enroll, shop → fulfill) or failed. Always 200 so
+// PayOS stops retrying. Routes course vs shop by the orderCode offset.
 router.post('/payos/webhook', async (req: Request, res: Response) => {
   try {
     const body = req.body as { data?: Record<string, unknown>; signature?: string };
@@ -797,17 +808,33 @@ router.post('/payos/webhook', async (req: Request, res: Response) => {
     if (!verifyPayosWebhook(body)) { res.status(400).json({ success: false, message: 'invalid signature' }); return; }
 
     const data = body.data;
-    const orderId = Number(data.orderCode);
-    if (orderId) {
-      if (String(data.code) === '00') {
-        await markCourseOrderPaidAndEnroll(orderId, {
+    const payosCode = Number(data.orderCode);
+    const isShop = payosCode >= PAYOS_SHOP_ORDER_OFFSET;
+    if (payosCode) {
+      const paid = String(data.code) === '00';
+      if (isShop) {
+        const shopOrderId = payosCode - PAYOS_SHOP_ORDER_OFFSET;
+        if (paid) {
+          await markShopOrderPaidAndFulfill(shopOrderId, {
+            txnNo: String(data.reference || data.paymentLinkId || ''),
+            payDate: new Date(),
+            amountPaid: Number(data.amount),
+            method: 'PAYOS',
+          });
+          logger.info('payos webhook shop PAID', { shopOrderId, ref: data.reference });
+        } else {
+          const o = await prisma.shopOrder.findUnique({ where: { id: shopOrderId }, select: { id: true, status: true } });
+          if (o && o.status === 'PENDING') await prisma.shopOrder.update({ where: { id: o.id }, data: { status: 'CANCELLED', paymentStatus: 'FAILED' } });
+        }
+      } else if (paid) {
+        await markCourseOrderPaidAndEnroll(payosCode, {
           txnNo: String(data.reference || data.paymentLinkId || ''),
           payDate: new Date(),
           amountPaid: Number(data.amount),
         });
-        logger.info('payos webhook PAID', { orderId, ref: data.reference });
+        logger.info('payos webhook PAID', { orderId: payosCode, ref: data.reference });
       } else {
-        const o = await prisma.courseOrder.findUnique({ where: { id: orderId }, select: { id: true, status: true } });
+        const o = await prisma.courseOrder.findUnique({ where: { id: payosCode }, select: { id: true, status: true } });
         if (o && o.status === 'PENDING') await prisma.courseOrder.update({ where: { id: o.id }, data: { status: 'FAILED' } });
       }
     }

@@ -640,7 +640,10 @@ export interface Product {
   price: number;
   originalPrice?: number;
   thumbnail: string;
-  category: ProductCategory;
+  // Category NAME (dynamic — admin-managed shop categories). Kept as a free
+  // string so newly-added categories (Sách, Tài liệu, …) flow through the
+  // grid/filters instead of being coerced into a fixed enum.
+  category: string;
   rating: number;
   reviewCount: number;
   description: string;

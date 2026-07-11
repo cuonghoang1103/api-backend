@@ -107,6 +107,29 @@ export async function getPayosLink(orderCode: number): Promise<PayosLink | null>
   }
 }
 
+/**
+ * Fetch the real payment status of an order from PayOS. Used as a
+ * webhook-independent fallback: when the buyer returns to our site we ask
+ * PayOS directly whether the order is PAID, so confirmation works even if
+ * the merchant hasn't wired up the webhook. Returns e.g. { status: 'PAID' }.
+ */
+export async function getPayosStatus(orderCode: number): Promise<{ status: string; amountPaid: number } | null> {
+  if (!isPayosConfigured()) return null;
+  try {
+    const res = await fetch(`${PAYOS_BASE}/v2/payment-requests/${orderCode}`, {
+      headers: { 'x-client-id': config.payos.clientId, 'x-api-key': config.payos.apiKey },
+    });
+    const json = (await res.json()) as { code: string; data?: { status?: string; amountPaid?: number } | null };
+    if (json.code === '00' && json.data?.status) {
+      return { status: String(json.data.status), amountPaid: Number(json.data.amountPaid || 0) };
+    }
+    return null;
+  } catch (err) {
+    logger.warn(`[payos] getPayosStatus failed: ${err instanceof Error ? err.message : err}`);
+    return null;
+  }
+}
+
 /** Verify a webhook body's signature against its data. */
 export function verifyPayosWebhook(payload: { data?: Record<string, unknown>; signature?: string }): boolean {
   if (!isPayosConfigured() || !payload?.data || !payload?.signature) return false;

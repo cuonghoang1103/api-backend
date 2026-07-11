@@ -37,7 +37,7 @@ import { vnpayIpnGuard } from '../middleware/vnpayIpnGuard.js';
 import { emailService } from '../services/email.service.js';
 import { logger } from '../utils/logger.js';
 import { config } from '../config/env.js';
-import { createPayosLink, getPayosLink, verifyPayosWebhook, isPayosConfigured } from '../config/payos.js';
+import { createPayosLink, getPayosLink, getPayosStatus, verifyPayosWebhook, isPayosConfigured } from '../config/payos.js';
 import {
   buildCoursePaymentUrl,
   buildVnpayPaymentUrl,
@@ -1041,11 +1041,27 @@ router.get('/order/:orderCode', authenticate, async (req: Request, res: Response
       throw new AppError('Ban khong co quyen xem don hang nay', 403);
     }
 
+    // Webhook-independent confirmation: if a PayOS order is still PENDING,
+    // ask PayOS directly whether it was paid. This makes the "Đang xác nhận
+    // thanh toán" spinner resolve even when the merchant hasn't configured
+    // the webhook yet (the buyer already paid — money received).
+    let status = order.status;
+    if (status === 'PENDING' && order.paymentMethod === 'PAYOS' && isPayosConfigured()) {
+      const st = await getPayosStatus(order.id);
+      if (st && st.status === 'PAID') {
+        await markCourseOrderPaidAndEnroll(order.id, { txnNo: 'payos-return', payDate: new Date() });
+        status = 'PAID';
+      } else if (st && (st.status === 'CANCELLED' || st.status === 'EXPIRED')) {
+        await prisma.courseOrder.updateMany({ where: { id: order.id, status: 'PENDING' }, data: { status: 'FAILED' } });
+        status = 'FAILED';
+      }
+    }
+
     res.json({
       success: true,
       data: {
         orderCode: order.orderCode,
-        status: order.status,
+        status,
         amount: Number(order.amount),
         course: order.course,
         createdAt: order.createdAt,

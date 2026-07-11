@@ -1,19 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
   Package, BookOpen, Download, ShoppingBag,
   ArrowLeft, Clock, CheckCircle, XCircle, FileText,
-  Package as PackageIcon, ChevronRight, Loader2,
+  Package as PackageIcon, ChevronRight, Loader2, RotateCcw,
+  Copy, LifeBuoy,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useOrderStore } from '@/store/orderStore';
 import { useAuthStore } from '@/store/authStore';
+import { useMessagingStore } from '@/store/messagingStore';
+import { api, courseOrdersApi, type MyCourseOrder } from '@/lib/api';
 import { getOrderByCode, getMyOrders, type OrderResponse } from '@/lib/api/shop';
-import { courseOrdersApi, type MyCourseOrder } from '@/lib/api';
 import { generateInvoicePDF } from '@/lib/invoice';
 import ShopOrderExtras from '@/components/shop/ShopOrderExtras';
 import type { Order } from '@/types';
@@ -40,9 +43,11 @@ function formatDate(dateStr: string): string {
 function StatusBadge({ status, t }: { status: Order['status']; t: (key: string) => string | string[] }) {
   const statusKey = status?.toUpperCase() || 'PENDING';
   const config: Record<string, { icon: typeof CheckCircle; color: string; bg: string; border: string; dot: string }> = {
+    PAID: { icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/30', dot: 'bg-green-400' },
     COMPLETED: { icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/30', dot: 'bg-green-400' },
     COMPLETE: { icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/30', dot: 'bg-green-400' },
     PENDING: { icon: Clock, color: 'text-yellow-400', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', dot: 'bg-yellow-400' },
+    REFUNDED: { icon: RotateCcw, color: 'text-purple-300', bg: 'bg-purple-500/10', border: 'border-purple-500/30', dot: 'bg-purple-300' },
     FAILED: { icon: XCircle, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30', dot: 'bg-red-400' },
     CANCELLED: { icon: XCircle, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30', dot: 'bg-red-400' },
   };
@@ -52,18 +57,63 @@ function StatusBadge({ status, t }: { status: Order['status']; t: (key: string) 
     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${bg} ${border} ${color}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
       <Icon className="w-3.5 h-3.5" />
-      {statusKey === 'COMPLETED' || statusKey === 'COMPLETE' ? t('orders.status.Completed') :
+      {statusKey === 'PAID' || statusKey === 'COMPLETED' || statusKey === 'COMPLETE' ? t('orders.adminStatus.Paid') :
        statusKey === 'PENDING' ? t('orders.status.Pending') :
+       statusKey === 'REFUNDED' ? t('orders.adminStatus.Refunded') :
        statusKey === 'FAILED' || statusKey === 'CANCELLED' ? t('orders.status.Failed') : statusKey}
     </span>
   );
 }
 
-export default function MyOrdersPage() {
+function MyOrdersContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { t } = useTranslation();
   const { orders, getAllOrders, saveBackendOrder } = useOrderStore();
   const { isAuthenticated, user } = useAuthStore();
+  const [adminId, setAdminId] = useState<number | null>(null);
+  const [contacting, setContacting] = useState(false);
+
+  // Resolve the admin to contact for order support (cached endpoint).
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    api.get('/social/admin-contact')
+      .then((res: any) => setAdminId(res.data?.data?.id ?? null))
+      .catch(() => setAdminId(null));
+  }, [isAuthenticated]);
+
+  const copyCode = async (code: string) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      toast.success(t('orders.support.copied'));
+    } catch {
+      toast.error(t('orders.support.copyFailed'));
+    }
+  };
+
+  // Open a support chat with admin, pre-sending an order-context message so
+  // the admin immediately sees WHICH order (and can click the code to jump to
+  // it). The customer then describes the problem in the same thread.
+  const contactSupport = async (opts: { code: string; title: string; lines: string[] }) => {
+    if (!isAuthenticated) {
+      router.push('/login?next=/my-orders');
+      return;
+    }
+    if (!adminId) {
+      toast.error(t('orders.support.noAdmin'));
+      return;
+    }
+    setContacting(true);
+    try {
+      const threadId = await useMessagingStore.getState().startUserThread(adminId);
+      const body = `${opts.title}\n${opts.lines.join('\n')}\n\n${t('orders.support.problemPrompt')}`;
+      await useMessagingStore.getState().sendMessage(threadId, body);
+      router.push(`/messages?peer=${adminId}`);
+    } catch {
+      toast.error(t('orders.support.openError'));
+      setContacting(false);
+    }
+  };
 
   // Reuse the shop invoice generator for a course purchase by mapping the
   // course order into the shared Order shape (single line item).
@@ -206,6 +256,15 @@ export default function MyOrdersPage() {
     }
   }, [mounted, isAuthenticated, getAllOrders, saveBackendOrder]);
 
+  // Deep-link: /my-orders?code=ORD-... auto-expands the matching order (used by
+  // the "order code" links so a customer lands right on the relevant order).
+  useEffect(() => {
+    const code = searchParams.get('code');
+    if (!code) return;
+    const match = localOrders.find((o) => (o.orderCode || o.id) === code);
+    if (match) setExpandedOrder(match.id);
+  }, [searchParams, localOrders]);
+
   if (!mounted) {
     return (
       <div className="min-h-screen bg-darkbg pt-20 flex items-center justify-center">
@@ -260,9 +319,13 @@ export default function MyOrdersPage() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-text-primary truncate">{o.course?.title || 'Khoá học'}</p>
-                      <p className="text-xs text-text-muted mt-0.5">
-                        <span className="font-mono">{o.orderCode}</span> · {new Date(o.createdAt).toLocaleDateString('vi-VN')} · {o.paymentMethod}
-                        {o.discountCode ? <> · mã {o.discountCode}</> : null}
+                      <p className="text-xs text-text-muted mt-0.5 flex items-center gap-1 flex-wrap">
+                        <span className="font-mono">{o.orderCode}</span>
+                        <button onClick={() => copyCode(o.orderCode)} title={t('orders.support.copyCode') as string} className="text-text-muted hover:text-neon-violet transition-colors">
+                          <Copy className="w-3 h-3" />
+                        </button>
+                        <span>· {new Date(o.createdAt).toLocaleDateString('vi-VN')} · {o.paymentMethod}</span>
+                        {o.discountCode ? <span>· mã {o.discountCode}</span> : null}
                       </p>
                     </div>
                     <div className="text-right shrink-0">
@@ -274,11 +337,29 @@ export default function MyOrdersPage() {
                       {paid && o.course?.slug && (
                         <Link href={`/courses/${o.course.slug}/learn`} className="block text-xs text-neon-violet hover:underline mt-1">Vào học →</Link>
                       )}
-                      {paid && (
-                        <button onClick={() => downloadCourseInvoice(o)} className="mt-1 text-xs text-text-muted hover:text-text-primary inline-flex items-center gap-1">
-                          <Download className="w-3 h-3" /> Hoá đơn
+                      <div className="flex items-center gap-2 justify-end mt-1">
+                        {paid && (
+                          <button onClick={() => downloadCourseInvoice(o)} className="text-xs text-text-muted hover:text-text-primary inline-flex items-center gap-1">
+                            <Download className="w-3 h-3" /> Hoá đơn
+                          </button>
+                        )}
+                        <button
+                          onClick={() => contactSupport({
+                            code: o.orderCode,
+                            title: `📚 ${t('orders.support.courseTitle')}`,
+                            lines: [
+                              `${t('orders.support.code')}: ${o.orderCode}`,
+                              `${t('orders.support.course')}: ${o.course?.title || '-'}`,
+                              `${t('orders.support.amount')}: ${formatPrice(o.amount)}`,
+                              `${t('orders.support.status')}: ${o.status}`,
+                            ],
+                          })}
+                          disabled={contacting}
+                          className="text-xs text-amber-300 hover:text-amber-200 inline-flex items-center gap-1 disabled:opacity-50"
+                        >
+                          <LifeBuoy className="w-3 h-3" /> {t('orders.support.button')}
                         </button>
-                      )}
+                      </div>
                     </div>
                   </div>
                 );
@@ -534,26 +615,50 @@ export default function MyOrdersPage() {
                             </div>
                           </div>
 
-                          {/* Download invoice */}
-                          {order.status === 'Completed' && (
+                          {/* Actions: copy code · support · invoice */}
+                          <div className="flex flex-wrap items-center gap-2">
                             <button
-                              onClick={() => {
-                                setDownloadingId(order.id);
-                                setTimeout(() => {
-                                  generateInvoicePDF(order);
-                                  setDownloadingId(null);
-                                }, 500);
-                              }}
-                              className="w-full flex items-center justify-center gap-2 py-2.5 bg-neon-violet/10 hover:bg-neon-violet/20 border border-neon-violet/30 text-neon-violet text-sm font-semibold rounded-xl transition-colors"
+                              onClick={() => copyCode((order as Order).orderCode || order.id)}
+                              className="flex items-center gap-1.5 px-3 py-2.5 bg-darkbg border border-darkborder text-text-secondary hover:text-text-primary text-sm rounded-xl transition-colors"
                             >
-                              {downloadingId === order.id ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                              ) : (
-                                <Download className="w-4 h-4" />
-                              )}
-                              {t('orders.downloadInvoice')}
+                              <Copy className="w-4 h-4" /> {t('orders.support.copyCode')}
                             </button>
-                          )}
+                            <button
+                              onClick={() => contactSupport({
+                                code: (order as Order).orderCode || order.id,
+                                title: `🛒 ${t('orders.support.shopTitle')}`,
+                                lines: [
+                                  `${t('orders.support.code')}: ${(order as Order).orderCode || order.id}`,
+                                  `${t('orders.support.product')}: ${order.items.map((i) => i.name).join(', ')}`,
+                                  `${t('orders.support.amount')}: ${formatPrice(order.total)}`,
+                                  `${t('orders.support.status')}: ${order.status}`,
+                                ],
+                              })}
+                              disabled={contacting}
+                              className="flex items-center gap-1.5 px-3 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+                            >
+                              <LifeBuoy className="w-4 h-4" /> {t('orders.support.button')}
+                            </button>
+                            {['PAID', 'COMPLETED', 'COMPLETE'].includes(String(order.status).toUpperCase()) && (
+                              <button
+                                onClick={() => {
+                                  setDownloadingId(order.id);
+                                  setTimeout(() => {
+                                    generateInvoicePDF(order);
+                                    setDownloadingId(null);
+                                  }, 500);
+                                }}
+                                className="flex items-center justify-center gap-2 px-4 py-2.5 bg-neon-violet/10 hover:bg-neon-violet/20 border border-neon-violet/30 text-neon-violet text-sm font-semibold rounded-xl transition-colors"
+                              >
+                                {downloadingId === order.id ? (
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                  <Download className="w-4 h-4" />
+                                )}
+                                {t('orders.downloadInvoice')}
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </motion.div>
@@ -565,5 +670,13 @@ export default function MyOrdersPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function MyOrdersPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-darkbg pt-20 flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-neon-violet" /></div>}>
+      <MyOrdersContent />
+    </Suspense>
   );
 }

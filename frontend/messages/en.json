@@ -259,6 +259,22 @@
       "Cancelled": "Cancelled",
       "Paid": "Paid",
       "Refunded": "Refunded"
+    },
+    "support": {
+      "copied": "Order code copied",
+      "copyFailed": "Copy failed",
+      "copyCode": "Copy code",
+      "button": "Get support",
+      "noAdmin": "No admin available for support",
+      "openError": "Could not open the chat",
+      "problemPrompt": "I have an issue with this order: (describe your problem here)",
+      "shopTitle": "Support request — Shop order",
+      "courseTitle": "Support request — Course order",
+      "code": "Order code",
+      "product": "Product",
+      "course": "Course",
+      "amount": "Amount",
+      "status": "Status"
     }
   },
   "chat": {

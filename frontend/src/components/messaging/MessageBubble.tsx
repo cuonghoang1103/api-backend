@@ -52,6 +52,12 @@ export default function MessageBubble({
   const [showMenu, setShowMenu] = useState(false);
   const auth = useAuthStore();
   const store = useMessagingStore();
+  // Only admins get clickable order codes (→ jump to the order in admin). For
+  // everyone else the code stays plain text (they can copy it).
+  const isAdmin = !!(auth.user as { roles?: string[] } | null)?.roles?.some((r) =>
+    ['admin', 'ADMIN', 'ROLE_ADMIN', 'SUPER_ADMIN'].includes(r),
+  );
+  const orderCodeHref = isAdmin ? (code: string) => `/admin/orders?code=${code}` : undefined;
 
   // Recalled: show stub, hide menu/reactions/recall option
   if (message.recalled) {
@@ -210,11 +216,12 @@ export default function MessageBubble({
               // make links white/underlined instead of the default blue.
               isOwn
                 ? {
+                    orderCodeHref,
                     linkClassName:
                       'font-medium underline decoration-1 underline-offset-2 break-all hover:opacity-80 text-white',
                     linkStyle: undefined,
                   }
-                : {},
+                : { orderCodeHref },
             )}
           </p>
         )}

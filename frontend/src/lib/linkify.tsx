@@ -19,7 +19,7 @@ import React from 'react';
 // everything up to whitespace / '<'; trailing punctuation is trimmed
 // afterwards by stripTrailing so "see https://x.com." doesn't eat the
 // period. The 'u' flag is required for the \p{L}\p{N} mention class.
-const TOKEN_RE = /((?:https?:\/\/|www\.)[^\s<]+)|(@[\p{L}\p{N}_.]{1,30})/giu;
+const TOKEN_RE = /((?:https?:\/\/|www\.)[^\s<]+)|(@[\p{L}\p{N}_.]{1,30})|(ORD-\d+-[A-Za-z0-9]+)/giu;
 
 // Trailing chars that are almost never part of a URL.
 const TRAILING = /[.,;:!?)\]}'"»…]+$/;
@@ -52,6 +52,12 @@ export interface LinkifyOptions {
   linkStyle?: React.CSSProperties;
   /** Class for @mention spans. */
   mentionClassName?: string;
+  /**
+   * Opt-in: when provided, shop order codes (ORD-...) in the text become
+   * clickable links to this href (e.g. an admin jumping to the order). Left
+   * undefined on customer-facing surfaces so codes stay as plain copyable text.
+   */
+  orderCodeHref?: (code: string) => string;
 }
 
 export function linkifyToNodes(
@@ -64,6 +70,7 @@ export function linkifyToNodes(
     linkClassName = DEFAULT_LINK_CLASS,
     linkStyle = { color: '#3b82f6' },
     mentionClassName = 'text-violet-300 font-medium',
+    orderCodeHref,
   } = opts;
 
   const nodes: React.ReactNode[] = [];
@@ -76,6 +83,7 @@ export function linkifyToNodes(
     const full = m[0];
     const url = m[1];
     const mention = m[2];
+    const orderCode = m[3];
 
     if (m.index > last) nodes.push(raw.slice(last, m.index));
 
@@ -114,6 +122,24 @@ export function linkifyToNodes(
           </a>
         ) : (
           mention
+        ),
+      );
+    } else if (orderCode) {
+      // Shop order code. Clickable only when a href builder is supplied
+      // (admin chat surfaces); otherwise plain text so customers can copy it.
+      nodes.push(
+        orderCodeHref ? (
+          <a
+            key={key++}
+            href={orderCodeHref(orderCode)}
+            onClick={(e) => e.stopPropagation()}
+            className={linkClassName}
+            style={linkStyle}
+          >
+            {orderCode}
+          </a>
+        ) : (
+          orderCode
         ),
       );
     }

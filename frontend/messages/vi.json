@@ -259,6 +259,22 @@
       "Cancelled": "Đã hủy",
       "Paid": "Đã thanh toán",
       "Refunded": "Đã hoàn tiền"
+    },
+    "support": {
+      "copied": "Đã copy mã đơn",
+      "copyFailed": "Không copy được",
+      "copyCode": "Copy mã",
+      "button": "Cần hỗ trợ",
+      "noAdmin": "Chưa tìm thấy admin để hỗ trợ",
+      "openError": "Không mở được cuộc trò chuyện",
+      "problemPrompt": "Mình gặp vấn đề với đơn này: (mô tả vấn đề của bạn ở đây)",
+      "shopTitle": "Cần hỗ trợ đơn hàng Shop",
+      "courseTitle": "Cần hỗ trợ đơn khoá học",
+      "code": "Mã đơn",
+      "product": "Sản phẩm",
+      "course": "Khoá học",
+      "amount": "Số tiền",
+      "status": "Trạng thái"
     }
   },
   "chat": {

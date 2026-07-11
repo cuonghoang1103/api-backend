@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import {
@@ -88,8 +89,9 @@ function mapOrderFromBackend(bo: any): Order {
   };
 }
 
-export default function AdminOrdersPage() {
+function AdminOrdersContent() {
   const { t } = useTranslation();
+  const searchParams = useSearchParams();
   const [orders, setOrders] = useState<Order[]>([]);
   const [rawOrders, setRawOrders] = useState<Record<string, OrderResponse>>({});
   const [loading, setLoading] = useState(true);
@@ -101,6 +103,13 @@ export default function AdminOrdersPage() {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  // Deep-link from a chat order code (/admin/orders?code=ORD-...) → prefill the
+  // search box so the admin lands right on that order.
+  useEffect(() => {
+    const code = searchParams.get('code');
+    if (code) setSearchQuery(code);
+  }, [searchParams]);
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -602,5 +611,13 @@ export default function AdminOrdersPage() {
         );
       })()}
     </div>
+  );
+}
+
+export default function AdminOrdersPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-neon-violet" /></div>}>
+      <AdminOrdersContent />
+    </Suspense>
   );
 }

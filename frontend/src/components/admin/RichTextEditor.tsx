@@ -8,6 +8,7 @@ import {
   Minus, Palette, Type, ChevronDown, Image as ImageIcon, Loader2,
 } from 'lucide-react';
 import { fileApi } from '@/lib/api';
+import { stripInlineColors } from '@/lib/utils';
 import { toast } from 'sonner';
 
 interface RichTextEditorProps {
@@ -181,7 +182,9 @@ export default function RichTextEditor({ value, onChange, placeholder, minHeight
     const el = editorRef.current;
     if (!el) return;
     if (document.activeElement === el) return; // don't clobber active typing
-    const incoming = value || '';
+    // Strip baked-in inline colours so OLD notes (pasted with dark source
+    // colours before the paste-strip fix) become readable on our dark UI.
+    const incoming = stripInlineColors(value || '');
     if (incoming !== el.innerHTML) {
       el.innerHTML = incoming;
       lastHtmlRef.current = incoming;

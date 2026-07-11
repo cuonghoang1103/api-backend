@@ -4,6 +4,31 @@ import { twMerge } from 'tailwind-merge';
 
 export const cn = (...inputs: ClassValue[]): string => twMerge(clsx(inputs));
 
+/**
+ * Strip inline `color` / `background-color` declarations from an HTML string.
+ *
+ * Rich text pasted from Word / Docs / a website carries the SOURCE text
+ * colour (usually near-black), which is invisible on our dark editor + dark
+ * lesson pages. We remove ONLY those inline declarations — class-based syntax
+ * highlighting (.tok-* / .hljs-*) and other style props (text-align, etc.) are
+ * kept — so old content becomes readable (inherits the theme colour) without
+ * losing code colours. Regex-based so it works on the server and client.
+ */
+export function stripInlineColors(html: string): string {
+  if (!html) return html;
+  return html.replace(/style\s*=\s*"([^"]*)"/gi, (_m, style: string) => {
+    const cleaned = style
+      .split(';')
+      .filter((decl) => {
+        const prop = decl.split(':')[0]?.trim().toLowerCase();
+        return prop && prop !== 'color' && prop !== 'background-color' && prop !== 'background';
+      })
+      .join('; ')
+      .trim();
+    return cleaned ? `style="${cleaned}"` : '';
+  });
+}
+
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleDateString('vi-VN', {

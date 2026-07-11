@@ -13,7 +13,7 @@ import { coursesApi, certificatesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
-import { sanitizeHtml } from '@/lib/utils';
+import { sanitizeHtml, stripInlineColors } from '@/lib/utils';
 import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
 import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
@@ -798,7 +798,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     <BookOpen className="w-5 h-5 text-neon-violet" />
                     <h3 className="font-semibold text-text-primary">Lesson Content</h3>
                   </div>
-                  <div className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentLesson.content) }} />
+                  <div className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(currentLesson.content || "")) }} />
                 </div>
               )}
 
@@ -813,7 +813,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   </div>
                   <div
                     className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(lessonDetail.teachingNotes) }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(lessonDetail.teachingNotes || "")) }}
                   />
                 </div>
               )}

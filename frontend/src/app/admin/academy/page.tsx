@@ -1293,8 +1293,18 @@ export default function AdminAcademyPage() {
                             {/* EXERCISE / SOLUTION: PDF is uploaded via the
                                 "Tài liệu đính kèm" section below. */}
                             {(lesson.lessonType === 'EXERCISE' || lesson.lessonType === 'SOLUTION') && (
-                              <div className="rounded-xl border border-dashed border-neon-violet/40 bg-neon-violet/5 p-3 text-xs text-text-secondary">
-                                📄 Tải file <b>PDF</b> {lesson.lessonType === 'EXERCISE' ? 'bài tập' : 'đáp án'} lên mục <b>Tài liệu đính kèm</b> bên dưới. Học viên sẽ xem PDF ngay trong trang học (tải về, phóng to, copy chữ/code được).
+                              <div className="rounded-xl border border-dashed border-neon-violet/40 bg-neon-violet/5 p-3 space-y-3">
+                                <p className="text-xs text-text-secondary">
+                                  📄 Tải file <b>PDF</b> {lesson.lessonType === 'EXERCISE' ? 'bài tập' : 'đáp án'} — học viên xem ngay trong trang học (lật trang, phóng to, tải về, copy chữ/code).
+                                </p>
+                                {lesson.id ? (
+                                  <LessonDocumentsManager
+                                    lessonId={lesson.id}
+                                    initialDocuments={lesson.documents || []}
+                                  />
+                                ) : (
+                                  <p className="text-xs text-amber-400">⚠️ Bấm nút <b>Lưu</b> (cuối trang) để lưu bài học trước, rồi ô tải PDF sẽ hiện ra ngay đây.</p>
+                                )}
                               </div>
                             )}
 
@@ -1306,9 +1316,9 @@ export default function AdminAcademyPage() {
                             {/* Tài liệu đính kèm — admin upload file (zip,
                                 doc, pdf, ...), student download trên
                                 /learn. Chỉ render khi lesson đã được
-                                lưu (có id) — upload cần id để gắn file
-                                vào đúng bài học. */}
-                            {lesson.id && (
+                                lưu (có id). EXERCISE/SOLUTION đã có ô tải
+                                PDF riêng ở trên nên bỏ qua để tránh trùng. */}
+                            {lesson.id && lesson.lessonType !== 'EXERCISE' && lesson.lessonType !== 'SOLUTION' && (
                               <div className="mt-2">
                                 <LessonDocumentsManager
                                   lessonId={lesson.id}

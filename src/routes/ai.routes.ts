@@ -23,7 +23,7 @@ import multer from 'multer';
 
 import { prisma } from '../config/database.js';
 import { aiService } from '../services/ai.service.js';
-import { optionalAuth, authenticate } from '../middleware/auth.js';
+import { optionalAuth, authenticate, requireAdmin } from '../middleware/auth.js';
 import { quotaMiddleware } from '../services/quota.service.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
@@ -405,7 +405,7 @@ router.get('/analytics/overview', authenticate, async (_req: any, res: Response<
 // ════════════════════════════════════════════════════════════════
 // ADMIN: GET /api/v1/ai/admin/config
 // ════════════════════════════════════════════════════════════════
-router.get('/admin/config', authenticate, async (_req: any, res: Response<ApiResponse>, next) => {
+router.get('/admin/config', authenticate, requireAdmin(), async (_req: any, res: Response<ApiResponse>, next) => {
   try {
     const config = await aiService.getConfig();
     res.json({ success: true, data: config });
@@ -417,7 +417,7 @@ router.get('/admin/config', authenticate, async (_req: any, res: Response<ApiRes
 // ════════════════════════════════════════════════════════════════
 // ADMIN: PUT /api/v1/ai/admin/config/:key
 // ════════════════════════════════════════════════════════════════
-router.put('/admin/config/:key', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+router.put('/admin/config/:key', authenticate, requireAdmin(), async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const { key } = req.params;
     const { value, description } = req.body;
@@ -438,7 +438,7 @@ router.put('/admin/config/:key', authenticate, async (req: any, res: Response<Ap
 // ════════════════════════════════════════════════════════════════
 // ADMIN: GET /api/v1/ai/admin/stats
 // ════════════════════════════════════════════════════════════════
-router.get('/admin/stats', authenticate, async (_req: any, res: Response<ApiResponse>, next) => {
+router.get('/admin/stats', authenticate, requireAdmin(), async (_req: any, res: Response<ApiResponse>, next) => {
   try {
     const [feedbackStats, config, chunksPage] = await Promise.all([
       aiService.getFeedbackStats(),
@@ -468,6 +468,7 @@ router.get('/admin/stats', authenticate, async (_req: any, res: Response<ApiResp
 router.post(
   '/admin/documents/upload-files',
   authenticate,
+  requireAdmin(),
   textUpload.array('files', 20),
   async (req: any, res: Response<ApiResponse>, next) => {
     try {
@@ -559,7 +560,7 @@ router.post(
 // Run once after deploying the embedding feature to populate the
 // 17 chunks that were indexed before embeddings existed.
 // ════════════════════════════════════════════════════════════════
-router.post('/admin/documents/backfill-embeddings', authenticate, async (_req: any, res: Response<ApiResponse>, next) => {
+router.post('/admin/documents/backfill-embeddings', authenticate, requireAdmin(), async (_req: any, res: Response<ApiResponse>, next) => {
   try {
     const result = await aiService.backfillMissingEmbeddings();
     res.json({
@@ -576,7 +577,7 @@ router.post('/admin/documents/backfill-embeddings', authenticate, async (_req: a
 // ADMIN: POST /api/v1/ai/admin/documents
 // Index document into RAG store
 // ════════════════════════════════════════════════════════════════
-router.post('/admin/documents', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+router.post('/admin/documents', authenticate, requireAdmin(), async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const { documentId, documentType, content, metadata } = req.body;
 
@@ -600,7 +601,7 @@ router.post('/admin/documents', authenticate, async (req: any, res: Response<Api
 // ADMIN: GET /api/v1/ai/admin/documents
 // List all document chunks
 // ════════════════════════════════════════════════════════════════
-router.get('/admin/documents', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+router.get('/admin/documents', authenticate, requireAdmin(), async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const { documentType, page, pageSize } = req.query;
     const result = await aiService.getAllChunks(
@@ -617,7 +618,7 @@ router.get('/admin/documents', authenticate, async (req: any, res: Response<ApiR
 // ADMIN: DELETE /api/v1/ai/admin/documents/:documentId
 // Delete all chunks belonging to a single document (by documentId + documentType)
 // ════════════════════════════════════════════════════════════════
-router.delete('/admin/documents/:documentId', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+router.delete('/admin/documents/:documentId', authenticate, requireAdmin(), async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const { documentId } = req.params;
     const { documentType } = req.query;
@@ -654,7 +655,7 @@ router.delete('/admin/documents/:documentId', authenticate, async (req: any, res
 // ADMIN: DELETE /api/v1/ai/admin/knowledge/clear-all
 // Clear all RAG chunks
 // ════════════════════════════════════════════════════════════════
-router.delete('/admin/knowledge/clear-all', authenticate, async (_req: any, res: Response<ApiResponse>, next) => {
+router.delete('/admin/knowledge/clear-all', authenticate, requireAdmin(), async (_req: any, res: Response<ApiResponse>, next) => {
   try {
     const { deleted } = await aiService.clearAllChunks();
     res.json({ success: true, message: `Cleared ${deleted} chunks` });

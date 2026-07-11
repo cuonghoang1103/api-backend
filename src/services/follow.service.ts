@@ -168,7 +168,11 @@ export async function getEnhancedPublicProfile(targetId: number, viewerId?: numb
     // ─── Extended profile (User-level) ──────────────────
     gender: user.gender,
     birthYear: user.birthYear,
-    phone: user.phone,
+    // Phone is PII — only expose it to the profile owner. IDs are sequential,
+    // so a public phone here would let an anonymous scraper enumerate every
+    // user's number. The frontend already renders it behind a `p.phone &&`
+    // guard, so null for other viewers just hides the row.
+    phone: viewerId === targetId ? user.phone : null,
     socialLinks: (user.socialLinks as Record<string, string> | null) ?? null,
     // ─── Extended profile (UserProfile-level) ───────────
     location: profile?.location ?? null,

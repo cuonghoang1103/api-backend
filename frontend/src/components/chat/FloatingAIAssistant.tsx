@@ -31,13 +31,21 @@ export default function FloatingAIAssistant() {
  const pathname = usePathname();
  // On MOBILE, show the AI bubble only on the home feed ('/') — on every other
  // page it covered content/action buttons (user request 2026-07-09). Desktop
- // is unaffected. Uses matchMedia (not the hook) because this early return
- // must run before the component's other hooks, mirroring the existing guards.
+ // is unaffected. Uses matchMedia (a plain call, not a hook) so the value is
+ // available synchronously during render.
  const hiddenOnMobile =
    pathname !== '/' &&
    typeof window !== 'undefined' &&
    window.matchMedia?.('(pointer: coarse)')?.matches;
- if (pathname?.startsWith('/creator') || pathname?.startsWith('/admin') || hiddenOnMobile) return null;
+ // Whether to hide the bubble on this route. We must NOT `return null` here:
+ // this component is mounted in the root layout and persists across
+ // client-side navigation, so an early return BEFORE the hooks below would
+ // change the hook count between renders (e.g. '/' → '/admin') and throw
+ // React error #310 "rendered fewer hooks than expected". Compute the flag
+ // now, call every hook unconditionally, then bail out just before the JSX.
+ const hidden = Boolean(
+   pathname?.startsWith('/creator') || pathname?.startsWith('/admin') || hiddenOnMobile,
+ );
 
  const { isStreaming, robotEmotion } = useChatStore();
  // When a track is loaded the mobile music bar sits above the bottom nav;
@@ -101,7 +109,10 @@ export default function FloatingAIAssistant() {
   }, []);
 
   useEffect(() => {
-    if (isOpen) {
+    // On routes where the bubble is hidden, don't schedule idle tooltips —
+    // otherwise a pending tooltip could flash the instant we navigate back to
+    // a visible route. (The hook itself still runs; only its body is gated.)
+    if (hidden || isOpen) {
       setShowTooltip(false);
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
@@ -112,7 +123,7 @@ export default function FloatingAIAssistant() {
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
     };
-  }, [isOpen, scheduleTooltip]);
+  }, [hidden, isOpen, scheduleTooltip]);
 
   const handleMouseEnter = () => {
     if (!isOpen) {
@@ -138,6 +149,10 @@ export default function FloatingAIAssistant() {
     setIsOpen(false);
     scheduleTooltip();
   };
+
+  // Route-based hide happens HERE — after every hook has run — so the hook
+  // order stays identical whether or not the bubble is shown (see `hidden`).
+  if (hidden) return null;
 
   return (
     <>

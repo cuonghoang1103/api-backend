@@ -441,7 +441,6 @@ router.get('/profile/:username', async (req, res: Response<ApiResponse>, next) =
       select: {
         id: true,
         username: true,
-        email: true,
         fullName: true,
         displayName: true,
         bio: true,
@@ -477,7 +476,6 @@ router.get('/profile/:username', async (req, res: Response<ApiResponse>, next) =
       data: {
         id: user.id,
         username: user.username,
-        email: user.email,
         fullName: user.fullName,
         displayName: user.displayName,
         bio: user.bio,
@@ -516,7 +514,6 @@ router.get('/profile/public', async (req, res: Response<ApiResponse>, next) => {
       select: {
         id: true,
         username: true,
-        email: true,
         fullName: true,
         displayName: true,
         bio: true,
@@ -551,7 +548,6 @@ router.get('/profile/public', async (req, res: Response<ApiResponse>, next) => {
       data: {
         id: user.id,
         username: user.username,
-        email: user.email,
         fullName: user.fullName,
         displayName: user.displayName,
         bio: user.bio,

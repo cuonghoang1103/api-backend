@@ -696,8 +696,11 @@ async function markCourseOrderPaidAndEnroll(orderId: number, meta: { txnNo?: str
   let flippedOk = false;
 
   await prisma.$transaction(async (tx) => {
+    // Recover FAILED too: PayOS may have received the money AFTER a stale
+    // -order cron flipped us to FAILED. PayOS is the payment source of
+    // truth, so a confirmed payment must still grant access.
     const flipped = await tx.courseOrder.updateMany({
-      where: { id: order.id, status: 'PENDING' },
+      where: { id: order.id, status: { in: ['PENDING', 'FAILED'] } },
       data: { status: 'PAID', paymentTxnNo: meta.txnNo ?? null, paymentPayDate: meta.payDate ?? new Date(), enrolled: true },
     });
     if (flipped.count !== 1) return;
@@ -1046,12 +1049,12 @@ router.get('/order/:orderCode', authenticate, async (req: Request, res: Response
     // thanh toán" spinner resolve even when the merchant hasn't configured
     // the webhook yet (the buyer already paid — money received).
     let status = order.status;
-    if (status === 'PENDING' && order.paymentMethod === 'PAYOS' && isPayosConfigured()) {
+    if ((status === 'PENDING' || status === 'FAILED') && order.paymentMethod === 'PAYOS' && isPayosConfigured()) {
       const st = await getPayosStatus(order.id);
       if (st && st.status === 'PAID') {
         await markCourseOrderPaidAndEnroll(order.id, { txnNo: 'payos-return', payDate: new Date() });
         status = 'PAID';
-      } else if (st && (st.status === 'CANCELLED' || st.status === 'EXPIRED')) {
+      } else if (status === 'PENDING' && st && (st.status === 'CANCELLED' || st.status === 'EXPIRED')) {
         await prisma.courseOrder.updateMany({ where: { id: order.id, status: 'PENDING' }, data: { status: 'FAILED' } });
         status = 'FAILED';
       }
@@ -1078,12 +1081,41 @@ router.get('/order/:orderCode', authenticate, async (req: Request, res: Response
 // newest first) for the "Lịch sử mua hàng" page.
 router.get('/orders/my', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
-    const orders = await prisma.courseOrder.findMany({
+    let orders = await prisma.courseOrder.findMany({
       where: { userId: req.userId },
       include: { course: { select: { id: true, slug: true, title: true, thumbnailUrl: true } } },
       orderBy: { createdAt: 'desc' },
       take: 200,
     });
+
+    // Reconcile against PayOS: any recent PENDING/FAILED PayOS order that
+    // PayOS reports as PAID (money received but webhook never fired / the
+    // stale-cron flipped it) is recovered here — so just opening the
+    // purchase history grants access. Capped at the 5 most recent to keep
+    // this cheap.
+    if (isPayosConfigured()) {
+      const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+      const toCheck = orders
+        .filter((o) => o.paymentMethod === 'PAYOS' && (o.status === 'PENDING' || o.status === 'FAILED') && o.createdAt.getTime() > dayAgo)
+        .slice(0, 5);
+      let recovered = false;
+      for (const o of toCheck) {
+        const st = await getPayosStatus(o.id);
+        if (st && st.status === 'PAID') {
+          await markCourseOrderPaidAndEnroll(o.id, { txnNo: 'payos-reconcile', payDate: new Date() });
+          recovered = true;
+        }
+      }
+      if (recovered) {
+        orders = await prisma.courseOrder.findMany({
+          where: { userId: req.userId },
+          include: { course: { select: { id: true, slug: true, title: true, thumbnailUrl: true } } },
+          orderBy: { createdAt: 'desc' },
+          take: 200,
+        });
+      }
+    }
+
     res.json({
       success: true,
       data: orders.map((o) => ({

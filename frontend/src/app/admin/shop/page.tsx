@@ -322,6 +322,11 @@ export default function AdminShopPage() {
     }
   };
 
+  // Guidance-editor hooks — declared here (before any early return) so hook
+  // order is stable (fixes React #310).
+  const guidanceRef = useRef<HTMLTextAreaElement>(null);
+  const [guidanceUploading, setGuidanceUploading] = useState(false);
+
   // Move a product up/down in the global manual order and persist.
   const [reordering, setReordering] = useState(false);
   const moveProduct = async (id: string, dir: -1 | 1) => {
@@ -538,9 +543,6 @@ export default function AdminShopPage() {
   };
 
   // ── Guidance editor helpers (image paste + "tại đây" links) ──
-  const guidanceRef = useRef<HTMLTextAreaElement>(null);
-  const [guidanceUploading, setGuidanceUploading] = useState(false);
-
   const insertGuidance = (snippet: string) => {
     const el = guidanceRef.current;
     const cur = productForm.guidance;

@@ -127,7 +127,7 @@ export default function ShopPage() {
   }
 
   return (
-    <div className="min-h-screen pt-20" style={{ background: '#050310' }}>
+    <div className="min-h-screen pt-20">
       <DigitalShopTermsGate />
       <SummerShopBackground />
       {/* Hero */}

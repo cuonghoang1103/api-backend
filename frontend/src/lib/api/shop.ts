@@ -324,6 +324,23 @@ export async function getShippingConfig(): Promise<ShippingConfig> {
   }
 }
 
+// ─── Check usage (API/activation key) ───────────────────────────────────────────
+
+export interface CheckUsageResult {
+  configured: boolean;
+  ok?: boolean;
+  message?: string;
+  usage?: Record<string, any>;
+}
+
+export async function checkUsage(apiKey: string): Promise<CheckUsageResult> {
+  const res = await request<ApiResponse<CheckUsageResult>>('/shop/check-usage', {
+    method: 'POST',
+    body: JSON.stringify({ apiKey }),
+  });
+  return res.data;
+}
+
 // ─── Product reviews ───────────────────────────────────────────────────────────
 
 export interface ProductReview {

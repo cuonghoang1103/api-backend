@@ -19,9 +19,11 @@ export default function ShopCategoryManager({ onChange }: { onChange?: () => voi
   const [categories, setCategories] = useState<AdminCategoryResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [newName, setNewName] = useState('');
+  const [newDesc, setNewDesc] = useState('');
   const [creating, setCreating] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editName, setEditName] = useState('');
+  const [editDesc, setEditDesc] = useState('');
   const [busyId, setBusyId] = useState<number | null>(null);
 
   const load = async () => {
@@ -40,8 +42,9 @@ export default function ShopCategoryManager({ onChange }: { onChange?: () => voi
     if (!name) return;
     setCreating(true);
     try {
-      await adminCreateCategory({ name });
+      await adminCreateCategory({ name, description: newDesc.trim() || undefined });
       setNewName('');
+      setNewDesc('');
       await load();
       notify();
       toast.success('Đã thêm danh mục');
@@ -57,11 +60,11 @@ export default function ShopCategoryManager({ onChange }: { onChange?: () => voi
     if (!name) return;
     setBusyId(id);
     try {
-      await adminUpdateCategory(id, { name });
+      await adminUpdateCategory(id, { name, description: editDesc.trim() });
       setEditingId(null);
       await load();
       notify();
-      toast.success('Đã đổi tên danh mục');
+      toast.success('Đã cập nhật danh mục');
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Không đổi được tên');
     } finally {
@@ -104,23 +107,32 @@ export default function ShopCategoryManager({ onChange }: { onChange?: () => voi
       {open && (
         <div className="px-5 pb-5 border-t border-darkborder">
           {/* Add */}
-          <div className="flex gap-2 mt-4 mb-4">
-            <input
-              type="text"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
-              placeholder="Tên danh mục mới (VD: Sách, Tài liệu, Sản phẩm thật)…"
-              className="flex-1 px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
+          <div className="mt-4 mb-4 space-y-2">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
+                placeholder="Tên danh mục mới (VD: Cursor AI, Tài khoản, Sách)…"
+                className="flex-1 px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
+              />
+              <button
+                onClick={handleCreate}
+                disabled={creating || !newName.trim()}
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-40"
+              >
+                {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                Thêm
+              </button>
+            </div>
+            <textarea
+              value={newDesc}
+              onChange={(e) => setNewDesc(e.target.value)}
+              rows={2}
+              placeholder="Mô tả danh mục (tùy chọn) — hiện khi khách chọn danh mục này ở Shop…"
+              className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none"
             />
-            <button
-              onClick={handleCreate}
-              disabled={creating || !newName.trim()}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-40"
-            >
-              {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-              Thêm
-            </button>
           </div>
 
           {/* List */}
@@ -133,44 +145,56 @@ export default function ShopCategoryManager({ onChange }: { onChange?: () => voi
           ) : (
             <div className="space-y-2">
               {categories.map((cat) => (
-                <div key={cat.id} className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-xl px-3 py-2">
+                <div key={cat.id} className="bg-darkbg border border-darkborder rounded-xl px-3 py-2">
                   {editingId === cat.id ? (
-                    <>
-                      <input
-                        type="text"
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
-                        onKeyDown={(e) => { if (e.key === 'Enter') handleRename(cat.id); if (e.key === 'Escape') setEditingId(null); }}
-                        autoFocus
-                        className="flex-1 px-3 py-1.5 bg-darkcard border border-neon-violet/40 rounded-lg text-sm text-text-primary focus:outline-none"
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          onKeyDown={(e) => { if (e.key === 'Escape') setEditingId(null); }}
+                          autoFocus
+                          className="flex-1 px-3 py-1.5 bg-darkcard border border-neon-violet/40 rounded-lg text-sm text-text-primary focus:outline-none"
+                        />
+                        <button onClick={() => handleRename(cat.id)} disabled={busyId === cat.id} className="p-1.5 text-green-400 hover:bg-green-400/10 rounded-lg">
+                          {busyId === cat.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                        </button>
+                        <button onClick={() => setEditingId(null)} className="p-1.5 text-text-muted hover:bg-darkborder/50 rounded-lg">
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <textarea
+                        value={editDesc}
+                        onChange={(e) => setEditDesc(e.target.value)}
+                        rows={2}
+                        placeholder="Mô tả danh mục…"
+                        className="w-full px-3 py-1.5 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none resize-none"
                       />
-                      <button onClick={() => handleRename(cat.id)} disabled={busyId === cat.id} className="p-1.5 text-green-400 hover:bg-green-400/10 rounded-lg">
-                        {busyId === cat.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-                      </button>
-                      <button onClick={() => setEditingId(null)} className="p-1.5 text-text-muted hover:bg-darkborder/50 rounded-lg">
-                        <X className="w-4 h-4" />
-                      </button>
-                    </>
+                    </div>
                   ) : (
-                    <>
-                      <span className="flex-1 text-sm text-text-primary font-medium">{cat.name}</span>
-                      <span className="text-xs text-text-muted px-2 py-0.5 bg-darkcard rounded-lg">{cat.productCount} SP</span>
-                      <button
-                        onClick={() => { setEditingId(cat.id); setEditName(cat.name); }}
-                        className="p-1.5 text-text-muted hover:text-neon-violet hover:bg-neon-violet/10 rounded-lg"
-                        title="Đổi tên"
-                      >
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(cat)}
-                        disabled={busyId === cat.id}
-                        className="p-1.5 text-text-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg"
-                        title="Xoá"
-                      >
-                        {busyId === cat.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                      </button>
-                    </>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="flex-1 text-sm text-text-primary font-medium">{cat.name}</span>
+                        <span className="text-xs text-text-muted px-2 py-0.5 bg-darkcard rounded-lg">{cat.productCount} SP</span>
+                        <button
+                          onClick={() => { setEditingId(cat.id); setEditName(cat.name); setEditDesc(cat.description || ''); }}
+                          className="p-1.5 text-text-muted hover:text-neon-violet hover:bg-neon-violet/10 rounded-lg"
+                          title="Sửa"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(cat)}
+                          disabled={busyId === cat.id}
+                          className="p-1.5 text-text-muted hover:text-red-400 hover:bg-red-400/10 rounded-lg"
+                          title="Xoá"
+                        >
+                          {busyId === cat.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                        </button>
+                      </div>
+                      {cat.description && <p className="text-xs text-text-muted mt-1 line-clamp-2">{cat.description}</p>}
+                    </div>
                   )}
                 </div>
               ))}

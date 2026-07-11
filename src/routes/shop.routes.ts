@@ -962,6 +962,40 @@ router.get('/shipping-config', (_req, res: Response<ApiResponse>) => {
   res.json({ success: true, data: { flatFee: SHIPPING_FLAT_FEE, freeThreshold: SHIPPING_FREE_THRESHOLD } });
 });
 
+// ─── POST /api/v1/shop/check-usage ───────────────────
+// "Check usage" tool: the buyer pastes an API/activation key and we return
+// its usage/limits. The real data comes from a provider the shop owner wires
+// up later via CHECK_USAGE_API_URL (POST {apiKey} → usage JSON). Until then we
+// respond gracefully so the UI renders a "chưa cấu hình" state instead of an
+// error. The key is NEVER logged or stored.
+router.post('/check-usage', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const apiKey = String((req.body as { apiKey?: unknown })?.apiKey || '').trim();
+    if (!apiKey) throw new AppError('Vui long nhap API key', 400);
+
+    const providerUrl = process.env.CHECK_USAGE_API_URL;
+    if (!providerUrl) {
+      res.json({ success: true, data: { configured: false, message: 'Tính năng kiểm tra đang được cấu hình. Vui lòng quay lại sau.' } });
+      return;
+    }
+    try {
+      const r = await fetch(providerUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...(process.env.CHECK_USAGE_API_TOKEN ? { Authorization: `Bearer ${process.env.CHECK_USAGE_API_TOKEN}` } : {}) },
+        body: JSON.stringify({ apiKey }),
+      });
+      const json = (await r.json().catch(() => ({}))) as Record<string, unknown>;
+      if (!r.ok) {
+        res.json({ success: true, data: { configured: true, ok: false, message: (json as { message?: string }).message || 'Không tìm thấy thông tin cho key này.' } });
+        return;
+      }
+      res.json({ success: true, data: { configured: true, ok: true, usage: json } });
+    } catch {
+      throw new AppError('Không kết nối được máy chủ kiểm tra', 502);
+    }
+  } catch (error) { next(error); }
+});
+
 // ─── GET /api/v1/shop/orders/my ─────────────────────
 router.get('/orders/my', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
   try {

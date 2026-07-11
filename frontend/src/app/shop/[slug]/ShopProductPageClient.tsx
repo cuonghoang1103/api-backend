@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
   ShoppingCart,
@@ -15,6 +15,9 @@ import {
   Tag,
   Package,
   TrendingUp,
+  Zap,
+  Headphones,
+  RefreshCw,
 } from 'lucide-react';
 import SmartImage from '@/components/ui/SmartImage';
 import Link from 'next/link';
@@ -53,6 +56,7 @@ export default function ProductDetailPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { fetchProducts, isLoaded } = useProductStore();
   const addShopItem = useCartStore((state) => state.addShopItem);
+  const router = useRouter();
 
   useEffect(() => {
     async function load() {
@@ -261,35 +265,43 @@ export default function ProductDetailPage() {
                 </span>
               )}
 
-              <button
-                onClick={() => addShopItem(product)}
-                disabled={product.stock === 0}
-                className="w-full flex items-center justify-center gap-2 py-4 mt-4 font-bold rounded-xl text-base transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
-                style={{
-                  background: product.stock === 0
-                    ? '#27272a'
-                    : `linear-gradient(135deg, ${c.primary}, ${c.secondary})`,
-                  color: '#fff',
-                  boxShadow: product.stock > 0 ? `0 4px 24px ${c.primary}50` : 'none',
-                }}
-              >
-                <ShoppingCart className="w-5 h-5" />
-                {product.stock === 0 ? t('shop.detail.outOfStock') : t('shop.detail.addToCart')}
-              </button>
-
-              {/* Trust badges */}
-              <div className="grid grid-cols-1 gap-3 mt-4 sm:grid-cols-2">
+              {/* Feature perks (Genz-style 2×2 cards) */}
+              <div className="grid grid-cols-2 gap-3 mt-4">
                 {[
-                  { icon: ShieldCheck, text: t('shop.detail.securePayment') },
-                  { icon: Download, text: t('shop.detail.instantDownload') },
-                  { icon: CheckCircle2, text: 'Bảo hành theo sản phẩm' },
-                  { icon: Star, text: t('shop.detail.qualityGuarantee') },
-                ].map(({ icon: Icon, text }) => (
-                  <div key={text} className="flex items-center gap-2 text-xs" style={{ color: c.textMuted }}>
-                    <Icon className="w-4 h-4 shrink-0" style={{ color: c.primary }} />
-                    <span>{text}</span>
+                  { icon: ShieldCheck, text: 'Bảo hành 100%', color: c.primary },
+                  { icon: isPhysical ? Package : Zap, text: isPhysical ? 'Giao tận nơi' : 'Giao ngay', color: c.tertiary },
+                  { icon: Headphones, text: 'Hỗ trợ 24/7', color: '#4ade80' },
+                  { icon: RefreshCw, text: 'Đổi mới nếu lỗi', color: c.secondary },
+                ].map(({ icon: Icon, text, color }) => (
+                  <div key={text} className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-xl border" style={{ background: 'rgba(255,255,255,0.02)', borderColor: c.borderLight }}>
+                    <Icon className="w-5 h-5" style={{ color }} />
+                    <span className="text-xs font-medium text-text-secondary">{text}</span>
                   </div>
                 ))}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                <button
+                  onClick={() => addShopItem(product)}
+                  disabled={product.stock === 0}
+                  className="w-full flex items-center justify-center gap-2 py-4 font-bold rounded-xl text-base transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={{
+                    background: product.stock === 0 ? '#27272a' : `linear-gradient(135deg, ${c.primary}, ${c.secondary})`,
+                    color: '#fff',
+                    boxShadow: product.stock > 0 ? `0 4px 24px ${c.primary}50` : 'none',
+                  }}
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  {product.stock === 0 ? t('shop.detail.outOfStock') : t('shop.detail.addToCart')}
+                </button>
+                <button
+                  onClick={() => { if (product.stock !== 0) { addShopItem(product); router.push('/checkout'); } }}
+                  disabled={product.stock === 0}
+                  className="w-full flex items-center justify-center gap-2 py-4 font-bold rounded-xl text-base border transition-all hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={{ borderColor: c.primary, color: c.primary }}
+                >
+                  Mua ngay
+                </button>
               </div>
             </div>
 

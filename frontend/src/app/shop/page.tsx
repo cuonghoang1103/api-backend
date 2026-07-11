@@ -3,11 +3,14 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, Shield, Clock, Star, ShoppingBag } from 'lucide-react';
+import Link from 'next/link';
+import { Gauge } from 'lucide-react';
 import ProductCard from '@/components/shop/ProductCard';
 import { Skeleton } from '@/components/ui/Skeleton';
 import ProductFilter from '@/components/shop/ProductFilter';
 import CartDrawer from '@/components/shop/CartDrawer';
 import ShopBackground from '@/components/shop/ShopBackground';
+import DigitalShopTermsGate from '@/components/shop/DigitalShopTermsGate';
 import { useProductStore } from '@/store/productStore';
 import type { PriceRange, SortOption } from '@/types';
 import { getCategories, type CategoryResponse } from '@/lib/api/shop';
@@ -122,6 +125,7 @@ export default function ShopPage() {
 
   return (
     <div className="min-h-screen pt-20" style={{ background: '#050310' }}>
+      <DigitalShopTermsGate />
       <ShopBackground />
       {/* Hero */}
       <section className="relative py-12 overflow-hidden">
@@ -161,6 +165,18 @@ export default function ShopPage() {
                 </div>
               ))}
             </div>
+
+            {/* Check-usage CTA */}
+            <div className="mt-8">
+              <Link
+                href="/shop/check-usage"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
+                style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7)', boxShadow: '0 8px 24px rgba(168,85,247,0.35)' }}
+              >
+                <Gauge className="w-4 h-4" />
+                Kiểm tra usage / limit của API key
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -182,6 +198,18 @@ export default function ShopPage() {
             categories={categoryOptions}
           />
         </div>
+
+        {/* Category description banner */}
+        {(() => {
+          const selectedCat = categories.find((c) => c.name === category);
+          if (!selectedCat?.description) return null;
+          return (
+            <div className="mb-8 rounded-2xl p-5 border" style={{ background: 'rgba(99,102,241,0.06)', borderColor: 'rgba(129,140,248,0.25)' }}>
+              <h2 className="text-lg font-heading font-bold text-text-primary mb-1">{selectedCat.name}</h2>
+              <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap">{selectedCat.description}</p>
+            </div>
+          );
+        })()}
 
         {/* Grid */}
         {filtered.length === 0 ? (

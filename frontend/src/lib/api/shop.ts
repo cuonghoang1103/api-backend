@@ -55,6 +55,7 @@ export interface ProductResponse {
   active: boolean;
   isHot?: boolean;
   isNew?: boolean;
+  sortOrder?: number;
   categoryId?: number;
   categoryName?: string;
   categorySlug?: string;
@@ -444,6 +445,14 @@ export async function adminDeleteProduct(
   });
 }
 
+// Persist a manual product order (array of ids in the desired order).
+export async function adminReorderProducts(ids: number[]): Promise<ApiResponse<void>> {
+  return request('/shop/admin/products/reorder', {
+    method: 'PATCH',
+    body: JSON.stringify({ ids }),
+  });
+}
+
 // Admin product list — unlike the public endpoint this INCLUDES the digital
 // deliverables (fileUrl / digitalContent) so the edit form can load them.
 export async function adminGetProducts(size = 200): Promise<ProductResponse[]> {
@@ -590,6 +599,7 @@ export function mapProductFromBackend(bp: ProductResponse) {
     guidance: bp.guidance ?? '',
     isHot: bp.isHot ?? false,
     isNew: bp.isNew ?? false,
+    sortOrder: bp.sortOrder ?? 0,
     fileUrl: bp.fileUrl,
     digitalContent: bp.digitalContent,
     stock: bp.stockQuantity ?? 0,

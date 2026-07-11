@@ -4,14 +4,14 @@ import { useState, useEffect, useRef } from 'react';
 import {
   Plus, Search, Trash2, X, Loader2,
   Edit, Star, Flame, Sparkles, CheckCircle2,
-  ShoppingBag, ChevronLeft, ChevronRight,
+  ShoppingBag, ChevronLeft, ChevronRight, ChevronUp,
   Upload, Info, ChevronDown, PlusCircle, Trash,
   DollarSign, Package, Tag,
 } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { useProductStore } from '@/store/productStore';
-import { adminCreateProduct, adminUpdateProduct, adminDeleteProduct, adminGetProducts, mapProductFromBackend, adminGetCategories, type AdminCategoryResponse } from '@/lib/api/shop';
+import { adminCreateProduct, adminUpdateProduct, adminDeleteProduct, adminGetProducts, adminReorderProducts, mapProductFromBackend, adminGetCategories, type AdminCategoryResponse } from '@/lib/api/shop';
 import { fileApi } from '@/lib/api';
 import type { Product, ProductSpec } from '@/types';
 import ImageUpload from '@/components/admin/ImageUpload';
@@ -108,6 +108,7 @@ const emptyProduct = {
   stock: 999,
   isFeatured: false,
   soldCount: 0,
+  sortOrder: 0,
   tags: [] as string[],
   type: 'DIGITAL' as string,
   fileUrl: '',
@@ -321,6 +322,26 @@ export default function AdminShopPage() {
     }
   };
 
+  // Move a product up/down in the global manual order and persist.
+  const [reordering, setReordering] = useState(false);
+  const moveProduct = async (id: string, dir: -1 | 1) => {
+    const ordered = [...products].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    const idx = ordered.findIndex((p) => p.id === id);
+    const swap = idx + dir;
+    if (idx < 0 || swap < 0 || swap >= ordered.length) return;
+    [ordered[idx], ordered[swap]] = [ordered[swap], ordered[idx]];
+    setReordering(true);
+    try {
+      await adminReorderProducts(ordered.map((p) => Number(p.id)));
+      await reloadProducts();
+      toast.success('Đã lưu thứ tự');
+    } catch {
+      toast.error('Không lưu được thứ tự');
+    } finally {
+      setReordering(false);
+    }
+  };
+
   if (!mounted) {
     return (
       <div className="min-h-screen bg-darkbg pt-20 flex items-center justify-center">
@@ -369,6 +390,7 @@ export default function AdminShopPage() {
       stock: product.stock || 0,
       isFeatured: Boolean(product.isFeatured),
       soldCount: product.soldCount || 0,
+      sortOrder: product.sortOrder || 0,
       tags: product.tags || [],
       type: product.productType || 'DIGITAL',
       fileUrl: product.fileUrl || '',
@@ -418,6 +440,7 @@ export default function AdminShopPage() {
         featured: productForm.isFeatured,
         isHot: productForm.isHot,
         isNew: productForm.isNew,
+        sortOrder: productForm.sortOrder,
         categoryName: productForm.category,
         type: productForm.type,
         fileUrl: productForm.fileUrl.trim(),
@@ -738,6 +761,25 @@ export default function AdminShopPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-end gap-1">
+                          {/* Manual reorder */}
+                          <div className="flex flex-col mr-1">
+                            <button
+                              onClick={() => moveProduct(product.id, -1)}
+                              disabled={reordering}
+                              className="p-0.5 rounded text-text-muted hover:text-neon-violet hover:bg-neon-violet/10 transition-colors disabled:opacity-40"
+                              title="Lên trên"
+                            >
+                              <ChevronUp className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => moveProduct(product.id, 1)}
+                              disabled={reordering}
+                              className="p-0.5 rounded text-text-muted hover:text-neon-violet hover:bg-neon-violet/10 transition-colors disabled:opacity-40"
+                              title="Xuống dưới"
+                            >
+                              <ChevronDown className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                           <button
                             onClick={() => handleToggleFeatured(product)}
                             className={`p-1.5 rounded-lg transition-colors ${product.isFeatured ? 'text-neon-violet bg-neon-violet/10' : 'text-text-muted hover:text-text-primary hover:bg-white/5'}`}
@@ -1239,6 +1281,18 @@ export default function AdminShopPage() {
                     className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50"
                   />
                 </div>
+              </div>
+
+              {/* Display order */}
+              <div>
+                <label className="block text-xs font-medium text-text-muted mb-1.5">Thứ tự hiển thị <span className="font-normal">(số nhỏ hiện trước)</span></label>
+                <input
+                  type="number"
+                  value={productForm.sortOrder}
+                  onChange={(e) => setProductForm((f) => ({ ...f, sortOrder: Number(e.target.value) }))}
+                  className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50"
+                />
+                <p className="text-[10px] text-text-muted mt-1">Hoặc dùng mũi tên ▲▼ ở danh sách để sắp xếp nhanh.</p>
               </div>
             </div>
 

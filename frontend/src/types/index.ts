@@ -624,7 +624,7 @@ export type ProductCategory = 'Web Template' | 'Tools' | 'Software' | 'Accounts'
 
 export type PriceRange = 'all' | 'under200' | '200to500' | 'above500';
 
-export type SortOption = 'newest' | 'price_asc' | 'price_desc' | 'popular';
+export type SortOption = 'featured' | 'newest' | 'price_asc' | 'price_desc' | 'popular';
 
 export type ItemType = 'shop' | 'academy';
 
@@ -648,6 +648,8 @@ export interface Product {
   category: string;
   /** PHYSICAL | DIGITAL — drives shipping vs instant delivery. */
   productType?: string;
+  /** Manual display order (admin-sortable; lower = first). */
+  sortOrder?: number;
   rating: number;
   reviewCount: number;
   description: string;

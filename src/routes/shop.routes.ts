@@ -1,4 +1,5 @@
 import { Router, type Response } from 'express';
+import { Prisma } from '@prisma/client';
 import { nanoid } from 'nanoid';
 import { prisma } from '../config/database.js';
 import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
@@ -133,6 +134,7 @@ interface SerializableProduct {
   active: boolean;
   isHot: boolean;
   isNew: boolean;
+  sortOrder?: number;
   categoryId: number | null;
   type: string;
   fileUrl: string | null;
@@ -166,6 +168,7 @@ function serializeProduct(product: SerializableProduct, admin = false) {
     active: product.active,
     isHot: product.isHot,
     isNew: product.isNew,
+    sortOrder: product.sortOrder ?? 0,
     categoryId: product.categoryId,
     categoryName: product.category?.name,
     categorySlug: product.category?.slug,
@@ -226,12 +229,14 @@ router.get('/products', async (req, res: Response<ApiResponse>, next) => {
     if (category) where.category = { slug: String(category) };
     if (featured !== undefined) where.featured = String(featured) === 'true';
 
-    // Sort options for the shop grid. Default = newest first.
-    const orderBy =
-      sort === 'price_asc' ? { price: 'asc' as const }
-      : sort === 'price_desc' ? { price: 'desc' as const }
-      : sort === 'bestselling' ? { soldCount: 'desc' as const }
-      : { createdAt: 'desc' as const };
+    // Sort options for the shop grid. Default = admin manual order
+    // (sortOrder asc, then newest) so the storefront respects drag/arrange.
+    const orderBy: Prisma.ProductOrderByWithRelationInput | Prisma.ProductOrderByWithRelationInput[] =
+      sort === 'price_asc' ? { price: 'asc' }
+      : sort === 'price_desc' ? { price: 'desc' }
+      : sort === 'bestselling' ? { soldCount: 'desc' }
+      : sort === 'newest' ? { createdAt: 'desc' }
+      : [{ sortOrder: 'asc' }, { createdAt: 'desc' }];
 
     const [products, total] = await Promise.all([
       prisma.product.findMany({ where, skip, take: pageSize, orderBy, include: { category: true } }),
@@ -452,7 +457,7 @@ router.get('/admin/products', authenticate, requireAdmin('ROLE_ADMIN'), async (r
     }
 
     const [products, total] = await Promise.all([
-      prisma.product.findMany({ where, skip, take: pageSize, orderBy: { createdAt: 'desc' }, include: { category: true } }),
+      prisma.product.findMany({ where, skip, take: pageSize, orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }], include: { category: true } }),
       prisma.product.count({ where }),
     ]);
 
@@ -479,6 +484,7 @@ router.post('/admin/products', authenticate, requireAdmin('ROLE_ADMIN'), async (
       featured,
       isHot,
       isNew,
+      sortOrder,
       categoryId: categoryIdInput,
       categoryName,
       type,
@@ -513,6 +519,7 @@ router.post('/admin/products', authenticate, requireAdmin('ROLE_ADMIN'), async (
         featured: Boolean(featured),
         isHot: Boolean(isHot),
         isNew: Boolean(isNew),
+        sortOrder: Number.isFinite(Number(sortOrder)) ? Number(sortOrder) : 0,
         active: active !== undefined ? Boolean(active) : true,
         categoryId,
         type: normalizeProductType(type),
@@ -548,6 +555,7 @@ router.put('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), asyn
       featured,
       isHot,
       isNew,
+      sortOrder,
       categoryId: categoryIdInput,
       categoryName,
       type,
@@ -579,6 +587,7 @@ router.put('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), asyn
         ...(featured !== undefined && { featured: Boolean(featured) }),
         ...(isHot !== undefined && { isHot: Boolean(isHot) }),
         ...(isNew !== undefined && { isNew: Boolean(isNew) }),
+        ...(sortOrder !== undefined && { sortOrder: Number(sortOrder) || 0 }),
         ...(active !== undefined && { active: Boolean(active) }),
         ...(categoryProvided && { categoryId }),
         ...(type !== undefined && { type: normalizeProductType(type) }),
@@ -592,6 +601,22 @@ router.put('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), asyn
     });
 
     res.json({ success: true, data: serializeProduct(updated, true), message: 'Product updated successfully' });
+  } catch (error) { next(error); }
+});
+
+// ─── PATCH /api/v1/shop/admin/products/reorder ───────
+// Persist a manual product order: body { ids: number[] } in the desired
+// order → sortOrder = index. (Registered before :id so it isn't shadowed.)
+router.patch('/admin/products/reorder', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const ids = (req.body as { ids?: unknown })?.ids;
+    if (!Array.isArray(ids) || ids.some((x) => !Number.isInteger(Number(x)))) {
+      throw new AppError('Danh sách ID không hợp lệ', 400);
+    }
+    await prisma.$transaction(
+      ids.map((id, index) => prisma.product.update({ where: { id: Number(id) }, data: { sortOrder: index } })),
+    );
+    res.json({ success: true, message: 'Đã lưu thứ tự sản phẩm' });
   } catch (error) { next(error); }
 });
 

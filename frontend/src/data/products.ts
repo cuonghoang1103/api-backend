@@ -592,8 +592,9 @@ export const PRICE_RANGES = [
 ] as const;
 
 export const SORT_OPTIONS = [
-  { value: 'newest', label: 'Newest' },
-  { value: 'price_asc', label: 'Price: Low → High' },
-  { value: 'price_desc', label: 'Price: High → Low' },
-  { value: 'popular', label: 'Most Popular' },
+  { value: 'featured', label: 'Nổi bật' },
+  { value: 'newest', label: 'Mới nhất' },
+  { value: 'price_asc', label: 'Giá: Thấp → Cao' },
+  { value: 'price_desc', label: 'Giá: Cao → Thấp' },
+  { value: 'popular', label: 'Bán chạy' },
 ] as const;

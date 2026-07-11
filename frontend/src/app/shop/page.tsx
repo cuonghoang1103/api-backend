@@ -9,7 +9,7 @@ import ProductCard from '@/components/shop/ProductCard';
 import { Skeleton } from '@/components/ui/Skeleton';
 import ProductFilter from '@/components/shop/ProductFilter';
 import CartDrawer from '@/components/shop/CartDrawer';
-import ShopBackground from '@/components/shop/ShopBackground';
+import SummerShopBackground from '@/components/shop/SummerShopBackground';
 import DigitalShopTermsGate from '@/components/shop/DigitalShopTermsGate';
 import { useProductStore } from '@/store/productStore';
 import type { PriceRange, SortOption } from '@/types';
@@ -22,7 +22,7 @@ export default function ShopPage() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<string>('all');
   const [priceRange, setPriceRange] = useState<PriceRange>('all');
-  const [sort, setSort] = useState<SortOption>('newest');
+  const [sort, setSort] = useState<SortOption>('featured');
   const [mounted, setMounted] = useState(false);
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
 
@@ -77,12 +77,15 @@ export default function ShopPage() {
         result.sort((a, b) => (b.soldCount || 0) - (a.soldCount || 0));
         break;
       case 'newest':
-      default:
         result.sort(
           (a, b) =>
             new Date(b.createdAt || 0).getTime() -
             new Date(a.createdAt || 0).getTime()
         );
+        break;
+      default:
+        // Preserve the admin's manual order (products arrive sorted by
+        // sortOrder from the API) — don't re-sort.
         break;
     }
 
@@ -126,7 +129,7 @@ export default function ShopPage() {
   return (
     <div className="min-h-screen pt-20" style={{ background: '#050310' }}>
       <DigitalShopTermsGate />
-      <ShopBackground />
+      <SummerShopBackground />
       {/* Hero */}
       <section className="relative py-12 overflow-hidden">
         <div className="absolute inset-0">
@@ -223,43 +226,26 @@ export default function ShopPage() {
             <p className="text-text-muted">{t('shop.page.adjustFilters')}</p>
           </div>
         ) : (
-          <>
-            {/* Hero Spotlight Banner — first/bestseller item */}
-            <motion.div
-              layout
-              className="mb-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
-            >
-              <ProductCard
-                product={filtered[0]}
-                index={0}
-                isSpotlight={true}
-              />
-            </motion.div>
-
-            {/* Product grid */}
-            <motion.div
-              layout
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-            >
-              <AnimatePresence mode="popLayout">
-                {filtered.slice(1).map((product, i) => (
-                  <motion.div
-                    key={product.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.3, delay: i * 0.04 }}
-                  >
-                    <ProductCard key={product.id} product={product} index={i + 1} />
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
-          </>
+          /* Uniform product grid (admin manual order) */
+          <motion.div
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          >
+            <AnimatePresence mode="popLayout">
+              {filtered.map((product, i) => (
+                <motion.div
+                  key={product.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
+                >
+                  <ProductCard product={product} index={i} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
       </div>
 

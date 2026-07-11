@@ -1077,6 +1077,8 @@ model Product {
   isHot            Boolean  @default(false) @map("is_hot")
   isNew            Boolean  @default(false) @map("is_new")
   active           Boolean  @default(true)
+  // Manual display order (admin-sortable). Lower = shown first.
+  sortOrder        Int      @default(0) @map("sort_order")
   categoryId       Int?     @map("category_id")
   // PHYSICAL (needs shipping) | DIGITAL (delivered instantly on payment)
   type             String   @default("DIGITAL") @db.VarChar(20)

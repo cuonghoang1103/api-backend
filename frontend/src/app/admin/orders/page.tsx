@@ -6,10 +6,10 @@ import Image from 'next/image';
 import {
   Receipt, Package, BookOpen, Search, CheckCircle,
   XCircle, Clock, Download, ChevronDown, ChevronRight,
-  FileText, Eye, Filter, Loader2,
+  FileText, Eye, Filter, Loader2, RotateCcw,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { adminGetOrders, adminUpdateOrderStatus, adminUpdateFulfillment, type OrderResponse } from '@/lib/api/shop';
+import { adminGetOrders, adminUpdateOrderStatus, adminUpdateFulfillment, adminRefundOrder, type OrderResponse } from '@/lib/api/shop';
 import { generateInvoicePDF } from '@/lib/invoice';
 import type { Order } from '@/types';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -33,10 +33,18 @@ function formatDate(dateStr: string): string {
   }).format(new Date(dateStr));
 }
 
+// A shop order counts as "successfully paid" when its status is PAID (set by
+// the payment gateways) OR the legacy 'COMPLETED' (older manual admin updates).
+function isPaidStatus(status: string): boolean {
+  return status === 'PAID' || status === 'COMPLETED';
+}
+
 function StatusBadge({ status, t }: { status: string; t: (key: string) => string | string[] }) {
   const configs: Record<string, { icon: typeof CheckCircle; color: string; bg: string; labelKey: string }> = {
-    COMPLETED: { icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-500/10', labelKey: 'orders.adminStatus.Completed' },
+    PAID: { icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-500/10', labelKey: 'orders.adminStatus.Paid' },
+    COMPLETED: { icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-500/10', labelKey: 'orders.adminStatus.Paid' },
     PENDING: { icon: Clock, color: 'text-yellow-400', bg: 'bg-yellow-500/10', labelKey: 'orders.adminStatus.Pending' },
+    REFUNDED: { icon: RotateCcw, color: 'text-purple-300', bg: 'bg-purple-500/10', labelKey: 'orders.adminStatus.Refunded' },
     FAILED: { icon: XCircle, color: 'text-red-400', bg: 'bg-red-500/10', labelKey: 'orders.adminStatus.Failed' },
     CANCELLED: { icon: XCircle, color: 'text-red-400', bg: 'bg-red-500/10', labelKey: 'orders.adminStatus.Cancelled' },
   };
@@ -132,7 +140,7 @@ export default function AdminOrdersPage() {
             ? {
                 ...o,
                 status: newStatus as Order['status'],
-                completedAt: newStatus === 'COMPLETED' ? new Date().toISOString() : o.completedAt,
+                completedAt: newStatus === 'PAID' ? new Date().toISOString() : o.completedAt,
               }
             : o
         )
@@ -145,6 +153,44 @@ export default function AdminOrdersPage() {
     }
   };
 
+  // ─── Refund (full/partial) — mirrors the course-order refund flow ───
+  const [refundFor, setRefundFor] = useState<string | null>(null);
+  const [refundAmount, setRefundAmount] = useState('');
+  const [refundReason, setRefundReason] = useState('');
+  const [refunding, setRefunding] = useState(false);
+
+  const openRefund = (order: Order) => {
+    setRefundFor(order.id);
+    setRefundAmount(String(order.total ?? '')); // default = full refund
+    setRefundReason('');
+  };
+
+  const handleRefund = async () => {
+    if (!refundFor) return;
+    if (!refundReason.trim()) {
+      toast.error(t('admin.orders.refundReasonRequired'));
+      return;
+    }
+    const amountNum = Number(refundAmount);
+    if (!refundAmount || isNaN(amountNum) || amountNum <= 0) {
+      toast.error(t('admin.orders.refundAmountInvalid'));
+      return;
+    }
+    setRefunding(true);
+    try {
+      const res = await adminRefundOrder(parseInt(refundFor), { reason: refundReason.trim(), refundAmount: amountNum });
+      const updated = res.data;
+      setOrders((prev) => prev.map((o) => (o.id === refundFor ? { ...o, status: 'REFUNDED' as Order['status'] } : o)));
+      if (updated) setRawOrders((prev) => ({ ...prev, [refundFor]: { ...prev[refundFor], ...updated } }));
+      toast.success(t('admin.orders.refundSuccess'));
+      setRefundFor(null);
+    } catch {
+      toast.error(t('admin.orders.refundError'));
+    } finally {
+      setRefunding(false);
+    }
+  };
+
   const filteredOrders = orders.filter((order) => {
     const q = searchQuery.toLowerCase();
     const matchesSearch =
@@ -153,13 +199,23 @@ export default function AdminOrdersPage() {
       (order.orderCode || '').toLowerCase().includes(q) ||
       order.buyerInfo.fullName.toLowerCase().includes(q) ||
       order.buyerInfo.email.toLowerCase().includes(q);
-    const matchesStatus = statusFilter === 'ALL' || order.status === statusFilter;
+    const matchesStatus =
+      statusFilter === 'ALL' ||
+      (statusFilter === 'PAID' ? isPaidStatus(order.status) : order.status === statusFilter);
     return matchesSearch && matchesStatus;
   });
 
-  const totalRevenue = orders
-    .filter((o) => o.status === 'COMPLETED')
-    .reduce((sum, o) => sum + (o.total || 0), 0);
+  // Revenue = paid orders' totals MINUS any amounts refunded. A REFUNDED order
+  // contributes total − refundAmount (0 for a full refund) so the number is the
+  // net money actually kept.
+  const totalRevenue = orders.reduce((sum, o) => {
+    if (isPaidStatus(o.status)) return sum + (o.total || 0);
+    if (o.status === 'REFUNDED') {
+      const refunded = rawOrders[o.id]?.refundAmount ?? o.total ?? 0;
+      return sum + Math.max(0, (o.total || 0) - Number(refunded));
+    }
+    return sum;
+  }, 0);
 
   const handleDownloadInvoice = (order: Order) => {
     generateInvoicePDF(order);
@@ -180,11 +236,12 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
         {[
           { labelKey: 'admin.orders.totalOrders', value: orders.length, color: 'text-text-primary' },
-          { labelKey: 'admin.orders.completed', value: orders.filter((o) => o.status === 'COMPLETED').length, color: 'text-green-400' },
+          { labelKey: 'admin.orders.completed', value: orders.filter((o) => isPaidStatus(o.status)).length, color: 'text-green-400' },
           { labelKey: 'admin.orders.pending', value: orders.filter((o) => o.status === 'PENDING').length, color: 'text-yellow-400' },
+          { labelKey: 'admin.orders.refunded', value: orders.filter((o) => o.status === 'REFUNDED').length, color: 'text-purple-300' },
           { labelKey: 'admin.orders.revenue', value: formatPrice(totalRevenue), color: 'text-neon-violet', isPrice: true },
         ].map((stat, i) => (
           <div key={i} className="bg-darkcard border border-darkborder rounded-2xl p-5">
@@ -209,7 +266,7 @@ export default function AdminOrdersPage() {
           />
         </div>
         <div className="flex gap-2">
-          {['ALL', 'COMPLETED', 'PENDING', 'CANCELLED'].map((s) => (
+          {['ALL', 'PAID', 'PENDING', 'REFUNDED'].map((s) => (
             <button
               key={s}
               onClick={() => setStatusFilter(s)}
@@ -219,7 +276,7 @@ export default function AdminOrdersPage() {
                   : 'bg-darkcard border border-darkborder text-text-secondary hover:text-text-primary'
               }`}
             >
-              {s === 'ALL' ? t('admin.orders.filterAll') : s === 'COMPLETED' ? t('admin.orders.filterCompleted') : s === 'PENDING' ? t('admin.orders.filterPending') : t('admin.orders.filterCancelled')}
+              {s === 'ALL' ? t('admin.orders.filterAll') : s === 'PAID' ? t('admin.orders.filterPaid') : s === 'PENDING' ? t('admin.orders.filterPending') : t('admin.orders.filterRefunded')}
             </button>
           ))}
         </div>
@@ -399,17 +456,34 @@ export default function AdminOrdersPage() {
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap">
-                      {/* Status update */}
+                      {/* Payment status update. A REFUNDED order is terminal —
+                          its status is locked (refunds happen via the button). */}
                       <select
-                        value={order.status}
+                        value={isPaidStatus(order.status) ? 'PAID' : order.status}
                         onChange={(e) => handleUpdateStatus(parseInt(order.id), e.target.value)}
-                        disabled={updating === order.id}
+                        disabled={updating === order.id || order.status === 'REFUNDED'}
                         className="px-3 py-2 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50 cursor-pointer disabled:opacity-50"
                       >
-                        <option value="PENDING">{t('orders.status.Pending')}</option>
-                        <option value="COMPLETED">{t('orders.status.Completed')}</option>
+                        <option value="PENDING">{t('orders.adminStatus.Pending')}</option>
+                        <option value="PAID">{t('orders.adminStatus.Paid')}</option>
+                        <option value="FAILED">{t('orders.adminStatus.Failed')}</option>
                         <option value="CANCELLED">{t('orders.adminStatus.Cancelled')}</option>
+                        {order.status === 'REFUNDED' && (
+                          <option value="REFUNDED">{t('orders.adminStatus.Refunded')}</option>
+                        )}
                       </select>
+
+                      {/* Refund — only for a paid, not-yet-refunded order */}
+                      {isPaidStatus(order.status) && (
+                        <button
+                          onClick={() => openRefund(order)}
+                          disabled={updating === order.id}
+                          className="flex items-center gap-1.5 px-3 py-2 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+                        >
+                          <RotateCcw className="w-4 h-4" />
+                          {t('admin.orders.refund')}
+                        </button>
+                      )}
 
                       {/* Physical shipping lifecycle */}
                       {(() => {
@@ -466,6 +540,67 @@ export default function AdminOrdersPage() {
           })}
         </div>
       )}
+
+      {/* ─── Refund modal ─── */}
+      {refundFor && (() => {
+        const order = orders.find((o) => o.id === refundFor);
+        if (!order) return null;
+        return (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/60 p-4" onClick={() => !refunding && setRefundFor(null)}>
+            <div className="w-full max-w-md bg-darkcard border border-purple-500/30 rounded-2xl p-6 space-y-4" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center gap-2">
+                <RotateCcw className="w-5 h-5 text-purple-300" />
+                <h3 className="text-lg font-heading font-bold text-text-primary">{t('admin.orders.refundTitle')}</h3>
+              </div>
+              <div className="text-sm text-text-muted">
+                {t('admin.orders.orderCode')}: <span className="text-text-secondary font-mono">{order.orderCode}</span>
+                <br />
+                {t('checkout.grandTotal')}: <span className="text-neon-violet font-semibold">{formatPrice(order.total || 0)}</span>
+              </div>
+              <div>
+                <label className="block text-xs text-text-muted mb-1">{t('admin.orders.refundAmountLabel')}</label>
+                <input
+                  type="number"
+                  value={refundAmount}
+                  onChange={(e) => setRefundAmount(e.target.value)}
+                  max={order.total || undefined}
+                  min={1}
+                  className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-purple-500/50"
+                />
+                <p className="text-[11px] text-text-muted mt-1">{t('admin.orders.refundAmountHint')}</p>
+              </div>
+              <div>
+                <label className="block text-xs text-text-muted mb-1">{t('admin.orders.refundReasonLabel')}</label>
+                <textarea
+                  value={refundReason}
+                  onChange={(e) => setRefundReason(e.target.value)}
+                  rows={3}
+                  maxLength={500}
+                  placeholder={t('admin.orders.refundReasonPlaceholder') as string}
+                  className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-purple-500/50 resize-none"
+                />
+              </div>
+              <div className="flex gap-2 justify-end">
+                <button
+                  onClick={() => setRefundFor(null)}
+                  disabled={refunding}
+                  className="px-4 py-2 bg-darkbg border border-darkborder rounded-xl text-sm text-text-secondary hover:text-text-primary transition-colors disabled:opacity-50"
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  onClick={handleRefund}
+                  disabled={refunding}
+                  className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+                >
+                  {refunding ? <Loader2 className="w-4 h-4 animate-spin" /> : <RotateCcw className="w-4 h-4" />}
+                  {t('admin.orders.confirmRefund')}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }

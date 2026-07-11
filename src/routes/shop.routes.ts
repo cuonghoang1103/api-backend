@@ -758,20 +758,97 @@ router.get('/admin/orders', authenticate, requireAdmin('ROLE_ADMIN'), async (req
 router.put('/admin/orders/:id/status', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
   try {
     const id = parseInt(req.params.id, 10);
-    const { status } = req.body;
-    if (!status) throw new AppError('Status is required', 400);
+    // Canonical shop-order statuses match the payment layer + CourseOrder:
+    // PENDING | PAID | FAILED | CANCELLED. Legacy 'COMPLETED' (older admin
+    // builds) is normalised to PAID. REFUNDED is NOT settable here — it must go
+    // through POST /admin/orders/:id/refund so the refund audit fields are set.
+    let status = String(req.body.status || '').toUpperCase();
+    if (status === 'COMPLETED') status = 'PAID';
+    const allowed = ['PENDING', 'PAID', 'FAILED', 'CANCELLED'];
+    if (!allowed.includes(status)) {
+      throw new AppError('Trang thai khong hop le (dung /refund de hoan tien)', 400);
+    }
 
+    const isPaid = status === 'PAID';
     const updated = await prisma.shopOrder.update({
       where: { id },
       data: {
-        status: String(status),
-        paymentStatus: String(status) === 'COMPLETED' ? 'PAID' : undefined,
-        paidAt: String(status) === 'COMPLETED' ? new Date() : undefined,
+        status,
+        paymentStatus: isPaid ? 'PAID' : undefined,
+        paidAt: isPaid ? new Date() : undefined,
       },
       include: { items: true },
     });
 
     res.json({ success: true, data: updated, message: 'Order status updated successfully' });
+  } catch (error) { next(error); }
+});
+
+// ─── POST /api/v1/shop/admin/orders/:id/refund ───────
+// Full or partial refund of a PAID shop order (mirrors the course refund).
+// Body: { refundAmount?: number, reason: string }
+//   - refundAmount omitted / >= total → full refund; < total → partial.
+// Marks the order REFUNDED, records the audit fields, and (physical goods)
+// restocks the returned items. Idempotent-guarded: only a PAID, not-yet-
+// refunded order can be refunded.
+router.post('/admin/orders/:id/refund', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const reason = String(req.body.reason || '').trim();
+    if (!reason) throw new AppError('Ly do hoan tien la bat buoc', 400);
+    if (reason.length > 500) throw new AppError('Ly do qua dai (toi da 500 ky tu)', 400);
+
+    const order = await prisma.shopOrder.findUnique({ where: { id }, include: { items: true } });
+    if (!order) throw new AppError('Khong tim thay don hang', 404);
+    if (order.status !== 'PAID') {
+      throw new AppError(`Chi hoan tien duoc don da thanh toan (dang: ${order.status})`, 400);
+    }
+    if (order.refundAmount !== null) {
+      throw new AppError('Don hang da duoc hoan tien truoc do', 409);
+    }
+
+    const total = Number(order.total);
+    const refundAmount =
+      req.body.refundAmount === undefined || req.body.refundAmount === null
+        ? total
+        : Number(req.body.refundAmount);
+    if (isNaN(refundAmount) || refundAmount <= 0) {
+      throw new AppError('So tien hoan phai la so duong', 400);
+    }
+    if (refundAmount > total) {
+      throw new AppError('So tien hoan khong duoc lon hon tong don', 400);
+    }
+    const isFullRefund = refundAmount >= total;
+
+    const updated = await prisma.$transaction(async (tx) => {
+      const row = await tx.shopOrder.update({
+        where: { id: order.id },
+        data: {
+          status: 'REFUNDED',
+          paymentStatus: 'REFUNDED',
+          refundAmount,
+          refundReason: reason,
+          refundedAt: new Date(),
+          refundedBy: req.userId ?? null,
+        },
+        include: { items: true },
+      });
+      // On a FULL refund of physical goods the customer is returning the item,
+      // so put the stock back (guarded; digital items have unlimited stock).
+      if (isFullRefund) {
+        for (const item of order.items) {
+          if ((item.productType || 'DIGITAL') === 'PHYSICAL') {
+            await tx.product.updateMany({
+              where: { name: item.productName },
+              data: { stockQuantity: { increment: item.quantity }, soldCount: { decrement: item.quantity } },
+            });
+          }
+        }
+      }
+      return row;
+    });
+
+    res.json({ success: true, data: updated, message: 'Da hoan tien don hang' });
   } catch (error) { next(error); }
 });
 

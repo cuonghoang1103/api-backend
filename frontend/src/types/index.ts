@@ -707,7 +707,7 @@ export interface DiscountUsage {
 }
 
 // Order status
-export type OrderStatus = 'Pending' | 'Completed' | 'Failed' | 'PENDING' | 'COMPLETED' | 'CANCELLED' | 'PENDING';
+export type OrderStatus = 'Pending' | 'Completed' | 'Failed' | 'PENDING' | 'COMPLETED' | 'CANCELLED' | 'PAID' | 'REFUNDED';
 
 export interface OrderItem {
   id: string;             // unique order item id

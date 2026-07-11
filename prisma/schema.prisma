@@ -1132,6 +1132,12 @@ model ShopOrder {
   paymentStatus     String    @default("PENDING") @map("payment_status") @db.VarChar(20)
   paymentId         String?   @map("payment_id") @db.VarChar(100)
   paidAt            DateTime? @map("paid_at")
+  // ─── Refund tracking (set by admin, mirrors CourseOrder) ──
+  // refundAmount: how much was actually returned (partial ≤ total). Null = not refunded.
+  refundAmount      Decimal?  @map("refund_amount") @db.Decimal(10, 2)
+  refundReason      String?   @map("refund_reason") @db.VarChar(500)
+  refundedAt        DateTime? @map("refunded_at")
+  refundedBy        Int?      @map("refunded_by")
   notes             String?   @db.Text
   createdAt         DateTime  @default(now()) @map("created_at")
   updatedAt         DateTime  @updatedAt @map("updated_at")

@@ -13,7 +13,8 @@
     "dashboard": "Dashboard",
     "contact": "Liên hệ",
     "about": "Giới thiệu",
-    "optional": "tùy chọn"
+    "optional": "tùy chọn",
+    "cancel": "Hủy"
   },
   "hero": {
     "badge": "Sẵn sàng nhận dự án",
@@ -123,22 +124,42 @@
     "webDev": {
       "title": "Phát triển Web",
       "description": "Xây dựng website hiện đại, responsive với React, Next.js, Spring Boot. Tối ưu hiệu suất và SEO.",
-      "features": ["Next.js / React", "Spring Boot / Node.js", "TypeScript", "REST / GraphQL"]
+      "features": [
+        "Next.js / React",
+        "Spring Boot / Node.js",
+        "TypeScript",
+        "REST / GraphQL"
+      ]
     },
     "aiIntegration": {
       "title": "Tích hợp AI",
       "description": "Tích hợp AI vào sản phẩm - Chatbot thông minh, RAG, NLP, Computer Vision.",
-      "features": ["OpenAI / Claude API", "RAG Architecture", "Vector Database", "Fine-tuning"]
+      "features": [
+        "OpenAI / Claude API",
+        "RAG Architecture",
+        "Vector Database",
+        "Fine-tuning"
+      ]
     },
     "ecommerce": {
       "title": "Thương mại điện tử",
       "description": "Xây dựng nền tảng TMĐT hoàn chỉnh - Quản lý sản phẩm, giỏ hàng, thanh toán trực tuyến.",
-      "features": ["Quản lý sản phẩm", "Cổng thanh toán", "Theo dõi đơn hàng", "Bảng quản trị"]
+      "features": [
+        "Quản lý sản phẩm",
+        "Cổng thanh toán",
+        "Theo dõi đơn hàng",
+        "Bảng quản trị"
+      ]
     },
     "devops": {
       "title": "DevOps & Cloud",
       "description": "Triển khai và vận hành hệ thống trên cloud - Docker, CI/CD, AWS, giám sát.",
-      "features": ["Docker / Kubernetes", "AWS / GCP", "CI/CD Pipeline", "Giám sát"]
+      "features": [
+        "Docker / Kubernetes",
+        "AWS / GCP",
+        "CI/CD Pipeline",
+        "Giám sát"
+      ]
     }
   },
   "language": {
@@ -235,7 +256,9 @@
       "Completed": "Hoàn thành",
       "Pending": "Đang xử lý",
       "Failed": "Thất bại",
-      "Cancelled": "Đã hủy"
+      "Cancelled": "Đã hủy",
+      "Paid": "Đã thanh toán",
+      "Refunded": "Đã hoàn tiền"
     }
   },
   "chat": {
@@ -243,71 +266,6 @@
     "newConversation": "Cuộc trò chuyện mới",
     "noConversations": "Chưa có cuộc trò chuyện nào",
     "newChat": "Trò chuyện mới"
-  },
-  "admin": {
-    "projects": {
-      "title": "Quản lý Dự án",
-      "projectCount": "{count} dự án",
-      "searchPlaceholder": "Tìm kiếm dự án...",
-      "noProjects": "Chưa có dự án nào",
-      "addProject": "Thêm dự án mới",
-      "editProject": "Chỉnh sửa dự án",
-      "projectName": "Tên dự án",
-      "projectNamePlaceholder": "Tên dự án",
-      "description": "Mô tả",
-      "descriptionPlaceholder": "Mô tả ngắn về dự án...",
-      "technologies": "Công nghệ sử dụng",
-      "status": "Trạng thái",
-      "featured": "Nổi bật",
-      "yes": "Có",
-      "no": "Không",
-      "save": "Lưu",
-      "saving": "Đang lưu...",
-      "createNew": "Tạo mới",
-      "update": "Cập nhật",
-      "projectNameRequired": "Tên dự án không được để trống",
-      "descriptionRequired": "Mô tả không được để trống",
-      "deleteProject": "Xóa dự án này?",
-      "deleteSuccess": "Đã xóa dự án",
-      "projectStatus": {
-        "PLANNING": "Lên kế hoạch",
-        "IN_PROGRESS": "Đang phát triển",
-        "COMPLETED": "Hoàn thành",
-        "MAINTENANCE": "Bảo trì"
-      }
-    },
-    "courses": {
-      "title": "Quản lý Khoá học",
-      "subtitle": "Tạo, chỉnh sửa và quản lý khoá học",
-      "searchPlaceholder": "Tìm kiếm khoá học...",
-      "all": "Tất cả",
-      "noCourses": "Chưa có khoá học nào",
-      "lessons": "bài",
-      "editCourse": "Sửa khoá học",
-      "createCourse": "Tạo khoá học mới",
-      "basicInfo": "Thông tin cơ bản",
-      "courseNameLabel": "Tên khoá học",
-      "courseNamePlaceholder": "Tên khoá học",
-      "category": "Danh mục",
-      "shortDescription": "Mô tả ngắn",
-      "shortDescPlaceholder": "Mô tả ngắn gọn (hiển thị trên card)",
-      "level": "Cấp độ",
-      "publishStatus": "Trạng thái xuất bản",
-      "draftNote": "Lưu nháp — chỉ admin thấy, không hiện trên Academy.",
-      "publishNote": "Xuất bản — hiện trên trang Academy, học viên có thể đăng ký.",
-      "priceLabel": "Giá (VND)",
-      "saveDraft": "Lưu nháp",
-      "publishCourse": "Xuất bản",
-      "titleRequired": "Tiêu đề không được trống",
-      "loadError": "Lỗi tải danh sách",
-      "saveError": "Lỗi khi lưu khoá học",
-      "deleteConfirm": "Bạn có chắc muốn xóa khoá học này?",
-      "deleteSuccess": "Đã xóa khoá học",
-      "deleteError": "Xóa thất bại",
-      "updateSuccess": "Cập nhật khoá học thành công!",
-      "createSuccess": "Tạo khoá học thành công!",
-      "delete": "Xóa"
-    }
   },
   "admin": {
     "orders": {
@@ -339,7 +297,21 @@
       "loadError": "Lỗi khi tải danh sách đơn hàng",
       "updateSuccess": "Cập nhật trạng thái thành công",
       "updateError": "Lỗi khi cập nhật trạng thái",
-      "invoiceDownloaded": "Đã tải hóa đơn PDF"
+      "invoiceDownloaded": "Đã tải hóa đơn PDF",
+      "refunded": "Đã hoàn tiền",
+      "filterPaid": "Đã thanh toán",
+      "filterRefunded": "Đã hoàn tiền",
+      "refund": "Hoàn tiền",
+      "refundTitle": "Hoàn tiền đơn hàng",
+      "refundAmountLabel": "Số tiền hoàn",
+      "refundAmountHint": "Để nguyên tổng đơn = hoàn toàn bộ; nhập nhỏ hơn = hoàn một phần",
+      "refundReasonLabel": "Lý do hoàn tiền",
+      "refundReasonPlaceholder": "Nhập lý do hoàn tiền...",
+      "confirmRefund": "Xác nhận hoàn tiền",
+      "refundSuccess": "Đã hoàn tiền đơn hàng",
+      "refundError": "Không hoàn tiền được",
+      "refundReasonRequired": "Vui lòng nhập lý do hoàn tiền",
+      "refundAmountInvalid": "Số tiền hoàn không hợp lệ"
     },
     "discounts": {
       "title": "Quản lý Mã giảm giá",

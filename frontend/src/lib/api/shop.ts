@@ -159,6 +159,9 @@ export interface OrderResponse {
   paymentMethod: string;
   paymentStatus: string;
   paidAt?: string;
+  refundAmount?: number | null;
+  refundReason?: string | null;
+  refundedAt?: string | null;
   items: OrderItemResponse[];
   deliveryInfo?: DeliveryInfo;
   createdAt: string;
@@ -526,6 +529,17 @@ export async function adminUpdateOrderStatus(
   return request(`/shop/admin/orders/${id}/status`, {
     method: 'PUT',
     body: JSON.stringify({ status }),
+  });
+}
+
+// Full or partial refund of a PAID shop order. Omit refundAmount for a full refund.
+export async function adminRefundOrder(
+  id: number,
+  data: { reason: string; refundAmount?: number }
+): Promise<ApiResponse<OrderResponse>> {
+  return request(`/shop/admin/orders/${id}/refund`, {
+    method: 'POST',
+    body: JSON.stringify(data),
   });
 }
 

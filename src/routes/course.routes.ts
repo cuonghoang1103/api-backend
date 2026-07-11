@@ -1421,6 +1421,61 @@ router.post('/reviews', authenticate, async (req, res: Response<ApiResponse>, ne
   } catch (error) { next(error); }
 });
 
+// ─── Admin review moderation ───────────────────────────────────────
+// List ALL reviews (approved + hidden), newest first. Optional ?courseId=.
+router.get('/reviews/moderation', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const courseId = req.query.courseId ? parseInt(String(req.query.courseId), 10) : undefined;
+    const reviews = await prisma.courseReview.findMany({
+      where: { ...(courseId ? { courseId } : {}) },
+      include: {
+        user: { select: { id: true, username: true, fullName: true, avatarUrl: true } },
+        course: { select: { id: true, title: true, slug: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 300,
+    });
+    res.json({
+      success: true,
+      data: reviews.map((r) => ({ ...serializeReview(r), isApproved: r.isApproved, course: r.course })),
+    });
+  } catch (error) { next(error); }
+});
+
+async function recomputeCourseRating(courseId: number) {
+  const agg = await prisma.courseReview.aggregate({
+    where: { courseId, isApproved: true }, _avg: { rating: true }, _count: { _all: true },
+  });
+  await prisma.course.update({ where: { id: courseId }, data: { avgRating: agg._avg.rating ?? 0, totalReviews: agg._count._all } });
+}
+
+// Approve / hide a review (isApproved toggle) — recomputes the course rating.
+router.patch('/reviews/:id/moderate', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid id', 400);
+    const review = await prisma.courseReview.findUnique({ where: { id }, select: { courseId: true } });
+    if (!review) throw new AppError('Review not found', 404);
+    const isApproved = Boolean(req.body?.isApproved);
+    await prisma.courseReview.update({ where: { id }, data: { isApproved } });
+    await recomputeCourseRating(review.courseId);
+    res.json({ success: true, data: { id, isApproved } });
+  } catch (error) { next(error); }
+});
+
+// Delete a review — recomputes the course rating.
+router.delete('/reviews/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid id', 400);
+    const review = await prisma.courseReview.findUnique({ where: { id }, select: { courseId: true } });
+    if (!review) throw new AppError('Review not found', 404);
+    await prisma.courseReview.delete({ where: { id } });
+    await recomputeCourseRating(review.courseId);
+    res.json({ success: true, data: { id } });
+  } catch (error) { next(error); }
+});
+
 router.get('/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
     const course = await prisma.course.findUnique({

@@ -1,6 +1,6 @@
 import { Router, type Response } from 'express';
 import { prisma } from '../config/database.js';
-import { authenticate } from '../middleware/auth.js';
+import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -104,6 +104,34 @@ router.delete('/:id', authenticate, async (req: any, res: Response<ApiResponse>,
     if (!existing || existing.userId !== req.userId) throw new AppError('Không tìm thấy mã', 404);
     await prisma.userSavedCode.delete({ where: { id } });
     res.json({ success: true, data: { id } });
+  } catch (error) { next(error); }
+});
+
+// ─── POST /api/v1/my-codes/admin/grant ─────────────────
+// Admin grants a code directly into a specific user's wallet.
+router.post('/admin/grant', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = Number(req.body?.userId);
+    const label = String(req.body?.label || '').trim();
+    const code = String(req.body?.code || '').trim();
+    if (!userId || !label || !code) throw new AppError('userId, tên mã và mã là bắt buộc', 400);
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } });
+    if (!user) throw new AppError('Không tìm thấy user', 404);
+    const codeType = VALID_TYPES.has(String(req.body?.codeType)) ? String(req.body.codeType) : 'OTHER';
+    let expiresAt: Date | null = null;
+    if (req.body?.expiresAt) {
+      const d = new Date(req.body.expiresAt);
+      if (!isNaN(d.getTime())) expiresAt = d;
+    }
+    await saveUserCode(userId, {
+      label,
+      code,
+      codeType,
+      note: req.body?.note ? String(req.body.note) : 'Admin cấp',
+      expiresAt,
+      source: 'MANUAL',
+    });
+    res.status(201).json({ success: true, data: { userId, code }, message: 'Đã cấp mã vào ví của user' });
   } catch (error) { next(error); }
 });
 

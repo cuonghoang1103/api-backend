@@ -20,7 +20,7 @@ import {
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
  Globe, ShoppingBag, Bell, NotebookPen,
 Sun, Moon, Wallet, ArrowLeft, Megaphone,
-PlayCircle, Receipt, Ticket,
+PlayCircle, Receipt, Ticket, Award,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -539,6 +539,14 @@ export default function Navbar() {
                           onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'transparent'; }}
                         >
                           <Ticket className="w-4 h-4" />My Code
+                        </Link>
+                        <Link href="/certificates/my" onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.background = 'var(--bg-surface-hover)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'transparent'; }}
+                        >
+                          <Award className="w-4 h-4" />Chứng chỉ của tôi
                         </Link>
                         <button
                           onClick={() => { toggleTheme(); setUserMenuOpen(false); }}

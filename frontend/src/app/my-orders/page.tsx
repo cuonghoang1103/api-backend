@@ -62,7 +62,30 @@ export default function MyOrdersPage() {
   const router = useRouter();
   const { t } = useTranslation();
   const { orders, getAllOrders, saveBackendOrder } = useOrderStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
+
+  // Reuse the shop invoice generator for a course purchase by mapping the
+  // course order into the shared Order shape (single line item).
+  const downloadCourseInvoice = (o: MyCourseOrder) => {
+    generateInvoicePDF({
+      id: o.orderCode,
+      orderCode: o.orderCode,
+      items: [{ id: String(o.id), itemType: 'course', name: o.course?.title || 'Khoá học', price: o.amount, quantity: 1, thumbnail: o.course?.thumbnailUrl || '', category: 'Web Template' }],
+      subtotal: o.originalAmount ?? o.amount,
+      discountAmount: o.originalAmount ? Math.max(0, o.originalAmount - o.amount) : 0,
+      discountCode: o.discountCode,
+      total: o.amount,
+      status: (o.status === 'PAID' ? 'COMPLETED' : o.status) as Order['status'],
+      buyerInfo: {
+        fullName: (user as { fullName?: string; name?: string; username?: string } | null)?.fullName || (user as { name?: string } | null)?.name || (user as { username?: string } | null)?.username || 'Học viên',
+        email: (user as { email?: string } | null)?.email || '',
+        phone: '',
+        address: '',
+      },
+      createdAt: o.createdAt,
+      completedAt: o.paymentPayDate || undefined,
+    } as unknown as Order);
+  };
   const [mounted, setMounted] = useState(false);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
@@ -244,6 +267,11 @@ export default function MyOrdersPage() {
                       </span>
                       {paid && o.course?.slug && (
                         <Link href={`/courses/${o.course.slug}/learn`} className="block text-xs text-neon-violet hover:underline mt-1">Vào học →</Link>
+                      )}
+                      {paid && (
+                        <button onClick={() => downloadCourseInvoice(o)} className="mt-1 text-xs text-text-muted hover:text-text-primary inline-flex items-center gap-1">
+                          <Download className="w-3 h-3" /> Hoá đơn
+                        </button>
                       )}
                     </div>
                   </div>

@@ -1414,6 +1414,30 @@ export const myCodesApi = {
   add: (data: { label: string; code: string; codeType?: string; note?: string; expiresAt?: string }) =>
     api.post<{ data: SavedCode }>('/my-codes', data),
   remove: (id: number) => api.delete(`/my-codes/${id}`),
+  // Admin: grant a code directly into a user's wallet.
+  adminGrant: (data: { userId: number; label: string; code: string; codeType?: string; note?: string; expiresAt?: string }) =>
+    api.post('/my-codes/admin/grant', data),
+};
+
+export interface AdminReview {
+  id: number;
+  courseId?: number;
+  userId?: number;
+  userFullName: string;
+  userAvatar?: string;
+  rating: number;
+  title?: string;
+  content?: string;
+  createdAt: string;
+  isApproved: boolean;
+  course?: { id: number; title: string; slug: string };
+}
+
+// Admin: course-review moderation (approve/hide/delete).
+export const adminReviewsApi = {
+  list: (courseId?: number) => api.get<{ data: AdminReview[] }>('/courses/reviews/moderation', { params: courseId ? { courseId } : undefined }),
+  moderate: (id: number, isApproved: boolean) => api.patch(`/courses/reviews/${id}/moderate`, { isApproved }),
+  remove: (id: number) => api.delete(`/courses/reviews/${id}`),
 };
 
 export interface MyCourseOrder {

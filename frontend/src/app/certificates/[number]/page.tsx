@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { Award, CheckCircle2, Download, Loader2 } from 'lucide-react';
+import { Award, CheckCircle2, Download, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { certificatesApi } from '@/lib/api';
 import type { Certificate } from '@/types';
 import { toast } from 'sonner';
@@ -12,6 +12,25 @@ export default function CertificatePage() {
   const [cert, setCert] = useState<Certificate | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [savingPng, setSavingPng] = useState(false);
+
+  const downloadPng = async () => {
+    if (!cardRef.current) return;
+    setSavingPng(true);
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const canvas = await html2canvas(cardRef.current, { backgroundColor: '#0d0b1e', scale: 2, useCORS: true });
+      const link = document.createElement('a');
+      link.download = `${cert?.certificateNumber || 'certificate'}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch {
+      toast.error('Không tạo được ảnh, thử "In chứng chỉ" để lưu PDF');
+    } finally {
+      setSavingPng(false);
+    }
+  };
 
   useEffect(() => {
     if (!params.number) return;
@@ -49,7 +68,7 @@ export default function CertificatePage() {
     <div className="min-h-screen bg-darkbg pt-20 pb-20 flex flex-col items-center justify-center px-4">
       <div className="max-w-3xl w-full">
         {/* Certificate Card */}
-        <div className="relative rounded-3xl overflow-hidden border-2 border-neon-violet/30 bg-gradient-to-br from-[#0d0b1e] to-[#1a1040] shadow-2xl shadow-neon-violet/10">
+        <div ref={cardRef} className="certificate-card relative rounded-3xl overflow-hidden border-2 border-neon-violet/30 bg-gradient-to-br from-[#0d0b1e] to-[#1a1040] shadow-2xl shadow-neon-violet/10">
           {/* Decorative corner accents */}
           <div className="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-neon-indigo to-transparent opacity-30" />
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-neon-violet to-transparent opacity-30" />
@@ -123,7 +142,14 @@ export default function CertificatePage() {
             onClick={() => window.print()}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium hover:opacity-90 transition"
           >
-            <Download className="w-4 h-4" /> In chứng chỉ
+            <Download className="w-4 h-4" /> Tải PDF (In)
+          </button>
+          <button
+            onClick={downloadPng}
+            disabled={savingPng}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-neon-violet/40 text-neon-violet font-medium hover:bg-neon-violet/10 transition disabled:opacity-60"
+          >
+            {savingPng ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />} Tải PNG
           </button>
           <button
             onClick={() => {

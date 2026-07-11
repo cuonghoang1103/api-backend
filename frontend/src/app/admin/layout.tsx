@@ -8,7 +8,7 @@ import {
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
  CreditCard, Github, Search, TrendingUp, AlertTriangle,
- KeyRound, UsersRound, Clapperboard, Sticker, Languages,
+ KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket,
 } from 'lucide-react';
 
 const adminNav = [
@@ -29,6 +29,8 @@ const adminNav = [
  { label: 'Quản lý Mã giảm giá', href: '/admin/discounts', icon: Tag },
  { label: 'Quản lý Đơn hàng', href: '/admin/orders', icon: Receipt },
  { label: 'Đơn hàng khoá học (VNPay)', href: '/admin/course-orders', icon: CreditCard },
+ { label: 'Duyệt đánh giá', href: '/admin/reviews', icon: Star },
+ { label: 'Cấp mã cho User', href: '/admin/user-codes', icon: Ticket },
  { label: 'Hoc vien khoa hoc', href: '/admin/course-enrollments', icon: UsersRound },
  { label: 'Quản lý Posts', href: '/admin/posts', icon: FileText },
  { label: 'Danh mục Video', href: '/admin/video-categories', icon: Clapperboard },

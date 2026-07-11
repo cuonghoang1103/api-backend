@@ -154,6 +154,7 @@ export default function NavigationDock() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
   const { user: backendUser, isAuthenticated: isBackendAuth } = useAuthStore();
@@ -235,6 +236,12 @@ export default function NavigationDock() {
     const onDown = (e: MouseEvent) => {
       const t = e.target as Node | null;
       if (!t) return;
+      // Exclude the toggle button: it lives OUTSIDE the panel, so a click
+      // on it counted as "outside" → close() fired on mousedown, then the
+      // button's own onClick toggle() flipped it back OPEN. Net effect: the
+      // X never closed the menu. Ignore clicks on the trigger here and let
+      // its onClick handle the toggle.
+      if (triggerRef.current && triggerRef.current.contains(t)) return;
       if (panelRef.current && !panelRef.current.contains(t)) {
         close();
       }
@@ -286,6 +293,7 @@ export default function NavigationDock() {
           crossfades from Menu to X via AnimatePresence. */}
       {!hideTriggerButton && (
       <motion.button
+        ref={triggerRef}
         type="button"
         aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
         aria-expanded={isOpen}
@@ -463,7 +471,10 @@ export default function NavigationDock() {
                 read `hoveredHref` from the parent state
                 to compute their own magnify scale based
                 on distance from the hovered item. */}
-            <div className="flex-1 overflow-y-auto overflow-x-visible overscroll-contain px-3 pb-3">
+            <div
+              className="flex-1 min-h-0 overflow-y-auto overflow-x-visible overscroll-contain px-3 pb-3"
+              style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
+            >
               {sections.map(({ key, items, index }) => (
                 <motion.div
                   key={key}

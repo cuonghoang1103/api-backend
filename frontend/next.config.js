@@ -4,6 +4,15 @@ const { withSentryConfig } = require('@sentry/nextjs');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  // Serialize static-page generation to ONE worker during `next build`.
+  // Default is (CPU count - 1) workers, each loading the app and each
+  // inheriting NODE_OPTIONS heap — on the 6GB VPS their combined peak during
+  // the static-generation phase OOM-killed the build (exit 137). One worker
+  // keeps the peak to a single process so the build fits in available RAM.
+  // Costs a little build time; irrelevant next to a failed deploy.
+  experimental: {
+    cpus: 1,
+  },
   typescript: {
     ignoreBuildErrors: false,
   },

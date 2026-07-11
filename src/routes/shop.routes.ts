@@ -1,7 +1,7 @@
 import { Router, type Response } from 'express';
 import { nanoid } from 'nanoid';
 import { prisma } from '../config/database.js';
-import { authenticate, requireAdmin } from '../middleware/auth.js';
+import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -481,16 +481,23 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
     const orderItems = [];
 
     for (const item of items) {
+      // Validate quantity — a client-controlled multiplier. Reject
+      // non-positive / non-integer / absurd values (negative would flip the
+      // total negative; huge would DoS / oversell).
+      const qty = Number(item.quantity);
+      if (!Number.isInteger(qty) || qty < 1 || qty > 1000) {
+        throw new AppError('So luong khong hop le', 400);
+      }
       const product = await prisma.product.findUnique({ where: { id: item.productId } });
       if (!product) throw new AppError(`Product ${item.productId} not found`, 404);
-      const itemTotal = Number(product.price) * item.quantity;
+      const itemTotal = Number(product.price) * qty;
       subtotal += itemTotal;
       orderItems.push({
         productName: product.name,
         productSlug: product.slug,
         productImage: product.thumbnailUrl,
         price: product.price,
-        quantity: item.quantity,
+        quantity: qty,
         total: itemTotal,
         fileUrl: product.fileUrl,
       });
@@ -499,7 +506,14 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
     let discountAmount = 0;
     if (discountCode) {
       const discount = await prisma.discountCode.findUnique({ where: { code: discountCode } });
-      if (discount && discount.active && (!discount.expiresAt || discount.expiresAt > new Date())) {
+      const now = new Date();
+      const usable = discount
+        && discount.active
+        && (!discount.startsAt || discount.startsAt <= now)
+        && (!discount.expiresAt || discount.expiresAt > now)
+        && (discount.maxUses === null || discount.usedCount < discount.maxUses)
+        && (discount.userId === null); // shop coupons must be public (not user-scoped)
+      if (usable && discount) {
         if (discount.minOrderAmount && subtotal < Number(discount.minOrderAmount)) {
           throw new AppError(`Minimum order amount is ${discount.minOrderAmount}`, 400);
         }
@@ -509,12 +523,14 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
             discountAmount = Number(discount.maxDiscountAmount);
           }
         } else {
-          discountAmount = Number(discount.discountValue);
+          // FIXED — never exceed the subtotal, or the total goes negative.
+          discountAmount = Math.min(Number(discount.discountValue), subtotal);
         }
       }
     }
 
-    const total = subtotal - discountAmount;
+    // Clamp so a discount can never make the total negative.
+    const total = Math.max(0, subtotal - discountAmount);
     const orderCode = `ORD-${Date.now()}-${nanoid(6).toUpperCase()}`;
 
     const order = await prisma.shopOrder.create({
@@ -552,15 +568,46 @@ router.get('/orders/my', authenticate, async (req: any, res: Response<ApiRespons
 });
 
 // ─── GET /api/v1/shop/orders/:code ───────────────────
-router.get('/orders/:code', async (req, res: Response<ApiResponse>, next) => {
+// Public poll (after checkout redirect). SECURITY: order codes are
+// guessable, so a non-owner must NOT receive buyer PII or the digital
+// deliverable (fileUrl / credentials). The owner (authenticated) gets the
+// full order — including goods once PAID; everyone else gets a minimal
+// status shape only.
+router.get('/orders/:code', optionalAuth, async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const order = await prisma.shopOrder.findUnique({
       where: { orderCode: req.params.code },
       include: { items: true },
     });
-
     if (!order) throw new AppError('Order not found', 404);
-    res.json({ success: true, data: order });
+
+    const isOwner = order.userId != null && req.userId === order.userId;
+    if (isOwner) {
+      res.json({ success: true, data: order });
+      return;
+    }
+
+    // Non-owner / guest poll: status + non-sensitive summary only.
+    res.json({
+      success: true,
+      data: {
+        orderCode: order.orderCode,
+        status: order.status,
+        total: Number(order.total),
+        subtotal: Number(order.subtotal),
+        discountAmount: Number(order.discountAmount),
+        createdAt: order.createdAt,
+        completedAt: (order as { completedAt?: Date | null }).completedAt ?? null,
+        items: order.items.map((it) => ({
+          productName: it.productName,
+          productSlug: it.productSlug,
+          productImage: it.productImage,
+          price: Number(it.price),
+          quantity: it.quantity,
+          total: Number(it.total),
+        })),
+      },
+    });
   } catch (error) { next(error); }
 });
 

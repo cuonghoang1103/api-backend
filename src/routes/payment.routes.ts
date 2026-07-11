@@ -288,6 +288,7 @@ async function handleProductIpn(
   }
 
   // ── SUCCESS PATH ──
+  const oversoldItems: string[] = [];
   await prisma.$transaction(async (tx) => {
     // Atomic PENDING → PAID. updateMany returns the affected count, our
     // idempotency guard against concurrent / retried IPNs.
@@ -306,20 +307,32 @@ async function handleProductIpn(
     if (flipped.count !== 1) return;
 
     // Decrement stock + bump sold count for each line item. Items link
-    // to Product by name (the relation FK). updateMany with a
-    // `stockQuantity >= quantity` guard avoids driving stock negative for
-    // tracked products; soldCount is bumped unconditionally for analytics.
+    // to Product by name (the relation FK). The `stockQuantity >= quantity`
+    // guard avoids driving stock negative; we only bump soldCount when the
+    // decrement actually matched a row, and flag oversell for manual review
+    // (money's received — never blindly claim stock we don't have).
     for (const item of order.items) {
-      await tx.product.updateMany({
+      const dec = await tx.product.updateMany({
         where: { name: item.productName, stockQuantity: { gte: item.quantity } },
         data: { stockQuantity: { decrement: item.quantity } },
       });
-      await tx.product.updateMany({
-        where: { name: item.productName },
-        data: { soldCount: { increment: item.quantity } },
-      });
+      if (dec.count === 1) {
+        await tx.product.updateMany({
+          where: { name: item.productName },
+          data: { soldCount: { increment: item.quantity } },
+        });
+      } else {
+        // Not enough stock (or product renamed → 0 rows). Order stays PAID
+        // (we took the money) but needs fulfillment attention.
+        oversoldItems.push(`${item.productName} x${item.quantity}`);
+      }
     }
   });
+  if (oversoldItems.length > 0) {
+    logger.error('shop order PAID but stock insufficient — manual fulfillment needed', {
+      orderCode: order.orderCode, shopOrderId: order.id, oversold: oversoldItems,
+    });
+  }
 
  logger.info('payment-ipn PRODUCT PAID', {
  orderCode: order.orderCode,
@@ -687,10 +700,16 @@ router.post('/create-qr', orderCreateLimiter, authenticate, async (req: Request,
 // ─── PayOS (primary course payment gateway) ─────────────────
 // Reusable: mark a course order PAID and enroll the buyer. Atomic
 // PENDING→PAID guard makes it idempotent (safe under webhook retries).
-async function markCourseOrderPaidAndEnroll(orderId: number, meta: { txnNo?: string; payDate?: Date }): Promise<'paid' | 'already' | 'notfound'> {
+async function markCourseOrderPaidAndEnroll(orderId: number, meta: { txnNo?: string; payDate?: Date; amountPaid?: number }): Promise<'paid' | 'already' | 'notfound' | 'amount_mismatch'> {
   const order = await prisma.courseOrder.findUnique({ where: { id: orderId } });
   if (!order) return 'notfound';
   if (order.status === 'PAID') return 'already';
+  // Amount integrity (defense-in-depth, mirrors the VNPay IPN): never enroll
+  // on an underpayment. `amountPaid` comes from PayOS itself.
+  if (meta.amountPaid !== undefined && meta.amountPaid < Number(order.amount)) {
+    logger.warn('payos amount mismatch — refusing to enroll', { orderId, amountPaid: meta.amountPaid, expected: Number(order.amount) });
+    return 'amount_mismatch';
+  }
 
   let receiptCtx: { to: string; fullName: string | null; courseTitle: string; courseSlug: string } | null = null;
   let flippedOk = false;
@@ -784,6 +803,7 @@ router.post('/payos/webhook', async (req: Request, res: Response) => {
         await markCourseOrderPaidAndEnroll(orderId, {
           txnNo: String(data.reference || data.paymentLinkId || ''),
           payDate: new Date(),
+          amountPaid: Number(data.amount),
         });
         logger.info('payos webhook PAID', { orderId, ref: data.reference });
       } else {
@@ -1053,7 +1073,7 @@ router.get('/order/:orderCode', authenticate, async (req: Request, res: Response
     if ((status === 'PENDING' || status === 'FAILED') && order.paymentMethod === 'PAYOS' && isPayosConfigured()) {
       const st = await getPayosStatus(order.id);
       if (st && st.status === 'PAID') {
-        await markCourseOrderPaidAndEnroll(order.id, { txnNo: 'payos-return', payDate: new Date() });
+        await markCourseOrderPaidAndEnroll(order.id, { txnNo: 'payos-return', payDate: new Date(), amountPaid: st.amountPaid });
         status = 'PAID';
       } else if (status === 'PENDING' && st && (st.status === 'CANCELLED' || st.status === 'EXPIRED')) {
         await prisma.courseOrder.updateMany({ where: { id: order.id, status: 'PENDING' }, data: { status: 'FAILED' } });
@@ -1103,7 +1123,7 @@ router.get('/orders/my', authenticate, async (req: Request, res: Response<ApiRes
       for (const o of toCheck) {
         const st = await getPayosStatus(o.id);
         if (st && st.status === 'PAID') {
-          await markCourseOrderPaidAndEnroll(o.id, { txnNo: 'payos-reconcile', payDate: new Date() });
+          await markCourseOrderPaidAndEnroll(o.id, { txnNo: 'payos-reconcile', payDate: new Date(), amountPaid: st.amountPaid });
           recovered = true;
         }
       }

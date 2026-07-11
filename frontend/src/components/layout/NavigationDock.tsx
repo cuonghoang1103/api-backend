@@ -155,6 +155,7 @@ export default function NavigationDock() {
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
   const { user: backendUser, isAuthenticated: isBackendAuth } = useAuthStore();
@@ -266,6 +267,41 @@ export default function NavigationDock() {
     lockScroll();
     return () => {
       unlockScroll();
+    };
+  }, [isOpen]);
+
+  // iOS/webview scroll-freeze guard. With the page scroller locked
+  // (html overflow:hidden), scrolling the panel list to its top/bottom
+  // edge and pushing further hands the gesture to the frozen <html>,
+  // which then swallows the momentum — the list "sticks" and won't scroll
+  // back. We (1) nudge a pixel away from the exact edges on touchstart and
+  // (2) preventDefault only the OVER-scroll past an edge (non-passive), so
+  // normal in-bounds scrolling always keeps working.
+  useEffect(() => {
+    if (!isOpen) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    let startY = 0;
+    const onStart = (e: TouchEvent) => {
+      startY = e.touches[0]?.clientY ?? 0;
+      if (el.scrollTop <= 0) el.scrollTop = 1;
+      else if (el.scrollTop + el.clientHeight >= el.scrollHeight) {
+        el.scrollTop = el.scrollHeight - el.clientHeight - 1;
+      }
+    };
+    const onMove = (e: TouchEvent) => {
+      const dy = (e.touches[0]?.clientY ?? 0) - startY;
+      const atTop = el.scrollTop <= 0;
+      const atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight;
+      if ((atTop && dy > 0) || (atBottom && dy < 0)) {
+        if (e.cancelable) e.preventDefault();
+      }
+    };
+    el.addEventListener('touchstart', onStart, { passive: true });
+    el.addEventListener('touchmove', onMove, { passive: false });
+    return () => {
+      el.removeEventListener('touchstart', onStart);
+      el.removeEventListener('touchmove', onMove);
     };
   }, [isOpen]);
 
@@ -472,6 +508,7 @@ export default function NavigationDock() {
                 to compute their own magnify scale based
                 on distance from the hovered item. */}
             <div
+              ref={scrollRef}
               className="flex-1 min-h-0 overflow-y-auto overflow-x-visible overscroll-contain px-3 pb-3"
               style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
             >

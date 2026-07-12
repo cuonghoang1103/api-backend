@@ -4,6 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Headphones, RefreshCw, Maximize2 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { useMusicAccess } from '@/hooks/useMusicAccess';
 import ClientOnly from '@/components/providers/ClientOnly';
 import CyberBackground from '@/components/music/CyberBackground';
 import CyberPlayer from '@/components/music/CyberPlayer';
@@ -79,6 +82,18 @@ export default function CyberMusicPage() {
   // On xl the pane classes below force BOTH panes visible (desktop unchanged).
   const [mobilePane, setMobilePane] = useState<'list' | 'player'>('list');
 
+  // 3-tier access guard: users without permission are bounced to home.
+  // Realtime — if an admin revokes access while the page is open, the
+  // socket event flips hasAccess and this redirects.
+  const router = useRouter();
+  const { hasAccess, isLoading: accessLoading } = useMusicAccess();
+  useEffect(() => {
+    if (!accessLoading && !hasAccess) {
+      toast.error('Bạn không có quyền truy cập trang nhạc');
+      router.replace('/');
+    }
+  }, [accessLoading, hasAccess, router]);
+
   // TanStack Query — replaces manual fetch with caching
   // Regular library only — REMIX tracks live on the /music/remix deck and
   // must never appear here (or in the "Tất cả" listing). Backend already
@@ -144,6 +159,10 @@ export default function CyberMusicPage() {
   }, [refetch]);
 
   if (!isMounted) return <CyberShell />;
+
+  // No access (or still resolving) → show the neutral shell; the effect
+  // above redirects to home. Prevents the music UI from flashing.
+  if (accessLoading || !hasAccess) return <CyberShell />;
 
   const showEmpty = !isLoading && !isError && storeTracks.length === 0;
 

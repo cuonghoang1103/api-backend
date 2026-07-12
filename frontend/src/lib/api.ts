@@ -540,6 +540,24 @@ export const noteShareApi = {
 };
 
 // Music API
+// Music-page access control (3-tier: ADMIN_ONLY | SPECIFIC | EVERYONE).
+export type MusicAccessMode = 'ADMIN_ONLY' | 'SPECIFIC' | 'EVERYONE';
+export const musicAccessApi = {
+  // Public (optionalAuth): does the current viewer get the /music page?
+  check: () =>
+    api.get<{ success: boolean; data: { hasAccess: boolean; mode: MusicAccessMode } }>('/music/access'),
+  // Admin: read + set the global mode.
+  getMode: () =>
+    api.get<{ success: boolean; data: { mode: MusicAccessMode } }>('/admin/music-access'),
+  setMode: (mode: MusicAccessMode) =>
+    api.put<{ success: boolean; data: { mode: MusicAccessMode } }>('/admin/music-access', { mode }),
+  // Admin: grant/revoke a specific user (used in SPECIFIC mode).
+  toggleUser: (userId: number, allowed: boolean) =>
+    api.patch<{ success: boolean; data: { id: number; username: string; musicAccess: boolean } }>(
+      `/admin/users/${userId}/toggle-music-access`, { allowed },
+    ),
+};
+
 export const musicApi = {
   getTracks: (params?: { page?: number; size?: number; keyword?: string; category?: 'NORMAL' | 'REMIX' }) =>
     api.get('/music/tracks', { params }),

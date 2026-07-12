@@ -190,6 +190,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://cuongthai.com',
   },
+  // Google Search Console verification. Set the meta token from
+  // Search Console via NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION (baked
+  // at build time). When unset, no tag is emitted. Registering the
+  // site + submitting sitemap.xml in Search Console is what actually
+  // gets "cuongthai" to show up when searched — the code side is ready.
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+  },
 }
 
 // Separate `viewport` export (Next.js 14 way — keeps it
@@ -233,6 +241,9 @@ export default function RootLayout({
         '@id': 'https://cuongthai.com/#website',
         url: 'https://cuongthai.com',
         name: 'CuongThai',
+        // Brand aliases so a search for "cuongthai" / "cuong thai"
+        // maps to this site.
+        alternateName: ['cuongthai', 'Cuong Thai', 'cuongthai.com'],
         description:
           'Portfolio, courses, music, blog & e-commerce platform built by Cuong Hoang.',
         inLanguage: 'vi-VN',

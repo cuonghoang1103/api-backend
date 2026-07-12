@@ -3,6 +3,8 @@ import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { renderProjectMarkdown } from '../services/projectMarkdown.service.js';
+import { getMusicAccessMode, setMusicAccessMode, setUserMusicAccess, type MusicAccessMode } from '../services/musicAccess.service.js';
+import { getIO } from '../socket/messaging.socket.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -190,7 +192,7 @@ router.get('/users', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: 
       prisma.user.findMany({
         where, skip, take: pageSize,
         orderBy: { [safeSortBy]: sortDir === 'asc' ? 'asc' as const : 'desc' as const },
-        select: { id: true, username: true, email: true, fullName: true, displayName: true, avatarUrl: true, enabled: true, accountNonLocked: true, emailVerified: true, provider: true, createdAt: true, roles: { include: { role: true } } },
+        select: { id: true, username: true, email: true, fullName: true, displayName: true, avatarUrl: true, enabled: true, accountNonLocked: true, emailVerified: true, musicAccess: true, provider: true, createdAt: true, roles: { include: { role: true } } },
       }),
       prisma.user.count({ where }),
     ]);
@@ -621,6 +623,40 @@ router.put('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req: a
       },
       select: { id: true, username: true, email: true, fullName: true, displayName: true, enabled: true, accountNonLocked: true, emailVerified: true, provider: true, createdAt: true },
     });
+    res.json({ success: true, data: updated });
+  } catch (error) { next(error); }
+});
+
+// ─── Music page access control (3-tier) ─────────────────────────
+// GET  /api/v1/admin/music-access  → current global mode
+router.get('/music-access', authenticate, requireAdmin('ROLE_ADMIN'), async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const mode = await getMusicAccessMode();
+    res.json({ success: true, data: { mode } });
+  } catch (error) { next(error); }
+});
+
+// PUT  /api/v1/admin/music-access  { mode }  → set global mode + broadcast
+router.put('/music-access', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const mode = await setMusicAccessMode(req.body?.mode as MusicAccessMode);
+    // Realtime: every connected client re-checks its music access.
+    getIO()?.emit('music:access-changed', { scope: 'global', mode });
+    res.json({ success: true, data: { mode } });
+  } catch (error) { next(error); }
+});
+
+// PATCH /api/v1/admin/users/:id/toggle-music-access  { allowed? } → per-user
+router.patch('/users/:id/toggle-music-access', authenticate, requireAdmin('ROLE_ADMIN'), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid user id', 400, 'INVALID_ID');
+    const current = await prisma.user.findUnique({ where: { id }, select: { musicAccess: true } });
+    if (!current) throw new AppError('User not found', 404, 'USER_NOT_FOUND');
+    const allowed = typeof req.body?.allowed === 'boolean' ? req.body.allowed : !current.musicAccess;
+    const updated = await setUserMusicAccess(id, allowed);
+    // Realtime: nudge just that user to re-check.
+    getIO()?.to(`user:${id}`).emit('music:access-changed', { scope: 'user', userId: id, musicAccess: allowed });
     res.json({ success: true, data: updated });
   } catch (error) { next(error); }
 });

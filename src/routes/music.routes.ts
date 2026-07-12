@@ -34,6 +34,7 @@ import multer from 'multer';
 
 import { musicService } from '../services/music.service.js';
 import { normalizeAudio, isFFmpegAvailable } from '../services/ffmpeg.service.js';
+import { canAccessMusic, getMusicAccessMode } from '../services/musicAccess.service.js';
 import { optionalAuth, authenticate, requireRole } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { uploadAudio, uploadImage, UploadError } from '../storage/uploadService.js';
@@ -74,6 +75,24 @@ const uploadMiddleware = multer({
     }
   },
 });
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/music/access — can the current viewer see the /music page?
+// Public (optionalAuth): guests get hasAccess only in EVERYONE mode.
+// ════════════════════════════════════════════════════════════════
+router.get(
+  '/access',
+  optionalAuth,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const hasAccess = await canAccessMusic(req.userId, req.user?.roles);
+      const mode = await getMusicAccessMode();
+      res.json({ success: true, data: { hasAccess, mode } });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 // ════════════════════════════════════════════════════════════════
 // GET /api/v1/music/tracks

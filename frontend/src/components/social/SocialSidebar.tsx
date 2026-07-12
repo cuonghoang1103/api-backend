@@ -18,6 +18,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
+import { useMusicAccess } from '@/hooks/useMusicAccess';
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { socialApi } from '@/lib/api';
@@ -76,6 +77,8 @@ export default function SocialSidebar({
     ['admin', 'ADMIN', 'ROLE_ADMIN', 'SUPER_ADMIN'].includes(r)
   );
 
+  const { hasAccess: hasMusicAccess } = useMusicAccess();
+
   // Pending incoming friend-request count → drives the badge on the
   // "Bạn bè" nav row. Stale for 30s; only when logged in.
   const { data: friendRequestCount = 0 } = useQuery({
@@ -96,7 +99,8 @@ export default function SocialSidebar({
   const explore = [
     { href: '/blog', label: 'Blog', icon: Sparkles },
     { href: '/projects', label: 'Projects', icon: Code2 },
-    { href: '/music', label: 'Music', icon: Music },
+    // /music only when the viewer is granted access (3-tier, realtime).
+    ...(hasMusicAccess ? [{ href: '/music', label: 'Music', icon: Music }] : []),
     { href: '/finance', label: 'MoneyFlow', icon: Wallet },
   ];
 

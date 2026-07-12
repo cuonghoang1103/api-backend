@@ -11,6 +11,7 @@ import { useCartStore } from '@/store/cartStore';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
+import { useMusicAccess } from '@/hooks/useMusicAccess';
 import NotificationDropdown from '@/components/social/NotificationDropdown';
 import UserSearchBox from '@/components/social/UserSearchBox';
 import { UserAvatar } from '@/components/common/UserAvatar';
@@ -80,6 +81,7 @@ export default function Navbar() {
   }, [pathname]);
   const { data: session } = useSession();
   const { user: backendUser, isAuthenticated: isBackendAuth } = useAuthStore();
+  const { hasAccess: hasMusicAccess } = useMusicAccess();
   const { theme, toggleTheme } = useTheme();
   const { getTotalItems, openDrawer } = useCartStore();
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
@@ -307,6 +309,7 @@ export default function Navbar() {
             {/* Center: nav links — icons only, no labels. */}
             <div className="hidden sm:flex items-center ml-1">
               {TOP_NAV_LINKS.filter((l) => {
+ if (l.href === '/music') return hasMusicAccess;
  if (l.adminOnly) return isAdmin;
  if (l.authOnly) return isAuthenticated;
  return true;

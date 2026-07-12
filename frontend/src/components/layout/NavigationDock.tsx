@@ -15,6 +15,7 @@ import {
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
+import { useMusicAccess } from '@/hooks/useMusicAccess';
 import { UserAvatar } from '@/components/common/UserAvatar';
 import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -198,15 +199,21 @@ export default function NavigationDock() {
   // keeps the toolbar bell's unread count accurate in real time.
   useNotificationSocket();
 
+  // Music page visibility (3-tier access, realtime). Hide the /music item
+  // entirely when the viewer isn't allowed.
+  const { hasAccess: hasMusicAccess } = useMusicAccess();
+
   const sections = useMemo(
     () =>
       (['main', 'user', 'admin'] as const).map((key, i) => ({
         key,
         index: i,
         ...SECTIONS[key],
-        items: DOCK_ITEMS.filter((item) => item.section === key),
+        items: DOCK_ITEMS.filter(
+          (item) => item.section === key && (item.href !== '/music' || hasMusicAccess),
+        ),
       })),
-    [],
+    [hasMusicAccess],
   );
 
   const open = useCallback(() => setIsOpen(true), []);

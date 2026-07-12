@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { api } from '@/lib/api';
+import { api, musicAccessApi, type MusicAccessMode } from '@/lib/api';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
@@ -23,6 +23,7 @@ import {
   Settings,
   BadgeCheck,
   MailWarning,
+  Music,
 } from 'lucide-react';
 
 interface BackendUser {
@@ -43,6 +44,8 @@ interface BackendUser {
   enabled: boolean;
   accountNonLocked: boolean;
   emailVerified: boolean;
+  /** Per-user access to the /music page (used in SPECIFIC mode). */
+  musicAccess?: boolean;
   createdAt: string;
   roleVersion?: number;
 }
@@ -188,6 +191,7 @@ function DeleteConfirmDialog({
 interface EditUserForm {
   displayName: string;
   emailVerified: boolean;
+  musicAccess: boolean;
   roles: string[];
 }
 
@@ -205,6 +209,7 @@ function EditUserModal({
   const [form, setForm] = useState<EditUserForm>({
     displayName: user.displayName ?? user.fullName ?? '',
     emailVerified: user.emailVerified ?? false,
+    musicAccess: user.musicAccess ?? false,
     roles: getRoles(user),
   });
 
@@ -270,6 +275,30 @@ function EditUserModal({
                 {form.emailVerified ? 'Nhấn để hủy xác minh' : 'Nhấn để xác minh thủ công'}
               </span>
             </button>
+            {/* Music page access (SPECIFIC mode) */}
+            <div className="mt-4">
+              <label className="block text-xs font-medium text-text-muted mb-1.5">
+                Quyền xem trang Nhạc (khi chế độ = &quot;Chỉ định&quot;)
+              </label>
+              <button
+                type="button"
+                onClick={() => setForm((p) => ({ ...p, musicAccess: !p.musicAccess }))}
+                className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl border transition-colors text-sm ${
+                  form.musicAccess
+                    ? 'bg-neon-violet/10 border-neon-violet/25 text-neon-violet'
+                    : 'bg-darkbg border-darkborder text-text-muted'
+                }`}
+              >
+                <Music className="w-4 h-4 shrink-0" />
+                <span className="font-medium">
+                  {form.musicAccess ? 'Được xem trang Nhạc' : 'Không được xem trang Nhạc'}
+                </span>
+                <span className="ml-auto text-xs opacity-60">
+                  {form.musicAccess ? 'Nhấn để thu hồi' : 'Nhấn để cấp quyền'}
+                </span>
+              </button>
+            </div>
+
             {form.emailVerified && !user.emailVerified && (
               <p className="text-xs text-yellow-400/80 mt-1.5 pl-1">
                 ⚠ Sau khi lưu, tài khoản sẽ không thể xóa cho đến khi hủy xác minh trở lại.
@@ -320,6 +349,70 @@ function EditUserModal({
             Lưu thay đổi
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Global music-access mode selector (3-tier). Changing it broadcasts a
+// realtime music:access-changed to every client so nav updates instantly.
+function MusicAccessModeCard() {
+  const [mode, setMode] = useState<MusicAccessMode | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    musicAccessApi.getMode().then((r) => setMode(r.data.data.mode)).catch(() => {});
+  }, []);
+
+  const change = async (m: MusicAccessMode) => {
+    if (m === mode || saving) return;
+    setSaving(true);
+    try {
+      const r = await musicAccessApi.setMode(m);
+      setMode(r.data.data.mode);
+      toast.success('Đã cập nhật chế độ hiển thị trang Nhạc');
+    } catch {
+      toast.error('Cập nhật chế độ thất bại');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const OPTIONS: { key: MusicAccessMode; label: string; desc: string }[] = [
+    { key: 'ADMIN_ONLY', label: 'Chỉ admin', desc: 'Chỉ quản trị viên thấy trang Nhạc (mặc định)' },
+    { key: 'SPECIFIC', label: 'Chỉ định', desc: 'Admin + user được cấp quyền (tick trong Sửa user)' },
+    { key: 'EVERYONE', label: 'Tất cả', desc: 'Mọi người, kể cả khách chưa đăng nhập' },
+  ];
+
+  return (
+    <div className="rounded-2xl border border-darkborder bg-darkcard p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <Music className="w-4 h-4 text-neon-violet" />
+        <h2 className="text-sm font-semibold text-text-primary">Quyền truy cập trang Nhạc</h2>
+        {saving && <RefreshCw className="w-3.5 h-3.5 animate-spin text-text-muted" />}
+      </div>
+      <div className="grid gap-2 sm:grid-cols-3">
+        {OPTIONS.map((o) => {
+          const active = mode === o.key;
+          return (
+            <button
+              key={o.key}
+              type="button"
+              disabled={saving}
+              onClick={() => change(o.key)}
+              className={`rounded-xl border p-3 text-left transition-colors disabled:opacity-60 ${
+                active
+                  ? 'border-neon-violet/50 bg-neon-violet/10'
+                  : 'border-darkborder bg-darkbg hover:border-neon-violet/30'
+              }`}
+            >
+              <div className={`text-sm font-semibold ${active ? 'text-neon-violet' : 'text-text-primary'}`}>
+                {o.label}
+              </div>
+              <div className="text-xs text-text-muted mt-0.5">{o.desc}</div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -435,6 +528,12 @@ export default function AdminUsersPage() {
         await api.patch(`/admin/users/${editTarget.id}/roles`, {
           roles: form.roles,
         });
+      }
+
+      // Update per-user music access if changed (separate endpoint,
+      // broadcasts a realtime music:access-changed to that user).
+      if (form.musicAccess !== (editTarget.musicAccess ?? false)) {
+        await musicAccessApi.toggleUser(editTarget.id, form.musicAccess);
       }
 
       toast.success('Đã cập nhật thông tin người dùng!');
@@ -575,6 +674,9 @@ export default function AdminUsersPage() {
           <span className="hidden sm:inline">Làm mới</span>
         </button>
       </div>
+
+      {/* ── Music page access mode (3-tier) ──────────────────────────── */}
+      <MusicAccessModeCard />
 
       {/* ── Filter + search row ──────────────────────────────────────── */}
       <div className="flex items-center gap-3 flex-wrap">

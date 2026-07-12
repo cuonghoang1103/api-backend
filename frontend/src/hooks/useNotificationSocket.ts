@@ -147,9 +147,20 @@ export function useNotificationSocket(): void {
 
         socket.on('admin:announcement', onAnnouncement);
 
+        // Music page access changed (admin flipped the global mode or toggled
+        // this user). Re-broadcast as a window event so useMusicAccess refetches
+        // and the /music nav item appears/disappears in realtime.
+        const onMusicAccess = () => {
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new Event('music-access-changed'));
+          }
+        };
+        socket.on('music:access-changed', onMusicAccess);
+
         cleanupFn = () => {
           socket.off('social:notification', onNotification);
           socket.off('admin:announcement', onAnnouncement);
+          socket.off('music:access-changed', onMusicAccess);
         };
       } catch (err) {
         // The socket failed to connect — that's fine, the

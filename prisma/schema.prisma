@@ -63,6 +63,11 @@ model User {
   accountNonLocked      Boolean @default(true) @map("account_non_locked")
   credentialsNonExpired Boolean @default(true) @map("credentials_non_expired")
 
+  // Per-user access to the /music page, used when the global music
+  // access mode (AppSetting "music_access_mode") is SPECIFIC. Admins
+  // always have access regardless of this flag.
+  musicAccess Boolean @default(false) @map("music_access")
+
   // ─── Account security (Giai đoạn 1 — bảo mật cao) ────────────────────
   // Email verification
   emailVerified   Boolean   @default(false) @map("email_verified")
@@ -289,6 +294,17 @@ model UserRole {
 
   @@id([userId, roleId], map: "pk_user_roles")
   @@map("user_roles")
+}
+
+// Generic site-wide key/value settings. Currently holds
+// "music_access_mode" (ADMIN_ONLY | SPECIFIC | EVERYONE) governing
+// who can see the /music page. Reusable for future global toggles.
+model AppSetting {
+  key       String   @id @db.VarChar(100)
+  value     String?  @db.Text
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("app_settings")
 }
 
 // ============================================================

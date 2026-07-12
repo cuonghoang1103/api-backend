@@ -24,11 +24,12 @@ import { getServerApiBaseUrl } from '@/lib/server-api'
 
 const SITE_URL = 'https://cuongthai.com'
 
-// Generate on-demand (per request) so the dynamic URLs are always fetched
-// at runtime against the INTERNAL backend. A build-time prerender can't
-// reach the API (it isn't running during `npm run build`) — that's why the
-// deployed sitemap only ever had the static pages. Crawlers fetch
-// sitemap.xml rarely, so a few list queries per request are cheap.
+// Render on-demand at RUNTIME (never build-time prerendered) so the dynamic
+// URLs are always fetched against the INTERNAL backend, which is reachable at
+// runtime but NOT during `npm run build`. This guarantees the sitemap always
+// carries the full URL set (never a static-only subset). The fetches below run
+// in parallel with a tight 3s timeout, so the live render stays fast (≤3s
+// worst-case) — which is what avoids Google Search Console's fetch timeout.
 export const dynamic = 'force-dynamic'
 
 type ListResp<T> = {
@@ -43,14 +44,14 @@ async function safeFetch<T>(path: string): Promise<T[]> {
       // sitemap runs on the server, hitting the internal backend directly.
       headers: { 'User-Agent': 'cuongthai-sitemap/1.0' },
       cache: 'no-store',
-      signal: AbortSignal.timeout(8000), // 8s ceiling
+      signal: AbortSignal.timeout(3000), // 3s ceiling per fetch (was 8s)
     })
     if (!res.ok) return []
     const json = (await res.json()) as ListResp<T>
     return Array.isArray(json.data) ? json.data : []
   } catch (err) {
     // Fail open — log to server console, return empty list, sitemap
-    // still serves the static pages.
+    // still serves the static pages. NEVER throws → the route never 500s.
     console.warn(`[sitemap] failed to fetch ${path}:`, (err as Error).message)
     return []
   }
@@ -76,9 +77,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // (`/social` removed — that route 404s; the public feed lives at `/`.)
   ]
 
-  // ── Dynamic: courses ──────────────────────────────────────
+  // ── Dynamic URLs — fetched in PARALLEL (Promise.all) so the total wait is
+  // the slowest single call (≤3s), not the sum of all four. Each safeFetch is
+  // fail-open (returns [] on error/timeout), so one slow or down API never
+  // fails the sitemap — it still renders the static routes plus whatever data
+  // came back. The route never throws / never 500s.
   type CourseItem = { id: number | string; slug?: string; updatedAt?: string; createdAt?: string; thumbnailUrl?: string }
-  const courses = await safeFetch<CourseItem>('/courses?limit=100')
+  type BlogItem = { id: number | string; slug?: string; updatedAt?: string; publishedAt?: string; createdAt?: string; thumbnailUrl?: string }
+  type ShopItem = { id: number | string; slug?: string; updatedAt?: string; createdAt?: string; thumbnailUrl?: string }
+  type ProjectItem = { id: number | string; slug?: string; updatedAt?: string; createdAt?: string; thumbnailUrl?: string; thumbnail?: string }
+
+  const [courses, posts, products, projects] = await Promise.all([
+    safeFetch<CourseItem>('/courses?limit=100'),
+    safeFetch<BlogItem>('/blog/posts?limit=100'),
+    safeFetch<ShopItem>('/shop/products?limit=100'),
+    safeFetch<ProjectItem>('/projects?limit=100'),
+  ])
+
   const courseUrls: MetadataRoute.Sitemap = courses
     .filter((c) => c.slug)
     .map((c) => ({
@@ -89,9 +104,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: c.thumbnailUrl ? [c.thumbnailUrl] : undefined,
     }))
 
-  // ── Dynamic: blog posts ───────────────────────────────────
-  type BlogItem = { id: number | string; slug?: string; updatedAt?: string; publishedAt?: string; createdAt?: string; thumbnailUrl?: string }
-  const posts = await safeFetch<BlogItem>('/blog/posts?limit=100')
   const blogUrls: MetadataRoute.Sitemap = posts
     .filter((p) => p.slug && p.slug.length > 0)
     .map((p) => ({
@@ -108,9 +120,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: p.thumbnailUrl ? [p.thumbnailUrl] : undefined,
     }))
 
-  // ── Dynamic: shop products ────────────────────────────────
-  type ShopItem = { id: number | string; slug?: string; updatedAt?: string; createdAt?: string; thumbnailUrl?: string }
-  const products = await safeFetch<ShopItem>('/shop/products?limit=100')
   const shopUrls: MetadataRoute.Sitemap = products
     .filter((s) => s.slug)
     .map((s) => ({
@@ -121,9 +130,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: s.thumbnailUrl ? [s.thumbnailUrl] : undefined,
     }))
 
-  // ── Dynamic: projects ─────────────────────────────────────
-  type ProjectItem = { id: number | string; slug?: string; updatedAt?: string; createdAt?: string; thumbnailUrl?: string; thumbnail?: string }
-  const projects = await safeFetch<ProjectItem>('/projects?limit=100')
   const projectUrls: MetadataRoute.Sitemap = projects
     .filter((p) => p.slug)
     .map((p) => {
@@ -137,10 +143,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     })
 
-  // ── Dynamic: music tracks (no per-track page; link to /music) ──
-  // The music player is on /music itself. Individual tracks don't
-  // have a dedicated URL — they're played in-place. Skip the
-  // per-track URLs to avoid linking to /music/:id which would 404.
+  // Music tracks intentionally omitted — no per-track page (played in-place
+  // on /music), so linking /music/:id would 404.
 
   return [...staticPages, ...courseUrls, ...blogUrls, ...shopUrls, ...projectUrls]
 }

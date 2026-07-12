@@ -4,16 +4,19 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   Plus, Search, Pencil, Trash2, X, ChevronLeft, ChevronRight,
   CheckCircle, Clock, AlertCircle, Eye, EyeOff, Loader2,
-  ChevronDown, ChevronUp, BookOpen, Play, FileText, Link, Video, Image
+  ChevronDown, ChevronUp, BookOpen, Play, FileText, Link, Video, Image, FolderTree
 } from 'lucide-react';
 import { adminCoursesApi, courseCategoryApi } from '@/lib/api';
 import { toast } from 'sonner';
 import type { Course, CourseCategory, CourseSection as CCSection, LessonDto } from '@/types';
 import ImageUpload from '@/components/admin/ImageUpload';
+import RichTextEditor from '@/components/admin/RichTextEditor';
+import LessonDocumentsManager from '@/components/admin/LessonDocumentsManager';
+import LessonVideoManager from '@/components/admin/LessonVideoManager';
+import LessonQuizBuilder, { type QuizData } from '@/components/admin/LessonQuizBuilder';
 
 const LEVELS = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
 const STATUSES = ['DRAFT', 'PUBLISHED'];
-const LESSON_TYPES = ['VIDEO', 'TEXT', 'QUIZ'];
 
 // Single source of truth for course status.
 // 'DRAFT' = not visible on Academy page
@@ -28,6 +31,8 @@ const emptyCourse = {
   status: 'DRAFT', tags: [] as string[],
   categoryId: 0,
   accessType: 'FREE',
+  // Guidance note shown above the course-level "Tài liệu chung" area.
+  documentsNote: '',
   // ISO datetime string or '' for "no expiry / forever".
   // discountExpiresAt: date+time after which discountPrice stops applying.
   discountExpiresAt: '',
@@ -46,31 +51,58 @@ interface SectionForm {
 interface LessonForm {
   id?: number;
   title: string;
+  slug: string;
   description: string;
   content: string;
   lessonType: string;
   videoUrl: string;
+  videoPlatform: 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT';
+  sourceCodeUrl: string;
+  teachingNotes: string;
+  quizData?: QuizData | null;
   videoDurationSeconds: number;
   thumbnailUrl: string;
   isFreePreview: boolean;
   isPublished: boolean;
   sortOrder: number;
-  documents: DocForm[];
+  documents?: Array<{
+    id: number;
+    title: string;
+    fileUrl: string;
+    fileSizeBytes: number;
+    fileType?: string | null;
+    downloadCount: number;
+    createdAt?: string;
+  }>;
 }
 
-interface DocForm {
-  id?: number;
-  title: string;
-  fileUrl: string;
-  fileSizeBytes: number;
-  fileType: string;
+// Bold the part of `text` that matches `query` (case-insensitive) so
+// suggestions visibly narrow as the admin types.
+function highlightMatch(text: string, query: string) {
+  const q = query.trim();
+  if (!q) return text;
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if (idx === -1) return text;
+  return (
+    <>
+      {text.slice(0, idx)}
+      <mark className="bg-neon-violet/30 text-inherit rounded px-0.5">{text.slice(idx, idx + q.length)}</mark>
+      {text.slice(idx + q.length)}
+    </>
+  );
 }
 
 export default function AdminCoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<CourseCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  // `searchInput` updates on every keystroke (drives the input + suggestions);
+  // `search` is the debounced value that actually triggers the server fetch,
+  // so fast typing no longer fires a request (and full-table spinner) per char.
+  const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeSuggestion, setActiveSuggestion] = useState(-1);
   const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -118,6 +150,26 @@ export default function AdminCoursesPage() {
   useEffect(() => { fetchCourses(); }, [fetchCourses]);
   useEffect(() => { setPage(0); }, [search, statusFilter]);
 
+  // Debounce the raw input into the value that drives fetching (250ms).
+  useEffect(() => {
+    const t = setTimeout(() => setSearch(searchInput.trim()), 250);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+
+  // Live suggestions: the server-filtered courses for the current query,
+  // capped to a short list. Matches by mã môn (courseCode) and title.
+  const suggestions = searchInput.trim() ? courses.slice(0, 8) : [];
+
+  // Picking a suggestion narrows the search to that exact course
+  // (by code when it has one, else by title).
+  const selectSuggestion = (c: Course) => {
+    const term = c.courseCode || c.title;
+    setSearchInput(term);
+    setSearch(term);
+    setShowSuggestions(false);
+    setActiveSuggestion(-1);
+  };
+
   useEffect(() => {
     courseCategoryApi.getAll().then(r => setCategories(r.data.data || [])).catch(() => {});
   }, []);
@@ -148,6 +200,7 @@ export default function AdminCoursesPage() {
       accessType: ((course as any).accessType === 'CODE' ? 'PAID' : (course as any).accessType) || 'FREE',
       requirements: course.requirements || '',
       whatYouLearn: course.whatYouLearn || '',
+      documentsNote: (course as { documentsNote?: string }).documentsNote || '',
       status: course.status || 'DRAFT',
       tags: course.tags || [],
       categoryId: course.categoryId || 0,
@@ -176,16 +229,23 @@ export default function AdminCoursesPage() {
           lessons: (s.lessons || []).map((l: LessonDto) => ({
             id: l.id,
             title: l.title,
+            slug: l.slug || '',
             description: l.description || '',
             content: l.content || '',
             lessonType: l.lessonType || 'VIDEO',
             videoUrl: l.videoUrl || '',
+            videoPlatform: (l.videoPlatform as 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT') || 'EMBED',
+            sourceCodeUrl: l.sourceCodeUrl || '',
+            teachingNotes: l.teachingNotes || '',
+            quizData: (l as unknown as { quizData?: QuizData; detail?: { quizData?: QuizData } }).quizData
+              ?? (l as unknown as { detail?: { quizData?: QuizData } }).detail?.quizData
+              ?? null,
             videoDurationSeconds: l.videoDurationSeconds || 0,
             thumbnailUrl: l.thumbnailUrl || '',
             isFreePreview: l.isFreePreview || false,
             isPublished: l.isPublished || false,
             sortOrder: l.sortOrder,
-            documents: [],
+            documents: l.documents || [],
           })),
         }));
         setSections(loaded);
@@ -215,8 +275,8 @@ export default function AdminCoursesPage() {
     }]);
   };
 
-  const updateSection = (idx: number, field: keyof SectionForm, value: unknown) => {
-    setSections(prev => prev.map((s, i) => i === idx ? { ...s, [field]: value } : s));
+  const updateSection = (idx: number, patch: Partial<SectionForm>) => {
+    setSections(prev => prev.map((s, i) => i === idx ? { ...s, ...patch } : s));
   };
 
   const removeSection = (idx: number) => {
@@ -225,20 +285,24 @@ export default function AdminCoursesPage() {
 
   // Lesson management
   const addLesson = (sectionIdx: number) => {
-    const section = sections[sectionIdx];
     setSections(prev => prev.map((s, i) =>
       i === sectionIdx ? {
         ...s,
         lessons: [...s.lessons, {
           title: '',
+          slug: '',
           description: '',
           content: '',
           lessonType: 'VIDEO',
           videoUrl: '',
+          videoPlatform: 'EMBED' as const,
+          sourceCodeUrl: '',
+          teachingNotes: '',
+          quizData: null,
           videoDurationSeconds: 0,
           thumbnailUrl: '',
           isFreePreview: false,
-          isPublished: false,
+          isPublished: true,
           sortOrder: s.lessons.length,
           documents: [],
         }],
@@ -246,12 +310,12 @@ export default function AdminCoursesPage() {
     ));
   };
 
-  const updateLesson = (sectionIdx: number, lessonIdx: number, field: keyof LessonForm, value: unknown) => {
+  const updateLesson = (sectionIdx: number, lessonIdx: number, patch: Partial<LessonForm>) => {
     setSections(prev => prev.map((s, si) =>
       si === sectionIdx ? {
         ...s,
         lessons: s.lessons.map((l, li) =>
-          li === lessonIdx ? { ...l, [field]: value } : l
+          li === lessonIdx ? { ...l, ...patch } : l
         ),
       } : s
     ));
@@ -274,6 +338,8 @@ export default function AdminCoursesPage() {
   const handleSave = async () => {
     if (!courseForm.title.trim()) { toast.error('Tiêu đề không được trống'); return; }
     setSaving(true);
+    // Collect per-item failures so one bad lesson doesn't abort the whole save.
+    const errors: string[] = [];
     try {
       const payload = {
         title: courseForm.title,
@@ -299,6 +365,7 @@ export default function AdminCoursesPage() {
         isPublished: statusDerived,
         requirements: courseForm.requirements,
         whatYouLearn: courseForm.whatYouLearn,
+        documentsNote: courseForm.documentsNote,
         status: courseForm.status,
         tags: courseForm.tags,
       };
@@ -311,42 +378,126 @@ export default function AdminCoursesPage() {
         discountExpiresAt: payload.discountExpiresAt ?? undefined,
       };
 
-      if (editingId) {
-        await adminCoursesApi.update(editingId, cleanPayload);
-        toast.success('Cập nhật khoá học thành công!');
+      // 1) Create or update the course itself.
+      const previousSections = sections.filter(s => s.id);
+      let courseId = editingId ?? undefined;
+      if (courseId) {
+        await adminCoursesApi.update(courseId, cleanPayload);
       } else {
         const created = await adminCoursesApi.create(cleanPayload);
-        const newId = created.data.data.id;
-        for (const section of sections) {
-          if (!section.title.trim()) continue;
-          const secRes = await adminCoursesApi.createSection({
-            courseId: newId,
-            title: section.title,
-            description: section.description,
-            sortOrder: section.sortOrder,
-            isLocked: section.isLocked,
-          });
-          const secId = secRes.data.data.id;
-          for (const lesson of section.lessons) {
-            if (!lesson.title.trim()) continue;
-            await adminCoursesApi.createLesson({
-              sectionId: secId,
-              title: lesson.title,
-              description: lesson.description,
-              content: lesson.content,
-              lessonType: lesson.lessonType,
-              videoUrl: lesson.videoUrl,
-              videoDurationSeconds: lesson.videoDurationSeconds,
-              thumbnailUrl: lesson.thumbnailUrl,
-              isFreePreview: lesson.isFreePreview,
-              isPublished: lesson.isPublished,
-              sortOrder: lesson.sortOrder,
-            });
+        courseId = created.data.data?.id;
+      }
+      if (!courseId) throw new Error('Không tạo được khoá học');
+
+      // 2) Delete sections/lessons that were removed in the editor (in edit
+      //    mode). Without this, old rows stay in DB and reappear on reload.
+      const currentSectionIds = new Set(sections.map(s => s.id).filter(Boolean));
+      for (const prev of previousSections) {
+        if (!prev.id) continue;
+        if (!currentSectionIds.has(prev.id)) {
+          try { await adminCoursesApi.deleteSection(prev.id); }
+          catch (e: any) { errors.push(`Không xoá được chương "${prev.title}": ${e?.response?.data?.message || e.message}`); }
+          continue;
+        }
+        const cur = sections.find(s => s.id === prev.id);
+        if (!cur) continue;
+        const curLessonIds = new Set(cur.lessons.map(l => l.id).filter(Boolean));
+        for (const pl of prev.lessons) {
+          if (pl.id && !curLessonIds.has(pl.id)) {
+            try { await adminCoursesApi.deleteLesson(pl.id); }
+            catch (e: any) { errors.push(`Không xoá được bài "${pl.title}": ${e?.response?.data?.message || e.message}`); }
           }
         }
-        toast.success('Tạo khoá học thành công!');
       }
-      closeForm();
+
+      // 3) Create/update sections + lessons. Dedup by id (backend dup rows)
+      //    and by title (user clicked "add" twice without renaming).
+      const seenSectionTitles = new Set<string>();
+      const processedSectionIds = new Set<number>();
+      const newSections: SectionForm[] = [];
+      for (let si = 0; si < sections.length; si++) {
+        const section = sections[si];
+        const tKey = (section.title || '').trim().toLowerCase();
+        if (!section.title.trim()) continue;
+        if (section.id != null && processedSectionIds.has(section.id)) continue;
+        if (tKey && seenSectionTitles.has(tKey)) continue;
+        if (section.id != null) processedSectionIds.add(section.id);
+        if (tKey) seenSectionTitles.add(tKey);
+
+        let savedSectionId: number | undefined;
+        try {
+          if (section.id) {
+            const r = await adminCoursesApi.updateSection(section.id, {
+              title: section.title, description: section.description, sortOrder: si, isLocked: section.isLocked,
+            });
+            savedSectionId = r.data.data?.id;
+          } else {
+            const r = await adminCoursesApi.createSection({
+              courseId, title: section.title, description: section.description, sortOrder: si, isLocked: section.isLocked,
+            });
+            savedSectionId = r.data.data?.id;
+          }
+          if (!savedSectionId) { errors.push(`Chương ${si + 1}: không tạo được ID`); continue; }
+        } catch (e: any) {
+          errors.push(`Chương ${si + 1}: ${e?.response?.data?.message || e.message}`);
+          continue;
+        }
+
+        const newLessons: LessonForm[] = [];
+        const seenLessonTitles = new Set<string>();
+        for (let li = 0; li < section.lessons.length; li++) {
+          const lesson = section.lessons[li];
+          const lKey = (lesson.title || '').trim().toLowerCase();
+          if (!lesson.title.trim()) continue;
+          if (lKey && seenLessonTitles.has(lKey)) continue;
+          seenLessonTitles.add(lKey);
+
+          const lessonPayload = {
+            title: lesson.title,
+            slug: lesson.slug,
+            description: lesson.description,
+            content: lesson.content,
+            lessonType: lesson.lessonType,
+            videoUrl: lesson.videoUrl,
+            videoPlatform: lesson.videoPlatform,
+            sourceCodeUrl: lesson.sourceCodeUrl,
+            teachingNotes: lesson.teachingNotes,
+            quizData: lesson.lessonType === 'QUIZ' ? (lesson.quizData ?? null) : null,
+            videoDurationSeconds: lesson.videoDurationSeconds,
+            thumbnailUrl: lesson.thumbnailUrl,
+            isFreePreview: lesson.isFreePreview,
+            isPublished: lesson.isPublished,
+            sortOrder: li,
+          };
+          let lessonId = lesson.id;
+          try {
+            if (lessonId) {
+              const r = await adminCoursesApi.updateLesson(lessonId, lessonPayload);
+              lessonId = r.data.data?.id;
+            } else {
+              const r = await adminCoursesApi.createLesson({ sectionId: savedSectionId, ...lessonPayload });
+              lessonId = r.data.data?.id;
+            }
+            if (!lessonId) { errors.push(`Bài ${li + 1} (${lesson.title}): không tạo được ID`); continue; }
+            newLessons.push({ ...lesson, id: lessonId, sortOrder: li });
+          } catch (e: any) {
+            errors.push(`Bài ${li + 1} (${lesson.title}): ${e?.response?.data?.message || e.message}`);
+          }
+        }
+        newSections.push({ ...section, id: savedSectionId, sortOrder: si, lessons: newLessons });
+      }
+
+      if (errors.length > 0) {
+        toast.error(`Một số mục lưu lỗi:\n${errors.slice(0, 5).join('\n')}${errors.length > 5 ? '\n...' : ''}`);
+      } else {
+        toast.success(editingId ? 'Cập nhật khoá học thành công!' : 'Tạo khoá học thành công!');
+      }
+
+      // Keep the modal open and switch to edit mode with the saved ids, so the
+      // per-lesson video/PDF upload widgets (which need a lesson id) appear.
+      setEditingId(courseId);
+      setSections(newSections);
+      setExpandedSections(new Set(newSections.map((_, i) => i)));
       fetchCourses();
     } catch (err: unknown) {
       const e = err as { response?: { data?: { message?: string } } };
@@ -394,14 +545,67 @@ export default function AdminCoursesPage() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted z-10" />
           <input
             type="text"
-            placeholder="Tìm kiếm khoá học..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
+            placeholder="Tìm theo mã môn hoặc tên khoá học..."
+            value={searchInput}
+            onChange={e => { setSearchInput(e.target.value); setShowSuggestions(true); setActiveSuggestion(-1); }}
+            onFocus={() => setShowSuggestions(true)}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+            onKeyDown={e => {
+              if (!showSuggestions || suggestions.length === 0) return;
+              if (e.key === 'ArrowDown') { e.preventDefault(); setActiveSuggestion(i => Math.min(i + 1, suggestions.length - 1)); }
+              else if (e.key === 'ArrowUp') { e.preventDefault(); setActiveSuggestion(i => Math.max(i - 1, 0)); }
+              else if (e.key === 'Enter' && activeSuggestion >= 0) { e.preventDefault(); selectSuggestion(suggestions[activeSuggestion]); }
+              else if (e.key === 'Escape') { setShowSuggestions(false); setActiveSuggestion(-1); }
+            }}
+            className="w-full pl-10 pr-9 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
           />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => { setSearchInput(''); setShowSuggestions(false); setActiveSuggestion(-1); }}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-text-muted hover:text-text-primary rounded-md hover:bg-white/5 transition-colors"
+              title="Xoá tìm kiếm"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+
+          {/* Live suggestions — matched by mã môn + tên, narrowing as you type */}
+          {showSuggestions && suggestions.length > 0 && (
+            <div className="absolute z-30 left-0 right-0 top-full mt-2 bg-darkcard border border-darkborder rounded-xl shadow-2xl shadow-black/40 overflow-hidden max-h-80 overflow-y-auto">
+              {suggestions.map((c, i) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onMouseDown={e => { e.preventDefault(); selectSuggestion(c); }}
+                  onMouseEnter={() => setActiveSuggestion(i)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${i === activeSuggestion ? 'bg-neon-violet/10' : 'hover:bg-white/[0.03]'}`}
+                >
+                  <img
+                    src={c.thumbnailUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=64'}
+                    alt=""
+                    className="w-9 h-9 rounded-md object-cover shrink-0"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      {c.courseCode && (
+                        <span className="shrink-0 font-mono text-[11px] px-1.5 py-0.5 rounded bg-neon-violet/15 text-neon-violet border border-neon-violet/25">
+                          {highlightMatch(c.courseCode, searchInput)}
+                        </span>
+                      )}
+                      <span className="text-sm text-text-primary truncate">{highlightMatch(c.title, searchInput)}</span>
+                    </div>
+                    <p className="text-xs text-text-muted mt-0.5 truncate">
+                      {c.categoryName || 'Chưa phân loại'} · {c.totalLessons || 0} bài
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <select
           value={statusFilter}
@@ -450,8 +654,15 @@ export default function AdminCoursesPage() {
                             alt={course.title}
                             className="w-14 h-10 rounded-lg object-cover shrink-0"
                           />
-                          <div>
-                            <p className="font-medium text-text-primary text-sm line-clamp-1">{course.title}</p>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              {course.courseCode && (
+                                <span className="shrink-0 font-mono text-[11px] px-1.5 py-0.5 rounded bg-neon-violet/15 text-neon-violet border border-neon-violet/25">
+                                  {course.courseCode}
+                                </span>
+                              )}
+                              <p className="font-medium text-text-primary text-sm line-clamp-1">{course.title}</p>
+                            </div>
                             <div className="flex items-center gap-2 mt-1">
                               <span className="text-xs text-text-muted">{course.totalLessons} bài</span>
                               <span className="text-text-muted text-xs">•</span>
@@ -779,6 +990,25 @@ export default function AdminCoursesPage() {
                   </button>
                 </div>
 
+                {/* Course-level documents note + shared materials */}
+                <div>
+                  <label className="block text-xs font-medium text-text-secondary mb-1.5">📝 Ghi chú cho mục Tài liệu (hướng dẫn học viên)</label>
+                  <textarea
+                    value={courseForm.documentsNote}
+                    onChange={e => setCourseForm(prev => ({ ...prev, documentsNote: e.target.value }))}
+                    rows={2}
+                    placeholder="VD: Tải tài liệu về, giải nén rồi mở file hướng dẫn.pdf trước khi xem video…"
+                    className="w-full px-3 py-2.5 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
+                  />
+                </div>
+                {editingId ? (
+                  <LessonDocumentsManager courseId={editingId} />
+                ) : (
+                  <p className="text-sm text-text-muted border border-dashed border-darkborder rounded-xl px-4 py-3">
+                    📁 Lưu khoá học trước để thêm <b>Tài liệu chung của khoá</b> (hiển thị ở đầu, ngang với chương).
+                  </p>
+                )}
+
                 {loadingSections && (
                   <div className="flex items-center justify-center py-8">
                     <Loader2 className="w-6 h-6 animate-spin text-neon-violet" />
@@ -792,97 +1022,160 @@ export default function AdminCoursesPage() {
                   </div>
                 )}
 
-                {sections.map((section, sIdx) => (
-                  <div key={sIdx} className="border border-darkborder/50 rounded-xl overflow-hidden">
+                {sections.map((section, sIdx) => {
+                  const expanded = expandedSections.has(sIdx);
+                  return (
+                  <div key={`${section.id || 'new'}-${sIdx}`} className="border border-darkborder/50 rounded-xl overflow-hidden bg-darkbg/40">
                     {/* Section header */}
-                    <div className="flex items-center gap-3 p-4 bg-darkbg/50">
-                      <button onClick={() => toggleSectionExpand(sIdx)}
-                        className="text-text-muted hover:text-text-primary transition-colors">
-                        {expandedSections.has(sIdx) ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                    <div className="w-full px-4 py-3.5 flex items-center justify-between gap-3">
+                      <button onClick={() => toggleSectionExpand(sIdx)} className="flex items-center gap-3 text-left hover:bg-white/5 rounded-lg px-2 py-1 -ml-2 flex-1 min-w-0">
+                        <FolderTree className="w-5 h-5 text-neon-violet shrink-0" />
+                        <div className="min-w-0">
+                          <p className="font-semibold text-text-primary truncate">{section.title || `Chương ${sIdx + 1}`}</p>
+                          <p className="text-xs text-text-muted">{section.lessons.length} bài học</p>
+                        </div>
                       </button>
-                      <input value={section.title}
-                        onChange={e => updateSection(sIdx, 'title', e.target.value)}
-                        placeholder="Tên chương (VD: Chương 1 - Giới thiệu)"
-                        className="flex-1 px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
-                      />
-                      <label className="flex items-center gap-1.5 text-xs text-text-muted shrink-0">
-                        <input type="checkbox" checked={section.isLocked}
-                          onChange={e => updateSection(sIdx, 'isLocked', e.target.checked)}
-                          className="w-3.5 h-3.5 rounded accent-neon-violet"
-                        />
-                        Khóa
-                      </label>
-                      <button onClick={() => removeSection(sIdx)}
-                        className="p-1.5 text-text-muted hover:text-red-400 transition-colors">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button onClick={() => removeSection(sIdx)}
+                          className="p-2 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors" title="Xoá chương">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                        {expanded ? <ChevronUp className="w-4 h-4 text-text-muted" /> : <ChevronDown className="w-4 h-4 text-text-muted" />}
+                      </div>
                     </div>
 
-                    {/* Lessons */}
-                    {expandedSections.has(sIdx) && (
-                      <div className="divide-y divide-darkborder/20">
-                        {section.lessons.map((lesson, lIdx) => (
-                          <div key={lIdx} className="p-4 pl-12 space-y-3">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-text-muted bg-darkbg px-2 py-0.5 rounded shrink-0">
-                                {lesson.lessonType}
-                              </span>
-                              <input value={lesson.title}
-                                onChange={e => updateLesson(sIdx, lIdx, 'title', e.target.value)}
-                                placeholder="Tên bài giảng"
-                                className="flex-1 px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
-                              />
-                              <button onClick={() => removeLesson(sIdx, lIdx)}
-                                className="p-1.5 text-text-muted hover:text-red-400 transition-colors">
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                              <select value={lesson.lessonType}
-                                onChange={e => updateLesson(sIdx, lIdx, 'lessonType', e.target.value)}
-                                className="px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-xs text-text-primary focus:outline-none focus:border-neon-violet/50 cursor-pointer"
-                              >
-                                {LESSON_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-                              </select>
-                              <input value={lesson.videoUrl}
-                                onChange={e => updateLesson(sIdx, lIdx, 'videoUrl', e.target.value)}
-                                placeholder="Video URL"
-                                className="px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
-                              />
-                              <div className="flex items-center gap-2">
-                                <label className="flex items-center gap-1 text-xs text-text-muted">
-                                  <input type="checkbox" checked={lesson.isFreePreview}
-                                    onChange={e => updateLesson(sIdx, lIdx, 'isFreePreview', e.target.checked)}
-                                    className="w-3.5 h-3.5 rounded accent-neon-violet"
-                                  />
-                                  Free
-                                </label>
-                                <label className="flex items-center gap-1 text-xs text-text-muted">
-                                  <input type="checkbox" checked={lesson.isPublished}
-                                    onChange={e => updateLesson(sIdx, lIdx, 'isPublished', e.target.checked)}
-                                    className="w-3.5 h-3.5 rounded accent-neon-violet"
-                                  />
-                                  Pub
-                                </label>
+                    {expanded && (
+                      <div className="border-t border-darkborder p-4 space-y-5">
+                        <div className="grid gap-3 md:grid-cols-[1fr_120px]">
+                          <input value={section.title} onChange={e => updateSection(sIdx, { title: e.target.value })}
+                            placeholder="Tên chương (VD: Chương 1 - Giới thiệu)"
+                            className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+                          <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-secondary">
+                            <input type="checkbox" checked={section.isLocked} onChange={e => updateSection(sIdx, { isLocked: e.target.checked })} className="accent-neon-violet" /> Khoá
+                          </label>
+                        </div>
+                        <textarea value={section.description} onChange={e => updateSection(sIdx, { description: e.target.value })} rows={2}
+                          placeholder="Mô tả chương" className="w-full px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+
+                        <div className="space-y-4">
+                          {section.lessons.map((lesson, lIdx) => (
+                            <div key={`${lesson.id || 'new'}-${lIdx}`} className="rounded-xl border border-darkborder bg-[#100f1a] p-4 space-y-4">
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2 text-text-primary font-semibold text-sm">
+                                  <BookOpen className="w-4 h-4 text-neon-indigo" /> Bài học {lIdx + 1}
+                                </div>
+                                <button onClick={() => removeLesson(sIdx, lIdx)}
+                                  className="text-xs px-3 py-1.5 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 flex items-center gap-1">
+                                  <Trash2 className="w-3.5 h-3.5" /> Xoá
+                                </button>
                               </div>
+
+                              <div className="grid gap-3 md:grid-cols-2">
+                                <input value={lesson.title} onChange={e => updateLesson(sIdx, lIdx, { title: e.target.value })} placeholder="Tiêu đề bài học" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+                                <input value={lesson.slug} onChange={e => updateLesson(sIdx, lIdx, { slug: e.target.value })} placeholder="Slug bài học (tự tạo nếu bỏ trống)" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+                              </div>
+
+                              <div className="grid gap-3 md:grid-cols-2">
+                                <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-secondary">
+                                  <span className="text-text-muted text-xs shrink-0">Loại:</span>
+                                  <select value={lesson.lessonType} onChange={e => updateLesson(sIdx, lIdx, { lessonType: e.target.value })} className="bg-transparent text-text-primary outline-none w-full cursor-pointer">
+                                    <option value="VIDEO">🎬 Video</option>
+                                    <option value="QUIZ">📝 Quizz (trắc nghiệm)</option>
+                                    <option value="EXERCISE">📄 Bài tập (PDF)</option>
+                                    <option value="SOLUTION">✅ Đáp án (PDF)</option>
+                                    <option value="TEXT">Text</option>
+                                    <option value="PROJECT">Project</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder">
+                                  <span className="text-sm text-text-secondary">Hiển thị:</span>
+                                  <button type="button" onClick={() => updateLesson(sIdx, lIdx, { isPublished: !lesson.isPublished })}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${lesson.isPublished ? 'bg-emerald-500' : 'bg-darkborder'}`}>
+                                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${lesson.isPublished ? 'translate-x-6' : 'translate-x-1'}`} />
+                                  </button>
+                                  <span className={`text-xs font-medium ${lesson.isPublished ? 'text-emerald-400' : 'text-text-muted'}`}>{lesson.isPublished ? 'Published' : 'Draft'}</span>
+                                  <label className="flex items-center gap-1 text-xs text-text-muted ml-auto">
+                                    <input type="checkbox" checked={lesson.isFreePreview} onChange={e => updateLesson(sIdx, lIdx, { isFreePreview: e.target.checked })} className="accent-neon-violet" /> Học thử
+                                  </label>
+                                </div>
+                              </div>
+
+                              <textarea value={lesson.description} onChange={e => updateLesson(sIdx, lIdx, { description: e.target.value })} rows={2}
+                                placeholder="Mô tả bài học" className="w-full px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+
+                              {lesson.lessonType === 'VIDEO' && (
+                                <>
+                                  <div className="grid gap-3 lg:grid-cols-3">
+                                    <label className="rounded-lg border border-darkborder bg-darkbg px-4 py-2.5 text-sm text-text-secondary flex items-center gap-2"><Video className="w-4 h-4 text-neon-violet shrink-0" />
+                                      <select value={lesson.videoPlatform} onChange={e => updateLesson(sIdx, lIdx, { videoPlatform: e.target.value as LessonForm['videoPlatform'] })} className="bg-transparent text-text-primary outline-none w-full cursor-pointer">
+                                        <option value="EMBED">Embed trên web</option>
+                                        <option value="YOUTUBE_TAB">Mở tab YouTube</option>
+                                        <option value="DIRECT">Direct video</option>
+                                      </select>
+                                    </label>
+                                    <input value={lesson.videoUrl} onChange={e => updateLesson(sIdx, lIdx, { videoUrl: e.target.value })} placeholder={lesson.videoPlatform === 'DIRECT' ? 'Link .mp4 ngoài — hoặc tải video lên bên dưới' : 'Video URL / YouTube URL'} className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 lg:col-span-2" />
+                                  </div>
+
+                                  {lesson.videoPlatform === 'DIRECT' && (
+                                    <LessonVideoManager
+                                      lessonId={lesson.id}
+                                      videoUrl={lesson.videoUrl}
+                                      onSaved={data => updateLesson(sIdx, lIdx, {
+                                        videoPlatform: 'DIRECT',
+                                        videoUrl: data.videoUrl,
+                                        ...(data.videoDurationSeconds ? { videoDurationSeconds: data.videoDurationSeconds } : {}),
+                                      })}
+                                      onDeleted={() => updateLesson(sIdx, lIdx, { videoUrl: '' })}
+                                    />
+                                  )}
+
+                                  <div className="grid gap-3 md:grid-cols-2">
+                                    <input value={lesson.sourceCodeUrl} onChange={e => updateLesson(sIdx, lIdx, { sourceCodeUrl: e.target.value })} placeholder="GitHub / source code URL" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+                                    <input type="number" value={lesson.videoDurationSeconds} onChange={e => updateLesson(sIdx, lIdx, { videoDurationSeconds: Number(e.target.value) })} placeholder="Thời lượng video (giây)" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+                                  </div>
+                                </>
+                              )}
+
+                              {lesson.lessonType === 'QUIZ' && (
+                                <LessonQuizBuilder value={lesson.quizData} onChange={data => updateLesson(sIdx, lIdx, { quizData: data })} />
+                              )}
+
+                              {(lesson.lessonType === 'EXERCISE' || lesson.lessonType === 'SOLUTION') && (
+                                <div className="rounded-lg border border-dashed border-neon-violet/40 bg-neon-violet/5 p-3 space-y-3">
+                                  <p className="text-xs text-text-secondary">
+                                    📄 Tải file <b>PDF</b> {lesson.lessonType === 'EXERCISE' ? 'bài tập' : 'đáp án'} — học viên xem ngay trong trang học.
+                                  </p>
+                                  {lesson.id ? (
+                                    <LessonDocumentsManager lessonId={lesson.id} initialDocuments={lesson.documents || []} />
+                                  ) : (
+                                    <p className="text-xs text-amber-400">⚠️ Bấm <b>Lưu</b> (cuối trang) để lưu bài học trước, rồi ô tải PDF sẽ hiện ra đây.</p>
+                                  )}
+                                </div>
+                              )}
+
+                              <div>
+                                <p className="mb-2 flex items-center gap-2 text-sm font-medium text-text-primary"><FileText className="w-4 h-4 text-neon-violet" /> Ghi chú giảng dạy</p>
+                                <RichTextEditor value={lesson.teachingNotes} onChange={value => updateLesson(sIdx, lIdx, { teachingNotes: value, content: value })} placeholder="Nội dung bài giảng, markdown được hỗ trợ..." />
+                              </div>
+
+                              {lesson.id && lesson.lessonType !== 'EXERCISE' && lesson.lessonType !== 'SOLUTION' && (
+                                <div className="mt-2">
+                                  <LessonDocumentsManager lessonId={lesson.id} initialDocuments={lesson.documents || []} />
+                                </div>
+                              )}
                             </div>
-                            <textarea value={lesson.content}
-                              onChange={e => updateLesson(sIdx, lIdx, 'content', e.target.value)}
-                              placeholder="Nội dung bài giảng (HTML)"
-                              rows={2}
-                              className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-y"
-                            />
-                          </div>
-                        ))}
-                        <button onClick={() => addLesson(sIdx)}
-                          className="w-full flex items-center justify-center gap-1.5 p-3 text-sm text-text-muted hover:text-neon-indigo hover:bg-neon-indigo/5 transition-colors">
-                          <Plus className="w-4 h-4" />
-                          Thêm bài giảng
-                        </button>
+                          ))}
+
+                          <button onClick={() => addLesson(sIdx)}
+                            className="w-full rounded-lg border border-dashed border-neon-violet/30 py-3 text-sm text-neon-violet hover:bg-neon-violet/10 flex items-center justify-center gap-2 transition-colors">
+                            <Plus className="w-4 h-4" /> Thêm bài học
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
-                ))}
+                  );
+                })}
               </section>
             </div>
 

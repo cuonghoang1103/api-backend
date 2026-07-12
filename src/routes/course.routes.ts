@@ -734,6 +734,9 @@ router.get('/admin/all', authenticate, requireAdmin('ROLE_ADMIN'), async (req, r
           { title: { contains: String(keyword), mode: 'insensitive' } },
           { shortDescription: { contains: String(keyword), mode: 'insensitive' } },
           { slug: { contains: String(keyword), mode: 'insensitive' } },
+          // Match by course code (mã môn) too — the admin search box lets you
+          // look up a course by its code, not just its title.
+          { courseCode: { contains: String(keyword), mode: 'insensitive' } },
         ],
       } : {}),
       ...(status ? { status: String(status) } : {}),

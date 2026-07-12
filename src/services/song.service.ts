@@ -28,6 +28,10 @@ import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
 import { promises as fs } from 'node:fs';
+// Read-only reuse of the music page's URL builder to turn a
+// MusicTrack's R2 key into a playable public URL. We NEVER mutate
+// MusicTrack here — the music page flow is untouched.
+import { buildAudioUrl } from './music.service.js';
 // music-metadata reads ID3 / MP4 header bytes to get duration
 // without downloading the whole file. Lazy-imported because it's
 // only needed on create (and a few KB on the server is fine).
@@ -224,6 +228,53 @@ export async function getSongById(id: number): Promise<unknown> {
   const track = await prisma.song.findUnique({ where: { id } });
   if (!track) throw new AppError('Bai hat khong ton tai', 404, 'SONG_NOT_FOUND');
   return track;
+}
+
+/**
+ * Bridge a public music-page track (MusicTrack) into the Song
+ * pool so it can be attached to a post via PostMusic (whose FK
+ * points at Song). We find-or-create a Song mirroring the track.
+ *
+ * Only tracks with a real, inline-playable R2 audio URL qualify —
+ * YouTube-only tracks (not yet downloaded to R2) can't play as
+ * background audio in a post, so we reject them with a clear hint
+ * to download (⬇) them on the music page first.
+ *
+ * This is READ-ONLY against MusicTrack; the music page is untouched.
+ */
+export async function resolveSongFromMusicTrack(musicTrackId: number, uploaderId: number): Promise<unknown> {
+  const mt = await prisma.musicTrack.findUnique({
+    where: { id: musicTrackId },
+    select: {
+      id: true, title: true, artist: true, coverImage: true,
+      audioUrl: true, localPath: true, durationSeconds: true,
+    },
+  });
+  if (!mt) throw new AppError('Bài nhạc không tồn tại', 404, 'MUSIC_TRACK_NOT_FOUND');
+
+  const built = buildAudioUrl(mt.audioUrl, mt.localPath);
+  if (!built || /(?:youtube\.com|youtu\.be)/i.test(built)) {
+    throw new AppError(
+      'Bài này chưa có bản audio để phát nền trong bài viết. Hãy vào trang nhạc bấm nút tải ⬇ về trước rồi thử lại.',
+      400,
+      'MUSIC_NOT_DOWNLOADED',
+    );
+  }
+
+  // Dedup by audioUrl so repeated picks of the same track reuse one Song row.
+  const existing = await prisma.song.findFirst({ where: { audioUrl: built } });
+  if (existing) return existing;
+
+  return prisma.song.create({
+    data: {
+      title: mt.title,
+      artist: mt.artist || 'Unknown',
+      audioUrl: built,
+      coverImage: mt.coverImage ?? null,
+      durationSec: mt.durationSeconds ?? 0,
+      uploadedById: uploaderId,
+    },
+  });
 }
 
 export async function updateSong(id: number, input: UpdateSongInput): Promise<unknown> {

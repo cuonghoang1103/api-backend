@@ -1,52 +1,30 @@
 'use client';
 
 /**
- * MusicPickerModal — user-facing music sticker picker.
+ * MusicPickerModal — user-facing music picker for post background music.
  *
- * Replaces the old YouTube-based picker (see commit history).
- * Two-step flow the user can step through:
+ * Two SOURCES (tabs):
+ *   1. "Nhạc nền"     → the admin-curated Song pool (publicSongsApi, /songs).
+ *   2. "Từ trang nhạc" → the public music page tracks (musicApi, /music/tracks).
+ *      Picking one bridges it into a Song via /songs/from-music-track so it can
+ *      attach to the post (which FKs to Song). YouTube-only tracks that haven't
+ *      been downloaded to R2 are rejected with a clear message.
  *
- *   Step 1: PICK A TRACK
- *     - Search box filters the live `?q=` query against the
- *       title and artist columns server-side.
- *     - Each row shows cover + title + artist + duration.
- *     - A ▶ button on each row plays a short preview
- *       (handled by the same Audio element that lives in
- *       the parent composer once the track is committed —
- *       the picker only toggles the preview source).
- *     - Tapping the row body selects the track and advances
- *       to Step 2.
+ * Two STEPS:
+ *   Step 1: PICK — server-side search (?q=) over title/artist; each row has a
+ *           preview ▶ (only for directly-playable audio).
+ *   Step 2: TRIM — optional dual-thumb slider to pick a segment. Default is the
+ *           whole track, so a user who ignores it still attaches the full song.
  *
- *   Step 2: TRIM (advanced)
- *     - A dual-handle range slider (startSec → endSec) on a
- *       mini timeline. The start / end are clamped to the
- *       first 40s of the track and to each other. The slider
- *       re-clicks 'Play' on a sub-segment so the user hears
- *       the snippet they're about to attach.
- *     - The trimmer is "Advanced" — we hide it behind a
- *       toggle so the default flow is just "tap to attach"
- *       (startSec=0, endSec=40s, or track length if shorter).
- *     - The user can also "Pick another track" to back to
- *       step 1.
- *
- * The modal mounts a single persistent <audio> element so the
- * preview doesn't restart when the user switches between
- * tracks (we just update its src).
+ * A single persistent <audio> element powers the preview.
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { Search, Play, Pause, X, Check } from 'lucide-react';
+import { Search, Play, Pause, X, Check, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { adminSongsApi, type AdminSong } from '@/lib/api';
+import { publicSongsApi, musicApi, type AdminSong } from '@/lib/api';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-
-// No hard cap. Earlier versions limited the snippet to 40s
-// (Instagram's "music sticker" cap), but users want to pick
-// any segment of the song — intro, chorus, drop, anywhere.
-// The backend PostMusic row stores any start/end values as
-// integers with no upper bound, so we just pass through what
-// the user picked.
 
 export interface MusicPickerResult {
   musicTrackId: number;
@@ -54,64 +32,102 @@ export interface MusicPickerResult {
   musicEndSec: number;
 }
 
+// Minimal shape the composer needs from a picked track. `id` is always a
+// Song id by the time we call onPick (music-page picks are resolved first).
+export interface MusicPickTrack {
+  id: number;
+  title: string;
+  artist: string;
+  coverImage: string | null;
+  audioUrl: string | null;
+  durationSec: number;
+}
+
 export interface MusicPickerModalProps {
   open: boolean;
   onClose: () => void;
-  /** Called with the picked track + snippet bounds when the
-   *  user confirms. The parent composer stores these in the
-   *  composerMusicTrack field of the store; the actual POST
-   *  happens when the user submits the post. */
-  onPick: (result: MusicPickerResult & { track: AdminSong }) => void;
+  onPick: (result: MusicPickerResult & { track: MusicPickTrack }) => void;
 }
 
-interface SearchHit extends AdminSong {
-  url: string;
+type PickSource = 'song' | 'music';
+
+interface PickRow {
+  id: number;
+  title: string;
+  artist: string;
+  coverImage: string | null;
+  durationSec: number;
+  audioUrl: string | null;
+  source: PickSource;
+}
+
+// A URL we can drop straight into <audio> (R2 mp3 etc). YouTube links can't
+// play as inline background audio, so we don't offer a preview for them.
+function isInlinePlayable(url: string | null | undefined): boolean {
+  return !!url && /^https?:\/\//i.test(url) && !/(?:youtube\.com|youtu\.be)/i.test(url);
 }
 
 export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerModalProps) {
+  const [source, setSource] = useState<PickSource>('song');
   const [query, setQuery] = useState('');
-  const [hits, setHits] = useState<SearchHit[]>([]);
+  const [hits, setHits] = useState<PickRow[]>([]);
   const [loading, setLoading] = useState(false);
+  const [resolving, setResolving] = useState(false);
   const [step, setStep] = useState<'pick' | 'trim'>('pick');
-  const [selected, setSelected] = useState<SearchHit | null>(null);
+  const [selected, setSelected] = useState<MusicPickTrack | null>(null);
   const [previewingId, setPreviewingId] = useState<number | null>(null);
   const [previewing, setPreviewing] = useState(false);
-  // Snippet bounds in seconds. Defaults to the full track length
-  // — the user can drag the dual-thumb slider to pick any
-  // segment (intro, chorus, drop, anywhere in the song).
   const [startSec, setStartSec] = useState(0);
   const [endSec, setEndSec] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Live-search with a 250ms debounce. The debounce avoids
-  // hammering the server while the user is typing — a slow
-  // connection is fine; the empty-query path returns the
-  // newest 30 active tracks.
+  // Reset to a clean state every time the modal opens — otherwise reopening
+  // drops the user straight into the trim screen of the previously-picked song.
+  useEffect(() => {
+    if (open) {
+      setStep('pick');
+      setSelected(null);
+      setQuery('');
+      setSource('song');
+      setPreviewingId(null);
+      setPreviewing(false);
+    }
+  }, [open]);
+
+  // Live search (250ms debounce), server-side ?q= against the active source.
   useEffect(() => {
     if (!open) return;
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const res = await adminSongsApi.list({ limit: 30 });
-        const rawItems = (res.data?.data?.items ?? []) as AdminSong[];
-        // Map AdminSong → SearchHit by aliasing audioUrl → url so
-        // the rest of the component can use the shorter name.
-        // The adminSongsApi shape returns `audioUrl`; without this
-        // mapping, the audio src becomes undefined and the player
-        // fires its 'error' event with "Khong the phat track nay".
-        const items: SearchHit[] = rawItems.map((t) => ({
-          ...t,
-          url: t.audioUrl,
-        }));
-        const q = query.trim().toLowerCase();
-        setHits(q ? items.filter(
-          (t) => t.title.toLowerCase().includes(q) || t.artist.toLowerCase().includes(q),
-        ) : items);
-      } catch (err) {
-        toast.error('Khong tai duoc danh sach nhac');
+        const q = query.trim();
+        if (source === 'song') {
+          const res = await publicSongsApi.list({ q: q || undefined, limit: 30 });
+          const items = (res.data?.data?.items ?? []) as AdminSong[];
+          setHits(items.map((t) => ({
+            id: t.id, title: t.title, artist: t.artist,
+            coverImage: t.coverImage ?? null, durationSec: t.durationSec,
+            audioUrl: t.audioUrl, source: 'song' as const,
+          })));
+        } else {
+          const res = await musicApi.getTracks({ page: 1, size: 30, keyword: q || undefined });
+          const items = ((res.data as { data?: unknown[] })?.data ?? []) as Array<Record<string, unknown>>;
+          setHits(items.map((t) => ({
+            id: Number(t.id),
+            title: String(t.title ?? ''),
+            artist: String(t.artist ?? ''),
+            coverImage: (t.coverImage as string | null) ?? null,
+            durationSec: Number(t.durationSeconds ?? 0),
+            audioUrl: (t.audioUrl as string | null) ?? null,
+            source: 'music' as const,
+          })));
+        }
+      } catch {
+        toast.error('Không tải được danh sách nhạc');
+        setHits([]);
       } finally {
         setLoading(false);
       }
@@ -119,13 +135,11 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [query, open]);
+  }, [query, open, source]);
 
-  // Persistent audio element so previews don't restart on
-  // track changes. We just swap its src.
+  // Persistent audio element for previews.
   useEffect(() => {
     if (!open) {
-      // Tear down on close.
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
@@ -141,54 +155,77 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
       audioRef.current.addEventListener('ended', () => setPreviewing(false));
       audioRef.current.addEventListener('error', () => {
         setPreviewing(false);
-        toast.error('Khong the phat nhac nay');
+        toast.error('Không thể phát nhạc này');
       });
     }
   }, [open]);
 
-  const playPreview = (track: SearchHit) => {
-    if (!audioRef.current) return;
-    if (previewingId === track.id) {
-      // Toggle: same track → pause.
+  const playPreview = (row: PickRow) => {
+    if (!audioRef.current || !isInlinePlayable(row.audioUrl)) return;
+    if (previewingId === row.id) {
       audioRef.current.pause();
       setPreviewing(false);
+      setPreviewingId(null);
       return;
     }
-    audioRef.current.src = track.url;
+    audioRef.current.src = row.audioUrl!;
     audioRef.current.currentTime = 0;
     audioRef.current.play().then(() => {
-      setPreviewingId(track.id);
+      setPreviewingId(row.id);
       setPreviewing(true);
     }).catch(() => setPreviewing(false));
   };
 
-  const pickTrack = (track: SearchHit) => {
+  // Advance to the trim step with a resolved, attachable Song. Music-page
+  // rows are bridged to a Song first (may reject YouTube-only tracks).
+  const pickRow = async (row: PickRow) => {
+    if (audioRef.current) audioRef.current.pause();
+    setPreviewing(false);
+    setPreviewingId(null);
+
+    let track: MusicPickTrack;
+    if (row.source === 'song') {
+      track = {
+        id: row.id, title: row.title, artist: row.artist,
+        coverImage: row.coverImage, audioUrl: row.audioUrl, durationSec: row.durationSec,
+      };
+    } else {
+      setResolving(true);
+      try {
+        const res = await publicSongsApi.fromMusicTrack(row.id);
+        const song = res.data.data;
+        track = {
+          id: song.id, title: song.title, artist: song.artist,
+          coverImage: song.coverImage ?? null, audioUrl: song.audioUrl, durationSec: song.durationSec,
+        };
+      } catch (err: unknown) {
+        const e = err as { response?: { data?: { message?: string } } };
+        toast.error(e?.response?.data?.message || 'Không dùng được bài này làm nhạc nền');
+        return;
+      } finally {
+        setResolving(false);
+      }
+    }
+
     setSelected(track);
-    // Default snippet = the WHOLE track (user can trim further
-    // if they want). Previously we capped at 40s which forced
-    // long songs to play only the intro.
     const dur = Math.max(1, track.durationSec);
     setStartSec(0);
     setEndSec(dur);
     setStep('trim');
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
   };
 
   const toggleSnippetPlay = () => {
-    if (!audioRef.current || !selected) return;
+    if (!audioRef.current || !selected || !isInlinePlayable(selected.audioUrl)) return;
     if (previewing && previewingId === selected.id) {
       audioRef.current.pause();
       setPreviewing(false);
       return;
     }
-    audioRef.current.src = selected.url;
+    audioRef.current.src = selected.audioUrl!;
     audioRef.current.currentTime = startSec;
     audioRef.current.play().then(() => {
       setPreviewingId(selected.id);
       setPreviewing(true);
-      // Auto-stop at endSec.
       const stopAt = endSec;
       const onTimeUpdate = () => {
         if (audioRef.current && audioRef.current.currentTime >= stopAt) {
@@ -212,8 +249,7 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
     onClose();
   };
 
-  const trackDuration = (selected?.durationSec ?? 0);
-  // Slider max = the FULL track duration. No cap.
+  const trackDuration = selected?.durationSec ?? 0;
   const maxSec = trackDuration;
 
   if (!open) return null;
@@ -257,6 +293,28 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
 
           {step === 'pick' ? (
             <div className="p-5 space-y-4">
+              {/* Source tabs */}
+              <div className="flex gap-1 rounded-lg bg-darkbg/60 p-1">
+                {([
+                  { key: 'song', label: 'Nhạc nền' },
+                  { key: 'music', label: 'Từ trang nhạc' },
+                ] as const).map((t) => (
+                  <button
+                    key={t.key}
+                    type="button"
+                    onClick={() => { setSource(t.key); setHits([]); }}
+                    className={cn(
+                      'flex-1 rounded-md py-1.5 text-sm font-medium transition-colors',
+                      source === t.key
+                        ? 'bg-gradient-to-r from-neon-violet/30 to-neon-pink/30 text-text-primary'
+                        : 'text-text-muted hover:text-text-primary',
+                    )}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+
               <div className="relative">
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-text-muted" />
                 <input
@@ -267,6 +325,12 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
                   className="w-full rounded-lg border border-darkborder bg-darkbg/60 py-2 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none"
                 />
               </div>
+
+              {source === 'music' && (
+                <p className="text-[11px] text-text-muted">
+                  Chỉ bài đã tải về (⬇ ở trang nhạc) mới phát nền được; bài YouTube chưa tải sẽ báo lỗi khi chọn.
+                </p>
+              )}
 
               {loading ? (
                 <div className="flex items-center justify-center py-10">
@@ -282,18 +346,22 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
                     const isPreviewing = previewingId === track.id && previewing;
                     const m = Math.floor(track.durationSec / 60);
                     const s = track.durationSec % 60;
+                    const canPreview = isInlinePlayable(track.audioUrl);
                     return (
                       <li
-                        key={track.id}
+                        key={`${track.source}-${track.id}`}
                         className="flex items-center gap-3 px-3 py-2.5 hover:bg-white/[0.04] transition-colors cursor-pointer"
-                        onClick={() => pickTrack(track)}
+                        onClick={() => void pickRow(track)}
                       >
                         <button
                           type="button"
+                          disabled={!canPreview}
                           onClick={(e) => { e.stopPropagation(); playPreview(track); }}
                           className={cn(
                             'flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors',
-                            isPreviewing
+                            !canPreview
+                              ? 'bg-white/5 text-text-muted/40 cursor-not-allowed'
+                              : isPreviewing
                               ? 'bg-neon-emerald/20 text-neon-emerald'
                               : 'bg-white/8 text-text-secondary hover:text-text-primary',
                           )}
@@ -321,9 +389,13 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
                             {track.artist}
                           </div>
                         </div>
-                        <span className="text-[10px] tabular-nums text-text-muted">
-                          {m}:{String(s).padStart(2, '0')}
-                        </span>
+                        {resolving ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin text-text-muted" />
+                        ) : (
+                          <span className="text-[10px] tabular-nums text-text-muted">
+                            {m}:{String(s).padStart(2, '0')}
+                          </span>
+                        )}
                       </li>
                     );
                   })}
@@ -360,16 +432,14 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
                     </button>
                   </div>
 
-                  {/* Trimmer — always visible (no "Advanced" toggle). The user
-                      can pick any segment of the song. Default is
-                      the FULL track, so a user who doesn't touch
-                      the slider still gets the whole song attached. */}
+                  {/* Trimmer — default is the whole track. */}
                   <div className="rounded-xl border border-darkborder bg-darkcard/40 p-4 space-y-3">
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={toggleSnippetPlay}
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+                        disabled={!isInlinePlayable(selected.audioUrl)}
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 disabled:opacity-40"
                         aria-label="Phát đoạn"
                       >
                         {previewing && previewingId === selected.id ? (
@@ -430,19 +500,7 @@ function formatSec(s: number): string {
 }
 
 /**
- * RangeDual — dual-thumb range slider.
- * Single horizontal track; the selected region is highlighted.
- *
- * We render two stacked native <input type="range"> elements
- * (one for the min thumb, one for the max thumb) instead of a
- * custom canvas-drawn slider. Native inputs already give us
- * keyboard support (arrow keys), accessibility (ARIA), and
- * touch support for free, and the visual styling is just CSS
- * overrides on `::-webkit-slider-thumb` and `::-webkit-slider-runnable-track`.
- *
- * The min thumb's value is clamped to the max thumb's value so
- * the thumbs can't cross. Same for the max thumb against the
- * min thumb.
+ * RangeDual — dual-thumb range slider (two stacked native range inputs).
  */
 function RangeDual({ min, max, step, valueMin, valueMax, onChange }: {
   min: number;

@@ -26,7 +26,8 @@ import SocialSavePopover, {
   type SaveCollection,
 } from '@/components/social/SocialSavePopover';
 import SocialSavePopoverV2 from '@/components/social/SocialSavePopoverV2';
-import MusicSticker, { type MusicTrackMini } from '@/components/social/MusicSticker';
+import { type MusicTrackMini } from '@/components/social/MusicSticker';
+import PostMusicPlayer from '@/components/social/PostMusicPlayer';
 import { useAuthStore } from '@/store/authStore';
 import { useMessagingStore } from '@/store/messagingStore';
 import { getMediaUrl } from '@/lib/utils';
@@ -911,31 +912,14 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
         }}
       />
 
-      {/* Music banner — Instagram-style header showing the
-          attached track ABOVE the post body. Renders only when
-          the post has a musicTrack. Tapping the banner is a
-          no-op for now (the user can still play via the
-          sticker on the media tile). */}
+      {/* Background-music player — FB/IG-style, at the TOP of the post.
+          Renders for ANY post with a musicTrack (incl. text-only posts).
+          Plays inline; see PostMusicPlayer. */}
       {post.musicTrack && (
-        <div
-          className="flex items-center gap-2 px-5 pt-3 pb-1 text-xs"
-          style={{ color: 'var(--text-secondary)' }}
-        >
-          <span
-            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
-            style={{ background: 'rgba(139,92,246,0.18)', color: '#c4b5fd' }}
-            aria-hidden
-          >
-            <Music2 size={12} />
-          </span>
-          <span className="truncate">
-            <span className="text-text-muted">Nhạc nền · </span>
-            <span className="font-semibold text-text-primary">
-              {post.musicTrack.title}
-            </span>
-            <span className="text-text-muted"> — {post.musicTrack.artist}</span>
-          </span>
-        </div>
+        <PostMusicPlayer
+          track={post.musicTrack}
+          startSec={post.musicStartSec ?? 0}
+        />
       )}
 
       <div className="p-5">
@@ -2368,14 +2352,8 @@ function MediaGrid({
                   : undefined
               }
             />
-            {/* Sticker only on the FIRST tile — it stays put
-                visually (we always render at index 0). */}
-            {i === 0 && musicTrack && (
-              <MusicSticker
-                track={musicTrack}
-                startSec={musicStartSec ?? 0}
-              />
-            )}
+            {/* Music now plays via the FB/IG-style PostMusicPlayer at the
+                top of the post (see PostCard header), not an overlay here. */}
           </div>
         ))}
       </div>

@@ -1807,6 +1807,11 @@ export const publicSongsApi = {
   get: (id: number) => api.get<{ data: AdminSong }>(`/songs/${id}`),
   getFeed: (params?: { q?: string; cursor?: number; limit?: number }) =>
     publicSongsApi.list(params),
+  // Bridge a public music-page track (MusicTrack) into the Song
+  // pool so the composer can attach it like a normal "Nhạc nền".
+  // Backend find-or-creates a Song and returns it.
+  fromMusicTrack: (musicTrackId: number) =>
+    api.post<{ data: AdminSong }>('/songs/from-music-track', { musicTrackId }),
 };
 
 // ─── In-app social notifications (added 2026-06-20) ──────────────────

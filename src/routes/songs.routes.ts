@@ -26,6 +26,7 @@ import {
   updateSong,
   setActive,
   deleteSong,
+  resolveSongFromMusicTrack,
 } from '../services/song.service.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -69,6 +70,23 @@ router.get('/', authenticate, async (req: any, res: Response<ApiResponse>, next)
       success: true,
       data: { items, nextCursor },
     });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/** POST /api/v1/songs/from-music-track — attach a public
+ * music-page track to the Song pool. Body: { musicTrackId }.
+ * Returns the find-or-created Song so the composer can attach it
+ * exactly like a normal "Nhạc nền" pick. Read-only vs MusicTrack. */
+router.post('/from-music-track', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const musicTrackId = Number(req.body?.musicTrackId);
+    if (!Number.isInteger(musicTrackId) || musicTrackId <= 0) {
+      throw new AppError('musicTrackId khong hop le', 400, 'INVALID_ID');
+    }
+    const song = await resolveSongFromMusicTrack(musicTrackId, req.user.userId);
+    res.json({ success: true, data: song });
   } catch (err) {
     next(err);
   }

@@ -15,12 +15,12 @@ import { generateInvoicePDF } from '@/lib/invoice';
 import type { Order } from '@/types';
 import { useTranslation } from '@/hooks/useTranslation';
 
-function formatPrice(price: number): string {
+function formatPrice(price: number | string): string {
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
     maximumFractionDigits: 0,
-  }).format(price);
+  }).format(Number(price) || 0);
 }
 
 function formatDate(dateStr: string): string {
@@ -217,11 +217,15 @@ function AdminOrdersContent() {
   // Revenue = paid orders' totals MINUS any amounts refunded. A REFUNDED order
   // contributes total − refundAmount (0 for a full refund) so the number is the
   // net money actually kept.
+  // NOTE: Prisma Decimal fields serialize to JSON as STRINGS, so `o.total` is a
+  // string here — Number() it before arithmetic, or `sum + "2000000"` string-
+  // concatenates into an absurd number that blew up the Revenue card.
   const totalRevenue = orders.reduce((sum, o) => {
-    if (isPaidStatus(o.status)) return sum + (o.total || 0);
+    const total = Number(o.total) || 0;
+    if (isPaidStatus(o.status)) return sum + total;
     if (o.status === 'REFUNDED') {
-      const refunded = rawOrders[o.id]?.refundAmount ?? o.total ?? 0;
-      return sum + Math.max(0, (o.total || 0) - Number(refunded));
+      const refunded = Number(rawOrders[o.id]?.refundAmount ?? o.total ?? 0) || 0;
+      return sum + Math.max(0, total - refunded);
     }
     return sum;
   }, 0);

@@ -6,12 +6,12 @@ import {
   Edit, Star, Flame, Sparkles, CheckCircle2,
   ShoppingBag, ChevronLeft, ChevronRight, ChevronUp,
   Upload, Info, ChevronDown, PlusCircle, Trash,
-  DollarSign, Package, Tag,
+  DollarSign, Package, Tag, KeyRound,
 } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { useProductStore } from '@/store/productStore';
-import { adminCreateProduct, adminUpdateProduct, adminDeleteProduct, adminGetProducts, adminReorderProducts, mapProductFromBackend, adminGetCategories, type AdminCategoryResponse } from '@/lib/api/shop';
+import { adminCreateProduct, adminUpdateProduct, adminDeleteProduct, adminGetProducts, adminReorderProducts, mapProductFromBackend, adminGetCategories, adminGetProductKeys, adminAddProductKeys, adminDeleteProductKey, type AdminCategoryResponse, type ProductKeyItem, type ProductKeyCounts } from '@/lib/api/shop';
 import { fileApi } from '@/lib/api';
 import type { Product, ProductSpec } from '@/types';
 import ImageUpload from '@/components/admin/ImageUpload';
@@ -122,6 +122,106 @@ function formatPrice(price: number): string {
     currency: 'VND',
     maximumFractionDigits: 0,
   }).format(price);
+}
+
+// Digital key pool manager: bulk-add unique credentials (one per line); each
+// buyer is auto-assigned one at checkout. Stock = available keys.
+function ProductKeyManager({ productId }: { productId: number }) {
+  const [keys, setKeys] = useState<ProductKeyItem[]>([]);
+  const [counts, setCounts] = useState<ProductKeyCounts>({ available: 0, sold: 0, total: 0 });
+  const [loading, setLoading] = useState(true);
+  const [bulk, setBulk] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const res = await adminGetProductKeys(productId);
+      setKeys(res.data?.keys ?? []);
+      setCounts(res.data?.counts ?? { available: 0, sold: 0, total: 0 });
+    } catch {
+      /* ignore */
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => { void load(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [productId]);
+
+  const addKeys = async () => {
+    const text = bulk.trim();
+    if (!text) return;
+    setSaving(true);
+    try {
+      const res = await adminAddProductKeys(productId, text);
+      toast.success(`Đã thêm ${res.data?.added ?? 0} key`);
+      setBulk('');
+      await load();
+    } catch {
+      toast.error('Không thêm được key');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const removeKey = async (keyId: number) => {
+    try {
+      await adminDeleteProductKey(productId, keyId);
+      await load();
+    } catch {
+      toast.error('Không xoá được (key đã bán không thể xoá)');
+    }
+  };
+
+  return (
+    <div className="rounded-xl border border-neon-violet/20 bg-neon-violet/5 p-4 space-y-3">
+      <div className="flex items-center gap-2">
+        <KeyRound className="w-4 h-4 text-neon-violet" />
+        <span className="text-sm font-semibold text-text-primary">Kho tài khoản / Key riêng (mỗi khách 1 key)</span>
+      </div>
+      <div className="flex gap-3 text-xs">
+        <span className="text-neon-emerald">Còn: <b>{counts.available}</b></span>
+        <span className="text-text-muted">Đã bán: <b>{counts.sold}</b></span>
+        <span className="text-text-muted">Tổng: <b>{counts.total}</b></span>
+        <span className="text-text-muted/70">— Tồn kho = số key còn lại</span>
+      </div>
+      <textarea
+        value={bulk}
+        onChange={(e) => setBulk(e.target.value)}
+        rows={4}
+        placeholder={`Mỗi dòng 1 key/tài khoản, dán nhiều dòng để thêm hàng loạt:\nuser1@mail.com|matkhau1\nKEY-AAAA-1111\nKEY-BBBB-2222`}
+        className="w-full px-3 py-2 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none font-mono"
+      />
+      <button
+        onClick={addKeys}
+        disabled={saving || !bulk.trim()}
+        className="flex items-center gap-2 px-4 py-2 bg-neon-violet/15 hover:bg-neon-violet/25 border border-neon-violet/30 text-neon-violet text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+      >
+        {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+        Thêm key vào kho
+      </button>
+      {loading ? (
+        <div className="py-2 text-center"><Loader2 className="w-4 h-4 animate-spin mx-auto text-text-muted" /></div>
+      ) : keys.length > 0 ? (
+        <div className="max-h-48 overflow-y-auto space-y-1 scrollbar-thin">
+          {keys.map((k) => (
+            <div key={k.id} className="flex items-center gap-2 text-xs bg-darkbg rounded-lg px-2.5 py-1.5">
+              <span className={`shrink-0 px-1.5 py-0.5 rounded text-[10px] font-semibold ${k.status === 'AVAILABLE' ? 'bg-green-500/15 text-green-400' : k.status === 'SOLD' ? 'bg-yellow-500/15 text-yellow-300' : 'bg-red-500/15 text-red-300'}`}>
+                {k.status === 'AVAILABLE' ? 'Còn' : k.status === 'SOLD' ? 'Đã bán' : 'Vô hiệu'}
+              </span>
+              <span className="flex-1 min-w-0 truncate font-mono text-text-secondary">{k.content}</span>
+              {k.status === 'AVAILABLE' && (
+                <button onClick={() => removeKey(k.id)} className="shrink-0 text-text-muted hover:text-red-400 transition-colors" title="Xoá key">
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-xs text-text-muted/70">Chưa có key nào. Dán danh sách key ở trên rồi bấm &quot;Thêm key vào kho&quot;. (Nếu để trống, mọi khách sẽ nhận cùng nội dung ở ô &quot;Tài khoản/Mã kích hoạt&quot; bên trên.)</p>
+      )}
+    </div>
+  );
 }
 
 function slugify(text: string): string {
@@ -1094,6 +1194,15 @@ export default function AdminShopPage() {
                     />
                     <p className="text-[10px] text-text-muted mt-1">Chỉ khách đã mua (đơn đã thanh toán) mới xem được. Để trống nếu chỉ giao file.</p>
                   </div>
+
+                  {/* Key pool: only for an existing product (keys attach to its id) */}
+                  {editingId ? (
+                    <ProductKeyManager productId={Number(editingId)} />
+                  ) : (
+                    <p className="text-[11px] text-text-muted/70 rounded-xl border border-dashed border-darkborder p-3">
+                      💡 Lưu sản phẩm trước, rồi mở lại để thêm <strong>kho tài khoản/key riêng cho từng khách</strong> (mỗi người mua nhận 1 key khác nhau, không trùng).
+                    </p>
+                  )}
                 </>
               ) : (
                 <div className="flex items-center gap-2 text-xs text-text-muted bg-darkbg border border-darkborder rounded-xl p-3">

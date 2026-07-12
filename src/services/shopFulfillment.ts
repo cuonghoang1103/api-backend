@@ -67,7 +67,7 @@ export async function markShopOrderPaidAndFulfill(
     for (const item of order.items) {
       const product = await tx.product.findFirst({
         where: { name: item.productName },
-        select: { type: true, fileUrl: true, digitalContent: true },
+        select: { id: true, type: true, fileUrl: true, digitalContent: true },
       });
       const pType = item.productType || product?.type || 'DIGITAL';
 
@@ -85,10 +85,54 @@ export async function markShopOrderPaidAndFulfill(
           oversoldItems.push(`${item.productName} x${item.quantity}`);
         }
       } else {
-        // Digital: unlimited stock; bump soldCount and RELEASE the deliverable
-        // onto the order item (only now that it's paid).
+        // Digital: bump soldCount and RELEASE the deliverable onto the order
+        // item (only now that it's paid).
         await tx.product.updateMany({ where: { name: item.productName }, data: { soldCount: { increment: item.quantity } } });
-        if (product && (product.fileUrl || product.digitalContent)) {
+
+        let delivered = false;
+        // ── Key pool: hand each unit a UNIQUE, previously-unassigned key so
+        // two buyers never receive the same credential. Only products that
+        // actually have a pool use this; others fall back to the single
+        // shared digitalContent below (legacy behaviour).
+        if (product?.id) {
+          const poolSize = await tx.productKey.count({ where: { productId: product.id } });
+          if (poolSize > 0) {
+            const claimed: string[] = [];
+            // Grab a few extra candidates to absorb races with a concurrent buyer.
+            const candidates = await tx.productKey.findMany({
+              where: { productId: product.id, status: 'AVAILABLE' },
+              orderBy: { id: 'asc' },
+              take: item.quantity + 5,
+            });
+            for (const k of candidates) {
+              if (claimed.length >= item.quantity) break;
+              const c = await tx.productKey.updateMany({
+                where: { id: k.id, status: 'AVAILABLE' },
+                data: { status: 'SOLD', orderItemId: item.id, buyerUserId: order.userId, assignedAt: new Date() },
+              });
+              if (c.count === 1) claimed.push(k.content);
+            }
+            if (claimed.length < item.quantity) {
+              // Pool ran dry — money is in but we owe key(s). Flag for manual
+              // fulfillment (mirrors the physical oversell path).
+              oversoldItems.push(`${item.productName} x${item.quantity} (het key/tai khoan)`);
+            }
+            if (claimed.length > 0) {
+              // Keep product stock (= available keys) in sync with what we handed out.
+              await tx.product.updateMany({
+                where: { id: product.id, stockQuantity: { gte: claimed.length } },
+                data: { stockQuantity: { decrement: claimed.length } },
+              });
+              await tx.shopOrderItem.update({
+                where: { id: item.id },
+                data: { fileUrl: product.fileUrl, digitalContent: claimed.join('\n---\n') },
+              });
+            }
+            delivered = true; // keyed product handled (fully or partially) — skip legacy copy
+          }
+        }
+
+        if (!delivered && product && (product.fileUrl || product.digitalContent)) {
           await tx.shopOrderItem.update({
             where: { id: item.id },
             data: { fileUrl: product.fileUrl, digitalContent: product.digitalContent },

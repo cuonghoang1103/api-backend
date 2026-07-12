@@ -1096,12 +1096,35 @@ model Product {
 
   category ProductCategory? @relation(fields: [categoryId], references: [id])
   reviews  ProductReview[]
+  keys     ProductKey[]
 
   @@index([categoryId], name: "idx_products_category")
   @@index([active], map: "idx_products_active")
   @@index([featured], map: "idx_products_featured")
   @@index([createdAt(sort: Desc)], name: "idx_products_created")
   @@map("products")
+}
+
+// A pool of UNIQUE digital deliverables (license keys, accounts, credentials)
+// for a digital product. Each buyer is assigned ONE previously-unassigned key
+// at fulfillment, so two buyers never get the same key. Products with no keys
+// fall back to the single `Product.digitalContent` (legacy behaviour).
+model ProductKey {
+  id          Int       @id @default(autoincrement())
+  productId   Int       @map("product_id")
+  // The actual credential handed to the buyer (account, key, etc.).
+  content     String    @db.Text
+  // AVAILABLE = in stock; SOLD = assigned to a buyer; DISABLED = withheld.
+  status      String    @default("AVAILABLE") @db.VarChar(20)
+  orderItemId Int?      @map("order_item_id")
+  buyerUserId Int?      @map("buyer_user_id")
+  assignedAt  DateTime? @map("assigned_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, status], name: "idx_product_keys_product_status")
+  @@map("product_keys")
 }
 
 model ShopOrder {

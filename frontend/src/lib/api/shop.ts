@@ -532,6 +532,41 @@ export async function adminUpdateOrderStatus(
   });
 }
 
+// ─── Digital key pool (unique-per-buyer credentials) ──────────────────────────
+export interface ProductKeyItem {
+  id: number;
+  content: string;
+  status: string; // AVAILABLE | SOLD | DISABLED
+  orderItemId?: number | null;
+  buyerUserId?: number | null;
+  assignedAt?: string | null;
+  createdAt: string;
+}
+export interface ProductKeyCounts { available: number; sold: number; total: number }
+
+export async function adminGetProductKeys(
+  productId: number
+): Promise<ApiResponse<{ keys: ProductKeyItem[]; counts: ProductKeyCounts }>> {
+  return request(`/shop/admin/products/${productId}/keys`);
+}
+
+export async function adminAddProductKeys(
+  productId: number,
+  text: string
+): Promise<ApiResponse<{ added: number; counts: ProductKeyCounts }>> {
+  return request(`/shop/admin/products/${productId}/keys`, {
+    method: 'POST',
+    body: JSON.stringify({ text }),
+  });
+}
+
+export async function adminDeleteProductKey(
+  productId: number,
+  keyId: number
+): Promise<ApiResponse<{ counts: ProductKeyCounts }>> {
+  return request(`/shop/admin/products/${productId}/keys/${keyId}`, { method: 'DELETE' });
+}
+
 // Full or partial refund of a PAID shop order. Omit refundAmount for a full refund.
 export async function adminRefundOrder(
   id: number,

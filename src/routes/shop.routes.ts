@@ -645,6 +645,79 @@ router.delete('/admin/products/:id', authenticate, requireAdmin('ROLE_ADMIN'), a
   } catch (error) { next(error); }
 });
 
+// ─── Digital key pool (unique-per-buyer credentials) ──────────
+// A product's sellable stock IS its number of AVAILABLE keys, so we keep
+// products.stock_quantity in sync with the available-key count on every add/
+// delete (fulfillment also decrements it when it hands a key out).
+async function syncKeyStock(productId: number): Promise<{ available: number; sold: number; total: number }> {
+  const [available, sold, total] = await Promise.all([
+    prisma.productKey.count({ where: { productId, status: 'AVAILABLE' } }),
+    prisma.productKey.count({ where: { productId, status: 'SOLD' } }),
+    prisma.productKey.count({ where: { productId } }),
+  ]);
+  await prisma.product.update({ where: { id: productId }, data: { stockQuantity: available } });
+  return { available, sold, total };
+}
+
+// GET /api/v1/shop/admin/products/:id/keys — list keys + counts
+router.get('/admin/products/:id/keys', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const productId = parseInt(req.params.id, 10);
+    if (!Number.isInteger(productId)) throw new AppError('ID san pham khong hop le', 400);
+    const keys = await prisma.productKey.findMany({
+      where: { productId },
+      orderBy: [{ status: 'asc' }, { id: 'asc' }],
+      select: { id: true, content: true, status: true, orderItemId: true, buyerUserId: true, assignedAt: true, createdAt: true },
+    });
+    const available = keys.filter((k) => k.status === 'AVAILABLE').length;
+    const sold = keys.filter((k) => k.status === 'SOLD').length;
+    res.json({ success: true, data: { keys, counts: { available, sold, total: keys.length } } });
+  } catch (error) { next(error); }
+});
+
+// POST /api/v1/shop/admin/products/:id/keys — bulk add keys
+// Body: { keys: string[] } OR { text: "one key per line" }
+router.post('/admin/products/:id/keys', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const productId = parseInt(req.params.id, 10);
+    if (!Number.isInteger(productId)) throw new AppError('ID san pham khong hop le', 400);
+    const product = await prisma.product.findUnique({ where: { id: productId }, select: { id: true } });
+    if (!product) throw new AppError('Product not found', 404);
+
+    let items: string[] = [];
+    if (Array.isArray(req.body.keys)) {
+      items = req.body.keys.map((k: unknown) => String(k));
+    } else if (typeof req.body.text === 'string') {
+      // One key per line. Blank lines skipped; a whole account block per key can
+      // still use the "|" separator inside a single line by convention.
+      items = req.body.text.split('\n');
+    }
+    items = items.map((s) => s.trim()).filter((s) => s.length > 0);
+    if (items.length === 0) throw new AppError('Chua co key nao de them', 400);
+    if (items.length > 5000) throw new AppError('Toi da 5000 key moi lan', 400);
+
+    await prisma.productKey.createMany({
+      data: items.map((content) => ({ productId, content })),
+    });
+    const counts = await syncKeyStock(productId);
+    res.json({ success: true, data: { added: items.length, counts }, message: `Da them ${items.length} key` });
+  } catch (error) { next(error); }
+});
+
+// DELETE /api/v1/shop/admin/products/:id/keys/:keyId — delete an AVAILABLE key
+router.delete('/admin/products/:id/keys/:keyId', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const productId = parseInt(req.params.id, 10);
+    const keyId = parseInt(req.params.keyId, 10);
+    const key = await prisma.productKey.findFirst({ where: { id: keyId, productId } });
+    if (!key) throw new AppError('Khong tim thay key', 404);
+    if (key.status === 'SOLD') throw new AppError('Khong the xoa key da ban cho khach', 409);
+    await prisma.productKey.delete({ where: { id: keyId } });
+    const counts = await syncKeyStock(productId);
+    res.json({ success: true, data: { counts }, message: 'Da xoa key' });
+  } catch (error) { next(error); }
+});
+
 // ─── Admin: product categories CRUD ──────────────────
 // Lets the admin add/rename/reorder/delete shop categories freely
 // (tool / sách / tài liệu / sản phẩm thật / ...).
@@ -833,14 +906,20 @@ router.post('/admin/orders/:id/refund', authenticate, requireAdmin('ROLE_ADMIN')
         },
         include: { items: true },
       });
-      // On a FULL refund of physical goods the customer is returning the item,
-      // so put the stock back (guarded; digital items have unlimited stock).
+      // On a FULL refund: physical goods are returned → restock; digital keys
+      // that were handed out are DISABLED (never resold — the buyer already saw
+      // the credential) rather than restocked.
       if (isFullRefund) {
         for (const item of order.items) {
           if ((item.productType || 'DIGITAL') === 'PHYSICAL') {
             await tx.product.updateMany({
               where: { name: item.productName },
               data: { stockQuantity: { increment: item.quantity }, soldCount: { decrement: item.quantity } },
+            });
+          } else {
+            await tx.productKey.updateMany({
+              where: { orderItemId: item.id, status: 'SOLD' },
+              data: { status: 'DISABLED' },
             });
           }
         }

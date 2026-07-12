@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Megaphone, Plus, Pin, X, ImagePlus, Loader2 } from 'lucide-react';
+import { Megaphone, Plus, Pin, X, ImagePlus, Loader2, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   announcementApi,
@@ -100,6 +100,9 @@ export default function ForumPage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showCompose, setShowCompose] = useState(false);
+  // Announcement currently being edited (null = not editing). Reuses the
+  // compose modal in "edit" mode.
+  const [editing, setEditing] = useState<Announcement | null>(null);
   const loadedOnce = useRef(false);
 
   const load = useCallback(async () => {
@@ -153,6 +156,22 @@ export default function ForumPage() {
   const handleCreated = (created: Announcement) => {
     setItems((prev) => [created, ...prev.filter((p) => p.id !== created.id)]);
     setShowCompose(false);
+  };
+
+  const handleUpdated = (updated: Announcement) => {
+    setItems((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+    setEditing(null);
+  };
+
+  const handleDelete = async (a: Announcement) => {
+    if (!window.confirm(`Xoá thông báo "${a.title}"? Hành động này không thể hoàn tác.`)) return;
+    try {
+      await announcementApi.remove(a.id);
+      setItems((prev) => prev.filter((p) => p.id !== a.id));
+      toast.success('Đã xoá thông báo.');
+    } catch {
+      toast.error('Xoá thông báo thất bại.');
+    }
   };
 
   return (
@@ -220,7 +239,14 @@ export default function ForumPage() {
         ) : (
           <div className="space-y-4">
             {ordered.map((a) => (
-              <AnnouncementCard key={a.id} a={a} onOpen={() => router.push(`/forum/${a.id}`)} />
+              <AnnouncementCard
+                key={a.id}
+                a={a}
+                isAdmin={isAdmin}
+                onOpen={() => router.push(`/forum/${a.id}`)}
+                onEdit={() => setEditing(a)}
+                onDelete={() => void handleDelete(a)}
+              />
             ))}
 
             {nextCursor != null && (
@@ -241,8 +267,13 @@ export default function ForumPage() {
       </div>
 
       <AnimatePresence>
-        {showCompose && (
-          <ComposeModal onClose={() => setShowCompose(false)} onCreated={handleCreated} />
+        {(showCompose || editing) && (
+          <ComposeModal
+            key={editing?.id ?? 'new'}
+            editing={editing}
+            onClose={() => { setShowCompose(false); setEditing(null); }}
+            onSaved={(a) => (editing ? handleUpdated(a) : handleCreated(a))}
+          />
         )}
       </AnimatePresence>
     </div>
@@ -250,7 +281,19 @@ export default function ForumPage() {
 }
 
 // ── Card ──────────────────────────────────────────────────────
-function AnnouncementCard({ a, onOpen }: { a: Announcement; onOpen: () => void }) {
+function AnnouncementCard({
+  a,
+  onOpen,
+  isAdmin,
+  onEdit,
+  onDelete,
+}: {
+  a: Announcement;
+  onOpen: () => void;
+  isAdmin: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
   const author = a.author;
   const authorName =
     author?.displayName || author?.fullName || author?.username || 'Admin';
@@ -283,9 +326,33 @@ function AnnouncementCard({ a, onOpen }: { a: Announcement; onOpen: () => void }
               Ghim
             </span>
           )}
-          <span className="ml-auto text-xs" style={{ color: 'var(--text-muted)' }}>
-            {relativeDate(a.createdAt)}
-          </span>
+          <div className="ml-auto flex items-center gap-1.5">
+            {isAdmin && (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onEdit(); }}
+                  className="rounded-lg p-1.5 transition-colors hover:bg-[var(--bg-surface-hover)]"
+                  style={{ color: 'var(--text-muted)' }}
+                  title="Sửa thông báo"
+                  aria-label="Sửa thông báo"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                  className="rounded-lg p-1.5 transition-colors hover:bg-red-500/10 hover:text-red-400"
+                  style={{ color: 'var(--text-muted)' }}
+                  title="Xoá thông báo"
+                  aria-label="Xoá thông báo"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </>
+            )}
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+              {relativeDate(a.createdAt)}
+            </span>
+          </div>
         </div>
 
         <h2 className="mb-1.5 text-lg font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
@@ -312,19 +379,21 @@ function AnnouncementCard({ a, onOpen }: { a: Announcement; onOpen: () => void }
   );
 }
 
-// ── Compose modal (admin only) ────────────────────────────────
+// ── Compose modal (admin only) — create or edit ───────────────
 function ComposeModal({
   onClose,
-  onCreated,
+  onSaved,
+  editing,
 }: {
   onClose: () => void;
-  onCreated: (a: Announcement) => void;
+  onSaved: (a: Announcement) => void;
+  editing?: Announcement | null;
 }) {
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [category, setCategory] = useState<AnnouncementCategory>('general');
-  const [isPinned, setIsPinned] = useState(false);
-  const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
+  const [title, setTitle] = useState(editing?.title ?? '');
+  const [body, setBody] = useState(editing?.body ?? '');
+  const [category, setCategory] = useState<AnnouncementCategory>(editing?.category ?? 'general');
+  const [isPinned, setIsPinned] = useState(editing?.isPinned ?? false);
+  const [coverImageUrl, setCoverImageUrl] = useState<string | null>(editing?.coverImageUrl ?? null);
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -354,17 +423,21 @@ function ComposeModal({
     }
     setSubmitting(true);
     try {
-      const res = await announcementApi.create({
+      const payload = {
         title: title.trim(),
         body: body.trim(),
         category,
-        coverImageUrl: coverImageUrl ?? undefined,
+        // null explicitly clears the cover on edit; undefined omits it on create.
+        coverImageUrl: editing ? coverImageUrl : (coverImageUrl ?? undefined),
         isPinned,
-      });
-      toast.success('Đã đăng thông báo.');
-      onCreated(res.data.data);
+      };
+      const res = editing
+        ? await announcementApi.update(editing.id, payload)
+        : await announcementApi.create(payload);
+      toast.success(editing ? 'Đã cập nhật thông báo.' : 'Đã đăng thông báo.');
+      onSaved(res.data.data);
     } catch {
-      toast.error('Đăng thông báo thất bại.');
+      toast.error(editing ? 'Cập nhật thất bại.' : 'Đăng thông báo thất bại.');
     } finally {
       setSubmitting(false);
     }
@@ -392,7 +465,7 @@ function ComposeModal({
           style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
         >
           <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>
-            Đăng thông báo mới
+            {editing ? 'Sửa thông báo' : 'Đăng thông báo mới'}
           </h3>
           <button
             onClick={onClose}
@@ -545,7 +618,7 @@ function ComposeModal({
             style={{ background: 'linear-gradient(135deg,#8b5cf6,#d946ef)' }}
           >
             {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-            Đăng
+            {editing ? 'Lưu thay đổi' : 'Đăng'}
           </button>
         </div>
       </motion.div>

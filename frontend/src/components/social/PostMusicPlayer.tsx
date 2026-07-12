@@ -68,13 +68,16 @@ export default function PostMusicPlayer({
   // Stable refs to the latest values used inside listeners set up once.
   const boundsRef = useRef({ startSec, effEnd });
   boundsRef.current = { startSec, effEnd };
+  // muted = speaker OFF = the audio is PAUSED (not merely silenced).
+  // Ref so listeners registered once always read the current value.
+  const mutedRef = useRef(muted);
+  mutedRef.current = muted;
 
   const ensureAudio = (): HTMLAudioElement | null => {
     if (!playable) return null;
     if (audioRef.current) return audioRef.current;
     const a = new Audio(src);
     a.preload = 'auto';
-    a.muted = muted;
     try { a.currentTime = startSec; } catch { /* metadata not ready yet */ }
 
     a.addEventListener('timeupdate', () => {
@@ -87,7 +90,8 @@ export default function PostMusicPlayer({
     a.addEventListener('ended', () => {
       const { startSec: s } = boundsRef.current;
       try { a.currentTime = s; } catch { /* ignore */ }
-      if (inViewRef.current) void a.play().catch(() => {});
+      // Auto-repeat while the speaker is on and the post is in view.
+      if (inViewRef.current && !mutedRef.current) void a.play().catch(() => {});
     });
     a.addEventListener('play', () => setPlaying(true));
     a.addEventListener('pause', () => setPlaying(false));
@@ -95,18 +99,17 @@ export default function PostMusicPlayer({
     return a;
   };
 
-  const retry = () => { if (inViewRef.current) tryPlay(); };
+  const retry = () => { if (inViewRef.current && !mutedRef.current) tryPlay(); };
 
   const tryPlay = () => {
+    // Speaker off → stay paused.
+    if (mutedRef.current) return;
     const a = ensureAudio();
     if (!a) return;
     if (currentAudio && currentAudio !== a) currentAudio.pause();
     currentAudio = a;
-    const { startSec: s, effEnd: e } = boundsRef.current;
-    if (a.currentTime < s || (e != null && a.currentTime >= e)) {
-      try { a.currentTime = s; } catch { /* ignore */ }
-    }
-    a.muted = muted;
+    // Always (re)start the snippet from its beginning.
+    try { a.currentTime = boundsRef.current.startSec; } catch { /* ignore */ }
     a.play()
       .then(() => setPlaying(true))
       .catch(() => {
@@ -143,9 +146,15 @@ export default function PostMusicPlayer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playable, src]);
 
-  // Keep mute live across all instances.
+  // Speaker toggle = play/pause. Off → pause immediately. On → if this post
+  // is in view, (re)start its snippet from the beginning.
   useEffect(() => {
-    if (audioRef.current) audioRef.current.muted = muted;
+    if (muted) {
+      audioRef.current?.pause();
+    } else if (inViewRef.current) {
+      tryPlay();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [muted]);
 
   // Teardown.
@@ -172,8 +181,8 @@ export default function PostMusicPlayer({
         type="button"
         onClick={toggleMuted}
         disabled={!playable}
-        aria-label={muted ? 'Bật tiếng' : 'Tắt tiếng'}
-        title={muted ? 'Bật tiếng nhạc nền' : 'Tắt tiếng nhạc nền'}
+        aria-label={muted ? 'Phát nhạc nền' : 'Dừng nhạc nền'}
+        title={muted ? 'Bật loa — phát nhạc nền' : 'Tắt loa — dừng nhạc'}
         className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-neon-violet/40 to-neon-pink/40 disabled:opacity-60"
       >
         {track.coverImage ? (

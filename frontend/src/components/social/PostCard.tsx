@@ -919,6 +919,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
         <PostMusicPlayer
           track={post.musicTrack}
           startSec={post.musicStartSec ?? 0}
+          endSec={post.musicEndSec ?? null}
         />
       )}
 

@@ -1012,6 +1012,9 @@ export function serializePost(
     // the (broken) postMusic join.
     musicTrackId: post.musicTrackId ?? (post.postMusic?.songId ?? null),
     musicStartSec: post.musicStartSec ?? (post.postMusic?.startSec ?? null),
+    // End of the trimmed snippet (null = play to the track's end). Only the
+    // PostMusic join carries this; there's no denormalized column.
+    musicEndSec: post.postMusic?.endSec ?? null,
     musicTrack: post.postMusic?.song
       ? {
           id: post.postMusic.song.id,

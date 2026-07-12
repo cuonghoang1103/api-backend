@@ -1,42 +1,158 @@
 'use client';
 
 /**
- * PostMusicPlayer — the small FB/IG-style background-music player shown at the
- * TOP of a post that has an attached track. Compact pill: spinning cover +
- * title + artist + play/pause + a thin progress bar. Plays inline via a single
- * <audio> element (no global store), resolving the URL through getMediaUrl.
+ * PostMusicPlayer — background music attached to a post (FB/IG-style), shown at
+ * the TOP of the post.
  *
- * Only ONE post plays at a time: starting one pauses whichever was playing.
+ * Behaviour:
+ *  - AUTO-PLAYS when the post scrolls into view (IntersectionObserver on the
+ *    post frame), PAUSES when scrolled out, resumes when scrolled back.
+ *  - Plays only the trimmed snippet [startSec, endSec] and loops it. When
+ *    endSec is null it loops the whole track from startSec.
+ *  - One post plays at a time (a new in-view post pauses the previous one).
+ *  - The control is a SPEAKER (mute/unmute), not play/pause. Muting is global
+ *    (mutes every post) and persists. Default: unmuted.
+ *  - Browser autoplay policy blocks sound before the first user gesture; we
+ *    retry the in-view post's playback on the first click/tap so it starts
+ *    with sound as soon as the user interacts.
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { Play, Pause, Music2 } from 'lucide-react';
+import { Volume2, VolumeX, Music2 } from 'lucide-react';
 import { getMediaUrl } from '@/lib/utils';
+import { useFeedMusicStore } from '@/store/feedMusicStore';
 import type { MusicTrackMini } from '@/types/social';
 
-// Module-level singleton so only one post's audio plays at once (FB behaviour).
+// Only one post's audio plays at a time.
 let currentAudio: HTMLAudioElement | null = null;
-const stopAll = (except: HTMLAudioElement | null) => {
-  if (currentAudio && currentAudio !== except) {
-    currentAudio.pause();
-  }
-};
+
+// Autoplay-with-sound needs a user gesture. Until the first one, in-view
+// players queue a retry here; the first click/tap flushes them.
+let audioUnlocked = false;
+const pendingPlays = new Set<() => void>();
+function armGestureUnlock() {
+  if (typeof window === 'undefined' || audioUnlocked) return;
+  const handler = () => {
+    audioUnlocked = true;
+    const cbs = Array.from(pendingPlays);
+    pendingPlays.clear();
+    cbs.forEach((fn) => fn());
+    window.removeEventListener('pointerdown', handler);
+    window.removeEventListener('keydown', handler);
+  };
+  window.addEventListener('pointerdown', handler, { once: true });
+  window.addEventListener('keydown', handler, { once: true });
+}
 
 export default function PostMusicPlayer({
   track,
   startSec = 0,
+  endSec = null,
 }: {
   track: MusicTrackMini;
   startSec?: number;
+  endSec?: number | null;
 }) {
+  const muted = useFeedMusicStore((s) => s.muted);
+  const toggleMuted = useFeedMusicStore((s) => s.toggleMuted);
   const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(0); // 0..1
+  const [progress, setProgress] = useState(0);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const inViewRef = useRef(false);
 
   const src = getMediaUrl(null, track.audioUrl ?? null, track.id);
   const playable = !!src && /^https?:\/\//i.test(src) && !/(?:youtube\.com|youtu\.be)/i.test(src);
+  const effEnd = endSec != null && endSec > startSec ? endSec : null;
 
-  // Clean up on unmount.
+  // Stable refs to the latest values used inside listeners set up once.
+  const boundsRef = useRef({ startSec, effEnd });
+  boundsRef.current = { startSec, effEnd };
+
+  const ensureAudio = (): HTMLAudioElement | null => {
+    if (!playable) return null;
+    if (audioRef.current) return audioRef.current;
+    const a = new Audio(src);
+    a.preload = 'auto';
+    a.muted = muted;
+    try { a.currentTime = startSec; } catch { /* metadata not ready yet */ }
+
+    a.addEventListener('timeupdate', () => {
+      const { startSec: s, effEnd: e } = boundsRef.current;
+      const end = e ?? (a.duration || 0);
+      const span = Math.max(1, end - s);
+      setProgress(Math.min(1, Math.max(0, (a.currentTime - s) / span)));
+      // Loop the trimmed window.
+      if (e != null && a.currentTime >= e) {
+        try { a.currentTime = s; } catch { /* ignore */ }
+      }
+    });
+    a.addEventListener('ended', () => {
+      const { startSec: s } = boundsRef.current;
+      try { a.currentTime = s; } catch { /* ignore */ }
+      if (inViewRef.current) void a.play().catch(() => {});
+    });
+    a.addEventListener('play', () => setPlaying(true));
+    a.addEventListener('pause', () => setPlaying(false));
+    audioRef.current = a;
+    return a;
+  };
+
+  const retry = () => { if (inViewRef.current) tryPlay(); };
+
+  const tryPlay = () => {
+    const a = ensureAudio();
+    if (!a) return;
+    if (currentAudio && currentAudio !== a) currentAudio.pause();
+    currentAudio = a;
+    const { startSec: s, effEnd: e } = boundsRef.current;
+    if (a.currentTime < s || (e != null && a.currentTime >= e)) {
+      try { a.currentTime = s; } catch { /* ignore */ }
+    }
+    a.muted = muted;
+    a.play()
+      .then(() => setPlaying(true))
+      .catch(() => {
+        // Autoplay blocked (no gesture yet) — retry on first interaction.
+        if (!audioUnlocked) {
+          pendingPlays.add(retry);
+          armGestureUnlock();
+        }
+      });
+  };
+
+  // Auto-play / pause based on whether the post frame is in view.
+  useEffect(() => {
+    if (!playable) return;
+    const el =
+      (containerRef.current?.closest('.post-card-frame') as Element | null) ??
+      containerRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const visible = entry.isIntersecting && entry.intersectionRatio >= 0.5;
+        inViewRef.current = visible;
+        if (visible) tryPlay();
+        else audioRef.current?.pause();
+      },
+      { threshold: [0, 0.5, 1] },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      pendingPlays.delete(retry);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playable, src]);
+
+  // Keep mute live across all instances.
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.muted = muted;
+  }, [muted]);
+
+  // Teardown.
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -44,56 +160,20 @@ export default function PostMusicPlayer({
         if (currentAudio === audioRef.current) currentAudio = null;
         audioRef.current = null;
       }
+      pendingPlays.delete(retry);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const toggle = async () => {
-    if (!playable) return;
-
-    if (!audioRef.current) {
-      const a = new Audio(src);
-      a.currentTime = startSec;
-      a.addEventListener('timeupdate', () => {
-        const dur = a.duration || 0;
-        const span = Math.max(1, dur - startSec);
-        setProgress(Math.min(1, Math.max(0, (a.currentTime - startSec) / span)));
-      });
-      // Loop back to the chosen start for a continuous background feel.
-      a.addEventListener('ended', () => {
-        a.currentTime = startSec;
-        a.play().catch(() => setPlaying(false));
-      });
-      a.addEventListener('pause', () => setPlaying(false));
-      a.addEventListener('play', () => setPlaying(true));
-      audioRef.current = a;
-    }
-
-    const a = audioRef.current;
-    if (playing) {
-      a.pause();
-      return;
-    }
-    stopAll(a);
-    currentAudio = a;
-    try {
-      if (a.currentTime < startSec) a.currentTime = startSec;
-      await a.play();
-    } catch {
-      setPlaying(false);
-    }
-  };
+  const soundOn = playing && !muted;
 
   return (
-    <div className="mx-4 mt-3 flex items-center gap-3 rounded-xl border px-3 py-2"
+    <div
+      ref={containerRef}
+      className="mx-4 mt-3 flex items-center gap-3 rounded-xl border px-3 py-2"
       style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}
     >
-      <button
-        type="button"
-        onClick={toggle}
-        disabled={!playable}
-        aria-label={playing ? 'Tạm dừng' : 'Phát nhạc nền'}
-        className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-neon-violet/40 to-neon-pink/40 disabled:cursor-not-allowed"
-      >
+      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-neon-violet/40 to-neon-pink/40">
         {track.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -105,12 +185,7 @@ export default function PostMusicPlayer({
         ) : (
           <Music2 className="h-4 w-4 text-white" />
         )}
-        {playable && (
-          <span className="absolute inset-0 flex items-center justify-center bg-black/35">
-            {playing ? <Pause className="h-4 w-4 text-white" /> : <Play className="h-4 w-4 translate-x-[1px] text-white" />}
-          </span>
-        )}
-      </button>
+      </div>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
@@ -123,7 +198,6 @@ export default function PostMusicPlayer({
         <div className="truncate text-xs leading-tight" style={{ color: 'var(--text-secondary)' }}>
           {track.artist}
         </div>
-        {/* Thin progress bar */}
         <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full" style={{ background: 'var(--bg-surface-hover)' }}>
           <div
             className="h-full rounded-full bg-gradient-to-r from-neon-violet to-neon-pink transition-[width] duration-200"
@@ -131,6 +205,22 @@ export default function PostMusicPlayer({
           />
         </div>
       </div>
+
+      {/* Speaker toggle — mute/unmute for ALL posts. Default: sound on. */}
+      <button
+        type="button"
+        onClick={toggleMuted}
+        disabled={!playable}
+        aria-label={muted ? 'Bật tiếng' : 'Tắt tiếng'}
+        title={muted ? 'Bật tiếng nhạc nền' : 'Tắt tiếng nhạc nền'}
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors disabled:opacity-40"
+        style={{
+          background: soundOn ? 'rgba(139,92,246,0.15)' : 'var(--bg-surface-hover)',
+          color: soundOn ? '#c4b5fd' : 'var(--text-muted)',
+        }}
+      >
+        {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+      </button>
     </div>
   );
 }

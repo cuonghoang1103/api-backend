@@ -137,6 +137,8 @@ export interface SocialPost {
   // optional snippet offset; not yet played in the feed (TODO).
   musicTrackId?: number | null;
   musicStartSec?: number | null;
+  // End of the trimmed snippet (null/undefined = play to the track's end).
+  musicEndSec?: number | null;
   musicTrack?: MusicTrackMini | null;
   viewCount: number;
   createdAt: string;

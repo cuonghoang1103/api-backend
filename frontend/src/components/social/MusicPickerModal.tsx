@@ -240,10 +240,12 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
 
   const handleConfirm = () => {
     if (!selected) return;
+    // Round to whole seconds — PostMusic.startSec/endSec are Int columns,
+    // so a fractional value (slider step 0.5) would break the create.
     onPick({
       musicTrackId: selected.id,
-      musicStartSec: startSec,
-      musicEndSec: endSec,
+      musicStartSec: Math.round(startSec),
+      musicEndSec: Math.round(endSec),
       track: selected,
     });
     onClose();
@@ -457,12 +459,45 @@ export default function MusicPickerModal({ open, onClose, onPick }: MusicPickerM
                         <RangeDual
                           min={0}
                           max={maxSec || 1}
-                          step={0.5}
+                          step={1}
                           valueMin={startSec}
                           valueMax={endSec}
                           onChange={(lo, hi) => { setStartSec(lo); setEndSec(hi); }}
                         />
                       </div>
+                    </div>
+
+                    {/* Precise numeric inputs (foolproof vs dragging). Type
+                        exact seconds, e.g. 30 → 60. */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <label className="text-[11px] text-text-muted">
+                        Bắt đầu (giây)
+                        <input
+                          type="number"
+                          min={0}
+                          max={Math.max(0, Math.floor(endSec) - 1)}
+                          value={Math.floor(startSec)}
+                          onChange={(e) => {
+                            const v = Math.max(0, Math.min(Number(e.target.value) || 0, endSec - 1));
+                            setStartSec(v);
+                          }}
+                          className="mt-1 w-full rounded-lg border border-darkborder bg-darkbg/60 px-2.5 py-1.5 text-sm text-text-primary focus:border-neon-violet/50 focus:outline-none"
+                        />
+                      </label>
+                      <label className="text-[11px] text-text-muted">
+                        Kết thúc (giây)
+                        <input
+                          type="number"
+                          min={Math.floor(startSec) + 1}
+                          max={Math.ceil(maxSec)}
+                          value={Math.ceil(endSec)}
+                          onChange={(e) => {
+                            const v = Math.min(maxSec || 1, Math.max(Number(e.target.value) || 0, startSec + 1));
+                            setEndSec(v);
+                          }}
+                          className="mt-1 w-full rounded-lg border border-darkborder bg-darkbg/60 px-2.5 py-1.5 text-sm text-text-primary focus:border-neon-violet/50 focus:outline-none"
+                        />
+                      </label>
                     </div>
                   </div>
                 </>

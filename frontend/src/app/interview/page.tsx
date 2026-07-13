@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { History, ArrowRight, Loader2, ShieldCheck } from 'lucide-react';
 import { INTERVIEW_ENABLED } from '@/lib/featureFlags';
+import ParticleBackground from '@/components/repos/ParticleBackground';
 import { interviewApi } from '@/lib/interview-api';
 import type { TaxonomyResponse, TaxonomyTrack, CompanyProfile, InterviewLevel } from '@/types/interview';
 import { LEVELS } from '@/types/interview';
@@ -63,27 +64,28 @@ export default function InterviewSetupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-16">
-      <div className="max-w-3xl mx-auto px-4 py-10">
+    <div className="relative min-h-screen bg-darkbg text-slate-100 pt-16 overflow-hidden">
+      <ParticleBackground density="medium" />
+      <div className="relative z-10 max-w-3xl mx-auto px-4 py-10">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-8">
           <div>
-            <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--text-secondary)] mb-2">Mock Interview</p>
-            <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] tracking-tight">Phòng luyện phỏng vấn</h1>
-            <p className="text-[var(--text-secondary)] mt-2 max-w-xl">
+            <p className="text-xs font-mono uppercase tracking-[0.2em] text-slate-400 mb-2">Mock Interview</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-100 tracking-tight">Phòng luyện phỏng vấn</h1>
+            <p className="text-slate-400 mt-2 max-w-xl">
               Một người phỏng vấn điềm tĩnh, công bằng sẽ hỏi bạn từng câu. Bạn trả lời, xem đáp án mẫu &amp; rubric, rồi tự chấm.
               Máy cũng chấm khách quan song song. Miễn phí, không cần AI.
             </p>
           </div>
-          <Link href="/interview/history" className="shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[var(--border-light)] text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+          <Link href="/interview/history" className="shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-sm text-slate-400 hover:text-slate-100 transition-colors">
             <History className="w-4 h-4" /> Lịch sử
           </Link>
         </div>
 
         {loading ? (
-          <div className="flex items-center gap-2 text-[var(--text-secondary)]"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải…</div>
+          <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải…</div>
         ) : !tax || !tax.domains.length ? (
-          <div className="rounded-xl border border-[var(--border-light)] p-6 text-[var(--text-secondary)]">
+          <div className="rounded-xl border border-white/10 p-6 text-slate-400">
             Chưa có ngân hàng câu hỏi. Vui lòng quay lại sau hoặc báo admin.
           </div>
         ) : (
@@ -109,14 +111,14 @@ export default function InterviewSetupPage() {
                     className={`text-left px-4 py-3 rounded-xl border transition-all ${
                       track?.id === t.id
                         ? 'border-amber-500/60 bg-amber-500/10'
-                        : 'border-[var(--border-light)] hover:border-[var(--text-secondary)]'
+                        : 'border-white/10 hover:border-slate-500'
                     }`}
                   >
-                    <div className="font-semibold text-[var(--text-primary)]">{t.name}</div>
-                    <div className="text-xs text-[var(--text-secondary)] mt-0.5">{t.topics.length} chủ đề</div>
+                    <div className="font-semibold text-slate-100">{t.name}</div>
+                    <div className="text-xs text-slate-400 mt-0.5">{t.topics.length} chủ đề</div>
                   </button>
                 ))}
-                {!domain?.tracks.length && <p className="text-sm text-[var(--text-secondary)]">Lĩnh vực này chưa có track.</p>}
+                {!domain?.tracks.length && <p className="text-sm text-slate-400">Lĩnh vực này chưa có track.</p>}
               </div>
             </Section>
 
@@ -137,25 +139,25 @@ export default function InterviewSetupPage() {
                   <Chip key={c.id} active={company?.id === c.id} onClick={() => setCompany(c)}>{c.name}</Chip>
                 ))}
               </div>
-              {company && <p className="text-xs text-[var(--text-secondary)] mt-2 italic">{company.styleDescriptor}</p>}
+              {company && <p className="text-xs text-slate-400 mt-2 italic">{company.styleDescriptor}</p>}
             </Section>
 
             {/* Options */}
             <Section step={5} title="Tuỳ chọn">
               <div className="flex flex-wrap items-center gap-6">
                 <label className="flex items-center gap-3">
-                  <span className="text-sm text-[var(--text-secondary)]">Số câu</span>
+                  <span className="text-sm text-slate-400">Số câu</span>
                   <input type="range" min={3} max={12} value={numQuestions} onChange={(e) => setNumQuestions(Number(e.target.value))} className="accent-amber-500" />
-                  <span className="text-sm font-mono text-[var(--text-primary)] w-6">{numQuestions}</span>
+                  <span className="text-sm font-mono text-slate-100 w-6">{numQuestions}</span>
                 </label>
-                <div className="inline-flex rounded-lg border border-[var(--border-light)] overflow-hidden">
+                <div className="inline-flex rounded-lg border border-white/10 overflow-hidden">
                   {(['VI', 'EN'] as const).map((l) => (
-                    <button key={l} onClick={() => setLanguage(l)} className={`px-3 py-1.5 text-sm ${language === l ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400' : 'text-[var(--text-secondary)]'}`}>
+                    <button key={l} onClick={() => setLanguage(l)} className={`px-3 py-1.5 text-sm ${language === l ? 'bg-amber-500/15 text-amber-400' : 'text-slate-400'}`}>
                       {l === 'VI' ? 'Tiếng Việt' : 'English'}
                     </button>
                   ))}
                 </div>
-                <label className="flex items-center gap-2 text-sm text-[var(--text-secondary)] cursor-pointer">
+                <label className="flex items-center gap-2 text-sm text-slate-400 cursor-pointer">
                   <input type="checkbox" checked={focusedMode} onChange={(e) => setFocusedMode(e.target.checked)} className="accent-amber-500" />
                   <ShieldCheck className="w-4 h-4" /> Focused Mode (chặn dán, đếm mất tập trung)
                 </label>
@@ -167,7 +169,7 @@ export default function InterviewSetupPage() {
               <button
                 onClick={start}
                 disabled={!track || starting}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--text-primary)] text-[var(--bg-primary)] font-semibold hover:opacity-90 transition-opacity disabled:opacity-40"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 transition-opacity disabled:opacity-40"
               >
                 {starting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                 Bắt đầu phỏng vấn
@@ -184,8 +186,8 @@ function Section({ step, title, children }: { step: number; title: string; child
   return (
     <section>
       <div className="flex items-center gap-2 mb-3">
-        <span className="w-6 h-6 rounded-full border border-[var(--border-light)] text-xs font-mono flex items-center justify-center text-[var(--text-secondary)]">{step}</span>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--text-secondary)]">{title}</h2>
+        <span className="w-6 h-6 rounded-full border border-white/10 text-xs font-mono flex items-center justify-center text-slate-400">{step}</span>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">{title}</h2>
       </div>
       {children}
     </section>
@@ -197,7 +199,7 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
     <button
       onClick={onClick}
       className={`px-3.5 py-1.5 rounded-full text-sm border transition-all ${
-        active ? 'border-amber-500/60 bg-amber-500/10 text-amber-700 dark:text-amber-300' : 'border-[var(--border-light)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+        active ? 'border-amber-500/60 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-400 hover:text-slate-100'
       }`}
     >
       {children}

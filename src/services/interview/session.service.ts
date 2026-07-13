@@ -164,13 +164,16 @@ export async function submitAnswer(
   order: number,
   body: { answer?: unknown; timeSpentMs?: unknown; integritySignals?: unknown; selectedOptionId?: unknown },
 ) {
-  await loadOwnedSession(userId, sessionId);
+  const session = await loadOwnedSession(userId, sessionId);
   const turn = await prisma.interviewTurn.findUnique({
     where: { uk_interview_turn_order: { sessionId, order } },
     include: { question: true },
   });
   if (!turn) throw new NotFoundError('Câu hỏi không tồn tại trong phiên');
   const q = turn.question;
+  const isEn = session.language === 'EN';
+  const reference = isEn ? q?.referenceAnswerEn || q?.referenceAnswer : q?.referenceAnswer;
+  const rubricForLang = (isEn && q?.rubricEn != null ? q.rubricEn : q?.rubric) as unknown as RubricCriterion[];
 
   const isMcq = q?.type === 'MCQ';
   const rawAnswer = isMcq ? String(body.selectedOptionId ?? '') : String(body.answer ?? '');
@@ -201,7 +204,7 @@ export async function submitAnswer(
       type: 'MCQ',
       correct,
       correctOptionId: opts.find((o) => o.correct)?.id ?? null,
-      referenceAnswer: q?.referenceAnswer ?? null,
+      referenceAnswer: reference ?? null,
       score: det.score,
       autoAdvance: true,
     };
@@ -233,8 +236,8 @@ export async function submitAnswer(
   return {
     order,
     type: q?.type ?? 'CONCEPTUAL',
-    referenceAnswer: q?.referenceAnswer ?? null,
-    rubric: (q?.rubric as unknown as RubricCriterion[]) ?? [],
+    referenceAnswer: reference ?? null,
+    rubric: rubricForLang ?? [],
     deterministic: det,
     injectionAttempted: det.injectionAttempted,
     autoAdvance: false,
@@ -248,7 +251,7 @@ export async function selfAssess(
   order: number,
   body: { ratings?: unknown },
 ) {
-  await loadOwnedSession(userId, sessionId);
+  const session = await loadOwnedSession(userId, sessionId);
   const turn = await prisma.interviewTurn.findUnique({
     where: { uk_interview_turn_order: { sessionId, order } },
     include: { question: true },
@@ -257,7 +260,7 @@ export async function selfAssess(
   if (!turn.userAnswer) throw new BadRequestError('Cần trả lời trước khi tự chấm');
 
   const ratings = (body.ratings && typeof body.ratings === 'object' ? body.ratings : {}) as Record<string, number>;
-  const rubric = (turn.question?.rubric as unknown as RubricCriterion[]) ?? [];
+  const rubric = ((session.language === 'EN' && turn.question?.rubricEn != null ? turn.question.rubricEn : turn.question?.rubric) as unknown as RubricCriterion[]) ?? [];
   const self = selfAssessmentScore(ratings, rubric);
   const det = (turn.deterministicScore as { score?: number } | null)?.score ?? null;
 
@@ -289,7 +292,8 @@ export async function finishSession(userId: number, sessionId: number) {
 }
 
 export async function getReport(userId: number, sessionId: number) {
-  await loadOwnedSession(userId, sessionId);
+  const session = await loadOwnedSession(userId, sessionId);
+  const isEn = session.language === 'EN';
   const report = await prisma.interviewReport.findUnique({ where: { sessionId } });
   if (!report) throw new NotFoundError('Chưa có báo cáo cho phiên này');
   // Per-turn explainability for the drill-down.
@@ -305,8 +309,8 @@ export async function getReport(userId: number, sessionId: number) {
       topic: t.question?.topic?.name ?? null,
       questionText: t.questionText,
       userAnswer: t.userAnswer,
-      referenceAnswer: t.question?.referenceAnswer ?? null,
-      rubric: t.question?.rubric ?? [],
+      referenceAnswer: (isEn ? t.question?.referenceAnswerEn || t.question?.referenceAnswer : t.question?.referenceAnswer) ?? null,
+      rubric: (isEn && t.question?.rubricEn != null ? t.question.rubricEn : t.question?.rubric) ?? [],
       deterministicScore: t.deterministicScore,
       selfScore: t.selfScore,
       turnScore: t.turnScore,

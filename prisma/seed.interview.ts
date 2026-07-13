@@ -4,30 +4,35 @@
  *
  * Fully idempotent & safe to re-run on prod:
  *  - domains/tracks/topics/concepts/company-profiles upserted by unique slug
- *  - questions are find-before-create (by topicId + body); nothing deleted
+ *  - questions are find-before-create (by topicId + body); on re-run, English
+ *    fields (bodyEn / referenceAnswerEn / rubricEn) are BACKFILLED into existing
+ *    rows if missing. Nothing is deleted.
  *
  * ⚠️ CONTENT WARNING (read the prompt's SEED DATA section):
  * The rubrics + reference answers ARE the product. These are a STRUCTURED
- * FIRST DRAFT for a human to rewrite — every question is marked
- * `rubricReviewed: false` so the admin panel flags it as low-confidence and
- * excludes it from any future golden set. The seed's job is to give the human
- * a starting point to edit, NOT to pretend the content problem is solved.
+ * FIRST DRAFT for a human to rewrite — every question is `rubricReviewed:false`
+ * so the admin panel flags it as low-confidence.
  *
- * Starter scope: 3 priority tracks (Node.js, Database, Behavioral) with
- * concept variants for the spaced-repetition drill. Expand over time.
+ * Bilingual: VI is the primary content; EN mirrors it so EN sessions render
+ * fully in English (question + reference + rubric). Deterministic Pass A reuses
+ * the same mustMention + synonym map (English tech terms + VN aliases both hit).
  */
 import { PrismaClient } from '@prisma/client';
 import type { InterviewLevel, InterviewQuestionType } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+type Rub = Array<{ id: string; criterion: string; weight: number }>;
 interface QSeed {
   level: InterviewLevel;
   type?: InterviewQuestionType;
   difficulty?: number;
   body: string;
+  bodyEn: string;
   referenceAnswer: string;
-  rubric: Array<{ id: string; criterion: string; weight: number }>;
+  referenceAnswerEn: string;
+  rubric: Rub;
+  rubricEn: Rub;
   mustMention: string[];
   shouldMention?: string[];
   redFlags?: string[];
@@ -63,33 +68,49 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'MID', difficulty: 3,
                 body: 'Giải thích Node.js event loop hoạt động như thế nào? Kể tên các phase chính và cho biết vì sao Node được coi là "single-threaded nhưng non-blocking".',
-                referenceAnswer: 'Node chạy JS trên một luồng duy nhất với một event loop do libuv cung cấp. Mỗi vòng lặp đi qua các phase theo thứ tự: timers (setTimeout/setInterval), pending callbacks, poll (I/O), check (setImmediate), close callbacks. Giữa mỗi phase (và sau mỗi callback ở tick), microtask queue (Promise) và process.nextTick được rút cạn. I/O thực sự được đẩy xuống thread pool của libuv hoặc kernel async, nên luồng JS không bị chặn — "single-threaded" cho code JS nhưng "non-blocking" nhờ I/O bất đồng bộ.',
+                bodyEn: 'Explain how the Node.js event loop works. Name its main phases and explain why Node is described as "single-threaded but non-blocking".',
+                referenceAnswer: 'Node chạy JS trên một luồng duy nhất với một event loop do libuv cung cấp, đi qua các phase: timers (setTimeout/setInterval), pending callbacks, poll (I/O), check (setImmediate), close callbacks. Giữa mỗi phase, microtask queue (Promise) và process.nextTick được rút cạn. I/O được đẩy xuống thread pool của libuv hoặc kernel async, nên luồng JS không bị chặn — "single-threaded" cho code JS nhưng "non-blocking" nhờ I/O bất đồng bộ.',
+                referenceAnswerEn: 'Node runs JS on a single thread driven by libuv\'s event loop, which cycles through phases: timers (setTimeout/setInterval), pending callbacks, poll (I/O), check (setImmediate), close callbacks. Between phases the microtask queue (Promises) and process.nextTick are drained. Actual I/O is offloaded to libuv\'s thread pool or the kernel\'s async facilities, so the JS thread never blocks — "single-threaded" for JS code but "non-blocking" thanks to async I/O.',
                 rubric: [
                   { id: 'c1', criterion: 'Nêu Node chạy JS một luồng + event loop của libuv', weight: 0.25 },
                   { id: 'c2', criterion: 'Kể tên các phase (timers, poll, check, close) đúng thứ tự', weight: 0.3 },
                   { id: 'c3', criterion: 'Giải thích I/O được offload (libuv thread pool / kernel) nên không chặn', weight: 0.25 },
-                  { id: 'c4', criterion: 'Phân biệt được microtask được rút cạn giữa các phase', weight: 0.2 },
+                  { id: 'c4', criterion: 'Phân biệt microtask được rút cạn giữa các phase', weight: 0.2 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'States Node runs JS single-threaded on libuv\'s event loop', weight: 0.25 },
+                  { id: 'c2', criterion: 'Names the phases (timers, poll, check, close) in order', weight: 0.3 },
+                  { id: 'c3', criterion: 'Explains I/O is offloaded (libuv thread pool / kernel) so it is non-blocking', weight: 0.25 },
+                  { id: 'c4', criterion: 'Notes microtasks drain between phases', weight: 0.2 },
                 ],
                 mustMention: ['event loop', 'phase', 'non-blocking'],
                 shouldMention: ['libuv', 'poll', 'timers', 'thread pool', 'setImmediate'],
-                redFlags: ['Node.js là đa luồng mặc định', 'Node chạy mỗi request một thread'],
-                synonyms: { 'non-blocking': ['non blocking', 'bất đồng bộ', 'không chặn'], 'thread pool': ['threadpool', 'nhóm luồng'], 'event loop': ['vòng lặp sự kiện', 'eventloop'] },
+                redFlags: ['Node.js là đa luồng mặc định', 'Node chạy mỗi request một thread', 'Node is multi-threaded by default'],
+                synonyms: { 'non-blocking': ['non blocking', 'bất đồng bộ', 'không chặn'], 'thread pool': ['threadpool', 'nhóm luồng'], 'event loop': ['vòng lặp sự kiện', 'eventloop'], 'phase': ['phases', 'giai đoạn'] },
                 tags: ['event-loop', 'libuv', 'async'],
               },
               {
                 level: 'SENIOR', difficulty: 4,
                 body: 'Một hàm đồng bộ nặng CPU (ví dụ tính toán lớn hoặc JSON.parse chuỗi khổng lồ) ảnh hưởng thế nào tới event loop? Làm sao phát hiện và tránh chặn?',
-                referenceAnswer: 'Vì JS chạy trên một luồng, một hàm sync nặng CPU sẽ chiếm luồng và chặn toàn bộ event loop: mọi request/callback khác phải chờ, latency tăng vọt, health check có thể timeout. Cách tránh: chia nhỏ tác vụ (chunking + setImmediate), đẩy sang worker_threads hoặc child process, dùng thư viện native/stream cho parse lớn, hoặc offload sang hàng đợi/dịch vụ khác. Phát hiện bằng cách đo event loop lag (ví dụ perf_hooks.monitorEventLoopDelay), theo dõi p99 latency, hoặc log khi lag vượt ngưỡng.',
+                bodyEn: 'How does a heavy synchronous CPU-bound function (e.g. a big computation or JSON.parse of a huge string) affect the event loop? How do you detect and avoid blocking?',
+                referenceAnswer: 'Vì JS chạy trên một luồng, một hàm sync nặng CPU sẽ chiếm luồng và chặn toàn bộ event loop: mọi request/callback khác phải chờ, latency tăng vọt, health check có thể timeout. Cách tránh: chia nhỏ tác vụ (chunking + setImmediate), đẩy sang worker_threads hoặc child process, dùng thư viện native/stream cho parse lớn. Phát hiện bằng cách đo event loop lag (perf_hooks.monitorEventLoopDelay), theo dõi p99 latency.',
+                referenceAnswerEn: 'Because JS runs on one thread, a heavy sync CPU function holds the thread and blocks the whole event loop: every other request/callback waits, latency spikes, health checks may time out. To avoid it: chunk the work (chunking + setImmediate), move it to worker_threads or a child process, use native/streaming libraries for large parsing. Detect it by measuring event loop lag (perf_hooks.monitorEventLoopDelay) and watching p99 latency.',
                 rubric: [
                   { id: 'c1', criterion: 'Giải thích code sync nặng chặn cả loop vì một luồng', weight: 0.3 },
                   { id: 'c2', criterion: 'Nêu hậu quả cụ thể (mọi request chờ, latency, timeout)', weight: 0.2 },
                   { id: 'c3', criterion: 'Đề xuất worker_threads / child process / chunking', weight: 0.3 },
                   { id: 'c4', criterion: 'Cách đo event loop lag để phát hiện', weight: 0.2 },
                 ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Explains heavy sync code blocks the whole loop (single thread)', weight: 0.3 },
+                  { id: 'c2', criterion: 'Names concrete consequences (all requests wait, latency, timeout)', weight: 0.2 },
+                  { id: 'c3', criterion: 'Proposes worker_threads / child process / chunking', weight: 0.3 },
+                  { id: 'c4', criterion: 'How to measure event loop lag to detect it', weight: 0.2 },
+                ],
                 mustMention: ['chặn', 'worker', 'một luồng'],
                 shouldMention: ['worker_threads', 'event loop lag', 'setImmediate', 'child process'],
-                redFlags: ['thêm CPU sẽ tự động chạy song song', 'Node tự tạo thread cho mỗi hàm nặng'],
-                synonyms: { 'chặn': ['block', 'blocking', 'chặn luồng'], 'worker': ['worker_threads', 'worker thread', 'luồng phụ'], 'một luồng': ['single thread', 'single-threaded', 'đơn luồng'] },
+                redFlags: ['thêm CPU sẽ tự động chạy song song', 'adding CPU runs it in parallel automatically'],
+                synonyms: { 'chặn': ['block', 'blocking', 'chặn luồng', 'blocks'], 'worker': ['worker_threads', 'worker thread', 'luồng phụ'], 'một luồng': ['single thread', 'single-threaded', 'đơn luồng'] },
                 tags: ['event-loop', 'cpu-bound', 'performance'],
               },
             ],
@@ -100,32 +121,47 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'MID', difficulty: 3,
                 body: 'Phân biệt microtask queue và macrotask queue trong Node. Với đoạn code có cả setTimeout(fn,0) và Promise.resolve().then(fn), cái nào chạy trước? Vì sao?',
-                referenceAnswer: 'Macrotask (task) gồm setTimeout/setInterval/setImmediate/I/O callbacks — mỗi phase của event loop xử lý chúng. Microtask gồm Promise.then/catch/finally và queueMicrotask; process.nextTick còn ưu tiên cao hơn cả microtask. Sau mỗi callback, Node rút CẠN toàn bộ microtask queue trước khi sang macrotask tiếp theo. Nên Promise.then chạy TRƯỚC setTimeout(fn,0) dù timeout là 0, vì microtask được xử lý ngay sau tick hiện tại còn timer phải đợi tới phase timers.',
+                bodyEn: 'Distinguish the microtask queue from the macrotask queue in Node. Given code with both setTimeout(fn,0) and Promise.resolve().then(fn), which runs first, and why?',
+                referenceAnswer: 'Macrotask gồm setTimeout/setInterval/setImmediate/I/O callbacks — mỗi phase của event loop xử lý chúng. Microtask gồm Promise.then/catch/finally và queueMicrotask; process.nextTick ưu tiên cao hơn cả microtask. Sau mỗi callback, Node rút CẠN toàn bộ microtask queue trước khi sang macrotask tiếp theo. Nên Promise.then chạy TRƯỚC setTimeout(fn,0) dù timeout là 0.',
+                referenceAnswerEn: 'Macrotasks include setTimeout/setInterval/setImmediate/I/O callbacks — each event-loop phase handles them. Microtasks include Promise.then/catch/finally and queueMicrotask; process.nextTick has even higher priority than microtasks. After each callback Node fully DRAINS the microtask queue before moving to the next macrotask. So Promise.then runs BEFORE setTimeout(fn,0) even with a 0 timeout.',
                 rubric: [
                   { id: 'c1', criterion: 'Định nghĩa đúng microtask (Promise) vs macrotask (setTimeout/IO)', weight: 0.3 },
                   { id: 'c2', criterion: 'Nêu microtask được rút cạn giữa mỗi macrotask', weight: 0.3 },
                   { id: 'c3', criterion: 'Kết luận Promise.then chạy trước setTimeout(0) + lý do', weight: 0.3 },
                   { id: 'c4', criterion: 'Đề cập process.nextTick ưu tiên hơn microtask', weight: 0.1 },
                 ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Correctly defines microtask (Promise) vs macrotask (setTimeout/IO)', weight: 0.3 },
+                  { id: 'c2', criterion: 'States microtasks drain between each macrotask', weight: 0.3 },
+                  { id: 'c3', criterion: 'Concludes Promise.then runs before setTimeout(0) + why', weight: 0.3 },
+                  { id: 'c4', criterion: 'Mentions process.nextTick outranks microtasks', weight: 0.1 },
+                ],
                 mustMention: ['microtask', 'macrotask', 'promise'],
                 shouldMention: ['nextTick', 'queueMicrotask', 'rút cạn', 'setTimeout'],
-                redFlags: ['setTimeout(0) luôn chạy trước Promise', 'microtask và macrotask giống nhau'],
-                synonyms: { 'microtask': ['micro task', 'microtask queue', 'promise queue', 'hàng đợi vi mô'], 'macrotask': ['macro task', 'task queue', 'macrotask queue'], 'rút cạn': ['drain', 'xử lý hết', 'flush'] },
+                redFlags: ['setTimeout(0) luôn chạy trước Promise', 'setTimeout(0) always runs before Promise'],
+                synonyms: { 'microtask': ['micro task', 'microtask queue', 'promise queue', 'hàng đợi vi mô'], 'macrotask': ['macro task', 'task queue', 'macrotask queue'], 'rút cạn': ['drain', 'drained', 'xử lý hết', 'flush'] },
                 tags: ['event-loop', 'microtask', 'promise'],
               },
               {
                 level: 'SENIOR', difficulty: 4,
                 body: 'process.nextTick khác gì so với một Promise microtask? Vì sao lạm dụng process.nextTick có thể gây "starvation" cho event loop?',
-                referenceAnswer: 'process.nextTick đẩy callback vào một hàng đợi riêng được xử lý NGAY sau operation hiện tại, TRƯỚC cả microtask (Promise) và trước khi loop tiếp tục. Promise microtask cũng chạy trước macrotask nhưng SAU nextTick queue. Vì nextTick queue được rút cạn hoàn toàn trước khi loop đi tiếp, nếu bạn liên tục schedule nextTick bên trong nextTick, event loop không bao giờ tới được phase I/O/timers → starvation: I/O bị "đói", request treo. Vì vậy nên dùng setImmediate khi muốn nhường loop.',
+                bodyEn: 'How does process.nextTick differ from a Promise microtask? Why can overusing process.nextTick cause event-loop "starvation"?',
+                referenceAnswer: 'process.nextTick đẩy callback vào một hàng đợi riêng được xử lý NGAY sau operation hiện tại, TRƯỚC cả microtask (Promise). Vì nextTick queue được rút cạn hoàn toàn trước khi loop đi tiếp, nếu bạn liên tục schedule nextTick bên trong nextTick, event loop không bao giờ tới phase I/O/timers → starvation. Nên dùng setImmediate khi muốn nhường loop.',
+                referenceAnswerEn: 'process.nextTick queues a callback in its own queue processed RIGHT after the current operation, BEFORE even microtasks (Promises). Because the nextTick queue is fully drained before the loop advances, if you keep scheduling nextTick inside nextTick the loop never reaches the I/O/timer phases → starvation. Use setImmediate when you want to yield the loop.',
                 rubric: [
                   { id: 'c1', criterion: 'nextTick chạy trước cả Promise microtask', weight: 0.3 },
                   { id: 'c2', criterion: 'Giải thích cơ chế starvation (nextTick lồng nhau chặn loop)', weight: 0.4 },
                   { id: 'c3', criterion: 'Đề xuất setImmediate để nhường loop', weight: 0.3 },
                 ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'nextTick runs before Promise microtasks', weight: 0.3 },
+                  { id: 'c2', criterion: 'Explains the starvation mechanism (nested nextTick blocks loop)', weight: 0.4 },
+                  { id: 'c3', criterion: 'Proposes setImmediate to yield the loop', weight: 0.3 },
+                ],
                 mustMention: ['nexttick', 'starvation'],
                 shouldMention: ['setImmediate', 'microtask', 'I/O'],
-                redFlags: ['nextTick chạy sau setTimeout', 'nextTick là macrotask'],
-                synonyms: { 'nexttick': ['process.nexttick', 'next tick'], 'starvation': ['đói', 'bỏ đói', 'starve'] },
+                redFlags: ['nextTick chạy sau setTimeout', 'nextTick runs after setTimeout'],
+                synonyms: { 'nexttick': ['process.nexttick', 'next tick'], 'starvation': ['đói', 'bỏ đói', 'starve', 'starved'] },
                 tags: ['event-loop', 'nexttick', 'starvation'],
               },
             ],
@@ -141,32 +177,47 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'JUNIOR', difficulty: 2,
                 body: 'async/await khác Promise.then() như thế nào? Từ khoá await có "chặn" luồng không?',
-                referenceAnswer: 'async/await là cú pháp đường (syntactic sugar) trên Promise: một hàm async luôn trả về Promise, await tạm dừng thực thi của hàm đó cho tới khi Promise resolve rồi trả về giá trị đã unwrap. await KHÔNG chặn luồng — nó chỉ tạm dừng hàm async hiện tại và trả quyền điều khiển về event loop để xử lý việc khác; khi Promise xong, phần còn lại chạy tiếp như một microtask. .then() thì nối callback thay vì viết tuần tự.',
+                bodyEn: 'How does async/await differ from Promise.then()? Does the await keyword "block" the thread?',
+                referenceAnswer: 'async/await là cú pháp đường trên Promise: một hàm async luôn trả về Promise, await tạm dừng thực thi của hàm đó cho tới khi Promise resolve rồi trả về giá trị đã unwrap. await KHÔNG chặn luồng — nó chỉ tạm dừng hàm async hiện tại và trả quyền điều khiển về event loop; khi Promise xong, phần còn lại chạy tiếp như một microtask.',
+                referenceAnswerEn: 'async/await is syntactic sugar over Promises: an async function always returns a Promise, and await pauses that function until the Promise resolves, then returns the unwrapped value. await does NOT block the thread — it only suspends the current async function and yields control back to the event loop; when the Promise settles, the rest resumes as a microtask.',
                 rubric: [
                   { id: 'c1', criterion: 'async fn trả về Promise, await unwrap giá trị', weight: 0.3 },
                   { id: 'c2', criterion: 'await KHÔNG chặn luồng, chỉ tạm dừng hàm async', weight: 0.4 },
                   { id: 'c3', criterion: 'Nêu tương đương với .then() (syntactic sugar)', weight: 0.3 },
                 ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'async fn returns a Promise; await unwraps the value', weight: 0.3 },
+                  { id: 'c2', criterion: 'await does NOT block the thread, only suspends the async fn', weight: 0.4 },
+                  { id: 'c3', criterion: 'Notes it is equivalent to .then() (syntactic sugar)', weight: 0.3 },
+                ],
                 mustMention: ['promise', 'await', 'không chặn'],
                 shouldMention: ['microtask', 'syntactic sugar', 'tạm dừng'],
-                redFlags: ['await chặn cả event loop', 'async làm code chạy song song trên nhiều luồng'],
-                synonyms: { 'không chặn': ['non-blocking', 'không block', 'không chặn luồng'], 'await': ['từ khoá await'], 'promise': ['lời hứa'] },
+                redFlags: ['await chặn cả event loop', 'await blocks the event loop'],
+                synonyms: { 'không chặn': ['non-blocking', 'không block', 'does not block', 'không chặn luồng'], 'await': ['từ khoá await'], 'promise': ['lời hứa'] },
                 tags: ['async', 'promise', 'async-await'],
               },
               {
                 level: 'MID', difficulty: 3,
                 body: 'Bạn cần gọi 3 API độc lập rồi tổng hợp kết quả. So sánh `await` từng cái trong vòng lặp với Promise.all(). Khi nào KHÔNG nên dùng Promise.all?',
-                referenceAnswer: 'await tuần tự trong vòng lặp chạy lần lượt: tổng thời gian = tổng các call → chậm khi chúng độc lập. Promise.all() khởi động cả 3 song song, chờ tất cả xong, tổng thời gian ≈ call chậm nhất. Nhược điểm Promise.all: nó fail-fast — một Promise reject là cả nhóm reject (các kết quả khác bị bỏ). Khi cần "chờ tất cả bất kể lỗi" dùng Promise.allSettled; khi cần giới hạn đồng thời (rate limit) thì dùng batching/p-limit thay vì bắn hết một lúc.',
+                bodyEn: 'You must call 3 independent APIs then combine the results. Compare awaiting each in a loop vs Promise.all(). When should you NOT use Promise.all?',
+                referenceAnswer: 'await tuần tự trong vòng lặp chạy lần lượt: tổng thời gian = tổng các call → chậm khi độc lập. Promise.all() khởi động cả 3 song song, tổng thời gian ≈ call chậm nhất. Nhược điểm Promise.all: fail-fast — một Promise reject là cả nhóm reject. Khi cần "chờ tất cả bất kể lỗi" dùng Promise.allSettled; khi cần giới hạn đồng thời dùng batching/p-limit.',
+                referenceAnswerEn: 'Awaiting sequentially in a loop runs one after another: total time = sum of calls → slow when they are independent. Promise.all() starts all 3 in parallel, total time ≈ the slowest call. Downside of Promise.all: it is fail-fast — one rejection rejects the whole group. When you need "wait for all regardless of errors" use Promise.allSettled; when you must cap concurrency use batching/p-limit.',
                 rubric: [
-                  { id: 'c1', criterion: 'await-trong-loop là tuần tự (tổng thời gian cộng dồn)', weight: 0.3 },
+                  { id: 'c1', criterion: 'await-trong-loop là tuần tự (thời gian cộng dồn)', weight: 0.3 },
                   { id: 'c2', criterion: 'Promise.all chạy song song, thời gian ≈ call chậm nhất', weight: 0.3 },
                   { id: 'c3', criterion: 'Nêu fail-fast của Promise.all + allSettled', weight: 0.25 },
-                  { id: 'c4', criterion: 'Nhắc giới hạn concurrency khi cần (rate limit)', weight: 0.15 },
+                  { id: 'c4', criterion: 'Nhắc giới hạn concurrency khi cần', weight: 0.15 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'await-in-loop is sequential (times add up)', weight: 0.3 },
+                  { id: 'c2', criterion: 'Promise.all runs in parallel, time ≈ slowest call', weight: 0.3 },
+                  { id: 'c3', criterion: 'Notes Promise.all fail-fast + allSettled', weight: 0.25 },
+                  { id: 'c4', criterion: 'Mentions capping concurrency when needed', weight: 0.15 },
                 ],
                 mustMention: ['promise.all', 'song song', 'tuần tự'],
                 shouldMention: ['allsettled', 'fail-fast', 'concurrency', 'batching'],
-                redFlags: ['await trong vòng lặp chạy song song', 'Promise.all tạo nhiều thread'],
-                synonyms: { 'song song': ['parallel', 'đồng thời', 'concurrent'], 'tuần tự': ['sequential', 'lần lượt'], 'promise.all': ['promiseall'] },
+                redFlags: ['await trong vòng lặp chạy song song', 'await in a loop runs in parallel'],
+                synonyms: { 'song song': ['parallel', 'đồng thời', 'concurrent'], 'tuần tự': ['sequential', 'sequentially', 'lần lượt'], 'promise.all': ['promiseall'] },
                 tags: ['async', 'promise-all', 'concurrency'],
               },
             ],
@@ -177,17 +228,25 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'SENIOR', difficulty: 4,
                 body: 'Backpressure trong Node streams là gì? Vì sao `source.pipe(dest)` xử lý được nó, còn tự đọc rồi ghi thủ công thì dễ gây tràn bộ nhớ?',
-                referenceAnswer: 'Backpressure là cơ chế điều tiết khi bên tiêu thụ (writable) chậm hơn bên sản xuất (readable): nếu cứ đọc và ghi mà không quan tâm, dữ liệu dồn vào buffer nội bộ và RAM phình ra. pipe() tự động xử lý: khi dest.write() trả về false (buffer đầy, vượt highWaterMark), pipe pause() source, và resume() khi dest phát sự kiện "drain". Khi tự viết vòng lặp read→write mà bỏ qua giá trị trả về của write() và sự kiện drain, bạn ghi nhanh hơn khả năng tiêu thụ → buffer tăng vô hạn, dẫn tới tốn RAM/OOM.',
+                bodyEn: 'What is backpressure in Node streams? Why does source.pipe(dest) handle it, while manually reading and writing risks running out of memory?',
+                referenceAnswer: 'Backpressure là cơ chế điều tiết khi bên tiêu thụ (writable) chậm hơn bên sản xuất (readable). pipe() tự động xử lý: khi dest.write() trả về false (vượt highWaterMark), pipe pause() source và resume() khi dest phát "drain". Khi tự viết vòng lặp read→write mà bỏ qua giá trị trả về của write() và sự kiện drain, buffer tăng vô hạn → OOM.',
+                referenceAnswerEn: 'Backpressure is the flow-control mechanism for when the consumer (writable) is slower than the producer (readable). pipe() handles it automatically: when dest.write() returns false (buffer past highWaterMark), pipe pause()s the source and resume()s on the dest\'s "drain" event. If you hand-write a read→write loop ignoring write()\'s return value and the drain event, the internal buffer grows unbounded → OOM.',
                 rubric: [
                   { id: 'c1', criterion: 'Định nghĩa backpressure (producer nhanh hơn consumer)', weight: 0.3 },
                   { id: 'c2', criterion: 'pipe() pause/resume dựa trên write()===false + drain', weight: 0.35 },
                   { id: 'c3', criterion: 'Nêu highWaterMark / buffer', weight: 0.15 },
                   { id: 'c4', criterion: 'Hậu quả bỏ qua backpressure: RAM/OOM', weight: 0.2 },
                 ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Defines backpressure (producer faster than consumer)', weight: 0.3 },
+                  { id: 'c2', criterion: 'pipe() pauses/resumes based on write()===false + drain', weight: 0.35 },
+                  { id: 'c3', criterion: 'Mentions highWaterMark / buffer', weight: 0.15 },
+                  { id: 'c4', criterion: 'Consequence of ignoring backpressure: RAM/OOM', weight: 0.2 },
+                ],
                 mustMention: ['backpressure', 'pipe', 'drain'],
                 shouldMention: ['highwatermark', 'buffer', 'writable', 'readable'],
-                redFlags: ['stream không bao giờ tốn RAM', 'pipe làm dữ liệu chạy nhanh hơn'],
-                synonyms: { 'backpressure': ['back pressure', 'áp lực ngược', 'điều tiết luồng'], 'drain': ['sự kiện drain'], 'pipe': ['.pipe', 'ống dẫn'] },
+                redFlags: ['stream không bao giờ tốn RAM', 'streams never use memory'],
+                synonyms: { 'backpressure': ['back pressure', 'áp lực ngược', 'điều tiết luồng'], 'drain': ['sự kiện drain', 'drain event'], 'pipe': ['.pipe', 'ống dẫn'] },
                 tags: ['streams', 'backpressure', 'memory'],
               },
             ],
@@ -208,32 +267,48 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'MID', difficulty: 3,
                 body: 'B-tree index giúp tăng tốc truy vấn như thế nào? Nêu vài trường hợp index KHÔNG được sử dụng dù cột đã có index.',
-                referenceAnswer: 'B-tree lưu khoá đã sắp xếp theo cây cân bằng, cho phép tìm kiếm/khoảng/sắp xếp với độ phức tạp O(log n) thay vì quét toàn bảng O(n). Index không được dùng khi: (1) hàm/biến đổi trên cột (WHERE lower(col)=... ) trừ khi có functional index; (2) leading wildcard LIKE \'%abc\'; (3) kiểu dữ liệu không khớp/ép kiểu ngầm; (4) độ chọn lọc thấp — optimizer thấy quét bảng rẻ hơn; (5) OR trên các cột khác nhau. Khi đó phải xem EXPLAIN để biết plan thực tế.',
+                bodyEn: 'How does a B-tree index speed up queries? Give a few cases where the index is NOT used even though the column is indexed.',
+                referenceAnswer: 'B-tree lưu khoá đã sắp xếp theo cây cân bằng, cho phép tìm kiếm/khoảng/sắp xếp O(log n) thay vì quét toàn bảng O(n). Index không được dùng khi: hàm/biến đổi trên cột (WHERE lower(col)=…); leading wildcard LIKE \'%abc\'; ép kiểu ngầm; độ chọn lọc thấp (optimizer thấy quét bảng rẻ hơn). Xem EXPLAIN để biết plan thực tế.',
+                referenceAnswerEn: 'A B-tree stores keys sorted in a balanced tree, enabling lookup/range/sort in O(log n) instead of an O(n) full scan. The index is skipped when: a function/transform is applied to the column (WHERE lower(col)=…); a leading wildcard LIKE \'%abc\'; implicit type casts; low selectivity (the optimizer finds a scan cheaper). Use EXPLAIN to see the real plan.',
                 rubric: [
                   { id: 'c1', criterion: 'B-tree = khoá sắp xếp, tra cứu O(log n) thay vì full scan', weight: 0.3 },
                   { id: 'c2', criterion: 'Nêu hỗ trợ range + order by nhờ tính đã sắp xếp', weight: 0.2 },
-                  { id: 'c3', criterion: 'Ít nhất 2 trường hợp index bị bỏ qua (function, leading wildcard, low selectivity, ép kiểu)', weight: 0.35 },
+                  { id: 'c3', criterion: 'Ít nhất 2 trường hợp index bị bỏ qua', weight: 0.35 },
                   { id: 'c4', criterion: 'Nhắc dùng EXPLAIN để kiểm chứng', weight: 0.15 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'B-tree = sorted keys, O(log n) lookup vs full scan', weight: 0.3 },
+                  { id: 'c2', criterion: 'Notes range + order-by support from being sorted', weight: 0.2 },
+                  { id: 'c3', criterion: 'At least 2 cases the index is skipped', weight: 0.35 },
+                  { id: 'c4', criterion: 'Mentions using EXPLAIN to verify', weight: 0.15 },
                 ],
                 mustMention: ['b-tree', 'sắp xếp', 'full scan'],
                 shouldMention: ['explain', 'selectivity', 'wildcard', 'o(log n)'],
-                redFlags: ['index luôn được dùng nếu cột có index', 'index làm ghi nhanh hơn'],
+                redFlags: ['index luôn được dùng nếu cột có index', 'an indexed column always uses the index'],
                 synonyms: { 'b-tree': ['btree', 'b tree', 'cây b'], 'full scan': ['seq scan', 'quét toàn bảng', 'sequential scan'], 'sắp xếp': ['sorted', 'đã sắp xếp'] },
                 tags: ['indexing', 'btree', 'query-plan'],
               },
               {
                 level: 'SENIOR', difficulty: 4,
                 body: 'Với composite index (a, b, c), thứ tự cột quan trọng ra sao? Giải thích "leftmost prefix" và cho biết truy vấn nào dùng được index này, truy vấn nào thì không.',
-                referenceAnswer: 'Composite index sắp xếp theo a, rồi b, rồi c. Nguyên tắc leftmost prefix: index chỉ hữu ích khi truy vấn dùng một tiền tố liên tục từ trái: (a), (a,b), (a,b,c). WHERE a=? dùng được; a=? AND b=? dùng được; a=? AND b=? AND c=? tối ưu nhất. Nhưng WHERE b=? (bỏ a) KHÔNG dùng được index (thiếu cột dẫn đầu); a=? AND c=? chỉ dùng được phần a rồi lọc c. Range trên cột giữa (a=? AND b>? AND c=?) làm phần sau c không tận dụng được thứ tự. Vì vậy đặt cột equality trước, range sau, và cột chọn lọc cao/thường lọc lên đầu.',
+                bodyEn: 'For a composite index (a, b, c), why does column order matter? Explain the "leftmost prefix" rule and which queries can use this index versus which cannot.',
+                referenceAnswer: 'Composite index sắp xếp theo a, rồi b, rồi c. Leftmost prefix: index chỉ hữu ích khi truy vấn dùng một tiền tố liên tục từ trái: (a), (a,b), (a,b,c). WHERE a=? dùng được; WHERE b=? (bỏ a) KHÔNG dùng được; a=? AND c=? chỉ dùng được phần a. Đặt cột equality trước, range sau.',
+                referenceAnswerEn: 'A composite index is sorted by a, then b, then c. Leftmost prefix: the index only helps when the query uses a continuous prefix from the left: (a), (a,b), (a,b,c). WHERE a=? works; WHERE b=? (skipping a) does NOT; a=? AND c=? only uses the a part. Put equality columns first, range columns last.',
                 rubric: [
                   { id: 'c1', criterion: 'Index sắp theo thứ tự cột a→b→c', weight: 0.25 },
                   { id: 'c2', criterion: 'Giải thích đúng leftmost prefix', weight: 0.35 },
-                  { id: 'c3', criterion: 'Ví dụ truy vấn dùng được vs không (bỏ cột dẫn đầu)', weight: 0.25 },
+                  { id: 'c3', criterion: 'Ví dụ dùng được vs không (bỏ cột dẫn đầu)', weight: 0.25 },
                   { id: 'c4', criterion: 'Nhắc equality trước range sau', weight: 0.15 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Index sorts by column order a→b→c', weight: 0.25 },
+                  { id: 'c2', criterion: 'Correctly explains leftmost prefix', weight: 0.35 },
+                  { id: 'c3', criterion: 'Example that works vs not (skipping leading column)', weight: 0.25 },
+                  { id: 'c4', criterion: 'Notes equality before range', weight: 0.15 },
                 ],
                 mustMention: ['leftmost prefix', 'thứ tự cột'],
                 shouldMention: ['equality', 'range', 'composite index', 'selectivity'],
-                redFlags: ['thứ tự cột trong composite index không quan trọng', 'index dùng được với mọi cột riêng lẻ'],
+                redFlags: ['thứ tự cột không quan trọng', 'column order does not matter'],
                 synonyms: { 'leftmost prefix': ['left-most prefix', 'tiền tố trái', 'prefix trái nhất'], 'thứ tự cột': ['column order', 'thứ tự các cột'], 'composite index': ['index tổng hợp', 'multi-column index'] },
                 tags: ['indexing', 'composite-index', 'leftmost-prefix'],
               },
@@ -245,17 +320,25 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'MID', difficulty: 3,
                 body: 'Vì sao KHÔNG nên đánh index cho mọi cột? Nêu các chi phí của việc thêm index.',
-                referenceAnswer: 'Mỗi index là một cấu trúc phải được cập nhật cùng dữ liệu: INSERT/UPDATE/DELETE trở nên chậm hơn vì phải sửa cả bảng lẫn từng index. Index tốn dung lượng đĩa và RAM (cache). Quá nhiều index còn làm query planner cân nhắc lâu hơn và đôi khi chọn nhầm. Index trên cột chọn lọc thấp (ví dụ boolean) gần như vô dụng. Vì vậy chỉ đánh index theo truy vấn thực tế (đo bằng EXPLAIN / slow query log), ưu tiên cột lọc/join/sort có độ chọn lọc cao.',
+                bodyEn: 'Why should you NOT index every column? What are the costs of adding an index?',
+                referenceAnswer: 'Mỗi index phải được cập nhật cùng dữ liệu: INSERT/UPDATE/DELETE chậm hơn. Index tốn dung lượng đĩa và RAM. Index trên cột chọn lọc thấp gần như vô dụng. Chỉ đánh index theo truy vấn thực tế (EXPLAIN / slow query log), ưu tiên cột lọc/join/sort có độ chọn lọc cao.',
+                referenceAnswerEn: 'Every index must be maintained with the data: INSERT/UPDATE/DELETE get slower. Indexes cost disk and RAM. An index on a low-selectivity column is nearly useless. Only index based on real queries (EXPLAIN / slow query log), favoring high-selectivity filter/join/sort columns.',
                 rubric: [
                   { id: 'c1', criterion: 'Index làm chậm ghi (INSERT/UPDATE/DELETE)', weight: 0.35 },
                   { id: 'c2', criterion: 'Tốn dung lượng đĩa/RAM', weight: 0.25 },
                   { id: 'c3', criterion: 'Index cột chọn lọc thấp vô dụng', weight: 0.2 },
-                  { id: 'c4', criterion: 'Đánh index theo truy vấn thực tế (đo lường)', weight: 0.2 },
+                  { id: 'c4', criterion: 'Đánh index theo truy vấn thực tế', weight: 0.2 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Indexes slow down writes (INSERT/UPDATE/DELETE)', weight: 0.35 },
+                  { id: 'c2', criterion: 'Cost disk/RAM', weight: 0.25 },
+                  { id: 'c3', criterion: 'Low-selectivity indexes are useless', weight: 0.2 },
+                  { id: 'c4', criterion: 'Index according to real queries', weight: 0.2 },
                 ],
                 mustMention: ['ghi', 'dung lượng', 'chọn lọc'],
                 shouldMention: ['insert', 'update', 'selectivity', 'slow query'],
-                redFlags: ['thêm index luôn tốt', 'index không ảnh hưởng tốc độ ghi'],
-                synonyms: { 'ghi': ['write', 'insert', 'update', 'ghi dữ liệu'], 'dung lượng': ['disk', 'storage', 'bộ nhớ đĩa'], 'chọn lọc': ['selectivity', 'độ chọn lọc'] },
+                redFlags: ['thêm index luôn tốt', 'more indexes is always better'],
+                synonyms: { 'ghi': ['write', 'writes', 'insert', 'update', 'ghi dữ liệu'], 'dung lượng': ['disk', 'storage', 'bộ nhớ đĩa'], 'chọn lọc': ['selectivity', 'độ chọn lọc'] },
                 tags: ['indexing', 'trade-offs', 'write-cost'],
               },
             ],
@@ -271,31 +354,46 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'SENIOR', difficulty: 4,
                 body: 'Kể các mức isolation (READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE) và anomaly mà mỗi mức ngăn được (dirty read, non-repeatable read, phantom read).',
-                referenceAnswer: 'Từ lỏng đến chặt: READ UNCOMMITTED cho phép dirty read (đọc dữ liệu chưa commit). READ COMMITTED chặn dirty read nhưng còn non-repeatable read (đọc lại cùng hàng ra giá trị khác vì transaction khác đã commit). REPEATABLE READ chặn thêm non-repeatable read (cùng hàng đọc lại nhất quán) nhưng lý thuyết còn phantom read (query theo điều kiện ra thêm/bớt hàng); một số engine như InnoDB dùng gap lock/MVCC hạn chế phantom. SERIALIZABLE chặn tất cả, như thể các transaction chạy tuần tự, đổi lại giảm concurrency và dễ deadlock/serialization failure.',
+                bodyEn: 'List the isolation levels (READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE) and the anomaly each one prevents (dirty read, non-repeatable read, phantom read).',
+                referenceAnswer: 'READ UNCOMMITTED cho phép dirty read. READ COMMITTED chặn dirty read nhưng còn non-repeatable read. REPEATABLE READ chặn thêm non-repeatable read nhưng lý thuyết còn phantom read (InnoDB dùng gap lock/MVCC hạn chế). SERIALIZABLE chặn tất cả, như thể chạy tuần tự, đổi lại giảm concurrency.',
+                referenceAnswerEn: 'READ UNCOMMITTED allows dirty reads. READ COMMITTED prevents dirty reads but still allows non-repeatable reads. REPEATABLE READ also prevents non-repeatable reads but in theory still allows phantom reads (InnoDB limits them with gap locks/MVCC). SERIALIZABLE prevents all, as if transactions ran serially, at the cost of concurrency.',
                 rubric: [
                   { id: 'c1', criterion: 'Xếp đúng 4 mức từ lỏng đến chặt', weight: 0.25 },
                   { id: 'c2', criterion: 'Dirty read ↔ READ UNCOMMITTED', weight: 0.2 },
                   { id: 'c3', criterion: 'Non-repeatable read ↔ READ COMMITTED cho phép, REPEATABLE READ chặn', weight: 0.3 },
-                  { id: 'c4', criterion: 'Phantom read ↔ SERIALIZABLE (hoặc gap lock)', weight: 0.25 },
+                  { id: 'c4', criterion: 'Phantom read ↔ SERIALIZABLE', weight: 0.25 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Orders the 4 levels from loosest to strictest', weight: 0.25 },
+                  { id: 'c2', criterion: 'Dirty read ↔ READ UNCOMMITTED', weight: 0.2 },
+                  { id: 'c3', criterion: 'Non-repeatable read ↔ allowed by READ COMMITTED, prevented by REPEATABLE READ', weight: 0.3 },
+                  { id: 'c4', criterion: 'Phantom read ↔ SERIALIZABLE', weight: 0.25 },
                 ],
                 mustMention: ['dirty read', 'non-repeatable read', 'phantom'],
                 shouldMention: ['serializable', 'repeatable read', 'mvcc', 'read committed'],
-                redFlags: ['SERIALIZABLE nhanh hơn READ COMMITTED', 'isolation level không ảnh hưởng tính đúng đắn'],
+                redFlags: ['SERIALIZABLE nhanh hơn READ COMMITTED', 'SERIALIZABLE is faster than READ COMMITTED'],
                 synonyms: { 'dirty read': ['đọc bẩn', 'dirty-read'], 'non-repeatable read': ['non repeatable read', 'đọc không lặp lại được'], 'phantom': ['phantom read', 'đọc ma', 'bóng ma'] },
                 tags: ['transactions', 'isolation', 'anomalies'],
               },
               {
                 level: 'MID', difficulty: 3,
                 body: 'READ COMMITTED nghĩa là gì? Mô tả một tình huống non-repeatable read xảy ra ở mức này.',
-                referenceAnswer: 'READ COMMITTED: mỗi câu lệnh chỉ nhìn thấy dữ liệu đã được commit tại thời điểm câu lệnh đó bắt đầu — không đọc dữ liệu chưa commit (không dirty read). Nhưng vì mỗi statement lấy snapshot mới, trong cùng một transaction đọc cùng một hàng hai lần có thể ra giá trị khác nếu giữa hai lần đọc có transaction khác commit thay đổi — đó là non-repeatable read. Ví dụ: T1 đọc balance=100; T2 update balance=50 rồi commit; T1 đọc lại balance=50 trong cùng transaction.',
+                bodyEn: 'What does READ COMMITTED mean? Describe a non-repeatable read that can happen at this level.',
+                referenceAnswer: 'READ COMMITTED: mỗi câu lệnh chỉ thấy dữ liệu đã commit (không dirty read). Nhưng đọc cùng một hàng hai lần trong cùng transaction có thể ra giá trị khác nếu giữa hai lần có transaction khác commit — non-repeatable read. Ví dụ: T1 đọc balance=100; T2 update=50 commit; T1 đọc lại=50.',
+                referenceAnswerEn: 'READ COMMITTED: each statement only sees committed data (no dirty reads). But reading the same row twice within one transaction can return different values if another transaction commits in between — a non-repeatable read. Example: T1 reads balance=100; T2 updates to 50 and commits; T1 re-reads 50.',
                 rubric: [
-                  { id: 'c1', criterion: 'READ COMMITTED chỉ thấy dữ liệu đã commit (không dirty read)', weight: 0.4 },
+                  { id: 'c1', criterion: 'READ COMMITTED chỉ thấy dữ liệu đã commit', weight: 0.4 },
                   { id: 'c2', criterion: 'Định nghĩa non-repeatable read', weight: 0.3 },
-                  { id: 'c3', criterion: 'Ví dụ cụ thể có hai lần đọc khác nhau', weight: 0.3 },
+                  { id: 'c3', criterion: 'Ví dụ cụ thể hai lần đọc khác nhau', weight: 0.3 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'READ COMMITTED only sees committed data', weight: 0.4 },
+                  { id: 'c2', criterion: 'Defines non-repeatable read', weight: 0.3 },
+                  { id: 'c3', criterion: 'Concrete example of two differing reads', weight: 0.3 },
                 ],
                 mustMention: ['committed', 'non-repeatable'],
                 shouldMention: ['snapshot', 'dirty read', 'commit'],
-                redFlags: ['READ COMMITTED cho phép đọc dữ liệu chưa commit'],
+                redFlags: ['READ COMMITTED cho phép đọc dữ liệu chưa commit', 'READ COMMITTED allows reading uncommitted data'],
                 synonyms: { 'committed': ['đã commit', 'read committed'], 'non-repeatable': ['non repeatable read', 'đọc không lặp lại'] },
                 tags: ['transactions', 'read-committed'],
               },
@@ -312,31 +410,46 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'MID', difficulty: 3,
                 body: 'N+1 query problem là gì? Cho một ví dụ cụ thể và nêu cách khắc phục.',
-                referenceAnswer: 'N+1 xảy ra khi bạn chạy 1 truy vấn lấy N bản ghi, rồi lặp qua từng bản ghi chạy thêm 1 truy vấn con → tổng 1 + N truy vấn. Ví dụ: lấy 100 bài viết (1 query) rồi với mỗi bài query tác giả (100 query) = 101 round-trip tới DB, rất chậm. Khắc phục: dùng JOIN để lấy một lần; hoặc eager-load/include của ORM; hoặc gom id rồi query IN (...) một lần (batching, dataloader). Mấu chốt là biến N truy vấn con thành 1 truy vấn theo lô.',
+                bodyEn: 'What is the N+1 query problem? Give a concrete example and how to fix it.',
+                referenceAnswer: 'N+1 xảy ra khi 1 truy vấn lấy N bản ghi, rồi lặp qua từng bản ghi chạy thêm 1 truy vấn con → tổng 1 + N. Ví dụ: lấy 100 bài viết (1 query) rồi mỗi bài query tác giả (100 query) = 101 round-trip. Khắc phục: JOIN lấy một lần; eager-load của ORM; hoặc gom id rồi query IN (…) một lần (batching/dataloader).',
+                referenceAnswerEn: 'N+1 happens when one query fetches N rows, then you loop over each row running one more sub-query → 1 + N total. Example: fetch 100 posts (1 query) then query each author (100 queries) = 101 round-trips. Fix: JOIN to fetch once; the ORM\'s eager-load; or collect ids and run one IN (…) query (batching/dataloader).',
                 rubric: [
                   { id: 'c1', criterion: 'Định nghĩa 1 + N truy vấn (query trong vòng lặp)', weight: 0.4 },
                   { id: 'c2', criterion: 'Ví dụ cụ thể (list + quan hệ con)', weight: 0.25 },
                   { id: 'c3', criterion: 'Khắc phục: JOIN / eager load / IN batching', weight: 0.35 },
                 ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Defines 1 + N queries (query inside a loop)', weight: 0.4 },
+                  { id: 'c2', criterion: 'Concrete example (list + child relation)', weight: 0.25 },
+                  { id: 'c3', criterion: 'Fix: JOIN / eager load / IN batching', weight: 0.35 },
+                ],
                 mustMention: ['n+1', 'join', 'vòng lặp'],
                 shouldMention: ['eager', 'batching', 'dataloader', 'in ('],
-                redFlags: ['N+1 là tính năng tối ưu', 'thêm index sửa được N+1'],
-                synonyms: { 'n+1': ['n + 1', 'n plus one', 'n cộng 1'], 'join': ['phép join', 'nối bảng'], 'vòng lặp': ['loop', 'lặp'] },
+                redFlags: ['N+1 là tính năng tối ưu', 'N+1 is an optimization'],
+                synonyms: { 'n+1': ['n + 1', 'n plus one', 'n cộng 1'], 'join': ['phép join', 'nối bảng'], 'vòng lặp': ['loop', 'lặp', 'in a loop'] },
                 tags: ['n-plus-one', 'orm', 'performance'],
               },
               {
                 level: 'SENIOR', difficulty: 4,
                 body: 'Vì sao ORM rất dễ vô tình tạo N+1? Phân biệt eager vs lazy loading và khi nào JOIN không phải lựa chọn tốt (dùng batch/dataloader thay thế).',
-                referenceAnswer: 'ORM ánh xạ quan hệ thành thuộc tính, nên truy cập order.customer trong vòng lặp trông như đọc thuộc tính nhưng thực chất bắn một query — lazy loading ẩn chi phí. Eager loading (include/join fetch) tải quan hệ ngay từ đầu, tránh N+1 nhưng nếu JOIN nhiều quan hệ one-to-many sẽ nhân bản hàng (cartesian) và truyền dữ liệu dư. Khi đó batch loading (gom khoá, một query IN mỗi quan hệ, như DataLoader) thường tốt hơn: giữ số query nhỏ mà không nhân bản. Chọn JOIN cho quan hệ to-one hoặc lọc; batch cho nhiều collection.',
+                bodyEn: 'Why do ORMs so easily cause N+1? Distinguish eager vs lazy loading, and when is JOIN not a good choice (use batch/dataloader instead)?',
+                referenceAnswer: 'ORM ánh xạ quan hệ thành thuộc tính, nên order.customer trong vòng lặp trông như đọc thuộc tính nhưng thực chất bắn một query — lazy loading ẩn chi phí. Eager (include/join fetch) tránh N+1 nhưng JOIN nhiều quan hệ one-to-many sẽ nhân bản hàng (cartesian). Khi đó batch loading (gom khoá, một query IN, như DataLoader) tốt hơn.',
+                referenceAnswerEn: 'ORMs map relations to properties, so order.customer inside a loop looks like a property read but actually fires a query — lazy loading hides the cost. Eager (include/join fetch) avoids N+1, but JOINing many one-to-many relations duplicates rows (cartesian). Then batch loading (collect keys, one IN query, like DataLoader) is better.',
                 rubric: [
                   { id: 'c1', criterion: 'Lazy loading ẩn query sau truy cập thuộc tính → dễ N+1', weight: 0.3 },
                   { id: 'c2', criterion: 'Phân biệt eager vs lazy', weight: 0.25 },
                   { id: 'c3', criterion: 'JOIN one-to-many gây nhân bản hàng (cartesian)', weight: 0.25 },
-                  { id: 'c4', criterion: 'Batch/dataloader là giải pháp cho nhiều collection', weight: 0.2 },
+                  { id: 'c4', criterion: 'Batch/dataloader cho nhiều collection', weight: 0.2 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Lazy loading hides a query behind a property access → easy N+1', weight: 0.3 },
+                  { id: 'c2', criterion: 'Distinguishes eager vs lazy', weight: 0.25 },
+                  { id: 'c3', criterion: 'JOIN one-to-many duplicates rows (cartesian)', weight: 0.25 },
+                  { id: 'c4', criterion: 'Batch/dataloader for many collections', weight: 0.2 },
                 ],
                 mustMention: ['lazy', 'eager', 'batch'],
                 shouldMention: ['dataloader', 'cartesian', 'join fetch', 'include'],
-                redFlags: ['JOIN luôn là cách tốt nhất cho mọi quan hệ', 'ORM không bao giờ gây N+1'],
+                redFlags: ['JOIN luôn là cách tốt nhất', 'JOIN is always best'],
                 synonyms: { 'lazy': ['lazy loading', 'tải lười'], 'eager': ['eager loading', 'tải sớm'], 'batch': ['batching', 'gom lô', 'theo lô'] },
                 tags: ['n-plus-one', 'orm', 'eager-lazy'],
               },
@@ -358,33 +471,49 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'MID', difficulty: 3, type: 'BEHAVIORAL',
                 body: 'Kể về một lần bạn bất đồng với đồng nghiệp hoặc quản lý về một quyết định kỹ thuật. Bạn đã xử lý thế nào và kết quả ra sao? (Trả lời theo cấu trúc STAR)',
-                referenceAnswer: 'Một câu trả lời mạnh theo STAR: Situation — nêu bối cảnh cụ thể (dự án, thời điểm, các bên). Task — vai trò và điều bạn cần đạt. Action — hành động CỦA BẠN: lắng nghe quan điểm đối phương, đưa dữ liệu/benchmark thay vì cãi cảm tính, đề xuất thử nghiệm nhỏ (spike/POC) để so sánh khách quan, hoặc leo thang đúng cách. Result — kết quả có số liệu (giảm latency X%, quyết định được chốt, quan hệ vẫn tốt) và bài học. Điểm mấu chốt: tôn trọng, dựa trên bằng chứng, không biến bất đồng thành cá nhân.',
+                bodyEn: 'Tell me about a time you disagreed with a colleague or manager on a technical decision. How did you handle it and what was the outcome? (Answer in STAR format.)',
+                referenceAnswer: 'STAR mạnh: Situation — bối cảnh cụ thể. Task — vai trò và điều cần đạt. Action — lắng nghe đối phương, đưa dữ liệu/benchmark thay vì cãi cảm tính, đề xuất POC để so sánh khách quan. Result — kết quả có số liệu và bài học. Mấu chốt: tôn trọng, dựa trên bằng chứng, không cá nhân hoá.',
+                referenceAnswerEn: 'A strong STAR answer: Situation — a specific context. Task — your role and goal. Action — listen to the other side, bring data/benchmarks instead of arguing from feeling, propose a POC to compare objectively. Result — a measurable outcome and a lesson. Key: respectful, evidence-based, not personal.',
                 rubric: [
                   { id: 'c1', criterion: 'Situation: bối cảnh cụ thể, không chung chung', weight: 0.2 },
-                  { id: 'c2', criterion: 'Task: vai trò/mục tiêu của bản thân rõ ràng', weight: 0.15 },
-                  { id: 'c3', criterion: 'Action: hành động cụ thể, dựa trên dữ liệu/thử nghiệm, tôn trọng', weight: 0.35 },
-                  { id: 'c4', criterion: 'Result: kết quả có số liệu + bài học rút ra', weight: 0.3 },
+                  { id: 'c2', criterion: 'Task: vai trò/mục tiêu rõ ràng', weight: 0.15 },
+                  { id: 'c3', criterion: 'Action: cụ thể, dựa trên dữ liệu, tôn trọng', weight: 0.35 },
+                  { id: 'c4', criterion: 'Result: kết quả có số liệu + bài học', weight: 0.3 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Situation: specific context, not vague', weight: 0.2 },
+                  { id: 'c2', criterion: 'Task: clear role/goal', weight: 0.15 },
+                  { id: 'c3', criterion: 'Action: concrete, data-driven, respectful', weight: 0.35 },
+                  { id: 'c4', criterion: 'Result: measurable outcome + lesson', weight: 0.3 },
                 ],
                 mustMention: ['bối cảnh', 'hành động', 'kết quả'],
                 shouldMention: ['dữ liệu', 'bài học', 'lắng nghe', 'thử nghiệm'],
-                redFlags: ['tôi luôn đúng', 'đồng nghiệp kém nên tôi mặc kệ', 'không bao giờ có bất đồng'],
-                synonyms: { 'bối cảnh': ['situation', 'tình huống', 'hoàn cảnh'], 'hành động': ['action', 'việc tôi làm'], 'kết quả': ['result', 'kết cục', 'outcome'] },
+                redFlags: ['tôi luôn đúng', 'i am always right', 'không bao giờ có bất đồng'],
+                synonyms: { 'bối cảnh': ['situation', 'tình huống', 'hoàn cảnh', 'context'], 'hành động': ['action', 'việc tôi làm', 'what i did'], 'kết quả': ['result', 'kết cục', 'outcome'] },
                 tags: ['behavioral', 'star', 'conflict'],
               },
               {
                 level: 'SENIOR', difficulty: 4, type: 'BEHAVIORAL',
                 body: 'Kể về lần bạn phải thuyết phục cả team đi theo một hướng kỹ thuật mà ban đầu đa số phản đối. Bạn xây dựng sự đồng thuận như thế nào? (STAR)',
-                referenceAnswer: 'Câu trả lời mạnh cho thấy lãnh đạo qua ảnh hưởng chứ không áp đặt: Situation — quyết định có rủi ro cao, team nghi ngờ. Action — hiểu vì sao họ phản đối (lắng nghe từng lo ngại), làm POC/benchmark để chứng minh, chia rủi ro thành bước nhỏ có thể rollback, mời người phản đối nhất cùng review, minh bạch về trade-off. Result — team đồng thuận (không chỉ tuân lệnh), kết quả đo được, và quan trọng là quy trình ra quyết định tốt hơn cho lần sau. Tránh: "tôi là senior nên họ phải nghe".',
+                bodyEn: 'Tell me about a time you had to convince a team to follow a technical direction most of them initially opposed. How did you build consensus? (STAR)',
+                referenceAnswer: 'Lãnh đạo qua ảnh hưởng: Situation — quyết định rủi ro cao, team nghi ngờ. Action — hiểu vì sao họ phản đối, làm POC/benchmark chứng minh, chia rủi ro thành bước nhỏ có thể rollback, mời người phản đối cùng review. Result — team đồng thuận thật, kết quả đo được. Tránh "tôi là senior nên họ phải nghe".',
+                referenceAnswerEn: 'Leadership through influence: Situation — a high-risk decision, a skeptical team. Action — understand why they object, prove it with a POC/benchmark, split risk into small rollback-able steps, invite the loudest objector to review. Result — genuine consensus, a measurable outcome. Avoid "I\'m senior so they must obey".',
                 rubric: [
-                  { id: 'c1', criterion: 'Situation + Task rõ, rủi ro/độ khó cụ thể', weight: 0.2 },
-                  { id: 'c2', criterion: 'Action: lắng nghe phản đối + bằng chứng (POC/benchmark)', weight: 0.35 },
+                  { id: 'c1', criterion: 'Situation + Task rõ, rủi ro cụ thể', weight: 0.2 },
+                  { id: 'c2', criterion: 'Action: lắng nghe + bằng chứng (POC/benchmark)', weight: 0.35 },
                   { id: 'c3', criterion: 'Xây đồng thuận (không áp đặt quyền lực)', weight: 0.25 },
-                  { id: 'c4', criterion: 'Result đo được + bài học về quy trình', weight: 0.2 },
+                  { id: 'c4', criterion: 'Result đo được + bài học', weight: 0.2 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Clear Situation + Task, concrete risk', weight: 0.2 },
+                  { id: 'c2', criterion: 'Action: listen + evidence (POC/benchmark)', weight: 0.35 },
+                  { id: 'c3', criterion: 'Builds consensus (no power play)', weight: 0.25 },
+                  { id: 'c4', criterion: 'Measurable result + lesson', weight: 0.2 },
                 ],
                 mustMention: ['bối cảnh', 'hành động', 'kết quả'],
                 shouldMention: ['đồng thuận', 'benchmark', 'lắng nghe', 'trade-off'],
-                redFlags: ['tôi là senior nên họ phải nghe', 'ép team làm theo'],
-                synonyms: { 'bối cảnh': ['situation', 'tình huống'], 'hành động': ['action', 'việc tôi làm'], 'kết quả': ['result', 'outcome'], 'đồng thuận': ['consensus', 'nhất trí'] },
+                redFlags: ['tôi là senior nên họ phải nghe', 'they must obey me'],
+                synonyms: { 'bối cảnh': ['situation', 'tình huống', 'context'], 'hành động': ['action', 'what i did'], 'kết quả': ['result', 'outcome'], 'đồng thuận': ['consensus', 'nhất trí'] },
                 tags: ['behavioral', 'star', 'influence'],
               },
             ],
@@ -400,17 +529,25 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'MID', difficulty: 3, type: 'BEHAVIORAL',
                 body: 'Kể về một nhiệm vụ hoặc dự án bạn từng thất bại. Điều gì đã xảy ra và bạn học được gì? (STAR)',
-                referenceAnswer: 'Câu trả lời mạnh dám nhận một thất bại THẬT (không phải "điểm yếu là quá cầu toàn"): Situation — điều gì đã sai, hậu quả cụ thể. Task — trách nhiệm của bạn. Action — bạn đã làm gì để xử lý/giảm thiệt hại và NHẬN phần lỗi của mình thay vì đổ cho hoàn cảnh. Result — bài học cụ thể và thay đổi hành vi đo được ở lần sau (ví dụ thêm test, đổi quy trình review, giao tiếp sớm hơn). Nhà tuyển dụng đánh giá sự tự nhận thức và khả năng học, không phải sự hoàn hảo.',
+                bodyEn: 'Tell me about a task or project you failed at. What happened and what did you learn? (STAR)',
+                referenceAnswer: 'Dám nhận một thất bại THẬT: Situation — điều gì sai, hậu quả cụ thể. Action — xử lý/giảm thiệt hại và NHẬN phần lỗi của mình thay vì đổ cho hoàn cảnh. Result — bài học cụ thể và thay đổi hành vi đo được sau đó. Nhà tuyển dụng đánh giá sự tự nhận thức và khả năng học.',
+                referenceAnswerEn: 'Own a REAL failure: Situation — what went wrong and its concrete impact. Action — how you handled/mitigated it and OWNED your share instead of blaming circumstances. Result — a concrete lesson and a measurable behavior change afterward. Interviewers value self-awareness and the ability to learn.',
                 rubric: [
-                  { id: 'c1', criterion: 'Thừa nhận thất bại thật + hậu quả cụ thể', weight: 0.3 },
-                  { id: 'c2', criterion: 'Nhận trách nhiệm (không đổ lỗi hoàn toàn cho ngoại cảnh)', weight: 0.3 },
+                  { id: 'c1', criterion: 'Thừa nhận thất bại thật + hậu quả', weight: 0.3 },
+                  { id: 'c2', criterion: 'Nhận trách nhiệm (không đổ lỗi hoàn toàn)', weight: 0.3 },
                   { id: 'c3', criterion: 'Hành động khắc phục cụ thể', weight: 0.2 },
-                  { id: 'c4', criterion: 'Bài học + thay đổi hành vi đo được sau đó', weight: 0.2 },
+                  { id: 'c4', criterion: 'Bài học + thay đổi hành vi sau đó', weight: 0.2 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Admits a real failure + impact', weight: 0.3 },
+                  { id: 'c2', criterion: 'Takes ownership (not full blame elsewhere)', weight: 0.3 },
+                  { id: 'c3', criterion: 'Concrete corrective action', weight: 0.2 },
+                  { id: 'c4', criterion: 'Lesson + later behavior change', weight: 0.2 },
                 ],
                 mustMention: ['bối cảnh', 'trách nhiệm', 'bài học'],
                 shouldMention: ['hành động', 'kết quả', 'thay đổi'],
-                redFlags: ['tôi chưa từng thất bại', 'toàn bộ là lỗi người khác', 'điểm yếu của tôi là quá cầu toàn'],
-                synonyms: { 'bối cảnh': ['situation', 'tình huống'], 'trách nhiệm': ['ownership', 'nhận lỗi', 'phần lỗi'], 'bài học': ['lesson', 'điều học được'] },
+                redFlags: ['tôi chưa từng thất bại', 'i have never failed', 'điểm yếu của tôi là quá cầu toàn'],
+                synonyms: { 'bối cảnh': ['situation', 'tình huống', 'context'], 'trách nhiệm': ['ownership', 'nhận lỗi', 'phần lỗi', 'own'], 'bài học': ['lesson', 'điều học được', 'learned'] },
                 tags: ['behavioral', 'star', 'failure'],
               },
             ],
@@ -421,17 +558,25 @@ const TRACKS: TrackSeed[] = [
               {
                 level: 'SENIOR', difficulty: 3, type: 'BEHAVIORAL',
                 body: 'Kể về lần bạn chủ động nhận trách nhiệm giải quyết một vấn đề nằm ngoài phạm vi được giao. (STAR)',
-                referenceAnswer: 'Câu trả lời mạnh thể hiện ownership: Situation — vấn đề không ai "sở hữu" (ví dụ flaky test, sự cố prod, nợ kỹ thuật) đang gây hại. Action — bạn chủ động đứng ra: điều tra, huy động đúng người, sửa gốc rễ chứ không vá tạm, và tài liệu hoá để không tái diễn. Result — tác động đo được (giảm sự cố, tiết kiệm thời gian team) và việc bạn nâng chuẩn chung. Tránh khoe khoang cá nhân — nhấn mạnh tác động tới team/sản phẩm.',
+                bodyEn: 'Tell me about a time you proactively took ownership of a problem outside your assigned scope. (STAR)',
+                referenceAnswer: 'Thể hiện ownership: Situation — vấn đề không ai "sở hữu" (flaky test, sự cố prod, nợ kỹ thuật) đang gây hại. Action — chủ động đứng ra: điều tra, huy động đúng người, sửa gốc rễ chứ không vá tạm, tài liệu hoá. Result — tác động đo được cho team/sản phẩm. Nhấn mạnh tác động chung, không khoe cá nhân.',
+                referenceAnswerEn: 'Show ownership: Situation — an unowned problem (flaky test, prod incident, tech debt) causing harm. Action — step up proactively: investigate, rally the right people, fix the root cause not a patch, document it. Result — a measurable impact for the team/product. Emphasize shared impact, not personal glory.',
                 rubric: [
                   { id: 'c1', criterion: 'Vấn đề ngoài phạm vi, không ai sở hữu, có tác hại', weight: 0.25 },
-                  { id: 'c2', criterion: 'Chủ động đứng ra + hành động cụ thể (sửa gốc rễ)', weight: 0.35 },
+                  { id: 'c2', criterion: 'Chủ động + hành động cụ thể (sửa gốc rễ)', weight: 0.35 },
                   { id: 'c3', criterion: 'Kết quả đo được cho team/sản phẩm', weight: 0.25 },
-                  { id: 'c4', criterion: 'Tài liệu hoá/nâng chuẩn để không tái diễn', weight: 0.15 },
+                  { id: 'c4', criterion: 'Tài liệu hoá/nâng chuẩn', weight: 0.15 },
+                ],
+                rubricEn: [
+                  { id: 'c1', criterion: 'Out-of-scope, unowned problem with real harm', weight: 0.25 },
+                  { id: 'c2', criterion: 'Proactive + concrete action (root-cause fix)', weight: 0.35 },
+                  { id: 'c3', criterion: 'Measurable result for team/product', weight: 0.25 },
+                  { id: 'c4', criterion: 'Documents / raises the bar', weight: 0.15 },
                 ],
                 mustMention: ['chủ động', 'hành động', 'kết quả'],
                 shouldMention: ['gốc rễ', 'tác động', 'tài liệu'],
                 redFlags: ['tôi làm hết một mình để được ghi nhận', 'vá tạm cho xong'],
-                synonyms: { 'chủ động': ['proactive', 'tự nguyện', 'đứng ra'], 'hành động': ['action', 'việc làm'], 'kết quả': ['result', 'tác động', 'outcome'] },
+                synonyms: { 'chủ động': ['proactive', 'proactively', 'tự nguyện', 'đứng ra', 'took ownership'], 'hành động': ['action', 'what i did'], 'kết quả': ['result', 'tác động', 'outcome'] },
                 tags: ['behavioral', 'star', 'ownership'],
               },
             ],
@@ -443,7 +588,7 @@ const TRACKS: TrackSeed[] = [
 ];
 
 async function main() {
-  let domains = 0, tracks = 0, topics = 0, concepts = 0, questions = 0, skipped = 0, companies = 0;
+  let domains = 0, tracks = 0, topics = 0, concepts = 0, created = 0, backfilled = 0, skipped = 0, companies = 0;
 
   for (const d of DOMAINS) {
     await prisma.interviewDomain.upsert({
@@ -491,7 +636,17 @@ async function main() {
 
         for (const q of cSeed.questions) {
           const exists = await prisma.interviewQuestion.findFirst({ where: { topicId: topic.id, body: q.body } });
-          if (exists) { skipped++; continue; }
+          if (exists) {
+            // Backfill English content into rows seeded before the EN columns existed.
+            if (!exists.bodyEn || !exists.referenceAnswerEn || exists.rubricEn == null) {
+              await prisma.interviewQuestion.update({
+                where: { id: exists.id },
+                data: { bodyEn: q.bodyEn, referenceAnswerEn: q.referenceAnswerEn, rubricEn: q.rubricEn as never },
+              });
+              backfilled++;
+            } else skipped++;
+            continue;
+          }
           await prisma.interviewQuestion.create({
             data: {
               topicId: topic.id,
@@ -501,8 +656,11 @@ async function main() {
               difficulty: q.difficulty ?? 3,
               body: q.body,
               bodyVi: q.body,
+              bodyEn: q.bodyEn,
               referenceAnswer: q.referenceAnswer,
+              referenceAnswerEn: q.referenceAnswerEn,
               rubric: q.rubric as never,
+              rubricEn: q.rubricEn as never,
               mustMention: q.mustMention,
               shouldMention: q.shouldMention ?? [],
               redFlags: q.redFlags ?? [],
@@ -513,13 +671,13 @@ async function main() {
               rubricReviewed: false, // ← human must review; flagged low-confidence
             },
           });
-          questions++;
+          created++;
         }
       }
     }
   }
 
-  console.log(`[seed:interview] domains=${domains} companies=${companies} tracks=${tracks} topics=${topics} concepts=${concepts} questions +${questions} (skipped existing ${skipped})`);
+  console.log(`[seed:interview] domains=${domains} companies=${companies} tracks=${tracks} topics=${topics} concepts=${concepts} created=${created} backfilledEN=${backfilled} skipped=${skipped}`);
   console.log('[seed:interview] NOTE: every seeded rubric is rubricReviewed=false — a human must rewrite them before they count.');
 }
 

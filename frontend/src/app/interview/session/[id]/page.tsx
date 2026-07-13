@@ -11,6 +11,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Loader2, ArrowRight, Flag, CheckCircle2, XCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
+import ParticleBackground from '@/components/repos/ParticleBackground';
 import { interviewApi } from '@/lib/interview-api';
 import type { SessionState, PublicTurn, SubmitAnswerResponse, IntegritySignals } from '@/types/interview';
 
@@ -154,45 +155,46 @@ export default function InterviewRoomPage() {
   const elapsed = useMemo(() => (now && startRef.current ? now - startRef.current : 0), [now]);
 
   if (loading) {
-    return <div className="min-h-screen bg-[var(--bg-primary)] pt-16 flex items-center justify-center text-[var(--text-secondary)]"><Loader2 className="w-5 h-5 animate-spin mr-2" /> Đang vào phòng…</div>;
+    return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400"><Loader2 className="w-5 h-5 animate-spin mr-2" /> Đang vào phòng…</div>;
   }
   if (!session || !turn) {
-    return <div className="min-h-screen bg-[var(--bg-primary)] pt-16 flex items-center justify-center text-[var(--text-secondary)]">Phiên không tồn tại.</div>;
+    return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400">Phiên không tồn tại.</div>;
   }
 
   const state: 'listening' | 'reviewing' = revealed ? 'reviewing' : 'listening';
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-16">
-      <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="relative min-h-screen bg-darkbg text-slate-100 pt-16 overflow-hidden">
+      <ParticleBackground density="low" followPointer={false} />
+      <div className="relative z-10 max-w-3xl mx-auto px-4 py-8">
         {/* Interviewer presence + progress */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <span className={`w-2.5 h-2.5 rounded-full ${state === 'listening' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
             <div>
-              <div className="text-sm font-semibold text-[var(--text-primary)]">Người phỏng vấn</div>
-              <div className="text-xs text-[var(--text-secondary)]">
+              <div className="text-sm font-semibold text-slate-100">Người phỏng vấn</div>
+              <div className="text-xs text-slate-400">
                 {session.companyStyle ? `${session.companyStyle} · ` : ''}{state === 'listening' ? 'đang lắng nghe' : 'đang xem xét câu trả lời'}
               </div>
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs font-mono text-[var(--text-secondary)]">Câu {order + 1} / {total}</div>
-            <div className="text-xs font-mono text-[var(--text-secondary)] tabular-nums">{fmtTime(elapsed)}</div>
+            <div className="text-xs font-mono text-slate-400">Câu {order + 1} / {total}</div>
+            <div className="text-xs font-mono text-slate-400 tabular-nums">{fmtTime(elapsed)}</div>
           </div>
         </div>
 
         {/* Progress rail */}
         <div className="flex gap-1 mb-8">
           {Array.from({ length: total }).map((_, i) => (
-            <div key={i} className={`h-1 flex-1 rounded-full ${i < order ? 'bg-amber-500' : i === order ? 'bg-amber-500/50' : 'bg-[var(--border-light)]'}`} />
+            <div key={i} className={`h-1 flex-1 rounded-full ${i < order ? 'bg-amber-500' : i === order ? 'bg-amber-500/50' : 'bg-white/10'}`} />
           ))}
         </div>
 
         {/* Question */}
         <div className="mb-6">
-          <div className="text-[11px] font-mono uppercase tracking-widest text-[var(--text-secondary)] mb-2">{turn.type}</div>
-          <p className="text-xl md:text-2xl font-semibold text-[var(--text-primary)] leading-relaxed whitespace-pre-wrap">{turn.questionText}</p>
+          <div className="text-[11px] font-mono uppercase tracking-widest text-slate-400 mb-2">{turn.type}</div>
+          <p className="text-xl md:text-2xl font-semibold text-slate-100 leading-relaxed whitespace-pre-wrap">{turn.questionText}</p>
         </div>
 
         {/* Answer area */}
@@ -208,11 +210,11 @@ export default function InterviewRoomPage() {
                   onClick={() => setMcqChoice(o.id)}
                   className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
                     revealed
-                      ? isCorrect ? 'border-emerald-500/60 bg-emerald-500/10' : chosen ? 'border-red-500/50 bg-red-500/10' : 'border-[var(--border-light)]'
-                      : chosen ? 'border-amber-500/60 bg-amber-500/10' : 'border-[var(--border-light)] hover:border-[var(--text-secondary)]'
+                      ? isCorrect ? 'border-emerald-500/60 bg-emerald-500/10' : chosen ? 'border-red-500/50 bg-red-500/10' : 'border-white/10'
+                      : chosen ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
                   }`}
                 >
-                  <span className="text-[var(--text-primary)]">{o.text}</span>
+                  <span className="text-slate-100">{o.text}</span>
                 </button>
               );
             })}
@@ -225,15 +227,15 @@ export default function InterviewRoomPage() {
             disabled={!!revealed}
             rows={8}
             placeholder="Trả lời như đang phỏng vấn thật. Giải thích bằng ngôn ngữ của bạn — máy chấm hiểu cả từ đồng nghĩa."
-            className="w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface)] p-4 text-[var(--text-primary)] font-mono text-sm leading-relaxed focus:outline-none focus:border-amber-500/60 resize-y disabled:opacity-70"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] p-4 text-slate-100 font-mono text-sm leading-relaxed focus:outline-none focus:border-amber-500/60 resize-y disabled:opacity-70"
           />
         )}
 
         {/* Actions / reveal */}
         {!revealed ? (
           <div className="flex items-center justify-between mt-4">
-            <span className="text-xs text-[var(--text-secondary)]">Không hiện điểm giữa buổi — cảm giác áp lực là điều làm buổi luyện có giá trị.</span>
-            <button onClick={submit} disabled={submitting} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--text-primary)] text-[var(--bg-primary)] font-semibold hover:opacity-90 disabled:opacity-40">
+            <span className="text-xs text-slate-400">Không hiện điểm giữa buổi — cảm giác áp lực là điều làm buổi luyện có giá trị.</span>
+            <button onClick={submit} disabled={submitting} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 disabled:opacity-40">
               {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />} Gửi câu trả lời
             </button>
           </div>
@@ -279,14 +281,14 @@ function Reveal({
   return (
     <div className="mt-6 space-y-5">
       {isMcq && (
-        <div className={`flex items-center gap-2 text-sm font-semibold ${revealed.correct ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
+        <div className={`flex items-center gap-2 text-sm font-semibold ${revealed.correct ? 'text-emerald-400' : 'text-red-400'}`}>
           {revealed.correct ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
           {revealed.correct ? 'Chính xác' : 'Chưa đúng'}
         </div>
       )}
 
       {revealed.injectionAttempted && (
-        <div className="flex items-start gap-2 text-xs text-amber-700 dark:text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2">
+        <div className="flex items-start gap-2 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2">
           <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
           Câu trả lời có dấu hiệu cố gắng "điều khiển" người chấm. Điểm chỉ tính trên nội dung kỹ thuật.
         </div>
@@ -294,8 +296,8 @@ function Reveal({
 
       {/* Deterministic coverage */}
       {det && (
-        <div className="rounded-xl border border-[var(--border-light)] p-4">
-          <div className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)] mb-3">Máy chấm khách quan (Pass A)</div>
+        <div className="rounded-xl border border-white/10 p-4">
+          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">Máy chấm khách quan (Pass A)</div>
           <div className="flex flex-wrap gap-1.5 mb-2">
             {det.mustHit.map((k) => <Tag key={k} tone="ok">{k}</Tag>)}
             {det.mustMiss.map((k) => <Tag key={k} tone="miss">thiếu: {k}</Tag>)}
@@ -305,30 +307,30 @@ function Reveal({
               {det.redFlagsHit.map((k) => <Tag key={k} tone="flag">⚠ {k}</Tag>)}
             </div>
           )}
-          <div className="text-sm text-[var(--text-secondary)]">Bao phủ khái niệm cốt lõi: <span className="font-mono text-[var(--text-primary)]">{det.mustHit.length}/{det.mustHit.length + det.mustMiss.length}</span> · Điểm tham chiếu: <span className="font-mono text-[var(--text-primary)]">{det.score}/100 ({det.grade})</span></div>
+          <div className="text-sm text-slate-400">Bao phủ khái niệm cốt lõi: <span className="font-mono text-slate-100">{det.mustHit.length}/{det.mustHit.length + det.mustMiss.length}</span> · Điểm tham chiếu: <span className="font-mono text-slate-100">{det.score}/100 ({det.grade})</span></div>
         </div>
       )}
 
       {/* Reference answer */}
       {revealed.referenceAnswer && (
-        <div className="rounded-xl border border-[var(--border-light)] p-4 bg-[var(--bg-surface)]">
-          <div className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)] mb-2">Đáp án mẫu (mức mong đợi)</div>
-          <p className="text-sm text-[var(--text-primary)] leading-relaxed whitespace-pre-wrap">{revealed.referenceAnswer}</p>
+        <div className="rounded-xl border border-white/10 p-4 bg-white/[0.04]">
+          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Đáp án mẫu (mức mong đợi)</div>
+          <p className="text-sm text-slate-100 leading-relaxed whitespace-pre-wrap">{revealed.referenceAnswer}</p>
         </div>
       )}
 
       {/* Self-assessment (non-MCQ) */}
       {!isMcq && revealed.rubric && revealed.rubric.length > 0 && (
-        <div className="rounded-xl border border-[var(--border-light)] p-4">
-          <div className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)] mb-1">Tự chấm theo từng tiêu chí</div>
-          <p className="text-xs text-[var(--text-secondary)] mb-3">Thành thật với chính mình — chênh lệch giữa "mình nghĩ đúng" và máy chấm là phản hồi giá trị nhất.</p>
+        <div className="rounded-xl border border-white/10 p-4">
+          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">Tự chấm theo từng tiêu chí</div>
+          <p className="text-xs text-slate-400 mb-3">Thành thật với chính mình — chênh lệch giữa "mình nghĩ đúng" và máy chấm là phản hồi giá trị nhất.</p>
           <div className="space-y-3">
             {revealed.rubric.map((c) => (
               <div key={c.id} className="flex items-center justify-between gap-3">
-                <span className="text-sm text-[var(--text-primary)]">{c.criterion} <span className="text-[var(--text-secondary)]">({Math.round(c.weight * 100)}%)</span></span>
+                <span className="text-sm text-slate-100">{c.criterion} <span className="text-slate-400">({Math.round(c.weight * 100)}%)</span></span>
                 <div className="flex gap-1 shrink-0">
                   {[0, 1, 2, 3, 4].map((v) => (
-                    <button key={v} onClick={() => setRatings({ ...ratings, [c.id]: v })} className={`w-7 h-7 rounded-md text-xs font-mono border ${ratings[c.id] === v ? 'border-amber-500/70 bg-amber-500/15 text-amber-600 dark:text-amber-300' : 'border-[var(--border-light)] text-[var(--text-secondary)]'}`}>{v}</button>
+                    <button key={v} onClick={() => setRatings({ ...ratings, [c.id]: v })} className={`w-7 h-7 rounded-md text-xs font-mono border ${ratings[c.id] === v ? 'border-amber-500/70 bg-amber-500/15 text-amber-300' : 'border-white/10 text-slate-400'}`}>{v}</button>
                   ))}
                 </div>
               </div>
@@ -338,7 +340,7 @@ function Reveal({
       )}
 
       <div className="flex justify-end">
-        <button onClick={onNext} disabled={advancing} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--text-primary)] text-[var(--bg-primary)] font-semibold hover:opacity-90 disabled:opacity-40">
+        <button onClick={onNext} disabled={advancing} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 disabled:opacity-40">
           {advancing ? <Loader2 className="w-4 h-4 animate-spin" /> : isLast ? <Flag className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
           {isLast ? 'Kết thúc & xem báo cáo' : 'Câu tiếp theo'}
         </button>
@@ -349,8 +351,8 @@ function Reveal({
 
 function Tag({ tone, children }: { tone: 'ok' | 'miss' | 'flag'; children: React.ReactNode }) {
   const cls =
-    tone === 'ok' ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30'
-    : tone === 'flag' ? 'bg-red-500/10 text-red-700 dark:text-red-300 border-red-500/30'
-    : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-light)]';
+    tone === 'ok' ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+    : tone === 'flag' ? 'bg-red-500/10 text-red-300 border-red-500/30'
+    : 'bg-white/[0.04] text-slate-400 border-white/10';
   return <span className={`px-2 py-0.5 rounded-md text-xs border ${cls}`}>{children}</span>;
 }

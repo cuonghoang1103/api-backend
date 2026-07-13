@@ -12,7 +12,7 @@ import { useMessagingStore } from '@/store/messagingStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import { useMusicAccess } from '@/hooks/useMusicAccess';
-import { CART_ENABLED } from '@/lib/featureFlags';
+import { CART_ENABLED, INTERVIEW_ENABLED } from '@/lib/featureFlags';
 import NotificationDropdown from '@/components/social/NotificationDropdown';
 import UserSearchBox from '@/components/social/UserSearchBox';
 import { UserAvatar } from '@/components/common/UserAvatar';
@@ -22,7 +22,7 @@ import {
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
  Globe, ShoppingBag, Bell, NotebookPen,
 Sun, Moon, Wallet, ArrowLeft, Megaphone,
-PlayCircle, Receipt, Ticket, Award,
+PlayCircle, Receipt, Ticket, Award, Briefcase,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -48,6 +48,7 @@ const TOP_NAV_LINKS: TopNavLink[] = [
  { href: '/music', label: 'Music', icon: Music },
  { href: '/messages', label: 'Messages', icon: MessageCircle, authOnly: true },
  { href: '/chat', label: 'AI Chat', icon: Sparkles },
+ ...(INTERVIEW_ENABLED ? [{ href: '/interview', label: 'Interview', icon: Briefcase, authOnly: true }] : []),
 ];
 
 // Mobile bottom tab bar — Facebook-style, kept to 4 essential tabs.

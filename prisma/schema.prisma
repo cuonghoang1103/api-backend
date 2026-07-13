@@ -4989,31 +4989,33 @@ model InterviewCompanyProfile {
 }
 
 model InterviewQuestion {
-  id              Int                     @id @default(autoincrement())
-  topicId         Int                     @map("topic_id")
-  topic           InterviewTopic          @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  conceptId       Int?                    @map("concept_id")
-  concept         InterviewConcept?       @relation(fields: [conceptId], references: [id], onDelete: SetNull)
-  level           InterviewLevel
-  type            InterviewQuestionType   @default(CONCEPTUAL)
-  difficulty      Int                     @default(3) // 1-5
-  body            String                  @db.Text // markdown, display language
-  bodyVi          String?                 @map("body_vi") @db.Text
-  bodyEn          String?                 @map("body_en") @db.Text
-  referenceAnswer String?                 @map("reference_answer") @db.Text
-  rubric          Json                    @default("[]") @db.JsonB // [{id,criterion,weight}]
-  mustMention     String[]                @default([]) @map("must_mention")
-  shouldMention   String[]                @default([]) @map("should_mention")
-  redFlags        String[]                @default([]) @map("red_flags")
-  synonyms        Json                    @default("{}") @db.JsonB // { term: [aliases] }
-  mcqOptions      Json?                   @map("mcq_options") @db.JsonB // [{id,text,correct}]
-  tags            String[]                @default([])
-  source          InterviewQuestionSource @default(SEED)
-  status          InterviewContentStatus  @default(DRAFT)
-  rubricReviewed  Boolean                 @default(false) @map("rubric_reviewed")
-  authorId        Int?                    @map("author_id")
-  createdAt       DateTime                @default(now()) @map("created_at")
-  updatedAt       DateTime                @updatedAt @map("updated_at")
+  id                Int                     @id @default(autoincrement())
+  topicId           Int                     @map("topic_id")
+  topic             InterviewTopic          @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  conceptId         Int?                    @map("concept_id")
+  concept           InterviewConcept?       @relation(fields: [conceptId], references: [id], onDelete: SetNull)
+  level             InterviewLevel
+  type              InterviewQuestionType   @default(CONCEPTUAL)
+  difficulty        Int                     @default(3) // 1-5
+  body              String                  @db.Text // markdown, display language
+  bodyVi            String?                 @map("body_vi") @db.Text
+  bodyEn            String?                 @map("body_en") @db.Text
+  referenceAnswer   String?                 @map("reference_answer") @db.Text
+  referenceAnswerEn String?                 @map("reference_answer_en") @db.Text
+  rubric            Json                    @default("[]") @db.JsonB // [{id,criterion,weight}] (display language)
+  rubricEn          Json?                   @map("rubric_en") @db.JsonB // English rubric (used when session.language=EN)
+  mustMention       String[]                @default([]) @map("must_mention")
+  shouldMention     String[]                @default([]) @map("should_mention")
+  redFlags          String[]                @default([]) @map("red_flags")
+  synonyms          Json                    @default("{}") @db.JsonB // { term: [aliases] }
+  mcqOptions        Json?                   @map("mcq_options") @db.JsonB // [{id,text,correct}]
+  tags              String[]                @default([])
+  source            InterviewQuestionSource @default(SEED)
+  status            InterviewContentStatus  @default(DRAFT)
+  rubricReviewed    Boolean                 @default(false) @map("rubric_reviewed")
+  authorId          Int?                    @map("author_id")
+  createdAt         DateTime                @default(now()) @map("created_at")
+  updatedAt         DateTime                @updatedAt @map("updated_at")
 
   versions    InterviewQuestionVersion[]
   turns       InterviewTurn[]

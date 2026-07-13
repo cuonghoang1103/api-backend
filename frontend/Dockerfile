@@ -129,8 +129,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Install wget for healthcheck only (Debian uses apt-get, not apk)
-RUN apt-get update && apt-get install -y --no-install-recommends wget && rm -rf /var/lib/apt/lists/*
+# No apt-get here: the container healthcheck uses node's built-in http
+# (see docker-compose.yml), so we don't install wget. This removes the
+# `apt-get install wget` step that repeatedly failed with a transient Debian
+# GPG "invalid signature" error and broke the frontend image build.
 
 # Create non-root user (security best practice)
 RUN groupadd --system --gid 1001 nodejs && \

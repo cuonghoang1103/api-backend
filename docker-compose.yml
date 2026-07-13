@@ -222,7 +222,10 @@ services:
         limits:
           memory: 1.5G
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/ || exit 1"]
+      # Node-based check (no external binary) — the image ships node, so we no
+      # longer install wget (its apt-get repeatedly failed with a transient
+      # Debian GPG "invalid signature" and broke deploys).
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3000/',r=>process.exit(r.statusCode<500?0:1)).on('error',()=>process.exit(1))\""]
       interval: 30s
       timeout: 10s
       retries: 3

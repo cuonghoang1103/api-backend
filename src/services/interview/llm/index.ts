@@ -44,6 +44,15 @@ const PRICING: Record<string, { in: number; out: number }> = {
   'claude-sonnet-5': { in: 3, out: 15 },
   'claude-opus-4-8': { in: 5, out: 25 },
   'claude-opus-4-7': { in: 5, out: 25 },
+  // Rambo-AI gateway model ids (Anthropic-compatible). Costs are ESTIMATES at
+  // Anthropic list prices — the reseller bills by its own plan, so treat
+  // cost_usd as informational only.
+  'rb-haiku-4-5': { in: 1, out: 5 },
+  'rb-sonnet-4-6': { in: 3, out: 15 },
+  'rb-sonnet-5': { in: 3, out: 15 },
+  'rb-opus-4-6': { in: 5, out: 25 },
+  'rb-opus-4-7': { in: 5, out: 25 },
+  'rb-opus-4-8': { in: 5, out: 25 },
 };
 function costUsd(model: string, inTok: number, outTok: number): number {
   const p = PRICING[model] ?? { in: 3, out: 15 };
@@ -65,8 +74,12 @@ const anthropicProvider: LLMProvider = {
     const timeoutMs = opts.timeoutMs ?? (Number(process.env.LLM_TIMEOUT_MS) || 60_000);
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+    // Base URL is configurable → works with the official Anthropic API OR any
+    // Anthropic-compatible gateway (e.g. a self-hosted proxy). Endpoint is
+    // always `<base>/v1/messages`, auth is `x-api-key`.
+    const base = (process.env.LLM_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, '');
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch(`${base}/v1/messages`, {
         method: 'POST',
         headers: {
           'x-api-key': key,
@@ -82,10 +95,13 @@ const anthropicProvider: LLMProvider = {
       }
       const json = (await res.json()) as {
         content?: Array<{ type: string; text?: string }>;
-        usage?: { input_tokens?: number; output_tokens?: number };
+        usage?: { input_tokens?: number; output_tokens?: number; cache_creation_input_tokens?: number; cache_read_input_tokens?: number };
       };
+      // Only text blocks (ignore thinking blocks a gateway may return).
       const text = (json.content ?? []).filter((b) => b.type === 'text').map((b) => b.text ?? '').join('');
-      return { text, inputTokens: json.usage?.input_tokens ?? 0, outputTokens: json.usage?.output_tokens ?? 0, model };
+      const u = json.usage ?? {};
+      const inputTokens = (u.input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0);
+      return { text, inputTokens, outputTokens: u.output_tokens ?? 0, model };
     } catch (e) {
       if ((e as Error).name === 'AbortError') throw new LLMError('LLM timeout', true);
       throw e;

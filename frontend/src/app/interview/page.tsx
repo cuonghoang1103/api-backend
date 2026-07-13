@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { History, ArrowRight, Loader2, ShieldCheck } from 'lucide-react';
+import { History, ArrowRight, Loader2, ShieldCheck, Flame } from 'lucide-react';
 import { INTERVIEW_ENABLED } from '@/lib/featureFlags';
 import ParticleBackground from '@/components/repos/ParticleBackground';
 import { interviewApi } from '@/lib/interview-api';
@@ -77,9 +77,14 @@ export default function InterviewSetupPage() {
               Máy cũng chấm khách quan song song. Miễn phí, không cần AI.
             </p>
           </div>
-          <Link href="/interview/history" className="shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-sm text-slate-400 hover:text-slate-100 transition-colors">
-            <History className="w-4 h-4" /> Lịch sử
-          </Link>
+          <div className="shrink-0 flex items-center gap-2">
+            <Link href="/interview/drill" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/40 bg-amber-500/10 text-sm text-amber-300 hover:bg-amber-500/15 transition-colors">
+              <Flame className="w-4 h-4" /> Ôn tập
+            </Link>
+            <Link href="/interview/history" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-sm text-slate-400 hover:text-slate-100 transition-colors">
+              <History className="w-4 h-4" /> Lịch sử
+            </Link>
+          </div>
         </div>
 
         {loading ? (

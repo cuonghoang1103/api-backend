@@ -17,6 +17,9 @@ import type {
   CreateSessionBody,
   IntegritySignals,
   InterviewLevel,
+  DrillResponse,
+  GradeCardResponse,
+  MasteryResponse,
 } from '@/types/interview';
 
 type Res<T> = Promise<{ data: ApiResponse<T> }>;
@@ -36,6 +39,11 @@ export const interviewApi = {
   finish: (id: number): Res<InterviewReport> => api.post(`/interview/sessions/${id}/finish`, {}),
   report: (id: number): Res<ReportResponse> => api.get(`/interview/sessions/${id}/report`),
   history: (): Res<HistoryItem[]> => api.get('/interview/history'),
+  // Phase 3 — spaced-repetition drill
+  drill: (lang: 'VI' | 'EN' = 'VI'): Res<DrillResponse> => api.get('/interview/drill', { params: { lang } }),
+  gradeCard: (cardId: number, body: { quality?: number; answer?: string }): Res<GradeCardResponse> =>
+    api.post(`/interview/drill/${cardId}/grade`, body),
+  mastery: (): Res<MasteryResponse> => api.get('/interview/mastery'),
 };
 
 // ── Admin ────────────────────────────────────────────────────

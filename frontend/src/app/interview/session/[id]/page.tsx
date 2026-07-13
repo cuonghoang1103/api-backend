@@ -12,6 +12,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Loader2, ArrowRight, Flag, CheckCircle2, XCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
 import ParticleBackground from '@/components/repos/ParticleBackground';
+import Markdown from '@/components/markdown/Markdown';
 import { interviewApi } from '@/lib/interview-api';
 import type { SessionState, PublicTurn, SubmitAnswerResponse, IntegritySignals } from '@/types/interview';
 
@@ -194,7 +195,7 @@ export default function InterviewRoomPage() {
         {/* Question */}
         <div className="mb-6">
           <div className="text-[11px] font-mono uppercase tracking-widest text-slate-400 mb-2">{turn.type}</div>
-          <p className="text-xl md:text-2xl font-semibold text-slate-100 leading-relaxed whitespace-pre-wrap">{turn.questionText}</p>
+          <div className="text-xl md:text-2xl font-semibold text-slate-100 leading-relaxed markdown-body"><Markdown mdx={turn.questionText} openLinksInNewTab /></div>
         </div>
 
         {/* Answer area */}
@@ -315,7 +316,7 @@ function Reveal({
       {revealed.referenceAnswer && (
         <div className="rounded-xl border border-white/10 p-4 bg-white/[0.04]">
           <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Đáp án mẫu (mức mong đợi)</div>
-          <p className="text-sm text-slate-100 leading-relaxed whitespace-pre-wrap">{revealed.referenceAnswer}</p>
+          <div className="text-sm text-slate-100 leading-relaxed markdown-body"><Markdown mdx={revealed.referenceAnswer} openLinksInNewTab /></div>
         </div>
       )}
 

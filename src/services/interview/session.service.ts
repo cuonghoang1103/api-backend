@@ -19,6 +19,7 @@ import { planQuestions, LEVEL_LADDER } from './questionBank.service.js';
 import { requireTrack } from './taxonomy.service.js';
 import { deterministicScore, selfAssessmentScore, type RubricCriterion, type SynonymMap } from './scoring.js';
 import { generateStaticReport } from './report.service.js';
+import { createReviewCardsForSession } from './drill.service.js';
 
 const MAX_QUESTIONS = 15;
 const DEFAULT_QUESTIONS = 6;
@@ -285,6 +286,8 @@ export async function selfAssess(
 export async function finishSession(userId: number, sessionId: number) {
   const session = await loadOwnedSession(userId, sessionId);
   const report = await generateStaticReport(sessionId);
+  // Weak concepts become spaced-repetition review cards (Phase 3 drill).
+  await createReviewCardsForSession(userId, sessionId).catch(() => {});
   if (session.status !== 'COMPLETED') {
     await prisma.interviewSession.update({ where: { id: sessionId }, data: { status: 'COMPLETED', endedAt: new Date() } });
   }

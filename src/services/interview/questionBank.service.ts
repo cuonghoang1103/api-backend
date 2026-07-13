@@ -15,15 +15,13 @@ import type { InterviewLevel, InterviewQuestion, Prisma } from '@prisma/client';
 // Level ladder — sampling falls back to adjacent levels when a topic is thin.
 export const LEVEL_LADDER: InterviewLevel[] = ['INTERN', 'FRESHER', 'JUNIOR', 'MID', 'SENIOR', 'LEAD', 'PRINCIPAL'];
 
-function nearbyLevels(level: InterviewLevel, spread = 1): InterviewLevel[] {
-  const i = LEVEL_LADDER.indexOf(level);
-  if (i < 0) return [level];
-  const out: InterviewLevel[] = [];
-  for (let d = 0; d <= spread; d++) {
-    if (i - d >= 0) out.push(LEVEL_LADDER[i - d]);
-    if (d > 0 && i + d < LEVEL_LADDER.length) out.push(LEVEL_LADDER[i + d]);
-  }
-  return Array.from(new Set(out));
+/** Distance between two levels on the ladder (0 = exact). Used to prefer the
+ *  requested level while still allowing any level so every level "works". */
+function levelDistance(a: InterviewLevel, b: InterviewLevel): number {
+  const ia = LEVEL_LADDER.indexOf(a);
+  const ib = LEVEL_LADDER.indexOf(b);
+  if (ia < 0 || ib < 0) return 99;
+  return Math.abs(ia - ib);
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -52,18 +50,22 @@ export async function planQuestions(
   });
   if (!topics.length) return [];
 
-  const levels = nearbyLevels(level, 1);
+  // Fetch ALL published questions for the track's topics (any level), then
+  // PREFER the requested level via level-distance sorting. This means every
+  // level works — even ones with no exact-match questions fall back to the
+  // closest available, rather than failing with "no questions".
   const questions = await prisma.interviewQuestion.findMany({
-    where: { topicId: { in: topics.map((t) => t.id) }, status: 'PUBLISHED', level: { in: levels } },
+    where: { topicId: { in: topics.map((t) => t.id) }, status: 'PUBLISHED' },
   });
   if (!questions.length) return [];
 
-  // Group questions by topic, shuffled, prioritising exact-level matches first.
+  // Group questions by topic, shuffled, then sort each topic's list so the
+  // level closest to the requested one comes first.
   const byTopic = new Map<number, InterviewQuestion[]>();
   for (const t of topics) byTopic.set(t.id, []);
   for (const q of shuffle(questions)) byTopic.get(q.topicId)?.push(q);
   for (const [, list] of byTopic) {
-    list.sort((a, b) => Number(b.level === level) - Number(a.level === level));
+    list.sort((a, b) => levelDistance(a.level, level) - levelDistance(b.level, level));
   }
 
   // Weighted round-robin: topics with higher weight get picked more often.

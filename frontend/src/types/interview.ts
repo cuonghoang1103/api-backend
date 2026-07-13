@@ -188,6 +188,49 @@ export interface HistoryItem {
   letterGrade: string | null;
 }
 
+// ── Phase 3: spaced-repetition drill ──
+export type MasteryLevel = 'UNSEEN' | 'SHAKY' | 'LEARNING' | 'SOLID' | 'MASTERED';
+
+export interface DrillCard {
+  cardId: number;
+  concept: string | null;
+  topic: string | null;
+  masteryLevel: MasteryLevel;
+  variantGap: boolean;
+  question: {
+    id: number;
+    type: InterviewQuestionType;
+    body: string;
+    referenceAnswer: string | null;
+    rubric: RubricCriterion[];
+  };
+}
+export interface DrillResponse {
+  totalDue: number;
+  cards: DrillCard[];
+}
+export interface GradeCardResponse {
+  cardId: number;
+  quality: number;
+  deterministic: DeterministicResult | null;
+  dueAt: string;
+  intervalDays: number;
+  masteryLevel: MasteryLevel;
+  remaining: number;
+}
+export interface MasteryTopic {
+  topicId: number;
+  topic: string;
+  total: number;
+  due: number;
+  byMastery: Record<MasteryLevel, number>;
+}
+export interface MasteryResponse {
+  totalCards: number;
+  totalDue: number;
+  topics: MasteryTopic[];
+}
+
 export interface CreateSessionBody {
   trackId: number;
   level: InterviewLevel;

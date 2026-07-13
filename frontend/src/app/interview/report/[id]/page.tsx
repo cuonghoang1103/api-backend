@@ -14,6 +14,7 @@ import {
 } from 'recharts';
 import { Loader2, ChevronDown, AlertTriangle, RotateCcw } from 'lucide-react';
 import ParticleBackground from '@/components/repos/ParticleBackground';
+import Markdown from '@/components/markdown/Markdown';
 import { interviewApi } from '@/lib/interview-api';
 import type { ReportResponse, ReportTurn } from '@/types/interview';
 
@@ -172,18 +173,22 @@ function TurnRow({ turn }: { turn: ReportTurn }) {
               {det.redFlagsHit.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-red-500/10 text-red-300 border border-red-500/30">⚠ {k}</span>)}
             </div>
           )}
-          {turn.referenceAnswer && <Block label="Đáp án mẫu" text={turn.referenceAnswer} />}
+          {turn.referenceAnswer && <Block label="Đáp án mẫu" text={turn.referenceAnswer} md />}
         </div>
       )}
     </div>
   );
 }
 
-function Block({ label, text }: { label: string; text: string }) {
+function Block({ label, text, md }: { label: string; text: string; md?: boolean }) {
   return (
     <div>
       <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">{label}</div>
-      <p className="text-sm text-slate-100 leading-relaxed whitespace-pre-wrap bg-white/[0.04] rounded-lg p-3 border border-white/10">{text}</p>
+      {md ? (
+        <div className="text-sm text-slate-100 leading-relaxed bg-white/[0.04] rounded-lg p-3 border border-white/10 markdown-body"><Markdown mdx={text} openLinksInNewTab /></div>
+      ) : (
+        <p className="text-sm text-slate-100 leading-relaxed whitespace-pre-wrap bg-white/[0.04] rounded-lg p-3 border border-white/10">{text}</p>
+      )}
     </div>
   );
 }

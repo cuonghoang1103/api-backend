@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { Loader2, AlertTriangle, Plus, Trash2, CheckCircle2, Eye } from 'lucide-react';
 import { interviewApi } from '@/lib/interview-api';
 import { interviewAdminApi, type AdminQuestion, type BankHealthRow } from '@/lib/interview-api';
+import MarkdownEditor from '@/components/admin/MarkdownEditor';
 import type { TaxonomyResponse, TaxonomyTopic } from '@/types/interview';
 import { LEVELS } from '@/types/interview';
 
@@ -239,8 +240,14 @@ function CreateForm({ topics, onDone }: { topics: FlatTopic[]; onDone: () => voi
           {['CONCEPTUAL', 'BEHAVIORAL', 'SCENARIO', 'SYSTEM_DESIGN', 'MCQ'].map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
       </div>
-      <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={2} placeholder="Nội dung câu hỏi (markdown)" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
-      <textarea value={referenceAnswer} onChange={(e) => setReferenceAnswer(e.target.value)} rows={3} placeholder="Đáp án mẫu (mức mong đợi)" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+      <div>
+        <label className="text-xs text-slate-400 mb-1 block">Nội dung câu hỏi (markdown — dán ảnh trực tiếp, ```lang cho code tô màu)</label>
+        <MarkdownEditor value={body} onChange={setBody} placeholder="Nội dung câu hỏi. Dán ảnh để upload; dùng ```js ... ``` cho khối code." />
+      </div>
+      <div>
+        <label className="text-xs text-slate-400 mb-1 block">Đáp án mẫu (mức mong đợi)</label>
+        <MarkdownEditor value={referenceAnswer} onChange={setReferenceAnswer} placeholder="Đáp án mẫu — markdown + code + ảnh." />
+      </div>
       <textarea value={rubric} onChange={(e) => setRubric(e.target.value)} rows={4} placeholder="Rubric JSON" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm font-mono" />
       <input value={mustMention} onChange={(e) => setMustMention(e.target.value)} placeholder="Khái niệm bắt buộc (phẩy ngăn cách): event loop, microtask, …" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
       <div className="flex justify-end gap-2">

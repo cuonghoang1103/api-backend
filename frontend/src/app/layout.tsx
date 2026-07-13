@@ -26,6 +26,7 @@ import dynamic from 'next/dynamic'
 import Navbar from '@/components/layout/Navbar'
 import DockLayout from '@/components/layout/DockLayout'
 import CartDrawer from '@/components/shop/CartDrawer'
+import { CART_ENABLED } from '@/lib/featureFlags'
 import AuthProvider from '@/components/providers/AuthProvider'
 import ToasterProvider from '@/components/providers/ToasterProvider'
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider'
@@ -341,7 +342,7 @@ export default function RootLayout({
             <AppBootSplash />
             <ClientOnly>
               <Navbar />
-              <CartDrawer />
+              {CART_ENABLED && <CartDrawer />}
               <CyberCursor />
             </ClientOnly>
 

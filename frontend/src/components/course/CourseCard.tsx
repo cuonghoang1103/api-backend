@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Star, Users, BookOpen, Clock, Play, ShoppingCart, Check } from 'lucide-react';
 import type { Course } from '@/types';
 import { useCartStore } from '@/store/cartStore';
+import { COURSE_PAYMENT_ENABLED } from '@/lib/featureFlags';
 import { toast } from 'sonner';
 
 function formatDuration(seconds: number): string {
@@ -125,7 +126,10 @@ export default function CourseCard({ course }: { course: Course }) {
             )}
           </div>
 
-          {/* Price + Add to Cart */}
+          {/* Price + Add to Cart — hidden while course payment is disabled
+              (see lib/featureFlags.ts). Free/enrol state still shown via the
+              thumbnail "Free" badge and the course page's enrol buttons. */}
+          {COURSE_PAYMENT_ENABLED && (
           <div className="flex items-center justify-between pt-3 border-t border-darkborder/30">
             <div className="flex items-center gap-2">
               {hasDiscount ? (
@@ -170,6 +174,7 @@ export default function CourseCard({ course }: { course: Course }) {
               </button>
             )}
           </div>
+          )}
         </div>
       </div>
     </Link>

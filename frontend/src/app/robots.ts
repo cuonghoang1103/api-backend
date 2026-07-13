@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { SHOP_ENABLED } from '@/lib/featureFlags'
 
 /**
  * robots.txt — tells crawlers what to index and where the sitemap is.
@@ -47,10 +48,11 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
       {
-        // Googlebot: same as above, but also explicitly allowed on
-        // /shop because products need rich snippets.
+        // Googlebot: same as above. /shop is only advertised while the
+        // shop is enabled (lib/featureFlags.ts) — when off it redirects
+        // home, so we don't invite crawls of it.
         userAgent: 'Googlebot',
-        allow: ['/', '/shop/'],
+        allow: SHOP_ENABLED ? ['/', '/shop/'] : ['/'],
         disallow: ['/admin/', '/api/'],
       },
     ],

@@ -3,27 +3,52 @@
 import Link from 'next/link';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SELLER_INFO } from '@/lib/sellerInfo';
+import { COMMERCE_ENABLED, CONTACT_ENABLED } from '@/lib/featureFlags';
 
 export default function Footer() {
   const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
-  const navLabels = [t('common.home'), t('common.blog'), t('common.projects'), t('contact.title')];
-  const serviceLabels = [t('footer.webDev'), t('footer.aiIntegration'), t('footer.ecommerce'), t('footer.devops')];
+  type FooterLink = { label: string; href: string };
+
+  // Nav links — the "Contact" entry is dropped while the contact section is
+  // hidden (lib/featureFlags.ts).
+  const navigation: FooterLink[] = [
+    { label: String(t('common.home')), href: '/' },
+    { label: String(t('common.blog')), href: '/blog' },
+    { label: String(t('common.projects')), href: '/projects' },
+    ...(CONTACT_ENABLED ? [{ label: String(t('contact.title')), href: '/#contact' }] : []),
+  ];
+
+  // Services — the e-commerce offering is dropped while commerce is disabled.
+  const services: FooterLink[] = [
+    { label: String(t('footer.webDev')), href: '/#services' },
+    { label: String(t('footer.aiIntegration')), href: '/#services' },
+    ...(COMMERCE_ENABLED ? [{ label: String(t('footer.ecommerce')), href: '/#services' }] : []),
+    { label: String(t('footer.devops')), href: '/#services' },
+  ];
+
   const resourceLabels = [t('footer.github'), t('footer.linkedin'), t('footer.twitter'), t('footer.email')];
 
-  type FooterLink = { label: string; href: string };
+  // Purchase-policy pages signal e-commerce activity — kept only while commerce
+  // is live. Privacy policy always stays.
+  const legal: FooterLink[] = [
+    ...(COMMERCE_ENABLED
+      ? [
+          { label: 'Hướng dẫn mua hàng', href: '/huong-dan-mua-hang' },
+          { label: 'Chính sách thanh toán', href: '/chinh-sach-thanh-toan' },
+          { label: 'Chính sách giao hàng', href: '/chinh-sach-giao-hang' },
+          { label: 'Chính sách đổi trả & hoàn tiền', href: '/chinh-sach-doi-tra' },
+        ]
+      : []),
+    { label: 'Chính sách bảo mật', href: '/chinh-sach-bao-mat' },
+  ];
+
   const footerLinks: Record<string, FooterLink[]> = {
-    navigation: navLabels.map((label, i) => ({ label: String(label), href: ['/', '/blog', '/projects', '/#contact'][i] })),
-    services: serviceLabels.map((label) => ({ label: String(label), href: '/#services' })),
+    navigation,
+    services,
     resources: resourceLabels.map((label, i) => ({ label: String(label), href: ['https://github.com/cuonghoang1103', 'https://www.linkedin.com/in/cuong-hoang-843a37258/', 'https://x.com/Hncuong311', 'mailto:cuongthaihnhe176322@gmail.com'][i] })),
-    legal: [
-      { label: 'Hướng dẫn mua hàng', href: '/huong-dan-mua-hang' },
-      { label: 'Chính sách thanh toán', href: '/chinh-sach-thanh-toan' },
-      { label: 'Chính sách giao hàng', href: '/chinh-sach-giao-hang' },
-      { label: 'Chính sách đổi trả & hoàn tiền', href: '/chinh-sach-doi-tra' },
-      { label: 'Chính sách bảo mật', href: '/chinh-sach-bao-mat' },
-    ],
+    legal,
   };
 
   return (
@@ -132,7 +157,10 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Seller info Column (Part 1 — MOIT) */}
+          {/* Seller info Column (Part 1 — MOIT). Hidden while commerce is
+              disabled (lib/featureFlags.ts): publishing seller identity / tax
+              code is exactly what signals an operating e-commerce business. */}
+          {COMMERCE_ENABLED && (
           <div>
             <h4 className="font-heading font-semibold text-text-primary mb-4">Thông tin người bán</h4>
             <ul className="space-y-2 text-text-muted text-sm">
@@ -151,6 +179,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+          )}
         </div>
 
         {/* Divider */}

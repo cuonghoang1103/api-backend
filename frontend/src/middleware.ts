@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { SHOP_ENABLED, CART_ENABLED, COMMERCE_ENABLED } from '@/lib/featureFlags';
 
 /**
  * Edge middleware — runs before any admin or learn route.
@@ -22,8 +23,27 @@ import { NextRequest, NextResponse } from 'next/server';
  * - /creator/* → admin only (Content Studio, Phase 3+)
  * - /learn/* → any authenticated user (just needs backend_token)
  */
+// Commerce routes that are redirected to the homepage while their feature
+// flag is off (see lib/featureFlags.ts). Nothing is deleted — flip the flag
+// back on and these pages serve normally again. Redirecting (vs 404) also
+// keeps Google from indexing disabled shop/checkout URLs.
+function commerceRedirect(request: NextRequest, pathname: string): NextResponse | null {
+  const disabled =
+    (!SHOP_ENABLED && (pathname === '/shop' || pathname.startsWith('/shop/'))) ||
+    (!CART_ENABLED && (pathname === '/cart' || pathname === '/checkout' || pathname === '/my-orders')) ||
+    (!COMMERCE_ENABLED &&
+      (pathname === '/huong-dan-mua-hang' ||
+        pathname === '/chinh-sach-thanh-toan' ||
+        pathname === '/chinh-sach-giao-hang' ||
+        pathname === '/chinh-sach-doi-tra'));
+  return disabled ? NextResponse.redirect(new URL('/', request.url)) : null;
+}
+
 export async function middleware(request: NextRequest) {
  const pathname = request.nextUrl.pathname;
+
+ const commerce = commerceRedirect(request, pathname);
+ if (commerce) return commerce;
 
  if (pathname.startsWith('/admin')) {
  return handleAdminRoute(request, pathname);
@@ -130,5 +150,10 @@ async function handleLearnRoute(
 }
 
 export const config = {
- matcher: ['/admin/:path*', '/admin', '/creator/:path*', '/creator', '/learn/:path*'],
+ matcher: [
+   '/admin/:path*', '/admin', '/creator/:path*', '/creator', '/learn/:path*',
+   // Commerce routes — intercepted so they redirect home while disabled.
+   '/shop/:path*', '/shop', '/cart', '/checkout', '/my-orders',
+   '/huong-dan-mua-hang', '/chinh-sach-thanh-toan', '/chinh-sach-giao-hang', '/chinh-sach-doi-tra',
+ ],
 };

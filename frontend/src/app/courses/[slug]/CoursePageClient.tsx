@@ -9,6 +9,7 @@ import {
   KeyRound,
 } from 'lucide-react';
 import { coursesApi, paymentApi } from '@/lib/api';
+import { COURSE_PAYMENT_ENABLED } from '@/lib/featureFlags';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -229,12 +230,21 @@ function OldCourseAccessOptions({
             // ── No access yet — show purchase form ──
             <>
               <div className="px-4 py-3 border-b border-neon-violet/20">
-                <p className="text-sm font-semibold text-neon-violet">Trả phí or Mã kích hoạt</p>
-                <p className="text-xs text-neon-violet/60">Chọn 1 trong 2 cách để truy cập khóa học</p>
+                <p className="text-sm font-semibold text-neon-violet">
+                  {COURSE_PAYMENT_ENABLED ? 'Trả phí or Mã kích hoạt' : 'Mã kích hoạt'}
+                </p>
+                <p className="text-xs text-neon-violet/60">
+                  {COURSE_PAYMENT_ENABLED
+                    ? 'Chọn 1 trong 2 cách để truy cập khóa học'
+                    : 'Nhập mã kích hoạt để truy cập khóa học'}
+                </p>
               </div>
 
               <div className="px-4 pb-4 space-y-3 pt-3">
-                {/* Online payment — PayOS (primary), auto-falls back to VNPay */}
+                {/* Online payment — PayOS (primary), auto-falls back to VNPay.
+                    Hidden while course payment is disabled (lib/featureFlags.ts);
+                    access-code enrolment below stays fully functional. */}
+                {COURSE_PAYMENT_ENABLED && (
                 <button
                   onClick={handleBuyCourse}
                   disabled={buying}
@@ -248,6 +258,7 @@ function OldCourseAccessOptions({
                     <p className="text-xs text-text-muted">Mua ngay – {priceLabel} · QR/ATM/Visa</p>
                   </div>
                 </button>
+                )}
 
                 {/* Mã kích hoạt */}
                 <div className="flex flex-col gap-2">
@@ -633,6 +644,8 @@ export default function CourseDetailPage() {
                   </div>
                 )}
                 <div className="p-6">
+                  {/* Price — hidden while course payment is disabled (lib/featureFlags.ts) */}
+                  {COURSE_PAYMENT_ENABLED && (
                   <div className="flex items-center gap-3 mb-4">
                     {hasDiscount ? (
                       <>
@@ -649,6 +662,7 @@ export default function CourseDetailPage() {
                       </span>
                     )}
                   </div>
+                  )}
 
                   <OldCourseAccessOptions
                     course={course}

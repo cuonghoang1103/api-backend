@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '@/hooks/useTranslation';
+import { COMMERCE_ENABLED } from '@/lib/featureFlags';
 import { ArrowRight, Cpu, Database, Gauge, Shield, Terminal } from 'lucide-react';
 
 interface ServiceSpec {
@@ -89,7 +90,9 @@ export default function ServicesSection() {
     { id: 'aiIntegration', titleKey: 'services.aiIntegration.title', icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> },
     { id: 'ecommerce', titleKey: 'services.ecommerce.title', icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg> },
     { id: 'devops', titleKey: 'services.devops.title', icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg> },
-  ];
+    // The e-commerce service tab is hidden while commerce is disabled
+    // (lib/featureFlags.ts) — it markets "payment & inventory" work.
+  ].filter((s) => COMMERCE_ENABLED || s.id !== 'ecommerce');
 
   const activeContent = serviceContents[activeService] || serviceContents.webDev;
 

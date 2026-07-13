@@ -14,6 +14,7 @@ import Footer from '@/components/home/Footer';
 import StatsSection from '@/components/home/StatsSection';
 import HomeBackground from '@/components/home/HomeBackground';
 import { formatNumber } from '@/lib/utils';
+import { SHOP_ENABLED, CONTACT_ENABLED } from '@/lib/featureFlags';
 import { ArrowRight, Sparkles, Code2, Terminal, Zap, Brain, Gem, Search, ChevronRight } from 'lucide-react';
 
 export default function AboutPage() {
@@ -53,7 +54,7 @@ export default function AboutPage() {
   const placeholderPhrases = [
     "Type /projects to explore...",
     "Ask anything about Cuong's stack...",
-    "Type /shop to view AI tools...",
+    ...(SHOP_ENABLED ? ["Type /shop to view AI tools..."] : []),
     "Try /chat for AI assistance...",
   ];
   useEffect(() => {
@@ -335,7 +336,7 @@ export default function AboutPage() {
                 <div className="flex flex-wrap gap-2 mt-3 ml-1">
                   {[
                     { label: '/projects', href: '/projects', icon: Code2 },
-                    { label: '/shop', href: '/shop', icon: Zap },
+                    ...(SHOP_ENABLED ? [{ label: '/shop', href: '/shop', icon: Zap }] : []),
                     { label: '/chat', href: '/chat', icon: Brain },
                   ].map(({ label, href, icon: Icon }) => (
                     <Link key={label}
@@ -955,8 +956,9 @@ export default function AboutPage() {
       {/* Services Section */}
       <ServicesSection />
 
-      {/* Contact Section */}
-      <ContactSection />
+      {/* Contact Section — hidden while the public contact form is disabled
+          (lib/featureFlags.ts) */}
+      {CONTACT_ENABLED && <ContactSection />}
 
       {/* Footer */}
       <Footer />

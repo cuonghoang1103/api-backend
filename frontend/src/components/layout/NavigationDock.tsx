@@ -16,6 +16,7 @@ import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import { useMusicAccess } from '@/hooks/useMusicAccess';
+import { SHOP_ENABLED, CART_ENABLED } from '@/lib/featureFlags';
 import { UserAvatar } from '@/components/common/UserAvatar';
 import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -56,7 +57,7 @@ interface DockItem {
 //   main:  Home, Academy, Shop, Messages, Courses, Orders
 //   user:  Blog, Projects, Exp Hub, Hub, GitHub Repos, AI Chat, Music, Dashboard
 //   admin: Admin (admin-only entry point, kept in its own section)
-const DOCK_ITEMS: DockItem[] = [
+const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/', label: 'Home', icon: Home, section: 'main' },
   { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'main' },
   { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'main' },
@@ -81,6 +82,15 @@ const DOCK_ITEMS: DockItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'user' },
   { href: '/admin', label: 'Admin', icon: Shield, section: 'admin' },
 ];
+
+// Commerce entry points are hidden while the shop/checkout is disabled
+// (see lib/featureFlags.ts). Re-enable by flipping the flags — nothing is
+// removed, the items just re-appear here.
+const DOCK_ITEMS: DockItem[] = ALL_DOCK_ITEMS.filter((it) => {
+  if (it.href === '/shop') return SHOP_ENABLED;
+  if (it.href === '/my-orders') return CART_ENABLED;
+  return true;
+});
 
 const SECTIONS = {
   main: { label: 'Navigate' },

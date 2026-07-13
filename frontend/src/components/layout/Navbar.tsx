@@ -12,6 +12,7 @@ import { useMessagingStore } from '@/store/messagingStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import { useMusicAccess } from '@/hooks/useMusicAccess';
+import { CART_ENABLED } from '@/lib/featureFlags';
 import NotificationDropdown from '@/components/social/NotificationDropdown';
 import UserSearchBox from '@/components/social/UserSearchBox';
 import { UserAvatar } from '@/components/common/UserAvatar';
@@ -365,21 +366,23 @@ export default function Navbar() {
                 })}
               </div>
 
-              {/* Cart */}
-              <button
-                onClick={openDrawer}
-                className="relative flex items-center justify-center w-9 h-9 rounded-xl
-                  bg-[var(--bg-surface)] border border-theme-light
-                  hover:border-neon-violet/30 hover:bg-neon-violet/5 transition-all"
-                title="Shopping Cart"
-              >
-                <ShoppingBag className="w-3.5 h-3.5 text-text-secondary" />
-                {mounted && getTotalItems() > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-neon-violet text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg shadow-neon-violet/30">
-                    {getTotalItems()}
-                  </span>
-                )}
-              </button>
+              {/* Cart (hidden while commerce is disabled — see lib/featureFlags.ts) */}
+              {CART_ENABLED && (
+                <button
+                  onClick={openDrawer}
+                  className="relative flex items-center justify-center w-9 h-9 rounded-xl
+                    bg-[var(--bg-surface)] border border-theme-light
+                    hover:border-neon-violet/30 hover:bg-neon-violet/5 transition-all"
+                  title="Shopping Cart"
+                >
+                  <ShoppingBag className="w-3.5 h-3.5 text-text-secondary" />
+                  {mounted && getTotalItems() > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-neon-violet text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg shadow-neon-violet/30">
+                      {getTotalItems()}
+                    </span>
+                  )}
+                </button>
+              )}
 
               {/* Diễn đàn / Tin tức — quick shortcut next to the bell */}
               {isAuthenticated && mounted && (
@@ -527,14 +530,16 @@ export default function Navbar() {
                         >
                           <PlayCircle className="w-4 h-4" />My Courses
                         </Link>
-                        <Link href="/my-orders" onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
-                          style={{ color: 'var(--text-secondary)' }}
-                          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.background = 'var(--bg-surface-hover)'; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'transparent'; }}
-                        >
-                          <Receipt className="w-4 h-4" />Lịch sử mua hàng
-                        </Link>
+                        {CART_ENABLED && (
+                          <Link href="/my-orders" onClick={() => setUserMenuOpen(false)}
+                            className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
+                            style={{ color: 'var(--text-secondary)' }}
+                            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.background = 'var(--bg-surface-hover)'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'transparent'; }}
+                          >
+                            <Receipt className="w-4 h-4" />Lịch sử mua hàng
+                          </Link>
+                        )}
                         <Link href="/my-codes" onClick={() => setUserMenuOpen(false)}
                           className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
                           style={{ color: 'var(--text-secondary)' }}

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { getServerApiBaseUrl } from '@/lib/server-api'
+import { SHOP_ENABLED } from '@/lib/featureFlags'
 
 /**
  * sitemap.xml — auto-generated at build time + ISR'd by Next.
@@ -65,7 +66,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/`, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${SITE_URL}/courses`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${SITE_URL}/academy`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${SITE_URL}/shop`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    // /shop only listed while the shop is enabled (lib/featureFlags.ts)
+    ...(SHOP_ENABLED ? [{ url: `${SITE_URL}/shop`, lastModified: now, changeFrequency: 'daily' as const, priority: 0.9 }] : []),
     { url: `${SITE_URL}/music`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${SITE_URL}/repos`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
@@ -120,7 +122,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: p.thumbnailUrl ? [p.thumbnailUrl] : undefined,
     }))
 
-  const shopUrls: MetadataRoute.Sitemap = products
+  const shopUrls: MetadataRoute.Sitemap = (SHOP_ENABLED ? products : [])
     .filter((s) => s.slug)
     .map((s) => ({
       url: `${SITE_URL}/shop/${s.slug}`,

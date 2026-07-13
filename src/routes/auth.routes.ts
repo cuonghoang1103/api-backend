@@ -264,10 +264,21 @@ router.get(
 );
 
 // ─── GET /api/v1/auth/role ──────────────────────────────
+// Internal-only: the NextAuth server calls this (server→server) during token
+// refresh to keep the role/roleVersion fresh. When INTERNAL_API_SECRET is
+// configured, we require the matching `X-Internal-Token` header so external
+// callers can't enumerate users / probe roles. If the secret isn't set yet
+// the guard is a no-op (safe rollout) — set INTERNAL_API_SECRET on BOTH the
+// backend and frontend runtime env to enforce.
 router.get(
   '/role',
   async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
     try {
+      const secret = process.env.INTERNAL_API_SECRET;
+      if (secret && req.headers['x-internal-token'] !== secret) {
+        res.status(401).json({ success: false, message: 'Unauthorized' });
+        return;
+      }
       const email = req.query.email as string;
       if (!email) {
         res.status(400).json({ success: false, message: 'Email is required' });

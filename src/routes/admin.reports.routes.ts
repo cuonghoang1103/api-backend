@@ -1,17 +1,21 @@
 import { Router, type Response, type Request, type NextFunction } from 'express';
 import { AppError } from '../middleware/errorHandler.js';
+import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { messagingSafetyService } from '../services/messaging-safety.service.js';
 import type { ApiResponse } from '../types/index.js';
 
 /**
  * Admin routes for the messaging safety system (block + report).
- * Mounted under /api/v1/admin/reports by src/routes/index.ts.
+ * Mounted under /api/v1/admin/reports by src/index.ts.
  *
- * Auth: every endpoint here requires an admin role. The router
- * assumes `authenticate` + `requireRole('admin')` are applied
- * upstream by the parent router that mounts it.
+ * Auth: the parent mount applies NO middleware, so we guard every
+ * endpoint here — an authenticated admin is required for all of them.
+ * (Previously this router relied on a non-existent "upstream" guard,
+ * leaving the report queue + resolve action fully unauthenticated.)
  */
 const router = Router();
+
+router.use(authenticate, requireAdmin('ROLE_ADMIN'));
 
 // GET /api/v1/admin/reports?status=open|resolved&cursor=<id>&take=<n>
 // Returns the thread-report queue. Default take=30, max=50.

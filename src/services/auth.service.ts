@@ -485,13 +485,15 @@ export class AuthService {
   }
 
   // ─── Get Role by Email ─────────────────────────────────
+  // Returns ONLY the fields the NextAuth token-refresh needs. We deliberately
+  // omit `email` and `emailVerified` — this endpoint used to leak another
+  // user's email + verification status. (Access is also restricted to the
+  // internal Next server via a shared secret in the route below.)
   async getRoleByEmail(email: string): Promise<{
     id: number;
     username: string;
-    email: string;
     primaryRole: string;
     roleVersion: number;
-    emailVerified: boolean;
   }> {
     const user = await prisma.user.findUnique({
       where: { email },
@@ -505,10 +507,8 @@ export class AuthService {
     return {
       id: user.id,
       username: user.username,
-      email: user.email,
       primaryRole: user.roles[0]?.role.name || 'ROLE_USER',
       roleVersion: Number(user.roleVersion),
-      emailVerified: user.emailVerified,
     };
   }
 

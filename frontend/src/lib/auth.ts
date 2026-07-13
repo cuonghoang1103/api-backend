@@ -135,8 +135,15 @@ export const authConfig: NextAuthConfig = {
             cache: "no-store",
           };
         } else {
-          // Token refresh (account == null): query role by email
+          // Token refresh (account == null): query role by email. This is a
+          // server→server call; send the internal secret so the backend
+          // accepts it while rejecting external callers. (Server-side env,
+          // never exposed to the browser.)
           endpoint = `${BACKEND_URL}/api/v1/auth/role?email=${encodeURIComponent(email)}`;
+          options = {
+            cache: "no-store",
+            headers: { "X-Internal-Token": process.env.INTERNAL_API_SECRET ?? "" },
+          };
         }
 
         const res = await fetch(endpoint, options);

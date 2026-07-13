@@ -6,6 +6,7 @@
  */
 import { z } from 'zod';
 import { llmComplete, extractJson } from './llm/index.js';
+import { renderPrompt } from './promptTemplate.service.js';
 
 const ReportSchema = z.object({
   strengths: z.array(z.string()).default([]),
@@ -32,13 +33,9 @@ export async function synthesizeAiReport(params: {
   overallScore: number;
   turns: TurnSummary[];
 }): Promise<AiReport | null> {
-  const system = [
-    'You are a senior engineer writing an honest, specific post-interview report for a candidate.',
-    'The pressure has lifted — be an ally, not a judge. Warm but truthful. Every point must be concrete and actionable.',
-    'NEVER write vague filler like "add more detail" or "improve understanding". Name the exact concept: e.g. "your answer did not distinguish the microtask queue from the macrotask queue".',
-    `Write in ${params.language === 'EN' ? 'English' : 'Vietnamese'}. Return JSON ONLY.`,
-    'Schema: {"strengths": string[], "weaknesses": string[], "actionableAdvice": markdown string, "hireRecommendation": one of STRONG_NO|NO|LEAN_NO|LEAN_YES|YES|STRONG_YES}',
-  ].join('\n');
+  const system = await renderPrompt('report_system', {
+    language: params.language === 'EN' ? 'English' : 'Vietnamese',
+  });
 
   const turnsText = params.turns
     .map((t, i) => `${i + 1}. [${t.topic}] score=${t.score ?? 'n/a'} ${t.redFlags.length ? `redFlags=[${t.redFlags.join(', ')}] ` : ''}${t.missing.length ? `missed=[${t.missing.join(', ')}]` : ''}\n   Q: ${t.question.slice(0, 140)}`)

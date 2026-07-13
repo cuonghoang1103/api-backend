@@ -18,7 +18,15 @@ import * as session from '../services/interview/session.service.js';
 import * as drill from '../services/interview/drill.service.js';
 import { isAiAvailable, getUsageStats } from '../services/interview/llm/index.js';
 import * as knowledge from '../services/interview/knowledge/knowledge.service.js';
+import * as prompts from '../services/interview/promptTemplate.service.js';
+import * as questionGen from '../services/interview/questionGen.service.js';
 import type { InterviewLevel, InterviewContentStatus } from '@prisma/client';
+
+const VALID_LEVELS: InterviewLevel[] = ['INTERN', 'FRESHER', 'JUNIOR', 'MID', 'SENIOR', 'LEAD', 'PRINCIPAL'];
+const parseLevel = (v: unknown): InterviewLevel | null => {
+  const s = String(v ?? '').toUpperCase();
+  return (VALID_LEVELS as string[]).includes(s) ? (s as InterviewLevel) : null;
+};
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -267,6 +275,67 @@ adminRouter.put('/questions/:id', async (req: Request, res: Response<ApiResponse
 });
 adminRouter.delete('/questions/:id', async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await bank.deleteQuestion(parseId(req.params.id)) }); } catch (err) { next(err); }
+});
+
+// ── Phase 7: Prompt template editor (versioned) ──────────────────
+adminRouter.get('/prompts', async (_req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await prompts.listPrompts() }); } catch (err) { next(err); }
+});
+adminRouter.get('/prompts/:key/versions', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await prompts.getPromptVersions(req.params.key) }); } catch (err) { next(err); }
+});
+adminRouter.post('/prompts/:key', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await prompts.savePrompt(req.params.key, String(req.body?.content ?? ''), req.body?.name);
+    res.status(201).json({ success: true, data });
+  } catch (err) { next(err); }
+});
+adminRouter.post('/prompts/:key/activate', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const version = parseInt(String(req.body?.version), 10);
+    if (!Number.isInteger(version)) { res.status(400).json({ success: false, message: 'version không hợp lệ' }); return; }
+    res.json({ success: true, data: await prompts.activateVersion(req.params.key, version) });
+  } catch (err) { next(err); }
+});
+adminRouter.post('/prompts/:key/reset', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await prompts.resetPrompt(req.params.key) }); } catch (err) { next(err); }
+});
+
+// ── Phase 8: AI question generation (preview → commit) ────────────
+adminRouter.post('/generate', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const b = req.body ?? {};
+    const topicId = parseId(String(b.topicId));
+    if (Number.isNaN(topicId)) { res.status(400).json({ success: false, message: 'topicId không hợp lệ' }); return; }
+    const level = parseLevel(b.level);
+    if (!level) { res.status(400).json({ success: false, message: 'level không hợp lệ' }); return; }
+    const data = await questionGen.generateQuestions({
+      userId: req.userId!,
+      topicId,
+      level,
+      count: b.count ? parseInt(String(b.count), 10) : undefined,
+      type: b.type ? String(b.type) : undefined,
+      language: String(b.language ?? 'VI').toUpperCase() === 'EN' ? 'EN' : 'VI',
+      useKnowledge: b.useKnowledge !== false,
+    });
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+adminRouter.post('/generate/commit', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const b = req.body ?? {};
+    const topicId = parseId(String(b.topicId));
+    if (Number.isNaN(topicId)) { res.status(400).json({ success: false, message: 'topicId không hợp lệ' }); return; }
+    const level = parseLevel(b.level);
+    if (!level) { res.status(400).json({ success: false, message: 'level không hợp lệ' }); return; }
+    const data = await questionGen.commitQuestions({
+      authorId: req.userId!,
+      topicId,
+      level,
+      questions: Array.isArray(b.questions) ? b.questions : [],
+    });
+    res.status(201).json({ success: true, data });
+  } catch (err) { next(err); }
 });
 
 export default router;

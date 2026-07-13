@@ -9,14 +9,23 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { Loader2, AlertTriangle, Plus, Trash2, CheckCircle2, Eye, Check, Search, Pencil, BookOpen, Boxes, ChevronDown, ChevronRight } from 'lucide-react';
+import { Loader2, AlertTriangle, Plus, Trash2, CheckCircle2, Eye, Check, Search, Pencil, BookOpen, Boxes, ChevronDown, ChevronRight, Sparkles, ScrollText, RotateCcw, History, Save } from 'lucide-react';
 import { interviewApi } from '@/lib/interview-api';
-import { interviewAdminApi, type AdminQuestion, type BankHealthRow, type LlmUsage, type FlaggedTurn, type KnowledgeDocListItem, type KnowledgeDocDetail, type KnowledgeChunk, type KnowledgeCoverageRow } from '@/lib/interview-api';
+import { interviewAdminApi, type AdminQuestion, type BankHealthRow, type LlmUsage, type FlaggedTurn, type KnowledgeDocListItem, type KnowledgeDocDetail, type KnowledgeChunk, type KnowledgeCoverageRow, type PromptSummary, type PromptVersion, type GeneratedQuestion } from '@/lib/interview-api';
 import MarkdownEditor from '@/components/admin/MarkdownEditor';
 import type { TaxonomyResponse, TaxonomyTopic } from '@/types/interview';
 import { LEVELS } from '@/types/interview';
 
-type Tab = 'overview' | 'questions' | 'flagged' | 'knowledge';
+type Tab = 'overview' | 'questions' | 'generate' | 'flagged' | 'knowledge' | 'prompts';
+
+const TAB_LABELS: Record<Tab, string> = {
+  overview: 'Tổng quan',
+  questions: 'Câu hỏi',
+  generate: 'AI tạo câu hỏi',
+  flagged: 'Cần rà soát',
+  knowledge: 'Kho tri thức',
+  prompts: 'Prompt AI',
+};
 
 interface FlatTopic { id: number; name: string; track: string; domain: string }
 
@@ -39,15 +48,20 @@ export default function AdminInterviewPage() {
       <h1 className="text-2xl font-bold mb-1">Interview Simulator</h1>
       <p className="text-slate-400 text-sm mb-5">Ngân hàng câu hỏi STATIC — tự chấm, không cần AI.</p>
 
-      <div className="flex gap-2 mb-6">
-        {(['overview', 'questions', 'flagged', 'knowledge'] as Tab[]).map((t) => (
+      <div className="flex flex-wrap gap-2 mb-6">
+        {(['overview', 'questions', 'generate', 'flagged', 'knowledge', 'prompts'] as Tab[]).map((t) => (
           <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-lg text-sm border ${tab === t ? 'bg-teal-500/20 text-teal-300 border-teal-500/40' : 'bg-white/5 text-slate-400 border-transparent hover:text-white'}`}>
-            {t === 'overview' ? 'Tổng quan' : t === 'questions' ? 'Câu hỏi' : t === 'flagged' ? 'Cần rà soát' : 'Kho tri thức'}
+            {TAB_LABELS[t]}
           </button>
         ))}
       </div>
 
-      {tab === 'overview' ? <Overview topicName={topicName} /> : tab === 'questions' ? <Questions topics={topics} topicName={topicName} /> : tab === 'flagged' ? <Flagged /> : <Knowledge tax={tax} topics={topics} topicName={topicName} />}
+      {tab === 'overview' ? <Overview topicName={topicName} />
+        : tab === 'questions' ? <Questions topics={topics} topicName={topicName} />
+        : tab === 'generate' ? <Generate topics={topics} />
+        : tab === 'flagged' ? <Flagged />
+        : tab === 'knowledge' ? <Knowledge tax={tax} topics={topics} topicName={topicName} />
+        : <Prompts />}
     </div>
   );
 }
@@ -674,6 +688,320 @@ function KnowledgeEditor({ doc, tracks, topics, onCancel, onSaved }: {
       )}
 
       {isEdit && !loadingDetail && <ChunkPreview chunks={chunks} />}
+    </div>
+  );
+}
+
+// ── Phase 8: AI question generation (preview → commit) ───────
+const GEN_TYPES = ['ANY', 'CONCEPTUAL', 'CODING', 'SYSTEM_DESIGN', 'BEHAVIORAL', 'SCENARIO', 'MCQ'] as const;
+
+interface GenRow {
+  include: boolean;
+  body: string;
+  referenceAnswer: string;
+  mustText: string;
+  rubricText: string;
+  difficulty: number;
+  type: string;
+  shouldMention: string[];
+  redFlags: string[];
+  tags: string[];
+}
+
+function toRow(q: GeneratedQuestion): GenRow {
+  return {
+    include: true,
+    body: q.body,
+    referenceAnswer: q.referenceAnswer ?? '',
+    mustText: (q.mustMention ?? []).join(', '),
+    rubricText: JSON.stringify(q.rubric ?? [], null, 2),
+    difficulty: q.difficulty ?? 3,
+    type: q.type ?? 'CONCEPTUAL',
+    shouldMention: q.shouldMention ?? [],
+    redFlags: q.redFlags ?? [],
+    tags: q.tags ?? [],
+  };
+}
+
+function Generate({ topics }: { topics: FlatTopic[] }) {
+  const [topicId, setTopicId] = useState<number>(topics[0]?.id ?? 0);
+  const [level, setLevel] = useState('MID');
+  const [count, setCount] = useState(5);
+  const [type, setType] = useState<string>('ANY');
+  const [language, setLanguage] = useState<'VI' | 'EN'>('VI');
+  const [useKnowledge, setUseKnowledge] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [committing, setCommitting] = useState(false);
+  const [rows, setRows] = useState<GenRow[]>([]);
+  const [meta, setMeta] = useState<{ grounded: boolean; chunksUsed: number; model: string; warning?: string; sources: { title: string }[] } | null>(null);
+
+  useEffect(() => { if (!topicId && topics[0]) setTopicId(topics[0].id); }, [topics, topicId]);
+
+  const generate = async () => {
+    if (!topicId) { toast.warning('Chọn chủ đề'); return; }
+    setLoading(true);
+    setRows([]);
+    setMeta(null);
+    try {
+      const r = await interviewAdminApi.generateQuestions({ topicId, level, count, type, language, useKnowledge });
+      const d = r.data.data;
+      setRows(d.questions.map(toRow));
+      setMeta({ grounded: d.grounded, chunksUsed: d.chunksUsed, model: d.model, warning: d.warning, sources: d.sources });
+      if (!d.questions.length) toast.warning('AI không trả về câu hỏi nào. Thử lại.');
+      else toast.success(`AI đề xuất ${d.questions.length} câu — rà soát rồi lưu.`);
+    } catch (e) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'Không sinh được câu hỏi (AI có thể đang tắt).');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const patch = (i: number, p: Partial<GenRow>) => setRows((prev) => prev.map((r, idx) => (idx === i ? { ...r, ...p } : r)));
+
+  const commit = async () => {
+    const chosen = rows.filter((r) => r.include && r.body.trim());
+    if (!chosen.length) { toast.warning('Chọn ít nhất một câu để lưu'); return; }
+    // Reconstruct GeneratedQuestion payloads; rubric parsed leniently.
+    const questions: GeneratedQuestion[] = chosen.map((r) => {
+      let rubric: GeneratedQuestion['rubric'] = [];
+      try { const p = JSON.parse(r.rubricText); if (Array.isArray(p)) rubric = p; } catch { /* keep [] — admin can fix later */ }
+      return {
+        body: r.body,
+        referenceAnswer: r.referenceAnswer,
+        rubric,
+        mustMention: r.mustText.split(',').map((s) => s.trim()).filter(Boolean),
+        shouldMention: r.shouldMention,
+        redFlags: r.redFlags,
+        difficulty: r.difficulty,
+        type: r.type,
+        tags: r.tags,
+      };
+    });
+    setCommitting(true);
+    try {
+      const r = await interviewAdminApi.commitQuestions({ topicId, level, questions });
+      toast.success(`Đã lưu ${r.data.data.created} câu vào ngân hàng (DRAFT, chưa duyệt). Vào tab "Câu hỏi" để duyệt & publish.`);
+      setRows([]);
+      setMeta(null);
+    } catch {
+      toast.error('Không lưu được');
+    } finally {
+      setCommitting(false);
+    }
+  };
+
+  const chosenCount = rows.filter((r) => r.include).length;
+
+  return (
+    <div className="space-y-5">
+      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+        <div className="flex items-center gap-2 text-sm font-semibold text-white mb-1"><Sparkles className="w-4 h-4 text-teal-300" /> AI sinh câu hỏi từ kho tri thức</div>
+        <p className="text-xs text-slate-500 mb-4">AI đề xuất câu hỏi + rubric + đáp án mẫu, bám theo kho tri thức (RAG) của chủ đề. Câu tạo ra là <b className="text-slate-300">bản nháp (DRAFT), chưa duyệt</b> — không lọt vào buổi phỏng vấn thật cho tới khi bạn duyệt & publish.</p>
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+          <select value={topicId} onChange={(e) => setTopicId(Number(e.target.value))} className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+            {topics.map((t) => <option key={t.id} value={t.id}>{t.domain} · {t.track} · {t.name}</option>)}
+          </select>
+          <select value={level} onChange={(e) => setLevel(e.target.value)} className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+            {LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
+          </select>
+          <select value={type} onChange={(e) => setType(e.target.value)} className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+            {GEN_TYPES.map((t) => <option key={t} value={t}>{t === 'ANY' ? 'Mọi loại' : t}</option>)}
+          </select>
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-slate-400 shrink-0">Số câu</label>
+            <input type="number" min={1} max={10} value={count} onChange={(e) => setCount(Math.max(1, Math.min(10, Number(e.target.value) || 1)))} className="w-20 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <select value={language} onChange={(e) => setLanguage(e.target.value as 'VI' | 'EN')} className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+            <option value="VI">Tiếng Việt</option>
+            <option value="EN">English</option>
+          </select>
+          <label className="flex items-center gap-2 text-sm text-slate-300">
+            <input type="checkbox" checked={useKnowledge} onChange={(e) => setUseKnowledge(e.target.checked)} className="accent-teal-500" /> Dùng kho tri thức (RAG)
+          </label>
+        </div>
+        <div className="flex justify-end mt-4">
+          <button onClick={generate} disabled={loading} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/40 text-sm disabled:opacity-50">
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} {loading ? 'Đang sinh…' : 'Sinh câu hỏi'}
+          </button>
+        </div>
+      </div>
+
+      {meta && (
+        <div className={`rounded-xl border p-3 text-xs ${meta.grounded ? 'border-emerald-500/30 bg-emerald-500/[0.05] text-emerald-200/90' : 'border-amber-500/30 bg-amber-500/[0.05] text-amber-200/90'}`}>
+          {meta.grounded
+            ? <>Grounded trên <b>{meta.chunksUsed}</b> khối tri thức · model <span className="font-mono">{meta.model}</span>{meta.sources.length ? <> · nguồn: {meta.sources.slice(0, 4).map((s) => s.title).join(', ')}{meta.sources.length > 4 ? '…' : ''}</> : null}</>
+            : <>{meta.warning || 'Không có kho tri thức cho chủ đề này — câu hỏi dựa trên kiến thức chung.'} · model <span className="font-mono">{meta.model}</span></>}
+        </div>
+      )}
+
+      {rows.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-slate-300">{chosenCount}/{rows.length} câu được chọn</div>
+            <button onClick={commit} disabled={committing || chosenCount === 0} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-sm disabled:opacity-50">
+              {committing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Lưu {chosenCount} câu (DRAFT)
+            </button>
+          </div>
+          {rows.map((r, i) => (
+            <div key={i} className={`rounded-xl border p-4 space-y-3 ${r.include ? 'border-teal-500/30 bg-white/[0.03]' : 'border-white/10 bg-white/[0.01] opacity-60'}`}>
+              <div className="flex items-start gap-3">
+                <label className="flex items-center gap-2 text-xs text-slate-400 shrink-0 pt-1">
+                  <input type="checkbox" checked={r.include} onChange={(e) => patch(i, { include: e.target.checked })} className="accent-teal-500" /> Lưu câu này
+                </label>
+                <div className="flex items-center gap-2 ml-auto">
+                  <select value={r.type} onChange={(e) => patch(i, { type: e.target.value })} className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs">
+                    {['CONCEPTUAL', 'CODING', 'SYSTEM_DESIGN', 'BEHAVIORAL', 'SCENARIO', 'MCQ'].map((t) => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                  <select value={r.difficulty} onChange={(e) => patch(i, { difficulty: Number(e.target.value) })} className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs">
+                    {[1, 2, 3, 4, 5].map((d) => <option key={d} value={d}>độ khó {d}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="text-[11px] text-slate-500 mb-1 block">Câu hỏi</label>
+                <textarea value={r.body} onChange={(e) => patch(i, { body: e.target.value })} rows={3} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+              </div>
+              <div>
+                <label className="text-[11px] text-slate-500 mb-1 block">Đáp án mẫu</label>
+                <textarea value={r.referenceAnswer} onChange={(e) => patch(i, { referenceAnswer: e.target.value })} rows={3} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+              </div>
+              <div className="grid md:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[11px] text-slate-500 mb-1 block">Rubric (JSON)</label>
+                  <textarea value={r.rubricText} onChange={(e) => patch(i, { rubricText: e.target.value })} rows={4} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs font-mono" />
+                </div>
+                <div className="space-y-2">
+                  <div>
+                    <label className="text-[11px] text-slate-500 mb-1 block">Khái niệm bắt buộc (phẩy ngăn cách)</label>
+                    <input value={r.mustText} onChange={(e) => patch(i, { mustText: e.target.value })} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+                  </div>
+                  {r.redFlags.length > 0 && (
+                    <div className="text-[11px] text-slate-500">Red flags: <span className="text-rose-300/80">{r.redFlags.join(' · ')}</span></div>
+                  )}
+                  {r.tags.length > 0 && (
+                    <div className="text-[11px] text-slate-500">Tags: {r.tags.join(', ')}</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Phase 7: Prompt template editor (versioned) ──────────────
+function Prompts() {
+  const [items, setItems] = useState<PromptSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [openKey, setOpenKey] = useState<string | null>(null);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    interviewAdminApi.listPrompts().then((r) => setItems(r.data.data)).catch(() => toast.error('Không tải được prompt')).finally(() => setLoading(false));
+  }, []);
+  useEffect(() => { load(); }, [load]);
+
+  if (loading) return <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải…</div>;
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+        <div className="flex items-center gap-2 text-sm font-semibold text-white mb-1"><ScrollText className="w-4 h-4 text-teal-300" /> Prompt hệ thống của AI</div>
+        <p className="text-xs text-slate-500">Chỉnh giọng điệu & quy tắc của AI (chấm bài, viết báo cáo, sinh câu hỏi) mà KHÔNG cần deploy. Mỗi lần lưu tạo một <b className="text-slate-300">phiên bản mới</b> và kích hoạt nó; có thể quay lại phiên bản cũ hoặc <b className="text-slate-300">reset về mặc định</b> bất cứ lúc nào. Giữ nguyên các biến <span className="font-mono text-slate-400">{'{{...}}'}</span> — hệ thống tự điền.</p>
+      </div>
+      {items.map((p) => (
+        <PromptCard key={p.key} p={p} open={openKey === p.key} onToggle={() => setOpenKey(openKey === p.key ? null : p.key)} onChanged={load} />
+      ))}
+    </div>
+  );
+}
+
+function PromptCard({ p, open, onToggle, onChanged }: { p: PromptSummary; open: boolean; onToggle: () => void; onChanged: () => void }) {
+  const [content, setContent] = useState(p.activeContent);
+  const [saving, setSaving] = useState(false);
+  const [versions, setVersions] = useState<PromptVersion[] | null>(null);
+  const [showVersions, setShowVersions] = useState(false);
+
+  useEffect(() => { setContent(p.activeContent); }, [p.activeContent]);
+
+  const dirty = content !== p.activeContent;
+
+  const save = async () => {
+    if (!content.trim()) { toast.warning('Nội dung trống'); return; }
+    setSaving(true);
+    try {
+      await interviewAdminApi.savePrompt(p.key, content);
+      toast.success('Đã lưu phiên bản mới & kích hoạt.');
+      onChanged();
+    } catch {
+      toast.error('Không lưu được');
+    } finally {
+      setSaving(false);
+    }
+  };
+  const reset = async () => {
+    if (!confirm('Reset về prompt mặc định (gốc code)? Các phiên bản đã lưu vẫn giữ trong lịch sử.')) return;
+    await interviewAdminApi.resetPrompt(p.key).then(() => { toast.success('Đã quay về mặc định.'); onChanged(); }).catch(() => toast.error('Lỗi'));
+  };
+  const loadVersions = async () => {
+    if (versions) { setShowVersions((s) => !s); return; }
+    try { const r = await interviewAdminApi.promptVersions(p.key); setVersions(r.data.data.versions); setShowVersions(true); } catch { toast.error('Không tải được lịch sử'); }
+  };
+  const activate = async (version: number) => {
+    await interviewAdminApi.activatePrompt(p.key, version).then(() => { toast.success(`Đã kích hoạt v${version}`); onChanged(); setVersions(null); setShowVersions(false); }).catch(() => toast.error('Lỗi'));
+  };
+
+  return (
+    <div className="rounded-xl border border-white/10 overflow-hidden">
+      <button onClick={onToggle} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.02]">
+        {open ? <ChevronDown className="w-4 h-4 text-slate-500 shrink-0" /> : <ChevronRight className="w-4 h-4 text-slate-500 shrink-0" />}
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-medium text-white">{p.name}</div>
+          <div className="text-xs text-slate-500 line-clamp-1">{p.description}</div>
+        </div>
+        <span className={`text-[11px] px-2 py-0.5 rounded shrink-0 ${p.usingDefault ? 'bg-slate-500/15 text-slate-400' : 'bg-emerald-500/15 text-emerald-300'}`}>
+          {p.usingDefault ? 'Mặc định' : `Tuỳ chỉnh · v${p.activeVersion}`}
+        </span>
+      </button>
+      {open && (
+        <div className="px-4 pb-4 space-y-3 border-t border-white/5 pt-3">
+          {p.variables.length > 0 && (
+            <div className="text-[11px] text-slate-500">
+              Biến khả dụng: {p.variables.map((v) => (
+                <span key={v.name} className="inline-block mr-2"><span className="font-mono text-teal-300/80">{`{{${v.name}}}`}</span> <span className="text-slate-600">— {v.desc}</span></span>
+              ))}
+            </div>
+          )}
+          <textarea value={content} onChange={(e) => setContent(e.target.value)} rows={14} className="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-xs font-mono leading-relaxed" spellCheck={false} />
+          <div className="flex flex-wrap items-center gap-2">
+            <button onClick={save} disabled={saving || !dirty} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/40 text-sm disabled:opacity-40">
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Lưu phiên bản mới
+            </button>
+            {dirty && <button onClick={() => setContent(p.activeContent)} className="px-3 py-1.5 rounded-lg text-sm text-slate-400 hover:bg-white/10">Hoàn tác</button>}
+            <button onClick={() => setContent(p.defaultContent)} className="px-3 py-1.5 rounded-lg text-sm text-slate-400 hover:bg-white/10 inline-flex items-center gap-1.5"><RotateCcw className="w-3.5 h-3.5" /> Nạp bản mặc định vào ô</button>
+            {!p.usingDefault && <button onClick={reset} className="px-3 py-1.5 rounded-lg text-sm text-amber-300/90 hover:bg-amber-500/10 border border-amber-500/30">Về mặc định</button>}
+            {p.versionCount > 0 && (
+              <button onClick={loadVersions} className="ml-auto px-3 py-1.5 rounded-lg text-sm text-slate-400 hover:bg-white/10 inline-flex items-center gap-1.5"><History className="w-3.5 h-3.5" /> Lịch sử ({p.versionCount})</button>
+            )}
+          </div>
+          {showVersions && versions && (
+            <div className="rounded-lg border border-white/10 divide-y divide-white/5">
+              {versions.map((v) => (
+                <div key={v.id} className="flex items-center gap-3 px-3 py-2 text-xs">
+                  <span className="font-mono text-slate-400">v{v.version}</span>
+                  {v.isActive && <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300">đang dùng</span>}
+                  <span className="text-slate-600">{new Date(v.updatedAt).toLocaleString('vi-VN')}</span>
+                  <span className="text-slate-500 truncate flex-1">{v.content.slice(0, 80)}…</span>
+                  {!v.isActive && <button onClick={() => activate(v.version)} className="shrink-0 px-2 py-1 rounded bg-white/5 text-slate-300 hover:bg-white/10">Kích hoạt</button>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

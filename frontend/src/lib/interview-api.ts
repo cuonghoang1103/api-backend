@@ -158,6 +158,68 @@ export interface LlmUsage {
   byModel: Array<{ model: string; success: boolean; calls: number; inputTokens: number; outputTokens: number; costUsd: number }>;
 }
 
+// ── Phase 7: Prompt templates (versioned) ──
+export interface PromptVar {
+  name: string;
+  desc: string;
+}
+export interface PromptSummary {
+  key: string;
+  name: string;
+  description: string;
+  variables: PromptVar[];
+  defaultContent: string;
+  activeVersion: number | null;
+  activeContent: string;
+  usingDefault: boolean;
+  updatedAt: string | null;
+  versionCount: number;
+}
+export interface PromptVersion {
+  id: number;
+  version: number;
+  name: string;
+  content: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface PromptVersionsResponse {
+  key: string;
+  name: string;
+  description: string;
+  variables: PromptVar[];
+  defaultContent: string;
+  versions: PromptVersion[];
+}
+
+// ── Phase 8: AI question generation ──
+export interface GeneratedRubricItem {
+  id: string;
+  criterion: string;
+  weight: number;
+}
+export interface GeneratedQuestion {
+  body: string;
+  referenceAnswer: string;
+  rubric: GeneratedRubricItem[];
+  mustMention: string[];
+  shouldMention: string[];
+  redFlags: string[];
+  difficulty: number;
+  type: string;
+  tags: string[];
+}
+export interface GeneratePreview {
+  questions: GeneratedQuestion[];
+  grounded: boolean;
+  chunksUsed: number;
+  sources: { documentId: number; title: string; headingPath: string | null }[];
+  model: string;
+  topic: { id: number; name: string; trackId: number };
+  warning?: string;
+}
+
 export const interviewAdminApi = {
   taxonomy: (): Res<unknown> => api.get('/admin/interview/taxonomy'),
   bankHealth: (): Res<BankHealthRow[]> => api.get('/admin/interview/bank-health'),
@@ -192,4 +254,24 @@ export const interviewAdminApi = {
   deleteKnowledge: (id: number): Res<{ deleted: boolean }> => api.delete(`/admin/interview/knowledge/${id}`),
   knowledgeCoverage: (): Res<KnowledgeCoverageRow[]> => api.get('/admin/interview/knowledge/coverage'),
   knowledgeGaps: (): Res<KnowledgeCoverageRow[]> => api.get('/admin/interview/knowledge/gaps'),
+  // ── Phase 7: Prompt templates ──
+  listPrompts: (): Res<PromptSummary[]> => api.get('/admin/interview/prompts'),
+  promptVersions: (key: string): Res<PromptVersionsResponse> => api.get(`/admin/interview/prompts/${key}/versions`),
+  savePrompt: (key: string, content: string, name?: string): Res<PromptVersion> =>
+    api.post(`/admin/interview/prompts/${key}`, { content, name }),
+  activatePrompt: (key: string, version: number): Res<{ key: string; activeVersion: number }> =>
+    api.post(`/admin/interview/prompts/${key}/activate`, { version }),
+  resetPrompt: (key: string): Res<{ key: string; usingDefault: boolean }> =>
+    api.post(`/admin/interview/prompts/${key}/reset`, {}),
+  // ── Phase 8: AI question generation (preview → commit) ──
+  generateQuestions: (body: {
+    topicId: number;
+    level: string;
+    count?: number;
+    type?: string;
+    language?: 'VI' | 'EN';
+    useKnowledge?: boolean;
+  }): Res<GeneratePreview> => api.post('/admin/interview/generate', body, { timeout: 120_000 }),
+  commitQuestions: (body: { topicId: number; level: string; questions: GeneratedQuestion[] }): Res<{ created: number; ids: number[] }> =>
+    api.post('/admin/interview/generate/commit', body),
 };

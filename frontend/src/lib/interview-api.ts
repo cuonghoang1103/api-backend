@@ -1,0 +1,95 @@
+/**
+ * Interview Simulator — API client.
+ * Axios groups over /api/v1/interview (user) and /api/v1/admin/interview (admin).
+ * Callers unwrap `res.data.data`. Phase 2 is STATIC — no streaming yet.
+ */
+import { api } from './api';
+import type { ApiResponse } from '@/types';
+import type {
+  TaxonomyResponse,
+  SessionCreateResponse,
+  SessionState,
+  SubmitAnswerResponse,
+  SelfAssessResponse,
+  InterviewReport,
+  ReportResponse,
+  HistoryItem,
+  CreateSessionBody,
+  IntegritySignals,
+  InterviewLevel,
+} from '@/types/interview';
+
+type Res<T> = Promise<{ data: ApiResponse<T> }>;
+
+export const interviewApi = {
+  // ── User flow ──────────────────────────────────────────────
+  tracks: (): Res<TaxonomyResponse> => api.get('/interview/tracks'),
+  createSession: (body: CreateSessionBody): Res<SessionCreateResponse> => api.post('/interview/sessions', body),
+  getSession: (id: number): Res<SessionState> => api.get(`/interview/sessions/${id}`),
+  answer: (
+    id: number,
+    order: number,
+    body: { answer?: string; selectedOptionId?: string; timeSpentMs?: number; integritySignals?: IntegritySignals },
+  ): Res<SubmitAnswerResponse> => api.post(`/interview/sessions/${id}/turns/${order}/answer`, body),
+  selfAssess: (id: number, order: number, ratings: Record<string, number>): Res<SelfAssessResponse> =>
+    api.post(`/interview/sessions/${id}/turns/${order}/self-assess`, { ratings }),
+  finish: (id: number): Res<InterviewReport> => api.post(`/interview/sessions/${id}/finish`, {}),
+  report: (id: number): Res<ReportResponse> => api.get(`/interview/sessions/${id}/report`),
+  history: (): Res<HistoryItem[]> => api.get('/interview/history'),
+};
+
+// ── Admin ────────────────────────────────────────────────────
+export interface AdminQuestion {
+  id: number;
+  topicId: number;
+  conceptId: number | null;
+  level: InterviewLevel;
+  type: string;
+  difficulty: number;
+  body: string;
+  bodyVi: string | null;
+  bodyEn: string | null;
+  referenceAnswer: string | null;
+  rubric: unknown;
+  mustMention: string[];
+  shouldMention: string[];
+  redFlags: string[];
+  synonyms: unknown;
+  tags: string[];
+  status: string;
+  rubricReviewed: boolean;
+  topic?: { id: number; name: string; trackId: number };
+  concept?: { id: number; name: string } | null;
+  updatedAt?: string;
+}
+
+export interface BankHealthRow {
+  topicId: number;
+  level: string;
+  status: string;
+  count: number;
+}
+
+export const interviewAdminApi = {
+  taxonomy: (): Res<unknown> => api.get('/admin/interview/taxonomy'),
+  bankHealth: (): Res<BankHealthRow[]> => api.get('/admin/interview/bank-health'),
+  listQuestions: (params: {
+    topicId?: number;
+    trackId?: number;
+    level?: string;
+    status?: string;
+    rubricReviewed?: boolean;
+    page?: number;
+    pageSize?: number;
+  } = {}): Res<{ items: AdminQuestion[]; total: number; page: number; pageSize: number }> =>
+    api.get('/admin/interview/questions', { params }),
+  getQuestion: (id: number): Res<AdminQuestion> => api.get(`/admin/interview/questions/${id}`),
+  createQuestion: (body: Partial<AdminQuestion>): Res<AdminQuestion> => api.post('/admin/interview/questions', body),
+  updateQuestion: (id: number, body: Partial<AdminQuestion>): Res<AdminQuestion> => api.put(`/admin/interview/questions/${id}`, body),
+  deleteQuestion: (id: number): Res<{ deleted: boolean }> => api.delete(`/admin/interview/questions/${id}`),
+  createDomain: (body: Record<string, unknown>): Res<unknown> => api.post('/admin/interview/domains', body),
+  createTrack: (body: Record<string, unknown>): Res<unknown> => api.post('/admin/interview/tracks', body),
+  createTopic: (body: Record<string, unknown>): Res<unknown> => api.post('/admin/interview/topics', body),
+  createConcept: (body: Record<string, unknown>): Res<unknown> => api.post('/admin/interview/concepts', body),
+  createCompanyProfile: (body: Record<string, unknown>): Res<unknown> => api.post('/admin/interview/company-profiles', body),
+};

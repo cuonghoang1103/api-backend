@@ -132,6 +132,10 @@ const myLanguagePublicRoutes = myLanguageModule.publicRouter;
 const myLanguageAdminRoutes = myLanguageModule.adminRouter;
 // MoneyFlow — private per-user personal finance module
 const financeRoutes = (await import(path.join(__dirname, 'routes', 'finance.routes.js'))).default;
+// Interview Simulator — STATIC mock-interview engine (user + admin)
+const interviewModule = await import(path.join(__dirname, 'routes', 'interview.routes.js'));
+const interviewRoutes = interviewModule.default;
+const interviewAdminRoutes = interviewModule.adminRouter;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -513,6 +517,9 @@ app.use('/api/v1/announcements', announcementRoutes);
 // My Language — public reads + authed SRS at /my-language, admin CRUD at /admin/my-language
 app.use('/api/v1/my-language', myLanguagePublicRoutes);
 app.use('/api/v1/admin/my-language', myLanguageAdminRoutes);
+// Interview Simulator — user flow + admin question bank / taxonomy
+app.use('/api/v1/interview', interviewRoutes);
+app.use('/api/v1/admin/interview', interviewAdminRoutes);
 app.use('/api/v1/finance', financeRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);

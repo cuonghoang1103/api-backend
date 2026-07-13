@@ -18,6 +18,13 @@
  * baked at build time too, so it buys nothing here.
  */
 
+/**
+ * Interview Simulator module (/interview + /admin/interview). Phase 2 ships a
+ * STATIC self-assessment engine (zero LLM, zero cost). Turn this OFF to hide
+ * the whole module (nav entry + routes) instantly — it's fully self-contained.
+ */
+export const INTERVIEW_ENABLED = true;
+
 /** Online shop: /shop pages, product cards, "buy"/"add to cart" buttons. */
 export const SHOP_ENABLED = false;
 

@@ -4811,3 +4811,358 @@ model Announcement {
   @@index([isPinned, createdAt], name: "idx_announcements_pinned_created")
   @@map("announcements")
 }
+
+// ═══════════════════════════════════════════════════════════════════
+//  INTERVIEW SIMULATOR  (Phase 2 — STATIC self-assessment engine)
+//  AI/Voice/Coding/System-Design/RAG modes are ACCOMMODATED via enum
+//  values + nullable columns but NOT implemented in Phase 2.
+//  All tables are self-contained: user ownership is a plain `userId Int`
+//  + index (NO FK to `users`) to keep this module decoupled from the
+//  core schema. Everything is gated behind the INTERVIEW_ENABLED
+//  frontend flag, so these tables are inert until the feature ships.
+//  Question full-text search (search_vector tsvector + GIN) is added by
+//  a separate hand-written raw-SQL migration, mirroring the Projects
+//  module — it is intentionally NOT modelled here.
+// ═══════════════════════════════════════════════════════════════════
+
+enum InterviewLevel {
+  INTERN
+  FRESHER
+  JUNIOR
+  MID
+  SENIOR
+  LEAD
+  PRINCIPAL
+}
+
+enum InterviewQuestionType {
+  CONCEPTUAL
+  CODING
+  SYSTEM_DESIGN
+  BEHAVIORAL
+  SCENARIO
+  MCQ
+}
+
+enum InterviewQuestionSource {
+  SEED
+  ADMIN
+  AI_GENERATED
+  IMPORTED
+}
+
+enum InterviewContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum InterviewSessionMode {
+  TEXT
+  VOICE
+  CODING
+  SYSTEM_DESIGN
+}
+
+enum InterviewEngineMode {
+  STATIC
+  HYBRID
+  FULL_AI
+}
+
+enum InterviewLanguage {
+  VI
+  EN
+}
+
+enum InterviewSessionStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+enum InterviewHireRecommendation {
+  STRONG_NO
+  NO
+  LEAN_NO
+  LEAN_YES
+  YES
+  STRONG_YES
+}
+
+enum InterviewMasteryLevel {
+  UNSEEN
+  SHAKY
+  LEARNING
+  SOLID
+  MASTERED
+}
+
+model InterviewDomain {
+  id          Int                    @id @default(autoincrement())
+  slug        String                 @unique @db.VarChar(80)
+  name        String                 @db.VarChar(120)
+  nameVi      String?                @map("name_vi") @db.VarChar(120)
+  description String?                @db.Text
+  icon        String?                @db.VarChar(60)
+  sortOrder   Int                    @default(0) @map("sort_order")
+  status      InterviewContentStatus @default(PUBLISHED)
+  createdAt   DateTime               @default(now()) @map("created_at")
+  updatedAt   DateTime               @updatedAt @map("updated_at")
+
+  tracks InterviewTrack[]
+
+  @@map("interview_domains")
+}
+
+model InterviewTrack {
+  id          Int                    @id @default(autoincrement())
+  domainId    Int                    @map("domain_id")
+  domain      InterviewDomain        @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  slug        String                 @unique @db.VarChar(100)
+  name        String                 @db.VarChar(150)
+  nameVi      String?                @map("name_vi") @db.VarChar(150)
+  description String?                @db.Text
+  icon        String?                @db.VarChar(60)
+  sortOrder   Int                    @default(0) @map("sort_order")
+  status      InterviewContentStatus @default(PUBLISHED)
+  createdAt   DateTime               @default(now()) @map("created_at")
+  updatedAt   DateTime               @updatedAt @map("updated_at")
+
+  topics   InterviewTopic[]
+  sessions InterviewSession[]
+
+  @@index([domainId], name: "idx_interview_tracks_domain")
+  @@map("interview_tracks")
+}
+
+model InterviewTopic {
+  id        Int                    @id @default(autoincrement())
+  trackId   Int                    @map("track_id")
+  track     InterviewTrack         @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  slug      String                 @unique @db.VarChar(120)
+  name      String                 @db.VarChar(150)
+  nameVi    String?                @map("name_vi") @db.VarChar(150)
+  weight    Int                    @default(1) // weighted sampling
+  sortOrder Int                    @default(0) @map("sort_order")
+  status    InterviewContentStatus @default(PUBLISHED)
+  createdAt DateTime               @default(now()) @map("created_at")
+  updatedAt DateTime               @updatedAt @map("updated_at")
+
+  concepts    InterviewConcept[]
+  questions   InterviewQuestion[]
+  reviewCards InterviewReviewCard[]
+
+  @@index([trackId], name: "idx_interview_topics_track")
+  @@map("interview_topics")
+}
+
+model InterviewConcept {
+  id        Int            @id @default(autoincrement())
+  topicId   Int            @map("topic_id")
+  topic     InterviewTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  slug      String         @unique @db.VarChar(140)
+  name      String         @db.VarChar(200)
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+
+  questions   InterviewQuestion[]
+  reviewCards InterviewReviewCard[]
+
+  @@index([topicId], name: "idx_interview_concepts_topic")
+  @@map("interview_concepts")
+}
+
+model InterviewCompanyProfile {
+  id              Int                    @id @default(autoincrement())
+  slug            String                 @unique @db.VarChar(80)
+  name            String                 @db.VarChar(150)
+  styleDescriptor String                 @map("style_descriptor") @db.Text
+  rigor           Int                    @default(3) // 1-5, injected into interviewer persona
+  status          InterviewContentStatus @default(PUBLISHED)
+  createdAt       DateTime               @default(now()) @map("created_at")
+  updatedAt       DateTime               @updatedAt @map("updated_at")
+
+  sessions InterviewSession[]
+
+  @@map("interview_company_profiles")
+}
+
+model InterviewQuestion {
+  id              Int                     @id @default(autoincrement())
+  topicId         Int                     @map("topic_id")
+  topic           InterviewTopic          @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  conceptId       Int?                    @map("concept_id")
+  concept         InterviewConcept?       @relation(fields: [conceptId], references: [id], onDelete: SetNull)
+  level           InterviewLevel
+  type            InterviewQuestionType   @default(CONCEPTUAL)
+  difficulty      Int                     @default(3) // 1-5
+  body            String                  @db.Text // markdown, display language
+  bodyVi          String?                 @map("body_vi") @db.Text
+  bodyEn          String?                 @map("body_en") @db.Text
+  referenceAnswer String?                 @map("reference_answer") @db.Text
+  rubric          Json                    @default("[]") @db.JsonB // [{id,criterion,weight}]
+  mustMention     String[]                @default([]) @map("must_mention")
+  shouldMention   String[]                @default([]) @map("should_mention")
+  redFlags        String[]                @default([]) @map("red_flags")
+  synonyms        Json                    @default("{}") @db.JsonB // { term: [aliases] }
+  mcqOptions      Json?                   @map("mcq_options") @db.JsonB // [{id,text,correct}]
+  tags            String[]                @default([])
+  source          InterviewQuestionSource @default(SEED)
+  status          InterviewContentStatus  @default(DRAFT)
+  rubricReviewed  Boolean                 @default(false) @map("rubric_reviewed")
+  authorId        Int?                    @map("author_id")
+  createdAt       DateTime                @default(now()) @map("created_at")
+  updatedAt       DateTime                @updatedAt @map("updated_at")
+
+  versions    InterviewQuestionVersion[]
+  turns       InterviewTurn[]
+  reviewCards InterviewReviewCard[]
+
+  @@index([topicId, level, status], name: "idx_interview_questions_topic_level")
+  @@index([conceptId], name: "idx_interview_questions_concept")
+  @@map("interview_questions")
+}
+
+model InterviewQuestionVersion {
+  id         Int               @id @default(autoincrement())
+  questionId Int               @map("question_id")
+  question   InterviewQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  version    Int
+  snapshot   Json              @db.JsonB
+  editorId   Int?              @map("editor_id")
+  createdAt  DateTime          @default(now()) @map("created_at")
+
+  @@unique([questionId, version], name: "uk_interview_qversion")
+  @@map("interview_question_versions")
+}
+
+model InterviewSession {
+  id               Int                      @id @default(autoincrement())
+  userId           Int                      @map("user_id")
+  trackId          Int                      @map("track_id")
+  track            InterviewTrack           @relation(fields: [trackId], references: [id], onDelete: Restrict)
+  companyProfileId Int?                     @map("company_profile_id")
+  companyProfile   InterviewCompanyProfile? @relation(fields: [companyProfileId], references: [id], onDelete: SetNull)
+  level            InterviewLevel
+  mode             InterviewSessionMode     @default(TEXT)
+  engineMode       InterviewEngineMode      @default(STATIC) @map("engine_mode")
+  language         InterviewLanguage        @default(VI)
+  status           InterviewSessionStatus   @default(IN_PROGRESS)
+  focusedMode      Boolean                  @default(false) @map("focused_mode")
+  config           Json                     @default("{}") @db.JsonB
+  startedAt        DateTime?                @map("started_at")
+  endedAt          DateTime?                @map("ended_at")
+  createdAt        DateTime                 @default(now()) @map("created_at")
+  updatedAt        DateTime                 @updatedAt @map("updated_at")
+
+  turns  InterviewTurn[]
+  report InterviewReport?
+
+  @@index([userId, status], name: "idx_interview_sessions_user")
+  @@index([trackId], name: "idx_interview_sessions_track")
+  @@map("interview_sessions")
+}
+
+model InterviewTurn {
+  id                 Int                @id @default(autoincrement())
+  sessionId          Int                @map("session_id")
+  session            InterviewSession   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionId         Int?               @map("question_id")
+  question           InterviewQuestion? @relation(fields: [questionId], references: [id], onDelete: SetNull)
+  order              Int
+  questionText       String             @map("question_text") @db.Text
+  userAnswer         String?            @map("user_answer") @db.Text
+  selfScore          Json?              @map("self_score") @db.JsonB
+  deterministicScore Json?              @map("deterministic_score") @db.JsonB
+  aiFollowUps        Json?              @map("ai_follow_ups") @db.JsonB
+  turnScore          Json?              @map("turn_score") @db.JsonB
+  timeSpentMs        Int?               @map("time_spent_ms")
+  integritySignals   Json?              @map("integrity_signals") @db.JsonB
+  needsReview        Boolean            @default(false) @map("needs_review")
+  injectionAttempted Boolean            @default(false) @map("injection_attempted")
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+
+  @@unique([sessionId, order], name: "uk_interview_turn_order")
+  @@index([questionId], name: "idx_interview_turns_question")
+  @@map("interview_turns")
+}
+
+model InterviewReport {
+  id                 Int                          @id @default(autoincrement())
+  sessionId          Int                          @unique @map("session_id")
+  session            InterviewSession             @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  overallScore       Float?                       @map("overall_score")
+  letterGrade        String?                      @map("letter_grade") @db.VarChar(2)
+  scoreBreakdown     Json                         @default("{}") @map("score_breakdown") @db.JsonB
+  strengths          String[]                     @default([])
+  weaknesses         String[]                     @default([])
+  actionableAdvice   String?                      @map("actionable_advice") @db.Text
+  suggestedResources Json?                        @map("suggested_resources") @db.JsonB
+  hireRecommendation InterviewHireRecommendation? @map("hire_recommendation")
+  pdfR2Key           String?                      @map("pdf_r2_key") @db.VarChar(300)
+  createdAt          DateTime                     @default(now()) @map("created_at")
+  updatedAt          DateTime                     @updatedAt @map("updated_at")
+
+  @@map("interview_reports")
+}
+
+model InterviewReviewCard {
+  id              Int                   @id @default(autoincrement())
+  userId          Int                   @map("user_id")
+  topicId         Int                   @map("topic_id")
+  topic           InterviewTopic        @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  conceptId       Int?                  @map("concept_id")
+  concept         InterviewConcept?     @relation(fields: [conceptId], references: [id], onDelete: SetNull)
+  questionId      Int?                  @map("question_id")
+  question        InterviewQuestion?    @relation(fields: [questionId], references: [id], onDelete: SetNull)
+  sourceSessionId Int?                  @map("source_session_id")
+  easeFactor      Float                 @default(2.5) @map("ease_factor")
+  intervalDays    Int                   @default(0) @map("interval_days")
+  repetitions     Int                   @default(0)
+  lapses          Int                   @default(0)
+  dueAt           DateTime?             @map("due_at")
+  lastReviewedAt  DateTime?             @map("last_reviewed_at")
+  masteryLevel    InterviewMasteryLevel @default(UNSEEN) @map("mastery_level")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+
+  @@unique([userId, conceptId], name: "uk_interview_reviewcard_user_concept")
+  @@index([userId, dueAt], name: "idx_interview_reviewcards_due")
+  @@index([topicId], name: "idx_interview_reviewcards_topic")
+  @@map("interview_review_cards")
+}
+
+// ── Ops / AI-phase tables (created now, INERT until Phase 4 wires the LLM layer) ──
+model InterviewPromptTemplate {
+  id        Int               @id @default(autoincrement())
+  key       String            @db.VarChar(80)
+  name      String            @db.VarChar(150)
+  content   String            @db.Text
+  language  InterviewLanguage @default(VI)
+  version   Int               @default(1)
+  isActive  Boolean           @default(true) @map("is_active")
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+
+  @@unique([key, version], name: "uk_interview_prompt_key_version")
+  @@map("interview_prompt_templates")
+}
+
+model InterviewLLMCallLog {
+  id           Int      @id @default(autoincrement())
+  userId       Int?     @map("user_id")
+  sessionId    Int?     @map("session_id")
+  step         String   @db.VarChar(40)
+  provider     String   @db.VarChar(40)
+  model        String   @db.VarChar(80)
+  inputTokens  Int      @default(0) @map("input_tokens")
+  outputTokens Int      @default(0) @map("output_tokens")
+  costUsd      Decimal  @default(0) @map("cost_usd") @db.Decimal(12, 6)
+  success      Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([userId, createdAt], name: "idx_interview_llmlog_user")
+  @@map("interview_llm_call_logs")
+}

@@ -8,7 +8,7 @@ import {
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
  CreditCard, Github, Search, TrendingUp, AlertTriangle,
- KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket,
+ KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase,
 } from 'lucide-react';
 
 const adminNav = [
@@ -37,6 +37,7 @@ const adminNav = [
  { label: 'GitHub Repo Hub', href: '/admin/repos', icon: Github },
  { label: 'EXP Hub — Snippets', href: '/admin/exp-hub', icon: Code2 },
  { label: 'My Language', href: '/admin/language', icon: Languages },
+ { label: 'Interview Simulator', href: '/admin/interview', icon: Briefcase },
  { label: 'Quản lý Users', href: '/admin/users', icon: Users },
  { label: 'Quản lý Skills', href: '/admin/skills', icon: Code2 },
  { label: 'Quản lý Projects', href: '/admin/projects', icon: Sparkles },

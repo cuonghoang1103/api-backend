@@ -338,6 +338,20 @@ else
  echo "$ZH_SEED_OUT" | tail -12 | sed 's/^/ /'
 fi
 
+# ── Step 3.11: Interview Simulator starter bank (idempotent) ────
+# Find-before-create questions + upsert taxonomy by slug; safe to re-run.
+# All seeded rubrics are rubricReviewed=false (flagged for human review).
+info "Running Interview Simulator seed (starter question bank)..."
+INTERVIEW_SEED_OUT=$($DC exec -T backend sh -c \
+ "npx tsx prisma/seed.interview.ts" 2>&1) || true
+if echo "$INTERVIEW_SEED_OUT" | grep -qiE "error|cannot find|exception"; then
+ warn "Interview seed reported errors — see /tmp/seed-interview.log"
+ echo "$INTERVIEW_SEED_OUT" > /tmp/seed-interview.log
+else
+ ok "Interview seed complete"
+ echo "$INTERVIEW_SEED_OUT" | tail -3 | sed 's/^/ /'
+fi
+
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."
 backend_ok=false
@@ -406,6 +420,7 @@ for route in \
     announcements \
     my-language \
     finance/wallets \
+    interview/tracks \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

@@ -199,6 +199,21 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // The `/social/post/[id]` route never existed — the canonical post URL is
+      // `/?post=[id]` (opens the post modal on the home feed). Old share links
+      // (Facebook/Twitter) and Google-indexed URLs still hit /social/post/* and
+      // 404'd. A permanent (308) redirect fixes those dead links and tells
+      // Google the URL moved so the 404s consolidate onto the home feed.
+      // Static config (not middleware) → no per-request code, no auth-flow risk.
+      {
+        source: '/social/post/:id',
+        destination: '/?post=:id',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 // Wrap the Next config with Sentry. The plugin instruments the

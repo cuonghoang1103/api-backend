@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 // without touching any rendering or logic.
 export const metadata: Metadata = {
   title: 'Shop',
+  alternates: { canonical: 'https://cuongthai.com/shop' },
   description:
     'AI tools, source code, and digital products built by Cuong Hoang.',
 };

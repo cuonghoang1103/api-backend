@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 // without touching any rendering or logic.
 export const metadata: Metadata = {
   title: 'Academy',
+  alternates: { canonical: 'https://cuongthai.com/academy' },
   description:
     'Learning hub — courses, roadmaps, and study resources by Cuong Hoang.',
 };

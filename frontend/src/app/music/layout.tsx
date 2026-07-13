@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 // without touching any rendering or logic.
 export const metadata: Metadata = {
   title: 'Music',
+  alternates: { canonical: 'https://cuongthai.com/music' },
   description:
     'Cyber music player — playlists, likes, lyrics, remixes, and listen-together.',
 };

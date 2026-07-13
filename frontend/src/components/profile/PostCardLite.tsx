@@ -84,7 +84,7 @@ export default function PostCardLite({ post, onToggleLike, onRepostChange }: Pos
 
   return (
     <Link
-      href={`/social/post/${post.id}`}
+      href={`/?post=${post.id}`}
       className="group block overflow-hidden rounded-2xl border border-darkborder bg-darkcard/40 transition-colors hover:border-neon-violet/40"
     >
       {/* Cover image */}

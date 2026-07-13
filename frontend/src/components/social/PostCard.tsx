@@ -405,7 +405,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
   const handleShare = (platform: string) => {
     setShowShareMenu(false);
     if (platform === 'copy') {
-      navigator.clipboard.writeText(`${window.location.origin}/social/post/${post.id}`);
+      navigator.clipboard.writeText(`${window.location.origin}/?post=${post.id}`);
       toast.success('Đã sao chép liên kết');
       return;
     }
@@ -415,8 +415,8 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
     }
     void socialApi.sharePost(post.id, platform);
     const urls: Record<string, string> = {
-      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(safeContent.slice(0, 100))}&url=${encodeURIComponent(window.location.origin + '/social/post/' + post.id)}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/social/post/' + post.id)}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(safeContent.slice(0, 100))}&url=${encodeURIComponent(window.location.origin + '/?post=' + post.id)}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/?post=' + post.id)}`,
     };
     if (urls[platform]) {
       window.open(urls[platform], '_blank', 'noopener');
@@ -1032,7 +1032,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                     <button
                       className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
                       style={{ color: 'var(--text-secondary)' }}
-                      onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/social/post/${post.id}`); setShowMoreMenu(false); toast.success('Đã sao chép liên kết'); }}
+                      onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/?post=${post.id}`); setShowMoreMenu(false); toast.success('Đã sao chép liên kết'); }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.color = 'var(--text-primary)';
                         e.currentTarget.style.background = 'var(--bg-surface-hover)';
@@ -3908,8 +3908,8 @@ function SendToMessengerModal({
   const [sendingTo, setSendingTo] = useState<number | null>(null);
 
   const postUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/social/post/${post.id}`
-    : `/social/post/${post.id}`;
+    ? `${window.location.origin}/?post=${post.id}`
+    : `/?post=${post.id}`;
   const previewText = `📌 Bài viết của ${authorDisplay}${post.content ? `: ${post.content.slice(0, 120)}` : ''}\n${postUrl}`;
 
   const handleSend = async (thread: MessagingThread) => {

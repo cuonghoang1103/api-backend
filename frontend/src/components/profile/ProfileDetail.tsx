@@ -786,7 +786,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
               return (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 rounded-2xl overflow-hidden border border-darkborder">
                   {items.map((m) => (
-                    <a key={m.id} href={`/social/post/${m.postId}`} className="group relative aspect-square overflow-hidden bg-darkcard/40">
+                    <a key={m.id} href={`/?post=${m.postId}`} className="group relative aspect-square overflow-hidden bg-darkcard/40">
                       <MediaThumb url={m.url || m.thumbnail} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                       {m.type === 'VIDEO' && <div className="absolute top-2 right-2 bg-black/60 rounded-full p-1.5"><ImageIcon className="h-4 w-4 text-white" /></div>}
                     </a>

@@ -262,10 +262,12 @@ export async function getUsageStats() {
 
 /** Extract a JSON object from possibly-fenced model text. Throws if unparseable. */
 export function extractJson<T = unknown>(text: string): T {
-  let t = (text || '').trim();
-  t = t.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
-  const first = t.indexOf('{');
-  const last = t.lastIndexOf('}');
+  let t = (text || "").trim();
+  t = t.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
+  const first = t.indexOf("{");
+  const last = t.lastIndexOf("}");
   if (first >= 0 && last > first) t = t.slice(first, last + 1);
+  // Repair unescaped raw control chars inside strings ("Bad control character").
+  t = t.replace(/[\x00-\x1F]+/g, " ");
   return JSON.parse(t) as T;
 }

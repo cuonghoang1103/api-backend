@@ -12,7 +12,8 @@ import { useParams } from 'next/navigation';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer,
 } from 'recharts';
-import { Loader2, ChevronDown, AlertTriangle, RotateCcw } from 'lucide-react';
+import { Loader2, ChevronDown, AlertTriangle, RotateCcw, Flag } from 'lucide-react';
+import { toast } from 'sonner';
 import ParticleBackground from '@/components/repos/ParticleBackground';
 import Markdown from '@/components/markdown/Markdown';
 import { interviewApi } from '@/lib/interview-api';
@@ -115,7 +116,7 @@ export default function InterviewReportPage() {
         {/* Per-question drill-down */}
         <div className="rounded-2xl border border-white/10 overflow-hidden">
           <div className="px-4 py-3 border-b border-white/10 text-sm font-semibold text-slate-100">Chi tiết từng câu (bấm để mở)</div>
-          {turns.map((t) => <TurnRow key={t.order} turn={t} />)}
+          {turns.map((t) => <TurnRow key={t.order} turn={t} sessionId={sessionId} />)}
         </div>
       </div>
     </div>
@@ -148,10 +149,23 @@ function ListCard({ title, items, tone, empty }: { title: string; items: string[
   );
 }
 
-function TurnRow({ turn }: { turn: ReportTurn }) {
+function TurnRow({ turn, sessionId }: { turn: ReportTurn; sessionId: number }) {
   const [open, setOpen] = useState(false);
+  const [flagged, setFlagged] = useState(false);
   const det = turn.deterministicScore;
-  const score = turn.turnScore?.deterministic ?? det?.score ?? null;
+  const score = turn.turnScore?.final ?? turn.turnScore?.deterministic ?? det?.score ?? null;
+
+  const flag = async () => {
+    const reason = window.prompt('Vì sao bạn nghĩ điểm câu này sai? (gửi tới admin xem lại)');
+    if (reason === null) return;
+    try {
+      await interviewApi.flagTurn(sessionId, turn.order, reason || '');
+      setFlagged(true);
+      toast.success('Đã gửi. Cảm ơn — admin sẽ xem lại điểm này.');
+    } catch {
+      toast.error('Không gửi được');
+    }
+  };
   return (
     <div className="border-b border-white/10 last:border-0">
       <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.04]">
@@ -174,6 +188,11 @@ function TurnRow({ turn }: { turn: ReportTurn }) {
             </div>
           )}
           {turn.referenceAnswer && <Block label="Đáp án mẫu" text={turn.referenceAnswer} md />}
+          <div className="flex justify-end">
+            <button onClick={flag} disabled={flagged} className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-amber-400 disabled:text-emerald-400">
+              <Flag className="w-3.5 h-3.5" /> {flagged ? 'Đã gửi phản hồi' : 'Điểm này có vẻ sai?'}
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -44,6 +44,9 @@ export const interviewApi = {
   gradeCard: (cardId: number, body: { quality?: number; answer?: string }): Res<GradeCardResponse> =>
     api.post(`/interview/drill/${cardId}/grade`, body),
   mastery: (): Res<MasteryResponse> => api.get('/interview/mastery'),
+  // Phase 5 — flag a turn's score as wrong
+  flagTurn: (id: number, order: number, reason: string): Res<{ flagged: boolean }> =>
+    api.post(`/interview/sessions/${id}/turns/${order}/flag`, { reason }),
 };
 
 // ── Admin ────────────────────────────────────────────────────
@@ -78,6 +81,24 @@ export interface BankHealthRow {
   count: number;
 }
 
+export interface FlaggedTurn {
+  id: number;
+  sessionId: number;
+  order: number;
+  topic: string | null;
+  questionText: string;
+  userAnswer: string | null;
+  referenceAnswer: string | null;
+  deterministicScore: { score?: number; grade?: string } | null;
+  turnScore: { final?: number; self?: number } | null;
+  injectionAttempted: boolean;
+  userFlag: { reason: string; at: string } | null;
+  level: string | null;
+  engineMode: string | null;
+  userId: number | null;
+  createdAt: string;
+}
+
 export interface LlmUsage {
   aiAvailable: boolean;
   forceStatic: boolean;
@@ -93,6 +114,8 @@ export const interviewAdminApi = {
   taxonomy: (): Res<unknown> => api.get('/admin/interview/taxonomy'),
   bankHealth: (): Res<BankHealthRow[]> => api.get('/admin/interview/bank-health'),
   llmUsage: (): Res<LlmUsage> => api.get('/admin/interview/llm-usage'),
+  flagged: (): Res<FlaggedTurn[]> => api.get('/admin/interview/flagged'),
+  resolveFlag: (turnId: number): Res<{ resolved: boolean }> => api.post(`/admin/interview/flagged/${turnId}/resolve`, {}),
   listQuestions: (params: {
     topicId?: number;
     trackId?: number;

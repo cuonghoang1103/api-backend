@@ -439,3 +439,56 @@ export async function listHistory(userId: number) {
     letterGrade: s.report?.letterGrade ?? null,
   }));
 }
+
+// ─── In-product feedback loop (Phase 5) ──────────────────────────
+/** User flags a turn's score as wrong → routes it to the admin review queue. */
+export async function flagTurn(userId: number, sessionId: number, order: number, reason: unknown) {
+  await loadOwnedSession(userId, sessionId);
+  const turn = await prisma.interviewTurn.findUnique({ where: { uk_interview_turn_order: { sessionId, order } } });
+  if (!turn) throw new NotFoundError('Câu hỏi không tồn tại trong phiên');
+  const sig = (turn.integritySignals as Record<string, unknown> | null) ?? {};
+  await prisma.interviewTurn.update({
+    where: { id: turn.id },
+    data: {
+      needsReview: true,
+      integritySignals: { ...sig, userFlag: { reason: String(reason ?? '').slice(0, 500), at: new Date().toISOString() } } as never,
+    },
+  });
+  return { flagged: true };
+}
+
+/** Admin review queue: turns flagged (by users OR by AI disagreement/injection). */
+export async function listFlaggedTurns() {
+  const turns = await prisma.interviewTurn.findMany({
+    where: { needsReview: true },
+    orderBy: { updatedAt: 'desc' },
+    take: 100,
+    include: {
+      session: { select: { userId: true, level: true, engineMode: true, language: true } },
+      question: { include: { topic: { select: { name: true } } } },
+    },
+  });
+  return turns.map((t) => ({
+    id: t.id,
+    sessionId: t.sessionId,
+    order: t.order,
+    topic: t.question?.topic?.name ?? null,
+    questionText: t.questionText,
+    userAnswer: t.userAnswer,
+    referenceAnswer: t.question?.referenceAnswer ?? null,
+    deterministicScore: t.deterministicScore,
+    turnScore: t.turnScore,
+    injectionAttempted: t.injectionAttempted,
+    userFlag: (t.integritySignals as { userFlag?: { reason: string; at: string } } | null)?.userFlag ?? null,
+    level: t.session?.level ?? null,
+    engineMode: t.session?.engineMode ?? null,
+    userId: t.session?.userId ?? null,
+    createdAt: t.createdAt,
+  }));
+}
+
+/** Admin resolves a flagged turn (clears the review flag). */
+export async function resolveFlag(turnId: number) {
+  await prisma.interviewTurn.update({ where: { id: turnId }, data: { needsReview: false } }).catch(() => {});
+  return { resolved: true };
+}

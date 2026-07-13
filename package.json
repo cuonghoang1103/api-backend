@@ -19,6 +19,8 @@
     "db:seed:lang": "tsx prisma/seed.my-language.ts",
     "db:seed:ja-kana": "tsx prisma/seed.ja-kana.ts",
     "db:seed:interview": "tsx prisma/seed.interview.ts",
+    "eval:grader": "tsx eval/runEval.ts",
+    "eval:grader:ai": "tsx eval/runEval.ts --ai",
     "lint": "eslint src --ext .ts",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist",

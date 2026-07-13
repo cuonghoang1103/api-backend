@@ -9,14 +9,14 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { Loader2, AlertTriangle, Plus, Trash2, CheckCircle2, Eye } from 'lucide-react';
+import { Loader2, AlertTriangle, Plus, Trash2, CheckCircle2, Eye, Check } from 'lucide-react';
 import { interviewApi } from '@/lib/interview-api';
-import { interviewAdminApi, type AdminQuestion, type BankHealthRow, type LlmUsage } from '@/lib/interview-api';
+import { interviewAdminApi, type AdminQuestion, type BankHealthRow, type LlmUsage, type FlaggedTurn } from '@/lib/interview-api';
 import MarkdownEditor from '@/components/admin/MarkdownEditor';
 import type { TaxonomyResponse, TaxonomyTopic } from '@/types/interview';
 import { LEVELS } from '@/types/interview';
 
-type Tab = 'overview' | 'questions';
+type Tab = 'overview' | 'questions' | 'flagged';
 
 interface FlatTopic { id: number; name: string; track: string; domain: string }
 
@@ -40,14 +40,14 @@ export default function AdminInterviewPage() {
       <p className="text-slate-400 text-sm mb-5">Ngân hàng câu hỏi STATIC — tự chấm, không cần AI.</p>
 
       <div className="flex gap-2 mb-6">
-        {(['overview', 'questions'] as Tab[]).map((t) => (
+        {(['overview', 'questions', 'flagged'] as Tab[]).map((t) => (
           <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-lg text-sm border ${tab === t ? 'bg-teal-500/20 text-teal-300 border-teal-500/40' : 'bg-white/5 text-slate-400 border-transparent hover:text-white'}`}>
-            {t === 'overview' ? 'Tổng quan' : 'Câu hỏi'}
+            {t === 'overview' ? 'Tổng quan' : t === 'questions' ? 'Câu hỏi' : 'Cần rà soát'}
           </button>
         ))}
       </div>
 
-      {tab === 'overview' ? <Overview topicName={topicName} /> : <Questions topics={topics} topicName={topicName} />}
+      {tab === 'overview' ? <Overview topicName={topicName} /> : tab === 'questions' ? <Questions topics={topics} topicName={topicName} /> : <Flagged />}
     </div>
   );
 }
@@ -221,6 +221,54 @@ function Questions({ topics, topicName }: { topics: FlatTopic[]; topicName: (id:
           {!items.length && <div className="px-4 py-4 text-sm text-slate-500">Không có câu hỏi.</div>}
         </div>
       )}
+    </div>
+  );
+}
+
+function Flagged() {
+  const [items, setItems] = useState<FlaggedTurn[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    interviewAdminApi.flagged().then((r) => setItems(r.data.data)).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+  useEffect(() => { load(); }, [load]);
+
+  const resolve = async (id: number) => {
+    await interviewAdminApi.resolveFlag(id).catch(() => {});
+    load();
+  };
+
+  if (loading) return <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải…</div>;
+  if (!items.length) return <div className="rounded-xl border border-white/10 p-6 text-slate-400">Không có câu nào cần rà soát. 🎉</div>;
+
+  return (
+    <div className="space-y-3">
+      <p className="text-sm text-slate-400">Câu bị người dùng gắn cờ "điểm sai" HOẶC bị hệ thống đánh dấu (AI lệch máy chấm nhiều / phát hiện gian lận). Rà xong bấm "Đã xử lý".</p>
+      {items.map((t) => {
+        const final = t.turnScore?.final ?? t.deterministicScore?.score ?? null;
+        return (
+          <div key={t.id} className="rounded-xl border border-amber-500/30 bg-amber-500/[0.05] p-4">
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <div className="flex-1">
+                <div className="text-sm text-white">{t.questionText}</div>
+                <div className="flex flex-wrap gap-2 mt-1 text-xs">
+                  {t.topic && <span className="text-slate-400">{t.topic}</span>}
+                  <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-300">{t.level} · {t.engineMode}</span>
+                  {final != null && <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-300">điểm {final}/100</span>}
+                  {t.injectionAttempted && <span className="px-1.5 py-0.5 rounded bg-red-500/15 text-red-300 inline-flex items-center gap-1"><AlertTriangle className="w-3 h-3" /> injection</span>}
+                  {t.userFlag && <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300">người dùng gắn cờ</span>}
+                </div>
+              </div>
+              <button onClick={() => resolve(t.id)} className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs"><Check className="w-4 h-4" /> Đã xử lý</button>
+            </div>
+            {t.userFlag?.reason && <p className="text-xs text-amber-200/80 mb-2">Lý do: "{t.userFlag.reason}"</p>}
+            {t.userAnswer && <div className="text-xs text-slate-300 bg-white/5 rounded p-2 mb-1"><span className="text-slate-500">Trả lời: </span>{t.userAnswer.slice(0, 300)}</div>}
+            {t.referenceAnswer && <div className="text-xs text-slate-400 line-clamp-2"><span className="text-slate-500">Đáp án mẫu: </span>{t.referenceAnswer.slice(0, 200)}</div>}
+          </div>
+        );
+      })}
     </div>
   );
 }

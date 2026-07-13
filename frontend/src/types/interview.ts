@@ -175,6 +175,7 @@ export interface StoredTurnScore {
   self: number | null;
   divergence: number | null;
   grade: string;
+  final?: number | null; // AI combined score (HYBRID/FULL_AI turns)
 }
 export interface StoredSelfScore {
   ratings?: Record<string, number>;

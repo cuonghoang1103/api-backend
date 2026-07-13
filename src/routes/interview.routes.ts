@@ -91,6 +91,14 @@ router.get('/history', async (req: Request, res: Response<ApiResponse>, next) =>
   } catch (err) { next(err); }
 });
 
+// Flag a turn's score as wrong → admin review queue (Phase 5 feedback loop)
+router.post('/sessions/:id/turns/:order/flag', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await session.flagTurn(req.userId!, parseId(req.params.id), parseInt(req.params.order, 10), req.body?.reason);
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+
 // ── Spaced-repetition drill (Phase 3) ──
 router.get('/drill', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
@@ -127,6 +135,17 @@ adminRouter.get('/bank-health', async (_req: Request, res: Response<ApiResponse>
 adminRouter.get('/llm-usage', async (_req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await getUsageStats() });
+  } catch (err) { next(err); }
+});
+// Flagged-turn review queue (user "score seems wrong" + AI disagreement/injection)
+adminRouter.get('/flagged', async (_req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await session.listFlaggedTurns() });
+  } catch (err) { next(err); }
+});
+adminRouter.post('/flagged/:turnId/resolve', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await session.resolveFlag(parseId(req.params.turnId)) });
   } catch (err) { next(err); }
 });
 

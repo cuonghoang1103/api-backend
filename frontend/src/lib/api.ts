@@ -201,6 +201,10 @@ export const authApi = {
     socialLinks?: Record<string, string> | null;
   }) => api.put('/profile', data),
 
+  // Data-subject rights (Nghị định 13/2023).
+  exportData: () => api.get('/profile/export-data'),
+  deleteAccount: () => api.post('/profile/delete-account'),
+
   changePassword: (data: {
     currentPassword: string;
     newPassword: string;

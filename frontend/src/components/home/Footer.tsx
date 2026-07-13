@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslation } from '@/hooks/useTranslation';
+import { SELLER_INFO } from '@/lib/sellerInfo';
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -17,8 +18,11 @@ export default function Footer() {
     services: serviceLabels.map((label) => ({ label: String(label), href: '/#services' })),
     resources: resourceLabels.map((label, i) => ({ label: String(label), href: ['https://github.com/cuonghoang1103', 'https://www.linkedin.com/in/cuong-hoang-843a37258/', 'https://x.com/Hncuong311', 'mailto:cuongthaihnhe176322@gmail.com'][i] })),
     legal: [
-      { label: String(t('footer.privacy')), href: '#' },
-      { label: String(t('footer.terms')), href: '#' },
+      { label: 'Hướng dẫn mua hàng', href: '/huong-dan-mua-hang' },
+      { label: 'Chính sách thanh toán', href: '/chinh-sach-thanh-toan' },
+      { label: 'Chính sách giao hàng', href: '/chinh-sach-giao-hang' },
+      { label: 'Chính sách đổi trả & hoàn tiền', href: '/chinh-sach-doi-tra' },
+      { label: 'Chính sách bảo mật', href: '/chinh-sach-bao-mat' },
     ],
   };
 
@@ -128,20 +132,22 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact Column */}
+          {/* Seller info Column (Part 1 — MOIT) */}
           <div>
-            <h4 className="font-heading font-semibold text-text-primary mb-4">{t('contact.title')}</h4>
-            <ul className="space-y-2.5">
+            <h4 className="font-heading font-semibold text-text-primary mb-4">Thông tin người bán</h4>
+            <ul className="space-y-2 text-text-muted text-sm">
+              <li>{SELLER_INFO.legalName}</li>
+              <li>{SELLER_INFO.address}</li>
+              <li>MST/ĐKKD: {SELLER_INFO.taxCode}</li>
               <li>
-                <a
-                  href="mailto:cuongthaihnhe176322@gmail.com"
-                  className="text-text-muted text-sm hover:text-neon-violet transition-colors"
-                >
-                  cuongthaihnhe176322@gmail.com
+                <a href={`tel:${SELLER_INFO.phone}`} className="hover:text-neon-violet transition-colors">
+                  ĐT/Zalo: {SELLER_INFO.phone}
                 </a>
               </li>
-              <li className="text-text-muted text-sm">
-                Hà Nội, Việt Nam
+              <li>
+                <a href={`mailto:${SELLER_INFO.email}`} className="hover:text-neon-violet transition-colors">
+                  {SELLER_INFO.email}
+                </a>
               </li>
             </ul>
           </div>
@@ -152,7 +158,7 @@ export default function Footer() {
           <p className="text-text-muted text-sm">
             © {currentYear} CuongHoang. {t('footer.rights')}
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             {footerLinks.legal.map((link) => (
               <Link
                 key={link.label}

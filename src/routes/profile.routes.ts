@@ -1,9 +1,32 @@
 import { Router, type Response } from 'express';
 import { authService } from '../services/auth.service.js';
+import { exportUserData, anonymizeAccount } from '../services/dataRights.service.js';
 import { authenticate } from '../middleware/auth.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
+
+// ─── Data-subject rights (Nghị định 13/2023) ───────────
+// GET /api/v1/profile/export-data — download a JSON copy of your own data.
+router.get('/export-data', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await exportUserData(req.userId!);
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/profile/delete-account — erase (anonymise) your account.
+router.post('/delete-account', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await anonymizeAccount(req.userId!);
+    res.clearCookie('backend_token'); // log the (now-anonymous) session out
+    res.json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+});
 
 // ─── GET /api/v1/profile ───────────────────────────────
 router.get('/', authenticate, async (req, res: Response<ApiResponse>, next) => {

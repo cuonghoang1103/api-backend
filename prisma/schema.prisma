@@ -5168,3 +5168,51 @@ model InterviewLLMCallLog {
   @@index([userId, createdAt], name: "idx_interview_llmlog_user")
   @@map("interview_llm_call_logs")
 }
+
+// ── Phase 6: Knowledge base / RAG ────────────────────────────────────
+// Admin-curated authoritative material that grounds the AI grader/report so it
+// stops hallucinating stale framework details. Retrieval is LEXICAL (tsvector,
+// see the search migration) — semantic/pgvector is a future upgrade (prod runs
+// postgis, no vector ext). authorId is a plain Int (module convention, no FK).
+model InterviewKnowledgeDocument {
+  id         Int                    @id @default(autoincrement())
+  title      String                 @db.VarChar(300)
+  content    String                 @db.Text // markdown source
+  sourceType String                 @default("ADMIN_WRITTEN") @map("source_type") @db.VarChar(30) // ADMIN_WRITTEN|UPLOADED_PDF|UPLOADED_MD|SCRAPED_DOC|REFERENCE_ANSWER
+  topicIds   Int[]                  @default([]) @map("topic_ids")
+  trackIds   Int[]                  @default([]) @map("track_ids")
+  level      InterviewLevel? // null = all levels
+  language   InterviewLanguage      @default(VI)
+  version    Int                    @default(1)
+  status     InterviewContentStatus @default(PUBLISHED)
+  sourceUrl  String?                @map("source_url") @db.Text
+  authorId   Int?                   @map("author_id")
+  createdAt  DateTime               @default(now()) @map("created_at")
+  updatedAt  DateTime               @updatedAt @map("updated_at")
+
+  chunks InterviewKnowledgeChunk[]
+
+  @@index([status], name: "idx_interview_kdoc_status")
+  @@map("interview_knowledge_documents")
+}
+
+model InterviewKnowledgeChunk {
+  id          Int                        @id @default(autoincrement())
+  documentId  Int                        @map("document_id")
+  document    InterviewKnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  chunkIndex  Int                        @map("chunk_index")
+  headingPath String?                    @map("heading_path") @db.Text // breadcrumb, e.g. "Streams > Backpressure"
+  content     String                     @db.Text
+  tokenCount  Int                        @default(0) @map("token_count")
+  // Denormalized scope from the parent doc → fast topic-scoped retrieval without a join.
+  topicIds    Int[]                      @default([]) @map("topic_ids")
+  trackIds    Int[]                      @default([]) @map("track_ids")
+  level       InterviewLevel?
+  language    InterviewLanguage          @default(VI)
+  status      InterviewContentStatus     @default(PUBLISHED)
+  createdAt   DateTime                   @default(now()) @map("created_at")
+
+  @@unique([documentId, chunkIndex], name: "uk_interview_kchunk_order")
+  @@index([documentId], name: "idx_interview_kchunk_doc")
+  @@map("interview_knowledge_chunks")
+}

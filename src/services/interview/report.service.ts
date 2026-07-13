@@ -9,6 +9,7 @@
 import { prisma } from '../../config/database.js';
 import type { InterviewHireRecommendation } from '@prisma/client';
 import { letterGrade } from './scoring.js';
+import * as knowledge from './knowledge/knowledge.service.js';
 
 interface StoredDeterministic {
   score?: number;
@@ -119,7 +120,19 @@ export async function generateStaticReport(sessionId: number) {
     total: session.turns.length,
   };
 
-  const suggestedResources = weakest.map((t) => ({ topicId: t.topicId, topic: t.topic, note: 'Xem đáp án mẫu & tiêu chí ở các câu thuộc chủ đề này.' }));
+  // Phase 6: link each weak topic to the exact knowledge docs covering it, so
+  // the report becomes a study plan (source-traceable), not just a verdict.
+  const suggestedResources = await Promise.all(
+    weakest.map(async (t) => {
+      const kb = await knowledge.sourcesForTopic(t.topicId).catch(() => []);
+      return {
+        topicId: t.topicId,
+        topic: t.topic,
+        note: 'Xem đáp án mẫu & tiêu chí ở các câu thuộc chủ đề này.',
+        sources: kb, // [{documentId,title,headingPath,sourceUrl}] from the knowledge base
+      };
+    }),
+  );
 
   return prisma.interviewReport.upsert({
     where: { sessionId },

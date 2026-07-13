@@ -9,14 +9,14 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { Loader2, AlertTriangle, Plus, Trash2, CheckCircle2, Eye, Check } from 'lucide-react';
+import { Loader2, AlertTriangle, Plus, Trash2, CheckCircle2, Eye, Check, Search, Pencil, BookOpen, Boxes, ChevronDown, ChevronRight } from 'lucide-react';
 import { interviewApi } from '@/lib/interview-api';
-import { interviewAdminApi, type AdminQuestion, type BankHealthRow, type LlmUsage, type FlaggedTurn } from '@/lib/interview-api';
+import { interviewAdminApi, type AdminQuestion, type BankHealthRow, type LlmUsage, type FlaggedTurn, type KnowledgeDocListItem, type KnowledgeDocDetail, type KnowledgeChunk, type KnowledgeCoverageRow } from '@/lib/interview-api';
 import MarkdownEditor from '@/components/admin/MarkdownEditor';
 import type { TaxonomyResponse, TaxonomyTopic } from '@/types/interview';
 import { LEVELS } from '@/types/interview';
 
-type Tab = 'overview' | 'questions' | 'flagged';
+type Tab = 'overview' | 'questions' | 'flagged' | 'knowledge';
 
 interface FlatTopic { id: number; name: string; track: string; domain: string }
 
@@ -40,14 +40,14 @@ export default function AdminInterviewPage() {
       <p className="text-slate-400 text-sm mb-5">Ngân hàng câu hỏi STATIC — tự chấm, không cần AI.</p>
 
       <div className="flex gap-2 mb-6">
-        {(['overview', 'questions', 'flagged'] as Tab[]).map((t) => (
+        {(['overview', 'questions', 'flagged', 'knowledge'] as Tab[]).map((t) => (
           <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-lg text-sm border ${tab === t ? 'bg-teal-500/20 text-teal-300 border-teal-500/40' : 'bg-white/5 text-slate-400 border-transparent hover:text-white'}`}>
-            {t === 'overview' ? 'Tổng quan' : t === 'questions' ? 'Câu hỏi' : 'Cần rà soát'}
+            {t === 'overview' ? 'Tổng quan' : t === 'questions' ? 'Câu hỏi' : t === 'flagged' ? 'Cần rà soát' : 'Kho tri thức'}
           </button>
         ))}
       </div>
 
-      {tab === 'overview' ? <Overview topicName={topicName} /> : tab === 'questions' ? <Questions topics={topics} topicName={topicName} /> : <Flagged />}
+      {tab === 'overview' ? <Overview topicName={topicName} /> : tab === 'questions' ? <Questions topics={topics} topicName={topicName} /> : tab === 'flagged' ? <Flagged /> : <Knowledge tax={tax} topics={topics} topicName={topicName} />}
     </div>
   );
 }
@@ -334,6 +334,383 @@ function CreateForm({ topics, onDone }: { topics: FlatTopic[]; onDone: () => voi
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />} Tạo
         </button>
       </div>
+    </div>
+  );
+}
+
+// ── Phase 6: Knowledge base (RAG) ────────────────────────────
+const KB_SOURCE_TYPES = ['ADMIN_WRITTEN', 'UPLOADED_MD', 'SCRAPED_DOC', 'REFERENCE_ANSWER'] as const;
+const KB_STATUSES = ['DRAFT', 'PUBLISHED', 'ARCHIVED'] as const;
+
+interface FlatTrack { id: number; name: string; domain: string }
+
+function chunkTone(n: number): string {
+  if (n === 0) return 'bg-red-500/15 text-red-300 border-red-500/30';
+  if (n <= 2) return 'bg-amber-500/15 text-amber-300 border-amber-500/30';
+  return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+}
+
+function Knowledge({ tax, topics, topicName }: { tax: TaxonomyResponse | null; topics: FlatTopic[]; topicName: (id: number) => string }) {
+  const tracks = useMemo<FlatTrack[]>(() => {
+    if (!tax) return [];
+    const out: FlatTrack[] = [];
+    for (const d of tax.domains) for (const t of d.tracks) out.push({ id: t.id, name: t.name, domain: d.name });
+    return out;
+  }, [tax]);
+
+  const [coverage, setCoverage] = useState<KnowledgeCoverageRow[]>([]);
+  const [items, setItems] = useState<KnowledgeDocListItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [q, setQ] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [editing, setEditing] = useState<KnowledgeDocListItem | 'new' | null>(null);
+
+  const loadCoverage = useCallback(() => {
+    interviewAdminApi.knowledgeCoverage().then((r) => setCoverage(r.data.data)).catch(() => {});
+  }, []);
+  const loadList = useCallback(() => {
+    setLoading(true);
+    interviewAdminApi
+      .listKnowledge({ q: q.trim() || undefined, status: statusFilter || undefined })
+      .then((r) => setItems(r.data.data))
+      .catch(() => toast.error('Không tải được danh sách tài liệu'))
+      .finally(() => setLoading(false));
+  }, [q, statusFilter]);
+
+  useEffect(() => { loadCoverage(); }, [loadCoverage]);
+  useEffect(() => { loadList(); }, [loadList]);
+
+  const del = async (doc: KnowledgeDocListItem) => {
+    if (!confirm(`Xoá tài liệu "${doc.title}"? Mọi khối (chunk) đã tạo cũng bị xoá.`)) return;
+    await interviewAdminApi.deleteKnowledge(doc.id).then(() => toast.success('Đã xoá')).catch(() => toast.error('Lỗi'));
+    loadList(); loadCoverage();
+  };
+
+  const afterSave = () => { setEditing(null); loadList(); loadCoverage(); };
+
+  if (editing) {
+    return <KnowledgeEditor doc={editing === 'new' ? null : editing} tracks={tracks} topics={topics} onCancel={() => setEditing(null)} onSaved={afterSave} />;
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Coverage heatmap — the most important screen */}
+      <CoverageHeatmap coverage={coverage} tracks={tracks} />
+
+      {/* Document list controls */}
+      <div>
+        <div className="flex flex-wrap items-center gap-3 mb-4">
+          <div className="relative">
+            <Search className="w-4 h-4 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Tìm tài liệu…"
+              className="bg-white/5 border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-sm w-56"
+            />
+          </div>
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm">
+            <option value="">Mọi trạng thái</option>
+            {KB_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+          <button onClick={() => setEditing('new')} className="ml-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/40 text-sm">
+            <Plus className="w-4 h-4" /> Tài liệu mới
+          </button>
+        </div>
+
+        {loading ? (
+          <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải…</div>
+        ) : (
+          <div className="rounded-xl border border-white/10 overflow-hidden">
+            {items.map((doc) => (
+              <div key={doc.id} className="flex items-start gap-3 px-4 py-3 border-b border-white/5 last:border-0">
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm text-white line-clamp-1 flex items-center gap-2">
+                    <BookOpen className="w-4 h-4 text-slate-500 shrink-0" /> {doc.title}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs">
+                    <span className={`px-1.5 py-0.5 rounded ${doc.status === 'PUBLISHED' ? 'bg-emerald-500/15 text-emerald-300' : doc.status === 'ARCHIVED' ? 'bg-slate-500/15 text-slate-400' : 'bg-amber-500/15 text-amber-300'}`}>{doc.status}</span>
+                    <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-300">{doc.language}</span>
+                    {doc.level && <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-300">{doc.level}</span>}
+                    <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-400">{doc.sourceType}</span>
+                    <span className={`px-1.5 py-0.5 rounded border ${chunkTone(doc.chunkCount)}`}>{doc.chunkCount} chunk{doc.chunkCount === 0 ? ' · AI mù' : ''}</span>
+                    {doc.topicIds.map((tid) => <span key={tid} className="text-slate-500">#{topicName(tid)}</span>)}
+                    <span className="text-slate-600">· cập nhật {new Date(doc.updatedAt).toLocaleDateString('vi-VN')}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <button onClick={() => setEditing(doc)} title="Sửa" className="p-1.5 rounded text-slate-300 hover:bg-white/10"><Pencil className="w-4 h-4" /></button>
+                  <button onClick={() => del(doc)} title="Xoá" className="p-1.5 rounded text-red-400 hover:bg-white/10"><Trash2 className="w-4 h-4" /></button>
+                </div>
+              </div>
+            ))}
+            {!items.length && <div className="px-4 py-4 text-sm text-slate-500">Chưa có tài liệu nào. Bấm "Tài liệu mới" để AI có gì mà truy hồi.</div>}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CoverageHeatmap({ coverage, tracks }: { coverage: KnowledgeCoverageRow[]; tracks: FlatTrack[] }) {
+  // Group coverage rows by track, preserving taxonomy order where possible.
+  const byTrack = useMemo(() => {
+    const m = new Map<number, { track: string; rows: KnowledgeCoverageRow[] }>();
+    for (const row of coverage) {
+      if (!m.has(row.trackId)) m.set(row.trackId, { track: row.track, rows: [] });
+      m.get(row.trackId)!.rows.push(row);
+    }
+    return m;
+  }, [coverage]);
+
+  const gapCount = coverage.filter((r) => r.chunkCount === 0).length;
+  const orderedTrackIds = tracks.length
+    ? tracks.filter((t) => byTrack.has(t.id)).map((t) => t.id)
+    : [...byTrack.keys()];
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center gap-2 text-sm font-semibold text-white"><Boxes className="w-4 h-4 text-teal-300" /> Bản đồ độ phủ tri thức</div>
+        {gapCount > 0 && <span className="text-xs px-2 py-0.5 rounded bg-red-500/15 text-red-300 border border-red-500/30">{gapCount} vùng AI đang mù</span>}
+      </div>
+      <p className="text-xs text-slate-500 mb-4">Mỗi ô là một chủ đề, con số là số khối tri thức (chunk) AI có thể truy hồi. <span className="text-red-300">Đỏ = 0 (AI đang mù vùng này)</span>, <span className="text-amber-300">vàng = mỏng</span>, <span className="text-emerald-300">xanh = đủ dày</span>.</p>
+
+      {orderedTrackIds.length === 0 ? (
+        <div className="text-sm text-slate-500">Chưa có dữ liệu độ phủ.</div>
+      ) : (
+        <div className="space-y-4">
+          {orderedTrackIds.map((tid) => {
+            const grp = byTrack.get(tid)!;
+            return (
+              <div key={tid}>
+                <div className="text-xs font-medium text-slate-400 mb-1.5">{grp.track}</div>
+                <div className="flex flex-wrap gap-2">
+                  {grp.rows.map((row) => (
+                    <div
+                      key={row.topicId}
+                      title={`${row.topic}: ${row.chunkCount} chunk`}
+                      className={`px-2.5 py-1.5 rounded-lg border text-xs flex items-center gap-2 ${chunkTone(row.chunkCount)}`}
+                    >
+                      <span className="max-w-[12rem] truncate">{row.topic}</span>
+                      <span className="font-mono font-semibold">{row.chunkCount}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function KnowledgeEditor({ doc, tracks, topics, onCancel, onSaved }: {
+  doc: KnowledgeDocListItem | null;
+  tracks: FlatTrack[];
+  topics: FlatTopic[];
+  onCancel: () => void;
+  onSaved: () => void;
+}) {
+  const isEdit = !!doc;
+  const [title, setTitle] = useState(doc?.title ?? '');
+  const [sourceType, setSourceType] = useState<string>(doc?.sourceType ?? 'ADMIN_WRITTEN');
+  const [language, setLanguage] = useState<'VI' | 'EN'>(doc?.language ?? 'VI');
+  const [level, setLevel] = useState<string>(doc?.level ?? '');
+  const [status, setStatus] = useState<'DRAFT' | 'PUBLISHED' | 'ARCHIVED'>(doc?.status ?? 'DRAFT');
+  const [topicIds, setTopicIds] = useState<number[]>(doc?.topicIds ?? []);
+  const [trackIds, setTrackIds] = useState<number[]>(doc?.trackIds ?? []);
+  const [sourceUrl, setSourceUrl] = useState(doc?.sourceUrl ?? '');
+  const [content, setContent] = useState('');
+  const [chunks, setChunks] = useState<KnowledgeChunk[]>([]);
+  const [loadingDetail, setLoadingDetail] = useState(isEdit);
+  const [saving, setSaving] = useState(false);
+
+  // On edit, fetch full detail (content + chunks).
+  useEffect(() => {
+    if (!doc) return;
+    setLoadingDetail(true);
+    interviewAdminApi.getKnowledge(doc.id)
+      .then((r) => {
+        const d: KnowledgeDocDetail = r.data.data;
+        setContent(d.content ?? '');
+        setChunks(d.chunks ?? []);
+        setTitle(d.title);
+        setSourceType(d.sourceType);
+        setLanguage(d.language);
+        setLevel(d.level ?? '');
+        setStatus(d.status);
+        setTopicIds(d.topicIds ?? []);
+        setTrackIds(d.trackIds ?? []);
+        setSourceUrl(d.sourceUrl ?? '');
+      })
+      .catch(() => toast.error('Không tải được nội dung tài liệu'))
+      .finally(() => setLoadingDetail(false));
+  }, [doc]);
+
+  const toggle = (arr: number[], setArr: (v: number[]) => void, id: number) => {
+    setArr(arr.includes(id) ? arr.filter((x) => x !== id) : [...arr, id]);
+  };
+
+  const save = async () => {
+    if (!title.trim()) { toast.warning('Nhập tiêu đề'); return; }
+    if (!content.trim()) { toast.warning('Nhập nội dung tài liệu'); return; }
+    const body = {
+      title: title.trim(),
+      content,
+      sourceType,
+      language,
+      level: level || null,
+      status,
+      topicIds,
+      trackIds,
+      sourceUrl: sourceUrl.trim() || null,
+    };
+    setSaving(true);
+    try {
+      if (isEdit && doc) {
+        await interviewAdminApi.updateKnowledge(doc.id, body);
+        toast.success('Đã lưu. Tài liệu được chia lại khối (re-chunk).');
+      } else {
+        await interviewAdminApi.createKnowledge(body);
+        toast.success('Đã tạo tài liệu và chia khối cho AI.');
+      }
+      onSaved();
+    } catch {
+      toast.error('Không lưu được');
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <button onClick={onCancel} className="text-sm text-slate-400 hover:text-white inline-flex items-center gap-1"><ChevronRight className="w-4 h-4 rotate-180" /> Danh sách</button>
+        <h2 className="text-lg font-semibold text-white">{isEdit ? 'Sửa tài liệu' : 'Tài liệu mới'}</h2>
+      </div>
+
+      {loadingDetail ? (
+        <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải nội dung…</div>
+      ) : (
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-4">
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Tiêu đề tài liệu" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3">
+            <div>
+              <label className="text-xs text-slate-400 mb-1 block">Nguồn</label>
+              <select value={sourceType} onChange={(e) => setSourceType(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+                {KB_SOURCE_TYPES.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="text-xs text-slate-400 mb-1 block">Ngôn ngữ</label>
+              <select value={language} onChange={(e) => setLanguage(e.target.value as 'VI' | 'EN')} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+                <option value="VI">VI</option>
+                <option value="EN">EN</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-xs text-slate-400 mb-1 block">Cấp độ</label>
+              <select value={level} onChange={(e) => setLevel(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+                <option value="">Tất cả</option>
+                {LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="text-xs text-slate-400 mb-1 block">Trạng thái</label>
+              <select value={status} onChange={(e) => setStatus(e.target.value as typeof status)} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm">
+                {KB_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-xs text-slate-400 mb-1.5 block">Chủ đề liên quan (topic) — chọn nhiều</label>
+            <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto p-2 rounded-lg border border-white/10 bg-white/[0.02]">
+              {topics.length === 0 && <span className="text-xs text-slate-500">Chưa có taxonomy.</span>}
+              {topics.map((t) => {
+                const on = topicIds.includes(t.id);
+                return (
+                  <button key={t.id} type="button" onClick={() => toggle(topicIds, setTopicIds, t.id)} title={`${t.domain} · ${t.track}`}
+                    className={`px-2 py-1 rounded text-xs border ${on ? 'bg-teal-500/20 text-teal-300 border-teal-500/40' : 'bg-white/5 text-slate-400 border-white/10 hover:text-white'}`}>
+                    {t.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <label className="text-xs text-slate-400 mb-1.5 block">Track liên quan — chọn nhiều</label>
+            <div className="flex flex-wrap gap-1.5">
+              {tracks.length === 0 && <span className="text-xs text-slate-500">Chưa có taxonomy.</span>}
+              {tracks.map((t) => {
+                const on = trackIds.includes(t.id);
+                return (
+                  <button key={t.id} type="button" onClick={() => toggle(trackIds, setTrackIds, t.id)} title={t.domain}
+                    className={`px-2 py-1 rounded text-xs border ${on ? 'bg-teal-500/20 text-teal-300 border-teal-500/40' : 'bg-white/5 text-slate-400 border-white/10 hover:text-white'}`}>
+                    {t.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <input value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} placeholder="URL nguồn (tuỳ chọn)" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm" />
+
+          <div>
+            <label className="text-xs text-slate-400 mb-1 block">Nội dung (markdown — dán ảnh trực tiếp, ```lang cho code; heading ## dùng để chia khối)</label>
+            <MarkdownEditor value={content} onChange={setContent} placeholder="Viết tài liệu tri thức. Dùng heading (##, ###) để AI chia khối gọn gàng." />
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <button onClick={onCancel} className="px-3 py-1.5 rounded-lg text-sm text-slate-300 hover:bg-white/10">Huỷ</button>
+            <button onClick={save} disabled={saving} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/40 text-sm disabled:opacity-50">
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />} {isEdit ? 'Lưu' : 'Tạo'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isEdit && !loadingDetail && <ChunkPreview chunks={chunks} />}
+    </div>
+  );
+}
+
+function ChunkPreview({ chunks }: { chunks: KnowledgeChunk[] }) {
+  const [open, setOpen] = useState<Set<number>>(new Set());
+  const toggle = (id: number) => setOpen((prev) => {
+    const next = new Set(prev);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    return next;
+  });
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+      <div className="text-sm font-semibold text-white mb-1">Xem trước {chunks.length} khối (chunk) — cách AI sẽ truy hồi tài liệu này</div>
+      <p className="text-xs text-slate-500 mb-3">Mỗi khối là một đoạn tài liệu được AI lấy ra khi trả lời. Kiểm tra chia khối hợp lý trước khi dựa vào nó.</p>
+      {chunks.length === 0 ? (
+        <div className="text-sm text-slate-500">Chưa có khối nào — lưu tài liệu để hệ thống chia khối.</div>
+      ) : (
+        <div className="space-y-2">
+          {chunks.map((c) => {
+            const isOpen = open.has(c.id);
+            const preview = c.content.length > 240 ? c.content.slice(0, 240) + '…' : c.content;
+            return (
+              <div key={c.id} className="rounded-lg border border-white/10 bg-white/[0.02]">
+                <button onClick={() => toggle(c.id)} className="w-full flex items-center gap-2 px-3 py-2 text-left">
+                  {isOpen ? <ChevronDown className="w-4 h-4 text-slate-500 shrink-0" /> : <ChevronRight className="w-4 h-4 text-slate-500 shrink-0" />}
+                  <span className="text-xs font-mono text-slate-500 shrink-0">#{c.chunkIndex}</span>
+                  <span className="text-xs text-slate-400 truncate flex-1">{c.headingPath || '(không có heading)'}</span>
+                  <span className="text-[11px] text-slate-500 shrink-0">{c.tokenCount} tokens</span>
+                </button>
+                <div className="px-3 pb-3 text-xs text-slate-300 whitespace-pre-wrap">{isOpen ? c.content : preview}</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

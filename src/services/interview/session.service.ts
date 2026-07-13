@@ -22,6 +22,7 @@ import { generateStaticReport } from './report.service.js';
 import { createReviewCardsForSession } from './drill.service.js';
 import { isAiAvailable, checkTokenQuota } from './llm/index.js';
 import { evaluateAnswerWithAI, type AiEvaluationResult } from './aiEvaluator.js';
+import { retrieveChunks } from './knowledge/retrieval.js';
 import { synthesizeAiReport, type TurnSummary } from './aiReport.js';
 import type { InterviewEngineMode } from '@prisma/client';
 
@@ -246,6 +247,14 @@ export async function submitAnswer(
   if (wantsAi && isAiAvailable()) {
     try {
       if (await checkTokenQuota(userId)) {
+        // Phase 6 RAG: ground the grader in admin-curated knowledge for this
+        // question's topic/track. Never throws (retrieval degrades to []).
+        const retrieved = await retrieveChunks({
+          query: `${turn.questionText}\n${rawAnswer}`.slice(0, 1000),
+          topicIds: q?.topicId ? [q.topicId] : [],
+          trackIds: [session.trackId],
+          language: session.language as 'VI' | 'EN',
+        });
         aiEval = await evaluateAnswerWithAI({
           userId,
           sessionId,
@@ -257,6 +266,7 @@ export async function submitAnswer(
           language: session.language as 'VI' | 'EN',
           redFlagPenalty: redFlagPenalty(),
           disagreementThreshold: disagreementThreshold(),
+          retrieved,
         });
       }
     } catch {
@@ -280,7 +290,7 @@ export async function submitAnswer(
       // AI turns store the combined result in turnScore (no self-assess step);
       // `final` is the authoritative score the report aggregates.
       turnScore: aiEval
-        ? ({ mode: 'AI', deterministic: det.score, ai: aiEval.aiScore, final: aiEval.finalScore, grade: aiEval.letterGrade, disagreement: aiEval.disagreement, criteria: aiEval.criteria, summary: aiEval.summary } as never)
+        ? ({ mode: 'AI', deterministic: det.score, ai: aiEval.aiScore, final: aiEval.finalScore, grade: aiEval.letterGrade, disagreement: aiEval.disagreement, criteria: aiEval.criteria, summary: aiEval.summary, grounded: aiEval.grounded, sources: aiEval.sources } as never)
         : undefined,
       injectionAttempted,
       needsReview,

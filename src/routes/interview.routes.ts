@@ -17,7 +17,8 @@ import * as bank from '../services/interview/questionBank.service.js';
 import * as session from '../services/interview/session.service.js';
 import * as drill from '../services/interview/drill.service.js';
 import { isAiAvailable, getUsageStats } from '../services/interview/llm/index.js';
-import type { InterviewLevel } from '@prisma/client';
+import * as knowledge from '../services/interview/knowledge/knowledge.service.js';
+import type { InterviewLevel, InterviewContentStatus } from '@prisma/client';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -147,6 +148,38 @@ adminRouter.post('/flagged/:turnId/resolve', async (req: Request, res: Response<
   try {
     res.json({ success: true, data: await session.resolveFlag(parseId(req.params.turnId)) });
   } catch (err) { next(err); }
+});
+
+// ── Phase 6: Knowledge base (RAG) ─────────────────────────────────
+// Coverage/gaps come BEFORE /:id so they aren't shadowed by the param route.
+adminRouter.get('/knowledge/coverage', async (_req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await knowledge.coverageHeatmap() }); } catch (err) { next(err); }
+});
+adminRouter.get('/knowledge/gaps', async (_req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await knowledge.knowledgeGaps() }); } catch (err) { next(err); }
+});
+adminRouter.get('/knowledge', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const q = req.query;
+    res.json({ success: true, data: await knowledge.listDocuments({
+      topicId: q.topicId ? parseId(String(q.topicId)) : undefined,
+      trackId: q.trackId ? parseId(String(q.trackId)) : undefined,
+      status: q.status ? (String(q.status) as InterviewContentStatus) : undefined,
+      q: q.q ? String(q.q) : undefined,
+    }) });
+  } catch (err) { next(err); }
+});
+adminRouter.get('/knowledge/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await knowledge.getDocument(parseId(req.params.id)) }); } catch (err) { next(err); }
+});
+adminRouter.post('/knowledge', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await knowledge.createDocument({ ...(req.body ?? {}), authorId: req.userId ?? null }) }); } catch (err) { next(err); }
+});
+adminRouter.put('/knowledge/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await knowledge.updateDocument(parseId(req.params.id), req.body ?? {}) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/knowledge/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await knowledge.deleteDocument(parseId(req.params.id)) }); } catch (err) { next(err); }
 });
 
 // Domains

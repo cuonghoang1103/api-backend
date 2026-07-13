@@ -113,6 +113,35 @@ export default function InterviewReportPage() {
           <ListCard title="Cần cải thiện" items={report.weaknesses} tone="weak" empty="Không có điểm yếu nổi bật. Tốt!" />
         </div>
 
+        {/* Study plan — resources grounded in the knowledge base (source-traceable) */}
+        {Array.isArray(report.suggestedResources) && report.suggestedResources.some((r) => r.sources?.length) && (
+          <div className="rounded-2xl border border-white/10 p-4 mb-8">
+            <div className="text-sm font-semibold text-slate-100 mb-3">Nên đọc lại (từ kho tri thức)</div>
+            <div className="space-y-3">
+              {report.suggestedResources.filter((r) => r.sources?.length).map((r) => (
+                <div key={r.topicId}>
+                  <div className="text-xs font-mono uppercase tracking-wide text-amber-400/90 mb-1">{r.topic}</div>
+                  <ul className="space-y-1">
+                    {r.sources!.map((s) => {
+                      const label = s.headingPath ? `${s.title} — ${s.headingPath}` : s.title;
+                      return (
+                        <li key={`${r.topicId}-${s.documentId}-${s.headingPath ?? ''}`} className="text-sm text-slate-300 flex items-start gap-2">
+                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
+                          {s.sourceUrl ? (
+                            <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:underline">{label}</a>
+                          ) : (
+                            <span>{label}</span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Per-question drill-down */}
         <div className="rounded-2xl border border-white/10 overflow-hidden">
           <div className="px-4 py-3 border-b border-white/10 text-sm font-semibold text-slate-100">Chi tiết từng câu (bấm để mở)</div>

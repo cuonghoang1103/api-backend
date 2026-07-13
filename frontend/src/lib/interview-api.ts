@@ -102,6 +102,51 @@ export interface FlaggedTurn {
   createdAt: string;
 }
 
+// ── Phase 6: Knowledge base ──
+export interface KnowledgeDocInput {
+  title: string;
+  content: string;
+  sourceType?: string;
+  topicIds?: number[];
+  trackIds?: number[];
+  level?: string | null;
+  language?: 'VI' | 'EN';
+  status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  sourceUrl?: string | null;
+}
+export interface KnowledgeDocListItem {
+  id: number;
+  title: string;
+  sourceType: string;
+  topicIds: number[];
+  trackIds: number[];
+  level: string | null;
+  language: 'VI' | 'EN';
+  version: number;
+  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  sourceUrl: string | null;
+  chunkCount: number;
+  updatedAt: string;
+}
+export interface KnowledgeChunk {
+  id: number;
+  chunkIndex: number;
+  headingPath: string | null;
+  content: string;
+  tokenCount: number;
+}
+export interface KnowledgeDocDetail extends KnowledgeDocListItem {
+  content: string;
+  chunks: KnowledgeChunk[];
+}
+export interface KnowledgeCoverageRow {
+  topicId: number;
+  topic: string;
+  trackId: number;
+  track: string;
+  chunkCount: number;
+}
+
 export interface LlmUsage {
   aiAvailable: boolean;
   forceStatic: boolean;
@@ -138,4 +183,13 @@ export const interviewAdminApi = {
   createTopic: (body: Record<string, unknown>): Res<unknown> => api.post('/admin/interview/topics', body),
   createConcept: (body: Record<string, unknown>): Res<unknown> => api.post('/admin/interview/concepts', body),
   createCompanyProfile: (body: Record<string, unknown>): Res<unknown> => api.post('/admin/interview/company-profiles', body),
+  // ── Phase 6: Knowledge base (RAG) ──
+  listKnowledge: (params: { topicId?: number; trackId?: number; status?: string; q?: string } = {}): Res<KnowledgeDocListItem[]> =>
+    api.get('/admin/interview/knowledge', { params }),
+  getKnowledge: (id: number): Res<KnowledgeDocDetail> => api.get(`/admin/interview/knowledge/${id}`),
+  createKnowledge: (body: Partial<KnowledgeDocInput>): Res<KnowledgeDocListItem> => api.post('/admin/interview/knowledge', body),
+  updateKnowledge: (id: number, body: Partial<KnowledgeDocInput>): Res<KnowledgeDocListItem> => api.put(`/admin/interview/knowledge/${id}`, body),
+  deleteKnowledge: (id: number): Res<{ deleted: boolean }> => api.delete(`/admin/interview/knowledge/${id}`),
+  knowledgeCoverage: (): Res<KnowledgeCoverageRow[]> => api.get('/admin/interview/knowledge/coverage'),
+  knowledgeGaps: (): Res<KnowledgeCoverageRow[]> => api.get('/admin/interview/knowledge/gaps'),
 };

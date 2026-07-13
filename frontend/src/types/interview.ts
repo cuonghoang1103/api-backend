@@ -151,10 +151,17 @@ export interface ScoreBreakdown {
   answered: number;
   total: number;
 }
+export interface KnowledgeSource {
+  documentId: number;
+  title: string;
+  headingPath: string | null;
+  sourceUrl?: string | null;
+}
 export interface SuggestedResource {
   topicId: number;
   topic: string;
   note: string;
+  sources?: KnowledgeSource[]; // Phase 6: KB docs covering this topic (source-traceable)
 }
 
 export interface InterviewReport {

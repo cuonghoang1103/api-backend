@@ -43,6 +43,26 @@ export interface CompanyProfile {
 export interface TaxonomyResponse {
   domains: TaxonomyDomain[];
   companyProfiles: CompanyProfile[];
+  aiAvailable?: boolean; // Phase 4: backend has an LLM key + kill switch off
+}
+
+export type EngineMode = 'STATIC' | 'HYBRID' | 'FULL_AI';
+
+export interface AiCriterion {
+  id: string;
+  score: number; // 0-4
+  evidence: string | null;
+  whatWasMissing?: string;
+}
+export interface AiEvaluation {
+  criteria: AiCriterion[];
+  injectionAttempted: boolean;
+  summary: string;
+  aiScore: number;
+  finalScore: number;
+  letterGrade: string;
+  disagreement: number;
+  needsReview: boolean;
 }
 
 export interface PublicTurn {
@@ -103,6 +123,9 @@ export interface SubmitAnswerResponse {
   correct?: boolean;
   correctOptionId?: string | null;
   score?: number;
+  // Phase 4 (HYBRID/FULL_AI)
+  aiEvaluation?: AiEvaluation | null;
+  downgraded?: boolean;
 }
 
 export interface SelfAssessResponse {
@@ -238,6 +261,7 @@ export interface CreateSessionBody {
   language?: InterviewLanguage;
   numQuestions?: number;
   focusedMode?: boolean;
+  engineMode?: EngineMode;
 }
 
 /** Client-collected integrity signals (non-invasive, informational). */

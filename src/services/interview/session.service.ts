@@ -20,6 +20,10 @@ import { requireTrack } from './taxonomy.service.js';
 import { deterministicScore, selfAssessmentScore, type RubricCriterion, type SynonymMap } from './scoring.js';
 import { generateStaticReport } from './report.service.js';
 import { createReviewCardsForSession } from './drill.service.js';
+import { isAiAvailable, checkTokenQuota } from './llm/index.js';
+import { evaluateAnswerWithAI, type AiEvaluationResult } from './aiEvaluator.js';
+import { synthesizeAiReport, type TurnSummary } from './aiReport.js';
+import type { InterviewEngineMode } from '@prisma/client';
 
 const MAX_QUESTIONS = 15;
 const DEFAULT_QUESTIONS = 6;
@@ -27,6 +31,17 @@ const DEFAULT_QUESTIONS = 6;
 function redFlagPenalty(): number {
   const v = Number(process.env.SCORE_REDFLAG_PENALTY);
   return Number.isFinite(v) && v > 0 ? v : 15;
+}
+function disagreementThreshold(): number {
+  const v = Number(process.env.SCORE_DISAGREEMENT_THRESHOLD);
+  return Number.isFinite(v) && v > 0 ? v : 35;
+}
+/** Requested engine mode collapses to STATIC whenever AI isn't currently usable. */
+function resolveEngineMode(requested: string | undefined): InterviewEngineMode {
+  const r = String(requested ?? process.env.DEFAULT_ENGINE_MODE ?? 'STATIC').toUpperCase();
+  const wantsAi = r === 'HYBRID' || r === 'FULL_AI';
+  if (wantsAi && isAiAvailable()) return r as InterviewEngineMode;
+  return 'STATIC';
 }
 
 async function loadOwnedSession(userId: number, sessionId: number) {
@@ -72,6 +87,7 @@ export async function createSession(
     language?: unknown;
     numQuestions?: unknown;
     focusedMode?: unknown;
+    engineMode?: unknown;
   },
 ) {
   const trackId = Number(body.trackId);
@@ -102,7 +118,7 @@ export async function createSession(
       companyProfileId,
       level,
       mode: 'TEXT',
-      engineMode: 'STATIC',
+      engineMode: resolveEngineMode(typeof body.engineMode === 'string' ? body.engineMode : undefined),
       language,
       status: 'IN_PROGRESS',
       focusedMode: Boolean(body.focusedMode),
@@ -222,6 +238,38 @@ export async function submitAnswer(
     { redFlagPenalty: redFlagPenalty() },
   );
 
+  // ── Pass C: AI rubric grading (HYBRID / FULL_AI). Degrades to STATIC on any
+  //    failure — the answer + Pass A are always saved, so nothing is lost.
+  let aiEval: AiEvaluationResult | null = null;
+  let downgraded = false;
+  const wantsAi = session.engineMode === 'HYBRID' || session.engineMode === 'FULL_AI';
+  if (wantsAi && isAiAvailable()) {
+    try {
+      if (await checkTokenQuota(userId)) {
+        aiEval = await evaluateAnswerWithAI({
+          userId,
+          sessionId,
+          questionBody: turn.questionText,
+          referenceAnswer: reference ?? null,
+          rubric: rubricForLang ?? [],
+          answer: rawAnswer,
+          passA: det,
+          language: session.language as 'VI' | 'EN',
+          redFlagPenalty: redFlagPenalty(),
+          disagreementThreshold: disagreementThreshold(),
+        });
+      }
+    } catch {
+      // Provider failed mid-session → downgrade this session to STATIC and
+      // continue in self-assessment mode. The turn stays re-scorable later.
+      downgraded = true;
+      await prisma.interviewSession.update({ where: { id: sessionId }, data: { engineMode: 'STATIC' } }).catch(() => {});
+    }
+  }
+
+  const injectionAttempted = aiEval?.injectionAttempted ?? det.injectionAttempted;
+  const needsReview = aiEval?.needsReview ?? det.injectionAttempted;
+
   await prisma.interviewTurn.update({
     where: { id: turn.id },
     data: {
@@ -229,8 +277,13 @@ export async function submitAnswer(
       timeSpentMs,
       integritySignals: integritySignals as never,
       deterministicScore: det as never,
-      injectionAttempted: det.injectionAttempted,
-      needsReview: det.injectionAttempted,
+      // AI turns store the combined result in turnScore (no self-assess step);
+      // `final` is the authoritative score the report aggregates.
+      turnScore: aiEval
+        ? ({ mode: 'AI', deterministic: det.score, ai: aiEval.aiScore, final: aiEval.finalScore, grade: aiEval.letterGrade, disagreement: aiEval.disagreement, criteria: aiEval.criteria, summary: aiEval.summary } as never)
+        : undefined,
+      injectionAttempted,
+      needsReview,
     },
   });
 
@@ -240,7 +293,9 @@ export async function submitAnswer(
     referenceAnswer: reference ?? null,
     rubric: rubricForLang ?? [],
     deterministic: det,
-    injectionAttempted: det.injectionAttempted,
+    aiEvaluation: aiEval, // per-criterion AI grading, or null in STATIC/degraded
+    downgraded, // true if AI failed this turn and the session fell back to STATIC
+    injectionAttempted,
     autoAdvance: false,
   };
 }
@@ -285,7 +340,50 @@ export async function selfAssess(
 // ─── Finish → report ─────────────────────────────────────────────
 export async function finishSession(userId: number, sessionId: number) {
   const session = await loadOwnedSession(userId, sessionId);
-  const report = await generateStaticReport(sessionId);
+  let report = await generateStaticReport(sessionId);
+
+  // FULL_AI: synthesize a warmer, more specific report over the template.
+  // Falls back silently to the template report on any failure.
+  if (session.engineMode === 'FULL_AI' && isAiAvailable()) {
+    const turns = await prisma.interviewTurn.findMany({
+      where: { sessionId },
+      orderBy: { order: 'asc' },
+      include: { question: { include: { topic: { select: { name: true } } } } },
+    });
+    const summaries: TurnSummary[] = turns.map((t) => {
+      const det = t.deterministicScore as { redFlagsHit?: string[]; mustMiss?: string[] } | null;
+      const ts = t.turnScore as { final?: number } | null;
+      return {
+        topic: t.question?.topic?.name ?? 'General',
+        question: t.questionText,
+        score: ts?.final ?? (t.deterministicScore as { score?: number } | null)?.score ?? null,
+        redFlags: det?.redFlagsHit ?? [],
+        missing: det?.mustMiss ?? [],
+      };
+    });
+    const track = await prisma.interviewTrack.findUnique({ where: { id: session.trackId }, select: { name: true } });
+    const ai = await synthesizeAiReport({
+      userId,
+      sessionId,
+      trackName: track?.name ?? '',
+      level: session.level,
+      language: session.language as 'VI' | 'EN',
+      overallScore: report.overallScore ?? 0,
+      turns: summaries,
+    }).catch(() => null);
+    if (ai) {
+      report = await prisma.interviewReport.update({
+        where: { sessionId },
+        data: {
+          strengths: ai.strengths.length ? ai.strengths : report.strengths,
+          weaknesses: ai.weaknesses.length ? ai.weaknesses : report.weaknesses,
+          actionableAdvice: ai.actionableAdvice || report.actionableAdvice,
+          hireRecommendation: ai.hireRecommendation ?? report.hireRecommendation,
+        },
+      });
+    }
+  }
+
   // Weak concepts become spaced-repetition review cards (Phase 3 drill).
   await createReviewCardsForSession(userId, sessionId).catch(() => {});
   if (session.status !== 'COMPLETED') {

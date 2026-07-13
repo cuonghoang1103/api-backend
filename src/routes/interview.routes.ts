@@ -16,6 +16,7 @@ import * as taxonomy from '../services/interview/taxonomy.service.js';
 import * as bank from '../services/interview/questionBank.service.js';
 import * as session from '../services/interview/session.service.js';
 import * as drill from '../services/interview/drill.service.js';
+import { isAiAvailable, getUsageStats } from '../services/interview/llm/index.js';
 import type { InterviewLevel } from '@prisma/client';
 
 const parseId = (v: string): number => {
@@ -30,7 +31,8 @@ router.use(authenticate);
 // Taxonomy for the setup wizard
 router.get('/tracks', async (_req: Request, res: Response<ApiResponse>, next) => {
   try {
-    res.json({ success: true, data: await taxonomy.getTaxonomy() });
+    const tax = await taxonomy.getTaxonomy();
+    res.json({ success: true, data: { ...tax, aiAvailable: isAiAvailable() } });
   } catch (err) { next(err); }
 });
 
@@ -120,6 +122,11 @@ adminRouter.get('/taxonomy', async (_req: Request, res: Response<ApiResponse>, n
 adminRouter.get('/bank-health', async (_req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await taxonomy.getBankHealth() });
+  } catch (err) { next(err); }
+});
+adminRouter.get('/llm-usage', async (_req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await getUsageStats() });
   } catch (err) { next(err); }
 });
 

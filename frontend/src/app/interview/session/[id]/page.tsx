@@ -120,6 +120,9 @@ export default function InterviewRoomPage() {
         integritySignals: collectSignals(),
       });
       setRevealed(res.data.data);
+      if (res.data.data.downgraded) {
+        toast.info('AI tạm thời không khả dụng — chuyển sang tự chấm. Câu trả lời của bạn vẫn được lưu.');
+      }
     } catch {
       toast.error('Không gửi được câu trả lời');
     } finally {
@@ -129,8 +132,8 @@ export default function InterviewRoomPage() {
 
   const next = async () => {
     const isLast = order + 1 >= total;
-    if (!isMcq && revealed) {
-      // Record self-assessment before advancing.
+    // AI-graded turns have no self-assessment step; only STATIC turns self-score.
+    if (!isMcq && revealed && !revealed.aiEvaluation) {
       setAdvancing(true);
       try {
         await interviewApi.selfAssess(sessionId, order, ratings);
@@ -320,8 +323,41 @@ function Reveal({
         </div>
       )}
 
-      {/* Self-assessment (non-MCQ) */}
-      {!isMcq && revealed.rubric && revealed.rubric.length > 0 && (
+      {/* AI grading (HYBRID/FULL_AI) — replaces self-assessment on AI turns */}
+      {revealed.aiEvaluation && (
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.06] p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="text-xs font-semibold uppercase tracking-wide text-amber-300">AI chấm (theo tiêu chí, có dẫn chứng)</div>
+            <div className="text-sm font-mono text-slate-100">{revealed.aiEvaluation.finalScore}/100 ({revealed.aiEvaluation.letterGrade})</div>
+          </div>
+          {revealed.aiEvaluation.summary && <p className="text-sm text-slate-300 mb-3">{revealed.aiEvaluation.summary}</p>}
+          <div className="space-y-2">
+            {revealed.aiEvaluation.criteria.map((c) => {
+              const rub = revealed.rubric?.find((r) => r.id === c.id);
+              return (
+                <div key={c.id} className="text-sm border-t border-white/10 pt-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-slate-100">{rub?.criterion ?? c.id}</span>
+                    <span className="font-mono text-xs shrink-0" style={{ color: c.score >= 3 ? '#84cc16' : c.score >= 2 ? '#f59e0b' : '#ef4444' }}>{c.score}/4</span>
+                  </div>
+                  {c.evidence ? (
+                    <p className="text-xs text-emerald-300/90 mt-0.5">“{c.evidence}”</p>
+                  ) : (
+                    <p className="text-xs text-slate-500 mt-0.5">Không tìm thấy dẫn chứng trong câu trả lời.</p>
+                  )}
+                  {c.whatWasMissing && <p className="text-xs text-slate-400 mt-0.5">Thiếu: {c.whatWasMissing}</p>}
+                </div>
+              );
+            })}
+          </div>
+          {revealed.aiEvaluation.needsReview && (
+            <p className="text-[11px] text-amber-300/80 mt-3">⚑ Điểm này được đánh dấu cần rà soát (AI và máy chấm khách quan lệch nhau nhiều, hoặc phát hiện cố gắng gian lận).</p>
+          )}
+        </div>
+      )}
+
+      {/* Self-assessment — only on STATIC turns (no AI grade) */}
+      {!isMcq && !revealed.aiEvaluation && revealed.rubric && revealed.rubric.length > 0 && (
         <div className="rounded-xl border border-white/10 p-4">
           <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">Tự chấm theo từng tiêu chí</div>
           <p className="text-xs text-slate-400 mb-3">Thành thật với chính mình — chênh lệch giữa "mình nghĩ đúng" và máy chấm là phản hồi giá trị nhất.</p>

@@ -78,9 +78,21 @@ export interface BankHealthRow {
   count: number;
 }
 
+export interface LlmUsage {
+  aiAvailable: boolean;
+  forceStatic: boolean;
+  hasKey: boolean;
+  totalCalls: number;
+  totalInputTokens: number;
+  totalOutputTokens: number;
+  totalCostUsd: number;
+  byModel: Array<{ model: string; success: boolean; calls: number; inputTokens: number; outputTokens: number; costUsd: number }>;
+}
+
 export const interviewAdminApi = {
   taxonomy: (): Res<unknown> => api.get('/admin/interview/taxonomy'),
   bankHealth: (): Res<BankHealthRow[]> => api.get('/admin/interview/bank-health'),
+  llmUsage: (): Res<LlmUsage> => api.get('/admin/interview/llm-usage'),
   listQuestions: (params: {
     topicId?: number;
     trackId?: number;

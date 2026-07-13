@@ -11,7 +11,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { Loader2, AlertTriangle, Plus, Trash2, CheckCircle2, Eye } from 'lucide-react';
 import { interviewApi } from '@/lib/interview-api';
-import { interviewAdminApi, type AdminQuestion, type BankHealthRow } from '@/lib/interview-api';
+import { interviewAdminApi, type AdminQuestion, type BankHealthRow, type LlmUsage } from '@/lib/interview-api';
 import MarkdownEditor from '@/components/admin/MarkdownEditor';
 import type { TaxonomyResponse, TaxonomyTopic } from '@/types/interview';
 import { LEVELS } from '@/types/interview';
@@ -55,12 +55,14 @@ export default function AdminInterviewPage() {
 function Overview({ topicName }: { topicName: (id: number) => string }) {
   const [health, setHealth] = useState<BankHealthRow[]>([]);
   const [unreviewed, setUnreviewed] = useState<number | null>(null);
+  const [usage, setUsage] = useState<LlmUsage | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
       interviewAdminApi.bankHealth().then((r) => setHealth(r.data.data)).catch(() => {}),
       interviewAdminApi.listQuestions({ rubricReviewed: false, pageSize: 1 }).then((r) => setUnreviewed(r.data.data.total)).catch(() => {}),
+      interviewAdminApi.llmUsage().then((r) => setUsage(r.data.data)).catch(() => {}),
     ]).finally(() => setLoading(false));
   }, []);
 
@@ -90,6 +92,34 @@ function Overview({ topicName }: { topicName: (id: number) => string }) {
         <Stat label="Câu nháp (DRAFT)" value={draft} />
         <Stat label="Rubric chưa duyệt" value={unreviewed ?? 0} tone={unreviewed ? 'warn' : undefined} />
       </div>
+
+      {usage && (
+        <div className="rounded-xl border border-white/10 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="text-sm font-semibold">Chi phí AI (LLM)</div>
+            <span className={`text-xs px-2 py-0.5 rounded ${usage.aiAvailable ? 'bg-emerald-500/15 text-emerald-300' : 'bg-slate-500/15 text-slate-300'}`}>
+              {usage.forceStatic ? 'KILL SWITCH BẬT (STATIC)' : usage.aiAvailable ? 'AI SẴN SÀNG' : usage.hasKey ? 'AI tạm ngắt (circuit)' : 'CHƯA có API key → STATIC'}
+            </span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Stat label="Tổng chi phí (USD)" value={usage.totalCostUsd} />
+            <Stat label="Lượt gọi" value={usage.totalCalls} />
+            <Stat label="Input tokens" value={usage.totalInputTokens} />
+            <Stat label="Output tokens" value={usage.totalOutputTokens} />
+          </div>
+          {usage.byModel.length > 0 && (
+            <div className="mt-3 space-y-1 text-xs text-slate-400">
+              {usage.byModel.map((m, i) => (
+                <div key={i} className="flex justify-between">
+                  <span>{m.model} {m.success ? '' : '(lỗi)'}</span>
+                  <span className="font-mono">{m.calls} lượt · ${m.costUsd.toFixed(4)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          <p className="text-[11px] text-slate-500 mt-3">Thêm ANTHROPIC_API_KEY vào VPS + đặt DEFAULT_ENGINE_MODE=HYBRID để bật AI chấm. FORCE_STATIC_MODE=true là kill switch tắt toàn bộ LLM.</p>
+        </div>
+      )}
 
       <div className="rounded-xl border border-white/10 overflow-hidden">
         <div className="px-4 py-2.5 border-b border-white/10 text-sm font-semibold">Độ phủ ngân hàng (câu đã xuất bản / chủ đề)</div>

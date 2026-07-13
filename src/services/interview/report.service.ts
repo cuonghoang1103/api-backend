@@ -19,6 +19,7 @@ interface StoredTurnScore {
   deterministic?: number;
   self?: number | null;
   divergence?: number | null;
+  final?: number | null; // AI combined score (HYBRID/FULL_AI turns)
 }
 
 function hireRecommendation(score: number): InterviewHireRecommendation {
@@ -62,9 +63,11 @@ export async function generateStaticReport(sessionId: number) {
     const topicName = t.question?.topic?.name ?? 'General';
     if (!topicAgg.has(topicId)) topicAgg.set(topicId, { name: topicName, scores: [], redFlags: 0 });
     const agg = topicAgg.get(topicId)!;
-    if (det?.score != null) {
-      agg.scores.push(det.score);
-      detScores.push(det.score);
+    // Authoritative score: AI combined score when present, else deterministic.
+    const authoritative = ts?.final != null ? ts.final : det?.score ?? null;
+    if (authoritative != null) {
+      agg.scores.push(authoritative);
+      detScores.push(authoritative);
     }
     const rf = det?.redFlagsHit?.length ?? 0;
     agg.redFlags += rf;

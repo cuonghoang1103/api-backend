@@ -31,6 +31,7 @@ export default function InterviewSetupPage() {
   const [numQuestions, setNumQuestions] = useState(6);
   const [language, setLanguage] = useState<'VI' | 'EN'>('VI');
   const [focusedMode, setFocusedMode] = useState(false);
+  const [engineMode, setEngineMode] = useState<'STATIC' | 'HYBRID' | 'FULL_AI'>('STATIC');
   const [starting, setStarting] = useState(false);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ export default function InterviewSetupPage() {
     try {
       const res = await interviewApi.createSession({
         trackId: track.id, level, companyProfileId: company?.id ?? null, language, numQuestions, focusedMode,
+        engineMode: tax?.aiAvailable ? engineMode : 'STATIC',
       });
       router.push(`/interview/session/${res.data.data.id}`);
     } catch (e) {
@@ -168,6 +170,30 @@ export default function InterviewSetupPage() {
                 </label>
               </div>
             </Section>
+
+            {/* Engine mode — only when the backend has AI configured */}
+            {tax.aiAvailable && (
+              <Section step={6} title="Chế độ chấm">
+                <div className="grid sm:grid-cols-3 gap-2">
+                  {([
+                    { id: 'STATIC', label: 'Tự chấm', desc: 'Bạn tự chấm + máy khách quan. 0 đồng, 0 AI.' },
+                    { id: 'HYBRID', label: 'AI chấm', desc: 'AI chấm từng tiêu chí có dẫn chứng. Tốn token.' },
+                    { id: 'FULL_AI', label: 'AI đầy đủ', desc: 'AI chấm + viết báo cáo chi tiết.' },
+                  ] as const).map((m) => (
+                    <button
+                      key={m.id}
+                      onClick={() => setEngineMode(m.id)}
+                      className={`text-left px-4 py-3 rounded-xl border transition-all ${
+                        engineMode === m.id ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
+                      }`}
+                    >
+                      <div className="font-semibold text-slate-100 text-sm">{m.label}</div>
+                      <div className="text-xs text-slate-400 mt-0.5">{m.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </Section>
+            )}
 
             {/* Start */}
             <div className="pt-2">

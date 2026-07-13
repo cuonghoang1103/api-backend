@@ -192,15 +192,17 @@ export async function llmComplete(opts: {
   maxTokens?: number;
   userId?: number | null;
   sessionId?: number | null;
+  maxRetries?: number; // override — latency-sensitive callers use fewer
+  timeoutMs?: number; // override per-call timeout
 }): Promise<LLMResult> {
   const provider = getProvider();
   const model = modelForStep(opts.step);
-  const maxRetries = Number(process.env.LLM_MAX_RETRIES) || 3;
+  const maxRetries = opts.maxRetries ?? (Number(process.env.LLM_MAX_RETRIES) || 3);
   let lastErr: unknown;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens });
+      const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs });
       recordSuccess();
       await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});
       return result;

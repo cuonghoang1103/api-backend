@@ -33,7 +33,10 @@ export const interviewApi = {
     id: number,
     order: number,
     body: { answer?: string; selectedOptionId?: string; timeSpentMs?: number; integritySignals?: IntegritySignals },
-  ): Res<SubmitAnswerResponse> => api.post(`/interview/sessions/${id}/turns/${order}/answer`, body),
+    // AI grading (HYBRID/FULL_AI) runs server-side on this call and can take
+    // ~10-25s via the LLM gateway — override the default 30s axios timeout so a
+    // long/detailed answer doesn't spuriously fail before the grade returns.
+  ): Res<SubmitAnswerResponse> => api.post(`/interview/sessions/${id}/turns/${order}/answer`, body, { timeout: 90_000 }),
   selfAssess: (id: number, order: number, ratings: Record<string, number>): Res<SelfAssessResponse> =>
     api.post(`/interview/sessions/${id}/turns/${order}/self-assess`, { ratings }),
   finish: (id: number): Res<InterviewReport> => api.post(`/interview/sessions/${id}/finish`, {}),

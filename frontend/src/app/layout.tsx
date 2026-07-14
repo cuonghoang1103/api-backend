@@ -66,6 +66,11 @@ const SoundInitializer = dynamic(
   { ssr: false }
 )
 
+const ProExpiryReminder = dynamic(
+  () => import('@/components/pro/ProExpiryReminder'),
+  { ssr: false }
+)
+
 const PWAInstallPrompt = dynamic(
   () => import('@/components/providers/PWAInstallPrompt'),
   { ssr: false }
@@ -357,6 +362,7 @@ export default function RootLayout({
               <GlobalMusicPlayer />
               <ListenTogetherSync />
               <FloatingAIAssistant />
+              <ProExpiryReminder />
               <SoundInitializer />
               <PWAInstallPrompt />
               <PostCommentModal />

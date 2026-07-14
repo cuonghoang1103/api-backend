@@ -10,7 +10,7 @@ import {
   Sparkles, FileCode2, LogOut, User, Settings,
   GraduationCap, ShoppingBag, Layers, ChevronRight,
   Github, Menu, X, NotebookPen, Languages, Wallet,
-  TrendingUp, Gamepad2, Users, PlayCircle, Megaphone, Briefcase,
+  TrendingUp, Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -77,6 +77,7 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/hub', label: 'Hub', icon: Layers, section: 'user' },
   { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'user' },
   { href: '/friends', label: 'Friends', icon: Users, section: 'user' },
+  { href: '/pro', label: 'Update Pro', icon: Crown, section: 'user' },
   { href: '/chat', label: 'AI Chat', icon: Sparkles, section: 'user' },
   { href: '/music', label: 'Music', icon: Music, section: 'user' },
   { href: '/finance', label: 'MoneyFlow', icon: Wallet, section: 'user' },

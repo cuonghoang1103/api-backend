@@ -450,14 +450,15 @@ $DC exec -T nginx nginx -s reload 2>/dev/null && ok "Nginx reloaded" || true
 # container — the live containers' images are protected, so this is
 # safe and reclaims the bulk of the space (~10GB observed).
 #
-# Build cache: `--keep-storage=4g` retains the most-recently-used 4GB
-# of BuildKit cache (the npm ci / apt layers) instead of wiping it all.
-# A bare `prune -f` deletes EVERYTHING once the build finishes (all
-# layers count as "unused" then), which made every deploy a full cold
-# build — re-downloading sharp's prebuilt binaries from GitHub (flaky
-# from this VPS: two timeouts on 2026-07-06) and re-running npm ci.
+# Build cache: `--keep-storage=12g` retains the most-recently-used 12GB
+# of BuildKit cache. Bumped from 4GB after the 2026-07-14 disk upgrade
+# (40->50GB): 4GB only held one image's layers, so the OTHER image
+# (usually frontend) still rebuilt cold every deploy — re-running npm ci /
+# npm install + re-fetching sharp's prebuilt binaries (flaky from this VPS).
+# 12GB holds BOTH backend and frontend node_modules/apt layers warm, so a
+# no-code redeploy is near-instant. Still well within the 50GB disk.
 info "Pruning Docker build cache + unused images..."
-docker builder prune -f --keep-storage=4g &>/dev/null && ok "Build cache pruned (kept ≤4GB hot layers)" || true
+docker builder prune -f --keep-storage=12g &>/dev/null && ok "Build cache pruned (kept ≤12GB hot layers)" || true
 docker image prune -af &>/dev/null && ok "Unused images removed" || true
 df -h / | awk 'NR==2 {print "[disk] / now " $5 " used, " $4 " free"}' || true
 

@@ -25,9 +25,11 @@
 import type { Server as HttpServer } from 'http';
 import type { Request } from 'express';
 import { Server as IOServer, type Socket } from 'socket.io';
+import { createAdapter } from '@socket.io/redis-adapter';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/env.js';
 import { prisma } from '../config/database.js';
+import { getRedis } from '../config/redis.js';
 import { UnauthorizedError } from '../middleware/errorHandler.js';
 import { extractToken, type JwtPayload } from '../middleware/auth.js';
 import { logger } from '../utils/logger.js';
@@ -200,6 +202,23 @@ function emitPresenceTo(
  * Attach a Socket.IO server to the existing HTTP server. Idempotent
  * — calling twice is a no-op so hot reload doesn't double-bind.
  */
+/** Attach the Redis pub-sub adapter so realtime events fan out across workers.
+ *  Best-effort: on any Redis failure we keep the default in-memory adapter. */
+async function attachRedisAdapter(server: IOServer): Promise<void> {
+  try {
+    const base = await getRedis();
+    const pubClient = base.duplicate();
+    const subClient = base.duplicate();
+    await Promise.all([pubClient.connect(), subClient.connect()]);
+    server.adapter(createAdapter(pubClient, subClient));
+    logger.info('Socket.IO Redis adapter attached (cross-worker broadcasts enabled)');
+  } catch (err) {
+    logger.warn('Socket.IO Redis adapter NOT attached — in-memory only (single instance)', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+  }
+}
+
 export function initSocketServer(httpServer: HttpServer): IOServer {
   if (io) return io;
 
@@ -217,6 +236,13 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     pingInterval: 25000,
     pingTimeout: 60000,
   });
+
+  // Redis adapter: broadcasts (emit to rooms / all) propagate across every
+  // backend worker/instance via Redis pub-sub. Required once the backend runs
+  // in cluster mode; harmless (a no-op pub-sub) with a single instance. If
+  // Redis is unreachable we fall back to the default in-memory adapter so
+  // single-instance realtime still works.
+  void attachRedisAdapter(io);
 
   // Auth middleware: read JWT from the same places the Express
   // middleware does (auth.token, Authorization header, or the

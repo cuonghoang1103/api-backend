@@ -291,8 +291,12 @@ export default function ChatPage() {
     }
   }, [removeSession]);
 
-  const sendMessage = useCallback(async (text: string, forceStatic: boolean = false, images?: string[]) => {
-    if ((!text.trim() && (!images || images.length === 0)) || isStreaming) return;
+  const sendMessage = useCallback(async (text: string, forceStatic: boolean = false, attach?: { images?: string[]; documents?: string[]; documentNames?: string[] }) => {
+    const images = attach?.images;
+    const documents = attach?.documents;
+    const documentNames = attach?.documentNames;
+    const hasAttach = (images?.length ?? 0) > 0 || (documents?.length ?? 0) > 0;
+    if ((!text.trim() && !hasAttach) || isStreaming) return;
 
     // Determine sessionId: use current, or create a new local one
     let sessionId = currentSessionId;
@@ -320,6 +324,7 @@ export default function ChatPage() {
       role: 'user',
       content: text.trim(),
       images: images && images.length > 0 ? images : undefined,
+      documentNames: documentNames && documentNames.length > 0 ? documentNames : undefined,
       createdAt: new Date().toISOString(),
     };
 
@@ -383,7 +388,7 @@ export default function ChatPage() {
           'Content-Type': 'application/json',
           ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
         },
-        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5, model: useChatModelStore.getState().modelId, history: historyPayload, images: images && images.length > 0 ? images : undefined }),
+        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5, model: useChatModelStore.getState().modelId, history: historyPayload, images: images && images.length > 0 ? images : undefined, documents: documents && documents.length > 0 ? documents : undefined }),
       });
 
       if (!res.ok) throw new Error('Stream failed');
@@ -908,7 +913,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input — always at bottom */}
-        <ChatInput onSend={(msg, imgs) => sendMessage(msg, false, imgs)} isStreaming={isStreaming} />
+        <ChatInput onSend={(msg, attach) => sendMessage(msg, false, attach)} isStreaming={isStreaming} />
       </main>
 
       {/* Build tag ribbon. Hidden by default, visible when

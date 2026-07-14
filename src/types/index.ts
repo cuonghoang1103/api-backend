@@ -66,6 +66,8 @@ export interface ChatMessageDto {
   history?: Array<{ role: 'user' | 'assistant'; content: string }>;
   /** Attached images as data URLs (data:image/...;base64,...) — Pro/Max only. */
   images?: string[];
+  /** Attached PDFs as data URLs (data:application/pdf;base64,...) — Pro/Max only. */
+  documents?: string[];
 }
 
 export interface UploadResult {

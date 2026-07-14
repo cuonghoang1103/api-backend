@@ -4,9 +4,11 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { User, Copy, CheckCheck } from 'lucide-react';
+import { User, Copy, CheckCheck, Download, FileText, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 import type { ChatMessage } from '@/types';
+import { downloadTextFile, downloadPdf } from '@/lib/chatExport';
 
 // ── Inject cyberpunk scrollbar styles directly (bypasses Tailwind build pipeline) ──
 function ChatScrollStyles() {
@@ -91,6 +93,8 @@ function MessageBubble({ msg, isStreaming, isLastAssistant }: {
   isLastAssistant: boolean;
 }) {
   const [copied, setCopied] = useState(false);
+  const [dlOpen, setDlOpen] = useState(false);
+  const [dlBusy, setDlBusy] = useState(false);
   const bubbleRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = async () => {
@@ -100,6 +104,20 @@ function MessageBubble({ msg, isStreaming, isLastAssistant }: {
   };
 
   const isUser = msg.role === 'user';
+
+  const download = async (fmt: 'txt' | 'md' | 'pdf') => {
+    const base = `cuongmini-${format(new Date(msg.createdAt), 'yyyyMMdd-HHmmss')}`;
+    try {
+      setDlBusy(true);
+      if (fmt === 'pdf') await downloadPdf(msg.content, `${base}.pdf`);
+      else downloadTextFile(msg.content, `${base}.${fmt}`);
+    } catch {
+      toast.error('Tải file thất bại');
+    } finally {
+      setDlBusy(false);
+      setDlOpen(false);
+    }
+  };
 
   return (
     <motion.div
@@ -253,6 +271,16 @@ function MessageBubble({ msg, isStreaming, isLastAssistant }: {
                   ))}
                 </div>
               )}
+              {msg.documentNames && msg.documentNames.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-2 justify-end">
+                  {msg.documentNames.map((name, i) => (
+                    <span key={i} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border border-[#ef4444]/25 bg-[#ef4444]/10 max-w-[200px]">
+                      <FileText className="w-3.5 h-3.5 shrink-0" />
+                      <span className="text-xs truncate">{name}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
               {msg.content && <span className="whitespace-pre-wrap">{msg.content}</span>}
             </div>
           )}
@@ -287,6 +315,32 @@ function MessageBubble({ msg, isStreaming, isLastAssistant }: {
                 <Copy className="w-3 h-3" />
               )}
             </motion.button>
+          )}
+          {/* Download the reply as a file (assistant, non-empty only) */}
+          {!isUser && msg.content?.trim() && (
+            <div className="relative">
+              <button
+                onClick={() => setDlOpen((o) => !o)}
+                disabled={dlBusy}
+                className="p-1 rounded-md text-[#64748b] hover:text-[#22d3ee] hover:bg-[#22d3ee]/5 transition-colors disabled:opacity-50"
+                title="Tải câu trả lời"
+              >
+                {dlBusy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Download className="w-3 h-3" />}
+              </button>
+              {dlOpen && !dlBusy && (
+                <div className="absolute z-20 bottom-full mb-1 left-0 flex gap-1 p-1 rounded-lg bg-[#0d1117] border border-[#22d3ee]/25 shadow-lg">
+                  {(['txt', 'md', 'pdf'] as const).map((fmt) => (
+                    <button
+                      key={fmt}
+                      onClick={() => download(fmt)}
+                      className="px-2 py-0.5 rounded text-[11px] font-mono uppercase text-[#e2e8f0] hover:bg-[#22d3ee]/15 hover:text-[#22d3ee] transition-colors"
+                    >
+                      {fmt}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>

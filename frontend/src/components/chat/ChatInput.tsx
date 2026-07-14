@@ -2,12 +2,15 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Loader2, ImagePlus, X } from 'lucide-react';
+import { Send, Loader2, Paperclip, FileText, X } from 'lucide-react';
+import { toast } from 'sonner';
 import ModelPicker from './ModelPicker';
 import { useChatModelStore, getChatModel } from '@/lib/aiChatModels';
 
+export interface ChatAttachment { images?: string[]; documents?: string[]; documentNames?: string[] }
+
 interface ChatInputProps {
-  onSend: (message: string, images?: string[]) => void;
+  onSend: (message: string, attach?: ChatAttachment) => void;
   isStreaming: boolean;
   disabled?: boolean;
 }
@@ -17,9 +20,17 @@ interface Attached {
   dataUrl: string;
 }
 
-// ── Client-side image limits (mirror of the backend guard) ──
+interface AttachedDoc {
+  id: string;
+  name: string;
+  dataUrl: string;
+}
+
+// ── Client-side attachment limits (mirror of the backend guards) ──
 const MAX_IMAGES = 4;
 const MAX_DIM = 1568; // Anthropic's recommended long-edge cap for vision
+const MAX_DOCS = 3;
+const MAX_DOC_BYTES = 6 * 1024 * 1024; // 6MB per PDF (matches backend)
 
 /** Read a File as a data URL. */
 function readAsDataURL(file: File): Promise<string> {
@@ -75,6 +86,7 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
   const [value, setValue] = useState('');
   const [focused, setFocused] = useState(false);
   const [images, setImages] = useState<Attached[]>([]);
+  const [docs, setDocs] = useState<AttachedDoc[]>([]);
   const [processing, setProcessing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -95,29 +107,47 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
     textareaRef.current?.focus();
   }, []);
 
-  // If the user switches back to a non-vision model, drop any staged images
-  // (the default model can't see them).
+  // If the user switches back to a non-vision model, drop any staged
+  // attachments (the default model can't read them).
   useEffect(() => {
-    if (!isVision && images.length > 0) setImages([]);
-  }, [isVision, images.length]);
+    if (!isVision) { if (images.length) setImages([]); if (docs.length) setDocs([]); }
+  }, [isVision, images.length, docs.length]);
 
   const addFiles = useCallback(async (files: File[]) => {
-    if (!isVision) return;
+    if (!isVision || files.length === 0) return;
     const imageFiles = files.filter((f) => f.type.startsWith('image/'));
-    if (imageFiles.length === 0) return;
+    const pdfFiles = files.filter((f) => f.type === 'application/pdf');
+    if (imageFiles.length === 0 && pdfFiles.length === 0) return;
     setProcessing(true);
     try {
-      const room = MAX_IMAGES - images.length;
-      const toAdd = imageFiles.slice(0, Math.max(0, room));
-      const compressed = await Promise.all(toAdd.map((f) => compressImage(f)));
-      setImages((prev) => [
-        ...prev,
-        ...compressed.map((dataUrl, i) => ({ id: `${Date.now()}_${i}_${Math.round(prev.length)}`, dataUrl })),
-      ].slice(0, MAX_IMAGES));
+      if (imageFiles.length) {
+        const room = MAX_IMAGES - images.length;
+        const toAdd = imageFiles.slice(0, Math.max(0, room));
+        const compressed = await Promise.all(toAdd.map((f) => compressImage(f)));
+        setImages((prev) => [
+          ...prev,
+          ...compressed.map((dataUrl, i) => ({ id: `${Date.now()}_i${i}_${prev.length}`, dataUrl })),
+        ].slice(0, MAX_IMAGES));
+      }
+      if (pdfFiles.length) {
+        const room = MAX_DOCS - docs.length;
+        const toAdd = pdfFiles.slice(0, Math.max(0, room));
+        const loaded = await Promise.all(
+          toAdd.map(async (f) => {
+            if (f.size > MAX_DOC_BYTES) { toast.error(`"${f.name}" quá lớn (tối đa 6MB)`); return null; }
+            return { name: f.name, dataUrl: await readAsDataURL(f) };
+          }),
+        );
+        setDocs((prev) => [
+          ...prev,
+          ...loaded.filter((x): x is { name: string; dataUrl: string } => !!x)
+            .map((d, i) => ({ id: `${Date.now()}_d${i}_${prev.length}`, name: d.name, dataUrl: d.dataUrl })),
+        ].slice(0, MAX_DOCS));
+      }
     } finally {
       setProcessing(false);
     }
-  }, [isVision, images.length]);
+  }, [isVision, images.length, docs.length]);
 
   const handlePaste = useCallback((e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     if (!isVision) return;
@@ -137,17 +167,25 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
   const removeImage = useCallback((id: string) => {
     setImages((prev) => prev.filter((img) => img.id !== id));
   }, []);
+  const removeDoc = useCallback((id: string) => {
+    setDocs((prev) => prev.filter((d) => d.id !== id));
+  }, []);
 
   const handleSubmit = useCallback(() => {
     const text = value.trim();
-    if ((!text && images.length === 0) || isDisabled || processing) return;
-    onSend(text, images.length > 0 ? images.map((i) => i.dataUrl) : undefined);
+    if ((!text && images.length === 0 && docs.length === 0) || isDisabled || processing) return;
+    onSend(text, {
+      images: images.length > 0 ? images.map((i) => i.dataUrl) : undefined,
+      documents: docs.length > 0 ? docs.map((d) => d.dataUrl) : undefined,
+      documentNames: docs.length > 0 ? docs.map((d) => d.name) : undefined,
+    });
     setValue('');
     setImages([]);
+    setDocs([]);
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
     }
-  }, [value, images, isDisabled, processing, onSend]);
+  }, [value, images, docs, isDisabled, processing, onSend]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -156,7 +194,8 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
     }
   };
 
-  const canSend = (!!value.trim() || images.length > 0) && !isDisabled && !processing;
+  const attachCount = images.length + docs.length;
+  const canSend = (!!value.trim() || attachCount > 0) && !isDisabled && !processing;
 
   return (
     <motion.div
@@ -206,6 +245,33 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
           )}
         </AnimatePresence>
 
+        {/* PDF chips (Pro/Max only) */}
+        <AnimatePresence>
+          {isVision && docs.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-2 flex flex-wrap gap-2"
+            >
+              {docs.map((d) => (
+                <div key={d.id} className="relative flex items-center gap-2 pl-2 pr-6 py-1.5 rounded-lg border border-[#22d3ee]/30 bg-[#22d3ee]/[0.06] max-w-[220px]">
+                  <FileText className="w-4 h-4 text-[#22d3ee] shrink-0" />
+                  <span className="text-xs text-[#e2e8f0] truncate">{d.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeDoc(d.id)}
+                    className="absolute top-1/2 -translate-y-1/2 right-1 w-4 h-4 rounded-full text-[#fca5a5] flex items-center justify-center hover:bg-[#ef4444]/20 transition-colors"
+                    aria-label="Remove file"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Terminal input box */}
         <div
           className={`
@@ -236,7 +302,7 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
             onPaste={handlePaste}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            placeholder={isVision ? 'enter command... (dán hoặc đính kèm ảnh)' : 'enter command...'}
+            placeholder={isVision ? 'enter command... (dán/đính kèm ảnh hoặc PDF)' : 'enter command...'}
             disabled={isDisabled}
             rows={1}
             className={`w-full pl-9 sm:pl-[170px] ${isVision ? 'pr-24' : 'pr-14'} py-3 bg-transparent text-[#f8fafc] placeholder:text-[#64748b]/40 font-mono text-base sm:text-sm focus:outline-none resize-none transition-all disabled:opacity-50`}
@@ -247,23 +313,23 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/png,image/jpeg,image/webp,image/gif"
+            accept="image/png,image/jpeg,image/webp,image/gif,application/pdf"
             multiple
             className="hidden"
             onChange={handleFileChange}
           />
 
           <div className="absolute right-2 bottom-2 flex items-center gap-1.5">
-            {/* Attach image (Pro/Max only) */}
+            {/* Attach image or PDF (Pro/Max only) */}
             {isVision && (
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                disabled={isDisabled || images.length >= MAX_IMAGES}
-                title={images.length >= MAX_IMAGES ? `Tối đa ${MAX_IMAGES} ảnh` : 'Đính kèm ảnh'}
+                disabled={isDisabled || (images.length >= MAX_IMAGES && docs.length >= MAX_DOCS)}
+                title={images.length >= MAX_IMAGES && docs.length >= MAX_DOCS ? 'Đã đạt tối đa tệp đính kèm' : 'Đính kèm ảnh hoặc PDF'}
                 className="w-10 h-10 rounded-xl flex items-center justify-center text-[#22d3ee] hover:bg-[#22d3ee]/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                <ImagePlus className="w-4 h-4" />
+                <Paperclip className="w-4 h-4" />
               </button>
             )}
 

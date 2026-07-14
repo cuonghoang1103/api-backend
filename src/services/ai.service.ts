@@ -152,6 +152,8 @@ interface ChatContext {
   history?: ChatTurn[];
   /** Attached images (base64) for the vision-capable Pro/Max tiers only. */
   images?: ChatImageInput[];
+  /** Attached PDFs (base64) for the document-capable Pro/Max tiers only. */
+  documents?: ChatDocumentInput[];
 }
 
 /** A validated, base64-encoded image ready for a Claude image block. */
@@ -159,18 +161,31 @@ export interface ChatImageInput {
   media_type: string;
   data: string;
 }
+/** A validated, base64-encoded PDF ready for a Claude document block. */
+export interface ChatDocumentInput {
+  data: string;
+}
 
 /**
- * Build the user-turn content for the Claude API. With no images it's a plain
- * string (unchanged behaviour); with images it's a content-block array where the
- * images come FIRST (Anthropic's recommended order) followed by the text.
+ * Build the user-turn content for the Claude API. With no attachments it's a
+ * plain string (unchanged behaviour); otherwise a content-block array with
+ * documents + images FIRST (Anthropic's recommended order) then the text.
  */
-function buildUserContent(message: string, images?: ChatImageInput[]): string | ClaudeContentBlock[] {
-  if (!images || images.length === 0) return message;
-  const blocks: ClaudeContentBlock[] = images.map((img) => ({
-    type: 'image',
-    source: { type: 'base64', media_type: img.media_type, data: img.data },
-  }));
+function buildUserContent(
+  message: string,
+  images?: ChatImageInput[],
+  documents?: ChatDocumentInput[],
+): string | ClaudeContentBlock[] {
+  const hasImages = !!images?.length;
+  const hasDocs = !!documents?.length;
+  if (!hasImages && !hasDocs) return message;
+  const blocks: ClaudeContentBlock[] = [];
+  for (const doc of documents ?? []) {
+    blocks.push({ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: doc.data } });
+  }
+  for (const img of images ?? []) {
+    blocks.push({ type: 'image', source: { type: 'base64', media_type: img.media_type, data: img.data } });
+  }
   if (message.trim()) blocks.push({ type: 'text', text: message });
   return blocks;
 }
@@ -495,9 +510,9 @@ export class AIService {
       } else if (!claudeChatAvailable()) {
         if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'claude_not_configured'; }
       } else {
-        // Images are a vision perk of the Pro/Max (Claude) tiers only — attach
+        // Images + PDFs are a perk of the Pro/Max (Claude) tiers only — attach
         // them to the current user turn. History stays text-only.
-        const userContent = buildUserContent(message, context.images);
+        const userContent = buildUserContent(message, context.images, context.documents);
         const claudeMessages: ClaudeMessage[] = [...history, { role: 'user', content: userContent }];
         const gwModel = selected.gatewayModel!();
         const outTokens = selected.maxTokens ? selected.maxTokens() : 8192;

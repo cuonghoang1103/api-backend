@@ -299,6 +299,10 @@ export interface ChatMessage {
   sessionId: string;
   role: 'user' | 'assistant';
   content: string;
+  /** Attached images (data URLs), user turns only. Not persisted server-side. */
+  images?: string[];
+  /** Names of attached PDFs, user turns only (shown as chips; not persisted). */
+  documentNames?: string[];
   tokenCount?: number;
   createdAt: string;
 }

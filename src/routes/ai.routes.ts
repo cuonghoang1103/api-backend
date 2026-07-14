@@ -92,6 +92,45 @@ function parseChatImages(raw: unknown): ParsedImage[] {
   return out;
 }
 
+// ─── PDF document limits (Pro/Max chat) ──────────────────
+const MAX_CHAT_DOCS = 3;
+const MAX_DOC_BYTES = 6 * 1024 * 1024; // 6MB decoded per PDF (stays under the 10mb body cap)
+
+interface ParsedDoc { data: string }
+
+/**
+ * Validate + normalize the `documents` field (array of PDF data URLs) into
+ * `{ data }` blocks. PDFs only. Throws AppError on malformed/oversized input.
+ */
+function parseChatDocuments(raw: unknown): ParsedDoc[] {
+  if (raw == null) return [];
+  if (!Array.isArray(raw)) {
+    throw new AppError('documents must be an array of data URLs', 400, 'INVALID_DOCUMENTS');
+  }
+  if (raw.length > MAX_CHAT_DOCS) {
+    throw new AppError(`Too many files (max ${MAX_CHAT_DOCS})`, 400, 'TOO_MANY_DOCUMENTS');
+  }
+  const out: ParsedDoc[] = [];
+  for (const item of raw) {
+    if (typeof item !== 'string') {
+      throw new AppError('Each file must be a data URL string', 400, 'INVALID_DOCUMENT');
+    }
+    const match = /^data:([^;,]+);base64,(.+)$/s.exec(item.trim());
+    if (!match) {
+      throw new AppError('File must be a base64 data URL', 400, 'INVALID_DOCUMENT_FORMAT');
+    }
+    if (match[1].toLowerCase() !== 'application/pdf') {
+      throw new AppError('Only PDF files are supported', 400, 'UNSUPPORTED_DOCUMENT_TYPE');
+    }
+    const data = match[2];
+    if (Math.floor((data.length * 3) / 4) > MAX_DOC_BYTES) {
+      throw new AppError('PDF too large (max 6MB each)', 400, 'DOCUMENT_TOO_LARGE');
+    }
+    out.push({ data });
+  }
+  return out;
+}
+
 // ─── SSE Constants ────────────────────────────────────────
 const SSE_KEEPALIVE_INTERVAL_MS = 15_000; // 15s — keep connection alive through Nginx AND reset client idle timers before slow (Opus) first-token
 const SSE_TIMEOUT_MS = 240_000;           // 4 phút — room for long (10k–15k token) Pro/Max answers
@@ -112,19 +151,21 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
   // returns a plain 400 rather than an SSE error frame. Images are honored only
   // on the Pro/Max (Claude) path inside the service; other models ignore them.
   let images: Array<{ media_type: string; data: string }> = [];
+  let documents: Array<{ data: string }> = [];
   try {
     images = parseChatImages((req.body as { images?: unknown }).images);
+    documents = parseChatDocuments((req.body as { documents?: unknown }).documents);
   } catch (err) {
     if (err instanceof AppError) {
       res.status(err.statusCode).json({ success: false, message: err.message, code: err.code });
       return;
     }
-    res.status(400).json({ success: false, message: 'Invalid images', code: 'INVALID_IMAGES' });
+    res.status(400).json({ success: false, message: 'Invalid attachments', code: 'INVALID_ATTACHMENTS' });
     return;
   }
 
-  // A message is required unless the user sent at least one image (image-only ask).
-  if (!message?.trim() && images.length === 0) {
+  // A message is required unless the user sent at least one attachment.
+  if (!message?.trim() && images.length === 0 && documents.length === 0) {
     // Cannot throw to next() here — headers not set yet
     res.status(400).json({
       success: false,
@@ -217,6 +258,7 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       ? (req.body as { history: Array<{ role: 'user' | 'assistant'; content: string }> }).history
       : undefined,
     images: images.length > 0 ? images : undefined,
+    documents: documents.length > 0 ? documents : undefined,
   };
 
   // Mutable model metadata — streamChat fills this in; we forward it to the

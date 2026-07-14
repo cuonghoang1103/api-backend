@@ -29,7 +29,12 @@ export interface ClaudeImageBlock {
   type: 'image';
   source: { type: 'base64'; media_type: string; data: string };
 }
-export type ClaudeContentBlock = ClaudeTextBlock | ClaudeImageBlock;
+/** A document block (base64 PDF) — the Sonnet/Opus tiers read text+layout. */
+export interface ClaudeDocumentBlock {
+  type: 'document';
+  source: { type: 'base64'; media_type: 'application/pdf'; data: string };
+}
+export type ClaudeContentBlock = ClaudeTextBlock | ClaudeImageBlock | ClaudeDocumentBlock;
 
 export interface ClaudeMessage {
   role: 'user' | 'assistant';

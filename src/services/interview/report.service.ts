@@ -48,6 +48,12 @@ export async function generateStaticReport(sessionId: number) {
   });
   if (!session) throw new Error('session not found');
 
+  // Language purity: EN sessions use the canonical topic name + English advice;
+  // VI sessions prefer nameVi + Vietnamese advice.
+  const isEn = session.language === 'EN';
+  const topicLabel = (topic?: { name: string | null; nameVi: string | null } | null): string =>
+    (isEn ? topic?.name : topic?.nameVi ?? topic?.name) ?? 'General';
+
   const answered = session.turns.filter((t) => t.userAnswer && t.userAnswer.trim().length > 0);
 
   // Per-topic aggregation from the deterministic (objective) score.
@@ -61,7 +67,7 @@ export async function generateStaticReport(sessionId: number) {
     const det = (t.deterministicScore as StoredDeterministic | null) ?? null;
     const ts = (t.turnScore as StoredTurnScore | null) ?? null;
     const topicId = t.question?.topic?.id ?? 0;
-    const topicName = t.question?.topic?.name ?? 'General';
+    const topicName = topicLabel(t.question?.topic);
     if (!topicAgg.has(topicId)) topicAgg.set(topicId, { name: topicName, scores: [], redFlags: 0 });
     const agg = topicAgg.get(topicId)!;
     // Authoritative score: AI combined score when present, else deterministic.
@@ -99,16 +105,22 @@ export async function generateStaticReport(sessionId: number) {
   const weakest = byTopic.slice(0, 3);
   const adviceLines: string[] = [];
   if (weakest.length) {
-    adviceLines.push('**Ưu tiên ôn lại:** ' + weakest.map((t) => `${t.topic} (${t.avgScore}/100)`).join(', ') + '.');
+    const topics = weakest.map((t) => `${t.topic} (${t.avgScore}/100)`).join(', ');
+    adviceLines.push(isEn ? `**Review first:** ${topics}.` : `**Ưu tiên ôn lại:** ${topics}.`);
   }
   if (redFlagTotal > 0) {
-    adviceLines.push(`Có **${redFlagTotal} lỗi kiến thức (red flag)** — đây là niềm tin sai, nguy hiểm hơn cả thiếu sót. Đọc kỹ đáp án mẫu ở các câu tương ứng.`);
+    adviceLines.push(isEn
+      ? `You have **${redFlagTotal} knowledge error(s) (red flags)** — wrong beliefs, more dangerous than gaps. Read the model answers on those questions carefully.`
+      : `Có **${redFlagTotal} lỗi kiến thức (red flag)** — đây là niềm tin sai, nguy hiểm hơn cả thiếu sót. Đọc kỹ đáp án mẫu ở các câu tương ứng.`);
   }
   if (selfAvg != null && Math.abs(selfAvg - overall) >= 15) {
-    const dir = selfAvg > overall ? 'cao hơn' : 'thấp hơn';
-    adviceLines.push(`Bạn tự chấm **${selfAvg}/100**, máy chấm khách quan **${overall}/100** (${dir}). Chênh lệch lớn là tín hiệu đáng chú ý nhất: hãy đối chiếu đáp án mẫu để hiệu chỉnh cảm nhận về mức độ mình nắm bài.`);
+    adviceLines.push(isEn
+      ? `You self-scored **${selfAvg}/100**, the objective grader **${overall}/100** (${selfAvg > overall ? 'higher' : 'lower'}). A large gap is the most notable signal: compare against the model answers to recalibrate how well you actually know the material.`
+      : `Bạn tự chấm **${selfAvg}/100**, máy chấm khách quan **${overall}/100** (${selfAvg > overall ? 'cao hơn' : 'thấp hơn'}). Chênh lệch lớn là tín hiệu đáng chú ý nhất: hãy đối chiếu đáp án mẫu để hiệu chỉnh cảm nhận về mức độ mình nắm bài.`);
   }
-  if (!adviceLines.length) adviceLines.push('Bao phủ tốt các tiêu chí. Tiếp tục luyện biến thể khác của cùng khái niệm để chắc chắn là hiểu chứ không phải học thuộc.');
+  if (!adviceLines.length) adviceLines.push(isEn
+    ? 'Good coverage across the criteria. Keep practising other variants of the same concept to make sure you understand it rather than memorise it.'
+    : 'Bao phủ tốt các tiêu chí. Tiếp tục luyện biến thể khác của cùng khái niệm để chắc chắn là hiểu chứ không phải học thuộc.');
 
   const scoreBreakdown = {
     byTopic,
@@ -128,7 +140,7 @@ export async function generateStaticReport(sessionId: number) {
       return {
         topicId: t.topicId,
         topic: t.topic,
-        note: 'Xem đáp án mẫu & tiêu chí ở các câu thuộc chủ đề này.',
+        note: isEn ? 'See the model answers & criteria on questions in this topic.' : 'Xem đáp án mẫu & tiêu chí ở các câu thuộc chủ đề này.',
         sources: kb, // [{documentId,title,headingPath,sourceUrl}] from the knowledge base
       };
     }),

@@ -15,6 +15,7 @@ import { useSpeech } from '@/hooks/useSpeech';
 import ParticleBackground from '@/components/repos/ParticleBackground';
 import Markdown from '@/components/markdown/Markdown';
 import { interviewApi } from '@/lib/interview-api';
+import { makeT, type ILang } from '@/lib/interview-i18n';
 import type { SessionState, PublicTurn, SubmitAnswerResponse, IntegritySignals } from '@/types/interview';
 
 function fmtTime(ms: number): string {
@@ -29,6 +30,11 @@ export default function InterviewRoomPage() {
 
   const [session, setSession] = useState<SessionState | null>(null);
   const [loading, setLoading] = useState(true);
+  // Display language: defaults to the session language (so the whole room is
+  // "pure" VI or EN), toggle-able in the header. Content + AI voice follow the
+  // session language; this switches the UI chrome.
+  const [displayLang, setDisplayLang] = useState<ILang>('VI');
+  const t = makeT(displayLang);
   const [order, setOrder] = useState(0);
   const [answer, setAnswer] = useState('');
   const [mcqChoice, setMcqChoice] = useState('');
@@ -60,11 +66,12 @@ export default function InterviewRoomPage() {
       .then((res) => {
         const s = res.data.data;
         setSession(s);
+        setDisplayLang(s.language === 'EN' ? 'EN' : 'VI');
         const firstUnanswered = s.turns.findIndex((t) => !t.answered);
         setOrder(firstUnanswered < 0 ? Math.max(0, s.turns.length - 1) : firstUnanswered);
         if (firstUnanswered < 0 && s.hasReport) router.replace(`/interview/report/${sessionId}`);
       })
-      .catch(() => toast.error('Không tải được phiên phỏng vấn'))
+      .catch(() => toast.error(t('tSessionLoadFail')))
       .finally(() => setLoading(false));
   }, [sessionId, router]);
 
@@ -109,12 +116,12 @@ export default function InterviewRoomPage() {
     if (text.length > 20) { pastesRef.current.count += 1; pastesRef.current.chars += text.length; }
     if (session?.focusedMode) {
       e.preventDefault();
-      toast.info('Focused Mode: đã tắt dán để buổi luyện có giá trị thật.');
+      toast.info(t('tFocusedPaste'));
     }
   };
 
   const submit = async () => {
-    if (isMcq ? !mcqChoice : !answer.trim()) { toast.warning('Nhập câu trả lời trước'); return; }
+    if (isMcq ? !mcqChoice : !answer.trim()) { toast.warning(t('tEnterAnswer')); return; }
     setSubmitting(true);
     try {
       const res = await interviewApi.answer(sessionId, order, {
@@ -127,10 +134,10 @@ export default function InterviewRoomPage() {
       });
       setRevealed(res.data.data);
       if (res.data.data.downgraded) {
-        toast.info('AI tạm thời không khả dụng — chuyển sang tự chấm. Câu trả lời của bạn vẫn được lưu.');
+        toast.info(t('tAiUnavailable'));
       }
     } catch {
-      toast.error('Không gửi được câu trả lời');
+      toast.error(t('tSubmitFail'));
     } finally {
       setSubmitting(false);
     }
@@ -143,7 +150,7 @@ export default function InterviewRoomPage() {
     const lang = session.language === 'EN' ? 'EN' : 'VI';
     if (speaking) { stopSpeak(); return; }
     if (!speak(turn.questionText, lang)) {
-      toast.info(lang === 'VI' ? 'Máy bạn chưa cài giọng tiếng Việt — chỉ hiển thị chữ.' : 'No English voice installed — text only.');
+      toast.info(t(lang === 'VI' ? 'tNoViVoice' : 'tNoEnVoice'));
     }
   };
 
@@ -168,20 +175,20 @@ export default function InterviewRoomPage() {
     if (useGroq) {
       if (recording) { stopRecording(); return; }
       void startRecording(async (blob) => {
-        if (!blob) { toast.error('Không ghi âm được — hãy gõ câu trả lời.'); return; }
+        if (!blob) { toast.error(t('tRecordFail')); return; }
         setTranscribing(true);
         try {
           const r = await interviewApi.transcribe(sessionId, order, blob, lang === 'EN' ? 'en' : 'vi');
-          const t = (r.data.data.text || '').trim();
-          if (t) {
-            setAnswer((p) => (p.trim() ? p.trimEnd() + ' ' : '') + t);
+          const txt = (r.data.data.text || '').trim();
+          if (txt) {
+            setAnswer((p) => (p.trim() ? p.trimEnd() + ' ' : '') + txt);
             setSpoke(true);
-            toast.info('Đã chuyển giọng nói → chữ. Hãy kiểm tra thuật ngữ kỹ thuật trước khi gửi.');
+            toast.info(t('tTranscribed'));
           } else {
-            toast.warning('Không nghe rõ — thử lại hoặc gõ tay.');
+            toast.warning(t('tUnclear'));
           }
         } catch {
-          toast.error('Máy chủ chuyển giọng nói lỗi — hãy gõ câu trả lời.');
+          toast.error(t('tSttServerFail'));
         } finally {
           setTranscribing(false);
         }
@@ -193,13 +200,13 @@ export default function InterviewRoomPage() {
         (t) => { setAnswer((p) => (p.trim() ? p.trimEnd() + ' ' : '') + t); setSpoke(true); },
         (code) => {
           if (code === 'not-allowed' || code === 'service-not-allowed') {
-            toast.error('Trình duyệt đang chặn micro — hãy cấp quyền micro cho trang rồi thử lại (hoặc gõ tay).');
+            toast.error(t('tMicBlocked'));
           } else if (code === 'no-speech') {
-            toast.warning('Không nghe thấy giọng nói — nói gần micro hơn rồi thử lại, hoặc gõ tay.');
+            toast.warning(t('tNoSpeech'));
           } else if (code === 'unsupported') {
-            toast.error('Trình duyệt này không hỗ trợ nhận giọng nói — hãy gõ câu trả lời.');
+            toast.error(t('tSttUnsupported'));
           } else {
-            toast.error('Micro chưa dùng được — thử lại hoặc gõ câu trả lời.');
+            toast.error(t('tMicUnavailable'));
           }
         },
       );
@@ -228,7 +235,7 @@ export default function InterviewRoomPage() {
       await interviewApi.finish(sessionId);
       router.push(`/interview/report/${sessionId}`);
     } catch {
-      toast.error('Không tạo được báo cáo');
+      toast.error(t('tReportFail'));
       setFinishing(false);
     }
   };
@@ -236,10 +243,10 @@ export default function InterviewRoomPage() {
   const elapsed = useMemo(() => (now && startRef.current ? now - startRef.current : 0), [now]);
 
   if (loading) {
-    return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400"><Loader2 className="w-5 h-5 animate-spin mr-2" /> Đang vào phòng…</div>;
+    return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400"><Loader2 className="w-5 h-5 animate-spin mr-2" /> {t('entering')}</div>;
   }
   if (!session || !turn) {
-    return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400">Phiên không tồn tại.</div>;
+    return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400">{t('sessionMissing')}</div>;
   }
 
   const state: 'listening' | 'reviewing' = revealed ? 'reviewing' : 'listening';
@@ -253,15 +260,29 @@ export default function InterviewRoomPage() {
           <div className="flex items-center gap-3">
             <span className={`w-2.5 h-2.5 rounded-full ${state === 'listening' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
             <div>
-              <div className="text-sm font-semibold text-slate-100">Người phỏng vấn</div>
+              <div className="text-sm font-semibold text-slate-100">{t('interviewer')}</div>
               <div className="text-xs text-slate-400">
-                {session.companyStyle ? `${session.companyStyle} · ` : ''}{state === 'listening' ? 'đang lắng nghe' : 'đang xem xét câu trả lời'}
+                {session.companyStyle ? `${session.companyStyle} · ` : ''}{state === 'listening' ? t('listening') : t('reviewing')}
               </div>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-xs font-mono text-slate-400">Câu {order + 1} / {total}</div>
-            <div className="text-xs font-mono text-slate-400 tabular-nums">{fmtTime(elapsed)}</div>
+          <div className="flex items-center gap-3">
+            {/* Display-language toggle (realtime). Defaults to the session language. */}
+            <div className="flex rounded-lg border border-white/10 overflow-hidden text-[11px] font-mono">
+              {(['VI', 'EN'] as const).map((lg) => (
+                <button
+                  key={lg}
+                  onClick={() => setDisplayLang(lg)}
+                  className={`px-2 py-1 transition-colors ${displayLang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-slate-400 hover:text-white'}`}
+                >
+                  {lg}
+                </button>
+              ))}
+            </div>
+            <div className="text-right">
+              <div className="text-xs font-mono text-slate-400">{t('questionOf', { n: order + 1, total })}</div>
+              <div className="text-xs font-mono text-slate-400 tabular-nums">{fmtTime(elapsed)}</div>
+            </div>
           </div>
         </div>
 
@@ -279,10 +300,10 @@ export default function InterviewRoomPage() {
             {ttsSupported && (
               <button
                 onClick={readQuestion}
-                title={speaking ? 'Dừng đọc' : 'Nghe AI đọc câu hỏi'}
+                title={speaking ? t('stopReading') : t('hearQuestionTitle')}
                 className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-400 hover:text-white hover:border-slate-500'}`}
               >
-                {speaking ? <Square className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />} {speaking ? 'Dừng' : 'Nghe câu hỏi'}
+                {speaking ? <Square className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />} {speaking ? t('stop') : t('hearQuestion')}
               </button>
             )}
           </div>
@@ -319,7 +340,7 @@ export default function InterviewRoomPage() {
               onPaste={onPaste}
               disabled={!!revealed}
               rows={8}
-              placeholder="Trả lời như đang phỏng vấn thật. Giải thích bằng ngôn ngữ của bạn — máy chấm hiểu cả từ đồng nghĩa."
+              placeholder={t('answerPlaceholder')}
               className="w-full rounded-xl border border-white/10 bg-white/[0.04] p-4 text-slate-100 font-mono text-sm leading-relaxed focus:outline-none focus:border-amber-500/60 resize-y disabled:opacity-70"
             />
             {!revealed && (session.sttProvider === 'groq' ? recordSupported : sttSupported) && (() => {
@@ -329,11 +350,11 @@ export default function InterviewRoomPage() {
                 <button
                   onClick={onMic}
                   disabled={busy}
-                  title={active ? 'Dừng ghi âm' : 'Trả lời bằng giọng nói'}
+                  title={active ? t('stopRecording') : t('answerByVoice')}
                   className={`absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs border transition-colors disabled:opacity-60 ${active ? 'border-red-500/50 bg-red-500/15 text-red-300 animate-pulse' : 'border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-slate-500'}`}
                 >
                   {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Mic className="w-3.5 h-3.5" />}
-                  {busy ? 'Đang chuyển…' : active ? 'Đang nghe…' : 'Nói'}
+                  {busy ? t('transcribing') : active ? t('micListening') : t('speakBtn')}
                 </button>
               );
             })()}
@@ -341,15 +362,15 @@ export default function InterviewRoomPage() {
         )}
         {/* Transcript-check nudge after a spoken answer (prevents grading on mis-heard terms). */}
         {!isMcq && !revealed && spoke && (
-          <p className="-mt-2 mb-3 text-[11px] text-amber-300/80">🎙️ Đây là bản chuyển từ giọng nói — hãy kiểm tra/sửa thuật ngữ kỹ thuật trước khi gửi (máy chấm dựa trên từ khoá).</p>
+          <p className="-mt-2 mb-3 text-[11px] text-amber-300/80">{t('transcriptNudge')}</p>
         )}
 
         {/* Actions / reveal */}
         {!revealed ? (
           <div className="flex items-center justify-between mt-4">
-            <span className="text-xs text-slate-400">Không hiện điểm giữa buổi — cảm giác áp lực là điều làm buổi luyện có giá trị.</span>
+            <span className="text-xs text-slate-400">{t('noMidScore')}</span>
             <button onClick={submit} disabled={submitting} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 disabled:opacity-40">
-              {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />} Gửi câu trả lời
+              {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />} {t('submitAnswer')}
             </button>
           </div>
         ) : (
@@ -361,6 +382,7 @@ export default function InterviewRoomPage() {
             onNext={next}
             advancing={advancing || finishing}
             isLast={order + 1 >= total}
+            lang={displayLang}
             ttsSupported={ttsSupported}
             speaking={speaking}
             onSpeakGrade={() => { const lang: 'VI' | 'EN' = session.language === 'EN' ? 'EN' : 'VI'; speak(buildGradeSpeech(revealed, lang), lang); }}
@@ -374,8 +396,8 @@ export default function InterviewRoomPage() {
         <div className="fixed inset-0 z-[120] bg-black/70 backdrop-blur-sm flex items-center justify-center">
           <div className="text-center text-white">
             <ShieldCheck className="w-10 h-10 mx-auto mb-3 opacity-80" />
-            <p className="text-lg font-semibold">Focused Mode — quay lại buổi phỏng vấn</p>
-            <p className="text-sm opacity-70 mt-1">Đồng hồ tạm dừng. Nhấp vào đây để tiếp tục.</p>
+            <p className="text-lg font-semibold">{t('focusedTitle')}</p>
+            <p className="text-sm opacity-70 mt-1">{t('focusedSub')}</p>
           </div>
         </div>
       )}
@@ -407,7 +429,7 @@ function buildGradeSpeech(r: SubmitAnswerResponse, lang: 'VI' | 'EN'): string {
 }
 
 function Reveal({
-  revealed, isMcq, ratings, setRatings, onNext, advancing, isLast,
+  revealed, isMcq, ratings, setRatings, onNext, advancing, isLast, lang,
   ttsSupported, speaking, onSpeakGrade, onStopSpeak,
 }: {
   revealed: SubmitAnswerResponse;
@@ -417,49 +439,51 @@ function Reveal({
   onNext: () => void;
   advancing: boolean;
   isLast: boolean;
+  lang: ILang;
   ttsSupported: boolean;
   speaking: boolean;
   onSpeakGrade: () => void;
   onStopSpeak: () => void;
 }) {
+  const t = makeT(lang);
   const det = revealed.deterministic;
   return (
     <div className="mt-6 space-y-5">
       {isMcq && (
         <div className={`flex items-center gap-2 text-sm font-semibold ${revealed.correct ? 'text-emerald-400' : 'text-red-400'}`}>
           {revealed.correct ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
-          {revealed.correct ? 'Chính xác' : 'Chưa đúng'}
+          {revealed.correct ? t('correct') : t('incorrect')}
         </div>
       )}
 
       {revealed.injectionAttempted && (
         <div className="flex items-start gap-2 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2">
           <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
-          Câu trả lời có dấu hiệu cố gắng "điều khiển" người chấm. Điểm chỉ tính trên nội dung kỹ thuật.
+          {t('injection')}
         </div>
       )}
 
       {/* Deterministic coverage */}
       {det && (
         <div className="rounded-xl border border-white/10 p-4">
-          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">Máy chấm khách quan (Pass A)</div>
+          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">{t('objectiveGrader')}</div>
           <div className="flex flex-wrap gap-1.5 mb-2">
             {det.mustHit.map((k) => <Tag key={k} tone="ok">{k}</Tag>)}
-            {det.mustMiss.map((k) => <Tag key={k} tone="miss">thiếu: {k}</Tag>)}
+            {det.mustMiss.map((k) => <Tag key={k} tone="miss">{t('missingTag', { k })}</Tag>)}
           </div>
           {det.redFlagsHit.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-2">
               {det.redFlagsHit.map((k) => <Tag key={k} tone="flag">⚠ {k}</Tag>)}
             </div>
           )}
-          <div className="text-sm text-slate-400">Bao phủ khái niệm cốt lõi: <span className="font-mono text-slate-100">{det.mustHit.length}/{det.mustHit.length + det.mustMiss.length}</span> · Điểm tham chiếu: <span className="font-mono text-slate-100">{det.score}/100 ({det.grade})</span></div>
+          <div className="text-sm text-slate-400">{t('coverage')} <span className="font-mono text-slate-100">{det.mustHit.length}/{det.mustHit.length + det.mustMiss.length}</span> · {t('refScore')} <span className="font-mono text-slate-100">{det.score}/100 ({det.grade})</span></div>
         </div>
       )}
 
       {/* Reference answer */}
       {revealed.referenceAnswer && (
         <div className="rounded-xl border border-white/10 p-4 bg-white/[0.04]">
-          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Đáp án mẫu (mức mong đợi)</div>
+          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">{t('refAnswer')}</div>
           <div className="text-sm text-slate-100 leading-relaxed markdown-body"><Markdown mdx={revealed.referenceAnswer} openLinksInNewTab /></div>
         </div>
       )}
@@ -468,15 +492,15 @@ function Reveal({
       {revealed.aiEvaluation && (
         <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.06] p-4">
           <div className="flex items-center justify-between gap-2 mb-3">
-            <div className="text-xs font-semibold uppercase tracking-wide text-amber-300">AI chấm (theo tiêu chí, có dẫn chứng)</div>
+            <div className="text-xs font-semibold uppercase tracking-wide text-amber-300">{t('aiGrading')}</div>
             <div className="flex items-center gap-2 shrink-0">
               {ttsSupported && (
                 <button
                   onClick={speaking ? onStopSpeak : onSpeakGrade}
-                  title={speaking ? 'Dừng đọc' : 'Nghe AI đọc nhận xét'}
+                  title={speaking ? t('stopReading') : t('hearFeedbackTitle')}
                   className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-400 hover:text-white hover:border-slate-500'}`}
                 >
-                  {speaking ? <Square className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />} {speaking ? 'Dừng' : 'Nghe nhận xét'}
+                  {speaking ? <Square className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />} {speaking ? t('stop') : t('hearFeedback')}
                 </button>
               )}
               <div className="text-sm font-mono text-slate-100">{revealed.aiEvaluation.finalScore}/100 ({revealed.aiEvaluation.letterGrade})</div>
@@ -495,15 +519,15 @@ function Reveal({
                   {c.evidence ? (
                     <p className="text-xs text-emerald-300/90 mt-0.5">“{c.evidence}”</p>
                   ) : (
-                    <p className="text-xs text-slate-500 mt-0.5">Không tìm thấy dẫn chứng trong câu trả lời.</p>
+                    <p className="text-xs text-slate-500 mt-0.5">{t('noEvidence')}</p>
                   )}
-                  {c.whatWasMissing && <p className="text-xs text-slate-400 mt-0.5">Thiếu: {c.whatWasMissing}</p>}
+                  {c.whatWasMissing && <p className="text-xs text-slate-400 mt-0.5">{t('missingLabel', { x: c.whatWasMissing })}</p>}
                 </div>
               );
             })}
           </div>
           {revealed.aiEvaluation.needsReview && (
-            <p className="text-[11px] text-amber-300/80 mt-3">⚑ Điểm này được đánh dấu cần rà soát (AI và máy chấm khách quan lệch nhau nhiều, hoặc phát hiện cố gắng gian lận).</p>
+            <p className="text-[11px] text-amber-300/80 mt-3">{t('needsReview')}</p>
           )}
         </div>
       )}
@@ -511,8 +535,8 @@ function Reveal({
       {/* Self-assessment — only on STATIC turns (no AI grade) */}
       {!isMcq && !revealed.aiEvaluation && revealed.rubric && revealed.rubric.length > 0 && (
         <div className="rounded-xl border border-white/10 p-4">
-          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">Tự chấm theo từng tiêu chí</div>
-          <p className="text-xs text-slate-400 mb-3">Thành thật với chính mình — chênh lệch giữa "mình nghĩ đúng" và máy chấm là phản hồi giá trị nhất.</p>
+          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">{t('selfAssess')}</div>
+          <p className="text-xs text-slate-400 mb-3">{t('selfAssessHint')}</p>
           <div className="space-y-3">
             {revealed.rubric.map((c) => (
               <div key={c.id} className="flex items-center justify-between gap-3">
@@ -531,7 +555,7 @@ function Reveal({
       <div className="flex justify-end">
         <button onClick={onNext} disabled={advancing} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 disabled:opacity-40">
           {advancing ? <Loader2 className="w-4 h-4 animate-spin" /> : isLast ? <Flag className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-          {isLast ? 'Kết thúc & xem báo cáo' : 'Câu tiếp theo'}
+          {isLast ? t('finishReport') : t('nextQuestion')}
         </button>
       </div>
     </div>

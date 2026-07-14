@@ -18,6 +18,7 @@ import ParticleBackground from '@/components/repos/ParticleBackground';
 import Markdown from '@/components/markdown/Markdown';
 import { useSpeech } from '@/hooks/useSpeech';
 import { interviewApi } from '@/lib/interview-api';
+import { makeT, type ILang } from '@/lib/interview-i18n';
 import type { InterviewReport, ReportResponse, ReportTurn } from '@/types/interview';
 
 const HIRE_LABEL: Record<string, { label: string; cls: string }> = {
@@ -54,10 +55,15 @@ export default function InterviewReportPage() {
   const sessionId = Number(id);
   const [data, setData] = useState<ReportResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [displayLang, setDisplayLang] = useState<ILang>('VI');
+  const t = makeT(displayLang);
   const { speak, stopSpeak, speaking, ttsSupported } = useSpeech();
 
   useEffect(() => {
-    interviewApi.report(sessionId).then((res) => setData(res.data.data)).catch(() => {}).finally(() => setLoading(false));
+    interviewApi.report(sessionId).then((res) => {
+      setData(res.data.data);
+      setDisplayLang(res.data.data.language === 'EN' ? 'EN' : 'VI');
+    }).catch(() => {}).finally(() => setLoading(false));
   }, [sessionId]);
 
   // Auto-read the final evaluation aloud once when it loads (user opted in).
@@ -72,8 +78,8 @@ export default function InterviewReportPage() {
   // Stop reading if the user leaves the report.
   useEffect(() => () => stopSpeak(), [stopSpeak]);
 
-  if (loading) return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400"><Loader2 className="w-5 h-5 animate-spin mr-2" /> Đang dựng báo cáo…</div>;
-  if (!data) return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400">Chưa có báo cáo.</div>;
+  if (loading) return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400"><Loader2 className="w-5 h-5 animate-spin mr-2" /> {t('buildingReport')}</div>;
+  if (!data) return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400">{t('noReport')}</div>;
 
   const { report, turns } = data;
   const bd = report.scoreBreakdown;
@@ -92,23 +98,35 @@ export default function InterviewReportPage() {
               <span className="text-xs font-mono text-slate-400">{report.overallScore ?? 0}/100</span>
             </div>
             <div>
-              <p className="text-xs font-mono uppercase tracking-[0.2em] text-slate-400 mb-1">Kết quả buổi phỏng vấn</p>
+              <p className="text-xs font-mono uppercase tracking-[0.2em] text-slate-400 mb-1">{t('interviewResult')}</p>
               {hire && <p className={`text-2xl font-bold ${hire.cls}`}>{hire.label}</p>}
-              <p className="text-sm text-slate-400 mt-1">{bd?.answered ?? 0}/{bd?.total ?? 0} câu · {bd?.redFlagTotal ?? 0} lỗi kiến thức</p>
+              <p className="text-sm text-slate-400 mt-1">{t('answeredSummary', { a: bd?.answered ?? 0, total: bd?.total ?? 0, rf: bd?.redFlagTotal ?? 0 })}</p>
             </div>
           </div>
-          <div className="md:ml-auto flex gap-2">
+          <div className="md:ml-auto flex gap-2 items-center">
+            {/* Display-language toggle (realtime); defaults to the session language. */}
+            <div className="flex rounded-lg border border-white/10 overflow-hidden text-[11px] font-mono">
+              {(['VI', 'EN'] as const).map((lg) => (
+                <button
+                  key={lg}
+                  onClick={() => setDisplayLang(lg)}
+                  className={`px-2 py-1.5 transition-colors ${displayLang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-slate-400 hover:text-white'}`}
+                >
+                  {lg}
+                </button>
+              ))}
+            </div>
             {ttsSupported && (
               <button
                 onClick={speaking ? stopSpeak : () => { const lang: 'VI' | 'EN' = data.language === 'EN' ? 'EN' : 'VI'; speak(buildReportSpeech(report, lang), lang); }}
-                title={speaking ? 'Dừng đọc' : 'Nghe AI đọc đánh giá'}
+                title={speaking ? t('stopReading') : t('hearEvalTitle')}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-300 hover:text-white hover:border-slate-500'}`}
               >
-                {speaking ? <Square className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />} {speaking ? 'Dừng' : 'Nghe đánh giá'}
+                {speaking ? <Square className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />} {speaking ? t('stop') : t('hearEval')}
               </button>
             )}
             <Link href="/interview" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500 text-slate-950 text-sm font-semibold hover:opacity-90">
-              <RotateCcw className="w-4 h-4" /> Luyện tiếp
+              <RotateCcw className="w-4 h-4" /> {t('practiceMore')}
             </Link>
           </div>
         </div>
@@ -117,7 +135,7 @@ export default function InterviewReportPage() {
           {/* Radar by topic */}
           {radarData.length >= 3 && (
             <div className="rounded-2xl border border-white/10 p-4">
-              <div className="text-sm font-semibold text-slate-100 mb-2">Năng lực theo chủ đề</div>
+              <div className="text-sm font-semibold text-slate-100 mb-2">{t('competencyByTopic')}</div>
               <ResponsiveContainer width="100%" height={240}>
                 <RadarChart data={radarData} outerRadius="72%">
                   <PolarGrid stroke="rgba(120,120,120,0.25)" />
@@ -130,13 +148,13 @@ export default function InterviewReportPage() {
 
           {/* Self vs objective + advice */}
           <div className="rounded-2xl border border-white/10 p-4">
-            <div className="text-sm font-semibold text-slate-100 mb-3">Tự đánh giá vs khách quan</div>
+            <div className="text-sm font-semibold text-slate-100 mb-3">{t('selfVsObjective')}</div>
             <div className="flex items-end gap-6 mb-4">
-              <Metric label="Bạn tự chấm" value={bd?.self ?? null} />
-              <Metric label="Máy chấm" value={bd?.deterministic ?? 0} />
+              <Metric label={t('youSelfScored')} value={bd?.self ?? null} />
+              <Metric label={t('objectiveScore')} value={bd?.deterministic ?? 0} />
               {bd?.divergence != null && (
                 <div>
-                  <div className="text-xs text-slate-400">Chênh lệch</div>
+                  <div className="text-xs text-slate-400">{t('divergence')}</div>
                   <div className={`text-2xl font-bold ${Math.abs(bd.divergence) >= 15 ? 'text-amber-500' : 'text-slate-100'}`}>{bd.divergence > 0 ? '+' : ''}{bd.divergence}</div>
                 </div>
               )}
@@ -149,14 +167,14 @@ export default function InterviewReportPage() {
 
         {/* Strengths / weaknesses */}
         <div className="grid sm:grid-cols-2 gap-4 mb-8">
-          <ListCard title="Điểm mạnh" items={report.strengths} tone="ok" empty="Chưa có chủ đề nào đạt mức mạnh — cứ luyện tiếp." />
-          <ListCard title="Cần cải thiện" items={report.weaknesses} tone="weak" empty="Không có điểm yếu nổi bật. Tốt!" />
+          <ListCard title={t('strengths')} items={report.strengths} tone="ok" empty={t('emptyStrengths')} />
+          <ListCard title={t('weaknesses')} items={report.weaknesses} tone="weak" empty={t('emptyWeaknesses')} />
         </div>
 
         {/* Study plan — resources grounded in the knowledge base (source-traceable) */}
         {Array.isArray(report.suggestedResources) && report.suggestedResources.some((r) => r.sources?.length) && (
           <div className="rounded-2xl border border-white/10 p-4 mb-8">
-            <div className="text-sm font-semibold text-slate-100 mb-3">Nên đọc lại (từ kho tri thức)</div>
+            <div className="text-sm font-semibold text-slate-100 mb-3">{t('suggestedReading')}</div>
             <div className="space-y-3">
               {report.suggestedResources.filter((r) => r.sources?.length).map((r) => (
                 <div key={r.topicId}>
@@ -184,8 +202,8 @@ export default function InterviewReportPage() {
 
         {/* Per-question drill-down */}
         <div className="rounded-2xl border border-white/10 overflow-hidden">
-          <div className="px-4 py-3 border-b border-white/10 text-sm font-semibold text-slate-100">Chi tiết từng câu (bấm để mở)</div>
-          {turns.map((t) => <TurnRow key={t.order} turn={t} sessionId={sessionId} />)}
+          <div className="px-4 py-3 border-b border-white/10 text-sm font-semibold text-slate-100">{t('perQuestion')}</div>
+          {turns.map((tn) => <TurnRow key={tn.order} turn={tn} sessionId={sessionId} lang={displayLang} />)}
         </div>
       </div>
     </div>
@@ -218,21 +236,22 @@ function ListCard({ title, items, tone, empty }: { title: string; items: string[
   );
 }
 
-function TurnRow({ turn, sessionId }: { turn: ReportTurn; sessionId: number }) {
+function TurnRow({ turn, sessionId, lang }: { turn: ReportTurn; sessionId: number; lang: ILang }) {
   const [open, setOpen] = useState(false);
   const [flagged, setFlagged] = useState(false);
+  const t = makeT(lang);
   const det = turn.deterministicScore;
   const score = turn.turnScore?.final ?? turn.turnScore?.deterministic ?? det?.score ?? null;
 
   const flag = async () => {
-    const reason = window.prompt('Vì sao bạn nghĩ điểm câu này sai? (gửi tới admin xem lại)');
+    const reason = window.prompt(t('flagPrompt'));
     if (reason === null) return;
     try {
       await interviewApi.flagTurn(sessionId, turn.order, reason || '');
       setFlagged(true);
-      toast.success('Đã gửi. Cảm ơn — admin sẽ xem lại điểm này.');
+      toast.success(t('flagSent'));
     } catch {
-      toast.error('Không gửi được');
+      toast.error(t('flagFail'));
     }
   };
   return (
@@ -247,19 +266,19 @@ function TurnRow({ turn, sessionId }: { turn: ReportTurn; sessionId: number }) {
       </button>
       {open && (
         <div className="px-4 pb-4 space-y-3">
-          <Block label="Câu trả lời của bạn" text={turn.userAnswer || '(bỏ trống)'} />
+          <Block label={t('yourAnswer')} text={turn.userAnswer || t('blank')} />
           {det && (
             <div className="text-xs">
-              <span className="text-slate-400">Bao phủ: </span>
+              <span className="text-slate-400">{t('coverageShort')}</span>
               {det.mustHit.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">{k}</span>)}
-              {det.mustMiss.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/10">thiếu: {k}</span>)}
+              {det.mustMiss.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/10">{t('missingInline', { k })}</span>)}
               {det.redFlagsHit.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-red-500/10 text-red-300 border border-red-500/30">⚠ {k}</span>)}
             </div>
           )}
-          {turn.referenceAnswer && <Block label="Đáp án mẫu" text={turn.referenceAnswer} md />}
+          {turn.referenceAnswer && <Block label={t('modelAnswerShort')} text={turn.referenceAnswer} md />}
           <div className="flex justify-end">
             <button onClick={flag} disabled={flagged} className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-amber-400 disabled:text-emerald-400">
-              <Flag className="w-3.5 h-3.5" /> {flagged ? 'Đã gửi phản hồi' : 'Điểm này có vẻ sai?'}
+              <Flag className="w-3.5 h-3.5" /> {flagged ? t('flagged') : t('flagWrong')}
             </button>
           </div>
         </div>

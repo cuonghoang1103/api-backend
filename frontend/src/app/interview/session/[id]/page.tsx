@@ -176,7 +176,21 @@ export default function InterviewRoomPage() {
       });
     } else {
       if (listening) { stopListen(); return; }
-      listen(lang, (t) => { setAnswer((p) => (p.trim() ? p.trimEnd() + ' ' : '') + t); setSpoke(true); });
+      listen(
+        lang,
+        (t) => { setAnswer((p) => (p.trim() ? p.trimEnd() + ' ' : '') + t); setSpoke(true); },
+        (code) => {
+          if (code === 'not-allowed' || code === 'service-not-allowed') {
+            toast.error('Trình duyệt đang chặn micro — hãy cấp quyền micro cho trang rồi thử lại (hoặc gõ tay).');
+          } else if (code === 'no-speech') {
+            toast.warning('Không nghe thấy giọng nói — nói gần micro hơn rồi thử lại, hoặc gõ tay.');
+          } else if (code === 'unsupported') {
+            toast.error('Trình duyệt này không hỗ trợ nhận giọng nói — hãy gõ câu trả lời.');
+          } else {
+            toast.error('Micro chưa dùng được — thử lại hoặc gõ câu trả lời.');
+          }
+        },
+      );
     }
   };
 

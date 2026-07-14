@@ -36,7 +36,7 @@ interface SpeechRecognitionLike {
   continuous: boolean;
   onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
   onend: (() => void) | null;
-  onerror: (() => void) | null;
+  onerror: ((e: { error?: string }) => void) | null;
   start: () => void;
   stop: () => void;
 }
@@ -92,26 +92,37 @@ export function useSpeech() {
   }, [ttsSupported]);
 
   // ── Browser STT (SpeechRecognition) ──
-  const listen = useCallback((lang: Lang, onResult: (text: string) => void) => {
-    if (!sttSupported) return;
+  // onError surfaces the failure to the caller (permission blocked, no speech,
+  // unsupported) so the UI can toast instead of silently doing nothing.
+  const listen = useCallback((lang: Lang, onResult: (text: string) => void, onError?: (code: string) => void) => {
+    if (!sttSupported) { onError?.('unsupported'); return; }
     const SR = (window as unknown as { SpeechRecognition?: new () => SpeechRecognitionLike; webkitSpeechRecognition?: new () => SpeechRecognitionLike }).SpeechRecognition ||
       (window as unknown as { webkitSpeechRecognition?: new () => SpeechRecognitionLike }).webkitSpeechRecognition;
-    if (!SR) return;
+    if (!SR) { onError?.('unsupported'); return; }
     const rec = new SR();
     rec.lang = LOCALE[lang];
     rec.interimResults = false;
     rec.continuous = false;
+    let gotResult = false;
     rec.onresult = (e) => {
       let t = '';
       for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript + ' ';
       t = t.trim();
-      if (t) onResult(t);
+      if (t) { gotResult = true; onResult(t); }
     };
-    rec.onend = () => setListening(false);
-    rec.onerror = () => setListening(false);
+    rec.onend = () => {
+      setListening(false);
+      // Ended with nothing captured and no explicit error → treat as "no speech".
+      if (!gotResult) onError?.('no-speech');
+    };
+    rec.onerror = (e) => {
+      setListening(false);
+      gotResult = true; // suppress the onend no-speech toast (onerror already reports)
+      onError?.(e?.error || 'error');
+    };
     recRef.current = rec;
     setListening(true);
-    try { rec.start(); } catch { setListening(false); }
+    try { rec.start(); } catch { setListening(false); onError?.('start-failed'); }
   }, [sttSupported]);
 
   const stopListen = useCallback(() => {

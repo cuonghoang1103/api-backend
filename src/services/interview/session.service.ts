@@ -22,6 +22,7 @@ import { generateStaticReport } from './report.service.js';
 import { createReviewCardsForSession } from './drill.service.js';
 import { isAiAvailable, checkTokenQuota } from './llm/index.js';
 import { evaluateAnswerWithAI, type AiEvaluationResult } from './aiEvaluator.js';
+import { generatePersonalizedQuestions, type PersonalizedQuestion } from './personalize.service.js';
 import { isProEffective } from '../pro.service.js';
 import { sttProvider } from './voice/stt.js';
 import { retrieveChunks } from './knowledge/retrieval.js';
@@ -92,6 +93,8 @@ export async function createSession(
     numQuestions?: unknown;
     focusedMode?: unknown;
     engineMode?: unknown;
+    cv?: unknown;
+    jd?: unknown;
   },
 ) {
   const trackId = Number(body.trackId);
@@ -110,14 +113,46 @@ export async function createSession(
     if (cp) companyProfileId = cp.id;
   }
 
-  const questions = await planQuestions(trackId, level, numQuestions);
-  if (!questions.length) {
-    throw new BadRequestError('Chưa có câu hỏi cho track/level này. Hãy chọn cấp độ khác hoặc báo admin bổ sung ngân hàng câu hỏi.');
-  }
-
   // AI grading (HYBRID/FULL_AI) is a Pro perk — non-Pro users are forced to
   // STATIC self-assessment regardless of what they requested.
   const allowAi = await isProEffective(userId);
+
+  // Phase 3: personalize from a pasted CV and/or Job Description. When present,
+  // questions are AI-generated ad-hoc (questionId=null) and their grading specs
+  // (rubric/reference/keywords) live in config.personalized — `answer()` reads
+  // them as a fallback. Requires Pro + AI.
+  const cv = typeof body.cv === 'string' ? body.cv.trim() : '';
+  const jd = typeof body.jd === 'string' ? body.jd.trim() : '';
+  const wantsPersonalized = !!(cv || jd);
+
+  let turnsCreate: Array<{ questionId?: number; order: number; questionText: string }>;
+  let configData: Record<string, unknown>;
+  let engineMode = resolveEngineMode(typeof body.engineMode === 'string' ? body.engineMode : undefined, allowAi);
+
+  if (wantsPersonalized) {
+    if (!allowAi) throw new BadRequestError('Cá nhân hoá theo CV/JD dành cho tài khoản Pro/Max.');
+    if (!isAiAvailable()) throw new BadRequestError('AI hiện không khả dụng — thử lại sau, hoặc bỏ CV/JD để dùng ngân hàng câu hỏi.');
+    let pq: PersonalizedQuestion[];
+    try {
+      pq = await generatePersonalizedQuestions({ userId, cv, jd, trackName: track.name, level, count: numQuestions, language });
+    } catch {
+      throw new BadRequestError('Không sinh được câu hỏi cá nhân hoá — thử lại, hoặc bỏ CV/JD.');
+    }
+    turnsCreate = pq.map((q, i) => ({ order: i, questionText: q.questionText })); // ad-hoc: no bank questionId
+    configData = { numQuestions: pq.length, requested: numQuestions, personalized: pq, personalizedSource: { hasCv: !!cv, hasJd: !!jd } };
+    engineMode = resolveEngineMode('FULL_AI', allowAi); // personalized sessions are AI-graded
+  } else {
+    const questions = await planQuestions(trackId, level, numQuestions);
+    if (!questions.length) {
+      throw new BadRequestError('Chưa có câu hỏi cho track/level này. Hãy chọn cấp độ khác hoặc báo admin bổ sung ngân hàng câu hỏi.');
+    }
+    turnsCreate = questions.map((q, i) => ({
+      questionId: q.id,
+      order: i,
+      questionText: language === 'EN' ? q.bodyEn || q.body : q.bodyVi || q.body,
+    }));
+    configData = { numQuestions: questions.length, requested: numQuestions };
+  }
 
   const session = await prisma.interviewSession.create({
     data: {
@@ -126,19 +161,13 @@ export async function createSession(
       companyProfileId,
       level,
       mode: 'TEXT',
-      engineMode: resolveEngineMode(typeof body.engineMode === 'string' ? body.engineMode : undefined, allowAi),
+      engineMode,
       language,
       status: 'IN_PROGRESS',
       focusedMode: Boolean(body.focusedMode),
-      config: { numQuestions: questions.length, requested: numQuestions } as never,
+      config: configData as never,
       startedAt: new Date(),
-      turns: {
-        create: questions.map((q, i) => ({
-          questionId: q.id,
-          order: i,
-          questionText: language === 'EN' ? q.bodyEn || q.body : q.bodyVi || q.body,
-        })),
-      },
+      turns: { create: turnsCreate },
     },
     include: { turns: { orderBy: { order: 'asc' }, include: { question: true } }, track: true },
   });
@@ -199,8 +228,15 @@ export async function submitAnswer(
   if (!turn) throw new NotFoundError('Câu hỏi không tồn tại trong phiên');
   const q = turn.question;
   const isEn = session.language === 'EN';
-  const reference = isEn ? q?.referenceAnswerEn || q?.referenceAnswer : q?.referenceAnswer;
-  const rubricForLang = (isEn && q?.rubricEn != null ? q.rubricEn : q?.rubric) as unknown as RubricCriterion[];
+  // Phase 3: ad-hoc personalized turns (no bank question) carry their grading
+  // spec in config.personalized[order]. This fallback only fires when q is null,
+  // so bank-question grading is completely unchanged.
+  const personalizedList = Array.isArray((session.config as { personalized?: unknown })?.personalized)
+    ? ((session.config as { personalized?: PersonalizedQuestion[] }).personalized as PersonalizedQuestion[])
+    : [];
+  const pcfg: PersonalizedQuestion | undefined = personalizedList[order];
+  const reference = (isEn ? q?.referenceAnswerEn || q?.referenceAnswer : q?.referenceAnswer) ?? pcfg?.referenceAnswer ?? null;
+  const rubricForLang = (((isEn && q?.rubricEn != null ? q.rubricEn : q?.rubric) as unknown as RubricCriterion[]) ?? pcfg?.rubric ?? []) as RubricCriterion[];
 
   const isMcq = q?.type === 'MCQ';
   const rawAnswer = isMcq ? String(body.selectedOptionId ?? '') : String(body.answer ?? '');
@@ -246,9 +282,9 @@ export async function submitAnswer(
   const det = deterministicScore(
     rawAnswer,
     {
-      mustMention: q?.mustMention ?? [],
-      shouldMention: q?.shouldMention ?? [],
-      redFlags: q?.redFlags ?? [],
+      mustMention: q?.mustMention ?? pcfg?.mustMention ?? [],
+      shouldMention: q?.shouldMention ?? pcfg?.shouldMention ?? [],
+      redFlags: q?.redFlags ?? pcfg?.redFlags ?? [],
       synonyms: (q?.synonyms as unknown as SynonymMap) ?? {},
     },
     { redFlagPenalty: redFlagPenalty() },

@@ -273,6 +273,9 @@ export interface CreateSessionBody {
   numQuestions?: number;
   focusedMode?: boolean;
   engineMode?: EngineMode;
+  /** Phase 3: paste a CV and/or JD → AI generates personalized questions (Pro). */
+  cv?: string;
+  jd?: string;
 }
 
 /** Client-collected integrity signals (non-invasive, informational). */

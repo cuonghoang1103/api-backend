@@ -27,7 +27,7 @@ type Res<T> = Promise<{ data: ApiResponse<T> }>;
 export const interviewApi = {
   // ── User flow ──────────────────────────────────────────────
   tracks: (): Res<TaxonomyResponse> => api.get('/interview/tracks'),
-  createSession: (body: CreateSessionBody): Res<SessionCreateResponse> => api.post('/interview/sessions', body),
+  createSession: (body: CreateSessionBody): Res<SessionCreateResponse> => api.post('/interview/sessions', body, { timeout: 90_000 }),
   getSession: (id: number): Res<SessionState> => api.get(`/interview/sessions/${id}`),
   answer: (
     id: number,

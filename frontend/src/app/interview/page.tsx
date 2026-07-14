@@ -32,6 +32,9 @@ export default function InterviewSetupPage() {
   const [language, setLanguage] = useState<'VI' | 'EN'>('VI');
   const [focusedMode, setFocusedMode] = useState(false);
   const [engineMode, setEngineMode] = useState<'STATIC' | 'HYBRID' | 'FULL_AI'>('STATIC');
+  const [personalize, setPersonalize] = useState(false);
+  const [cv, setCv] = useState('');
+  const [jd, setJd] = useState('');
   const [starting, setStarting] = useState(false);
 
   useEffect(() => {
@@ -53,9 +56,11 @@ export default function InterviewSetupPage() {
     if (!track) { toast.warning('Chọn một track trước đã'); return; }
     setStarting(true);
     try {
+      const usePersonalize = personalize && (cv.trim() || jd.trim());
       const res = await interviewApi.createSession({
         trackId: track.id, level, companyProfileId: company?.id ?? null, language, numQuestions, focusedMode,
         engineMode: tax?.aiAvailable ? engineMode : 'STATIC',
+        ...(usePersonalize ? { cv: cv.trim() || undefined, jd: jd.trim() || undefined } : {}),
       });
       router.push(`/interview/session/${res.data.data.id}`);
     } catch (e) {
@@ -198,6 +203,29 @@ export default function InterviewSetupPage() {
                     );
                   })}
                 </div>
+              </Section>
+            )}
+
+            {/* Personalize from CV/JD — Pro only */}
+            {tax.aiAvailable && tax.aiAllowed && (
+              <Section step={7} title="Cá nhân hoá theo CV/JD (tuỳ chọn)">
+                <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer mb-2">
+                  <input type="checkbox" checked={personalize} onChange={(e) => setPersonalize(e.target.checked)} className="accent-amber-500" />
+                  Sinh câu hỏi bám theo CV và/hoặc mô tả công việc (JD)
+                </label>
+                {personalize && (
+                  <div className="space-y-3">
+                    <p className="text-xs text-slate-400">AI đọc CV/JD và tạo câu hỏi riêng cho bạn, chấm bằng AI đầy đủ. Dán văn bản bên dưới — nội dung không lưu lâu dài. Việc tạo có thể mất ~15–40s.</p>
+                    <div>
+                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">CV của bạn</div>
+                      <textarea value={cv} onChange={(e) => setCv(e.target.value)} rows={5} placeholder="Dán nội dung CV (kinh nghiệm, kỹ năng, dự án)…" className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm focus:outline-none focus:border-amber-500/60 resize-y" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">Mô tả công việc — JD</div>
+                      <textarea value={jd} onChange={(e) => setJd(e.target.value)} rows={4} placeholder="Dán JD của vị trí bạn ứng tuyển…" className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm focus:outline-none focus:border-amber-500/60 resize-y" />
+                    </div>
+                  </div>
+                )}
               </Section>
             )}
 

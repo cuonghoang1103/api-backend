@@ -44,7 +44,10 @@ export const interviewApi = {
     fd.append('sessionId', String(id));
     fd.append('order', String(order));
     fd.append('language', language);
-    return api.post('/interview/stt', fd, { timeout: 60_000 });
+    // Override the axios instance's default application/json Content-Type —
+    // without this the multipart body isn't sent as multipart and multer sees
+    // no file ("Thiếu audio" → 400). Matches every other upload in api.ts.
+    return api.post('/interview/stt', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
   },
   selfAssess: (id: number, order: number, ratings: Record<string, number>): Res<SelfAssessResponse> =>
     api.post(`/interview/sessions/${id}/turns/${order}/self-assess`, { ratings }),

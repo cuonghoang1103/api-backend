@@ -57,7 +57,9 @@ export const interviewApi = {
     api.post(`/interview/sessions/${id}/turns/${order}/followup/answer`, { question, answer }, { timeout: 40_000 }),
   selfAssess: (id: number, order: number, ratings: Record<string, number>): Res<SelfAssessResponse> =>
     api.post(`/interview/sessions/${id}/turns/${order}/self-assess`, { ratings }),
-  finish: (id: number): Res<InterviewReport> => api.post(`/interview/sessions/${id}/finish`, {}),
+  // Report synthesis (Opus, up to ~120s) runs synchronously here — needs a long
+  // client timeout or the report silently fails to reach the user.
+  finish: (id: number): Res<InterviewReport> => api.post(`/interview/sessions/${id}/finish`, {}, { timeout: 180_000 }),
   report: (id: number): Res<ReportResponse> => api.get(`/interview/sessions/${id}/report`),
   history: (): Res<HistoryItem[]> => api.get('/interview/history'),
   // Phase 3 — spaced-repetition drill

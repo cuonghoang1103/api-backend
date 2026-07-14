@@ -27,7 +27,8 @@ function toPlain(md: string): string {
     .replace(/\[(.*?)\]\(.*?\)/g, '$1')
     .replace(/\s+/g, ' ')
     .trim()
-    .slice(0, 4000);
+    // Generous cap so long grades/reports are read in full (was 4000 → cut off).
+    .slice(0, 16000);
 }
 
 // Any Vietnamese diacritic → the token is Vietnamese for sure.

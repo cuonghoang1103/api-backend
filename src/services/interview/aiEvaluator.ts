@@ -142,7 +142,7 @@ export async function evaluateAnswerWithAI(params: {
   // Latency-sensitive: the candidate is waiting on this call. Fail fast (short
   // timeout, 1 retry) and let the caller degrade to STATIC rather than hang —
   // a long/detailed answer + a slow gateway must not blow the frontend timeout.
-  const first = await llmComplete({ step: 'interview', system, messages: [{ role: 'user', content: user }], maxTokens: 1200, userId: params.userId, sessionId: params.sessionId, maxRetries: 1, timeoutMs: 25_000 });
+  const first = await llmComplete({ step: 'interview', system, messages: [{ role: 'user', content: user }], maxTokens: 2800, userId: params.userId, sessionId: params.sessionId, maxRetries: 1, timeoutMs: 45_000 });
   let ai: AiEval;
   try {
     ai = parse(first.text);
@@ -156,11 +156,11 @@ export async function evaluateAnswerWithAI(params: {
         { role: 'assistant', content: first.text },
         { role: 'user', content: 'Your previous output was not valid JSON matching the schema. Return ONLY the JSON object — no prose, no code fences.' },
       ],
-      maxTokens: 1200,
+      maxTokens: 2800,
       userId: params.userId,
       sessionId: params.sessionId,
       maxRetries: 1,
-      timeoutMs: 25_000,
+      timeoutMs: 45_000,
     });
     ai = parse(retry.text); // a second failure throws → caller falls back to Pass A
   }

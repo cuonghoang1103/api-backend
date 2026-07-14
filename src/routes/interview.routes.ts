@@ -10,8 +10,10 @@
  * no LLM is invoked here.
  */
 import { Router, type Request, type Response } from 'express';
+import multer from 'multer';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import type { ApiResponse } from '../types/index.js';
+import * as stt from '../services/interview/voice/stt.js';
 import * as taxonomy from '../services/interview/taxonomy.service.js';
 import * as bank from '../services/interview/questionBank.service.js';
 import * as session from '../services/interview/session.service.js';
@@ -44,7 +46,9 @@ router.get('/tracks', async (req: Request, res: Response<ApiResponse>, next) => 
     const tax = await taxonomy.getTaxonomy();
     // aiAvailable = platform can do AI; aiAllowed = THIS user may use it (Pro/admin).
     const aiAllowed = await isProEffective(req.userId);
-    res.json({ success: true, data: { ...tax, aiAvailable: isAiAvailable(), aiAllowed } });
+    // sttProvider tells the client whether to transcribe voice answers in the
+    // browser (free) or via the server (Groq Whisper) — see voice/stt.ts.
+    res.json({ success: true, data: { ...tax, aiAvailable: isAiAvailable(), aiAllowed, sttProvider: stt.sttProvider() } });
   } catch (err) { next(err); }
 });
 
@@ -126,6 +130,30 @@ router.post('/drill/:cardId/grade', async (req: Request, res: Response<ApiRespon
 router.get('/mastery', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await drill.getMastery(req.userId!) });
+  } catch (err) { next(err); }
+});
+
+// ── Phase 9: server speech-to-text (Groq Whisper) ──
+// Audio is held in memory only (never written to disk) — it is PII.
+const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024 } });
+router.post('/stt', audioUpload.single('audio'), async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const file = (req as unknown as { file?: { buffer: Buffer; originalname?: string; mimetype?: string } }).file;
+    if (!file?.buffer?.length) { res.status(400).json({ success: false, message: 'Thiếu audio' }); return; }
+    const sessionId = parseId(String(req.body?.sessionId));
+    const order = parseInt(String(req.body?.order), 10);
+    if (Number.isNaN(sessionId) || !Number.isInteger(order)) { res.status(400).json({ success: false, message: 'sessionId/order không hợp lệ' }); return; }
+    const language = String(req.body?.language ?? 'vi').toLowerCase() === 'en' ? 'en' : 'vi';
+    const data = await stt.transcribeAnswerAudio({
+      userId: req.userId!,
+      sessionId,
+      order,
+      language,
+      audio: file.buffer,
+      filename: file.originalname || 'answer.webm',
+      mimetype: file.mimetype || 'audio/webm',
+    });
+    res.json({ success: true, data });
   } catch (err) { next(err); }
 });
 

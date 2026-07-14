@@ -23,6 +23,7 @@ import { createReviewCardsForSession } from './drill.service.js';
 import { isAiAvailable, checkTokenQuota } from './llm/index.js';
 import { evaluateAnswerWithAI, type AiEvaluationResult } from './aiEvaluator.js';
 import { isProEffective } from '../pro.service.js';
+import { sttProvider } from './voice/stt.js';
 import { retrieveChunks } from './knowledge/retrieval.js';
 import { synthesizeAiReport, type TurnSummary } from './aiReport.js';
 import type { InterviewEngineMode } from '@prisma/client';
@@ -177,6 +178,8 @@ export async function getSessionState(userId: number, sessionId: number) {
     companyStyle: session.companyProfile?.name ?? null,
     total: session.turns.length,
     hasReport: !!session.report,
+    // Voice: which STT the client should use for spoken answers (browser|groq).
+    sttProvider: sttProvider(),
     turns: session.turns.map(publicTurn),
   };
 }
@@ -186,7 +189,7 @@ export async function submitAnswer(
   userId: number,
   sessionId: number,
   order: number,
-  body: { answer?: unknown; timeSpentMs?: unknown; integritySignals?: unknown; selectedOptionId?: unknown },
+  body: { answer?: unknown; timeSpentMs?: unknown; integritySignals?: unknown; selectedOptionId?: unknown; inputMode?: unknown; sttProvider?: unknown },
 ) {
   const session = await loadOwnedSession(userId, sessionId);
   const turn = await prisma.interviewTurn.findUnique({
@@ -204,7 +207,13 @@ export async function submitAnswer(
   if (!rawAnswer.trim()) throw new BadRequestError('Câu trả lời trống');
 
   const timeSpentMs = Number(body.timeSpentMs) || null;
-  const integritySignals = (body.integritySignals && typeof body.integritySignals === 'object') ? body.integritySignals : undefined;
+  // Record how the answer was entered (typed vs dictated) + which STT produced
+  // it, so admin can spot systematically-lower spoken scores (a transcription
+  // problem, not a knowledge problem). Merged into the integritySignals JSON.
+  const baseSignals = (body.integritySignals && typeof body.integritySignals === 'object') ? { ...(body.integritySignals as Record<string, unknown>) } : {};
+  const inputMode = String(body.inputMode ?? '').toUpperCase() === 'SPOKEN' ? 'SPOKEN' : 'TYPED';
+  const integritySignals: Record<string, unknown> = { ...baseSignals, inputMode };
+  if (body.sttProvider) integritySignals.sttProvider = String(body.sttProvider);
 
   if (isMcq) {
     // Objective: 100 if the chosen option is flagged correct, else 0.

@@ -98,6 +98,7 @@ export interface SessionState {
   companyStyle: string | null;
   total: number;
   hasReport: boolean;
+  sttProvider?: 'browser' | 'groq';
   turns: PublicTurn[];
 }
 

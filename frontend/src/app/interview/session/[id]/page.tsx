@@ -35,7 +35,9 @@ export default function InterviewRoomPage() {
   const [submitting, setSubmitting] = useState(false);
   const [revealed, setRevealed] = useState<SubmitAnswerResponse | null>(null);
   const [ratings, setRatings] = useState<Record<string, number>>({});
-  const { speak, stopSpeak, speaking, ttsSupported, listen, stopListen, listening, sttSupported } = useSpeech();
+  const { speak, stopSpeak, speaking, ttsSupported, hasVoiceFor, listen, stopListen, listening, sttSupported, startRecording, stopRecording, recording, recordSupported } = useSpeech();
+  const [spoke, setSpoke] = useState(false); // this turn's answer came from voice
+  const [transcribing, setTranscribing] = useState(false);
   const [advancing, setAdvancing] = useState(false);
   const [finishing, setFinishing] = useState(false);
   const [now, setNow] = useState(0);
@@ -120,6 +122,8 @@ export default function InterviewRoomPage() {
         selectedOptionId: isMcq ? mcqChoice : undefined,
         timeSpentMs: Date.now() - startRef.current,
         integritySignals: collectSignals(),
+        inputMode: spoke ? 'SPOKEN' : 'TYPED',
+        sttProvider: spoke ? (session?.sttProvider ?? 'browser') : undefined,
       });
       setRevealed(res.data.data);
       if (res.data.data.downgraded) {
@@ -129,6 +133,50 @@ export default function InterviewRoomPage() {
       toast.error('Không gửi được câu trả lời');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  // Read the question aloud (browser TTS). If the OS has no voice for the
+  // session language, don't read with the wrong voice — keep it text-only.
+  const readQuestion = () => {
+    if (!session || !turn) return;
+    const lang = session.language === 'EN' ? 'EN' : 'VI';
+    if (speaking) { stopSpeak(); return; }
+    if (!speak(turn.questionText, lang)) {
+      toast.info(lang === 'VI' ? 'Máy bạn chưa cài giọng tiếng Việt — chỉ hiển thị chữ.' : 'No English voice installed — text only.');
+    }
+  };
+
+  // Voice answer. Groq path records audio → server transcribes; browser path
+  // uses SpeechRecognition. Either way the transcript lands in the editable box.
+  const onMic = () => {
+    if (!session || !!revealed) return;
+    const lang = session.language === 'EN' ? 'EN' : 'VI';
+    const useGroq = session.sttProvider === 'groq';
+    if (useGroq) {
+      if (recording) { stopRecording(); return; }
+      void startRecording(async (blob) => {
+        if (!blob) { toast.error('Không ghi âm được — hãy gõ câu trả lời.'); return; }
+        setTranscribing(true);
+        try {
+          const r = await interviewApi.transcribe(sessionId, order, blob, lang === 'EN' ? 'en' : 'vi');
+          const t = (r.data.data.text || '').trim();
+          if (t) {
+            setAnswer((p) => (p.trim() ? p.trimEnd() + ' ' : '') + t);
+            setSpoke(true);
+            toast.info('Đã chuyển giọng nói → chữ. Hãy kiểm tra thuật ngữ kỹ thuật trước khi gửi.');
+          } else {
+            toast.warning('Không nghe rõ — thử lại hoặc gõ tay.');
+          }
+        } catch {
+          toast.error('Máy chủ chuyển giọng nói lỗi — hãy gõ câu trả lời.');
+        } finally {
+          setTranscribing(false);
+        }
+      });
+    } else {
+      if (listening) { stopListen(); return; }
+      listen(lang, (t) => { setAnswer((p) => (p.trim() ? p.trimEnd() + ' ' : '') + t); setSpoke(true); });
     }
   };
 
@@ -144,7 +192,7 @@ export default function InterviewRoomPage() {
     }
     if (isLast) { await finish(); return; }
     setOrder((o) => o + 1);
-    setAnswer(''); setMcqChoice(''); setRevealed(null); setRatings({});
+    setAnswer(''); setMcqChoice(''); setRevealed(null); setRatings({}); setSpoke(false);
   };
 
   const finish = async () => {
@@ -203,7 +251,7 @@ export default function InterviewRoomPage() {
             <div className="text-[11px] font-mono uppercase tracking-widest text-slate-400">{turn.type}</div>
             {ttsSupported && (
               <button
-                onClick={() => (speaking ? stopSpeak() : speak(turn.questionText, session.language === 'EN' ? 'EN' : 'VI'))}
+                onClick={readQuestion}
                 title={speaking ? 'Dừng đọc' : 'Nghe AI đọc câu hỏi'}
                 className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-400 hover:text-white hover:border-slate-500'}`}
               >
@@ -247,16 +295,26 @@ export default function InterviewRoomPage() {
               placeholder="Trả lời như đang phỏng vấn thật. Giải thích bằng ngôn ngữ của bạn — máy chấm hiểu cả từ đồng nghĩa."
               className="w-full rounded-xl border border-white/10 bg-white/[0.04] p-4 text-slate-100 font-mono text-sm leading-relaxed focus:outline-none focus:border-amber-500/60 resize-y disabled:opacity-70"
             />
-            {sttSupported && !revealed && (
-              <button
-                onClick={() => (listening ? stopListen() : listen(session.language === 'EN' ? 'EN' : 'VI', (t) => setAnswer((prev) => (prev.trim() ? prev.trimEnd() + ' ' : '') + t)))}
-                title={listening ? 'Dừng ghi âm' : 'Trả lời bằng giọng nói'}
-                className={`absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs border transition-colors ${listening ? 'border-red-500/50 bg-red-500/15 text-red-300 animate-pulse' : 'border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-slate-500'}`}
-              >
-                <Mic className="w-3.5 h-3.5" /> {listening ? 'Đang nghe…' : 'Nói'}
-              </button>
-            )}
+            {!revealed && (session.sttProvider === 'groq' ? recordSupported : sttSupported) && (() => {
+              const active = recording || listening;
+              const busy = transcribing;
+              return (
+                <button
+                  onClick={onMic}
+                  disabled={busy}
+                  title={active ? 'Dừng ghi âm' : 'Trả lời bằng giọng nói'}
+                  className={`absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs border transition-colors disabled:opacity-60 ${active ? 'border-red-500/50 bg-red-500/15 text-red-300 animate-pulse' : 'border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-slate-500'}`}
+                >
+                  {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Mic className="w-3.5 h-3.5" />}
+                  {busy ? 'Đang chuyển…' : active ? 'Đang nghe…' : 'Nói'}
+                </button>
+              );
+            })()}
           </div>
+        )}
+        {/* Transcript-check nudge after a spoken answer (prevents grading on mis-heard terms). */}
+        {!isMcq && !revealed && spoke && (
+          <p className="-mt-2 mb-3 text-[11px] text-amber-300/80">🎙️ Đây là bản chuyển từ giọng nói — hãy kiểm tra/sửa thuật ngữ kỹ thuật trước khi gửi (máy chấm dựa trên từ khoá).</p>
         )}
 
         {/* Actions / reveal */}

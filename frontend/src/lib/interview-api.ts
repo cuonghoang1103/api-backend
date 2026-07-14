@@ -32,11 +32,20 @@ export const interviewApi = {
   answer: (
     id: number,
     order: number,
-    body: { answer?: string; selectedOptionId?: string; timeSpentMs?: number; integritySignals?: IntegritySignals },
+    body: { answer?: string; selectedOptionId?: string; timeSpentMs?: number; integritySignals?: IntegritySignals; inputMode?: 'TYPED' | 'SPOKEN'; sttProvider?: string },
     // AI grading (HYBRID/FULL_AI) runs server-side on this call and can take
     // ~10-25s via the LLM gateway — override the default 30s axios timeout so a
     // long/detailed answer doesn't spuriously fail before the grade returns.
   ): Res<SubmitAnswerResponse> => api.post(`/interview/sessions/${id}/turns/${order}/answer`, body, { timeout: 90_000 }),
+  // Phase 9 — server speech-to-text (Groq Whisper). Audio is not stored server-side.
+  transcribe: (id: number, order: number, audio: Blob, language: 'vi' | 'en'): Res<{ text: string; provider: string }> => {
+    const fd = new FormData();
+    fd.append('audio', audio, 'answer.webm');
+    fd.append('sessionId', String(id));
+    fd.append('order', String(order));
+    fd.append('language', language);
+    return api.post('/interview/stt', fd, { timeout: 60_000 });
+  },
   selfAssess: (id: number, order: number, ratings: Record<string, number>): Res<SelfAssessResponse> =>
     api.post(`/interview/sessions/${id}/turns/${order}/self-assess`, { ratings }),
   finish: (id: number): Res<InterviewReport> => api.post(`/interview/sessions/${id}/finish`, {}),

@@ -47,14 +47,22 @@ export async function planQuestions(
   return planQuestionsMulti([trackId], level, count);
 }
 
-/** Like planQuestions but samples across MULTIPLE tracks (combined positions). */
+/**
+ * Like planQuestions but across MULTIPLE tracks (combined positions). If
+ * `topicIds` is given and non-empty, it narrows to ONLY those topics (deep-dive
+ * on a specific area, e.g. just "OOP"); otherwise it covers all topics of the
+ * selected tracks.
+ */
 export async function planQuestionsMulti(
   trackIds: number[],
   level: InterviewLevel,
   count: number,
+  topicIds?: number[],
 ): Promise<InterviewQuestion[]> {
   const topics = await prisma.interviewTopic.findMany({
-    where: { trackId: { in: trackIds }, status: 'PUBLISHED' },
+    where: topicIds && topicIds.length
+      ? { id: { in: topicIds }, status: 'PUBLISHED' }
+      : { trackId: { in: trackIds }, status: 'PUBLISHED' },
     orderBy: { sortOrder: 'asc' },
   });
   if (!topics.length) return [];

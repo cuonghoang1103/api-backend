@@ -26,6 +26,7 @@ export default function InterviewSetupPage() {
   const [loading, setLoading] = useState(true);
   const [domainId, setDomainId] = useState<number | null>(null);
   const [tracks, setTracks] = useState<TaxonomyTrack[]>([]);
+  const [topicIds, setTopicIds] = useState<number[]>([]);
   const [level, setLevel] = useState<InterviewLevel>('MID');
   const [company, setCompany] = useState<CompanyProfile | null>(null);
   const [numQuestions, setNumQuestions] = useState(6);
@@ -55,6 +56,21 @@ export default function InterviewSetupPage() {
 
   const domain = useMemo(() => tax?.domains.find((d) => d.id === domainId) ?? null, [tax, domainId]);
   const totalQ = useMemo(() => tracks.reduce((s, t) => s + (t.questionCount ?? 0), 0), [tracks]);
+  // Topics available from the selected tracks (for deep-dive selection).
+  const availableTopics = useMemo(
+    () => tracks.flatMap((t) => t.topics.map((tp) => ({ ...tp, trackName: t.name }))),
+    [tracks],
+  );
+  // Effective question pool: selected topics if any, else the whole track(s).
+  const effectiveQ = useMemo(() => {
+    if (!topicIds.length) return totalQ;
+    return availableTopics.filter((tp) => topicIds.includes(tp.id)).reduce((s, tp) => s + (tp.questionCount ?? 0), 0);
+  }, [topicIds, availableTopics, totalQ]);
+
+  // Drop topic selections that no longer belong to the chosen tracks.
+  useEffect(() => {
+    setTopicIds((prev) => prev.filter((id) => availableTopics.some((tp) => tp.id === id)));
+  }, [availableTopics]);
 
   const toggleTrack = (t: TaxonomyTrack) => {
     setTracks((prev) => {
@@ -64,6 +80,7 @@ export default function InterviewSetupPage() {
       return next;
     });
   };
+  const toggleTopic = (id: number) => setTopicIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
   const start = async () => {
     if (!tracks.length) { toast.warning('Chọn ít nhất 1 vị trí'); return; }
@@ -74,6 +91,7 @@ export default function InterviewSetupPage() {
       const res = await interviewApi.createSession({
         trackId: tracks[0].id, trackIds: tracks.map((t) => t.id), level, companyProfileId: company?.id ?? null, language, numQuestions, focusedMode,
         engineMode: tax?.aiAvailable ? engineMode : 'STATIC',
+        ...(topicIds.length ? { topicIds } : {}),
         ...(useProj ? { projectMd: projectMd.trim() } : usePersonalize ? { cv: cv.trim() || undefined, jd: jd.trim() || undefined } : {}),
       });
       router.push(`/interview/session/${res.data.data.id}`);
@@ -166,6 +184,38 @@ export default function InterviewSetupPage() {
               )}
             </Section>
 
+            {/* Phase F — deep-dive on specific topics (optional) */}
+            {tracks.length > 0 && availableTopics.length > 0 && (
+              <Section step={3} title="Chuyên sâu theo topic (tuỳ chọn)">
+                <p className="text-xs text-slate-400 mb-2">
+                  Bỏ trống = kiểm tra <b>toàn bộ</b> topic của vị trí đã chọn. Tick 1 hoặc vài topic (vd chỉ <b>OOP</b>) để <b>luyện chuyên sâu</b> đúng mảng đó.
+                </p>
+                <div className="grid sm:grid-cols-2 gap-1.5">
+                  {availableTopics.map((tp) => {
+                    const on = topicIds.includes(tp.id);
+                    const qc = tp.questionCount ?? 0;
+                    return (
+                      <button
+                        key={tp.id}
+                        onClick={() => toggleTopic(tp.id)}
+                        className={`text-left px-3 py-2 rounded-lg border text-sm transition-all ${
+                          on ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
+                        }`}
+                      >
+                        <span className={`inline-flex w-3.5 h-3.5 mr-2 rounded border items-center justify-center text-[9px] align-middle ${on ? 'bg-amber-500 border-amber-500 text-slate-950' : 'border-white/20'}`}>{on ? '✓' : ''}</span>
+                        <span className="text-slate-100">{tp.name}</span>
+                        <span className="text-slate-400"> · {tp.trackName}</span>
+                        <span className={qc > 0 ? 'text-emerald-400' : 'text-amber-400/80'}> · {qc} câu</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                {topicIds.length > 0 && (
+                  <p className="text-xs text-slate-400 mt-2">Đang chuyên sâu <b className="text-amber-300">{topicIds.length}</b> topic · <b className="text-emerald-400">{effectiveQ}</b> câu hỏi.</p>
+                )}
+              </Section>
+            )}
+
             {/* Level */}
             <Section step={3} title="Cấp độ">
               <div className="flex flex-wrap gap-2">
@@ -194,14 +244,14 @@ export default function InterviewSetupPage() {
                   <input
                     type="range"
                     min={3}
-                    max={Math.max(3, Math.min(totalQ || 12, 50))}
+                    max={Math.max(3, Math.min(effectiveQ || 12, 50))}
                     value={numQuestions}
                     onChange={(e) => setNumQuestions(Number(e.target.value))}
                     className="accent-amber-500"
                   />
                   <span className="text-sm font-mono text-slate-100 w-8">{numQuestions}</span>
-                  {totalQ > 0 && (
-                    <span className="text-xs text-slate-500">(tối đa {Math.min(totalQ, 50)})</span>
+                  {effectiveQ > 0 && (
+                    <span className="text-xs text-slate-500">(tối đa {Math.min(effectiveQ, 50)})</span>
                   )}
                 </label>
                 <div className="inline-flex rounded-lg border border-white/10 overflow-hidden">

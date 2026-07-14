@@ -18,6 +18,8 @@ export interface TaxonomyTopic {
   name: string;
   nameVi?: string | null;
   weight: number;
+  /** PUBLISHED questions in this topic (for deep-dive selection). */
+  questionCount?: number;
 }
 export interface TaxonomyTrack {
   id: number;
@@ -284,6 +286,8 @@ export interface CreateSessionBody {
   jd?: string;
   /** Multi-select: combine several positions into one session. */
   trackIds?: number[];
+  /** Phase F: deep-dive on specific topics only (e.g. just OOP). Empty = all. */
+  topicIds?: number[];
   /** Phase 8: a project .md → AI generates a 2-round project interview (Opus, Pro). */
   projectMd?: string;
 }

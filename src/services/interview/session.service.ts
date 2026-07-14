@@ -96,12 +96,17 @@ export async function createSession(
     cv?: unknown;
     jd?: unknown;
     trackIds?: unknown;
+    topicIds?: unknown;
     projectMd?: unknown;
   },
 ) {
   // Multi-select: `trackIds` combines several positions; fall back to single trackId.
   const trackIds = Array.isArray(body.trackIds)
     ? [...new Set((body.trackIds as unknown[]).map(Number).filter((n) => Number.isInteger(n) && n > 0))]
+    : [];
+  // Phase F: optional topic deep-dive — narrow to specific topics (e.g. just OOP).
+  const topicIds = Array.isArray(body.topicIds)
+    ? [...new Set((body.topicIds as unknown[]).map(Number).filter((n) => Number.isInteger(n) && n > 0))]
     : [];
   const trackId = trackIds.length ? trackIds[0] : Number(body.trackId);
   if (!Number.isInteger(trackId) || trackId <= 0) throw new BadRequestError('trackId không hợp lệ');
@@ -166,16 +171,16 @@ export async function createSession(
     configData = { numQuestions: pq.length, requested: numQuestions, personalized: pq, personalizedSource: { hasCv: !!cv, hasJd: !!jd } };
     engineMode = resolveEngineMode('FULL_AI', allowAi); // personalized sessions are AI-graded
   } else {
-    const questions = await planQuestionsMulti(allTrackIds, level, numQuestions);
+    const questions = await planQuestionsMulti(allTrackIds, level, numQuestions, topicIds.length ? topicIds : undefined);
     if (!questions.length) {
-      throw new BadRequestError('Chưa có câu hỏi cho (các) track/level này. Chọn track đã có câu hỏi, đổi cấp độ, hoặc để admin sinh câu hỏi (AI).');
+      throw new BadRequestError('Chưa có câu hỏi cho lựa chọn này. Chọn track/topic đã có câu hỏi, đổi cấp độ, hoặc để admin sinh câu hỏi (AI).');
     }
     turnsCreate = questions.map((q, i) => ({
       questionId: q.id,
       order: i,
       questionText: language === 'EN' ? q.bodyEn || q.body : q.bodyVi || q.body,
     }));
-    configData = { numQuestions: questions.length, requested: numQuestions, trackIds: allTrackIds };
+    configData = { numQuestions: questions.length, requested: numQuestions, trackIds: allTrackIds, topicIds: topicIds.length ? topicIds : undefined };
   }
 
   const session = await prisma.interviewSession.create({

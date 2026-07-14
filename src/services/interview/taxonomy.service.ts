@@ -59,6 +59,7 @@ async function fetchTaxonomy() {
     tracks: d.tracks.map((t) => ({
       ...t,
       questionCount: t.topics.reduce((s, tp) => s + (byTopic.get(tp.id) ?? 0), 0),
+      topics: t.topics.map((tp) => ({ ...tp, questionCount: byTopic.get(tp.id) ?? 0 })),
     })),
   }));
 

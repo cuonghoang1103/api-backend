@@ -16,7 +16,7 @@
 import { prisma } from '../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import { isProEffective } from './pro.service.js';
-import { llmComplete, checkTokenQuota, isAiAvailable, extractJson } from './interview/llm/index.js';
+import { llmComplete, checkTokenQuota, isAiAvailable, extractJson, type LLMMessage } from './interview/llm/index.js';
 import { transcribeWithGroq, serverSttEnabled } from './interview/voice/stt.js';
 
 export type ExplainKind = 'grammar' | 'vocab';
@@ -492,4 +492,180 @@ export async function gradeAnswer(
   const corrected = typeof parsed.corrected === 'string' ? parsed.corrected.trim() : '';
 
   return { score, verdict, feedback, corrected };
+}
+
+// ── Phase 4a: Writing feedback ────────────────────────────────────
+export interface WritingCorrection {
+  original: string;
+  suggestion: string;
+  note: string;
+}
+export interface WritingFeedback {
+  score: number; // 0–100
+  level: string; // e.g. "B1" / "N4" / '' when unsure
+  verdict: PronounceVerdict;
+  feedback: string;
+  corrected: string; // full rewritten version in the target language
+  corrections: WritingCorrection[];
+}
+
+/** Grade a free composition: score + level + specific corrections + rewrite. */
+export async function gradeWriting(
+  userId: number,
+  body: { languageCode?: string; text?: string; prompt?: string },
+): Promise<WritingFeedback> {
+  const code = (body?.languageCode || '').trim();
+  const text = (body?.text || '').trim();
+  const prompt = (body?.prompt || '').trim();
+  if (!text) throw new BadRequestError('Bạn chưa viết gì.');
+  if (text.length > 4000) throw new BadRequestError('Bài viết quá dài (tối đa ~4000 ký tự).');
+
+  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!(await isProEffective(userId))) throw new ForbiddenError('Chấm bài viết dành cho tài khoản Pro/Max.');
+  if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
+
+  const langName = languageName(code);
+  const focus =
+    code === 'ja'
+      ? 'Chú trọng trợ từ (は/が/を/に…), thể lịch sự (ます/です ↔ thể thường), trật tự từ và cách diễn đạt tự nhiên.'
+      : isCjk(code)
+        ? 'Chú trọng ngữ pháp, trật tự từ và cách diễn đạt tự nhiên.'
+        : 'Chú trọng ngữ pháp, chính tả, collocation, và ước lượng band/CEFR.';
+  const system =
+    `You are a supportive writing teacher for a Vietnamese speaker learning ${langName}. ${focus} ` +
+    `Grade the composition fairly and ALWAYS write feedback/notes in Vietnamese (tiếng Việt); the ${langName} text (corrected + suggestions) stays in ${langName}. ` +
+    `Return ONLY a minified JSON object: {"score": number (0-100), "level": string, "verdict": "good"|"ok"|"poor", "feedback": string, "corrected": string, "corrections": [{"original": string, "suggestion": string, "note": string}]}. ` +
+    `"level" is a short proficiency estimate (e.g. "B1", "N4") or "" if unsure. "corrected" is the full improved version in ${langName}. ` +
+    `"corrections" lists up to 8 specific fixes (original phrase → suggestion + a short VI note). score ≥85 → "good", 60–84 → "ok", <60 → "poor".`;
+  const user = `${prompt ? `ĐỀ BÀI: ${prompt}\n\n` : ''}BÀI VIẾT:\n${text}`;
+
+  let parsed: Record<string, unknown> = {};
+  try {
+    const res = await llmComplete({
+      step: 'interview',
+      system,
+      messages: [{ role: 'user', content: user }],
+      maxTokens: 1400,
+      maxRetries: 1,
+      timeoutMs: 40_000,
+      userId,
+    });
+    parsed = extractJson<Record<string, unknown>>(res.text);
+  } catch {
+    throw new BadRequestError('Chấm bài đang bận, vui lòng thử lại sau giây lát.');
+  }
+
+  const rawScore = Number(parsed.score);
+  const score = Number.isFinite(rawScore) ? Math.max(0, Math.min(100, Math.round(rawScore))) : 0;
+  const verdict: PronounceVerdict =
+    parsed.verdict === 'good' || parsed.verdict === 'ok' || parsed.verdict === 'poor'
+      ? (parsed.verdict as PronounceVerdict)
+      : score >= 85 ? 'good' : score >= 60 ? 'ok' : 'poor';
+  const str = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
+  const corrections = (Array.isArray(parsed.corrections) ? parsed.corrections : [])
+    .map((c) => {
+      const co = (c ?? {}) as Record<string, unknown>;
+      const original = str(co.original);
+      const suggestion = str(co.suggestion);
+      const note = str(co.note);
+      if (!original && !suggestion) return null;
+      return { original, suggestion, note };
+    })
+    .filter((c): c is WritingCorrection => c != null)
+    .slice(0, 8);
+
+  return { score, level: str(parsed.level), verdict, feedback: str(parsed.feedback), corrected: str(parsed.corrected), corrections };
+}
+
+// ── Phase 4b: Role-play conversation (multi-turn) ─────────────────
+export interface RolePlayReply {
+  reply: string; // target language
+  translation: string; // Vietnamese
+  correction: string; // gentle fix of the learner's last message ('' if none)
+}
+
+/** One role-play chat turn. History is passed each call (stateless). */
+export async function rolePlayTurn(
+  userId: number,
+  body: { languageCode?: string; scenario?: string; history?: unknown; message?: string },
+): Promise<RolePlayReply> {
+  const code = (body?.languageCode || '').trim();
+  const scenario = (body?.scenario || '').trim();
+  const message = (body?.message || '').trim();
+  if (!scenario) throw new BadRequestError('Thiếu tình huống.');
+
+  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!(await isProEffective(userId))) throw new ForbiddenError('Hội thoại AI dành cho tài khoản Pro/Max.');
+  if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
+
+  const rawHistory = Array.isArray(body?.history) ? body!.history : [];
+  const history: LLMMessage[] = rawHistory
+    .map((m) => {
+      const mo = (m ?? {}) as Record<string, unknown>;
+      const role = mo.role === 'assistant' ? 'assistant' : mo.role === 'user' ? 'user' : null;
+      const content = typeof mo.content === 'string' ? mo.content.trim() : '';
+      if (!role || !content) return null;
+      return { role, content } as LLMMessage;
+    })
+    .filter((m): m is LLMMessage => m != null)
+    .slice(-12);
+
+  const messages: LLMMessage[] = [...history];
+  if (message) messages.push({ role: 'user', content: message });
+  // Anthropic requires a non-empty array whose FIRST message is 'user' (the
+  // opener is an assistant turn, so history can start with assistant) and a
+  // trailing 'user' turn.
+  if (!messages.length || messages[0].role === 'assistant') {
+    messages.unshift({ role: 'user', content: '(Hãy bắt đầu cuộc hội thoại theo tình huống.)' });
+  }
+  if (messages[messages.length - 1].role === 'assistant') messages.push({ role: 'user', content: '(Tiếp tục.)' });
+
+  const langName = languageName(code);
+  const readingNote = isCjk(code) ? ` Với ${langName}, "reply" dùng chữ chuẩn (kèm cách đọc nếu hữu ích).` : '';
+  const system =
+    `You are a friendly role-play partner helping a Vietnamese speaker practice conversational ${langName}. ` +
+    `Stay in character for this scenario: "${scenario}". Reply in ${langName} with SHORT, natural, realistic lines (1–2 sentences), and keep the conversation going by asking or responding naturally.${readingNote} ` +
+    `Also gently correct the learner's LAST message if it has mistakes. ` +
+    `Return ONLY a minified JSON object: {"reply": string, "translation": string, "correction": string}. ` +
+    `"reply" is your in-character line in ${langName}. "translation" is its Vietnamese meaning. "correction" is a brief, encouraging fix (in Vietnamese) of the learner's last message, or "" if it was fine or there was none.`;
+
+  let parsed: Record<string, unknown> = {};
+  try {
+    const res = await llmComplete({
+      step: 'interview',
+      system,
+      messages,
+      maxTokens: 500,
+      maxRetries: 1,
+      timeoutMs: 30_000,
+      userId,
+    });
+    parsed = extractJson<Record<string, unknown>>(res.text);
+  } catch {
+    throw new BadRequestError('Hội thoại AI đang bận, vui lòng thử lại sau giây lát.');
+  }
+
+  const str = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
+  const reply = str(parsed.reply);
+  if (!reply) throw new BadRequestError('AI chưa trả lời được, vui lòng thử lại.');
+  return { reply, translation: str(parsed.translation), correction: str(parsed.correction) };
+}
+
+// ── Phase 4c: Plain transcription (voice input for role-play) ─────
+/** Transcribe audio to text (no scoring). Pro/Max only; needs Groq STT. */
+export async function transcribe(
+  userId: number,
+  input: { audio: Buffer; filename: string; mimetype: string; languageCode?: string },
+): Promise<{ text: string }> {
+  if (!input.audio?.length) throw new BadRequestError('Thiếu audio.');
+  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!(await isProEffective(userId))) throw new ForbiddenError('Nhập bằng giọng nói dành cho tài khoản Pro/Max.');
+  if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
+  if (!serverSttEnabled()) throw new BadRequestError('Nhập bằng giọng nói cần bật STT (Groq) — hiện chưa khả dụng.');
+  try {
+    const tr = await transcribeWithGroq(input.audio, input.filename, input.mimetype, { language: whisperLang(input.languageCode || '') });
+    return { text: tr.text.trim() };
+  } catch {
+    throw new BadRequestError('Không nhận dạng được giọng nói, vui lòng thử lại.');
+  }
 }

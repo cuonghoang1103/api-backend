@@ -97,6 +97,16 @@ export const languageApi = {
     api.post('/my-language/ai/quiz', body),
   gradeAnswer: (body: { languageCode: string; prompt: string; answer: string; sampleAnswer?: string }): Res<AiGradeResult> =>
     api.post('/my-language/ai/grade', body),
+  gradeWriting: (body: { languageCode: string; text: string; prompt?: string }): Res<WritingFeedback> =>
+    api.post('/my-language/ai/writing', body),
+  rolePlayTurn: (body: { languageCode: string; scenario: string; history: { role: 'user' | 'assistant'; content: string }[]; message: string }): Res<RolePlayReply> =>
+    api.post('/my-language/ai/roleplay', body),
+  transcribe: (body: { audio: Blob; languageCode: string }): Res<{ text: string }> => {
+    const fd = new FormData();
+    fd.append('audio', body.audio, 'clip.webm');
+    fd.append('languageCode', body.languageCode);
+    return api.post('/my-language/ai/stt', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
+  },
 };
 
 export interface AiExplanationExample {
@@ -137,6 +147,25 @@ export interface AiGradeResult {
   verdict: PronounceVerdict;
   feedback: string;
   corrected: string;
+}
+
+export interface WritingCorrection {
+  original: string;
+  suggestion: string;
+  note: string;
+}
+export interface WritingFeedback {
+  score: number; // 0–100
+  level: string;
+  verdict: PronounceVerdict;
+  feedback: string;
+  corrected: string;
+  corrections: WritingCorrection[];
+}
+export interface RolePlayReply {
+  reply: string;
+  translation: string;
+  correction: string;
 }
 
 /**

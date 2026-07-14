@@ -163,6 +163,34 @@ publicRouter.post('/ai/grade', authenticate, async (req: Request, res: Response<
   } catch (err) { next(err); }
 });
 
+publicRouter.post('/ai/writing', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await aiSvc.gradeWriting(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.post('/ai/roleplay', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await aiSvc.rolePlayTurn(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.post('/ai/stt', authenticate, aiAudioUpload.single('audio'), async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const f = req.file;
+    if (!f?.buffer?.length) throw new BadRequestError('Thiếu audio');
+    res.json({
+      success: true,
+      data: await aiSvc.transcribe(req.userId!, {
+        audio: f.buffer,
+        filename: f.originalname || 'clip.webm',
+        mimetype: f.mimetype || 'audio/webm',
+        languageCode: String(req.body?.languageCode ?? ''),
+      }),
+    });
+  } catch (err) { next(err); }
+});
+
 // Per-language public content
 publicRouter.get('/:code', async (req, res: Response<ApiResponse>, next) => {
   try {

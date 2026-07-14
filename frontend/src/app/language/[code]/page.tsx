@@ -15,6 +15,8 @@ import {
   Flame,
   BarChart3,
   ArrowLeft,
+  PenLine,
+  Bot,
 } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
 import type { LanguageOverview } from '@/types/language';
@@ -28,7 +30,11 @@ const SECTIONS = [
   { key: 'conversation', n: 5, label: 'Giao tiếp', desc: 'Hội thoại hằng ngày', icon: MessagesSquare, color: 'text-neon-fuchsia' },
   { key: 'reading', n: 6, label: 'Đọc', desc: 'Bài đọc & báo', icon: Newspaper, color: 'text-neon-orange' },
   { key: 'qna', n: 7, label: 'Q&A', desc: 'Câu hỏi thường gặp', icon: HelpCircle, color: 'text-neon-pink' },
+  { key: 'writing', n: 8, label: 'Luyện viết', desc: 'AI chữa bài & chấm điểm', icon: PenLine, color: 'text-neon-emerald' },
+  { key: 'roleplay', n: 9, label: 'Hội thoại AI', desc: 'Nhập vai tình huống', icon: Bot, color: 'text-neon-cyan' },
 ] as const;
+
+const AI_SECTIONS = new Set(['writing', 'roleplay']);
 
 export default function LanguageHomePage() {
   const params = useParams();
@@ -111,6 +117,7 @@ export default function LanguageHomePage() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {SECTIONS.map((s, i) => {
             const Icon = s.icon;
+            const isAi = AI_SECTIONS.has(s.key);
             const count = counts ? (counts as Record<string, number>)[s.key] ?? 0 : 0;
             return (
               <motion.div
@@ -125,7 +132,9 @@ export default function LanguageHomePage() {
                   <h3 className="font-heading font-semibold text-text-primary">{s.label}</h3>
                   <p className="mt-0.5 text-xs text-text-muted">{s.desc}</p>
                   <span className="mt-auto pt-2 text-xs font-medium text-text-secondary">
-                    {loading ? '…' : `${count} mục`}
+                    {isAi ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-neon-violet/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-neon-violet">✨ AI · Pro</span>
+                    ) : loading ? '…' : `${count} mục`}
                   </span>
                 </Link>
               </motion.div>

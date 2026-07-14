@@ -127,6 +127,16 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
   }
   const grounded = retrieved.length > 0;
 
+  // Anti-duplication: fetch what's already in the bank so we can (a) tell the
+  // model not to repeat them and (b) filter any near-duplicate it proposes.
+  const existingQuestions = await prisma.interviewQuestion.findMany({
+    where: { topicId: topic.id },
+    select: { body: true },
+    orderBy: { id: 'desc' },
+    take: 150,
+  });
+  const existingKeys = new Set(existingQuestions.map((e) => e.body.trim().toLowerCase().slice(0, 120)));
+
   const system = await renderPrompt('question_generation_system', {
     count,
     language: language === 'EN' ? 'English' : 'Vietnamese',
@@ -145,6 +155,13 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
     userParts.push('', '<reference_knowledge>', renderKnowledge(retrieved), '</reference_knowledge>');
   } else {
     userParts.push('', '(No reference knowledge available for this topic — use only canonical, well-established knowledge.)');
+  }
+  if (existingQuestions.length) {
+    userParts.push(
+      '',
+      'These questions ALREADY EXIST in the bank — do NOT duplicate, re-order, or lightly reword any of them; produce genuinely NEW ones:',
+      ...existingQuestions.slice(0, 80).map((e, i) => `${i + 1}. ${e.body.slice(0, 200)}`),
+    );
   }
   userParts.push('', 'Return the JSON object only.');
   const user = userParts.join('\n');
@@ -178,8 +195,8 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
     questions = parse(retry.text); // second failure throws → route returns 400
   }
 
-  // Dedupe near-identical bodies the model sometimes repeats.
-  const seen = new Set<string>();
+  // Dedupe near-identical bodies (within the batch AND against the existing bank).
+  const seen = new Set<string>(existingKeys);
   questions = questions.filter((q) => {
     const key = q.body.trim().toLowerCase().slice(0, 120);
     if (seen.has(key)) return false;
@@ -209,14 +226,21 @@ export interface CommitParams {
  * Persist chosen proposals as DRAFT, source=AI_GENERATED, rubricReviewed=false.
  * They stay out of live sessions until an admin reviews + publishes them.
  */
-export async function commitQuestions(params: CommitParams): Promise<{ created: number; ids: number[] }> {
+export async function commitQuestions(params: CommitParams): Promise<{ created: number; skipped: number; ids: number[] }> {
   const topic = await prisma.interviewTopic.findUnique({ where: { id: params.topicId }, select: { id: true } });
   if (!topic) throw new BadRequestError('Topic không tồn tại');
   const items = (params.questions ?? []).filter((q) => q && typeof q.body === 'string' && q.body.trim());
   if (!items.length) throw new BadRequestError('Không có câu hỏi nào để lưu');
 
+  // Anti-duplication: never recreate a question whose body already exists in the topic.
+  const existing = await prisma.interviewQuestion.findMany({ where: { topicId: params.topicId }, select: { body: true } });
+  const existingKeys = new Set(existing.map((e) => e.body.trim().toLowerCase().slice(0, 120)));
+
   const ids: number[] = [];
   for (const q of items) {
+    const key = q.body.trim().toLowerCase().slice(0, 120);
+    if (existingKeys.has(key)) continue; // already in the bank — skip
+    existingKeys.add(key);
     const created = await prisma.interviewQuestion.create({
       data: {
         topicId: params.topicId,
@@ -239,5 +263,5 @@ export async function commitQuestions(params: CommitParams): Promise<{ created: 
     });
     ids.push(created.id);
   }
-  return { created: ids.length, ids };
+  return { created: ids.length, skipped: items.length - ids.length, ids };
 }

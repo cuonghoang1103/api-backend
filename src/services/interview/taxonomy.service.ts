@@ -45,7 +45,24 @@ async function fetchTaxonomy() {
       select: { id: true, slug: true, name: true, styleDescriptor: true, rigor: true },
     }),
   ]);
-  return { domains, companyProfiles };
+
+  // How many PUBLISHED questions back each track (across its topics) — lets the UI
+  // show which positions are usable and cap the question count to what exists.
+  const counts = await prisma.interviewQuestion.groupBy({
+    by: ['topicId'],
+    where: { status: 'PUBLISHED' },
+    _count: { _all: true },
+  });
+  const byTopic = new Map(counts.map((c) => [c.topicId, c._count._all]));
+  const domainsWithCounts = domains.map((d) => ({
+    ...d,
+    tracks: d.tracks.map((t) => ({
+      ...t,
+      questionCount: t.topics.reduce((s, tp) => s + (byTopic.get(tp.id) ?? 0), 0),
+    })),
+  }));
+
+  return { domains: domainsWithCounts, companyProfiles };
 }
 
 /** How many PUBLISHED questions back each topic/level — powers the admin "bank health" view. */

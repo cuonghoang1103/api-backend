@@ -119,8 +119,11 @@ function getProvider(): LLMProvider {
 // ── Model selection per step (configurable via env, not hardcoded in logic) ──
 export function modelForStep(step: LLMStep): string {
   if (step === 'report') return process.env.LLM_MODEL_REPORT || 'claude-opus-4-8';
-  if (step === 'generation') return process.env.LLM_MODEL_GENERATION || 'claude-sonnet-5';
-  return process.env.LLM_MODEL_INTERVIEW || 'claude-haiku-4-5'; // cheaper model for routine turns
+  // Question generation uses the STRONGEST model (Opus 4.8) — deep, professional
+  // questions + accurate model answers. Grading stays on the interview step model.
+  if (step === 'generation') return process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
+  return process.env.LLM_MODEL_INTERVIEW || 'claude-haiku-4-5'; // grading — kept on the cheaper/sonnet model
+
 }
 
 // ── Kill switch + availability ────────────────────────────────────

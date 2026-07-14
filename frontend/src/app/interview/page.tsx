@@ -116,22 +116,37 @@ export default function InterviewSetupPage() {
             {/* Track */}
             <Section step={2} title="Vị trí (track)">
               <div className="grid sm:grid-cols-2 gap-2">
-                {domain?.tracks.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => setTrack(t)}
-                    className={`text-left px-4 py-3 rounded-xl border transition-all ${
-                      track?.id === t.id
-                        ? 'border-amber-500/60 bg-amber-500/10'
-                        : 'border-white/10 hover:border-slate-500'
-                    }`}
-                  >
-                    <div className="font-semibold text-slate-100">{t.name}</div>
-                    <div className="text-xs text-slate-400 mt-0.5">{t.topics.length} chủ đề</div>
-                  </button>
-                ))}
+                {domain?.tracks.map((t) => {
+                  const qc = t.questionCount ?? 0;
+                  return (
+                    <button
+                      key={t.id}
+                      onClick={() => { setTrack(t); if (qc > 0) setNumQuestions((n) => Math.max(3, Math.min(n, qc))); }}
+                      className={`text-left px-4 py-3 rounded-xl border transition-all ${
+                        track?.id === t.id
+                          ? 'border-amber-500/60 bg-amber-500/10'
+                          : 'border-white/10 hover:border-slate-500'
+                      }`}
+                    >
+                      <div className="font-semibold text-slate-100">{t.name}</div>
+                      <div className="text-xs mt-0.5 flex items-center gap-2">
+                        <span className="text-slate-400">{t.topics.length} chủ đề</span>
+                        {qc > 0 ? (
+                          <span className="text-emerald-400">· {qc} câu hỏi</span>
+                        ) : (
+                          <span className="text-amber-400/90">· chưa có câu hỏi</span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
                 {!domain?.tracks.length && <p className="text-sm text-slate-400">Lĩnh vực này chưa có track.</p>}
               </div>
+              {track && (track.questionCount ?? 0) === 0 && (
+                <p className="text-xs text-amber-300/90 mt-2">
+                  Track này chưa có câu hỏi trong ngân hàng. Admin vào <b>/admin/interview</b> → chọn topic → <b>AI sinh câu hỏi</b> (model Opus 4.8) để tạo, hoặc chọn track khác đã có câu hỏi.
+                </p>
+              )}
             </Section>
 
             {/* Level */}
@@ -159,8 +174,18 @@ export default function InterviewSetupPage() {
               <div className="flex flex-wrap items-center gap-6">
                 <label className="flex items-center gap-3">
                   <span className="text-sm text-slate-400">Số câu</span>
-                  <input type="range" min={3} max={12} value={numQuestions} onChange={(e) => setNumQuestions(Number(e.target.value))} className="accent-amber-500" />
-                  <span className="text-sm font-mono text-slate-100 w-6">{numQuestions}</span>
+                  <input
+                    type="range"
+                    min={3}
+                    max={Math.max(3, Math.min(track?.questionCount || 12, 50))}
+                    value={numQuestions}
+                    onChange={(e) => setNumQuestions(Number(e.target.value))}
+                    className="accent-amber-500"
+                  />
+                  <span className="text-sm font-mono text-slate-100 w-8">{numQuestions}</span>
+                  {track && (track.questionCount ?? 0) > 0 && (
+                    <span className="text-xs text-slate-500">(tối đa {Math.min(track.questionCount!, 50)})</span>
+                  )}
                 </label>
                 <div className="inline-flex rounded-lg border border-white/10 overflow-hidden">
                   {(['VI', 'EN'] as const).map((l) => (

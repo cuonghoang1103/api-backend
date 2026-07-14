@@ -45,14 +45,183 @@ interface TrackSeed { slug: string; name: string; nameVi: string; domainSlug: st
 
 const DOMAINS = [
   { slug: 'backend', name: 'Backend', nameVi: 'Backend', icon: 'server' },
+  { slug: 'frontend', name: 'Frontend', nameVi: 'Frontend', icon: 'layout' },
+  { slug: 'database', name: 'Database', nameVi: 'Cơ sở dữ liệu', icon: 'database' },
+  { slug: 'devops', name: 'DevOps', nameVi: 'DevOps', icon: 'infinity' },
+  { slug: 'cloud', name: 'Cloud & VPS', nameVi: 'Cloud & VPS', icon: 'cloud' },
+  { slug: 'networking', name: 'Networking', nameVi: 'Mạng máy tính', icon: 'network' },
+  { slug: 'mobile', name: 'Mobile', nameVi: 'Di động', icon: 'smartphone' },
+  { slug: 'ai-ml', name: 'AI / Machine Learning', nameVi: 'AI / Máy học', icon: 'brain' },
+  { slug: 'data', name: 'Data Engineering', nameVi: 'Kỹ thuật dữ liệu', icon: 'bar-chart' },
+  { slug: 'security', name: 'Security', nameVi: 'An ninh mạng', icon: 'shield' },
+  { slug: 'qa', name: 'QA / Testing', nameVi: 'Kiểm thử (QA)', icon: 'check-circle' },
+  { slug: 'system-design', name: 'System Design', nameVi: 'Thiết kế hệ thống', icon: 'sitemap' },
   { slug: 'general', name: 'General', nameVi: 'Tổng quát', icon: 'users' },
 ];
 
 const COMPANY_PROFILES = [
-  { slug: 'faang', name: 'FAANG-style', rigor: 5, styleDescriptor: 'A large global tech company. Deep, rigorous, follow-up heavy. Expects precise terminology, complexity analysis, and trade-off reasoning. Politely relentless; probes every claim.' },
-  { slug: 'vn-product', name: 'Vietnamese product company', rigor: 4, styleDescriptor: 'A Vietnamese product company. Values solid fundamentals plus real system-design depth and ownership. Practical, scenario-driven; asks how you would ship and operate it.' },
-  { slug: 'outsourcing', name: 'Outsourcing / agency', rigor: 3, styleDescriptor: 'A Vietnamese outsourcing/agency. Heavy on fundamentals and clear English communication. Broad coverage over extreme depth; expects you to explain concepts a client could follow.' },
-  { slug: 'startup', name: 'Startup', rigor: 3, styleDescriptor: 'An early-stage startup. Pragmatic and scrappy; values shipping, breadth, and judgement under ambiguity over textbook perfection.' },
+  { slug: 'faang', name: 'FAANG / Big Tech', rigor: 5, styleDescriptor: 'A large global tech company (FAANG-style). Deep, rigorous, follow-up heavy. Expects precise terminology, complexity analysis, and trade-off reasoning. Politely relentless; probes every claim.' },
+  { slug: 'vn-product', name: 'Công ty product Việt Nam', rigor: 4, styleDescriptor: 'A Vietnamese product company. Values solid fundamentals plus real system-design depth and ownership. Practical, scenario-driven; asks how you would ship and operate it.' },
+  { slug: 'outsourcing', name: 'Outsourcing / Agency', rigor: 3, styleDescriptor: 'A Vietnamese outsourcing/agency. Heavy on fundamentals and clear English communication. Broad coverage over extreme depth; expects you to explain concepts a client could follow.' },
+  { slug: 'startup', name: 'Startup giai đoạn đầu', rigor: 3, styleDescriptor: 'An early-stage startup. Pragmatic and scrappy; values shipping, breadth, and judgement under ambiguity over textbook perfection.' },
+  { slug: 'fintech', name: 'Fintech / Ngân hàng', rigor: 5, styleDescriptor: 'A fintech / bank. Correctness, security, data consistency and compliance come first. Expects rigor on transactions, idempotency, auditing, and failure handling; low tolerance for hand-waving on edge cases.' },
+  { slug: 'ecommerce', name: 'E-commerce quy mô lớn', rigor: 4, styleDescriptor: 'A high-traffic e-commerce company. Focus on scalability, caching, consistency at scale, peak-load (sale events) handling, and pragmatic trade-offs between latency, cost and correctness.' },
+  { slug: 'enterprise', name: 'Enterprise / Tập đoàn', rigor: 4, styleDescriptor: 'A large enterprise/corporate. Values maintainability, clear design, documentation, process, and long-term stability over cleverness. Asks about testing, governance, and working within established architecture.' },
+  { slug: 'gaming', name: 'Game studio', rigor: 4, styleDescriptor: 'A game studio. Performance-obsessed: memory, latency, real-time systems, and low-level optimisation. Expects strong CS fundamentals and hands-on problem solving under tight constraints.' },
+  { slug: 'ai-company', name: 'Công ty AI / Data', rigor: 5, styleDescriptor: 'An AI/data company. Probes ML fundamentals, data pipelines, evaluation rigor, and the engineering around models (serving, latency, cost). Expects clear reasoning about trade-offs and failure modes.' },
+  { slug: 'consulting', name: 'Tư vấn / SI', rigor: 3, styleDescriptor: 'A consulting / systems-integrator. Values breadth, communication, requirement clarification, and the ability to justify decisions to non-technical stakeholders. Scenario and client-facing heavy.' },
+  { slug: 'remote-global', name: 'Remote / Global team', rigor: 4, styleDescriptor: 'A remote-first global team. Strong written communication, autonomy, and async collaboration matter as much as technical depth. Expects clear, self-driven reasoning in fluent English.' },
+];
+
+// ── Metadata-only tracks (positions) + topics. No seeded questions — admins fill
+// them via the AI generator (/admin/interview/generate). Idempotent by slug. The
+// 3 fully-seeded tracks (nodejs-backend, database, behavioral) live in TRACKS. ──
+type MetaTopic = { slug: string; name: string; nameVi: string; weight: number };
+type MetaTrack = { slug: string; name: string; nameVi: string; domainSlug: string; topics: MetaTopic[] };
+
+const TRACKS_META: MetaTrack[] = [
+  // ─ Backend ─
+  { slug: 'java-backend', name: 'Java / Spring Backend', nameVi: 'Java / Spring Backend', domainSlug: 'backend', topics: [
+    { slug: 'java-oop', name: 'OOP & Design Principles', nameVi: 'OOP & Nguyên lý thiết kế', weight: 3 },
+    { slug: 'java-spring', name: 'Spring & Dependency Injection', nameVi: 'Spring & Dependency Injection', weight: 3 },
+    { slug: 'java-concurrency', name: 'Concurrency & JVM', nameVi: 'Đa luồng & JVM', weight: 2 },
+    { slug: 'java-collections', name: 'Collections & Generics', nameVi: 'Collections & Generics', weight: 2 },
+  ] },
+  { slug: 'python-backend', name: 'Python Backend', nameVi: 'Python Backend', domainSlug: 'backend', topics: [
+    { slug: 'py-language', name: 'Language internals & data model', nameVi: 'Nội tại ngôn ngữ & data model', weight: 3 },
+    { slug: 'py-async', name: 'Async & concurrency (asyncio, GIL)', nameVi: 'Bất đồng bộ & đồng thời (asyncio, GIL)', weight: 2 },
+    { slug: 'py-web', name: 'Django / FastAPI', nameVi: 'Django / FastAPI', weight: 3 },
+  ] },
+  { slug: 'go-backend', name: 'Go Backend', nameVi: 'Go Backend', domainSlug: 'backend', topics: [
+    { slug: 'go-concurrency', name: 'Goroutines & channels', nameVi: 'Goroutines & channels', weight: 3 },
+    { slug: 'go-language', name: 'Interfaces, memory & error handling', nameVi: 'Interface, bộ nhớ & xử lý lỗi', weight: 2 },
+  ] },
+  { slug: 'dotnet-backend', name: '.NET / C# Backend', nameVi: '.NET / C# Backend', domainSlug: 'backend', topics: [
+    { slug: 'csharp-language', name: 'C# language & CLR', nameVi: 'Ngôn ngữ C# & CLR', weight: 3 },
+    { slug: 'dotnet-async', name: 'async/await & TPL', nameVi: 'async/await & TPL', weight: 2 },
+    { slug: 'aspnet-core', name: 'ASP.NET Core & EF', nameVi: 'ASP.NET Core & EF', weight: 3 },
+  ] },
+  { slug: 'api-design', name: 'API & Microservices', nameVi: 'API & Microservices', domainSlug: 'backend', topics: [
+    { slug: 'rest-design', name: 'REST / gRPC design', nameVi: 'Thiết kế REST / gRPC', weight: 3 },
+    { slug: 'auth-security', name: 'AuthN/AuthZ (JWT, OAuth2)', nameVi: 'Xác thực/Phân quyền (JWT, OAuth2)', weight: 3 },
+    { slug: 'msvc-patterns', name: 'Microservice patterns & messaging', nameVi: 'Mẫu microservice & message queue', weight: 2 },
+  ] },
+  // ─ Frontend ─
+  { slug: 'react-frontend', name: 'React / Next.js', nameVi: 'React / Next.js', domainSlug: 'frontend', topics: [
+    { slug: 'react-hooks', name: 'Hooks & rendering model', nameVi: 'Hooks & cơ chế render', weight: 3 },
+    { slug: 'react-state', name: 'State management & data fetching', nameVi: 'Quản lý state & data fetching', weight: 2 },
+    { slug: 'react-perf', name: 'Performance & re-render', nameVi: 'Hiệu năng & re-render', weight: 2 },
+    { slug: 'nextjs-ssr', name: 'Next.js SSR/SSG & routing', nameVi: 'Next.js SSR/SSG & routing', weight: 2 },
+  ] },
+  { slug: 'vue-frontend', name: 'Vue.js', nameVi: 'Vue.js', domainSlug: 'frontend', topics: [
+    { slug: 'vue-reactivity', name: 'Reactivity & composition API', nameVi: 'Reactivity & Composition API', weight: 3 },
+    { slug: 'vue-ecosystem', name: 'Router, Pinia & ecosystem', nameVi: 'Router, Pinia & hệ sinh thái', weight: 2 },
+  ] },
+  { slug: 'js-fundamentals', name: 'JavaScript / TypeScript', nameVi: 'JavaScript / TypeScript', domainSlug: 'frontend', topics: [
+    { slug: 'js-core', name: 'Closures, prototypes, this, event loop', nameVi: 'Closure, prototype, this, event loop', weight: 3 },
+    { slug: 'ts-types', name: 'TypeScript type system', nameVi: 'Hệ kiểu TypeScript', weight: 2 },
+    { slug: 'web-fundamentals', name: 'Browser, DOM, CSS & web perf', nameVi: 'Trình duyệt, DOM, CSS & hiệu năng web', weight: 2 },
+  ] },
+  // ─ Database ─
+  { slug: 'sql-rdbms', name: 'SQL / RDBMS', nameVi: 'SQL / RDBMS', domainSlug: 'database', topics: [
+    { slug: 'sql-queries', name: 'Query optimisation & EXPLAIN', nameVi: 'Tối ưu truy vấn & EXPLAIN', weight: 3 },
+    { slug: 'sql-design', name: 'Schema design & normalisation', nameVi: 'Thiết kế schema & chuẩn hoá', weight: 2 },
+    { slug: 'sql-tx', name: 'Transactions, locking & isolation', nameVi: 'Transaction, khoá & isolation', weight: 3 },
+  ] },
+  { slug: 'nosql', name: 'NoSQL (Mongo / Redis)', nameVi: 'NoSQL (Mongo / Redis)', domainSlug: 'database', topics: [
+    { slug: 'nosql-modeling', name: 'Document/KV data modeling', nameVi: 'Mô hình dữ liệu Document/KV', weight: 3 },
+    { slug: 'nosql-scaling', name: 'Sharding, replication & consistency', nameVi: 'Sharding, replication & nhất quán', weight: 2 },
+  ] },
+  // ─ DevOps ─
+  { slug: 'cicd', name: 'CI/CD', nameVi: 'CI/CD', domainSlug: 'devops', topics: [
+    { slug: 'cicd-pipelines', name: 'Pipelines & GitOps', nameVi: 'Pipeline & GitOps', weight: 3 },
+    { slug: 'cicd-strategy', name: 'Deploy strategies (blue-green, canary)', nameVi: 'Chiến lược deploy (blue-green, canary)', weight: 2 },
+  ] },
+  { slug: 'docker-k8s', name: 'Docker & Kubernetes', nameVi: 'Docker & Kubernetes', domainSlug: 'devops', topics: [
+    { slug: 'docker-core', name: 'Containers, images & networking', nameVi: 'Container, image & mạng', weight: 3 },
+    { slug: 'k8s-core', name: 'Pods, services, scaling & probes', nameVi: 'Pod, service, scaling & probe', weight: 3 },
+    { slug: 'k8s-ops', name: 'Config, secrets & troubleshooting', nameVi: 'Config, secret & xử lý sự cố', weight: 2 },
+  ] },
+  { slug: 'sre-observability', name: 'SRE & Observability', nameVi: 'SRE & Observability', domainSlug: 'devops', topics: [
+    { slug: 'sre-slo', name: 'SLI/SLO/SLA & error budgets', nameVi: 'SLI/SLO/SLA & error budget', weight: 3 },
+    { slug: 'observability', name: 'Logging, metrics & tracing', nameVi: 'Logging, metrics & tracing', weight: 2 },
+  ] },
+  // ─ Cloud & VPS ─
+  { slug: 'aws-cloud', name: 'AWS / Cloud', nameVi: 'AWS / Cloud', domainSlug: 'cloud', topics: [
+    { slug: 'aws-compute', name: 'Compute, storage & networking', nameVi: 'Compute, storage & networking', weight: 3 },
+    { slug: 'cloud-arch', name: 'Scalability, cost & well-architected', nameVi: 'Khả năng mở rộng, chi phí & kiến trúc chuẩn', weight: 2 },
+  ] },
+  { slug: 'linux-vps', name: 'Linux / VPS Administration', nameVi: 'Quản trị Linux / VPS', domainSlug: 'cloud', topics: [
+    { slug: 'linux-core', name: 'Processes, permissions & filesystem', nameVi: 'Tiến trình, quyền & filesystem', weight: 3 },
+    { slug: 'vps-ops', name: 'Nginx, systemd, TLS & hardening', nameVi: 'Nginx, systemd, TLS & bảo mật', weight: 2 },
+    { slug: 'linux-debug', name: 'Performance & troubleshooting', nameVi: 'Hiệu năng & gỡ lỗi', weight: 2 },
+  ] },
+  // ─ Networking ─
+  { slug: 'network-fundamentals', name: 'Network Fundamentals', nameVi: 'Nền tảng mạng', domainSlug: 'networking', topics: [
+    { slug: 'net-tcpip', name: 'TCP/IP, DNS & HTTP(S)', nameVi: 'TCP/IP, DNS & HTTP(S)', weight: 3 },
+    { slug: 'net-security', name: 'TLS, firewalls & load balancing', nameVi: 'TLS, tường lửa & cân bằng tải', weight: 2 },
+  ] },
+  // ─ Mobile ─
+  { slug: 'ios-swift', name: 'iOS (Swift)', nameVi: 'iOS (Swift)', domainSlug: 'mobile', topics: [
+    { slug: 'swift-language', name: 'Swift, memory (ARC) & optionals', nameVi: 'Swift, bộ nhớ (ARC) & optional', weight: 3 },
+    { slug: 'ios-ui', name: 'SwiftUI / UIKit & lifecycle', nameVi: 'SwiftUI / UIKit & vòng đời', weight: 2 },
+  ] },
+  { slug: 'android-kotlin', name: 'Android (Kotlin)', nameVi: 'Android (Kotlin)', domainSlug: 'mobile', topics: [
+    { slug: 'kotlin-language', name: 'Kotlin, coroutines & null safety', nameVi: 'Kotlin, coroutine & null safety', weight: 3 },
+    { slug: 'android-arch', name: 'Jetpack, lifecycle & architecture', nameVi: 'Jetpack, vòng đời & kiến trúc', weight: 2 },
+  ] },
+  { slug: 'flutter-mobile', name: 'Flutter / React Native', nameVi: 'Flutter / React Native', domainSlug: 'mobile', topics: [
+    { slug: 'crossplatform-core', name: 'Widget/component tree & state', nameVi: 'Cây widget/component & state', weight: 3 },
+    { slug: 'crossplatform-perf', name: 'Performance & native bridges', nameVi: 'Hiệu năng & cầu nối native', weight: 2 },
+  ] },
+  // ─ AI / ML ─
+  { slug: 'ml-fundamentals', name: 'ML Fundamentals', nameVi: 'Nền tảng ML', domainSlug: 'ai-ml', topics: [
+    { slug: 'ml-core', name: 'Supervised learning & evaluation', nameVi: 'Học có giám sát & đánh giá', weight: 3 },
+    { slug: 'ml-overfitting', name: 'Bias-variance, regularisation', nameVi: 'Bias-variance, regularisation', weight: 2 },
+  ] },
+  { slug: 'deep-learning', name: 'Deep Learning', nameVi: 'Deep Learning', domainSlug: 'ai-ml', topics: [
+    { slug: 'dl-nn', name: 'Neural nets, backprop & training', nameVi: 'Mạng nơ-ron, backprop & huấn luyện', weight: 3 },
+    { slug: 'dl-arch', name: 'CNN / RNN / Transformer', nameVi: 'CNN / RNN / Transformer', weight: 2 },
+  ] },
+  { slug: 'llm-genai', name: 'LLM / GenAI Engineering', nameVi: 'Kỹ thuật LLM / GenAI', domainSlug: 'ai-ml', topics: [
+    { slug: 'llm-core', name: 'Prompting, RAG & embeddings', nameVi: 'Prompting, RAG & embedding', weight: 3 },
+    { slug: 'llm-ops', name: 'Serving, evaluation & guardrails', nameVi: 'Triển khai, đánh giá & guardrail', weight: 2 },
+  ] },
+  // ─ Data Engineering ─
+  { slug: 'data-engineering', name: 'Data Engineering', nameVi: 'Kỹ thuật dữ liệu', domainSlug: 'data', topics: [
+    { slug: 'data-pipelines', name: 'ETL/ELT & orchestration', nameVi: 'ETL/ELT & orchestration', weight: 3 },
+    { slug: 'data-warehouse', name: 'Warehousing & modeling', nameVi: 'Kho dữ liệu & mô hình hoá', weight: 2 },
+    { slug: 'data-bigdata', name: 'Spark & streaming (Kafka)', nameVi: 'Spark & streaming (Kafka)', weight: 2 },
+  ] },
+  // ─ Security ─
+  { slug: 'appsec', name: 'Application Security', nameVi: 'Bảo mật ứng dụng', domainSlug: 'security', topics: [
+    { slug: 'owasp', name: 'OWASP Top 10 & secure coding', nameVi: 'OWASP Top 10 & code an toàn', weight: 3 },
+    { slug: 'crypto-basics', name: 'Auth, sessions & cryptography', nameVi: 'Xác thực, session & mật mã', weight: 2 },
+  ] },
+  { slug: 'pentest', name: 'Penetration Testing', nameVi: 'Kiểm thử xâm nhập', domainSlug: 'security', topics: [
+    { slug: 'pentest-web', name: 'Web exploitation & recon', nameVi: 'Khai thác web & do thám', weight: 3 },
+    { slug: 'pentest-net', name: 'Network & privilege escalation', nameVi: 'Mạng & leo thang đặc quyền', weight: 2 },
+  ] },
+  // ─ QA / Testing ─
+  { slug: 'qa-automation', name: 'Test Automation', nameVi: 'Kiểm thử tự động', domainSlug: 'qa', topics: [
+    { slug: 'test-strategy', name: 'Test pyramid & strategy', nameVi: 'Kim tự tháp test & chiến lược', weight: 3 },
+    { slug: 'test-automation', name: 'E2E/API automation frameworks', nameVi: 'Framework tự động E2E/API', weight: 2 },
+  ] },
+  { slug: 'qa-manual', name: 'Manual / QA Analyst', nameVi: 'Kiểm thử thủ công / QA', domainSlug: 'qa', topics: [
+    { slug: 'test-design', name: 'Test case design & techniques', nameVi: 'Thiết kế test case & kỹ thuật', weight: 3 },
+    { slug: 'bug-lifecycle', name: 'Bug lifecycle & reporting', nameVi: 'Vòng đời bug & báo cáo', weight: 2 },
+  ] },
+  // ─ System Design ─
+  { slug: 'system-design', name: 'System Design', nameVi: 'Thiết kế hệ thống', domainSlug: 'system-design', topics: [
+    { slug: 'sd-fundamentals', name: 'Scalability, caching & load balancing', nameVi: 'Mở rộng, cache & cân bằng tải', weight: 3 },
+    { slug: 'sd-data', name: 'Data storage, sharding & consistency', nameVi: 'Lưu trữ, sharding & nhất quán', weight: 3 },
+    { slug: 'sd-cases', name: 'Case studies (feed, chat, URL shortener)', nameVi: 'Bài toán thực tế (feed, chat, rút gọn URL)', weight: 2 },
+  ] },
+  // ─ General ─
+  { slug: 'coding-dsa', name: 'Coding & Data Structures', nameVi: 'Coding & Cấu trúc dữ liệu', domainSlug: 'general', topics: [
+    { slug: 'dsa-core', name: 'Arrays, strings, hashing & complexity', nameVi: 'Mảng, chuỗi, hashing & độ phức tạp', weight: 3 },
+    { slug: 'dsa-advanced', name: 'Trees, graphs & dynamic programming', nameVi: 'Cây, đồ thị & quy hoạch động', weight: 2 },
+  ] },
 ];
 
 const TRACKS: TrackSeed[] = [
@@ -677,7 +846,28 @@ async function main() {
     }
   }
 
-  console.log(`[seed:interview] domains=${domains} companies=${companies} tracks=${tracks} topics=${topics} concepts=${concepts} created=${created} backfilledEN=${backfilled} skipped=${skipped}`);
+  // Metadata-only tracks/topics (positions). No questions — admins AI-generate them.
+  let metaTracks = 0, metaTopics = 0;
+  for (const t of TRACKS_META) {
+    const domain = await prisma.interviewDomain.findUnique({ where: { slug: t.domainSlug } });
+    if (!domain) continue;
+    const track = await prisma.interviewTrack.upsert({
+      where: { slug: t.slug },
+      update: { name: t.name, nameVi: t.nameVi, domainId: domain.id },
+      create: { slug: t.slug, name: t.name, nameVi: t.nameVi, domainId: domain.id, status: 'PUBLISHED' },
+    });
+    metaTracks++;
+    for (const tp of t.topics) {
+      await prisma.interviewTopic.upsert({
+        where: { slug: tp.slug },
+        update: { name: tp.name, nameVi: tp.nameVi, weight: tp.weight, trackId: track.id },
+        create: { slug: tp.slug, name: tp.name, nameVi: tp.nameVi, weight: tp.weight, trackId: track.id, status: 'PUBLISHED' },
+      });
+      metaTopics++;
+    }
+  }
+
+  console.log(`[seed:interview] domains=${domains} companies=${companies} tracks=${tracks}(+${metaTracks} meta) topics=${topics}(+${metaTopics} meta) concepts=${concepts} created=${created} backfilledEN=${backfilled} skipped=${skipped}`);
   console.log('[seed:interview] NOTE: every seeded rubric is rubricReviewed=false — a human must rewrite them before they count.');
 }
 

@@ -25,6 +25,8 @@ export interface TaxonomyTrack {
   name: string;
   nameVi?: string | null;
   topics: TaxonomyTopic[];
+  /** PUBLISHED questions backing this track (0 = admin must AI-generate first). */
+  questionCount?: number;
 }
 export interface TaxonomyDomain {
   id: number;

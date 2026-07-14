@@ -119,13 +119,12 @@ RUN chmod +x /usr/local/bin/fix-uploads-perms.sh
 ENV NODE_ENV=production
 ENV PORT=3001
 # Node old-space heap cap. MUST stay BELOW the backend container's memory
-# limit in docker-compose.yml (currently `memory: 1G`) or the kernel
-# OOM-kills the container (exit 137) once the heap grows past the cgroup
-# limit — the old value here was 1536 MB against a 1 GB cgroup, a
-# guaranteed OOM. 768 MB ≈ 75% of 1 GB, leaving ~256 MB for non-heap
-# (buffers, sharp, stack, code). If the backend genuinely needs more heap,
-# raise BOTH this value and the compose memory limit together.
-ENV NODE_OPTIONS=--max-old-space-size=768
+# limit in docker-compose.yml or the kernel OOM-kills the container (exit 137)
+# once the heap grows past the cgroup limit. Sized for the 8 GB VPS (upgraded
+# 2026-07-14): compose limit is now 2G, so 1536 MB heap ≈ 75%, leaving ~512 MB
+# for non-heap (buffers, sharp, the embeddings ONNX model, stack, code).
+# Raise BOTH this value and the compose memory limit together if you grow it.
+ENV NODE_OPTIONS=--max-old-space-size=1536
 
 # Expose port
 EXPOSE 3001

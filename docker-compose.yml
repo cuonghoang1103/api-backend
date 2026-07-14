@@ -151,7 +151,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1G
+          memory: 2G
     healthcheck:
       test: ["CMD-SHELL", "curl -sf http://localhost:3001/health || exit 1"]
       interval: 15s
@@ -220,7 +220,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1.5G
+          memory: 2G
     healthcheck:
       # Node-based check (no external binary) — the image ships node, so we no
       # longer install wget (its apt-get repeatedly failed with a transient

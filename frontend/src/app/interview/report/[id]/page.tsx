@@ -6,18 +6,19 @@
  * traceable — expand a question to see your answer vs the reference, the
  * rubric, and the objective coverage that produced the number.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer,
 } from 'recharts';
-import { Loader2, ChevronDown, AlertTriangle, RotateCcw, Flag } from 'lucide-react';
+import { Loader2, ChevronDown, AlertTriangle, RotateCcw, Flag, Volume2, Square } from 'lucide-react';
 import { toast } from 'sonner';
 import ParticleBackground from '@/components/repos/ParticleBackground';
 import Markdown from '@/components/markdown/Markdown';
+import { useSpeech } from '@/hooks/useSpeech';
 import { interviewApi } from '@/lib/interview-api';
-import type { ReportResponse, ReportTurn } from '@/types/interview';
+import type { InterviewReport, ReportResponse, ReportTurn } from '@/types/interview';
 
 const HIRE_LABEL: Record<string, { label: string; cls: string }> = {
   STRONG_YES: { label: 'Strong Hire', cls: 'text-emerald-400' },
@@ -31,15 +32,45 @@ const HIRE_LABEL: Record<string, { label: string; cls: string }> = {
 const gradeColor = (g?: string | null) =>
   g === 'A' ? '#10b981' : g === 'B' ? '#84cc16' : g === 'C' ? '#f59e0b' : g === 'D' ? '#f97316' : '#ef4444';
 
+// Compose the final report into a spoken script: overall verdict + strengths +
+// weaknesses + advice. markdown/list text is read as plain sentences.
+function buildReportSpeech(r: InterviewReport, lang: 'VI' | 'EN'): string {
+  const vi = lang === 'VI';
+  const hire = r.hireRecommendation ? HIRE_LABEL[r.hireRecommendation]?.label ?? '' : '';
+  const parts: string[] = [];
+  parts.push(
+    vi
+      ? `Kết quả buổi phỏng vấn: điểm tổng ${r.overallScore ?? 0} trên 100, xếp loại ${r.letterGrade ?? 'chưa có'}.${hire ? ` Đề xuất tuyển dụng: ${hire}.` : ''}`
+      : `Interview result: overall score ${r.overallScore ?? 0} out of 100, grade ${r.letterGrade ?? 'n/a'}.${hire ? ` Recommendation: ${hire}.` : ''}`,
+  );
+  if (r.strengths?.length) parts.push((vi ? 'Điểm mạnh: ' : 'Strengths: ') + r.strengths.join('; ') + '.');
+  if (r.weaknesses?.length) parts.push((vi ? 'Cần cải thiện: ' : 'Areas to improve: ') + r.weaknesses.join('; ') + '.');
+  if (r.actionableAdvice) parts.push((vi ? 'Lời khuyên: ' : 'Advice: ') + r.actionableAdvice);
+  return parts.join(' ');
+}
+
 export default function InterviewReportPage() {
   const { id } = useParams();
   const sessionId = Number(id);
   const [data, setData] = useState<ReportResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const { speak, stopSpeak, speaking, ttsSupported } = useSpeech();
 
   useEffect(() => {
     interviewApi.report(sessionId).then((res) => setData(res.data.data)).catch(() => {}).finally(() => setLoading(false));
   }, [sessionId]);
+
+  // Auto-read the final evaluation aloud once when it loads (user opted in).
+  const spokenRef = useRef(false);
+  useEffect(() => {
+    if (!data || !ttsSupported || spokenRef.current) return;
+    spokenRef.current = true;
+    const lang: 'VI' | 'EN' = data.language === 'EN' ? 'EN' : 'VI';
+    speak(buildReportSpeech(data.report, lang), lang);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, ttsSupported]);
+  // Stop reading if the user leaves the report.
+  useEffect(() => () => stopSpeak(), [stopSpeak]);
 
   if (loading) return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400"><Loader2 className="w-5 h-5 animate-spin mr-2" /> Đang dựng báo cáo…</div>;
   if (!data) return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400">Chưa có báo cáo.</div>;
@@ -67,6 +98,15 @@ export default function InterviewReportPage() {
             </div>
           </div>
           <div className="md:ml-auto flex gap-2">
+            {ttsSupported && (
+              <button
+                onClick={speaking ? stopSpeak : () => { const lang: 'VI' | 'EN' = data.language === 'EN' ? 'EN' : 'VI'; speak(buildReportSpeech(report, lang), lang); }}
+                title={speaking ? 'Dừng đọc' : 'Nghe AI đọc đánh giá'}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-300 hover:text-white hover:border-slate-500'}`}
+              >
+                {speaking ? <Square className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />} {speaking ? 'Dừng' : 'Nghe đánh giá'}
+              </button>
+            )}
             <Link href="/interview" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500 text-slate-950 text-sm font-semibold hover:opacity-90">
               <RotateCcw className="w-4 h-4" /> Luyện tiếp
             </Link>

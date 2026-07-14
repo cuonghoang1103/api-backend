@@ -208,6 +208,7 @@ export interface ReportTurn {
 export interface ReportResponse {
   report: InterviewReport;
   turns: ReportTurn[];
+  language?: InterviewLanguage;
 }
 
 export interface HistoryItem {

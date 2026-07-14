@@ -147,6 +147,18 @@ export default function InterviewRoomPage() {
     }
   };
 
+  // Auto-read the AI grade aloud once it appears (user opted into auto-read).
+  // Only AI-graded turns have spoken feedback; STATIC self-assess turns don't.
+  const spokenGradeRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!session || !revealed?.aiEvaluation || !ttsSupported) return;
+    if (spokenGradeRef.current === order) return; // already read this turn
+    spokenGradeRef.current = order;
+    const lang: 'VI' | 'EN' = session.language === 'EN' ? 'EN' : 'VI';
+    speak(buildGradeSpeech(revealed, lang), lang);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revealed, session, order, ttsSupported]);
+
   // Voice answer. Groq path records audio → server transcribes; browser path
   // uses SpeechRecognition. Either way the transcript lands in the editable box.
   const onMic = () => {
@@ -195,6 +207,7 @@ export default function InterviewRoomPage() {
   };
 
   const next = async () => {
+    stopSpeak(); // stop any in-progress grade read-out before moving on
     const isLast = order + 1 >= total;
     // AI-graded turns have no self-assessment step; only STATIC turns self-score.
     if (!isMcq && revealed && !revealed.aiEvaluation) {
@@ -348,6 +361,10 @@ export default function InterviewRoomPage() {
             onNext={next}
             advancing={advancing || finishing}
             isLast={order + 1 >= total}
+            ttsSupported={ttsSupported}
+            speaking={speaking}
+            onSpeakGrade={() => { const lang: 'VI' | 'EN' = session.language === 'EN' ? 'EN' : 'VI'; speak(buildGradeSpeech(revealed, lang), lang); }}
+            onStopSpeak={stopSpeak}
           />
         )}
       </div>
@@ -366,8 +383,32 @@ export default function InterviewRoomPage() {
   );
 }
 
+// Compose the AI grade into a spoken script: verdict + score + summary, then
+// each criterion (name + score/4 + what was missing). markdown is stripped by
+// speak()'s toPlain, so summary can contain markdown safely.
+function buildGradeSpeech(r: SubmitAnswerResponse, lang: 'VI' | 'EN'): string {
+  const ev = r.aiEvaluation;
+  if (!ev) return '';
+  const vi = lang === 'VI';
+  const parts: string[] = [];
+  parts.push(
+    vi
+      ? `${r.correct ? 'Câu trả lời đạt yêu cầu.' : 'Câu trả lời chưa đạt.'} Điểm ${ev.finalScore} trên 100, xếp loại ${ev.letterGrade}.`
+      : `${r.correct ? 'Answer accepted.' : 'Answer not passing yet.'} Score ${ev.finalScore} out of 100, grade ${ev.letterGrade}.`,
+  );
+  if (ev.summary) parts.push(ev.summary);
+  for (const c of ev.criteria) {
+    const name = r.rubric?.find((x) => x.id === c.id)?.criterion ?? c.id;
+    let line = vi ? `Tiêu chí ${name}: ${c.score} trên 4.` : `Criterion ${name}: ${c.score} out of 4.`;
+    if (c.whatWasMissing) line += vi ? ` Còn thiếu: ${c.whatWasMissing}.` : ` Missing: ${c.whatWasMissing}.`;
+    parts.push(line);
+  }
+  return parts.join(' ');
+}
+
 function Reveal({
   revealed, isMcq, ratings, setRatings, onNext, advancing, isLast,
+  ttsSupported, speaking, onSpeakGrade, onStopSpeak,
 }: {
   revealed: SubmitAnswerResponse;
   isMcq: boolean;
@@ -376,6 +417,10 @@ function Reveal({
   onNext: () => void;
   advancing: boolean;
   isLast: boolean;
+  ttsSupported: boolean;
+  speaking: boolean;
+  onSpeakGrade: () => void;
+  onStopSpeak: () => void;
 }) {
   const det = revealed.deterministic;
   return (
@@ -422,9 +467,20 @@ function Reveal({
       {/* AI grading (HYBRID/FULL_AI) — replaces self-assessment on AI turns */}
       {revealed.aiEvaluation && (
         <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.06] p-4">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between gap-2 mb-3">
             <div className="text-xs font-semibold uppercase tracking-wide text-amber-300">AI chấm (theo tiêu chí, có dẫn chứng)</div>
-            <div className="text-sm font-mono text-slate-100">{revealed.aiEvaluation.finalScore}/100 ({revealed.aiEvaluation.letterGrade})</div>
+            <div className="flex items-center gap-2 shrink-0">
+              {ttsSupported && (
+                <button
+                  onClick={speaking ? onStopSpeak : onSpeakGrade}
+                  title={speaking ? 'Dừng đọc' : 'Nghe AI đọc nhận xét'}
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-400 hover:text-white hover:border-slate-500'}`}
+                >
+                  {speaking ? <Square className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />} {speaking ? 'Dừng' : 'Nghe nhận xét'}
+                </button>
+              )}
+              <div className="text-sm font-mono text-slate-100">{revealed.aiEvaluation.finalScore}/100 ({revealed.aiEvaluation.letterGrade})</div>
+            </div>
           </div>
           {revealed.aiEvaluation.summary && <p className="text-sm text-slate-300 mb-3">{revealed.aiEvaluation.summary}</p>}
           <div className="space-y-2">

@@ -430,6 +430,7 @@ export async function getReport(userId: number, sessionId: number) {
   });
   return {
     report,
+    language: session.language, // so the report page can read it aloud in the right voice
     turns: turns.map((t) => ({
       order: t.order,
       topic: t.question?.topic?.name ?? null,

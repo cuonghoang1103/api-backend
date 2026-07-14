@@ -9,6 +9,32 @@ services:
     image: postgis/postgis:16-3.4
     container_name: cuonghoangdev_postgres
     restart: unless-stopped
+    # Performance tuning sized for the 2G container on the 8GB VPS (2026-07-14).
+    # Passed as -c flags so it's version-controlled and survives recreate (no
+    # editing files inside the data volume). shared_buffers = 25% of the
+    # container cap; work_mem is per-operation so kept modest vs max_connections.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - effective_cache_size=1536MB
+      - -c
+      - maintenance_work_mem=256MB
+      - -c
+      - work_mem=12MB
+      - -c
+      - random_page_cost=1.1
+      - -c
+      - effective_io_concurrency=200
+      - -c
+      - checkpoint_completion_target=0.9
+      - -c
+      - wal_buffers=16MB
+      - -c
+      - max_wal_size=2GB
+      - -c
+      - min_wal_size=256MB
     environment:
       POSTGRES_DB: cuonghoangdev_db
       POSTGRES_USER: postgres

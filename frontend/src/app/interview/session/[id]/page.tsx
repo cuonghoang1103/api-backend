@@ -10,7 +10,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Loader2, ArrowRight, Flag, CheckCircle2, XCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Loader2, ArrowRight, Flag, CheckCircle2, XCircle, AlertTriangle, ShieldCheck, Volume2, Square, Mic } from 'lucide-react';
+import { useSpeech } from '@/hooks/useSpeech';
 import ParticleBackground from '@/components/repos/ParticleBackground';
 import Markdown from '@/components/markdown/Markdown';
 import { interviewApi } from '@/lib/interview-api';
@@ -34,6 +35,7 @@ export default function InterviewRoomPage() {
   const [submitting, setSubmitting] = useState(false);
   const [revealed, setRevealed] = useState<SubmitAnswerResponse | null>(null);
   const [ratings, setRatings] = useState<Record<string, number>>({});
+  const { speak, stopSpeak, speaking, ttsSupported, listen, stopListen, listening, sttSupported } = useSpeech();
   const [advancing, setAdvancing] = useState(false);
   const [finishing, setFinishing] = useState(false);
   const [now, setNow] = useState(0);
@@ -197,7 +199,18 @@ export default function InterviewRoomPage() {
 
         {/* Question */}
         <div className="mb-6">
-          <div className="text-[11px] font-mono uppercase tracking-widest text-slate-400 mb-2">{turn.type}</div>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="text-[11px] font-mono uppercase tracking-widest text-slate-400">{turn.type}</div>
+            {ttsSupported && (
+              <button
+                onClick={() => (speaking ? stopSpeak() : speak(turn.questionText, session.language === 'EN' ? 'EN' : 'VI'))}
+                title={speaking ? 'Dừng đọc' : 'Nghe AI đọc câu hỏi'}
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-400 hover:text-white hover:border-slate-500'}`}
+              >
+                {speaking ? <Square className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />} {speaking ? 'Dừng' : 'Nghe câu hỏi'}
+              </button>
+            )}
+          </div>
           <div className="text-xl md:text-2xl font-semibold text-slate-100 leading-relaxed markdown-body"><Markdown mdx={turn.questionText} openLinksInNewTab /></div>
         </div>
 
@@ -224,15 +237,26 @@ export default function InterviewRoomPage() {
             })}
           </div>
         ) : (
-          <textarea
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            onPaste={onPaste}
-            disabled={!!revealed}
-            rows={8}
-            placeholder="Trả lời như đang phỏng vấn thật. Giải thích bằng ngôn ngữ của bạn — máy chấm hiểu cả từ đồng nghĩa."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] p-4 text-slate-100 font-mono text-sm leading-relaxed focus:outline-none focus:border-amber-500/60 resize-y disabled:opacity-70"
-          />
+          <div className="relative">
+            <textarea
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              onPaste={onPaste}
+              disabled={!!revealed}
+              rows={8}
+              placeholder="Trả lời như đang phỏng vấn thật. Giải thích bằng ngôn ngữ của bạn — máy chấm hiểu cả từ đồng nghĩa."
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] p-4 text-slate-100 font-mono text-sm leading-relaxed focus:outline-none focus:border-amber-500/60 resize-y disabled:opacity-70"
+            />
+            {sttSupported && !revealed && (
+              <button
+                onClick={() => (listening ? stopListen() : listen(session.language === 'EN' ? 'EN' : 'VI', (t) => setAnswer((prev) => (prev.trim() ? prev.trimEnd() + ' ' : '') + t)))}
+                title={listening ? 'Dừng ghi âm' : 'Trả lời bằng giọng nói'}
+                className={`absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs border transition-colors ${listening ? 'border-red-500/50 bg-red-500/15 text-red-300 animate-pulse' : 'border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-slate-500'}`}
+              >
+                <Mic className="w-3.5 h-3.5" /> {listening ? 'Đang nghe…' : 'Nói'}
+              </button>
+            )}
+          </div>
         )}
 
         {/* Actions / reveal */}

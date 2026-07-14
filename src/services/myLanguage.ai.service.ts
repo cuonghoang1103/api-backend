@@ -337,3 +337,159 @@ export async function scorePronunciation(
 
   return { target, heard, score, verdict, feedback, tips };
 }
+
+// ── Phase 3a: AI-generated quiz from a vocab set ──────────────────
+export interface AiQuizQuestion {
+  prompt: string;
+  options: string[];
+  correctIndex: number;
+  explanation?: string;
+}
+export interface AiQuiz {
+  questions: AiQuizQuestion[];
+}
+
+/**
+ * Generate a context-aware multiple-choice quiz from the learner's vocab set.
+ * Smarter than the static word↔meaning quiz: usage-in-context, JA readings/
+ * particles, EN CEFR usage. Pro/Max only; not cached (variety each run).
+ */
+export async function generateQuiz(
+  userId: number,
+  body: { languageCode?: string; categoryId?: number | string; count?: number | string },
+): Promise<AiQuiz> {
+  const code = (body?.languageCode || '').trim();
+  if (!code) throw new BadRequestError('Thiếu mã ngôn ngữ.');
+  const count = Math.max(3, Math.min(10, Number(body?.count) || 6));
+  const categoryId = Number(body?.categoryId);
+
+  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!(await isProEffective(userId))) throw new ForbiddenError('Quiz AI dành cho tài khoản Pro/Max.');
+  if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
+
+  const words = await prisma.langVocabWord.findMany({
+    where: {
+      category: { language: { code }, ...(Number.isInteger(categoryId) && categoryId > 0 ? { id: categoryId } : {}) },
+    },
+    include: { pronunciations: { orderBy: { order: 'asc' } } },
+    take: 24,
+    orderBy: { id: 'asc' },
+  });
+  if (words.length < 4) throw new BadRequestError('Cần ít nhất 4 từ để tạo quiz. Hãy chọn chủ đề có nhiều từ hơn.');
+
+  const cjk = isCjk(code);
+  const list = words
+    .map((w) => {
+      const reading = w.pronunciations.map((p) => `${p.type}:${p.value}`).join(' / ');
+      return `- ${w.word}${reading ? ` (${reading})` : ''} = ${w.meaningVi}${w.exampleSentence ? ` | vd: ${w.exampleSentence}` : ''}`;
+    })
+    .join('\n');
+
+  const styleNote = cjk
+    ? `Vì ${languageName(code)} dùng chữ không phải Latinh, hãy TRỘN thêm câu hỏi về CÁCH ĐỌC (đọc đúng của từ) và ${code === 'ja' ? 'trợ từ / thể lịch sự' : 'thanh điệu / cách dùng'}.`
+    : `Trộn câu hỏi dùng-từ-trong-ngữ-cảnh (điền chỗ trống, "câu nào dùng đúng"), không chỉ hỏi nghĩa.`;
+  const system =
+    `You are a language quiz generator for a Vietnamese speaker learning ${languageName(code)}. ` +
+    `Create exactly ${count} multiple-choice questions (each with EXACTLY 4 options, one correct) that test real understanding of the given words. ` +
+    `${styleNote} Question prompts and explanations MUST be in Vietnamese (tiếng Việt); the ${languageName(code)} words/sentences themselves stay in ${languageName(code)}. ` +
+    `Distractors must be plausible. Return ONLY a minified JSON object: ` +
+    `{"questions":[{"prompt":string,"options":[string,string,string,string],"correctIndex":number,"explanation":string}]}. correctIndex is 0-based.`;
+  const user = `Danh sách từ vựng:\n${list}`;
+
+  let parsed: { questions?: unknown };
+  try {
+    const res = await llmComplete({
+      step: 'interview',
+      system,
+      messages: [{ role: 'user', content: user }],
+      maxTokens: 1500,
+      maxRetries: 1,
+      timeoutMs: 40_000,
+      userId,
+    });
+    parsed = extractJson<{ questions?: unknown }>(res.text);
+  } catch {
+    throw new BadRequestError('Tạo quiz đang bận, vui lòng thử lại sau giây lát.');
+  }
+
+  const rawQs = Array.isArray(parsed.questions) ? parsed.questions : [];
+  const questions: AiQuizQuestion[] = rawQs
+    .map((q) => {
+      const qo = (q ?? {}) as Record<string, unknown>;
+      const prompt = typeof qo.prompt === 'string' ? qo.prompt.trim() : '';
+      const options = (Array.isArray(qo.options) ? qo.options : [])
+        .map((o) => (typeof o === 'string' ? o.trim() : ''))
+        .filter(Boolean)
+        .slice(0, 4);
+      let correctIndex = Number(qo.correctIndex);
+      if (!Number.isInteger(correctIndex) || correctIndex < 0 || correctIndex >= options.length) correctIndex = 0;
+      const explanation = typeof qo.explanation === 'string' ? qo.explanation.trim() : '';
+      if (!prompt || options.length < 2) return null;
+      return { prompt, options, correctIndex, ...(explanation ? { explanation } : {}) };
+    })
+    .filter((q): q is AiQuizQuestion => q != null)
+    .slice(0, count);
+
+  if (!questions.length) throw new BadRequestError('Không tạo được quiz, vui lòng thử lại.');
+  return { questions };
+}
+
+// ── Phase 3b: Grade a free-text answer ────────────────────────────
+export interface AiGradeResult {
+  score: number; // 0–100
+  verdict: PronounceVerdict; // good | ok | poor
+  feedback: string;
+  corrected: string; // improved version of the learner's answer ('' if none)
+}
+
+/** Grade a learner's free-text answer against a question (+ optional sample). */
+export async function gradeAnswer(
+  userId: number,
+  body: { languageCode?: string; prompt?: string; answer?: string; sampleAnswer?: string },
+): Promise<AiGradeResult> {
+  const code = (body?.languageCode || '').trim();
+  const prompt = (body?.prompt || '').trim();
+  const answer = (body?.answer || '').trim();
+  const sample = (body?.sampleAnswer || '').trim();
+  if (!answer) throw new BadRequestError('Bạn chưa viết câu trả lời.');
+  if (!prompt) throw new BadRequestError('Thiếu câu hỏi.');
+
+  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!(await isProEffective(userId))) throw new ForbiddenError('Chấm bài AI dành cho tài khoản Pro/Max.');
+  if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
+
+  const system =
+    `You are a supportive teacher grading a Vietnamese learner's free-text answer to a ${languageName(code)} reading-comprehension question. ` +
+    `Judge correctness AND language quality fairly. ALWAYS write feedback in Vietnamese (tiếng Việt). ` +
+    `Return ONLY a minified JSON object: {"score": number (0-100), "verdict": "good"|"ok"|"poor", "feedback": string, "corrected": string}. ` +
+    `"corrected" = an improved/corrected version of the learner's answer in ${languageName(code)} (empty string if the answer is already good). ` +
+    `score ≥85 → "good", 60–84 → "ok", <60 → "poor". Keep feedback to 1–3 sentences.`;
+  const user = `QUESTION: ${prompt}\nLEARNER ANSWER: ${answer}${sample ? `\nSAMPLE ANSWER: ${sample}` : ''}`;
+
+  let parsed: Record<string, unknown> = {};
+  try {
+    const res = await llmComplete({
+      step: 'interview',
+      system,
+      messages: [{ role: 'user', content: user }],
+      maxTokens: 700,
+      maxRetries: 1,
+      timeoutMs: 30_000,
+      userId,
+    });
+    parsed = extractJson<Record<string, unknown>>(res.text);
+  } catch {
+    throw new BadRequestError('Chấm bài đang bận, vui lòng thử lại sau giây lát.');
+  }
+
+  const rawScore = Number(parsed.score);
+  const score = Number.isFinite(rawScore) ? Math.max(0, Math.min(100, Math.round(rawScore))) : 0;
+  const verdict: PronounceVerdict =
+    parsed.verdict === 'good' || parsed.verdict === 'ok' || parsed.verdict === 'poor'
+      ? (parsed.verdict as PronounceVerdict)
+      : score >= 85 ? 'good' : score >= 60 ? 'ok' : 'poor';
+  const feedback = typeof parsed.feedback === 'string' ? parsed.feedback.trim() : '';
+  const corrected = typeof parsed.corrected === 'string' ? parsed.corrected.trim() : '';
+
+  return { score, verdict, feedback, corrected };
+}

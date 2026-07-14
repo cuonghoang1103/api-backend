@@ -8,7 +8,7 @@
  *    (tokenizes the article, underlines dictionary words, tap → sheet).
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -25,8 +25,10 @@ import {
   XCircle,
   Eye,
   HelpCircle,
+  Sparkles,
+  Loader2,
 } from 'lucide-react';
-import { fetchAllPages, languageApi } from '@/lib/language-api';
+import { fetchAllPages, languageApi, type AiGradeResult } from '@/lib/language-api';
 import { getImageUrl } from '@/lib/utils';
 import type { ReadingArticle, DictionaryEntry, ReadingQuestion } from '@/types/language';
 import {
@@ -34,8 +36,10 @@ import {
   SpeakerButton,
   EmptyState,
   CardsSkeleton,
+  ProgressRing,
   usePrefersReducedMotion,
 } from '@/components/language/primitives';
+import { usePro } from '@/hooks/usePro';
 
 // ─── HTML → plain-text paragraphs (client-only) ───────────────────
 function htmlToParagraphs(html: string): string[] {
@@ -132,6 +136,7 @@ export default function ReadingPage() {
       ) : active ? (
         <ArticleDetail
           article={active}
+          code={code}
           reduced={reduced}
           dict={dict}
           onNeedDictionary={loadDictionary}
@@ -193,12 +198,14 @@ function ArticleListCard({ article, onOpen }: { article: ReadingArticle; onOpen:
 // ─── Detail view ──────────────────────────────────────────────────
 function ArticleDetail({
   article,
+  code,
   reduced,
   dict,
   onNeedDictionary,
   onBack,
 }: {
   article: ReadingArticle;
+  code: string;
   reduced: boolean;
   dict: Map<string, DictionaryEntry> | null;
   onNeedDictionary: () => void;
@@ -222,13 +229,13 @@ function ArticleDetail({
         <TextReader article={article} reduced={reduced} dict={dict} onNeedDictionary={onNeedDictionary} />
       )}
 
-      <ReadingQuestions questions={article.questions ?? []} />
+      <ReadingQuestions questions={article.questions ?? []} code={code} />
     </div>
   );
 }
 
 // ─── Comprehension questions (learner answers; nothing persisted) ──
-function ReadingQuestions({ questions }: { questions: ReadingQuestion[] }) {
+function ReadingQuestions({ questions, code }: { questions: ReadingQuestion[]; code: string }) {
   // Per-question learner state, keyed by question id.
   const [picked, setPicked] = useState<Record<string, number>>({});
   const [checked, setChecked] = useState<Record<string, boolean>>({});
@@ -275,6 +282,7 @@ function ReadingQuestions({ questions }: { questions: ReadingQuestion[] }) {
             ) : (
               <OpenBlock
                 q={q}
+                code={code}
                 value={written[q.id] ?? ''}
                 revealed={!!revealed[q.id]}
                 onWrite={(v) => setWritten((w) => ({ ...w, [q.id]: v }))}
@@ -353,19 +361,56 @@ function McBlock({
   );
 }
 
+const GRADE_VERDICT: Record<AiGradeResult['verdict'], { label: string; cls: string }> = {
+  good: { label: 'Tốt', cls: 'text-neon-green' },
+  ok: { label: 'Khá', cls: 'text-neon-cyan' },
+  poor: { label: 'Cần cải thiện', cls: 'text-neon-orange' },
+};
+
 function OpenBlock({
   q,
+  code,
   value,
   revealed,
   onWrite,
   onReveal,
 }: {
   q: Extract<ReadingQuestion, { kind: 'open' }>;
+  code: string;
   value: string;
   revealed: boolean;
   onWrite: (v: string) => void;
   onReveal: () => void;
 }) {
+  const router = useRouter();
+  const { isPro } = usePro();
+  const [grading, setGrading] = useState(false);
+  const [gradeError, setGradeError] = useState<string | null>(null);
+  const [grade, setGrade] = useState<AiGradeResult | null>(null);
+
+  const runGrade = async () => {
+    if (!isPro) { router.push('/pro'); return; }
+    if (!value.trim()) return;
+    setGrading(true);
+    setGradeError(null);
+    try {
+      const r = await languageApi.gradeAnswer({
+        languageCode: code,
+        prompt: q.prompt,
+        answer: value,
+        sampleAnswer: q.sampleAnswer || undefined,
+      });
+      setGrade(r.data.data ?? null);
+    } catch (e: unknown) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Không chấm được, thử lại sau.';
+      setGradeError(msg);
+    } finally {
+      setGrading(false);
+    }
+  };
+
+  const gv = grade ? GRADE_VERDICT[grade.verdict] : null;
+
   return (
     <div className="space-y-2">
       <textarea
@@ -375,15 +420,52 @@ function OpenBlock({
         rows={3}
         className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm text-text-primary outline-none focus:border-neon-violet/60"
       />
-      {(q.sampleAnswer || q.explanation) && !revealed && (
+      <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
-          onClick={onReveal}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-[var(--bg-primary)] px-3 py-2 text-sm font-medium text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-text-primary"
+          onClick={runGrade}
+          disabled={grading || !value.trim()}
+          className="inline-flex items-center gap-1.5 rounded-xl bg-neon-violet/15 px-3 py-2 text-sm font-semibold text-neon-violet ring-1 ring-neon-violet/30 transition hover:bg-neon-violet/25 disabled:opacity-50"
         >
-          <Eye size={15} /> Xem đáp án mẫu
+          {grading ? <Loader2 size={15} className="animate-spin" /> : <Sparkles size={15} />}
+          {grading ? 'Đang chấm…' : 'Chấm bằng AI'}
+          {!isPro && <span className="rounded-full bg-neon-violet/25 px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none">Pro</span>}
         </button>
+        {(q.sampleAnswer || q.explanation) && !revealed && (
+          <button
+            type="button"
+            onClick={onReveal}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[var(--bg-primary)] px-3 py-2 text-sm font-medium text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-text-primary"
+          >
+            <Eye size={15} /> Xem đáp án mẫu
+          </button>
+        )}
+      </div>
+
+      {gradeError && (
+        <p className="rounded-xl bg-neon-orange/10 px-3 py-2 text-sm text-neon-orange ring-1 ring-neon-orange/30">{gradeError}</p>
       )}
+
+      {grade && gv && (
+        <div className="space-y-2 rounded-xl bg-[var(--bg-primary)] p-3 ring-1 ring-[var(--border-color)]">
+          <div className="flex items-center gap-3">
+            <div className={gv.cls}>
+              <ProgressRing value={grade.score} size={54} label={`${grade.score}`} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className={`text-sm font-semibold ${gv.cls}`}>{gv.label}</p>
+              {grade.feedback && <p className="mt-0.5 text-sm text-text-secondary">{grade.feedback}</p>}
+            </div>
+          </div>
+          {grade.corrected && (
+            <div className="rounded-lg bg-emerald-500/10 px-3 py-2 text-sm ring-1 ring-emerald-500/30">
+              <span className="mb-0.5 block text-xs font-semibold text-emerald-500">Gợi ý sửa</span>
+              <span className="whitespace-pre-wrap text-text-primary">{grade.corrected}</span>
+            </div>
+          )}
+        </div>
+      )}
+
       {revealed && (
         <div className="space-y-2">
           {q.sampleAnswer && (

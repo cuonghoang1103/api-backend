@@ -93,6 +93,10 @@ export const languageApi = {
     // Override the axios default application/json or multer sees no file.
     return api.post('/my-language/ai/pronounce', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
   },
+  generateQuiz: (body: { languageCode: string; categoryId?: number; count?: number }): Res<AiQuiz> =>
+    api.post('/my-language/ai/quiz', body),
+  gradeAnswer: (body: { languageCode: string; prompt: string; answer: string; sampleAnswer?: string }): Res<AiGradeResult> =>
+    api.post('/my-language/ai/grade', body),
 };
 
 export interface AiExplanationExample {
@@ -117,6 +121,22 @@ export interface PronunciationResult {
   verdict: PronounceVerdict;
   feedback: string;
   tips: string[];
+}
+
+export interface AiQuizQuestion {
+  prompt: string;
+  options: string[];
+  correctIndex: number;
+  explanation?: string;
+}
+export interface AiQuiz {
+  questions: AiQuizQuestion[];
+}
+export interface AiGradeResult {
+  score: number; // 0–100
+  verdict: PronounceVerdict;
+  feedback: string;
+  corrected: string;
 }
 
 /**

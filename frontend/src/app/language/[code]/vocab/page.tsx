@@ -32,6 +32,8 @@ import {
   Pencil,
   Trash2,
   Plus,
+  Sparkles,
+  Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -587,6 +589,8 @@ function VocabInner() {
           categoryId={srcKind === 'category' && !reviewMode ? activeCat : null}
           isAuthenticated={isAuthenticated}
           reduced={reduced}
+          languageCode={code}
+          isPro={isPro}
         />
       )}
 
@@ -981,10 +985,11 @@ function FlashcardsView({
 // ─── Quiz view ───────────────────────────────────────────────────
 interface QuizQuestion {
   key: string;
-  word: VocabWord;
+  word?: VocabWord; // absent for AI-generated questions
   prompt: string;
   correct: string;
   options: string[];
+  explanation?: string; // AI questions carry a short explanation
 }
 
 function buildQuiz(words: VocabWord[]): QuizQuestion[] {
@@ -1012,32 +1017,72 @@ function QuizView({
   categoryId,
   isAuthenticated,
   reduced,
+  languageCode,
+  isPro,
 }: {
   words: VocabWord[];
   languageId: number | null;
   categoryId: number | null;
   isAuthenticated: boolean;
   reduced: boolean;
+  languageCode: string;
+  isPro: boolean;
 }) {
+  const router = useRouter();
+  const [mode, setMode] = useState<'static' | 'ai'>('static');
   const [questions, setQuestions] = useState<QuizQuestion[]>(() => buildQuiz(words));
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
   const submittedRef = useRef(false);
 
-  const regenerate = useCallback(() => {
-    setQuestions(buildQuiz(words));
+  const resetProgress = useCallback(() => {
     setIndex(0);
     setSelected(null);
     setScore(0);
     setFinished(false);
     submittedRef.current = false;
-  }, [words]);
+  }, []);
 
+  const regenerate = useCallback(() => {
+    setMode('static');
+    setAiError(null);
+    setQuestions(buildQuiz(words));
+    resetProgress();
+  }, [words, resetProgress]);
+
+  // Fresh static quiz whenever the word set changes.
   useEffect(() => {
     regenerate();
   }, [regenerate]);
+
+  const loadAiQuiz = useCallback(async () => {
+    if (!isPro) { router.push('/pro'); return; }
+    setAiLoading(true);
+    setAiError(null);
+    try {
+      const r = await languageApi.generateQuiz({ languageCode, categoryId: categoryId ?? undefined, count: 6 });
+      const qs: QuizQuestion[] = (r.data.data?.questions ?? []).map((q, i) => ({
+        key: `ai-${i}`,
+        prompt: q.prompt,
+        options: q.options,
+        correct: q.options[q.correctIndex] ?? q.options[0],
+        explanation: q.explanation,
+      }));
+      if (!qs.length) throw new Error('empty');
+      setMode('ai');
+      setQuestions(qs);
+      resetProgress();
+    } catch (e: unknown) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Không tạo được quiz AI, thử lại sau.';
+      setAiError(msg);
+    } finally {
+      setAiLoading(false);
+    }
+  }, [isPro, router, languageCode, categoryId, resetProgress]);
 
   // Persist quiz result once at the end.
   useEffect(() => {
@@ -1072,13 +1117,14 @@ function QuizView({
         <p className="text-lg font-semibold text-text-primary">
           {score} / {questions.length} đúng
         </p>
-        <p className="text-sm text-text-muted">{pct}%</p>
+        <p className="text-sm text-text-muted">{pct}%{mode === 'ai' ? ' · Quiz AI' : ''}</p>
         <button
           type="button"
-          onClick={regenerate}
-          className="inline-flex items-center gap-2 rounded-full bg-neon-violet/20 px-5 py-2 text-sm font-medium text-neon-violet ring-1 ring-neon-violet/40 hover:bg-neon-violet/30"
+          onClick={mode === 'ai' ? loadAiQuiz : regenerate}
+          disabled={aiLoading}
+          className="inline-flex items-center gap-2 rounded-full bg-neon-violet/20 px-5 py-2 text-sm font-medium text-neon-violet ring-1 ring-neon-violet/40 hover:bg-neon-violet/30 disabled:opacity-60"
         >
-          <RotateCcw size={15} /> Làm lại
+          <RotateCcw size={15} /> {aiLoading ? 'Đang tạo…' : 'Làm lại'}
         </button>
       </div>
     );
@@ -1105,6 +1151,35 @@ function QuizView({
 
   return (
     <div className="mx-auto max-w-xl">
+      {/* Mode toggle: static vs AI-generated quiz */}
+      <div className="mb-3 flex flex-wrap items-center justify-center gap-2">
+        <button
+          type="button"
+          onClick={() => { if (mode !== 'static') regenerate(); }}
+          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ring-1 transition ${
+            mode === 'static' ? 'bg-neon-violet/20 text-neon-violet ring-neon-violet/40' : 'bg-[var(--bg-surface)] text-text-muted ring-[var(--border-color)] hover:text-text-primary'
+          }`}
+        >
+          Quiz thường
+        </button>
+        <button
+          type="button"
+          onClick={loadAiQuiz}
+          disabled={aiLoading}
+          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ring-1 transition disabled:opacity-60 ${
+            mode === 'ai' ? 'bg-neon-violet/20 text-neon-violet ring-neon-violet/40' : 'bg-neon-violet/10 text-neon-violet ring-neon-violet/30 hover:bg-neon-violet/20'
+          }`}
+        >
+          {aiLoading ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
+          {aiLoading ? 'Đang tạo…' : 'Quiz AI'}
+          {!isPro && <span className="rounded-full bg-neon-violet/25 px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none">Pro</span>}
+        </button>
+      </div>
+
+      {aiError && (
+        <p className="mb-3 rounded-xl bg-neon-orange/10 p-2.5 text-center text-xs text-neon-orange ring-1 ring-neon-orange/30">{aiError}</p>
+      )}
+
       <div className="mb-3 flex items-center justify-between text-sm font-medium text-text-muted">
         <span>
           Câu {index + 1} / {questions.length}
@@ -1121,8 +1196,10 @@ function QuizView({
           transition={{ duration: reduced ? 0 : 0.2, ease: 'easeOut' }}
         >
           <div className="card mb-4 flex min-h-24 items-center justify-center gap-3 p-6 text-center">
-            <span className="min-w-0 break-words text-2xl font-bold text-text-primary">{q.prompt}</span>
-            <SpeakerButton text={q.word.word} reading={q.word.pronunciations?.[0]?.value} audioUrl={q.word.audioUrl} />
+            <span className={`min-w-0 break-words font-bold text-text-primary ${mode === 'ai' ? 'text-lg' : 'text-2xl'}`}>{q.prompt}</span>
+            {q.word && (
+              <SpeakerButton text={q.word.word} reading={q.word.pronunciations?.[0]?.value} audioUrl={q.word.audioUrl} />
+            )}
           </div>
 
           <div className="grid grid-cols-1 gap-2.5">
@@ -1153,6 +1230,12 @@ function QuizView({
           </div>
         </motion.div>
       </AnimatePresence>
+
+      {answered && q.explanation && (
+        <p className="mt-4 rounded-xl bg-neon-violet/10 p-3 text-sm text-text-secondary ring-1 ring-neon-violet/25">
+          <span className="font-semibold text-neon-violet">Giải thích: </span>{q.explanation}
+        </p>
+      )}
 
       {answered && (
         <div className="mt-4 flex justify-end">

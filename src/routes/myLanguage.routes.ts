@@ -151,6 +151,18 @@ publicRouter.get('/ai/status', authenticate, async (req: Request, res: Response<
   } catch (err) { next(err); }
 });
 
+publicRouter.post('/ai/quiz', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await aiSvc.generateQuiz(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.post('/ai/grade', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await aiSvc.gradeAnswer(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
 // Per-language public content
 publicRouter.get('/:code', async (req, res: Response<ApiResponse>, next) => {
   try {

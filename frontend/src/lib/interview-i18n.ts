@@ -82,6 +82,10 @@ const STR = {
   followupError: { vi: 'Không tạo được câu hỏi vặn — thử lại.', en: "Couldn't generate a follow-up — try again." },
   youLabel: { vi: 'Bạn', en: 'You' },
 
+  // ── Code editor (CODING questions) ──
+  codeEditor: { vi: 'Trình soạn code', en: 'Code editor' },
+  codePlaceholder: { vi: '// Viết code của bạn ở đây…', en: '// Write your code here…' },
+
   // ── Session toasts ──
   tSessionLoadFail: { vi: 'Không tải được phiên phỏng vấn', en: 'Failed to load the interview session' },
   tFocusedPaste: { vi: 'Focused Mode: đã tắt dán để buổi luyện có giá trị thật.', en: 'Focused Mode: paste disabled to keep the practice honest.' },

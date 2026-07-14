@@ -99,6 +99,8 @@ export interface SessionState {
   total: number;
   hasReport: boolean;
   sttProvider?: 'browser' | 'groq';
+  /** Whether AI is usable right now (key + kill-switch + circuit breaker). */
+  aiAvailable?: boolean;
   turns: PublicTurn[];
 }
 

@@ -179,7 +179,14 @@ export async function createSession(
     language: session.language,
     engineMode: session.engineMode,
     total: session.turns.length,
-    turns: session.turns.map(publicTurn),
+    turns: session.turns.map((tn) => {
+      const pt = publicTurn(tn);
+      if (!tn.question) {
+        const spec = personalizedSpecs(session.config)[tn.order];
+        if (spec?.type) pt.type = spec.type;
+      }
+      return pt;
+    }),
   };
 }
 
@@ -209,8 +216,24 @@ export async function getSessionState(userId: number, sessionId: number) {
     hasReport: !!session.report,
     // Voice: which STT the client should use for spoken answers (browser|groq).
     sttProvider: sttProvider(),
-    turns: session.turns.map(publicTurn),
+    // So the room can hide AI-only features (follow-up) when AI is down/maintenance.
+    aiAvailable: isAiAvailable(),
+    turns: session.turns.map((tn) => {
+      const pt = publicTurn(tn);
+      // Ad-hoc personalized turns carry their type in config (no bank question).
+      if (!tn.question) {
+        const spec = personalizedSpecs(session.config)[tn.order];
+        if (spec?.type) pt.type = spec.type;
+      }
+      return pt;
+    }),
   };
+}
+
+/** Read the personalized question specs stored on a session's config JSON. */
+function personalizedSpecs(config: unknown): Array<PersonalizedQuestion> {
+  const list = (config as { personalized?: unknown })?.personalized;
+  return Array.isArray(list) ? (list as PersonalizedQuestion[]) : [];
 }
 
 // ─── Answer (Pass A + reveal) ────────────────────────────────────

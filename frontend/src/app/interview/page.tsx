@@ -206,6 +206,14 @@ export default function InterviewSetupPage() {
               </Section>
             )}
 
+            {/* AI unavailable (kill-switch / maintenance / breaker open) → make it
+                clear the interview still works fully in self-assessment mode. */}
+            {!tax.aiAvailable && (
+              <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-sm text-amber-200/90">
+                Chấm điểm AI đang tạm nghỉ (bảo trì / không khả dụng). Buổi phỏng vấn vẫn chạy đầy đủ ở chế độ <b>Tự chấm</b> — câu hỏi, đáp án mẫu, máy chấm khách quan và báo cáo đều hoạt động bình thường, thuần ngôn ngữ bạn chọn.
+              </div>
+            )}
+
             {/* Personalize from CV/JD — Pro only */}
             {tax.aiAvailable && tax.aiAllowed && (
               <Section step={7} title="Cá nhân hoá theo CV/JD (tuỳ chọn)">

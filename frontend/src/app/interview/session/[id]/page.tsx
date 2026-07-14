@@ -332,6 +332,10 @@ export default function InterviewRoomPage() {
               );
             })}
           </div>
+        ) : turn.type === 'CODING' ? (
+          <div className="mb-4">
+            <CodeAnswer value={answer} onChange={setAnswer} disabled={!!revealed} lang={displayLang} />
+          </div>
         ) : (
           <div className="relative">
             <textarea
@@ -385,6 +389,7 @@ export default function InterviewRoomPage() {
             lang={displayLang}
             sessionId={sessionId}
             order={order}
+            aiAvailable={session.aiAvailable !== false}
             ttsSupported={ttsSupported}
             speaking={speaking}
             onSpeakGrade={() => { const lang: 'VI' | 'EN' = session.language === 'EN' ? 'EN' : 'VI'; speak(buildGradeSpeech(revealed, lang), lang); }}
@@ -431,7 +436,7 @@ function buildGradeSpeech(r: SubmitAnswerResponse, lang: 'VI' | 'EN'): string {
 }
 
 function Reveal({
-  revealed, isMcq, ratings, setRatings, onNext, advancing, isLast, lang, sessionId, order,
+  revealed, isMcq, ratings, setRatings, onNext, advancing, isLast, lang, sessionId, order, aiAvailable,
   ttsSupported, speaking, onSpeakGrade, onStopSpeak,
 }: {
   revealed: SubmitAnswerResponse;
@@ -444,6 +449,7 @@ function Reveal({
   lang: ILang;
   sessionId: number;
   order: number;
+  aiAvailable: boolean;
   ttsSupported: boolean;
   speaking: boolean;
   onSpeakGrade: () => void;
@@ -556,8 +562,8 @@ function Reveal({
         </div>
       )}
 
-      {/* Follow-up (probing) — open questions only; stateless AI coaching */}
-      {!isMcq && <FollowUp sessionId={sessionId} order={order} lang={lang} />}
+      {/* Follow-up (probing) — open questions only, and only when AI is up */}
+      {!isMcq && aiAvailable && <FollowUp sessionId={sessionId} order={order} lang={lang} />}
 
       <div className="flex justify-end">
         <button onClick={onNext} disabled={advancing} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 disabled:opacity-40">
@@ -565,6 +571,46 @@ function Reveal({
           {isLast ? t('finishReport') : t('nextQuestion')}
         </button>
       </div>
+    </div>
+  );
+}
+
+const CODE_LANGS = ['javascript', 'typescript', 'python', 'java', 'csharp', 'cpp', 'go', 'rust', 'sql', 'php', 'other'];
+
+// Lightweight code editor for CODING questions: dark, monospace, Tab inserts two
+// spaces. (Full Monaco needs a CDN the CSP blocks, so we keep it dependency-free.)
+function CodeAnswer({ value, onChange, disabled, lang }: { value: string; onChange: (v: string) => void; disabled: boolean; lang: ILang }) {
+  const t = makeT(lang);
+  const [codeLang, setCodeLang] = useState('javascript');
+  const onKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const ta = e.currentTarget;
+      const s = ta.selectionStart;
+      const en = ta.selectionEnd;
+      onChange(value.slice(0, s) + '  ' + value.slice(en));
+      requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = s + 2; });
+    }
+  };
+  return (
+    <div className="rounded-xl border border-white/10 overflow-hidden bg-[#0d1117]">
+      <div className="flex items-center justify-between px-3 py-1.5 border-b border-white/10 bg-white/[0.03]">
+        <span className="text-xs font-mono text-slate-500">&lt;/&gt; {t('codeEditor')}</span>
+        <select value={codeLang} onChange={(e) => setCodeLang(e.target.value)} disabled={disabled} className="bg-[#0d1117] text-xs text-slate-300 focus:outline-none border border-white/10 rounded px-1.5 py-0.5">
+          {CODE_LANGS.map((l) => <option key={l} value={l}>{l}</option>)}
+        </select>
+      </div>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={onKey}
+        disabled={disabled}
+        spellCheck={false}
+        rows={14}
+        placeholder={t('codePlaceholder')}
+        className="w-full bg-[#0d1117] text-[#e2e8f0] font-mono text-[13px] leading-relaxed p-4 focus:outline-none resize-y disabled:opacity-70"
+        style={{ tabSize: 2 }}
+      />
     </div>
   );
 }

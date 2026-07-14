@@ -64,6 +64,8 @@ export interface ChatMessageDto {
   model?: string;
   /** Prior conversation turns for multi-turn memory (most recent last). */
   history?: Array<{ role: 'user' | 'assistant'; content: string }>;
+  /** Attached images as data URLs (data:image/...;base64,...) — Pro/Max only. */
+  images?: string[];
 }
 
 export interface UploadResult {

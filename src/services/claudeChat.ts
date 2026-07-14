@@ -19,9 +19,22 @@
  * default model — this is the whole point of the Pro/Max tiers.
  */
 
+/** A text block inside a multi-part message. */
+export interface ClaudeTextBlock {
+  type: 'text';
+  text: string;
+}
+/** An image block (base64) — vision input for the Sonnet/Opus tiers. */
+export interface ClaudeImageBlock {
+  type: 'image';
+  source: { type: 'base64'; media_type: string; data: string };
+}
+export type ClaudeContentBlock = ClaudeTextBlock | ClaudeImageBlock;
+
 export interface ClaudeMessage {
   role: 'user' | 'assistant';
-  content: string;
+  /** Plain text, OR a content-block array (text + images) for vision turns. */
+  content: string | ClaudeContentBlock[];
 }
 
 /** Whether the Claude gateway is configured (key present). */
@@ -73,8 +86,13 @@ interface ClaudeCallParams {
 }
 
 function buildBody(p: ClaudeCallParams, stream: boolean): string {
-  // Drop empty messages and ensure the turn order the API expects.
-  const messages = p.messages.filter((m) => m.content && m.content.trim());
+  // Drop empty messages and ensure the turn order the API expects. A message is
+  // non-empty if it's a non-blank string OR a content-block array with items.
+  const messages = p.messages.filter((m) =>
+    typeof m.content === 'string'
+      ? m.content.trim().length > 0
+      : Array.isArray(m.content) && m.content.length > 0,
+  );
   return JSON.stringify({
     model: p.model,
     max_tokens: p.maxTokens ?? claudeMaxTokens(),

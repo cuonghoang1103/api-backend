@@ -46,6 +46,52 @@ const textUpload = multer({
   },
 });
 
+// ─── Vision image limits (Pro/Max chat) ──────────────────
+// Kept conservative so a request stays well under the 10mb express.json cap even
+// with several images + history. Frontend compresses before upload; these are
+// the server-side defense.
+const MAX_CHAT_IMAGES = 4;
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // 4MB decoded per image
+const ALLOWED_IMAGE_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp', 'image/gif']);
+
+interface ParsedImage { media_type: string; data: string }
+
+/**
+ * Validate + normalize the `images` field (array of data URLs) from the chat
+ * body into `{ media_type, data }` blocks. Throws AppError on any malformed or
+ * oversized input. Returns [] when there are no images.
+ */
+function parseChatImages(raw: unknown): ParsedImage[] {
+  if (raw == null) return [];
+  if (!Array.isArray(raw)) {
+    throw new AppError('images must be an array of data URLs', 400, 'INVALID_IMAGES');
+  }
+  if (raw.length > MAX_CHAT_IMAGES) {
+    throw new AppError(`Too many images (max ${MAX_CHAT_IMAGES})`, 400, 'TOO_MANY_IMAGES');
+  }
+  const out: ParsedImage[] = [];
+  for (const item of raw) {
+    if (typeof item !== 'string') {
+      throw new AppError('Each image must be a data URL string', 400, 'INVALID_IMAGE');
+    }
+    const match = /^data:([^;,]+);base64,(.+)$/s.exec(item.trim());
+    if (!match) {
+      throw new AppError('Image must be a base64 data URL', 400, 'INVALID_IMAGE_FORMAT');
+    }
+    const mediaType = match[1].toLowerCase();
+    const data = match[2];
+    if (!ALLOWED_IMAGE_TYPES.has(mediaType)) {
+      throw new AppError(`Unsupported image type ${mediaType} (png/jpeg/webp/gif only)`, 400, 'UNSUPPORTED_IMAGE_TYPE');
+    }
+    // base64 decodes to ~3/4 of its length; guard against oversized payloads.
+    if (Math.floor((data.length * 3) / 4) > MAX_IMAGE_BYTES) {
+      throw new AppError('Image too large (max 4MB each)', 400, 'IMAGE_TOO_LARGE');
+    }
+    out.push({ media_type: mediaType, data });
+  }
+  return out;
+}
+
 // ─── SSE Constants ────────────────────────────────────────
 const SSE_KEEPALIVE_INTERVAL_MS = 15_000; // 15s — keep connection alive through Nginx AND reset client idle timers before slow (Opus) first-token
 const SSE_TIMEOUT_MS = 240_000;           // 4 phút — room for long (10k–15k token) Pro/Max answers
@@ -62,7 +108,23 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     ? (req.body as { model: string }).model
     : DEFAULT_CHAT_MODEL_ID;
 
-  if (!message?.trim()) {
+  // Parse/validate attached images FIRST (before SSE headers) so a bad payload
+  // returns a plain 400 rather than an SSE error frame. Images are honored only
+  // on the Pro/Max (Claude) path inside the service; other models ignore them.
+  let images: Array<{ media_type: string; data: string }> = [];
+  try {
+    images = parseChatImages((req.body as { images?: unknown }).images);
+  } catch (err) {
+    if (err instanceof AppError) {
+      res.status(err.statusCode).json({ success: false, message: err.message, code: err.code });
+      return;
+    }
+    res.status(400).json({ success: false, message: 'Invalid images', code: 'INVALID_IMAGES' });
+    return;
+  }
+
+  // A message is required unless the user sent at least one image (image-only ask).
+  if (!message?.trim() && images.length === 0) {
     // Cannot throw to next() here — headers not set yet
     res.status(400).json({
       success: false,
@@ -72,7 +134,7 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     return;
   }
 
-  if (message.length > 10000) {
+  if (message && message.length > 10000) {
     res.status(400).json({
       success: false,
       message: 'Message too long (max 10000 characters)',
@@ -147,13 +209,14 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
   const chatContext = {
     userId: req.userId,
     sessionId,
-    message: message.trim(),
+    message: (message ?? '').trim(),
     documentType,
     topK: topK ?? 5,
     model: requestedModel,
     history: Array.isArray((req.body as { history?: unknown }).history)
       ? (req.body as { history: Array<{ role: 'user' | 'assistant'; content: string }> }).history
       : undefined,
+    images: images.length > 0 ? images : undefined,
   };
 
   // Mutable model metadata — streamChat fills this in; we forward it to the

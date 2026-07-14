@@ -42,7 +42,7 @@ import {
   computeEmbeddings,
   cosineSimilarity,
 } from './aiProviders.js';
-import { claudeChatAvailable, completeClaudeChat, streamClaudeChat, proModel, maxModel, proMaxTokens, maxMaxTokens, type ClaudeMessage } from './claudeChat.js';
+import { claudeChatAvailable, completeClaudeChat, streamClaudeChat, proModel, maxModel, proMaxTokens, maxMaxTokens, type ClaudeMessage, type ClaudeContentBlock } from './claudeChat.js';
 import { isProEffective } from './pro.service.js';
 import { logger } from '../utils/logger.js';
 
@@ -52,7 +52,7 @@ import { logger } from '../utils/logger.js';
 const MAX_HISTORY_TURNS = 10;
 const MAX_HISTORY_CHARS = 6000;
 export interface ChatTurn { role: 'user' | 'assistant'; content: string }
-function sanitizeHistory(history?: ChatTurn[]): ClaudeMessage[] {
+function sanitizeHistory(history?: ChatTurn[]): ChatTurn[] {
   if (!Array.isArray(history)) return [];
   return history
     .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim())
@@ -150,6 +150,29 @@ interface ChatContext {
   model?: string;
   /** Prior conversation turns for multi-turn memory (most recent last). */
   history?: ChatTurn[];
+  /** Attached images (base64) for the vision-capable Pro/Max tiers only. */
+  images?: ChatImageInput[];
+}
+
+/** A validated, base64-encoded image ready for a Claude image block. */
+export interface ChatImageInput {
+  media_type: string;
+  data: string;
+}
+
+/**
+ * Build the user-turn content for the Claude API. With no images it's a plain
+ * string (unchanged behaviour); with images it's a content-block array where the
+ * images come FIRST (Anthropic's recommended order) followed by the text.
+ */
+function buildUserContent(message: string, images?: ChatImageInput[]): string | ClaudeContentBlock[] {
+  if (!images || images.length === 0) return message;
+  const blocks: ClaudeContentBlock[] = images.map((img) => ({
+    type: 'image',
+    source: { type: 'base64', media_type: img.media_type, data: img.data },
+  }));
+  if (message.trim()) blocks.push({ type: 'text', text: message });
+  return blocks;
 }
 
 // ─── AI Service ──────────────────────────────────────────────
@@ -472,7 +495,10 @@ export class AIService {
       } else if (!claudeChatAvailable()) {
         if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'claude_not_configured'; }
       } else {
-        const claudeMessages: ClaudeMessage[] = [...history, { role: 'user', content: message }];
+        // Images are a vision perk of the Pro/Max (Claude) tiers only — attach
+        // them to the current user turn. History stays text-only.
+        const userContent = buildUserContent(message, context.images);
+        const claudeMessages: ClaudeMessage[] = [...history, { role: 'user', content: userContent }];
         const gwModel = selected.gatewayModel!();
         const outTokens = selected.maxTokens ? selected.maxTokens() : 8192;
         // 1) Try REAL streaming — tokens flow immediately (no idle-out, no long

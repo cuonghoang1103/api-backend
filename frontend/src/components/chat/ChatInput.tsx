@@ -1,21 +1,88 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { Send, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Send, Loader2, ImagePlus, X } from 'lucide-react';
 import ModelPicker from './ModelPicker';
+import { useChatModelStore, getChatModel } from '@/lib/aiChatModels';
 
 interface ChatInputProps {
-  onSend: (message: string) => void;
+  onSend: (message: string, images?: string[]) => void;
   isStreaming: boolean;
   disabled?: boolean;
+}
+
+interface Attached {
+  id: string;
+  dataUrl: string;
+}
+
+// ── Client-side image limits (mirror of the backend guard) ──
+const MAX_IMAGES = 4;
+const MAX_DIM = 1568; // Anthropic's recommended long-edge cap for vision
+
+/** Read a File as a data URL. */
+function readAsDataURL(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error('read failed'));
+    reader.readAsDataURL(file);
+  });
+}
+
+/** Load an <img> from a data URL. */
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('decode failed'));
+    img.src = src;
+  });
+}
+
+/**
+ * Downscale (long edge ≤ MAX_DIM) and re-encode to JPEG so the payload stays
+ * small — vision quality is unaffected at this size and it keeps us well under
+ * the request-size cap. Falls back to the original data URL if anything fails.
+ */
+async function compressImage(file: File): Promise<string> {
+  const original = await readAsDataURL(file);
+  try {
+    const img = await loadImage(original);
+    let { width, height } = img;
+    if (Math.max(width, height) > MAX_DIM) {
+      const scale = MAX_DIM / Math.max(width, height);
+      width = Math.round(width * scale);
+      height = Math.round(height * scale);
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return original;
+    // White backdrop so transparent PNGs don't turn black when flattened to JPEG.
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+    ctx.drawImage(img, 0, 0, width, height);
+    return canvas.toDataURL('image/jpeg', 0.85);
+  } catch {
+    return original;
+  }
 }
 
 export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputProps) {
   const [value, setValue] = useState('');
   const [focused, setFocused] = useState(false);
+  const [images, setImages] = useState<Attached[]>([]);
+  const [processing, setProcessing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const isDisabled = disabled || isStreaming;
+
+  // Vision (image input) is a perk of the Pro/Max tiers only.
+  const modelId = useChatModelStore((s) => s.modelId);
+  const isVision = getChatModel(modelId).tier !== 'default';
 
   useEffect(() => {
     const ta = textareaRef.current;
@@ -28,15 +95,59 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
     textareaRef.current?.focus();
   }, []);
 
+  // If the user switches back to a non-vision model, drop any staged images
+  // (the default model can't see them).
+  useEffect(() => {
+    if (!isVision && images.length > 0) setImages([]);
+  }, [isVision, images.length]);
+
+  const addFiles = useCallback(async (files: File[]) => {
+    if (!isVision) return;
+    const imageFiles = files.filter((f) => f.type.startsWith('image/'));
+    if (imageFiles.length === 0) return;
+    setProcessing(true);
+    try {
+      const room = MAX_IMAGES - images.length;
+      const toAdd = imageFiles.slice(0, Math.max(0, room));
+      const compressed = await Promise.all(toAdd.map((f) => compressImage(f)));
+      setImages((prev) => [
+        ...prev,
+        ...compressed.map((dataUrl, i) => ({ id: `${Date.now()}_${i}_${Math.round(prev.length)}`, dataUrl })),
+      ].slice(0, MAX_IMAGES));
+    } finally {
+      setProcessing(false);
+    }
+  }, [isVision, images.length]);
+
+  const handlePaste = useCallback((e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    if (!isVision) return;
+    const files = Array.from(e.clipboardData?.files || []).filter((f) => f.type.startsWith('image/'));
+    if (files.length > 0) {
+      e.preventDefault();
+      void addFiles(files);
+    }
+  }, [isVision, addFiles]);
+
+  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    void addFiles(files);
+    e.target.value = ''; // allow re-selecting the same file
+  }, [addFiles]);
+
+  const removeImage = useCallback((id: string) => {
+    setImages((prev) => prev.filter((img) => img.id !== id));
+  }, []);
+
   const handleSubmit = useCallback(() => {
     const text = value.trim();
-    if (!text || isDisabled) return;
-    onSend(text);
+    if ((!text && images.length === 0) || isDisabled || processing) return;
+    onSend(text, images.length > 0 ? images.map((i) => i.dataUrl) : undefined);
     setValue('');
+    setImages([]);
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
     }
-  }, [value, isDisabled, onSend]);
+  }, [value, images, isDisabled, processing, onSend]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -44,6 +155,8 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
       handleSubmit();
     }
   };
+
+  const canSend = (!!value.trim() || images.length > 0) && !isDisabled && !processing;
 
   return (
     <motion.div
@@ -56,6 +169,43 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
         <div className="mb-2 flex items-center">
           <ModelPicker disabled={isStreaming} />
         </div>
+
+        {/* Image previews (Pro/Max only) */}
+        <AnimatePresence>
+          {isVision && images.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-2 flex flex-wrap gap-2"
+            >
+              {images.map((img) => (
+                <div key={img.id} className="relative group">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={img.dataUrl}
+                    alt="attachment"
+                    className="w-16 h-16 object-cover rounded-lg border border-[#22d3ee]/30"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(img.id)}
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[#0d1117] border border-[#ef4444]/50 text-[#fca5a5] flex items-center justify-center hover:bg-[#ef4444]/20 transition-colors"
+                    aria-label="Remove image"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+              {processing && (
+                <div className="w-16 h-16 rounded-lg border border-[#22d3ee]/20 flex items-center justify-center">
+                  <Loader2 className="w-4 h-4 text-[#22d3ee] animate-spin" />
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Terminal input box */}
         <div
           className={`
@@ -83,26 +233,50 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
+            onPaste={handlePaste}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            placeholder="enter command..."
+            placeholder={isVision ? 'enter command... (dán hoặc đính kèm ảnh)' : 'enter command...'}
             disabled={isDisabled}
             rows={1}
-            className="w-full pl-9 sm:pl-[170px] pr-14 py-3 bg-transparent text-[#f8fafc] placeholder:text-[#64748b]/40 font-mono text-base sm:text-sm focus:outline-none resize-none transition-all disabled:opacity-50"
+            className={`w-full pl-9 sm:pl-[170px] ${isVision ? 'pr-24' : 'pr-14'} py-3 bg-transparent text-[#f8fafc] placeholder:text-[#64748b]/40 font-mono text-base sm:text-sm focus:outline-none resize-none transition-all disabled:opacity-50`}
             style={{ minHeight: '48px', maxHeight: '160px' }}
           />
 
-          {/* Execute button */}
-          <div className="absolute right-2 bottom-2">
+          {/* Hidden file input for the attach button */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/gif"
+            multiple
+            className="hidden"
+            onChange={handleFileChange}
+          />
+
+          <div className="absolute right-2 bottom-2 flex items-center gap-1.5">
+            {/* Attach image (Pro/Max only) */}
+            {isVision && (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isDisabled || images.length >= MAX_IMAGES}
+                title={images.length >= MAX_IMAGES ? `Tối đa ${MAX_IMAGES} ảnh` : 'Đính kèm ảnh'}
+                className="w-10 h-10 rounded-xl flex items-center justify-center text-[#22d3ee] hover:bg-[#22d3ee]/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <ImagePlus className="w-4 h-4" />
+              </button>
+            )}
+
+            {/* Execute button */}
             <motion.button
               whileHover={{ scale: 1.08, y: -2 }}
               whileTap={{ scale: 0.92 }}
               onClick={handleSubmit}
-              disabled={!value.trim() || isDisabled}
+              disabled={!canSend}
               className={`
                 relative w-10 h-10 rounded-xl flex items-center justify-center
                 transition-all shadow-lg overflow-hidden exec-btn-glitch
-                ${value.trim() && !isDisabled
+                ${canSend
                   ? 'bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6] text-white shadow-[0_0_16px_rgba(34,211,238,0.3)]'
                   : 'bg-[#1a1a24] text-[#64748b] cursor-not-allowed'
                 }

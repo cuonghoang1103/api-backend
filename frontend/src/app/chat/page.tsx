@@ -291,8 +291,8 @@ export default function ChatPage() {
     }
   }, [removeSession]);
 
-  const sendMessage = useCallback(async (text: string, forceStatic: boolean = false) => {
-    if (!text.trim() || isStreaming) return;
+  const sendMessage = useCallback(async (text: string, forceStatic: boolean = false, images?: string[]) => {
+    if ((!text.trim() && (!images || images.length === 0)) || isStreaming) return;
 
     // Determine sessionId: use current, or create a new local one
     let sessionId = currentSessionId;
@@ -319,6 +319,7 @@ export default function ChatPage() {
       sessionId,
       role: 'user',
       content: text.trim(),
+      images: images && images.length > 0 ? images : undefined,
       createdAt: new Date().toISOString(),
     };
 
@@ -382,7 +383,7 @@ export default function ChatPage() {
           'Content-Type': 'application/json',
           ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
         },
-        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5, model: useChatModelStore.getState().modelId, history: historyPayload }),
+        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5, model: useChatModelStore.getState().modelId, history: historyPayload, images: images && images.length > 0 ? images : undefined }),
       });
 
       if (!res.ok) throw new Error('Stream failed');
@@ -907,7 +908,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input — always at bottom */}
-        <ChatInput onSend={sendMessage} isStreaming={isStreaming} />
+        <ChatInput onSend={(msg, imgs) => sendMessage(msg, false, imgs)} isStreaming={isStreaming} />
       </main>
 
       {/* Build tag ribbon. Hidden by default, visible when

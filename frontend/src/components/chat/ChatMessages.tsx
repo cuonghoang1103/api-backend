@@ -239,7 +239,22 @@ function MessageBubble({ msg, isStreaming, isLastAssistant }: {
               })()}
             </div>
           ) : (
-            <span className="whitespace-pre-wrap">{msg.content}</span>
+            <div>
+              {msg.images && msg.images.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-2 justify-end">
+                  {msg.images.map((src, i) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={i}
+                      src={src}
+                      alt="attachment"
+                      className="max-w-[160px] max-h-[160px] object-cover rounded-lg border border-[#ef4444]/25"
+                    />
+                  ))}
+                </div>
+              )}
+              {msg.content && <span className="whitespace-pre-wrap">{msg.content}</span>}
+            </div>
           )}
 
           {/* Blinking cursor */}

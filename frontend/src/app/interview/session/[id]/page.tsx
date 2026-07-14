@@ -59,20 +59,34 @@ export default function InterviewRoomPage() {
   const isMcq = turn?.type === 'MCQ';
   const total = session?.total ?? 0;
 
-  // Load session + resume at first unanswered turn.
+  // Load session + resume at first unanswered turn. For async project/CV modes
+  // the session starts empty with generating=true — poll until the turns arrive.
   useEffect(() => {
-    interviewApi
-      .getSession(sessionId)
-      .then((res) => {
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const load = async (initial: boolean) => {
+      try {
+        const res = await interviewApi.getSession(sessionId);
+        if (cancelled) return;
         const s = res.data.data;
         setSession(s);
-        setDisplayLang(s.language === 'EN' ? 'EN' : 'VI');
-        const firstUnanswered = s.turns.findIndex((t) => !t.answered);
+        if (initial) setDisplayLang(s.language === 'EN' ? 'EN' : 'VI');
+        if (s.generating && !s.genError) {
+          timer = setTimeout(() => load(false), 4000); // keep polling while generating
+          return;
+        }
+        const firstUnanswered = s.turns.findIndex((tn) => !tn.answered);
         setOrder(firstUnanswered < 0 ? Math.max(0, s.turns.length - 1) : firstUnanswered);
         if (firstUnanswered < 0 && s.hasReport) router.replace(`/interview/report/${sessionId}`);
-      })
-      .catch(() => toast.error(t('tSessionLoadFail')))
-      .finally(() => setLoading(false));
+      } catch {
+        if (!cancelled) toast.error(t('tSessionLoadFail'));
+      } finally {
+        if (initial && !cancelled) setLoading(false);
+      }
+    };
+    void load(true);
+    return () => { cancelled = true; if (timer) clearTimeout(timer); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId, router]);
 
   // Per-question timer + reset integrity accumulators when the turn changes.
@@ -244,6 +258,31 @@ export default function InterviewRoomPage() {
 
   if (loading) {
     return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400"><Loader2 className="w-5 h-5 animate-spin mr-2" /> {t('entering')}</div>;
+  }
+  // Async generation failed.
+  if (session?.genError) {
+    return (
+      <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center px-4">
+        <div className="max-w-md text-center">
+          <div className="text-4xl mb-3">⚠️</div>
+          <p className="text-slate-100 font-semibold mb-2">{displayLang === 'EN' ? "Couldn't generate the interview" : 'Không tạo được câu hỏi'}</p>
+          <p className="text-sm text-slate-400 mb-5">{displayLang === 'EN' ? 'The AI failed to read your CV/project. Please try again or shorten the file.' : 'AI chưa đọc/sinh được từ CV/project của bạn. Thử lại hoặc rút gọn file.'}</p>
+          <button onClick={() => router.push('/interview')} className="px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90">{displayLang === 'EN' ? 'Back to setup' : 'Về trang tạo'}</button>
+        </div>
+      </div>
+    );
+  }
+  // Async generation in progress (project/CV modes).
+  if (session?.generating) {
+    return (
+      <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center px-4">
+        <div className="max-w-md text-center">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-amber-400" />
+          <p className="text-slate-100 font-semibold mb-2">{displayLang === 'EN' ? 'Preparing your interview…' : 'Đang chuẩn bị buổi phỏng vấn…'}</p>
+          <p className="text-sm text-slate-400">{displayLang === 'EN' ? 'Opus 4.8 is reading your CV/project and writing tailored questions. This can take a minute — no need to reload.' : 'Opus 4.8 đang đọc CV/project và soạn câu hỏi riêng cho bạn. Có thể mất khoảng một phút — không cần tải lại.'}</p>
+        </div>
+      </div>
+    );
   }
   if (!session || !turn) {
     return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400">{t('sessionMissing')}</div>;

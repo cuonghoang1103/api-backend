@@ -139,50 +139,44 @@ export async function createSession(
   const wantsProject = !!projectMd;
   const wantsPersonalized = !wantsProject && !!(cv || jd);
 
-  let turnsCreate: Array<{ questionId?: number; order: number; questionText: string }>;
-  let configData: Record<string, unknown>;
-  let engineMode = resolveEngineMode(typeof body.engineMode === 'string' ? body.engineMode : undefined, allowAi);
-
-  if (wantsProject) {
-    // Phase 8: two-round project interview from an uploaded .md (Opus 4.8, Pro).
-    if (!allowAi) throw new BadRequestError('Phỏng vấn theo project dành cho tài khoản Pro/Max.');
+  if (wantsProject || wantsPersonalized) {
+    // CV/JD & project modes generate with Opus, which can take minutes on a long
+    // doc → doing it inside this request races the nginx 300s cap. Instead create
+    // the session shell NOW and generate questions in the BACKGROUND; the room
+    // polls getSessionState until the turns are ready (or a genError is set).
+    const kind: 'project' | 'personalized' = wantsProject ? 'project' : 'personalized';
+    if (!allowAi) throw new BadRequestError(`${wantsProject ? 'Phỏng vấn theo project' : 'Cá nhân hoá theo CV/JD'} dành cho tài khoản Pro/Max.`);
     if (!isAiAvailable()) throw new BadRequestError('AI hiện không khả dụng — thử lại sau.');
-    const round2 = Math.max(2, Math.round(numQuestions * 0.5));
-    const round1 = Math.max(2, numQuestions - round2);
-    let pq: PersonalizedQuestion[];
-    try {
-      pq = await generateProjectQuestions({ userId, md: projectMd, level, language, round1Count: round1, round2Count: round2 });
-    } catch {
-      throw new BadRequestError('Không đọc/sinh được câu hỏi từ file project — thử lại, hoặc rút gọn file .md.');
-    }
-    turnsCreate = pq.map((q, i) => ({ order: i, questionText: q.questionText }));
-    configData = { numQuestions: pq.length, requested: numQuestions, personalized: pq, projectInterview: true };
-    engineMode = resolveEngineMode('FULL_AI', allowAi);
-  } else if (wantsPersonalized) {
-    if (!allowAi) throw new BadRequestError('Cá nhân hoá theo CV/JD dành cho tài khoản Pro/Max.');
-    if (!isAiAvailable()) throw new BadRequestError('AI hiện không khả dụng — thử lại sau, hoặc bỏ CV/JD để dùng ngân hàng câu hỏi.');
-    let pq: PersonalizedQuestion[];
-    try {
-      pq = await generatePersonalizedQuestions({ userId, cv, jd, trackName: track.name, level, count: numQuestions, language });
-    } catch {
-      throw new BadRequestError('Không sinh được câu hỏi cá nhân hoá — thử lại, hoặc bỏ CV/JD.');
-    }
-    turnsCreate = pq.map((q, i) => ({ order: i, questionText: q.questionText })); // ad-hoc: no bank questionId
-    configData = { numQuestions: pq.length, requested: numQuestions, personalized: pq, personalizedSource: { hasCv: !!cv, hasJd: !!jd } };
-    engineMode = resolveEngineMode('FULL_AI', allowAi); // personalized sessions are AI-graded
-  } else {
-    const questions = await planQuestionsMulti(allTrackIds, level, numQuestions, topicIds.length ? topicIds : undefined);
-    if (!questions.length) {
-      throw new BadRequestError('Chưa có câu hỏi cho lựa chọn này. Chọn track/topic đã có câu hỏi, đổi cấp độ, hoặc để admin sinh câu hỏi (AI).');
-    }
-    turnsCreate = questions.map((q, i) => ({
-      questionId: q.id,
-      order: i,
-      questionText: language === 'EN' ? q.bodyEn || q.body : q.bodyVi || q.body,
-    }));
-    configData = { numQuestions: questions.length, requested: numQuestions, trackIds: allTrackIds, topicIds: topicIds.length ? topicIds : undefined };
+    const shell = await prisma.interviewSession.create({
+      data: {
+        userId, trackId, companyProfileId, level, mode: 'TEXT',
+        engineMode: resolveEngineMode('FULL_AI', allowAi),
+        language, status: 'IN_PROGRESS', focusedMode: Boolean(body.focusedMode),
+        config: { generating: true, kind, requested: numQuestions } as never,
+        startedAt: new Date(),
+      },
+      include: { track: true },
+    });
+    // Fire-and-forget — never await (that's the whole point).
+    void populateAiSession(shell.id, { userId, kind, cv, jd, projectMd, trackName: track.name, level, language, numQuestions })
+      .catch(() => { void markGenError(shell.id); });
+    return {
+      id: shell.id,
+      trackName: track.name,
+      level: shell.level,
+      language: shell.language,
+      engineMode: shell.engineMode,
+      total: 0,
+      generating: true,
+      turns: [] as ReturnType<typeof publicTurn>[],
+    };
   }
 
+  // Bank questions — synchronous (fast).
+  const questions = await planQuestionsMulti(allTrackIds, level, numQuestions, topicIds.length ? topicIds : undefined);
+  if (!questions.length) {
+    throw new BadRequestError('Chưa có câu hỏi cho lựa chọn này. Chọn track/topic đã có câu hỏi, đổi cấp độ, hoặc để admin sinh câu hỏi (AI).');
+  }
   const session = await prisma.interviewSession.create({
     data: {
       userId,
@@ -190,13 +184,13 @@ export async function createSession(
       companyProfileId,
       level,
       mode: 'TEXT',
-      engineMode,
+      engineMode: resolveEngineMode(typeof body.engineMode === 'string' ? body.engineMode : undefined, allowAi),
       language,
       status: 'IN_PROGRESS',
       focusedMode: Boolean(body.focusedMode),
-      config: configData as never,
+      config: { numQuestions: questions.length, requested: numQuestions, trackIds: allTrackIds, topicIds: topicIds.length ? topicIds : undefined } as never,
       startedAt: new Date(),
-      turns: { create: turnsCreate },
+      turns: { create: questions.map((q, i) => ({ questionId: q.id, order: i, questionText: language === 'EN' ? q.bodyEn || q.body : q.bodyVi || q.body })) },
     },
     include: { turns: { orderBy: { order: 'asc' }, include: { question: true } }, track: true },
   });
@@ -208,13 +202,34 @@ export async function createSession(
     language: session.language,
     engineMode: session.engineMode,
     total: session.turns.length,
-    turns: session.turns.map((tn) => {
-      const pt = publicTurn(tn);
-      const spec = tn.question ? undefined : personalizedSpecs(session.config)[tn.order];
-      if (spec?.type) pt.type = spec.type;
-      return { ...pt, round: spec?.round };
-    }),
+    turns: session.turns.map((tn) => publicTurn(tn)),
   };
+}
+
+/** Background: generate AI questions for a shell session, then create its turns. */
+async function populateAiSession(sessionId: number, opts: {
+  userId: number; kind: 'project' | 'personalized'; cv: string; jd: string; projectMd: string;
+  trackName: string; level: InterviewLevel; language: InterviewLanguage; numQuestions: number;
+}): Promise<void> {
+  let pq: PersonalizedQuestion[];
+  if (opts.kind === 'project') {
+    const round2 = Math.max(2, Math.round(opts.numQuestions * 0.5));
+    const round1 = Math.max(2, opts.numQuestions - round2);
+    pq = await generateProjectQuestions({ userId: opts.userId, md: opts.projectMd, level: opts.level, language: opts.language as 'VI' | 'EN', round1Count: round1, round2Count: round2 });
+  } else {
+    pq = await generatePersonalizedQuestions({ userId: opts.userId, cv: opts.cv, jd: opts.jd, trackName: opts.trackName, level: opts.level, count: opts.numQuestions, language: opts.language as 'VI' | 'EN' });
+  }
+  await prisma.$transaction([
+    prisma.interviewTurn.createMany({ data: pq.map((q, i) => ({ sessionId, order: i, questionText: q.questionText })) }),
+    prisma.interviewSession.update({
+      where: { id: sessionId },
+      data: { config: { generating: false, kind: opts.kind, requested: opts.numQuestions, numQuestions: pq.length, personalized: pq, projectInterview: opts.kind === 'project' } as never },
+    }),
+  ]);
+}
+
+async function markGenError(sessionId: number): Promise<void> {
+  await prisma.interviewSession.update({ where: { id: sessionId }, data: { config: { generating: false, genError: true } as never } }).catch(() => {});
 }
 
 // ─── Read ────────────────────────────────────────────────────────
@@ -245,6 +260,9 @@ export async function getSessionState(userId: number, sessionId: number) {
     sttProvider: sttProvider(),
     // So the room can hide AI-only features (follow-up) when AI is down/maintenance.
     aiAvailable: isAiAvailable(),
+    // Async project/CV generation state (Phase 8/3): the room polls while generating.
+    generating: !!(session.config as { generating?: boolean } | null)?.generating,
+    genError: !!(session.config as { genError?: boolean } | null)?.genError,
     turns: session.turns.map((tn) => {
       const pt = publicTurn(tn);
       // Ad-hoc personalized/project turns carry type + round in config (no bank question).
@@ -425,7 +443,10 @@ export async function selfAssess(
   if (!turn.userAnswer) throw new BadRequestError('Cần trả lời trước khi tự chấm');
 
   const ratings = (body.ratings && typeof body.ratings === 'object' ? body.ratings : {}) as Record<string, number>;
-  const rubric = ((session.language === 'EN' && turn.question?.rubricEn != null ? turn.question.rubricEn : turn.question?.rubric) as unknown as RubricCriterion[]) ?? [];
+  // Ad-hoc personalized/project turns (no bank question) carry their rubric in
+  // config — fall back to it so self-assessment isn't forced to 0.
+  const pcfg = turn.question ? undefined : personalizedSpecs(session.config)[order];
+  const rubric = (((session.language === 'EN' && turn.question?.rubricEn != null ? turn.question.rubricEn : turn.question?.rubric) as unknown as RubricCriterion[]) ?? pcfg?.rubric ?? []) as RubricCriterion[];
   const self = selfAssessmentScore(ratings, rubric);
   const det = (turn.deterministicScore as { score?: number } | null)?.score ?? null;
 
@@ -451,9 +472,12 @@ export async function finishSession(userId: number, sessionId: number) {
   const session = await loadOwnedSession(userId, sessionId);
   let report = await generateStaticReport(sessionId);
 
-  // FULL_AI: synthesize a warmer, more specific report over the template.
-  // Falls back silently to the template report on any failure.
-  if (session.engineMode === 'FULL_AI' && isAiAvailable()) {
+  // Synthesize a warmer, more specific AI report over the template when AI is up.
+  // Runs for AI-graded and personalized/project sessions (even if they downgraded
+  // to STATIC mid-run); falls back silently to the template on any failure.
+  const rcfg = session.config as { personalized?: unknown } | null;
+  const wantsAiReport = session.engineMode === 'FULL_AI' || session.engineMode === 'HYBRID' || Array.isArray(rcfg?.personalized);
+  if (wantsAiReport && isAiAvailable()) {
     const turns = await prisma.interviewTurn.findMany({
       where: { sessionId },
       orderBy: { order: 'asc' },

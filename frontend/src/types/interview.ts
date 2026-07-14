@@ -90,6 +90,7 @@ export interface SessionCreateResponse {
   language: InterviewLanguage;
   engineMode: string;
   total: number;
+  generating?: boolean;
   turns: PublicTurn[];
 }
 
@@ -107,6 +108,10 @@ export interface SessionState {
   sttProvider?: 'browser' | 'groq';
   /** Whether AI is usable right now (key + kill-switch + circuit breaker). */
   aiAvailable?: boolean;
+  /** Phase 8/3: AI questions are still generating in the background (poll). */
+  generating?: boolean;
+  /** Background generation failed. */
+  genError?: boolean;
   turns: PublicTurn[];
 }
 

@@ -12,12 +12,13 @@ import { useParams } from 'next/navigation';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer,
 } from 'recharts';
-import { Loader2, ChevronDown, AlertTriangle, RotateCcw, Flag, Volume2, Square } from 'lucide-react';
+import { Loader2, ChevronDown, AlertTriangle, RotateCcw, Flag, Volume2, Square, Download } from 'lucide-react';
 import { toast } from 'sonner';
 import ParticleBackground from '@/components/repos/ParticleBackground';
 import Markdown from '@/components/markdown/Markdown';
 import { useSpeech } from '@/hooks/useSpeech';
 import { interviewApi } from '@/lib/interview-api';
+import { downloadPdf } from '@/lib/chatExport';
 import { makeT, type ILang } from '@/lib/interview-i18n';
 import type { InterviewReport, ReportResponse, ReportTurn } from '@/types/interview';
 
@@ -32,6 +33,11 @@ const HIRE_LABEL: Record<string, { label: string; cls: string }> = {
 
 const gradeColor = (g?: string | null) =>
   g === 'A' ? '#10b981' : g === 'B' ? '#84cc16' : g === 'C' ? '#f59e0b' : g === 'D' ? '#f97316' : '#ef4444';
+
+// Colour a turn by the SCORE actually shown (AI final or deterministic), not the
+// deterministic letter grade — an AI-graded 85 was rendering red before.
+const scoreColor = (s?: number | null) =>
+  s == null ? '#94a3b8' : s >= 85 ? '#10b981' : s >= 70 ? '#84cc16' : s >= 55 ? '#f59e0b' : s >= 40 ? '#f97316' : '#ef4444';
 
 // Compose the final report into a spoken script: overall verdict + strengths +
 // weaknesses + advice. markdown/list text is read as plain sentences.
@@ -50,14 +56,52 @@ function buildReportSpeech(r: InterviewReport, lang: 'VI' | 'EN'): string {
   return parts.join(' ');
 }
 
+/** Compose the full report as Markdown for the PDF export. */
+function buildReportMarkdown(r: InterviewReport, turns: ReportTurn[], lang: 'VI' | 'EN'): string {
+  const vi = lang === 'VI';
+  const hire = r.hireRecommendation ? HIRE_LABEL[r.hireRecommendation]?.label ?? r.hireRecommendation : '';
+  const bd = r.scoreBreakdown;
+  const L = (v: string, e: string) => (vi ? v : e);
+  const md: string[] = [];
+  md.push(`# ${L('Báo cáo phỏng vấn', 'Interview Report')}`);
+  md.push(`${L('Điểm tổng', 'Overall score')}: **${r.overallScore ?? 0}/100** · ${L('Xếp loại', 'Grade')}: **${r.letterGrade ?? '—'}**${hire ? ` · ${L('Đề xuất', 'Recommendation')}: **${hire}**` : ''}`);
+  md.push(`${L('Đã trả lời', 'Answered')}: ${bd?.answered ?? 0}/${bd?.total ?? 0} · ${L('Lỗi kiến thức', 'Knowledge errors')}: ${bd?.redFlagTotal ?? 0}`);
+  if (r.strengths?.length) { md.push(`## ${L('Điểm mạnh', 'Strengths')}`); r.strengths.forEach((s) => md.push(`- ${s}`)); }
+  if (r.weaknesses?.length) { md.push(`## ${L('Cần cải thiện', 'Areas to improve')}`); r.weaknesses.forEach((s) => md.push(`- ${s}`)); }
+  if (r.actionableAdvice) { md.push(`## ${L('Lời khuyên', 'Advice')}`); md.push(r.actionableAdvice.replace(/\*\*/g, '')); }
+  md.push(`## ${L('Chi tiết từng câu', 'Per-question detail')}`);
+  turns.forEach((tn) => {
+    const sc = tn.turnScore?.final ?? tn.turnScore?.deterministic ?? tn.deterministicScore?.score ?? null;
+    md.push(`### #${tn.order + 1} ${tn.topic ? `(${tn.topic})` : ''} — ${sc ?? '—'}/100`);
+    md.push(`**${L('Câu hỏi', 'Question')}:** ${tn.questionText}`);
+    md.push(`**${L('Câu trả lời của bạn', 'Your answer')}:** ${tn.userAnswer || L('(bỏ trống)', '(blank)')}`);
+    if (tn.referenceAnswer) md.push(`**${L('Đáp án mẫu', 'Model answer')}:** ${tn.referenceAnswer}`);
+  });
+  return md.join('\n\n');
+}
+
 export default function InterviewReportPage() {
   const { id } = useParams();
   const sessionId = Number(id);
   const [data, setData] = useState<ReportResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [displayLang, setDisplayLang] = useState<ILang>('VI');
+  const [pdfBusy, setPdfBusy] = useState(false);
   const t = makeT(displayLang);
   const { speak, stopSpeak, speaking, ttsSupported } = useSpeech();
+
+  const downloadReportPdf = async () => {
+    if (!data) return;
+    setPdfBusy(true);
+    try {
+      const md = buildReportMarkdown(data.report, data.turns, displayLang === 'EN' ? 'EN' : 'VI');
+      await downloadPdf(md, `interview-report-${sessionId}.pdf`);
+    } catch {
+      toast.error(displayLang === 'EN' ? 'PDF export failed' : 'Xuất PDF thất bại');
+    } finally {
+      setPdfBusy(false);
+    }
+  };
 
   useEffect(() => {
     interviewApi.report(sessionId).then((res) => {
@@ -125,6 +169,13 @@ export default function InterviewReportPage() {
                 {speaking ? <Square className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />} {speaking ? t('stop') : t('hearEval')}
               </button>
             )}
+            <button
+              onClick={downloadReportPdf}
+              disabled={pdfBusy}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 text-slate-300 text-sm font-semibold hover:text-white hover:border-slate-500 transition-colors disabled:opacity-50"
+            >
+              {pdfBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} PDF
+            </button>
             <Link href="/interview" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500 text-slate-950 text-sm font-semibold hover:opacity-90">
               <RotateCcw className="w-4 h-4" /> {t('practiceMore')}
             </Link>
@@ -261,7 +312,7 @@ function TurnRow({ turn, sessionId, lang }: { turn: ReportTurn; sessionId: numbe
         <span className="flex-1 text-sm text-slate-100 line-clamp-1">{turn.questionText}</span>
         {turn.injectionAttempted && <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />}
         {turn.topic && <span className="text-xs text-slate-400 hidden sm:inline">{turn.topic}</span>}
-        <span className="text-sm font-mono font-semibold shrink-0" style={{ color: gradeColor(det?.grade) }}>{score ?? '—'}</span>
+        <span className="text-sm font-mono font-semibold shrink-0" style={{ color: scoreColor(score) }}>{score ?? '—'}</span>
         <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (

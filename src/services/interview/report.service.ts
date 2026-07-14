@@ -54,6 +54,14 @@ export async function generateStaticReport(sessionId: number) {
   const topicLabel = (topic?: { name: string | null; nameVi: string | null } | null): string =>
     (isEn ? topic?.name : topic?.nameVi ?? topic?.name) ?? 'General';
 
+  // Personalized/project turns have no bank topic (topicId 0) — group them under a
+  // single synthetic bucket so the report isn't empty for those sessions.
+  const cfg = session.config as { personalized?: unknown; projectInterview?: boolean } | null;
+  const isPersonalized = Array.isArray(cfg?.personalized);
+  const adhocName = isPersonalized
+    ? (cfg?.projectInterview ? (isEn ? 'Project' : 'Dự án') : (isEn ? 'Personalized' : 'Cá nhân hoá'))
+    : 'General';
+
   const answered = session.turns.filter((t) => t.userAnswer && t.userAnswer.trim().length > 0);
 
   // Per-topic aggregation from the deterministic (objective) score.
@@ -67,7 +75,7 @@ export async function generateStaticReport(sessionId: number) {
     const det = (t.deterministicScore as StoredDeterministic | null) ?? null;
     const ts = (t.turnScore as StoredTurnScore | null) ?? null;
     const topicId = t.question?.topic?.id ?? 0;
-    const topicName = topicLabel(t.question?.topic);
+    const topicName = t.question?.topic ? topicLabel(t.question.topic) : adhocName;
     if (!topicAgg.has(topicId)) topicAgg.set(topicId, { name: topicName, scores: [], redFlags: 0 });
     const agg = topicAgg.get(topicId)!;
     // Authoritative score: AI combined score when present, else deterministic.
@@ -89,7 +97,7 @@ export async function generateStaticReport(sessionId: number) {
   const selfAvg = selfCount ? Math.round(selfSum / selfCount) : null;
 
   const byTopic = Array.from(topicAgg.entries())
-    .filter(([id]) => id !== 0)
+    .filter(([id]) => id !== 0 || isPersonalized)
     .map(([id, v]) => ({
       topicId: id,
       topic: v.name,

@@ -6,7 +6,7 @@
  * and a client-side MediaRecorder practice mode (record → replay → compare).
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MessagesSquare, Mic, Pause, Play, Square, X } from 'lucide-react';
@@ -20,6 +20,8 @@ import {
   SpeakerButton,
   usePrefersReducedMotion,
 } from '@/components/language/primitives';
+import { usePro } from '@/hooks/usePro';
+import { PronounceButton, PronunciationTrainer } from '@/components/language/PronunciationTrainer';
 import { getImageUrl, getMediaUrl } from '@/lib/utils';
 
 // ─── Mini play/pause audio (admin voice) ───────────────────────────
@@ -214,13 +216,23 @@ function PracticeRecorder({ voiceSrc }: { voiceSrc: string | null }) {
 // ─── One Q/A conversation card ─────────────────────────────────────
 function ConversationCard({
   item,
+  code,
   onImage,
 }: {
   item: ConversationItem;
+  code: string;
   onImage: (url: string) => void;
 }) {
+  const router = useRouter();
+  const { isPro } = usePro();
   const [showMeaning, setShowMeaning] = useState(false);
+  const [pronOpen, setPronOpen] = useState(false);
   const voiceSrc = item.voiceUrl ? getMediaUrl(item.voiceUrl, null, item.id) : null;
+
+  const openPron = () => {
+    if (!isPro) { router.push('/pro'); return; }
+    setPronOpen(true);
+  };
 
   return (
     <div className="card p-4">
@@ -271,10 +283,23 @@ function ConversationCard({
             <MiniAudio src={voiceSrc} label="Nghe mẫu" />
           </div>
         )}
+        <div className="mt-1.5 pr-1">
+          <PronounceButton isPro={isPro} onOpen={openPron} />
+        </div>
         <div className="self-stretch">
           <PracticeRecorder voiceSrc={voiceSrc} />
         </div>
       </div>
+
+      {pronOpen && (
+        <PronunciationTrainer
+          target={item.answer}
+          reading={item.answerPronunciation}
+          languageCode={code}
+          title="Luyện nói câu trả lời"
+          onClose={() => setPronOpen(false)}
+        />
+      )}
 
       {/* Vietnamese meaning (collapsible) */}
       {item.meaningVi && (
@@ -337,7 +362,7 @@ export default function ConversationPage() {
       ) : (
         <div className="space-y-4">
           {items.map((it) => (
-            <ConversationCard key={it.id} item={it} onImage={setLightbox} />
+            <ConversationCard key={it.id} item={it} code={code} onImage={setLightbox} />
           ))}
         </div>
       )}

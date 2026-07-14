@@ -79,7 +79,9 @@ export async function transcribeWithGroq(
   audio: Buffer,
   filename: string,
   mimetype: string,
-  opts: { language: 'vi' | 'en'; hints?: string },
+  // `language` is an ISO-639-1 code Whisper understands (vi/en/ja/zh/…). The
+  // interview passes vi/en; My Language pronunciation scoring passes ja/zh too.
+  opts: { language: string; hints?: string },
 ): Promise<TranscriptResult> {
   const key = process.env.GROQ_API_KEY;
   if (!key) throw new Error('GROQ_API_KEY missing');

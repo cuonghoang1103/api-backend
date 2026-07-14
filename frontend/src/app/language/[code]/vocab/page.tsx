@@ -39,6 +39,7 @@ import { languageApi } from '@/lib/language-api';
 import type { VocabCategory, VocabCollection, VocabWord, LangLearnStatus } from '@/types/language';
 import { usePro } from '@/hooks/usePro';
 import { AiExplainButton, AiExplainModal } from '@/components/language/AiExplainModal';
+import { PronounceButton, PronunciationTrainer } from '@/components/language/PronunciationTrainer';
 import {
   SectionShell,
   SpeakerButton,
@@ -102,6 +103,15 @@ function VocabInner() {
     (w: VocabWord) => {
       if (!isPro) { router.push('/pro'); return; }
       setAiWord(w);
+    },
+    [isPro, router],
+  );
+  // Pro-gated pronunciation trainer for a vocab word.
+  const [pronWord, setPronWord] = useState<VocabWord | null>(null);
+  const openPronWord = useCallback(
+    (w: VocabWord) => {
+      if (!isPro) { router.push('/pro'); return; }
+      setPronWord(w);
     },
     [isPro, router],
   );
@@ -557,6 +567,7 @@ function VocabInner() {
           onLoadMore={loadMore}
           isPro={isPro}
           onExplain={openAiWord}
+          onPronounce={openPronWord}
         />
       ) : view === 'cards' ? (
         <FlashcardsView
@@ -567,6 +578,7 @@ function VocabInner() {
           onToggleFav={toggleFav}
           isPro={isPro}
           onExplain={openAiWord}
+          onPronounce={openPronWord}
         />
       ) : (
         <QuizView
@@ -605,6 +617,16 @@ function VocabInner() {
           languageCode={code}
           title={aiWord.word}
           onClose={() => setAiWord(null)}
+        />
+      )}
+
+      {pronWord && (
+        <PronunciationTrainer
+          target={pronWord.word}
+          reading={pronWord.pronunciations?.[0]?.value}
+          languageCode={code}
+          title={pronWord.word}
+          onClose={() => setPronWord(null)}
         />
       )}
     </SectionShell>
@@ -646,6 +668,7 @@ function ListView({
   onLoadMore,
   isPro,
   onExplain,
+  onPronounce,
 }: {
   words: VocabWord[];
   statuses: Map<number, LangLearnStatus>;
@@ -660,6 +683,7 @@ function ListView({
   onLoadMore: () => void;
   isPro: boolean;
   onExplain: (w: VocabWord) => void;
+  onPronounce: (w: VocabWord) => void;
 }) {
   return (
     <div className="space-y-3">
@@ -732,8 +756,9 @@ function ListView({
               {w.exampleMeaning && (
                 <p className="text-sm text-text-muted">{w.exampleMeaning}</p>
               )}
-              <div className="mt-2">
+              <div className="mt-2 flex flex-wrap items-center gap-2">
                 <AiExplainButton isPro={isPro} onOpen={() => onExplain(w)} />
+                <PronounceButton isPro={isPro} onOpen={() => onPronounce(w)} />
               </div>
             </div>
           </div>
@@ -771,6 +796,7 @@ function FlashcardsView({
   onToggleFav,
   isPro,
   onExplain,
+  onPronounce,
 }: {
   words: VocabWord[];
   isAuthenticated: boolean;
@@ -779,6 +805,7 @@ function FlashcardsView({
   onToggleFav: (w: VocabWord) => void;
   isPro: boolean;
   onExplain: (w: VocabWord) => void;
+  onPronounce: (w: VocabWord) => void;
 }) {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -869,6 +896,7 @@ function FlashcardsView({
         </span>
         {isAuthenticated && <HeartButton active={favIds.has(w.id)} onClick={() => onToggleFav(w)} size={14} />}
         <AiExplainButton isPro={isPro} onOpen={() => onExplain(w)} />
+        <PronounceButton isPro={isPro} onOpen={() => onPronounce(w)} />
       </div>
 
       <div className="[perspective:1200px]">

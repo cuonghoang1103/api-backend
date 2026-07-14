@@ -124,6 +124,27 @@ publicRouter.post('/ai/explain', authenticate, async (req: Request, res: Respons
   } catch (err) { next(err); }
 });
 
+// AI pronunciation scoring (Pro/Max). Audio held in memory only (PII), never
+// persisted — dedicated multer, not the admin `upload` const defined below.
+const aiAudioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024 } });
+publicRouter.post('/ai/pronounce', authenticate, aiAudioUpload.single('audio'), async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const f = req.file;
+    if (!f?.buffer?.length) throw new BadRequestError('Thiếu audio');
+    res.json({
+      success: true,
+      data: await aiSvc.scorePronunciation(req.userId!, {
+        audio: f.buffer,
+        filename: f.originalname || 'clip.webm',
+        mimetype: f.mimetype || 'audio/webm',
+        languageCode: String(req.body?.languageCode ?? ''),
+        target: String(req.body?.target ?? ''),
+        reading: req.body?.reading ? String(req.body.reading) : undefined,
+      }),
+    });
+  } catch (err) { next(err); }
+});
+
 publicRouter.get('/ai/status', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: { available: isAiAvailable(), isPro: await isProEffective(req.userId!) } });

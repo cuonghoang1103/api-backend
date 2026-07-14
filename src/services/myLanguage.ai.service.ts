@@ -17,6 +17,7 @@ import { prisma } from '../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import { isProEffective } from './pro.service.js';
 import { llmComplete, checkTokenQuota, isAiAvailable, extractJson } from './interview/llm/index.js';
+import { transcribeWithGroq, serverSttEnabled } from './interview/voice/stt.js';
 
 export type ExplainKind = 'grammar' | 'vocab';
 
@@ -243,4 +244,96 @@ export async function explainConcept(
 
   cacheSet(cacheKey, result);
   return result;
+}
+
+// ── Phase 2: Pronunciation scoring (Groq Whisper + LLM) ───────────
+export type PronounceVerdict = 'good' | 'ok' | 'poor';
+export interface PronunciationResult {
+  target: string;
+  heard: string; // what the STT actually transcribed
+  score: number; // 0–100
+  verdict: PronounceVerdict;
+  feedback: string; // tiếng Việt
+  tips: string[];
+}
+
+/** Map an ISO language code to the Whisper language code (bcp-47 short). */
+function whisperLang(code: string): string {
+  const c = (code || '').toLowerCase();
+  if (c === 'ja' || c === 'en' || c === 'zh' || c === 'ko' || c === 'fr' || c === 'vi') return c;
+  return 'en';
+}
+
+/**
+ * Score how well the learner pronounced `target`: transcribe their recording
+ * with Groq Whisper, then have the LLM compare heard-vs-target and grade it.
+ * Pro/Max only; needs STT_PROVIDER=groq (degrades with a friendly error).
+ */
+export async function scorePronunciation(
+  userId: number,
+  input: { audio: Buffer; filename: string; mimetype: string; languageCode?: string; target?: string; reading?: string },
+): Promise<PronunciationResult> {
+  const target = (input.target || '').trim();
+  const code = (input.languageCode || '').trim();
+  if (!target) throw new BadRequestError('Thiếu nội dung cần đọc.');
+  if (!input.audio?.length) throw new BadRequestError('Thiếu audio.');
+
+  // Gate: AI on + Pro + under daily quota.
+  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!(await isProEffective(userId))) throw new ForbiddenError('Chấm phát âm dành cho tài khoản Pro/Max.');
+  if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
+  if (!serverSttEnabled()) throw new BadRequestError('Chấm phát âm cần bật STT (Groq) — hiện chưa khả dụng.');
+
+  // Transcribe. NO target hint: hinting Whisper with the answer makes it "hear"
+  // the answer even when mispronounced, which would hide real errors.
+  let heard = '';
+  try {
+    const tr = await transcribeWithGroq(input.audio, input.filename, input.mimetype, { language: whisperLang(code) });
+    heard = tr.text.trim();
+  } catch {
+    throw new BadRequestError('Không nhận dạng được giọng nói, vui lòng thu âm lại rõ hơn.');
+  }
+  if (!heard) {
+    return { target, heard: '', score: 0, verdict: 'poor', feedback: 'Không nghe rõ giọng đọc. Hãy thu âm ở nơi yên tĩnh và đọc to, rõ hơn nhé.', tips: [] };
+  }
+
+  const langName = languageName(code);
+  const readingLine = input.reading ? `Cách đọc chuẩn: ${input.reading}\n` : '';
+  const system =
+    `You are a supportive pronunciation coach for a Vietnamese speaker learning ${langName}. ` +
+    `You are given the TARGET the learner tried to read aloud and HEARD — what a speech-to-text engine transcribed from their recording. ` +
+    `Judge how close their pronunciation was, being fair about STT noise. ALWAYS write feedback and tips in natural Vietnamese (tiếng Việt). ` +
+    `Return ONLY a minified JSON object: {"score": number (0-100), "verdict": "good"|"ok"|"poor", "feedback": string, "tips": [string]}. ` +
+    `score ≥85 → "good", 60–84 → "ok", <60 → "poor". Keep feedback to 1–3 sentences; 1–3 short tips on the specific sounds/words to fix.`;
+  const user = `TARGET: ${target}\n${readingLine}HEARD (STT): ${heard}`;
+
+  let parsed: Record<string, unknown> = {};
+  try {
+    const res = await llmComplete({
+      step: 'interview',
+      system,
+      messages: [{ role: 'user', content: user }],
+      maxTokens: 600,
+      maxRetries: 1,
+      timeoutMs: 30_000,
+      userId,
+    });
+    parsed = extractJson<Record<string, unknown>>(res.text);
+  } catch {
+    throw new BadRequestError('Chấm phát âm đang bận, vui lòng thử lại sau giây lát.');
+  }
+
+  const rawScore = Number(parsed.score);
+  const score = Number.isFinite(rawScore) ? Math.max(0, Math.min(100, Math.round(rawScore))) : 0;
+  const verdict: PronounceVerdict =
+    parsed.verdict === 'good' || parsed.verdict === 'ok' || parsed.verdict === 'poor'
+      ? (parsed.verdict as PronounceVerdict)
+      : score >= 85 ? 'good' : score >= 60 ? 'ok' : 'poor';
+  const feedback = typeof parsed.feedback === 'string' ? parsed.feedback.trim() : '';
+  const tips = (Array.isArray(parsed.tips) ? parsed.tips : [])
+    .map((t) => (typeof t === 'string' ? t.trim() : ''))
+    .filter(Boolean)
+    .slice(0, 5);
+
+  return { target, heard, score, verdict, feedback, tips };
 }

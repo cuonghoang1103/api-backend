@@ -84,6 +84,15 @@ export const languageApi = {
   explain: (body: { languageCode: string; kind: 'grammar' | 'vocab'; itemId: number }): Res<AiExplanation> =>
     api.post('/my-language/ai/explain', body),
   aiStatus: (): Res<{ available: boolean; isPro: boolean }> => api.get('/my-language/ai/status'),
+  pronounce: (body: { audio: Blob; languageCode: string; target: string; reading?: string }): Res<PronunciationResult> => {
+    const fd = new FormData();
+    fd.append('audio', body.audio, 'clip.webm');
+    fd.append('languageCode', body.languageCode);
+    fd.append('target', body.target);
+    if (body.reading) fd.append('reading', body.reading);
+    // Override the axios default application/json or multer sees no file.
+    return api.post('/my-language/ai/pronounce', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
+  },
 };
 
 export interface AiExplanationExample {
@@ -97,6 +106,16 @@ export interface AiExplanation {
   summary: string;
   explanation: string; // markdown
   examples: AiExplanationExample[];
+  tips: string[];
+}
+
+export type PronounceVerdict = 'good' | 'ok' | 'poor';
+export interface PronunciationResult {
+  target: string;
+  heard: string;
+  score: number; // 0–100
+  verdict: PronounceVerdict;
+  feedback: string;
   tips: string[];
 }
 

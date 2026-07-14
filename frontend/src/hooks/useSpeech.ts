@@ -31,8 +31,34 @@ function toPlain(md: string): string {
     .slice(0, 16000);
 }
 
-// Any Vietnamese diacritic → the token is Vietnamese for sure.
-const VIET_RE = /[àáảãạăắằẳẵặâấầẩẫậđèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵ]/i;
+/**
+ * Load the installed voices, waiting for the async `voiceschanged` event the
+ * first time (Chrome returns [] from getVoices() until it fires). Without this,
+ * the very first "hear question" click speaks with no voice — or nothing.
+ */
+let voicesCache: SpeechSynthesisVoice[] = [];
+function loadVoices(): Promise<SpeechSynthesisVoice[]> {
+  const synth = window.speechSynthesis;
+  const now = synth.getVoices();
+  if (now.length) { voicesCache = now; return Promise.resolve(now); }
+  return new Promise((resolve) => {
+    let done = false;
+    const finish = (): void => {
+      if (done) return;
+      done = true;
+      voicesCache = synth.getVoices();
+      resolve(voicesCache);
+    };
+    try { synth.addEventListener('voiceschanged', finish, { once: true }); } catch { /* older browsers */ }
+    setTimeout(finish, 1000); // fallback if the event never fires
+  });
+}
+
+/** Split into sentence-sized chunks for natural pauses at . ! ? … — every chunk
+ *  is read by the SAME voice (see speak), never a second voice mid-passage. */
+function splitSentences(text: string): string[] {
+  return (text.match(/[^.!?…]+[.!?…]*\s*/g) || [text]).filter((s) => s.trim());
+}
 
 /**
  * Pick the most natural-sounding installed voice for a language. Browser default
@@ -53,43 +79,6 @@ function pickVoice(voices: SpeechSynthesisVoice[], lang: Lang): SpeechSynthesisV
     return s;
   };
   return [...cands].sort((a, b) => score(b) - score(a))[0];
-}
-
-/**
- * Split mixed Vietnamese/English text into language-tagged, sentence-sized units
- * so each is spoken by the right voice at a natural pace:
- *  - a word with Vietnamese diacritics → VI
- *  - a pure-ASCII alphabetic word (≥2 letters) → EN. LLM-written Vietnamese
- *    always carries diacritics, so bare-ASCII words are almost always English
- *    technical terms (Kubernetes, database, async) — reading them with a
- *    Vietnamese voice mangles the pronunciation.
- *  - digits / punctuation inherit the surrounding language.
- * Each unit is further split at sentence enders (. ! ? …) so the queue inserts a
- * natural pause between sentences instead of reading in one flat run.
- */
-function toSpeechUnits(text: string, primary: Lang): Array<{ lang: Lang; text: string }> {
-  const tokens = text.match(/[\p{L}][\p{L}\d'’.\-]*|\d[\d.,:/]*|\s+|[^\p{L}\p{N}\s]+/gu) || [text];
-  const segs: Array<{ lang: Lang; text: string }> = [];
-  let cur: Lang = primary;
-  for (const tok of tokens) {
-    let lang: Lang = cur;
-    if (/\p{L}/u.test(tok)) {
-      if (VIET_RE.test(tok)) lang = 'VI';
-      else if (/^[A-Za-z][A-Za-z'’.\-]*$/.test(tok) && tok.replace(/[^A-Za-z]/g, '').length >= 2) lang = 'EN';
-      else lang = cur; // single letters / mixed → keep flowing in the current voice
-    }
-    const last = segs[segs.length - 1];
-    if (last && last.lang === lang) last.text += tok;
-    else segs.push({ lang, text: tok });
-    cur = lang;
-  }
-  // Split each language segment into sentences for natural pauses.
-  const units: Array<{ lang: Lang; text: string }> = [];
-  for (const seg of segs) {
-    const sentences = seg.text.match(/[^.!?…]+[.!?…]*\s*/g) || [seg.text];
-    for (const s of sentences) if (s.trim()) units.push({ lang: seg.lang, text: s });
-  }
-  return units;
 }
 
 interface SpeechRecognitionLike {
@@ -128,46 +117,46 @@ export function useSpeech() {
   }, [ttsSupported]);
 
   /**
-   * Speak text with a bilingual, natural cadence. Returns false (and reads
-   * nothing) if there's no voice for the primary language.
-   *  - Vietnamese and embedded English terms are each read by their own voice
-   *    (so "dùng Kubernetes để" pronounces "Kubernetes" in English, not mangled).
-   *  - Text is queued sentence-by-sentence so there are real pauses at . ! ? …
-   *  - The most natural installed voice per language is chosen (see pickVoice).
+   * Read text aloud with ONE continuous voice — no mid-sentence voice switching.
+   *  - A single voice reads the whole passage: the session language first, then
+   *    the other language, then the browser default. A Vietnamese voice reading
+   *    embedded English terms ("class", "object") in a Vietnamese cadence is far
+   *    less jarring than swapping to a second voice for each term (the old
+   *    behaviour that made it sound like two different people).
+   *  - Voices are awaited on the first call so the first click isn't silent.
+   *  - Never returns false for "no VI voice": it falls back to any voice so the
+   *    button always produces audio.
+   * Returns true whenever TTS will be attempted (kept sync for existing callers).
    */
   const speak = useCallback((text: string, lang: Lang = 'VI'): boolean => {
     if (!ttsSupported) return false;
     const plain = toPlain(text);
     if (!plain) return false;
     const synth = window.speechSynthesis;
-    const voices = synth.getVoices();
-    const primaryVoice = pickVoice(voices, lang);
-    if (voices.length && !primaryVoice) return false; // no primary voice → caller falls back to text
 
-    const units = toSpeechUnits(plain, lang);
-    if (!units.length) return false;
+    const run = (voices: SpeechSynthesisVoice[]): void => {
+      // One voice for the entire passage.
+      const voice = pickVoice(voices, lang) || pickVoice(voices, lang === 'VI' ? 'EN' : 'VI');
+      const chunks = splitSentences(plain);
+      synth.cancel();
+      let pending = chunks.length;
+      setSpeaking(true);
+      const finishOne = (): void => { pending -= 1; if (pending <= 0) setSpeaking(false); };
+      for (const chunk of chunks) {
+        const u = new SpeechSynthesisUtterance(chunk);
+        if (voice) u.voice = voice;
+        u.lang = voice?.lang || LOCALE[lang];
+        u.rate = 0.95;
+        u.pitch = 1;
+        u.onend = finishOne;
+        u.onerror = finishOne;
+        synth.speak(u);
+      }
+    };
 
-    // Resolve one voice per language; if the secondary language has no installed
-    // voice, fall back to the primary voice rather than dropping the text.
-    const viVoice = pickVoice(voices, 'VI') || (lang === 'VI' ? primaryVoice : undefined);
-    const enVoice = pickVoice(voices, 'EN') || (lang === 'EN' ? primaryVoice : undefined);
-
-    synth.cancel();
-    let pending = units.length;
-    setSpeaking(true);
-    const finishOne = (): void => { pending -= 1; if (pending <= 0) setSpeaking(false); };
-
-    for (const unit of units) {
-      const u = new SpeechSynthesisUtterance(unit.text);
-      const v = unit.lang === 'EN' ? (enVoice || primaryVoice) : (viVoice || primaryVoice);
-      if (v) u.voice = v;
-      u.lang = v?.lang || LOCALE[unit.lang];
-      u.rate = unit.lang === 'VI' ? 0.92 : 0.98; // VI a touch slower reads clearer
-      u.pitch = 1;
-      u.onend = finishOne;
-      u.onerror = finishOne;
-      synth.speak(u);
-    }
+    const cached = synth.getVoices();
+    if (cached.length) run(cached);
+    else void loadVoices().then(run); // first click before voices load: wait, then speak
     return true;
   }, [ttsSupported]);
 
@@ -242,6 +231,13 @@ export function useSpeech() {
   const stopRecording = useCallback(() => {
     try { mediaRef.current?.stop(); } catch { setRecording(false); }
   }, []);
+
+  // Warm the voice list on mount so the first "hear question" click takes the
+  // synchronous path — calling speak() after an await can lose the user-gesture
+  // context and get blocked on Safari/mobile.
+  useEffect(() => {
+    if (ttsSupported) void loadVoices();
+  }, [ttsSupported]);
 
   useEffect(() => () => {
     try { recRef.current?.stop(); } catch { /* ignore */ }

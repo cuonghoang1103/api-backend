@@ -5,6 +5,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import { renderProjectMarkdown } from '../services/projectMarkdown.service.js';
 import { getMusicAccessMode, setMusicAccessMode, setUserMusicAccess, type MusicAccessMode } from '../services/musicAccess.service.js';
 import { getIO } from '../socket/messaging.socket.js';
+import { getSystemStats } from '../services/systemStats.service.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -417,14 +418,10 @@ router.get('/stats/overview', authenticate, requireAdmin('ROLE_ADMIN'), async (_
       }),
     ]);
 
-    const memoryUsedMB = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
-    const memoryTotalMB = Math.round(process.memoryUsage().heapTotal / 1024 / 1024);
-    const memoryPercent = memoryTotalMB > 0 ? Math.round((memoryUsedMB / memoryTotalMB) * 100) : 0;
-    const uptimeSeconds = Math.floor(process.uptime());
-    const hours = Math.floor(uptimeSeconds / 3600);
-    const minutes = Math.floor((uptimeSeconds % 3600) / 60);
-    const seconds = uptimeSeconds % 60;
-    const uptimeFormatted = `${hours}h ${minutes}m ${seconds}s`;
+    // Real host + infra metrics (VPS RAM/uptime/CPU, host disk, R2, DB, Redis).
+    const system = await getSystemStats();
+    const upS = system.host.uptimeSeconds;
+    const uptimeFormatted = `${Math.floor(upS / 86400)}d ${Math.floor((upS % 86400) / 3600)}h ${Math.floor((upS % 3600) / 60)}m`;
 
     res.json({
       success: true,
@@ -437,11 +434,14 @@ router.get('/stats/overview', authenticate, requireAdmin('ROLE_ADMIN'), async (_
         activeSessions: recentActiveUsers,
         totalMessages,
         totalSessions,
-        memoryUsedMB,
-        memoryTotalMB,
-        memoryPercent,
-        uptimeSeconds,
+        // NEW: full system statistics (host is the VPS, not the Node process).
+        system,
         uptimeFormatted,
+        // Back-compat legacy fields (mapped to real HOST RAM instead of Node heap).
+        memoryUsedMB: Math.round(system.host.memUsedBytes / 1048576),
+        memoryTotalMB: Math.round(system.host.memTotalBytes / 1048576),
+        memoryPercent: system.host.memPercent,
+        uptimeSeconds: upS,
       },
     });
   } catch (error) { next(error); }

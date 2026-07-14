@@ -22,7 +22,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  X, Heart, MessageCircle, Share2, Bookmark, Volume2, VolumeX, Play, Loader2,
+  X, Heart, MessageCircle, Share2, Bookmark, Volume2, VolumeX, Play, Loader2, RotateCcw,
 } from 'lucide-react';
 import type { SocialPost } from '@/types/social';
 import { socialApi } from '@/lib/api';
@@ -417,6 +417,8 @@ function UploadedVideo({
 }: { url: string; poster: string | null; muted: boolean; onToggleMute: () => void }) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const [paused, setPaused] = useState(false);
+  const [buffering, setBuffering] = useState(false);
+  const [errored, setErrored] = useState(false);
 
   // Autoplay on mount (this only renders when the slide is active).
   useEffect(() => {
@@ -451,8 +453,35 @@ function UploadedVideo({
         className="h-full max-h-[100dvh] w-auto max-w-full object-contain"
         onPlay={() => setPaused(false)}
         onPause={() => setPaused(true)}
+        onLoadStart={() => setErrored(false)}
+        onWaiting={() => setBuffering(true)}
+        onStalled={() => setBuffering(true)}
+        onPlaying={() => { setBuffering(false); setErrored(false); }}
+        onCanPlay={() => setBuffering(false)}
+        onError={() => { setErrored(true); setBuffering(false); }}
       />
-      {paused && (
+      {/* Buffering spinner (only when not showing the pause icon or an error). */}
+      {buffering && !errored && !paused && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <span className="rounded-full bg-black/45 p-4 backdrop-blur-sm">
+            <Loader2 size={30} className="animate-spin text-white" />
+          </span>
+        </div>
+      )}
+      {errored && (
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center"
+          onClick={(e) => {
+            e.stopPropagation();
+            const v = ref.current;
+            if (v) { setErrored(false); setBuffering(true); v.load(); v.play().catch(() => {}); }
+          }}
+        >
+          <RotateCcw size={30} className="text-white" />
+          <span className="text-sm font-medium text-white">Không tải được video — chạm để thử lại</span>
+        </div>
+      )}
+      {paused && !buffering && !errored && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <span className="rounded-full bg-black/40 p-5 backdrop-blur-sm">
             <Play size={34} className="fill-white text-white" />

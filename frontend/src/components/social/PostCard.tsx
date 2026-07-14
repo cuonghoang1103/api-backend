@@ -10,7 +10,7 @@ import {
   Repeat2, Trash2, Copy, Flag, Eye, Globe, Users, Lock,
   X, Youtube, Music2,
   Download, FileText, FileCode, FileArchive, FileSpreadsheet,
-  CornerDownRight, Loader2,
+  CornerDownRight, Loader2, RotateCcw,
   // Phase 3: FB menu
   Pin, Bell, Archive, EyeOff, Clock,
 } from 'lucide-react';
@@ -1681,6 +1681,8 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
   const [muted, setMuted] = useState(false);
   const [showControls, setShowControls] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isBuffering, setIsBuffering] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Pause EVERY inline feed video while this modal is open, and keep
@@ -1811,7 +1813,13 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
           onPlay={() => setPlaying(true)}
           onPause={handlePause}
           onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime ?? 0)}
+          onLoadStart={() => setVideoError(false)}
           onLoadedMetadata={() => setDuration(videoRef.current?.duration ?? 0)}
+          onWaiting={() => setIsBuffering(true)}
+          onStalled={() => setIsBuffering(true)}
+          onPlaying={() => { setIsBuffering(false); setVideoError(false); }}
+          onCanPlay={() => setIsBuffering(false)}
+          onError={() => { setVideoError(true); setIsBuffering(false); }}
           onVolumeChange={() => {
             const v = videoRef.current;
             if (!v) return;
@@ -1819,6 +1827,30 @@ function VideoPlayerModal({ src, onClose }: { src: string; onClose: () => void }
             setMuted(v.muted);
           }}
         />
+
+        {/* Buffering spinner (centered) while the modal video waits for data. */}
+        {isBuffering && !videoError && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/55 backdrop-blur-sm">
+              <Loader2 className="h-7 w-7 animate-spin text-white" />
+            </span>
+          </div>
+        )}
+
+        {/* Playback error → retry. */}
+        {videoError && (
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center"
+            onClick={(e) => {
+              e.stopPropagation();
+              const v = videoRef.current;
+              if (v) { setVideoError(false); setIsBuffering(true); v.load(); v.play().catch(() => {}); }
+            }}
+          >
+            <RotateCcw className="h-8 w-8 text-white" />
+            <span className="text-sm font-medium text-white">Không tải được video — chạm để thử lại</span>
+          </div>
+        )}
 
         {/* Controls overlay */}
         <AnimatePresence>
@@ -2597,6 +2629,11 @@ function MediaItem({
   // Flips true once the <video> can actually play; used to retry the
   // autoplay if the first play() call raced ahead of the media loading.
   const [canPlay, setCanPlay] = useState(false);
+  // Buffering / error UX: without these the <video> just freezes on a stall
+  // (no feedback). onWaiting/onStalled show a centered spinner; onError shows
+  // a retry affordance instead of a dead frame.
+  const [isBuffering, setIsBuffering] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   // True while a VideoPlayerModal is open anywhere on the page. Inline
   // videos must NOT play while a modal is up (only the modal should have
   // sound/motion), and must resume — if still in view — once it closes.
@@ -2774,6 +2811,7 @@ function MediaItem({
             onPlay={() => setIsPlaying(true)}
             onPause={() => { setIsPlaying(false); setShowInlineControls(true); }}
             onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime ?? 0)}
+            onLoadStart={() => setVideoError(false)}
             onLoadedMetadata={() => {
               const v = videoRef.current;
               setDuration(v?.duration ?? 0);
@@ -2781,10 +2819,15 @@ function MediaItem({
                 onAspect?.(v.videoWidth / v.videoHeight);
               }
             }}
+            // Buffering feedback: the network can't keep up → show the spinner.
+            onWaiting={() => setIsBuffering(true)}
+            onStalled={() => setIsBuffering(true)}
+            onPlaying={() => { setIsBuffering(false); setVideoError(false); }}
+            onError={() => { setVideoError(true); setIsBuffering(false); }}
             // Retry autoplay once the media is actually playable. A
             // play() fired before data is buffered can no-op on some
             // browsers; flipping canPlay re-runs the play effect.
-            onCanPlay={() => setCanPlay(true)}
+            onCanPlay={() => { setCanPlay(true); setIsBuffering(false); }}
           />
         ) : (
           <img
@@ -2814,6 +2857,30 @@ function MediaItem({
                 <path d="M8 5v14l11-7z" />
               </svg>
             </div>
+          </div>
+        )}
+
+        {/* Buffering spinner — shown while the video stalls waiting for data. */}
+        {autoPlayEnabled && isBuffering && !videoError && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-black/55 backdrop-blur-sm">
+              <Loader2 className="h-6 w-6 animate-spin text-white" />
+            </span>
+          </div>
+        )}
+
+        {/* Playback error — offer a retry instead of a frozen frame. */}
+        {autoPlayEnabled && videoError && (
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/70 px-4 text-center"
+            onClick={(e) => {
+              e.stopPropagation();
+              const v = videoRef.current;
+              if (v) { setVideoError(false); setIsBuffering(true); v.load(); v.play().catch(() => {}); }
+            }}
+          >
+            <RotateCcw className="h-7 w-7 text-white" />
+            <span className="text-xs font-medium text-white">Không tải được video — chạm để thử lại</span>
           </div>
         )}
 

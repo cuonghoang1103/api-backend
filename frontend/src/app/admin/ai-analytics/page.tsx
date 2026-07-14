@@ -17,18 +17,21 @@ import {
 export default function AdminAIAnalyticsPage() {
   const [stats, setStats] = useState<Record<string, any>>({});
   const [feedback, setFeedback] = useState<Record<string, any>>({});
+  const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetch = async () => {
       try {
         setLoading(true);
-        const [overviewRes, feedbackRes] = await Promise.all([
+        const [overviewRes, feedbackRes, usersRes] = await Promise.all([
           api.get('/ai/analytics/overview').catch(() => ({ data: { data: {} } })),
           api.get('/ai/feedback/stats').catch(() => ({ data: { data: {} } })),
+          api.get('/ai/admin/usage/users').catch(() => ({ data: { data: [] } })),
         ]);
         setStats(overviewRes.data?.data || {});
         setFeedback(feedbackRes.data?.data || {});
+        setUsers(Array.isArray(usersRes.data?.data) ? usersRes.data.data : []);
       } catch {
         toast.error('Lỗi tải AI analytics');
       } finally {
@@ -194,6 +197,55 @@ export default function AdminAIAnalyticsPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Per-user usage (Pro/Max management) */}
+      <div className="bg-darkcard rounded-2xl border border-darkborder p-5">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-heading font-bold text-text-primary">Người dùng theo mức sử dụng</h2>
+          <span className="text-xs text-text-secondary">{users.length} người dùng · sắp theo token</span>
+        </div>
+        {users.length === 0 ? (
+          <p className="text-sm text-text-secondary">Chưa có dữ liệu sử dụng theo người dùng.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-text-secondary border-b border-darkborder">
+                  <th className="py-2 pr-3 font-medium">Người dùng</th>
+                  <th className="py-2 px-3 font-medium">Gói</th>
+                  <th className="py-2 px-3 font-medium text-right">Tin nhắn</th>
+                  <th className="py-2 px-3 font-medium text-right">Token</th>
+                  <th className="py-2 px-3 font-medium text-right">Phiên</th>
+                  <th className="py-2 pl-3 font-medium">Hoạt động gần nhất</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((u) => (
+                  <tr key={u.userId} className="border-b border-darkborder/50">
+                    <td className="py-2 pr-3">
+                      <div className="text-text-primary font-medium">{u.username || `#${u.userId}`}</div>
+                      {u.email && <div className="text-xs text-text-secondary">{u.email}</div>}
+                    </td>
+                    <td className="py-2 px-3">
+                      {u.isPro ? (
+                        <span className="inline-flex items-center rounded-full bg-amber-400/15 px-2 py-0.5 text-xs font-semibold text-amber-300">
+                          PRO{u.proExpiresAt ? '' : ' ∞'}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-text-secondary">Free</span>
+                      )}
+                    </td>
+                    <td className="py-2 px-3 text-right font-mono text-text-primary">{u.messages?.toLocaleString?.() ?? u.messages}</td>
+                    <td className="py-2 px-3 text-right font-mono text-text-primary">{u.tokens?.toLocaleString?.() ?? u.tokens}</td>
+                    <td className="py-2 px-3 text-right font-mono text-text-secondary">{u.sessions}</td>
+                    <td className="py-2 pl-3 text-xs text-text-secondary">{u.lastActive ? new Date(u.lastActive).toLocaleString('vi-VN') : '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

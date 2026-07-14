@@ -4,11 +4,12 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { User, Copy, CheckCheck, Download, FileText, Loader2 } from 'lucide-react';
+import { User, Copy, CheckCheck, Download, FileText, Loader2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import type { ChatMessage } from '@/types';
 import { downloadTextFile, downloadPdf } from '@/lib/chatExport';
+import { api } from '@/lib/api';
 
 // ── Inject cyberpunk scrollbar styles directly (bypasses Tailwind build pipeline) ──
 function ChatScrollStyles() {
@@ -95,7 +96,20 @@ function MessageBubble({ msg, isStreaming, isLastAssistant }: {
   const [copied, setCopied] = useState(false);
   const [dlOpen, setDlOpen] = useState(false);
   const [dlBusy, setDlBusy] = useState(false);
+  const [rated, setRated] = useState<null | 'up' | 'down'>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
+
+  const sendFeedback = async (kind: 'up' | 'down') => {
+    if (!msg.dbId || rated) return;
+    setRated(kind); // optimistic — the widget stays out of the user's way
+    try {
+      await api.post('/ai/feedback', { messageId: msg.dbId, rating: kind === 'up' ? 5 : 1, feedbackType: 'thumbs' });
+      toast.success('Cảm ơn phản hồi của bạn!');
+    } catch {
+      setRated(null);
+      toast.error('Không gửi được phản hồi');
+    }
+  };
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(msg.content);
@@ -315,6 +329,27 @@ function MessageBubble({ msg, isStreaming, isLastAssistant }: {
                 <Copy className="w-3 h-3" />
               )}
             </motion.button>
+          )}
+          {/* Feedback thumbs — only once the reply is saved (has a DB id) and done */}
+          {!isUser && msg.dbId && !isStreaming && (
+            <div className="flex items-center gap-0.5">
+              <button
+                onClick={() => sendFeedback('up')}
+                disabled={!!rated}
+                title="Câu trả lời hữu ích"
+                className={`p-1 rounded-md transition-colors ${rated === 'up' ? 'text-green-400' : 'text-[#64748b] hover:text-green-400 hover:bg-green-400/5'} disabled:cursor-default`}
+              >
+                <ThumbsUp className="w-3 h-3" />
+              </button>
+              <button
+                onClick={() => sendFeedback('down')}
+                disabled={!!rated}
+                title="Câu trả lời chưa tốt"
+                className={`p-1 rounded-md transition-colors ${rated === 'down' ? 'text-red-400' : 'text-[#64748b] hover:text-red-400 hover:bg-red-400/5'} disabled:cursor-default`}
+              >
+                <ThumbsDown className="w-3 h-3" />
+              </button>
+            </div>
           )}
           {/* Download the reply as a file (assistant, non-empty only) */}
           {!isUser && msg.content?.trim() && (

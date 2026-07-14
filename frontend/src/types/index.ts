@@ -296,6 +296,8 @@ export interface PostCard {
 // AI Chat types
 export interface ChatMessage {
   id: number;
+  /** Real DB id of the saved assistant message (from the SSE done frame) — for feedback. */
+  dbId?: number;
   sessionId: string;
   role: 'user' | 'assistant';
   content: string;

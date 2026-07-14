@@ -91,6 +91,13 @@ export interface ChatModelMeta {
   effective: string;
   fellBack: boolean;
   reason?: string;
+  /** DB id of the saved assistant message (so the client can attach feedback). */
+  savedMessageId?: number;
+}
+
+/** Rough token estimate (~4 chars/token) — used when the gateway doesn't return usage. */
+function estimateTokens(text: string): number {
+  return Math.max(1, Math.round((text || '').length / 4));
 }
 
 // ─── Groq (OpenAI-compatible) client ─────────────────────────────
@@ -280,29 +287,41 @@ export class AIService {
   private async saveUserMessage(
     sessionId: string,
     content: string,
-    _userId?: number,
+    userId?: number,
   ): Promise<void> {
     // Ensure session exists BEFORE creating messages that reference it
     // (foreign key chat_messages_session_id_fkey would otherwise fail).
+    // Persist userId so per-user analytics (Pro/Max usage) can attribute chats.
     await prisma.chatSession.upsert({
       where: { id: sessionId },
-      create: { id: sessionId, title: `Chat ${new Date().toLocaleString('vi-VN')}` },
-      update: { updatedAt: new Date() },
+      create: { id: sessionId, userId: userId ?? null, title: `Chat ${new Date().toLocaleString('vi-VN')}` },
+      update: { updatedAt: new Date(), ...(userId ? { userId } : {}) },
     });
 
     await prisma.chatMessage.create({
-      data: { sessionId, role: 'user', content },
+      data: { sessionId, role: 'user', content, tokenCount: estimateTokens(content) },
     });
   }
 
   // ─── Save assistant message ────────────────────────────────
+  // Returns the created row so callers can surface its id (for feedback) and
+  // stores a token estimate (real usage isn't uniformly exposed by the gateway).
   private async saveAssistantMessage(
     sessionId: string,
     content: string,
-  ): Promise<void> {
-    await prisma.chatMessage.create({
-      data: { sessionId, role: 'assistant', content },
+    tokenCount?: number,
+  ): Promise<{ id: number }> {
+    const msg = await prisma.chatMessage.create({
+      data: { sessionId, role: 'assistant', content, tokenCount: tokenCount ?? estimateTokens(content) },
+      select: { id: true },
     });
+    return msg;
+  }
+
+  /** Save the assistant message AND record its id on meta (for client feedback). */
+  private async saveAssistantAndTrack(sessionId: string, content: string, meta?: ChatModelMeta, tokenCount?: number): Promise<void> {
+    const saved = await this.saveAssistantMessage(sessionId, content, tokenCount);
+    if (meta) meta.savedMessageId = saved.id;
   }
 
   // ─── Fetch RAG context (semantic search with keyword fallback) ──────
@@ -528,12 +547,12 @@ export class AIService {
           // Empty stream (no error but zero tokens) → treat as failure so we
           // try the non-stream path rather than returning a blank answer.
           if (!streamed.trim()) throw new Error('empty claude stream');
-          if (sessionId) await this.saveAssistantMessage(sessionId, streamed);
+          if (sessionId) await this.saveAssistantAndTrack(sessionId, streamed, meta);
           return;
         } catch (err) {
           if (streamed) {
             // Partial answer already shown — save it and stop (don't restart).
-            if (sessionId) await this.saveAssistantMessage(sessionId, streamed);
+            if (sessionId) await this.saveAssistantAndTrack(sessionId, streamed, meta);
             logger.warn('AIService Claude stream broke mid-answer, kept partial', { model: selected.id });
             return;
           }
@@ -543,7 +562,7 @@ export class AIService {
         try {
           const text = await completeClaudeChat({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens });
           for (let i = 0; i < text.length; i += 4) yield text.slice(i, i + 4);
-          if (sessionId && text) await this.saveAssistantMessage(sessionId, text);
+          if (sessionId && text) await this.saveAssistantAndTrack(sessionId, text, meta);
           return;
         } catch (err) {
           logger.warn('AIService Claude non-stream failed, falling back to default', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
@@ -626,7 +645,7 @@ export class AIService {
         }
 
         if (sessionId && fullResponse) {
-          await this.saveAssistantMessage(sessionId, fullResponse);
+          await this.saveAssistantAndTrack(sessionId, fullResponse, meta);
         }
         return;
       } catch (err) {
@@ -977,11 +996,10 @@ export class AIService {
 
   // ─── Get feedback stats ─────────────────────────────────
   async getFeedbackStats() {
-    const [aggregate, recent] = await Promise.all([
-      prisma.chatFeedback.aggregate({
-        _avg: { rating: true },
-        _count: true,
-      }),
+    const [aggregate, positiveCount, negativeCount, recent] = await Promise.all([
+      prisma.chatFeedback.aggregate({ _avg: { rating: true }, _count: true }),
+      prisma.chatFeedback.count({ where: { rating: { gte: 4 } } }),
+      prisma.chatFeedback.count({ where: { rating: { lte: 2 } } }),
       prisma.chatFeedback.findMany({
         orderBy: { createdAt: 'desc' },
         take: 20,
@@ -993,6 +1011,11 @@ export class AIService {
     ]);
 
     return {
+      totalFeedbacks: aggregate._count,
+      averageRating: aggregate._avg.rating ?? 0,
+      positiveCount,
+      negativeCount,
+      // Back-compat keys.
       total: aggregate._count,
       avgRating: aggregate._avg.rating ?? 0,
       recent,

@@ -398,6 +398,7 @@ export default function ChatPage() {
 
       let assistantContent = '';
       let resolvedSessionId = '';
+      let resolvedMessageId: number | undefined;
       const assistantTempId = tempId + 1;
 
       const assistantMsg: ChatMessage = {
@@ -442,7 +443,11 @@ export default function ChatPage() {
               }
               continue;
             }
-            if (data.type === 'done' || data.type === 'error') continue;
+            if (data.type === 'done') {
+              if (typeof data.messageId === 'number') resolvedMessageId = data.messageId;
+              continue;
+            }
+            if (data.type === 'error') continue;
 
             const text = data.text ?? data.content ?? '';
             if (text) {
@@ -456,6 +461,20 @@ export default function ChatPage() {
             }
           }
         }
+      }
+
+      // Attach the real DB message id to the assistant bubble so it can carry feedback.
+      if (resolvedMessageId) {
+        useChatStore.setState((state) => {
+          const msgs = state.messages[sessionId];
+          if (!msgs) return state;
+          return {
+            messages: {
+              ...state.messages,
+              [sessionId]: msgs.map((m) => (m.id === assistantTempId ? { ...m, dbId: resolvedMessageId } : m)),
+            },
+          };
+        });
       }
 
       // Migrate to backend session if resolved

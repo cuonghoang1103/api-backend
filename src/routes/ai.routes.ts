@@ -327,7 +327,7 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     clearTimers();
     sendModelFrame(); // ensure the client learns the effective model even if 0 chunks streamed
     res.write(
-      `data: ${JSON.stringify({ type: 'done', text: '', done: true, tokens: tokenCount, model: modelMeta.effective, fellBack: modelMeta.fellBack })}\n\n`,
+      `data: ${JSON.stringify({ type: 'done', text: '', done: true, tokens: tokenCount, model: modelMeta.effective, fellBack: modelMeta.fellBack, messageId: modelMeta.savedMessageId })}\n\n`,
     );
     res.end();
   } catch (streamError) {
@@ -505,37 +505,107 @@ router.get('/feedback/stats', authenticate, async (_req: any, res: Response<ApiR
 // ════════════════════════════════════════════════════════════════
 // GET /api/v1/ai/analytics/overview
 // ════════════════════════════════════════════════════════════════
-router.get('/analytics/overview', authenticate, async (_req: any, res: Response<ApiResponse>, next) => {
+router.get('/analytics/overview', authenticate, requireAdmin(), async (_req: any, res: Response<ApiResponse>, next) => {
   try {
-    const [sessionCount, messageCount, recentSessions] = await Promise.all([
+    const [sessionCount, messageCount, userMsgCount, tokenAgg, identifiedSessions, recentMsgs] = await Promise.all([
       prisma.chatSession.count(),
       prisma.chatMessage.count(),
-      prisma.chatSession.findMany({
-        select: { createdAt: true },
+      prisma.chatMessage.count({ where: { role: 'user' } }),
+      prisma.chatMessage.aggregate({ _sum: { tokenCount: true } }),
+      prisma.chatSession.count({ where: { userId: { not: null } } }),
+      // Real response time: user→assistant gap within a session, over recent msgs.
+      prisma.chatMessage.findMany({
         orderBy: { createdAt: 'desc' },
-        take: 100,
+        take: 2000,
+        select: { sessionId: true, role: true, createdAt: true },
       }),
     ]);
 
-    let avgResponseTime = 0;
-    if (recentSessions.length > 1) {
-      const diffs = recentSessions
-        .slice(1)
-        .map((s, i) => s.createdAt.getTime() - recentSessions[i].createdAt.getTime())
-        .filter(d => d > 0 && d < 300000);
-      avgResponseTime = diffs.length > 0
-        ? Math.round(diffs.reduce((a, b) => a + b, 0) / diffs.length)
-        : 0;
+    const bySession = new Map<string, Array<{ role: string; t: number }>>();
+    for (const m of recentMsgs) {
+      const arr = bySession.get(m.sessionId) ?? [];
+      arr.push({ role: m.role, t: m.createdAt.getTime() });
+      bySession.set(m.sessionId, arr);
     }
+    const diffs: number[] = [];
+    for (const arr of bySession.values()) {
+      arr.sort((a, b) => a.t - b.t);
+      for (let i = 1; i < arr.length; i++) {
+        if (arr[i - 1].role === 'user' && arr[i].role === 'assistant') {
+          const d = arr[i].t - arr[i - 1].t;
+          if (d > 0 && d < 300000) diffs.push(d);
+        }
+      }
+    }
+    const avgResponseTimeMs = diffs.length ? Math.round(diffs.reduce((a, b) => a + b, 0) / diffs.length) : 0;
 
     res.json({
       success: true,
       data: {
         totalSessions: sessionCount,
         totalMessages: messageCount,
-        avgResponseTime,
+        totalUserMessages: userMsgCount,
+        totalTokens: tokenAgg._sum.tokenCount ?? 0,
+        avgResponseTimeMs,
+        avgResponseTime: avgResponseTimeMs, // back-compat
+        identifiedSessions,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ════════════════════════════════════════════════════════════════
+// ADMIN: GET /api/v1/ai/admin/usage/users
+// Per-user chat usage (messages, tokens, sessions) + Pro/Max status — so admins
+// can manage who's using the Pro/Max tiers and how heavily.
+// ════════════════════════════════════════════════════════════════
+router.get('/admin/usage/users', authenticate, requireAdmin(), async (_req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const [msgAgg, sessions] = await Promise.all([
+      prisma.chatMessage.groupBy({ by: ['sessionId'], _count: { _all: true }, _sum: { tokenCount: true } }),
+      prisma.chatSession.findMany({ where: { userId: { not: null } }, select: { id: true, userId: true, updatedAt: true } }),
+    ]);
+    const sessMap = new Map(sessions.map((s) => [s.id, s]));
+    const perUser = new Map<number, { messages: number; tokens: number; sessions: number; lastActive: number }>();
+    for (const g of msgAgg) {
+      const s = sessMap.get(g.sessionId);
+      if (!s?.userId) continue;
+      const u = perUser.get(s.userId) ?? { messages: 0, tokens: 0, sessions: 0, lastActive: 0 };
+      u.messages += g._count._all;
+      u.tokens += g._sum.tokenCount ?? 0;
+      u.sessions += 1;
+      u.lastActive = Math.max(u.lastActive, s.updatedAt.getTime());
+      perUser.set(s.userId, u);
+    }
+    const userIds = [...perUser.keys()];
+    const users = userIds.length
+      ? await prisma.user.findMany({
+          where: { id: { in: userIds } },
+          select: { id: true, username: true, email: true, isPro: true, proExpiresAt: true },
+        })
+      : [];
+    const uMap = new Map(users.map((u) => [u.id, u]));
+    const rows = userIds
+      .map((id) => {
+        const agg = perUser.get(id)!;
+        const u = uMap.get(id);
+        return {
+          userId: id,
+          username: u?.username ?? null,
+          email: u?.email ?? null,
+          isPro: !!u?.isPro,
+          proExpiresAt: u?.proExpiresAt ?? null,
+          messages: agg.messages,
+          tokens: agg.tokens,
+          sessions: agg.sessions,
+          lastActive: new Date(agg.lastActive).toISOString(),
+        };
+      })
+      .sort((a, b) => b.tokens - a.tokens)
+      .slice(0, 100);
+    res.json({ success: true, data: rows });
   } catch (error) {
     next(error);
   }

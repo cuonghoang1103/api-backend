@@ -10,6 +10,7 @@
  */
 import { prisma } from '../../config/database.js';
 import { BadRequestError } from '../../middleware/errorHandler.js';
+import { invalidateTaxonomy } from './taxonomy.service.js';
 import type { InterviewLevel, InterviewQuestion, Prisma } from '@prisma/client';
 
 // Level ladder — sampling falls back to adjacent levels when a topic is thin.
@@ -218,7 +219,7 @@ export async function createQuestion(authorId: number, data: QuestionInput) {
   if (!data.topicId) throw new BadRequestError('topicId là bắt buộc');
   if (!data.level) throw new BadRequestError('level là bắt buộc');
   if (!data.body?.trim()) throw new BadRequestError('body là bắt buộc');
-  return prisma.interviewQuestion.create({
+  const created = await prisma.interviewQuestion.create({
     data: {
       topicId: data.topicId,
       conceptId: data.conceptId ?? null,
@@ -242,6 +243,8 @@ export async function createQuestion(authorId: number, data: QuestionInput) {
       authorId,
     },
   });
+  invalidateTaxonomy(); // question count changed → refresh the setup wizard immediately
+  return created;
 }
 
 export async function updateQuestion(id: number, editorId: number, data: QuestionInput) {
@@ -252,7 +255,7 @@ export async function updateQuestion(id: number, editorId: number, data: Questio
   await prisma.interviewQuestionVersion.create({
     data: { questionId: id, version: lastVersion + 1, snapshot: existing as never, editorId },
   });
-  return prisma.interviewQuestion.update({
+  const updated = await prisma.interviewQuestion.update({
     where: { id },
     data: {
       topicId: data.topicId ?? undefined,
@@ -275,9 +278,12 @@ export async function updateQuestion(id: number, editorId: number, data: Questio
       rubricReviewed: data.rubricReviewed ?? undefined,
     },
   });
+  invalidateTaxonomy(); // publish/unpublish/edit changes the count → refresh immediately
+  return updated;
 }
 
 export async function deleteQuestion(id: number) {
   await prisma.interviewQuestion.delete({ where: { id } });
+  invalidateTaxonomy();
   return { deleted: true };
 }

@@ -60,6 +60,10 @@ export interface ChatMessageDto {
   sessionId?: string;
   documentType?: string;
   topK?: number;
+  /** Selected chat model id (see CHAT_MODELS). */
+  model?: string;
+  /** Prior conversation turns for multi-turn memory (most recent last). */
+  history?: Array<{ role: 'user' | 'assistant'; content: string }>;
 }
 
 export interface UploadResult {

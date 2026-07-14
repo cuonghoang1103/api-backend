@@ -523,11 +523,21 @@ export class AuthService {
       throw new AppError('User not found', 404, 'USER_NOT_FOUND');
     }
 
+    // Pro membership — effective = admin OR (isPro flag && not expired).
+    const roleNames = user.roles.map((ur) => ur.role.name);
+    const isAdmin = roleNames.some((n) => /^(role_)?(admin|superadmin)$/i.test(n));
+    const proActive = user.isPro && (!user.proExpiresAt || user.proExpiresAt > new Date());
+    const isProEffective = isAdmin || proActive;
+
     return {
       id: user.id,
       username: user.username,
       email: user.email,
       fullName: user.fullName,
+      // Pro membership (effective — admins are always Pro).
+      isPro: isProEffective,
+      proLifetime: isAdmin ? true : proActive ? !user.proExpiresAt : false,
+      proExpiresAt: user.proExpiresAt,
       // displayName is the user-facing "Tên" shown in the UI.
       // Falls back to fullName then username when not set so
       // callers always have a non-empty value.

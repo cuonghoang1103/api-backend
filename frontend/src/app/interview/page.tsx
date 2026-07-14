@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { History, ArrowRight, Loader2, ShieldCheck, Flame } from 'lucide-react';
+import { History, ArrowRight, Loader2, ShieldCheck, Flame, Crown } from 'lucide-react';
 import { INTERVIEW_ENABLED } from '@/lib/featureFlags';
 import ParticleBackground from '@/components/repos/ParticleBackground';
 import { interviewApi } from '@/lib/interview-api';
@@ -179,18 +179,24 @@ export default function InterviewSetupPage() {
                     { id: 'STATIC', label: 'Tự chấm', desc: 'Bạn tự chấm + máy khách quan. 0 đồng, 0 AI.' },
                     { id: 'HYBRID', label: 'AI chấm', desc: 'AI chấm từng tiêu chí có dẫn chứng. Tốn token.' },
                     { id: 'FULL_AI', label: 'AI đầy đủ', desc: 'AI chấm + viết báo cáo chi tiết.' },
-                  ] as const).map((m) => (
-                    <button
-                      key={m.id}
-                      onClick={() => setEngineMode(m.id)}
-                      className={`text-left px-4 py-3 rounded-xl border transition-all ${
-                        engineMode === m.id ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
-                      }`}
-                    >
-                      <div className="font-semibold text-slate-100 text-sm">{m.label}</div>
-                      <div className="text-xs text-slate-400 mt-0.5">{m.desc}</div>
-                    </button>
-                  ))}
+                  ] as const).map((m) => {
+                    const locked = m.id !== 'STATIC' && !tax.aiAllowed;
+                    return (
+                      <button
+                        key={m.id}
+                        onClick={() => { if (locked) { router.push('/pro'); return; } setEngineMode(m.id); }}
+                        className={`text-left px-4 py-3 rounded-xl border transition-all ${
+                          engineMode === m.id && !locked ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
+                        } ${locked ? 'opacity-80' : ''}`}
+                      >
+                        <div className="font-semibold text-slate-100 text-sm flex items-center gap-1.5">
+                          {m.label}
+                          {locked && <span className="inline-flex items-center gap-0.5 rounded bg-amber-400/15 px-1 py-0.5 text-[9px] font-semibold text-amber-300"><Crown className="w-2.5 h-2.5" /> PRO</span>}
+                        </div>
+                        <div className="text-xs text-slate-400 mt-0.5">{locked ? 'Nâng cấp Pro để dùng AI chấm điểm' : m.desc}</div>
+                      </button>
+                    );
+                  })}
                 </div>
               </Section>
             )}

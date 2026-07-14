@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Loader2 } from 'lucide-react';
+import ModelPicker from './ModelPicker';
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -51,6 +52,10 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
       className="px-4 py-3 border-t border-[#22d3ee]/10 bg-[#0d1117]/80 backdrop-blur-xl flex-shrink-0 z-10"
     >
       <div className="max-w-4xl mx-auto">
+        {/* Model switcher */}
+        <div className="mb-2 flex items-center">
+          <ModelPicker disabled={isStreaming} />
+        </div>
         {/* Terminal input box */}
         <div
           className={`

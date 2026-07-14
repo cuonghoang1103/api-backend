@@ -20,6 +20,7 @@ import { isAiAvailable, getUsageStats } from '../services/interview/llm/index.js
 import * as knowledge from '../services/interview/knowledge/knowledge.service.js';
 import * as prompts from '../services/interview/promptTemplate.service.js';
 import * as questionGen from '../services/interview/questionGen.service.js';
+import { isProEffective } from '../services/pro.service.js';
 import type { InterviewLevel, InterviewContentStatus } from '@prisma/client';
 
 const VALID_LEVELS: InterviewLevel[] = ['INTERN', 'FRESHER', 'JUNIOR', 'MID', 'SENIOR', 'LEAD', 'PRINCIPAL'];
@@ -38,10 +39,12 @@ const router = Router();
 router.use(authenticate);
 
 // Taxonomy for the setup wizard
-router.get('/tracks', async (_req: Request, res: Response<ApiResponse>, next) => {
+router.get('/tracks', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const tax = await taxonomy.getTaxonomy();
-    res.json({ success: true, data: { ...tax, aiAvailable: isAiAvailable() } });
+    // aiAvailable = platform can do AI; aiAllowed = THIS user may use it (Pro/admin).
+    const aiAllowed = await isProEffective(req.userId);
+    res.json({ success: true, data: { ...tax, aiAvailable: isAiAvailable(), aiAllowed } });
   } catch (err) { next(err); }
 });
 

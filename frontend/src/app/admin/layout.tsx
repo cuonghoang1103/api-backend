@@ -8,7 +8,7 @@ import {
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
  CreditCard, Github, Search, TrendingUp, AlertTriangle,
- KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase,
+ KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown,
 } from 'lucide-react';
 
 const adminNav = [
@@ -20,6 +20,7 @@ const adminNav = [
  { label: 'Content Studio', href: '/creator', icon: Clapperboard, accent: 'studio' as const },
  { label: 'FPT Academy LMS', href: '/admin/academy', icon: GraduationCap },
  { label: 'Quản lý Mã Code', href: '/admin/code-academy', icon: KeyRound },
+ { label: 'Quản lý Mã Pro', href: '/admin/pro-codes', icon: Crown },
  { label: 'Quan ly Bai Giang', href: '/admin/lessons', icon: BookOpen },
   { label: 'Quan ly Nhac', href: '/admin/music', icon: Music },
   { label: 'Music Post (Post nền)', href: '/admin/music-posts', icon: Music },

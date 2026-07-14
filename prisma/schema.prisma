@@ -68,6 +68,14 @@ model User {
   // always have access regardless of this flag.
   musicAccess Boolean @default(false) @map("music_access")
 
+  // ─── Pro membership (unlocks music page, AI chat Pro/Max, Interview AI
+  //     grading, full Academy). Admins are always effectively Pro regardless.
+  //     `proExpiresAt` null while isPro=true means a LIFETIME membership. ─────
+  isPro        Boolean   @default(false) @map("is_pro")
+  proSince     DateTime? @map("pro_since")
+  proExpiresAt DateTime? @map("pro_expires_at")
+  proSource    String?   @map("pro_source") @db.VarChar(20) // CODE | ADMIN
+
   // ─── Account security (Giai đoạn 1 — bảo mật cao) ────────────────────
   // Email verification
   emailVerified   Boolean   @default(false) @map("email_verified")
@@ -305,6 +313,40 @@ model AppSetting {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("app_settings")
+}
+
+// ─── Pro membership codes (global entitlement, unlike per-course CourseCode) ──
+// An admin creates a ProCode with an optional duration (null = lifetime) and a
+// use cap; a user redeems it to become Pro. Mirrors the CourseCode redeem
+// pattern but grants an account-wide flag instead of a per-course enrollment.
+model ProCode {
+  id           Int             @id @default(autoincrement())
+  code         String          @unique @db.VarChar(40)
+  label        String?         @db.VarChar(120)
+  durationDays Int?            @map("duration_days") // null = lifetime
+  maxUses      Int             @default(1) @map("max_uses")
+  usedCount    Int             @default(0) @map("used_count")
+  isActive     Boolean         @default(true) @map("is_active")
+  expiresAt    DateTime?       @map("expires_at") // the code's own validity window
+  note         String?         @db.VarChar(255)
+  createdBy    Int?            @map("created_by") // admin userId (no FK, matches interview convention)
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+  redemptions  ProRedemption[]
+
+  @@map("pro_codes")
+}
+
+model ProRedemption {
+  id          Int      @id @default(autoincrement())
+  proCodeId   Int      @map("pro_code_id")
+  userId      Int      @map("user_id") // no FK (matches interview convention)
+  grantedDays Int?     @map("granted_days") // snapshot; null = lifetime
+  createdAt   DateTime @default(now()) @map("created_at")
+  proCode     ProCode  @relation(fields: [proCodeId], references: [id], onDelete: Cascade)
+
+  @@unique([proCodeId, userId], name: "uk_pro_redemption")
+  @@map("pro_redemptions")
 }
 
 // ============================================================

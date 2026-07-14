@@ -5,6 +5,7 @@ import { randomBytes } from 'crypto';
 import { prisma } from '../config/database.js';
 import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { isProEffective } from '../services/pro.service.js';
 import { uploadDocument, deleteByUrl, UploadError } from '../storage/uploadService.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { buildKey } from '../storage/keys.js';
@@ -91,6 +92,8 @@ async function assertCanAccessCourseContent(
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {
+        isPro: true,
+        proExpiresAt: true,
         roles: {
           select: { role: { select: { name: true } } },
         },
@@ -100,6 +103,10 @@ async function assertCanAccessCourseContent(
     const isAdmin = roleNames.some((n) => /^(role_)?(admin|superadmin)$/i.test(n));
     if (isAdmin || course.instructorId === userId) {
       return { isAdmin: true, isEnrolled: true, isFree, hasCodeEnrollment: false };
+    }
+    // Pro members get full Academy access — no code, no enrollment needed.
+    if (user?.isPro && (!user.proExpiresAt || user.proExpiresAt > new Date())) {
+      return { isAdmin: false, isEnrolled: true, isFree, hasCodeEnrollment: true };
     }
   }
 
@@ -434,8 +441,11 @@ async function serializeCourse(
   // (admin "Trả phí or Mã kích hoạt" type). A FREE enrollment never unlocks a CODE/PAID course.
   const isPaidOrCodeCourse = isCodeCourse || course.accessType === 'PAID';
   const hasCodeEnrollment = enrollment?.source === 'CODE' && !enrollmentExpired;
+  // Pro members (and admins) unlock all courses without a code/order.
+  const hasProAccess = options?.userId && !isOwner ? await isProEffective(options.userId) : false;
   const hasPaidAccess = options?.includeDraftLessons
     || isOwner
+    || hasProAccess
     || (isFree && !isCodeCourse && Boolean(enrollment) && !enrollmentExpired)
     || (hasPaidOrder && !enrollmentExpired)
     || (isPaidOrCodeCourse && hasCodeEnrollment);

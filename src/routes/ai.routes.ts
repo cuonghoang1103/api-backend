@@ -22,7 +22,7 @@ import { Router, type Response } from 'express';
 import multer from 'multer';
 
 import { prisma } from '../config/database.js';
-import { aiService } from '../services/ai.service.js';
+import { aiService, DEFAULT_CHAT_MODEL_ID, type ChatModelMeta } from '../services/ai.service.js';
 import { optionalAuth, authenticate, requireAdmin } from '../middleware/auth.js';
 import { quotaMiddleware } from '../services/quota.service.js';
 import { AppError } from '../middleware/errorHandler.js';
@@ -47,8 +47,8 @@ const textUpload = multer({
 });
 
 // ─── SSE Constants ────────────────────────────────────────
-const SSE_KEEPALIVE_INTERVAL_MS = 25_000; // 25s — keep connection alive through Nginx
-const SSE_TIMEOUT_MS = 180_000;           // 3 phút max response time
+const SSE_KEEPALIVE_INTERVAL_MS = 15_000; // 15s — keep connection alive through Nginx AND reset client idle timers before slow (Opus) first-token
+const SSE_TIMEOUT_MS = 240_000;           // 4 phút — room for long (10k–15k token) Pro/Max answers
 
 // ════════════════════════════════════════════════════════════════
 // POST /api/v1/ai/chat
@@ -58,6 +58,9 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
   // ─── 1. Validate input FIRST ──────────────────────────────
   // Validation MUST happen before flushHeaders() to avoid double-response
   const { message, sessionId, documentType, topK } = req.body as ChatMessageDto;
+  const requestedModel = typeof (req.body as { model?: unknown }).model === 'string'
+    ? (req.body as { model: string }).model
+    : DEFAULT_CHAT_MODEL_ID;
 
   if (!message?.trim()) {
     // Cannot throw to next() here — headers not set yet
@@ -147,6 +150,20 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     message: message.trim(),
     documentType,
     topK: topK ?? 5,
+    model: requestedModel,
+    history: Array.isArray((req.body as { history?: unknown }).history)
+      ? (req.body as { history: Array<{ role: 'user' | 'assistant'; content: string }> }).history
+      : undefined,
+  };
+
+  // Mutable model metadata — streamChat fills this in; we forward it to the
+  // client so a Claude→default fallback reverts the model switcher in the UI.
+  const modelMeta: ChatModelMeta = { requested: requestedModel, effective: requestedModel, fellBack: false };
+  let modelFrameSent = false;
+  const sendModelFrame = (): void => {
+    if (modelFrameSent || res.writableEnded) return;
+    modelFrameSent = true;
+    res.write(`data: ${JSON.stringify({ type: 'model', requested: modelMeta.requested, effective: modelMeta.effective, fellBack: modelMeta.fellBack, reason: modelMeta.reason })}\n\n`);
   };
 
   let tokenCount = 0;
@@ -154,7 +171,10 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
 
   try {
     // async generator: yields each text chunk from Gemini stream
-    for await (const chunk of aiService.streamChat(chatContext)) {
+    for await (const chunk of aiService.streamChat(chatContext, modelMeta)) {
+      // Emit the resolved model once (before the first token) so the client can
+      // revert the picker immediately if a Claude tier fell back to default.
+      sendModelFrame();
       // Safety: max 10000 tokens
       tokenCount++;
       if (tokenCount > 10000) {
@@ -200,8 +220,9 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
 
     // ─── 7. Send completion frame ───────────────────────
     clearTimers();
+    sendModelFrame(); // ensure the client learns the effective model even if 0 chunks streamed
     res.write(
-      `data: ${JSON.stringify({ type: 'done', text: '', done: true, tokens: tokenCount })}\n\n`,
+      `data: ${JSON.stringify({ type: 'done', text: '', done: true, tokens: tokenCount, model: modelMeta.effective, fellBack: modelMeta.fellBack })}\n\n`,
     );
     res.end();
   } catch (streamError) {

@@ -421,6 +421,7 @@ for route in \
     my-language \
     finance/wallets \
     interview/tracks \
+    pro/status \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

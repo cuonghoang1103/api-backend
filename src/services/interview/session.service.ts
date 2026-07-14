@@ -22,6 +22,7 @@ import { generateStaticReport } from './report.service.js';
 import { createReviewCardsForSession } from './drill.service.js';
 import { isAiAvailable, checkTokenQuota } from './llm/index.js';
 import { evaluateAnswerWithAI, type AiEvaluationResult } from './aiEvaluator.js';
+import { isProEffective } from '../pro.service.js';
 import { retrieveChunks } from './knowledge/retrieval.js';
 import { synthesizeAiReport, type TurnSummary } from './aiReport.js';
 import type { InterviewEngineMode } from '@prisma/client';
@@ -37,11 +38,12 @@ function disagreementThreshold(): number {
   const v = Number(process.env.SCORE_DISAGREEMENT_THRESHOLD);
   return Number.isFinite(v) && v > 0 ? v : 35;
 }
-/** Requested engine mode collapses to STATIC whenever AI isn't currently usable. */
-function resolveEngineMode(requested: string | undefined): InterviewEngineMode {
+/** Requested engine mode collapses to STATIC whenever AI isn't currently usable
+ *  OR the user isn't allowed AI grading (Pro/admin only). */
+function resolveEngineMode(requested: string | undefined, allowAi: boolean): InterviewEngineMode {
   const r = String(requested ?? process.env.DEFAULT_ENGINE_MODE ?? 'STATIC').toUpperCase();
   const wantsAi = r === 'HYBRID' || r === 'FULL_AI';
-  if (wantsAi && isAiAvailable()) return r as InterviewEngineMode;
+  if (wantsAi && isAiAvailable() && allowAi) return r as InterviewEngineMode;
   return 'STATIC';
 }
 
@@ -112,6 +114,10 @@ export async function createSession(
     throw new BadRequestError('Chưa có câu hỏi cho track/level này. Hãy chọn cấp độ khác hoặc báo admin bổ sung ngân hàng câu hỏi.');
   }
 
+  // AI grading (HYBRID/FULL_AI) is a Pro perk — non-Pro users are forced to
+  // STATIC self-assessment regardless of what they requested.
+  const allowAi = await isProEffective(userId);
+
   const session = await prisma.interviewSession.create({
     data: {
       userId,
@@ -119,7 +125,7 @@ export async function createSession(
       companyProfileId,
       level,
       mode: 'TEXT',
-      engineMode: resolveEngineMode(typeof body.engineMode === 'string' ? body.engineMode : undefined),
+      engineMode: resolveEngineMode(typeof body.engineMode === 'string' ? body.engineMode : undefined, allowAi),
       language,
       status: 'IN_PROGRESS',
       focusedMode: Boolean(body.focusedMode),

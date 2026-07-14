@@ -22,9 +22,10 @@ import {
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
  Globe, ShoppingBag, Bell, NotebookPen,
 Sun, Moon, Wallet, ArrowLeft, Megaphone,
-PlayCircle, Receipt, Ticket, Award, Briefcase,
+PlayCircle, Receipt, Ticket, Award, Briefcase, Crown,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { usePro } from '@/hooks/usePro';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { ChangePasswordModal } from '@/components/auth/ChangePasswordModal';
 
@@ -84,6 +85,7 @@ export default function Navbar() {
   const { data: session } = useSession();
   const { user: backendUser, isAuthenticated: isBackendAuth } = useAuthStore();
   const { hasAccess: hasMusicAccess } = useMusicAccess();
+  const { isPro } = usePro();
   const { theme, toggleTheme } = useTheme();
   const { getTotalItems, openDrawer } = useCartStore();
   const unreadMessages = useMessagingStore((s) => s.unreadTotal);
@@ -281,11 +283,16 @@ export default function Navbar() {
               <img
                 src="/images/avatar.png"
                 alt="CuongHoang"
-                className="w-8 h-8 rounded-xl object-cover ring-1 ring-neon-violet/30 group-hover:ring-neon-violet/60 transition-all"
+                className={`w-8 h-8 rounded-xl object-cover ring-1 transition-all ${isPro ? 'ring-2 ring-amber-400/70 shadow-[0_0_12px_rgba(251,191,36,0.4)]' : 'ring-neon-violet/30 group-hover:ring-neon-violet/60'}`}
               />
               <span className="font-heading font-bold text-sm text-text-primary hidden sm:block group-hover:text-neon-violet transition-colors">
                 CuongHoang
               </span>
+              {isPro && (
+                <span className="hidden sm:inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[10px] font-bold text-white bg-gradient-to-r from-amber-400 to-violet-500 shadow-[0_0_10px_rgba(245,158,11,0.4)]">
+                  <Crown className="w-2.5 h-2.5" /> PRO
+                </span>
+              )}
             </Link>
 
             {/* Mobile back button — every page EXCEPT the home feed gets a
@@ -541,6 +548,15 @@ export default function Navbar() {
                             <Receipt className="w-4 h-4" />Lịch sử mua hàng
                           </Link>
                         )}
+                        <Link href="/pro" onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors"
+                          style={{ color: isPro ? '#fbbf24' : 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-surface-hover)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+                        >
+                          <Crown className="w-4 h-4" style={{ color: '#fbbf24' }} />
+                          {isPro ? 'Thành viên PRO ✓' : 'Update Pro'}
+                        </Link>
                         <Link href="/my-codes" onClick={() => setUserMenuOpen(false)}
                           className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
                           style={{ color: 'var(--text-secondary)' }}

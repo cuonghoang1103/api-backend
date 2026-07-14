@@ -42,7 +42,56 @@ import {
   computeEmbeddings,
   cosineSimilarity,
 } from './aiProviders.js';
+import { claudeChatAvailable, completeClaudeChat, streamClaudeChat, proModel, maxModel, proMaxTokens, maxMaxTokens, type ClaudeMessage } from './claudeChat.js';
+import { isProEffective } from './pro.service.js';
 import { logger } from '../utils/logger.js';
+
+// ─── Conversation history helpers (multi-turn memory) ────────────────
+// The chat surfaces send recent turns so the model has context. We cap the
+// count + per-message length so the prompt stays bounded (cost + latency).
+const MAX_HISTORY_TURNS = 10;
+const MAX_HISTORY_CHARS = 6000;
+export interface ChatTurn { role: 'user' | 'assistant'; content: string }
+function sanitizeHistory(history?: ChatTurn[]): ClaudeMessage[] {
+  if (!Array.isArray(history)) return [];
+  return history
+    .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim())
+    .slice(-MAX_HISTORY_TURNS)
+    .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_HISTORY_CHARS) }));
+}
+
+// ─── Chat model registry (user-facing "CuongMini" tiers) ─────────────
+// The frontend model switcher sends one of these ids. `default` = Groq Llama
+// (fast, streamed). `claude` tiers go through the Anthropic gateway; if they
+// fail they degrade to the default and the UI reverts the button.
+export type ChatModelTier = 'default' | 'claude';
+export interface ChatModelDef {
+  id: string;
+  label: string;
+  tier: ChatModelTier;
+  /** Gateway model id (claude tiers only). */
+  gatewayModel?: () => string;
+  /** Max output tokens (claude tiers only) — a cap so long answers aren't cut. */
+  maxTokens?: () => number;
+}
+export const DEFAULT_CHAT_MODEL_ID = 'cuongmini-3.11';
+export const CHAT_MODELS: Record<string, ChatModelDef> = {
+  'cuongmini-3.11': { id: 'cuongmini-3.11', label: 'CuongMini3.11', tier: 'default' },
+  'cuongmini-pro': { id: 'cuongmini-pro', label: 'CuongMini Pro', tier: 'claude', gatewayModel: proModel, maxTokens: proMaxTokens },
+  'cuongmini-max': { id: 'cuongmini-max', label: 'CuongMini Max', tier: 'claude', gatewayModel: maxModel, maxTokens: maxMaxTokens },
+};
+function resolveChatModel(id?: string): ChatModelDef {
+  return (id && CHAT_MODELS[id]) || CHAT_MODELS[DEFAULT_CHAT_MODEL_ID];
+}
+
+/** Mutable metadata the route reads to tell the client which model actually
+ *  answered (so a Claude→Groq fallback reverts the model button). */
+export interface ChatModelMeta {
+  requested: string;
+  effective: string;
+  fellBack: boolean;
+  reason?: string;
+}
 
 // ─── Groq (OpenAI-compatible) client ─────────────────────────────
 // Re-export getGroq() for backward compatibility with other code paths
@@ -97,6 +146,10 @@ interface ChatContext {
   message: string;
   documentType?: string;
   topK?: number;
+  /** Selected model id from the frontend switcher (see CHAT_MODELS). */
+  model?: string;
+  /** Prior conversation turns for multi-turn memory (most recent last). */
+  history?: ChatTurn[];
 }
 
 // ─── AI Service ──────────────────────────────────────────────
@@ -383,6 +436,7 @@ export class AIService {
    */
   async *streamChat(
     context: ChatContext,
+    meta?: ChatModelMeta,
   ): AsyncGenerator<string, void, unknown> {
     const { sessionId, message, documentType, topK } = context;
 
@@ -397,6 +451,65 @@ export class AIService {
     // Save user message
     if (sessionId) {
       await this.saveUserMessage(sessionId, message, context.userId);
+    }
+
+    // ─── Selected model routing ──────────────────────────────
+    // Default = Groq Llama (streamed below). "Pro"/"Max" = Claude via the
+    // Anthropic gateway. If a Claude tier fails OR isn't configured, we set
+    // meta.fellBack and drop through to the Groq path so the user still gets an
+    // answer — and the route tells the client to revert the model button.
+    const selected = resolveChatModel(context.model);
+    const history = sanitizeHistory(context.history);
+    if (meta) { meta.requested = selected.id; meta.effective = selected.id; meta.fellBack = false; }
+
+    if (selected.tier === 'claude') {
+      // Pro/Max models are a Pro perk. Non-Pro (incl. guests) silently get the
+      // default model back + a 'pro_required' signal so the UI reverts the
+      // picker and can nudge them to upgrade.
+      const allowPro = await isProEffective(context.userId);
+      if (!allowPro) {
+        if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'pro_required'; }
+      } else if (!claudeChatAvailable()) {
+        if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'claude_not_configured'; }
+      } else {
+        const claudeMessages: ClaudeMessage[] = [...history, { role: 'user', content: message }];
+        const gwModel = selected.gatewayModel!();
+        const outTokens = selected.maxTokens ? selected.maxTokens() : 8192;
+        // 1) Try REAL streaming — tokens flow immediately (no idle-out, no long
+        //    blank spinner). If it fails BEFORE any token, fall through to the
+        //    non-stream call; if it fails AFTER partial text, keep the partial.
+        let streamed = '';
+        try {
+          for await (const delta of streamClaudeChat({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens })) {
+            streamed += delta;
+            yield delta;
+          }
+          // Empty stream (no error but zero tokens) → treat as failure so we
+          // try the non-stream path rather than returning a blank answer.
+          if (!streamed.trim()) throw new Error('empty claude stream');
+          if (sessionId) await this.saveAssistantMessage(sessionId, streamed);
+          return;
+        } catch (err) {
+          if (streamed) {
+            // Partial answer already shown — save it and stop (don't restart).
+            if (sessionId) await this.saveAssistantMessage(sessionId, streamed);
+            logger.warn('AIService Claude stream broke mid-answer, kept partial', { model: selected.id });
+            return;
+          }
+          logger.warn('AIService Claude streaming failed, trying non-stream', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
+        }
+        // 2) Non-stream fallback (proven interview path). Simulate streaming.
+        try {
+          const text = await completeClaudeChat({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens });
+          for (let i = 0; i < text.length; i += 4) yield text.slice(i, i + 4);
+          if (sessionId && text) await this.saveAssistantMessage(sessionId, text);
+          return;
+        } catch (err) {
+          logger.warn('AIService Claude non-stream failed, falling back to default', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
+          if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'claude_error'; }
+          // fall through to Groq default
+        }
+      }
     }
 
     // Try streaming with Groq first (fast, real-time SSE).
@@ -417,6 +530,7 @@ export class AIService {
           model: config.groqChatModel,
           messages: [
             { role: 'system', content: systemPrompt },
+            ...history,
             { role: 'user', content: message },
           ],
           max_tokens: config.aiMaxTokens,
@@ -489,6 +603,7 @@ export class AIService {
       const result = await chatWithFallback({
         messages: [
           { role: 'system', content: systemPrompt },
+          ...history,
           { role: 'user', content: message },
         ],
       });

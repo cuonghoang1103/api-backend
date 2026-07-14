@@ -21,7 +21,7 @@ import {
   Link2, Image as ImageIcon, Settings, Grid3X3, UserPlus, UserCheck, Clock, MoreHorizontal,
   Facebook, Twitter, Github, Linkedin, Youtube, Instagram,
   Plus, Home, Star, Building, MapPinned, MapPinHouse, Info,
-  BookText, CalendarDays, Briefcase as WorkIcon, Link as LinkIcon, Copy, Lock,
+  BookText, CalendarDays, Briefcase as WorkIcon, Link as LinkIcon, Copy, Lock, Crown,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import type { ComponentType } from 'react';
@@ -77,6 +77,7 @@ interface ExtendedProfile {
   followingCount?: number;
   isFollowing?: boolean;
   isOnline?: boolean;
+  isPro?: boolean;
 }
 
 const socialIcons: Record<string, ComponentType<{ className?: string }>> = {
@@ -613,7 +614,12 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
           <div className="flex flex-col items-center sm:flex-row sm:items-end gap-3 sm:gap-5">
             {/* Avatar — pulled UP over the cover bottom edge; z-10 keeps it above the cover */}
             <div className="relative z-10 -mt-14 sm:-mt-[80px] shrink-0">
-              <div className="group relative h-[120px] w-[120px] sm:h-[168px] sm:w-[168px] rounded-full ring-4 ring-darkcard shadow-2xl overflow-hidden transition-all duration-300 hover:ring-neon-violet/40">
+              {p.isPro && (
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-0.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold text-white bg-gradient-to-r from-amber-400 to-violet-500 shadow-[0_2px_10px_rgba(245,158,11,0.5)] ring-2 ring-darkcard">
+                  <Crown className="w-3 h-3" /> PRO
+                </span>
+              )}
+              <div className={`group relative h-[120px] w-[120px] sm:h-[168px] sm:w-[168px] rounded-full ring-4 shadow-2xl overflow-hidden transition-all duration-300 ${p.isPro ? 'ring-amber-400/80 hover:ring-amber-300' : 'ring-darkcard hover:ring-neon-violet/40'}`}>
                 {p.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={p.avatarUrl} alt="Ảnh đại diện" className="w-full h-full object-cover" />) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neon-violet via-neon-purple to-neon-pink">
                     <span className="text-5xl sm:text-6xl font-bold text-white drop-shadow-lg">{(p.displayName || p.fullName || p.username || '?').slice(0, 1).toUpperCase()}</span>

@@ -136,6 +136,10 @@ const financeRoutes = (await import(path.join(__dirname, 'routes', 'finance.rout
 const interviewModule = await import(path.join(__dirname, 'routes', 'interview.routes.js'));
 const interviewRoutes = interviewModule.default;
 const interviewAdminRoutes = interviewModule.adminRouter;
+// Pro membership — user redeem/status + admin code management
+const proModule = await import(path.join(__dirname, 'routes', 'pro.routes.js'));
+const proRoutes = proModule.default;
+const proAdminRoutes = proModule.adminRouter;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -520,6 +524,8 @@ app.use('/api/v1/admin/my-language', myLanguageAdminRoutes);
 // Interview Simulator — user flow + admin question bank / taxonomy
 app.use('/api/v1/interview', interviewRoutes);
 app.use('/api/v1/admin/interview', interviewAdminRoutes);
+app.use('/api/v1/pro', proRoutes);
+app.use('/api/v1/admin/pro', proAdminRoutes);
 app.use('/api/v1/finance', financeRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);

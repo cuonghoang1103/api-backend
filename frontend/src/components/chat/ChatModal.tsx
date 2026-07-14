@@ -4,12 +4,14 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { X, Loader2, Copy, CheckCheck, User, Send, Search } from 'lucide-react';
+import { X, Loader2, Copy, CheckCheck, User, Send, Search, SquarePen } from 'lucide-react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { api } from '@/lib/api';
 import { findStaticResponse } from '@/lib/ai-static-responses';
+import { useChatModelStore, DEFAULT_CHAT_MODEL_ID, getChatModel } from '@/lib/aiChatModels';
+import ModelPicker from './ModelPicker';
 import { toast } from 'sonner';
 import type { ChatMessage, ChatSession } from '@/types';
 
@@ -282,6 +284,12 @@ export default function ChatModal({ onClose }: ChatModalProps) {
       createdAt: new Date().toISOString(),
     };
 
+    // Capture prior turns for multi-turn memory BEFORE adding the new message.
+    const historyPayload = (useChatStore.getState().messages[sessionId] || [])
+      .filter((m) => (m.role === 'user' || m.role === 'assistant') && m.content?.trim())
+      .slice(-10)
+      .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }));
+
     addMessage(sessionId, userMsg);
     setInput('');
     setShowPrompts(false);
@@ -299,6 +307,8 @@ export default function ChatModal({ onClose }: ChatModalProps) {
           message: text.trim(),
           sessionId: currentSessionId || undefined,
           topK: 5,
+          model: useChatModelStore.getState().modelId,
+          history: historyPayload,
         }),
       });
 
@@ -334,7 +344,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
           try {
             reader.cancel('idle-timeout');
           } catch {}
-        }, 20_000);
+        }, 45_000);
       };
       resetIdleTimer();
 
@@ -360,6 +370,14 @@ export default function ChatModal({ onClose }: ChatModalProps) {
               if (data.sessionId && !resolvedSessionId) {
                 resolvedSessionId = data.sessionId;
                 setCurrentSessionId(resolvedSessionId);
+              }
+              continue;
+            }
+            if (data.type === 'model') {
+              if (data.fellBack) {
+                const requested = getChatModel(data.requested);
+                useChatModelStore.getState().setModelId(DEFAULT_CHAT_MODEL_ID);
+                toast.info(`${requested.label} không phản hồi — đã chuyển về ${getChatModel(DEFAULT_CHAT_MODEL_ID).label}`);
               }
               continue;
             }
@@ -515,6 +533,22 @@ export default function ChatModal({ onClose }: ChatModalProps) {
             </p>
           </div>
 
+          {modalMessages.length > 0 && (
+            <button
+              onClick={() => {
+                if (isStreaming) return;
+                setMessages('__modal__', []);
+                setCurrentSessionId(null);
+                setShowPrompts(true);
+              }}
+              disabled={isStreaming}
+              title="Chat mới (xoá hội thoại để đỡ tốn token)"
+              className="p-2 rounded-xl hover:bg-[#22d3ee]/10 text-[#64748b] hover:text-[#22d3ee] transition-colors border border-transparent hover:border-[#22d3ee]/20 disabled:opacity-40"
+            >
+              <SquarePen className="w-4 h-4" />
+            </button>
+          )}
+
           <button
             onClick={onClose}
             className="p-2 rounded-xl hover:bg-[#22d3ee]/10 text-[#64748b] hover:text-[#22d3ee] transition-colors border border-transparent hover:border-[#22d3ee]/20"
@@ -589,6 +623,9 @@ export default function ChatModal({ onClose }: ChatModalProps) {
 
         {/* Input */}
         <div className="px-4 py-3 border-t border-[#22d3ee]/10 bg-[#0a0a0f]/80 flex-shrink-0">
+          <div className="mb-2 flex items-center">
+            <ModelPicker disabled={isStreaming} />
+          </div>
           <div className="relative">
             {/* Terminal prompt */}
             <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none select-none">

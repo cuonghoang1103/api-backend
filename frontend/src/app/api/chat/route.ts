@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
         message,
         history: Array.isArray(body.history) ? body.history : [],
         topK: typeof body.topK === 'number' ? body.topK : 5,
+        ...(typeof body.model === 'string' ? { model: body.model } : {}),
       }),
       cache: 'no-store',
     });

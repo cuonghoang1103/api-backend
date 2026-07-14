@@ -34,6 +34,8 @@ export interface PublicProfileEnhanced {
   coverPhotoUrl: string | null;
   bio: string | null;
   roles: string[];
+  /** Effective Pro membership (admin OR valid Pro) — drives the avatar PRO badge. */
+  isPro: boolean;
   createdAt: Date;
   isOnline: boolean;
   lastActiveAt: Date | null;
@@ -158,6 +160,9 @@ export async function getEnhancedPublicProfile(targetId: number, viewerId?: numb
     coverPhotoUrl: user.coverPhotoUrl,
     bio: user.bio,
     roles: user.roles.map((ur) => ur.role.name),
+    isPro:
+      user.roles.some((ur) => /^(role_)?(admin|superadmin)$/i.test(ur.role.name)) ||
+      (user.isPro && (!user.proExpiresAt || user.proExpiresAt > new Date())),
     createdAt: user.createdAt,
     isOnline: isOnline(user.lastActiveAt),
     lastActiveAt: user.lastActiveAt,

@@ -48,9 +48,15 @@ export async function canAccessMusic(
   if (mode === 'EVERYONE') return true;
   if (!userId) return false;
   if (isAdminRoles(roles)) return true;
+  // Pro members always have access, regardless of mode (a Pro perk). The
+  // existing admin per-user grant (musicAccess) is untouched.
+  const u = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { musicAccess: true, isPro: true, proExpiresAt: true },
+  });
+  if (u && u.isPro && (!u.proExpiresAt || u.proExpiresAt > new Date())) return true;
   if (mode === 'ADMIN_ONLY') return false;
   // SPECIFIC — check the per-user flag.
-  const u = await prisma.user.findUnique({ where: { id: userId }, select: { musicAccess: true } });
   return !!u?.musicAccess;
 }
 

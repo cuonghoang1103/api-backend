@@ -44,6 +44,7 @@ export interface TaxonomyResponse {
   domains: TaxonomyDomain[];
   companyProfiles: CompanyProfile[];
   aiAvailable?: boolean; // Phase 4: backend has an LLM key + kill switch off
+  aiAllowed?: boolean; // Pro gating: THIS user may use AI grading (Pro/admin)
 }
 
 export type EngineMode = 'STATIC' | 'HYBRID' | 'FULL_AI';

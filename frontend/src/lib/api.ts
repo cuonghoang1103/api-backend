@@ -3538,3 +3538,55 @@ export const contentApi = {
 };
 
 
+
+// ─── Pro membership ──────────────────────────────────────────
+export interface ProStatus {
+  isAdmin: boolean;
+  isPro: boolean;
+  effective: boolean;
+  lifetime: boolean;
+  expiresAt: string | null;
+  source: string | null;
+}
+export interface ProCode {
+  id: number;
+  code: string;
+  label: string | null;
+  durationDays: number | null;
+  lifetime: boolean;
+  maxUses: number;
+  usedCount: number;
+  isActive: boolean;
+  expiresAt: string | null;
+  note: string | null;
+  redemptions: number;
+  createdAt: string;
+}
+export interface ProUser {
+  id: number;
+  username: string;
+  fullName: string | null;
+  avatarUrl: string | null;
+  proSince: string | null;
+  expiresAt: string | null;
+  lifetime: boolean;
+  expired: boolean;
+  source: string | null;
+}
+
+export const proApi = {
+  status: () => api.get<{ data: ProStatus }>('/pro/status'),
+  redeem: (code: string) => api.post<{ data: ProStatus }>('/pro/redeem', { code }),
+};
+
+export const proAdminApi = {
+  listCodes: () => api.get<{ data: ProCode[] }>('/admin/pro/codes'),
+  createCode: (data: { code?: string; label?: string; durationDays?: number | null; maxUses?: number; expiresAt?: string | null; note?: string | null }) =>
+    api.post<{ data: ProCode }>('/admin/pro/codes', data),
+  updateCode: (id: number, data: Partial<{ label: string; durationDays: number | null; maxUses: number; isActive: boolean; expiresAt: string | null; note: string | null }>) =>
+    api.put<{ data: ProCode }>(`/admin/pro/codes/${id}`, data),
+  deleteCode: (id: number) => api.delete(`/admin/pro/codes/${id}`),
+  listUsers: () => api.get<{ data: ProUser[] }>('/admin/pro/users'),
+  grant: (userId: number, durationDays: number | null) => api.post<{ data: ProStatus }>('/admin/pro/grant', { userId, durationDays }),
+  revoke: (userId: number) => api.post<{ data: ProStatus }>('/admin/pro/revoke', { userId }),
+};

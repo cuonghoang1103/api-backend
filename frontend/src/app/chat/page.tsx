@@ -18,6 +18,7 @@ import QuotaIndicator from '@/components/chat/QuotaIndicator';
 import LottieClient from '@/components/ui/LottieClient';
 import type { ChatMessage, ChatSession } from '@/types';
 import { findStaticResponse, getDefaultGreeting, getFallbackResponse } from '@/lib/ai-static-responses';
+import { useChatModelStore, DEFAULT_CHAT_MODEL_ID, getChatModel } from '@/lib/aiChatModels';
 import { useKeyboardInset } from '@/hooks/useKeyboardInset';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -321,6 +322,12 @@ export default function ChatPage() {
       createdAt: new Date().toISOString(),
     };
 
+    // Capture prior turns for multi-turn memory BEFORE adding the new message.
+    const historyPayload = (useChatStore.getState().messages[sessionId] || [])
+      .filter((m) => (m.role === 'user' || m.role === 'assistant') && m.content?.trim())
+      .slice(-10)
+      .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }));
+
     addMessage(sessionId, userMsg);
     setRobotEmotion('typing');
     setStreaming(true);
@@ -375,7 +382,7 @@ export default function ChatPage() {
           'Content-Type': 'application/json',
           ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
         },
-        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5 }),
+        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5, model: useChatModelStore.getState().modelId, history: historyPayload }),
       });
 
       if (!res.ok) throw new Error('Stream failed');
@@ -417,6 +424,16 @@ export default function ChatPage() {
 
             if (data.type === 'connected') {
               if (data.sessionId) resolvedSessionId = data.sessionId;
+              continue;
+            }
+            // Backend tells us which model actually answered. If a Claude tier
+            // fell back to the default, revert the picker + inform the user.
+            if (data.type === 'model') {
+              if (data.fellBack) {
+                const requested = getChatModel(data.requested);
+                useChatModelStore.getState().setModelId(DEFAULT_CHAT_MODEL_ID);
+                toast.info(`${requested.label} không phản hồi — đã chuyển về ${getChatModel(DEFAULT_CHAT_MODEL_ID).label}`);
+              }
               continue;
             }
             if (data.type === 'done' || data.type === 'error') continue;

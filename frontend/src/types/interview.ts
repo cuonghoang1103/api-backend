@@ -72,6 +72,8 @@ export interface PublicTurn {
   order: number;
   questionText: string;
   type: InterviewQuestionType;
+  /** Phase 8 project interview: 1 = knowledge/theory round, 2 = coding/project round. */
+  round?: 1 | 2;
   mcqOptions?: { id: string; text: string }[];
   answered: boolean;
   userAnswer: string | null;
@@ -280,6 +282,10 @@ export interface CreateSessionBody {
   /** Phase 3: paste a CV and/or JD → AI generates personalized questions (Pro). */
   cv?: string;
   jd?: string;
+  /** Multi-select: combine several positions into one session. */
+  trackIds?: number[];
+  /** Phase 8: a project .md → AI generates a 2-round project interview (Opus, Pro). */
+  projectMd?: string;
 }
 
 /** Client-collected integrity signals (non-invasive, informational). */

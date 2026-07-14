@@ -293,10 +293,21 @@ export default function InterviewRoomPage() {
           ))}
         </div>
 
+        {/* Round transition banner (Phase 8 project interview) */}
+        {turn.round === 2 && session.turns[order - 1]?.round === 1 && (
+          <div className="mb-5 rounded-xl border border-sky-500/40 bg-sky-500/[0.08] px-4 py-3 text-sky-200">
+            <div className="font-semibold">🚀 {displayLang === 'EN' ? 'Round 2 — Coding & Project' : 'Vòng 2 — Code & Dự án'}</div>
+            <div className="text-xs text-sky-300/80 mt-0.5">{displayLang === 'EN' ? 'Hands-on coding and problem-solving inside your project.' : 'Code trực tiếp & xử lý bài toán trong chính dự án của bạn.'}</div>
+          </div>
+        )}
+
         {/* Question */}
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-2">
             <div className="text-[11px] font-mono uppercase tracking-widest text-slate-400">{turn.type}</div>
+            {turn.round && (
+              <span className="text-[11px] font-mono uppercase tracking-widest text-sky-400/80">· {displayLang === 'EN' ? `Round ${turn.round}` : `Vòng ${turn.round}`}</span>
+            )}
             {ttsSupported && (
               <button
                 onClick={readQuestion}

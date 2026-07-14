@@ -44,8 +44,17 @@ export async function planQuestions(
   level: InterviewLevel,
   count: number,
 ): Promise<InterviewQuestion[]> {
+  return planQuestionsMulti([trackId], level, count);
+}
+
+/** Like planQuestions but samples across MULTIPLE tracks (combined positions). */
+export async function planQuestionsMulti(
+  trackIds: number[],
+  level: InterviewLevel,
+  count: number,
+): Promise<InterviewQuestion[]> {
   const topics = await prisma.interviewTopic.findMany({
-    where: { trackId, status: 'PUBLISHED' },
+    where: { trackId: { in: trackIds }, status: 'PUBLISHED' },
     orderBy: { sortOrder: 'asc' },
   });
   if (!topics.length) return [];

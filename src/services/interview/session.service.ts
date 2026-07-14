@@ -15,14 +15,14 @@
 import { prisma } from '../../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import type { InterviewLanguage, InterviewLevel } from '@prisma/client';
-import { planQuestions, LEVEL_LADDER } from './questionBank.service.js';
+import { planQuestionsMulti, LEVEL_LADDER } from './questionBank.service.js';
 import { requireTrack } from './taxonomy.service.js';
 import { deterministicScore, selfAssessmentScore, type RubricCriterion, type SynonymMap } from './scoring.js';
 import { generateStaticReport } from './report.service.js';
 import { createReviewCardsForSession } from './drill.service.js';
 import { isAiAvailable, checkTokenQuota } from './llm/index.js';
 import { evaluateAnswerWithAI, type AiEvaluationResult } from './aiEvaluator.js';
-import { generatePersonalizedQuestions, type PersonalizedQuestion } from './personalize.service.js';
+import { generatePersonalizedQuestions, generateProjectQuestions, type PersonalizedQuestion } from './personalize.service.js';
 import { isProEffective } from '../pro.service.js';
 import { sttProvider } from './voice/stt.js';
 import { retrieveChunks } from './knowledge/retrieval.js';
@@ -95,10 +95,17 @@ export async function createSession(
     engineMode?: unknown;
     cv?: unknown;
     jd?: unknown;
+    trackIds?: unknown;
+    projectMd?: unknown;
   },
 ) {
-  const trackId = Number(body.trackId);
+  // Multi-select: `trackIds` combines several positions; fall back to single trackId.
+  const trackIds = Array.isArray(body.trackIds)
+    ? [...new Set((body.trackIds as unknown[]).map(Number).filter((n) => Number.isInteger(n) && n > 0))]
+    : [];
+  const trackId = trackIds.length ? trackIds[0] : Number(body.trackId);
   if (!Number.isInteger(trackId) || trackId <= 0) throw new BadRequestError('trackId không hợp lệ');
+  const allTrackIds = trackIds.length ? trackIds : [trackId];
   const level = String(body.level ?? '').toUpperCase() as InterviewLevel;
   if (!LEVEL_LADDER.includes(level)) throw new BadRequestError('level không hợp lệ');
   const language = (String(body.language ?? 'VI').toUpperCase() === 'EN' ? 'EN' : 'VI') as InterviewLanguage;
@@ -123,13 +130,30 @@ export async function createSession(
   // them as a fallback. Requires Pro + AI.
   const cv = typeof body.cv === 'string' ? body.cv.trim() : '';
   const jd = typeof body.jd === 'string' ? body.jd.trim() : '';
-  const wantsPersonalized = !!(cv || jd);
+  const projectMd = typeof body.projectMd === 'string' ? body.projectMd.trim() : '';
+  const wantsProject = !!projectMd;
+  const wantsPersonalized = !wantsProject && !!(cv || jd);
 
   let turnsCreate: Array<{ questionId?: number; order: number; questionText: string }>;
   let configData: Record<string, unknown>;
   let engineMode = resolveEngineMode(typeof body.engineMode === 'string' ? body.engineMode : undefined, allowAi);
 
-  if (wantsPersonalized) {
+  if (wantsProject) {
+    // Phase 8: two-round project interview from an uploaded .md (Opus 4.8, Pro).
+    if (!allowAi) throw new BadRequestError('Phỏng vấn theo project dành cho tài khoản Pro/Max.');
+    if (!isAiAvailable()) throw new BadRequestError('AI hiện không khả dụng — thử lại sau.');
+    const round2 = Math.max(2, Math.round(numQuestions * 0.5));
+    const round1 = Math.max(2, numQuestions - round2);
+    let pq: PersonalizedQuestion[];
+    try {
+      pq = await generateProjectQuestions({ userId, md: projectMd, level, language, round1Count: round1, round2Count: round2 });
+    } catch {
+      throw new BadRequestError('Không đọc/sinh được câu hỏi từ file project — thử lại, hoặc rút gọn file .md.');
+    }
+    turnsCreate = pq.map((q, i) => ({ order: i, questionText: q.questionText }));
+    configData = { numQuestions: pq.length, requested: numQuestions, personalized: pq, projectInterview: true };
+    engineMode = resolveEngineMode('FULL_AI', allowAi);
+  } else if (wantsPersonalized) {
     if (!allowAi) throw new BadRequestError('Cá nhân hoá theo CV/JD dành cho tài khoản Pro/Max.');
     if (!isAiAvailable()) throw new BadRequestError('AI hiện không khả dụng — thử lại sau, hoặc bỏ CV/JD để dùng ngân hàng câu hỏi.');
     let pq: PersonalizedQuestion[];
@@ -142,16 +166,16 @@ export async function createSession(
     configData = { numQuestions: pq.length, requested: numQuestions, personalized: pq, personalizedSource: { hasCv: !!cv, hasJd: !!jd } };
     engineMode = resolveEngineMode('FULL_AI', allowAi); // personalized sessions are AI-graded
   } else {
-    const questions = await planQuestions(trackId, level, numQuestions);
+    const questions = await planQuestionsMulti(allTrackIds, level, numQuestions);
     if (!questions.length) {
-      throw new BadRequestError('Chưa có câu hỏi cho track/level này. Hãy chọn cấp độ khác hoặc báo admin bổ sung ngân hàng câu hỏi.');
+      throw new BadRequestError('Chưa có câu hỏi cho (các) track/level này. Chọn track đã có câu hỏi, đổi cấp độ, hoặc để admin sinh câu hỏi (AI).');
     }
     turnsCreate = questions.map((q, i) => ({
       questionId: q.id,
       order: i,
       questionText: language === 'EN' ? q.bodyEn || q.body : q.bodyVi || q.body,
     }));
-    configData = { numQuestions: questions.length, requested: numQuestions };
+    configData = { numQuestions: questions.length, requested: numQuestions, trackIds: allTrackIds };
   }
 
   const session = await prisma.interviewSession.create({
@@ -181,11 +205,9 @@ export async function createSession(
     total: session.turns.length,
     turns: session.turns.map((tn) => {
       const pt = publicTurn(tn);
-      if (!tn.question) {
-        const spec = personalizedSpecs(session.config)[tn.order];
-        if (spec?.type) pt.type = spec.type;
-      }
-      return pt;
+      const spec = tn.question ? undefined : personalizedSpecs(session.config)[tn.order];
+      if (spec?.type) pt.type = spec.type;
+      return { ...pt, round: spec?.round };
     }),
   };
 }
@@ -220,12 +242,10 @@ export async function getSessionState(userId: number, sessionId: number) {
     aiAvailable: isAiAvailable(),
     turns: session.turns.map((tn) => {
       const pt = publicTurn(tn);
-      // Ad-hoc personalized turns carry their type in config (no bank question).
-      if (!tn.question) {
-        const spec = personalizedSpecs(session.config)[tn.order];
-        if (spec?.type) pt.type = spec.type;
-      }
-      return pt;
+      // Ad-hoc personalized/project turns carry type + round in config (no bank question).
+      const spec = tn.question ? undefined : personalizedSpecs(session.config)[tn.order];
+      if (spec?.type) pt.type = spec.type;
+      return { ...pt, round: spec?.round };
     }),
   };
 }

@@ -25,7 +25,7 @@ export default function InterviewSetupPage() {
   const [tax, setTax] = useState<TaxonomyResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [domainId, setDomainId] = useState<number | null>(null);
-  const [track, setTrack] = useState<TaxonomyTrack | null>(null);
+  const [tracks, setTracks] = useState<TaxonomyTrack[]>([]);
   const [level, setLevel] = useState<InterviewLevel>('MID');
   const [company, setCompany] = useState<CompanyProfile | null>(null);
   const [numQuestions, setNumQuestions] = useState(6);
@@ -35,6 +35,9 @@ export default function InterviewSetupPage() {
   const [personalize, setPersonalize] = useState(false);
   const [cv, setCv] = useState('');
   const [jd, setJd] = useState('');
+  const [useProject, setUseProject] = useState(false);
+  const [projectMd, setProjectMd] = useState('');
+  const [projectName, setProjectName] = useState('');
   const [starting, setStarting] = useState(false);
 
   useEffect(() => {
@@ -51,16 +54,27 @@ export default function InterviewSetupPage() {
   }, [router]);
 
   const domain = useMemo(() => tax?.domains.find((d) => d.id === domainId) ?? null, [tax, domainId]);
+  const totalQ = useMemo(() => tracks.reduce((s, t) => s + (t.questionCount ?? 0), 0), [tracks]);
+
+  const toggleTrack = (t: TaxonomyTrack) => {
+    setTracks((prev) => {
+      const next = prev.some((x) => x.id === t.id) ? prev.filter((x) => x.id !== t.id) : [...prev, t];
+      const q = next.reduce((s, x) => s + (x.questionCount ?? 0), 0);
+      if (q > 0) setNumQuestions((n) => Math.max(3, Math.min(n, q)));
+      return next;
+    });
+  };
 
   const start = async () => {
-    if (!track) { toast.warning('Chọn một track trước đã'); return; }
+    if (!tracks.length) { toast.warning('Chọn ít nhất 1 vị trí'); return; }
     setStarting(true);
     try {
-      const usePersonalize = personalize && (cv.trim() || jd.trim());
+      const useProj = useProject && projectMd.trim();
+      const usePersonalize = !useProj && personalize && (cv.trim() || jd.trim());
       const res = await interviewApi.createSession({
-        trackId: track.id, level, companyProfileId: company?.id ?? null, language, numQuestions, focusedMode,
+        trackId: tracks[0].id, trackIds: tracks.map((t) => t.id), level, companyProfileId: company?.id ?? null, language, numQuestions, focusedMode,
         engineMode: tax?.aiAvailable ? engineMode : 'STATIC',
-        ...(usePersonalize ? { cv: cv.trim() || undefined, jd: jd.trim() || undefined } : {}),
+        ...(useProj ? { projectMd: projectMd.trim() } : usePersonalize ? { cv: cv.trim() || undefined, jd: jd.trim() || undefined } : {}),
       });
       router.push(`/interview/session/${res.data.data.id}`);
     } catch (e) {
@@ -106,7 +120,7 @@ export default function InterviewSetupPage() {
             <Section step={1} title="Lĩnh vực">
               <div className="flex flex-wrap gap-2">
                 {tax.domains.map((d) => (
-                  <Chip key={d.id} active={d.id === domainId} onClick={() => { setDomainId(d.id); setTrack(null); }}>
+                  <Chip key={d.id} active={d.id === domainId} onClick={() => setDomainId(d.id)}>
                     {d.nameVi || d.name}
                   </Chip>
                 ))}
@@ -114,37 +128,40 @@ export default function InterviewSetupPage() {
             </Section>
 
             {/* Track */}
-            <Section step={2} title="Vị trí (track)">
+            <Section step={2} title="Vị trí — chọn 1 hoặc nhiều (gộp lĩnh vực)">
               <div className="grid sm:grid-cols-2 gap-2">
                 {domain?.tracks.map((t) => {
                   const qc = t.questionCount ?? 0;
+                  const on = tracks.some((x) => x.id === t.id);
                   return (
                     <button
                       key={t.id}
-                      onClick={() => { setTrack(t); if (qc > 0) setNumQuestions((n) => Math.max(3, Math.min(n, qc))); }}
+                      onClick={() => toggleTrack(t)}
                       className={`text-left px-4 py-3 rounded-xl border transition-all ${
-                        track?.id === t.id
-                          ? 'border-amber-500/60 bg-amber-500/10'
-                          : 'border-white/10 hover:border-slate-500'
+                        on ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
                       }`}
                     >
-                      <div className="font-semibold text-slate-100">{t.name}</div>
-                      <div className="text-xs mt-0.5 flex items-center gap-2">
+                      <div className="font-semibold text-slate-100 flex items-center gap-2">
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] ${on ? 'bg-amber-500 border-amber-500 text-slate-950' : 'border-white/20'}`}>{on ? '✓' : ''}</span>
+                        {t.name}
+                      </div>
+                      <div className="text-xs mt-0.5 flex items-center gap-2 pl-6">
                         <span className="text-slate-400">{t.topics.length} chủ đề</span>
-                        {qc > 0 ? (
-                          <span className="text-emerald-400">· {qc} câu hỏi</span>
-                        ) : (
-                          <span className="text-amber-400/90">· chưa có câu hỏi</span>
-                        )}
+                        {qc > 0 ? <span className="text-emerald-400">· {qc} câu hỏi</span> : <span className="text-amber-400/90">· chưa có câu hỏi</span>}
                       </div>
                     </button>
                   );
                 })}
                 {!domain?.tracks.length && <p className="text-sm text-slate-400">Lĩnh vực này chưa có track.</p>}
               </div>
-              {track && (track.questionCount ?? 0) === 0 && (
-                <p className="text-xs text-amber-300/90 mt-2">
-                  Track này chưa có câu hỏi trong ngân hàng. Admin vào <b>/admin/interview</b> → chọn topic → <b>AI sinh câu hỏi</b> (model Opus 4.8) để tạo, hoặc chọn track khác đã có câu hỏi.
+              {tracks.length > 0 && (
+                <p className="text-xs text-slate-400 mt-2">
+                  Đã chọn <b className="text-amber-300">{tracks.length}</b> vị trí ({tracks.map((t) => t.name).join(', ')}) · tổng <b className="text-emerald-400">{totalQ}</b> câu hỏi.
+                </p>
+              )}
+              {tracks.length > 0 && totalQ === 0 && (
+                <p className="text-xs text-amber-300/90 mt-1">
+                  Các vị trí đã chọn chưa có câu hỏi. Admin vào <b>/admin/interview</b> → chọn topic → <b>AI sinh câu hỏi</b> (Opus 4.8), hoặc chọn vị trí đã có câu hỏi.
                 </p>
               )}
             </Section>
@@ -177,14 +194,14 @@ export default function InterviewSetupPage() {
                   <input
                     type="range"
                     min={3}
-                    max={Math.max(3, Math.min(track?.questionCount || 12, 50))}
+                    max={Math.max(3, Math.min(totalQ || 12, 50))}
                     value={numQuestions}
                     onChange={(e) => setNumQuestions(Number(e.target.value))}
                     className="accent-amber-500"
                   />
                   <span className="text-sm font-mono text-slate-100 w-8">{numQuestions}</span>
-                  {track && (track.questionCount ?? 0) > 0 && (
-                    <span className="text-xs text-slate-500">(tối đa {Math.min(track.questionCount!, 50)})</span>
+                  {totalQ > 0 && (
+                    <span className="text-xs text-slate-500">(tối đa {Math.min(totalQ, 50)})</span>
                   )}
                 </label>
                 <div className="inline-flex rounded-lg border border-white/10 overflow-hidden">
@@ -262,11 +279,56 @@ export default function InterviewSetupPage() {
               </Section>
             )}
 
+            {/* Phase 8 — project (.md) 2-round interview — Pro only */}
+            {tax.aiAvailable && tax.aiAllowed && (
+              <Section step={8} title="Phỏng vấn theo Project — upload .md (2 vòng)">
+                <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer mb-2">
+                  <input type="checkbox" checked={useProject} onChange={(e) => setUseProject(e.target.checked)} className="accent-amber-500" />
+                  AI đọc cả file .md dự án của bạn và hỏi chuyên sâu (model Opus 4.8)
+                </label>
+                {useProject && (
+                  <div className="space-y-3">
+                    <p className="text-xs text-slate-400">
+                      <b>Vòng 1</b>: lý thuyết + hiểu code trong dự án. <b>Vòng 2</b>: chỉ code — implement/mở rộng/tối ưu/gỡ lỗi trong chính dự án. File .md càng chi tiết, câu hỏi càng sâu. Nội dung không lưu lâu dài · tạo có thể mất ~30–90s.
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-500/40 text-amber-300 text-sm cursor-pointer hover:bg-amber-500/10">
+                        <input
+                          type="file"
+                          accept=".md,.markdown,.txt,text/markdown,text/plain"
+                          className="hidden"
+                          onChange={async (e) => {
+                            const f = e.target.files?.[0];
+                            if (!f) return;
+                            if (f.size > 2 * 1024 * 1024) { toast.error('File quá lớn (tối đa 2MB)'); return; }
+                            const text = await f.text();
+                            setProjectMd(text);
+                            setProjectName(f.name);
+                            e.target.value = '';
+                          }}
+                        />
+                        Chọn file .md
+                      </label>
+                      {projectName && (
+                        <span className="text-xs text-slate-300">{projectName} · {(projectMd.length / 1024).toFixed(1)} KB
+                          <button onClick={() => { setProjectMd(''); setProjectName(''); }} className="ml-2 text-red-400 hover:underline">xoá</button>
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">…hoặc dán nội dung .md</div>
+                      <textarea value={projectMd} onChange={(e) => { setProjectMd(e.target.value); if (!projectName) setProjectName('(dán tay)'); }} rows={6} placeholder="Dán toàn bộ tài liệu dự án (README, kiến trúc, quyết định kỹ thuật…)" className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm font-mono focus:outline-none focus:border-amber-500/60 resize-y" />
+                    </div>
+                  </div>
+                )}
+              </Section>
+            )}
+
             {/* Start */}
             <div className="pt-2">
               <button
                 onClick={start}
-                disabled={!track || starting}
+                disabled={!tracks.length || starting}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 transition-opacity disabled:opacity-40"
               >
                 {starting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}

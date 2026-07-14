@@ -27,7 +27,9 @@ type Res<T> = Promise<{ data: ApiResponse<T> }>;
 export const interviewApi = {
   // ── User flow ──────────────────────────────────────────────
   tracks: (): Res<TaxonomyResponse> => api.get('/interview/tracks'),
-  createSession: (body: CreateSessionBody): Res<SessionCreateResponse> => api.post('/interview/sessions', body, { timeout: 90_000 }),
+  // CV/JD & project (.md) modes generate questions synchronously via Opus, which
+  // can take a couple of minutes — long client timeout (under the nginx 300s cap).
+  createSession: (body: CreateSessionBody): Res<SessionCreateResponse> => api.post('/interview/sessions', body, { timeout: 290_000 }),
   getSession: (id: number): Res<SessionState> => api.get(`/interview/sessions/${id}`),
   answer: (
     id: number,

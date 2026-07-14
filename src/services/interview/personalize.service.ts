@@ -46,17 +46,17 @@ export async function generatePersonalizedQuestions(opts: {
     `Rules: pick "type" per question (use "CODING" for write-code questions, "SYSTEM_DESIGN" for design, etc.); rubric ids are "c1","c2",…; weights sum to ~1.0; mustMention = the key technical keywords a strong answer MUST contain (short, 3-8 items); shouldMention = nice-to-have keywords; redFlags = common wrong beliefs. Keep each questionText to 1-3 sentences. No prose outside the JSON.`;
 
   const parts: string[] = [];
-  if (opts.cv?.trim()) parts.push(`CANDIDATE CV:\n${opts.cv.slice(0, 6000)}`);
-  if (opts.jd?.trim()) parts.push(`JOB DESCRIPTION:\n${opts.jd.slice(0, 6000)}`);
+  if (opts.cv?.trim()) parts.push(`CANDIDATE CV:\n${opts.cv.slice(0, 16000)}`);
+  if (opts.jd?.trim()) parts.push(`JOB DESCRIPTION:\n${opts.jd.slice(0, 16000)}`);
   const user = parts.join('\n\n') || `No CV/JD text provided; produce solid general questions for a ${opts.level} ${opts.trackName}.`;
 
   const res = await llmComplete({
-    step: 'generation',
+    step: 'generation', // Opus 4.8 — same strong model as the other Pro modes
     system,
     messages: [{ role: 'user', content: user }],
-    maxTokens: 4000,
-    maxRetries: 1,
-    timeoutMs: 60_000,
+    maxTokens: Math.min(32000, opts.count * 3750 + 5000),
+    maxRetries: 0,
+    timeoutMs: 240_000,
     userId: opts.userId,
   });
 
@@ -119,15 +119,16 @@ export async function generateProjectQuestions(opts: {
     `Return ONLY JSON of this EXACT shape:\n` +
     `{"questions":[{"round":1|2,"questionText":string,"type":"CONCEPTUAL"|"CODING"|"SYSTEM_DESIGN"|"BEHAVIORAL"|"SCENARIO","referenceAnswer":string,"rubric":[{"id":"c1","criterion":string,"weight":number}],"mustMention":[string],"shouldMention":[string],"redFlags":[string]}]}\n` +
     `Rules: rubric ids "c1","c2",…; weights sum ~1.0; mustMention = key technical keywords a strong answer MUST contain; keep questionText concise (1-4 sentences); questions must be specific to THIS project, not generic. No prose outside the JSON.`;
-  const user = `PROJECT DOCUMENT (Markdown):\n\n${opts.md.slice(0, 40000)}`;
+  // Read a LONG project doc (Opus has a huge context) so it understands deeply.
+  const user = `PROJECT DOCUMENT (Markdown):\n\n${opts.md.slice(0, 100000)}`;
 
   const res = await llmComplete({
     step: 'generation', // Opus 4.8 — deepest reading of the project
     system,
     messages: [{ role: 'user', content: user }],
-    maxTokens: 8000,
-    maxRetries: 1,
-    timeoutMs: 120_000,
+    maxTokens: Math.min(32000, (opts.round1Count + opts.round2Count) * 3000 + 6000),
+    maxRetries: 0,
+    timeoutMs: 285_000,
     userId: opts.userId,
   });
 

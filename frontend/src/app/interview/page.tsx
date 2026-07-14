@@ -40,6 +40,7 @@ export default function InterviewSetupPage() {
   const [projectMd, setProjectMd] = useState('');
   const [projectName, setProjectName] = useState('');
   const [starting, setStarting] = useState(false);
+  const [needLogin, setNeedLogin] = useState(false);
 
   useEffect(() => {
     if (!INTERVIEW_ENABLED) { router.replace('/'); return; }
@@ -50,7 +51,11 @@ export default function InterviewSetupPage() {
         setTax(data);
         if (data.domains[0]) setDomainId(data.domains[0].id);
       })
-      .catch(() => toast.error('Không tải được danh mục. Bạn đã đăng nhập chưa?'))
+      .catch((e) => {
+        const status = (e as { response?: { status?: number } })?.response?.status;
+        if (status === 401) setNeedLogin(true);
+        else toast.error('Không tải được danh mục — thử lại sau.');
+      })
       .finally(() => setLoading(false));
   }, [router]);
 
@@ -128,6 +133,20 @@ export default function InterviewSetupPage() {
 
         {loading ? (
           <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải…</div>
+        ) : needLogin ? (
+          <div className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] p-8 text-center">
+            <div className="text-4xl mb-3">🔒</div>
+            <h2 className="text-xl font-bold text-slate-100 mb-1">Vui lòng đăng nhập để sử dụng</h2>
+            <p className="text-sm text-slate-400 mb-5 max-w-md mx-auto">Phòng luyện phỏng vấn yêu cầu đăng nhập để lưu tiến trình, báo cáo và dùng các tính năng AI (chỉ dành cho tài khoản Pro).</p>
+            <div className="flex items-center justify-center gap-3">
+              <Link href={`/login?redirect=${encodeURIComponent('/interview')}`} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90">
+                Đăng nhập
+              </Link>
+              <Link href="/register" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-slate-300 hover:text-white">
+                Đăng ký
+              </Link>
+            </div>
+          </div>
         ) : !tax || !tax.domains.length ? (
           <div className="rounded-xl border border-white/10 p-6 text-slate-400">
             Chưa có ngân hàng câu hỏi. Vui lòng quay lại sau hoặc báo admin.

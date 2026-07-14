@@ -5,9 +5,22 @@
  */
 import { prisma } from '../../config/database.js';
 import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
+import { cached, invalidateCache, CacheKeys } from '../../utils/cache.js';
 
-/** Full taxonomy tree for the setup wizard (published only) + company profiles. */
+const TAXONOMY_TTL = 120; // seconds — taxonomy changes rarely (admin CRUD busts it)
+
+/** Bust the taxonomy cache — called from every taxonomy write. */
+export function invalidateTaxonomy(): void {
+  void invalidateCache(CacheKeys.interviewTaxonomy);
+}
+
+/** Full taxonomy tree for the setup wizard (published only) + company profiles.
+ *  Cached in Redis (fail-open, single-flight) — hit on every interview setup load. */
 export async function getTaxonomy() {
+  return cached(CacheKeys.interviewTaxonomy, TAXONOMY_TTL, fetchTaxonomy);
+}
+
+async function fetchTaxonomy() {
   const [domains, companyProfiles] = await Promise.all([
     prisma.interviewDomain.findMany({
       where: { status: 'PUBLISHED' },
@@ -50,37 +63,52 @@ export async function listDomains() {
 }
 export async function createDomain(data: { slug: string; name: string; nameVi?: string; description?: string; icon?: string; sortOrder?: number; status?: string }) {
   if (!data.slug || !data.name) throw new BadRequestError('slug và name là bắt buộc');
-  return prisma.interviewDomain.create({ data: { ...data, status: (data.status as never) ?? 'PUBLISHED' } });
+  const r = await prisma.interviewDomain.create({ data: { ...data, status: (data.status as never) ?? 'PUBLISHED' } });
+  invalidateTaxonomy();
+  return r;
 }
 export async function updateDomain(id: number, data: Record<string, unknown>) {
-  return prisma.interviewDomain.update({ where: { id }, data: data as never });
+  const r = await prisma.interviewDomain.update({ where: { id }, data: data as never });
+  invalidateTaxonomy();
+  return r;
 }
 export async function deleteDomain(id: number) {
   await prisma.interviewDomain.delete({ where: { id } });
+  invalidateTaxonomy();
   return { deleted: true };
 }
 
 export async function createTrack(data: { domainId: number; slug: string; name: string; nameVi?: string; description?: string; icon?: string; sortOrder?: number; status?: string }) {
   if (!data.domainId || !data.slug || !data.name) throw new BadRequestError('domainId, slug, name là bắt buộc');
-  return prisma.interviewTrack.create({ data: { ...data, status: (data.status as never) ?? 'PUBLISHED' } });
+  const r = await prisma.interviewTrack.create({ data: { ...data, status: (data.status as never) ?? 'PUBLISHED' } });
+  invalidateTaxonomy();
+  return r;
 }
 export async function updateTrack(id: number, data: Record<string, unknown>) {
-  return prisma.interviewTrack.update({ where: { id }, data: data as never });
+  const r = await prisma.interviewTrack.update({ where: { id }, data: data as never });
+  invalidateTaxonomy();
+  return r;
 }
 export async function deleteTrack(id: number) {
   await prisma.interviewTrack.delete({ where: { id } });
+  invalidateTaxonomy();
   return { deleted: true };
 }
 
 export async function createTopic(data: { trackId: number; slug: string; name: string; nameVi?: string; weight?: number; sortOrder?: number; status?: string }) {
   if (!data.trackId || !data.slug || !data.name) throw new BadRequestError('trackId, slug, name là bắt buộc');
-  return prisma.interviewTopic.create({ data: { ...data, status: (data.status as never) ?? 'PUBLISHED' } });
+  const r = await prisma.interviewTopic.create({ data: { ...data, status: (data.status as never) ?? 'PUBLISHED' } });
+  invalidateTaxonomy();
+  return r;
 }
 export async function updateTopic(id: number, data: Record<string, unknown>) {
-  return prisma.interviewTopic.update({ where: { id }, data: data as never });
+  const r = await prisma.interviewTopic.update({ where: { id }, data: data as never });
+  invalidateTaxonomy();
+  return r;
 }
 export async function deleteTopic(id: number) {
   await prisma.interviewTopic.delete({ where: { id } });
+  invalidateTaxonomy();
   return { deleted: true };
 }
 
@@ -94,10 +122,14 @@ export async function listConcepts(topicId?: number) {
 
 export async function createCompanyProfile(data: { slug: string; name: string; styleDescriptor: string; rigor?: number; status?: string }) {
   if (!data.slug || !data.name || !data.styleDescriptor) throw new BadRequestError('slug, name, styleDescriptor là bắt buộc');
-  return prisma.interviewCompanyProfile.create({ data: { ...data, status: (data.status as never) ?? 'PUBLISHED' } });
+  const r = await prisma.interviewCompanyProfile.create({ data: { ...data, status: (data.status as never) ?? 'PUBLISHED' } });
+  invalidateTaxonomy();
+  return r;
 }
 export async function updateCompanyProfile(id: number, data: Record<string, unknown>) {
-  return prisma.interviewCompanyProfile.update({ where: { id }, data: data as never });
+  const r = await prisma.interviewCompanyProfile.update({ where: { id }, data: data as never });
+  invalidateTaxonomy();
+  return r;
 }
 
 /** Resolve a track by id, throwing a friendly 404 — used by the session planner. */

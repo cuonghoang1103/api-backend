@@ -92,4 +92,5 @@ export async function invalidateCache(...keys: string[]): Promise<void> {
 export const CacheKeys = {
   videoCategoriesActive: 'cache:videoCategories:active',
   languagesGlobal: 'cache:lang:languages',
+  interviewTaxonomy: 'cache:interview:taxonomy',
 } as const;

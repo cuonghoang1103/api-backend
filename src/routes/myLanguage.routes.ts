@@ -15,6 +15,9 @@ import { AppError, BadRequestError } from '../middleware/errorHandler.js';
 import { uploadImage, uploadAudio, UploadError } from '../storage/uploadService.js';
 import type { ApiResponse } from '../types/index.js';
 import * as svc from '../services/myLanguage.service.js';
+import * as aiSvc from '../services/myLanguage.ai.service.js';
+import { isAiAvailable } from '../services/interview/llm/index.js';
+import { isProEffective } from '../services/pro.service.js';
 
 // ─── Public + authed-user router ─────────────────────────────────
 const publicRouter = Router();
@@ -110,6 +113,20 @@ publicRouter.post('/collections/:id/words', authenticate, async (req: Request, r
 publicRouter.delete('/collections/:id/words/:wordId', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await svc.removeWordFromCollection(req.userId!, Number(req.params.id), Number(req.params.wordId)) });
+  } catch (err) { next(err); }
+});
+
+// AI tutor (Pro/Max) — gia sư giải thích ngữ pháp/từ vựng. Fixed paths, must
+// stay above the '/:code' wildcard.
+publicRouter.post('/ai/explain', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await aiSvc.explainConcept(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/ai/status', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: { available: isAiAvailable(), isPro: await isProEffective(req.userId!) } });
   } catch (err) { next(err); }
 });
 

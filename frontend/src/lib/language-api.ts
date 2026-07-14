@@ -79,7 +79,26 @@ export const languageApi = {
     api.post(`/my-language/collections/${id}/words`, body),
   removeFromCollection: (id: number, wordId: number): Res<{ removed: boolean }> =>
     api.delete(`/my-language/collections/${id}/words/${wordId}`),
+
+  // ─── AI tutor (Pro/Max) ──────────────────────────────────────
+  explain: (body: { languageCode: string; kind: 'grammar' | 'vocab'; itemId: number }): Res<AiExplanation> =>
+    api.post('/my-language/ai/explain', body),
+  aiStatus: (): Res<{ available: boolean; isPro: boolean }> => api.get('/my-language/ai/status'),
 };
+
+export interface AiExplanationExample {
+  text: string;
+  reading?: string;
+  translation?: string;
+}
+export interface AiExplanation {
+  kind: 'grammar' | 'vocab';
+  title: string;
+  summary: string;
+  explanation: string; // markdown
+  examples: AiExplanationExample[];
+  tips: string[];
+}
 
 /**
  * Drain a paginated list endpoint (backend caps limit at 100, default 20).

@@ -13,7 +13,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   BookOpen,
@@ -37,6 +37,8 @@ import { toast } from 'sonner';
 
 import { languageApi } from '@/lib/language-api';
 import type { VocabCategory, VocabCollection, VocabWord, LangLearnStatus } from '@/types/language';
+import { usePro } from '@/hooks/usePro';
+import { AiExplainButton, AiExplainModal } from '@/components/language/AiExplainModal';
 import {
   SectionShell,
   SpeakerButton,
@@ -87,10 +89,22 @@ export default function VocabPage() {
 
 function VocabInner() {
   const code = String(useParams().code);
+  const router = useRouter();
   const searchParams = useSearchParams();
   const wantReview = searchParams.get('mode') === 'review';
   const { isAuthenticated } = useLangUser();
+  const { isPro } = usePro();
   const reduced = usePrefersReducedMotion();
+
+  // Pro-gated AI tutor for a vocab word.
+  const [aiWord, setAiWord] = useState<VocabWord | null>(null);
+  const openAiWord = useCallback(
+    (w: VocabWord) => {
+      if (!isPro) { router.push('/pro'); return; }
+      setAiWord(w);
+    },
+    [isPro, router],
+  );
 
   const [view, setView] = useState<View>('list');
   const [categories, setCategories] = useState<VocabCategory[]>([]);
@@ -541,6 +555,8 @@ function VocabInner() {
           canLoadMore={srcKind === 'category' && !debounced.trim() && page < totalPages}
           loadingMore={loadingMore}
           onLoadMore={loadMore}
+          isPro={isPro}
+          onExplain={openAiWord}
         />
       ) : view === 'cards' ? (
         <FlashcardsView
@@ -549,6 +565,8 @@ function VocabInner() {
           reduced={reduced}
           favIds={favIds}
           onToggleFav={toggleFav}
+          isPro={isPro}
+          onExplain={openAiWord}
         />
       ) : (
         <QuizView
@@ -577,6 +595,16 @@ function VocabInner() {
               setActiveColl(null);
             }
           }}
+        />
+      )}
+
+      {aiWord && (
+        <AiExplainModal
+          kind="vocab"
+          itemId={aiWord.id}
+          languageCode={code}
+          title={aiWord.word}
+          onClose={() => setAiWord(null)}
         />
       )}
     </SectionShell>
@@ -616,6 +644,8 @@ function ListView({
   canLoadMore,
   loadingMore,
   onLoadMore,
+  isPro,
+  onExplain,
 }: {
   words: VocabWord[];
   statuses: Map<number, LangLearnStatus>;
@@ -628,6 +658,8 @@ function ListView({
   canLoadMore: boolean;
   loadingMore: boolean;
   onLoadMore: () => void;
+  isPro: boolean;
+  onExplain: (w: VocabWord) => void;
 }) {
   return (
     <div className="space-y-3">
@@ -700,6 +732,9 @@ function ListView({
               {w.exampleMeaning && (
                 <p className="text-sm text-text-muted">{w.exampleMeaning}</p>
               )}
+              <div className="mt-2">
+                <AiExplainButton isPro={isPro} onOpen={() => onExplain(w)} />
+              </div>
             </div>
           </div>
         ))}
@@ -734,12 +769,16 @@ function FlashcardsView({
   reduced,
   favIds,
   onToggleFav,
+  isPro,
+  onExplain,
 }: {
   words: VocabWord[];
   isAuthenticated: boolean;
   reduced: boolean;
   favIds: Set<number>;
   onToggleFav: (w: VocabWord) => void;
+  isPro: boolean;
+  onExplain: (w: VocabWord) => void;
 }) {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -824,11 +863,12 @@ function FlashcardsView({
 
   return (
     <div className="mx-auto max-w-xl">
-      <div className="mb-3 flex items-center justify-center gap-2 text-sm font-medium text-text-muted">
+      <div className="mb-3 flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-text-muted">
         <span>
           {index + 1} / {words.length}
         </span>
         {isAuthenticated && <HeartButton active={favIds.has(w.id)} onClick={() => onToggleFav(w)} size={14} />}
+        <AiExplainButton isPro={isPro} onOpen={() => onExplain(w)} />
       </div>
 
       <div className="[perspective:1200px]">

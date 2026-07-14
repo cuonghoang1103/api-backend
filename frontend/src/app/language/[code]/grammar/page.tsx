@@ -6,12 +6,14 @@
  * explanation (HTML), examples, and optional mistake / comparison callouts.
  */
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { GraduationCap, ChevronDown, AlertTriangle, GitCompare, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { fetchAllPages, languageApi } from '@/lib/language-api';
 import type { GrammarPoint } from '@/types/language';
+import { usePro } from '@/hooks/usePro';
+import { AiExplainButton, AiExplainModal } from '@/components/language/AiExplainModal';
 import {
   SectionShell,
   SpeakerButton,
@@ -26,8 +28,10 @@ const ALL = '__all__';
 
 export default function GrammarPage() {
   const code = String(useParams().code);
+  const router = useRouter();
   const reduced = usePrefersReducedMotion();
   const { isAuthenticated } = useLangUser();
+  const { isPro } = usePro();
 
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<GrammarPoint[]>([]);
@@ -35,6 +39,16 @@ export default function GrammarPage() {
   const [level, setLevel] = useState<string>(ALL);
   const [openId, setOpenId] = useState<number | null>(null);
   const [learned, setLearned] = useState<Set<number>>(new Set());
+  const [aiPoint, setAiPoint] = useState<GrammarPoint | null>(null);
+
+  // Pro-gated AI tutor: guests/non-Pro are sent to /pro; Pro opens the modal.
+  const openAi = useCallback(
+    (point: GrammarPoint) => {
+      if (!isPro) { router.push('/pro'); return; }
+      setAiPoint(point);
+    },
+    [isPro, router],
+  );
 
   useEffect(() => {
     let alive = true;
@@ -109,9 +123,21 @@ export default function GrammarPage() {
               canLearn={isAuthenticated}
               learned={learned.has(point.id)}
               onLearn={() => markLearned(point)}
+              isPro={isPro}
+              onExplain={() => openAi(point)}
             />
           ))}
         </ul>
+      )}
+
+      {aiPoint && (
+        <AiExplainModal
+          kind="grammar"
+          itemId={aiPoint.id}
+          languageCode={code}
+          title={aiPoint.title}
+          onClose={() => setAiPoint(null)}
+        />
       )}
     </SectionShell>
   );
@@ -125,6 +151,8 @@ function GrammarRow({
   canLearn,
   learned,
   onLearn,
+  isPro,
+  onExplain,
 }: {
   point: GrammarPoint;
   open: boolean;
@@ -133,6 +161,8 @@ function GrammarRow({
   canLearn: boolean;
   learned: boolean;
   onLearn: () => void;
+  isPro: boolean;
+  onExplain: () => void;
 }) {
   const panelId = `grammar-panel-${point.id}`;
   const headerId = `grammar-header-${point.id}`;
@@ -235,8 +265,9 @@ function GrammarRow({
                 </div>
               )}
 
-              {canLearn && (
-                <div className="pt-1">
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <AiExplainButton isPro={isPro} onOpen={onExplain} />
+                {canLearn && (
                   <button
                     type="button"
                     onClick={onLearn}
@@ -250,8 +281,8 @@ function GrammarRow({
                     <Check size={16} />
                     {learned ? 'Đã học' : 'Đánh dấu đã học'}
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </motion.div>
         )}

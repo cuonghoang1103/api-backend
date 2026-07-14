@@ -100,8 +100,10 @@ const nextConfig = {
       // - Referrer-Policy: strict-origin-when-cross-origin — leaks
       //   only the origin (not the path) when navigating out.
       // - Permissions-Policy — disable APIs the site doesn't use
-      //   (geolocation, camera, microphone, payment). Saves a
-      //   permission-prompt surface and limits XSS impact.
+      //   (geolocation, camera, payment). microphone=(self) is ALLOWED
+      //   for same-origin: the Interview Simulator records spoken answers
+      //   (Groq Whisper STT) via getUserMedia — an empty microphone=()
+      //   blocks that before the browser even prompts for permission.
       // - X-Powered-By: removed — don't tell attackers the runtime.
       // - Cross-Origin-*-Policy: tighten COOP/COEP to same-origin
       //   (we don't share a process with other sites) and cross-origin
@@ -113,7 +115,7 @@ const nextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'geolocation=(), camera=(), microphone=(), payment=(), usb=()' },
+          { key: 'Permissions-Policy', value: 'geolocation=(), camera=(), microphone=(self), payment=(), usb=()' },
           // Hide the framework fingerprint. The `x-nextjs-*` headers
           // are still emitted by Next for routing cache; this only
           // removes the `X-Powered-By: Next.js` line.

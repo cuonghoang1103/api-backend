@@ -91,99 +91,12 @@ jobs:
               echo '[SKIP] .env already exists'; \
             fi"
 
-      - name: Update .env on VPS with secrets
-        env:
-          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
-          COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
-          SIGNED_URL_SECRET: ${{ secrets.SIGNED_URL_SECRET }}
-        run: |
-          if grep -q "^YOUTUBE_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
-            ssh vps "sed -i 's|^YOUTUBE_API_KEY=.*|YOUTUBE_API_KEY=${YOUTUBE_API_KEY}|' /opt/cuonghoangdev/.env"
-          else
-            ssh vps "echo 'YOUTUBE_API_KEY=${YOUTUBE_API_KEY}' >> /opt/cuonghoangdev/.env"
-          fi
-          if [ -n "$GROQ_API_KEY" ]; then
-            if grep -q "^GROQ_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
-              ssh vps "sed -i 's|^GROQ_API_KEY=.*|GROQ_API_KEY=${GROQ_API_KEY}|' /opt/cuonghoangdev/.env"
-            else
-              ssh vps "echo 'GROQ_API_KEY=${GROQ_API_KEY}' >> /opt/cuonghoangdev/.env"
-            fi
-          fi
-          if grep -q "^OPENROUTER_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
-            ssh vps "sed -i 's|^OPENROUTER_API_KEY=.*|OPENROUTER_API_KEY=${OPENROUTER_API_KEY}|' /opt/cuonghoangdev/.env"
-          else
-            ssh vps "echo 'OPENROUTER_API_KEY=${OPENROUTER_API_KEY}' >> /opt/cuonghoangdev/.env"
-          fi
-          if [ -n "$OPENAI_API_KEY" ]; then
-            if grep -q "^OPENAI_API_KEY=" /opt/cuonghoangdev/.env 2>/dev/null; then
-              ssh vps "sed -i 's|^OPENAI_API_KEY=.*|OPENAI_API_KEY=${OPENAI_API_KEY}|' /opt/cuonghoangdev/.env"
-            else
-              ssh vps "echo 'OPENAI_API_KEY=${OPENAI_API_KEY}' >> /opt/cuonghoangdev/.env"
-            fi
-          fi
-          # Required secrets - use GitHub secret if set, otherwise keep existing value in .env
-          # (The .env was originally set up with strong random values that we don't want
-          # to overwrite with weak defaults on every deploy.)
-          if [ -n "$JWT_SECRET" ]; then
-            if grep -q "^JWT_SECRET=" /opt/cuonghoangdev/.env 2>/dev/null; then
-              ssh vps "sed -i 's|^JWT_SECRET=.*|JWT_SECRET=${JWT_SECRET}|' /opt/cuonghoangdev/.env"
-            else
-              ssh vps "echo 'JWT_SECRET=${JWT_SECRET}' >> /opt/cuonghoangdev/.env"
-            fi
-          fi
-          if [ -n "$JWT_REFRESH_SECRET" ]; then
-            if grep -q "^JWT_REFRESH_SECRET=" /opt/cuonghoangdev/.env 2>/dev/null; then
-              ssh vps "sed -i 's|^JWT_REFRESH_SECRET=.*|JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}|' /opt/cuonghoangdev/.env"
-            else
-              ssh vps "echo 'JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}' >> /opt/cuonghoangdev/.env"
-            fi
-          fi
-          # SIGNED_URL_SECRET is REQUIRED for backend to start
-          # Generate random 64-char hex string if not set and not in .env
-          if grep -q "^SIGNED_URL_SECRET=" /opt/cuonghoangdev/.env 2>/dev/null; then
-            if [ -n "$SIGNED_URL_SECRET" ]; then
-              ssh vps "sed -i 's|^SIGNED_URL_SECRET=.*|SIGNED_URL_SECRET=${SIGNED_URL_SECRET}|' /opt/cuonghoangdev/.env"
-            fi
-          else
-            if [ -n "$SIGNED_URL_SECRET" ]; then
-              ssh vps "echo 'SIGNED_URL_SECRET=${SIGNED_URL_SECRET}' >> /opt/cuonghoangdev/.env"
-            else
-              # Generate a random 64-char hex string on VPS
-              SIGNED_URL_RAND=$(openssl rand -hex 32)
-              ssh vps "echo 'SIGNED_URL_SECRET=${SIGNED_URL_RAND}' >> /opt/cuonghoangdev/.env"
-              echo "[GENERATED] SIGNED_URL_SECRET"
-            fi
-          fi
-          # COOKIE_SECRET is REQUIRED for backend to start
-          if grep -q "^COOKIE_SECRET=" /opt/cuonghoangdev/.env 2>/dev/null; then
-            if [ -n "$COOKIE_SECRET" ]; then
-              ssh vps "sed -i 's|^COOKIE_SECRET=.*|COOKIE_SECRET=${COOKIE_SECRET}|' /opt/cuonghoangdev/.env"
-            fi
-          else
-            if [ -n "$COOKIE_SECRET" ]; then
-              ssh vps "echo 'COOKIE_SECRET=${COOKIE_SECRET}' >> /opt/cuonghoangdev/.env"
-            else
-              COOKIE_RAND=$(openssl rand -hex 32)
-              ssh vps "echo 'COOKIE_SECRET=${COOKIE_RAND}' >> /opt/cuonghoangdev/.env"
-              echo "[GENERATED] COOKIE_SECRET"
-            fi
-          fi
-          if [ -n "$POSTGRES_PASSWORD" ]; then
-            if grep -q "^POSTGRES_PASSWORD=" /opt/cuonghoangdev/.env 2>/dev/null; then
-              ssh vps "sed -i 's|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=${POSTGRES_PASSWORD}|' /opt/cuonghoangdev/.env"
-            else
-              ssh vps "echo 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}' >> /opt/cuonghoangdev/.env"
-            fi
-          fi
-          # Verify required secrets are present
-          echo "=== Verifying required secrets ==="
-          ssh vps "grep -E '^(JWT_SECRET|JWT_REFRESH_SECRET|SIGNED_URL_SECRET|COOKIE_SECRET)=' /opt/cuonghoangdev/.env"
+      # NOTE (2026-07-14): the "Update .env on VPS with secrets" step was REMOVED.
+      # It appended each secret to /opt/cuonghoangdev/.env on every run without
+      # de-duping, bloating .env to 1965 lines (7 keys × ~248 copies) before it
+      # was cleaned up. Secrets now live PERMANENTLY in the VPS .env (managed by
+      # hand / `bash deploy.sh` which sources but never rewrites it), so CI must
+      # not touch it. Add/rotate a secret directly in /opt/cuonghoangdev/.env.
 
       - name: Upload and run swap setup script
         continue-on-error: true

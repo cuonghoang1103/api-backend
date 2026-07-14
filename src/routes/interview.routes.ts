@@ -18,6 +18,7 @@ import * as taxonomy from '../services/interview/taxonomy.service.js';
 import * as bank from '../services/interview/questionBank.service.js';
 import * as session from '../services/interview/session.service.js';
 import * as drill from '../services/interview/drill.service.js';
+import * as followup from '../services/interview/followup.service.js';
 import { isAiAvailable, getUsageStats } from '../services/interview/llm/index.js';
 import * as knowledge from '../services/interview/knowledge/knowledge.service.js';
 import * as prompts from '../services/interview/promptTemplate.service.js';
@@ -111,6 +112,27 @@ router.get('/history', async (req: Request, res: Response<ApiResponse>, next) =>
 router.post('/sessions/:id/turns/:order/flag', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const data = await session.flagTurn(req.userId!, parseId(req.params.id), parseInt(req.params.order, 10), req.body?.reason);
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+
+// ── Follow-up (probing) questions (Phase 2b) — stateless AI coaching ──
+router.post('/sessions/:id/turns/:order/followup', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const previous = Array.isArray(req.body?.previous) ? (req.body.previous as unknown[]).map(String) : undefined;
+    const data = await followup.generateFollowup(req.userId!, parseId(req.params.id), parseInt(req.params.order, 10), previous);
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+router.post('/sessions/:id/turns/:order/followup/answer', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await followup.assessFollowup(
+      req.userId!,
+      parseId(req.params.id),
+      parseInt(req.params.order, 10),
+      String(req.body?.question ?? ''),
+      String(req.body?.answer ?? ''),
+    );
     res.json({ success: true, data });
   } catch (err) { next(err); }
 });

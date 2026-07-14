@@ -70,6 +70,18 @@ const STR = {
   finishReport: { vi: 'Kết thúc & xem báo cáo', en: 'Finish & view report' },
   nextQuestion: { vi: 'Câu tiếp theo', en: 'Next question' },
 
+  // ── Follow-up (probing) ──
+  followupTitle: { vi: 'Hỏi vặn — đào sâu', en: 'Follow-up — go deeper' },
+  followupIntro: { vi: 'Người phỏng vấn hỏi thêm để đào sâu câu trả lời của bạn (không tính vào điểm).', en: 'The interviewer probes deeper into your answer (not scored).' },
+  followupAsk: { vi: 'Người phỏng vấn hỏi vặn', en: 'Ask a follow-up' },
+  followupAnswerPlaceholder: { vi: 'Trả lời câu hỏi vặn…', en: 'Answer the follow-up…' },
+  followupSend: { vi: 'Gửi', en: 'Send' },
+  followupAnother: { vi: 'Hỏi câu khác', en: 'Ask another' },
+  followupThinking: { vi: 'Đang nghĩ…', en: 'Thinking…' },
+  followupProOnly: { vi: 'Hỏi vặn dành cho tài khoản Pro/Max.', en: 'Follow-ups are a Pro/Max feature.' },
+  followupError: { vi: 'Không tạo được câu hỏi vặn — thử lại.', en: "Couldn't generate a follow-up — try again." },
+  youLabel: { vi: 'Bạn', en: 'You' },
+
   // ── Session toasts ──
   tSessionLoadFail: { vi: 'Không tải được phiên phỏng vấn', en: 'Failed to load the interview session' },
   tFocusedPaste: { vi: 'Focused Mode: đã tắt dán để buổi luyện có giá trị thật.', en: 'Focused Mode: paste disabled to keep the practice honest.' },

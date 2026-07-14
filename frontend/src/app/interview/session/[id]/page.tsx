@@ -10,7 +10,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Loader2, ArrowRight, Flag, CheckCircle2, XCircle, AlertTriangle, ShieldCheck, Volume2, Square, Mic } from 'lucide-react';
+import { Loader2, ArrowRight, Flag, CheckCircle2, XCircle, AlertTriangle, ShieldCheck, Volume2, Square, Mic, MessageCircle } from 'lucide-react';
 import { useSpeech } from '@/hooks/useSpeech';
 import ParticleBackground from '@/components/repos/ParticleBackground';
 import Markdown from '@/components/markdown/Markdown';
@@ -383,6 +383,8 @@ export default function InterviewRoomPage() {
             advancing={advancing || finishing}
             isLast={order + 1 >= total}
             lang={displayLang}
+            sessionId={sessionId}
+            order={order}
             ttsSupported={ttsSupported}
             speaking={speaking}
             onSpeakGrade={() => { const lang: 'VI' | 'EN' = session.language === 'EN' ? 'EN' : 'VI'; speak(buildGradeSpeech(revealed, lang), lang); }}
@@ -429,7 +431,7 @@ function buildGradeSpeech(r: SubmitAnswerResponse, lang: 'VI' | 'EN'): string {
 }
 
 function Reveal({
-  revealed, isMcq, ratings, setRatings, onNext, advancing, isLast, lang,
+  revealed, isMcq, ratings, setRatings, onNext, advancing, isLast, lang, sessionId, order,
   ttsSupported, speaking, onSpeakGrade, onStopSpeak,
 }: {
   revealed: SubmitAnswerResponse;
@@ -440,6 +442,8 @@ function Reveal({
   advancing: boolean;
   isLast: boolean;
   lang: ILang;
+  sessionId: number;
+  order: number;
   ttsSupported: boolean;
   speaking: boolean;
   onSpeakGrade: () => void;
@@ -552,12 +556,89 @@ function Reveal({
         </div>
       )}
 
+      {/* Follow-up (probing) — open questions only; stateless AI coaching */}
+      {!isMcq && <FollowUp sessionId={sessionId} order={order} lang={lang} />}
+
       <div className="flex justify-end">
         <button onClick={onNext} disabled={advancing} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 disabled:opacity-40">
           {advancing ? <Loader2 className="w-4 h-4 animate-spin" /> : isLast ? <Flag className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
           {isLast ? t('finishReport') : t('nextQuestion')}
         </button>
       </div>
+    </div>
+  );
+}
+
+// Live, stateless follow-up coaching: the interviewer probes deeper. Requires
+// Pro/AI (backend gates); errors surface as a toast. Not persisted, not scored.
+function FollowUp({ sessionId, order, lang }: { sessionId: number; order: number; lang: ILang }) {
+  const t = makeT(lang);
+  const [rounds, setRounds] = useState<{ question: string; answer: string; feedback: string }[]>([]);
+  const [current, setCurrent] = useState<{ question: string; answer: string } | null>(null);
+  const [loadingQ, setLoadingQ] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  const ask = async () => {
+    setLoadingQ(true);
+    try {
+      const previous = [...rounds.map((r) => r.question), ...(current ? [current.question] : [])];
+      const res = await interviewApi.generateFollowup(sessionId, order, previous.length ? previous : undefined);
+      setCurrent({ question: res.data.data.question, answer: '' });
+    } catch (e) {
+      const code = (e as { response?: { status?: number } })?.response?.status;
+      toast.error(code === 403 ? t('followupProOnly') : t('followupError'));
+    } finally {
+      setLoadingQ(false);
+    }
+  };
+
+  const submit = async () => {
+    if (!current || !current.answer.trim() || busy) return;
+    setBusy(true);
+    try {
+      const res = await interviewApi.answerFollowup(sessionId, order, current.question, current.answer);
+      setRounds((rs) => [...rs, { question: current.question, answer: current.answer, feedback: res.data.data.feedback }]);
+      setCurrent(null);
+    } catch {
+      toast.error(t('followupError'));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="rounded-xl border border-sky-500/30 bg-sky-500/[0.05] p-4">
+      <div className="text-xs font-semibold uppercase tracking-wide text-sky-300 mb-1">{t('followupTitle')}</div>
+      <p className="text-xs text-slate-400 mb-3">{t('followupIntro')}</p>
+
+      {rounds.map((r, i) => (
+        <div key={i} className="mb-3 space-y-1.5 border-l-2 border-sky-500/30 pl-3">
+          <div className="text-sm text-slate-100"><span className="text-sky-300 font-semibold">{t('interviewer')}: </span>{r.question}</div>
+          <div className="text-sm text-slate-300"><span className="text-slate-400 font-semibold">{t('youLabel')}: </span>{r.answer}</div>
+          {r.feedback && <div className="text-xs text-emerald-300/90 bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-2 whitespace-pre-wrap">{r.feedback}</div>}
+        </div>
+      ))}
+
+      {current ? (
+        <div className="space-y-2">
+          <div className="text-sm text-slate-100"><span className="text-sky-300 font-semibold">{t('interviewer')}: </span>{current.question}</div>
+          <textarea
+            value={current.answer}
+            onChange={(e) => setCurrent({ ...current, answer: e.target.value })}
+            rows={3}
+            placeholder={t('followupAnswerPlaceholder')}
+            className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm leading-relaxed focus:outline-none focus:border-sky-500/60 resize-y"
+          />
+          <button onClick={submit} disabled={busy || !current.answer.trim()} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500 text-slate-950 text-sm font-semibold hover:opacity-90 disabled:opacity-40">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : null} {busy ? t('followupThinking') : t('followupSend')}
+          </button>
+        </div>
+      ) : (
+        <button onClick={ask} disabled={loadingQ} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-sky-500/40 text-sky-300 text-sm font-medium hover:bg-sky-500/10 disabled:opacity-50">
+          {loadingQ ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageCircle className="w-4 h-4" />}
+          {loadingQ ? t('followupThinking') : rounds.length ? t('followupAnother') : t('followupAsk')}
+        </button>
+      )}
     </div>
   );
 }

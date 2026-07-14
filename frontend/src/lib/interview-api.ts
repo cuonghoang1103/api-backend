@@ -49,6 +49,12 @@ export const interviewApi = {
     // no file ("Thiếu audio" → 400). Matches every other upload in api.ts.
     return api.post('/interview/stt', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
   },
+
+  // Phase 2 — follow-up (probing) questions. Stateless AI coaching, not scored.
+  generateFollowup: (id: number, order: number, previous?: string[]): Res<{ question: string }> =>
+    api.post(`/interview/sessions/${id}/turns/${order}/followup`, { previous }, { timeout: 40_000 }),
+  answerFollowup: (id: number, order: number, question: string, answer: string): Res<{ feedback: string }> =>
+    api.post(`/interview/sessions/${id}/turns/${order}/followup/answer`, { question, answer }, { timeout: 40_000 }),
   selfAssess: (id: number, order: number, ratings: Record<string, number>): Res<SelfAssessResponse> =>
     api.post(`/interview/sessions/${id}/turns/${order}/self-assess`, { ratings }),
   finish: (id: number): Res<InterviewReport> => api.post(`/interview/sessions/${id}/finish`, {}),

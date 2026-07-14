@@ -168,11 +168,12 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
 
   const parse = (text: string): GeneratedQuestion[] => GenerationResultSchema.parse(extractJson(text)).questions;
 
-  // Opus writes thorough questions + model answers + rubrics; 4000 tokens was too
-  // small for larger batches → the JSON got truncated → parse failed → retry →
-  // spin. Scale the budget to the count, and give the slow model a real timeout.
-  const genMaxTokens = Math.min(16000, count * 1500 + 2000);
-  const genTimeoutMs = 180_000;
+  // Opus writes thorough questions + model answers + rubrics. Budget scales with
+  // the count and is generous (≈2.5× the earlier size) so answers are detailed and
+  // never truncated. Timeout is raised to match (stays under the nginx 300s cap);
+  // no auto-retry — a retry at this length would blow past that ceiling.
+  const genMaxTokens = Math.min(32000, count * 3750 + 5000);
+  const genTimeoutMs = 285_000;
 
   let questions: GeneratedQuestion[];
   const first = await llmComplete({
@@ -181,7 +182,7 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
     messages: [{ role: 'user', content: user }],
     maxTokens: genMaxTokens,
     timeoutMs: genTimeoutMs,
-    maxRetries: 1,
+    maxRetries: 0,
     userId: params.userId,
     sessionId: null,
   });
@@ -198,7 +199,7 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
       ],
       maxTokens: genMaxTokens,
       timeoutMs: genTimeoutMs,
-      maxRetries: 1,
+      maxRetries: 0,
       userId: params.userId,
       sessionId: null,
     });

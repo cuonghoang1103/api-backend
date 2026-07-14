@@ -168,12 +168,20 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
 
   const parse = (text: string): GeneratedQuestion[] => GenerationResultSchema.parse(extractJson(text)).questions;
 
+  // Opus writes thorough questions + model answers + rubrics; 4000 tokens was too
+  // small for larger batches → the JSON got truncated → parse failed → retry →
+  // spin. Scale the budget to the count, and give the slow model a real timeout.
+  const genMaxTokens = Math.min(16000, count * 1500 + 2000);
+  const genTimeoutMs = 180_000;
+
   let questions: GeneratedQuestion[];
   const first = await llmComplete({
     step: 'generation',
     system,
     messages: [{ role: 'user', content: user }],
-    maxTokens: 4000,
+    maxTokens: genMaxTokens,
+    timeoutMs: genTimeoutMs,
+    maxRetries: 1,
     userId: params.userId,
     sessionId: null,
   });
@@ -188,7 +196,9 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
         { role: 'assistant', content: first.text },
         { role: 'user', content: 'Your previous output was not valid JSON matching the schema. Return ONLY the JSON object — no prose, no code fences.' },
       ],
-      maxTokens: 4000,
+      maxTokens: genMaxTokens,
+      timeoutMs: genTimeoutMs,
+      maxRetries: 1,
       userId: params.userId,
       sessionId: null,
     });

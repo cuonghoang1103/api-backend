@@ -289,7 +289,7 @@ export const interviewAdminApi = {
     type?: string;
     language?: 'VI' | 'EN';
     useKnowledge?: boolean;
-  }): Res<GeneratePreview> => api.post('/admin/interview/generate', body, { timeout: 120_000 }),
+  }): Res<GeneratePreview> => api.post('/admin/interview/generate', body, { timeout: 190_000 }),
   commitQuestions: (body: { topicId: number; level: string; questions: GeneratedQuestion[] }): Res<{ created: number; ids: number[] }> =>
     api.post('/admin/interview/generate/commit', body),
 };

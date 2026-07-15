@@ -50,6 +50,12 @@ export const cvApi = {
   // ── Import (Phase 2a: paste + JSON Resume) ──────────────────
   listImports: (): Res<CvImportJob[]> => api.get('/cv/import'),
   importPaste: (text: string): Res<CvImportJob> => api.post('/cv/import/paste', { text }),
+  importUpload: (file: File): Res<CvImportJob> => {
+    const fd = new FormData();
+    fd.append('file', file);
+    // PDF text extraction can take a few seconds on big/complex files.
+    return api.post('/cv/import/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 60_000 });
+  },
   importJsonResume: (resume: unknown): Res<CvImportJob> => api.post('/cv/import/json-resume', { resume }),
   getImport: (id: number): Res<CvImportJob> => api.get(`/cv/import/${id}`),
   commitImport: (id: number, body: CvImportCommitBody): Res<{ committed: boolean; counts: Record<string, number> }> =>

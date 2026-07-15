@@ -15,6 +15,7 @@ import { z } from 'zod';
 import { prisma } from '../../config/database.js';
 import { NotFoundError, BadRequestError } from '../../middleware/errorHandler.js';
 import type { CvItemKind, CvSkillCategory } from '@prisma/client';
+import { extractPdf, extractDocx, detectFileType } from './extract.service.js';
 
 // ─── The structured draft shape (what review UI renders + commit consumes) ──
 export interface DraftBullet { text: string; userStatedFacts?: string | null }
@@ -377,6 +378,54 @@ export async function createPasteImport(userId: number, body: unknown) {
       rawText: text.slice(0, 60000),
       parsedResult: draft as unknown as object,
       confidenceFlags: confidenceFlags as unknown as object,
+    },
+  });
+}
+
+/**
+ * Import an uploaded PDF or DOCX. The raw file is NOT trusted by its client
+ * mimetype — the real type is sniffed from magic bytes. Text is extracted
+ * (line-structure preserved), then run through the same heuristic parser.
+ * A scanned/image-only PDF is surfaced loudly: every ATS read it as blank.
+ */
+export async function createFileImport(userId: number, buffer: Buffer, originalName: string) {
+  const type = detectFileType(buffer);
+  if (!type) throw new BadRequestError('Chỉ nhận file PDF hoặc DOCX');
+
+  let extracted;
+  try {
+    extracted = type === 'PDF' ? await extractPdf(buffer) : await extractDocx(buffer);
+  } catch {
+    // Retain the job so the user sees a clear failure rather than a lost upload.
+    return prisma.cvImportJob.create({
+      data: { userId, source: type, status: 'FAILED', error: 'Không đọc được nội dung file. File có thể bị hỏng hoặc được bảo vệ.' },
+    });
+  }
+
+  const flags: ConfidenceFlag[] = [];
+  if (extracted.imageOnly) {
+    flags.push({
+      field: 'file',
+      reason: 'File PDF này gần như không có text đọc được — nhiều khả năng là ảnh scan. Nghĩa là mọi hệ thống ATS bạn từng nộp đều đọc ra TRANG TRẮNG. Đây thường là lỗi lớn nhất của một CV.',
+    });
+  }
+  if (extracted.hiddenTextFound) {
+    flags.push({ field: 'file', reason: 'Phát hiện chữ ẩn (mắt người không thấy nhưng ATS đọc được). Nếu không cố ý, bạn nên biết điều này.' });
+  }
+
+  const { draft, confidenceFlags } = extracted.text.trim()
+    ? parseRawText(extracted.text)
+    : { draft: { contact: { links: {} }, items: [], skills: [], languageSkills: [], certifications: [] } as ParsedDraft, confidenceFlags: [] };
+
+  return prisma.cvImportJob.create({
+    data: {
+      userId,
+      source: type,
+      status: extracted.imageOnly ? 'PARSED' : 'PARSED',
+      rawText: extracted.text.slice(0, 60000),
+      parsedResult: draft as unknown as object,
+      confidenceFlags: [...flags, ...confidenceFlags] as unknown as object,
+      hiddenTextFound: extracted.hiddenTextFound || extracted.imageOnly,
     },
   });
 }

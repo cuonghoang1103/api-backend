@@ -10,6 +10,7 @@
  * mapped to a 400 here (the global handler would otherwise treat it as 500).
  */
 import { Router, type Request, type Response, type NextFunction } from 'express';
+import multer from 'multer';
 import { ZodError } from 'zod';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import type { ApiResponse } from '../types/index.js';
@@ -123,9 +124,17 @@ router.delete('/languages/:id', h((req, res) => {
   return profile.deleteLang(req.userId!, id);
 }));
 
-// ── Import (Phase 2a: paste + JSON Resume; files/GitHub later) ──
+// ── Import (Phase 2a paste + JSON Resume; 2b PDF/DOCX upload) ──
+// CV files are held in memory only (never written to disk) and processed then
+// dropped — the extracted text is what persists, redactable and non-PII-logged.
+const cvUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 router.get('/import', h((req) => importSvc.listImports(req.userId!)));
 router.post('/import/paste', h((req) => importSvc.createPasteImport(req.userId!, req.body ?? {})));
+router.post('/import/upload', cvUpload.single('file'), h((req) => {
+  const f = (req as Request & { file?: { buffer: Buffer; originalname: string } }).file;
+  if (!f) { throw new ZodError([{ code: 'custom', path: ['file'], message: 'Cần chọn file PDF hoặc DOCX' }]); }
+  return importSvc.createFileImport(req.userId!, f.buffer, f.originalname);
+}));
 router.post('/import/json-resume', h((req) => importSvc.createJsonResumeImport(req.userId!, req.body?.resume ?? req.body)));
 router.get('/import/:id', h((req, res) => {
   const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();

@@ -74,6 +74,18 @@ export default function CvImportPage() {
     } finally { setBusy(false); }
   };
 
+  const onCvFile = async (file: File) => {
+    if (file.size > 10 * 1024 * 1024) { toast.error('File tối đa 10MB'); return; }
+    setBusy(true);
+    try {
+      const job = (await cvApi.importUpload(file)).data.data;
+      if (job.status === 'FAILED') { toast.error('Không đọc được file — có thể bị hỏng hoặc khoá mật khẩu'); return; }
+      enterReview(job);
+    } catch {
+      toast.error('Tải file thất bại');
+    } finally { setBusy(false); }
+  };
+
   const commit = async () => {
     if (!jobId || !draft) return;
     setBusy(true);
@@ -140,18 +152,23 @@ export default function CvImportPage() {
                   onChange={(e) => { const f = e.target.files?.[0]; if (f) onJsonFile(f); e.currentTarget.value = ''; }} />
               </label>
 
-              {[
-                { icon: FileText, title: 'Tải PDF / DOCX', desc: 'Bóc tách text + phát hiện chữ ẩn' },
-                { icon: Github, title: 'Kết nối GitHub', desc: 'Chấm điểm repo, gợi ý mục CV' },
-              ].map((s) => (
-                <div key={s.title} className="flex items-center gap-3 rounded-xl border border-dashed border-[var(--border-color)] bg-[var(--bg-card)]/50 p-4 opacity-70">
-                  <s.icon className="h-5 w-5 shrink-0 text-[var(--text-secondary)]" />
-                  <div>
-                    <div className="text-sm font-medium">{s.title} <span className="text-xs font-normal text-[var(--text-secondary)]">· sắp có</span></div>
-                    <div className="text-xs text-[var(--text-secondary)]">{s.desc}</div>
-                  </div>
+              <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 hover:border-[var(--accent-color)]">
+                <FileText className="h-5 w-5 shrink-0" />
+                <div className="min-w-0">
+                  <div className="text-sm font-medium">Tải PDF / DOCX</div>
+                  <div className="text-xs text-[var(--text-secondary)]">Bóc tách text + cảnh báo chữ ẩn / CV scan (≤ 10MB)</div>
                 </div>
-              ))}
+                <input type="file" accept="application/pdf,.pdf,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="hidden"
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) onCvFile(f); e.currentTarget.value = ''; }} />
+              </label>
+
+              <div className="flex items-center gap-3 rounded-xl border border-dashed border-[var(--border-color)] bg-[var(--bg-card)]/50 p-4 opacity-70">
+                <Github className="h-5 w-5 shrink-0 text-[var(--text-secondary)]" />
+                <div>
+                  <div className="text-sm font-medium">Kết nối GitHub <span className="text-xs font-normal text-[var(--text-secondary)]">· sắp có</span></div>
+                  <div className="text-xs text-[var(--text-secondary)]">Chấm điểm repo, gợi ý mục CV</div>
+                </div>
+              </div>
 
               <Link href="/cv/profile" className="block rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 hover:border-[var(--accent-color)]">
                 <div className="text-sm font-medium">Bắt đầu từ trang trắng</div>

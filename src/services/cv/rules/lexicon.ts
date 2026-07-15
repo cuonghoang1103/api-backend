@@ -64,10 +64,14 @@ export const FIRST_PERSON = /\b(i|i'm|i've|my|me|myself|we|we've|our|us)\b/i;
 
 // Words that signal a RESULT/outcome clause (as opposed to a pure task).
 export const OUTCOME_HINTS: RegExp[] = [
-  /\b(reduc|improv|increas|decreas|cut|sav(ed|ing)|boost|accelerat|elimin|enabl|result|achiev|grew|grow|drove|driving|deliver|lower|rais|shorten|speed(ed)? up|scal)/i,
-  /\bfrom\s+[\w$%.]+\s+to\s+[\w$%.]+/i, // "from 4s to 900ms"
+  /\b(reduc|improv|increas|decreas|cut|sav(ed|ing)|boost|accelerat|elimin|enabl|result|achiev|grew|grow|drove|driving|deliver|lower|rais|shorten|speed(ed)? up|scal|tripl|doubl|quadrupl|halv)/i,
+  /\bfrom\s+\S*\d\S*\s+to\s+\S+/i, // "from 4s to 900ms" — require a NUMBER on the "from" side (not "from JS to TS")
   /\bby\s+\d/i, // "by 40%", "by 3x"
 ];
+
+// Presence-not-contribution phrases anywhere in the bullet (not just the start).
+// "worked as part of a team to deliver…" describes being there, not what you did.
+export const PRESENCE_PHRASES = /\b(as part of a team|part of a team|member of a team|worked as part|one of the (developers|engineers))\b/i;
 
 // Quantification: any number, percentage, multiplier, or common unit.
 export const METRIC_RE = /(\d[\d,.]*\s*(%|percent|x|k|m|b|ms|s\b|sec|seconds|mins?|minutes|hours?|days?|rps|qps|req|users?|customers?|records?|rows?|gb|mb|tb|k\/day|\/day|\/s|\+))|(\$\s?\d)|\b\d{2,}\b|\b\d+x\b/i;

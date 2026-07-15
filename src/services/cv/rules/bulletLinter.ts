@@ -9,7 +9,7 @@
  */
 import {
   STRONG_VERBS, WEAK_VERBS, BANNED_OPENERS, BUZZWORDS,
-  FIRST_PERSON, OUTCOME_HINTS, METRIC_RE, PASSIVE_RE,
+  FIRST_PERSON, OUTCOME_HINTS, METRIC_RE, PASSIVE_RE, PRESENCE_PHRASES,
 } from './lexicon.js';
 
 export type Severity = 'CRITICAL' | 'MAJOR' | 'MINOR';
@@ -111,6 +111,10 @@ export function lintBullet(raw: string): BulletVerdict {
   if (buzz) {
     issues.push({ code: 'buzzword', severity: 'MINOR', message: `Từ sáo rỗng ("${buzz}") không nói lên điều gì — bỏ đi, thay bằng bằng chứng cụ thể.` });
   }
+  const presence = PRESENCE_PHRASES.test(text);
+  if (presence) {
+    issues.push({ code: 'presence-phrase', severity: 'MAJOR', message: 'Mô tả sự "có mặt" trong nhóm chứ không phải đóng góp của bạn — nói rõ BẠN đã làm gì và kết quả.' });
+  }
   if (text.length > 240) {
     issues.push({ code: 'too-long', severity: 'MINOR', message: 'Bullet quá dài (>2 dòng khi render) — nhà tuyển dụng lướt, hãy cô đọng.' });
   }
@@ -138,6 +142,8 @@ export function lintBullet(raw: string): BulletVerdict {
   if (PASSIVE_RE.test(text)) score -= 1;
   if (buzz) score -= 1;
   if (text.length > 240) score -= 1;
+
+  if (presence) score -= 2.5; // being "part of a team" is presence, not contribution
 
   const strength: BulletStrength = score >= 3 ? 'STRONG' : score <= -1.5 ? 'WEAK' : 'OK';
   return { strength, issues, hasMetric, hasOutcome, startsStrong };

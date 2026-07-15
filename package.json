@@ -40,7 +40,8 @@
     "test:finance": "tsx scripts/test-finance-calc.ts",
     "db:seed:finance": "tsx prisma/seed.finance.ts",
     "db:seed:finance:demo": "tsx prisma/seed.finance.demo.ts",
-    "eval:cv-linter": "tsx src/services/cv/rules/__eval__/run.ts"
+    "eval:cv-linter": "tsx src/services/cv/rules/__eval__/run.ts",
+    "eval:cv-fabrication": "tsx src/services/cv/rules/__eval__/run-fabrication.ts"
   },
   "keywords": [
     "portfolio",

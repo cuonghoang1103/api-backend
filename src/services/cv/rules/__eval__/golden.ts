@@ -51,4 +51,30 @@ export const GOLDEN: GoldenBullet[] = [
   { text: 'Involved in the development of the mobile application', expected: 'WEAK' },
   { text: 'Studied data structures and algorithms', expected: 'WEAK', note: 'coursework as achievement' },
   { text: 'Assisted senior engineers with debugging', expected: 'WEAK' },
+
+  // ── Extended set (Phase 11.4) — edge cases across verbs/stacks/levels ──
+  // STRONG — less common strong verbs, unusual metrics
+  { text: 'Diagnosed and fixed a memory leak, cutting pod restarts from 12/day to 0', expected: 'STRONG' },
+  { text: 'Cut monthly cloud spend 40% by rightsizing EC2 instances and adding autoscaling', expected: 'STRONG' },
+  { text: 'Containerized 12 legacy services, shrinking cold-start from 45s to 6s', expected: 'STRONG' },
+  { text: 'Benchmarked three message queues and migrated to NATS, tripling throughput', expected: 'STRONG' },
+  { text: 'Mentored 3 juniors and introduced code review, dropping production incidents 50%', expected: 'STRONG' },
+  { text: 'Rearchitected the billing flow to be idempotent, eliminating duplicate charges', expected: 'STRONG', note: 'outcome without a number' },
+  { text: 'Automated data backfills, saving the team ~10 engineer-hours each week', expected: 'STRONG' },
+
+  // OK — real tasks, action verb, but no strong measurable outcome (must NOT be WEAK)
+  { text: 'Configured monitoring and alerting with Prometheus and Grafana', expected: 'OK' },
+  { text: 'Wrote technical documentation and onboarding guides for the API', expected: 'OK' },
+  { text: 'Reviewed pull requests and enforced coding standards across the team', expected: 'OK' },
+  { text: 'Provisioned staging environments with Terraform', expected: 'OK' },
+  { text: 'Migrated the frontend from JavaScript to TypeScript', expected: 'OK' },
+
+  // WEAK — passive, buzzword-summary, listing without a verb, first person, coursework
+  { text: 'The payment system was migrated to AWS by the team', expected: 'WEAK', note: 'passive, no ownership' },
+  { text: 'Detail-oriented engineer with a passion for writing clean, maintainable code', expected: 'WEAK', note: 'buzzword summary' },
+  { text: 'Familiar with Docker, Kubernetes, and various cloud platforms', expected: 'WEAK', note: 'listing, no contribution' },
+  { text: 'My main task was to maintain the internal admin dashboard', expected: 'WEAK', note: 'first person + maintain' },
+  { text: 'Contributed to several open-source projects in my free time', expected: 'WEAK', note: 'vague, no specifics' },
+  { text: 'Completed an online course on machine learning', expected: 'WEAK', note: 'coursework' },
+  { text: 'Worked as part of a team to deliver features on schedule', expected: 'WEAK', note: 'presence not contribution' },
 ];

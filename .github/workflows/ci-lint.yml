@@ -46,6 +46,10 @@ jobs:
         # linter regresses — especially if it starts marking STRONG bullets WEAK
         # (the fatal false-positive the harness gates on).
         run: npm run eval:cv-linter
+      - name: CV critique fabrication test (skips without an AI key)
+        # Feeds the reviewer a metric-less CV and fails if it invents a number.
+        # No key in CI → it SKIPS (exit 0). Run manually / with a key to enforce.
+        run: npm run eval:cv-fabrication
       - name: Unit tests — money math + payment signature (required)
         run: npm test
       - name: ESLint (informational)

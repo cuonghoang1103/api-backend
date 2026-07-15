@@ -17,6 +17,7 @@ import {
   ArrowLeft,
   PenLine,
   Bot,
+  NotebookPen,
 } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
 import type { LanguageOverview } from '@/types/language';
@@ -92,12 +93,20 @@ export default function LanguageHomePage() {
             <h1 className="truncate font-heading text-lg font-bold text-text-primary">{lang?.name ?? code}</h1>
           </div>
           {isAuthenticated && (
-            <Link
-              href={`/language/${code}/stats`}
-              className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] hover:text-neon-violet"
-            >
-              <BarChart3 size={15} /> Thống kê
-            </Link>
+            <>
+              <Link
+                href={`/language/notebook?code=${code}`}
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] hover:text-neon-violet"
+              >
+                <NotebookPen size={15} /> Sổ tay
+              </Link>
+              <Link
+                href={`/language/${code}/stats`}
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] hover:text-neon-violet"
+              >
+                <BarChart3 size={15} /> Thống kê
+              </Link>
+            </>
           )}
         </div>
       </div>

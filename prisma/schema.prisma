@@ -201,15 +201,17 @@ model User {
   // all routes put `userId` in their WHERE clause to prevent
   // cross-tenant reads. Cascade on delete so removing a user
   // takes their Hub data with it (no orphans).
-  hubFolders        HubFolder[]
-  hubLinks          HubLink[]
-  hubFiles          HubFile[]
+  hubFolders          HubFolder[]
+  hubLinks            HubLink[]
+  hubFiles            HubFile[]
+  langNotebookFolders LangNotebookFolder[] @relation("UserLangNotebookFolders")
+  langNotebookEntries LangNotebookEntry[]  @relation("UserLangNotebookEntries")
   // Hub user-sharing (Phase 2): the rows where this user is
   // the owner (gave access) or the recipient (got access). Two
   // named relations because Prisma requires a unique name per
   // FK even when the target model is the same.
-  hubSharesOwned    HubShare[]  @relation("HubShareOwner")
-  hubSharesReceived HubShare[]  @relation("HubShareRecipient")
+  hubSharesOwned      HubShare[]           @relation("HubShareOwner")
+  hubSharesReceived   HubShare[]           @relation("HubShareRecipient")
 
   // ─── Orphaned upload cleanup (Phase 7) ─────────────────────────
   // PendingUpload rows track video uploads that have been started
@@ -4195,6 +4197,8 @@ model Language {
   qnaItems          LangQnaItem[]
   quizResults       LangQuizResult[]
   vocabCollections  LangVocabCollection[]
+  notebookFolders   LangNotebookFolder[]
+  notebookEntries   LangNotebookEntry[]
 
   @@index([isActive, order], name: "idx_languages_active_order")
   @@map("languages")
@@ -4514,6 +4518,50 @@ enum LangLearnStatus {
   MASTERED
 
   @@map("lang_learn_status")
+}
+
+// ===== NOTEBOOK — per-user, per-language, nested folders =====
+model LangNotebookFolder {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  languageId Int      @map("language_id")
+  parentId   Int?     @map("parent_id")
+  name       String   @db.VarChar(120)
+  icon       String?  @db.VarChar(64)
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user     User                 @relation("UserLangNotebookFolders", fields: [userId], references: [id], onDelete: Cascade)
+  language Language             @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  parent   LangNotebookFolder?  @relation("LangNbSub", fields: [parentId], references: [id], onDelete: Cascade)
+  children LangNotebookFolder[] @relation("LangNbSub")
+  entries  LangNotebookEntry[]
+
+  @@index([userId, languageId, sortOrder], name: "idx_lang_nb_folder_user")
+  @@map("lang_notebook_folders")
+}
+
+model LangNotebookEntry {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  languageId Int      @map("language_id")
+  folderId   Int?     @map("folder_id")
+  kind       String   @default("note") @db.VarChar(32) // note | explanation | vocab | grammar | pronunciation | writing
+  title      String   @db.VarChar(255)
+  body       String   @db.Text // markdown
+  reading    String?  @db.VarChar(255)
+  meaning    String?  @db.Text
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user     User                @relation("UserLangNotebookEntries", fields: [userId], references: [id], onDelete: Cascade)
+  language Language            @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  folder   LangNotebookFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+
+  @@index([userId, languageId, folderId], name: "idx_lang_nb_entry_user")
+  @@map("lang_notebook_entries")
 }
 
 // ============================================================

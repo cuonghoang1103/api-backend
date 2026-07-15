@@ -17,6 +17,7 @@ import type { ApiResponse } from '../types/index.js';
 import * as svc from '../services/myLanguage.service.js';
 import * as aiSvc from '../services/myLanguage.ai.service.js';
 import * as aiGen from '../services/myLanguage.aiGen.service.js';
+import * as notebook from '../services/langNotebook.service.js';
 import { isAiAvailable } from '../services/interview/llm/index.js';
 import { isProEffective } from '../services/pro.service.js';
 
@@ -190,6 +191,45 @@ publicRouter.post('/ai/stt', authenticate, aiAudioUpload.single('audio'), async 
       }),
     });
   } catch (err) { next(err); }
+});
+
+// ─── Notebook (per-user; authed). Fixed '/notebook/*' paths — declared
+//     before the '/:code' wildcard; specific paths before '/notebook/:code'.
+publicRouter.get('/notebook/languages', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.listLanguages(req.userId!) }); } catch (err) { next(err); }
+});
+publicRouter.get('/notebook/entry/:id', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.getEntry(req.userId!, Number(req.params.id)) }); } catch (err) { next(err); }
+});
+publicRouter.post('/notebook/folders', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await notebook.createFolder(req.userId!, req.body) }); } catch (err) { next(err); }
+});
+publicRouter.put('/notebook/folders/:id', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.renameFolder(req.userId!, Number(req.params.id), req.body) }); } catch (err) { next(err); }
+});
+publicRouter.patch('/notebook/folders/:id/move', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.moveFolder(req.userId!, Number(req.params.id), req.body) }); } catch (err) { next(err); }
+});
+publicRouter.delete('/notebook/folders/:id', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.deleteFolder(req.userId!, Number(req.params.id)) }); } catch (err) { next(err); }
+});
+publicRouter.post('/notebook/entries', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await notebook.createEntry(req.userId!, req.body) }); } catch (err) { next(err); }
+});
+publicRouter.put('/notebook/entries/:id', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.updateEntry(req.userId!, Number(req.params.id), req.body) }); } catch (err) { next(err); }
+});
+publicRouter.patch('/notebook/entries/:id/move', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.moveEntry(req.userId!, Number(req.params.id), req.body) }); } catch (err) { next(err); }
+});
+publicRouter.delete('/notebook/entries/:id', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.deleteEntry(req.userId!, Number(req.params.id)) }); } catch (err) { next(err); }
+});
+publicRouter.post('/notebook/save', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await notebook.saveFromAi(req.userId!, req.body) }); } catch (err) { next(err); }
+});
+publicRouter.get('/notebook/:code', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.getTree(req.userId!, req.params.code) }); } catch (err) { next(err); }
 });
 
 // Per-language public content

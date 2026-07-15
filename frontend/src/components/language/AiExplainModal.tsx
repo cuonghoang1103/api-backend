@@ -15,10 +15,27 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, X, Loader2, AlertTriangle, Lightbulb } from 'lucide-react';
-import { languageApi, type AiExplanation } from '@/lib/language-api';
+import { Sparkles, X, Loader2, AlertTriangle, Lightbulb, BookmarkPlus, Check } from 'lucide-react';
+import { toast } from 'sonner';
+import { languageApi, notebookApi, type AiExplanation } from '@/lib/language-api';
 import { SpeakerButton } from '@/components/language/primitives';
 import type { VocabLang } from '@/lib/notesTts';
+
+/** Compose the explanation into a Markdown note body for the notebook. */
+function explanationToMarkdown(d: AiExplanation): string {
+  const parts: string[] = [];
+  if (d.summary) parts.push(`> ${d.summary}`);
+  if (d.explanation) parts.push(d.explanation);
+  if (d.examples.length) {
+    parts.push('### Ví dụ');
+    parts.push(d.examples.map((e) => `- ${e.text}${e.reading ? ` (${e.reading})` : ''}${e.translation ? ` — ${e.translation}` : ''}`).join('\n'));
+  }
+  if (d.tips.length) {
+    parts.push('### Mẹo & lưu ý');
+    parts.push(d.tips.map((t) => `- ${t}`).join('\n'));
+  }
+  return parts.join('\n\n');
+}
 
 function speakLang(code: string): VocabLang | undefined {
   const c = (code || '').toLowerCase();
@@ -45,6 +62,22 @@ export function AiExplainModal({
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<AiExplanation | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const saveToNotebook = async () => {
+    if (!data || saving || saved) return;
+    setSaving(true);
+    try {
+      await notebookApi.save({ code: languageCode, title, kind: kind === 'vocab' ? 'vocab' : 'grammar', body: explanationToMarkdown(data) });
+      setSaved(true);
+      toast.success('Đã lưu vào sổ tay ngôn ngữ');
+    } catch (e: unknown) {
+      toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Không lưu được, thử lại sau.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   useEffect(() => setMounted(true), []);
 
@@ -195,6 +228,18 @@ export function AiExplainModal({
                     </div>
                   </div>
                 )}
+
+                <button
+                  type="button"
+                  onClick={saveToNotebook}
+                  disabled={saving || saved}
+                  className={`inline-flex w-full items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium ring-1 transition ${
+                    saved ? 'bg-neon-green/15 text-neon-green ring-neon-green/30' : 'bg-[var(--bg-surface)] text-text-secondary ring-[var(--border-color)] hover:text-neon-violet hover:ring-neon-violet/40'
+                  } disabled:opacity-70`}
+                >
+                  {saving ? <Loader2 size={15} className="animate-spin" /> : saved ? <Check size={15} /> : <BookmarkPlus size={15} />}
+                  {saved ? 'Đã lưu vào sổ tay' : 'Lưu vào sổ tay'}
+                </button>
 
                 <p className="pt-1 text-center text-[11px] text-text-muted">Nội dung do AI tạo — hãy kiểm chứng khi cần.</p>
               </div>

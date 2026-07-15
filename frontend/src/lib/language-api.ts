@@ -270,3 +270,33 @@ export interface AiGenResult {
   section: string;
   items: AiGenProposal[];
 }
+
+// ─── Notebook (per-user, per-language, nested folders) ───────────
+export interface NotebookFolder { id: number; parentId: number | null; name: string; icon?: string | null; sortOrder: number }
+export interface NotebookEntrySummary { id: number; folderId: number | null; kind: string; title: string; reading?: string | null; updatedAt: string }
+export interface NotebookEntry extends NotebookEntrySummary { body: string; meaning?: string | null; languageId: number }
+export interface NotebookLanguageMeta { id: number; code: string; name: string; flagEmoji: string }
+export interface NotebookTree { language: NotebookLanguageMeta; folders: NotebookFolder[]; entries: NotebookEntrySummary[] }
+export interface NotebookLanguage extends NotebookLanguageMeta { entryCount: number }
+
+export const notebookApi = {
+  languages: (): Res<NotebookLanguage[]> => api.get('/my-language/notebook/languages'),
+  tree: (code: string): Res<NotebookTree> => api.get(`/my-language/notebook/${code}`),
+  entry: (id: number): Res<NotebookEntry> => api.get(`/my-language/notebook/entry/${id}`),
+  createFolder: (body: { code: string; name: string; icon?: string | null; parentId?: number | null }): Res<NotebookFolder> =>
+    api.post('/my-language/notebook/folders', body),
+  renameFolder: (id: number, body: { name?: string; icon?: string | null }): Res<NotebookFolder> =>
+    api.put(`/my-language/notebook/folders/${id}`, body),
+  moveFolder: (id: number, parentId: number | null): Res<NotebookFolder> =>
+    api.patch(`/my-language/notebook/folders/${id}/move`, { parentId }),
+  deleteFolder: (id: number): Res<{ id: number }> => api.delete(`/my-language/notebook/folders/${id}`),
+  createEntry: (body: { code: string; folderId?: number | null; kind?: string; title: string; body: string; reading?: string | null; meaning?: string | null }): Res<NotebookEntry> =>
+    api.post('/my-language/notebook/entries', body),
+  updateEntry: (id: number, body: { title?: string; body?: string; reading?: string | null; meaning?: string | null; kind?: string }): Res<NotebookEntry> =>
+    api.put(`/my-language/notebook/entries/${id}`, body),
+  moveEntry: (id: number, folderId: number | null): Res<NotebookEntry> =>
+    api.patch(`/my-language/notebook/entries/${id}/move`, { folderId }),
+  deleteEntry: (id: number): Res<{ id: number }> => api.delete(`/my-language/notebook/entries/${id}`),
+  save: (body: { code: string; title: string; body: string; kind?: string; reading?: string | null; meaning?: string | null; folderId?: number | null }): Res<{ id: number; languageId: number }> =>
+    api.post('/my-language/notebook/save', body),
+};

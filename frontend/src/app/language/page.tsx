@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { BookOpen, GraduationCap, Flame } from 'lucide-react';
+import { BookOpen, GraduationCap, Flame, NotebookPen } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
 import type { LanguageCard } from '@/types/language';
 import { ProgressRing, CardsSkeleton, EmptyState, useLangUser } from '@/components/language/primitives';
@@ -44,6 +44,13 @@ export default function LanguageLandingPage() {
           <p className="mt-3 text-text-secondary">
             Học ngôn ngữ theo cách của bạn — từ vựng, ngữ pháp, nghe, giao tiếp, đọc &amp; Q&amp;A.
           </p>
+          {isAuthenticated && (
+            <div className="mt-4 flex justify-center">
+              <Link href="/language/notebook" className="inline-flex items-center gap-1.5 rounded-full bg-neon-violet/15 px-4 py-2 text-sm font-medium text-neon-violet ring-1 ring-neon-violet/30 transition hover:bg-neon-violet/25">
+                <NotebookPen size={16} /> Sổ tay ngôn ngữ
+              </Link>
+            </div>
+          )}
         </motion.header>
 
         {!loading && languages.length > 0 && (

@@ -28,6 +28,17 @@ import type { InterviewLevel, InterviewQuestionType } from '@prisma/client';
 const QUESTION_TYPES: InterviewQuestionType[] = ['CONCEPTUAL', 'CODING', 'SYSTEM_DESIGN', 'BEHAVIORAL', 'SCENARIO', 'MCQ'];
 
 // Lenient parsing — models drift on exact shapes. Coerce numbers, default arrays.
+// String-list fields also arrive as a single comma/newline-joined string
+// (observed in bulk generation: `"redFlags": "a, b"` failed the whole batch) —
+// coerce those into arrays instead of hard-failing.
+const stringList = z
+  .union([z.array(z.string()), z.string()])
+  .nullish()
+  .transform((v) => {
+    if (Array.isArray(v)) return v.map((s) => s.trim()).filter(Boolean);
+    if (typeof v === 'string') return v.split(/[\n,;]+/).map((s) => s.trim()).filter(Boolean);
+    return [];
+  });
 const RubricItem = z.object({
   id: z.string().nullish().transform((v) => (v && v.trim()) || ''),
   criterion: z.string().nullish().transform((v) => v ?? ''),
@@ -37,17 +48,26 @@ const GeneratedQuestionSchema = z.object({
   body: z.string().min(1),
   referenceAnswer: z.string().nullish().transform((v) => v ?? ''),
   rubric: z.array(RubricItem).nullish().transform((v) => v ?? []),
-  mustMention: z.array(z.string()).nullish().transform((v) => v ?? []),
-  shouldMention: z.array(z.string()).nullish().transform((v) => v ?? []),
-  redFlags: z.array(z.string()).nullish().transform((v) => v ?? []),
+  mustMention: stringList,
+  shouldMention: stringList,
+  redFlags: stringList,
   difficulty: z.coerce.number().nullish().transform((v) => clampDifficulty(v)),
   type: z.string().nullish().transform((v) => normalizeType(v)),
-  tags: z.array(z.string()).nullish().transform((v) => v ?? []),
-});
-const GenerationResultSchema = z.object({
-  questions: z.array(GeneratedQuestionSchema).default([]),
+  tags: stringList,
 });
 export type GeneratedQuestion = z.infer<typeof GeneratedQuestionSchema>;
+
+/** Salvage parsing: one malformed question must not sink its 5 valid siblings. */
+function parseGenerationResult(raw: unknown): GeneratedQuestion[] {
+  const arr = (raw as { questions?: unknown[] })?.questions;
+  if (!Array.isArray(arr)) return [];
+  const out: GeneratedQuestion[] = [];
+  for (const item of arr) {
+    const parsed = GeneratedQuestionSchema.safeParse(item);
+    if (parsed.success) out.push(parsed.data);
+  }
+  return out;
+}
 
 function clampDifficulty(v: unknown): number {
   const n = Math.round(Number(v));
@@ -166,7 +186,7 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
   userParts.push('', 'Return the JSON object only.');
   const user = userParts.join('\n');
 
-  const parse = (text: string): GeneratedQuestion[] => GenerationResultSchema.parse(extractJson(text)).questions;
+  const parse = (text: string): GeneratedQuestion[] => parseGenerationResult(extractJson(text));
 
   // Opus writes thorough questions + model answers + rubrics. Budget scales with
   // the count and is generous (≈2.5× the earlier size) so answers are detailed and
@@ -188,6 +208,7 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
   });
   try {
     questions = parse(first.text);
+    if (!questions.length) throw new Error('salvage yielded zero questions');
   } catch {
     const retry = await llmComplete({
       step: 'generation',

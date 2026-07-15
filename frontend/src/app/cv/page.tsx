@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
   FileText, ArrowRight, Loader2, CheckCircle2, Circle,
-  Upload, ScanSearch, Eye, Download, Target, Lock,
+  Upload, ScanSearch, Eye, Download, Target, Lock, Sparkles,
 } from 'lucide-react';
 import { CV_BUILDER_ENABLED } from '@/lib/featureFlags';
 import { cvApi } from '@/lib/cv-api';
@@ -147,6 +147,12 @@ export default function CvDashboardPage() {
                   className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium hover:bg-[var(--bg-primary)]"
                 >
                   <Target className="h-4 w-4" /> Nhắm theo job
+                </Link>
+                <Link
+                  href="/cv/intake"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium hover:bg-[var(--bg-primary)]"
+                >
+                  <Sparkles className="h-4 w-4" /> AI phỏng vấn lấy nội dung
                 </Link>
                 <Link
                   href="/cv/profile"

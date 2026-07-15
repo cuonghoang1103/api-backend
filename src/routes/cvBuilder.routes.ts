@@ -22,6 +22,7 @@ import { exportProfile, type ExportFormat } from '../services/cv/export.service.
 import * as critiqueSvc from '../services/cv/critique.service.js';
 import * as jobSvc from '../services/cv/jobTarget.service.js';
 import * as coverSvc from '../services/cv/coverLetter.service.js';
+import * as intakeSvc from '../services/cv/intake.service.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -182,6 +183,10 @@ router.post('/jobs/:id/cover-letter', h((req, res) => {
 // ── AI Critique (Phase 7) — quota-gated; degrades to STATIC when no key ──
 router.get('/critique/status', h(async () => critiqueSvc.critiqueStatus()));
 router.post('/critique', h((req) => critiqueSvc.critiqueProfile(req.userId!)));
+
+// ── Intake Mode (Phase 8c) — AI debrief conversation; stateless multi-turn ──
+router.get('/intake/status', h(async () => intakeSvc.intakeStatus()));
+router.post('/intake', h((req) => intakeSvc.intakeTurn(req.userId!, req.body ?? {})));
 
 // ── Export (Phase 4: PDF/DOCX/TXT/MD/JSON) — binary download, not JSON ──
 router.get('/export/:format', async (req: Request, res: Response, next: NextFunction): Promise<void> => {

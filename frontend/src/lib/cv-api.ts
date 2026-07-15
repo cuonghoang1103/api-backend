@@ -76,6 +76,11 @@ export const cvApi = {
   jobTailor: (id: number): Res<CvTailor> => api.get(`/cv/jobs/${id}/tailor`),
   deleteJob: (id: number): Res<{ id: number }> => api.delete(`/cv/jobs/${id}`),
 
+  // ── Intake Mode (Phase 8c) — AI debrief conversation ────────
+  intakeStatus: (): Res<{ available: boolean }> => api.get('/cv/intake/status'),
+  intakeTurn: (messages: { role: 'user' | 'assistant'; content: string }[]): Res<{ reply: string; draftBullets: { text: string; userStatedFacts: string }[]; done: boolean }> =>
+    api.post('/cv/intake', { messages }, { timeout: 90_000 }),
+
   // ── Cover letter (Phase 8b) — AI ────────────────────────────
   coverLetterStatus: (): Res<{ available: boolean }> => api.get('/cv/cover-letter/status'),
   coverLetter: (jobId: number, tone: string): Res<{ body: string; tone: string; wordCount: number }> =>

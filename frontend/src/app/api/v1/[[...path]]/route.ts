@@ -147,6 +147,8 @@ async function toNextResponse(response: Response): Promise<NextResponse> {
   const forwarding = [
     "accept-ranges", "content-range", "cache-control",
     "x-accel-buffering", "access-control-expose-headers",
+    // download filename + CV export round-trip signal
+    "content-disposition", "x-cv-roundtrip",
   ];
   for (const h of forwarding) {
     const v = response.headers.get(h);

@@ -63,4 +63,9 @@ export const cvApi = {
 
   // ── Analysis (Phase 3: STATIC rules engine — free) ──────────
   lint: (body?: { market?: string; level?: string }): Res<CvLintResult> => api.post('/cv/lint', body ?? {}),
+
+  // ── Export (Phase 4) — binary download; returns the raw axios response. ──
+  exportCv: (format: 'pdf' | 'docx' | 'txt' | 'md' | 'json') =>
+    api.get(`/cv/export/${format}`, { responseType: 'blob', timeout: 60_000 }),
 };
+

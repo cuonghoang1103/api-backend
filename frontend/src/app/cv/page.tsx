@@ -11,6 +11,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import {
   FileText, ArrowRight, Loader2, CheckCircle2, Circle,
   Upload, ScanSearch, Eye, Download, Target, Lock,
@@ -19,11 +20,36 @@ import { CV_BUILDER_ENABLED } from '@/lib/featureFlags';
 import { cvApi } from '@/lib/cv-api';
 import type { CvCompleteness } from '@/types/cv';
 
+const EXPORT_FORMATS: { fmt: 'pdf' | 'docx' | 'txt' | 'md' | 'json'; label: string; hint?: string }[] = [
+  { fmt: 'pdf', label: 'PDF', hint: 'ATS-safe' },
+  { fmt: 'docx', label: 'Word (.docx)' },
+  { fmt: 'txt', label: 'Text' },
+  { fmt: 'md', label: 'Markdown' },
+  { fmt: 'json', label: 'JSON Resume' },
+];
+
 export default function CvDashboardPage() {
   const router = useRouter();
   const [comp, setComp] = useState<CvCompleteness | null>(null);
   const [loading, setLoading] = useState(true);
   const [needLogin, setNeedLogin] = useState(false);
+  const [exporting, setExporting] = useState<string | null>(null);
+
+  const download = async (fmt: 'pdf' | 'docx' | 'txt' | 'md' | 'json') => {
+    setExporting(fmt);
+    try {
+      const res = await cvApi.exportCv(fmt);
+      const cd = (res.headers?.['content-disposition'] as string | undefined) ?? '';
+      const fname = cd.match(/filename="(.+?)"/)?.[1] || `CV.${fmt}`;
+      const url = URL.createObjectURL(res.data as Blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'Xuất CV thất bại');
+    } finally { setExporting(null); }
+  };
 
   useEffect(() => {
     if (!CV_BUILDER_ENABLED) { router.replace('/'); return; }
@@ -135,6 +161,28 @@ export default function CvDashboardPage() {
                 ))}
               </div>
             )}
+
+            {/* Export */}
+            <section className="mt-8 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
+              <div className="flex items-center gap-2 text-sm font-medium"><Download className="h-4 w-4" /> Tải CV xuống</div>
+              <p className="mt-1 text-xs text-[var(--text-secondary)]">
+                PDF là chữ thật (ATS đọc được, đã kiểm tra round-trip), không phải ảnh. DOCX để nhà tuyển dụng sửa trực tiếp.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {EXPORT_FORMATS.map((f) => (
+                  <button
+                    key={f.fmt}
+                    onClick={() => download(f.fmt)}
+                    disabled={exporting !== null}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-sm hover:bg-[var(--bg-primary)] disabled:opacity-50"
+                  >
+                    {exporting === f.fmt ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+                    {f.label}
+                    {f.hint && <span className="text-[10px] text-[var(--text-secondary)]">· {f.hint}</span>}
+                  </button>
+                ))}
+              </div>
+            </section>
 
             {/* Roadmap — honest about what isn't built yet */}
             <section className="mt-8">

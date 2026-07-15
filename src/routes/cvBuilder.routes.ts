@@ -18,6 +18,7 @@ import { prisma } from '../config/database.js';
 import * as profile from '../services/cv/profile.service.js';
 import * as importSvc from '../services/cv/import.service.js';
 import * as lintSvc from '../services/cv/lint.service.js';
+import { exportProfile, type ExportFormat } from '../services/cv/export.service.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -148,6 +149,20 @@ router.post('/import/:id/commit', h((req, res) => {
 
 // ── Analysis (Phase 3: STATIC rules engine — free, instant, no LLM) ──
 router.post('/lint', h((req) => lintSvc.lintProfile(req.userId!, req.body ?? {})));
+
+// ── Export (Phase 4: PDF/DOCX/TXT/MD/JSON) — binary download, not JSON ──
+router.get('/export/:format', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const format = String(req.params.format).toLowerCase() as ExportFormat;
+    const { buffer, mime, filename, roundTripOk } = await exportProfile(req.userId!, format);
+    res.setHeader('Content-Type', mime);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    if (roundTripOk !== null) res.setHeader('X-CV-RoundTrip', roundTripOk ? 'ok' : 'fail');
+    res.send(buffer);
+  } catch (err) {
+    next(err);
+  }
+});
 
 // ═══════════════════════ ADMIN ROUTER ═══════════════════════════
 const adminRouter = Router();

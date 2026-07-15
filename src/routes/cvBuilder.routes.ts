@@ -15,6 +15,7 @@ import { authenticate, requireAdmin } from '../middleware/auth.js';
 import type { ApiResponse } from '../types/index.js';
 import { prisma } from '../config/database.js';
 import * as profile from '../services/cv/profile.service.js';
+import * as importSvc from '../services/cv/import.service.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -120,6 +121,19 @@ router.put('/languages/:id', h((req, res) => {
 router.delete('/languages/:id', h((req, res) => {
   const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
   return profile.deleteLang(req.userId!, id);
+}));
+
+// ── Import (Phase 2a: paste + JSON Resume; files/GitHub later) ──
+router.get('/import', h((req) => importSvc.listImports(req.userId!)));
+router.post('/import/paste', h((req) => importSvc.createPasteImport(req.userId!, req.body ?? {})));
+router.post('/import/json-resume', h((req) => importSvc.createJsonResumeImport(req.userId!, req.body?.resume ?? req.body)));
+router.get('/import/:id', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return importSvc.getImport(req.userId!, id);
+}));
+router.post('/import/:id/commit', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return importSvc.commitImport(req.userId!, id, req.body ?? {});
 }));
 
 // ═══════════════════════ ADMIN ROUTER ═══════════════════════════

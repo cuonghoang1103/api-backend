@@ -135,6 +135,59 @@ export type CvProfilePatch = Partial<
   >
 >;
 
+// ── Import (Phase 2) ────────────────────────────────────────────
+export type CvImportSource = 'PDF' | 'DOCX' | 'GITHUB' | 'LINKEDIN_ARCHIVE' | 'JSON_RESUME' | 'PASTE';
+export type CvImportStatus = 'PENDING' | 'PARSING' | 'PARSED' | 'COMMITTED' | 'FAILED';
+
+export interface DraftBullet { text: string; userStatedFacts?: string | null }
+export interface DraftItem {
+  kind: CvItemKind;
+  title: string;
+  organization?: string | null;
+  location?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  isCurrent?: boolean;
+  url?: string | null;
+  techStack?: string[];
+  gpa?: string | null;
+  bullets: DraftBullet[];
+}
+export interface ParsedDraft {
+  contact: {
+    fullName?: string | null;
+    headline?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    location?: string | null;
+    links: { github?: string; linkedin?: string; portfolio?: string; website?: string };
+  };
+  summary?: string | null;
+  items: DraftItem[];
+  skills: { name: string; category?: CvSkillCategory }[];
+  languageSkills: { language: string; proficiency?: string | null; certName?: string | null; certScore?: string | null }[];
+  certifications: { name: string; issuer?: string | null }[];
+}
+export interface ConfidenceFlag { field: string; reason: string }
+
+export interface CvImportJob {
+  id: number;
+  source: CvImportSource;
+  status: CvImportStatus;
+  rawText?: string | null;
+  parsedResult: ParsedDraft | null;
+  confidenceFlags: ConfidenceFlag[] | null;
+  hiddenTextFound: boolean;
+  reviewedByUser: boolean;
+  createdAt: string;
+}
+
+export interface CvImportCommitBody {
+  applyContact?: boolean;
+  applySummary?: boolean;
+  draft: ParsedDraft;
+}
+
 export type CvItemInput = Partial<Omit<CvItem, 'id' | 'bullets'>> & { kind?: CvItemKind; title?: string };
 export type CvBulletInput = Partial<Pick<CvBullet, 'text' | 'userStatedFacts' | 'skillsEvidenced' | 'strength' | 'sortOrder'>>;
 export type CvSkillInput = Partial<Omit<CvSkill, 'id'>> & { name?: string };

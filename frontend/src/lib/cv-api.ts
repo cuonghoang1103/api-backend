@@ -10,6 +10,7 @@ import type {
   CvItem, CvItemInput, CvBullet, CvBulletInput,
   CvSkill, CvSkillInput, CvCertification, CvCertInput,
   CvLanguageSkill, CvLangInput,
+  CvImportJob, CvImportCommitBody,
 } from '@/types/cv';
 
 type Res<T> = Promise<{ data: ApiResponse<T> }>;
@@ -45,4 +46,12 @@ export const cvApi = {
   createLang: (body: CvLangInput): Res<CvLanguageSkill> => api.post('/cv/languages', body),
   updateLang: (id: number, body: CvLangInput): Res<CvLanguageSkill> => api.put(`/cv/languages/${id}`, body),
   deleteLang: (id: number): Res<{ id: number }> => api.delete(`/cv/languages/${id}`),
+
+  // ── Import (Phase 2a: paste + JSON Resume) ──────────────────
+  listImports: (): Res<CvImportJob[]> => api.get('/cv/import'),
+  importPaste: (text: string): Res<CvImportJob> => api.post('/cv/import/paste', { text }),
+  importJsonResume: (resume: unknown): Res<CvImportJob> => api.post('/cv/import/json-resume', { resume }),
+  getImport: (id: number): Res<CvImportJob> => api.get(`/cv/import/${id}`),
+  commitImport: (id: number, body: CvImportCommitBody): Res<{ committed: boolean; counts: Record<string, number> }> =>
+    api.post(`/cv/import/${id}/commit`, body),
 };

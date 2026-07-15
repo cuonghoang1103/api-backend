@@ -10,7 +10,7 @@ import type {
   CvItem, CvItemInput, CvBullet, CvBulletInput,
   CvSkill, CvSkillInput, CvCertification, CvCertInput,
   CvLanguageSkill, CvLangInput,
-  CvImportJob, CvImportCommitBody, CvLintResult,
+  CvImportJob, CvImportCommitBody, CvLintResult, CvCritiqueResult,
 } from '@/types/cv';
 
 type Res<T> = Promise<{ data: ApiResponse<T> }>;
@@ -63,6 +63,10 @@ export const cvApi = {
 
   // ── Analysis (Phase 3: STATIC rules engine — free) ──────────
   lint: (body?: { market?: string; level?: string }): Res<CvLintResult> => api.post('/cv/lint', body ?? {}),
+
+  // ── AI Critique (Phase 7) — quota-gated, may take ~15–30s ───
+  critiqueStatus: (): Res<{ available: boolean }> => api.get('/cv/critique/status'),
+  critique: (): Res<CvCritiqueResult> => api.post('/cv/critique', {}, { timeout: 90_000 }),
 
   // ── Export (Phase 4) — binary download; returns the raw axios response. ──
   exportCv: (format: 'pdf' | 'docx' | 'txt' | 'md' | 'json') =>

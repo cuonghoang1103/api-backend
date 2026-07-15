@@ -204,6 +204,31 @@ export interface CvDocIssue {
   suggestedFix?: string;
   location?: { itemId?: number; bulletId?: number; section?: string };
 }
+// ── AI Critique (Phase 7) ───────────────────────────────────────
+export interface CvCritiqueIssue {
+  severity: CvSeverity;
+  location: string;
+  problem: string;
+  whyItMatters: string;
+  suggestedFix: string;
+  needsUserInput: boolean;
+  clarifyingQuestion: string | null;
+}
+export interface CvInterviewRisk {
+  claim: string;
+  likelyQuestion: string;
+  canYouAnswerIt: string;
+}
+export interface CvCritiqueResult {
+  overallVerdict: 'INTERVIEW' | 'MAYBE' | 'REJECT';
+  sixSecondTest: string;
+  issues: CvCritiqueIssue[];
+  strengths: string[];
+  interviewRisks: CvInterviewRisk[];
+  injectionAttempted: boolean;
+  mode: 'AI';
+}
+
 export interface CvLintResult {
   market: string;
   level: string;

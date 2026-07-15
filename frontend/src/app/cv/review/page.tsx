@@ -9,12 +9,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import {
   ArrowLeft, Loader2, AlertOctagon, AlertTriangle, Info,
-  CheckCircle2, ScanEye, Target as TargetIcon,
+  CheckCircle2, ScanEye, Target as TargetIcon, Sparkles, ShieldAlert, HelpCircle, Dumbbell,
 } from 'lucide-react';
 import { cvApi } from '@/lib/cv-api';
-import type { CvLintResult, CvSeverity } from '@/types/cv';
+import type { CvLintResult, CvSeverity, CvCritiqueResult } from '@/types/cv';
 
 const MARKETS = [
   { value: 'VN', label: 'Việt Nam' },
@@ -40,6 +41,23 @@ export default function CvReviewPage() {
   const [res, setRes] = useState<CvLintResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [needLogin, setNeedLogin] = useState(false);
+  // AI critique (Phase 7)
+  const [aiAvailable, setAiAvailable] = useState<boolean | null>(null);
+  const [critique, setCritique] = useState<CvCritiqueResult | null>(null);
+  const [critiquing, setCritiquing] = useState(false);
+
+  useEffect(() => { cvApi.critiqueStatus().then((r) => setAiAvailable(r.data.data.available)).catch(() => setAiAvailable(false)); }, []);
+
+  const runCritique = async () => {
+    setCritiquing(true);
+    try {
+      const r = await cvApi.critique();
+      setCritique(r.data.data);
+    } catch (e) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'AI chấm thất bại');
+    } finally { setCritiquing(false); }
+  };
 
   const run = useCallback(async (m: string, l: string) => {
     setLoading(true);
@@ -104,6 +122,84 @@ export default function CvReviewPage() {
                   </div>
                 </div>
               </div>
+            </section>
+
+            {/* AI Critique (Phase 7) */}
+            <section className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-sm font-medium"><Sparkles className="h-4 w-4" /> AI chấm sâu — như một senior khó tính</div>
+                {aiAvailable !== false && !critique && (
+                  <button onClick={runCritique} disabled={critiquing || aiAvailable === null}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent-color)] px-3 py-1.5 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
+                    {critiquing ? <><Loader2 className="h-4 w-4 animate-spin" /> Đang chấm…</> : <><Sparkles className="h-4 w-4" /> Chấm bằng AI</>}
+                  </button>
+                )}
+              </div>
+
+              {aiAvailable === false && (
+                <p className="mt-2 text-xs text-[var(--text-secondary)]">
+                  AI chưa được cấu hình (chưa có khoá) — bản chấm miễn phí bên dưới vẫn bắt phần lớn lỗi. AI sẽ soi thêm rủi ro bị hỏi khi phỏng vấn.
+                </p>
+              )}
+              {aiAvailable !== false && !critique && !critiquing && (
+                <p className="mt-2 text-xs text-[var(--text-secondary)]">
+                  AI review CV như hiring manager: verdict, lỗi kèm cách sửa (chỉ dùng sự thật của bạn, không bịa), và <strong>những câu interviewer sẽ hỏi</strong> về từng claim.
+                </p>
+              )}
+
+              {critique && (
+                <div className="mt-4 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <span className={`text-sm font-semibold ${BAND_META[critique.overallVerdict]?.cls}`}>{BAND_META[critique.overallVerdict]?.label}</span>
+                    {critique.injectionAttempted && (
+                      <span className="inline-flex items-center gap-1 rounded bg-red-500/10 px-2 py-0.5 text-xs text-red-500"><ShieldAlert className="h-3 w-3" /> Phát hiện chèn chỉ thị lạ trong CV</span>
+                    )}
+                  </div>
+                  {critique.sixSecondTest && <p className="rounded-lg bg-[var(--bg-primary)] p-3 text-sm">{critique.sixSecondTest}</p>}
+
+                  {critique.interviewRisks.length > 0 && (
+                    <div>
+                      <div className="text-sm font-medium">Bạn đang hứa sẽ trả lời được những câu này</div>
+                      <ul className="mt-2 space-y-2">
+                        {critique.interviewRisks.map((r, i) => (
+                          <li key={i} className="rounded-lg border border-[var(--border-color)] p-3">
+                            <div className="text-sm font-medium">“{r.claim}”</div>
+                            <div className="mt-1 text-sm text-[var(--text-secondary)]">Interviewer sẽ hỏi: {r.likelyQuestion}</div>
+                            <div className="mt-0.5 text-xs text-[var(--text-secondary)]">{r.canYouAnswerIt}</div>
+                            <Link href="/interview" className="mt-2 inline-flex items-center gap-1 text-xs text-[var(--accent-color)]"><Dumbbell className="h-3 w-3" /> Luyện tập trong Interview Simulator</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {critique.issues.length > 0 && (
+                    <div>
+                      <div className="text-sm font-medium">Vấn đề AI thấy</div>
+                      <ul className="mt-2 space-y-2">
+                        {critique.issues.map((i, idx) => (
+                          <li key={idx} className="border-l-2 border-[var(--border-color)] pl-3">
+                            <div className="text-sm">{i.problem} {i.location && <span className="text-xs text-[var(--text-secondary)]">({i.location})</span>}</div>
+                            {i.whyItMatters && <div className="text-xs text-[var(--text-secondary)]">Vì sao quan trọng: {i.whyItMatters}</div>}
+                            {i.suggestedFix && <div className="mt-0.5 text-xs">→ {i.suggestedFix}</div>}
+                            {i.needsUserInput && i.clarifyingQuestion && (
+                              <div className="mt-1 flex items-start gap-1 text-xs text-amber-600 dark:text-amber-400"><HelpCircle className="mt-0.5 h-3 w-3 shrink-0" /> {i.clarifyingQuestion}</div>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {critique.strengths.length > 0 && (
+                    <div>
+                      <div className="text-sm font-medium text-emerald-500">Điểm mạnh</div>
+                      <ul className="mt-1 space-y-1">{critique.strengths.map((s, i) => <li key={i} className="text-sm text-[var(--text-secondary)]">• {s}</li>)}</ul>
+                    </div>
+                  )}
+                  <p className="text-xs text-[var(--text-secondary)]">AI chỉ dùng sự thật bạn đã ghi — nó KHÔNG bịa số liệu. Chỗ nào cần số, nó hỏi lại bạn.</p>
+                </div>
+              )}
             </section>
 
             {/* Six-second test */}

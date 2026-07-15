@@ -19,6 +19,7 @@ import * as profile from '../services/cv/profile.service.js';
 import * as importSvc from '../services/cv/import.service.js';
 import * as lintSvc from '../services/cv/lint.service.js';
 import { exportProfile, type ExportFormat } from '../services/cv/export.service.js';
+import * as critiqueSvc from '../services/cv/critique.service.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -149,6 +150,10 @@ router.post('/import/:id/commit', h((req, res) => {
 
 // ── Analysis (Phase 3: STATIC rules engine — free, instant, no LLM) ──
 router.post('/lint', h((req) => lintSvc.lintProfile(req.userId!, req.body ?? {})));
+
+// ── AI Critique (Phase 7) — quota-gated; degrades to STATIC when no key ──
+router.get('/critique/status', h(async () => critiqueSvc.critiqueStatus()));
+router.post('/critique', h((req) => critiqueSvc.critiqueProfile(req.userId!)));
 
 // ── Export (Phase 4: PDF/DOCX/TXT/MD/JSON) — binary download, not JSON ──
 router.get('/export/:format', async (req: Request, res: Response, next: NextFunction): Promise<void> => {

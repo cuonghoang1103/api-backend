@@ -5,11 +5,12 @@
 // example rows, common-mistakes & compared-with textareas).
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Plus, Pencil, Loader2, X } from 'lucide-react';
+import { Plus, Pencil, Loader2, X, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { languageAdminApi } from '@/lib/language-api';
 import type { GrammarPoint, GrammarExample } from '@/types/language';
 import NoteContentEditor from '@/components/exp-hub/NoteContentEditor';
+import AiGeneratePanel from './AiGeneratePanel';
 import {
   Modal,
   SortableList,
@@ -47,6 +48,7 @@ export default function GrammarTab({ languageId, code }: TabProps) {
   const [levelFilter, setLevelFilter] = useState<string>('');
   const [editor, setEditor] = useState<Editor | null>(null);
   const [saving, setSaving] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -132,7 +134,10 @@ export default function GrammarTab({ languageId, code }: TabProps) {
             <button key={lv} onClick={() => setLevelFilter(lv)} className={`rounded-lg px-2.5 py-1 text-xs ${levelFilter === lv ? 'bg-neon-violet/20 text-violet-200' : 'text-text-secondary hover:bg-white/5'}`}>{lv}</button>
           ))}
         </div>
-        <button onClick={() => setEditor({ ...EMPTY })} className={btnAdd}><Plus className="h-4 w-4" /> Ngữ pháp</button>
+        <div className="flex gap-2">
+          <button onClick={() => setAiOpen(true)} className={btnAdd}><Sparkles className="h-4 w-4" /> AI tạo</button>
+          <button onClick={() => setEditor({ ...EMPTY })} className={btnAdd}><Plus className="h-4 w-4" /> Ngữ pháp</button>
+        </div>
       </div>
 
       {loading ? (
@@ -209,6 +214,8 @@ export default function GrammarTab({ languageId, code }: TabProps) {
           </>
         )}
       </Modal>
+
+      <AiGeneratePanel open={aiOpen} onClose={() => setAiOpen(false)} section="grammar" languageCode={code} onCommitted={load} />
     </div>
   );
 }

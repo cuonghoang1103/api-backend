@@ -16,6 +16,7 @@ import { uploadImage, uploadAudio, UploadError } from '../storage/uploadService.
 import type { ApiResponse } from '../types/index.js';
 import * as svc from '../services/myLanguage.service.js';
 import * as aiSvc from '../services/myLanguage.ai.service.js';
+import * as aiGen from '../services/myLanguage.aiGen.service.js';
 import { isAiAvailable } from '../services/interview/llm/index.js';
 import { isProEffective } from '../services/pro.service.js';
 
@@ -267,6 +268,18 @@ publicRouter.get('/:code/qna', async (req, res: Response<ApiResponse>, next) => 
 // ─── Admin router (ADMIN only) ───────────────────────────────────
 const adminRouter = Router();
 adminRouter.use(authenticate, requireRole('ADMIN'));
+
+// AI content generation (preview → commit). ADMIN-gated by the router above.
+adminRouter.post('/ai/generate', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await aiGen.adminGenerate(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+adminRouter.post('/ai/commit', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await aiGen.adminCommit(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
 
 const upload = multer({
   storage: multer.memoryStorage(),

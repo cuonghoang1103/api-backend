@@ -253,4 +253,20 @@ export const languageAdminApi = {
   createQna: (languageId: number, body: AnyRecord): Res<unknown> => api.post(`/admin/my-language/languages/${languageId}/qna`, body),
   updateQna: (id: number, body: AnyRecord): Res<unknown> => api.put(`/admin/my-language/qna/${id}`, body),
   deleteQna: (id: number): Res<unknown> => api.delete(`/admin/my-language/qna/${id}`),
+
+  // AI content generation (preview → commit)
+  aiGenerate: (body: { languageCode: string; section: string; categoryId?: number; articleId?: number; level?: string; topic?: string; count?: number }): Res<AiGenResult> =>
+    api.post('/admin/my-language/ai/generate', body),
+  aiCommit: (body: { languageCode: string; section: string; categoryId?: number; articleId?: number; items: AnyRecord[] }): Res<{ created: number; skipped: number }> =>
+    api.post('/admin/my-language/ai/commit', body),
 };
+
+export interface AiGenProposal {
+  key: string;
+  summary: string;
+  data: Record<string, unknown>;
+}
+export interface AiGenResult {
+  section: string;
+  items: AiGenProposal[];
+}

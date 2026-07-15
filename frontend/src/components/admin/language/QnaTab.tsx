@@ -4,7 +4,7 @@
 // an optional audio clip. DnD reorder.
 
 import { useCallback, useEffect, useState } from 'react';
-import { Plus, Pencil, Loader2, Volume2 } from 'lucide-react';
+import { Plus, Pencil, Loader2, Volume2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { languageAdminApi } from '@/lib/language-api';
 import type { QnaItem } from '@/types/language';
@@ -21,6 +21,7 @@ import {
   unwrap,
   errMsg,
 } from './shared';
+import AiGeneratePanel from './AiGeneratePanel';
 
 interface TabProps {
   languageId: number;
@@ -43,6 +44,7 @@ export default function QnaTab({ languageId, code }: TabProps) {
   const [loading, setLoading] = useState(true);
   const [editor, setEditor] = useState<Editor | null>(null);
   const [saving, setSaving] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -115,7 +117,10 @@ export default function QnaTab({ languageId, code }: TabProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-text-primary">Câu hỏi & Trả lời</h3>
-        <button onClick={() => setEditor({ ...EMPTY })} className={btnAdd}><Plus className="h-4 w-4" /> Q&A</button>
+        <div className="flex gap-2">
+          <button onClick={() => setAiOpen(true)} className={btnAdd}><Sparkles className="h-4 w-4" /> AI tạo</button>
+          <button onClick={() => setEditor({ ...EMPTY })} className={btnAdd}><Plus className="h-4 w-4" /> Q&A</button>
+        </div>
       </div>
 
       {loading ? (
@@ -165,6 +170,8 @@ export default function QnaTab({ languageId, code }: TabProps) {
           </>
         )}
       </Modal>
+
+      <AiGeneratePanel open={aiOpen} onClose={() => setAiOpen(false)} section="qna" languageCode={code} onCommitted={load} />
     </div>
   );
 }

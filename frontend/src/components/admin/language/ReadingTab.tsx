@@ -5,12 +5,13 @@
 // translation editor for both.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Plus, Pencil, Loader2, Upload, Trash2, FileText, Images, ChevronUp, ChevronDown } from 'lucide-react';
+import { Plus, Pencil, Loader2, Upload, Trash2, FileText, Images, ChevronUp, ChevronDown, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { languageAdminApi } from '@/lib/language-api';
 import type { ReadingArticle, ReadingType, ReadingQuestion } from '@/types/language';
 import { getImageUrl } from '@/lib/utils';
 import NoteContentEditor from '@/components/exp-hub/NoteContentEditor';
+import AiGeneratePanel from './AiGeneratePanel';
 import {
   Modal,
   SortableList,
@@ -47,6 +48,7 @@ export default function ReadingTab({ languageId, code }: TabProps) {
   const [editor, setEditor] = useState<Editor | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploadingImg, setUploadingImg] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
   const imgRef = useRef<HTMLInputElement | null>(null);
 
   const load = useCallback(async () => {
@@ -228,13 +230,51 @@ export default function ReadingTab({ languageId, code }: TabProps) {
             </div>
 
             <div>
-              <span className={labelCls}>Câu hỏi (tùy chọn)</span>
-              <p className="mb-2 text-[11px] text-text-muted">Người học sẽ trả lời sau khi đọc. Trắc nghiệm được tự chấm; Tự luận hiện đáp án mẫu để tự đối chiếu.</p>
+              <div className="mb-1 flex items-center justify-between gap-2">
+                <span className={labelCls}>Câu hỏi (tùy chọn)</span>
+                <button
+                  type="button"
+                  onClick={() => setAiOpen(true)}
+                  disabled={editor.id == null}
+                  title={editor.id == null ? 'Lưu bài đọc trước khi tạo câu hỏi bằng AI' : 'Tạo câu hỏi bằng AI từ nội dung bài đọc'}
+                  className={`${btnAdd} disabled:opacity-50`}
+                >
+                  <Sparkles className="h-4 w-4" /> AI tạo câu hỏi
+                </button>
+              </div>
+              <p className="mb-2 text-[11px] text-text-muted">Người học sẽ trả lời sau khi đọc. Trắc nghiệm được tự chấm; Tự luận hiện đáp án mẫu để tự đối chiếu.{editor.id == null && ' (Lưu bài đọc trước để dùng AI tạo câu hỏi.)'}</p>
               <QuestionsBuilder value={editor.questions} onChange={(questions) => setEditor((prev) => (prev ? { ...prev, questions } : prev))} />
             </div>
           </>
         )}
       </Modal>
+
+      {editor?.id != null && (
+        <AiGeneratePanel
+          open={aiOpen}
+          onClose={() => setAiOpen(false)}
+          section="reading"
+          languageCode={code}
+          articleId={editor.id}
+          onItems={(items) =>
+            setEditor((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    questions: [
+                      ...prev.questions,
+                      ...items.map((it) =>
+                        it.kind === 'open'
+                          ? { id: newId(), kind: 'open' as const, prompt: String(it.prompt ?? ''), sampleAnswer: String(it.sampleAnswer ?? ''), explanation: String(it.explanation ?? '') }
+                          : { id: newId(), kind: 'mc' as const, prompt: String(it.prompt ?? ''), options: (Array.isArray(it.options) ? it.options : []).map((o) => String(o)), correctIndex: Number(it.correctIndex) || 0, explanation: String(it.explanation ?? '') },
+                      ),
+                    ],
+                  }
+                : prev,
+            )
+          }
+        />
+      )}
     </div>
   );
 }

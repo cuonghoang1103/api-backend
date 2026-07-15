@@ -5,10 +5,11 @@
 // rows) + a CSV import panel (preview → import + template download).
 
 import { useCallback, useEffect, useState } from 'react';
-import { Plus, Pencil, Trash2, Loader2, ChevronRight, Search, Volume2, FileUp, Download, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, ChevronRight, Search, Volume2, FileUp, Download, X, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { languageAdminApi } from '@/lib/language-api';
 import type { VocabCategory, VocabWord, VocabPronunciation, CsvRowResult } from '@/types/language';
+import AiGeneratePanel from './AiGeneratePanel';
 import {
   Modal,
   ImageField,
@@ -71,6 +72,7 @@ export default function VocabTab({ languageId, code }: TabProps) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [catEditor, setCatEditor] = useState<CatEditor | null>(null);
   const [savingCat, setSavingCat] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
 
   const [words, setWords] = useState<VocabWord[]>([]);
   const [loadingWords, setLoadingWords] = useState(false);
@@ -311,6 +313,7 @@ export default function VocabTab({ languageId, code }: TabProps) {
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="text-sm font-semibold text-text-primary">Từ vựng — {selected.name}</h3>
               <div className="flex gap-2">
+                <button onClick={() => setAiOpen(true)} className={btnAdd}><Sparkles className="h-4 w-4" /> AI tạo từ</button>
                 <button onClick={() => { setCsvOpen(true); setCsvPreview(null); }} className={btnGhost}><FileUp className="h-4 w-4" /> CSV</button>
                 <button onClick={() => setWordEditor({ ...EMPTY_WORD })} className={btnAdd}><Plus className="h-4 w-4" /> Từ</button>
               </div>
@@ -484,6 +487,17 @@ export default function VocabTab({ languageId, code }: TabProps) {
           </div>
         )}
       </Modal>
+
+      {selected && (
+        <AiGeneratePanel
+          open={aiOpen}
+          onClose={() => setAiOpen(false)}
+          section="vocab"
+          languageCode={code}
+          categoryId={selected.id}
+          onCommitted={loadWords}
+        />
+      )}
     </div>
   );
 }

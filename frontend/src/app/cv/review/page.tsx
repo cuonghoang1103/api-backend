@@ -48,6 +48,17 @@ export default function CvReviewPage() {
 
   useEffect(() => { cvApi.critiqueStatus().then((r) => setAiAvailable(r.data.data.available)).catch(() => setAiAvailable(false)); }, []);
 
+  // P9 — CV → Interview: stash the CV text so /interview pre-fills its personalize
+  // flow, then jump there. The CV literally seeds the practice questions.
+  const practiceFromCv = async () => {
+    try {
+      const res = await cvApi.exportCv('txt');
+      const text = await (res.data as Blob).text();
+      sessionStorage.setItem('cvbuilder:interviewCv', text.slice(0, 16000));
+    } catch { /* proceed without stash — interview page still works */ }
+    router.push('/interview');
+  };
+
   const runCritique = async () => {
     setCritiquing(true);
     try {
@@ -159,14 +170,19 @@ export default function CvReviewPage() {
 
                   {critique.interviewRisks.length > 0 && (
                     <div>
-                      <div className="text-sm font-medium">Bạn đang hứa sẽ trả lời được những câu này</div>
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="text-sm font-medium">Bạn đang hứa sẽ trả lời được những câu này</div>
+                        <button onClick={practiceFromCv} className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent-color)] px-3 py-1.5 text-xs font-medium text-white hover:opacity-90">
+                          <Dumbbell className="h-3.5 w-3.5" /> Luyện phỏng vấn từ CV này
+                        </button>
+                      </div>
                       <ul className="mt-2 space-y-2">
                         {critique.interviewRisks.map((r, i) => (
                           <li key={i} className="rounded-lg border border-[var(--border-color)] p-3">
                             <div className="text-sm font-medium">“{r.claim}”</div>
                             <div className="mt-1 text-sm text-[var(--text-secondary)]">Interviewer sẽ hỏi: {r.likelyQuestion}</div>
                             <div className="mt-0.5 text-xs text-[var(--text-secondary)]">{r.canYouAnswerIt}</div>
-                            <Link href="/interview" className="mt-2 inline-flex items-center gap-1 text-xs text-[var(--accent-color)]"><Dumbbell className="h-3 w-3" /> Luyện tập trong Interview Simulator</Link>
+                            <button onClick={practiceFromCv} className="mt-2 inline-flex items-center gap-1 text-xs text-[var(--accent-color)] hover:underline"><Dumbbell className="h-3 w-3" /> Luyện tập trong Interview Simulator</button>
                           </li>
                         ))}
                       </ul>

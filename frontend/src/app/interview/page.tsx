@@ -59,6 +59,22 @@ export default function InterviewSetupPage() {
       .finally(() => setLoading(false));
   }, [router]);
 
+  // CV Builder integration (P9): when the user clicks "practice from this CV" in
+  // /cv, the CV text is stashed in sessionStorage. Pre-fill the personalize flow
+  // so their own CV seeds the questions, then clear the stash.
+  const [fromCv, setFromCv] = useState(false);
+  useEffect(() => {
+    try {
+      const stashed = sessionStorage.getItem('cvbuilder:interviewCv');
+      if (stashed && stashed.trim()) {
+        setCv(stashed);
+        setPersonalize(true);
+        setFromCv(true);
+        sessionStorage.removeItem('cvbuilder:interviewCv');
+      }
+    } catch { /* sessionStorage unavailable — ignore */ }
+  }, []);
+
   const domain = useMemo(() => tax?.domains.find((d) => d.id === domainId) ?? null, [tax, domainId]);
   const totalQ = useMemo(() => tracks.reduce((s, t) => s + (t.questionCount ?? 0), 0), [tracks]);
   // Topics available from the selected tracks (for deep-dive selection).
@@ -322,6 +338,14 @@ export default function InterviewSetupPage() {
             {!tax.aiAvailable && (
               <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-sm text-amber-200/90">
                 Chấm điểm AI đang tạm nghỉ (bảo trì / không khả dụng). Buổi phỏng vấn vẫn chạy đầy đủ ở chế độ <b>Tự chấm</b> — câu hỏi, đáp án mẫu, máy chấm khách quan và báo cáo đều hoạt động bình thường, thuần ngôn ngữ bạn chọn.
+              </div>
+            )}
+
+            {/* From CV Builder (P9): the user's CV was pre-loaded into personalize. */}
+            {fromCv && (
+              <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-amber-200">
+                Đã nạp CV của bạn từ CV Builder — câu hỏi sẽ bám theo chính hồ sơ của bạn. Chọn lĩnh vực/cấp độ rồi bắt đầu.
+                {(!tax.aiAvailable || !tax.aiAllowed) && <span className="mt-1 block text-xs text-amber-300/80">Cá nhân hoá theo CV cần bản Pro + AI bật. Bạn vẫn luyện được với ngân hàng câu hỏi tĩnh.</span>}
               </div>
             )}
 

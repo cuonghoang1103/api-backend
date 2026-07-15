@@ -17,6 +17,7 @@ on:
       - 'frontend/tsconfig.json'
       - '.eslintrc.json'
       - '.prettierrc'
+  workflow_dispatch: {}   # cho phép bấm chạy tay (Actions → Run workflow) — không cần push
 
 jobs:
   backend-lint:

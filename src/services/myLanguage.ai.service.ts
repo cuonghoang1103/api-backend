@@ -169,7 +169,7 @@ function toPlainText(v: unknown): string | null {
  * smart quotes, trailing commas, stray prose) — which surfaced as "AI đang
  * bận" after a few turns. Try extractJson, then a light repair, else {}.
  */
-function looseJson(text: string): Record<string, unknown> {
+export function looseJson(text: string): Record<string, unknown> {
   try {
     return extractJson<Record<string, unknown>>(text);
   } catch {
@@ -192,7 +192,7 @@ function looseJson(text: string): Record<string, unknown> {
 }
 
 /** Last-resort: pull a single string field's value even from broken JSON. */
-function grabField(text: string, field: string): string {
+export function grabField(text: string, field: string): string {
   const re = new RegExp(`"${field}"\\s*:\\s*"([\\s\\S]*?)"\\s*(?:,\\s*"\\w+"\\s*:|}\\s*$|}\\s*[,\\]])`, 'm');
   const m = String(text || '').match(re);
   return m ? m[1].replace(/\\"/g, '"').replace(/\s+/g, ' ').trim() : '';

@@ -11,6 +11,8 @@ import { toast } from 'sonner';
 import { languageAdminApi, type AiGenProposal } from '@/lib/language-api';
 import { Modal, inputCls, labelCls, btnPrimary, btnGhost, unwrap, errMsg } from './shared';
 
+export interface AiGenCategory { id: number; name: string; wordCount?: number }
+
 const LEVELS: Record<string, string[]> = {
   ja: ['N5', 'N4', 'N3', 'N2', 'N1'],
   zh: ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5'],
@@ -24,6 +26,7 @@ const SECTION_LABEL: Record<string, string> = {
   conversation: 'hội thoại',
   qna: 'Q&A',
   reading: 'câu hỏi bài đọc',
+  'reading-article': 'bài đọc',
 };
 
 export default function AiGeneratePanel({
@@ -33,15 +36,18 @@ export default function AiGeneratePanel({
   languageCode,
   categoryId,
   articleId,
+  categories,
   onCommitted,
   onItems,
 }: {
   open: boolean;
   onClose: () => void;
-  section: 'vocab' | 'grammar' | 'conversation' | 'qna' | 'reading';
+  section: 'vocab' | 'grammar' | 'conversation' | 'qna' | 'reading' | 'reading-article';
   languageCode: string;
   categoryId?: number;
   articleId?: number;
+  /** Vocab only: categories to pick which one AI adds words to. */
+  categories?: AiGenCategory[];
   onCommitted?: () => void;
   /** When provided, "Lưu" hands the picked items to the parent instead of
    *  writing to the DB (used by Reading to drop questions into the form). */
@@ -49,18 +55,22 @@ export default function AiGeneratePanel({
 }) {
   const [level, setLevel] = useState('');
   const [topic, setTopic] = useState('');
-  const [count, setCount] = useState(6);
+  const [count, setCount] = useState(8);
+  const [catId, setCatId] = useState<number | undefined>(categoryId);
   const [generating, setGenerating] = useState(false);
   const [committing, setCommitting] = useState(false);
   const [proposals, setProposals] = useState<AiGenProposal[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const levelChips = useMemo(() => LEVELS[languageCode.toLowerCase()] ?? CEFR, [languageCode]);
+  // Vocab targets a specific category (dropdown); other sections don't.
+  const effCategoryId = section === 'vocab' ? catId : categoryId;
+  const canGenerate = section !== 'vocab' || !!effCategoryId;
 
   const generate = async (append = false) => {
     setGenerating(true);
     try {
-      const res = unwrap(await languageAdminApi.aiGenerate({ languageCode, section, categoryId, articleId, level: level.trim() || undefined, topic: topic.trim() || undefined, count }));
+      const res = unwrap(await languageAdminApi.aiGenerate({ languageCode, section, categoryId: effCategoryId, articleId, level: level.trim() || undefined, topic: topic.trim() || undefined, count }));
       const incoming = res.items ?? [];
       if (append) {
         setProposals((prev) => {
@@ -92,7 +102,7 @@ export default function AiGeneratePanel({
     }
     setCommitting(true);
     try {
-      const res = unwrap(await languageAdminApi.aiCommit({ languageCode, section, categoryId, articleId, items }));
+      const res = unwrap(await languageAdminApi.aiCommit({ languageCode, section, categoryId: effCategoryId, articleId, items }));
       toast.success(`Đã lưu ${res.created} mục${res.skipped ? `, bỏ qua ${res.skipped} (trùng)` : ''}`);
       onCommitted?.();
       reset();
@@ -129,12 +139,24 @@ export default function AiGeneratePanel({
             </button>
           </>
         ) : (
-          <button className={btnPrimary} onClick={() => generate(false)} disabled={generating}>
+          <button className={btnPrimary} onClick={() => generate(false)} disabled={generating || !canGenerate}>
             {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />} Sinh
           </button>
         )
       }
     >
+      {section === 'vocab' && (
+        <div>
+          <label className={labelCls}>Danh mục *</label>
+          <select className={inputCls} value={catId ?? ''} onChange={(e) => setCatId(Number(e.target.value) || undefined)}>
+            <option value="">— Chọn danh mục —</option>
+            {(categories ?? []).map((c) => (
+              <option key={c.id} value={c.id}>{c.name}{typeof c.wordCount === 'number' ? ` (${c.wordCount} từ)` : ''}</option>
+            ))}
+          </select>
+          <p className="mt-1 text-[11px] text-text-muted">Từ mới sẽ được thêm vào đúng danh mục này và tránh trùng với từ đã có trong đó.</p>
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className={labelCls}>Cấp độ (tùy chọn)</label>
@@ -146,8 +168,8 @@ export default function AiGeneratePanel({
           </div>
         </div>
         <div>
-          <label className={labelCls}>Số lượng</label>
-          <input type="number" min={3} max={12} className={inputCls} value={count} onChange={(e) => setCount(Math.max(3, Math.min(12, Number(e.target.value) || 6)))} />
+          <label className={labelCls}>Số lượng {section === 'reading-article' ? '(bài, tối đa 4)' : '(tối đa 25)'}</label>
+          <input type="number" min={1} max={section === 'reading-article' ? 4 : 25} className={inputCls} value={count} onChange={(e) => setCount(Math.max(1, Math.min(section === 'reading-article' ? 4 : 25, Number(e.target.value) || 8)))} />
         </div>
       </div>
       {section !== 'reading' && (

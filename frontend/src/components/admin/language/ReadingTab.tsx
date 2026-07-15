@@ -49,6 +49,7 @@ export default function ReadingTab({ languageId, code }: TabProps) {
   const [saving, setSaving] = useState(false);
   const [uploadingImg, setUploadingImg] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
+  const [aiArticleOpen, setAiArticleOpen] = useState(false);
   const imgRef = useRef<HTMLInputElement | null>(null);
 
   const load = useCallback(async () => {
@@ -140,7 +141,10 @@ export default function ReadingTab({ languageId, code }: TabProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-text-primary">Bài đọc</h3>
-        <button onClick={() => setEditor({ ...EMPTY })} className={btnAdd}><Plus className="h-4 w-4" /> Bài đọc</button>
+        <div className="flex gap-2">
+          <button onClick={() => setAiArticleOpen(true)} className={btnAdd}><Sparkles className="h-4 w-4" /> AI tạo bài đọc</button>
+          <button onClick={() => setEditor({ ...EMPTY })} className={btnAdd}><Plus className="h-4 w-4" /> Bài đọc</button>
+        </div>
       </div>
 
       {loading ? (
@@ -248,6 +252,14 @@ export default function ReadingTab({ languageId, code }: TabProps) {
           </>
         )}
       </Modal>
+
+      <AiGeneratePanel
+        open={aiArticleOpen}
+        onClose={() => setAiArticleOpen(false)}
+        section="reading-article"
+        languageCode={code}
+        onCommitted={load}
+      />
 
       {editor?.id != null && (
         <AiGeneratePanel

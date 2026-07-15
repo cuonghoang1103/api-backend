@@ -495,6 +495,7 @@ export default function VocabTab({ languageId, code }: TabProps) {
           section="vocab"
           languageCode={code}
           categoryId={selected.id}
+          categories={categories.map((c) => ({ id: c.id, name: c.name, wordCount: c.wordCount ?? c._count?.words }))}
           onCommitted={loadWords}
         />
       )}

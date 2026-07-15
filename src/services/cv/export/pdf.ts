@@ -31,8 +31,18 @@ export function renderPdf(cv: RenderCv, spec: CvTemplateSpec = CV_TEMPLATES.ats,
   const width = right - left;
   const headerAlign: 'left' | 'center' = spec.centerHeader ? 'center' : 'left';
 
+  // We only embed the NotoSans Regular weight (OFL, licensing-clean; no bold
+  // weight is available offline). Faux-bold: render the glyph fill AND a thin
+  // stroke of the same colour — a standard technique that reads as bold without
+  // a second font file. Stroke width scales with the point size.
+  const bold = (size: number, color: string, txt: string, x: number, y: number, opts: PDFKit.Mixins.TextOptions = {}) => {
+    doc.fontSize(size).fillColor(color).strokeColor(color).lineWidth(size * 0.028);
+    doc.text(txt, x, y, { stroke: true, fill: true, ...opts });
+    doc.lineWidth(1);
+  };
+
   // ── Header ──
-  doc.fillColor(spec.id === 'senior' ? ACCENT : INK).fontSize(spec.nameSize).text(cv.fullName || 'Họ và tên', left, doc.y, { width, align: headerAlign });
+  bold(spec.nameSize, spec.id === 'senior' ? ACCENT : INK, cv.fullName || 'Họ và tên', left, doc.y, { width, align: headerAlign });
   if (cv.headline) doc.fillColor(MUTED).fontSize(12).text(cv.headline, { width, align: headerAlign });
   const contactBits = [cv.email, cv.phone, cv.location, spec.showDob && cv.dateOfBirth ? `${L.dob}: ${cv.dateOfBirth}` : '']
     .filter(Boolean).join('  •  ');
@@ -49,7 +59,7 @@ export function renderPdf(cv: RenderCv, spec: CvTemplateSpec = CV_TEMPLATES.ats,
   const section = (title: string) => {
     if (doc.y > doc.page.height - 120) doc.addPage();
     doc.moveDown(0.4);
-    doc.fillColor(ACCENT).fontSize(11).text(title.toUpperCase(), left, doc.y, { width, characterSpacing: 0.5 });
+    bold(11, ACCENT, title.toUpperCase(), left, doc.y, { width, characterSpacing: 0.5 });
     const y = doc.y + 2;
     doc.moveTo(left, y).lineTo(right, y).lineWidth(spec.id === 'technical' ? 1.2 : 0.75).strokeColor(spec.id === 'ats' ? RULE : ACCENT).stroke();
     doc.moveDown(0.5);
@@ -58,7 +68,7 @@ export function renderPdf(cv: RenderCv, spec: CvTemplateSpec = CV_TEMPLATES.ats,
   const item = (it: RenderItem) => {
     if (doc.y > doc.page.height - 90) doc.addPage();
     const startY = doc.y;
-    doc.fillColor(INK).fontSize(11).text(it.title, left, startY, { width: width - 120 });
+    bold(11, INK, it.title, left, startY, { width: width - 120 });
     if (it.dateRange) doc.fillColor(MUTED).fontSize(9.5).text(it.dateRange, left, startY, { width, align: 'right' });
     const sub = [it.organization, it.location].filter(Boolean).join(' · ');
     if (sub) doc.fillColor(MUTED).fontSize(10).text(sub, left, doc.y, { width });
@@ -86,7 +96,11 @@ export function renderPdf(cv: RenderCv, spec: CvTemplateSpec = CV_TEMPLATES.ats,
 
   if (cv.skillGroups.length) {
     section(L.skills);
-    for (const g of cv.skillGroups) doc.fillColor(INK).fontSize(10).text(`${g.category}: `, left, doc.y, { continued: true }).fillColor(MUTED).text(g.names.join(', '));
+    for (const g of cv.skillGroups) {
+      const y = doc.y;
+      bold(10, INK, `${g.category}: `, left, y, { continued: true });
+      doc.lineWidth(1).fillColor(MUTED).fontSize(10).text(g.names.join(', '), { stroke: false });
+    }
     doc.moveDown(0.3);
   }
   if (cv.languageSkills.length) {

@@ -71,6 +71,11 @@ const ProExpiryReminder = dynamic(
   { ssr: false }
 )
 
+const LangReviewReminder = dynamic(
+  () => import('@/components/language/LangReviewReminder'),
+  { ssr: false }
+)
+
 const PWAInstallPrompt = dynamic(
   () => import('@/components/providers/PWAInstallPrompt'),
   { ssr: false }
@@ -363,6 +368,7 @@ export default function RootLayout({
               <ListenTogetherSync />
               <FloatingAIAssistant />
               <ProExpiryReminder />
+              <LangReviewReminder />
               <SoundInitializer />
               <PWAInstallPrompt />
               <PostCommentModal />

@@ -259,7 +259,24 @@ export const languageAdminApi = {
     api.post('/admin/my-language/ai/generate', body),
   aiCommit: (body: { languageCode: string; section: string; categoryId?: number; articleId?: number; items: AnyRecord[] }): Res<{ created: number; skipped: number }> =>
     api.post('/admin/my-language/ai/commit', body),
+
+  // Learning analytics (per-user)
+  analyticsOverview: (): Res<LangAnalyticsOverview> => api.get('/admin/my-language/analytics/overview'),
+  analyticsUsers: (keyword?: string): Res<LangAnalyticsUser[]> => api.get('/admin/my-language/analytics/users', { params: { keyword } }),
+  analyticsUser: (id: number): Res<LangAnalyticsUserDetail> => api.get(`/admin/my-language/analytics/users/${id}`),
 };
+
+export interface LangAnalyticsOverview { learners: number; mastered: number; quizzes: number; notebookEntries: number; dueCards: number }
+export interface LangAnalyticsUser {
+  userId: number; username: string; email: string; fullName: string | null; avatarUrl: string | null; isAdmin: boolean;
+  mastered: number; reviewing: number; learning: number; quizzes: number; quizAvg: number; notebook: number; due: number; lastActive: string | null;
+}
+export interface LangAnalyticsUserDetail {
+  user: { id: number; username: string; email: string; fullName: string | null; avatarUrl: string | null } | null;
+  perSection: Record<string, { learning: number; reviewing: number; mastered: number; total: number }>;
+  quizzes: { id: number; score: number; total: number; createdAt: string; languageId: number }[];
+  notebookByKind: { kind: string; count: number }[];
+}
 
 export interface AiGenProposal {
   key: string;
@@ -277,7 +294,7 @@ export interface NotebookEntrySummary { id: number; folderId: number | null; kin
 export interface NotebookEntry extends NotebookEntrySummary { body: string; meaning?: string | null; languageId: number }
 export interface NotebookLanguageMeta { id: number; code: string; name: string; flagEmoji: string }
 export interface NotebookTree { language: NotebookLanguageMeta; folders: NotebookFolder[]; entries: NotebookEntrySummary[] }
-export interface NotebookLanguage extends NotebookLanguageMeta { entryCount: number }
+export interface NotebookLanguage extends NotebookLanguageMeta { entryCount: number; dueCount: number }
 
 export const notebookApi = {
   languages: (): Res<NotebookLanguage[]> => api.get('/my-language/notebook/languages'),
@@ -298,6 +315,8 @@ export const notebookApi = {
     api.patch(`/my-language/notebook/entries/${id}/move`, { folderId }),
   reviewEntry: (id: number, quality: number): Res<{ id: number; nextReviewAt: string | null }> =>
     api.patch(`/my-language/notebook/entries/${id}/review`, { quality }),
+  reorderEntries: (ids: number[]): Res<{ updated: number }> =>
+    api.patch('/my-language/notebook/entries/reorder', { ids }),
   deleteEntry: (id: number): Res<{ id: number }> => api.delete(`/my-language/notebook/entries/${id}`),
   save: (body: { code: string; title: string; body: string; kind?: string; reading?: string | null; meaning?: string | null; folderId?: number | null }): Res<{ id: number; languageId: number }> =>
     api.post('/my-language/notebook/save', body),

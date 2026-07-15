@@ -64,12 +64,28 @@ export async function getEntry(userId: number, id: number) {
   return ownEntry(userId, id);
 }
 
-/** Languages the user has notebook content in (+ counts), for the picker. */
+/** Languages the user has notebook content in (+ counts + due), for the picker. */
 export async function listLanguages(userId: number) {
-  const langs = await prisma.language.findMany({ where: { isActive: true }, select: { id: true, code: true, name: true, flagEmoji: true }, orderBy: { order: 'asc' } });
-  const counts = await prisma.langNotebookEntry.groupBy({ by: ['languageId'], where: { userId }, _count: { _all: true } });
+  const now = new Date();
+  const [langs, counts, due] = await Promise.all([
+    prisma.language.findMany({ where: { isActive: true }, select: { id: true, code: true, name: true, flagEmoji: true }, orderBy: { order: 'asc' } }),
+    prisma.langNotebookEntry.groupBy({ by: ['languageId'], where: { userId }, _count: { _all: true } }),
+    prisma.langNotebookEntry.groupBy({ by: ['languageId'], where: { userId, OR: [{ nextReviewAt: null }, { nextReviewAt: { lte: now } }] }, _count: { _all: true } }),
+  ]);
   const byId = new Map(counts.map((c) => [c.languageId, c._count._all]));
-  return langs.map((l) => ({ ...l, entryCount: byId.get(l.id) ?? 0 }));
+  const dueById = new Map(due.map((c) => [c.languageId, c._count._all]));
+  return langs.map((l) => ({ ...l, entryCount: byId.get(l.id) ?? 0, dueCount: dueById.get(l.id) ?? 0 }));
+}
+
+/** Persist a new order for entries (within a folder / current view). */
+export async function reorderEntries(userId: number, body: { ids?: unknown }) {
+  const ids = (Array.isArray(body?.ids) ? body!.ids : []).map((v) => Number(v)).filter((n) => Number.isInteger(n) && n > 0);
+  if (!ids.length) return { updated: 0 };
+  const owned = await prisma.langNotebookEntry.findMany({ where: { id: { in: ids }, userId }, select: { id: true } });
+  const ownedSet = new Set(owned.map((e) => e.id));
+  const valid = ids.filter((id) => ownedSet.has(id));
+  await prisma.$transaction(valid.map((id, idx) => prisma.langNotebookEntry.update({ where: { id }, data: { sortOrder: idx } })));
+  return { updated: valid.length };
 }
 
 // ── Folders ───────────────────────────────────────────────────────

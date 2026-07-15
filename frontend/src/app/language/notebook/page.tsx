@@ -11,7 +11,10 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DndContext, PointerSensor, useSensor, useSensors, useDroppable, useDraggable, type DragEndEvent } from '@dnd-kit/core';
+import { DndContext, PointerSensor, useSensor, useSensors, useDroppable, closestCenter, type DragEndEvent } from '@dnd-kit/core';
+// (useDraggable removed — entries are useSortable now)
+import { SortableContext, useSortable, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import {
   NotebookPen, Folder, FolderPlus, ChevronRight, ChevronDown, Plus, Pencil, Trash2, X, Loader2, ArrowLeft, Layers, FileText, Download, Flame,
 } from 'lucide-react';
@@ -164,18 +167,39 @@ function NotebookInner() {
     } catch { toast.error('Không tải được'); } finally { setBusyBulk(false); }
   };
 
-  // Drag an entry card onto a folder (or "Chưa phân loại") to move it.
+  // Drag an entry card onto a FOLDER → move; onto another ENTRY → reorder.
   const dndSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;
     const entryId = (active.data.current as { entryId?: number } | undefined)?.entryId;
+    if (entryId == null) return;
     const target = over.data.current as { folderId?: number | null } | undefined;
-    if (entryId == null || !target || !('folderId' in target)) return;
-    const cur = entries.find((e) => e.id === entryId);
-    const dest = target.folderId ?? null;
-    if (cur && (cur.folderId ?? null) === dest) return;
-    void moveEntry(entryId, dest);
+    if (target && 'folderId' in target) {
+      // Dropped on a folder droppable → move (unless same folder).
+      const cur = entries.find((e) => e.id === entryId);
+      const dest = target.folderId ?? null;
+      if (cur && (cur.folderId ?? null) === dest) return;
+      void moveEntry(entryId, dest);
+      return;
+    }
+    // Dropped on another entry → reorder within the current view.
+    const overId = Number(String(over.id).replace('entry-', ''));
+    if (!overId || overId === entryId) return;
+    const viewIds = entries.map((e) => e.id);
+    const oldIdx = viewIds.indexOf(entryId);
+    const newIdx = viewIds.indexOf(overId);
+    if (oldIdx < 0 || newIdx < 0) return;
+    const reorderedView = arrayMove(viewIds, oldIdx, newIdx);
+    const viewSet = new Set(viewIds);
+    // Slot the reordered subset back into the full entries list, keeping others put.
+    setTree((t) => {
+      if (!t) return t;
+      let k = 0;
+      const merged = t.entries.map((e) => (viewSet.has(e.id) ? t.entries.find((x) => x.id === reorderedView[k++])! : e));
+      void notebookApi.reorderEntries(merged.map((e) => e.id)).catch(() => refresh());
+      return { ...t, entries: merged };
+    });
   };
 
   const flatFolders = tree?.folders ?? [];
@@ -199,6 +223,7 @@ function NotebookInner() {
           >
             <span>{l.flagEmoji}</span> {l.name}
             {l.entryCount > 0 && <span className="text-xs text-text-muted">({l.entryCount})</span>}
+            {l.dueCount > 0 && <span className="rounded-full bg-neon-orange/20 px-1.5 py-0.5 text-[10px] font-bold text-neon-orange">{l.dueCount} đến hạn</span>}
           </button>
         ))}
       </div>
@@ -206,7 +231,7 @@ function NotebookInner() {
       {loading ? (
         <div className="py-20 text-center"><Loader2 className="mx-auto h-6 w-6 animate-spin text-neon-violet" /></div>
       ) : (
-        <DndContext sensors={dndSensors} onDragEnd={onDragEnd}>
+        <DndContext sensors={dndSensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
         <div className="grid gap-4 md:grid-cols-[minmax(220px,280px)_1fr]">
           {/* Folder tree */}
           <aside className="card h-max p-3">
@@ -257,11 +282,13 @@ function NotebookInner() {
                 <p className="max-w-sm text-xs text-text-muted">Lưu giải thích từ AI (nút "Lưu vào sổ tay") hoặc tạo mục thủ công.</p>
               </div>
             ) : (
-              <ul className="grid gap-2 sm:grid-cols-2">
-                {entries.map((e) => (
-                  <DraggableEntryCard key={e.id} e={e} onOpen={() => openViewer(e.id)} />
-                ))}
-              </ul>
+              <SortableContext items={entries.map((e) => `entry-${e.id}`)} strategy={verticalListSortingStrategy}>
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {entries.map((e) => (
+                    <SortableEntryCard key={e.id} e={e} onOpen={() => openViewer(e.id)} />
+                  ))}
+                </ul>
+              </SortableContext>
             )}
           </section>
         </div>
@@ -300,11 +327,11 @@ function NotebookInner() {
   );
 }
 
-function DraggableEntryCard({ e, onOpen }: { e: NotebookEntrySummary; onOpen: () => void }) {
-  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: `entry-${e.id}`, data: { entryId: e.id } });
+function SortableEntryCard({ e, onOpen }: { e: NotebookEntrySummary; onOpen: () => void }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: `entry-${e.id}`, data: { entryId: e.id } });
   const due = !e.nextReviewAt || new Date(e.nextReviewAt).getTime() <= Date.now();
   return (
-    <li ref={setNodeRef} className={isDragging ? 'opacity-40' : ''}>
+    <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={isDragging ? 'opacity-40' : ''}>
       <button onClick={onOpen} {...listeners} {...attributes} className="card flex w-full flex-col items-start gap-1 p-3 text-left touch-none transition hover:-translate-y-0.5">
         <div className="flex w-full items-center gap-2">
           <span className="min-w-0 flex-1 truncate font-medium text-text-primary">{e.title}</span>

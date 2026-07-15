@@ -38,6 +38,7 @@ const adminNav = [
  { label: 'GitHub Repo Hub', href: '/admin/repos', icon: Github },
  { label: 'EXP Hub — Snippets', href: '/admin/exp-hub', icon: Code2 },
  { label: 'My Language', href: '/admin/language', icon: Languages },
+ { label: 'Thống kê Ngôn ngữ', href: '/admin/language-analytics', icon: BarChart3 },
  { label: 'Interview Simulator', href: '/admin/interview', icon: Briefcase },
  { label: 'Quản lý Users', href: '/admin/users', icon: Users },
  { label: 'Quản lý Skills', href: '/admin/skills', icon: Code2 },

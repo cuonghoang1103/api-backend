@@ -18,6 +18,7 @@ import * as svc from '../services/myLanguage.service.js';
 import * as aiSvc from '../services/myLanguage.ai.service.js';
 import * as aiGen from '../services/myLanguage.aiGen.service.js';
 import * as notebook from '../services/langNotebook.service.js';
+import * as langAnalytics from '../services/langAnalytics.service.js';
 import { isAiAvailable } from '../services/interview/llm/index.js';
 import { isProEffective } from '../services/pro.service.js';
 
@@ -216,6 +217,9 @@ publicRouter.delete('/notebook/folders/:id', authenticate, async (req: Request, 
 publicRouter.post('/notebook/entries', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.status(201).json({ success: true, data: await notebook.createEntry(req.userId!, req.body) }); } catch (err) { next(err); }
 });
+publicRouter.patch('/notebook/entries/reorder', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.reorderEntries(req.userId!, req.body) }); } catch (err) { next(err); }
+});
 publicRouter.put('/notebook/entries/:id', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await notebook.updateEntry(req.userId!, Number(req.params.id), req.body) }); } catch (err) { next(err); }
 });
@@ -311,6 +315,17 @@ publicRouter.get('/:code/qna', async (req, res: Response<ApiResponse>, next) => 
 // ─── Admin router (ADMIN only) ───────────────────────────────────
 const adminRouter = Router();
 adminRouter.use(authenticate, requireRole('ADMIN'));
+
+// Learning analytics (per-user). ADMIN-gated by the router above.
+adminRouter.get('/analytics/overview', async (_req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await langAnalytics.overview() }); } catch (err) { next(err); }
+});
+adminRouter.get('/analytics/users', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await langAnalytics.perUser({ keyword: req.query.keyword as string | undefined, limit: Number(req.query.limit) || undefined }) }); } catch (err) { next(err); }
+});
+adminRouter.get('/analytics/users/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await langAnalytics.userDetail(Number(req.params.id)) }); } catch (err) { next(err); }
+});
 
 // AI content generation (preview → commit). ADMIN-gated by the router above.
 adminRouter.post('/ai/generate', async (req: Request, res: Response<ApiResponse>, next) => {

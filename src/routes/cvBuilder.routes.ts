@@ -24,6 +24,7 @@ import * as jobSvc from '../services/cv/jobTarget.service.js';
 import * as coverSvc from '../services/cv/coverLetter.service.js';
 import * as intakeSvc from '../services/cv/intake.service.js';
 import * as githubSvc from '../services/cv/github.service.js';
+import { getUsageStats as getCvLlmUsage } from '../services/cv/llm/index.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -211,14 +212,41 @@ router.get('/export/:format', async (req: Request, res: Response, next: NextFunc
 const adminRouter = Router();
 adminRouter.use(authenticate, requireAdmin());
 
-// Anonymized aggregate only — never exposes individual CV content.
+// Anonymized aggregates only — never exposes individual CV content (spec:
+// "Never expose individual CVs to admin"). Only counts + LLM cost/usage.
 adminRouter.get('/overview', h(async () => {
-  const [profiles, documents, reviews] = await Promise.all([
+  const [profiles, documents, reviews, imports, jobs, github, items, bullets] = await Promise.all([
     prisma.cvProfile.count(),
     prisma.cvDocument.count(),
     prisma.cvReview.count(),
+    prisma.cvImportJob.count(),
+    prisma.cvJobTarget.count(),
+    prisma.cvGitHubProfile.count(),
+    prisma.cvItem.count(),
+    prisma.cvBullet.count(),
   ]);
-  return { profiles, documents, reviews };
+  return { profiles, documents, reviews, imports, jobs, github, items, bullets };
+}));
+
+// LLM cost dashboard — spend by provider/model/task (getUsageStats from P6).
+adminRouter.get('/usage', h(async () => getCvLlmUsage()));
+
+// Anonymized analytics: import sources, injection flags, bullet-strength mix.
+adminRouter.get('/analytics', h(async () => {
+  const [importsBySource, bulletStrength, injectionJobs, verifiedBullets, aiBullets] = await Promise.all([
+    prisma.cvImportJob.groupBy({ by: ['source', 'status'], _count: { _all: true } }),
+    prisma.cvBullet.groupBy({ by: ['strength'], _count: { _all: true } }),
+    prisma.cvJobTarget.count({ where: { injectionAttempted: true } }),
+    prisma.cvBullet.count({ where: { verified: true } }),
+    prisma.cvBullet.count({ where: { aiGenerated: true } }),
+  ]);
+  return {
+    importsBySource: importsBySource.map((r) => ({ source: r.source, status: r.status, count: r._count._all })),
+    bulletStrength: bulletStrength.map((r) => ({ strength: r.strength, count: r._count._all })),
+    injectionAttempts: injectionJobs,
+    verifiedBullets,
+    aiBullets,
+  };
 }));
 
 export default router;

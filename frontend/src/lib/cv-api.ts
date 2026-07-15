@@ -97,3 +97,25 @@ export const cvApi = {
     api.get(`/cv/export/${format}`, { responseType: 'blob', timeout: 60_000 }),
 };
 
+// ── Admin (Phase 10) — anonymized aggregates + LLM cost dashboard ──────────
+export interface CvAdminUsage {
+  forceStatic: boolean;
+  providers: { name: string; hasKey: boolean; trainsOnInput: boolean; circuitOpen: boolean }[];
+  totalCalls: number;
+  totalInputTokens: number;
+  totalOutputTokens: number;
+  totalCostUsd: number;
+  byTask: { task: string; provider: string; model: string; success: boolean; calls: number; inputTokens: number; outputTokens: number; costUsd: number }[];
+}
+export const cvAdminApi = {
+  overview: (): Res<Record<string, number>> => api.get('/admin/cv/overview'),
+  usage: (): Res<CvAdminUsage> => api.get('/admin/cv/usage'),
+  analytics: (): Res<{
+    importsBySource: { source: string; status: string; count: number }[];
+    bulletStrength: { strength: string; count: number }[];
+    injectionAttempts: number;
+    verifiedBullets: number;
+    aiBullets: number;
+  }> => api.get('/admin/cv/analytics'),
+};
+

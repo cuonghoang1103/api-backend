@@ -40,6 +40,7 @@ const adminNav = [
  { label: 'My Language', href: '/admin/language', icon: Languages },
  { label: 'Thống kê Ngôn ngữ', href: '/admin/language-analytics', icon: BarChart3 },
  { label: 'Interview Simulator', href: '/admin/interview', icon: Briefcase },
+ { label: 'CV Builder', href: '/admin/cv', icon: FileText },
  { label: 'Quản lý Users', href: '/admin/users', icon: Users },
  { label: 'Quản lý Skills', href: '/admin/skills', icon: Code2 },
  { label: 'Quản lý Projects', href: '/admin/projects', icon: Sparkles },

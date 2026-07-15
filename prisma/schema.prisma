@@ -4543,24 +4543,31 @@ model LangNotebookFolder {
 }
 
 model LangNotebookEntry {
-  id         Int      @id @default(autoincrement())
-  userId     Int      @map("user_id")
-  languageId Int      @map("language_id")
-  folderId   Int?     @map("folder_id")
-  kind       String   @default("note") @db.VarChar(32) // note | explanation | vocab | grammar | pronunciation | writing
-  title      String   @db.VarChar(255)
-  body       String   @db.Text // markdown
-  reading    String?  @db.VarChar(255)
-  meaning    String?  @db.Text
-  sortOrder  Int      @default(0) @map("sort_order")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  id             Int       @id @default(autoincrement())
+  userId         Int       @map("user_id")
+  languageId     Int       @map("language_id")
+  folderId       Int?      @map("folder_id")
+  kind           String    @default("note") @db.VarChar(32) // note | explanation | vocab | grammar | pronunciation | writing
+  title          String    @db.VarChar(255)
+  body           String    @db.Text // markdown
+  reading        String?   @db.VarChar(255)
+  meaning        String?   @db.Text
+  sortOrder      Int       @default(0) @map("sort_order")
+  // SRS (simplified SM-2) — spaced-repetition review of saved entries.
+  easeFactor     Float     @default(2.5) @map("ease_factor")
+  intervalDays   Int       @default(0) @map("interval_days")
+  repetitions    Int       @default(0)
+  nextReviewAt   DateTime? @map("next_review_at")
+  lastReviewedAt DateTime? @map("last_reviewed_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
   user     User                @relation("UserLangNotebookEntries", fields: [userId], references: [id], onDelete: Cascade)
   language Language            @relation(fields: [languageId], references: [id], onDelete: Cascade)
   folder   LangNotebookFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
 
   @@index([userId, languageId, folderId], name: "idx_lang_nb_entry_user")
+  @@index([userId, nextReviewAt], name: "idx_lang_nb_entry_due")
   @@map("lang_notebook_entries")
 }
 

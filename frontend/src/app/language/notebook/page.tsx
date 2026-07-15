@@ -11,12 +11,14 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import { motion, AnimatePresence } from 'framer-motion';
+import { DndContext, PointerSensor, useSensor, useSensors, useDroppable, useDraggable, type DragEndEvent } from '@dnd-kit/core';
 import {
-  NotebookPen, Folder, FolderPlus, ChevronRight, ChevronLeft, ChevronDown, Plus, Pencil, Trash2, X, Loader2, ArrowLeft, Layers, FileText, Download,
+  NotebookPen, Folder, FolderPlus, ChevronRight, ChevronDown, Plus, Pencil, Trash2, X, Loader2, ArrowLeft, Layers, FileText, Download, Flame,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { notebookApi, type NotebookFolder, type NotebookEntrySummary, type NotebookEntry, type NotebookLanguage, type NotebookTree } from '@/lib/language-api';
 import { SpeakerButton } from '@/components/language/primitives';
+import { downloadPdf } from '@/lib/chatExport';
 
 const KIND_LABEL: Record<string, string> = {
   note: 'Ghi chú', explanation: 'Giải thích AI', vocab: 'Từ vựng', grammar: 'Ngữ pháp', pronunciation: 'Phát âm', writing: 'Bài viết',
@@ -134,23 +136,46 @@ function NotebookInner() {
     const rs = await Promise.all(list.map((e) => notebookApi.entry(e.id).then((r) => r.data.data).catch(() => null)));
     return rs.filter(Boolean) as NotebookEntry[];
   };
-  const exportAll = async () => {
+  const exportAll = async (fmt: 'md' | 'pdf') => {
     if (!entries.length) { toast.info('Chưa có mục nào'); return; }
     setBusyBulk(true);
     try {
       const full = await fetchFull(entries);
       const md = `# Sổ tay ${tree?.language.name ?? code}\n\n` + full.map(entryMd).join('\n---\n\n');
-      downloadMd(`so-tay-${code}`, md);
+      if (fmt === 'pdf') await downloadPdf(md, `so-tay-${code}.pdf`);
+      else downloadMd(`so-tay-${code}`, md);
     } catch { toast.error('Không xuất được'); } finally { setBusyBulk(false); }
   };
-  const startReview = async () => {
-    if (!entries.length) return;
+
+  // Cards due for review: never reviewed (null) or nextReviewAt in the past.
+  const dueEntries = useMemo(() => {
+    const now = Date.now();
+    return entries.filter((e) => !e.nextReviewAt || new Date(e.nextReviewAt).getTime() <= now);
+  }, [entries]);
+
+  const startReview = async (dueOnly: boolean) => {
+    const list = dueOnly ? dueEntries : entries;
+    if (!list.length) { toast.info('Không có thẻ để ôn'); return; }
     setBusyBulk(true);
     try {
-      const cards = await fetchFull(entries);
+      const cards = await fetchFull(list);
       for (let i = cards.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [cards[i], cards[j]] = [cards[j], cards[i]]; }
       setReview({ cards, index: 0, flipped: false });
     } catch { toast.error('Không tải được'); } finally { setBusyBulk(false); }
+  };
+
+  // Drag an entry card onto a folder (or "Chưa phân loại") to move it.
+  const dndSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
+  const onDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+    const entryId = (active.data.current as { entryId?: number } | undefined)?.entryId;
+    const target = over.data.current as { folderId?: number | null } | undefined;
+    if (entryId == null || !target || !('folderId' in target)) return;
+    const cur = entries.find((e) => e.id === entryId);
+    const dest = target.folderId ?? null;
+    if (cur && (cur.folderId ?? null) === dest) return;
+    void moveEntry(entryId, dest);
   };
 
   const flatFolders = tree?.folders ?? [];
@@ -181,6 +206,7 @@ function NotebookInner() {
       {loading ? (
         <div className="py-20 text-center"><Loader2 className="mx-auto h-6 w-6 animate-spin text-neon-violet" /></div>
       ) : (
+        <DndContext sensors={dndSensors} onDragEnd={onDragEnd}>
         <div className="grid gap-4 md:grid-cols-[minmax(220px,280px)_1fr]">
           {/* Folder tree */}
           <aside className="card h-max p-3">
@@ -191,9 +217,13 @@ function NotebookInner() {
             <button onClick={() => setSelected('all')} className={`mb-1 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-sm ${selected === 'all' ? 'bg-neon-violet/15 text-neon-violet' : 'text-text-secondary hover:bg-[var(--bg-surface)]'}`}>
               <Layers size={15} /> Tất cả <span className="ml-auto text-xs text-text-muted">{tree?.entries.length ?? 0}</span>
             </button>
-            <button onClick={() => setSelected('root')} className={`mb-1 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-sm ${selected === 'root' ? 'bg-neon-violet/15 text-neon-violet' : 'text-text-secondary hover:bg-[var(--bg-surface)]'}`}>
-              <FileText size={15} /> Chưa phân loại
-            </button>
+            <DropZone folderId={null}>
+              {(isOver) => (
+                <button onClick={() => setSelected('root')} className={`mb-1 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-sm ${isOver ? 'bg-neon-violet/20 ring-1 ring-neon-violet/50' : selected === 'root' ? 'bg-neon-violet/15 text-neon-violet' : 'text-text-secondary hover:bg-[var(--bg-surface)]'}`}>
+                  <FileText size={15} /> Chưa phân loại
+                </button>
+              )}
+            </DropZone>
             <div className="mt-1 space-y-0.5">
               {(childrenOf.get(null) ?? []).map((f) => (
                 <FolderNode key={f.id} folder={f} depth={0} childrenOf={childrenOf} expanded={expanded} setExpanded={setExpanded} selected={selected} setSelected={setSelected} onAdd={addFolder} onRename={renameFolder} onDelete={removeFolder} entries={tree?.entries ?? []} />
@@ -209,8 +239,12 @@ function NotebookInner() {
               <div className="flex flex-wrap gap-2">
                 {entries.length > 0 && (
                   <>
-                    <button onClick={startReview} disabled={busyBulk} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-neon-violet disabled:opacity-60"><Layers size={15} /> Ôn tập</button>
-                    <button onClick={exportAll} disabled={busyBulk} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-neon-violet disabled:opacity-60"><Download size={15} /> Xuất .md</button>
+                    {dueEntries.length > 0 && (
+                      <button onClick={() => startReview(true)} disabled={busyBulk} className="inline-flex items-center gap-1.5 rounded-full bg-neon-orange/15 px-3 py-1.5 text-sm font-medium text-neon-orange ring-1 ring-neon-orange/30 transition hover:bg-neon-orange/25 disabled:opacity-60"><Flame size={15} /> Ôn tập đến hạn ({dueEntries.length})</button>
+                    )}
+                    <button onClick={() => startReview(false)} disabled={busyBulk} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-neon-violet disabled:opacity-60"><Layers size={15} /> Ôn tất cả</button>
+                    <button onClick={() => exportAll('md')} disabled={busyBulk} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-neon-violet disabled:opacity-60"><Download size={15} /> .md</button>
+                    <button onClick={() => exportAll('pdf')} disabled={busyBulk} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-neon-violet disabled:opacity-60"><FileText size={15} /> PDF</button>
                   </>
                 )}
                 <button onClick={() => setEditing({ id: null, title: '', body: '' })} className="inline-flex items-center gap-1.5 rounded-full bg-neon-violet/15 px-3 py-1.5 text-sm font-medium text-neon-violet ring-1 ring-neon-violet/30 hover:bg-neon-violet/25"><Plus size={15} /> Mục mới</button>
@@ -225,20 +259,13 @@ function NotebookInner() {
             ) : (
               <ul className="grid gap-2 sm:grid-cols-2">
                 {entries.map((e) => (
-                  <li key={e.id}>
-                    <button onClick={() => openViewer(e.id)} className="card flex w-full flex-col items-start gap-1 p-3 text-left transition hover:-translate-y-0.5">
-                      <div className="flex w-full items-center gap-2">
-                        <span className="min-w-0 flex-1 truncate font-medium text-text-primary">{e.title}</span>
-                        <span className="shrink-0 rounded-full bg-[var(--bg-surface)] px-2 py-0.5 text-[10px] text-text-muted ring-1 ring-[var(--border-color)]">{KIND_LABEL[e.kind] ?? e.kind}</span>
-                      </div>
-                      {e.reading && <span className="text-xs text-text-muted">{e.reading}</span>}
-                    </button>
-                  </li>
+                  <DraggableEntryCard key={e.id} e={e} onOpen={() => openViewer(e.id)} />
                 ))}
               </ul>
             )}
           </section>
         </div>
+        </DndContext>
       )}
 
       {/* Entry viewer */}
@@ -263,14 +290,36 @@ function NotebookInner() {
         )}
       </AnimatePresence>
 
-      {/* Flashcard review */}
+      {/* Flashcard review (SRS) */}
       <AnimatePresence>
         {review && review.cards.length > 0 && (
-          <ReviewDeck review={review} setReview={setReview} code={code} onClose={() => setReview(null)} />
+          <ReviewDeck review={review} setReview={setReview} code={code} onClose={() => { setReview(null); refresh(); }} />
         )}
       </AnimatePresence>
     </div>
   );
+}
+
+function DraggableEntryCard({ e, onOpen }: { e: NotebookEntrySummary; onOpen: () => void }) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: `entry-${e.id}`, data: { entryId: e.id } });
+  const due = !e.nextReviewAt || new Date(e.nextReviewAt).getTime() <= Date.now();
+  return (
+    <li ref={setNodeRef} className={isDragging ? 'opacity-40' : ''}>
+      <button onClick={onOpen} {...listeners} {...attributes} className="card flex w-full flex-col items-start gap-1 p-3 text-left touch-none transition hover:-translate-y-0.5">
+        <div className="flex w-full items-center gap-2">
+          <span className="min-w-0 flex-1 truncate font-medium text-text-primary">{e.title}</span>
+          {due && e.nextReviewAt && <span className="h-2 w-2 shrink-0 rounded-full bg-neon-orange" title="Đến hạn ôn" />}
+          <span className="shrink-0 rounded-full bg-[var(--bg-surface)] px-2 py-0.5 text-[10px] text-text-muted ring-1 ring-[var(--border-color)]">{KIND_LABEL[e.kind] ?? e.kind}</span>
+        </div>
+        {e.reading && <span className="text-xs text-text-muted">{e.reading}</span>}
+      </button>
+    </li>
+  );
+}
+
+function DropZone({ folderId, children }: { folderId: number | null; children: (isOver: boolean) => React.ReactNode }) {
+  const { setNodeRef, isOver } = useDroppable({ id: folderId == null ? 'nb-drop-root' : `nb-drop-${folderId}`, data: { folderId } });
+  return <div ref={setNodeRef}>{children(isOver)}</div>;
 }
 
 function ReviewDeck({ review, setReview, code, onClose }: {
@@ -280,7 +329,20 @@ function ReviewDeck({ review, setReview, code, onClose }: {
 }) {
   const forceLang = code === 'ja' ? 'ja-JP' : code === 'zh' ? 'zh-CN' : code === 'en' ? 'en-US' : undefined;
   const card = review.cards[review.index];
-  const go = (d: number) => setReview({ ...review, index: Math.max(0, Math.min(review.cards.length - 1, review.index + d)), flipped: false });
+  const advance = () => {
+    if (review.index >= review.cards.length - 1) { onClose(); return; }
+    setReview({ ...review, index: review.index + 1, flipped: false });
+  };
+  const rate = async (quality: number) => {
+    try { await notebookApi.reviewEntry(card.id, quality); } catch { /* schedule best-effort */ }
+    advance();
+  };
+  const RATINGS: { label: string; q: number; cls: string }[] = [
+    { label: 'Lại', q: 2, cls: 'bg-neon-pink/20 text-neon-pink ring-neon-pink/40' },
+    { label: 'Khó', q: 3, cls: 'bg-neon-orange/20 text-neon-orange ring-neon-orange/40' },
+    { label: 'Được', q: 4, cls: 'bg-neon-cyan/20 text-neon-cyan ring-neon-cyan/40' },
+    { label: 'Dễ', q: 5, cls: 'bg-neon-green/20 text-neon-green ring-neon-green/40' },
+  ];
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[220] flex flex-col bg-black/85 backdrop-blur-sm p-4" onClick={onClose}>
       <div className="mx-auto flex w-full max-w-xl flex-1 flex-col" onClick={(e) => e.stopPropagation()}>
@@ -302,10 +364,15 @@ function ReviewDeck({ review, setReview, code, onClose }: {
             </div>
           )}
         </button>
-        <div className="mt-3 flex items-center justify-between">
-          <button onClick={() => go(-1)} disabled={review.index === 0} className="inline-flex items-center gap-1 rounded-full bg-white/10 px-4 py-2 text-sm text-white disabled:opacity-40"><ChevronLeft size={16} /> Trước</button>
-          <button onClick={() => go(1)} disabled={review.index >= review.cards.length - 1} className="inline-flex items-center gap-1 rounded-full bg-neon-violet px-4 py-2 text-sm font-medium text-white disabled:opacity-40">Sau <ChevronRight size={16} /></button>
-        </div>
+        {review.flipped ? (
+          <div className="mt-3 grid grid-cols-4 gap-2">
+            {RATINGS.map((r) => (
+              <button key={r.q} onClick={() => void rate(r.q)} className={`rounded-xl py-2.5 text-sm font-semibold ring-1 transition hover:opacity-85 ${r.cls}`}>{r.label}</button>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-3 text-center text-xs text-white/60">Lật thẻ rồi tự đánh giá để lên lịch ôn lại</p>
+        )}
       </div>
     </motion.div>
   );
@@ -322,9 +389,10 @@ function FolderNode({ folder, depth, childrenOf, expanded, setExpanded, selected
   const isOpen = expanded.has(folder.id);
   const count = entries.filter((e) => e.folderId === folder.id).length;
   const toggle = () => { const n = new Set(expanded); if (n.has(folder.id)) n.delete(folder.id); else n.add(folder.id); setExpanded(n); };
+  const { setNodeRef, isOver } = useDroppable({ id: `nb-drop-${folder.id}`, data: { folderId: folder.id } });
   return (
     <div>
-      <div className={`group flex items-center gap-1 rounded-lg pr-1 ${selected === folder.id ? 'bg-neon-violet/15' : 'hover:bg-[var(--bg-surface)]'}`} style={{ paddingLeft: depth * 12 }}>
+      <div ref={setNodeRef} className={`group flex items-center gap-1 rounded-lg pr-1 ${isOver ? 'bg-neon-violet/20 ring-1 ring-neon-violet/50' : selected === folder.id ? 'bg-neon-violet/15' : 'hover:bg-[var(--bg-surface)]'}`} style={{ paddingLeft: depth * 12 }}>
         <button onClick={kids.length ? toggle : undefined} className="p-1 text-text-muted">
           {kids.length ? (isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />) : <span className="inline-block w-[14px]" />}
         </button>
@@ -373,6 +441,7 @@ function EntryViewer({ entry, code, folders, onClose, onEdit, onDelete, onMove }
           </select>
           <div className="ml-auto flex gap-2">
             <button onClick={() => downloadMd(entry.title, entryMd(entry))} title="Tải .md" className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] hover:text-neon-violet"><Download size={14} /> .md</button>
+            <button onClick={() => downloadPdf(entryMd(entry), `${entry.title.replace(/[\\/:*?"<>|]+/g, '_').slice(0, 60)}.pdf`)} title="Tải PDF" className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] hover:text-neon-violet"><FileText size={14} /> PDF</button>
             <button onClick={onEdit} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] hover:text-neon-violet"><Pencil size={14} /> Sửa</button>
             <button onClick={onDelete} className="inline-flex items-center gap-1.5 rounded-full bg-neon-pink/10 px-3 py-1.5 text-sm text-neon-pink ring-1 ring-neon-pink/30 hover:bg-neon-pink/20"><Trash2 size={14} /> Xoá</button>
           </div>

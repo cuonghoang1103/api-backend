@@ -53,7 +53,7 @@ export async function getTree(userId: number, code: string) {
     }),
     prisma.langNotebookEntry.findMany({
       where: { userId, languageId: language.id },
-      select: { id: true, folderId: true, kind: true, title: true, reading: true, updatedAt: true },
+      select: { id: true, folderId: true, kind: true, title: true, reading: true, updatedAt: true, nextReviewAt: true },
       orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
     }),
   ]);
@@ -174,4 +174,30 @@ export async function moveEntry(userId: number, id: number, body: { folderId?: u
 export async function saveFromAi(userId: number, body: { code?: string; folderId?: unknown; kind?: unknown; title?: unknown; body?: unknown; reading?: unknown; meaning?: unknown }) {
   const entry = await createEntry(userId, body);
   return { id: entry.id, languageId: entry.languageId };
+}
+
+/** Record a spaced-repetition review (simplified SM-2) and schedule the next. */
+export async function reviewEntry(userId: number, id: number, body: { quality?: unknown }) {
+  const e = await ownEntry(userId, id);
+  const q = Math.max(0, Math.min(5, Math.round(Number(body?.quality) || 0)));
+  let easeFactor = e.easeFactor ?? 2.5;
+  let repetitions = e.repetitions ?? 0;
+  let intervalDays = e.intervalDays ?? 0;
+  if (q < 3) {
+    repetitions = 0;
+    intervalDays = 1;
+  } else {
+    if (repetitions === 0) intervalDays = 1;
+    else if (repetitions === 1) intervalDays = 6;
+    else intervalDays = Math.round(intervalDays * easeFactor);
+    repetitions += 1;
+  }
+  easeFactor = Math.max(1.3, easeFactor + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02)));
+  const now = new Date();
+  const nextReviewAt = new Date(now.getTime() + intervalDays * 24 * 60 * 60 * 1000);
+  return prisma.langNotebookEntry.update({
+    where: { id },
+    data: { easeFactor, repetitions, intervalDays, nextReviewAt, lastReviewedAt: now },
+    select: { id: true, nextReviewAt: true },
+  });
 }

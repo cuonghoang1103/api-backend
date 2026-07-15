@@ -222,6 +222,9 @@ publicRouter.put('/notebook/entries/:id', authenticate, async (req: Request, res
 publicRouter.patch('/notebook/entries/:id/move', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await notebook.moveEntry(req.userId!, Number(req.params.id), req.body) }); } catch (err) { next(err); }
 });
+publicRouter.patch('/notebook/entries/:id/review', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await notebook.reviewEntry(req.userId!, Number(req.params.id), req.body) }); } catch (err) { next(err); }
+});
 publicRouter.delete('/notebook/entries/:id', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await notebook.deleteEntry(req.userId!, Number(req.params.id)) }); } catch (err) { next(err); }
 });

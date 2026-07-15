@@ -273,7 +273,7 @@ export interface AiGenResult {
 
 // ─── Notebook (per-user, per-language, nested folders) ───────────
 export interface NotebookFolder { id: number; parentId: number | null; name: string; icon?: string | null; sortOrder: number }
-export interface NotebookEntrySummary { id: number; folderId: number | null; kind: string; title: string; reading?: string | null; updatedAt: string }
+export interface NotebookEntrySummary { id: number; folderId: number | null; kind: string; title: string; reading?: string | null; updatedAt: string; nextReviewAt?: string | null }
 export interface NotebookEntry extends NotebookEntrySummary { body: string; meaning?: string | null; languageId: number }
 export interface NotebookLanguageMeta { id: number; code: string; name: string; flagEmoji: string }
 export interface NotebookTree { language: NotebookLanguageMeta; folders: NotebookFolder[]; entries: NotebookEntrySummary[] }
@@ -296,6 +296,8 @@ export const notebookApi = {
     api.put(`/my-language/notebook/entries/${id}`, body),
   moveEntry: (id: number, folderId: number | null): Res<NotebookEntry> =>
     api.patch(`/my-language/notebook/entries/${id}/move`, { folderId }),
+  reviewEntry: (id: number, quality: number): Res<{ id: number; nextReviewAt: string | null }> =>
+    api.patch(`/my-language/notebook/entries/${id}/review`, { quality }),
   deleteEntry: (id: number): Res<{ id: number }> => api.delete(`/my-language/notebook/entries/${id}`),
   save: (body: { code: string; title: string; body: string; kind?: string; reading?: string | null; meaning?: string | null; folderId?: number | null }): Res<{ id: number; languageId: number }> =>
     api.post('/my-language/notebook/save', body),

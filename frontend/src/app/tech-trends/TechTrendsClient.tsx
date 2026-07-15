@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useMemo, useEffect, useCallback, type ReactNode } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { Bookmark, Share2, Clock, TrendingUp, Search, Sparkles, Code2, AlertTriangle, CheckCircle2, X } from 'lucide-react';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -47,8 +49,18 @@ export default function TechTrendsClient() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  // Hydration guard
-  useEffect(() => setMounted(true), []);
+  // Hydration guard. Also seed the search box from `?q=` so tag
+  // links coming from an article detail page (/tech-trends?q=React)
+  // land pre-filtered.
+  useEffect(() => {
+    setMounted(true);
+    try {
+      const q = new URLSearchParams(window.location.search).get('q');
+      if (q) setQuery(q);
+    } catch {
+      /* no window / bad URL — ignore */
+    }
+  }, []);
 
   // Initial load + bookmark hydration
   useEffect(() => {
@@ -299,6 +311,7 @@ export default function TechTrendsClient() {
                         onToggleExpand={() =>
                           setExpandedId((cur) => (cur === article.id ? null : article.id))
                         }
+                        onSelectTag={(t) => setQuery(t)}
                       />
                     ))}
                   </motion.div>
@@ -368,6 +381,7 @@ function ArticleCard({
   onToggleBookmark,
   isExpanded,
   onToggleExpand,
+  onSelectTag,
 }: {
   article: Article;
   index: number;
@@ -375,10 +389,31 @@ function ArticleCard({
   onToggleBookmark: () => void;
   isExpanded: boolean;
   onToggleExpand: () => void;
+  onSelectTag: (tag: string) => void;
 }) {
   const style = CATEGORY_STYLES[article.category] ?? DEFAULT_CATEGORY_STYLE;
   const spanClass = article.isFeatured ? 'md:col-span-2' : 'md:col-span-1';
   const displayCover = article.coverEmoji || CATEGORY_DEFAULT_EMOJI[article.category] || DEFAULT_CATEGORY_STYLE.emoji;
+  const permalink = `/tech-trends/${article.slug}`;
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const url = typeof window !== 'undefined' ? `${window.location.origin}${permalink}` : permalink;
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: article.title, text: article.summary, url });
+        return;
+      } catch {
+        /* cancelled → fall through to copy */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success('Đã sao chép link bài viết');
+    } catch {
+      toast.error('Không thể sao chép link');
+    }
+  };
 
   return (
     <motion.article
@@ -473,7 +508,13 @@ function ArticleCard({
             'leading-relaxed',
             article.isFeatured ? 'text-2xl sm:text-3xl' : 'text-lg sm:text-xl',
           ].join(' ')}>
-            {article.title}
+            <Link
+              href={permalink}
+              className="hover:text-neon-violet transition-colors"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {article.title}
+            </Link>
           </h2>
 
           <p className="text-text-secondary leading-relaxed text-sm sm:text-[0.95rem]">
@@ -526,15 +567,16 @@ function ArticleCard({
           {article.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {article.tags.map((t) => (
-                <span
+                <button
                   key={t}
+                  type="button"
                   className="px-2 py-0.5 rounded-md text-[11px] font-medium
                     bg-white/[0.04] text-text-muted border border-white/[0.04]
                     hover:text-text-primary hover:border-neon-violet/30 transition-colors cursor-pointer"
-                  onClick={() => { /* future: route to filtered list */ }}
+                  onClick={(e) => { e.stopPropagation(); onSelectTag(t); }}
                 >
                   #{t}
-                </span>
+                </button>
               ))}
             </div>
           )}
@@ -582,11 +624,21 @@ function ArticleCard({
               >
                 {isExpanded ? 'Hide' : 'Read'}
               </button>
+              <Link
+                href={permalink}
+                onClick={(e) => e.stopPropagation()}
+                className="px-2.5 py-1 rounded-lg text-[11px] font-medium
+                  bg-white/[0.04] text-text-secondary
+                  hover:bg-neon-violet/15 hover:text-neon-violet
+                  transition-colors active:scale-95"
+              >
+                Mở
+              </Link>
               <button
-                onClick={(e) => { e.stopPropagation(); }}
+                onClick={handleShare}
                 className="p-1.5 rounded-lg text-text-muted hover:text-text-primary
                   hover:bg-white/[0.04] transition-colors active:scale-95"
-                aria-label="Share"
+                aria-label="Chia sẻ"
               >
                 <Share2 className="w-3.5 h-3.5" />
               </button>

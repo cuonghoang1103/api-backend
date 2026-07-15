@@ -245,6 +245,38 @@ publicRouter.get('/articles', async (req, res: Response<ApiResponse>, next) => {
   }
 });
 
+// GET /api/v1/tech-trends/articles/by-slug/:slug
+// Single article read by slug — powers the SSR detail page at
+// /tech-trends/[slug]. Increments viewCount (fire-and-forget so
+// a transient DB issue never breaks the read). Only PUBLISHED
+// articles are exposed publicly. This is the canonical public
+// read surface for a single article (the numeric `:id` variant
+// below is kept for back-compat).
+publicRouter.get('/articles/by-slug/:slug', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const slug = String(req.params.slug || '').trim();
+    if (!slug) {
+      throw new AppError('Invalid article slug', 400, 'INVALID_SLUG');
+    }
+
+    const article = await prisma.techTrendArticle.findUnique({
+      where: { slug },
+      include: authorInclude,
+    });
+    if (!article || article.status !== 'PUBLISHED') {
+      throw new AppError('Article not found', 404, 'ARTICLE_NOT_FOUND');
+    }
+
+    prisma.techTrendArticle
+      .update({ where: { id: article.id }, data: { viewCount: { increment: 1 } } })
+      .catch(() => {});
+
+    res.json({ success: true, data: serializeForPublic(article as unknown as Record<string, unknown>) });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // GET /api/v1/tech-trends/articles/:id
 // Single article read. Increments viewCount (fire-and-forget
 // so a transient DB issue never breaks the read).

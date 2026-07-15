@@ -88,12 +88,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   type BlogItem = { id: number | string; slug?: string; updatedAt?: string; publishedAt?: string; createdAt?: string; thumbnailUrl?: string }
   type ShopItem = { id: number | string; slug?: string; updatedAt?: string; createdAt?: string; thumbnailUrl?: string }
   type ProjectItem = { id: number | string; slug?: string; updatedAt?: string; createdAt?: string; thumbnailUrl?: string; thumbnail?: string }
+  type TechTrendItem = { id: number | string; slug?: string; updatedAt?: string; publishedAt?: string; createdAt?: string; coverImageUrl?: string }
 
-  const [courses, posts, products, projects] = await Promise.all([
+  const [courses, posts, products, projects, techTrends] = await Promise.all([
     safeFetch<CourseItem>('/courses?limit=100'),
     safeFetch<BlogItem>('/blog/posts?limit=100'),
     safeFetch<ShopItem>('/shop/products?limit=100'),
     safeFetch<ProjectItem>('/projects?limit=100'),
+    safeFetch<TechTrendItem>('/tech-trends/articles?size=100'),
   ])
 
   const courseUrls: MetadataRoute.Sitemap = courses
@@ -145,8 +147,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     })
 
+  const techTrendUrls: MetadataRoute.Sitemap = techTrends
+    .filter((a) => a.slug)
+    .map((a) => ({
+      url: `${SITE_URL}/tech-trends/${a.slug}`,
+      lastModified: a.publishedAt
+        ? new Date(a.publishedAt)
+        : a.updatedAt
+        ? new Date(a.updatedAt)
+        : a.createdAt
+        ? new Date(a.createdAt)
+        : now,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+      images: a.coverImageUrl ? [a.coverImageUrl] : undefined,
+    }))
+
   // Music tracks intentionally omitted — no per-track page (played in-place
   // on /music), so linking /music/:id would 404.
 
-  return [...staticPages, ...courseUrls, ...blogUrls, ...shopUrls, ...projectUrls]
+  return [...staticPages, ...courseUrls, ...blogUrls, ...shopUrls, ...projectUrls, ...techTrendUrls]
 }

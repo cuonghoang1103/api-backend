@@ -2972,6 +2972,14 @@ export const techTrendsApi = {
     return api.get<{ data: PublicTechTrendArticle }>(`/tech-trends/articles/${id}`);
   },
 
+  // Public: get a single article by slug. Increments viewCount.
+  // Canonical read surface for the /tech-trends/[slug] detail page.
+  getBySlug(slug: string) {
+    return api.get<{ data: PublicTechTrendArticle }>(
+      `/tech-trends/articles/by-slug/${encodeURIComponent(slug)}`,
+    );
+  },
+
   // Public: get category counts for the tab bar.
   getCategories() {
     return api.get<{

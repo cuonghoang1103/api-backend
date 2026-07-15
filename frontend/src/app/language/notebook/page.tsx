@@ -12,7 +12,7 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  NotebookPen, Folder, FolderPlus, ChevronRight, ChevronDown, Plus, Pencil, Trash2, X, Loader2, ArrowLeft, Layers, FileText,
+  NotebookPen, Folder, FolderPlus, ChevronRight, ChevronLeft, ChevronDown, Plus, Pencil, Trash2, X, Loader2, ArrowLeft, Layers, FileText, Download,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { notebookApi, type NotebookFolder, type NotebookEntrySummary, type NotebookEntry, type NotebookLanguage, type NotebookTree } from '@/lib/language-api';
@@ -40,6 +40,8 @@ function NotebookInner() {
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
   const [openEntry, setOpenEntry] = useState<NotebookEntry | null>(null);
   const [editing, setEditing] = useState<{ id: number | null; title: string; body: string } | null>(null);
+  const [review, setReview] = useState<{ cards: NotebookEntry[]; index: number; flipped: boolean } | null>(null);
+  const [busyBulk, setBusyBulk] = useState(false);
 
   useEffect(() => {
     notebookApi.languages().then((r) => {
@@ -127,6 +129,30 @@ function NotebookInner() {
     try { await notebookApi.moveEntry(id, folderId); setOpenEntry(null); refresh(); } catch (e) { toast.error(errMsg(e)); }
   };
 
+  // Fetch full bodies for a set of entries (list only has summaries).
+  const fetchFull = async (list: NotebookEntrySummary[]): Promise<NotebookEntry[]> => {
+    const rs = await Promise.all(list.map((e) => notebookApi.entry(e.id).then((r) => r.data.data).catch(() => null)));
+    return rs.filter(Boolean) as NotebookEntry[];
+  };
+  const exportAll = async () => {
+    if (!entries.length) { toast.info('Chưa có mục nào'); return; }
+    setBusyBulk(true);
+    try {
+      const full = await fetchFull(entries);
+      const md = `# Sổ tay ${tree?.language.name ?? code}\n\n` + full.map(entryMd).join('\n---\n\n');
+      downloadMd(`so-tay-${code}`, md);
+    } catch { toast.error('Không xuất được'); } finally { setBusyBulk(false); }
+  };
+  const startReview = async () => {
+    if (!entries.length) return;
+    setBusyBulk(true);
+    try {
+      const cards = await fetchFull(entries);
+      for (let i = cards.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [cards[i], cards[j]] = [cards[j], cards[i]]; }
+      setReview({ cards, index: 0, flipped: false });
+    } catch { toast.error('Không tải được'); } finally { setBusyBulk(false); }
+  };
+
   const flatFolders = tree?.folders ?? [];
 
   return (
@@ -178,9 +204,17 @@ function NotebookInner() {
 
           {/* Entries */}
           <section>
-            <div className="mb-3 flex items-center justify-between">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-sm font-semibold text-text-primary">{entries.length} mục</h2>
-              <button onClick={() => setEditing({ id: null, title: '', body: '' })} className="inline-flex items-center gap-1.5 rounded-full bg-neon-violet/15 px-3 py-1.5 text-sm font-medium text-neon-violet ring-1 ring-neon-violet/30 hover:bg-neon-violet/25"><Plus size={15} /> Mục mới</button>
+              <div className="flex flex-wrap gap-2">
+                {entries.length > 0 && (
+                  <>
+                    <button onClick={startReview} disabled={busyBulk} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-neon-violet disabled:opacity-60"><Layers size={15} /> Ôn tập</button>
+                    <button onClick={exportAll} disabled={busyBulk} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-neon-violet disabled:opacity-60"><Download size={15} /> Xuất .md</button>
+                  </>
+                )}
+                <button onClick={() => setEditing({ id: null, title: '', body: '' })} className="inline-flex items-center gap-1.5 rounded-full bg-neon-violet/15 px-3 py-1.5 text-sm font-medium text-neon-violet ring-1 ring-neon-violet/30 hover:bg-neon-violet/25"><Plus size={15} /> Mục mới</button>
+              </div>
             </div>
             {entries.length === 0 ? (
               <div className="card flex flex-col items-center gap-2 py-16 text-center">
@@ -228,7 +262,52 @@ function NotebookInner() {
           <EntryEditor value={editing} onChange={setEditing} onSave={saveEntry} onClose={() => setEditing(null)} />
         )}
       </AnimatePresence>
+
+      {/* Flashcard review */}
+      <AnimatePresence>
+        {review && review.cards.length > 0 && (
+          <ReviewDeck review={review} setReview={setReview} code={code} onClose={() => setReview(null)} />
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+function ReviewDeck({ review, setReview, code, onClose }: {
+  review: { cards: NotebookEntry[]; index: number; flipped: boolean };
+  setReview: (r: { cards: NotebookEntry[]; index: number; flipped: boolean } | null) => void;
+  code: string; onClose: () => void;
+}) {
+  const forceLang = code === 'ja' ? 'ja-JP' : code === 'zh' ? 'zh-CN' : code === 'en' ? 'en-US' : undefined;
+  const card = review.cards[review.index];
+  const go = (d: number) => setReview({ ...review, index: Math.max(0, Math.min(review.cards.length - 1, review.index + d)), flipped: false });
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[220] flex flex-col bg-black/85 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="mx-auto flex w-full max-w-xl flex-1 flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="mb-3 flex items-center justify-between text-sm text-white/80">
+          <span>Ôn tập · {review.index + 1}/{review.cards.length}</span>
+          <button onClick={onClose} className="rounded-full p-1.5 text-white/70 hover:bg-white/10"><X size={18} /></button>
+        </div>
+        <button onClick={() => setReview({ ...review, flipped: !review.flipped })} className="card flex flex-1 flex-col items-center justify-center gap-3 overflow-auto p-6 text-center">
+          {!review.flipped ? (
+            <>
+              <span className="text-2xl font-bold text-text-primary">{card.title}</span>
+              {card.reading && <span className="text-sm text-text-muted">{card.reading}</span>}
+              <SpeakerButton text={card.title} reading={card.reading} forceLang={forceLang} />
+              <span className="mt-2 text-xs text-text-muted">Chạm để lật</span>
+            </>
+          ) : (
+            <div className="note-prose lang-prose max-w-full break-words text-left text-sm leading-relaxed text-text-secondary">
+              <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{card.body}</ReactMarkdown>
+            </div>
+          )}
+        </button>
+        <div className="mt-3 flex items-center justify-between">
+          <button onClick={() => go(-1)} disabled={review.index === 0} className="inline-flex items-center gap-1 rounded-full bg-white/10 px-4 py-2 text-sm text-white disabled:opacity-40"><ChevronLeft size={16} /> Trước</button>
+          <button onClick={() => go(1)} disabled={review.index >= review.cards.length - 1} className="inline-flex items-center gap-1 rounded-full bg-neon-violet px-4 py-2 text-sm font-medium text-white disabled:opacity-40">Sau <ChevronRight size={16} /></button>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -293,6 +372,7 @@ function EntryViewer({ entry, code, folders, onClose, onEdit, onDelete, onMove }
             {folders.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
           </select>
           <div className="ml-auto flex gap-2">
+            <button onClick={() => downloadMd(entry.title, entryMd(entry))} title="Tải .md" className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] hover:text-neon-violet"><Download size={14} /> .md</button>
             <button onClick={onEdit} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-text-secondary ring-1 ring-[var(--border-color)] hover:text-neon-violet"><Pencil size={14} /> Sửa</button>
             <button onClick={onDelete} className="inline-flex items-center gap-1.5 rounded-full bg-neon-pink/10 px-3 py-1.5 text-sm text-neon-pink ring-1 ring-neon-pink/30 hover:bg-neon-pink/20"><Trash2 size={14} /> Xoá</button>
           </div>
@@ -327,4 +407,19 @@ function EntryEditor({ value, onChange, onSave, onClose }: {
 
 function errMsg(e: unknown): string {
   return (e as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Có lỗi, thử lại sau.';
+}
+
+function entryMd(e: { title: string; reading?: string | null; body: string }): string {
+  return `# ${e.title}\n${e.reading ? `*${e.reading}*\n` : ''}\n${e.body}\n`;
+}
+function downloadMd(name: string, content: string) {
+  const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${(name || 'note').replace(/[\\/:*?"<>|]+/g, '_').slice(0, 80)}.md`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }

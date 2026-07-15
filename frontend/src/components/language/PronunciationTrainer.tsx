@@ -13,8 +13,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mic, Square, Loader2, X, RotateCcw, AlertTriangle, Lightbulb, Play } from 'lucide-react';
-import { languageApi, type PronunciationResult } from '@/lib/language-api';
+import { Mic, Square, Loader2, X, RotateCcw, AlertTriangle, Lightbulb, Play, BookmarkPlus, Check } from 'lucide-react';
+import { toast } from 'sonner';
+import { languageApi, notebookApi, type PronunciationResult } from '@/lib/language-api';
 import { SpeakerButton, ProgressRing } from '@/components/language/primitives';
 import { useSpeech } from '@/hooks/useSpeech';
 import type { VocabLang } from '@/lib/notesTts';
@@ -52,10 +53,29 @@ export function PronunciationTrainer({
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<PronunciationResult | null>(null);
   const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
   const autoStopTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const recordedUrlRef = useRef<string | null>(null);
 
   useEffect(() => setMounted(true), []);
+
+  const saveToNotebook = async (r: PronunciationResult) => {
+    if (saved) return;
+    const body = [
+      `**Mục tiêu:** ${r.target}${reading ? ` (${reading})` : ''}`,
+      r.heard ? `**Máy nghe được:** ${r.heard}` : '',
+      `**Điểm:** ${r.score}/100 (${r.verdict})`,
+      r.feedback ? `\n${r.feedback}` : '',
+      r.tips.length ? `\n### Mẹo\n${r.tips.map((t) => `- ${t}`).join('\n')}` : '',
+    ].filter(Boolean).join('\n\n');
+    try {
+      await notebookApi.save({ code: languageCode, title, kind: 'pronunciation', reading: reading ?? undefined, body });
+      setSaved(true);
+      toast.success('Đã lưu vào sổ tay');
+    } catch (e: unknown) {
+      toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Không lưu được.');
+    }
+  };
 
   // Escape to close.
   useEffect(() => {
@@ -240,13 +260,23 @@ export function PronunciationTrainer({
                       </div>
                     )}
 
-                    <button
-                      type="button"
-                      onClick={toggleRecord}
-                      className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-4 py-2 text-sm font-medium text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-neon-violet hover:ring-neon-violet/40"
-                    >
-                      <RotateCcw size={15} /> Thử lại
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={toggleRecord}
+                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-4 py-2 text-sm font-medium text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-neon-violet hover:ring-neon-violet/40"
+                      >
+                        <RotateCcw size={15} /> Thử lại
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => saveToNotebook(result)}
+                        disabled={saved}
+                        className={`inline-flex flex-1 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium ring-1 transition disabled:opacity-70 ${saved ? 'bg-neon-green/15 text-neon-green ring-neon-green/30' : 'bg-[var(--bg-surface)] text-text-secondary ring-[var(--border-color)] hover:text-neon-violet hover:ring-neon-violet/40'}`}
+                      >
+                        {saved ? <Check size={15} /> : <BookmarkPlus size={15} />} {saved ? 'Đã lưu' : 'Lưu vào sổ tay'}
+                      </button>
+                    </div>
                   </div>
                 )}
               </>

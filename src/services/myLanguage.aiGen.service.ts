@@ -70,6 +70,38 @@ function genId(i: number): string {
   return `q_${Date.now().toString(36)}_${i}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/**
+ * Per-item salvage: when the whole {items:[...]} JSON won't parse (one item's
+ * unescaped inner double-quote breaks the entire array), pull each top-level
+ * `{...}` object out by BALANCED BRACE counting (quote-agnostic) so valid items
+ * survive. Each object is then parsed leniently by the caller (looseJson).
+ */
+function extractObjects(raw: string): string[] {
+  const text = String(raw || '');
+  const start = text.indexOf('"items"');
+  const s = start >= 0 ? text.slice(start) : text;
+  const objs: string[] = [];
+  let depth = 0;
+  let from = -1;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c === '{') {
+      if (depth === 0) from = i;
+      depth++;
+    } else if (c === '}') {
+      depth--;
+      if (depth === 0 && from >= 0) {
+        objs.push(s.slice(from, i + 1));
+        from = -1;
+      } else if (depth < 0) {
+        depth = 0;
+      }
+    }
+  }
+  // Drop the very first object if it's the outer wrapper (no useful fields).
+  return objs;
+}
+
 async function loadLanguage(code: string): Promise<{ id: number; code: string }> {
   const lang = await prisma.language.findUnique({ where: { code: String(code || '').trim() }, select: { id: true, code: true } });
   if (!lang) throw new NotFoundError('Không tìm thấy ngôn ngữ.');
@@ -134,7 +166,7 @@ function buildPrompts(section: GenSection, code: string, count: number, level: s
     intro = `Generate ${count} ${langName} vocabulary entries${lv}${tp}. ${pronNote(code)} ${viNote}`;
     shape = `{"items":[{"word":string,"meaningVi":string,"exampleSentence":string,"exampleMeaning":string,"note":string,"pronunciations":[{"type":string,"value":string}]}]}`;
   } else if (section === 'grammar') {
-    intro = `Generate ${count} ${langName} grammar points${lv}${tp}. "explanation" is a SHORT HTML string in Vietnamese (use <p>, <ul><li>). "examples" each: sentence (in ${langName}), pronunciation (reading), meaningVi. ${viNote}`;
+    intro = `Generate ${count} ${langName} grammar points${lv}${tp}. "explanation" is a SHORT PLAIN-TEXT explanation in Vietnamese (2-4 sentences, NO HTML tags). "examples" each: sentence (in ${langName}), pronunciation (reading), meaningVi. ${viNote}`;
     shape = `{"items":[{"level":string,"title":string,"structure":string,"explanation":string,"examples":[{"sentence":string,"pronunciation":string,"meaningVi":string}],"commonMistakes":string,"comparedWith":string}]}`;
   } else if (section === 'conversation') {
     intro = `Generate ${count} ${langName} daily-conversation Q/A pairs${lv}${tp}. Include the reading (pronunciation) for both lines and the Vietnamese meaning. ${viNote}`;
@@ -154,7 +186,10 @@ function buildPrompts(section: GenSection, code: string, count: number, level: s
     shape = `{"items":[{"kind":"mc","prompt":string,"options":[string,string,string,string],"correctIndex":number,"explanation":string} | {"kind":"open","prompt":string,"sampleAnswer":string,"explanation":string}]}`;
   }
   return {
-    system: `You are an expert ${langName} teacher creating high-quality learning content for Vietnamese learners. ${intro} Escape any double-quote inside a string as \\". Return ONLY a minified JSON object with this exact shape: ${shape}`,
+    system:
+      `You are an expert ${langName} teacher creating high-quality learning content for Vietnamese learners. ${intro} ` +
+      `CRITICAL: inside every JSON string value, NEVER use the raw double-quote character ("). If you need to quote something, use single quotes or the corner brackets 「」/『』. Do not add any text outside the JSON. ` +
+      `Return ONLY a minified JSON object with this exact shape: ${shape}`,
     user: `Hãy tạo nội dung.${noDup}`,
   };
 }
@@ -290,7 +325,16 @@ export async function adminGenerate(
   }
 
   const parsed = looseJson(raw) as { items?: unknown };
-  const rawItems = Array.isArray(parsed.items) ? parsed.items : [];
+  let rawItems: unknown[] = Array.isArray(parsed.items) ? parsed.items : [];
+  // Salvage: whole-array parse failed (usually one item's unescaped quote broke
+  // the JSON) → recover each valid object individually. This is what fixes the
+  // grammar "0 items → đã đầy đủ" false failure.
+  if (!rawItems.length) {
+    rawItems = extractObjects(raw)
+      .map((o) => looseJson(o))
+      .filter((o) => o && Object.keys(o).length > 0);
+  }
+
   const seen = new Set(keys);
   const items: GenProposal[] = [];
   for (const rawItem of rawItems) {

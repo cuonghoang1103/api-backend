@@ -6,8 +6,9 @@
  */
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { PenLine, Sparkles, Loader2, AlertTriangle } from 'lucide-react';
-import { languageApi, type WritingFeedback } from '@/lib/language-api';
+import { PenLine, Sparkles, Loader2, AlertTriangle, BookmarkPlus, Check } from 'lucide-react';
+import { toast } from 'sonner';
+import { languageApi, notebookApi, type WritingFeedback } from '@/lib/language-api';
 import { SectionShell, ProgressRing, SpeakerButton } from '@/components/language/primitives';
 import { usePro } from '@/hooks/usePro';
 import type { VocabLang } from '@/lib/notesTts';
@@ -35,15 +36,36 @@ export default function WritingPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<WritingFeedback | null>(null);
+  const [saved, setSaved] = useState(false);
 
   const forceLang = speakLang(code);
   const v = result ? VERDICT[result.verdict] : null;
+
+  const saveToNotebook = async () => {
+    if (!result || saved) return;
+    const body = [
+      prompt.trim() ? `**Đề bài:** ${prompt.trim()}` : '',
+      `### Bài viết của bạn\n${text.trim()}`,
+      `**Điểm:** ${result.score}/100${result.level ? ` · ${result.level}` : ''} (${result.verdict})`,
+      result.feedback ? `\n${result.feedback}` : '',
+      result.corrections.length ? `### Lỗi & gợi ý\n${result.corrections.map((c) => `- ${c.original ? `~~${c.original}~~ → ` : ''}${c.suggestion}${c.note ? ` (${c.note})` : ''}`).join('\n')}` : '',
+      result.corrected ? `### Bản viết lại\n${result.corrected}` : '',
+    ].filter(Boolean).join('\n\n');
+    try {
+      await notebookApi.save({ code, title: prompt.trim() || 'Bài viết', kind: 'writing', body });
+      setSaved(true);
+      toast.success('Đã lưu vào sổ tay');
+    } catch (e: unknown) {
+      toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Không lưu được.');
+    }
+  };
 
   const grade = async () => {
     if (!isPro) { router.push('/pro'); return; }
     if (!text.trim()) return;
     setLoading(true);
     setError(null);
+    setSaved(false);
     try {
       const r = await languageApi.gradeWriting({ languageCode: code, text, prompt: prompt.trim() || undefined });
       setResult(r.data.data ?? null);
@@ -141,6 +163,15 @@ export default function WritingPage() {
                 <p className="whitespace-pre-wrap text-sm text-text-primary">{result.corrected}</p>
               </div>
             )}
+
+            <button
+              type="button"
+              onClick={saveToNotebook}
+              disabled={saved}
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium ring-1 transition disabled:opacity-70 ${saved ? 'bg-neon-green/15 text-neon-green ring-neon-green/30' : 'bg-[var(--bg-surface)] text-text-secondary ring-[var(--border-color)] hover:text-neon-violet hover:ring-neon-violet/40'}`}
+            >
+              {saved ? <Check size={15} /> : <BookmarkPlus size={15} />} {saved ? 'Đã lưu vào sổ tay' : 'Lưu vào sổ tay'}
+            </button>
           </div>
         )}
       </div>

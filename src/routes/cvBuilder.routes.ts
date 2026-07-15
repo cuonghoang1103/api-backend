@@ -23,6 +23,7 @@ import * as critiqueSvc from '../services/cv/critique.service.js';
 import * as jobSvc from '../services/cv/jobTarget.service.js';
 import * as coverSvc from '../services/cv/coverLetter.service.js';
 import * as intakeSvc from '../services/cv/intake.service.js';
+import * as githubSvc from '../services/cv/github.service.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -141,6 +142,10 @@ router.post('/import/upload', cvUpload.single('file'), h((req) => {
   if (!f) { throw new ZodError([{ code: 'custom', path: ['file'], message: 'Cần chọn file PDF hoặc DOCX' }]); }
   return importSvc.createFileImport(req.userId!, f.buffer, f.originalname);
 }));
+// GitHub public-repo import (Phase 2c) — by username, scored by substance.
+router.get('/import/github', h((req) => githubSvc.getGitHubProfile(req.userId!)));
+router.post('/import/github/sync', h((req) => githubSvc.syncGitHub(req.userId!, String(req.body?.username ?? ''))));
+router.post('/import/github/add', h((req) => githubSvc.addRepoAsItem(req.userId!, req.body ?? {})));
 router.post('/import/json-resume', h((req) => importSvc.createJsonResumeImport(req.userId!, req.body?.resume ?? req.body)));
 router.get('/import/:id', h((req, res) => {
   const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();

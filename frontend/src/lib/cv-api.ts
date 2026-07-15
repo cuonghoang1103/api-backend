@@ -11,7 +11,7 @@ import type {
   CvSkill, CvSkillInput, CvCertification, CvCertInput,
   CvLanguageSkill, CvLangInput,
   CvImportJob, CvImportCommitBody, CvLintResult, CvCritiqueResult,
-  CvJobSummary, CvCoverage, CvTailor,
+  CvJobSummary, CvCoverage, CvTailor, GhCandidate,
 } from '@/types/cv';
 
 type Res<T> = Promise<{ data: ApiResponse<T> }>;
@@ -58,6 +58,12 @@ export const cvApi = {
     return api.post('/cv/import/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 60_000 });
   },
   importJsonResume: (resume: unknown): Res<CvImportJob> => api.post('/cv/import/json-resume', { resume }),
+
+  // ── GitHub import (Phase 2c) — public repos by username ─────
+  githubGet: (): Res<{ username: string; candidates: GhCandidate[]; languageProfile: Record<string, number>; lastSyncedAt: string } | null> => api.get('/cv/import/github'),
+  githubSync: (username: string): Res<{ username: string; candidates: GhCandidate[]; languageProfile: Record<string, number> }> =>
+    api.post('/cv/import/github/sync', { username }, { timeout: 40_000 }),
+  githubAdd: (repo: GhCandidate): Res<{ id: number }> => api.post('/cv/import/github/add', repo),
   getImport: (id: number): Res<CvImportJob> => api.get(`/cv/import/${id}`),
   commitImport: (id: number, body: CvImportCommitBody): Res<{ committed: boolean; counts: Record<string, number> }> =>
     api.post(`/cv/import/${id}/commit`, body),

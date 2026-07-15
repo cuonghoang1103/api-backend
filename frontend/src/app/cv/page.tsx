@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
   FileText, ArrowRight, Loader2, CheckCircle2, Circle,
-  Upload, ScanSearch, Eye, Download, Target, Lock, Sparkles,
+  Upload, ScanSearch, Eye, Download, Target, Sparkles,
 } from 'lucide-react';
 import { CV_BUILDER_ENABLED } from '@/lib/featureFlags';
 import { cvApi } from '@/lib/cv-api';
@@ -202,30 +202,6 @@ export default function CvDashboardPage() {
               </div>
             </section>
 
-            {/* Roadmap — honest about what isn't built yet */}
-            <section className="mt-8">
-              <h2 className="text-sm font-medium text-[var(--text-secondary)]">Sắp có</h2>
-              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {[
-                  { icon: Upload, title: 'Kết nối GitHub', desc: 'Chấm điểm repo, gợi ý mục CV (dán text, JSON Resume, PDF/DOCX đã dùng được).' },
-                  { icon: FileText, title: 'Cover letter', desc: 'Sinh thư xin việc bám JD, không sáo rỗng (đang làm).' },
-                ].map((f) => (
-                  <div
-                    key={f.title}
-                    className="relative flex gap-3 rounded-xl border border-dashed border-[var(--border-color)] bg-[var(--bg-card)]/50 p-4 opacity-80"
-                  >
-                    <f.icon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--text-secondary)]" />
-                    <div>
-                      <div className="flex items-center gap-1.5 text-sm font-medium">
-                        {f.title}
-                        <Lock className="h-3 w-3 text-[var(--text-secondary)]" />
-                      </div>
-                      <p className="mt-0.5 text-xs text-[var(--text-secondary)]">{f.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
           </>
         )}
       </div>

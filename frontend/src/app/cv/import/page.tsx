@@ -19,7 +19,7 @@ import {
   AlertTriangle, Trash2, Save, X, ChevronDown, ChevronRight,
 } from 'lucide-react';
 import { cvApi } from '@/lib/cv-api';
-import type { ParsedDraft, ConfidenceFlag, DraftItem } from '@/types/cv';
+import type { ParsedDraft, ConfidenceFlag, DraftItem, GhCandidate } from '@/types/cv';
 
 const inputCls =
   'w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm ' +
@@ -36,9 +36,34 @@ const KIND_LABEL: Record<string, string> = {
 
 export default function CvImportPage() {
   const router = useRouter();
-  const [mode, setMode] = useState<'input' | 'review'>('input');
+  const [mode, setMode] = useState<'input' | 'review' | 'github'>('input');
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
+  // GitHub import
+  const [ghUsername, setGhUsername] = useState('');
+  const [ghBusy, setGhBusy] = useState(false);
+  const [ghCandidates, setGhCandidates] = useState<GhCandidate[] | null>(null);
+  const [ghAdded, setGhAdded] = useState<Set<string>>(new Set());
+
+  const ghSync = async () => {
+    if (!ghUsername.trim()) { toast.error('Nhập username GitHub'); return; }
+    setGhBusy(true);
+    try {
+      const r = await cvApi.githubSync(ghUsername.trim());
+      setGhCandidates(r.data.data.candidates);
+      if (r.data.data.candidates.length === 0) toast('Không thấy repo nào đủ "chất" để đưa vào CV.');
+    } catch (e) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'Quét GitHub thất bại');
+    } finally { setGhBusy(false); }
+  };
+  const ghAdd = async (repo: GhCandidate) => {
+    try {
+      await cvApi.githubAdd(repo);
+      setGhAdded((s) => new Set(s).add(repo.name));
+      toast.success(`Đã thêm ${repo.name} vào hồ sơ`);
+    } catch { toast.error('Không thêm được'); }
+  };
 
   const [jobId, setJobId] = useState<number | null>(null);
   const [rawText, setRawText] = useState('');
@@ -121,7 +146,45 @@ export default function CvImportPage() {
           Đã có CV rồi thì đừng gõ lại. Dán vào, máy sẽ tách thành cấu trúc để bạn <strong>duyệt trước khi lưu</strong>.
         </p>
 
-        {mode === 'input' ? (
+        {mode === 'github' ? (
+          <div className="mt-6">
+            <button onClick={() => setMode('input')} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">← Quay lại</button>
+            <section className="mt-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
+              <div className="flex items-center gap-2 text-sm font-medium"><Github className="h-4 w-4" /> Nhập từ GitHub (repo công khai)</div>
+              <p className="mt-1 text-xs text-[var(--text-secondary)]">GitHub của bạn chính là bằng chứng. Máy chấm điểm repo theo độ "thật" — bỏ qua fork/tutorial/repo rỗng.</p>
+              <div className="mt-3 flex gap-2">
+                <input value={ghUsername} onChange={(e) => setGhUsername(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && ghSync()}
+                  placeholder="username GitHub của bạn" className={inputCls} />
+                <button onClick={ghSync} disabled={ghBusy} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[var(--accent-color)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
+                  {ghBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Github className="h-4 w-4" />} Quét repo
+                </button>
+              </div>
+            </section>
+            {ghCandidates && ghCandidates.length > 0 && (
+              <div className="mt-3 space-y-2">
+                {ghCandidates.map((r) => (
+                  <div key={r.name} className="flex items-start justify-between gap-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{r.name}</span>
+                        {r.language && <span className="rounded border border-[var(--border-color)] px-1.5 py-0.5 text-[11px] text-[var(--text-secondary)]">{r.language}</span>}
+                        {r.stars > 0 && <span className="text-[11px] text-[var(--text-secondary)]">★{r.stars}</span>}
+                        {r.hasReadme && <span className="text-[11px] text-emerald-500">README</span>}
+                      </div>
+                      {r.description && <div className="mt-0.5 text-sm text-[var(--text-secondary)]">{r.description}</div>}
+                      {r.topics.length > 0 && <div className="mt-1 text-[11px] text-[var(--text-secondary)]">{r.topics.slice(0, 6).join(' · ')}</div>}
+                    </div>
+                    <button onClick={() => ghAdd(r)} disabled={ghAdded.has(r.name)}
+                      className={`inline-flex shrink-0 items-center gap-1 rounded-lg px-3 py-1.5 text-xs ${ghAdded.has(r.name) ? 'text-emerald-500' : 'bg-[var(--accent-color)] text-white hover:opacity-90'}`}>
+                      {ghAdded.has(r.name) ? '✓ Đã thêm' : 'Thêm vào CV'}
+                    </button>
+                  </div>
+                ))}
+                <p className="text-xs text-[var(--text-secondary)]">Thêm xong, mở <Link href="/cv/intake" className="text-[var(--accent-color)]">chế độ phỏng vấn</Link> để AI moi ra điều repo chưa nói (cái khó, tác động, quy mô).</p>
+              </div>
+            )}
+          </div>
+        ) : mode === 'input' ? (
           <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1.4fr_1fr]">
             {/* Paste */}
             <section className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
@@ -162,13 +225,13 @@ export default function CvImportPage() {
                   onChange={(e) => { const f = e.target.files?.[0]; if (f) onCvFile(f); e.currentTarget.value = ''; }} />
               </label>
 
-              <div className="flex items-center gap-3 rounded-xl border border-dashed border-[var(--border-color)] bg-[var(--bg-card)]/50 p-4 opacity-70">
-                <Github className="h-5 w-5 shrink-0 text-[var(--text-secondary)]" />
+              <button onClick={() => setMode('github')} className="flex w-full items-center gap-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 text-left hover:border-[var(--accent-color)]">
+                <Github className="h-5 w-5 shrink-0" />
                 <div>
-                  <div className="text-sm font-medium">Kết nối GitHub <span className="text-xs font-normal text-[var(--text-secondary)]">· sắp có</span></div>
-                  <div className="text-xs text-[var(--text-secondary)]">Chấm điểm repo, gợi ý mục CV</div>
+                  <div className="text-sm font-medium">Kết nối GitHub</div>
+                  <div className="text-xs text-[var(--text-secondary)]">Nhập username → chấm điểm repo công khai, gợi ý mục CV</div>
                 </div>
-              </div>
+              </button>
 
               <Link href="/cv/profile" className="block rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 hover:border-[var(--accent-color)]">
                 <div className="text-sm font-medium">Bắt đầu từ trang trắng</div>

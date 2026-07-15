@@ -182,6 +182,19 @@ export interface CvImportJob {
   createdAt: string;
 }
 
+export interface GhCandidate {
+  name: string;
+  url: string | null;
+  description: string | null;
+  language: string | null;
+  stars: number;
+  topics: string[];
+  pushedAt?: string;
+  score: number;
+  reason: string;
+  hasReadme: boolean;
+}
+
 export interface CvImportCommitBody {
   applyContact?: boolean;
   applySummary?: boolean;

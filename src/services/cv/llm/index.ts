@@ -160,9 +160,16 @@ function providerNameForTask(task: CvLLMTask): string {
 export function modelForTask(task: CvLLMTask): string {
   const key = `LLM_MODEL_${task.toUpperCase()}`;
   if (process.env[key]) return process.env[key]!;
-  // Sensible defaults per provider family.
   const provider = providerNameForTask(task);
-  if (provider === 'anthropic') return task === 'critique' ? 'claude-opus-4-8' : 'claude-haiku-4-5';
+  // REUSE the Interview module's already-configured gateway models so the CV AI
+  // works with zero new env: critique (the high-value call) borrows the strong
+  // report/generation model; the cheaper tasks borrow the interview model. This
+  // is why the module goes live the moment ANTHROPIC_API_KEY + LLM_BASE_URL are
+  // set (they already are on prod), without any CV-specific model vars.
+  if (provider === 'anthropic') {
+    if (task === 'critique') return process.env.LLM_MODEL_REPORT || process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
+    return process.env.LLM_MODEL_INTERVIEW || process.env.LLM_MODEL_REPORT || 'claude-haiku-4-5';
+  }
   return task === 'critique' ? 'llama-3.3-70b-versatile' : 'llama-3.1-8b-instant';
 }
 

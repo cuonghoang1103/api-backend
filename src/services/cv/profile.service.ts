@@ -430,6 +430,34 @@ export async function deleteLang(userId: number, id: number) {
   return { id };
 }
 
+// ─── Photo (W5 — VN-market templates show a portrait) ────────────────────
+// Stored via the shared uploadService (sharp → webp on R2/local). We keep the
+// PUBLIC URL in photoR2Key (varchar 300) so both the preview and the PDF
+// renderer can fetch it directly; deleteByUrl handles cleanup.
+export async function setProfilePhoto(userId: number, file: { buffer: Buffer; originalname: string; mimetype: string; size: number }) {
+  const { uploadImage, deleteByUrl } = await import('../../storage/uploadService.js');
+  const profile = await prisma.cvProfile.upsert({ where: { userId }, update: {}, create: { userId }, select: { id: true, photoR2Key: true } });
+  const result = await uploadImage(
+    { buffer: file.buffer, originalName: file.originalname, mimetype: file.mimetype, size: file.size },
+    'images/avatar',
+    { userId, subPrefix: 'cv' },
+  );
+  // Best-effort delete of the previous photo (never block the new upload).
+  if (profile.photoR2Key) await deleteByUrl(profile.photoR2Key).catch(() => {});
+  await prisma.cvProfile.update({ where: { userId }, data: { photoR2Key: result.url } });
+  return { photoUrl: result.url };
+}
+
+export async function removeProfilePhoto(userId: number) {
+  const profile = await prisma.cvProfile.findUnique({ where: { userId }, select: { photoR2Key: true } });
+  if (profile?.photoR2Key) {
+    const { deleteByUrl } = await import('../../storage/uploadService.js');
+    await deleteByUrl(profile.photoR2Key).catch(() => {});
+    await prisma.cvProfile.update({ where: { userId }, data: { photoR2Key: null } });
+  }
+  return { photoUrl: null };
+}
+
 // ─── Completeness signal (dashboard) ─────────────────────────────────────
 // A cheap, honest score of how filled-in the master record is. Not a quality
 // score (that's the rules engine, P3) — just "how much have you entered".

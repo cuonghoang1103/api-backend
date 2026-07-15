@@ -30,7 +30,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # 22 matches the production runtime (node:22-alpine) and is required
+          # by the CV PDF round-trip test in `npm test` (unpdf needs
+          # Promise.withResolvers, a Node 22 feature).
+          node-version: '22'
           cache: 'npm'
       - name: Install deps
         run: npm ci --no-audit --no-fund
@@ -48,7 +51,13 @@ jobs:
         run: npm run eval:cv-linter
       - name: CV critique fabrication test (skips without an AI key)
         # Feeds the reviewer a metric-less CV and fails if it invents a number.
-        # No key in CI → it SKIPS (exit 0). Run manually / with a key to enforce.
+        # Becomes a REAL gate once the repo secrets below are added (Settings →
+        # Secrets → Actions): ANTHROPIC_API_KEY, LLM_BASE_URL, LLM_MODEL_REPORT.
+        # Without them the env is empty and the test SKIPS (exit 0).
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL_REPORT: ${{ secrets.LLM_MODEL_REPORT }}
         run: npm run eval:cv-fabrication
       - name: Unit tests — money math + payment signature (required)
         run: npm test

@@ -191,6 +191,10 @@ function splitSections(lines: string[]): { key: SectionKey | 'header'; lines: st
   const isHeader = (line: string): SectionKey | null => {
     const t = line.trim();
     if (!t || t.length > 40) return null;
+    // A header never carries content after a colon — "Languages: TypeScript,
+    // Python" is a SKILLS body line, not a LANGUAGES section header.
+    const colon = t.indexOf(':');
+    if (colon >= 0 && t.slice(colon + 1).trim()) return null;
     // Header heuristic: short line, matches a known section word, few words.
     for (const p of SECTION_PATTERNS) if (p.re.test(t)) return p.key;
     return null;

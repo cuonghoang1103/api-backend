@@ -51,7 +51,22 @@ async function verifyPdfRoundTrip(buffer: Buffer, name: string, email: string): 
 
 export async function exportProfile(userId: number, format: ExportFormat, opts?: { template?: string; market?: string; language?: string }): Promise<ExportResult> {
   const profile = await getOrCreateProfile(userId);
-  return exportCvData(userId, profile, format, opts);
+  return exportCvData(userId, profile, format, { ...opts, photoUrl: profile.photoR2Key });
+}
+
+/** Fetch the profile photo and convert to PNG for pdfkit (uploads are webp).
+ *  Best-effort: any failure → render without a photo, never block the export. */
+async function fetchPhotoPng(url: string | null | undefined): Promise<Buffer | null> {
+  if (!url) return null;
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    if (!res.ok) return null;
+    const raw = Buffer.from(await res.arrayBuffer());
+    const sharp = (await import('sharp')).default;
+    return await sharp(raw).resize(280, 360, { fit: 'cover' }).png().toBuffer();
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -59,7 +74,7 @@ export async function exportProfile(userId: number, format: ExportFormat, opts?:
  * document's filtered subset) to the requested format. See exportProfile /
  * exportDocument (document.service) for the two entry points.
  */
-export async function exportCvData(userId: number, profileLike: Parameters<typeof toRenderCv>[0], format: ExportFormat, opts?: { template?: string; market?: string; language?: string }): Promise<ExportResult> {
+export async function exportCvData(userId: number, profileLike: Parameters<typeof toRenderCv>[0], format: ExportFormat, opts?: { template?: string; market?: string; language?: string; photoUrl?: string | null }): Promise<ExportResult> {
   if (!(format in MIME)) throw new BadRequestError('Định dạng không hỗ trợ');
   let cv = toRenderCv(profileLike);
 
@@ -69,11 +84,14 @@ export async function exportCvData(userId: number, profileLike: Parameters<typeo
   const market = opts?.market === 'INTERNATIONAL' ? 'INTERNATIONAL' : 'VN';
   const spec = { ...base, showDob: base.showDob && market === 'VN' };
 
-  // Bilingual: when a language is explicitly requested, AI-translate the CONTENT
-  // to it (faithful, no fabrication) and render section labels in that language.
+  // Bilingual (Pro-only): translate CONTENT only when English is requested —
+  // users write in Vietnamese, so VI needs no AI pass (and VI→VI was a wasted
+  // LLM call). Section labels follow the selected language either way.
   const lang: ExportLang = opts?.language === 'EN' ? 'EN' : 'VI';
-  if (opts?.language === 'EN' || opts?.language === 'VI') {
-    cv = await translateCv(userId, cv, lang);
+  if (opts?.language === 'EN') {
+    const { assertCvAiPro } = await import('./proGate.js');
+    await assertCvAiPro(userId);
+    cv = await translateCv(userId, cv, 'EN');
   }
 
   const ext = format === 'md' ? 'md' : format;
@@ -84,7 +102,8 @@ export async function exportCvData(userId: number, profileLike: Parameters<typeo
 
   switch (format) {
     case 'pdf': {
-      buffer = await renderPdf(cv, spec, lang);
+      const photoPng = spec.showDob ? await fetchPhotoPng(opts?.photoUrl) : null;
+      buffer = await renderPdf(cv, spec, lang, photoPng);
       roundTripOk = await verifyPdfRoundTrip(buffer, cv.fullName, cv.email);
       if (!roundTripOk) {
         // Do not hand out a PDF ATS can't read. This should not happen with

@@ -26,6 +26,7 @@ import * as jobSvc from '../services/cv/jobTarget.service.js';
 import * as coverSvc from '../services/cv/coverLetter.service.js';
 import * as intakeSvc from '../services/cv/intake.service.js';
 import * as githubSvc from '../services/cv/github.service.js';
+import * as rewriteSvc from '../services/cv/rewrite.service.js';
 import { getUsageStats as getCvLlmUsage } from '../services/cv/llm/index.js';
 
 const parseId = (v: string): number => {
@@ -71,6 +72,14 @@ router.use(authenticate);
 router.get('/profile', h((req) => profile.getOrCreateProfile(req.userId!)));
 router.put('/profile', h((req) => profile.updateProfile(req.userId!, req.body ?? {})));
 router.get('/profile/completeness', h((req) => profile.getProfileCompleteness(req.userId!)));
+// Photo (W5 — VN templates). Image only, ≤5MB, optimized via sharp.
+const photoUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
+router.post('/profile/photo', photoUpload.single('photo'), h((req) => {
+  const f = (req as Request & { file?: { buffer: Buffer; originalname: string; mimetype: string; size: number } }).file;
+  if (!f) { throw new ZodError([{ code: 'custom', path: ['photo'], message: 'Cần chọn một file ảnh' }]); }
+  return profile.setProfilePhoto(req.userId!, f);
+}));
+router.delete('/profile/photo', h((req) => profile.removeProfilePhoto(req.userId!)));
 
 // ── Items (experience / project / education / …) ────────────────
 router.post('/items', h((req) => profile.createItem(req.userId!, req.body ?? {})));
@@ -91,6 +100,16 @@ router.post('/items/:id/bullets', h((req, res) => {
 router.put('/bullets/:id', h((req, res) => {
   const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
   return profile.updateBullet(req.userId!, id, req.body ?? {});
+}));
+// AI rewrite (W2): one bullet → one proposal → user accepts/rejects. Never bulk.
+router.get('/rewrite/status', h((req) => rewriteSvc.rewriteStatus(req.userId!)));
+router.post('/bullets/:id/rewrite', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return rewriteSvc.rewriteBullet(req.userId!, id);
+}));
+router.post('/suggestions/:id/decide', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return rewriteSvc.decideSuggestion(req.userId!, id, req.body?.accepted === true, typeof req.body?.editedText === 'string' ? req.body.editedText : undefined);
 }));
 router.post('/bullets/:id/verify', h((req, res) => {
   const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
@@ -182,18 +201,18 @@ router.delete('/jobs/:id', h((req, res) => {
   return jobSvc.deleteJobTarget(req.userId!, id);
 }));
 // Cover letter (Phase 8b) — AI, quota-gated; degrades when no key.
-router.get('/cover-letter/status', h(async () => coverSvc.coverLetterStatus()));
+router.get('/cover-letter/status', h((req) => coverSvc.coverLetterStatus(req.userId!)));
 router.post('/jobs/:id/cover-letter', h((req, res) => {
   const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
   return coverSvc.generateCoverLetter(req.userId!, id, req.body?.tone);
 }));
 
 // ── AI Critique (Phase 7) — quota-gated; degrades to STATIC when no key ──
-router.get('/critique/status', h(async () => critiqueSvc.critiqueStatus()));
+router.get('/critique/status', h((req) => critiqueSvc.critiqueStatus(req.userId!)));
 router.post('/critique', h((req) => critiqueSvc.critiqueProfile(req.userId!)));
 
 // ── Intake Mode (Phase 8c) — AI debrief conversation; stateless multi-turn ──
-router.get('/intake/status', h(async () => intakeSvc.intakeStatus()));
+router.get('/intake/status', h((req) => intakeSvc.intakeStatus(req.userId!)));
 router.post('/intake', h((req) => intakeSvc.intakeTurn(req.userId!, req.body ?? {})));
 
 // Available export templates (Phase 11) — for the export picker.
@@ -276,14 +295,28 @@ adminRouter.get('/overview', h(async () => {
 // LLM cost dashboard — spend by provider/model/task (getUsageStats from P6).
 adminRouter.get('/usage', h(async () => getCvLlmUsage()));
 
+// Rules-engine overrides (W6) — extend verb/phrase dictionaries WITHOUT a
+// deploy. Additive only; stored in app_settings, cached 60s in the linter.
+adminRouter.get('/rules', h(async () => {
+  const { getRuleOverrides } = await import('../services/cv/rules/overrides.js');
+  return getRuleOverrides();
+}));
+adminRouter.put('/rules', h(async (req) => {
+  const { setRuleOverrides } = await import('../services/cv/rules/overrides.js');
+  return setRuleOverrides(req.body ?? {});
+}));
+
 // Anonymized analytics: import sources, injection flags, bullet-strength mix.
 adminRouter.get('/analytics', h(async () => {
-  const [importsBySource, bulletStrength, injectionJobs, verifiedBullets, aiBullets] = await Promise.all([
+  const [importsBySource, bulletStrength, injectionJobs, verifiedBullets, aiBullets, sugAccepted, sugRejected, sugPending] = await Promise.all([
     prisma.cvImportJob.groupBy({ by: ['source', 'status'], _count: { _all: true } }),
     prisma.cvBullet.groupBy({ by: ['strength'], _count: { _all: true } }),
     prisma.cvJobTarget.count({ where: { injectionAttempted: true } }),
     prisma.cvBullet.count({ where: { verified: true } }),
     prisma.cvBullet.count({ where: { aiGenerated: true } }),
+    prisma.cvSuggestionLog.count({ where: { accepted: true } }),
+    prisma.cvSuggestionLog.count({ where: { accepted: false } }),
+    prisma.cvSuggestionLog.count({ where: { accepted: null } }),
   ]);
   return {
     importsBySource: importsBySource.map((r) => ({ source: r.source, status: r.status, count: r._count._all })),
@@ -291,6 +324,9 @@ adminRouter.get('/analytics', h(async () => {
     injectionAttempts: injectionJobs,
     verifiedBullets,
     aiBullets,
+    // Rewrite accept-rate — if users reject most rewrites, the AI's voice is
+    // wrong for them (a signal, not a user problem — per spec).
+    suggestions: { accepted: sugAccepted, rejected: sugRejected, pending: sugPending },
   };
 }));
 

@@ -6,7 +6,7 @@
  * VN-market DOB field.
  */
 import PDFDocument from 'pdfkit';
-import { notoSansViBuffer } from './font.js';
+import { notoSansViBuffer, notoSansViBoldBuffer } from './font.js';
 import type { RenderCv, RenderItem } from './cvData.js';
 import { CV_TEMPLATES, type CvTemplateSpec } from './templates.js';
 import { SECTION_LABELS, type ExportLang } from './labels.js';
@@ -14,7 +14,7 @@ import { SECTION_LABELS, type ExportLang } from './labels.js';
 const MUTED = '#555555';
 const RULE = '#cccccc';
 
-export function renderPdf(cv: RenderCv, spec: CvTemplateSpec = CV_TEMPLATES.ats, lang: ExportLang = 'VI'): Promise<Buffer> {
+export function renderPdf(cv: RenderCv, spec: CvTemplateSpec = CV_TEMPLATES.ats, lang: ExportLang = 'VI', photoPng?: Buffer | null): Promise<Buffer> {
   const L = SECTION_LABELS[lang];
   const INK = spec.id === 'ats' ? '#1a1a1a' : '#1a1a1a';
   const ACCENT = spec.accent;
@@ -24,6 +24,7 @@ export function renderPdf(cv: RenderCv, spec: CvTemplateSpec = CV_TEMPLATES.ats,
   const done = new Promise<Buffer>((resolve) => doc.on('end', () => resolve(Buffer.concat(chunks))));
 
   doc.registerFont('vi', notoSansViBuffer());
+  doc.registerFont('vi-bold', notoSansViBoldBuffer()); // real NotoSans Bold (VN subset, OFL)
   doc.font('vi');
 
   const left = doc.page.margins.left;
@@ -31,18 +32,22 @@ export function renderPdf(cv: RenderCv, spec: CvTemplateSpec = CV_TEMPLATES.ats,
   const width = right - left;
   const headerAlign: 'left' | 'center' = spec.centerHeader ? 'center' : 'left';
 
-  // We only embed the NotoSans Regular weight (OFL, licensing-clean; no bold
-  // weight is available offline). Faux-bold: render the glyph fill AND a thin
-  // stroke of the same colour — a standard technique that reads as bold without
-  // a second font file. Stroke width scales with the point size.
+  /** Render text in the REAL bold face, then restore the regular face. */
   const bold = (size: number, color: string, txt: string, x: number, y: number, opts: PDFKit.Mixins.TextOptions = {}) => {
-    doc.fontSize(size).fillColor(color).strokeColor(color).lineWidth(size * 0.028);
-    doc.text(txt, x, y, { stroke: true, fill: true, ...opts });
-    doc.lineWidth(1);
+    doc.font('vi-bold').fontSize(size).fillColor(color);
+    doc.text(txt, x, y, opts);
+    doc.font('vi');
   };
 
   // ── Header ──
-  bold(spec.nameSize, spec.id === 'senior' ? ACCENT : INK, cv.fullName || 'Họ và tên', left, doc.y, { width, align: headerAlign });
+  // VN-market portrait (only when the template wants it and a photo exists).
+  // Placed top-right so the text header keeps its full width.
+  if (photoPng && spec.showDob) {
+    try {
+      doc.image(photoPng, right - 70, doc.y, { fit: [70, 90] });
+    } catch { /* corrupt image — render without it */ }
+  }
+  bold(spec.nameSize, spec.id === 'senior' ? ACCENT : INK, cv.fullName || 'Họ và tên', left, doc.y, { width: photoPng && spec.showDob ? width - 80 : width, align: headerAlign });
   if (cv.headline) doc.fillColor(MUTED).fontSize(12).text(cv.headline, { width, align: headerAlign });
   const contactBits = [cv.email, cv.phone, cv.location, spec.showDob && cv.dateOfBirth ? `${L.dob}: ${cv.dateOfBirth}` : '']
     .filter(Boolean).join('  •  ');
@@ -99,7 +104,7 @@ export function renderPdf(cv: RenderCv, spec: CvTemplateSpec = CV_TEMPLATES.ats,
     for (const g of cv.skillGroups) {
       const y = doc.y;
       bold(10, INK, `${g.category}: `, left, y, { continued: true });
-      doc.lineWidth(1).fillColor(MUTED).fontSize(10).text(g.names.join(', '), { stroke: false });
+      doc.fillColor(MUTED).fontSize(10).text(g.names.join(', '));
     }
     doc.moveDown(0.3);
   }

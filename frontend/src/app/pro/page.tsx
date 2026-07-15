@@ -18,6 +18,9 @@ const BENEFITS = [
   { icon: Music, title: 'Trang nhạc mở vĩnh viễn', desc: 'Không cần admin cấp quyền — vào /music bất cứ lúc nào.' },
   { icon: Bot, title: 'AI Chat Pro & Max', desc: 'Dùng CuongMini Pro (Sonnet) và Max (Opus) không giới hạn.' },
   { icon: ClipboardCheck, title: 'Interview AI chấm điểm', desc: 'Mở khoá "AI chấm" và "AI đầy đủ" khi luyện phỏng vấn.' },
+  // NEW (2026-07-16): the two AI-heavy modules are Pro entitlements.
+  { icon: Sparkles, title: 'CV Builder — toàn bộ AI', desc: 'AI chấm sâu + rủi ro phỏng vấn, AI viết lại từng dòng, AI phỏng vấn lấy nội dung, cover letter và xuất CV song ngữ Việt–Anh.' },
+  { icon: Bot, title: 'My Language — gia sư AI', desc: 'Gia sư giải thích, chấm phát âm, quiz AI, chấm bài viết và role-play hội thoại.' },
   { icon: GraduationCap, title: 'Full khoá học Academy', desc: 'Truy cập mọi khoá học, không cần nhập mã kích hoạt.' },
   { icon: BadgeCheck, title: 'Huy hiệu PRO', desc: 'Khung avatar + logo gắn nhãn PRO nổi bật, khác biệt.' },
 ];

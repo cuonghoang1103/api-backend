@@ -16,6 +16,7 @@
 import { cvLlmComplete, isAiAvailable, checkTokenQuota, extractJson } from './llm/index.js';
 import { INJECTION_SYSTEM_NOTE } from './llm/injection.js';
 import { BadRequestError } from '../../middleware/errorHandler.js';
+import { assertCvAiPro, cvAiIsPro } from './proGate.js';
 import { z } from 'zod';
 
 const SYSTEM_PROMPT = [
@@ -58,6 +59,7 @@ export interface IntakeDraftBullet { text: string; userStatedFacts: string }
 export interface IntakeTurnResult { reply: string; draftBullets: IntakeDraftBullet[]; done: boolean }
 
 export async function intakeTurn(userId: number, body: unknown): Promise<IntakeTurnResult> {
+  await assertCvAiPro(userId); // AI is Pro-only
   if (!isAiAvailable('intake')) {
     throw new BadRequestError('AI chưa sẵn sàng (chưa cấu hình khoá). Chế độ phỏng vấn cần AI — bạn vẫn có thể nhập tay ở trình chỉnh sửa hồ sơ.');
   }
@@ -96,6 +98,7 @@ export async function intakeTurn(userId: number, body: unknown): Promise<IntakeT
   };
 }
 
-export function intakeStatus() {
-  return { available: isAiAvailable('intake') };
+export async function intakeStatus(userId: number) {
+  const isPro = await cvAiIsPro(userId);
+  return { available: isAiAvailable('intake') && isPro, needPro: isAiAvailable('intake') && !isPro };
 }

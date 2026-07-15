@@ -12,6 +12,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { ArrowLeft, Loader2, Save, Download, ScanSearch, CheckCircle2, History } from 'lucide-react';
 import { cvApi } from '@/lib/cv-api';
+import CvPreview from '@/components/cv/CvPreview';
 import type { CvDocumentDetail, CvProfile, CvLintResult } from '@/types/cv';
 
 const inputCls = 'rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1.5 text-sm text-[var(--text-primary)]';
@@ -92,10 +93,12 @@ export default function CvBuilderPage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] pt-16">
-      <div className="mx-auto max-w-3xl px-4 py-8 sm:py-10">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
         <Link href="/cv" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"><ArrowLeft className="h-4 w-4" /> CV Builder</Link>
-        <input value={name} onChange={(e) => setName(e.target.value)} className="mt-3 w-full bg-transparent text-2xl font-semibold tracking-tight outline-none" placeholder="Tên bản CV (Backend @ KMS)" />
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">Bản CV riêng cho một công việc — chọn nội dung đưa vào, mẫu, thị trường, ngôn ngữ.</p>
+        <div className="mt-3 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_460px]">
+        <div>
+        <input value={name} onChange={(e) => setName(e.target.value)} aria-label="Tên bản CV" className="w-full bg-transparent text-2xl font-semibold tracking-tight outline-none" placeholder="Tên bản CV (Backend @ KMS)" />
+        <p className="mt-1 text-sm text-[var(--text-secondary)]">Bản CV riêng cho một công việc — chọn nội dung đưa vào, mẫu, thị trường, ngôn ngữ. Bản xem trước cập nhật trực tiếp bên phải.</p>
 
         {/* Settings */}
         <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -157,6 +160,24 @@ export default function CvBuilderPage() {
             <p className="mt-2 text-xs text-[var(--text-secondary)]">Gắn nhãn kết quả thật (vd &quot;được KMS gọi&quot;) để so bản nào hiệu quả — sẽ thêm ở bản sau.</p>
           </section>
         )}
+        </div>
+
+        {/* Live preview (W1) — the preview is the hero */}
+        <div className="lg:sticky lg:top-20 lg:self-start">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-xs font-medium text-[var(--text-secondary)]">Xem trước trực tiếp — mẫu {templateKey}</span>
+            {language === 'EN' && <span className="text-[10px] text-[var(--text-secondary)]">Nội dung sẽ được AI dịch sang tiếng Anh khi tải xuống</span>}
+          </div>
+          {profile && (
+            <CvPreview
+              profile={profile}
+              includedItemIds={includeAll ? null : [...selected]}
+              templateKey={templateKey}
+              market={market}
+            />
+          )}
+        </div>
+        </div>
       </div>
     </div>
   );

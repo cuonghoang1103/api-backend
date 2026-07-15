@@ -19,6 +19,7 @@ import { prisma } from '../../config/database.js';
 import { cvLlmComplete, isAiAvailable, checkTokenQuota } from './llm/index.js';
 import { wrapUntrusted, INJECTION_SYSTEM_NOTE } from './llm/injection.js';
 import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
+import { assertCvAiPro, cvAiIsPro } from './proGate.js';
 
 export type CoverLetterTone = 'FORMAL' | 'DIRECT' | 'WARM';
 
@@ -51,6 +52,7 @@ export interface CoverLetterResult { body: string; tone: CoverLetterTone; wordCo
 
 export async function generateCoverLetter(userId: number, jobId: number, toneIn?: string): Promise<CoverLetterResult> {
   const tone: CoverLetterTone = (['FORMAL', 'DIRECT', 'WARM'] as const).includes(toneIn as CoverLetterTone) ? (toneIn as CoverLetterTone) : 'DIRECT';
+  await assertCvAiPro(userId); // AI is Pro-only
   if (!isAiAvailable('cover_letter')) {
     throw new BadRequestError('AI chưa sẵn sàng (chưa cấu hình khoá). Cover letter cần AI — hãy thêm khoá hoặc quay lại sau.');
   }
@@ -88,6 +90,7 @@ export async function generateCoverLetter(userId: number, jobId: number, toneIn?
   return { body, tone, wordCount: body.split(/\s+/).filter(Boolean).length };
 }
 
-export function coverLetterStatus() {
-  return { available: isAiAvailable('cover_letter') };
+export async function coverLetterStatus(userId: number) {
+  const isPro = await cvAiIsPro(userId);
+  return { available: isAiAvailable('cover_letter') && isPro, needPro: isAiAvailable('cover_letter') && !isPro };
 }

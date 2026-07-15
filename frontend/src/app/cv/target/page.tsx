@@ -42,11 +42,16 @@ export default function CvTargetPage() {
   const [tailor, setTailor] = useState<CvTailor | null>(null);
   // cover letter
   const [clAvailable, setClAvailable] = useState<boolean | null>(null);
+  const [clNeedPro, setClNeedPro] = useState(false);
   const [clTone, setClTone] = useState('DIRECT');
   const [clBusy, setClBusy] = useState(false);
   const [coverLetter, setCoverLetter] = useState<{ body: string; wordCount: number } | null>(null);
 
-  useEffect(() => { cvApi.coverLetterStatus().then((r) => setClAvailable(r.data.data.available)).catch(() => setClAvailable(false)); }, []);
+  useEffect(() => {
+    cvApi.coverLetterStatus()
+      .then((r) => { setClAvailable(r.data.data.available); setClNeedPro(!!r.data.data.needPro); })
+      .catch(() => setClAvailable(false));
+  }, []);
 
   const genCoverLetter = async () => {
     if (!coverage) return;
@@ -126,7 +131,7 @@ export default function CvTargetPage() {
             {jobs.map((j) => (
               <span key={j.id} className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] px-2 py-1 text-xs">
                 <button onClick={() => openJob(j.id)} className="hover:underline">{j.title}{j.company ? ` · ${j.company}` : ''}</button>
-                <button onClick={() => del(j.id)} className="text-red-500 hover:opacity-80"><Trash2 className="h-3 w-3" /></button>
+                <button onClick={() => del(j.id)} className="text-red-500 hover:opacity-80" aria-label="Xoá job này"><Trash2 className="h-3 w-3" /></button>
               </span>
             ))}
           </div>
@@ -197,7 +202,13 @@ export default function CvTargetPage() {
                   </div>
                 )}
               </div>
-              {clAvailable === false && <p className="mt-2 text-xs text-[var(--text-secondary)]">Cover letter cần AI — chưa cấu hình khoá. Thêm khoá là dùng được ngay.</p>}
+              {clAvailable === false && (clNeedPro ? (
+                <p className="mt-2 text-sm">Cover letter AI dành cho tài khoản <strong>Pro</strong>.
+                  <Link href="/pro" className="ml-2 inline-flex items-center gap-1 rounded bg-amber-500 px-2.5 py-1 text-xs font-semibold text-black hover:opacity-90">Nâng cấp Pro</Link>
+                </p>
+              ) : (
+                <p className="mt-2 text-xs text-[var(--text-secondary)]">Cover letter cần AI — chưa cấu hình khoá.</p>
+              ))}
               {coverLetter && (
                 <div className="mt-3">
                   <div className="flex items-center justify-between text-xs text-[var(--text-secondary)]">

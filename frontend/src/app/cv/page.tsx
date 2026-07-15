@@ -242,7 +242,7 @@ export default function CvDashboardPage() {
                   <select value={exLanguage} onChange={(e) => setExLanguage(e.target.value)} className="mt-1 w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1.5 text-sm text-[var(--text-primary)]">
                     <option value="">Nguyên bản (như đã viết)</option>
                     <option value="VI">Tiếng Việt (AI dịch)</option>
-                    <option value="EN">Tiếng Anh (AI dịch)</option>
+                    <option value="EN">Tiếng Anh (AI dịch — Pro)</option>
                   </select>
                 </label>
                 <label className="text-xs text-[var(--text-secondary)]">Thị trường

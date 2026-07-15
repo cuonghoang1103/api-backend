@@ -319,7 +319,7 @@ export default function CvImportPage() {
                             {it.gpa ? ` · GPA ${it.gpa}` : ''}
                           </div>
                         </div>
-                        <button className="text-red-500 hover:opacity-80" onClick={() => removeItem(i)} title="Bỏ mục này"><Trash2 className="h-4 w-4" /></button>
+                        <button className="text-red-500 hover:opacity-80" onClick={() => removeItem(i)} title="Bỏ mục này" aria-label="Bỏ mục này"><Trash2 className="h-4 w-4" /></button>
                       </div>
                       {it.bullets.length > 0 && (
                         <ul className="mt-2 space-y-1">
@@ -327,7 +327,7 @@ export default function CvImportPage() {
                             <li key={bi} className="flex items-start gap-2 text-xs">
                               <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-[var(--text-secondary)]" />
                               <span className="flex-1">{b.text}</span>
-                              <button className="text-red-500 hover:opacity-80" onClick={() => removeBullet(i, bi)}><X className="h-3 w-3" /></button>
+                              <button className="text-red-500 hover:opacity-80" onClick={() => removeBullet(i, bi)} aria-label="Bỏ dòng này"><X className="h-3 w-3" /></button>
                             </li>
                           ))}
                         </ul>
@@ -345,7 +345,7 @@ export default function CvImportPage() {
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {draft.skills.map((s, i) => (
                       <span key={i} className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1 text-xs">
-                        {s.name}<button className="text-red-500 hover:opacity-80" onClick={() => removeSkill(i)}><X className="h-3 w-3" /></button>
+                        {s.name}<button className="text-red-500 hover:opacity-80" onClick={() => removeSkill(i)} aria-label="Bỏ kỹ năng"><X className="h-3 w-3" /></button>
                       </span>
                     ))}
                   </div>
@@ -358,7 +358,7 @@ export default function CvImportPage() {
                     {draft.languageSkills.map((l, i) => (
                       <li key={i} className="flex items-center justify-between">
                         <span>{l.language}{l.certName ? ` · ${l.certName} ${l.certScore ?? ''}` : l.proficiency ? ` · ${l.proficiency}` : ''}</span>
-                        <button className="text-red-500 hover:opacity-80" onClick={() => removeLang(i)}><X className="h-3.5 w-3.5" /></button>
+                        <button className="text-red-500 hover:opacity-80" onClick={() => removeLang(i)} aria-label="Bỏ ngoại ngữ"><X className="h-3.5 w-3.5" /></button>
                       </li>
                     ))}
                   </ul>
@@ -371,7 +371,7 @@ export default function CvImportPage() {
                     {draft.certifications.map((c, i) => (
                       <li key={i} className="flex items-center justify-between">
                         <span>{c.name}{c.issuer ? ` · ${c.issuer}` : ''}</span>
-                        <button className="text-red-500 hover:opacity-80" onClick={() => removeCert(i)}><X className="h-3.5 w-3.5" /></button>
+                        <button className="text-red-500 hover:opacity-80" onClick={() => removeCert(i)} aria-label="Bỏ chứng chỉ"><X className="h-3.5 w-3.5" /></button>
                       </li>
                     ))}
                   </ul>

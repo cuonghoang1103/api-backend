@@ -22,12 +22,13 @@
  * needs, and logs to its own CvLLMCallLog for a clean cost dashboard.
  */
 import { prisma } from '../../../config/database.js';
+import { logger } from '../../../utils/logger.js';
 
 export interface LLMMessage { role: 'user' | 'assistant'; content: string }
 export interface LLMResult { text: string; inputTokens: number; outputTokens: number; model: string; provider: string }
 
 /** Per-task routing key. Cheap/high-volume vs the calls that define quality. */
-export type CvLLMTask = 'critique' | 'intake' | 'jd_parse' | 'parse_fallback' | 'cover_letter' | 'translate';
+export type CvLLMTask = 'critique' | 'intake' | 'jd_parse' | 'parse_fallback' | 'cover_letter' | 'translate' | 'rewrite';
 
 /** Tasks that put the user's real CV (name, phone, employment history) into the
  *  prompt. These may ONLY go to a provider that does not train on inputs. */
@@ -37,6 +38,7 @@ const TASK_TOUCHES_CV_CONTENT: Record<CvLLMTask, boolean> = {
   cover_letter: true,
   parse_fallback: true,
   translate: true, // the whole CV is translated
+  rewrite: true, // a single bullet + its stated facts
   jd_parse: false, // a pasted job description is public text
 };
 
@@ -254,6 +256,12 @@ export async function cvLlmComplete(opts: {
     }
   }
   recordFailure(provider.name);
+  // Ops visibility (W6): failures were previously silent except the call log.
+  // NEVER log prompt/CV content — provider/model/task/error class only.
+  logger.error('cv-llm call failed after retries', {
+    task: opts.task, provider: provider.name, model,
+    error: lastErr instanceof Error ? lastErr.message : String(lastErr),
+  });
   await logCall({ userId: opts.userId, documentId: opts.documentId, task: opts.task, provider: provider.name, model, inputTokens: 0, outputTokens: 0, success: false });
   throw lastErr;
 }
@@ -265,10 +273,17 @@ function deterministicJitter(n: number): number {
   return x - Math.floor(x);
 }
 
-/** Per-user daily token cap (env CV_DAILY_TOKEN_CAP). true = under cap / no cap. */
+/**
+ * Per-user daily token cap. env CV_DAILY_TOKEN_CAP overrides; with no env we
+ * still enforce a SAFE DEFAULT (300k tokens/day ≈ a few dozen AI calls) so one
+ * user can't run up the gateway bill — cost control must not depend on
+ * remembering to set an env var. Set CV_DAILY_TOKEN_CAP=0 to disable.
+ */
+const DEFAULT_DAILY_TOKEN_CAP = 300_000;
 export async function checkTokenQuota(userId: number): Promise<boolean> {
-  const cap = Number(process.env.CV_DAILY_TOKEN_CAP);
-  if (!Number.isFinite(cap) || cap <= 0) return true;
+  const raw = process.env.CV_DAILY_TOKEN_CAP;
+  const cap = raw !== undefined && raw !== '' ? Number(raw) : DEFAULT_DAILY_TOKEN_CAP;
+  if (!Number.isFinite(cap) || cap <= 0) return true; // explicit 0/invalid = unlimited
   const start = new Date(); start.setHours(0, 0, 0, 0);
   const agg = await prisma.cvLLMCallLog.aggregate({ where: { userId, createdAt: { gte: start }, success: true }, _sum: { inputTokens: true, outputTokens: true } });
   return (agg._sum.inputTokens ?? 0) + (agg._sum.outputTokens ?? 0) < cap;

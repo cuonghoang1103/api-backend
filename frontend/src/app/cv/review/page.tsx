@@ -43,10 +43,15 @@ export default function CvReviewPage() {
   const [needLogin, setNeedLogin] = useState(false);
   // AI critique (Phase 7)
   const [aiAvailable, setAiAvailable] = useState<boolean | null>(null);
+  const [needPro, setNeedPro] = useState(false);
   const [critique, setCritique] = useState<CvCritiqueResult | null>(null);
   const [critiquing, setCritiquing] = useState(false);
 
-  useEffect(() => { cvApi.critiqueStatus().then((r) => setAiAvailable(r.data.data.available)).catch(() => setAiAvailable(false)); }, []);
+  useEffect(() => {
+    cvApi.critiqueStatus()
+      .then((r) => { setAiAvailable(r.data.data.available); setNeedPro(!!r.data.data.needPro); })
+      .catch(() => setAiAvailable(false));
+  }, []);
 
   // P9 — CV → Interview: stash the CV text so /interview pre-fills its personalize
   // flow, then jump there. The CV literally seeds the practice questions.
@@ -147,9 +152,15 @@ export default function CvReviewPage() {
                 )}
               </div>
 
-              {aiAvailable === false && (
+              {aiAvailable === false && needPro && (
+                <div className="mt-2 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm">
+                  Tính năng AI của CV Builder dành cho tài khoản <strong>Pro</strong>. Bản chấm miễn phí bên dưới vẫn bắt phần lớn lỗi.
+                  <Link href="/pro" className="ml-2 inline-flex items-center gap-1 rounded bg-amber-500 px-2.5 py-1 text-xs font-semibold text-black hover:opacity-90">Nâng cấp Pro</Link>
+                </div>
+              )}
+              {aiAvailable === false && !needPro && (
                 <p className="mt-2 text-xs text-[var(--text-secondary)]">
-                  AI chưa được cấu hình (chưa có khoá) — bản chấm miễn phí bên dưới vẫn bắt phần lớn lỗi. AI sẽ soi thêm rủi ro bị hỏi khi phỏng vấn.
+                  AI chưa được cấu hình — bản chấm miễn phí bên dưới vẫn bắt phần lớn lỗi.
                 </p>
               )}
               {aiAvailable !== false && !critique && !critiquing && (

@@ -10,6 +10,7 @@
 import { prisma } from '../../config/database.js';
 import { getOrCreateProfile } from './profile.service.js';
 import { lintCv, type LintInput } from './rules/documentLinter.js';
+import { loadRuleOverrides } from './rules/overrides.js';
 import type { CvMarket, CvLevel } from './rules/conventions.js';
 
 const MARKETS: CvMarket[] = ['VN', 'INTERNATIONAL'];
@@ -64,6 +65,7 @@ export async function persistBulletStrengths(verdicts: { bulletId: number; stren
 }
 
 export async function lintProfile(userId: number, opts?: { market?: string; level?: string }) {
+  await loadRuleOverrides(); // refresh admin dictionary overrides (cached 60s)
   const profile = await getOrCreateProfile(userId);
   const market: CvMarket = MARKETS.includes(opts?.market as CvMarket) ? (opts!.market as CvMarket) : 'VN';
   const level: CvLevel = LEVELS.includes(opts?.level as CvLevel)

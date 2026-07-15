@@ -22,6 +22,7 @@ import { renderTxt } from './export/text.js';
 import { cvLlmComplete, isAiAvailable, checkTokenQuota, extractJson } from './llm/index.js';
 import { wrapUntrusted, INJECTION_SYSTEM_NOTE, detectInjection } from './llm/injection.js';
 import { BadRequestError } from '../../middleware/errorHandler.js';
+import { assertCvAiPro, cvAiIsPro } from './proGate.js';
 
 export interface CritiqueIssue {
   severity: 'CRITICAL' | 'MAJOR' | 'MINOR';
@@ -63,6 +64,7 @@ export const SYSTEM_PROMPT = [
   'interviewRisks là tính năng quan trọng nhất: mỗi tuyên bố trên CV là một lời hứa phải trả lời câu hỏi về nó.',
   'Với những claim rủi ro nhất, nêu chính xác câu interviewer sẽ hỏi và hỏi thẳng ứng viên "bạn trả lời nổi dưới áp lực không?".',
   '',
+  'GIỚI HẠN ĐỘ DÀI: tối đa 8 issues và 5 interviewRisks — chọn những cái QUAN TRỌNG nhất. Mỗi trường ngắn gọn.',
   'CHỈ trả về JSON hợp lệ theo đúng schema sau, không kèm chữ nào khác:',
   '{',
   '  "overallVerdict": "INTERVIEW" | "MAYBE" | "REJECT",',
@@ -76,6 +78,7 @@ export const SYSTEM_PROMPT = [
 const MAX_CV_CHARS = 12000;
 
 export async function critiqueProfile(userId: number): Promise<CritiqueResult> {
+  await assertCvAiPro(userId); // AI is Pro-only (token cost control)
   if (!isAiAvailable('critique')) {
     throw new BadRequestError('AI chưa sẵn sàng (chưa cấu hình khoá hoặc đang tạm dừng). Hãy dùng bản "Chấm CV" miễn phí — nó vẫn bắt phần lớn lỗi.');
   }
@@ -104,7 +107,7 @@ export async function critiqueProfile(userId: number): Promise<CritiqueResult> {
     task: 'critique',
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: userMsg }],
-    maxTokens: 2500,
+    maxTokens: 4000,
     userId,
   });
 
@@ -148,7 +151,8 @@ function normalizeRisk(r: Partial<InterviewRisk>): InterviewRisk {
   };
 }
 
-/** Availability probe for the UI (so it can show the AI button state without a call). */
-export function critiqueStatus() {
-  return { available: isAiAvailable('critique') };
+/** Availability probe for the UI. needPro=true → show the /pro upsell. */
+export async function critiqueStatus(userId: number) {
+  const isPro = await cvAiIsPro(userId);
+  return { available: isAiAvailable('critique') && isPro, needPro: isAiAvailable('critique') && !isPro };
 }

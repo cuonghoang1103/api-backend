@@ -7,8 +7,8 @@
  */
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Loader2, DollarSign, FileText, Cpu, ShieldAlert, CheckCircle2, AlertCircle } from 'lucide-react';
-import { cvAdminApi, type CvAdminUsage } from '@/lib/cv-api';
+import { Loader2, DollarSign, FileText, Cpu, ShieldAlert, CheckCircle2, AlertCircle, BookOpen, Save } from 'lucide-react';
+import { cvAdminApi, type CvAdminUsage, type CvRuleOverrides } from '@/lib/cv-api';
 
 export default function AdminCvPage() {
   const [overview, setOverview] = useState<Record<string, number> | null>(null);
@@ -16,9 +16,27 @@ export default function AdminCvPage() {
   const [analytics, setAnalytics] = useState<Awaited<ReturnType<typeof cvAdminApi.analytics>>['data']['data'] | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // W6 — rules-engine overrides (edit dictionaries without a deploy)
+  const [rules, setRules] = useState<Record<keyof CvRuleOverrides, string>>({ strongVerbs: '', weakVerbs: '', bannedOpeners: '', buzzwords: '' });
+  const [savingRules, setSavingRules] = useState(false);
+  const saveRules = async () => {
+    setSavingRules(true);
+    try {
+      const toList = (s: string) => s.split(/[\n,]/).map((x) => x.trim()).filter(Boolean);
+      await cvAdminApi.setRules({ strongVerbs: toList(rules.strongVerbs), weakVerbs: toList(rules.weakVerbs), bannedOpeners: toList(rules.bannedOpeners), buzzwords: toList(rules.buzzwords) });
+      toast.success('Đã lưu — linter áp dụng trong ≤60s (không cần deploy)');
+    } catch { toast.error('Lưu thất bại'); } finally { setSavingRules(false); }
+  };
+
   useEffect(() => {
-    Promise.all([cvAdminApi.overview(), cvAdminApi.usage(), cvAdminApi.analytics()])
-      .then(([o, u, a]) => { setOverview(o.data.data); setUsage(u.data.data); setAnalytics(a.data.data); })
+    Promise.all([cvAdminApi.overview(), cvAdminApi.usage(), cvAdminApi.analytics(), cvAdminApi.getRules().catch(() => null)])
+      .then(([o, u, a, r]) => {
+        setOverview(o.data.data); setUsage(u.data.data); setAnalytics(a.data.data);
+        if (r) {
+          const d = r.data.data;
+          setRules({ strongVerbs: d.strongVerbs.join(', '), weakVerbs: d.weakVerbs.join(', '), bannedOpeners: d.bannedOpeners.join('\n'), buzzwords: d.buzzwords.join('\n') });
+        }
+      })
       .catch(() => toast.error('Không tải được dữ liệu admin'))
       .finally(() => setLoading(false));
   }, []);
@@ -103,6 +121,29 @@ export default function AdminCvPage() {
         )}
       </div>
 
+      {/* Rules-engine overrides (W6) — extend dictionaries without a deploy */}
+      <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-5">
+        <div className="flex items-center gap-2 text-sm font-semibold"><BookOpen className="h-4 w-4" /> Từ điển rules-engine (bổ sung, không cần deploy)</div>
+        <p className="mt-1 text-xs text-slate-400">Thêm vào danh sách gốc (không xoá được baseline — an toàn). Phân cách bằng dấu phẩy hoặc xuống dòng. Linter áp dụng trong ≤60 giây.</p>
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {([
+            ['strongVerbs', 'Động từ MẠNH thêm (built, shipped…)'],
+            ['weakVerbs', 'Động từ YẾU thêm (helped, assisted…)'],
+            ['bannedOpeners', 'Cụm mở đầu CẤM thêm (responsible for…)'],
+            ['buzzwords', 'Buzzword thêm (team player…)'],
+          ] as [keyof CvRuleOverrides, string][]).map(([k, label]) => (
+            <label key={k} className="text-xs text-slate-400">{label}
+              <textarea value={rules[k]} onChange={(e) => setRules((r) => ({ ...r, [k]: e.target.value }))}
+                rows={3} className="mt-1 w-full rounded-lg border border-white/10 bg-white/[0.02] p-2 text-xs text-slate-100" />
+            </label>
+          ))}
+        </div>
+        <button onClick={saveRules} disabled={savingRules}
+          className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
+          {savingRules ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Lưu từ điển
+        </button>
+      </div>
+
       {/* Analytics */}
       {analytics && (
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -124,6 +165,16 @@ export default function AdminCvPage() {
               <li className="flex justify-between"><span className="text-slate-400">Bullet đã xác nhận</span><span className="tabular-nums">{num(analytics.verifiedBullets)}</span></li>
               <li className="flex justify-between"><span className="text-slate-400">Bullet AI tạo</span><span className="tabular-nums">{num(analytics.aiBullets)}</span></li>
               <li className="flex items-center justify-between"><span className="flex items-center gap-1 text-slate-400"><ShieldAlert className="h-3.5 w-3.5" /> JD nghi chèn chỉ thị</span><span className="tabular-nums">{num(analytics.injectionAttempts)}</span></li>
+              {'suggestions' in analytics && (analytics as unknown as { suggestions: { accepted: number; rejected: number; pending: number } }).suggestions && (() => {
+                const s = (analytics as unknown as { suggestions: { accepted: number; rejected: number; pending: number } }).suggestions;
+                const decided = s.accepted + s.rejected;
+                return (
+                  <li className="flex items-center justify-between">
+                    <span className="text-slate-400">AI viết lại — tỉ lệ chấp nhận</span>
+                    <span className="tabular-nums">{decided ? Math.round((s.accepted / decided) * 100) + '%' : '—'} ({s.accepted}/{decided})</span>
+                  </li>
+                );
+              })()}
             </ul>
           </div>
         </div>

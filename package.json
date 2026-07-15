@@ -26,7 +26,7 @@
     "clean": "rm -rf dist",
     "migrate:r2": "tsx scripts/migrate-to-r2.ts",
     "migrate:r2:dry": "tsx scripts/migrate-to-r2.ts --dry-run",
-    "test": "tsx --test src/services/finance/money.test.ts src/services/payment/vnpay.test.ts",
+    "test": "tsx --test src/services/finance/money.test.ts src/services/payment/vnpay.test.ts src/services/cv/cv.test.ts",
     "test:smoke": "tsx scripts/test-all.ts",
     "test:image": "tsx scripts/test-image-optimizer.ts",
     "test:r2": "tsx scripts/test-r2.ts",
@@ -41,7 +41,8 @@
     "db:seed:finance": "tsx prisma/seed.finance.ts",
     "db:seed:finance:demo": "tsx prisma/seed.finance.demo.ts",
     "eval:cv-linter": "tsx src/services/cv/rules/__eval__/run.ts",
-    "eval:cv-fabrication": "tsx src/services/cv/rules/__eval__/run-fabrication.ts"
+    "eval:cv-fabrication": "tsx src/services/cv/rules/__eval__/run-fabrication.ts",
+    "eval:cv-ai": "tsx src/services/cv/rules/__eval__/run-ai-eval.ts"
   },
   "keywords": [
     "portfolio",

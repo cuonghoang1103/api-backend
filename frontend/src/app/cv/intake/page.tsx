@@ -22,6 +22,7 @@ const KINDS: { v: CvItemKind; l: string }[] = [
 export default function CvIntakePage() {
   const [profile, setProfile] = useState<CvProfile | null>(null);
   const [available, setAvailable] = useState<boolean | null>(null);
+  const [needPro, setNeedPro] = useState(false);
   const [needLogin, setNeedLogin] = useState(false);
   const [targetId, setTargetId] = useState<number | null>(null);
   const [newTitle, setNewTitle] = useState('');
@@ -34,9 +35,10 @@ export default function CvIntakePage() {
 
   const load = useCallback(async () => {
     try {
-      const [p, st] = await Promise.all([cvApi.getProfile(), cvApi.intakeStatus().catch(() => ({ data: { data: { available: false } } }))]);
+      const [p, st] = await Promise.all([cvApi.getProfile(), cvApi.intakeStatus().catch(() => ({ data: { data: { available: false, needPro: false } } }))]);
       setProfile(p.data.data);
       setAvailable(st.data.data.available);
+      setNeedPro(!!(st.data.data as { needPro?: boolean }).needPro);
       const firstItem = p.data.data.items.find((i) => ['EXPERIENCE', 'PROJECT', 'OPEN_SOURCE'].includes(i.kind));
       if (firstItem) setTargetId(firstItem.id);
     } catch (e) {
@@ -102,8 +104,14 @@ export default function CvIntakePage() {
         </p>
 
         {available === false && (
-          <div className="mt-4 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] p-4 text-sm text-[var(--text-secondary)]">
-            Chế độ phỏng vấn cần AI — chưa cấu hình khoá. Bạn vẫn có thể <Link href="/cv/profile" className="text-[var(--accent-color)]">nhập tay ở trình chỉnh sửa</Link>.
+          <div className="mt-4 rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-sm">
+            {needPro ? (
+              <>Chế độ AI phỏng vấn dành cho tài khoản <strong>Pro</strong>.
+                <Link href="/pro" className="ml-2 inline-flex items-center gap-1 rounded bg-amber-500 px-2.5 py-1 text-xs font-semibold text-black hover:opacity-90">Nâng cấp Pro</Link>
+                <span className="mt-1 block text-xs text-[var(--text-secondary)]">Bạn vẫn có thể <Link href="/cv/profile" className="text-[var(--accent-color)]">nhập tay ở trình chỉnh sửa</Link> — miễn phí.</span></>
+            ) : (
+              <>Chế độ phỏng vấn cần AI — chưa cấu hình khoá. Bạn vẫn có thể <Link href="/cv/profile" className="text-[var(--accent-color)]">nhập tay ở trình chỉnh sửa</Link>.</>
+            )}
           </div>
         )}
 
@@ -172,7 +180,7 @@ export default function CvIntakePage() {
                 placeholder="Trả lời / kể tiếp… (Enter để gửi)"
                 className="min-h-[46px] max-h-40 flex-1 resize-y rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm" />
               <button onClick={send} disabled={busy || !input.trim()}
-                className="inline-flex h-[46px] items-center gap-1.5 rounded-lg bg-[var(--accent-color)] px-4 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
+                aria-label="Gửi tin nhắn" className="inline-flex h-[46px] items-center gap-1.5 rounded-lg bg-[var(--accent-color)] px-4 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
                 <Send className="h-4 w-4" />
               </button>
             </div>

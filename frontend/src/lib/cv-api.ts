@@ -22,6 +22,12 @@ export const cvApi = {
   getProfile: (): Res<CvProfile> => api.get('/cv/profile'),
   updateProfile: (body: CvProfilePatch): Res<CvProfile> => api.put('/cv/profile', body),
   completeness: (): Res<CvCompleteness> => api.get('/cv/profile/completeness'),
+  uploadPhoto: (file: File): Res<{ photoUrl: string }> => {
+    const fd = new FormData();
+    fd.append('photo', file);
+    return api.post('/cv/profile/photo', fd, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 60_000 });
+  },
+  removePhoto: (): Res<{ photoUrl: null }> => api.delete('/cv/profile/photo'),
 
   // ── Items (experience / project / education / …) ────────────
   createItem: (body: CvItemInput): Res<CvItem> => api.post('/cv/items', body),
@@ -80,11 +86,18 @@ export const cvApi = {
   exportDoc: (id: number, format: 'pdf' | 'docx' | 'txt' | 'md' | 'json') =>
     api.get(`/cv/documents/${id}/export/${format}`, { responseType: 'blob', timeout: 120_000 }),
 
+  // ── AI rewrite per bullet (W2) — one proposal, accept/reject ──
+  rewriteStatus: (): Res<{ available: boolean; needPro?: boolean }> => api.get('/cv/rewrite/status'),
+  rewriteBullet: (bulletId: number): Res<{ suggestionId: number; bulletId: number; original: string; proposed: string; rationale: string; needsUserInput: boolean; clarifyingQuestion: string | null }> =>
+    api.post(`/cv/bullets/${bulletId}/rewrite`, {}, { timeout: 60_000 }),
+  decideSuggestion: (suggestionId: number, accepted: boolean, editedText?: string): Res<{ suggestionId: number; accepted: boolean }> =>
+    api.post(`/cv/suggestions/${suggestionId}/decide`, { accepted, editedText }),
+
   // ── Analysis (Phase 3: STATIC rules engine — free) ──────────
   lint: (body?: { market?: string; level?: string }): Res<CvLintResult> => api.post('/cv/lint', body ?? {}),
 
   // ── AI Critique (Phase 7) — quota-gated, may take ~15–30s ───
-  critiqueStatus: (): Res<{ available: boolean }> => api.get('/cv/critique/status'),
+  critiqueStatus: (): Res<{ available: boolean; needPro?: boolean }> => api.get('/cv/critique/status'),
   critique: (): Res<CvCritiqueResult> => api.post('/cv/critique', {}, { timeout: 90_000 }),
 
   // ── Job targeting (Phase 8a) — deterministic, free ──────────
@@ -95,12 +108,12 @@ export const cvApi = {
   deleteJob: (id: number): Res<{ id: number }> => api.delete(`/cv/jobs/${id}`),
 
   // ── Intake Mode (Phase 8c) — AI debrief conversation ────────
-  intakeStatus: (): Res<{ available: boolean }> => api.get('/cv/intake/status'),
+  intakeStatus: (): Res<{ available: boolean; needPro?: boolean }> => api.get('/cv/intake/status'),
   intakeTurn: (messages: { role: 'user' | 'assistant'; content: string }[]): Res<{ reply: string; draftBullets: { text: string; userStatedFacts: string }[]; done: boolean }> =>
     api.post('/cv/intake', { messages }, { timeout: 90_000 }),
 
   // ── Cover letter (Phase 8b) — AI ────────────────────────────
-  coverLetterStatus: (): Res<{ available: boolean }> => api.get('/cv/cover-letter/status'),
+  coverLetterStatus: (): Res<{ available: boolean; needPro?: boolean }> => api.get('/cv/cover-letter/status'),
   coverLetter: (jobId: number, tone: string): Res<{ body: string; tone: string; wordCount: number }> =>
     api.post(`/cv/jobs/${jobId}/cover-letter`, { tone }, { timeout: 90_000 }),
 
@@ -127,9 +140,12 @@ export interface CvAdminUsage {
   totalCostUsd: number;
   byTask: { task: string; provider: string; model: string; success: boolean; calls: number; inputTokens: number; outputTokens: number; costUsd: number }[];
 }
+export interface CvRuleOverrides { strongVerbs: string[]; weakVerbs: string[]; bannedOpeners: string[]; buzzwords: string[] }
 export const cvAdminApi = {
   overview: (): Res<Record<string, number>> => api.get('/admin/cv/overview'),
   usage: (): Res<CvAdminUsage> => api.get('/admin/cv/usage'),
+  getRules: (): Res<CvRuleOverrides> => api.get('/admin/cv/rules'),
+  setRules: (body: CvRuleOverrides): Res<CvRuleOverrides> => api.put('/admin/cv/rules', body),
   analytics: (): Res<{
     importsBySource: { source: string; status: string; count: number }[];
     bulletStrength: { strength: string; count: number }[];

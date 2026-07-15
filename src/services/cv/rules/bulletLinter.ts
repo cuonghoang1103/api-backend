@@ -11,6 +11,7 @@ import {
   STRONG_VERBS, WEAK_VERBS, BANNED_OPENERS, BUZZWORDS,
   FIRST_PERSON, OUTCOME_HINTS, METRIC_RE, PASSIVE_RE, PRESENCE_PHRASES,
 } from './lexicon.js';
+import { currentOverrides } from './overrides.js';
 
 export type Severity = 'CRITICAL' | 'MAJOR' | 'MINOR';
 export type BulletStrength = 'WEAK' | 'OK' | 'STRONG';
@@ -38,16 +39,19 @@ function firstWord(text: string): string {
   return (m?.[1] ?? '').toLowerCase();
 }
 
-/** Membership with light stemming so "build"/"builds"/"building" match "built". */
+/** Membership with light stemming so "build"/"builds"/"building" match "built".
+ *  Admin overrides (W6) extend the baseline sets additively. */
 function isStrongVerb(w: string): boolean {
-  if (STRONG_SET.has(w)) return true;
+  const extra = currentOverrides().strongVerbs;
+  if (STRONG_SET.has(w) || extra.includes(w)) return true;
   // present → past guesses
   const guesses = [w + 'ed', w + 'd', w.replace(/e$/, '') + 'ed', w.replace(/y$/, 'ied'), w.replace(/ing$/, ''), w.replace(/ing$/, 'ed'), w.replace(/s$/, '')];
-  return guesses.some((g) => STRONG_SET.has(g));
+  return guesses.some((g) => STRONG_SET.has(g) || extra.includes(g));
 }
 function isWeakVerb(w: string): boolean {
-  if (WEAK_SET.has(w)) return true;
-  return [w + 'ed', w.replace(/ing$/, ''), w.replace(/s$/, '')].some((g) => WEAK_SET.has(g));
+  const extra = currentOverrides().weakVerbs;
+  if (WEAK_SET.has(w) || extra.includes(w)) return true;
+  return [w + 'ed', w.replace(/ing$/, ''), w.replace(/s$/, '')].some((g) => WEAK_SET.has(g) || extra.includes(g));
 }
 
 export function lintBullet(raw: string): BulletVerdict {

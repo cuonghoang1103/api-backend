@@ -13,6 +13,7 @@ import { NotFoundError } from '../../middleware/errorHandler.js';
 import { getOrCreateProfile } from './profile.service.js';
 import { lintCv } from './rules/documentLinter.js';
 import { profileToLintInput, persistBulletStrengths } from './lint.service.js';
+import { loadRuleOverrides } from './rules/overrides.js';
 import { exportCvData, type ExportFormat, type ExportResult } from './export.service.js';
 import type { CvMarket, CvLevel } from './rules/conventions.js';
 
@@ -125,6 +126,7 @@ export async function duplicateDocument(userId: number, id: number) {
 
 /** Lint a document's filtered subset and SAVE the result as a CvReview (history). */
 export async function lintDocument(userId: number, id: number) {
+  await loadRuleOverrides(); // refresh admin dictionary overrides (cached 60s)
   const doc = await owned(userId, id);
   const profile = await getOrCreateProfile(userId);
   const filtered = filterProfile(profile, (doc.includedItemIds ?? {}) as IncludedIds);
@@ -148,5 +150,5 @@ export async function exportDocument(userId: number, id: number, format: ExportF
   const doc = await owned(userId, id);
   const profile = await getOrCreateProfile(userId);
   const filtered = filterProfile(profile, (doc.includedItemIds ?? {}) as IncludedIds);
-  return exportCvData(userId, filtered, format, { template: doc.templateKey ?? 'ats', market: doc.market, language: doc.language });
+  return exportCvData(userId, filtered, format, { template: doc.templateKey ?? 'ats', market: doc.market, language: doc.language, photoUrl: profile.photoR2Key });
 }

@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 import {
   ArrowLeft, Loader2, Plus, Trash2, Save, Pencil, X, Check,
   BadgeCheck, ShieldQuestion, GraduationCap, Briefcase, FolderGit2,
-  Award as AwardIcon, BookText, Heart, Languages as LangIcon, Wrench,
+  Award as AwardIcon, BookText, Heart, Languages as LangIcon, Wrench, Sparkles,
 } from 'lucide-react';
 import { CV_BUILDER_ENABLED } from '@/lib/featureFlags';
 import { cvApi } from '@/lib/cv-api';
@@ -200,6 +200,35 @@ function ContactSection({ profile, onSaved }: { profile: CvProfile; onSaved: () 
   return (
     <Card>
       <h2 className="text-base font-semibold">Thông tin liên hệ</h2>
+
+      {/* Photo (W5) — VN-market templates show a portrait; INTERNATIONAL strips it */}
+      <div className="mt-3 flex items-center gap-3">
+        {profile.photoR2Key ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={profile.photoR2Key} alt="Ảnh CV" className="h-20 w-16 rounded object-cover" />
+        ) : (
+          <div className="flex h-20 w-16 items-center justify-center rounded border border-dashed border-[var(--border-color)] text-[10px] text-[var(--text-secondary)]">Chưa có ảnh</div>
+        )}
+        <div className="space-y-1.5">
+          <label className={`${btnGhost} cursor-pointer`}>
+            <Plus className="h-3.5 w-3.5" /> {profile.photoR2Key ? 'Đổi ảnh' : 'Thêm ảnh CV'}
+            <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden"
+              onChange={async (e) => {
+                const f = e.target.files?.[0]; e.currentTarget.value = '';
+                if (!f) return;
+                try { await cvApi.uploadPhoto(f); await onSaved(); toast.success('Đã cập nhật ảnh'); }
+                catch { toast.error('Tải ảnh thất bại (ảnh ≤5MB)'); }
+              }} />
+          </label>
+          {profile.photoR2Key && (
+            <button className={btnDanger} onClick={async () => { await cvApi.removePhoto(); await onSaved(); }}>
+              <Trash2 className="h-3.5 w-3.5" /> Bỏ ảnh
+            </button>
+          )}
+          <p className="text-[10px] text-[var(--text-secondary)]">Chỉ mẫu &quot;Vietnamese Standard&quot; in ảnh; CV quốc tế tự bỏ ảnh (đúng quy ước).</p>
+        </div>
+      </div>
+
       <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Field label="Họ và tên"><input className={inputCls} value={f.fullName} onChange={set('fullName')} placeholder="Nguyễn Văn A" /></Field>
         <Field label="Chức danh"><input className={inputCls} value={f.headline} onChange={set('headline')} placeholder="Backend Engineer" /></Field>
@@ -427,8 +456,8 @@ function ItemRow({ item, onChanged }: { item: CvItem; onChanged: () => Promise<v
           )}
         </div>
         <div className="flex shrink-0 gap-1">
-          <button className={btnGhost} onClick={() => setEditing(true)}><Pencil className="h-3.5 w-3.5" /></button>
-          <button className={btnDanger} onClick={del}><Trash2 className="h-3.5 w-3.5" /></button>
+          <button className={btnGhost} onClick={() => setEditing(true)} aria-label="Sửa mục này"><Pencil className="h-3.5 w-3.5" /></button>
+          <button className={btnDanger} onClick={del} aria-label="Xoá mục này"><Trash2 className="h-3.5 w-3.5" /></button>
         </div>
       </div>
 
@@ -437,10 +466,28 @@ function ItemRow({ item, onChanged }: { item: CvItem; onChanged: () => Promise<v
   );
 }
 
+const STRENGTH_META: Record<string, { label: string; cls: string }> = {
+  STRONG: { label: 'Mạnh', cls: 'bg-emerald-500/15 text-emerald-500' },
+  OK: { label: 'Ổn', cls: 'bg-slate-500/15 text-[var(--text-secondary)]' },
+  WEAK: { label: 'Yếu', cls: 'bg-red-500/15 text-red-500' },
+};
+
+interface RewriteState {
+  suggestionId: number;
+  original: string;
+  proposed: string;
+  rationale: string;
+  clarifyingQuestion: string | null;
+}
+
 function Bullets({ item, onChanged }: { item: CvItem; onChanged: () => Promise<void> }) {
   const [text, setText] = useState('');
   const [facts, setFacts] = useState('');
   const [busy, setBusy] = useState(false);
+  // W2: per-bullet AI rewrite — one open diff at a time, per-bullet accept/reject.
+  const [rewriting, setRewriting] = useState<number | null>(null);
+  const [diff, setDiff] = useState<(RewriteState & { bulletId: number }) | null>(null);
+  const [deciding, setDeciding] = useState(false);
 
   const add = async () => {
     if (!text.trim()) return;
@@ -452,23 +499,94 @@ function Bullets({ item, onChanged }: { item: CvItem; onChanged: () => Promise<v
     } catch { toast.error('Không thêm được'); } finally { setBusy(false); }
   };
 
+  const startRewrite = async (bulletId: number) => {
+    setRewriting(bulletId);
+    try {
+      const r = await cvApi.rewriteBullet(bulletId);
+      const d = r.data.data;
+      setDiff({ bulletId, suggestionId: d.suggestionId, original: d.original, proposed: d.proposed, rationale: d.rationale, clarifyingQuestion: d.clarifyingQuestion });
+    } catch (e) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'AI viết lại thất bại');
+    } finally { setRewriting(null); }
+  };
+
+  const decide = async (accepted: boolean) => {
+    if (!diff) return;
+    setDeciding(true);
+    try {
+      await cvApi.decideSuggestion(diff.suggestionId, accepted, accepted ? diff.proposed : undefined);
+      setDiff(null);
+      if (accepted) await onChanged();
+    } catch { toast.error('Không lưu được quyết định'); } finally { setDeciding(false); }
+  };
+
   return (
     <div className="mt-3 border-t border-[var(--border-color)] pt-3">
       <ul className="space-y-1.5">
         {item.bullets.map((b) => (
-          <li key={b.id} className="flex items-start gap-2 text-sm">
-            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[var(--text-secondary)]" />
-            <span className="flex-1">{b.text}</span>
-            <button
-              title={b.verified ? 'Đã xác nhận (bạn tự viết)' : 'Chưa xác nhận'}
-              onClick={async () => { await cvApi.verifyBullet(b.id, !b.verified); await onChanged(); }}
-              className={b.verified ? 'text-emerald-500' : 'text-[var(--text-secondary)] opacity-60'}
-            >
-              {b.verified ? <BadgeCheck className="h-4 w-4" /> : <ShieldQuestion className="h-4 w-4" />}
-            </button>
-            <button className={btnDanger} onClick={async () => { await cvApi.deleteBullet(b.id); await onChanged(); }}>
-              <Trash2 className="h-3.5 w-3.5" />
-            </button>
+          <li key={b.id}>
+            <div className="flex items-start gap-2 text-sm">
+              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[var(--text-secondary)]" />
+              <span className="flex-1">{b.text}</span>
+              <span className={`mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${STRENGTH_META[b.strength]?.cls ?? ''}`} title="Độ mạnh theo rules engine (cập nhật khi Chấm CV)">
+                {STRENGTH_META[b.strength]?.label ?? b.strength}
+              </span>
+              <button
+                aria-label="AI viết lại dòng này"
+                title="AI viết lại (chỉ dùng sự thật của bạn)"
+                onClick={() => startRewrite(b.id)}
+                disabled={rewriting !== null || diff !== null}
+                className="text-[var(--accent-color)] disabled:opacity-40"
+              >
+                {rewriting === b.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+              </button>
+              <button
+                aria-label={b.verified ? 'Đã xác nhận' : 'Chưa xác nhận'}
+                title={b.verified ? 'Đã xác nhận (bạn tự viết)' : 'Chưa xác nhận'}
+                onClick={async () => { await cvApi.verifyBullet(b.id, !b.verified); await onChanged(); }}
+                className={b.verified ? 'text-emerald-500' : 'text-[var(--text-secondary)] opacity-60'}
+              >
+                {b.verified ? <BadgeCheck className="h-4 w-4" /> : <ShieldQuestion className="h-4 w-4" />}
+              </button>
+              <button aria-label="Xoá dòng" className={btnDanger} onClick={async () => { await cvApi.deleteBullet(b.id); await onChanged(); }}>
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+            {/* W2 — before/after diff, per-bullet accept/reject/edit. Never bulk. */}
+            {diff?.bulletId === b.id && (
+              <div className="ml-3 mt-2 rounded-lg border border-[var(--accent-color)]/40 bg-[var(--bg-primary)] p-3">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <div>
+                    <div className="text-[10px] font-medium uppercase text-[var(--text-secondary)]">Bản gốc</div>
+                    <p className="mt-1 rounded bg-red-500/5 p-2 text-xs line-through decoration-red-400/60">{diff.original}</p>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-medium uppercase text-[var(--text-secondary)]">AI đề xuất (sửa được)</div>
+                    <textarea
+                      value={diff.proposed}
+                      onChange={(e) => setDiff({ ...diff, proposed: e.target.value })}
+                      className="mt-1 w-full resize-y rounded border border-emerald-500/30 bg-emerald-500/5 p-2 text-xs"
+                      rows={3}
+                      aria-label="Bản AI đề xuất"
+                    />
+                  </div>
+                </div>
+                {diff.rationale && <p className="mt-2 text-[11px] text-[var(--text-secondary)]">Vì sao: {diff.rationale}</p>}
+                {diff.clarifyingQuestion && (
+                  <p className="mt-1 text-[11px] text-amber-600 dark:text-amber-400">AI hỏi: {diff.clarifyingQuestion} — trả lời được thì sửa thẳng vào ô đề xuất rồi hãy chấp nhận.</p>
+                )}
+                <div className="mt-2 flex gap-2">
+                  <button onClick={() => decide(true)} disabled={deciding} className="inline-flex items-center gap-1 rounded bg-[var(--accent-color)] px-3 py-1 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50">
+                    {deciding ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />} Chấp nhận
+                  </button>
+                  <button onClick={() => decide(false)} disabled={deciding} className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-3 py-1 text-xs hover:bg-[var(--bg-card)]">
+                    <X className="h-3 w-3" /> Từ chối
+                  </button>
+                </div>
+              </div>
+            )}
           </li>
         ))}
       </ul>

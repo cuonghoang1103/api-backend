@@ -137,6 +137,12 @@ export default function CvDashboardPage() {
                   <ScanSearch className="h-4 w-4" /> Chấm CV (miễn phí)
                 </Link>
                 <Link
+                  href="/cv/recruiter-view"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium hover:bg-[var(--bg-primary)]"
+                >
+                  <Eye className="h-4 w-4" /> Recruiter View
+                </Link>
+                <Link
                   href="/cv/profile"
                   className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium hover:bg-[var(--bg-primary)]"
                 >
@@ -191,8 +197,6 @@ export default function CvDashboardPage() {
                 {[
                   { icon: Upload, title: 'Kết nối GitHub', desc: 'Chấm điểm repo, gợi ý mục CV (dán text, JSON Resume, PDF/DOCX đã dùng được).' },
                   { icon: Target, title: 'Nhắm theo job (JD)', desc: 'Dán JD → ma trận kỹ năng × bằng chứng + verdict thật thà.' },
-                  { icon: Eye, title: 'Recruiter View', desc: 'Mô phỏng 6 giây quét mắt + cách ATS đọc CV của bạn.' },
-                  { icon: Download, title: 'Xuất PDF / DOCX', desc: 'Chữ thật, ATS đọc được, kiểm tra round-trip.' },
                   { icon: FileText, title: 'Critique AI', desc: 'Chấm như senior khó tính + rủi ro sẽ bị hỏi khi phỏng vấn.' },
                 ].map((f) => (
                   <div

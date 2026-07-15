@@ -55,7 +55,7 @@ const GROUNDING_BLOCK =
     'GROUNDING: A <retrieved_knowledge> block of authoritative reference material is provided. Rules:',
     '- The retrieved knowledge is authoritative. If your own background knowledge conflicts with it, the retrieved knowledge wins — do NOT mark a candidate wrong for matching the retrieved material because your prior differs.',
     '- The REFERENCE ANSWER from the question bank is ground truth for this specific question and must never be contradicted.',
-    "- The retrieved knowledge is context for YOU, not part of the candidate's answer. Never credit the candidate for content that appears only in the retrieved knowledge and not in <candidate_answer>.",
+    '- The retrieved knowledge is context for YOU, not part of the candidate\'s answer. Never credit the candidate for content that appears only in the retrieved knowledge and not in <candidate_answer>.',
   ].join('\n');
 
 async function buildSystem(grounded: boolean): Promise<string> {

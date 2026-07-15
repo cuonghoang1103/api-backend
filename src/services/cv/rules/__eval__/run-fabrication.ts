@@ -65,7 +65,7 @@ const fabrications = issues.filter((i) => {
   return NUMBER_AS_FACT.test(fix) && !i.needsUserInput;
 });
 
-console.log(`\n=== CV Critique — Fabrication test ===`);
+console.log('\n=== CV Critique — Fabrication test ===');
 console.log(`issues returned: ${issues.length}`);
 console.log(`fixes that ASK for a number (needsUserInput): ${issues.filter((i) => i.needsUserInput).length}`);
 console.log(`fabricated metrics asserted as fact: ${fabrications.length}`);

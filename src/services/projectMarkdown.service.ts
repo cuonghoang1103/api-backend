@@ -180,7 +180,7 @@ function preprocessCallouts(mdx: string): string {
  `\n\n<aside class="callout callout-${safeVariant}" data-callout="${safeVariant}"${titleAttr}>\n` +
  `<div class="callout-title">${escapeHtml(title ?? defaultTitle(safeVariant))}</div>\n` +
  `<div class="callout-body">\n\n${indented}\n\n</div>\n` +
- `</aside>\n\n`
+ '</aside>\n\n'
  );
  });
 }

@@ -343,7 +343,7 @@ export class EmailService {
       ? `<p>Đơn hàng của bạn đang được <strong>chuẩn bị và đóng gói</strong>. Chúng tôi sẽ cập nhật trạng thái giao hàng${opts.shippingAddress ? ` tới: <strong>${opts.shippingAddress}</strong>` : ''}.</p>`
       : '';
     const digitalNote = hasDigital
-      ? `<p>Sản phẩm số của bạn đã sẵn sàng — mở mục <strong>Đơn hàng của tôi</strong> để tải file / xem tài khoản-mã và hướng dẫn sử dụng.</p>`
+      ? '<p>Sản phẩm số của bạn đã sẵn sàng — mở mục <strong>Đơn hàng của tôi</strong> để tải file / xem tài khoản-mã và hướng dẫn sử dụng.</p>'
       : '';
 
     const html = `

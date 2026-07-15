@@ -60,10 +60,10 @@ export async function extractVideoThumbnail(
     // -q:v 2: quality (2 = high quality JPEG)
     const cmd = [
       `${FFMPEG_PATH} -y`,
-      `-ss 00:00:01`,
+      '-ss 00:00:01',
       `-i "${inputPath}"`,
-      `-vframes 1`,
-      `-q:v 2`,
+      '-vframes 1',
+      '-q:v 2',
       `"${outputPath}"`,
     ].join(' ');
 

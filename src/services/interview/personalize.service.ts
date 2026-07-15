@@ -41,9 +41,9 @@ export async function generatePersonalizedQuestions(opts: {
   const langName = opts.language === 'EN' ? 'English' : 'Vietnamese';
   const system =
     `You are a senior technical interviewer designing a PERSONALIZED interview. Using the candidate's CV and/or the target Job Description, write exactly ${opts.count} interview questions tailored to them for a ${opts.level} ${opts.trackName} role. Favour questions that probe the technologies/experience in the CV and the requirements in the JD; mix conceptual, practical, and behavioural where relevant. For EACH question also produce a concise model answer and a grading rubric. Write ALL text in ${langName}.\n` +
-    `Return ONLY JSON of this EXACT shape:\n` +
-    `{"questions":[{"questionText":string,"type":"CONCEPTUAL"|"CODING"|"SYSTEM_DESIGN"|"BEHAVIORAL"|"SCENARIO","referenceAnswer":string,"rubric":[{"id":"c1","criterion":string,"weight":number}],"mustMention":[string],"shouldMention":[string],"redFlags":[string]}]}\n` +
-    `Rules: pick "type" per question (use "CODING" for write-code questions, "SYSTEM_DESIGN" for design, etc.); rubric ids are "c1","c2",…; weights sum to ~1.0; mustMention = the key technical keywords a strong answer MUST contain (short, 3-8 items); shouldMention = nice-to-have keywords; redFlags = common wrong beliefs. Keep each questionText to 1-3 sentences. No prose outside the JSON.`;
+    'Return ONLY JSON of this EXACT shape:\n' +
+    '{"questions":[{"questionText":string,"type":"CONCEPTUAL"|"CODING"|"SYSTEM_DESIGN"|"BEHAVIORAL"|"SCENARIO","referenceAnswer":string,"rubric":[{"id":"c1","criterion":string,"weight":number}],"mustMention":[string],"shouldMention":[string],"redFlags":[string]}]}\n' +
+    'Rules: pick "type" per question (use "CODING" for write-code questions, "SYSTEM_DESIGN" for design, etc.); rubric ids are "c1","c2",…; weights sum to ~1.0; mustMention = the key technical keywords a strong answer MUST contain (short, 3-8 items); shouldMention = nice-to-have keywords; redFlags = common wrong beliefs. Keep each questionText to 1-3 sentences. No prose outside the JSON.';
 
   const parts: string[] = [];
   if (opts.cv?.trim()) parts.push(`CANDIDATE CV:\n${opts.cv.slice(0, 16000)}`);
@@ -112,13 +112,13 @@ export async function generateProjectQuestions(opts: {
 }): Promise<PersonalizedQuestion[]> {
   const langName = opts.language === 'EN' ? 'English' : 'Vietnamese';
   const system =
-    `You are a senior technical interviewer designing a TWO-ROUND interview based ENTIRELY on the candidate's OWN project, described in the Markdown document below. Read the WHOLE document and understand its architecture, tech stack, data model, key decisions, and trade-offs.\n` +
+    'You are a senior technical interviewer designing a TWO-ROUND interview based ENTIRELY on the candidate\'s OWN project, described in the Markdown document below. Read the WHOLE document and understand its architecture, tech stack, data model, key decisions, and trade-offs.\n' +
     `ROUND 1 (round=1): exactly ${opts.round1Count} questions that mix theory/knowledge AND code understanding ABOUT THIS PROJECT — why decisions were made, how components work, trade-offs, edge cases, the specific technologies used. Types may be CONCEPTUAL, SCENARIO, or CODING.\n` +
     `ROUND 2 (round=2): exactly ${opts.round2Count} questions that are PURELY coding & hands-on problem-solving in or closely related to this project — implement, extend, refactor, debug, or optimise a concrete piece of it; advanced and practical. Almost all should be type=CODING.\n` +
     `Difficulty target: ${opts.level}. Write ALL text in ${langName}. For EACH question also produce a concise model answer + grading rubric.\n` +
-    `Return ONLY JSON of this EXACT shape:\n` +
-    `{"questions":[{"round":1|2,"questionText":string,"type":"CONCEPTUAL"|"CODING"|"SYSTEM_DESIGN"|"BEHAVIORAL"|"SCENARIO","referenceAnswer":string,"rubric":[{"id":"c1","criterion":string,"weight":number}],"mustMention":[string],"shouldMention":[string],"redFlags":[string]}]}\n` +
-    `Rules: rubric ids "c1","c2",…; weights sum ~1.0; mustMention = key technical keywords a strong answer MUST contain; keep questionText concise (1-4 sentences); questions must be specific to THIS project, not generic. No prose outside the JSON.`;
+    'Return ONLY JSON of this EXACT shape:\n' +
+    '{"questions":[{"round":1|2,"questionText":string,"type":"CONCEPTUAL"|"CODING"|"SYSTEM_DESIGN"|"BEHAVIORAL"|"SCENARIO","referenceAnswer":string,"rubric":[{"id":"c1","criterion":string,"weight":number}],"mustMention":[string],"shouldMention":[string],"redFlags":[string]}]}\n' +
+    'Rules: rubric ids "c1","c2",…; weights sum ~1.0; mustMention = key technical keywords a strong answer MUST contain; keep questionText concise (1-4 sentences); questions must be specific to THIS project, not generic. No prose outside the JSON.';
   // Read a LONG project doc (Opus has a huge context) so it understands deeply.
   const user = `PROJECT DOCUMENT (Markdown):\n\n${opts.md.slice(0, 100000)}`;
 

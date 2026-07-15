@@ -46,10 +46,10 @@ function languageName(code: string, fallback?: string | null): string {
 }
 function pronNote(code: string): string {
   const c = (code || '').toLowerCase();
-  if (c === 'ja') return `Pronunciations MUST include {"type":"hiragana","value":...} and {"type":"romaji","value":...}.`;
-  if (c === 'zh') return `Pronunciations MUST include {"type":"pinyin","value":...} (with tone marks).`;
-  if (c === 'ko') return `Pronunciations MUST include {"type":"romaja","value":...}.`;
-  return `Pronunciations may be an empty array or include {"type":"IPA","value":...}.`;
+  if (c === 'ja') return 'Pronunciations MUST include {"type":"hiragana","value":...} and {"type":"romaji","value":...}.';
+  if (c === 'zh') return 'Pronunciations MUST include {"type":"pinyin","value":...} (with tone marks).';
+  if (c === 'ko') return 'Pronunciations MUST include {"type":"romaja","value":...}.';
+  return 'Pronunciations may be an empty array or include {"type":"IPA","value":...}.';
 }
 function norm(s: unknown): string {
   return String(s ?? '').trim().toLowerCase().slice(0, 120);
@@ -150,7 +150,7 @@ function fullMessage(section: GenSection, level: string, topic: string): string 
   if (section === 'conversation') return `Hội thoại ${lv}${tp} có vẻ đã đầy đủ — không có mẫu câu mới. Thử chủ đề/cấp độ khác.`;
   if (section === 'qna') return `Q&A ${lv}${tp} có vẻ đã đầy đủ — không có câu mới. Thử chủ đề/cấp độ khác.`;
   if (section === 'reading-article') return `Bài đọc ${lv}${tp} có vẻ đã đủ — trùng tiêu đề đã có. Thử chủ đề khác.`;
-  return `Câu hỏi cho bài đọc này có vẻ đã đầy đủ — thử lại hoặc thêm thủ công.`;
+  return 'Câu hỏi cho bài đọc này có vẻ đã đầy đủ — thử lại hoặc thêm thủ công.';
 }
 
 // ── Per-section prompt + item normalizer ──────────────────────────
@@ -164,31 +164,31 @@ function buildPrompts(section: GenSection, code: string, count: number, level: s
   let intro = '';
   if (section === 'vocab') {
     intro = `Generate ${count} ${langName} vocabulary entries${lv}${tp}. ${pronNote(code)} ${viNote}`;
-    shape = `{"items":[{"word":string,"meaningVi":string,"exampleSentence":string,"exampleMeaning":string,"note":string,"pronunciations":[{"type":string,"value":string}]}]}`;
+    shape = '{"items":[{"word":string,"meaningVi":string,"exampleSentence":string,"exampleMeaning":string,"note":string,"pronunciations":[{"type":string,"value":string}]}]}';
   } else if (section === 'grammar') {
     intro = `Generate ${count} ${langName} grammar points${lv}${tp}. "explanation" is a SHORT PLAIN-TEXT explanation in Vietnamese (2-4 sentences, NO HTML tags). "examples" each: sentence (in ${langName}), pronunciation (reading), meaningVi. ${viNote}`;
-    shape = `{"items":[{"level":string,"title":string,"structure":string,"explanation":string,"examples":[{"sentence":string,"pronunciation":string,"meaningVi":string}],"commonMistakes":string,"comparedWith":string}]}`;
+    shape = '{"items":[{"level":string,"title":string,"structure":string,"explanation":string,"examples":[{"sentence":string,"pronunciation":string,"meaningVi":string}],"commonMistakes":string,"comparedWith":string}]}';
   } else if (section === 'conversation') {
     intro = `Generate ${count} ${langName} daily-conversation Q/A pairs${lv}${tp}. Include the reading (pronunciation) for both lines and the Vietnamese meaning. ${viNote}`;
-    shape = `{"items":[{"question":string,"answer":string,"questionPronunciation":string,"answerPronunciation":string,"meaningVi":string}]}`;
+    shape = '{"items":[{"question":string,"answer":string,"questionPronunciation":string,"answerPronunciation":string,"meaningVi":string}]}';
   } else if (section === 'qna') {
     intro = `Generate ${count} ${langName} FAQ-style question/answer pairs${lv}${tp}. Include the reading of the answer and the Vietnamese meaning. ${viNote}`;
-    shape = `{"items":[{"question":string,"answer":string,"pronunciation":string,"meaningVi":string}]}`;
+    shape = '{"items":[{"question":string,"answer":string,"pronunciation":string,"meaningVi":string}]}';
   } else if (section === 'reading-article') {
     intro =
       `Write ${count} complete, engaging ${langName} reading passage(s)${lv}${tp} for learners. ` +
       `Each passage: a "title" in ${langName}; "content" = the passage as an HTML string of several <p> paragraphs in ${langName} (length appropriate to the level — short for A1/N5, longer for B2+); ` +
-      `"translation" = a faithful Vietnamese translation, also an HTML string of <p> paragraphs aligned to the content; ` +
-      `"questions" = 3-5 comprehension questions based on the passage (mix "mc" with 4 options + 0-based correctIndex, and "open" with sampleAnswer). Prompts/explanations in Vietnamese.`;
-    shape = `{"items":[{"title":string,"content":string,"translation":string,"questions":[{"kind":"mc","prompt":string,"options":[string,string,string,string],"correctIndex":number,"explanation":string}|{"kind":"open","prompt":string,"sampleAnswer":string,"explanation":string}]}]}`;
+      '"translation" = a faithful Vietnamese translation, also an HTML string of <p> paragraphs aligned to the content; ' +
+      '"questions" = 3-5 comprehension questions based on the passage (mix "mc" with 4 options + 0-based correctIndex, and "open" with sampleAnswer). Prompts/explanations in Vietnamese.';
+    shape = '{"items":[{"title":string,"content":string,"translation":string,"questions":[{"kind":"mc","prompt":string,"options":[string,string,string,string],"correctIndex":number,"explanation":string}|{"kind":"open","prompt":string,"sampleAnswer":string,"explanation":string}]}]}';
   } else {
     intro = `Generate ${count} comprehension questions STRICTLY based on the ${langName} reading passage below. Mix multiple-choice and open questions. For "mc": 4 options + 0-based correctIndex. Prompts/explanations in Vietnamese; keep option text faithful to the passage. ${viNote}\n\nPASSAGE:\n${(articleText || '').slice(0, 3500)}`;
-    shape = `{"items":[{"kind":"mc","prompt":string,"options":[string,string,string,string],"correctIndex":number,"explanation":string} | {"kind":"open","prompt":string,"sampleAnswer":string,"explanation":string}]}`;
+    shape = '{"items":[{"kind":"mc","prompt":string,"options":[string,string,string,string],"correctIndex":number,"explanation":string} | {"kind":"open","prompt":string,"sampleAnswer":string,"explanation":string}]}';
   }
   return {
     system:
       `You are an expert ${langName} teacher creating high-quality learning content for Vietnamese learners. ${intro} ` +
-      `CRITICAL: inside every JSON string value, NEVER use the raw double-quote character ("). If you need to quote something, use single quotes or the corner brackets 「」/『』. Do not add any text outside the JSON. ` +
+      'CRITICAL: inside every JSON string value, NEVER use the raw double-quote character ("). If you need to quote something, use single quotes or the corner brackets 「」/『』. Do not add any text outside the JSON. ' +
       `Return ONLY a minified JSON object with this exact shape: ${shape}`,
     user: `Hãy tạo nội dung.${noDup}`,
   };

@@ -182,7 +182,7 @@ export function looseJson(text: string): Record<string, unknown> {
     if (a >= 0 && b > a) t = t.slice(a, b + 1);
     t = t
       .replace(/[“”]/g, '"') // smart double quotes → "
-      .replace(/[‘’]/g, "'") // smart single quotes → '
+      .replace(/[‘’]/g, '\'') // smart single quotes → '
       .replace(/[\x00-\x1F]+/g, ' ') // control chars (incl. raw newlines)
       .replace(/,\s*([}\]])/g, '$1'); // trailing commas
     return JSON.parse(t) as Record<string, unknown>;
@@ -346,10 +346,10 @@ export async function scorePronunciation(
   const readingLine = input.reading ? `Cách đọc chuẩn: ${input.reading}\n` : '';
   const system =
     `You are a supportive pronunciation coach for a Vietnamese speaker learning ${langName}. ` +
-    `You are given the TARGET the learner tried to read aloud and HEARD — what a speech-to-text engine transcribed from their recording. ` +
-    `Judge how close their pronunciation was, being fair about STT noise. ALWAYS write feedback and tips in natural Vietnamese (tiếng Việt). ` +
-    `Return ONLY a minified JSON object: {"score": number (0-100), "verdict": "good"|"ok"|"poor", "feedback": string, "tips": [string]}. ` +
-    `score ≥85 → "good", 60–84 → "ok", <60 → "poor". Keep feedback to 1–3 sentences; 1–3 short tips on the specific sounds/words to fix.`;
+    'You are given the TARGET the learner tried to read aloud and HEARD — what a speech-to-text engine transcribed from their recording. ' +
+    'Judge how close their pronunciation was, being fair about STT noise. ALWAYS write feedback and tips in natural Vietnamese (tiếng Việt). ' +
+    'Return ONLY a minified JSON object: {"score": number (0-100), "verdict": "good"|"ok"|"poor", "feedback": string, "tips": [string]}. ' +
+    'score ≥85 → "good", 60–84 → "ok", <60 → "poor". Keep feedback to 1–3 sentences; 1–3 short tips on the specific sounds/words to fix.';
   const user = `TARGET: ${target}\n${readingLine}HEARD (STT): ${heard}`;
 
   let parsed: Record<string, unknown> = {};
@@ -432,13 +432,13 @@ export async function generateQuiz(
 
   const styleNote = cjk
     ? `Vì ${languageName(code)} dùng chữ không phải Latinh, hãy TRỘN thêm câu hỏi về CÁCH ĐỌC (đọc đúng của từ) và ${code === 'ja' ? 'trợ từ / thể lịch sự' : 'thanh điệu / cách dùng'}.`
-    : `Trộn câu hỏi dùng-từ-trong-ngữ-cảnh (điền chỗ trống, "câu nào dùng đúng"), không chỉ hỏi nghĩa.`;
+    : 'Trộn câu hỏi dùng-từ-trong-ngữ-cảnh (điền chỗ trống, "câu nào dùng đúng"), không chỉ hỏi nghĩa.';
   const system =
     `You are a language quiz generator for a Vietnamese speaker learning ${languageName(code)}. ` +
     `Create exactly ${count} multiple-choice questions (each with EXACTLY 4 options, one correct) that test real understanding of the given words. ` +
     `${styleNote} Question prompts and explanations MUST be in Vietnamese (tiếng Việt); the ${languageName(code)} words/sentences themselves stay in ${languageName(code)}. ` +
-    `Distractors must be plausible. Return ONLY a minified JSON object: ` +
-    `{"questions":[{"prompt":string,"options":[string,string,string,string],"correctIndex":number,"explanation":string}]}. correctIndex is 0-based.`;
+    'Distractors must be plausible. Return ONLY a minified JSON object: ' +
+    '{"questions":[{"prompt":string,"options":[string,string,string,string],"correctIndex":number,"explanation":string}]}. correctIndex is 0-based.';
   const user = `Danh sách từ vựng:\n${list}`;
 
   let parsed: { questions?: unknown };
@@ -505,10 +505,10 @@ export async function gradeAnswer(
 
   const system =
     `You are a supportive teacher grading a Vietnamese learner's free-text answer to a ${languageName(code)} reading-comprehension question. ` +
-    `Judge correctness AND language quality fairly. ALWAYS write feedback in Vietnamese (tiếng Việt). ` +
-    `Return ONLY a minified JSON object: {"score": number (0-100), "verdict": "good"|"ok"|"poor", "feedback": string, "corrected": string}. ` +
+    'Judge correctness AND language quality fairly. ALWAYS write feedback in Vietnamese (tiếng Việt). ' +
+    'Return ONLY a minified JSON object: {"score": number (0-100), "verdict": "good"|"ok"|"poor", "feedback": string, "corrected": string}. ' +
     `"corrected" = an improved/corrected version of the learner's answer in ${languageName(code)} (empty string if the answer is already good). ` +
-    `score ≥85 → "good", 60–84 → "ok", <60 → "poor". Keep feedback to 1–3 sentences.`;
+    'score ≥85 → "good", 60–84 → "ok", <60 → "poor". Keep feedback to 1–3 sentences.';
   const user = `QUESTION: ${prompt}\nLEARNER ANSWER: ${answer}${sample ? `\nSAMPLE ANSWER: ${sample}` : ''}`;
 
   let parsed: Record<string, unknown> = {};
@@ -579,10 +579,10 @@ export async function gradeWriting(
   const system =
     `You are a supportive writing teacher for a Vietnamese speaker learning ${langName}. ${focus} ` +
     `Grade the composition fairly and ALWAYS write feedback/notes in Vietnamese (tiếng Việt); the ${langName} text (corrected + suggestions) stays in ${langName}. ` +
-    `Return ONLY a minified JSON object: {"score": number (0-100), "level": string, "verdict": "good"|"ok"|"poor", "feedback": string, "corrected": string, "corrections": [{"original": string, "suggestion": string, "note": string}]}. ` +
-    `Escape any double-quote inside a string as \\". No text outside the JSON. ` +
+    'Return ONLY a minified JSON object: {"score": number (0-100), "level": string, "verdict": "good"|"ok"|"poor", "feedback": string, "corrected": string, "corrections": [{"original": string, "suggestion": string, "note": string}]}. ' +
+    'Escape any double-quote inside a string as \\". No text outside the JSON. ' +
     `"level" is a short proficiency estimate (e.g. "B1", "N4") or "" if unsure. "corrected" is the full improved version in ${langName}. ` +
-    `"corrections" lists up to 8 specific fixes (original phrase → suggestion + a short VI note). score ≥85 → "good", 60–84 → "ok", <60 → "poor".`;
+    '"corrections" lists up to 8 specific fixes (original phrase → suggestion + a short VI note). score ≥85 → "good", 60–84 → "ok", <60 → "poor".';
   const user = `${prompt ? `ĐỀ BÀI: ${prompt}\n\n` : ''}BÀI VIẾT:\n${text}`;
 
   let raw = '';
@@ -677,9 +677,9 @@ export async function rolePlayTurn(
   const system =
     `You are a friendly role-play partner helping a Vietnamese speaker practice conversational ${langName}. ` +
     `Stay in character for this scenario: "${scenario}". Reply in ${langName} with SHORT, natural, realistic lines (1–2 sentences), and keep the conversation going by asking or responding naturally.${readingNote} ` +
-    `Also gently correct the learner's LAST message if it has mistakes. ` +
-    `Return ONLY a minified JSON object: {"reply": string, "translation": string, "correction": string}. ` +
-    `Escape any double-quote inside a string as \\". No text outside the JSON. ` +
+    'Also gently correct the learner\'s LAST message if it has mistakes. ' +
+    'Return ONLY a minified JSON object: {"reply": string, "translation": string, "correction": string}. ' +
+    'Escape any double-quote inside a string as \\". No text outside the JSON. ' +
     `"reply" is your in-character line in ${langName}. "translation" is its Vietnamese meaning. "correction" is a brief, encouraging fix (in Vietnamese) of the learner's last message, or "" if it was fine or there was none.`;
 
   let raw = '';

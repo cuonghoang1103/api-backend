@@ -392,7 +392,7 @@ export async function createPasteImport(userId: number, body: unknown) {
  * (line-structure preserved), then run through the same heuristic parser.
  * A scanned/image-only PDF is surfaced loudly: every ATS read it as blank.
  */
-export async function createFileImport(userId: number, buffer: Buffer, originalName: string) {
+export async function createFileImport(userId: number, buffer: Buffer, _originalName: string) {
   const type = detectFileType(buffer);
   if (!type) throw new BadRequestError('Chỉ nhận file PDF hoặc DOCX');
 

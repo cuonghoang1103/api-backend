@@ -15,15 +15,14 @@ import type { CvMarket, CvLevel } from './rules/conventions.js';
 const MARKETS: CvMarket[] = ['VN', 'INTERNATIONAL'];
 const LEVELS: CvLevel[] = ['STUDENT', 'FRESHER', 'JUNIOR', 'MID', 'SENIOR', 'LEAD'];
 
-export async function lintProfile(userId: number, opts?: { market?: string; level?: string }) {
-  const profile = await getOrCreateProfile(userId);
-  const market: CvMarket = MARKETS.includes(opts?.market as CvMarket) ? (opts!.market as CvMarket) : 'VN';
-  const level: CvLevel = LEVELS.includes(opts?.level as CvLevel)
-    ? (opts!.level as CvLevel)
-    : (LEVELS.includes(profile.seniority as CvLevel) ? (profile.seniority as CvLevel) : 'MID');
+// Loosely typed profile-with-includes so a document's FILTERED subset can be
+// linted through the same path as the master profile.
+type LintProfileLike = Awaited<ReturnType<typeof getOrCreateProfile>>;
 
+/** Map a profile (full or filtered) into the linter's input shape. */
+export function profileToLintInput(profile: LintProfileLike, market: CvMarket, level: CvLevel): LintInput {
   const links = (profile.links ?? {}) as Record<string, string>;
-  const input: LintInput = {
+  return {
     market,
     level,
     contact: {
@@ -49,12 +48,12 @@ export async function lintProfile(userId: number, opts?: { market?: string; leve
     })),
     skills: profile.skills.map((s) => ({ name: s.name })),
   };
+}
 
-  const result = lintCv(input);
-
-  // Persist per-bullet strength (batched: one updateMany per strength bucket).
+/** Persist computed per-bullet strengths (batched). */
+export async function persistBulletStrengths(verdicts: { bulletId: number; strength: string }[]) {
   const byStrength: Record<string, number[]> = { WEAK: [], OK: [], STRONG: [] };
-  for (const v of result.bulletVerdicts) byStrength[v.strength]?.push(v.bulletId);
+  for (const v of verdicts) byStrength[v.strength]?.push(v.bulletId);
   await Promise.all(
     Object.entries(byStrength)
       .filter(([, ids]) => ids.length > 0)
@@ -62,6 +61,16 @@ export async function lintProfile(userId: number, opts?: { market?: string; leve
         prisma.cvBullet.updateMany({ where: { id: { in: ids } }, data: { strength: strength as 'WEAK' | 'OK' | 'STRONG' } }),
       ),
   );
+}
 
+export async function lintProfile(userId: number, opts?: { market?: string; level?: string }) {
+  const profile = await getOrCreateProfile(userId);
+  const market: CvMarket = MARKETS.includes(opts?.market as CvMarket) ? (opts!.market as CvMarket) : 'VN';
+  const level: CvLevel = LEVELS.includes(opts?.level as CvLevel)
+    ? (opts!.level as CvLevel)
+    : (LEVELS.includes(profile.seniority as CvLevel) ? (profile.seniority as CvLevel) : 'MID');
+
+  const result = lintCv(profileToLintInput(profile, market, level));
+  await persistBulletStrengths(result.bulletVerdicts);
   return { market, level, ...result };
 }

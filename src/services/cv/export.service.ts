@@ -50,9 +50,18 @@ async function verifyPdfRoundTrip(buffer: Buffer, name: string, email: string): 
 }
 
 export async function exportProfile(userId: number, format: ExportFormat, opts?: { template?: string; market?: string; language?: string }): Promise<ExportResult> {
-  if (!(format in MIME)) throw new BadRequestError('Định dạng không hỗ trợ');
   const profile = await getOrCreateProfile(userId);
-  let cv = toRenderCv(profile);
+  return exportCvData(userId, profile, format, opts);
+}
+
+/**
+ * Core export — renders any profile-shaped object (the master profile, or a
+ * document's filtered subset) to the requested format. See exportProfile /
+ * exportDocument (document.service) for the two entry points.
+ */
+export async function exportCvData(userId: number, profileLike: Parameters<typeof toRenderCv>[0], format: ExportFormat, opts?: { template?: string; market?: string; language?: string }): Promise<ExportResult> {
+  if (!(format in MIME)) throw new BadRequestError('Định dạng không hỗ trợ');
+  let cv = toRenderCv(profileLike);
 
   // Template + market. International market strips VN-only fields (DOB) no matter
   // which template asks for them — the market convention wins.
@@ -94,7 +103,7 @@ export async function exportProfile(userId: number, format: ExportFormat, opts?:
       buffer = Buffer.from(renderMarkdown(cv, lang), 'utf8');
       break;
     case 'json':
-      buffer = Buffer.from(JSON.stringify(renderJsonResume(profile), null, 2), 'utf8');
+      buffer = Buffer.from(JSON.stringify(renderJsonResume(profileLike), null, 2), 'utf8');
       break;
     default:
       throw new BadRequestError('Định dạng không hỗ trợ');

@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { CV_BUILDER_ENABLED } from '@/lib/featureFlags';
 import { cvApi } from '@/lib/cv-api';
-import type { CvCompleteness } from '@/types/cv';
+import type { CvCompleteness, CvDocumentSummary } from '@/types/cv';
 
 const EXPORT_FORMATS: { fmt: 'pdf' | 'docx' | 'txt' | 'md' | 'json'; label: string; hint?: string }[] = [
   { fmt: 'pdf', label: 'PDF', hint: 'ATS-safe' },
@@ -68,7 +68,18 @@ export default function CvDashboardPage() {
         if (status === 401) setNeedLogin(true);
       })
       .finally(() => setLoading(false));
+    cvApi.listDocs().then((r) => setDocs(r.data.data)).catch(() => {});
   }, [router]);
+
+  const [docs, setDocs] = useState<CvDocumentSummary[]>([]);
+  const [creatingDoc, setCreatingDoc] = useState(false);
+  const createDoc = async () => {
+    setCreatingDoc(true);
+    try {
+      const d = await cvApi.createDoc({ name: 'CV mới' });
+      router.push(`/cv/builder/${d.data.data.id}`);
+    } catch { setCreatingDoc(false); }
+  };
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] pt-16">
@@ -187,7 +198,30 @@ export default function CvDashboardPage() {
               </div>
             )}
 
-            {/* Export */}
+            {/* Tailored CVs (per-job documents) */}
+            <section className="mt-8 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-sm font-medium"><FileText className="h-4 w-4" /> CV theo từng công việc</div>
+                <button onClick={createDoc} disabled={creatingDoc} className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent-color)] px-3 py-1.5 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
+                  {creatingDoc ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />} Tạo CV mới
+                </button>
+              </div>
+              <p className="mt-1 text-xs text-[var(--text-secondary)]">Mỗi công việc một bản CV riêng — chọn nội dung, mẫu, thị trường, ngôn ngữ khác nhau từ cùng một hồ sơ gốc.</p>
+              {docs.length > 0 ? (
+                <ul className="mt-3 space-y-1.5">
+                  {docs.map((d) => (
+                    <li key={d.id}>
+                      <Link href={`/cv/builder/${d.id}`} className="flex items-center justify-between rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm hover:border-[var(--accent-color)]">
+                        <span>{d.name}</span>
+                        <span className="text-xs text-[var(--text-secondary)]">{d.templateKey} · {d.market} · {d.language}{d.outcomeLabel ? ` · ${d.outcomeLabel}` : ''}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : <p className="mt-3 text-xs text-[var(--text-secondary)]">Chưa có bản nào. Bấm &quot;Tạo CV mới&quot; để làm bản riêng cho một job.</p>}
+            </section>
+
+            {/* Export (master profile) */}
             <section className="mt-8 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
               <div className="flex items-center gap-2 text-sm font-medium"><Download className="h-4 w-4" /> Tải CV xuống</div>
               <p className="mt-1 text-xs text-[var(--text-secondary)]">

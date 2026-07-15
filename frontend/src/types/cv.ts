@@ -201,6 +201,46 @@ export interface CvImportCommitBody {
   draft: ParsedDraft;
 }
 
+// ── Tailored documents (Phase 11.2) ─────────────────────────────
+export interface CvDocumentSummary {
+  id: number;
+  name: string;
+  market: string;
+  language: string;
+  templateKey: string | null;
+  status: string;
+  outcomeLabel: string | null;
+  updatedAt: string;
+}
+export interface CvDocumentReview {
+  id: number;
+  mode: string;
+  verdict: string | null;
+  score: number | null;
+  sixSecondTest: string | null;
+  createdAt: string;
+}
+export interface CvDocumentDetail {
+  id: number;
+  name: string;
+  market: string;
+  language: string;
+  templateKey: string | null;
+  experienceLevel: string;
+  cvType: string;
+  includedItemIds: { items?: number[]; skills?: number[] };
+  pageTarget: number;
+  outcomeLabel: string | null;
+  status: string;
+  targetJobId: number | null;
+  reviews: CvDocumentReview[];
+}
+export type CvDocumentPatch = Partial<{
+  name: string; market: string; language: string; experienceLevel: string; cvType: string;
+  templateKey: string; includedItemIds: { items?: number[]; skills?: number[] };
+  pageTarget: number; outcomeLabel: string | null; status: string; targetJobId: number | null;
+}>;
+
 // ── Job targeting (Phase 8a) ────────────────────────────────────
 export interface CvJobSummary { id: number; title: string; company: string | null; createdAt: string }
 export type CvCoverageLevel = 'GREEN' | 'AMBER' | 'RED';

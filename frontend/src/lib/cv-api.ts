@@ -12,6 +12,7 @@ import type {
   CvLanguageSkill, CvLangInput,
   CvImportJob, CvImportCommitBody, CvLintResult, CvCritiqueResult,
   CvJobSummary, CvCoverage, CvTailor, GhCandidate,
+  CvDocumentSummary, CvDocumentDetail, CvDocumentPatch,
 } from '@/types/cv';
 
 type Res<T> = Promise<{ data: ApiResponse<T> }>;
@@ -67,6 +68,17 @@ export const cvApi = {
   getImport: (id: number): Res<CvImportJob> => api.get(`/cv/import/${id}`),
   commitImport: (id: number, body: CvImportCommitBody): Res<{ committed: boolean; counts: Record<string, number> }> =>
     api.post(`/cv/import/${id}/commit`, body),
+
+  // ── Tailored documents (Phase 11.2) ────────────────────────
+  listDocs: (): Res<CvDocumentSummary[]> => api.get('/cv/documents'),
+  createDoc: (body: CvDocumentPatch): Res<CvDocumentDetail> => api.post('/cv/documents', body),
+  getDoc: (id: number): Res<CvDocumentDetail> => api.get(`/cv/documents/${id}`),
+  updateDoc: (id: number, body: CvDocumentPatch): Res<CvDocumentDetail> => api.put(`/cv/documents/${id}`, body),
+  deleteDoc: (id: number): Res<{ id: number }> => api.delete(`/cv/documents/${id}`),
+  duplicateDoc: (id: number): Res<CvDocumentDetail> => api.post(`/cv/documents/${id}/duplicate`, {}),
+  lintDoc: (id: number): Res<CvLintResult & { documentId: number }> => api.post(`/cv/documents/${id}/lint`, {}),
+  exportDoc: (id: number, format: 'pdf' | 'docx' | 'txt' | 'md' | 'json') =>
+    api.get(`/cv/documents/${id}/export/${format}`, { responseType: 'blob', timeout: 120_000 }),
 
   // ── Analysis (Phase 3: STATIC rules engine — free) ──────────
   lint: (body?: { market?: string; level?: string }): Res<CvLintResult> => api.post('/cv/lint', body ?? {}),

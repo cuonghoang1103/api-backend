@@ -20,6 +20,7 @@ import * as importSvc from '../services/cv/import.service.js';
 import * as lintSvc from '../services/cv/lint.service.js';
 import { exportProfile, type ExportFormat } from '../services/cv/export.service.js';
 import { listTemplates } from '../services/cv/export/templates.js';
+import * as docSvc from '../services/cv/document.service.js';
 import * as critiqueSvc from '../services/cv/critique.service.js';
 import * as jobSvc from '../services/cv/jobTarget.service.js';
 import * as coverSvc from '../services/cv/coverLetter.service.js';
@@ -197,6 +198,42 @@ router.post('/intake', h((req) => intakeSvc.intakeTurn(req.userId!, req.body ?? 
 
 // Available export templates (Phase 11) — for the export picker.
 router.get('/templates', h(async () => listTemplates()));
+
+// ── Tailored documents (Phase 11.2) — many CVs derived from the profile ──
+router.get('/documents', h((req) => docSvc.listDocuments(req.userId!)));
+router.post('/documents', h((req) => docSvc.createDocument(req.userId!, req.body ?? {})));
+router.get('/documents/:id', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return docSvc.getDocument(req.userId!, id);
+}));
+router.put('/documents/:id', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return docSvc.updateDocument(req.userId!, id, req.body ?? {});
+}));
+router.delete('/documents/:id', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return docSvc.deleteDocument(req.userId!, id);
+}));
+router.post('/documents/:id/duplicate', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return docSvc.duplicateDocument(req.userId!, id);
+}));
+router.post('/documents/:id/lint', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return docSvc.lintDocument(req.userId!, id);
+}));
+router.get('/documents/:id/export/:format', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const id = parseId(req.params.id);
+    if (Number.isNaN(id)) { res.status(400).json({ success: false, message: 'id không hợp lệ' }); return; }
+    const format = String(req.params.format).toLowerCase() as ExportFormat;
+    const { buffer, mime, filename, roundTripOk } = await docSvc.exportDocument(req.userId!, id, format);
+    res.setHeader('Content-Type', mime);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    if (roundTripOk !== null) res.setHeader('X-CV-RoundTrip', roundTripOk ? 'ok' : 'fail');
+    res.send(buffer);
+  } catch (err) { next(err); }
+});
 
 // ── Export (Phase 4: PDF/DOCX/TXT/MD/JSON) — binary download, not JSON ──
 router.get('/export/:format', async (req: Request, res: Response, next: NextFunction): Promise<void> => {

@@ -5602,6 +5602,10 @@ model CvDocument {
   cvType          CvType            @default(INDUSTRY) @map("cv_type")
   templateId      Int?              @map("template_id")
   template        CvTemplate?       @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  // Code-defined template id ('ats' | 'technical' | 'vietnam' | 'senior') — the
+  // renderer uses this, not the CvTemplate row (which stays for an admin-managed
+  // template library later).
+  templateKey     String?           @map("template_key") @db.VarChar(60)
   targetJobId     Int?              @map("target_job_id") // soft ref to CvJobTarget (module convention)
   sectionOrder    Json              @default("[]") @db.JsonB
   includedItemIds Json              @default("{}") @map("included_item_ids") @db.JsonB // items/bullets/skills in THIS cv

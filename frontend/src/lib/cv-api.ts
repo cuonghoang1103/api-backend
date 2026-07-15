@@ -10,7 +10,7 @@ import type {
   CvItem, CvItemInput, CvBullet, CvBulletInput,
   CvSkill, CvSkillInput, CvCertification, CvCertInput,
   CvLanguageSkill, CvLangInput,
-  CvImportJob, CvImportCommitBody,
+  CvImportJob, CvImportCommitBody, CvLintResult,
 } from '@/types/cv';
 
 type Res<T> = Promise<{ data: ApiResponse<T> }>;
@@ -60,4 +60,7 @@ export const cvApi = {
   getImport: (id: number): Res<CvImportJob> => api.get(`/cv/import/${id}`),
   commitImport: (id: number, body: CvImportCommitBody): Res<{ committed: boolean; counts: Record<string, number> }> =>
     api.post(`/cv/import/${id}/commit`, body),
+
+  // ── Analysis (Phase 3: STATIC rules engine — free) ──────────
+  lint: (body?: { market?: string; level?: string }): Res<CvLintResult> => api.post('/cv/lint', body ?? {}),
 };

@@ -105,6 +105,12 @@ export default function CvDashboardPage() {
                   <Upload className="h-4 w-4" /> Nhập CV có sẵn
                 </Link>
                 <Link
+                  href="/cv/review"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium hover:bg-[var(--bg-primary)]"
+                >
+                  <ScanSearch className="h-4 w-4" /> Chấm CV (miễn phí)
+                </Link>
+                <Link
                   href="/cv/profile"
                   className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium hover:bg-[var(--bg-primary)]"
                 >
@@ -135,8 +141,7 @@ export default function CvDashboardPage() {
               <h2 className="text-sm font-medium text-[var(--text-secondary)]">Sắp có</h2>
               <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {[
-                  { icon: Upload, title: 'Nhập PDF / GitHub', desc: 'Tải PDF/DOCX hoặc kết nối GitHub (dán text & JSON Resume đã dùng được).' },
-                  { icon: ScanSearch, title: 'Chấm CV (miễn phí)', desc: 'Rules-engine bắt lỗi bullet, kỹ năng thiếu bằng chứng, ATS.' },
+                  { icon: Upload, title: 'Kết nối GitHub', desc: 'Chấm điểm repo, gợi ý mục CV (dán text, JSON Resume, PDF/DOCX đã dùng được).' },
                   { icon: Target, title: 'Nhắm theo job (JD)', desc: 'Dán JD → ma trận kỹ năng × bằng chứng + verdict thật thà.' },
                   { icon: Eye, title: 'Recruiter View', desc: 'Mô phỏng 6 giây quét mắt + cách ATS đọc CV của bạn.' },
                   { icon: Download, title: 'Xuất PDF / DOCX', desc: 'Chữ thật, ATS đọc được, kiểm tra round-trip.' },

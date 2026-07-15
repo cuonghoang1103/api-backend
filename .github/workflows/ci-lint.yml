@@ -41,6 +41,11 @@ jobs:
         # stops ranking answers correctly (a prompt/scoring regression). The AI
         # eval (npm run eval:grader:ai) needs a key and is run manually.
         run: npm run eval:grader
+      - name: CV linter eval — golden set (required)
+        # STATIC eval: pure, no DB, no LLM key. Fails the build if the CV bullet
+        # linter regresses — especially if it starts marking STRONG bullets WEAK
+        # (the fatal false-positive the harness gates on).
+        run: npm run eval:cv-linter
       - name: Unit tests — money math + payment signature (required)
         run: npm test
       - name: ESLint (informational)

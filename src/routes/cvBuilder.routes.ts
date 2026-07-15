@@ -17,6 +17,7 @@ import type { ApiResponse } from '../types/index.js';
 import { prisma } from '../config/database.js';
 import * as profile from '../services/cv/profile.service.js';
 import * as importSvc from '../services/cv/import.service.js';
+import * as lintSvc from '../services/cv/lint.service.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -144,6 +145,9 @@ router.post('/import/:id/commit', h((req, res) => {
   const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
   return importSvc.commitImport(req.userId!, id, req.body ?? {});
 }));
+
+// ── Analysis (Phase 3: STATIC rules engine — free, instant, no LLM) ──
+router.post('/lint', h((req) => lintSvc.lintProfile(req.userId!, req.body ?? {})));
 
 // ═══════════════════════ ADMIN ROUTER ═══════════════════════════
 const adminRouter = Router();

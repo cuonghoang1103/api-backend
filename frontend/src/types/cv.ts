@@ -188,6 +188,36 @@ export interface CvImportCommitBody {
   draft: ParsedDraft;
 }
 
+// ── Rules engine / lint (Phase 3) ───────────────────────────────
+export type CvSeverity = 'CRITICAL' | 'MAJOR' | 'MINOR';
+export interface CvBulletIssue { code: string; severity: CvSeverity; message: string }
+export interface CvBulletVerdict {
+  bulletId: number;
+  itemId: number;
+  strength: CvBulletStrength;
+  issues: CvBulletIssue[];
+}
+export interface CvDocIssue {
+  code: string;
+  severity: CvSeverity;
+  problem: string;
+  suggestedFix?: string;
+  location?: { itemId?: number; bulletId?: number; section?: string };
+}
+export interface CvLintResult {
+  market: string;
+  level: string;
+  score: number;
+  band: 'INTERVIEW' | 'MAYBE' | 'REJECT';
+  sixSecondTest: string;
+  issues: CvDocIssue[];
+  strengths: string[];
+  bulletVerdicts: CvBulletVerdict[];
+  skillGaps: string[];
+  counts: { bullets: number; weakBullets: number; strongBullets: number; bulletsWithMetric: number; items: number };
+  conventionNotes: { market: string; level: string };
+}
+
 export type CvItemInput = Partial<Omit<CvItem, 'id' | 'bullets'>> & { kind?: CvItemKind; title?: string };
 export type CvBulletInput = Partial<Pick<CvBullet, 'text' | 'userStatedFacts' | 'skillsEvidenced' | 'strength' | 'sortOrder'>>;
 export type CvSkillInput = Partial<Omit<CvSkill, 'id'>> & { name?: string };

@@ -4,6 +4,12 @@
  * /interview — setup wizard. Pick Domain → Track → Level → (optional) company
  * style, then start a STATIC self-assessment session. Low-chrome, composed:
  * this screen sets the expectation that the interview counts.
+ *
+ * UI language: fully bilingual VI/EN via interview-i18n (makeT). The toggle in
+ * the header switches the WHOLE page realtime (labels + catalog names via
+ * nameVi/name), persisted in localStorage. Default VI. This is separate from
+ * the interview CONTENT language (`language` state) sent to the API — though
+ * picking a content language for the first time nudges the UI to match.
  */
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -13,12 +19,23 @@ import { History, ArrowRight, Loader2, ShieldCheck, Flame, Crown } from 'lucide-
 import { INTERVIEW_ENABLED } from '@/lib/featureFlags';
 import ParticleBackground from '@/components/repos/ParticleBackground';
 import { interviewApi } from '@/lib/interview-api';
+import { makeT, type ILang } from '@/lib/interview-i18n';
 import type { TaxonomyResponse, TaxonomyTrack, CompanyProfile, InterviewLevel } from '@/types/interview';
 import { LEVELS } from '@/types/interview';
 
 const LEVEL_LABEL: Record<InterviewLevel, string> = {
   INTERN: 'Intern', FRESHER: 'Fresher', JUNIOR: 'Junior', MID: 'Middle', SENIOR: 'Senior', LEAD: 'Lead', PRINCIPAL: 'Principal',
 };
+
+const UI_LANG_KEY = 'interview:uiLang';
+
+/** Static strings we author ourselves (interview-i18n) may carry <b> markup. */
+function Rich({ s }: { s: string }) {
+  return <span dangerouslySetInnerHTML={{ __html: s }} />;
+}
+
+/** Escape dynamic values before interpolating them into Rich strings. */
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 export default function InterviewSetupPage() {
   const router = useRouter();
@@ -42,6 +59,22 @@ export default function InterviewSetupPage() {
   const [starting, setStarting] = useState(false);
   const [needLogin, setNeedLogin] = useState(false);
 
+  // ── UI language (VI default, persisted, realtime) ─────────────────────────
+  const [uiLang, setUiLang] = useState<ILang>('VI');
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(UI_LANG_KEY);
+      if (saved === 'EN' || saved === 'VI') setUiLang(saved);
+    } catch { /* ignore */ }
+  }, []);
+  const switchUiLang = (l: ILang) => {
+    setUiLang(l);
+    try { localStorage.setItem(UI_LANG_KEY, l); } catch { /* ignore */ }
+  };
+  const t = makeT(uiLang);
+  /** Catalog display name honouring the UI language (nameVi ⇄ name). */
+  const dn = (x: { name: string; nameVi?: string | null }) => (uiLang === 'VI' ? (x.nameVi || x.name) : x.name);
+
   useEffect(() => {
     if (!INTERVIEW_ENABLED) { router.replace('/'); return; }
     interviewApi
@@ -54,7 +87,11 @@ export default function InterviewSetupPage() {
       .catch((e) => {
         const status = (e as { response?: { status?: number } })?.response?.status;
         if (status === 401) setNeedLogin(true);
-        else toast.error('Không tải được danh mục — thử lại sau.');
+        else {
+          let lg: ILang = 'VI';
+          try { const s = localStorage.getItem(UI_LANG_KEY); if (s === 'EN') lg = 'EN'; } catch { /* ignore */ }
+          toast.error(makeT(lg)('tCatalogFail'));
+        }
       })
       .finally(() => setLoading(false));
   }, [router]);
@@ -79,7 +116,7 @@ export default function InterviewSetupPage() {
   const totalQ = useMemo(() => tracks.reduce((s, t) => s + (t.questionCount ?? 0), 0), [tracks]);
   // Topics available from the selected tracks (for deep-dive selection).
   const availableTopics = useMemo(
-    () => tracks.flatMap((t) => t.topics.map((tp) => ({ ...tp, trackName: t.name }))),
+    () => tracks.flatMap((tr) => tr.topics.map((tp) => ({ ...tp, track: tr }))),
     [tracks],
   );
   // Effective question pool: selected topics if any, else the whole track(s).
@@ -93,9 +130,9 @@ export default function InterviewSetupPage() {
     setTopicIds((prev) => prev.filter((id) => availableTopics.some((tp) => tp.id === id)));
   }, [availableTopics]);
 
-  const toggleTrack = (t: TaxonomyTrack) => {
+  const toggleTrack = (tr: TaxonomyTrack) => {
     setTracks((prev) => {
-      const next = prev.some((x) => x.id === t.id) ? prev.filter((x) => x.id !== t.id) : [...prev, t];
+      const next = prev.some((x) => x.id === tr.id) ? prev.filter((x) => x.id !== tr.id) : [...prev, tr];
       const q = next.reduce((s, x) => s + (x.questionCount ?? 0), 0);
       if (q > 0) setNumQuestions((n) => Math.max(3, Math.min(n, q)));
       return next;
@@ -104,13 +141,13 @@ export default function InterviewSetupPage() {
   const toggleTopic = (id: number) => setTopicIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
   const start = async () => {
-    if (!tracks.length) { toast.warning('Chọn ít nhất 1 vị trí'); return; }
+    if (!tracks.length) { toast.warning(t('tPickTrack')); return; }
     setStarting(true);
     try {
       const useProj = useProject && projectMd.trim();
       const usePersonalize = !useProj && personalize && (cv.trim() || jd.trim());
       const res = await interviewApi.createSession({
-        trackId: tracks[0].id, trackIds: tracks.map((t) => t.id), level, companyProfileId: company?.id ?? null, language, numQuestions, focusedMode,
+        trackId: tracks[0].id, trackIds: tracks.map((tr) => tr.id), level, companyProfileId: company?.id ?? null, language, numQuestions, focusedMode,
         engineMode: tax?.aiAvailable ? engineMode : 'STATIC',
         ...(topicIds.length ? { topicIds } : {}),
         ...(useProj ? { projectMd: projectMd.trim() } : usePersonalize ? { cv: cv.trim() || undefined, jd: jd.trim() || undefined } : {}),
@@ -118,10 +155,14 @@ export default function InterviewSetupPage() {
       router.push(`/interview/session/${res.data.data.id}`);
     } catch (e) {
       const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      toast.error(msg || 'Không tạo được phiên phỏng vấn');
+      toast.error(msg || t('tCreateFail'));
       setStarting(false);
     }
   };
+
+  // Section numbering is computed so hidden sections never leave gaps/dupes.
+  let step = 0;
+  const nextStep = () => ++step;
 
   return (
     <div className="relative min-h-screen bg-darkbg text-slate-100 pt-16 overflow-hidden">
@@ -130,101 +171,106 @@ export default function InterviewSetupPage() {
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-8">
           <div>
-            <p className="text-xs font-mono uppercase tracking-[0.2em] text-slate-400 mb-2">Mock Interview</p>
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-100 tracking-tight">Phòng luyện phỏng vấn</h1>
-            <p className="text-slate-400 mt-2 max-w-xl">
-              Một người phỏng vấn điềm tĩnh, công bằng sẽ hỏi bạn từng câu. Bạn trả lời, xem đáp án mẫu &amp; rubric, rồi tự chấm.
-              Máy cũng chấm khách quan song song. Miễn phí, không cần AI.
-            </p>
+            <p className="text-xs font-mono uppercase tracking-[0.2em] text-slate-400 mb-2">{t('setupKicker')}</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-100 tracking-tight">{t('setupTitle')}</h1>
+            <p className="text-slate-400 mt-2 max-w-xl">{t('setupIntro')}</p>
           </div>
-          <div className="shrink-0 flex items-center gap-2">
-            <Link href="/interview/drill" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/40 bg-amber-500/10 text-sm text-amber-300 hover:bg-amber-500/15 transition-colors">
-              <Flame className="w-4 h-4" /> Ôn tập
-            </Link>
-            <Link href="/interview/history" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-sm text-slate-400 hover:text-slate-100 transition-colors">
-              <History className="w-4 h-4" /> Lịch sử
-            </Link>
+          <div className="shrink-0 flex flex-col items-end gap-2">
+            {/* UI language toggle — realtime, persisted */}
+            <div className="inline-flex rounded-lg border border-white/10 overflow-hidden" role="group" aria-label="Display language">
+              {(['VI', 'EN'] as const).map((lg) => (
+                <button
+                  key={lg}
+                  onClick={() => switchUiLang(lg)}
+                  className={`px-2.5 py-1 text-xs transition-colors ${uiLang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-slate-400 hover:text-white'}`}
+                >
+                  {lg}
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center gap-2">
+              <Link href="/interview/drill" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/40 bg-amber-500/10 text-sm text-amber-300 hover:bg-amber-500/15 transition-colors">
+                <Flame className="w-4 h-4" /> {t('drillBtn')}
+              </Link>
+              <Link href="/interview/history" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-sm text-slate-400 hover:text-slate-100 transition-colors">
+                <History className="w-4 h-4" /> {t('historyBtn')}
+              </Link>
+            </div>
           </div>
         </div>
 
         {loading ? (
-          <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải…</div>
+          <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> {t('loadingCatalog')}</div>
         ) : needLogin ? (
           <div className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] p-8 text-center">
             <div className="text-4xl mb-3">🔒</div>
-            <h2 className="text-xl font-bold text-slate-100 mb-1">Vui lòng đăng nhập để sử dụng</h2>
-            <p className="text-sm text-slate-400 mb-5 max-w-md mx-auto">Phòng luyện phỏng vấn yêu cầu đăng nhập để lưu tiến trình, báo cáo và dùng các tính năng AI (chỉ dành cho tài khoản Pro).</p>
+            <h2 className="text-xl font-bold text-slate-100 mb-1">{t('loginRequired')}</h2>
+            <p className="text-sm text-slate-400 mb-5 max-w-md mx-auto">{t('loginRequiredSub')}</p>
             <div className="flex items-center justify-center gap-3">
               <Link href={`/login?redirect=${encodeURIComponent('/interview')}`} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90">
-                Đăng nhập
+                {t('loginBtn')}
               </Link>
               <Link href="/register" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-slate-300 hover:text-white">
-                Đăng ký
+                {t('registerBtn')}
               </Link>
             </div>
           </div>
         ) : !tax || !tax.domains.length ? (
-          <div className="rounded-xl border border-white/10 p-6 text-slate-400">
-            Chưa có ngân hàng câu hỏi. Vui lòng quay lại sau hoặc báo admin.
-          </div>
+          <div className="rounded-xl border border-white/10 p-6 text-slate-400">{t('emptyBank')}</div>
         ) : (
           <div className="space-y-8">
             {/* Domain */}
-            <Section step={1} title="Lĩnh vực">
+            <Section step={nextStep()} title={t('stepDomain')}>
               <div className="flex flex-wrap gap-2">
                 {tax.domains.map((d) => (
                   <Chip key={d.id} active={d.id === domainId} onClick={() => setDomainId(d.id)}>
-                    {d.nameVi || d.name}
+                    {dn(d)}
                   </Chip>
                 ))}
               </div>
             </Section>
 
             {/* Track */}
-            <Section step={2} title="Vị trí — chọn 1 hoặc nhiều (gộp lĩnh vực)">
+            <Section step={nextStep()} title={t('stepTrack')}>
               <div className="grid sm:grid-cols-2 gap-2">
-                {domain?.tracks.map((t) => {
-                  const qc = t.questionCount ?? 0;
-                  const on = tracks.some((x) => x.id === t.id);
+                {domain?.tracks.map((tr) => {
+                  const qc = tr.questionCount ?? 0;
+                  const on = tracks.some((x) => x.id === tr.id);
                   return (
                     <button
-                      key={t.id}
-                      onClick={() => toggleTrack(t)}
+                      key={tr.id}
+                      onClick={() => toggleTrack(tr)}
                       className={`text-left px-4 py-3 rounded-xl border transition-all ${
                         on ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
                       }`}
                     >
                       <div className="font-semibold text-slate-100 flex items-center gap-2">
                         <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] ${on ? 'bg-amber-500 border-amber-500 text-slate-950' : 'border-white/20'}`}>{on ? '✓' : ''}</span>
-                        {t.name}
+                        {dn(tr)}
                       </div>
                       <div className="text-xs mt-0.5 flex items-center gap-2 pl-6">
-                        <span className="text-slate-400">{t.topics.length} chủ đề</span>
-                        {qc > 0 ? <span className="text-emerald-400">· {qc} câu hỏi</span> : <span className="text-amber-400/90">· chưa có câu hỏi</span>}
+                        <span className="text-slate-400">{t('topicsCount', { n: tr.topics.length })}</span>
+                        {qc > 0 ? <span className="text-emerald-400">{t('qCount', { n: qc })}</span> : <span className="text-amber-400/90">{t('qNone')}</span>}
                       </div>
                     </button>
                   );
                 })}
-                {!domain?.tracks.length && <p className="text-sm text-slate-400">Lĩnh vực này chưa có track.</p>}
+                {!domain?.tracks.length && <p className="text-sm text-slate-400">{t('noTracks')}</p>}
               </div>
               {tracks.length > 0 && (
                 <p className="text-xs text-slate-400 mt-2">
-                  Đã chọn <b className="text-amber-300">{tracks.length}</b> vị trí ({tracks.map((t) => t.name).join(', ')}) · tổng <b className="text-emerald-400">{totalQ}</b> câu hỏi.
+                  <Rich s={t('tracksSelected', { n: `<b class="text-amber-300">${tracks.length}</b>`, names: esc(tracks.map((tr) => dn(tr)).join(', ')), q: `<b class="text-emerald-400">${totalQ}</b>` })} />
                 </p>
               )}
               {tracks.length > 0 && totalQ === 0 && (
-                <p className="text-xs text-amber-300/90 mt-1">
-                  Các vị trí đã chọn chưa có câu hỏi. Admin vào <b>/admin/interview</b> → chọn topic → <b>AI sinh câu hỏi</b> (Opus 4.8), hoặc chọn vị trí đã có câu hỏi.
-                </p>
+                <p className="text-xs text-amber-300/90 mt-1"><Rich s={t('tracksNoQuestions')} /></p>
               )}
             </Section>
 
-            {/* Phase F — deep-dive on specific topics (optional) */}
+            {/* Deep-dive on specific topics (optional) */}
             {tracks.length > 0 && availableTopics.length > 0 && (
-              <Section step={3} title="Chuyên sâu theo topic (tuỳ chọn)">
-                <p className="text-xs text-slate-400 mb-2">
-                  Bỏ trống = kiểm tra <b>toàn bộ</b> topic của vị trí đã chọn. Tick 1 hoặc vài topic (vd chỉ <b>OOP</b>) để <b>luyện chuyên sâu</b> đúng mảng đó.
-                </p>
+              <Section step={nextStep()} title={t('stepTopics')}>
+                <p className="text-xs text-slate-400 mb-2"><Rich s={t('topicsHint')} /></p>
                 <div className="grid sm:grid-cols-2 gap-1.5">
                   {availableTopics.map((tp) => {
                     const on = topicIds.includes(tp.id);
@@ -238,21 +284,23 @@ export default function InterviewSetupPage() {
                         }`}
                       >
                         <span className={`inline-flex w-3.5 h-3.5 mr-2 rounded border items-center justify-center text-[9px] align-middle ${on ? 'bg-amber-500 border-amber-500 text-slate-950' : 'border-white/20'}`}>{on ? '✓' : ''}</span>
-                        <span className="text-slate-100">{tp.name}</span>
-                        <span className="text-slate-400"> · {tp.trackName}</span>
-                        <span className={qc > 0 ? 'text-emerald-400' : 'text-amber-400/80'}> · {qc} câu</span>
+                        <span className="text-slate-100">{dn(tp)}</span>
+                        <span className="text-slate-400"> · {dn(tp.track)}</span>
+                        <span className={qc > 0 ? 'text-emerald-400' : 'text-amber-400/80'}> {t('qShort', { n: qc })}</span>
                       </button>
                     );
                   })}
                 </div>
                 {topicIds.length > 0 && (
-                  <p className="text-xs text-slate-400 mt-2">Đang chuyên sâu <b className="text-amber-300">{topicIds.length}</b> topic · <b className="text-emerald-400">{effectiveQ}</b> câu hỏi.</p>
+                  <p className="text-xs text-slate-400 mt-2">
+                    <Rich s={t('topicsSelected', { n: `<b class="text-amber-300">${topicIds.length}</b>`, q: `<b class="text-emerald-400">${effectiveQ}</b>` })} />
+                  </p>
                 )}
               </Section>
             )}
 
             {/* Level */}
-            <Section step={3} title="Cấp độ">
+            <Section step={nextStep()} title={t('stepLevel')}>
               <div className="flex flex-wrap gap-2">
                 {LEVELS.map((lv) => (
                   <Chip key={lv} active={lv === level} onClick={() => setLevel(lv)}>{LEVEL_LABEL[lv]}</Chip>
@@ -261,9 +309,9 @@ export default function InterviewSetupPage() {
             </Section>
 
             {/* Company style (optional) */}
-            <Section step={4} title="Phong cách công ty (tuỳ chọn)">
+            <Section step={nextStep()} title={t('stepCompany')}>
               <div className="flex flex-wrap gap-2">
-                <Chip active={company === null} onClick={() => setCompany(null)}>Mặc định</Chip>
+                <Chip active={company === null} onClick={() => setCompany(null)}>{t('companyDefault')}</Chip>
                 {tax.companyProfiles.map((c) => (
                   <Chip key={c.id} active={company?.id === c.id} onClick={() => setCompany(c)}>{c.name}</Chip>
                 ))}
@@ -272,10 +320,10 @@ export default function InterviewSetupPage() {
             </Section>
 
             {/* Options */}
-            <Section step={5} title="Tuỳ chọn">
+            <Section step={nextStep()} title={t('stepOptions')}>
               <div className="flex flex-wrap items-center gap-6">
                 <label className="flex items-center gap-3">
-                  <span className="text-sm text-slate-400">Số câu</span>
+                  <span className="text-sm text-slate-400">{t('numQuestions')}</span>
                   <input
                     type="range"
                     min={3}
@@ -286,31 +334,34 @@ export default function InterviewSetupPage() {
                   />
                   <span className="text-sm font-mono text-slate-100 w-8">{numQuestions}</span>
                   {effectiveQ > 0 && (
-                    <span className="text-xs text-slate-500">(tối đa {Math.min(effectiveQ, 50)})</span>
+                    <span className="text-xs text-slate-500">{t('maxN', { n: Math.min(effectiveQ, 50) })}</span>
                   )}
                 </label>
-                <div className="inline-flex rounded-lg border border-white/10 overflow-hidden">
-                  {(['VI', 'EN'] as const).map((l) => (
-                    <button key={l} onClick={() => setLanguage(l)} className={`px-3 py-1.5 text-sm ${language === l ? 'bg-amber-500/15 text-amber-400' : 'text-slate-400'}`}>
-                      {l === 'VI' ? 'Tiếng Việt' : 'English'}
-                    </button>
-                  ))}
-                </div>
+                <label className="flex items-center gap-2">
+                  <span className="text-sm text-slate-400">{t('contentLangLabel')}</span>
+                  <span className="inline-flex rounded-lg border border-white/10 overflow-hidden">
+                    {(['VI', 'EN'] as const).map((l) => (
+                      <button key={l} onClick={() => setLanguage(l)} className={`px-3 py-1.5 text-sm ${language === l ? 'bg-amber-500/15 text-amber-400' : 'text-slate-400'}`}>
+                        {l === 'VI' ? 'Tiếng Việt' : 'English'}
+                      </button>
+                    ))}
+                  </span>
+                </label>
                 <label className="flex items-center gap-2 text-sm text-slate-400 cursor-pointer">
                   <input type="checkbox" checked={focusedMode} onChange={(e) => setFocusedMode(e.target.checked)} className="accent-amber-500" />
-                  <ShieldCheck className="w-4 h-4" /> Focused Mode (chặn dán, đếm mất tập trung)
+                  <ShieldCheck className="w-4 h-4" /> {t('focusedMode')}
                 </label>
               </div>
             </Section>
 
             {/* Engine mode — only when the backend has AI configured */}
             {tax.aiAvailable && (
-              <Section step={6} title="Chế độ chấm">
+              <Section step={nextStep()} title={t('stepEngine')}>
                 <div className="grid sm:grid-cols-3 gap-2">
                   {([
-                    { id: 'STATIC', label: 'Tự chấm', desc: 'Bạn tự chấm + máy khách quan. 0 đồng, 0 AI.' },
-                    { id: 'HYBRID', label: 'AI chấm', desc: 'AI chấm từng tiêu chí có dẫn chứng. Tốn token.' },
-                    { id: 'FULL_AI', label: 'AI đầy đủ', desc: 'AI chấm + viết báo cáo chi tiết.' },
+                    { id: 'STATIC', label: t('engineStatic'), desc: t('engineStaticDesc') },
+                    { id: 'HYBRID', label: t('engineHybrid'), desc: t('engineHybridDesc') },
+                    { id: 'FULL_AI', label: t('engineFull'), desc: t('engineFullDesc') },
                   ] as const).map((m) => {
                     const locked = m.id !== 'STATIC' && !tax.aiAllowed;
                     return (
@@ -325,7 +376,7 @@ export default function InterviewSetupPage() {
                           {m.label}
                           {locked && <span className="inline-flex items-center gap-0.5 rounded bg-amber-400/15 px-1 py-0.5 text-[9px] font-semibold text-amber-300"><Crown className="w-2.5 h-2.5" /> PRO</span>}
                         </div>
-                        <div className="text-xs text-slate-400 mt-0.5">{locked ? 'Nâng cấp Pro để dùng AI chấm điểm' : m.desc}</div>
+                        <div className="text-xs text-slate-400 mt-0.5">{locked ? t('engineLocked') : m.desc}</div>
                       </button>
                     );
                   })}
@@ -337,53 +388,51 @@ export default function InterviewSetupPage() {
                 clear the interview still works fully in self-assessment mode. */}
             {!tax.aiAvailable && (
               <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-sm text-amber-200/90">
-                Chấm điểm AI đang tạm nghỉ (bảo trì / không khả dụng). Buổi phỏng vấn vẫn chạy đầy đủ ở chế độ <b>Tự chấm</b> — câu hỏi, đáp án mẫu, máy chấm khách quan và báo cáo đều hoạt động bình thường, thuần ngôn ngữ bạn chọn.
+                <Rich s={t('aiDown')} />
               </div>
             )}
 
             {/* From CV Builder (P9): the user's CV was pre-loaded into personalize. */}
             {fromCv && (
               <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-amber-200">
-                Đã nạp CV của bạn từ CV Builder — câu hỏi sẽ bám theo chính hồ sơ của bạn. Chọn lĩnh vực/cấp độ rồi bắt đầu.
-                {(!tax.aiAvailable || !tax.aiAllowed) && <span className="mt-1 block text-xs text-amber-300/80">Cá nhân hoá theo CV cần bản Pro + AI bật. Bạn vẫn luyện được với ngân hàng câu hỏi tĩnh.</span>}
+                {t('fromCvLoaded')}
+                {(!tax.aiAvailable || !tax.aiAllowed) && <span className="mt-1 block text-xs text-amber-300/80">{t('fromCvProNote')}</span>}
               </div>
             )}
 
             {/* Personalize from CV/JD — Pro only */}
             {tax.aiAvailable && tax.aiAllowed && (
-              <Section step={7} title="Cá nhân hoá theo CV/JD (tuỳ chọn)">
+              <Section step={nextStep()} title={t('stepPersonalize')}>
                 <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer mb-2">
                   <input type="checkbox" checked={personalize} onChange={(e) => setPersonalize(e.target.checked)} className="accent-amber-500" />
-                  Sinh câu hỏi bám theo CV và/hoặc mô tả công việc (JD)
+                  {t('personalizeToggle')}
                 </label>
                 {personalize && (
                   <div className="space-y-3">
-                    <p className="text-xs text-slate-400">AI đọc CV/JD và tạo câu hỏi riêng cho bạn, chấm bằng AI đầy đủ. Dán văn bản bên dưới — nội dung không lưu lâu dài. Việc tạo có thể mất ~15–40s.</p>
+                    <p className="text-xs text-slate-400">{t('personalizeHint')}</p>
                     <div>
-                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">CV của bạn</div>
-                      <textarea value={cv} onChange={(e) => setCv(e.target.value)} rows={5} placeholder="Dán nội dung CV (kinh nghiệm, kỹ năng, dự án)…" className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm focus:outline-none focus:border-amber-500/60 resize-y" />
+                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">{t('yourCv')}</div>
+                      <textarea value={cv} onChange={(e) => setCv(e.target.value)} rows={5} placeholder={t('cvPlaceholder')} className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm focus:outline-none focus:border-amber-500/60 resize-y" />
                     </div>
                     <div>
-                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">Mô tả công việc — JD</div>
-                      <textarea value={jd} onChange={(e) => setJd(e.target.value)} rows={4} placeholder="Dán JD của vị trí bạn ứng tuyển…" className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm focus:outline-none focus:border-amber-500/60 resize-y" />
+                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">{t('jdLabel')}</div>
+                      <textarea value={jd} onChange={(e) => setJd(e.target.value)} rows={4} placeholder={t('jdPlaceholder')} className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm focus:outline-none focus:border-amber-500/60 resize-y" />
                     </div>
                   </div>
                 )}
               </Section>
             )}
 
-            {/* Phase 8 — project (.md) 2-round interview — Pro only */}
+            {/* Project (.md) 2-round interview — Pro only */}
             {tax.aiAvailable && tax.aiAllowed && (
-              <Section step={8} title="Phỏng vấn theo Project — upload .md (2 vòng)">
+              <Section step={nextStep()} title={t('stepProject')}>
                 <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer mb-2">
                   <input type="checkbox" checked={useProject} onChange={(e) => setUseProject(e.target.checked)} className="accent-amber-500" />
-                  AI đọc cả file .md dự án của bạn và hỏi chuyên sâu (model Opus 4.8)
+                  {t('projectToggle')}
                 </label>
                 {useProject && (
                   <div className="space-y-3">
-                    <p className="text-xs text-slate-400">
-                      <b>Vòng 1</b>: lý thuyết + hiểu code trong dự án. <b>Vòng 2</b>: chỉ code — implement/mở rộng/tối ưu/gỡ lỗi trong chính dự án. File .md càng chi tiết, câu hỏi càng sâu. Nội dung không lưu lâu dài · tạo có thể mất ~30–90s.
-                    </p>
+                    <p className="text-xs text-slate-400"><Rich s={t('projectHint')} /></p>
                     <div className="flex items-center gap-3">
                       <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-500/40 text-amber-300 text-sm cursor-pointer hover:bg-amber-500/10">
                         <input
@@ -393,24 +442,24 @@ export default function InterviewSetupPage() {
                           onChange={async (e) => {
                             const f = e.target.files?.[0];
                             if (!f) return;
-                            if (f.size > 2 * 1024 * 1024) { toast.error('File quá lớn (tối đa 2MB)'); return; }
+                            if (f.size > 2 * 1024 * 1024) { toast.error(t('fileTooBig')); return; }
                             const text = await f.text();
                             setProjectMd(text);
                             setProjectName(f.name);
                             e.target.value = '';
                           }}
                         />
-                        Chọn file .md
+                        {t('chooseMd')}
                       </label>
                       {projectName && (
                         <span className="text-xs text-slate-300">{projectName} · {(projectMd.length / 1024).toFixed(1)} KB
-                          <button onClick={() => { setProjectMd(''); setProjectName(''); }} className="ml-2 text-red-400 hover:underline">xoá</button>
+                          <button onClick={() => { setProjectMd(''); setProjectName(''); }} className="ml-2 text-red-400 hover:underline">{t('removeFile')}</button>
                         </span>
                       )}
                     </div>
                     <div>
-                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">…hoặc dán nội dung .md</div>
-                      <textarea value={projectMd} onChange={(e) => { setProjectMd(e.target.value); if (!projectName) setProjectName('(dán tay)'); }} rows={6} placeholder="Dán toàn bộ tài liệu dự án (README, kiến trúc, quyết định kỹ thuật…)" className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm font-mono focus:outline-none focus:border-amber-500/60 resize-y" />
+                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">{t('pasteMd')}</div>
+                      <textarea value={projectMd} onChange={(e) => { setProjectMd(e.target.value); if (!projectName) setProjectName(t('pastedByHand')); }} rows={6} placeholder={t('pasteMdPlaceholder')} className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm font-mono focus:outline-none focus:border-amber-500/60 resize-y" />
                     </div>
                   </div>
                 )}
@@ -425,7 +474,7 @@ export default function InterviewSetupPage() {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 transition-opacity disabled:opacity-40"
               >
                 {starting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
-                Bắt đầu phỏng vấn
+                {t('startInterview')}
               </button>
             </div>
           </div>

@@ -22,7 +22,18 @@ const RATINGS = [
 ];
 
 export default function InterviewDrillPage() {
-  const [lang, setLang] = useState<'VI' | 'EN'>('VI');
+  const [lang, setLangState] = useState<'VI' | 'EN'>('VI');
+  // Share the module-wide language choice with the setup/history pages.
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('interview:uiLang');
+      if (saved === 'EN' || saved === 'VI') setLangState(saved);
+    } catch { /* ignore */ }
+  }, []);
+  const setLang = (l: 'VI' | 'EN') => {
+    setLangState(l);
+    try { localStorage.setItem('interview:uiLang', l); } catch { /* ignore */ }
+  };
   const [cards, setCards] = useState<DrillCard[]>([]);
   const [totalDue, setTotalDue] = useState(0);
   const [loading, setLoading] = useState(true);

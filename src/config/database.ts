@@ -17,11 +17,14 @@ import { logger } from '../utils/logger.js';
 // Vì production không cần hot-reload, singleton gây bug khi env vars thay đổi
 const prismaClient = new PrismaClient({
   // ─── Connection Pool Configuration ───────────────────────────
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL,
-    },
-  },
+  // Only override the datasource when DATABASE_URL is actually present.
+  // Passing `url: undefined` makes the PrismaClient constructor throw at import
+  // time, which broke pure unit tests / evals that import DB-backed modules but
+  // never query (CI has no DATABASE_URL). Omitting the override lets Prisma
+  // construct lazily and only fail on a real query.
+  ...(process.env.DATABASE_URL
+    ? { datasources: { db: { url: process.env.DATABASE_URL } } }
+    : {}),
 
   // ─── Log levels ───────────────────────────────────────────
   log: buildLogLevels(process.env.NODE_ENV),

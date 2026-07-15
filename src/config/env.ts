@@ -223,7 +223,7 @@ export const config = {
 
   // CORS
   frontendUrl: env.FRONTEND_URL,
-  corsOrigins: env.ALLOWED_ORIGINS.split(','),
+  corsOrigins: (env.ALLOWED_ORIGINS ?? '').split(',').filter(Boolean),
 
   // OAuth
   googleClientId: env.GOOGLE_CLIENT_ID,
@@ -233,7 +233,7 @@ export const config = {
   githubApiToken: env.GITHUB_API_TOKEN,
 
   // Admin
-  adminEmails: env.ADMIN_EMAILS.split(',').filter(Boolean),
+  adminEmails: (env.ADMIN_EMAILS ?? '').split(',').filter(Boolean),
   adminUsername: env.ADMIN_USERNAME,
 
   // File Upload
@@ -296,7 +296,7 @@ export const config = {
   // Cloudflare R2
   r2: {
     bucketName: env.R2_BUCKET_NAME,
-    publicUrl: env.R2_PUBLIC_URL.replace(/\/$/, ''), // strip trailing slash
+    publicUrl: (env.R2_PUBLIC_URL ?? '').replace(/\/$/, ''), // strip trailing slash
     endpoint: env.R2_ENDPOINT_URL,
     accessKeyId: env.R2_ACCESS_KEY_ID,
     secretAccessKey: env.R2_SECRET_ACCESS_KEY,

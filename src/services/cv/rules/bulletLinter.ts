@@ -11,7 +11,7 @@ import {
   STRONG_VERBS, WEAK_VERBS, BANNED_OPENERS, BUZZWORDS,
   FIRST_PERSON, OUTCOME_HINTS, METRIC_RE, PASSIVE_RE, PRESENCE_PHRASES,
 } from './lexicon.js';
-import { currentOverrides } from './overrides.js';
+import { currentOverrides } from './overrideState.js';
 
 export type Severity = 'CRITICAL' | 'MAJOR' | 'MINOR';
 export type BulletStrength = 'WEAK' | 'OK' | 'STRONG';

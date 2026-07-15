@@ -27,7 +27,7 @@ export interface LLMMessage { role: 'user' | 'assistant'; content: string }
 export interface LLMResult { text: string; inputTokens: number; outputTokens: number; model: string; provider: string }
 
 /** Per-task routing key. Cheap/high-volume vs the calls that define quality. */
-export type CvLLMTask = 'critique' | 'intake' | 'jd_parse' | 'parse_fallback' | 'cover_letter';
+export type CvLLMTask = 'critique' | 'intake' | 'jd_parse' | 'parse_fallback' | 'cover_letter' | 'translate';
 
 /** Tasks that put the user's real CV (name, phone, employment history) into the
  *  prompt. These may ONLY go to a provider that does not train on inputs. */
@@ -36,6 +36,7 @@ const TASK_TOUCHES_CV_CONTENT: Record<CvLLMTask, boolean> = {
   intake: true,
   cover_letter: true,
   parse_fallback: true,
+  translate: true, // the whole CV is translated
   jd_parse: false, // a pasted job description is public text
 };
 

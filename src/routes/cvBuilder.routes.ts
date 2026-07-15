@@ -19,6 +19,7 @@ import * as profile from '../services/cv/profile.service.js';
 import * as importSvc from '../services/cv/import.service.js';
 import * as lintSvc from '../services/cv/lint.service.js';
 import { exportProfile, type ExportFormat } from '../services/cv/export.service.js';
+import { listTemplates } from '../services/cv/export/templates.js';
 import * as critiqueSvc from '../services/cv/critique.service.js';
 import * as jobSvc from '../services/cv/jobTarget.service.js';
 import * as coverSvc from '../services/cv/coverLetter.service.js';
@@ -194,11 +195,18 @@ router.post('/critique', h((req) => critiqueSvc.critiqueProfile(req.userId!)));
 router.get('/intake/status', h(async () => intakeSvc.intakeStatus()));
 router.post('/intake', h((req) => intakeSvc.intakeTurn(req.userId!, req.body ?? {})));
 
+// Available export templates (Phase 11) — for the export picker.
+router.get('/templates', h(async () => listTemplates()));
+
 // ── Export (Phase 4: PDF/DOCX/TXT/MD/JSON) — binary download, not JSON ──
 router.get('/export/:format', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const format = String(req.params.format).toLowerCase() as ExportFormat;
-    const { buffer, mime, filename, roundTripOk } = await exportProfile(req.userId!, format);
+    const { buffer, mime, filename, roundTripOk } = await exportProfile(req.userId!, format, {
+      template: typeof req.query.template === 'string' ? req.query.template : undefined,
+      market: typeof req.query.market === 'string' ? req.query.market : undefined,
+      language: typeof req.query.language === 'string' ? req.query.language : undefined,
+    });
     res.setHeader('Content-Type', mime);
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     if (roundTripOk !== null) res.setHeader('X-CV-RoundTrip', roundTripOk ? 'ok' : 'fail');

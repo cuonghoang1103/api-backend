@@ -34,11 +34,18 @@ export default function CvDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [needLogin, setNeedLogin] = useState(false);
   const [exporting, setExporting] = useState<string | null>(null);
+  const [exTemplate, setExTemplate] = useState('ats');
+  const [exLanguage, setExLanguage] = useState(''); // '' = nguyên bản
+  const [exMarket, setExMarket] = useState('VN');
 
   const download = async (fmt: 'pdf' | 'docx' | 'txt' | 'md' | 'json') => {
     setExporting(fmt);
     try {
-      const res = await cvApi.exportCv(fmt);
+      const res = await cvApi.exportCv(fmt, {
+        template: exTemplate,
+        market: exMarket,
+        ...(exLanguage ? { language: exLanguage } : {}),
+      });
       const cd = (res.headers?.['content-disposition'] as string | undefined) ?? '';
       const fname = cd.match(/filename="(.+?)"/)?.[1] || `CV.${fmt}`;
       const url = URL.createObjectURL(res.data as Blob);
@@ -186,6 +193,33 @@ export default function CvDashboardPage() {
               <p className="mt-1 text-xs text-[var(--text-secondary)]">
                 PDF là chữ thật (ATS đọc được, đã kiểm tra round-trip), không phải ảnh. DOCX để nhà tuyển dụng sửa trực tiếp.
               </p>
+
+              {/* Options: template + language + market */}
+              <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <label className="text-xs text-[var(--text-secondary)]">Mẫu
+                  <select value={exTemplate} onChange={(e) => setExTemplate(e.target.value)} className="mt-1 w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1.5 text-sm text-[var(--text-primary)]">
+                    <option value="ats">ATS-Optimized (mặc định)</option>
+                    <option value="technical">Technical (Modern)</option>
+                    <option value="vietnam">Vietnamese Standard</option>
+                    <option value="senior">Senior / Leadership</option>
+                  </select>
+                </label>
+                <label className="text-xs text-[var(--text-secondary)]">Ngôn ngữ
+                  <select value={exLanguage} onChange={(e) => setExLanguage(e.target.value)} className="mt-1 w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1.5 text-sm text-[var(--text-primary)]">
+                    <option value="">Nguyên bản (như đã viết)</option>
+                    <option value="VI">Tiếng Việt (AI dịch)</option>
+                    <option value="EN">Tiếng Anh (AI dịch)</option>
+                  </select>
+                </label>
+                <label className="text-xs text-[var(--text-secondary)]">Thị trường
+                  <select value={exMarket} onChange={(e) => setExMarket(e.target.value)} className="mt-1 w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1.5 text-sm text-[var(--text-primary)]">
+                    <option value="VN">Việt Nam (có ngày sinh)</option>
+                    <option value="INTERNATIONAL">Quốc tế (bỏ ngày sinh)</option>
+                  </select>
+                </label>
+              </div>
+              {exLanguage && <p className="mt-1.5 text-[11px] text-[var(--text-secondary)]">Bản dịch dùng AI — chỉ dịch, không bịa thêm; kiểm tra lại trước khi gửi. Mất thêm ~10-20s.</p>}
+
               <div className="mt-3 flex flex-wrap gap-2">
                 {EXPORT_FORMATS.map((f) => (
                   <button

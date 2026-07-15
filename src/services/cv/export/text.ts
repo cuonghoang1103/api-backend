@@ -4,6 +4,7 @@
  * Always available, no deps.
  */
 import type { RenderCv, RenderItem } from './cvData.js';
+import { SECTION_LABELS, type ExportLang } from './labels.js';
 
 function itemTxt(it: RenderItem): string[] {
   const lines: string[] = [];
@@ -18,7 +19,8 @@ function itemTxt(it: RenderItem): string[] {
   return lines;
 }
 
-export function renderTxt(cv: RenderCv): string {
+export function renderTxt(cv: RenderCv, lang: ExportLang = 'VI'): string {
+  const S = SECTION_LABELS[lang];
   const L: string[] = [];
   L.push(cv.fullName || '');
   if (cv.headline) L.push(cv.headline);
@@ -26,14 +28,14 @@ export function renderTxt(cv: RenderCv): string {
   for (const lnk of cv.links) L.push(`${lnk.label}: ${lnk.url}`);
   L.push('');
   const sec = (t: string) => { L.push(t.toUpperCase()); L.push('='.repeat(t.length)); };
-  if (cv.summary) { sec('Tóm tắt'); L.push(cv.summary, ''); }
-  if (cv.experiences.length) { sec('Kinh nghiệm làm việc'); cv.experiences.forEach((i) => L.push(...itemTxt(i))); }
-  if (cv.projects.length) { sec('Dự án'); cv.projects.forEach((i) => L.push(...itemTxt(i))); }
-  if (cv.education.length) { sec('Học vấn'); cv.education.forEach((i) => L.push(...itemTxt(i))); }
-  if (cv.skillGroups.length) { sec('Kỹ năng'); cv.skillGroups.forEach((g) => L.push(`${g.category}: ${g.names.join(', ')}`)); L.push(''); }
-  if (cv.languageSkills.length) { sec('Ngoại ngữ'); cv.languageSkills.forEach((l) => L.push(`${l.language}${l.detail ? ' — ' + l.detail : ''}`)); L.push(''); }
-  if (cv.certifications.length) { sec('Chứng chỉ'); cv.certifications.forEach((c) => L.push(`${c.name}${c.issuer ? ' — ' + c.issuer : ''}`)); L.push(''); }
-  if (cv.others.length) { sec('Khác'); cv.others.forEach((i) => L.push(...itemTxt(i))); }
+  if (cv.summary) { sec(S.summary); L.push(cv.summary, ''); }
+  if (cv.experiences.length) { sec(S.experience); cv.experiences.forEach((i) => L.push(...itemTxt(i))); }
+  if (cv.projects.length) { sec(S.projects); cv.projects.forEach((i) => L.push(...itemTxt(i))); }
+  if (cv.education.length) { sec(S.education); cv.education.forEach((i) => L.push(...itemTxt(i))); }
+  if (cv.skillGroups.length) { sec(S.skills); cv.skillGroups.forEach((g) => L.push(`${g.category}: ${g.names.join(', ')}`)); L.push(''); }
+  if (cv.languageSkills.length) { sec(S.languages); cv.languageSkills.forEach((l) => L.push(`${l.language}${l.detail ? ' — ' + l.detail : ''}`)); L.push(''); }
+  if (cv.certifications.length) { sec(S.certifications); cv.certifications.forEach((c) => L.push(`${c.name}${c.issuer ? ' — ' + c.issuer : ''}`)); L.push(''); }
+  if (cv.others.length) { sec(S.other); cv.others.forEach((i) => L.push(...itemTxt(i))); }
   return L.join('\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
 }
 
@@ -50,20 +52,21 @@ function itemMd(it: RenderItem): string[] {
   return L;
 }
 
-export function renderMarkdown(cv: RenderCv): string {
+export function renderMarkdown(cv: RenderCv, lang: ExportLang = 'VI'): string {
+  const S = SECTION_LABELS[lang];
   const L: string[] = [];
   L.push(`# ${cv.fullName || ''}`);
   if (cv.headline) L.push(`**${cv.headline}**`);
   L.push([cv.email, cv.phone, cv.location].filter(Boolean).join(' | '));
   if (cv.links.length) L.push(cv.links.map((l) => `[${l.label}](${l.url})`).join(' · '));
   L.push('');
-  if (cv.summary) { L.push('## Tóm tắt', cv.summary, ''); }
-  if (cv.experiences.length) { L.push('## Kinh nghiệm làm việc'); cv.experiences.forEach((i) => L.push(...itemMd(i))); }
-  if (cv.projects.length) { L.push('## Dự án'); cv.projects.forEach((i) => L.push(...itemMd(i))); }
-  if (cv.education.length) { L.push('## Học vấn'); cv.education.forEach((i) => L.push(...itemMd(i))); }
-  if (cv.skillGroups.length) { L.push('## Kỹ năng'); cv.skillGroups.forEach((g) => L.push(`- **${g.category}:** ${g.names.join(', ')}`)); L.push(''); }
-  if (cv.languageSkills.length) { L.push('## Ngoại ngữ'); cv.languageSkills.forEach((l) => L.push(`- ${l.language}${l.detail ? ' — ' + l.detail : ''}`)); L.push(''); }
-  if (cv.certifications.length) { L.push('## Chứng chỉ'); cv.certifications.forEach((c) => L.push(`- ${c.name}${c.issuer ? ' — ' + c.issuer : ''}`)); L.push(''); }
-  if (cv.others.length) { L.push('## Khác'); cv.others.forEach((i) => L.push(...itemMd(i))); }
+  if (cv.summary) { L.push(`## ${S.summary}`, cv.summary, ''); }
+  if (cv.experiences.length) { L.push(`## ${S.experience}`); cv.experiences.forEach((i) => L.push(...itemMd(i))); }
+  if (cv.projects.length) { L.push(`## ${S.projects}`); cv.projects.forEach((i) => L.push(...itemMd(i))); }
+  if (cv.education.length) { L.push(`## ${S.education}`); cv.education.forEach((i) => L.push(...itemMd(i))); }
+  if (cv.skillGroups.length) { L.push(`## ${S.skills}`); cv.skillGroups.forEach((g) => L.push(`- **${g.category}:** ${g.names.join(', ')}`)); L.push(''); }
+  if (cv.languageSkills.length) { L.push(`## ${S.languages}`); cv.languageSkills.forEach((l) => L.push(`- ${l.language}${l.detail ? ' — ' + l.detail : ''}`)); L.push(''); }
+  if (cv.certifications.length) { L.push(`## ${S.certifications}`); cv.certifications.forEach((c) => L.push(`- ${c.name}${c.issuer ? ' — ' + c.issuer : ''}`)); L.push(''); }
+  if (cv.others.length) { L.push(`## ${S.other}`); cv.others.forEach((i) => L.push(...itemMd(i))); }
   return L.join('\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
 }

@@ -10,6 +10,7 @@ import {
   Document, Packer, Paragraph, TextRun, HeadingLevel, ExternalHyperlink, BorderStyle,
 } from 'docx';
 import type { RenderCv, RenderItem } from './cvData.js';
+import { SECTION_LABELS, type ExportLang } from './labels.js';
 
 function sectionHeading(text: string): Paragraph {
   return new Paragraph({
@@ -41,7 +42,8 @@ function itemParagraphs(it: RenderItem): Paragraph[] {
   return out;
 }
 
-export async function renderDocx(cv: RenderCv): Promise<Buffer> {
+export async function renderDocx(cv: RenderCv, lang: ExportLang = 'VI'): Promise<Buffer> {
+  const L = SECTION_LABELS[lang];
   const body: Paragraph[] = [];
 
   // Header
@@ -59,23 +61,23 @@ export async function renderDocx(cv: RenderCv): Promise<Buffer> {
     }));
   }
 
-  if (cv.summary) { body.push(sectionHeading('Tóm tắt')); body.push(new Paragraph({ children: [new TextRun({ text: cv.summary, size: 20 })] })); }
-  if (cv.experiences.length) { body.push(sectionHeading('Kinh nghiệm làm việc')); cv.experiences.forEach((it) => body.push(...itemParagraphs(it))); }
-  if (cv.projects.length) { body.push(sectionHeading('Dự án')); cv.projects.forEach((it) => body.push(...itemParagraphs(it))); }
-  if (cv.education.length) { body.push(sectionHeading('Học vấn')); cv.education.forEach((it) => body.push(...itemParagraphs(it))); }
+  if (cv.summary) { body.push(sectionHeading(L.summary)); body.push(new Paragraph({ children: [new TextRun({ text: cv.summary, size: 20 })] })); }
+  if (cv.experiences.length) { body.push(sectionHeading(L.experience)); cv.experiences.forEach((it) => body.push(...itemParagraphs(it))); }
+  if (cv.projects.length) { body.push(sectionHeading(L.projects)); cv.projects.forEach((it) => body.push(...itemParagraphs(it))); }
+  if (cv.education.length) { body.push(sectionHeading(L.education)); cv.education.forEach((it) => body.push(...itemParagraphs(it))); }
   if (cv.skillGroups.length) {
-    body.push(sectionHeading('Kỹ năng'));
+    body.push(sectionHeading(L.skills));
     for (const g of cv.skillGroups) body.push(new Paragraph({ children: [new TextRun({ text: `${g.category}: `, bold: true, size: 20 }), new TextRun({ text: g.names.join(', '), size: 20 })] }));
   }
   if (cv.languageSkills.length) {
-    body.push(sectionHeading('Ngoại ngữ'));
+    body.push(sectionHeading(L.languages));
     for (const l of cv.languageSkills) body.push(new Paragraph({ children: [new TextRun({ text: `${l.language}${l.detail ? ' — ' + l.detail : ''}`, size: 20 })] }));
   }
   if (cv.certifications.length) {
-    body.push(sectionHeading('Chứng chỉ'));
+    body.push(sectionHeading(L.certifications));
     for (const c of cv.certifications) body.push(new Paragraph({ children: [new TextRun({ text: `${c.name}${c.issuer ? ' — ' + c.issuer : ''}`, size: 20 })] }));
   }
-  if (cv.others.length) { body.push(sectionHeading('Khác')); cv.others.forEach((it) => body.push(...itemParagraphs(it))); }
+  if (cv.others.length) { body.push(sectionHeading(L.other)); cv.others.forEach((it) => body.push(...itemParagraphs(it))); }
 
   const doc = new Document({
     styles: { default: { document: { run: { font: 'Calibri' } } } },

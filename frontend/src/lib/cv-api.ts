@@ -92,9 +92,17 @@ export const cvApi = {
   coverLetter: (jobId: number, tone: string): Res<{ body: string; tone: string; wordCount: number }> =>
     api.post(`/cv/jobs/${jobId}/cover-letter`, { tone }, { timeout: 90_000 }),
 
-  // ── Export (Phase 4) — binary download; returns the raw axios response. ──
-  exportCv: (format: 'pdf' | 'docx' | 'txt' | 'md' | 'json') =>
-    api.get(`/cv/export/${format}`, { responseType: 'blob', timeout: 60_000 }),
+  // ── Export (Phase 4/11) — binary download with template/lang/market opts. ──
+  cvTemplates: (): Res<{ id: string; name: string; description: string; bestFor: string }[]> => api.get('/cv/templates'),
+  exportCv: (format: 'pdf' | 'docx' | 'txt' | 'md' | 'json', opts?: { template?: string; language?: string; market?: string }) => {
+    const q = new URLSearchParams();
+    if (opts?.template) q.set('template', opts.template);
+    if (opts?.language) q.set('language', opts.language);
+    if (opts?.market) q.set('market', opts.market);
+    const qs = q.toString();
+    // Translation adds an LLM round-trip → allow more time.
+    return api.get(`/cv/export/${format}${qs ? '?' + qs : ''}`, { responseType: 'blob', timeout: opts?.language ? 120_000 : 60_000 });
+  },
 };
 
 // ── Admin (Phase 10) — anonymized aggregates + LLM cost dashboard ──────────

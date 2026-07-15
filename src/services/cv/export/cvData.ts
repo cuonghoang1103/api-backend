@@ -21,6 +21,7 @@ export interface RenderCv {
   email: string;
   phone: string;
   location: string;
+  dateOfBirth: string | null; // shown only by VN-market templates
   links: { label: string; url: string }[];
   summary: string;
   experiences: RenderItem[];
@@ -54,6 +55,7 @@ const SKILL_CAT_LABEL: Record<string, string> = {
 interface ProfileLike {
   fullName?: string | null; headline?: string | null; email?: string | null;
   phone?: string | null; location?: string | null; summary?: string | null;
+  dateOfBirth?: Date | null;
   links?: unknown;
   items: Array<{
     kind: string; title: string; organization?: string | null; location?: string | null;
@@ -97,6 +99,9 @@ export function toRenderCv(profile: ProfileLike): RenderCv {
     email: profile.email ?? '',
     phone: profile.phone ?? '',
     location: profile.location ?? '',
+    dateOfBirth: profile.dateOfBirth
+      ? `${String(profile.dateOfBirth.getDate()).padStart(2, '0')}/${String(profile.dateOfBirth.getMonth() + 1).padStart(2, '0')}/${profile.dateOfBirth.getFullYear()}`
+      : null,
     links,
     summary: profile.summary ?? '',
     experiences: byKind('EXPERIENCE'),

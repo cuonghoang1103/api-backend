@@ -10,6 +10,9 @@ import { extractText, getDocumentProxy } from 'unpdf';
 import { getOrCreateProfile } from './profile.service.js';
 import { toRenderCv, suggestFilename } from './export/cvData.js';
 import { renderPdf } from './export/pdf.js';
+import { resolveTemplate } from './export/templates.js';
+import type { ExportLang } from './export/labels.js';
+import { translateCv } from './translate.service.js';
 import { renderDocx } from './export/docx.js';
 import { renderTxt, renderMarkdown } from './export/text.js';
 import { renderJsonResume } from './export/jsonResume.js';
@@ -46,10 +49,24 @@ async function verifyPdfRoundTrip(buffer: Buffer, name: string, email: string): 
   }
 }
 
-export async function exportProfile(userId: number, format: ExportFormat): Promise<ExportResult> {
+export async function exportProfile(userId: number, format: ExportFormat, opts?: { template?: string; market?: string; language?: string }): Promise<ExportResult> {
   if (!(format in MIME)) throw new BadRequestError('Định dạng không hỗ trợ');
   const profile = await getOrCreateProfile(userId);
-  const cv = toRenderCv(profile);
+  let cv = toRenderCv(profile);
+
+  // Template + market. International market strips VN-only fields (DOB) no matter
+  // which template asks for them — the market convention wins.
+  const base = resolveTemplate(opts?.template);
+  const market = opts?.market === 'INTERNATIONAL' ? 'INTERNATIONAL' : 'VN';
+  const spec = { ...base, showDob: base.showDob && market === 'VN' };
+
+  // Bilingual: when a language is explicitly requested, AI-translate the CONTENT
+  // to it (faithful, no fabrication) and render section labels in that language.
+  const lang: ExportLang = opts?.language === 'EN' ? 'EN' : 'VI';
+  if (opts?.language === 'EN' || opts?.language === 'VI') {
+    cv = await translateCv(userId, cv, lang);
+  }
+
   const ext = format === 'md' ? 'md' : format;
   const filename = suggestFilename(cv, ext);
 
@@ -58,7 +75,7 @@ export async function exportProfile(userId: number, format: ExportFormat): Promi
 
   switch (format) {
     case 'pdf': {
-      buffer = await renderPdf(cv);
+      buffer = await renderPdf(cv, spec, lang);
       roundTripOk = await verifyPdfRoundTrip(buffer, cv.fullName, cv.email);
       if (!roundTripOk) {
         // Do not hand out a PDF ATS can't read. This should not happen with
@@ -68,13 +85,13 @@ export async function exportProfile(userId: number, format: ExportFormat): Promi
       break;
     }
     case 'docx':
-      buffer = await renderDocx(cv);
+      buffer = await renderDocx(cv, lang);
       break;
     case 'txt':
-      buffer = Buffer.from(renderTxt(cv), 'utf8');
+      buffer = Buffer.from(renderTxt(cv, lang), 'utf8');
       break;
     case 'md':
-      buffer = Buffer.from(renderMarkdown(cv), 'utf8');
+      buffer = Buffer.from(renderMarkdown(cv, lang), 'utf8');
       break;
     case 'json':
       buffer = Buffer.from(JSON.stringify(renderJsonResume(profile), null, 2), 'utf8');

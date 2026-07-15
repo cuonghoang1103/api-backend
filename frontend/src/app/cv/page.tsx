@@ -143,6 +143,12 @@ export default function CvDashboardPage() {
                   <Eye className="h-4 w-4" /> Recruiter View
                 </Link>
                 <Link
+                  href="/cv/target"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium hover:bg-[var(--bg-primary)]"
+                >
+                  <Target className="h-4 w-4" /> Nhắm theo job
+                </Link>
+                <Link
                   href="/cv/profile"
                   className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium hover:bg-[var(--bg-primary)]"
                 >
@@ -196,8 +202,7 @@ export default function CvDashboardPage() {
               <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {[
                   { icon: Upload, title: 'Kết nối GitHub', desc: 'Chấm điểm repo, gợi ý mục CV (dán text, JSON Resume, PDF/DOCX đã dùng được).' },
-                  { icon: Target, title: 'Nhắm theo job (JD)', desc: 'Dán JD → ma trận kỹ năng × bằng chứng + verdict thật thà.' },
-                  { icon: FileText, title: 'Critique AI', desc: 'Chấm như senior khó tính + rủi ro sẽ bị hỏi khi phỏng vấn.' },
+                  { icon: FileText, title: 'Cover letter', desc: 'Sinh thư xin việc bám JD, không sáo rỗng (đang làm).' },
                 ].map((f) => (
                   <div
                     key={f.title}

@@ -11,6 +11,7 @@ import type {
   CvSkill, CvSkillInput, CvCertification, CvCertInput,
   CvLanguageSkill, CvLangInput,
   CvImportJob, CvImportCommitBody, CvLintResult, CvCritiqueResult,
+  CvJobSummary, CvCoverage, CvTailor,
 } from '@/types/cv';
 
 type Res<T> = Promise<{ data: ApiResponse<T> }>;
@@ -67,6 +68,13 @@ export const cvApi = {
   // ── AI Critique (Phase 7) — quota-gated, may take ~15–30s ───
   critiqueStatus: (): Res<{ available: boolean }> => api.get('/cv/critique/status'),
   critique: (): Res<CvCritiqueResult> => api.post('/cv/critique', {}, { timeout: 90_000 }),
+
+  // ── Job targeting (Phase 8a) — deterministic, free ──────────
+  listJobs: (): Res<CvJobSummary[]> => api.get('/cv/jobs'),
+  createJob: (body: { title: string; company?: string | null; sourceUrl?: string | null; rawJobDescription: string }): Res<{ id: number }> => api.post('/cv/jobs', body),
+  jobCoverage: (id: number): Res<CvCoverage> => api.get(`/cv/jobs/${id}/coverage`),
+  jobTailor: (id: number): Res<CvTailor> => api.get(`/cv/jobs/${id}/tailor`),
+  deleteJob: (id: number): Res<{ id: number }> => api.delete(`/cv/jobs/${id}`),
 
   // ── Export (Phase 4) — binary download; returns the raw axios response. ──
   exportCv: (format: 'pdf' | 'docx' | 'txt' | 'md' | 'json') =>

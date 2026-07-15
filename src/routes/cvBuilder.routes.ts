@@ -20,6 +20,7 @@ import * as importSvc from '../services/cv/import.service.js';
 import * as lintSvc from '../services/cv/lint.service.js';
 import { exportProfile, type ExportFormat } from '../services/cv/export.service.js';
 import * as critiqueSvc from '../services/cv/critique.service.js';
+import * as jobSvc from '../services/cv/jobTarget.service.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -150,6 +151,26 @@ router.post('/import/:id/commit', h((req, res) => {
 
 // ── Analysis (Phase 3: STATIC rules engine — free, instant, no LLM) ──
 router.post('/lint', h((req) => lintSvc.lintProfile(req.userId!, req.body ?? {})));
+
+// ── Job targeting (Phase 8a) — deterministic JD coverage + honest fit ──
+router.get('/jobs', h((req) => jobSvc.listJobTargets(req.userId!)));
+router.post('/jobs', h((req) => jobSvc.createJobTarget(req.userId!, req.body ?? {})));
+router.get('/jobs/:id', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return jobSvc.getJobTarget(req.userId!, id);
+}));
+router.get('/jobs/:id/coverage', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return jobSvc.getCoverage(req.userId!, id);
+}));
+router.get('/jobs/:id/tailor', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return jobSvc.getTailorSuggestions(req.userId!, id);
+}));
+router.delete('/jobs/:id', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return jobSvc.deleteJobTarget(req.userId!, id);
+}));
 
 // ── AI Critique (Phase 7) — quota-gated; degrades to STATIC when no key ──
 router.get('/critique/status', h(async () => critiqueSvc.critiqueStatus()));

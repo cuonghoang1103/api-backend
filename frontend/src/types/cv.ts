@@ -188,6 +188,34 @@ export interface CvImportCommitBody {
   draft: ParsedDraft;
 }
 
+// ── Job targeting (Phase 8a) ────────────────────────────────────
+export interface CvJobSummary { id: number; title: string; company: string | null; createdAt: string }
+export type CvCoverageLevel = 'GREEN' | 'AMBER' | 'RED';
+export interface CvCoverageRow {
+  skill: string;
+  category: string;
+  required: boolean;
+  level: CvCoverageLevel;
+  evidence: string | null;
+}
+export interface CvCoverage {
+  job: { id: number; title: string; company: string | null; injectionAttempted: boolean };
+  rows: CvCoverageRow[];
+  summary: {
+    verdict: 'STRONG' | 'STRETCH' | 'POOR';
+    message: string;
+    mustHaveTotal: number;
+    mustHaveMatched: number;
+    mustHaveStrong: number;
+    gaps: string[];
+  };
+}
+export interface CvTailor {
+  note: string;
+  reorder: { itemId: number; title: string; reason: string }[];
+  consider_dropping: { itemId: number; title: string; reason: string }[];
+}
+
 // ── Rules engine / lint (Phase 3) ───────────────────────────────
 export type CvSeverity = 'CRITICAL' | 'MAJOR' | 'MINOR';
 export interface CvBulletIssue { code: string; severity: CvSeverity; message: string }

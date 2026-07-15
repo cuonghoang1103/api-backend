@@ -140,6 +140,10 @@ const interviewAdminRoutes = interviewModule.adminRouter;
 const proModule = await import(path.join(__dirname, 'routes', 'pro.routes.js'));
 const proRoutes = proModule.default;
 const proAdminRoutes = proModule.adminRouter;
+// CV Builder — honest IT-focused CV builder (master profile CRUD + later AI)
+const cvModule = await import(path.join(__dirname, 'routes', 'cvBuilder.routes.js'));
+const cvRoutes = cvModule.default;
+const cvAdminRoutes = cvModule.adminRouter;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -526,6 +530,8 @@ app.use('/api/v1/interview', interviewRoutes);
 app.use('/api/v1/admin/interview', interviewAdminRoutes);
 app.use('/api/v1/pro', proRoutes);
 app.use('/api/v1/admin/pro', proAdminRoutes);
+app.use('/api/v1/cv', cvRoutes);
+app.use('/api/v1/admin/cv', cvAdminRoutes);
 app.use('/api/v1/finance', financeRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);

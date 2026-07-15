@@ -25,6 +25,14 @@
  */
 export const INTERVIEW_ENABLED = true;
 
+/**
+ * CV Builder module (/cv + /admin/cv). Honest IT-focused CV builder that
+ * shares the Interview module's LLM/quota/Pro plumbing. STATIC (rules-engine)
+ * features are free; AI features are quota-gated (later phases). Turn OFF to
+ * hide the whole module (nav entry + routes) instantly — self-contained.
+ */
+export const CV_BUILDER_ENABLED = true;
+
 /** Online shop: /shop pages, product cards, "buy"/"add to cart" buttons. */
 export const SHOP_ENABLED = false;
 

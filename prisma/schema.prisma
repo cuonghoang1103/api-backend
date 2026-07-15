@@ -5313,3 +5313,496 @@ model InterviewKnowledgeChunk {
   @@index([documentId], name: "idx_interview_kchunk_doc")
   @@map("interview_knowledge_chunks")
 }
+
+// ═══════════════════════════════════════════════════════════════════
+//  CV BUILDER MODULE  (Phase 1 — foundation)
+//  Honest, IT-focused CV builder. Sits alongside the Interview module
+//  and reuses its LLM / quota / Pro / R2 plumbing. The CV is stored as
+//  STRUCTURED data (profile → items → bullets), never a text blob —
+//  that is what enables multi-template render, ATS-safe export, per-job
+//  tailoring, and AI critique at the level of a single claim.
+//
+//  Convention (identical to the Interview module): `userId Int` carries
+//  NO foreign key to User. Account-deletion cascade is done in the
+//  service layer (hard-delete endpoint, a later phase). Relations WITHIN
+//  the module (profile → item → bullet, document → version …) cascade
+//  normally via onDelete: Cascade.
+// ═══════════════════════════════════════════════════════════════════
+
+enum CvMarket {
+  VN
+  INTERNATIONAL
+}
+
+enum CvLanguage {
+  VI
+  EN
+}
+
+enum CvExperienceLevel {
+  STUDENT
+  FRESHER
+  JUNIOR
+  MID
+  SENIOR
+  LEAD
+}
+
+enum CvType {
+  INDUSTRY
+  ACADEMIC
+  GOVERNMENT
+}
+
+// A CvItem is a unified record for anything that carries achievement
+// bullets: a job, a project, a degree, an open-source contribution, a
+// publication, an award, or volunteering. The `kind` discriminates.
+enum CvItemKind {
+  EXPERIENCE
+  PROJECT
+  EDUCATION
+  OPEN_SOURCE
+  PUBLICATION
+  AWARD
+  VOLUNTEER
+}
+
+enum CvBulletStrength {
+  WEAK
+  OK
+  STRONG
+}
+
+enum CvSkillCategory {
+  LANGUAGE
+  FRAMEWORK
+  DATABASE
+  INFRA
+  TOOL
+  PRACTICE
+  SOFT
+}
+
+enum CvEmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  FREELANCE
+  VOLUNTEER
+}
+
+enum CvDocumentStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum CvReviewMode {
+  STATIC
+  AI
+}
+
+enum CvReviewVerdict {
+  INTERVIEW
+  MAYBE
+  REJECT
+}
+
+enum CvImportSource {
+  PDF
+  DOCX
+  GITHUB
+  LINKEDIN_ARCHIVE
+  JSON_RESUME
+  PASTE
+}
+
+enum CvImportStatus {
+  PENDING
+  PARSING
+  PARSED
+  COMMITTED
+  FAILED
+}
+
+enum CvExportFormat {
+  PDF
+  DOCX
+  TXT
+  MD
+  JSON
+}
+
+enum CvExportStatus {
+  PENDING
+  RENDERING
+  READY
+  FAILED
+}
+
+enum CvCoverLetterTone {
+  FORMAL
+  DIRECT
+  WARM
+}
+
+// The user's MASTER career record — one per user. Contains everything
+// they have ever done, including things that won't appear on any single
+// CV. Individual CvDocuments are just curated views of this source.
+model CvProfile {
+  id            Int                @id @default(autoincrement())
+  userId        Int                @unique @map("user_id")
+  // Contact block
+  fullName      String?            @map("full_name") @db.VarChar(150)
+  headline      String?            @db.VarChar(200) // e.g. "Backend Engineer"
+  email         String?            @db.VarChar(150)
+  phone         String?            @db.VarChar(40)
+  location      String?            @db.VarChar(150)
+  links         Json               @default("{}") @db.JsonB // { github, linkedin, portfolio, website }
+  photoR2Key    String?            @map("photo_r2_key") @db.VarChar(300)
+  dateOfBirth   DateTime?          @map("date_of_birth") // VN market only; INTERNATIONAL strips it
+  summary       String?            @db.Text
+  // Preferences — seed defaults for new tailored CVs
+  targetRoles   String[]           @default([]) @map("target_roles")
+  seniority     CvExperienceLevel?
+  locationsPref String[]           @default([]) @map("locations_pref")
+  remotePref    String?            @map("remote_pref") @db.VarChar(20) // REMOTE|ONSITE|HYBRID|ANY
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+
+  items          CvItem[]
+  skills         CvSkill[]
+  certifications CvCertification[]
+  languageSkills CvLanguageSkill[]
+  documents      CvDocument[]
+
+  @@map("cv_profiles")
+}
+
+// A bullet-bearing entry: job / project / degree / etc. (see CvItemKind).
+model CvItem {
+  id             Int               @id @default(autoincrement())
+  profileId      Int               @map("profile_id")
+  profile        CvProfile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  kind           CvItemKind
+  title          String            @db.VarChar(250) // role / project name / degree
+  organization   String?           @db.VarChar(250) // company / school / publisher
+  location       String?           @db.VarChar(150)
+  employmentType CvEmploymentType? @map("employment_type")
+  startDate      DateTime?         @map("start_date")
+  endDate        DateTime?         @map("end_date") // null + isCurrent = ongoing
+  isCurrent      Boolean           @default(false) @map("is_current")
+  url            String?           @db.VarChar(500) // repo / demo / publication link
+  techStack      String[]          @default([]) @map("tech_stack")
+  context        String?           @db.Text // private notes, never rendered
+  gpa            String?           @db.VarChar(20) // EDUCATION only
+  sortOrder      Int               @default(0) @map("sort_order")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  bullets CvBullet[]
+
+  @@index([profileId, kind], name: "idx_cv_items_profile_kind")
+  @@map("cv_items")
+}
+
+// The atomic unit — one achievement line. This is where the value is.
+// Every AI-touched bullet must trace back to `userStatedFacts`; a claim
+// with no supporting user input is a hard failure (a ClarifyingQuestion
+// is emitted instead). `verified` gates export.
+model CvBullet {
+  id              Int              @id @default(autoincrement())
+  itemId          Int              @map("item_id")
+  item            CvItem           @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  text            String           @db.Text // the rendered line
+  userStatedFacts String?          @map("user_stated_facts") @db.Text // provenance anchor
+  provenance      Json?            @db.JsonB // claim → supporting user fact
+  verified        Boolean          @default(false) // user confirmed accurate
+  aiGenerated     Boolean          @default(false) @map("ai_generated")
+  metrics         Json?            @db.JsonB // extracted numbers, reusable & checkable
+  skillsEvidenced String[]         @default([]) @map("skills_evidenced") // powers skills-vs-evidence gap
+  strength        CvBulletStrength @default(OK) // computed by the rules engine
+  variants        Json             @default("[]") @db.JsonB // alt phrasings for tailoring
+  sortOrder       Int              @default(0) @map("sort_order")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+
+  @@index([itemId], name: "idx_cv_bullets_item")
+  @@map("cv_bullets")
+}
+
+// A skill claim. Evidence is matched against CvBullet.skillsEvidenced at
+// lint time — a skill with no evidencing bullet is a liability the
+// rules engine surfaces (the interview will test it).
+model CvSkill {
+  id          Int             @id @default(autoincrement())
+  profileId   Int             @map("profile_id")
+  profile     CvProfile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name        String          @db.VarChar(100)
+  category    CvSkillCategory @default(TOOL)
+  proficiency String?         @db.VarChar(30) // never rendered as bars/stars (ATS-harmful)
+  yearsUsed   Float?          @map("years_used")
+  sortOrder   Int             @default(0) @map("sort_order")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+
+  @@index([profileId], name: "idx_cv_skills_profile")
+  @@map("cv_skills")
+}
+
+model CvCertification {
+  id           Int       @id @default(autoincrement())
+  profileId    Int       @map("profile_id")
+  profile      CvProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name         String    @db.VarChar(200)
+  issuer       String?   @db.VarChar(200)
+  issueDate    DateTime? @map("issue_date")
+  expiryDate   DateTime? @map("expiry_date")
+  credentialId String?   @map("credential_id") @db.VarChar(150)
+  url          String?   @db.VarChar(500)
+  sortOrder    Int       @default(0) @map("sort_order")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@index([profileId], name: "idx_cv_certs_profile")
+  @@map("cv_certifications")
+}
+
+// English proficiency is a first-class credential in the VN outsourcing
+// market (FPT, KMS, NashTech…) — IELTS/TOEIC scores belong here and the
+// VN template surfaces them prominently.
+model CvLanguageSkill {
+  id          Int       @id @default(autoincrement())
+  profileId   Int       @map("profile_id")
+  profile     CvProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  language    String    @db.VarChar(60) // "English", "Japanese"
+  proficiency String?   @db.VarChar(60) // "Native", "Professional working"
+  certName    String?   @map("cert_name") @db.VarChar(60) // IELTS | TOEIC | JLPT
+  certScore   String?   @map("cert_score") @db.VarChar(40) // "7.5", "900", "N2"
+  sortOrder   Int       @default(0) @map("sort_order")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@index([profileId], name: "idx_cv_langskills_profile")
+  @@map("cv_language_skills")
+}
+
+// A specific tailored CV derived from the master profile. Rendering is a
+// separate concern (templates); this row is the SELECTION + config.
+model CvDocument {
+  id              Int               @id @default(autoincrement())
+  profileId       Int               @map("profile_id")
+  profile         CvProfile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  userId          Int               @map("user_id") // denormalized for fast listing + IDOR guard
+  name            String            @db.VarChar(150) // "Backend @ KMS"
+  market          CvMarket          @default(VN)
+  language        CvLanguage        @default(VI)
+  experienceLevel CvExperienceLevel @default(JUNIOR) @map("experience_level")
+  cvType          CvType            @default(INDUSTRY) @map("cv_type")
+  templateId      Int?              @map("template_id")
+  template        CvTemplate?       @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  targetJobId     Int?              @map("target_job_id") // soft ref to CvJobTarget (module convention)
+  sectionOrder    Json              @default("[]") @db.JsonB
+  includedItemIds Json              @default("{}") @map("included_item_ids") @db.JsonB // items/bullets/skills in THIS cv
+  pageTarget      Int               @default(1) @map("page_target")
+  includePhoto    Boolean           @default(false) @map("include_photo")
+  status          CvDocumentStatus  @default(DRAFT)
+  version         Int               @default(1)
+  outcomeLabel    String?           @map("outcome_label") @db.VarChar(200) // "got KMS interview"
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+
+  versions     CvVersion[]
+  reviews      CvReview[]
+  coverLetters CvCoverLetter[]
+  exports      CvExport[]
+
+  @@index([userId, status], name: "idx_cv_documents_user")
+  @@index([profileId], name: "idx_cv_documents_profile")
+  @@map("cv_documents")
+}
+
+// Full snapshot history — diffable. Lets a user compare the CV that got
+// an interview against the one that didn't.
+model CvVersion {
+  id         Int        @id @default(autoincrement())
+  documentId Int        @map("document_id")
+  document   CvDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  version    Int
+  snapshot   Json       @db.JsonB // full structured data at this version
+  note       String?    @db.VarChar(300)
+  createdAt  DateTime   @default(now()) @map("created_at")
+
+  @@unique([documentId, version], name: "uk_cv_version")
+  @@map("cv_versions")
+}
+
+// A job posting the user targets. Untrusted input — parsed JD text is
+// wrapped in delimiters before any LLM sees it; injection is flagged.
+model CvJobTarget {
+  id                 Int      @id @default(autoincrement())
+  userId             Int      @map("user_id")
+  title              String   @db.VarChar(250)
+  company            String?  @db.VarChar(200)
+  sourceUrl          String?  @map("source_url") @db.VarChar(500)
+  rawJobDescription  String   @map("raw_job_description") @db.Text
+  parsedRequirements Json?    @map("parsed_requirements") @db.JsonB // must-have, nice-to-have, keywords
+  injectionAttempted Boolean  @default(false) @map("injection_attempted")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@index([userId], name: "idx_cv_jobs_user")
+  @@map("cv_job_targets")
+}
+
+// Output of one analysis run — STATIC rules engine or AI critique.
+model CvReview {
+  id             Int              @id @default(autoincrement())
+  documentId     Int              @map("document_id")
+  document       CvDocument       @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  userId         Int              @map("user_id")
+  mode           CvReviewMode     @default(STATIC)
+  verdict        CvReviewVerdict?
+  score          Int? // 0..100
+  atsScore       Int?             @map("ats_score")
+  sixSecondTest  String?          @map("six_second_test") @db.Text
+  issues         Json             @default("[]") @db.JsonB // [{severity, location, problem, whyItMatters, suggestedFix}]
+  strengths      Json             @default("[]") @db.JsonB
+  interviewRisks Json             @default("[]") @map("interview_risks") @db.JsonB // the killer feature
+  keywordGaps    Json             @default("[]") @map("keyword_gaps") @db.JsonB
+  jobTargetId    Int?             @map("job_target_id")
+  createdAt      DateTime         @default(now()) @map("created_at")
+
+  @@index([documentId], name: "idx_cv_reviews_document")
+  @@map("cv_reviews")
+}
+
+// Render definition. Every template must pass the ATS linter and the PDF
+// round-trip test in CI (a later phase). Fewer, better — four total.
+model CvTemplate {
+  id           Int      @id @default(autoincrement())
+  key          String   @unique @db.VarChar(60)
+  name         String   @db.VarChar(120)
+  description  String?  @db.Text
+  renderSpec   Json     @default("{}") @map("render_spec") @db.JsonB
+  atsSafe      Boolean  @default(true) @map("ats_safe")
+  bestFor      Json     @default("{}") @map("best_for") @db.JsonB // { market, level hints }
+  previewR2Key String?  @map("preview_r2_key") @db.VarChar(300)
+  isActive     Boolean  @default(true) @map("is_active")
+  sortOrder    Int      @default(0) @map("sort_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  documents CvDocument[]
+
+  @@map("cv_templates")
+}
+
+// An import run (upload / GitHub / paste …). Raw upload is retained so a
+// failed parse can be retried without re-uploading. Parse is a first
+// draft the user reviews — never written to the profile authoritatively.
+model CvImportJob {
+  id              Int            @id @default(autoincrement())
+  userId          Int            @map("user_id")
+  source          CvImportSource
+  status          CvImportStatus @default(PENDING)
+  rawContentR2Key String?        @map("raw_content_r2_key") @db.VarChar(300)
+  rawText         String?        @map("raw_text") @db.Text
+  parsedResult    Json?          @map("parsed_result") @db.JsonB
+  confidenceFlags Json?          @map("confidence_flags") @db.JsonB // which fields the parser is unsure about
+  hiddenTextFound Boolean        @default(false) @map("hidden_text_found") // white-on-white / zero-size fonts
+  error           String?        @db.Text
+  reviewedByUser  Boolean        @default(false) @map("reviewed_by_user")
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+
+  @@index([userId, status], name: "idx_cv_imports_user")
+  @@map("cv_import_jobs")
+}
+
+// Read-only GitHub OAuth snapshot. Repos scored by substance so only
+// real projects are surfaced as CV candidates.
+model CvGitHubProfile {
+  id              Int       @id @default(autoincrement())
+  userId          Int       @unique @map("user_id")
+  username        String    @db.VarChar(100)
+  repos           Json      @default("[]") @db.JsonB
+  languageProfile Json      @default("{}") @map("language_profile") @db.JsonB
+  lastSyncedAt    DateTime? @map("last_synced_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  @@map("cv_github_profiles")
+}
+
+model CvCoverLetter {
+  id          Int               @id @default(autoincrement())
+  documentId  Int               @map("document_id")
+  document    CvDocument        @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  userId      Int               @map("user_id")
+  jobTargetId Int?              @map("job_target_id")
+  body        String            @db.Text
+  tone        CvCoverLetterTone @default(DIRECT)
+  version     Int               @default(1)
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+
+  @@index([documentId], name: "idx_cv_coverletters_document")
+  @@map("cv_cover_letters")
+}
+
+// Every AI rewrite proposed — powers the before/after diff and the
+// accept-rate signal (a user rejecting most rewrites = wrong voice).
+model CvSuggestionLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  bulletId  Int?     @map("bullet_id")
+  original  String   @db.Text
+  proposed  String   @db.Text
+  rationale String?  @db.Text
+  accepted  Boolean? // null = pending
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId], name: "idx_cv_suggestions_user")
+  @@map("cv_suggestion_logs")
+}
+
+// A generated export artifact in R2. `roundTripOk` records whether the
+// PDF's text re-extracted correctly (ATS-readability gate).
+model CvExport {
+  id          Int            @id @default(autoincrement())
+  documentId  Int            @map("document_id")
+  document    CvDocument     @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  userId      Int            @map("user_id")
+  format      CvExportFormat
+  status      CvExportStatus @default(PENDING)
+  r2Key       String?        @map("r2_key") @db.VarChar(300)
+  fileName    String?        @map("file_name") @db.VarChar(200)
+  roundTripOk Boolean?       @map("round_trip_ok")
+  error       String?        @db.Text
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  @@index([documentId], name: "idx_cv_exports_document")
+  @@map("cv_exports")
+}
+
+// Per-task LLM cost/token accounting, isolated from the Interview log so
+// the CV cost dashboard is clean. Failed calls logged with zero tokens.
+model CvLLMCallLog {
+  id           Int      @id @default(autoincrement())
+  userId       Int?     @map("user_id")
+  documentId   Int?     @map("document_id")
+  task         String   @db.VarChar(40) // critique | intake | jd_parse | parse_fallback | cover_letter
+  provider     String   @db.VarChar(40)
+  model        String   @db.VarChar(80)
+  inputTokens  Int      @default(0) @map("input_tokens")
+  outputTokens Int      @default(0) @map("output_tokens")
+  costUsd      Decimal  @default(0) @map("cost_usd") @db.Decimal(12, 6)
+  success      Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([userId, createdAt], name: "idx_cv_llmlog_user")
+  @@map("cv_llm_call_logs")
+}

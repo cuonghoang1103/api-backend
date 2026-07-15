@@ -11,12 +11,13 @@ import {
   GraduationCap, ShoppingBag, Layers, ChevronRight,
   Github, Menu, X, NotebookPen, Languages, Wallet,
   TrendingUp, Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
+  FileText,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import { useMusicAccess } from '@/hooks/useMusicAccess';
-import { SHOP_ENABLED, CART_ENABLED, INTERVIEW_ENABLED } from '@/lib/featureFlags';
+import { SHOP_ENABLED, CART_ENABLED, INTERVIEW_ENABLED, CV_BUILDER_ENABLED } from '@/lib/featureFlags';
 import { UserAvatar } from '@/components/common/UserAvatar';
 import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -64,6 +65,7 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/messages', label: 'Messages', icon: MessagesSquare, section: 'main', showUnread: true },
   { href: '/courses', label: 'Courses', icon: BookMarked, section: 'main' },
   { href: '/interview', label: 'Interview', icon: Briefcase, section: 'main' },
+  { href: '/cv', label: 'CV Builder', icon: FileText, section: 'main' },
   { href: '/my-courses', label: 'My Courses', icon: PlayCircle, section: 'main' },
   { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'main' },
   { href: '/blog', label: 'Blog', icon: BookOpen, section: 'user' },
@@ -92,6 +94,7 @@ const DOCK_ITEMS: DockItem[] = ALL_DOCK_ITEMS.filter((it) => {
   if (it.href === '/shop') return SHOP_ENABLED;
   if (it.href === '/my-orders') return CART_ENABLED;
   if (it.href === '/interview') return INTERVIEW_ENABLED;
+  if (it.href === '/cv') return CV_BUILDER_ENABLED;
   return true;
 });
 

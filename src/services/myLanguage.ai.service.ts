@@ -164,6 +164,51 @@ function toPlainText(v: unknown): string | null {
 }
 
 /**
+ * Tolerant JSON parse for LLM output. `extractJson` throws on the common
+ * failure modes of conversational content (unescaped inner double-quotes,
+ * smart quotes, trailing commas, stray prose) — which surfaced as "AI đang
+ * bận" after a few turns. Try extractJson, then a light repair, else {}.
+ */
+function looseJson(text: string): Record<string, unknown> {
+  try {
+    return extractJson<Record<string, unknown>>(text);
+  } catch {
+    /* fall through to repair */
+  }
+  try {
+    let t = String(text || '').replace(/```(?:json)?/gi, '').trim();
+    const a = t.indexOf('{');
+    const b = t.lastIndexOf('}');
+    if (a >= 0 && b > a) t = t.slice(a, b + 1);
+    t = t
+      .replace(/[“”]/g, '"') // smart double quotes → "
+      .replace(/[‘’]/g, "'") // smart single quotes → '
+      .replace(/[\x00-\x1F]+/g, ' ') // control chars (incl. raw newlines)
+      .replace(/,\s*([}\]])/g, '$1'); // trailing commas
+    return JSON.parse(t) as Record<string, unknown>;
+  } catch {
+    return {};
+  }
+}
+
+/** Last-resort: pull a single string field's value even from broken JSON. */
+function grabField(text: string, field: string): string {
+  const re = new RegExp(`"${field}"\\s*:\\s*"([\\s\\S]*?)"\\s*(?:,\\s*"\\w+"\\s*:|}\\s*$|}\\s*[,\\]])`, 'm');
+  const m = String(text || '').match(re);
+  return m ? m[1].replace(/\\"/g, '"').replace(/\s+/g, ' ').trim() : '';
+}
+
+/** Strip JSON/markdown scaffolding to salvage plain text (role-play fallback). */
+function salvageText(text: string): string {
+  let t = String(text || '').replace(/```(?:json)?/gi, '').trim();
+  const grabbed = grabField(t, 'reply');
+  if (grabbed) return grabbed;
+  // Otherwise drop obvious JSON braces/keys and return what's left.
+  t = t.replace(/^\s*\{/, '').replace(/\}\s*$/, '').replace(/"\w+"\s*:/g, '').replace(/["{}]/g, '').trim();
+  return t.slice(0, 500);
+}
+
+/**
  * Explain a grammar point or vocab word with the AI tutor.
  * Pro/Max only; degrades with a friendly error when AI is off.
  */
@@ -233,7 +278,7 @@ export async function explainConcept(
       timeoutMs: 30_000,
       userId,
     });
-    result = normalize(kind, title, extractJson(res.text));
+    result = normalize(kind, title, looseJson(res.text));
   } catch {
     throw new BadRequestError('Gia sư AI đang bận, vui lòng thử lại sau giây lát.');
   }
@@ -318,7 +363,7 @@ export async function scorePronunciation(
       timeoutMs: 30_000,
       userId,
     });
-    parsed = extractJson<Record<string, unknown>>(res.text);
+    parsed = looseJson(res.text);
   } catch {
     throw new BadRequestError('Chấm phát âm đang bận, vui lòng thử lại sau giây lát.');
   }
@@ -407,7 +452,7 @@ export async function generateQuiz(
       timeoutMs: 40_000,
       userId,
     });
-    parsed = extractJson<{ questions?: unknown }>(res.text);
+    parsed = looseJson(res.text) as { questions?: unknown };
   } catch {
     throw new BadRequestError('Tạo quiz đang bận, vui lòng thử lại sau giây lát.');
   }
@@ -472,12 +517,12 @@ export async function gradeAnswer(
       step: 'interview',
       system,
       messages: [{ role: 'user', content: user }],
-      maxTokens: 700,
+      maxTokens: 900,
       maxRetries: 1,
       timeoutMs: 30_000,
       userId,
     });
-    parsed = extractJson<Record<string, unknown>>(res.text);
+    parsed = looseJson(res.text);
   } catch {
     throw new BadRequestError('Chấm bài đang bận, vui lòng thử lại sau giây lát.');
   }
@@ -535,26 +580,28 @@ export async function gradeWriting(
     `You are a supportive writing teacher for a Vietnamese speaker learning ${langName}. ${focus} ` +
     `Grade the composition fairly and ALWAYS write feedback/notes in Vietnamese (tiếng Việt); the ${langName} text (corrected + suggestions) stays in ${langName}. ` +
     `Return ONLY a minified JSON object: {"score": number (0-100), "level": string, "verdict": "good"|"ok"|"poor", "feedback": string, "corrected": string, "corrections": [{"original": string, "suggestion": string, "note": string}]}. ` +
+    `Escape any double-quote inside a string as \\". No text outside the JSON. ` +
     `"level" is a short proficiency estimate (e.g. "B1", "N4") or "" if unsure. "corrected" is the full improved version in ${langName}. ` +
     `"corrections" lists up to 8 specific fixes (original phrase → suggestion + a short VI note). score ≥85 → "good", 60–84 → "ok", <60 → "poor".`;
   const user = `${prompt ? `ĐỀ BÀI: ${prompt}\n\n` : ''}BÀI VIẾT:\n${text}`;
 
-  let parsed: Record<string, unknown> = {};
+  let raw = '';
   try {
     const res = await llmComplete({
       step: 'interview',
       system,
       messages: [{ role: 'user', content: user }],
-      maxTokens: 1400,
+      maxTokens: 1900,
       maxRetries: 1,
-      timeoutMs: 40_000,
+      timeoutMs: 45_000,
       userId,
     });
-    parsed = extractJson<Record<string, unknown>>(res.text);
+    raw = res.text;
   } catch {
     throw new BadRequestError('Chấm bài đang bận, vui lòng thử lại sau giây lát.');
   }
 
+  const parsed = looseJson(raw);
   const rawScore = Number(parsed.score);
   const score = Number.isFinite(rawScore) ? Math.max(0, Math.min(100, Math.round(rawScore))) : 0;
   const verdict: PronounceVerdict =
@@ -574,7 +621,12 @@ export async function gradeWriting(
     .filter((c): c is WritingCorrection => c != null)
     .slice(0, 8);
 
-  return { score, level: str(parsed.level), verdict, feedback: str(parsed.feedback), corrected: str(parsed.corrected), corrections };
+  const feedback = str(parsed.feedback) || grabField(raw, 'feedback');
+  const corrected = str(parsed.corrected) || grabField(raw, 'corrected');
+  if (!feedback && !corrected && !corrections.length) {
+    throw new BadRequestError('Chưa đọc được kết quả chấm, vui lòng thử lại.');
+  }
+  return { score, level: str(parsed.level), verdict, feedback, corrected, corrections };
 }
 
 // ── Phase 4b: Role-play conversation (multi-turn) ─────────────────
@@ -627,28 +679,37 @@ export async function rolePlayTurn(
     `Stay in character for this scenario: "${scenario}". Reply in ${langName} with SHORT, natural, realistic lines (1–2 sentences), and keep the conversation going by asking or responding naturally.${readingNote} ` +
     `Also gently correct the learner's LAST message if it has mistakes. ` +
     `Return ONLY a minified JSON object: {"reply": string, "translation": string, "correction": string}. ` +
+    `Escape any double-quote inside a string as \\". No text outside the JSON. ` +
     `"reply" is your in-character line in ${langName}. "translation" is its Vietnamese meaning. "correction" is a brief, encouraging fix (in Vietnamese) of the learner's last message, or "" if it was fine or there was none.`;
 
-  let parsed: Record<string, unknown> = {};
+  let raw = '';
   try {
     const res = await llmComplete({
       step: 'interview',
       system,
       messages,
-      maxTokens: 500,
+      maxTokens: 800,
       maxRetries: 1,
       timeoutMs: 30_000,
       userId,
     });
-    parsed = extractJson<Record<string, unknown>>(res.text);
+    raw = res.text;
   } catch {
+    // Genuine LLM/network failure (rare) — the only case that hard-fails now.
     throw new BadRequestError('Hội thoại AI đang bận, vui lòng thử lại sau giây lát.');
   }
 
-  const str = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
-  const reply = str(parsed.reply);
+  const parsed = looseJson(raw);
+  const s = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
+  // Never hard-fail on a parse issue: fall back to the raw reply so the chat
+  // keeps flowing (translation/correction just come through best-effort).
+  const reply = s(parsed.reply) || grabField(raw, 'reply') || salvageText(raw);
   if (!reply) throw new BadRequestError('AI chưa trả lời được, vui lòng thử lại.');
-  return { reply, translation: str(parsed.translation), correction: str(parsed.correction) };
+  return {
+    reply,
+    translation: s(parsed.translation) || grabField(raw, 'translation'),
+    correction: s(parsed.correction) || grabField(raw, 'correction'),
+  };
 }
 
 // ── Phase 4c: Plain transcription (voice input for role-play) ─────

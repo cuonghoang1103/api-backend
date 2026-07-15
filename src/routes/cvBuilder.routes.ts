@@ -21,6 +21,7 @@ import * as lintSvc from '../services/cv/lint.service.js';
 import { exportProfile, type ExportFormat } from '../services/cv/export.service.js';
 import * as critiqueSvc from '../services/cv/critique.service.js';
 import * as jobSvc from '../services/cv/jobTarget.service.js';
+import * as coverSvc from '../services/cv/coverLetter.service.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -170,6 +171,12 @@ router.get('/jobs/:id/tailor', h((req, res) => {
 router.delete('/jobs/:id', h((req, res) => {
   const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
   return jobSvc.deleteJobTarget(req.userId!, id);
+}));
+// Cover letter (Phase 8b) — AI, quota-gated; degrades when no key.
+router.get('/cover-letter/status', h(async () => coverSvc.coverLetterStatus()));
+router.post('/jobs/:id/cover-letter', h((req, res) => {
+  const id = idOr400(req, res); if (Number.isNaN(id)) return Promise.resolve();
+  return coverSvc.generateCoverLetter(req.userId!, id, req.body?.tone);
 }));
 
 // ── AI Critique (Phase 7) — quota-gated; degrades to STATIC when no key ──

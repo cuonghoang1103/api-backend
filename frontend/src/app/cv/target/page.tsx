@@ -12,10 +12,12 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
   ArrowLeft, Loader2, Target, CheckCircle2, AlertTriangle, XCircle,
-  ShieldAlert, ListOrdered, Trash2,
+  ShieldAlert, ListOrdered, Trash2, Mail, Copy,
 } from 'lucide-react';
 import { cvApi } from '@/lib/cv-api';
 import type { CvJobSummary, CvCoverage, CvTailor, CvCoverageLevel } from '@/types/cv';
+
+const TONES = [{ v: 'DIRECT', l: 'Thẳng thắn' }, { v: 'FORMAL', l: 'Trang trọng' }, { v: 'WARM', l: 'Ấm áp' }];
 
 const LEVEL_META: Record<CvCoverageLevel, { icon: React.ElementType; cls: string; label: string }> = {
   GREEN: { icon: CheckCircle2, cls: 'text-emerald-500', label: 'Có bằng chứng' },
@@ -38,6 +40,25 @@ export default function CvTargetPage() {
   const [busy, setBusy] = useState(false);
   const [coverage, setCoverage] = useState<CvCoverage | null>(null);
   const [tailor, setTailor] = useState<CvTailor | null>(null);
+  // cover letter
+  const [clAvailable, setClAvailable] = useState<boolean | null>(null);
+  const [clTone, setClTone] = useState('DIRECT');
+  const [clBusy, setClBusy] = useState(false);
+  const [coverLetter, setCoverLetter] = useState<{ body: string; wordCount: number } | null>(null);
+
+  useEffect(() => { cvApi.coverLetterStatus().then((r) => setClAvailable(r.data.data.available)).catch(() => setClAvailable(false)); }, []);
+
+  const genCoverLetter = async () => {
+    if (!coverage) return;
+    setClBusy(true);
+    try {
+      const r = await cvApi.coverLetter(coverage.job.id, clTone);
+      setCoverLetter({ body: r.data.data.body, wordCount: r.data.data.wordCount });
+    } catch (e) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'Sinh cover letter thất bại');
+    } finally { setClBusy(false); }
+  };
 
   const loadJobs = useCallback(async () => {
     try { setJobs((await cvApi.listJobs()).data.data); }
@@ -46,7 +67,7 @@ export default function CvTargetPage() {
   useEffect(() => { loadJobs(); }, [loadJobs]);
 
   const openJob = async (id: number) => {
-    setBusy(true); setCoverage(null); setTailor(null);
+    setBusy(true); setCoverage(null); setTailor(null); setCoverLetter(null);
     try {
       const [cov, tl] = await Promise.all([cvApi.jobCoverage(id), cvApi.jobTailor(id)]);
       setCoverage(cov.data.data); setTailor(tl.data.data);
@@ -160,6 +181,35 @@ export default function CvTargetPage() {
                 )}
               </section>
             )}
+
+            {/* Cover letter (Phase 8b) */}
+            <section className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-sm font-medium"><Mail className="h-4 w-4" /> Cover letter</div>
+                {clAvailable !== false && (
+                  <div className="flex items-center gap-2">
+                    <select value={clTone} onChange={(e) => setClTone(e.target.value)} className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1 text-xs">
+                      {TONES.map((t) => <option key={t.v} value={t.v}>{t.l}</option>)}
+                    </select>
+                    <button onClick={genCoverLetter} disabled={clBusy} className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent-color)] px-3 py-1.5 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
+                      {clBusy ? <><Loader2 className="h-4 w-4 animate-spin" /> Đang viết…</> : <><Mail className="h-4 w-4" /> {coverLetter ? 'Viết lại' : 'Sinh cover letter'}</>}
+                    </button>
+                  </div>
+                )}
+              </div>
+              {clAvailable === false && <p className="mt-2 text-xs text-[var(--text-secondary)]">Cover letter cần AI — chưa cấu hình khoá. Thêm khoá là dùng được ngay.</p>}
+              {coverLetter && (
+                <div className="mt-3">
+                  <div className="flex items-center justify-between text-xs text-[var(--text-secondary)]">
+                    <span>{coverLetter.wordCount} từ</span>
+                    <button onClick={() => { navigator.clipboard.writeText(coverLetter.body); toast.success('Đã copy'); }} className="inline-flex items-center gap-1 hover:text-[var(--text-primary)]"><Copy className="h-3 w-3" /> Copy</button>
+                  </div>
+                  <textarea className="mt-2 min-h-[280px] w-full resize-y rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] p-3 text-sm leading-relaxed"
+                    value={coverLetter.body} onChange={(e) => setCoverLetter({ ...coverLetter, body: e.target.value })} />
+                  <p className="mt-1 text-xs text-[var(--text-secondary)]">AI chỉ dùng sự thật trong hồ sơ + JD — không bịa. Đọc lại và chỉnh cho giống giọng bạn trước khi gửi.</p>
+                </div>
+              )}
+            </section>
           </div>
         )}
       </div>

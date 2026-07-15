@@ -76,6 +76,11 @@ export const cvApi = {
   jobTailor: (id: number): Res<CvTailor> => api.get(`/cv/jobs/${id}/tailor`),
   deleteJob: (id: number): Res<{ id: number }> => api.delete(`/cv/jobs/${id}`),
 
+  // ── Cover letter (Phase 8b) — AI ────────────────────────────
+  coverLetterStatus: (): Res<{ available: boolean }> => api.get('/cv/cover-letter/status'),
+  coverLetter: (jobId: number, tone: string): Res<{ body: string; tone: string; wordCount: number }> =>
+    api.post(`/cv/jobs/${jobId}/cover-letter`, { tone }, { timeout: 90_000 }),
+
   // ── Export (Phase 4) — binary download; returns the raw axios response. ──
   exportCv: (format: 'pdf' | 'docx' | 'txt' | 'md' | 'json') =>
     api.get(`/cv/export/${format}`, { responseType: 'blob', timeout: 60_000 }),

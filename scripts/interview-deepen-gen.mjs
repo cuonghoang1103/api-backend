@@ -27,8 +27,8 @@ const DOMAINS = String(val('--domains', 'backend,frontend,database,devops,cloud,
   .split(',').map((s) => s.trim()).filter(Boolean);
 const LEVELS = ['INTERN', 'FRESHER', 'JUNIOR', 'MID', 'SENIOR'];
 const PER_LEVEL = Math.ceil(TARGET / LEVELS.length); // 50 → 10 per level
-const BATCH = 6;                                     // questions per LLM call (stable, no truncation)
-const LEVEL_CONCURRENCY = 3;                         // parallel level-calls within one topic
+const BATCH = 5;                                     // questions per LLM call (stable, no truncation)
+const LEVEL_CONCURRENCY = 1;                         // sequential — parallel calls made the gateway exceed Cloudflare's timeout (HTTP 524)
 const ADMIN_USER_ID = 1;
 
 // ── Token-window throttle ────────────────────────────────────────────────
@@ -105,8 +105,14 @@ async function fillLevel(tp, level) {
       callFails++;
       const msg = String(e?.message ?? e);
       console.error(`    [!] ${tp.track.slug}/${tp.slug} ${level}: ${msg.slice(0, 140)}`);
-      if (msg.includes('hạn mức') || msg.includes('AI đang tắt')) { stop = true; }
-      break; // don't hammer a failing (topic, level); resumable later
+      if (msg.includes('hạn mức') || msg.includes('AI đang tắt')) { stop = true; break; }
+      // Transient gateway wobble (524/timeout/network) → breathe 90s and retry
+      // within the guard budget; anything else abandons this (topic, level).
+      if (/524|timeout|ETIMEDOUT|ECONNRESET|fetch failed|529|overloaded/i.test(msg)) {
+        await new Promise((r) => setTimeout(r, 90_000));
+        continue;
+      }
+      break;
     }
   }
   return have;

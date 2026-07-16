@@ -345,7 +345,15 @@ export async function adminGenerate(
     items.push(p);
     if (items.length >= count) break;
   }
-  if (!items.length) throw new BadRequestError(fullMessage(section, level, topic));
+  if (!items.length) {
+    // "Already full" is only honest when the model DID return items and dedup
+    // removed every one. If it returned nothing parseable, this is a generation
+    // failure and must read as retryable — a fresh category has no existing
+    // keys, so "full" is impossible there by definition, yet callers that
+    // believe it strand the unit at zero forever.
+    if (!rawItems.length) throw new BadRequestError('Tạo nội dung chưa ra kết quả, vui lòng thử lại.');
+    throw new BadRequestError(fullMessage(section, level, topic));
+  }
   return { section, items };
 }
 

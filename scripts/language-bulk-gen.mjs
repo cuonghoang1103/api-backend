@@ -68,7 +68,7 @@ const isQuotaErr = (m) => /hạn mức|AI đang tắt|quota/i.test(String(m));
 // adminGenerate collapses EVERY llmComplete failure (timeout, 524, overload)
 // into one "đang bận" message, so that string is a transient error, not a dry
 // well. Telling the two apart is what stops a blip from ending a category.
-const isTransientErr = (m) => /đang bận|524|529|timeout|ETIMEDOUT|ECONNRESET|fetch failed|overloaded/i.test(String(m));
+const isTransientErr = (m) => /đang bận|chưa ra kết quả|524|529|timeout|ETIMEDOUT|ECONNRESET|fetch failed|overloaded/i.test(String(m));
 
 /** One generate→commit round. Returns {created, kind}:
  *  'ok' new rows | 'dry' AI found nothing new | 'transient' retryable | 'quota' stop. */

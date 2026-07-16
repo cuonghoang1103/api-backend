@@ -7,7 +7,7 @@ import {
   LayoutDashboard, FileText, Users, Code2, Sparkles,
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
- CreditCard, Github, Search, TrendingUp, AlertTriangle,
+ CreditCard, Github, Search, TrendingUp, AlertTriangle, Gamepad2,
  KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown,
 } from 'lucide-react';
 
@@ -51,6 +51,7 @@ const adminNav = [
  { label: 'Embed Queue', href: '/admin/embed-jobs', icon: Zap },
  { label: 'SEO Tools', href: '/admin/seo', icon: Search },
  { label: 'Tech Trends', href: '/admin/tech-trends', icon: TrendingUp },
+ { label: 'Games', href: '/admin/games', icon: Gamepad2 },
  { label: 'System Stats', href: '/admin/stats', icon: BarChart3 },
 ];
 

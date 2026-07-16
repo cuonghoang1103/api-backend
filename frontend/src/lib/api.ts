@@ -3179,6 +3179,197 @@ export interface AiGeneratedArticle {
   } | null;
 }
 
+// ─── Game Library ("Playground") ───────────────────────────────────
+//
+// Public reads are unauthenticated; /admin/* requires ROLE_ADMIN
+// (enforced server-side, not just by middleware). Cover uploads reuse
+// the shared fileApi.upload endpoint — there is no games-specific
+// upload route and no R2 credential ever reaches the client.
+
+export type GameDifficulty = 'EASY' | 'MEDIUM' | 'HARD';
+export type GameStatus = 'DRAFT' | 'PUBLISHED' | 'COMING_SOON';
+export type GameKind = 'REACT' | 'IFRAME';
+
+export interface GameCategoryDto {
+  id: number;
+  slug: string;
+  name: string;
+  nameVi: string | null;
+  icon: string | null;
+  color: string | null;
+  sortOrder?: number;
+  gameCount?: number;
+  _count?: { games: number };
+}
+
+export interface GameDto {
+  id: number;
+  slug: string;
+  title: string;
+  titleVi: string | null;
+  description: string;
+  descriptionVi: string | null;
+  longDescription?: string | null;
+  coverImage: string | null;
+  screenshots?: string[];
+  difficulty: GameDifficulty;
+  status: GameStatus;
+  featured: boolean;
+  sortOrder: number;
+  playCount: number;
+  kind: GameKind;
+  componentKey: string | null;
+  iframeSrc?: string | null;
+  estimatedTime: string | null;
+  techStack: string[];
+  tags: string[];
+  controls?: string | null;
+  controlsVi?: string | null;
+  categoryId?: number;
+  category: GameCategoryDto;
+  createdAt: string;
+  updatedAt?: string;
+  /** Only present on the by-slug detail response. */
+  bestScore?: number | null;
+}
+
+export interface GameLeaderEntry {
+  rank: number;
+  id: number;
+  score: number;
+  playedAt: string;
+  userId: number | null;
+  /** null → render as "Anonymous". */
+  player: { id: number; name: string; avatarUrl: string | null } | null;
+  game?: { id: number; slug: string; title: string; titleVi: string | null };
+}
+
+export interface GameStats {
+  games: number;
+  categories: number;
+  totalPlays: number;
+}
+
+export interface GameAdminStats {
+  total: number;
+  published: number;
+  drafts: number;
+  comingSoon: number;
+  playsAll: number;
+  plays7: number;
+  daily: { date: string; plays: number }[];
+}
+
+export interface GameInput {
+  title: string;
+  titleVi?: string | null;
+  slug?: string | null;
+  description: string;
+  descriptionVi?: string | null;
+  longDescription?: string | null;
+  coverImage?: string | null;
+  screenshots?: string[];
+  difficulty?: GameDifficulty;
+  status?: GameStatus;
+  kind?: GameKind;
+  componentKey?: string | null;
+  iframeSrc?: string | null;
+  featured?: boolean;
+  sortOrder?: number;
+  estimatedTime?: string | null;
+  techStack?: string[];
+  tags?: string[];
+  controls?: string | null;
+  controlsVi?: string | null;
+  categoryId: number;
+}
+
+export const gamesApi = {
+  list(params?: { category?: string; q?: string; featured?: boolean }) {
+    return api.get<{ data: GameDto[] }>('/games', { params });
+  },
+  categories() {
+    return api.get<{ data: GameCategoryDto[] }>('/games/categories');
+  },
+  stats() {
+    return api.get<{ data: GameStats }>('/games/stats');
+  },
+  getBySlug(slug: string) {
+    return api.get<{ data: GameDto }>(`/games/by-slug/${encodeURIComponent(slug)}`);
+  },
+  related(id: number) {
+    return api.get<{ data: GameDto[] }>(`/games/${id}/related`);
+  },
+  leaderboard(limit = 5) {
+    return api.get<{ data: GameLeaderEntry[] }>('/games/leaderboard', { params: { limit } });
+  },
+  gameLeaderboard(id: number, limit = 20) {
+    return api.get<{ data: GameLeaderEntry[] }>(`/games/${id}/leaderboard`, { params: { limit } });
+  },
+  /** Count one play — client guards to once per session per game. */
+  recordPlay(id: number) {
+    return api.post<{ data: { playCount: number } }>(`/games/${id}/play`);
+  },
+  /** Submit a run's score. Server clamps to the per-game cap. */
+  submitScore(id: number, score: number, duration?: number) {
+    return api.post<{ data: { play: { id: number; score: number }; capped: boolean; cap: number } }>(
+      `/games/${id}/score`,
+      { score, duration },
+    );
+  },
+};
+
+export const adminGamesApi = {
+  list(params?: { page?: number; size?: number; status?: GameStatus | ''; categoryId?: number; q?: string }) {
+    return api.get<{
+      data: GameDto[];
+      pagination: { page: number; limit: number; total: number; totalPages: number };
+    }>('/admin/games', { params });
+  },
+  stats() {
+    return api.get<{ data: GameAdminStats }>('/admin/games/stats');
+  },
+  get(id: number) {
+    return api.get<{ data: GameDto }>(`/admin/games/${id}`);
+  },
+  create(payload: GameInput) {
+    return api.post<{ data: GameDto }>('/admin/games', payload);
+  },
+  update(id: number, payload: Partial<GameInput>) {
+    return api.patch<{ data: GameDto }>(`/admin/games/${id}`, payload);
+  },
+  remove(id: number) {
+    return api.delete<{ data: { id: number } }>(`/admin/games/${id}`);
+  },
+  reorder(items: { id: number; sortOrder: number }[]) {
+    return api.post<{ data: { updated: number } }>('/admin/games/reorder', { items });
+  },
+  /** Cover/screenshot upload — reuses the shared files endpoint. */
+  uploadImage(file: File) {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('category', 'cover');
+    return api.post<{ data: { url: string; id: number } }>('/files/upload', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+};
+
+export const adminGameCategoriesApi = {
+  list() {
+    return api.get<{ data: GameCategoryDto[] }>('/admin/game-categories');
+  },
+  create(payload: { name: string; nameVi?: string | null; slug?: string | null; icon?: string | null; color?: string | null; sortOrder?: number }) {
+    return api.post<{ data: GameCategoryDto }>('/admin/game-categories', payload);
+  },
+  update(id: number, payload: Partial<{ name: string; nameVi: string | null; slug: string; icon: string | null; color: string | null; sortOrder: number }>) {
+    return api.patch<{ data: GameCategoryDto }>(`/admin/game-categories/${id}`, payload);
+  },
+  remove(id: number) {
+    return api.delete<{ data: { id: number } }>(`/admin/game-categories/${id}`);
+  },
+};
+
 // ─── Hub — Personal Bookmark Manager ───────────────────────────────
 //
 // All Hub endpoints are auth-gated. The response shape mirrors

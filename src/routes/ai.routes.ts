@@ -29,6 +29,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 import type { ChatMessageDto } from '../types/index.js';
+import { getGenStats } from '../services/genStats.service.js';
 
 const router = Router();
 
@@ -500,6 +501,19 @@ router.get('/feedback/stats', authenticate, async (_req: any, res: Response<ApiR
   } catch (error) {
     next(error);
   }
+});
+
+// ════════════════════════════════════════════════════════════════
+// ADMIN: GET /api/v1/ai/analytics/generation
+// Live pulse of the bulk content generators (My Language, interview deepen, the
+// EN backfill). Read-only aggregates over the existing LLM call log — the
+// generators run detached on the VPS and write there already, so nothing has to
+// change on their side and nothing here can disturb them.
+// ════════════════════════════════════════════════════════════════
+router.get('/analytics/generation', authenticate, requireAdmin(), async (_req: any, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await getGenStats() });
+  } catch (err) { next(err); }
 });
 
 // ════════════════════════════════════════════════════════════════

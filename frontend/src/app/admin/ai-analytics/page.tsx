@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
+import GenerationStats from '@/components/admin/GenerationStats';
 import {
   MessageSquare,
   ThumbsUp,
@@ -12,9 +13,42 @@ import {
   Activity,
   Star,
   BarChart3,
+  Sparkles,
 } from 'lucide-react';
 
+type Tab = 'chat' | 'generation';
+
+/** Two separate concerns share this page: what users ask the chatbot, and what
+ *  the background generators are producing. Tabs keep each one uncluttered. */
+function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
+  const items: Array<{ id: Tab; label: string; icon: typeof MessageSquare }> = [
+    { id: 'chat', label: 'AI Chat', icon: MessageSquare },
+    { id: 'generation', label: 'AI Tạo Sinh', icon: Sparkles },
+  ];
+  return (
+    <div className="flex gap-1.5 overflow-x-auto">
+      {items.map((it) => {
+        const Icon = it.icon;
+        const on = tab === it.id;
+        return (
+          <button
+            key={it.id}
+            type="button"
+            onClick={() => setTab(it.id)}
+            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold ring-1 transition ${
+              on ? 'bg-neon-violet/15 text-neon-violet ring-neon-violet/40' : 'bg-darkcard text-text-muted ring-darkborder hover:text-text-secondary'
+            }`}
+          >
+            <Icon size={15} /> {it.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function AdminAIAnalyticsPage() {
+  const [tab, setTab] = useState<Tab>('chat');
   const [stats, setStats] = useState<Record<string, any>>({});
   const [feedback, setFeedback] = useState<Record<string, any>>({});
   const [users, setUsers] = useState<any[]>([]);
@@ -81,8 +115,18 @@ export default function AdminAIAnalyticsPage() {
     },
   ];
 
+  if (tab === 'generation') {
+    return (
+      <div className="space-y-6">
+        <Tabs tab={tab} setTab={setTab} />
+        <GenerationStats />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+      <Tabs tab={tab} setTab={setTab} />
       <div>
         <h1 className="text-2xl font-heading font-bold text-text-primary">AI Chat Analytics</h1>
         <p className="text-text-secondary mt-1">Thống kê chatbot AI</p>

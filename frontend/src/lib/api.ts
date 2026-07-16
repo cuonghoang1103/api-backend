@@ -2986,6 +2986,23 @@ export const techTrendsApi = {
       data: { id: string; label: string; count: number }[];
     }>('/tech-trends/categories');
   },
+
+  // ── Reader AI (PRO-gated, auth required). available = server has a
+  //    key; isPro = this user is entitled. 403 PRO_REQUIRED otherwise. ──
+  readerAiStatus() {
+    return api.get<{ data: { available: boolean; isPro: boolean } }>('/tech-trends/ai/status');
+  },
+  tldr(id: number) {
+    return api.post<{ data: { tldr: string[] } }>(`/tech-trends/articles/${id}/tldr`);
+  },
+  explainArticleCode(id: number) {
+    return api.post<{ data: { explanation: string } }>(`/tech-trends/articles/${id}/explain-code`);
+  },
+  ask(question: string) {
+    return api.post<{
+      data: { answer: string; grounded: boolean; sources: { id: number; slug: string; title: string }[] };
+    }>('/tech-trends/ask', { question });
+  },
 };
 
 export const adminTechTrendsApi = {

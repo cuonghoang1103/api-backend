@@ -248,3 +248,94 @@ export async function rewriteBody(
 export function aiStatus(): { available: boolean } {
   return { available: isAiAvailable() };
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Reader-facing AI (PRO-gated at the route layer). Same gateway, cheaper step.
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Strip HTML/markdown to plain text and cap it, for feeding a body to the LLM. */
+function toPlainText(input: string, max = 6_000): string {
+  return String(input ?? '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/[#*`>_~]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, max);
+}
+
+// ── 5. TL;DR of a single article ────────────────────────────────────────────
+export async function summarizeArticle(
+  opts: { title: string; text: string; userId?: number | null },
+): Promise<{ tldr: string[] }> {
+  ensureAvailable();
+  const body = toPlainText(opts.text);
+  if (!body) throw new AppError('Bài viết không có nội dung để tóm tắt', 400, 'BODY_REQUIRED');
+
+  const system = [
+    'Bạn tóm tắt bài viết kỹ thuật thành các gạch đầu dòng ngắn gọn, chính xác.',
+    OUTPUT_LANGUAGE_NOTE,
+    INJECTION_NOTE,
+    'Trả về DUY NHẤT JSON hợp lệ: {"tldr": string[]} — 3 đến 5 ý chính, mỗi ý 1 câu ngắn.',
+  ].join('\n');
+
+  const userMsg = `Tiêu đề: ${String(opts.title ?? '').slice(0, 300)}\n\n${wrap('body', body)}`;
+  const result = await llmComplete({ step: 'interview', system, messages: [{ role: 'user', content: userMsg }], maxTokens: 500, userId: opts.userId });
+  const json = extractJson<{ tldr?: unknown }>(result.text);
+  const tldr = Array.isArray(json.tldr) ? json.tldr.map((x) => String(x).trim()).filter(Boolean).slice(0, 6) : [];
+  if (tldr.length === 0) throw new AppError('Không tạo được tóm tắt, thử lại.', 502, 'AI_BAD_OUTPUT');
+  return { tldr };
+}
+
+// ── 6. Explain a code snippet ───────────────────────────────────────────────
+export async function explainCode(
+  opts: { code: string; lang?: string; userId?: number | null },
+): Promise<{ explanation: string }> {
+  ensureAvailable();
+  if (!opts.code?.trim()) throw new AppError('Không có code để giải thích', 400, 'CODE_REQUIRED');
+
+  const system = [
+    'Bạn giải thích đoạn code cho lập trình viên: nó làm gì, ý chính từng phần, và điểm cần lưu ý.',
+    OUTPUT_LANGUAGE_NOTE,
+    INJECTION_NOTE,
+    'Giải thích ngắn gọn bằng Markdown (vài gạch đầu dòng). Trả về DUY NHẤT JSON: {"explanation": string}',
+  ].join('\n');
+
+  const userMsg = `Ngôn ngữ: ${String(opts.lang ?? 'unknown')}\n${wrap('code', opts.code)}`;
+  const result = await llmComplete({ step: 'interview', system, messages: [{ role: 'user', content: userMsg }], maxTokens: 700, userId: opts.userId });
+  const json = extractJson<{ explanation?: string }>(result.text);
+  const explanation = String(json.explanation ?? '').trim();
+  if (!explanation) throw new AppError('Không giải thích được, thử lại.', 502, 'AI_BAD_OUTPUT');
+  return { explanation };
+}
+
+// ── 7. Answer a question grounded in retrieved articles (RAG) ───────────────
+export interface RagDoc { id: number; slug: string; title: string; snippet: string }
+export async function answerQuestion(
+  opts: { question: string; docs: RagDoc[]; userId?: number | null },
+): Promise<{ answer: string; grounded: boolean }> {
+  ensureAvailable();
+  if (!opts.question?.trim()) throw new AppError('Cần nhập câu hỏi', 400, 'QUESTION_REQUIRED');
+
+  if (opts.docs.length === 0) {
+    return { answer: 'Mình chưa tìm thấy bài viết nào trên blog liên quan tới câu hỏi này.', grounded: false };
+  }
+
+  const context = opts.docs
+    .map((d, i) => `[${i + 1}] "${d.title}"\n${toPlainText(d.snippet, 1200)}`)
+    .join('\n\n');
+
+  const system = [
+    'Bạn là trợ lý trả lời câu hỏi CHỈ dựa trên các bài viết được cung cấp bên dưới.',
+    OUTPUT_LANGUAGE_NOTE,
+    INJECTION_NOTE,
+    'Chỉ dùng thông tin trong các đoạn [1], [2]... Nếu không đủ dữ kiện, nói thẳng là blog chưa có nội dung phù hợp — KHÔNG bịa.',
+    'Khi dùng thông tin từ một bài, trích dẫn số hiệu của nó dạng [1]. Trả lời ngắn gọn bằng Markdown. Trả về DUY NHẤT JSON: {"answer": string}',
+  ].join('\n');
+
+  const userMsg = `Câu hỏi: ${opts.question.slice(0, 500)}\n\nCác bài viết:\n${wrap('articles', context)}`;
+  const result = await llmComplete({ step: 'interview', system, messages: [{ role: 'user', content: userMsg }], maxTokens: 900, userId: opts.userId });
+  const json = extractJson<{ answer?: string }>(result.text);
+  const answer = String(json.answer ?? '').trim();
+  if (!answer) throw new AppError('Không trả lời được, thử lại.', 502, 'AI_BAD_OUTPUT');
+  return { answer, grounded: true };
+}

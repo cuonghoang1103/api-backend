@@ -11,9 +11,14 @@ import {
   enrichMeta,
   rewriteBody,
   aiStatus,
+  summarizeArticle,
+  explainCode,
+  answerQuestion,
+  type RagDoc,
   TECH_TREND_CATEGORIES,
   type TechTrendCategory,
 } from '../services/techTrends/ai.service.js';
+import { isProEffective } from '../services/pro.service.js';
 
 /**
  * Tech Trends & Insights — public + admin REST API
@@ -309,6 +314,123 @@ publicRouter.get('/articles/:id', async (req, res: Response<ApiResponse>, next) 
       .catch(() => {});
 
     res.json({ success: true, data: serializeForPublic(article as unknown as Record<string, unknown>) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── Reader AI (PRO-gated) ─────────────────────────────────────────────
+// Reader-facing AI on the public article surface. These REQUIRE auth (to
+// identify the user) and Pro entitlement (same line the CV / Interview AI
+// uses). Non-Pro / anonymous → 403 with a friendly message the UI turns
+// into a /pro upsell. Reuses the interview LLM gateway (no new infra).
+
+const PRO_MESSAGE =
+  'Trợ lý AI đọc bài dành cho tài khoản Pro. Nâng cấp tại /pro để dùng TL;DR, hỏi đáp và giải thích code.';
+
+async function assertReaderPro(req: unknown): Promise<number> {
+  const userId = (req as { userId?: number }).userId ?? null;
+  if (!userId || !(await isProEffective(userId))) {
+    throw new AppError(PRO_MESSAGE, 403, 'PRO_REQUIRED');
+  }
+  return userId;
+}
+
+const STOPWORDS = new Set([
+  'the', 'and', 'for', 'với', 'các', 'này', 'khi', 'nào', 'gì', 'sao', 'thế', 'như', 'một',
+  'that', 'this', 'what', 'how', 'why', 'when', 'là', 'của', 'trong', 'được', 'cho', 'có',
+]);
+
+function extractKeywords(q: string): string[] {
+  const words = (q.toLowerCase().match(/[\p{L}\p{N}#.+-]{3,}/gu) ?? []).filter((w) => !STOPWORDS.has(w));
+  return [...new Set(words)].slice(0, 6);
+}
+
+// GET /api/v1/tech-trends/ai/status — auth required; tells the UI whether to
+// show reader-AI controls (available = key present, isPro = entitled).
+publicRouter.get('/ai/status', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = (req as unknown as { userId?: number }).userId ?? null;
+    const isPro = userId ? await isProEffective(userId) : false;
+    res.json({ success: true, data: { available: aiStatus().available, isPro } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/tech-trends/articles/:id/tldr — Pro. Summarize one article.
+publicRouter.post('/articles/:id/tldr', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = await assertReaderPro(req);
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid article id', 400, 'INVALID_ID');
+    const article = await prisma.techTrendArticle.findUnique({ where: { id }, select: { title: true, bodyHtml: true, body: true, status: true } });
+    if (!article || article.status !== 'PUBLISHED') throw new AppError('Article not found', 404, 'ARTICLE_NOT_FOUND');
+    const text = article.bodyHtml || (Array.isArray(article.body) ? (article.body as string[]).join('\n') : '');
+    const data = await summarizeArticle({ title: article.title, text, userId });
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/tech-trends/articles/:id/explain-code — Pro. Explain the
+// article's Before/After code block.
+publicRouter.post('/articles/:id/explain-code', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = await assertReaderPro(req);
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid article id', 400, 'INVALID_ID');
+    const article = await prisma.techTrendArticle.findUnique({ where: { id }, select: { codeBlock: true, status: true } });
+    if (!article || article.status !== 'PUBLISHED') throw new AppError('Article not found', 404, 'ARTICLE_NOT_FOUND');
+    const cb = article.codeBlock as { before?: { lang?: string; lines?: string[] }; after?: { lang?: string; lines?: string[] } } | null;
+    if (!cb) throw new AppError('Bài viết này không có khối code', 400, 'NO_CODE_BLOCK');
+    const lang = cb.before?.lang || cb.after?.lang || 'code';
+    const code =
+      `// Before\n${(cb.before?.lines ?? []).join('\n')}\n\n// After\n${(cb.after?.lines ?? []).join('\n')}`;
+    const data = await explainCode({ code, lang, userId });
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/tech-trends/ask — Pro. Answer a question grounded in the
+// published article corpus (lightweight ILIKE retrieval; no vector index).
+publicRouter.post('/ask', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = await assertReaderPro(req);
+    const question = String((req.body as { question?: unknown }).question ?? '').trim();
+    if (!question) throw new AppError('Cần nhập câu hỏi', 400, 'QUESTION_REQUIRED');
+
+    const keys = extractKeywords(question);
+    const or: Record<string, unknown>[] = keys.length
+      ? keys.flatMap((k) => [
+          { title: { contains: k, mode: 'insensitive' } },
+          { summary: { contains: k, mode: 'insensitive' } },
+          { tags: { has: k } },
+        ])
+      : [{ title: { contains: question, mode: 'insensitive' } }, { summary: { contains: question, mode: 'insensitive' } }];
+
+    const found = await prisma.techTrendArticle.findMany({
+      where: { status: 'PUBLISHED', OR: or },
+      orderBy: [{ trendingScore: 'desc' }, { viewCount: 'desc' }],
+      take: 5,
+      select: { id: true, slug: true, title: true, summary: true, bodyHtml: true },
+    });
+
+    const docs: RagDoc[] = found.map((a) => ({
+      id: a.id,
+      slug: a.slug,
+      title: a.title,
+      snippet: `${a.summary}\n${a.bodyHtml ?? ''}`,
+    }));
+
+    const data = await answerQuestion({ question, docs, userId });
+    res.json({
+      success: true,
+      data: { ...data, sources: found.map((a) => ({ id: a.id, slug: a.slug, title: a.title })) },
+    });
   } catch (error) {
     next(error);
   }

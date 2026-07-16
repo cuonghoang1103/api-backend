@@ -6,6 +6,7 @@ import { getServerApiBaseUrl } from '@/lib/server-api';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import type { PublicTechTrendArticle } from '@/lib/api';
 import ArticleActions from './ArticleActions';
+import ReaderAiTools from './ReaderAiTools';
 
 /**
  * Tech Trends — article detail page (SSR).
@@ -201,6 +202,11 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
         {/* Body + TOC */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-8 min-w-0">
+            {/* Reader AI tools (PRO) */}
+            <div className="mb-8">
+              <ReaderAiTools articleId={article.id} hasCodeBlock={!!article.codeBlock} />
+            </div>
+
             {/* Code comparison (FixBug) */}
             {article.codeBlock && (
               <div className="mb-8 rounded-xl border border-darkborder overflow-hidden bg-[#0a0c14]">

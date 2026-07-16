@@ -1,7 +1,7 @@
 import { Router, type Response } from 'express';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
-import { authenticate, requireAdmin } from '../middleware/auth.js';
+import { authenticate, requireAdmin, optionalAuth } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import { renderArticle } from '../services/techTrendsRenderer.service.js';
@@ -19,6 +19,13 @@ import {
   type TechTrendCategory,
 } from '../services/techTrends/ai.service.js';
 import { isProEffective } from '../services/pro.service.js';
+import {
+  listComments,
+  createComment,
+  editComment,
+  deleteComment,
+  toggleLike,
+} from '../services/techTrends/comment.service.js';
 
 /**
  * Tech Trends & Insights — public + admin REST API
@@ -351,6 +358,85 @@ publicRouter.get('/articles/:id/related', async (req, res: Response<ApiResponse>
     });
 
     res.json({ success: true, data: related });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── Reader comments (+ likes) ─────────────────────────────────────────
+// Reading is public (optionalAuth → likedByMe when logged in). Writing
+// requires auth. Edit is owner-only; delete is owner-or-admin.
+
+function reqUserId(req: unknown): number | null {
+  return (req as { userId?: number }).userId ?? null;
+}
+function requireUserId(req: unknown): number {
+  const id = reqUserId(req);
+  if (!id) throw new AppError('Bạn cần đăng nhập', 401, 'UNAUTHENTICATED');
+  return id;
+}
+
+// GET /api/v1/tech-trends/articles/:id/comments
+publicRouter.get('/articles/:id/comments', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid article id', 400, 'INVALID_ID');
+    const data = await listComments(id, reqUserId(req));
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/tech-trends/articles/:id/comments
+publicRouter.post('/articles/:id/comments', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = requireUserId(req);
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid article id', 400, 'INVALID_ID');
+    const { content, parentId } = req.body as { content?: unknown; parentId?: unknown };
+    const pid = parentId != null ? parseInt(String(parentId), 10) : null;
+    const data = await createComment(id, userId, String(content ?? ''), Number.isNaN(pid as number) ? null : pid);
+    res.status(201).json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// PATCH /api/v1/tech-trends/comments/:cid
+publicRouter.patch('/comments/:cid', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = requireUserId(req);
+    const cid = parseInt(req.params.cid, 10);
+    if (Number.isNaN(cid)) throw new AppError('Invalid comment id', 400, 'INVALID_ID');
+    const data = await editComment(cid, userId, String((req.body as { content?: unknown }).content ?? ''));
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// DELETE /api/v1/tech-trends/comments/:cid
+publicRouter.delete('/comments/:cid', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = requireUserId(req);
+    const cid = parseInt(req.params.cid, 10);
+    if (Number.isNaN(cid)) throw new AppError('Invalid comment id', 400, 'INVALID_ID');
+    await deleteComment(cid, userId);
+    res.json({ success: true, data: { id: cid } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/tech-trends/comments/:cid/like — toggle like.
+publicRouter.post('/comments/:cid/like', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = requireUserId(req);
+    const cid = parseInt(req.params.cid, 10);
+    if (Number.isNaN(cid)) throw new AppError('Invalid comment id', 400, 'INVALID_ID');
+    const data = await toggleLike(cid, userId);
+    res.json({ success: true, data });
   } catch (error) {
     next(error);
   }

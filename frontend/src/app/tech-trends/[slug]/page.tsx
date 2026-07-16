@@ -8,6 +8,7 @@ import type { PublicTechTrendArticle, RelatedTechTrendArticle } from '@/lib/api'
 import ArticleActions from './ArticleActions';
 import ReaderAiTools from './ReaderAiTools';
 import ReadingProgress from './ReadingProgress';
+import ArticleComments from './ArticleComments';
 
 /**
  * Tech Trends — article detail page (SSR).
@@ -328,6 +329,11 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
             </div>
           </section>
         )}
+
+        {/* Comments */}
+        <div className="max-w-3xl">
+          <ArticleComments articleId={article.id} />
+        </div>
 
         {/* Back to index */}
         <div className="mt-14 pt-8 border-t border-darkborder">

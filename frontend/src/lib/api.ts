@@ -2866,6 +2866,20 @@ export interface PublicTechTrendArticle {
   updatedAt: string;
 }
 
+// Reader comment (+ nested 1-level replies) on a tech-trend article.
+export interface TechTrendComment {
+  id: number;
+  parentId: number | null;
+  content: string;
+  likesCount: number;
+  likedByMe: boolean;
+  isEdited: boolean;
+  createdAt: string;
+  updatedAt: string;
+  author: { id: number; username: string; displayName: string | null; fullName: string | null; avatarUrl: string | null };
+  replies: TechTrendComment[];
+}
+
 // Light shape for the "Related" cards on the detail page.
 export interface RelatedTechTrendArticle {
   id: number;
@@ -2996,6 +3010,23 @@ export const techTrendsApi = {
   // Public: up to 4 related articles (shared tag or same category).
   getRelated(id: number) {
     return api.get<{ data: RelatedTechTrendArticle[] }>(`/tech-trends/articles/${id}/related`);
+  },
+
+  // ── Reader comments (+ likes). Read is public; write needs auth. ──
+  listComments(id: number) {
+    return api.get<{ data: { comments: TechTrendComment[]; total: number } }>(`/tech-trends/articles/${id}/comments`);
+  },
+  addComment(id: number, content: string, parentId?: number | null) {
+    return api.post<{ data: TechTrendComment }>(`/tech-trends/articles/${id}/comments`, { content, parentId: parentId ?? undefined });
+  },
+  editComment(commentId: number, content: string) {
+    return api.patch<{ data: TechTrendComment }>(`/tech-trends/comments/${commentId}`, { content });
+  },
+  deleteComment(commentId: number) {
+    return api.delete<{ data: { id: number } }>(`/tech-trends/comments/${commentId}`);
+  },
+  likeComment(commentId: number) {
+    return api.post<{ data: { liked: boolean; likesCount: number } }>(`/tech-trends/comments/${commentId}/like`);
   },
 
   // Public: get category counts for the tab bar.

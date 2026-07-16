@@ -149,11 +149,13 @@ model User {
   // Notification graph — who is the receiver / sender on social
   // notifications. The reverse relations are defined on
   // SocialNotification above.
-  socialNotificationsReceived SocialNotification[] @relation("NotificationsReceived")
-  socialNotificationsSent     SocialNotification[] @relation("NotificationsSent")
+  socialNotificationsReceived SocialNotification[]   @relation("NotificationsReceived")
+  socialNotificationsSent     SocialNotification[]   @relation("NotificationsSent")
   socialPollVotes             SocialPollVote[]
-  techTrendArticles           TechTrendArticle[]   @relation("TechTrendAuthor")
-  announcements               Announcement[]       @relation("AnnouncementAuthor")
+  techTrendArticles           TechTrendArticle[]     @relation("TechTrendAuthor")
+  techTrendComments           TechTrendComment[]
+  techTrendCommentLikes       TechTrendCommentLike[]
+  announcements               Announcement[]         @relation("AnnouncementAuthor")
 
   cyberProfile   CyberProfile?
   cyberTasks     CyberTask[]
@@ -2844,7 +2846,8 @@ model TechTrendArticle {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  author User? @relation("TechTrendAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  author   User?              @relation("TechTrendAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  comments TechTrendComment[]
 
   @@index([category], name: "idx_tech_trend_category")
   @@index([status], name: "idx_tech_trend_status")
@@ -2852,6 +2855,49 @@ model TechTrendArticle {
   @@index([publishedAt(sort: Desc)], name: "idx_tech_trend_published_at")
   @@index([authorId], name: "idx_tech_trend_author_id")
   @@map("tech_trend_articles")
+}
+
+// ─── Tech Trends — reader comments (added 2026-07-16) ─────────
+// Flat + one level of replies (parentId), like SnippetComment.
+// Comments require a logged-in user (userId is NOT nullable);
+// deleting the article or the user cascades. `likesCount` is a
+// denormalised counter kept in sync by the like toggle.
+model TechTrendComment {
+  id         Int      @id @default(autoincrement())
+  articleId  Int      @map("article_id")
+  userId     Int      @map("user_id")
+  parentId   Int?     @map("parent_id")
+  content    String   @db.Text
+  likesCount Int      @default(0) @map("likes_count")
+  isEdited   Boolean  @default(false) @map("is_edited")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  article TechTrendArticle       @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user    User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent  TechTrendComment?      @relation("TechTrendCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies TechTrendComment[]     @relation("TechTrendCommentReplies")
+  likes   TechTrendCommentLike[]
+
+  @@index([articleId, createdAt(sort: Desc)], name: "idx_tt_comments_article_time")
+  @@index([parentId], name: "idx_tt_comments_parent")
+  @@index([userId], name: "idx_tt_comments_user")
+  @@map("tech_trend_comments")
+}
+
+model TechTrendCommentLike {
+  id        Int      @id @default(autoincrement())
+  commentId Int      @map("comment_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment TechTrendComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId], name: "uk_tt_comment_like")
+  @@index([commentId], name: "idx_tt_comment_likes_comment")
+  @@index([userId], name: "idx_tt_comment_likes_user")
+  @@map("tech_trend_comment_likes")
 }
 
 // ============================================================

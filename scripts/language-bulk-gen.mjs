@@ -45,15 +45,20 @@ const shown = (v) => (v === Infinity ? '∞' : v);
 const BATCH = 12;
 
 // ── Token-window throttle (shared with interview via interviewLLMCallLog) ──
-// `--budget 0` disables it: the log counts every call regardless of which key
-// served it, so a shard running on a SEPARATE provider/quota would otherwise
-// inflate the shared window and put the main-key shards to sleep for nothing.
+// A quota belongs to a KEY, so the window must only count calls that key served.
+// The log records every provider's calls together: counting them as one made a
+// terra shard's traffic push the Claude shards toward sleep on a budget terra
+// never spends — 1.2M of terra had eaten 38% of Claude's 3.2M while Claude
+// itself had only used 1.6M. `model` is what tells the two apart.
+// `--budget 0` still disables the throttle entirely.
 const WINDOW_MS = 5 * 60 * 60 * 1000;
 const BUDGET = num('--budget', 3_200_000);
 const THROTTLE = BUDGET > 0;
+const MODEL = process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
 async function windowUsed() {
   const a = await prisma.interviewLLMCallLog.aggregate({
-    where: { createdAt: { gte: new Date(Date.now() - WINDOW_MS) }, success: true }, _sum: { inputTokens: true, outputTokens: true },
+    where: { createdAt: { gte: new Date(Date.now() - WINDOW_MS) }, success: true, model: MODEL },
+    _sum: { inputTokens: true, outputTokens: true },
   });
   return (a._sum.inputTokens ?? 0) + (a._sum.outputTokens ?? 0);
 }

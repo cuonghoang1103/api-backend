@@ -36,11 +36,16 @@ const ADMIN_USER_ID = 1;
 // site's other AI features. We self-limit to WINDOW_BUDGET from the interview
 // call log and SLEEP until the window drains — the run is autonomous across
 // as many windows as it needs.
+// A quota belongs to a KEY, so only count calls that key served. The log holds
+// every provider's calls together; summing them made a shard on a different
+// key (its own quota) push this one toward sleep on a budget it never spends.
+// `model` is what tells the providers apart.
 const WINDOW_MS = 5 * 60 * 60 * 1000;
 const WINDOW_BUDGET = Number(val('--budget', '3200000')) || 3_200_000;
+const MODEL = process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
 async function windowUsed() {
   const agg = await prisma.interviewLLMCallLog.aggregate({
-    where: { createdAt: { gte: new Date(Date.now() - WINDOW_MS) }, success: true },
+    where: { createdAt: { gte: new Date(Date.now() - WINDOW_MS) }, success: true, model: MODEL },
     _sum: { inputTokens: true, outputTokens: true },
   });
   return (agg._sum.inputTokens ?? 0) + (agg._sum.outputTokens ?? 0);

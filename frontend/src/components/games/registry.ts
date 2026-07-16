@@ -63,6 +63,18 @@ export const GAME_REGISTRY: Record<string, GameRegistryEntry> = {
     scoreCap: 100,
     scored: false,
   },
+  'math-blitz': {
+    name: 'Math Blitz',
+    load: () => loader(() => import('./MathBlitzGame')),
+    scoreCap: 5_000,
+    scored: true,
+  },
+  projectile: {
+    name: 'Projectile Challenge',
+    load: () => loader(() => import('./ProjectileGame')),
+    scoreCap: 20_000,
+    scored: true,
+  },
 };
 
 /** Keys for the admin select (free-text entry is still allowed alongside). */

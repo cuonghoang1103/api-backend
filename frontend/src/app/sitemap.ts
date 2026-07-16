@@ -89,13 +89,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   type ShopItem = { id: number | string; slug?: string; updatedAt?: string; createdAt?: string; thumbnailUrl?: string }
   type ProjectItem = { id: number | string; slug?: string; updatedAt?: string; createdAt?: string; thumbnailUrl?: string; thumbnail?: string }
   type TechTrendItem = { id: number | string; slug?: string; updatedAt?: string; publishedAt?: string; createdAt?: string; coverImageUrl?: string }
+  type GameItem = { id: number | string; slug?: string; status?: string; updatedAt?: string; createdAt?: string; coverImage?: string }
 
-  const [courses, posts, products, projects, techTrends] = await Promise.all([
+  const [courses, posts, products, projects, techTrends, games] = await Promise.all([
     safeFetch<CourseItem>('/courses?limit=100'),
     safeFetch<BlogItem>('/blog/posts?limit=100'),
     safeFetch<ShopItem>('/shop/products?limit=100'),
     safeFetch<ProjectItem>('/projects?limit=100'),
     safeFetch<TechTrendItem>('/tech-trends/articles?size=100'),
+    safeFetch<GameItem>('/games'),
   ])
 
   const courseUrls: MetadataRoute.Sitemap = courses
@@ -163,8 +165,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: a.coverImageUrl ? [a.coverImageUrl] : undefined,
     }))
 
+  // Games: only PUBLISHED get a URL — COMING_SOON pages exist but hold no
+  // content worth indexing, and DRAFT 404s for non-admins.
+  const gameUrls: MetadataRoute.Sitemap = games
+    .filter((g) => g.slug && g.status === 'PUBLISHED')
+    .map((g) => ({
+      url: `${SITE_URL}/games/${g.slug}`,
+      lastModified: g.updatedAt ? new Date(g.updatedAt) : g.createdAt ? new Date(g.createdAt) : now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+      images: g.coverImage ? [g.coverImage] : undefined,
+    }))
+
   // Music tracks intentionally omitted — no per-track page (played in-place
   // on /music), so linking /music/:id would 404.
 
-  return [...staticPages, ...courseUrls, ...blogUrls, ...shopUrls, ...projectUrls, ...techTrendUrls]
+  return [...staticPages, ...courseUrls, ...blogUrls, ...shopUrls, ...projectUrls, ...techTrendUrls, ...gameUrls]
 }

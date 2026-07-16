@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { RotateCcw, Pause, Play } from 'lucide-react';
+import type { GameProps } from './registry';
 
 type Cell = 'empty' | 'snake' | 'food';
 type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
@@ -28,7 +29,19 @@ function getRandomFood(snake: [number, number][]): [number, number] {
 
 const FOOD_COLORS = ['#f43f5e', '#f97316', '#eab308', '#22c55e', '#06b6d4', '#8b5cf6'];
 
-export default function SnakeGame() {
+/**
+ * Snake. Grid-based canvas, speed ramps with score, arrows/WASD + swipe.
+ *
+ * Contract: when GameShell mounts this it passes `onScore`; the component then
+ * auto-starts (the shell already showed the start screen) and reports its score
+ * once on game over instead of rendering its own start/game-over chrome. Props
+ * are optional so the component still runs standalone.
+ */
+export default function SnakeGame({ onScore }: Partial<GameProps> = {}) {
+  // In shell mode the shell owns start/end/replay; we only play and report.
+  const inShell = typeof onScore === 'function';
+  const startedAtRef = useRef<number>(0);
+  const reportedRef = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
@@ -190,7 +203,9 @@ export default function SnakeGame() {
     if (gameState === 'idle' || gameState === 'gameover') draw();
   }, [gameState, draw]);
 
-  const startGame = () => {
+  const startGame = useCallback(() => {
+    reportedRef.current = false;
+    startedAtRef.current = performance.now();
     snakeRef.current = [[10, 10]];
     dirRef.current = 'RIGHT';
     nextDirRef.current = 'RIGHT';
@@ -198,7 +213,19 @@ export default function SnakeGame() {
     speedRef.current = INITIAL_SPEED;
     setScore(0);
     setGameState('playing');
-  };
+  }, []);
+
+  // Shell mode: the shell already showed the start screen, so begin at once.
+  useEffect(() => {
+    if (inShell) startGame();
+  }, [inShell, startGame]);
+
+  // Report exactly once per run — the shell drives the end screen from this.
+  useEffect(() => {
+    if (!inShell || gameState !== 'gameover' || reportedRef.current) return;
+    reportedRef.current = true;
+    onScore!(score, Math.round((performance.now() - startedAtRef.current) / 1000));
+  }, [inShell, gameState, score, onScore]);
 
   const handleKey = useCallback((e: KeyboardEvent) => {
     if (gameState === 'paused' || gameState === 'gameover') return;
@@ -248,7 +275,7 @@ export default function SnakeGame() {
         />
 
         {/* Idle overlay */}
-        {gameState === 'idle' && (
+        {gameState === 'idle' && !inShell && (
           <div className="absolute inset-0 rounded-2xl bg-darkbg/85 backdrop-blur-sm flex flex-col items-center justify-center gap-4">
             <h3 className="font-heading font-bold text-2xl text-text-primary">Snake Game</h3>
             <p className="text-sm text-text-muted text-center max-w-xs">
@@ -277,7 +304,7 @@ export default function SnakeGame() {
         )}
 
         {/* Game over overlay */}
-        {gameState === 'gameover' && (
+        {gameState === 'gameover' && !inShell && (
           <div className="absolute inset-0 rounded-2xl bg-darkbg/90 backdrop-blur-sm flex flex-col items-center justify-center gap-4">
             <h3 className="font-heading font-bold text-2xl text-red-400">Game Over</h3>
             <p className="text-lg text-text-primary font-heading">

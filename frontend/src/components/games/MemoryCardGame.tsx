@@ -3,8 +3,37 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, Trophy } from 'lucide-react';
+import type { GameProps } from './registry';
 
-const SYMBOLS = ['🎮', '🎯', '🚀', '💎', '⚡', '🔥', '🌙', '🎪'];
+/**
+ * Original geometric symbols, drawn inline as SVG paths — no emoji (they render
+ * differently per-platform and aren't original artwork) and no external
+ * sprites. Each key maps to a shape + its accent colour.
+ */
+const SYMBOLS = ['tri', 'circ', 'sq', 'dia', 'hex', 'star', 'ring', 'cross'] as const;
+type SymbolKey = (typeof SYMBOLS)[number];
+
+const SYMBOL_COLOR: Record<SymbolKey, string> = {
+  tri: '#f43f5e', circ: '#06b6d4', sq: '#eab308', dia: '#8b5cf6',
+  hex: '#22c55e', star: '#f97316', ring: '#ec4899', cross: '#3b82f6',
+};
+
+function SymbolGlyph({ name }: { name: string }) {
+  const c = SYMBOL_COLOR[name as SymbolKey] ?? '#8b5cf6';
+  const common = { fill: 'none', stroke: c, strokeWidth: 6, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const };
+  return (
+    <svg viewBox="0 0 64 64" className="w-2/3 h-2/3" aria-hidden>
+      {name === 'tri' && <polygon points="32,10 56,54 8,54" {...common} />}
+      {name === 'circ' && <circle cx="32" cy="32" r="22" {...common} />}
+      {name === 'sq' && <rect x="12" y="12" width="40" height="40" rx="4" {...common} />}
+      {name === 'dia' && <polygon points="32,8 56,32 32,56 8,32" {...common} />}
+      {name === 'hex' && <polygon points="32,8 54,20 54,44 32,56 10,44 10,20" {...common} />}
+      {name === 'star' && <polygon points="32,8 39,26 58,26 43,38 49,56 32,45 15,56 21,38 6,26 25,26" {...common} />}
+      {name === 'ring' && <><circle cx="32" cy="32" r="22" {...common} /><circle cx="32" cy="32" r="9" {...common} /></>}
+      {name === 'cross' && <><line x1="14" y1="14" x2="50" y2="50" {...common} /><line x1="50" y1="14" x2="14" y2="50" {...common} /></>}
+    </svg>
+  );
+}
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -32,7 +61,15 @@ function createCards(): Card[] {
   }));
 }
 
-export default function MemoryCardGame() {
+/**
+ * Memory Card. Contract: inside GameShell the shell owns start/end/replay, so
+ * we report the score once on win and hide our own win overlay. Score rewards
+ * fewer moves and finishing fast (prompt: "fewer moves + time bonus").
+ */
+export default function MemoryCardGame({ onScore }: Partial<GameProps> = {}) {
+  const inShell = typeof onScore === 'function';
+  const startedAtRef = useRef<number>(0);
+  const reportedRef = useRef(false);
   const [cards, setCards] = useState<Card[]>(() => createCards());
   const [selected, setSelected] = useState<string[]>([]);
   const [moves, setMoves] = useState(0);
@@ -47,6 +84,21 @@ export default function MemoryCardGame() {
       setGameState('won');
     }
   }, [matches, totalPairs]);
+
+  useEffect(() => { startedAtRef.current = performance.now(); }, []);
+
+  // Report once per run. A perfect game is `totalPairs` moves; every extra move
+  // costs 40, and finishing under 120s adds up to 600 — so speed matters but
+  // can never rescue a careless game.
+  useEffect(() => {
+    if (!inShell || gameState !== 'won' || reportedRef.current) return;
+    reportedRef.current = true;
+    const secs = Math.round((performance.now() - startedAtRef.current) / 1000);
+    const movePenalty = Math.max(0, moves - totalPairs) * 40;
+    const timeBonus = Math.max(0, 600 - secs * 5);
+    const score = Math.max(0, 2000 - movePenalty + timeBonus);
+    onScore!(score, secs);
+  }, [inShell, gameState, moves, totalPairs, onScore]);
 
   // Handle card flip logic
   useEffect(() => {
@@ -163,7 +215,7 @@ export default function MemoryCardGame() {
                   <span
                     className={`text-3xl select-none ${card.isMatched ? 'scale-110' : ''}`}
                   >
-                    {card.symbol}
+                    <SymbolGlyph name={card.symbol} />
                   </span>
                 </motion.div>
               ) : (
@@ -188,7 +240,7 @@ export default function MemoryCardGame() {
 
       {/* Win screen */}
       <AnimatePresence>
-        {gameState === 'won' && (
+        {gameState === 'won' && !inShell && (
           <motion.div
             initial={{ scale: 0.7, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

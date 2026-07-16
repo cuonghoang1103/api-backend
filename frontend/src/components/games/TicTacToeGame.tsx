@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { RotateCcw } from 'lucide-react';
+import type { GameProps } from './registry';
 
 type Player = 'X' | 'O';
 type Cell = Player | null;
@@ -67,7 +68,16 @@ function getBestMove(board: Cell[]): number {
   return move;
 }
 
-export default function TicTacToeGame() {
+/**
+ * Tic Tac Toe vs a minimax AI — unbeatable, so a perfect game draws.
+ *
+ * Registered as `scored: false`: there's no meaningful score ladder against a
+ * perfect opponent, so we report 0 purely to hand control back to GameShell's
+ * end screen.
+ */
+export default function TicTacToeGame({ onScore }: Partial<GameProps> = {}) {
+  const inShell = typeof onScore === 'function';
+  const reportedRef = useRef(false);
   const [board, setBoard] = useState<Cell[]>(Array(9).fill(null));
   const [player, setPlayer] = useState<Player>('X');
   const [gameResult, setGameResult] = useState<{ winner: Player | 'draw'; line: number[] } | null>(null);
@@ -82,6 +92,13 @@ export default function TicTacToeGame() {
       setLastWin(result.winner);
     }
   }, [board]);
+
+  // Hand the run back to the shell once the board resolves.
+  useEffect(() => {
+    if (!inShell || !gameResult || reportedRef.current) return;
+    reportedRef.current = true;
+    onScore!(0);
+  }, [inShell, gameResult, onScore]);
 
   // AI move
   useEffect(() => {

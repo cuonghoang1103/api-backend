@@ -20,8 +20,9 @@ import ConversationTab from '@/components/admin/language/ConversationTab';
 import ReadingTab from '@/components/admin/language/ReadingTab';
 import QnaTab from '@/components/admin/language/QnaTab';
 import RoadmapTab from '@/components/admin/language/RoadmapTab';
+import HanziManager from '@/components/admin/HanziManager';
 
-type TabKey = 'roadmap' | 'alphabet' | 'vocab' | 'grammar' | 'listening' | 'conversation' | 'reading' | 'qna';
+type TabKey = 'roadmap' | 'alphabet' | 'vocab' | 'grammar' | 'listening' | 'conversation' | 'reading' | 'qna' | 'hanzi';
 
 const TABS: Array<{ key: TabKey; label: string }> = [
   { key: 'roadmap', label: 'Lộ trình' },
@@ -32,7 +33,11 @@ const TABS: Array<{ key: TabKey; label: string }> = [
   { key: 'conversation', label: 'Giao tiếp' },
   { key: 'reading', label: 'Đọc' },
   { key: 'qna', label: 'Q&A' },
+  // Kanji/hanzi is filtered out for languages that have none — see TABS use below.
+  { key: 'hanzi', label: 'Hán tự' },
 ];
+const CJK_ONLY: TabKey[] = ['hanzi'];
+const CJK_CODES = new Set(['ja', 'zh']);
 
 export default function AdminLanguageContentPage() {
   const params = useParams<{ code: string }>();
@@ -98,7 +103,7 @@ export default function AdminLanguageContentPage() {
       </div>
 
       <div role="tablist" className="flex flex-wrap gap-2 border-b border-darkborder pb-3">
-        {TABS.map((t) => (
+        {TABS.filter((t) => !CJK_ONLY.includes(t.key) || CJK_CODES.has(code)).map((t) => (
           <button
             key={t.key}
             role="tab"
@@ -124,6 +129,7 @@ export default function AdminLanguageContentPage() {
         {tab === 'conversation' && <ConversationTab languageId={languageId} code={code} />}
         {tab === 'reading' && <ReadingTab languageId={languageId} code={code} />}
         {tab === 'qna' && <QnaTab languageId={languageId} code={code} />}
+        {tab === 'hanzi' && <HanziManager code={code} />}
       </div>
     </div>
   );

@@ -19,6 +19,7 @@ import * as aiSvc from '../services/myLanguage.ai.service.js';
 import * as aiGen from '../services/myLanguage.aiGen.service.js';
 import * as notebook from '../services/langNotebook.service.js';
 import * as langAnalytics from '../services/langAnalytics.service.js';
+import * as hanzi from '../services/myLanguage.hanzi.service.js';
 import * as roadmap from '../services/myLanguage.roadmap.service.js';
 import * as practice from '../services/myLanguage.practice.service.js';
 import * as achievements from '../services/myLanguage.achievements.service.js';
@@ -190,6 +191,50 @@ publicRouter.post('/ai/translate', authenticate, async (req: Request, res: Respo
 publicRouter.post('/ai/grammar-check', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await aiSvc.grammarCheck(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+// ─── Hán tự (kanji / hanzi) writing practice ─────────────────────
+// MUST stay above the `/:code` wildcard below or that route swallows them.
+
+/**
+ * Stroke geometry for one character, from hanzi-writer-data on OUR origin —
+ * the library's default CDN loader would be refused by the CSP. Immutable per
+ * character, so it is cached hard: the browser should never ask twice.
+ */
+publicRouter.get('/hanzi-stroke/:char', async (req: Request, res: Response, next) => {
+  try {
+    // ja and zh disagree about some characters (気 vs 氣) — the caller says which.
+    const lang = String(req.query.lang ?? 'ja') === 'zh' ? 'zh' : 'ja';
+    const json = await hanzi.getStrokeData(String(req.params.char ?? ''), lang);
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    res.send(json);
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/hanzi', optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const level = typeof req.query.level === 'string' && req.query.level.trim() ? req.query.level.trim() : undefined;
+    res.json({ success: true, data: await hanzi.listChars(String(req.params.code), { level, userId: req.userId }) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/hanzi/:id', optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await hanzi.getChar(Number(req.params.id), req.userId) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.post('/hanzi/attempt', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await hanzi.recordAttempt(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.get('/:code/hanzi/stats', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await hanzi.getStats(String(req.params.code), req.userId!) });
   } catch (err) { next(err); }
 });
 
@@ -450,6 +495,20 @@ const upload = multer({
 function toId(req: Request, key = 'id'): number {
   return svc.toInt(req.params[key], key);
 }
+
+// ─── Hán tự CRUD (illustrations reuse /upload/image below) ───────
+adminRouter.get('/:code/hanzi', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await hanzi.adminList(String(req.params.code)) }); } catch (err) { next(err); }
+});
+adminRouter.post('/:code/hanzi', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await hanzi.adminCreate(String(req.params.code), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/hanzi/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await hanzi.adminUpdate(Number(req.params.id), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/hanzi/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await hanzi.adminDelete(Number(req.params.id)) }); } catch (err) { next(err); }
+});
 
 // Uploads → return url/key for the admin form to persist on a model
 adminRouter.post('/upload/image', upload.single('image'), async (req: Request, res: Response<ApiResponse>, next) => {

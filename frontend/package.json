@@ -44,6 +44,7 @@
     "emoji-mart": "^5.6.0",
     "framer-motion": "^11.9.0",
     "googleapis": "^173.0.0",
+    "hanzi-writer": "^3.7.3",
     "highlight.js": "^11.11.1",
     "html2canvas": "^1.4.1",
     "isomorphic-dompurify": "^3.15.0",

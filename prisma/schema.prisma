@@ -4252,9 +4252,71 @@ model Language {
   roadmapNodes      LangRoadmapNode[]
   gameStates        LangGameState[]
   lessonProgress    LangLessonProgress[]
+  hanziChars        LangHanziChar[]
 
   @@index([isActive, order], name: "idx_languages_active_order")
   @@map("languages")
+}
+
+// ─── My Language — Han characters (kanji / hanzi) writing practice ───
+// Stroke PATHS are not stored here: hanzi-writer-data (9,575 chars) already has
+// them, served from our own origin so the CSP never sees a third-party CDN.
+// This table holds what that data cannot know — the Vietnamese meaning, the
+// mnemonic, and the admin's own illustrations.
+model LangHanziChar {
+  id          Int     @id @default(autoincrement())
+  languageId  Int     @map("language_id")
+  char        String  @db.VarChar(8) // 漢 — one grapheme (surrogate pairs fit in 8)
+  level       String? @db.VarChar(20) // N5..N1 | HSK1..HSK6
+  strokeCount Int?    @map("stroke_count")
+
+  // Readings. JA needs both on'yomi and kun'yomi; ZH uses pinyin. Kept as
+  // separate columns rather than one blob so a language only fills what it has.
+  onyomi  String? @db.VarChar(120) // カン、ケン
+  kunyomi String? @db.VarChar(120) // みなもと
+  pinyin  String? @db.VarChar(120) // hàn
+
+  meaningVi String   @map("meaning_vi") @db.Text // "Hán, sông Hán"
+  mnemonic  String?  @db.Text // cách nhớ — admin viết hoặc AI sinh
+  radical   String?  @db.VarChar(16) // 氵
+  breakdown String?  @db.Text // chiết tự: 氵(nước) + 難(khó)
+  // Compound words that USE this char — what makes a character stick.
+  examples  Json     @default("[]") @db.JsonB // [{word,reading,meaningVi}]
+  // 1–3 admin-uploaded illustrations (R2 URLs). Order is the display order.
+  images    Json     @default("[]") @db.JsonB // [{url,caption}]
+  note      String?  @db.Text
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  language Language            @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  progress LangHanziProgress[]
+
+  // One row per character per language — re-running a seed must never double up.
+  @@unique([languageId, char], name: "uk_lang_hanzi_lang_char", map: "uk_lang_hanzi_lang_char")
+  @@index([languageId, level, order], name: "idx_lang_hanzi_lang_level")
+  @@map("lang_hanzi_chars")
+}
+
+// Per-user writing progress. userId has no FK (matches the rest of the module),
+// so deleting a user leaves rows that are simply never read again.
+model LangHanziProgress {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+  charId Int @map("char_id")
+
+  // How the learner is doing, not just whether they looked at it.
+  attempts     Int      @default(0) // quiz runs finished
+  mistakes     Int      @default(0) // strokes drawn wrong across all attempts
+  bestMistakes Int?     @map("best_mistakes") // fewest mistakes in one run — the real skill signal
+  learned      Boolean  @default(false) // one clean run from memory
+  lastAt       DateTime @default(now()) @map("last_at")
+
+  char LangHanziChar @relation(fields: [charId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, charId], name: "uk_lang_hanzi_progress", map: "uk_lang_hanzi_progress")
+  @@index([userId, lastAt], name: "idx_lang_hanzi_progress_user")
+  @@map("lang_hanzi_progress")
 }
 
 // ===== 1. ALPHABET =====

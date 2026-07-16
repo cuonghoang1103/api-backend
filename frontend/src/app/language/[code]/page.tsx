@@ -22,6 +22,7 @@ import {
   Dumbbell,
   Languages,
   SpellCheck,
+  PenTool,
 } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
 import type { LanguageOverview } from '@/types/language';
@@ -39,7 +40,13 @@ const SECTIONS = [
   { key: 'roleplay', n: 9, label: 'Hội thoại AI', desc: 'Nhập vai tình huống', icon: Bot, color: 'text-neon-cyan' },
   { key: 'translate', n: 10, label: 'Dịch văn bản', desc: 'Dịch 2 chiều & giải thích', icon: Languages, color: 'text-neon-blue' },
   { key: 'grammar-check', n: 11, label: 'Kiểm tra ngữ pháp', desc: 'Soi lỗi, chấm & sửa', icon: SpellCheck, color: 'text-neon-pink' },
+  { key: 'hanzi', n: 12, label: 'Luyện viết chữ Hán', desc: 'Nét mẫu, tô theo & viết', icon: PenTool, color: 'text-neon-orange' },
 ] as const;
+
+// Kanji/hanzi only exist in Japanese and Chinese — showing the tile on English
+// would promise a page with nothing in it.
+const CJK_ONLY = new Set(['hanzi']);
+const CJK_CODES = new Set(['ja', 'zh']);
 
 const AI_SECTIONS = new Set(['writing', 'roleplay', 'translate', 'grammar-check']);
 
@@ -163,7 +170,7 @@ export default function LanguageHomePage() {
         )}
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {SECTIONS.map((s, i) => {
+          {SECTIONS.filter((s) => !CJK_ONLY.has(s.key) || CJK_CODES.has(code)).map((s, i) => {
             const Icon = s.icon;
             const isAi = AI_SECTIONS.has(s.key);
             const count = counts ? (counts as Record<string, number>)[s.key] ?? 0 : 0;

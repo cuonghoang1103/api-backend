@@ -1,0 +1,21 @@
+Stroke data for Han characters
+==============================
+
+hanzi-graphics-ja.txt.gz  (Japanese kanji, 7,007 characters)
+  Source : animCJK — https://github.com/parsimonhi/animCJK  (graphicsJa.txt)
+  Licence: ARPHIC PUBLIC LICENSE
+  Note   : gzip of the upstream file, byte-for-byte. Not modified.
+  Why not npm: hanzi-writer-data (npm) is built from Chinese forms and has no
+  Japanese shinjitai — 気, 読 and 毎 are simply absent, and using their Chinese
+  ancestors (氣, 讀, 每) would teach the wrong character. hanzi-writer-data-jp
+  exists on npm but ships no data at all (47KB, 12 files, stub).
+
+Chinese hanzi come from the `hanzi-writer-data` npm package (same licence),
+which is installed as a dependency rather than vendored here.
+
+The renderer, hanzi-writer, is MIT.
+
+ARPHIC PUBLIC LICENSE, in summary: free to use, copy, distribute and modify,
+provided the licence travels with the font data and modifications are published.
+We redistribute it unmodified. Full text:
+https://github.com/parsimonhi/animCJK/blob/master/licenses/APL

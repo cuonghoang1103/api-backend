@@ -107,6 +107,15 @@ export const languageApi = {
     fd.append('languageCode', body.languageCode);
     return api.post('/my-language/ai/stt', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
   },
+  // ─── Hán tự (kanji / hanzi) ──────────────────────────────────
+  hanziList: (code: string, level?: string): Res<{ levels: string[]; chars: HanziChar[] }> =>
+    api.get(`/my-language/${code}/hanzi`, { params: level ? { level } : undefined }),
+  hanziChar: (id: number): Res<HanziChar> => api.get(`/my-language/hanzi/${id}`),
+  hanziAttempt: (body: { charId: number; mistakes: number; fromMemory?: boolean }): Res<{ attempts: number; mistakes: number; bestMistakes: number | null; learned: boolean }> =>
+    api.post('/my-language/hanzi/attempt', body),
+  hanziStats: (code: string): Res<{ total: number; learned: number; attempted: number }> =>
+    api.get(`/my-language/${code}/hanzi/stats`),
+
   translate: (body: { languageCode: string; text: string; direction: 'to' | 'from'; tone?: string }): Res<TranslateResult> =>
     api.post('/my-language/ai/translate', body),
   grammarCheck: (body: { languageCode: string; text: string }): Res<GrammarCheckResult> =>
@@ -284,6 +293,27 @@ export interface RolePlayReply {
   translation: string;
   correction: string;
 }
+export interface HanziExample { word: string; reading?: string; meaningVi: string }
+export interface HanziImage { url: string; caption?: string }
+export interface HanziChar {
+  id: number;
+  char: string;
+  level: string | null;
+  strokeCount: number | null;
+  onyomi: string | null;
+  kunyomi: string | null;
+  pinyin: string | null;
+  meaningVi: string;
+  mnemonic: string | null;
+  radical: string | null;
+  breakdown: string | null;
+  examples: HanziExample[];
+  images: HanziImage[];
+  note: string | null;
+  order: number;
+  progress?: { attempts: number; mistakes: number; bestMistakes: number | null; learned: boolean } | null;
+}
+
 export interface TranslateAlternative {
   text: string;
   note: string;
@@ -369,6 +399,11 @@ export const languageAdminApi = {
   deleteAlphabetItem: (id: number): Res<unknown> => api.delete(`/admin/my-language/alphabet-items/${id}`),
 
   // vocab
+  hanziList: (code: string): Res<HanziChar[]> => api.get(`/admin/my-language/${code}/hanzi`),
+  hanziCreate: (code: string, body: AnyRecord): Res<HanziChar> => api.post(`/admin/my-language/${code}/hanzi`, body),
+  hanziUpdate: (id: number, body: AnyRecord): Res<HanziChar> => api.put(`/admin/my-language/hanzi/${id}`, body),
+  hanziDelete: (id: number): Res<unknown> => api.delete(`/admin/my-language/hanzi/${id}`),
+
   createVocabCategory: (languageId: number, body: AnyRecord): Res<unknown> => api.post(`/admin/my-language/languages/${languageId}/vocab-categories`, body),
   updateVocabCategory: (id: number, body: AnyRecord): Res<unknown> => api.put(`/admin/my-language/vocab-categories/${id}`, body),
   deleteVocabCategory: (id: number): Res<unknown> => api.delete(`/admin/my-language/vocab-categories/${id}`),

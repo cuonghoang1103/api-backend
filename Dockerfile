@@ -20,6 +20,8 @@ RUN if [ -f package-lock.json ]; then npm ci; \
 # Copy source code
 COPY prisma ./prisma/
 COPY tsconfig.json ./
+# Vendored kanji stroke data — read at runtime by the Hán tự module.
+COPY data ./data/
 
 # Generate Prisma Client — bước BẮT BUỘC trước khi build
 RUN npx prisma generate
@@ -52,6 +54,10 @@ COPY --from=builder --chown=nodejs:nodejs /app/prisma ./prisma
 
 # Copy package.json (để npm scripts vẫn hoạt động)
 COPY --from=builder --chown=nodejs:nodejs /app/package.json ./package.json
+
+# Kanji stroke data (read from disk at runtime, resolved against process.cwd()).
+# Without this the Hán tự page 500s on prod while working locally.
+COPY --from=builder --chown=nodejs:nodejs /app/data ./data
 
 # Tạo thư mục uploads với quyền nodejs user
 RUN mkdir -p /app/uploads && chown -R nodejs:nodejs /app/uploads

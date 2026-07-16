@@ -403,6 +403,8 @@ export const languageAdminApi = {
   hanziCreate: (code: string, body: AnyRecord): Res<HanziChar> => api.post(`/admin/my-language/${code}/hanzi`, body),
   hanziUpdate: (id: number, body: AnyRecord): Res<HanziChar> => api.put(`/admin/my-language/hanzi/${id}`, body),
   hanziDelete: (id: number): Res<unknown> => api.delete(`/admin/my-language/hanzi/${id}`),
+  hanziAi: (id: number, overwrite = false): Res<{ id: number; meaningVi: string; mnemonic: string | null; breakdown: string | null; examples: HanziExample[] }> =>
+    api.post(`/admin/my-language/hanzi/${id}/ai`, { overwrite }),
 
   createVocabCategory: (languageId: number, body: AnyRecord): Res<unknown> => api.post(`/admin/my-language/languages/${languageId}/vocab-categories`, body),
   updateVocabCategory: (id: number, body: AnyRecord): Res<unknown> => api.put(`/admin/my-language/vocab-categories/${id}`, body),

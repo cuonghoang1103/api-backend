@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
 import { languageAdminApi, type HanziChar } from '@/lib/language-api';
-import { Plus, Pencil, Trash2, X, Loader2, ImagePlus, Search, Check } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Loader2, ImagePlus, Search, Check, Sparkles } from 'lucide-react';
 
 type Draft = {
   id?: number;
@@ -42,6 +42,7 @@ export default function HanziManager({ code }: { code: string }) {
   const [draft, setDraft] = useState<Draft | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [aiBusy, setAiBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const load = useCallback(async () => {
@@ -123,6 +124,31 @@ export default function HanziManager({ code }: { code: string }) {
       void load();
     } catch {
       toast.error('Không xoá được');
+    }
+  };
+
+  /** Ask the AI for the parts a dataset cannot know. Saves server-side, so the
+   *  draft is refreshed from what actually landed rather than guessed at. */
+  const aiFill = async (overwrite: boolean) => {
+    if (!draft?.id) { toast.info('Lưu chữ trước rồi mới sinh được'); return; }
+    setAiBusy(true);
+    try {
+      const r = await languageAdminApi.hanziAi(draft.id, overwrite);
+      const d = r.data.data;
+      if (!d) throw new Error('empty');
+      setDraft((prev) => (prev ? {
+        ...prev,
+        meaningVi: d.meaningVi ?? prev.meaningVi,
+        mnemonic: d.mnemonic ?? prev.mnemonic,
+        breakdown: d.breakdown ?? prev.breakdown,
+        examples: (d.examples ?? []).map((e) => ({ word: e.word, reading: e.reading ?? '', meaningVi: e.meaningVi })),
+      } : prev));
+      toast.success(overwrite ? 'AI đã viết lại' : 'AI đã điền phần còn trống');
+      void load();
+    } catch (e: unknown) {
+      toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message || 'AI không sinh được');
+    } finally {
+      setAiBusy(false);
     }
   };
 
@@ -283,7 +309,28 @@ export default function HanziManager({ code }: { code: string }) {
               <Field label="Ghi chú"><input value={draft.note} onChange={(e) => setDraft({ ...draft, note: e.target.value })} className={IN} /></Field>
             </div>
 
-            <div className="flex justify-end gap-2 border-t border-darkborder px-4 py-3">
+            <div className="flex flex-wrap justify-end gap-2 border-t border-darkborder px-4 py-3">
+              {draft.id && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => void aiFill(false)}
+                    disabled={aiBusy}
+                    title="Chỉ điền các ô đang trống — không đụng phần bạn đã viết"
+                    className="mr-auto inline-flex items-center gap-1.5 rounded-xl bg-neon-violet/15 px-3 py-2 text-sm font-semibold text-neon-violet ring-1 ring-neon-violet/30 disabled:opacity-50"
+                  >
+                    {aiBusy ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />} AI điền chỗ trống
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { if (window.confirm('AI viết lại nghĩa, mẹo nhớ, chiết tự và từ ghép — ghi đè nội dung hiện tại?')) void aiFill(true); }}
+                    disabled={aiBusy}
+                    className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm text-text-muted ring-1 ring-darkborder hover:text-neon-violet disabled:opacity-50"
+                  >
+                    Viết lại
+                  </button>
+                </>
+              )}
               <button type="button" onClick={() => setDraft(null)} className="rounded-xl px-4 py-2 text-sm text-text-muted hover:text-text-primary">Huỷ</button>
               <button type="button" onClick={() => void save()} disabled={saving} className="inline-flex items-center gap-1.5 rounded-xl bg-neon-orange px-5 py-2 text-sm font-semibold text-white disabled:opacity-60">
                 {saving && <Loader2 size={14} className="animate-spin" />} Lưu

@@ -20,6 +20,7 @@ import * as aiGen from '../services/myLanguage.aiGen.service.js';
 import * as notebook from '../services/langNotebook.service.js';
 import * as langAnalytics from '../services/langAnalytics.service.js';
 import * as hanzi from '../services/myLanguage.hanzi.service.js';
+import * as hanziAi from '../services/myLanguage.hanziAi.service.js';
 import * as roadmap from '../services/myLanguage.roadmap.service.js';
 import * as practice from '../services/myLanguage.practice.service.js';
 import * as achievements from '../services/myLanguage.achievements.service.js';
@@ -508,6 +509,15 @@ adminRouter.put('/hanzi/:id', async (req: Request, res: Response<ApiResponse>, n
 });
 adminRouter.delete('/hanzi/:id', async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await hanzi.adminDelete(Number(req.params.id)) }); } catch (err) { next(err); }
+});
+// AI writes the parts a dataset cannot know: Vietnamese meaning, mnemonic,
+// breakdown, compound words. Without ?overwrite=1 it only fills what is empty,
+// so an admin's own wording survives a stray click.
+adminRouter.post('/hanzi/:id/ai', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const overwrite = String(req.query.overwrite ?? '') === '1' || req.body?.overwrite === true;
+    res.json({ success: true, data: await hanziAi.adminEnrichOne(req.userId!, Number(req.params.id), { overwrite }) });
+  } catch (err) { next(err); }
 });
 
 // Uploads → return url/key for the admin form to persist on a model

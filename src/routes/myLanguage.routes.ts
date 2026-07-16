@@ -181,6 +181,18 @@ publicRouter.post('/ai/roleplay', authenticate, async (req: Request, res: Respon
   } catch (err) { next(err); }
 });
 
+publicRouter.post('/ai/translate', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await aiSvc.translateText(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+publicRouter.post('/ai/grammar-check', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await aiSvc.grammarCheck(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
 publicRouter.post('/ai/stt', authenticate, aiAudioUpload.single('audio'), async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const f = req.file;

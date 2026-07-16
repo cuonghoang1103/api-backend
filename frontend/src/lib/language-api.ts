@@ -107,6 +107,10 @@ export const languageApi = {
     fd.append('languageCode', body.languageCode);
     return api.post('/my-language/ai/stt', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
   },
+  translate: (body: { languageCode: string; text: string; direction: 'to' | 'from'; tone?: string }): Res<TranslateResult> =>
+    api.post('/my-language/ai/translate', body),
+  grammarCheck: (body: { languageCode: string; text: string }): Res<GrammarCheckResult> =>
+    api.post('/my-language/ai/grammar-check', body),
 
   // ─── Roadmap (lộ trình học) ──────────────────────────────────
   roadmap: (code: string): Res<Roadmap> => api.get(`/my-language/${code}/roadmap`),
@@ -279,6 +283,31 @@ export interface RolePlayReply {
   reply: string;
   translation: string;
   correction: string;
+}
+export interface TranslateAlternative {
+  text: string;
+  note: string;
+}
+export interface TranslateResult {
+  translation: string;
+  reading: string; // romaji/pinyin when translating INTO a CJK language
+  literal: string;
+  notes: string;
+  alternatives: TranslateAlternative[];
+}
+export interface GrammarIssue {
+  original: string;
+  suggestion: string;
+  type: string;
+  severity: 'error' | 'warning' | 'style';
+  explanation: string;
+}
+export interface GrammarCheckResult {
+  score: number; // 0–100
+  verdict: PronounceVerdict;
+  corrected: string;
+  summary: string;
+  issues: GrammarIssue[];
 }
 
 /**

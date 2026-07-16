@@ -20,6 +20,8 @@ import {
   NotebookPen,
   Route,
   Dumbbell,
+  Languages,
+  SpellCheck,
 } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
 import type { LanguageOverview } from '@/types/language';
@@ -35,9 +37,11 @@ const SECTIONS = [
   { key: 'qna', n: 7, label: 'Q&A', desc: 'Câu hỏi thường gặp', icon: HelpCircle, color: 'text-neon-pink' },
   { key: 'writing', n: 8, label: 'Luyện viết', desc: 'AI chữa bài & chấm điểm', icon: PenLine, color: 'text-neon-emerald' },
   { key: 'roleplay', n: 9, label: 'Hội thoại AI', desc: 'Nhập vai tình huống', icon: Bot, color: 'text-neon-cyan' },
+  { key: 'translate', n: 10, label: 'Dịch văn bản', desc: 'Dịch 2 chiều & giải thích', icon: Languages, color: 'text-neon-blue' },
+  { key: 'grammar-check', n: 11, label: 'Kiểm tra ngữ pháp', desc: 'Soi lỗi, chấm & sửa', icon: SpellCheck, color: 'text-neon-pink' },
 ] as const;
 
-const AI_SECTIONS = new Set(['writing', 'roleplay']);
+const AI_SECTIONS = new Set(['writing', 'roleplay', 'translate', 'grammar-check']);
 
 export default function LanguageHomePage() {
   const params = useParams();

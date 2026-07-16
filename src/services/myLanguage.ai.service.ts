@@ -712,6 +712,205 @@ export async function rolePlayTurn(
   };
 }
 
+// ── Phase 5a: Translation (VI ⇄ target language) ──────────────────
+export interface TranslateAlternative {
+  text: string;
+  note: string; // when to prefer this wording
+}
+export interface TranslateResult {
+  translation: string;
+  reading: string; // romaji / pinyin for CJK output; '' otherwise
+  literal: string; // word-for-word gloss back into Vietnamese, to learn from
+  notes: string; // grammar/register explanation, in Vietnamese
+  alternatives: TranslateAlternative[];
+}
+
+/** Translate between Vietnamese and the language being learnt.
+ *  `direction` 'to' = VI → target, 'from' = target → VI. Pro/Max only. */
+export async function translateText(
+  userId: number,
+  body: { languageCode?: string; text?: string; direction?: 'to' | 'from'; tone?: string },
+): Promise<TranslateResult> {
+  const code = (body?.languageCode || '').trim();
+  const text = (body?.text || '').trim();
+  const direction = body?.direction === 'from' ? 'from' : 'to';
+  const tone = (body?.tone || '').trim().slice(0, 40);
+  if (!text) throw new BadRequestError('Bạn chưa nhập nội dung cần dịch.');
+  if (text.length > 4000) throw new BadRequestError('Nội dung quá dài (tối đa ~4000 ký tự).');
+
+  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!(await isProEffective(userId))) throw new ForbiddenError('Dịch văn bản dành cho tài khoản Pro/Max.');
+  if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
+
+  const langName = languageName(code);
+  const src = direction === 'to' ? 'Vietnamese' : langName;
+  const dst = direction === 'to' ? langName : 'Vietnamese';
+  // Reading only makes sense for CJK output; asking for it on Vietnamese output
+  // invites the model to invent one.
+  const wantsReading = direction === 'to' && isCjk(code);
+  const readingLabel = code === 'ja' ? 'romaji' : code === 'zh' ? 'pinyin (có dấu thanh)' : 'phiên âm';
+  const register =
+    code === 'ja'
+      ? 'Chọn thể phù hợp (です/ます vs thể thường) theo ngữ cảnh và nêu rõ đã chọn thể nào trong "notes".'
+      : isCjk(code)
+        ? 'Chú ý mức độ trang trọng và lượng từ (measure words) cho đúng.'
+        : 'Chú ý register (trang trọng/thân mật), collocation và mạo từ cho tự nhiên.';
+
+  const system =
+    `You are a professional translator working between Vietnamese and ${langName}, serving a Vietnamese speaker who is LEARNING ${langName}. ` +
+    `Translate from ${src} into ${dst}. Produce a translation a native speaker would actually write — accurate, grammatical and natural, never word-for-word. ${register} ` +
+    (tone ? `Desired tone/register: ${tone}. ` : '') +
+    'ALWAYS write "literal" and "notes" in Vietnamese (tiếng Việt). ' +
+    'Return ONLY a minified JSON object: {"translation": string, "reading": string, "literal": string, "notes": string, "alternatives": [{"text": string, "note": string}]}. ' +
+    (wantsReading
+      ? `"reading" = ${readingLabel} of the translation. `
+      : '"reading" = "" (empty string; do not invent one). ') +
+    '"literal" = nghĩa sát từng phần của bản dịch, giải thích bằng tiếng Việt để người học đối chiếu. ' +
+    '"notes" = giải thích ngắn bằng tiếng Việt: ngữ pháp/cấu trúc đáng chú ý, sắc thái, lỗi người Việt hay mắc ở câu này. ' +
+    '"alternatives" = tối đa 3 cách diễn đạt khác (trang trọng hơn/thân mật hơn/ngắn gọn hơn), mỗi cách kèm "note" tiếng Việt nói khi nào nên dùng. ' +
+    'Escape any double-quote inside a string as \\". No text outside the JSON.';
+  const user = `NỘI DUNG (${src} → ${dst}):\n${text}`;
+
+  let raw = '';
+  try {
+    const res = await llmComplete({
+      step: 'interview',
+      system,
+      messages: [{ role: 'user', content: user }],
+      maxTokens: 2200,
+      maxRetries: 1,
+      timeoutMs: 45_000,
+      userId,
+    });
+    raw = res.text;
+  } catch {
+    throw new BadRequestError('Dịch đang bận, vui lòng thử lại sau giây lát.');
+  }
+
+  const parsed = looseJson(raw);
+  const s = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
+  const alternatives = (Array.isArray(parsed.alternatives) ? parsed.alternatives : [])
+    .map((a): TranslateAlternative | null => {
+      const o = a as Record<string, unknown>;
+      const t = s(o?.text);
+      return t ? { text: t, note: s(o?.note) } : null;
+    })
+    .filter((a): a is TranslateAlternative => a != null)
+    .slice(0, 3);
+
+  const translation = s(parsed.translation) || grabField(raw, 'translation');
+  if (!translation) throw new BadRequestError('Chưa đọc được bản dịch, vui lòng thử lại.');
+  return {
+    translation,
+    reading: wantsReading ? s(parsed.reading) || grabField(raw, 'reading') : '',
+    literal: s(parsed.literal) || grabField(raw, 'literal'),
+    notes: s(parsed.notes) || grabField(raw, 'notes'),
+    alternatives,
+  };
+}
+
+// ── Phase 5b: Grammar check (proofreading) ────────────────────────
+export interface GrammarIssue {
+  original: string;
+  suggestion: string;
+  type: string; // e.g. "Trợ từ", "Chia động từ", "Trật tự từ"
+  severity: 'error' | 'warning' | 'style';
+  explanation: string; // in Vietnamese
+}
+export interface GrammarCheckResult {
+  score: number; // 0–100
+  verdict: PronounceVerdict;
+  corrected: string;
+  summary: string; // overall assessment, in Vietnamese
+  issues: GrammarIssue[];
+}
+
+/** Proofread text in the target language: rate it, list every issue with a fix
+ *  and a Vietnamese explanation, and return a corrected version. Pro/Max only. */
+export async function grammarCheck(
+  userId: number,
+  body: { languageCode?: string; text?: string },
+): Promise<GrammarCheckResult> {
+  const code = (body?.languageCode || '').trim();
+  const text = (body?.text || '').trim();
+  if (!text) throw new BadRequestError('Bạn chưa nhập nội dung cần kiểm tra.');
+  if (text.length > 4000) throw new BadRequestError('Nội dung quá dài (tối đa ~4000 ký tự).');
+
+  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!(await isProEffective(userId))) throw new ForbiddenError('Kiểm tra ngữ pháp dành cho tài khoản Pro/Max.');
+  if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
+
+  const langName = languageName(code);
+  const focus =
+    code === 'ja'
+      ? 'Soi kỹ trợ từ (は/が/を/に/で/へ), thể lịch sự vs thể thường (nhất quán trong cả đoạn), chia động từ/tính từ, tự động từ vs tha động từ, và trật tự từ.'
+      : code === 'zh'
+        ? 'Soi kỹ lượng từ (measure words), trật tự từ, 了/着/过, 把/被, bổ ngữ, và cách dùng hư từ.'
+        : 'Soi kỹ thì và sự hoà hợp chủ ngữ–động từ, mạo từ (a/an/the), giới từ, số ít/số nhiều, collocation và dấu câu.';
+
+  const system =
+    `You are a meticulous ${langName} proofreader for a Vietnamese learner. Check the text for grammar, spelling, word choice and naturalness. ${focus} ` +
+    'Be precise and complete: report EVERY real issue, but never invent one — if the text is already correct, return an empty "issues" array and say so in "summary". ' +
+    'Judge only the language, never the opinions expressed. ' +
+    `Keep "original", "suggestion" and "corrected" in ${langName}; ALWAYS write "type", "explanation" and "summary" in Vietnamese (tiếng Việt). ` +
+    'Return ONLY a minified JSON object: {"score": number (0-100), "verdict": "good"|"ok"|"poor", "corrected": string, "summary": string, "issues": [{"original": string, "suggestion": string, "type": string, "severity": "error"|"warning"|"style", "explanation": string}]}. ' +
+    '"original" = đúng đoạn văn bản gốc bị lỗi (trích nguyên văn, đủ ngắn để định vị). ' +
+    '"severity": "error" = sai ngữ pháp thật sự, "warning" = dùng được nhưng không tự nhiên, "style" = gợi ý văn phong. ' +
+    '"score" = độ chuẩn xác tổng thể (100 = không lỗi). "corrected" = toàn bộ văn bản đã sửa. ' +
+    'Escape any double-quote inside a string as \\". No text outside the JSON.';
+  const user = `VĂN BẢN (${langName}):\n${text}`;
+
+  let raw = '';
+  try {
+    const res = await llmComplete({
+      step: 'interview',
+      system,
+      messages: [{ role: 'user', content: user }],
+      maxTokens: 2400,
+      maxRetries: 1,
+      timeoutMs: 45_000,
+      userId,
+    });
+    raw = res.text;
+  } catch {
+    throw new BadRequestError('Kiểm tra ngữ pháp đang bận, vui lòng thử lại sau giây lát.');
+  }
+
+  const parsed = looseJson(raw);
+  const s = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
+  const issues = (Array.isArray(parsed.issues) ? parsed.issues : [])
+    .map((i): GrammarIssue | null => {
+      const o = i as Record<string, unknown>;
+      const original = s(o?.original);
+      const suggestion = s(o?.suggestion);
+      if (!original && !suggestion) return null;
+      const sev = s(o?.severity);
+      return {
+        original,
+        suggestion,
+        type: s(o?.type),
+        severity: sev === 'error' || sev === 'warning' || sev === 'style' ? sev : 'warning',
+        explanation: s(o?.explanation),
+      };
+    })
+    .filter((i): i is GrammarIssue => i != null)
+    .slice(0, 20);
+
+  const rawScore = Number(parsed.score);
+  const score = Number.isFinite(rawScore) ? Math.max(0, Math.min(100, Math.round(rawScore))) : issues.length ? 0 : 100;
+  const v = s(parsed.verdict);
+  const verdict: PronounceVerdict =
+    v === 'good' || v === 'ok' || v === 'poor' ? v : score >= 85 ? 'good' : score >= 60 ? 'ok' : 'poor';
+  const corrected = s(parsed.corrected) || grabField(raw, 'corrected');
+  const summary = s(parsed.summary) || grabField(raw, 'summary');
+  if (!summary && !corrected && !issues.length) {
+    throw new BadRequestError('Chưa đọc được kết quả kiểm tra, vui lòng thử lại.');
+  }
+  // A clean text legitimately has no issues — fall back to echoing the input so
+  // the UI always has something to show.
+  return { score, verdict, corrected: corrected || text, summary, issues };
+}
+
 // ── Phase 4c: Plain transcription (voice input for role-play) ─────
 /** Transcribe audio to text (no scoring). Pro/Max only; needs Groq STT. */
 export async function transcribe(

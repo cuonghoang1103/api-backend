@@ -8,7 +8,7 @@
 import { prisma } from '../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 
-const ENTRY_KINDS = new Set(['note', 'explanation', 'vocab', 'grammar', 'pronunciation', 'writing']);
+const ENTRY_KINDS = new Set(['note', 'explanation', 'vocab', 'grammar', 'pronunciation', 'writing', 'translate', 'grammar-check']);
 
 function cleanStr(v: unknown, label: string, max: number, required = true): string {
   const s = typeof v === 'string' ? v.trim() : '';

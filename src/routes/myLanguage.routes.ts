@@ -19,6 +19,9 @@ import * as aiSvc from '../services/myLanguage.ai.service.js';
 import * as aiGen from '../services/myLanguage.aiGen.service.js';
 import * as notebook from '../services/langNotebook.service.js';
 import * as langAnalytics from '../services/langAnalytics.service.js';
+import * as roadmap from '../services/myLanguage.roadmap.service.js';
+import * as practice from '../services/myLanguage.practice.service.js';
+import * as achievements from '../services/myLanguage.achievements.service.js';
 import { isAiAvailable } from '../services/interview/llm/index.js';
 import { isProEffective } from '../services/pro.service.js';
 
@@ -194,6 +197,27 @@ publicRouter.post('/ai/stt', authenticate, aiAudioUpload.single('audio'), async 
   } catch (err) { next(err); }
 });
 
+// ─── Roadmap (learning path). Fixed '/roadmap/*' mutation path declared
+//     before the '/:code' wildcard; the per-language read is a '/:code/*' path.
+publicRouter.post('/roadmap/:nodeId/done', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await roadmap.toggleDone(req.userId!, Number(req.params.nodeId)) });
+  } catch (err) { next(err); }
+});
+
+// ─── Practice (Duolingo-style). Fixed '/practice/*' mutation paths declared
+//     before the '/:code' wildcard; the per-language overview is a '/:code/*' path.
+publicRouter.post('/practice/complete', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await practice.completeLesson(req.userId!, String(req.body?.languageCode ?? ''), req.body) });
+  } catch (err) { next(err); }
+});
+publicRouter.post('/practice/reminder', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await practice.updateReminder(req.userId!, String(req.body?.languageCode ?? ''), req.body) });
+  } catch (err) { next(err); }
+});
+
 // ─── Notebook (per-user; authed). Fixed '/notebook/*' paths — declared
 //     before the '/:code' wildcard; specific paths before '/notebook/:code'.
 publicRouter.get('/notebook/languages', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
@@ -312,6 +336,34 @@ publicRouter.get('/:code/qna', async (req, res: Response<ApiResponse>, next) => 
   } catch (err) { next(err); }
 });
 
+// Roadmap — public read; optionalAuth so a logged-in user also gets doneNodeIds.
+publicRouter.get('/:code/roadmap', optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await roadmap.getRoadmap(req.params.code, req.user?.userId) });
+  } catch (err) { next(err); }
+});
+
+// Practice — per-user game state + lesson path (auth required, like Duolingo).
+publicRouter.get('/:code/practice', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await practice.getOverview(req.userId!, req.params.code) });
+  } catch (err) { next(err); }
+});
+
+// Weekly leaderboard for a language.
+publicRouter.get('/:code/practice/leaderboard', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await practice.getLeaderboard(req.userId!, req.params.code) });
+  } catch (err) { next(err); }
+});
+
+// Level + achievement badges (computed) for a language.
+publicRouter.get('/:code/practice/achievements', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await achievements.getAchievements(req.userId!, req.params.code) });
+  } catch (err) { next(err); }
+});
+
 // ─── Admin router (ADMIN only) ───────────────────────────────────
 const adminRouter = Router();
 adminRouter.use(authenticate, requireRole('ADMIN'));
@@ -336,6 +388,38 @@ adminRouter.post('/ai/generate', async (req: Request, res: Response<ApiResponse>
 adminRouter.post('/ai/commit', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await aiGen.adminCommit(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+// Roadmap admin: CRUD + reorder + one-click seed (English / Japanese starters).
+adminRouter.get('/:code/roadmap/nodes', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await roadmap.adminListNodes(req.params.code) }); } catch (err) { next(err); }
+});
+adminRouter.post('/languages/:id/roadmap/nodes', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.status(201).json({ success: true, data: await roadmap.adminCreateNode(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.put('/roadmap/nodes/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await roadmap.adminUpdateNode(toId(req), req.body) }); } catch (err) { next(err); }
+});
+adminRouter.delete('/roadmap/nodes/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await roadmap.adminDeleteNode(toId(req)) }); } catch (err) { next(err); }
+});
+adminRouter.patch('/roadmap/reorder', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await roadmap.adminReorder(req.body?.items) }); } catch (err) { next(err); }
+});
+adminRouter.post('/roadmap/seed', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const force = !!req.body?.force;
+    const data = req.body?.all
+      ? await roadmap.seedAllRoadmaps({ force })
+      : await roadmap.seedRoadmap(String(req.body?.code ?? ''), { force });
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+// Distribute vocab categories onto vocab nodes so Practice groups by stage.
+adminRouter.post('/:code/roadmap/auto-assign', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await roadmap.autoAssignCategories(req.params.code, { force: !!req.body?.force }) });
   } catch (err) { next(err); }
 });
 

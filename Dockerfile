@@ -1,6 +1,13 @@
 # ============================================================
 # CuongHoangDev API - Dockerfile
 # Multi-stage build: Builder → Runner (node:22-alpine)
+#
+# ⚠️  NOT THE ONE PRODUCTION USES. docker-compose builds the backend from
+#     Dockerfile.backend (see `dockerfile:` under the backend service), which is
+#     what deploy.sh runs. This file is only the local `docker build -t
+#     backend-test .` reference from CLAUDE.md.
+#     Editing this one and expecting prod to change costs an afternoon — keep
+#     any runtime file the app reads (e.g. data/) copied in BOTH.
 # ============================================================
 
 # ─── Stage 1: Builder ────────────────────────────────────

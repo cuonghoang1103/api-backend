@@ -114,6 +114,11 @@ RUN chmod +x /usr/local/bin/fix-uploads-perms.sh
  COPY --from=builder --chown=1001:0 /app/prisma ./prisma
  COPY --from=builder --chown=1001:0 /app/package.json ./package.json
  COPY --from=builder --chown=1001:0 /app/scripts ./scripts
+ # Vendored kanji stroke data — read off disk at runtime (process.cwd()/data) by
+ # the Hán tự module. The builder gets it via `COPY . .` above, but the runner
+ # copies named paths only, so without this line the stroke endpoint 500s on
+ # prod while working locally.
+ COPY --from=builder --chown=1001:0 /app/data ./data
 
 # Set environment
 ENV NODE_ENV=production

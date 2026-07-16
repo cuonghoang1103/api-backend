@@ -101,6 +101,12 @@ if [ "$MODE" = "local" ]; then
 
     # ── Step 1: rsync code ─────────────────────────────────────────
     info "Syncing code to VPS via rsync..."
+    # NOTE: top-level `data/` is NOT excluded. It used to be, grouped with
+    # uploads/ as runtime state, but it now holds tracked SOURCE — the vendored
+    # kanji stroke data the Hán tự module reads at runtime. Excluding it (with
+    # --delete-excluded, no less) meant the folder never reached the VPS, the
+    # Docker build had nothing to COPY, and the feature 500'd on prod while
+    # working perfectly on this machine.
     rsync -azP \
         --delete \
         --delete-excluded \
@@ -113,7 +119,6 @@ if [ "$MODE" = "local" ]; then
         --exclude='.env.*' \
         --exclude='*.env' \
         --exclude='uploads/' \
-        --exclude='/data/' \
         --exclude='*.log' \
         --exclude='.DS_Store' \
         --exclude='coverage/' \

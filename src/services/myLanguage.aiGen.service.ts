@@ -111,13 +111,25 @@ async function loadLanguage(code: string): Promise<{ id: number; code: string }>
 // ── Existing keys (dedup) + a short sample string for the prompt ───
 async function existingContext(section: GenSection, languageId: number, categoryId?: number, articleId?: number): Promise<{ keys: Set<string>; sample: string }> {
   if (section === 'vocab') {
-    const rows = await prisma.langVocabWord.findMany({
-      where: categoryId ? { categoryId } : { category: { languageId } },
+    // Dedup keys span the WHOLE language, not just this category. Scoped to one
+    // category, the model was free to pad a topic with words that belong to
+    // another one — "Gia đình" ended up holding 警察/护士/司机 once its real
+    // family words ran out, and 几 lived in 4 categories at once. A word earns
+    // one home; that is what makes "the AI is out of words" mean the topic is
+    // genuinely exhausted rather than merely unlucky.
+    // No `take` cap here: it bounded how much we compare against (200 rows),
+    // so once a language passed 200 words the older ones stopped blocking
+    // duplicates entirely. Only the `word` column is read, so this stays cheap.
+    const all = await prisma.langVocabWord.findMany({
+      where: { category: { languageId } },
       select: { word: true },
-      orderBy: { id: 'desc' },
-      take: 200,
     });
-    return { keys: new Set(rows.map((r) => norm(r.word))), sample: rows.slice(0, 120).map((r) => r.word).join(', ') };
+    // The prompt sample stays category-scoped: the model should see what this
+    // topic already holds, not a random slice of the entire language.
+    const own = categoryId
+      ? await prisma.langVocabWord.findMany({ where: { categoryId }, select: { word: true }, orderBy: { id: 'desc' }, take: 120 })
+      : all.slice(0, 120);
+    return { keys: new Set(all.map((r) => norm(r.word))), sample: own.map((r) => r.word).join(', ') };
   }
   if (section === 'grammar') {
     const rows = await prisma.langGrammarPoint.findMany({ where: { languageId }, select: { title: true }, orderBy: { id: 'desc' }, take: 150 });
@@ -163,7 +175,17 @@ function buildPrompts(section: GenSection, code: string, count: number, level: s
   let shape = '';
   let intro = '';
   if (section === 'vocab') {
-    intro = `Generate ${count} ${langName} vocabulary entries${lv}${tp}. ${pronNote(code)} ${viNote}`;
+    // Padding guard: asked for "more" past a topic's natural end, the model
+    // drifts into neighbouring topics or enumerates mechanically (二十二, 二十三,
+    // 二十四…). Returning fewer entries has to be the sanctioned answer, or the
+    // catalogue fills with words that are correct but miscategorised.
+    const strict = topic
+      ? ` EVERY entry must belong to "${topic}" as a learner would expect to find it there — a word that fits another topic better does NOT belong here.` +
+        ' Do NOT pad: no mechanical enumerations (e.g. every number in a sequence), no function words unless the topic is about them,' +
+        ` and no words outside${lv ? ` level ${level}` : ' the level'}.` +
+        ` If fewer than ${count} genuinely fitting entries remain, return ONLY those — returning 3 correct entries is right, inventing 12 is wrong. An empty list is a valid answer.`
+      : '';
+    intro = `Generate up to ${count} ${langName} vocabulary entries${lv}${tp}.${strict} ${pronNote(code)} ${viNote}`;
     shape = '{"items":[{"word":string,"meaningVi":string,"exampleSentence":string,"exampleMeaning":string,"note":string,"pronunciations":[{"type":string,"value":string}]}]}';
   } else if (section === 'grammar') {
     intro = `Generate ${count} ${langName} grammar points${lv}${tp}. "explanation" is a SHORT PLAIN-TEXT explanation in Vietnamese (2-4 sentences, NO HTML tags). "examples" each: sentence (in ${langName}), pronunciation (reading), meaningVi. ${viNote}`;

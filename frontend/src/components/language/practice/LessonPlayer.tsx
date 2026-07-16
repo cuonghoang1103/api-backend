@@ -264,8 +264,21 @@ export default function LessonPlayer({
   }, [index, total, correct, mistakes, finish]);
 
   // ── Render ──────────────────────────────────────────────────────
+  // `inset-0` under `viewportFit: cover` starts at the physical top of the
+  // screen — behind the notch. The exit button lives in the first row, so on a
+  // notched phone it sat under the status bar and could not be tapped at all:
+  // the lesson had no way out. Inset the whole overlay past the notch, and past
+  // the home indicator at the bottom.
   const shell = (children: React.ReactNode) => (
-    <div className="fixed inset-0 z-[200] flex flex-col bg-[var(--bg-primary)]">{children}</div>
+    <div
+      className="fixed inset-0 z-[200] flex flex-col bg-[var(--bg-primary)]"
+      style={{
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      }}
+    >
+      {children}
+    </div>
   );
 
   if (loading) {
@@ -312,7 +325,14 @@ export default function LessonPlayer({
     <>
       {/* Top bar */}
       <div className="flex items-center gap-3 px-4 py-3 sm:px-6">
-        <button onClick={onClose} aria-label="Thoát" className="text-text-muted hover:text-text-primary"><X size={22} /></button>
+        {/* Big enough to hit with a thumb — this is the only way out. */}
+        <button
+          onClick={onClose}
+          aria-label="Thoát bài học"
+          className="-ml-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-text-muted transition hover:bg-[var(--bg-surface)] hover:text-text-primary active:scale-95"
+        >
+          <X size={22} />
+        </button>
         <div className="h-3 flex-1 overflow-hidden rounded-full bg-[var(--bg-surface)]">
           <div className="h-full rounded-full bg-neon-gradient transition-all" style={{ width: `${progress}%` }} />
         </div>

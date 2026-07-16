@@ -16,11 +16,11 @@ import { DndContext, PointerSensor, useSensor, useSensors, useDroppable, closest
 import { SortableContext, useSortable, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
-  NotebookPen, Folder, FolderPlus, ChevronRight, ChevronDown, Plus, Pencil, Trash2, X, Loader2, ArrowLeft, Layers, FileText, Download, Flame,
+  NotebookPen, Folder, FolderPlus, ChevronRight, ChevronDown, Plus, Pencil, Trash2, X, Loader2, Layers, FileText, Download, Flame,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { notebookApi, type NotebookFolder, type NotebookEntrySummary, type NotebookEntry, type NotebookLanguage, type NotebookTree } from '@/lib/language-api';
-import { SpeakerButton } from '@/components/language/primitives';
+import { SpeakerButton, BackButton } from '@/components/language/primitives';
 import { downloadPdf } from '@/lib/chatExport';
 
 const KIND_LABEL: Record<string, string> = {
@@ -207,7 +207,8 @@ function NotebookInner() {
   return (
     <div className="mx-auto max-w-6xl px-3 pb-16 pt-20 sm:px-5 sm:pt-24">
       <div className="mb-4 flex items-center gap-2 text-sm text-text-muted">
-        <Link href="/language" className="inline-flex items-center gap-1 hover:text-neon-violet"><ArrowLeft size={15} /> My Language</Link>
+        <BackButton />
+        <Link href="/language" className="inline-flex items-center gap-1 hover:text-neon-violet">My Language</Link>
       </div>
       <h1 className="mb-4 flex items-center gap-2.5 font-heading text-2xl font-bold text-text-primary sm:text-3xl">
         <NotebookPen className="text-neon-violet" /> Sổ tay ngôn ngữ

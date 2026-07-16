@@ -2578,7 +2578,24 @@ html.pwa-banner-open .ai-robot-fab {
    (spec) AND an `html.pwa-standalone` class stamped from JS via the legacy
    `navigator.standalone` flag (older iOS reports only the latter). Keep both
    blocks in sync. */
+/* How tall the top nav actually is, measured from the top of the VIEWPORT:
+   4rem, plus whatever the notch takes on an installed PWA.
+
+   Use it ONLY for elements that escape `.app-main` — `position: sticky` and
+   `position: fixed` children, and the toast layer. Those resolve their offsets
+   against the scrollport, so `.app-main`'s safe-area padding never reaches them
+   and a hard `top-16` leaves them parked behind the nav on a notched phone.
+
+   Do NOT use it for ordinary in-flow content: `.app-main` already adds the
+   inset for everything inside it, so `pt-[var(--app-nav-h)]` would count the
+   notch twice. In-flow content only ever needs to clear the 4rem — `pt-20`. */
+:root {
+  --app-nav-h: 4rem;
+}
 @media (display-mode: standalone) {
+  :root {
+    --app-nav-h: calc(4rem + env(safe-area-inset-top, 0px));
+  }
   .app-top-nav {
     height: calc(4rem + env(safe-area-inset-top, 0px)) !important;
     padding-top: env(safe-area-inset-top, 0px);
@@ -2595,6 +2612,9 @@ html.pwa-banner-open .ai-robot-fab {
   button[aria-label='Close chat sessions'] {
     top: calc(1rem + env(safe-area-inset-top, 0px));
   }
+}
+html.pwa-standalone {
+  --app-nav-h: calc(4rem + env(safe-area-inset-top, 0px));
 }
 html.pwa-standalone .app-top-nav {
   height: calc(4rem + env(safe-area-inset-top, 0px)) !important;

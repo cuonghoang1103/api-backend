@@ -29,7 +29,10 @@ export default function LanguageLandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-16">
+    // pt-16 was exactly the nav's 4rem — zero clearance, and the nav is
+    // transparent until scrolled, so the first row rendered through it. The
+    // notch is already handled by .app-main; this just buys a gap.
+    <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
       <div className="mx-auto max-w-5xl px-3 py-8 sm:px-5 sm:py-12">
         {/* Hero */}
         <motion.header

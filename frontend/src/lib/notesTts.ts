@@ -155,6 +155,31 @@ export interface SpeakResult {
  *   engine would garble.
  * Returns a result so the caller can surface a "no voice installed" hint.
  */
+/** Phones ship compact, lower-quality voices and slur far more than a desktop's
+ *  at the same nominal rate — the same utterance that reads cleanly on a laptop
+ *  drops syllables here. Give mobile a little more room. */
+function isHandheld(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+}
+
+/** Learner-friendly pace per language. CJK has to be slower than a native would
+ *  speak: mora and tones blur together, which is what "it swallows sounds"
+ *  actually is. */
+export function defaultRate(lang: VocabLang): number {
+  const base = lang === 'ja-JP' ? 0.7 : lang === 'zh-CN' ? 0.75 : lang === 'en-US' ? 0.95 : 0.85;
+  return isHandheld() ? base - 0.05 : base;
+}
+
+/** Ceiling a caller may not exceed. Call sites pass a rate tuned for how LONG
+ *  the text is ("sentences read best around 0.85"), which says nothing about
+ *  the language — 0.85 is fine for an English sentence and a mumble in
+ *  Japanese. The language gets the final say. */
+function maxRate(lang: VocabLang): number {
+  const cap = lang === 'ja-JP' ? 0.75 : lang === 'zh-CN' ? 0.8 : 1;
+  return isHandheld() ? cap - 0.05 : cap;
+}
+
 export async function speakVocabEntry(
   entry: { term?: string | null; reading?: string | null },
   opts: { rate?: number; forceLang?: VocabLang } = {},
@@ -184,9 +209,16 @@ export async function speakVocabEntry(
   const u = new SpeechSynthesisUtterance(text);
   u.lang = lang;
   if (voice) u.voice = voice;
-  if (opts.rate) u.rate = opts.rate;
+  // Rate belongs here, keyed off the language we actually resolved. Callers
+  // used to each pick their own, so any that forgot got the platform's 1.0 —
+  // Japanese in the Practice player ran 43% faster than everywhere else in the
+  // app, fast enough to slur the kana together.
+  u.rate = Math.min(opts.rate ?? defaultRate(lang), maxRate(lang));
   synth.cancel();
-  synth.speak(u);
+  // WebKit's cancel() is asynchronous: speak() in the same tick races it and
+  // loses the opening syllables, or the whole utterance. Yield a frame so the
+  // queue is genuinely empty before speaking — this is the mobile clipping.
+  window.setTimeout(() => synth.speak(u), 60);
   return { ok: true, lang, missingVoice: false };
 }
 

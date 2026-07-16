@@ -5,8 +5,9 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Volume2, ChevronRight, Loader2 } from 'lucide-react';
+import { Volume2, ChevronRight, Loader2, ArrowLeft } from 'lucide-react';
 import { speakVocabEntry, detectVocabLang, type VocabLang } from '@/lib/notesTts';
 import { useAuthStore } from '@/store/authStore';
 import type { LangLearnStatus } from '@/types/language';
@@ -71,9 +72,10 @@ export function SpeakerButton({
       }
       setBusy(true);
       try {
-        // CJK stays slow for learners; English at natural (Siri-like) pace.
-        const defaultRate = forceLang === 'ja-JP' ? 0.7 : forceLang === 'zh-CN' ? 0.75 : 1.0;
-        await speakVocabEntry({ term: text, reading: reading ?? undefined }, { forceLang, rate: rate ?? defaultRate });
+        // Pace is decided by speakVocabEntry, which keys it off the language it
+        // actually resolves. Deciding it here meant guessing from `forceLang`,
+        // so a button without one read Japanese at the English pace.
+        await speakVocabEntry({ term: text, reading: reading ?? undefined }, { forceLang, rate });
       } finally {
         setBusy(false);
       }
@@ -197,6 +199,34 @@ export function Breadcrumb({ code, section }: { code: string; section?: string }
   );
 }
 
+// ─── Back button ─────────────────────────────────────────────────
+/** Go back one step. Falls back to the language home when there is no history
+ *  to pop — a page opened from a shared link or a fresh tab has none, and
+ *  router.back() there either leaves the site or does nothing at all. */
+export function BackButton({ code, className = '' }: { code?: string; className?: string }) {
+  const router = useRouter();
+  const [canGoBack, setCanGoBack] = useState(false);
+  useEffect(() => {
+    setCanGoBack(typeof window !== 'undefined' && window.history.length > 1);
+  }, []);
+
+  const go = useCallback(() => {
+    if (canGoBack) router.back();
+    else router.push(code ? `/language/${code}` : '/language');
+  }, [canGoBack, router, code]);
+
+  return (
+    <button
+      type="button"
+      onClick={go}
+      aria-label="Quay lại trang trước"
+      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-text-muted transition hover:bg-[var(--bg-surface)] hover:text-neon-violet active:scale-95 ${className}`}
+    >
+      <ArrowLeft size={20} />
+    </button>
+  );
+}
+
 // ─── Section shell (header + breadcrumb) ─────────────────────────
 export function SectionShell({
   code,
@@ -214,8 +244,14 @@ export function SectionShell({
   children: React.ReactNode;
 }) {
   return (
+    // pt only has to clear the nav's 4rem: this is in-flow content, and
+    // .app-main already adds the notch inset for everything inside it. Reading
+    // --app-nav-h here would count the inset twice.
     <div className="mx-auto max-w-5xl px-3 pb-8 pt-20 sm:px-5 sm:pt-24">
-      <Breadcrumb code={code} section={section ?? title} />
+      <div className="flex items-center gap-2">
+        <BackButton code={code} className="-ml-2" />
+        <Breadcrumb code={code} section={section ?? title} />
+      </div>
       <div className="mt-3 mb-5 flex flex-wrap items-center justify-between gap-3">
         <h1 className="flex items-center gap-2.5 font-heading text-2xl font-bold text-text-primary sm:text-3xl">
           {icon}

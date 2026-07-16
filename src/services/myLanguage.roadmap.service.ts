@@ -223,9 +223,10 @@ export async function autoAssignCategories(
   const vocabNodesFull = await prisma.langRoadmapNode.findMany({
     where: { languageId: language.id, linkType: 'vocab' },
     orderBy: [{ stage: 'asc' }, { order: 'asc' }, { id: 'asc' }],
-    select: { id: true, linkRef: true, level: true },
+    select: { id: true, linkRef: true, level: true, title: true },
   });
   const levelOf = new Map(vocabNodesFull.map((n) => [n.id, n.level]));
+  const titleOf = new Map(vocabNodesFull.map((n) => [n.id, n.title]));
 
   const cats = await prisma.langVocabCategory.findMany({
     where: { languageId: language.id },
@@ -255,16 +256,53 @@ export async function autoAssignCategories(
   // categories stay unbound and surface under the trailing "Từ vựng khác" unit.
   const remaining = [...freeCats];
   let bound = 0;
-  const takeCat = (nodeLevel: string | null | undefined): number | null => {
-    let idx = -1;
-    if (nodeLevel) idx = remaining.findIndex((c) => c.level === nodeLevel);
-    if (idx === -1) idx = remaining.findIndex((c) => !c.level); // untagged next
-    if (idx === -1 && !nodeLevel) idx = 0; // untagged node takes anything left
-    if (idx === -1) return null;
-    return remaining.splice(idx, 1)[0].id;
+
+  /** Theme words of a title/name, minus the scaffolding both sides share
+   *  ("Từ vựng N5 · Chào hỏi & con người" and "N5 · Chào hỏi & giao tiếp" must
+   *  meet on "chào hỏi"). */
+  const themeWords = (s: string): Set<string> => {
+    const after = s.includes('·') ? s.slice(s.lastIndexOf('·') + 1) : s;
+    const stop = new Set(['từ', 'vựng', 'và', 'các', 'theo', 'chủ', 'đề', 'luyện', 'tập', 'cơ', 'bản']);
+    return new Set(
+      after.toLowerCase().normalize('NFC').replace(/[&·(),.–-]/g, ' ').split(/\s+/)
+        .filter((w) => w.length > 1 && !stop.has(w)),
+    );
+  };
+  /** Shared theme words: the fraction of the smaller set, and the raw count.
+   *  Vietnamese themes are syllable pairs, so a single shared syllable proves
+   *  nothing — "Động vật" and "Động từ thông dụng" share "động" and score 0.5,
+   *  which would send a learner looking for animals to a list of verbs. Two
+   *  syllables is the evidence that the themes are actually the same one. */
+  const overlap = (a: Set<string>, b: Set<string>): { score: number; hits: number } => {
+    if (!a.size || !b.size) return { score: 0, hits: 0 };
+    let hits = 0;
+    for (const w of a) if (b.has(w)) hits++;
+    return { score: hits / Math.min(a.size, b.size), hits };
+  };
+
+  // Pair a node with the SAME-TOPIC category, not merely the next same-level
+  // one. Matching on level alone handed "Từ vựng HSK1 · Chào hỏi" the category
+  // "Sở thích" — the link opened a topic the node never named.
+  const takeCat = (nodeLevel: string | null | undefined, nodeTitle: string): number | null => {
+    const want = themeWords(nodeTitle || '');
+    const sameLevel = nodeLevel ? remaining.filter((c) => c.level === nodeLevel) : [];
+    let best: { idx: number; score: number } | null = null;
+    for (const c of sameLevel) {
+      const { score, hits } = overlap(want, themeWords(c.name));
+      if (score >= 0.5 && hits >= 2 && (!best || score > best.score)) best = { idx: remaining.indexOf(c), score };
+    }
+    // No convincing topic match: leave the node unbound rather than point it at
+    // an unrelated topic. The href still carries ?level, so it opens that
+    // level's vocab list — every category of the level, none of them wrong.
+    if (!best) {
+      if (nodeLevel) return null;
+      const idx = remaining.findIndex((c) => !c.level);
+      return idx === -1 ? null : remaining.splice(idx, 1)[0].id;
+    }
+    return remaining.splice(best.idx, 1)[0].id;
   };
   for (const node of openNodes) {
-    const catId = takeCat(levelOf.get(node.id));
+    const catId = takeCat(levelOf.get(node.id), titleOf.get(node.id) ?? '');
     if (catId == null) continue;
     await prisma.langRoadmapNode.update({ where: { id: node.id }, data: { linkRef: String(catId) } });
     bound++;

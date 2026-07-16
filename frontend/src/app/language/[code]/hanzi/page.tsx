@@ -37,6 +37,10 @@ export default function HanziPage() {
   const [chars, setChars] = useState<HanziChar[]>([]);
   const [loading, setLoading] = useState(true);
   const [openIdx, setOpenIdx] = useState<number | null>(null);
+  // Review mode replaces the grid with just the characters this learner keeps
+  // getting wrong — the list the server ranks, not a filter of the full set.
+  const [review, setReview] = useState<HanziChar[] | null>(null);
+  const [dueCount, setDueCount] = useState(0);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -55,6 +59,26 @@ export default function HanziPage() {
 
   useEffect(() => { void load(); }, [load]);
 
+  // How many are due — shown on the button so it is worth pressing.
+  useEffect(() => {
+    if (!isAuthenticated) { setDueCount(0); return; }
+    languageApi.hanziReview(code).then((r) => setDueCount(r.data.data?.count ?? 0)).catch(() => {});
+  }, [code, isAuthenticated, chars]);
+
+  const startReview = useCallback(async () => {
+    try {
+      const r = await languageApi.hanziReview(code);
+      const list = r.data.data?.chars ?? [];
+      if (!list.length) { toast.info('Chưa có chữ nào cần ôn — luyện thêm vài chữ đã nhé!'); return; }
+      setReview(list);
+      setOpenIdx(0);
+    } catch {
+      toast.error('Không tải được danh sách ôn tập');
+    }
+  }, [code]);
+
+  // Whatever is on screen: the review queue when reviewing, else the grid.
+  const shown = review ?? chars;
   const learned = chars.filter((c) => c.progress?.learned).length;
 
   return (
@@ -70,9 +94,19 @@ export default function HanziPage() {
         ) : undefined
       }
     >
-      <p className="mb-4 text-sm text-text-muted">
+      <p className="mb-3 text-sm text-text-muted">
         Xem thứ tự nét → tô theo mẫu → viết từ trí nhớ. Viết sai nét sẽ được báo ngay và gợi ý.
       </p>
+
+      {isAuthenticated && dueCount > 0 && (
+        <button
+          type="button"
+          onClick={() => void startReview()}
+          className="mb-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-neon-gradient px-4 py-3 font-semibold text-white shadow-neon transition hover:opacity-95"
+        >
+          <RotateCcw size={17} /> Ôn {dueCount} chữ hay viết sai
+        </button>
+      )}
 
       {levels.length > 1 && (
         <div className="mb-4 flex flex-wrap gap-1.5">
@@ -100,13 +134,25 @@ export default function HanziPage() {
         </div>
       )}
 
+      {review && (
+        <div className="mb-3 flex items-center gap-2 rounded-2xl bg-neon-violet/10 p-3 ring-1 ring-neon-violet/30">
+          <RotateCcw size={16} className="text-neon-violet" />
+          <p className="min-w-0 flex-1 text-sm text-text-secondary">
+            Đang ôn <span className="font-semibold text-neon-violet">{review.length} chữ</span> bạn hay viết sai — vào thẳng chặng viết từ trí nhớ.
+          </p>
+          <button type="button" onClick={() => { setReview(null); setOpenIdx(null); }} className="shrink-0 rounded-full px-3 py-1 text-xs font-semibold text-text-muted ring-1 ring-[var(--border-color)] hover:text-text-primary">
+            Thoát ôn tập
+          </button>
+        </div>
+      )}
+
       {loading ? (
         <div className="flex justify-center py-20"><Loader2 className="h-6 w-6 animate-spin text-neon-orange" /></div>
       ) : !chars.length ? (
         <EmptyState emoji="🖌️" title="Chưa có chữ Hán nào" hint="Quản trị viên có thể thêm trong trang admin." />
       ) : (
         <div className="grid grid-cols-4 gap-2.5 sm:grid-cols-6 lg:grid-cols-8">
-          {chars.map((c, i) => (
+          {shown.map((c, i) => (
             <motion.button
               key={c.id}
               type="button"
@@ -133,20 +179,25 @@ export default function HanziPage() {
       )}
 
       <AnimatePresence>
-        {openIdx != null && chars[openIdx] && (
+        {openIdx != null && shown[openIdx] && (
           <CharModal
-            key={chars[openIdx].id}
-            char={chars[openIdx]}
+            key={shown[openIdx].id}
+            char={shown[openIdx]}
             lang={lang}
             code={code}
             isAuthenticated={isAuthenticated}
             hasPrev={openIdx > 0}
-            hasNext={openIdx < chars.length - 1}
+            hasNext={openIdx < shown.length - 1}
             onPrev={() => setOpenIdx((i) => (i != null && i > 0 ? i - 1 : i))}
-            onNext={() => setOpenIdx((i) => (i != null && i < chars.length - 1 ? i + 1 : i))}
+            onNext={() => setOpenIdx((i) => (i != null && i < shown.length - 1 ? i + 1 : i))}
             onClose={() => setOpenIdx(null)}
+            // Review opens straight at the hard part: these are characters the
+            // learner has already watched and traced and still gets wrong.
+            initialStage={review ? 'memory' : 'watch'}
             onProgress={(p) => {
-              setChars((prev) => prev.map((c, i) => (i === openIdx ? { ...c, progress: p } : c)));
+              const patch = (arr: HanziChar[]) => arr.map((c, i) => (i === openIdx ? { ...c, progress: p } : c));
+              if (review) setReview((prev) => (prev ? patch(prev) : prev));
+              else setChars(patch);
             }}
           />
         )}
@@ -163,12 +214,13 @@ function speakLang(code: string): VocabLang | undefined {
 
 // ─── Character detail ────────────────────────────────────────────
 function CharModal({
-  char, lang, code, isAuthenticated, hasPrev, hasNext, onPrev, onNext, onClose, onProgress,
+  char, lang, code, isAuthenticated, hasPrev, hasNext, onPrev, onNext, onClose, onProgress, initialStage = 'watch',
 }: {
   char: HanziChar;
   lang: 'ja' | 'zh';
   code: string;
   isAuthenticated: boolean;
+  initialStage?: Stage;
   hasPrev: boolean;
   hasNext: boolean;
   onPrev: () => void;
@@ -177,7 +229,7 @@ function CharModal({
   onProgress: (p: HanziChar['progress']) => void;
 }) {
   const [mounted, setMounted] = useState(false);
-  const [stage, setStage] = useState<Stage>('watch');
+  const [stage, setStage] = useState<Stage>(initialStage);
   const [strokes, setStrokes] = useState<number | null>(char.strokeCount);
   const [err, setErr] = useState<string | null>(null);
   const [wrong, setWrong] = useState(0);

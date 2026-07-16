@@ -253,6 +253,49 @@ export async function recordAttempt(
   return row;
 }
 
+/**
+ * Characters this learner should write again, weakest first.
+ *
+ * Deliberately NOT wired into LangUserProgress/LangItemType: that enum has no
+ * HANZI member and adding one is a migration for a queue this table can already
+ * answer. LangHanziProgress records every run, so "needs work" is a query, not
+ * new state:
+ *   - never written cleanly from memory (learned = false) → always due
+ *   - written cleanly but untouched for a week → due again (it fades)
+ * Ordered by mistakes so the character that keeps going wrong comes back first.
+ */
+export async function getReviewQueue(
+  code: string,
+  userId: number,
+  limit = 30,
+): Promise<{ count: number; chars: HanziCharDto[] }> {
+  const langId = await languageId(code);
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+  const rows = await prisma.langHanziProgress.findMany({
+    where: {
+      userId,
+      char: { languageId: langId },
+      OR: [{ learned: false }, { learned: true, lastAt: { lt: weekAgo } }],
+    },
+    include: { char: true },
+    // A char failed 12 times matters more than one failed twice; among equals,
+    // the one left alone longest goes first.
+    orderBy: [{ mistakes: 'desc' }, { lastAt: 'asc' }],
+    take: limit,
+  });
+
+  return {
+    count: rows.length,
+    chars: rows.map((r) =>
+      toDto({
+        ...r.char,
+        progress: [{ attempts: r.attempts, mistakes: r.mistakes, bestMistakes: r.bestMistakes, learned: r.learned }],
+      } as never),
+    ),
+  };
+}
+
 export async function getStats(code: string, userId: number): Promise<{ total: number; learned: number; attempted: number }> {
   const langId = await languageId(code);
   const [total, rows] = await Promise.all([

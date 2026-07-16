@@ -115,6 +115,8 @@ export const languageApi = {
     api.post('/my-language/hanzi/attempt', body),
   hanziStats: (code: string): Res<{ total: number; learned: number; attempted: number }> =>
     api.get(`/my-language/${code}/hanzi/stats`),
+  hanziReview: (code: string): Res<{ count: number; chars: HanziChar[] }> =>
+    api.get(`/my-language/${code}/hanzi/review`),
 
   translate: (body: { languageCode: string; text: string; direction: 'to' | 'from'; tone?: string }): Res<TranslateResult> =>
     api.post('/my-language/ai/translate', body),

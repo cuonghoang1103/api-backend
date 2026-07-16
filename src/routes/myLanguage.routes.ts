@@ -233,6 +233,12 @@ publicRouter.post('/hanzi/attempt', authenticate, async (req: Request, res: Resp
   } catch (err) { next(err); }
 });
 
+publicRouter.get('/:code/hanzi/review', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await hanzi.getReviewQueue(String(req.params.code), req.userId!, Number(req.query.limit) || undefined) });
+  } catch (err) { next(err); }
+});
+
 publicRouter.get('/:code/hanzi/stats', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await hanzi.getStats(String(req.params.code), req.userId!) });

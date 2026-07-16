@@ -4,9 +4,10 @@ import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import { getServerApiBaseUrl } from '@/lib/server-api';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
-import type { PublicTechTrendArticle } from '@/lib/api';
+import type { PublicTechTrendArticle, RelatedTechTrendArticle } from '@/lib/api';
 import ArticleActions from './ArticleActions';
 import ReaderAiTools from './ReaderAiTools';
+import ReadingProgress from './ReadingProgress';
 
 /**
  * Tech Trends — article detail page (SSR).
@@ -47,6 +48,20 @@ const getArticle = cache(async (slug: string): Promise<PublicTechTrendArticle | 
     return null;
   }
 });
+
+async function getRelated(id: number): Promise<RelatedTechTrendArticle[]> {
+  try {
+    const res = await fetch(
+      `${getServerApiBaseUrl()}/api/v1/tech-trends/articles/${id}/related`,
+      { headers: { accept: 'application/json' }, next: { revalidate: 300 } },
+    );
+    if (!res.ok) return [];
+    const json = await res.json();
+    return Array.isArray(json?.data) ? (json.data as RelatedTechTrendArticle[]) : [];
+  } catch {
+    return [];
+  }
+}
 
 const CATEGORY_LABEL: Record<string, { emoji: string; label: string }> = {
   TechNews: { emoji: '📰', label: '#TechNews' },
@@ -107,6 +122,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
   const article = await getArticle(params.slug);
   if (!article) notFound();
 
+  const related = await getRelated(article.id);
   const cat = CATEGORY_LABEL[article.category] ?? { emoji: '🏷️', label: `#${article.category}` };
   const url = `${SITE_URL}/tech-trends/${params.slug}`;
   const displayCover = article.coverEmoji || cat.emoji;
@@ -129,6 +145,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen pt-24 pb-24" style={{ background: '#0a0a0f' }}>
+      <ReadingProgress />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
@@ -276,6 +293,41 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
             </aside>
           )}
         </div>
+
+        {/* Related articles — internal links (SEO + reader retention) */}
+        {related.length > 0 && (
+          <section className="mt-16 pt-10 border-t border-darkborder">
+            <h2 className="text-xl font-heading font-semibold text-text-primary mb-5">Bài liên quan</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {related.map((r) => {
+                const rc = CATEGORY_LABEL[r.category] ?? { emoji: '🏷️', label: `#${r.category}` };
+                return (
+                  <Link
+                    key={r.id}
+                    href={`/tech-trends/${r.slug}`}
+                    className="group flex gap-3 p-4 rounded-2xl border border-darkborder bg-darkcard/60 hover:border-neon-violet/40 transition-all"
+                  >
+                    <div className="shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-darkbg border border-darkborder flex items-center justify-center">
+                      {r.coverImageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={r.coverImageUrl} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-2xl">{r.coverEmoji || rc.emoji}</span>
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs text-neon-violet mb-0.5">{rc.label}</p>
+                      <p className="text-sm font-semibold text-text-primary leading-snug line-clamp-2 group-hover:text-neon-violet transition-colors">
+                        {r.title}
+                      </p>
+                      <p className="text-xs text-text-muted mt-1 line-clamp-1">{r.summary}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         {/* Back to index */}
         <div className="mt-14 pt-8 border-t border-darkborder">

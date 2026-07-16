@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://cuongthai.com/tech-trends',
+    types: {
+      'application/rss+xml': 'https://cuongthai.com/tech-trends/rss.xml',
+    },
   },
 };
 

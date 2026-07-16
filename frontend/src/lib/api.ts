@@ -2866,6 +2866,19 @@ export interface PublicTechTrendArticle {
   updatedAt: string;
 }
 
+// Light shape for the "Related" cards on the detail page.
+export interface RelatedTechTrendArticle {
+  id: number;
+  slug: string;
+  title: string;
+  summary: string;
+  category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+  coverEmoji: string | null;
+  coverImageUrl: string | null;
+  readTimeMin: number;
+  publishedAt: string | null;
+}
+
 // Admin-side view of an article — same shape as the public
 // one but includes the canonical `bodyMdx` (markdown source)
 // so the TipTap editor can hydrate. Legacy `body` JsonB is
@@ -2978,6 +2991,11 @@ export const techTrendsApi = {
     return api.get<{ data: PublicTechTrendArticle }>(
       `/tech-trends/articles/by-slug/${encodeURIComponent(slug)}`,
     );
+  },
+
+  // Public: up to 4 related articles (shared tag or same category).
+  getRelated(id: number) {
+    return api.get<{ data: RelatedTechTrendArticle[] }>(`/tech-trends/articles/${id}/related`);
   },
 
   // Public: get category counts for the tab bar.

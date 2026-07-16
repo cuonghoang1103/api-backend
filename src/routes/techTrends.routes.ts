@@ -319,6 +319,43 @@ publicRouter.get('/articles/:id', async (req, res: Response<ApiResponse>, next) 
   }
 });
 
+// GET /api/v1/tech-trends/articles/:id/related
+// Up to 4 other PUBLISHED articles sharing a tag or the same category.
+// Powers the "Related" section on the detail page (SSR internal links).
+publicRouter.get('/articles/:id/related', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (Number.isNaN(id)) throw new AppError('Invalid article id', 400, 'INVALID_ID');
+
+    const base = await prisma.techTrendArticle.findUnique({
+      where: { id },
+      select: { tags: true, category: true },
+    });
+    if (!base) throw new AppError('Article not found', 404, 'ARTICLE_NOT_FOUND');
+
+    const related = await prisma.techTrendArticle.findMany({
+      where: {
+        status: 'PUBLISHED',
+        id: { not: id },
+        OR: [
+          ...(base.tags.length ? [{ tags: { hasSome: base.tags } }] : []),
+          { category: base.category },
+        ],
+      },
+      orderBy: [{ trendingScore: 'desc' }, { publishedAt: 'desc' }],
+      take: 4,
+      select: {
+        id: true, slug: true, title: true, summary: true, category: true,
+        coverEmoji: true, coverImageUrl: true, readTimeMin: true, publishedAt: true,
+      },
+    });
+
+    res.json({ success: true, data: related });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // ─── Reader AI (PRO-gated) ─────────────────────────────────────────────
 // Reader-facing AI on the public article surface. These REQUIRE auth (to
 // identify the user) and Pro entitlement (same line the CV / Interview AI

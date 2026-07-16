@@ -102,6 +102,19 @@ async function seedVocab(languageId: number, categories: CategorySeed[]): Promis
     if (category) {
       summary.categories.skipped++;
     } else {
+      // A category can be absent for two reasons: a fresh database (create it),
+      // or it was deliberately MERGED into the level-tagged catalogue and its
+      // shell deleted. Recreating it in the second case resurrects the legacy
+      // set on every deploy and duplicates every word it carried — which is
+      // exactly what happened the night the merge ran. If most of its words
+      // already live elsewhere in this language, it was merged, not missing.
+      const already = await prisma.langVocabWord.count({
+        where: { category: { languageId }, word: { in: cat.words.map((w) => w.word) } },
+      });
+      if (already >= Math.ceil(cat.words.length / 2)) {
+        summary.categories.skipped++;
+        continue;
+      }
       category = await prisma.langVocabCategory.create({
         data: { languageId, name: cat.name, icon: cat.icon, order: catOrder++ },
       });

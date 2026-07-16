@@ -80,7 +80,7 @@ for (let i = 0; i < todo.length; i += BATCH) {
   let raw = '';
   try {
     const res = await llmComplete({
-      step: 'generation', system, messages: [{ role: 'user', content: user }],
+      step: 'generation', feature: 'bulk_gen', system, messages: [{ role: 'user', content: user }],
       maxTokens: Math.min(16000, chunk.length * 2600 + 1500), maxRetries: 1, timeoutMs: 180_000, userId: 1,
     });
     raw = res.text;

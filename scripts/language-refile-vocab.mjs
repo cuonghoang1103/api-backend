@@ -82,7 +82,7 @@ for (const code of LANGS) {
 
       let raw = '';
       try {
-        const res = await llmComplete({ step: 'generation', system, messages: [{ role: 'user', content: user }], maxTokens: 1200, maxRetries: 1, timeoutMs: 60_000, userId: 1 });
+        const res = await llmComplete({ step: 'generation', feature: 'bulk_gen', system, messages: [{ role: 'user', content: user }], maxTokens: 1200, maxRetries: 1, timeoutMs: 60_000, userId: 1 });
         raw = res.text;
       } catch (e) {
         failed++;

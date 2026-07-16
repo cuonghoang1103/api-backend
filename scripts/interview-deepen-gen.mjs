@@ -108,7 +108,12 @@ async function fillLevel(tp, level) {
       if (msg.includes('hạn mức') || msg.includes('AI đang tắt')) { stop = true; break; }
       // Transient gateway wobble (524/timeout/network) → breathe 90s and retry
       // within the guard budget; anything else abandons this (topic, level).
-      if (/524|timeout|ETIMEDOUT|ECONNRESET|fetch failed|529|overloaded/i.test(msg)) {
+      // 'Không có câu hỏi nào để lưu' is retryable too: it means ONE batch came
+      // back empty (unparseable, or dedup ate everything) — the next call
+      // usually produces different questions. Abandoning the level on it left
+      // topics stuck below target for a whole run, the language module's
+      // "one blip reads as exhausted" bug in interview clothes.
+      if (/524|timeout|ETIMEDOUT|ECONNRESET|fetch failed|529|overloaded|Không có câu hỏi nào để lưu/i.test(msg)) {
         await new Promise((r) => setTimeout(r, 90_000));
         continue;
       }

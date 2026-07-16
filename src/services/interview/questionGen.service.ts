@@ -149,11 +149,14 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
 
   // Anti-duplication: fetch what's already in the bank so we can (a) tell the
   // model not to repeat them and (b) filter any near-duplicate it proposes.
+  // No `take` cap: it bounds what dedup compares against, so past that many
+  // rows the OLDEST questions silently stop blocking duplicates — the exact
+  // failure the vocab generator had at take:200. Per-topic and body-only, so
+  // even a deep topic is a cheap read.
   const existingQuestions = await prisma.interviewQuestion.findMany({
     where: { topicId: topic.id },
     select: { body: true },
     orderBy: { id: 'desc' },
-    take: 150,
   });
   const existingKeys = new Set(existingQuestions.map((e) => e.body.trim().toLowerCase().slice(0, 120)));
 

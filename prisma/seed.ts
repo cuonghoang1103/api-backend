@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { renderProjectMarkdown } from '../src/services/projectMarkdown.service.js';
+import { seedGames } from './seed.games.js';
 
 const prisma = new PrismaClient();
 
@@ -134,6 +135,12 @@ async function main() {
  // don't duplicate ideas. Used to populate the
  // /creator/ideas page on a fresh install.
  await seedContentIdeas();
+
+ // ─── Seed Game Library (Playground) ────────────────
+ // Categories + the initial catalogue, migrated from the old
+ // static GAMES_DATA. Create-if-missing only, so admin edits
+ // in /admin/games survive every re-deploy.
+ await seedGames(prisma);
 }
 
 async function seedCaseStudyProject() {

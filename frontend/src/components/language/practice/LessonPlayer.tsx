@@ -11,12 +11,13 @@
  *
  * Theme-aware (CSS vars, never `dark:`).
  */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { X, Heart, Volume2, Loader2, Flame, Zap, Crown, ArrowRight, Mic, Square } from 'lucide-react';
 import { languageApi, type PracticeLesson, type PracticeCompleteResult, type PronunciationResult } from '@/lib/language-api';
 import type { VocabWord } from '@/types/language';
 import { speakVocabEntry, type VocabLang } from '@/lib/notesTts';
 import { useSpeech } from '@/hooks/useSpeech';
+import { Mascot, pickMascot, praisePhrase, comfortPhrase, playMascotSound, mascotName } from '../mascot/mascot';
 
 function speakLang(code: string): VocabLang | undefined {
   const c = (code || '').toLowerCase();
@@ -138,6 +139,12 @@ export default function LessonPlayer({
   const [correct, setCorrect] = useState(0);
   const [mistakes, setMistakes] = useState(0);
   const [phase, setPhase] = useState<'answer' | 'correct' | 'wrong'>('answer');
+  // Coach: same character for the whole lesson, consecutive-correct streak
+  // drives the celebration tier, and the phrase is fixed per answer (a random
+  // pick in render would reshuffle on every state change).
+  const coach = useMemo(() => pickMascot(lesson.lessonKey), [lesson.lessonKey]);
+  const [runStreak, setRunStreak] = useState(0);
+  const [coachLine, setCoachLine] = useState('');
 
   const [choice, setChoice] = useState<string | null>(null);
   const [built, setBuilt] = useState<string[]>([]);
@@ -188,10 +195,28 @@ export default function LessonPlayer({
 
   const total = exercises.length;
 
-  // Record a graded outcome + remember the word for SRS.
+  // Record a graded outcome + remember the word for SRS. This runs inside the
+  // tap that answered, so the coach's chirp satisfies iOS's gesture rule.
   const mark = useCallback((ok: boolean, wordId: number) => {
-    if (ok) { setCorrect((c) => c + 1); setRightIds((a) => [...a, wordId]); setPhase('correct'); }
-    else { setMistakes((m) => m + 1); setHearts((h) => Math.max(0, h - 1)); setWrongIds((a) => [...a, wordId]); setPhase('wrong'); }
+    if (ok) {
+      setCorrect((c) => c + 1);
+      setRightIds((a) => [...a, wordId]);
+      setPhase('correct');
+      setRunStreak((s) => {
+        const next = s + 1;
+        setCoachLine(praisePhrase(next));
+        playMascotSound(next >= 3 ? 'cheer' : 'praise');
+        return next;
+      });
+    } else {
+      setMistakes((m) => m + 1);
+      setHearts((h) => Math.max(0, h - 1));
+      setWrongIds((a) => [...a, wordId]);
+      setPhase('wrong');
+      setRunStreak(0);
+      setCoachLine(comfortPhrase());
+      playMascotSound('sad');
+    }
   }, []);
 
   const isArrangeReady = ex?.type === 'arrange' && built.length === ex.tokens.length;
@@ -245,6 +270,8 @@ export default function LessonPlayer({
 
   const finish = useCallback(async (finalCorrect: number, finalMistakes: number) => {
     setFinishing(true);
+    // Fires inside the "Hoàn thành" tap → allowed to make noise on iOS.
+    playMascotSound(finalMistakes === 0 ? 'wow' : 'cheer');
     try {
       const res = await languageApi.practiceComplete({
         languageCode: code, lessonKey: lesson.lessonKey, correct: finalCorrect, total, mistakes: finalMistakes,
@@ -297,9 +324,11 @@ export default function LessonPlayer({
     const perfect = mistakes === 0;
     return shell(
       <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
-        <div className="text-6xl">{perfect ? '🏆' : correct / total >= 0.5 ? '🎉' : '📚'}</div>
-        <h2 className="font-heading text-2xl font-bold text-text-primary">{perfect ? 'Hoàn hảo!' : 'Hoàn thành bài học'}</h2>
-        <p className="text-text-secondary">{correct}/{total} câu đúng</p>
+        <Mascot id={coach} mood={perfect ? 'cheer' : correct / total >= 0.5 ? 'happy' : 'wow'} size={110} />
+        <h2 className="font-heading text-2xl font-bold text-text-primary">
+          {perfect ? 'Hoàn hảo! 🏆' : correct / total >= 0.5 ? 'Hoàn thành bài học 🎉' : 'Hoàn thành — ôn thêm nhé 📚'}
+        </h2>
+        <p className="text-text-secondary">{mascotName(coach)} chấm: {correct}/{total} câu đúng</p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <span className="inline-flex items-center gap-1.5 rounded-2xl bg-neon-violet/10 px-4 py-2.5 text-sm font-semibold text-neon-violet ring-1 ring-neon-violet/25"><Zap size={16} /> +{result.xpGained} XP</span>
           {result.leveledUp && (
@@ -353,16 +382,21 @@ export default function LessonPlayer({
       <div className={`border-t px-4 py-4 sm:px-6 ${phase === 'correct' ? 'border-neon-green/30 bg-neon-green/10' : phase === 'wrong' ? 'border-neon-orange/30 bg-neon-orange/10' : 'border-[var(--border-color)]'}`}>
         <div className="mx-auto flex w-full max-w-xl items-center gap-3">
           {phase !== 'answer' && (
-            <div className="min-w-0 flex-1">
-              <p className={`text-sm font-semibold ${phase === 'correct' ? 'text-neon-green' : 'text-neon-orange'}`}>
-                {phase === 'correct' ? 'Chính xác!' : 'Chưa đúng'}
-                {ex.type === 'speak' && speakResult ? ` · ${speakResult.score}/100` : ''}
-              </p>
-              {(phase === 'wrong' || ex.type === 'speak') && feedbackAnswer && (
-                <p className="truncate text-xs text-text-secondary">
-                  {ex.type === 'speak' ? feedbackAnswer : <>Đáp án: <span className="font-medium text-text-primary">{feedbackAnswer}</span></>}
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <div className="shrink-0">
+                <Mascot id={coach} mood={phase === 'correct' ? (runStreak >= 3 ? 'cheer' : 'happy') : 'sad'} size={52} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className={`text-sm font-semibold ${phase === 'correct' ? 'text-neon-green' : 'text-neon-orange'}`}>
+                  {coachLine || (phase === 'correct' ? 'Chính xác!' : 'Chưa đúng')}
+                  {ex.type === 'speak' && speakResult ? ` · ${speakResult.score}/100` : ''}
                 </p>
-              )}
+                {(phase === 'wrong' || ex.type === 'speak') && feedbackAnswer && (
+                  <p className="truncate text-xs text-text-secondary">
+                    {ex.type === 'speak' ? feedbackAnswer : <>Đáp án: <span className="font-medium text-text-primary">{feedbackAnswer}</span></>}
+                  </p>
+                )}
+              </div>
             </div>
           )}
           {phase === 'answer' ? (

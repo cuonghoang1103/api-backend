@@ -37,6 +37,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { languageApi, type Roadmap, type RoadmapNode } from '@/lib/language-api';
+import type { VocabCategory } from '@/types/language';
+import { MascotCoach, useDailyMascot } from '@/components/language/mascot/mascot';
 import { SectionShell, EmptyState, ProgressRing, useLangUser } from '@/components/language/primitives';
 
 const ICONS: Record<string, typeof Route> = {
@@ -58,6 +60,18 @@ function nodeHref(code: string, n: RoadmapNode): string | null {
 }
 
 type NodeStatus = 'done' | 'current' | 'todo';
+
+/** Today's coach welcomes the learner and nudges them to the next unit. */
+function RoadmapGreeting({ doneCount, total }: { doneCount: number; total: number }) {
+  const { id, name } = useDailyMascot();
+  const text =
+    doneCount === 0
+      ? `Chào bạn, mình là ${name}! Bấm vào một chặng để xem các bài học bên trong nhé 🌟`
+      : doneCount >= total
+        ? `Bạn đã đi hết lộ trình rồi — ${name} phục sát đất! 🏆`
+        : `${name} đây! Bạn đã xong ${doneCount}/${total} chặng — học tiếp chặng phát sáng nha 💪`;
+  return <MascotCoach id={id} mood={doneCount >= total ? 'cheer' : 'happy'} text={text} size={60} className="mb-4" />;
+}
 
 export default function RoadmapPage() {
   const code = String(useParams().code);
@@ -155,6 +169,8 @@ export default function RoadmapPage() {
         />
       ) : (
         <div className="space-y-2">
+          <RoadmapGreeting doneCount={doneCount} total={total} />
+
           {/* Legend */}
           <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-text-muted">
             <span className="inline-flex items-center gap-1.5"><span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-neon-green/20 text-neon-green"><Check size={11} /></span> Đã xong</span>
@@ -286,6 +302,27 @@ function NodeDrawer({
   const href = nodeHref(code, node);
   const isDone = status === 'done';
 
+  // The node names an abstract theme ("Đời sống cơ bản") that rarely matches a
+  // catalogue category by name, so a single deep-link can only ever be
+  // approximate. What IS precise: the level's real categories. Load them and
+  // show the unit's actual lessons right here — tap one, land in that exact
+  // word list — the way a Duolingo unit opens into its lessons.
+  const [lessons, setLessons] = useState<VocabCategory[] | null>(null);
+  const wantsLessons = node.linkType === 'vocab' && !!node.level;
+  useEffect(() => {
+    if (!wantsLessons) return;
+    let alive = true;
+    languageApi
+      .vocabCategories(code)
+      .then((r) => {
+        if (!alive) return;
+        const all = r.data.data ?? [];
+        setLessons(all.filter((c) => c.level === node.level && (c.wordCount ?? c._count?.words ?? 0) > 0));
+      })
+      .catch(() => alive && setLessons([]));
+    return () => { alive = false; };
+  }, [code, node.level, wantsLessons]);
+
   if (!mounted) return null;
 
   return createPortal(
@@ -335,6 +372,44 @@ function NodeDrawer({
             <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-secondary">{node.description}</p>
           ) : (
             <p className="text-sm text-text-muted">Chưa có phần giới thiệu cho chặng này.</p>
+          )}
+
+          {wantsLessons && (
+            <div className="mt-4">
+              <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">
+                Bài học trong chặng này {lessons ? `(${lessons.length})` : ''}
+              </h4>
+              {lessons === null ? (
+                <div className="flex justify-center py-4"><Loader2 size={18} className="animate-spin text-neon-violet" /></div>
+              ) : lessons.length === 0 ? (
+                <p className="rounded-xl bg-[var(--bg-surface)] p-3 text-sm text-text-muted ring-1 ring-[var(--border-color)]">
+                  Nội dung cấp {node.level} đang được bổ sung — quay lại sau nhé.
+                </p>
+              ) : (
+                <ul className="space-y-1.5">
+                  {lessons.map((c) => {
+                    const bound = node.linkRef === String(c.id);
+                    return (
+                      <li key={c.id}>
+                        <Link
+                          href={`/language/${code}/vocab?categoryId=${c.id}${node.level ? `&level=${node.level}` : ''}`}
+                          className={`flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm ring-1 transition hover:ring-neon-violet/40 ${
+                            bound ? 'bg-neon-violet/10 ring-neon-violet/30' : 'bg-[var(--bg-surface)] ring-[var(--border-color)]'
+                          }`}
+                        >
+                          <span className="text-lg leading-none">{c.icon || '📘'}</span>
+                          <span className="min-w-0 flex-1 truncate font-medium text-text-primary">
+                            {c.name.includes('·') ? c.name.slice(c.name.lastIndexOf('·') + 1).trim() : c.name}
+                          </span>
+                          <span className="shrink-0 text-xs text-text-muted">{c.wordCount ?? c._count?.words ?? 0} từ</span>
+                          <ArrowRight size={14} className="shrink-0 text-text-muted" />
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
           )}
         </div>
 

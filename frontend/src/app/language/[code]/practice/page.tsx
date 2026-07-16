@@ -18,6 +18,7 @@ import { languageApi, type PracticeOverview, type PracticeLesson, type PracticeC
 import { SectionShell, EmptyState, ProgressRing, useLangUser } from '@/components/language/primitives';
 import { usePro } from '@/hooks/usePro';
 import LessonPlayer from '@/components/language/practice/LessonPlayer';
+import { MascotCoach, useDailyMascot } from '@/components/language/mascot/mascot';
 
 const PATH_OFFSETS = [0, 44, 64, 44, 0, -44, -64, -44];
 
@@ -29,6 +30,20 @@ const UNIT_THEMES = [
   { grad: 'from-neon-pink/15 to-neon-violet/10', ring: 'ring-neon-pink/25', text: 'text-neon-pink', bar: 'bg-neon-pink', badge: 'bg-neon-pink', bubble: 'bg-neon-pink/20 text-neon-pink ring-neon-pink/40' },
   { grad: 'from-neon-green/15 to-neon-cyan/10', ring: 'ring-neon-green/25', text: 'text-neon-green', bar: 'bg-neon-green', badge: 'bg-neon-green', bubble: 'bg-neon-green/20 text-neon-green ring-neon-green/40' },
 ];
+
+/** Today's coach — greets by progress: fresh day, mid-goal, or goal reached. */
+function PracticeGreeting({ dailyPct, streak }: { dailyPct: number; streak: number }) {
+  const { id, name } = useDailyMascot();
+  const text =
+    dailyPct >= 100
+      ? `Mục tiêu hôm nay xong rồi! ${name} tự hào về bạn lắm 🎉`
+      : dailyPct > 0
+        ? `Sắp chạm mục tiêu hôm nay rồi (${dailyPct}%) — cố thêm chút nữa nha! 🔥`
+        : streak > 0
+          ? `Chuỗi ${streak} ngày đang chờ! Làm một bài giữ lửa nào 🔥`
+          : `Chào bạn, ${name} đây! Làm một bài ngắn để khởi động nhé 💪`;
+  return <MascotCoach id={id} mood={dailyPct >= 100 ? 'cheer' : 'happy'} text={text} size={60} className="mb-4" />;
+}
 
 export default function PracticePage() {
   const code = String(useParams().code);
@@ -128,6 +143,8 @@ export default function PracticePage() {
         <EmptyState emoji="🧩" title="Chưa có bài luyện tập" hint="Cần các danh mục từ vựng (≥4 từ) để tạo bài. Quản trị viên có thể thêm trong trang admin." />
       ) : (
         <div className="mx-auto max-w-lg">
+          <PracticeGreeting dailyPct={dailyPct} streak={st?.streak ?? 0} />
+
           {/* HUD */}
           <div className="mb-4 flex items-center gap-3 rounded-2xl bg-[var(--bg-surface)] px-4 py-3 ring-1 ring-[var(--border-color)]">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-neon-violet/10 px-2 py-0.5 text-sm font-bold text-neon-violet ring-1 ring-neon-violet/25" title={`Cấp độ ${st!.level} · ${st!.xpIntoLevel}/${st!.xpForLevel} XP đến cấp sau`}><Star size={15} className="fill-neon-violet" /> Lv{st!.level}</span>

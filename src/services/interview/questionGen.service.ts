@@ -48,6 +48,14 @@ const GeneratedQuestionSchema = z.object({
   body: z.string().min(1),
   referenceAnswer: z.string().nullish().transform((v) => v ?? ''),
   rubric: z.array(RubricItem).nullish().transform((v) => v ?? []),
+  // The English twin. The schema, the session runner, the grader and the report
+  // have always read bodyEn/referenceAnswerEn/rubricEn — nothing ever wrote
+  // them, so `?? body` quietly served Vietnamese to anyone who picked English.
+  // Optional: a model that returns only the display language still parses, it
+  // just leaves the EN side empty rather than failing the batch.
+  bodyEn: z.string().nullish().transform((v) => (v && v.trim()) || ''),
+  referenceAnswerEn: z.string().nullish().transform((v) => (v && v.trim()) || ''),
+  rubricEn: z.array(RubricItem).nullish().transform((v) => v ?? []),
   mustMention: stringList,
   shouldMention: stringList,
   redFlags: stringList,
@@ -186,7 +194,23 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
       ...existingQuestions.slice(0, 80).map((e, i) => `${i + 1}. ${e.body.slice(0, 200)}`),
     );
   }
-  userParts.push('', 'Return the JSON object only.');
+  // Bilingual twin. This instruction lives here rather than in the editable
+  // system template so it holds no matter how an admin rewrites that template.
+  userParts.push(
+    '',
+    'BILINGUAL — every question MUST carry both languages, because the learner switches between them:',
+    language === 'EN'
+      ? '- "body"/"referenceAnswer"/"rubric" are in English. Copy them verbatim into "bodyEn"/"referenceAnswerEn"/"rubricEn".'
+      : [
+          '- "body", "referenceAnswer" and "rubric" are in Vietnamese, as instructed above.',
+          '- "bodyEn", "referenceAnswerEn" and "rubricEn" are the SAME question, model answer and rubric written in professional English —',
+          '  the English a real interviewer at an international company would use. Not a literal gloss of the Vietnamese: idiomatic, natural technical English.',
+          '- "rubricEn" must mirror "rubric" one-for-one: same length, same order, identical "id" and "weight", only "criterion" translated.',
+          '- Technical terms, code and identifiers stay untouched in BOTH languages (deadlock, race condition, `useEffect`, N+1…). Never invent Vietnamese for an established English term.',
+        ].join('\n'),
+    '',
+    'Return the JSON object only.',
+  );
   const user = userParts.join('\n');
 
   const parse = (text: string): GeneratedQuestion[] => parseGenerationResult(extractJson(text));
@@ -283,8 +307,14 @@ export async function commitQuestions(params: CommitParams): Promise<{ created: 
         type: normalizeType(q.type),
         difficulty: clampDifficulty(q.difficulty),
         body: q.body,
+        bodyEn: q.bodyEn || null,
         referenceAnswer: q.referenceAnswer || null,
+        referenceAnswerEn: q.referenceAnswerEn || null,
         rubric: (q.rubric ?? []) as never,
+        // Only store an English rubric that actually mirrors the display one —
+        // a half-translated rubric would score an English session against
+        // criteria that no longer line up with their weights.
+        rubricEn: (q.rubricEn?.length === (q.rubric?.length ?? 0) && q.rubricEn?.length ? (q.rubricEn as never) : undefined),
         mustMention: q.mustMention ?? [],
         shouldMention: q.shouldMention ?? [],
         redFlags: q.redFlags ?? [],

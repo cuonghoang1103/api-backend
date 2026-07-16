@@ -19,10 +19,12 @@ import ListeningTab from '@/components/admin/language/ListeningTab';
 import ConversationTab from '@/components/admin/language/ConversationTab';
 import ReadingTab from '@/components/admin/language/ReadingTab';
 import QnaTab from '@/components/admin/language/QnaTab';
+import RoadmapTab from '@/components/admin/language/RoadmapTab';
 
-type TabKey = 'alphabet' | 'vocab' | 'grammar' | 'listening' | 'conversation' | 'reading' | 'qna';
+type TabKey = 'roadmap' | 'alphabet' | 'vocab' | 'grammar' | 'listening' | 'conversation' | 'reading' | 'qna';
 
 const TABS: Array<{ key: TabKey; label: string }> = [
+  { key: 'roadmap', label: 'Lộ trình' },
   { key: 'alphabet', label: 'Bảng chữ cái' },
   { key: 'vocab', label: 'Từ vựng' },
   { key: 'grammar', label: 'Ngữ pháp' },
@@ -114,6 +116,7 @@ export default function AdminLanguageContentPage() {
       </div>
 
       <div>
+        {tab === 'roadmap' && <RoadmapTab languageId={languageId} code={code} />}
         {tab === 'alphabet' && <AlphabetTab languageId={languageId} code={code} />}
         {tab === 'vocab' && <VocabTab languageId={languageId} code={code} />}
         {tab === 'grammar' && <GrammarTab languageId={languageId} code={code} />}

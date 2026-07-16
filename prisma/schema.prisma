@@ -290,6 +290,9 @@ model User {
   languageQuizzes      LangQuizResult[]
   langVocabFavorites   LangVocabFavorite[]
   langVocabCollections LangVocabCollection[]
+  langRoadmapDone      LangRoadmapDone[]
+  langGameStates       LangGameState[]
+  langLessonProgress   LangLessonProgress[]
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -4199,6 +4202,9 @@ model Language {
   vocabCollections  LangVocabCollection[]
   notebookFolders   LangNotebookFolder[]
   notebookEntries   LangNotebookEntry[]
+  roadmapNodes      LangRoadmapNode[]
+  gameStates        LangGameState[]
+  lessonProgress    LangLessonProgress[]
 
   @@index([isActive, order], name: "idx_languages_active_order")
   @@map("languages")
@@ -5809,4 +5815,100 @@ model CvLLMCallLog {
 
   @@index([userId, createdAt], name: "idx_cv_llmlog_user")
   @@map("cv_llm_call_logs")
+}
+
+// ─── My Language — Roadmap (learning path) ───────────────────────────
+// A per-language visual roadmap (roadmap.sh style): ordered stages, each with
+// nodes that link into the existing section pages (vocab/grammar/…). Fully
+// additive. Node completion is per-user and manual (LangRoadmapDone).
+model LangRoadmapNode {
+  id          Int      @id @default(autoincrement())
+  languageId  Int      @map("language_id")
+  stage       Int      @default(0) // group index (0,1,2,…)
+  stageLabel  String   @map("stage_label") @db.VarChar(120) // "N5", "IELTS nền (B2)"
+  order       Int      @default(0) // order within the stage
+  side        String   @default("center") @db.VarChar(10) // center | left | right
+  kind        String   @default("primary") @db.VarChar(16) // primary | alternative | info
+  title       String   @db.VarChar(255)
+  subtitle    String?  @db.VarChar(255)
+  level       String?  @db.VarChar(20) // A1..C2 | N5..N1 — used to deep-link the section
+  icon        String?  @db.VarChar(48) // lucide icon name
+  description String?  @db.Text // the "intro" shown when the node is opened
+  linkType    String?  @map("link_type") @db.VarChar(32) // section key: vocab|grammar|listening|reading|conversation|roleplay|writing|alphabet | external
+  linkRef     String?  @map("link_ref") @db.VarChar(255) // optional override (e.g. external URL)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  language Language          @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  doneBy   LangRoadmapDone[]
+
+  @@index([languageId, stage, order], name: "idx_lang_roadmap_lang")
+  @@map("lang_roadmap_nodes")
+}
+
+model LangRoadmapDone {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  nodeId    Int      @map("node_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  node LangRoadmapNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, nodeId], map: "uk_lang_roadmap_done")
+  @@index([userId], name: "idx_lang_roadmap_done_user")
+  @@map("lang_roadmap_done")
+}
+
+// ─── My Language — Practice (Duolingo-style gamification) ────────────
+// Per-user, per-language game state (XP / streak / daily goal / hearts /
+// reminder pref) + per-lesson crown progress. Fully additive. Exercises are
+// generated client-side from the existing vocab content; only the game state is
+// server-authoritative here.
+model LangGameState {
+  id               Int       @id @default(autoincrement())
+  userId           Int       @map("user_id")
+  languageId       Int       @map("language_id")
+  xp               Int       @default(0)
+  streak           Int       @default(0)
+  longestStreak    Int       @default(0) @map("longest_streak")
+  lastPracticeDate DateTime? @map("last_practice_date")
+  dailyGoalXp      Int       @default(30) @map("daily_goal_xp")
+  dailyXp          Int       @default(0) @map("daily_xp")
+  dailyXpDate      String?   @map("daily_xp_date") @db.VarChar(10)
+  weeklyXp         Int       @default(0) @map("weekly_xp")
+  weekKey          String?   @map("week_key") @db.VarChar(10)
+  hearts           Int       @default(5)
+  heartsUpdatedAt  DateTime  @default(now()) @map("hearts_updated_at")
+  reminderEnabled  Boolean   @default(false) @map("reminder_enabled")
+  reminderHour     Int       @default(20) @map("reminder_hour")
+  lastReminderAt   DateTime? @map("last_reminder_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, languageId], map: "uk_lang_game_user_lang")
+  @@map("lang_game_states")
+}
+
+model LangLessonProgress {
+  id              Int       @id @default(autoincrement())
+  userId          Int       @map("user_id")
+  languageId      Int       @map("language_id")
+  lessonKey       String    @map("lesson_key") @db.VarChar(80)
+  crown           Int       @default(0)
+  bestScore       Int       @default(0) @map("best_score")
+  timesCompleted  Int       @default(0) @map("times_completed")
+  lastCompletedAt DateTime? @map("last_completed_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonKey], map: "uk_lang_lesson_user_key")
+  @@index([userId, languageId], name: "idx_lang_lesson_user_lang")
+  @@map("lang_lesson_progress")
 }

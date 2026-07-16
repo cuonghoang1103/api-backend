@@ -23,6 +23,7 @@ import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
 import { completedExpiryCutoff, COMPLETED_TASK_RETENTION_DAYS } from '../utils/dashboard.js';
 import { deleteByKey } from '../storage/uploadService.js';
+import { sendDueReminders } from './myLanguage.reminder.service.js';
 
 let _started = false;
 
@@ -232,6 +233,19 @@ export function startCronJobs(): void {
       }
     } catch (err) {
       logger.error('cron dashboard archive failed', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
+  // ─── My Language — hourly practice reminder emails ───
+  // Each user picks their own reminder hour; this job fires every hour and
+  // emails only those whose hour matches now (VN) and who haven't practiced
+  // or been reminded today. Best-effort; degrades to no-op without RESEND key.
+  cron.schedule('0 * * * *', async () => {
+    try {
+      const r = await sendDueReminders();
+      if (r.sent > 0) logger.info('cron lang reminders sent', r);
+    } catch (err) {
+      logger.error('cron lang reminder failed', { error: (err as Error).message });
     }
   }, { timezone: 'UTC' });
 

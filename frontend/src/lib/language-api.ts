@@ -107,7 +107,120 @@ export const languageApi = {
     fd.append('languageCode', body.languageCode);
     return api.post('/my-language/ai/stt', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
   },
+
+  // ─── Roadmap (lộ trình học) ──────────────────────────────────
+  roadmap: (code: string): Res<Roadmap> => api.get(`/my-language/${code}/roadmap`),
+  roadmapToggleDone: (nodeId: number): Res<{ nodeId: number; done: boolean }> =>
+    api.post(`/my-language/roadmap/${nodeId}/done`, {}),
+
+  // ─── Practice (Duolingo-style) ───────────────────────────────
+  practice: (code: string): Res<PracticeOverview> => api.get(`/my-language/${code}/practice`),
+  practiceComplete: (body: { languageCode: string; lessonKey: string; correct: number; total: number; mistakes: number; wrongIds?: number[]; rightIds?: number[] }): Res<PracticeCompleteResult> =>
+    api.post('/my-language/practice/complete', body),
+  practiceReminder: (body: { languageCode: string; enabled: boolean; hour?: number }): Res<PracticeStateDto> =>
+    api.post('/my-language/practice/reminder', body),
+  practiceLeaderboard: (code: string): Res<Leaderboard> => api.get(`/my-language/${code}/practice/leaderboard`),
+  practiceAchievements: (code: string): Res<AchievementsResult> => api.get(`/my-language/${code}/practice/achievements`),
 };
+
+export interface PracticeStateDto {
+  xp: number;
+  level: number;
+  xpIntoLevel: number;
+  xpForLevel: number;
+  streak: number;
+  longestStreak: number;
+  dailyGoalXp: number;
+  dailyXp: number;
+  weeklyXp: number;
+  hearts: number;
+  maxHearts: number;
+  heartsFullInMin: number;
+  reminderEnabled: boolean;
+  reminderHour: number;
+}
+export interface AchievementBadge {
+  id: string;
+  label: string;
+  description: string;
+  icon: string;
+  earned: boolean;
+  progress: number;
+  goal: number;
+  current: number;
+}
+export interface AchievementsResult {
+  level: { level: number; xpIntoLevel: number; xpForLevel: number; xp: number };
+  totals: { lessonsPlayed: number; lessonsPassed: number; goldCrowns: number; longestStreak: number; xp: number };
+  badges: AchievementBadge[];
+  earnedCount: number;
+}
+export interface PracticeLesson {
+  lessonKey: string;
+  categoryId: number;
+  name: string;
+  icon: string | null;
+  wordCount: number;
+  crown: number;
+  bestScore: number;
+  locked: boolean;
+}
+export interface PracticeUnit {
+  key: string;
+  label: string;
+  lessons: PracticeLesson[];
+}
+export interface PracticeOverview {
+  language: { id: number; code: string; name: string; nameEn: string; flagEmoji: string };
+  state: PracticeStateDto;
+  units: PracticeUnit[];
+}
+export interface PracticeCompleteResult {
+  xpGained: number;
+  crown: number;
+  leveledUp: boolean;
+  state: PracticeStateDto;
+}
+export interface LeaderboardEntry {
+  rank: number;
+  userId: number;
+  name: string;
+  avatarUrl: string | null;
+  weeklyXp: number;
+  isMe: boolean;
+}
+export interface Leaderboard {
+  week: string;
+  entries: LeaderboardEntry[];
+  me: LeaderboardEntry | null;
+}
+
+export interface RoadmapNode {
+  id: number;
+  stage: number;
+  stageLabel: string;
+  order: number;
+  side: 'center' | 'left' | 'right' | string;
+  kind: 'primary' | 'alternative' | 'info' | string;
+  title: string;
+  subtitle: string | null;
+  level: string | null;
+  icon: string | null;
+  description: string | null;
+  linkType: string | null;
+  linkRef: string | null;
+}
+export interface RoadmapStage {
+  stage: number;
+  stageLabel: string;
+  nodes: RoadmapNode[];
+}
+export interface Roadmap {
+  language: { id: number; code: string; name: string; nameEn: string; flagEmoji: string };
+  stages: RoadmapStage[];
+  doneNodeIds: number[];
+  total: number;
+}
 
 export interface AiExplanationExample {
   text: string;
@@ -264,6 +377,20 @@ export const languageAdminApi = {
   analyticsOverview: (): Res<LangAnalyticsOverview> => api.get('/admin/my-language/analytics/overview'),
   analyticsUsers: (keyword?: string): Res<LangAnalyticsUser[]> => api.get('/admin/my-language/analytics/users', { params: { keyword } }),
   analyticsUser: (id: number): Res<LangAnalyticsUserDetail> => api.get(`/admin/my-language/analytics/users/${id}`),
+
+  // Roadmap (lộ trình) — CRUD + seed
+  roadmapNodes: (code: string): Res<RoadmapNode[]> => api.get(`/admin/my-language/${code}/roadmap/nodes`),
+  createRoadmapNode: (languageId: number, body: AnyRecord): Res<RoadmapNode> =>
+    api.post(`/admin/my-language/languages/${languageId}/roadmap/nodes`, body),
+  updateRoadmapNode: (id: number, body: AnyRecord): Res<RoadmapNode> =>
+    api.put(`/admin/my-language/roadmap/nodes/${id}`, body),
+  deleteRoadmapNode: (id: number): Res<{ id: number }> => api.delete(`/admin/my-language/roadmap/nodes/${id}`),
+  reorderRoadmap: (items: Array<{ id: number; stage?: number; order?: number; side?: string }>): Res<{ updated: number }> =>
+    api.patch('/admin/my-language/roadmap/reorder', { items }),
+  seedRoadmap: (body: { code?: string; all?: boolean; force?: boolean }): Res<unknown> =>
+    api.post('/admin/my-language/roadmap/seed', body),
+  autoAssignRoadmap: (code: string, force = false): Res<{ code: string; boundNodes: number; assignedCategories: number; vocabNodes: number; eligibleCategories: number }> =>
+    api.post(`/admin/my-language/${code}/roadmap/auto-assign`, { force }),
 };
 
 export interface LangAnalyticsOverview { learners: number; mastered: number; quizzes: number; notebookEntries: number; dueCards: number }

@@ -18,6 +18,8 @@ import {
   PenLine,
   Bot,
   NotebookPen,
+  Route,
+  Dumbbell,
 } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
 import type { LanguageOverview } from '@/types/language';
@@ -112,6 +114,34 @@ export default function LanguageHomePage() {
       </div>
 
       <div className="mx-auto max-w-5xl px-3 py-6 sm:px-5">
+        {/* Roadmap + Practice CTAs — the guided path + gamified drills */}
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <Link
+            href={`/language/${code}/roadmap`}
+            className="card group flex items-center gap-3 p-4 transition hover:-translate-y-0.5"
+          >
+            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-neon-violet/15 text-neon-violet">
+              <Route size={22} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <h3 className="font-heading font-semibold text-text-primary">Lộ trình học</h3>
+              <p className="text-xs text-text-muted">Sơ đồ dẫn đường từ cơ bản đến nâng cao</p>
+            </div>
+          </Link>
+          <Link
+            href={`/language/${code}/practice`}
+            className="card group flex items-center gap-3 p-4 transition hover:-translate-y-0.5"
+          >
+            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-neon-green/15 text-neon-green">
+              <Dumbbell size={22} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <h3 className="font-heading font-semibold text-text-primary">Luyện tập</h3>
+              <p className="text-xs text-text-muted">Bài tập kiểu Duolingo — XP, chuỗi ngày, vương miện</p>
+            </div>
+          </Link>
+        </motion.div>
+
         {isAuthenticated && due > 0 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <Link

@@ -14,44 +14,97 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-type Cat = { theme: string; icon: string };
-// A compact, standard thematic set repeated (as relevant) per level. Themes are
-// ordered basic→abstract so lower levels lean concrete, higher levels abstract.
+/** tier 1 = everyday concrete (present from the very first level), 2 = practical
+ *  situations, 3 = abstract/specialised. A theme appears at every level whose
+ *  tier reaches it, so "Động vật" exists at N5 AND N2 — same theme, harder words. */
+type Cat = { theme: string; icon: string; tier: 1 | 2 | 3 };
+
+// Dictionary-style coverage: the themes a learner actually meets in daily life,
+// not a token sample. Order within a tier is the display order.
 const CORE: Cat[] = [
-  { theme: 'Chào hỏi & giao tiếp', icon: '👋' },
-  { theme: 'Gia đình & con người', icon: '👪' },
-  { theme: 'Số đếm & thời gian', icon: '🕐' },
-  { theme: 'Đồ ăn & thức uống', icon: '🍜' },
-  { theme: 'Nhà cửa & đồ vật', icon: '🏠' },
-  { theme: 'Cơ thể & sức khoẻ', icon: '🩺' },
-  { theme: 'Mua sắm & tiền bạc', icon: '🛒' },
-  { theme: 'Đi lại & phương hướng', icon: '🚆' },
-  { theme: 'Thời tiết & thiên nhiên', icon: '🌤️' },
-  { theme: 'Học tập & trường lớp', icon: '📚' },
-  { theme: 'Công việc & nghề nghiệp', icon: '💼' },
-  { theme: 'Sở thích & giải trí', icon: '🎨' },
-  { theme: 'Cảm xúc & tính cách', icon: '😊' },
-  { theme: 'Xã hội & tin tức', icon: '📰' },
-  { theme: 'Kinh tế & kinh doanh', icon: '📈' },
-  { theme: 'Khoa học & công nghệ', icon: '🔬' },
-  { theme: 'Môi trường & xã hội', icon: '🌍' },
-  { theme: 'Văn hoá & nghệ thuật', icon: '🎭' },
+  // ── tier 1 — mọi cấp đều có, kể cả sơ cấp ──
+  { theme: 'Chào hỏi & giao tiếp', icon: '👋', tier: 1 },
+  { theme: 'Gia đình & con người', icon: '👪', tier: 1 },
+  { theme: 'Số đếm & thời gian', icon: '🕐', tier: 1 },
+  { theme: 'Ngày tháng & lịch', icon: '📅', tier: 1 },
+  { theme: 'Đồ ăn & thức uống', icon: '🍜', tier: 1 },
+  { theme: 'Rau củ & trái cây', icon: '🍎', tier: 1 },
+  { theme: 'Động vật', icon: '🐶', tier: 1 },
+  { theme: 'Cây cối & hoa lá', icon: '🌳', tier: 1 },
+  { theme: 'Côn trùng & sinh vật nhỏ', icon: '🐝', tier: 1 },
+  { theme: 'Nhà cửa & đồ vật', icon: '🏠', tier: 1 },
+  { theme: 'Nhà bếp & nấu ăn', icon: '🍳', tier: 1 },
+  { theme: 'Quần áo & phụ kiện', icon: '👕', tier: 1 },
+  { theme: 'Đồ dùng cá nhân', icon: '🧴', tier: 1 },
+  { theme: 'Cơ thể & sức khoẻ', icon: '🩺', tier: 1 },
+  { theme: 'Màu sắc & hình dạng', icon: '🎨', tier: 1 },
+  { theme: 'Mua sắm & tiền bạc', icon: '🛒', tier: 1 },
+  { theme: 'Đi lại & phương hướng', icon: '🚆', tier: 1 },
+  { theme: 'Thời tiết & mùa', icon: '🌤️', tier: 1 },
+  { theme: 'Học tập & trường lớp', icon: '📚', tier: 1 },
+  { theme: 'Nghề nghiệp', icon: '💼', tier: 1 },
+  { theme: 'Sở thích & giải trí', icon: '🎮', tier: 1 },
+  { theme: 'Cảm xúc & tính cách', icon: '😊', tier: 1 },
+  { theme: 'Bạn bè & quan hệ', icon: '🤝', tier: 1 },
+  { theme: 'Thành phố & địa điểm', icon: '🏙️', tier: 1 },
+  { theme: 'Điện thoại & internet', icon: '📱', tier: 1 },
+  { theme: 'Động từ thông dụng hằng ngày', icon: '🏃', tier: 1 },
+  { theme: 'Tính từ mô tả thường gặp', icon: '🔤', tier: 1 },
+  // ── tier 2 — tình huống thực tế, từ sơ-trung cấp trở lên ──
+  { theme: 'Nhà hàng & gọi món', icon: '🍽️', tier: 2 },
+  { theme: 'Du lịch & khách sạn', icon: '✈️', tier: 2 },
+  { theme: 'Giao thông & phương tiện', icon: '🚗', tier: 2 },
+  { theme: 'Bệnh viện & khám bệnh', icon: '🏥', tier: 2 },
+  { theme: 'Ngân hàng & thủ tục', icon: '🏦', tier: 2 },
+  { theme: 'Bưu điện & hành chính', icon: '📮', tier: 2 },
+  { theme: 'Nhà ở & thuê nhà', icon: '🔑', tier: 2 },
+  { theme: 'Thể thao', icon: '⚽', tier: 2 },
+  { theme: 'Âm nhạc & phim ảnh', icon: '🎬', tier: 2 },
+  { theme: 'Lễ hội & phong tục', icon: '🎊', tier: 2 },
+  { theme: 'Ẩm thực & đặc sản', icon: '🍱', tier: 2 },
+  { theme: 'Công việc & văn phòng', icon: '🏢', tier: 2 },
+  { theme: 'Phỏng vấn & xin việc', icon: '📝', tier: 2 },
+  { theme: 'Thiên nhiên & địa lý', icon: '🏔️', tier: 2 },
+  { theme: 'Biển cả & sông nước', icon: '🌊', tier: 2 },
+  { theme: 'Nông nghiệp & đồng quê', icon: '🌾', tier: 2 },
+  { theme: 'Xã hội & tin tức', icon: '📰', tier: 2 },
+  { theme: 'Dịch vụ & sửa chữa', icon: '🧾', tier: 2 },
+  { theme: 'An toàn & khẩn cấp', icon: '🚨', tier: 2 },
+  { theme: 'Trạng từ & liên từ', icon: '🔗', tier: 2 },
+  // ── tier 3 — trừu tượng & chuyên sâu, từ trung cấp trở lên ──
+  { theme: 'Kinh tế & kinh doanh', icon: '📈', tier: 3 },
+  { theme: 'Tài chính & đầu tư', icon: '💰', tier: 3 },
+  { theme: 'Khoa học & công nghệ', icon: '🔬', tier: 3 },
+  { theme: 'Y học & sinh học', icon: '🧬', tier: 3 },
+  { theme: 'Vũ trụ & thiên văn', icon: '🔭', tier: 3 },
+  { theme: 'Môi trường & khí hậu', icon: '🌍', tier: 3 },
+  { theme: 'Chính trị & pháp luật', icon: '⚖️', tier: 3 },
+  { theme: 'Lịch sử & địa danh', icon: '🏛️', tier: 3 },
+  { theme: 'Văn hoá & nghệ thuật', icon: '🎭', tier: 3 },
+  { theme: 'Văn học & thành ngữ', icon: '📖', tier: 3 },
+  { theme: 'Tâm lý & hành vi', icon: '🧠', tier: 3 },
+  { theme: 'Giáo dục & nghiên cứu', icon: '🎓', tier: 3 },
+  { theme: 'Truyền thông & quảng cáo', icon: '📢', tier: 3 },
+  { theme: 'Công nghiệp & sản xuất', icon: '🏭', tier: 3 },
+  { theme: 'Triết học & tư tưởng', icon: '💭', tier: 3 },
 ];
 
-// How many themes (from the top of CORE) each level gets — grows with level.
-const PER_LEVEL_THEMES: Record<string, number> = {
+// Highest theme tier each level receives (level 1 = concrete only; mid+ = all).
+const LEVEL_TIER: Record<string, 1 | 2 | 3> = {
   // JLPT
-  N5: 8, N4: 10, N3: 12, N2: 14, N1: 16,
+  N5: 1, N4: 2, N3: 3, N2: 3, N1: 3,
   // CEFR
-  A1: 8, A2: 10, B1: 12, B2: 14, C1: 16, C2: 18,
+  A1: 1, A2: 2, B1: 3, B2: 3, C1: 3, C2: 3,
   // HSK
-  HSK1: 6, HSK2: 8, HSK3: 10, HSK4: 12, HSK5: 14, HSK6: 16,
+  HSK1: 1, HSK2: 2, HSK3: 3, HSK4: 3, HSK5: 3, HSK6: 3,
 };
 
+// Full ladders — these must match the roadmap v2 levels (EN→C2, JA→N1, ZH→HSK6),
+// otherwise a roadmap node has no categories to bind to.
 const LANG_LEVELS: Record<string, string[]> = {
-  ja: ['N5', 'N4', 'N3', 'N2'],
-  en: ['A1', 'A2', 'B1', 'B2', 'C1'],
-  zh: ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5'],
+  ja: ['N5', 'N4', 'N3', 'N2', 'N1'],
+  en: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'],
+  zh: ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6'],
 };
 
 async function main() {
@@ -62,8 +115,8 @@ async function main() {
     langs++;
     let order = 0;
     for (const level of levels) {
-      const n = PER_LEVEL_THEMES[level] ?? 10;
-      for (const cat of CORE.slice(0, n)) {
+      const maxTier = LEVEL_TIER[level] ?? 3;
+      for (const cat of CORE.filter((c) => c.tier <= maxTier)) {
         const name = `${level} · ${cat.theme}`;
         const existing = await prisma.langVocabCategory.findFirst({
           where: { languageId: lang.id, name }, select: { id: true },
@@ -78,7 +131,7 @@ async function main() {
         order++;
       }
     }
-    console.log(`[catalog] ${code}: ${levels.length} levels → categories ensured`);
+    console.log(`[catalog] ${code}: ${levels.length} levels → ${order} categories ensured`);
   }
   console.log(`[catalog] DONE langs=${langs} created=${created} updated=${updated}`);
 }

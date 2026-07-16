@@ -22,9 +22,10 @@ import {
   EyeOff,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { adminTechTrendsApi, type AdminTechTrendArticle } from '@/lib/api';
+import { adminTechTrendsApi, type AdminTechTrendArticle, type AiGeneratedArticle } from '@/lib/api';
 import type { Category, ArticleCodeBlock } from '@/app/tech-trends/types';
 import TechArticleEditor from '@/components/tech-trends/TechArticleEditor';
+import AiAssistPanel from '@/components/tech-trends/AiAssistPanel';
 
 const CATEGORIES: Category[] = ['TechNews', 'FixBug', 'Experience', 'Interviews'];
 
@@ -609,6 +610,41 @@ function ArticleFormModal({
     setForm((f) => ({ ...f, [key]: value }));
   };
 
+  // Apply an AI-generated article onto the form. Fills every field the
+  // model returned (including the FixBug code block) so the admin can
+  // review + tweak, then Save through the normal path.
+  const applyAiArticle = (a: AiGeneratedArticle) => {
+    setForm((f) => ({
+      ...f,
+      title: a.title || f.title,
+      summary: a.summary || f.summary,
+      bodyMdx: a.bodyMdx || f.bodyMdx,
+      tagsCsv: a.tags?.length ? a.tags.join(', ') : f.tagsCsv,
+      readTimeMin: a.readTimeMin || f.readTimeMin,
+      coverEmoji: a.coverEmoji || f.coverEmoji,
+      category: (a.category as Category) || f.category,
+      ...(a.codeBlock
+        ? {
+            hasCodeBlock: true,
+            codeLang: a.codeBlock.before.lang || 'ts',
+            beforeCode: a.codeBlock.before.lines.join('\n'),
+            afterCode: a.codeBlock.after.lines.join('\n'),
+            takeaway: a.codeBlock.takeaway,
+          }
+        : {}),
+    }));
+  };
+
+  const applyAiEnrich = (e: { summary: string; tags: string[]; readTimeMin: number; coverEmoji: string }) => {
+    setForm((f) => ({
+      ...f,
+      summary: e.summary || f.summary,
+      tagsCsv: e.tags?.length ? e.tags.join(', ') : f.tagsCsv,
+      readTimeMin: e.readTimeMin || f.readTimeMin,
+      coverEmoji: e.coverEmoji || f.coverEmoji,
+    }));
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -647,6 +683,16 @@ function ArticleFormModal({
 
         {/* Body */}
         <div className="px-6 py-5 max-h-[70vh] overflow-y-auto space-y-5">
+          {/* AI authoring assistant */}
+          <AiAssistPanel
+            category={form.category}
+            currentTitle={form.title}
+            currentBody={form.bodyMdx}
+            onApplyArticle={applyAiArticle}
+            onApplyEnrich={applyAiEnrich}
+            onApplyBody={(md) => update('bodyMdx', md)}
+          />
+
           {/* Title + summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2 space-y-3">

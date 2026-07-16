@@ -3073,7 +3073,45 @@ export const adminTechTrendsApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
+
+  // ── AI authoring (admin-only). Reuses the interview LLM
+  //    gateway server-side — no new env/dep. Each call degrades
+  //    to a 503 (AI_UNAVAILABLE) when no key / kill switch. ──
+  aiStatus() {
+    return api.get<{ data: { available: boolean } }>('/admin/tech-trends/ai/status');
+  },
+  aiDraft(payload: { topic: string; category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews'; notes?: string }) {
+    return api.post<{ data: AiGeneratedArticle }>('/admin/tech-trends/ai/draft', payload);
+  },
+  aiFixBug(payload: { errorText: string; context?: string }) {
+    return api.post<{ data: AiGeneratedArticle }>('/admin/tech-trends/ai/fixbug', payload);
+  },
+  aiEnrich(payload: { title: string; bodyMdx: string; category?: string }) {
+    return api.post<{
+      data: { summary: string; tags: string[]; metaDescription: string; readTimeMin: number; coverEmoji: string };
+    }>('/admin/tech-trends/ai/enrich', payload);
+  },
+  aiRewrite(payload: { bodyMdx: string; instruction: string }) {
+    return api.post<{ data: { bodyMdx: string } }>('/admin/tech-trends/ai/rewrite', payload);
+  },
 };
+
+// Shape returned by the AI draft / fixbug endpoints. `codeBlock`
+// is only present for FixBug output.
+export interface AiGeneratedArticle {
+  title: string;
+  summary: string;
+  bodyMdx: string;
+  tags: string[];
+  readTimeMin: number;
+  coverEmoji: string;
+  category?: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+  codeBlock?: {
+    before: { lang: string; lines: string[] };
+    after: { lang: string; lines: string[] };
+    takeaway: string;
+  } | null;
+}
 
 // ─── Hub — Personal Bookmark Manager ───────────────────────────────
 //

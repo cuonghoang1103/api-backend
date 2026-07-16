@@ -5,6 +5,15 @@ import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import { renderArticle } from '../services/techTrendsRenderer.service.js';
+import {
+  generateDraft,
+  structureFixBug,
+  enrichMeta,
+  rewriteBody,
+  aiStatus,
+  TECH_TREND_CATEGORIES,
+  type TechTrendCategory,
+} from '../services/techTrends/ai.service.js';
 
 /**
  * Tech Trends & Insights — public + admin REST API
@@ -594,6 +603,85 @@ adminRouter.post('/:id/unpublish', async (req, res: Response<ApiResponse>, next)
       include: authorInclude,
     });
     res.json({ success: true, data: updated });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── Admin AI authoring endpoints ──────────────────────────────────────
+// All inherit the router-level `authenticate + requireAdmin('ROLE_ADMIN')`.
+// They REUSE the interview LLM gateway (no new env/dep/migration) and
+// degrade cleanly to a 503 when AI is unavailable.
+
+function adminUserId(req: unknown): number | null {
+  return (req as { userId?: number }).userId ?? null;
+}
+
+// GET /api/v1/admin/tech-trends/ai/status — lets the UI show/hide AI controls.
+adminRouter.get('/ai/status', (_req, res: Response<ApiResponse>) => {
+  res.json({ success: true, data: aiStatus() });
+});
+
+// POST /api/v1/admin/tech-trends/ai/draft — topic + notes → full article draft.
+adminRouter.post('/ai/draft', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { topic, category, notes } = req.body as Record<string, unknown>;
+    const cat = TECH_TREND_CATEGORIES.includes(category as TechTrendCategory)
+      ? (category as TechTrendCategory)
+      : 'TechNews';
+    const data = await generateDraft({
+      topic: String(topic ?? ''),
+      category: cat,
+      notes: notes ? String(notes) : undefined,
+      userId: adminUserId(req),
+    });
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/admin/tech-trends/ai/fixbug — error/trace → #FixBug post-mortem.
+adminRouter.post('/ai/fixbug', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { errorText, context } = req.body as Record<string, unknown>;
+    const data = await structureFixBug({
+      errorText: String(errorText ?? ''),
+      context: context ? String(context) : undefined,
+      userId: adminUserId(req),
+    });
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/admin/tech-trends/ai/enrich — body → summary + tags + SEO meta.
+adminRouter.post('/ai/enrich', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { title, bodyMdx, category } = req.body as Record<string, unknown>;
+    const data = await enrichMeta({
+      title: String(title ?? ''),
+      bodyMdx: String(bodyMdx ?? ''),
+      category: category ? String(category) : undefined,
+      userId: adminUserId(req),
+    });
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/admin/tech-trends/ai/rewrite — instruction → polished body.
+adminRouter.post('/ai/rewrite', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { bodyMdx, instruction } = req.body as Record<string, unknown>;
+    const data = await rewriteBody({
+      bodyMdx: String(bodyMdx ?? ''),
+      instruction: String(instruction ?? ''),
+      userId: adminUserId(req),
+    });
+    res.json({ success: true, data });
   } catch (error) {
     next(error);
   }

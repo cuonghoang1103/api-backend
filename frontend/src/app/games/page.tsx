@@ -1,66 +1,88 @@
-import type { Metadata } from 'next'
-import GamesClient from './GamesClient';
-import GamesBackground from '@/components/games/GamesBackground';
-import { GAMES_DATA } from '@/types/games';
+import type { Metadata } from 'next';
+import { getServerApiBaseUrl } from '@/lib/server-api';
+import type { GameDto, GameCategoryDto, GameStats, GameLeaderEntry } from '@/lib/api';
+import GamesPortalClient from './GamesPortalClient';
+
+/**
+ * /games — the Playground portal.
+ *
+ * Server component: fetches the catalogue, categories, stats and the
+ * leaderboard teaser from the API at request time, then hands them to a client
+ * component that owns filtering/search/view-toggle (client-side over the
+ * already-fetched list, URL-synced so filters are shareable).
+ *
+ * Replaces the old static GAMES_DATA array — the catalogue is now admin-managed
+ * in /admin/games.
+ *
+ * `force-dynamic` keeps these fetches out of `npm run build` (the backend isn't
+ * running then). Every fetch is fail-open: a down API renders an empty portal
+ * rather than a 500.
+ */
+export const dynamic = 'force-dynamic';
+
+const SITE_URL = 'https://cuongthai.com';
 
 export const metadata: Metadata = {
-  title: 'Games — Playground',
-  description: 'Play free games built with HTML5 Canvas, React & TypeScript.',
-  alternates: {
-    canonical: 'https://cuongthai.com/games',
+  title: 'Playground — Games',
+  description:
+    'Original browser games built from scratch with HTML5 Canvas, React and TypeScript. Play free, no install.',
+  alternates: { canonical: `${SITE_URL}/games` },
+  openGraph: {
+    title: 'Playground — Games | CuongThai',
+    description: 'Original browser games built with Canvas, React & TypeScript. Play free.',
+    url: `${SITE_URL}/games`,
+    type: 'website',
+    images: ['/opengraph-image'],
   },
 };
 
+async function fetchJson<T>(path: string, fallback: T): Promise<T> {
+  try {
+    const res = await fetch(`${getServerApiBaseUrl()}/api/v1${path}`, {
+      headers: { accept: 'application/json' },
+      cache: 'no-store',
+      signal: AbortSignal.timeout(4000),
+    });
+    if (!res.ok) return fallback;
+    const json = await res.json();
+    return (json?.data as T) ?? fallback;
+  } catch {
+    return fallback; // fail-open — the portal still renders
+  }
+}
+
 export default async function GamesPage() {
-  const games = GAMES_DATA;
+  const [games, categories, stats, leaders] = await Promise.all([
+    fetchJson<GameDto[]>('/games', []),
+    fetchJson<GameCategoryDto[]>('/games/categories', []),
+    fetchJson<GameStats>('/games/stats', { games: 0, categories: 0, totalPlays: 0 }),
+    fetchJson<GameLeaderEntry[]>('/games/leaderboard?limit=5', []),
+  ]);
+
+  // JSON-LD: tells Google this is a game hub, not a generic list.
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Playground — Games',
+    url: `${SITE_URL}/games`,
+    numberOfItems: games.length,
+    hasPart: games.slice(0, 20).map((g) => ({
+      '@type': 'VideoGame',
+      name: g.title,
+      url: `${SITE_URL}/games/${g.slug}`,
+      applicationCategory: 'Game',
+      operatingSystem: 'Web browser',
+      genre: g.category?.name,
+    })),
+  };
 
   return (
-    <div className="min-h-screen pt-20 pb-20" style={{ background: '#020110' }}>
-      <GamesBackground />
-
-      {/* Hero */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-violet/10 border border-neon-violet/20 mb-6">
-            <span className="w-2 h-2 bg-neon-violet rounded-full animate-pulse" />
-            <span className="text-xs font-mono font-medium text-neon-violet tracking-widest uppercase">
-              Game Zone
-            </span>
-          </div>
-
-          {/* Title */}
-          <h1 className="font-heading font-black text-5xl md:text-6xl lg:text-7xl text-text-primary mb-4 leading-none">
-            Playground
-          </h1>
-          <p className="font-heading text-2xl md:text-3xl text-text-muted mb-4">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-neon-indigo via-neon-violet to-neon-fuchsia">
-              Games
-            </span>{' '}
-            by CuongHoang
-          </p>
-          <p className="text-base text-text-secondary max-w-xl">
-            Mini games built with HTML5 Canvas, React & TypeScript. Play for fun,
-            challenge yourself, or just feed a break.
-          </p>
-
-          {/* Stats */}
-          <div className="flex items-center gap-6 mt-8">
-            {[
-              { label: 'Games', value: games.length },
-              { label: 'Playable', value: games.filter((g) => g.isPlayable).length },
-              { label: 'Categories', value: new Set(games.map((g) => g.category)).size },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="font-heading font-bold text-2xl text-neon-violet">{stat.value}</div>
-                <div className="text-xs text-text-muted">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <GamesClient games={games} />
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+      />
+      <GamesPortalClient games={games} categories={categories} stats={stats} leaders={leaders} />
+    </>
   );
 }

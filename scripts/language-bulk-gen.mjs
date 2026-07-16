@@ -45,8 +45,12 @@ const shown = (v) => (v === Infinity ? '∞' : v);
 const BATCH = 12;
 
 // ── Token-window throttle (shared with interview via interviewLLMCallLog) ──
+// `--budget 0` disables it: the log counts every call regardless of which key
+// served it, so a shard running on a SEPARATE provider/quota would otherwise
+// inflate the shared window and put the main-key shards to sleep for nothing.
 const WINDOW_MS = 5 * 60 * 60 * 1000;
 const BUDGET = num('--budget', 3_200_000);
+const THROTTLE = BUDGET > 0;
 async function windowUsed() {
   const a = await prisma.interviewLLMCallLog.aggregate({
     where: { createdAt: { gte: new Date(Date.now() - WINDOW_MS) }, success: true }, _sum: { inputTokens: true, outputTokens: true },
@@ -54,6 +58,7 @@ async function windowUsed() {
   return (a._sum.inputTokens ?? 0) + (a._sum.outputTokens ?? 0);
 }
 async function waitBudget() {
+  if (!THROTTLE) return; // separate provider/quota — nothing to protect here
   for (;;) {
     if (await windowUsed() < BUDGET) return;
     const oldest = await prisma.interviewLLMCallLog.findFirst({ where: { createdAt: { gte: new Date(Date.now() - WINDOW_MS) }, success: true }, orderBy: { createdAt: 'asc' }, select: { createdAt: true } });

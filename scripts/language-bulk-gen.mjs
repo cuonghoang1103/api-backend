@@ -65,25 +65,30 @@ async function waitBudget() {
 
 let stop = false, totalCreated = 0, fails = 0;
 const isQuotaErr = (m) => /hạn mức|AI đang tắt|quota/i.test(String(m));
+// adminGenerate collapses EVERY llmComplete failure (timeout, 524, overload)
+// into one "đang bận" message, so that string is a transient error, not a dry
+// well. Telling the two apart is what stops a blip from ending a category.
+const isTransientErr = (m) => /đang bận|524|529|timeout|ETIMEDOUT|ECONNRESET|fetch failed|overloaded/i.test(String(m));
 
-/** One generate→commit round for a section. Returns #created. */
+/** One generate→commit round. Returns {created, kind}:
+ *  'ok' new rows | 'dry' AI found nothing new | 'transient' retryable | 'quota' stop. */
 async function round(langCode, section, opts) {
   await waitBudget();
   try {
     const count = Math.min(BATCH, opts.want);
     const preview = await adminGenerate(ADMIN, { languageCode: langCode, section, count, level: opts.level, topic: opts.topic, categoryId: opts.categoryId, articleId: opts.articleId });
     const items = preview?.items?.map((p) => p.data) ?? [];
-    if (!items.length) return 0;
+    if (!items.length) return { created: 0, kind: 'dry' };
     const commit = await adminCommit(ADMIN, { languageCode: langCode, section, items, level: opts.level, categoryId: opts.categoryId, articleId: opts.articleId });
     totalCreated += commit.created;
-    return commit.created;
+    return { created: commit.created, kind: commit.created > 0 ? 'ok' : 'dry' };
   } catch (e) {
     fails++;
     const msg = e?.message ?? e;
     console.error(`    [!] ${langCode}/${section}/${opts.label}: ${String(msg).slice(0, 120)}`);
-    if (isQuotaErr(msg)) { stop = true; return 0; }
-    if (/524|529|timeout|ETIMEDOUT|ECONNRESET|fetch failed|overloaded/i.test(String(msg))) { await new Promise((r) => setTimeout(r, 90_000)); }
-    return 0;
+    if (isQuotaErr(msg)) { stop = true; return { created: 0, kind: 'quota' }; }
+    if (isTransientErr(msg)) { await new Promise((r) => setTimeout(r, 60_000)); return { created: 0, kind: 'transient' }; }
+    return { created: 0, kind: 'dry' };
   }
 }
 
@@ -92,13 +97,20 @@ async function round(langCode, section, opts) {
  *  guard only bounds the uncapped case so one unit can't loop forever. */
 async function fill(langCode, section, unit, target, countFn) {
   let have = await countFn();
-  let guard = 0;
+  let guard = 0, softFails = 0;
   const maxRounds = target === Infinity ? 60 : 8;
   while (have < target && !stop && guard < maxRounds) {
     guard++;
-    const made = await round(langCode, section, { ...unit, want: target - have });
-    if (made === 0 && !stop) break; // dry well / repeated dupes
-    have += made;
+    const { created, kind } = await round(langCode, section, { ...unit, want: target - have });
+    if (kind === 'transient') {
+      // round() already backed off; retry a few times before leaving the unit,
+      // otherwise a gateway blip reads as "exhausted" and skips the category.
+      if (++softFails >= 3) { console.log(`    ↳ bỏ qua sau 3 lần lỗi tạm thời`); break; }
+      continue;
+    }
+    softFails = 0;
+    if (kind === 'dry') break; // AI genuinely has nothing new for this unit
+    have += created;
   }
   return have;
 }
@@ -158,7 +170,7 @@ for (const code of LANGS) {
       if (DRY) { console.log(`  would fill reading ${level}`); continue; }
       // reading-article generates whole passages (capped 4/call); loop to target.
       let have = await prisma.langReadingArticle.count({ where: { languageId: lang.id, level } });
-      let guard = 0;
+      let guard = 0, softFails = 0;
       const maxRounds = T.reading === Infinity ? 20 : 4;
       while (have < T.reading && !stop && guard < maxRounds) {
         guard++;
@@ -170,7 +182,15 @@ for (const code of LANGS) {
           const commit = await adminCommit(ADMIN, { languageCode: code, section: 'reading-article', items, level });
           totalCreated += commit.created; have += commit.created;
           if (commit.created === 0) break;
-        } catch (e) { fails++; if (isQuotaErr(e?.message)) { stop = true; } break; }
+          softFails = 0;
+        } catch (e) {
+          fails++;
+          const msg = e?.message ?? e;
+          console.error(`    [!] ${code}/reading/${level}: ${String(msg).slice(0, 120)}`);
+          if (isQuotaErr(msg)) { stop = true; break; }
+          if (isTransientErr(msg) && ++softFails < 3) { await new Promise((r) => setTimeout(r, 60_000)); continue; }
+          break;
+        }
       }
       console.log(`  reading ${level}: ${have}/${shown(T.reading)}`);
     }

@@ -223,7 +223,7 @@ function BlogContent() {
     <>
       {/* Search & Filters */}
       <section
-        className="sticky top-16 z-30 border-b"
+        className="sticky top-[var(--app-nav-h)] z-30 border-b"
         style={{
           background: 'rgba(10,10,15,0.85)',
           backdropFilter: 'blur(20px)',

@@ -90,7 +90,7 @@ export default function ExpensesPage() {
         <div className="space-y-4">
           {days.map((d) => (
             <div key={d.date}>
-              <div className="sticky top-16 z-10 mb-1.5 flex items-center justify-between bg-[var(--bg-primary)]/80 py-1 backdrop-blur">
+              <div className="sticky top-[var(--app-nav-h)] z-10 mb-1.5 flex items-center justify-between bg-[var(--bg-primary)]/80 py-1 backdrop-blur">
                 <span className="text-sm font-medium text-text-secondary">{d.date}</span>
                 <span className="text-sm font-semibold text-neon-orange tabular-nums">{formatVnd(d.total)}</span>
               </div>

@@ -700,9 +700,12 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         </div>
       </div>
 
-      {/* Sticky tab bar — sibling of the header card so it stays pinned while the feed scrolls
-          (top-16 clears the fixed 64px navbar; z-30 sits below the navbar's z-40) */}
-      <div className="sticky top-16 z-30 mt-2 rounded-xl border border-darkborder bg-darkcard/90 backdrop-blur supports-[backdrop-filter]:bg-darkcard/75">
+      {/* Sticky tab bar — sibling of the header card so it stays pinned while the feed scrolls.
+          --app-nav-h is the navbar's real height: 64px, or 64 + the notch on an installed PWA.
+          A sticky element resolves `top` against the scrollport, so .app-main's safe-area
+          padding never reaches it and a hard top-16 parks it behind the navbar. z-30 < the
+          navbar's z-40, so if it lands too high the navbar wins and this bar disappears. */}
+      <div className="sticky top-[var(--app-nav-h)] z-30 mt-2 rounded-xl border border-darkborder bg-darkcard/90 backdrop-blur supports-[backdrop-filter]:bg-darkcard/75">
         <div className="flex gap-1 overflow-x-auto scrollbar-hide px-1.5" role="tablist">
           {mainTabs.map((tab) => (
             <button key={tab.id} role="tab" aria-selected={mainTab === tab.id} onClick={() => setMainTab(tab.id)}

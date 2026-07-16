@@ -122,7 +122,7 @@ export default function ChatSidebar({ onDeleteSession, onSelectSession }: ChatSi
         initial={false}
         animate={{ width: expanded ? SIDEBAR_EXPANDED_WIDTH : SIDEBAR_COLLAPSED_WIDTH }}
         transition={{ type: 'spring' as const, stiffness: 320, damping: 32, mass: 0.9 }}
-        className="fixed top-16 left-0 bottom-0 z-[51] flex flex-col
+        className="fixed top-[var(--app-nav-h)] left-0 bottom-0 z-[51] flex flex-col
           bg-[#0d1117]/[0.97] backdrop-blur-xl
           border-r border-[#22d3ee]/10
           shadow-[4px_0_32px_rgba(0,0,0,0.4)] overflow-hidden"

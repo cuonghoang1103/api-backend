@@ -160,7 +160,7 @@ export default function GamesPortalClient({ games, categories, stats, leaders }:
         )}
 
         {/* ── Filter bar (sticky) ─────────────────────── */}
-        <div className="sticky top-16 z-30 -mx-4 px-4 py-3 mb-6 bg-[#020110]/85 backdrop-blur-md border-b border-darkborder/60">
+        <div className="sticky top-[var(--app-nav-h)] z-30 -mx-4 px-4 py-3 mb-6 bg-[#020110]/85 backdrop-blur-md border-b border-darkborder/60">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />

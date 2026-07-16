@@ -270,7 +270,7 @@ export async function explainConcept(
   let result: ExplainResult;
   try {
     const res = await llmComplete({
-      step: 'interview', // cheap/fast model (haiku) — enough for explanations
+      step: 'interview', feature: 'language', // cheap/fast model (haiku) — enough for explanations
       system,
       messages: [{ role: 'user', content: user }],
       maxTokens: 1200,
@@ -355,7 +355,7 @@ export async function scorePronunciation(
   let parsed: Record<string, unknown> = {};
   try {
     const res = await llmComplete({
-      step: 'interview',
+      step: 'interview', feature: 'language',
       system,
       messages: [{ role: 'user', content: user }],
       maxTokens: 600,
@@ -444,7 +444,7 @@ export async function generateQuiz(
   let parsed: { questions?: unknown };
   try {
     const res = await llmComplete({
-      step: 'interview',
+      step: 'interview', feature: 'language',
       system,
       messages: [{ role: 'user', content: user }],
       maxTokens: 1500,
@@ -514,7 +514,7 @@ export async function gradeAnswer(
   let parsed: Record<string, unknown> = {};
   try {
     const res = await llmComplete({
-      step: 'interview',
+      step: 'interview', feature: 'language',
       system,
       messages: [{ role: 'user', content: user }],
       maxTokens: 900,
@@ -588,7 +588,7 @@ export async function gradeWriting(
   let raw = '';
   try {
     const res = await llmComplete({
-      step: 'interview',
+      step: 'interview', feature: 'language',
       system,
       messages: [{ role: 'user', content: user }],
       maxTokens: 1900,
@@ -685,7 +685,7 @@ export async function rolePlayTurn(
   let raw = '';
   try {
     const res = await llmComplete({
-      step: 'interview',
+      step: 'interview', feature: 'language',
       system,
       messages,
       maxTokens: 800,
@@ -774,7 +774,7 @@ export async function translateText(
   let raw = '';
   try {
     const res = await llmComplete({
-      step: 'interview',
+      step: 'interview', feature: 'language',
       system,
       messages: [{ role: 'user', content: user }],
       maxTokens: 2200,
@@ -863,7 +863,7 @@ export async function grammarCheck(
   let raw = '';
   try {
     const res = await llmComplete({
-      step: 'interview',
+      step: 'interview', feature: 'language',
       system,
       messages: [{ role: 'user', content: user }],
       maxTokens: 2400,

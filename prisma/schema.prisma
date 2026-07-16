@@ -5311,6 +5311,12 @@ model InterviewLLMCallLog {
   id           Int      @id @default(autoincrement())
   userId       Int?     @map("user_id")
   sessionId    Int?     @map("session_id")
+  // Which product made the call: interview | language | cv | chat | bulk_gen.
+  // `step` only says which model tier to route to, so Interview grading and the
+  // My Language tutor both log step='interview' and were indistinguishable —
+  // there was no way to answer "which users are spending Pro AI on what".
+  // Nullable: rows written before this column existed keep their history.
+  feature      String?  @db.VarChar(24)
   step         String   @db.VarChar(40)
   provider     String   @db.VarChar(40)
   model        String   @db.VarChar(80)
@@ -5321,6 +5327,7 @@ model InterviewLLMCallLog {
   createdAt    DateTime @default(now()) @map("created_at")
 
   @@index([userId, createdAt], name: "idx_interview_llmlog_user")
+  @@index([feature, createdAt], name: "idx_interview_llmlog_feature")
   @@map("interview_llm_call_logs")
 }
 

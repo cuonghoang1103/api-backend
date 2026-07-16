@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
 import GenerationStats from '@/components/admin/GenerationStats';
+import FeatureUsers from '@/components/admin/FeatureUsers';
 import {
   MessageSquare,
   ThumbsUp,
@@ -14,9 +15,12 @@ import {
   Star,
   BarChart3,
   Sparkles,
+  BrainCircuit,
+  Languages,
+  FileText,
 } from 'lucide-react';
 
-type Tab = 'chat' | 'generation';
+type Tab = 'chat' | 'generation' | 'interview' | 'language' | 'cv';
 
 /** Two separate concerns share this page: what users ask the chatbot, and what
  *  the background generators are producing. Tabs keep each one uncluttered. */
@@ -24,6 +28,9 @@ function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
   const items: Array<{ id: Tab; label: string; icon: typeof MessageSquare }> = [
     { id: 'chat', label: 'AI Chat', icon: MessageSquare },
     { id: 'generation', label: 'AI Tạo Sinh', icon: Sparkles },
+    { id: 'interview', label: 'Phỏng vấn AI', icon: BrainCircuit },
+    { id: 'language', label: 'Ngôn ngữ AI', icon: Languages },
+    { id: 'cv', label: 'CV Builder AI', icon: FileText },
   ];
   return (
     <div className="flex gap-1.5 overflow-x-auto">
@@ -120,6 +127,15 @@ export default function AdminAIAnalyticsPage() {
       <div className="space-y-6">
         <Tabs tab={tab} setTab={setTab} />
         <GenerationStats />
+      </div>
+    );
+  }
+
+  if (tab === 'interview' || tab === 'language' || tab === 'cv') {
+    return (
+      <div className="space-y-6">
+        <Tabs tab={tab} setTab={setTab} />
+        <FeatureUsers feature={tab} />
       </div>
     );
   }

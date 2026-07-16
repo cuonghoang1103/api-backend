@@ -340,7 +340,7 @@ export async function adminGenerate(
 
   let raw = '';
   try {
-    const res = await llmComplete({ step: 'generation', system, messages: [{ role: 'user', content: user }], maxTokens, maxRetries: 1, timeoutMs: 90_000, userId });
+    const res = await llmComplete({ step: 'generation', feature: 'bulk_gen', system, messages: [{ role: 'user', content: user }], maxTokens, maxRetries: 1, timeoutMs: 90_000, userId });
     raw = res.text;
   } catch {
     throw new BadRequestError('Tạo nội dung đang bận, vui lòng thử lại sau giây lát.');

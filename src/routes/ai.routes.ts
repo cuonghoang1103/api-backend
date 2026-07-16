@@ -29,7 +29,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 import type { ChatMessageDto } from '../types/index.js';
-import { getGenStats } from '../services/genStats.service.js';
+import { getGenStats, getFeatureUsers } from '../services/genStats.service.js';
 
 const router = Router();
 
@@ -513,6 +513,21 @@ router.get('/feedback/stats', authenticate, async (_req: any, res: Response<ApiR
 router.get('/analytics/generation', authenticate, requireAdmin(), async (_req: any, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await getGenStats() });
+  } catch (err) { next(err); }
+});
+
+// ════════════════════════════════════════════════════════════════
+// ADMIN: GET /api/v1/ai/analytics/feature-users?feature=interview|language|cv
+// Who is spending Pro AI on what: per user, per feature — calls, tokens in/out,
+// cost, first/last use, and a breakdown by task. Read-only.
+// ════════════════════════════════════════════════════════════════
+router.get('/analytics/feature-users', authenticate, requireAdmin(), async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const f = String(req.query.feature ?? '');
+    if (f !== 'interview' && f !== 'language' && f !== 'cv') {
+      throw new AppError('feature must be interview | language | cv', 400, 'INVALID_FEATURE');
+    }
+    res.json({ success: true, data: await getFeatureUsers(f) });
   } catch (err) { next(err); }
 });
 

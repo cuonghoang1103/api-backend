@@ -160,9 +160,14 @@ export function isAiAvailable(): boolean {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+/** Which product spent the tokens. `step` only picks a model tier, so without
+ *  this the Interview grader and the My Language tutor were the same row. */
+export type LLMFeature = 'interview' | 'language' | 'cv' | 'chat' | 'bulk_gen';
+
 async function logLlmCall(d: {
   userId?: number | null;
   sessionId?: number | null;
+  feature?: LLMFeature | null;
   step: LLMStep;
   model: string;
   inputTokens: number;
@@ -173,6 +178,7 @@ async function logLlmCall(d: {
     data: {
       userId: d.userId ?? null,
       sessionId: d.sessionId ?? null,
+      feature: d.feature ?? null,
       step: d.step,
       provider: getProvider().name,
       model: d.model,
@@ -195,6 +201,10 @@ export async function llmComplete(opts: {
   maxTokens?: number;
   userId?: number | null;
   sessionId?: number | null;
+  /** Which product is spending the tokens. Optional so existing callers keep
+   *  compiling; unlabelled calls simply report as "không rõ" in the admin view
+   *  rather than being attributed to the wrong feature. */
+  feature?: LLMFeature | null;
   maxRetries?: number; // override — latency-sensitive callers use fewer
   timeoutMs?: number; // override per-call timeout
 }): Promise<LLMResult> {
@@ -207,7 +217,7 @@ export async function llmComplete(opts: {
     try {
       const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs });
       recordSuccess();
-      await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});
+      await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});
       return result;
     } catch (e) {
       lastErr = e;
@@ -217,7 +227,7 @@ export async function llmComplete(opts: {
   }
   recordFailure();
   // Never charge quota for a failed call → log with zero tokens.
-  await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, step: opts.step, model, inputTokens: 0, outputTokens: 0, success: false }).catch(() => {});
+  await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: 0, outputTokens: 0, success: false }).catch(() => {});
   throw lastErr;
 }
 

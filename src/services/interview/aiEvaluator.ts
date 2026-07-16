@@ -142,14 +142,14 @@ export async function evaluateAnswerWithAI(params: {
   // Latency-sensitive: the candidate is waiting on this call. Fail fast (short
   // timeout, 1 retry) and let the caller degrade to STATIC rather than hang —
   // a long/detailed answer + a slow gateway must not blow the frontend timeout.
-  const first = await llmComplete({ step: 'interview', system, messages: [{ role: 'user', content: user }], maxTokens: 2800, userId: params.userId, sessionId: params.sessionId, maxRetries: 1, timeoutMs: 45_000 });
+  const first = await llmComplete({ step: 'interview', feature: 'interview', system, messages: [{ role: 'user', content: user }], maxTokens: 2800, userId: params.userId, sessionId: params.sessionId, maxRetries: 1, timeoutMs: 45_000 });
   let ai: AiEval;
   try {
     ai = parse(first.text);
   } catch {
     // Retry once with the error appended (per spec).
     const retry = await llmComplete({
-      step: 'interview',
+      step: 'interview', feature: 'interview',
       system,
       messages: [
         { role: 'user', content: user },

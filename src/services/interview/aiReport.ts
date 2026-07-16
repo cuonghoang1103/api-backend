@@ -51,7 +51,7 @@ export async function synthesizeAiReport(params: {
   ].join('\n');
 
   try {
-    const res = await llmComplete({ step: 'report', system, messages: [{ role: 'user', content: user }], maxTokens: 4000, timeoutMs: 120_000, userId: params.userId, sessionId: params.sessionId });
+    const res = await llmComplete({ step: 'report', feature: 'interview', system, messages: [{ role: 'user', content: user }], maxTokens: 4000, timeoutMs: 120_000, userId: params.userId, sessionId: params.sessionId });
     return ReportSchema.parse(extractJson(res.text));
   } catch {
     return null; // fall back to the deterministic template report

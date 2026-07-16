@@ -64,7 +64,7 @@ export async function generateFollowup(
     : '';
   const user = `Original question:\n${turn.questionText}\n\nCandidate's answer:\n${turn.userAnswer || '(no written answer)'}${prev}`;
   const res = await llmComplete({
-    step: 'interview',
+    step: 'interview', feature: 'interview',
     system,
     messages: [{ role: 'user', content: user }],
     maxTokens: 300,
@@ -94,7 +94,7 @@ export async function assessFollowup(
     `You are a senior technical interviewer giving brief, direct coaching (2-4 sentences) on the candidate's follow-up answer: say whether it's strong, what's missing or wrong, and one concrete tip. Be encouraging but honest. Write in ${langName}. Return ONLY JSON: {"feedback": string}.`;
   const user = `Follow-up question:\n${followupQuestion}\n\nCandidate's answer:\n${answer || '(no answer)'}`;
   const res = await llmComplete({
-    step: 'interview',
+    step: 'interview', feature: 'interview',
     system,
     messages: [{ role: 'user', content: user }],
     maxTokens: 400,

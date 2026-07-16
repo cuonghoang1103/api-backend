@@ -52,6 +52,15 @@ export const interviewApi = {
     return api.post('/interview/stt', fd, { timeout: 60_000, headers: { 'Content-Type': 'multipart/form-data' } });
   },
 
+  // Project interview from a real .zip — server digests the archive in memory
+  // (junk skipped, small foundational projects read in full) and returns a
+  // Markdown digest to feed createSession({ projectMd }). Nothing is persisted.
+  projectZip: (archive: File): Res<{ digest: string; stats: { filesIncluded: number; filesSkipped: number; bytesIncluded: number; truncated: boolean; tree: string[] } }> => {
+    const fd = new FormData();
+    fd.append('archive', archive, archive.name);
+    return api.post('/interview/project-zip', fd, { timeout: 120_000, headers: { 'Content-Type': 'multipart/form-data' } });
+  },
+
   // Phase 2 — follow-up (probing) questions. Stateless AI coaching, not scored.
   generateFollowup: (id: number, order: number, previous?: string[]): Res<{ question: string }> =>
     api.post(`/interview/sessions/${id}/turns/${order}/followup`, { previous }, { timeout: 40_000 }),

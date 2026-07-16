@@ -31,6 +31,10 @@ import type { InterviewEngineMode } from '@prisma/client';
 
 const MAX_QUESTIONS = 15;
 const DEFAULT_QUESTIONS = 6;
+// Project interviews generate per-round in parallel (each round gets its own
+// full token budget), so they can safely go deeper than bank sessions.
+const MAX_PROJECT_QUESTIONS = 16;
+const DEFAULT_PROJECT_QUESTIONS = 12;
 
 function redFlagPenalty(): number {
   const v = Number(process.env.SCORE_REDFLAG_PENALTY);
@@ -146,19 +150,24 @@ export async function createSession(
     // polls getSessionState until the turns are ready (or a genError is set).
     const kind: 'project' | 'personalized' = wantsProject ? 'project' : 'personalized';
     if (!allowAi) throw new BadRequestError(`${wantsProject ? 'Phỏng vấn theo project' : 'Cá nhân hoá theo CV/JD'} dành cho tài khoản Pro/Max.`);
+    // Project sessions ignore the bank-based cap: the wizard slider is sized by
+    // bank question counts, which are irrelevant here. Re-clamp generously.
+    const aiNumQuestions = wantsProject
+      ? Math.min(MAX_PROJECT_QUESTIONS, Math.max(4, Number(body.numQuestions) || DEFAULT_PROJECT_QUESTIONS))
+      : numQuestions;
     if (!isAiAvailable()) throw new BadRequestError('AI hiện không khả dụng — thử lại sau.');
     const shell = await prisma.interviewSession.create({
       data: {
         userId, trackId, companyProfileId, level, mode: 'TEXT',
         engineMode: resolveEngineMode('FULL_AI', allowAi),
         language, status: 'IN_PROGRESS', focusedMode: Boolean(body.focusedMode),
-        config: { generating: true, kind, requested: numQuestions } as never,
+        config: { generating: true, kind, requested: aiNumQuestions } as never,
         startedAt: new Date(),
       },
       include: { track: true },
     });
     // Fire-and-forget — never await (that's the whole point).
-    void populateAiSession(shell.id, { userId, kind, cv, jd, projectMd, trackName: track.name, level, language, numQuestions })
+    void populateAiSession(shell.id, { userId, kind, cv, jd, projectMd, trackName: track.name, level, language, numQuestions: aiNumQuestions })
       .catch(() => { void markGenError(shell.id); });
     return {
       id: shell.id,

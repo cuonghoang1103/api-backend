@@ -56,6 +56,8 @@ export default function InterviewSetupPage() {
   const [useProject, setUseProject] = useState(false);
   const [projectMd, setProjectMd] = useState('');
   const [projectName, setProjectName] = useState('');
+  const [zipBusy, setZipBusy] = useState(false);
+  const [zipStats, setZipStats] = useState<{ filesIncluded: number; filesSkipped: number; bytesIncluded: number; truncated: boolean } | null>(null);
   const [starting, setStarting] = useState(false);
   const [needLogin, setNeedLogin] = useState(false);
 
@@ -140,16 +142,26 @@ export default function InterviewSetupPage() {
   };
   const toggleTopic = (id: number) => setTopicIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
+  // Project mode generates questions 100% from the uploaded code — the track is
+  // only a history label there, so we auto-pick one instead of blocking start.
+  const projectReady = useProject && !!projectMd.trim();
   const start = async () => {
-    if (!tracks.length) { toast.warning(t('tPickTrack')); return; }
+    let effTracks = tracks;
+    if (!effTracks.length) {
+      if (projectReady) {
+        const fallback = domain?.tracks[0] ?? tax?.domains.flatMap((d) => d.tracks)[0];
+        if (fallback) effTracks = [fallback];
+      }
+      if (!effTracks.length) { toast.warning(t('tPickTrack')); return; }
+    }
     setStarting(true);
     try {
-      const useProj = useProject && projectMd.trim();
+      const useProj = projectReady;
       const usePersonalize = !useProj && personalize && (cv.trim() || jd.trim());
       const res = await interviewApi.createSession({
-        trackId: tracks[0].id, trackIds: tracks.map((tr) => tr.id), level, companyProfileId: company?.id ?? null, language, numQuestions, focusedMode,
+        trackId: effTracks[0].id, trackIds: effTracks.map((tr) => tr.id), level, companyProfileId: company?.id ?? null, language, numQuestions, focusedMode,
         engineMode: tax?.aiAvailable ? engineMode : 'STATIC',
-        ...(topicIds.length ? { topicIds } : {}),
+        ...(topicIds.length && !useProj ? { topicIds } : {}),
         ...(useProj ? { projectMd: projectMd.trim() } : usePersonalize ? { cv: cv.trim() || undefined, jd: jd.trim() || undefined } : {}),
       });
       router.push(`/interview/session/${res.data.data.id}`);
@@ -232,6 +244,7 @@ export default function InterviewSetupPage() {
 
             {/* Track */}
             <Section step={nextStep()} title={t('stepTrack')}>
+              {projectReady && <p className="text-xs text-amber-300/80 mb-2">{t('projectModeLabelOnly')}</p>}
               <div className="grid sm:grid-cols-2 gap-2">
                 {domain?.tracks.map((tr) => {
                   const qc = tr.questionCount ?? 0;
@@ -270,7 +283,9 @@ export default function InterviewSetupPage() {
             {/* Deep-dive on specific topics (optional) */}
             {tracks.length > 0 && availableTopics.length > 0 && (
               <Section step={nextStep()} title={t('stepTopics')}>
-                <p className="text-xs text-slate-400 mb-2"><Rich s={t('topicsHint')} /></p>
+                {projectReady
+                  ? <p className="text-xs text-amber-300/80 mb-2">{t('projectModeIgnored')}</p>
+                  : <p className="text-xs text-slate-400 mb-2"><Rich s={t('topicsHint')} /></p>}
                 <div className="grid sm:grid-cols-2 gap-1.5">
                   {availableTopics.map((tp) => {
                     const on = topicIds.includes(tp.id);
@@ -310,6 +325,7 @@ export default function InterviewSetupPage() {
 
             {/* Company style (optional) */}
             <Section step={nextStep()} title={t('stepCompany')}>
+              {projectReady && <p className="text-xs text-amber-300/80 mb-2">{t('projectModeIgnored')}</p>}
               <div className="flex flex-wrap gap-2">
                 <Chip active={company === null} onClick={() => setCompany(null)}>{t('companyDefault')}</Chip>
                 {tax.companyProfiles.map((c) => (
@@ -324,18 +340,20 @@ export default function InterviewSetupPage() {
               <div className="flex flex-wrap items-center gap-6">
                 <label className="flex items-center gap-3">
                   <span className="text-sm text-slate-400">{t('numQuestions')}</span>
+                  {/* Project mode generates its own questions (2 parallel AI
+                      rounds) — the bank-based cap is irrelevant there. */}
                   <input
                     type="range"
-                    min={3}
-                    max={Math.max(3, Math.min(effectiveQ || 12, 50))}
+                    min={useProject && projectMd ? 4 : 3}
+                    max={useProject && projectMd ? 16 : Math.max(3, Math.min(effectiveQ || 12, 50))}
                     value={numQuestions}
                     onChange={(e) => setNumQuestions(Number(e.target.value))}
                     className="accent-amber-500"
                   />
                   <span className="text-sm font-mono text-slate-100 w-8">{numQuestions}</span>
-                  {effectiveQ > 0 && (
-                    <span className="text-xs text-slate-500">{t('maxN', { n: Math.min(effectiveQ, 50) })}</span>
-                  )}
+                  <span className="text-xs text-slate-500">
+                    {useProject && projectMd ? t('maxN', { n: 16 }) : effectiveQ > 0 ? t('maxN', { n: Math.min(effectiveQ, 50) }) : ''}
+                  </span>
                 </label>
                 <label className="flex items-center gap-2">
                   <span className="text-sm text-slate-400">{t('contentLangLabel')}</span>
@@ -433,7 +451,35 @@ export default function InterviewSetupPage() {
                 {useProject && (
                   <div className="space-y-3">
                     <p className="text-xs text-slate-400"><Rich s={t('projectHint')} /></p>
-                    <div className="flex items-center gap-3">
+                    <p className="text-xs text-slate-400">{t('zipHint')}</p>
+                    <div className="flex flex-wrap items-center gap-3">
+                      {/* Real project upload (.zip) — server digests the code. */}
+                      <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-500/60 bg-amber-500/10 text-amber-300 text-sm cursor-pointer hover:bg-amber-500/15 ${zipBusy ? 'opacity-60 pointer-events-none' : ''}`}>
+                        <input
+                          type="file"
+                          accept=".zip,application/zip,application/x-zip-compressed"
+                          className="hidden"
+                          onChange={async (e) => {
+                            const f = e.target.files?.[0];
+                            e.target.value = '';
+                            if (!f) return;
+                            if (f.size > 30 * 1024 * 1024) { toast.error(t('zipTooBig')); return; }
+                            setZipBusy(true);
+                            try {
+                              const res = await interviewApi.projectZip(f);
+                              const d = res.data.data;
+                              setProjectMd(d.digest);
+                              setProjectName(f.name);
+                              setZipStats(d.stats);
+                            } catch (err) {
+                              const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+                              toast.error(msg || t('zipFailed'));
+                            } finally { setZipBusy(false); }
+                          }}
+                        />
+                        {zipBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                        {zipBusy ? t('zipReading') : t('chooseZip')}
+                      </label>
                       <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-500/40 text-amber-300 text-sm cursor-pointer hover:bg-amber-500/10">
                         <input
                           type="file"
@@ -446,6 +492,7 @@ export default function InterviewSetupPage() {
                             const text = await f.text();
                             setProjectMd(text);
                             setProjectName(f.name);
+                            setZipStats(null);
                             e.target.value = '';
                           }}
                         />
@@ -453,10 +500,16 @@ export default function InterviewSetupPage() {
                       </label>
                       {projectName && (
                         <span className="text-xs text-slate-300">{projectName} · {(projectMd.length / 1024).toFixed(1)} KB
-                          <button onClick={() => { setProjectMd(''); setProjectName(''); }} className="ml-2 text-red-400 hover:underline">{t('removeFile')}</button>
+                          <button onClick={() => { setProjectMd(''); setProjectName(''); setZipStats(null); }} className="ml-2 text-red-400 hover:underline">{t('removeFile')}</button>
                         </span>
                       )}
                     </div>
+                    {zipStats && (
+                      <p className="text-xs text-emerald-400/90">
+                        {t('zipStats', { inc: zipStats.filesIncluded, kb: Math.round(zipStats.bytesIncluded / 1024), skip: zipStats.filesSkipped })}
+                        {zipStats.truncated ? t('zipTruncated') : ''}
+                      </p>
+                    )}
                     <div>
                       <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">{t('pasteMd')}</div>
                       <textarea value={projectMd} onChange={(e) => { setProjectMd(e.target.value); if (!projectName) setProjectName(t('pastedByHand')); }} rows={6} placeholder={t('pasteMdPlaceholder')} className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm font-mono focus:outline-none focus:border-amber-500/60 resize-y" />
@@ -470,7 +523,7 @@ export default function InterviewSetupPage() {
             <div className="pt-2">
               <button
                 onClick={start}
-                disabled={!tracks.length || starting}
+                disabled={(!tracks.length && !projectReady) || starting}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 transition-opacity disabled:opacity-40"
               >
                 {starting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}

@@ -155,6 +155,27 @@ router.get('/mastery', async (req: Request, res: Response<ApiResponse>, next) =>
   } catch (err) { next(err); }
 });
 
+// ── Project interview from a .zip upload ──
+// The archive is digested IN MEMORY into a Markdown project summary (never
+// written to disk, never persisted) — the FE then feeds that digest into the
+// normal project-interview flow (createSession { projectMd }). Pro-only, same
+// as the project mode itself.
+const zipUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 30 * 1024 * 1024 } });
+router.post('/project-zip', zipUpload.single('archive'), async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { isProEffective } = await import('../services/pro.service.js');
+    if (!(await isProEffective(req.userId!))) {
+      res.status(403).json({ success: false, message: 'Phỏng vấn theo project dành cho tài khoản Pro/Max.' });
+      return;
+    }
+    const file = (req as unknown as { file?: { buffer: Buffer; originalname?: string } }).file;
+    if (!file?.buffer?.length) { res.status(400).json({ success: false, message: 'Thiếu file .zip' }); return; }
+    const { buildProjectDigest } = await import('../services/interview/projectZip.service.js');
+    const data = buildProjectDigest(file.buffer, file.originalname);
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+
 // ── Phase 9: server speech-to-text (Groq Whisper) ──
 // Audio is held in memory only (never written to disk) — it is PII.
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024 } });

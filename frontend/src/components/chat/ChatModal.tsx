@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { X, Loader2, Copy, CheckCheck, User, Send, Search, SquarePen } from 'lucide-react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
@@ -12,6 +10,7 @@ import { api } from '@/lib/api';
 import { findStaticResponse } from '@/lib/ai-static-responses';
 import { useChatModelStore, DEFAULT_CHAT_MODEL_ID, getChatModel } from '@/lib/aiChatModels';
 import ModelPicker from './ModelPicker';
+import ChatMarkdown from './ChatMarkdown';
 import { toast } from 'sonner';
 import type { ChatMessage, ChatSession } from '@/types';
 
@@ -146,41 +145,7 @@ function ChatBubble({ msg, isLastAssistant, isStreaming }: {
         }`}>
           {!isUser ? (
             <div className="markdown-content text-xs overflow-hidden">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  code({ className, children, ...props }) {
-                    const isInline = !className;
-                    if (isInline) {
-                      return (
-                        <code className="px-1 py-0.5 bg-[#22d3ee]/10 rounded text-[#22d3ee] font-mono text-[10px] border border-[#22d3ee]/15" {...props}>
-                          {children}
-                        </code>
-                      );
-                    }
-                    return (
-                      <pre className="bg-[#0a0a0f] rounded-lg p-2 overflow-x-auto max-w-full mt-1 mb-1">
-                        <code className="text-[10px] text-[#22d3ee] font-mono break-all" {...props}>{children}</code>
-                      </pre>
-                    );
-                  },
-                  a({ href, children }) {
-                    return (
-                      <a href={href} target="_blank" rel="noopener noreferrer"
-                        className="text-[#22d3ee] underline underline-offset-2">
-                        {children}
-                      </a>
-                    );
-                  },
-                  p({ children }) { return <p className="mb-1 last:mb-0">{children}</p>; },
-                  ul({ children }) { return <ul className="list-disc list-inside mb-1 space-y-0.5">{children}</ul>; },
-                  ol({ children }) { return <ol className="list-decimal list-inside mb-1 space-y-0.5">{children}</ol>; },
-                  li({ children }) { return <li className="text-[#e2e8f0]/90">{children}</li>; },
-                  strong({ children }) { return <strong className="font-semibold text-white">{children}</strong>; },
-                }}
-              >
-                {msg.content}
-              </ReactMarkdown>
+              <ChatMarkdown content={msg.content} />
             </div>
           ) : (
             <span className="whitespace-pre-wrap">{msg.content}</span>
@@ -240,6 +205,8 @@ export default function ChatModal({ onClose }: ChatModalProps) {
   const [showPrompts, setShowPrompts] = useState(true);
   const [focused, setFocused] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  // Stop-generation: abort the in-flight stream, keep the partial reply.
+  const abortRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const modalMessages = messages['__modal__'] || [];
@@ -297,8 +264,11 @@ export default function ChatModal({ onClose }: ChatModalProps) {
     setStreaming(true);
 
     try {
+      const controller = new AbortController();
+      abortRef.current = controller;
       const res = await fetch(`/api/v1/ai/chat`, {
         method: 'POST',
+        signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
           ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
@@ -349,7 +319,13 @@ export default function ChatModal({ onClose }: ChatModalProps) {
       resetIdleTimer();
 
       while (true) {
-        const { done, value } = await reader.read();
+        let step: ReadableStreamReadResult<Uint8Array>;
+        try {
+          step = await reader.read();
+        } catch {
+          break; // aborted/idle-cancelled mid-read — keep partial reply
+        }
+        const { done, value } = step;
         if (done) break;
         resetIdleTimer();
 
@@ -412,10 +388,8 @@ export default function ChatModal({ onClose }: ChatModalProps) {
               updateLastAssistantMessage(sessionId, assistantContent);
             }
           } catch {
-            if (raw) {
-              assistantContent += raw;
-              updateLastAssistantMessage(sessionId, assistantContent);
-            }
+            // Malformed/split SSE frame — never render raw JSON fragments.
+            continue;
           }
         }
       }
@@ -441,6 +415,9 @@ export default function ChatModal({ onClose }: ChatModalProps) {
       if (ctx.length > 0) setSuggestedPrompts(ctx);
       setShowPrompts(true);
     } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        return; // user pressed Stop — partial reply already kept
+      }
       console.error('Chat error:', err);
       const staticResp = findStaticResponse(text);
       if (staticResp) {
@@ -458,11 +435,19 @@ export default function ChatModal({ onClose }: ChatModalProps) {
       }
       setMessages(sessionId, (messages[sessionId] || []).filter(m => m.id !== tempId && m.id !== (tempId + 1)));
     } finally {
+      abortRef.current = null;
       setStreaming(false);
     }
   }, [isStreaming, currentSessionId, addMessage, setStreaming, setRobotEmotion,
       setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
       updateLastAssistantMessage, removePendingMessage, messages]);
+
+  // Stop generation: abort the fetch, keep the partial reply, unlock input.
+  const stopStreaming = useCallback(() => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    setStreaming(false);
+  }, [setStreaming]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -655,21 +640,23 @@ export default function ChatModal({ onClose }: ChatModalProps) {
 
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => handleSend(input)}
-              disabled={!input.trim() || isStreaming}
+              onClick={isStreaming ? stopStreaming : () => handleSend(input)}
+              disabled={!isStreaming && !input.trim()}
+              aria-label={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
+              title={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
               className={`
                 absolute right-1.5 bottom-1.5 w-8 h-8 rounded-lg flex items-center justify-center
                 transition-all overflow-hidden exec-btn-glitch
-                ${input.trim() && !isStreaming
-                  ? 'bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6] text-white shadow-[0_0_10px_rgba(34,211,238,0.3)]'
-                  : 'bg-[#1a1a24] text-[#64748b] cursor-not-allowed'
+                ${isStreaming
+                  ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white shadow-[0_0_10px_rgba(239,68,68,0.35)]'
+                  : input.trim()
+                    ? 'bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6] text-white shadow-[0_0_10px_rgba(34,211,238,0.3)]'
+                    : 'bg-[#1a1a24] text-[#64748b] cursor-not-allowed'
                 }
               `}
             >
               {isStreaming ? (
-                <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
-                  <Loader2 className="w-3.5 h-3.5" />
-                </motion.div>
+                <span className="block h-2.5 w-2.5 rounded-[2px] bg-white" />
               ) : (
                 <Send className="w-3.5 h-3.5" />
               )}

@@ -12,6 +12,8 @@ export interface ChatAttachment { images?: string[]; documents?: string[]; docum
 interface ChatInputProps {
   onSend: (message: string, attach?: ChatAttachment) => void;
   isStreaming: boolean;
+  /** Stop the in-flight generation (keeps the partial reply). */
+  onStop?: () => void;
   disabled?: boolean;
 }
 
@@ -82,7 +84,7 @@ async function compressImage(file: File): Promise<string> {
   }
 }
 
-export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputProps) {
+export default function ChatInput({ onSend, isStreaming, onStop, disabled }: ChatInputProps) {
   const [value, setValue] = useState('');
   const [focused, setFocused] = useState(false);
   const [images, setImages] = useState<Attached[]>([]);
@@ -337,24 +339,32 @@ export default function ChatInput({ onSend, isStreaming, disabled }: ChatInputPr
             <motion.button
               whileHover={{ scale: 1.08, y: -2 }}
               whileTap={{ scale: 0.92 }}
-              onClick={handleSubmit}
-              disabled={!canSend}
+              onClick={isStreaming && onStop ? onStop : handleSubmit}
+              disabled={isStreaming ? !onStop : !canSend}
+              aria-label={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
+              title={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
               className={`
                 relative w-10 h-10 rounded-xl flex items-center justify-center
                 transition-all shadow-lg overflow-hidden exec-btn-glitch
-                ${canSend
-                  ? 'bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6] text-white shadow-[0_0_16px_rgba(34,211,238,0.3)]'
-                  : 'bg-[#1a1a24] text-[#64748b] cursor-not-allowed'
+                ${isStreaming && onStop
+                  ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white shadow-[0_0_16px_rgba(239,68,68,0.35)]'
+                  : canSend
+                    ? 'bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6] text-white shadow-[0_0_16px_rgba(34,211,238,0.3)]'
+                    : 'bg-[#1a1a24] text-[#64748b] cursor-not-allowed'
                 }
               `}
             >
               {isStreaming ? (
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                >
-                  <Loader2 className="w-4 h-4" />
-                </motion.div>
+                onStop ? (
+                  <span className="block h-3 w-3 rounded-[3px] bg-white" />
+                ) : (
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  >
+                    <Loader2 className="w-4 h-4" />
+                  </motion.div>
+                )
               ) : (
                 <Send className="w-4 h-4" />
               )}

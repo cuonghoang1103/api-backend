@@ -183,6 +183,8 @@ export default function ChatPage() {
 
   const [backendConnected, setBackendConnected] = useState<boolean | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  // Stop-generation support: abort the in-flight stream, keep the partial reply.
+  const abortRef = useRef<AbortController | null>(null);
   const [glitchTrigger, setGlitchTrigger] = useState(false);
   const [sessionCount, setSessionCount] = useState(0);
   const [robotData, setRobotData] = useState<object | null>(null);
@@ -382,8 +384,11 @@ export default function ChatPage() {
         return;
       }
 
+      const controller = new AbortController();
+      abortRef.current = controller;
       const res = await fetch(`/api/v1/ai/chat`, {
         method: 'POST',
+        signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
           ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
@@ -414,7 +419,13 @@ export default function ChatPage() {
       let buffer = '';
 
       while (true) {
-        const { done, value } = await reader.read();
+        let step: ReadableStreamReadResult<Uint8Array>;
+        try {
+          step = await reader.read();
+        } catch {
+          break; // aborted mid-read — keep whatever already streamed
+        }
+        const { done, value } = step;
         if (done) break;
 
         buffer += decoder.decode(value, { stream: true });
@@ -455,10 +466,9 @@ export default function ChatPage() {
               updateLastAssistantMessage(sessionId, assistantContent);
             }
           } catch {
-            if (raw) {
-              assistantContent += raw;
-              updateLastAssistantMessage(sessionId, assistantContent);
-            }
+            // Malformed/split SSE frame — NEVER render raw frame text (it showed
+            // up as "ký tự lạ" JSON fragments in the reply). Skip silently.
+            continue;
           }
         }
       }
@@ -534,6 +544,10 @@ export default function ChatPage() {
         setRobotEmotion('idle');
       }
     } catch (err) {
+      // User pressed Stop — keep the partial reply, no error UI.
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        return;
+      }
       console.error('Chat error:', err);
       const staticResp = findStaticResponse(text);
       if (staticResp) {
@@ -553,6 +567,7 @@ export default function ChatPage() {
       }
       removePendingMessage(sessionId, tempId);
     } finally {
+      abortRef.current = null;
       setStreaming(false);
     }
   }, [
@@ -561,6 +576,14 @@ export default function ChatPage() {
     updateLastAssistantMessage, removePendingMessage, removeSession, limitedMode, setLimitedMode,
     getToken,
   ]);
+
+  // Stop generation: abort the fetch — the reader loop exits, the partial
+  // reply stays, input unlocks immediately so the user can retype.
+  const stopStreaming = useCallback(() => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    setStreaming(false);
+  }, [setStreaming]);
 
   const handlePromptSelect = useCallback((prompt: string, forceStatic?: boolean) => {
     inputRef.current?.focus();
@@ -932,7 +955,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input — always at bottom */}
-        <ChatInput onSend={(msg, attach) => sendMessage(msg, false, attach)} isStreaming={isStreaming} />
+        <ChatInput onSend={(msg, attach) => sendMessage(msg, false, attach)} isStreaming={isStreaming} onStop={stopStreaming} />
       </main>
 
       {/* Build tag ribbon. Hidden by default, visible when

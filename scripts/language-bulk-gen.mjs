@@ -10,6 +10,10 @@
  *     [--vocab 20] [--grammar 25] [--conv 12] [--qna 12] [--reading 3] \
  *     [--limit N] [--dry] [--budget 3200000]
  *
+ * Any target set to 0 means UNCAPPED — that unit keeps generating until the AI
+ * stops producing new items (the pipeline's dedup decides when it's exhausted),
+ * e.g. `--vocab 0` fills every category to whatever its level really holds.
+ *
  * Resumable: every unit (category/level) is topped up to its target only.
  * Throttle: sleeps when the shared 5h gateway window nears --budget tokens.
  * Same LLM gateway as the interview module — run this OR interview deepen, not
@@ -24,11 +28,20 @@ const ADMIN = 1;
 const args = process.argv.slice(2);
 const DRY = args.includes('--dry');
 const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : d; };
-const num = (f, d) => Number(val(f, d)) || d;
+// NB: `Number(x) || d` would swallow an explicit 0 (falsy) — and 0 is what marks
+// a target as uncapped, so parse it properly.
+const num = (f, d) => { const v = val(f, undefined); const n = Number(v); return v === undefined || Number.isNaN(n) ? d : n; };
 const LANGS = String(val('--langs', 'ja,en,zh')).split(',').map((s) => s.trim()).filter(Boolean);
 const SECTIONS = String(val('--sections', 'vocab,grammar,conversation,qna,reading')).split(',').map((s) => s.trim());
 const LIMIT = num('--limit', 0);
-const T = { vocab: num('--vocab', 20), grammar: num('--grammar', 25), conv: num('--conv', 12), qna: num('--qna', 12), reading: num('--reading', 3) };
+// A target of 0 means "no cap": keep generating until the AI stops finding new
+// items for that unit (the pipeline's dedup is what ends it, not a number).
+const unlim = (v) => (v <= 0 ? Infinity : v);
+const T = {
+  vocab: unlim(num('--vocab', 20)), grammar: unlim(num('--grammar', 25)),
+  conv: unlim(num('--conv', 12)), qna: unlim(num('--qna', 12)), reading: unlim(num('--reading', 3)),
+};
+const shown = (v) => (v === Infinity ? '∞' : v);
 const BATCH = 12;
 
 // ── Token-window throttle (shared with interview via interviewLLMCallLog) ──
@@ -74,11 +87,14 @@ async function round(langCode, section, opts) {
   }
 }
 
-/** Top a (unit) up to `target` published rows, `countFn` re-reads the live count. */
+/** Top a (unit) up to `target` published rows, `countFn` re-reads the live count.
+ *  target=Infinity → runs until a round yields nothing new (the AI is dry). The
+ *  guard only bounds the uncapped case so one unit can't loop forever. */
 async function fill(langCode, section, unit, target, countFn) {
   let have = await countFn();
   let guard = 0;
-  while (have < target && !stop && guard < 8) {
+  const maxRounds = target === Infinity ? 60 : 8;
+  while (have < target && !stop && guard < maxRounds) {
     guard++;
     const made = await round(langCode, section, { ...unit, want: target - have });
     if (made === 0 && !stop) break; // dry well / repeated dupes
@@ -102,7 +118,7 @@ for (const code of LANGS) {
       if (DRY) { console.log(`  would fill vocab ${c.name}`); continue; }
       const n = await fill(code, 'vocab', { level: c.level, topic: c.name.replace(/^[^·]*·\s*/, ''), categoryId: c.id, label: c.name }, T.vocab,
         () => prisma.langVocabWord.count({ where: { categoryId: c.id } }));
-      console.log(`  vocab ${c.name}: ${n}/${T.vocab}`);
+      console.log(`  vocab ${c.name}: ${n}/${shown(T.vocab)}`);
     }
   }
 
@@ -115,7 +131,7 @@ for (const code of LANGS) {
       if (DRY) { console.log(`  would fill grammar ${level}`); continue; }
       const n = await fill(code, 'grammar', { level, topic: `trình độ ${level}`, label: `grammar ${level}` }, T.grammar,
         () => prisma.langGrammarPoint.count({ where: { languageId: lang.id, level } }));
-      console.log(`  grammar ${level}: ${n}/${T.grammar}`);
+      console.log(`  grammar ${level}: ${n}/${shown(T.grammar)}`);
     }
   }
   if (SECTIONS.includes('conversation')) {
@@ -124,7 +140,7 @@ for (const code of LANGS) {
       if (DRY) { console.log(`  would fill conversation ${level}`); continue; }
       const n = await fill(code, 'conversation', { level, topic: `hội thoại đời sống trình độ ${level}`, label: `conv ${level}` }, T.conv,
         () => prisma.langConversationItem.count({ where: { languageId: lang.id, level } }));
-      console.log(`  conversation ${level}: ${n}/${T.conv}`);
+      console.log(`  conversation ${level}: ${n}/${shown(T.conv)}`);
     }
   }
   if (SECTIONS.includes('qna')) {
@@ -133,7 +149,7 @@ for (const code of LANGS) {
       if (DRY) { console.log(`  would fill qna ${level}`); continue; }
       const n = await fill(code, 'qna', { level, topic: `hỏi đáp thông dụng trình độ ${level}`, label: `qna ${level}` }, T.qna,
         () => prisma.langQnaItem.count({ where: { languageId: lang.id, level } }));
-      console.log(`  qna ${level}: ${n}/${T.qna}`);
+      console.log(`  qna ${level}: ${n}/${shown(T.qna)}`);
     }
   }
   if (SECTIONS.includes('reading')) {
@@ -143,7 +159,8 @@ for (const code of LANGS) {
       // reading-article generates whole passages (capped 4/call); loop to target.
       let have = await prisma.langReadingArticle.count({ where: { languageId: lang.id, level } });
       let guard = 0;
-      while (have < T.reading && !stop && guard < 4) {
+      const maxRounds = T.reading === Infinity ? 20 : 4;
+      while (have < T.reading && !stop && guard < maxRounds) {
         guard++;
         await waitBudget();
         try {
@@ -155,7 +172,7 @@ for (const code of LANGS) {
           if (commit.created === 0) break;
         } catch (e) { fails++; if (isQuotaErr(e?.message)) { stop = true; } break; }
       }
-      console.log(`  reading ${level}: ${have}/${T.reading}`);
+      console.log(`  reading ${level}: ${have}/${shown(T.reading)}`);
     }
   }
 }

@@ -155,6 +155,7 @@ model User {
   techTrendArticles           TechTrendArticle[]     @relation("TechTrendAuthor")
   techTrendComments           TechTrendComment[]
   techTrendCommentLikes       TechTrendCommentLike[]
+  gamePlays                   GamePlay[]
   announcements               Announcement[]         @relation("AnnouncementAuthor")
 
   cyberProfile   CyberProfile?
@@ -4297,6 +4298,7 @@ model LangVocabCategory {
   languageId Int      @map("language_id")
   name       String   @db.VarChar(150) // "Công nghệ"
   icon       String?  @db.VarChar(64) // emoji or lucide icon name
+  level      String?  @db.VarChar(20) // free-text level tag (A1..C2 | N5..N1 | HSK)
   order      Int      @default(0)
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
@@ -4372,6 +4374,7 @@ model LangGrammarPoint {
 model LangListeningItem {
   id          Int                 @id @default(autoincrement())
   languageId  Int                 @map("language_id")
+  level       String?             @db.VarChar(20) // free-text level tag (A1..C2 | N5..N1 | HSK)
   title       String              @db.VarChar(255)
   sourceType  LangListeningSource @default(UPLOAD) @map("source_type")
   audioUrl    String?             @map("audio_url") @db.VarChar(500)
@@ -4393,6 +4396,7 @@ model LangListeningItem {
 model LangConversationItem {
   id                    Int      @id @default(autoincrement())
   languageId            Int      @map("language_id")
+  level                 String?  @db.VarChar(20) // free-text level tag (A1..C2 | N5..N1 | HSK)
   question              String   @db.Text
   answer                String   @db.Text
   questionPronunciation String?  @map("question_pronunciation") @db.Text
@@ -4415,6 +4419,7 @@ model LangConversationItem {
 model LangReadingArticle {
   id          Int             @id @default(autoincrement())
   languageId  Int             @map("language_id")
+  level       String?         @db.VarChar(20) // free-text level tag (A1..C2 | N5..N1 | HSK)
   title       String          @db.VarChar(255)
   type        LangReadingType @default(TEXT)
   images      Json?           @db.JsonB // [imageUrl]
@@ -4435,6 +4440,7 @@ model LangReadingArticle {
 model LangQnaItem {
   id            Int      @id @default(autoincrement())
   languageId    Int      @map("language_id")
+  level         String?  @db.VarChar(20) // free-text level tag (A1..C2 | N5..N1 | HSK)
   question      String   @db.Text
   answer        String   @db.Text
   pronunciation String?  @db.Text
@@ -5957,4 +5963,109 @@ model LangLessonProgress {
   @@unique([userId, lessonKey], map: "uk_lang_lesson_user_key")
   @@index([userId, languageId], name: "idx_lang_lesson_user_lang")
   @@map("lang_lesson_progress")
+}
+
+// ============================================================
+// 31. GAME LIBRARY ("Playground") — added 2026-07-16
+// ============================================================
+// DB-backed replacement for the old static GAMES_DATA array in
+// frontend/src/types/games.ts. Games are admin-curated; plays
+// (scores) are recorded per game and may be anonymous.
+//
+// `kind` preserves the pre-existing capability of hosting a
+// standalone HTML game in /public via an iframe (the `love-me`
+// game) alongside React component games — the old GameRenderer
+// supported this and dropping it would regress that game.
+// React games resolve `componentKey` through the client-side
+// registry (components/games/registry.ts).
+
+enum GameDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum GameStatus {
+  DRAFT
+  PUBLISHED
+  COMING_SOON
+}
+
+enum GameKind {
+  REACT
+  IFRAME
+}
+
+model GameCategory {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(80)
+  nameVi    String?  @map("name_vi") @db.VarChar(80)
+  slug      String   @unique(map: "uk_game_category_slug") @db.VarChar(80)
+  icon      String?  @db.VarChar(40)
+  color     String?  @db.VarChar(16)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  games Game[]
+
+  @@index([sortOrder], name: "idx_game_category_sort")
+  @@map("game_categories")
+}
+
+model Game {
+  id              Int            @id @default(autoincrement())
+  title           String         @db.VarChar(160)
+  titleVi         String?        @map("title_vi") @db.VarChar(160)
+  slug            String         @unique(map: "uk_game_slug") @db.VarChar(160)
+  description     String         @db.Text
+  descriptionVi   String?        @map("description_vi") @db.Text
+  longDescription String?        @map("long_description") @db.Text
+  coverImage      String?        @map("cover_image") @db.VarChar(500)
+  screenshots     String[]       @default([])
+  difficulty      GameDifficulty @default(EASY)
+  status          GameStatus     @default(DRAFT)
+  featured        Boolean        @default(false)
+  sortOrder       Int            @default(0) @map("sort_order")
+  playCount       Int            @default(0) @map("play_count")
+  // REACT → resolved via the client registry; IFRAME → iframeSrc.
+  kind            GameKind       @default(REACT)
+  componentKey    String?        @map("component_key") @db.VarChar(64)
+  iframeSrc       String?        @map("iframe_src") @db.VarChar(500)
+  estimatedTime   String?        @map("estimated_time") @db.VarChar(40)
+  techStack       String[]       @default([]) @map("tech_stack")
+  tags            String[]       @default([])
+  controls        String?        @db.Text
+  controlsVi      String?        @map("controls_vi") @db.Text
+  categoryId      Int            @map("category_id")
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+
+  category GameCategory @relation(fields: [categoryId], references: [id])
+  plays    GamePlay[]
+
+  @@index([status, featured], name: "idx_game_status_featured")
+  @@index([categoryId], name: "idx_game_category")
+  @@index([sortOrder], name: "idx_game_sort")
+  @@map("games")
+}
+
+model GamePlay {
+  id       Int      @id @default(autoincrement())
+  gameId   Int      @map("game_id")
+  // Nullable: anonymous plays are allowed. SetNull (not Cascade) so
+  // deleting an account anonymises its scores instead of silently
+  // rewriting every leaderboard.
+  userId   Int?     @map("user_id")
+  score    Int      @default(0)
+  duration Int?
+  playedAt DateTime @default(now()) @map("played_at")
+
+  game Game  @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([gameId, score(sort: Desc)], name: "idx_game_play_game_score")
+  @@index([userId], name: "idx_game_play_user")
+  @@index([playedAt(sort: Desc)], name: "idx_game_play_time")
+  @@map("game_plays")
 }

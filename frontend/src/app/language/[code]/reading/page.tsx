@@ -31,7 +31,7 @@ import {
 import { fetchAllPages, languageApi, type AiGradeResult } from '@/lib/language-api';
 import { getImageUrl } from '@/lib/utils';
 import type { ReadingArticle, DictionaryEntry, ReadingQuestion } from '@/types/language';
-import {
+import { Chip,
   SectionShell,
   SpeakerButton,
   EmptyState,
@@ -88,6 +88,16 @@ export default function ReadingPage() {
   const reduced = usePrefersReducedMotion();
 
   const [articles, setArticles] = useState<ReadingArticle[] | null>(null);
+  // Level filter (A1..C2 / N5..N1 / HSK) — chips appear once items carry level
+  // tags; ?level= deep-links from the roadmap land pre-filtered.
+  const [levelFilter, setLevelFilter] = useState<string | null>(null);
+  useEffect(() => {
+    try {
+      const lv = new URLSearchParams(window.location.search).get('level');
+      if (lv) setLevelFilter(lv);
+    } catch { /* ignore */ }
+  }, []);
+
   const [activeId, setActiveId] = useState<number | null>(null);
   const [dict, setDict] = useState<Map<string, DictionaryEntry> | null>(null);
 
@@ -131,6 +141,18 @@ export default function ReadingPage() {
 
   return (
     <SectionShell code={code} title="Đọc" icon={<Newspaper />}>
+      {(() => {
+        const lvls = [...new Set((articles ?? []).map((x) => x.level).filter(Boolean))] as string[];
+        if (lvls.length < 2) return null;
+        return (
+          <div className="mb-4 -mx-1 flex gap-2 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <Chip active={levelFilter == null} onClick={() => setLevelFilter(null)}>Tất cả cấp độ</Chip>
+            {lvls.map((lv) => (
+              <Chip key={lv} active={levelFilter === lv} onClick={() => setLevelFilter(lv)}>{lv}</Chip>
+            ))}
+          </div>
+        );
+      })()}
       {articles === null ? (
         <CardsSkeleton count={6} />
       ) : active ? (
@@ -150,7 +172,7 @@ export default function ReadingPage() {
         />
       ) : (
         <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {articles.map((a) => (
+          {(levelFilter ? articles.filter((x) => x.level === levelFilter) : articles).map((a) => (
             <ArticleListCard key={a.id} article={a} onOpen={() => setActiveId(a.id)} />
           ))}
         </ul>

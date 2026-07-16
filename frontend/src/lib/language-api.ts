@@ -42,13 +42,13 @@ export const languageApi = {
   dictionary: (code: string): Res<DictionaryEntry[]> => api.get(`/my-language/${code}/dictionary`),
   grammar: (code: string, params: { level?: string; page?: number; limit?: number } = {}): Res<{ items: GrammarPoint[]; levels: string[] }> =>
     api.get(`/my-language/${code}/grammar`, { params }),
-  listening: (code: string, params: { page?: number; limit?: number } = {}): Res<ListeningItem[]> =>
+  listening: (code: string, params: { level?: string; page?: number; limit?: number } = {}): Res<ListeningItem[]> =>
     api.get(`/my-language/${code}/listening`, { params }),
-  conversation: (code: string, params: { page?: number; limit?: number } = {}): Res<ConversationItem[]> =>
+  conversation: (code: string, params: { level?: string; page?: number; limit?: number } = {}): Res<ConversationItem[]> =>
     api.get(`/my-language/${code}/conversation`, { params }),
-  reading: (code: string, params: { page?: number; limit?: number } = {}): Res<ReadingArticle[]> =>
+  reading: (code: string, params: { level?: string; page?: number; limit?: number } = {}): Res<ReadingArticle[]> =>
     api.get(`/my-language/${code}/reading`, { params }),
-  qna: (code: string, params: { page?: number; limit?: number } = {}): Res<QnaItem[]> =>
+  qna: (code: string, params: { level?: string; page?: number; limit?: number } = {}): Res<QnaItem[]> =>
     api.get(`/my-language/${code}/qna`, { params }),
 
   // ─── Authed learning engine ──────────────────────────────────

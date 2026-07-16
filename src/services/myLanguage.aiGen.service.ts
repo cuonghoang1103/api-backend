@@ -352,8 +352,11 @@ export async function adminGenerate(
 // ── Commit (insert selected) ──────────────────────────────────────
 export async function adminCommit(
   userId: number,
-  body: { languageCode?: string; section?: string; categoryId?: number | string; articleId?: number | string; items?: unknown },
+  body: { languageCode?: string; section?: string; categoryId?: number | string; articleId?: number | string; items?: unknown; level?: string },
 ): Promise<{ created: number; skipped: number }> {
+  // Level tag: stamp the request-level onto every committed item so sections
+  // can be browsed/deep-linked by level (items may also carry their own).
+  const reqLevel = typeof body?.level === 'string' && body.level.trim() ? body.level.trim().slice(0, 20) : undefined;
   const section = SECTIONS.includes(body?.section as GenSection) ? (body!.section as GenSection) : null;
   if (!section) throw new BadRequestError('Mục không hợp lệ.');
   const categoryId = Number(body?.categoryId) || undefined;
@@ -405,6 +408,7 @@ export async function adminCommit(
           content: str(data.content),
           translation: str(data.translation) || null,
           questions: questions.length ? questions : null,
+          level: str(data.level) || reqLevel,
         });
         keys.add(key);
         created++;
@@ -420,9 +424,9 @@ export async function adminCommit(
     if (!key || keys.has(key)) { skipped++; continue; }
     try {
       if (section === 'vocab') await createVocabWord(categoryId!, data);
-      else if (section === 'grammar') await createGrammar(lang.id, data);
-      else if (section === 'conversation') await createConversation(lang.id, data);
-      else if (section === 'qna') await createQna(lang.id, data);
+      else if (section === 'grammar') await createGrammar(lang.id, { ...data, level: (data as { level?: unknown }).level || reqLevel });
+      else if (section === 'conversation') await createConversation(lang.id, { ...data, level: reqLevel });
+      else if (section === 'qna') await createQna(lang.id, { ...data, level: reqLevel });
       keys.add(key);
       created++;
     } catch {

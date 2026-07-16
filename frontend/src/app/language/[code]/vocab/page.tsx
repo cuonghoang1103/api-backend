@@ -95,6 +95,11 @@ function VocabInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const wantReview = searchParams.get('mode') === 'review';
+  // Roadmap deep-link: ?categoryId= opens that category; ?level= filters the
+  // category chips to one level (both optional).
+  const urlCategoryId = Number(searchParams.get('categoryId')) || null;
+  const urlLevel = searchParams.get('level');
+  const [levelFilter, setLevelFilter] = useState<string | null>(urlLevel);
   const { isAuthenticated } = useLangUser();
   const { isPro } = usePro();
   const reduced = usePrefersReducedMotion();
@@ -183,7 +188,9 @@ function VocabInner() {
           return;
         }
 
-        setActiveCat(cats.length ? cats[0].id : null);
+        const fromUrl = urlCategoryId && cats.some((c) => c.id === urlCategoryId) ? urlCategoryId : null;
+        const fromLevel = !fromUrl && urlLevel ? (cats.find((c) => c.level === urlLevel)?.id ?? null) : null;
+        setActiveCat(fromUrl ?? fromLevel ?? (cats.length ? cats[0].id : null));
         if (!cats.length) setLoading(false);
       } catch {
         if (alive) {
@@ -453,8 +460,21 @@ function VocabInner() {
       {/* Category chips + search (list-affecting filters) */}
       {showCatBar && (
         <div className="mb-4 space-y-3">
+          {/* Level bar — appears once categories carry level tags (A1/N5/HSK…) */}
+          {(() => {
+            const lvls = [...new Set(categories.map((c) => c.level).filter(Boolean))] as string[];
+            if (lvls.length < 2) return null;
+            return (
+              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <Chip active={levelFilter == null} onClick={() => setLevelFilter(null)}>Tất cả cấp độ</Chip>
+                {lvls.map((lv) => (
+                  <Chip key={lv} active={levelFilter === lv} onClick={() => setLevelFilter(lv)}>{lv}</Chip>
+                ))}
+              </div>
+            );
+          })()}
           <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {categories.map((c) => (
+            {(levelFilter ? categories.filter((c) => c.level === levelFilter) : categories).map((c) => (
               <Chip
                 key={c.id}
                 active={srcKind === 'category' && c.id === activeCat}

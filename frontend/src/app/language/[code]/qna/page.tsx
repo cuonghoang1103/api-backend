@@ -12,7 +12,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { HelpCircle, ChevronDown, Shuffle } from 'lucide-react';
 import { fetchAllPages, languageApi } from '@/lib/language-api';
 import type { QnaItem } from '@/types/language';
-import {
+import { Chip,
   SectionShell,
   SpeakerButton,
   EmptyState,
@@ -25,6 +25,16 @@ export default function QnaPage() {
   const reduced = usePrefersReducedMotion();
 
   const [items, setItems] = useState<QnaItem[] | null>(null);
+  // Level filter (A1..C2 / N5..N1 / HSK) — chips appear once items carry level
+  // tags; ?level= deep-links from the roadmap land pre-filtered.
+  const [levelFilter, setLevelFilter] = useState<string | null>(null);
+  useEffect(() => {
+    try {
+      const lv = new URLSearchParams(window.location.search).get('level');
+      if (lv) setLevelFilter(lv);
+    } catch { /* ignore */ }
+  }, []);
+
   const [randomMode, setRandomMode] = useState(false);
 
   useEffect(() => {
@@ -63,6 +73,18 @@ export default function QnaPage() {
 
   return (
     <SectionShell code={code} title="Q&A" icon={<HelpCircle />} right={toggle}>
+      {(() => {
+        const lvls = [...new Set((items ?? []).map((x) => x.level).filter(Boolean))] as string[];
+        if (lvls.length < 2) return null;
+        return (
+          <div className="mb-4 -mx-1 flex gap-2 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <Chip active={levelFilter == null} onClick={() => setLevelFilter(null)}>Tất cả cấp độ</Chip>
+            {lvls.map((lv) => (
+              <Chip key={lv} active={levelFilter === lv} onClick={() => setLevelFilter(lv)}>{lv}</Chip>
+            ))}
+          </div>
+        );
+      })()}
       {items === null ? (
         <CardsSkeleton count={5} />
       ) : items.length === 0 ? (
@@ -72,9 +94,9 @@ export default function QnaPage() {
           hint="Nội dung Q&A cho ngôn ngữ này sẽ sớm được thêm."
         />
       ) : randomMode ? (
-        <RandomMode items={items} reduced={reduced} />
+        <RandomMode items={levelFilter ? items.filter((x) => x.level === levelFilter) : items} reduced={reduced} />
       ) : (
-        <Accordion items={items} reduced={reduced} />
+        <Accordion items={levelFilter ? items.filter((x) => x.level === levelFilter) : items} reduced={reduced} />
       )}
     </SectionShell>
   );

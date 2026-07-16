@@ -92,6 +92,7 @@ export interface VocabWord {
   category?: { id: number; name: string };
 }
 export interface VocabCategory {
+  level?: string | null;
   id: number;
   languageId: number;
   name: string;
@@ -132,6 +133,7 @@ export interface ListeningQuestion {
   answer: string;
 }
 export interface ListeningItem {
+  level?: string | null;
   id: number;
   languageId: number;
   title: string;
@@ -145,6 +147,7 @@ export interface ListeningItem {
 }
 
 export interface ConversationItem {
+  level?: string | null;
   id: number;
   languageId: number;
   question: string;
@@ -179,6 +182,7 @@ export type ReadingQuestion =
     };
 
 export interface ReadingArticle {
+  level?: string | null;
   id: number;
   languageId: number;
   title: string;
@@ -191,6 +195,7 @@ export interface ReadingArticle {
 }
 
 export interface QnaItem {
+  level?: string | null;
   id: number;
   languageId: number;
   question: string;

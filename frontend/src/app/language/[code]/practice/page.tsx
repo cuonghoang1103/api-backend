@@ -21,6 +21,15 @@ import LessonPlayer from '@/components/language/practice/LessonPlayer';
 
 const PATH_OFFSETS = [0, 44, 64, 44, 0, -44, -64, -44];
 
+// Per-unit visual themes — rotate so each stage feels like a new chapter.
+const UNIT_THEMES = [
+  { grad: 'from-neon-violet/15 to-neon-cyan/10', ring: 'ring-neon-violet/25', text: 'text-neon-violet', bar: 'bg-neon-violet', badge: 'bg-neon-violet', bubble: 'bg-neon-violet/20 text-neon-violet ring-neon-violet/40' },
+  { grad: 'from-neon-cyan/15 to-neon-green/10', ring: 'ring-neon-cyan/25', text: 'text-neon-cyan', bar: 'bg-neon-cyan', badge: 'bg-neon-cyan', bubble: 'bg-neon-cyan/20 text-neon-cyan ring-neon-cyan/40' },
+  { grad: 'from-neon-orange/15 to-neon-pink/10', ring: 'ring-neon-orange/25', text: 'text-neon-orange', bar: 'bg-neon-orange', badge: 'bg-neon-orange', bubble: 'bg-neon-orange/20 text-neon-orange ring-neon-orange/40' },
+  { grad: 'from-neon-pink/15 to-neon-violet/10', ring: 'ring-neon-pink/25', text: 'text-neon-pink', bar: 'bg-neon-pink', badge: 'bg-neon-pink', bubble: 'bg-neon-pink/20 text-neon-pink ring-neon-pink/40' },
+  { grad: 'from-neon-green/15 to-neon-cyan/10', ring: 'ring-neon-green/25', text: 'text-neon-green', bar: 'bg-neon-green', badge: 'bg-neon-green', bubble: 'bg-neon-green/20 text-neon-green ring-neon-green/40' },
+];
+
 export default function PracticePage() {
   const code = String(useParams().code);
   const { isAuthenticated } = useLangUser();
@@ -110,7 +119,6 @@ export default function PracticePage() {
 
   const st = data?.state;
   const dailyPct = st && st.dailyGoalXp > 0 ? Math.min(100, Math.round((st.dailyXp / st.dailyGoalXp) * 100)) : 0;
-  let bubbleIndex = -1; // running index across units for the zig-zag offset
 
   return (
     <SectionShell code={code} title="Luyện tập" icon={<Dumbbell className="text-neon-violet" />}>
@@ -154,38 +162,85 @@ export default function PracticePage() {
                 </p>
               )}
 
-              <div className="space-y-8">
-                {data.units.map((unit) => (
-                  <section key={unit.key}>
-                    <div className="mb-4 flex items-center justify-center">
-                      <span className="rounded-full bg-neon-violet/10 px-4 py-1.5 text-sm font-semibold text-neon-violet ring-1 ring-neon-violet/25">{unit.label}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-3">
-                      {unit.lessons.map((l) => {
-                        bubbleIndex++;
-                        const offset = PATH_OFFSETS[bubbleIndex % PATH_OFFSETS.length];
-                        return (
-                          <motion.div key={l.lessonKey} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} style={{ transform: `translateX(${offset}px)` }} className="flex flex-col items-center">
-                            <button
-                              type="button"
-                              onClick={() => onLessonClick(l)}
-                              aria-label={l.name}
-                              className={`relative flex h-16 w-16 items-center justify-center rounded-full ring-4 transition ${
-                                l.locked ? 'bg-[var(--bg-surface)] text-text-muted ring-[var(--border-color)]' : l.crown > 0 ? 'bg-neon-green/20 text-neon-green ring-neon-green/30 hover:-translate-y-0.5' : 'bg-neon-violet/20 text-neon-violet ring-neon-violet/40 hover:-translate-y-0.5'
-                              }`}
-                            >
-                              {l.locked ? <Lock size={22} /> : l.crown >= 5 ? <Crown size={26} /> : l.crown > 0 ? <Check size={26} /> : <Dumbbell size={24} />}
-                              {!l.locked && l.crown > 0 && (
-                                <span className="absolute -bottom-1 -right-1 inline-flex items-center gap-0.5 rounded-full bg-neon-orange px-1.5 py-0.5 text-[10px] font-bold text-white"><Crown size={9} /> {l.crown}</span>
-                              )}
-                            </button>
-                            <span className={`mt-1.5 max-w-[9rem] truncate text-center text-xs font-medium ${l.locked ? 'text-text-muted' : 'text-text-secondary'}`}>{l.name}</span>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                  </section>
-                ))}
+              <div className="space-y-10">
+                {(() => {
+                  // The first unlocked-but-uncrowned lesson across the whole
+                  // path is "current" — it gets the pulsing BẮT ĐẦU marker.
+                  const currentKey = data.units.flatMap((u) => u.lessons).find((l) => !l.locked && l.crown === 0)?.lessonKey ?? null;
+                  return data.units.map((unit, ui) => {
+                    const theme = UNIT_THEMES[ui % UNIT_THEMES.length];
+                    const done = unit.lessons.filter((l) => l.crown > 0).length;
+                    const gold = unit.lessons.filter((l) => l.crown >= 5).length;
+                    const words = unit.lessons.reduce((s, l) => s + (l.wordCount ?? 0), 0);
+                    const pct = unit.lessons.length ? Math.round((done / unit.lessons.length) * 100) : 0;
+                    return (
+                      <section key={unit.key}>
+                        {/* Unit banner — numbered, themed, with progress */}
+                        <div className={`mb-5 overflow-hidden rounded-2xl bg-gradient-to-r ${theme.grad} p-4 ring-1 ${theme.ring}`}>
+                          <div className="flex items-center gap-3">
+                            <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-lg font-black ${theme.text}`}>{ui + 1}</span>
+                            <div className="min-w-0 flex-1">
+                              <p className={`text-[10px] font-bold uppercase tracking-wider ${theme.text} opacity-80`}>Chặng {ui + 1}</p>
+                              <p className="truncate text-base font-bold text-text-primary">{unit.label}</p>
+                            </div>
+                            <div className="shrink-0 text-right">
+                              <p className={`text-sm font-bold ${theme.text}`}>{done}/{unit.lessons.length} bài</p>
+                              <p className="text-[10px] text-text-muted">{words > 0 ? `${words} từ` : ''}{gold > 0 ? ` · ${gold} 👑` : ''}</p>
+                            </div>
+                          </div>
+                          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-black/20">
+                            <div className={`h-full rounded-full ${theme.bar} transition-all`} style={{ width: `${pct}%` }} />
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-center gap-3">
+                          {unit.lessons.map((l, li) => {
+                            const offset = PATH_OFFSETS[li % PATH_OFFSETS.length];
+                            const isCurrent = l.lessonKey === currentKey;
+                            return (
+                              <motion.div key={l.lessonKey} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} style={{ transform: `translateX(${offset}px)` }} className="flex flex-col items-center">
+                                {isCurrent && (
+                                  <motion.span
+                                    animate={{ y: [0, -4, 0] }}
+                                    transition={{ duration: 1.2, repeat: Infinity }}
+                                    className={`mb-1 rounded-lg px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-white shadow-lg ${theme.badge}`}
+                                  >
+                                    Bắt đầu
+                                  </motion.span>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={() => onLessonClick(l)}
+                                  aria-label={l.name}
+                                  className={`relative flex h-16 w-16 items-center justify-center rounded-full ring-4 transition ${
+                                    l.locked
+                                      ? 'bg-[var(--bg-surface)] text-text-muted ring-[var(--border-color)]'
+                                      : l.crown >= 5
+                                        ? 'bg-neon-orange/20 text-neon-orange ring-neon-orange/40 hover:-translate-y-0.5'
+                                        : l.crown > 0
+                                          ? 'bg-neon-green/20 text-neon-green ring-neon-green/30 hover:-translate-y-0.5'
+                                          : `${theme.bubble} hover:-translate-y-0.5 ${isCurrent ? 'animate-pulse' : ''}`
+                                  }`}
+                                >
+                                  {l.locked ? <Lock size={22} /> : l.crown >= 5 ? <Crown size={26} /> : l.icon ? <span className="text-2xl leading-none" aria-hidden>{l.icon}</span> : l.crown > 0 ? <Check size={26} /> : <Dumbbell size={24} />}
+                                  {!l.locked && l.crown > 0 && (
+                                    <span className="absolute -bottom-1 -right-1 inline-flex items-center gap-0.5 rounded-full bg-neon-orange px-1.5 py-0.5 text-[10px] font-bold text-white"><Crown size={9} /> {l.crown}</span>
+                                  )}
+                                  {!l.locked && l.bestScore > 0 && l.crown < 5 && (
+                                    <span className="absolute -top-1 -left-1 rounded-full bg-[var(--bg-surface)] px-1.5 py-0.5 text-[9px] font-bold text-text-secondary ring-1 ring-[var(--border-color)]">{l.bestScore}%</span>
+                                  )}
+                                </button>
+                                <span className={`mt-1.5 max-w-[9rem] truncate text-center text-xs font-medium ${l.locked ? 'text-text-muted' : 'text-text-secondary'}`}>{l.name}</span>
+                                {!l.locked && l.wordCount > 0 && (
+                                  <span className="text-[10px] text-text-muted">{l.wordCount} từ</span>
+                                )}
+                              </motion.div>
+                            );
+                          })}
+                        </div>
+                      </section>
+                    );
+                  });
+                })()}
               </div>
 
               {/* Daily reminder */}

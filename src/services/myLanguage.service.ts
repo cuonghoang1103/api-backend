@@ -310,48 +310,80 @@ export async function getGrammar(code: string, query: { level?: unknown; page?: 
   return { items, levels, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 
-export async function getListening(code: string, query: { page?: unknown; limit?: unknown }) {
+export async function getListening(code: string, query: { level?: unknown; page?: unknown; limit?: unknown }) {
   const lang = await getLanguageOrThrow(code);
   const { page, limit, skip } = pageParams(query);
-  const where = { languageId: lang.id };
-  const [items, total] = await Promise.all([
+  const level = optStr(query.level);
+  const where: Prisma.LangListeningItemWhereInput = { languageId: lang.id };
+  if (level) where.level = level;
+  const [items, total, levelsRaw] = await Promise.all([
     prisma.langListeningItem.findMany({ where, orderBy: [{ order: 'asc' }, { id: 'asc' }], skip, take: limit }),
     prisma.langListeningItem.count({ where }),
+    prisma.langListeningItem.findMany({
+      where: { languageId: lang.id, level: { not: null } },
+      select: { level: true },
+      distinct: ['level'],
+    }),
   ]);
-  return { items, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
+  const levels = levelsRaw.map((l) => l.level).filter(Boolean) as string[];
+  return { items, levels, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 
-export async function getConversation(code: string, query: { page?: unknown; limit?: unknown }) {
+export async function getConversation(code: string, query: { level?: unknown; page?: unknown; limit?: unknown }) {
   const lang = await getLanguageOrThrow(code);
   const { page, limit, skip } = pageParams(query);
-  const where = { languageId: lang.id };
-  const [items, total] = await Promise.all([
+  const level = optStr(query.level);
+  const where: Prisma.LangConversationItemWhereInput = { languageId: lang.id };
+  if (level) where.level = level;
+  const [items, total, levelsRaw] = await Promise.all([
     prisma.langConversationItem.findMany({ where, orderBy: [{ order: 'asc' }, { id: 'asc' }], skip, take: limit }),
     prisma.langConversationItem.count({ where }),
+    prisma.langConversationItem.findMany({
+      where: { languageId: lang.id, level: { not: null } },
+      select: { level: true },
+      distinct: ['level'],
+    }),
   ]);
-  return { items, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
+  const levels = levelsRaw.map((l) => l.level).filter(Boolean) as string[];
+  return { items, levels, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 
-export async function getReading(code: string, query: { page?: unknown; limit?: unknown }) {
+export async function getReading(code: string, query: { level?: unknown; page?: unknown; limit?: unknown }) {
   const lang = await getLanguageOrThrow(code);
   const { page, limit, skip } = pageParams(query);
-  const where = { languageId: lang.id };
-  const [items, total] = await Promise.all([
+  const level = optStr(query.level);
+  const where: Prisma.LangReadingArticleWhereInput = { languageId: lang.id };
+  if (level) where.level = level;
+  const [items, total, levelsRaw] = await Promise.all([
     prisma.langReadingArticle.findMany({ where, orderBy: [{ order: 'asc' }, { id: 'asc' }], skip, take: limit }),
     prisma.langReadingArticle.count({ where }),
+    prisma.langReadingArticle.findMany({
+      where: { languageId: lang.id, level: { not: null } },
+      select: { level: true },
+      distinct: ['level'],
+    }),
   ]);
-  return { items, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
+  const levels = levelsRaw.map((l) => l.level).filter(Boolean) as string[];
+  return { items, levels, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 
-export async function getQna(code: string, query: { page?: unknown; limit?: unknown }) {
+export async function getQna(code: string, query: { level?: unknown; page?: unknown; limit?: unknown }) {
   const lang = await getLanguageOrThrow(code);
   const { page, limit, skip } = pageParams(query);
-  const where = { languageId: lang.id };
-  const [items, total] = await Promise.all([
+  const level = optStr(query.level);
+  const where: Prisma.LangQnaItemWhereInput = { languageId: lang.id };
+  if (level) where.level = level;
+  const [items, total, levelsRaw] = await Promise.all([
     prisma.langQnaItem.findMany({ where, orderBy: [{ order: 'asc' }, { id: 'asc' }], skip, take: limit }),
     prisma.langQnaItem.count({ where }),
+    prisma.langQnaItem.findMany({
+      where: { languageId: lang.id, level: { not: null } },
+      select: { level: true },
+      distinct: ['level'],
+    }),
   ]);
-  return { items, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
+  const levels = levelsRaw.map((l) => l.level).filter(Boolean) as string[];
+  return { items, levels, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -865,6 +897,7 @@ export async function createVocabCategory(languageId: number, body: Record<strin
   return prisma.langVocabCategory.create({
     data: {
       languageId,
+      level: optStr(body.level, 20),
       name: cleanStr(body.name, 'Tên danh mục', { required: true, max: 150 }),
       icon: optStr(body.icon, 64),
       order: optInt(body.order) ?? 0,
@@ -873,6 +906,7 @@ export async function createVocabCategory(languageId: number, body: Record<strin
 }
 export async function updateVocabCategory(id: number, body: Record<string, unknown>) {
   const data: Prisma.LangVocabCategoryUpdateInput = {};
+  if (body.level !== undefined) data.level = optStr(body.level, 20);
   if (body.name !== undefined) data.name = cleanStr(body.name, 'Tên danh mục', { required: true, max: 150 });
   if (body.icon !== undefined) data.icon = optStr(body.icon, 64);
   if (body.order !== undefined) data.order = optInt(body.order) ?? 0;
@@ -1065,6 +1099,7 @@ export async function createListening(languageId: number, body: Record<string, u
   return prisma.langListeningItem.create({
     data: {
       languageId,
+      level: optStr(body.level, 20),
       title: cleanStr(body.title, 'Tiêu đề', { required: true, max: 255 }),
       sourceType,
       audioUrl: optStr(body.audioUrl, 500),
@@ -1078,6 +1113,7 @@ export async function createListening(languageId: number, body: Record<string, u
 }
 export async function updateListening(id: number, body: Record<string, unknown>) {
   const data: Prisma.LangListeningItemUpdateInput = {};
+  if (body.level !== undefined) data.level = optStr(body.level, 20);
   if (body.title !== undefined) data.title = cleanStr(body.title, 'Tiêu đề', { required: true, max: 255 });
   if (body.sourceType !== undefined) data.sourceType = String(body.sourceType).toUpperCase() === 'YOUTUBE' ? 'YOUTUBE' : 'UPLOAD';
   if (body.audioUrl !== undefined) data.audioUrl = optStr(body.audioUrl, 500);
@@ -1098,6 +1134,7 @@ export async function createConversation(languageId: number, body: Record<string
   return prisma.langConversationItem.create({
     data: {
       languageId,
+      level: optStr(body.level, 20),
       question: cleanStr(body.question, 'Câu hỏi', { required: true }),
       answer: cleanStr(body.answer, 'Câu trả lời', { required: true }),
       questionPronunciation: optStr(body.questionPronunciation),
@@ -1112,6 +1149,7 @@ export async function createConversation(languageId: number, body: Record<string
 }
 export async function updateConversation(id: number, body: Record<string, unknown>) {
   const data: Prisma.LangConversationItemUpdateInput = {};
+  if (body.level !== undefined) data.level = optStr(body.level, 20);
   if (body.question !== undefined) data.question = cleanStr(body.question, 'Câu hỏi', { required: true });
   if (body.answer !== undefined) data.answer = cleanStr(body.answer, 'Câu trả lời', { required: true });
   if (body.questionPronunciation !== undefined) data.questionPronunciation = optStr(body.questionPronunciation);
@@ -1134,6 +1172,7 @@ export async function createReading(languageId: number, body: Record<string, unk
   return prisma.langReadingArticle.create({
     data: {
       languageId,
+      level: optStr(body.level, 20),
       title: cleanStr(body.title, 'Tiêu đề', { required: true, max: 255 }),
       type,
       images: (body.images ?? null) as Prisma.InputJsonValue,
@@ -1146,6 +1185,7 @@ export async function createReading(languageId: number, body: Record<string, unk
 }
 export async function updateReading(id: number, body: Record<string, unknown>) {
   const data: Prisma.LangReadingArticleUpdateInput = {};
+  if (body.level !== undefined) data.level = optStr(body.level, 20);
   if (body.title !== undefined) data.title = cleanStr(body.title, 'Tiêu đề', { required: true, max: 255 });
   if (body.type !== undefined) data.type = String(body.type).toUpperCase() === 'IMAGE_LIST' ? 'IMAGE_LIST' : 'TEXT';
   if (body.images !== undefined) data.images = (body.images ?? null) as Prisma.InputJsonValue;
@@ -1165,6 +1205,7 @@ export async function createQna(languageId: number, body: Record<string, unknown
   return prisma.langQnaItem.create({
     data: {
       languageId,
+      level: optStr(body.level, 20),
       question: cleanStr(body.question, 'Câu hỏi', { required: true }),
       answer: cleanStr(body.answer, 'Câu trả lời', { required: true }),
       pronunciation: optStr(body.pronunciation),
@@ -1176,6 +1217,7 @@ export async function createQna(languageId: number, body: Record<string, unknown
 }
 export async function updateQna(id: number, body: Record<string, unknown>) {
   const data: Prisma.LangQnaItemUpdateInput = {};
+  if (body.level !== undefined) data.level = optStr(body.level, 20);
   if (body.question !== undefined) data.question = cleanStr(body.question, 'Câu hỏi', { required: true });
   if (body.answer !== undefined) data.answer = cleanStr(body.answer, 'Câu trả lời', { required: true });
   if (body.pronunciation !== undefined) data.pronunciation = optStr(body.pronunciation);

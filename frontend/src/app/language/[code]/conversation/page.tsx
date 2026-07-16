@@ -13,7 +13,7 @@ import { MessagesSquare, Mic, Pause, Play, Square, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { fetchAllPages, languageApi } from '@/lib/language-api';
 import type { ConversationItem } from '@/types/language';
-import {
+import { Chip,
   CardsSkeleton,
   EmptyState,
   SectionShell,
@@ -324,6 +324,16 @@ function ConversationCard({
 export default function ConversationPage() {
   const code = String(useParams().code);
   const [items, setItems] = useState<ConversationItem[]>([]);
+  // Level filter (A1..C2 / N5..N1 / HSK) — chips appear once items carry level
+  // tags; ?level= deep-links from the roadmap land pre-filtered.
+  const [levelFilter, setLevelFilter] = useState<string | null>(null);
+  useEffect(() => {
+    try {
+      const lv = new URLSearchParams(window.location.search).get('level');
+      if (lv) setLevelFilter(lv);
+    } catch { /* ignore */ }
+  }, []);
+
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState<string | null>(null);
   const reduced = usePrefersReducedMotion();
@@ -351,6 +361,18 @@ export default function ConversationPage() {
 
   return (
     <SectionShell code={code} title="Giao tiếp" icon={<MessagesSquare size={26} className="text-neon-violet" />}>
+      {(() => {
+        const lvls = [...new Set((items ?? []).map((x) => x.level).filter(Boolean))] as string[];
+        if (lvls.length < 2) return null;
+        return (
+          <div className="mb-4 -mx-1 flex gap-2 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <Chip active={levelFilter == null} onClick={() => setLevelFilter(null)}>Tất cả cấp độ</Chip>
+            {lvls.map((lv) => (
+              <Chip key={lv} active={levelFilter === lv} onClick={() => setLevelFilter(lv)}>{lv}</Chip>
+            ))}
+          </div>
+        );
+      })()}
       {loading ? (
         <CardsSkeleton />
       ) : items.length === 0 ? (
@@ -361,7 +383,7 @@ export default function ConversationPage() {
         />
       ) : (
         <div className="space-y-4">
-          {items.map((it) => (
+          {(levelFilter ? items.filter((x) => x.level === levelFilter) : items).map((it) => (
             <ConversationCard key={it.id} item={it} code={code} onImage={setLightbox} />
           ))}
         </div>

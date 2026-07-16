@@ -5,8 +5,8 @@
  * Each row always shows title + mono structure formula; expanding reveals
  * explanation (HTML), examples, and optional mistake / comparison callouts.
  */
-import { useCallback, useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { GraduationCap, ChevronDown, AlertTriangle, GitCompare, Check } from 'lucide-react';
 import { toast } from 'sonner';
@@ -26,7 +26,16 @@ import {
 
 const ALL = '__all__';
 
+// Suspense wrapper needed for useSearchParams (deep-link ?level= from roadmap).
 export default function GrammarPage() {
+  return (
+    <Suspense fallback={<div className="mx-auto max-w-5xl px-3 py-8"><CardsSkeleton /></div>}>
+      <GrammarInner />
+    </Suspense>
+  );
+}
+
+function GrammarInner() {
   const code = String(useParams().code);
   const router = useRouter();
   const reduced = usePrefersReducedMotion();
@@ -36,7 +45,8 @@ export default function GrammarPage() {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<GrammarPoint[]>([]);
   const [levels, setLevels] = useState<string[]>([]);
-  const [level, setLevel] = useState<string>(ALL);
+  const searchParams = useSearchParams();
+  const [level, setLevel] = useState<string>(() => searchParams.get('level') || ALL);
   const [openId, setOpenId] = useState<number | null>(null);
   const [learned, setLearned] = useState<Set<number>>(new Set());
   const [aiPoint, setAiPoint] = useState<GrammarPoint | null>(null);

@@ -310,29 +310,29 @@ publicRouter.get('/:code/grammar', async (req, res: Response<ApiResponse>, next)
 
 publicRouter.get('/:code/listening', async (req, res: Response<ApiResponse>, next) => {
   try {
-    const { items, pagination } = await svc.getListening(req.params.code, req.query);
-    res.json({ success: true, data: items, pagination });
+    const { items, levels, pagination } = await svc.getListening(req.params.code, req.query);
+    res.json({ success: true, data: items, levels, pagination } as never);
   } catch (err) { next(err); }
 });
 
 publicRouter.get('/:code/conversation', async (req, res: Response<ApiResponse>, next) => {
   try {
-    const { items, pagination } = await svc.getConversation(req.params.code, req.query);
-    res.json({ success: true, data: items, pagination });
+    const { items, levels, pagination } = await svc.getConversation(req.params.code, req.query);
+    res.json({ success: true, data: items, levels, pagination } as never);
   } catch (err) { next(err); }
 });
 
 publicRouter.get('/:code/reading', async (req, res: Response<ApiResponse>, next) => {
   try {
-    const { items, pagination } = await svc.getReading(req.params.code, req.query);
-    res.json({ success: true, data: items, pagination });
+    const { items, levels, pagination } = await svc.getReading(req.params.code, req.query);
+    res.json({ success: true, data: items, levels, pagination } as never);
   } catch (err) { next(err); }
 });
 
 publicRouter.get('/:code/qna', async (req, res: Response<ApiResponse>, next) => {
   try {
-    const { items, pagination } = await svc.getQna(req.params.code, req.query);
-    res.json({ success: true, data: items, pagination });
+    const { items, levels, pagination } = await svc.getQna(req.params.code, req.query);
+    res.json({ success: true, data: items, levels, pagination } as never);
   } catch (err) { next(err); }
 });
 

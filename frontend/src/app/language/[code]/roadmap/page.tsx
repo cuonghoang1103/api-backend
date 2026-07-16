@@ -48,8 +48,13 @@ function nodeHref(code: string, n: RoadmapNode): string | null {
   if (n.linkType === 'external' && n.linkRef) return n.linkRef;
   if (!n.linkType) return null;
   const base = `/language/${code}/${n.linkType}`;
-  if (n.level && SECTION_WITH_LEVEL.has(n.linkType)) return `${base}?level=${encodeURIComponent(n.level)}`;
-  return base;
+  const params = new URLSearchParams();
+  // vocab nodes carry the bound category id in linkRef — deep-link straight
+  // into that category's word list (the practice binding uses the same ref).
+  if (n.linkType === 'vocab' && n.linkRef && /^\d+$/.test(n.linkRef)) params.set('categoryId', n.linkRef);
+  if (n.level && SECTION_WITH_LEVEL.has(n.linkType)) params.set('level', n.level);
+  const qs = params.toString();
+  return qs ? `${base}?${qs}` : base;
 }
 
 type NodeStatus = 'done' | 'current' | 'todo';

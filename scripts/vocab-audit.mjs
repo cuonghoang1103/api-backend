@@ -37,7 +37,12 @@ const LIMIT = num('--limit', 0);
 // Target exact rows. Without this the only way to check the auditor against a
 // KNOWN bad word is to audit everything before it — so the auditor never gets
 // audited, which is how a checker that catches nothing ships looking green.
-const IDS = String(val('--ids', '')).split(',').map((x) => Number(x.trim())).filter(Number.isInteger);
+// filter(Boolean) BEFORE Number(): ''.split(',') is [''], and Number('') is 0,
+// not NaN — so the empty case produced IDS=[0], the where clause became
+// `id IN (0)`, and a full audit silently checked nothing while reporting
+// success. Same shape as the `Number(x) || d` bug that ate `--vocab 0`.
+const IDS = String(val('--ids', '')).split(',').map((x) => x.trim()).filter(Boolean)
+  .map(Number).filter((n) => Number.isInteger(n) && n > 0);
 const BUDGET = num('--budget', 3_200_000);
 const MODEL = process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
 const BATCH = 10;

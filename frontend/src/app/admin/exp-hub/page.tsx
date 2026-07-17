@@ -30,6 +30,7 @@ import type {
   Snippet, SnippetCategory, SnippetTag, DashboardStats, BulkImportResult,
 } from '@/types/exp-hub';
 import NoteContentEditor from '@/components/exp-hub/NoteContentEditor';
+import { CodeEditor } from '@/components/exp-hub/CodeEditor';
 
 type Tab = 'dashboard' | 'snippets' | 'categories' | 'tags' | 'import';
 
@@ -687,12 +688,12 @@ function SnippetsTab({
                         </button>
                       )}
                     </div>
-                    <textarea
+                    <CodeEditor
                       value={blk.code}
-                      onChange={e => setEditor(prev => { if (!prev) return prev; const cb = [...prev.codeBlocks]; cb[idx] = { ...cb[idx], code: e.target.value }; return { ...prev, codeBlocks: cb }; })}
+                      language={blk.language}
+                      onChange={(code) => setEditor(prev => { if (!prev) return prev; const cb = [...prev.codeBlocks]; cb[idx] = { ...cb[idx], code }; return { ...prev, codeBlocks: cb }; })}
                       placeholder="Paste code của bạn vào đây..."
-                      className="w-full rounded border border-white/10 bg-[#0d1117] px-3 py-2 font-mono text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none resize-none"
-                      style={{ height: '200px' }}
+                      height={220}
                     />
                   </div>
                 ))}

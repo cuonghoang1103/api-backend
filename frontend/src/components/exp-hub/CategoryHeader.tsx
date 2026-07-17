@@ -7,6 +7,7 @@
 
 import { BookOpen } from 'lucide-react';
 import type { SnippetCategory } from '@/types/exp-hub';
+import { useTranslation } from '@/hooks/useTranslation';
 import { CategoryIcon } from './CategoryIcon';
 
 export function CategoryHeader({
@@ -16,6 +17,7 @@ export function CategoryHeader({
   category: SnippetCategory;
   count?: number;
 }) {
+  const { t } = useTranslation();
   const accent = category.color || 'var(--accent-color)';
 
   return (
@@ -36,7 +38,7 @@ export function CategoryHeader({
           className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
           style={{ background: `${typeof accent === 'string' && accent.startsWith('#') ? accent + '1a' : 'var(--bg-surface-active)'}` }}
         >
-          <CategoryIcon name={category.name} icon={category.icon} color={category.color} size={26} />
+          <CategoryIcon name={category.name} slug={category.slug} icon={category.icon} color={category.color} size={26} />
         </div>
 
         <div className="min-w-0 flex-1">
@@ -44,7 +46,7 @@ export function CategoryHeader({
             <h2 className="text-base font-bold text-[var(--text-primary)]">{category.name}</h2>
             {typeof count === 'number' && count > 0 && (
               <span className="rounded-full bg-[var(--bg-surface-active)] px-2 py-0.5 text-xs text-[var(--text-secondary)]">
-                {count} mục
+                {count} {t('expHub.items')}
               </span>
             )}
           </div>
@@ -62,7 +64,7 @@ export function CategoryHeader({
               style={{ borderColor: accent, color: accent }}
             >
               <BookOpen className="h-3.5 w-3.5" />
-              Tài liệu chính thức
+              {t('expHub.officialDocs')}
             </a>
           )}
         </div>

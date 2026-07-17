@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronRight, ChevronDown, Folder, FolderOpen, MoreHorizontal, Plus } from 'lucide-react';
+import { ChevronRight, ChevronDown, Folder, MoreHorizontal, Plus } from 'lucide-react';
 import type { SnippetCategory } from '@/types/exp-hub';
+import { useTranslation } from '@/hooks/useTranslation';
+import { CategoryIcon } from './CategoryIcon';
 
 interface FolderTreeProps {
   categories: SnippetCategory[];
@@ -75,11 +77,7 @@ function CategoryItem({
         )}
 
         <span className="flex-1 flex items-center gap-2 min-w-0">
-          {isOpen && hasChildren ? (
-            <FolderOpen className="w-4 h-4 text-amber-400 shrink-0" />
-          ) : (
-            <Folder className="w-4 h-4 text-amber-400 shrink-0" />
-          )}
+          <CategoryIcon name={category.name} slug={category.slug} icon={category.icon} color={category.color} size={16} className="shrink-0" />
           <span className="truncate text-sm font-medium">{category.name}</span>
           {snippetCount > 0 && (
             <span className="text-xs text-[var(--text-muted)] bg-[var(--bg-surface-active)] px-1.5 py-0.5 rounded-full">
@@ -134,24 +132,25 @@ export function FolderTree({
   categories,
   selectedCategoryId,
   onSelectCategory,
-  allLabel = 'Tất cả mục',
+  allLabel,
   isAdmin,
   onCreateCategory,
   onEditCategory,
   onDeleteCategory,
 }: FolderTreeProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col h-full">
       {isAdmin && onCreateCategory && (
         <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border-color)]">
           <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
-            Danh mục
+            {t('expHub.categories')}
           </h3>
           <button
             type="button"
             onClick={() => onCreateCategory()}
             className="p-1 hover:bg-[var(--bg-surface-hover)] rounded"
-            title="Thêm danh mục"
+            title={t('expHub.addCategory')}
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -168,7 +167,7 @@ export function FolderTree({
           onClick={() => onSelectCategory(null)}
         >
           <Folder className="w-4 h-4 text-amber-400 shrink-0" />
-          <span className="text-sm font-medium">{allLabel}</span>
+          <span className="text-sm font-medium">{allLabel ?? t('expHub.allItems')}</span>
         </div>
 
         {categories.map((category) => (
@@ -187,7 +186,7 @@ export function FolderTree({
 
         {categories.length === 0 && (
           <p className="px-3 py-4 text-sm text-[var(--text-muted)] text-center">
-            Chưa có danh mục
+            {t('expHub.noCategories')}
           </p>
         )}
       </div>

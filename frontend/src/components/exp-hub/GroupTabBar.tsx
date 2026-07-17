@@ -9,6 +9,7 @@
 import { useRef } from 'react';
 import { LayoutGrid, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { SnippetCategory } from '@/types/exp-hub';
+import { useTranslation } from '@/hooks/useTranslation';
 import { CategoryIcon } from './CategoryIcon';
 
 interface GroupTabBarProps {
@@ -26,6 +27,7 @@ function subtreeCount(node: SnippetCategory): number {
 }
 
 export function GroupTabBar({ groups, activeGroupId, onSelectGroup }: GroupTabBarProps) {
+  const { t } = useTranslation();
   const scrollerRef = useRef<HTMLDivElement>(null);
 
   const nudge = (dir: -1 | 1) => {
@@ -39,7 +41,7 @@ export function GroupTabBar({ groups, activeGroupId, onSelectGroup }: GroupTabBa
         type="button"
         onClick={() => nudge(-1)}
         className="hidden shrink-0 rounded-md p-1 text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] sm:block"
-        aria-label="Cuộn trái"
+        aria-label={t('expHub.scrollLeft')}
       >
         <ChevronLeft className="h-4 w-4" />
       </button>
@@ -59,7 +61,7 @@ export function GroupTabBar({ groups, activeGroupId, onSelectGroup }: GroupTabBa
           }`}
         >
           <LayoutGrid className="h-4 w-4" />
-          Tất cả
+          {t('expHub.all')}
         </button>
 
         {groups.map((g) => {
@@ -83,7 +85,7 @@ export function GroupTabBar({ groups, activeGroupId, onSelectGroup }: GroupTabBa
                   : undefined
               }
             >
-              <CategoryIcon name={g.name} icon={g.icon} color={active ? '#ffffff' : g.color} size={18} />
+              <CategoryIcon name={g.name} slug={g.slug} icon={g.icon} color={active ? '#ffffff' : g.color} size={18} />
               <span className="whitespace-nowrap">{g.name}</span>
               {count > 0 && (
                 <span
@@ -103,7 +105,7 @@ export function GroupTabBar({ groups, activeGroupId, onSelectGroup }: GroupTabBa
         type="button"
         onClick={() => nudge(1)}
         className="hidden shrink-0 rounded-md p-1 text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] sm:block"
-        aria-label="Cuộn phải"
+        aria-label={t('expHub.scrollRight')}
       >
         <ChevronRight className="h-4 w-4" />
       </button>

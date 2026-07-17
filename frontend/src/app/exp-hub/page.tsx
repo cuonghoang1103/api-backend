@@ -3,9 +3,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
-import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen, Github, Download } from 'lucide-react';
+import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen, Github, Download, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTheme } from '@/context/ThemeContext';
+import { useTranslation } from '@/hooks/useTranslation';
 import { FolderTree } from '@/components/exp-hub/FolderTree';
 import { SnippetCard } from '@/components/exp-hub/SnippetCard';
 import { CodeViewer } from '@/components/exp-hub/CodeViewer';
@@ -42,6 +43,7 @@ function formatBytes(n?: number | null): string {
 export default function ExpHubPage() {
   const searchParams = useSearchParams();
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const isDark = theme === 'dark';
 
   const [categories, setCategories] = useState<SnippetCategory[]>([]);
@@ -87,6 +89,17 @@ export default function ExpHubPage() {
   const treeCategories = activeGroup ? (activeGroup.children ?? []) : categories;
   // The category whose header we show above the list (group or technology).
   const selectedCategory = selectedCategoryId ? findCategory(categories, selectedCategoryId) : undefined;
+
+  // Float "Install / Setup" entries to the top of the list — the first thing
+  // you want when opening a technology. Skipped while searching (search
+  // relevance wins). Client-side over the current page.
+  const displaySnippets = useMemo(() => {
+    if (searchQuery || showSaved) return snippets;
+    const re = /(install|set\s?up|cài\s?đặt|thiết lập|cấu hình|khởi tạo|getting started|bắt đầu)/i;
+    const pinned: Snippet[] = [], rest: Snippet[] = [];
+    for (const s of snippets) (re.test(s.title) ? pinned : rest).push(s);
+    return pinned.length ? [...pinned, ...rest] : snippets;
+  }, [snippets, searchQuery, showSaved]);
 
   // Fetch categories
   useEffect(() => {
@@ -147,12 +160,12 @@ export default function ExpHubPage() {
     fetchSnippets();
   }, [fetchSnippets]);
 
-  // Select first snippet when list changes
+  // Select first snippet when list changes (respects the pinned order)
   useEffect(() => {
-    if (snippets.length > 0 && !selectedSnippet) {
-      setSelectedSnippet(snippets[0]);
+    if (displaySnippets.length > 0 && !selectedSnippet) {
+      setSelectedSnippet(displaySnippets[0]);
     }
-  }, [snippets, selectedSnippet]);
+  }, [displaySnippets, selectedSnippet]);
 
   // Fetch the FULL record when a snippet is selected — the list payload
   // has no variables / hasUpvoted / hasBookmarked, and the detail
@@ -192,7 +205,7 @@ export default function ExpHubPage() {
         upvoteCount: Math.max(0, detail.upvoteCount + (upvoted ? 1 : -1)),
       });
     } catch {
-      toast.error('Không vote được, thử lại sau');
+      toast.error(t('expHub.voteFail'));
     } finally {
       setVoteBusy(false);
     }
@@ -205,14 +218,14 @@ export default function ExpHubPage() {
       const res = await snippetsApi.toggleBookmark(detail.id);
       const bookmarked = res.data.data.bookmarked;
       setDetail({ ...detail, hasBookmarked: bookmarked });
-      toast.success(bookmarked ? 'Đã lưu snippet' : 'Đã bỏ lưu');
+      toast.success(bookmarked ? t('expHub.bookmarked') : t('expHub.unsaveOk'));
       // Keep the saved list in sync if it's open
       if (showSaved) {
         if (bookmarked) setSavedSnippets((prev) => [detail, ...prev.filter(s => s.id !== detail.id)]);
         else setSavedSnippets((prev) => prev.filter(s => s.id !== detail.id));
       }
     } catch {
-      toast.error('Không lưu được, thử lại sau');
+      toast.error(t('expHub.saveFail'));
     } finally {
       setVoteBusy(false);
     }
@@ -272,6 +285,20 @@ export default function ExpHubPage() {
     await navigator.clipboard.writeText(snippet.code);
   };
 
+  // Copy every code block of the current snippet at once (joined) — handy for
+  // multi-block "install & setup" entries.
+  const handleCopyAll = async (snippet: Snippet) => {
+    const blocks = (snippet.codeBlocks && snippet.codeBlocks.length)
+      ? snippet.codeBlocks.map((b) => b.code)
+      : [snippet.code];
+    const all = blocks.filter((c) => c?.trim()).join('\n\n');
+    if (!all.trim()) return;
+    try {
+      await navigator.clipboard.writeText(all);
+      toast.success(t('expHub.copiedAll'));
+    } catch { /* ignore */ }
+  };
+
   // Helper to convert YouTube URL to embed URL
   const getYouTubeEmbedUrl = (url: string): string => {
     if (!url) return '';
@@ -284,7 +311,7 @@ export default function ExpHubPage() {
   };
 
   const getBreadcrumbs = (): Array<{ label: string; id?: number }> => {
-    const crumbs: Array<{ label: string; id?: number }> = [{ label: 'Tất cả' }];
+    const crumbs: Array<{ label: string; id?: number }> = [{ label: t('expHub.all') }];
     if (activeGroup) crumbs.push({ label: activeGroup.name, id: activeGroup.id });
     if (selectedCategory && selectedCategory.id !== activeGroup?.id) {
       crumbs.push({ label: selectedCategory.name, id: selectedCategory.id });
@@ -327,7 +354,7 @@ export default function ExpHubPage() {
           </h1>
           {stats && (
             <span className="hidden rounded-full border border-[var(--border-color)] bg-[var(--bg-surface-active)] px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)] sm:inline">
-              {stats.totalSnippets} mục
+              {stats.totalSnippets} {t('expHub.items')}
             </span>
           )}
         </div>
@@ -344,10 +371,10 @@ export default function ExpHubPage() {
                 ? 'border-violet-400/60 bg-violet-500/15 text-violet-500 dark:text-violet-300'
                 : 'border-[var(--border-color)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'
             }`}
-            title="Snippets đã lưu"
+            title={t('expHub.savedTab')}
           >
             <BookmarkCheck className="h-4 w-4" />
-            <span className="hidden sm:inline">Đã lưu</span>
+            <span className="hidden sm:inline">{t('expHub.savedTab')}</span>
           </button>
         </div>
       </header>
@@ -370,14 +397,14 @@ export default function ExpHubPage() {
           <div className={`flex items-center border-b border-[var(--border-color)] ${folderTreeOpen ? 'justify-between px-3 py-2' : 'justify-center py-2'}`}>
             <span className={`flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] transition-opacity ${folderTreeOpen ? 'opacity-100' : 'w-0 overflow-hidden opacity-0 pointer-events-none'}`}>
               <FolderOpen className="h-4 w-4 text-violet-500" />
-              {activeGroup ? activeGroup.name : 'Danh mục'}
+              {activeGroup ? activeGroup.name : t('expHub.categories')}
             </span>
             <button
               type="button"
               onClick={() => setFolderTreeOpen((v) => !v)}
               className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]"
-              title={folderTreeOpen ? 'Ẩn danh mục' : 'Hiện danh mục'}
-              aria-label={folderTreeOpen ? 'Ẩn sidebar danh mục' : 'Hiện sidebar danh mục'}
+              title={folderTreeOpen ? t('expHub.hideCategories') : t('expHub.showCategories')}
+              aria-label={folderTreeOpen ? t('expHub.hideCategories') : t('expHub.showCategories')}
             >
               {folderTreeOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
             </button>
@@ -387,7 +414,7 @@ export default function ExpHubPage() {
               categories={treeCategories}
               selectedCategoryId={selectedCategoryId}
               onSelectCategory={handleCategorySelect}
-              allLabel={activeGroup ? `Tất cả ${activeGroup.name}` : 'Tất cả mục'}
+              allLabel={activeGroup ? `${t('expHub.all')} ${activeGroup.name}` : t('expHub.allItems')}
             />
           </div>
         </aside>
@@ -420,11 +447,11 @@ export default function ExpHubPage() {
                 onChange={(e) => setSortBy(e.target.value as 'popular' | 'newest' | 'upvotes')}
                 className="rounded border border-[var(--border-color)] bg-[var(--bg-surface)] px-2 py-1 text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-violet-500/40"
               >
-                <option value="newest">Mới nhất</option>
-                <option value="popular">Copy nhiều</option>
-                <option value="upvotes">Yêu thích</option>
+                <option value="newest">{t('expHub.sortNewest')}</option>
+                <option value="popular">{t('expHub.sortPopular')}</option>
+                <option value="upvotes">{t('expHub.sortTop')}</option>
               </select>
-              <span className="text-sm text-[var(--text-muted)]">{snippets.length} kết quả</span>
+              <span className="text-sm text-[var(--text-muted)]">{snippets.length} {t('expHub.results')}</span>
             </div>
           </div>
 
@@ -434,7 +461,7 @@ export default function ExpHubPage() {
               savedLoading ? (
                 <div className="flex items-center justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-violet-500" /></div>
               ) : savedSnippets.length === 0 ? (
-                <div className="p-8 text-center text-[var(--text-muted)]"><p>Chưa có snippet nào được lưu</p></div>
+                <div className="p-8 text-center text-[var(--text-muted)]"><p>{t('expHub.noSaved')}</p></div>
               ) : (
                 savedSnippets.map((snippet) => (
                   <SnippetCard key={snippet.id} snippet={snippet} isSelected={selectedSnippet?.id === snippet.id} onClick={() => handleSnippetClick(snippet)} onCopy={() => handleCopySnippet(snippet)} />
@@ -442,10 +469,10 @@ export default function ExpHubPage() {
               )
             ) : isLoading ? (
               <div className="flex items-center justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-violet-500" /></div>
-            ) : snippets.length === 0 ? (
-              <div className="p-8 text-center text-[var(--text-muted)]"><p>Chưa có mục nào ở đây</p></div>
+            ) : displaySnippets.length === 0 ? (
+              <div className="p-8 text-center text-[var(--text-muted)]"><p>{t('expHub.empty')}</p></div>
             ) : (
-              snippets.map((snippet) => (
+              displaySnippets.map((snippet) => (
                 <SnippetCard key={snippet.id} snippet={snippet} isSelected={selectedSnippet?.id === snippet.id} onClick={() => handleSnippetClick(snippet)} onCopy={() => handleCopySnippet(snippet)} />
               ))
             )}
@@ -455,11 +482,11 @@ export default function ExpHubPage() {
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-2 border-t border-[var(--border-color)] p-3">
               <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className="rounded border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-1 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] disabled:opacity-40">
-                Trước
+                {t('expHub.prev')}
               </button>
               <span className="text-sm text-[var(--text-muted)]">{page} / {totalPages}</span>
               <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="rounded border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-1 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] disabled:opacity-40">
-                Sau
+                {t('expHub.next')}
               </button>
             </div>
           )}
@@ -472,7 +499,7 @@ export default function ExpHubPage() {
             if (!view) {
               return (
                 <div className="flex h-full items-center justify-center text-[var(--text-muted)]">
-                  Chọn một mục để xem chi tiết
+                  {t('expHub.selectHint')}
                 </div>
               );
             }
@@ -495,7 +522,7 @@ export default function ExpHubPage() {
                     <div className="flex flex-wrap items-center gap-2">
                       {isProject && (
                         <span className="inline-flex items-center gap-1 rounded-md bg-violet-500/15 px-2 py-0.5 text-xs font-semibold text-violet-500 dark:text-violet-300">
-                          <Github className="h-3.5 w-3.5" /> Project
+                          <Github className="h-3.5 w-3.5" /> {t('expHub.project')}
                         </span>
                       )}
                       <h2 className="text-2xl font-bold text-[var(--text-primary)]">{view.title}</h2>
@@ -548,7 +575,7 @@ export default function ExpHubPage() {
                 {/* Attachments (downloadable project files) */}
                 {view.attachments && view.attachments.length > 0 && (
                   <div className="mb-6">
-                    <div className="mb-2 text-sm font-medium text-[var(--text-secondary)]">Tệp đính kèm</div>
+                    <div className="mb-2 text-sm font-medium text-[var(--text-secondary)]">{t('expHub.attachments')}</div>
                     <div className="flex flex-col gap-2">
                       {view.attachments.map((att) => (
                         <a
@@ -578,9 +605,14 @@ export default function ExpHubPage() {
 
                 {/* Actions */}
                 <div className="flex flex-wrap items-center gap-3">
+                  {((view.codeBlocks?.filter((b) => b.code?.trim()).length ?? 0) > 1) && (
+                    <button onClick={() => handleCopyAll(view)} className="flex items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/15 px-4 py-2 text-sm text-emerald-600 transition-colors hover:bg-emerald-500/25 dark:text-emerald-300">
+                      <Copy className="h-4 w-4" /> {t('expHub.copyAll')}
+                    </button>
+                  )}
                   {(view.explanation || view.youtubeUrl || view.referenceUrl) && (
                     <button onClick={() => setShowExplanation(true)} className="flex items-center gap-2 rounded-lg border border-blue-500/40 bg-blue-500/15 px-4 py-2 text-sm text-blue-600 transition-colors hover:bg-blue-500/25 dark:text-blue-300">
-                      <Info className="h-4 w-4" /> Chi tiết
+                      <Info className="h-4 w-4" /> {t('expHub.details')}
                     </button>
                   )}
                   <button
@@ -591,7 +623,7 @@ export default function ExpHubPage() {
                     }`}
                   >
                     <Bookmark className={`h-4 w-4 ${view.hasBookmarked ? 'fill-current' : ''}`} />
-                    {view.hasBookmarked ? 'Đã lưu' : 'Lưu'}
+                    {view.hasBookmarked ? t('expHub.bookmarked') : t('expHub.bookmark')}
                   </button>
                   <button
                     onClick={handleToggleUpvote}
@@ -604,7 +636,7 @@ export default function ExpHubPage() {
                     {view.upvoteCount > 0 ? view.upvoteCount : ''}
                   </button>
                   <button onClick={handleToggleVersions} className="flex items-center gap-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-4 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)]">
-                    <History className="h-4 w-4" /> Lịch sử
+                    <History className="h-4 w-4" /> {t('expHub.history')}
                   </button>
                 </div>
 
@@ -622,7 +654,7 @@ export default function ExpHubPage() {
                         {view.youtubeUrl && (
                           <div>
                             <div className="mb-3 flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)]">
-                              <Play className="h-4 w-4 text-red-500" /> Video hướng dẫn
+                              <Play className="h-4 w-4 text-red-500" /> {t('expHub.videoGuide')}
                             </div>
                             <div className="relative aspect-video overflow-hidden rounded-xl bg-black">
                               <iframe src={getYouTubeEmbedUrl(view.youtubeUrl)} className="absolute inset-0 h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
@@ -632,18 +664,18 @@ export default function ExpHubPage() {
                         {view.referenceUrl && (
                           <div>
                             <div className="mb-3 flex items-center justify-between gap-2 text-sm font-medium text-[var(--text-secondary)]">
-                              <span className="flex items-center gap-2"><ExternalLink className="h-4 w-4 text-cyan-500" /> Trang web tham khảo</span>
-                              <a href={view.referenceUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-600 hover:underline">Mở tab mới ↗</a>
+                              <span className="flex items-center gap-2"><ExternalLink className="h-4 w-4 text-cyan-500" /> {t('expHub.refSite')}</span>
+                              <a href={view.referenceUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-600 hover:underline">{t('expHub.openNewTab')}</a>
                             </div>
                             <div className="relative aspect-video overflow-hidden rounded-xl border border-[var(--border-color)] bg-white">
                               <iframe src={view.referenceUrl} className="absolute inset-0 h-full w-full" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" referrerPolicy="no-referrer" loading="lazy" />
                             </div>
-                            <p className="mt-1.5 text-xs text-[var(--text-muted)]">Một số trang chặn nhúng — nếu trống, bấm &quot;Mở tab mới&quot;.</p>
+                            <p className="mt-1.5 text-xs text-[var(--text-muted)]">{t('expHub.embedBlocked')}</p>
                           </div>
                         )}
                         {view.explanation && (
                           <div>
-                            <div className="mb-3 flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)]"><Info className="h-4 w-4" /> Giải thích</div>
+                            <div className="mb-3 flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)]"><Info className="h-4 w-4" /> {t('expHub.explanation')}</div>
                             <div className="prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: sanitizeHtml(view.explanation) }} />
                           </div>
                         )}
@@ -655,11 +687,11 @@ export default function ExpHubPage() {
                 {/* Version history (lazy) */}
                 {showVersions && (
                   <div className="mt-4 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] p-3">
-                    <h3 className="mb-2 text-sm font-semibold text-[var(--text-secondary)]">Lịch sử phiên bản</h3>
+                    <h3 className="mb-2 text-sm font-semibold text-[var(--text-secondary)]">{t('expHub.versionHistory')}</h3>
                     {versions == null ? (
                       <div className="flex justify-center py-4"><Loader2 className="h-4 w-4 animate-spin text-violet-500" /></div>
                     ) : versions.length === 0 ? (
-                      <p className="text-sm text-[var(--text-muted)]">Chưa có phiên bản nào</p>
+                      <p className="text-sm text-[var(--text-muted)]">{t('expHub.noVersions')}</p>
                     ) : (
                       <div className="space-y-2">
                         {versions.map((v, i) => (
@@ -680,8 +712,8 @@ export default function ExpHubPage() {
 
                 {/* Meta */}
                 <div className="mt-6 border-t border-[var(--border-color)] pt-6 text-sm text-[var(--text-muted)]">
-                  <p>Tạo ngày {new Date(view.createdAt).toLocaleDateString('vi-VN')}</p>
-                  {view.author && <p>Bởi {view.author.username}</p>}
+                  <p>{t('expHub.createdOn')} {new Date(view.createdAt).toLocaleDateString()}</p>
+                  {view.author && <p>{t('expHub.by')} {view.author.username}</p>}
                 </div>
               </div>
             );

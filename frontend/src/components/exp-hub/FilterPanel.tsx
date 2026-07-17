@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Filter, X } from 'lucide-react';
 import type { SnippetTag } from '@/types/exp-hub';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface FilterPanelProps {
   tags: SnippetTag[];
@@ -25,6 +26,7 @@ export function FilterPanel({
   onClear,
   className = '',
 }: FilterPanelProps) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const hasFilters = selectedTags.length > 0 || selectedLanguage;
 
@@ -48,7 +50,7 @@ export function FilterPanel({
           }`}
         >
           <Filter className="w-4 h-4" />
-          <span>Lọc</span>
+          <span>{t('expHub.filter')}</span>
           {hasFilters && (
             <span className="px-1.5 py-0.5 bg-violet-500/25 rounded text-xs">
               {selectedTags.length + (selectedLanguage ? 1 : 0)}
@@ -62,7 +64,7 @@ export function FilterPanel({
             className="flex items-center gap-1 px-2 py-1 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]"
           >
             <X className="w-3.5 h-3.5" />
-            Xoá lọc
+            {t('expHub.clearFilter')}
           </button>
         )}
       </div>
@@ -72,7 +74,7 @@ export function FilterPanel({
           {/* Languages */}
           {languages.length > 0 && (
             <div className="mb-4">
-              <h4 className="text-sm font-medium mb-2 text-[var(--text-secondary)]">Ngôn ngữ</h4>
+              <h4 className="text-sm font-medium mb-2 text-[var(--text-secondary)]">{t('expHub.language')}</h4>
               <div className="flex flex-wrap gap-2">
                 {languages.map((lang) => (
                   <button
@@ -94,7 +96,7 @@ export function FilterPanel({
           {/* Tags */}
           {tags.length > 0 && (
             <div>
-              <h4 className="text-sm font-medium mb-2 text-[var(--text-secondary)]">Tags</h4>
+              <h4 className="text-sm font-medium mb-2 text-[var(--text-secondary)]">{t('expHub.tags')}</h4>
               <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
                 {tags.map((tag) => (
                   <button

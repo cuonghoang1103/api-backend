@@ -2761,3 +2761,37 @@ html.pwa-standalone button[aria-label='Close chat sessions'] {
 }
 .legal-prose li { margin: 0.35rem 0; }
 .legal-prose b { color: var(--text-primary); font-weight: 600; }
+
+/* ── EXP_Hub admin CodeEditor — VSCode Dark+ token colors (scoped) ──
+   Used by src/components/exp-hub/CodeEditor.tsx (highlight.js overlay).
+   Always dark tokens: the editor tile is a fixed dark #1e1e1e canvas. */
+.exphub-code-editor .hljs-comment,
+.exphub-code-editor .hljs-quote { color: #6a9955; font-style: italic; }
+.exphub-code-editor .hljs-keyword,
+.exphub-code-editor .hljs-selector-tag,
+.exphub-code-editor .hljs-built_in,
+.exphub-code-editor .hljs-name { color: #569cd6; }
+.exphub-code-editor .hljs-string,
+.exphub-code-editor .hljs-attr,
+.exphub-code-editor .hljs-symbol,
+.exphub-code-editor .hljs-meta .hljs-string { color: #ce9178; }
+.exphub-code-editor .hljs-number,
+.exphub-code-editor .hljs-literal { color: #b5cea8; }
+.exphub-code-editor .hljs-title,
+.exphub-code-editor .hljs-title.function_,
+.exphub-code-editor .hljs-section { color: #dcdcaa; }
+.exphub-code-editor .hljs-type,
+.exphub-code-editor .hljs-class .hljs-title,
+.exphub-code-editor .hljs-title.class_ { color: #4ec9b0; }
+.exphub-code-editor .hljs-variable,
+.exphub-code-editor .hljs-template-variable,
+.exphub-code-editor .hljs-property { color: #9cdcfe; }
+.exphub-code-editor .hljs-attribute { color: #9cdcfe; }
+.exphub-code-editor .hljs-tag { color: #808080; }
+.exphub-code-editor .hljs-regexp { color: #d16969; }
+.exphub-code-editor .hljs-meta,
+.exphub-code-editor .hljs-comment.hljs-doctag { color: #c586c0; }
+.exphub-code-editor .hljs-deletion { color: #ce9178; }
+.exphub-code-editor .hljs-addition { color: #b5cea8; }
+.exphub-code-editor .hljs-emphasis { font-style: italic; }
+.exphub-code-editor .hljs-strong { font-weight: 700; }

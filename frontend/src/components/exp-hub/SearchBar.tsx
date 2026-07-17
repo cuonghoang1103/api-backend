@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { Search, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface SearchBarProps {
   initialQuery?: string;
@@ -14,9 +15,11 @@ interface SearchBarProps {
   onSearch?: (query: string) => void;
 }
 
-export function SearchBar({ initialQuery = '', placeholder = 'Tìm kiếm...', className = '', onSearch }: SearchBarProps) {
+export function SearchBar({ initialQuery = '', placeholder, className = '', onSearch }: SearchBarProps) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState(initialQuery);
   const router = useRouter();
+  const ph = placeholder || t('expHub.searchPlaceholder');
 
   const handleSearch = useCallback(
     (e: React.FormEvent) => {
@@ -45,7 +48,7 @@ export function SearchBar({ initialQuery = '', placeholder = 'Tìm kiếm...', c
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder={placeholder}
+        placeholder={ph}
         className="w-full pl-10 pr-10 py-2 bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/50 transition-colors"
       />
       {query && (

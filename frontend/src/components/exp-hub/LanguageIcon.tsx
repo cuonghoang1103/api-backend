@@ -1,10 +1,18 @@
 'use client';
 
+import { BRAND_LOGOS } from './brandLogos';
+
 interface LanguageIconProps {
   language: string;
   className?: string;
   size?: number;
 }
+
+// A few language ids differ from the brand-logo slug.
+const LANG_TO_BRAND: Record<string, string> = {
+  js: 'javascript', ts: 'typescript', py: 'python', golang: 'go',
+  'c++': 'cpp', node: 'nodejs', nodejs: 'nodejs', reactjs: 'react',
+};
 
 // Language color mapping
 const LANGUAGE_COLORS: Record<string, string> = {
@@ -95,6 +103,23 @@ export function LanguageIcon({ language, className = '', size = 24 }: LanguageIc
   const normalizedLang = language.toLowerCase();
   const color = LANGUAGE_COLORS[normalizedLang] || '#6b7280';
   const shortName = LANGUAGE_NAMES[normalizedLang] || language.slice(0, 4).toUpperCase();
+
+  // Prefer a real brand logo when we have one for this language.
+  const brand = BRAND_LOGOS[LANG_TO_BRAND[normalizedLang] ?? normalizedLang];
+  if (brand) {
+    // Sit the logo on a soft brand-tinted rounded tile for a consistent look.
+    const dark = parseInt(brand.h.slice(1), 16) < 0x333333;
+    return (
+      <div
+        className={`relative shrink-0 flex items-center justify-center rounded overflow-hidden ${className}`}
+        style={{ width: size, height: size, background: `${brand.h}1f` }}
+      >
+        <svg viewBox="0 0 24 24" width={size * 0.68} height={size * 0.68} fill={dark ? 'var(--text-primary)' : brand.h} aria-label={brand.t}>
+          <path d={brand.p} />
+        </svg>
+      </div>
+    );
+  }
 
   return (
     <div

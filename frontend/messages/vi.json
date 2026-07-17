@@ -570,6 +570,17 @@
     "hoursAgo": "giờ trước",
     "daysAgo": "ngày trước",
     "anonymous": "Người dùng",
-    "reactions": "Cảm xúc"
+    "reactions": "Cảm xúc",
+    "related": "Xem thêm",
+    "aiAssist": "Trợ lý AI",
+    "aiExplain": "Giải thích",
+    "aiOptimize": "Review & tối ưu",
+    "aiInstall": "Lệnh cài đặt",
+    "aiPick": "Chọn việc bạn muốn AI làm với đoạn code này:",
+    "aiThinking": "Đang xử lý…",
+    "aiHint": "Do AI tạo — hãy kiểm tra lại trước khi tin dùng.",
+    "aiNeedLogin": "Vui lòng đăng nhập để dùng trợ lý AI.",
+    "aiError": "Trợ lý AI đang bận, vui lòng thử lại sau giây lát.",
+    "copyResult": "Sao chép"
   }
 }

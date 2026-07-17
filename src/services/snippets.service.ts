@@ -4,7 +4,7 @@
 
 import { prisma } from '../config/database.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 function slugify(text: string): string {
   return text
@@ -210,44 +210,114 @@ export interface SnippetFilters {
   limit?: number;
 }
 
+const SNIPPET_LIST_INCLUDE = {
+  category: { select: { id: true, name: true, slug: true } },
+  author: { select: { id: true, username: true, avatarUrl: true } },
+  snippetToTags: { include: { tag: true } },
+  _count: { select: { comments: true, upvotes: true } },
+} satisfies Prisma.SnippetInclude;
+
 export async function getSnippets(filters: SnippetFilters = {}) {
   const { categoryId, tagIds, language, status = 'PUBLISHED', search, sort = 'newest', page = 1, limit = 20 } = filters;
   const skip = (page - 1) * limit;
 
+  // ── Full-text search path (ranked by relevance) ──────────────────────────
+  // When a query is present we rank via the `search_vector` tsvector (GIN
+  // index) instead of unranked LIKE. Other filters are applied in the same
+  // SQL; rows are then hydrated with Prisma to reuse the normal include.
+  const q = search?.trim();
+  if (q) {
+    const categoryIds = categoryId ? await getCategoryAndDescendantIds(categoryId) : null;
+    const conds: Prisma.Sql[] = [Prisma.sql`s.search_vector @@ websearch_to_tsquery('simple', ${q})`];
+    if (status) conds.push(Prisma.sql`s.status::text = ${status}`);
+    if (categoryIds?.length) conds.push(Prisma.sql`s.category_id IN (${Prisma.join(categoryIds)})`);
+    if (language) conds.push(Prisma.sql`s.language = ${language}`);
+    if (tagIds?.length) conds.push(Prisma.sql`EXISTS (SELECT 1 FROM snippet_to_tags st WHERE st.snippet_id = s.id AND st.tag_id IN (${Prisma.join(tagIds)}))`);
+    const whereSql = Prisma.join(conds, ' AND ');
+
+    const [idRows, countRows] = await Promise.all([
+      prisma.$queryRaw<Array<{ id: number }>>(Prisma.sql`
+        SELECT s.id FROM snippets s
+        WHERE ${whereSql}
+        ORDER BY ts_rank(s.search_vector, websearch_to_tsquery('simple', ${q})) DESC, s.copy_count DESC, s.created_at DESC
+        LIMIT ${limit} OFFSET ${skip}
+      `),
+      prisma.$queryRaw<Array<{ count: bigint }>>(Prisma.sql`SELECT COUNT(*)::bigint AS count FROM snippets s WHERE ${whereSql}`),
+    ]);
+
+    const total = Number(countRows[0]?.count ?? 0);
+    const ids = idRows.map((r) => r.id);
+    if (!ids.length) return { snippets: [], total, page, limit, totalPages: Math.ceil(total / limit) };
+
+    const found = await prisma.snippet.findMany({ where: { id: { in: ids } }, include: SNIPPET_LIST_INCLUDE });
+    const byId = new Map(found.map((s) => [s.id, s]));
+    const ordered = ids.map((id) => byId.get(id)).filter((s): s is (typeof found)[number] => !!s);
+    return { snippets: ordered.map(normalizeSnippet), total, page, limit, totalPages: Math.ceil(total / limit) };
+  }
+
+  // ── Normal filtered path (no search) ────────────────────────────────────
   const where: Prisma.SnippetWhereInput = {};
   if (status) where.status = status as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   if (categoryId) {
-    // Include the folder itself AND all nested sub-folders so a parent
-    // selection surfaces everything underneath it.
     const categoryIds = await getCategoryAndDescendantIds(categoryId);
     where.categoryId = { in: categoryIds };
   }
   if (language) where.language = language;
   if (tagIds?.length) where.snippetToTags = { some: { tagId: { in: tagIds } } };
-  if (search) {
-    where.OR = [
-      { title: { contains: search, mode: 'insensitive' } },
-      { description: { contains: search, mode: 'insensitive' } },
-      { code: { contains: search, mode: 'insensitive' } },
-    ];
-  }
 
   const orderBy = sort === 'popular' ? { copyCount: 'desc' as const } : sort === 'upvotes' ? { upvoteCount: 'desc' as const } : { createdAt: 'desc' as const };
 
   const [snippets, total] = await Promise.all([
-    prisma.snippet.findMany({
-      where, skip, take: limit, orderBy,
-      include: {
-        category: { select: { id: true, name: true, slug: true } },
-        author: { select: { id: true, username: true, avatarUrl: true } },
-        snippetToTags: { include: { tag: true } },
-        _count: { select: { comments: true, upvotes: true } },
-      },
-    }),
+    prisma.snippet.findMany({ where, skip, take: limit, orderBy, include: SNIPPET_LIST_INCLUDE }),
     prisma.snippet.count({ where }),
   ]);
 
   return { snippets: snippets.map(normalizeSnippet), total, page, limit, totalPages: Math.ceil(total / limit) };
+}
+
+// Related entries for a snippet: prefer the same category, then entries that
+// share a tag, then the same language — always PUBLISHED, excluding itself.
+// Deduped and capped at `limit`, ordered within each tier by popularity.
+export async function getRelatedSnippets(id: number, limit = 6) {
+  const base = await prisma.snippet.findUnique({
+    where: { id },
+    select: { id: true, categoryId: true, language: true, snippetToTags: { select: { tagId: true } } },
+  });
+  if (!base) return [];
+
+  const tagIds = base.snippetToTags.map((t) => t.tagId);
+  const common = {
+    where: { status: 'PUBLISHED' as const, NOT: { id } },
+    include: {
+      category: { select: { id: true, name: true, slug: true } },
+      author: { select: { id: true, username: true, avatarUrl: true } },
+      snippetToTags: { include: { tag: true } },
+      _count: { select: { comments: true, upvotes: true } },
+    },
+    orderBy: [{ copyCount: 'desc' as const }, { createdAt: 'desc' as const }],
+  };
+
+  const picked = new Map<number, any>();
+  const add = (rows: any[]) => { for (const r of rows) if (!picked.has(r.id) && picked.size < limit) picked.set(r.id, r); };
+
+  // Tier 1 — same category
+  if (base.categoryId) {
+    add(await prisma.snippet.findMany({ ...common, where: { ...common.where, categoryId: base.categoryId }, take: limit }));
+  }
+  // Tier 2 — shared tags
+  if (picked.size < limit && tagIds.length) {
+    add(await prisma.snippet.findMany({
+      ...common,
+      where: { ...common.where, snippetToTags: { some: { tagId: { in: tagIds } } } },
+      take: limit,
+    }));
+  }
+  // Tier 3 — same language
+  if (picked.size < limit && base.language) {
+    add(await prisma.snippet.findMany({ ...common, where: { ...common.where, language: base.language }, take: limit }));
+  }
+
+  return Array.from(picked.values()).slice(0, limit).map(normalizeSnippet);
 }
 
 export async function getSnippetById(id: number, ip?: string) {
@@ -659,32 +729,11 @@ export async function getDashboardStats() {
 }
 
 // ─── Full-text Search ───────────────────────────────────────────────
+// Delegates to the ranked FTS path in getSnippets so there is a single search
+// implementation (tsvector + ts_rank).
 
 export async function searchSnippets(query: string, page = 1, limit = 20) {
-  const skip = (page - 1) * limit;
-  const where = {
-    status: 'PUBLISHED' as const,
-    OR: [
-      { title: { contains: query, mode: 'insensitive' as const } },
-      { description: { contains: query, mode: 'insensitive' as const } },
-      { code: { contains: query, mode: 'insensitive' as const } },
-    ],
-  };
-
-  const [snippets, total] = await Promise.all([
-    prisma.snippet.findMany({
-      where, skip, take: limit, orderBy: [{ copyCount: 'desc' }, { viewCount: 'desc' }],
-      include: {
-        category: { select: { id: true, name: true, slug: true } },
-        author: { select: { id: true, username: true, avatarUrl: true } },
-        snippetToTags: { include: { tag: true } },
-        _count: { select: { comments: true, upvotes: true } },
-      },
-    }),
-    prisma.snippet.count({ where }),
-  ]);
-
-  return { snippets: snippets.map(normalizeSnippet), total, page, limit, totalPages: Math.ceil(total / limit) };
+  return getSnippets({ search: query, status: 'PUBLISHED', page, limit });
 }
 
 // ─── Bulk Import ─────────────────────────────────────────────────────

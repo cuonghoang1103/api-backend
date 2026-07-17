@@ -141,7 +141,7 @@ function OAuthCallbackContent() {
       if (freshRole === 'ADMIN') {
         router.replace('/admin');
       } else {
-        router.replace(redirectParam || '/');
+        router.replace(redirectParam || '/feed');
       }
     };
 

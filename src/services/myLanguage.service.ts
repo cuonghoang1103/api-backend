@@ -20,6 +20,25 @@ import type { Prisma, LangItemType, LangLearnStatus } from '@prisma/client';
 
 const DEFAULT_PAGE_SIZE = 20;
 
+// Canonical learning-path order for level chips. JLPT counts DOWN (N5 = beginner
+// → N1 = hardest); CEFR and HSK count UP. A single language only uses one scheme,
+// so the shared numeric slots never collide within one level set. Unknown tags
+// sort last, alphabetically — so chip/roadmap order always follows the syllabus
+// regardless of the order rows were inserted (distinct() returns no guaranteed order).
+const LEVEL_ORDER: Record<string, number> = {
+  N5: 1, N4: 2, N3: 3, N2: 4, N1: 5,
+  A1: 1, A2: 2, B1: 3, B2: 4, C1: 5, C2: 6,
+  HSK1: 1, HSK2: 2, HSK3: 3, HSK4: 4, HSK5: 5, HSK6: 6,
+};
+
+function sortLevels(levels: string[]): string[] {
+  return [...levels].sort((a, b) => {
+    const oa = LEVEL_ORDER[a.toUpperCase().replace(/\s+/g, '')] ?? 999;
+    const ob = LEVEL_ORDER[b.toUpperCase().replace(/\s+/g, '')] ?? 999;
+    return oa - ob || a.localeCompare(b);
+  });
+}
+
 function toInt(value: unknown, label = 'id'): number {
   const n = typeof value === 'number' ? value : parseInt(String(value ?? ''), 10);
   if (!Number.isInteger(n) || n <= 0) throw new BadRequestError(`${label} không hợp lệ`);
@@ -306,7 +325,7 @@ export async function getGrammar(code: string, query: { level?: unknown; page?: 
       distinct: ['level'],
     }),
   ]);
-  const levels = levelsRaw.map((l) => l.level).filter(Boolean) as string[];
+  const levels = sortLevels(levelsRaw.map((l) => l.level).filter(Boolean) as string[]);
   return { items, levels, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 
@@ -325,7 +344,7 @@ export async function getListening(code: string, query: { level?: unknown; page?
       distinct: ['level'],
     }),
   ]);
-  const levels = levelsRaw.map((l) => l.level).filter(Boolean) as string[];
+  const levels = sortLevels(levelsRaw.map((l) => l.level).filter(Boolean) as string[]);
   return { items, levels, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 
@@ -344,7 +363,7 @@ export async function getConversation(code: string, query: { level?: unknown; pa
       distinct: ['level'],
     }),
   ]);
-  const levels = levelsRaw.map((l) => l.level).filter(Boolean) as string[];
+  const levels = sortLevels(levelsRaw.map((l) => l.level).filter(Boolean) as string[]);
   return { items, levels, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 
@@ -363,7 +382,7 @@ export async function getReading(code: string, query: { level?: unknown; page?: 
       distinct: ['level'],
     }),
   ]);
-  const levels = levelsRaw.map((l) => l.level).filter(Boolean) as string[];
+  const levels = sortLevels(levelsRaw.map((l) => l.level).filter(Boolean) as string[]);
   return { items, levels, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 
@@ -382,7 +401,7 @@ export async function getQna(code: string, query: { level?: unknown; page?: unkn
       distinct: ['level'],
     }),
   ]);
-  const levels = levelsRaw.map((l) => l.level).filter(Boolean) as string[];
+  const levels = sortLevels(levelsRaw.map((l) => l.level).filter(Boolean) as string[]);
   return { items, levels, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } };
 }
 

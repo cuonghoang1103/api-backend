@@ -570,6 +570,17 @@
     "hoursAgo": "h ago",
     "daysAgo": "d ago",
     "anonymous": "User",
-    "reactions": "Reactions"
+    "reactions": "Reactions",
+    "related": "Related",
+    "aiAssist": "AI Assist",
+    "aiExplain": "Explain",
+    "aiOptimize": "Review & optimize",
+    "aiInstall": "Install commands",
+    "aiPick": "Pick what you'd like the AI to do with this code:",
+    "aiThinking": "Thinking…",
+    "aiHint": "AI-generated — double-check before you rely on it.",
+    "aiNeedLogin": "Please log in to use the AI assistant.",
+    "aiError": "The AI assistant is busy, please try again shortly.",
+    "copyResult": "Copy"
   }
 }

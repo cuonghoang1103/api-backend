@@ -11,7 +11,7 @@ import {
   GraduationCap, ShoppingBag, Layers, ChevronRight,
   Github, Menu, X, NotebookPen, Languages, Wallet,
   TrendingUp, Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
-  FileText,
+  FileText, Newspaper,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -60,6 +60,7 @@ interface DockItem {
 //   admin: Admin (admin-only entry point, kept in its own section)
 const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/', label: 'Home', icon: Home, section: 'main' },
+  { href: '/feed', label: 'Feed', icon: Newspaper, section: 'main' },
   { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'main' },
   { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'main' },
   { href: '/messages', label: 'Messages', icon: MessagesSquare, section: 'main', showUnread: true },

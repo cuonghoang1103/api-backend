@@ -20,7 +20,7 @@ import { useTheme } from '@/context/ThemeContext';
 import {
  Home, FolderOpen, Music, MessageCircle, Sparkles,
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
- Globe, ShoppingBag, Bell, NotebookPen,
+ Globe, ShoppingBag, Bell, NotebookPen, Newspaper,
 Sun, Moon, Wallet, ArrowLeft, Megaphone,
 PlayCircle, Receipt, Ticket, Award, Briefcase, Crown, FileText,
 } from 'lucide-react';
@@ -42,6 +42,7 @@ interface TopNavLink {
 
 const TOP_NAV_LINKS: TopNavLink[] = [
  { href: '/', label: 'Home', icon: Home },
+ { href: '/feed', label: 'Feed', icon: Newspaper },
  { href: '/about', label: 'About', icon: User },
  { href: '/projects', label: 'Projects', icon: FolderOpen },
  { href: '/notes', label: 'Notes', icon: NotebookPen, authOnly: true },

@@ -138,6 +138,14 @@ export const snippetsApi = {
   getVersions: (id: number) =>
     api.get<{ success: boolean; data: SnippetVersion[] }>(`${BASE}/${id}/versions`),
 
+  getRelated: (id: number, limit = 6) =>
+    api.get<{ success: boolean; data: Snippet[] }>(`${BASE}/${id}/related`, { params: { limit } }),
+
+  // AI assist for code — explain / optimize / install. Sends the code in the
+  // request (works on any snippet); the backend bounds it by per-user quota.
+  aiAssist: (payload: { mode: 'explain' | 'install' | 'optimize'; code?: string; language?: string; title?: string }) =>
+    api.post<{ success: boolean; data: { text: string } }>(`${BASE}/ai/assist`, payload),
+
   // Attachments — register an already-uploaded R2 file against the snippet,
   // or remove one. The file bytes go through fileApi.upload first.
   addAttachment: (

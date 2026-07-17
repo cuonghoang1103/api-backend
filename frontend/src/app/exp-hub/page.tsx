@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
-import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen, Github, Download, Copy } from 'lucide-react';
+import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen, Github, Download, Copy, Sparkles, Wand2, Terminal } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTheme } from '@/context/ThemeContext';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -19,7 +19,8 @@ import { ReactionBar } from '@/components/exp-hub/ReactionBar';
 import { CommentsSection } from '@/components/exp-hub/CommentsSection';
 import { snippetsApi, snippetCategoriesApi, snippetTagsApi, snippetStatsApi, snippetBookmarksApi, snippetReactionsApi } from '@/lib/exp-hub-api';
 import { useAuthStore } from '@/store/authStore';
-import { LanguageBadge } from '@/components/exp-hub/LanguageIcon';
+import { LanguageBadge, LanguageIcon } from '@/components/exp-hub/LanguageIcon';
+import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { Snippet, SnippetCategory, SnippetTag, SnippetFilters, SnippetVersion, ReactionSummary } from '@/types/exp-hub';
 
 // Find a category anywhere in the nested tree.
@@ -77,11 +78,20 @@ export default function ExpHubPage() {
   const [voteBusy, setVoteBusy] = useState(false);
   // Emoji reactions on the selected snippet (loaded per selection).
   const [snippetReactions, setSnippetReactions] = useState<ReactionSummary[]>([]);
+  // Related entries for the selected snippet.
+  const [related, setRelated] = useState<Snippet[]>([]);
   // Version history (lazy-loaded on expand)
   const [showVersions, setShowVersions] = useState(false);
   const [versions, setVersions] = useState<SnippetVersion[] | null>(null);
   // Explanation modal
   const [showExplanation, setShowExplanation] = useState(false);
+  // AI assist modal (explain / optimize / install) — code goes in the request,
+  // result is Vietnamese markdown; bounded by the per-user daily token quota.
+  const [aiOpen, setAiOpen] = useState(false);
+  const [aiMode, setAiMode] = useState<'explain' | 'install' | 'optimize'>('explain');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResult, setAiResult] = useState('');
+  const [aiError, setAiError] = useState('');
   // Left sidebar (FolderTree) collapse — persisted to localStorage so the
   // user keeps their preference across page reloads.
   const [folderTreeOpen, setFolderTreeOpen] = useState(true);
@@ -182,11 +192,15 @@ export default function ExpHubPage() {
     setShowVersions(false);
     setVersions(null);
     setSnippetReactions([]);
+    setRelated([]);
     snippetsApi.getById(selectedSnippet.id)
       .then((res) => { if (!cancelled) setDetail(res.data.data); })
       .catch(() => { if (!cancelled) setDetail(selectedSnippet); });
     snippetReactionsApi.getForSnippet(selectedSnippet.id)
       .then((res) => { if (!cancelled) setSnippetReactions(res.data.data.reactions); })
+      .catch(() => { /* ignore */ });
+    snippetsApi.getRelated(selectedSnippet.id)
+      .then((res) => { if (!cancelled) setRelated(res.data.data || []); })
       .catch(() => { /* ignore */ });
     return () => { cancelled = true; };
   }, [selectedSnippet]);
@@ -319,6 +333,29 @@ export default function ExpHubPage() {
       await navigator.clipboard.writeText(all);
       toast.success(t('expHub.copiedAll'));
     } catch { /* ignore */ }
+  };
+
+  // Open the AI assist modal (does not spend tokens until a mode is chosen).
+  const openAi = () => {
+    if (!isAuthed) { toast.error(t('expHub.aiNeedLogin')); return; }
+    setAiResult(''); setAiError(''); setAiMode('explain'); setAiOpen(true);
+  };
+
+  // Run one AI mode on the currently-selected entry's code.
+  const runAiAssist = async (mode: 'explain' | 'install' | 'optimize') => {
+    const view = detail ?? selectedSnippet;
+    if (!view) return;
+    const code = (view.codeBlocks?.filter((b) => b.code?.trim())
+      .map((b) => (b.name ? `// ${b.name}\n${b.code}` : b.code)).join('\n\n')) || view.code || '';
+    setAiMode(mode); setAiLoading(true); setAiResult(''); setAiError('');
+    try {
+      const res = await snippetsApi.aiAssist({ mode, code, language: view.language, title: view.title });
+      setAiResult(res.data.data?.text || '');
+    } catch (e: any) {
+      setAiError(e?.response?.data?.message || t('expHub.aiError'));
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   // Helper to convert YouTube URL to embed URL
@@ -637,6 +674,11 @@ export default function ExpHubPage() {
                       <Info className="h-4 w-4" /> {t('expHub.details')}
                     </button>
                   )}
+                  {(view.code?.trim() || view.codeBlocks?.some((b) => b.code?.trim())) && (
+                    <button onClick={openAi} className="flex items-center gap-2 rounded-lg border border-violet-500/40 bg-violet-500/15 px-4 py-2 text-sm text-violet-600 transition-colors hover:bg-violet-500/25 dark:text-violet-300">
+                      <Sparkles className="h-4 w-4" /> {t('expHub.aiAssist')}
+                    </button>
+                  )}
                   <button
                     onClick={handleToggleBookmark}
                     disabled={voteBusy || !detail}
@@ -742,6 +784,88 @@ export default function ExpHubPage() {
                   <p>{t('expHub.createdOn')} {new Date(view.createdAt).toLocaleDateString()}</p>
                   {view.author && <p>{t('expHub.by')} {view.author.username}</p>}
                 </div>
+
+                {/* AI assist modal — explain / optimize / install */}
+                {aiOpen && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setAiOpen(false)}>
+                    <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex items-center justify-between border-b border-[var(--border-color)] px-6 py-4">
+                        <h2 className="flex items-center gap-2 text-lg font-semibold text-[var(--text-primary)]">
+                          <Sparkles className="h-5 w-5 text-violet-500" /> {t('expHub.aiAssist')}
+                        </h2>
+                        <button onClick={() => setAiOpen(false)} className="rounded-lg p-2 text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]">
+                          <X className="h-5 w-5" />
+                        </button>
+                      </div>
+                      <div className="flex flex-wrap gap-2 border-b border-[var(--border-color)] px-6 py-3">
+                        {([
+                          { m: 'explain', icon: Sparkles, label: t('expHub.aiExplain') },
+                          { m: 'optimize', icon: Wand2, label: t('expHub.aiOptimize') },
+                          { m: 'install', icon: Terminal, label: t('expHub.aiInstall') },
+                        ] as const).map(({ m, icon: Icon, label }) => (
+                          <button
+                            key={m}
+                            onClick={() => runAiAssist(m)}
+                            disabled={aiLoading}
+                            className={`flex items-center gap-2 rounded-lg border px-3.5 py-2 text-sm transition-colors disabled:opacity-60 ${
+                              aiMode === m && (aiLoading || aiResult || aiError)
+                                ? 'border-violet-500/50 bg-violet-500/20 text-violet-600 dark:text-violet-300'
+                                : 'border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]'
+                            }`}
+                          >
+                            <Icon className="h-4 w-4" /> {label}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+                        {aiLoading ? (
+                          <div className="flex items-center justify-center gap-2 py-12 text-[var(--text-secondary)]">
+                            <Loader2 className="h-5 w-5 animate-spin" /> {t('expHub.aiThinking')}
+                          </div>
+                        ) : aiError ? (
+                          <p className="py-8 text-center text-sm text-rose-500">{aiError}</p>
+                        ) : aiResult ? (
+                          <div className="text-sm text-[var(--text-primary)]"><ChatMarkdown content={aiResult} /></div>
+                        ) : (
+                          <p className="py-10 text-center text-sm text-[var(--text-muted)]">{t('expHub.aiPick')}</p>
+                        )}
+                      </div>
+                      {(aiResult && !aiLoading) && (
+                        <div className="flex items-center justify-between gap-3 border-t border-[var(--border-color)] px-6 py-3">
+                          <span className="text-xs text-[var(--text-muted)]">{t('expHub.aiHint')}</span>
+                          <button
+                            onClick={() => { navigator.clipboard.writeText(aiResult).then(() => toast.success(t('expHub.copiedAll'))).catch(() => {}); }}
+                            className="flex shrink-0 items-center gap-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]"
+                          >
+                            <Copy className="h-4 w-4" /> {t('expHub.copyResult')}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Related entries */}
+                {related.length > 0 && (
+                  <div className="mt-8 border-t border-[var(--border-color)] pt-6">
+                    <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--text-secondary)]">{t('expHub.related')}</h3>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {related.map((r) => (
+                        <button
+                          key={r.id}
+                          onClick={() => setSelectedSnippet(r)}
+                          className="flex items-center gap-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] p-2.5 text-left transition-colors hover:border-violet-400/50 hover:bg-[var(--bg-surface-hover)]"
+                        >
+                          <LanguageIcon language={r.language} size={26} className="mt-0.5" />
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-sm font-medium text-[var(--text-primary)]">{r.title}</span>
+                            {r.category && <span className="block truncate text-xs text-[var(--text-muted)]">{r.category.name}</span>}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Comments + reactions */}
                 <CommentsSection key={view.id} snippetId={view.id} />

@@ -28,6 +28,7 @@ import { BadRequestError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import * as snippetsService from '../services/snippets.service.js';
 import * as commentsService from '../services/snippets.comments.service.js';
+import { assistCode, type ExplainMode } from '../services/snippets.ai.service.js';
 
 const router = Router();
 
@@ -146,6 +147,16 @@ router.get('/slug/:slug', async (req, res: Response<ApiResponse>, next) => {
     const ip = getClientIp(req);
     const snippet = await snippetsService.getSnippetBySlug(slug, ip);
     res.json({ success: true, data: snippet });
+  } catch (error) { next(error); }
+});
+
+// GET /api/v1/snippets/:id/related
+router.get('/:id(\\d+)/related', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const limit = req.query.limit ? Math.min(12, parseInt(req.query.limit as string)) : 6;
+    const related = await snippetsService.getRelatedSnippets(id, limit);
+    res.json({ success: true, data: related });
   } catch (error) { next(error); }
 });
 
@@ -509,6 +520,24 @@ router.get('/admin/dashboard', authenticate, requireRole('ADMIN'), async (_req, 
   try {
     const stats = await snippetsService.getDashboardStats();
     res.json({ success: true, data: stats });
+  } catch (error) { next(error); }
+});
+
+// POST /api/v1/snippets/ai/assist — AI explain / optimize / install for code.
+// Authenticated (quota is per-user); the code lives in the request, not the DB,
+// so this works on drafts and unsaved edits too. `/ai/...` never collides with
+// the numeric `/:id(\d+)` routes above.
+router.post('/ai/assist', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { mode, code, language, title } = req.body ?? {};
+    const result = await assistCode({
+      mode: mode as ExplainMode,
+      code,
+      language,
+      title,
+      userId: req.user!.userId,
+    });
+    res.json({ success: true, data: result });
   } catch (error) { next(error); }
 });
 

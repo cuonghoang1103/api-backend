@@ -189,7 +189,8 @@ function LoginForm() {
 
       // ─── Step 5: Redirect based on role ─────────────────────────
       const isAdmin = isAdminRole(profileRoles);
-      let dest = '/';
+      // "/" is now the marketing landing; signed-in users belong on their feed.
+      let dest = '/feed';
       if (isAdmin) {
         dest = '/admin';
       } else if (redirect && /^\/(?!\/)/.test(redirect)) {

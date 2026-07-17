@@ -122,7 +122,10 @@ export function modelForStep(step: LLMStep): string {
   // Question generation uses the STRONGEST model (Opus 4.8) — deep, professional
   // questions + accurate model answers. Grading stays on the interview step model.
   if (step === 'generation') return process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
-  return process.env.LLM_MODEL_INTERVIEW || 'claude-haiku-4-5'; // grading — kept on the cheaper/sonnet model
+  // Per-answer grading (Pass C). Default to Sonnet, not Haiku: if LLM_MODEL_INTERVIEW
+  // is ever unset (fresh env / forgotten var), grading must NOT silently drop to the
+  // weakest model — Sonnet is the floor we're willing to grade a candidate on.
+  return process.env.LLM_MODEL_INTERVIEW || 'rb-sonnet-5';
 
 }
 
@@ -184,7 +187,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Which product spent the tokens. `step` only picks a model tier, so without
  *  this the Interview grader and the My Language tutor were the same row. */
-export type LLMFeature = 'interview' | 'language' | 'cv' | 'chat' | 'bulk_gen';
+export type LLMFeature = 'interview' | 'language' | 'cv' | 'chat' | 'bulk_gen' | 'exphub';
 
 async function logLlmCall(d: {
   userId?: number | null;

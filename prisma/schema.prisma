@@ -4047,6 +4047,12 @@ model Snippet {
   categoryId Int? @map("category_id")
   authorId   Int? @map("author_id")
 
+  // Full-text search vector — a GENERATED ALWAYS STORED tsvector over
+  // title + description + code (config 'simple'). Maintained by Postgres,
+  // queried only via $queryRaw (websearch_to_tsquery); Unsupported so
+  // Prisma tracks the column but never reads/writes it.
+  searchVector Unsupported("tsvector")? @map("search_vector")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -6199,4 +6205,26 @@ model GamePlay {
   @@index([userId], name: "idx_game_play_user")
   @@index([playedAt(sort: Desc)], name: "idx_game_play_time")
   @@map("game_plays")
+}
+
+// ===== LANDING PROMO ==================================================
+// Short muted promo clips shown in the marquee on the public landing page ("/").
+// Admin-managed: the video bytes live in R2 (uploaded via the presign flow) and
+// only the URL + metadata live here. Site content, not user data → no user FK.
+model LandingPromo {
+  id         Int      @id @default(autoincrement())
+  title      String   @db.VarChar(160)
+  tagline    String?  @db.VarChar(255)
+  videoUrl   String   @map("video_url") @db.VarChar(500)
+  posterUrl  String?  @map("poster_url") @db.VarChar(500)
+  href       String?  @db.VarChar(255)
+  accent     String?  @db.VarChar(16)
+  featureKey String?  @map("feature_key") @db.VarChar(48)
+  isActive   Boolean  @default(true) @map("is_active")
+  order      Int      @default(0)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive, order], name: "idx_landing_promo_active_order")
+  @@map("landing_promos")
 }

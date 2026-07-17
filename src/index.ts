@@ -149,6 +149,10 @@ const proAdminRoutes = proModule.adminRouter;
 const cvModule = await import(path.join(__dirname, 'routes', 'cvBuilder.routes.js'));
 const cvRoutes = cvModule.default;
 const cvAdminRoutes = cvModule.adminRouter;
+// Landing page — public promo marquee feed + admin CRUD
+const landingModule = await import(path.join(__dirname, 'routes', 'landing.routes.js'));
+const landingRoutes = landingModule.default;
+const landingAdminRoutes = landingModule.adminRouter;
 
 // ─── Express App ───────────────────────────────────────────
 const app: Express = express();
@@ -540,6 +544,8 @@ app.use('/api/v1/pro', proRoutes);
 app.use('/api/v1/admin/pro', proAdminRoutes);
 app.use('/api/v1/cv', cvRoutes);
 app.use('/api/v1/admin/cv', cvAdminRoutes);
+app.use('/api/v1/landing', landingRoutes);
+app.use('/api/v1/admin/landing', landingAdminRoutes);
 app.use('/api/v1/finance', financeRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);

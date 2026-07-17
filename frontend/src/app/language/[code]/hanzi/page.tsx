@@ -456,10 +456,10 @@ function CharModal({
               <Row label="Từ ghép thường gặp">
                 <ul className="space-y-1.5">
                   {char.examples.map((e, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm">
+                    <li key={i} className="flex items-start gap-2 text-sm">
                       <span className="font-medium text-text-primary">{e.word}</span>
                       {e.reading && <span className="text-xs text-text-muted">{e.reading}</span>}
-                      <span className="min-w-0 flex-1 truncate text-text-secondary">— {e.meaningVi}</span>
+                      <span className="min-w-0 flex-1 break-words text-text-secondary">— {e.meaningVi}</span>
                       <SpeakerButton text={e.word} reading={e.reading} forceLang={speakLang(code)} size={13} className="h-6 w-6 shrink-0" />
                     </li>
                   ))}

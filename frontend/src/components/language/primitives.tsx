@@ -4,6 +4,7 @@
  * Theme-aware (CSS vars, never `dark:`); neon-violet accents; mobile-first.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Mascot } from './mascot/mascot';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -265,12 +266,35 @@ export function SectionShell({
 }
 
 // ─── Empty state ─────────────────────────────────────────────────
-export function EmptyState({ emoji = '🌱', title, hint }: { emoji?: string; title: string; hint?: string }) {
+/**
+ * Nothing here yet.
+ *
+ * Gấu Lười is the mascot for empty: the art is a panda asleep under a pile of
+ * Zzz, which is what an empty screen actually is. `emoji` still wins when a
+ * caller passes one — some screens are empty for a reason a sleeping bear does
+ * not describe.
+ */
+export function EmptyState({
+  emoji,
+  title,
+  hint,
+  action,
+}: {
+  emoji?: string;
+  title: string;
+  hint?: string;
+  action?: React.ReactNode;
+}) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--border-color)] py-16 text-center">
-      <div className="mb-3 text-5xl">{emoji}</div>
-      <p className="font-medium text-text-secondary">{title}</p>
-      {hint && <p className="mt-1 max-w-sm text-sm text-text-muted">{hint}</p>}
+    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--border-color)] py-14 text-center">
+      {emoji ? (
+        <div className="mb-3 text-5xl">{emoji}</div>
+      ) : (
+        <Mascot character="grumpy" emotion="happy" size={92} className="mb-2" />
+      )}
+      <p className="font-round font-bold text-text-secondary">{title}</p>
+      {hint && <p className="mt-1 max-w-sm px-4 text-sm text-text-muted">{hint}</p>}
+      {action && <div className="mt-4">{action}</div>}
     </div>
   );
 }
@@ -280,7 +304,7 @@ export function CardsSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="h-28 animate-pulse rounded-2xl bg-[var(--bg-surface)]" />
+        <div key={i} className="skeleton-shimmer h-28 rounded-2xl bg-[var(--bg-surface)]" />
       ))}
     </div>
   );

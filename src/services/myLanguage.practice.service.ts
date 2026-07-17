@@ -16,7 +16,17 @@ import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
 import { recordProgress } from './myLanguage.service.js';
 
 const MAX_HEARTS = 5;
-const HEART_REGEN_MS = 60 * 60 * 1000; // 1 heart / hour
+/**
+ * 12 minutes per heart — an hour from empty to full, not five.
+ *
+ * At the old 1/hour a learner who ran out mid-lesson was locked out for the
+ * rest of the evening, and the punishment landed hardest on exactly the person
+ * it should not: the beginner, who gets things wrong because they are learning.
+ * Hearts should make you slow down for a moment, not close the app.
+ *
+ * The cap stays at 5 — hearts only mean anything if they can run out.
+ */
+const HEART_REGEN_MS = 12 * 60 * 1000;
 const TZ_OFFSET_MS = 7 * 60 * 60 * 1000; // Asia/Ho_Chi_Minh — day/week boundary
 const MIN_WORDS_PER_LESSON = 4;
 
@@ -108,6 +118,7 @@ function regen(hearts: number, updatedAt: Date, now: Date): { hearts: number; he
   const heartsUpdatedAt = next >= MAX_HEARTS ? now : new Date(updatedAt.getTime() + gained * HEART_REGEN_MS);
   return { hearts: next, heartsUpdatedAt };
 }
+/** Minutes until the NEXT heart lands (not until full — the UI says "tim tiếp theo"). */
 function heartsFullInMin(hearts: number, updatedAt: Date, now: Date): number {
   if (hearts >= MAX_HEARTS) return 0;
   const remaining = HEART_REGEN_MS - ((now.getTime() - updatedAt.getTime()) % HEART_REGEN_MS);
@@ -311,8 +322,16 @@ export async function completeLesson(
   const weeklyXp = (s.weekKey === week ? s.weeklyXp : 0) + xpGained;
 
   // Hearts: lose one per mistake; restart the regen clock only if we dropped.
-  const heartsAfter = clamp(s.hearts - mistakes, 0, MAX_HEARTS);
-  const heartsUpdatedAt = mistakes > 0 ? now : undefined;
+  //
+  // Hitting the daily goal refills them. It gives the learner a way to EARN
+  // their way back instead of watching a timer, and it pays out for the one
+  // behaviour this whole screen exists to encourage — so the goal that was
+  // just met is also the thing that lets them keep going.
+  const goalMetNow = s.dailyGoalXp > 0
+    && dailyXp >= s.dailyGoalXp
+    && (s.dailyXpDate === today ? s.dailyXp : 0) < s.dailyGoalXp;
+  const heartsAfter = goalMetNow ? MAX_HEARTS : clamp(s.hearts - mistakes, 0, MAX_HEARTS);
+  const heartsUpdatedAt = goalMetNow || mistakes > 0 ? now : undefined;
 
   const updated = await prisma.langGameState.update({
     where: { userId_languageId: { userId, languageId: language.id } },

@@ -231,7 +231,7 @@ export function PronunciationTrainer({
                       <div className="min-w-0 flex-1">
                         <p className={`text-sm font-semibold ${v.text}`}>{v.label}</p>
                         {result.heard && (
-                          <p className="mt-0.5 truncate text-xs text-text-muted">
+                          <p className="mt-0.5 break-words text-xs text-text-muted">
                             Máy nghe được: <span className="text-text-secondary">{result.heard}</span>
                           </p>
                         )}

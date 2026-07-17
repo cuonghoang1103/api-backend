@@ -72,6 +72,17 @@ const CAT_CLASS: Record<string, { bg: string; fg: string; icon: string }> = {
   ai: { bg: 'bg-cat-ai-bg', fg: 'text-cat-ai-fg', icon: 'text-cat-ai-icon' },
 };
 
+/**
+ * Card chrome that does NOT depend on the palette.
+ *
+ * If a --cat-* variable ever fails to resolve, `background-color: var(--x)` is
+ * simply invalid and the card paints transparent — which is exactly what
+ * shipped once: a page of black rectangles with no edges, because the tile had
+ * no other background and no border. The surface and ring below come from the
+ * base theme, so the worst a broken palette can now do is make the tiles plain.
+ */
+const CARD_BASE = 'rounded-2xl bg-[var(--bg-card)] ring-1 ring-[var(--border-color)]';
+
 // Kanji/hanzi only exist in Japanese and Chinese — showing the tile on English
 // would promise a page with nothing in it.
 const CJK_ONLY = new Set(['hanzi']);
@@ -139,7 +150,7 @@ function SkillSection({ title, items, code, counts, loading, m, isAi }: {
           const count = counts?.[sec.key] ?? 0;
           return (
             <motion.div key={sec.key} variants={m.childEnter} {...m.cardHover} {...m.buttonPress}>
-              <Link href={`/language/${code}/${sec.key}`} className={`flex h-full flex-col rounded-2xl ${cc.bg} p-4`}>
+              <Link href={`/language/${code}/${sec.key}`} className={`flex h-full flex-col ${CARD_BASE} ${cc.bg} p-4`}>
                 <Icon size={28} className={`${cc.icon} mb-2`} />
                 <h3 className={`font-round font-extrabold leading-tight ${cc.fg}`}>{sec.label}</h3>
                 <p className={`mt-0.5 text-xs leading-snug ${cc.fg} opacity-70`}>{sec.desc}</p>

@@ -197,7 +197,9 @@ function GrammarRow({
               </span>
             )}
           </div>
-          <p className="mt-1 truncate font-mono text-sm text-neon-cyan">{point.structure}</p>
+          {/* A grammar structure IS the lesson — clipping it to one line hides
+              the half that matters ("Vます → Vたい" becomes "Vます → V…"). */}
+          <p className="mt-1 break-words font-mono text-sm text-neon-cyan">{point.structure}</p>
         </div>
         <motion.span
           aria-hidden

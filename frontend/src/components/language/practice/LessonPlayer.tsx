@@ -402,9 +402,12 @@ export default function LessonPlayer({
         transition={SPRING_SOFT}
         className={`border-t px-4 py-4 sm:px-6 ${phase === 'correct' ? 'border-state-done/30 bg-state-done/10' : phase === 'wrong' ? 'border-state-wrong/30 bg-state-wrong/10' : 'border-[var(--border-color)]'}`}
       >
-        <div className="mx-auto flex w-full max-w-xl items-center gap-3">
+        {/* Stacks on mobile. Side by side, the mascot and the button left the
+            explanation about 40% of the width, and it was the explanation —
+            the only part that teaches anything — that got clipped. */}
+        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 sm:flex-row sm:items-center">
           {phase !== 'answer' && (
-            <div className="flex min-w-0 flex-1 items-center gap-2">
+            <div className="flex min-w-0 flex-1 items-start gap-2">
               <div className="shrink-0">
                 <Mascot character={coach} emotion={phase === 'correct' ? (runStreak >= 3 ? 'cheer' : 'happy') : 'sad'} size={52} />
               </div>
@@ -414,7 +417,9 @@ export default function LessonPlayer({
                   {ex.type === 'speak' && speakResult ? ` · ${speakResult.score}/100` : ''}
                 </p>
                 {(phase === 'wrong' || ex.type === 'speak') && feedbackAnswer && (
-                  <p className="truncate text-xs text-text-secondary">
+                  // Wraps, and scrolls only if the AI really runs on — capped so
+                  // a long explanation cannot push the Tiếp tục button off screen.
+                  <p className="mt-0.5 max-h-28 overflow-y-auto break-words text-xs leading-relaxed text-text-secondary sm:max-h-20">
                     {ex.type === 'speak' ? feedbackAnswer : <>Đáp án: <span className="font-medium text-text-primary">{feedbackAnswer}</span></>}
                   </p>
                 )}
@@ -423,11 +428,11 @@ export default function LessonPlayer({
           )}
           {phase === 'answer' ? (
             ex.type === 'speak' ? (
-              <button onClick={skipSpeak} disabled={scoring || recording} className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-6 py-3 text-sm font-semibold text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-text-primary disabled:opacity-40">
+              <button onClick={skipSpeak} disabled={scoring || recording} className="w-full shrink-0 justify-center sm:ml-auto sm:w-auto inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)] px-6 py-3 text-sm font-semibold text-text-secondary ring-1 ring-[var(--border-color)] transition hover:text-text-primary disabled:opacity-40">
                 Bỏ qua
               </button>
             ) : (
-              <button onClick={check} disabled={!canCheck} className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-neon-violet px-8 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:opacity-40">
+              <button onClick={check} disabled={!canCheck} className="w-full shrink-0 justify-center sm:ml-auto sm:w-auto inline-flex items-center gap-1.5 rounded-full bg-neon-violet px-8 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:opacity-40">
                 Kiểm tra
               </button>
             )
@@ -437,7 +442,7 @@ export default function LessonPlayer({
               disabled={finishing}
               tone={phase === 'correct' ? 'success' : 'danger'}
               size="lg"
-              className="ml-auto"
+              className="w-full shrink-0 sm:ml-auto sm:w-auto"
             >
               {finishing ? <Loader2 size={16} className="animate-spin" /> : index + 1 >= total ? 'Hoàn thành' : 'Tiếp tục'}
             </TactileButton>

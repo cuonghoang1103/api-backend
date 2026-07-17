@@ -25,6 +25,43 @@
     --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    --font-nunito: 'Nunito';
+
+    /* ── My Language — bảng màu theo kỹ năng ──────────────────────────
+       Mỗi kỹ năng một họ màu, để người học nhận ra thẻ bằng MÀU trước khi
+       đọc chữ. Ba biến mỗi danh mục, ý nghĩa KHÔNG đổi giữa hai theme, nên
+       component chỉ viết `bg-cat-vocab-bg` một lần là đúng cả sáng lẫn tối:
+
+         -bg   nền thẻ
+         -fg   chữ trên nền đó   — luôn ≥ 4.5:1 (đo WCAG, không ước lượng)
+         -icon icon/viền         — luôn ≥ 3:1 (icon là đồ hoạ lớn)
+
+       Theme SÁNG dùng tông 'deep' cho chữ, KHÔNG dùng 'strong': strong trên
+       nền tint chỉ đạt 1.9–3.4:1 (amber tệ nhất, gần như không đọc nổi).
+       Theme TỐI: nền = strong pha 14% trên #242526, chữ = strong làm sáng vừa
+       đủ chạm 4.5:1 — không sáng hơn, để màu còn ra màu. */
+    --cat-alphabet-bg: #EEEDFE;
+    --cat-alphabet-fg: #26215C;
+    --cat-alphabet-icon: #7F77DD;
+    --cat-vocab-bg: #E1F5EE;
+    --cat-vocab-fg: #04342C;
+    --cat-vocab-icon: #1c9b73;
+    --cat-grammar-bg: #FAECE7;
+    --cat-grammar-fg: #4A1B0C;
+    --cat-grammar-icon: #D85A30;
+    --cat-listening-bg: #FBEAF0;
+    --cat-listening-fg: #4B1528;
+    --cat-listening-icon: #D4537E;
+    --cat-speaking-bg: #E6F1FB;
+    --cat-speaking-fg: #042C53;
+    --cat-speaking-icon: #378ADD;
+    --cat-reading-bg: #FAEEDA;
+    --cat-reading-fg: #412402;
+    --cat-reading-icon: #ba7c1e;
+    --cat-ai-bg: #F3EAFD;
+    --cat-ai-fg: #2E0A4F;
+    --cat-ai-icon: #9333EA;
   }
 
   /* Dark theme — add 'theme-dark' class to html.
@@ -55,6 +92,29 @@
     --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.5);
     --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.6);
+
+    /* Bảng màu kỹ năng — bản tối. Cùng tên biến, cùng ý nghĩa, khác giá trị. */
+--cat-alphabet-bg: #313040;
+    --cat-alphabet-fg: #968fe3;
+    --cat-alphabet-icon: #968fe3;
+    --cat-vocab-bg: #233631;
+    --cat-vocab-fg: #3dac88;
+    --cat-vocab-icon: #3dac88;
+    --cat-grammar-bg: #3d2c27;
+    --cat-grammar-fg: #e07b59;
+    --cat-grammar-icon: #e07b59;
+    --cat-listening-bg: #3d2b32;
+    --cat-listening-fg: #dd799a;
+    --cat-listening-icon: #dd799a;
+    --cat-speaking-bg: #273340;
+    --cat-speaking-fg: #5b9fe3;
+    --cat-speaking-icon: #5b9fe3;
+    --cat-reading-bg: #403626;
+    --cat-reading-fg: #ef9f27;
+    --cat-reading-icon: #ef9f27;
+    --cat-ai-bg: #342741;
+    --cat-ai-fg: #b878f1;
+    --cat-ai-icon: #b878f1;
   }
 
   /* Legacy light class - keep for backward compat (same as :root) */
@@ -238,6 +298,34 @@
 }
 
 @layer utilities {
+  /* Skeleton with a light sweep — a pulse says "busy", a sweep says "loading
+     something with a shape". Pure CSS: a skeleton must not cost JS on the very
+     frame the page is already fighting for. */
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .skeleton-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--bg-surface-hover),
+      transparent
+    );
+    animation: skeleton-sweep 1.6s infinite;
+  }
+  @keyframes skeleton-sweep {
+    100% { transform: translateX(100%); }
+  }
+  /* A sweeping bar is exactly the kind of repeating motion this setting is for. */
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton-shimmer::after { animation: none; }
+  }
+
   .animate-delay-100 { animation-delay: 100ms; }
   .animate-delay-200 { animation-delay: 200ms; }
   .animate-delay-300 { animation-delay: 300ms; }

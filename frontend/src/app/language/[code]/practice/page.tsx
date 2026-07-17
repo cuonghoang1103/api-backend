@@ -243,7 +243,11 @@ export default function PracticePage() {
             <>
               {st!.hearts <= 0 && (
                 <p className="mb-4 rounded-xl bg-neon-orange/10 px-3 py-2 text-center text-xs text-neon-orange ring-1 ring-neon-orange/25">
-                  Hết tim — hồi 1 tim mỗi giờ{st!.heartsFullInMin ? ` (tim tiếp theo sau ~${st!.heartsFullInMin} phút)` : ''}.
+                  {/* Say the cap and both ways out. The old copy gave a rate
+                      and a countdown and never mentioned that finishing the
+                      daily goal refills everything — so waiting looked like the
+                      only option it wasn't. */}
+                  Hết tim — hồi 1 tim mỗi 12 phút (tối đa {st!.maxHearts}){st!.heartsFullInMin ? `, tim tiếp theo sau ~${st!.heartsFullInMin} phút` : ''}. Xong mục tiêu hôm nay là đầy tim ngay.
                 </p>
               )}
 

@@ -38,7 +38,8 @@ import {
 import { toast } from 'sonner';
 import { languageApi, type Roadmap, type RoadmapNode } from '@/lib/language-api';
 import type { VocabCategory } from '@/types/language';
-import { MascotCoach, useDailyMascot } from '@/components/language/mascot/mascot';
+import { MascotRow } from '@/components/language/mascot/MascotScene';
+import { dailyMascot, mascotName } from '@/lib/mascotData';
 import { SectionShell, EmptyState, ProgressRing, useLangUser } from '@/components/language/primitives';
 
 const ICONS: Record<string, typeof Route> = {
@@ -63,14 +64,17 @@ type NodeStatus = 'done' | 'current' | 'todo';
 
 /** Today's coach welcomes the learner and nudges them to the next unit. */
 function RoadmapGreeting({ doneCount, total }: { doneCount: number; total: number }) {
-  const { id, name } = useDailyMascot();
+  // Rotates daily so the cast takes turns greeting the learner.
+  const [id, setId] = useState(() => dailyMascot());
+  useEffect(() => { setId(dailyMascot()); }, []);
+  const name = mascotName(id);
   const text =
     doneCount === 0
       ? `Chào bạn, mình là ${name}! Bấm vào một chặng để xem các bài học bên trong nhé 🌟`
       : doneCount >= total
         ? `Bạn đã đi hết lộ trình rồi — ${name} phục sát đất! 🏆`
         : `${name} đây! Bạn đã xong ${doneCount}/${total} chặng — học tiếp chặng phát sáng nha 💪`;
-  return <MascotCoach id={id} mood={doneCount >= total ? 'cheer' : 'happy'} text={text} size={60} className="mb-4" />;
+  return <MascotRow character={id} emotion={doneCount >= total ? 'cheer' : 'happy'} text={text} size={64} className="mb-4" />;
 }
 
 export default function RoadmapPage() {

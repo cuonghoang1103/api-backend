@@ -18,7 +18,8 @@ import { toast } from 'sonner';
 import { languageApi, type HanziChar } from '@/lib/language-api';
 import { SectionShell, EmptyState, SpeakerButton, useLangUser } from '@/components/language/primitives';
 import { HanziWriterBox, type HanziWriterHandle } from '@/components/language/hanzi/HanziWriterBox';
-import { Mascot, pickMascot, playMascotSound, praisePhrase, comfortPhrase } from '@/components/language/mascot/mascot';
+import { Mascot, playMascotSound, praisePhrase, comfortPhrase } from '@/components/language/mascot/mascot';
+import { dailyMascot } from '@/lib/mascotData';
 import type { VocabLang } from '@/lib/notesTts';
 
 type Stage = 'watch' | 'trace' | 'memory';
@@ -237,7 +238,7 @@ function CharModal({
   const [imgIdx, setImgIdx] = useState(0);
   const [saving, setSaving] = useState(false);
   const writer = useRef<HanziWriterHandle | null>(null);
-  const coach = pickMascot(char.char);
+  const coach = dailyMascot(char.char);
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
@@ -387,7 +388,7 @@ function CharModal({
           <AnimatePresence>
             {done && (
               <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mx-4 mb-3 flex items-center gap-3 rounded-2xl bg-[var(--bg-surface)] p-3 ring-1 ring-[var(--border-color)]">
-                <Mascot id={coach} mood={done.mistakes === 0 ? 'cheer' : 'sad'} size={50} />
+                <Mascot character={coach} emotion={done.mistakes === 0 ? 'cheer' : 'sad'} size={50} />
                 <div className="min-w-0 flex-1">
                   <p className={`text-sm font-semibold ${done.mistakes === 0 ? 'text-neon-green' : 'text-neon-orange'}`}>
                     {done.mistakes === 0 ? praisePhrase(1) : comfortPhrase()}

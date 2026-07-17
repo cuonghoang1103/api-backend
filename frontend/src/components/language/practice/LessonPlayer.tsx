@@ -17,7 +17,8 @@ import { languageApi, type PracticeLesson, type PracticeCompleteResult, type Pro
 import type { VocabWord } from '@/types/language';
 import { speakVocabEntry, type VocabLang } from '@/lib/notesTts';
 import { useSpeech } from '@/hooks/useSpeech';
-import { Mascot, pickMascot, praisePhrase, comfortPhrase, playMascotSound, mascotName } from '../mascot/mascot';
+import { Mascot, praisePhrase, comfortPhrase, playMascotSound, mascotName } from '../mascot/mascot';
+import { dailyMascot } from '@/lib/mascotData';
 
 function speakLang(code: string): VocabLang | undefined {
   const c = (code || '').toLowerCase();
@@ -142,7 +143,8 @@ export default function LessonPlayer({
   // Coach: same character for the whole lesson, consecutive-correct streak
   // drives the celebration tier, and the phrase is fixed per answer (a random
   // pick in render would reshuffle on every state change).
-  const coach = useMemo(() => pickMascot(lesson.lessonKey), [lesson.lessonKey]);
+  // Seeded on the lesson key so one lesson keeps one coach start to finish.
+  const coach = useMemo(() => dailyMascot(lesson.lessonKey), [lesson.lessonKey]);
   const [runStreak, setRunStreak] = useState(0);
   const [coachLine, setCoachLine] = useState('');
 
@@ -324,7 +326,7 @@ export default function LessonPlayer({
     const perfect = mistakes === 0;
     return shell(
       <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
-        <Mascot id={coach} mood={perfect ? 'cheer' : correct / total >= 0.5 ? 'happy' : 'wow'} size={110} />
+        <Mascot character={coach} emotion={perfect ? 'cheer' : correct / total >= 0.5 ? 'happy' : 'sad'} size={110} />
         <h2 className="font-heading text-2xl font-bold text-text-primary">
           {perfect ? 'Hoàn hảo! 🏆' : correct / total >= 0.5 ? 'Hoàn thành bài học 🎉' : 'Hoàn thành — ôn thêm nhé 📚'}
         </h2>
@@ -384,7 +386,7 @@ export default function LessonPlayer({
           {phase !== 'answer' && (
             <div className="flex min-w-0 flex-1 items-center gap-2">
               <div className="shrink-0">
-                <Mascot id={coach} mood={phase === 'correct' ? (runStreak >= 3 ? 'cheer' : 'happy') : 'sad'} size={52} />
+                <Mascot character={coach} emotion={phase === 'correct' ? (runStreak >= 3 ? 'cheer' : 'happy') : 'sad'} size={52} />
               </div>
               <div className="min-w-0 flex-1">
                 <p className={`text-sm font-semibold ${phase === 'correct' ? 'text-neon-green' : 'text-neon-orange'}`}>

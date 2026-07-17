@@ -18,7 +18,8 @@ import { languageApi, type PracticeOverview, type PracticeLesson, type PracticeC
 import { SectionShell, EmptyState, ProgressRing, useLangUser } from '@/components/language/primitives';
 import { usePro } from '@/hooks/usePro';
 import LessonPlayer from '@/components/language/practice/LessonPlayer';
-import { MascotCoach, useDailyMascot } from '@/components/language/mascot/mascot';
+import { MascotRow, MascotScene } from '@/components/language/mascot/MascotScene';
+import { dailyMascot, mascotName } from '@/lib/mascotData';
 
 const PATH_OFFSETS = [0, 44, 64, 44, 0, -44, -64, -44];
 
@@ -31,18 +32,34 @@ const UNIT_THEMES = [
   { grad: 'from-neon-green/15 to-neon-cyan/10', ring: 'ring-neon-green/25', text: 'text-neon-green', bar: 'bg-neon-green', badge: 'bg-neon-green', bubble: 'bg-neon-green/20 text-neon-green ring-neon-green/40' },
 ];
 
-/** Today's coach — greets by progress: fresh day, mid-goal, or goal reached. */
+/**
+ * Today's coach — greets by progress: fresh day, mid-goal, or goal reached.
+ *
+ * The two moments worth celebrating get a specific mascot rather than whoever is
+ * on rotation: finishing the daily goal brings out Sage (crown and star), and a
+ * live streak brings out Zippy. Everything else is the rotating greeter, so the
+ * special two stay special.
+ */
 function PracticeGreeting({ dailyPct, streak }: { dailyPct: number; streak: number }) {
-  const { id, name } = useDailyMascot();
+  // Rotates daily so the cast takes turns greeting the learner. Resolved in an
+  // effect too: dailyMascot() reads the clock, and the server's day and the
+  // browser's day can differ — picking during SSR would hydrate-mismatch.
+  const [id, setId] = useState(() => dailyMascot());
+  useEffect(() => { setId(dailyMascot()); }, []);
+
+  if (dailyPct >= 100) {
+    return <MascotScene context="done" text="Mục tiêu hôm nay xong rồi! Ta tự hào về con 👑" size={64} className="mb-4" />;
+  }
+  if (dailyPct === 0 && streak > 0) {
+    return <MascotScene context="streak" text={`Chuỗi ${streak} ngày đang cháy! Làm một bài giữ lửa nào 🔥`} size={64} className="mb-4" />;
+  }
+
+  const name = mascotName(id);
   const text =
-    dailyPct >= 100
-      ? `Mục tiêu hôm nay xong rồi! ${name} tự hào về bạn lắm 🎉`
-      : dailyPct > 0
-        ? `Sắp chạm mục tiêu hôm nay rồi (${dailyPct}%) — cố thêm chút nữa nha! 🔥`
-        : streak > 0
-          ? `Chuỗi ${streak} ngày đang chờ! Làm một bài giữ lửa nào 🔥`
-          : `Chào bạn, ${name} đây! Làm một bài ngắn để khởi động nhé 💪`;
-  return <MascotCoach id={id} mood={dailyPct >= 100 ? 'cheer' : 'happy'} text={text} size={60} className="mb-4" />;
+    dailyPct > 0
+      ? `Sắp chạm mục tiêu hôm nay rồi (${dailyPct}%) — cố thêm chút nữa nha! 🔥`
+      : `Chào bạn, ${name} đây! Làm một bài ngắn để khởi động nhé 💪`;
+  return <MascotRow character={id} emotion="happy" text={text} size={64} className="mb-4" />;
 }
 
 export default function PracticePage() {

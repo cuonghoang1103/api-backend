@@ -39,12 +39,23 @@ export default function AdminLandingPage() {
     if (!file.type.startsWith('video/')) { toast.error('Vui lòng chọn tệp video'); return; }
     setUploading(true); setProgress(0);
     try {
-      const res = await fileApi.uploadVideoDirect(file, (p) => setProgress(p));
-      const data = res.data?.data ?? {};
-      setDraft((d) => ({ ...d, videoUrl: data.url || '', posterUrl: data.thumbnail || '' }));
-      toast.success('Đã tải video lên R2');
-    } catch (err: any) {
-      toast.error(err?.message || 'Tải video thất bại (kiểm tra CORS bucket)');
+      let data: any = {};
+      try {
+        // Fast path: presigned browser→R2 PUT (needs bucket CORS).
+        data = (await fileApi.uploadVideoDirect(file, (p) => setProgress(p))).data?.data ?? {};
+      } catch {
+        // Fallback: multipart through the backend (no browser CORS needed).
+        // Fine for short 2–3s promo clips (well under the body-size cap).
+        setProgress(50);
+        const r = await fileApi.upload(file, 'video');
+        data = r.data?.data ?? r.data ?? {};
+      }
+      const url = data.url || data.fileUrl || '';
+      if (!url) throw new Error('no-url');
+      setDraft((d) => ({ ...d, videoUrl: url, posterUrl: data.thumbnail || data.posterUrl || '' }));
+      toast.success('Đã tải video lên');
+    } catch {
+      toast.error('Tải video thất bại — bạn có thể dán URL video vào ô bên dưới thay thế.');
     } finally {
       setUploading(false); setProgress(0);
       if (fileRef.current) fileRef.current.value = '';
@@ -105,9 +116,12 @@ export default function AdminLandingPage() {
           <label className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
             Màu nhấn <input type="color" value={draft.accent} onChange={(e) => setDraft({ ...draft, accent: e.target.value })} className="h-8 w-14 rounded" />
           </label>
+          <input value={draft.videoUrl} onChange={(e) => setDraft({ ...draft, videoUrl: e.target.value })} placeholder="URL video * (tự điền khi tải, hoặc dán vào đây)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+          <input value={draft.posterUrl} onChange={(e) => setDraft({ ...draft, posterUrl: e.target.value })} placeholder="URL ảnh poster (tùy chọn)" className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]" />
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
+          <span className="text-xs text-[var(--text-muted)]">Tải video lên (tự điền URL), hoặc dán URL sẵn ở ô trên:</span>
           <input ref={fileRef} type="file" accept="video/*" onChange={onPickVideo} className="hidden" />
           <button onClick={() => fileRef.current?.click()} disabled={uploading} className="flex items-center gap-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] disabled:opacity-60">
             {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}

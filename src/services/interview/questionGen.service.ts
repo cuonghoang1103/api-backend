@@ -20,7 +20,7 @@
 import { z } from 'zod';
 import { prisma } from '../../config/database.js';
 import { BadRequestError } from '../../middleware/errorHandler.js';
-import { llmComplete, extractJson, isAiAvailable, checkTokenQuota, modelForStep } from './llm/index.js';
+import { llmComplete, extractJson, isAiAvailable, aiOffReason, circuitReopensInMs, checkTokenQuota, modelForStep } from './llm/index.js';
 import { renderPrompt } from './promptTemplate.service.js';
 import { retrieveChunks, type RetrievedChunk } from './knowledge/retrieval.js';
 import type { InterviewLevel, InterviewQuestionType } from '@prisma/client';
@@ -124,7 +124,13 @@ export interface GeneratePreview {
  */
 export async function generateQuestions(params: GenerateParams): Promise<GeneratePreview> {
   if (!isAiAvailable()) {
-    throw new BadRequestError('AI đang tắt (STATIC mode / thiếu API key / circuit mở). Không thể sinh câu hỏi lúc này.');
+    // Say WHICH, so a long-running job can tell "wait 60s" from "give up".
+    const reason = aiOffReason();
+    throw new BadRequestError(
+      reason === 'circuit'
+        ? `AI tạm nghỉ (cổng lỗi liên tiếp, mở lại sau ~${Math.ceil(circuitReopensInMs() / 1000)}s). Thử lại ngay sau đó.`
+        : 'AI đang tắt (STATIC mode / thiếu API key). Không thể sinh câu hỏi lúc này.',
+    );
   }
   const okQuota = await checkTokenQuota(params.userId);
   if (!okQuota) throw new BadRequestError('Đã đạt hạn mức token trong ngày. Thử lại vào ngày mai hoặc tăng INTERVIEW_DAILY_TOKEN_CAP.');

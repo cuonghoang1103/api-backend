@@ -110,6 +110,10 @@ async function fillLevel(tp, level) {
       callFails++;
       const msg = String(e?.message ?? e);
       console.error(`    [!] ${tp.track.slug}/${tp.slug} ${level}: ${msg.slice(0, 140)}`);
+      // Only give up on things that will still be true in an hour. The circuit
+      // breaker opens for SIXTY SECONDS after a burst of gateway 502s and then
+      // heals itself — quitting on it threw away four shards mid-run once, with
+      // hours of work left, while the gateway was already answering again.
       if (msg.includes('hạn mức') || msg.includes('AI đang tắt')) { stop = true; break; }
       // Transient gateway wobble (524/timeout/network) → breathe 90s and retry
       // within the guard budget; anything else abandons this (topic, level).
@@ -118,7 +122,12 @@ async function fillLevel(tp, level) {
       // usually produces different questions. Abandoning the level on it left
       // topics stuck below target for a whole run, the language module's
       // "one blip reads as exhausted" bug in interview clothes.
-      if (/524|timeout|ETIMEDOUT|ECONNRESET|fetch failed|529|overloaded|Không có câu hỏi nào để lưu/i.test(msg)) {
+      // 'AI tạm nghỉ' is the circuit breaker, which opens for SIXTY SECONDS
+      // after a burst of gateway 502s and then heals itself. It used to arrive
+      // as the same "AI đang tắt" string as a missing API key, so all four
+      // shards quit permanently over a one-minute wobble, hours of work left,
+      // while the gateway was already answering again.
+      if (/524|502|timeout|ETIMEDOUT|ECONNRESET|fetch failed|529|overloaded|Không có câu hỏi nào để lưu|AI tạm nghỉ/i.test(msg)) {
         await new Promise((r) => setTimeout(r, 90_000));
         continue;
       }

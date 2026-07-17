@@ -158,6 +158,28 @@ export function isAiAvailable(): boolean {
   return hasKey() && !isForceStatic() && !circuitOpen();
 }
 
+/**
+ * WHY the AI is unavailable — because the answers differ by hours.
+ *
+ * 'circuit' lasts 60 seconds and heals itself; 'nokey' and 'static' last until
+ * someone changes the environment. A caller that cannot tell them apart has to
+ * treat a one-minute wobble like a permanent outage, and a long autonomous run
+ * will quit over it. That is not hypothetical: a burst of gateway 502s opened
+ * the breaker for one minute and killed four bulk-generation shards that had
+ * hours of work left.
+ */
+export function aiOffReason(): 'none' | 'nokey' | 'static' | 'circuit' {
+  if (!hasKey()) return 'nokey';
+  if (isForceStatic()) return 'static';
+  if (circuitOpen()) return 'circuit';
+  return 'none';
+}
+
+/** ms until the breaker closes; 0 when it is already closed. */
+export function circuitReopensInMs(): number {
+  return Math.max(0, cbOpenUntil - Date.now());
+}
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Which product spent the tokens. `step` only picks a model tier, so without

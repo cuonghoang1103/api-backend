@@ -12,13 +12,17 @@
  * Theme-aware (CSS vars, never `dark:`).
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { X, Heart, Volume2, Loader2, Flame, Zap, Crown, ArrowRight, Mic, Square } from 'lucide-react';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import { X, Heart, Volume2, Loader2, Flame, Zap, Crown, ArrowRight, Mic, Square, Target } from 'lucide-react';
 import { languageApi, type PracticeLesson, type PracticeCompleteResult, type PronunciationResult } from '@/lib/language-api';
 import type { VocabWord } from '@/types/language';
 import { speakVocabEntry, type VocabLang } from '@/lib/notesTts';
 import { useSpeech } from '@/hooks/useSpeech';
 import { Mascot, praisePhrase, comfortPhrase, playMascotSound, mascotName } from '../mascot/mascot';
-import { dailyMascot } from '@/lib/mascotData';
+import { dailyMascot, pickMascot } from '@/lib/mascotData';
+import { Confetti } from '@/components/language/ui/Confetti';
+import { TactileButton } from '@/components/language/ui/TactileButton';
+import { useMotion, useCountUp, SPRING_SOFT } from '@/lib/motion';
 
 function speakLang(code: string): VocabLang | undefined {
   const c = (code || '').toLowerCase();
@@ -146,6 +150,7 @@ export default function LessonPlayer({
   // Seeded on the lesson key so one lesson keeps one coach start to finish.
   const coach = useMemo(() => dailyMascot(lesson.lessonKey), [lesson.lessonKey]);
   const [runStreak, setRunStreak] = useState(0);
+  const m = useMotion();
   const [coachLine, setCoachLine] = useState('');
 
   const [choice, setChoice] = useState<string | null>(null);
@@ -323,27 +328,14 @@ export default function LessonPlayer({
   }
 
   if (result) {
-    const perfect = mistakes === 0;
     return shell(
-      <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
-        <Mascot character={coach} emotion={perfect ? 'cheer' : correct / total >= 0.5 ? 'happy' : 'sad'} size={110} />
-        <h2 className="font-heading text-2xl font-bold text-text-primary">
-          {perfect ? 'Hoàn hảo! 🏆' : correct / total >= 0.5 ? 'Hoàn thành bài học 🎉' : 'Hoàn thành — ôn thêm nhé 📚'}
-        </h2>
-        <p className="text-text-secondary">{mascotName(coach)} chấm: {correct}/{total} câu đúng</p>
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <span className="inline-flex items-center gap-1.5 rounded-2xl bg-neon-violet/10 px-4 py-2.5 text-sm font-semibold text-neon-violet ring-1 ring-neon-violet/25"><Zap size={16} /> +{result.xpGained} XP</span>
-          {result.leveledUp && (
-            <span className="inline-flex items-center gap-1.5 rounded-2xl bg-neon-orange/10 px-4 py-2.5 text-sm font-semibold text-neon-orange ring-1 ring-neon-orange/25"><Crown size={16} /> Vương miện {result.crown}</span>
-          )}
-          {result.state && result.state.streak > 0 && (
-            <span className="inline-flex items-center gap-1.5 rounded-2xl bg-neon-orange/10 px-4 py-2.5 text-sm font-semibold text-neon-orange ring-1 ring-neon-orange/25"><Flame size={16} /> {result.state.streak} ngày</span>
-          )}
-        </div>
-        <button onClick={() => { onFinished(result); onClose(); }} className="mt-2 inline-flex items-center gap-2 rounded-full bg-neon-violet px-8 py-3 text-sm font-bold text-white transition hover:opacity-90">
-          Tiếp tục <ArrowRight size={16} />
-        </button>
-      </div>,
+      <LessonComplete
+        result={result}
+        correct={correct}
+        total={total}
+        mistakes={mistakes}
+        onContinue={() => { onFinished(result); onClose(); }}
+      />,
     );
   }
 
@@ -364,9 +356,29 @@ export default function LessonPlayer({
         >
           <X size={22} />
         </button>
-        <div className="h-3 flex-1 overflow-hidden rounded-full bg-[var(--bg-surface)]">
-          <div className="h-full rounded-full bg-neon-gradient transition-all" style={{ width: `${progress}%` }} />
+        <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-[var(--bg-surface)]">
+          <motion.div
+            className="h-full rounded-full bg-state-done"
+            animate={{ width: `${progress}%` }}
+            transition={m.reduce ? { duration: 0 } : SPRING_SOFT}
+          />
         </div>
+        {/* The one flashy moment allowed mid-lesson. It sits by the progress
+            bar, not over the question — the question is what they are reading. */}
+        <AnimatePresence>
+          {runStreak >= 3 && phase !== 'answer' && (
+            <motion.span
+              key={runStreak}
+              variants={m.popIn}
+              initial="hidden"
+              animate="show"
+              exit={{ opacity: 0, scale: 0.7 }}
+              className="shrink-0 rounded-full bg-state-current px-2 py-1 font-round text-[10px] font-extrabold uppercase text-[#4A3600]"
+            >
+              Combo x{runStreak}
+            </motion.span>
+          )}
+        </AnimatePresence>
         <span className="inline-flex items-center gap-1 text-sm font-semibold text-neon-pink"><Heart size={18} className="fill-neon-pink" /> {hearts}</span>
       </div>
 
@@ -381,7 +393,15 @@ export default function LessonPlayer({
       </div>
 
       {/* Feedback + action bar */}
-      <div className={`border-t px-4 py-4 sm:px-6 ${phase === 'correct' ? 'border-neon-green/30 bg-neon-green/10' : phase === 'wrong' ? 'border-neon-orange/30 bg-neon-orange/10' : 'border-[var(--border-color)]'}`}>
+      <motion.div
+        // Slides up on a verdict: the sheet arriving IS the feedback, before
+        // any of its text is read.
+        animate={m.reduce ? undefined : { y: 0 }}
+        initial={m.reduce ? undefined : { y: 8 }}
+        key={phase}
+        transition={SPRING_SOFT}
+        className={`border-t px-4 py-4 sm:px-6 ${phase === 'correct' ? 'border-state-done/30 bg-state-done/10' : phase === 'wrong' ? 'border-state-wrong/30 bg-state-wrong/10' : 'border-[var(--border-color)]'}`}
+      >
         <div className="mx-auto flex w-full max-w-xl items-center gap-3">
           {phase !== 'answer' && (
             <div className="flex min-w-0 flex-1 items-center gap-2">
@@ -412,13 +432,83 @@ export default function LessonPlayer({
               </button>
             )
           ) : (
-            <button onClick={next} disabled={finishing} className={`ml-auto inline-flex items-center gap-1.5 rounded-full px-8 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:opacity-60 ${phase === 'correct' ? 'bg-neon-green' : 'bg-neon-orange'}`}>
+            <TactileButton
+              onClick={next}
+              disabled={finishing}
+              tone={phase === 'correct' ? 'success' : 'danger'}
+              size="lg"
+              className="ml-auto"
+            >
               {finishing ? <Loader2 size={16} className="animate-spin" /> : index + 1 >= total ? 'Hoàn thành' : 'Tiếp tục'}
-            </button>
+            </TactileButton>
           )}
         </div>
-      </div>
+      </motion.div>
     </>,
+  );
+}
+
+/**
+ * Lesson complete — the one screen allowed to be loud.
+ *
+ * Sage (crown, star) presents a level-up; otherwise the lesson's own coach
+ * stays on, so finishing feels like the same character saw it through.
+ */
+function LessonComplete({ result, correct, total, mistakes, onContinue }: {
+  result: PracticeCompleteResult;
+  correct: number;
+  total: number;
+  mistakes: number;
+  onContinue: () => void;
+}) {
+  const m = useMotion();
+  const perfect = mistakes === 0;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const cast = pickMascot(result.leveledUp ? 'levelUp' : perfect ? 'done' : 'welcome');
+  const xp = useCountUp(result.xpGained);
+  const acc = useCountUp(pct);
+
+  return (
+    <div className="relative flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
+      {/* Fires once — this component only mounts when the lesson is over. */}
+      {(perfect || result.leveledUp) && <Confetti />}
+
+      <Mascot character={cast.mascot} emotion={perfect || result.leveledUp ? 'cheer' : 'happy'} size={130} />
+
+      <motion.h2 variants={m.popIn} initial="hidden" animate="show" className="font-round text-2xl font-extrabold text-text-primary">
+        {result.leveledUp ? `Vương miện ${result.crown}! 👑` : perfect ? 'Hoàn hảo! 🏆' : pct >= 50 ? 'Hoàn thành bài học 🎉' : 'Hoàn thành — ôn thêm nhé 📚'}
+      </motion.h2>
+
+      <motion.div variants={m.pageEnter} initial="hidden" animate="show" className="flex flex-wrap items-center justify-center gap-3">
+        <StatCard variants={m.childEnter} icon={<Zap size={16} />} value={`+${xp}`} label="XP" tone="violet" />
+        <StatCard variants={m.childEnter} icon={<Target size={16} />} value={`${acc}%`} label="chính xác" tone="green" />
+        {result.state && result.state.streak > 0 && (
+          <StatCard variants={m.childEnter} icon={<Flame size={16} />} value={String(result.state.streak)} label="ngày" tone="orange" />
+        )}
+      </motion.div>
+
+      <TactileButton onClick={onContinue} tone="success" size="lg" className="mt-2">
+        Tiếp tục <ArrowRight size={16} />
+      </TactileButton>
+    </div>
+  );
+}
+
+function StatCard({ icon, value, label, tone, variants }: {
+  icon: React.ReactNode; value: string; label: string;
+  tone: 'violet' | 'green' | 'orange';
+  variants?: Variants;
+}) {
+  const c = tone === 'violet'
+    ? 'bg-neon-violet/10 text-neon-violet ring-neon-violet/25'
+    : tone === 'green'
+      ? 'bg-state-done/10 text-state-done ring-state-done/25'
+      : 'bg-neon-orange/10 text-neon-orange ring-neon-orange/25';
+  return (
+    <motion.div variants={variants} className={`flex min-w-[5.5rem] flex-col items-center gap-0.5 rounded-2xl px-4 py-2.5 ring-1 ${c}`}>
+      <span className="flex items-center gap-1.5 font-round text-xl font-extrabold leading-none">{icon}{value}</span>
+      <span className="text-[10px] font-medium opacity-70">{label}</span>
+    </motion.div>
   );
 }
 

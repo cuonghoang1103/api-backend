@@ -21,13 +21,21 @@ const prisma = new PrismaClient();
 const args = process.argv.slice(2);
 const DRY = args.includes('--dry');
 const val = (flag, dflt) => { const i = args.indexOf(flag); return i >= 0 ? args[i + 1] : dflt; };
+// Not `Number(x) || d`: that swallows a legitimate 0. Not bare Number() either:
+// Number('') is 0, not NaN. Check for absence first, then parse.
+const num = (flag, dflt) => { const v = val(flag, undefined); if (v === undefined) return dflt; const n = Number(v); return Number.isFinite(n) ? n : dflt; };
 const TARGET = Number(val('--target', '50')) || 50;
 const LIMIT = Number(val('--limit', '0')) || 0;
 const DOMAINS = String(val('--domains', 'backend,frontend,database,devops,cloud,networking,data,security,qa,system-design'))
   .split(',').map((s) => s.trim()).filter(Boolean);
 const LEVELS = ['INTERN', 'FRESHER', 'JUNIOR', 'MID', 'SENIOR'];
 const PER_LEVEL = Math.ceil(TARGET / LEVELS.length); // 50 → 10 per level
-const BATCH = 5;                                     // questions per LLM call (stable, no truncation)
+// Questions per LLM call. Tunable because it is the whole 524 story: the
+// gateway cuts at Cloudflare's 100s, and a call asking for five long questions
+// from a slow model does not finish in time. Fewer per call = shorter response
+// = under the limit. It is the difference between a model being unusable here
+// and merely slower.
+const BATCH = num('--batch', 5);
 const LEVEL_CONCURRENCY = 1;                         // sequential — parallel calls made the gateway exceed Cloudflare's timeout (HTTP 524)
 const ADMIN_USER_ID = 1;
 

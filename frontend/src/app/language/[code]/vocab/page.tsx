@@ -726,7 +726,7 @@ function ListView({
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <div className="flex min-w-0 items-center gap-2">
-                    <span className="min-w-0 truncate text-xl font-bold text-text-primary">{w.word}</span>
+                    <span className="min-w-0 truncate font-round text-2xl font-extrabold leading-tight text-text-primary">{w.word}</span>
                     <SpeakerButton
                       text={w.word}
                       reading={w.pronunciations?.[0]?.value}
@@ -738,9 +738,9 @@ function ListView({
                       {w.pronunciations.map((p, i) => (
                         <span
                           key={p.id ?? i}
-                          className="rounded-full bg-[var(--bg-surface)] px-2 py-0.5 text-[11px] text-text-secondary ring-1 ring-[var(--border-color)]"
+                          className="rounded-full bg-[var(--bg-surface)] px-2 py-0.5 font-mono text-[11px] text-text-secondary ring-1 ring-[var(--border-color)]"
                         >
-                          <span className="text-text-muted">{p.type}:</span> {p.value}
+                          <span className="font-sans text-text-muted">{p.type}:</span> {p.value}
                         </span>
                       ))}
                     </div>
@@ -773,12 +773,15 @@ function ListView({
                   </div>
                 )}
               </div>
-              <p className="mt-2 text-text-primary">{w.meaningVi}</p>
+              {/* Meaning is what the learner came for — accent colour lifts it
+                  out of the grey block; the example sentences step down a size
+                  and a shade so the eye lands on the meaning first. */}
+              <p className="mt-2 font-medium text-cat-vocab-icon">{w.meaningVi}</p>
               {w.exampleSentence && (
-                <p className="mt-1.5 text-sm text-text-secondary">{w.exampleSentence}</p>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-text-secondary">{w.exampleSentence}</p>
               )}
               {w.exampleMeaning && (
-                <p className="text-sm text-text-muted">{w.exampleMeaning}</p>
+                <p className="text-[13px] leading-relaxed text-text-muted">{w.exampleMeaning}</p>
               )}
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <AiExplainButton isPro={isPro} onOpen={() => onExplain(w)} />

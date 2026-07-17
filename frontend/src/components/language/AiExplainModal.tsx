@@ -265,7 +265,9 @@ export function AiExplainButton({ isPro, onOpen, className = '' }: { isPro: bool
         onOpen();
       }}
       title="Giải thích bằng AI"
-      className={`inline-flex items-center gap-1.5 rounded-full bg-neon-violet/15 px-3 py-1.5 text-xs font-semibold text-neon-violet ring-1 ring-neon-violet/30 transition hover:bg-neon-violet/25 ${className}`}
+      /* Secondary: outline. Same shape as the primary, deliberately lighter —
+         this is the optional extra, not the point of the card. */
+      className={`inline-flex items-center gap-1.5 rounded-full bg-transparent px-3.5 py-1.5 text-xs font-bold text-cat-ai-icon ring-1 ring-cat-ai-icon/40 transition hover:bg-cat-ai-icon/10 ${className}`}
     >
       <Sparkles size={14} />
       <span>Giải thích AI</span>

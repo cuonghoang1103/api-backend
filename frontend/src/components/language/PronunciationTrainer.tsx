@@ -302,12 +302,14 @@ export function PronounceButton({ isPro, onOpen, className = '' }: { isPro: bool
         onOpen();
       }}
       title="Luyện phát âm"
-      className={`inline-flex items-center gap-1.5 rounded-full bg-neon-cyan/15 px-3 py-1.5 text-xs font-semibold text-neon-cyan ring-1 ring-neon-cyan/30 transition hover:bg-neon-cyan/25 ${className}`}
+      /* Primary: filled. Speaking the word is the main thing to DO with a
+         vocabulary card, so it must not look like a peer of the AI button. */
+      className={`inline-flex items-center gap-1.5 rounded-full bg-neon-cyan px-3.5 py-1.5 text-xs font-bold text-white shadow-sm transition hover:opacity-90 ${className}`}
     >
       <Mic size={14} />
       <span>Luyện đọc</span>
       {!isPro && (
-        <span className="rounded-full bg-neon-cyan/25 px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none tracking-wide">
+        <span className="rounded-full bg-white/25 px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none tracking-wide">
           Pro
         </span>
       )}

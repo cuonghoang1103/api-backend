@@ -1,6 +1,6 @@
 'use client';
 
-import { Copy, Eye, Heart } from 'lucide-react';
+import { Copy, Eye, Heart, MessageSquare } from 'lucide-react';
 import { LanguageIcon } from './LanguageIcon';
 import type { Snippet } from '@/types/exp-hub';
 
@@ -79,6 +79,12 @@ export function SnippetCard({ snippet, isSelected, onClick, onCopy }: SnippetCar
           <span className="flex items-center gap-1">
             <Heart className="w-3 h-3" />
             {snippet.upvoteCount}
+          </span>
+        )}
+        {(snippet.commentCount ?? 0) > 0 && (
+          <span className="flex items-center gap-1">
+            <MessageSquare className="w-3 h-3" />
+            {snippet.commentCount}
           </span>
         )}
       </div>

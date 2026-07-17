@@ -11,6 +11,8 @@ import type {
   SnippetVariable,
   SnippetVersion,
   SnippetAttachment,
+  SnippetComment,
+  ReactionSummary,
   PaginatedResponse,
   DashboardStats,
   BulkImportResult,
@@ -160,6 +162,33 @@ export const snippetsApi = {
       files,
       categoryId,
     }),
+};
+
+// ─── Comments + Reactions ───────────────────────────────────────────────────────
+
+export const snippetCommentsApi = {
+  list: (snippetId: number) =>
+    api.get<{ success: boolean; data: { comments: SnippetComment[]; total: number } }>(`${BASE}/${snippetId}/comments`),
+
+  add: (snippetId: number, content: string, parentId?: number | null) =>
+    api.post<{ success: boolean; data: SnippetComment }>(`${BASE}/${snippetId}/comments`, { content, parentId }),
+
+  edit: (commentId: number, content: string) =>
+    api.patch<{ success: boolean; message: string }>(`${BASE}/comments/${commentId}`, { content }),
+
+  remove: (commentId: number) =>
+    api.delete<{ success: boolean; message: string }>(`${BASE}/comments/${commentId}`),
+
+  react: (commentId: number, emoji: string) =>
+    api.post<{ success: boolean; data: { reactions: ReactionSummary[] } }>(`${BASE}/comments/${commentId}/reactions`, { emoji }),
+};
+
+export const snippetReactionsApi = {
+  getForSnippet: (snippetId: number) =>
+    api.get<{ success: boolean; data: { reactions: ReactionSummary[] } }>(`${BASE}/${snippetId}/reactions`),
+
+  toggle: (snippetId: number, emoji: string) =>
+    api.post<{ success: boolean; data: { reactions: ReactionSummary[] } }>(`${BASE}/${snippetId}/reactions`, { emoji }),
 };
 
 // ─── Bookmarks ────────────────────────────────────────────────────────────────

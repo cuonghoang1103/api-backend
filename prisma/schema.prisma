@@ -275,16 +275,19 @@ model User {
 
   // ─── EXP_Hub — Snippet Library ──────────────────────────────
   // Snippets authored by this user
-  snippets         Snippet[]
+  snippets                Snippet[]
   // Bookmarks saved by this user (authenticated)
-  snippetBookmarks SnippetBookmark[]
+  snippetBookmarks        SnippetBookmark[]
   // Upvotes by this user (authenticated)
-  snippetUpvotes   SnippetUpvote[]
+  snippetUpvotes          SnippetUpvote[]
   // Comments on snippets
-  snippetComments  SnippetComment[]
+  snippetComments         SnippetComment[]
   // Webhooks configured by this user
-  snippetWebhooks  SnippetWebhook[]
-  SnippetVersion   SnippetVersion[]
+  snippetWebhooks         SnippetWebhook[]
+  SnippetVersion          SnippetVersion[]
+  // Emoji reactions on snippets / snippet comments
+  snippetReactions        SnippetReaction[]
+  snippetCommentReactions SnippetCommentReaction[]
 
   // ─── My Language — learning progress (per-user, SRS) ─────────
   // Additive. Every row is scoped by userId; SM-2 spaced repetition
@@ -4059,6 +4062,7 @@ model Snippet {
   comments      SnippetComment[]
   upvotes       SnippetUpvote[]
   bookmarks     SnippetBookmark[]
+  reactions     SnippetReaction[]
 
   @@index([categoryId], name: "idx_snippets_category")
   @@index([authorId], name: "idx_snippets_author")
@@ -4160,14 +4164,50 @@ model SnippetComment {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  snippet Snippet          @relation(fields: [snippetId], references: [id], onDelete: Cascade)
-  user    User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
-  parent  SnippetComment?  @relation("SnippetCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies SnippetComment[] @relation("SnippetCommentReplies")
+  snippet   Snippet                  @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+  user      User?                    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  parent    SnippetComment?          @relation("SnippetCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   SnippetComment[]         @relation("SnippetCommentReplies")
+  reactions SnippetCommentReaction[]
 
   @@index([snippetId, createdAt(sort: Desc)], name: "idx_snippet_comments_snippet_time")
   @@index([parentId], name: "idx_snippet_comments_parent")
   @@map("snippet_comments")
+}
+
+// ─── Reactions (emoji) ──────────────────────────────────────────
+// GitHub-style: a user may add several distinct emoji to one target, but each
+// (target, user, emoji) combination is unique. Logged-in users only — no
+// anonymous reactions, so we always have a userId.
+
+model SnippetReaction {
+  id        Int      @id @default(autoincrement())
+  snippetId Int      @map("snippet_id")
+  userId    Int      @map("user_id")
+  emoji     String   @db.VarChar(16)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  snippet Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([snippetId, userId, emoji], name: "uk_snippet_reaction")
+  @@index([snippetId], name: "idx_snippet_reactions_snippet")
+  @@map("snippet_reactions")
+}
+
+model SnippetCommentReaction {
+  id        Int      @id @default(autoincrement())
+  commentId Int      @map("comment_id")
+  userId    Int      @map("user_id")
+  emoji     String   @db.VarChar(16)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment SnippetComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId, emoji], name: "uk_snippet_comment_reaction")
+  @@index([commentId], name: "idx_snippet_comment_reactions_comment")
+  @@map("snippet_comment_reactions")
 }
 
 // ─── Upvotes (Phase 2) ──────────────────────────────────────────

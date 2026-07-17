@@ -27,6 +27,7 @@ import { authenticate, optionalAuth, requireRole } from '../middleware/auth.js';
 import { BadRequestError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import * as snippetsService from '../services/snippets.service.js';
+import * as commentsService from '../services/snippets.comments.service.js';
 
 const router = Router();
 
@@ -201,6 +202,77 @@ router.get('/bookmarks/list', optionalAuth, async (req, res: Response<ApiRespons
 
     const result = await snippetsService.getBookmarks(userId, ip);
     res.json({ success: true, data: result });
+  } catch (error) { next(error); }
+});
+
+// ─── Comments + Reactions ─────────────────────────────────────────────────────────
+// Reading is public; posting/reacting requires a login. Edit/delete is
+// owner-only (admins may delete for moderation — enforced in the service).
+
+// GET /api/v1/snippets/:id/comments — threaded comments (+ per-comment reactions)
+router.get('/:id(\\d+)/comments', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const result = await commentsService.listComments(id, req.user?.userId ?? null);
+    res.json({ success: true, data: result });
+  } catch (error) { next(error); }
+});
+
+// POST /api/v1/snippets/:id/comments — add a comment or reply
+router.post('/:id(\\d+)/comments', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { content, parentId } = req.body as { content: string; parentId?: number | null };
+    const comment = await commentsService.createComment(id, req.user!.userId, content, parentId ?? null);
+    res.status(201).json({ success: true, data: comment });
+  } catch (error) { next(error); }
+});
+
+// PATCH /api/v1/snippets/comments/:cid — edit own comment
+router.patch('/comments/:cid(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const cid = parseInt(req.params.cid);
+    const { content } = req.body as { content: string };
+    await commentsService.editComment(cid, req.user!.userId, content);
+    res.json({ success: true, message: 'Comment updated' });
+  } catch (error) { next(error); }
+});
+
+// DELETE /api/v1/snippets/comments/:cid — delete own comment (admin: any)
+router.delete('/comments/:cid(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const cid = parseInt(req.params.cid);
+    await commentsService.deleteComment(cid, req.user!.userId);
+    res.json({ success: true, message: 'Comment deleted' });
+  } catch (error) { next(error); }
+});
+
+// POST /api/v1/snippets/comments/:cid/reactions — toggle an emoji on a comment
+router.post('/comments/:cid(\\d+)/reactions', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const cid = parseInt(req.params.cid);
+    const { emoji } = req.body as { emoji: string };
+    const reactions = await commentsService.toggleCommentReaction(cid, req.user!.userId, emoji);
+    res.json({ success: true, data: { reactions } });
+  } catch (error) { next(error); }
+});
+
+// GET /api/v1/snippets/:id/reactions — snippet reaction summary
+router.get('/:id(\\d+)/reactions', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const reactions = await commentsService.summarizeSnippetReactions(id, req.user?.userId ?? null);
+    res.json({ success: true, data: { reactions } });
+  } catch (error) { next(error); }
+});
+
+// POST /api/v1/snippets/:id/reactions — toggle an emoji on a snippet
+router.post('/:id(\\d+)/reactions', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { emoji } = req.body as { emoji: string };
+    const reactions = await commentsService.toggleSnippetReaction(id, req.user!.userId, emoji);
+    res.json({ success: true, data: { reactions } });
   } catch (error) { next(error); }
 });
 

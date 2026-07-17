@@ -95,6 +95,33 @@ export interface SnippetAttachment {
   createdAt: string;
 }
 
+// ─── Comments + Reactions ──────────────────────────────────────────
+export interface ReactionSummary {
+  emoji: string;
+  count: number;
+  mine: boolean;
+}
+
+export interface SnippetCommentAuthor {
+  id: number;
+  username: string;
+  displayName: string | null;
+  fullName: string | null;
+  avatarUrl: string | null;
+}
+
+export interface SnippetComment {
+  id: number;
+  parentId: number | null;
+  content: string;
+  isEdited: boolean;
+  createdAt: string;
+  updatedAt: string;
+  author: SnippetCommentAuthor | null;
+  reactions: ReactionSummary[];
+  replies: SnippetComment[];
+}
+
 export interface SnippetVersion {
   id: number;
   snippetId: number;

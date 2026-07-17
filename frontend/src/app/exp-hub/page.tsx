@@ -15,9 +15,12 @@ import { SearchBar } from '@/components/exp-hub/SearchBar';
 import { FilterPanel } from '@/components/exp-hub/FilterPanel';
 import { GroupTabBar } from '@/components/exp-hub/GroupTabBar';
 import { CategoryHeader } from '@/components/exp-hub/CategoryHeader';
-import { snippetsApi, snippetCategoriesApi, snippetTagsApi, snippetStatsApi, snippetBookmarksApi } from '@/lib/exp-hub-api';
+import { ReactionBar } from '@/components/exp-hub/ReactionBar';
+import { CommentsSection } from '@/components/exp-hub/CommentsSection';
+import { snippetsApi, snippetCategoriesApi, snippetTagsApi, snippetStatsApi, snippetBookmarksApi, snippetReactionsApi } from '@/lib/exp-hub-api';
+import { useAuthStore } from '@/store/authStore';
 import { LanguageBadge } from '@/components/exp-hub/LanguageIcon';
-import type { Snippet, SnippetCategory, SnippetTag, SnippetFilters, SnippetVersion } from '@/types/exp-hub';
+import type { Snippet, SnippetCategory, SnippetTag, SnippetFilters, SnippetVersion, ReactionSummary } from '@/types/exp-hub';
 
 // Find a category anywhere in the nested tree.
 function findCategory(cats: SnippetCategory[], targetId: number): SnippetCategory | null {
@@ -45,6 +48,7 @@ export default function ExpHubPage() {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const isDark = theme === 'dark';
+  const isAuthed = useAuthStore((s) => s.isAuthenticated);
 
   const [categories, setCategories] = useState<SnippetCategory[]>([]);
   const [tags, setTags] = useState<SnippetTag[]>([]);
@@ -71,6 +75,8 @@ export default function ExpHubPage() {
   // on selection (this also counts the view server-side).
   const [detail, setDetail] = useState<Snippet | null>(null);
   const [voteBusy, setVoteBusy] = useState(false);
+  // Emoji reactions on the selected snippet (loaded per selection).
+  const [snippetReactions, setSnippetReactions] = useState<ReactionSummary[]>([]);
   // Version history (lazy-loaded on expand)
   const [showVersions, setShowVersions] = useState(false);
   const [versions, setVersions] = useState<SnippetVersion[] | null>(null);
@@ -175,11 +181,27 @@ export default function ExpHubPage() {
     let cancelled = false;
     setShowVersions(false);
     setVersions(null);
+    setSnippetReactions([]);
     snippetsApi.getById(selectedSnippet.id)
       .then((res) => { if (!cancelled) setDetail(res.data.data); })
       .catch(() => { if (!cancelled) setDetail(selectedSnippet); });
+    snippetReactionsApi.getForSnippet(selectedSnippet.id)
+      .then((res) => { if (!cancelled) setSnippetReactions(res.data.data.reactions); })
+      .catch(() => { /* ignore */ });
     return () => { cancelled = true; };
   }, [selectedSnippet]);
+
+  const handleToggleSnippetReaction = async (emoji: string) => {
+    const view = detail ?? selectedSnippet;
+    if (!view) return;
+    if (!isAuthed) { toast.error(t('expHub.loginToReact')); return; }
+    try {
+      const res = await snippetReactionsApi.toggle(view.id, emoji);
+      setSnippetReactions(res.data.data.reactions);
+    } catch {
+      toast.error(t('expHub.reactFail'));
+    }
+  };
 
   // Saved-only view: load bookmarks when toggled on
   useEffect(() => {
@@ -640,6 +662,11 @@ export default function ExpHubPage() {
                   </button>
                 </div>
 
+                {/* Emoji reactions on the entry */}
+                <div className="mt-4">
+                  <ReactionBar reactions={snippetReactions} onToggle={handleToggleSnippetReaction} disabled={!isAuthed} />
+                </div>
+
                 {/* Explanation Modal — theme-aware */}
                 {showExplanation && (view.explanation || view.youtubeUrl || view.referenceUrl) && (
                   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setShowExplanation(false)}>
@@ -715,6 +742,9 @@ export default function ExpHubPage() {
                   <p>{t('expHub.createdOn')} {new Date(view.createdAt).toLocaleDateString()}</p>
                   {view.author && <p>{t('expHub.by')} {view.author.username}</p>}
                 </div>
+
+                {/* Comments + reactions */}
+                <CommentsSection key={view.id} snippetId={view.id} />
               </div>
             );
           })()}

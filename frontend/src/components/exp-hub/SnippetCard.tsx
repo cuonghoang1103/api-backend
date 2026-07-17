@@ -20,22 +20,22 @@ export function SnippetCard({ snippet, isSelected, onClick, onCopy }: SnippetCar
   return (
     <div
       onClick={onClick}
-      className={`group p-3 border-b border-white/5 cursor-pointer transition-colors ${
+      className={`group p-3 border-b border-[var(--border-color)] cursor-pointer transition-colors ${
         isSelected
           ? 'bg-violet-500/10 border-l-2 border-l-violet-400'
-          : 'hover:bg-white/[0.04]'
+          : 'hover:bg-[var(--bg-surface-hover)]'
       }`}
     >
       <div className="flex items-start gap-2">
         <LanguageIcon language={snippet.language} className="mt-0.5 shrink-0" />
 
         <div className="flex-1 min-w-0">
-          <h4 className="text-sm font-medium text-slate-200 truncate">
+          <h4 className="text-sm font-medium text-[var(--text-primary)] truncate">
             {snippet.title}
           </h4>
 
           {snippet.description && (
-            <p className="text-xs text-slate-400 line-clamp-2 mt-0.5">
+            <p className="text-xs text-[var(--text-secondary)] line-clamp-2 mt-0.5">
               {snippet.description}
             </p>
           )}
@@ -44,13 +44,13 @@ export function SnippetCard({ snippet, isSelected, onClick, onCopy }: SnippetCar
             {snippet.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag.id}
-                className="text-[10px] px-1.5 py-0.5 bg-white/5 border border-white/10 text-slate-400 rounded"
+                className="text-[10px] px-1.5 py-0.5 bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-secondary)] rounded"
               >
                 {tag.name}
               </span>
             ))}
             {snippet.tags.length > 3 && (
-              <span className="text-[10px] text-slate-500">
+              <span className="text-[10px] text-[var(--text-muted)]">
                 +{snippet.tags.length - 3}
               </span>
             )}
@@ -59,14 +59,14 @@ export function SnippetCard({ snippet, isSelected, onClick, onCopy }: SnippetCar
 
         <button
           onClick={handleCopy}
-          className="p-1.5 hover:bg-white/10 rounded transition-colors opacity-60 hover:opacity-100 active:scale-90"
+          className="p-1.5 hover:bg-[var(--bg-surface-active)] rounded transition-colors opacity-60 hover:opacity-100 active:scale-90"
           title="Copy code"
         >
-          <Copy className="w-3.5 h-3.5 text-slate-400" />
+          <Copy className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
         </button>
       </div>
 
-      <div className="flex items-center gap-3 mt-2 text-xs text-slate-500">
+      <div className="flex items-center gap-3 mt-2 text-xs text-[var(--text-muted)]">
         <span className="flex items-center gap-1">
           <Copy className="w-3 h-3" />
           {snippet.copyCount}

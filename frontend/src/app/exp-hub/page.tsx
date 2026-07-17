@@ -1,28 +1,56 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
-import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen } from 'lucide-react';
+import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen, Github, Download } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTheme } from '@/context/ThemeContext';
 import { FolderTree } from '@/components/exp-hub/FolderTree';
 import { SnippetCard } from '@/components/exp-hub/SnippetCard';
 import { CodeViewer } from '@/components/exp-hub/CodeViewer';
 import { SnippetCodeTabs } from '@/components/exp-hub/SnippetCodeTabs';
 import { SearchBar } from '@/components/exp-hub/SearchBar';
 import { FilterPanel } from '@/components/exp-hub/FilterPanel';
+import { GroupTabBar } from '@/components/exp-hub/GroupTabBar';
+import { CategoryHeader } from '@/components/exp-hub/CategoryHeader';
 import { snippetsApi, snippetCategoriesApi, snippetTagsApi, snippetStatsApi, snippetBookmarksApi } from '@/lib/exp-hub-api';
 import { LanguageBadge } from '@/components/exp-hub/LanguageIcon';
 import type { Snippet, SnippetCategory, SnippetTag, SnippetFilters, SnippetVersion } from '@/types/exp-hub';
 
+// Find a category anywhere in the nested tree.
+function findCategory(cats: SnippetCategory[], targetId: number): SnippetCategory | null {
+  for (const cat of cats) {
+    if (cat.id === targetId) return cat;
+    if (cat.children) {
+      const found = findCategory(cat.children, targetId);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+// Pretty-format a file size in bytes.
+function formatBytes(n?: number | null): string {
+  if (!n || n <= 0) return '';
+  const u = ['B', 'KB', 'MB', 'GB'];
+  let i = 0; let v = n;
+  while (v >= 1024 && i < u.length - 1) { v /= 1024; i++; }
+  return `${v.toFixed(v < 10 && i > 0 ? 1 : 0)} ${u[i]}`;
+}
+
 export default function ExpHubPage() {
   const searchParams = useSearchParams();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   const [categories, setCategories] = useState<SnippetCategory[]>([]);
   const [tags, setTags] = useState<SnippetTag[]>([]);
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [selectedSnippet, setSelectedSnippet] = useState<Snippet | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>();
+  // Active TOP-LEVEL group (root category) — scopes the left tree + list.
+  const [activeGroupId, setActiveGroupId] = useState<number | undefined>();
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>();
   const [sortBy, setSortBy] = useState<'popular' | 'newest' | 'upvotes'>('newest');
@@ -51,6 +79,14 @@ export default function ExpHubPage() {
   const [folderTreeOpen, setFolderTreeOpen] = useState(true);
 
   const languages = [...new Set(snippets.filter((s) => s.language).map((s) => s.language))].slice(0, 10);
+
+  // The active group object + the categories shown in the left tree:
+  // when a group is active the tree lists that group's technologies;
+  // otherwise it lists the top-level groups.
+  const activeGroup = activeGroupId ? findCategory(categories, activeGroupId) : undefined;
+  const treeCategories = activeGroup ? (activeGroup.children ?? []) : categories;
+  // The category whose header we show above the list (group or technology).
+  const selectedCategory = selectedCategoryId ? findCategory(categories, selectedCategoryId) : undefined;
 
   // Fetch categories
   useEffect(() => {
@@ -195,8 +231,29 @@ export default function ExpHubPage() {
     }
   };
 
+  // Group tab click: scope the whole view to that group (or clear to "Tất cả").
+  const handleSelectGroup = (group: SnippetCategory | null) => {
+    if (!group) {
+      setActiveGroupId(undefined);
+      setSelectedCategoryId(undefined);
+    } else {
+      setActiveGroupId(group.id);
+      setSelectedCategoryId(group.id); // list shows the whole group subtree
+    }
+    setSelectedSnippet(null);
+    setPage(1);
+  };
+
+  // Left-tree selection. `null` = "all in the current scope" (the active
+  // group, or truly everything at the top level).
   const handleCategorySelect = (category: SnippetCategory | null) => {
-    setSelectedCategoryId(category?.id);
+    if (!category) {
+      setSelectedCategoryId(activeGroupId);
+    } else {
+      setSelectedCategoryId(category.id);
+      // Selecting a root group from the "Tất cả" tree behaves like its tab.
+      if (!activeGroupId && category.parentId == null) setActiveGroupId(category.id);
+    }
     setSelectedSnippet(null);
     setPage(1);
   };
@@ -218,150 +275,134 @@ export default function ExpHubPage() {
   // Helper to convert YouTube URL to embed URL
   const getYouTubeEmbedUrl = (url: string): string => {
     if (!url) return '';
-    // Already embed URL
     if (url.includes('youtube.com/embed/')) return url;
-    // Short URL youtu.be
     const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
     if (shortMatch) return `https://www.youtube.com/embed/${shortMatch[1]}`;
-    // Standard watch URL
     const watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
     if (watchMatch) return `https://www.youtube.com/embed/${watchMatch[1]}`;
     return url;
   };
 
   const getBreadcrumbs = (): Array<{ label: string; id?: number }> => {
-    const crumbs: Array<{ label: string; id?: number }> = [{ label: 'All Snippets' }];
-    if (selectedCategoryId) {
-      const findCategory = (cats: SnippetCategory[], targetId: number): SnippetCategory | null => {
-        for (const cat of cats) {
-          if (cat.id === targetId) return cat;
-          if (cat.children) {
-            const found = findCategory(cat.children, targetId);
-            if (found) return found;
-          }
-        }
-        return null;
-      };
-      const cat = findCategory(categories, selectedCategoryId);
-      if (cat) crumbs.push({ label: cat.name, id: cat.id });
+    const crumbs: Array<{ label: string; id?: number }> = [{ label: 'Tất cả' }];
+    if (activeGroup) crumbs.push({ label: activeGroup.name, id: activeGroup.id });
+    if (selectedCategory && selectedCategory.id !== activeGroup?.id) {
+      crumbs.push({ label: selectedCategory.name, id: selectedCategory.id });
     }
     return crumbs;
   };
 
+  // Parse "owner/repo" out of a GitHub URL for the repo card.
+  const repoInfo = useMemo(() => {
+    const url = (detail ?? selectedSnippet)?.repoUrl;
+    if (!url) return null;
+    const m = url.match(/github\.com\/([^/]+)\/([^/#?]+)/i);
+    if (!m) return { owner: '', repo: url, url };
+    return { owner: m[1], repo: m[2].replace(/\.git$/, ''), url };
+  }, [detail, selectedSnippet]);
+
   return (
-    <div className="relative flex flex-col h-[calc(100dvh-var(--app-chrome-bottom))] pt-16 sm:pt-20 overflow-hidden text-slate-200 bg-[#0d1120]">
-      {/* ── Ambient dark background (sits behind everything, never over
-          text/code — pointer-events-none, low opacity). ── */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(160deg, #0d1120 0%, #111832 55%, #0b0f1e 100%)' }}
-        />
-        {/* faint grid */}
-        <div
-          className="absolute inset-0 opacity-[0.25]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.06) 1px, transparent 1px)',
-            backgroundSize: '46px 46px',
-          }}
-        />
-        {/* drifting neon blobs */}
-        <div
-          className="exphub-blob-a absolute -top-32 -left-24 h-[42rem] w-[42rem] rounded-full opacity-[0.16]"
-          style={{ background: 'radial-gradient(circle, #8b5cf6 0%, transparent 62%)' }}
-        />
-        <div
-          className="exphub-blob-b absolute -bottom-40 -right-28 h-[46rem] w-[46rem] rounded-full opacity-[0.14]"
-          style={{ background: 'radial-gradient(circle, #22d3ee 0%, transparent 62%)' }}
-        />
-      </div>
+    <div className="relative flex flex-col h-[calc(100dvh-var(--app-chrome-bottom))] pt-16 sm:pt-20 overflow-hidden bg-[var(--bg-primary)] text-[var(--text-primary)]">
+      {/* Ambient neon background — dark theme only (looks wrong on light). */}
+      {isDark && (
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, #0d1120 0%, #111832 55%, #0b0f1e 100%)' }} />
+          <div
+            className="absolute inset-0 opacity-[0.25]"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.06) 1px, transparent 1px)',
+              backgroundSize: '46px 46px',
+            }}
+          />
+          <div className="exphub-blob-a absolute -top-32 -left-24 h-[42rem] w-[42rem] rounded-full opacity-[0.16]" style={{ background: 'radial-gradient(circle, #8b5cf6 0%, transparent 62%)' }} />
+          <div className="exphub-blob-b absolute -bottom-40 -right-28 h-[46rem] w-[46rem] rounded-full opacity-[0.14]" style={{ background: 'radial-gradient(circle, #22d3ee 0%, transparent 62%)' }} />
+        </div>
+      )}
 
       {/* Header */}
-      <header className="relative z-10 flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#0d1120]/80 backdrop-blur-md">
+      <header className="relative z-10 flex items-center justify-between gap-3 border-b border-[var(--border-color)] bg-[var(--bg-card)]/80 px-4 py-3 backdrop-blur-md">
         <div className="flex items-center gap-4">
-          <h1 className="text-lg font-bold bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300 bg-clip-text text-transparent">
+          <h1 className="bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 bg-clip-text text-lg font-bold text-transparent">
             EXP_Hub
           </h1>
           {stats && (
-            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-slate-400">
-              {stats.totalSnippets} snippets
+            <span className="hidden rounded-full border border-[var(--border-color)] bg-[var(--bg-surface-active)] px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)] sm:inline">
+              {stats.totalSnippets} mục
             </span>
           )}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <SearchBar
-            className="w-80"
+            className="w-40 sm:w-80"
             initialQuery={searchQuery}
             onSearch={(q) => { setSearchQuery(q); setPage(1); setSelectedSnippet(null); }}
           />
           <button
             onClick={() => setShowSaved((v) => !v)}
-            className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg border transition-colors ${
+            className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors ${
               showSaved
-                ? 'bg-violet-500/20 border-violet-400/50 text-violet-200 shadow-[0_0_18px_rgba(139,92,246,0.35)]'
-                : 'border-white/10 text-slate-400 hover:bg-white/5 hover:text-slate-200'
+                ? 'border-violet-400/60 bg-violet-500/15 text-violet-500 dark:text-violet-300'
+                : 'border-[var(--border-color)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'
             }`}
             title="Snippets đã lưu"
           >
-            <BookmarkCheck className="w-4 h-4" />
-            Đã lưu
+            <BookmarkCheck className="h-4 w-4" />
+            <span className="hidden sm:inline">Đã lưu</span>
           </button>
         </div>
       </header>
 
-      {/* Main Content — stacks vertically on mobile so all three panels are
-          reachable (no horizontal overflow), side-by-side columns on ≥lg. */}
+      {/* Horizontal group tab bar (Backend / Frontend / …) */}
+      {categories.length > 0 && (
+        <div className="relative z-10">
+          <GroupTabBar groups={categories} activeGroupId={activeGroupId} onSelectGroup={handleSelectGroup} />
+        </div>
+      )}
+
+      {/* Main Content — stacks vertically on mobile, side-by-side on ≥lg. */}
       <div className="relative z-10 flex flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
-        {/* Left Sidebar - Folder Tree (collapsible).
-            Mobile: collapses into the top stacked row.
-            Desktop (≥lg): width animates between 288px (open) and 44px (closed)
-            via inline width — the FolderTree itself hides when closed. */}
+        {/* Left Sidebar - Folder Tree (collapsible) */}
         <aside
-          className={`relative shrink-0 border-b border-white/10 bg-white/[0.02] lg:border-b-0 lg:border-r ${
+          className={`relative shrink-0 border-b border-[var(--border-color)] bg-[var(--bg-card)]/50 lg:border-b-0 lg:border-r ${
             folderTreeOpen ? 'lg:w-72' : 'lg:w-11'
           }`}
         >
-          <div className={`flex items-center border-b border-white/10 ${
-            folderTreeOpen ? 'justify-between px-3 py-2' : 'justify-center py-2'
-          }`}>
-            <span
-              className={`flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-slate-300 transition-opacity ${
-                folderTreeOpen ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden pointer-events-none'
-              }`}
-            >
-              <FolderOpen className="w-4 h-4 text-violet-400" />
-              Categories
+          <div className={`flex items-center border-b border-[var(--border-color)] ${folderTreeOpen ? 'justify-between px-3 py-2' : 'justify-center py-2'}`}>
+            <span className={`flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] transition-opacity ${folderTreeOpen ? 'opacity-100' : 'w-0 overflow-hidden opacity-0 pointer-events-none'}`}>
+              <FolderOpen className="h-4 w-4 text-violet-500" />
+              {activeGroup ? activeGroup.name : 'Danh mục'}
             </span>
             <button
               type="button"
               onClick={() => setFolderTreeOpen((v) => !v)}
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-white/10 hover:text-slate-100"
-              title={folderTreeOpen ? 'Ẩn Categories' : 'Hiện Categories'}
-              aria-label={folderTreeOpen ? 'Ẩn sidebar Categories' : 'Hiện sidebar Categories'}
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]"
+              title={folderTreeOpen ? 'Ẩn danh mục' : 'Hiện danh mục'}
+              aria-label={folderTreeOpen ? 'Ẩn sidebar danh mục' : 'Hiện sidebar danh mục'}
             >
-              {folderTreeOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+              {folderTreeOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
             </button>
           </div>
-          {/* FolderTree — render normally but hide when collapsed so the
-              toggle button above stays the only control visible. */}
-          <div
-            className={`max-h-52 overflow-y-auto lg:max-h-none ${
-              folderTreeOpen ? '' : 'hidden'
-            }`}
-          >
+          <div className={`max-h-52 overflow-y-auto lg:max-h-none ${folderTreeOpen ? '' : 'hidden'}`}>
             <FolderTree
-              categories={categories}
+              categories={treeCategories}
               selectedCategoryId={selectedCategoryId}
               onSelectCategory={handleCategorySelect}
+              allLabel={activeGroup ? `Tất cả ${activeGroup.name}` : 'Tất cả mục'}
             />
           </div>
         </aside>
 
         {/* Middle Column - Snippet List */}
-        <div className="flex w-full shrink-0 flex-col border-b border-white/10 bg-white/[0.02] lg:w-96 lg:border-b-0 lg:border-r">
+        <div className="flex w-full shrink-0 flex-col border-b border-[var(--border-color)] bg-[var(--bg-card)]/40 lg:w-96 lg:border-b-0 lg:border-r">
+          {/* Category header (rich intro) */}
+          {selectedCategory && !showSaved && (
+            <div className="p-3 pb-0">
+              <CategoryHeader category={selectedCategory} count={selectedCategory._count?.snippets} />
+            </div>
+          )}
+
           {/* Filters */}
-          <div className="p-3 border-b border-white/10 space-y-3">
+          <div className="space-y-3 border-b border-[var(--border-color)] p-3">
             <FilterPanel
               tags={tags}
               languages={languages}
@@ -377,13 +418,13 @@ export default function ExpHubPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'popular' | 'newest' | 'upvotes')}
-                className="text-sm px-2 py-1 bg-white/5 border border-white/10 text-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-violet-500/40 [&>option]:bg-[#131a2e] [&>option]:text-slate-200"
+                className="rounded border border-[var(--border-color)] bg-[var(--bg-surface)] px-2 py-1 text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-violet-500/40"
               >
-                <option value="newest">Newest</option>
-                <option value="popular">Most Popular</option>
-                <option value="upvotes">Top Rated</option>
+                <option value="newest">Mới nhất</option>
+                <option value="popular">Copy nhiều</option>
+                <option value="upvotes">Yêu thích</option>
               </select>
-              <span className="text-sm text-slate-500">{snippets.length} results</span>
+              <span className="text-sm text-[var(--text-muted)]">{snippets.length} kết quả</span>
             </div>
           </div>
 
@@ -391,320 +432,258 @@ export default function ExpHubPage() {
           <div className="flex-1 overflow-y-auto">
             {showSaved ? (
               savedLoading ? (
-                <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-6 h-6 animate-spin text-violet-400" />
-                </div>
+                <div className="flex items-center justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-violet-500" /></div>
               ) : savedSnippets.length === 0 ? (
-                <div className="p-8 text-center text-slate-500">
-                  <p>Chưa có snippet nào được lưu</p>
-                </div>
+                <div className="p-8 text-center text-[var(--text-muted)]"><p>Chưa có snippet nào được lưu</p></div>
               ) : (
                 savedSnippets.map((snippet) => (
-                  <SnippetCard
-                    key={snippet.id}
-                    snippet={snippet}
-                    isSelected={selectedSnippet?.id === snippet.id}
-                    onClick={() => handleSnippetClick(snippet)}
-                    onCopy={() => handleCopySnippet(snippet)}
-                  />
+                  <SnippetCard key={snippet.id} snippet={snippet} isSelected={selectedSnippet?.id === snippet.id} onClick={() => handleSnippetClick(snippet)} onCopy={() => handleCopySnippet(snippet)} />
                 ))
               )
             ) : isLoading ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-6 h-6 animate-spin text-violet-400" />
-              </div>
+              <div className="flex items-center justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-violet-500" /></div>
             ) : snippets.length === 0 ? (
-              <div className="p-8 text-center text-slate-500">
-                <p>No snippets found</p>
-              </div>
+              <div className="p-8 text-center text-[var(--text-muted)]"><p>Chưa có mục nào ở đây</p></div>
             ) : (
               snippets.map((snippet) => (
-                <SnippetCard
-                  key={snippet.id}
-                  snippet={snippet}
-                  isSelected={selectedSnippet?.id === snippet.id}
-                  onClick={() => handleSnippetClick(snippet)}
-                  onCopy={() => handleCopySnippet(snippet)}
-                />
+                <SnippetCard key={snippet.id} snippet={snippet} isSelected={selectedSnippet?.id === snippet.id} onClick={() => handleSnippetClick(snippet)} onCopy={() => handleCopySnippet(snippet)} />
               ))
             )}
           </div>
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="p-3 border-t border-white/10 flex items-center justify-center gap-2">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="px-3 py-1 text-sm bg-white/5 border border-white/10 text-slate-300 rounded hover:bg-white/10 disabled:opacity-40 transition-colors"
-              >
-                Prev
+            <div className="flex items-center justify-center gap-2 border-t border-[var(--border-color)] p-3">
+              <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className="rounded border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-1 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] disabled:opacity-40">
+                Trước
               </button>
-              <span className="text-sm text-slate-500">
-                {page} / {totalPages}
-              </span>
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className="px-3 py-1 text-sm bg-white/5 border border-white/10 text-slate-300 rounded hover:bg-white/10 disabled:opacity-40 transition-colors"
-              >
-                Next
+              <span className="text-sm text-[var(--text-muted)]">{page} / {totalPages}</span>
+              <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="rounded border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-1 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] disabled:opacity-40">
+                Sau
               </button>
             </div>
           )}
         </div>
 
-        {/* Right Column - Snippet Detail (full record fetched on select:
-            includes variables, hasUpvoted/hasBookmarked and counts views) */}
+        {/* Right Column - Snippet Detail */}
         <div className="w-full overflow-y-auto lg:flex-1">
           {(() => {
             const view = detail ?? selectedSnippet;
             if (!view) {
               return (
-                <div className="flex items-center justify-center h-full text-slate-500">
-                  Select a snippet to view its details
+                <div className="flex h-full items-center justify-center text-[var(--text-muted)]">
+                  Chọn một mục để xem chi tiết
                 </div>
               );
             }
+            const isProject = view.kind === 'PROJECT' || !!view.repoUrl;
             return (
-            <div className="p-6">
-              {/* Breadcrumbs */}
-              <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
-                {getBreadcrumbs().map((crumb, i, arr) => (
-                  <span key={i} className="flex items-center gap-2">
-                    {i > 0 && <ChevronRight className="w-3.5 h-3.5" />}
-                    <span className={i === arr.length - 1 ? 'text-slate-100 font-medium' : ''}>
-                      {crumb.label}
-                    </span>
-                  </span>
-                ))}
-              </div>
-
-              {/* Title */}
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h2 className="text-2xl font-bold text-slate-50">
-                    {view.title}
-                  </h2>
-                  {view.description && (
-                    <p className="mt-1 text-slate-400">
-                      {view.description}
-                    </p>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <LanguageBadge language={view.language} />
-                  {view.previewUrl && (
-                    <a
-                      href={view.previewUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 text-slate-400 hover:bg-white/10 hover:text-slate-200 rounded transition-colors"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              {/* Tags */}
-              {view.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {view.tags.map((tag) => (
-                    <span
-                      key={tag.id}
-                      className="px-2 py-1 text-xs bg-white/5 border border-white/10 text-slate-400 rounded"
-                    >
-                      {tag.name}
+              <div className="p-6">
+                {/* Breadcrumbs */}
+                <div className="mb-4 flex flex-wrap items-center gap-2 text-sm text-[var(--text-muted)]">
+                  {getBreadcrumbs().map((crumb, i, arr) => (
+                    <span key={i} className="flex items-center gap-2">
+                      {i > 0 && <ChevronRight className="h-3.5 w-3.5" />}
+                      <span className={i === arr.length - 1 ? 'font-medium text-[var(--text-primary)]' : ''}>{crumb.label}</span>
                     </span>
                   ))}
                 </div>
-              )}
 
-              {/* Code blocks — tabbed (Code 1, Code 2, …), each with its own copy */}
-              <SnippetCodeTabs snippet={view} />
-
-              {/* Note section — optional rich text (with images), alongside the code */}
-              {view.noteContent?.trim() && (
-                <div
-                  className="prose prose-invert mb-6 max-w-none prose-img:rounded-lg prose-img:border prose-img:border-white/10"
-                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(view.noteContent) }}
-                />
-              )}
-
-              {/* Actions */}
-              <div className="flex items-center gap-3">
-                {(view.explanation || view.youtubeUrl || view.referenceUrl) && (
-                  <button
-                    onClick={() => setShowExplanation(true)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500/15 text-blue-300 border border-blue-500/40 hover:bg-blue-500/25 rounded-lg transition-colors"
-                  >
-                    <Info className="w-4 h-4" />
-                    More
-                  </button>
-                )}
-                <button
-                  onClick={handleToggleBookmark}
-                  disabled={voteBusy || !detail}
-                  className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-colors disabled:opacity-60 border ${
-                    view.hasBookmarked
-                      ? 'bg-amber-500/15 text-amber-300 border-amber-500/40'
-                      : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
-                  }`}
-                >
-                  <Bookmark className={`w-4 h-4 ${view.hasBookmarked ? 'fill-current' : ''}`} />
-                  {view.hasBookmarked ? 'Đã lưu' : 'Lưu'}
-                </button>
-                <button
-                  onClick={handleToggleUpvote}
-                  disabled={voteBusy || !detail}
-                  className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-colors disabled:opacity-60 border ${
-                    view.hasUpvoted
-                      ? 'bg-rose-500/15 text-rose-300 border-rose-500/40'
-                      : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
-                  }`}
-                >
-                  <Heart className={`w-4 h-4 ${view.hasUpvoted ? 'fill-current' : ''}`} />
-                  {view.upvoteCount > 0 ? view.upvoteCount : ''}
-                </button>
-                <button
-                  onClick={handleToggleVersions}
-                  className="flex items-center gap-2 px-4 py-2 text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 rounded-lg transition-colors"
-                >
-                  <History className="w-4 h-4" />
-                  Lịch sử
-                </button>
-              </div>
-
-              {/* Explanation Modal */}
-              {showExplanation && (view.explanation || view.youtubeUrl || view.referenceUrl) && (
-                <div
-                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
-                  onClick={() => setShowExplanation(false)}
-                >
-                  <div
-                    className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-neutral-900 shadow-2xl"
-                    onClick={e => e.stopPropagation()}
-                  >
-                    {/* Modal Header */}
-                    <div className="sticky top-0 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 rounded-t-2xl">
-                      <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
-                        {view.title}
-                      </h2>
-                      <button
-                        onClick={() => setShowExplanation(false)}
-                        className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                      >
-                        <X className="w-5 h-5 text-neutral-500" />
-                      </button>
+                {/* Title */}
+                <div className="mb-4 flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {isProject && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-violet-500/15 px-2 py-0.5 text-xs font-semibold text-violet-500 dark:text-violet-300">
+                          <Github className="h-3.5 w-3.5" /> Project
+                        </span>
+                      )}
+                      <h2 className="text-2xl font-bold text-[var(--text-primary)]">{view.title}</h2>
                     </div>
-
-                    {/* Modal Content */}
-                    <div className="p-6 space-y-6">
-                      {/* YouTube Video */}
-                      {view.youtubeUrl && (
-                        <div>
-                          <div className="flex items-center gap-2 mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                            <Play className="w-4 h-4 text-red-500" />
-                            Video hướng dẫn
-                          </div>
-                          <div className="relative aspect-video rounded-xl overflow-hidden bg-neutral-900">
-                            <iframe
-                              src={getYouTubeEmbedUrl(view.youtubeUrl)}
-                              className="absolute inset-0 w-full h-full"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Reference website (embedded iframe) */}
-                      {view.referenceUrl && (
-                        <div>
-                          <div className="flex items-center justify-between gap-2 mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                            <span className="flex items-center gap-2">
-                              <ExternalLink className="w-4 h-4 text-cyan-500" />
-                              Trang web tham khảo
-                            </span>
-                            <a
-                              href={view.referenceUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs text-cyan-600 hover:underline"
-                            >
-                              Mở tab mới ↗
-                            </a>
-                          </div>
-                          <div className="relative aspect-video rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-white">
-                            <iframe
-                              src={view.referenceUrl}
-                              className="absolute inset-0 w-full h-full"
-                              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-                              referrerPolicy="no-referrer"
-                              loading="lazy"
-                            />
-                          </div>
-                          <p className="mt-1.5 text-xs text-neutral-500">
-                            Một số trang chặn nhúng — nếu trống, bấm &quot;Mở tab mới&quot;.
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Explanation Text */}
-                      {view.explanation && (
-                        <div>
-                          <div className="flex items-center gap-2 mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                            <Info className="w-4 h-4" />
-                            Giải thích
-                          </div>
-                          <div
-                            className="prose prose-neutral dark:prose-invert max-w-none text-neutral-600 dark:text-neutral-400"
-                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(view.explanation) }}
-                          />
-                        </div>
-                      )}
-                    </div>
+                    {view.description && <p className="mt-1 text-[var(--text-secondary)]">{view.description}</p>}
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {view.language && !isProject && <LanguageBadge language={view.language} />}
+                    {view.previewUrl && (
+                      <a href={view.previewUrl} target="_blank" rel="noopener noreferrer" className="rounded p-2 text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]">
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    )}
                   </div>
                 </div>
-              )}
 
-              {/* Version history (lazy) */}
-              {showVersions && (
-                <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.03] p-3">
-                  <h3 className="mb-2 text-sm font-semibold text-slate-300">
-                    Lịch sử phiên bản
-                  </h3>
-                  {versions == null ? (
-                    <div className="flex justify-center py-4"><Loader2 className="w-4 h-4 animate-spin text-violet-400" /></div>
-                  ) : versions.length === 0 ? (
-                    <p className="text-sm text-slate-500">Chưa có phiên bản nào</p>
-                  ) : (
-                    <div className="space-y-2">
-                      {versions.map((v, i) => (
-                        <details key={v.id} className="rounded border border-white/10">
-                          <summary className="cursor-pointer px-3 py-2 text-sm text-slate-400 hover:text-slate-200">
-                            v{versions.length - i} — {new Date(v.editedAt).toLocaleString('vi-VN')}
-                            {v.editedBy ? ` — ${v.editedBy.username}` : ''}
-                          </summary>
-                          <div className="border-t border-white/10">
-                            <CodeViewer code={v.code} language={view.language} />
-                          </div>
-                        </details>
+                {/* GitHub repo card (PROJECT) */}
+                {repoInfo && (
+                  <a
+                    href={repoInfo.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mb-5 flex items-center gap-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 transition-colors hover:border-violet-400/50 hover:bg-[var(--bg-surface-hover)]"
+                  >
+                    <Github className="h-6 w-6 shrink-0 text-[var(--text-primary)]" />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-sm font-semibold text-[var(--text-primary)]">
+                        {repoInfo.owner ? `${repoInfo.owner}/` : ''}<span className="text-violet-500 dark:text-violet-300">{repoInfo.repo}</span>
+                      </div>
+                      <div className="truncate text-xs text-[var(--text-muted)]">{repoInfo.url}</div>
+                    </div>
+                    <ExternalLink className="h-4 w-4 shrink-0 text-[var(--text-muted)]" />
+                  </a>
+                )}
+
+                {/* Tags */}
+                {view.tags.length > 0 && (
+                  <div className="mb-6 flex flex-wrap gap-2">
+                    {view.tags.map((tag) => (
+                      <span key={tag.id} className="rounded border border-[var(--border-color)] bg-[var(--bg-surface)] px-2 py-1 text-xs text-[var(--text-secondary)]">
+                        {tag.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Code blocks — tabbed (for PROJECT these read as named files) */}
+                <SnippetCodeTabs snippet={view} />
+
+                {/* Attachments (downloadable project files) */}
+                {view.attachments && view.attachments.length > 0 && (
+                  <div className="mb-6">
+                    <div className="mb-2 text-sm font-medium text-[var(--text-secondary)]">Tệp đính kèm</div>
+                    <div className="flex flex-col gap-2">
+                      {view.attachments.map((att) => (
+                        <a
+                          key={att.id}
+                          href={att.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          download={att.originalName}
+                          className="flex items-center gap-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-sm transition-colors hover:bg-[var(--bg-surface-hover)]"
+                        >
+                          <Download className="h-4 w-4 shrink-0 text-violet-500" />
+                          <span className="min-w-0 flex-1 truncate text-[var(--text-primary)]">{att.originalName}</span>
+                          {att.fileSize ? <span className="shrink-0 text-xs text-[var(--text-muted)]">{formatBytes(att.fileSize)}</span> : null}
+                        </a>
                       ))}
                     </div>
-                  )}
-                </div>
-              )}
-
-              {/* Meta */}
-              <div className="mt-6 pt-6 border-t border-white/10 text-sm text-slate-500">
-                <p>Created {new Date(view.createdAt).toLocaleDateString()}</p>
-                {view.author && (
-                  <p>By {view.author.username}</p>
+                  </div>
                 )}
+
+                {/* Note section — optional rich text (with images) */}
+                {view.noteContent?.trim() && (
+                  <div
+                    className="prose mb-6 max-w-none dark:prose-invert prose-img:rounded-lg prose-img:border prose-img:border-[var(--border-color)]"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(view.noteContent) }}
+                  />
+                )}
+
+                {/* Actions */}
+                <div className="flex flex-wrap items-center gap-3">
+                  {(view.explanation || view.youtubeUrl || view.referenceUrl) && (
+                    <button onClick={() => setShowExplanation(true)} className="flex items-center gap-2 rounded-lg border border-blue-500/40 bg-blue-500/15 px-4 py-2 text-sm text-blue-600 transition-colors hover:bg-blue-500/25 dark:text-blue-300">
+                      <Info className="h-4 w-4" /> Chi tiết
+                    </button>
+                  )}
+                  <button
+                    onClick={handleToggleBookmark}
+                    disabled={voteBusy || !detail}
+                    className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm transition-colors disabled:opacity-60 ${
+                      view.hasBookmarked ? 'border-amber-500/40 bg-amber-500/15 text-amber-600 dark:text-amber-300' : 'border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]'
+                    }`}
+                  >
+                    <Bookmark className={`h-4 w-4 ${view.hasBookmarked ? 'fill-current' : ''}`} />
+                    {view.hasBookmarked ? 'Đã lưu' : 'Lưu'}
+                  </button>
+                  <button
+                    onClick={handleToggleUpvote}
+                    disabled={voteBusy || !detail}
+                    className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm transition-colors disabled:opacity-60 ${
+                      view.hasUpvoted ? 'border-rose-500/40 bg-rose-500/15 text-rose-600 dark:text-rose-300' : 'border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]'
+                    }`}
+                  >
+                    <Heart className={`h-4 w-4 ${view.hasUpvoted ? 'fill-current' : ''}`} />
+                    {view.upvoteCount > 0 ? view.upvoteCount : ''}
+                  </button>
+                  <button onClick={handleToggleVersions} className="flex items-center gap-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-4 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)]">
+                    <History className="h-4 w-4" /> Lịch sử
+                  </button>
+                </div>
+
+                {/* Explanation Modal — theme-aware */}
+                {showExplanation && (view.explanation || view.youtubeUrl || view.referenceUrl) && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setShowExplanation(false)}>
+                    <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                      <div className="sticky top-0 flex items-center justify-between rounded-t-2xl border-b border-[var(--border-color)] bg-[var(--bg-card)] px-6 py-4">
+                        <h2 className="text-lg font-semibold text-[var(--text-primary)]">{view.title}</h2>
+                        <button onClick={() => setShowExplanation(false)} className="rounded-lg p-2 text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]">
+                          <X className="h-5 w-5" />
+                        </button>
+                      </div>
+                      <div className="space-y-6 p-6">
+                        {view.youtubeUrl && (
+                          <div>
+                            <div className="mb-3 flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)]">
+                              <Play className="h-4 w-4 text-red-500" /> Video hướng dẫn
+                            </div>
+                            <div className="relative aspect-video overflow-hidden rounded-xl bg-black">
+                              <iframe src={getYouTubeEmbedUrl(view.youtubeUrl)} className="absolute inset-0 h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                            </div>
+                          </div>
+                        )}
+                        {view.referenceUrl && (
+                          <div>
+                            <div className="mb-3 flex items-center justify-between gap-2 text-sm font-medium text-[var(--text-secondary)]">
+                              <span className="flex items-center gap-2"><ExternalLink className="h-4 w-4 text-cyan-500" /> Trang web tham khảo</span>
+                              <a href={view.referenceUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-600 hover:underline">Mở tab mới ↗</a>
+                            </div>
+                            <div className="relative aspect-video overflow-hidden rounded-xl border border-[var(--border-color)] bg-white">
+                              <iframe src={view.referenceUrl} className="absolute inset-0 h-full w-full" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" referrerPolicy="no-referrer" loading="lazy" />
+                            </div>
+                            <p className="mt-1.5 text-xs text-[var(--text-muted)]">Một số trang chặn nhúng — nếu trống, bấm &quot;Mở tab mới&quot;.</p>
+                          </div>
+                        )}
+                        {view.explanation && (
+                          <div>
+                            <div className="mb-3 flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)]"><Info className="h-4 w-4" /> Giải thích</div>
+                            <div className="prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: sanitizeHtml(view.explanation) }} />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Version history (lazy) */}
+                {showVersions && (
+                  <div className="mt-4 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] p-3">
+                    <h3 className="mb-2 text-sm font-semibold text-[var(--text-secondary)]">Lịch sử phiên bản</h3>
+                    {versions == null ? (
+                      <div className="flex justify-center py-4"><Loader2 className="h-4 w-4 animate-spin text-violet-500" /></div>
+                    ) : versions.length === 0 ? (
+                      <p className="text-sm text-[var(--text-muted)]">Chưa có phiên bản nào</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {versions.map((v, i) => (
+                          <details key={v.id} className="rounded border border-[var(--border-color)]">
+                            <summary className="cursor-pointer px-3 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+                              v{versions.length - i} — {new Date(v.editedAt).toLocaleString('vi-VN')}
+                              {v.editedBy ? ` — ${v.editedBy.username}` : ''}
+                            </summary>
+                            <div className="border-t border-[var(--border-color)]">
+                              <CodeViewer code={v.code} language={view.language} />
+                            </div>
+                          </details>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Meta */}
+                <div className="mt-6 border-t border-[var(--border-color)] pt-6 text-sm text-[var(--text-muted)]">
+                  <p>Tạo ngày {new Date(view.createdAt).toLocaleDateString('vi-VN')}</p>
+                  {view.author && <p>Bởi {view.author.username}</p>}
+                </div>
               </div>
-            </div>
             );
           })()}
         </div>

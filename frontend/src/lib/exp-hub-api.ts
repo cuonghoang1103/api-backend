@@ -10,6 +10,7 @@ import type {
   SnippetFilters,
   SnippetVariable,
   SnippetVersion,
+  SnippetAttachment,
   PaginatedResponse,
   DashboardStats,
   BulkImportResult,
@@ -19,14 +20,23 @@ const BASE = '/snippets';
 
 // ─── Categories ────────────────────────────────────────────────────────────────
 
+// Rich category metadata shared by create/update payloads.
+export interface CategoryMetaPayload {
+  description?: string | null;
+  icon?: string | null;
+  color?: string | null;
+  coverImageUrl?: string | null;
+  docsUrl?: string | null;
+}
+
 export const snippetCategoriesApi = {
   getAll: () =>
     api.get<{ success: boolean; data: SnippetCategory[] }>(`${BASE}/categories`),
 
-  create: (data: { name: string; parentId?: number | null; sortOrder?: number }) =>
+  create: (data: { name: string; parentId?: number | null; sortOrder?: number } & CategoryMetaPayload) =>
     api.post<{ success: boolean; data: SnippetCategory }>(`${BASE}/categories`, data),
 
-  update: (id: number, data: { name?: string; parentId?: number | null; sortOrder?: number }) =>
+  update: (id: number, data: { name?: string; parentId?: number | null; sortOrder?: number } & CategoryMetaPayload) =>
     api.put<{ success: boolean; data: SnippetCategory }>(`${BASE}/categories/${id}`, data),
 
   delete: (id: number, moveChildrenTo?: number | null) =>
@@ -78,6 +88,8 @@ export const snippetsApi = {
     explanation?: string;
     youtubeUrl?: string;
     referenceUrl?: string;
+    repoUrl?: string;
+    kind?: 'CODE' | 'NOTE' | 'PROJECT';
     categoryId?: number | null;
     tagIds?: number[];
     variables?: Array<{ key: string; label: string; defaultValue?: string }>;
@@ -96,6 +108,8 @@ export const snippetsApi = {
     explanation?: string;
     youtubeUrl?: string;
     referenceUrl?: string;
+    repoUrl?: string;
+    kind?: 'CODE' | 'NOTE' | 'PROJECT';
     categoryId?: number | null;
     tagIds?: number[];
     variables?: Array<{ key: string; label: string; defaultValue?: string }>;
@@ -121,6 +135,17 @@ export const snippetsApi = {
 
   getVersions: (id: number) =>
     api.get<{ success: boolean; data: SnippetVersion[] }>(`${BASE}/${id}/versions`),
+
+  // Attachments — register an already-uploaded R2 file against the snippet,
+  // or remove one. The file bytes go through fileApi.upload first.
+  addAttachment: (
+    snippetId: number,
+    data: { fileUrl: string; originalName: string; fileType?: string | null; fileSize?: number | null },
+  ) =>
+    api.post<{ success: boolean; data: SnippetAttachment }>(`${BASE}/${snippetId}/attachments`, data),
+
+  deleteAttachment: (snippetId: number, attachmentId: number) =>
+    api.delete<{ success: boolean; message: string }>(`${BASE}/${snippetId}/attachments/${attachmentId}`),
 
   bulkImport: (files: Array<{
     title: string;

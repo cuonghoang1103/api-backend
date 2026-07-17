@@ -19,12 +19,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Plus, Trash2, Pencil, Loader2, Code2, FolderTree as FolderTreeIcon,
   Tags as TagsIcon, Upload, LayoutDashboard, X, ChevronRight, Save,
-  Eye, Copy as CopyIcon, ThumbsUp, FileCode2, RefreshCw,
+  Eye, Copy as CopyIcon, ThumbsUp, FileCode2, RefreshCw, Github, Paperclip,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
   snippetsApi, snippetCategoriesApi, snippetTagsApi, snippetStatsApi,
 } from '@/lib/exp-hub-api';
+import { fileApi } from '@/lib/api';
 import type {
   Snippet, SnippetCategory, SnippetTag, DashboardStats, BulkImportResult,
 } from '@/types/exp-hub';
@@ -34,8 +35,11 @@ type Tab = 'dashboard' | 'snippets' | 'categories' | 'tags' | 'import';
 
 const LANGUAGES = [
   'javascript', 'typescript', 'python', 'java', 'sql', 'bash', 'json',
-  'yaml', 'html', 'css', 'go', 'rust', 'php', 'ruby', 'csharp', 'cpp',
-  'kotlin', 'swift', 'markdown', 'plaintext',
+  'yaml', 'html', 'css', 'go', 'rust', 'php', 'ruby', 'csharp', 'cpp', 'c',
+  'kotlin', 'swift', 'dart', 'markdown', 'plaintext',
+  // DevOps / Linux / config — commonly needed for install & setup notes
+  'powershell', 'dockerfile', 'nginx', 'toml', 'ini', 'groovy', 'properties',
+  'graphql', 'xml',
   'mermaid', // renders as a diagram (flowchart/sequence/…) instead of code
 ];
 
@@ -45,8 +49,11 @@ const EXT_LANG: Record<string, string> = {
   ts: 'typescript', tsx: 'typescript', py: 'python', java: 'java',
   sql: 'sql', sh: 'bash', bash: 'bash', json: 'json', yml: 'yaml',
   yaml: 'yaml', html: 'html', css: 'css', scss: 'css', go: 'go',
-  rs: 'rust', php: 'php', rb: 'ruby', cs: 'csharp', c: 'cpp', cpp: 'cpp',
-  h: 'cpp', kt: 'kotlin', swift: 'swift', md: 'markdown',
+  rs: 'rust', php: 'php', rb: 'ruby', cs: 'csharp', c: 'c', cpp: 'cpp',
+  h: 'cpp', kt: 'kotlin', swift: 'swift', dart: 'dart', md: 'markdown',
+  ps1: 'powershell', dockerfile: 'dockerfile', toml: 'toml', ini: 'ini',
+  conf: 'nginx', gradle: 'groovy', properties: 'properties', xml: 'xml',
+  graphql: 'graphql', gql: 'graphql',
 };
 
 const STATUS_META: Record<Snippet['status'], { label: string; cls: string }> = {
@@ -210,11 +217,21 @@ function DashboardTab() {
 
 interface CodeBlockDraft { name: string; language: string; code: string }
 
+interface AttachmentDraft {
+  id?: number;          // present = already saved on the server
+  fileUrl: string;
+  originalName: string;
+  fileType?: string | null;
+  fileSize?: number | null;
+}
+
 interface EditorState {
   id: number | null; // null = creating
+  // CODE = snippet, NOTE = ghi chú, PROJECT = dự án (repo GitHub / nhiều file).
+  kind: 'CODE' | 'NOTE' | 'PROJECT';
   title: string;
   description: string;
-  // One or more named code blocks (Code 1, Code 2, …).
+  // One or more named code blocks (Code 1, Code 2, … — with PROJECT these are files).
   codeBlocks: CodeBlockDraft[];
   // Optional rich-text note section (HTML with pasted images).
   noteContent: string;
@@ -222,18 +239,22 @@ interface EditorState {
   explanation: string;
   youtubeUrl: string;
   referenceUrl: string;
+  // GitHub repo URL (PROJECT kind).
+  repoUrl: string;
   categoryId: number | null;
   tagIds: number[];
   status: Snippet['status'];
   previewUrl: string;
   variables: Array<{ key: string; label: string; defaultValue: string }>;
+  // Downloadable file attachments (uploaded to R2, registered on the snippet).
+  attachments: AttachmentDraft[];
 }
 
 const EMPTY_EDITOR: EditorState = {
-  id: null, title: '', description: '',
+  id: null, kind: 'CODE', title: '', description: '',
   codeBlocks: [{ name: 'Code 1', language: 'javascript', code: '' }],
-  noteContent: '', explanation: '', youtubeUrl: '', referenceUrl: '',
-  categoryId: null, tagIds: [], status: 'DRAFT', previewUrl: '', variables: [],
+  noteContent: '', explanation: '', youtubeUrl: '', referenceUrl: '', repoUrl: '',
+  categoryId: null, tagIds: [], status: 'DRAFT', previewUrl: '', variables: [], attachments: [],
 };
 
 function SnippetsTab({
@@ -252,6 +273,45 @@ function SnippetsTab({
   const [filterStatus, setFilterStatus] = useState('');
   const [editor, setEditor] = useState<EditorState | null>(null);
   const [saving, setSaving] = useState(false);
+  const [attBusy, setAttBusy] = useState(false);
+  const attFileRef = useRef<HTMLInputElement>(null);
+
+  // Upload a file to R2 and add it to the editor's attachment drafts. The
+  // draft is registered against the snippet on Save (see `save`). Existing
+  // (id-bearing) attachments are deleted immediately from the server.
+  const onPickAttachments = async (files: FileList | null) => {
+    if (!files?.length || !editor) return;
+    setAttBusy(true);
+    try {
+      for (const f of Array.from(files)) {
+        if (f.size > 25 * 1024 * 1024) { toast.error(`${f.name}: quá lớn (>25MB)`); continue; }
+        try {
+          const res = await fileApi.upload(f, 'document');
+          const url = res.data?.data?.url;
+          if (!url) { toast.error(`${f.name}: upload lỗi`); continue; }
+          setEditor(prev => prev ? {
+            ...prev,
+            attachments: [...prev.attachments, { fileUrl: url, originalName: f.name, fileType: f.type || null, fileSize: f.size }],
+          } : prev);
+        } catch (e: any) {
+          toast.error(`${f.name}: ${e?.response?.data?.message || 'upload lỗi (định dạng bị chặn?)'}`);
+        }
+      }
+    } finally {
+      setAttBusy(false);
+      if (attFileRef.current) attFileRef.current.value = '';
+    }
+  };
+
+  const removeAttachment = async (idx: number) => {
+    if (!editor) return;
+    const att = editor.attachments[idx];
+    if (att?.id != null && editor.id != null) {
+      try { await snippetsApi.deleteAttachment(editor.id, att.id); }
+      catch { toast.error('Không xoá được tệp trên máy chủ'); return; }
+    }
+    setEditor(prev => prev ? { ...prev, attachments: prev.attachments.filter((_, i) => i !== idx) } : prev);
+  };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -284,6 +344,7 @@ function SnippetsTab({
         : [{ name: 'Code 1', language: s.language || 'javascript', code: s.code || '' }];
       setEditor({
         id: s.id,
+        kind: (s.kind ?? 'CODE') as EditorState['kind'],
         title: s.title,
         description: s.description ?? '',
         codeBlocks: blocks,
@@ -291,12 +352,16 @@ function SnippetsTab({
         explanation: s.explanation ?? '',
         youtubeUrl: s.youtubeUrl ?? '',
         referenceUrl: s.referenceUrl ?? '',
+        repoUrl: s.repoUrl ?? '',
         categoryId: s.categoryId,
         tagIds: (s.tags ?? []).map(t => t.id),
         status: s.status,
         previewUrl: s.previewUrl ?? '',
         variables: (s.variables ?? []).map(v => ({
           key: v.key, label: v.label, defaultValue: v.defaultValue ?? '',
+        })),
+        attachments: (s.attachments ?? []).map(a => ({
+          id: a.id, fileUrl: a.fileUrl, originalName: a.originalName, fileType: a.fileType, fileSize: a.fileSize,
         })),
       });
     } catch {
@@ -309,7 +374,13 @@ function SnippetsTab({
     if (!editor.title.trim()) { toast.error('Cần tiêu đề'); return; }
     const hasCode = editor.codeBlocks.some((b) => b.code.trim().length > 0);
     const hasNote = editor.noteContent.trim().length > 0;
-    if (!hasCode && !hasNote) { toast.error('Cần ít nhất một khối code hoặc ghi chú'); return; }
+    const hasRepo = editor.repoUrl.trim().length > 0;
+    const hasAttach = editor.attachments.length > 0;
+    // PROJECT entries are valid with just a repo link or attached files.
+    if (!hasCode && !hasNote && !hasRepo && !hasAttach) {
+      toast.error('Cần ít nhất một khối code, ghi chú, link repo hoặc tệp đính kèm');
+      return;
+    }
     setSaving(true);
     // Derive the legacy `language` + `code` fields from the first non-empty
     // code block. The DB schema requires these to be non-null even when we
@@ -333,6 +404,8 @@ function SnippetsTab({
       explanation: editor.explanation.trim() || undefined,
       youtubeUrl: editor.youtubeUrl.trim() || undefined,
       referenceUrl: editor.referenceUrl.trim() || undefined,
+      repoUrl: editor.repoUrl.trim() || undefined,
+      kind: editor.kind,
       categoryId: editor.categoryId,
       tagIds: editor.tagIds,
       status: editor.status,
@@ -342,13 +415,26 @@ function SnippetsTab({
         .map(v => ({ key: v.key.trim(), label: v.label.trim() || v.key.trim(), defaultValue: v.defaultValue || undefined })),
     };
     try {
-      if (editor.id == null) {
-        await snippetsApi.create(payload);
+      // Save the snippet first so we have an id for attachment registration.
+      let snippetId = editor.id;
+      if (snippetId == null) {
+        const res = await snippetsApi.create(payload);
+        snippetId = res.data.data.id;
         toast.success('Đã tạo snippet');
       } else {
-        await snippetsApi.update(editor.id, payload);
+        await snippetsApi.update(snippetId, payload);
         toast.success('Đã lưu snippet');
       }
+      // Register any freshly-uploaded attachments (drafts without an id).
+      const newAtts = editor.attachments.filter(a => a.id == null);
+      for (const a of newAtts) {
+        try {
+          await snippetsApi.addAttachment(snippetId, {
+            fileUrl: a.fileUrl, originalName: a.originalName, fileType: a.fileType, fileSize: a.fileSize,
+          });
+        } catch { /* non-fatal — surface once below */ }
+      }
+      if (newAtts.length) { /* attachments registered */ }
       setEditor(null);
       load();
       onRefChanged();
@@ -466,9 +552,50 @@ function SnippetsTab({
         <div className="fixed inset-0 z-[130] flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-10" onClick={() => !saving && setEditor(null)}>
           <div className="w-full max-w-4xl rounded-2xl border border-white/10 bg-[#12161d] p-5 shadow-2xl" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-white">{editor.id == null ? 'Tạo snippet' : `Sửa snippet #${editor.id}`}</h2>
+              <h2 className="text-lg font-semibold text-white">{editor.id == null ? 'Tạo mục mới' : `Sửa mục #${editor.id}`}</h2>
               <button onClick={() => setEditor(null)} className="rounded p-1.5 text-slate-400 hover:bg-white/10"><X className="h-5 w-5" /></button>
             </div>
+
+            {/* Kind selector — Snippet / Ghi chú / Project */}
+            <div className="mb-4">
+              <div className="mb-1.5 text-xs text-slate-400">Loại</div>
+              <div className="inline-flex rounded-lg border border-white/10 bg-white/5 p-0.5">
+                {([
+                  { k: 'CODE', label: 'Snippet', icon: Code2 },
+                  { k: 'NOTE', label: 'Ghi chú', icon: FileCode2 },
+                  { k: 'PROJECT', label: 'Project', icon: Github },
+                ] as const).map(({ k, label, icon: Icon }) => (
+                  <button
+                    key={k}
+                    type="button"
+                    onClick={() => setEditor({ ...editor, kind: k })}
+                    className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                      editor.kind === k ? 'bg-teal-500/25 text-teal-200' : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" /> {label}
+                  </button>
+                ))}
+              </div>
+              {editor.kind === 'PROJECT' && (
+                <p className="mt-1.5 text-xs text-slate-500">Project: gắn repo GitHub, gom nhiều file (mỗi khối code = 1 file) và/hoặc tệp tải về.</p>
+              )}
+            </div>
+
+            {/* GitHub repo URL — PROJECT kind */}
+            {editor.kind === 'PROJECT' && (
+              <div className="mb-4">
+                <div className="mb-1.5 flex items-center gap-1.5 text-xs text-slate-400">
+                  <Github className="h-3.5 w-3.5" /> Link repo GitHub
+                </div>
+                <input
+                  value={editor.repoUrl}
+                  onChange={e => setEditor({ ...editor, repoUrl: e.target.value })}
+                  placeholder="https://github.com/owner/repo"
+                  className="w-full rounded-lg border border-white/10 bg-[#0d1117] px-4 py-2 text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none"
+                />
+              </div>
+            )}
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="sm:col-span-2 text-xs text-slate-400">Tiêu đề *
@@ -626,6 +753,40 @@ function SnippetsTab({
               />
             </div>
 
+            {/* Attachments — downloadable files (uploaded to R2) */}
+            <div className="mt-4">
+              <div className="mb-1.5 flex items-center gap-1.5 text-xs text-slate-400">
+                <Paperclip className="h-3.5 w-3.5" /> Tệp đính kèm
+                <span className="text-slate-500">(zip, pdf, ảnh… — cho user tải về. Code nguồn nên dán vào khối code)</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => attFileRef.current?.click()}
+                  disabled={attBusy}
+                  className="flex items-center gap-2 rounded-lg border border-dashed border-white/20 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 disabled:opacity-50"
+                >
+                  {attBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                  Chọn tệp
+                </button>
+                <input ref={attFileRef} type="file" multiple className="hidden" onChange={e => onPickAttachments(e.target.files)} />
+              </div>
+              {editor.attachments.length > 0 && (
+                <div className="mt-2 space-y-1.5">
+                  {editor.attachments.map((a, i) => (
+                    <div key={a.id ?? `new-${i}`} className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5">
+                      <FileCode2 className="h-4 w-4 shrink-0 text-slate-500" />
+                      <span className="min-w-0 flex-1 truncate text-sm text-slate-200">{a.originalName}</span>
+                      {a.id == null && <span className="shrink-0 rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] text-amber-300">mới</span>}
+                      <button type="button" onClick={() => removeAttachment(i)} className="rounded p-1 text-slate-400 hover:bg-rose-500/20 hover:text-rose-300" title="Gỡ">
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="mt-5 flex justify-end gap-2">
               <button onClick={() => setEditor(null)} disabled={saving} className="rounded-lg border border-white/10 px-4 py-2 text-sm text-slate-300 hover:bg-white/5">Hủy</button>
               <button onClick={save} disabled={saving} className="flex items-center gap-2 rounded-lg bg-teal-500 px-4 py-2 text-sm font-medium text-black hover:bg-teal-400 disabled:opacity-60">
@@ -652,7 +813,10 @@ function CategoriesTab({
   const [newName, setNewName] = useState('');
   const [newParent, setNewParent] = useState<number | ''>('');
   const [busy, setBusy] = useState(false);
-  const [editing, setEditing] = useState<{ id: number; name: string; parentId: number | null } | null>(null);
+  const [editing, setEditing] = useState<{
+    id: number; name: string; parentId: number | null;
+    description: string; icon: string; color: string; coverImageUrl: string; docsUrl: string;
+  } | null>(null);
   const [deleting, setDeleting] = useState<SnippetCategory | null>(null);
 
   const create = async () => {
@@ -675,7 +839,15 @@ function CategoriesTab({
     if (!editing || busy) return;
     setBusy(true);
     try {
-      await snippetCategoriesApi.update(editing.id, { name: editing.name.trim(), parentId: editing.parentId });
+      await snippetCategoriesApi.update(editing.id, {
+        name: editing.name.trim(),
+        parentId: editing.parentId,
+        description: editing.description.trim() || null,
+        icon: editing.icon.trim() || null,
+        color: editing.color.trim() || null,
+        coverImageUrl: editing.coverImageUrl.trim() || null,
+        docsUrl: editing.docsUrl.trim() || null,
+      });
       toast.success('Đã lưu');
       setEditing(null);
       onChanged();
@@ -713,7 +885,11 @@ function CategoriesTab({
           {node._count?.snippets ?? 0} snippets
         </span>
         <div className="ml-auto flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-          <button onClick={() => setEditing({ id: node.id, name: node.name, parentId: node.parentId })} className="rounded p-1 text-slate-400 hover:bg-white/10" title="Sửa">
+          <button onClick={() => setEditing({
+            id: node.id, name: node.name, parentId: node.parentId,
+            description: node.description ?? '', icon: node.icon ?? '', color: node.color ?? '',
+            coverImageUrl: node.coverImageUrl ?? '', docsUrl: node.docsUrl ?? '',
+          })} className="rounded p-1 text-slate-400 hover:bg-white/10" title="Sửa">
             <Pencil className="h-3.5 w-3.5" />
           </button>
           <button onClick={() => setDeleting(node)} className="rounded p-1 text-slate-400 hover:bg-rose-500/20 hover:text-rose-300" title="Xóa">
@@ -747,16 +923,38 @@ function CategoriesTab({
 
       {/* Edit modal */}
       {editing && (
-        <Modal title={`Sửa thư mục #${editing.id}`} onClose={() => setEditing(null)}>
-          <label className="text-xs text-slate-400">Tên
-            <input value={editing.name} onChange={e => setEditing({ ...editing, name: e.target.value })} className={inpCls} />
-          </label>
-          <label className="mt-2 block text-xs text-slate-400">Thư mục cha
-            <select value={editing.parentId ?? ''} onChange={e => setEditing({ ...editing, parentId: e.target.value ? Number(e.target.value) : null })} className={inpCls}>
-              <option value="">Gốc (không có cha)</option>
-              {catOptions.filter(o => o.id !== editing.id).map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
-            </select>
-          </label>
+        <Modal title={`Sửa danh mục #${editing.id}`} onClose={() => setEditing(null)}>
+          <div className="max-h-[70vh] space-y-2 overflow-y-auto pr-1">
+            <label className="block text-xs text-slate-400">Tên
+              <input value={editing.name} onChange={e => setEditing({ ...editing, name: e.target.value })} className={inpCls} />
+            </label>
+            <label className="block text-xs text-slate-400">Thư mục cha
+              <select value={editing.parentId ?? ''} onChange={e => setEditing({ ...editing, parentId: e.target.value ? Number(e.target.value) : null })} className={inpCls}>
+                <option value="">Gốc — nhóm lớn (Backend, Frontend…)</option>
+                {catOptions.filter(o => o.id !== editing.id).map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
+              </select>
+            </label>
+            <label className="block text-xs text-slate-400">Mô tả ngắn <span className="text-slate-500">(giới thiệu công nghệ — hiện ở đầu trang)</span>
+              <textarea value={editing.description} onChange={e => setEditing({ ...editing, description: e.target.value })} className={inpCls} rows={2} placeholder="VD: Runtime JavaScript phía server." />
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <label className="block text-xs text-slate-400">Icon <span className="text-slate-500">(Lucide/URL)</span>
+                <input value={editing.icon} onChange={e => setEditing({ ...editing, icon: e.target.value })} className={inpCls} placeholder="Server / https://..." />
+              </label>
+              <label className="block text-xs text-slate-400">Màu accent
+                <div className="mt-1 flex items-center gap-2">
+                  <input type="color" value={/^#[0-9a-fA-F]{6}$/.test(editing.color) ? editing.color : '#8b5cf6'} onChange={e => setEditing({ ...editing, color: e.target.value })} className="h-9 w-10 shrink-0 rounded border border-white/10 bg-transparent" />
+                  <input value={editing.color} onChange={e => setEditing({ ...editing, color: e.target.value })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 placeholder:text-slate-600 focus:border-teal-500/50 focus:outline-none" placeholder="#8b5cf6" />
+                </div>
+              </label>
+            </div>
+            <label className="block text-xs text-slate-400">Link tài liệu chính thức (docsUrl)
+              <input value={editing.docsUrl} onChange={e => setEditing({ ...editing, docsUrl: e.target.value })} className={inpCls} placeholder="https://nodejs.org/en/docs" />
+            </label>
+            <label className="block text-xs text-slate-400">Ảnh bìa (cover URL) <span className="text-slate-500">(tuỳ chọn)</span>
+              <input value={editing.coverImageUrl} onChange={e => setEditing({ ...editing, coverImageUrl: e.target.value })} className={inpCls} placeholder="https://... (R2)" />
+            </label>
+          </div>
           <div className="mt-4 flex justify-end gap-2">
             <button onClick={() => setEditing(null)} className="rounded-lg border border-white/10 px-4 py-2 text-sm text-slate-300">Hủy</button>
             <button onClick={saveEdit} disabled={busy} className="rounded-lg bg-teal-500 px-4 py-2 text-sm font-medium text-black hover:bg-teal-400 disabled:opacity-60">Lưu</button>

@@ -73,27 +73,59 @@ export async function getCategories() {
   return buildTree(null);
 }
 
-export async function createCategory(data: { name: string; parentId?: number | null; sortOrder?: number }) {
+export interface CategoryMetaInput {
+  description?: string | null;
+  icon?: string | null;
+  color?: string | null;
+  coverImageUrl?: string | null;
+  docsUrl?: string | null;
+}
+
+export async function createCategory(
+  data: { name: string; parentId?: number | null; sortOrder?: number } & CategoryMetaInput,
+) {
   const generatedSlug = slugify(data.name);
   const existing = await prisma.snippetCategory.findUnique({ where: { slug: generatedSlug } });
   if (existing) throw new BadRequestError('A category with this name already exists');
 
   return prisma.snippetCategory.create({
-    data: { name: data.name, slug: generatedSlug, parentId: data.parentId, sortOrder: data.sortOrder ?? 0 },
+    data: {
+      name: data.name,
+      slug: generatedSlug,
+      parentId: data.parentId,
+      sortOrder: data.sortOrder ?? 0,
+      description: data.description ?? null,
+      icon: data.icon ?? null,
+      color: data.color ?? null,
+      coverImageUrl: data.coverImageUrl ?? null,
+      docsUrl: data.docsUrl ?? null,
+    },
   });
 }
 
-export async function updateCategory(id: number, data: { name?: string; parentId?: number | null; sortOrder?: number }) {
-  const updateData: { name?: string; slug?: string; parentId?: number | null; sortOrder?: number } = {};
+export async function updateCategory(
+  id: number,
+  data: { name?: string; parentId?: number | null; sortOrder?: number } & CategoryMetaInput,
+) {
+  const updateData: Prisma.SnippetCategoryUpdateInput = {};
 
   if (data.name) {
     updateData.name = data.name;
     updateData.slug = slugify(data.name);
-    const existing = await prisma.snippetCategory.findFirst({ where: { slug: updateData.slug, NOT: { id } } });
+    const existing = await prisma.snippetCategory.findFirst({ where: { slug: updateData.slug as string, NOT: { id } } });
     if (existing) throw new BadRequestError('A category with this name already exists');
   }
-  if (data.parentId !== undefined) updateData.parentId = data.parentId;
+  if (data.parentId !== undefined) {
+    updateData.parent = data.parentId === null ? { disconnect: true } : { connect: { id: data.parentId } };
+  }
   if (data.sortOrder !== undefined) updateData.sortOrder = data.sortOrder;
+  // Metadata: only touch a field when the caller explicitly sends it, so a
+  // partial edit (e.g. just renaming) never wipes an existing icon/description.
+  if (data.description !== undefined) updateData.description = data.description;
+  if (data.icon !== undefined) updateData.icon = data.icon;
+  if (data.color !== undefined) updateData.color = data.color;
+  if (data.coverImageUrl !== undefined) updateData.coverImageUrl = data.coverImageUrl;
+  if (data.docsUrl !== undefined) updateData.docsUrl = data.docsUrl;
 
   return prisma.snippetCategory.update({ where: { id }, data: updateData });
 }
@@ -309,11 +341,12 @@ export async function createSnippet(
     language: string;
     code: string;
     codeBlocks?: CodeBlockInput[];
-    kind?: 'CODE' | 'NOTE';
+    kind?: 'CODE' | 'NOTE' | 'PROJECT';
     noteContent?: string | null;
     explanation?: string;
     youtubeUrl?: string;
     referenceUrl?: string;
+    repoUrl?: string;
     categoryId?: number | null;
     tagIds?: number[];
     variables?: Array<{ key: string; label: string; defaultValue?: string }>;
@@ -340,6 +373,7 @@ export async function createSnippet(
       explanation: data.explanation,
       youtubeUrl: data.youtubeUrl,
       referenceUrl: data.referenceUrl,
+      repoUrl: data.repoUrl,
       categoryId: data.categoryId,
       previewUrl: data.previewUrl,
       status: data.status ?? 'DRAFT',
@@ -369,11 +403,12 @@ export async function updateSnippet(
     language?: string;
     code?: string;
     codeBlocks?: CodeBlockInput[];
-    kind?: 'CODE' | 'NOTE';
+    kind?: 'CODE' | 'NOTE' | 'PROJECT';
     noteContent?: string | null;
     explanation?: string;
     youtubeUrl?: string;
     referenceUrl?: string;
+    repoUrl?: string;
     categoryId?: number | null;
     tagIds?: number[];
     variables?: Array<{ key: string; label: string; defaultValue?: string }>;
@@ -401,6 +436,7 @@ export async function updateSnippet(
   if (data.explanation !== undefined) updateData.explanation = data.explanation;
   if (data.youtubeUrl !== undefined) updateData.youtubeUrl = data.youtubeUrl;
   if (data.referenceUrl !== undefined) updateData.referenceUrl = data.referenceUrl;
+  if (data.repoUrl !== undefined) updateData.repoUrl = data.repoUrl;
   if (data.categoryId !== undefined) updateData.category = data.categoryId === null ? { disconnect: true } : { connect: { id: data.categoryId } };
   if (data.status) updateData.status = data.status;
 
@@ -448,6 +484,39 @@ export async function updateSnippet(
 
 export async function deleteSnippet(id: number) {
   return prisma.snippet.delete({ where: { id } });
+}
+
+// ─── Attachments (downloadable project files) ────────────────────────────
+// The actual file bytes are uploaded via /api/v1/files/upload (R2); here we
+// only register the resulting URL against the snippet so it renders + is
+// deletable. Kept simple: no re-upload, just metadata rows.
+
+export async function addAttachment(
+  snippetId: number,
+  data: { fileUrl: string; originalName: string; fileType?: string | null; fileSize?: number | null },
+) {
+  const snippet = await prisma.snippet.findUnique({ where: { id: snippetId }, select: { id: true } });
+  if (!snippet) throw new NotFoundError('Snippet not found');
+  if (!data.fileUrl?.trim() || !data.originalName?.trim()) {
+    throw new BadRequestError('fileUrl and originalName are required');
+  }
+  const count = await prisma.snippetAttachment.count({ where: { snippetId } });
+  return prisma.snippetAttachment.create({
+    data: {
+      snippetId,
+      fileUrl: data.fileUrl.trim(),
+      originalName: data.originalName.trim().slice(0, 255),
+      fileType: data.fileType ?? null,
+      fileSize: data.fileSize ?? null,
+      sortOrder: count,
+    },
+  });
+}
+
+export async function deleteAttachment(snippetId: number, attachmentId: number) {
+  const att = await prisma.snippetAttachment.findFirst({ where: { id: attachmentId, snippetId } });
+  if (!att) throw new NotFoundError('Attachment not found');
+  return prisma.snippetAttachment.delete({ where: { id: attachmentId } });
 }
 
 export async function copySnippet(id: number, _ip?: string, variables?: Record<string, string>) {

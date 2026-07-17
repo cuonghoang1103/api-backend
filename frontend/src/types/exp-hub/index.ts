@@ -8,6 +8,12 @@ export interface SnippetCategory {
   slug: string;
   parentId: number | null;
   sortOrder: number;
+  // Rich metadata (P2 upgrade — all optional/additive)
+  description?: string | null;
+  icon?: string | null;
+  color?: string | null;
+  coverImageUrl?: string | null;
+  docsUrl?: string | null;
   createdAt: string;
   updatedAt: string;
   _count?: { snippets: number; children: number };
@@ -32,9 +38,10 @@ export interface Snippet {
   title: string;
   slug: string;
   description: string | null;
-  // kind is legacy (no longer surfaced in the UI). A snippet can now carry
-  // several named code blocks AND an optional rich-text note section.
-  kind?: 'CODE' | 'NOTE';
+  // A snippet can carry several named code blocks AND an optional rich-text
+  // note section. PROJECT-kind entries also carry a `repoUrl` (GitHub repo)
+  // and typically use codeBlocks as named files + downloadable attachments.
+  kind?: 'CODE' | 'NOTE' | 'PROJECT';
   language: string;
   code: string;
   // Named, ordered code blocks. Falls back to a single { code, language }
@@ -45,6 +52,8 @@ export interface Snippet {
   explanation: string | null;
   youtubeUrl: string | null;
   referenceUrl: string | null;
+  // GitHub repo URL for PROJECT-kind entries (rendered as a repo card).
+  repoUrl: string | null;
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   viewCount: number;
   copyCount: number;

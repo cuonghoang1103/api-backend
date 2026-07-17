@@ -209,17 +209,24 @@ router.get('/bookmarks/list', optionalAuth, async (req, res: Response<ApiRespons
 // POST /api/v1/snippets/categories
 router.post('/categories', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
   try {
-    const { name, parentId, sortOrder } = req.body as {
+    const { name, parentId, sortOrder, description, icon, color, coverImageUrl, docsUrl } = req.body as {
       name: string;
       parentId?: number | null;
       sortOrder?: number;
+      description?: string | null;
+      icon?: string | null;
+      color?: string | null;
+      coverImageUrl?: string | null;
+      docsUrl?: string | null;
     };
 
     if (!name?.trim()) {
       throw new BadRequestError('Category name is required');
     }
 
-    const category = await snippetsService.createCategory({ name, parentId, sortOrder });
+    const category = await snippetsService.createCategory({
+      name, parentId, sortOrder, description, icon, color, coverImageUrl, docsUrl,
+    });
     res.status(201).json({ success: true, data: category });
   } catch (error) { next(error); }
 });
@@ -228,13 +235,20 @@ router.post('/categories', authenticate, requireRole('ADMIN', 'EDITOR'), async (
 router.put('/categories/:id', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
   try {
     const id = parseInt(req.params.id);
-    const { name, parentId, sortOrder } = req.body as {
+    const { name, parentId, sortOrder, description, icon, color, coverImageUrl, docsUrl } = req.body as {
       name?: string;
       parentId?: number | null;
       sortOrder?: number;
+      description?: string | null;
+      icon?: string | null;
+      color?: string | null;
+      coverImageUrl?: string | null;
+      docsUrl?: string | null;
     };
 
-    const category = await snippetsService.updateCategory(id, { name, parentId, sortOrder });
+    const category = await snippetsService.updateCategory(id, {
+      name, parentId, sortOrder, description, icon, color, coverImageUrl, docsUrl,
+    });
     res.json({ success: true, data: category });
   } catch (error) { next(error); }
 });
@@ -297,11 +311,12 @@ router.post('/', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: 
       language: string;
       code: string;
       codeBlocks?: Array<{ name?: string; language?: string; code?: string }>;
-      kind?: 'CODE' | 'NOTE';
+      kind?: 'CODE' | 'NOTE' | 'PROJECT';
       noteContent?: string | null;
       explanation?: string;
       youtubeUrl?: string;
       referenceUrl?: string;
+      repoUrl?: string;
       categoryId?: number | null;
       tagIds?: number[];
       variables?: Array<{ key: string; label: string; defaultValue?: string }>;
@@ -334,11 +349,12 @@ router.put('/:id(\\d+)', authenticate, requireRole('ADMIN', 'EDITOR'), async (re
       language?: string;
       code?: string;
       codeBlocks?: Array<{ name?: string; language?: string; code?: string }>;
-      kind?: 'CODE' | 'NOTE';
+      kind?: 'CODE' | 'NOTE' | 'PROJECT';
       noteContent?: string | null;
       explanation?: string;
       youtubeUrl?: string;
       referenceUrl?: string;
+      repoUrl?: string;
       categoryId?: number | null;
       tagIds?: number[];
       variables?: Array<{ key: string; label: string; defaultValue?: string }>;
@@ -357,6 +373,28 @@ router.delete('/:id(\\d+)', authenticate, requireRole('ADMIN'), async (req, res:
     const id = parseInt(req.params.id);
     await snippetsService.deleteSnippet(id);
     res.json({ success: true, message: 'Snippet deleted' });
+  } catch (error) { next(error); }
+});
+
+// POST /api/v1/snippets/:id/attachments — register an uploaded file (R2 URL)
+router.post('/:id(\\d+)/attachments', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { fileUrl, originalName, fileType, fileSize } = req.body as {
+      fileUrl: string; originalName: string; fileType?: string | null; fileSize?: number | null;
+    };
+    const attachment = await snippetsService.addAttachment(id, { fileUrl, originalName, fileType, fileSize });
+    res.status(201).json({ success: true, data: attachment });
+  } catch (error) { next(error); }
+});
+
+// DELETE /api/v1/snippets/:id/attachments/:attId
+router.delete('/:id(\\d+)/attachments/:attId(\\d+)', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id);
+    const attId = parseInt(req.params.attId);
+    await snippetsService.deleteAttachment(id, attId);
+    res.json({ success: true, message: 'Attachment deleted' });
   } catch (error) { next(error); }
 });
 

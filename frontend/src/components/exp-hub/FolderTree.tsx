@@ -8,6 +8,8 @@ interface FolderTreeProps {
   categories: SnippetCategory[];
   selectedCategoryId?: number;
   onSelectCategory: (category: SnippetCategory | null) => void;
+  // Label + behaviour for the top "all" row (scoped to the active group).
+  allLabel?: string;
   isAdmin?: boolean;
   onCreateCategory?: (parentId?: number) => void;
   onEditCategory?: (category: SnippetCategory) => void;
@@ -50,8 +52,8 @@ function CategoryItem({
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(category); } }}
         className={`group flex items-center gap-1 px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
           isSelected
-            ? 'bg-violet-500/15 text-violet-200'
-            : 'text-slate-300 hover:bg-white/5'
+            ? 'bg-violet-500/15 text-violet-600 dark:text-violet-200'
+            : 'text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]'
         }`}
         style={{ paddingLeft: `${level * 16 + 8}px` }}
       >
@@ -59,13 +61,13 @@ function CategoryItem({
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
-            className="p-0.5 hover:bg-white/10 rounded"
+            className="p-0.5 hover:bg-[var(--bg-surface-active)] rounded"
             aria-label={isOpen ? 'Thu gọn' : 'Mở rộng'}
           >
             {isOpen ? (
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronDown className="w-3.5 h-3.5 text-[var(--text-muted)]" />
             ) : (
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronRight className="w-3.5 h-3.5 text-[var(--text-muted)]" />
             )}
           </button>
         ) : (
@@ -80,7 +82,7 @@ function CategoryItem({
           )}
           <span className="truncate text-sm font-medium">{category.name}</span>
           {snippetCount > 0 && (
-            <span className="text-xs text-slate-400 bg-white/10 px-1.5 py-0.5 rounded-full">
+            <span className="text-xs text-[var(--text-muted)] bg-[var(--bg-surface-active)] px-1.5 py-0.5 rounded-full">
               {snippetCount}
             </span>
           )}
@@ -91,7 +93,7 @@ function CategoryItem({
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); onCreate?.(category.id); }}
-              className="p-1 hover:bg-white/10 rounded"
+              className="p-1 hover:bg-[var(--bg-surface-active)] rounded"
               title="Add subfolder"
             >
               <Plus className="w-3 h-3" />
@@ -99,7 +101,7 @@ function CategoryItem({
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); onEdit?.(category); }}
-              className="p-1 hover:bg-white/10 rounded"
+              className="p-1 hover:bg-[var(--bg-surface-active)] rounded"
             >
               <MoreHorizontal className="w-3 h-3" />
             </button>
@@ -132,6 +134,7 @@ export function FolderTree({
   categories,
   selectedCategoryId,
   onSelectCategory,
+  allLabel = 'Tất cả mục',
   isAdmin,
   onCreateCategory,
   onEditCategory,
@@ -139,33 +142,33 @@ export function FolderTree({
 }: FolderTreeProps) {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-3 py-2 border-b border-white/10">
-        <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
-          Categories
-        </h3>
-        {isAdmin && onCreateCategory && (
+      {isAdmin && onCreateCategory && (
+        <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border-color)]">
+          <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+            Danh mục
+          </h3>
           <button
             type="button"
             onClick={() => onCreateCategory()}
-            className="p-1 hover:bg-white/10 rounded"
-            title="Add category"
+            className="p-1 hover:bg-[var(--bg-surface-hover)] rounded"
+            title="Thêm danh mục"
           >
             <Plus className="w-4 h-4" />
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="flex-1 overflow-y-auto py-2">
         <div
           className={`group flex items-center gap-1 px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
             selectedCategoryId === undefined
-              ? 'bg-violet-500/15 text-violet-200'
-              : 'text-slate-300 hover:bg-white/5'
+              ? 'bg-violet-500/15 text-violet-600 dark:text-violet-200'
+              : 'text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]'
           }`}
           onClick={() => onSelectCategory(null)}
         >
           <Folder className="w-4 h-4 text-amber-400 shrink-0" />
-          <span className="text-sm font-medium">All Snippets</span>
+          <span className="text-sm font-medium">{allLabel}</span>
         </div>
 
         {categories.map((category) => (
@@ -183,8 +186,8 @@ export function FolderTree({
         ))}
 
         {categories.length === 0 && (
-          <p className="px-3 py-4 text-sm text-neutral-500 text-center">
-            No categories yet
+          <p className="px-3 py-4 text-sm text-[var(--text-muted)] text-center">
+            Chưa có danh mục
           </p>
         )}
       </div>

@@ -14,6 +14,7 @@ import { SpeakerButton } from '@/components/language/primitives';
 import type { VocabLang } from '@/lib/notesTts';
 import type { AlphabetItem } from '@/types/language';
 import { getImageUrl } from '@/lib/utils';
+import { KanaStudyPanel } from './KanaStudyPanel';
 
 export type KanaMode = 'gojuon' | 'yoon' | 'flat';
 
@@ -208,7 +209,7 @@ function KanaCell({
       </div>
 
       <AnimatePresence>
-        {open && <KanaCellDetail key="detail" item={item} speakable={speakable} onClose={() => setOpen(false)} />}
+        {open && <KanaCellDetail key="detail" item={item} speakable={speakable} onClose={() => setOpen(false)} code={code} />}
       </AnimatePresence>
     </>
   );
@@ -222,10 +223,12 @@ function KanaCellDetail({
   item,
   speakable,
   onClose,
+  code,
 }: {
   item: AlphabetItem;
   speakable: { text: string; lang?: VocabLang } | null;
   onClose: () => void;
+  code?: string;
 }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -296,6 +299,12 @@ function KanaCellDetail({
           <p className="whitespace-pre-wrap break-words text-left text-sm leading-relaxed text-text-secondary">
             {item.note}
           </p>
+        )}
+
+        {/* Writing / mnemonic / confusables — Japanese only: the stroke data is
+            the Japanese set, and stroke order means nothing for A–Z or pinyin. */}
+        {code === 'ja' && [...item.character].length === 1 && (
+          <KanaStudyPanel char={item.character} romaji={item.romanization} code={code} />
         )}
       </motion.div>
     </motion.div>,

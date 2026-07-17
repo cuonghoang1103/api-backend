@@ -117,6 +117,10 @@ export const languageApi = {
     api.get(`/my-language/${code}/hanzi/stats`),
   hanziReview: (code: string): Res<{ count: number; chars: HanziChar[] }> =>
     api.get(`/my-language/${code}/hanzi/review`),
+  kanaTip: (body: { char: string; romaji?: string }): Res<KanaTip> =>
+    api.post('/my-language/ai/kana-tip', body),
+  kanaConfusable: (char: string): Res<{ items: KanaConfusable[] }> =>
+    api.get(`/my-language/kana/${encodeURIComponent(char)}/confusable`),
 
   translate: (body: { languageCode: string; text: string; direction: 'to' | 'from'; tone?: string }): Res<TranslateResult> =>
     api.post('/my-language/ai/translate', body),
@@ -297,6 +301,16 @@ export interface RolePlayReply {
 }
 export interface HanziExample { word: string; reading?: string; meaningVi: string }
 export interface HanziImage { url: string; caption?: string }
+export interface KanaConfusable { char: string; romaji: string; how: string }
+export interface KanaTip {
+  char: string;
+  romaji: string;
+  mnemonic: string;
+  strokeTip: string;
+  confusable: KanaConfusable[];
+  examples: Array<{ word: string; reading: string; meaningVi: string }>;
+}
+
 export interface HanziChar {
   id: number;
   char: string;

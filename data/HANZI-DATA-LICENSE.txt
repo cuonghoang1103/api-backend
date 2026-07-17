@@ -1,7 +1,7 @@
 Stroke data for Han characters
 ==============================
 
-hanzi-graphics-ja.txt.gz  (Japanese kanji, 7,007 characters)
+hanzi-graphics-ja.txt.gz / kana-graphics-ja.txt.gz  (Japanese kanji, 7,007 characters)
   Source : animCJK — https://github.com/parsimonhi/animCJK  (graphicsJa.txt)
   Licence: ARPHIC PUBLIC LICENSE
   Note   : gzip of the upstream file, byte-for-byte. Not modified.
@@ -19,3 +19,19 @@ ARPHIC PUBLIC LICENSE, in summary: free to use, copy, distribute and modify,
 provided the licence travels with the font data and modifications are published.
 We redistribute it unmodified. Full text:
 https://github.com/parsimonhi/animCJK/blob/master/licenses/APL
+
+
+─────────────────────────────────────────────────────────────────────────────
+kana-graphics-ja.txt.gz
+─────────────────────────────────────────────────────────────────────────────
+Nguồn : animCJK — graphicsJaKana.txt
+        https://github.com/parsimonhi/animCJK
+Giấy phép: Arphic Public License (giống graphicsJa.txt ở trên).
+Nội dung : 177 ký tự kana — hiragana + katakana đầy đủ, gồm cả âm đục
+        (が…ぼ), bán đục (ぱ…ぽ), âm ghép nhỏ (ゃゅょ), katakana mở rộng cho
+        âm ngoại lai (ヴ, ファ…), trường âm ー và small tsu っ.
+
+Vì sao vendor: bộ nét kanji (graphicsJa.txt) KHÔNG chứa kana — đã kiểm tra,
+7.007 ký tự đều là chữ Hán. Kana nằm ở file riêng của cùng dự án. Cả hai được
+nạp chung vào một index (xem myLanguage.hanzi.service.ts): với người học thì
+あ và 学 đều chỉ là "một chữ cần viết đúng nét".

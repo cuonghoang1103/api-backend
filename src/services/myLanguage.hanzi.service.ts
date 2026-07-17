@@ -142,22 +142,43 @@ export async function getChar(id: number, userId?: number): Promise<HanziCharDto
 let jaIndex: Map<string, string> | null = null;
 let jaLoading: Promise<Map<string, string>> | null = null;
 
+function indexFile(text: string, map: Map<string, string>): void {
+  for (const line of text.split('\n')) {
+    if (!line.trim()) continue;
+    const at = line.indexOf('"character":"');
+    if (at < 0) continue;
+    const end = line.indexOf('"', at + 13);
+    if (end < 0) continue;
+    map.set(line.slice(at + 13, end), line);
+  }
+}
+
 async function loadJaIndex(): Promise<Map<string, string>> {
   if (jaIndex) return jaIndex;
   // Concurrent first requests must not each decompress 22MB.
   if (jaLoading) return jaLoading;
   jaLoading = (async () => {
-    const file = path.join(process.cwd(), 'data', 'hanzi-graphics-ja.txt.gz');
-    const raw = await readFile(file);
-    const text = gunzipSync(raw).toString('utf8');
     const map = new Map<string, string>();
-    for (const line of text.split('\n')) {
-      if (!line.trim()) continue;
-      const at = line.indexOf('"character":"');
-      if (at < 0) continue;
-      const end = line.indexOf('"', at + 13);
-      if (end < 0) continue;
-      map.set(line.slice(at + 13, end), line);
+    // Kanji and kana ship as two files upstream (graphicsJa / graphicsJaKana)
+    // but are one namespace to a learner: the writing screen asks for a
+    // character, not for which file it lives in.
+    //
+    // Loaded independently: a missing kana file must cost us kana, not kanji.
+    // Failing the whole index would turn one absent asset into a dead feature
+    // that was working — exactly the stale-build class of outage that has bitten
+    // this deploy before.
+    for (const name of ['hanzi-graphics-ja.txt.gz', 'kana-graphics-ja.txt.gz']) {
+      try {
+        const raw = await readFile(path.join(process.cwd(), 'data', name));
+        indexFile(gunzipSync(raw).toString('utf8'), map);
+      } catch (err) {
+        console.error(`[hanzi] không đọc được data/${name}:`, (err as Error).message);
+      }
+    }
+    if (!map.size) {
+      // Both files gone: report it rather than caching an empty index forever.
+      jaLoading = null;
+      throw new Error('Không nạp được dữ liệu nét tiếng Nhật (data/*.txt.gz).');
     }
     jaIndex = map;
     jaLoading = null;
@@ -165,6 +186,9 @@ async function loadJaIndex(): Promise<Map<string, string>> {
   })();
   return jaLoading;
 }
+
+/** Kana, plus the marks that behave like kana when writing: ー and small tsu. */
+const KANA_RE = /[\u3040-\u309F\u30A0-\u30FF]/u;
 
 const zhCache = new Map<string, string>();
 const ZH_CACHE_CAP = 400;
@@ -182,7 +206,13 @@ export async function getStrokeData(char: string, lang: 'ja' | 'zh' = 'ja'): Pro
   // Exactly one grapheme. Anything else is either a mistake or an attempt to
   // walk the filesystem — `..` and `/` must never reach path.join below.
   if (!c || [...c].length !== 1) throw new BadRequestError('Chỉ nhận đúng 1 ký tự.');
-  if (!/\p{Script=Han}/u.test(c)) throw new BadRequestError('Ký tự không phải chữ Hán.');
+  const isHan = /\p{Script=Han}/u.test(c);
+  const isKana = KANA_RE.test(c);
+  // Still a whitelist, just a wider one: only Han or kana ever reach the
+  // path.join below, so `..` and `/` remain impossible.
+  if (!isHan && !isKana) throw new BadRequestError('Ký tự không phải chữ Hán hoặc kana.');
+  // Only the Japanese set has kana; hanzi-writer-data is Han-only.
+  if (isKana && lang !== 'ja') throw new BadRequestError('Kana chỉ có trong tiếng Nhật.');
 
   if (lang === 'ja') {
     const idx = await loadJaIndex();

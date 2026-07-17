@@ -26,6 +26,7 @@ import * as practice from '../services/myLanguage.practice.service.js';
 import * as achievements from '../services/myLanguage.achievements.service.js';
 import { isAiAvailable } from '../services/interview/llm/index.js';
 import { isProEffective } from '../services/pro.service.js';
+import * as kanaAi from '../services/myLanguage.kanaAi.service.js';
 
 // ─── Public + authed-user router ─────────────────────────────────
 const publicRouter = Router();
@@ -126,6 +127,21 @@ publicRouter.delete('/collections/:id/words/:wordId', authenticate, async (req: 
 
 // AI tutor (Pro/Max) — gia sư giải thích ngữ pháp/từ vựng. Fixed paths, must
 // stay above the '/:code' wildcard.
+// Kana memory aid (Pro). Confusables come from a hand-written table, not the
+// model — see the service.
+publicRouter.post('/ai/kana-tip', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await kanaAi.kanaTip(req.userId!, req.body) });
+  } catch (err) { next(err); }
+});
+
+// Which kana are confused with this one — no AI, no auth: it is a fixed table.
+publicRouter.get('/kana/:char/confusable', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: { items: kanaAi.confusablesFor(String(req.params.char)) } });
+  } catch (err) { next(err); }
+});
+
 publicRouter.post('/ai/explain', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await aiSvc.explainConcept(req.userId!, req.body) });

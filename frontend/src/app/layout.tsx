@@ -20,6 +20,11 @@ import '@fontsource/poppins/400.css'
 import '@fontsource/poppins/500.css'
 import '@fontsource/poppins/600.css'
 import '@fontsource/poppins/700.css'
+// Nunito: chữ tròn, thân thiện — CHỈ dùng trong My Language (class `font-round`)
+// cho tiêu đề và các con số lớn (XP, streak). Không đặt làm font mặc định:
+// đổi typography toàn site vì một module là cái giá quá đắt.
+import '@fontsource/nunito/700.css'
+import '@fontsource/nunito/800.css'
 import '@fontsource/jetbrains-mono/400.css'
 import '@fontsource/jetbrains-mono/500.css'
 import dynamic from 'next/dynamic'

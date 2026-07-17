@@ -12,6 +12,26 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+
+        // Màu theo kỹ năng. Giá trị thật nằm ở biến CSS trong globals.css và
+        // TỰ ĐỔI theo theme sáng/tối — nên `bg-cat-vocab-bg` viết một lần là
+        // đúng ở cả hai, không cần biến thể `dark:` nào (vốn cũng bị cấm
+        // ngoài Notes).
+        cat: {
+          alphabet: { bg: "var(--cat-alphabet-bg)", fg: "var(--cat-alphabet-fg)", icon: "var(--cat-alphabet-icon)" },
+          vocab: { bg: "var(--cat-vocab-bg)", fg: "var(--cat-vocab-fg)", icon: "var(--cat-vocab-icon)" },
+          grammar: { bg: "var(--cat-grammar-bg)", fg: "var(--cat-grammar-fg)", icon: "var(--cat-grammar-icon)" },
+          listening: { bg: "var(--cat-listening-bg)", fg: "var(--cat-listening-fg)", icon: "var(--cat-listening-icon)" },
+          speaking: { bg: "var(--cat-speaking-bg)", fg: "var(--cat-speaking-fg)", icon: "var(--cat-speaking-icon)" },
+          reading: { bg: "var(--cat-reading-bg)", fg: "var(--cat-reading-fg)", icon: "var(--cat-reading-icon)" },
+          ai: { bg: "var(--cat-ai-bg)", fg: "var(--cat-ai-fg)", icon: "var(--cat-ai-icon)" },
+        },
+        // Trạng thái tiến độ (nút lộ trình, phản hồi đúng/sai).
+        state: {
+          done: "#58CC02",
+          current: "#FFC800",
+          wrong: "#E05C5C",
+        },
         // Dark theme colors
         darkbg: "#18191a",
         darkcard: "#242526",
@@ -83,6 +103,8 @@ const config: Config = {
         sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
         heading: ["var(--font-poppins)", "Poppins", "system-ui", "sans-serif"],
         mono: ["var(--font-jetbrains-mono)", "JetBrains Mono", "monospace"],
+        // Chữ tròn cho My Language — tiêu đề, XP, streak. Xem layout.tsx.
+        round: ["var(--font-nunito)", "Nunito", "var(--font-poppins)", "system-ui", "sans-serif"],
       },
  animation: {
  "fade-in": "fadeIn 0.3s ease-out",

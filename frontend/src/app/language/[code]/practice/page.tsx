@@ -19,9 +19,51 @@ import { SectionShell, EmptyState, ProgressRing, useLangUser } from '@/component
 import { usePro } from '@/hooks/usePro';
 import LessonPlayer from '@/components/language/practice/LessonPlayer';
 import { MascotRow, MascotScene } from '@/components/language/mascot/MascotScene';
+import { Mascot } from '@/components/language/mascot/mascot';
+import { useMotion } from '@/lib/motion';
 import { dailyMascot, mascotName } from '@/lib/mascotData';
 
 const PATH_OFFSETS = [0, 44, 64, 44, 0, -44, -64, -44];
+
+// Node geometry — the connector is drawn from these, so the line and the
+// circles cannot drift apart when one of them is retuned.
+const NODE = 64;   // circle diameter
+const GAP = 12;    // vertical gap between node rows
+const ROW = NODE + 46 + GAP; // circle + label block + gap
+
+/**
+ * The dashed trail between two nodes.
+ *
+ * Drawn as an SVG cubic curve rather than a border on a div: the nodes zigzag
+ * up to 128px apart horizontally, and a straight connector between them looks
+ * like a mistake. Solid green behind you, dashed grey ahead — the line itself
+ * reports progress, so it is not decoration.
+ */
+function Connector({ fromX, toX, done }: { fromX: number; toX: number; done: boolean }) {
+  const w = Math.abs(toX - fromX) + 8;
+  const h = GAP + 46;
+  const x1 = fromX < toX ? 4 : w - 4;
+  const x2 = fromX < toX ? w - 4 : 4;
+  return (
+    <svg
+      width={w}
+      height={h}
+      viewBox={`0 0 ${w} ${h}`}
+      className="pointer-events-none absolute left-1/2 top-full -z-10"
+      style={{ transform: `translateX(calc(-50% + ${(fromX + toX) / 2 - fromX}px))` }}
+      aria-hidden
+    >
+      <path
+        d={`M ${x1} 0 C ${x1} ${h * 0.5}, ${x2} ${h * 0.5}, ${x2} ${h}`}
+        fill="none"
+        stroke={done ? '#58CC02' : 'var(--border-color)'}
+        strokeWidth={4}
+        strokeLinecap="round"
+        strokeDasharray={done ? undefined : '2 9'}
+      />
+    </svg>
+  );
+}
 
 // Per-unit visual themes — rotate so each stage feels like a new chapter.
 const UNIT_THEMES = [
@@ -75,6 +117,9 @@ export default function PracticePage() {
   const [boardLoading, setBoardLoading] = useState(false);
   const [ach, setAch] = useState<AchievementsResult | null>(null);
   const [achLoading, setAchLoading] = useState(false);
+  // Which node is shaking right now — a tap on a locked lesson.
+  const [shakeKey, setShakeKey] = useState<string | null>(null);
+  const m = useMotion();
 
   const load = useCallback(() => {
     if (!isAuthenticated) { setLoading(false); return; }
@@ -111,7 +156,13 @@ export default function PracticePage() {
   useEffect(() => { if (tab === 'ach') loadAch(); }, [tab, loadAch]);
 
   const onLessonClick = (l: PracticeLesson) => {
-    if (l.locked) { toast.info('Hoàn thành bài trước để mở khóa bài này.'); return; }
+    if (l.locked) {
+      // Shake the node itself: the toast says why, the shake says WHICH.
+      setShakeKey(l.lessonKey);
+      setTimeout(() => setShakeKey(null), 400);
+      toast.info('Hoàn thành bài trước để mở khóa bài này.');
+      return;
+    }
     if (data && data.state.hearts <= 0) { toast.info('Bạn đã hết tim — chờ hồi phục rồi luyện tiếp nhé.'); return; }
     setActive(l);
   };
@@ -226,51 +277,98 @@ export default function PracticePage() {
                             <div className={`h-full rounded-full ${theme.bar} transition-all`} style={{ width: `${pct}%` }} />
                           </div>
                         </div>
-                        <div className="flex flex-col items-center gap-3">
+                        <motion.div variants={m.pageEnter} initial="hidden" animate="show" className="flex flex-col items-center" style={{ rowGap: GAP }}>
                           {unit.lessons.map((l, li) => {
                             const offset = PATH_OFFSETS[li % PATH_OFFSETS.length];
+                            const next = unit.lessons[li + 1];
+                            const nextOffset = next ? PATH_OFFSETS[(li + 1) % PATH_OFFSETS.length] : null;
                             const isCurrent = l.lessonKey === currentKey;
+                            const isLast = li === unit.lessons.length - 1;
+                            // The trail behind a finished lesson is solid; the
+                            // one ahead of it is still dashed.
+                            const trailDone = l.crown > 0;
                             return (
-                              <motion.div key={l.lessonKey} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} style={{ transform: `translateX(${offset}px)` }} className="flex flex-col items-center">
+                              <motion.div
+                                key={l.lessonKey}
+                                variants={m.childEnter}
+                                style={{ transform: `translateX(${offset}px)` }}
+                                className="relative flex flex-col items-center"
+                              >
+                                {nextOffset !== null && (
+                                  <Connector fromX={offset} toX={nextOffset} done={trailDone} />
+                                )}
+
                                 {isCurrent && (
                                   <motion.span
-                                    animate={{ y: [0, -4, 0] }}
+                                    animate={m.reduce ? undefined : { y: [0, -4, 0] }}
                                     transition={{ duration: 1.2, repeat: Infinity }}
-                                    className={`mb-1 rounded-lg px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-white shadow-lg ${theme.badge}`}
+                                    className="mb-1 rounded-lg bg-state-current px-2.5 py-1 font-round text-[10px] font-extrabold uppercase tracking-wide text-[#4A3600] shadow-lg"
                                   >
                                     Bắt đầu
                                   </motion.span>
                                 )}
-                                <button
+
+                                {/* The current node is the ONE looping animation
+                                    on this screen — plus the mascot's breathing,
+                                    which is the whole motion budget. */}
+                                <motion.button
                                   type="button"
                                   onClick={() => onLessonClick(l)}
                                   aria-label={l.name}
+                                  animate={shakeKey === l.lessonKey ? m.shake.animate : undefined}
+                                  transition={m.shake.transition}
+                                  {...(isCurrent && !l.locked ? m.pulseRing : {})}
+                                  {...m.buttonPress}
                                   className={`relative flex h-16 w-16 items-center justify-center rounded-full ring-4 transition ${
                                     l.locked
-                                      ? 'bg-[var(--bg-surface)] text-text-muted ring-[var(--border-color)]'
+                                      ? 'bg-[var(--bg-surface)] text-text-muted opacity-40 ring-[var(--border-color)]'
                                       : l.crown >= 5
-                                        ? 'bg-neon-orange/20 text-neon-orange ring-neon-orange/40 hover:-translate-y-0.5'
+                                        ? 'bg-neon-orange/20 text-neon-orange ring-neon-orange/40'
                                         : l.crown > 0
-                                          ? 'bg-neon-green/20 text-neon-green ring-neon-green/30 hover:-translate-y-0.5'
-                                          : `${theme.bubble} hover:-translate-y-0.5 ${isCurrent ? 'animate-pulse' : ''}`
+                                          ? 'bg-state-done text-white ring-state-done/30'
+                                          : isCurrent
+                                            ? 'bg-state-current text-[#4A3600] ring-state-current/30'
+                                            : `${theme.bubble}`
                                   }`}
                                 >
-                                  {l.locked ? <Lock size={22} /> : l.crown >= 5 ? <Crown size={26} /> : l.icon ? <span className="text-2xl leading-none" aria-hidden>{l.icon}</span> : l.crown > 0 ? <Check size={26} /> : <Dumbbell size={24} />}
+                                  {l.locked ? <Lock size={22} /> : l.crown >= 5 ? <Crown size={26} /> : l.icon ? <span className="text-2xl leading-none" aria-hidden>{l.icon}</span> : l.crown > 0 ? <Check size={26} strokeWidth={3} /> : <Dumbbell size={24} />}
                                   {!l.locked && l.crown > 0 && (
                                     <span className="absolute -bottom-1 -right-1 inline-flex items-center gap-0.5 rounded-full bg-neon-orange px-1.5 py-0.5 text-[10px] font-bold text-white"><Crown size={9} /> {l.crown}</span>
                                   )}
                                   {!l.locked && l.bestScore > 0 && l.crown < 5 && (
                                     <span className="absolute -top-1 -left-1 rounded-full bg-[var(--bg-surface)] px-1.5 py-0.5 text-[9px] font-bold text-text-secondary ring-1 ring-[var(--border-color)]">{l.bestScore}%</span>
                                   )}
-                                </button>
-                                <span className={`mt-1.5 max-w-[9rem] truncate text-center text-xs font-medium ${l.locked ? 'text-text-muted' : 'text-text-secondary'}`}>{l.name}</span>
+                                </motion.button>
+
+                                {/* Mascot stands beside the current node — it
+                                    moves because it is RENDERED there, not
+                                    animated to a position that could go stale. */}
+                                {isCurrent && (
+                                  <span
+                                    className="pointer-events-none absolute top-1 hidden sm:block"
+                                    style={offset > 0 ? { right: NODE + 18 } : { left: NODE + 18 }}
+                                  >
+                                    <Mascot character="bip" emotion="happy" size={56} />
+                                  </span>
+                                )}
+
+                                <span className={`mt-1.5 max-w-[9rem] truncate text-center font-round text-xs font-bold ${l.locked ? 'text-text-muted' : 'text-text-secondary'}`}>{l.name}</span>
                                 {!l.locked && l.wordCount > 0 && (
                                   <span className="text-[10px] text-text-muted">{l.wordCount} từ</span>
+                                )}
+                                {isLast && unit.lessons.every((x) => x.crown > 0) && (
+                                  // A real checkpoint: it marks a unit actually
+                                  // finished. No treasure chests — there is no
+                                  // reward behind one, and a chest that opens
+                                  // onto nothing is a lie.
+                                  <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-state-done/15 px-3 py-1.5 font-round text-xs font-extrabold text-state-done ring-1 ring-state-done/30">
+                                    <Trophy size={13} /> Xong chặng {ui + 1}
+                                  </span>
                                 )}
                               </motion.div>
                             );
                           })}
-                        </div>
+                        </motion.div>
                       </section>
                     );
                   });

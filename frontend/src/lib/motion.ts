@@ -15,7 +15,7 @@
  * ones that forget are the ones nobody looks at again.
  */
 import { useEffect, useState } from 'react';
-import { useReducedMotion, type Variants, type Transition } from 'framer-motion';
+import { useReducedMotion, type Variants, type Transition, type TargetAndTransition } from 'framer-motion';
 
 // ─── Timing ──────────────────────────────────────────────────────
 export const EASE_OUT = [0.22, 1, 0.36, 1] as const; // gentle iOS-ish deceleration
@@ -64,13 +64,14 @@ export interface MotionKit {
   /** Scale-in with overshoot: badges, checkmarks, combo pills. */
   popIn: Variants;
   /** Spread onto a motion element for hover lift. */
-  cardHover: Record<string, unknown>;
+  cardHover: { whileHover?: TargetAndTransition; transition?: Transition };
   /** Spread onto a motion element for tap feedback. */
-  buttonPress: Record<string, unknown>;
+  buttonPress: { whileTap?: TargetAndTransition };
   /** Infinite ring pulse — for the ONE current node only. */
-  pulseRing: Record<string, unknown>;
-  /** Horizontal shake for a wrong answer / locked node. */
-  shake: Record<string, unknown>;
+  pulseRing: { animate?: TargetAndTransition; transition?: Transition };
+  /** Horizontal shake for a wrong answer / locked node. Fire it by swapping
+   *  `animate` in, not by remounting — a remount restarts the whole node. */
+  shake: { animate?: TargetAndTransition; transition?: Transition };
 }
 
 /**

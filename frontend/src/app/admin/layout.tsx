@@ -8,7 +8,7 @@ import {
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
  CreditCard, Github, Search, TrendingUp, AlertTriangle, Gamepad2,
- KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown,
+ KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown, MonitorPlay,
 } from 'lucide-react';
 
 const adminNav = [
@@ -18,6 +18,7 @@ const adminNav = [
  // Dashboard) so the creator workflow is the first thing
  // the user sees when they open the admin panel.
  { label: 'Content Studio', href: '/creator', icon: Clapperboard, accent: 'studio' as const },
+ { label: 'Trang chủ — Promo Videos', href: '/admin/landing', icon: MonitorPlay },
  { label: 'FPT Academy LMS', href: '/admin/academy', icon: GraduationCap },
  { label: 'Quản lý Mã Code', href: '/admin/code-academy', icon: KeyRound },
  { label: 'Quản lý Mã Pro', href: '/admin/pro-codes', icon: Crown },

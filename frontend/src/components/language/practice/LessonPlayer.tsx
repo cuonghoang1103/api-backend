@@ -19,6 +19,7 @@ import type { VocabWord } from '@/types/language';
 import { speakVocabEntry, type VocabLang } from '@/lib/notesTts';
 import { useSpeech } from '@/hooks/useSpeech';
 import { Mascot, praisePhrase, comfortPhrase, playMascotSound, mascotName } from '../mascot/mascot';
+import { toast } from 'sonner';
 import { dailyMascot, pickMascot } from '@/lib/mascotData';
 import { Confetti } from '@/components/language/ui/Confetti';
 import { TactileButton } from '@/components/language/ui/TactileButton';
@@ -258,10 +259,12 @@ export default function LessonPlayer({
         const ok = !!(res && (res.verdict === 'good' || res.verdict === 'ok'));
         mark(ok, word.id);
       } catch {
-        // Pro required / STT off / network → skip this one with credit.
-        setSpeakResult({ target: word.word, heard: '', score: 0, verdict: 'ok', feedback: 'Chấm phát âm chưa khả dụng — đã bỏ qua câu này.', tips: [] });
-        setCorrect((c) => c + 1);
-        setPhase('correct');
+        // Scoring failed (system busy / STT down / Pro gate / network). Do NOT
+        // fake a pass — the old code marked it "correct" (green) with a 0/100
+        // score, which read as passing a word you never pronounced. Stay on the
+        // answer step so the learner can record again, or press "Bỏ qua" to skip.
+        setSpeakResult(null);
+        toast.error('Chưa chấm được phát âm lúc này. Hãy thử ghi âm lại, hoặc bấm "Bỏ qua".');
       } finally {
         setScoring(false);
       }

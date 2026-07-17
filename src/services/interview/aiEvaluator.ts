@@ -139,10 +139,12 @@ export async function evaluateAnswerWithAI(params: {
 
   const parse = (text: string): AiEval => AiEvalSchema.parse(extractJson(text));
 
-  // Latency-sensitive: the candidate is waiting on this call. Fail fast (short
-  // timeout, 1 retry) and let the caller degrade to STATIC rather than hang —
-  // a long/detailed answer + a slow gateway must not blow the frontend timeout.
-  const first = await llmComplete({ step: 'interview', feature: 'interview', system, messages: [{ role: 'user', content: user }], maxTokens: 2800, userId: params.userId, sessionId: params.sessionId, maxRetries: 1, timeoutMs: 45_000 });
+  // Latency-sensitive: the candidate is waiting on this call to submit. Fail FAST
+  // and let the caller degrade to STATIC rather than hang. A rate-limited gateway
+  // that holds the request would, at 45s × retries, blow past the nginx/browser
+  // timeout → the user sees "couldn't submit" instead of a graceful STATIC score.
+  // No internal retry; a tight timeout keeps a bad round under the proxy limit.
+  const first = await llmComplete({ step: 'interview', feature: 'interview', system, messages: [{ role: 'user', content: user }], maxTokens: 2800, userId: params.userId, sessionId: params.sessionId, maxRetries: 0, timeoutMs: 20_000 });
   let ai: AiEval;
   try {
     ai = parse(first.text);
@@ -159,8 +161,8 @@ export async function evaluateAnswerWithAI(params: {
       maxTokens: 2800,
       userId: params.userId,
       sessionId: params.sessionId,
-      maxRetries: 1,
-      timeoutMs: 45_000,
+      maxRetries: 0,
+      timeoutMs: 15_000,
     });
     ai = parse(retry.text); // a second failure throws → caller falls back to Pass A
   }

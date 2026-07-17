@@ -13,11 +13,12 @@ import { ArrowRight, Compass } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import AnimatedGreeting from './AnimatedGreeting';
 
-interface Greeting { line1: string; line2: string; }
+interface Greeting { head: string; highlight: string; sub: string; }
 
 const VISITOR: Greeting = {
-  line1: 'Welcome to CuongThai',
-  line2: 'Sign up and explore — practice interviews, learn languages, build your CV, and more, all with AI on your side.',
+  head: 'Welcome to ',
+  highlight: 'CuongThai',
+  sub: 'Sign up and explore — practice interviews, learn languages, build your CV, and more, all with AI on your side.',
 };
 
 function timeWord(h: number): string {
@@ -35,8 +36,9 @@ export default function LandingHero() {
     if (isAuthed && user) {
       const name = user.fullName || user.displayName || user.username || 'there';
       setGreeting({
-        line1: `Welcome back, ${name}`,
-        line2: `${timeWord(new Date().getHours())} — have a great, productive day.`,
+        head: 'Welcome back, ',
+        highlight: name,
+        sub: `${timeWord(new Date().getHours())} — have a great, productive day.`,
       });
     } else {
       setGreeting(VISITOR);
@@ -53,7 +55,7 @@ export default function LandingHero() {
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> The interactive learning & career platform
       </motion.span>
 
-      <AnimatedGreeting line1={greeting.line1} line2={greeting.line2} />
+      <AnimatedGreeting head={greeting.head} highlight={greeting.highlight} sub={greeting.sub} />
 
       <motion.div
         className="mt-9 flex flex-wrap items-center justify-center gap-3"

@@ -14,7 +14,7 @@
  *   2. AI — spelling, meaning, examples. Needs a model, so it is checked, capped
  *      and never allowed to touch a field it did not justify.
  *
- *   docker exec cuonghoangdev_backend node scripts/vocab-audit.mjs [--langs ja,zh,en] [--limit N]
+ *   docker exec cuonghoangdev_backend node scripts/vocab-audit.mjs [--langs ja,zh,en] [--limit N] [--ids 1,2,3]
  *   docker exec ... vocab-audit.mjs --apply          (mặc định CHẠY THỬ, không ghi gì)
  *
  * On the cheap provider so it never competes with question generation:
@@ -34,6 +34,10 @@ const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] :
 const num = (f, d) => { const v = val(f, undefined); const n = Number(v); return v === undefined || Number.isNaN(n) ? d : n; };
 const LANGS = String(val('--langs', 'ja,zh,en')).split(',').map((s) => s.trim()).filter(Boolean);
 const LIMIT = num('--limit', 0);
+// Target exact rows. Without this the only way to check the auditor against a
+// KNOWN bad word is to audit everything before it — so the auditor never gets
+// audited, which is how a checker that catches nothing ships looking green.
+const IDS = String(val('--ids', '')).split(',').map((x) => Number(x.trim())).filter(Number.isInteger);
 const BUDGET = num('--budget', 3_200_000);
 const MODEL = process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
 const BATCH = 10;
@@ -127,7 +131,9 @@ function prompt(code, items) {
 let checked = 0, flagged = 0, fixed = 0, failed = 0, skipped = 0;
 
 async function passAi(code, langId) {
-  const where = { category: { languageId: langId } };
+  const where = IDS.length
+    ? { id: { in: IDS }, category: { languageId: langId } }
+    : { category: { languageId: langId } };
   const rows = await prisma.langVocabWord.findMany({
     where,
     select: {

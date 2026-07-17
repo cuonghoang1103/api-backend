@@ -5,7 +5,7 @@
  * `mnemonic IS NULL` marks the ones still waiting for a meaning, a mnemonic,
  * a readable breakdown and compound words. This fills them in bulk.
  *
- *   docker exec cuonghoangdev_backend node scripts/hanzi-ai-enrich.mjs [--langs ja,zh] [--level N5] [--limit N]
+ *   docker exec cuonghoangdev_backend node scripts/hanzi-ai-enrich.mjs [--langs ja,zh] [--level N5,N4] [--limit N]
  *   docker exec ... node scripts/hanzi-ai-enrich.mjs --apply
  *
  * DRY-RUN BY DEFAULT — prints a sample and writes nothing.
@@ -25,7 +25,11 @@ const APPLY = args.includes('--apply');
 const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : d; };
 const num = (f, d) => { const v = val(f, undefined); const n = Number(v); return v === undefined || Number.isNaN(n) ? d : n; };
 const LANGS = String(val('--langs', 'ja,zh')).split(',').map((s) => s.trim()).filter(Boolean);
-const ONLY_LEVEL = val('--level', '');
+// Comma-separated so two runners can split one language cleanly by level
+// (`--level HSK1,HSK2,HSK3` vs `--level HSK4,HSK5,HSK6`). Without it, two
+// processes on the same language each snapshot `mnemonic IS NULL` at start and
+// then re-do each other's rows — harmless but pure waste.
+const ONLY_LEVELS = String(val('--level', '')).split(',').map((x) => x.trim()).filter(Boolean);
 const LIMIT = num('--limit', 0);
 const BUDGET = num('--budget', 3_200_000);
 const MODEL = process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
@@ -48,6 +52,10 @@ async function waitBudget() {
 }
 
 let done = 0, failed = 0, stop = false;
+// Characters the model omitted from an otherwise-successful batch. Not a batch
+// error, so they never showed up in the summary — it said "0 lô lỗi" while
+// leaving rows with mnemonic still null. Re-running finds them again.
+let skipped = 0;
 
 for (const code of LANGS) {
   if (stop) break;
@@ -60,7 +68,7 @@ for (const code of LANGS) {
       // The seed leaves mnemonic null; anything with one is either hand-written
       // or already enriched, and must not be redone.
       OR: [{ mnemonic: null }, { mnemonic: '' }],
-      ...(ONLY_LEVEL ? { level: ONLY_LEVEL } : {}),
+      ...(ONLY_LEVELS.length ? { level: { in: ONLY_LEVELS } } : {}),
     },
     select: {
       id: true, char: true, level: true, strokeCount: true, onyomi: true, kunyomi: true,
@@ -70,7 +78,7 @@ for (const code of LANGS) {
     ...(LIMIT ? { take: LIMIT } : {}),
   });
 
-  console.log(`\n=== ${code}: ${todo.length} chữ chưa có mẹo nhớ${APPLY ? '' : ' — CHẠY THỬ'} ===`);
+  console.log(`\n=== ${code}${ONLY_LEVELS.length ? ` (${ONLY_LEVELS.join(',')})` : ''}: ${todo.length} chữ chưa có mẹo nhớ${APPLY ? '' : ' — CHẠY THỬ'} ===`);
 
   for (let i = 0; i < todo.length; i += BATCH) {
     if (stop) break;
@@ -101,6 +109,12 @@ for (const code of LANGS) {
       continue;
     }
 
+    const missed = chunk.filter((c) => !got.has(c.char));
+    if (missed.length) {
+      skipped += missed.length;
+      console.warn(`  [bỏ qua] lô ${Math.floor(i / BATCH) + 1}: AI không trả về ${missed.length} chữ (${missed.map((c) => c.char).join(' ')})`);
+    }
+
     for (const c of chunk) {
       const e = got.get(c.char);
       if (!e) continue;
@@ -128,5 +142,6 @@ for (const code of LANGS) {
   }
 }
 
-console.log(`\n[hanzi-ai] ${APPLY ? 'ĐÃ viết' : 'SẼ viết'} ${done} chữ · ${failed} lô lỗi.${APPLY ? '' : ' Chạy lại với --apply để lưu.'}`);
+console.log(`\n[hanzi-ai] ${APPLY ? 'ĐÃ viết' : 'SẼ viết'} ${done} chữ · ${failed} lô lỗi · ${skipped} chữ bị bỏ qua.${APPLY ? '' : ' Chạy lại với --apply để lưu.'}`);
+if (skipped && APPLY) console.log(`[hanzi-ai] ${skipped} chữ chưa xong — CHẠY LẠI script này để viết nốt (nó tự tìm chữ thiếu mẹo nhớ).`);
 await prisma.$disconnect();

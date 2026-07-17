@@ -55,6 +55,12 @@ const todo = await prisma.interviewQuestion.findMany({
 console.log(`[backfill] ${todo.length} câu thiếu bản tiếng Anh${APPLY ? '' : ' — CHẠY THỬ'}\n`);
 
 let done = 0, failed = 0;
+// Items the model simply did not return, or returned unusably. They are NOT
+// batch errors — the call succeeded — so they used to vanish between "ĐÃ dịch
+// N" and the row count, and the summary line claimed 0 errors while quietly
+// leaving rows behind. Re-running picks them up (the query finds work by
+// `body_en IS NULL`), but only if you know to.
+let skipped = 0;
 for (let i = 0; i < todo.length; i += BATCH) {
   const chunk = todo.slice(i, i + BATCH);
   await waitBudget();
@@ -95,10 +101,12 @@ for (let i = 0; i < todo.length; i += BATCH) {
   const items = looseJson(raw)?.items;
   if (!Array.isArray(items) || !items.length) { failed++; console.error(`  [!] lô ${i / BATCH + 1}: không đọc được kết quả`); continue; }
 
+  const handled = new Set();
   for (const it of items) {
     const q = chunk[Number(it?.n) - 1];
     const bodyEn = typeof it?.bodyEn === 'string' ? it.bodyEn.trim() : '';
     if (!q || !bodyEn) continue;
+    handled.add(q.id);
 
     // A rubric is only usable if it still lines up with the Vietnamese one:
     // same length AND same weights, or an English session would be scored
@@ -125,8 +133,14 @@ for (let i = 0; i < todo.length; i += BATCH) {
     }
     done++;
   }
+  const missed = chunk.filter((q) => !handled.has(q.id));
+  if (missed.length) {
+    skipped += missed.length;
+    console.warn(`  [bỏ qua] lô ${i / BATCH + 1}: AI không trả về ${missed.length} câu (id ${missed.map((q) => q.id).join(', ')})`);
+  }
   if (done % 40 < BATCH) console.log(`  … ${done}/${todo.length}`);
 }
 
-console.log(`\n[backfill] ${APPLY ? 'ĐÃ dịch' : 'SẼ dịch'} ${done} câu · ${failed} lô lỗi.${APPLY ? '' : ' Chạy lại với --apply để lưu.'}`);
+console.log(`\n[backfill] ${APPLY ? 'ĐÃ dịch' : 'SẼ dịch'} ${done}/${todo.length} câu · ${failed} lô lỗi · ${skipped} câu bị bỏ qua.${APPLY ? '' : ' Chạy lại với --apply để lưu.'}`);
+if (skipped && APPLY) console.log(`[backfill] ${skipped} câu chưa xong — CHẠY LẠI script này để dịch nốt (nó tự tìm câu còn thiếu).`);
 await prisma.$disconnect();

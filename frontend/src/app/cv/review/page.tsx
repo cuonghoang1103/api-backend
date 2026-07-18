@@ -67,11 +67,24 @@ export default function CvReviewPage() {
   const runCritique = async () => {
     setCritiquing(true);
     try {
-      const r = await cvApi.critique();
-      setCritique(r.data.data);
+      let data: CvCritiqueResult;
+      try {
+        data = (await cvApi.critique()).data.data;
+      } catch (e1) {
+        // Auto-retry once on a transient failure (slow gateway → timeout / 5xx /
+        // dropped connection). A 4xx (quota, Pro gate, validation) is a real block
+        // and is surfaced as-is, not retried.
+        const status = (e1 as { response?: { status?: number }; code?: string })?.response?.status;
+        const transient = !status || status >= 500 || (e1 as { code?: string })?.code === 'ECONNABORTED';
+        if (!transient) throw e1;
+        toast.info('Gateway hơi chậm — đang thử lại…');
+        await new Promise((r) => setTimeout(r, 1200));
+        data = (await cvApi.critique()).data.data;
+      }
+      setCritique(data);
     } catch (e) {
       const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      toast.error(msg || 'AI chấm thất bại');
+      toast.error(msg || 'AI chấm thất bại — thử lại sau giây lát.');
     } finally { setCritiquing(false); }
   };
 

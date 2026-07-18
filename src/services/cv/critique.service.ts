@@ -109,6 +109,11 @@ export async function critiqueProfile(userId: number): Promise<CritiqueResult> {
     messages: [{ role: 'user', content: userMsg }],
     maxTokens: 4000,
     userId,
+    // Latency-sensitive (the user is waiting): fail fast so a slow gateway round
+    // returns an error the client can auto-retry, instead of the default 3×60s
+    // stacking past the browser's timeout and dropping the request with no reply.
+    maxRetries: 1,
+    timeoutMs: 40_000,
   });
 
   let parsed: Partial<CritiqueResult>;

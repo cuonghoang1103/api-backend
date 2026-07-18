@@ -502,12 +502,22 @@ function Bullets({ item, onChanged }: { item: CvItem; onChanged: () => Promise<v
   const startRewrite = async (bulletId: number) => {
     setRewriting(bulletId);
     try {
-      const r = await cvApi.rewriteBullet(bulletId);
-      const d = r.data.data;
+      let d;
+      try {
+        d = (await cvApi.rewriteBullet(bulletId)).data.data;
+      } catch (e1) {
+        // Auto-retry once on a transient failure (timeout / slow gateway / 5xx).
+        const status = (e1 as { response?: { status?: number } })?.response?.status;
+        const transient = !status || status >= 500 || (e1 as { code?: string })?.code === 'ECONNABORTED';
+        if (!transient) throw e1;
+        toast.info('Gateway hơi chậm — đang thử lại…');
+        await new Promise((r) => setTimeout(r, 1000));
+        d = (await cvApi.rewriteBullet(bulletId)).data.data;
+      }
       setDiff({ bulletId, suggestionId: d.suggestionId, original: d.original, proposed: d.proposed, rationale: d.rationale, clarifyingQuestion: d.clarifyingQuestion });
     } catch (e) {
       const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      toast.error(msg || 'AI viết lại thất bại');
+      toast.error(msg || 'AI viết lại thất bại — thử lại sau giây lát.');
     } finally { setRewriting(null); }
   };
 

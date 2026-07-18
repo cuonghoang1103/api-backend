@@ -82,6 +82,10 @@ export async function rewriteBullet(userId: number, bulletId: number): Promise<R
     messages: [{ role: 'user', content: context }],
     maxTokens: 700,
     userId,
+    // Fail fast (short prompt anyway) so a slow round returns within the client
+    // timeout and can be auto-retried, rather than stacking retries past it.
+    maxRetries: 1,
+    timeoutMs: 25_000,
   });
 
   let parsed: { proposed?: string; rationale?: string; needsUserInput?: boolean; clarifyingQuestion?: string | null };

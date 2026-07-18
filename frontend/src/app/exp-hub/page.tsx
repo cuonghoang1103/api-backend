@@ -14,6 +14,7 @@ import { SnippetCodeTabs } from '@/components/exp-hub/SnippetCodeTabs';
 import { SearchAutocomplete } from '@/components/exp-hub/SearchAutocomplete';
 import { FilterPanel } from '@/components/exp-hub/FilterPanel';
 import { CategoryHeader } from '@/components/exp-hub/CategoryHeader';
+import { CategoryDoc } from '@/components/exp-hub/CategoryDoc';
 import { ReactionBar } from '@/components/exp-hub/ReactionBar';
 import { CommentsSection } from '@/components/exp-hub/CommentsSection';
 import { snippetsApi, snippetCategoriesApi, snippetTagsApi, snippetStatsApi, snippetBookmarksApi, snippetReactionsApi } from '@/lib/exp-hub-api';
@@ -485,6 +486,7 @@ export default function ExpHubPage() {
           {selectedCategory && !showSaved && (
             <div className="p-3 pb-0">
               <CategoryHeader category={selectedCategory} count={selectedCategory._count?.snippets} />
+              <CategoryDoc categoryId={selectedCategory.id} hasDoc={selectedCategory.hasDoc} />
             </div>
           )}
 

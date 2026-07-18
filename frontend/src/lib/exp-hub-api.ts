@@ -6,6 +6,8 @@ import { api } from './api';
 import type {
   Snippet,
   SnippetCategory,
+  CategoryDoc,
+  DocBlock,
   SnippetTag,
   SnippetFilters,
   SnippetVariable,
@@ -45,6 +47,29 @@ export const snippetCategoriesApi = {
     api.delete<{ success: boolean; message: string }>(`${BASE}/categories/${id}`, {
       data: { moveChildrenTo },
     }),
+
+  // ─── AI reference doc (full-English tech doc) ─────────────────────────────
+  // Public: fetch the full doc for a technology (on demand — not in the tree).
+  getDoc: (id: number) =>
+    api.get<{ success: boolean; data: CategoryDoc }>(`${BASE}/categories/${id}/doc`),
+
+  // ADMIN/EDITOR: preview a generated doc (no DB write).
+  generateDoc: (categoryId: number) =>
+    api.post<{ success: boolean; data: { categoryId: number; name: string; blocks: DocBlock[]; model: string } }>(
+      `${BASE}/admin/ai/doc/generate`,
+      { categoryId },
+    ),
+
+  // ADMIN/EDITOR: persist the reviewed (possibly edited) blocks.
+  commitDoc: (data: { categoryId: number; blocks: DocBlock[]; model?: string; lang?: string }) =>
+    api.post<{ success: boolean; data: { categoryId: number; blocks: number } }>(
+      `${BASE}/admin/ai/doc/commit`,
+      data,
+    ),
+
+  // ADMIN/EDITOR: clear a category's doc.
+  clearDoc: (id: number) =>
+    api.delete<{ success: boolean; message: string }>(`${BASE}/categories/${id}/doc`),
 };
 
 // ─── Tags ─────────────────────────────────────────────────────────────────────

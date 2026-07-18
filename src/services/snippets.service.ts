@@ -53,9 +53,19 @@ function getIpHash(ip: string): string {
 // ─── Categories ────────────────────────────────────────────────────────────────
 
 export async function getCategories() {
+  // Explicit select: the doc (docBlocks) can be several KB per category and this
+  // tree is the nav payload loaded on every Exp Hub page — shipping 159 docs here
+  // would bloat it. We expose only a `hasDoc` flag + light meta; the full doc is
+  // fetched on demand via getCategoryDoc when a technology is opened.
   const categories = await prisma.snippetCategory.findMany({
     orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
-    include: { _count: { select: { snippets: true, children: true } } },
+    select: {
+      id: true, name: true, slug: true, parentId: true, sortOrder: true,
+      description: true, icon: true, color: true, coverImageUrl: true, docsUrl: true,
+      docLang: true, docGeneratedAt: true,
+      createdAt: true, updatedAt: true,
+      _count: { select: { snippets: true, children: true } },
+    },
   });
 
   const map = new Map<number | null, typeof categories>();
@@ -65,12 +75,31 @@ export async function getCategories() {
     map.get(parentId)!.push(cat);
   }
 
-  function buildTree(parentId: number | null): Array<typeof categories[0] & { children: typeof categories }> {
+  type CategoryNode = typeof categories[0] & { hasDoc: boolean; children: CategoryNode[] };
+  function buildTree(parentId: number | null): CategoryNode[] {
     const children = map.get(parentId) ?? [];
-    return children.map(cat => ({ ...cat, children: buildTree(cat.id) }));
+    return children.map(cat => ({ ...cat, hasDoc: !!cat.docGeneratedAt, children: buildTree(cat.id) }));
   }
 
   return buildTree(null);
+}
+
+// Full AI doc for one category (technology). Public — served on demand when a
+// technology is opened. Returns an empty block list when no doc exists yet.
+export async function getCategoryDoc(id: number) {
+  const cat = await prisma.snippetCategory.findUnique({
+    where: { id },
+    select: { id: true, name: true, docBlocks: true, docLang: true, docModel: true, docGeneratedAt: true },
+  });
+  if (!cat) throw new NotFoundError('Category not found');
+  return {
+    id: cat.id,
+    name: cat.name,
+    blocks: Array.isArray(cat.docBlocks) ? cat.docBlocks : [],
+    docLang: cat.docLang,
+    docModel: cat.docModel,
+    docGeneratedAt: cat.docGeneratedAt,
+  };
 }
 
 export interface CategoryMetaInput {

@@ -29,6 +29,7 @@ import type { ApiResponse } from '../types/index.js';
 import * as snippetsService from '../services/snippets.service.js';
 import * as commentsService from '../services/snippets.comments.service.js';
 import { assistCode, type ExplainMode } from '../services/snippets.ai.service.js';
+import { generateCategoryDoc, commitCategoryDoc, clearCategoryDoc } from '../services/snippets.aiDoc.service.js';
 
 const router = Router();
 
@@ -50,6 +51,16 @@ router.get('/categories', async (_req, res: Response<ApiResponse>, next) => {
   try {
     const categories = await snippetsService.getCategories();
     res.json({ success: true, data: categories });
+  } catch (error) { next(error); }
+});
+
+// GET /api/v1/snippets/categories/:id/doc — full AI reference doc for a
+// technology (fetched on demand; kept OUT of the /categories nav tree to keep
+// that payload small). Public: 200 with an empty block list when no doc yet.
+router.get('/categories/:id(\\d+)/doc', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const doc = await snippetsService.getCategoryDoc(parseInt(req.params.id));
+    res.json({ success: true, data: doc });
   } catch (error) { next(error); }
 });
 
@@ -538,6 +549,34 @@ router.post('/ai/assist', authenticate, async (req, res: Response<ApiResponse>, 
       userId: req.user!.userId,
     });
     res.json({ success: true, data: result });
+  } catch (error) { next(error); }
+});
+
+// ─── Category reference-doc AI (ADMIN/EDITOR) ─────────────────────────────────
+// Full-English "what is X / install / usage / combines with" doc per technology.
+// generate = preview (no DB write); commit = persist the reviewed blocks.
+
+// POST /api/v1/snippets/admin/ai/doc/generate
+router.post('/admin/ai/doc/generate', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await generateCategoryDoc(req.user!.userId, req.body ?? {});
+    res.json({ success: true, data: result });
+  } catch (error) { next(error); }
+});
+
+// POST /api/v1/snippets/admin/ai/doc/commit
+router.post('/admin/ai/doc/commit', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await commitCategoryDoc(req.user!.userId, req.body ?? {});
+    res.json({ success: true, data: result });
+  } catch (error) { next(error); }
+});
+
+// DELETE /api/v1/snippets/categories/:id/doc — clear a category's doc.
+router.delete('/categories/:id(\\d+)/doc', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    await clearCategoryDoc(parseInt(req.params.id));
+    res.json({ success: true, message: 'Doc cleared' });
   } catch (error) { next(error); }
 });
 

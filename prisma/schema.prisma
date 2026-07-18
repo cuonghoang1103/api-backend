@@ -3956,29 +3956,44 @@ enum SnippetKind {
 // ─── Nested Folder Tree ─────────────────────────────────────────
 
 model SnippetCategory {
-  id            Int      @id @default(autoincrement())
-  name          String   @db.VarChar(100)
-  slug          String   @unique(map: "uk_snippet_category_slug") @db.VarChar(100)
+  id             Int       @id @default(autoincrement())
+  name           String    @db.VarChar(100)
+  slug           String    @unique(map: "uk_snippet_category_slug") @db.VarChar(100)
   // parentId = null means root-level category
-  parentId      Int?     @map("parent_id")
+  parentId       Int?      @map("parent_id")
   // Display order within the same parent (null parent = root level)
-  sortOrder     Int      @default(0) @map("sort_order")
+  sortOrder      Int       @default(0) @map("sort_order")
   // ─── Rich metadata (P2 upgrade — all optional/additive) ───────────
   // Short intro shown in the category header on the public page
   // ("what is Node.js / when to use it"). Markdown/plain, rendered client-side.
-  description   String?  @db.Text
+  description    String?   @db.Text
   // Icon: either a Lucide icon name (frontend maps to a component / brand
   // glyph via slug too) or an absolute URL to an uploaded image on R2.
-  icon          String?  @db.VarChar(500)
+  icon           String?   @db.VarChar(500)
   // Accent color for the top group tab + header (hex, e.g. "#3178c6").
   // Null = frontend derives a color from the slug.
-  color         String?  @map("color") @db.VarChar(20)
+  color          String?   @map("color") @db.VarChar(20)
   // Optional banner image (R2) for the category header.
-  coverImageUrl String?  @map("cover_image_url") @db.VarChar(2000)
+  coverImageUrl  String?   @map("cover_image_url") @db.VarChar(2000)
   // Link to the official documentation ("Tài liệu chính thức" button).
-  docsUrl       String?  @map("docs_url") @db.VarChar(500)
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  docsUrl        String?   @map("docs_url") @db.VarChar(500)
+  // ─── AI-generated reference doc (P3 — full-English tech doc) ───────
+  // A complete "what is X / used for / install / setup / combines with"
+  // reference for a technology, stored as an ORDERED array of typed blocks:
+  //   {type:'heading',text} | {type:'prose',html} |
+  //   {type:'code',title?,language,code} | {type:'mermaid',code} |
+  //   {type:'image',url,caption?}
+  // Prose HTML is sanitized on render (same as Snippet.noteContent). This is
+  // ADDITIVE — null means "no doc yet"; the short `description` above is
+  // unaffected. Written by the admin AI doc generator (snippets.aiDoc.service).
+  docBlocks      Json?     @map("doc_blocks")
+  // BCP-47-ish language tag of the doc ("EN"). Null when no doc.
+  docLang        String?   @map("doc_lang") @db.VarChar(8)
+  // Model that produced the doc (audit) + when it was last (re)generated.
+  docModel       String?   @map("doc_model") @db.VarChar(80)
+  docGeneratedAt DateTime? @map("doc_generated_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
   // Self-relation for nested tree
   parent   SnippetCategory?  @relation("SnippetCategoryParent", fields: [parentId], references: [id], onDelete: Cascade)

@@ -2,6 +2,25 @@
  * EXP_Hub — TypeScript Types
  */
 
+// One block of a category's AI reference doc (full-English tech doc).
+// `image` is renderer-supported for manual additions; the AI never emits it.
+export type DocBlock =
+  | { type: 'heading'; text: string }
+  | { type: 'prose'; html: string }
+  | { type: 'code'; title?: string; language: string; code: string }
+  | { type: 'mermaid'; code: string }
+  | { type: 'image'; url: string; caption?: string };
+
+// Full doc payload returned by GET /snippets/categories/:id/doc.
+export interface CategoryDoc {
+  id: number;
+  name: string;
+  blocks: DocBlock[];
+  docLang?: string | null;
+  docModel?: string | null;
+  docGeneratedAt?: string | null;
+}
+
 export interface SnippetCategory {
   id: number;
   name: string;
@@ -14,6 +33,11 @@ export interface SnippetCategory {
   color?: string | null;
   coverImageUrl?: string | null;
   docsUrl?: string | null;
+  // AI reference doc (P3): the block array itself is NOT shipped in the nav tree
+  // — only these flags. Fetch the full doc on demand via snippetCategoriesApi.getDoc.
+  hasDoc?: boolean;
+  docLang?: string | null;
+  docGeneratedAt?: string | null;
   createdAt: string;
   updatedAt: string;
   _count?: { snippets: number; children: number };

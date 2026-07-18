@@ -523,20 +523,32 @@ function Reveal({
         </div>
       )}
 
-      {/* Deterministic coverage */}
+      {/* Deterministic coverage. When the keyword pass is unreliable for this
+          answer's language (EN answer vs VI-only keys), we DON'T show the
+          misleading score/miss list — it grades 24/100 on a perfect answer.
+          Show a short note and defer to the AI grade instead. */}
       {det && (
         <div className="rounded-xl border border-white/10 p-4">
           <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">{t('objectiveGrader')}</div>
-          <div className="flex flex-wrap gap-1.5 mb-2">
-            {det.mustHit.map((k) => <Tag key={k} tone="ok">{k}</Tag>)}
-            {det.mustMiss.map((k) => <Tag key={k} tone="miss">{t('missingTag', { k })}</Tag>)}
-          </div>
-          {det.redFlagsHit.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-2">
-              {det.redFlagsHit.map((k) => <Tag key={k} tone="flag">⚠ {k}</Tag>)}
+          {det.reliable === false ? (
+            <div className="text-sm text-slate-400">
+              {t('refScore')} <span className="font-mono text-slate-500 italic">{t('objNA')}</span>
+              <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">{t('objSkipped')}</p>
             </div>
+          ) : (
+            <>
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {det.mustHit.map((k) => <Tag key={k} tone="ok">{k}</Tag>)}
+                {det.mustMiss.map((k) => <Tag key={k} tone="miss">{t('missingTag', { k })}</Tag>)}
+              </div>
+              {det.redFlagsHit.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {det.redFlagsHit.map((k) => <Tag key={k} tone="flag">⚠ {k}</Tag>)}
+                </div>
+              )}
+              <div className="text-sm text-slate-400">{t('coverage')} <span className="font-mono text-slate-100">{det.mustHit.length}/{det.mustHit.length + det.mustMiss.length}</span> · {t('refScore')} <span className="font-mono text-slate-100">{det.score}/100 ({det.grade})</span></div>
+            </>
           )}
-          <div className="text-sm text-slate-400">{t('coverage')} <span className="font-mono text-slate-100">{det.mustHit.length}/{det.mustHit.length + det.mustMiss.length}</span> · {t('refScore')} <span className="font-mono text-slate-100">{det.score}/100 ({det.grade})</span></div>
         </div>
       )}
 

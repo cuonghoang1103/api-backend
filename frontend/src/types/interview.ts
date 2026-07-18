@@ -124,6 +124,10 @@ export interface DeterministicResult {
   score: number;
   grade: string;
   injectionAttempted: boolean;
+  // False when the keyword pass can't be trusted for this answer's language
+  // (e.g. an English answer against a question that only has Vietnamese keys).
+  // The UI hides the misleading objective score and defers to the AI grade.
+  reliable?: boolean;
 }
 
 export interface SubmitAnswerResponse {

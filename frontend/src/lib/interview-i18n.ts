@@ -52,6 +52,8 @@ const STR = {
   missingTag: { vi: 'thiếu: {k}', en: 'missing: {k}' },
   coverage: { vi: 'Bao phủ khái niệm cốt lõi:', en: 'Core concept coverage:' },
   refScore: { vi: 'Điểm tham chiếu:', en: 'Reference score:' },
+  objSkipped: { vi: 'Chấm khách quan không áp dụng — câu trả lời khác ngôn ngữ với bộ từ khoá chấm. Dùng điểm AI bên dưới.', en: 'Objective grading not applicable — your answer is in a different language than the keyword set. See the AI grade below.' },
+  objNA: { vi: 'không áp dụng', en: 'N/A' },
   refAnswer: { vi: 'Đáp án mẫu (mức mong đợi)', en: 'Model answer (expected level)' },
   aiGrading: { vi: 'AI chấm (theo tiêu chí, có dẫn chứng)', en: 'AI grading (criteria-based, with evidence)' },
   hearFeedbackTitle: { vi: 'Nghe AI đọc nhận xét', en: 'Hear the feedback read aloud' },

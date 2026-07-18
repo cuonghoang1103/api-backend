@@ -324,14 +324,16 @@ function TurnRow({ turn, sessionId, lang }: { turn: ReportTurn; sessionId: numbe
       {open && (
         <div className="px-4 pb-4 space-y-3">
           <Block label={t('yourAnswer')} text={turn.userAnswer || t('blank')} />
-          {det && (
+          {det && (det.reliable === false ? (
+            <p className="text-xs text-slate-500 leading-relaxed">{t('objSkipped')}</p>
+          ) : (
             <div className="text-xs">
               <span className="text-slate-400">{t('coverageShort')}</span>
               {det.mustHit.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">{k}</span>)}
               {det.mustMiss.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/10">{t('missingInline', { k })}</span>)}
               {det.redFlagsHit.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-red-500/10 text-red-300 border border-red-500/30">⚠ {k}</span>)}
             </div>
-          )}
+          ))}
           {turn.referenceAnswer && <Block label={t('modelAnswerShort')} text={turn.referenceAnswer} md />}
           <div className="flex justify-end">
             <button onClick={flag} disabled={flagged} className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-amber-400 disabled:text-emerald-400">

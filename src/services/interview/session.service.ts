@@ -331,7 +331,7 @@ export async function submitAnswer(
     const opts = Array.isArray(q?.mcqOptions) ? (q!.mcqOptions as Array<{ id: string; text: string; correct?: boolean }>) : [];
     const chosen = opts.find((o) => o.id === rawAnswer);
     const correct = !!chosen?.correct;
-    const det = { score: correct ? 100 : 0, grade: correct ? 'A' : 'F', mustHit: [], mustMiss: [], shouldHit: [], shouldMiss: [], redFlagsHit: [], injectionAttempted: false };
+    const det = { score: correct ? 100 : 0, grade: correct ? 'A' : 'F', mustHit: [], mustMiss: [], shouldHit: [], shouldMiss: [], redFlagsHit: [], injectionAttempted: false, reliable: true };
     await prisma.interviewTurn.update({
       where: { id: turn.id },
       data: {
@@ -428,7 +428,10 @@ export async function submitAnswer(
       userAnswer: rawAnswer,
       timeSpentMs,
       integritySignals: integritySignals as never,
-      deterministicScore: det as never,
+      // Persist whether the keyword pass is trustworthy for this answer's language
+      // (EN answer vs. VI-only keys ⇒ unreliable). The report/UI hides the
+      // misleading objective score when this is false. See `detReliable` above.
+      deterministicScore: { ...det, reliable: detReliable } as never,
       // AI turns store the combined result in turnScore (no self-assess step);
       // `final` is the authoritative score the report aggregates.
       turnScore: aiEval
@@ -444,7 +447,7 @@ export async function submitAnswer(
     type: q?.type ?? 'CONCEPTUAL',
     referenceAnswer: reference ?? null,
     rubric: rubricForLang ?? [],
-    deterministic: det,
+    deterministic: { ...det, reliable: detReliable },
     aiEvaluation: aiEval, // per-criterion AI grading, or null in STATIC/degraded
     downgraded, // true if AI failed this turn and the session fell back to STATIC
     injectionAttempted,
@@ -564,19 +567,29 @@ export async function getReport(userId: number, sessionId: number) {
   return {
     report,
     language: session.language, // so the report page can read it aloud in the right voice
-    turns: turns.map((t) => ({
+    turns: turns.map((t) => {
+      // The keyword pass is trustworthy only when its keys match the answer's
+      // language: VI sessions always; EN sessions only when the question carries
+      // English keys. Prefer the flag persisted at grade time; recompute it for
+      // turns graded before that flag existed so old reports gray out too.
+      const detObj = t.deterministicScore as (Record<string, unknown> & { reliable?: boolean }) | null;
+      const reliable = detObj?.reliable ?? (
+        !isEn || !t.question || ((t.question.mustMentionEn?.length ?? 0) > 0)
+      );
+      return {
       order: t.order,
       topic: t.question?.topic?.name ?? null,
       questionText: t.questionText,
       userAnswer: t.userAnswer,
       referenceAnswer: (isEn ? t.question?.referenceAnswerEn || t.question?.referenceAnswer : t.question?.referenceAnswer) ?? null,
       rubric: (isEn && t.question?.rubricEn != null ? t.question.rubricEn : t.question?.rubric) ?? [],
-      deterministicScore: t.deterministicScore,
+      deterministicScore: detObj ? { ...detObj, reliable } : detObj,
       selfScore: t.selfScore,
       turnScore: t.turnScore,
       needsReview: t.needsReview,
       injectionAttempted: t.injectionAttempted,
-    })),
+      };
+    }),
   };
 }
 

@@ -378,20 +378,27 @@ function ReviewDeck({ review, setReview, code, onClose }: {
           <span>Ôn tập · {review.index + 1}/{review.cards.length}</span>
           <button onClick={onClose} className="rounded-full p-1.5 text-white/70 hover:bg-white/10"><X size={18} /></button>
         </div>
-        <button onClick={() => setReview({ ...review, flipped: !review.flipped })} className="card flex flex-1 flex-col items-center justify-center gap-3 overflow-auto p-6 text-center">
+        {/* Card. Front = tap to flip (centered). Back = a real scroll area
+            (top-aligned) so long explanations scroll instead of being clipped by
+            flex centering — and tapping the text no longer flips it back. */}
+        <div className="card flex flex-1 flex-col overflow-hidden">
           {!review.flipped ? (
-            <>
+            <button onClick={() => setReview({ ...review, flipped: true })} className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
               <span className="text-2xl font-bold text-text-primary">{card.title}</span>
               {card.reading && <span className="text-sm text-text-muted">{card.reading}</span>}
               <SpeakerButton text={card.title} reading={card.reading} forceLang={forceLang} />
               <span className="mt-2 text-xs text-text-muted">Chạm để lật</span>
-            </>
+            </button>
           ) : (
-            <div className="note-prose lang-prose max-w-full break-words text-left text-sm leading-relaxed text-text-secondary">
-              <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{card.body}</ReactMarkdown>
+            <div className="min-h-0 flex-1 overflow-y-auto p-6">
+              <div className="note-prose lang-prose max-w-full break-words text-left text-sm leading-relaxed text-text-secondary">
+                {/* Some saved explanations stored newlines as the literal two-char
+                    sequence "\n" — turn those back into real breaks before markdown. */}
+                <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{card.body.replace(/\\n/g, '\n')}</ReactMarkdown>
+              </div>
             </div>
           )}
-        </button>
+        </div>
         {review.flipped ? (
           <div className="mt-3 grid grid-cols-4 gap-2">
             {RATINGS.map((r) => (
@@ -459,7 +466,7 @@ function EntryViewer({ entry, code, folders, onClose, onEdit, onDelete, onMove }
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
           <div className="note-prose lang-prose max-w-full break-words text-sm leading-relaxed text-text-secondary">
-            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{entry.body}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{entry.body.replace(/\\n/g, '\n')}</ReactMarkdown>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 border-t border-[var(--border-color)] px-4 py-3">
@@ -507,7 +514,7 @@ function errMsg(e: unknown): string {
 }
 
 function entryMd(e: { title: string; reading?: string | null; body: string }): string {
-  return `# ${e.title}\n${e.reading ? `*${e.reading}*\n` : ''}\n${e.body}\n`;
+  return `# ${e.title}\n${e.reading ? `*${e.reading}*\n` : ''}\n${e.body.replace(/\\n/g, '\n')}\n`;
 }
 function downloadMd(name: string, content: string) {
   const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });

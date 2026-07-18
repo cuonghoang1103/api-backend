@@ -140,7 +140,7 @@ export function FolderTree({
 }: FolderTreeProps) {
   const { t } = useTranslation();
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col">
       {isAdmin && onCreateCategory && (
         <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border-color)]">
           <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
@@ -157,7 +157,7 @@ export function FolderTree({
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto py-2">
+      <div className="py-2">
         <div
           className={`group flex items-center gap-1 px-2 py-1.5 rounded-md cursor-pointer transition-colors ${
             selectedCategoryId === undefined

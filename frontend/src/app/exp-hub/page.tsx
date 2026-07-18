@@ -13,7 +13,6 @@ import { CodeViewer } from '@/components/exp-hub/CodeViewer';
 import { SnippetCodeTabs } from '@/components/exp-hub/SnippetCodeTabs';
 import { SearchBar } from '@/components/exp-hub/SearchBar';
 import { FilterPanel } from '@/components/exp-hub/FilterPanel';
-import { GroupTabBar } from '@/components/exp-hub/GroupTabBar';
 import { CategoryHeader } from '@/components/exp-hub/CategoryHeader';
 import { ReactionBar } from '@/components/exp-hub/ReactionBar';
 import { CommentsSection } from '@/components/exp-hub/CommentsSection';
@@ -57,7 +56,6 @@ export default function ExpHubPage() {
   const [selectedSnippet, setSelectedSnippet] = useState<Snippet | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>();
   // Active TOP-LEVEL group (root category) — scopes the left tree + list.
-  const [activeGroupId, setActiveGroupId] = useState<number | undefined>();
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>();
   const [sortBy, setSortBy] = useState<'popular' | 'newest' | 'upvotes'>('newest');
@@ -101,8 +99,6 @@ export default function ExpHubPage() {
   // The active group object + the categories shown in the left tree:
   // when a group is active the tree lists that group's technologies;
   // otherwise it lists the top-level groups.
-  const activeGroup = activeGroupId ? findCategory(categories, activeGroupId) : undefined;
-  const treeCategories = activeGroup ? (activeGroup.children ?? []) : categories;
   // The category whose header we show above the list (group or technology).
   const selectedCategory = selectedCategoryId ? findCategory(categories, selectedCategoryId) : undefined;
 
@@ -280,29 +276,10 @@ export default function ExpHubPage() {
     }
   };
 
-  // Group tab click: scope the whole view to that group (or clear to "Tất cả").
-  const handleSelectGroup = (group: SnippetCategory | null) => {
-    if (!group) {
-      setActiveGroupId(undefined);
-      setSelectedCategoryId(undefined);
-    } else {
-      setActiveGroupId(group.id);
-      setSelectedCategoryId(group.id); // list shows the whole group subtree
-    }
-    setSelectedSnippet(null);
-    setPage(1);
-  };
-
-  // Left-tree selection. `null` = "all in the current scope" (the active
-  // group, or truly everything at the top level).
+  // Single-tree selection. `null` = everything (top level); a node = filter the
+  // list to that category. Groups are just root nodes in the same tree now.
   const handleCategorySelect = (category: SnippetCategory | null) => {
-    if (!category) {
-      setSelectedCategoryId(activeGroupId);
-    } else {
-      setSelectedCategoryId(category.id);
-      // Selecting a root group from the "Tất cả" tree behaves like its tab.
-      if (!activeGroupId && category.parentId == null) setActiveGroupId(category.id);
-    }
+    setSelectedCategoryId(category ? category.id : undefined);
     setSelectedSnippet(null);
     setPage(1);
   };
@@ -371,10 +348,7 @@ export default function ExpHubPage() {
 
   const getBreadcrumbs = (): Array<{ label: string; id?: number }> => {
     const crumbs: Array<{ label: string; id?: number }> = [{ label: t('expHub.all') }];
-    if (activeGroup) crumbs.push({ label: activeGroup.name, id: activeGroup.id });
-    if (selectedCategory && selectedCategory.id !== activeGroup?.id) {
-      crumbs.push({ label: selectedCategory.name, id: selectedCategory.id });
-    }
+    if (selectedCategory) crumbs.push({ label: selectedCategory.name, id: selectedCategory.id });
     return crumbs;
   };
 
@@ -438,25 +412,18 @@ export default function ExpHubPage() {
         </div>
       </header>
 
-      {/* Horizontal group tab bar (Backend / Frontend / …) */}
-      {categories.length > 0 && (
-        <div className="relative z-10">
-          <GroupTabBar groups={categories} activeGroupId={activeGroupId} onSelectGroup={handleSelectGroup} />
-        </div>
-      )}
-
       {/* Main Content — stacks vertically on mobile, side-by-side on ≥lg. */}
       <div className="relative z-10 flex flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
         {/* Left Sidebar - Folder Tree (collapsible) */}
         <aside
-          className={`relative shrink-0 border-b border-[var(--border-color)] bg-[var(--bg-card)]/50 lg:border-b-0 lg:border-r ${
+          className={`relative shrink-0 border-b border-[var(--border-color)] bg-[var(--bg-card)]/50 lg:flex lg:min-h-0 lg:flex-col lg:border-b-0 lg:border-r ${
             folderTreeOpen ? 'lg:w-72' : 'lg:w-11'
           }`}
         >
-          <div className={`flex items-center border-b border-[var(--border-color)] ${folderTreeOpen ? 'justify-between px-3 py-2' : 'justify-center py-2'}`}>
+          <div className={`flex shrink-0 items-center border-b border-[var(--border-color)] ${folderTreeOpen ? 'justify-between px-3 py-2' : 'justify-center py-2'}`}>
             <span className={`flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] transition-opacity ${folderTreeOpen ? 'opacity-100' : 'w-0 overflow-hidden opacity-0 pointer-events-none'}`}>
               <FolderOpen className="h-4 w-4 text-violet-500" />
-              {activeGroup ? activeGroup.name : t('expHub.categories')}
+              {t('expHub.categories')}
             </span>
             <button
               type="button"
@@ -468,12 +435,12 @@ export default function ExpHubPage() {
               {folderTreeOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
             </button>
           </div>
-          <div className={`max-h-52 overflow-y-auto lg:max-h-none ${folderTreeOpen ? '' : 'hidden'}`}>
+          <div className={`overflow-y-auto max-h-[40vh] lg:max-h-none lg:min-h-0 lg:flex-1 ${folderTreeOpen ? '' : 'hidden'}`}>
             <FolderTree
-              categories={treeCategories}
+              categories={categories}
               selectedCategoryId={selectedCategoryId}
               onSelectCategory={handleCategorySelect}
-              allLabel={activeGroup ? `${t('expHub.all')} ${activeGroup.name}` : t('expHub.allItems')}
+              allLabel={t('expHub.allItems')}
             />
           </div>
         </aside>

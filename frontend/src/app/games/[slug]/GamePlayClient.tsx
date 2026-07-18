@@ -154,6 +154,7 @@ export default function GamePlayClient({ game, related }: { game: GameDto; relat
               best: t('games.bestScore'),
               replay: t('games.replay'),
               fullscreen: t('games.fullscreen'),
+              exit: locale === 'vi' ? 'Thoát' : 'Exit',
             }}
           />
         ) : (

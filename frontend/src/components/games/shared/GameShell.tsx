@@ -17,7 +17,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Play, Pause, Maximize2, Minimize2 } from 'lucide-react';
+import { Play, Pause, Maximize2, Minimize2, X } from 'lucide-react';
 import type { GameProps } from '../registry';
 import ScorePanel from './ScorePanel';
 
@@ -32,6 +32,7 @@ export interface GameShellLabels {
   best: string;
   replay: string;
   fullscreen: string;
+  exit: string;
 }
 
 export default function GameShell({
@@ -144,6 +145,18 @@ export default function GameShell({
               title={labels.fullscreen}
             >
               {isFs ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+            </button>
+          )}
+          {/* Exit — stop the current run and return to the idle screen (from
+              there the page's breadcrumb leaves the game). Only while playing. */}
+          {(phase === 'playing' || phase === 'paused') && (
+            <button
+              onClick={() => { if (isFs) document.exitFullscreen().catch(() => {}); setPhase('idle'); }}
+              className="p-1.5 rounded-lg text-text-muted transition-colors hover:bg-white/[0.06] hover:text-neon-red"
+              aria-label={labels.exit}
+              title={labels.exit}
+            >
+              <X className="w-3.5 h-3.5" />
             </button>
           )}
         </div>

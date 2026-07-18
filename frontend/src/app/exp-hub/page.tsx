@@ -11,7 +11,7 @@ import { FolderTree } from '@/components/exp-hub/FolderTree';
 import { SnippetCard } from '@/components/exp-hub/SnippetCard';
 import { CodeViewer } from '@/components/exp-hub/CodeViewer';
 import { SnippetCodeTabs } from '@/components/exp-hub/SnippetCodeTabs';
-import { SearchBar } from '@/components/exp-hub/SearchBar';
+import { SearchAutocomplete } from '@/components/exp-hub/SearchAutocomplete';
 import { FilterPanel } from '@/components/exp-hub/FilterPanel';
 import { CategoryHeader } from '@/components/exp-hub/CategoryHeader';
 import { ReactionBar } from '@/components/exp-hub/ReactionBar';
@@ -409,9 +409,11 @@ export default function ExpHubPage() {
           )}
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
-          <SearchBar
-            className="w-40 sm:w-80"
-            initialQuery={searchQuery}
+          <SearchAutocomplete
+            className="w-44 sm:w-96"
+            categories={categories}
+            onSelectCategory={handleCategorySelect}
+            onSelectSnippet={handleSnippetClick}
             onSearch={(q) => { setSearchQuery(q); setPage(1); setSelectedSnippet(null); }}
           />
           <button
@@ -691,7 +693,7 @@ export default function ExpHubPage() {
                 {/* Note section — optional rich text (with images) */}
                 {view.noteContent?.trim() && (
                   <div
-                    className="prose mb-6 max-w-none dark:prose-invert prose-img:rounded-lg prose-img:border prose-img:border-[var(--border-color)]"
+                    className="prose mb-6 max-w-none dark:prose-invert prose-headings:font-bold prose-headings:text-[var(--text-primary)] prose-a:text-violet-500 prose-a:no-underline hover:prose-a:underline prose-strong:text-[var(--text-primary)] prose-code:rounded prose-code:bg-[var(--bg-surface-active)] prose-code:px-1 prose-code:py-0.5 prose-code:text-violet-500 prose-code:before:content-[''] prose-code:after:content-[''] prose-pre:rounded-xl prose-pre:border prose-pre:border-[var(--border-color)] prose-img:rounded-lg prose-img:border prose-img:border-[var(--border-color)] prose-img:shadow-sm prose-blockquote:border-l-violet-400 prose-blockquote:text-[var(--text-secondary)]"
                     dangerouslySetInnerHTML={{ __html: sanitizeHtml(view.noteContent) }}
                   />
                 )}
@@ -779,7 +781,7 @@ export default function ExpHubPage() {
                         {view.explanation && (
                           <div>
                             <div className="mb-3 flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)]"><Info className="h-4 w-4" /> {t('expHub.explanation')}</div>
-                            <div className="prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: sanitizeHtml(view.explanation) }} />
+                            <div className="prose max-w-none dark:prose-invert prose-headings:text-[var(--text-primary)] prose-a:text-violet-500 prose-strong:text-[var(--text-primary)] prose-code:rounded prose-code:bg-[var(--bg-surface-active)] prose-code:px-1 prose-code:py-0.5 prose-code:text-violet-500 prose-code:before:content-[''] prose-code:after:content-[''] prose-img:rounded-lg prose-img:border prose-img:border-[var(--border-color)]" dangerouslySetInnerHTML={{ __html: sanitizeHtml(view.explanation) }} />
                           </div>
                         )}
                       </div>

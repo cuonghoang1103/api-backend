@@ -75,6 +75,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/games`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${SITE_URL}/language`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${SITE_URL}/tech-trends`, lastModified: now, changeFrequency: 'daily', priority: 0.6 },
+    { url: `${SITE_URL}/voice`, lastModified: now, changeFrequency: 'daily', priority: 0.6 },
     { url: `${SITE_URL}/forum`, lastModified: now, changeFrequency: 'daily', priority: 0.5 },
     // (`/social` removed — that route 404s; the public feed lives at `/`.)
   ]
@@ -177,8 +178,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: g.coverImage ? [g.coverImage] : undefined,
     }))
 
+  // Voice Hub: the /voice list envelope is { data: { posts: [...] } }, which
+  // safeFetch (expects json.data to be an array) can't read — fetch directly.
+  type VoiceItem = { slug?: string; updatedAt?: string; publishedAt?: string; thumbnailUrl?: string }
+  let voicePosts: VoiceItem[] = []
+  try {
+    const res = await fetch(`${getServerApiBaseUrl()}/api/v1/voice?size=100`, {
+      headers: { 'User-Agent': 'cuongthai-sitemap/1.0' },
+      cache: 'no-store',
+      signal: AbortSignal.timeout(3000),
+    })
+    if (res.ok) {
+      const json = await res.json()
+      if (Array.isArray(json?.data?.posts)) voicePosts = json.data.posts as VoiceItem[]
+    }
+  } catch { /* fail open */ }
+
+  const voiceUrls: MetadataRoute.Sitemap = voicePosts
+    .filter((p) => p.slug)
+    .map((p) => ({
+      url: `${SITE_URL}/voice/${p.slug}`,
+      lastModified: p.publishedAt ? new Date(p.publishedAt) : p.updatedAt ? new Date(p.updatedAt) : now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      images: p.thumbnailUrl ? [p.thumbnailUrl] : undefined,
+    }))
+
   // Music tracks intentionally omitted — no per-track page (played in-place
   // on /music), so linking /music/:id would 404.
 
-  return [...staticPages, ...courseUrls, ...blogUrls, ...shopUrls, ...projectUrls, ...techTrendUrls, ...gameUrls]
+  return [...staticPages, ...courseUrls, ...blogUrls, ...shopUrls, ...projectUrls, ...techTrendUrls, ...gameUrls, ...voiceUrls]
 }

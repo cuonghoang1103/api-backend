@@ -11,7 +11,7 @@ import {
   GraduationCap, ShoppingBag, Layers, ChevronRight,
   Github, Menu, X, NotebookPen, Languages, Wallet,
   TrendingUp, Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
-  FileText, Newspaper,
+  FileText, Newspaper, Radio,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -72,6 +72,7 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/blog', label: 'Blog', icon: BookOpen, section: 'user' },
   { href: '/forum', label: 'Diễn đàn', icon: Megaphone, section: 'user' },
   { href: '/tech-trends', label: 'Tech Trends', icon: TrendingUp, section: 'user' },
+  { href: '/voice', label: 'Voice', icon: Radio, section: 'user' },
   { href: '/games', label: 'Games', icon: Gamepad2, section: 'user' },
   { href: '/notes', label: 'Notes', icon: NotebookPen, section: 'user' },
   { href: '/language', label: 'My Language', icon: Languages, section: 'user' },

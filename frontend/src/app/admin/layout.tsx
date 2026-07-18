@@ -8,7 +8,7 @@ import {
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
  CreditCard, Github, Search, TrendingUp, AlertTriangle, Gamepad2,
- KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown, MonitorPlay,
+ KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown, MonitorPlay, Radio,
 } from 'lucide-react';
 
 const adminNav = [
@@ -52,6 +52,7 @@ const adminNav = [
  { label: 'Embed Queue', href: '/admin/embed-jobs', icon: Zap },
  { label: 'SEO Tools', href: '/admin/seo', icon: Search },
  { label: 'Tech Trends', href: '/admin/tech-trends', icon: TrendingUp },
+ { label: 'Voice (Vlog/Reaction)', href: '/admin/voice', icon: Radio },
  { label: 'Games', href: '/admin/games', icon: Gamepad2 },
  { label: 'System Stats', href: '/admin/stats', icon: BarChart3 },
 ];

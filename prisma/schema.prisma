@@ -216,6 +216,12 @@ model User {
   hubSharesOwned      HubShare[]           @relation("HubShareOwner")
   hubSharesReceived   HubShare[]           @relation("HubShareRecipient")
 
+  // ─── Voice Hub (admin creator channel — vlog/reaction/code-exp/podcast) ─
+  voicePosts        VoicePost[]        @relation("VoicePostAuthor")
+  voiceComments     VoiceComment[]
+  voiceCommentLikes VoiceCommentLike[]
+  voiceLikes        VoiceLike[]
+
   // ─── Orphaned upload cleanup (Phase 7) ─────────────────────────
   // PendingUpload rows track video uploads that have been started
   // but not yet linked to a post. Cron job cleans up expired rows.
@@ -6232,4 +6238,122 @@ model LandingPromo {
 
   @@index([isActive, order], name: "idx_landing_promo_active_order")
   @@map("landing_promos")
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Voice Hub — admin-only creator channel: Vlog / Reaction / Kinh nghiệm code
+// / Podcast (voice) / Tutorial. Media is a YouTube embed, a self-hosted R2
+// video, or audio-only. Mirrors the Tech Trends pattern (slug + status +
+// publishedAt + featured + viewCount) plus media/series/chapters. Comments
+// are auth-only with one level of replies + likes. Fully additive.
+// ─────────────────────────────────────────────────────────────────────────
+
+model VoiceSeries {
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(255)
+  slug          String   @unique(map: "uk_voice_series_slug") @db.VarChar(255)
+  description   String?  @db.Text
+  coverImageUrl String?  @map("cover_image_url") @db.VarChar(500)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  posts VoicePost[]
+
+  @@map("voice_series")
+}
+
+model VoicePost {
+  id              Int       @id @default(autoincrement())
+  title           String    @db.VarChar(255)
+  slug            String    @unique(map: "uk_voice_post_slug") @db.VarChar(255)
+  summary         String?   @db.Text
+  // Rich show-notes. `description` is the Markdown source the admin edits;
+  // `descriptionHtml` is the rendered HTML cached at write time.
+  description     String?   @db.Text
+  descriptionHtml String?   @map("description_html") @db.Text
+  type            String    @default("VLOG") @db.VarChar(20) // VLOG | REACTION | CODE_EXP | PODCAST | TUTORIAL
+  mediaKind       String    @default("YOUTUBE") @db.VarChar(20) // YOUTUBE | R2_VIDEO | AUDIO
+  youtubeId       String?   @map("youtube_id") @db.VarChar(32)
+  videoUrl        String?   @map("video_url") @db.VarChar(555)
+  audioUrl        String?   @map("audio_url") @db.VarChar(555)
+  thumbnailUrl    String?   @map("thumbnail_url") @db.VarChar(500)
+  durationSec     Int?      @map("duration_sec")
+  chapters        Json?     @db.JsonB // [{ t: number(seconds), label: string }]
+  tags            String[]  @default([])
+  status          String    @default("DRAFT") @db.VarChar(20) // DRAFT | PUBLISHED | SCHEDULED
+  isFeatured      Boolean   @default(false) @map("is_featured")
+  isPinned        Boolean   @default(false) @map("is_pinned")
+  viewCount       Int       @default(0) @map("view_count")
+  likeCount       Int       @default(0) @map("like_count")
+  seriesId        Int?      @map("series_id")
+  authorId        Int?      @map("author_id")
+  publishedAt     DateTime? @map("published_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  series   VoiceSeries?   @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  author   User?          @relation("VoicePostAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  comments VoiceComment[]
+  likes    VoiceLike[]
+
+  @@index([type], name: "idx_voice_post_type")
+  @@index([status], name: "idx_voice_post_status")
+  @@index([isFeatured], name: "idx_voice_post_featured")
+  @@index([publishedAt(sort: Desc)], name: "idx_voice_post_published_at")
+  @@index([seriesId], name: "idx_voice_post_series")
+  @@index([authorId], name: "idx_voice_post_author")
+  @@map("voice_posts")
+}
+
+model VoiceLike {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post VoicePost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId], name: "uk_voice_like")
+  @@index([postId], name: "idx_voice_likes_post")
+  @@index([userId], name: "idx_voice_likes_user")
+  @@map("voice_likes")
+}
+
+model VoiceComment {
+  id         Int      @id @default(autoincrement())
+  postId     Int      @map("post_id")
+  userId     Int      @map("user_id")
+  parentId   Int?     @map("parent_id")
+  content    String   @db.Text
+  likesCount Int      @default(0) @map("likes_count")
+  isEdited   Boolean  @default(false) @map("is_edited")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  post    VoicePost          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent  VoiceComment?      @relation("VoiceCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies VoiceComment[]     @relation("VoiceCommentReplies")
+  likes   VoiceCommentLike[]
+
+  @@index([postId, createdAt(sort: Desc)], name: "idx_voice_comments_post_time")
+  @@index([parentId], name: "idx_voice_comments_parent")
+  @@index([userId], name: "idx_voice_comments_user")
+  @@map("voice_comments")
+}
+
+model VoiceCommentLike {
+  id        Int      @id @default(autoincrement())
+  commentId Int      @map("comment_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment VoiceComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId], name: "uk_voice_comment_like")
+  @@index([commentId], name: "idx_voice_comment_likes_comment")
+  @@index([userId], name: "idx_voice_comment_likes_user")
+  @@map("voice_comment_likes")
 }

@@ -3893,3 +3893,208 @@ export const proAdminApi = {
   grant: (userId: number, durationDays: number | null) => api.post<{ data: ProStatus }>('/admin/pro/grant', { userId, durationDays }),
   revoke: (userId: number) => api.post<{ data: ProStatus }>('/admin/pro/revoke', { userId }),
 };
+
+// ─────────────────────────────────────────────────────────────────────────
+// Voice Hub — admin creator channel (Vlog / Reaction / Kinh nghiệm code /
+// Podcast-voice / Tutorial). Public read + auth comments/likes; admin CRUD.
+// ─────────────────────────────────────────────────────────────────────────
+
+export type VoiceType = 'VLOG' | 'REACTION' | 'CODE_EXP' | 'PODCAST' | 'TUTORIAL';
+export type VoiceMediaKind = 'YOUTUBE' | 'R2_VIDEO' | 'AUDIO';
+export type VoiceStatus = 'DRAFT' | 'PUBLISHED' | 'SCHEDULED';
+
+export interface VoiceAuthor {
+  id: number;
+  username: string;
+  fullName?: string | null;
+  displayName?: string | null;
+  avatarUrl?: string | null;
+  bio?: string | null;
+}
+
+export interface VoiceSeriesRef {
+  id: number;
+  title: string;
+  slug: string;
+}
+
+export interface VoicePostCard {
+  id: number;
+  title: string;
+  slug: string;
+  summary: string | null;
+  type: VoiceType;
+  mediaKind: VoiceMediaKind;
+  youtubeId: string | null;
+  thumbnailUrl: string | null;
+  durationSec: number | null;
+  tags: string[];
+  isFeatured: boolean;
+  isPinned: boolean;
+  viewCount: number;
+  likeCount: number;
+  publishedAt: string | null;
+  series: VoiceSeriesRef | null;
+  author: VoiceAuthor | null;
+  commentCount: number;
+}
+
+export interface VoiceChapter {
+  t: number;
+  label: string;
+}
+
+export interface PublicVoicePost extends VoicePostCard {
+  description: string | null;
+  descriptionHtml: string | null;
+  chapters: VoiceChapter[];
+  videoUrl: string | null;
+  audioUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+  likedByMe: boolean;
+}
+
+export interface VoiceComment {
+  id: number;
+  parentId: number | null;
+  content: string;
+  likesCount: number;
+  likedByMe: boolean;
+  isEdited: boolean;
+  createdAt: string;
+  updatedAt: string;
+  author: { id: number; username: string; displayName: string | null; fullName: string | null; avatarUrl: string | null };
+  replies: VoiceComment[];
+}
+
+export interface VoiceSeries {
+  id: number;
+  title: string;
+  slug: string;
+  description: string | null;
+  coverImageUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+  _count?: { posts: number };
+}
+
+export interface AdminVoicePost extends Omit<PublicVoicePost, 'likedByMe' | 'commentCount' | 'series' | 'author'> {
+  status: VoiceStatus;
+  seriesId: number | null;
+  authorId: number | null;
+  series?: VoiceSeriesRef | null;
+  author?: VoiceAuthor | null;
+}
+
+export interface VoiceUpsertPayload {
+  title: string;
+  summary?: string | null;
+  description?: string | null;
+  type: VoiceType;
+  mediaKind: VoiceMediaKind;
+  youtubeInput?: string;
+  videoUrl?: string | null;
+  audioUrl?: string | null;
+  thumbnailUrl?: string | null;
+  durationSec?: number | null;
+  chapters?: VoiceChapter[];
+  tags?: string[];
+  seriesId?: number | null;
+  isFeatured?: boolean;
+  isPinned?: boolean;
+  status?: VoiceStatus;
+  publishedAt?: string | null;
+}
+
+export const voiceApi = {
+  list(params?: { type?: VoiceType; series?: string; tag?: string; q?: string; featured?: boolean; page?: number; size?: number }) {
+    return api.get<{
+      data: { posts: VoicePostCard[]; pagination: { page: number; size: number; total: number; totalPages: number } };
+    }>('/voice', { params });
+  },
+  series() {
+    return api.get<{ data: VoiceSeries[] }>('/voice/series');
+  },
+  getBySlug(slug: string, opts?: { view?: boolean }) {
+    return api.get<{ data: { post: PublicVoicePost; related: VoicePostCard[] } }>(
+      `/voice/posts/${encodeURIComponent(slug)}`,
+      { params: opts?.view ? { view: 1 } : undefined },
+    );
+  },
+  likePost(id: number) {
+    return api.post<{ data: { liked: boolean; likeCount: number } }>(`/voice/posts/${id}/like`);
+  },
+  // ── Comments ──
+  listComments(id: number) {
+    return api.get<{ data: { comments: VoiceComment[]; total: number } }>(`/voice/posts/${id}/comments`);
+  },
+  addComment(id: number, content: string, parentId?: number | null) {
+    return api.post<{ data: VoiceComment }>(`/voice/posts/${id}/comments`, { content, parentId: parentId ?? undefined });
+  },
+  editComment(commentId: number, content: string) {
+    return api.patch<{ data: VoiceComment }>(`/voice/comments/${commentId}`, { content });
+  },
+  deleteComment(commentId: number) {
+    return api.delete<{ data: { id: number } }>(`/voice/comments/${commentId}`);
+  },
+  likeComment(commentId: number) {
+    return api.post<{ data: { liked: boolean; likesCount: number } }>(`/voice/comments/${commentId}/like`);
+  },
+  // ── Reader AI (PRO) ──
+  readerAiStatus() {
+    return api.get<{ data: { available: boolean; isPro: boolean } }>('/voice/ai/status');
+  },
+  tldr(slug: string) {
+    return api.post<{ data: { tldr: string[] } }>(`/voice/posts/${encodeURIComponent(slug)}/tldr`);
+  },
+};
+
+export const adminVoiceApi = {
+  list(params?: { status?: VoiceStatus; type?: VoiceType; q?: string; page?: number; size?: number }) {
+    return api.get<{
+      data: { posts: AdminVoicePost[]; pagination: { page: number; size: number; total: number; totalPages: number } };
+    }>('/admin/voice', { params });
+  },
+  get(id: number) {
+    return api.get<{ data: AdminVoicePost }>(`/admin/voice/${id}`);
+  },
+  create(payload: VoiceUpsertPayload) {
+    return api.post<{ data: AdminVoicePost }>('/admin/voice', payload);
+  },
+  update(id: number, payload: Partial<VoiceUpsertPayload>) {
+    return api.put<{ data: AdminVoicePost }>(`/admin/voice/${id}`, payload);
+  },
+  remove(id: number) {
+    return api.delete<{ data: { id: number } }>(`/admin/voice/${id}`);
+  },
+  publish(id: number) {
+    return api.post<{ data: AdminVoicePost }>(`/admin/voice/${id}/publish`);
+  },
+  unpublish(id: number) {
+    return api.post<{ data: AdminVoicePost }>(`/admin/voice/${id}/unpublish`);
+  },
+  // ── Series ──
+  listSeries() {
+    return api.get<{ data: VoiceSeries[] }>('/admin/voice/series/all');
+  },
+  createSeries(data: { title: string; description?: string | null; coverImageUrl?: string | null }) {
+    return api.post<{ data: VoiceSeries }>('/admin/voice/series', data);
+  },
+  updateSeries(id: number, data: { title?: string; description?: string | null; coverImageUrl?: string | null }) {
+    return api.put<{ data: VoiceSeries }>(`/admin/voice/series/${id}`, data);
+  },
+  deleteSeries(id: number) {
+    return api.delete<{ data: { id: number } }>(`/admin/voice/series/${id}`);
+  },
+  // ── Admin AI ──
+  aiStatus() {
+    return api.get<{ data: { available: boolean } }>('/admin/voice/ai/status');
+  },
+  generateMeta(data: { title: string; notes?: string; type?: VoiceType }) {
+    return api.post<{ data: { summary: string; description: string; tags: string[]; chapters: VoiceChapter[] } }>(
+      '/admin/voice/ai/generate-meta',
+      data,
+    );
+  },
+};

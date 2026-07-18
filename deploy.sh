@@ -429,6 +429,7 @@ for route in \
     pro/status \
     cv/profile \
     tech-trends/articles \
+    voice \
     games \
     landing/promos \
     cyber/profile; do

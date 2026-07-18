@@ -486,7 +486,6 @@ export default function ExpHubPage() {
           {selectedCategory && !showSaved && (
             <div className="p-3 pb-0">
               <CategoryHeader category={selectedCategory} count={selectedCategory._count?.snippets} />
-              <CategoryDoc categoryId={selectedCategory.id} hasDoc={selectedCategory.hasDoc} />
             </div>
           )}
 
@@ -594,6 +593,16 @@ export default function ExpHubPage() {
           {(() => {
             const view = detail ?? selectedSnippet;
             if (!view) {
+              // No snippet open: if a technology is selected, its full reference
+              // doc fills this wide panel (scrollable, readable) instead of being
+              // cramped in the narrow list column.
+              if (selectedCategory && !showSaved) {
+                return (
+                  <div className="mx-auto max-w-4xl p-6">
+                    <CategoryDoc categoryId={selectedCategory.id} hasDoc={selectedCategory.hasDoc} />
+                  </div>
+                );
+              }
               return (
                 <div className="flex h-full items-center justify-center text-[var(--text-muted)]">
                   {t('expHub.selectHint')}

@@ -12,7 +12,7 @@ import { ArrowLeft, CheckCircle2, Circle, Loader2, BookOpen, Clock, ExternalLink
 import { codeLabApi } from '@/lib/code-lab-api';
 import type { CodeTrack, MyProgressItem } from '@/types/code-lab';
 import { useAuthStore } from '@/store/authStore';
-import { DifficultyBadge, LevelPill, ProgressRing, GroupGlyph } from '@/components/code-lab/shared';
+import { DifficultyBadge, LevelPill, ProgressRing, TechIcon } from '@/components/code-lab/shared';
 
 export default function TrackRoadmapPage() {
   const params = useParams<{ trackSlug: string }>();
@@ -65,7 +65,7 @@ export default function TrackRoadmapPage() {
       {/* Track header */}
       <div className="mb-6 flex items-start gap-4 rounded-xl border p-5" style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
         <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl" style={{ background: `${accent}1a`, color: accent }}>
-          <GroupGlyph icon={track.icon || track.language} size={28} />
+          <TechIcon slug={track.slug} name={track.name} icon={track.icon} color={track.color} size={30} />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">

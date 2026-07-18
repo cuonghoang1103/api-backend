@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Code2, Database, Server, Layout, Smartphone, Cloud, Cpu, Boxes, Terminal, Braces, Globe, Gamepad2, Shield, Binary, type LucideIcon } from 'lucide-react';
 import { DIFFICULTY_META } from '@/lib/code-lab-api';
 import type { CodeDifficulty, CodeLevel } from '@/types/code-lab';
+import { CategoryIcon } from '@/components/exp-hub/CategoryIcon';
 
 // Map a group/track slug or icon keyword to a Lucide glyph.
 const ICONS: Record<string, LucideIcon> = {
@@ -18,6 +19,28 @@ export function GroupGlyph({ slug, icon, size = 18, className }: { slug?: string
   const key = (icon || slug || 'code').toLowerCase();
   const Cmp = ICONS[key] || (icon && ICONS[icon.toLowerCase()]) || Code2;
   return <Cmp size={size} className={className} />;
+}
+
+// Map a Code Lab track slug to the matching Exp Hub brand-logo key, so tracks
+// show the SAME real brand SVGs (React, Python, Docker…) as Exp Hub. Slugs that
+// already match a brand key pass through; unknowns fall back to a coloured
+// initial badge inside CategoryIcon.
+const TRACK_BRAND_ALIAS: Record<string, string> = {
+  'aspnet-core': 'net-c',
+  'django': 'django-fastapi',
+  'fastapi': 'django-fastapi',
+  'git': 'git-github',
+  'laravel': 'php-laravel',
+  'linux-bash': 'bash-zsh',
+  'nodejs-express': 'nodejs',
+  'python': 'python-backend',
+  'swiftui-ios': 'ios-swift-swiftui',
+  'tailwind-css': 'tailwindcss',
+};
+
+// A technology's brand icon (real logo when known). Used on track cards.
+export function TechIcon({ slug, name, icon, color, size = 22 }: { slug: string; name: string; icon?: string | null; color?: string | null; size?: number }) {
+  return <CategoryIcon name={name} slug={TRACK_BRAND_ALIAS[slug] || slug} icon={icon} color={color} size={size} />;
 }
 
 export function DifficultyBadge({ difficulty, small }: { difficulty: CodeDifficulty; small?: boolean }) {
@@ -86,7 +109,7 @@ export function TrackCard({ track }: { track: { slug: string; name: string; lang
           className="flex h-10 w-10 items-center justify-center rounded-lg"
           style={{ background: `${accent}1a`, color: accent }}
         >
-          <GroupGlyph slug={track.groupSlug} icon={track.icon} size={20} />
+          <TechIcon slug={track.slug} name={track.name} icon={track.icon} color={track.color} size={22} />
         </span>
         <div className="min-w-0">
           <div className="truncate font-semibold" style={{ color: 'var(--text-primary)' }}>{track.name}</div>

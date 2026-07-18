@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
-import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen, Github, Download, Copy, Sparkles, Wand2, Terminal } from 'lucide-react';
+import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen, Github, Download, Copy, Sparkles, Wand2, Terminal, List } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTheme } from '@/context/ThemeContext';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -96,6 +96,8 @@ export default function ExpHubPage() {
   // Left sidebar (FolderTree) collapse — persisted to localStorage so the
   // user keeps their preference across page reloads.
   const [folderTreeOpen, setFolderTreeOpen] = useState(true);
+  // Middle snippet-list column collapse (like the category tree).
+  const [listOpen, setListOpen] = useState(true);
 
   const languages = [...new Set(snippets.filter((s) => s.language).map((s) => s.language))].slice(0, 10);
 
@@ -460,8 +462,23 @@ export default function ExpHubPage() {
           </div>
         </aside>
 
-        {/* Middle Column - Snippet List */}
-        <div className="flex w-full shrink-0 flex-col border-b border-[var(--border-color)] bg-[var(--bg-card)]/40 lg:w-96 lg:border-b-0 lg:border-r">
+        {/* Middle Column - Snippet List (collapsible, like the tree) */}
+        <div className={`flex w-full shrink-0 flex-col border-b border-[var(--border-color)] bg-[var(--bg-card)]/40 lg:min-h-0 lg:border-b-0 lg:border-r ${listOpen ? 'lg:w-96' : 'lg:w-12'}`}>
+          <div className={`flex shrink-0 items-center border-b border-[var(--border-color)] ${listOpen ? 'justify-between px-3 py-2' : 'justify-center py-2'}`}>
+            <span className={`flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] ${listOpen ? '' : 'w-0 overflow-hidden opacity-0 pointer-events-none'}`}>
+              <List className="h-4 w-4 text-violet-500" /> {snippets.length} {t('expHub.results')}
+            </span>
+            <button
+              type="button"
+              onClick={() => setListOpen((v) => !v)}
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]"
+              title={listOpen ? 'Ẩn danh sách' : 'Hiện danh sách'}
+              aria-label={listOpen ? 'Ẩn danh sách' : 'Hiện danh sách'}
+            >
+              {listOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            </button>
+          </div>
+          <div className={`flex min-h-0 flex-1 flex-col ${listOpen ? '' : 'hidden'}`}>
           {/* Category header (rich intro) */}
           {selectedCategory && !showSaved && (
             <div className="p-3 pb-0">
@@ -531,6 +548,7 @@ export default function ExpHubPage() {
               </button>
             </div>
           )}
+          </div>
         </div>
 
         {/* Right Column - Snippet Detail */}

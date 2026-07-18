@@ -235,7 +235,7 @@ function ConversationCard({
   };
 
   return (
-    <div className="card p-4">
+    <div className="card p-4 shadow-[var(--shadow-md)]">
       {item.imageUrl && (
         <button
           type="button"

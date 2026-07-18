@@ -429,7 +429,7 @@ function CharModal({
             {char.breakdown && <Row label="Chiết tự"><p className="text-sm text-text-secondary">{char.breakdown}</p></Row>}
 
             {char.images.length > 0 && (
-              <div className="rounded-2xl bg-[var(--bg-surface)] p-3 ring-1 ring-[var(--border-color)]">
+              <div className="rounded-2xl bg-[var(--bg-surface)] p-3 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
                 <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-text-muted"><ImageIcon size={13} /> Hình minh hoạ</p>
                 <div className="relative overflow-hidden rounded-xl">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -482,7 +482,7 @@ function CharModal({
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl bg-[var(--bg-surface)] p-3 ring-1 ring-[var(--border-color)]">
+    <div className="rounded-2xl bg-[var(--bg-surface)] p-3 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
       <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-muted">{label}</p>
       {children}
     </div>

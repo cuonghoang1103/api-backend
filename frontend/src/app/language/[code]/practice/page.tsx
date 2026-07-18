@@ -214,7 +214,7 @@ export default function PracticePage() {
           <PracticeGreeting dailyPct={dailyPct} streak={st?.streak ?? 0} />
 
           {/* HUD */}
-          <div className="mb-4 flex items-center gap-3 rounded-2xl bg-[var(--bg-surface)] px-4 py-3 ring-1 ring-[var(--border-color)]">
+          <div className="mb-4 flex items-center gap-3 rounded-2xl bg-[var(--bg-surface)] bg-gradient-to-r from-neon-violet/5 via-transparent to-neon-cyan/5 px-4 py-3 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-neon-violet/10 px-2 py-0.5 text-sm font-bold text-neon-violet ring-1 ring-neon-violet/25" title={`Cấp độ ${st!.level} · ${st!.xpIntoLevel}/${st!.xpForLevel} XP đến cấp sau`}><Star size={15} className="fill-neon-violet" /> Lv{st!.level}</span>
             <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-neon-orange" title="Chuỗi ngày"><Flame size={18} /> {st!.streak}</span>
             <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-neon-pink" title="Tim"><Heart size={18} className="fill-neon-pink" /> {st!.hearts}</span>
@@ -416,7 +416,7 @@ function AchievementsView({ ach, loading }: { ach: AchievementsResult | null; lo
   return (
     <div className="space-y-5">
       {/* Level card */}
-      <div className="rounded-2xl bg-[var(--bg-surface)] p-4 ring-1 ring-[var(--border-color)]">
+      <div className="rounded-2xl bg-[var(--bg-surface)] bg-gradient-to-br from-neon-violet/10 to-transparent p-4 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
         <div className="flex items-center gap-3">
           <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-neon-violet/15 text-lg font-black text-neon-violet ring-1 ring-neon-violet/30">{ach.level.level}</span>
           <div className="min-w-0 flex-1">

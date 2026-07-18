@@ -108,7 +108,7 @@ export default function StatsPage() {
 // ─── Streak ───────────────────────────────────────────────────────
 function StreakCard({ streak }: { streak: number }) {
   return (
-    <div className="card flex items-center gap-4 rounded-2xl p-5">
+    <div className="card flex items-center gap-4 rounded-2xl p-5 shadow-[var(--shadow-md)]">
       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-neon-orange/15 text-neon-orange">
         <Flame size={28} />
       </div>
@@ -141,7 +141,7 @@ function SectionProgress({
         {rows.map(({ key, data }) => {
           const pct = data.total > 0 ? (data.mastered / data.total) * 100 : 0;
           return (
-            <div key={key} className="card flex items-center gap-4 rounded-2xl p-4">
+            <div key={key} className="card flex items-center gap-4 rounded-2xl p-4 shadow-[var(--shadow-md)]">
               <ProgressRing value={pct} />
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-text-primary">{SECTION_LABELS[key]}</p>
@@ -197,11 +197,11 @@ function QuizHistoryChart({
     <div>
       <h2 className="mb-3 font-heading text-lg font-bold text-text-primary">Lịch sử kiểm tra</h2>
       {bars.length === 0 ? (
-        <div className="card rounded-2xl p-6 text-center text-sm text-text-muted">
+        <div className="card rounded-2xl p-6 text-center text-sm text-text-muted shadow-[var(--shadow-md)]">
           Chưa có bài kiểm tra nào. Làm quiz để xem lịch sử ở đây.
         </div>
       ) : (
-        <div className="card rounded-2xl p-4">
+        <div className="card rounded-2xl p-4 shadow-[var(--shadow-md)]">
           <div className="overflow-x-auto">
             <div
               className="flex items-end gap-2"
@@ -260,13 +260,13 @@ function LegendDot({ color, label }: { color: string; label: string }) {
 function StatsSkeleton() {
   return (
     <div className="flex flex-col gap-6">
-      <div className="h-24 animate-pulse rounded-2xl bg-[var(--bg-surface)]" />
+      <div className="h-24 animate-pulse rounded-2xl bg-[var(--bg-surface)] shadow-[var(--shadow-md)]" />
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-24 animate-pulse rounded-2xl bg-[var(--bg-surface)]" />
+          <div key={i} className="h-24 animate-pulse rounded-2xl bg-[var(--bg-surface)] shadow-[var(--shadow-md)]" />
         ))}
       </div>
-      <div className="h-48 animate-pulse rounded-2xl bg-[var(--bg-surface)]" />
+      <div className="h-48 animate-pulse rounded-2xl bg-[var(--bg-surface)] shadow-[var(--shadow-md)]" />
     </div>
   );
 }

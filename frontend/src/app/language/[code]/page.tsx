@@ -90,14 +90,16 @@ const CJK_CODES = new Set(['ja', 'zh']);
 
 const AI_SECTIONS = new Set(['writing', 'roleplay', 'translate', 'grammar-check']);
 
-/** One stat, counted up on mount. */
-function StatChip({ icon, value, label }: { icon: string; value: number; label: string }) {
+/** One stat, counted up on mount. `tint` colours the icon bubble (static classes). */
+function StatChip({ icon, value, label, tint }: { icon: string; value: number; label: string; tint: string }) {
   const n = useCountUp(value);
   return (
-    <div className="flex items-center gap-1.5 rounded-2xl bg-[var(--bg-card)] px-3 py-2 ring-1 ring-[var(--border-color)]">
-      <span className="text-base leading-none">{icon}</span>
-      <span className="font-round text-lg font-extrabold leading-none text-text-primary">{n}</span>
-      <span className="text-[11px] leading-none text-text-muted">{label}</span>
+    <div className="flex items-center gap-2 rounded-2xl bg-[var(--bg-card)] px-3 py-2 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
+      <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base leading-none ${tint}`}>{icon}</span>
+      <div className="flex min-w-0 flex-col">
+        <span className="font-round text-lg font-extrabold leading-none text-text-primary tabular-nums">{n}</span>
+        <span className="mt-0.5 text-[10px] uppercase leading-none tracking-wide text-text-muted">{label}</span>
+      </div>
     </div>
   );
 }
@@ -107,20 +109,23 @@ function HeroCard({ href, icon, title, desc, tone, m }: {
   href: string; icon: React.ReactNode; title: string; desc: string;
   tone: 'violet' | 'green'; m: ReturnType<typeof useMotion>;
 }) {
+  // Full literal classes — a runtime-built `group-hover:${c.fg}` would never be
+  // generated (Tailwind scans source as text), same reason CAT_CLASS exists.
   const c = tone === 'violet'
-    ? { ring: 'ring-neon-violet/30', bg: 'bg-neon-violet/10', fg: 'text-neon-violet' }
-    : { ring: 'ring-neon-green/30', bg: 'bg-neon-green/10', fg: 'text-neon-green' };
+    ? { ring: 'ring-neon-violet/30', bg: 'bg-neon-violet/10', fg: 'text-neon-violet', grad: 'from-neon-violet/10', hoverFg: 'group-hover:text-neon-violet' }
+    : { ring: 'ring-neon-green/30', bg: 'bg-neon-green/10', fg: 'text-neon-green', grad: 'from-neon-green/10', hoverFg: 'group-hover:text-neon-green' };
   return (
-    <motion.div {...m.cardHover} {...m.buttonPress}>
-      <Link href={href} className={`flex h-full items-center gap-4 rounded-3xl bg-[var(--bg-card)] p-5 ring-1 ${c.ring} shadow-[var(--shadow-md)]`}>
-        <span className={`inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${c.bg} ${c.fg}`}>
+    <motion.div {...m.cardHover} {...m.buttonPress} className="h-full">
+      <Link href={href} className={`group relative flex h-full items-center gap-4 overflow-hidden rounded-3xl bg-[var(--bg-card)] p-5 ring-1 ${c.ring} shadow-[var(--shadow-md)] transition-shadow duration-200 hover:shadow-lg`}>
+        <span className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${c.grad} to-transparent`} aria-hidden />
+        <span className={`relative inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${c.bg} ${c.fg} transition-transform duration-200 group-hover:scale-110`}>
           {icon}
         </span>
-        <div className="min-w-0 flex-1">
+        <div className="relative min-w-0 flex-1">
           <h3 className="font-round text-lg font-extrabold text-text-primary">{title}</h3>
           <p className="mt-0.5 text-xs leading-snug text-text-muted">{desc}</p>
         </div>
-        <ChevronRight size={20} className="shrink-0 text-text-muted" />
+        <ChevronRight size={20} className={`relative shrink-0 text-text-muted transition-transform duration-200 group-hover:translate-x-1 ${c.hoverFg}`} />
       </Link>
     </motion.div>
   );
@@ -139,9 +144,12 @@ function SkillSection({ title, items, code, counts, loading, m, isAi }: {
   if (!items.length) return null;
   return (
     <motion.section variants={m.childEnter} className="mb-6">
-      <h2 className="mb-2.5 flex items-center gap-1.5 px-1 font-round text-sm font-extrabold uppercase tracking-wide text-text-muted">
+      <h2 className="mb-3 flex items-center gap-2 px-1 font-round text-sm font-extrabold uppercase tracking-wide text-text-muted">
         {isAi && <Sparkles size={14} className="text-cat-ai-icon" />}
         {title}
+        <span className="rounded-full bg-[var(--bg-card)] px-2 py-0.5 text-[10px] font-bold tabular-nums text-text-muted ring-1 ring-[var(--border-color)]">
+          {items.length}
+        </span>
       </h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {items.map((sec) => {
@@ -150,8 +158,10 @@ function SkillSection({ title, items, code, counts, loading, m, isAi }: {
           const count = counts?.[sec.key] ?? 0;
           return (
             <motion.div key={sec.key} variants={m.childEnter} {...m.cardHover} {...m.buttonPress}>
-              <Link href={`/language/${code}/${sec.key}`} className={`flex h-full flex-col ${CARD_BASE} ${cc.bg} p-4`}>
-                <Icon size={28} className={`${cc.icon} mb-2`} />
+              <Link href={`/language/${code}/${sec.key}`} className={`group flex h-full flex-col ${CARD_BASE} ${cc.bg} p-4 shadow-[var(--shadow-md)] transition-shadow duration-200 hover:shadow-lg`}>
+                <span className={`mb-2.5 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--bg-card)]/60 ${cc.icon} transition-transform duration-200 group-hover:scale-110`}>
+                  <Icon size={24} />
+                </span>
                 <h3 className={`font-round font-extrabold leading-tight ${cc.fg}`}>{sec.label}</h3>
                 <p className={`mt-0.5 text-xs leading-snug ${cc.fg} opacity-70`}>{sec.desc}</p>
                 <span className="mt-auto pt-2.5">
@@ -277,12 +287,27 @@ export default function LanguageHomePage() {
         {/* ── Hero: mascot + 3 chỉ số. Ai vào trang cũng thấy tiến độ của
                mình trước, rồi mới đến việc phải làm. ── */}
         {isAuthenticated && st && (
-          <motion.div variants={m.childEnter} className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <MascotScene context={st.streak > 0 ? 'streak' : 'welcome'} size={72} />
-            <div className="flex gap-2">
-              <StatChip icon="🔥" value={st.streak} label="ngày" />
-              <StatChip icon="⚡" value={st.xp} label="XP" />
-              <StatChip icon="❤️" value={st.hearts} label="tim" />
+          <motion.div
+            variants={m.childEnter}
+            className="mb-5 overflow-hidden rounded-3xl bg-[var(--bg-card)] ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]"
+          >
+            <div className="flex flex-col gap-4 bg-gradient-to-br from-neon-violet/10 via-transparent to-neon-cyan/10 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+              <div className="flex items-center gap-3">
+                <MascotScene context={st.streak > 0 ? 'streak' : 'welcome'} size={64} />
+                <div className="min-w-0">
+                  <p className="font-round text-lg font-extrabold leading-tight text-text-primary">
+                    {st.streak > 0 ? `Chuỗi ${st.streak} ngày rồi!` : 'Chào bạn quay lại 👋'}
+                  </p>
+                  <p className="mt-0.5 text-xs text-text-muted">
+                    {st.streak > 0 ? 'Giữ lửa nhé — học tiếp hôm nay nào.' : 'Bắt đầu một chuỗi ngày học mới thôi.'}
+                  </p>
+                </div>
+              </div>
+              <div className="grid shrink-0 grid-cols-3 gap-2 sm:flex">
+                <StatChip icon="🔥" value={st.streak} label="ngày" tint="bg-neon-orange/15" />
+                <StatChip icon="⚡" value={st.xp} label="XP" tint="bg-neon-violet/15" />
+                <StatChip icon="❤️" value={st.hearts} label="tim" tint="bg-neon-pink/15" />
+              </div>
             </div>
           </motion.div>
         )}

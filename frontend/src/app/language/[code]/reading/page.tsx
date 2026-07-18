@@ -192,7 +192,7 @@ function ArticleListCard({ article, onOpen }: { article: ReadingArticle; onOpen:
       <button
         type="button"
         onClick={onOpen}
-        className="card group flex w-full items-center gap-3 rounded-2xl p-3 text-left transition hover:ring-1 hover:ring-neon-violet/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet/50"
+        className="card group flex w-full items-center gap-3 rounded-2xl p-3 text-left transition hover:ring-1 hover:ring-neon-violet/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet/50 shadow-[var(--shadow-md)] hover:-translate-y-0.5"
       >
         {thumb ? (
           <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-[var(--bg-surface)]">
@@ -287,7 +287,7 @@ function ReadingQuestions({ questions, code }: { questions: ReadingQuestion[]; c
 
       <ol className="space-y-4">
         {questions.map((q, i) => (
-          <li key={q.id} className="rounded-2xl bg-[var(--bg-surface)] p-4 ring-1 ring-[var(--border-color)]">
+          <li key={q.id} className="rounded-2xl bg-[var(--bg-surface)] p-4 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
             <p className="mb-3 font-medium text-text-primary">
               <span className="mr-1.5 text-text-muted">{i + 1}.</span>
               {q.prompt}
@@ -751,7 +751,7 @@ function TextReader({
 
       {/* Reading body (tokenized) */}
       <article
-        className="card break-words rounded-2xl p-4 leading-relaxed text-text-primary sm:p-6"
+        className="card break-words rounded-2xl p-4 leading-relaxed text-text-primary sm:p-6 shadow-[var(--shadow-md)]"
         style={{ fontSize }}
       >
         {tokenized.length === 0 ? (

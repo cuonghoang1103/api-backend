@@ -79,20 +79,22 @@ export default function LanguageLandingPage() {
                 >
                   <Link
                     href={`/language/${lang.code}`}
-                    className="card group flex items-center gap-4 p-5 transition hover:-translate-y-1"
+                    className="card group flex items-center gap-4 p-5 shadow-[var(--shadow-md)] hover:-translate-y-1"
                   >
-                    <span className="text-5xl drop-shadow">{lang.flagEmoji}</span>
+                    <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--bg-surface)] text-4xl ring-1 ring-[var(--border-color)] transition-transform duration-200 group-hover:scale-110">
+                      {lang.flagEmoji}
+                    </span>
                     <div className="min-w-0 flex-1">
                       <h2 className="truncate font-heading text-xl font-bold text-text-primary">{lang.name}</h2>
                       <p className="text-sm text-text-muted">{lang.nameEn}</p>
-                      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-text-secondary">
-                        <span className="inline-flex items-center gap-1">
-                          <BookOpen size={13} className="text-neon-violet" /> {lang.counts.words} từ
+                      <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-neon-violet/10 px-2 py-0.5 font-medium text-neon-violet">
+                          <BookOpen size={12} /> {lang.counts.words} từ
                         </span>
-                        <span className="inline-flex items-center gap-1">
-                          <GraduationCap size={13} className="text-neon-cyan" /> {lang.counts.grammar} ngữ pháp
+                        <span className="inline-flex items-center gap-1 rounded-full bg-neon-cyan/10 px-2 py-0.5 font-medium text-neon-cyan">
+                          <GraduationCap size={12} /> {lang.counts.grammar} ngữ pháp
                         </span>
-                        <span className="inline-flex items-center gap-1">🎧 {lang.counts.lessons} bài</span>
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-surface)] px-2 py-0.5 font-medium text-text-secondary">🎧 {lang.counts.lessons} bài</span>
                       </div>
                       {isAuthenticated && lang.progress && lang.progress.due > 0 && (
                         <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-neon-orange/15 px-2 py-0.5 text-[11px] font-medium text-neon-orange">

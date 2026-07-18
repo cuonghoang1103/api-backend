@@ -170,7 +170,7 @@ export default function AlphabetPage() {
               section.children[0] ??
               null;
             return (
-              <div key={section.key} className="card overflow-hidden rounded-2xl p-0">
+              <div key={section.key} className="card overflow-hidden rounded-2xl p-0 shadow-[var(--shadow-md)]">
                 <button
                   type="button"
                   onClick={() => toggleParent(section)}

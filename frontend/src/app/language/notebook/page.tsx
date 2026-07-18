@@ -235,7 +235,7 @@ function NotebookInner() {
         <DndContext sensors={dndSensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
         <div className="grid gap-4 md:grid-cols-[minmax(220px,280px)_1fr]">
           {/* Folder tree */}
-          <aside className="card h-max p-3">
+          <aside className="card h-max p-3 shadow-[var(--shadow-md)]">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wide text-text-muted">Thư mục</span>
               <button onClick={() => addFolder(null)} title="Tạo thư mục" className="rounded-lg p-1.5 text-text-muted hover:bg-[var(--bg-surface)] hover:text-neon-violet"><FolderPlus size={16} /></button>
@@ -277,7 +277,7 @@ function NotebookInner() {
               </div>
             </div>
             {entries.length === 0 ? (
-              <div className="card flex flex-col items-center gap-2 py-16 text-center">
+              <div className="card flex flex-col items-center gap-2 py-16 text-center shadow-[var(--shadow-md)]">
                 <NotebookPen className="text-text-muted" size={32} />
                 <p className="text-sm text-text-secondary">Chưa có mục nào.</p>
                 <p className="max-w-sm text-xs text-text-muted">Lưu giải thích từ AI (nút "Lưu vào sổ tay") hoặc tạo mục thủ công.</p>
@@ -333,7 +333,7 @@ function SortableEntryCard({ e, onOpen }: { e: NotebookEntrySummary; onOpen: () 
   const due = !e.nextReviewAt || new Date(e.nextReviewAt).getTime() <= Date.now();
   return (
     <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={isDragging ? 'opacity-40' : ''}>
-      <button onClick={onOpen} {...listeners} {...attributes} className="card flex w-full flex-col items-start gap-1 p-3 text-left touch-none transition hover:-translate-y-0.5">
+      <button onClick={onOpen} {...listeners} {...attributes} className="card flex w-full flex-col items-start gap-1 p-3 text-left touch-none transition hover:-translate-y-0.5 shadow-[var(--shadow-md)]">
         <div className="flex w-full items-center gap-2">
           <span className="min-w-0 flex-1 truncate font-medium text-text-primary">{e.title}</span>
           {due && e.nextReviewAt && <span className="h-2 w-2 shrink-0 rounded-full bg-neon-orange" title="Đến hạn ôn" />}

@@ -141,7 +141,7 @@ export default function TranslatePage() {
         </p>
 
         {/* Direction */}
-        <div className="flex items-center justify-center gap-2 rounded-2xl bg-[var(--bg-surface)] p-2 ring-1 ring-[var(--border-color)]">
+        <div className="flex items-center justify-center gap-2 rounded-2xl bg-[var(--bg-surface)] p-2 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
           <span className="flex-1 truncate text-center text-sm font-semibold text-text-primary">{srcLabel}</span>
           <button
             type="button"
@@ -220,7 +220,7 @@ export default function TranslatePage() {
 
         {result && (
           <div className="space-y-4">
-            <div className="rounded-2xl bg-[var(--bg-surface)] p-4 ring-1 ring-[var(--border-color)]">
+            <div className="rounded-2xl bg-[var(--bg-surface)] p-4 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
               <div className="mb-2 flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide text-neon-blue">{dstLabel}</span>
                 {canSpeak && <SpeakerButton text={result.translation} forceLang={outLang} size={15} className="h-6 w-6" rate={0.9} />}
@@ -238,7 +238,7 @@ export default function TranslatePage() {
             </div>
 
             {result.literal && (
-              <div className="rounded-xl bg-[var(--bg-surface)] p-3 ring-1 ring-[var(--border-color)]">
+              <div className="rounded-xl bg-[var(--bg-surface)] p-3 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
                 <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-muted">Nghĩa sát từng phần</h3>
                 <p className="text-sm text-text-secondary">{result.literal}</p>
               </div>
@@ -256,7 +256,7 @@ export default function TranslatePage() {
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Cách nói khác</h3>
                 <ul className="space-y-2">
                   {result.alternatives.map((a, i) => (
-                    <li key={i} className="rounded-xl bg-[var(--bg-surface)] p-3 text-sm ring-1 ring-[var(--border-color)]">
+                    <li key={i} className="rounded-xl bg-[var(--bg-surface)] p-3 text-sm ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
                       <div className="flex items-start gap-2">
                         <p className="min-w-0 flex-1 text-text-primary">{a.text}</p>
                         {canSpeak && <SpeakerButton text={a.text} forceLang={outLang} size={14} className="h-6 w-6 shrink-0" rate={0.9} />}

@@ -199,7 +199,7 @@ function AudioPlayer({ src }: { src: string }) {
 function QuestionRow({ q, a }: { q: string; a: string }) {
   const [shown, setShown] = useState(false);
   return (
-    <li className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3">
+    <li className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 shadow-[var(--shadow-md)]">
       <p className="text-sm font-medium text-text-primary">{q}</p>
       <button
         type="button"
@@ -243,7 +243,7 @@ function LessonDetail({ item, onBack }: { item: ListeningItem; onBack: () => voi
         <ArrowLeft size={16} /> Danh sách bài nghe
       </button>
 
-      <div className="card p-4 sm:p-5">
+      <div className="card p-4 sm:p-5 shadow-[var(--shadow-md)]">
         <h2 className="mb-3 font-heading text-xl font-bold text-text-primary">{item.title}</h2>
 
         {audioSrc ? (
@@ -274,7 +274,7 @@ function LessonDetail({ item, onBack }: { item: ListeningItem; onBack: () => voi
                 <Eye size={15} /> Hiện transcript
               </button>
             ) : (
-              <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3">
+              <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 shadow-[var(--shadow-md)]">
                 <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-text-primary">
                   {item.transcript}
                 </p>
@@ -378,7 +378,7 @@ export default function ListeningPage() {
                   key={it.id}
                   type="button"
                   onClick={() => setSelectedId(it.id)}
-                  className="card group flex items-center gap-3 p-4 text-left transition hover:ring-2 hover:ring-neon-violet/40"
+                  className="card group flex items-center gap-3 p-4 text-left transition hover:ring-2 hover:ring-neon-violet/40 shadow-[var(--shadow-md)] hover:-translate-y-0.5"
                 >
                   <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-neon-violet/15 text-neon-violet">
                     <Headphones size={20} />

@@ -713,7 +713,7 @@ function ListView({
     <div className="space-y-3">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {words.map((w) => (
-          <div key={w.id} className="card flex gap-3 p-4">
+          <div key={w.id} className="card flex gap-3 p-4 shadow-[var(--shadow-md)] hover:-translate-y-0.5">
             {w.imageUrl && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -939,7 +939,7 @@ function FlashcardsView({
               The back content gets its own rotateY(180) so it isn't mirrored
               inside the 180°-rotated button. Plain flat transforms only. */}
           <div
-            className={`card absolute inset-0 flex flex-col items-center justify-center ${
+            className={`card absolute inset-0 flex flex-col items-center justify-center shadow-[var(--shadow-md)] ${
               showBack ? 'gap-3 overflow-auto px-6 py-5 text-center' : 'gap-4'
             }`}
             style={showBack ? { transform: 'rotateY(180deg)' } : undefined}

@@ -254,8 +254,15 @@ export function SectionShell({
         <Breadcrumb code={code} section={section ?? title} />
       </div>
       <div className="mt-3 mb-5 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="flex items-center gap-2.5 font-heading text-2xl font-bold text-text-primary sm:text-3xl">
-          {icon}
+        <h1 className="flex items-center gap-3 font-heading text-2xl font-bold text-text-primary sm:text-3xl">
+          {icon && (
+            // Padding-based (not fixed size) so it fits whatever icon a page
+            // passes without clipping; the icon keeps its own colour class,
+            // this only adds a consistent tinted plate behind it.
+            <span className="inline-flex shrink-0 items-center justify-center rounded-2xl bg-[var(--bg-surface)] p-2 text-neon-violet ring-1 ring-[var(--border-color)]">
+              {icon}
+            </span>
+          )}
           {title}
         </h1>
         {right}

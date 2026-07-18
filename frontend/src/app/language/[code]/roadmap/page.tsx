@@ -229,7 +229,7 @@ export default function RoadmapPage() {
                             <button
                               type="button"
                               onClick={() => setActive(n)}
-                              className={`card group w-full p-3.5 text-left transition hover:-translate-y-0.5 ${
+                              className={`card group w-full p-3.5 text-left shadow-[var(--shadow-md)] hover:-translate-y-0.5 ${
                                 left ? 'sm:text-right' : ''
                               } ${st === 'current' ? 'ring-1 ring-neon-violet/50' : ''}`}
                             >

@@ -179,7 +179,7 @@ function GrammarRow({
   const examples = point.examples ?? [];
 
   return (
-    <li className="card overflow-hidden rounded-2xl">
+    <li className="card overflow-hidden rounded-2xl shadow-[var(--shadow-md)]">
       <button
         type="button"
         id={headerId}
@@ -239,7 +239,7 @@ function GrammarRow({
                     {examples.map((ex, i) => (
                       <li
                         key={i}
-                        className="flex items-start gap-2 rounded-xl bg-[var(--bg-surface)] p-3 ring-1 ring-[var(--border-color)]"
+                        className="flex items-start gap-2 rounded-xl bg-[var(--bg-surface)] p-3 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]"
                       >
                         <div className="mt-0.5 shrink-0">
                           <SpeakerButton text={ex.sentence} size={16} className="h-7 w-7" rate={0.85} />

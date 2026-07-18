@@ -110,7 +110,7 @@ function Accordion({ items, reduced }: { items: QnaItem[]; reduced: boolean }) {
       {items.map((item) => {
         const open = openId === item.id;
         return (
-          <li key={item.id} className="card overflow-hidden rounded-2xl">
+          <li key={item.id} className="card overflow-hidden rounded-2xl shadow-[var(--shadow-md)]">
             <button
               type="button"
               onClick={() => setOpenId(open ? null : item.id)}

@@ -181,7 +181,7 @@ export default function RolePlayPage() {
         ) : (
           <div className="flex h-[calc(100dvh-220px)] min-h-[420px] flex-col">
             {/* Scenario bar */}
-            <div className="mb-2 flex items-center gap-2 rounded-xl bg-[var(--bg-surface)] px-3 py-2 ring-1 ring-[var(--border-color)]">
+            <div className="mb-2 flex items-center gap-2 rounded-xl bg-[var(--bg-surface)] px-3 py-2 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
               <Bot size={16} className="shrink-0 text-neon-cyan" />
               <p className="min-w-0 flex-1 truncate text-xs text-text-secondary">{scenario}</p>
               <button type="button" onClick={restart} title="Đổi tình huống" className="inline-flex items-center gap-1 text-xs font-medium text-text-muted hover:text-neon-violet">

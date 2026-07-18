@@ -131,7 +131,7 @@ export default function GrammarCheckPage() {
 
         {result && v && (
           <div className="space-y-4">
-            <div className="flex items-center gap-3 rounded-2xl bg-[var(--bg-surface)] p-4 ring-1 ring-[var(--border-color)]">
+            <div className="flex items-center gap-3 rounded-2xl bg-[var(--bg-surface)] p-4 ring-1 ring-[var(--border-color)] shadow-[var(--shadow-md)]">
               <div className={v.cls}>
                 <ProgressRing value={result.score} size={64} label={`${result.score}`} />
               </div>
@@ -155,7 +155,7 @@ export default function GrammarCheckPage() {
                   {result.issues.map((it, i) => {
                     const sv = SEVERITY[it.severity];
                     return (
-                      <li key={i} className={`rounded-xl bg-[var(--bg-surface)] p-3 text-sm ring-1 ${sv.ring}`}>
+                      <li key={i} className={`rounded-xl bg-[var(--bg-surface)] p-3 text-sm ring-1 ${sv.ring} shadow-[var(--shadow-md)]`}>
                         <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
                           <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${sv.cls} bg-current/10`}>{sv.label}</span>
                           {it.type && <span className="text-[11px] font-medium text-text-muted">{it.type}</span>}

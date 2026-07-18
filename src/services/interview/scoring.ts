@@ -62,7 +62,10 @@ export function mentions(answerNorm: string, term: string, synonyms: SynonymMap)
     if (!c) continue;
     if (answerNorm.includes(c)) return true;
     if (answerFlat.includes(collapse(c))) return true;
-    const words = c.split(' ').filter((w) => w.length > 2);
+    // Split compound terms on space AND hyphen/slash so "try-catch" / "async/await"
+    // count as satisfied when both parts appear in the answer — code writes them as
+    // `try { … } catch` / `async … await`, never the literal hyphenated token.
+    const words = c.split(/[\s/-]+/).filter((w) => w.length > 2);
     if (words.length > 1 && words.every((w) => answerNorm.includes(w))) return true;
   }
   return false;

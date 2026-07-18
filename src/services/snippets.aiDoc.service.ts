@@ -21,12 +21,15 @@ import { looseJson } from './myLanguage.ai.service.js';
 
 // One doc = an ordered list of these blocks. `image` is supported by the
 // renderer for manual additions; the AI never invents image URLs (they'd 404).
+// `links` = a card row of resources (homepage / download / docs / repo).
+export interface DocLinkItem { label: string; url: string; note?: string }
 export type DocBlock =
   | { type: 'heading'; text: string }
   | { type: 'prose'; html: string }
   | { type: 'code'; title?: string; language: string; code: string }
   | { type: 'mermaid'; code: string }
-  | { type: 'image'; url: string; caption?: string };
+  | { type: 'image'; url: string; caption?: string }
+  | { type: 'links'; items: DocLinkItem[] };
 
 function str(v: unknown): string {
   return typeof v === 'string' ? v.trim() : '';
@@ -81,6 +84,22 @@ function normalizeBlock(raw: unknown): DocBlock | null {
     if (caption) (block as { caption?: string }).caption = caption;
     return block;
   }
+  if (type === 'links') {
+    const rawItems = Array.isArray(o.items) ? o.items : [];
+    const items: DocLinkItem[] = [];
+    for (const it of rawItems.slice(0, 12)) {
+      const io = (it ?? {}) as Record<string, unknown>;
+      const url = str(io.url);
+      // Resource links must be absolute http(s) — reject invented/relative junk.
+      if (!/^https?:\/\//i.test(url)) continue;
+      const label = (str(io.label) || url).slice(0, 120);
+      const item: DocLinkItem = { label, url: url.slice(0, 2000) };
+      const note = str(io.note).slice(0, 200);
+      if (note) item.note = note;
+      items.push(item);
+    }
+    return items.length ? { type: 'links', items } : null;
+  }
   return null;
 }
 
@@ -119,26 +138,45 @@ export async function generateCategoryDoc(
   const docsNote = cat.docsUrl ? `\nOfficial docs: ${cat.docsUrl}` : '';
 
   const system =
-    `You are a senior software engineer writing a CONCISE BUT COMPLETE reference page, in ENGLISH, ` +
-    `for the technology/tool "${cat.name}".${groupNote} The reader is a developer who wants to understand ` +
-    `what it is and get productive fast. Write accurate, real, up-to-date content — never invent APIs, ` +
-    `packages, or commands that do not exist.\n\n` +
-    `Structure the page as these sections, each introduced by a "heading" block:\n` +
-    `1. Overview — what "${cat.name}" is, in 2-4 sentences.\n` +
-    `2. What it's used for — the main use cases (a short <ul> list is good).\n` +
-    `3. Installation & setup — the REAL install/setup commands. Put commands in "code" blocks with ` +
-    `language "bash". Note OS/package-manager differences briefly when they matter.\n` +
-    `4. Basic usage — a minimal, correct "hello world"-level code example in the most relevant language.\n` +
-    `5. Works well with — technologies/libraries it commonly combines with, and why (prose).\n` +
-    `Optionally add one "mermaid" block if a small architecture/flow diagram genuinely helps.\n\n` +
+    `You are a senior software engineer and technical writer producing a COMPLETE, PROFESSIONAL ` +
+    `reference page, in ENGLISH, for the technology/tool "${cat.name}".${groupNote} The reader is a ` +
+    `developer who wants to understand it and get productive fast. Write accurate, real, up-to-date ` +
+    `content. NEVER invent APIs, packages, commands, or URLs that do not exist — if you are not sure a ` +
+    `URL is real, omit it.\n\n` +
+    `Cover these sections, each introduced by a "heading" block (skip a section only if it truly does ` +
+    `not apply). Be thorough and practical:\n` +
+    `1. Overview — what "${cat.name}" is and why it matters (2-4 sentences).\n` +
+    `2. Key features — the standout capabilities, as a <ul> list.\n` +
+    `3. What it's used for — concrete real-world use cases (<ul>).\n` +
+    `4. Installation — the REAL install commands as "code" blocks (language "bash"), with a "title" per ` +
+    `block naming the method/OS (e.g. "macOS (Homebrew)", "Ubuntu/Debian (apt)", "Windows", "npm", "pip", ` +
+    `"Docker"). Give every common path a developer would actually use.\n` +
+    `5. Configuration & setup — first-time setup / a minimal config file or init command (prose + code).\n` +
+    `6. Basic usage — a minimal, correct, runnable example ("code" in the most relevant language).\n` +
+    `7. Common commands — a short cheatsheet of everyday terminal commands ("code", language "bash", ` +
+    `with brief inline comments).\n` +
+    `8. Works well with — technologies/libraries it commonly combines with, and why (prose).\n` +
+    `9. Resources & links — a "links" block with the REAL official homepage, download page, ` +
+    `documentation, source repository (GitHub/GitLab) and package registry (npm/PyPI/crates…) when they ` +
+    `exist. Each item: {label, url, note}.\n` +
+    `Optionally add one "mermaid" block if a small architecture/flow diagram genuinely helps understanding.\n\n` +
     `Return ONLY a minified JSON object of this exact shape (no text outside the JSON):\n` +
-    `{"blocks":[{"type":"heading","text":string} | {"type":"prose","html":string} | ` +
-    `{"type":"code","title":string,"language":string,"code":string} | {"type":"mermaid","code":string}]}\n` +
-    `Rules: "prose".html uses ONLY simple tags <p><ul><ol><li><strong><em><code><a href>. Keep the whole ` +
-    `doc focused (roughly 6-14 blocks). Inside JSON strings, escape every double-quote and newline correctly ` +
-    `so the JSON parses.`;
+    `{"blocks":[` +
+    `{"type":"heading","text":string} | ` +
+    `{"type":"prose","html":string} | ` +
+    `{"type":"code","title":string,"language":string,"code":string} | ` +
+    `{"type":"mermaid","code":string} | ` +
+    `{"type":"links","items":[{"label":string,"url":string,"note":string}]}` +
+    `]}\n` +
+    `Rules: "prose".html uses ONLY simple tags <p><ul><ol><li><strong><em><code><a href>. Prefer a ` +
+    `"links" block for external resources rather than burying URLs in prose. Aim for a rich but focused ` +
+    `doc (roughly 12-22 blocks). Inside JSON strings, escape every double-quote and newline correctly so ` +
+    `the JSON parses.`;
 
-  const user = `Write the reference doc for "${cat.name}".${hint}${docsNote}`;
+  const user =
+    `Write the complete reference doc for "${cat.name}".${hint}${docsNote}\n` +
+    `Include real installation commands for the common platforms, a usage example, a commands cheatsheet, ` +
+    `and a Resources & links block with the official site, docs and repository.`;
 
   let raw = '';
   let model = 'generation';
@@ -148,9 +186,9 @@ export async function generateCategoryDoc(
       feature: 'exphub',
       system,
       messages: [{ role: 'user', content: user }],
-      maxTokens: 5000,
+      maxTokens: 8000,
       maxRetries: 1,
-      timeoutMs: 120_000,
+      timeoutMs: 150_000,
       userId,
     });
     raw = res.text;

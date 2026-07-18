@@ -10,8 +10,7 @@ import { useEffect, useState } from 'react';
 import { BookText, ChevronDown, Loader2 } from 'lucide-react';
 import type { DocBlock } from '@/types/exp-hub';
 import { snippetCategoriesApi } from '@/lib/exp-hub-api';
-import { sanitizeHtml } from '@/lib/sanitizeHtml';
-import { CodeViewer } from './CodeViewer';
+import { DocBlocksView } from './DocBlocksView';
 
 export function CategoryDoc({ categoryId, hasDoc }: { categoryId: number; hasDoc?: boolean }) {
   const [blocks, setBlocks] = useState<DocBlock[] | null>(null);
@@ -53,40 +52,10 @@ export function CategoryDoc({ categoryId, hasDoc }: { categoryId: number; hasDoc
       </button>
 
       {open && (
-        <div className="space-y-4 border-t border-[var(--border-color)] px-4 py-4">
-          {blocks.map((b, i) => (
-            <DocBlockView key={i} block={b} />
-          ))}
+        <div className="border-t border-[var(--border-color)] px-4 py-4">
+          <DocBlocksView blocks={blocks} />
         </div>
       )}
     </div>
   );
-}
-
-function DocBlockView({ block }: { block: DocBlock }) {
-  switch (block.type) {
-    case 'heading':
-      return <h3 className="mt-1 text-base font-bold text-[var(--text-primary)]">{block.text}</h3>;
-    case 'prose':
-      return (
-        <div
-          className="exp-doc-prose text-sm leading-relaxed text-[var(--text-secondary)] [&_a]:text-[var(--accent-color)] [&_a]:underline [&_code]:rounded [&_code]:bg-[var(--bg-surface-active)] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_li]:my-1 [&_li]:ml-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_strong]:text-[var(--text-primary)] [&_ul]:list-disc [&_ul]:pl-5"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html) }}
-        />
-      );
-    case 'code':
-      return <CodeViewer code={block.code} language={block.language} filename={block.title} showLineNumbers={false} maxHeight="440px" />;
-    case 'mermaid':
-      return <CodeViewer code={block.code} language="mermaid" />;
-    case 'image':
-      return (
-        <figure className="my-2">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={block.url} alt={block.caption || ''} className="max-w-full rounded-lg border border-[var(--border-color)]" />
-          {block.caption && <figcaption className="mt-1 text-center text-xs text-[var(--text-secondary)]">{block.caption}</figcaption>}
-        </figure>
-      );
-    default:
-      return null;
-  }
 }

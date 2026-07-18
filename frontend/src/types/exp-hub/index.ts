@@ -4,12 +4,15 @@
 
 // One block of a category's AI reference doc (full-English tech doc).
 // `image` is renderer-supported for manual additions; the AI never emits it.
+// `links` = a card row of external resources (homepage / download / docs / repo).
+export interface DocLinkItem { label: string; url: string; note?: string }
 export type DocBlock =
   | { type: 'heading'; text: string }
   | { type: 'prose'; html: string }
   | { type: 'code'; title?: string; language: string; code: string }
   | { type: 'mermaid'; code: string }
-  | { type: 'image'; url: string; caption?: string };
+  | { type: 'image'; url: string; caption?: string }
+  | { type: 'links'; items: DocLinkItem[] };
 
 // Full doc payload returned by GET /snippets/categories/:id/doc.
 export interface CategoryDoc {

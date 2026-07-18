@@ -107,3 +107,6 @@ frontend/.next/standalone/
 # Next.js cache (regenerated on build)
 frontend/.next/cache/
 scratch/
+
+# UI/UX Pro Max skill (uipro) — dev tooling, per-machine, not app code
+.claude/skills/

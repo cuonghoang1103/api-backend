@@ -497,6 +497,10 @@
     "difficultyEASY": "Easy",
     "difficultyMEDIUM": "Medium",
     "difficultyHARD": "Hard",
+    "difficulty": "Difficulty",
+    "sortFeatured": "Featured",
+    "sortNew": "Newest",
+    "sortHot": "Popular",
     "empty": "No games published yet."
   },
   "expHub": {

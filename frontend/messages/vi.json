@@ -497,6 +497,10 @@
     "difficultyEASY": "Dễ",
     "difficultyMEDIUM": "Trung bình",
     "difficultyHARD": "Khó",
+    "difficulty": "Độ khó",
+    "sortFeatured": "Nổi bật",
+    "sortNew": "Mới nhất",
+    "sortHot": "Phổ biến",
     "empty": "Chưa có game nào được đăng."
   },
   "expHub": {

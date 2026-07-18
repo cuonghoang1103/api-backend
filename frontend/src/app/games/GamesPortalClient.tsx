@@ -16,7 +16,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
-  Search, Trophy, Clock, Lock, Play, Sparkles, X, LayoutGrid, Rows3, Gamepad2, Medal,
+  Search, Trophy, Clock, Lock, Play, Sparkles, X, LayoutGrid, Rows3, Gamepad2, Medal, Flame,
 } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import GamesBackground from '@/components/games/GamesBackground';
@@ -38,6 +38,10 @@ export default function GamesPortalClient({ games, categories, stats, leaders }:
 
   const [query, setQuery] = useState(params.get('q') ?? '');
   const [cat, setCat] = useState(params.get('cat') ?? '');
+  const [diff, setDiff] = useState(params.get('diff') ?? '');
+  const [sort, setSort] = useState<'featured' | 'new' | 'hot'>(
+    (['new', 'hot'].includes(params.get('sort') ?? '') ? params.get('sort') : 'featured') as 'featured' | 'new' | 'hot',
+  );
   const [view, setView] = useState<'grid' | 'by-category'>(
     params.get('view') === 'by-category' ? 'by-category' : 'grid',
   );
@@ -53,15 +57,18 @@ export default function GamesPortalClient({ games, categories, stats, leaders }:
     const sp = new URLSearchParams();
     if (query.trim()) sp.set('q', query.trim());
     if (cat) sp.set('cat', cat);
+    if (diff) sp.set('diff', diff);
+    if (sort !== 'featured') sp.set('sort', sort);
     if (view !== 'grid') sp.set('view', view);
     const qs = sp.toString();
     window.history.replaceState(null, '', qs ? `/games?${qs}` : '/games');
-  }, [query, cat, view]);
+  }, [query, cat, diff, sort, view]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return games.filter((g) => {
+    const list = games.filter((g) => {
       if (cat && g.category?.slug !== cat) return false;
+      if (diff && g.difficulty !== diff) return false;
       if (!q) return true;
       return (
         g.title.toLowerCase().includes(q) ||
@@ -70,7 +77,12 @@ export default function GamesPortalClient({ games, categories, stats, leaders }:
         g.tags.some((x) => x.toLowerCase().includes(q))
       );
     });
-  }, [games, query, cat]);
+    // Sort is a client-side re-order over the already-filtered list. 'featured'
+    // keeps the backend order (sortOrder). New = freshest first; Hot = most plays.
+    if (sort === 'new') return [...list].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    if (sort === 'hot') return [...list].sort((a, b) => b.playCount - a.playCount);
+    return list;
+  }, [games, query, cat, diff, sort]);
 
   // Spotlight: the featured game that sorts first.
   const spotlight = useMemo(
@@ -84,10 +96,23 @@ export default function GamesPortalClient({ games, categories, stats, leaders }:
       .filter((s) => s.items.length > 0);
   }, [categories, filtered]);
 
-  const hasFilters = !!query.trim() || !!cat;
+  const hasFilters = !!query.trim() || !!cat || !!diff;
 
   return (
     <div className="min-h-screen pt-20 pb-20" style={{ background: '#020110' }}>
+      {/* Ambient arcade lighting — layered neon radials for depth. Static
+          (no JS, no CPU), sits behind everything; the flat #020110 alone read
+          as a dead black rectangle. */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0"
+        style={{
+          background:
+            'radial-gradient(55% 45% at 12% -5%, rgba(139,92,246,0.20), transparent 60%),' +
+            'radial-gradient(50% 40% at 92% 8%, rgba(34,211,238,0.14), transparent 60%),' +
+            'radial-gradient(70% 55% at 50% 118%, rgba(217,70,239,0.12), transparent 60%)',
+        }}
+      />
       {/* Particle field lives behind the hero only — it's masked out below so it
           never competes with the card grid or burn CPU behind content. */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[70vh] overflow-hidden [mask-image:linear-gradient(to_bottom,black_55%,transparent_100%)]">
@@ -101,13 +126,13 @@ export default function GamesPortalClient({ games, categories, stats, leaders }:
             <Sparkles className="w-3.5 h-3.5 text-neon-violet" />
             <span className="text-xs text-neon-violet font-medium">{t('games.title')}</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-text-primary tracking-tight leading-[1.05]">
+          <h1 className="bg-gradient-to-br from-white via-neon-violet to-neon-cyan bg-clip-text text-4xl font-heading font-bold leading-[1.05] tracking-tight text-transparent sm:text-5xl lg:text-6xl">
             {t('games.title')}
           </h1>
           <p className="mt-3 text-base sm:text-lg text-text-secondary max-w-2xl leading-relaxed">
             {t('games.tagline')}
           </p>
-          <dl className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <dl className="mt-6 grid max-w-lg grid-cols-3 gap-3">
             <Stat n={stats.games} label={t('games.statGames')} />
             <Stat n={stats.categories} label={t('games.statCategories')} />
             <Stat n={stats.totalPlays} label={t('games.statPlays')} />
@@ -197,13 +222,62 @@ export default function GamesPortalClient({ games, categories, stats, leaders }:
               />
             ))}
           </div>
+
+          {/* Sort + difficulty filter */}
+          <div className="mt-2.5 flex flex-wrap items-center gap-2">
+            <div className="flex gap-1 rounded-xl border border-darkborder bg-darkcard/80 p-1">
+              {([['featured', Trophy], ['new', Sparkles], ['hot', Flame]] as const).map(([s, Icon]) => (
+                <button
+                  key={s}
+                  onClick={() => setSort(s)}
+                  aria-pressed={sort === s}
+                  className={[
+                    'inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors whitespace-nowrap',
+                    sort === s ? 'bg-neon-violet/20 text-neon-violet' : 'text-text-secondary hover:text-text-primary',
+                  ].join(' ')}
+                >
+                  <Icon className="h-3 w-3" />
+                  {t(`games.sort${s.charAt(0).toUpperCase()}${s.slice(1)}`)}
+                </button>
+              ))}
+            </div>
+            <span aria-hidden className="mx-0.5 h-4 w-px bg-darkborder" />
+            <button
+              onClick={() => setDiff('')}
+              aria-pressed={!diff}
+              className={[
+                'inline-flex items-center rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors whitespace-nowrap',
+                !diff ? 'border-neon-violet/40 bg-neon-violet/15 text-neon-violet' : 'border-darkborder text-text-secondary hover:text-text-primary',
+              ].join(' ')}
+            >
+              {t('games.all')}
+            </button>
+            {(['EASY', 'MEDIUM', 'HARD'] as const).map((d) => {
+              const on = diff === d;
+              const cls: Record<GameDifficulty, string> = {
+                EASY: on ? 'border-neon-emerald/50 bg-neon-emerald/15 text-neon-emerald' : 'border-darkborder text-text-secondary hover:text-neon-emerald',
+                MEDIUM: on ? 'border-neon-orange/50 bg-neon-orange/15 text-neon-orange' : 'border-darkborder text-text-secondary hover:text-neon-orange',
+                HARD: on ? 'border-neon-red/50 bg-neon-red/15 text-neon-red' : 'border-darkborder text-text-secondary hover:text-neon-red',
+              };
+              return (
+                <button
+                  key={d}
+                  onClick={() => setDiff(on ? '' : d)}
+                  aria-pressed={on}
+                  className={['inline-flex items-center rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors whitespace-nowrap', cls[d]].join(' ')}
+                >
+                  {t(`games.difficulty${d}`)}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* ── Grid ────────────────────────────────────── */}
         {games.length === 0 ? (
           <Empty text={t('games.empty')} />
         ) : filtered.length === 0 ? (
-          <Empty text={t('games.noResults')} action={{ label: t('games.clearFilters'), onClick: () => { setQuery(''); setCat(''); } }} />
+          <Empty text={t('games.noResults')} action={{ label: t('games.clearFilters'), onClick: () => { setQuery(''); setCat(''); setDiff(''); setSort('featured'); } }} />
         ) : view === 'grid' ? (
           <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filtered.map((g) => <GameCard key={g.id} game={g} t={t} L={L} />)}
@@ -315,16 +389,21 @@ function GameCard({ game, t, L, bare }: { game: GameDto; t: TFn; L: LFn; bare?: 
       </div>
 
       {/* Body */}
-      <div className="p-3.5 space-y-2">
-        <h3 className="font-heading font-semibold text-text-primary text-sm leading-snug line-clamp-1">
+      <div className="p-4 space-y-2">
+        <h3 className="font-heading font-bold text-text-primary text-[15px] leading-snug line-clamp-1">
           {L(game.title, game.titleVi)}
         </h3>
-        <p className="text-[11px] text-text-muted leading-relaxed line-clamp-2 min-h-[2.4em]">
+        <p className="text-xs text-text-muted leading-relaxed line-clamp-2 min-h-[2.5em]">
           {L(game.description, game.descriptionVi)}
         </p>
         <div className="flex items-center gap-2 text-[10px] text-text-muted">
           <DifficultyPill d={game.difficulty} t={t} tiny />
           {game.estimatedTime && <span className="inline-flex items-center gap-0.5"><Clock className="w-2.5 h-2.5" />{game.estimatedTime}</span>}
+          {game.playCount > 0 && (
+            <span className="ml-auto inline-flex items-center gap-0.5 tabular-nums" title={t('games.plays')}>
+              <Play className="w-2.5 h-2.5" />{game.playCount.toLocaleString()}
+            </span>
+          )}
         </div>
         <span
           className={[
@@ -338,12 +417,13 @@ function GameCard({ game, t, L, bare }: { game: GameDto; t: TFn; L: LFn; bare?: 
         </span>
       </div>
 
-      {/* Category-coloured border glow on hover (no layout impact). */}
+      {/* Category-coloured glow — subtle always-on for arcade depth, intensifies
+          on hover (no layout impact). */}
       {!soon && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{ boxShadow: `inset 0 0 0 1px ${color}66, 0 10px 30px -12px ${color}80` }}
+          className="pointer-events-none absolute inset-0 rounded-2xl opacity-40 transition-opacity duration-300 group-hover:opacity-100"
+          style={{ boxShadow: `inset 0 0 0 1px ${color}55, 0 10px 30px -12px ${color}80` }}
         />
       )}
     </div>
@@ -395,10 +475,10 @@ function DifficultyPill({ d, t, tiny }: { d: GameDifficulty; t: TFn; tiny?: bool
 
 function Stat({ n, label }: { n: number; label: string }) {
   return (
-    <div className="flex items-baseline gap-1.5">
+    <div className="rounded-2xl border border-darkborder bg-darkcard/50 px-3 py-3 text-center backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
       <dt className="sr-only">{label}</dt>
-      <dd className="text-xl font-heading font-bold text-text-primary tabular-nums">{n.toLocaleString()}</dd>
-      <span className="text-text-muted text-xs">{label}</span>
+      <dd className="font-heading text-2xl font-extrabold tabular-nums text-text-primary sm:text-3xl">{n.toLocaleString()}</dd>
+      <span className="mt-0.5 block text-[11px] uppercase tracking-wide text-text-muted">{label}</span>
     </div>
   );
 }

@@ -120,11 +120,11 @@ export default function GameShell({
   return (
     <div
       ref={containerRef}
-      className="relative w-full rounded-2xl overflow-hidden border border-darkborder bg-[#0a0a14] flex flex-col"
+      className="relative flex w-full flex-col overflow-hidden rounded-2xl border border-darkborder bg-[#0a0a14] shadow-[0_0_0_1px_rgba(139,92,246,0.10),0_28px_80px_-32px_rgba(139,92,246,0.55)]"
       style={{ minHeight: 420 }}
     >
       {/* Toolbar */}
-      <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-darkborder bg-darkcard/40">
+      <div className="flex items-center justify-between gap-2 border-b border-darkborder bg-gradient-to-r from-darkcard/70 to-darkcard/30 px-3 py-2">
         <p className="text-xs font-semibold text-text-secondary truncate">{title}</p>
         <div className="flex items-center gap-1">
           {(phase === 'playing' || phase === 'paused') && (
@@ -153,7 +153,10 @@ export default function GameShell({
       <div className="relative flex-1 flex items-center justify-center p-4">
         {phase === 'idle' && (
           <div className="text-center max-w-sm">
-            <h3 className="text-xl font-heading font-bold text-text-primary">{title}</h3>
+            <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-neon-indigo/30 to-neon-violet/20 text-neon-violet shadow-[0_0_30px_-6px_rgba(139,92,246,0.6)]">
+              <Play className="h-7 w-7" />
+            </span>
+            <h3 className="text-2xl font-heading font-bold text-text-primary">{title}</h3>
             {howTo && <p className="mt-2 text-xs text-text-muted leading-relaxed whitespace-pre-wrap">{howTo}</p>}
             <button
               onClick={start}

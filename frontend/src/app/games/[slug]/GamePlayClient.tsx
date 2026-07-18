@@ -104,7 +104,7 @@ export default function GamePlayClient({ game, related }: { game: GameDto; relat
             </span>
           )}
         </div>
-        <h1 className="text-3xl sm:text-4xl font-heading font-bold text-text-primary tracking-tight">
+        <h1 className="bg-gradient-to-br from-white via-neon-violet to-neon-cyan bg-clip-text text-3xl font-heading font-bold tracking-tight text-transparent sm:text-4xl">
           {L(game.title, game.titleVi)}
         </h1>
         <p className="mt-2 text-sm text-text-secondary leading-relaxed max-w-2xl">
@@ -119,7 +119,7 @@ export default function GamePlayClient({ game, related }: { game: GameDto; relat
         ) : game.kind === 'IFRAME' && game.iframeSrc ? (
           // Sandboxed: the HTML game gets scripts + same-origin (it needs its
           // own assets) but nothing else — no top-navigation, no popups.
-          <div className="rounded-2xl overflow-hidden border border-darkborder bg-[#0a0a14]">
+          <div className="overflow-hidden rounded-2xl border border-darkborder bg-[#0a0a14] shadow-[0_0_0_1px_rgba(139,92,246,0.10),0_28px_80px_-32px_rgba(139,92,246,0.55)]">
             <iframe
               src={game.iframeSrc}
               title={L(game.title, game.titleVi)}
@@ -202,7 +202,7 @@ export default function GamePlayClient({ game, related }: { game: GameDto; relat
 
       {/* ── Leaderboard ── */}
       {playable && entry?.scored && leaders.length > 0 && (
-        <section className="mt-10 rounded-2xl border border-darkborder bg-darkcard/60 p-5">
+        <section className="mt-10 rounded-2xl border border-darkborder bg-darkcard/60 p-5 shadow-[0_22px_64px_-34px_rgba(139,92,246,0.5)]">
           <h2 className="text-sm font-heading font-semibold text-text-primary flex items-center gap-2 mb-3">
             <Trophy className="w-4 h-4 text-neon-orange" /> {t('games.topScores')}
           </h2>
@@ -217,7 +217,7 @@ export default function GamePlayClient({ game, related }: { game: GameDto; relat
           <ul className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {related.map((r) => (
               <li key={r.id}>
-                <Link href={`/games/${r.slug}`} className="group block rounded-xl overflow-hidden border border-darkborder bg-darkcard/60 hover:border-neon-violet/40 transition-colors">
+                <Link href={`/games/${r.slug}`} className="group block overflow-hidden rounded-xl border border-darkborder bg-darkcard/60 shadow-[0_14px_40px_-22px_rgba(0,0,0,0.7)] transition-all duration-300 hover:-translate-y-0.5 hover:border-neon-violet/40 hover:shadow-[0_18px_44px_-20px_rgba(139,92,246,0.4)]">
                   <div className="aspect-video bg-darkbg overflow-hidden">
                     {r.coverImage ? (
                       // eslint-disable-next-line @next/next/no-img-element

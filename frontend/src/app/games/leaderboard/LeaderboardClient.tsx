@@ -78,7 +78,7 @@ export default function LeaderboardClient({ games }: { games: GameDto[] }) {
       </div>
 
       {/* Board */}
-      <div className="mt-4 rounded-2xl border border-darkborder bg-darkcard/60 overflow-hidden">
+      <div className="mt-4 overflow-hidden rounded-2xl border border-darkborder bg-darkcard/60 shadow-[0_24px_70px_-32px_rgba(139,92,246,0.55)]">
         {loading ? (
           <div className="py-16 text-center"><Loader2 className="w-5 h-5 mx-auto animate-spin text-neon-violet" /></div>
         ) : rows.length === 0 ? (

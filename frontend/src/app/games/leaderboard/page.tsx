@@ -41,6 +41,16 @@ export default async function LeaderboardPage() {
 
   return (
     <div className="min-h-screen pt-24 pb-20" style={{ background: '#020110' }}>
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0"
+        style={{
+          background:
+            'radial-gradient(55% 45% at 12% -5%, rgba(139,92,246,0.18), transparent 60%),' +
+            'radial-gradient(50% 40% at 92% 8%, rgba(34,211,238,0.12), transparent 60%),' +
+            'radial-gradient(70% 55% at 50% 118%, rgba(217,70,239,0.10), transparent 60%)',
+        }}
+      />
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="mb-5 text-sm text-text-muted flex items-center gap-1.5">
           <Link href="/games" className="hover:text-neon-violet transition-colors">Playground</Link>

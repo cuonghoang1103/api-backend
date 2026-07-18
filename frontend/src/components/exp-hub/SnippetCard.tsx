@@ -20,17 +20,17 @@ export function SnippetCard({ snippet, isSelected, onClick, onCopy }: SnippetCar
   return (
     <div
       onClick={onClick}
-      className={`group p-3 border-b border-[var(--border-color)] cursor-pointer transition-colors ${
+      className={`group cursor-pointer border-b border-l-2 border-b-[var(--border-color)] p-3 transition-colors ${
         isSelected
-          ? 'bg-violet-500/10 border-l-2 border-l-violet-400'
-          : 'hover:bg-[var(--bg-surface-hover)]'
+          ? 'border-l-violet-400 bg-violet-500/10'
+          : 'border-l-transparent hover:border-l-violet-400/40 hover:bg-[var(--bg-surface-hover)]'
       }`}
     >
       <div className="flex items-start gap-2">
         <LanguageIcon language={snippet.language} className="mt-0.5 shrink-0" />
 
         <div className="flex-1 min-w-0">
-          <h4 className="text-sm font-medium text-[var(--text-primary)] truncate">
+          <h4 className="truncate text-sm font-semibold text-[var(--text-primary)] transition-colors group-hover:text-violet-500 dark:group-hover:text-violet-300">
             {snippet.title}
           </h4>
 

@@ -167,6 +167,23 @@ const TREE = [
       { name: 'LangChain', color: '#1c3c3c', docsUrl: 'https://python.langchain.com/docs/' },
     ],
   },
+  {
+    name: 'AI Models', icon: 'Sparkles', color: '#d946ef',
+    description: 'Các mô hình AI (Claude, GPT, Gemini, Llama…): cách cài, chạy, API & mẹo dùng.',
+    children: [
+      { name: 'Claude (Anthropic)', color: '#d97757', docsUrl: 'https://docs.anthropic.com/', description: 'Họ mô hình Claude: API, prompt, context, tool use, Claude Code.' },
+      { name: 'ChatGPT / GPT (OpenAI)', color: '#10a37f', docsUrl: 'https://platform.openai.com/docs', description: 'GPT-4o / o-series: API, function calling, Assistants.' },
+      { name: 'Gemini (Google)', color: '#4285f4', docsUrl: 'https://ai.google.dev/docs', description: 'Gemini API, multimodal, Google AI Studio.' },
+      { name: 'Llama (Meta)', color: '#0866ff', docsUrl: 'https://www.llama.com/docs/', description: 'Mô hình mở, chạy local qua Ollama / llama.cpp.' },
+      { name: 'Mistral', color: '#fa520f', docsUrl: 'https://docs.mistral.ai/', description: 'Mô hình mở gọn nhẹ, hiệu năng cao.' },
+      { name: 'DeepSeek', color: '#4d6bfe', docsUrl: 'https://api-docs.deepseek.com/', description: 'Mạnh về code & reasoning, chi phí thấp.' },
+      { name: 'Grok (xAI)', color: '#111111', docsUrl: 'https://docs.x.ai/', description: 'Model của xAI, API tương thích OpenAI.' },
+      { name: 'Qwen (Alibaba)', color: '#615ced', docsUrl: 'https://qwen.readthedocs.io/', description: 'Họ Qwen mở, đa ngôn ngữ.' },
+      { name: 'Ollama (chạy model local)', color: '#111111', docsUrl: 'https://github.com/ollama/ollama', description: 'Tải & chạy LLM ngay trên máy: `ollama run llama3`.' },
+      { name: 'Hugging Face', color: '#ffd21e', docsUrl: 'https://huggingface.co/docs', description: 'Kho model/dataset + transformers, inference API.' },
+      { name: 'AI Coding (Cursor / Copilot / Claude Code)', color: '#8b5cf6', description: 'Công cụ lập trình có AI: cài đặt, cấu hình, mẹo dùng.' },
+    ],
+  },
 ];
 
 let created = 0;

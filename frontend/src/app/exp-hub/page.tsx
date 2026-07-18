@@ -54,6 +54,9 @@ export default function ExpHubPage() {
   const [tags, setTags] = useState<SnippetTag[]>([]);
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [selectedSnippet, setSelectedSnippet] = useState<Snippet | null>(null);
+  // Browser/editor-style open tabs: snippets the user has opened. The active
+  // one is `selectedSnippet`; each is closeable with an X.
+  const [openTabs, setOpenTabs] = useState<Snippet[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>();
   // Active TOP-LEVEL group (root category) — scopes the left tree + list.
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
@@ -292,6 +295,18 @@ export default function ExpHubPage() {
 
   const handleSnippetClick = (snippet: Snippet) => {
     setSelectedSnippet(snippet);
+    // Open as a tab (dedupe, keep order) — like a browser/editor.
+    setOpenTabs((tabs) => (tabs.some((t) => t.id === snippet.id) ? tabs : [...tabs, snippet]));
+  };
+
+  // Close a tab (its X). If it was the active one, jump to a neighbour tab.
+  const closeTab = (id: number) => {
+    setOpenTabs((tabs) => {
+      const idx = tabs.findIndex((t) => t.id === id);
+      const next = tabs.filter((t) => t.id !== id);
+      if (selectedSnippet?.id === id) setSelectedSnippet(next[idx] ?? next[idx - 1] ?? null);
+      return next;
+    });
   };
 
   const handleCopySnippet = async (snippet: Snippet) => {
@@ -520,6 +535,40 @@ export default function ExpHubPage() {
 
         {/* Right Column - Snippet Detail */}
         <div className="w-full overflow-y-auto lg:flex-1">
+          {/* Open tabs (browser/editor style) — sticky above the detail. */}
+          {openTabs.length > 0 && (
+            <div className="sticky top-0 z-10 flex items-center gap-0.5 overflow-x-auto border-b border-[var(--border-color)] bg-[var(--bg-card)]/90 px-1 backdrop-blur [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {openTabs.map((tab) => {
+                const active = tab.id === selectedSnippet?.id;
+                return (
+                  <div
+                    key={tab.id}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setSelectedSnippet(tab)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedSnippet(tab); } }}
+                    className={`group flex max-w-[200px] shrink-0 cursor-pointer items-center gap-2 border-b-2 px-3 py-2 text-sm transition-colors ${
+                      active
+                        ? 'border-violet-400 bg-[var(--bg-surface-active)] text-[var(--text-primary)]'
+                        : 'border-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]'
+                    }`}
+                    title={tab.title}
+                  >
+                    <LanguageIcon language={tab.language} size={14} className="shrink-0" />
+                    <span className="truncate">{tab.title}</span>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); closeTab(tab.id); }}
+                      className="shrink-0 rounded p-0.5 text-[var(--text-muted)] opacity-60 transition hover:bg-[var(--bg-surface-active)] hover:text-[var(--text-primary)] hover:opacity-100"
+                      aria-label={`Đóng ${tab.title}`}
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
           {(() => {
             const view = detail ?? selectedSnippet;
             if (!view) {

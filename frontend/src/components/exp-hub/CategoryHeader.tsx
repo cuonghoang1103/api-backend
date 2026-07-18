@@ -21,7 +21,7 @@ export function CategoryHeader({
   const accent = category.color || 'var(--accent-color)';
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]">
+    <div className="relative overflow-hidden rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-[0_8px_24px_-16px_rgba(139,92,246,0.4)]">
       {/* Cover image (optional) or accent wash */}
       {category.coverImageUrl ? (
         // eslint-disable-next-line @next/next/no-img-element

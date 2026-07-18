@@ -12,6 +12,7 @@
 import {
   Server, LayoutDashboard, Database, Container, TerminalSquare,
   Smartphone, Wrench, Brain, Folder, Code2, Cloud, Cpu, Boxes,
+  Network, ShieldCheck, Gamepad2, FlaskConical, Sparkles,
   type LucideIcon,
 } from 'lucide-react';
 import { BRAND_LOGOS } from './brandLogos';
@@ -19,6 +20,7 @@ import { BRAND_LOGOS } from './brandLogos';
 const LUCIDE: Record<string, LucideIcon> = {
   Server, LayoutDashboard, Database, Container, TerminalSquare,
   Smartphone, Wrench, Brain, Folder, Code2, Cloud, Cpu, Boxes,
+  Network, ShieldCheck, Gamepad2, FlaskConical, Sparkles,
 };
 
 function hueFromString(s: string): number {

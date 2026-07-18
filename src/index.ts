@@ -128,6 +128,8 @@ const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
 // EXP_Hub — Code Snippet Library
 const snippetRoutes = (await import(path.join(__dirname, 'routes', 'snippets.routes.js'))).default;
+// Code Lab — coding-practice + learning-roadmap module
+const codeLabRoutes = (await import(path.join(__dirname, 'routes', 'codeLab.routes.js'))).default;
 // Video categories (home-feed video classification)
 const videoCategoryRoutes = (await import(path.join(__dirname, 'routes', 'videoCategories.routes.js'))).default;
 // Announcements — site-wide broadcast notices (public reads + admin CRUD)
@@ -535,6 +537,8 @@ app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
 // EXP_Hub — Code Snippet Library
 app.use('/api/v1/snippets', snippetRoutes);
+// Code Lab — coding-practice + learning-roadmap module
+app.use('/api/v1/code-lab', codeLabRoutes);
 app.use('/api/v1/video-categories', videoCategoryRoutes);
 app.use('/api/v1/announcements', announcementRoutes);
 // My Language — public reads + authed SRS at /my-language, admin CRUD at /admin/my-language

@@ -11,7 +11,7 @@ import {
   GraduationCap, ShoppingBag, Layers, ChevronRight,
   Github, Menu, X, NotebookPen, Languages, Wallet,
   TrendingUp, Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
-  FileText, Newspaper, Radio,
+  FileText, Newspaper, Radio, Code2,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -78,6 +78,7 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/language', label: 'My Language', icon: Languages, section: 'user' },
   { href: '/projects', label: 'Projects', icon: FolderOpen, section: 'user' },
   { href: '/exp-hub', label: 'Exp Hub', icon: FileCode2, section: 'user' },
+  { href: '/code-lab', label: 'Code Lab', icon: Code2, section: 'user' },
   { href: '/hub', label: 'Hub', icon: Layers, section: 'user' },
   { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'user' },
   { href: '/friends', label: 'Friends', icon: Users, section: 'user' },

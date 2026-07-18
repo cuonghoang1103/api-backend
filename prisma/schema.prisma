@@ -295,6 +295,10 @@ model User {
   snippetReactions        SnippetReaction[]
   snippetCommentReactions SnippetCommentReaction[]
 
+  // ─── Code Lab — authored exercises + personal practice progress ──
+  codeExercises CodeExercise[]
+  codeProgress  CodeProgress[]
+
   // ─── My Language — learning progress (per-user, SRS) ─────────
   // Additive. Every row is scoped by userId; SM-2 spaced repetition
   // progress + quiz history live here. See models at end of file.
@@ -6371,4 +6375,212 @@ model VoiceCommentLike {
   @@index([commentId], name: "idx_voice_comment_likes_comment")
   @@index([userId], name: "idx_voice_comment_likes_user")
   @@map("voice_comment_likes")
+}
+
+// ════════════════════════════════════════════════════════════════
+//  CODE LAB — coding-practice + learning-roadmap module
+//  Hierarchy:  CodeGroup ▸ CodeTrack ▸ CodeModule ▸ CodeExercise
+//  Plus per-user CodeProgress (save attempt / mark solved).
+//  All content authored in ENGLISH. Additive — no changes to
+//  existing tables. Mirrors the Snippet* (Exp Hub) pipeline.
+// ════════════════════════════════════════════════════════════════
+
+// Coarse skill tier used on tracks + modules (ordering the roadmap).
+enum CodeLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+
+  @@map("code_level")
+}
+
+// Per-exercise difficulty badge (LeetCode-style, four tiers).
+enum CodeDifficulty {
+  EASY
+  MEDIUM
+  HARD
+  EXPERT
+
+  @@map("code_difficulty")
+}
+
+// Publication state for tracks / exercises. DRAFT = admin-only.
+enum CodeStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+
+  @@map("code_status")
+}
+
+// Per-user practice status for a single exercise.
+enum CodeProgressStatus {
+  IN_PROGRESS
+  SOLVED
+
+  @@map("code_progress_status")
+}
+
+// ─── Top-level groups (the tabs across the top of the hub) ───────
+model CodeGroup {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  slug        String   @unique(map: "uk_code_group_slug") @db.VarChar(100)
+  description String?  @db.Text
+  // Lucide icon name OR an absolute R2 image URL.
+  icon        String?  @db.VarChar(500)
+  // Accent hex color for the group tab (e.g. "#3178c6"). Null = derived.
+  color       String?  @db.VarChar(20)
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tracks CodeTrack[]
+
+  @@index([sortOrder], name: "idx_code_group_order")
+  @@map("code_groups")
+}
+
+// ─── Tracks (a learning path for one technology) ─────────────────
+model CodeTrack {
+  id            Int        @id @default(autoincrement())
+  groupId       Int        @map("group_id")
+  name          String     @db.VarChar(150)
+  slug          String     @unique(map: "uk_code_track_slug") @db.VarChar(150)
+  // Primary language/tech key ("java", "python", "sql", "spring", "nextjs"…).
+  language      String     @db.VarChar(40)
+  description   String?    @db.Text
+  icon          String?    @db.VarChar(500)
+  color         String?    @db.VarChar(20)
+  coverImageUrl String?    @map("cover_image_url") @db.VarChar(2000)
+  docsUrl       String?    @map("docs_url") @db.VarChar(500)
+  // Overall entry level of the track (roadmap ordering hint).
+  level         CodeLevel  @default(BEGINNER)
+  sortOrder     Int        @default(0) @map("sort_order")
+  status        CodeStatus @default(PUBLISHED)
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+
+  group     CodeGroup      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  modules   CodeModule[]
+  exercises CodeExercise[]
+
+  @@index([groupId, sortOrder], name: "idx_code_track_group_order")
+  @@index([slug], name: "idx_code_track_slug")
+  @@map("code_tracks")
+}
+
+// ─── Modules (ordered chapters/stages inside a track) ────────────
+model CodeModule {
+  id          Int       @id @default(autoincrement())
+  trackId     Int       @map("track_id")
+  name        String    @db.VarChar(150)
+  slug        String    @db.VarChar(150)
+  description String?   @db.Text
+  level       CodeLevel @default(BEGINNER)
+  sortOrder   Int       @default(0) @map("sort_order")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  track     CodeTrack      @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  exercises CodeExercise[]
+
+  // slug is unique within a track (not globally).
+  @@unique([trackId, slug], name: "uk_code_module_track_slug")
+  @@index([trackId, sortOrder], name: "idx_code_module_track_order")
+  @@map("code_modules")
+}
+
+// ─── Exercises (the graded practice problems) ────────────────────
+model CodeExercise {
+  id         Int            @id @default(autoincrement())
+  moduleId   Int            @map("module_id")
+  // Denormalised for fast track-wide queries / progress rollups.
+  trackId    Int            @map("track_id")
+  title      String         @db.VarChar(255)
+  slug       String         @unique(map: "uk_code_exercise_slug") @db.VarChar(255)
+  difficulty CodeDifficulty @default(EASY)
+  sortOrder  Int            @default(0) @map("sort_order")
+  status     CodeStatus     @default(PUBLISHED)
+  // Primary language for the editor/solution ("java", "python"…).
+  language   String         @db.VarChar(40)
+
+  // ─── Problem body (all English, NTU-style) ─────────────────────
+  // The problem statement, rendered as sanitized HTML on the client.
+  problemHtml             String? @map("problem_html") @db.Text
+  // "Knowledge to learn & apply" — JSON array of strings.
+  concepts                Json?   @map("concepts")
+  // Prerequisite concepts / links — JSON array of strings.
+  prerequisites           Json?   @map("prerequisites")
+  // Free-text specs shown as their own sections.
+  inputSpec               String? @map("input_spec") @db.Text
+  outputSpec              String? @map("output_spec") @db.Text
+  constraints             String? @db.Text
+  // Worked examples: JSON array of { input, output, explanation }.
+  examplesJson            Json?   @map("examples_json")
+  // Progressive hints: JSON array of strings (revealed one by one).
+  hintsJson               Json?   @map("hints_json")
+  // Starter code: JSON array of { name, language, code } (like Snippet.codeBlocks).
+  starterCodeJson         Json?   @map("starter_code_json")
+  // Official solution: JSON array of { name, language, code }.
+  solutionCodeJson        Json?   @map("solution_code_json")
+  // Walkthrough of the solution (sanitized HTML).
+  solutionExplanationHtml String? @map("solution_explanation_html") @db.Text
+  // Optional UML/diagram image (R2) + extra images [{ url, caption }].
+  diagramImageUrl         String? @map("diagram_image_url") @db.VarChar(2000)
+  imagesJson              Json?   @map("images_json")
+  // Extra references.
+  youtubeUrl              String? @map("youtube_url") @db.VarChar(500)
+  referenceUrl            String? @map("reference_url") @db.VarChar(500)
+  // Freeform tags: JSON array of strings.
+  tags                    Json?
+  // Meta.
+  estimatedMinutes        Int?    @map("estimated_minutes")
+  points                  Int     @default(10)
+  viewCount               Int     @default(0) @map("view_count")
+  solveCount              Int     @default(0) @map("solve_count")
+
+  authorId Int? @map("author_id")
+
+  // Full-text search vector over title + problem + concepts (config 'simple').
+  // Maintained by Postgres; queried only via $queryRaw. Unsupported so Prisma
+  // tracks the column but never reads/writes it. (Same pattern as Snippet.)
+  searchVector Unsupported("tsvector")? @map("search_vector")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  module   CodeModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  track    CodeTrack      @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  author   User?          @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  progress CodeProgress[]
+
+  @@index([moduleId, sortOrder], name: "idx_code_exercise_module_order")
+  @@index([trackId], name: "idx_code_exercise_track")
+  @@index([status], name: "idx_code_exercise_status")
+  @@index([difficulty], name: "idx_code_exercise_difficulty")
+  @@index([language], name: "idx_code_exercise_language")
+  @@index([slug], name: "idx_code_exercise_slug")
+  @@map("code_exercises")
+}
+
+// ─── Per-user practice progress (one row per user+exercise) ──────
+model CodeProgress {
+  id         Int                @id @default(autoincrement())
+  userId     Int                @map("user_id")
+  exerciseId Int                @map("exercise_id")
+  status     CodeProgressStatus @default(IN_PROGRESS)
+  // The user's last saved attempt: JSON array of { name, language, code }.
+  savedCode  Json?              @map("saved_code")
+  solvedAt   DateTime?          @map("solved_at")
+  createdAt  DateTime           @default(now()) @map("created_at")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
+
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise CodeExercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, exerciseId], name: "uk_code_progress_user_exercise")
+  @@index([userId, status], name: "idx_code_progress_user_status")
+  @@index([exerciseId], name: "idx_code_progress_exercise")
+  @@map("code_progress")
 }

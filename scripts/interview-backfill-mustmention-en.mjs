@@ -51,16 +51,21 @@ async function translateBatch(rows) {
   const byI = new Map((parsed?.out ?? []).map((o) => [o.i, o]));
   return rows.map((r, i) => {
     const o = byI.get(i);
-    return {
-      id: r.id,
-      mustMentionEn: Array.isArray(o?.must) && o.must.length ? o.must.map(String) : r.mustMention,
-      shouldMentionEn: Array.isArray(o?.should) ? o.should.map(String) : r.shouldMention,
-    };
-  });
+    // Only write a REAL English translation. If the model returned nothing usable
+    // for this row, leave the field EMPTY (fix A hides the objective score when EN
+    // keys are empty) and let a later round retry — NEVER copy the Vietnamese keys
+    // in as "English": that silently poisons the language-matched objective grader
+    // (an English answer can't match Vietnamese keys → a perfect answer scores ~24/100).
+    const must = Array.isArray(o?.must) && o.must.length ? o.must.map(String) : null;
+    if (!must) return null;
+    const should = Array.isArray(o?.should) ? o.should.map(String) : [];
+    return { id: r.id, mustMentionEn: must, shouldMentionEn: should };
+  }).filter(Boolean);
 }
 
 let done = 0, fails = 0;
 const skip = new Set(); // batch IDs that errored — never mutate their data, just don't retry
+const miss = new Map(); // id -> times the model returned no usable EN (leave empty, retry, then give up)
 console.log(`[backfill-en] model=${MODEL} batch=${BATCH} budget=${(BUDGET / 1e6).toFixed(1)}M`);
 while (true) {
   if (BUDGET > 0) {
@@ -75,11 +80,22 @@ while (true) {
   if (!rows.length) { console.log(`[backfill-en] DONE — no rows left. translated=${done} skipped=${skip.size}`); break; }
   try {
     const out = await translateBatch(rows);
-    await prisma.$transaction(out.map((o) => prisma.interviewQuestion.update({
-      where: { id: o.id }, data: { mustMentionEn: o.mustMentionEn, shouldMentionEn: o.shouldMentionEn },
-    })));
-    done += out.length;
-    console.log(`  +${out.length} (total ${done}) e.g. #${rows[0].id}: ${JSON.stringify(out[0].mustMentionEn).slice(0, 80)}`);
+    if (out.length) {
+      await prisma.$transaction(out.map((o) => prisma.interviewQuestion.update({
+        where: { id: o.id }, data: { mustMentionEn: o.mustMentionEn, shouldMentionEn: o.shouldMentionEn },
+      })));
+      done += out.length;
+      console.log(`  +${out.length} (total ${done}) e.g. #${out[0].id}: ${JSON.stringify(out[0].mustMentionEn).slice(0, 80)}`);
+    }
+    // Rows the model didn't translate this round stay EMPTY (never VI). Retry them,
+    // but give up after 3 misses so an untranslatable row can't spin the loop forever.
+    const got = new Set(out.map((o) => o.id));
+    for (const r of rows) {
+      if (got.has(r.id)) continue;
+      const c = (miss.get(r.id) ?? 0) + 1;
+      miss.set(r.id, c);
+      if (c >= 3) { skip.add(r.id); console.log(`  [~] #${r.id}: AI không dịch được sau 3 lần — để trống (guard ẩn điểm)`); }
+    }
   } catch (e) {
     fails++;
     // Don't corrupt data with VI-as-EN (that would defeat the language guard).

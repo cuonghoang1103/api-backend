@@ -133,9 +133,11 @@ export function lintCv(input: LintInput): CvLintResult {
   // missing experience — expected-state aware
   if (experiences.length === 0) {
     if (level.flagNoWorkExperience) {
-      issues.push({ code: 'no-experience', severity: 'MAJOR', problem: 'Chưa có mục kinh nghiệm làm việc.', suggestedFix: 'Thêm các vai trò đã làm, kèm thành tích đo được.' });
+      // No experience where it's expected = no primary evidence → critical, not major.
+      issues.push({ code: 'no-experience', severity: 'CRITICAL', problem: 'Chưa có mục kinh nghiệm làm việc.', suggestedFix: 'Thêm các vai trò đã làm, kèm thành tích đo được.' });
     } else if (projects.length === 0) {
-      issues.push({ code: 'fresher-no-projects', severity: 'MAJOR', problem: 'Là fresher/sinh viên thì DỰ ÁN là bằng chứng chính — nhưng chưa có mục nào.', suggestedFix: 'Thêm 2–3 dự án thật (cá nhân/đồ án/hackathon) có link.' });
+      // For a fresher, projects ARE the evidence — none at all is a critical gap.
+      issues.push({ code: 'fresher-no-projects', severity: 'CRITICAL', problem: 'Là fresher/sinh viên thì DỰ ÁN là bằng chứng chính — nhưng chưa có mục nào.', suggestedFix: 'Thêm 2–3 dự án thật (cá nhân/đồ án/hackathon) có link.' });
     }
   }
 
@@ -160,6 +162,14 @@ export function lintCv(input: LintInput): CvLintResult {
 
   if (totalBullets >= 3 && bulletsWithMetric === 0) {
     issues.push({ code: 'no-numbers-anywhere', severity: 'MAJOR', problem: 'Cả CV không có dòng nào chứa con số — CV sẽ bị lướt qua và bỏ.', suggestedFix: 'Thêm số đo vào ít nhất vài bullet mạnh nhất (thời gian, %, quy mô).' });
+  }
+  // Evidence gap: a CV with no achievement lines (or none that are strong) has
+  // nothing to substantiate its claims — the biggest reason a real CV gets passed
+  // over. Previously unpenalized, which let empty CVs score in the INTERVIEW band.
+  if (totalBullets === 0) {
+    issues.push({ code: 'no-bullets', severity: 'MAJOR', problem: 'CV chưa có dòng thành tích/mô tả nào — không có bằng chứng năng lực để nhà tuyển dụng đánh giá.', suggestedFix: 'Mỗi mục (kinh nghiệm/dự án) nên có 2–4 bullet: động từ hành động + việc đã làm + kết quả đo được.' });
+  } else if (strongBullets === 0 && totalBullets >= 2) {
+    issues.push({ code: 'no-strong-bullets', severity: 'MAJOR', problem: 'Chưa có dòng thành tích nào đủ mạnh (động từ hành động + kết quả đo được).', suggestedFix: 'Viết lại vài bullet quan trọng nhất theo dạng: đã làm gì → tác động đo được.' });
   }
 
   // ── Skills vs evidence ──

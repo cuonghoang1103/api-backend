@@ -19,6 +19,38 @@ import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/ind
 import { looseJson } from './myLanguage.ai.service.js';
 import { normalizeBlocks, type DocBlock } from './snippets.aiDoc.service.js';
 
+/**
+ * Recover complete top-level block objects from a possibly-truncated JSON string
+ * by BALANCED-BRACE counting (quote-agnostic, same trick as the My Language
+ * generator). When a long lesson truncates mid-JSON, the valid prefix of blocks
+ * still survives instead of the whole response being lost.
+ */
+function salvageBlocks(raw: string): unknown[] {
+  const text = String(raw || '');
+  const start = text.indexOf('"blocks"');
+  const s = start >= 0 ? text.slice(start) : text;
+  const objs: unknown[] = [];
+  let depth = 0;
+  let from = -1;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c === '{') {
+      if (depth === 0) from = i;
+      depth++;
+    } else if (c === '}') {
+      depth--;
+      if (depth === 0 && from >= 0) {
+        const o = looseJson(s.slice(from, i + 1));
+        if (o && Object.keys(o).length) objs.push(o);
+        from = -1;
+      } else if (depth < 0) {
+        depth = 0;
+      }
+    }
+  }
+  return objs;
+}
+
 async function loadModule(moduleId: number) {
   const mod = await prisma.codeModule.findUnique({
     where: { id: moduleId },
@@ -66,9 +98,9 @@ export async function generateLesson(
     `{"type":"mermaid","code":string} | ` +
     `{"type":"links","items":[{"label":string,"url":string,"note":string}]}` +
     `]}\n` +
-    `"prose".html uses ONLY <p><ul><ol><li><strong><em><code><a href>. Be generous — aim for a rich, ` +
-    `complete chapter (roughly 20-40 blocks). Inside JSON strings, escape every double-quote and newline ` +
-    `so the JSON parses.`;
+    `"prose".html uses ONLY <p><ul><ol><li><strong><em><code><a href>. Aim for a rich but focused ` +
+    `chapter of roughly 12-18 blocks — thorough, but keep it complete rather than sprawling. Inside JSON ` +
+    `strings, escape every double-quote and newline so the JSON parses.`;
 
   const user = `Write the full lesson for the module "${mod.name}" (${lang}).${ctx}`;
 
@@ -80,9 +112,9 @@ export async function generateLesson(
       feature: 'exphub',
       system,
       messages: [{ role: 'user', content: user }],
-      maxTokens: 14000,
+      maxTokens: 12000,
       maxRetries: 1,
-      timeoutMs: 240_000,
+      timeoutMs: 200_000,
       userId,
     });
     raw = res.text;
@@ -92,7 +124,11 @@ export async function generateLesson(
   }
 
   const parsed = looseJson(raw) as { blocks?: unknown };
-  const blocks = normalizeBlocks(parsed.blocks);
+  let blocks = normalizeBlocks(parsed.blocks);
+  // Salvage: if the whole-array parse failed (usually the tail truncated mid-JSON
+  // on a long lesson), recover each complete top-level block object by balanced
+  // brace counting so the valid prefix still survives.
+  if (!blocks.length) blocks = normalizeBlocks(salvageBlocks(raw));
   if (!blocks.length) throw new BadRequestError('Lesson generation returned nothing, please retry.');
 
   return { moduleId: mod.id, moduleName: mod.name, blocks, model };

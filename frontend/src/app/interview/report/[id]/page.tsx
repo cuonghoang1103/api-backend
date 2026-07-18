@@ -201,8 +201,8 @@ export default function InterviewReportPage() {
           <div className="rounded-2xl border border-white/10 p-4">
             <div className="text-sm font-semibold text-slate-100 mb-3">{t('selfVsObjective')}</div>
             <div className="flex items-end gap-6 mb-4">
-              <Metric label={t('youSelfScored')} value={bd?.self ?? null} />
-              <Metric label={t('objectiveScore')} value={bd?.deterministic ?? 0} />
+              <Metric label={t('youSelfScored')} value={bd?.self ?? null} suffix="/100" />
+              <Metric label={t('objectiveScore')} value={bd?.deterministic ?? 0} suffix="/100" />
               {bd?.divergence != null && (
                 <div>
                   <div className="text-xs text-slate-400">{t('divergence')}</div>
@@ -267,11 +267,11 @@ export default function InterviewReportPage() {
   );
 }
 
-function Metric({ label, value }: { label: string; value: number | null }) {
+function Metric({ label, value, suffix = '' }: { label: string; value: number | null; suffix?: string }) {
   return (
     <div>
       <div className="text-xs text-slate-400">{label}</div>
-      <div className="text-2xl font-bold text-slate-100">{value ?? '—'}</div>
+      <div className="text-2xl font-bold text-slate-100">{value ?? '—'}{value != null ? <span className="text-sm font-normal text-slate-400">{suffix}</span> : null}</div>
     </div>
   );
 }

@@ -5291,6 +5291,11 @@ model InterviewQuestion {
   rubricEn          Json?                   @map("rubric_en") @db.JsonB // English rubric (used when session.language=EN)
   mustMention       String[]                @default([]) @map("must_mention")
   shouldMention     String[]                @default([]) @map("should_mention")
+  // English keyword sets — used by the objective (keyword) grader when
+  // session.language=EN, so an English answer is matched against English keys
+  // instead of the Vietnamese ones (which made EN answers fail the keyword pass).
+  mustMentionEn     String[]                @default([]) @map("must_mention_en")
+  shouldMentionEn   String[]                @default([]) @map("should_mention_en")
   redFlags          String[]                @default([]) @map("red_flags")
   synonyms          Json                    @default("{}") @db.JsonB // { term: [aliases] }
   mcqOptions        Json?                   @map("mcq_options") @db.JsonB // [{id,text,correct}]

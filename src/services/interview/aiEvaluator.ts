@@ -128,6 +128,10 @@ export async function evaluateAnswerWithAI(params: {
   rubric: RubricCriterion[];
   answer: string;
   passA: DeterministicResult;
+  /** Whether the keyword (Pass A) score is trustworthy for this answer's language.
+   *  False for EN answers scored against Vietnamese-only keys — then AI↔Pass-A
+   *  divergence is meaningless and must NOT flag the turn for review. */
+  detReliable?: boolean;
   language: 'VI' | 'EN';
   redFlagPenalty: number;
   disagreementThreshold: number;
@@ -170,8 +174,13 @@ export async function evaluateAnswerWithAI(params: {
   const aiScore = weightedAiScore(ai.criteria, params.rubric);
   const penalties = params.passA.redFlagsHit.length * params.redFlagPenalty;
   const finalScore = Math.max(0, Math.min(100, aiScore - penalties));
-  const disagreement = Math.abs(aiScore - params.passA.score);
-  const needsReview = ai.injectionAttempted || disagreement >= params.disagreementThreshold;
+  // Divergence between AI and the keyword grader is only meaningful when the
+  // keyword grader is trustworthy for this language. For EN answers scored on
+  // Vietnamese-only keys, Pass A is garbage — report 0 divergence and never flag
+  // (a perfect English answer must not be flagged just because VI keys didn't hit).
+  const detReliable = params.detReliable !== false;
+  const disagreement = detReliable ? Math.abs(aiScore - params.passA.score) : 0;
+  const needsReview = ai.injectionAttempted || (detReliable && disagreement >= params.disagreementThreshold);
 
   return {
     criteria: ai.criteria,

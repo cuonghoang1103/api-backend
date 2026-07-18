@@ -354,11 +354,26 @@ export async function submitAnswer(
     };
   }
 
+  // Language-matched keywords: an EN answer must be graded against EN keys, not
+  // the Vietnamese ones (which made English answers fail the objective/keyword
+  // pass — 24/100 for a perfect answer). Fall back to VI keys when a bank question
+  // has no English set yet. Ad-hoc turns carry keys already in the session language.
+  const isPersonalizedTurn = q == null;
+  const mustKw = (isEn && (q?.mustMentionEn?.length ?? 0) > 0)
+    ? q!.mustMentionEn
+    : (q?.mustMention ?? pcfg?.mustMention ?? []);
+  const shouldKw = (isEn && (q?.shouldMentionEn?.length ?? 0) > 0)
+    ? q!.shouldMentionEn
+    : (q?.shouldMention ?? pcfg?.shouldMention ?? []);
+  // The keyword grader is only trustworthy when the keys match the answer's
+  // language: VI sessions always; EN sessions only with English keys (or ad-hoc).
+  const detReliable = !isEn || isPersonalizedTurn || (q?.mustMentionEn?.length ?? 0) > 0;
+
   const det = deterministicScore(
     rawAnswer,
     {
-      mustMention: q?.mustMention ?? pcfg?.mustMention ?? [],
-      shouldMention: q?.shouldMention ?? pcfg?.shouldMention ?? [],
+      mustMention: mustKw,
+      shouldMention: shouldKw,
       redFlags: q?.redFlags ?? pcfg?.redFlags ?? [],
       synonyms: (q?.synonyms as unknown as SynonymMap) ?? {},
     },
@@ -389,6 +404,7 @@ export async function submitAnswer(
           rubric: rubricForLang ?? [],
           answer: rawAnswer,
           passA: det,
+          detReliable,
           language: session.language as 'VI' | 'EN',
           redFlagPenalty: redFlagPenalty(),
           disagreementThreshold: disagreementThreshold(),

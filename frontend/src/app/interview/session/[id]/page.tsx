@@ -600,7 +600,9 @@ function Reveal({
           <div className="space-y-3">
             {revealed.rubric.map((c) => (
               <div key={c.id} className="flex items-center justify-between gap-3">
-                <span className="text-sm text-slate-100">{c.criterion} <span className="text-slate-400">({Math.round(c.weight * 100)}%)</span></span>
+                {/* Weights are stored as integers summing to ~100 (not fractions),
+                    so show each as its share of the total — never weight × 100. */}
+                <span className="text-sm text-slate-100">{c.criterion} <span className="text-slate-400">({Math.round((c.weight / (revealed.rubric!.reduce((s, x) => s + (x.weight || 0), 0) || 1)) * 100)}%)</span></span>
                 <div className="flex gap-1 shrink-0">
                   {[0, 1, 2, 3, 4].map((v) => (
                     <button key={v} onClick={() => setRatings({ ...ratings, [c.id]: v })} className={`w-7 h-7 rounded-md text-xs font-mono border ${ratings[c.id] === v ? 'border-amber-500/70 bg-amber-500/15 text-amber-300' : 'border-white/10 text-slate-400'}`}>{v}</button>

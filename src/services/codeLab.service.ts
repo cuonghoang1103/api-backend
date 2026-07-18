@@ -304,10 +304,16 @@ export async function getTrackBySlug(slug: string, opts: { admin?: boolean } = {
   if (!track) throw new NotFoundError('Track not found.');
 
   const exWhere = opts.admin ? {} : { status: 'PUBLISHED' as CodeStatus };
-  const modules = await prisma.codeModule.findMany({
+  // Explicit select so the (potentially large) lessonBlocks JSON is NOT shipped
+  // in the roadmap payload — only a `hasLesson` flag. The full lesson is fetched
+  // on demand via getModuleLesson.
+  const rawModules = await prisma.codeModule.findMany({
     where: { trackId: track.id },
     orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
-    include: {
+    select: {
+      id: true, trackId: true, name: true, slug: true, description: true,
+      level: true, sortOrder: true, createdAt: true, updatedAt: true,
+      lessonGeneratedAt: true,
       exercises: {
         where: exWhere,
         orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
@@ -315,6 +321,7 @@ export async function getTrackBySlug(slug: string, opts: { admin?: boolean } = {
       },
     },
   });
+  const modules = rawModules.map((m) => ({ ...m, hasLesson: !!m.lessonGeneratedAt }));
 
   const exerciseCount = modules.reduce((n, m) => n + m.exercises.length, 0);
   return { ...track, modules, exerciseCount };

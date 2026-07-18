@@ -26,6 +26,7 @@ import { authenticate, optionalAuth, requireRole } from '../middleware/auth.js';
 import type { ApiResponse } from '../types/index.js';
 import * as codeLab from '../services/codeLab.service.js';
 import { generateRoadmap, generateExercises, commitExercises } from '../services/codeLab.ai.service.js';
+import { generateLesson, commitLesson, getModuleLesson, clearLesson } from '../services/codeLab.lesson.service.js';
 
 const router = Router();
 
@@ -206,6 +207,21 @@ router.post('/admin/ai/exercises/generate', authenticate, requireRole('ADMIN', '
 });
 router.post('/admin/ai/exercises/commit', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
   try { res.status(201).json({ success: true, data: await commitExercises(req.user!.userId, req.body) }); } catch (e) { next(e); }
+});
+
+// ─── Module LESSON (NTU-style tutorial) ──────────────────────────
+// Public: full lesson for one module (fetched on demand, not in the tree).
+router.get('/modules/:id(\\d+)/lesson', async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await getModuleLesson(parseInt(req.params.id)) }); } catch (e) { next(e); }
+});
+router.post('/admin/ai/lesson/generate', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await generateLesson(req.user!.userId, req.body) }); } catch (e) { next(e); }
+});
+router.post('/admin/ai/lesson/commit', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await commitLesson(req.user!.userId, req.body) }); } catch (e) { next(e); }
+});
+router.delete('/modules/:id(\\d+)/lesson', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
+  try { await clearLesson(parseInt(req.params.id)); res.json({ success: true, message: 'Lesson cleared' }); } catch (e) { next(e); }
 });
 
 export default router;

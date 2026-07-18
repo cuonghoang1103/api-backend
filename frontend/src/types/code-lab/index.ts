@@ -2,6 +2,7 @@
  * Code Lab — TypeScript types (shared by the public hub + admin console).
  * All content is authored in English.
  */
+import type { DocBlock } from '@/types/exp-hub';
 
 export type CodeLevel = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
 export type CodeDifficulty = 'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT';
@@ -67,6 +68,17 @@ export interface CodeModule {
   level: CodeLevel;
   sortOrder: number;
   exercises?: CodeExerciseListItem[];
+  // NTU-style lesson: the block array isn't shipped in the roadmap tree — only
+  // this flag. Fetch the full lesson on demand via codeLabApi.getLesson.
+  hasLesson?: boolean;
+}
+
+// A module's NTU-style lesson reuses the SAME DocBlock system as Exp Hub docs.
+export interface CodeLesson {
+  id: number;
+  name: string;
+  blocks: DocBlock[];
+  lessonGeneratedAt?: string | null;
 }
 
 export interface CodeExerciseListItem {

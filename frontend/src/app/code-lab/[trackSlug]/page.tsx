@@ -13,6 +13,7 @@ import { codeLabApi } from '@/lib/code-lab-api';
 import type { CodeTrack, MyProgressItem } from '@/types/code-lab';
 import { useAuthStore } from '@/store/authStore';
 import { DifficultyBadge, LevelPill, ProgressRing, TechIcon } from '@/components/code-lab/shared';
+import { ModuleLesson } from '@/components/code-lab/ModuleLesson';
 
 export default function TrackRoadmapPage() {
   const params = useParams<{ trackSlug: string }>();
@@ -114,6 +115,7 @@ export default function TrackRoadmapPage() {
               </div>
               <BookOpen size={16} style={{ color: 'var(--text-muted)' }} />
             </header>
+            <ModuleLesson moduleId={m.id} hasLesson={m.hasLesson} />
             <ul>
               {(m.exercises || []).length === 0 && (
                 <li className="px-4 py-3 text-xs" style={{ color: 'var(--text-muted)' }}>No exercises in this module yet.</li>

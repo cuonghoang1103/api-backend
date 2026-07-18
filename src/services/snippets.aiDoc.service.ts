@@ -103,7 +103,7 @@ function normalizeBlock(raw: unknown): DocBlock | null {
   return null;
 }
 
-function normalizeBlocks(raw: unknown): DocBlock[] {
+export function normalizeBlocks(raw: unknown): DocBlock[] {
   const arr = Array.isArray(raw) ? raw : [];
   const out: DocBlock[] = [];
   for (const b of arr.slice(0, 60)) {

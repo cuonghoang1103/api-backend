@@ -16,7 +16,9 @@ import type {
   CodeStatus,
   RoadmapModuleProposal,
   ExerciseProposal,
+  CodeLesson,
 } from '@/types/code-lab';
+import type { DocBlock } from '@/types/exp-hub';
 
 const BASE = '/code-lab';
 
@@ -28,6 +30,8 @@ export const codeLabApi = {
   getGroups: () => api.get<Ok<CodeGroup[]>>(`${BASE}/groups`),
   getTrack: (slug: string) => api.get<Ok<CodeTrack>>(`${BASE}/tracks/${slug}`),
   getExercise: (slug: string) => api.get<Ok<CodeExercise>>(`${BASE}/exercises/${slug}`),
+  // NTU-style module lesson (fetched on demand; empty blocks when none).
+  getLesson: (moduleId: number) => api.get<Ok<CodeLesson>>(`${BASE}/modules/${moduleId}/lesson`),
   getStats: () => api.get<Ok<CodeStats>>(`${BASE}/stats`),
 
   listExercises: (params: {
@@ -80,6 +84,12 @@ export const codeLabAdminApi = {
     api.post<Ok<{ moduleId: number; moduleName: string; trackName: string; language: string; exercises: ExerciseProposal[]; model: string }>>(`${BASE}/admin/ai/exercises/generate`, body),
   aiCommitExercises: (body: { moduleId: number; exercises: ExerciseProposal[] }) =>
     api.post<Ok<{ moduleId: number; created: number; ids: number[] }>>(`${BASE}/admin/ai/exercises/commit`, body),
+  // NTU-style module lesson
+  aiGenerateLesson: (body: { moduleId: number }) =>
+    api.post<Ok<{ moduleId: number; moduleName: string; blocks: DocBlock[]; model: string }>>(`${BASE}/admin/ai/lesson/generate`, body),
+  aiCommitLesson: (body: { moduleId: number; blocks: DocBlock[]; model?: string }) =>
+    api.post<Ok<{ moduleId: number; blocks: number }>>(`${BASE}/admin/ai/lesson/commit`, body),
+  clearLesson: (moduleId: number) => api.delete(`${BASE}/modules/${moduleId}/lesson`),
 };
 
 // ─── Shared UI constants ────────────────────────────────────────

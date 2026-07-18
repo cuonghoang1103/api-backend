@@ -6472,15 +6472,24 @@ model CodeTrack {
 
 // ─── Modules (ordered chapters/stages inside a track) ────────────
 model CodeModule {
-  id          Int       @id @default(autoincrement())
-  trackId     Int       @map("track_id")
-  name        String    @db.VarChar(150)
-  slug        String    @db.VarChar(150)
-  description String?   @db.Text
-  level       CodeLevel @default(BEGINNER)
-  sortOrder   Int       @default(0) @map("sort_order")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  id                Int       @id @default(autoincrement())
+  trackId           Int       @map("track_id")
+  name              String    @db.VarChar(150)
+  slug              String    @db.VarChar(150)
+  description       String?   @db.Text
+  level             CodeLevel @default(BEGINNER)
+  sortOrder         Int       @default(0) @map("sort_order")
+  // ─── NTU-style long-form LESSON (P2) ─────────────────────────────
+  // A comprehensive tutorial for this module — intro, concepts explained
+  // with annotated code + output, old-vs-new comparisons, best practices —
+  // stored as the SAME ordered DocBlock array used by Exp Hub docs
+  // ({type: heading|prose|code|mermaid|image|links}). Rendered above the
+  // module's exercises. Additive/nullable — null = no lesson yet.
+  lessonBlocks      Json?     @map("lesson_blocks")
+  lessonModel       String?   @map("lesson_model") @db.VarChar(80)
+  lessonGeneratedAt DateTime? @map("lesson_generated_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
 
   track     CodeTrack      @relation(fields: [trackId], references: [id], onDelete: Cascade)
   exercises CodeExercise[]

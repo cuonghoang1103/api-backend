@@ -7,19 +7,24 @@
  * with the shared token throttle.
  *
  *   docker exec cuonghoangdev_backend node scripts/exphub-doc-bulk-gen.mjs \
- *     [--roots] [--all] [--force] [--limit N] [--only slug,slug] [--dry] [--budget 3200000]
+ *     [--roots] [--all] [--force] [--regen-thin] [--limit N] [--only slug,slug] [--dry] [--budget 3200000]
  *
  * Scope (default = every NON-root category = the technologies):
- *   --roots  also write an overview doc for the root GROUP categories
- *   --all    every category (roots + children)
- *   --only   restrict to these category slugs (comma list)
- * Resumable: a category that already has a doc is SKIPPED unless --force.
+ *   --roots       also write an overview doc for the root GROUP categories
+ *   --all         every category (roots + children)
+ *   --only        restrict to these category slugs (comma list)
+ *   --force       (re)write even categories that already have a doc
+ *   --regen-thin  re-write ONLY categories whose EXISTING doc is too shallow
+ *                 (below isThinDoc: <22 blocks / <4 code / <5k chars). This is the
+ *                 cheap, targeted way to upgrade the old thin cheat-sheet docs to
+ *                 full guides WITHOUT re-spending tokens on the already-deep ones.
+ * Resumable: a category that already has a doc is SKIPPED unless --force/--regen-thin.
  * Throttle: sleeps when the shared 5h gateway window nears --budget tokens
  *   (same key/window as interview + language bulk-gen — run ONE flat-out, not all).
  */
 import { PrismaClient } from '@prisma/client';
 
-const { generateCategoryDoc, commitCategoryDoc } = await import('../dist/services/snippets.aiDoc.service.js');
+const { generateCategoryDoc, commitCategoryDoc, isThinDoc } = await import('../dist/services/snippets.aiDoc.service.js');
 
 const prisma = new PrismaClient();
 const ADMIN = 1;
@@ -30,6 +35,7 @@ const num = (f, d) => { const v = val(f, undefined); const n = Number(v); return
 
 const DRY = has('--dry');
 const FORCE = has('--force');
+const REGEN_THIN = has('--regen-thin');
 const ROOTS = has('--roots');
 const ALL = has('--all');
 const LIMIT = num('--limit', 0);
@@ -68,13 +74,24 @@ async function main() {
   const where = (ALL || ROOTS) ? {} : { parentId: { not: null } };
   let cats = await prisma.snippetCategory.findMany({
     where,
-    select: { id: true, name: true, slug: true, parentId: true, docGeneratedAt: true },
+    select: { id: true, name: true, slug: true, parentId: true, docGeneratedAt: true, docBlocks: true },
     orderBy: [{ parentId: 'asc' }, { sortOrder: 'asc' }],
   });
   if (ONLY.length) cats = cats.filter((c) => ONLY.includes(c.slug));
 
-  const todo = cats.filter((c) => FORCE || !c.docGeneratedAt);
-  console.log(`[exphub-doc] ${todo.length} categories to write (${cats.length - todo.length} already have a doc, skipped)${DRY ? ' — DRY' : ''}`);
+  // Selection:
+  //   --force       → every category in scope
+  //   --regen-thin  → categories with NO doc OR whose existing doc is too shallow
+  //   (default)     → only categories with no doc yet
+  const isThin = (c) => Array.isArray(c.docBlocks) && isThinDoc(c.docBlocks);
+  const todo = cats.filter((c) =>
+    FORCE ? true : REGEN_THIN ? (!c.docGeneratedAt || isThin(c)) : !c.docGeneratedAt,
+  );
+  const thinCount = REGEN_THIN ? cats.filter((c) => c.docGeneratedAt && isThin(c)).length : 0;
+  console.log(
+    `[exphub-doc] ${todo.length} categories to write (${cats.length - todo.length} skipped` +
+    `${REGEN_THIN ? `, incl. ${thinCount} thin docs to upgrade` : ''})${DRY ? ' — DRY' : ''}`,
+  );
 
   for (const cat of todo) {
     if (stop) break;

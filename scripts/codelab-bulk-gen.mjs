@@ -104,18 +104,30 @@ async function roadmapPhase(tracks) {
     }
     await waitBudget();
     try {
-      const res = await generateRoadmap(ADMIN, { trackId: t.id, moduleCount: MODULES_PER_TRACK, titlesPerModule: TITLES });
-      const existing = new Set((await prisma.codeModule.findMany({ where: { trackId: t.id }, select: { slug: true } })).map((m) => m.slug));
+      // EXTEND: only generate the modules still needed to reach the target, and
+      // tell the AI what already exists so it adds deeper/advanced topics only.
+      const existingMods = await prisma.codeModule.findMany({ where: { trackId: t.id }, select: { slug: true, name: true } });
+      const need = MODULES_PER_TRACK - existingMods.length;
+      if (need <= 0) { console.log(`  · [roadmap] ${t.slug}: already ${existingMods.length}/${MODULES_PER_TRACK} modules — skip`); await sleep(SLEEP); continue; }
+      const res = await generateRoadmap(ADMIN, {
+        trackId: t.id,
+        moduleCount: need,
+        titlesPerModule: TITLES,
+        existingNames: existingMods.map((m) => m.name),
+      });
+      const existing = new Set(existingMods.map((m) => m.slug));
       const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
-      let order = (await prisma.codeModule.count({ where: { trackId: t.id } }));
+      let order = existingMods.length;
       let added = 0;
       for (const m of res.modules) {
-        if (existing.has(slugify(m.name))) continue;
+        const sl = slugify(m.name);
+        if (existing.has(sl)) continue;
+        existing.add(sl);
         added++;
         if (!DRY) await createModule({ trackId: t.id, name: m.name, description: m.description, level: m.level, sortOrder: order++ });
       }
       modWrote += added;
-      console.log(`  ${DRY ? '~' : '✓'} [roadmap] ${t.slug}: ${DRY ? 'would add' : 'added'} ${added} module(s)`);
+      console.log(`  ${DRY ? '~' : '✓'} [roadmap] ${t.slug}: ${existingMods.length} existing, ${DRY ? 'would add' : 'added'} ${added} (target ${MODULES_PER_TRACK})`);
     } catch (e) {
       fails++;
       const msg = String(e?.message ?? e);

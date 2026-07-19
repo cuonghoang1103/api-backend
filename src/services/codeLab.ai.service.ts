@@ -46,7 +46,7 @@ export interface RoadmapModuleProposal {
 
 export async function generateRoadmap(
   userId: number,
-  body: { trackId?: number | string; moduleCount?: number; titlesPerModule?: number },
+  body: { trackId?: number | string; moduleCount?: number; titlesPerModule?: number; existingNames?: string[] },
 ): Promise<{ trackId: number; trackName: string; modules: RoadmapModuleProposal[]; model: string }> {
   await ensureAi(userId);
   const trackId = Number(body?.trackId) || 0;
@@ -59,12 +59,22 @@ export async function generateRoadmap(
 
   const moduleCount = Math.min(20, Math.max(3, Number(body?.moduleCount) || 8));
   const titlesPer = Math.min(30, Math.max(4, Number(body?.titlesPerModule) || 8));
+  // EXTEND mode: when the track already has modules, generate ADDITIONAL,
+  // deeper/more-advanced modules that continue the path without repeating what
+  // exists — so raising the target grows breadth (basic→advanced) cleanly.
+  const existing = Array.isArray(body?.existingNames) ? body.existingNames.filter((s) => typeof s === 'string' && s.trim()).slice(0, 60) : [];
+  const extendNote = existing.length
+    ? `\n\nThe track ALREADY has these modules (do NOT repeat or rename them):\n- ${existing.join('\n- ')}\n` +
+      `Design ${moduleCount} NEW modules that CONTINUE this path toward ADVANCED mastery — deeper topics, ` +
+      `real-world/advanced techniques, edge cases, performance, tooling, patterns — that are NOT already ` +
+      `covered above. Lean toward INTERMEDIATE and ADVANCED levels.`
+    : '';
 
   const system =
     `You are a senior software instructor designing a complete, professional learning ROADMAP ` +
     `in ENGLISH for the track "${track.name}" (primary language/tech: ${track.language}), which sits in ` +
     `the "${track.group.name}" group. Design a path that takes a learner from ZERO to ADVANCED, ` +
-    `ordered logically so each module builds on the previous ones.\n\n` +
+    `ordered logically so each module builds on the previous ones.${extendNote}\n\n` +
     `Produce EXACTLY ${moduleCount} modules. For each module give: a short "name", a one-sentence ` +
     `"description", a "level" (one of BEGINNER, INTERMEDIATE, ADVANCED), and ${titlesPer} concrete, ` +
     `varied "exerciseTitles" (short imperative problem titles, increasing in difficulty). Titles must be ` +

@@ -15,13 +15,14 @@ import { SearchAutocomplete } from '@/components/exp-hub/SearchAutocomplete';
 import { FilterPanel } from '@/components/exp-hub/FilterPanel';
 import { CategoryHeader } from '@/components/exp-hub/CategoryHeader';
 import { CategoryDoc } from '@/components/exp-hub/CategoryDoc';
+import { DocToc } from '@/components/exp-hub/DocToc';
 import { ReactionBar } from '@/components/exp-hub/ReactionBar';
 import { CommentsSection } from '@/components/exp-hub/CommentsSection';
 import { snippetsApi, snippetCategoriesApi, snippetTagsApi, snippetStatsApi, snippetBookmarksApi, snippetReactionsApi } from '@/lib/exp-hub-api';
 import { useAuthStore } from '@/store/authStore';
 import { LanguageBadge, LanguageIcon } from '@/components/exp-hub/LanguageIcon';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
-import type { Snippet, SnippetCategory, SnippetTag, SnippetFilters, SnippetVersion, ReactionSummary } from '@/types/exp-hub';
+import type { Snippet, SnippetCategory, SnippetTag, SnippetFilters, SnippetVersion, ReactionSummary, DocBlock } from '@/types/exp-hub';
 
 // Find a category anywhere in the nested tree.
 function findCategory(cats: SnippetCategory[], targetId: number): SnippetCategory | null {
@@ -99,6 +100,10 @@ export default function ExpHubPage() {
   const [folderTreeOpen, setFolderTreeOpen] = useState(true);
   // Middle snippet-list column collapse (like the category tree).
   const [listOpen, setListOpen] = useState(true);
+  // The selected technology's reference doc — OWNED here so the middle-column
+  // sub-section nav (DocToc) and the right-panel CategoryDoc share ONE fetch.
+  const [docBlocks, setDocBlocks] = useState<DocBlock[] | null>(null);
+  const [docLoading, setDocLoading] = useState(false);
 
   const languages = [...new Set(snippets.filter((s) => s.language).map((s) => s.language))].slice(0, 10);
 
@@ -177,6 +182,27 @@ export default function ExpHubPage() {
   useEffect(() => {
     fetchSnippets();
   }, [fetchSnippets]);
+
+  // Fetch the selected technology's reference doc (shared by the doc panel +
+  // the middle-column sub-section nav). Skipped in the saved view and when the
+  // tree already told us there's no doc.
+  const selectedHasDoc = selectedCategory?.hasDoc;
+  useEffect(() => {
+    if (!selectedCategoryId || showSaved || selectedHasDoc === false) {
+      setDocBlocks(null);
+      setDocLoading(false);
+      return;
+    }
+    let alive = true;
+    setDocLoading(true);
+    setDocBlocks(null);
+    snippetCategoriesApi
+      .getDoc(selectedCategoryId)
+      .then((res) => { if (alive) setDocBlocks(res.data.data.blocks || []); })
+      .catch(() => { if (alive) setDocBlocks([]); })
+      .finally(() => { if (alive) setDocLoading(false); });
+    return () => { alive = false; };
+  }, [selectedCategoryId, showSaved, selectedHasDoc]);
 
   // Select first snippet when list changes (respects the pinned order)
   useEffect(() => {
@@ -489,6 +515,12 @@ export default function ExpHubPage() {
             </div>
           )}
 
+          {/* Sub-section nav for the technology's reference doc ("mục con") —
+              lets you jump straight to Install / Usage / CLI reference / etc. */}
+          {selectedCategory && !showSaved && !selectedSnippet && docBlocks && docBlocks.length > 0 && (
+            <DocToc blocks={docBlocks} />
+          )}
+
           {/* Filters */}
           <div className="space-y-3 border-b border-[var(--border-color)] p-3">
             <FilterPanel
@@ -599,7 +631,7 @@ export default function ExpHubPage() {
               if (selectedCategory && !showSaved) {
                 return (
                   <div className="mx-auto max-w-4xl p-6">
-                    <CategoryDoc categoryId={selectedCategory.id} hasDoc={selectedCategory.hasDoc} />
+                    <CategoryDoc name={selectedCategory.name} blocks={docBlocks} loading={docLoading} />
                   </div>
                 );
               }

@@ -10,20 +10,43 @@ import type { DocBlock } from '@/types/exp-hub';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { CodeViewer } from './CodeViewer';
 
+// Stable DOM id for the Nth block's heading — the middle-column TOC scrolls to
+// these, so the id MUST match between the sidebar list and the rendered doc.
+export function docHeadingId(index: number): string {
+  return `exp-doc-h-${index}`;
+}
+
+// The doc's section headings (with their block index) — used to build the
+// sub-section navigation ("mục con") in the middle column.
+export function docHeadings(blocks: DocBlock[]): Array<{ id: string; text: string }> {
+  const out: Array<{ id: string; text: string }> = [];
+  blocks.forEach((b, i) => {
+    if (b.type === 'heading' && b.text.trim()) out.push({ id: docHeadingId(i), text: b.text });
+  });
+  return out;
+}
+
 export function DocBlocksView({ blocks }: { blocks: DocBlock[] }) {
   return (
     <div className="space-y-4">
       {blocks.map((b, i) => (
-        <DocBlockView key={i} block={b} />
+        <DocBlockView key={i} block={b} index={i} />
       ))}
     </div>
   );
 }
 
-export function DocBlockView({ block }: { block: DocBlock }) {
+export function DocBlockView({ block, index }: { block: DocBlock; index?: number }) {
   switch (block.type) {
     case 'heading':
-      return <h3 className="mt-1 text-base font-bold text-[var(--text-primary)]">{block.text}</h3>;
+      return (
+        <h3
+          id={index != null ? docHeadingId(index) : undefined}
+          className="mt-1 scroll-mt-24 text-base font-bold text-[var(--text-primary)]"
+        >
+          {block.text}
+        </h3>
+      );
     case 'prose':
       return (
         <div

@@ -113,6 +113,45 @@ export function normalizeBlocks(raw: unknown): DocBlock[] {
   return out;
 }
 
+/**
+ * Recover blocks from a TRUNCATED JSON response (comprehensive docs can exceed
+ * the token budget mid-array). Walks the raw text, extracts every balanced
+ * top-level `{...}` object inside the `"blocks":[ ... ]` array, and normalizes
+ * whatever parsed — so a doc cut off at block 30/40 still yields 29 good blocks
+ * instead of throwing. Mirrors salvageBlocks in codeLab.lesson.service.
+ */
+export function salvageBlocks(raw: string): DocBlock[] {
+  const start = raw.indexOf('"blocks"');
+  const arrStart = start >= 0 ? raw.indexOf('[', start) : raw.indexOf('[');
+  if (arrStart < 0) return [];
+  const objs: unknown[] = [];
+  let depth = 0;
+  let inStr = false;
+  let esc = false;
+  let objStart = -1;
+  for (let i = arrStart + 1; i < raw.length; i++) {
+    const ch = raw[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (ch === '\\') esc = true;
+      else if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') { inStr = true; continue; }
+    if (ch === '{') { if (depth === 0) objStart = i; depth++; continue; }
+    if (ch === '}') {
+      depth--;
+      if (depth === 0 && objStart >= 0) {
+        try { objs.push(JSON.parse(raw.slice(objStart, i + 1))); } catch { /* skip */ }
+        objStart = -1;
+      }
+      continue;
+    }
+    if (ch === ']' && depth === 0) break; // end of blocks array
+  }
+  return normalizeBlocks(objs);
+}
+
 async function loadCategory(categoryId: number) {
   const cat = await prisma.snippetCategory.findUnique({
     where: { id: categoryId },
@@ -138,28 +177,37 @@ export async function generateCategoryDoc(
   const docsNote = cat.docsUrl ? `\nOfficial docs: ${cat.docsUrl}` : '';
 
   const system =
-    `You are a senior software engineer and technical writer producing a COMPLETE, PROFESSIONAL ` +
-    `reference page, in ENGLISH, for the technology/tool "${cat.name}".${groupNote} The reader is a ` +
-    `developer who wants to understand it and get productive fast. Write accurate, real, up-to-date ` +
-    `content. NEVER invent APIs, packages, commands, or URLs that do not exist — if you are not sure a ` +
-    `URL is real, omit it.\n\n` +
-    `Cover these sections, each introduced by a "heading" block (skip a section only if it truly does ` +
-    `not apply). Be thorough and practical:\n` +
-    `1. Overview — what "${cat.name}" is and why it matters (2-4 sentences).\n` +
-    `2. Key features — the standout capabilities, as a <ul> list.\n` +
+    `You are a senior software engineer and technical writer producing a COMPREHENSIVE, PROFESSIONAL, ` +
+    `IN-DEPTH guide, in ENGLISH, for the technology/tool "${cat.name}".${groupNote} The reader wants to ` +
+    `fully understand it AND use it end-to-end. Write a LONG, thorough, textbook-quality guide — detailed ` +
+    `enough that a developer can learn it and become productive from this page alone. Be accurate and ` +
+    `real; NEVER invent APIs, packages, commands, plans or URLs — omit anything you're unsure is real.\n\n` +
+    `Structure it as MANY sections (each a "heading" block), adapted to what "${cat.name}" actually is. ` +
+    `Cover, in a sensible order, all that apply:\n` +
+    `1. Overview — what it is, why it matters, where it fits.\n` +
+    `2. Key features / capabilities (<ul>).\n` +
     `3. What it's used for — concrete real-world use cases (<ul>).\n` +
-    `4. Installation — the REAL install commands as "code" blocks (language "bash"), with a "title" per ` +
-    `block naming the method/OS (e.g. "macOS (Homebrew)", "Ubuntu/Debian (apt)", "Windows", "npm", "pip", ` +
-    `"Docker"). Give every common path a developer would actually use.\n` +
-    `5. Configuration & setup — first-time setup / a minimal config file or init command (prose + code).\n` +
-    `6. Basic usage — a minimal, correct, runnable example ("code" in the most relevant language).\n` +
-    `7. Common commands — a short cheatsheet of everyday terminal commands ("code", language "bash", ` +
-    `with brief inline comments).\n` +
-    `8. Works well with — technologies/libraries it commonly combines with, and why (prose).\n` +
-    `9. Resources & links — a "links" block with the REAL official homepage, download page, ` +
-    `documentation, source repository (GitHub/GitLab) and package registry (npm/PyPI/crates…) when they ` +
-    `exist. Each item: {label, url, note}.\n` +
-    `Optionally add one "mermaid" block if a small architecture/flow diagram genuinely helps understanding.\n\n` +
+    `4. Installation — REAL commands for EVERY common OS/method as "code" blocks (title per block: ` +
+    `"macOS (Homebrew)", "Ubuntu (apt)", "Windows", "npm", "pip", "Docker"…).\n` +
+    `5. Getting started — a step-by-step first run (setup → a first working example → how to verify it worked).\n` +
+    `6. Core usage & common tasks — SEVERAL practical, annotated examples/recipes covering what people ` +
+    `actually DO with it (not just one hello-world). Show real code/commands WITH expected output as ` +
+    `inline comments.\n` +
+    `7. Command / CLI reference — for anything with a CLI (git, docker, package managers, cloud/AI CLIs, ` +
+    `dev tools): a THOROUGH list of the important commands/subcommands and what each does — the everyday ` +
+    `workflow AND the useful extras. (e.g. git: clone/status/branch/checkout/merge/rebase/stash/log/diff/` +
+    `reset/revert/remote/push/pull/PR; a CLI tool: install/login/auth, the main run command and its key ` +
+    `flags, and any session/REPL commands with their purpose.)\n` +
+    `8. Configuration — important settings / config files / env vars.\n` +
+    `9. Plans, pricing & access — ONLY when it applies (a paid API with pay-as-you-go, subscription tiers ` +
+    `like free / pro / higher tiers, or cloud pricing): explain how access and billing work and the ` +
+    `practical differences between the tiers.\n` +
+    `10. Advanced usage & best practices — real-world patterns, deeper features.\n` +
+    `11. Tips, gotchas & troubleshooting — common mistakes and how to fix them.\n` +
+    `12. Works well with — ecosystem it combines with, and why.\n` +
+    `13. Resources & links — a "links" block with the REAL official homepage, docs, download, source repo ` +
+    `and package registry when they exist ({label, url, note}).\n` +
+    `Include 2-4 "mermaid" diagrams where a picture clarifies (architecture, workflow, request/response, flow).\n\n` +
     `Return ONLY a minified JSON object of this exact shape (no text outside the JSON):\n` +
     `{"blocks":[` +
     `{"type":"heading","text":string} | ` +
@@ -168,15 +216,15 @@ export async function generateCategoryDoc(
     `{"type":"mermaid","code":string} | ` +
     `{"type":"links","items":[{"label":string,"url":string,"note":string}]}` +
     `]}\n` +
-    `Rules: "prose".html uses ONLY simple tags <p><ul><ol><li><strong><em><code><a href>. Prefer a ` +
-    `"links" block for external resources rather than burying URLs in prose. Aim for a rich but focused ` +
-    `doc (roughly 12-22 blocks). Inside JSON strings, escape every double-quote and newline correctly so ` +
-    `the JSON parses.`;
+    `Rules: "prose".html uses ONLY <p><ul><ol><li><strong><em><code><a href>. Prefer a "links" block for ` +
+    `external resources. Aim for a RICH, comprehensive guide (roughly 26-45 blocks). Inside JSON strings, ` +
+    `escape every double-quote and newline correctly so the JSON parses.`;
 
   const user =
-    `Write the complete reference doc for "${cat.name}".${hint}${docsNote}\n` +
-    `Include real installation commands for the common platforms, a usage example, a commands cheatsheet, ` +
-    `and a Resources & links block with the official site, docs and repository.`;
+    `Write the complete, in-depth guide for "${cat.name}".${hint}${docsNote}\n` +
+    `Be thorough: installation for common platforms, a getting-started walkthrough, several real usage ` +
+    `recipes with output, a full command/CLI reference if it has one, plans/pricing if it applies, ` +
+    `troubleshooting, and a Resources & links block.`;
 
   let raw = '';
   let model = 'generation';
@@ -186,7 +234,7 @@ export async function generateCategoryDoc(
       feature: 'exphub',
       system,
       messages: [{ role: 'user', content: user }],
-      maxTokens: 8000,
+      maxTokens: 12000,
       maxRetries: 1,
       timeoutMs: 150_000,
       userId,
@@ -198,7 +246,13 @@ export async function generateCategoryDoc(
   }
 
   const parsed = looseJson(raw) as { blocks?: unknown };
-  const blocks = normalizeBlocks(parsed.blocks);
+  let blocks = normalizeBlocks(parsed.blocks);
+  // Comprehensive guides can overrun the token budget and truncate the JSON;
+  // recover the balanced-brace objects rather than losing the whole doc.
+  if (blocks.length < 6) {
+    const salvaged = salvageBlocks(raw);
+    if (salvaged.length > blocks.length) blocks = salvaged;
+  }
   if (!blocks.length) throw new BadRequestError('Tạo tài liệu chưa ra kết quả, vui lòng thử lại.');
 
   return { categoryId: cat.id, name: cat.name, blocks, model };

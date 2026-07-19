@@ -39,13 +39,23 @@ CAN go deep → the thin ones just need regeneration with the strong model + the
    ```
    Resumable — re-running skips docs that are now deep enough. Each thin doc may cost up to 2 LLM calls
    (draft + expand retry); the budget throttle paces it.
-4. (Optional) Prune the empty junk groups:
+4. Prune the empty junk groups AND unblock the missing Next.js / Node.js leaves. ROOT CAUSE: the leftover
+   empty root groups "Next.Js" (slug `nextjs`) and "Node.JS" (slug `nodejs`) collide with the taxonomy
+   seed's intended leaves (Frontend → Next.js, Backend → Node.js). Because the seed is idempotent-by-slug,
+   the collision makes it SKIP creating those two leaves — which is why Next.js/Node.js are missing today.
+   Order matters: **prune first, then re-seed.**
    ```bash
+   # a) delete the 4 empty junk roots (Game, Lab211, Next.Js, Node.JS):
    docker exec cuonghoangdev_backend node scripts/exphub-prune-empty-groups.mjs           # preview
    docker exec cuonghoangdev_backend node scripts/exphub-prune-empty-groups.mjs --apply    # delete
+   # b) re-run the taxonomy seed — now unblocked, it creates Backend/Node.js + Frontend/Next.js:
+   docker exec cuonghoangdev_backend node scripts/exp-hub-seed-taxonomy.mjs --apply
+   # c) the --regen-thin run in step 3 (or a fresh run) then generates deep docs for the two new leaves
+   #    (they have no doc yet, so a normal bulk run picks them up too):
+   docker exec -e LLM_MODEL_GENERATION=claude-opus-4-8 cuonghoangdev_backend \
+     node scripts/exphub-doc-bulk-gen.mjs --only nodejs,nextjs --budget 3000000
    ```
-5. (Optional, separate) Add real **Next.js** and **Node.js** tech leaves (they currently exist only as empty
-   groups). Best via the admin panel or the taxonomy seed, then generate their docs — not automated here.
+   (Seed already DEFINES Node.js and Next.js — no code change needed; the collision was the only blocker.)
 
 ## Verify after the run
 ```bash

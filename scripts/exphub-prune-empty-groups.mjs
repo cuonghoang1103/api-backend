@@ -8,6 +8,13 @@
  * clutter the top-level nav. This lists and (with --apply) deletes ONLY root
  * categories that are genuinely empty: 0 child categories AND 0 snippets.
  *
+ * WHY THIS ALSO FIXES MISSING Next.js / Node.js: those empty roots have slugs
+ * `nextjs` / `nodejs`, which COLLIDE with the taxonomy seed's intended leaves
+ * (Frontend → Next.js, Backend → Node.js). The seed is idempotent-by-slug, so
+ * the collision makes it SKIP creating the two leaves. Deleting these empty roots
+ * unblocks the seed → run `exp-hub-seed-taxonomy.mjs --apply` AFTER this, then
+ * generate docs for the new leaves. See EXPHUB-DEEPEN-RUNBOOK.md step 4.
+ *
  *   node scripts/exphub-prune-empty-groups.mjs            # DRY — list only (default)
  *   node scripts/exphub-prune-empty-groups.mjs --apply    # actually delete them
  *   node scripts/exphub-prune-empty-groups.mjs --keep game,lab211   # never touch these slugs

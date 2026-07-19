@@ -392,6 +392,7 @@ export interface ExerciseInput {
   solutionCodeJson?: unknown;
   solutionExplanationHtml?: string | null;
   diagramImageUrl?: string | null;
+  diagramMermaid?: string | null;
   imagesJson?: unknown;
   youtubeUrl?: string | null;
   referenceUrl?: string | null;
@@ -418,6 +419,7 @@ function buildExerciseData(data: ExerciseInput, lang: string) {
     solutionCodeJson: normalizeCodeBlocks(data.solutionCodeJson, lang),
     solutionExplanationHtml: data.solutionExplanationHtml ?? null,
     diagramImageUrl: data.diagramImageUrl ?? null,
+    diagramMermaid: data.diagramMermaid ?? null,
     imagesJson: normalizeImages(data.imagesJson),
     youtubeUrl: data.youtubeUrl ?? null,
     referenceUrl: data.referenceUrl ?? null,
@@ -484,6 +486,7 @@ export async function updateExercise(id: number, data: Partial<ExerciseInput>) {
   if (data.solutionCodeJson !== undefined) patch.solutionCodeJson = normalizeCodeBlocks(data.solutionCodeJson, lang);
   if (data.solutionExplanationHtml !== undefined) patch.solutionExplanationHtml = data.solutionExplanationHtml;
   if (data.diagramImageUrl !== undefined) patch.diagramImageUrl = data.diagramImageUrl;
+  if (data.diagramMermaid !== undefined) patch.diagramMermaid = data.diagramMermaid;
   if (data.imagesJson !== undefined) patch.imagesJson = normalizeImages(data.imagesJson);
   if (data.youtubeUrl !== undefined) patch.youtubeUrl = data.youtubeUrl;
   if (data.referenceUrl !== undefined) patch.referenceUrl = data.referenceUrl;

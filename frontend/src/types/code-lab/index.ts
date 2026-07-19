@@ -112,6 +112,7 @@ export interface CodeExercise extends CodeExerciseListItem {
   solutionCodeJson?: CodeBlock[] | null;
   solutionExplanationHtml?: string | null;
   diagramImageUrl?: string | null;
+  diagramMermaid?: string | null;
   imagesJson?: ImageItem[] | null;
   youtubeUrl?: string | null;
   referenceUrl?: string | null;

@@ -19,6 +19,7 @@ import type { CodeExercise, CodeBlock } from '@/types/code-lab';
 import { useAuthStore } from '@/store/authStore';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { CodeViewer } from '@/components/exp-hub/CodeViewer';
+import { MiniCode } from '@/components/code-lab/MiniCode';
 import { CodeEditor } from '@/components/exp-hub/CodeEditor';
 import { DifficultyBadge } from '@/components/code-lab/shared';
 
@@ -154,7 +155,12 @@ export default function ExerciseDetailPage() {
         </Section>
       )}
 
-      {/* Diagram + extra images */}
+      {/* Diagram — Mermaid (illustrates the problem, NTU-style) + optional image */}
+      {ex.diagramMermaid && (
+        <figure className="mb-5">
+          <CodeViewer code={ex.diagramMermaid} language="mermaid" />
+        </figure>
+      )}
       {ex.diagramImageUrl && (
         <figure className="mb-5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -197,11 +203,11 @@ export default function ExerciseDetailPage() {
                 <div className="grid grid-cols-1 gap-px sm:grid-cols-2" style={{ background: 'var(--border-color)' }}>
                   <div className="p-3" style={{ background: 'var(--bg-card)' }}>
                     <div className="mb-1 text-[10px] font-bold uppercase" style={{ color: 'var(--text-muted)' }}>Input</div>
-                    <pre className="overflow-x-auto whitespace-pre-wrap font-mono text-xs" style={{ color: 'var(--text-primary)' }}>{exm.input || '—'}</pre>
+                    <MiniCode code={exm.input || '—'} language={ex.language} />
                   </div>
                   <div className="p-3" style={{ background: 'var(--bg-card)' }}>
                     <div className="mb-1 text-[10px] font-bold uppercase" style={{ color: 'var(--text-muted)' }}>Output</div>
-                    <pre className="overflow-x-auto whitespace-pre-wrap font-mono text-xs" style={{ color: 'var(--text-primary)' }}>{exm.output || '—'}</pre>
+                    <MiniCode code={exm.output || '—'} plain />
                   </div>
                 </div>
                 {exm.explanation && (

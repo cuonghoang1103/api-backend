@@ -147,6 +147,7 @@ export interface ExerciseProposal {
   solutionCode: Array<{ name: string; language: string; code: string }>;
   solutionExplanationHtml: string;
   tags: string[];
+  diagramMermaid: string;
 }
 
 export async function generateExercises(
@@ -203,14 +204,19 @@ export async function generateExercises(
     `- "starterCode": array of {name, language, code} — a minimal scaffold with TODOs (language "${language}").\n` +
     `- "solutionCode": array of {name, language, code} — a correct, idiomatic, RUNNABLE official solution.\n` +
     `- "solutionExplanationHtml": a walkthrough of the solution as HTML (same allowed tags as problemHtml).\n` +
-    `- "tags": array of short lowercase tags.\n\n` +
+    `- "tags": array of short lowercase tags.\n` +
+    `- "diagramMermaid": a SMALL Mermaid diagram that helps the learner picture the problem — a CLASS diagram ` +
+    `for OOP/class tasks (fields + methods, like a UML class box), or a FLOWCHART for algorithm/logic tasks, ` +
+    `or a sequence/data-flow where it fits. Use valid, simple Mermaid (classDiagram / flowchart TD / graph LR). ` +
+    `Empty string "" only if a diagram genuinely does not apply.\n\n` +
     `Never invent APIs, packages, or syntax that do not exist. Code must be real and correct.\n` +
     `Return ONLY minified JSON of this exact shape (no text outside the JSON), escaping quotes/newlines so it parses:\n` +
     `{"exercises":[{"title":string,"difficulty":string,"estimatedMinutes":number,"points":number,"concepts":[string],` +
     `"prerequisites":[string],"problemHtml":string,"inputSpec":string,"outputSpec":string,"constraints":string,` +
     `"examples":[{"input":string,"output":string,"explanation":string}],"hints":[string],` +
     `"starterCode":[{"name":string,"language":string,"code":string}],` +
-    `"solutionCode":[{"name":string,"language":string,"code":string}],"solutionExplanationHtml":string,"tags":[string]}]}`;
+    `"solutionCode":[{"name":string,"language":string,"code":string}],"solutionExplanationHtml":string,"tags":[string],` +
+    `"diagramMermaid":string}]}`;
 
   const user = `Write ${count} exercise(s) now for "${mod.name}".${mod.description ? ` Module context: ${mod.description}` : ''}`;
 
@@ -286,6 +292,7 @@ function normalizeProposals(raw: unknown, fallbackLang: string): ExerciseProposa
         solutionCode: blocks(o.solutionCode),
         solutionExplanationHtml: s(o.solutionExplanationHtml),
         tags: arr(o.tags, 15),
+        diagramMermaid: s(o.diagramMermaid),
       };
     })
     .filter((x): x is ExerciseProposal => !!x)
@@ -335,6 +342,7 @@ export async function commitExercises(
         tags: p.tags,
         estimatedMinutes: p.estimatedMinutes,
         points: p.points,
+        diagramMermaid: p.diagramMermaid || null,
       },
       userId,
     );

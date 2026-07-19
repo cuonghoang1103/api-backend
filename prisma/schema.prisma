@@ -6537,6 +6537,10 @@ model CodeExercise {
   solutionExplanationHtml String? @map("solution_explanation_html") @db.Text
   // Optional UML/diagram image (R2) + extra images [{ url, caption }].
   diagramImageUrl         String? @map("diagram_image_url") @db.VarChar(2000)
+  // Optional Mermaid diagram illustrating the problem (a class diagram for OOP
+  // tasks, a flowchart for algorithm tasks) — rendered above the problem so the
+  // learner can picture the structure, NTU-style. Additive/nullable.
+  diagramMermaid          String? @map("diagram_mermaid") @db.Text
   imagesJson              Json?   @map("images_json")
   // Extra references.
   youtubeUrl              String? @map("youtube_url") @db.VarChar(500)

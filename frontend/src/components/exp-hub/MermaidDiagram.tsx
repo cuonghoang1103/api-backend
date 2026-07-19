@@ -35,9 +35,12 @@ function quoteLabels(body: string): string {
       const end = body.indexOf(closeStr, start);
       if (end < 0) continue;
       let text = body.slice(start, end);
+      // SAFETY: stray inner bracket/pipe → the first-close heuristic mis-fired;
+      // leave it untouched rather than mangle it.
+      if (/[[\]{}|]/.test(text)) { out += body[i]; i++; matched = true; break; }
       const trimmed = text.trim();
       const isQuoted = trimmed.startsWith('"') && trimmed.endsWith('"') && trimmed.length >= 2;
-      const needs = /[()"'%<>=×÷#&\n[\]{}]/.test(text) || text.includes(':') || text.includes('\\n');
+      const needs = /[()"'%<>=×÷#&\n]/.test(text) || text.includes(':') || text.includes('\\n');
       if (isQuoted) {
         const inner = trimmed.slice(1, -1)
           .replace(/\\n/g, '<br/>').replace(/\n/g, '<br/>')
@@ -132,8 +135,16 @@ export function MermaidDiagram({ chart, className = '' }: MermaidDiagramProps) {
           // to the bottom of the page). Suppress it and handle errors ourselves.
           suppressErrorRendering: true,
         });
-        // mermaid.render throws on invalid syntax — caught below.
-        const { svg: out } = await mermaid.render(renderId.current, cleanMermaid(chart));
+        // Render as-authored FIRST so valid diagrams are never altered; only if
+        // that fails do we attempt the best-effort repair (cleanMermaid). This
+        // prevents the repair heuristics from mangling a valid diagram.
+        let out: string;
+        try {
+          ({ svg: out } = await mermaid.render(renderId.current, chart.trim()));
+        } catch {
+          document.getElementById(`d${renderId.current}`)?.remove();
+          ({ svg: out } = await mermaid.render(renderId.current, cleanMermaid(chart)));
+        }
         if (!cancelled) setSvg(out);
       } catch (e) {
         // Defence-in-depth: remove any orphan node mermaid may have appended to

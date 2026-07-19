@@ -1,11 +1,18 @@
 /**
- * sanitizeMermaid — repair the common ways AI-generated mermaid arrives broken,
- * so a diagram renders instead of showing a parse error. Deterministic and
- * conservative (proven zero-regression on the live Code Lab dataset).
+ * sanitizeMermaid — SAFE, deterministic repairs for AI-generated mermaid that
+ * NEVER change an already-valid diagram. Applied at write time (lesson blocks +
+ * exercise diagrams) so obvious junk is cleaned at rest.
  *
- * Fixes: ```fences, two diagrams concatenated into one block, stray trailing
- * `end` lines, risky flowchart labels (parens/quotes/%/newlines → quoted), and
- * escaped \n / \" inside labels. Mirrored in the frontend MermaidDiagram.
+ * Only structural fixes that can't break a valid diagram:
+ *   - strip ```mermaid fences / stray backticks
+ *   - drop non-diagram trailing junk lines (caption:/note:/…)
+ *   - split two diagrams glued into one block (keep the first)
+ *   - remove stray trailing `end` lines that close no block
+ *
+ * NOTE: risky label-quoting (parens/quotes/newlines) is intentionally NOT done
+ * here — it can mangle valid labels that legitimately contain brackets. The
+ * viewer (frontend MermaidDiagram) applies that repair ONLY as a fallback, after
+ * trying to render the diagram as-authored first.
  */
 const DIAGRAM_HEADERS = [
   'graph', 'flowchart', 'sequenceDiagram', 'classDiagram', 'stateDiagram-v2',
@@ -13,54 +20,6 @@ const DIAGRAM_HEADERS = [
   'timeline', 'quadrantChart', 'requirementDiagram', 'C4Context', 'sankey-beta',
   'xychart-beta', 'block-beta',
 ];
-
-function quoteLabels(body: string): string {
-  const shapes: Array<[string, string]> = [
-    ['[(', ')]'], ['((', '))'], ['{{', '}}'], ['[[', ']]'],
-    ['[/', '/]'], ['[\\', '\\]'],
-    ['(', ')'], ['[', ']'], ['{', '}'],
-  ];
-  let out = '';
-  let i = 0;
-  const n = body.length;
-  while (i < n) {
-    let matched = false;
-    for (const [openStr, closeStr] of shapes) {
-      if (!body.startsWith(openStr, i)) continue;
-      const start = i + openStr.length;
-      const end = body.indexOf(closeStr, start);
-      if (end < 0) continue;
-      let text = body.slice(start, end);
-      const trimmed = text.trim();
-      const isQuoted = trimmed.startsWith('"') && trimmed.endsWith('"') && trimmed.length >= 2;
-      const needs = /[()"'%<>=×÷#&\n[\]{}]/.test(text) || text.includes(':') || text.includes('\\n');
-      if (isQuoted) {
-        const inner = trimmed.slice(1, -1)
-          .replace(/\\n/g, '<br/>').replace(/\n/g, '<br/>')
-          .replace(/\\"/g, '&quot;').replace(/"/g, '&quot;');
-        out += openStr + '"' + inner + '"' + closeStr;
-      } else if (needs) {
-        text = text
-          .replace(/\\n/g, '<br/>').replace(/\n/g, '<br/>')
-          .replace(/\\"/g, '&quot;').replace(/"/g, '&quot;');
-        out += openStr + '"' + text + '"' + closeStr;
-      } else {
-        out += openStr + text + closeStr;
-      }
-      i = end + closeStr.length;
-      matched = true;
-      break;
-    }
-    if (!matched) { out += body[i]; i++; }
-  }
-  out = out.replace(/\|([^|]*)\|/g, (m, t: string) => {
-    const tr = t.trim();
-    if (tr.startsWith('"')) return m;
-    if (/[()"']/.test(t)) return '|"' + t.replace(/"/g, '&quot;') + '"|';
-    return m;
-  });
-  return out;
-}
 
 export function sanitizeMermaid(raw: string | null | undefined): string {
   let s = (raw || '').trim();
@@ -89,12 +48,6 @@ export function sanitizeMermaid(raw: string | null | undefined): string {
       if (/^\s*end\s*$/.test(lines[k])) { lines.splice(k, 1); endCount--; }
     }
     s = lines.join('\n');
-  }
-  // quote risky labels in flowchart/graph diagrams
-  const head = s.split(/\s|\n/)[0];
-  if (head === 'graph' || head === 'flowchart') {
-    const nl = s.indexOf('\n');
-    if (nl > 0) s = s.slice(0, nl) + '\n' + quoteLabels(s.slice(nl + 1));
   }
   return s.trim();
 }

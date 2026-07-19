@@ -106,10 +106,16 @@ function normalizeBlock(raw: unknown): DocBlock | null {
   return null;
 }
 
+// A hand-authored Code Lab module lesson is a full textbook chapter — the OOP
+// one runs to 130 blocks. The old cap of 60 silently truncated such a lesson to
+// less than half and reported success, so the loss was invisible. 250 still
+// bounds a runaway AI response while leaving real courseware intact.
+const MAX_BLOCKS = 250;
+
 export function normalizeBlocks(raw: unknown): DocBlock[] {
   const arr = Array.isArray(raw) ? raw : [];
   const out: DocBlock[] = [];
-  for (const b of arr.slice(0, 60)) {
+  for (const b of arr.slice(0, MAX_BLOCKS)) {
     const nb = normalizeBlock(b);
     if (nb) out.push(nb);
   }

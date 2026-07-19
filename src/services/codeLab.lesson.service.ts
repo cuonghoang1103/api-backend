@@ -93,7 +93,10 @@ export async function generateLesson(
     `picture clarifies a concept — e.g. process/compilation flows, architecture/component diagrams, the ` +
     `request/response or data flow, control flow (loops and if/else as flowcharts), state machines, or how ` +
     `pieces relate. Aim for roughly 2-4 diagrams per lesson. Keep mermaid syntax simple and valid ` +
-    `(graph TD / flowchart LR / sequenceDiagram).\n` +
+    `(graph TD / flowchart LR / sequenceDiagram). MERMAID LABEL RULES (critical — a broken diagram fails to ` +
+    `render): every node label must be PLAIN TEXT — NO parentheses, quotes, square brackets, pipes, %, *, /, or ` +
+    `code/array/object literals inside a label (write "array of 5 numbers", not "[1,2,3,4,5]"). One diagram per ` +
+    `mermaid block; never append a stray trailing "end" or a "caption:" line.\n` +
     `Close with a "Best practices & summary" section and a final "links" block with official docs / references.\n\n` +
     `NEVER invent APIs, packages, syntax or output that do not exist — code and output must be real.\n\n` +
     `Return ONLY a minified JSON object of this exact shape (no text outside the JSON):\n` +

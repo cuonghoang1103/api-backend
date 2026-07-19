@@ -209,7 +209,11 @@ export async function generateExercises(
     `- "diagramMermaid": a SMALL Mermaid diagram that helps the learner picture the problem — a CLASS diagram ` +
     `for OOP/class tasks (fields + methods, like a UML class box), or a FLOWCHART for algorithm/logic tasks, ` +
     `or a sequence/data-flow where it fits. Use valid, simple Mermaid (classDiagram / flowchart TD / graph LR). ` +
-    `Empty string "" only if a diagram genuinely does not apply.\n\n` +
+    `MERMAID LABEL RULES (critical — a broken diagram fails to render): keep every node label PLAIN TEXT — ` +
+    `NO parentheses, quotes, square brackets, pipes, %, *, /, or code snippets INSIDE a label; describe in words ` +
+    `instead (e.g. "call factorial of 4", not "factorial(4)"). One diagram per block; do NOT append a trailing ` +
+    `stray "end" or a "caption:" line. For classDiagram do not use "::" and give every class a plain single-word ` +
+    `name. Empty string "" only if a diagram genuinely does not apply.\n\n` +
     `Never invent APIs, packages, or syntax that do not exist. Code must be real and correct.\n` +
     `Return ONLY minified JSON of this exact shape (no text outside the JSON), escaping quotes/newlines so it parses:\n` +
     `{"exercises":[{"title":string,"difficulty":string,"estimatedMinutes":number,"points":number,"concepts":[string],` +

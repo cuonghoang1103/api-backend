@@ -116,6 +116,43 @@ export function normalizeBlocks(raw: unknown): DocBlock[] {
   return out;
 }
 
+// ── Depth measurement (drives the "regenerate if thin" gate) ──────
+// A doc must read like a reference chapter, not a cheat-sheet. These thresholds
+// are deliberately below the prompt's target (26-45 blocks) so a slightly-short
+// but genuinely rich draft still passes, while the shallow ~16-block / ~2.5k-char
+// cheat-sheets get a second, expanded pass.
+export const DOC_MIN_BLOCKS = 22;
+export const DOC_MIN_CODE = 4;
+export const DOC_MIN_CHARS = 5000;
+
+export interface DocDepth { blocks: number; chars: number; code: number; mermaid: number }
+
+/** Measure a doc's depth: block count, approx content chars, code + diagram counts. */
+export function docDepth(blocks: DocBlock[]): DocDepth {
+  let chars = 0;
+  let code = 0;
+  let mermaid = 0;
+  for (const b of blocks) {
+    if (b.type === 'code') { code++; chars += b.code.length; }
+    else if (b.type === 'mermaid') { mermaid++; chars += b.code.length; }
+    else if (b.type === 'prose') chars += b.html.length;
+    else if (b.type === 'heading') chars += b.text.length;
+  }
+  return { blocks: blocks.length, chars, code, mermaid };
+}
+
+/** True when a doc is too shallow to count as a professional reference. */
+export function isThinDoc(blocks: DocBlock[]): boolean {
+  const d = docDepth(blocks);
+  return d.blocks < DOC_MIN_BLOCKS || d.code < DOC_MIN_CODE || d.chars < DOC_MIN_CHARS;
+}
+
+/** Rough total content size — used to keep the deeper of two generation drafts. */
+function docWeight(blocks: DocBlock[]): number {
+  const d = docDepth(blocks);
+  return d.chars + d.blocks * 40 + d.code * 200 + d.mermaid * 200;
+}
+
 /**
  * Recover blocks from a TRUNCATED JSON response (comprehensive docs can exceed
  * the token budget mid-array). Walks the raw text, extracts every balanced
@@ -220,8 +257,13 @@ export async function generateCategoryDoc(
     `{"type":"links","items":[{"label":string,"url":string,"note":string}]}` +
     `]}\n` +
     `Rules: "prose".html uses ONLY <p><ul><ol><li><strong><em><code><a href>. Prefer a "links" block for ` +
-    `external resources. Aim for a RICH, comprehensive guide (roughly 26-45 blocks). Inside JSON strings, ` +
-    `escape every double-quote and newline correctly so the JSON parses.`;
+    `external resources.\n` +
+    `DEPTH IS MANDATORY — this must read like a real reference chapter, NOT a cheat-sheet. Hard minimums ` +
+    `for EVERY doc: at least 26 blocks (aim 30-45); at least 6 "code" blocks with REAL, non-trivial, ` +
+    `multi-line examples (installation per platform + SEVERAL usage recipes + a CLI reference where one ` +
+    `exists) — never one-line snippets; at least 2 "mermaid" diagrams; and a final "links" block. Do NOT ` +
+    `stop early, summarize, or thin out later sections. Inside JSON strings, escape every double-quote and ` +
+    `newline correctly so the JSON parses.`;
 
   const user =
     `Write the complete, in-depth guide for "${cat.name}".${hint}${docsNote}\n` +
@@ -229,33 +271,52 @@ export async function generateCategoryDoc(
     `recipes with output, a full command/CLI reference if it has one, plans/pricing if it applies, ` +
     `troubleshooting, and a Resources & links block.`;
 
-  let raw = '';
+  // Two attempts: if the first draft comes back thin (a common failure — the
+  // model produces a short cheat-sheet instead of the full guide), retry ONCE
+  // with an explicit expansion instruction and keep whichever draft is deeper.
+  // Already-rich docs pass the gate on attempt 1, so no extra tokens are spent.
+  let blocks: DocBlock[] = [];
   let model = 'generation';
-  try {
-    const res = await llmComplete({
-      step: 'generation',
-      feature: 'exphub',
-      system,
-      messages: [{ role: 'user', content: user }],
-      maxTokens: 12000,
-      maxRetries: 1,
-      timeoutMs: 150_000,
-      userId,
-    });
-    raw = res.text;
-    model = res.model || model;
-  } catch {
-    throw new BadRequestError('Tạo tài liệu đang bận, vui lòng thử lại sau giây lát.');
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    const content =
+      attempt === 1
+        ? user
+        : `${user}\n\nYOUR PREVIOUS DRAFT WAS TOO SHORT. Produce the FULL comprehensive guide this time: ` +
+          `at least 30 blocks, at least 6 substantial multi-line code examples (per-OS installation + ` +
+          `multiple real usage recipes with output + a CLI/command reference), and at least 2 mermaid ` +
+          `diagrams. Do not summarize or stop early — cover every applicable section in depth.`;
+    let raw = '';
+    try {
+      const res = await llmComplete({
+        step: 'generation',
+        feature: 'exphub',
+        system,
+        messages: [{ role: 'user', content }],
+        maxTokens: 16000,
+        maxRetries: 1,
+        timeoutMs: 200_000,
+        userId,
+      });
+      raw = res.text;
+      model = res.model || model;
+    } catch {
+      if (attempt === 1 && !blocks.length) throw new BadRequestError('Tạo tài liệu đang bận, vui lòng thử lại sau giây lát.');
+      break; // a retry failure: keep the attempt-1 draft
+    }
+
+    const parsed = looseJson(raw) as { blocks?: unknown };
+    let attemptBlocks = normalizeBlocks(parsed.blocks);
+    // Comprehensive guides can overrun the token budget and truncate the JSON;
+    // recover the balanced-brace objects rather than losing the whole doc.
+    if (attemptBlocks.length < 6) {
+      const salvaged = salvageBlocks(raw);
+      if (salvaged.length > attemptBlocks.length) attemptBlocks = salvaged;
+    }
+    // Keep the deeper of the two drafts (by total content size).
+    if (docWeight(attemptBlocks) > docWeight(blocks)) blocks = attemptBlocks;
+    if (!isThinDoc(blocks)) break; // deep enough — don't spend a second call
   }
 
-  const parsed = looseJson(raw) as { blocks?: unknown };
-  let blocks = normalizeBlocks(parsed.blocks);
-  // Comprehensive guides can overrun the token budget and truncate the JSON;
-  // recover the balanced-brace objects rather than losing the whole doc.
-  if (blocks.length < 6) {
-    const salvaged = salvageBlocks(raw);
-    if (salvaged.length > blocks.length) blocks = salvaged;
-  }
   if (!blocks.length) throw new BadRequestError('Tạo tài liệu chưa ra kết quả, vui lòng thử lại.');
 
   return { categoryId: cat.id, name: cat.name, blocks, model };

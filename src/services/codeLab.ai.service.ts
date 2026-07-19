@@ -19,6 +19,7 @@ import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
 import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
 import { looseJson } from './myLanguage.ai.service.js';
 import * as codeLab from './codeLab.service.js';
+import { sanitizeMermaid } from '../utils/mermaid.js';
 
 const LEVELS = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'] as const;
 const DIFFS = ['EASY', 'MEDIUM', 'HARD', 'EXPERT'] as const;
@@ -292,7 +293,7 @@ function normalizeProposals(raw: unknown, fallbackLang: string): ExerciseProposa
         solutionCode: blocks(o.solutionCode),
         solutionExplanationHtml: s(o.solutionExplanationHtml),
         tags: arr(o.tags, 15),
-        diagramMermaid: s(o.diagramMermaid),
+        diagramMermaid: sanitizeMermaid(s(o.diagramMermaid)),
       };
     })
     .filter((x): x is ExerciseProposal => !!x)

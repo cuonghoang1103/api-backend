@@ -18,6 +18,7 @@ import { prisma } from '../config/database.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
 import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
 import { looseJson } from './myLanguage.ai.service.js';
+import { sanitizeMermaid } from '../utils/mermaid.js';
 
 // One doc = an ordered list of these blocks. `image` is supported by the
 // renderer for manual additions; the AI never invents image URLs (they'd 404).
@@ -72,7 +73,9 @@ function normalizeBlock(raw: unknown): DocBlock | null {
     return block;
   }
   if (type === 'mermaid') {
-    const code = typeof o.code === 'string' ? o.code : '';
+    // Repair common AI mistakes (fences, glued diagrams, unquoted labels) so the
+    // diagram renders instead of throwing a parse error in the viewer.
+    const code = sanitizeMermaid(typeof o.code === 'string' ? o.code : '');
     return code.trim() ? { type: 'mermaid', code: code.slice(0, 8_000) } : null;
   }
   if (type === 'image') {

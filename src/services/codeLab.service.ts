@@ -13,6 +13,7 @@
  */
 import { Prisma, type CodeLevel, type CodeDifficulty, type CodeStatus } from '@prisma/client';
 import { prisma } from '../config/database.js';
+import { sanitizeMermaid } from '../utils/mermaid.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
 
 // ─── Slug helpers ───────────────────────────────────────────────
@@ -419,7 +420,7 @@ function buildExerciseData(data: ExerciseInput, lang: string) {
     solutionCodeJson: normalizeCodeBlocks(data.solutionCodeJson, lang),
     solutionExplanationHtml: data.solutionExplanationHtml ?? null,
     diagramImageUrl: data.diagramImageUrl ?? null,
-    diagramMermaid: data.diagramMermaid ?? null,
+    diagramMermaid: data.diagramMermaid ? sanitizeMermaid(data.diagramMermaid) : null,
     imagesJson: normalizeImages(data.imagesJson),
     youtubeUrl: data.youtubeUrl ?? null,
     referenceUrl: data.referenceUrl ?? null,
@@ -486,7 +487,7 @@ export async function updateExercise(id: number, data: Partial<ExerciseInput>) {
   if (data.solutionCodeJson !== undefined) patch.solutionCodeJson = normalizeCodeBlocks(data.solutionCodeJson, lang);
   if (data.solutionExplanationHtml !== undefined) patch.solutionExplanationHtml = data.solutionExplanationHtml;
   if (data.diagramImageUrl !== undefined) patch.diagramImageUrl = data.diagramImageUrl;
-  if (data.diagramMermaid !== undefined) patch.diagramMermaid = data.diagramMermaid;
+  if (data.diagramMermaid !== undefined) patch.diagramMermaid = data.diagramMermaid ? sanitizeMermaid(data.diagramMermaid) : data.diagramMermaid;
   if (data.imagesJson !== undefined) patch.imagesJson = normalizeImages(data.imagesJson);
   if (data.youtubeUrl !== undefined) patch.youtubeUrl = data.youtubeUrl;
   if (data.referenceUrl !== undefined) patch.referenceUrl = data.referenceUrl;

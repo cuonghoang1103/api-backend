@@ -16,31 +16,90 @@ const DIAGRAM_HEADERS = [
   'xychart-beta', 'block-beta',
 ];
 
+// Quote flowchart node/edge labels whose bare text (parens, quotes, %, newlines)
+// would break the parser. Mirrors src/utils/mermaid.ts on the backend.
+function quoteLabels(body: string): string {
+  const shapes: Array<[string, string]> = [
+    ['[(', ')]'], ['((', '))'], ['{{', '}}'], ['[[', ']]'],
+    ['[/', '/]'], ['[\\', '\\]'],
+    ['(', ')'], ['[', ']'], ['{', '}'],
+  ];
+  let out = '';
+  let i = 0;
+  const n = body.length;
+  while (i < n) {
+    let matched = false;
+    for (const [openStr, closeStr] of shapes) {
+      if (!body.startsWith(openStr, i)) continue;
+      const start = i + openStr.length;
+      const end = body.indexOf(closeStr, start);
+      if (end < 0) continue;
+      let text = body.slice(start, end);
+      const trimmed = text.trim();
+      const isQuoted = trimmed.startsWith('"') && trimmed.endsWith('"') && trimmed.length >= 2;
+      const needs = /[()"'%<>=×÷#&\n[\]{}]/.test(text) || text.includes(':') || text.includes('\\n');
+      if (isQuoted) {
+        const inner = trimmed.slice(1, -1)
+          .replace(/\\n/g, '<br/>').replace(/\n/g, '<br/>')
+          .replace(/\\"/g, '&quot;').replace(/"/g, '&quot;');
+        out += openStr + '"' + inner + '"' + closeStr;
+      } else if (needs) {
+        text = text
+          .replace(/\\n/g, '<br/>').replace(/\n/g, '<br/>')
+          .replace(/\\"/g, '&quot;').replace(/"/g, '&quot;');
+        out += openStr + '"' + text + '"' + closeStr;
+      } else {
+        out += openStr + text + closeStr;
+      }
+      i = end + closeStr.length;
+      matched = true;
+      break;
+    }
+    if (!matched) { out += body[i]; i++; }
+  }
+  return out.replace(/\|([^|]*)\|/g, (m, t: string) => {
+    const tr = t.trim();
+    if (tr.startsWith('"')) return m;
+    if (/[()"']/.test(t)) return '|"' + t.replace(/"/g, '&quot;') + '"|';
+    return m;
+  });
+}
+
 /**
- * Repair the most common ways AI-generated mermaid arrives broken:
- *  - wrapped in ```mermaid fences / stray backticks
- *  - TWO diagrams concatenated into one block (e.g. a classDiagram immediately
- *    followed by "graph LR …") — keep only the first, which is what the parser
- *    was choking on ("…atesgraph LR"). We cut at the 2nd diagram header.
+ * Repair the common ways AI-generated mermaid arrives broken so it renders
+ * instead of erroring: ```fences, two diagrams glued into one ("…atesgraph LR"),
+ * stray trailing `end`, and unquoted flowchart labels. Kept in sync with the
+ * backend sanitizeMermaid (src/utils/mermaid.ts) — the backend now sanitizes at
+ * write time; this is the client-side backstop.
  */
 function cleanMermaid(raw: string): string {
   let s = (raw || '').trim();
-  // strip a ```mermaid … ``` fence or plain triple backticks
-  s = s.replace(/^```(?:mermaid)?\s*/i, '').replace(/```$/i, '').trim();
+  s = s.replace(/^```(?:mermaid)?\s*/i, '').replace(/\s*```$/i, '').trim();
   if (!s) return s;
-
-  // find where the SECOND diagram header starts and truncate there. The first
-  // header is the diagram's own type; a later one means two diagrams got glued.
+  s = s.split('\n').filter((line) => !/^(caption|note|description|explanation)\s*:/i.test(line.trim())).join('\n');
   const headerRe = new RegExp(`(^|[^A-Za-z])(${DIAGRAM_HEADERS.join('|')})\\b`, 'g');
   const positions: number[] = [];
   let m: RegExpExecArray | null;
   while ((m = headerRe.exec(s)) !== null) {
-    // position of the keyword itself (skip the leading boundary char, if any)
     positions.push(m.index + (m[1] ? m[1].length : 0));
     if (positions.length >= 2) break;
   }
   if (positions.length >= 2) s = s.slice(0, positions[1]).trim();
-  return s;
+  {
+    const lines = s.split('\n');
+    const openers = lines.filter((l) => /^\s*(subgraph|loop|alt|opt|par|critical|rect|break|box)\b/.test(l)).length;
+    let endCount = lines.filter((l) => /^\s*end\s*$/.test(l)).length;
+    for (let k = lines.length - 1; k >= 0 && endCount > openers; k--) {
+      if (/^\s*end\s*$/.test(lines[k])) { lines.splice(k, 1); endCount--; }
+    }
+    s = lines.join('\n');
+  }
+  const head = s.split(/\s|\n/)[0];
+  if (head === 'graph' || head === 'flowchart') {
+    const nl = s.indexOf('\n');
+    if (nl > 0) s = s.slice(0, nl) + '\n' + quoteLabels(s.slice(nl + 1));
+  }
+  return s.trim();
 }
 
 /**

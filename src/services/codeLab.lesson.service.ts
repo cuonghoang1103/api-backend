@@ -86,9 +86,15 @@ export async function generateLesson(
     `(e.g. // => [1, 4, 9]). Prefer several small, focused examples over one big dump.\n` +
     `- Where useful, contrast the OLD vs NEW / wrong vs right approach.\n` +
     `- Call out common mistakes, edge cases and gotchas.\n` +
-    `Open with a short "Introduction" (what you'll learn + prerequisites) and close with a ` +
-    `"Best practices & summary" section. Add a "mermaid" block only if a small diagram genuinely helps, ` +
-    `and a final "links" block with official docs / references.\n\n` +
+    `ALWAYS open with a thorough "Introduction" section (heading "Introduction") — several paragraphs that ` +
+    `orient the learner: what this topic is, why it matters, where it's used in the real world, what they ` +
+    `will be able to do after, and the prerequisites. This on-ramp is required on EVERY lesson.\n` +
+    `ILLUSTRATE like a textbook: include SEVERAL "mermaid" diagrams throughout (not just one) wherever a ` +
+    `picture clarifies a concept — e.g. process/compilation flows, architecture/component diagrams, the ` +
+    `request/response or data flow, control flow (loops and if/else as flowcharts), state machines, or how ` +
+    `pieces relate. Aim for roughly 2-4 diagrams per lesson. Keep mermaid syntax simple and valid ` +
+    `(graph TD / flowchart LR / sequenceDiagram).\n` +
+    `Close with a "Best practices & summary" section and a final "links" block with official docs / references.\n\n` +
     `NEVER invent APIs, packages, syntax or output that do not exist — code and output must be real.\n\n` +
     `Return ONLY a minified JSON object of this exact shape (no text outside the JSON):\n` +
     `{"blocks":[` +
@@ -98,8 +104,8 @@ export async function generateLesson(
     `{"type":"mermaid","code":string} | ` +
     `{"type":"links","items":[{"label":string,"url":string,"note":string}]}` +
     `]}\n` +
-    `"prose".html uses ONLY <p><ul><ol><li><strong><em><code><a href>. Aim for a rich but focused ` +
-    `chapter of roughly 12-18 blocks — thorough, but keep it complete rather than sprawling. Inside JSON ` +
+    `"prose".html uses ONLY <p><ul><ol><li><strong><em><code><a href>. Aim for a rich chapter of roughly ` +
+    `16-26 blocks (thorough intro + several diagrams + annotated examples), but keep it complete. Inside JSON ` +
     `strings, escape every double-quote and newline so the JSON parses.`;
 
   const user = `Write the full lesson for the module "${mod.name}" (${lang}).${ctx}`;

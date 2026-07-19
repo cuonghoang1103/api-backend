@@ -33,7 +33,16 @@
  */
 import { PrismaClient } from '@prisma/client';
 
-const { generateRoadmap, generateExercises, commitExercises } = await import('../dist/services/codeLab.ai.service.js');
+const { generateRoadmap, generateExercises, generateExerciseBlueprint, commitExercises } = await import('../dist/services/codeLab.ai.service.js');
+
+// Difficulty ramp by final slot position: first ~20% EASY, middle ~60% MEDIUM,
+// last ~20% HARD — so a module goes from on-ramp to challenging.
+function rampDifficulty(pos, total) {
+  const r = pos / Math.max(1, total);
+  if (r <= 0.2) return 'EASY';
+  if (r <= 0.8) return 'MEDIUM';
+  return 'HARD';
+}
 const { createModule, deleteModule } = await import('../dist/services/codeLab.service.js');
 
 const prisma = new PrismaClient();
@@ -147,32 +156,40 @@ async function exercisePhase(tracks) {
     for (const mod of modules) {
       if (stop) break;
       if (LIMIT_MODULES && modulesTouched >= LIMIT_MODULES) { console.log(`[limit] hit --limit-modules ${LIMIT_MODULES}`); stop = true; break; }
-      const have = await prisma.codeExercise.count({ where: { moduleId: mod.id } });
-      let need = PER_MODULE - have;
+      const existing = await prisma.codeExercise.findMany({ where: { moduleId: mod.id }, select: { title: true } });
+      const have = existing.length;
+      const need = PER_MODULE - have;
       if (need <= 0) continue;
       modulesTouched++;
+      const seen = new Set(existing.map((e) => e.title));       // avoid re-skinning these
       console.log(`  · ${t.slug}/${mod.slug}: have ${have}, need ${need}`);
-      while (need > 0 && !stop) {
-        const take = Math.min(BATCH, need);
+      // Blueprint of DISTINCT sub-topics so each new exercise is a different facet,
+      // not a re-skin of one canonical problem.
+      let blueprint = [];
+      try { await waitBudget(); blueprint = await generateExerciseBlueprint(ADMIN, { moduleId: mod.id, count: need, avoidTitles: [...seen] }); }
+      catch { blueprint = []; }
+      for (let k = 0; k < need && !stop; k++) {
+        const pos = have + k + 1;                               // final 1-indexed slot
+        const difficulty = rampDifficulty(pos, PER_MODULE);
+        const topic = blueprint[k] || undefined;
         await waitBudget();
         try {
-          const gen = await generateExercises(ADMIN, { moduleId: mod.id, count: take });
+          const gen = await generateExercises(ADMIN, { moduleId: mod.id, count: 1, difficulty, topic, avoidTitles: [...seen] });
+          gen.exercises.forEach((e) => seen.add(e.title));       // future calls must avoid these too
           if (DRY) {
-            console.log(`    ~ would add ${gen.exercises.length}: ${gen.exercises.map((e) => e.title).join(' | ').slice(0, 100)}`);
-            need -= gen.exercises.length || take;
+            console.log(`    ~ [${difficulty}] ${topic ? '(' + topic + ') ' : ''}${gen.exercises.map((e) => e.title).join(' | ').slice(0, 90)}`);
           } else {
             const res = await commitExercises(ADMIN, { moduleId: mod.id, exercises: gen.exercises });
             exWrote += res.created;
-            need -= res.created || take;
-            console.log(`    ✓ +${res.created} (${PER_MODULE - need}/${PER_MODULE})`);
+            console.log(`    ✓ [${difficulty}] +${res.created} ${topic ? topic + ' ' : ''}(${pos}/${PER_MODULE})`);
           }
         } catch (e) {
           fails++;
           const msg = String(e?.message ?? e);
-          console.error(`    [!] ${mod.slug}: ${msg.slice(0, 120)}`);
+          console.error(`    [!] ${mod.slug} slot ${pos}: ${msg.slice(0, 120)}`);
           if (isQuotaErr(msg)) { stop = true; console.log('  [stop] quota/AI off — stopping'); break; }
-          if (isTransientErr(msg)) { await sleep(15_000); continue; }
-          break; // non-transient: skip this module
+          if (isTransientErr(msg)) { await sleep(15_000); k--; continue; }   // retry same slot
+          // non-transient: skip this slot, continue to next
         }
         await sleep(SLEEP);
       }

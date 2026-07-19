@@ -161,6 +161,44 @@ export interface ExerciseProposal {
   diagramMermaid: string;
 }
 
+/**
+ * Blueprint of DISTINCT sub-topics for a module, so exercises can be generated
+ * one-per-facet instead of re-converging on a single canonical problem. Returns
+ * short sub-topic phrases (e.g. "constructor overloading", "equals and hashCode",
+ * "immutability", "composition over inheritance").
+ */
+export async function generateExerciseBlueprint(
+  userId: number,
+  body: { moduleId?: number | string; count?: number; avoidTitles?: string[] },
+): Promise<string[]> {
+  await ensureAi(userId);
+  const moduleId = Number(body?.moduleId) || 0;
+  if (!moduleId) throw new BadRequestError('A module is required.');
+  const mod = await prisma.codeModule.findUnique({ where: { id: moduleId }, include: { track: { include: { group: true } } } });
+  if (!mod) throw new NotFoundError('Module not found.');
+  const count = Math.min(20, Math.max(1, Number(body?.count) || 10));
+  const avoid = Array.isArray(body?.avoidTitles) ? body.avoidTitles.map((t) => s(t)).filter(Boolean).slice(0, 40) : [];
+  const avoidNote = avoid.length ? `\nAvoid sub-topics already covered by these existing exercises:\n- ${avoid.join('\n- ')}` : '';
+
+  const system =
+    `You are a senior instructor planning coding EXERCISES for the module "${mod.name}" of the track ` +
+    `"${mod.track.name}" (${mod.track.language}, group ${mod.track.group.name}). List ${count} DISTINCT ` +
+    `sub-topics/facets of THIS module that each deserve their own exercise — genuinely different problems, ` +
+    `NOT variations of one theme. Order them from easier to harder. Each is a short phrase (3-8 words), a ` +
+    `concrete skill or scenario a learner should practice.${avoidNote}\n\n` +
+    `Return ONLY minified JSON: {"subTopics":[string, ...]}`;
+  const user = `List ${count} distinct sub-topics for "${mod.name}".${mod.description ? ` Context: ${mod.description}` : ''}`;
+
+  let raw = '';
+  try {
+    const res = await llmComplete({ step: 'generation', feature: 'exphub', system, messages: [{ role: 'user', content: user }], maxTokens: 1500, maxRetries: 1, timeoutMs: 90_000, userId });
+    raw = res.text;
+  } catch { return []; }
+  const parsed = looseJson(raw) as { subTopics?: unknown };
+  const arr = Array.isArray(parsed.subTopics) ? parsed.subTopics : [];
+  return arr.map((t) => s(t)).filter(Boolean).slice(0, count);
+}
+
 export async function generateExercises(
   userId: number,
   body: {
@@ -169,6 +207,7 @@ export async function generateExercises(
     difficulty?: string;
     topic?: string;
     titles?: string[];
+    avoidTitles?: string[];
   },
 ): Promise<{ moduleId: number; moduleName: string; trackName: string; language: string; exercises: ExerciseProposal[]; model: string }> {
   await ensureAi(userId);
@@ -191,13 +230,22 @@ export async function generateExercises(
     : `Invent ${count} distinct, progressively harder exercise titles suitable for this module.`;
   const diffNote = difficulty ? `Target difficulty for ALL exercises: ${difficulty}.` : `Vary difficulty across EASY/MEDIUM/HARD as appropriate.`;
   const topicNote = topic ? ` Focus the exercises on: ${topic}.` : '';
+  // ANTI-REPEAT: the module's existing exercises, so the model must produce
+  // genuinely DIFFERENT problems instead of re-skinning one canonical task.
+  const avoidTitles = Array.isArray(body?.avoidTitles) ? body.avoidTitles.map((t) => s(t)).filter(Boolean).slice(0, 40) : [];
+  const avoidNote = avoidTitles.length
+    ? `\n\nThe module ALREADY has these exercises — your new one(s) MUST be DISTINCT problems exploring a ` +
+      `DIFFERENT sub-topic or scenario, NOT variations, rewordings, or re-skins of these, and NOT the same ` +
+      `domain (e.g. if "Bank Account with encapsulation" exists, do NOT produce another account/wallet CRUD ` +
+      `task — pick a genuinely different facet of the module):\n- ${avoidTitles.join('\n- ')}`
+    : '';
 
   const system =
     `You are a senior software instructor writing complete, professional coding EXERCISES in ENGLISH, ` +
     `in the style of a university programming course (like the NTU "programming notes" exercises). ` +
     `The exercises are for the module "${mod.name}" of the track "${mod.track.name}" ` +
     `(language/tech: ${language}, group: ${mod.track.group.name}).\n\n` +
-    `${titlesNote} ${diffNote}${topicNote}\n\n` +
+    `${titlesNote} ${diffNote}${topicNote}${avoidNote}\n\n` +
     `For EACH exercise produce a rigorous, self-contained problem with a worked official solution. Fields:\n` +
     `- "title": short imperative title.\n` +
     `- "difficulty": one of EASY, MEDIUM, HARD, EXPERT.\n` +

@@ -98,6 +98,10 @@ export async function generateLesson(
     `code/array/object literals inside a label (write "array of 5 numbers", not "[1,2,3,4,5]"). One diagram per ` +
     `mermaid block; never append a stray trailing "end" or a "caption:" line.\n` +
     `Close with a "Best practices & summary" section and a final "links" block with official docs / references.\n\n` +
+    `DEPTH REQUIREMENTS (a thin lesson is a FAILED lesson): cover EVERY major sub-topic of this module, each ` +
+    `in its own section with explanation AND runnable annotated code. Include AT LEAST 8 annotated "code" ` +
+    `blocks and AT LEAST 3 "mermaid" diagrams. For ADVANCED topics go deeper, not shorter — real-world usage, ` +
+    `internals, trade-offs, performance and pitfalls. Do NOT skim or summarise; teach thoroughly.\n\n` +
     `NEVER invent APIs, packages, syntax or output that do not exist — code and output must be real.\n\n` +
     `Return ONLY a minified JSON object of this exact shape (no text outside the JSON):\n` +
     `{"blocks":[` +
@@ -107,39 +111,52 @@ export async function generateLesson(
     `{"type":"mermaid","code":string} | ` +
     `{"type":"links","items":[{"label":string,"url":string,"note":string}]}` +
     `]}\n` +
-    `"prose".html uses ONLY <p><ul><ol><li><strong><em><code><a href>. Aim for a rich chapter of roughly ` +
-    `16-26 blocks (thorough intro + several diagrams + annotated examples), but keep it complete. Inside JSON ` +
+    `"prose".html uses ONLY <p><ul><ol><li><strong><em><code><a href>. Aim for a rich, complete chapter of ` +
+    `roughly 28-45 blocks (thorough intro + several diagrams + many annotated examples). Inside JSON ` +
     `strings, escape every double-quote and newline so the JSON parses.`;
 
   const user = `Write the full lesson for the module "${mod.name}" (${lang}).${ctx}`;
 
-  let raw = '';
   let model = 'generation';
-  try {
+  // One generation attempt → normalized (+salvage) blocks. Salvage: if the whole
+  // array failed to parse (long lessons can truncate mid-JSON), recover each
+  // complete top-level block object by balanced-brace counting.
+  const runGen = async (nudge: string): Promise<DocBlock[]> => {
+    let raw = '';
     const res = await llmComplete({
-      step: 'generation',
-      feature: 'exphub',
-      system,
-      messages: [{ role: 'user', content: user }],
-      maxTokens: 12000,
-      maxRetries: 1,
-      timeoutMs: 200_000,
-      userId,
+      step: 'generation', feature: 'exphub', system,
+      messages: [{ role: 'user', content: user + nudge }],
+      maxTokens: 12000, maxRetries: 1, timeoutMs: 200_000, userId,
     });
     raw = res.text;
     model = res.model || model;
+    const parsed = looseJson(raw) as { blocks?: unknown };
+    let b = normalizeBlocks(parsed.blocks);
+    if (!b.length) b = normalizeBlocks(salvageBlocks(raw));
+    return b;
+  };
+
+  let blocks: DocBlock[];
+  try {
+    blocks = await runGen('');
   } catch {
     throw new BadRequestError('Lesson generation is busy, please try again shortly.');
   }
 
-  const parsed = looseJson(raw) as { blocks?: unknown };
-  let blocks = normalizeBlocks(parsed.blocks);
-  // Salvage: if the whole-array parse failed (usually the tail truncated mid-JSON
-  // on a long lesson), recover each complete top-level block object by balanced
-  // brace counting so the valid prefix still survives.
-  if (!blocks.length) blocks = normalizeBlocks(salvageBlocks(raw));
-  if (!blocks.length) throw new BadRequestError('Lesson generation returned nothing, please retry.');
+  // DEPTH GATE: a thin lesson is a defect. If shallow, try once more (deeper) and
+  // keep whichever draft is richer.
+  const codeCount = (bs: DocBlock[]) => bs.filter((b) => b.type === 'code').length;
+  const charCount = (bs: DocBlock[]) => bs.reduce((n, b: any) => n + (b.html?.length || 0) + (b.code?.length || 0) + (b.text?.length || 0), 0);
+  if (blocks.length < 22 || codeCount(blocks) < 6 || charCount(blocks) < 12000) {
+    try {
+      const deeper = await runGen('\n\nThe first draft was TOO SHALLOW and would be rejected. Produce a MUCH ' +
+        'deeper, longer lesson: at least 30 blocks, at least 8 annotated code examples, at least 3 diagrams, ' +
+        'covering EVERY sub-topic of the module thoroughly with real-world usage and pitfalls.');
+      if (charCount(deeper) > charCount(blocks)) blocks = deeper;
+    } catch { /* keep the first draft */ }
+  }
 
+  if (!blocks.length) throw new BadRequestError('Lesson generation returned nothing, please retry.');
   return { moduleId: mod.id, moduleName: mod.name, blocks, model };
 }
 

@@ -12,6 +12,12 @@
 import { PrismaClient } from '@prisma/client';
 const { generateLesson, commitLesson } = await import('../dist/services/codeLab.lesson.service.js');
 
+// RESILIENCE: since Node 15+ an unhandled promise rejection TERMINATES the
+// process. A stray rejection from the LLM gateway (524/timeout) was killing this
+// long-running job mid-run. Log and keep going instead of dying.
+process.on('unhandledRejection', (e) => console.error('[unhandledRejection]', String(e?.message ?? e).slice(0, 200)));
+process.on('uncaughtException', (e) => console.error('[uncaughtException]', String(e?.message ?? e).slice(0, 200)));
+
 const prisma = new PrismaClient();
 const ADMIN = 1;
 const args = process.argv.slice(2);
@@ -63,8 +69,8 @@ async function main() {
   for (const mod of todo) {
     if (stop) break;
     if (LIMIT && done >= LIMIT) { console.log(`[limit] ${LIMIT}`); break; }
-    await waitBudget();
     try {
+      await waitBudget();
       const res = await generateLesson(ADMIN, { moduleId: mod.id });
       const blocks = res?.blocks ?? [];
       if (!blocks.length) { console.log(`  · ${mod.track.slug}/${mod.id}: empty — skip`); continue; }

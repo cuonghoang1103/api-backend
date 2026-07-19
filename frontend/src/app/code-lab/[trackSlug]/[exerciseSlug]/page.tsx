@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
   ArrowLeft, Loader2, CheckCircle2, Lightbulb, Save, Eye, EyeOff, Play,
-  BookOpen, Youtube, ExternalLink, ListChecks, Layers,
+  BookOpen, Youtube, ExternalLink, ListChecks, Layers, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { codeLabApi, DIFFICULTY_META } from '@/lib/code-lab-api';
@@ -40,6 +40,10 @@ export default function ExerciseDetailPage() {
 
   const [ex, setEx] = useState<CodeExercise | null>(null);
   const [loading, setLoading] = useState(true);
+  // Ordered list of every exercise in this track (module order, then exercise
+  // order) — powers the Prev / Next navigation so you don't have to go back to
+  // the roadmap after each one.
+  const [siblings, setSiblings] = useState<Array<{ slug: string; title: string }>>([]);
 
   const [revealHints, setRevealHints] = useState(0);
   const [showSolution, setShowSolution] = useState(false);
@@ -76,6 +80,38 @@ export default function ExerciseDetailPage() {
     // reset transient UI when the slug changes
     setRevealHints(0); setShowSolution(false); setActiveStarter(0); setActiveSolution(0);
   }, [params.exerciseSlug, isAuthed]);
+
+  // Build the ordered exercise list for this track (for Prev/Next). Fetched
+  // once per track, independent of which exercise is open.
+  useEffect(() => {
+    let alive = true;
+    codeLabApi.getTrack(params.trackSlug)
+      .then((res) => {
+        if (!alive) return;
+        const mods = [...(res.data.data.modules || [])].sort((a, b) => a.sortOrder - b.sortOrder);
+        const flat: Array<{ slug: string; title: string }> = [];
+        for (const mod of mods) {
+          for (const e of [...(mod.exercises || [])].sort((a, b) => a.sortOrder - b.sortOrder)) {
+            flat.push({ slug: e.slug, title: e.title });
+          }
+        }
+        setSiblings(flat);
+      })
+      .catch(() => { if (alive) setSiblings([]); });
+    return () => { alive = false; };
+  }, [params.trackSlug]);
+
+  // Locate the current exercise in the ordered list → neighbours.
+  const nav = useMemo(() => {
+    const idx = siblings.findIndex((s) => s.slug === params.exerciseSlug);
+    if (idx < 0) return { idx, total: siblings.length, prev: null, next: null };
+    return {
+      idx,
+      total: siblings.length,
+      prev: idx > 0 ? siblings[idx - 1] : null,
+      next: idx < siblings.length - 1 ? siblings[idx + 1] : null,
+    };
+  }, [siblings, params.exerciseSlug]);
 
   const editorLang = useMemo(() => ex?.starterCodeJson?.[activeStarter]?.language || ex?.language || 'text', [ex, activeStarter]);
 
@@ -339,6 +375,45 @@ export default function ExerciseDetailPage() {
             )}
           </div>
         </Section>
+      )}
+
+      {/* Prev / Next exercise navigation */}
+      {(nav.prev || nav.next) && (
+        <nav className="mt-8 border-t pt-5" style={{ borderColor: 'var(--border-color)' }}>
+          {nav.idx >= 0 && nav.total > 0 && (
+            <div className="mb-2 text-center text-xs" style={{ color: 'var(--text-muted)' }}>
+              Exercise {nav.idx + 1} of {nav.total}
+            </div>
+          )}
+          <div className="flex items-stretch gap-3">
+            {nav.prev ? (
+              <Link
+                href={`/code-lab/${params.trackSlug}/${nav.prev.slug}`}
+                className="group flex flex-1 items-center gap-2 rounded-xl border p-3 transition-colors hover:border-indigo-400"
+                style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}
+              >
+                <ChevronLeft size={18} className="shrink-0" style={{ color: 'var(--text-muted)' }} />
+                <span className="min-w-0">
+                  <span className="block text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Previous</span>
+                  <span className="block truncate text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{nav.prev.title}</span>
+                </span>
+              </Link>
+            ) : <div className="flex-1" />}
+            {nav.next ? (
+              <Link
+                href={`/code-lab/${params.trackSlug}/${nav.next.slug}`}
+                className="group flex flex-1 items-center justify-end gap-2 rounded-xl border p-3 text-right transition-colors hover:border-indigo-400"
+                style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}
+              >
+                <span className="min-w-0">
+                  <span className="block text-[10px] font-bold uppercase tracking-wide" style={{ color: '#6366f1' }}>Next exercise</span>
+                  <span className="block truncate text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{nav.next.title}</span>
+                </span>
+                <ChevronRight size={18} className="shrink-0" style={{ color: '#6366f1' }} />
+              </Link>
+            ) : <div className="flex-1" />}
+          </div>
+        </nav>
       )}
 
       <style jsx global>{`

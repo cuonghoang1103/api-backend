@@ -1,0 +1,572 @@
+// Generator for MongoDB module 414 (mongodb-fundamentals-and-crud-operations) — 10 exercises.
+// Track language is "javascript"; solutions are mongosh commands (valid JS, modern CRUD API,
+// map 1:1 to the Node driver). Verified by piping the exact solution to a real mongosh and
+// matching its auto-printed results. Integer _id values keep output deterministic.
+import fs from 'node:fs';
+import path from 'node:path';
+
+const trackSlug = 'mongodb';
+const moduleSlug = 'mongodb-fundamentals-and-crud-operations';
+const L = 'javascript';
+
+const exercises = [
+  {
+    title: 'Insert Documents with insertOne and insertMany',
+    difficulty: 'EASY',
+    estimatedMinutes: 15,
+    points: 10,
+    concepts: ['insertOne', 'insertMany', 'documents', 'acknowledged writes', 'insertedId'],
+    prerequisites: ['JSON objects', 'mongosh basics'],
+    tags: ['crud', 'insert', 'documents', 'fundamentals', 'mongodb'],
+    problemHtml: `<p>A MongoDB collection stores JSON-like documents, and everything begins with getting data in. <code>insertOne</code> adds a single document and <code>insertMany</code> adds several in one call. Each returns an acknowledgement telling you the write succeeded and the <code>_id</code> values assigned — either the ones you supplied or ones MongoDB generated.</p>
+<p>Working in the <code>products</code> collection, do the following in order:</p>
+<ul>
+<li>Insert one document with <code>insertOne</code>: <code>{ _id: 1, name: "Keyboard", price: 49.9, tags: ["input", "wired"] }</code>.</li>
+<li>Insert two more with <code>insertMany</code>: <code>{ _id: 2, name: "Mouse", price: 19 }</code> and <code>{ _id: 3, name: "Monitor", price: 150 }</code>.</li>
+<li>Return the total number of documents with <code>countDocuments</code> — it should be <code>3</code>.</li>
+</ul>
+<p>Supply explicit integer <code>_id</code> values so the results are predictable; without them MongoDB assigns a random <code>ObjectId</code>. The scaffold provides the three calls to complete.</p>`,
+    inputSpec: 'An empty products collection. You issue mongosh commands (equivalent to the Node driver collection methods).',
+    outputSpec: 'insertOne returns { acknowledged: true, insertedId: 1 }; insertMany returns { acknowledged: true, insertedIds: { "0": 2, "1": 3 } }; countDocuments returns 3.',
+    constraints: 'Use insertOne and insertMany (the modern methods) — not the deprecated insert(). Supply explicit integer _id values.',
+    examplesJson: [
+      {
+        input: 'db.products.insertOne({ _id: 1, name: "Keyboard", price: 49.9, tags: ["input", "wired"] })',
+        output: '{ acknowledged: true, insertedId: 1 }',
+        explanation: 'The write is acknowledged and the assigned _id (the one you supplied, 1) is echoed back.',
+      },
+      {
+        input: 'db.products.insertMany([{ _id: 2, name: "Mouse", price: 19 }, { _id: 3, name: "Monitor", price: 150 }])',
+        output: "{ acknowledged: true, insertedIds: { '0': 2, '1': 3 } }",
+        explanation: 'insertMany reports each inserted _id keyed by its position in the input array.',
+      },
+    ],
+    hintsJson: [
+      'Two methods cover one-or-many inserts; both return an acknowledgement with the ids.',
+      'insertOne(doc) adds a single document; insertMany([...]) adds an array of them.',
+      'countDocuments() with no filter counts everything in the collection.',
+      'db.products.insertOne({ _id: 1, ... }); db.products.insertMany([{ _id: 2, ... }, { _id: 3, ... }]); db.products.countDocuments().',
+    ],
+    starter: `db.products.insertOne({ _id: 1, name: "Keyboard", price: 49.9, tags: ["input", "wired"] })
+// insertMany the other two documents
+// countDocuments to confirm there are 3`,
+    solution: `db.products.insertOne({ _id: 1, name: "Keyboard", price: 49.9, tags: ["input", "wired"] })
+db.products.insertMany([{ _id: 2, name: "Mouse", price: 19 }, { _id: 3, name: "Monitor", price: 150 }])
+db.products.countDocuments()`,
+    solutionExplanationHtml: `<p>The two insert methods are the foundation of writing data. <code>insertOne</code> takes a single document object and returns <code>{ acknowledged: true, insertedId: 1 }</code> — <code>acknowledged</code> confirms the server received and applied the write, and <code>insertedId</code> reports the document's <code>_id</code>. <code>insertMany</code> takes an array and returns the ids keyed by array position in <code>insertedIds</code>. Because you supplied explicit integer <code>_id</code>s, the results are predictable; had you omitted them, each document would receive a generated 12-byte <code>ObjectId</code> instead, which is the normal production choice but non-deterministic.</p>
+<p>The key design point is that <code>_id</code> is mandatory and unique per collection — it is the primary key, always indexed, and inserting a second document with an existing <code>_id</code> raises a duplicate-key error (E11000). The common beginner mistake is reaching for the old <code>insert()</code> method seen in dated tutorials; it is deprecated in favour of the explicit <code>insertOne</code>/<code>insertMany</code> pair, which have clearer semantics and return values. A second subtlety: <code>insertMany</code> is ordered by default, so if one document in the middle fails, the ones after it are not inserted; pass <code>{ ordered: false }</code> to attempt every document regardless. <code>countDocuments()</code> with an empty filter returns the total, confirming all three writes landed.</p>`,
+    reset: 'db.products.drop()',
+  },
+
+  {
+    title: 'Query Documents with find, findOne, and Projections',
+    difficulty: 'EASY',
+    estimatedMinutes: 20,
+    points: 10,
+    concepts: ['find', 'findOne', 'query filter', 'projection', 'toArray'],
+    prerequisites: ['insertMany', 'documents'],
+    tags: ['crud', 'find', 'projection', 'query', 'mongodb'],
+    problemHtml: `<p>Reading is where MongoDB queries earn their keep. <code>find</code> returns every document matching a filter (as a cursor you materialise with <code>toArray</code>), <code>findOne</code> returns just the first match, and a <strong>projection</strong> selects which fields come back — trimming payloads to what you actually need.</p>
+<p>The <code>products</code> collection is pre-seeded with three documents. Do the following:</p>
+<ul>
+<li>Find all products with <code>price</code> greater than 20, returning only the <code>name</code> field and suppressing <code>_id</code> — projection <code>{ name: 1, _id: 0 }</code> — as an array.</li>
+<li>Fetch the single product with <code>_id: 2</code> using <code>findOne</code>.</li>
+<li>Fetch the Monitor by name, projecting only its <code>price</code> (no <code>_id</code>).</li>
+<li>Return all products with just <code>name</code> and <code>price</code>, sorted by price ascending.</li>
+<li>Count how many products have <code>price</code> greater than 20.</li>
+</ul>
+<p>Remember that <code>_id</code> is included by default and must be explicitly turned off with <code>_id: 0</code>. The scaffold provides the query skeletons.</p>`,
+    inputSpec: 'A products collection seeded with { _id:1, name:"Keyboard", price:49.9 }, { _id:2, name:"Mouse", price:19 }, { _id:3, name:"Monitor", price:150 }.',
+    outputSpec: "The projected find returns [{ name: 'Keyboard' }, { name: 'Monitor' }]; findOne({_id:2}) returns the Mouse document; findOne Monitor returns { price: 150 }; the sorted find returns the three by ascending price; countDocuments({price:{$gt:20}}) returns 2.",
+    constraints: 'Use a projection to limit fields; suppress _id with _id: 0. Use toArray() to materialise find() results. Sort with { price: 1 } for ascending.',
+    examplesJson: [
+      {
+        input: 'db.products.find({ price: { $gt: 20 } }, { name: 1, _id: 0 }).toArray()',
+        output: "[ { name: 'Keyboard' }, { name: 'Monitor' } ]",
+        explanation: 'Only Keyboard (49.9) and Monitor (150) exceed 20; the projection returns just their name and drops _id.',
+      },
+      {
+        input: 'db.products.findOne({ _id: 2 })',
+        output: "{ _id: 2, name: 'Mouse', price: 19 }",
+        explanation: 'findOne returns a single document (not an array) — the one matching _id 2.',
+      },
+    ],
+    hintsJson: [
+      'find returns many, findOne returns one; a second argument to find selects fields.',
+      'The projection { name: 1, _id: 0 } keeps name and explicitly removes the always-on _id.',
+      'find() gives a cursor; call .toArray() to get a plain array of documents.',
+      'db.products.find({ price: { $gt: 20 } }, { name: 1, _id: 0 }).toArray(); db.products.findOne({ _id: 2 }).',
+    ],
+    starter: `// find price > 20, project only name (no _id), as an array
+// findOne the document with _id 2
+// findOne Monitor by name, project only price (no _id)
+// find all, project name+price, sort by price ascending
+// count products with price > 20`,
+    solution: `db.products.find({ price: { $gt: 20 } }, { name: 1, _id: 0 }).toArray()
+db.products.findOne({ _id: 2 })
+db.products.findOne({ name: "Monitor" }, { price: 1, _id: 0 })
+db.products.find({}, { name: 1, price: 1, _id: 0 }).sort({ price: 1 }).toArray()
+db.products.countDocuments({ price: { $gt: 20 } })`,
+    solutionExplanationHtml: `<p><code>find</code> and <code>findOne</code> differ in shape: <code>find</code> returns a <em>cursor</em> over all matches, which you turn into a concrete array with <code>toArray()</code>, whereas <code>findOne</code> returns a single document object (or <code>null</code> if nothing matches). The first argument to either is the query filter — <code>{ price: { $gt: 20 } }</code> uses the <code>$gt</code> operator to mean "greater than 20" — and the second argument to <code>find</code> is the projection.</p>
+<p>The projection is where the important rule lives: fields are opt-in with <code>1</code>, but <code>_id</code> is the exception — it is returned <em>by default</em> and must be explicitly suppressed with <code>_id: 0</code>. Forgetting that is the single most common projection surprise: you ask for <code>{ name: 1 }</code> expecting only names and get <code>{ _id: ..., name: ... }</code> back. Note also that you generally cannot mix inclusion and exclusion in one projection (e.g. <code>{ name: 1, price: 0 }</code> is an error) — the only permitted mix is suppressing <code>_id</code> alongside inclusions, which is exactly what you do here. Projecting narrowly matters at scale because it reduces the bytes transferred over the wire and can let a query be served entirely from an index (a covered query) without touching the documents.</p>`,
+    reset: `db.products.drop(); db.products.insertMany([{ _id: 1, name: "Keyboard", price: 49.9 }, { _id: 2, name: "Mouse", price: 19 }, { _id: 3, name: "Monitor", price: 150 }])`,
+  },
+
+  {
+    title: 'Modify a Document with updateOne and $set',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 20,
+    points: 15,
+    concepts: ['updateOne', '$set', 'update result', 'matchedCount', 'modifiedCount'],
+    prerequisites: ['findOne', 'query filter'],
+    tags: ['crud', 'update', 'set', 'operators', 'mongodb'],
+    problemHtml: `<p>Updating in MongoDB is deliberately explicit: you name the document to change with a filter, and you describe the change with an <strong>update operator</strong>. The workhorse operator is <code>$set</code>, which assigns fields without disturbing the rest of the document. The result tells you how many documents matched and how many actually changed.</p>
+<p>In the seeded <code>products</code> collection:</p>
+<ul>
+<li>Use <code>updateOne</code> to set the <code>price</code> of the product with <code>_id: 2</code> to <code>21.5</code> and add a new field <code>onSale: true</code> — both in a single <code>$set</code> — then read it back with <code>findOne</code>.</li>
+<li>Run the same <code>$set</code> of <code>price</code> to <code>21.5</code> again and note the result reports <code>modifiedCount: 0</code> — it matched but changed nothing.</li>
+<li>Use <code>updateOne</code> to rename the product with <code>_id: 1</code> to <code>"Keyboard Pro"</code> and set its price to <code>45</code>, then read it back.</li>
+</ul>
+<p>Observe the update result: <code>matchedCount</code> is <code>1</code> (one document matched the filter) and <code>modifiedCount</code> is <code>1</code> when it actually changed, or <code>0</code> when the value was already what you set. The scaffold provides the update skeleton.</p>`,
+
+    inputSpec: 'A products collection seeded with { _id:2, name:"Mouse", price:19 } among others.',
+    outputSpec: 'updateOne returns a result with matchedCount:1 and modifiedCount:1; findOne({_id:2}) then shows price 21.5 and onSale:true added.',
+    constraints: 'Use $set to change fields. A bare update document without an operator would replace the whole document — do not do that. Change exactly the _id: 2 document.',
+    examplesJson: [
+      {
+        input: 'db.products.updateOne({ _id: 2 }, { $set: { price: 21.5, onSale: true } })',
+        output: '{ acknowledged: true, insertedId: null, matchedCount: 1, modifiedCount: 1, upsertedCount: 0 }',
+        explanation: 'One document matched (matchedCount 1) and was changed (modifiedCount 1); nothing was inserted.',
+      },
+      {
+        input: 'db.products.findOne({ _id: 2 })',
+        output: "{ _id: 2, name: 'Mouse', price: 21.5, onSale: true }",
+        explanation: '$set updated price and added onSale without touching name — the rest of the document is preserved.',
+      },
+    ],
+    hintsJson: [
+      'You need to change two fields on one document without wiping the others.',
+      'The update must use an operator; $set assigns fields and leaves everything else alone.',
+      '$set can create a field that did not exist yet (onSale) as well as change one that did (price).',
+      'db.products.updateOne({ _id: 2 }, { $set: { price: 21.5, onSale: true } }).',
+    ],
+    starter: `// updateOne: set price to 21.5 and add onSale: true on _id 2, then findOne
+// updateOne _id 2 setting price to 21.5 again (modifiedCount will be 0)
+// updateOne _id 1: rename to "Keyboard Pro" and set price 45, then findOne`,
+    solution: `db.products.updateOne({ _id: 2 }, { $set: { price: 21.5, onSale: true } })
+db.products.findOne({ _id: 2 })
+db.products.updateOne({ _id: 2 }, { $set: { price: 21.5 } })
+db.products.updateOne({ _id: 1 }, { $set: { name: "Keyboard Pro", price: 45 } })
+db.products.findOne({ _id: 1 })`,
+    solutionExplanationHtml: `<p><code>updateOne</code> changes at most one document — the first that matches the filter — and the change is expressed with update operators, here <code>$set</code>. <code>$set</code> assigns the listed fields and leaves every other field untouched, which is why <code>name</code> survives while <code>price</code> is changed and <code>onSale</code> is newly added (<code>$set</code> creates a field that did not previously exist). The result document reports <code>matchedCount: 1</code> and <code>modifiedCount: 1</code>: the first says the filter found a document, the second says it was actually altered.</p>
+<p>The distinction between those two counts matters. If you <code>$set</code> a field to the value it already holds, <code>matchedCount</code> is <code>1</code> but <code>modifiedCount</code> is <code>0</code> — the document matched but nothing changed, which is useful for detecting no-op writes. The dangerous mistake this exercise guards against is omitting the operator: <code>updateOne({ _id: 2 }, { price: 21.5 })</code> is interpreted as a <em>replacement</em> document and would wipe out <code>name</code> and every other field, leaving only <code>_id</code> and <code>price</code>. Always wrap changes in an operator like <code>$set</code> unless you truly intend a full replace (for which the explicit <code>replaceOne</code> exists). This "modify in place" model is what makes partial updates cheap and concurrent-safe.</p>`,
+    reset: `db.products.drop(); db.products.insertMany([{ _id: 1, name: "Keyboard", price: 49.9 }, { _id: 2, name: "Mouse", price: 19 }, { _id: 3, name: "Monitor", price: 150 }])`,
+  },
+
+  {
+    title: 'Update Many Documents and Upsert a Missing One',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 25,
+    points: 15,
+    concepts: ['updateMany', 'upsert', 'bulk field change', 'upsertedId', 'conditional insert'],
+    prerequisites: ['updateOne', '$set'],
+    tags: ['crud', 'update-many', 'upsert', 'operators', 'mongodb'],
+    problemHtml: `<p>Two everyday needs go beyond a single-document update: changing every document that matches a condition, and "update it if it exists, otherwise create it". <code>updateMany</code> handles the first; the <code>upsert: true</code> option handles the second, turning an update that matched nothing into an insert.</p>
+<p>In the seeded <code>products</code> collection:</p>
+<ul>
+<li>Use <code>updateMany</code> to add <code>{ category: "electronics" }</code> to <strong>every</strong> document (filter <code>{}</code>). Confirm the result modifies all three.</li>
+<li>Use <code>updateOne</code> with <code>{ upsert: true }</code> to set <code>name</code> and <code>price</code> on a product with <code>_id: 99</code> that does not exist yet — because no document matches, it is inserted. The result reports <code>upsertedId: 99</code>.</li>
+<li>Return <code>countDocuments()</code> — now <code>4</code>.</li>
+</ul>
+<p>Watch the result fields: <code>updateMany</code> shows <code>modifiedCount: 3</code>, and the upsert shows <code>upsertedCount: 1</code> with <code>upsertedId</code>. The scaffold provides the skeletons.</p>`,
+    inputSpec: 'A products collection seeded with three documents (_id 1, 2, 3). _id 99 does not exist.',
+    outputSpec: 'updateMany({}, ...) returns matchedCount:3, modifiedCount:3; the upsert returns upsertedCount:1 and upsertedId:99; countDocuments() returns 4.',
+    constraints: 'Use updateMany with an empty filter to touch all documents. Use { upsert: true } to create the missing _id: 99 document. Do not insert it manually.',
+    examplesJson: [
+      {
+        input: 'db.products.updateMany({}, { $set: { category: "electronics" } })',
+        output: '{ acknowledged: true, insertedId: null, matchedCount: 3, modifiedCount: 3, upsertedCount: 0 }',
+        explanation: 'The empty filter {} matches every document, so all three gain the category field.',
+      },
+      {
+        input: 'db.products.updateOne({ _id: 99 }, { $set: { name: "Webcam", price: 60 } }, { upsert: true })',
+        output: '{ acknowledged: true, insertedId: null, matchedCount: 0, modifiedCount: 0, upsertedCount: 1, upsertedId: 99 }',
+        explanation: 'No document matched _id 99, so upsert inserts one; upsertedCount is 1 and upsertedId reports the new _id.',
+      },
+    ],
+    hintsJson: [
+      'One operation changes all matches; a flag turns a no-match update into an insert.',
+      'updateMany({}, { $set: {...} }) applies the change to every document because {} matches all.',
+      'Passing { upsert: true } as the third argument inserts a new document when the filter matches nothing.',
+      'The upsert result carries upsertedId (the new _id) and upsertedCount: 1 instead of a modifiedCount.',
+    ],
+    starter: `// updateMany all docs: $set category "electronics"
+// updateOne _id 99 with upsert:true to create it
+// findOne _id 99 to see the upserted document
+// countDocuments to confirm 4`,
+    solution: `db.products.updateMany({}, { $set: { category: "electronics" } })
+db.products.updateOne({ _id: 99 }, { $set: { name: "Webcam", price: 60 } }, { upsert: true })
+db.products.findOne({ _id: 99 })
+db.products.countDocuments()`,
+    solutionExplanationHtml: `<p><code>updateMany</code> applies the same operator update to every document its filter matches; with the empty filter <code>{}</code> that means all three documents receive <code>category: "electronics"</code>, so <code>matchedCount</code> and <code>modifiedCount</code> are both <code>3</code>. This is the bulk-edit primitive — change a status across a whole set, backfill a new field — and it is a single round trip regardless of how many documents it touches.</p>
+<p>The <code>upsert: true</code> option changes the semantics of a non-matching update. Normally <code>updateOne({ _id: 99 }, ...)</code> against a missing document matches nothing and does nothing (<code>matchedCount: 0</code>). With upsert enabled, that same miss becomes an insert: MongoDB creates a new document combining the filter's equality conditions (<code>_id: 99</code>) with the <code>$set</code> values, and the result reports <code>upsertedCount: 1</code> and the new <code>upsertedId</code>. This is the idiomatic way to write "ensure a document exists with these values" in one atomic operation, avoiding the classic race between a separate existence check and insert. The subtle rule to remember: the filter's <em>equality</em> fields are carried into the inserted document, so an upsert filtered on <code>{ _id: 99 }</code> gives the new document that id, whereas filtering on a range like <code>{ price: { $gt: 5 } }</code> would not contribute <code>price</code> to the insert — you must <code>$set</code> everything the new document needs.</p>`,
+    reset: `db.products.drop(); db.products.insertMany([{ _id: 1, name: "Keyboard", price: 49.9 }, { _id: 2, name: "Mouse", price: 19 }, { _id: 3, name: "Monitor", price: 150 }])`,
+  },
+
+  {
+    title: 'Remove Documents with deleteOne and deleteMany',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 20,
+    points: 15,
+    concepts: ['deleteOne', 'deleteMany', 'deletedCount', 'filtered delete', 'idempotent delete'],
+    prerequisites: ['query filter', 'countDocuments'],
+    tags: ['crud', 'delete', 'remove', 'query', 'mongodb'],
+    problemHtml: `<p>Deleting mirrors updating: you name what to remove with a filter, and MongoDB reports how many documents went. <code>deleteOne</code> removes at most the first match; <code>deleteMany</code> removes all matches. A filter that matches nothing simply deletes nothing — no error — which makes deletes safe to retry.</p>
+<p>The <code>products</code> collection is seeded with five documents of varying <code>price</code>. Do the following:</p>
+<ul>
+<li>Use <code>deleteOne</code> to remove the single product with <code>_id: 3</code>; the result reports <code>deletedCount: 1</code>.</li>
+<li>Use <code>deleteMany</code> to remove every product with <code>price</code> less than 25; the result reports how many were removed.</li>
+<li>Call <code>deleteOne({ _id: 999 })</code> for a document that does not exist and observe <code>deletedCount: 0</code>.</li>
+<li>Return <code>countDocuments()</code> to confirm what remains.</li>
+</ul>
+<p>The seed has prices 49.9, 19, 150, 12, 30. After deleting <code>_id: 3</code> and everything under 25, work out which documents survive. The scaffold provides the skeletons.</p>`,
+    inputSpec: 'A products collection seeded with _id 1 (49.9), 2 (19), 3 (150), 4 (12), 5 (30).',
+    outputSpec: 'deleteOne({_id:3}) returns deletedCount:1; deleteMany({price:{$lt:25}}) returns deletedCount:2 (ids 2 and 4); deleteOne({_id:999}) returns deletedCount:0; countDocuments() returns 2 (ids 1 and 5).',
+    constraints: 'Use deleteOne for the single removal and deleteMany for the price filter. Do not drop the whole collection. Expect a no-match delete to return deletedCount: 0.',
+    examplesJson: [
+      {
+        input: 'db.products.deleteMany({ price: { $lt: 25 } })',
+        output: '{ acknowledged: true, deletedCount: 2 }',
+        explanation: 'Prices under 25 are the Mouse (19) and _id 4 (12) — two documents removed.',
+      },
+      {
+        input: 'db.products.deleteOne({ _id: 999 })',
+        output: '{ acknowledged: true, deletedCount: 0 }',
+        explanation: 'No document has _id 999, so nothing is deleted and deletedCount is 0 — deletes are safe to repeat.',
+      },
+    ],
+    hintsJson: [
+      'deleteOne removes a single match; deleteMany removes all matches of the filter.',
+      'The filter { price: { $lt: 25 } } selects documents cheaper than 25.',
+      'A delete whose filter matches nothing returns deletedCount: 0 rather than erroring.',
+      'After removing _id 3 and everything under 25 (ids 2 and 4), the survivors are ids 1 (49.9) and 5 (30).',
+    ],
+    starter: `// deleteOne _id 3
+// deleteMany price < 25
+// deleteOne _id 999 (no match)
+// deleteMany price > 1000 (no match)
+// countDocuments, then list surviving _ids sorted`,
+    solution: `db.products.deleteOne({ _id: 3 })
+db.products.deleteMany({ price: { $lt: 25 } })
+db.products.deleteOne({ _id: 999 })
+db.products.deleteMany({ price: { $gt: 1000 } })
+db.products.countDocuments()
+db.products.find({}, { _id: 1 }).sort({ _id: 1 }).toArray()`,
+    solutionExplanationHtml: `<p>The delete methods parallel the update methods exactly. <code>deleteOne</code> removes the first document matching its filter and reports <code>deletedCount: 1</code> when it found one; <code>deleteMany</code> removes every match, so <code>{ price: { $lt: 25 } }</code> takes out both the 19 and the 12 documents for a <code>deletedCount: 2</code>. Tracing the data: starting from five documents, removing <code>_id: 3</code> and then everything under 25 (ids 2 and 4) leaves ids 1 (49.9) and 5 (30), so the final <code>countDocuments()</code> is 2.</p>
+<p>The behaviour worth internalising is that a filter matching nothing is not an error — <code>deleteOne({ _id: 999 })</code> returns <code>deletedCount: 0</code> and moves on. That makes deletes idempotent and safe to retry after a network hiccup, the same property you rely on with Redis <code>DEL</code> or SQL's forgiving deletes. The genuinely dangerous mistake is the empty filter: <code>deleteMany({})</code> deletes <em>every</em> document in the collection, and unlike <code>drop()</code> it does so document by document while leaving indexes intact. Because the filter is what scopes the damage, always double-check it before running a delete in production — an accidental <code>{}</code> or a filter that is broader than intended is the classic data-loss incident. For removing an entire collection and its indexes, the explicit <code>drop()</code> is clearer and faster than <code>deleteMany({})</code>.</p>`,
+    reset: `db.products.drop(); db.products.insertMany([{ _id: 1, name: "Keyboard", price: 49.9 }, { _id: 2, name: "Mouse", price: 19 }, { _id: 3, name: "Monitor", price: 150 }, { _id: 4, name: "Cable", price: 12 }, { _id: 5, name: "Pad", price: 30 }])`,
+  },
+
+  {
+    title: 'Filter with Query Operators: $gt, $lte, $in, and $ne',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 25,
+    points: 20,
+    concepts: ['comparison operators', '$gt and $lte', '$in', '$ne', 'compound filters'],
+    prerequisites: ['find', 'query filter'],
+    tags: ['query', 'operators', 'filter', 'comparison', 'mongodb'],
+    problemHtml: `<p>Real queries rarely test plain equality. MongoDB's query operators — all prefixed with <code>$</code> — express ranges, membership, and negation inside the filter document. Combining several fields in one filter implicitly ANDs them, giving you precise selection without any query language beyond JSON.</p>
+<p>The <code>products</code> collection is seeded with a <code>price</code> and a <code>category</code> per document. Write three queries, each returning an array of names only (projection <code>{ name: 1, _id: 0 }</code>):</p>
+<ul>
+<li>Products with <code>price</code> greater than 20 <strong>and</strong> at most 100 — combine <code>$gt</code> and <code>$lte</code> on the same field.</li>
+<li>Products whose <code>category</code> is in the set <code>["input", "display"]</code> — use <code>$in</code>.</li>
+<li>Products whose <code>category</code> is <strong>not</strong> <code>"cable"</code> — use <code>$ne</code>.</li>
+</ul>
+<p>Sort each result by <code>name</code> ascending so the output order is stable. The scaffold provides the three query skeletons.</p>`,
+    inputSpec: 'A products collection seeded with { name, price, category } documents spanning several prices and categories (input, display, cable).',
+    outputSpec: 'Three name-only arrays: the price range 20..100, the category $in [input, display], and category $ne cable, each sorted by name.',
+    constraints: 'Use $gt/$lte for the range on one field, $in for membership, $ne for negation. Project only name (no _id) and sort by name ascending.',
+    examplesJson: [
+      {
+        input: 'db.products.find({ price: { $gt: 20, $lte: 100 } }, { name: 1, _id: 0 }).sort({ name: 1 }).toArray()',
+        output: "[ { name: 'Keyboard' }, { name: 'Pad' } ]",
+        explanation: 'Two conditions on price combine as a range: Keyboard (49.9) and Pad (30) are both above 20 and at most 100; Monitor (150) is excluded.',
+      },
+      {
+        input: 'db.products.find({ category: { $in: ["input", "display"] } }, { name: 1, _id: 0 }).sort({ name: 1 }).toArray()',
+        output: "[ { name: 'Keyboard' }, { name: 'Monitor' }, { name: 'Mouse' } ]",
+        explanation: '$in matches any document whose category is one of the listed values.',
+      },
+    ],
+    hintsJson: [
+      'A range on one field is two operators in the same sub-document; membership and negation are their own operators.',
+      'Combine bounds like { price: { $gt: 20, $lte: 100 } } — both apply to price.',
+      '$in takes an array of allowed values; $ne takes a single value to exclude.',
+      'Add .sort({ name: 1 }) before .toArray() so results come back in a stable order.',
+    ],
+    starter: `// price > 20 AND <= 100, names only, sorted
+// category in [input, display], names only, sorted
+// category != cable, names only, sorted`,
+    solution: `db.products.find({ price: { $gt: 20, $lte: 100 } }, { name: 1, _id: 0 }).sort({ name: 1 }).toArray()
+db.products.find({ category: { $in: ["input", "display"] } }, { name: 1, _id: 0 }).sort({ name: 1 }).toArray()
+db.products.find({ category: { $ne: "cable" } }, { name: 1, _id: 0 }).sort({ name: 1 }).toArray()`,
+    solutionExplanationHtml: `<p>Query operators turn the filter document into a small expression language. Two operators on the same field, <code>{ price: { $gt: 20, $lte: 100 } }</code>, are ANDed into a range — greater than 20 <em>and</em> at most 100 — so Keyboard (49.9) and Pad (30) qualify while Monitor (150) does not. <code>$in</code> tests membership against an array of allowed values, and <code>$ne</code> negates a single value. When a filter lists several fields, those are implicitly ANDed too, which is why you rarely need an explicit <code>$and</code>.</p>
+<p>Two traps are worth flagging. First, operator boundaries: <code>$gt</code>/<code>$lt</code> are exclusive while <code>$gte</code>/<code>$lte</code> are inclusive, so <code>$lte: 100</code> would include a product priced exactly 100 whereas <code>$lt: 100</code> would not — off-by-one filtering bugs almost always trace back to this choice. Second, <code>$ne</code> and <code>$nin</code> have a subtle reach: they also match documents where the field is <em>absent</em>, because a missing <code>category</code> is "not equal to cable" by MongoDB's logic, which can pull in documents you did not expect; guard with <code>$exists</code> if that matters. Finally, these operators are what indexes accelerate — an index on <code>price</code> lets the range query skip a full collection scan — and the <code>.sort({ name: 1 })</code> here only orders the output, distinct from the filter that selects it.</p>`,
+    reset: `db.products.drop(); db.products.insertMany([{ _id: 1, name: "Keyboard", price: 49.9, category: "input" }, { _id: 2, name: "Mouse", price: 19, category: "input" }, { _id: 3, name: "Monitor", price: 150, category: "display" }, { _id: 4, name: "Cable", price: 12, category: "cable" }, { _id: 5, name: "Pad", price: 30, category: "desk" }])`,
+  },
+
+  {
+    title: 'Change Numbers and Arrays with $inc, $push, and $addToSet',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 30,
+    points: 20,
+    concepts: ['$inc', '$push', '$addToSet', '$pull', 'array update operators'],
+    prerequisites: ['updateOne', '$set'],
+    tags: ['update', 'arrays', 'operators', 'inc', 'mongodb'],
+    problemHtml: `<p>Beyond <code>$set</code>, MongoDB has operators that modify values in place: <code>$inc</code> adjusts a number atomically, and the array operators grow or shrink an embedded array without you reading it first. This lets you increment a counter, append to a log, or maintain a tag set entirely server-side, safely under concurrency.</p>
+<p>The <code>posts</code> collection has one document <code>{ _id: 1, title: "Intro", likes: 0, tags: ["draft"] }</code>. Apply these updates to <code>_id: 1</code>:</p>
+<ul>
+<li><code>$inc</code> the <code>likes</code> field by <code>3</code>.</li>
+<li><code>$push</code> the value <code>"mongodb"</code> onto <code>tags</code> (append, allowing duplicates).</li>
+<li><code>$addToSet</code> the value <code>"draft"</code> onto <code>tags</code> — because it already exists, the array is unchanged (set semantics).</li>
+<li><code>$pull</code> the value <code>"draft"</code> from <code>tags</code> (remove all occurrences).</li>
+<li>Read the document back with <code>findOne</code>.</li>
+</ul>
+<p>Predict the final <code>tags</code> array and <code>likes</code> before you run it. The scaffold provides the update skeletons.</p>`,
+    inputSpec: 'A posts collection with one document { _id: 1, title: "Intro", likes: 0, tags: ["draft"] }.',
+    outputSpec: 'After the updates, findOne({_id:1}) shows likes: 3 and tags: ["mongodb"] (draft was added-as-duplicate-noop by $addToSet then removed by $pull; mongodb remains from $push).',
+    constraints: 'Use $inc for the number and $push / $addToSet / $pull for the array. Do not read-modify-write the array in application code.',
+    examplesJson: [
+      {
+        input: 'db.posts.updateOne({ _id: 1 }, { $inc: { likes: 3 } })',
+        output: '{ acknowledged: true, insertedId: null, matchedCount: 1, modifiedCount: 1, upsertedCount: 0 }',
+        explanation: '$inc adds 3 to likes atomically, taking it from 0 to 3.',
+      },
+      {
+        input: 'db.posts.findOne({ _id: 1 })  (after all four updates)',
+        output: "{ _id: 1, title: 'Intro', likes: 3, tags: [ 'mongodb' ] }",
+        explanation: '$push added "mongodb"; $addToSet("draft") was a no-op since draft was present; $pull("draft") removed the original draft, leaving only mongodb.',
+      },
+    ],
+    hintsJson: [
+      'Each change has a dedicated operator so the server does the read-modify-write atomically.',
+      '$inc: { likes: 3 } adds to a number; a negative value subtracts.',
+      '$push always appends (duplicates allowed); $addToSet appends only if the value is absent.',
+      '$pull: { tags: "draft" } removes every occurrence of "draft" from the array.',
+    ],
+    starter: `// $inc likes by 3
+// $push "mongodb" onto tags
+// $addToSet "draft" onto tags (already present -> no change)
+// $pull "draft" from tags
+// findOne _id 1`,
+    solution: `db.posts.updateOne({ _id: 1 }, { $inc: { likes: 3 } })
+db.posts.updateOne({ _id: 1 }, { $push: { tags: "mongodb" } })
+db.posts.updateOne({ _id: 1 }, { $addToSet: { tags: "draft" } })
+db.posts.updateOne({ _id: 1 }, { $pull: { tags: "draft" } })
+db.posts.findOne({ _id: 1 })`,
+    solutionExplanationHtml: `<p>These operators modify a document in place on the server, which is both concise and concurrency-safe. <code>$inc</code> adds to a numeric field atomically — <code>likes</code> goes 0 → 3 — so two simultaneous increments never lose a count, exactly the guarantee an application-side read-modify-write cannot make. The array operators similarly avoid fetching the array first: <code>$push</code> appends unconditionally (duplicates allowed), <code>$addToSet</code> appends only if the value is not already present, and <code>$pull</code> removes every element equal to the given value.</p>
+<p>Tracing the <code>tags</code> array is the point of the exercise. It starts as <code>["draft"]</code>. <code>$push "mongodb"</code> makes it <code>["draft", "mongodb"]</code>. <code>$addToSet "draft"</code> is a no-op because <code>"draft"</code> is already there — that is the difference from <code>$push</code>, which would have produced a duplicate. Then <code>$pull "draft"</code> removes the original, leaving <code>["mongodb"]</code>. The common confusion is expecting <code>$addToSet</code> and <code>$push</code> to behave the same; use <code>$addToSet</code> for tag-like sets where duplicates are meaningless, and <code>$push</code> for logs or event lists where every entry counts (and where <code>$push</code> with the <code>$each</code>, <code>$slice</code>, and <code>$sort</code> modifiers can even maintain a capped, sorted array). Because each operator is atomic, this is how you maintain counters and collections under load without transactions.</p>`,
+    reset: `db.posts.drop(); db.posts.insertOne({ _id: 1, title: "Intro", likes: 0, tags: ["draft"] })`,
+  },
+
+  {
+    title: 'Sort, Limit, Skip, and Summarise with distinct',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 25,
+    points: 20,
+    concepts: ['sort', 'limit', 'skip', 'distinct', 'cursor pagination'],
+    prerequisites: ['find', 'toArray'],
+    tags: ['query', 'sort', 'pagination', 'distinct', 'mongodb'],
+    problemHtml: `<p>Presenting data means ordering and paging it. Cursor modifiers <code>sort</code>, <code>limit</code>, and <code>skip</code> chain onto a <code>find</code> to produce "top N" lists and pages, while <code>distinct</code> collapses a field to its unique values. Together they cover the read-side needs of most list views.</p>
+<p>The <code>products</code> collection is seeded with five documents. Produce these results:</p>
+<ul>
+<li>The two most expensive products, names and prices only, using <code>sort({ price: -1 }).limit(2)</code>.</li>
+<li>The "second page" of one product when ordered by price descending: <code>sort({ price: -1 }).skip(2).limit(1)</code>.</li>
+<li>The list of distinct <code>category</code> values with <code>distinct("category")</code>.</li>
+<li>The total document count with <code>countDocuments()</code>.</li>
+</ul>
+<p>Sort direction is <code>1</code> for ascending and <code>-1</code> for descending. The scaffold provides the query skeletons.</p>`,
+    inputSpec: 'A products collection seeded with five { name, price, category } documents across categories input, display, cable, desk.',
+    outputSpec: 'Top-2 by price returns Monitor then Keyboard; skip(2).limit(1) returns the 3rd most expensive (Pad); distinct("category") returns the unique categories; countDocuments() returns 5.',
+    constraints: 'Use sort with -1 for descending. Chain skip before limit for paging. Use distinct for unique values, not a manual loop.',
+    examplesJson: [
+      {
+        input: 'db.products.find({}, { name: 1, price: 1, _id: 0 }).sort({ price: -1 }).limit(2).toArray()',
+        output: "[ { name: 'Monitor', price: 150 }, { name: 'Keyboard', price: 49.9 } ]",
+        explanation: 'Descending by price puts Monitor (150) first and Keyboard (49.9) second; limit(2) keeps just those two.',
+      },
+      {
+        input: 'db.products.distinct("category")',
+        output: "[ 'cable', 'desk', 'display', 'input' ]",
+        explanation: 'distinct collapses the category field to its unique values (returned sorted).',
+      },
+    ],
+    hintsJson: [
+      'Ordering, paging, and unique-values are three separate tools that chain onto or replace find.',
+      'sort({ price: -1 }) orders high-to-low; limit(n) keeps the first n after sorting.',
+      'For a page, skip past the earlier pages then limit: .skip(2).limit(1) is the third item.',
+      'distinct("category") returns an array of the unique values of that field.',
+    ],
+    starter: `// top 2 by price desc, name+price only
+// skip 2, limit 1 by price desc (the 3rd)
+// distinct categories
+// countDocuments`,
+    solution: `db.products.find({}, { name: 1, price: 1, _id: 0 }).sort({ price: -1 }).limit(2).toArray()
+db.products.find({}, { name: 1, price: 1, _id: 0 }).sort({ price: -1 }).skip(2).limit(1).toArray()
+db.products.distinct("category")
+db.products.countDocuments()`,
+    solutionExplanationHtml: `<p>These cursor modifiers compose to produce ordered pages. <code>sort({ price: -1 })</code> orders results high-to-low (<code>-1</code> descending, <code>1</code> ascending); <code>limit(2)</code> then keeps only the first two, giving the two most expensive products. For pagination you combine <code>skip</code> and <code>limit</code>: <code>skip(2).limit(1)</code> discards the top two and returns the next one — the third most expensive. <code>distinct("category")</code> is a different shape entirely: rather than returning documents, it returns the unique values a field takes, which MongoDB returns sorted.</p>
+<p>The critical detail is evaluation order. Regardless of how you chain them, the server applies <strong>sort, then skip, then limit</strong> — so the sort establishes a stable ordering before paging carves out a slice. If you omit the sort, <code>skip</code>/<code>limit</code> operate on an undefined order and "page 2" can overlap or miss rows between requests; always sort on a unique or tie-broken key when paginating. The well-known scaling caveat is that <code>skip</code> still walks past the skipped documents internally, so deep pagination (<code>skip(100000)</code>) grows linearly slower; production systems switch to range-based pagination (<code>find({ price: { $lt: lastSeenPrice } }).limit(n)</code>) for large offsets. For counting, <code>countDocuments()</code> returns an accurate total by scanning the matched set, unlike the older <code>count()</code> which could return stale metadata estimates.</p>`,
+    reset: `db.products.drop(); db.products.insertMany([{ _id: 1, name: "Keyboard", price: 49.9, category: "input" }, { _id: 2, name: "Mouse", price: 19, category: "input" }, { _id: 3, name: "Monitor", price: 150, category: "display" }, { _id: 4, name: "Cable", price: 12, category: "cable" }, { _id: 5, name: "Pad", price: 30, category: "desk" }])`,
+  },
+
+  {
+    title: 'Atomically Read and Modify with findOneAndUpdate',
+    difficulty: 'HARD',
+    estimatedMinutes: 40,
+    points: 25,
+    concepts: ['findOneAndUpdate', 'returnDocument', 'atomic read-modify-write', 'upsert with return', '$inc counter'],
+    prerequisites: ['updateOne', '$inc', 'upsert'],
+    tags: ['atomic', 'findoneandupdate', 'counter', 'concurrency', 'mongodb'],
+    problemHtml: `<p>Sometimes you must change a document <em>and</em> see the resulting value in one indivisible step — allocating the next sequence number, claiming a job, decrementing stock. Doing a <code>find</code> then a separate <code>updateOne</code> opens a race window. <code>findOneAndUpdate</code> closes it: it matches, updates, and returns the document atomically, and you choose whether you get the version before or after the change.</p>
+<p>Build an atomic counter in a <code>counters</code> collection:</p>
+<ul>
+<li>Call <code>findOneAndUpdate</code> on <code>{ _id: "orderId" }</code> with <code>{ $inc: { seq: 1 } }</code>, options <code>{ upsert: true, returnDocument: "after" }</code>. The first call creates the counter and returns the document with <code>seq: 1</code>.</li>
+<li>Call it again with the same arguments — it now returns <code>seq: 2</code>.</li>
+<li>Call it a third time — returns <code>seq: 3</code>.</li>
+</ul>
+<p>Each call hands back the <em>post-increment</em> value, which is exactly what a "give me the next id" service needs. The scaffold provides the call to complete.</p>`,
+    inputSpec: 'An empty counters collection. The document { _id: "orderId" } does not exist on the first call.',
+    outputSpec: 'Three findOneAndUpdate calls return the counter document with seq 1, then 2, then 3 — the value after each increment. The first call creates it via upsert.',
+    constraints: 'Use findOneAndUpdate with returnDocument: "after" and upsert: true. Do not use a separate find + update (that is not atomic). $inc must be the operator.',
+    examplesJson: [
+      {
+        input: 'db.counters.findOneAndUpdate({ _id: "orderId" }, { $inc: { seq: 1 } }, { upsert: true, returnDocument: "after" })',
+        output: "{ _id: 'orderId', seq: 1 }",
+        explanation: 'The counter did not exist, so upsert creates it and $inc sets seq to 1; returnDocument "after" gives the post-increment value.',
+      },
+      {
+        input: 'The same call, run a second time',
+        output: "{ _id: 'orderId', seq: 2 }",
+        explanation: 'The existing counter is incremented atomically to 2 and the updated document is returned.',
+      },
+    ],
+    hintsJson: [
+      'A find then update has a gap where another client can act. You need the read and write fused.',
+      'findOneAndUpdate applies the update and returns the document in one atomic operation.',
+      'Pass returnDocument: "after" to get the post-update value (the default is the pre-update "before").',
+      'Add upsert: true so the very first call creates the counter document instead of matching nothing.',
+    ],
+    starter: `// findOneAndUpdate _id "orderId", $inc seq by 1,
+// with upsert:true and returnDocument:"after"
+// run it three times`,
+    solution: `db.counters.findOneAndUpdate({ _id: "orderId" }, { $inc: { seq: 1 } }, { upsert: true, returnDocument: "after" })
+db.counters.findOneAndUpdate({ _id: "orderId" }, { $inc: { seq: 1 } }, { upsert: true, returnDocument: "after" })
+db.counters.findOneAndUpdate({ _id: "orderId" }, { $inc: { seq: 1 } }, { upsert: true, returnDocument: "after" })`,
+    solutionExplanationHtml: `<p><code>findOneAndUpdate</code> fuses three steps — locate, modify, return — into one atomic server operation, which is what makes it the correct tool for a sequence generator. The <code>{ $inc: { seq: 1 } }</code> bumps the counter, <code>returnDocument: "after"</code> asks for the value <em>after</em> the increment, and <code>upsert: true</code> means the first call, which matches no existing document, creates <code>{ _id: "orderId", seq: 1 }</code> rather than returning null. Each subsequent call increments and hands back <code>seq: 2</code>, then <code>seq: 3</code>. No two concurrent callers can ever receive the same number, because the increment-and-read happens under the document's lock with no gap.</p>
+<p>Contrast the naive approach: <code>findOne</code> to read <code>seq</code>, add one in your code, then <code>updateOne</code> to write it back. Between the read and the write, another client can read the same value, and both write the same "next" id — a duplicate that corrupts whatever the id keys. <code>findOneAndUpdate</code> eliminates that window entirely. Two options are easy to get wrong: <code>returnDocument</code> defaults to <code>"before"</code> (the pre-update document, or <code>null</code> on an upsert's first run), so you must pass <code>"after"</code> to see the incremented value; and in older drivers the option was the boolean <code>returnNewDocument</code> or <code>returnOriginal</code>, which is why copied snippets sometimes return the wrong version. The same atomic pattern — match on a condition, mutate, return — underlies job queues (claim a pending task) and inventory (decrement only if stock remains, by adding the stock check to the filter).</p>`,
+    diagramMermaid: `sequenceDiagram
+  participant App
+  participant Mongo
+  App->>Mongo: findOneAndUpdate inc seq return after
+  Mongo-->>App: document with seq 1
+  App->>Mongo: findOneAndUpdate inc seq return after
+  Mongo-->>App: document with seq 2`,
+    reset: `db.counters.drop()`,
+  },
+
+  {
+    title: 'Apply a Batch of Mixed Writes with bulkWrite',
+    difficulty: 'HARD',
+    estimatedMinutes: 45,
+    points: 30,
+    concepts: ['bulkWrite', 'mixed operations', 'ordered vs unordered', 'batch results', 'atomic per-document writes'],
+    prerequisites: ['insertOne', 'updateOne', 'deleteOne', 'upsert'],
+    tags: ['bulk', 'bulkwrite', 'batch', 'crud', 'mongodb'],
+    problemHtml: `<p>When a request needs several different writes — insert two rows, adjust one, remove another — sending them one at a time costs a round trip each. <code>bulkWrite</code> submits a mixed batch of operations in a single call and returns a combined tally of what each kind of operation did. It is the throughput tool for write-heavy paths.</p>
+<p>The <code>inventory</code> collection is seeded with <code>{ _id: 1, sku: "A", qty: 5 }</code> and <code>{ _id: 2, sku: "B", qty: 0 }</code>. Issue one <code>bulkWrite</code> containing, in order:</p>
+<ul>
+<li><code>insertOne</code> a new item <code>{ _id: 3, sku: "C", qty: 8 }</code>.</li>
+<li><code>updateOne</code> matching <code>{ _id: 1 }</code> with <code>{ $inc: { qty: -2 } }</code> (ship two of item A).</li>
+<li><code>deleteOne</code> matching <code>{ _id: 2 }</code> (drop the out-of-stock item B).</li>
+<li>An <code>updateOne</code> with <code>upsert: true</code> matching <code>{ _id: 4 }</code>, setting <code>{ sku: "D", qty: 3 }</code>.</li>
+</ul>
+<p>Then read the whole collection back with <code>find().sort({ _id: 1 }).toArray()</code>. Predict the batch result counts before running it. The scaffold provides the <code>bulkWrite</code> skeleton.</p>`,
+    inputSpec: 'An inventory collection seeded with { _id:1, sku:"A", qty:5 } and { _id:2, sku:"B", qty:0 }.',
+    outputSpec: 'bulkWrite returns insertedCount:1, modifiedCount:1, deletedCount:1, upsertedCount:1. The final collection is _id 1 (qty 3), _id 3 (qty 8), _id 4 (qty 3) — _id 2 deleted.',
+    constraints: 'Use a single bulkWrite with insertOne, updateOne ($inc), deleteOne, and an upserting updateOne. Do not issue four separate calls. Keep the operations in the listed order.',
+    examplesJson: [
+      {
+        input: 'db.inventory.bulkWrite([ { insertOne: {...} }, { updateOne: { filter: {_id:1}, update: { $inc: { qty: -2 } } } }, { deleteOne: { filter: {_id:2} } }, { updateOne: { filter: {_id:4}, update: { $set: {...} }, upsert: true } } ])',
+        output: 'result with insertedCount: 1, matchedCount: 1, modifiedCount: 1, deletedCount: 1, upsertedCount: 1',
+        explanation: 'Each operation contributes to its own counter: one insert, one modify, one delete, one upsert.',
+      },
+      {
+        input: 'db.inventory.find().sort({ _id: 1 }).toArray()',
+        output: "[ { _id: 1, sku: 'A', qty: 3 }, { _id: 3, sku: 'C', qty: 8 }, { _id: 4, qty: 3, sku: 'D' } ]",
+        explanation: 'Item A dropped from 5 to 3, C was inserted, D was upserted, and B (_id 2) was deleted. (In the upserted D document MongoDB orders the $set fields after the _id, so it prints as qty then sku.)',
+      },
+    ],
+    hintsJson: [
+      'Four different writes in one request means one array of operation descriptors, not four calls.',
+      'Each element names its operation: { insertOne: { document } }, { updateOne: { filter, update } }, { deleteOne: { filter } }.',
+      'The upsert goes inside the updateOne descriptor: { updateOne: { filter, update, upsert: true } }.',
+      'The result carries separate insertedCount, modifiedCount, deletedCount, and upsertedCount fields.',
+    ],
+    starter: `db.inventory.bulkWrite([
+  // { insertOne: { document: { _id: 3, sku: "C", qty: 8 } } },
+  // { updateOne: { filter: { _id: 1 }, update: { $inc: { qty: -2 } } } },
+  // { deleteOne: { filter: { _id: 2 } } },
+  // { updateOne: { filter: { _id: 4 }, update: { $set: { sku: "D", qty: 3 } }, upsert: true } }
+])
+db.inventory.find().sort({ _id: 1 }).toArray()`,
+    solution: `db.inventory.bulkWrite([
+  { insertOne: { document: { _id: 3, sku: "C", qty: 8 } } },
+  { updateOne: { filter: { _id: 1 }, update: { $inc: { qty: -2 } } } },
+  { deleteOne: { filter: { _id: 2 } } },
+  { updateOne: { filter: { _id: 4 }, update: { $set: { sku: "D", qty: 3 } }, upsert: true } }
+])
+db.inventory.find().sort({ _id: 1 }).toArray()`,
+    solutionExplanationHtml: `<p><code>bulkWrite</code> takes an array of operation descriptors, each an object whose single key names the operation — <code>insertOne</code>, <code>updateOne</code>, <code>deleteOne</code>, <code>replaceOne</code> — and whose value carries that operation's arguments. Submitting them together means one network round trip instead of four, and the returned result aggregates the outcome into separate counters: <code>insertedCount: 1</code> from the insert, <code>modifiedCount: 1</code> from the <code>$inc</code>, <code>deletedCount: 1</code> from the delete, and <code>upsertedCount: 1</code> from the upserting update. Tracing the data confirms it: item A goes 5 → 3, B (_id 2) is removed, C is inserted, and D is upserted, leaving three documents ordered 1, 3, 4.</p>
+<p>The behaviour to understand is ordering and atomicity. By default <code>bulkWrite</code> is <strong>ordered</strong>: operations execute in sequence and, if one fails, the remaining operations are abandoned — useful when later writes depend on earlier ones. Passing <code>{ ordered: false }</code> lets MongoDB run them in any order and continue past failures, which is faster and appropriate for independent writes. The crucial caveat is that <code>bulkWrite</code> is <em>not</em> a transaction: each individual operation is atomic, but the batch as a whole is not, so a mid-batch failure in ordered mode can leave earlier operations applied and later ones not. When you need all-or-nothing across multiple documents, wrap the writes in a real multi-document transaction (a session with <code>startTransaction</code>) instead. For the common case of many independent writes on a hot path, <code>bulkWrite</code> is the right, and much faster, choice.</p>`,
+    reset: `db.inventory.drop(); db.inventory.insertMany([{ _id: 1, sku: "A", qty: 5 }, { _id: 2, sku: "B", qty: 0 }])`,
+  },
+];
+
+// ---- emit payload + verify (mongosh, reset before each) ----
+const OUT = path.resolve(process.argv[2] || 'docs/codelab-authoring/authored');
+const VERIFY = path.resolve(process.argv[3] || 'docs/codelab-authoring/verify');
+fs.mkdirSync(OUT, { recursive: true });
+fs.mkdirSync(VERIFY, { recursive: true });
+
+const clean = exercises.map((ex) => ({
+  title: ex.title, difficulty: ex.difficulty, estimatedMinutes: ex.estimatedMinutes, points: ex.points,
+  concepts: ex.concepts, prerequisites: ex.prerequisites, tags: ex.tags,
+  problemHtml: ex.problemHtml, inputSpec: ex.inputSpec, outputSpec: ex.outputSpec, constraints: ex.constraints,
+  examplesJson: ex.examplesJson, hintsJson: ex.hintsJson,
+  starterCodeJson: [{ name: 'solution.js', language: L, code: ex.starter }],
+  solutionCodeJson: [{ name: 'solution.js', language: L, code: ex.solution }],
+  solutionExplanationHtml: ex.solutionExplanationHtml,
+  ...(ex.diagramMermaid ? { diagramMermaid: ex.diagramMermaid } : {}),
+}));
+fs.writeFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), JSON.stringify({ trackSlug, moduleSlug, exercises: clean }, null, 2));
+
+let js = '';
+exercises.forEach((ex, i) => {
+  js += `print("========== EX ${i + 1}: ${ex.title.replace(/"/g, '')} ==========")\n`;
+  js += (ex.reset || '') + '\n';
+  js += ex.solution + '\n';
+});
+fs.writeFileSync(path.join(VERIFY, `mongodb-414.js`), js);
+
+const parsed = JSON.parse(fs.readFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), 'utf8'));
+const diffs = ['EASY', 'EASY', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'HARD', 'HARD'];
+parsed.exercises.forEach((ex, i) => {
+  if (ex.difficulty !== diffs[i]) throw new Error(`slot ${i + 1} diff ${ex.difficulty} != ${diffs[i]}`);
+  if (ex.problemHtml.length < 900) throw new Error(`problemHtml<900 ${ex.title} (${ex.problemHtml.length})`);
+  if (ex.solutionExplanationHtml.length < 500) throw new Error(`expl<500 ${ex.title}`);
+  if (ex.hintsJson.length < 4) throw new Error(`<4 hints ${ex.title}`);
+  const solLen = ex.solutionCodeJson.map((f) => f.code).join('').length;
+  if (solLen < 205) throw new Error(`solution<205 ${ex.title} (${solLen})`);
+});
+console.log(`OK ${parsed.exercises.length} exercises -> ${trackSlug}__${moduleSlug}.json`);

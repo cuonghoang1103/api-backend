@@ -1,0 +1,751 @@
+// Generator for Redis module 422 (redis-setup-and-foundation) — 10 exercises.
+// Track language is "text"; solutions are pure redis-cli command sequences (no comments,
+// because redis-cli pipe mode executes every line). Documented outputs use the decorated
+// --no-raw format a learner sees interactively: (integer) N, "string", (nil), N) "elem".
+// The verify script is derived from solutionCodeJson so what runs IS what ships.
+import fs from 'node:fs';
+import path from 'node:path';
+
+const trackSlug = 'redis';
+const moduleSlug = 'redis-setup-and-foundation';
+const L = 'text';
+
+const exercises = [
+  {
+    title: 'Store and Retrieve String Values with SET and GET',
+    difficulty: 'EASY',
+    estimatedMinutes: 15,
+    points: 10,
+    concepts: ['SET', 'GET', 'string values', 'overwrite semantics', 'missing keys'],
+    prerequisites: ['redis-cli basics'],
+    tags: ['strings', 'set', 'get', 'foundation', 'redis'],
+    problemHtml: `<p>The string is Redis's most basic value: a key maps to one string, and almost everything else builds on it. <code>SET</code> writes a key, <code>GET</code> reads it back, and reading a key that was never set returns the special value <code>(nil)</code> rather than an error — a distinction your code must handle.</p>
+<p>Using <code>redis-cli</code>, model a small user profile spread across several keys:</p>
+<ul>
+<li>Store <code>"Ann"</code>, <code>"ann@example.com"</code>, <code>"Hanoi"</code>, and <code>"member"</code> under <code>user:1:name</code>, <code>user:1:email</code>, <code>user:1:city</code>, and <code>user:1:role</code>.</li>
+<li>Read all four keys back.</li>
+<li>Overwrite <code>user:1:name</code> with <code>"Annabelle"</code> — a plain <code>SET</code> replaces the existing value with no error — and read it again.</li>
+<li>Read <code>user:1:phone</code>, a key you never set, and observe it returns <code>(nil)</code>.</li>
+</ul>
+<p>Use the colon-delimited key naming (<code>user:1:name</code>) that is the conventional way to namespace keys in Redis. The scaffold lists the commands with the values left blank.</p>`,
+    inputSpec: 'A clean Redis database. You issue redis-cli commands; the "input" is the commands themselves.',
+    outputSpec: 'The four GETs return "Ann", "ann@example.com", "Hanoi", "member"; after overwrite GET user:1:name returns "Annabelle"; GET user:1:phone returns (nil).',
+    constraints: 'Use only SET and GET. Do not create the phone key. Use the colon-namespaced key names exactly as given.',
+    examplesJson: [
+      {
+        input: 'SET user:1:name "Ann"  then  GET user:1:name',
+        output: 'OK\n"Ann"',
+        explanation: 'SET replies OK; GET returns the stored string in quotes.',
+      },
+      {
+        input: 'GET user:1:phone  (never set)',
+        output: '(nil)',
+        explanation: 'Reading a key that does not exist yields the nil reply — not an error and not an empty string.',
+      },
+    ],
+    hintsJson: [
+      'Two commands do everything here: one writes, one reads.',
+      'SET key value writes; GET key reads it back.',
+      'A second SET on the same key simply replaces the old value and replies OK.',
+      'SET user:1:name "Annabelle" overwrites; GET user:1:phone on an unset key returns (nil).',
+    ],
+    starter: `SET user:1:name ____
+SET user:1:email ____
+SET user:1:city ____
+SET user:1:role ____
+GET user:1:name
+GET user:1:email
+GET user:1:city
+GET user:1:role
+SET user:1:name ____
+GET user:1:name
+GET user:1:phone`,
+    solution: `SET user:1:name "Ann"
+SET user:1:email "ann@example.com"
+SET user:1:city "Hanoi"
+SET user:1:role "member"
+GET user:1:name
+GET user:1:email
+GET user:1:city
+GET user:1:role
+SET user:1:name "Annabelle"
+GET user:1:name
+GET user:1:phone`,
+    solutionExplanationHtml: `<p>Every <code>SET</code> is an unconditional write: it creates the key if absent and replaces the value if present, always replying <code>OK</code>. That is why <code>SET user:1:name "Annabelle"</code> silently overwrites <code>"Ann"</code> — Redis strings have no "already exists" protection unless you ask for it with the <code>NX</code> option. <code>GET</code> returns the current value as a quoted string in <code>redis-cli</code>.</p>
+<p>The one subtlety worth internalising is the difference between a missing key and an empty value. <code>GET user:1:phone</code> returns <code>(nil)</code> because the key was never written; that is distinct from a key holding the empty string <code>""</code>. In client libraries this surfaces as <code>null</code>/<code>None</code> versus <code>""</code>, and treating them the same is a classic source of bugs — a cache "miss" (nil) must trigger a recompute, whereas a stored empty string is a real cached value. The colon namespacing (<code>user:1:name</code>) carries no special meaning to Redis itself; it is a widely-followed convention that keeps a flat keyspace organised and makes pattern-based tooling easier later. Storing a profile as several discrete keys, as here, is the simplest model; a Redis hash can hold all the fields under one key, which you will meet in the data-structures module.</p>`,
+  },
+
+  {
+    title: 'Inspect and Remove Keys with EXISTS, TYPE, and DEL',
+    difficulty: 'EASY',
+    estimatedMinutes: 15,
+    points: 10,
+    concepts: ['EXISTS', 'TYPE', 'DEL', 'key lifecycle', 'idempotent delete'],
+    prerequisites: ['SET', 'GET'],
+    tags: ['keys', 'exists', 'del', 'type', 'redis'],
+    problemHtml: `<p>Beyond reading values, you often need to ask about a key itself: does it exist, what type of value does it hold, and how do I remove it. <code>EXISTS</code>, <code>TYPE</code>, and <code>DEL</code> are the foundational key-management commands, and their return values are counts and labels rather than the stored data.</p>
+<p>Using <code>redis-cli</code>, perform this sequence:</p>
+<ul>
+<li>Create three keys: <code>session:abc</code> = <code>"active"</code>, <code>session:xyz</code> = <code>"idle"</code>, <code>session:pqr</code> = <code>"pending"</code>.</li>
+<li><code>EXISTS session:abc</code> returns <code>1</code>; <code>EXISTS session:abc session:xyz session:pqr</code> counts all three and returns <code>3</code>.</li>
+<li><code>TYPE session:abc</code> reports <code>string</code>.</li>
+<li><code>DEL session:abc</code> returns <code>1</code> (one key removed); <code>EXISTS session:abc</code> is now <code>0</code>.</li>
+<li><code>DEL session:abc</code> again returns <code>0</code> — nothing to remove.</li>
+<li><code>DEL session:xyz session:pqr</code> deletes both remaining keys and returns <code>2</code>.</li>
+</ul>
+<p>Notice that <code>EXISTS</code> can count several keys at once, and that <code>DEL</code> is safe to repeat. The scaffold lists the commands.</p>`,
+    inputSpec: 'A clean Redis database. You issue the key-management commands via redis-cli.',
+    outputSpec: 'EXISTS returns 1, then 3 (three keys), then 0 after deletion; TYPE returns string; the first DEL of a key returns 1, a repeat returns 0, and a two-key DEL returns 2.',
+    constraints: 'Use EXISTS, TYPE, and DEL. Do not use GET to check existence — use EXISTS.',
+    examplesJson: [
+      {
+        input: 'SET session:abc/xyz/pqr; EXISTS session:abc session:xyz session:pqr',
+        output: '(integer) 3',
+        explanation: 'EXISTS with multiple keys returns how many of them exist — all three do, so 3.',
+      },
+      {
+        input: 'DEL session:abc  then  DEL session:abc  again',
+        output: '(integer) 1\n(integer) 0',
+        explanation: 'The first DEL removes one key (returns 1); the repeat finds nothing and returns 0 — DEL is idempotent.',
+      },
+    ],
+    hintsJson: [
+      'These commands answer questions about the key, so they return counts and labels, not the value.',
+      'EXISTS key returns 1 or 0; passing several keys returns how many exist. TYPE key returns the value type name.',
+      'DEL key returns how many keys it actually removed.',
+      'A second DEL on the same key returns 0 because there is nothing left to delete.',
+    ],
+    starter: `SET session:abc ____
+SET session:xyz ____
+SET session:pqr ____
+EXISTS session:abc
+EXISTS session:abc session:xyz session:pqr
+TYPE session:abc
+DEL session:abc
+EXISTS session:abc
+DEL session:abc
+DEL session:xyz session:pqr`,
+    solution: `SET session:abc "active"
+SET session:xyz "idle"
+SET session:pqr "pending"
+EXISTS session:abc
+EXISTS session:abc session:xyz session:pqr
+TYPE session:abc
+DEL session:abc
+EXISTS session:abc
+DEL session:abc
+DEL session:xyz session:pqr`,
+    solutionExplanationHtml: `<p>These three commands report on keys rather than return their contents. <code>EXISTS</code> returns a count — <code>1</code> when a key is present, <code>0</code> when it is not, and when given several keys it returns how many of them exist (here <code>2</code>). <code>TYPE</code> returns the value's data type as a bare word, <code>string</code> here, which later becomes essential when a key might hold a list, hash, or set. <code>DEL</code> returns the number of keys actually removed, which is why the first delete reports <code>1</code> and the repeat reports <code>0</code>.</p>
+<p>That count-based return is the practical lesson: <code>DEL</code> is idempotent, so cleanup code can call it without first checking existence and without fearing an error on an already-gone key — a property you rely on when tearing down sessions or cache entries that may or may not still be there. The common mistake is using <code>GET key</code> to test existence: it works for strings but returns <code>(nil)</code> for a missing key <em>and</em> would fail outright on a non-string type, whereas <code>EXISTS</code> answers the presence question uniformly for every value type. Prefer <code>EXISTS</code> for "is it there" and reserve <code>GET</code> for "what is its value". One production note: <code>DEL</code> frees the memory synchronously, which for a very large value can briefly block the server; <code>UNLINK</code> is the non-blocking alternative that reclaims memory in the background.</p>`,
+  },
+
+  {
+    title: 'Maintain an Atomic Counter with INCR and INCRBY',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 20,
+    points: 15,
+    concepts: ['INCR', 'INCRBY', 'DECR', 'atomic increment', 'integer strings'],
+    prerequisites: ['SET', 'GET'],
+    tags: ['counters', 'incr', 'atomic', 'integers', 'redis'],
+    problemHtml: `<p>Counting events — page views, likes, retries — is one of Redis's most common jobs, and it must be correct even when many clients count at once. <code>INCR</code> solves this: it increments a key's integer value <strong>atomically</strong>, so two simultaneous increments never lose a count the way a read-modify-write in application code would. It also initialises a missing key to <code>0</code> before incrementing.</p>
+<p>Using <code>redis-cli</code> on a fresh keyspace, work the key <code>page:home:views</code>:</p>
+<ul>
+<li><code>INCR</code> it twice — the missing key is treated as <code>0</code>, so the results are <code>1</code> then <code>2</code>.</li>
+<li><code>INCRBY</code> it by <code>10</code> &rarr; <code>12</code>; <code>DECR</code> once &rarr; <code>11</code>; <code>DECRBY</code> by <code>3</code> &rarr; <code>8</code>.</li>
+<li><code>GET</code> the key and observe the value comes back as the string <code>"8"</code>, not a bare integer.</li>
+<li>Reset it with <code>SET page:home:views 100</code>, then <code>INCR</code> once more &rarr; <code>101</code>, and <code>GET</code> &rarr; <code>"101"</code>.</li>
+</ul>
+<p>The point to absorb: the counter is stored as a string that Redis interprets numerically for the increment family, and a plain <code>SET</code> can reset it. The scaffold lists the commands.</p>`,
+    inputSpec: 'A clean Redis database; the key page:home:views does not exist initially.',
+    outputSpec: 'INCR returns 1 then 2; INCRBY 10 -> 12; DECR -> 11; DECRBY 3 -> 8; GET -> "8"; after SET 100, INCR -> 101 and GET -> "101".',
+    constraints: 'Use INCR, INCRBY, DECR, and DECRBY — do not compute the new value in application code. Do not pre-create the key before the first INCR.',
+    examplesJson: [
+      {
+        input: 'INCR page:home:views  (key absent)  then INCR again',
+        output: '(integer) 1\n(integer) 2',
+        explanation: 'A missing key starts at 0, so the first INCR returns 1; the second returns 2.',
+      },
+      {
+        input: 'SET page:home:views 100  then  INCR page:home:views  then  GET page:home:views',
+        output: 'OK\n(integer) 101\n"101"',
+        explanation: 'SET overwrites the counter to 100; INCR returns the integer 101; GET returns it as the string "101".',
+      },
+    ],
+    hintsJson: [
+      'Never read the count into your app, add one, and write it back — that loses updates under concurrency. Let Redis do the add.',
+      'INCR key increments by one and returns the new value; a missing key is treated as 0 first.',
+      'INCRBY key 10 adds ten; DECR key subtracts one; DECRBY key 3 subtracts three.',
+      'After the operations, GET returns the number formatted as a string, e.g. "8"; a plain SET can reset the counter.',
+    ],
+    starter: `INCR page:home:views
+INCR page:home:views
+INCRBY page:home:views ____
+DECR page:home:views
+DECRBY page:home:views ____
+GET page:home:views
+SET page:home:views 100
+INCR page:home:views
+GET page:home:views
+DECRBY page:home:views 50
+INCRBY page:home:views 9
+GET page:home:views`,
+    solution: `INCR page:home:views
+INCR page:home:views
+INCRBY page:home:views 10
+DECR page:home:views
+DECRBY page:home:views 3
+GET page:home:views
+SET page:home:views 100
+INCR page:home:views
+GET page:home:views
+DECRBY page:home:views 50
+INCRBY page:home:views 9
+GET page:home:views`,
+    solutionExplanationHtml: `<p>The whole value of <code>INCR</code> is atomicity. Redis executes each command to completion before starting the next, so an increment reads, adds, and writes as one indivisible step. That is why a counter under heavy concurrency stays correct with <code>INCR</code> but corrupts if you emulate it with <code>GET</code> then <code>SET</code> in your application: between your read and your write, another client can slip in, and one of the two increments is lost. Pushing the arithmetic into Redis removes that race entirely.</p>
+<p>Two details reward attention. First, a non-existent key is treated as <code>0</code> before the operation, so you never need to initialise a counter — the first <code>INCR</code> returns <code>1</code>. Second, the counter is physically stored as a string; the <code>INCR</code> family parses it as a 64-bit integer, increments, and writes it back as a string, which is why <code>GET</code> returns <code>"8"</code> in quotes and a plain <code>SET page:home:views 100</code> can reset it. A consequence and common trap: if the key holds a value that is not a valid integer (say <code>"12x"</code> or a float), <code>INCR</code> fails with <em>value is not an integer or out of range</em>. For fractional counters use <code>INCRBYFLOAT</code>, and remember the increments overflow past the signed 64-bit range rather than growing without bound.</p>`,
+  },
+
+  {
+    title: 'Expire Keys with TTL, EXPIRE, and PERSIST',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 25,
+    points: 15,
+    concepts: ['SET EX', 'TTL', 'EXPIRE', 'PERSIST', 'key expiration'],
+    prerequisites: ['SET', 'GET'],
+    tags: ['expiration', 'ttl', 'expire', 'cache', 'redis'],
+    problemHtml: `<p>A key that expires on its own is what makes Redis a natural cache and session store: set a one-time password to live for five minutes and it deletes itself, no cleanup job required. You attach a time-to-live at write time with <code>SET ... EX</code>, inspect it with <code>TTL</code>, add or change it with <code>EXPIRE</code>, and remove it with <code>PERSIST</code>.</p>
+<p>Using <code>redis-cli</code>, perform this sequence:</p>
+<ul>
+<li>Write <code>otp:123</code> = <code>"999000"</code> with a 300-second expiry using <code>SET ... EX 300</code>; <code>TTL otp:123</code> reports about <code>300</code>.</li>
+<li><code>PERSIST otp:123</code> removes the expiry and returns <code>1</code>; <code>TTL otp:123</code> now returns <code>-1</code> ("exists, no expiry").</li>
+<li><code>TTL missing:key</code> returns <code>-2</code> ("key does not exist").</li>
+<li>Write <code>k</code>=<code>"v"</code> plainly, then <code>EXPIRE k 60</code> (returns <code>1</code>); <code>TTL k</code> is about <code>60</code>.</li>
+<li>Overwrite with a plain <code>SET k "v2"</code>, then <code>TTL k</code> — it is now <code>-1</code>, because a plain <code>SET</code> <strong>clears</strong> the TTL.</li>
+</ul>
+<p>Learn the two negative TTL codes, and the fact that overwriting a key drops its expiry. The scaffold lists the commands.</p>`,
+    inputSpec: 'A clean Redis database. Commands set, inspect, and remove expirations.',
+    outputSpec: 'TTL returns ~300, then -1 after PERSIST; TTL of a missing key returns -2; EXPIRE returns 1 and TTL ~60; after a plain SET overwrite, TTL returns -1 (TTL cleared).',
+    constraints: 'Use SET ... EX for the initial expiry and EXPIRE for the separate one. Observe that a plain SET clears an existing TTL (use KEEPTTL to preserve it).',
+    examplesJson: [
+      {
+        input: 'SET otp:123 "999000" EX 300  then  TTL otp:123',
+        output: 'OK\n(integer) 300',
+        explanation: 'The key is stored with a 300-second lifetime; TTL reports the seconds left (300 immediately after).',
+      },
+      {
+        input: 'PERSIST otp:123; TTL otp:123; TTL missing:key',
+        output: '(integer) 1\n(integer) -1\n(integer) -2',
+        explanation: 'PERSIST removes the expiry (1). TTL then returns -1 (no expiry) for the live key and -2 for a key that does not exist.',
+      },
+      {
+        input: 'SET k "v"; EXPIRE k 60; SET k "v2"; TTL k',
+        output: 'OK\n(integer) 1\nOK\n(integer) -1',
+        explanation: 'EXPIRE sets a 60s TTL, but the plain SET k "v2" overwrite discards it, so TTL returns -1.',
+      },
+    ],
+    hintsJson: [
+      'Expiry can be attached at write time or added later. Two different commands, one effect.',
+      'SET key value EX 300 writes with a 300-second TTL; TTL key reports the remaining seconds.',
+      'PERSIST key strips the expiry so the key lives forever; it returns 1 if it removed one.',
+      'Memorise the codes: TTL returns -1 for a key with no expiry and -2 for a key that is absent. A plain SET on the key clears any TTL unless you add KEEPTTL.',
+    ],
+    starter: `SET otp:123 "999000" EX ____
+TTL otp:123
+PERSIST otp:123
+TTL otp:123
+TTL missing:key
+SET k "v"
+EXPIRE k 60
+TTL k
+SET k "v2"
+TTL k
+SET k2 "temp"
+EXPIRE k2 120
+TTL k2
+PERSIST k2
+TTL k2
+SET k3 "z" EX 45
+TTL k3`,
+    solution: `SET otp:123 "999000" EX 300
+TTL otp:123
+PERSIST otp:123
+TTL otp:123
+TTL missing:key
+SET k "v"
+EXPIRE k 60
+TTL k
+SET k "v2"
+TTL k
+SET k2 "temp"
+EXPIRE k2 120
+TTL k2
+PERSIST k2
+TTL k2
+SET k3 "z" EX 45
+TTL k3`,
+    solutionExplanationHtml: `<p>Attaching a lifetime to a key is what turns Redis into a self-cleaning store. <code>SET otp:123 "999000" EX 300</code> writes the value and a 300-second countdown in one atomic command; once it elapses, Redis deletes the key automatically, so an expiring one-time password needs no separate cleanup. <code>TTL</code> reports the seconds remaining, and <code>PERSIST</code> cancels the countdown, making the key permanent again (it returns <code>1</code> when it actually removed a TTL).</p>
+<p>The detail most people get wrong is the two negative <code>TTL</code> results, because they look similar but mean opposite things. <code>-1</code> means the key <em>exists but has no expiration</em>; <code>-2</code> means the key <em>does not exist at all</em>. Code that treats both as "no data" will happily overwrite a live permanent key, so branch on them explicitly. The second trap is demonstrated directly by the last two commands: a plain <code>SET</code> on a key that already has a TTL <em>clears</em> that TTL, which is why <code>TTL k</code> ends at <code>-1</code> after <code>SET k "v2"</code>. This is a frequent cause of cache entries that mysteriously stop expiring after an update; pass <code>KEEPTTL</code> (<code>SET k "v2" KEEPTTL</code>) when you want the expiry preserved across a rewrite. Finally, prefer setting the TTL atomically with <code>SET ... EX</code> over a separate <code>SET</code> then <code>EXPIRE</code>: the two-command version leaves a brief window where the key exists with no expiry, and if the client crashes in between, the key leaks forever.</p>`,
+  },
+
+  {
+    title: 'Set a Key Only If Absent with SET NX',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 25,
+    points: 20,
+    concepts: ['SET NX', 'SETNX', 'first-writer-wins', 'conditional write', 'simple locks'],
+    prerequisites: ['SET', 'GET', 'EXISTS'],
+    tags: ['nx', 'conditional', 'locks', 'idempotency', 'redis'],
+    problemHtml: `<p>Sometimes a write must only happen if the key is not already taken — claiming a lock, reserving a unique username, or making an operation run exactly once. The <code>NX</code> ("only if it does <strong>N</strong>ot e<strong>X</strong>ist") option gives you this atomically: <code>SET key value NX</code> stores the value and returns <code>OK</code> only when the key was absent, and returns <code>(nil)</code> without changing anything when it was already present.</p>
+<p>Using <code>redis-cli</code>, perform this sequence:</p>
+<ul>
+<li><code>SETNX lock:job "worker1"</code> claims the free key &rarr; <code>1</code>; a second <code>SETNX lock:job "worker2"</code> finds it taken &rarr; <code>0</code>; <code>GET lock:job</code> is still <code>"worker1"</code> (first writer won).</li>
+<li><code>SET config:mode "prod" NX</code> &rarr; <code>OK</code>; <code>SET config:mode "dev" NX</code> &rarr; <code>(nil)</code> (unchanged); <code>GET config:mode</code> is still <code>"prod"</code>.</li>
+<li>Release the first lock with <code>DEL lock:job</code> (&rarr; <code>1</code>), then re-claim it atomically with a safety timeout: <code>SET lock:job "worker3" NX EX 30</code> &rarr; <code>OK</code>, and <code>TTL lock:job</code> is about <code>30</code>.</li>
+</ul>
+<p>Both <code>SETNX</code> (dedicated command) and <code>SET ... NX</code> (the modern option form) express the same rule; the option form also composes with <code>EX</code>. The scaffold lists the commands.</p>`,
+    inputSpec: 'A clean Redis database. Independent keys demonstrate the conditional write and a lock with a timeout.',
+    outputSpec: 'SETNX returns 1 then 0; GET lock:job stays "worker1". SET ... NX returns OK then (nil); GET config:mode stays "prod". After DEL, SET ... NX EX 30 returns OK and TTL ~30.',
+    constraints: 'Use SETNX and/or SET ... NX. The second write to each key must not change it. Do not use EXISTS-then-SET (not atomic). Re-claim the released lock with SET ... NX EX to add a timeout.',
+    examplesJson: [
+      {
+        input: 'SETNX lock:job "worker1"  then  SETNX lock:job "worker2"',
+        output: '(integer) 1\n(integer) 0',
+        explanation: 'The first claim succeeds (1); the second finds the key taken and fails to set (0).',
+      },
+      {
+        input: 'DEL lock:job; SET lock:job "worker3" NX EX 30; TTL lock:job',
+        output: '(integer) 1\nOK\n(integer) 30',
+        explanation: 'After release, the NX set succeeds and EX 30 gives the lock a 30-second self-expiry, so TTL reports ~30.',
+      },
+    ],
+    hintsJson: [
+      'The rule is "write only if nobody else has". Checking with EXISTS first is a race; you need one atomic command.',
+      'SETNX key value sets only when the key is absent, returning 1 or 0.',
+      'The modern equivalent is SET key value NX, which returns OK or (nil) and can add EX for a timeout.',
+      'After DEL releases the lock, SET lock:job "worker3" NX EX 30 re-claims it with a 30-second safety expiry.',
+    ],
+    starter: `SETNX lock:job ____
+SETNX lock:job ____
+GET lock:job
+SET config:mode "prod" NX
+SET config:mode "dev" NX
+GET config:mode
+DEL lock:job
+SET lock:job "worker3" NX EX 30
+TTL lock:job
+GET lock:job
+DEL config:mode
+SET config:mode "staging" NX
+GET config:mode`,
+    solution: `SETNX lock:job "worker1"
+SETNX lock:job "worker2"
+GET lock:job
+SET config:mode "prod" NX
+SET config:mode "dev" NX
+GET config:mode
+DEL lock:job
+SET lock:job "worker3" NX EX 30
+TTL lock:job
+GET lock:job
+DEL config:mode
+SET config:mode "staging" NX
+GET config:mode`,
+    solutionExplanationHtml: `<p>The <code>NX</code> semantics are "set only if the key does not already exist", executed atomically. That atomicity is the entire point. The tempting alternative — <code>EXISTS key</code>, and if it returns 0 then <code>SET key value</code> — has a gap between the check and the write in which another client can claim the key, so two workers both believe they won. <code>SETNX</code>/<code>SET ... NX</code> collapses check-and-set into one indivisible operation, so exactly one caller gets the <code>1</code>/<code>OK</code> and every other gets <code>0</code>/<code>(nil)</code>. This is the primitive behind "first writer wins", one-time initialisation, and the simplest form of a distributed lock.</p>
+<p>Note the two return conventions: the dedicated <code>SETNX</code> command returns an integer (<code>1</code>/<code>0</code>), while the option form <code>SET ... NX</code> returns <code>OK</code>/<code>(nil)</code>. They are otherwise equivalent, and the modern option form is preferred because it composes with other options in one command — crucially <code>SET lock:job "worker3" NX EX 30</code>, which claims a lock <em>and</em> gives it a safety timeout atomically, as the last commands show. That combination matters: a lock taken with <code>NX</code> but no expiry becomes a permanent deadlock if the holder crashes before releasing it, whereas the <code>EX</code> ensures it self-heals. For fully-correct distributed locking you also need a unique token and a checked release (only delete if the token is still yours), but the atomic conditional set demonstrated here is the foundation everything else is built on.</p>`,
+  },
+
+  {
+    title: 'Read and Write Many Keys at Once with MSET and MGET',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 25,
+    points: 20,
+    concepts: ['MSET', 'MGET', 'MSETNX', 'batch operations', 'round-trip reduction'],
+    prerequisites: ['SET', 'GET', 'SET NX'],
+    tags: ['batch', 'mset', 'mget', 'performance', 'redis'],
+    problemHtml: `<p>Issuing a hundred single <code>GET</code>s means a hundred network round trips. <code>MSET</code> and <code>MGET</code> collapse many reads or writes into one command and one round trip, which is often the single biggest latency win when working with Redis. <code>MSETNX</code> adds an all-or-nothing guarantee for batch writes.</p>
+<p>Using <code>redis-cli</code>, perform this sequence:</p>
+<ul>
+<li><code>MSET u:1 "Ann" u:2 "Bob" u:3 "Cy"</code> writes three keys at once &rarr; <code>OK</code>.</li>
+<li><code>MGET u:1 u:2 u:4</code> reads three keys in order; <code>u:4</code> was never set, so its slot is <code>(nil)</code>.</li>
+<li><code>MSETNX u:4 "Di" u:1 "X"</code> sets only if <strong>all</strong> keys are absent; because <code>u:1</code> exists, <strong>none</strong> are written &rarr; <code>0</code>; <code>GET u:4</code> is still <code>(nil)</code>.</li>
+<li><code>MSETNX u:4 "Di" u:5 "Ed"</code> — now both target keys are free, so it writes both &rarr; <code>1</code>; <code>MGET u:4 u:5</code> returns <code>"Di"</code> and <code>"Ed"</code>.</li>
+</ul>
+<p>The lesson is that <code>MGET</code> preserves position (missing keys become nil in place) and <code>MSETNX</code> is atomic across the whole batch. The scaffold lists the commands.</p>`,
+    inputSpec: 'A clean Redis database. Batch commands write and read several keys together.',
+    outputSpec: 'MSET returns OK; MGET returns ["Ann","Bob",nil]; the first MSETNX returns 0 (u:1 exists) and u:4 stays nil; the second MSETNX returns 1 and MGET u:4 u:5 returns ["Di","Ed"].',
+    constraints: 'Use MSET, MGET, and MSETNX. Do not fall back to individual SET/GET calls. Rely on MSETNX being all-or-nothing.',
+    examplesJson: [
+      {
+        input: 'MSET u:1 "Ann" u:2 "Bob" u:3 "Cy"  then  MGET u:1 u:2 u:4',
+        output: 'OK\n1) "Ann"\n2) "Bob"\n3) (nil)',
+        explanation: 'MGET returns one array slot per requested key in order; u:4 was never set so slot 3 is (nil).',
+      },
+      {
+        input: 'MSETNX u:4 "Di" u:1 "X"  then  MSETNX u:4 "Di" u:5 "Ed"',
+        output: '(integer) 0\n(integer) 1',
+        explanation: 'The first fails because u:1 exists (all-or-nothing, so u:4 is not set either); the second succeeds because u:4 and u:5 are both free.',
+      },
+    ],
+    hintsJson: [
+      'Batching many keys into one command removes network round trips — the usual bottleneck.',
+      'MSET k1 v1 k2 v2 ... writes them all; MGET k1 k2 ... reads them all in order.',
+      'A key missing in MGET does not shrink the result — its position holds (nil).',
+      'MSETNX writes only if every listed key is absent; one existing key makes the whole batch a no-op returning 0.',
+    ],
+    starter: `MSET u:1 ____ u:2 ____ u:3 ____
+MGET u:1 u:2 u:4
+MSETNX u:4 "Di" u:1 "X"
+GET u:4
+MSETNX u:4 "Di" u:5 "Ed"
+MGET u:4 u:5
+MSET u:6 "Fi" u:7 "Gu"
+MGET u:5 u:6 u:7 u:99
+MSETNX u:8 "Hu" u:9 "Iv"
+MGET u:6 u:7 u:8 u:9`,
+    solution: `MSET u:1 "Ann" u:2 "Bob" u:3 "Cy"
+MGET u:1 u:2 u:4
+MSETNX u:4 "Di" u:1 "X"
+GET u:4
+MSETNX u:4 "Di" u:5 "Ed"
+MGET u:4 u:5
+MSET u:6 "Fi" u:7 "Gu"
+MGET u:5 u:6 u:7 u:99
+MSETNX u:8 "Hu" u:9 "Iv"
+MGET u:6 u:7 u:8 u:9`,
+    solutionExplanationHtml: `<p><code>MSET</code> and <code>MGET</code> exist for one reason: throughput. Network latency, not Redis's in-memory work, dominates the cost of many small operations, so replacing <em>N</em> round trips with one is frequently a 10x-or-more improvement for bulk reads and writes. <code>MGET</code> returns a positional array — one slot per key you asked for, in the same order — and a key that does not exist yields <code>(nil)</code> in its slot rather than being dropped. That positional guarantee is what lets you zip the results back onto your list of requested keys without ambiguity; assuming missing keys are omitted would misalign every value after the gap.</p>
+<p><code>MSETNX</code> adds atomic all-or-nothing semantics: it writes the whole batch only if <em>every</em> listed key is currently absent. The first call returns <code>0</code> and writes nothing because <code>u:1</code> exists — so <code>u:4</code> stays <code>(nil)</code> even though it was free — while the second call returns <code>1</code> because both <code>u:4</code> and <code>u:5</code> are absent. This makes <code>MSETNX</code> suitable for initialising a group of related keys exactly once. The main caveat to remember for later: in Redis Cluster, multi-key commands require all keys to live in the same hash slot, so bulk operations across arbitrary keys may need hash-tag key design or client-side grouping to work in a sharded deployment.</p>`,
+  },
+
+  {
+    title: 'Manipulate String Fragments with APPEND, STRLEN, and GETRANGE',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 25,
+    points: 20,
+    concepts: ['APPEND', 'STRLEN', 'GETRANGE', 'SETRANGE', 'binary-safe strings'],
+    prerequisites: ['SET', 'GET'],
+    tags: ['strings', 'append', 'substring', 'getrange', 'redis'],
+    problemHtml: `<p>Redis strings are more than opaque blobs — you can grow them and slice them server-side without transferring the whole value. <code>APPEND</code> adds to the end and returns the new length, <code>STRLEN</code> reports the length, <code>GETRANGE</code> extracts a substring by index, and <code>SETRANGE</code> overwrites part of it in place.</p>
+<p>Using <code>redis-cli</code>, perform this sequence:</p>
+<ul>
+<li><code>SET msg "hello"</code>, then <code>APPEND msg " world"</code> &rarr; the new total length <code>11</code>; <code>STRLEN msg</code> &rarr; <code>11</code>.</li>
+<li><code>GETRANGE msg 0 4</code> &rarr; <code>"hello"</code> (indices 0..4 inclusive); <code>GETRANGE msg -5 -1</code> &rarr; <code>"world"</code> (last five characters).</li>
+<li><code>APPEND fresh "new"</code> on a key that does not exist &rarr; <code>3</code> (APPEND creates it); <code>GET fresh</code> &rarr; <code>"new"</code>.</li>
+<li><code>SETRANGE msg 0 "H"</code> overwrites index 0 &rarr; returns the length <code>11</code>; <code>GET msg</code> &rarr; <code>"Hello world"</code>.</li>
+</ul>
+<p>Note that <code>GETRANGE</code> indices are inclusive on both ends, negative indices count from the end, and <code>APPEND</code> on a missing key creates it. The scaffold lists the commands.</p>`,
+    inputSpec: 'A clean Redis database. Commands build, slice, and edit string keys.',
+    outputSpec: 'APPEND returns 11; STRLEN 11; GETRANGE 0 4 "hello"; GETRANGE -5 -1 "world"; APPEND on a missing key returns 3; SETRANGE returns 11 and GET msg is "Hello world".',
+    constraints: 'Use APPEND, STRLEN, GETRANGE, and SETRANGE. GETRANGE indices are inclusive; use negative indices for the tail slice.',
+    examplesJson: [
+      {
+        input: 'SET msg "hello"  then  APPEND msg " world"  then  STRLEN msg',
+        output: 'OK\n(integer) 11\n(integer) 11',
+        explanation: '"hello" is 5 chars; appending " world" (6 chars) makes 11, which APPEND returns and STRLEN confirms.',
+      },
+      {
+        input: 'GETRANGE msg -5 -1  then  SETRANGE msg 0 "H"  then  GET msg',
+        output: '"world"\n(integer) 11\n"Hello world"',
+        explanation: 'Negative indices give the last 5 chars; SETRANGE replaces index 0 with H and returns the length; GET shows the edited string.',
+      },
+    ],
+    hintsJson: [
+      'You can change and read parts of a string without sending the whole value over the wire.',
+      'APPEND key text adds to the end and returns the resulting length; STRLEN key returns the length.',
+      'GETRANGE key start end extracts a substring; both indices are inclusive and negatives count from the end.',
+      'SETRANGE key offset text overwrites in place starting at offset and returns the new length.',
+    ],
+    starter: `SET msg "hello"
+APPEND msg ____
+STRLEN msg
+GETRANGE msg 0 4
+GETRANGE msg -5 -1
+APPEND fresh "new"
+GET fresh
+SETRANGE msg 0 "H"
+GET msg
+STRLEN msg
+GETRANGE msg 6 10
+APPEND fresh "-tag"
+GET fresh
+STRLEN fresh`,
+    solution: `SET msg "hello"
+APPEND msg " world"
+STRLEN msg
+GETRANGE msg 0 4
+GETRANGE msg -5 -1
+APPEND fresh "new"
+GET fresh
+SETRANGE msg 0 "H"
+GET msg
+STRLEN msg
+GETRANGE msg 6 10
+APPEND fresh "-tag"
+GET fresh
+STRLEN fresh`,
+    solutionExplanationHtml: `<p>These commands operate on the string in place on the server, which saves bandwidth and round trips. <code>APPEND</code> concatenates onto the existing value — or creates the key if absent, as with <code>fresh</code> — and conveniently returns the new length, so you can track size as you build. <code>STRLEN</code> reports that length independently. <code>GETRANGE</code> slices out a substring by byte index, and the indexing rules are the crux: both <code>start</code> and <code>end</code> are <strong>inclusive</strong>, so <code>0 4</code> returns five characters, and negative indices count from the end with <code>-1</code> being the last character, making <code>-5 -1</code> the trailing five. <code>SETRANGE</code> overwrites bytes starting at an offset and returns the resulting length.</p>
+<p>The off-by-one trap is expecting <code>GETRANGE key 0 5</code> to return five characters as it would in a language with exclusive end bounds; here it returns six (indices 0,1,2,3,4,5). Because Redis strings are binary-safe — they can hold arbitrary bytes, not just text — these operations count bytes rather than Unicode code points, so slicing multibyte UTF-8 by character position can split a character; index by byte offsets you control. <code>APPEND</code> runs in amortised constant time thanks to Redis over-allocating string capacity, so incrementally building a value is efficient rather than quadratic, though for structured accumulation a list or stream is usually the better data type.</p>`,
+  },
+
+  {
+    title: 'Rename Keys Safely with RENAME and RENAMENX',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 25,
+    points: 20,
+    concepts: ['RENAME', 'RENAMENX', 'COPY', 'atomic key moves', 'overwrite protection'],
+    prerequisites: ['SET', 'GET', 'EXISTS'],
+    tags: ['keys', 'rename', 'copy', 'atomic', 'redis'],
+    problemHtml: `<p>Promoting a draft to published, or swapping a freshly-built value into a live key, is a rename. <code>RENAME</code> moves a key's value to a new name atomically, but it will happily clobber an existing destination — so when that is unsafe, <code>RENAMENX</code> renames only if the destination is free. <code>COPY</code> duplicates a key without removing the source.</p>
+<p>Using <code>redis-cli</code>, perform this sequence:</p>
+<ul>
+<li><code>SET draft:1 "final content"</code>, then <code>RENAME draft:1 published:1</code> &rarr; <code>OK</code>; <code>GET published:1</code> &rarr; <code>"final content"</code>; <code>EXISTS draft:1</code> &rarr; <code>0</code> (the source name is gone).</li>
+<li><code>SET a "x"</code>, <code>SET b "y"</code>, then <code>RENAMENX a b</code> &rarr; <code>0</code> — the destination <code>b</code> exists, so the rename is refused.</li>
+<li><code>COPY a c</code> &rarr; <code>1</code>; <code>GET c</code> &rarr; <code>"x"</code> and <code>a</code> still holds <code>"x"</code> (COPY preserves the source).</li>
+<li><code>RENAMENX a d</code> &rarr; <code>1</code> — the destination <code>d</code> is free, so this rename succeeds.</li>
+</ul>
+<p>The contrast to internalise: <code>RENAME</code> overwrites, <code>RENAMENX</code> protects, <code>COPY</code> preserves the original. The scaffold lists the commands.</p>`,
+    inputSpec: 'A clean Redis database. Commands rename and copy keys, including a blocked rename and a successful guarded one.',
+    outputSpec: 'RENAME returns OK (source EXISTS becomes 0); RENAMENX onto an existing key returns 0; COPY returns 1 leaving the source intact; RENAMENX onto a free key returns 1.',
+    constraints: 'Use RENAME, RENAMENX, and COPY. Do not emulate rename with GET + SET + DEL (not atomic). Expect RENAMENX to refuse an occupied destination and accept a free one.',
+    examplesJson: [
+      {
+        input: 'SET draft:1 "final content"; RENAME draft:1 published:1; EXISTS draft:1',
+        output: 'OK\nOK\n(integer) 0',
+        explanation: 'RENAME moves the value to published:1 and removes the old name, so EXISTS draft:1 is 0.',
+      },
+      {
+        input: 'SET a "x"; SET b "y"; RENAMENX a b; COPY a c; RENAMENX a d',
+        output: '(integer) 0\n(integer) 1\n(integer) 1',
+        explanation: 'RENAMENX a b is refused because b exists (0); COPY a c duplicates to the free key c (1); RENAMENX a d succeeds because d is free (1).',
+      },
+    ],
+    hintsJson: [
+      'Renaming should be one atomic step, not a read, write, and delete in your app.',
+      'RENAME old new moves the value and removes the old name, returning OK.',
+      'RENAMENX old new does the same only if new is free, returning 1 or 0.',
+      'COPY src dst duplicates without deleting src, returning 1 when it copied.',
+    ],
+    starter: `SET draft:1 ____
+RENAME draft:1 published:1
+GET published:1
+EXISTS draft:1
+SET a "x"
+SET b "y"
+RENAMENX a b
+COPY a c
+GET c
+RENAMENX a d
+GET d
+EXISTS a
+COPY d e
+GET e
+EXISTS c d e
+COPY d f
+GET f
+EXISTS c d e f`,
+    solution: `SET draft:1 "final content"
+RENAME draft:1 published:1
+GET published:1
+EXISTS draft:1
+SET a "x"
+SET b "y"
+RENAMENX a b
+COPY a c
+GET c
+RENAMENX a d
+GET d
+EXISTS a
+COPY d e
+GET e
+EXISTS c d e
+COPY d f
+GET f
+EXISTS c d e f`,
+    solutionExplanationHtml: `<p>All three commands change the keyspace atomically, which is why you reach for them instead of stitching together <code>GET</code>, <code>SET</code>, and <code>DEL</code> in application code — that manual sequence has windows where the value exists under both names, neither name, or is half-written. <code>RENAME old new</code> atomically moves the value to the new name and deletes the old one, so afterwards <code>EXISTS draft:1</code> is <code>0</code>. The catch is that <code>RENAME</code> <strong>overwrites</strong> the destination without warning if it already holds a value, which can silently destroy data.</p>
+<p><code>RENAMENX</code> is the guarded version: it performs the rename only when the destination does not exist, returning <code>1</code> on success and <code>0</code> when it refused — that is the <code>0</code> when renaming <code>a</code> onto the existing <code>b</code>, and the <code>1</code> when renaming <code>a</code> onto the free <code>d</code>. <code>COPY src dst</code> is different again: it duplicates the value to a new key and leaves the source in place, returning <code>1</code> when it copied (it refuses an existing destination unless you add the <code>REPLACE</code> option). One sharp edge to remember: <code>RENAME</code> on a source key that does not exist raises an error (<em>no such key</em>), unlike the forgiving <code>DEL</code>, so guard renames whose source might be absent. Renaming a key preserves its TTL, which is what makes the "build under a temp name, then rename into place" cache-swap pattern work cleanly.</p>`,
+  },
+
+  {
+    title: 'Build a Fixed-Window Rate Limiter with INCR and EXPIRE',
+    difficulty: 'HARD',
+    estimatedMinutes: 45,
+    points: 25,
+    concepts: ['rate limiting', 'INCR with EXPIRE', 'fixed window', 'atomic counter with TTL', 'limit enforcement'],
+    prerequisites: ['INCR', 'EXPIRE', 'TTL', 'SET NX'],
+    tags: ['rate-limiting', 'incr', 'expire', 'pattern', 'redis'],
+    problemHtml: `<p>The canonical first "real" Redis pattern is a fixed-window rate limiter: allow at most <em>N</em> actions per time window per user. It is built from two primitives you already know — an atomic counter (<code>INCR</code>) and an expiry (<code>EXPIRE</code>) — combined so the counter resets itself when the window ends.</p>
+<p>The rule: each request runs <code>INCR</code> on a key like <code>rate:user:1</code>. If the result is <code>1</code>, this is the first request of a new window, so set the window length with <code>EXPIRE ... 60</code>. If the returned count exceeds the limit, the request is rejected. Simulate a limit of <strong>5 per 60 seconds</strong> with six requests:</p>
+<ul>
+<li>Request 1: <code>INCR rate:user:1</code> &rarr; <code>1</code>; because it is <code>1</code>, <code>EXPIRE rate:user:1 60</code> (&rarr; <code>1</code>).</li>
+<li>Requests 2&ndash;5: <code>INCR</code> returns <code>2</code>, <code>3</code>, <code>4</code>, <code>5</code> — all at or under the limit of 5, so allowed. Do <strong>not</strong> reset the TTL.</li>
+<li><code>TTL rate:user:1</code> stays around <code>60</code>, proving the window counts down from the first request.</li>
+<li>Request 6: <code>INCR</code> returns <code>6</code> — this <strong>exceeds</strong> 5, so the request is rejected by your application logic.</li>
+</ul>
+<p>The scaffold lays out the request sequence. Focus on why <code>EXPIRE</code> is applied only when the counter is <code>1</code>, and how the returned count drives the allow/reject decision.</p>`,
+    inputSpec: 'A clean Redis database; rate:user:1 does not exist. Simulate six requests within one window, limit 5.',
+    outputSpec: 'INCR returns 1..6 across the six requests; EXPIRE (only after the first) returns 1; TTL stays ~60; the count of 6 signals rejection because it exceeds the limit of 5.',
+    constraints: 'Apply EXPIRE only when INCR returns 1 (start of window). Do not re-set the TTL on later requests, or the window would never end (a sliding bug). Do not store timestamps. A returned count greater than 5 means reject.',
+    examplesJson: [
+      {
+        input: 'First request: INCR rate:user:1 (absent key) then EXPIRE rate:user:1 60',
+        output: '(integer) 1\n(integer) 1',
+        explanation: 'The counter starts at 1 for a new window; EXPIRE sets the 60-second window and returns 1.',
+      },
+      {
+        input: 'The 5th and 6th requests: INCR rate:user:1 (twice)',
+        output: '(integer) 5\n(integer) 6',
+        explanation: 'Count 5 is at the limit (allowed); count 6 exceeds the limit of 5, so the application rejects that request.',
+      },
+    ],
+    hintsJson: [
+      'You need a per-user counter that empties itself when the window ends — a counter plus an expiry.',
+      'On every request INCR the user key; the returned count is how many requests are in the current window.',
+      'Set the window exactly once: when INCR returns 1, the window just started, so EXPIRE it for the window length.',
+      'Never EXPIRE on later requests — that would keep pushing the reset forward so the window never closes. Reject when the returned count exceeds the limit.',
+    ],
+    starter: `INCR rate:user:1
+EXPIRE rate:user:1 ____
+INCR rate:user:1
+INCR rate:user:1
+INCR rate:user:1
+TTL rate:user:1
+INCR rate:user:1
+INCR rate:user:1
+GET rate:user:1
+TTL rate:user:1
+INCR rate:user:1
+GET rate:user:1
+TTL rate:user:1`,
+    solution: `INCR rate:user:1
+EXPIRE rate:user:1 60
+INCR rate:user:1
+INCR rate:user:1
+INCR rate:user:1
+TTL rate:user:1
+INCR rate:user:1
+INCR rate:user:1
+GET rate:user:1
+TTL rate:user:1
+INCR rate:user:1
+GET rate:user:1
+TTL rate:user:1`,
+    solutionExplanationHtml: `<p>The pattern composes two atomic primitives into a self-resetting quota. Every request does <code>INCR rate:user:1</code>; the value it returns <em>is</em> the number of requests seen so far in the current window, so the caller simply compares it to the limit (5) and rejects when it goes over — which is exactly what the final count of <code>6</code> signals. The window itself is created exactly once: the very first request makes <code>INCR</code> return <code>1</code>, and that return value of <code>1</code> is the signal to run <code>EXPIRE rate:user:1 60</code>. When the 60 seconds elapse, Redis deletes the key, and the next <code>INCR</code> starts a fresh window back at <code>1</code> — no cleanup job, no stored timestamps.</p>
+<p>The critical rule, and the bug this exercise is designed to prevent, is applying <code>EXPIRE</code> <em>only</em> when the count is <code>1</code>. If you reset the TTL on every request, the window's deadline keeps sliding forward and, for a steadily active user, the key never expires — the limit effectively becomes permanent and the window never resets. That is why the middle requests here leave the TTL untouched at ~60. Two production caveats: first, the <code>INCR</code> and the conditional <code>EXPIRE</code> are two separate commands, so a crash between them could leave a counter with no expiry; wrapping them in a Lua script (or <code>MULTI</code>/<code>EXEC</code>) makes the pair atomic. Second, a fixed window allows bursts at the boundary — up to <code>2N</code> requests across two adjacent windows — which is why sliding-window or token-bucket variants exist; the fixed window is the simplest correct starting point and the foundation for those refinements.</p>`,
+    diagramMermaid: `flowchart TD
+  A[Request arrives] --> B[INCR rate key]
+  B --> C{Count equals 1}
+  C -- yes --> D[EXPIRE key for window length]
+  C -- no --> E[Leave TTL untouched]
+  D --> F{Count over limit}
+  E --> F
+  F -- no --> G[Allow request]
+  F -- yes --> H[Reject request]`,
+  },
+
+  {
+    title: 'Implement Cache-Aside with a Stampede Lock',
+    difficulty: 'HARD',
+    estimatedMinutes: 50,
+    points: 30,
+    concepts: ['cache-aside', 'cache stampede', 'SET NX EX lock', 'TTL cache', 'lock release'],
+    prerequisites: ['SET NX', 'SET EX', 'GET', 'DEL', 'TTL'],
+    tags: ['caching', 'cache-aside', 'stampede', 'lock', 'redis'],
+    problemHtml: `<p>The most common way Redis is used is as a cache in front of a slow data source: check Redis first, and only compute from the database on a miss. The dangerous edge case is the <strong>cache stampede</strong> — when a hot key expires, hundreds of requests miss simultaneously and all hammer the database to rebuild the same value. A short-lived <strong>build lock</strong> lets only one request rebuild while the others wait or serve stale data.</p>
+<p>Simulate the full cache-aside flow with two competing workers, in order:</p>
+<ul>
+<li><code>GET cache:homepage</code> &rarr; <code>(nil)</code>: a cache miss.</li>
+<li>Worker A claims the build lock: <code>SET lock:homepage "A" NX EX 10</code> &rarr; <code>OK</code>. Worker B tries the same: <code>SET lock:homepage "B" NX EX 10</code> &rarr; <code>(nil)</code>, locked out.</li>
+<li>Worker A stores the rebuilt value with a cache TTL: <code>SET cache:homepage "rendered-html" EX 300</code> &rarr; <code>OK</code>; <code>GET cache:homepage</code> is now a hit &rarr; <code>"rendered-html"</code>.</li>
+<li>Worker A releases the lock: <code>DEL lock:homepage</code> &rarr; <code>1</code>; <code>TTL cache:homepage</code> is about <code>300</code>.</li>
+<li>After release, a later worker C can re-acquire: <code>SET lock:homepage "C" NX EX 10</code> &rarr; <code>OK</code>; <code>GET cache:homepage</code> still serves the cached <code>"rendered-html"</code>.</li>
+</ul>
+<p>The scaffold lays out the sequence. Focus on why the lock uses <code>NX</code> (only one winner) <em>and</em> <code>EX</code> (self-healing if the holder crashes).</p>`,
+    inputSpec: 'A clean Redis database; neither cache:homepage nor lock:homepage exists. Workers A and B contend, then worker C re-acquires after release.',
+    outputSpec: 'The initial GET returns (nil); A wins the lock (OK) and B is refused (nil); storing returns OK; the next GET returns "rendered-html"; DEL returns 1; TTL ~300; after release C acquires (OK) and the cache still serves "rendered-html".',
+    constraints: 'The build lock must use SET ... NX EX (both options). Only the lock winner writes the cache. Give the cached value its own TTL, separate from the lock TTL. Release the lock with DEL.',
+    examplesJson: [
+      {
+        input: 'GET cache:homepage (cold); A: SET lock:homepage "A" NX EX 10; B: SET lock:homepage "B" NX EX 10',
+        output: '(nil)\nOK\n(nil)',
+        explanation: 'The cache is empty (nil). A wins the lock (OK); B is refused (nil) because NX allows only the first setter.',
+      },
+      {
+        input: 'DEL lock:homepage; SET lock:homepage "C" NX EX 10; GET cache:homepage',
+        output: '(integer) 1\nOK\n"rendered-html"',
+        explanation: 'Releasing the lock (1) lets worker C acquire it (OK); the cache still serves the stored value.',
+      },
+    ],
+    hintsJson: [
+      'On a miss, you do not want every worker rebuilding at once. Let exactly one acquire a build lock.',
+      'The lock is just a key set with NX (only one winner) and EX (auto-expires if the holder dies): SET lock:key worker NX EX 10.',
+      'Only the worker that got OK computes and writes the cache; the others (nil) back off.',
+      'Store the rebuilt value with its own TTL (SET cache:key value EX 300), then release the lock with DEL so the next rebuild can proceed.',
+    ],
+    starter: `GET cache:homepage
+SET lock:homepage "A" NX EX 10
+SET lock:homepage "B" NX EX 10
+SET cache:homepage ____ EX 300
+GET cache:homepage
+DEL lock:homepage
+TTL cache:homepage
+SET lock:homepage "C" NX EX 10
+GET cache:homepage`,
+    solution: `GET cache:homepage
+SET lock:homepage "A" NX EX 10
+SET lock:homepage "B" NX EX 10
+SET cache:homepage "rendered-html" EX 300
+GET cache:homepage
+DEL lock:homepage
+TTL cache:homepage
+SET lock:homepage "C" NX EX 10
+GET cache:homepage`,
+    solutionExplanationHtml: `<p>Cache-aside is the read path: look in Redis, and on a <code>(nil)</code> miss, compute the value from the source of truth and write it back with a TTL so future reads are hits. The problem this exercise targets appears only under load: when a popular key expires, many workers miss at the same instant and all rebuild it against the database — a stampede that can overwhelm the very system the cache was protecting. The fix is a <strong>build lock</strong> keyed on the thing being rebuilt. <code>SET lock:homepage "A" NX EX 10</code> does two jobs in one atomic command: <code>NX</code> ensures only the first worker gets <code>OK</code> (every other gets <code>(nil)</code> and stands down), and <code>EX 10</code> guarantees the lock disappears on its own even if the winning worker crashes mid-rebuild, so the system cannot deadlock.</p>
+<p>Only the lock winner computes and writes <code>SET cache:homepage "rendered-html" EX 300</code>; note the cache's TTL (300) is deliberately separate from the lock's TTL (10), because they answer different questions — how long the value stays fresh versus how long a single rebuild may take. After writing, the winner releases the lock with <code>DEL</code> so the next rebuild after the cache eventually expires can proceed promptly, which is what lets worker C acquire the lock afterwards. Two refinements matter in production and are worth stating even though they are beyond this simulation: releasing the lock should be a <em>checked</em> delete (only delete if the stored token is still yours, via a small Lua script) so a worker whose lock already expired cannot delete a newer holder's lock; and the workers that lost the lock typically serve slightly stale data or retry after a brief sleep rather than blocking. The atomic <code>SET ... NX EX</code> lock is the load-bearing idea, and it is the same primitive that underlies the well-known Redis distributed-lock recipes.</p>`,
+    diagramMermaid: `sequenceDiagram
+  participant A as Worker A
+  participant R as Redis
+  participant B as Worker B
+  A->>R: GET cache miss
+  A->>R: SET lock NX EX 10 returns OK
+  B->>R: SET lock NX EX 10 returns nil
+  A->>R: SET cache value EX 300
+  A->>R: DEL lock
+  B->>R: GET cache now a hit`,
+  },
+];
+
+// ---- emit payload + verify (verify built from solutionCodeJson, FLUSHALL between) ----
+const OUT = path.resolve(process.argv[2] || 'docs/codelab-authoring/authored');
+const VERIFY = path.resolve(process.argv[3] || 'docs/codelab-authoring/verify');
+fs.mkdirSync(OUT, { recursive: true });
+fs.mkdirSync(VERIFY, { recursive: true });
+
+const clean = exercises.map((ex) => ({
+  title: ex.title, difficulty: ex.difficulty, estimatedMinutes: ex.estimatedMinutes, points: ex.points,
+  concepts: ex.concepts, prerequisites: ex.prerequisites, tags: ex.tags,
+  problemHtml: ex.problemHtml, inputSpec: ex.inputSpec, outputSpec: ex.outputSpec, constraints: ex.constraints,
+  examplesJson: ex.examplesJson, hintsJson: ex.hintsJson,
+  starterCodeJson: [{ name: 'commands.redis', language: L, code: ex.starter }],
+  solutionCodeJson: [{ name: 'commands.redis', language: L, code: ex.solution }],
+  solutionExplanationHtml: ex.solutionExplanationHtml,
+  ...(ex.diagramMermaid ? { diagramMermaid: ex.diagramMermaid } : {}),
+}));
+fs.writeFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), JSON.stringify({ trackSlug, moduleSlug, exercises: clean }, null, 2));
+
+let cmds = '';
+exercises.forEach((ex, i) => {
+  cmds += `ECHO "========== EX ${i + 1}: ${ex.title.replace(/"/g, '')} =========="\n`;
+  cmds += 'FLUSHALL\n' + ex.solution + '\n';
+});
+fs.writeFileSync(path.join(VERIFY, `redis-422.txt`), cmds);
+
+const parsed = JSON.parse(fs.readFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), 'utf8'));
+const diffs = ['EASY', 'EASY', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'HARD', 'HARD'];
+parsed.exercises.forEach((ex, i) => {
+  if (ex.difficulty !== diffs[i]) throw new Error(`slot ${i + 1} diff ${ex.difficulty} != ${diffs[i]}`);
+  if (ex.problemHtml.length < 900) throw new Error(`problemHtml<900 ${ex.title} (${ex.problemHtml.length})`);
+  if (ex.solutionExplanationHtml.length < 500) throw new Error(`expl<500 ${ex.title}`);
+  if (ex.hintsJson.length < 4) throw new Error(`<4 hints ${ex.title}`);
+  const solLen = ex.solutionCodeJson.map((f) => f.code).join('').length;
+  if (solLen < 205) throw new Error(`solution<205 (seeder floor 200) ${ex.title} (${solLen})`);
+});
+console.log(`OK ${parsed.exercises.length} exercises -> ${trackSlug}__${moduleSlug}.json`);

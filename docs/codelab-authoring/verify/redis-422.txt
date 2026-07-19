@@ -1,0 +1,147 @@
+ECHO "========== EX 1: Store and Retrieve String Values with SET and GET =========="
+FLUSHALL
+SET user:1:name "Ann"
+SET user:1:email "ann@example.com"
+SET user:1:city "Hanoi"
+SET user:1:role "member"
+GET user:1:name
+GET user:1:email
+GET user:1:city
+GET user:1:role
+SET user:1:name "Annabelle"
+GET user:1:name
+GET user:1:phone
+ECHO "========== EX 2: Inspect and Remove Keys with EXISTS, TYPE, and DEL =========="
+FLUSHALL
+SET session:abc "active"
+SET session:xyz "idle"
+SET session:pqr "pending"
+EXISTS session:abc
+EXISTS session:abc session:xyz session:pqr
+TYPE session:abc
+DEL session:abc
+EXISTS session:abc
+DEL session:abc
+DEL session:xyz session:pqr
+ECHO "========== EX 3: Maintain an Atomic Counter with INCR and INCRBY =========="
+FLUSHALL
+INCR page:home:views
+INCR page:home:views
+INCRBY page:home:views 10
+DECR page:home:views
+DECRBY page:home:views 3
+GET page:home:views
+SET page:home:views 100
+INCR page:home:views
+GET page:home:views
+DECRBY page:home:views 50
+INCRBY page:home:views 9
+GET page:home:views
+ECHO "========== EX 4: Expire Keys with TTL, EXPIRE, and PERSIST =========="
+FLUSHALL
+SET otp:123 "999000" EX 300
+TTL otp:123
+PERSIST otp:123
+TTL otp:123
+TTL missing:key
+SET k "v"
+EXPIRE k 60
+TTL k
+SET k "v2"
+TTL k
+SET k2 "temp"
+EXPIRE k2 120
+TTL k2
+PERSIST k2
+TTL k2
+SET k3 "z" EX 45
+TTL k3
+ECHO "========== EX 5: Set a Key Only If Absent with SET NX =========="
+FLUSHALL
+SETNX lock:job "worker1"
+SETNX lock:job "worker2"
+GET lock:job
+SET config:mode "prod" NX
+SET config:mode "dev" NX
+GET config:mode
+DEL lock:job
+SET lock:job "worker3" NX EX 30
+TTL lock:job
+GET lock:job
+DEL config:mode
+SET config:mode "staging" NX
+GET config:mode
+ECHO "========== EX 6: Read and Write Many Keys at Once with MSET and MGET =========="
+FLUSHALL
+MSET u:1 "Ann" u:2 "Bob" u:3 "Cy"
+MGET u:1 u:2 u:4
+MSETNX u:4 "Di" u:1 "X"
+GET u:4
+MSETNX u:4 "Di" u:5 "Ed"
+MGET u:4 u:5
+MSET u:6 "Fi" u:7 "Gu"
+MGET u:5 u:6 u:7 u:99
+MSETNX u:8 "Hu" u:9 "Iv"
+MGET u:6 u:7 u:8 u:9
+ECHO "========== EX 7: Manipulate String Fragments with APPEND, STRLEN, and GETRANGE =========="
+FLUSHALL
+SET msg "hello"
+APPEND msg " world"
+STRLEN msg
+GETRANGE msg 0 4
+GETRANGE msg -5 -1
+APPEND fresh "new"
+GET fresh
+SETRANGE msg 0 "H"
+GET msg
+STRLEN msg
+GETRANGE msg 6 10
+APPEND fresh "-tag"
+GET fresh
+STRLEN fresh
+ECHO "========== EX 8: Rename Keys Safely with RENAME and RENAMENX =========="
+FLUSHALL
+SET draft:1 "final content"
+RENAME draft:1 published:1
+GET published:1
+EXISTS draft:1
+SET a "x"
+SET b "y"
+RENAMENX a b
+COPY a c
+GET c
+RENAMENX a d
+GET d
+EXISTS a
+COPY d e
+GET e
+EXISTS c d e
+COPY d f
+GET f
+EXISTS c d e f
+ECHO "========== EX 9: Build a Fixed-Window Rate Limiter with INCR and EXPIRE =========="
+FLUSHALL
+INCR rate:user:1
+EXPIRE rate:user:1 60
+INCR rate:user:1
+INCR rate:user:1
+INCR rate:user:1
+TTL rate:user:1
+INCR rate:user:1
+INCR rate:user:1
+GET rate:user:1
+TTL rate:user:1
+INCR rate:user:1
+GET rate:user:1
+TTL rate:user:1
+ECHO "========== EX 10: Implement Cache-Aside with a Stampede Lock =========="
+FLUSHALL
+GET cache:homepage
+SET lock:homepage "A" NX EX 10
+SET lock:homepage "B" NX EX 10
+SET cache:homepage "rendered-html" EX 300
+GET cache:homepage
+DEL lock:homepage
+TTL cache:homepage
+SET lock:homepage "C" NX EX 10
+GET cache:homepage

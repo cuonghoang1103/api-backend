@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:x@localhost:55432/prisma_codelab"
+}
+
+model BlogPost {
+  id          Int       @id @default(autoincrement())
+  publishedAt DateTime? @map("published_at")
+  authorName  String    @map("author_name")
+  viewCount   Int       @default(0) @map("view_count")
+
+  @@map("blog_posts")
+}

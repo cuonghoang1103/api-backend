@@ -1,0 +1,2 @@
+SELECT column_name, data_type, column_default FROM information_schema.columns WHERE table_name='User' ORDER BY ordinal_position;
+SELECT enumlabel FROM pg_enum e JOIN pg_type t ON t.oid=e.enumtypid WHERE t.typname='Role' ORDER BY e.enumsortorder;

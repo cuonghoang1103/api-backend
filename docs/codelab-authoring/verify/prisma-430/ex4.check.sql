@@ -1,0 +1,2 @@
+SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name IN ('Post','Tag','_PostToTag') ORDER BY table_name;
+SELECT column_name FROM information_schema.columns WHERE table_name='_PostToTag' ORDER BY ordinal_position;

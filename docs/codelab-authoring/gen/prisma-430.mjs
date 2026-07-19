@@ -1,0 +1,827 @@
+// Generator for prisma-orm module 430 (prisma-setup-and-schema-basics) — 10 exercises.
+// Track language typescript. Two kinds of exercise, both really verified:
+//  - schema exercises: solution is schema.prisma; verified by `prisma db push` against a
+//    temp Postgres, then introspecting information_schema to confirm the tables/columns.
+//  - client exercises: solution is TypeScript Prisma Client code; verified by running it
+//    with tsx against a pushed reference schema and matching the printed output.
+import fs from 'node:fs';
+import path from 'node:path';
+
+const trackSlug = 'prisma-orm';
+const moduleSlug = 'prisma-setup-and-schema-basics';
+const HEADER = `generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:x@localhost:55432/prisma_codelab"
+}
+`;
+
+// Reference schema the CLIENT exercises (7, 8, 10) run against.
+const REFERENCE = `${HEADER}
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  posts     Post[]
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean   @default(false)
+  authorId  Int
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Comment {
+  id     Int    @id @default(autoincrement())
+  text   String
+  postId Int
+  post   Post   @relation(fields: [postId], references: [id])
+}
+`;
+
+const exercises = [
+  {
+    kind: 'schema',
+    title: 'Define Your First Prisma Model',
+    difficulty: 'EASY',
+    estimatedMinutes: 20,
+    points: 10,
+    concepts: ['datasource block', 'generator block', 'model definition', '@id', '@default(autoincrement())'],
+    prerequisites: ['relational tables', 'PostgreSQL basics'],
+    tags: ['prisma', 'schema', 'model', 'setup', 'postgres'],
+    problemHtml: `<p>A Prisma project is driven by a single file, <code>schema.prisma</code>. It has three parts: a <code>datasource</code> that says which database to talk to, a <code>generator</code> that says what client to produce, and one or more <code>model</code> blocks that describe your tables. Getting this file right is the foundation for everything Prisma does — the type-safe client is generated directly from it.</p>
+<p>Write a complete <code>schema.prisma</code> that defines a single <code>User</code> model:</p>
+<ul>
+<li>A <code>datasource db</code> block with <code>provider = "postgresql"</code> and a <code>url</code>.</li>
+<li>A <code>generator client</code> block with <code>provider = "prisma-client-js"</code>.</li>
+<li>A <code>User</code> model with: <code>id Int @id @default(autoincrement())</code>, an <code>email String</code> that is <code>@unique</code>, and an optional <code>name String?</code>.</li>
+</ul>
+<p>The <code>@id</code> attribute marks the primary key and <code>@default(autoincrement())</code> makes the database assign sequential ids. The trailing <code>?</code> on a type makes the field optional (nullable). The scaffold gives you the block skeletons to fill in.</p>`,
+    inputSpec: 'An empty PostgreSQL database. You write the schema.prisma that, when pushed, creates the User table.',
+    outputSpec: 'After `prisma db push`, a "User" table exists with columns id (integer, PK, auto-increment), email (text, unique, not null), and name (text, nullable).',
+    constraints: 'Use provider "postgresql". The id must be @id @default(autoincrement()). email must be @unique. name must be optional (String?).',
+    examplesJson: [
+      {
+        input: 'The User model block in schema.prisma',
+        output: 'model User {\n  id    Int    @id @default(autoincrement())\n  email String @unique\n  name  String?\n}',
+        explanation: 'id is the auto-incrementing primary key, email is a required unique string, and name is an optional string.',
+      },
+      {
+        input: 'Running: npx prisma db push',
+        output: 'A User table is created with id, email (unique), and a nullable name column.',
+        explanation: 'db push translates the model into a CREATE TABLE and applies it to the database.',
+      },
+    ],
+    hintsJson: [
+      'The file has three kinds of block: datasource, generator, and model.',
+      'The datasource names the database provider and connection url; the generator names prisma-client-js.',
+      'Inside the model, @id marks the primary key and @default(autoincrement()) auto-assigns it.',
+      'A required unique field is `email String @unique`; an optional field uses a trailing ?: `name String?`.',
+    ],
+    solutionShown: `datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  name  String?
+}`,
+    solutionExplanationHtml: `<p>The three blocks divide responsibilities cleanly. The <code>datasource</code> tells Prisma the database is PostgreSQL and where to reach it; in real projects the <code>url</code> reads from an environment variable with <code>env("DATABASE_URL")</code> so secrets stay out of the schema. The <code>generator</code> declares that running <code>prisma generate</code> should produce the JavaScript/TypeScript client. The <code>model</code> is the heart of it: each line is a field with a name, a type, and optional attributes.</p>
+<p>The attributes carry the meaning. <code>@id</code> designates the primary key, and <code>@default(autoincrement())</code> hands id assignment to the database's sequence so you never set it manually. <code>@unique</code> on <code>email</code> creates a unique constraint, so two users cannot share an address. The trailing <code>?</code> in <code>name String?</code> is the one piece beginners most often miss: without it, <code>name</code> is <code>NOT NULL</code> and every insert must provide a name; with it, the column is nullable. Prisma maps its types to Postgres types — <code>Int</code> becomes <code>integer</code>, <code>String</code> becomes <code>text</code>, <code>DateTime</code> becomes <code>timestamp</code> — so the model is a database-agnostic description that <code>prisma db push</code> turns into the correct <code>CREATE TABLE</code> for your provider.</p>`,
+    fullSchema: `${HEADER}
+model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  name  String?
+}`,
+    check: `SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name='User' ORDER BY ordinal_position;
+SELECT indexname FROM pg_indexes WHERE tablename='User';`,
+  },
+
+  {
+    kind: 'schema',
+    title: 'Add Defaults, Timestamps, and an Enum',
+    difficulty: 'EASY',
+    estimatedMinutes: 25,
+    points: 10,
+    concepts: ['@default', 'enum', '@default(now())', '@updatedAt', 'scalar defaults'],
+    prerequisites: ['model definition', '@id'],
+    tags: ['prisma', 'schema', 'enum', 'defaults', 'timestamps'],
+    problemHtml: `<p>Most real columns want a sensible default and a couple of automatic timestamps. Prisma expresses these declaratively: <code>@default(...)</code> supplies a value when none is given, <code>@default(now())</code> stamps the creation time, and <code>@updatedAt</code> auto-updates a column on every write. An <code>enum</code> constrains a field to a fixed set of named values.</p>
+<p>Extend a <code>User</code> model so that it has:</p>
+<ul>
+<li><code>id Int @id @default(autoincrement())</code> and <code>email String @unique</code> as before.</li>
+<li>A <code>role</code> field of a new <code>enum Role { USER ADMIN }</code>, defaulting to <code>USER</code>.</li>
+<li>An <code>active Boolean</code> that defaults to <code>true</code>.</li>
+<li>A <code>createdAt DateTime</code> that defaults to <code>now()</code>.</li>
+<li>An <code>updatedAt DateTime</code> marked <code>@updatedAt</code>.</li>
+</ul>
+<p>Declare the <code>enum Role</code> block alongside the model. The scaffold provides the model and enum skeletons.</p>`,
+    inputSpec: 'An empty PostgreSQL database. Write the schema with the enum and defaulted columns.',
+    outputSpec: 'After push: a Role enum type exists; the User table has role (default USER), active (default true), createdAt (default now), and updatedAt columns.',
+    constraints: 'Use an enum for role with a @default(USER). Use @default(now()) for createdAt and @updatedAt for updatedAt. active defaults to true.',
+    examplesJson: [
+      {
+        input: 'The Role enum and role field',
+        output: 'enum Role { USER ADMIN }\n// in User:\nrole Role @default(USER)',
+        explanation: 'The enum defines the allowed values; the field references it and defaults to USER.',
+      },
+      {
+        input: 'The two timestamp fields',
+        output: 'createdAt DateTime @default(now())\nupdatedAt DateTime @updatedAt',
+        explanation: 'createdAt is set once at insert; updatedAt is refreshed by Prisma on every update.',
+      },
+    ],
+    hintsJson: [
+      'A fixed set of values is an enum; a default value is the @default attribute.',
+      'Declare enum Role { USER ADMIN } as its own block, then reference it: role Role @default(USER).',
+      'Timestamps: @default(now()) fills createdAt at insert; @updatedAt bumps a column on every write.',
+      'A boolean default is @default(true).',
+    ],
+    solutionShown: `enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  role      Role     @default(USER)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}`,
+    solutionExplanationHtml: `<p>Each attribute encodes a behaviour so you never write the boilerplate by hand. <code>@default(USER)</code> means a created user without an explicit role becomes a <code>USER</code>; the value must be one of the <code>enum Role</code> members, which Prisma turns into a native Postgres <code>enum</code> type that rejects any other string at the database level. <code>@default(true)</code> does the same for the boolean. <code>@default(now())</code> stamps <code>createdAt</code> with the insert time exactly once.</p>
+<p>The subtle one is <code>@updatedAt</code>. It is <em>not</em> a database default — Prisma's client sets it to the current time on every <code>update</code> it performs, so the column tracks the last modification automatically. The trap this creates is that a write made <em>outside</em> Prisma (a raw SQL <code>UPDATE</code>, another service) will not touch <code>updatedAt</code>, because the behaviour lives in the Prisma client rather than in the database. If you need the guarantee at the database layer regardless of who writes, you add a Postgres trigger instead. Also note enums are a schema-level contract: adding a value later is a migration, and removing one that existing rows use will fail — so design the value set with room to grow. Together these attributes turn common columns into single, declarative lines.</p>`,
+    fullSchema: `${HEADER}
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  role      Role     @default(USER)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}`,
+    check: `SELECT column_name, data_type, column_default FROM information_schema.columns WHERE table_name='User' ORDER BY ordinal_position;
+SELECT enumlabel FROM pg_enum e JOIN pg_type t ON t.oid=e.enumtypid WHERE t.typname='Role' ORDER BY e.enumsortorder;`,
+  },
+
+  {
+    kind: 'schema',
+    title: 'Model a One-to-Many Relation',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 30,
+    points: 15,
+    concepts: ['relation fields', '@relation', 'foreign key', 'back-relation', 'one-to-many'],
+    prerequisites: ['model definition', '@id', 'foreign keys'],
+    tags: ['prisma', 'schema', 'relations', 'one-to-many', 'foreign-key'],
+    problemHtml: `<p>Relations are where Prisma's schema shines: you describe them once with relation fields and Prisma creates the foreign key and gives you type-safe nested queries. A one-to-many relation (one <code>User</code> has many <code>Post</code>s) needs <strong>both sides</strong> declared — the "many" side holds the actual foreign key, and the "one" side holds a list back-relation.</p>
+<p>Define two models with a one-to-many relation:</p>
+<ul>
+<li><code>User</code>: <code>id</code> (auto-increment PK), <code>email String @unique</code>, and a <code>posts Post[]</code> list field (the back-relation — no database column).</li>
+<li><code>Post</code>: <code>id</code> (auto-increment PK), <code>title String</code>, an <code>authorId Int</code> scalar field for the foreign key, and an <code>author User</code> relation field annotated <code>@relation(fields: [authorId], references: [id])</code>.</li>
+</ul>
+<p>The <code>@relation</code> attribute wires the <code>authorId</code> column to <code>User.id</code>. Miss the <code>posts Post[]</code> back-relation and Prisma's validation fails. The scaffold provides both model skeletons.</p>`,
+    inputSpec: 'An empty database. Write the two related models.',
+    outputSpec: 'After push: a Post table with an authorId column and a foreign key referencing User(id); the User table unchanged (the posts field is virtual, no column).',
+    constraints: 'The Post side holds authorId + the @relation annotation. The User side must include the posts Post[] back-relation. Do not create a posts column on User.',
+    examplesJson: [
+      {
+        input: 'The Post relation fields',
+        output: 'authorId Int\nauthor   User @relation(fields: [authorId], references: [id])',
+        explanation: 'authorId is the real foreign-key column; author is the virtual relation field that @relation binds to it.',
+      },
+      {
+        input: 'The User back-relation',
+        output: 'posts Post[]',
+        explanation: 'This list field lets you traverse from a user to their posts; it creates no column, only enables nested queries.',
+      },
+    ],
+    hintsJson: [
+      'A relation has two sides: the one that owns the foreign key and the one that lists the children.',
+      'The "many" side (Post) needs both a scalar authorId and a relation field author.',
+      'Bind them with @relation(fields: [authorId], references: [id]).',
+      'The "one" side (User) needs posts Post[] — omitting it makes prisma validate fail.',
+    ],
+    solutionShown: `model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  posts Post[]
+}
+
+model Post {
+  id       Int    @id @default(autoincrement())
+  title    String
+  authorId Int
+  author   User   @relation(fields: [authorId], references: [id])
+}`,
+    solutionExplanationHtml: `<p>A Prisma relation is described from both directions, and each direction does a different job. On the <code>Post</code> side, <code>authorId Int</code> is a real scalar column — the foreign key — and <code>author User @relation(fields: [authorId], references: [id])</code> is a <em>virtual</em> relation field that tells Prisma "this <code>authorId</code> points at <code>User.id</code>". That <code>@relation</code> attribute is what generates the actual <code>FOREIGN KEY</code> constraint in the database. On the <code>User</code> side, <code>posts Post[]</code> is also virtual — it creates no column — but it is required, because it is how you traverse from a user to their posts in queries and how Prisma knows the relation is one-to-many.</p>
+<p>The error beginners hit is omitting the back-relation: define only the <code>Post.author</code> side and <code>prisma validate</code> fails with <em>The relation field author on model Post is missing an opposite relation field on the model User</em>. Both halves must exist. A second subtlety is which side owns the key: the model carrying <code>@relation(fields: ...)</code> is the one with the foreign-key column, so putting it on <code>Post</code> (many) rather than <code>User</code> (one) is what makes this one-to-many rather than the reverse. Once declared, this single relation unlocks type-safe nested reads (<code>include: { posts: true }</code>) and nested writes (creating a user and their posts in one call), which later exercises use.</p>`,
+    diagramMermaid: `erDiagram
+  User ||--o{ Post : authors
+  User { int id PK }
+  Post { int id PK }`,
+    fullSchema: `${HEADER}
+model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  posts Post[]
+}
+
+model Post {
+  id       Int    @id @default(autoincrement())
+  title    String
+  authorId Int
+  author   User   @relation(fields: [authorId], references: [id])
+}`,
+    check: `SELECT column_name FROM information_schema.columns WHERE table_name='Post' ORDER BY ordinal_position;
+SELECT tc.constraint_type, kcu.column_name, ccu.table_name AS refs
+FROM information_schema.table_constraints tc
+JOIN information_schema.key_column_usage kcu ON tc.constraint_name=kcu.constraint_name
+JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name=ccu.constraint_name
+WHERE tc.table_name='Post' AND tc.constraint_type='FOREIGN KEY';`,
+  },
+
+  {
+    kind: 'schema',
+    title: 'Model a Many-to-Many Relation with an Implicit Join Table',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 30,
+    points: 15,
+    concepts: ['many-to-many', 'implicit join table', 'relation lists on both sides', '@relation', 'referential design'],
+    prerequisites: ['one-to-many relations', 'model definition'],
+    tags: ['prisma', 'schema', 'many-to-many', 'relations', 'join-table'],
+    problemHtml: `<p>A post can have many tags, and a tag can be attached to many posts — a <strong>many-to-many</strong> relation. In SQL you model this with a junction table you create and manage yourself. Prisma can do it for you: declare a list relation field on <em>both</em> models and it creates and maintains a hidden join table automatically, an <strong>implicit many-to-many</strong>.</p>
+<p>Define two models joined many-to-many:</p>
+<ul>
+<li><code>Post</code>: <code>id Int @id @default(autoincrement())</code>, <code>title String</code>, an optional <code>content String?</code>, and a <code>tags Tag[]</code> list field.</li>
+<li><code>Tag</code>: <code>id Int @id @default(autoincrement())</code>, <code>name String @unique</code>, <code>createdAt DateTime @default(now())</code>, and a <code>posts Post[]</code> list field.</li>
+</ul>
+<p>Because both sides are lists and neither holds a scalar foreign key, Prisma infers a many-to-many and generates a join table named <code>_PostToTag</code> behind the scenes. You never write that table — you connect posts and tags through the relation fields. The scaffold provides both model skeletons.</p>`,
+    inputSpec: 'An empty database. Write the two models with list relation fields on both sides.',
+    outputSpec: 'After push: a Post table, a Tag table, and an implicit join table named "_PostToTag" with two columns (A and B) referencing Post(id) and Tag(id).',
+    constraints: 'Both sides must be list relation fields (Tag[] and Post[]). Do not add a scalar foreign key or a manual join model — let Prisma create the implicit join table.',
+    examplesJson: [
+      {
+        input: 'The two relation fields',
+        output: '// in Post:\ntags  Tag[]\n// in Tag:\nposts Post[]',
+        explanation: 'A list field on both sides with no scalar FK tells Prisma this is many-to-many.',
+      },
+      {
+        input: 'Running prisma db push',
+        output: 'Creates Post, Tag, and a hidden _PostToTag join table with columns A and B.',
+        explanation: 'Prisma manages the junction table; you connect records through tags/posts, never by inserting into _PostToTag directly.',
+      },
+    ],
+    hintsJson: [
+      'Many-to-many means neither side owns a single foreign key — both sides list the other.',
+      'Put tags Tag[] on Post and posts Post[] on Tag.',
+      'Do not add tagId/postId scalars; that would make it one-to-many instead.',
+      'Prisma creates the join table _PostToTag automatically; you never define it.',
+    ],
+    solutionShown: `model Post {
+  id      Int    @id @default(autoincrement())
+  title   String
+  content String?
+  tags    Tag[]
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  posts     Post[]
+}`,
+    solutionExplanationHtml: `<p>The signal that makes this many-to-many rather than one-to-many is that <em>both</em> sides are list fields (<code>Tag[]</code> and <code>Post[]</code>) and <em>neither</em> carries a scalar foreign key. When Prisma sees that shape, it knows a single foreign-key column cannot express the relation — a post relates to many tags and vice versa — so it generates a separate join table, named <code>_PostToTag</code> by convention, with two columns <code>A</code> and <code>B</code> referencing <code>Post.id</code> and <code>Tag.id</code>. This is the "implicit" many-to-many: you declare intent with the relation fields and Prisma owns the junction table entirely.</p>
+<p>The practical consequence is that you connect and disconnect records through the relation fields, never by inserting into <code>_PostToTag</code> yourself — for example <code>prisma.post.update({ where: { id }, data: { tags: { connect: { id: tagId } } } })</code>. The trap is accidentally writing a one-to-many by adding a scalar like <code>tagId Int</code> and a single <code>@relation</code>: that forces each post to have exactly one tag. Implicit many-to-many is the quickest path and perfect when the relationship itself carries no data. Its limitation is exactly that: if you need to store attributes <em>on</em> the relationship (when a tag was added, who added it), you must switch to an <strong>explicit</strong> join model — a real model with two foreign keys and a composite key — which trades the automatic convenience for a table you control. For a plain tag relationship, the implicit form is the right, minimal choice.</p>`,
+    diagramMermaid: `erDiagram
+  Post }o--o{ Tag : tagged
+  Post { int id PK }
+  Tag { int id PK }`,
+    fullSchema: `${HEADER}
+model Post {
+  id      Int    @id @default(autoincrement())
+  title   String
+  content String?
+  tags    Tag[]
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  posts     Post[]
+}`,
+    check: `SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name IN ('Post','Tag','_PostToTag') ORDER BY table_name;
+SELECT column_name FROM information_schema.columns WHERE table_name='_PostToTag' ORDER BY ordinal_position;`,
+  },
+
+  {
+    kind: 'schema',
+    title: 'Map Model and Field Names to Existing Database Names',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 25,
+    points: 15,
+    concepts: ['@@map', '@map', 'naming conventions', 'legacy schemas', 'physical vs logical names'],
+    prerequisites: ['model definition', 'field attributes'],
+    tags: ['prisma', 'schema', 'mapping', 'naming', 'postgres'],
+    problemHtml: `<p>Prisma prefers <code>PascalCase</code> models and <code>camelCase</code> fields, but real databases often use <code>snake_case</code> tables and columns. Rather than force one convention on the other, Prisma lets you keep idiomatic names in your code and map them to the physical database names with <code>@@map</code> (for the table) and <code>@map</code> (for a column). This is essential when adopting Prisma over an existing schema.</p>
+<p>Define a model that keeps clean Prisma names in code but writes to snake_case in the database:</p>
+<ul>
+<li>A model named <code>BlogPost</code> that maps to the table <code>blog_posts</code> via <code>@@map("blog_posts")</code>.</li>
+<li><code>id Int @id @default(autoincrement())</code>.</li>
+<li>A field <code>publishedAt DateTime?</code> that maps to the column <code>published_at</code> via <code>@map("published_at")</code>.</li>
+<li>A field <code>authorName String</code> that maps to the column <code>author_name</code>.</li>
+<li>A field <code>viewCount Int</code> defaulting to <code>0</code> that maps to the column <code>view_count</code>.</li>
+</ul>
+<p>In your Prisma queries you use <code>BlogPost</code>, <code>publishedAt</code>, and <code>authorName</code>; the database sees <code>blog_posts</code>, <code>published_at</code>, and <code>author_name</code>. The scaffold provides the model skeleton.</p>`,
+    inputSpec: 'An empty database. Write the model with @@map and @map.',
+    outputSpec: 'After push: the physical table is named blog_posts with columns id, published_at, and author_name (snake_case), even though the Prisma model uses BlogPost/publishedAt/authorName.',
+    constraints: 'Use @@map for the table name and @map for the two column names. The Prisma-side names must remain BlogPost/publishedAt/authorName.',
+    examplesJson: [
+      {
+        input: 'The model with mappings',
+        output: 'model BlogPost {\n  id          Int       @id @default(autoincrement())\n  publishedAt DateTime? @map("published_at")\n  authorName  String    @map("author_name")\n  @@map("blog_posts")\n}',
+        explanation: '@map renames individual columns; @@map renames the whole table.',
+      },
+      {
+        input: 'The resulting database table',
+        output: 'Table blog_posts with columns id, published_at, author_name',
+        explanation: 'The physical names are snake_case; only your Prisma code sees the PascalCase/camelCase names.',
+      },
+    ],
+    hintsJson: [
+      'Two attributes: one renames the table, one renames a column.',
+      'A single column is renamed with @map("db_column_name") after its type.',
+      'The whole table is renamed with @@map("db_table_name") on its own line inside the model.',
+      'Keep publishedAt/authorName as the Prisma names; map them to published_at/author_name.',
+    ],
+    solutionShown: `model BlogPost {
+  id          Int       @id @default(autoincrement())
+  publishedAt DateTime? @map("published_at")
+  authorName  String    @map("author_name")
+  viewCount   Int       @default(0) @map("view_count")
+
+  @@map("blog_posts")
+}`,
+    solutionExplanationHtml: `<p>The mapping attributes decouple the names your code uses from the names the database stores, so each side can follow its own conventions. <code>@map("published_at")</code> on a field renames just that column at the database level while leaving <code>publishedAt</code> as the property you use in queries; <code>@@map("blog_posts")</code> (double-<code>@</code>, block-level) renames the entire table. The double-<code>@</code> versus single-<code>@</code> distinction is consistent across Prisma: single-<code>@</code> attributes decorate a single field, double-<code>@@</code> attributes decorate the whole model.</p>
+<p>This matters most when adopting Prisma on top of a database you did not create. Without mapping, Prisma would expect a table literally named <code>BlogPost</code> with a column <code>publishedAt</code>, which will not match a legacy <code>blog_posts</code>/<code>published_at</code> schema, and every query would fail with "relation does not exist". With <code>@@map</code>/<code>@map</code>, the generated SQL targets the real names while your TypeScript stays idiomatic. The common mistake is mapping the table but forgetting a column (or vice versa), producing a half-mapped model that compiles but fails at query time on the unmapped name. A practical tip: running <code>prisma db pull</code> against an existing database auto-generates these <code>@map</code>/<code>@@map</code> annotations for you, giving a correct starting point you can then rename in code freely.</p>`,
+    fullSchema: `${HEADER}
+model BlogPost {
+  id          Int       @id @default(autoincrement())
+  publishedAt DateTime? @map("published_at")
+  authorName  String    @map("author_name")
+  viewCount   Int       @default(0) @map("view_count")
+
+  @@map("blog_posts")
+}`,
+    check: `SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name IN ('blog_posts','BlogPost');
+SELECT column_name FROM information_schema.columns WHERE table_name='blog_posts' ORDER BY ordinal_position;`,
+  },
+
+  {
+    kind: 'schema',
+    title: 'Enforce Compound Rules with @@unique and @@index',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 30,
+    points: 20,
+    concepts: ['@@unique', '@@index', 'composite constraints', 'multi-field uniqueness', 'query indexes'],
+    prerequisites: ['model definition', '@unique', 'relations'],
+    tags: ['prisma', 'schema', 'unique', 'index', 'constraints'],
+    problemHtml: `<p>A single-field <code>@unique</code> is not enough when a rule spans two columns — a user may follow many others, but each (follower, following) pair must be unique. Prisma expresses this with the block-level <code>@@unique([a, b])</code>. Its sibling <code>@@index([...])</code> creates a non-unique index to speed up queries that filter or sort on those fields.</p>
+<p>Define a <code>Follow</code> model representing a social graph edge:</p>
+<ul>
+<li><code>id Int @id @default(autoincrement())</code>.</li>
+<li><code>followerId Int</code> and <code>followingId Int</code> — the two user ids in the edge.</li>
+<li><code>createdAt DateTime @default(now())</code>.</li>
+<li>A composite unique constraint <code>@@unique([followerId, followingId])</code> so the same follow cannot be inserted twice.</li>
+<li>A <code>@@index([followingId])</code> to make "who follows this user" queries fast.</li>
+</ul>
+<p>Both attributes are block-level (double <code>@@</code>) and take an array of field names. The scaffold provides the model skeleton.</p>`,
+    inputSpec: 'An empty database. Write the Follow model with the composite unique and the index.',
+    outputSpec: 'After push: a Follow table with a unique index over (followerId, followingId) and a separate non-unique index on (followingId).',
+    constraints: 'Use @@unique([followerId, followingId]) for the pair uniqueness and @@index([followingId]) for the lookup index. Both are block-level attributes.',
+    examplesJson: [
+      {
+        input: 'The two block-level attributes',
+        output: '@@unique([followerId, followingId])\n@@index([followingId])',
+        explanation: 'The first forbids duplicate follow pairs; the second indexes reverse lookups.',
+      },
+      {
+        input: 'Attempting to insert the same (followerId, followingId) twice',
+        output: 'Rejected by the unique constraint (a duplicate pair is not allowed).',
+        explanation: 'The composite unique treats the pair as the key, so the exact combination can appear only once.',
+      },
+    ],
+    hintsJson: [
+      'The rule is about a pair of columns, not one — so a single-field @unique will not do.',
+      'A multi-field uniqueness rule is @@unique([field1, field2]) at the block level.',
+      'A non-unique index to speed a lookup is @@index([field]).',
+      'Both go on their own lines inside the model, after the fields.',
+    ],
+    solutionShown: `model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followingId])
+}`,
+    solutionExplanationHtml: `<p>The two block-level attributes solve related but distinct problems. <code>@@unique([followerId, followingId])</code> creates a composite unique constraint: the database indexes the <em>pair</em> and rejects any second row with the same combination, so a user cannot follow the same person twice, even though <code>followerId</code> alone and <code>followingId</code> alone each repeat freely across the table. This is the multi-column analogue of a single <code>@unique</code>, and it is the right tool whenever "uniqueness" is defined by more than one field — join tables, per-user-per-day records, (subject, recipient) shares.</p>
+<p><code>@@index([followingId])</code> is a performance tool rather than a correctness one: it builds a non-unique B-tree index so that the query "list everyone who follows user X" (<code>where: { followingId: X }</code>) can jump straight to the matching rows instead of scanning the whole table. Note the composite unique already provides an index whose <em>leading</em> column is <code>followerId</code>, which accelerates "who does user X follow" — but because a composite index is only usable left-to-right, it does <em>not</em> help queries that filter on <code>followingId</code> alone, which is exactly why the separate <code>@@index([followingId])</code> is added. Choosing indexes is a trade-off: each one speeds reads but slows writes and uses space, so you index the columns your real queries filter and sort on, not every column. In Prisma, the generated client also uses the composite unique as a typed <code>where</code> key (<code>followerId_followingId</code>) for precise lookups and upserts.</p>`,
+    fullSchema: `${HEADER}
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followingId])
+}`,
+    check: `SELECT indexname, indexdef FROM pg_indexes WHERE tablename='Follow' ORDER BY indexname;`,
+  },
+
+  {
+    kind: 'client',
+    title: 'Create and Read Rows with the Prisma Client',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 30,
+    points: 20,
+    concepts: ['PrismaClient', 'create', 'findMany', 'async/await', 'typed results'],
+    prerequisites: ['model definition', 'prisma generate', 'async functions'],
+    tags: ['prisma', 'client', 'create', 'findmany', 'typescript'],
+    problemHtml: `<p>Once the schema is defined and <code>prisma generate</code> has run, you get a fully-typed client. Every model becomes a property on the client (<code>prisma.user</code>) with methods like <code>create</code>, <code>findMany</code>, and <code>findUnique</code>. All of them are asynchronous and return typed results — TypeScript knows the shape of a <code>User</code> without you declaring it.</p>
+<p>Against the reference schema (a <code>User</code> with <code>id</code>, <code>email</code>, <code>name?</code>, <code>role</code>), write an async function that:</p>
+<ul>
+<li>Creates a user with <code>prisma.user.create</code>, data <code>{ email: "ann@x.io", name: "Ann" }</code>.</li>
+<li>Creates a second user with <code>{ email: "bob@x.io" }</code> (no name — it is optional).</li>
+<li>Reads all users with <code>prisma.user.findMany({ orderBy: { email: "asc" } })</code>.</li>
+<li>Logs the number of users and each user's <code>email</code> and <code>role</code> (which defaults to <code>USER</code>).</li>
+</ul>
+<p>The scaffold gives the client import and the async skeleton. Print exactly: the count, then one line per user as <code>email role</code>.</p>`,
+    inputSpec: 'The reference schema is pushed and the client generated. The Users table starts empty (the harness clears it).',
+    outputSpec: 'Logs "count 2", then "ann@x.io USER" and "bob@x.io USER" (ordered by email). bob has no name; both default to role USER.',
+    constraints: 'Use prisma.user.create and prisma.user.findMany. Order by email ascending. Do not set role explicitly — rely on the schema default.',
+    examplesJson: [
+      {
+        input: 'await prisma.user.create({ data: { email: "ann@x.io", name: "Ann" } })',
+        output: 'Inserts a user; role defaults to USER because the schema sets @default(USER).',
+        explanation: 'You supply only email and name; the id auto-increments and role takes its default.',
+      },
+      {
+        input: 'The printed output',
+        output: 'count 2\nann@x.io USER\nbob@x.io USER',
+        explanation: 'Two users, ordered by email; each shows its email and the default role.',
+      },
+    ],
+    hintsJson: [
+      'Import PrismaClient, construct it, and remember every method returns a promise you await.',
+      'Create with prisma.user.create({ data: { ... } }); the optional name can be omitted.',
+      'Read all with prisma.user.findMany({ orderBy: { email: "asc" } }).',
+      'Loop the result and log `${u.email} ${u.role}`; log users.length for the count.',
+    ],
+    solutionTs: `import { PrismaClient } from './generated';
+const prisma = new PrismaClient();
+
+async function main() {
+  await prisma.user.create({ data: { email: "ann@x.io", name: "Ann" } });
+  await prisma.user.create({ data: { email: "bob@x.io" } });
+
+  const users = await prisma.user.findMany({ orderBy: { email: "asc" } });
+  console.log("count", users.length);
+  for (const u of users) {
+    console.log(u.email, u.role);
+  }
+}
+
+main().finally(() => prisma.$disconnect());`,
+    solutionExplanationHtml: `<p>The generated client turns each model into a typed namespace: <code>prisma.user.create</code>, <code>prisma.user.findMany</code>, and so on, all returning promises you must <code>await</code>. In <code>create</code>, the <code>data</code> object only needs the fields you are setting — <code>id</code> auto-increments, and because the schema declares <code>role Role @default(USER)</code>, omitting <code>role</code> yields <code>USER</code>. Omitting <code>name</code> for Bob is allowed precisely because the field is optional (<code>String?</code>); had it been required, TypeScript would reject the call at compile time, which is the type safety paying off before you ever run the code.</p>
+<p><code>findMany</code> with no <code>where</code> returns every row, and <code>orderBy: { email: "asc" }</code> sorts them, so the output is deterministic. The result is fully typed: <code>u.email</code> is a <code>string</code> and <code>u.role</code> is the <code>Role</code> enum, with the editor autocompleting both. Two habits matter here. First, always <code>await</code> — a forgotten <code>await</code> returns a pending promise, so you would log <code>undefined</code> counts or write in the wrong order, a very common early bug. Second, disconnect the client when done (<code>prisma.$disconnect()</code>) so the process can exit and the connection pool is released; in a long-running server you construct one <code>PrismaClient</code> and keep it, but in a script you close it. The printed output — <code>count 2</code> then the two ordered <code>email role</code> lines — confirms both writes landed and the default role applied.</p>`,
+    expect: `count 2\nann@x.io USER\nbob@x.io USER`,
+  },
+
+  {
+    kind: 'client',
+    title: 'Filter, Select, and Sort with where and select',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 35,
+    points: 20,
+    concepts: ['where filter', 'select projection', 'orderBy', 'comparison operators', 'partial results'],
+    prerequisites: ['findMany', 'create'],
+    tags: ['prisma', 'client', 'where', 'select', 'filtering'],
+    problemHtml: `<p>Real reads filter, project, and sort. Prisma's <code>where</code> object expresses conditions (including operators like <code>gt</code>, <code>contains</code>, <code>in</code>), <code>select</code> chooses exactly which fields to return (changing the result's TypeScript type accordingly), and <code>orderBy</code> sorts. Together they produce narrow, efficient, strongly-typed queries.</p>
+<p>The <code>Post</code> table is seeded with several posts of varying <code>published</code> and <code>title</code>. Write a function that:</p>
+<ul>
+<li>Finds posts where <code>published</code> is <code>true</code>, selecting only <code>title</code> and <code>published</code>, ordered by <code>title</code> ascending, and logs each title.</li>
+<li>Counts posts whose <code>title</code> <code>contains</code> the substring <code>"Prisma"</code> using <code>prisma.post.count</code>.</li>
+<li>Logs that count.</li>
+</ul>
+<p>Use <code>select: { title: true, published: true }</code> so the returned objects have only those two fields. The scaffold gives the async skeleton. Print each published title, then <code>prisma-count N</code>.</p>`,
+    inputSpec: 'The Post table is seeded by the harness with: "Intro to SQL" (published), "Prisma Basics" (published), "Draft on Prisma" (unpublished), "Redis Notes" (published).',
+    outputSpec: 'Logs the published titles ordered ascending — "Intro to SQL", "Prisma Basics", "Redis Notes" — then "prisma-count 2" (two titles contain "Prisma").',
+    constraints: 'Use where for the published filter and the contains filter. Use select to return only title and published. Order by title ascending. Use prisma.post.count for the count.',
+    examplesJson: [
+      {
+        input: 'prisma.post.findMany({ where: { published: true }, select: { title: true, published: true }, orderBy: { title: "asc" } })',
+        output: 'Returns [{ title: "Intro to SQL", published: true }, { title: "Prisma Basics", published: true }, { title: "Redis Notes", published: true }]',
+        explanation: 'Only published posts, only the two selected fields, sorted by title.',
+      },
+      {
+        input: 'prisma.post.count({ where: { title: { contains: "Prisma" } } })',
+        output: '2',
+        explanation: '"Prisma Basics" and "Draft on Prisma" both contain the substring, so the count is 2 regardless of published state.',
+      },
+    ],
+    hintsJson: [
+      'Three tools compose in one call: where to filter, select to project, orderBy to sort.',
+      'A boolean filter is where: { published: true }; a substring filter is where: { title: { contains: "Prisma" } }.',
+      'select: { title: true, published: true } narrows both the returned fields and the TypeScript type.',
+      'Counting uses prisma.post.count({ where: { ... } }) rather than findMany + length.',
+    ],
+    solutionTs: `import { PrismaClient } from './generated';
+const prisma = new PrismaClient();
+
+async function main() {
+  const published = await prisma.post.findMany({
+    where: { published: true },
+    select: { title: true, published: true },
+    orderBy: { title: "asc" },
+  });
+  for (const p of published) {
+    console.log(p.title);
+  }
+
+  const prismaCount = await prisma.post.count({
+    where: { title: { contains: "Prisma" } },
+  });
+  console.log("prisma-count", prismaCount);
+}
+
+main().finally(() => prisma.$disconnect());`,
+    solutionExplanationHtml: `<p>The three query options each shape a different aspect of the read. <code>where</code> is the filter, and it nests operators inside a field to go beyond equality: <code>{ published: true }</code> is an equality match, while <code>{ title: { contains: "Prisma" } }</code> uses the <code>contains</code> operator to do a substring search (translated to a SQL <code>LIKE</code>). <code>orderBy</code> sorts the results, here by <code>title</code> ascending, making the output deterministic. <code>select</code> projects: asking for <code>{ title: true, published: true }</code> returns objects with <em>only</em> those two fields — and crucially, TypeScript narrows the result type to match, so accessing <code>p.content</code> afterwards would be a compile error. That is the payoff of Prisma's typing: the query's shape and the value's type stay in lockstep.</p>
+<p>The count illustrates an important efficiency habit: <code>prisma.post.count({ where: ... })</code> asks the database for a number, whereas <code>findMany(...).length</code> would transfer every matching row just to count them. For "how many", always count. Note also that the <code>contains</code> filter matched <code>"Prisma Basics"</code> and <code>"Draft on Prisma"</code> — including the unpublished draft — because the count query has its own <code>where</code> and does not inherit the <code>published: true</code> filter from the earlier query; each call is independent. A final subtlety worth knowing: <code>contains</code> is case-sensitive by default on PostgreSQL; add <code>mode: "insensitive"</code> to the filter when you need case-insensitive matching. The printed published titles followed by <code>prisma-count 2</code> confirm the filter, projection, sort, and count all behaved as specified.</p>`,
+    expect: `Intro to SQL\nPrisma Basics\nRedis Notes\nprisma-count 2`,
+    seed: `await prisma.comment.deleteMany(); await prisma.post.deleteMany(); await prisma.user.deleteMany();
+const u = await prisma.user.create({ data: { email: "seed@x.io" } });
+await prisma.post.createMany({ data: [
+  { title: "Intro to SQL", published: true, authorId: u.id },
+  { title: "Prisma Basics", published: true, authorId: u.id },
+  { title: "Draft on Prisma", published: false, authorId: u.id },
+  { title: "Redis Notes", published: true, authorId: u.id },
+]});`,
+  },
+
+  {
+    kind: 'schema',
+    title: 'Assemble a Complete Blog Schema',
+    difficulty: 'HARD',
+    estimatedMinutes: 50,
+    points: 25,
+    concepts: ['multi-model schema', 'enums', 'one-to-many relations', 'timestamps', 'referential design'],
+    prerequisites: ['relations', 'enum', '@default', '@updatedAt'],
+    tags: ['prisma', 'schema', 'blog', 'relations', 'capstone'],
+    problemHtml: `<p>Everything in this module comes together in a realistic multi-model schema. A blog has <code>User</code>s who write <code>Post</code>s, and each post has many <code>Comment</code>s. This is the schema the client exercises query, so it must define the relations and defaults correctly end to end.</p>
+<p>Write a complete <code>schema.prisma</code> (datasource + generator + the models) with:</p>
+<ul>
+<li><code>enum Role { USER ADMIN }</code>.</li>
+<li><code>User</code>: auto-increment <code>id</code>; <code>email String @unique</code>; optional <code>name</code>; <code>role Role @default(USER)</code>; <code>createdAt DateTime @default(now())</code>; a <code>posts Post[]</code> back-relation.</li>
+<li><code>Post</code>: auto-increment <code>id</code>; <code>title String</code>; optional <code>content</code>; <code>published Boolean @default(false)</code>; <code>authorId Int</code> with <code>author User @relation(fields: [authorId], references: [id])</code>; a <code>comments Comment[]</code> back-relation; <code>createdAt</code> defaulting to now and <code>updatedAt @updatedAt</code>.</li>
+<li><code>Comment</code>: auto-increment <code>id</code>; <code>text String</code>; <code>postId Int</code> with <code>post Post @relation(fields: [postId], references: [id])</code>.</li>
+</ul>
+<p>Every relation needs both sides. The scaffold provides the three model skeletons and the enum. This is the reference schema used by the client exercises.</p>`,
+    inputSpec: 'An empty database. Write the full three-model blog schema.',
+    outputSpec: 'After push: User, Post, and Comment tables exist; Post has a FK to User(id) and Comment has a FK to Post(id); the Role enum exists; defaults (role USER, published false, timestamps) are set.',
+    constraints: 'Include datasource + generator + the Role enum + all three models. Every relation must have both sides. Post.authorId -> User.id and Comment.postId -> Post.id.',
+    examplesJson: [
+      {
+        input: 'The Comment model',
+        output: 'model Comment {\n  id     Int    @id @default(autoincrement())\n  text   String\n  postId Int\n  post   Post   @relation(fields: [postId], references: [id])\n}',
+        explanation: 'Comment holds the postId foreign key and its @relation; Post must carry the matching comments Comment[] back-relation.',
+      },
+      {
+        input: 'Running prisma db push on the full schema',
+        output: 'Creates User, Post, Comment tables with the two foreign keys and the Role enum type.',
+        explanation: 'The whole schema validates and materialises into three related tables.',
+      },
+    ],
+    hintsJson: [
+      'Build it up model by model, and for each relation add BOTH the FK side and the list back-relation.',
+      'User.posts Post[] pairs with Post.author + authorId; Post.comments Comment[] pairs with Comment.post + postId.',
+      'Give scalars their defaults: role @default(USER), published @default(false), createdAt @default(now()), updatedAt @updatedAt.',
+      'Run prisma format then prisma validate to catch a missing back-relation before pushing.',
+    ],
+    solutionShown: `enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  posts     Post[]
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean   @default(false)
+  authorId  Int
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Comment {
+  id     Int    @id @default(autoincrement())
+  text   String
+  postId Int
+  post   Post   @relation(fields: [postId], references: [id])
+}`,
+    solutionExplanationHtml: `<p>This schema is the whole module applied at once. The <code>enum Role</code> constrains the user role; <code>User</code> carries its defaults and a <code>posts Post[]</code> back-relation; <code>Post</code> owns the <code>authorId</code> foreign key to <code>User</code> plus a <code>comments Comment[]</code> back-relation; and <code>Comment</code> owns the <code>postId</code> foreign key to <code>Post</code>. Every relation is declared from both directions — the model with <code>@relation(fields: ...)</code> holds the physical foreign key, and the opposite model holds the virtual list — so Prisma can generate the constraints and the type-safe nested queries the client exercises rely on.</p>
+<p>The design decisions are deliberate. Optional <code>content</code> (<code>String?</code>) lets a post exist as a title-only draft; <code>published Boolean @default(false)</code> means new posts are unpublished until explicitly flipped; <code>@default(now())</code> and <code>@updatedAt</code> track lifecycle timestamps without application code. The single most common failure assembling a schema this size is a missing back-relation — declaring <code>Post.author</code> but forgetting <code>User.posts</code>, or <code>Comment.post</code> but forgetting <code>Post.comments</code> — which makes <code>prisma validate</code> stop with a clear "missing an opposite relation field" error; running <code>prisma format</code> first even offers to scaffold the missing side. Note this schema uses the database's default referential behaviour (restrict), so deleting a user who still has posts is blocked; you would add <code>onDelete: Cascade</code> to the relation if you wanted their posts removed too. With the schema pushed and the client generated, the same models become <code>prisma.user</code>, <code>prisma.post</code>, and <code>prisma.comment</code> — the bridge from schema design to type-safe data access.</p>`,
+    diagramMermaid: `erDiagram
+  User ||--o{ Post : writes
+  Post ||--o{ Comment : has
+  User { int id PK }
+  Post { int id PK }
+  Comment { int id PK }`,
+    fullSchema: REFERENCE,
+    check: `SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name IN ('User','Post','Comment') ORDER BY table_name;
+SELECT tc.table_name, ccu.table_name AS refs FROM information_schema.table_constraints tc
+JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name=ccu.constraint_name
+WHERE tc.constraint_type='FOREIGN KEY' AND tc.table_name IN ('Post','Comment') ORDER BY tc.table_name;
+SELECT enumlabel FROM pg_enum e JOIN pg_type t ON t.oid=e.enumtypid WHERE t.typname='Role' ORDER BY e.enumsortorder;`,
+  },
+
+  {
+    kind: 'client',
+    title: 'Write Related Data with a Nested Create and include',
+    difficulty: 'HARD',
+    estimatedMinutes: 45,
+    points: 30,
+    concepts: ['nested create', 'include', 'relation queries', 'transactional nested writes', 'typed relations'],
+    prerequisites: ['create', 'relations', 'findUnique'],
+    tags: ['prisma', 'client', 'nested-write', 'include', 'relations'],
+    problemHtml: `<p>Prisma's headline feature is writing and reading related data in one type-safe call. A <strong>nested create</strong> inserts a parent and its children together (as one transaction), and <strong>include</strong> pulls related records back in a single query — no manual joins, no second round trip. This is the payoff of declaring relations in the schema.</p>
+<p>Against the blog reference schema, write a function that:</p>
+<ul>
+<li>Creates a <code>User</code> and, in the same <code>create</code> call, two of their <code>Post</code>s via a nested <code>posts: { create: [...] }</code>. Give the user <code>email: "author@x.io"</code> and posts titled <code>"First"</code> and <code>"Second"</code>.</li>
+<li>Into the first post, nest the creation of a <code>Comment</code> with text <code>"Nice"</code> (nested two levels deep, or a follow-up nested write).</li>
+<li>Reads the user back with <code>findUnique</code> and <code>include: { posts: { include: { comments: true } } }</code>.</li>
+<li>Logs the user's email, the number of posts, and the text of the first post's first comment.</li>
+</ul>
+<p>The scaffold gives the async skeleton. Print exactly: <code>author@x.io</code>, then <code>posts 2</code>, then <code>comment Nice</code>.</p>`,
+    inputSpec: 'The blog reference schema is pushed and the client generated. The harness clears Users/Posts/Comments first.',
+    outputSpec: 'Creates one user with two posts and one comment nested in; then logs "author@x.io", "posts 2", and "comment Nice".',
+    constraints: 'Use a single nested create for the user + posts. Attach the comment via a nested write. Read back with include (nested). Do not issue separate create calls per row.',
+    examplesJson: [
+      {
+        input: 'prisma.user.create({ data: { email: "author@x.io", posts: { create: [{ title: "First" }, { title: "Second" }] } } })',
+        output: 'Inserts the user and both posts in one transactional call; each post gets authorId set automatically.',
+        explanation: 'The nested create writes the parent and children together; Prisma fills the foreign keys.',
+      },
+      {
+        input: 'The printed output',
+        output: 'author@x.io\nposts 2\ncomment Nice',
+        explanation: 'The user has two posts, and the first post carries the nested "Nice" comment retrieved via include.',
+      },
+    ],
+    hintsJson: [
+      'You can build the whole object graph in one create by nesting create under the relation field.',
+      'posts: { create: [{ title: "First" }, { title: "Second" }] } writes both posts and links them to the new user.',
+      'Attach the comment with a nested write on the post (comments: { create: { text: "Nice" } }) or a follow-up update.',
+      'Read it all back with findUnique + include: { posts: { include: { comments: true } } }.',
+    ],
+    solutionTs: `import { PrismaClient } from './generated';
+const prisma = new PrismaClient();
+
+async function main() {
+  const user = await prisma.user.create({
+    data: {
+      email: "author@x.io",
+      posts: {
+        create: [
+          { title: "First", comments: { create: { text: "Nice" } } },
+          { title: "Second" },
+        ],
+      },
+    },
+  });
+
+  const full = await prisma.user.findUnique({
+    where: { id: user.id },
+    include: { posts: { include: { comments: true } } },
+  });
+
+  console.log(full!.email);
+  console.log("posts", full!.posts.length);
+  console.log("comment", full!.posts[0].comments[0].text);
+}
+
+main().finally(() => prisma.$disconnect());`,
+    solutionExplanationHtml: `<p>The nested <code>create</code> builds an entire object graph in one call. Under <code>data</code>, the relation field <code>posts</code> takes a <code>create</code> with an array, and each post can itself nest a <code>comments: { create: ... }</code>, so a user, two posts, and a comment are written together. Prisma runs this as a single transaction and fills every foreign key for you — you never set <code>authorId</code> or <code>postId</code> by hand, because the parent's generated id is threaded into the children automatically. If any part fails, the whole nested write rolls back, so you never get a half-built graph.</p>
+<p>Reading it back, <code>include</code> is the mirror image: <code>include: { posts: { include: { comments: true } } }</code> tells Prisma to fetch the user, their posts, and each post's comments in one query, returning a nested, fully-typed object — <code>full.posts[0].comments[0].text</code> is known to be a <code>string</code> at compile time. This is the whole reason to declare relations in the schema: the join is expressed once and reused for both writing and reading. Two things to internalise. First, <code>findUnique</code> can return <code>null</code> (the id might not exist), which is why the code uses <code>full!</code> after confirming the create; in production you would handle the null branch. Second, <code>include</code> versus <code>select</code>: <code>include</code> adds related records <em>on top of</em> the model's scalar fields, while <code>select</code> replaces them with an explicit set — mixing the two at the same level is an error. The printed <code>author@x.io</code> / <code>posts 2</code> / <code>comment Nice</code> confirms the nested write persisted and the nested include read it back intact.</p>`,
+    diagramMermaid: `flowchart TD
+  A[user.create] --> B[User row]
+  A --> C[Post First]
+  A --> D[Post Second]
+  C --> E[Comment Nice]
+  F[findUnique include posts include comments] --> G[nested typed object]`,
+    expect: `author@x.io\nposts 2\ncomment Nice`,
+    seed: `await prisma.comment.deleteMany(); await prisma.post.deleteMany(); await prisma.user.deleteMany();`,
+  },
+];
+
+// ---- emit payload + verification artifacts ----
+const OUT = path.resolve(process.argv[2] || 'docs/codelab-authoring/authored');
+const VDIR = path.resolve(process.argv[3] || 'docs/codelab-authoring/verify') + '/prisma-430';
+fs.mkdirSync(OUT, { recursive: true });
+fs.mkdirSync(VDIR, { recursive: true });
+
+// reorder to the module's pedagogical order but keep difficulty ramp valid
+const order = exercises; // already 2E,4M,1M-client... verify ramp below
+const clean = order.map((ex) => ({
+  title: ex.title, difficulty: ex.difficulty, estimatedMinutes: ex.estimatedMinutes, points: ex.points,
+  concepts: ex.concepts, prerequisites: ex.prerequisites, tags: ex.tags,
+  problemHtml: ex.problemHtml, inputSpec: ex.inputSpec, outputSpec: ex.outputSpec, constraints: ex.constraints,
+  examplesJson: ex.examplesJson, hintsJson: ex.hintsJson,
+  starterCodeJson: [{ name: ex.kind === 'schema' ? 'schema.prisma' : 'solution.ts', language: ex.kind === 'schema' ? 'prisma' : 'typescript', code: scaffold(ex) }],
+  solutionCodeJson: [{ name: ex.kind === 'schema' ? 'schema.prisma' : 'solution.ts', language: ex.kind === 'schema' ? 'prisma' : 'typescript', code: ex.kind === 'schema' ? ex.solutionShown : ex.solutionTs }],
+  solutionExplanationHtml: ex.solutionExplanationHtml,
+  ...(ex.diagramMermaid ? { diagramMermaid: ex.diagramMermaid } : {}),
+}));
+
+function scaffold(ex) {
+  if (ex.kind === 'schema') {
+    return `// Define the model(s) described above in schema.prisma.\n// Remember: @id @default(autoincrement()) for the primary key,\n// and every relation needs both sides.`;
+  }
+  return `import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());`;
+}
+
+fs.writeFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), JSON.stringify({ trackSlug, moduleSlug, exercises: clean }, null, 2));
+
+// verification artifacts
+fs.writeFileSync(path.join(VDIR, 'reference.prisma'), REFERENCE);
+const plan = [];
+order.forEach((ex, i) => {
+  const n = i + 1;
+  if (ex.kind === 'schema') {
+    fs.writeFileSync(path.join(VDIR, `ex${n}.prisma`), ex.fullSchema);
+    fs.writeFileSync(path.join(VDIR, `ex${n}.check.sql`), ex.check);
+    plan.push({ n, kind: 'schema', title: ex.title });
+  } else {
+    fs.writeFileSync(path.join(VDIR, `ex${n}.ts`), ex.solutionTs);
+    if (ex.seed) fs.writeFileSync(path.join(VDIR, `ex${n}.seed.ts`), `import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\nasync function main(){\n${ex.seed}\n}\nmain().finally(()=>prisma.$disconnect());`);
+    plan.push({ n, kind: 'client', title: ex.title, expect: ex.expect });
+  }
+});
+fs.writeFileSync(path.join(VDIR, 'plan.json'), JSON.stringify(plan, null, 2));
+
+// self-checks
+const parsed = JSON.parse(fs.readFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), 'utf8'));
+const diffs = ['EASY', 'EASY', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'HARD', 'HARD'];
+if (parsed.exercises.length !== 10) throw new Error(`${parsed.exercises.length} exercises (need 10)`);
+parsed.exercises.forEach((ex, i) => {
+  if (ex.difficulty !== diffs[i]) throw new Error(`slot ${i + 1} diff ${ex.difficulty} != ${diffs[i]}`);
+  if (ex.problemHtml.length < 900) throw new Error(`problemHtml<900 ${ex.title} (${ex.problemHtml.length})`);
+  if (ex.solutionExplanationHtml.length < 500) throw new Error(`expl<500 ${ex.title}`);
+  if (ex.hintsJson.length < 4) throw new Error(`<4 hints ${ex.title}`);
+  const solLen = ex.solutionCodeJson.map((f) => f.code).join('').length;
+  if (solLen < 205) throw new Error(`solution<205 ${ex.title} (${solLen})`);
+});
+console.log(`OK ${parsed.exercises.length} exercises -> ${trackSlug}__${moduleSlug}.json; verify dir ${VDIR}`);

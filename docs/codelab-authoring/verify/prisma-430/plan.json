@@ -1,0 +1,55 @@
+[
+  {
+    "n": 1,
+    "kind": "schema",
+    "title": "Define Your First Prisma Model"
+  },
+  {
+    "n": 2,
+    "kind": "schema",
+    "title": "Add Defaults, Timestamps, and an Enum"
+  },
+  {
+    "n": 3,
+    "kind": "schema",
+    "title": "Model a One-to-Many Relation"
+  },
+  {
+    "n": 4,
+    "kind": "schema",
+    "title": "Model a Many-to-Many Relation with an Implicit Join Table"
+  },
+  {
+    "n": 5,
+    "kind": "schema",
+    "title": "Map Model and Field Names to Existing Database Names"
+  },
+  {
+    "n": 6,
+    "kind": "schema",
+    "title": "Enforce Compound Rules with @@unique and @@index"
+  },
+  {
+    "n": 7,
+    "kind": "client",
+    "title": "Create and Read Rows with the Prisma Client",
+    "expect": "count 2\nann@x.io USER\nbob@x.io USER"
+  },
+  {
+    "n": 8,
+    "kind": "client",
+    "title": "Filter, Select, and Sort with where and select",
+    "expect": "Intro to SQL\nPrisma Basics\nRedis Notes\nprisma-count 2"
+  },
+  {
+    "n": 9,
+    "kind": "schema",
+    "title": "Assemble a Complete Blog Schema"
+  },
+  {
+    "n": 10,
+    "kind": "client",
+    "title": "Write Related Data with a Nested Create and include",
+    "expect": "author@x.io\nposts 2\ncomment Nice"
+  }
+]

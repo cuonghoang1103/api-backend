@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:x@localhost:55432/prisma_codelab"
+}
+
+model Post {
+  id      Int    @id @default(autoincrement())
+  title   String
+  content String?
+  tags    Tag[]
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  posts     Post[]
+}

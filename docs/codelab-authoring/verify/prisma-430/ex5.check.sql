@@ -1,0 +1,2 @@
+SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_name IN ('blog_posts','BlogPost');
+SELECT column_name FROM information_schema.columns WHERE table_name='blog_posts' ORDER BY ordinal_position;
